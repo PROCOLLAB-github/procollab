@@ -18,4 +18,4 @@ jobs:
       - run: npm run lint:ts
       - run: npm run format
       - run: npm run lint:scss
-      - run: npm test:ci
+      - run: npm run test:ci
