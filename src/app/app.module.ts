@@ -6,10 +6,12 @@ import * as Sentry from "@sentry/angular";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { Router } from "@angular/router";
+import { HttpClientModule } from "@angular/common/http";
+import { CoreModule } from "./core/core.module";
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule, CoreModule],
   providers: [
     {
       provide: ErrorHandler,
