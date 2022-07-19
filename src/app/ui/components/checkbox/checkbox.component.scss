@@ -1,0 +1,10 @@
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  background-color: var(--gray-100);
+  border-radius: var(--rounded-sm);
+}

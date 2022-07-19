@@ -18,11 +18,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 export class InputComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";
 
-  value = "";
-  disabled = false;
-
-  touched: boolean = false;
-
   constructor() {}
 
   ngOnInit(): void {}
@@ -32,6 +27,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
     this.onChange(value);
   }
 
+  value = "";
   writeValue(value: string): void {
     this.value = value;
   }
@@ -46,6 +42,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
     this.onTouch = fn;
   }
 
+  disabled = false;
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
   }
