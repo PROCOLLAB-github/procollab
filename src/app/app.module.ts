@@ -9,10 +9,18 @@ import { Router } from "@angular/router";
 import { HttpClientModule } from "@angular/common/http";
 import { CoreModule } from "./core/core.module";
 import { UiModule } from "./ui/ui.module";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, CoreModule, UiModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    CoreModule,
+    UiModule,
+    ReactiveFormsModule,
+  ],
   providers: [
     {
       provide: ErrorHandler,

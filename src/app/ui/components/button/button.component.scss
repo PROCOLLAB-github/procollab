@@ -3,7 +3,7 @@
   cursor: pointer;
   background-color: var(--accent);
   border: none;
-  border-radius: 30px;
+  border-radius: var(--rounded-lg);
   outline: none;
 
   &--md {
