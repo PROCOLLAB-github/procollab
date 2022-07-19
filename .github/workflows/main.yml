@@ -27,10 +27,8 @@ jobs:
       steps:
         - uses: actions/checkout@v1
         - name: Install surge and fire deployment
-          uses: actions/setup-node@v1
-          with:
-            node-version: 8
-        - run: npm ci
+          uses: actions/setup-node@v3
+        - run: npm i
         - run: npm run build-storybook
         - run: npm install -g surge
         - run: surge ./storybook-static ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
