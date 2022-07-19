@@ -30,6 +30,7 @@ jobs:
           uses: actions/setup-node@v1
           with:
             node-version: 8
+        - run: npm ci
         - run: npm run build-storybook
         - run: npm install -g surge
         - run: surge ./storybook-static ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
