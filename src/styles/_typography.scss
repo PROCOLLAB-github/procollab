@@ -58,23 +58,41 @@
   url('../assets/monteserrat/montserrat-v25-latin_cyrillic-900.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
-.text-button {
+.text-h1 {
   font-family: Montserrat, sans-serif;
-  font-size: 20px;
+  font-size: 36px;
   font-weight: 700;
-  line-height: 24px;
-  letter-spacing: -0.005em;
-
-  &--lg {
-    font-size: 24px;
-    line-height: 29px;
-  }
+  line-height: 44px;
 }
 
-.text-input {
+.text-h2 {
+  font-family: Montserrat, sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150.4%;
+}
+
+.text-h3 {
+  font-family: Montserrat, sans-serif;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 37px;
+}
+
+.text-h4 {
+  font-family: Montserrat, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 29px;
+}
+
+.text-p1 {
   font-family: Montserrat, sans-serif;
   font-size: 15px;
+  font-style: normal;
   font-weight: 400;
   line-height: 18px;
 }
-
