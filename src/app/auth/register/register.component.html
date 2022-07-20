@@ -1,0 +1,18 @@
+<!-- @format -->
+
+<form class="auth" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <h1 class="text-h4 auth__title">Регистрация</h1>
+  <app-input
+    class="auth__field"
+    type="email"
+    formControlName="email"
+    placeholder="Введите почту"
+  ></app-input>
+  <app-input
+    class="auth__field"
+    type="password"
+    formControlName="password"
+    placeholder="Пароль"
+  ></app-input>
+  <app-button class="auth__button" size="lg">Регистрация</app-button>
+</form>

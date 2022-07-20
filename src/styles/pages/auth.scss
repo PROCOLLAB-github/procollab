@@ -1,0 +1,32 @@
+.auth {
+  &__title {
+    margin-bottom: 60px;
+    color: var(--gray-100);
+    text-align: center;
+  }
+
+  &__field {
+    display: block;
+    margin-bottom: 30px;
+  }
+
+  &__agreement {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__checkbox {
+    display: block;
+    margin-right: 5px;
+  }
+
+  &__agreement-text {
+    color: var(--gray-100);
+  }
+
+  &__button {
+    display: block;
+    margin-top: 30px;
+  }
+}

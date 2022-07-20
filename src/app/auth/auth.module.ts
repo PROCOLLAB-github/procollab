@@ -8,9 +8,10 @@ import { AuthRoutingModule } from "./auth-routing.module";
 import { LoginComponent } from "./login/login.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { UiModule } from "../ui/ui.module";
+import { RegisterComponent } from "./register/register.component";
 
 @NgModule({
-  declarations: [AuthComponent, LoginComponent],
+  declarations: [AuthComponent, LoginComponent, RegisterComponent],
   providers: [AuthService],
   imports: [CommonModule, AuthRoutingModule, ReactiveFormsModule, UiModule],
 })

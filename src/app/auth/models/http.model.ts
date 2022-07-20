@@ -18,3 +18,6 @@ export class RefreshResponse {
   // @ts-ignore
   token_type: "Bearer";
 }
+
+export class RegisterRequest {}
+export class RegisterResponse {}

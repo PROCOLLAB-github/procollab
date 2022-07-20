@@ -3,7 +3,12 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "../../core/services";
 import { map, Observable } from "rxjs";
-import { LoginResponse, RefreshResponse } from "../models/http.model";
+import {
+  LoginResponse,
+  RefreshResponse,
+  RegisterRequest,
+  RegisterResponse,
+} from "../models/http.model";
 import { plainToClass } from "class-transformer";
 
 @Injectable()
@@ -14,6 +19,12 @@ export class AuthService {
     return this.apiService
       .post("/auth/login", { email, password })
       .pipe(map(json => plainToClass(LoginResponse, json)));
+  }
+
+  register(data: RegisterRequest): Observable<RegisterResponse> {
+    return this.apiService
+      .post("/auth/register", data)
+      .pipe(map(json => plainToClass(RegisterResponse, json)));
   }
 
   refreshTokens(): Observable<RefreshResponse> {
