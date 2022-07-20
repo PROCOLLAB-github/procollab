@@ -4,12 +4,12 @@
   <div class="input__left-icon">
     <ng-content select="left-icon"></ng-content>
   </div>
-
   <input
     [value]="value"
     (input)="onInput($event)"
     [placeholder]="placeholder"
     [type]="type"
+    [mask]="appMask"
     class="text-p1 field__input"
   />
 </div>

@@ -11,6 +11,7 @@ import { CoreModule } from "./core/core.module";
 import { UiModule } from "./ui/ui.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AuthModule } from "./auth/auth.module";
+import { NgxMaskModule } from "ngx-mask";
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,6 +23,7 @@ import { AuthModule } from "./auth/auth.module";
     UiModule,
     AuthModule,
     ReactiveFormsModule,
+    NgxMaskModule.forRoot(),
   ],
   providers: [
     {

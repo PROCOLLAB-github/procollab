@@ -10,6 +10,7 @@ import {
   SelectComponent,
 } from "./components";
 import { ClickOutsideModule } from "ng-click-outside";
+import { NgxMaskModule } from "ngx-mask";
 
 @NgModule({
   declarations: [
@@ -19,7 +20,7 @@ import { ClickOutsideModule } from "ng-click-outside";
     IconComponent,
     SelectComponent,
   ],
-  imports: [CommonModule, ClickOutsideModule],
+  imports: [CommonModule, ClickOutsideModule, NgxMaskModule],
   exports: [ButtonComponent, InputComponent, CheckboxComponent, IconComponent, SelectComponent],
 })
 export class UiModule {}

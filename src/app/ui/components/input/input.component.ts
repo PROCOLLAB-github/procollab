@@ -19,6 +19,8 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";
   @Input() type: "text" | "password" | "email" = "text";
 
+  @Input() appMask = "";
+
   constructor() {}
 
   ngOnInit(): void {}

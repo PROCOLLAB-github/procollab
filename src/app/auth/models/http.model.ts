@@ -1,20 +1,27 @@
 /** @format */
 
-// TODO make camel case
+export class LoginRequest {
+  email!: string;
+  password!: string;
+}
+
 export class LoginResponse {
-  // @ts-ignore
-  access_token: string;
-  // @ts-ignore
-  refresh_token: string;
-  // @ts-ignore
-  token_type: "Bearer";
+  accessToken!: string;
+  refreshToken!: string;
+  tokenType!: "Bearer";
 }
 
 export class RefreshResponse {
-  // @ts-ignore
-  access_token: string;
-  // @ts-ignore
-  refresh_token: string;
-  // @ts-ignore
-  token_type: "Bearer";
+  accessToken!: string;
+  refreshToken!: string;
+  tokenType!: "Bearer";
 }
+
+export class RegisterRequest {
+  name!: string;
+  surname!: string;
+  birthday!: string;
+  email!: string;
+  password!: string;
+}
+export class RegisterResponse extends LoginResponse {}
