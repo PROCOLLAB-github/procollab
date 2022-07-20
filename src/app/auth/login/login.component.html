@@ -1,1 +1,22 @@
-<p>login works!</p>
+<!-- @format -->
+
+<form class="login" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <h1 class="text-h4 login__title">Вход</h1>
+  <app-input
+    class="login__field"
+    type="email"
+    formControlName="email"
+    placeholder="Введите почту"
+  ></app-input>
+  <app-input
+    class="login__field"
+    type="password"
+    formControlName="password"
+    placeholder="Пароль"
+  ></app-input>
+  <div class="login__agreement">
+    <app-checkbox class="login__checkbox" [(checked)]="loginMem"></app-checkbox>
+    <span class="text-p1 login__agreement-text" (click)="loginMem = !loginMem">Запомнить меня</span>
+  </div>
+  <app-button class="login__button" size="lg">Войти</app-button>
+</form>
