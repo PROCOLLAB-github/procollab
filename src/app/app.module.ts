@@ -10,6 +10,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { CoreModule } from "./core/core.module";
 import { UiModule } from "./ui/ui.module";
 import { ReactiveFormsModule } from "@angular/forms";
+import { AuthModule } from "./auth/auth.module";
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,6 +20,7 @@ import { ReactiveFormsModule } from "@angular/forms";
     HttpClientModule,
     CoreModule,
     UiModule,
+    AuthModule,
     ReactiveFormsModule,
   ],
   providers: [
