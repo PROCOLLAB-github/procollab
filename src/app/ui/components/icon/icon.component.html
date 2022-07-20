@@ -1,12 +1,7 @@
 <!-- @format -->
 
-<div class="flex items-center justify-center w-full h-full">
-  <svg
-    class="block"
-    [attr.width]="square || width"
-    [attr.height]="square || height"
-    [attr.viewBox]="viewBox"
-  >
+<div class="icon">
+  <svg [attr.width]="square || width" [attr.height]="square || height" [attr.viewBox]="viewBox">
     <use [attr.xlink:href]="'assets/icons/sprite.svg#' + icon"></use>
   </svg>
 </div>
