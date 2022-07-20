@@ -14,7 +14,7 @@ import { AuthService } from "../../auth/services";
 
 @Injectable()
 export class BearerTokenInterceptor implements HttpInterceptor {
-  constructor(private authSerice: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const headers = new HttpHeaders();
@@ -28,9 +28,9 @@ export class BearerTokenInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          return this.authSerice.refreshTokens().pipe(
+          return this.authService.refreshTokens().pipe(
             switchMap(res => {
-              this.authSerice.memTokens(res);
+              this.authService.memTokens(res);
               const headers = new HttpHeaders();
               const token = localStorage.getItem("accessToken");
               headers.set("Authorization", `Bearer ${token}`);
