@@ -2,13 +2,11 @@
 
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ButtonComponent } from "./components/button/button.component";
-import { InputComponent } from "./components/input/input.component";
-import { CheckboxComponent } from "./components/checkbox/checkbox.component";
+import { ButtonComponent, CheckboxComponent, IconComponent, InputComponent } from "./components";
 
 @NgModule({
-  declarations: [ButtonComponent, InputComponent, CheckboxComponent],
+  declarations: [ButtonComponent, InputComponent, CheckboxComponent, IconComponent],
   imports: [CommonModule],
-  exports: [ButtonComponent, InputComponent, CheckboxComponent],
+  exports: [ButtonComponent, InputComponent, CheckboxComponent, IconComponent],
 })
 export class UiModule {}
