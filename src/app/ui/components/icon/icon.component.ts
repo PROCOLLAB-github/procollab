@@ -32,7 +32,11 @@ export class IconComponent implements OnInit {
   set appWidth(width: string) {
     this.width = width;
 
-    !this.viewBox && (this.viewBox = `0 0 ${width} 0`);
+    if (this.viewBox) {
+      const viewbox = this.viewBoxInfo(this.viewBox);
+      viewbox[2] = width;
+      !this.viewBox && (this.viewBox = viewbox.join(" "));
+    }
   }
 
   get appWidth(): string {
@@ -43,7 +47,11 @@ export class IconComponent implements OnInit {
   set appHeight(height: string) {
     this.height = height;
 
-    !this.viewBox && (this.viewBox = `0 0 0 ${height}`);
+    if (this.viewBox) {
+      const viewbox = this.viewBoxInfo(this.viewBox);
+      viewbox[3] = height;
+      !this.viewBox && (this.viewBox = viewbox.join(" "));
+    }
   }
 
   get appHeight(): string {
@@ -59,4 +67,8 @@ export class IconComponent implements OnInit {
   height!: string;
 
   ngOnInit(): void {}
+
+  viewBoxInfo(viewBox: string): string[] {
+    return viewBox.split(" ");
+  }
 }

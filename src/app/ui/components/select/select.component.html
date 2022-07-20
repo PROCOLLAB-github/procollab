@@ -1,0 +1,23 @@
+<!-- @format -->
+
+<div class="field" (clickOutside)="onClickOutside()">
+  <div
+    class="field__input"
+    [class.field__input--placeholder]="!selectedId"
+    (click)="isOpen = !isOpen"
+  >
+    {{ selectedId ? getLabel(selectedId) || basicLabel : basicLabel }}
+    <app-icon
+      class="field__arrow"
+      [class.field__arrow--filpped]="isOpen"
+      icon="arrow-no-body"
+      appWidth="16"
+      appHeight="9"
+    ></app-icon>
+  </div>
+  <ul *ngIf="isOpen" class="field__options">
+    <li *ngFor="let option of options" class="field__option" (click)="onUpdate($event, option.id)">
+      {{ option.label }}
+    </li>
+  </ul>
+</div>
