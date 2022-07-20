@@ -7,6 +7,7 @@
 export const environment = {
   production: false,
   sentryDns: "",
+  apiUrl: "http://dartt0n.xyz:8080",
 };
 
 /*
