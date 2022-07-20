@@ -5,6 +5,8 @@
 /tmp
 /out-tsc
 /bazel-out
+/storybook-static
+/src/assets/icons/sprite.svg
 
 # Node
 /node_modules

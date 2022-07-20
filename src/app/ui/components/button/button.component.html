@@ -1,0 +1,11 @@
+<!-- @format -->
+
+<button
+  class="button"
+  [ngClass]="{
+    'button--md text-p1': size === 'md',
+    'button--lg text-h4': size === 'lg'
+  }"
+>
+  <ng-content></ng-content>
+</button>

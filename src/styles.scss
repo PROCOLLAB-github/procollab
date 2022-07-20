@@ -1,5 +1,9 @@
-/**
- * /* You can add global styles to this file, and also import other style files
- *
- * @format
- */
+// BASE
+
+@import "styles/colors";
+@import "styles/global";
+@import "styles/rounded";
+
+// TYPOGRAPHY
+
+@import "styles/typography";
