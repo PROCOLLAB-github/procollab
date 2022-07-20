@@ -4,7 +4,7 @@ on:
   workflows: [Main]
 
 jobs:
-    docs:
+    deploy:
         runs-on: ubuntu-latest
 
         name: Deploying to surge
