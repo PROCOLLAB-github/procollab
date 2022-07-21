@@ -14,9 +14,12 @@ jobs:
       - uses: actions/checkout@v3
       - name: Use Node.js latest
         uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
       - run: npm ci
-      - run: npm run lint:ts
       - run: npm run format
+      - run: npm run lint:ts
       - run: npm run lint:scss
   docs:
       runs-on: ubuntu-latest
@@ -27,7 +30,10 @@ jobs:
         - uses: actions/checkout@v1
         - name: Install surge and fire deployment
           uses: actions/setup-node@v3
-        - run: npm i
+          with:
+            node-version: 16
+            cache: 'npm'
+        - run: npm ci
         - run: npm run build-storybook
         - run: npm install -g surge
         - run: surge ./storybook-static ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
