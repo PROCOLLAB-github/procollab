@@ -1,15 +1,17 @@
-import { TestBed } from '@angular/core/testing';
+/** @format */
 
-import { CamelcaseInterceptor } from './camelcase.interceptor';
+import { TestBed } from "@angular/core/testing";
 
-describe('CamelcaseInterceptor', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    providers: [
-      CamelcaseInterceptor
-      ]
-  }));
+import { CamelcaseInterceptor } from "./camelcase.interceptor";
 
-  it('should be created', () => {
+describe("CamelcaseInterceptor", () => {
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      providers: [CamelcaseInterceptor],
+    })
+  );
+
+  it("should be created", () => {
     const interceptor: CamelcaseInterceptor = TestBed.inject(CamelcaseInterceptor);
     expect(interceptor).toBeTruthy();
   });

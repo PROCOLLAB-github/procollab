@@ -1,15 +1,17 @@
-import { TestBed } from '@angular/core/testing';
+/** @format */
 
-import { BearerTokenInterceptor } from './bearer-token.interceptor';
+import { TestBed } from "@angular/core/testing";
 
-describe('BearerTokenInterceptor', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    providers: [
-      BearerTokenInterceptor
-      ]
-  }));
+import { BearerTokenInterceptor } from "./bearer-token.interceptor";
 
-  it('should be created', () => {
+describe("BearerTokenInterceptor", () => {
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      providers: [BearerTokenInterceptor],
+    })
+  );
+
+  it("should be created", () => {
     const interceptor: BearerTokenInterceptor = TestBed.inject(BearerTokenInterceptor);
     expect(interceptor).toBeTruthy();
   });

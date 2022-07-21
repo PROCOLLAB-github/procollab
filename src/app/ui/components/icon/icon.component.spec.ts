@@ -1,16 +1,17 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { IconComponent } from './icon.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('IconComponent', () => {
+import { IconComponent } from "./icon.component";
+
+describe("IconComponent", () => {
   let component: IconComponent;
   let fixture: ComponentFixture<IconComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ IconComponent ]
-    })
-    .compileComponents();
+      declarations: [IconComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe('IconComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

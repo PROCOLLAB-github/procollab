@@ -1,16 +1,17 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { CheckboxComponent } from './checkbox.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('CheckboxComponent', () => {
+import { CheckboxComponent } from "./checkbox.component";
+
+describe("CheckboxComponent", () => {
   let component: CheckboxComponent;
   let fixture: ComponentFixture<CheckboxComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CheckboxComponent ]
-    })
-    .compileComponents();
+      declarations: [CheckboxComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe('CheckboxComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
