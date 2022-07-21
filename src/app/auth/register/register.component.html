@@ -2,15 +2,23 @@
 
 <form class="auth" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
   <h1 class="text-h4 auth__title">Регистрация</h1>
-  <app-input class="auth__field" type="text" formControlName="name" placeholder="Имя"></app-input>
   <app-input
     class="auth__field"
+    [error]="!!(registerForm.get('name')?.touched && registerForm.get('name')?.invalid)"
+    type="text"
+    formControlName="name"
+    placeholder="Имя"
+  ></app-input>
+  <app-input
+    class="auth__field"
+    [error]="!!(registerForm.get('surname')?.touched && registerForm.get('surname')?.invalid)"
     type="text"
     formControlName="surname"
     placeholder="Фамилия"
   ></app-input>
   <app-input
     class="auth__field"
+    [error]="!!(registerForm.get('birthday')?.touched && registerForm.get('birthday')?.invalid)"
     type="text"
     appMask="00.00.0000"
     formControlName="birthday"
@@ -18,12 +26,14 @@
   ></app-input>
   <app-input
     class="auth__field"
+    [error]="!!(registerForm.get('email')?.touched && registerForm.get('email')?.invalid)"
     type="email"
     formControlName="email"
     placeholder="Введите почту"
   ></app-input>
   <app-input
     class="auth__field"
+    [error]="!!(registerForm.get('password')?.touched && registerForm.get('password')?.invalid)"
     type="password"
     formControlName="password"
     placeholder="Пароль"

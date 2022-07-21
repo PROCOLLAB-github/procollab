@@ -4,12 +4,14 @@
   <h1 class="text-h4 auth__title">Вход</h1>
   <app-input
     class="auth__field"
+    [error]="!!(loginForm.get('email')?.touched && loginForm.get('email')?.invalid)"
     type="email"
     formControlName="email"
     placeholder="Введите почту"
   ></app-input>
   <app-input
     class="auth__field"
+    [error]="!!(loginForm.get('password')?.touched && loginForm.get('password')?.invalid)"
     type="password"
     formControlName="password"
     placeholder="Пароль"
