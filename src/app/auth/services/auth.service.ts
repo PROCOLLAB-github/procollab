@@ -35,8 +35,26 @@ export class AuthService {
       .pipe(map(json => plainToClass(RefreshResponse, json)));
   }
 
-  memTokens(tokens: Tokens): void {
-    localStorage.setItem("accessToken", tokens.accessToken);
-    localStorage.setItem("refreshToken", tokens.refreshToken);
+  getTokens(): Tokens | null {
+    const accessToken =
+      localStorage.getItem("accessToken") ?? sessionStorage.getItem("accessToken");
+    const refreshToken =
+      localStorage.getItem("refreshToken") ?? sessionStorage.getItem("refreshToken");
+
+    if (!accessToken && !refreshToken) {
+      return null;
+    }
+
+    return { accessToken: accessToken as string, refreshToken: accessToken as string };
+  }
+
+  memTokens(tokens: Tokens, session = false): void {
+    if (!session) {
+      localStorage.setItem("accessToken", tokens.accessToken);
+      localStorage.setItem("refreshToken", tokens.refreshToken);
+    } else {
+      sessionStorage.setItem("accessToken", tokens.accessToken);
+      sessionStorage.setItem("refreshToken", tokens.refreshToken);
+    }
   }
 }

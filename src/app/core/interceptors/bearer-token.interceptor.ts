@@ -18,10 +18,10 @@ export class BearerTokenInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const headers = new HttpHeaders();
-    const token = localStorage.getItem("accessToken");
+    const tokens = this.authService.getTokens();
 
-    if (token) {
-      headers.set("Authorization", `Bearer ${token}`);
+    if (tokens) {
+      headers.set("Authorization", `Bearer ${tokens.accessToken}`);
     }
 
     const req = request.clone({ headers });
@@ -32,8 +32,12 @@ export class BearerTokenInterceptor implements HttpInterceptor {
             switchMap(res => {
               this.authService.memTokens(res);
               const headers = new HttpHeaders();
-              const token = localStorage.getItem("accessToken");
-              headers.set("Authorization", `Bearer ${token}`);
+
+              const tokens = this.authService.getTokens();
+
+              if (tokens) {
+                headers.set("Authorization", `Bearer ${tokens.accessToken}`);
+              }
 
               return next.handle(
                 request.clone({

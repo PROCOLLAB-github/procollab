@@ -27,6 +27,8 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.authService.login(this.loginForm.value).subscribe(res => console.log("component", res));
+    this.authService.login(this.loginForm.value).subscribe(res => {
+      this.authService.memTokens(res, !this.loginMem);
+    });
   }
 }
