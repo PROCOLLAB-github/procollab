@@ -67,6 +67,9 @@ export class IconComponent implements OnInit {
   height!: string;
 
   ngOnInit(): void {}
+  ngAfterViewInit(): void {
+    console.log(this.viewBox);
+  }
 
   viewBoxInfo(viewBox: string): string[] {
     return viewBox.split(" ");

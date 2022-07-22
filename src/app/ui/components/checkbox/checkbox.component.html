@@ -1,10 +1,4 @@
 <!-- @format -->
 <div class="field" (click)="checkedChange.emit(!checked)">
-  <app-icon
-    *ngIf="checked"
-    class="field__checked"
-    icon="check"
-    appHeight="17"
-    appWidth="18"
-  ></app-icon>
+  <app-icon *ngIf="checked" class="field__checked" icon="check" appViewBox="0 0 18 17"></app-icon>
 </div>

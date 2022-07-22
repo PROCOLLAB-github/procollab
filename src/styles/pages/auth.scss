@@ -19,7 +19,9 @@
   }
 
   &__checkbox {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-right: 5px;
   }
 
