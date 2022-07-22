@@ -11,3 +11,13 @@ li,
 ol {
   list-style-type: none;
 }
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--accent-hover);
+  }
+}

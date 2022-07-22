@@ -1,0 +1,12 @@
+/** @format */
+
+.page {
+  position: relative;
+  height: 100vh;
+  background-color: var(--bg-main);
+
+  &__header {
+    display: flex;
+    padding: 20px 140px;
+  }
+}
