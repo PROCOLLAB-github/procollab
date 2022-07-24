@@ -38,5 +38,17 @@
     formControlName="password"
     placeholder="Пароль"
   ></app-input>
+  <app-input
+    class="auth__field"
+    [error]="
+      !!(
+        registerForm.get('repeatedPassword')?.touched &&
+        registerForm.get('repeatedPassword')?.invalid
+      )
+    "
+    type="password"
+    formControlName="repeatedPassword"
+    placeholder="Повторите пароль"
+  ></app-input>
   <app-button class="auth__button" size="lg">Регистрация</app-button>
 </form>

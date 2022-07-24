@@ -3,6 +3,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
+import { ValidationService } from "../../core/services";
 
 @Component({
   selector: "app-login",
@@ -12,14 +13,22 @@ import { AuthService } from "../services";
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
-    this.registerForm = this.fb.group({
-      name: ["", [Validators.required]],
-      surname: ["", [Validators.required]],
-      email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required]],
-      birthday: ["", [Validators.required]],
-    });
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private validationService: ValidationService
+  ) {
+    this.registerForm = this.fb.group(
+      {
+        name: ["", [Validators.required]],
+        surname: ["", [Validators.required]],
+        email: ["", [Validators.required, Validators.email]],
+        birthday: ["", [Validators.required]],
+        password: ["", [Validators.required]],
+        repeatedPassword: ["", [Validators.required]],
+      },
+      { validators: [this.validationService.useMatchValidator("password", "repeatedPassword")] }
+    );
   }
 
   ngOnInit(): void {}
@@ -29,7 +38,9 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    this.authService.register(this.registerForm.value).subscribe(res => {
+    const form = { ...this.registerForm.value };
+    delete form.repeatedPassword;
+    this.authService.register(form).subscribe(res => {
       this.authService.memTokens(res);
     });
   }
