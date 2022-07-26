@@ -12,6 +12,11 @@ ol {
   list-style-type: none;
 }
 
+fieldset {
+  border: none;
+  outline: none;
+}
+
 a {
   color: var(--accent);
   text-decoration: none;

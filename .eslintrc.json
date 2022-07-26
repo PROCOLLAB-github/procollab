@@ -6,7 +6,8 @@
   },
   "extends": [
     "standard",
-    "prettier"
+    "prettier",
+    "plugin:@typescript-eslint/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -17,6 +18,7 @@
     "@typescript-eslint"
   ],
   "rules": {
-    "no-useless-constructor": "off"
+    "no-useless-constructor": "off",
+    "@typescript-eslint/no-empty-function": "off"
   }
 }

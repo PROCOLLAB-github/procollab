@@ -2,20 +2,38 @@
 
 <form class="auth" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <h1 class="text-h4 auth__title">Вход</h1>
-  <app-input
-    class="auth__field"
-    [error]="!!(loginForm.get('email')?.touched && loginForm.get('email')?.invalid)"
-    type="email"
-    formControlName="email"
-    placeholder="Введите почту"
-  ></app-input>
-  <app-input
-    class="auth__field"
-    [error]="!!(loginForm.get('password')?.touched && loginForm.get('password')?.invalid)"
-    type="password"
-    formControlName="password"
-    placeholder="Пароль"
-  ></app-input>
+  <fieldset *ngIf="loginForm.get('email') as email" class="auth__field">
+    <app-input
+      [error]="!!(email.touched && email.invalid)"
+      type="email"
+      formControlName="email"
+      placeholder="Введите почту"
+    ></app-input>
+    <div *ngIf="email.errors?.email" class="error auth__error">
+      <app-icon icon="color-error" appSquare="16"></app-icon>
+      {{ errorMessages.VALIDATION_EMAIL }}
+    </div>
+    <div *ngIf="email.errors?.required" class="error auth__error">
+      <app-icon icon="color-error" appSquare="16"></app-icon>
+      {{ errorMessages.VALIDATION_REQUIRED }}
+    </div>
+  </fieldset>
+  <fieldset *ngIf="loginForm.get('password') as password" class="auth__field">
+    <app-input
+      [error]="!!(password?.touched && password?.invalid)"
+      type="password"
+      formControlName="password"
+      placeholder="Пароль"
+    ></app-input>
+    <div *ngIf="password.errors?.required" class="error auth__error">
+      <app-icon icon="color-error" appSquare="16"></app-icon>
+      {{ errorMessages.VALIDATION_REQUIRED }}
+    </div>
+    <div *ngIf="password.errors?.minlength" class="error auth__error">
+      <app-icon icon="color-error" appSquare="16"></app-icon>
+      {{ errorMessages.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
+    </div>
+  </fieldset>
   <div class="auth__agreement">
     <app-checkbox class="auth__checkbox" [(checked)]="loginMem"></app-checkbox>
     <span class="text-p1 auth__agreement-text" (click)="loginMem = !loginMem">Запомнить меня</span>

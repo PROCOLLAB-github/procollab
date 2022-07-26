@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { ErrorCode } from "../models/error";
+import { ErrorCode } from "../models/error-code";
 
 @Injectable({
   providedIn: "root",

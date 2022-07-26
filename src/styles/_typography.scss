@@ -69,21 +69,29 @@
       url("../assets/monteserrat/montserrat-v25-latin_cyrillic-900.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
-.text-error-code {
+@mixin text-error-code {
   font-family: Montserrat, sans-serif;
   font-size: 128px;
   font-weight: 800;
   line-height: 150.4%;
 }
 
-.text-h1 {
+.text-error-code {
+  @include text-error-code;
+}
+
+@mixin text-h1 {
   font-family: Montserrat, sans-serif;
   font-size: 36px;
   font-weight: 700;
   line-height: 44px;
 }
 
-.text-h2 {
+.text-h1 {
+  @include text-h1;
+}
+
+@mixin text-h2 {
   font-family: Montserrat, sans-serif;
   font-size: 32px;
   font-style: normal;
@@ -91,7 +99,11 @@
   line-height: 150.4%;
 }
 
-.text-h3 {
+.text-h2 {
+  @include text-h2;
+}
+
+@mixin text-h3 {
   font-family: Montserrat, sans-serif;
   font-size: 30px;
   font-style: normal;
@@ -99,7 +111,11 @@
   line-height: 37px;
 }
 
-.text-h4 {
+.text-h3 {
+  @include text-h3;
+}
+
+@mixin text-h4 {
   font-family: Montserrat, sans-serif;
   font-size: 24px;
   font-style: normal;
@@ -107,10 +123,30 @@
   line-height: 29px;
 }
 
-.text-p1 {
+.text-h4 {
+  @include text-h4;
+}
+
+@mixin text-p1 {
   font-family: Montserrat, sans-serif;
   font-size: 15px;
   font-style: normal;
   font-weight: 400;
   line-height: 18px;
+}
+
+.text-p1 {
+  @include text-p1;
+}
+
+@mixin text-p2 {
+  font-family: Montserrat, sans-serif;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 12px;
+}
+
+.text-p2 {
+  @include text-p2;
 }

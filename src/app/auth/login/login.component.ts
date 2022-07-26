@@ -3,6 +3,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
+import { ErrorMessages } from "../../error/models/error-messages";
 
 @Component({
   selector: "app-login",
@@ -13,10 +14,12 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loginMem = false;
 
+  errorMessages = ErrorMessages;
+
   constructor(private fb: FormBuilder, private authService: AuthService) {
     this.loginForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required]],
+      password: ["", [Validators.required, Validators.minLength(6)]],
     });
   }
 

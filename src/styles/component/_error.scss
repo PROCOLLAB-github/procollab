@@ -1,0 +1,15 @@
+.error {
+  display: flex;
+  align-items: center;
+  color: var(--error);
+
+  @include text-p2;
+
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+
+  app-icon {
+    margin-right: 5px;
+  }
+}

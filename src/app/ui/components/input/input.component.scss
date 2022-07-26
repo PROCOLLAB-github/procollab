@@ -9,5 +9,10 @@
     border: 1px solid var(--gray-100);
     border-radius: var(--rounded-lg);
     outline: none;
+
+    &--error {
+      color: var(--error);
+      border-color: var(--error);
+    }
   }
 }
