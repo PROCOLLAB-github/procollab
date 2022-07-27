@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loginMem = false;
 
+  errorWrongAuth = false;
   errorMessages = ErrorMessages;
 
   constructor(private fb: FormBuilder, private authService: AuthService) {
@@ -30,8 +31,15 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.authService.login(this.loginForm.value).subscribe(res => {
-      this.authService.memTokens(res, !this.loginMem);
-    });
+    this.authService.login(this.loginForm.value).subscribe(
+      res => {
+        this.authService.memTokens(res, !this.loginMem);
+      },
+      error => {
+        if (error.error?.detail === "Incorrect email or password") {
+          this.errorWrongAuth = true;
+        }
+      }
+    );
   }
 }

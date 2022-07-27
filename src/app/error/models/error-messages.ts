@@ -2,6 +2,7 @@
 
 export enum ErrorMessages {
   AUTH_EMAIL_EXIST = "Аккаунт с таким email уже зарегистрирован",
+  AUTH_WRONG_AUTH = "Неправильный логин или пароль",
   AUTH_WRONG_PASSWORD = "Неправильный пароль",
   AUTH_EMAIL_NOT_EXIST = "Аккаунт с таким email не зарегистрирован",
 

@@ -34,5 +34,8 @@
     <app-checkbox class="auth__checkbox" [(checked)]="loginMem"></app-checkbox>
     <span class="text-p1 auth__agreement-text" (click)="loginMem = !loginMem">Запомнить меня</span>
   </div>
+  <app-error-message *ngIf="errorWrongAuth">
+    {{ errorMessages.AUTH_WRONG_AUTH }}
+  </app-error-message>
   <app-button class="auth__button" size="lg">Войти</app-button>
 </form>
