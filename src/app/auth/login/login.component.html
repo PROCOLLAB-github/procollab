@@ -9,14 +9,12 @@
       formControlName="email"
       placeholder="Введите почту"
     ></app-input>
-    <div *ngIf="email.errors?.email" class="error auth__error">
-      <app-icon icon="color-error" appSquare="16"></app-icon>
+    <app-error-message *ngIf="email.errors?.email" class="auth__error">
       {{ errorMessages.VALIDATION_EMAIL }}
-    </div>
-    <div *ngIf="email.errors?.required" class="error auth__error">
-      <app-icon icon="color-error" appSquare="16"></app-icon>
+    </app-error-message>
+    <app-error-message *ngIf="email.errors?.required" class="auth__error">
       {{ errorMessages.VALIDATION_REQUIRED }}
-    </div>
+    </app-error-message>
   </fieldset>
   <fieldset *ngIf="loginForm.get('password') as password" class="auth__field">
     <app-input
@@ -25,14 +23,12 @@
       formControlName="password"
       placeholder="Пароль"
     ></app-input>
-    <div *ngIf="password.errors?.required" class="error auth__error">
-      <app-icon icon="color-error" appSquare="16"></app-icon>
+    <app-error-message *ngIf="password.errors?.required" class="auth__error">
       {{ errorMessages.VALIDATION_REQUIRED }}
-    </div>
-    <div *ngIf="password.errors?.minlength" class="error auth__error">
-      <app-icon icon="color-error" appSquare="16"></app-icon>
+    </app-error-message>
+    <app-error-message *ngIf="password.errors?.minlength" class="auth__error">
       {{ errorMessages.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
-    </div>
+    </app-error-message>
   </fieldset>
   <div class="auth__agreement">
     <app-checkbox class="auth__checkbox" [(checked)]="loginMem"></app-checkbox>

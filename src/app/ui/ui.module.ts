@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 import {
   ButtonComponent,
   CheckboxComponent,
+  ErrorMessageComponent,
   IconComponent,
   InputComponent,
   SelectComponent,
@@ -19,8 +20,16 @@ import { NgxMaskModule } from "ngx-mask";
     CheckboxComponent,
     IconComponent,
     SelectComponent,
+    ErrorMessageComponent,
   ],
   imports: [CommonModule, ClickOutsideModule, NgxMaskModule],
-  exports: [ButtonComponent, InputComponent, CheckboxComponent, IconComponent, SelectComponent],
+  exports: [
+    ButtonComponent,
+    InputComponent,
+    CheckboxComponent,
+    IconComponent,
+    SelectComponent,
+    ErrorMessageComponent,
+  ],
 })
 export class UiModule {}

@@ -1,12 +1,544 @@
 {
     "pipes": [],
     "interfaces": [],
-    "injectables": [],
+    "injectables": [
+        {
+            "name": "ApiService",
+            "id": "injectable-ApiService-702b0472240ab7b1c03b054633981c28ec2c7396267f5eb7396d70f8ffddca4c922f703f8b5350c2e18cd3b343975083d39e8293e65683aaa9f74cb180a86f33",
+            "file": "src/app/core/services/api.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "delete",
+                    "args": [
+                        {
+                            "name": "path",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<any>",
+                    "typeParameters": [],
+                    "line": 27,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "path",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "get",
+                    "args": [
+                        {
+                            "name": "path",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "params",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "optional": true
+                        },
+                        {
+                            "name": "options",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "optional": true
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<any>",
+                    "typeParameters": [],
+                    "line": 15,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "path",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "params",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "optional": true,
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "options",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "optional": true,
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "post",
+                    "args": [
+                        {
+                            "name": "path",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "body",
+                            "type": "object",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<any>",
+                    "typeParameters": [],
+                    "line": 23,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "path",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "body",
+                            "type": "object",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "put",
+                    "args": [
+                        {
+                            "name": "path",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "body",
+                            "type": "object",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<any>",
+                    "typeParameters": [],
+                    "line": 19,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "path",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "body",
+                            "type": "object",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { HttpClient } from \"@angular/common/http\";\nimport { first, Observable } from \"rxjs\";\nimport { environment } from \"../../../environments/environment\";\n\n@Injectable({\n  providedIn: \"root\",\n})\nexport class ApiService {\n  constructor(private http: HttpClient) {}\n\n  // eslint-disable-next-line no-undef\n  get(path: string, params?: any, options?: any): Observable<any> {\n    return this.http.get(environment.apiUrl + path, { params, ...options }).pipe(first());\n  }\n\n  put(path: string, body: object): Observable<any> {\n    return this.http.put(environment.apiUrl + path, body).pipe(first());\n  }\n\n  post(path: string, body: object): Observable<any> {\n    return this.http.post(environment.apiUrl + path, body).pipe(first());\n  }\n\n  delete(path: string): Observable<any> {\n    return this.http.delete(environment.apiUrl + path).pipe(first());\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 11,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "AuthService",
+            "id": "injectable-AuthService-3f7a275b8b0d47114ae1b68bddb05c688b19d55bf32c3aa9f4c5585d6dde23de874e5a43914eecd2ccc015fc3f0b707a5fa5abb0e87ef61f94d99d29cd609c58",
+            "file": "src/app/auth/services/auth.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "getTokens",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Tokens | null",
+                    "typeParameters": [],
+                    "line": 38,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "login",
+                    "args": [
+                        {
+                            "type": "LoginRequest",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<LoginResponse>",
+                    "typeParameters": [],
+                    "line": 20,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "type": "LoginRequest",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "memTokens",
+                    "args": [
+                        {
+                            "name": "tokens",
+                            "type": "Tokens",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "session",
+                            "type": "",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "defaultValue": "false"
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 51,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "tokens",
+                            "type": "Tokens",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "session",
+                            "type": "",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "defaultValue": "false",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "refreshTokens",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Observable<RefreshResponse>",
+                    "typeParameters": [],
+                    "line": 32,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "register",
+                    "args": [
+                        {
+                            "name": "data",
+                            "type": "RegisterRequest",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<RegisterResponse>",
+                    "typeParameters": [],
+                    "line": 26,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "data",
+                            "type": "RegisterRequest",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { ApiService } from \"../../core/services\";\nimport { map, Observable } from \"rxjs\";\nimport {\n  LoginRequest,\n  LoginResponse,\n  RefreshResponse,\n  RegisterRequest,\n  RegisterResponse,\n} from \"../models/http.model\";\nimport { plainToClass } from \"class-transformer\";\nimport { Tokens } from \"../models/tokens\";\n\n@Injectable()\nexport class AuthService {\n  constructor(private apiService: ApiService) {}\n\n  login({ email, password }: LoginRequest): Observable<LoginResponse> {\n    return this.apiService\n      .post(\"/auth/login\", { email, password })\n      .pipe(map(json => plainToClass(LoginResponse, json)));\n  }\n\n  register(data: RegisterRequest): Observable<RegisterResponse> {\n    return this.apiService\n      .post(\"/auth/register\", data)\n      .pipe(map(json => plainToClass(RegisterResponse, json)));\n  }\n\n  refreshTokens(): Observable<RefreshResponse> {\n    return this.apiService\n      .post(\"/auth/refresh-tokens\", { refresh_token: localStorage.getItem(\"refreshToken\") })\n      .pipe(map(json => plainToClass(RefreshResponse, json)));\n  }\n\n  getTokens(): Tokens | null {\n    const accessToken =\n      localStorage.getItem(\"accessToken\") ?? sessionStorage.getItem(\"accessToken\");\n    const refreshToken =\n      localStorage.getItem(\"refreshToken\") ?? sessionStorage.getItem(\"refreshToken\");\n\n    if (!accessToken && !refreshToken) {\n      return null;\n    }\n\n    return { accessToken: accessToken as string, refreshToken: accessToken as string };\n  }\n\n  memTokens(tokens: Tokens, session = false): void {\n    if (!session) {\n      localStorage.setItem(\"accessToken\", tokens.accessToken);\n      localStorage.setItem(\"refreshToken\", tokens.refreshToken);\n    } else {\n      sessionStorage.setItem(\"accessToken\", tokens.accessToken);\n      sessionStorage.setItem(\"refreshToken\", tokens.refreshToken);\n    }\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "apiService",
+                        "type": "ApiService",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 17,
+                "jsdoctags": [
+                    {
+                        "name": "apiService",
+                        "type": "ApiService",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "ErrorService",
+            "id": "injectable-ErrorService-0c71cab9ac0d61f94297f34e4d77ab03c29291f7312b6751195235837d22eae82955490d289f2dc74384bdc2d90d6ed063ff565e3312aaa51bb28aa073c60886",
+            "file": "src/app/error/services/error.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "throwError",
+                    "args": [
+                        {
+                            "name": "type",
+                            "type": "ErrorCode",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Promise<void>",
+                    "typeParameters": [],
+                    "line": 21,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "modifierKind": [
+                        121
+                    ],
+                    "jsdoctags": [
+                        {
+                            "name": "type",
+                            "type": "ErrorCode",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "throwNotFount",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Promise<void>",
+                    "typeParameters": [],
+                    "line": 13,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "throwServerError",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Promise<void>",
+                    "typeParameters": [],
+                    "line": 17,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { Router } from \"@angular/router\";\nimport { ErrorCode } from \"../models/error-code\";\n\n@Injectable({\n  providedIn: \"root\",\n})\nexport class ErrorService {\n  constructor(private router: Router) {}\n\n  throwNotFount(): Promise<void> {\n    return this.throwError(ErrorCode.NOT_FOUND);\n  }\n\n  throwServerError(): Promise<void> {\n    return this.throwError(ErrorCode.SERVER_ERROR);\n  }\n\n  private throwError(type: ErrorCode): Promise<void> {\n    return this.router.navigateByUrl(`/error/${type}`).then(() => console.debug(\"Route Changed\"));\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "router",
+                        "type": "Router",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 10,
+                "jsdoctags": [
+                    {
+                        "name": "router",
+                        "type": "Router",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "ValidationService",
+            "id": "injectable-ValidationService-172cc714b3ef425b179bc75b21ae7e0b271ee0dad48f0c1058a8961626c0de7e511b0b8ca803a1e444526e1e9f0964c79707d498ac7b109c972503b5f459e5d5",
+            "file": "src/app/core/services/validation.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "useMatchValidator",
+                    "args": [
+                        {
+                            "name": "left",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "right",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "ValidatorFn",
+                    "typeParameters": [],
+                    "line": 12,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "left",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "right",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport { ValidatorFn } from \"@angular/forms\";\n\n@Injectable({\n  providedIn: \"root\",\n})\nexport class ValidationService {\n  constructor() {}\n\n  useMatchValidator(left: string, right: string): ValidatorFn {\n    return group => {\n      if (!group.get(left) || !group.get(right)) {\n        throw new Error(`No control with name ${left} or ${right}`);\n      }\n\n      // @ts-ignore\n      return group.get(left).value !== group.get(right).value ? { unMatch: true } : null;\n    };\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 9
+            },
+            "type": "injectable"
+        }
+    ],
     "guards": [],
     "interceptors": [
         {
             "name": "BearerTokenInterceptor",
-            "id": "injectable-BearerTokenInterceptor-a9dbc5c906fac5a82826225cd316b307dd60e5b305739efaad7b63bfad230b878d3e6a3bd6d2c5b4d5ee3da1849b2d9b94bdf0859da0fc15a51c8467eb1433cd",
+            "id": "injectable-BearerTokenInterceptor-4e86d77db9dfe7f8805ed898aa644175d27f9aa03788f0760e30471a503893b47108f5f7b93114c0541d1c9bbb53be08a967066723cf84d88820f16c5b3803db",
             "file": "src/app/core/interceptors/bearer-token.interceptor.ts",
             "properties": [],
             "methods": [
@@ -29,7 +561,7 @@
                     "optional": false,
                     "returnType": "Observable<HttpEvent<>>",
                     "typeParameters": [],
-                    "line": 15,
+                    "line": 19,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -58,16 +590,382 @@
             "deprecationMessage": "",
             "description": "",
             "rawdescription": "\n",
-            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport {\n  HttpRequest,\n  HttpHandler,\n  HttpEvent,\n  HttpInterceptor,\n  HttpHeaders,\n} from \"@angular/common/http\";\nimport { Observable } from \"rxjs\";\n\n@Injectable()\nexport class BearerTokenInterceptor implements HttpInterceptor {\n  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {\n    const headers = new HttpHeaders();\n    const token = localStorage.getItem(\"access-token\");\n\n    if (token) {\n      headers.set(\"Authorization\", `Bearer ${token}`);\n    }\n\n    const req = request.clone({ headers });\n    return next.handle(req);\n  }\n}\n",
+            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport {\n  HttpErrorResponse,\n  HttpEvent,\n  HttpHandler,\n  HttpHeaders,\n  HttpInterceptor,\n  HttpRequest,\n} from \"@angular/common/http\";\nimport { catchError, Observable, switchMap, throwError } from \"rxjs\";\nimport { AuthService } from \"../../auth/services\";\n\n@Injectable()\nexport class BearerTokenInterceptor implements HttpInterceptor {\n  constructor(private authService: AuthService) {}\n\n  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {\n    const headers = new HttpHeaders();\n    const tokens = this.authService.getTokens();\n\n    if (tokens) {\n      headers.set(\"Authorization\", `Bearer ${tokens.accessToken}`);\n    }\n\n    const req = request.clone({ headers });\n    return next.handle(req).pipe(\n      catchError((error: HttpErrorResponse) => {\n        if (error.status === 401) {\n          return this.authService.refreshTokens().pipe(\n            switchMap(res => {\n              this.authService.memTokens(res);\n              const headers = new HttpHeaders();\n\n              const tokens = this.authService.getTokens();\n\n              if (tokens) {\n                headers.set(\"Authorization\", `Bearer ${tokens.accessToken}`);\n              }\n\n              return next.handle(\n                request.clone({\n                  headers,\n                })\n              );\n            })\n          );\n        }\n\n        return throwError(() => error);\n      })\n    );\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "authService",
+                        "type": "AuthService",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 16,
+                "jsdoctags": [
+                    {
+                        "name": "authService",
+                        "type": "AuthService",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "interceptor"
+        },
+        {
+            "name": "CamelcaseInterceptor",
+            "id": "injectable-CamelcaseInterceptor-684fae64dcd830eeda864faf4be113e3b39768493ecd6cabda66be913542acac01762dd55e9b38cfd1c11a1814ea66c4d91a0e42efaff4e1e5326148b8f16d9a",
+            "file": "src/app/core/interceptors/camelcase.interceptor.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "intercept",
+                    "args": [
+                        {
+                            "name": "request",
+                            "type": "HttpRequest<>",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "next",
+                            "type": "HttpHandler",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<HttpEvent<>>",
+                    "typeParameters": [],
+                    "line": 19,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "request",
+                            "type": "HttpRequest<>",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "next",
+                            "type": "HttpHandler",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { Injectable } from \"@angular/core\";\nimport {\n  HttpEvent,\n  HttpHandler,\n  HttpInterceptor,\n  HttpRequest,\n  HttpResponse,\n} from \"@angular/common/http\";\nimport { map, Observable } from \"rxjs\";\nimport * as snakecaseKeys from \"snakecase-keys\";\nimport camelcaseKeys from \"camelcase-keys\";\n\n@Injectable()\nexport class CamelcaseInterceptor implements HttpInterceptor {\n  constructor() {}\n\n  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {\n    const req = request.clone({\n      // @ts-ignore\n      body: snakecaseKeys(request.body, { deep: true }),\n    });\n\n    return next.handle(req).pipe(\n      map((event: HttpEvent<any>) => {\n        if (event instanceof HttpResponse) {\n          return event.clone({\n            body: camelcaseKeys(event.body, { deep: true }),\n          });\n        }\n\n        return event;\n      })\n    );\n  }\n}\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 16
+            },
             "type": "interceptor"
         }
     ],
-    "classes": [],
+    "classes": [
+        {
+            "name": "LoginRequest",
+            "id": "class-LoginRequest-bc63bd023afb36564d0be315b97d8452ed7645608e03150a624fa513a2a85dd3128bc7ea8a0b987e40f7ddba8dae8102829fe11c2a327cd4cd73cef283743761",
+            "file": "src/app/auth/models/http.model.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "class",
+            "sourceCode": "export class LoginRequest {\n  email!: string;\n  password!: string;\n}\n\nexport class LoginResponse {\n  accessToken!: string;\n  refreshToken!: string;\n  tokenType!: \"Bearer\";\n}\n\nexport class RefreshResponse {\n  accessToken!: string;\n  refreshToken!: string;\n  tokenType!: \"Bearer\";\n}\n\nexport class RegisterRequest {\n  name!: string;\n  surname!: string;\n  birthday!: string;\n  email!: string;\n  password!: string;\n}\nexport class RegisterResponse extends LoginResponse {}\n",
+            "properties": [
+                {
+                    "name": "email",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 4
+                },
+                {
+                    "name": "password",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "LoginResponse",
+            "id": "class-LoginResponse-bc63bd023afb36564d0be315b97d8452ed7645608e03150a624fa513a2a85dd3128bc7ea8a0b987e40f7ddba8dae8102829fe11c2a327cd4cd73cef283743761",
+            "file": "src/app/auth/models/http.model.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "class",
+            "sourceCode": "export class LoginRequest {\n  email!: string;\n  password!: string;\n}\n\nexport class LoginResponse {\n  accessToken!: string;\n  refreshToken!: string;\n  tokenType!: \"Bearer\";\n}\n\nexport class RefreshResponse {\n  accessToken!: string;\n  refreshToken!: string;\n  tokenType!: \"Bearer\";\n}\n\nexport class RegisterRequest {\n  name!: string;\n  surname!: string;\n  birthday!: string;\n  email!: string;\n  password!: string;\n}\nexport class RegisterResponse extends LoginResponse {}\n",
+            "properties": [
+                {
+                    "name": "accessToken",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                },
+                {
+                    "name": "refreshToken",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 10
+                },
+                {
+                    "name": "tokenType",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "RefreshResponse",
+            "id": "class-RefreshResponse-bc63bd023afb36564d0be315b97d8452ed7645608e03150a624fa513a2a85dd3128bc7ea8a0b987e40f7ddba8dae8102829fe11c2a327cd4cd73cef283743761",
+            "file": "src/app/auth/models/http.model.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "class",
+            "sourceCode": "export class LoginRequest {\n  email!: string;\n  password!: string;\n}\n\nexport class LoginResponse {\n  accessToken!: string;\n  refreshToken!: string;\n  tokenType!: \"Bearer\";\n}\n\nexport class RefreshResponse {\n  accessToken!: string;\n  refreshToken!: string;\n  tokenType!: \"Bearer\";\n}\n\nexport class RegisterRequest {\n  name!: string;\n  surname!: string;\n  birthday!: string;\n  email!: string;\n  password!: string;\n}\nexport class RegisterResponse extends LoginResponse {}\n",
+            "properties": [
+                {
+                    "name": "accessToken",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 15
+                },
+                {
+                    "name": "refreshToken",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 16
+                },
+                {
+                    "name": "tokenType",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 17
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "RegisterRequest",
+            "id": "class-RegisterRequest-bc63bd023afb36564d0be315b97d8452ed7645608e03150a624fa513a2a85dd3128bc7ea8a0b987e40f7ddba8dae8102829fe11c2a327cd4cd73cef283743761",
+            "file": "src/app/auth/models/http.model.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "class",
+            "sourceCode": "export class LoginRequest {\n  email!: string;\n  password!: string;\n}\n\nexport class LoginResponse {\n  accessToken!: string;\n  refreshToken!: string;\n  tokenType!: \"Bearer\";\n}\n\nexport class RefreshResponse {\n  accessToken!: string;\n  refreshToken!: string;\n  tokenType!: \"Bearer\";\n}\n\nexport class RegisterRequest {\n  name!: string;\n  surname!: string;\n  birthday!: string;\n  email!: string;\n  password!: string;\n}\nexport class RegisterResponse extends LoginResponse {}\n",
+            "properties": [
+                {
+                    "name": "birthday",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 23
+                },
+                {
+                    "name": "email",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 24
+                },
+                {
+                    "name": "name",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 21
+                },
+                {
+                    "name": "password",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 25
+                },
+                {
+                    "name": "surname",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 22
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "RegisterResponse",
+            "id": "class-RegisterResponse-bc63bd023afb36564d0be315b97d8452ed7645608e03150a624fa513a2a85dd3128bc7ea8a0b987e40f7ddba8dae8102829fe11c2a327cd4cd73cef283743761",
+            "file": "src/app/auth/models/http.model.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "class",
+            "sourceCode": "export class LoginRequest {\n  email!: string;\n  password!: string;\n}\n\nexport class LoginResponse {\n  accessToken!: string;\n  refreshToken!: string;\n  tokenType!: \"Bearer\";\n}\n\nexport class RefreshResponse {\n  accessToken!: string;\n  refreshToken!: string;\n  tokenType!: \"Bearer\";\n}\n\nexport class RegisterRequest {\n  name!: string;\n  surname!: string;\n  birthday!: string;\n  email!: string;\n  password!: string;\n}\nexport class RegisterResponse extends LoginResponse {}\n",
+            "properties": [
+                {
+                    "name": "accessToken",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 9,
+                    "inheritance": {
+                        "file": "LoginResponse"
+                    }
+                },
+                {
+                    "name": "refreshToken",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 10,
+                    "inheritance": {
+                        "file": "LoginResponse"
+                    }
+                },
+                {
+                    "name": "tokenType",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 11,
+                    "inheritance": {
+                        "file": "LoginResponse"
+                    }
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "extends": "LoginResponse",
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        },
+        {
+            "name": "Tokens",
+            "id": "class-Tokens-6773ee4c008ce149a89e75b7706a355c8de6b7be2ced627970de1b45787a62bd539ae49361e53ed14fdd7be3f5ce059f307b9943277b725b404159bbc055f23e",
+            "file": "src/app/auth/models/tokens.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "class",
+            "sourceCode": "export class Tokens {\n  accessToken!: string;\n  refreshToken!: string;\n}\n",
+            "properties": [
+                {
+                    "name": "accessToken",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 4
+                },
+                {
+                    "name": "refreshToken",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        }
+    ],
     "directives": [],
     "components": [
         {
             "name": "AppComponent",
-            "id": "component-AppComponent-d5922b9ec110f7ed5417d679b0b9c4386eff35e101285fc61b3f78f2169950f1b9c90e43b18bbc6c3a564d21376ff6c440e2bdcf7f452e1f64191930b60d1542",
+            "id": "component-AppComponent-7529d1e83f370cc2c628f16bd1137be200c9b9bdc10eb15f950668965e5d5e773fb5ef0e31ffc510969f69f1f94d4de83fad951751715692c5d8400a3db8f78b",
             "file": "src/app/app.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -85,18 +983,7 @@
             "viewProviders": [],
             "inputsClass": [],
             "outputsClass": [],
-            "propertiesClass": [
-                {
-                    "name": "checked",
-                    "defaultValue": "false",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "",
-                    "optional": false,
-                    "description": "",
-                    "line": 11
-                }
-            ],
+            "propertiesClass": [],
             "methodsClass": [],
             "deprecated": false,
             "deprecationMessage": "",
@@ -105,7 +992,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component } from \"@angular/core\";\n\n@Component({\n  selector: \"app-root\",\n  templateUrl: \"./app.component.html\",\n  styleUrls: [\"./app.component.scss\"],\n})\nexport class AppComponent {\n  checked = false;\n}\n",
+            "sourceCode": "import { Component } from \"@angular/core\";\n\n@Component({\n  selector: \"app-root\",\n  templateUrl: \"./app.component.html\",\n  styleUrls: [\"./app.component.scss\"],\n})\nexport class AppComponent {}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -114,7 +1001,69 @@
                 }
             ],
             "stylesData": "",
-            "templateData": "<!-- @format -->\n\n<form style=\"background-color: #000\">\n  <app-checkbox [checked]=\"true\"></app-checkbox>\n</form>\n<router-outlet></router-outlet>\n"
+            "templateData": "<!-- @format -->\n\n<router-outlet></router-outlet>\n"
+        },
+        {
+            "name": "AuthComponent",
+            "id": "component-AuthComponent-d61509c1bc7629e170743947c9d18ef37e332eda62857369bb057f096883c6422ce1ec77ab5579516fdcad272e83613490e33e64a472e5eef29dda789c56c4bd",
+            "file": "src/app/auth/auth.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-auth",
+            "styleUrls": [
+                "./auth.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./auth.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 13,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-auth\",\n  templateUrl: \"./auth.component.html\",\n  styleUrls: [\"./auth.component.scss\"],\n})\nexport class AuthComponent implements OnInit {\n  constructor() {}\n\n  ngOnInit(): void {}\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "/** @format */\n\n.page {\n  position: relative;\n  height: 100vh;\n  background: var(--bg-main) no-repeat center/cover url(\"/assets/images/auth/bg.png\");\n\n  &__header {\n    display: flex;\n    padding: 20px 140px;\n  }\n\n  &__body {\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    width: 790px;\n    padding: 40px 200px 70px;\n    background: radial-gradient(\n      123.12% 427.27% at -3.17% 0%,\n      rgb(170 255 255 / 14%) 3.43%,\n      rgb(170 255 255 / 0%) 100%\n    );\n    background-blend-mode: overlay, normal;\n    border-radius: var(--rounded-lg);\n    transform: translate(-50%, -50%);\n    backdrop-filter: blur(39px);\n  }\n}\n",
+                    "styleUrl": "./auth.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 10
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<!-- @format -->\n\n<div class=\"page\">\n  <header class=\"page__header\">\n    <img src=\"/assets/images/shared/logo.png\" width=\"150px\" alt=\"pro_collab\" />\n  </header>\n  <div class=\"page__body\">\n    <router-outlet></router-outlet>\n  </div>\n</div>\n"
         },
         {
             "name": "ButtonComponent",
@@ -170,7 +1119,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": ".button {\n  color: #fff;\n  cursor: pointer;\n  background-color: var(--accent);\n  border: none;\n  border-radius: var(--rounded-lg);\n  outline: none;\n\n  &--md {\n    min-width: 210px;\n    padding: 10px 20px;\n  }\n\n  &--lg {\n    min-width: 375px;\n    padding: 15px 30px;\n  }\n}\n",
+                    "data": "/** @format */\n\n.button {\n  color: #fff;\n  cursor: pointer;\n  background-color: var(--accent);\n  border: none;\n  border-radius: var(--rounded-lg);\n  outline: none;\n  transition: background-color 0.2s;\n\n  &:hover {\n    background-color: var(--accent-hover);\n  }\n\n  &--md {\n    min-width: 210px;\n    padding: 10px 20px;\n  }\n\n  &--lg {\n    min-width: 375px;\n    padding: 15px 30px;\n  }\n}\n",
                     "styleUrl": "./button.component.scss"
                 }
             ],
@@ -186,7 +1135,7 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<!-- @format -->\n\n<button\n  class=\"button\"\n  [ngClass]=\"{\n    'button--md text-button': size === 'md',\n    'button--lg text-button--lg': size === 'lg'\n  }\"\n>\n  <ng-content></ng-content>\n</button>\n"
+            "templateData": "<!-- @format -->\n\n<button\n  class=\"button\"\n  [ngClass]=\"{\n    'button--md text-p1': size === 'md',\n    'button--lg text-h4': size === 'lg'\n  }\"\n>\n  <ng-content></ng-content>\n</button>\n"
         },
         {
             "name": "CheckboxComponent",
@@ -251,7 +1200,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": ".field {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 20px;\n  height: 20px;\n  cursor: pointer;\n  background-color: var(--gray-100);\n  border-radius: var(--rounded-sm);\n\n  &__checked {\n    display: block;\n    width: 100%;\n    height: 100%;\n  }\n}\n",
+                    "data": "/** @format */\n\n.field {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 20px;\n  height: 20px;\n  cursor: pointer;\n  background-color: var(--gray-100);\n  border-radius: var(--rounded-sm);\n\n  &__checked {\n    display: block;\n    width: 100%;\n    height: 100%;\n    color: var(--blue-dark);\n  }\n}\n",
                     "styleUrl": "./checkbox.component.scss"
                 }
             ],
@@ -259,11 +1208,288 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<!-- @format -->\n<div class=\"field\" (click)=\"checkedChange.emit(!checked)\">\n  <app-icon *ngIf=\"checked\" class=\"field__checked\" icon=\"check\" appSquare=\"17\"></app-icon>\n</div>\n"
+            "templateData": "<!-- @format -->\n<div class=\"field\" (click)=\"checkedChange.emit(!checked)\">\n  <app-icon *ngIf=\"checked\" class=\"field__checked\" icon=\"check\" appViewBox=\"0 0 18 17\"></app-icon>\n</div>\n"
+        },
+        {
+            "name": "ErrorCodeComponent",
+            "id": "component-ErrorCodeComponent-461c9a6628a3c41e4e84b4307542eb6eb7a9bc181ea5741585c53e4f08ce2868487c38b82cb5f365bfc79eb05e0a5aad2e80f06cbf76b40736b9e71157f52b62",
+            "file": "src/app/error/code/error-code.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-code",
+            "styleUrls": [
+                "./error-code.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./error-code.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "errorCode",
+                    "defaultValue": "this.activatedRoute.params.pipe(pluck(\"code\"))",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 13
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 17,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\nimport { ActivatedRoute } from \"@angular/router\";\nimport { pluck } from \"rxjs\";\n\n@Component({\n  selector: \"app-code\",\n  templateUrl: \"./error-code.component.html\",\n  styleUrls: [\"./error-code.component.scss\"],\n})\nexport class ErrorCodeComponent implements OnInit {\n  errorCode = this.activatedRoute.params.pipe(pluck(\"code\"));\n\n  constructor(private activatedRoute: ActivatedRoute) {}\n\n  ngOnInit(): void {}\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ".error {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n\n  &__code {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 580px;\n    height: 580px;\n    margin-bottom: 20px;\n    color: var(--error-code);\n    background: radial-gradient(50% 50% at 50% 50%, rgb(0 200 147 / 51%) 0%, rgb(0 200 147 / 0%) 100%);\n  }\n\n  &__title {\n    margin-bottom: 20px;\n    color: var(--gray-100);\n    text-align: center;\n  }\n\n  &__link {\n    display: block;\n    text-align: center;\n  }\n}\n",
+                    "styleUrl": "./error-code.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "activatedRoute",
+                        "type": "ActivatedRoute",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 13,
+                "jsdoctags": [
+                    {
+                        "name": "activatedRoute",
+                        "type": "ActivatedRoute",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<!-- @format -->\n\n<div class=\"error\">\n  <div class=\"error__body\">\n    <div class=\"text-error-code error__code\">{{ errorCode | async }}</div>\n    <h1 class=\"text-h2 error__title\">Какая-то непонятная ошибка</h1>\n    <a class=\"text-p1 error__link\" routerLink=\"/\">Вернуться на главную</a>\n  </div>\n</div>\n"
+        },
+        {
+            "name": "ErrorComponent",
+            "id": "component-ErrorComponent-32cbf03addbefc455f409c5cc3a67600dc1bdc3a8c15d8db7fa21904f0edaaa651415dbf22170504c586882d4ab2e3d4c758215f6878ce4644592f33dd5241c1",
+            "file": "src/app/error/error.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-error",
+            "styleUrls": [
+                "./error.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./error.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 12,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-error',\n  templateUrl: './error.component.html',\n  styleUrls: ['./error.component.scss']\n})\nexport class ErrorComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "/** @format */\n\n.page {\n  position: relative;\n  height: 100vh;\n  background-color: var(--bg-main);\n\n  &__header {\n    display: flex;\n    padding: 20px 140px;\n  }\n}\n",
+                    "styleUrl": "./error.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 8
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<!-- @format -->\n\n<main class=\"page\">\n  <header class=\"page__header\">\n    <img src=\"/assets/images/shared/logo.png\" width=\"150px\" alt=\"pro_collab\" />\n  </header>\n  <router-outlet></router-outlet>\n</main>\n"
+        },
+        {
+            "name": "ErrorMessageComponent",
+            "id": "component-ErrorMessageComponent-5e2cb58447210121fc8ebfc3bff1a0fd691c2662de597e616834e112ba765a01d31823d6bc024b34bc043dc18fd91a154fa5ff3b21a1fe393c4cb5133ecbca8e",
+            "file": "src/app/ui/components/error-message/error-message.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-error-message",
+            "styleUrls": [
+                "./error-message.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./error-message.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 12,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-error-message',\n  templateUrl: './error-message.component.html',\n  styleUrls: ['./error-message.component.scss']\n})\nexport class ErrorMessageComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "@import \"src/styles/typography\";\n\n.error {\n  display: flex;\n  align-items: center;\n  color: var(--error);\n\n  @include text-p2;\n\n  &:not(:last-child) {\n    margin-bottom: 10px;\n  }\n\n  app-icon {\n    margin-right: 5px;\n  }\n}\n",
+                    "styleUrl": "./error-message.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 8
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<!-- @format -->\n\n<div class=\"error\">\n  <app-icon icon=\"color-error\" appSquare=\"16\"></app-icon>\n  <ng-content></ng-content>\n</div>\n"
+        },
+        {
+            "name": "ErrorNotFoundComponent",
+            "id": "component-ErrorNotFoundComponent-bc912ab081813394d79416770ee5eb246779b20da91cc6554805c1f2bd760bfa3bf3e5ade225d525fa9a4f3e30fc4477542abe0414fd38a4f98b97cedd4bbe6a",
+            "file": "src/app/error/not-found/error-not-found.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-not-found",
+            "styleUrls": [
+                "./error-not-found.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./error-not-found.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 13,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-not-found\",\n  templateUrl: \"./error-not-found.component.html\",\n  styleUrls: [\"./error-not-found.component.scss\"],\n})\nexport class ErrorNotFoundComponent implements OnInit {\n  constructor() {}\n\n  ngOnInit(): void {}\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ".error {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n\n  &__code {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 580px;\n    height: 580px;\n    margin-bottom: 20px;\n    color: var(--error-code);\n    background: radial-gradient(50% 50% at 50% 50%, rgb(0 200 147 / 51%) 0%, rgb(0 200 147 / 0%) 100%);\n  }\n\n  &__title {\n    margin-bottom: 20px;\n    color: var(--gray-100);\n    text-align: center;\n  }\n\n  &__link {\n    display: block;\n    text-align: center;\n  }\n}\n",
+                    "styleUrl": "./error-not-found.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 10
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<!-- @format -->\n\n<div class=\"error\">\n  <div class=\"error__body\">\n    <div class=\"text-error-code error__code\">404</div>\n    <h1 class=\"text-h2 error__title\">Страница не найдена</h1>\n    <a class=\"text-p1 error__link\" routerLink=\"/\">Вернуться на главную</a>\n  </div>\n</div>\n"
         },
         {
             "name": "IconComponent",
-            "id": "component-IconComponent-b4dbf99aedf875c9a14bfe56021c0a52fe63fb3f890e61e45d0c8444ba2577c96ab9d56d99868fd5520c2d8b2e5e970e13c25545662a88e34f2a45e73bc5d325",
+            "id": "component-IconComponent-060436cc69c1db7fe24ebc9fab93d9b4eae2f03abca412583c6b9bb6a0768384dbd1b1afe43b26a37949c8fe921e90d38c82ca6b829150c9f24dbe70d9b1e02e",
             "file": "src/app/ui/components/icon/icon.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -284,7 +1510,7 @@
                     "name": "appHeight",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 43,
+                    "line": 47,
                     "type": "string",
                     "decorators": []
                 },
@@ -316,7 +1542,7 @@
                     "name": "icon",
                     "deprecated": false,
                     "deprecationMessage": "",
-                    "line": 53,
+                    "line": 61,
                     "type": "string",
                     "decorators": []
                 }
@@ -330,7 +1556,7 @@
                     "type": "string",
                     "optional": false,
                     "description": "",
-                    "line": 59
+                    "line": 67
                 },
                 {
                     "name": "square",
@@ -339,7 +1565,7 @@
                     "type": "string",
                     "optional": false,
                     "description": "",
-                    "line": 55
+                    "line": 63
                 },
                 {
                     "name": "viewBox",
@@ -348,7 +1574,7 @@
                     "type": "string",
                     "optional": false,
                     "description": "",
-                    "line": 56
+                    "line": 64
                 },
                 {
                     "name": "width",
@@ -357,7 +1583,7 @@
                     "type": "string",
                     "optional": false,
                     "description": "",
-                    "line": 58
+                    "line": 66
                 }
             ],
             "methodsClass": [
@@ -367,9 +1593,37 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 61,
+                    "line": 69,
                     "deprecated": false,
                     "deprecationMessage": ""
+                },
+                {
+                    "name": "viewBoxInfo",
+                    "args": [
+                        {
+                            "name": "viewBox",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "string[]",
+                    "typeParameters": [],
+                    "line": 71,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "viewBox",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
                 }
             ],
             "deprecated": false,
@@ -379,11 +1633,11 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-icon\",\n  templateUrl: \"./icon.component.html\",\n  styleUrls: [\"./icon.component.scss\"],\n})\nexport class IconComponent implements OnInit {\n  @Input()\n  set appSquare(square: string) {\n    this.square = square;\n\n    !this.viewBox && (this.viewBox = `0 0 ${square} ${square}`);\n  }\n\n  get appSquare(): string {\n    return this.square;\n  }\n\n  @Input()\n  set appViewBox(viewBox: string) {\n    this.viewBox = viewBox;\n  }\n\n  get appViewBox(): string {\n    return this.viewBox;\n  }\n\n  @Input()\n  set appWidth(width: string) {\n    this.width = width;\n\n    !this.viewBox && (this.viewBox = `0 0 ${width} 0`);\n  }\n\n  get appWidth(): string {\n    return this.width;\n  }\n\n  @Input()\n  set appHeight(height: string) {\n    this.height = height;\n\n    !this.viewBox && (this.viewBox = `0 0 0 ${height}`);\n  }\n\n  get appHeight(): string {\n    return this.height;\n  }\n\n  @Input() icon!: string;\n\n  square!: string;\n  viewBox!: string;\n\n  width!: string;\n  height!: string;\n\n  ngOnInit(): void {}\n}\n",
+            "sourceCode": "import { Component, Input, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-icon\",\n  templateUrl: \"./icon.component.html\",\n  styleUrls: [\"./icon.component.scss\"],\n})\nexport class IconComponent implements OnInit {\n  @Input()\n  set appSquare(square: string) {\n    this.square = square;\n\n    !this.viewBox && (this.viewBox = `0 0 ${square} ${square}`);\n  }\n\n  get appSquare(): string {\n    return this.square;\n  }\n\n  @Input()\n  set appViewBox(viewBox: string) {\n    this.viewBox = viewBox;\n  }\n\n  get appViewBox(): string {\n    return this.viewBox;\n  }\n\n  @Input()\n  set appWidth(width: string) {\n    this.width = width;\n\n    if (this.viewBox) {\n      const viewbox = this.viewBoxInfo(this.viewBox);\n      viewbox[2] = width;\n      !this.viewBox && (this.viewBox = viewbox.join(\" \"));\n    }\n  }\n\n  get appWidth(): string {\n    return this.width;\n  }\n\n  @Input()\n  set appHeight(height: string) {\n    this.height = height;\n\n    if (this.viewBox) {\n      const viewbox = this.viewBoxInfo(this.viewBox);\n      viewbox[3] = height;\n      !this.viewBox && (this.viewBox = viewbox.join(\" \"));\n    }\n  }\n\n  get appHeight(): string {\n    return this.height;\n  }\n\n  @Input() icon!: string;\n\n  square!: string;\n  viewBox!: string;\n\n  width!: string;\n  height!: string;\n\n  ngOnInit(): void {}\n\n  viewBoxInfo(viewBox: string): string[] {\n    return viewBox.split(\" \");\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "",
+                    "data": "/** @format */\n\n.icon {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 20px;\n  height: 20px;\n\n  svg {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    width: 100%;\n    height: 100%;\n  }\n}\n",
                     "styleUrl": "./icon.component.scss"
                 }
             ],
@@ -497,7 +1751,7 @@
                         "name": "appWidth",
                         "type": "string",
                         "returnType": "string",
-                        "line": 38
+                        "line": 42
                     }
                 },
                 "appHeight": {
@@ -516,7 +1770,7 @@
                             }
                         ],
                         "returnType": "void",
-                        "line": 43,
+                        "line": 47,
                         "jsdoctags": [
                             {
                                 "name": "height",
@@ -533,15 +1787,15 @@
                         "name": "appHeight",
                         "type": "string",
                         "returnType": "string",
-                        "line": 49
+                        "line": 57
                     }
                 }
             },
-            "templateData": "<!-- @format -->\n\n<div class=\"flex items-center justify-center w-full h-full\">\n  <svg\n    class=\"block\"\n    [attr.width]=\"square || width\"\n    [attr.height]=\"square || height\"\n    [attr.viewBox]=\"viewBox\"\n  >\n    <use [attr.xlink:href]=\"'assets/icons/sprite.svg#' + icon\"></use>\n  </svg>\n</div>\n"
+            "templateData": "<!-- @format -->\n\n<div class=\"icon\">\n  <svg [attr.width]=\"square || width\" [attr.height]=\"square || height\" [attr.viewBox]=\"viewBox\">\n    <use [attr.xlink:href]=\"'assets/icons/sprite.svg#' + icon\"></use>\n  </svg>\n</div>\n"
         },
         {
             "name": "InputComponent",
-            "id": "component-InputComponent-8eb25d23f6242d9556dc7eafe39b7b5de4368ab7398a77d2463b714646eaa0aa1ed3b36ee9013bc588de1679d9e07afdac77025b1dea82bf9540b85fb3ad36ae",
+            "id": "component-InputComponent-f82fce375e7f5506229205d13652e800e3a2d1d3494c62f72887711aa895dcf26ca2c97186f9234d3b05d951bfde2345aa29bc1918c3e8e20a416a414a87848e",
             "file": "src/app/ui/components/input/input.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -564,12 +1818,39 @@
             "viewProviders": [],
             "inputsClass": [
                 {
+                    "name": "appMask",
+                    "defaultValue": "\"\"",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 22,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "error",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 21,
+                    "type": "boolean",
+                    "decorators": []
+                },
+                {
                     "name": "placeholder",
                     "defaultValue": "\"\"",
                     "deprecated": false,
                     "deprecationMessage": "",
                     "line": 19,
                     "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "type",
+                    "defaultValue": "\"text\"",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 20,
+                    "type": "\"text\" | \"password\" | \"email\"",
                     "decorators": []
                 }
             ],
@@ -583,7 +1864,7 @@
                     "type": "",
                     "optional": false,
                     "description": "",
-                    "line": 45
+                    "line": 52
                 },
                 {
                     "name": "onChange",
@@ -593,7 +1874,7 @@
                     "type": "function",
                     "optional": false,
                     "description": "",
-                    "line": 35
+                    "line": 42
                 },
                 {
                     "name": "onTouch",
@@ -603,7 +1884,7 @@
                     "type": "function",
                     "optional": false,
                     "description": "",
-                    "line": 40
+                    "line": 47
                 },
                 {
                     "name": "value",
@@ -613,7 +1894,7 @@
                     "type": "string",
                     "optional": false,
                     "description": "",
-                    "line": 30
+                    "line": 37
                 }
             ],
             "methodsClass": [
@@ -623,7 +1904,17 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 23,
+                    "line": 26,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onBlur",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 33,
                     "deprecated": false,
                     "deprecationMessage": ""
                 },
@@ -640,7 +1931,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 25,
+                    "line": 28,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -660,23 +1951,39 @@
                     "args": [
                         {
                             "name": "fn",
-                            "type": "any",
+                            "type": "function",
                             "deprecated": false,
-                            "deprecationMessage": ""
+                            "deprecationMessage": "",
+                            "function": [
+                                {
+                                    "name": "v",
+                                    "type": "string",
+                                    "deprecated": false,
+                                    "deprecationMessage": ""
+                                }
+                            ]
                         }
                     ],
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 36,
+                    "line": 43,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
                         {
                             "name": "fn",
-                            "type": "any",
+                            "type": "function",
                             "deprecated": false,
                             "deprecationMessage": "",
+                            "function": [
+                                {
+                                    "name": "v",
+                                    "type": "string",
+                                    "deprecated": false,
+                                    "deprecationMessage": ""
+                                }
+                            ],
                             "tagName": {
                                 "text": "param"
                             }
@@ -688,23 +1995,25 @@
                     "args": [
                         {
                             "name": "fn",
-                            "type": "any",
+                            "type": "function",
                             "deprecated": false,
-                            "deprecationMessage": ""
+                            "deprecationMessage": "",
+                            "function": []
                         }
                     ],
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 41,
+                    "line": 48,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
                         {
                             "name": "fn",
-                            "type": "any",
+                            "type": "function",
                             "deprecated": false,
                             "deprecationMessage": "",
+                            "function": [],
                             "tagName": {
                                 "text": "param"
                             }
@@ -724,7 +2033,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 46,
+                    "line": 53,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -752,7 +2061,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 31,
+                    "line": 38,
                     "deprecated": false,
                     "deprecationMessage": "",
                     "jsdoctags": [
@@ -775,11 +2084,11 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, forwardRef, Input, OnInit } from \"@angular/core\";\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from \"@angular/forms\";\n\n@Component({\n  selector: \"app-input\",\n  templateUrl: \"./input.component.html\",\n  styleUrls: [\"./input.component.scss\"],\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => InputComponent),\n      multi: true,\n    },\n  ],\n})\nexport class InputComponent implements OnInit, ControlValueAccessor {\n  @Input() placeholder = \"\";\n\n  constructor() {}\n\n  ngOnInit(): void {}\n\n  onInput(event: Event): void {\n    const value = (event.target as HTMLInputElement).value;\n    this.onChange(value);\n  }\n\n  value = \"\";\n  writeValue(value: string): void {\n    this.value = value;\n  }\n\n  onChange: (value: string) => void = () => {};\n  registerOnChange(fn: any): void {\n    this.onChange = fn;\n  }\n\n  onTouch: () => void = () => {};\n  registerOnTouched(fn: any): void {\n    this.onTouch = fn;\n  }\n\n  disabled = false;\n  setDisabledState(isDisabled: boolean) {\n    this.disabled = isDisabled;\n  }\n}\n",
+            "sourceCode": "import { Component, forwardRef, Input, OnInit } from \"@angular/core\";\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from \"@angular/forms\";\n\n@Component({\n  selector: \"app-input\",\n  templateUrl: \"./input.component.html\",\n  styleUrls: [\"./input.component.scss\"],\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => InputComponent),\n      multi: true,\n    },\n  ],\n})\nexport class InputComponent implements OnInit, ControlValueAccessor {\n  @Input() placeholder = \"\";\n  @Input() type: \"text\" | \"password\" | \"email\" = \"text\";\n  @Input() error = false;\n  @Input() appMask = \"\";\n\n  constructor() {}\n\n  ngOnInit(): void {}\n\n  onInput(event: Event): void {\n    const value = (event.target as HTMLInputElement).value;\n    this.onChange(value);\n  }\n\n  onBlur(): void {\n    this.onTouch();\n  }\n\n  value = \"\";\n  writeValue(value: string): void {\n    this.value = value;\n  }\n\n  onChange: (value: string) => void = () => {};\n  registerOnChange(fn: (v: string) => void): void {\n    this.onChange = fn;\n  }\n\n  onTouch: () => void = () => {};\n  registerOnTouched(fn: () => void): void {\n    this.onTouch = fn;\n  }\n\n  disabled = false;\n  setDisabledState(isDisabled: boolean) {\n    this.disabled = isDisabled;\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": ".field {\n  &__input {\n    padding: 20px 25px;\n    color: var(--gray-100);\n    background-color: transparent;\n    border: 1px solid var(--gray-100);\n    border-radius: var(--rounded-lg);\n    outline: none;\n  }\n}\n",
+                    "data": "/** @format */\n\n.field {\n  &__input {\n    width: 100%;\n    padding: 15px 25px;\n    color: var(--gray-100);\n    background-color: transparent;\n    border: 1px solid var(--gray-100);\n    border-radius: var(--rounded-lg);\n    outline: none;\n\n    &--error {\n      color: var(--error);\n      border-color: var(--error);\n    }\n  }\n}\n",
                     "styleUrl": "./input.component.scss"
                 }
             ],
@@ -790,25 +2099,676 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "args": [],
-                "line": 19
+                "line": 22
             },
             "implements": [
                 "OnInit",
                 "ControlValueAccessor"
             ],
-            "templateData": "<!-- @format -->\n\n<div class=\"field\">\n  <div class=\"input__left-icon\">\n    <ng-content select=\"left-icon\"></ng-content>\n  </div>\n\n  <input\n    [value]=\"value\"\n    (input)=\"onInput($event)\"\n    [placeholder]=\"placeholder\"\n    type=\"text\"\n    class=\"text-input field__input\"\n  />\n</div>\n"
+            "templateData": "<!-- @format -->\n\n<div class=\"field\" [class.field--error]=\"error\">\n  <div class=\"input__left-icon\">\n    <ng-content select=\"left-icon\"></ng-content>\n  </div>\n  <input\n    [value]=\"value\"\n    (input)=\"onInput($event)\"\n    (blur)=\"onBlur()\"\n    [placeholder]=\"placeholder\"\n    [type]=\"type\"\n    [mask]=\"appMask\"\n    class=\"text-p1 field__input\"\n    [class.field__input--error]=\"error\"\n  />\n</div>\n"
+        },
+        {
+            "name": "LoginComponent",
+            "id": "component-LoginComponent-4d657e1bea9e3a6f9478c75f1ac68c815044a2c37c510b1cc47331642729aaced3b8970bb0f7b5452bc68064b72b53cb9abec3d67e84481edc92adb8d9e881ea",
+            "file": "src/app/auth/login/login.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-login",
+            "styleUrls": [
+                "./login.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./login.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "errorMessages",
+                    "defaultValue": "ErrorMessages",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 17
+                },
+                {
+                    "name": "loginForm",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "FormGroup",
+                    "optional": false,
+                    "description": "",
+                    "line": 14
+                },
+                {
+                    "name": "loginMem",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 15
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 26,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onSubmit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 28,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\nimport { FormBuilder, FormGroup, Validators } from \"@angular/forms\";\nimport { AuthService } from \"../services\";\nimport { ErrorMessages } from \"../../error/models/error-messages\";\n\n@Component({\n  selector: \"app-login\",\n  templateUrl: \"./login.component.html\",\n  styleUrls: [\"./login.component.scss\"],\n})\nexport class LoginComponent implements OnInit {\n  loginForm: FormGroup;\n  loginMem = false;\n\n  errorMessages = ErrorMessages;\n\n  constructor(private fb: FormBuilder, private authService: AuthService) {\n    this.loginForm = this.fb.group({\n      email: [\"\", [Validators.required, Validators.email]],\n      password: [\"\", [Validators.required, Validators.minLength(6)]],\n    });\n  }\n\n  ngOnInit(): void {}\n\n  onSubmit() {\n    if (this.loginForm.invalid) {\n      return;\n    }\n\n    this.authService.login(this.loginForm.value).subscribe(res => {\n      this.authService.memTokens(res, !this.loginMem);\n    });\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "/** @format */\n",
+                    "styleUrl": "./login.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "fb",
+                        "type": "FormBuilder",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "authService",
+                        "type": "AuthService",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 17,
+                "jsdoctags": [
+                    {
+                        "name": "fb",
+                        "type": "FormBuilder",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "authService",
+                        "type": "AuthService",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<!-- @format -->\n\n<form class=\"auth\" [formGroup]=\"loginForm\" (ngSubmit)=\"onSubmit()\">\n  <h1 class=\"text-h4 auth__title\">Вход</h1>\n  <fieldset *ngIf=\"loginForm.get('email') as email\" class=\"auth__field\">\n    <app-input\n      [error]=\"!!(email.touched && email.invalid)\"\n      type=\"email\"\n      formControlName=\"email\"\n      placeholder=\"Введите почту\"\n    ></app-input>\n    <app-error-message *ngIf=\"email.errors?.email\" class=\"auth__error\">\n      {{ errorMessages.VALIDATION_EMAIL }}\n    </app-error-message>\n    <app-error-message *ngIf=\"email.errors?.required\" class=\"auth__error\">\n      {{ errorMessages.VALIDATION_REQUIRED }}\n    </app-error-message>\n  </fieldset>\n  <fieldset *ngIf=\"loginForm.get('password') as password\" class=\"auth__field\">\n    <app-input\n      [error]=\"!!(password?.touched && password?.invalid)\"\n      type=\"password\"\n      formControlName=\"password\"\n      placeholder=\"Пароль\"\n    ></app-input>\n    <app-error-message *ngIf=\"password.errors?.required\" class=\"auth__error\">\n      {{ errorMessages.VALIDATION_REQUIRED }}\n    </app-error-message>\n    <app-error-message *ngIf=\"password.errors?.minlength\" class=\"auth__error\">\n      {{ errorMessages.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}\n    </app-error-message>\n  </fieldset>\n  <div class=\"auth__agreement\">\n    <app-checkbox class=\"auth__checkbox\" [(checked)]=\"loginMem\"></app-checkbox>\n    <span class=\"text-p1 auth__agreement-text\" (click)=\"loginMem = !loginMem\">Запомнить меня</span>\n  </div>\n  <app-button class=\"auth__button\" size=\"lg\">Войти</app-button>\n</form>\n"
+        },
+        {
+            "name": "RegisterComponent",
+            "id": "component-RegisterComponent-0bb3f440cd7da8ecd10877e7594036ec6bf7da217213334fc0c23c1fefd07fde44a330d82a377450a1f07ed85e21778ed08075fd4ea00e9fd42d818182009f1f",
+            "file": "src/app/auth/register/register.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-login",
+            "styleUrls": [
+                "./register.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./register.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "registerForm",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "FormGroup",
+                    "optional": false,
+                    "description": "",
+                    "line": 14
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 34,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onSubmit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 36,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\nimport { FormBuilder, FormGroup, Validators } from \"@angular/forms\";\nimport { AuthService } from \"../services\";\nimport { ValidationService } from \"../../core/services\";\n\n@Component({\n  selector: \"app-login\",\n  templateUrl: \"./register.component.html\",\n  styleUrls: [\"./register.component.scss\"],\n})\nexport class RegisterComponent implements OnInit {\n  registerForm: FormGroup;\n\n  constructor(\n    private fb: FormBuilder,\n    private authService: AuthService,\n    private validationService: ValidationService\n  ) {\n    this.registerForm = this.fb.group(\n      {\n        name: [\"\", [Validators.required]],\n        surname: [\"\", [Validators.required]],\n        email: [\"\", [Validators.required, Validators.email]],\n        birthday: [\"\", [Validators.required]],\n        password: [\"\", [Validators.required]],\n        repeatedPassword: [\"\", [Validators.required]],\n      },\n      { validators: [this.validationService.useMatchValidator(\"password\", \"repeatedPassword\")] }\n    );\n  }\n\n  ngOnInit(): void {}\n\n  onSubmit() {\n    if (this.registerForm.invalid) {\n      return;\n    }\n\n    const form = { ...this.registerForm.value };\n    delete form.repeatedPassword;\n    this.authService.register(form).subscribe(res => {\n      this.authService.memTokens(res);\n    });\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "/** @format */\n",
+                    "styleUrl": "./register.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "fb",
+                        "type": "FormBuilder",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "authService",
+                        "type": "AuthService",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "validationService",
+                        "type": "ValidationService",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 14,
+                "jsdoctags": [
+                    {
+                        "name": "fb",
+                        "type": "FormBuilder",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "authService",
+                        "type": "AuthService",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "validationService",
+                        "type": "ValidationService",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<!-- @format -->\n\n<form class=\"auth\" [formGroup]=\"registerForm\" (ngSubmit)=\"onSubmit()\">\n  <h1 class=\"text-h4 auth__title\">Регистрация</h1>\n  <app-input\n    class=\"auth__field\"\n    [error]=\"!!(registerForm.get('name')?.touched && registerForm.get('name')?.invalid)\"\n    type=\"text\"\n    formControlName=\"name\"\n    placeholder=\"Имя\"\n  ></app-input>\n  <app-input\n    class=\"auth__field\"\n    [error]=\"!!(registerForm.get('surname')?.touched && registerForm.get('surname')?.invalid)\"\n    type=\"text\"\n    formControlName=\"surname\"\n    placeholder=\"Фамилия\"\n  ></app-input>\n  <app-input\n    class=\"auth__field\"\n    [error]=\"!!(registerForm.get('birthday')?.touched && registerForm.get('birthday')?.invalid)\"\n    type=\"text\"\n    appMask=\"00.00.0000\"\n    formControlName=\"birthday\"\n    placeholder=\"Дата рождения\"\n  ></app-input>\n  <app-input\n    class=\"auth__field\"\n    [error]=\"!!(registerForm.get('email')?.touched && registerForm.get('email')?.invalid)\"\n    type=\"email\"\n    formControlName=\"email\"\n    placeholder=\"Введите почту\"\n  ></app-input>\n  <app-input\n    class=\"auth__field\"\n    [error]=\"!!(registerForm.get('password')?.touched && registerForm.get('password')?.invalid)\"\n    type=\"password\"\n    formControlName=\"password\"\n    placeholder=\"Пароль\"\n  ></app-input>\n  <app-input\n    class=\"auth__field\"\n    [error]=\"\n      !!(\n        registerForm.get('repeatedPassword')?.touched &&\n        registerForm.get('repeatedPassword')?.invalid\n      )\n    \"\n    type=\"password\"\n    formControlName=\"repeatedPassword\"\n    placeholder=\"Повторите пароль\"\n  ></app-input>\n  <app-button class=\"auth__button\" size=\"lg\">Регистрация</app-button>\n</form>\n"
+        },
+        {
+            "name": "SelectComponent",
+            "id": "component-SelectComponent-9d6c61e14ec97455ff7dbb171372a4ba77158ab2f9a576b3f5ae2cb39761ab14552520f1a4a9fb0697480e0821073bfd2050987964f789891b0e6b908d4ba960",
+            "file": "src/app/ui/components/select/select.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [
+                {
+                    "name": "{\n    provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => SelectComponent), multi: true,\n}",
+                    "type": "component"
+                }
+            ],
+            "selector": "app-select",
+            "styleUrls": [
+                "./select.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./select.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "basicLabel",
+                    "defaultValue": "\"\"",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 19,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "options",
+                    "defaultValue": "[]",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 20,
+                    "type": "literal type[]",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "disabled",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 33
+                },
+                {
+                    "name": "isOpen",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 22
+                },
+                {
+                    "name": "onChange",
+                    "defaultValue": "() => {...}",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "function",
+                    "optional": false,
+                    "description": "",
+                    "line": 38
+                },
+                {
+                    "name": "onTouched",
+                    "defaultValue": "() => {...}",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "function",
+                    "optional": false,
+                    "description": "",
+                    "line": 43
+                },
+                {
+                    "name": "selectedId",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "optional": true,
+                    "description": "",
+                    "line": 24
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "getId",
+                    "args": [
+                        {
+                            "name": "label",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "number | undefined",
+                    "typeParameters": [],
+                    "line": 68,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "label",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getLabel",
+                    "args": [
+                        {
+                            "name": "optionId",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "string | undefined",
+                    "typeParameters": [],
+                    "line": 60,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "optionId",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "getValue",
+                    "args": [
+                        {
+                            "name": "optionId",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "string | undefined",
+                    "typeParameters": [],
+                    "line": 64,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "optionId",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 27,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onClickOutside",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 72,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onUpdate",
+                    "args": [
+                        {
+                            "name": "event",
+                            "type": "MouseEvent",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "id",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 48,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "event",
+                            "type": "MouseEvent",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "id",
+                            "type": "number",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnChange",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 39,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "registerOnTouched",
+                    "args": [
+                        {
+                            "name": "fn",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 44,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "fn",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "setDisabledState",
+                    "args": [
+                        {
+                            "name": "isDisabled",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 34,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "isDisabled",
+                            "type": "boolean",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "writeValue",
+                    "args": [
+                        {
+                            "name": "label",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 29,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "label",
+                            "type": "string",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, forwardRef, Input, OnInit } from \"@angular/core\";\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from \"@angular/forms\";\n\n@Component({\n  selector: \"app-select\",\n  templateUrl: \"./select.component.html\",\n  styleUrls: [\"./select.component.scss\"],\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => SelectComponent),\n      multi: true,\n    },\n  ],\n})\nexport class SelectComponent implements OnInit, ControlValueAccessor {\n  @Input() basicLabel = \"\";\n  @Input() options: { value: string; label: string; id: number }[] = [];\n\n  isOpen = false;\n\n  selectedId?: number;\n  constructor() {}\n\n  ngOnInit(): void {}\n\n  writeValue(label: string) {\n    this.selectedId = this.getId(label);\n  }\n\n  disabled = false;\n  setDisabledState(isDisabled: boolean) {\n    this.disabled = isDisabled;\n  }\n\n  onChange: (value: string) => void = () => {};\n  registerOnChange(fn: any) {\n    this.onChange = fn;\n  }\n\n  onTouched: () => void = () => {};\n  registerOnTouched(fn: any) {\n    this.onTouched = fn;\n  }\n\n  onUpdate(event: MouseEvent, id: number): void {\n    event.stopPropagation();\n    if (this.disabled) {\n      return;\n    }\n\n    this.selectedId = id;\n    this.onChange(this.getValue(id) ?? this.options[0].value);\n\n    this.isOpen = false;\n  }\n\n  getLabel(optionId: number): string | undefined {\n    return this.options.find(el => el.id === optionId)?.label;\n  }\n\n  getValue(optionId: number): string | undefined {\n    return this.options.find(el => el.id === optionId)?.value;\n  }\n\n  getId(label: string): number | undefined {\n    return this.options.find(el => el.label === label)?.id;\n  }\n\n  onClickOutside() {\n    this.isOpen = false;\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "/** @format */\n\n.field {\n  &__input {\n    position: relative;\n    z-index: 2;\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding: 15px 25px;\n    color: var(--gray-100);\n    background-color: transparent;\n    border: 1px solid var(--gray-100);\n    border-radius: var(--rounded-lg);\n    outline: none;\n\n    &--placeholder {\n      color: rgba(#fff, 0.3);\n    }\n  }\n\n  &__options {\n    position: absolute;\n    top: 25px;\n    right: 0;\n    left: 0;\n    padding-top: 25px;\n    background-color: #000;\n  }\n\n  &__option {\n    padding: 5px 25px;\n    color: var(--gray-100);\n    background-color: #000;\n  }\n\n  &__arrow {\n    color: var(--gray-100);\n    transition: transform 0.2s;\n\n    &--filpped {\n      transform: rotate(180deg);\n    }\n  }\n}\n",
+                    "styleUrl": "./select.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 24
+            },
+            "implements": [
+                "OnInit",
+                "ControlValueAccessor"
+            ],
+            "templateData": "<!-- @format -->\n\n<div class=\"field\" (clickOutside)=\"onClickOutside()\">\n  <div\n    class=\"field__input\"\n    [class.field__input--placeholder]=\"!selectedId\"\n    (click)=\"isOpen = !isOpen\"\n  >\n    {{ selectedId ? getLabel(selectedId) || basicLabel : basicLabel }}\n    <app-icon\n      class=\"field__arrow\"\n      [class.field__arrow--filpped]=\"isOpen\"\n      icon=\"arrow-no-body\"\n      appWidth=\"16\"\n      appHeight=\"9\"\n    ></app-icon>\n  </div>\n  <ul *ngIf=\"isOpen\" class=\"field__options\">\n    <li *ngFor=\"let option of options\" class=\"field__option\" (click)=\"onUpdate($event, option.id)\">\n      {{ option.label }}\n    </li>\n  </ul>\n</div>\n"
         }
     ],
     "modules": [
         {
             "name": "AppModule",
-            "id": "module-AppModule-721fca350ae9bee7e33fe33f325ff40bdcd8433653728947934ffa50dc2bc9824e66e985a89e53a4ae27cb80c85835f6c232e9e9ebb110cb16771a0a7c7f2923",
+            "id": "module-AppModule-846a76f6aba08d1d4611c9ea801bcad428b4a1f84323084cca97035848977fe697e867d475d35f402a02671eaa5837ce870686bfb5e0249ef6f623cc9900d4cd",
             "description": "",
             "deprecationMessage": "",
             "deprecated": false,
             "file": "src/app/app.module.ts",
             "methods": [],
-            "sourceCode": "/** @format */\n\nimport { APP_INITIALIZER, ErrorHandler, NgModule } from \"@angular/core\";\nimport { BrowserModule } from \"@angular/platform-browser\";\nimport * as Sentry from \"@sentry/angular\";\nimport { AppRoutingModule } from \"./app-routing.module\";\nimport { AppComponent } from \"./app.component\";\nimport { Router } from \"@angular/router\";\nimport { HttpClientModule } from \"@angular/common/http\";\nimport { CoreModule } from \"./core/core.module\";\nimport { UiModule } from \"./ui/ui.module\";\nimport { ReactiveFormsModule } from \"@angular/forms\";\n\n@NgModule({\n  declarations: [AppComponent],\n  imports: [\n    BrowserModule,\n    AppRoutingModule,\n    HttpClientModule,\n    CoreModule,\n    UiModule,\n    ReactiveFormsModule,\n  ],\n  providers: [\n    {\n      provide: ErrorHandler,\n      useValue: Sentry.createErrorHandler({\n        showDialog: true,\n      }),\n    },\n    {\n      provide: Sentry.TraceService,\n      deps: [Router],\n    },\n    {\n      provide: APP_INITIALIZER,\n      useFactory: () => () => {},\n      deps: [Sentry.TraceService],\n      multi: true,\n    },\n  ],\n  bootstrap: [AppComponent],\n})\nexport class AppModule {}\n",
+            "sourceCode": "/** @format */\n\nimport { APP_INITIALIZER, ErrorHandler, NgModule } from \"@angular/core\";\nimport { BrowserModule } from \"@angular/platform-browser\";\nimport * as Sentry from \"@sentry/angular\";\nimport { AppRoutingModule } from \"./app-routing.module\";\nimport { AppComponent } from \"./app.component\";\nimport { Router } from \"@angular/router\";\nimport { HttpClientModule } from \"@angular/common/http\";\nimport { CoreModule } from \"./core/core.module\";\nimport { UiModule } from \"./ui/ui.module\";\nimport { ReactiveFormsModule } from \"@angular/forms\";\nimport { AuthModule } from \"./auth/auth.module\";\nimport { NgxMaskModule } from \"ngx-mask\";\n\n@NgModule({\n  declarations: [AppComponent],\n  imports: [\n    BrowserModule,\n    AppRoutingModule,\n    HttpClientModule,\n    CoreModule,\n    UiModule,\n    AuthModule,\n    ReactiveFormsModule,\n    NgxMaskModule.forRoot(),\n  ],\n  providers: [\n    {\n      provide: ErrorHandler,\n      useValue: Sentry.createErrorHandler({\n        showDialog: true,\n      }),\n    },\n    {\n      provide: Sentry.TraceService,\n      deps: [Router],\n    },\n    {\n      provide: APP_INITIALIZER,\n      useFactory: () => () => {},\n      deps: [Sentry.TraceService],\n      multi: true,\n    },\n  ],\n  bootstrap: [AppComponent],\n})\nexport class AppModule {}\n",
             "children": [
                 {
                     "type": "providers",
@@ -827,6 +2787,9 @@
                     "elements": [
                         {
                             "name": "AppRoutingModule"
+                        },
+                        {
+                            "name": "AuthModule"
                         },
                         {
                             "name": "CoreModule"
@@ -856,13 +2819,106 @@
         },
         {
             "name": "AppRoutingModule",
-            "id": "module-AppRoutingModule-28f0b89a41de2f8f11d8a02530cfa2d01dfb02554cc5693f5fb7c37a90737800286e3083351a287bbb3e172023d7f7df3ffb7736e4476440fa618134f9cfafa5",
+            "id": "module-AppRoutingModule-5f0a73c5b7184738a6bf3bb27e71db5b3ae0e82e0a1eae1c19304f7dd2572ffb1f73d1daa98ccd1d88727b005d71d07452642dd2f1074706fa6260127b4b5805",
             "description": "",
             "deprecationMessage": "",
             "deprecated": false,
             "file": "src/app/app-routing.module.ts",
             "methods": [],
-            "sourceCode": "/** @format */\n\nimport { NgModule } from \"@angular/core\";\nimport { RouterModule, Routes } from \"@angular/router\";\n\nconst routes: Routes = [];\n\n@NgModule({\n  imports: [RouterModule.forRoot(routes)],\n  exports: [RouterModule],\n})\nexport class AppRoutingModule {}\n",
+            "sourceCode": "/** @format */\n\nimport { NgModule } from \"@angular/core\";\nimport { RouterModule, Routes } from \"@angular/router\";\nimport { AppComponent } from \"./app.component\";\n\nconst routes: Routes = [\n  {\n    path: \"\",\n    component: AppComponent,\n  },\n  {\n    path: \"auth\",\n    loadChildren: () => \"import(\\\"./auth/auth.module\\\").then(m => m.AuthModule)\",\n  },\n  {\n    path: \"error\",\n    loadChildren: () => \"import(\\\"./error/error.module\\\").then(m => m.ErrorModule)\",\n  },\n];\n\n@NgModule({\n  imports: [RouterModule.forRoot(routes)],\n  exports: [RouterModule],\n})\nexport class AppRoutingModule {}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "AuthModule",
+            "id": "module-AuthModule-ec638db4fe385c77ff675c9732cb060329c9a0bb70ffdb4f3cbc2e48aeb477373a8c892be92bae078a21a9bf457ada5a29d80eda1920a2b7494bcd9fb1a89775",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/auth/auth.module.ts",
+            "methods": [],
+            "sourceCode": "/** @format */\n\nimport { NgModule } from \"@angular/core\";\nimport { CommonModule } from \"@angular/common\";\nimport { AuthService } from \"./services\";\nimport { AuthComponent } from \"./auth.component\";\nimport { AuthRoutingModule } from \"./auth-routing.module\";\nimport { LoginComponent } from \"./login/login.component\";\nimport { ReactiveFormsModule } from \"@angular/forms\";\nimport { UiModule } from \"../ui/ui.module\";\nimport { RegisterComponent } from \"./register/register.component\";\n\n@NgModule({\n  declarations: [AuthComponent, LoginComponent, RegisterComponent],\n  providers: [AuthService],\n  imports: [CommonModule, AuthRoutingModule, ReactiveFormsModule, UiModule],\n})\nexport class AuthModule {}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": [
+                        {
+                            "name": "AuthService"
+                        }
+                    ]
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "AuthComponent"
+                        },
+                        {
+                            "name": "LoginComponent"
+                        },
+                        {
+                            "name": "RegisterComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "AuthRoutingModule"
+                        },
+                        {
+                            "name": "UiModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "AuthRoutingModule",
+            "id": "module-AuthRoutingModule-97e147c31c4b269e768bfeca83956ac083d7f53a63a77cdde4265ee9caebcc479d44688725d7a5cabda3d9f6ed27f1e167bbaf123a6dcd46a1f96305b5de08e1",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/auth/auth-routing.module.ts",
+            "methods": [],
+            "sourceCode": "/** @format */\n\nimport { RouterModule, Routes } from \"@angular/router\";\nimport { AuthComponent } from \"./auth.component\";\nimport { NgModule } from \"@angular/core\";\nimport { LoginComponent } from \"./login/login.component\";\nimport { RegisterComponent } from \"./register/register.component\";\n\nconst routes: Routes = [\n  {\n    path: \"\",\n    component: AuthComponent,\n    children: [\n      {\n        path: \"login\",\n        component: LoginComponent,\n      },\n      {\n        path: \"register\",\n        component: RegisterComponent,\n      },\n    ],\n  },\n];\n\n@NgModule({\n  imports: [RouterModule.forChild(routes)],\n  exports: [RouterModule],\n})\nexport class AuthRoutingModule {}\n",
             "children": [
                 {
                     "type": "providers",
@@ -892,19 +2948,25 @@
         },
         {
             "name": "CoreModule",
-            "id": "module-CoreModule-e7abea447d20bbbc3c90df1a4de10a3803362af9de01a783cb1bd559bd63b3816c17787be70fdbac2815684941d361af8d4ebfd64c581320fd0892969e107bfb",
+            "id": "module-CoreModule-bf0373aace731b5b284a2e832d9b36222c2f6e1d9a584707e9fcc0276fc268899edc1881d22a6a5626f668aa3c4cce5c411fda793845729da0abdf2f31e4fb1c",
             "description": "",
             "deprecationMessage": "",
             "deprecated": false,
             "file": "src/app/core/core.module.ts",
             "methods": [],
-            "sourceCode": "/** @format */\n\nimport { NgModule } from \"@angular/core\";\nimport { CommonModule } from \"@angular/common\";\nimport { HTTP_INTERCEPTORS } from \"@angular/common/http\";\nimport { BearerTokenInterceptor } from \"./interceptors/bearer-token.interceptor\";\n\n@NgModule({\n  declarations: [],\n  imports: [CommonModule],\n  providers: [\n    {\n      provide: HTTP_INTERCEPTORS,\n      useClass: BearerTokenInterceptor,\n      multi: true,\n    },\n  ],\n})\nexport class CoreModule {}\n",
+            "sourceCode": "/** @format */\n\nimport { NgModule } from \"@angular/core\";\nimport { CommonModule } from \"@angular/common\";\nimport { HTTP_INTERCEPTORS } from \"@angular/common/http\";\nimport { BearerTokenInterceptor } from \"./interceptors/bearer-token.interceptor\";\nimport { ApiService } from \"./services\";\nimport { CamelcaseInterceptor } from \"./interceptors/camelcase.interceptor\";\n\n@NgModule({\n  declarations: [],\n  imports: [CommonModule],\n  providers: [\n    {\n      provide: HTTP_INTERCEPTORS,\n      useClass: BearerTokenInterceptor,\n      multi: true,\n    },\n    {\n      provide: HTTP_INTERCEPTORS,\n      useClass: CamelcaseInterceptor,\n      multi: true,\n    },\n    ApiService,\n  ],\n})\nexport class CoreModule {}\n",
             "children": [
                 {
                     "type": "providers",
                     "elements": [
                         {
+                            "name": "ApiService"
+                        },
+                        {
                             "name": "BearerTokenInterceptor"
+                        },
+                        {
+                            "name": "CamelcaseInterceptor"
                         }
                     ]
                 },
@@ -931,14 +2993,100 @@
             ]
         },
         {
+            "name": "ErrorModule",
+            "id": "module-ErrorModule-8c075b1c5943ce0c076f8dd7375b469f6da2df9cc74ed59066ede5deeddedfa1fc427d0180558a15e18bf8a659afe711f1e466fec32065937d2b002ac4b8eea7",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/error/error.module.ts",
+            "methods": [],
+            "sourceCode": "/** @format */\n\nimport { NgModule } from \"@angular/core\";\nimport { CommonModule } from \"@angular/common\";\nimport { ErrorComponent } from \"./error.component\";\nimport { ErrorRoutingModule } from \"./error-routing.module\";\nimport { ErrorCodeComponent } from \"./code/error-code.component\";\nimport { ErrorNotFoundComponent } from \"./not-found/error-not-found.component\";\n\n@NgModule({\n  declarations: [ErrorComponent, ErrorCodeComponent, ErrorNotFoundComponent],\n  imports: [CommonModule, ErrorRoutingModule],\n})\nexport class ErrorModule {}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "ErrorCodeComponent"
+                        },
+                        {
+                            "name": "ErrorComponent"
+                        },
+                        {
+                            "name": "ErrorNotFoundComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "ErrorRoutingModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "ErrorRoutingModule",
+            "id": "module-ErrorRoutingModule-0d09bf3102c510d934b4c4c0508d28c608cc2f274587418a979fe8e89e83c0d159561ad9d981e2e60f7c50b7d72136175bbfd977fbb9223e207baae854b8d447",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/error/error-routing.module.ts",
+            "methods": [],
+            "sourceCode": "/** @format */\n\nimport { RouterModule, Routes } from \"@angular/router\";\nimport { ErrorComponent } from \"./error.component\";\nimport { NgModule } from \"@angular/core\";\nimport { ErrorCodeComponent } from \"./code/error-code.component\";\nimport { ErrorNotFoundComponent } from \"./not-found/error-not-found.component\";\n\nconst routes: Routes = [\n  {\n    path: \"\",\n    component: ErrorComponent,\n    children: [\n      {\n        path: \"404\",\n        component: ErrorNotFoundComponent,\n      },\n      {\n        path: \":code\",\n        component: ErrorCodeComponent,\n      },\n    ],\n  },\n];\n\n@NgModule({\n  imports: [RouterModule.forChild(routes)],\n  exports: [RouterModule],\n})\nexport class ErrorRoutingModule {}\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
             "name": "UiModule",
-            "id": "module-UiModule-a24507da648fa56ef5185d865817a7d55892ebdd5e6409cdc061b6cacee2199353eb29de1149ab50846d2336ddd7a4937bdde5ce67da0504f202589d626cde0a",
+            "id": "module-UiModule-98c5d4b2ff15a44b91b2e00a7dc84630bb5147ab5bb211b27fa46c092c2216e1cdd3e139b7fce8dab3105f022dd0a2c521e0b6a53b25484e5824a9d20dbe7554",
             "description": "",
             "deprecationMessage": "",
             "deprecated": false,
             "file": "src/app/ui/ui.module.ts",
             "methods": [],
-            "sourceCode": "/** @format */\n\nimport { NgModule } from \"@angular/core\";\nimport { CommonModule } from \"@angular/common\";\nimport { ButtonComponent, CheckboxComponent, IconComponent, InputComponent } from \"./components\";\n\n@NgModule({\n  declarations: [ButtonComponent, InputComponent, CheckboxComponent, IconComponent],\n  imports: [CommonModule],\n  exports: [ButtonComponent, InputComponent, CheckboxComponent, IconComponent],\n})\nexport class UiModule {}\n",
+            "sourceCode": "/** @format */\n\nimport { NgModule } from \"@angular/core\";\nimport { CommonModule } from \"@angular/common\";\nimport {\n  ButtonComponent,\n  CheckboxComponent,\n  ErrorMessageComponent,\n  IconComponent,\n  InputComponent,\n  SelectComponent,\n} from \"./components\";\nimport { ClickOutsideModule } from \"ng-click-outside\";\nimport { NgxMaskModule } from \"ngx-mask\";\n\n@NgModule({\n  declarations: [\n    ButtonComponent,\n    InputComponent,\n    CheckboxComponent,\n    IconComponent,\n    SelectComponent,\n    ErrorMessageComponent,\n  ],\n  imports: [CommonModule, ClickOutsideModule, NgxMaskModule],\n  exports: [\n    ButtonComponent,\n    InputComponent,\n    CheckboxComponent,\n    IconComponent,\n    SelectComponent,\n    ErrorMessageComponent,\n  ],\n})\nexport class UiModule {}\n",
             "children": [
                 {
                     "type": "providers",
@@ -954,10 +3102,16 @@
                             "name": "CheckboxComponent"
                         },
                         {
+                            "name": "ErrorMessageComponent"
+                        },
+                        {
                             "name": "IconComponent"
                         },
                         {
                             "name": "InputComponent"
+                        },
+                        {
+                            "name": "SelectComponent"
                         }
                     ]
                 },
@@ -975,10 +3129,16 @@
                             "name": "CheckboxComponent"
                         },
                         {
+                            "name": "ErrorMessageComponent"
+                        },
+                        {
                             "name": "IconComponent"
                         },
                         {
                             "name": "InputComponent"
+                        },
+                        {
+                            "name": "SelectComponent"
                         }
                     ]
                 },
@@ -995,6 +3155,26 @@
     ],
     "miscellaneous": {
         "variables": [
+            {
+                "name": "Basic",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/ui/components/error-message/error-message.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
+            {
+                "name": "Basic",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/ui/components/select/select.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "Template.bind({})"
+            },
             {
                 "name": "Basic",
                 "ctype": "miscellaneous",
@@ -1033,7 +3213,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "object",
-                "defaultValue": "{\n  production: true,\n  sentryDns: \"https://fc61f416df6044bab8c7e1afd55f4355@o1186023.ingest.sentry.io/6577563\",\n}"
+                "defaultValue": "{\n  production: true,\n  sentryDns: \"https://fc61f416df6044bab8c7e1afd55f4355@o1186023.ingest.sentry.io/6577563\",\n  apiUrl: \"http://dartt0n.xyz:8080\",\n}"
             },
             {
                 "name": "environment",
@@ -1043,7 +3223,7 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "object",
-                "defaultValue": "{\n  production: false,\n  sentryDns: \"\",\n}"
+                "defaultValue": "{\n  production: false,\n  sentryDns: \"\",\n  apiUrl: \"http://dartt0n.xyz:8080\",\n}"
             },
             {
                 "name": "PrimaryLg",
@@ -1088,6 +3268,26 @@
                 "name": "Template",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
+                "file": "src/app/ui/components/error-message/error-message.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "args => ({\n  props: args,\n  template: \"<app-error-message>Ошибка</app-error-message>\",\n})"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/ui/components/select/select.stories.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "Story",
+                "defaultValue": "args => ({ props: args })"
+            },
+            {
+                "name": "Template",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
                 "file": "src/app/ui/components/input/input.stories.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
@@ -1097,8 +3297,129 @@
         ],
         "functions": [],
         "typealiases": [],
-        "enumerations": [],
+        "enumerations": [
+            {
+                "name": "ErrorCode",
+                "childs": [
+                    {
+                        "name": "NOT_FOUND",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "404"
+                    },
+                    {
+                        "name": "SERVER_ERROR",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "500"
+                    }
+                ],
+                "ctype": "miscellaneous",
+                "subtype": "enum",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "file": "src/app/error/models/error-code.ts"
+            },
+            {
+                "name": "ErrorMessages",
+                "childs": [
+                    {
+                        "name": "AUTH_EMAIL_EXIST",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "Аккаунт с таким email уже зарегистрирован"
+                    },
+                    {
+                        "name": "AUTH_WRONG_PASSWORD",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "Неправильный пароль"
+                    },
+                    {
+                        "name": "AUTH_EMAIL_NOT_EXIST",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "Аккаунт с таким email не зарегистрирован"
+                    },
+                    {
+                        "name": "VALIDATION_TOO_LONG",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "Максимальная длинна:"
+                    },
+                    {
+                        "name": "VALIDATION_TOO_SHORT",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "Минимальная длинна:"
+                    },
+                    {
+                        "name": "VALIDATION_REQUIRED",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "Обязательное поле"
+                    },
+                    {
+                        "name": "VALIDATION_EMAIL",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "Введенное значение не соответствует формату email"
+                    }
+                ],
+                "ctype": "miscellaneous",
+                "subtype": "enum",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "file": "src/app/error/models/error-messages.ts"
+            }
+        ],
         "groupedVariables": {
+            "src/app/ui/components/error-message/error-message.stories.ts": [
+                {
+                    "name": "Basic",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/ui/components/error-message/error-message.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/ui/components/error-message/error-message.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "args => ({\n  props: args,\n  template: \"<app-error-message>Ошибка</app-error-message>\",\n})"
+                }
+            ],
+            "src/app/ui/components/select/select.stories.ts": [
+                {
+                    "name": "Basic",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/ui/components/select/select.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "Template.bind({})"
+                },
+                {
+                    "name": "Template",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/ui/components/select/select.stories.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Story",
+                    "defaultValue": "args => ({ props: args })"
+                }
+            ],
             "src/app/ui/components/input/input.stories.ts": [
                 {
                     "name": "Basic",
@@ -1173,7 +3494,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "object",
-                    "defaultValue": "{\n  production: true,\n  sentryDns: \"https://fc61f416df6044bab8c7e1afd55f4355@o1186023.ingest.sentry.io/6577563\",\n}"
+                    "defaultValue": "{\n  production: true,\n  sentryDns: \"https://fc61f416df6044bab8c7e1afd55f4355@o1186023.ingest.sentry.io/6577563\",\n  apiUrl: \"http://dartt0n.xyz:8080\",\n}"
                 }
             ],
             "src/environments/environment.ts": [
@@ -1185,7 +3506,7 @@
                     "deprecated": false,
                     "deprecationMessage": "",
                     "type": "object",
-                    "defaultValue": "{\n  production: false,\n  sentryDns: \"\",\n}"
+                    "defaultValue": "{\n  production: false,\n  sentryDns: \"\",\n  apiUrl: \"http://dartt0n.xyz:8080\",\n}"
                 }
             ],
             "src/app/ui/components/button/button.stories.ts": [
@@ -1212,7 +3533,88 @@
             ]
         },
         "groupedFunctions": {},
-        "groupedEnumerations": {},
+        "groupedEnumerations": {
+            "src/app/error/models/error-code.ts": [
+                {
+                    "name": "ErrorCode",
+                    "childs": [
+                        {
+                            "name": "NOT_FOUND",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "404"
+                        },
+                        {
+                            "name": "SERVER_ERROR",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "500"
+                        }
+                    ],
+                    "ctype": "miscellaneous",
+                    "subtype": "enum",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "file": "src/app/error/models/error-code.ts"
+                }
+            ],
+            "src/app/error/models/error-messages.ts": [
+                {
+                    "name": "ErrorMessages",
+                    "childs": [
+                        {
+                            "name": "AUTH_EMAIL_EXIST",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "Аккаунт с таким email уже зарегистрирован"
+                        },
+                        {
+                            "name": "AUTH_WRONG_PASSWORD",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "Неправильный пароль"
+                        },
+                        {
+                            "name": "AUTH_EMAIL_NOT_EXIST",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "Аккаунт с таким email не зарегистрирован"
+                        },
+                        {
+                            "name": "VALIDATION_TOO_LONG",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "Максимальная длинна:"
+                        },
+                        {
+                            "name": "VALIDATION_TOO_SHORT",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "Минимальная длинна:"
+                        },
+                        {
+                            "name": "VALIDATION_REQUIRED",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "Обязательное поле"
+                        },
+                        {
+                            "name": "VALIDATION_EMAIL",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "Введенное значение не соответствует формату email"
+                        }
+                    ],
+                    "ctype": "miscellaneous",
+                    "subtype": "enum",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "file": "src/app/error/models/error-messages.ts"
+                }
+            ]
+        },
         "groupedTypeAliases": {}
     },
     "routes": {
@@ -1224,7 +3626,72 @@
                 "name": "routes",
                 "filename": "src/app/app-routing.module.ts",
                 "module": "AppRoutingModule",
-                "children": [],
+                "children": [
+                    {
+                        "path": "",
+                        "component": "AppComponent"
+                    },
+                    {
+                        "path": "auth",
+                        "loadChildren": "./auth/auth.module#AuthModule"
+                    },
+                    {
+                        "path": "error",
+                        "loadChildren": "./error/error.module#ErrorModule",
+                        "children": [
+                            {
+                                "kind": "module",
+                                "children": [
+                                    {
+                                        "name": "routes",
+                                        "filename": "src/app/error/error-routing.module.ts",
+                                        "module": "ErrorRoutingModule",
+                                        "children": [
+                                            {
+                                                "path": "",
+                                                "component": "ErrorComponent",
+                                                "children": [
+                                                    {
+                                                        "path": "404",
+                                                        "component": "ErrorNotFoundComponent"
+                                                    },
+                                                    {
+                                                        "path": ":code",
+                                                        "component": "ErrorCodeComponent"
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "kind": "module"
+                                    }
+                                ],
+                                "module": "ErrorModule"
+                            }
+                        ]
+                    }
+                ],
+                "kind": "module"
+            },
+            {
+                "name": "routes",
+                "filename": "src/app/auth/auth-routing.module.ts",
+                "module": "AuthRoutingModule",
+                "children": [
+                    {
+                        "path": "",
+                        "component": "AuthComponent",
+                        "children": [
+                            {
+                                "path": "login",
+                                "component": "LoginComponent"
+                            },
+                            {
+                                "path": "register",
+                                "component": "RegisterComponent"
+                            }
+                        ]
+                    }
+                ],
                 "kind": "module"
             }
         ]
@@ -1239,7 +3706,97 @@
                 "linktype": "component",
                 "name": "AppComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/2",
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/auth.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "AuthComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/login/login.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "LoginComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/models/http.model.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "LoginRequest",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/models/http.model.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "LoginResponse",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/models/http.model.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "RefreshResponse",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/models/http.model.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "RegisterRequest",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/models/http.model.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "RegisterResponse",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/models/tokens.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "Tokens",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/register/register.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "RegisterComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/auth/services/auth.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "AuthService",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
                 "status": "low"
             },
             {
@@ -1248,7 +3805,70 @@
                 "linktype": "interceptor",
                 "name": "BearerTokenInterceptor",
                 "coveragePercent": 0,
-                "coverageCount": "0/2",
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/interceptors/camelcase.interceptor.ts",
+                "type": "interceptor",
+                "linktype": "interceptor",
+                "name": "CamelcaseInterceptor",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/services/api.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "ApiService",
+                "coveragePercent": 0,
+                "coverageCount": "0/6",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/services/validation.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "ValidationService",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/error/code/error-code.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ErrorCodeComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/error/error.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ErrorComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/error/not-found/error-not-found.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ErrorNotFoundComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/error/services/error.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "ErrorService",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
                 "status": "low"
             },
             {
@@ -1310,12 +3930,41 @@
                 "status": "low"
             },
             {
+                "filePath": "src/app/ui/components/error-message/error-message.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ErrorMessageComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/ui/components/error-message/error-message.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Basic",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/ui/components/error-message/error-message.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
                 "filePath": "src/app/ui/components/icon/icon.component.ts",
                 "type": "component",
                 "linktype": "component",
                 "name": "IconComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/11",
+                "coverageCount": "0/12",
                 "status": "low"
             },
             {
@@ -1324,7 +3973,7 @@
                 "linktype": "component",
                 "name": "InputComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/13",
+                "coverageCount": "0/17",
                 "status": "low"
             },
             {
@@ -1339,6 +3988,35 @@
             },
             {
                 "filePath": "src/app/ui/components/input/input.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Template",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/ui/components/select/select.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "SelectComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/19",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/ui/components/select/select.stories.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "Basic",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/ui/components/select/select.stories.ts",
                 "type": "variable",
                 "linktype": "miscellaneous",
                 "linksubtype": "variable",
