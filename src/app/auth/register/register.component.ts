@@ -4,6 +4,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
 import { ValidationService } from "../../core/services";
+import { ErrorMessage } from "../../error/models/error-message";
 
 @Component({
   selector: "app-login",
@@ -12,6 +13,8 @@ import { ValidationService } from "../../core/services";
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
+
+  errorMessages = ErrorMessage;
 
   constructor(
     private fb: FormBuilder,

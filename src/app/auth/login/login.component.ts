@@ -3,7 +3,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
-import { ErrorMessages } from "../../error/models/error-messages";
+import { ErrorMessage } from "../../error/models/error-message";
 
 @Component({
   selector: "app-login",
@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   loginMem = false;
 
   errorWrongAuth = false;
-  errorMessages = ErrorMessages;
+  errorMessage = ErrorMessage;
 
   constructor(private fb: FormBuilder, private authService: AuthService) {
     this.loginForm = this.fb.group({

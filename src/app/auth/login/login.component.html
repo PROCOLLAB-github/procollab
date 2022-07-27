@@ -10,10 +10,10 @@
       placeholder="Введите почту"
     ></app-input>
     <app-error-message *ngIf="email.errors?.email" class="auth__error">
-      {{ errorMessages.VALIDATION_EMAIL }}
+      {{ errorMessage.VALIDATION_EMAIL }}
     </app-error-message>
     <app-error-message *ngIf="email.errors?.required" class="auth__error">
-      {{ errorMessages.VALIDATION_REQUIRED }}
+      {{ errorMessage.VALIDATION_REQUIRED }}
     </app-error-message>
   </fieldset>
   <fieldset *ngIf="loginForm.get('password') as password" class="auth__field">
@@ -24,10 +24,10 @@
       placeholder="Пароль"
     ></app-input>
     <app-error-message *ngIf="password.errors?.required" class="auth__error">
-      {{ errorMessages.VALIDATION_REQUIRED }}
+      {{ errorMessage.VALIDATION_REQUIRED }}
     </app-error-message>
     <app-error-message *ngIf="password.errors?.minlength" class="auth__error">
-      {{ errorMessages.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
+      {{ errorMessage.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
     </app-error-message>
   </fieldset>
   <div class="auth__agreement">
@@ -35,7 +35,7 @@
     <span class="text-p1 auth__agreement-text" (click)="loginMem = !loginMem">Запомнить меня</span>
   </div>
   <app-error-message *ngIf="errorWrongAuth">
-    {{ errorMessages.AUTH_WRONG_AUTH }}
+    {{ errorMessage.AUTH_WRONG_AUTH }}
   </app-error-message>
   <app-button class="auth__button" size="lg">Войти</app-button>
 </form>

@@ -13,8 +13,12 @@
 
     app-input {
       display: block;
-      margin-bottom: 12px;
     }
+  }
+
+  &__error {
+    display: block;
+    margin-top: 12px;
   }
 
   &__agreement {

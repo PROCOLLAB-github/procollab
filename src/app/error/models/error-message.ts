@@ -1,6 +1,6 @@
 /** @format */
 
-export enum ErrorMessages {
+export enum ErrorMessage {
   AUTH_EMAIL_EXIST = "Аккаунт с таким email уже зарегистрирован",
   AUTH_WRONG_AUTH = "Неправильный логин или пароль",
   AUTH_WRONG_PASSWORD = "Неправильный пароль",
