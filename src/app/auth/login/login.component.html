@@ -4,12 +4,12 @@
   <h1 class="text-h4 auth__title">Вход</h1>
   <fieldset *ngIf="loginForm.get('email') as email" class="auth__field">
     <app-input
-      [error]="!!(email.touched && email.invalid)"
+      [error]="email | controlError"
       type="email"
       formControlName="email"
       placeholder="Введите почту"
     ></app-input>
-    <div *ngIf="email.errors?.email" class="error auth__error">
+    <div *ngIf="email | controllError" class="error auth__error">
       <app-icon icon="color-error" appSquare="16"></app-icon>
       {{ errorMessages.VALIDATION_EMAIL }}
     </div>

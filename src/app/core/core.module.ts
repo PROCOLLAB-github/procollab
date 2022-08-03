@@ -6,10 +6,14 @@ import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { BearerTokenInterceptor } from "./interceptors/bearer-token.interceptor";
 import { ApiService } from "./services";
 import { CamelcaseInterceptor } from "./interceptors/camelcase.interceptor";
+import { ControlErrorPipe } from './pipes/control-error.pipe';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    ControlErrorPipe
+  ],
   imports: [CommonModule],
+  exports: [ControlErrorPipe],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
