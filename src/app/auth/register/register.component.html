@@ -68,6 +68,12 @@
     <app-error-message *ngIf="repeatedPassword | controlError: 'required'" class="auth__error">
       {{ errorMessages.VALIDATION_REQUIRED }}
     </app-error-message>
+    <app-error-message
+      class="auth__error"
+      *ngIf="registerForm.get('repeatedPassword')?.touched && registerForm.errors?.unMatch"
+    >
+      {{ errorMessages.VALIDATION_PASSWORD_UNMATCH }}
+    </app-error-message>
   </fieldset>
   <app-button class="auth__button" size="lg">Регистрация</app-button>
 </form>

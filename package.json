@@ -16,7 +16,11 @@
     "storybook": "npm run docs:json && start-storybook -p 6006",
     "build-storybook": "npm run docs:json && build-storybook"
   },
-  "precommit": ["test:ci"],
+  "precommit": [
+    "lint:scss",
+    "lint:ts",
+    "test:ci"
+  ],
   "private": true,
   "dependencies": {
     "@angular/animations": "~13.3.0",

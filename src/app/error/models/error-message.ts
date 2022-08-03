@@ -10,4 +10,5 @@ export enum ErrorMessage {
   VALIDATION_TOO_SHORT = "Минимальная длинна:",
   VALIDATION_REQUIRED = "Обязательное поле",
   VALIDATION_EMAIL = "Введенное значение не соответствует формату email",
+  VALIDATION_PASSWORD_UNMATCH = "Пароли не совпадают",
 }
