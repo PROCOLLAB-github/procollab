@@ -4,68 +4,68 @@
   <h1 class="text-h4 auth__title">Регистрация</h1>
   <fieldset *ngIf="registerForm.get('name') as name" class="auth__field">
     <app-input
-      [error]="!!(name.touched && name.invalid)"
+      [error]="name | controlError"
       type="text"
       formControlName="name"
       placeholder="Имя"
     ></app-input>
-    <app-error-message *ngIf="name.errors?.required" class="auth__error">
+    <app-error-message *ngIf="name | controlError: 'required'" class="auth__error">
       {{ errorMessages.VALIDATION_REQUIRED }}
     </app-error-message>
   </fieldset>
   <fieldset *ngIf="registerForm.get('surname') as surname" class="auth__field">
     <app-input
-      [error]="!!(surname.touched && surname.invalid)"
+      [error]="surname | controlError"
       type="text"
       formControlName="surname"
       placeholder="Фамилия"
     ></app-input>
-    <app-error-message *ngIf="surname.errors?.required" class="auth__error">
+    <app-error-message *ngIf="surname | controlError: 'required'" class="auth__error">
       {{ errorMessages.VALIDATION_REQUIRED }}
     </app-error-message>
   </fieldset>
   <fieldset *ngIf="registerForm.get('birthday') as birthday" class="auth__field">
     <app-input
-      [error]="!!(birthday.touched && birthday.invalid)"
+      [error]="birthday | controlError"
       type="text"
       appMask="00.00.0000"
       formControlName="birthday"
       placeholder="Дата рождения"
     ></app-input>
-    <app-error-message *ngIf="birthday.errors?.required" class="auth__error">
+    <app-error-message *ngIf="birthday | controlError: 'required'" class="auth__error">
       {{ errorMessages.VALIDATION_REQUIRED }}
     </app-error-message>
   </fieldset>
   <fieldset *ngIf="registerForm.get('email') as email" class="auth__field">
     <app-input
-      [error]="!!(email.touched && email.invalid)"
+      [error]="email | controlError"
       type="email"
       formControlName="email"
       placeholder="Введите почту"
     ></app-input>
-    <app-error-message *ngIf="email.errors?.required" class="auth__error">
+    <app-error-message *ngIf="email | controlError: 'required'" class="auth__error">
       {{ errorMessages.VALIDATION_REQUIRED }}
     </app-error-message>
   </fieldset>
   <fieldset *ngIf="registerForm.get('password') as password" class="auth__field">
     <app-input
-      [error]="!!(password.touched && password.invalid)"
+      [error]="password | controlError"
       type="password"
       formControlName="password"
       placeholder="Пароль"
     ></app-input>
-    <app-error-message *ngIf="password.errors?.required" class="auth__error">
+    <app-error-message *ngIf="password | controlError: 'required'" class="auth__error">
       {{ errorMessages.VALIDATION_REQUIRED }}
     </app-error-message>
   </fieldset>
   <fieldset *ngIf="registerForm.get('repeatedPassword') as repeatedPassword" class="auth__field">
     <app-input
-      [error]="!!(repeatedPassword.touched && repeatedPassword.invalid)"
+      [error]="repeatedPassword | controlError"
       type="password"
       formControlName="repeatedPassword"
       placeholder="Повторите пароль"
     ></app-input>
-    <app-error-message *ngIf="repeatedPassword.errors?.required" class="auth__error">
+    <app-error-message *ngIf="repeatedPassword | controlError: 'required'" class="auth__error">
       {{ errorMessages.VALIDATION_REQUIRED }}
     </app-error-message>
   </fieldset>

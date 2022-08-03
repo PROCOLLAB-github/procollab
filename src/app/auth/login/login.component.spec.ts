@@ -6,6 +6,7 @@ import { LoginComponent } from "./login.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AuthService } from "../services";
 import { InputComponent } from "../../ui/components";
+import { CoreModule } from "../../core/core.module";
 
 describe("LoginComponent", () => {
   let component: LoginComponent;
@@ -15,7 +16,7 @@ describe("LoginComponent", () => {
     const authSpy = jasmine.createSpyObj("AuthService", ["login", "memTokens"]);
 
     await TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule],
+      imports: [FormsModule, ReactiveFormsModule, CoreModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
       declarations: [LoginComponent, InputComponent],
     }).compileComponents();

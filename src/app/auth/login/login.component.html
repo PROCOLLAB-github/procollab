@@ -4,29 +4,29 @@
   <h1 class="text-h4 auth__title">Вход</h1>
   <fieldset *ngIf="loginForm.get('email') as email" class="auth__field">
     <app-input
-      [error]="!!(email.touched && email.invalid)"
+      [error]="email | controlError"
       type="email"
       formControlName="email"
       placeholder="Введите почту"
     ></app-input>
-    <app-error-message *ngIf="email.errors?.email" class="auth__error">
+    <app-error-message *ngIf="email | controlError: 'email'" class="auth__error">
       {{ errorMessage.VALIDATION_EMAIL }}
     </app-error-message>
-    <app-error-message *ngIf="email.errors?.required" class="auth__error">
+    <app-error-message *ngIf="email | controlError: 'required'" class="auth__error">
       {{ errorMessage.VALIDATION_REQUIRED }}
     </app-error-message>
   </fieldset>
   <fieldset *ngIf="loginForm.get('password') as password" class="auth__field">
     <app-input
-      [error]="!!(password?.touched && password?.invalid)"
+      [error]="password | controlError"
       type="password"
       formControlName="password"
       placeholder="Пароль"
     ></app-input>
-    <app-error-message *ngIf="password.errors?.required" class="auth__error">
+    <app-error-message *ngIf="password | controlError: 'required'" class="auth__error">
       {{ errorMessage.VALIDATION_REQUIRED }}
     </app-error-message>
-    <app-error-message *ngIf="password.errors?.minlength" class="auth__error">
+    <app-error-message *ngIf="password | controlError: 'minlength'" class="auth__error">
       {{ errorMessage.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
     </app-error-message>
   </fieldset>
