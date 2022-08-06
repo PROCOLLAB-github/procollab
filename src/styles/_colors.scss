@@ -3,21 +3,34 @@
 @use "sass:color";
 
 :root {
-  // UI
-  --accent: #6043bf;
-  --accent-hover: #3a2876;
-  --secondary: #00c893;
-  --error: #FA1212;
+  // ACCENT
+  --gradient: linear-gradient(90deg, #242424 0%, #6C27FF 50%);
 
   // GRAY
-  --gray-100: #fff;
+  --white: #FFF;
+  --black: #332E2D;
+  --dark-gray: #8C888A;
+  --gray: #E0E0E0;
+  --light-gray: #F9F9F9;
+  
+  // FUNCTIONAL
+  --green: #73C66E;
+  --red: #FF5151;
 
-  // BLUE
-  --blue-dark: #272d62;
+  // // UI
+  // --accent-hover: #3a2876;
+  // --secondary: #00c893;
+  // --error: #FA1212;
 
-  // BG
-  --bg-main: #16171a;
+  // // GRAY
+  // --gray-100: #fff;
 
-  // EXTRA
-  --error-code: rgb(255 255 255 / 30%);
+  // // BLUE
+  // --blue-dark: #272d62;
+
+  // // BG
+  // --bg-main: #16171a;
+
+  // // EXTRA
+  // --error-code: rgb(255 255 255 / 30%);
 }

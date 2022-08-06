@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <div class="field" [class.field--error]="error">
-  <div class="input__left-icon">
+  <div class="field__left-icon">
     <ng-content select="left-icon"></ng-content>
   </div>
   <input
@@ -14,4 +14,8 @@
     class="text-p1 field__input"
     [class.field__input--error]="error"
   />
+  <div class="field__gradient"></div>
+  <div *ngIf="error" class="field__error-icon">
+    <app-icon icon="color-error" appSquare="20"></app-icon>
+  </div>
 </div>
