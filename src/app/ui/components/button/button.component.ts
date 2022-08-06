@@ -8,8 +8,6 @@ import { Component, Input, OnInit } from "@angular/core";
   styleUrls: ["./button.component.scss"],
 })
 export class ButtonComponent implements OnInit {
-  @Input() size: "md" | "lg" = "md";
-
   constructor() {}
 
   ngOnInit(): void {}

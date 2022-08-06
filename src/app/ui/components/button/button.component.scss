@@ -1,25 +1,14 @@
 /** @format */
 
 .button {
-  color: #fff;
+  padding: 18px;
+  color: var(--white);
   cursor: pointer;
-  background-color: var(--accent);
+  text-align: center;
+  min-width: 350px;
+  background: var(--gradient);
   border: none;
-  border-radius: var(--rounded-lg);
+  border-radius: var(--rounded-md);
   outline: none;
   transition: background-color 0.2s;
-
-  &:hover {
-    background-color: var(--accent-hover);
-  }
-
-  &--md {
-    min-width: 210px;
-    padding: 10px 20px;
-  }
-
-  &--lg {
-    min-width: 375px;
-    padding: 15px 30px;
-  }
 }
