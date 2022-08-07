@@ -5,8 +5,8 @@
 
   &__input {
     width: 100%;
+    padding: 16px 20px;
     color: var(--black);
-    padding: 18px 20px;
     background-color: var(--white);
     border: 1px solid var(--gray);
     border-radius: var(--rounded-md);
@@ -21,23 +21,10 @@
       border-color: var(--red);
     }
 
-    &:not(.field__input--error):focus {
-      box-shadow: 0px 0px 6px rgba(109, 40, 255, 0.3);
-
-      & + .field__gradient {
-        background: var(--gradient);
-      }
+    &:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 6px rgb(109 40 255 / 30%);
     }
-  }
-
-  &__gradient {
-    position: absolute;
-    inset: 0;
-    margin: -1px;
-    z-index: -1;
-    border-radius: var(--rounded-md);
-    background: transparent;
-    transition: all 0.2s;
   }
 
   &__error-icon {

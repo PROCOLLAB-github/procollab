@@ -1,6 +1,8 @@
 /** @format */
 
 .field {
+  position: relative;
+
   &__input {
     position: relative;
     z-index: 2;
@@ -8,8 +10,8 @@
     align-items: center;
     justify-content: space-between;
     padding: 16px 20px;
-    color: var(--gray-100);
-    background-color: transparent;
+    color: var(--black);
+    background-color: var(--white);
     border: 1px solid var(--gray);
     border-radius: var(--rounded-md);
     outline: none;
@@ -17,21 +19,34 @@
     &--placeholder {
       color: var(--dark-gray);
     }
+
+    &--open {
+      border-color: var(--accent);
+      box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+    }
   }
 
   &__options {
     position: absolute;
-    top: 25px;
     right: 0;
+    bottom: -6px;
     left: 0;
-    padding-top: 25px;
-    background-color: #000;
+    padding: 10px;
+    border: 1px solid var(--gray);
+    border-radius: var(--rounded-md);
+    transform: translateY(100%);
   }
 
   &__option {
-    padding: 5px 25px;
-    color: var(--gray-100);
-    background-color: #000;
+    padding: 18px;
+    color: var(--dark-gray);
+    cursor: pointer;
+    border-radius: var(--rounded-md);
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: var(--light-gray);
+    }
   }
 
   &__arrow {

@@ -4,18 +4,19 @@
 
 :root {
   // ACCENT
-  --gradient: linear-gradient(90deg, #242424 0%, #6C27FF 50%);
+  --gradient: linear-gradient(90deg, #242424 0%, #6c27ff 50%);
+  --accent: #6c27ff;
 
   // GRAY
-  --white: #FFF;
-  --black: #332E2D;
-  --dark-gray: #8C888A;
-  --gray: #E0E0E0;
-  --light-gray: #F9F9F9;
-  
+  --white: #fff;
+  --black: #332e2d;
+  --dark-gray: #8c888a;
+  --gray: #e0e0e0;
+  --light-gray: #f9f9f9;
+
   // FUNCTIONAL
-  --green: #73C66E;
-  --red: #FF5151;
+  --green: #73c66e;
+  --red: #ff5151;
 
   // // UI
   // --accent-hover: #3a2876;
