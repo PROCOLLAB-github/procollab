@@ -2,28 +2,22 @@
 
 .page {
   position: relative;
+  display: flex;
+  flex-direction: column;
   height: 100vh;
-  background: var(--bg-main) no-repeat center/cover url("/assets/images/auth/bg.png");
+  padding: 0 100px;
+  background: var(--white) no-repeat right/contain url("/assets/images/auth/bg.svg");
 
   &__header {
-    display: flex;
-    padding: 20px 140px;
+    position: absolute;
+    top: 80px;
   }
 
   &__body {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 790px;
-    padding: 40px 200px 70px;
-    background: radial-gradient(
-      123.12% 427.27% at -3.17% 0%,
-      rgb(170 255 255 / 14%) 3.43%,
-      rgb(170 255 255 / 0%) 100%
-    );
-    background-blend-mode: overlay, normal;
-    border-radius: var(--rounded-lg);
-    transform: translate(-50%, -50%);
-    backdrop-filter: blur(39px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 415px;
+    height: 100%;
   }
 }

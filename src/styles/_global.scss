@@ -1,5 +1,9 @@
 /** @format */
 
+@import "typography";
+
+/** @format */
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -25,4 +29,12 @@ a {
   &:hover {
     color: var(--accent-hover);
   }
+}
+
+label.field-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--black);
+
+  @include small-body;
 }

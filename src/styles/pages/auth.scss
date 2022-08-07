@@ -2,23 +2,35 @@
 
 .auth {
   &__title {
-    margin-bottom: 60px;
-    color: var(--gray-100);
-    text-align: center;
+    margin-bottom: 12px;
+    color: var(--black);
   }
 
   &__field {
-    display: block;
-    margin-bottom: 30px;
+    margin-bottom: 12px;
 
-    app-input {
+    app-input,
+    app-select {
       display: block;
     }
   }
 
   &__error {
     display: block;
-    margin-top: 12px;
+    margin-top: 6px;
+    color: var(--red);
+  }
+
+  &__row {
+    display: flex;
+
+    fieldset {
+      width: 50%;
+
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
+    }
   }
 
   &__agreement {
@@ -41,6 +53,11 @@
 
   &__button {
     display: block;
-    margin-top: 30px;
+    width: 100%;
+    margin-top: 20px;
+
+    app-button {
+      display: block;
+    }
   }
 }

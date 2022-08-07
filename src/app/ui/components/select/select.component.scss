@@ -2,6 +2,7 @@
 
 .field {
   position: relative;
+  width: 100%;
 
   &__input {
     position: relative;
@@ -9,6 +10,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100%;
     padding: 16px 20px;
     color: var(--black);
     background-color: var(--white);
@@ -31,7 +33,9 @@
     right: 0;
     bottom: -6px;
     left: 0;
+    z-index: 2;
     padding: 10px;
+    background-color: var(--white);
     border: 1px solid var(--gray);
     border-radius: var(--rounded-md);
     transform: translateY(100%);

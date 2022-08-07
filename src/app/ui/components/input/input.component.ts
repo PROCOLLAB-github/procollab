@@ -19,7 +19,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";
   @Input() type: "text" | "password" | "email" = "text";
   @Input() error = false;
-  @Input() appMask = "";
+  @Input() mask = "";
 
   constructor() {}
 

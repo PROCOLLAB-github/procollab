@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<div class="icon">
+<div class="icon" [attr.width]="square || width" [attr.height]="square || height">
   <svg [attr.width]="square || width" [attr.height]="square || height" [attr.viewBox]="viewBox">
     <use [attr.xlink:href]="'assets/icons/sprite.svg#' + icon"></use>
   </svg>

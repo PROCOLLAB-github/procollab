@@ -1,41 +1,40 @@
 <!-- @format -->
 
 <form class="auth" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <h1 class="text-h4 auth__title">Вход</h1>
-  <fieldset *ngIf="loginForm.get('email') as email" class="auth__field">
-    <app-input
-      [error]="email | controlError"
-      type="email"
-      formControlName="email"
-      placeholder="Введите почту"
-    ></app-input>
-    <app-error-message *ngIf="email | controlError: 'email'" class="auth__error">
-      {{ errorMessage.VALIDATION_EMAIL }}
-    </app-error-message>
-    <app-error-message *ngIf="email | controlError: 'required'" class="auth__error">
-      {{ errorMessage.VALIDATION_REQUIRED }}
-    </app-error-message>
+  <h1 class="text-heading-1 auth__title">Вход</h1>
+  <fieldset [disabled]="loginSubmitting">
+    <fieldset *ngIf="loginForm.get('email') as email" class="auth__field">
+      <label for="email" class="field-label">Электронная почта</label>
+      <app-input
+        [error]="email | controlError"
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="Введите почту"
+      ></app-input>
+      <div *ngIf="email | controlError: 'email'" class="text-small-body auth__error">
+        {{ errorMessage.VALIDATION_EMAIL }}
+      </div>
+      <div *ngIf="email | controlError: 'required'" class="text-small-body auth__error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+    </fieldset>
+    <fieldset *ngIf="loginForm.get('password') as password" class="auth__field">
+      <label for="password" class="field-label">Ваш пароль</label>
+      <app-input
+        [error]="password | controlError"
+        id="password"
+        type="password"
+        formControlName="password"
+        placeholder="Пароль"
+      ></app-input>
+      <div *ngIf="password | controlError: 'required'" class="text-small-body auth__error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+    </fieldset>
+    <div *ngIf="errorWrongAuth" class="text-small-body auth__error">
+      {{ errorMessage.AUTH_WRONG_AUTH }}
+    </div>
+    <app-button class="auth__button">Войти</app-button>
   </fieldset>
-  <fieldset *ngIf="loginForm.get('password') as password" class="auth__field">
-    <app-input
-      [error]="password | controlError"
-      type="password"
-      formControlName="password"
-      placeholder="Пароль"
-    ></app-input>
-    <app-error-message *ngIf="password | controlError: 'required'" class="auth__error">
-      {{ errorMessage.VALIDATION_REQUIRED }}
-    </app-error-message>
-    <app-error-message *ngIf="password | controlError: 'minlength'" class="auth__error">
-      {{ errorMessage.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
-    </app-error-message>
-  </fieldset>
-  <div class="auth__agreement">
-    <app-checkbox class="auth__checkbox" [(checked)]="loginMem"></app-checkbox>
-    <span class="text-p1 auth__agreement-text" (click)="loginMem = !loginMem">Запомнить меня</span>
-  </div>
-  <app-error-message *ngIf="errorWrongAuth">
-    {{ errorMessage.AUTH_WRONG_AUTH }}
-  </app-error-message>
-  <app-button class="auth__button" size="lg">Войти</app-button>
 </form>
