@@ -1153,7 +1153,7 @@
         },
         {
             "name": "ButtonComponent",
-            "id": "component-ButtonComponent-9ce35947fe781a347d972456e05bbedd0f653b0150e2549b77f64797ce9c24d615a24a11e661a823a03fd426cfcf21ba85437fcec0d94291ac17cc231d7fb40b",
+            "id": "component-ButtonComponent-6c8d43ebf2b89c99b623a89e648123c87f48a3f4a826b6832fa2ea39d2d28b4b0fa5e1247fd4832a32739f253f248efded9097b4c06bba7260c50c18fddc2b4a",
             "file": "src/app/ui/components/button/button.component.ts",
             "encapsulation": [],
             "entryComponents": [],
@@ -1169,17 +1169,7 @@
                 "./button.component.html"
             ],
             "viewProviders": [],
-            "inputsClass": [
-                {
-                    "name": "size",
-                    "defaultValue": "\"md\"",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "line": 11,
-                    "type": "\"md\" | \"lg\"",
-                    "decorators": []
-                }
-            ],
+            "inputsClass": [],
             "outputsClass": [],
             "propertiesClass": [],
             "methodsClass": [
@@ -1189,7 +1179,7 @@
                     "optional": false,
                     "returnType": "void",
                     "typeParameters": [],
-                    "line": 15,
+                    "line": 13,
                     "deprecated": false,
                     "deprecationMessage": ""
                 }
@@ -1201,11 +1191,11 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-button\",\n  templateUrl: \"./button.component.html\",\n  styleUrls: [\"./button.component.scss\"],\n})\nexport class ButtonComponent implements OnInit {\n  @Input() size: \"md\" | \"lg\" = \"md\";\n\n  constructor() {}\n\n  ngOnInit(): void {}\n}\n",
+            "sourceCode": "import { Component, Input, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-button\",\n  templateUrl: \"./button.component.html\",\n  styleUrls: [\"./button.component.scss\"],\n})\nexport class ButtonComponent implements OnInit {\n  constructor() {}\n\n  ngOnInit(): void {}\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "/** @format */\n\n.button {\n  color: #fff;\n  cursor: pointer;\n  background-color: var(--accent);\n  border: none;\n  border-radius: var(--rounded-lg);\n  outline: none;\n  transition: background-color 0.2s;\n\n  &:hover {\n    background-color: var(--accent-hover);\n  }\n\n  &--md {\n    min-width: 210px;\n    padding: 10px 20px;\n  }\n\n  &--lg {\n    min-width: 375px;\n    padding: 15px 30px;\n  }\n}\n",
+                    "data": "/** @format */\n\n.button {\n  padding: 18px;\n  color: var(--white);\n  cursor: pointer;\n  text-align: center;\n  min-width: 350px;\n  background: var(--gradient);\n  border: none;\n  border-radius: var(--rounded-md);\n  outline: none;\n  transition: background-color 0.2s;\n  font-size: 16px;\n}\n",
                     "styleUrl": "./button.component.scss"
                 }
             ],
@@ -1216,12 +1206,12 @@
                 "deprecated": false,
                 "deprecationMessage": "",
                 "args": [],
-                "line": 11
+                "line": 10
             },
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<!-- @format -->\n\n<button\n  class=\"button\"\n  [ngClass]=\"{\n    'button--md text-p1': size === 'md',\n    'button--lg text-h4': size === 'lg'\n  }\"\n>\n  <ng-content></ng-content>\n</button>\n"
+            "templateData": "<!-- @format -->\n\n<button class=\"button\">\n  <ng-content></ng-content>\n</button>\n"
         },
         {
             "name": "CheckboxComponent",
@@ -1286,7 +1276,7 @@
             "assetsDirs": [],
             "styleUrlsData": [
                 {
-                    "data": "/** @format */\n\n.field {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 20px;\n  height: 20px;\n  cursor: pointer;\n  background-color: var(--gray-100);\n  border-radius: var(--rounded-sm);\n\n  &__checked {\n    display: block;\n    width: 100%;\n    height: 100%;\n    color: var(--blue-dark);\n  }\n}\n",
+                    "data": "/** @format */\n\n$border-width: 2px;\n\n.field {\n  position: relative;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 20px;\n  height: 20px;\n  cursor: pointer;\n  border: $border-width solid var(--gray);\n  background-clip: border-box;\n  border-radius: var(--rounded-sm);\n\n  &--checked {\n    border-color: transparent;\n  }\n\n  &__bg {\n    position: absolute;\n    inset: -$border-width;\n    border-radius: var(--rounded-sm);\n    background-image: var(--gradient);\n  }\n\n  &__check {\n    display: block;\n    width: 100%;\n    height: 100%;\n    color: var(--blue-dark);\n  }\n}\n",
                     "styleUrl": "./checkbox.component.scss"
                 }
             ],
@@ -1294,7 +1284,7 @@
             "implements": [
                 "OnInit"
             ],
-            "templateData": "<!-- @format -->\n<div class=\"field\" (click)=\"checkedChange.emit(!checked)\">\n  <app-icon *ngIf=\"checked\" class=\"field__checked\" icon=\"check\" appViewBox=\"0 0 18 17\"></app-icon>\n</div>\n"
+            "templateData": "<!-- @format -->\n<div class=\"field\" [class.field--checked]=\"checked\" (click)=\"checkedChange.emit(!checked)\">\n  <div *ngIf=\"checked\" class=\"field__bg\"></div>\n  <!-- TODO: change to new ckeck icon  <app-icon *ngIf=\"checked\" class=\"field__check\" icon=\"check\" appViewBox=\"0 0 18 17\"></app-icon> -->\n</div>\n"
         },
         {
             "name": "ErrorCodeComponent",
@@ -2191,7 +2181,7 @@
                 "OnInit",
                 "ControlValueAccessor"
             ],
-            "templateData": "<!-- @format -->\n\n<div class=\"field\" [class.field--error]=\"error\">\n  <div class=\"field__left-icon\">\n    <ng-content select=\"left-icon\"></ng-content>\n  </div>\n  <app-icon icon=\"color-error\" appSquare=\"20\"></app-icon>\n  <input\n    [value]=\"value\"\n    (input)=\"onInput($event)\"\n    (blur)=\"onBlur()\"\n    [placeholder]=\"placeholder\"\n    [type]=\"type\"\n    [mask]=\"appMask\"\n    class=\"text-p1 field__input\"\n    [class.field__input--error]=\"error\"\n  />\n  <div class=\"field__gradient\"></div>\n  <div *ngIf=\"error\" class=\"field__error-icon\">\n    <app-icon icon=\"color-error\" appSquare=\"20\"></app-icon>\n  </div>\n</div>\n"
+            "templateData": "<!-- @format -->\n\n<div class=\"field\" [class.field--error]=\"error\">\n  <div class=\"field__left-icon\">\n    <ng-content select=\"left-icon\"></ng-content>\n  </div>\n  <input\n    [value]=\"value\"\n    (input)=\"onInput($event)\"\n    (blur)=\"onBlur()\"\n    [placeholder]=\"placeholder\"\n    [type]=\"type\"\n    [mask]=\"appMask\"\n    class=\"text-p1 field__input\"\n    [class.field__input--error]=\"error\"\n  />\n  <div class=\"field__gradient\"></div>\n  <div *ngIf=\"error\" class=\"field__error-icon\">\n    <app-icon icon=\"color-error\" appSquare=\"20\"></app-icon>\n  </div>\n</div>\n"
         },
         {
             "name": "LoginComponent",
@@ -3327,21 +3317,21 @@
                 "name": "environment",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/environments/environment.prod.ts",
-                "deprecated": false,
-                "deprecationMessage": "",
-                "type": "object",
-                "defaultValue": "{\n  production: true,\n  sentryDns: \"https://fc61f416df6044bab8c7e1afd55f4355@o1186023.ingest.sentry.io/6577563\",\n  apiUrl: \"http://dartt0n.xyz:8080\",\n}"
-            },
-            {
-                "name": "environment",
-                "ctype": "miscellaneous",
-                "subtype": "variable",
                 "file": "src/environments/environment.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "object",
                 "defaultValue": "{\n  production: false,\n  sentryDns: \"\",\n  apiUrl: \"http://dartt0n.xyz:8080\",\n}"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.prod.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "object",
+                "defaultValue": "{\n  production: true,\n  sentryDns: \"https://fc61f416df6044bab8c7e1afd55f4355@o1186023.ingest.sentry.io/6577563\",\n  apiUrl: \"http://dartt0n.xyz:8080\",\n}"
             },
             {
                 "name": "PrimaryLg",
@@ -3386,7 +3376,7 @@
                 "name": "Template",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/ui/components/checkbox/checkbox.stories.ts",
+                "file": "src/app/ui/components/input/input.stories.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "Story",
@@ -3396,7 +3386,7 @@
                 "name": "Template",
                 "ctype": "miscellaneous",
                 "subtype": "variable",
-                "file": "src/app/ui/components/input/input.stories.ts",
+                "file": "src/app/ui/components/checkbox/checkbox.stories.ts",
                 "deprecated": false,
                 "deprecationMessage": "",
                 "type": "Story",
@@ -3615,18 +3605,6 @@
                     "defaultValue": "args => ({\n  props: args,\n})"
                 }
             ],
-            "src/environments/environment.prod.ts": [
-                {
-                    "name": "environment",
-                    "ctype": "miscellaneous",
-                    "subtype": "variable",
-                    "file": "src/environments/environment.prod.ts",
-                    "deprecated": false,
-                    "deprecationMessage": "",
-                    "type": "object",
-                    "defaultValue": "{\n  production: true,\n  sentryDns: \"https://fc61f416df6044bab8c7e1afd55f4355@o1186023.ingest.sentry.io/6577563\",\n  apiUrl: \"http://dartt0n.xyz:8080\",\n}"
-                }
-            ],
             "src/environments/environment.ts": [
                 {
                     "name": "environment",
@@ -3637,6 +3615,18 @@
                     "deprecationMessage": "",
                     "type": "object",
                     "defaultValue": "{\n  production: false,\n  sentryDns: \"\",\n  apiUrl: \"http://dartt0n.xyz:8080\",\n}"
+                }
+            ],
+            "src/environments/environment.prod.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.prod.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "defaultValue": "{\n  production: true,\n  sentryDns: \"https://fc61f416df6044bab8c7e1afd55f4355@o1186023.ingest.sentry.io/6577563\",\n  apiUrl: \"http://dartt0n.xyz:8080\",\n}"
                 }
             ],
             "src/app/ui/components/button/button.stories.ts": [
@@ -4037,7 +4027,7 @@
                 "linktype": "component",
                 "name": "ButtonComponent",
                 "coveragePercent": 0,
-                "coverageCount": "0/4",
+                "coverageCount": "0/3",
                 "status": "low"
             },
             {

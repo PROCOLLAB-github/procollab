@@ -1,15 +1,14 @@
 /** @format */
 
 .button {
+  min-width: 350px;
   padding: 18px;
   color: var(--white);
-  cursor: pointer;
   text-align: center;
-  min-width: 350px;
+  cursor: pointer;
   background: var(--gradient);
   border: none;
   border-radius: var(--rounded-md);
   outline: none;
   transition: background-color 0.2s;
-  font-size: 16px;
 }

@@ -192,89 +192,122 @@
     url("../assets/MontFont/Mont-Light.ttf") format("truetype");
 }
 
-@mixin text-error-code {
-  font-family: Montserrat, sans-serif;
-  font-size: 128px;
-  line-height: 150.4%;
-}
-
-.text-error-code {
-  @include text-error-code;
-
-  font-weight: 700;
-  line-height: 44px;
-}
-
-@mixin text-h1 {
-  font-family: Montserrat, sans-serif;
+@mixin heading-1 {
+  font-family: Mont, sans-serif;
   font-size: 36px;
-}
-
-.text-h1 {
-  @include text-h1;
-
-  font-weight: 700;
-  line-height: 150.4%;
-}
-
-@mixin text-h2 {
-  font-family: Montserrat, sans-serif;
-  font-size: 32px;
   font-style: normal;
+  font-weight: 900;
+  line-height: 150%;
 }
 
-.text-h2 {
-  @include text-h2;
-
-  font-weight: 700;
-  line-height: 37px;
+.text-heading-1 {
+  @include heading-1;
 }
 
-@mixin text-h3 {
-  font-family: Montserrat, sans-serif;
-  font-size: 30px;
+@mixin heading-2 {
+  font-family: Mont, sans-serif;
+  font-size: 28px;
   font-style: normal;
+  font-weight: 900;
+  line-height: 150%;
 }
 
-.text-h3 {
-  @include text-h3;
-
-  font-weight: 700;
-  line-height: 29px;
+.text-heading-2 {
+  @include heading-2;
 }
 
-@mixin text-h4 {
-  font-family: Montserrat, sans-serif;
+@mixin heading-3 {
+  font-family: Mont, sans-serif;
   font-size: 24px;
   font-style: normal;
+  font-weight: 800;
+  line-height: 150%;
 }
 
-.text-h4 {
-  @include text-h4;
-
-  font-weight: 400;
-  line-height: 18px;
+.text-heading-3 {
+  @include heading-3;
 }
 
-@mixin text-p1 {
-  font-family: Montserrat, sans-serif;
-  font-size: 15px;
+@mixin big-bold-body {
+  font-family: Mont, sans-serif;
+  font-size: 18px;
   font-style: normal;
+  font-weight: 800;
+  line-height: 150%;
 }
 
-.text-p1 {
-  @include text-p1;
-
-  font-weight: 500;
-  line-height: 12px;
+.text-big-bold-body {
+  @include big-bold-body;
 }
 
-@mixin text-p2 {
-  font-family: Montserrat, sans-serif;
-  font-size: 10px;
+@mixin big-body {
+  font-family: Mont, sans-serif;
+  font-size: 18px;
   font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
 }
 
-.text-p2 {
-  @include text-p2;
+.text-big-bogy {
+  @include big-body;
+}
+
+@mixin bold-body {
+  font-family: Mont, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 150%;
+}
+
+.text-bold-body {
+  @include bold-body;
+}
+
+@mixin body {
+  font-family: Mont, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+.text-body {
+  @include body;
+}
+
+@mixin small-bold-body {
+  font-family: Mont, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 150%;
+}
+
+.text-small-bold-body {
+  @include small-bold-body;
+}
+
+@mixin small-body {
+  font-family: Mont, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+.text-small-body {
+  @include small-body;
+}
+
+@mixin very-small-body {
+  font-family: Mont, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 130%;
+}
+
+.text-very-small-body {
+  @include very-small-body;
 }
