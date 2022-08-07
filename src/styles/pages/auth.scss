@@ -1,6 +1,10 @@
 /** @format */
 
 .auth {
+  &__wrapper {
+    max-width: 415px;
+  }
+
   &__title {
     margin-bottom: 12px;
     color: var(--black);

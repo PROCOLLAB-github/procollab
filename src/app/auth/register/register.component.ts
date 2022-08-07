@@ -14,10 +14,11 @@ import { SelectComponent } from "src/app/ui/components";
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
+  registerAgreement = false;
 
   errorMessage = ErrorMessage;
 
-  typeOptions: SelectComponent["options"] = [
+  statusOptions: SelectComponent["options"] = [
     { id: 1, value: "Ученик", label: "Ученик" },
     { id: 2, value: "Ментор", label: "Ментор" },
   ];
@@ -32,7 +33,7 @@ export class RegisterComponent implements OnInit {
         name: ["", [Validators.required]],
         surname: ["", [Validators.required]],
         email: ["", [Validators.required, Validators.email]],
-        type: ["", [Validators.required]],
+        status: ["", [Validators.required]],
         birthday: ["", [Validators.required]],
         password: ["", [Validators.required, Validators.minLength(6)]],
         repeatedPassword: ["", [Validators.required]],
@@ -44,12 +45,13 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit() {
-    if (this.registerForm.invalid) {
+    if (this.registerForm.invalid || !this.registerAgreement) {
       return;
     }
 
     const form = { ...this.registerForm.value };
     delete form.repeatedPassword;
+
     this.authService.register(form).subscribe(res => {
       this.authService.memTokens(res);
     });

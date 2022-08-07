@@ -1,1 +1,14 @@
 /** @format */
+
+.register {
+  &__agreement {
+    display: flex;
+    align-items: center;
+    margin-top: 30px;
+    cursor: pointer;
+
+    app-checkbox {
+      margin-right: 15px;
+    }
+  }
+}

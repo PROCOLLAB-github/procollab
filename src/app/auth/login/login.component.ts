@@ -14,7 +14,6 @@ import { ErrorMessage } from "../../error/models/error-message";
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loginMem = false;
-  loginSubmitting = false;
 
   errorWrongAuth = false;
   errorMessage = ErrorMessage;
@@ -32,16 +31,12 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-    this.loginSubmitting = true;
 
     this.authService.login(this.loginForm.value).subscribe(
       res => {
-        this.loginSubmitting = false;
         this.authService.memTokens(res, !this.loginMem);
       },
       error => {
-        this.loginSubmitting = false;
-
         if (error.error?.detail === "Incorrect email or password") {
           this.errorWrongAuth = true;
         }

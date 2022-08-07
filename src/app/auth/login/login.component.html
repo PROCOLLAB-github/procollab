@@ -1,8 +1,8 @@
 <!-- @format -->
 
 <form class="auth" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <h1 class="text-heading-1 auth__title">Вход</h1>
-  <fieldset [disabled]="loginSubmitting">
+  <div class="auth__wrapper">
+    <h1 class="text-heading-1 auth__title">Вход</h1>
     <fieldset *ngIf="loginForm.get('email') as email" class="auth__field">
       <label for="email" class="field-label">Электронная почта</label>
       <app-input
@@ -36,5 +36,8 @@
       {{ errorMessage.AUTH_WRONG_AUTH }}
     </div>
     <app-button class="auth__button">Войти</app-button>
-  </fieldset>
+    <p class="text-body login__reg">
+      Нет аккаунта? <a routerLink="/auth/register">Зарегистрируйтесь</a>
+    </p>
+  </div>
 </form>

@@ -54,10 +54,11 @@
   }
 
   &__arrow {
-    color: var(--gray-100);
-    transition: transform 0.2s;
+    color: var(--dark-gray);
+    transition: all 0.2s;
 
     &--filpped {
+      color: var(--accent);
       transform: rotate(180deg);
     }
   }

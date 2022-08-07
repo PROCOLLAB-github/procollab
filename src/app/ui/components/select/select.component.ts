@@ -27,6 +27,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
   ngOnInit(): void {}
 
   writeValue(label: string) {
+    console.log(label);
     this.selectedId = this.getId(label);
   }
 

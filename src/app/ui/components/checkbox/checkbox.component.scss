@@ -1,7 +1,5 @@
 /** @format */
 
-$border-width: 2px;
-
 .field {
   position: relative;
   display: flex;
@@ -10,19 +8,12 @@ $border-width: 2px;
   width: 20px;
   height: 20px;
   cursor: pointer;
-  border: $border-width solid var(--gray);
-  background-clip: border-box;
+  border: 2px solid var(--gray);
   border-radius: var(--rounded-sm);
 
   &--checked {
-    border-color: transparent;
-  }
-
-  &__bg {
-    position: absolute;
-    inset: -$border-width;
-    border-radius: var(--rounded-sm);
-    background-image: var(--gradient);
+    background-color: var(--accent);
+    border-color: var(--accent);
   }
 
   &__check {
