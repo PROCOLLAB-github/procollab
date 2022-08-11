@@ -8,13 +8,14 @@
     (click)="isOpen = !isOpen"
   >
     {{ selectedId ? getLabel(selectedId) || basicLabel : basicLabel }}
-    <app-icon
+    <i
       class="field__arrow"
       [class.field__arrow--filpped]="isOpen"
+      appIcon
       icon="arrow-no-body"
       appWidth="18"
       appHeight="9"
-    ></app-icon>
+    ></i>
   </div>
   <ul *ngIf="isOpen" class="field__options">
     <li

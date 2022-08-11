@@ -15,8 +15,5 @@
     class="text-body field__input"
     [class.field__input--error]="error"
   />
-  <div class="field__gradient"></div>
-  <div *ngIf="error" class="field__error-icon">
-    <app-icon icon="color-error" appSquare="20"></app-icon>
-  </div>
+  <i *ngIf="error" class="field__error-icon" appIcon icon="color-error" appSquare="20"></i>
 </div>

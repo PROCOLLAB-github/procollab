@@ -3,7 +3,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 
 @Component({
-  selector: "app-icon",
+  selector: "[appIcon]",
   templateUrl: "./icon.component.html",
   styleUrls: ["./icon.component.scss"],
 })

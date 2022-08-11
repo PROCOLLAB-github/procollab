@@ -31,6 +31,9 @@
     position: absolute;
     top: 50%;
     right: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transform: translateY(-50%);
   }
 }
