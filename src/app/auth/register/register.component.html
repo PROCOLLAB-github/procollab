@@ -105,7 +105,10 @@
         {{ errorMessage.VALIDATION_PASSWORD_UNMATCH }}
       </div>
     </fieldset>
-    <app-button class="auth__button">Создать аккаунт</app-button>
+    <app-button class="auth__button">
+      <span>Создать аккаунт</span>
+      <i class="auth__button-icon" appIcon icon="arrow-no-body" appWidth="12" appHeight="6"></i>
+    </app-button>
   </div>
   <div class="register__agreement">
     <app-checkbox [(checked)]="registerAgreement"></app-checkbox>

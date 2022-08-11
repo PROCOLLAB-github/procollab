@@ -35,7 +35,10 @@
     <div *ngIf="errorWrongAuth" class="text-small-body auth__error">
       {{ errorMessage.AUTH_WRONG_AUTH }}
     </div>
-    <app-button class="auth__button">Войти</app-button>
+    <app-button class="auth__button">
+      <span>Войти</span>
+      <i class="auth__button-icon" appIcon icon="arrow-no-body" appWidth="12" appHeight="6"></i>
+    </app-button>
     <p class="text-body login__reg">
       Нет аккаунта? <a routerLink="/auth/register">Зарегистрируйтесь</a>
     </p>
