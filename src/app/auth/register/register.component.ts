@@ -45,7 +45,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit() {
-    if (this.registerForm.invalid || !this.registerAgreement) {
+    if (this.validationService.getFormValidation(this.registerForm) || !this.registerAgreement) {
       return;
     }
 

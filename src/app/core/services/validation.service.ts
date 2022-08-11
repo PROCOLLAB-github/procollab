@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ValidatorFn } from "@angular/forms";
+import { AnyForUntypedForms, ValidatorFn } from "@angular/forms";
 
 @Injectable({
   providedIn: "root",
@@ -15,8 +15,19 @@ export class ValidationService {
         throw new Error(`No control with name ${left} or ${right}`);
       }
 
-      // @ts-ignore
-      return group.get(left).value !== group.get(right).value ? { unMatch: true } : null;
+      return group.get(left)?.value !== group.get(right)?.value ? { unMatch: true } : null;
     };
+  }
+
+  getFormValidation(form: AnyForUntypedForms): boolean {
+    if (form.valid) {
+      return true;
+    }
+
+    Object.keys(form.controls).forEach(control =>
+      form.get(control).markAsTouched({ onlySelf: true })
+    );
+
+    return false;
   }
 }

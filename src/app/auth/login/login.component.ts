@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
 import { ErrorMessage } from "../../error/models/error-message";
+import { ValidationService } from "src/app/core/services";
 
 @Component({
   selector: "app-login",
@@ -18,7 +19,11 @@ export class LoginComponent implements OnInit {
   errorWrongAuth = false;
   errorMessage = ErrorMessage;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private validationService: ValidationService
+  ) {
     this.loginForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
       password: ["", [Validators.required]],
@@ -28,7 +33,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit() {
-    if (this.loginForm.invalid) {
+    if (this.validationService.getFormValidation(this.loginForm)) {
       return;
     }
 
