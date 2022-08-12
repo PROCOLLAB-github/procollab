@@ -63,23 +63,14 @@
         {{ errorMessage.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
       </div>
     </fieldset>
-    <fieldset *ngIf="registerForm.get('repeatedPassword') as repeatedPassword" class="auth__field">
-      <app-input
-        [error]="repeatedPassword | controlError"
-        type="password"
-        formControlName="repeatedPassword"
-        placeholder="Повторите пароль"
-      ></app-input>
-      <div *ngIf="repeatedPassword | controlError: 'required'" class="text-small-body auth__error">
-        {{ errorMessage.VALIDATION_REQUIRED }}
-      </div>
-      <div
-        class="text-small-body auth__error"
-        *ngIf="registerForm.get('repeatedPassword')?.touched && registerForm.errors?.unMatch"
-      >
-        {{ errorMessage.VALIDATION_PASSWORD_UNMATCH }}
-      </div>
-    </fieldset>
+  </div>
+  <div class="register__agreement">
+    <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
+    <span class="text-small-body" (click)="registerAgreement = !registerAgreement">
+      Я прочитал соглашение и даю <a routerLink=".">согласие</a> на обработку персональных данных
+    </span>
+  </div>
+  <div class="auth__wrapper">
     <app-button class="auth__button">
       <span>Создать аккаунт</span>
       <i
@@ -91,11 +82,5 @@
         appViewBox="0 0 18 9"
       ></i>
     </app-button>
-  </div>
-  <div class="register__agreement">
-    <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
-    <span class="text-small-body" (click)="registerAgreement = !registerAgreement">
-      Я прочитал соглашение и даю <a routerLink=".">согласие</a> на обработку персональных данных
-    </span>
   </div>
 </form>
