@@ -31,31 +31,6 @@
         </div>
       </fieldset>
     </div>
-    <div class="auth__row">
-      <fieldset *ngIf="registerForm.get('birthday') as birthday" class="auth__field">
-        <label for="birthday" class="field-label">Дата рождения</label>
-        <app-input
-          [error]="birthday | controlError"
-          id="birthday"
-          type="text"
-          mask="00.00.0000"
-          formControlName="birthday"
-          placeholder="Дата рождения"
-        ></app-input>
-        <div *ngIf="birthday | controlError: 'required'" class="text-small-body auth__error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-      </fieldset>
-      <fieldset>
-        <label for="type" class="field-label">Тип аккаунта</label>
-        <app-select
-          id="type"
-          formControlName="status"
-          basicLabel="Ученик"
-          [options]="statusOptions"
-        ></app-select>
-      </fieldset>
-    </div>
     <fieldset *ngIf="registerForm.get('email') as email" class="auth__field">
       <label for="email" class="field-label">Почта</label>
       <app-input
