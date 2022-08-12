@@ -196,7 +196,7 @@
   font-family: Mont, sans-serif;
   font-size: 36px;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 900;
   line-height: 150%;
 }
 
@@ -228,7 +228,7 @@
   @include heading-3;
 }
 
-@mixin big-bold-body {
+@mixin heading-4 {
   font-family: Mont, sans-serif;
   font-size: 18px;
   font-style: normal;
@@ -236,8 +236,8 @@
   line-height: 150%;
 }
 
-.text-big-bold-body {
-  @include big-bold-body;
+text.heading-4 {
+  @include heading-4;
 }
 
 @mixin big-body {
