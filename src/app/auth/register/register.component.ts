@@ -6,6 +6,7 @@ import { AuthService } from "../services";
 import { ValidationService } from "../../core/services";
 import { ErrorMessage } from "../../error/models/error-message";
 import { SelectComponent } from "src/app/ui/components";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-login",
@@ -26,6 +27,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private router: Router,
     private validationService: ValidationService
   ) {
     this.registerForm = this.fb.group({
@@ -39,7 +41,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit() {
-    if (this.validationService.getFormValidation(this.registerForm) || !this.registerAgreement) {
+    if (!this.validationService.getFormValidation(this.registerForm) || !this.registerAgreement) {
       return;
     }
 
@@ -48,6 +50,7 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(form).subscribe(res => {
       this.authService.memTokens(res);
+      this.router.navigateByUrl("/office");
     });
   }
 }

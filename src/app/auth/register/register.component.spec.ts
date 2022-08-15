@@ -9,6 +9,7 @@ import { InputComponent } from "../../ui/components";
 import { CoreModule } from "../../core/core.module";
 import { UiModule } from "src/app/ui/ui.module";
 import { NgxMaskModule } from "ngx-mask";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("LoginComponent", () => {
   let component: RegisterComponent;
@@ -18,7 +19,14 @@ describe("LoginComponent", () => {
     const authSpy = jasmine.createSpyObj("AuthService", ["login", "memTokens"]);
 
     return await TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule, CoreModule, UiModule, NgxMaskModule.forRoot()],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        RouterTestingModule,
+        CoreModule,
+        UiModule,
+        NgxMaskModule.forRoot(),
+      ],
       providers: [{ provide: AuthService, useValue: authSpy }],
       declarations: [RegisterComponent, InputComponent],
     }).compileComponents();
