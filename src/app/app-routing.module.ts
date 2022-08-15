@@ -3,7 +3,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
-import { AuthRequiredGuard } from "./auth/guards/auth-required.guard";
 
 const routes: Routes = [
   {
@@ -21,7 +20,7 @@ const routes: Routes = [
   {
     path: "office",
     loadChildren: () => import("./office/office.module").then(m => m.OfficeModule),
-    canActivate: [AuthRequiredGuard],
+    // canActivate: [AuthRequiredGuard],
   },
 ];
 

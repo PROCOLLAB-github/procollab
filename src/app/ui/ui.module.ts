@@ -11,6 +11,7 @@ import {
 } from "./components";
 import { ClickOutsideModule } from "ng-click-outside";
 import { NgxMaskModule } from "ngx-mask";
+import { AvatarComponent } from "./components/avatar/avatar.component";
 
 @NgModule({
   declarations: [
@@ -19,8 +20,16 @@ import { NgxMaskModule } from "ngx-mask";
     CheckboxComponent,
     IconComponent,
     SelectComponent,
+    AvatarComponent,
   ],
   imports: [CommonModule, ClickOutsideModule, NgxMaskModule],
-  exports: [ButtonComponent, InputComponent, CheckboxComponent, IconComponent, SelectComponent],
+  exports: [
+    ButtonComponent,
+    InputComponent,
+    CheckboxComponent,
+    IconComponent,
+    SelectComponent,
+    AvatarComponent,
+  ],
 })
 export class UiModule {}

@@ -1,0 +1,58 @@
+@import "src/styles/responsive";
+
+.header {
+  border-bottom: 1px solid var(--gray);
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: $container-sm;
+    padding: 20px 30px;
+    margin: 0 auto;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+  }
+
+  &__bell {
+    position: relative;
+
+    > div {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 7px;
+      height: 7px;
+      background-color: var(--red);
+      border-radius: 50%;
+    }
+  }
+
+  &__separator {
+    width: 1px;
+    height: 50px;
+    margin: 0 30px;
+    background-color: var(--gray);
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+  }
+
+  &__user-avatar {
+    display: block;
+    margin-right: 12px;
+  }
+
+  &__user-name {
+    color: var(--black);
+  }
+
+  &__user-email {
+    color: var(--dark-gray);
+  }
+}

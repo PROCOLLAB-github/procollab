@@ -1,0 +1,21 @@
+<!-- @format -->
+
+<header class="header">
+  <div class="header__inner">
+    <img src="/assets/images/shared/logo.svg" alt="procollab" />
+    <div class="header__right">
+      <div class="header__bell">
+        <div *ngIf="hasNotifications | async"></div>
+        <i appIcon icon="bell" appWidth="20" appHeight="23" appViewBox="0 0 20 22"></i>
+      </div>
+      <div class="header__separator"></div>
+      <a class="header__user">
+        <app-avatar class="header__user-avatar"></app-avatar>
+        <div>
+          <div class="text-small-bold-body header__user-name">Some name</div>
+          <div class="text-small-body header__user-email">e@tokarev.work</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</header>
