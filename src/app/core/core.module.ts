@@ -7,10 +7,9 @@ import { BearerTokenInterceptor } from "./interceptors/bearer-token.interceptor"
 import { ApiService } from "./services";
 import { CamelcaseInterceptor } from "./interceptors/camelcase.interceptor";
 import { ControlErrorPipe } from "./pipes/control-error.pipe";
-import { AnimateDirective } from "./directives/animate.directive";
 
 @NgModule({
-  declarations: [ControlErrorPipe, AnimateDirective],
+  declarations: [ControlErrorPipe],
   imports: [CommonModule],
   providers: [
     {
@@ -25,6 +24,6 @@ import { AnimateDirective } from "./directives/animate.directive";
     },
     ApiService,
   ],
-  exports: [ControlErrorPipe, AnimateDirective],
+  exports: [ControlErrorPipe],
 })
 export class CoreModule {}

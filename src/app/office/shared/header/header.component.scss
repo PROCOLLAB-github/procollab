@@ -1,3 +1,5 @@
+/** @format */
+
 @import "src/styles/responsive";
 
 .header {
@@ -19,6 +21,7 @@
 
   &__bell {
     position: relative;
+    cursor: pointer;
 
     > div {
       position: absolute;
@@ -41,6 +44,7 @@
   &__user {
     display: flex;
     align-items: center;
+    cursor: pointer;
   }
 
   &__user-avatar {

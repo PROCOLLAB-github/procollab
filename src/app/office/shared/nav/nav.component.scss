@@ -1,0 +1,44 @@
+/** @format */
+
+@import "src/styles/responsive";
+
+.nav {
+  &__inner {
+    max-width: $container-sm;
+    padding: 36px 30px 24px;
+    margin: 0 auto;
+  }
+
+  &__title {
+    color: var(--black);
+    margin-bottom: 18px;
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+  }
+
+  &__link {
+    color: var(--dark-gray);
+
+    &:not(:last-child) {
+      margin-right: 38px;
+    }
+
+    &--active {
+      color: var(--black);
+    }
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    color: inherit;
+    cursor: pointer;
+
+    i {
+      margin-right: 12px;
+    }
+  }
+}
