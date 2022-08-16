@@ -1,5 +1,13 @@
 <!-- @format -->
 
-<app-header></app-header>
-<app-nav></app-nav>
-<router-outlet></router-outlet>
+<div class="office">
+  <div #general>
+    <app-header></app-header>
+    <app-nav></app-nav>
+  </div>
+  <div [style.height]="bodyHeight" class="office__body">
+    <div class="office__inner">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

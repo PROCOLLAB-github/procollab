@@ -1,0 +1,16 @@
+/** @format */
+
+@import "src/styles/responsive";
+
+.office {
+  &__body {
+    padding: 20px 0 0;
+    overflow-y: auto;
+    background-color: var(--light-gray);
+  }
+
+  &__inner {
+    max-width: $container-sm;
+    margin: 0 auto;
+  }
+}

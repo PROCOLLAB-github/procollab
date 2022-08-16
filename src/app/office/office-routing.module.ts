@@ -14,6 +14,11 @@ const routes: Routes = [
     component: OfficeComponent,
     children: [
       {
+        path: "",
+        pathMatch: "full",
+        redirectTo: "projects",
+      },
+      {
         path: "projects",
         component: ProjectsComponent,
       },
