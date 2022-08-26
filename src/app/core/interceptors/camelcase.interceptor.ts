@@ -16,11 +16,18 @@ import camelcaseKeys from "camelcase-keys";
 export class CamelcaseInterceptor implements HttpInterceptor {
   constructor() {}
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const req = request.clone({
-      // @ts-ignore
-      body: snakecaseKeys(request.body, { deep: true }),
-    });
+  intercept(
+    request: HttpRequest<Record<string, any>>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
+    let req: HttpRequest<Record<string, any>>;
+    if (request.body) {
+      req = request.clone({
+        body: snakecaseKeys(request.body, { deep: true }),
+      });
+    } else {
+      req = request.clone();
+    }
 
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {

@@ -6,8 +6,8 @@
 
 export const environment = {
   production: false,
-  sentryDns: "",
-  apiUrl: "http://procollab.dartt0n.xyz:8080",
+  sentryDns: "https://fc61f416df6044bab8c7e1afd55f4355@o1186023.ingest.sentry.io/6577563",
+  apiUrl: "http://localhost:3333",
 };
 
 /*

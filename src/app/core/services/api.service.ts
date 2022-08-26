@@ -11,20 +11,21 @@ import { environment } from "../../../environments/environment";
 export class ApiService {
   constructor(private http: HttpClient) {}
 
-  // eslint-disable-next-line no-undef
-  get(path: string, params?: any, options?: any): Observable<any> {
-    return this.http.get(environment.apiUrl + path, { params, ...options }).pipe(first());
+  get<T>(path: string, params?: any, options?: any): Observable<T> {
+    return this.http
+      .get<T>(environment.apiUrl + path, { params, ...options })
+      .pipe(first()) as Observable<T>;
   }
 
-  put(path: string, body: object): Observable<any> {
-    return this.http.put(environment.apiUrl + path, body).pipe(first());
+  put<T>(path: string, body: object): Observable<T> {
+    return this.http.put<T>(environment.apiUrl + path, body).pipe(first()) as Observable<T>;
   }
 
-  post(path: string, body: object): Observable<any> {
-    return this.http.post(environment.apiUrl + path, body).pipe(first());
+  post<T>(path: string, body: object): Observable<T> {
+    return this.http.post<T>(environment.apiUrl + path, body).pipe(first()) as Observable<T>;
   }
 
-  delete(path: string): Observable<any> {
-    return this.http.delete(environment.apiUrl + path).pipe(first());
+  delete<T>(path: string): Observable<T> {
+    return this.http.delete<T>(environment.apiUrl + path).pipe(first()) as Observable<T>;
   }
 }

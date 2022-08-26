@@ -9,11 +9,17 @@
         <i appIcon icon="bell" appWidth="20" appHeight="23" appViewBox="0 0 20 22"></i>
       </div>
       <div class="header__separator"></div>
-      <a class="header__user">
+      <a
+        *ngIf="authService.profileStream | async as user"
+        class="header__user"
+        [routerLink]="['/office/profile', user.id]"
+      >
         <app-avatar class="header__user-avatar"></app-avatar>
         <div>
-          <div class="text-small-bold-body header__user-name">Some name</div>
-          <div class="text-small-body header__user-email">e@tokarev.work</div>
+          <div class="text-small-bold-body header__user-name">
+            {{ user.name }}
+          </div>
+          <div class="text-small-body header__user-email">{{ user.email }}</div>
         </div>
       </a>
     </div>

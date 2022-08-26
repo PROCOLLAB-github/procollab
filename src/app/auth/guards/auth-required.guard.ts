@@ -3,6 +3,7 @@
 import { Injectable } from "@angular/core";
 import { CanActivate, Router, UrlTree } from "@angular/router";
 import { AuthService } from "../services";
+import { catchError, map, Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -10,11 +11,16 @@ import { AuthService } from "../services";
 export class AuthRequiredGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(): boolean | UrlTree {
+  canActivate(): Observable<boolean> | UrlTree {
     if (this.authService.getTokens() === null) {
       return this.router.createUrlTree(["/auth/login"]);
     }
 
-    return true;
+    return this.authService.getProfile().pipe(
+      map(profile => !!profile),
+      catchError(() => {
+        return this.router.navigateByUrl("/auth/login");
+      })
+    );
   }
 }

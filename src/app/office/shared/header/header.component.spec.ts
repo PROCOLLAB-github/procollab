@@ -1,16 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { HeaderComponent } from './header.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('HeaderComponent', () => {
+import { HeaderComponent } from "./header.component";
+import { of } from "rxjs";
+import { AuthService } from "../../../auth/services";
+
+describe("HeaderComponent", () => {
   let component: HeaderComponent;
   let fixture: ComponentFixture<HeaderComponent>;
 
   beforeEach(async () => {
+    const authSpy = jasmine.createSpyObj([{ profileStream: of({}) }]);
+
     await TestBed.configureTestingModule({
-      declarations: [ HeaderComponent ]
-    })
-    .compileComponents();
+      providers: [{ provide: AuthService, useValue: authSpy }],
+      declarations: [HeaderComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +25,7 @@ describe('HeaderComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

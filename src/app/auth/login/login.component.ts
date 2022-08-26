@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl("/office");
       },
       error => {
-        if (error.error?.detail === "Incorrect email or password") {
+        if (error.status === 403) {
           this.errorWrongAuth = true;
         }
       }

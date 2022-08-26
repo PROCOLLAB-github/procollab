@@ -2,6 +2,7 @@
 
 import { Component, OnInit } from "@angular/core";
 import { NotificationService } from "../../services/notification.service";
+import { AuthService } from "../../../auth/services";
 
 @Component({
   selector: "app-header",
@@ -9,7 +10,7 @@ import { NotificationService } from "../../services/notification.service";
   styleUrls: ["./header.component.scss"],
 })
 export class HeaderComponent implements OnInit {
-  constructor(private notificationService: NotificationService) {}
+  constructor(private notificationService: NotificationService, public authService: AuthService) {}
 
   hasNotifications = this.notificationService.hasNotifications;
 

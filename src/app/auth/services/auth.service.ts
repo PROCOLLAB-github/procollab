@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService } from "../../core/services";
-import { map, Observable } from "rxjs";
+import { distinctUntilChanged, map, Observable, ReplaySubject, tap } from "rxjs";
 import {
   LoginRequest,
   LoginResponse,
@@ -11,7 +11,8 @@ import {
   RegisterResponse,
 } from "../models/http.model";
 import { plainToClass } from "class-transformer";
-import { Tokens } from "../models/tokens";
+import { Tokens } from "../models/tokens.model";
+import { User } from "../models/user.model";
 
 @Injectable()
 export class AuthService {
@@ -56,5 +57,15 @@ export class AuthService {
       sessionStorage.setItem("accessToken", tokens.accessToken);
       sessionStorage.setItem("refreshToken", tokens.refreshToken);
     }
+  }
+
+  profile$ = new ReplaySubject<User>(1);
+  profileStream = this.profile$.asObservable().pipe(distinctUntilChanged());
+
+  getProfile(): Observable<User> {
+    return this.apiService.get<User>("/profile/").pipe(
+      map(user => plainToClass(User, user)),
+      tap(profile => this.profile$.next(profile))
+    );
   }
 }

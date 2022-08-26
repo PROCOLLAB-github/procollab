@@ -1,0 +1,6 @@
+{
+  "/profile": "/profile/0",
+  "/profile/update": "/profile/0",
+  "/project/user/:user_id": "/project/?leader_id=:user_id",
+  "/project/update/:project_id": "/project"
+}
