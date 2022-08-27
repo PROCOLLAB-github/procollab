@@ -11,7 +11,7 @@ describe("HeaderComponent", () => {
   let fixture: ComponentFixture<HeaderComponent>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj([{ profileStream: of({}) }]);
+    const authSpy = jasmine.createSpyObj([{ profile: of({}) }]);
 
     await TestBed.configureTestingModule({
       providers: [{ provide: AuthService, useValue: authSpy }],

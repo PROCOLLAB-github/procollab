@@ -2,7 +2,7 @@
 
 <div class="field" (clickOutside)="onClickOutside()">
   <div
-    class="text-body field__input"
+    class="text-body-16 field__input"
     [class.field__input--placeholder]="!selectedId"
     [class.field__input--open]="isOpen"
     (click)="isOpen = !isOpen"
@@ -20,7 +20,7 @@
   <ul *ngIf="isOpen" class="field__options">
     <li
       *ngFor="let option of options"
-      class="text-body field__option"
+      class="text-body-16 field__option"
       (click)="onUpdate($event, option.id)"
     >
       {{ option.label }}

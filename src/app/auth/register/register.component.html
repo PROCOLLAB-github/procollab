@@ -13,7 +13,7 @@
           formControlName="name"
           placeholder="Иван"
         ></app-input>
-        <div *ngIf="name | controlError: 'required'" class="text-small-body auth__error">
+        <div *ngIf="name | controlError: 'required'" class="text-body-14 auth__error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
       </fieldset>
@@ -26,7 +26,7 @@
           formControlName="surname"
           placeholder="Иванов"
         ></app-input>
-        <div *ngIf="surname | controlError: 'required'" class="text-small-body auth__error">
+        <div *ngIf="surname | controlError: 'required'" class="text-body-14 auth__error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
       </fieldset>
@@ -40,10 +40,10 @@
         formControlName="email"
         placeholder="mail@example.ru"
       ></app-input>
-      <div *ngIf="email | controlError: 'required'" class="text-small-body auth__error">
+      <div *ngIf="email | controlError: 'required'" class="text-body-14 auth__error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
-      <div *ngIf="email | controlError: 'email'" class="text-small-body auth__error">
+      <div *ngIf="email | controlError: 'email'" class="text-body-14 auth__error">
         {{ errorMessage.VALIDATION_EMAIL }}
       </div>
     </fieldset>
@@ -56,17 +56,17 @@
         formControlName="password"
         placeholder="Пароль"
       ></app-input>
-      <div *ngIf="password | controlError: 'required'" class="text-small-body auth__error">
+      <div *ngIf="password | controlError: 'required'" class="text-body-14 auth__error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
-      <div *ngIf="password | controlError: 'minlength'" class="text-small-body auth__error">
+      <div *ngIf="password | controlError: 'minlength'" class="text-body-14 auth__error">
         {{ errorMessage.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
       </div>
     </fieldset>
   </div>
   <div class="register__agreement">
     <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
-    <span class="text-small-body" (click)="registerAgreement = !registerAgreement">
+    <span class="text-body-14" (click)="registerAgreement = !registerAgreement">
       Я прочитал соглашение и даю <a routerLink=".">согласие</a> на обработку персональных данных
     </span>
   </div>

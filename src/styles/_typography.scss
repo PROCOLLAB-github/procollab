@@ -240,7 +240,7 @@ text.heading-4 {
   @include heading-4;
 }
 
-@mixin big-body {
+@mixin body-18 {
   font-family: Mont, sans-serif;
   font-size: 18px;
   font-style: normal;
@@ -248,11 +248,11 @@ text.heading-4 {
   line-height: 150%;
 }
 
-.text-big-bogy {
-  @include big-body;
+.text-body-18 {
+  @include body-18;
 }
 
-@mixin bold-body {
+@mixin bold-body-16 {
   font-family: Mont, sans-serif;
   font-size: 16px;
   font-style: normal;
@@ -260,11 +260,11 @@ text.heading-4 {
   line-height: 150%;
 }
 
-.text-bold-body {
-  @include bold-body;
+.text-bold-body-16 {
+  @include bold-body-16;
 }
 
-@mixin body {
+@mixin body-16 {
   font-family: Mont, sans-serif;
   font-size: 16px;
   font-style: normal;
@@ -272,11 +272,11 @@ text.heading-4 {
   line-height: 150%;
 }
 
-.text-body {
-  @include body;
+.text-body-16 {
+  @include body-16;
 }
 
-@mixin small-bold-body {
+@mixin bold-body-14 {
   font-family: Mont, sans-serif;
   font-size: 14px;
   font-style: normal;
@@ -284,11 +284,11 @@ text.heading-4 {
   line-height: 150%;
 }
 
-.text-small-bold-body {
-  @include small-bold-body;
+.text-bold-body-14 {
+  @include bold-body-14;
 }
 
-@mixin small-body {
+@mixin body-14 {
   font-family: Mont, sans-serif;
   font-size: 14px;
   font-style: normal;
@@ -296,11 +296,11 @@ text.heading-4 {
   line-height: 150%;
 }
 
-.text-small-body {
-  @include small-body;
+.text-body-14 {
+  @include body-14;
 }
 
-@mixin very-small-body {
+@mixin body-12 {
   font-family: Mont, sans-serif;
   font-size: 12px;
   font-style: normal;
@@ -308,6 +308,6 @@ text.heading-4 {
   line-height: 130%;
 }
 
-.text-very-small-body {
-  @include very-small-body;
+.text-body-12 {
+  @include body-12;
 }
