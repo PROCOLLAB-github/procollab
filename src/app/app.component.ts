@@ -15,6 +15,8 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     if (this.authService.getTokens() === null) {
       this.router.navigateByUrl("/auth/login");
+    } else {
+      this.router.navigateByUrl("/office");
     }
   }
 }
