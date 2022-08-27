@@ -12,6 +12,7 @@ import {
 import { ClickOutsideModule } from "ng-click-outside";
 import { NgxMaskModule } from "ngx-mask";
 import { AvatarComponent } from "./components/avatar/avatar.component";
+import { TagComponent } from "./components/tag/tag.component";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { AvatarComponent } from "./components/avatar/avatar.component";
     IconComponent,
     SelectComponent,
     AvatarComponent,
+    TagComponent,
   ],
   imports: [CommonModule, ClickOutsideModule, NgxMaskModule],
   exports: [
@@ -30,6 +32,7 @@ import { AvatarComponent } from "./components/avatar/avatar.component";
     IconComponent,
     SelectComponent,
     AvatarComponent,
+    TagComponent,
   ],
 })
 export class UiModule {}

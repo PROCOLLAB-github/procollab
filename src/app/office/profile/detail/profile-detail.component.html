@@ -1,9 +1,58 @@
 <!-- @format -->
 
-<main *ngIf="authService.profile | async as user" class="profile">
+<main *ngIf="user | async as user" class="profile">
+  <section class="profile__section profile__main">
+    <img class="profile__cover" src="/assets/images/office/profile/detail/cover.png" alt="cover" />
+    <div class="profile__info">
+      <app-avatar
+        class="profile__avatar"
+        [url]="user.photoAddress"
+        [size]="150"
+        [hasBorder]="true"
+      ></app-avatar>
+      <div class="profile__main-info">
+        <p class="text-body-12 profile__status">{{ user.status }}</p>
+        <h2 class="text-heading-3 profile__name">{{ user.name }} {{ user.surname }}</h2>
+        <p class="text-body-12 profile__keys">
+          {{ user.birthday }} • {{ user.city }}, {{ user.region }}
+        </p>
+        <ul class="profile__skills">
+          <li *ngFor="let skill of user.keySkills" class="profile__skill">
+            <app-tag>{{ skill }}</app-tag>
+          </li>
+        </ul>
+      </div>
+      <a class="profile__write" routerLink=".">
+        <app-button>
+          Написать
+          <i
+            class="profile__chat-icon"
+            appIcon
+            icon="message-inline"
+            appWidth="13"
+            appHeight="12"
+            appViewBox="0 0 13 12"
+          ></i>
+        </app-button>
+      </a>
+    </div>
+  </section>
+  <section class="profile__section profile__achievements">
+    <h3 class="text-bold-body-16 profile__title">Достижения</h3>
+    <ul class="profile__ach-list">
+      <li
+        *ngFor="let achievement of user.achievements"
+        class="text-bold-body-14 profile__achievement"
+      >
+        {{ achievement }}
+      </li>
+    </ul>
+    <h3 class="text-bold-body-16 profile__title">Место учебы</h3>
+    <p class="text-bold-body-14">{{ user.organisation }}</p>
+  </section>
   <section class="profile__section profile__description">
-    <h3 class="text-heading-3 profile__title">Обо мне</h3>
-    <p>
+    <h3 class="text-bold-body-16 profile__title">Обо мне</h3>
+    <p class="text-body-14">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam at consectetur, consequuntur
       deleniti dignissimos doloremque dolorum eum ex explicabo facilis id ipsa laborum libero magni
       necessitatibus nisi, non officiis perferendis quaerat quasi quidem quisquam quos reiciendis

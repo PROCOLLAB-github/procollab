@@ -5,14 +5,13 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-width: 350px;
   padding: 18px;
   color: var(--white);
   text-align: center;
   cursor: pointer;
   background: var(--accent);
   border: none;
-  border-radius: var(--rounded-md);
+  border-radius: var(--rounded-lg);
   outline: none;
   transition: background-color 0.2s;
 

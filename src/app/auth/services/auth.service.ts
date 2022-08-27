@@ -59,13 +59,17 @@ export class AuthService {
     }
   }
 
-  profile$ = new ReplaySubject<User>(1);
-  profileStream = this.profile$.asObservable().pipe(distinctUntilChanged());
+  private profile$ = new ReplaySubject<User>(1);
+  profile = this.profile$.asObservable().pipe(distinctUntilChanged());
 
   getProfile(): Observable<User> {
     return this.apiService.get<User>("/profile/").pipe(
       map(user => plainToClass(User, user)),
       tap(profile => this.profile$.next(profile))
     );
+  }
+
+  getUser(id: number): Observable<User> {
+    return this.apiService.get<User>(`/profile/${id}`).pipe(map(user => plainToClass(User, user)));
   }
 }

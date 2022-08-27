@@ -3,7 +3,7 @@
 import { Component, OnInit } from "@angular/core";
 
 @Component({
-  selector: "app-edit",
+  selector: "app-profile-edit",
   templateUrl: "./profile-edit.component.html",
   styleUrls: ["./profile-edit.component.scss"],
 })

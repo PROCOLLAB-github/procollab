@@ -9,6 +9,9 @@ import { Component, Input, OnInit } from "@angular/core";
 })
 export class AvatarComponent implements OnInit {
   @Input() url?: string;
+  @Input() size = 50;
+  @Input() hasBorder = false;
+
   placeholderUrl = "https://joeschmoe.io/api/v1/random";
 
   constructor() {}

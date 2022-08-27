@@ -11,7 +11,7 @@ import { ProjectsComponent } from "./projects/projects.component";
 import { ChatComponent } from "./chat/chat.component";
 import { PeopleComponent } from "./people/people.component";
 import { NewsComponent } from "./news/news.component";
-import { ProfileDetailComponent } from "./profile/derail/profile-detail.component";
+import { ProfileDetailComponent } from "./profile/detail/profile-detail.component";
 import { ProfileEditComponent } from "./profile/edit/profile-edit.component";
 
 @NgModule({

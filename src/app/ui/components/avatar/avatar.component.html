@@ -1,5 +1,15 @@
 <!-- @format -->
 
-<div class="avatar">
-  <img [src]="url || placeholderUrl" alt="avatar" />
+<div
+  class="avatar"
+  [class.avatar--border]="hasBorder"
+  [style.width]="size + 'px'"
+  [style.height]="size + 'px'"
+>
+  <img
+    [src]="url || placeholderUrl"
+    [style.width]="size + 'px'"
+    [style.height]="size + 'px'"
+    alt="avatar"
+  />
 </div>

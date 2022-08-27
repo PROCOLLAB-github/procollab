@@ -26,6 +26,11 @@ fieldset {
   outline: none;
 }
 
+img {
+  display: block;
+  max-width: 100%;
+}
+
 a {
   color: var(--accent);
   text-decoration: none;
