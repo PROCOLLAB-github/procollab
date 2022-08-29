@@ -38,15 +38,12 @@ const routes: Routes = [
         component: NewsComponent,
       },
       {
-        path: "profile/:id",
-        component: ProfileDetailComponent,
-        resolve: {
-          data: ProfileDetailResolver,
-        },
-      },
-      {
         path: "profile/edit",
         component: ProfileEditComponent,
+      },
+      {
+        path: "profile/:id",
+        component: ProfileDetailComponent,
         resolve: {
           data: ProfileDetailResolver,
         },

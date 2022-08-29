@@ -16,7 +16,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
   ],
 })
 export class SelectComponent implements OnInit, ControlValueAccessor {
-  @Input() basicLabel = "";
+  @Input() placeholder = "";
   @Input() options: { value: string; label: string; id: number }[] = [];
 
   isOpen = false;

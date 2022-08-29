@@ -1,0 +1,18 @@
+/** @format */
+
+.profile {
+  &__form {
+    padding: 24px;
+    background-color: var(--white);
+    border-radius: var(--rounded-md);
+    color: var(--black);
+  }
+
+  &__row {
+    display: flex;
+
+    fieldset:first-child {
+      margin-right: 10px;
+    }
+  }
+}

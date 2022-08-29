@@ -5,6 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ProfileEditComponent } from "./profile-edit.component";
 import { of } from "rxjs";
 import { AuthService } from "../../../auth/services";
+import { ReactiveFormsModule } from "@angular/forms";
 
 describe("EditComponent", () => {
   let component: ProfileEditComponent;
@@ -14,6 +15,7 @@ describe("EditComponent", () => {
     const authSpy = jasmine.createSpyObj([{ profile: of({}) }]);
 
     await TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
       declarations: [ProfileEditComponent],
     }).compileComponents();

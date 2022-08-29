@@ -1,1 +1,61 @@
-<p>edit works!</p>
+<!-- @format -->
+
+<main *ngIf="authService.profile | async as user" class="profile">
+  <form [formGroup]="profileForm" class="profile__form">
+    <div class="profile__row">
+      <fieldset *ngIf="profileForm.get('name') as name">
+        <label for="name" class="field-label">Имя</label>
+        <app-input
+          [error]="name | controlError"
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Егор"
+        ></app-input>
+        <div *ngIf="name | controlError: 'required'" class="text-body-14 auth__error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+      </fieldset>
+      <fieldset *ngIf="profileForm.get('surname') as surname">
+        <label for="surname" class="field-label">Фамилия</label>
+        <app-input
+          [error]="surname | controlError"
+          id="surname"
+          type="text"
+          formControlName="surname"
+          placeholder="Токарев"
+        ></app-input>
+        <div *ngIf="surname | controlError: 'required'" class="text-body-14 auth__error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+      </fieldset>
+    </div>
+    <div class="profile__row">
+      <fieldset *ngIf="profileForm.get('status') as status">
+        <label for="status" class="field-label">Тип аккаунта</label>
+        <app-select
+          id="status"
+          formControlName="status"
+          placeholder="Ученик"
+          [options]="statusOptions"
+        ></app-select>
+        <div *ngIf="status | controlError: 'required'" class="text-body-14 auth__error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+      </fieldset>
+      <fieldset *ngIf="profileForm.get('birthday') as birthday">
+        <label for="birthday" class="field-label">Дата рождения</label>
+        <app-input
+          id="birthday"
+          [error]="birthday | controlError"
+          type="text"
+          mask="00.00.0000"
+          formControlName="birthday"
+        ></app-input>
+        <div *ngIf="birthday | controlError: 'required'" class="text-body-14 auth__error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+      </fieldset>
+    </div>
+  </form>
+</main>

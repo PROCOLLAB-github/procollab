@@ -13,6 +13,8 @@ import { PeopleComponent } from "./people/people.component";
 import { NewsComponent } from "./news/news.component";
 import { ProfileDetailComponent } from "./profile/detail/profile-detail.component";
 import { ProfileEditComponent } from "./profile/edit/profile-edit.component";
+import { CoreModule } from "../core/core.module";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -26,6 +28,6 @@ import { ProfileEditComponent } from "./profile/edit/profile-edit.component";
     ProfileDetailComponent,
     ProfileEditComponent,
   ],
-  imports: [OfficeRoutingModule, CommonModule, UiModule],
+  imports: [OfficeRoutingModule, CommonModule, UiModule, CoreModule, ReactiveFormsModule],
 })
 export class OfficeModule {}
