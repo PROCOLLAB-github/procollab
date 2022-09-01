@@ -1,31 +1,22 @@
 {
   "tokens": {
-    "name": "sdfsdf",
-    "surname": "sdfsdf",
-    "email": "user@mail.org",
-    "password": "password"
+    "accessToken": "sdfsdf",
+    "refreshToken": "sdfsdf"
   },
   "profile": [
     {
       "name": "Егор",
       "surname": "Токарев",
-      "status": "Ученик",
-      "birthday": "14.09.2004",
-      "city": "Москва",
-      "organisation": "МАОУ Гимназия № 35",
-      "speciality": "sdfsdf",
-      "key_skills": [
-        "javascript",
-        "docker",
-        "scss",
-        "angular",
-        "nodejs"
-      ],
-      "achievements": [
-        "Big dick",
-        ""
-      ],
-      "about_me": "sdfsdfsdfsdf",
+      "status": "",
+      "email": "e@tokarev.work",
+      "profile_photo": "https://joeschmoe.io/api/v1/random",
+      "birthday": "",
+      "city": "",
+      "organisation": "",
+      "speciality": "",
+      "key_skills": [],
+      "achievements": [],
+      "about_me": "",
       "id": 0
     }
   ]
