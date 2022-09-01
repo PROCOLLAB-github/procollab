@@ -72,4 +72,8 @@ export class AuthService {
   getUser(id: number): Observable<User> {
     return this.apiService.get<User>(`/profile/${id}`).pipe(map(user => plainToClass(User, user)));
   }
+
+  saveProfile(newProfile: Partial<User>): Observable<string> {
+    return this.apiService.put<string>("/profile/update", newProfile);
+  }
 }

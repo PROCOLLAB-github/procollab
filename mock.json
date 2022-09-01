@@ -1,30 +1,29 @@
 {
-  "profile": [{
-    "id": 0,
-    "email": "e@tokarev.work",
-    "name": "Егор",
-    "surname": "Токарев",
-    "patronymic": "string",
-    "birthday": "14.09.2004",
-    "photo_address": "https://joeschmoe.io/api/v1/jon",
-    "key_skills": [
-      "javascript",
-      "docker",
-      "scss",
-      "angular",
-      "nodejs"
-    ],
-    "useful_to_project": "string",
-    "status": "Участник",
-    "city": "Москва",
-    "region": "Россия",
-    "organisation": "МАОУ Гимназия № 35",
-    "achievements": [
-      "Big dick",
-      "Have a lot of money"
-    ],
-    "tags": "string",
-    "time_created": "string",
-    "time_updated": "string"
-  }]
+  "profile": [
+    {
+      "name": "Егор",
+      "surname": "Токарев",
+      "status": "Ученик",
+      "birthday": "14.09.2004",
+      "city": "Москва",
+      "organisation": "МАОУ Гимназия № 35",
+      "speciality": "sdfsdf",
+      "key_skills": [
+        "javascript",
+        "docker",
+        "scss",
+        "angular",
+        "nodejs",
+        "sdsdf",
+        "sdfsdf",
+        ""
+      ],
+      "achievements": [
+        "Big dick",
+        ""
+      ],
+      "about_me": "sdfsdf",
+      "id": 0
+    }
+  ]
 }

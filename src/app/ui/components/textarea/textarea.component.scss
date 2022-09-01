@@ -1,0 +1,40 @@
+/** @format */
+
+.field {
+  position: relative;
+
+  &__input {
+    width: 100%;
+    padding: 12px 20px;
+    color: var(--black);
+    resize: none;
+    background-color: var(--white);
+    border: 1px solid var(--gray);
+    border-radius: var(--rounded-lg);
+    outline: none;
+    transition: all 0.2s;
+
+    &::placeholder {
+      color: var(--dark-gray);
+    }
+
+    &--error {
+      border-color: var(--red);
+    }
+
+    &:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+    }
+  }
+
+  &__error-icon {
+    position: absolute;
+    top: 50%;
+    right: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%);
+  }
+}

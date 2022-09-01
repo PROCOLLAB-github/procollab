@@ -1,61 +1,173 @@
 <!-- @format -->
 
 <main *ngIf="authService.profile | async as user" class="profile">
-  <form [formGroup]="profileForm" class="profile__form">
-    <div class="profile__row">
-      <fieldset *ngIf="profileForm.get('name') as name">
-        <label for="name" class="field-label">Имя</label>
-        <app-input
-          [error]="name | controlError"
-          id="name"
-          type="text"
-          formControlName="name"
-          placeholder="Егор"
-        ></app-input>
-        <div *ngIf="name | controlError: 'required'" class="text-body-14 auth__error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
+    <div class="profile__column">
+      <div class="profile__row">
+        <fieldset *ngIf="profileForm.get('name') as name">
+          <label for="name" class="field-label">Имя</label>
+          <app-input
+            [error]="name | controlError"
+            id="name"
+            type="text"
+            formControlName="name"
+            placeholder="Егор"
+          ></app-input>
+          <div *ngIf="name | controlError: 'required'" class="text-body-14 auth__error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+        <fieldset *ngIf="profileForm.get('surname') as surname">
+          <label for="surname" class="field-label">Фамилия</label>
+          <app-input
+            [error]="surname | controlError"
+            id="surname"
+            type="text"
+            formControlName="surname"
+            placeholder="Токарев"
+          ></app-input>
+          <div *ngIf="surname | controlError: 'required'" class="text-body-14 auth__error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+      </div>
+      <div class="profile__row">
+        <fieldset *ngIf="profileForm.get('status') as status">
+          <label for="status" class="field-label">Тип аккаунта</label>
+          <app-select
+            id="status"
+            formControlName="status"
+            placeholder="Ученик"
+            [options]="statusOptions"
+          ></app-select>
+          <div *ngIf="status | controlError: 'required'" class="text-body-14 auth__error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+        <fieldset *ngIf="profileForm.get('birthday') as birthday">
+          <label for="birthday" class="field-label">Дата рождения</label>
+          <app-input
+            id="birthday"
+            [error]="birthday | controlError"
+            type="text"
+            mask="00.00.0000"
+            formControlName="birthday"
+          ></app-input>
+          <div *ngIf="birthday | controlError: 'required'" class="text-body-14 auth__error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+      </div>
+      <div class="profile__row">
+        <fieldset *ngIf="profileForm.get('city') as city">
+          <label for="city" class="field-label">Город</label>
+          <app-input
+            id="city"
+            [error]="city | controlError"
+            type="text"
+            placeholder="Откуда вы"
+            formControlName="city"
+          ></app-input>
+          <div *ngIf="city | controlError: 'required'" class="text-body-14 auth__error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+      </div>
+      <div class="profile__row">
+        <fieldset *ngIf="profileForm.get('speciality') as speciality">
+          <label for="speciality" class="field-label">Специальность</label>
+          <app-input
+            id="speciality"
+            [error]="speciality | controlError"
+            type="text"
+            placeholder="Например: Java Developer"
+            formControlName="speciality"
+          ></app-input>
+          <div *ngIf="speciality | controlError: 'required'" class="text-body-14 auth__error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+      </div>
+      <div class="profile__row">
+        <div>
+          <label class="field-label">Ключевые навыки</label>
+          <ul class="key-skills-list">
+            <li *ngFor="let skill of keySkills.controls; index as i" class="key-skills-list__item">
+              <app-tag>
+                <span>{{ skill.value }}</span>
+                <i
+                  class="key-skills-list__remove-icon"
+                  appIcon
+                  icon="basket"
+                  appSquare="24"
+                  (click)="removeKeySkill(i)"
+                ></i>
+              </app-tag>
+            </li>
+          </ul>
+          <div class="key-skill-form">
+            <app-input
+              [(appValue)]="newKeySkillTitle"
+              class="key-skill-form__input"
+              placeholder="Введите свой навык, например: Python"
+            ></app-input>
+            <app-button class="key-skill-form__button" (click)="addKeySkill()">
+              <i appIcon icon="check" appWidth="12" appHeight="10"></i>
+            </app-button>
+          </div>
         </div>
-      </fieldset>
-      <fieldset *ngIf="profileForm.get('surname') as surname">
-        <label for="surname" class="field-label">Фамилия</label>
-        <app-input
-          [error]="surname | controlError"
-          id="surname"
-          type="text"
-          formControlName="surname"
-          placeholder="Токарев"
-        ></app-input>
-        <div *ngIf="surname | controlError: 'required'" class="text-body-14 auth__error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+      <!--   TODO: return achievements   <div class="">
+        <label class="field-label">Достижения</label>
+        <ng-container formArrayName="achievements">
+          {{ achievements.value | json }}
+          <ul>
+            <li
+              *ngFor="let control of achievements.controls; index as i"
+              class="profile__achievement"
+            >
+              <fieldset class="achievement">
+                <app-input
+                  class="achievement__input"
+                  [formControlName]="i"
+                  [error]="control | controlError"
+                ></app-input>
+                <app-button class="achievement__remove" color="red" (click)="removeAchievement(i)">
+                  <span>Удалить</span>
+                  <i class="achievement__basket" appIcon icon="basket" appSquare="24"></i>
+                </app-button>
+              </fieldset>
+            </li>
+          </ul>
+        </ng-container>
+        <div class="achievement-form">
+          <app-input
+            [(appValue)]="newAchievementTitle"
+            class="achievement-form__input"
+            placeholder="Занятое место"
+          ></app-input>
+          <app-button class="profile__add-achievement" (click)="addAchievement()">
+            <span>Добавить новое достижение</span>
+            <i appIcon icon="plus" appSquare="24"></i>
+          </app-button>
         </div>
-      </fieldset>
+      </div>-->
     </div>
-    <div class="profile__row">
-      <fieldset *ngIf="profileForm.get('status') as status">
-        <label for="status" class="field-label">Тип аккаунта</label>
-        <app-select
-          id="status"
-          formControlName="status"
-          placeholder="Ученик"
-          [options]="statusOptions"
-        ></app-select>
-        <div *ngIf="status | controlError: 'required'" class="text-body-14 auth__error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-      </fieldset>
-      <fieldset *ngIf="profileForm.get('birthday') as birthday">
-        <label for="birthday" class="field-label">Дата рождения</label>
-        <app-input
-          id="birthday"
-          [error]="birthday | controlError"
+    <div class="profile__column">
+      <fieldset *ngIf="profileForm.get('aboutMe') as aboutMe">
+        <label for="aboutMe" class="field-label">Обо мне</label>
+        <app-textarea
+          id="aboutMe"
+          [error]="aboutMe | controlError"
           type="text"
-          mask="00.00.0000"
-          formControlName="birthday"
-        ></app-input>
-        <div *ngIf="birthday | controlError: 'required'" class="text-body-14 auth__error">
+          placeholder="Я java developer, очень люблю котиков и Хайдегера"
+          formControlName="aboutMe"
+        ></app-textarea>
+        <div *ngIf="aboutMe | controlError: 'required'" class="text-body-14 auth__error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
       </fieldset>
+      <app-button class="profile__save">Сохранить</app-button>
     </div>
   </form>
 </main>

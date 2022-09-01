@@ -1,36 +1,25 @@
 /** @format */
 
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@angular/core";
+import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
-  selector: "app-input",
-  templateUrl: "./input.component.html",
-  styleUrls: ["./input.component.scss"],
+  selector: "app-textarea",
+  templateUrl: "./textarea.component.html",
+  styleUrls: ["./textarea.component.scss"],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputComponent),
+      useExisting: forwardRef(() => TextareaComponent),
       multi: true,
     },
   ],
 })
-export class InputComponent implements OnInit, ControlValueAccessor {
+export class TextareaComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";
   @Input() type: "text" | "password" | "email" = "text";
   @Input() error = false;
   @Input() mask = "";
-
-  @Input()
-  set appValue(value: string) {
-    this.value = value;
-  }
-
-  get appValue(): string {
-    return this.value;
-  }
-
-  @Output() appValueChange = new EventEmitter<string>();
 
   constructor() {}
 
@@ -39,7 +28,6 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.onChange(value);
-    this.appValueChange.emit(value);
   }
 
   onBlur(): void {

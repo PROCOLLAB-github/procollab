@@ -5,7 +5,8 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 18px;
+  min-height: 52px;
+  padding: 14px 18px;
   color: var(--white);
   text-align: center;
   cursor: pointer;
@@ -19,7 +20,11 @@
     display: block;
 
     &:not(:last-child) {
-      margin-right: 15px;
+      margin-right: 10px;
     }
+  }
+
+  &--red {
+    background-color: var(--red);
   }
 }

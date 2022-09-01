@@ -2,17 +2,109 @@
 
 .profile {
   &__form {
+    display: flex;
+    align-items: flex-start;
     padding: 24px;
+    color: var(--black);
     background-color: var(--white);
     border-radius: var(--rounded-md);
-    color: var(--black);
+  }
+
+  &__column {
+    flex-basis: 50%;
+
+    &:first-child {
+      margin-right: 50px;
+    }
   }
 
   &__row {
     display: flex;
+    width: 100%;
+
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+
+    > * {
+      flex-basis: 50%;
+
+      &:first-child:last-child {
+        flex-basis: 100%;
+      }
+    }
 
     fieldset:first-child {
       margin-right: 10px;
     }
+  }
+
+  &__achievement {
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  &__add-achievement {
+    display: block;
+  }
+
+  &__save {
+    display: block;
+    margin-top: 20px;
+  }
+}
+
+.achievement {
+  display: flex;
+  align-items: center;
+
+  &__input {
+    flex-basis: 75%;
+    margin-right: 10px;
+  }
+
+  &__basket {
+    flex-shrink: 0;
+    color: var(--white);
+  }
+}
+
+.achievement-form {
+  &__input {
+    display: block;
+    margin-bottom: 12px;
+  }
+}
+
+
+.key-skills-list {
+  display: flex;
+  flex-wrap: wrap;
+
+  &__item {
+    display: block;
+    margin-bottom: 12px;
+
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+
+  &__remove-icon {
+    color: var(--red);
+    cursor: pointer;
+  }
+}
+
+.key-skill-form {
+  display: flex;
+
+  &__input {
+    flex-grow: 1;
+    margin-right: 6px;
+  }
+
+  &__button {
+    width: 52px;
   }
 }

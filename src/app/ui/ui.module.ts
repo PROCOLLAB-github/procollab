@@ -13,6 +13,8 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { NgxMaskModule } from "ngx-mask";
 import { AvatarComponent } from "./components/avatar/avatar.component";
 import { TagComponent } from "./components/tag/tag.component";
+import { TextareaComponent } from "./components/textarea/textarea.component";
+import { NgxAutogrowModule } from "ngx-autogrow";
 
 @NgModule({
   declarations: [
@@ -23,11 +25,13 @@ import { TagComponent } from "./components/tag/tag.component";
     SelectComponent,
     AvatarComponent,
     TagComponent,
+    TextareaComponent,
   ],
-  imports: [CommonModule, ClickOutsideModule, NgxMaskModule],
+  imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule],
   exports: [
     ButtonComponent,
     InputComponent,
+    TextareaComponent,
     CheckboxComponent,
     IconComponent,
     SelectComponent,

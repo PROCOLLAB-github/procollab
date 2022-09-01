@@ -50,7 +50,7 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(form).subscribe(res => {
       this.authService.memTokens(res);
-      this.router.navigateByUrl("/office");
+      this.router.navigateByUrl("/office/profile/edit");
     });
   }
 }
