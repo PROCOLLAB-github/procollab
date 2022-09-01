@@ -1,4 +1,10 @@
 {
+  "tokens": {
+    "name": "sdfsdf",
+    "surname": "sdfsdf",
+    "email": "user@mail.org",
+    "password": "password"
+  },
   "profile": [
     {
       "name": "Егор",
@@ -13,16 +19,13 @@
         "docker",
         "scss",
         "angular",
-        "nodejs",
-        "sdsdf",
-        "sdfsdf",
-        ""
+        "nodejs"
       ],
       "achievements": [
         "Big dick",
         ""
       ],
-      "about_me": "sdfsdf",
+      "about_me": "sdfsdfsdfsdf",
       "id": 0
     }
   ]
