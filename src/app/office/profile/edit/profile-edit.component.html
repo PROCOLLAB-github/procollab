@@ -74,6 +74,21 @@
         </fieldset>
       </div>
       <div class="profile__row">
+        <fieldset *ngIf="profileForm.get('organisation') as organisation">
+          <label for="city" class="field-label">Место учебы</label>
+          <app-input
+            id="organisation"
+            [error]="organisation | controlError"
+            type="text"
+            placeholder="ВУЗ / колледж / школа"
+            formControlName="organisation"
+          ></app-input>
+          <div *ngIf="organisation | controlError: 'required'" class="text-body-14 auth__error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+      </div>
+      <div class="profile__row">
         <fieldset *ngIf="profileForm.get('speciality') as speciality">
           <label for="speciality" class="field-label">Специальность</label>
           <app-input
@@ -167,7 +182,7 @@
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
       </fieldset>
-      <app-button class="profile__save">Сохранить</app-button>
+      <app-button class="profile__save" (click)="saveProfile()">Сохранить</app-button>
     </div>
   </form>
 </main>

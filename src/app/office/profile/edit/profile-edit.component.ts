@@ -29,7 +29,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       organisation: ["", [Validators.required]],
       speciality: ["", [Validators.required]],
       keySkills: this.fb.array([]),
-      achievements: this.fb.array([]),
       aboutMe: ["", [Validators.required]],
     });
   }
@@ -50,7 +49,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
           aboutMe: profile.aboutMe ?? "",
         });
 
-        profile.achievements.forEach(achievement => this.addAchievement(achievement));
+        // profile.achievements.forEach(achievement => this.addAchievement(achievement));
         profile.keySkills.forEach(skill => this.addKeySkill(skill));
       });
     });
@@ -76,21 +75,21 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   profileFormSubmitting = false;
   profileForm: FormGroup;
 
-  newAchievementTitle = "";
-  addAchievement(title?: string): void {
-    this.achievements.push(
-      title ? this.fb.control(title) : this.fb.control(this.newAchievementTitle)
-    );
-
-    setTimeout(() => {
-      this.achievements.at(this.achievements.length - 1).setValue(this.newAchievementTitle);
-      this.newAchievementTitle = "";
-    });
-  }
-
-  removeAchievement(i: number): void {
-    this.achievements.removeAt(i);
-  }
+  // newAchievementTitle = "";
+  // addAchievement(title?: string): void {
+  //   this.achievements.push(
+  //     title ? this.fb.control(title) : this.fb.control(this.newAchievementTitle)
+  //   );
+  //
+  //   setTimeout(() => {
+  //     this.achievements.at(this.achievements.length - 1).setValue(this.newAchievementTitle);
+  //     this.newAchievementTitle = "";
+  //   });
+  // }
+  //
+  // removeAchievement(i: number): void {
+  //   this.achievements.removeAt(i);
+  // }
 
   get keySkills(): FormArray {
     return this.profileForm.get("keySkills") as FormArray;
@@ -110,12 +109,13 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   saveProfile(): void {
+    console.log(this.profileForm.errors, this.profileForm);
     if (!this.validationService.getFormValidation(this.profileForm)) {
       return;
     }
     this.profileFormSubmitting = true;
 
-    this.authService.saveProfile(this.profileForm.value)?.subscribe(
+    this.authService.saveProfile(this.profileForm.value).subscribe(
       () => {
         this.profileFormSubmitting = false;
       },
