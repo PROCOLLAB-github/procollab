@@ -14,16 +14,6 @@ import { Router } from "@angular/router";
   styleUrls: ["./register.component.scss"],
 })
 export class RegisterComponent implements OnInit {
-  registerForm: FormGroup;
-  registerAgreement = false;
-
-  errorMessage = ErrorMessage;
-
-  statusOptions: SelectComponent["options"] = [
-    { id: 1, value: "Ученик", label: "Ученик" },
-    { id: 2, value: "Ментор", label: "Ментор" },
-  ];
-
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -38,19 +28,45 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  registerForm: FormGroup;
+  registerAgreement = false;
+  registerIsSubmitting = false;
+
+  errorMessage = ErrorMessage;
+
+  statusOptions: SelectComponent["options"] = [
+    { id: 1, value: "Ученик", label: "Ученик" },
+    { id: 2, value: "Ментор", label: "Ментор" },
+  ];
+
   ngOnInit(): void {}
 
   onSubmit() {
-    if (!this.validationService.getFormValidation(this.registerForm) || !this.registerAgreement) {
+    if (
+      !this.validationService.getFormValidation(this.registerForm) ||
+      !this.registerAgreement ||
+      this.registerIsSubmitting
+    ) {
       return;
     }
 
     const form = { ...this.registerForm.value };
     delete form.repeatedPassword;
 
-    this.authService.register(form).subscribe(res => {
-      this.authService.memTokens(res);
-      this.router.navigateByUrl("/office/profile/edit");
+    setTimeout(() => {
+      this.registerIsSubmitting = true;
     });
+
+    this.authService.register(form).subscribe(
+      res => {
+        this.authService.memTokens(res);
+        this.router.navigateByUrl("/office/profile/edit");
+
+        this.registerIsSubmitting = false;
+      },
+      () => {
+        this.registerIsSubmitting = false;
+      }
+    );
   }
 }
