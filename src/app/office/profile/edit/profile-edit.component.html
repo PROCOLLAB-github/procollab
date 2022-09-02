@@ -181,7 +181,9 @@
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
       </fieldset>
-      <app-button class="profile__save" (click)="saveProfile()">Сохранить</app-button>
+      <app-button [loader]="profileFormSubmitting" class="profile__save" (click)="saveProfile()">
+        Сохранить
+      </app-button>
     </div>
   </form>
 </main>

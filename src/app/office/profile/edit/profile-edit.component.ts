@@ -106,10 +106,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   saveProfile(): void {
-    if (!this.validationService.getFormValidation(this.profileForm)) {
+    if (!this.validationService.getFormValidation(this.profileForm) || this.profileFormSubmitting) {
       return;
     }
-    this.profileFormSubmitting = true;
+    setTimeout(() => {
+      this.profileFormSubmitting = true;
+    }, 0);
 
     this.authService.saveProfile(this.profileForm.value).subscribe(
       () => {

@@ -9,16 +9,18 @@
     {
       "name": "Егор",
       "surname": "Токарев",
-      "status": "Ученик",
+      "status": "Ментор",
       "birthday": "23.42.3423",
       "city": "234sadfas",
       "organisation": "dfasdfasdf",
       "speciality": "asdfasdfasd",
-      "key_skills": [],
+      "key_skills": [
+        "sadf"
+      ],
       "achievements": [
         "1ksadsadfasdl;fjkasdl",
-        "sadfasdf",
-        "asdf"
+        "sdfsdf",
+        "sfdsf"
       ],
       "about_me": "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
       "id": 0

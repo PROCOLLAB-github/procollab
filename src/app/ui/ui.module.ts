@@ -15,6 +15,7 @@ import { AvatarComponent } from "./components/avatar/avatar.component";
 import { TagComponent } from "./components/tag/tag.component";
 import { TextareaComponent } from "./components/textarea/textarea.component";
 import { NgxAutogrowModule } from "ngx-autogrow";
+import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { NgxAutogrowModule } from "ngx-autogrow";
     AvatarComponent,
     TagComponent,
     TextareaComponent,
+    LoaderComponent,
   ],
   imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule],
   exports: [

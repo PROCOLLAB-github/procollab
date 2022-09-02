@@ -1,5 +1,8 @@
 <!-- @format -->
 
 <button class="button text-bold-body-16" [class.button--red]="color === 'red'">
-  <ng-content></ng-content>
+  <ng-container *ngIf="!loader">
+    <ng-content></ng-content>
+  </ng-container>
+  <app-loader *ngIf="loader"></app-loader>
 </button>
