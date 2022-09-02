@@ -1,0 +1,36 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  background-color: var(--white);
+  border-radius: var(--rounded-md);
+
+  &__status {
+    margin: 16px 0;
+    color: var(--dark-gray);
+  }
+
+  &__name {
+    margin-bottom: 3px;
+    color: var(--black);
+  }
+
+  &__info {
+    margin-bottom: 16px;
+    color: var(--dark-gray);
+  }
+
+  &__skills {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__skill {
+    margin-bottom: 5px;
+
+    &:not(:last-child) {
+      margin-right: 5px;
+    }
+  }
+}

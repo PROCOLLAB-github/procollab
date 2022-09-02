@@ -4,12 +4,13 @@ import { RouterModule, Routes } from "@angular/router";
 import { NgModule } from "@angular/core";
 import { OfficeComponent } from "./office.component";
 import { ProjectsComponent } from "./projects/projects.component";
-import { PeopleComponent } from "./people/people.component";
 import { ChatComponent } from "./chat/chat.component";
 import { NewsComponent } from "./news/news.component";
 import { ProfileDetailComponent } from "./profile/detail/profile-detail.component";
 import { ProfileEditComponent } from "./profile/edit/profile-edit.component";
 import { ProfileDetailResolver } from "./profile/detail/profile-detail.resolver";
+import { MembersComponent } from "./members/members.component";
+import { MembersResolver } from "./members/members.resolver";
 
 const routes: Routes = [
   {
@@ -26,8 +27,11 @@ const routes: Routes = [
         component: ProjectsComponent,
       },
       {
-        path: "people",
-        component: PeopleComponent,
+        path: "members",
+        component: MembersComponent,
+        resolve: {
+          data: MembersResolver,
+        },
       },
       {
         path: "chat",

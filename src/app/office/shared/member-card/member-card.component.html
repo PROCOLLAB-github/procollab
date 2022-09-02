@@ -1,0 +1,13 @@
+<!-- @format -->
+
+<div class="card">
+  <app-avatar [url]="user.photoAddress" [size]="90"></app-avatar>
+  <p class="text-body-12 card__status">{{ user.status }}</p>
+  <p class="text-heading-4 card__name">{{ user.name }} {{ user.surname }}</p>
+  <p class="text-body-12 card__info">{{ user.speciality }} • {{ user.birthday }}</p>
+  <ul class="card__skills">
+    <li *ngFor="let skill of user.keySkills" class="card__skill">
+      <app-tag>{{ skill }}</app-tag>
+    </li>
+  </ul>
+</div>

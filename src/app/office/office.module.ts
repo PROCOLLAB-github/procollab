@@ -9,12 +9,13 @@ import { UiModule } from "../ui/ui.module";
 import { NavComponent } from "./shared/nav/nav.component";
 import { ProjectsComponent } from "./projects/projects.component";
 import { ChatComponent } from "./chat/chat.component";
-import { PeopleComponent } from "./people/people.component";
 import { NewsComponent } from "./news/news.component";
 import { ProfileDetailComponent } from "./profile/detail/profile-detail.component";
 import { ProfileEditComponent } from "./profile/edit/profile-edit.component";
 import { CoreModule } from "../core/core.module";
 import { ReactiveFormsModule } from "@angular/forms";
+import { MembersComponent } from "./members/members.component";
+import { MemberCardComponent } from './shared/member-card/member-card.component';
 
 @NgModule({
   declarations: [
@@ -23,10 +24,11 @@ import { ReactiveFormsModule } from "@angular/forms";
     NavComponent,
     ProjectsComponent,
     ChatComponent,
-    PeopleComponent,
     NewsComponent,
     ProfileDetailComponent,
     ProfileEditComponent,
+    MembersComponent,
+    MemberCardComponent,
   ],
   imports: [OfficeRoutingModule, CommonModule, UiModule, CoreModule, ReactiveFormsModule],
 })

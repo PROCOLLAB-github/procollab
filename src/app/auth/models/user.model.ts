@@ -20,4 +20,22 @@ export class User {
   tags!: string;
   timeCreated!: string;
   timeUpdated!: string;
+
+  static default(): User {
+    return {
+      name: "Егор",
+      surname: "Токарев",
+      status: "Ментор",
+      birthday: "23.42.3423",
+      city: "234sadfas",
+      organisation: "dfasdfasdf",
+      speciality: "asdfasdfasd",
+      keySkills: ["sadf"],
+      achievements: ["1ksadsadfasdl;fjkasdl", "sdfsdf", "sfdsf"],
+      aboutMe: "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
+      id: 0,
+      timeCreated: "",
+      timeUpdated: "",
+    } as User;
+  }
 }

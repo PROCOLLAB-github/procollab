@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService } from "../../core/services";
-import { distinctUntilChanged, map, Observable, ReplaySubject, tap } from "rxjs";
+import { map, Observable, ReplaySubject, tap } from "rxjs";
 import {
   LoginRequest,
   LoginResponse,
@@ -60,7 +60,7 @@ export class AuthService {
   }
 
   private profile$ = new ReplaySubject<User>(1);
-  profile = this.profile$.asObservable().pipe(distinctUntilChanged());
+  profile = this.profile$.asObservable();
 
   getProfile(): Observable<User> {
     return this.apiService.get<User>("/profile/").pipe(

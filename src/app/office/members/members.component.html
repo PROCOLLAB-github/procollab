@@ -1,0 +1,11 @@
+<!-- @format -->
+
+<section class="page">
+  <ul class="page__list">
+    <a *ngFor="let member of members$ | async" [routerLink]="['/office/profile', member.id]">
+      <li>
+        <app-member-card [user]="member"></app-member-card>
+      </li>
+    </a>
+  </ul>
+</section>
