@@ -132,10 +132,9 @@
           </div>
         </div>
       </div>
-      <!--   TODO: return achievements   <div class="">
+      <div class="">
         <label class="field-label">Достижения</label>
         <ng-container formArrayName="achievements">
-          {{ achievements.value | json }}
           <ul>
             <li
               *ngFor="let control of achievements.controls; index as i"
@@ -166,7 +165,7 @@
             <i appIcon icon="plus" appSquare="24"></i>
           </app-button>
         </div>
-      </div>-->
+      </div>
     </div>
     <div class="profile__column">
       <fieldset *ngIf="profileForm.get('aboutMe') as aboutMe">

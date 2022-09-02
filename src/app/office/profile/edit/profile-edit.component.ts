@@ -1,6 +1,6 @@
 /** @format */
 
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "../../../auth/services";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "../../../error/models/error-message";
@@ -17,8 +17,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     public authService: AuthService,
     private fb: FormBuilder,
-    private validationService: ValidationService,
-    private cdref: ChangeDetectorRef
+    private validationService: ValidationService
   ) {
     this.profileForm = this.fb.group({
       name: ["", [Validators.required]],
@@ -29,6 +28,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       organisation: ["", [Validators.required]],
       speciality: ["", [Validators.required]],
       keySkills: this.fb.array([]),
+      achievements: this.fb.array([]),
       aboutMe: ["", [Validators.required]],
     });
   }
@@ -49,8 +49,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
           aboutMe: profile.aboutMe ?? "",
         });
 
-        // profile.achievements.forEach(achievement => this.addAchievement(achievement));
-        profile.keySkills.forEach(skill => this.addKeySkill(skill));
+        profile.achievements?.forEach(achievement => this.addAchievement(achievement));
+        profile.keySkills?.forEach(skill => this.addKeySkill(skill));
       });
     });
   }
@@ -75,21 +75,18 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   profileFormSubmitting = false;
   profileForm: FormGroup;
 
-  // newAchievementTitle = "";
-  // addAchievement(title?: string): void {
-  //   this.achievements.push(
-  //     title ? this.fb.control(title) : this.fb.control(this.newAchievementTitle)
-  //   );
-  //
-  //   setTimeout(() => {
-  //     this.achievements.at(this.achievements.length - 1).setValue(this.newAchievementTitle);
-  //     this.newAchievementTitle = "";
-  //   });
-  // }
-  //
-  // removeAchievement(i: number): void {
-  //   this.achievements.removeAt(i);
-  // }
+  newAchievementTitle = "";
+  addAchievement(title?: string): void {
+    const fromState = title ?? this.newAchievementTitle;
+    const control = this.fb.control(fromState, [Validators.required]);
+    this.achievements.push(control);
+
+    this.newAchievementTitle = "";
+  }
+
+  removeAchievement(i: number): void {
+    this.achievements.removeAt(i);
+  }
 
   get keySkills(): FormArray {
     return this.profileForm.get("keySkills") as FormArray;
@@ -97,11 +94,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   newKeySkillTitle = "";
   addKeySkill(title?: string): void {
-    this.keySkills.push(title ? this.fb.control(title) : this.fb.control(this.newKeySkillTitle));
+    const fromState = title ?? this.newAchievementTitle;
+    const control = this.fb.control(fromState, [Validators.required]);
+    this.keySkills.push(control);
 
-    setTimeout(() => {
-      this.newKeySkillTitle = "";
-    });
+    this.newKeySkillTitle = "";
   }
 
   removeKeySkill(i: number): void {
@@ -109,7 +106,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   saveProfile(): void {
-    console.log(this.profileForm.errors, this.profileForm);
     if (!this.validationService.getFormValidation(this.profileForm)) {
       return;
     }

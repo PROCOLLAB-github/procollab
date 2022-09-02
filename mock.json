@@ -1,22 +1,26 @@
 {
   "tokens": {
-    "accessToken": "sdfsdf",
-    "refreshToken": "sdfsdf"
+    "name": "sdfsdf",
+    "surname": "sdfsdf",
+    "email": "user@mail.org",
+    "password": "password"
   },
   "profile": [
     {
       "name": "Егор",
       "surname": "Токарев",
-      "status": "",
-      "email": "e@tokarev.work",
-      "profile_photo": "https://joeschmoe.io/api/v1/random",
-      "birthday": "",
-      "city": "",
-      "organisation": "",
-      "speciality": "",
+      "status": "Ученик",
+      "birthday": "23.42.3423",
+      "city": "234sadfas",
+      "organisation": "dfasdfasdf",
+      "speciality": "asdfasdfasd",
       "key_skills": [],
-      "achievements": [],
-      "about_me": "",
+      "achievements": [
+        "1ksadsadfasdl;fjkasdl",
+        "sadfasdf",
+        "asdf"
+      ],
+      "about_me": "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
       "id": 0
     }
   ]

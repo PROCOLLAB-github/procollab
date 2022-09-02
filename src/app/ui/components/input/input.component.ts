@@ -16,6 +16,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
   ],
 })
 export class InputComponent implements OnInit, ControlValueAccessor {
+  constructor() {}
+
   @Input() placeholder = "";
   @Input() type: "text" | "password" | "email" = "text";
   @Input() error = false;
@@ -32,8 +34,6 @@ export class InputComponent implements OnInit, ControlValueAccessor {
 
   @Output() appValueChange = new EventEmitter<string>();
 
-  constructor() {}
-
   ngOnInit(): void {}
 
   onInput(event: Event): void {
@@ -48,7 +48,9 @@ export class InputComponent implements OnInit, ControlValueAccessor {
 
   value = "";
   writeValue(value: string): void {
-    this.value = value;
+    setTimeout(() => {
+      this.value = value;
+    });
   }
 
   onChange: (value: string) => void = () => {};
