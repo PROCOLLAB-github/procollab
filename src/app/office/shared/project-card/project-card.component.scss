@@ -1,0 +1,49 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  background-color: var(--white);
+  border-radius: var(--rounded-md);
+
+  &__photo {
+    display: block;
+    filter: drop-shadow(5px 5px 25px rgb(159 159 159 / 15%));
+  }
+
+  &__name {
+    margin: 16px 0 3px;
+    color: var(--black);
+  }
+
+  &__industry {
+    margin-bottom: 16px;
+    color: var(--dark-gray);
+  }
+
+  &__description {
+    margin-bottom: 16px;
+    color: var(--dark-gray);
+    text-align: center;
+  }
+}
+
+.collaborators {
+  display: flex;
+  align-items: center;
+
+  &__list {
+    display: flex;
+  }
+
+  &__item {
+    &:not(:first-child) {
+      margin-left: -10px;
+    }
+  }
+
+  &__other {
+    margin-left: 8px;
+    color: var(--dark-gray);
+  }
+}

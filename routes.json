@@ -2,8 +2,12 @@
   "/profile": "/profile/0",
   "/member/all": "/profile",
   "/profile/update": "/profile/0",
+
   "/auth/register": "/tokens",
   "/auth/login": "/tokens",
+
   "/project/user/:user_id": "/project/?leader_id=:user_id",
-  "/project/update/:project_id": "/project"
+  "/project/update/:project_id": "/project",
+  "/project/my": "/projects/?leader_id=0",
+  "/project/all": "/projects"
 }

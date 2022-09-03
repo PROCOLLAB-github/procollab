@@ -5,6 +5,78 @@
     "email": "user@mail.org",
     "password": "password"
   },
+  "projects": [
+    {
+      "id": 0,
+      "name": "string",
+      "description": "string",
+      "short_description": "sdlfkjsdlfkjsdf",
+      "achievements": "string",
+      "industry_id": 0,
+      "presentation_address": "string",
+      "image_address": "",
+      "number_of_collaborators": 7,
+      "collaborators": [
+        {
+          "name": "user",
+          "surname": "suruser",
+          "photoAddress": "https://joeschmoe.io/api/v1/random",
+          "id": 0
+        },
+        {
+          "name": "user",
+          "surname": "suruser",
+          "photoAddress": "https://joeschmoe.io/api/v1/random",
+          "id": 1
+        },
+        {
+          "name": "user",
+          "surname": "suruser",
+          "photoAddress": "https://joeschmoe.io/api/v1/random",
+          "id": 2
+        },
+        {
+          "name": "user",
+          "surname": "suruser",
+          "photoAddress": "https://joeschmoe.io/api/v1/random",
+          "id": 3
+        }
+      ],
+      "leader_info": "string",
+      "leader_id": 0
+    },
+    {
+      "id": 1,
+      "name": "string",
+      "description": "string",
+      "short_description": "sdlfkjsdlfkjsdf",
+      "achievements": "string",
+      "industry_id": 0,
+      "presentation_address": "string",
+      "image_address": "",
+      "number_of_collaborators": 7,
+      "collaborators": [
+        {
+          "name": "user",
+          "surname": "suruser",
+          "photoAddress": "https://joeschmoe.io/api/v1/random",
+          "id": 0
+        }
+      ],
+      "leader_info": "string",
+      "leader_id": 1
+    }
+  ],
+  "industry": [
+    {
+      "id": 0,
+      "name": "EdTech"
+    },
+    {
+      "id": 1,
+      "name": "FoodTech"
+    }
+  ],
   "profile": [
     {
       "name": "Егор",
@@ -14,14 +86,8 @@
       "city": "234sadfas",
       "organisation": "dfasdfasdf",
       "speciality": "asdfasdfasd",
-      "key_skills": [
-        "sadf"
-      ],
-      "achievements": [
-        "1ksadsadfasdl;fjkasdl",
-        "sdfsdf",
-        "sfdsf"
-      ],
+      "key_skills": ["sadf"],
+      "achievements": ["1ksadsadfasdl;fjkasdl", "sdfsdf", "sfdsf"],
       "about_me": "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
       "id": 0
     },
@@ -33,14 +99,8 @@
       "city": "234sadfas",
       "organisation": "dfasdfasdf",
       "speciality": "asdfasdfasd",
-      "key_skills": [
-        "sadf"
-      ],
-      "achievements": [
-        "1ksadsadfasdl;fjkasdl",
-        "sdfsdf",
-        "sfdsf"
-      ],
+      "key_skills": ["sadf"],
+      "achievements": ["1ksadsadfasdl;fjkasdl", "sdfsdf", "sfdsf"],
       "about_me": "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
       "id": 1
     },
@@ -52,14 +112,8 @@
       "city": "234sadfas",
       "organisation": "dfasdfasdf",
       "speciality": "asdfasdfasd",
-      "key_skills": [
-        "sadf"
-      ],
-      "achievements": [
-        "1ksadsadfasdl;fjkasdl",
-        "sdfsdf",
-        "sfdsf"
-      ],
+      "key_skills": ["sadf"],
+      "achievements": ["1ksadsadfasdl;fjkasdl", "sdfsdf", "sfdsf"],
       "about_me": "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
       "id": 2
     },
@@ -71,16 +125,8 @@
       "city": "234sadfas",
       "organisation": "dfasdfasdf",
       "speciality": "asdfasdfasd",
-      "key_skills": [
-        "sadf",
-        "sadf",
-        "sadf"
-      ],
-      "achievements": [
-        "1ksadsadfasdl;fjkasdl",
-        "sdfsdf",
-        "sfdsf"
-      ],
+      "key_skills": ["sadf", "sadf", "sadf"],
+      "achievements": ["1ksadsadfasdl;fjkasdl", "sdfsdf", "sfdsf"],
       "about_me": "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
       "id": 3
     }

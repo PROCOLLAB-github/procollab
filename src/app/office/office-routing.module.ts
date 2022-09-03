@@ -11,6 +11,7 @@ import { ProfileEditComponent } from "./profile/edit/profile-edit.component";
 import { ProfileDetailResolver } from "./profile/detail/profile-detail.resolver";
 import { MembersComponent } from "./members/members.component";
 import { MembersResolver } from "./members/members.resolver";
+import { ProjectsResolver } from "./projects/projects.resolver";
 
 const routes: Routes = [
   {
@@ -25,6 +26,9 @@ const routes: Routes = [
       {
         path: "projects",
         component: ProjectsComponent,
+        resolve: {
+          data: ProjectsResolver,
+        },
       },
       {
         path: "members",
