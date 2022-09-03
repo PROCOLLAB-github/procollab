@@ -1,11 +1,30 @@
 <!-- @format -->
 
 <section class="page">
-  <ul class="page__list">
+  <div class="bar page__bar">
+    <nav *ngIf="projectsCount$ | async as count" class="bar__nav">
+      <ul class="bar__tabs">
+        <a class="bar__link" routerLink="/office/projects/my" routerLinkActive="bar__link--active">
+          <li class="text-body-14 bar__item">
+            Мои проекты
+            <div class="bar__ball">{{ count.my }}</div>
+          </li>
+        </a>
+        <a class="bar__link" routerLink="/office/projects/all" routerLinkActive="bar__link--active">
+          <li class="text-body-14 bar__item">
+            Все проекты
+            <div class="bar__ball">{{ count.all }}</div>
+          </li>
+        </a>
+      </ul>
+    </nav>
+  </div>
+  <router-outlet></router-outlet>
+  <!--  <ul class="page__list">
     <a *ngFor="let project of projects$ | async" [routerLink]="['/office/projects', project.id]">
       <li>
         <app-project-card [project]="project"></app-project-card>
       </li>
     </a>
-  </ul>
+  </ul>-->
 </section>

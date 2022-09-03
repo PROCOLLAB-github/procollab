@@ -1,7 +1,48 @@
 .page {
-  &__list {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 16px;
+  &__bar {
+    margin-bottom: 12px;
+  }
+}
+
+.bar {
+  padding: 0 20px;
+  background-color: var(--white);
+
+  &__tabs {
+    display: flex;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    color: var(--dark-gray);
+    cursor: pointer;
+  }
+
+  &__ball {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    min-height: 22px;
+    padding: 0 2px;
+    margin-left: 6px;
+    color: var(--white);
+    background-color: var(--gray);
+    border-radius: 100%;
+  }
+
+  &__link {
+    &--active {
+      .bar__item {
+        color: var(--black);
+        border-bottom: 2px solid var(--black);
+      }
+
+      .bar__ball {
+        background-color: var(--black);
+      }
+    }
   }
 }

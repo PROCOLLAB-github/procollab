@@ -13,7 +13,7 @@ import { pluck } from "rxjs";
 export class ProjectsComponent implements OnInit {
   constructor(private navService: NavService, private route: ActivatedRoute) {}
 
-  projects$ = this.route.data.pipe(pluck("data"));
+  projectsCount$ = this.route.data.pipe(pluck("data"));
 
   ngOnInit(): void {
     this.navService.setNavTitle("Проекты");

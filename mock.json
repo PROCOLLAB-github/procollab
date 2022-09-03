@@ -67,6 +67,10 @@
       "leader_id": 1
     }
   ],
+  "project-count": {
+    "all": 100,
+    "my": 4
+  },
   "industry": [
     {
       "id": 0,

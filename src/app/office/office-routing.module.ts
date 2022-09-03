@@ -12,6 +12,9 @@ import { ProfileDetailResolver } from "./profile/detail/profile-detail.resolver"
 import { MembersComponent } from "./members/members.component";
 import { MembersResolver } from "./members/members.resolver";
 import { ProjectsResolver } from "./projects/projects.resolver";
+import { ProjectsListComponent } from "./projects/list/list.component";
+import { ProjectsMyResolver } from "./projects/list/my.resolver";
+import { ProjectsAllResolver } from "./projects/list/all.resolver";
 
 const routes: Routes = [
   {
@@ -29,6 +32,22 @@ const routes: Routes = [
         resolve: {
           data: ProjectsResolver,
         },
+        children: [
+          {
+            path: "my",
+            component: ProjectsListComponent,
+            resolve: {
+              data: ProjectsMyResolver,
+            },
+          },
+          {
+            path: "all",
+            component: ProjectsListComponent,
+            resolve: {
+              data: ProjectsAllResolver,
+            },
+          },
+        ],
       },
       {
         path: "members",

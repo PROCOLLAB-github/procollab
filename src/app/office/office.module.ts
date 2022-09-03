@@ -15,8 +15,9 @@ import { ProfileEditComponent } from "./profile/edit/profile-edit.component";
 import { CoreModule } from "../core/core.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MembersComponent } from "./members/members.component";
-import { MemberCardComponent } from './shared/member-card/member-card.component';
-import { ProjectCardComponent } from './shared/project-card/project-card.component';
+import { MemberCardComponent } from "./shared/member-card/member-card.component";
+import { ProjectCardComponent } from "./shared/project-card/project-card.component";
+import { ProjectsListComponent } from "./projects/list/list.component";
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ProjectCardComponent } from './shared/project-card/project-card.compone
     MembersComponent,
     MemberCardComponent,
     ProjectCardComponent,
+    ProjectsListComponent,
   ],
   imports: [OfficeRoutingModule, CommonModule, UiModule, CoreModule, ReactiveFormsModule],
 })

@@ -29,3 +29,8 @@ export class Project {
     };
   }
 }
+
+export class ProjectCount {
+  all!: number;
+  my!: number;
+}
