@@ -6,6 +6,7 @@
   // ACCENT
   --gradient: linear-gradient(90deg, #242424 0%, #6c27ff 50%);
   --accent: #6c27ff;
+  --accent-dark: #{color.adjust(#6c27ff, $blackness: 20%)};
 
   // GRAY
   --white: #fff;
@@ -17,4 +18,5 @@
   // FUNCTIONAL
   --green: #73c66e;
   --red: #ff5151;
+  --red-dark: #{color.adjust(#ff5151, $blackness: 10%)};
 }

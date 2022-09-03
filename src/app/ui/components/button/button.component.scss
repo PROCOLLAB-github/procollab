@@ -16,6 +16,10 @@
   outline: none;
   transition: background-color 0.2s;
 
+  &:hover {
+    background-color: var(--accent-dark);
+  }
+
   ::ng-deep * {
     display: block;
 
@@ -26,5 +30,9 @@
 
   &--red {
     background-color: var(--red);
+
+    &:hover {
+      background-color: var(--red-dark);
+    }
   }
 }
