@@ -1,6 +1,7 @@
 /** @format */
 
 export class Project {
+  id!: number;
   name!: string;
   description!: string;
   shortDescription!: string;
@@ -15,6 +16,7 @@ export class Project {
 
   static default(): Project {
     return {
+      id: 0,
       name: "string",
       description: "string",
       shortDescription: "string",

@@ -18,6 +18,7 @@ import { MembersComponent } from "./members/members.component";
 import { MemberCardComponent } from "./shared/member-card/member-card.component";
 import { ProjectCardComponent } from "./shared/project-card/project-card.component";
 import { ProjectsListComponent } from "./projects/list/list.component";
+import { ProjectDetailComponent } from "./projects/detail/detail.component";
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ProjectsListComponent } from "./projects/list/list.component";
     MemberCardComponent,
     ProjectCardComponent,
     ProjectsListComponent,
+    ProjectDetailComponent,
   ],
   imports: [OfficeRoutingModule, CommonModule, UiModule, CoreModule, ReactiveFormsModule],
 })

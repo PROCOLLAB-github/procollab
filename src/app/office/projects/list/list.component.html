@@ -2,9 +2,15 @@
 
 <section class="page">
   <ul class="page__list">
-    <a *ngFor="let project of projects$ | async" [routerLink]="['/office/projects', project.id]">
+    <a
+      *ngFor="let project of projects$ | async"
+      [routerLink]="['/office/projects', project.project.id]"
+    >
       <li>
-        <app-project-card [project]="project"></app-project-card>
+        <app-project-card
+          [project]="project.project"
+          [basket]="project.isBasket"
+        ></app-project-card>
       </li>
     </a>
   </ul>

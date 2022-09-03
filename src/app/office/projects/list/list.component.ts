@@ -2,7 +2,10 @@
 
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { pluck } from "rxjs";
+import { combineLatest, map, Observable, pluck } from "rxjs";
+import { AuthService } from "../../../auth/services";
+import { Project } from "../../models/project.model";
+import { User } from "../../../auth/models/user.model";
 
 @Component({
   selector: "app-list",
@@ -10,9 +13,16 @@ import { pluck } from "rxjs";
   styleUrls: ["./list.component.scss"],
 })
 export class ProjectsListComponent implements OnInit {
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private authService: AuthService) {}
 
-  projects$ = this.route.data.pipe(pluck("data"));
+  projects$: Observable<{ project: Project; isBasket: boolean }[]> = combineLatest([
+    this.route.data.pipe(pluck("data")),
+    this.authService.profile,
+  ]).pipe(
+    map(([projects, profile]: [Project[], User]) => {
+      return projects.map(project => ({ project, isBasket: profile.id === project.leaderId }));
+    })
+  );
 
   ngOnInit(): void {}
 }

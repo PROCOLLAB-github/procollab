@@ -18,6 +18,12 @@ export class ProjectService {
       .pipe(map(projects => plainToClass(Project, projects)));
   }
 
+  getOne(id: number): Observable<Project> {
+    return this.apiService
+      .get(`/project/${id}`)
+      .pipe(map(project => plainToClass(Project, project)));
+  }
+
   getMy(): Observable<Project[]> {
     return this.apiService
       .get<Project[]>("/project/my")

@@ -15,6 +15,8 @@ import { ProjectsResolver } from "./projects/projects.resolver";
 import { ProjectsListComponent } from "./projects/list/list.component";
 import { ProjectsMyResolver } from "./projects/list/my.resolver";
 import { ProjectsAllResolver } from "./projects/list/all.resolver";
+import { ProjectDetailComponent } from "./projects/detail/detail.component";
+import { ProjectDetailResolver } from "./projects/detail/detail.resolver";
 
 const routes: Routes = [
   {
@@ -34,6 +36,11 @@ const routes: Routes = [
         },
         children: [
           {
+            path: "",
+            pathMatch: "full",
+            redirectTo: "my",
+          },
+          {
             path: "my",
             component: ProjectsListComponent,
             resolve: {
@@ -45,6 +52,13 @@ const routes: Routes = [
             component: ProjectsListComponent,
             resolve: {
               data: ProjectsAllResolver,
+            },
+          },
+          {
+            path: ":projectId",
+            component: ProjectDetailComponent,
+            resolve: {
+              data: ProjectDetailResolver,
             },
           },
         ],

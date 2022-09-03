@@ -1,6 +1,14 @@
 <!-- @format -->
 
 <div class="card">
+  <i
+    *ngIf="basket"
+    class="card__basket"
+    appIcon
+    icon="basket"
+    appSquare="24"
+    (click)="remove.emit()"
+  ></i>
   <app-avatar class="card__photo" [url]="project.imageAddress" [size]="90"></app-avatar>
   <p class="text-heading-4 card__name">{{ project.name }}</p>
   <p *ngIf="industryService.industries | async as industries" class="text-body-12 card__industry">
