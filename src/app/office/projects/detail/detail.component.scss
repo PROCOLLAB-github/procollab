@@ -1,3 +1,5 @@
+/** @format */
+
 .project {
   display: grid;
   grid-template-columns: minmax(445px, 1fr) 1fr 1fr;
@@ -69,5 +71,27 @@
   &__star {
     margin-left: auto;
     color: var(--black);
+  }
+}
+
+.about {
+  &__title {
+    margin-bottom: 12px;
+    color: var(--black);
+  }
+
+  &__text {
+    overflow: hidden;
+    color: var(--black);
+
+    &--hide {
+      max-height: 66px;
+    }
+  }
+
+  &__read-full {
+    margin-top: 2px;
+    color: var(--accent);
+    cursor: pointer;
   }
 }

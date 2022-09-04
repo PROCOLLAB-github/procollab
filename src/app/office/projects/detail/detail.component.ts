@@ -26,6 +26,8 @@ export class ProjectDetailComponent implements OnInit {
     this.navService.setNavTitle("Профиль проекта");
   }
 
+  readFull = false;
+
   getIndustry(industries: Industry[], industryId: number): Industry | undefined {
     return industries.find(industry => industry.id === industryId);
   }
