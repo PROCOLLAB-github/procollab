@@ -47,7 +47,7 @@
 
   &__item {
     display: block;
-    
+
     &:not(:last-child) {
       margin-bottom: 12px;
     }
@@ -95,5 +95,18 @@
     margin-top: 2px;
     color: var(--accent);
     cursor: pointer;
+  }
+}
+
+.achievements {
+  &__title {
+    margin-bottom: 12px;
+    color: var(--black);
+  }
+
+  &__item {
+    &:not(:last-child) {
+      margin-bottom: 12px;
+    }
   }
 }

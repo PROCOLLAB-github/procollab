@@ -53,5 +53,15 @@
       {{ readFull ? "Скрыть" : "Читать полностью" }}
     </div>
   </div>
-  <div class="project__section project__achievements"></div>
+  <div class="achievements project__section project__achievements">
+    <h3 class="text-bold-body-16 achievements__title">Достижения</h3>
+    <ul class="achievements__list">
+      <li
+        *ngFor="let achievement of project.achievements"
+        class="text-bold-body-14 achievements__item"
+      >
+        {{ achievement }}
+      </li>
+    </ul>
+  </div>
 </section>
