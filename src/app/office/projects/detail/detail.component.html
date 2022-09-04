@@ -1,1 +1,25 @@
-<p>detail works!</p>
+<!-- @format -->
+
+<section *ngIf="project$ | async as project" class="project">
+  <div class="info project__section project__info">
+    <app-avatar [url]="project.imageAddress" [size]="140"></app-avatar>
+    <h1 class="text-heading-2 info__title">{{ project.name }}</h1>
+    <p *ngIf="industryService.industries | async as industries" class="text-body-14 info__industry">
+      <span *ngIf="getIndustry(industries, project.industryId) as industry">
+        {{ industry.name }}
+      </span>
+    </p>
+    <a
+      class="text-bold-body-14 info__presentation"
+      [href]="project.presentationAddress"
+      target="_blank"
+    >
+      <img src="/assets/images/projects/detail/pdf.svg" alt="pdf" />
+      Презентация проекта.pdf
+    </a>
+  </div>
+  <div class="project__section project__team"></div>
+  <div class="project__section project__vacancy"></div>
+  <div class="project__section project__about"></div>
+  <div class="project__section project__achievements"></div>
+</section>

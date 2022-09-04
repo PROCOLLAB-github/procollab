@@ -1,0 +1,38 @@
+.project {
+  display: grid;
+  grid-template-columns: minmax(445px, 1fr) 1fr 1fr;
+  grid-gap: 18px;
+
+  &__section {
+    padding: 24px;
+    background-color: var(--white);
+    border-radius: var(--rounded-md);
+  }
+
+  &__about {
+    grid-column: span 2;
+  }
+}
+
+.info {
+  &__title {
+    margin-top: 24px;
+    color: var(--black);
+  }
+
+  &__industry {
+    margin-top: 2px;
+    color: var(--dark-gray);
+  }
+
+  &__presentation {
+    display: flex;
+    align-items: center;
+    margin-top: 26px;
+    color: var(--black);
+
+    img {
+      margin-right: 10px;
+    }
+  }
+}
