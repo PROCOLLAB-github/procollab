@@ -21,20 +21,26 @@
   <div class="team project__section project__team">
     <h3 class="text-bold-body-16 team__title">Команда</h3>
     <ul>
-      <li *ngFor="let member of project.collaborators" class="team__item member">
-        <app-avatar class="member__avatar" [url]="member.photoAddress" [size]="40"></app-avatar>
-        <div class="member__info">
-          <p class="text-bold-body-14 member__name">{{ member.name }} {{ member.surname }}</p>
-          <p class="text-body-12 member__speciality">{{ member.speciality }}</p>
-        </div>
-        <i
-          *ngIf="member.id === project.leaderId"
-          class="member__star"
-          appIcon
-          icon="star"
-          appSquare="14"
-        ></i>
-      </li>
+      <a
+        *ngFor="let member of project.collaborators"
+        class="team__item"
+        [routerLink]="['/office/profile', member.id]"
+      >
+        <li class="member">
+          <app-avatar class="member__avatar" [url]="member.photoAddress" [size]="40"></app-avatar>
+          <div class="member__info">
+            <p class="text-bold-body-14 member__name">{{ member.name }} {{ member.surname }}</p>
+            <p class="text-body-12 member__speciality">{{ member.speciality }}</p>
+          </div>
+          <i
+            *ngIf="member.id === project.leaderId"
+            class="member__star"
+            appIcon
+            icon="star"
+            appSquare="14"
+          ></i>
+        </li>
+      </a>
     </ul>
   </div>
   <div class="project__section project__vacancy"></div>

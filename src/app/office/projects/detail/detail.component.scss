@@ -46,6 +46,8 @@
   }
 
   &__item {
+    display: block;
+    
     &:not(:last-child) {
       margin-bottom: 12px;
     }
