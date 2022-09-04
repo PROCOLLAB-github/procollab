@@ -23,4 +23,8 @@ export class IndustryService {
       })
     );
   }
+
+  getIndustry(industries: Industry[], industryId: number): Industry | undefined {
+    return industries.find(industry => industry.id === industryId);
+  }
 }

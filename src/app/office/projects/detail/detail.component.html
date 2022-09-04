@@ -5,7 +5,7 @@
     <app-avatar [url]="project.imageAddress" [size]="140"></app-avatar>
     <h1 class="text-heading-2 info__title">{{ project.name }}</h1>
     <p *ngIf="industryService.industries | async as industries" class="text-body-14 info__industry">
-      <span *ngIf="getIndustry(industries, project.industryId) as industry">
+      <span *ngIf="industryService.getIndustry(industries, project.industryId) as industry">
         {{ industry.name }}
       </span>
     </p>

@@ -5,7 +5,6 @@ import { ActivatedRoute } from "@angular/router";
 import { Observable, pluck } from "rxjs";
 import { Project } from "../../models/project.model";
 import { IndustryService } from "../../services/industry.service";
-import { Industry } from "../../models/industry.model";
 import { NavService } from "../../services/nav.service";
 
 @Component({
@@ -27,8 +26,4 @@ export class ProjectDetailComponent implements OnInit {
   }
 
   readFull = false;
-
-  getIndustry(industries: Industry[], industryId: number): Industry | undefined {
-    return industries.find(industry => industry.id === industryId);
-  }
 }
