@@ -6,6 +6,7 @@ import { Observable, pluck } from "rxjs";
 import { Project } from "../../models/project.model";
 import { IndustryService } from "../../services/industry.service";
 import { Industry } from "../../models/industry.model";
+import { NavService } from "../../services/nav.service";
 
 @Component({
   selector: "app-detail",
@@ -13,11 +14,17 @@ import { Industry } from "../../models/industry.model";
   styleUrls: ["./detail.component.scss"],
 })
 export class ProjectDetailComponent implements OnInit {
-  constructor(private route: ActivatedRoute, public industryService: IndustryService) {}
+  constructor(
+    private route: ActivatedRoute,
+    public industryService: IndustryService,
+    private navService: NavService
+  ) {}
 
   project$: Observable<Project> = this.route.data.pipe(pluck("data"));
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.navService.setNavTitle("Профиль проекта");
+  }
 
   getIndustry(industries: Industry[], industryId: number): Industry | undefined {
     return industries.find(industry => industry.id === industryId);
