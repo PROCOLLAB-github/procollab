@@ -36,3 +36,38 @@
     }
   }
 }
+
+.team {
+  &__title {
+    margin-bottom: 12px;
+    color: var(--black);
+  }
+
+  &__item {
+    &:not(:last-child) {
+      margin-bottom: 12px;
+    }
+  }
+}
+
+.member {
+  display: flex;
+  align-items: center;
+
+  &__avatar {
+    margin-right: 10px;
+  }
+
+  &__name {
+    color: var(--black);
+  }
+
+  &__speciality {
+    color: var(--dark-gray);
+  }
+
+  &__star {
+    margin-left: auto;
+    color: var(--black);
+  }
+}

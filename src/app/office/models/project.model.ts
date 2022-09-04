@@ -10,7 +10,14 @@ export class Project {
   presentationAddress!: string;
   imageAddress!: string;
   numberOfCollaborators!: number;
-  collaborators!: { name: string; surname: string; id: number; photoAddress: string }[];
+  collaborators!: {
+    name: string;
+    surname: string;
+    id: number;
+    photoAddress: string;
+    speciality: string;
+  }[];
+
   leaderInfo!: string;
   leaderId!: number;
 
@@ -25,7 +32,15 @@ export class Project {
       presentationAddress: "string",
       imageAddress: "string",
       numberOfCollaborators: 10,
-      collaborators: [{ name: "string", surname: "string", id: 0, photoAddress: "string" }],
+      collaborators: [
+        {
+          name: "string",
+          surname: "string",
+          id: 0,
+          photoAddress: "string",
+          speciality: "Front-end",
+        },
+      ],
       leaderInfo: "string",
       leaderId: 0,
     };

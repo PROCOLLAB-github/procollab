@@ -21,25 +21,29 @@
           "name": "user",
           "surname": "suruser",
           "photoAddress": "https://joeschmoe.io/api/v1/random",
-          "id": 0
+          "id": 0,
+          "speciality": "Front-end"
         },
         {
           "name": "user",
           "surname": "suruser",
           "photoAddress": "https://joeschmoe.io/api/v1/random",
-          "id": 1
+          "id": 1,
+          "speciality": "Front-end"
         },
         {
           "name": "user",
           "surname": "suruser",
           "photoAddress": "https://joeschmoe.io/api/v1/random",
-          "id": 2
+          "id": 2,
+          "speciality": "Front-end"
         },
         {
           "name": "user",
           "surname": "suruser",
           "photoAddress": "https://joeschmoe.io/api/v1/random",
-          "id": 3
+          "id": 3,
+          "speciality": "Front-end"
         }
       ],
       "leader_info": "string",
@@ -60,7 +64,8 @@
           "name": "user",
           "surname": "suruser",
           "photoAddress": "https://joeschmoe.io/api/v1/random",
-          "id": 0
+          "id": 0,
+          "speciality": "Front-end"
         }
       ],
       "leader_info": "string",
