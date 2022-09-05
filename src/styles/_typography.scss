@@ -1,195 +1,58 @@
 /** @format */
 
 @font-face {
-  font-family: Mont, sans-serif;
+  font-family: Mont;
   font-style: normal;
   font-weight: 900;
-  src: url("../assets/MontFont/Mont-Black.eot");
-  src: local("Mont Black"), local("Mont-Black"),
-    url("../assets/MontFont/Mont-Black.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-Black.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-Black.woff") format("woff"),
-    url("../assets/MontFont/Mont-Black.ttf") format("truetype");
+  src: local(''), url("../assets/font/Mont-Black.woff") format("woff");
 }
 
 @font-face {
-  font-family: Mont, sans-serif;
-  font-style: italic;
-  font-weight: 100;
-  src: url("../assets/MontFont/Mont-ThinItalic.eot");
-  src: local("Mont Thin Italic"), local("Mont-ThinItalic"),
-    url("../assets/MontFont/Mont-ThinItalic.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-ThinItalic.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-ThinItalic.woff") format("woff"),
-    url("../assets/MontFont/Mont-ThinItalic.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Mont, sans-serif;
-  font-style: normal;
-  font-weight: 200;
-  src: url("../assets/MontFont/Mont-ExtraLight.eot");
-  src: local("Mont ExtraLight"), local("Mont-ExtraLight"),
-    url("../assets/MontFont/Mont-ExtraLight.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-ExtraLight.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-ExtraLight.woff") format("woff"),
-    url("../assets/MontFont/Mont-ExtraLight.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Mont, sans-serif;
-  font-style: normal;
-  font-weight: bold;
-  src: url("../assets/MontFont/Mont-Bold.eot");
-  src: local("Mont Bold"), local("Mont-Bold"),
-    url("../assets/MontFont/Mont-Bold.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-Bold.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-Bold.woff") format("woff"),
-    url("../assets/MontFont/Mont-Bold.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Mont, sans-serif;
-  font-style: italic;
-  font-weight: 800;
-  src: url("../assets/MontFont/Mont-HeavyItalic.eot");
-  src: local("Mont Heavy Italic"), local("Mont-HeavyItalic"),
-    url("../assets/MontFont/Mont-HeavyItalic.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-HeavyItalic.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-HeavyItalic.woff") format("woff"),
-    url("../assets/MontFont/Mont-HeavyItalic.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Mont, sans-serif;
-  font-style: italic;
-  font-weight: 900;
-  src: url("../assets/MontFont/Mont-BlackItalic.eot");
-  src: local("Mont Black Italic"), local("Mont-BlackItalic"),
-    url("../assets/MontFont/Mont-BlackItalic.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-BlackItalic.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-BlackItalic.woff") format("woff"),
-    url("../assets/MontFont/Mont-BlackItalic.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Mont, sans-serif;
-  font-style: italic;
-  font-weight: 200;
-  src: url("../assets/MontFont/Mont-ExtraLightItalic.eot");
-  src: local("Mont ExtraLight Italic"), local("Mont-ExtraLightItalic"),
-    url("../assets/MontFont/Mont-ExtraLightItalic.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-ExtraLightItalic.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-ExtraLightItalic.woff") format("woff"),
-    url("../assets/MontFont/Mont-ExtraLightItalic.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Mont, sans-serif;
+  font-family: Mont;
   font-style: normal;
   font-weight: 800;
-  src: url("../assets/MontFont/Mont-Heavy.eot");
+  src: url("../assets/font/Mont-Heavy.eot");
   src: local("Mont Heavy"), local("Mont-Heavy"),
-    url("../assets/MontFont/Mont-Heavy.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-Heavy.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-Heavy.woff") format("woff"),
-    url("../assets/MontFont/Mont-Heavy.ttf") format("truetype");
+  url("../assets/font/Mont-Heavy.eot?#iefix") format("embedded-opentype"),
+  url("../assets/font/Mont-Heavy.woff2") format("woff2"),
+  url("../assets/font/Mont-Heavy.woff") format("woff"),
+  url("../assets/font/Mont-Heavy.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: Mont, sans-serif;
+  font-family: Mont;
   font-style: normal;
-  font-weight: 600;
-  src: url("../assets/MontFont/Mont-SemiBold.eot");
-  src: local("Mont SemiBold"), local("Mont-SemiBold"),
-    url("../assets/MontFont/Mont-SemiBold.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-SemiBold.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-SemiBold.woff") format("woff"),
-    url("../assets/MontFont/Mont-SemiBold.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Mont, sans-serif;
-  font-style: italic;
-  font-weight: normal;
-  src: url("../assets/MontFont/Mont-RegularItalic.eot");
-  src: local("Mont Regular Italic"), local("Mont-RegularItalic"),
-    url("../assets/MontFont/Mont-RegularItalic.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-RegularItalic.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-RegularItalic.woff") format("woff"),
-    url("../assets/MontFont/Mont-RegularItalic.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Mont, sans-serif;
-  font-style: italic;
   font-weight: bold;
-  src: url("../assets/MontFont/Mont-BoldItalic.eot");
-  src: local("Mont Bold Italic"), local("Mont-BoldItalic"),
-    url("../assets/MontFont/Mont-BoldItalic.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-BoldItalic.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-BoldItalic.woff") format("woff"),
-    url("../assets/MontFont/Mont-BoldItalic.ttf") format("truetype");
+  src: url("../assets/font/Mont-Bold.eot");
+  src: local("Mont Bold"), local("Mont-Bold"),
+    url("../assets/font/Mont-Bold.eot?#iefix") format("embedded-opentype"),
+    url("../assets/font/Mont-Bold.woff2") format("woff2"),
+    url("../assets/font/Mont-Bold.woff") format("woff"),
+    url("../assets/font/Mont-Bold.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: Mont, sans-serif;
-  font-style: italic;
-  font-weight: 600;
-  src: url("../assets/MontFont/Mont-SemiBoldItalic.eot");
-  src: local("Mont SemiBold Italic"), local("Mont-SemiBoldItalic"),
-    url("../assets/MontFont/Mont-SemiBoldItalic.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-SemiBoldItalic.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-SemiBoldItalic.woff") format("woff"),
-    url("../assets/MontFont/Mont-SemiBoldItalic.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Mont, sans-serif;
-  font-style: italic;
-  font-weight: 300;
-  src: url("../assets/MontFont/Mont-LightItalic.eot");
-  src: local("Mont Light Italic"), local("Mont-LightItalic"),
-    url("../assets/MontFont/Mont-LightItalic.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-LightItalic.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-LightItalic.woff") format("woff"),
-    url("../assets/MontFont/Mont-LightItalic.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Mont, sans-serif;
+  font-family: Mont;
   font-style: normal;
-  font-weight: 100;
-  src: url("../assets/MontFont/Mont-Thin.eot");
-  src: local("Mont Thin"), local("Mont-Thin"),
-    url("../assets/MontFont/Mont-Thin.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-Thin.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-Thin.woff") format("woff"),
-    url("../assets/MontFont/Mont-Thin.ttf") format("truetype");
+  font-weight: 600;
+  src: url("../assets/font/Mont-SemiBold.eot");
+  src: local("Mont SemiBold"), local("Mont-SemiBold"),
+    url("../assets/font/Mont-SemiBold.eot?#iefix") format("embedded-opentype"),
+    url("../assets/font/Mont-SemiBold.woff2") format("woff2"),
+    url("../assets/font/Mont-SemiBold.woff") format("woff"),
+    url("../assets/font/Mont-SemiBold.ttf") format("truetype");
 }
 
 @font-face {
-  font-family: Mont, sans-serif;
+  font-family: Mont;
   font-style: normal;
   font-weight: normal;
-  src: url("../assets/MontFont/Mont-Regular.eot");
+  src: url("../assets/font/Mont-Regular.eot");
   src: local("Mont Regular"), local("Mont-Regular"),
-    url("../assets/MontFont/Mont-Regular.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-Regular.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-Regular.woff") format("woff"),
-    url("../assets/MontFont/Mont-Regular.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: Mont, sans-serif;
-  font-style: normal;
-  font-weight: 300;
-  src: url("../assets/MontFont/Mont-Light.eot");
-  src: local("Mont Light"), local("Mont-Light"),
-    url("../assets/MontFont/Mont-Light.eot?#iefix") format("embedded-opentype"),
-    url("../assets/MontFont/Mont-Light.woff2") format("woff2"),
-    url("../assets/MontFont/Mont-Light.woff") format("woff"),
-    url("../assets/MontFont/Mont-Light.ttf") format("truetype");
+    url("../assets/font/Mont-Regular.eot?#iefix") format("embedded-opentype"),
+    url("../assets/font/Mont-Regular.woff2") format("woff2"),
+    url("../assets/font/Mont-Regular.woff") format("woff"),
+    url("../assets/font/Mont-Regular.ttf") format("truetype");
 }
 
 @mixin heading-1 {
