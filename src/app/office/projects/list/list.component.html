@@ -2,14 +2,12 @@
 
 <section class="page">
   <ul class="page__list">
-    <a
-      *ngFor="let project of projects$ | async"
-      [routerLink]="['/office/projects', project.project.id]"
-    >
+    <a *ngFor="let project of projects" [routerLink]="['/office/projects', project.id]">
       <li>
         <app-project-card
-          [project]="project.project"
-          [basket]="project.isBasket"
+          [project]="project"
+          [basket]="project.leaderId === profile?.id"
+          (remove)="deleteProject($event)"
         ></app-project-card>
       </li>
     </a>

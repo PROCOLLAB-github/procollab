@@ -7,7 +7,7 @@
     appIcon
     icon="basket"
     appSquare="24"
-    (click)="remove.emit()"
+    (click)="onBasket($event)"
   ></i>
   <app-avatar class="card__photo" [url]="project.imageAddress" [size]="90"></app-avatar>
   <p class="text-heading-4 card__name">{{ project.name }}</p>

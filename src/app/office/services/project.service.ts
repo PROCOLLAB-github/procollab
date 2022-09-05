@@ -35,4 +35,8 @@ export class ProjectService {
       .get("/project/count")
       .pipe(map(count => plainToClass(ProjectCount, count)));
   }
+
+  remove(projectId: number): Observable<void> {
+    return this.apiService.delete(`/project/${projectId}`);
+  }
 }

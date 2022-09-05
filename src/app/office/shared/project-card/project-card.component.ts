@@ -20,5 +20,11 @@ export class ProjectCardComponent implements OnInit {
   @Input() project!: Project;
   @Input() basket?: boolean | null = false;
 
-  @Output() remove = new EventEmitter<void>();
+  @Output() remove = new EventEmitter<number>();
+
+  onBasket(event: MouseEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.remove.emit(this.project.id);
+  }
 }
