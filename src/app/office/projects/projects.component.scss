@@ -8,6 +8,11 @@
   padding: 0 20px 0 0;
   background-color: var(--white);
 
+  &__nav {
+    display: flex;
+    align-items: center;
+  }
+
   &__tabs {
     display: flex;
   }
@@ -43,6 +48,21 @@
       .bar__ball {
         background-color: var(--black);
       }
+    }
+  }
+
+  &__right {
+    margin-left: auto;
+  }
+
+  &__add-project {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    i {
+      display: block;
+      margin-left: 6px;
     }
   }
 }

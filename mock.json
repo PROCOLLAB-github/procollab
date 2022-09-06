@@ -94,6 +94,33 @@
       ],
       "leader_info": "string",
       "leader_id": 1
+    },
+    {
+      "id": 2,
+      "name": "string",
+      "description": "string",
+      "short_description": "string",
+      "achievements": [
+        {
+          "title": "sdf",
+          "place": "dsaf"
+        }
+      ],
+      "industry_id": 0,
+      "presentation_address": "string",
+      "image_address": "string",
+      "number_of_collaborators": 10,
+      "collaborators": [
+        {
+          "name": "string",
+          "surname": "string",
+          "id": 0,
+          "photo_address": "string",
+          "speciality": "Front-end"
+        }
+      ],
+      "leader_info": "string",
+      "leader_id": 0
     }
   ],
   "vacancy": [
@@ -108,6 +135,17 @@
       "taken": false,
       "description": "",
       "id": 2
+    },
+    {
+      "role": "sdfa",
+      "requirements": [
+        "23vdsf"
+      ],
+      "project_id": 2,
+      "project_name": "",
+      "taken": false,
+      "description": "",
+      "id": 3
     }
   ],
   "project-count": {

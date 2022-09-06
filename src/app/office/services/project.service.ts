@@ -39,4 +39,13 @@ export class ProjectService {
   remove(projectId: number): Observable<void> {
     return this.apiService.delete(`/project/${projectId}`);
   }
+
+  create(): Observable<Project> {
+    return (
+      this.apiService
+        // TODO remove body after release
+        .post("/project/create", Project.default())
+        .pipe(map(project => plainToClass(Project, project)))
+    );
+  }
 }

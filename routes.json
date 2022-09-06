@@ -8,6 +8,7 @@
 
   "/project/user/:user_id": "/projects/?leader_id=:user_id",
   "/project/update/:project_id": "/projects/:project_id",
+  "/project/create": "/projects",
   "/project/my": "/projects/?leader_id=0",
   "/project/all": "/projects",
   "/project/count": "/project-count",

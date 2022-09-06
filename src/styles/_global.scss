@@ -41,6 +41,12 @@ a {
   }
 }
 
+button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
 label.field-label {
   display: block;
   margin-bottom: 6px;
