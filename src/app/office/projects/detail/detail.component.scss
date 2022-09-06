@@ -146,3 +146,13 @@
     color: var(--dark-gray);
   }
 }
+
+.achievement {
+  &__place {
+    color: var(--black);
+  }
+
+  &__title {
+    color: var(--dark-gray);
+  }
+}
