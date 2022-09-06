@@ -121,6 +121,7 @@
               <div class="vacancy__form-skill-add">
                 <app-input
                   placeholder="Навыки требуемого специалиста"
+                  (enter)="addRequirement()"
                   [(appValue)]="requirementTitle"
                 ></app-input>
                 <app-button (click)="addRequirement()">

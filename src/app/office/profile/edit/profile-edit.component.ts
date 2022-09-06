@@ -37,21 +37,19 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.profile$ = this.authService.profile.subscribe(profile => {
-      setTimeout(() => {
-        this.profileForm.patchValue({
-          name: profile.name ?? "",
-          surname: profile.surname ?? "",
-          status: profile.status ?? "",
-          birthday: profile.birthday ?? "",
-          city: profile.city ?? "",
-          organisation: profile.organisation ?? "",
-          speciality: profile.speciality ?? "",
-          aboutMe: profile.aboutMe ?? "",
-        });
-
-        profile.achievements?.forEach(achievement => this.addAchievement(achievement));
-        profile.keySkills?.forEach(skill => this.addKeySkill(skill));
+      this.profileForm.patchValue({
+        name: profile.name ?? "",
+        surname: profile.surname ?? "",
+        status: profile.status ?? "",
+        birthday: profile.birthday ?? "",
+        city: profile.city ?? "",
+        organisation: profile.organisation ?? "",
+        speciality: profile.speciality ?? "",
+        aboutMe: profile.aboutMe ?? "",
       });
+
+      profile.achievements?.forEach(achievement => this.addAchievement(achievement));
+      profile.keySkills?.forEach(skill => this.addKeySkill(skill));
     });
   }
 
@@ -94,7 +92,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   newKeySkillTitle = "";
   addKeySkill(title?: string): void {
-    const fromState = title ?? this.newAchievementTitle;
+    const fromState = title ?? this.newKeySkillTitle;
+    if (!fromState) {
+      return;
+    }
+
     const control = this.fb.control(fromState, [Validators.required]);
     this.keySkills.push(control);
 

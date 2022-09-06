@@ -33,6 +33,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   }
 
   @Output() appValueChange = new EventEmitter<string>();
+  @Output() enter = new EventEmitter<void>();
 
   ngOnInit(): void {}
 

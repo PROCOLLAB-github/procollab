@@ -122,11 +122,12 @@
           </ul>
           <div class="key-skill-form">
             <app-input
+              (enter)="addKeySkill()"
               [(appValue)]="newKeySkillTitle"
               class="key-skill-form__input"
               placeholder="Введите свой навык, например: Python"
             ></app-input>
-            <app-button class="key-skill-form__button" (click)="addKeySkill()">
+            <app-button type="button" class="key-skill-form__button" (click)="addKeySkill()">
               <i appIcon icon="check" appWidth="12" appHeight="10"></i>
             </app-button>
           </div>

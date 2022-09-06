@@ -12,6 +12,7 @@ export class ButtonComponent implements OnInit {
 
   @Input() color: "primary" | "red" = "primary";
   @Input() loader = false;
+  @Input() type: "submit" | "reset" | "button" = "button";
 
   ngOnInit(): void {}
 }
