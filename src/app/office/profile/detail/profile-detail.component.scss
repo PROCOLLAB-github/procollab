@@ -75,6 +75,16 @@ $section-padding: 24px;
     }
   }
 
+  &__edit {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+
+    &:hover {
+      color: var(--accent-dark);
+    }
+  }
+
   &__achievements {
     grid-column: 3/4;
 

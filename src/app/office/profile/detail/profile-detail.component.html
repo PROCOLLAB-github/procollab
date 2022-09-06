@@ -22,19 +22,24 @@
           </li>
         </ul>
       </div>
-      <a class="profile__write" routerLink=".">
-        <app-button>
-          Написать
-          <i
-            class="profile__chat-icon"
-            appIcon
-            icon="message-inline"
-            appWidth="13"
-            appHeight="12"
-            appViewBox="0 0 13 12"
-          ></i>
-        </app-button>
-      </a>
+      <ng-container *ngIf="authService.profile | async as profile">
+        <a *ngIf="profile.id !== user.id" class="profile__write" routerLink=".">
+          <app-button>
+            Написать
+            <i
+              class="profile__chat-icon"
+              appIcon
+              icon="message-inline"
+              appWidth="13"
+              appHeight="12"
+              appViewBox="0 0 13 12"
+            ></i>
+          </app-button>
+        </a>
+        <a *ngIf="profile.id === user.id" class="profile__edit" routerLink="/office/profile/edit">
+          <i appIcon icon="settings" appSquare="40"></i>
+        </a>
+      </ng-container>
     </div>
   </section>
   <section class="profile__section profile__achievements">
