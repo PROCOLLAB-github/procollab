@@ -11,5 +11,8 @@
   "/project/my": "/projects/?leader_id=0",
   "/project/all": "/projects",
   "/project/count": "/project-count",
-  "/project/:project_id": "/projects/:project_id"
+  "/project/:project_id": "/projects/:project_id",
+
+  "/vacancy/project/:project_id": "/vacancy/?project_id=:project_id",
+  "/vacancy/create": "/vacancy"
 }

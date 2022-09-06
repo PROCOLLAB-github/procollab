@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<main *ngIf="authService.profile | async as user" class="profile">
+<main class="profile">
   <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
     <div class="profile__column">
       <div class="profile__row">
@@ -13,7 +13,7 @@
             formControlName="name"
             placeholder="Егор"
           ></app-input>
-          <div *ngIf="name | controlError: 'required'" class="text-body-14 auth__error">
+          <div *ngIf="name | controlError: 'required'" class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
         </fieldset>
@@ -26,7 +26,7 @@
             formControlName="surname"
             placeholder="Токарев"
           ></app-input>
-          <div *ngIf="surname | controlError: 'required'" class="text-body-14 auth__error">
+          <div *ngIf="surname | controlError: 'required'" class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
         </fieldset>
@@ -40,7 +40,7 @@
             placeholder="Ученик"
             [options]="statusOptions"
           ></app-select>
-          <div *ngIf="status | controlError: 'required'" class="text-body-14 auth__error">
+          <div *ngIf="status | controlError: 'required'" class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
         </fieldset>
@@ -53,7 +53,7 @@
             mask="00.00.0000"
             formControlName="birthday"
           ></app-input>
-          <div *ngIf="birthday | controlError: 'required'" class="text-body-14 auth__error">
+          <div *ngIf="birthday | controlError: 'required'" class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
         </fieldset>
@@ -68,7 +68,7 @@
             placeholder="Откуда вы"
             formControlName="city"
           ></app-input>
-          <div *ngIf="city | controlError: 'required'" class="text-body-14 auth__error">
+          <div *ngIf="city | controlError: 'required'" class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
         </fieldset>
@@ -83,7 +83,7 @@
             placeholder="ВУЗ / колледж / школа"
             formControlName="organisation"
           ></app-input>
-          <div *ngIf="organisation | controlError: 'required'" class="text-body-14 auth__error">
+          <div *ngIf="organisation | controlError: 'required'" class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
         </fieldset>
@@ -98,7 +98,7 @@
             placeholder="Например: Java Developer"
             formControlName="speciality"
           ></app-input>
-          <div *ngIf="speciality | controlError: 'required'" class="text-body-14 auth__error">
+          <div *ngIf="speciality | controlError: 'required'" class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
         </fieldset>
@@ -177,7 +177,7 @@
           placeholder="Я java developer, очень люблю котиков и Хайдегера"
           formControlName="aboutMe"
         ></app-textarea>
-        <div *ngIf="aboutMe | controlError: 'required'" class="text-body-14 auth__error">
+        <div *ngIf="aboutMe | controlError: 'required'" class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
       </fieldset>

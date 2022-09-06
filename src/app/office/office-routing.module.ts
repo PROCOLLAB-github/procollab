@@ -17,6 +17,8 @@ import { ProjectsMyResolver } from "./projects/list/my.resolver";
 import { ProjectsAllResolver } from "./projects/list/all.resolver";
 import { ProjectDetailComponent } from "./projects/detail/detail.component";
 import { ProjectDetailResolver } from "./projects/detail/detail.resolver";
+import { ProjectEditComponent } from "./projects/edit/edit.component";
+import { ProjectEditResolver } from "./projects/edit/edit.resolver";
 
 const routes: Routes = [
   {
@@ -59,6 +61,13 @@ const routes: Routes = [
             component: ProjectDetailComponent,
             resolve: {
               data: ProjectDetailResolver,
+            },
+          },
+          {
+            path: ":projectId/edit",
+            component: ProjectEditComponent,
+            resolve: {
+              data: ProjectEditResolver,
             },
           },
         ],

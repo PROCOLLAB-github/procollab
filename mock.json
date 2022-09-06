@@ -10,9 +10,18 @@
       "description": "Команда занимается разработкой сервиса - приложения которое помогуает индивидуально подобрать рецепт для приготовления блюда дома. Система учитывает вкусовые предпочтения, финансовые возможности, аллергические реакции. Приложение рекомендует рецепты на завтрак, обед, ужин.Команда занимается разработкой сервиса - приложения которое помогуает индивидуально подобрать рецепт для приготовления блюда дома. Система учитывает вкусовые предпочтения, финансовые возможности, аллергические реакции. Приложение рекомендует рецепты на завтрак, обед, ужин.",
       "short_description": "sdlfkjsdlfkjsdf",
       "achievements": [
-        "1ksadsadfasdl;fjkasdl",
-        "sdfsdf",
-        "sfdsf"
+        {
+          "title": "1ksadsadfasdl;fjkasdl",
+          "place": "1 place"
+        },
+        {
+          "title": "sdfsdf",
+          "place": "1 place"
+        },
+        {
+          "title": "sfdsf",
+          "place": "1 place"
+        }
       ],
       "industry_id": 0,
       "presentation_address": "http://www.africau.edu/images/default/sample.pdf",
@@ -57,9 +66,18 @@
       "description": "string",
       "short_description": "sdlfkjsdlfkjsdf",
       "achievements": [
-        "1ksadsadfasdl;fjkasdl",
-        "sdfsdf",
-        "sfdsf"
+        {
+          "title": "1ksadsadfasdl;fjkasdl",
+          "place": "1 place"
+        },
+        {
+          "title": "sdfsdf",
+          "place": "1 place"
+        },
+        {
+          "title": "sfdsf",
+          "place": "1 place"
+        }
       ],
       "industry_id": 0,
       "presentation_address": "string",
@@ -76,6 +94,20 @@
       ],
       "leader_info": "string",
       "leader_id": 1
+    }
+  ],
+  "vacancy": [
+    {
+      "role": "asdf",
+      "requirements": [
+        "asf",
+        "asdfasdf"
+      ],
+      "project_id": 0,
+      "project_name": "",
+      "taken": false,
+      "description": "",
+      "id": 2
     }
   ],
   "project-count": {

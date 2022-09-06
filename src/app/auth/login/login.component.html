@@ -12,10 +12,10 @@
         formControlName="email"
         placeholder="Введите почту"
       ></app-input>
-      <div *ngIf="email | controlError: 'email'" class="text-body-14 auth__error">
+      <div *ngIf="email | controlError: 'email'" class="text-body-14 error">
         {{ errorMessage.VALIDATION_EMAIL }}
       </div>
-      <div *ngIf="email | controlError: 'required'" class="text-body-14 auth__error">
+      <div *ngIf="email | controlError: 'required'" class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
     </fieldset>
@@ -28,11 +28,11 @@
         formControlName="password"
         placeholder="Пароль"
       ></app-input>
-      <div *ngIf="password | controlError: 'required'" class="text-body-14 auth__error">
+      <div *ngIf="password | controlError: 'required'" class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
     </fieldset>
-    <div *ngIf="errorWrongAuth" class="text-body-14 auth__error">
+    <div *ngIf="errorWrongAuth" class="text-body-14 error">
       {{ errorMessage.AUTH_WRONG_AUTH }}
     </div>
     <app-button class="auth__button">

@@ -5,7 +5,7 @@ export class Project {
   name!: string;
   description!: string;
   shortDescription!: string;
-  achievements!: string;
+  achievements!: { title: string; place: string }[];
   industryId!: number;
   presentationAddress!: string;
   imageAddress!: string;
@@ -27,7 +27,7 @@ export class Project {
       name: "string",
       description: "string",
       shortDescription: "string",
-      achievements: "string",
+      achievements: [{ title: "sdf", place: "dsaf" }],
       industryId: 0,
       presentationAddress: "string",
       imageAddress: "string",

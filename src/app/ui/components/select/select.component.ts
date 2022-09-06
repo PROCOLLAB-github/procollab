@@ -17,7 +17,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 })
 export class SelectComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";
-  @Input() options: { value: string; label: string; id: number }[] = [];
+  @Input() options: { value: string | number; label: string; id: number }[] = [];
 
   isOpen = false;
 
@@ -26,8 +26,8 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit(): void {}
 
-  writeValue(label: string) {
-    this.selectedId = this.getId(label);
+  writeValue(id: number) {
+    this.selectedId = id;
   }
 
   disabled = false;
@@ -35,7 +35,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  onChange: (value: string) => void = () => {};
+  onChange: (value: string | number) => void = () => {};
   registerOnChange(fn: any) {
     this.onChange = fn;
   }
@@ -61,7 +61,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
     return this.options.find(el => el.id === optionId)?.label;
   }
 
-  getValue(optionId: number): string | undefined {
+  getValue(optionId: number): string | number | undefined {
     return this.options.find(el => el.id === optionId)?.value;
   }
 

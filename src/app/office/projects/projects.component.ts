@@ -3,7 +3,8 @@
 import { Component, OnInit } from "@angular/core";
 import { NavService } from "../services/nav.service";
 import { ActivatedRoute } from "@angular/router";
-import { pluck } from "rxjs";
+import { Observable, pluck } from "rxjs";
+import { ProjectCount } from "../models/project.model";
 
 @Component({
   selector: "app-projects",
@@ -13,7 +14,7 @@ import { pluck } from "rxjs";
 export class ProjectsComponent implements OnInit {
   constructor(private navService: NavService, private route: ActivatedRoute) {}
 
-  projectsCount$ = this.route.data.pipe(pluck("data"));
+  projectsCount$: Observable<ProjectCount> = this.route.data.pipe(pluck("data"));
 
   ngOnInit(): void {
     this.navService.setNavTitle("Проекты");

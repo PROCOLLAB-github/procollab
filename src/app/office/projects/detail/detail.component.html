@@ -10,6 +10,7 @@
       </span>
     </p>
     <a
+      *ngIf="project.presentationAddress"
       class="text-bold-body-14 info__presentation"
       [href]="project.presentationAddress"
       target="_blank"
@@ -43,7 +44,18 @@
       </a>
     </ul>
   </div>
-  <div class="project__section project__vacancy"></div>
+  <div *ngIf="vacancies$ | async as vacancies" class="vacancies project__section project__vacancy">
+    <h3 class="text-bold-body-16 team__title">Вакансии</h3>
+    <ul class="vacancies__list">
+      <li *ngFor="let vacancy of vacancies" class="vacancy">
+        <div class="vacancy__info">
+          <span class="text-bold-body-14 vacancy__title">{{ vacancy.role }}</span>
+          <a class="text-body-12 vacancy__action" [routerLink]="['.']">Откликнуться</a>
+        </div>
+        <p class="text-body-12 vacancy__requirements">{{ vacancy.requirements.join(" • ") }}</p>
+      </li>
+    </ul>
+  </div>
   <div class="about project__section project__about">
     <h3 class="text-bold-body-16 about__title">О проекте</h3>
     <p class="text-body-14 about__text" [class.about__text--hide]="!readFull">

@@ -48,3 +48,11 @@ label.field-label {
 
   @include body-14;
 }
+
+
+
+.error {
+  display: block;
+  margin-top: 6px;
+  color: var(--red);
+}

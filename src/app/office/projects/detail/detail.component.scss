@@ -110,3 +110,39 @@
     }
   }
 }
+
+.vacancies {
+  &__title {
+    margin-bottom: 12px;
+    color: var(--black);
+  }
+
+  li {
+    &:not(:last-child) {
+      margin-bottom: 12px;
+    }
+  }
+}
+
+.vacancy {
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3px;
+  }
+
+  &__action {
+    color: var(--accent);
+    text-decoration: underline;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--accent-dark);
+    }
+  }
+
+  &__requirements {
+    color: var(--dark-gray);
+  }
+}

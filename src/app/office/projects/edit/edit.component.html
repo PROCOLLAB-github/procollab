@@ -1,0 +1,140 @@
+<!-- @format -->
+
+<main class="project">
+  <form [formGroup]="projectForm">
+    <div class="project__inner">
+      <div class="project__column">
+        <fieldset *ngIf="projectForm.get('name') as name">
+          <label class="field-label" for="name">Название проекта</label>
+          <app-input
+            id="name"
+            formControlName="name"
+            [error]="name | controlError"
+            placeholder="Например: procollab"
+          ></app-input>
+          <div *ngIf="name | controlError: 'required'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+        <fieldset *ngIf="projectForm.get('industry') as industry">
+          <label class="field-label" for="industry">Сфера проекта</label>
+          <app-select
+            *ngIf="industries$ | async as industries"
+            id="industry"
+            formControlName="industry"
+            placeholder="Выберите сферу к которой относится ваш проект"
+            [options]="industries"
+          ></app-select>
+          <div *ngIf="industry | controlError: 'required'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+        <fieldset *ngIf="projectForm.get('description') as description">
+          <label for="description" class="field-label">Информация о проекте</label>
+          <app-textarea
+            id="description"
+            formControlName="description"
+            placeholder="Напишите кратко о своем проекте, его суть"
+          ></app-textarea>
+        </fieldset>
+        <div>
+          <label for="achievements" class="field-label">Достижения</label>
+          <ng-container formArrayName="achievements">
+            <ul id="achievements" class="project__achievements-list">
+              <li
+                *ngFor="let achievement of achievements.controls; index as i"
+                class="project__achievement-item"
+              >
+                <form [formGroupName]="i" class="achievement">
+                  <div class="achievement__first-row">
+                    <fieldset *ngIf="achievements.at(i)?.get('title') as title">
+                      <app-input
+                        [error]="title | controlError"
+                        placeholder="Название конкурса"
+                        formControlName="title"
+                      ></app-input>
+                      <div *ngIf="title | controlError: 'required'" class="text-body-14 error">
+                        {{ errorMessage.VALIDATION_REQUIRED }}
+                      </div>
+                    </fieldset>
+                    <app-button
+                      class="achievement__remove"
+                      color="red"
+                      (click)="removeAchievement(i)"
+                    >
+                      <span>Удалить</span>
+                      <i appIcon icon="basket" appSquare="24"></i>
+                    </app-button>
+                  </div>
+                  <fieldset *ngIf="achievements.at(i).get('place') as place">
+                    <app-input
+                      [error]="place | controlError"
+                      placeholder="Занятое место"
+                      formControlName="place"
+                    ></app-input>
+                    <div *ngIf="place | controlError: 'required'" class="text-body-14 error">
+                      {{ errorMessage.VALIDATION_REQUIRED }}
+                    </div>
+                  </fieldset>
+                </form>
+              </li>
+            </ul>
+            <app-button class="project__add-achievement" (click)="addAchievement()">
+              <span>Добавить достижение</span>
+              <i appIcon icon="plus" appSquare="24"></i>
+            </app-button>
+          </ng-container>
+        </div>
+      </div>
+      <div class="project__column">
+        <div class="vacancy">
+          <h2 class="text-heading-4 vacancy__title">Создание вакансии</h2>
+          <ul class="vacancy__list">
+            <li *ngFor="let vacancy of vacancies" class="vacancy__item">
+              <app-vacancy-card
+                [vacancy]="vacancy"
+                (remove)="removeVacancy($event)"
+              ></app-vacancy-card>
+            </li>
+          </ul>
+          <form [formGroup]="vacancyForm">
+            <fieldset class="vacancy__role" *ngIf="vacancyForm.get('role') as role">
+              <app-input
+                id="vacancy_role"
+                formControlName="role"
+                [error]="role | controlError"
+                placeholder="Роль"
+              ></app-input>
+              <div *ngIf="role | controlError: 'required'" class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+            </fieldset>
+            <fieldset>
+              <ul class="vacancy__form-list">
+                <li *ngFor="let skill of requirements.controls; index as i" class="vacancy__skill">
+                  <app-tag class="skill">
+                    <span>{{ skill.value }}</span>
+                    <i appIcon icon="basket" appSquare="24" (click)="removeRequirement(i)"></i>
+                  </app-tag>
+                </li>
+              </ul>
+              <div class="vacancy__form-skill-add">
+                <app-input
+                  placeholder="Навыки требуемого специалиста"
+                  [(appValue)]="requirementTitle"
+                ></app-input>
+                <app-button (click)="addRequirement()">
+                  <i appIcon icon="check" appWidth="12" appHeight="10"></i>
+                </app-button>
+              </div>
+            </fieldset>
+            <app-button class="vacancy__submit" (click)="submitVacancy()">
+              <span>Создать вакансию</span>
+              <i appIcon icon="person" appSquare="24"></i>
+            </app-button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </form>
+</main>

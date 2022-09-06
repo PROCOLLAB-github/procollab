@@ -1,0 +1,99 @@
+.project {
+  padding: 24px;
+  margin-bottom: 100px;
+  background-color: var(--white);
+  border-radius: var(--rounded-md);
+
+  &__inner {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &__column {
+    flex-basis: 50%;
+
+    &:first-child {
+      margin-right: 80px;
+    }
+
+    > fieldset {
+      margin-bottom: 20px;
+    }
+  }
+
+  &__add-achievement {
+    display: block;
+    margin-top: 12px;
+  }
+
+  &__achievement-item {
+    &:not(:last-child) {
+      margin-bottom: 12px;
+    }
+  }
+}
+
+.achievement {
+  &__first-row {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+
+    > *:first-child {
+      flex-grow: 1;
+    }
+  }
+
+  &__remove {
+    width: 155px;
+    margin-left: 10px;
+  }
+}
+
+.vacancy {
+  &__item {
+    margin-bottom: 12px;
+  }
+
+  &__form-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__skill {
+    margin-bottom: 12px;
+
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+
+  &__role {
+    margin-bottom: 12px;
+  }
+
+  &__form-skill-add {
+    display: flex;
+
+    app-input {
+      flex-grow: 1;
+      margin-right: 6px;
+    }
+
+    app-button {
+      width: 52px;
+    }
+  }
+
+  &__submit {
+    display: block;
+    margin-top: 12px;
+  }
+}
+
+.skill {
+  i {
+    color: var(--red);
+    cursor: pointer;
+  }
+}
