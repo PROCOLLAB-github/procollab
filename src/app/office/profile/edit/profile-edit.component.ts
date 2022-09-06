@@ -48,7 +48,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         aboutMe: profile.aboutMe ?? "",
       });
 
-      profile.achievements?.forEach(achievement => this.addAchievement(achievement));
+      profile.achievements?.forEach(achievement =>
+        this.addAchievement(achievement.title, achievement.place)
+      );
       profile.keySkills?.forEach(skill => this.addKeySkill(skill));
     });
   }
@@ -73,13 +75,13 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   profileFormSubmitting = false;
   profileForm: FormGroup;
 
-  newAchievementTitle = "";
-  addAchievement(title?: string): void {
-    const fromState = title ?? this.newAchievementTitle;
-    const control = this.fb.control(fromState, [Validators.required]);
-    this.achievements.push(control);
-
-    this.newAchievementTitle = "";
+  addAchievement(title?: string, place?: string): void {
+    this.achievements.push(
+      this.fb.group({
+        title: [title ?? "", [Validators.required]],
+        place: [place ?? "", [Validators.required]],
+      })
+    );
   }
 
   removeAchievement(i: number): void {

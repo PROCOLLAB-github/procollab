@@ -139,8 +139,18 @@
         "wer"
       ],
       "achievements": [
-        "1ksadsadfasdl;fjkasdl",
-        "sfdsf"
+        {
+          "title": "sadfs",
+          "place": "fsdfsd"
+        },
+        {
+          "title": "sdfsdf",
+          "place": "1 place"
+        },
+        {
+          "title": "sfdsf",
+          "place": "1 place"
+        }
       ],
       "about_me": "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
       "id": 0
@@ -157,52 +167,21 @@
         "sadf"
       ],
       "achievements": [
-        "1ksadsadfasdl;fjkasdl",
-        "sdfsdf",
-        "sfdsf"
+        {
+          "title": "1ksadsadfasdl;fjkasdl",
+          "place": "1 place"
+        },
+        {
+          "title": "sdfsdf",
+          "place": "1 place"
+        },
+        {
+          "title": "sfdsf",
+          "place": "1 place"
+        }
       ],
       "about_me": "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
       "id": 1
-    },
-    {
-      "name": "Егор",
-      "surname": "Токарев",
-      "status": "Ментор",
-      "birthday": "23.42.3423",
-      "city": "234sadfas",
-      "organisation": "dfasdfasdf",
-      "speciality": "asdfasdfasd",
-      "key_skills": [
-        "sadf"
-      ],
-      "achievements": [
-        "1ksadsadfasdl;fjkasdl",
-        "sdfsdf",
-        "sfdsf"
-      ],
-      "about_me": "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
-      "id": 2
-    },
-    {
-      "name": "Егор",
-      "surname": "Токарев",
-      "status": "Ментор",
-      "birthday": "23.42.3423",
-      "city": "234sadfas",
-      "organisation": "dfasdfasdf",
-      "speciality": "asdfasdfasd",
-      "key_skills": [
-        "sadf",
-        "sadf",
-        "sadf"
-      ],
-      "achievements": [
-        "1ksadsadfasdl;fjkasdl",
-        "sdfsdf",
-        "sfdsf"
-      ],
-      "about_me": "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
-      "id": 3
     }
   ]
 }

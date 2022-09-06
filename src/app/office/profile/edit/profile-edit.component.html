@@ -141,31 +141,45 @@
               *ngFor="let control of achievements.controls; index as i"
               class="profile__achievement"
             >
-              <fieldset class="achievement">
-                <app-input
-                  class="achievement__input"
-                  [formControlName]="i"
-                  [error]="control | controlError"
-                ></app-input>
-                <app-button class="achievement__remove" color="red" (click)="removeAchievement(i)">
-                  <span>Удалить</span>
-                  <i class="achievement__basket" appIcon icon="basket" appSquare="24"></i>
-                </app-button>
-              </fieldset>
+              <form [formGroupName]="i" class="achievement">
+                <div class="achievement__first-row">
+                  <fieldset *ngIf="achievements.at(i)?.get('title') as title">
+                    <app-input
+                      [error]="title | controlError"
+                      placeholder="Название конкурса"
+                      formControlName="title"
+                    ></app-input>
+                    <div *ngIf="title | controlError: 'required'" class="text-body-14 error">
+                      {{ errorMessage.VALIDATION_REQUIRED }}
+                    </div>
+                  </fieldset>
+                  <app-button
+                    class="achievement__remove"
+                    color="red"
+                    (click)="removeAchievement(i)"
+                  >
+                    <span>Удалить</span>
+                    <i appIcon icon="basket" appSquare="24"></i>
+                  </app-button>
+                </div>
+                <fieldset *ngIf="achievements.at(i).get('place') as place">
+                  <app-input
+                    [error]="place | controlError"
+                    placeholder="Занятое место"
+                    formControlName="place"
+                  ></app-input>
+                  <div *ngIf="place | controlError: 'required'" class="text-body-14 error">
+                    {{ errorMessage.VALIDATION_REQUIRED }}
+                  </div>
+                </fieldset>
+              </form>
             </li>
           </ul>
         </ng-container>
-        <div class="achievement-form">
-          <app-input
-            [(appValue)]="newAchievementTitle"
-            class="achievement-form__input"
-            placeholder="Занятое место"
-          ></app-input>
-          <app-button class="profile__add-achievement" (click)="addAchievement()">
-            <span>Добавить новое достижение</span>
-            <i appIcon icon="plus" appSquare="24"></i>
-          </app-button>
-        </div>
+        <app-button class="profile__add-achievement" (click)="addAchievement()">
+          <span>Добавить новое достижение</span>
+          <i appIcon icon="plus" appSquare="24"></i>
+        </app-button>
       </div>
     </div>
     <div class="profile__column">

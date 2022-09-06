@@ -56,21 +56,6 @@
   }
 }
 
-.achievement {
-  display: flex;
-  align-items: center;
-
-  &__input {
-    flex-basis: 75%;
-    margin-right: 10px;
-  }
-
-  &__basket {
-    flex-shrink: 0;
-    color: var(--white);
-  }
-}
-
 .achievement-form {
   &__input {
     display: block;
@@ -108,5 +93,22 @@
 
   &__button {
     width: 52px;
+  }
+}
+
+.achievement {
+  &__first-row {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+
+    > :first-child {
+      flex-grow: 1;
+    }
+  }
+
+  &__remove {
+    width: 155px;
+    margin-left: 10px;
   }
 }

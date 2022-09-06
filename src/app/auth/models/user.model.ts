@@ -16,7 +16,7 @@ export class User {
   city!: string;
   region!: string;
   organisation!: string;
-  achievements!: string[];
+  achievements!: { title: string; place: string }[];
   tags!: string;
   timeCreated!: string;
   timeUpdated!: string;
@@ -31,7 +31,7 @@ export class User {
       organisation: "dfasdfasdf",
       speciality: "asdfasdfasd",
       keySkills: ["sadf"],
-      achievements: ["1ksadsadfasdl;fjkasdl", "sdfsdf", "sfdsf"],
+      achievements: [{ title: "string", place: "string" }],
       aboutMe: "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
       id: 0,
       timeCreated: "",
