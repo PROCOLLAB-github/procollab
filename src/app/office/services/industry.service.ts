@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService } from "../../core/services";
-import { BehaviorSubject, map, Observable, tap } from "rxjs";
+import { BehaviorSubject, catchError, map, Observable, tap, throwError } from "rxjs";
 import { Industry } from "../models/industry.model";
 import { plainToClass } from "class-transformer";
 
@@ -17,6 +17,7 @@ export class IndustryService {
 
   getAll(): Observable<Industry[]> {
     return this.apiService.get<Industry[]>("/industry").pipe(
+      catchError(err => throwError(err)),
       map(industries => plainToClass(Industry, industries)),
       tap(industries => {
         this.industries$.next(industries);

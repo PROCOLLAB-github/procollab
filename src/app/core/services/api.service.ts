@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { first, Observable } from "rxjs";
 import { environment } from "../../../environments/environment";
 
@@ -11,9 +11,9 @@ import { environment } from "../../../environments/environment";
 export class ApiService {
   constructor(private http: HttpClient) {}
 
-  get<T>(path: string, params?: any, options?: any): Observable<T> {
+  get<T>(path: string, params?: HttpParams, options?: object): Observable<T> {
     return this.http
-      .get<T>(environment.apiUrl + path, { params, ...options })
+      .get(environment.apiUrl + path, { ...params, ...options })
       .pipe(first()) as Observable<T>;
   }
 

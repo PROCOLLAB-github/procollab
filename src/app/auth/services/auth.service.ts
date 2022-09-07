@@ -32,7 +32,7 @@ export class AuthService {
 
   refreshTokens(): Observable<RefreshResponse> {
     return this.apiService
-      .post("/auth/refresh-tokens", { refresh_token: localStorage.getItem("refreshToken") })
+      .post("/auth/refresh-tokens", { refreshToken: localStorage.getItem("refreshToken") })
       .pipe(map(json => plainToClass(RefreshResponse, json)));
   }
 
@@ -47,6 +47,11 @@ export class AuthService {
     }
 
     return { accessToken: accessToken as string, refreshToken: accessToken as string };
+  }
+
+  clearTokens(): void {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
   }
 
   memTokens(tokens: Tokens, session = false): void {

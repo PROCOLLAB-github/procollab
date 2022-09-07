@@ -14,6 +14,8 @@ import { AuthService } from "../../auth/services";
 @Injectable()
 export class BearerTokenInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
+  private retry = 0;
+  private retryCount = 3;
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const headers: Record<string, string> = {
@@ -27,33 +29,45 @@ export class BearerTokenInterceptor implements HttpInterceptor {
     }
 
     const req = request.clone({ setHeaders: headers });
-    return next.handle(req).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          return this.authService.refreshTokens().pipe(
-            switchMap(res => {
-              this.authService.memTokens(res);
-              const headers: Record<string, string> = {
-                Accept: "application/json",
-              };
+    if (tokens !== null && this.retry < this.retryCount) {
+      return next.handle(req).pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.retry++;
+            return this.handle401(request, next);
+          }
 
-              const tokens = this.authService.getTokens();
+          return throwError(() => error);
+        })
+      );
+    } else {
+      return next.handle(request);
+    }
+  }
 
-              if (tokens) {
-                // eslint-disable-next-line
-                headers["Authorization"] = `Bearer ${tokens.accessToken}`;
-              }
+  private handle401(
+    request: HttpRequest<unknown>,
+    next: HttpHandler
+  ): Observable<HttpEvent<unknown>> {
+    return this.authService.refreshTokens().pipe(
+      switchMap(res => {
+        this.authService.memTokens(res);
+        const headers: Record<string, string> = {
+          Accept: "application/json",
+        };
 
-              return next.handle(
-                request.clone({
-                  setHeaders: headers,
-                })
-              );
-            })
-          );
+        const tokens = this.authService.getTokens();
+
+        if (tokens) {
+          // eslint-disable-next-line
+          headers["Authorization"] = `Bearer ${tokens.accessToken}`;
         }
 
-        return throwError(() => error);
+        return next.handle(
+          request.clone({
+            setHeaders: headers,
+          })
+        );
       })
     );
   }

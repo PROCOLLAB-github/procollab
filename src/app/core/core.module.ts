@@ -14,12 +14,12 @@ import { ControlErrorPipe } from "./pipes/control-error.pipe";
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: BearerTokenInterceptor,
+      useClass: CamelcaseInterceptor,
       multi: true,
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: CamelcaseInterceptor,
+      useClass: BearerTokenInterceptor,
       multi: true,
     },
     ApiService,
