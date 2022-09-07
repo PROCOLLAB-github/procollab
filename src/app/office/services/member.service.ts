@@ -13,6 +13,8 @@ export class MemberService {
   constructor(private apiService: ApiService) {}
 
   getMembers(): Observable<User[]> {
-    return this.apiService.get<User[]>("/member/all").pipe(map(users => plainToClass(User, users)));
+    return this.apiService
+      .get<User[]>("/members/all")
+      .pipe(map(users => plainToClass(User, users)));
   }
 }

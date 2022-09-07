@@ -22,6 +22,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.profileForm = this.fb.group({
       name: ["", [Validators.required]],
       surname: ["", [Validators.required]],
+      email: [""],
       status: ["", [Validators.required]],
       birthday: ["", [Validators.required]],
       city: ["", [Validators.required]],
@@ -40,6 +41,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       this.profileForm.patchValue({
         name: profile.name ?? "",
         surname: profile.surname ?? "",
+        email: profile.email ?? "",
         status: profile.status ?? "",
         birthday: profile.birthday ?? "",
         city: profile.city ?? "",

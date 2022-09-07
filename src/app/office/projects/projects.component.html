@@ -7,13 +7,13 @@
         <a class="bar__link" routerLink="/office/projects/my" routerLinkActive="bar__link--active">
           <li class="text-body-14 bar__item">
             Мои проекты
-            <div class="bar__ball">{{ count.my }}</div>
+            <div class="bar__ball" [class.bar__ball--small]="count.my < 10">{{ count.my }}</div>
           </li>
         </a>
         <a class="bar__link" routerLink="/office/projects/all" routerLinkActive="bar__link--active">
           <li class="text-body-14 bar__item">
             Все проекты
-            <div class="bar__ball">{{ count.all }}</div>
+            <div class="bar__ball" [class.bar__ball--small]="count.all < 10">{{ count.all }}</div>
           </li>
         </a>
       </ul>

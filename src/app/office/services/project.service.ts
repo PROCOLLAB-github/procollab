@@ -14,7 +14,7 @@ export class ProjectService {
 
   getAll(): Observable<Project[]> {
     return this.apiService
-      .get<Project[]>("/project/all")
+      .get<Project[]>("/project/all/")
       .pipe(map(projects => plainToClass(Project, projects)));
   }
 
@@ -26,13 +26,13 @@ export class ProjectService {
 
   getMy(): Observable<Project[]> {
     return this.apiService
-      .get<Project[]>("/project/my")
+      .get<Project[]>("/project/my/")
       .pipe(map(projects => plainToClass(Project, projects)));
   }
 
   getCount(): Observable<ProjectCount> {
     return this.apiService
-      .get("/project/count")
+      .get("/project/count/")
       .pipe(map(count => plainToClass(ProjectCount, count)));
   }
 
@@ -41,11 +41,8 @@ export class ProjectService {
   }
 
   create(): Observable<Project> {
-    return (
-      this.apiService
-        // TODO remove body after release
-        .post("/project/create", Project.default())
-        .pipe(map(project => plainToClass(Project, project)))
-    );
+    return this.apiService
+      .post("/project/create", {})
+      .pipe(map(project => plainToClass(Project, project)));
   }
 }
