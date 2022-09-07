@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
 import { ErrorMessage } from "../../error/models/error-message";
@@ -18,7 +18,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private cdref: ChangeDetectorRef
   ) {
     this.loginForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
@@ -41,16 +42,16 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    setTimeout(() => {
-      this.loginIsSubmitting = true;
-    });
+    this.loginIsSubmitting = true;
 
     this.authService.login(this.loginForm.value).subscribe(
       res => {
         this.authService.memTokens(res, !this.loginMem);
-        this.router.navigateByUrl("/office");
-
         this.loginIsSubmitting = false;
+
+        this.cdref.detectChanges();
+
+        this.router.navigateByUrl("/office");
       },
       error => {
         this.loginIsSubmitting = false;
@@ -58,6 +59,8 @@ export class LoginComponent implements OnInit {
         if (error.status === 403) {
           this.errorWrongAuth = true;
         }
+
+        this.cdref.detectChanges();
       }
     );
   }

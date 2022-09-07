@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start:mock": "./node_modules/.bin/json-server --delay 200 --no-corse -p 3333 --watch mock.json -r routes.json",
+    "start:mock": "./node_modules/.bin/json-server --delay 2000 --no-corse -p 3333 --watch mock.json -r routes.json",
     "build": "npm run build:sprite && ng build",
     "watch": "ng build --watch --configuration development",
     "build:sprite": "svg2sprite ./src/assets/icons/svg ./src/assets/icons/sprite.svg --stripAttrs class",

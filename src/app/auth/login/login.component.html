@@ -35,7 +35,7 @@
     <div *ngIf="errorWrongAuth" class="text-body-14 error">
       {{ errorMessage.AUTH_WRONG_AUTH }}
     </div>
-    <app-button class="auth__button">
+    <app-button [loader]="loginIsSubmitting" class="auth__button" type="submit">
       <span>Войти</span>
       <i
         class="auth__button-icon"

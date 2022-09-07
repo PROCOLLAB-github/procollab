@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
 import { ValidationService } from "../../core/services";
@@ -18,7 +18,8 @@ export class RegisterComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private cdref: ChangeDetectorRef
   ) {
     this.registerForm = this.fb.group({
       name: ["", [Validators.required]],
@@ -53,9 +54,7 @@ export class RegisterComponent implements OnInit {
     const form = { ...this.registerForm.value };
     delete form.repeatedPassword;
 
-    setTimeout(() => {
-      this.registerIsSubmitting = true;
-    });
+    this.registerIsSubmitting = true;
 
     this.authService.register(form).subscribe(
       res => {
@@ -63,9 +62,12 @@ export class RegisterComponent implements OnInit {
         this.router.navigateByUrl("/office/profile/edit");
 
         this.registerIsSubmitting = false;
+
+        this.cdref.detectChanges();
       },
       () => {
         this.registerIsSubmitting = false;
+        this.cdref.detectChanges();
       }
     );
   }
