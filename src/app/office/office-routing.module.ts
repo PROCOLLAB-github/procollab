@@ -5,7 +5,7 @@ import { NgModule } from "@angular/core";
 import { OfficeComponent } from "./office.component";
 import { ProjectsComponent } from "./projects/projects.component";
 import { ChatComponent } from "./chat/chat.component";
-import { NewsComponent } from "./news/news.component";
+import { NewsAllComponent } from "./news/all/all.component";
 import { ProfileDetailComponent } from "./profile/detail/profile-detail.component";
 import { ProfileEditComponent } from "./profile/edit/profile-edit.component";
 import { ProfileDetailResolver } from "./profile/detail/profile-detail.resolver";
@@ -19,6 +19,9 @@ import { ProjectDetailComponent } from "./projects/detail/detail.component";
 import { ProjectDetailResolver } from "./projects/detail/detail.resolver";
 import { ProjectEditComponent } from "./projects/edit/edit.component";
 import { ProjectEditResolver } from "./projects/edit/edit.resolver";
+import { NewsAllResolver } from "./news/all/all.resolver";
+import { NewsDetailComponent } from "./news/detail/detail.component";
+import { NewsDetailResolver } from "./news/detail/detail.resolver";
 
 const routes: Routes = [
   {
@@ -85,7 +88,17 @@ const routes: Routes = [
       },
       {
         path: "news",
-        component: NewsComponent,
+        component: NewsAllComponent,
+        resolve: {
+          data: NewsAllResolver,
+        },
+      },
+      {
+        path: "news/:advertId",
+        component: NewsDetailComponent,
+        resolve: {
+          data: NewsDetailResolver,
+        },
       },
       {
         path: "profile/edit",

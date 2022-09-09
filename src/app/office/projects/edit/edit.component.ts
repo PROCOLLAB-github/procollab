@@ -11,6 +11,8 @@ import { Project } from "../../models/project.model";
 import { Vacancy } from "../../models/vacancy.model";
 import { ValidationService } from "../../../core/services";
 import { VacancyService } from "../../services/vacancy.service";
+import { InviteService } from "../../services/invite.service";
+import { User } from "../../../auth/models/user.model";
 
 @Component({
   selector: "app-edit",
@@ -24,7 +26,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private industryService: IndustryService,
     private navService: NavService,
     private validationService: ValidationService,
-    private vacancyService: VacancyService
+    private vacancyService: VacancyService,
+    private inviteService: InviteService
   ) {
     this.projectForm = this.fb.group({
       name: ["", [Validators.required]],
@@ -37,6 +40,18 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       role: ["", [Validators.required]],
       requirements: this.fb.array([]),
     });
+
+    this.inviteForm = this.fb.group({
+      role: ["", [Validators.required]],
+      // eslint-disable-next-line
+      link: [
+        "",
+        [
+          Validators.required,
+          Validators.pattern(/^http(s)?:\/\/\w+(:[0-9]*)?\/office\/profile\/\d+$/),
+        ],
+      ],
+    });
   }
 
   ngOnInit(): void {
@@ -46,7 +61,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.profile$ = this.route.data
       .pipe(pluck("data"))
-      .subscribe(([project, vacancies]: [Project, Vacancy[]]) => {
+      .subscribe(([project, vacancies, invites]: [Project, Vacancy[], User[]]) => {
         this.projectForm.patchValue({
           name: project.name,
           industry: project.industryId,
@@ -59,6 +74,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         );
 
         this.vacancies = vacancies;
+
+        this.invites = invites;
       });
   }
 
@@ -100,7 +117,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   vacancyIsSubmitting = false;
 
-  submitVacancy() {
+  submitVacancy(): void {
     if (!this.validationService.getFormValidation(this.vacancyForm)) {
       return;
     }
@@ -132,6 +149,46 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.vacancyService.deleteVacancy(vacancyId).subscribe(() => {
       const index = this.vacancies.findIndex(vacancy => vacancy.id === vacancyId);
       this.vacancies.splice(index, 1);
+    });
+  }
+
+  inviteForm: FormGroup;
+  inviteFormIsSubmitting = false;
+
+  invites: User[] = [];
+
+  submitInvite(): void {
+    if (!this.validationService.getFormValidation(this.inviteForm)) {
+      return;
+    }
+
+    this.inviteFormIsSubmitting = true;
+
+    const link = new URL(this.inviteForm.get("link")?.value);
+
+    // Sure that it's works because of regex validation
+    const path = link.pathname.split("/");
+    this.inviteService
+      .sendForUser(
+        Number(path[path.length - 1]),
+        Number(this.route.snapshot.paramMap.get("projectId"))
+      )
+      .subscribe(
+        profile => {
+          this.inviteFormIsSubmitting = false;
+
+          this.invites.push(profile);
+        },
+        () => {
+          this.inviteFormIsSubmitting = false;
+        }
+      );
+  }
+
+  removeInvitation(invitationId: number): void {
+    this.inviteService.revokeInvite(invitationId).subscribe(() => {
+      const index = this.invites.findIndex(invite => invite.id === invitationId);
+      this.invites.splice(index, 1);
     });
   }
 

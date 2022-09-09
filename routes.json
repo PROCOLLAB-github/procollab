@@ -10,10 +10,17 @@
   "/project/update/:project_id": "/projects/:project_id",
   "/project/create": "/projects",
   "/project/my": "/projects/?leader_id=0",
-  "/project/all": "/projects",
+  "/project/all": "/projects/?draft=false",
   "/project/count": "/project-count",
   "/project/:project_id": "/projects/:project_id",
 
   "/vacancy/project/:project_id": "/vacancy/?project_id=:project_id",
-  "/vacancy/create": "/vacancy"
+  "/vacancy/create": "/vacancy",
+
+  "/invite/send": "/profile/1",
+  "/invite/revoke/:invite_id": "/empty",
+  "/invite/all/:project_id": "/profile",
+
+  "/advert/all": "/article",
+  "/advert/:advert_id": "/article/:advert_id"
 }

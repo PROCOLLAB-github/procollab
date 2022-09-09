@@ -1,0 +1,25 @@
+.invite {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--light-gray);
+  border-radius: var(--rounded-md);
+
+  &__role {
+    color: var(--black);
+  }
+
+  &__requirements {
+    color: var(--dark-gray);
+  }
+
+  &__status {
+    margin: 0 10px 0 auto;
+    color: var(--accent);
+  }
+
+  &__cross {
+    color: var(--red);
+    cursor: pointer;
+  }
+}

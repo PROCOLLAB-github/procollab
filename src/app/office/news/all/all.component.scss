@@ -1,0 +1,29 @@
+.news {
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 24px;
+  }
+
+  &__advert {
+    place-self: stretch stretch;
+    cursor: pointer;
+
+    li {
+      height: 100%;
+    }
+
+    &:first-child {
+      grid-row: span 2;
+      grid-column: span 3;
+    }
+
+    &:nth-child(-n + 3) {
+      grid-column: span 3;
+    }
+
+    &:nth-child(n + 4) {
+      grid-column: span 2;
+    }
+  }
+}

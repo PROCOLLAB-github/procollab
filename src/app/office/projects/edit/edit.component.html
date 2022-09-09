@@ -87,6 +87,47 @@
         </div>
       </div>
       <div class="project__column">
+        <div class="invite">
+          <h2 class="text-heading-4 invite__title">Приглашение участников</h2>
+          <ul class="invite__list">
+            <li *ngFor="let user of invites" class="invite__item">
+              <app-invite-card [user]="user" (remove)="removeInvitation($event)"></app-invite-card>
+            </li>
+          </ul>
+          <form [formGroup]="inviteForm">
+            <fieldset class="invite__role" *ngIf="inviteForm.get('role') as role">
+              <app-input
+                id="invite_role"
+                formControlName="role"
+                [error]="role | controlError"
+                placeholder="Роль"
+              ></app-input>
+              <div *ngIf="role | controlError: 'required'" class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+            </fieldset>
+            <fieldset class="invite__link" *ngIf="inviteForm.get('link') as link">
+              <app-input
+                id="invite_link"
+                formControlName="link"
+                [error]="link | controlError"
+                placeholder="https://procollab.ru/office/profile/1"
+              ></app-input>
+              <div *ngIf="link | controlError: 'required'" class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+            </fieldset>
+            <app-button
+              class="invite__submit"
+              [loader]="inviteFormIsSubmitting"
+              (click)="submitInvite()"
+            >
+              <span>Пригласить участника</span>
+              <i appIcon icon="plus" appSquare="24"></i>
+            </app-button>
+          </form>
+        </div>
+        <p class="text-body-14 project__or">или</p>
         <div class="vacancy">
           <h2 class="text-heading-4 vacancy__title">Создание вакансии</h2>
           <ul class="vacancy__list">
@@ -129,7 +170,11 @@
                 </app-button>
               </div>
             </fieldset>
-            <app-button class="vacancy__submit" (click)="submitVacancy()">
+            <app-button
+              class="vacancy__submit"
+              [loader]="vacancyIsSubmitting"
+              (click)="submitVacancy()"
+            >
               <span>Создать вакансию</span>
               <i appIcon icon="person" appSquare="24"></i>
             </app-button>

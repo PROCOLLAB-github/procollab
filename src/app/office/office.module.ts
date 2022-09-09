@@ -9,7 +9,7 @@ import { UiModule } from "../ui/ui.module";
 import { NavComponent } from "./shared/nav/nav.component";
 import { ProjectsComponent } from "./projects/projects.component";
 import { ChatComponent } from "./chat/chat.component";
-import { NewsComponent } from "./news/news.component";
+import { NewsAllComponent } from "./news/all/all.component";
 import { ProfileDetailComponent } from "./profile/detail/profile-detail.component";
 import { ProfileEditComponent } from "./profile/edit/profile-edit.component";
 import { CoreModule } from "../core/core.module";
@@ -20,7 +20,10 @@ import { ProjectCardComponent } from "./shared/project-card/project-card.compone
 import { ProjectsListComponent } from "./projects/list/list.component";
 import { ProjectDetailComponent } from "./projects/detail/detail.component";
 import { ProjectEditComponent } from "./projects/edit/edit.component";
-import { VacancyCardComponent } from './shared/vacancy-card/vacancy-card.component';
+import { VacancyCardComponent } from "./shared/vacancy-card/vacancy-card.component";
+import { InviteCardComponent } from "./shared/invite-card/invite-card.component";
+import { AdvertCardComponent } from "./shared/advert-card/advert-card.component";
+import { NewsDetailComponent } from "./news/detail/detail.component";
 
 @NgModule({
   declarations: [
@@ -29,7 +32,7 @@ import { VacancyCardComponent } from './shared/vacancy-card/vacancy-card.compone
     NavComponent,
     ProjectsComponent,
     ChatComponent,
-    NewsComponent,
+    NewsAllComponent,
     ProfileDetailComponent,
     ProfileEditComponent,
     MembersComponent,
@@ -39,6 +42,9 @@ import { VacancyCardComponent } from './shared/vacancy-card/vacancy-card.compone
     ProjectDetailComponent,
     ProjectEditComponent,
     VacancyCardComponent,
+    InviteCardComponent,
+    AdvertCardComponent,
+    NewsDetailComponent,
   ],
   imports: [OfficeRoutingModule, CommonModule, UiModule, CoreModule, ReactiveFormsModule],
 })

@@ -31,6 +31,11 @@
       margin-bottom: 12px;
     }
   }
+
+  &__or {
+    margin: 20px 0;
+    color: var(--dark-gray);
+  }
 }
 
 .achievement {
@@ -47,6 +52,24 @@
   &__remove {
     width: 155px;
     margin-left: 10px;
+  }
+}
+
+.invite {
+  &__title {
+    margin-bottom: 12px;
+  }
+
+  &__role {
+    margin-bottom: 12px;
+  }
+
+  &__link {
+    margin-bottom: 12px;
+  }
+
+  &__item {
+    margin-bottom: 12px;
   }
 }
 

@@ -1,0 +1,18 @@
+<!-- @format -->
+
+<main class="news">
+  <ul class="news__list">
+    <a
+      *ngFor="let advert of adverts$ | async; index as i"
+      class="news__advert"
+      [routerLink]="['/office/news', advert.id]"
+    >
+      <li>
+        <app-advert-card
+          [advert]="advert"
+          [layout]="i > 0 && i < 3 ? 'vertical' : 'horizontal'"
+        ></app-advert-card>
+      </li>
+    </a>
+  </ul>
+</main>

@@ -1,0 +1,40 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 24px;
+  background-color: var(--white);
+
+  &__cover {
+    width: 100%;
+    max-height: 325px;
+    object-fit: cover;
+    object-position: center;
+    margin-bottom: 24px;
+    border-radius: var(--rounded-md);
+  }
+
+  &__title {
+    margin-bottom: 6px;
+    color: var(--black);
+  }
+
+  &__text {
+    color: var(--dark-gray);
+  }
+
+  &--vertical {
+    flex-direction: row;
+
+    .card__body {
+      flex-basis: 75%;
+    }
+
+    .card__cover {
+      flex-basis: 25%;
+      height: 100%;
+      margin-right: 24px;
+      margin-bottom: 0;
+    }
+  }
+}
