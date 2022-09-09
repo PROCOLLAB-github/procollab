@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { NewsDetailComponent } from "./detail.component";
 import { RouterTestingModule } from "@angular/router/testing";
 
-describe("DetailComponent", () => {
+describe("NewsDetailComponent", () => {
   let component: NewsDetailComponent;
   let fixture: ComponentFixture<NewsDetailComponent>;
 

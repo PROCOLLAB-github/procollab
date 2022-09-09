@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ErrorCodeComponent } from "./error-code.component";
 import { RouterTestingModule } from "@angular/router/testing";
 
-describe("CodeComponent", () => {
+describe("ErrorCodeComponent", () => {
   let component: ErrorCodeComponent;
   let fixture: ComponentFixture<ErrorCodeComponent>;
 

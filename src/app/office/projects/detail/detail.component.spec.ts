@@ -6,7 +6,7 @@ import { ProjectDetailComponent } from "./detail.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
-describe("DetailComponent", () => {
+describe("ProjectDetailComponent", () => {
   let component: ProjectDetailComponent;
   let fixture: ComponentFixture<ProjectDetailComponent>;
 

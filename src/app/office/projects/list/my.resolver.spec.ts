@@ -6,7 +6,7 @@ import { ProjectsMyResolver } from "./my.resolver";
 import { of } from "rxjs";
 import { ProjectService } from "../../services/project.service";
 
-describe("MyResolver", () => {
+describe("ProjectsMyResolver", () => {
   let resolver: ProjectsMyResolver;
 
   beforeEach(() => {

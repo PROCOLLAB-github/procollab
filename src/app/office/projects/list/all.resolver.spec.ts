@@ -6,7 +6,7 @@ import { ProjectsAllResolver } from "./all.resolver";
 import { of } from "rxjs";
 import { ProjectService } from "../../services/project.service";
 
-describe("AllResolver", () => {
+describe("ProjectsAllResolver", () => {
   let resolver: ProjectsAllResolver;
 
   beforeEach(() => {

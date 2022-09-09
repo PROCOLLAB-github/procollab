@@ -11,7 +11,7 @@ import { ProjectsComponent } from "./projects/projects.component";
 import { ChatComponent } from "./chat/chat.component";
 import { NewsAllComponent } from "./news/all/all.component";
 import { ProfileDetailComponent } from "./profile/detail/profile-detail.component";
-import { ProfileEditComponent } from "./profile/edit/profile-edit.component";
+import { ProfileEditComponent } from "./profile/edit/edit.component";
 import { CoreModule } from "../core/core.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MembersComponent } from "./members/members.component";

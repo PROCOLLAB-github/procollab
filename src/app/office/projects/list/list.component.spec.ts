@@ -8,7 +8,7 @@ import { of } from "rxjs";
 import { AuthService } from "../../../auth/services";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
-describe("ListComponent", () => {
+describe("ProjectsListComponent", () => {
   let component: ProjectsListComponent;
   let fixture: ComponentFixture<ProjectsListComponent>;
 

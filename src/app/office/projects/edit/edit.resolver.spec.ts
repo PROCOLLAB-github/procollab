@@ -5,7 +5,7 @@ import { TestBed } from "@angular/core/testing";
 import { ProjectEditResolver } from "./edit.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
-describe("EditResolver", () => {
+describe("ProjectEditResolver", () => {
   let resolver: ProjectEditResolver;
 
   beforeEach(() => {

@@ -7,7 +7,7 @@ import { of } from "rxjs";
 import { AuthService } from "../../../auth/services";
 import { RouterTestingModule } from "@angular/router/testing";
 
-describe("DerailComponent", () => {
+describe("ProfileDetailComponent", () => {
   let component: ProfileDetailComponent;
   let fixture: ComponentFixture<ProfileDetailComponent>;
 

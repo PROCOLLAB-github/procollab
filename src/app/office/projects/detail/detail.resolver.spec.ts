@@ -5,7 +5,7 @@ import { TestBed } from "@angular/core/testing";
 import { ProjectDetailResolver } from "./detail.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
-describe("DetailResolver", () => {
+describe("ProjectDetailResolver", () => {
   let resolver: ProjectDetailResolver;
 
   beforeEach(() => {

@@ -6,7 +6,7 @@ import { NewsAllComponent } from "./all.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 
-describe("NewsComponent", () => {
+describe("NewsAllComponent", () => {
   let component: NewsAllComponent;
   let fixture: ComponentFixture<NewsAllComponent>;
 

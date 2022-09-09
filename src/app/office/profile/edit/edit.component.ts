@@ -10,8 +10,8 @@ import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-profile-edit",
-  templateUrl: "./profile-edit.component.html",
-  styleUrls: ["./profile-edit.component.scss"],
+  templateUrl: "./edit.component.html",
+  styleUrls: ["./edit.component.scss"],
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(

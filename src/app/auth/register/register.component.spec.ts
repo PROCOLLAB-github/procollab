@@ -11,7 +11,7 @@ import { UiModule } from "src/app/ui/ui.module";
 import { NgxMaskModule } from "ngx-mask";
 import { RouterTestingModule } from "@angular/router/testing";
 
-describe("LoginComponent", () => {
+describe("RegisterComponent", () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
 
