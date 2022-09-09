@@ -16,6 +16,7 @@
 
   "/vacancy/project/:project_id": "/vacancy/?project_id=:project_id",
   "/vacancy/create": "/vacancy",
+  "/vacancy/send/:vacancy_id": "/empty",
 
   "/invite/send": "/profile/1",
   "/invite/revoke/:invite_id": "/empty",

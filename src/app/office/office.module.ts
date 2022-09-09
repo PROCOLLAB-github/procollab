@@ -24,6 +24,7 @@ import { VacancyCardComponent } from "./shared/vacancy-card/vacancy-card.compone
 import { InviteCardComponent } from "./shared/invite-card/invite-card.component";
 import { AdvertCardComponent } from "./shared/advert-card/advert-card.component";
 import { NewsDetailComponent } from "./news/detail/detail.component";
+import { VacancySendComponent } from "./vacancy/send/send.component";
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { NewsDetailComponent } from "./news/detail/detail.component";
     InviteCardComponent,
     AdvertCardComponent,
     NewsDetailComponent,
+    VacancySendComponent,
   ],
   imports: [OfficeRoutingModule, CommonModule, UiModule, CoreModule, ReactiveFormsModule],
 })

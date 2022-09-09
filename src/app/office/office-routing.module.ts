@@ -22,6 +22,7 @@ import { ProjectEditResolver } from "./projects/edit/edit.resolver";
 import { NewsAllResolver } from "./news/all/all.resolver";
 import { NewsDetailComponent } from "./news/detail/detail.component";
 import { NewsDetailResolver } from "./news/detail/detail.resolver";
+import { VacancySendComponent } from "./vacancy/send/send.component";
 
 const routes: Routes = [
   {
@@ -74,6 +75,10 @@ const routes: Routes = [
             },
           },
         ],
+      },
+      {
+        path: "vacancy/:vacancyId",
+        component: VacancySendComponent,
       },
       {
         path: "members",
