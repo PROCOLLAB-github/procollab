@@ -1,6 +1,6 @@
 {
   "/profile": "/profile/0",
-  "/member/all": "/profile",
+  "/members/all": "/profile",
   "/profile/update": "/profile/0",
 
   "/auth/register": "/tokens",

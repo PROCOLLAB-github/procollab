@@ -23,7 +23,7 @@
         </ul>
       </div>
       <ng-container *ngIf="authService.profile | async as profile">
-        <a *ngIf="profile.id !== user.id" class="profile__write" routerLink=".">
+        <a *ngIf="profile.id !== user.id" class="profile__write" [href]="'mailto:' + profile.email">
           <app-button>
             Написать
             <i
