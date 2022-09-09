@@ -14,6 +14,11 @@
     color: var(--red);
   }
 
+  &__draft {
+    margin-bottom: 16px;
+    color: var(--red);
+  }
+
   &__photo {
     display: block;
     filter: drop-shadow(5px 5px 25px rgb(159 159 159 / 15%));

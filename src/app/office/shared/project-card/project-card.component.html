@@ -9,6 +9,7 @@
     appSquare="24"
     (click)="onBasket($event)"
   ></i>
+  <p *ngIf="project.draft" class="text-body-12 card__draft">Черновик</p>
   <app-avatar class="card__photo" [url]="project.imageAddress" [size]="90"></app-avatar>
   <p class="text-heading-4 card__name">{{ project.name }}</p>
   <p *ngIf="industryService.industries | async as industries" class="text-body-12 card__industry">

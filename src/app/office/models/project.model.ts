@@ -18,6 +18,7 @@ export class Project {
     speciality: string;
   }[];
 
+  draft!: boolean;
   leaderInfo!: string;
   leaderId!: number;
 
@@ -41,6 +42,7 @@ export class Project {
           speciality: "Front-end",
         },
       ],
+      draft: false,
       leaderInfo: "string",
       leaderId: 0,
     };
