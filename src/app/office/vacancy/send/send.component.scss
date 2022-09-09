@@ -1,0 +1,57 @@
+.vacancy {
+  padding: 24px;
+  background: var(--white) no-repeat url("/assets/images/office/vacancy/send/bg.svg") right/contain;
+  border-radius: var(--rounded-md);
+
+  &__inner {
+    width: 50%;
+  }
+
+  &__sender {
+    margin-bottom: 20px;
+  }
+}
+
+.profile {
+  display: flex;
+  align-items: flex-start;
+
+  &__body {
+    margin-left: 18px;
+  }
+
+  &__status {
+    margin-bottom: 6px;
+    color: var(--dark-gray);
+  }
+
+  &__name {
+    margin-bottom: 2px;
+    color: var(--black);
+  }
+
+  &__info {
+    margin-bottom: 16px;
+    color: var(--dark-gray);
+  }
+
+  &__skills {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__skill {
+    margin-bottom: 10px;
+
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+}
+
+.form {
+  &__submit {
+    display: block;
+    margin-top: 20px;
+  }
+}

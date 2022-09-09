@@ -36,6 +36,9 @@
             formControlName="description"
             placeholder="Напишите кратко о своем проекте, его суть"
           ></app-textarea>
+          <div *ngIf="description | controlError: 'required'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
         </fieldset>
         <div>
           <label for="achievements" class="field-label">Достижения</label>

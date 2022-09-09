@@ -34,4 +34,8 @@ export class VacancyService {
   deleteVacancy(vacancyId: number): Observable<void> {
     return this.apiService.delete(`/vacancy/${vacancyId}`);
   }
+
+  sendVacancy(vacancyId: number, body: { text: string }): Observable<void> {
+    return this.apiService.post(`/vacancy/send/${vacancyId}`, body);
+  }
 }

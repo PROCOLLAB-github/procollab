@@ -1,0 +1,36 @@
+<!-- @format -->
+
+<main class="vacancy">
+  <div class="vacancy__inner">
+    <div *ngIf="authService.profile | async as profile" class="vacancy__sender profile">
+      <app-avatar [size]="140" [url]="profile.photoAddress"></app-avatar>
+      <div class="profile__body">
+        <p class="text-body-12 profile__status">{{ profile.status }}</p>
+        <h2 class="text-heading-3 profile__name">{{ profile.name }} {{ profile.surname }}</h2>
+        <p class="text-body-14 profile__info">{{ profile.speciality }} • {{ profile.city }}</p>
+        <ul class="profile__skills">
+          <li *ngFor="let skill of profile.keySkills" class="profile__skill">
+            <app-tag>{{ skill }}</app-tag>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <form class="vacacy__form form" [formGroup]="sendForm" (ngSubmit)="onSubmit()">
+      <fieldset *ngIf="sendForm.get('text') as text">
+        <label for="text" class="field-label">Мотивационное письмо</label>
+        <app-textarea
+          id="text"
+          formControlName="text"
+          [error]="text | controlError"
+          placeholder="Текст письма"
+        ></app-textarea>
+        <div *ngIf="text | controlError: 'required'" class="text-body-14 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+      </fieldset>
+      <app-button [loader]="sendFormIsSubmitting" type="submit" class="form__submit">
+        Отправить отклик
+      </app-button>
+    </form>
+  </div>
+</main>

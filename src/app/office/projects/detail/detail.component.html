@@ -50,7 +50,9 @@
       <li *ngFor="let vacancy of vacancies" class="vacancy">
         <div class="vacancy__info">
           <span class="text-bold-body-14 vacancy__title">{{ vacancy.role }}</span>
-          <a class="text-body-12 vacancy__action" [routerLink]="['.']">Откликнуться</a>
+          <a class="text-body-12 vacancy__action" [routerLink]="['/office/vacancy', vacancy.id]">
+            Откликнуться
+          </a>
         </div>
         <p class="text-body-12 vacancy__requirements">{{ vacancy.requirements.join(" • ") }}</p>
       </li>
