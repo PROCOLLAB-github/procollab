@@ -36,6 +36,8 @@ export class VacancySendComponent implements OnInit {
   sendForm: FormGroup;
   sendFormIsSubmitting = false;
 
+  resultModal = false;
+
   onSubmit(): void {
     if (!this.validationService.getFormValidation(this.sendForm)) {
       return;
@@ -48,6 +50,7 @@ export class VacancySendComponent implements OnInit {
       .subscribe(
         () => {
           this.sendFormIsSubmitting = false;
+          this.resultModal = true;
         },
         () => {
           this.sendFormIsSubmitting = false;

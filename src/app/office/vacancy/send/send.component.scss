@@ -55,3 +55,27 @@
     margin-top: 20px;
   }
 }
+
+$succeed-modal-width: 310px;
+
+.succeed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: $succeed-modal-width;
+
+  &__check {
+    width: 97px;
+    margin-bottom: 18px;
+    color: var(--green);
+  }
+
+  &__text {
+    color: var(--black);
+    margin-bottom: 18px;
+  }
+
+  &__link {
+    width: $succeed-modal-width;
+  }
+}

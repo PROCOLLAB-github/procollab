@@ -1,8 +1,21 @@
 <!-- @format -->
 
-<main class="vacancy">
+<main *ngIf="authService.profile | async as profile" class="vacancy">
+  <app-modal [(open)]="resultModal">
+    <div class="succeed">
+      <i class="succeed__check" appIcon icon="inline-check" appSquare="97"></i>
+      <p class="text-bold-body-16 succeed__text">Ваш отклик на вакансию отправлен</p>
+      <a
+        class="succeed__link"
+        [routerLink]="['/office/profile', profile.id]"
+        [skipLocationChange]="true"
+      >
+        <app-button>Вернуться в профиль</app-button>
+      </a>
+    </div>
+  </app-modal>
   <div class="vacancy__inner">
-    <div *ngIf="authService.profile | async as profile" class="vacancy__sender profile">
+    <div class="vacancy__sender profile">
       <app-avatar [size]="140" [url]="profile.photoAddress"></app-avatar>
       <div class="profile__body">
         <p class="text-body-12 profile__status">{{ profile.status }}</p>
