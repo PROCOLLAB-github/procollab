@@ -41,12 +41,13 @@ export class AuthService {
       localStorage.getItem("accessToken") ?? sessionStorage.getItem("accessToken");
     const refreshToken =
       localStorage.getItem("refreshToken") ?? sessionStorage.getItem("refreshToken");
+    const tokenType = localStorage.getItem("tokenType");
 
-    if (!accessToken && !refreshToken) {
+    if (!accessToken || !refreshToken || !tokenType) {
       return null;
     }
 
-    return { accessToken: accessToken as string, refreshToken: accessToken as string };
+    return { accessToken, refreshToken, tokenType };
   }
 
   clearTokens(): void {
@@ -57,9 +58,11 @@ export class AuthService {
   memTokens(tokens: Tokens, session = false): void {
     if (!session) {
       localStorage.setItem("accessToken", tokens.accessToken);
+      localStorage.setItem("tokenType", tokens.tokenType);
       localStorage.setItem("refreshToken", tokens.refreshToken);
     } else {
       sessionStorage.setItem("accessToken", tokens.accessToken);
+      sessionStorage.setItem("tokenType", tokens.tokenType);
       sessionStorage.setItem("refreshToken", tokens.refreshToken);
     }
   }

@@ -25,7 +25,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
 
     if (tokens !== null) {
       // eslint-disable-next-line
-      headers["Authorization"] = `Bearer ${tokens.accessToken}`;
+      headers["Authorization"] = `${tokens.tokenType} ${tokens.accessToken}`;
     }
 
     const req = request.clone({ setHeaders: headers });
@@ -60,7 +60,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
 
         if (tokens) {
           // eslint-disable-next-line
-          headers["Authorization"] = `Bearer ${tokens.accessToken}`;
+          headers["Authorization"] = `${tokens.tokenType} ${tokens.accessToken}`;
         }
 
         return next.handle(
