@@ -1,0 +1,55 @@
+.invite {
+  &__main {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &__avatars {
+    display: flex;
+
+    app-avatar {
+      position: relative;
+
+      &:not(:first-child) {
+        left: -20px;
+      }
+
+      @for $i from 1 through 3 {
+        &:nth-child(#{$i}) {
+          z-index: $i;
+        }
+      }
+    }
+  }
+
+  &__text {
+    color: var(--black);
+
+    a {
+      color: var(--accent);
+      transition: color 0.2s;
+
+      &:hover {
+        color: var(--accent-dark);
+      }
+    }
+  }
+
+  &__time {
+    margin-top: 4px;
+    color: var(--dark-gray);
+  }
+
+  &__actions {
+    display: flex;
+    margin-top: 16px;
+
+    app-button {
+      flex-basis: 50%;
+
+      &:first-child {
+        margin-right: 15px;
+      }
+    }
+  }
+}

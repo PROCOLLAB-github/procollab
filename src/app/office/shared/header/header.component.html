@@ -4,10 +4,29 @@
   <div class="header__inner">
     <img src="/assets/images/shared/logo.svg" alt="procollab" />
     <div class="header__right">
-      <!--<div class="header__bell">
-        <div *ngIf="hasNotifications | async"></div>
-        <i appIcon icon="bell" appWidth="20" appHeight="23" appViewBox="0 0 20 22"></i>
-      </div>-->
+      <div (clickOutside)="onClickOutside()" class="header__bell">
+        <div class="attention" *ngIf="showBall | async"></div>
+        <i
+          appIcon
+          icon="bell"
+          appWidth="20"
+          appHeight="23"
+          appViewBox="0 0 20 22"
+          (click)="showNotifications = true"
+        ></i>
+        <div *ngIf="showNotifications" class="header__notifications notifications">
+          <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
+          <ul class="notifications__invites">
+            <li *ngFor="let invite of invites" class="notifications__invite">
+              <app-invite-manage-card
+                [invite]="invite"
+                (accept)="onAcceptInvite($event)"
+                (reject)="onRejectInvite($event)"
+              ></app-invite-manage-card>
+            </li>
+          </ul>
+        </div>
+      </div>
       <div class="header__separator"></div>
       <a
         *ngIf="authService.profile | async as user"

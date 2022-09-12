@@ -10,7 +10,9 @@ import {
   ViewChild,
 } from "@angular/core";
 import { IndustryService } from "./services/industry.service";
-import { noop, Subscription } from "rxjs";
+import { noop, Observable, pluck, Subscription } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
+import { Invite } from "./models/invite.model";
 
 @Component({
   selector: "app-office",
@@ -18,7 +20,13 @@ import { noop, Subscription } from "rxjs";
   styleUrls: ["./office.component.scss"],
 })
 export class OfficeComponent implements OnInit, AfterViewInit, OnDestroy {
-  constructor(private cdref: ChangeDetectorRef, private industryService: IndustryService) {}
+  constructor(
+    private cdref: ChangeDetectorRef,
+    private industryService: IndustryService,
+    private route: ActivatedRoute
+  ) {}
+
+  invites$: Observable<Invite[]> = this.route.data.pipe(pluck("invites"));
 
   bodyHeight = "0px";
   @ViewChild("general") general?: ElementRef<HTMLElement>;

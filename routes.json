@@ -18,9 +18,12 @@
   "/vacancy/create": "/vacancy",
   "/vacancy/send/:vacancy_id": "/empty",
 
-  "/invite/send": "/profile/1",
+  "/invite/send": "/invite/0",
+  "/invite/my": "/invite",
   "/invite/revoke/:invite_id": "/empty",
-  "/invite/all/:project_id": "/profile",
+  "/invite/all/:project_id": "/invite",
+  "/invite/accept/:invite_id": "/invite/:invite_id",
+  "/invite/reject/:invite_id": "/invite/:invite_id",
 
   "/advert/all": "/article",
   "/advert/:advert_id": "/article/:advert_id"

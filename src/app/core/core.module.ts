@@ -7,9 +7,10 @@ import { BearerTokenInterceptor } from "./interceptors/bearer-token.interceptor"
 import { ApiService } from "./services";
 import { CamelcaseInterceptor } from "./interceptors/camelcase.interceptor";
 import { ControlErrorPipe } from "./pipes/control-error.pipe";
+import { DayjsPipe } from "./pipes/dayjs.pipe";
 
 @NgModule({
-  declarations: [ControlErrorPipe],
+  declarations: [ControlErrorPipe, DayjsPipe],
   imports: [CommonModule],
   providers: [
     {
@@ -24,6 +25,6 @@ import { ControlErrorPipe } from "./pipes/control-error.pipe";
     },
     ApiService,
   ],
-  exports: [ControlErrorPipe],
+  exports: [ControlErrorPipe, DayjsPipe],
 })
 export class CoreModule {}

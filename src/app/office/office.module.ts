@@ -25,6 +25,8 @@ import { InviteCardComponent } from "./shared/invite-card/invite-card.component"
 import { AdvertCardComponent } from "./shared/advert-card/advert-card.component";
 import { NewsDetailComponent } from "./news/detail/detail.component";
 import { VacancySendComponent } from "./vacancy/send/send.component";
+import { InviteManageCardComponent } from "./shared/invite-manage-card/invite-manage-card.component";
+import { ClickOutsideModule } from "ng-click-outside";
 
 @NgModule({
   declarations: [
@@ -47,7 +49,15 @@ import { VacancySendComponent } from "./vacancy/send/send.component";
     AdvertCardComponent,
     NewsDetailComponent,
     VacancySendComponent,
+    InviteManageCardComponent,
   ],
-  imports: [OfficeRoutingModule, CommonModule, UiModule, CoreModule, ReactiveFormsModule],
+  imports: [
+    OfficeRoutingModule,
+    CommonModule,
+    UiModule,
+    CoreModule,
+    ClickOutsideModule,
+    ReactiveFormsModule,
+  ],
 })
 export class OfficeModule {}

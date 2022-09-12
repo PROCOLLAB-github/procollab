@@ -23,11 +23,15 @@ import { NewsAllResolver } from "./news/all/all.resolver";
 import { NewsDetailComponent } from "./news/detail/detail.component";
 import { NewsDetailResolver } from "./news/detail/detail.resolver";
 import { VacancySendComponent } from "./vacancy/send/send.component";
+import { OfficeResolver } from "./office.resolver";
 
 const routes: Routes = [
   {
     path: "",
     component: OfficeComponent,
+    resolve: {
+      invites: OfficeResolver,
+    },
     children: [
       {
         path: "",

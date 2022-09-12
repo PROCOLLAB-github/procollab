@@ -1,7 +1,7 @@
 {
   "empty": {},
   "tokens": {
-    "email": "user@mail.org",
+    "email": "example1@gmail.com",
     "password": "password"
   },
   "projects": [
@@ -101,6 +101,56 @@
     {
       "id": 2,
       "achievements": []
+    }
+  ],
+  "invite": [
+    {
+      "id": 0,
+      "created_at": "2022-09-11 10:06:09",
+      "updated_at":"2022-09-11 10:06:09",
+      "project": {
+        "id": 0,
+        "photoAddress": "",
+        "name": "somename"
+      },
+      "inviter_profile": {
+        "id": 0,
+        "profile_address": "",
+        "name": "Egor",
+        "surname": "Tokarev"
+      }
+    },
+    {
+      "id": 0,
+      "created_at": "2022-09-11 10:06:09",
+      "updated_at": "2022-09-11 10:06:09",
+      "project": {
+        "id": 0,
+        "photoAddress": "",
+        "name":  "somename"
+      },
+      "inviter_profile":  {
+        "id": 0,
+        "profile_address": "",
+        "name": "Egor",
+        "surname": "Tokarev"
+      }
+    },
+    {
+      "id": 0,
+      "created_at": "2022-09-11 10:06:09",
+      "updated_at": "2022-09-11 10:06:09",
+      "project": {
+        "id": 0,
+        "photoAddress": "",
+        "name":  "somename"
+      },
+      "inviter_profile":  {
+        "id": 0,
+        "profile_address": "",
+        "name": "Egor",
+        "surname": "Tokarev"
+      }
     }
   ],
   "vacancy": [

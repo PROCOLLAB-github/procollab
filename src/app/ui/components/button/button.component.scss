@@ -1,38 +1,61 @@
 /** @format */
 
 .button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 52px;
-  padding: 14px 18px;
-  color: var(--white);
-  text-align: center;
-  cursor: pointer;
-  background: var(--accent);
-  border: none;
-  border-radius: var(--rounded-lg);
-  outline: none;
-  transition: background-color 0.2s;
+  &.button--inline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 52px;
+    padding: 11.5px 18px;
+    color: var(--white);
+    text-align: center;
+    cursor: pointer;
+    background: var(--accent);
+    border: 2px solid transparent;
+    border-radius: var(--rounded-lg);
+    outline: none;
+    transition: background-color 0.2s;
 
-  &:hover {
-    background-color: var(--accent-dark);
-  }
+    &:hover {
+      background-color: var(--accent-dark);
+    }
 
-  ::ng-deep * {
-    display: block;
+    ::ng-deep * {
+      display: block;
 
-    &:not(:last-child) {
-      margin-right: 10px;
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+
+    &.button--red {
+      background-color: var(--red);
+
+      &:hover {
+        background-color: var(--red-dark);
+      }
     }
   }
 
-  &--red {
-    background-color: var(--red);
+  &.button--outline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 52px;
+    padding: 11.5px 18px;
+    color: var(--accent);
+    text-align: center;
+    cursor: pointer;
+    background-color: transparent;
+    border: 2px solid var(--accent);
+    border-radius: var(--rounded-lg);
+    transition: all 0.2s;
 
     &:hover {
-      background-color: var(--red-dark);
+      color: var(--accent-dark);
+      border-color: var(--accent-dark);
     }
   }
 }

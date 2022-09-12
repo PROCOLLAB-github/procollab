@@ -1,0 +1,27 @@
+<!-- @format -->
+
+<div *ngIf="invite" class="invite">
+  <div class="invite__main">
+    <div class="invite__avatars">
+      <app-avatar [size]="42" [url]="invite.inviterProfile.photoAddress"></app-avatar>
+      <app-avatar [size]="42" [url]="invite.project.photoAddress"></app-avatar>
+    </div>
+    <div class="invite__info">
+      <div class="text-body-12 invite__text">
+        <a [routerLink]="['/office/profile', invite.inviterProfile.id]"
+          >{{ invite.inviterProfile.name }} {{ invite.inviterProfile.surname }}</a
+        >
+        пригласил в проект
+        <a [routerLink]="['/office/projects', invite.project.id]">"{{ invite.project.name }}"</a>
+      </div>
+      <div class="text-body-12 invite__time">
+        {{ invite.createdAt | dayjs: "fromX" }} назад в
+        {{ invite.createdAt | dayjs: "format":"HH:HH" }}
+      </div>
+    </div>
+  </div>
+  <div class="invite__actions">
+    <app-button appearance="outline" (click)="reject.emit(invite.id)">Отклонить</app-button>
+    <app-button (click)="accept.emit(invite.id)">Принять</app-button>
+  </div>
+</div>

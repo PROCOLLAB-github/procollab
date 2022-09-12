@@ -1,6 +1,6 @@
 /** @format */
 
-const whiteList = ["profile", "empty"];
+const whiteList = ["profile", "empty", "invite"];
 module.exports = function (req, res, next) {
   if (whiteList.map(url => req.url.includes(url)).some(Boolean)) {
     req.method = "GET";

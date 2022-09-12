@@ -1,6 +1,14 @@
 <!-- @format -->
 
-<button [type]="type" class="button text-bold-body-16" [class.button--red]="color === 'red'">
+<button
+  [type]="type"
+  class="button text-bold-body-16"
+  [ngClass]="{
+    'button--red': color === 'red',
+    'button--inline': appearance === 'inline',
+    'button--outline': appearance === 'outline'
+  }"
+>
   <ng-container *ngIf="!loader">
     <ng-content></ng-content>
   </ng-container>
