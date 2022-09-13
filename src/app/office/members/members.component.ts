@@ -1,11 +1,13 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { combineLatest, map, pluck } from "rxjs";
+import { combineLatest, map, pluck, Subscription } from "rxjs";
 import { AuthService } from "../../auth/services";
 import { User } from "../../auth/models/user.model";
 import { NavService } from "../services/nav.service";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import Fuse from "fuse.js";
 
 @Component({
   selector: "app-members",
@@ -13,18 +15,49 @@ import { NavService } from "../services/nav.service";
   styleUrls: ["./members.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MembersComponent implements OnInit {
+export class MembersComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
-    private navService: NavService
-  ) {}
-
-  members$ = combineLatest([this.route.data.pipe(pluck("data")), this.authService.profile]).pipe(
-    map(([members, profile]: [User[], User]) => members.filter(member => member.id !== profile.id))
-  );
+    private navService: NavService,
+    private fb: FormBuilder
+  ) {
+    this.searchForm = this.fb.group({
+      search: ["", [Validators.required]],
+    });
+  }
 
   ngOnInit(): void {
     this.navService.setNavTitle("Участники");
+
+    this.members$ = combineLatest([this.route.data.pipe(pluck("data")), this.authService.profile])
+      .pipe(
+        map(([members, profile]: [User[], User]) =>
+          members.filter(member => member.id !== profile.id)
+        )
+      )
+      .subscribe(members => {
+        this.members = members;
+        this.searchedMembers = members;
+      });
+
+    this.searchFormSearch$ = this.searchForm.get("search")?.valueChanges.subscribe(value => {
+      const fuse = new Fuse(this.members, {
+        keys: ["name", "surname", "keySkills"],
+      });
+
+      this.searchedMembers = value ? fuse.search(value).map(el => el.item) : this.members;
+    });
   }
+
+  ngOnDestroy(): void {
+    [this.members$, this.searchFormSearch$].forEach($ => $?.unsubscribe());
+  }
+
+  members: User[] = [];
+  searchedMembers: User[] = [];
+  members$?: Subscription;
+
+  searchForm: FormGroup;
+  searchFormSearch$?: Subscription;
 }

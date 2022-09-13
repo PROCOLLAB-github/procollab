@@ -1,0 +1,23 @@
+.search {
+  display: flex;
+  cursor: pointer;
+
+  &__icon {
+    margin-right: 21px;
+    color: var(--black);
+  }
+
+  &__input {
+    input {
+      line-height: 20px;
+      background-color: transparent;
+      border: none;
+      border-bottom: 1px solid var(--black);
+      outline: none;
+
+      &::placeholder {
+        color: var(--dark-gray);
+      }
+    }
+  }
+}

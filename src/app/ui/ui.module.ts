@@ -19,6 +19,7 @@ import { LoaderComponent } from "./components/loader/loader.component";
 import { ModalComponent } from "./components/modal/modal.component";
 import { AvatarControlComponent } from "./components/avatar-control/avatar-control.component";
 import { UploadFileComponent } from "./components/upload-file/upload-file.component";
+import { SearchComponent } from "./components/search/search.component";
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { UploadFileComponent } from "./components/upload-file/upload-file.compon
     ModalComponent,
     AvatarControlComponent,
     UploadFileComponent,
+    SearchComponent,
   ],
   imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule],
   exports: [
@@ -48,6 +50,7 @@ import { UploadFileComponent } from "./components/upload-file/upload-file.compon
     ModalComponent,
     AvatarControlComponent,
     UploadFileComponent,
+    SearchComponent,
   ],
 })
 export class UiModule {}

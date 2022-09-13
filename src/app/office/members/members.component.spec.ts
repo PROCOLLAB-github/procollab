@@ -6,6 +6,8 @@ import { MembersComponent } from "./members.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
 import { AuthService } from "../../auth/services";
+import { ReactiveFormsModule } from "@angular/forms";
+import { UiModule } from "../../ui/ui.module";
 
 describe("MembersComponent", () => {
   let component: MembersComponent;
@@ -15,7 +17,7 @@ describe("MembersComponent", () => {
     const authSpy = jasmine.createSpyObj([{ profile: of({}) }]);
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, ReactiveFormsModule, UiModule],
       declarations: [MembersComponent],
       providers: [{ provide: AuthService, useValue: authSpy }],
     }).compileComponents();
