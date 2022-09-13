@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <div class="control">
-  <input [id]="controlId" hidden type="file" (change)="onUpdate($event)" />
+  <input [id]="controlId" hidden type="file" [accept]="accept" (change)="onUpdate($event)" />
   <label [for]="controlId">
     <div class="control__empty">
       <ng-content select="[emptyPlaceholder]"></ng-content>

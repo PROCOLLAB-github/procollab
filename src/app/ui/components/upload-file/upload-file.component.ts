@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, forwardRef, OnInit } from "@angular/core";
+import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { FileService } from "../../../core/services/file.service";
 import { nanoid } from "nanoid";
@@ -19,6 +19,8 @@ import { nanoid } from "nanoid";
 })
 export class UploadFileComponent implements OnInit, ControlValueAccessor {
   constructor(private fileService: FileService) {}
+
+  @Input() accept = "";
 
   ngOnInit(): void {}
 
