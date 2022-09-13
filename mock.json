@@ -1,6 +1,8 @@
 {
   "empty": {},
   "tokens": {
+    "name": "dsf",
+    "surname": "sdfsdf",
     "email": "example1@gmail.com",
     "password": "password"
   },
