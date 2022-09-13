@@ -26,6 +26,21 @@
     }
   }
 
+  &__slides-title {
+    display: flex;
+    color: var(--black);
+
+    img {
+      margin-right: 10px;
+    }
+  }
+
+  &__slides-text {
+    width: 275px;
+    margin-top: 12px;
+    color: var(--dark-gray);
+  }
+
   &__add-achievement {
     display: block;
     margin-top: 12px;

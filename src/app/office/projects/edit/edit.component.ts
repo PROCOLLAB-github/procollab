@@ -36,6 +36,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       name: ["", [Validators.required]],
       industry: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
+      presentationAddress: ["", [Validators.required]],
       achievements: this.fb.array([]),
     });
 
@@ -66,10 +67,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(pluck("data"))
       .subscribe(([project, vacancies, invites]: [Project, Vacancy[], Invite[]]) => {
         this.projectForm.patchValue({
-          photoAddress: project.imageAddress,
+          imageAddress: project.imageAddress,
           name: project.name,
           industry: project.industryId,
           description: project.description,
+          presentationAddress: project.presentationAddress,
           achievements: project.achievements,
         });
 

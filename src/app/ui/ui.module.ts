@@ -18,6 +18,7 @@ import { NgxAutogrowModule } from "ngx-autogrow";
 import { LoaderComponent } from "./components/loader/loader.component";
 import { ModalComponent } from "./components/modal/modal.component";
 import { AvatarControlComponent } from "./components/avatar-control/avatar-control.component";
+import { UploadFileComponent } from "./components/upload-file/upload-file.component";
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { AvatarControlComponent } from "./components/avatar-control/avatar-contr
     LoaderComponent,
     ModalComponent,
     AvatarControlComponent,
+    UploadFileComponent,
   ],
   imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule],
   exports: [
@@ -45,6 +47,7 @@ import { AvatarControlComponent } from "./components/avatar-control/avatar-contr
     TagComponent,
     ModalComponent,
     AvatarControlComponent,
+    UploadFileComponent,
   ],
 })
 export class UiModule {}

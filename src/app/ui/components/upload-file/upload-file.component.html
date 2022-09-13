@@ -1,0 +1,10 @@
+<!-- @format -->
+
+<div class="control">
+  <input [id]="controlId" hidden type="file" (change)="onUpdate($event)" />
+  <label [for]="controlId">
+    <div class="control__empty">
+      <ng-content select="[emptyPlaceholder]"></ng-content>
+    </div>
+  </label>
+</div>

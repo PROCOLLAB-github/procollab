@@ -44,6 +44,19 @@
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
         </fieldset>
+        <fieldset>
+          <app-upload-file formControlName="presentationAddress">
+            <ng-container emptyPlaceholder>
+              <h4 class="text-bold-body-16 project__slides-title">
+                <img src="/assets/images/projects/shared/pdf.svg" alt="pdf" />
+                Добавить файл презентации
+              </h4>
+              <p class="text-body-14 project__slides-text">
+                Презентации формата .PDF или .PPTX весом до 50МБ
+              </p>
+            </ng-container>
+          </app-upload-file>
+        </fieldset>
         <div>
           <label for="achievements" class="field-label">Достижения</label>
           <ng-container formArrayName="achievements">

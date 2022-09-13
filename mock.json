@@ -6,19 +6,11 @@
   },
   "projects": [
     {
-      "image_address": "",
+      "image_address": "https://sun1.userapi.com/sun1-95/s/v1/ig2/L5lVeUCjLbNUvuZOKvucX0_Hwiq3r2MCB77iyDs1-QmqBEdBZmw5yfxxYPiMWZDXbxgAEP63KSEhO24j-qnU4_Jp.jpg?size=604x453&quality=95&type=album",
       "name": "string",
-      "industry": 1,
       "description": "Команда занимается разработкой сервиса - приложения которое помогуает индивидуально подобрать рецепт для приготовления блюда дома. Система учитывает вкусовые предпочтения, финансовые возможности, аллергические реакции. Приложение рекомендует рецепты на завтрак, обед, ужин.Команда занимается разработкой сервиса - приложения которое помогуает индивидуально подобрать рецепт для приготовления блюда дома. Система учитывает вкусовые предпочтения, финансовые возможности, аллергические реакции. Приложение рекомендует рецепты на завтрак, обед, ужин.",
+      "presentation_address": "https://sun1.userapi.com/sun1-95/s/v1/ig2/L5lVeUCjLbNUvuZOKvucX0_Hwiq3r2MCB77iyDs1-QmqBEdBZmw5yfxxYPiMWZDXbxgAEP63KSEhO24j-qnU4_Jp.jpg?size=604x453&quality=95&type=album",
       "achievements": [
-        {
-          "title": "1ksadsadfasdl;fjkasdl",
-          "place": "1 place"
-        },
-        {
-          "title": "sdfsdf",
-          "place": "1 place"
-        },
         {
           "title": "sfdsf",
           "place": "1 place"

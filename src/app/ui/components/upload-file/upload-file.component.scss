@@ -1,0 +1,9 @@
+.control {
+  padding: 26px;
+  border: 2px dashed var(--accent);
+  border-radius: var(--rounded-md);
+
+  &__empty {
+    cursor: pointer;
+  }
+}
