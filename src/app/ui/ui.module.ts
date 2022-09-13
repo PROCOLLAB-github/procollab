@@ -17,6 +17,7 @@ import { TextareaComponent } from "./components/textarea/textarea.component";
 import { NgxAutogrowModule } from "ngx-autogrow";
 import { LoaderComponent } from "./components/loader/loader.component";
 import { ModalComponent } from "./components/modal/modal.component";
+import { AvatarControlComponent } from "./components/avatar-control/avatar-control.component";
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { ModalComponent } from "./components/modal/modal.component";
     TextareaComponent,
     LoaderComponent,
     ModalComponent,
+    AvatarControlComponent,
   ],
   imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule],
   exports: [
@@ -42,6 +44,7 @@ import { ModalComponent } from "./components/modal/modal.component";
     AvatarComponent,
     TagComponent,
     ModalComponent,
+    AvatarControlComponent,
   ],
 })
 export class UiModule {}

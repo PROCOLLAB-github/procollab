@@ -6,7 +6,8 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "../../../error/models/error-message";
 import { SelectComponent } from "../../../ui/components";
 import { ValidationService } from "../../../core/services";
-import { Subscription } from "rxjs";
+import { concatMap, first, Subscription } from "rxjs";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-profile-edit",
@@ -17,7 +18,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     public authService: AuthService,
     private fb: FormBuilder,
-    private validationService: ValidationService
+    private validationService: ValidationService,
+    private router: Router
   ) {
     this.profileForm = this.fb.group({
       name: ["", [Validators.required]],
@@ -30,6 +32,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       speciality: ["", [Validators.required]],
       keySkills: this.fb.array([]),
       achievements: this.fb.array([]),
+      photoAddress: ["", [Validators.required]],
       aboutMe: ["", [Validators.required]],
     });
   }
@@ -37,7 +40,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    this.profile$ = this.authService.profile.subscribe(profile => {
+    this.profile$ = this.authService.profile.pipe(first()).subscribe(profile => {
+      this.profileId = profile.id;
+
       this.profileForm.patchValue({
         name: profile.name ?? "",
         surname: profile.surname ?? "",
@@ -47,6 +52,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         city: profile.city ?? "",
         organisation: profile.organisation ?? "",
         speciality: profile.speciality ?? "",
+        photoAddress: profile.photoAddress ?? "",
         aboutMe: profile.aboutMe ?? "",
       });
 
@@ -60,6 +66,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy(): void {
     this.profile$?.unsubscribe();
   }
+
+  profileId?: number;
 
   profile$?: Subscription;
 
@@ -115,17 +123,22 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.validationService.getFormValidation(this.profileForm) || this.profileFormSubmitting) {
       return;
     }
-    setTimeout(() => {
-      this.profileFormSubmitting = true;
-    }, 0);
 
-    this.authService.saveProfile(this.profileForm.value).subscribe(
-      () => {
-        this.profileFormSubmitting = false;
-      },
-      () => {
-        this.profileFormSubmitting = false;
-      }
-    );
+    this.profileFormSubmitting = true;
+
+    this.authService
+      .saveProfile(this.profileForm.value)
+      .pipe(concatMap(() => this.authService.getProfile()))
+      .subscribe(
+        () => {
+          this.profileFormSubmitting = false;
+          this.router
+            .navigateByUrl(`/office/profile/${this.profileId}`)
+            .then(() => console.debug("Router Changed form ProfileEditComponent"));
+        },
+        () => {
+          this.profileFormSubmitting = false;
+        }
+      );
   }
 }

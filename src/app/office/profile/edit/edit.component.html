@@ -183,6 +183,10 @@
       </div>
     </div>
     <div class="profile__column">
+      <fieldset class="profile__avatar">
+        <label for="photoAddress" class="field-label">Фотография профиля</label>
+        <app-avatar-control id="photoAddress" formControlName="photoAddress"></app-avatar-control>
+      </fieldset>
       <fieldset *ngIf="profileForm.get('aboutMe') as aboutMe">
         <label for="aboutMe" class="field-label">Обо мне</label>
         <app-textarea

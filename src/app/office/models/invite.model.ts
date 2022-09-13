@@ -15,5 +15,14 @@ export class Invite {
     photoAddress: string;
     name: string;
     surname: string;
+    speciality: string;
+  };
+
+  targetProfile!: {
+    id: number;
+    photoAddress: string;
+    name: string;
+    surname: string;
+    speciality: string;
   };
 }

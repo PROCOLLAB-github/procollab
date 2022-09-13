@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { User } from "../../../auth/models/user.model";
+import { Invite } from "../../models/invite.model";
 
 @Component({
   selector: "app-invite-card",
@@ -11,7 +11,7 @@ import { User } from "../../../auth/models/user.model";
 export class InviteCardComponent implements OnInit {
   constructor() {}
 
-  @Input() user?: User;
+  @Input() invite?: Invite;
   @Output() remove = new EventEmitter<number>();
 
   ngOnInit(): void {}
@@ -20,6 +20,6 @@ export class InviteCardComponent implements OnInit {
     event.stopPropagation();
     event.preventDefault();
 
-    this.remove.emit(this.user?.id);
+    this.remove.emit(this.invite?.id);
   }
 }

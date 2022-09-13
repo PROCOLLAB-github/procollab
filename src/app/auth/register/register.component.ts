@@ -43,11 +43,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit() {
-    if (
-      !this.validationService.getFormValidation(this.registerForm) ||
-      !this.registerAgreement ||
-      this.registerIsSubmitting
-    ) {
+    if (!this.validationService.getFormValidation(this.registerForm) || !this.registerAgreement) {
       return;
     }
 
@@ -59,7 +55,9 @@ export class RegisterComponent implements OnInit {
     this.authService.register(form).subscribe(
       res => {
         this.authService.memTokens(res);
-        this.router.navigateByUrl("/office/profile/edit");
+        this.router
+          .navigateByUrl("/office/profile/edit")
+          .then(() => console.debug("Route changed from RegisterComponent"));
 
         this.registerIsSubmitting = false;
 

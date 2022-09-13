@@ -107,7 +107,7 @@
     {
       "id": 0,
       "created_at": "2022-09-11 10:06:09",
-      "updated_at":"2022-09-11 10:06:09",
+      "updated_at": "2022-09-11 10:06:09",
       "project": {
         "id": 0,
         "photoAddress": "",
@@ -117,7 +117,15 @@
         "id": 0,
         "profile_address": "",
         "name": "Egor",
-        "surname": "Tokarev"
+        "surname": "Tokarev",
+        "speciality": "Front-end"
+      },
+      "target_profile": {
+        "id": 0,
+        "profile_address": "",
+        "name": "Egor",
+        "surname": "Tokarev",
+        "speciality": "Front-end"
       }
     },
     {
@@ -127,13 +135,21 @@
       "project": {
         "id": 0,
         "photoAddress": "",
-        "name":  "somename"
+        "name": "somename"
       },
-      "inviter_profile":  {
+      "inviter_profile": {
         "id": 0,
         "profile_address": "",
         "name": "Egor",
-        "surname": "Tokarev"
+        "surname": "Tokarev",
+        "speciality": "Front-end"
+      },
+      "target_profile": {
+        "id": 0,
+        "profile_address": "",
+        "name": "Egor",
+        "surname": "Tokarev",
+        "speciality": "Front-end"
       }
     },
     {
@@ -143,13 +159,21 @@
       "project": {
         "id": 0,
         "photoAddress": "",
-        "name":  "somename"
+        "name": "somename"
       },
-      "inviter_profile":  {
+      "inviter_profile": {
         "id": 0,
         "profile_address": "",
         "name": "Egor",
-        "surname": "Tokarev"
+        "surname": "Tokarev",
+        "speciality": "Front-end"
+      },
+      "target_profile": {
+        "id": 0,
+        "profile_address": "",
+        "name": "Egor",
+        "surname": "Tokarev",
+        "speciality": "Front-end"
       }
     }
   ],
@@ -206,6 +230,9 @@
     "all": 1000,
     "my": 10
   },
+  "files": {
+    "url": "https://sun1.userapi.com/sun1-95/s/v1/ig2/L5lVeUCjLbNUvuZOKvucX0_Hwiq3r2MCB77iyDs1-QmqBEdBZmw5yfxxYPiMWZDXbxgAEP63KSEhO24j-qnU4_Jp.jpg?size=604x453&quality=95&type=album"
+  },
   "industry": [
     {
       "id": 0,
@@ -218,17 +245,17 @@
   ],
   "profile": [
     {
-      "name": "Егорwsdefsdf",
+      "name": "sfsdfsdf",
       "surname": "Токарев",
-      "status": "Ментор",
+      "email": "",
+      "status": "Ученик",
       "birthday": "23.42.3423",
       "city": "234sadfas",
       "organisation": "sfdsadfsdf",
       "speciality": "asdfasdfasd",
       "key_skills": [
         "sadf",
-        "wsdf",
-        "wer"
+        "wsdf"
       ],
       "achievements": [
         {
@@ -236,14 +263,11 @@
           "place": "fsdfsd"
         },
         {
-          "title": "sdfsdf",
-          "place": "1 place"
-        },
-        {
           "title": "sfdsf",
           "place": "1 place"
         }
       ],
+      "photo_address": "https://sun1.userapi.com/sun1-95/s/v1/ig2/L5lVeUCjLbNUvuZOKvucX0_Hwiq3r2MCB77iyDs1-QmqBEdBZmw5yfxxYPiMWZDXbxgAEP63KSEhO24j-qnU4_Jp.jpg?size=604x453&quality=95&type=album",
       "about_me": "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
       "id": 0
     },

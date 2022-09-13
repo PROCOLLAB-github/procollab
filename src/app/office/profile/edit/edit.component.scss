@@ -1,6 +1,7 @@
 /** @format */
 
 .profile {
+  position: relative;
   margin-bottom: 100px;
 
   &__form {
@@ -51,8 +52,16 @@
   }
 
   &__save {
+    position: absolute;
+    top: 0;
+    right: 24px;
     display: block;
+    width: 250px;
     margin-top: 20px;
+  }
+
+  &__avatar {
+    margin-bottom: 24px;
   }
 }
 

@@ -21,7 +21,7 @@
       background-color: var(--accent-dark);
     }
 
-    ::ng-deep * {
+    ::ng-deep *:not(.dot-wave) {
       display: block;
 
       &:not(:last-child) {

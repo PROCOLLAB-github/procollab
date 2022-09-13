@@ -26,5 +26,7 @@
   "/invite/reject/:invite_id": "/invite/:invite_id",
 
   "/advert/all": "/article",
-  "/advert/:advert_id": "/article/:advert_id"
+  "/advert/:advert_id": "/article/:advert_id",
+
+  "/file/upload": "/files"
 }

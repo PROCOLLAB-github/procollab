@@ -12,7 +12,7 @@ import { Vacancy } from "../../models/vacancy.model";
 import { ValidationService } from "../../../core/services";
 import { VacancyService } from "../../services/vacancy.service";
 import { InviteService } from "../../services/invite.service";
-import { User } from "../../../auth/models/user.model";
+import { Invite } from "../../models/invite.model";
 
 @Component({
   selector: "app-edit",
@@ -61,7 +61,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.profile$ = this.route.data
       .pipe(pluck("data"))
-      .subscribe(([project, vacancies, invites]: [Project, Vacancy[], User[]]) => {
+      .subscribe(([project, vacancies, invites]: [Project, Vacancy[], Invite[]]) => {
         this.projectForm.patchValue({
           name: project.name,
           industry: project.industryId,
@@ -155,7 +155,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   inviteForm: FormGroup;
   inviteFormIsSubmitting = false;
 
-  invites: User[] = [];
+  invites: Invite[] = [];
 
   submitInvite(): void {
     if (!this.validationService.getFormValidation(this.inviteForm)) {

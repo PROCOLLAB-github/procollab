@@ -1,0 +1,11 @@
+<!-- @format -->
+
+<div class="control" [style.width]="size + 'px'" [style.height]="size + 'px'">
+  <input [id]="controlId" hidden type="file" class="control__input" (change)="onUpdate($event)" />
+  <label [for]="controlId" class="control__label">
+    <img [src]="value" alt="avatar" class="control__img" />
+    <div class="control__overlay">
+      <i appIcon icon="edit-pen" appSquare="32"></i>
+    </div>
+  </label>
+</div>
