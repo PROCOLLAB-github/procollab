@@ -1,4 +1,6 @@
 .news {
+  margin-bottom: 100px;
+
   &__list {
     display: grid;
     grid-template-columns: repeat(6, 1fr);

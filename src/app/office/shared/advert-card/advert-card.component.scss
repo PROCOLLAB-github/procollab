@@ -6,12 +6,34 @@
   background-color: var(--white);
 
   &__cover {
+    position: relative;
     width: 100%;
-    max-height: 325px;
-    object-fit: cover;
-    object-position: center;
+    height: 100%;
     margin-bottom: 24px;
+
+    img {
+      width: 100%;
+      max-height: 325px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: var(--rounded-md);
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    background-image: linear-gradient(0deg, rgb(108 39 255 / 60%), rgb(108 39 255 / 60%));
     border-radius: var(--rounded-md);
+    opacity: 0;
+    transition: opacity 0.2s;
   }
 
   &__title {
@@ -32,9 +54,18 @@
 
     .card__cover {
       flex-basis: 25%;
-      height: 100%;
       margin-right: 24px;
       margin-bottom: 0;
+
+      img {
+        height: 100%;
+      }
+    }
+  }
+
+  &:hover {
+    .card__overlay {
+      opacity: 1;
     }
   }
 }
