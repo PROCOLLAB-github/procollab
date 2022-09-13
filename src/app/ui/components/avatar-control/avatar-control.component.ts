@@ -26,9 +26,12 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
 
   controlId = nanoid(3);
 
+  placeholderUrl =
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfRvoKyPWxl-0EExOVhrqc56QcPcWK-Tloew&usqp=CAU";
+
   value = "";
   writeValue(address: string) {
-    this.value = address;
+    this.value = address || this.placeholderUrl;
   }
 
   onTouch: () => void = () => {};

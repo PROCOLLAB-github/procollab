@@ -13,6 +13,7 @@ import { ValidationService } from "../../../core/services";
 import { VacancyService } from "../../services/vacancy.service";
 import { InviteService } from "../../services/invite.service";
 import { Invite } from "../../models/invite.model";
+import { ProjectService } from "../../services/project.service";
 
 @Component({
   selector: "app-edit",
@@ -24,12 +25,14 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private industryService: IndustryService,
+    protected projectService: ProjectService,
     private navService: NavService,
     private validationService: ValidationService,
     private vacancyService: VacancyService,
     private inviteService: InviteService
   ) {
     this.projectForm = this.fb.group({
+      imageAddress: ["", [Validators.required]],
       name: ["", [Validators.required]],
       industry: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
@@ -63,6 +66,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(pluck("data"))
       .subscribe(([project, vacancies, invites]: [Project, Vacancy[], Invite[]]) => {
         this.projectForm.patchValue({
+          photoAddress: project.imageAddress,
           name: project.name,
           industry: project.industryId,
           description: project.description,
@@ -193,6 +197,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   projectForm: FormGroup;
+  projectFormIsSubmitting = false;
 
   get achievements(): FormArray {
     return this.projectForm.get("achievements") as FormArray;
@@ -209,5 +214,24 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   removeAchievement(index: number): void {
     this.achievements.removeAt(index);
+  }
+
+  saveProfile(): void {
+    if (this.validationService.getFormValidation(this.projectForm)) {
+      return;
+    }
+
+    this.projectFormIsSubmitting = true;
+
+    this.projectService
+      .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), this.projectForm.value)
+      .subscribe(
+        () => {
+          this.projectFormIsSubmitting = false;
+        },
+        () => {
+          this.projectFormIsSubmitting = false;
+        }
+      );
   }
 }

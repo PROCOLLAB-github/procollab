@@ -1,8 +1,13 @@
 .project {
+  position: relative;
   padding: 24px;
   margin-bottom: 100px;
   background-color: var(--white);
   border-radius: var(--rounded-md);
+
+  &__image {
+    margin-bottom: 20px;
+  }
 
   &__inner {
     display: flex;
@@ -35,6 +40,13 @@
   &__or {
     margin: 20px 0;
     color: var(--dark-gray);
+  }
+
+  &__save {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 255px;
   }
 }
 

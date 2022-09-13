@@ -45,4 +45,10 @@ export class ProjectService {
       .post("/project/create", {})
       .pipe(map(project => plainToClass(Project, project)));
   }
+
+  updateProject(projectId: number, newProject: Partial<Project>): Observable<Project> {
+    return this.apiService
+      .put(`/project/update/${projectId}`, newProject)
+      .pipe(map(project => plainToClass(Project, project)));
+  }
 }
