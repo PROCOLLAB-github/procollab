@@ -17,8 +17,24 @@
 }
 
 .info {
-  &__title {
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-top: 24px;
+
+    i {
+      color: var(--accent);
+      cursor: pointer;
+      transition: color 0.2s;
+
+      &:hover {
+        color: var(--accent-dark);
+      }
+    }
+  }
+
+  &__title {
     color: var(--black);
   }
 

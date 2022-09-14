@@ -7,6 +7,7 @@ import { Project } from "../../models/project.model";
 import { IndustryService } from "../../services/industry.service";
 import { NavService } from "../../services/nav.service";
 import { Vacancy } from "../../models/vacancy.model";
+import { AuthService } from "../../../auth/services";
 
 @Component({
   selector: "app-detail",
@@ -17,6 +18,7 @@ export class ProjectDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     public industryService: IndustryService,
+    public authService: AuthService,
     private navService: NavService
   ) {}
 

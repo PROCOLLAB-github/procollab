@@ -18,7 +18,8 @@
           "place": "1 place"
         }
       ],
-      "id": 0
+      "id": 0,
+      "leader_id": 0
     },
     {
       "id": 1,

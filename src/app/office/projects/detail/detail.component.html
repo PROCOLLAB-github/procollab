@@ -3,7 +3,15 @@
 <section *ngIf="project$ | async as project" class="project">
   <div class="info project__section project__info">
     <app-avatar [url]="project.imageAddress" [size]="140"></app-avatar>
-    <h1 class="text-heading-2 info__title">{{ project.name }}</h1>
+    <div class="info__row">
+      <h1 class="text-heading-2 info__title">{{ project.name }}</h1>
+      <a
+        *ngIf="authService.profile | async as profile"
+        [routerLink]="['/office/projects', project.id, 'edit']"
+      >
+        <i *ngIf="profile.id === project.leaderId" appIcon icon="settings" appSquare="40"></i>
+      </a>
+    </div>
     <p *ngIf="industryService.industries | async as industries" class="text-body-14 info__industry">
       <span *ngIf="industryService.getIndustry(industries, project.industryId) as industry">
         {{ industry.name }}
@@ -15,7 +23,7 @@
       [href]="project.presentationAddress"
       target="_blank"
     >
-      <img src="/src/assets/images/projects/shared/pdf.svg" alt="pdf" />
+      <img src="/assets/images/projects/shared/pdf.svg" alt="pdf" />
       Презентация проекта.pdf
     </a>
   </div>
