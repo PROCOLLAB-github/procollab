@@ -8,18 +8,44 @@
   },
   "projects": [
     {
-      "image_address": "https://sun1.userapi.com/sun1-95/s/v1/ig2/L5lVeUCjLbNUvuZOKvucX0_Hwiq3r2MCB77iyDs1-QmqBEdBZmw5yfxxYPiMWZDXbxgAEP63KSEhO24j-qnU4_Jp.jpg?size=604x453&quality=95&type=album",
+      "id": 0,
       "name": "string",
-      "description": "Команда занимается разработкой сервиса - приложения которое помогуает индивидуально подобрать рецепт для приготовления блюда дома. Система учитывает вкусовые предпочтения, финансовые возможности, аллергические реакции. Приложение рекомендует рецепты на завтрак, обед, ужин.Команда занимается разработкой сервиса - приложения которое помогуает индивидуально подобрать рецепт для приготовления блюда дома. Система учитывает вкусовые предпочтения, финансовые возможности, аллергические реакции. Приложение рекомендует рецепты на завтрак, обед, ужин.",
-      "presentation_address": "https://sun1.userapi.com/sun1-95/s/v1/ig2/L5lVeUCjLbNUvuZOKvucX0_Hwiq3r2MCB77iyDs1-QmqBEdBZmw5yfxxYPiMWZDXbxgAEP63KSEhO24j-qnU4_Jp.jpg?size=604x453&quality=95&type=album",
+      "description": "string",
+      "short_description": "sdlfkjsdlfkjsdf",
       "achievements": [
+        {
+          "title": "1ksadsadfasdl;fjkasdl",
+          "place": "1 place"
+        },
+        {
+          "title": "sdfsdf",
+          "place": "1 place"
+        },
         {
           "title": "sfdsf",
           "place": "1 place"
         }
       ],
-      "id": 0,
-      "leader_id": 0
+      "industry_id": 0,
+      "presentation_address": "string",
+      "image_address": "",
+      "number_of_collaborators": 7,
+      "collaborators": [
+        {
+          "name": "user",
+          "surname": "suruser",
+          "photoAddress": "https://joeschmoe.io/api/v1/random",
+          "id": 0,
+          "speciality": "Front-end"
+        }
+      ],
+      "draft": false,
+      "leader_info": "string",
+      "leader_id": 1
+    },
+    {
+      "id": 2,
+      "achievements": []
     },
     {
       "id": 1,
