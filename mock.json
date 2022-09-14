@@ -1,10 +1,9 @@
 {
   "empty": {},
   "tokens": {
-    "name": "dsf",
-    "surname": "sdfsdf",
-    "email": "example1@gmail.com",
-    "password": "password"
+    "access_token": "sdfsdf",
+    "refresh_token": "sdfsdf",
+    "token_type": "Bearer"
   },
   "projects": [
     {

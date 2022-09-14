@@ -14,7 +14,7 @@ export class MemberService {
 
   getMembers(): Observable<User[]> {
     return this.apiService
-      .get<User[]>("/members/all")
+      .get<User[]>("/members/all/")
       .pipe(map(users => plainToClass(User, users)));
   }
 }

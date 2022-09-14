@@ -5,6 +5,7 @@ import { ApiService } from "../../core/services";
 import { map, Observable } from "rxjs";
 import { Vacancy } from "../models/vacancy.model";
 import { plainToClass } from "class-transformer";
+import { VacancyResponse } from "../models/vacancy-response.model";
 
 @Injectable({
   providedIn: "root",
@@ -35,7 +36,13 @@ export class VacancyService {
     return this.apiService.delete(`/vacancy/${vacancyId}`);
   }
 
-  sendVacancy(vacancyId: number, body: { text: string }): Observable<void> {
-    return this.apiService.post(`/vacancy/send/${vacancyId}`, body);
+  sendResponse(vacancyId: number, body: { text: string }): Observable<void> {
+    return this.apiService.post(`/response/send/${vacancyId}`, body);
+  }
+
+  responsesByProject(projectId: number): Observable<VacancyResponse> {
+    return this.apiService
+      .get(`/response/${projectId}`)
+      .pipe(map(response => plainToClass(VacancyResponse, response)));
   }
 }

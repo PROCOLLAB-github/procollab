@@ -46,7 +46,7 @@ export class VacancySendComponent implements OnInit {
     this.sendFormIsSubmitting = true;
 
     this.vacancyService
-      .sendVacancy(Number(this.route.snapshot.paramMap.get("vacancyId")), this.sendForm.value)
+      .sendResponse(Number(this.route.snapshot.paramMap.get("vacancyId")), this.sendForm.value)
       .subscribe(
         () => {
           this.sendFormIsSubmitting = false;
