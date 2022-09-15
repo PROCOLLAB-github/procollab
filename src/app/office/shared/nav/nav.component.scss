@@ -10,8 +10,8 @@
   }
 
   &__title {
-    color: var(--black);
     margin-bottom: 18px;
+    color: var(--black);
   }
 
   &__list {
@@ -21,6 +21,11 @@
 
   &__link {
     color: var(--dark-gray);
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--black);
+    }
 
     &:not(:last-child) {
       margin-right: 38px;
