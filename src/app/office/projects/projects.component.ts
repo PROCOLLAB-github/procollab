@@ -32,7 +32,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.searchFormSearch$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
       this.router
         .navigate([], {
-          queryParams: { query: search },
+          queryParams: { search },
           relativeTo: this.route,
           queryParamsHandling: "merge",
         })

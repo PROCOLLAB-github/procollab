@@ -8,6 +8,7 @@ import { Project } from "../../models/project.model";
 import { User } from "../../../auth/models/user.model";
 import { NavService } from "../../services/nav.service";
 import { ProjectService } from "../../services/project.service";
+import Fuse from "fuse.js";
 
 @Component({
   selector: "app-list",
@@ -29,19 +30,31 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
       this.profile = profile;
     });
 
+    this.querySearch$ = this.route.queryParams.pipe(pluck("search")).subscribe(search => {
+      const fuse = new Fuse(this.projects, {
+        keys: ["name"],
+      });
+
+      this.searchedProjects = search ? fuse.search(search).map(el => el.item) : this.projects;
+    });
+
     this.projects$ = this.route.data.pipe(pluck("data")).subscribe(projects => {
       this.projects = projects;
+      this.searchedProjects = projects;
     });
   }
 
   ngOnDestroy(): void {
-    [this.profile$, this.projects$].forEach($ => $?.unsubscribe());
+    [this.profile$, this.projects$, this.querySearch$].forEach($ => $?.unsubscribe());
   }
 
   profile?: User;
   profile$?: Subscription;
 
+  querySearch$?: Subscription;
+
   projects: Project[] = [];
+  searchedProjects: Project[] = [];
   projects$?: Subscription;
 
   deleteProject(projectId: number): void {
