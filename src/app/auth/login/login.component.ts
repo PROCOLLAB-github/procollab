@@ -46,7 +46,6 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.loginForm.value).subscribe(
       res => {
-        console.log(res);
         this.authService.memTokens(res);
         this.loginIsSubmitting = false;
 
