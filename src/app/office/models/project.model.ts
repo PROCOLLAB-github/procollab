@@ -11,9 +11,9 @@ export class Project {
   imageAddress!: string;
   numberOfCollaborators!: number;
   collaborators!: {
+    id: number;
     name: string;
     surname: string;
-    id: number;
     photoAddress: string;
     speciality: string;
   }[];

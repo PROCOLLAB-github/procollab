@@ -1,0 +1,32 @@
+<!-- @format -->
+
+<section *ngIf="response" class="response">
+  <a class="response__profile profile" [routerLink]="['/office/profile', response.profile.id]">
+    <app-avatar [size]="90" [url]="response.profile.photoAddress"></app-avatar>
+    <p class="text-body-12 profile__status">{{ response.profile.status }}</p>
+    <h3 class="text-heading-4 profile__name">
+      {{ response.profile.name }} {{ response.profile.surname }}
+    </h3>
+    <p class="text-body-12 profile__info">{{ response.profile.speciality }}</p>
+    <ul class="profile__skills">
+      <li *ngFor="let skill of response.profile.keySkills" class="profile__skill">
+        <app-tag>{{ skill }}</app-tag>
+      </li>
+    </ul>
+  </a>
+  <div class="response__text text">
+    <h4 class="text-body-14 text__title">Мотивационное письмо</h4>
+    <p class="text-body-12 text__content">{{ response.text }}</p>
+  </div>
+  <div class="response__actions actions">
+    <app-button class="actions__button" (click)="accept.emit(response.id)">Принять</app-button>
+    <app-button
+      class="actions__button"
+      color="red"
+      appearance="outline"
+      (click)="reject.emit(response.id)"
+    >
+      Отклонить
+    </app-button>
+  </div>
+</section>

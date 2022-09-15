@@ -57,5 +57,15 @@
       color: var(--accent-dark);
       border-color: var(--accent-dark);
     }
+
+    &.button--red {
+      color: var(--red);
+      border-color: var(--red);
+
+      &:hover {
+        color: var(--red-dark);
+        border-color: var(--red-dark);
+      }
+    }
   }
 }

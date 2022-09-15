@@ -25,6 +25,10 @@
   "/invite/accept/:invite_id": "/invite/:invite_id",
   "/invite/reject/:invite_id": "/invite/:invite_id",
 
+  "/response/:project_id": "/response/?project_id=:project_id",
+  "/response/accept/:response_id": "/empty",
+  "/response/reject/:response_id": "/empty",
+
   "/advert/all": "/article",
   "/advert/:advert_id": "/article/:advert_id",
 

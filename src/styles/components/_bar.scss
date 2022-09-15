@@ -1,0 +1,68 @@
+.bar {
+  padding: 0 20px 0 0;
+  background-color: var(--white);
+
+  &__nav {
+    display: flex;
+    align-items: center;
+  }
+
+  &__tabs {
+    display: flex;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    color: var(--dark-gray);
+    cursor: pointer;
+  }
+
+  &__ball {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    min-height: 22px;
+    padding: 1px 6px;
+    margin-left: 6px;
+    line-height: 1;
+    color: var(--white);
+    background-color: var(--gray);
+    border-radius: 7px;
+
+    &--small {
+      padding: 0;
+      border-radius: 100px;
+    }
+  }
+
+  &__link {
+    &--active {
+      .bar__item {
+        color: var(--black);
+        border-bottom: 2px solid var(--black);
+      }
+
+      .bar__ball {
+        background-color: var(--black);
+      }
+    }
+  }
+
+  &__right {
+    margin-left: auto;
+  }
+
+  &__add-project {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    i {
+      display: block;
+      margin-left: 6px;
+    }
+  }
+}

@@ -40,6 +40,9 @@
         <div *ngIf="text | controlError: 'required'" class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
+        <div *ngIf="text | controlError: 'maxlength'" class="text-body-14 error">
+          {{ errorMessage.VALIDATION_TOO_LONG }} {{ text.errors?.maxlength.requiredLength }}
+        </div>
       </fieldset>
       <app-button [loader]="sendFormIsSubmitting" type="submit" class="form__submit">
         Отправить отклик

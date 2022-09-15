@@ -1,10 +1,17 @@
 /** @format */
 
 .project {
-  display: grid;
-  grid-template-columns: minmax(445px, 1fr) 1fr 1fr;
-  grid-gap: 18px;
   margin-bottom: 100px;
+
+  &__bar {
+    margin-bottom: 12px;
+  }
+
+  &__main {
+    display: grid;
+    grid-template-columns: minmax(445px, 1fr) 1fr 1fr;
+    grid-gap: 18px;
+  }
 
   &__section {
     padding: 24px;

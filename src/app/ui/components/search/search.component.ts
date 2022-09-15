@@ -54,9 +54,6 @@ export class SearchComponent implements OnInit, ControlValueAccessor {
       setTimeout(() => {
         this.inputEl?.nativeElement.focus();
       });
-    } else {
-      this.onChange("");
-      this.appValueChange.emit("");
     }
   }
 

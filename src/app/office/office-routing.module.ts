@@ -24,6 +24,8 @@ import { NewsDetailComponent } from "./news/detail/detail.component";
 import { NewsDetailResolver } from "./news/detail/detail.resolver";
 import { VacancySendComponent } from "./vacancy/send/send.component";
 import { OfficeResolver } from "./office.resolver";
+import { ProjectResponsesComponent } from "./projects/responses/responses.component";
+import { ProjectResponsesResolver } from "./projects/responses/responses.resolver";
 
 const routes: Routes = [
   {
@@ -65,13 +67,6 @@ const routes: Routes = [
             },
           },
           {
-            path: ":projectId",
-            component: ProjectDetailComponent,
-            resolve: {
-              data: ProjectDetailResolver,
-            },
-          },
-          {
             path: ":projectId/edit",
             component: ProjectEditComponent,
             resolve: {
@@ -79,6 +74,20 @@ const routes: Routes = [
             },
           },
         ],
+      },
+      {
+        path: "projects/:projectId",
+        component: ProjectDetailComponent,
+        resolve: {
+          data: ProjectDetailResolver,
+        },
+      },
+      {
+        path: "projects/:projectId/responses",
+        component: ProjectResponsesComponent,
+        resolve: {
+          data: ProjectResponsesResolver,
+        },
       },
       {
         path: "vacancy/:vacancyId",

@@ -40,11 +40,7 @@
       ],
       "draft": false,
       "leader_info": "string",
-      "leader_id": 1
-    },
-    {
-      "id": 2,
-      "achievements": []
+      "leader_id": 0
     },
     {
       "id": 1,
@@ -81,10 +77,6 @@
       "draft": false,
       "leader_info": "string",
       "leader_id": 1
-    },
-    {
-      "id": 2,
-      "achievements": []
     }
   ],
   "invite": [
@@ -158,6 +150,40 @@
         "name": "Egor",
         "surname": "Tokarev",
         "speciality": "Front-end"
+      }
+    }
+  ],
+  "response": [
+    {
+      "id": 0,
+      "project_id": 0,
+      "text": "sdfsdfdsf",
+      "profile": {
+        "name": "sfsdfsdf",
+        "surname": "Токарев",
+        "email": "",
+        "status": "Ученик",
+        "birthday": "23.42.3423",
+        "city": "234sadfas",
+        "organisation": "sfdsadfsdf",
+        "speciality": "asdfasdfasd",
+        "key_skills": [
+          "sadf",
+          "wsdf"
+        ],
+        "achievements": [
+          {
+            "title": "sadfs",
+            "place": "fsdfsd"
+          },
+          {
+            "title": "sfdsf",
+            "place": "1 place"
+          }
+        ],
+        "photo_address": "https://sun1.userapi.com/sun1-95/s/v1/ig2/L5lVeUCjLbNUvuZOKvucX0_Hwiq3r2MCB77iyDs1-QmqBEdBZmw5yfxxYPiMWZDXbxgAEP63KSEhO24j-qnU4_Jp.jpg?size=604x453&quality=95&type=album",
+        "about_me": "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
+        "id": 0
       }
     }
   ],

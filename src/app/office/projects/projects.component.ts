@@ -50,6 +50,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   projectsCount$: Observable<ProjectCount> = this.route.data.pipe(pluck("data"));
 
   isMy: Observable<boolean> = this.route.url.pipe(map(() => location.href.includes("/my")));
+  isAll: Observable<boolean> = this.route.url.pipe(map(() => location.href.includes("/all")));
 
   addProject(): void {
     this.projectService.create().subscribe(project => {

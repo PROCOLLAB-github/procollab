@@ -32,7 +32,7 @@ export class InviteService {
 
   getMy(): Observable<Invite[]> {
     return this.apiService
-      .get<Invite[]>("/invite/my")
+      .get<Invite[]>("/invite/my/")
       .pipe(map(invites => plainToClass(Invite, invites)));
   }
 

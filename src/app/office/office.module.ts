@@ -27,6 +27,8 @@ import { NewsDetailComponent } from "./news/detail/detail.component";
 import { VacancySendComponent } from "./vacancy/send/send.component";
 import { InviteManageCardComponent } from "./shared/invite-manage-card/invite-manage-card.component";
 import { ClickOutsideModule } from "ng-click-outside";
+import { ProjectResponsesComponent } from "./projects/responses/responses.component";
+import { ResponseCardComponent } from './shared/response-card/response-card.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,8 @@ import { ClickOutsideModule } from "ng-click-outside";
     NewsDetailComponent,
     VacancySendComponent,
     InviteManageCardComponent,
+    ProjectResponsesComponent,
+    ResponseCardComponent,
   ],
   imports: [
     OfficeRoutingModule,

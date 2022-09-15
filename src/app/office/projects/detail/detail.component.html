@@ -1,90 +1,118 @@
 <!-- @format -->
 
-<section *ngIf="project$ | async as project" class="project">
-  <div class="info project__section project__info">
-    <app-avatar [url]="project.imageAddress" [size]="140"></app-avatar>
-    <div class="info__row">
-      <h1 class="text-heading-2 info__title">{{ project.name }}</h1>
-      <a
-        *ngIf="authService.profile | async as profile"
-        [routerLink]="['/office/projects', project.id, 'edit']"
+<main *ngIf="project$ | async as project" class="project">
+  <section class="bar project__bar">
+    <nav class="bar__nav">
+      <ul class="bar__tabs">
+        <a
+          class="bar__link"
+          [routerLink]="['/office/projects', project.id]"
+          routerLinkActive="bar__link--active"
+        >
+          <li class="text-body-14 bar__item">Страница проекта</li>
+        </a>
+        <a
+          class="bar__link"
+          [routerLink]="['/office/projects', project.id, 'responses']"
+          routerLinkActive="bar__link--active"
+        >
+          <li class="text-body-14 bar__item">Отклики на вакансию</li>
+        </a>
+      </ul>
+    </nav>
+  </section>
+  <section class="project__main">
+    <div class="info project__section project__info">
+      <app-avatar [url]="project.imageAddress" [size]="140"></app-avatar>
+      <div class="info__row">
+        <h1 class="text-heading-2 info__title">{{ project.name }}</h1>
+        <a
+          *ngIf="authService.profile | async as profile"
+          [routerLink]="['/office/projects', project.id, 'edit']"
+        >
+          <i *ngIf="profile.id === project.leaderId" appIcon icon="settings" appSquare="40"></i>
+        </a>
+      </div>
+      <p
+        *ngIf="industryService.industries | async as industries"
+        class="text-body-14 info__industry"
       >
-        <i *ngIf="profile.id === project.leaderId" appIcon icon="settings" appSquare="40"></i>
+        <span *ngIf="industryService.getIndustry(industries, project.industryId) as industry">
+          {{ industry.name }}
+        </span>
+      </p>
+      <a
+        *ngIf="project.presentationAddress"
+        class="text-bold-body-14 info__presentation"
+        [href]="project.presentationAddress"
+        target="_blank"
+      >
+        <img src="/assets/images/projects/shared/pdf.svg" alt="pdf" />
+        Презентация проекта.pdf
       </a>
     </div>
-    <p *ngIf="industryService.industries | async as industries" class="text-body-14 info__industry">
-      <span *ngIf="industryService.getIndustry(industries, project.industryId) as industry">
-        {{ industry.name }}
-      </span>
-    </p>
-    <a
-      *ngIf="project.presentationAddress"
-      class="text-bold-body-14 info__presentation"
-      [href]="project.presentationAddress"
-      target="_blank"
+    <div class="team project__section project__team">
+      <h3 class="text-bold-body-16 team__title">Команда</h3>
+      <ul>
+        <a
+          *ngFor="let member of project.collaborators"
+          class="team__item"
+          [routerLink]="['/office/profile', member.id]"
+        >
+          <li class="member">
+            <app-avatar class="member__avatar" [url]="member.photoAddress" [size]="40"></app-avatar>
+            <div class="member__info">
+              <p class="text-bold-body-14 member__name">{{ member.name }} {{ member.surname }}</p>
+              <p class="text-body-12 member__speciality">{{ member.speciality }}</p>
+            </div>
+            <i
+              *ngIf="member.id === project.leaderId"
+              class="member__star"
+              appIcon
+              icon="star"
+              appSquare="14"
+            ></i>
+          </li>
+        </a>
+      </ul>
+    </div>
+    <div
+      *ngIf="vacancies$ | async as vacancies"
+      class="vacancies project__section project__vacancy"
     >
-      <img src="/assets/images/projects/shared/pdf.svg" alt="pdf" />
-      Презентация проекта.pdf
-    </a>
-  </div>
-  <div class="team project__section project__team">
-    <h3 class="text-bold-body-16 team__title">Команда</h3>
-    <ul>
-      <a
-        *ngFor="let member of project.collaborators"
-        class="team__item"
-        [routerLink]="['/office/profile', member.id]"
-      >
-        <li class="member">
-          <app-avatar class="member__avatar" [url]="member.photoAddress" [size]="40"></app-avatar>
-          <div class="member__info">
-            <p class="text-bold-body-14 member__name">{{ member.name }} {{ member.surname }}</p>
-            <p class="text-body-12 member__speciality">{{ member.speciality }}</p>
+      <h3 class="text-bold-body-16 team__title">Вакансии</h3>
+      <ul class="vacancies__list">
+        <li *ngFor="let vacancy of vacancies" class="vacancy">
+          <div class="vacancy__info">
+            <span class="text-bold-body-14 vacancy__title">{{ vacancy.role }}</span>
+            <a class="text-body-12 vacancy__action" [routerLink]="['/office/vacancy', vacancy.id]">
+              Откликнуться
+            </a>
           </div>
-          <i
-            *ngIf="member.id === project.leaderId"
-            class="member__star"
-            appIcon
-            icon="star"
-            appSquare="14"
-          ></i>
+          <p class="text-body-12 vacancy__requirements">{{ vacancy.requirements.join(" • ") }}</p>
         </li>
-      </a>
-    </ul>
-  </div>
-  <div *ngIf="vacancies$ | async as vacancies" class="vacancies project__section project__vacancy">
-    <h3 class="text-bold-body-16 team__title">Вакансии</h3>
-    <ul class="vacancies__list">
-      <li *ngFor="let vacancy of vacancies" class="vacancy">
-        <div class="vacancy__info">
-          <span class="text-bold-body-14 vacancy__title">{{ vacancy.role }}</span>
-          <a class="text-body-12 vacancy__action" [routerLink]="['/office/vacancy', vacancy.id]">
-            Откликнуться
-          </a>
-        </div>
-        <p class="text-body-12 vacancy__requirements">{{ vacancy.requirements.join(" • ") }}</p>
-      </li>
-    </ul>
-  </div>
-  <div class="about project__section project__about">
-    <h3 class="text-bold-body-16 about__title">О проекте</h3>
-    <p class="text-body-14 about__text" [class.about__text--hide]="!readFull">
-      {{ project.description }}
-    </p>
-    <div class="text-body-14 about__read-full" (click)="readFull = !readFull">
-      {{ readFull ? "Скрыть" : "Читать полностью" }}
+      </ul>
     </div>
-  </div>
-  <div class="achievements project__section project__achievements">
-    <h3 class="text-bold-body-16 achievements__title">Достижения</h3>
-    <ul class="achievements__list">
-      <li
-        *ngFor="let achievement of project.achievements"
-        class="text-bold-body-14 achievements__item achievement"
-      >
-        <p class="text-bold-body-14 achievement__place">{{ achievement.place }}</p>
-        <p class="text-body-12 achievement__title">{{ achievement.title }}</p>
-      </li>
-    </ul>
-  </div>
-</section>
+    <div class="about project__section project__about">
+      <h3 class="text-bold-body-16 about__title">О проекте</h3>
+      <p class="text-body-14 about__text" [class.about__text--hide]="!readFull">
+        {{ project.description }}
+      </p>
+      <div class="text-body-14 about__read-full" (click)="readFull = !readFull">
+        {{ readFull ? "Скрыть" : "Читать полностью" }}
+      </div>
+    </div>
+    <div class="achievements project__section project__achievements">
+      <h3 class="text-bold-body-16 achievements__title">Достижения</h3>
+      <ul class="achievements__list">
+        <li
+          *ngFor="let achievement of project.achievements"
+          class="text-bold-body-14 achievements__item achievement"
+        >
+          <p class="text-bold-body-14 achievement__place">{{ achievement.place }}</p>
+          <p class="text-body-12 achievement__title">{{ achievement.title }}</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+</main>

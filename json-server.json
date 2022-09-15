@@ -2,6 +2,5 @@
   "middlewares": ["post-to-get.middleware.js"],
   "delay": 200,
   "port": 3333,
-  "watch": "mock.json",
   "routes": "routes.json"
 }
