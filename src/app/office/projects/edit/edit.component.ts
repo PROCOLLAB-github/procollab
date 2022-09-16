@@ -182,6 +182,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(
         profile => {
           this.inviteFormIsSubmitting = false;
+          this.inviteForm.reset();
 
           this.invites.push(profile);
         },
