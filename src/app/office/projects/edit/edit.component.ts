@@ -52,7 +52,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         "",
         [
           Validators.required,
-          Validators.pattern(/^http(s)?:\/\/\w+(:[0-9]*)?\/office\/profile\/\d+$/),
+          Validators.pattern(/^http(s)?:\/\/.+(:[0-9]*)?\/office\/profile\/\d+$/),
         ],
       ],
     });

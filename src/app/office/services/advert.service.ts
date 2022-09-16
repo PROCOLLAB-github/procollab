@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { map, Observable } from "rxjs";
+import { map, Observable, pluck } from "rxjs";
 import { Advert } from "../models/article.model";
 import { ApiService } from "../../core/services";
 import { plainToClass } from "class-transformer";
@@ -13,9 +13,10 @@ export class AdvertSerivce {
   constructor(private apiService: ApiService) {}
 
   getAll(): Observable<Advert[]> {
-    return this.apiService
-      .get<Advert[]>("/advert/all")
-      .pipe(map(adverts => plainToClass(Advert, adverts)));
+    return this.apiService.get<{ news: Advert[] }>("/advert/all").pipe(
+      pluck("news"),
+      map(adverts => plainToClass(Advert, adverts))
+    );
   }
 
   getOne(advertId: number): Observable<Advert> {
