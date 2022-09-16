@@ -9,12 +9,15 @@ import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { CoreModule } from "../../../core/core.module";
 import { UiModule } from "../../../ui/ui.module";
 import { NgxMaskModule } from "ngx-mask";
+import { AuthService } from "../../../auth/services";
 
 describe("ProjectEditComponent", () => {
   let component: ProjectEditComponent;
   let fixture: ComponentFixture<ProjectEditComponent>;
 
   beforeEach(async () => {
+    const authSpy = {};
+
     await TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
@@ -24,6 +27,7 @@ describe("ProjectEditComponent", () => {
         UiModule,
         NgxMaskModule.forRoot(),
       ],
+      providers: [{ provide: AuthService, useValue: authSpy }],
       declarations: [ProjectEditComponent],
     }).compileComponents();
   });
