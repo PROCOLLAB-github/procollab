@@ -16,7 +16,7 @@ export class IndustryService {
   industries = this.industries$.asObservable();
 
   getAll(): Observable<Industry[]> {
-    return this.apiService.get<Industry[]>("/industry").pipe(
+    return this.apiService.get<Industry[]>("/industry/").pipe(
       catchError(err => throwError(err)),
       map(industries => plainToClass(Industry, industries)),
       tap(industries => {
