@@ -24,7 +24,10 @@
         <app-avatar [url]="member.photoAddress" [size]="32"></app-avatar>
       </li>
     </ul>
-    <div class="text-body-14 collaborators__other">
+    <div
+      *ngIf="project.numberOfCollaborators && project.collaborators"
+      class="text-body-14 collaborators__other"
+    >
       + {{ project.numberOfCollaborators - project.collaborators.length }}
       {{
         numWord(project.numberOfCollaborators - project.collaborators.length, [
