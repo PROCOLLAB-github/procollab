@@ -16,7 +16,7 @@
         <p class="text-body-12 profile__keys">
           {{ user.birthday }} • {{ user.city }}, {{ user.region }}
         </p>
-        <ul class="profile__skills">
+        <ul *ngIf="user.keySkills.length" class="profile__skills">
           <li *ngFor="let skill of user.keySkills" class="profile__skill">
             <app-tag>{{ skill }}</app-tag>
           </li>
@@ -44,7 +44,7 @@
   </section>
   <section class="profile__section profile__achievements">
     <h3 class="text-bold-body-16 profile__title">Достижения</h3>
-    <ul class="profile__ach-list">
+    <ul *ngIf="user.achievements.length" class="profile__ach-list">
       <li
         *ngFor="let achievement of user.achievements"
         class="text-bold-body-14 profile__achievement"
