@@ -4,6 +4,6 @@
   <article *ngIf="advert$ | async as advert" class="page__advert advert">
     <img class="advert__cover" [src]="advert.coverUrl" [alt]="advert.title" />
     <h1 class="text-heading-2 advert__title">{{ advert.title }}</h1>
-    <div class="advert__body" [innerHTML]="advert.text"></div>
+    <div class="text-body-14 advert__body" [innerHTML]="advert.text"></div>
   </article>
 </main>
