@@ -18,7 +18,6 @@ export class FileService {
   ) {}
 
   uploadFile(file: File): Observable<{ url: string }> {
-    console.log(file);
     const formData = new FormData();
     formData.append("file", file);
 
@@ -42,6 +41,6 @@ export class FileService {
 
   deleteFile(fileUrl: string): Observable<{ success: true }> {
     const params = new HttpParams({ fromObject: { url: fileUrl } });
-    return this.apiService.delete("/files", params);
+    return this.apiService.delete("/files/", params);
   }
 }
