@@ -26,7 +26,7 @@ export class AuthService {
 
   register(data: RegisterRequest): Observable<RegisterResponse> {
     return this.apiService
-      .post("/auth/register", data)
+      .post("/auth/register", { ...data, achievements: [] })
       .pipe(map(json => plainToClass(RegisterResponse, json)));
   }
 
@@ -41,7 +41,7 @@ export class AuthService {
       localStorage.getItem("accessToken") ?? sessionStorage.getItem("accessToken");
     const refreshToken =
       localStorage.getItem("refreshToken") ?? sessionStorage.getItem("refreshToken");
-    const tokenType = localStorage.getItem("tokenType");
+    const tokenType = localStorage.getItem("tokenType") ?? sessionStorage.getItem("tokenType");
 
     if (!accessToken || !refreshToken || !tokenType) {
       return null;
@@ -53,6 +53,11 @@ export class AuthService {
   clearTokens(): void {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("tokenType");
+
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("tokenType");
   }
 
   memTokens(tokens: Tokens, session = false): void {
