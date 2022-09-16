@@ -1,4 +1,4 @@
-import { DayjsPipe } from './dayjs.pipe';
+import { DayjsPipe } from "./dayjs.pipe";
 
 describe('DayjsPipe', () => {
   it('create an instance', () => {

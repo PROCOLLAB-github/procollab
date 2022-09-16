@@ -20,12 +20,12 @@
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
         </fieldset>
-        <fieldset *ngIf="projectForm.get('industry') as industry">
+        <fieldset *ngIf="projectForm.get('industryId') as industry">
           <label class="field-label" for="industry">Сфера проекта</label>
           <app-select
             *ngIf="industries$ | async as industries"
             id="industry"
-            formControlName="industry"
+            formControlName="industryId"
             placeholder="Выберите сферу к которой относится ваш проект"
             [options]="industries"
           ></app-select>

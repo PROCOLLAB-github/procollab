@@ -34,7 +34,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectForm = this.fb.group({
       imageAddress: ["", [Validators.required]],
       name: ["", [Validators.required]],
-      industry: [undefined, [Validators.required]],
+      industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
       presentationAddress: ["", [Validators.required]],
       achievements: this.fb.array([]),
@@ -69,15 +69,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.projectForm.patchValue({
           imageAddress: project.imageAddress,
           name: project.name,
-          industry: project.industryId,
+          industryId: project.industryId,
           description: project.description,
           presentationAddress: project.presentationAddress,
-          achievements: project.achievements,
         });
 
-        project.achievements.forEach(achievement =>
-          this.addAchievement(achievement.title, achievement.place)
-        );
+        project.achievements?.length &&
+          project.achievements.forEach(achievement =>
+            this.addAchievement(achievement.title, achievement.place)
+          );
 
         this.vacancies = vacancies;
 
@@ -219,7 +219,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   saveProfile(): void {
-    if (this.validationService.getFormValidation(this.projectForm)) {
+    if (!this.validationService.getFormValidation(this.projectForm)) {
       return;
     }
 

@@ -7,3 +7,29 @@
     cursor: pointer;
   }
 }
+
+.file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: var(--light-gray);
+  border-radius: var(--rounded-lg);
+
+  &__title {
+    max-width: 80%;
+    overflow: hidden;
+    color: var(--black);
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+
+  &__basket {
+    color: var(--red);
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--red-dark);
+    }
+  }
+}

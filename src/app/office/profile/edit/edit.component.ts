@@ -56,10 +56,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         aboutMe: profile.aboutMe ?? "",
       });
 
-      profile.achievements?.forEach(achievement =>
-        this.addAchievement(achievement.title, achievement.place)
-      );
-      profile.keySkills?.forEach(skill => this.addKeySkill(skill));
+      profile.achievements.length &&
+        profile.achievements?.forEach(achievement =>
+          this.addAchievement(achievement.title, achievement.place)
+        );
+      profile.keySkills.length && profile.keySkills?.forEach(skill => this.addKeySkill(skill));
     });
   }
 

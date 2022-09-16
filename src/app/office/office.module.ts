@@ -28,7 +28,7 @@ import { VacancySendComponent } from "./vacancy/send/send.component";
 import { InviteManageCardComponent } from "./shared/invite-manage-card/invite-manage-card.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { ProjectResponsesComponent } from "./projects/responses/responses.component";
-import { ResponseCardComponent } from './shared/response-card/response-card.component';
+import { ResponseCardComponent } from "./shared/response-card/response-card.component";
 
 @NgModule({
   declarations: [

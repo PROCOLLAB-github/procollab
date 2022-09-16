@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { InviteManageCardComponent } from './invite-manage-card.component';
+import { InviteManageCardComponent } from "./invite-manage-card.component";
 
 describe('InviteManageCardComponent', () => {
   let component: InviteManageCardComponent;

@@ -14,7 +14,7 @@ export class InviteService {
 
   sendForUser(userId: number, projectId: number): Observable<Invite> {
     return this.apiService
-      .post("/invite/send", { userId, projectId })
+      .post("/invite/send", { inviteeId: userId, projectId })
       .pipe(map(profile => plainToClass(Invite, profile)));
   }
 

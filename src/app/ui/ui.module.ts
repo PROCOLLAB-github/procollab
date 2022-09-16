@@ -2,13 +2,7 @@
 
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import {
-  ButtonComponent,
-  CheckboxComponent,
-  IconComponent,
-  InputComponent,
-  SelectComponent,
-} from "./components";
+import { ButtonComponent, CheckboxComponent, IconComponent, InputComponent, SelectComponent } from "./components";
 import { ClickOutsideModule } from "ng-click-outside";
 import { NgxMaskModule } from "ngx-mask";
 import { AvatarComponent } from "./components/avatar/avatar.component";

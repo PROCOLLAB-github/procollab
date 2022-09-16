@@ -1,8 +1,10 @@
-import { TestBed } from '@angular/core/testing';
+/** @format */
 
-import { NotificationService } from './notification.service';
+import { TestBed } from "@angular/core/testing";
 
-describe('NotificationService', () => {
+import { NotificationService } from "./notification.service";
+
+describe("NotificationService", () => {
   let service: NotificationService;
 
   beforeEach(() => {
@@ -10,7 +12,7 @@ describe('NotificationService', () => {
     service = TestBed.inject(NotificationService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

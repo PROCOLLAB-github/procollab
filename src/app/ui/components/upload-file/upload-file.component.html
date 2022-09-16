@@ -1,10 +1,16 @@
 <!-- @format -->
 
-<div class="control">
-  <input [id]="controlId" hidden type="file" [accept]="accept" (change)="onUpdate($event)" />
-  <label [for]="controlId">
-    <div class="control__empty">
-      <ng-content select="[emptyPlaceholder]"></ng-content>
-    </div>
-  </label>
+<div>
+  <div class="control" *ngIf="!value">
+    <input [id]="controlId" hidden type="file" [accept]="accept" (change)="onUpdate($event)" />
+    <label [for]="controlId">
+      <div class="control__empty">
+        <ng-content select="[emptyPlaceholder]"></ng-content>
+      </div>
+    </label>
+  </div>
+  <div *ngIf="value" class="file">
+    <p class="text-bold-body-14 file__title">{{ value }}</p>
+    <i class="file__basket" appIcon icon="basket" appSquare="24"></i>
+  </div>
 </div>

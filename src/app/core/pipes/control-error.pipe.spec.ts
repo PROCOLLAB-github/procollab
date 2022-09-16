@@ -1,4 +1,4 @@
-import { ControlErrorPipe } from './control-error.pipe';
+import { ControlErrorPipe } from "./control-error.pipe";
 
 describe('ControlErrorPipe', () => {
   it('create an instance', () => {

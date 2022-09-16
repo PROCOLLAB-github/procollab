@@ -43,7 +43,7 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
 
   loading = false;
 
-  onUpdate(event: Event) {
+  onUpdate(event: Event): void {
     const files = (event.currentTarget as HTMLInputElement).files;
     if (!files?.length) {
       return;
@@ -57,5 +57,13 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
       this.value = res.url;
       this.onChange(res.url);
     });
+  }
+
+  onRemove(): void {
+    // TODO: make server delte when back will be ready
+    this.value = "";
+
+    this.onTouch();
+    this.onChange("");
   }
 }
