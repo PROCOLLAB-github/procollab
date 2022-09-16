@@ -26,7 +26,7 @@ export class AuthService {
 
   register(data: RegisterRequest): Observable<RegisterResponse> {
     return this.apiService
-      .post("/auth/register", { ...data, achievements: [] })
+      .post("/auth/register", { ...data, achievements: [], keySkills: [] })
       .pipe(map(json => plainToClass(RegisterResponse, json)));
   }
 
