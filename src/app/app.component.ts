@@ -13,14 +13,16 @@ export class AppComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    if (this.authService.getTokens() === null) {
-      this.router
-        .navigateByUrl("/auth/login")
-        .then(() => console.debug("Route changed from AppComponent"));
-    } else {
-      this.router
-        .navigateByUrl("/office")
-        .then(() => console.debug("Route changed From AppComponent"));
+    if (location.pathname === "/") {
+      if (this.authService.getTokens() === null) {
+        this.router
+          .navigateByUrl("/auth/login")
+          .then(() => console.debug("Route changed from AppComponent"));
+      } else {
+        this.router
+          .navigateByUrl("/office")
+          .then(() => console.debug("Route changed From AppComponent"));
+      }
     }
   }
 }
