@@ -32,7 +32,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onRejectInvite(inviteId: number): void {
-    this.inviteService.acceptInvite(inviteId).subscribe(() => {
+    this.inviteService.rejectInvite(inviteId).subscribe(() => {
       const index = this.invites.findIndex(invite => invite.id === inviteId);
       this.invites.splice(index, 1);
 
