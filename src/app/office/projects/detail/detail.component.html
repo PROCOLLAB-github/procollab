@@ -2,7 +2,7 @@
 
 <main *ngIf="project$ | async as project" class="project">
   <ng-container *ngIf="authService.profile | async as profile">
-    <section *ngIf="profile.id === project.id" class="bar project__bar">
+    <section *ngIf="profile.id === project.leaderId" class="bar project__bar">
       <nav class="bar__nav">
         <ul class="bar__tabs">
           <a
