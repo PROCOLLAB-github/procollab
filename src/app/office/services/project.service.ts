@@ -1,16 +1,17 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { map, Observable } from "rxjs";
+import { concatMap, map, Observable } from "rxjs";
 import { Project, ProjectCount } from "../models/project.model";
 import { ApiService } from "../../core/services";
 import { plainToClass } from "class-transformer";
+import { AuthService } from "../../auth/services";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProjectService {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private authService: AuthService) {}
 
   getAll(): Observable<Project[]> {
     return this.apiService
@@ -41,9 +42,10 @@ export class ProjectService {
   }
 
   create(): Observable<Project> {
-    return this.apiService
-      .post("/project/create", {})
-      .pipe(map(project => plainToClass(Project, project)));
+    return this.authService.profile.pipe(
+      concatMap(profile => this.apiService.post("/project/create", { leaderId: profile.id })),
+      map(project => plainToClass(Project, project))
+    );
   }
 
   updateProject(projectId: number, newProject: Partial<Project>): Observable<Project> {

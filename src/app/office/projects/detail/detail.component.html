@@ -1,26 +1,28 @@
 <!-- @format -->
 
 <main *ngIf="project$ | async as project" class="project">
-  <section class="bar project__bar">
-    <nav class="bar__nav">
-      <ul class="bar__tabs">
-        <a
-          class="bar__link"
-          [routerLink]="['/office/projects', project.id]"
-          routerLinkActive="bar__link--active"
-        >
-          <li class="text-body-14 bar__item">Страница проекта</li>
-        </a>
-        <a
-          class="bar__link"
-          [routerLink]="['/office/projects', project.id, 'responses']"
-          routerLinkActive="bar__link--active"
-        >
-          <li class="text-body-14 bar__item">Отклики на вакансию</li>
-        </a>
-      </ul>
-    </nav>
-  </section>
+  <ng-container *ngIf="authService.profile | async as profile">
+    <section *ngIf="profile.id === project.id" class="bar project__bar">
+      <nav class="bar__nav">
+        <ul class="bar__tabs">
+          <a
+            class="bar__link"
+            [routerLink]="['/office/projects', project.id]"
+            routerLinkActive="bar__link--active"
+          >
+            <li class="text-body-14 bar__item">Страница проекта</li>
+          </a>
+          <a
+            class="bar__link"
+            [routerLink]="['/office/projects', project.id, 'responses']"
+            routerLinkActive="bar__link--active"
+          >
+            <li class="text-body-14 bar__item">Отклики на вакансию</li>
+          </a>
+        </ul>
+      </nav>
+    </section>
+  </ng-container>
   <section class="project__main">
     <div class="info project__section project__info">
       <app-avatar [url]="project.imageAddress" [size]="140"></app-avatar>
