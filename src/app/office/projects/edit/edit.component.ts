@@ -74,7 +74,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           presentationAddress: project.presentationAddress,
         });
 
-        project.achievements?.length &&
+        project.achievements &&
           project.achievements.forEach(achievement =>
             this.addAchievement(achievement.title, achievement.place)
           );

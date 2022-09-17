@@ -41,8 +41,9 @@ export class HeaderComponent implements OnInit {
   }
 
   onAcceptInvite(inviteId: number): void {
-    this.inviteService.acceptInvite(inviteId).subscribe(invite => {
+    this.inviteService.acceptInvite(inviteId).subscribe(() => {
       const index = this.invites.findIndex(invite => invite.id === inviteId);
+      const invite = JSON.parse(JSON.stringify(this.invites[index]));
       this.invites.splice(index, 1);
 
       this.showNotifications = false;
