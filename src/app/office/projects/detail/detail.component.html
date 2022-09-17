@@ -83,11 +83,15 @@
       class="vacancies project__section project__vacancy"
     >
       <h3 class="text-bold-body-16 team__title">Вакансии</h3>
-      <ul class="vacancies__list">
+      <ul *ngIf="authService.profile | async as profile" class="vacancies__list">
         <li *ngFor="let vacancy of vacancies" class="vacancy">
           <div class="vacancy__info">
             <span class="text-bold-body-14 vacancy__title">{{ vacancy.role }}</span>
-            <a class="text-body-12 vacancy__action" [routerLink]="['/office/vacancy', vacancy.id]">
+            <a
+              *ngIf="profile.id !== project.leaderId"
+              class="text-body-12 vacancy__action"
+              [routerLink]="['/office/vacancy', vacancy.id]"
+            >
               Откликнуться
             </a>
           </div>
