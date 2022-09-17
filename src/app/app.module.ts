@@ -13,6 +13,8 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { AuthModule } from "./auth/auth.module";
 import { NgxMaskModule } from "ngx-mask";
 import { NgxAutogrowModule } from "ngx-autogrow";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +28,8 @@ import { NgxAutogrowModule } from "ngx-autogrow";
     ReactiveFormsModule,
     NgxAutogrowModule,
     NgxMaskModule.forRoot(),
+    BrowserAnimationsModule,
+    MatProgressBarModule,
   ],
   providers: [
     {

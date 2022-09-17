@@ -1,8 +1,9 @@
 /** @format */
 
 import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { ResolveEnd, ResolveStart, Router } from "@angular/router";
 import { AuthService } from "./auth/services";
+import { debounceTime, filter, mapTo, merge, Observable } from "rxjs";
 
 @Component({
   selector: "app-root",
@@ -12,7 +13,23 @@ import { AuthService } from "./auth/services";
 export class AppComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) {}
 
+  isLoading$?: Observable<boolean>;
+  private showLoaderEvents?: Observable<boolean>;
+  private hideLoaderEvents?: Observable<boolean>;
+
   ngOnInit(): void {
+    this.showLoaderEvents = this.router.events.pipe(
+      filter(evt => evt instanceof ResolveStart),
+      mapTo(true)
+    );
+    this.hideLoaderEvents = this.router.events.pipe(
+      filter(evt => evt instanceof ResolveEnd),
+      debounceTime(200),
+      mapTo(false)
+    );
+
+    this.isLoading$ = merge(this.hideLoaderEvents, this.showLoaderEvents);
+
     if (location.pathname === "/") {
       if (this.authService.getTokens() === null) {
         this.router
