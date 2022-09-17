@@ -37,7 +37,7 @@ export class ProjectResponsesComponent implements OnInit, OnDestroy {
   }
 
   rejectResponse(responseId: number) {
-    this.vacancyService.acceptResponse(responseId).subscribe(() => {
+    this.vacancyService.rejectResponse(responseId).subscribe(() => {
       const index = this.responses.findIndex(el => el.id === responseId);
       this.responses.splice(index, 1);
     });
