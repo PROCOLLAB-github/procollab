@@ -3,7 +3,9 @@
 <div *ngIf="vacancy" class="vacancy">
   <div>
     <h3 class="text-bold-body-14 vacancy__role">{{ vacancy.role }}</h3>
-    <p class="text-body-12 vacancy__requirements">{{ vacancy.requirements.join(" • ") }}</p>
+    <p *ngIf="vacancy.requirements.length" class="text-body-12 vacancy__requirements">
+      {{ vacancy.requirements.join(" • ") }}
+    </p>
   </div>
   <i class="vacancy__basket" appIcon icon="basket" appSquare="24" (click)="onRemove($event)"></i>
 </div>
