@@ -36,6 +36,8 @@
     left: 0;
     z-index: 2;
     padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
     background-color: var(--white);
     border: 1px solid var(--gray);
     border-radius: var(--rounded-lg);
