@@ -67,7 +67,11 @@
   <div class="register__agreement">
     <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
     <span class="text-body-14" (click)="registerAgreement = !registerAgreement">
-      Я прочитал соглашение и даю <a routerLink=".">согласие</a> на обработку персональных данных
+      Я прочитал соглашение и да
+      <a href="/assets/downloads/auth/shared/Политика_обработки_перс_данных_2022.docx" download>
+        согласие
+      </a>
+      на обработку персональных данных
     </span>
   </div>
   <div class="auth__wrapper">
