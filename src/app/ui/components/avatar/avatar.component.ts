@@ -12,7 +12,7 @@ export class AvatarComponent implements OnInit {
   @Input() size = 50;
   @Input() hasBorder = false;
 
-  placeholderUrl = "https://joeschmoe.io/api/v1/random";
+  placeholderUrl = "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif";
 
   constructor() {}
 
