@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit {
       res => {
         this.authService.memTokens(res);
         this.router
-          .navigateByUrl("/office/profile/edit")
+          .navigateByUrl("/auth/verification/email")
           .then(() => console.debug("Route changed from RegisterComponent"));
 
         this.registerIsSubmitting = false;
