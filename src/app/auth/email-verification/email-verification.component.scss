@@ -1,0 +1,13 @@
+/** @format */
+
+.verification {
+  &__title {
+    margin-bottom: 12px;
+    color: var(--black);
+  }
+
+  &__text {
+    max-width: 515px;
+    color: var(--black);
+  }
+}
