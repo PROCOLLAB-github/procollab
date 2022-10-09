@@ -75,12 +75,12 @@
       </div>
       <div class="profile__row">
         <fieldset *ngIf="profileForm.get('organisation') as organisation">
-          <label for="city" class="field-label">Место учебы</label>
+          <label for="city" class="field-label">Место учебы/работы</label>
           <app-input
             id="organisation"
             [error]="organisation | controlError"
             type="text"
-            placeholder="вуз / колледж / школа"
+            placeholder="вуз / колледж / школа / организация"
             formControlName="organisation"
           ></app-input>
           <div *ngIf="organisation | controlError: 'required'" class="text-body-14 error">
