@@ -1,6 +1,6 @@
 /** @format */
 
-import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "../../services/industry.service";
@@ -29,7 +29,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private navService: NavService,
     private validationService: ValidationService,
     private vacancyService: VacancyService,
-    private inviteService: InviteService
+    private inviteService: InviteService,
+    private cdRef: ChangeDetectorRef
   ) {
     this.projectForm = this.fb.group({
       imageAddress: ["", [Validators.required]],
@@ -82,6 +83,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.vacancies = vacancies;
 
         this.invites = invites;
+
+        this.cdRef.detectChanges();
       });
   }
 
@@ -219,7 +222,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.achievements.removeAt(index);
   }
 
-  saveProfile(): void {
+  saveProject(): void {
     if (!this.validationService.getFormValidation(this.projectForm)) {
       return;
     }

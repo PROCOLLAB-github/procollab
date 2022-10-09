@@ -110,7 +110,7 @@
     </div>
     <div class="achievements project__section project__achievements">
       <h3 class="text-bold-body-16 achievements__title">Достижения</h3>
-      <ul *ngIf="project.achievements.length" class="achievements__list">
+      <ul *ngIf="project.achievements" class="achievements__list">
         <li
           *ngFor="let achievement of project.achievements"
           class="text-bold-body-14 achievements__item achievement"
