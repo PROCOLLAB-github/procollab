@@ -25,15 +25,15 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       name: ["", [Validators.required]],
       surname: ["", [Validators.required]],
       email: [""],
-      status: ["", [Validators.required]],
-      birthday: ["", [Validators.required]],
-      city: ["", [Validators.required]],
-      organisation: ["", [Validators.required]],
-      speciality: ["", [Validators.required]],
+      status: [""],
+      birthday: [""],
+      city: [""],
+      organisation: [""],
+      speciality: [""],
       keySkills: this.fb.array([]),
       achievements: this.fb.array([]),
-      photoAddress: ["", [Validators.required]],
-      aboutMe: ["", [Validators.required]],
+      photoAddress: [""],
+      aboutMe: [""],
     });
   }
 
