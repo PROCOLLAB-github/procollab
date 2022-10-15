@@ -1,8 +1,8 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { concatMap, map, Observable } from "rxjs";
-import { Project, ProjectCount } from "../models/project.model";
+import { BehaviorSubject, concatMap, map, Observable, tap } from "rxjs";
+import { Project, ProjectCount, ProjectSetp } from "../models/project.model";
 import { ApiService } from "../../core/services";
 import { plainToClass } from "class-transformer";
 import { AuthService } from "../../auth/services";
@@ -52,5 +52,15 @@ export class ProjectService {
     return this.apiService
       .put(`/project/update/${projectId}`, newProject)
       .pipe(map(project => plainToClass(Project, project)));
+  }
+
+  private projectSteps$ = new BehaviorSubject<ProjectSetp[]>([]);
+  projectSteps = this.projectSteps$.asObservable();
+
+  getProjectSteps(): Observable<ProjectSetp[]> {
+    return this.apiService.get<ProjectSetp[]>("/project/project_steps/").pipe(
+      map(projectSteps => plainToClass(ProjectSetp, projectSteps)),
+      tap(projectSteps => this.projectSteps$.next(projectSteps))
+    );
   }
 }

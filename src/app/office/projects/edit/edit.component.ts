@@ -25,7 +25,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private industryService: IndustryService,
-    protected projectService: ProjectService,
+    private projectService: ProjectService,
     private navService: NavService,
     private validationService: ValidationService,
     private vacancyService: VacancyService,
@@ -36,6 +36,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       imageAddress: ["", [Validators.required]],
       name: ["", [Validators.required]],
       industryId: [undefined, [Validators.required]],
+      step: ["", [Validators.required]],
       description: ["", [Validators.required]],
       presentationAddress: ["", [Validators.required]],
       achievements: this.fb.array([]),
@@ -72,6 +73,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           name: project.name,
           industryId: project.industryId,
           description: project.description,
+          step: project.step,
           presentationAddress: project.presentationAddress,
         });
 
@@ -99,6 +101,16 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   industries$ = this.industryService.industries.pipe(
     map(industries =>
       industries.map(industry => ({ value: industry.id, id: industry.id, label: industry.name }))
+    )
+  );
+
+  projectSteps$ = this.projectService.projectSteps.pipe(
+    map(projectSteps =>
+      projectSteps.map(projectStep => ({
+        value: projectStep.name,
+        id: projectStep.id,
+        label: projectStep.name,
+      }))
     )
   );
 

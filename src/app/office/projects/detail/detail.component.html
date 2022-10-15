@@ -26,7 +26,7 @@
   <section class="project__main">
     <div class="info project__section project__info">
       <app-avatar [url]="project.imageAddress" [size]="140"></app-avatar>
-      <div class="info__row">
+      <div class="info__title-row">
         <h1 class="text-heading-2 info__title">{{ project.name }}</h1>
         <a
           *ngIf="authService.profile | async as profile"
@@ -35,14 +35,17 @@
           <i *ngIf="profile.id === project.leaderId" appIcon icon="settings" appSquare="40"></i>
         </a>
       </div>
-      <p
-        *ngIf="industryService.industries | async as industries"
-        class="text-body-14 info__industry"
-      >
-        <span *ngIf="industryService.getIndustry(industries, project.industryId) as industry">
-          {{ industry.name }}
-        </span>
-      </p>
+      <div class="info__secondary-row">
+        <p
+          *ngIf="industryService.industries | async as industries"
+          class="text-body-14 info__industry"
+        >
+          <span *ngIf="industryService.getIndustry(industries, project.industryId) as industry">
+            {{ industry.name }}
+          </span>
+        </p>
+        <p *ngIf="project.step" class="text-body-14 info__industry">&nbsp;• {{ project.step }}</p>
+      </div>
       <a
         *ngIf="project.presentationAddress"
         class="text-bold-body-14 info__presentation"

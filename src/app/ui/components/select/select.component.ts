@@ -26,8 +26,12 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
 
   ngOnInit(): void {}
 
-  writeValue(id: number) {
-    this.selectedId = id;
+  writeValue(value: number | string) {
+    if (typeof value === "number") {
+      this.selectedId = value;
+    } else {
+      this.selectedId = this.getId(value);
+    }
   }
 
   disabled = false;

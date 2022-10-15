@@ -10,9 +10,10 @@ import {
   ViewChild,
 } from "@angular/core";
 import { IndustryService } from "./services/industry.service";
-import { noop, Observable, pluck, Subscription } from "rxjs";
+import { forkJoin, noop, Observable, pluck, Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { Invite } from "./models/invite.model";
+import { ProjectService } from "./services/project.service";
 
 @Component({
   selector: "app-office",
@@ -23,6 +24,7 @@ export class OfficeComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private cdref: ChangeDetectorRef,
     private industryService: IndustryService,
+    private projectService: ProjectService,
     private route: ActivatedRoute
   ) {}
 
@@ -31,10 +33,13 @@ export class OfficeComponent implements OnInit, AfterViewInit, OnDestroy {
   bodyHeight = "0px";
   @ViewChild("general") general?: ElementRef<HTMLElement>;
 
-  industrySub?: Subscription;
+  hintsSub?: Subscription;
 
   ngOnInit(): void {
-    this.industrySub = this.industryService.getAll().subscribe(noop);
+    this.hintsSub = forkJoin([
+      this.industryService.getAll(),
+      this.projectService.getProjectSteps(),
+    ]).subscribe(noop);
   }
 
   ngAfterViewInit(): void {
@@ -45,6 +50,6 @@ export class OfficeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.industrySub?.unsubscribe();
+    this.hintsSub?.unsubscribe();
   }
 }
