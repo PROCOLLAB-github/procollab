@@ -39,3 +39,8 @@ export class User {
     } as User;
   }
 }
+
+export class UserSpeciality {
+  id!: number;
+  name!: string;
+}

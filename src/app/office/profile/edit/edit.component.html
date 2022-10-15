@@ -91,13 +91,13 @@
       <div class="profile__row">
         <fieldset *ngIf="profileForm.get('speciality') as speciality">
           <label for="speciality" class="field-label">Специальность</label>
-          <app-input
+          <app-select
+            *ngIf="specialityOptions$ | async as specialityOptions"
             id="speciality"
-            [error]="speciality | controlError"
-            type="text"
             placeholder="Например: Java Developer"
             formControlName="speciality"
-          ></app-input>
+            [options]="specialityOptions"
+          ></app-select>
           <div *ngIf="speciality | controlError: 'required'" class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>

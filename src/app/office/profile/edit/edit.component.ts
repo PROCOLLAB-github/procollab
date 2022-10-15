@@ -6,8 +6,9 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "../../../error/models/error-message";
 import { SelectComponent } from "../../../ui/components";
 import { ValidationService } from "../../../core/services";
-import { concatMap, first, Subscription } from "rxjs";
+import { concatMap, first, map, Observable, Subscription } from "rxjs";
 import { Router } from "@angular/router";
+import { MemberService } from "../../services/member.service";
 
 @Component({
   selector: "app-profile-edit",
@@ -19,7 +20,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     public authService: AuthService,
     private fb: FormBuilder,
     private validationService: ValidationService,
-    private router: Router
+    private router: Router,
+    private memberService: MemberService
   ) {
     this.profileForm = this.fb.group({
       name: ["", [Validators.required]],
@@ -83,6 +85,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     { id: 2, value: "Ментор", label: "Ментор" },
   ];
 
+  specialityOptions$: Observable<SelectComponent["options"]> = this.memberService.specialities.pipe(
+    map(specialities =>
+      specialities.map((speciality, index) => ({
+        id: index,
+        label: speciality?.name ?? "",
+        value: speciality?.name ?? "",
+      }))
+    )
+  );
+
   profileFormSubmitting = false;
   profileForm: FormGroup;
 
@@ -104,6 +116,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   newKeySkillTitle = "";
+
   addKeySkill(title?: string): void {
     const fromState = title ?? this.newKeySkillTitle;
     if (!fromState) {
