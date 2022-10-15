@@ -1,16 +1,19 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { EmailVerificationComponent } from './email-verification.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('EmailVerificationComponent', () => {
+import { EmailVerificationComponent } from "./email-verification.component";
+import { RouterTestingModule } from "@angular/router/testing";
+
+describe("EmailVerificationComponent", () => {
   let component: EmailVerificationComponent;
   let fixture: ComponentFixture<EmailVerificationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EmailVerificationComponent ]
-    })
-    .compileComponents();
+      imports: [RouterTestingModule],
+      declarations: [EmailVerificationComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +22,7 @@ describe('EmailVerificationComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

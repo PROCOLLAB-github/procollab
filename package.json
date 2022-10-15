@@ -19,7 +19,8 @@
   },
   "precommit": [
     "lint:scss",
-    "lint:ts"
+    "lint:ts",
+    "test:ci"
   ],
   "private": true,
   "dependencies": {
