@@ -81,6 +81,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   statusOptions: SelectComponent["options"] = [
     { id: 1, value: "Ученик", label: "Ученик" },
     { id: 2, value: "Ментор", label: "Ментор" },
+    { id: 3, value: "Эксперт", label: "Эксперт" },
+    { id: 4, value: "Инвестор", label: "Инвестор" },
   ];
 
   profileFormSubmitting = false;
