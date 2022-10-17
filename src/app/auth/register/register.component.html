@@ -64,6 +64,9 @@
       </div>
     </fieldset>
   </div>
+  <div *ngIf="userExistError" class="text-body-14 error">
+    {{ errorMessage.AUTH_EMAIL_EXIST }}
+  </div>
   <div class="register__agreement">
     <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
     <span class="text-body-14" (click)="registerAgreement = !registerAgreement">

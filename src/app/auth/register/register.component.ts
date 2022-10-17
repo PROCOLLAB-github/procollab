@@ -33,6 +33,8 @@ export class RegisterComponent implements OnInit {
   registerAgreement = false;
   registerIsSubmitting = false;
 
+  userExistError = false;
+
   errorMessage = ErrorMessage;
 
   statusOptions: SelectComponent["options"] = [
@@ -63,7 +65,11 @@ export class RegisterComponent implements OnInit {
 
         this.cdref.detectChanges();
       },
-      () => {
+      error => {
+        if (error.status === 409) {
+          this.userExistError = true;
+        }
+
         this.registerIsSubmitting = false;
         this.cdref.detectChanges();
       }

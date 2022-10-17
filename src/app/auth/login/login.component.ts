@@ -51,15 +51,16 @@ export class LoginComponent implements OnInit {
 
         this.cdref.detectChanges();
 
-        this.router.navigateByUrl("/office");
+        this.router
+          .navigateByUrl("/office")
+          .then(() => console.debug("Route changed from LoginComponent"));
       },
       error => {
-        this.loginIsSubmitting = false;
-
         if (error.status === 403) {
           this.errorWrongAuth = true;
         }
 
+        this.loginIsSubmitting = false;
         this.cdref.detectChanges();
       }
     );
