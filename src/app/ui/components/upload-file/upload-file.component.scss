@@ -26,6 +26,7 @@
 
   &__basket {
     color: var(--red);
+    cursor: pointer;
     transition: color 0.2s;
 
     &:hover {

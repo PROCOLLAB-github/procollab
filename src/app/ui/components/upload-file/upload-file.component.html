@@ -11,6 +11,6 @@
   </div>
   <div *ngIf="value" class="file">
     <p class="text-bold-body-14 file__title">{{ value.slice(0, 60) }}</p>
-    <i class="file__basket" appIcon icon="basket" appSquare="24"></i>
+    <i class="file__basket" appIcon icon="basket" appSquare="24" (click)="onRemove()"></i>
   </div>
 </div>
