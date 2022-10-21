@@ -2,9 +2,9 @@
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "../../services/industry.service";
-import { map, Subscription } from "rxjs";
+import { distinctUntilChanged, map, Subscription } from "rxjs";
 import { ErrorMessage } from "../../../error/models/error-message";
 import { NavService } from "../../services/nav.service";
 import { Project } from "../../models/project.model";
@@ -37,7 +37,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       name: ["", [Validators.required]],
       industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
-      presentationAddress: ["", [Validators.required]],
+      presentationAddress: [""],
       achievements: this.fb.array([]),
     });
 
@@ -61,6 +61,23 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.navService.setNavTitle("Создание проекта");
+    const controls: (AbstractControl | null)[] = [
+      this.inviteForm.get("role"),
+      this.inviteForm.get("link"),
+      this.vacancyForm.get("role"),
+      this.vacancyForm.get("requirements"),
+    ];
+
+    controls.filter(Boolean).forEach(control => {
+      this.subscriptions.push(
+        control?.valueChanges.pipe(distinctUntilChanged()).subscribe(value => {
+          if (value === "") {
+            control?.removeValidators([Validators.required]);
+            control?.updateValueAndValidity();
+          }
+        })
+      );
+    });
   }
 
   ngAfterViewInit(): void {
@@ -90,6 +107,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.profile$?.unsubscribe();
+    this.subscriptions.forEach($ => $?.unsubscribe());
   }
 
   profile$?: Subscription;
@@ -101,6 +119,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       industries.map(industry => ({ value: industry.id, id: industry.id, label: industry.name }))
     )
   );
+
+  subscriptions: (Subscription | undefined)[] = [];
 
   vacancies: Vacancy[] = [];
   vacancyForm: FormGroup;
@@ -128,6 +148,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   submitVacancy(): void {
     if (!this.validationService.getFormValidation(this.vacancyForm)) {
+      const controls = [this.vacancyForm.get("role"), this.vacancyForm.get("requirements")];
+
+      controls.filter(Boolean).forEach(control => {
+        console.debug("Submit vacancy error: ", control);
+
+        control?.addValidators([Validators.required]);
+        control?.updateValueAndValidity({ emitEvent: false });
+      });
+
       return;
     }
 
@@ -168,6 +197,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   submitInvite(): void {
     if (!this.validationService.getFormValidation(this.inviteForm)) {
+      const controls = [this.inviteForm.get("role"), this.inviteForm.get("link")];
+
+      controls.filter(Boolean).forEach(control => {
+        console.debug("Submit invite error: ", control);
+
+        control?.addValidators([Validators.required]);
+        control?.updateValueAndValidity({ emitEvent: false });
+      });
+
       return;
     }
 
