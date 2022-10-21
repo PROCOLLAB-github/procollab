@@ -4,7 +4,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "
 import { ActivatedRoute } from "@angular/router";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "../../services/industry.service";
-import { map, pluck, Subscription } from "rxjs";
+import { map, Subscription } from "rxjs";
 import { ErrorMessage } from "../../../error/models/error-message";
 import { NavService } from "../../services/nav.service";
 import { Project } from "../../models/project.model";
@@ -65,7 +65,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.profile$ = this.route.data
-      .pipe(pluck("data"))
+      .pipe(map(d => d["data"]))
       .subscribe(([project, vacancies, invites]: [Project, Vacancy[], Invite[]]) => {
         this.projectForm.patchValue({
           imageAddress: project.imageAddress,
@@ -135,8 +135,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.vacancyService
       .postVacancy(Number(this.route.snapshot.paramMap.get("projectId")), this.vacancyForm.value)
-      .subscribe(
-        vacancy => {
+      .subscribe({
+        next: vacancy => {
           this.vacancies.push(vacancy);
 
           this.requirements.clear();
@@ -144,10 +144,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
           this.vacancyIsSubmitting = false;
         },
-        () => {
+        error: () => {
           this.vacancyIsSubmitting = false;
-        }
-      );
+        },
+      });
   }
 
   removeVacancy(vacancyId: number): void {
@@ -182,17 +182,17 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         Number(path[path.length - 1]),
         Number(this.route.snapshot.paramMap.get("projectId"))
       )
-      .subscribe(
-        profile => {
+      .subscribe({
+        next: profile => {
           this.inviteFormIsSubmitting = false;
           this.inviteForm.reset();
 
           this.invites.push(profile);
         },
-        () => {
+        error: () => {
           this.inviteFormIsSubmitting = false;
-        }
-      );
+        },
+      });
   }
 
   removeInvitation(invitationId: number): void {
@@ -231,13 +231,13 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.projectService
       .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), this.projectForm.value)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.projectFormIsSubmitting = false;
         },
-        () => {
+        error: () => {
           this.projectFormIsSubmitting = false;
-        }
-      );
+        },
+      });
   }
 }
