@@ -39,7 +39,7 @@ export class OfficeComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     if (this.general) {
-      this.bodyHeight = `${window.screen.availHeight - this.general.nativeElement.clientHeight}px`;
+      this.bodyHeight = `${window.innerHeight - this.general.nativeElement.clientHeight}px`;
       this.cdref.detectChanges();
     }
   }
