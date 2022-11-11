@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { map, Observable, pluck, Subscription } from "rxjs";
+import { map, Observable, Subscription } from "rxjs";
 import { VacancyResponse } from "../../models/vacancy-response.model";
 import { VacancyService } from "../../services/vacancy.service";
 
@@ -15,7 +15,7 @@ export class ProjectResponsesComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private vacancyService: VacancyService) {}
 
   ngOnInit(): void {
-    this.responses$ = this.route.data.pipe(pluck("data")).subscribe(responses => {
+    this.responses$ = this.route.data.pipe(map(r => r["data"])).subscribe(responses => {
       this.responses = responses;
     });
   }
@@ -24,7 +24,10 @@ export class ProjectResponsesComponent implements OnInit, OnDestroy {
     this.responses$?.unsubscribe();
   }
 
-  projectId: Observable<number> = this.route.params.pipe(pluck("projectId"), map(Number));
+  projectId: Observable<number> = this.route.params.pipe(
+    map(r => r["projectId"]),
+    map(Number)
+  );
 
   responses$?: Subscription;
   responses: VacancyResponse[] = [];

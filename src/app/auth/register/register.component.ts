@@ -54,8 +54,8 @@ export class RegisterComponent implements OnInit {
 
     this.registerIsSubmitting = true;
 
-    this.authService.register(form).subscribe(
-      res => {
+    this.authService.register(form).subscribe({
+      next: res => {
         this.authService.memTokens(res);
         this.router
           .navigateByUrl("/auth/verification/email")
@@ -65,14 +65,14 @@ export class RegisterComponent implements OnInit {
 
         this.cdref.detectChanges();
       },
-      error => {
+      error: error => {
         if (error.status === 409) {
           this.userExistError = true;
         }
 
         this.registerIsSubmitting = false;
         this.cdref.detectChanges();
-      }
-    );
+      },
+    });
   }
 }

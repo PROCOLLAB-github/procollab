@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { pluck, Subscription } from "rxjs";
+import { map, Subscription } from "rxjs";
 import { AuthService } from "../../../auth/services";
 import { Project } from "../../models/project.model";
 import { User } from "../../../auth/models/user.model";
@@ -30,7 +30,7 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
       this.profile = profile;
     });
 
-    this.querySearch$ = this.route.queryParams.pipe(pluck("search")).subscribe(search => {
+    this.querySearch$ = this.route.queryParams.pipe(map(r => r["search"])).subscribe(search => {
       const fuse = new Fuse(this.projects, {
         keys: ["name"],
       });
@@ -38,7 +38,7 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
       this.searchedProjects = search ? fuse.search(search).map(el => el.item) : this.projects;
     });
 
-    this.projects$ = this.route.data.pipe(pluck("data")).subscribe(projects => {
+    this.projects$ = this.route.data.pipe(map(r => r["data"])).subscribe(projects => {
       this.projects = projects;
       this.searchedProjects = projects;
     });

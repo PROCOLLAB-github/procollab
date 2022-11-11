@@ -3,7 +3,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ResolveEnd, ResolveStart, Router } from "@angular/router";
 import { AuthService } from "./auth/services";
-import { debounceTime, filter, mapTo, merge, Observable } from "rxjs";
+import { debounceTime, filter, map, merge, Observable } from "rxjs";
 
 @Component({
   selector: "app-root",
@@ -20,12 +20,12 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.showLoaderEvents = this.router.events.pipe(
       filter(evt => evt instanceof ResolveStart),
-      mapTo(true)
+      map(() => true)
     );
     this.hideLoaderEvents = this.router.events.pipe(
       filter(evt => evt instanceof ResolveEnd),
       debounceTime(200),
-      mapTo(false)
+      map(() => false)
     );
 
     this.isLoading$ = merge(this.hideLoaderEvents, this.showLoaderEvents);

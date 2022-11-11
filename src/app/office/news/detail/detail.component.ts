@@ -2,7 +2,7 @@
 
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Observable, pluck } from "rxjs";
+import { map, Observable } from "rxjs";
 import { Advert } from "../../models/article.model";
 
 @Component({
@@ -13,7 +13,7 @@ import { Advert } from "../../models/article.model";
 export class NewsDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
-  advert$: Observable<Advert> = this.route.data.pipe(pluck("data"));
+  advert$: Observable<Advert> = this.route.data.pipe(map(r => r["data"]));
 
   ngOnInit(): void {}
 }

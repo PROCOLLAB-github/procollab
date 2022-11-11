@@ -44,8 +44,8 @@ export class LoginComponent implements OnInit {
 
     this.loginIsSubmitting = true;
 
-    this.authService.login(this.loginForm.value).subscribe(
-      res => {
+    this.authService.login(this.loginForm.value).subscribe({
+      next: res => {
         this.authService.memTokens(res);
         this.loginIsSubmitting = false;
 
@@ -55,14 +55,14 @@ export class LoginComponent implements OnInit {
           .navigateByUrl("/office")
           .then(() => console.debug("Route changed from LoginComponent"));
       },
-      error => {
+      error: error => {
         if (error.status === 403) {
           this.errorWrongAuth = true;
         }
 
         this.loginIsSubmitting = false;
         this.cdref.detectChanges();
-      }
-    );
+      },
+    });
   }
 }

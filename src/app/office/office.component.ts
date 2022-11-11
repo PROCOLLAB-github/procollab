@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { IndustryService } from "./services/industry.service";
-import { noop, Observable, pluck, Subscription } from "rxjs";
+import { map, noop, Observable, Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { Invite } from "./models/invite.model";
 
@@ -26,7 +26,7 @@ export class OfficeComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute
   ) {}
 
-  invites$: Observable<Invite[]> = this.route.data.pipe(pluck("invites"));
+  invites$: Observable<Invite[]> = this.route.data.pipe(map(r => r["invites"]));
 
   bodyHeight = "0px";
   @ViewChild("general") general?: ElementRef<HTMLElement>;

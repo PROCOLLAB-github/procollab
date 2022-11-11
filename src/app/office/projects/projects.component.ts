@@ -3,7 +3,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NavService } from "../services/nav.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { map, Observable, pluck, Subscription } from "rxjs";
+import { map, Observable, Subscription } from "rxjs";
 import { ProjectCount } from "../models/project.model";
 import { ProjectService } from "../services/project.service";
 import { FormBuilder, FormGroup } from "@angular/forms";
@@ -47,7 +47,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   searchForm: FormGroup;
   searchFormSearch$?: Subscription;
 
-  projectsCount$: Observable<ProjectCount> = this.route.data.pipe(pluck("data"));
+  projectsCount$: Observable<ProjectCount> = this.route.data.pipe(map(r => r["data"]));
 
   isMy: Observable<boolean> = this.route.url.pipe(map(() => location.href.includes("/my")));
   isAll: Observable<boolean> = this.route.url.pipe(map(() => location.href.includes("/all")));

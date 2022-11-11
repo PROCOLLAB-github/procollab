@@ -2,7 +2,7 @@
 
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { pluck } from "rxjs";
+import { map } from "rxjs";
 
 @Component({
   selector: "app-email-verification",
@@ -12,7 +12,7 @@ import { pluck } from "rxjs";
 export class EmailVerificationComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
-  userEmail = this.route.queryParams.pipe(pluck("email"));
+  userEmail = this.route.queryParams.pipe(map(r => r.email));
 
   ngOnInit(): void {}
 }

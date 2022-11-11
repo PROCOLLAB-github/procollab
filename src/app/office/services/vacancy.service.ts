@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService } from "../../core/services";
-import { map, Observable, pluck } from "rxjs";
+import { map, Observable } from "rxjs";
 import { Vacancy } from "../models/vacancy.model";
 import { plainToClass } from "class-transformer";
 import { VacancyResponse } from "../models/vacancy-response.model";
@@ -15,7 +15,7 @@ export class VacancyService {
 
   getForProject(projectId: number): Observable<Vacancy[]> {
     return this.apiService.get<{ vacancies: Vacancy[] }>(`/vacancy/project/${projectId}`).pipe(
-      pluck("vacancies"),
+      map(r => r.vacancies),
       map(vacancies => plainToClass(Vacancy, vacancies))
     );
   }

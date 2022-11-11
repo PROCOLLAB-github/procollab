@@ -47,14 +47,14 @@ export class VacancySendComponent implements OnInit {
 
     this.vacancyService
       .sendResponse(Number(this.route.snapshot.paramMap.get("vacancyId")), this.sendForm.value)
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.sendFormIsSubmitting = false;
           this.resultModal = true;
         },
-        () => {
+        error: () => {
           this.sendFormIsSubmitting = false;
-        }
-      );
+        },
+      });
   }
 }

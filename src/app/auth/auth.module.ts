@@ -10,7 +10,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { UiModule } from "../ui/ui.module";
 import { RegisterComponent } from "./register/register.component";
 import { CoreModule } from "../core/core.module";
-import { EmailVerificationComponent } from './email-verification/email-verification.component';
+import { EmailVerificationComponent } from "./email-verification/email-verification.component";
 
 @NgModule({
   declarations: [AuthComponent, LoginComponent, RegisterComponent, EmailVerificationComponent],

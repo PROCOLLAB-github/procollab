@@ -62,7 +62,7 @@
           <ng-container formArrayName="achievements">
             <ul id="achievements" class="project__achievements-list">
               <li
-                *ngFor="let achievement of achievements.controls; index as i"
+                *ngFor="let _ of achievements.controls; index as i"
                 class="project__achievement-item"
               >
                 <form [formGroupName]="i" class="achievement">

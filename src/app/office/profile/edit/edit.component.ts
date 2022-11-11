@@ -132,16 +132,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.authService
       .saveProfile(this.profileForm.value)
       .pipe(concatMap(() => this.authService.getProfile()))
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.profileFormSubmitting = false;
           this.router
             .navigateByUrl(`/office/profile/${this.profileId}`)
             .then(() => console.debug("Router Changed form ProfileEditComponent"));
         },
-        () => {
+        error: () => {
           this.profileFormSubmitting = false;
-        }
-      );
+        },
+      });
   }
 }
