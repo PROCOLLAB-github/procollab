@@ -1,7 +1,13 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from "@angular/common/http";
 import { catchError, Observable, switchMap, throwError } from "rxjs";
 import { AuthService } from "../../auth/services";
 
@@ -19,7 +25,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
 
     if (tokens !== null) {
       // eslint-disable-next-line
-      headers["Authorization"] = `${tokens.tokenType} ${tokens.accessToken}`;
+      headers["Authorization"] = `Bearer ${tokens.access}`;
     }
 
     const req = request.clone({ setHeaders: headers });
@@ -54,7 +60,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
 
         if (tokens) {
           // eslint-disable-next-line
-          headers["Authorization"] = `${tokens.tokenType} ${tokens.accessToken}`;
+          headers["Authorization"] = `Bearer ${tokens.access}`;
         }
 
         return next.handle(

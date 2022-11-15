@@ -25,9 +25,7 @@ export class FileService {
       fetch(`${environment.apiUrl}/files/upload`, {
         method: "PUT",
         headers: {
-          Authorization: `${this.authService.getTokens()?.tokenType} ${
-            this.authService.getTokens()?.accessToken
-          }`,
+          Authorization: `Bearer ${this.authService.getTokens()?.access}`,
         },
         body: formData,
       })

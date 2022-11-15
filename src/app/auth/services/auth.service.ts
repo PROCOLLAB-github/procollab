@@ -3,7 +3,13 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "../../core/services";
 import { map, Observable, ReplaySubject, tap } from "rxjs";
-import { LoginRequest, LoginResponse, RefreshResponse, RegisterRequest, RegisterResponse } from "../models/http.model";
+import {
+  LoginRequest,
+  LoginResponse,
+  RefreshResponse,
+  RegisterRequest,
+  RegisterResponse,
+} from "../models/http.model";
 import { plainToClass } from "class-transformer";
 import { Tokens } from "../models/tokens.model";
 import { User } from "../models/user.model";
@@ -14,34 +20,32 @@ export class AuthService {
 
   login({ email, password }: LoginRequest): Observable<LoginResponse> {
     return this.apiService
-      .post("/auth/login", { email, password })
+      .post("/api/token/", { email, password })
       .pipe(map(json => plainToClass(LoginResponse, json)));
   }
 
   register(data: RegisterRequest): Observable<RegisterResponse> {
     return this.apiService
-      .post("/auth/register", { ...data, achievements: [], keySkills: [] })
+      .post("/auth/users/", data)
       .pipe(map(json => plainToClass(RegisterResponse, json)));
   }
 
   refreshTokens(): Observable<RefreshResponse> {
     return this.apiService
-      .post("/auth/refresh-tokens", { refreshToken: localStorage.getItem("refreshToken") })
+      .post("/api/token/refresh", { refresh: localStorage.getItem("refreshToken") })
       .pipe(map(json => plainToClass(RefreshResponse, json)));
   }
 
   getTokens(): Tokens | null {
-    const accessToken =
-      localStorage.getItem("accessToken") ?? sessionStorage.getItem("accessToken");
-    const refreshToken =
-      localStorage.getItem("refreshToken") ?? sessionStorage.getItem("refreshToken");
+    const access = localStorage.getItem("accessToken") ?? sessionStorage.getItem("accessToken");
+    const refresh = localStorage.getItem("refreshToken") ?? sessionStorage.getItem("refreshToken");
     const tokenType = localStorage.getItem("tokenType") ?? sessionStorage.getItem("tokenType");
 
-    if (!accessToken || !refreshToken || !tokenType) {
+    if (!access || !refresh || !tokenType) {
       return null;
     }
 
-    return { accessToken, refreshToken, tokenType };
+    return { access, refresh };
   }
 
   clearTokens(): void {
@@ -56,13 +60,11 @@ export class AuthService {
 
   memTokens(tokens: Tokens, session = false): void {
     if (!session) {
-      localStorage.setItem("accessToken", tokens.accessToken);
-      localStorage.setItem("tokenType", tokens.tokenType);
-      localStorage.setItem("refreshToken", tokens.refreshToken);
+      localStorage.setItem("accessToken", tokens.access);
+      localStorage.setItem("refreshToken", tokens.refresh);
     } else {
-      sessionStorage.setItem("accessToken", tokens.accessToken);
-      sessionStorage.setItem("tokenType", tokens.tokenType);
-      sessionStorage.setItem("refreshToken", tokens.refreshToken);
+      sessionStorage.setItem("accessToken", tokens.access);
+      sessionStorage.setItem("refreshToken", tokens.refresh);
     }
   }
 
@@ -70,7 +72,7 @@ export class AuthService {
   profile = this.profile$.asObservable();
 
   getProfile(): Observable<User> {
-    return this.apiService.get<User>("/profile/").pipe(
+    return this.apiService.get<User>("/auth/users/current/").pipe(
       map(user => plainToClass(User, user)),
       tap(profile => this.profile$.next(profile))
     );

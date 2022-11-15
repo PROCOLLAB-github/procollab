@@ -22,8 +22,8 @@ export class RegisterComponent implements OnInit {
     private cdref: ChangeDetectorRef
   ) {
     this.registerForm = this.fb.group({
-      name: ["", [Validators.required]],
-      surname: ["", [Validators.required]],
+      firstName: ["", [Validators.required]],
+      lastName: ["", [Validators.required]],
       email: ["", [Validators.required, Validators.email]],
       password: ["", [Validators.required, Validators.minLength(6)]],
     });
@@ -66,7 +66,10 @@ export class RegisterComponent implements OnInit {
         this.cdref.detectChanges();
       },
       error: error => {
-        if (error.status === 409) {
+        if (
+          error.status === 400 &&
+          error.error.email.some((msg: string) => msg.includes("email"))
+        ) {
           this.userExistError = true;
         }
 
