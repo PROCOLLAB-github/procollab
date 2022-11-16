@@ -3,14 +3,8 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "../../core/services";
 import { map, Observable, ReplaySubject, tap } from "rxjs";
-import {
-  LoginRequest,
-  LoginResponse,
-  RefreshResponse,
-  RegisterRequest,
-  RegisterResponse,
-} from "../models/http.model";
-import { plainToClass } from "class-transformer";
+import { LoginRequest, LoginResponse, RefreshResponse, RegisterRequest, RegisterResponse } from "../models/http.model";
+import { plainToInstance } from "class-transformer";
 import { Tokens } from "../models/tokens.model";
 import { User } from "../models/user.model";
 
@@ -21,19 +15,19 @@ export class AuthService {
   login({ email, password }: LoginRequest): Observable<LoginResponse> {
     return this.apiService
       .post("/api/token/", { email, password })
-      .pipe(map(json => plainToClass(LoginResponse, json)));
+      .pipe(map(json => plainToInstance(LoginResponse, json)));
   }
 
   register(data: RegisterRequest): Observable<RegisterResponse> {
     return this.apiService
       .post("/auth/users/", data)
-      .pipe(map(json => plainToClass(RegisterResponse, json)));
+      .pipe(map(json => plainToInstance(RegisterResponse, json)));
   }
 
   refreshTokens(): Observable<RefreshResponse> {
     return this.apiService
       .post("/api/token/refresh", { refresh: localStorage.getItem("refreshToken") })
-      .pipe(map(json => plainToClass(RefreshResponse, json)));
+      .pipe(map(json => plainToInstance(RefreshResponse, json)));
   }
 
   getTokens(): Tokens | null {
@@ -73,13 +67,15 @@ export class AuthService {
 
   getProfile(): Observable<User> {
     return this.apiService.get<User>("/auth/users/current/").pipe(
-      map(user => plainToClass(User, user)),
+      map(user => plainToInstance(User, user)),
       tap(profile => this.profile$.next(profile))
     );
   }
 
   getUser(id: number): Observable<User> {
-    return this.apiService.get<User>(`/profile/${id}`).pipe(map(user => plainToClass(User, user)));
+    return this.apiService
+      .get<User>(`/profile/${id}`)
+      .pipe(map(user => plainToInstance(User, user)));
   }
 
   saveProfile(newProfile: Partial<User>): Observable<string> {

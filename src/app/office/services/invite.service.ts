@@ -3,7 +3,7 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "../../core/services";
 import { map, Observable } from "rxjs";
-import { plainToClass } from "class-transformer";
+import { plainToInstance } from "class-transformer";
 import { Invite } from "../models/invite.model";
 
 @Injectable({
@@ -15,7 +15,7 @@ export class InviteService {
   sendForUser(userId: number, projectId: number): Observable<Invite> {
     return this.apiService
       .post("/invite/send", { inviteeId: userId, projectId })
-      .pipe(map(profile => plainToClass(Invite, profile)));
+      .pipe(map(profile => plainToInstance(Invite, profile)));
   }
 
   revokeInvite(invitationId: number): Observable<Invite> {
@@ -32,13 +32,13 @@ export class InviteService {
 
   getMy(): Observable<Invite[]> {
     return this.apiService
-      .get<Invite[]>("/invite/my/")
-      .pipe(map(invites => plainToClass(Invite, invites)));
+      .get<Invite[]>("/invites/")
+      .pipe(map(invites => plainToInstance(Invite, invites)));
   }
 
   getByProject(projectId: number): Observable<Invite[]> {
     return this.apiService
       .get<Invite[]>(`/invite/all/${projectId}`)
-      .pipe(map(profiles => plainToClass(Invite, profiles)));
+      .pipe(map(profiles => plainToInstance(Invite, profiles)));
   }
 }
