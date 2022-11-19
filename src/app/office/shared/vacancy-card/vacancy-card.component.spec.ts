@@ -3,13 +3,20 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { VacancyCardComponent } from "./vacancy-card.component";
+import { of } from "rxjs";
+import { AuthService } from "../../../auth/services";
 
 describe("VacancyCardComponent", () => {
   let component: VacancyCardComponent;
   let fixture: ComponentFixture<VacancyCardComponent>;
 
   beforeEach(async () => {
+    const authSpy = {
+      roles: of([]),
+    };
+
     await TestBed.configureTestingModule({
+      providers: [{ provide: AuthService, useValue: authSpy }],
       declarations: [VacancyCardComponent],
     }).compileComponents();
   });

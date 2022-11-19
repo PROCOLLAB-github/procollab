@@ -6,15 +6,19 @@ import { OfficeComponent } from "./office.component";
 import { IndustryService } from "./services/industry.service";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { of } from "rxjs";
+import { AuthService } from "../auth/services";
 
 describe("OfficeComponent", () => {
   let component: OfficeComponent;
   let fixture: ComponentFixture<OfficeComponent>;
 
   beforeEach(async () => {
+    const authSpy = jasmine.createSpyObj({ getUserRoles: of([]) });
+
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [IndustryService],
+      providers: [IndustryService, { provide: AuthService, useValue: authSpy }],
       declarations: [OfficeComponent],
     }).compileComponents();
   });

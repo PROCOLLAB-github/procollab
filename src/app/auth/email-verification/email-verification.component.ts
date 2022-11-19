@@ -7,14 +7,12 @@ import { map } from "rxjs";
 @Component({
   selector: "app-email-verification",
   templateUrl: "./email-verification.component.html",
-  styleUrls: ["./email-verification.component.scss"]
+  styleUrls: ["./email-verification.component.scss"],
 })
 export class EmailVerificationComponent implements OnInit {
-  constructor(private route: ActivatedRoute) {
-  }
+  constructor(private route: ActivatedRoute) {}
 
-  userEmail = this.route.queryParams.pipe(map(r => r.email));
+  userEmail = this.route.queryParams.pipe(map(r => r["email"]));
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }
