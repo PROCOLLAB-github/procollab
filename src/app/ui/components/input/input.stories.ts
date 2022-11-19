@@ -5,11 +5,11 @@ import { InputComponent } from "./input.component";
 
 export default {
   title: "Input",
-  component: InputComponent,
+  component: InputComponent
 } as Meta;
 
 const Template: Story = args => ({
-  props: args,
+  props: args
 });
 
 export const Basic = Template.bind({});

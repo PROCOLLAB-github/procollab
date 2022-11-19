@@ -1,18 +1,20 @@
 /** @format */
 
 import { Component, Input, OnInit } from "@angular/core";
-import { Advert } from "../../models/article.model";
+import { New } from "../../models/article.model";
 
 @Component({
   selector: "app-advert-card",
   templateUrl: "./advert-card.component.html",
-  styleUrls: ["./advert-card.component.scss"],
+  styleUrls: ["./advert-card.component.scss"]
 })
 export class AdvertCardComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  @Input() advert?: Advert;
+  @Input() advert?: New;
   @Input() layout: "vertical" | "horizontal" = "vertical";
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 }

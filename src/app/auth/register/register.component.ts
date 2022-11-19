@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: "app-login",
   templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.scss"],
+  styleUrls: ["./register.component.scss"]
 })
 export class RegisterComponent implements OnInit {
   constructor(
@@ -25,7 +25,7 @@ export class RegisterComponent implements OnInit {
       firstName: ["", [Validators.required]],
       lastName: ["", [Validators.required]],
       email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required, Validators.minLength(6)]],
+      password: ["", [Validators.required, Validators.minLength(6)]]
     });
   }
 
@@ -39,10 +39,11 @@ export class RegisterComponent implements OnInit {
 
   statusOptions: SelectComponent["options"] = [
     { id: 1, value: "Ученик", label: "Ученик" },
-    { id: 2, value: "Ментор", label: "Ментор" },
+    { id: 2, value: "Ментор", label: "Ментор" }
   ];
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   onSubmit() {
     if (!this.validationService.getFormValidation(this.registerForm) || !this.registerAgreement) {
@@ -75,7 +76,7 @@ export class RegisterComponent implements OnInit {
 
         this.registerIsSubmitting = false;
         this.cdref.detectChanges();
-      },
+      }
     });
   }
 }

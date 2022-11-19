@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
-  styleUrls: ["./header.component.scss"],
+  styleUrls: ["./header.component.scss"]
 })
 export class HeaderComponent implements OnInit {
   constructor(
@@ -19,13 +19,16 @@ export class HeaderComponent implements OnInit {
     public authService: AuthService,
     private inviteService: InviteService,
     private router: Router
-  ) {}
+  ) {
+  }
 
   showBall = this.notificationService.hasNotifications.pipe(map(has => has || this.invites.length));
   showNotifications = false;
 
   @Input() invites: Invite[] = [];
-  ngOnInit(): void {}
+
+  ngOnInit(): void {
+  }
 
   onClickOutside() {
     this.showNotifications = false;

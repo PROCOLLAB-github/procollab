@@ -12,7 +12,7 @@ describe("NewsDetailComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [NewsDetailComponent],
+      declarations: [NewsDetailComponent]
     }).compileComponents();
   });
 

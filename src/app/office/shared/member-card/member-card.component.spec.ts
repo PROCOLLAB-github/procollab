@@ -11,7 +11,7 @@ describe("MemberCardComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MemberCardComponent],
+      declarations: [MemberCardComponent]
     }).compileComponents();
   });
 

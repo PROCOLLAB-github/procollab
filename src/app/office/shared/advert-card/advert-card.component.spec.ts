@@ -2,15 +2,15 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AdvertCardComponent } from "./advert-card.component";
 
-describe('AdvertCardComponent', () => {
+describe("AdvertCardComponent", () => {
   let component: AdvertCardComponent;
   let fixture: ComponentFixture<AdvertCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdvertCardComponent ]
+      declarations: [AdvertCardComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('AdvertCardComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

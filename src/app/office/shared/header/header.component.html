@@ -33,9 +33,11 @@
         class="header__user"
         [routerLink]="['/office/profile', user.id]"
       >
-        <app-avatar class="header__user-avatar" [url]="user.photoAddress"></app-avatar>
+        <app-avatar class="header__user-avatar" [url]="user.avatar"></app-avatar>
         <div>
-          <div class="text-bold-body-14 header__user-name">{{ user.name }} {{ user.surname }}</div>
+          <div class="text-bold-body-14 header__user-name">
+            {{ user.firstName }} {{ user.lastName }}
+          </div>
           <div class="text-body-14 header__user-email">{{ user.email }}</div>
         </div>
       </a>

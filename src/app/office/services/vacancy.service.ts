@@ -6,6 +6,7 @@ import { map, Observable } from "rxjs";
 import { Vacancy } from "../models/vacancy.model";
 import { plainToInstance } from "class-transformer";
 import { VacancyResponse } from "../models/vacancy-response.model";
+import { HttpParams } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
@@ -14,10 +15,9 @@ export class VacancyService {
   constructor(private apiService: ApiService) {}
 
   getForProject(projectId: number): Observable<Vacancy[]> {
-    return this.apiService.get<{ vacancies: Vacancy[] }>(`/vacancy/project/${projectId}`).pipe(
-      map(r => r.vacancies),
-      map(vacancies => plainToInstance(Vacancy, vacancies))
-    );
+    return this.apiService
+      .get<Vacancy[]>("/vacancies/", new HttpParams({ fromObject: { project_id: projectId } }))
+      .pipe(map(vacancies => plainToInstance(Vacancy, vacancies)));
   }
 
   postVacancy(

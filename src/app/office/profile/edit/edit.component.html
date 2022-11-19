@@ -4,29 +4,29 @@
   <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
     <div class="profile__column">
       <div class="profile__row">
-        <fieldset *ngIf="profileForm.get('name') as name">
-          <label for="name" class="field-label">Имя</label>
+        <fieldset *ngIf="profileForm.get('firstName') as firstName">
+          <label for="firstName" class="field-label">Имя</label>
           <app-input
-            [error]="name | controlError"
-            id="name"
+            [error]="firstName | controlError"
+            id="firstName"
             type="text"
-            formControlName="name"
+            formControlName="firstName"
             placeholder="Егор"
           ></app-input>
-          <div *ngIf="name | controlError: 'required'" class="text-body-14 error">
+          <div *ngIf="firstName | controlError: 'required'" class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
         </fieldset>
-        <fieldset *ngIf="profileForm.get('surname') as surname">
-          <label for="surname" class="field-label">Фамилия</label>
+        <fieldset *ngIf="profileForm.get('lastName') as lastName">
+          <label for="lastName" class="field-label">Фамилия</label>
           <app-input
-            [error]="surname | controlError"
-            id="surname"
+            [error]="lastName | controlError"
+            id="lastName"
             type="text"
-            formControlName="surname"
+            formControlName="lastName"
             placeholder="Токарев"
           ></app-input>
-          <div *ngIf="surname | controlError: 'required'" class="text-body-14 error">
+          <div *ngIf="lastName | controlError: 'required'" class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
         </fieldset>
@@ -35,10 +35,11 @@
         <fieldset *ngIf="profileForm.get('status') as status">
           <label for="status" class="field-label">Тип аккаунта</label>
           <app-select
+            *ngIf="statusOptions | async as options"
             id="status"
             formControlName="status"
             placeholder="Ученик"
-            [options]="statusOptions"
+            [options]="options"
           ></app-select>
           <div *ngIf="status | controlError: 'required'" class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
@@ -162,13 +163,13 @@
                     <i appIcon icon="basket" appSquare="24"></i>
                   </app-button>
                 </div>
-                <fieldset *ngIf="achievements.at(i).get('place') as place">
+                <fieldset *ngIf="achievements.at(i).get('status') as status">
                   <app-input
-                    [error]="place | controlError"
+                    [error]="status | controlError"
                     placeholder="Занятое место"
-                    formControlName="place"
+                    formControlName="status"
                   ></app-input>
-                  <div *ngIf="place | controlError: 'required'" class="text-body-14 error">
+                  <div *ngIf="status | controlError: 'required'" class="text-body-14 error">
                     {{ errorMessage.VALIDATION_REQUIRED }}
                   </div>
                 </fieldset>
@@ -176,7 +177,7 @@
             </li>
           </ul>
         </ng-container>
-        <app-button class="profile__add-achievement" (click)="addAchievement()">
+        <app-button class="profile__add-achievement" (click)="addAchievementForm()">
           <span>Добавить новое достижение</span>
           <i appIcon icon="plus" appSquare="24"></i>
         </app-button>
@@ -184,8 +185,8 @@
     </div>
     <div class="profile__column">
       <fieldset class="profile__avatar">
-        <label for="photoAddress" class="field-label">Фотография профиля</label>
-        <app-avatar-control id="photoAddress" formControlName="photoAddress"></app-avatar-control>
+        <label for="avatar" class="field-label">Фотография профиля</label>
+        <app-avatar-control id="avatar" formControlName="avatar"></app-avatar-control>
       </fieldset>
       <fieldset *ngIf="profileForm.get('aboutMe') as aboutMe">
         <label for="aboutMe" class="field-label">Обо мне</label>

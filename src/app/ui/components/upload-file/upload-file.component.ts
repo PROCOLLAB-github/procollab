@@ -13,30 +13,37 @@ import { nanoid } from "nanoid";
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => UploadFileComponent),
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class UploadFileComponent implements OnInit, ControlValueAccessor {
-  constructor(private fileService: FileService) {}
+  constructor(private fileService: FileService) {
+  }
 
   @Input() accept = "";
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   controlId = nanoid(3);
 
   value = "";
+
   writeValue(url: string) {
     this.value = url;
   }
 
-  onTouch: () => void = () => {};
+  onTouch: () => void = () => {
+  };
+
   registerOnTouched(fn: any) {
     this.onTouch = fn;
   }
 
-  onChange: (url: string) => void = () => {};
+  onChange: (url: string) => void = () => {
+  };
+
   registerOnChange(fn: any) {
     this.onChange = fn;
   }

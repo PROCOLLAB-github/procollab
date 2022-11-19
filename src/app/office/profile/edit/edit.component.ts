@@ -6,8 +6,9 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "../../../error/models/error-message";
 import { SelectComponent } from "../../../ui/components";
 import { ValidationService } from "../../../core/services";
-import { concatMap, first, Subscription } from "rxjs";
+import { concatMap, first, map, Observable, Subscription } from "rxjs";
 import { Router } from "@angular/router";
+import * as dayjs from "dayjs";
 
 @Component({
   selector: "app-profile-edit",
@@ -22,17 +23,17 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     private router: Router
   ) {
     this.profileForm = this.fb.group({
-      name: ["", [Validators.required]],
-      surname: ["", [Validators.required]],
+      firstName: ["", [Validators.required]],
+      lastName: ["", [Validators.required]],
       email: [""],
-      status: [""],
+      userType: [0],
       birthday: [""],
       city: [""],
       organisation: [""],
       speciality: [""],
       keySkills: this.fb.array([]),
       achievements: this.fb.array([]),
-      photoAddress: [""],
+      avatar: [""],
       aboutMe: [""],
     });
   }
@@ -44,23 +45,24 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       this.profileId = profile.id;
 
       this.profileForm.patchValue({
-        name: profile.name ?? "",
-        surname: profile.surname ?? "",
+        firstName: profile.firstName ?? "",
+        lastName: profile.lastName ?? "",
         email: profile.email ?? "",
-        status: profile.status ?? "",
-        birthday: profile.birthday ?? "",
+        status: profile.userType ?? "",
+        birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
         city: profile.city ?? "",
         organisation: profile.organisation ?? "",
         speciality: profile.speciality ?? "",
-        photoAddress: profile.photoAddress ?? "",
+        avatar: profile.avatar ?? "",
         aboutMe: profile.aboutMe ?? "",
       });
 
       profile.achievements.length &&
         profile.achievements?.forEach(achievement =>
-          this.addAchievement(achievement.title, achievement.place)
+          this.addAchievementForm(achievement.id, achievement.title, achievement.status)
         );
-      profile.keySkills.length && profile.keySkills?.forEach(skill => this.addKeySkill(skill));
+      profile.member?.keySkills.length &&
+        profile.member.keySkills?.forEach(skill => this.addKeySkill(skill));
     });
   }
 
@@ -78,21 +80,19 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   errorMessage = ErrorMessage;
 
-  statusOptions: SelectComponent["options"] = [
-    { id: 1, value: "Ученик", label: "Ученик" },
-    { id: 2, value: "Ментор", label: "Ментор" },
-    { id: 3, value: "Эксперт", label: "Эксперт" },
-    { id: 4, value: "Инвестор", label: "Инвестор" },
-  ];
+  statusOptions: Observable<SelectComponent["options"]> = this.authService.roles.pipe(
+    map(roles => roles.map(role => ({ id: role.id, value: role.id, label: role.name })))
+  );
 
   profileFormSubmitting = false;
   profileForm: FormGroup;
 
-  addAchievement(title?: string, place?: string): void {
+  addAchievementForm(id?: number, title?: string, status?: string): void {
     this.achievements.push(
       this.fb.group({
         title: [title ?? "", [Validators.required]],
-        place: [place ?? "", [Validators.required]],
+        status: [status ?? "", [Validators.required]],
+        id: [id],
       })
     );
   }
@@ -106,6 +106,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   newKeySkillTitle = "";
+
   addKeySkill(title?: string): void {
     const fromState = title ?? this.newKeySkillTitle;
     if (!fromState) {
@@ -130,7 +131,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.profileFormSubmitting = true;
 
     this.authService
-      .saveProfile(this.profileForm.value)
+      .saveProfile({
+        ...this.profileForm.value,
+        keySkills: undefined,
+        member: { keySkills: this.keySkills.value },
+        birthday: dayjs(this.profileForm.value.birthday).format("YYYY-MM-DD"),
+      })
       .pipe(concatMap(() => this.authService.getProfile()))
       .subscribe({
         next: () => {

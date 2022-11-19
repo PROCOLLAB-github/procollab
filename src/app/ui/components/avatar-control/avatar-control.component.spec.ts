@@ -16,7 +16,7 @@ describe("AvatarControlComponent", () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [{ provide: AuthService, useValue: autSpy }],
-      declarations: [AvatarControlComponent],
+      declarations: [AvatarControlComponent]
     }).compileComponents();
   });
 

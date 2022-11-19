@@ -13,18 +13,19 @@ const routes: Routes = [
     children: [
       {
         path: "404",
-        component: ErrorNotFoundComponent,
+        component: ErrorNotFoundComponent
       },
       {
         path: ":code",
-        component: ErrorCodeComponent,
-      },
-    ],
-  },
+        component: ErrorCodeComponent
+      }
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class ErrorRoutingModule {}
+export class ErrorRoutingModule {
+}

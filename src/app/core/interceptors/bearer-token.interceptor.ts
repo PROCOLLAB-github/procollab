@@ -7,13 +7,15 @@ import { AuthService } from "../../auth/services";
 
 @Injectable()
 export class BearerTokenInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+  }
+
   private retry = 0;
   private retryCount = 3;
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const headers: Record<string, string> = {
-      Accept: "application/json",
+      Accept: "application/json"
     };
     const tokens = this.authService.getTokens();
 
@@ -47,7 +49,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
       switchMap(res => {
         this.authService.memTokens(res);
         const headers: Record<string, string> = {
-          Accept: "application/json",
+          Accept: "application/json"
         };
 
         const tokens = this.authService.getTokens();
@@ -59,7 +61,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
 
         return next.handle(
           request.clone({
-            setHeaders: headers,
+            setHeaders: headers
           })
         );
       })

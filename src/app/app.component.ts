@@ -36,6 +36,7 @@ export class AppComponent implements OnInit {
           .navigateByUrl("/auth/login")
           .then(() => console.debug("Route changed from AppComponent"));
       } else {
+        console.debug("Route start changing from AppComponent");
         this.router
           .navigateByUrl("/office")
           .then(() => console.debug("Route changed From AppComponent"));

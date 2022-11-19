@@ -15,7 +15,7 @@ describe("UploadFileComponent", () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [UploadFileComponent],
+      declarations: [UploadFileComponent]
     }).compileComponents();
   });
 

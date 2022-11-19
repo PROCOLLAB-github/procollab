@@ -39,12 +39,12 @@ export class Project {
           surname: "string",
           id: 0,
           photoAddress: "string",
-          speciality: "Front-end",
-        },
+          speciality: "Front-end"
+        }
       ],
       draft: false,
       leaderInfo: "string",
-      leaderId: 0,
+      leaderId: 0
     };
   }
 }

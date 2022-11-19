@@ -2,14 +2,14 @@
 
 <section *ngIf="response" class="response">
   <a class="response__profile profile" [routerLink]="['/office/profile', response.profile.id]">
-    <app-avatar [size]="90" [url]="response.profile.photoAddress"></app-avatar>
-    <p class="text-body-12 profile__status">{{ response.profile.status }}</p>
+    <app-avatar [size]="90" [url]="response.profile.avatar"></app-avatar>
+    <p class="text-body-12 profile__status">{{ response.profile.userType | userRole | async }}</p>
     <h3 class="text-heading-4 profile__name">
-      {{ response.profile.name }} {{ response.profile.surname }}
+      {{ response.profile.firstName }} {{ response.profile.lastName }}
     </h3>
     <p class="text-body-12 profile__info">{{ response.profile.speciality }}</p>
-    <ul class="profile__skills">
-      <li *ngFor="let skill of response.profile.keySkills" class="profile__skill">
+    <ul *ngIf="response.profile.member" class="profile__skills">
+      <li *ngFor="let skill of response.profile.member.keySkills" class="profile__skill">
         <app-tag>{{ skill }}</app-tag>
       </li>
     </ul>

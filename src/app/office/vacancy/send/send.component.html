@@ -16,13 +16,13 @@
   </app-modal>
   <div class="vacancy__inner">
     <div class="vacancy__sender profile">
-      <app-avatar [size]="140" [url]="profile.photoAddress"></app-avatar>
+      <app-avatar [size]="140" [url]="profile.avatar"></app-avatar>
       <div class="profile__body">
-        <p class="text-body-12 profile__status">{{ profile.status }}</p>
-        <h2 class="text-heading-3 profile__name">{{ profile.name }} {{ profile.surname }}</h2>
+        <p class="text-body-12 profile__status">{{ profile.userType | userRole | async }}</p>
+        <h2 class="text-heading-3 profile__name">{{ profile.firstName }} {{ profile.lastName }}</h2>
         <p class="text-body-14 profile__info">{{ profile.speciality }} • {{ profile.city }}</p>
-        <ul class="profile__skills">
-          <li *ngFor="let skill of profile.keySkills" class="profile__skill">
+        <ul *ngIf="profile.member" class="profile__skills">
+          <li *ngFor="let skill of profile.member.keySkills" class="profile__skill">
             <app-tag>{{ skill }}</app-tag>
           </li>
         </ul>

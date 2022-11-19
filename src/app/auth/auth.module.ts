@@ -15,6 +15,7 @@ import { EmailVerificationComponent } from "./email-verification/email-verificat
 @NgModule({
   declarations: [AuthComponent, LoginComponent, RegisterComponent, EmailVerificationComponent],
   providers: [AuthService],
-  imports: [CommonModule, AuthRoutingModule, CoreModule, ReactiveFormsModule, UiModule],
+  imports: [CommonModule, AuthRoutingModule, CoreModule, ReactiveFormsModule, UiModule]
 })
-export class AuthModule {}
+export class AuthModule {
+}

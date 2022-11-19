@@ -7,7 +7,7 @@ import { CamelcaseInterceptor } from "./camelcase.interceptor";
 describe("CamelcaseInterceptor", () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
-      providers: [CamelcaseInterceptor],
+      providers: [CamelcaseInterceptor]
     })
   );
 

@@ -5,15 +5,15 @@ import { ButtonComponent } from "./button.component";
 
 export default {
   title: "Button",
-  component: ButtonComponent,
+  component: ButtonComponent
 } as Meta;
 
 export const PrimaryMd: Story = () => ({
-  template: "<app-button size='md'>click</app-button>",
+  template: "<app-button size='md'>click</app-button>"
 });
 
 export const PrimaryLg: Story = () => ({
-  template: "<app-button size='lg'>click</app-button>",
+  template: "<app-button size='lg'>click</app-button>"
 });
 
 // export const Primary: Story = () => ({

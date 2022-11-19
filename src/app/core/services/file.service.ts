@@ -8,32 +8,34 @@ import { AuthService } from "../../auth/services";
 import { environment } from "../../../environments/environment";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class FileService {
   constructor(
     private apiService: ApiService,
     private httpClient: HttpClient,
     private authService: AuthService
-  ) {}
+  ) {
+  }
 
   uploadFile(file: File): Observable<{ url: string }> {
     const formData = new FormData();
     formData.append("file", file);
 
     return new Observable<{ url: string }>(observer => {
-      fetch(`${environment.apiUrl}/files/upload`, {
-        method: "PUT",
+      fetch(`${environment.apiUrl}/files/`, {
+        method: "POST",
         headers: {
-          Authorization: `Bearer ${this.authService.getTokens()?.access}`,
+          Authorization: `Bearer ${this.authService.getTokens()?.access}`
         },
-        body: formData,
+        body: formData
       })
         .then(res => res.json())
         .then(res => {
           observer.next(res);
           observer.complete();
-        });
+        })
+        .catch(err => observer.error(err));
     });
   }
 

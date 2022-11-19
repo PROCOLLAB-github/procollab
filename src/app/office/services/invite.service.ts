@@ -5,6 +5,7 @@ import { ApiService } from "../../core/services";
 import { map, Observable } from "rxjs";
 import { plainToInstance } from "class-transformer";
 import { Invite } from "../models/invite.model";
+import { HttpParams } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
@@ -38,7 +39,7 @@ export class InviteService {
 
   getByProject(projectId: number): Observable<Invite[]> {
     return this.apiService
-      .get<Invite[]>(`/invite/all/${projectId}`)
+      .get<Invite[]>("/invites/", new HttpParams({ fromObject: { project_id: projectId } }))
       .pipe(map(profiles => plainToInstance(Invite, profiles)));
   }
 }

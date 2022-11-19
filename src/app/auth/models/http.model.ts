@@ -21,4 +21,6 @@ export class RegisterRequest {
   email!: string;
   password!: string;
 }
-export class RegisterResponse extends LoginResponse {}
+
+export class RegisterResponse extends LoginResponse {
+}

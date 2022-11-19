@@ -6,18 +6,18 @@
     <div class="profile__info">
       <app-avatar
         class="profile__avatar"
-        [url]="user.photoAddress"
+        [url]="user.avatar"
         [size]="150"
         [hasBorder]="true"
       ></app-avatar>
       <div class="profile__main-info">
-        <p class="text-body-12 profile__status">{{ user.status }}</p>
-        <h2 class="text-heading-3 profile__name">{{ user.name }} {{ user.surname }}</h2>
+        <p class="text-body-12 profile__status">{{ user.userType | userRole | async }}</p>
+        <h2 class="text-heading-3 profile__name">{{ user.firstName }} {{ user.lastName }}</h2>
         <p class="text-body-12 profile__keys">
-          {{ user.birthday }} • {{ user.city }}, {{ user.region }}
+          {{ user.birthday | dayjs: "format":"DD MMMM YYYY" }} • {{ user.city }}, {{ user.region }}
         </p>
-        <ul *ngIf="user.keySkills.length" class="profile__skills">
-          <li *ngFor="let skill of user.keySkills" class="profile__skill">
+        <ul *ngIf="user.member && user.member.keySkills.length" class="profile__skills">
+          <li *ngFor="let skill of user.member.keySkills" class="profile__skill">
             <app-tag>{{ skill }}</app-tag>
           </li>
         </ul>
@@ -49,7 +49,7 @@
         *ngFor="let achievement of user.achievements"
         class="text-bold-body-14 profile__achievement"
       >
-        {{ achievement.place }} {{ achievement.title }}
+        {{ achievement.status }} {{ achievement.title }}
       </li>
     </ul>
     <h3 class="text-bold-body-16 profile__title">Место учебы</h3>

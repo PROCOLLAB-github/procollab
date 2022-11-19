@@ -12,7 +12,7 @@ describe("EmailVerificationComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [EmailVerificationComponent],
+      declarations: [EmailVerificationComponent]
     }).compileComponents();
   });
 

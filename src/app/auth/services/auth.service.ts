@@ -2,11 +2,11 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService } from "../../core/services";
-import { map, Observable, ReplaySubject, tap } from "rxjs";
+import { concatMap, map, Observable, ReplaySubject, take, tap } from "rxjs";
 import { LoginRequest, LoginResponse, RefreshResponse, RegisterRequest, RegisterResponse } from "../models/http.model";
 import { plainToInstance } from "class-transformer";
 import { Tokens } from "../models/tokens.model";
-import { User } from "../models/user.model";
+import { User, UserRole } from "../models/user.model";
 
 @Injectable()
 export class AuthService {
@@ -26,16 +26,15 @@ export class AuthService {
 
   refreshTokens(): Observable<RefreshResponse> {
     return this.apiService
-      .post("/api/token/refresh", { refresh: localStorage.getItem("refreshToken") })
+      .post("/api/token/refresh/", { refresh: localStorage.getItem("refreshToken") })
       .pipe(map(json => plainToInstance(RefreshResponse, json)));
   }
 
   getTokens(): Tokens | null {
     const access = localStorage.getItem("accessToken") ?? sessionStorage.getItem("accessToken");
     const refresh = localStorage.getItem("refreshToken") ?? sessionStorage.getItem("refreshToken");
-    const tokenType = localStorage.getItem("tokenType") ?? sessionStorage.getItem("tokenType");
 
-    if (!access || !refresh || !tokenType) {
+    if (!access || !refresh) {
       return null;
     }
 
@@ -45,11 +44,9 @@ export class AuthService {
   clearTokens(): void {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    localStorage.removeItem("tokenType");
 
     sessionStorage.removeItem("accessToken");
     sessionStorage.removeItem("refreshToken");
-    sessionStorage.removeItem("tokenType");
   }
 
   memTokens(tokens: Tokens, session = false): void {
@@ -65,6 +62,9 @@ export class AuthService {
   private profile$ = new ReplaySubject<User>(1);
   profile = this.profile$.asObservable();
 
+  private roles$ = new ReplaySubject<UserRole[]>(1);
+  roles = this.roles$.asObservable();
+
   getProfile(): Observable<User> {
     return this.apiService.get<User>("/auth/users/current/").pipe(
       map(user => plainToInstance(User, user)),
@@ -72,13 +72,24 @@ export class AuthService {
     );
   }
 
+  getUserRoles(): Observable<UserRole[]> {
+    return this.apiService.get<[[number, string]]>("/auth/users/types/").pipe(
+      map(roles => roles.map(role => ({ id: role[0], name: role[1] }))),
+      map(roles => plainToInstance(UserRole, roles)),
+      tap(roles => this.roles$.next(roles))
+    );
+  }
+
   getUser(id: number): Observable<User> {
     return this.apiService
-      .get<User>(`/profile/${id}`)
+      .get<User>(`/auth/users/${id}/`)
       .pipe(map(user => plainToInstance(User, user)));
   }
 
-  saveProfile(newProfile: Partial<User>): Observable<string> {
-    return this.apiService.put<string>("/profile/update", newProfile);
+  saveProfile(newProfile: Partial<User>): Observable<User> {
+    return this.profile.pipe(
+      take(1),
+      concatMap(profile => this.apiService.put<User>(`/auth/users/${profile.id}/`, newProfile))
+    );
   }
 }
