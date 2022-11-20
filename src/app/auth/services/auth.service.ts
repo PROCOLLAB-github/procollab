@@ -3,13 +3,7 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "../../core/services";
 import { concatMap, map, Observable, ReplaySubject, take, tap } from "rxjs";
-import {
-  LoginRequest,
-  LoginResponse,
-  RefreshResponse,
-  RegisterRequest,
-  RegisterResponse,
-} from "../models/http.model";
+import { LoginRequest, LoginResponse, RefreshResponse, RegisterRequest, RegisterResponse } from "../models/http.model";
 import { plainToInstance } from "class-transformer";
 import { Tokens } from "../models/tokens.model";
 import { User, UserRole } from "../models/user.model";

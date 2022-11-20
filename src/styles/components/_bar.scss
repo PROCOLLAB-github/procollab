@@ -1,5 +1,4 @@
 .bar {
-  padding: 0 20px 0 0;
   background-color: var(--white);
 
   &__nav {
@@ -52,6 +51,8 @@
   }
 
   &__right {
+    display: flex;
+    align-items: center;
     margin-left: auto;
   }
 
@@ -63,6 +64,63 @@
     i {
       display: block;
       margin-left: 6px;
+    }
+  }
+}
+
+.filter {
+  position: relative;
+
+  &__toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    margin-left: 15px;
+    color: var(--black);
+    cursor: pointer;
+
+    &--active {
+      color: var(--white);
+      background-color: var(--black);
+    }
+  }
+
+  &__arrow {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    color: var(--white);
+    transform: rotate(180deg) translateX(50%);
+  }
+
+  &__body {
+    position: absolute;
+    right: 0;
+    z-index: 10;
+    width: 280px;
+    padding: 22px;
+    background-color: var(--white);
+    border-radius: var(--rounded-md);
+    transform: translateY(10px);
+  }
+
+  &__title {
+    margin-bottom: 14px;
+    color: var(--black);
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    color: var(--black);
+    cursor: pointer;
+
+    app-checkbox {
+      margin-right: 15px;
     }
   }
 }

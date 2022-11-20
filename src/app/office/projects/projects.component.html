@@ -24,6 +24,35 @@
         <form [formGroup]="searchForm">
           <app-search *ngIf="isAll | async" formControlName="search"></app-search>
         </form>
+        <div class="filter" (clickOutside)="onFilterOutside()">
+          <div
+            *ngIf="isAll | async"
+            class="filter__toggle"
+            [class.filter__toggle--active]="filterOpen"
+            (click)="filterOpen = !filterOpen"
+          >
+            <i appIcon icon="filter" appSquare="34"></i>
+            <i
+              class="filter__arrow"
+              appIcon
+              icon="arrow-no-body"
+              appWidth="12"
+              appHeight="6"
+              appViewBox="0 0 18 9"
+            ></i>
+          </div>
+          <div *ngIf="filterOpen" class="filter__body">
+            <h3 class="text-bold-body-16 filter__title">Фильтр</h3>
+            <div
+              class="text-body-14 filter__checkbox"
+              *ngFor="let industry of industries"
+              (click)="filterByIndustry(industry.id)"
+            >
+              <app-checkbox [checked]="industry.id === currentIndustry"></app-checkbox>
+              {{ industry.name }}
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
   </div>

@@ -1,22 +1,21 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { concatMap, map, Observable, take } from "rxjs";
+import { map, Observable } from "rxjs";
 import { Project, ProjectCount } from "../models/project.model";
 import { ApiService } from "../../core/services";
 import { plainToInstance } from "class-transformer";
-import { AuthService } from "../../auth/services";
 import { HttpParams } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProjectService {
-  constructor(private apiService: ApiService, private authService: AuthService) {}
+  constructor(private apiService: ApiService) {}
 
-  getAll(): Observable<Project[]> {
+  getAll(params?: HttpParams): Observable<Project[]> {
     return this.apiService
-      .get<Project[]>("/projects/")
+      .get<Project[]>("/projects/", params)
       .pipe(map(projects => plainToInstance(Project, projects)));
   }
 
@@ -27,16 +26,9 @@ export class ProjectService {
   }
 
   getMy(): Observable<Project[]> {
-    return this.authService.profile.pipe(
-      take(1),
-      concatMap(profile =>
-        this.apiService.get<Project[]>(
-          "/auth/users/drafts/",
-          new HttpParams({ fromObject: { leader_id: profile.id } })
-        )
-      ),
-      map(projects => plainToInstance(Project, projects))
-    );
+    return this.apiService
+      .get<Project[]>("/auth/users/drafts/")
+      .pipe(map(projects => plainToInstance(Project, projects)));
   }
 
   getCount(): Observable<ProjectCount> {

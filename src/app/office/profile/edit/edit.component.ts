@@ -6,7 +6,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "../../../error/models/error-message";
 import { SelectComponent } from "../../../ui/components";
 import { ValidationService } from "../../../core/services";
-import { concatMap, first, map, noop, Observable, Subscription, take, tap } from "rxjs";
+import { concatMap, first, map, noop, Observable, Subscription, take } from "rxjs";
 import { Router } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";

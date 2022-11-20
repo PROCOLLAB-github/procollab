@@ -247,10 +247,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.projectForm.get("achievements") as FormArray;
   }
 
-  addAchievement(title?: string, place?: string): void {
+  addAchievement(title?: string, status?: string): void {
     const formGroup = this.fb.group({
       title: [title ?? "", [Validators.required]],
-      place: [place ?? "", [Validators.required]],
+      status: [status ?? "", [Validators.required]],
     });
 
     this.achievements.push(formGroup);
