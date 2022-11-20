@@ -32,19 +32,21 @@
         </fieldset>
       </div>
       <div class="profile__row">
-        <fieldset *ngIf="profileForm.get('status') as status">
-          <label for="status" class="field-label">Тип аккаунта</label>
-          <app-select
-            *ngIf="statusOptions | async as options"
-            id="status"
-            formControlName="status"
-            placeholder="Ученик"
-            [options]="options"
-          ></app-select>
-          <div *ngIf="status | controlError: 'required'" class="text-body-14 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-        </fieldset>
+        <ng-container *ngIf="profileForm.get('userType') as userType">
+          <fieldset *ngIf="userType.value !== 1">
+            <label for="userType" class="field-label">Тип аккаунта</label>
+            <app-select
+              *ngIf="statusOptions | async as options"
+              id="userType"
+              formControlName="userType"
+              placeholder="Ученик"
+              [options]="options"
+            ></app-select>
+            <div *ngIf="userType | controlError: 'required'" class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+          </fieldset>
+        </ng-container>
         <fieldset *ngIf="profileForm.get('birthday') as birthday">
           <label for="birthday" class="field-label">Дата рождения</label>
           <app-input
@@ -194,7 +196,7 @@
           id="aboutMe"
           [error]="aboutMe | controlError"
           type="text"
-          placeholder="Я java developer, очень люблю котиков и Хайдегера"
+          placeholder="Я java developer, очень люблю котиков"
           formControlName="aboutMe"
         ></app-textarea>
         <div *ngIf="aboutMe | controlError: 'required'" class="text-body-14 error">

@@ -2,7 +2,7 @@
 
 <main *ngIf="project$ | async as project" class="project">
   <ng-container *ngIf="authService.profile | async as profile">
-    <section *ngIf="profile.id === project.leaderId" class="bar project__bar">
+    <section *ngIf="profile.id === project.leader" class="bar project__bar">
       <nav class="bar__nav">
         <ul class="bar__tabs">
           <a
@@ -32,7 +32,7 @@
           *ngIf="authService.profile | async as profile"
           [routerLink]="['/office/projects', project.id, 'edit']"
         >
-          <i *ngIf="profile.id === project.leaderId" appIcon icon="settings" appSquare="40"></i>
+          <i *ngIf="profile.id === project.leader" appIcon icon="settings" appSquare="40"></i>
         </a>
       </div>
       <p
@@ -68,7 +68,7 @@
               <p class="text-body-12 member__speciality">{{ member.speciality }}</p>
             </div>
             <i
-              *ngIf="member.id === project.leaderId"
+              *ngIf="member.id === project.leader"
               class="member__star"
               appIcon
               icon="star"
@@ -88,7 +88,7 @@
           <div class="vacancy__info">
             <span class="text-bold-body-14 vacancy__title">{{ vacancy.role }}</span>
             <a
-              *ngIf="profile.id !== project.leaderId"
+              *ngIf="profile.id !== project.leader"
               class="text-body-12 vacancy__action"
               [routerLink]="['/office/vacancy', vacancy.id]"
             >

@@ -31,7 +31,7 @@ export class ProjectService {
       take(1),
       concatMap(profile =>
         this.apiService.get<Project[]>(
-          "/projects/",
+          "/auth/users/drafts/",
           new HttpParams({ fromObject: { leader_id: profile.id } })
         )
       ),
@@ -46,7 +46,7 @@ export class ProjectService {
   }
 
   remove(projectId: number): Observable<void> {
-    return this.apiService.delete(`/projects/${projectId}`);
+    return this.apiService.delete(`/projects/${projectId}/`);
   }
 
   create(): Observable<Project> {
@@ -57,7 +57,7 @@ export class ProjectService {
 
   updateProject(projectId: number, newProject: Partial<Project>): Observable<Project> {
     return this.apiService
-      .put(`/project/${projectId}`, newProject)
+      .put(`/projects/${projectId}/`, newProject)
       .pipe(map(project => plainToInstance(Project, project)));
   }
 }

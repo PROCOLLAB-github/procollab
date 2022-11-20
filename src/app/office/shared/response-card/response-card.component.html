@@ -8,8 +8,8 @@
       {{ response.profile.firstName }} {{ response.profile.lastName }}
     </h3>
     <p class="text-body-12 profile__info">{{ response.profile.speciality }}</p>
-    <ul *ngIf="response.profile.member" class="profile__skills">
-      <li *ngFor="let skill of response.profile.member.keySkills" class="profile__skill">
+    <ul *ngIf="response.profile.keySkills" class="profile__skills">
+      <li *ngFor="let skill of response.profile.keySkills" class="profile__skill">
         <app-tag>{{ skill }}</app-tag>
       </li>
     </ul>

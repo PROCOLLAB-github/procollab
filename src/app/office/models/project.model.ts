@@ -19,8 +19,7 @@ export class Project {
   }[];
 
   draft!: boolean;
-  leaderInfo!: string;
-  leaderId!: number;
+  leader!: number;
 
   static default(): Project {
     return {
@@ -39,12 +38,11 @@ export class Project {
           surname: "string",
           id: 0,
           photoAddress: "string",
-          speciality: "Front-end"
-        }
+          speciality: "Front-end",
+        },
       ],
       draft: false,
-      leaderInfo: "string",
-      leaderId: 0
+      leader: 0,
     };
   }
 }

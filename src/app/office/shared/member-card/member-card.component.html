@@ -8,8 +8,8 @@
     {{ user.speciality }} •
     <span *ngIf="user.birthday">{{ user.birthday | dayjs: "format":"DD MMMM YYYY" }}</span>
   </p>
-  <ul *ngIf="user.member && user.member.keySkills" class="card__skills">
-    <li *ngFor="let skill of user.member.keySkills" class="card__skill">
+  <ul *ngIf="user.keySkills" class="card__skills">
+    <li *ngFor="let skill of user.keySkills" class="card__skill">
       <app-tag>{{ skill }}</app-tag>
     </li>
   </ul>

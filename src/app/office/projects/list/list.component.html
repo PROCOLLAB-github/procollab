@@ -6,7 +6,7 @@
       <li>
         <app-project-card
           [project]="project"
-          [basket]="project.leaderId === profile?.id"
+          [basket]="project.leader === profile?.id"
           (remove)="deleteProject($event)"
         ></app-project-card>
       </li>

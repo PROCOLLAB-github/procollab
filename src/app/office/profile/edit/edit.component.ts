@@ -1,14 +1,17 @@
 /** @format */
 
-import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "../../../auth/services";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "../../../error/models/error-message";
 import { SelectComponent } from "../../../ui/components";
 import { ValidationService } from "../../../core/services";
-import { concatMap, first, map, Observable, Subscription } from "rxjs";
+import { concatMap, first, map, noop, Observable, Subscription, take, tap } from "rxjs";
 import { Router } from "@angular/router";
 import * as dayjs from "dayjs";
+import * as cpf from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(cpf);
 
 @Component({
   selector: "app-profile-edit",
@@ -17,6 +20,7 @@ import * as dayjs from "dayjs";
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
+    private cdref: ChangeDetectorRef,
     public authService: AuthService,
     private fb: FormBuilder,
     private validationService: ValidationService,
@@ -38,7 +42,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.profileForm
+      .get("userType")
+      ?.valueChanges.pipe(take(1), concatMap(this.changeUserType.bind(this)))
+      .subscribe(noop);
+  }
 
   ngAfterViewInit(): void {
     this.profile$ = this.authService.profile.pipe(first()).subscribe(profile => {
@@ -61,8 +70,19 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         profile.achievements?.forEach(achievement =>
           this.addAchievementForm(achievement.id, achievement.title, achievement.status)
         );
-      profile.member?.keySkills.length &&
-        profile.member.keySkills?.forEach(skill => this.addKeySkill(skill));
+
+      if (profile.userType === 2) {
+        this.profileForm.addControl(
+          "mentor",
+          this.fb.group({
+            preferredIndustries: this.fb.array([]),
+          })
+        );
+      }
+
+      profile.keySkills?.forEach(skill => this.addKeySkill(skill));
+
+      this.cdref.detectChanges();
     });
   }
 
@@ -135,7 +155,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         ...this.profileForm.value,
         keySkills: undefined,
         member: { keySkills: this.keySkills.value },
-        birthday: dayjs(this.profileForm.value.birthday).format("YYYY-MM-DD"),
+        birthday: dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD"),
       })
       .pipe(concatMap(() => this.authService.getProfile()))
       .subscribe({
@@ -149,5 +169,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
           this.profileFormSubmitting = false;
         },
       });
+  }
+
+  changeUserType(typeId: number): Observable<void> {
+    return this.authService
+      .saveProfile({
+        email: this.profileForm.value.email,
+        firstName: this.profileForm.value.firstName,
+        lastName: this.profileForm.value.lastName,
+        userType: typeId,
+      })
+      .pipe(map(() => location.reload()));
   }
 }

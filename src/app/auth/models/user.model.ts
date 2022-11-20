@@ -15,8 +15,8 @@ export class User {
   aboutMe!: string;
   birthday!: string;
   avatar!: string;
+  keySkills!: string[];
   member?: {
-    keySkills: string[];
     usefulToProject: string;
   };
 
@@ -25,7 +25,6 @@ export class User {
   city!: string;
   region!: string;
   organisation!: string;
-  tags!: string;
   achievements!: Achievement[];
   timeCreated!: string;
   timeUpdated!: string;
@@ -39,9 +38,8 @@ export class User {
       city: "234sadfas",
       organisation: "dfasdfasdf",
       speciality: "asdfasdfasd",
-      member: {
-        keySkills: ["sadf"],
-      },
+      keySkills: ["sadf"],
+      member: {},
       aboutMe: "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
       id: 0,
       timeCreated: "",

@@ -16,8 +16,8 @@
         <p class="text-body-12 profile__keys">
           {{ user.birthday | dayjs: "format":"DD MMMM YYYY" }} • {{ user.city }}, {{ user.region }}
         </p>
-        <ul *ngIf="user.member && user.member.keySkills.length" class="profile__skills">
-          <li *ngFor="let skill of user.member.keySkills" class="profile__skill">
+        <ul *ngIf="user.keySkills" class="profile__skills">
+          <li *ngFor="let skill of user.keySkills" class="profile__skill">
             <app-tag>{{ skill }}</app-tag>
           </li>
         </ul>
