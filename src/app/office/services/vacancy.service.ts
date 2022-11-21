@@ -33,7 +33,7 @@ export class VacancyService {
   }
 
   deleteVacancy(vacancyId: number): Observable<void> {
-    return this.apiService.delete(`/vacancy/${vacancyId}`);
+    return this.apiService.delete(`/vacancies/${vacancyId}`);
   }
 
   sendResponse(vacancyId: number, body: { whyMe: string }): Observable<void> {
