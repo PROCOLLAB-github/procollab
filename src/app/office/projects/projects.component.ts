@@ -46,9 +46,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       this.industries = industries;
     });
 
-    // this.queries$ = this.route.queryParams.subscribe(queries => {
-    //   this.currentIndustry = parseInt(queries["industry"]);
-    // });
+    this.queries$ = this.route.queryParams.subscribe(queries => {
+      this.currentIndustry = parseInt(queries["industry"]);
+    });
   }
 
   ngOnDestroy(): void {
@@ -94,7 +94,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   onFilterOutside() {
     if (this.filterOpen && location.href.includes("/all")) {
       this.filterOpen = false;
-      this.filterByIndustry();
     }
   }
 }
