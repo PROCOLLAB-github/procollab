@@ -15,8 +15,9 @@
         <h2 class="text-heading-3 profile__name">{{ user.firstName }} {{ user.lastName }}</h2>
         <p class="text-body-12 profile__keys">
           <span *ngIf="user.birthday">
-            {{ user.birthday | dayjs: "format":"DD MMMM YYYY" }} •
+            {{ user.birthday | dayjs: "format":"DD MMMM YYYY" }}
           </span>
+          <ng-container *ngIf="user.birthday && user.city"> • </ng-container>
           <span *ngIf="user.city">{{ user.city }}, {{ user.region }}</span>
         </p>
         <ul *ngIf="user.keySkills" class="profile__skills">
