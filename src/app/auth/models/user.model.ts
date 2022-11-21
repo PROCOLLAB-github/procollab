@@ -24,7 +24,7 @@ export class User {
   userType!: number;
   city!: string;
   region!: string;
-  organisation!: string;
+  organization!: string;
   achievements!: Achievement[];
   timeCreated!: string;
   timeUpdated!: string;
@@ -36,7 +36,7 @@ export class User {
       userType: 2,
       birthday: "23.42.3423",
       city: "234sadfas",
-      organisation: "dfasdfasdf",
+      organization: "dfasdfasdf",
       speciality: "asdfasdfasd",
       keySkills: ["sadf"],
       member: {},
