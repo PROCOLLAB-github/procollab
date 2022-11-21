@@ -7,6 +7,7 @@
   <textarea
     autogrow
     (input)="onInput($event)"
+    (keydown.enter)="preventEnter($event)"
     (blur)="onBlur()"
     [placeholder]="placeholder"
     class="text-body-16 field__input"

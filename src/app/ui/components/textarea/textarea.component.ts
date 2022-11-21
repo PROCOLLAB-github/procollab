@@ -11,9 +11,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => TextareaComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class TextareaComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";
@@ -21,11 +21,9 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
   @Input() error = false;
   @Input() mask = "";
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
@@ -42,15 +40,13 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
     this.value = value;
   }
 
-  onChange: (value: string) => void = () => {
-  };
+  onChange: (value: string) => void = () => {};
 
   registerOnChange(fn: (v: string) => void): void {
     this.onChange = fn;
   }
 
-  onTouch: () => void = () => {
-  };
+  onTouch: () => void = () => {};
 
   registerOnTouched(fn: () => void): void {
     this.onTouch = fn;
@@ -60,5 +56,9 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
+  }
+
+  preventEnter(event: Event) {
+    event.preventDefault();
   }
 }
