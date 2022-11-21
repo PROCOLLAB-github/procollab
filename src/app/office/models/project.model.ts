@@ -5,8 +5,8 @@ export class Project {
   name!: string;
   description!: string;
   shortDescription!: string;
-  achievements!: { title: string; place: string }[];
-  industryId!: number;
+  achievements!: { id: number; title: string; status: string }[];
+  industry!: number;
   presentationAddress!: string;
   imageAddress!: string;
   numberOfCollaborators!: number;
@@ -27,8 +27,8 @@ export class Project {
       name: "string",
       description: "string",
       shortDescription: "string",
-      achievements: [{ title: "sdf", place: "dsaf" }],
-      industryId: 0,
+      achievements: [{ id: 3, title: "sdf", status: "dsaf" }],
+      industry: 0,
       presentationAddress: "string",
       imageAddress: "string",
       numberOfCollaborators: 10,

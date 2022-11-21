@@ -68,7 +68,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
       profile.achievements.length &&
         profile.achievements?.forEach(achievement =>
-          this.addAchievementForm(achievement.id, achievement.title, achievement.status)
+          this.addAchievement(achievement.id, achievement.title, achievement.status)
         );
 
       if (profile.userType === 2) {
@@ -107,7 +107,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   profileFormSubmitting = false;
   profileForm: FormGroup;
 
-  addAchievementForm(id?: number, title?: string, status?: string): void {
+  addAchievement(id?: number, title?: string, status?: string): void {
     this.achievements.push(
       this.fb.group({
         title: [title ?? "", [Validators.required]],

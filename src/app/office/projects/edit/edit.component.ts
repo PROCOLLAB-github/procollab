@@ -87,14 +87,14 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.projectForm.patchValue({
           imageAddress: project.imageAddress,
           name: project.name,
-          industryId: project.industryId,
+          industryId: project.industry,
           description: project.description,
           presentationAddress: project.presentationAddress,
         });
 
         project.achievements &&
           project.achievements.forEach(achievement =>
-            this.addAchievement(achievement.title, achievement.place)
+            this.addAchievement(achievement.id, achievement.title, achievement.status)
           );
 
         this.vacancies = vacancies;
@@ -218,10 +218,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.inviteService
       .sendForUser(
         Number(path[path.length - 1]),
-        Number(this.route.snapshot.paramMap.get("projectId"))
+        Number(this.route.snapshot.paramMap.get("projectId")),
+        this.inviteForm.value.role
       )
       .subscribe({
         next: profile => {
+          console.log(profile);
           this.inviteFormIsSubmitting = false;
           this.inviteForm.reset();
 
@@ -247,10 +249,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.projectForm.get("achievements") as FormArray;
   }
 
-  addAchievement(title?: string, status?: string): void {
+  addAchievement(id?: number, title?: string, status?: string): void {
     const formGroup = this.fb.group({
       title: [title ?? "", [Validators.required]],
       status: [status ?? "", [Validators.required]],
+      id: [id],
     });
 
     this.achievements.push(formGroup);

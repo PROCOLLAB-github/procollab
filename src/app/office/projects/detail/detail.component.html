@@ -39,7 +39,7 @@
         *ngIf="industryService.industries | async as industries"
         class="text-body-14 info__industry"
       >
-        <span *ngIf="industryService.getIndustry(industries, project.industryId) as industry">
+        <span *ngIf="industryService.getIndustry(industries, project.industry) as industry">
           {{ industry.name }}
         </span>
       </p>
@@ -112,7 +112,7 @@
           *ngFor="let achievement of project.achievements"
           class="text-bold-body-14 achievements__item achievement"
         >
-          <p class="text-bold-body-14 achievement__place">{{ achievement.place }}</p>
+          <p class="text-bold-body-14 achievement__place">{{ achievement.status }}</p>
           <p class="text-body-12 achievement__title">{{ achievement.title }}</p>
         </li>
       </ul>
