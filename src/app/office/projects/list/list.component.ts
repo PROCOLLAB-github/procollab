@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { concatMap, map, Subscription } from "rxjs";
+import { concatMap, distinctUntilChanged, map, Subscription } from "rxjs";
 import { AuthService } from "../../../auth/services";
 import { Project } from "../../models/project.model";
 import { User } from "../../../auth/models/user.model";
@@ -43,6 +43,7 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
       this.queryIndustry$ = this.route.queryParams
         .pipe(
           map(q => q["industry"]),
+          distinctUntilChanged(),
           concatMap(industry =>
             this.projectService.getAll(
               industry ? new HttpParams({ fromObject: { industry } }) : undefined

@@ -46,7 +46,7 @@ export class MembersComponent implements OnInit, OnDestroy {
 
     this.searchFormSearch$ = this.searchForm.get("search")?.valueChanges.subscribe(value => {
       const fuse = new Fuse(this.members, {
-        keys: ["name", "surname", "keySkills"],
+        keys: ["firstName", "lastName", "keySkills"],
       });
 
       this.searchedMembers = value ? fuse.search(value).map(el => el.item) : this.members;
