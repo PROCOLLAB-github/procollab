@@ -3,9 +3,9 @@
 <div *ngIf="invite" class="invite">
   <div>
     <h3 class="text-bold-body-14 invite__role">
-      {{ invite.targetProfile.name }} {{ invite.targetProfile.surname }}
+      {{ invite.user.firstName }} {{ invite.user.lastName }}
     </h3>
-    <p class="text-body-12 invite__requirements">{{ invite.targetProfile.speciality }}</p>
+    <p class="text-body-12 invite__requirements">{{ invite.user.speciality }}</p>
   </div>
   <p class="text-body-12 invite__status">Приглашение отправленно</p>
   <i class="invite__cross" appIcon icon="cross" appSquare="24" (click)="onRemove($event)"></i>
