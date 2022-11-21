@@ -1,7 +1,7 @@
 /** @format */
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "../../services/industry.service";
 import { distinctUntilChanged, map, Observable, Subscription } from "rxjs";
@@ -24,6 +24,7 @@ import { SelectComponent } from "../../../ui/components";
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private industryService: IndustryService,
     protected projectService: ProjectService,
@@ -281,8 +282,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectService
       .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), this.projectForm.value)
       .subscribe({
-        next: () => {
+        next: project => {
           this.projectFormIsSubmitting = false;
+          this.router
+            .navigateByUrl(`/office/projects/${project.id}/`)
+            .then(() => console.debug("Route changed from ProjectEditComponent"));
         },
         error: () => {
           this.projectFormIsSubmitting = false;
