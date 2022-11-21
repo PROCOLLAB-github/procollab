@@ -43,6 +43,9 @@
         <div *ngIf="whyMe | controlError: 'maxlength'" class="text-body-14 error">
           {{ errorMessage.VALIDATION_TOO_LONG }} {{ whyMe.errors?.maxlength.requiredLength }}
         </div>
+        <div *ngIf="whyMe | controlError: 'minlength'" class="text-body-14 error">
+          {{ errorMessage.VALIDATION_TOO_SHORT }} {{ whyMe.errors?.minlength.requiredLength }}
+        </div>
       </fieldset>
       <app-button [loader]="sendFormIsSubmitting" type="submit" class="form__submit">
         Отправить отклик
