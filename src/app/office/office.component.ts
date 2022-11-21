@@ -14,6 +14,7 @@ import { forkJoin, map, noop, Observable, Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { Invite } from "./models/invite.model";
 import { AuthService } from "../auth/services";
+import { ProjectService } from "./services/project.service";
 
 @Component({
   selector: "app-office",
@@ -25,7 +26,8 @@ export class OfficeComponent implements OnInit, AfterViewInit, OnDestroy {
     private cdref: ChangeDetectorRef,
     private industryService: IndustryService,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private projectService: ProjectService
   ) {}
 
   invites$: Observable<Invite[]> = this.route.data.pipe(map(r => r["invites"]));
@@ -39,6 +41,7 @@ export class OfficeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dictSub$ = forkJoin([
       this.industryService.getAll(),
       this.authService.getUserRoles(),
+      this.projectService.getProjectSteps(),
     ]).subscribe(noop);
   }
 

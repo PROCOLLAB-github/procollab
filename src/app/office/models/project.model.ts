@@ -4,6 +4,8 @@ export class Project {
   id!: number;
   name!: string;
   description!: string;
+  region!: string;
+  step!: number;
   shortDescription!: string;
   achievements!: { id: number; title: string; status: string }[];
   industry!: number;
@@ -25,6 +27,8 @@ export class Project {
     return {
       id: 0,
       name: "string",
+      region: "sdf",
+      step: 1,
       description: "string",
       shortDescription: "string",
       achievements: [{ id: 3, title: "sdf", status: "dsaf" }],
@@ -34,11 +38,11 @@ export class Project {
       numberOfCollaborators: 10,
       collaborators: [
         {
-          name: "string",
-          surname: "string",
-          id: 0,
-          photoAddress: "string",
-          speciality: "Front-end",
+          firstName: "string",
+          lastName: "string",
+          userId: 0,
+          avatar: "string",
+          role: "Front-end",
         },
       ],
       draft: false,
@@ -50,4 +54,9 @@ export class Project {
 export class ProjectCount {
   all!: number;
   my!: number;
+}
+
+export class ProjectStep {
+  id!: number;
+  name!: string;
 }

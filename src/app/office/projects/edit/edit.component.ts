@@ -4,7 +4,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "
 import { ActivatedRoute } from "@angular/router";
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "../../services/industry.service";
-import { distinctUntilChanged, map, Subscription } from "rxjs";
+import { distinctUntilChanged, map, Observable, Subscription } from "rxjs";
 import { ErrorMessage } from "../../../error/models/error-message";
 import { NavService } from "../../services/nav.service";
 import { Project } from "../../models/project.model";
@@ -14,6 +14,7 @@ import { VacancyService } from "../../services/vacancy.service";
 import { InviteService } from "../../services/invite.service";
 import { Invite } from "../../models/invite.model";
 import { ProjectService } from "../../services/project.service";
+import { SelectComponent } from "../../../ui/components";
 
 @Component({
   selector: "app-edit",
@@ -35,6 +36,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectForm = this.fb.group({
       imageAddress: ["", [Validators.required]],
       name: ["", [Validators.required]],
+      region: ["", [Validators.required]],
+      step: [null, [Validators.required]],
       industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
       presentationAddress: [""],
@@ -87,6 +90,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.projectForm.patchValue({
           imageAddress: project.imageAddress,
           name: project.name,
+          region: project.region,
+          step: project.step,
           industryId: project.industry,
           description: project.description,
           presentationAddress: project.presentationAddress,
@@ -118,6 +123,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     map(industries =>
       industries.map(industry => ({ value: industry.id, id: industry.id, label: industry.name }))
     )
+  );
+
+  projectSteps$: Observable<SelectComponent["options"]> = this.projectService.steps.pipe(
+    map(steps => steps.map(step => ({ id: step.id, label: step.name, value: step.id })))
   );
 
   subscriptions: (Subscription | undefined)[] = [];

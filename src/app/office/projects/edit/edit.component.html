@@ -20,6 +20,31 @@
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
         </fieldset>
+        <fieldset *ngIf="projectForm.get('region') as region">
+          <label class="field-label" for="region">Регион проекта</label>
+          <app-input
+            id="region"
+            formControlName="region"
+            [error]="region | controlError"
+            placeholder="Например: Москва"
+          ></app-input>
+          <div *ngIf="region | controlError: 'required'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+        <fieldset *ngIf="projectForm.get('step') as step">
+          <label class="field-label" for="step">Этап на котором находится проект</label>
+          <app-select
+            *ngIf="projectSteps$ | async as steps"
+            id="step"
+            formControlName="step"
+            placeholder="Выберите этап на котором находится ваш проект"
+            [options]="steps"
+          ></app-select>
+          <div *ngIf="step | controlError: 'required'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
         <fieldset *ngIf="projectForm.get('industryId') as industry">
           <label class="field-label" for="industry">Сфера проекта</label>
           <app-select
