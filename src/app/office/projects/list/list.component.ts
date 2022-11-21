@@ -53,12 +53,12 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
           this.projects = projects;
           this.searchedProjects = projects;
         });
-
-      this.projects$ = this.route.data.pipe(map(r => r["data"])).subscribe(projects => {
-        this.projects = projects;
-        this.searchedProjects = projects;
-      });
     }
+
+    this.projects$ = this.route.data.pipe(map(r => r["data"])).subscribe(projects => {
+      this.projects = projects;
+      this.searchedProjects = projects;
+    });
   }
 
   ngOnDestroy(): void {
