@@ -1,21 +1,26 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from "@angular/common/http";
 import { catchError, Observable, switchMap, throwError } from "rxjs";
 import { AuthService } from "../../auth/services";
 
 @Injectable()
 export class BearerTokenInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {
-  }
+  constructor(private authService: AuthService) {}
 
   private retry = 0;
   private retryCount = 3;
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const headers: Record<string, string> = {
-      Accept: "application/json"
+      Accept: "application/json",
     };
     const tokens = this.authService.getTokens();
 
@@ -28,7 +33,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
     if (tokens !== null && this.retry < this.retryCount) {
       return next.handle(req).pipe(
         catchError((error: HttpErrorResponse) => {
-          if (error.status === 401) {
+          if (error.status === 502) {
             this.retry++;
             return this.handle401(request, next);
           }
@@ -49,7 +54,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
       switchMap(res => {
         this.authService.memTokens(res);
         const headers: Record<string, string> = {
-          Accept: "application/json"
+          Accept: "application/json",
         };
 
         const tokens = this.authService.getTokens();
@@ -61,7 +66,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
 
         return next.handle(
           request.clone({
-            setHeaders: headers
+            setHeaders: headers,
           })
         );
       })
