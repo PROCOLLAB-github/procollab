@@ -14,7 +14,10 @@
         <p class="text-body-12 profile__status">{{ user.userType | userRole | async }}</p>
         <h2 class="text-heading-3 profile__name">{{ user.firstName }} {{ user.lastName }}</h2>
         <p class="text-body-12 profile__keys">
-          {{ user.birthday | dayjs: "format":"DD MMMM YYYY" }} • {{ user.city }}, {{ user.region }}
+          <span *ngIf="user.birthday">
+            {{ user.birthday | dayjs: "format":"DD MMMM YYYY" }} •
+          </span>
+          <span *ngIf="user.city">{{ user.city }}, {{ user.region }}</span>
         </p>
         <ul *ngIf="user.keySkills" class="profile__skills">
           <li *ngFor="let skill of user.keySkills" class="profile__skill">
