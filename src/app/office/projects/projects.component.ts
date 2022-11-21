@@ -93,6 +93,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   onFilterOutside() {
     this.filterOpen = false;
-    this.filterByIndustry();
+    if (location.href.includes("/all")) this.filterByIndustry();
   }
 }
