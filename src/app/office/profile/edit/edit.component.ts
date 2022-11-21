@@ -153,8 +153,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.authService
       .saveProfile({
         ...this.profileForm.value,
-        keySkills: undefined,
-        member: { keySkills: this.keySkills.value },
         birthday: dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD"),
       })
       .pipe(concatMap(() => this.authService.getProfile()))

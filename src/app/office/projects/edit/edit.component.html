@@ -86,13 +86,13 @@
                       <i appIcon icon="basket" appSquare="24"></i>
                     </app-button>
                   </div>
-                  <fieldset *ngIf="achievements.at(i).get('place') as place">
+                  <fieldset *ngIf="achievements.at(i).get('status') as status">
                     <app-input
-                      [error]="place | controlError"
+                      [error]="status | controlError"
                       placeholder="Занятое место"
-                      formControlName="place"
+                      formControlName="status"
                     ></app-input>
-                    <div *ngIf="place | controlError: 'required'" class="text-body-14 error">
+                    <div *ngIf="status | controlError: 'required'" class="text-body-14 error">
                       {{ errorMessage.VALIDATION_REQUIRED }}
                     </div>
                   </fieldset>
