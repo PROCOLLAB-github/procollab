@@ -31,7 +31,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       lastName: ["", [Validators.required]],
       email: [""],
       userType: [0],
-      birthday: [""],
+      birthday: ["", [Validators.required]],
       city: [""],
       organization: [""],
       speciality: [""],
@@ -153,7 +153,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.authService
       .saveProfile({
         ...this.profileForm.value,
-        birthday: dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD"),
+        birthday: this.profileForm.value.birthday
+          ? dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD")
+          : undefined,
       })
       .pipe(concatMap(() => this.authService.getProfile()))
       .subscribe({
