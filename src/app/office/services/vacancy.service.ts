@@ -36,21 +36,21 @@ export class VacancyService {
     return this.apiService.delete(`/vacancy/${vacancyId}`);
   }
 
-  sendResponse(vacancyId: number, body: { text: string }): Observable<void> {
-    return this.apiService.post(`/response/send/${vacancyId}`, body);
+  sendResponse(vacancyId: number, body: { whyMe: string }): Observable<void> {
+    return this.apiService.post(`/vacancies/${vacancyId}/responses/`, body);
   }
 
   responsesByProject(projectId: number): Observable<VacancyResponse[]> {
     return this.apiService
-      .get<VacancyResponse[]>(`/response/${projectId}`)
+      .get<VacancyResponse[]>(`/projects/${projectId}/responses/`)
       .pipe(map(response => plainToInstance(VacancyResponse, response)));
   }
 
   acceptResponse(responseId: number): Observable<void> {
-    return this.apiService.post(`/response/accept/${responseId}`, {});
+    return this.apiService.post(`/vacancies/responses/${responseId}/accept`, {});
   }
 
   rejectResponse(responseId: number): Observable<void> {
-    return this.apiService.post(`/response/reject/${responseId}`, {});
+    return this.apiService.post(`/vacancies/responses/${responseId}/decline`, {});
   }
 }

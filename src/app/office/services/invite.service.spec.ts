@@ -4,13 +4,20 @@ import { TestBed } from "@angular/core/testing";
 
 import { InviteService } from "./invite.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { of } from "rxjs";
+import { AuthService } from "../../auth/services";
 
 describe("InviteService", () => {
   let service: InviteService;
 
   beforeEach(() => {
+    const authSpy = {
+      profile: of({}),
+    };
+
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
+      providers: [{ provide: AuthService, useValue: authSpy }],
     });
     service = TestBed.inject(InviteService);
   });

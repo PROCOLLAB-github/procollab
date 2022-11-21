@@ -24,7 +24,7 @@ export class VacancySendComponent implements OnInit {
     private navService: NavService
   ) {
     this.sendForm = this.fb.group({
-      text: ["", [Validators.required, Validators.maxLength(2000)]],
+      whyMe: ["", [Validators.required, Validators.maxLength(2000)]],
     });
   }
 

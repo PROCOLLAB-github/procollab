@@ -38,7 +38,7 @@ export class ProjectService {
 
   getMy(): Observable<Project[]> {
     return this.apiService
-      .get<Project[]>("/auth/users/drafts/")
+      .get<Project[]>("/auth/users/projects/")
       .pipe(map(projects => plainToInstance(Project, projects)));
   }
 

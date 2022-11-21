@@ -15,9 +15,11 @@ export class ProjectResponsesComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private vacancyService: VacancyService) {}
 
   ngOnInit(): void {
-    this.responses$ = this.route.data.pipe(map(r => r["data"])).subscribe(responses => {
-      this.responses = responses;
-    });
+    this.responses$ = this.route.data
+      .pipe(map(r => r["data"]))
+      .subscribe((responses: VacancyResponse[]) => {
+        this.responses = responses.filter(response => response.isApproved !== false);
+      });
   }
 
   ngOnDestroy(): void {
