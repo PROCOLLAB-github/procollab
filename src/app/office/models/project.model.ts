@@ -13,11 +13,11 @@ export class Project {
   imageAddress!: string;
   numberOfCollaborators!: number;
   collaborators!: {
-    id: number;
-    name: string;
-    surname: string;
-    photoAddress: string;
-    speciality: string;
+    userId: number;
+    firstName: string;
+    lastName: string;
+    avatar: string;
+    role: string;
   }[];
 
   draft!: boolean;

@@ -46,7 +46,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.vacancyForm = this.fb.group({
       role: ["", [Validators.required]],
-      requirements: this.fb.array([]),
+      requiredSkills: this.fb.array([]),
     });
 
     this.inviteForm = this.fb.group({
@@ -68,7 +68,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.inviteForm.get("role"),
       this.inviteForm.get("link"),
       this.vacancyForm.get("role"),
-      this.vacancyForm.get("requirements"),
+      this.vacancyForm.get("requiredSkills"),
     ];
 
     controls.filter(Boolean).forEach(control => {
@@ -134,30 +134,30 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   vacancies: Vacancy[] = [];
   vacancyForm: FormGroup;
 
-  requirementTitle = "";
+  requiredSkillTitle = "";
 
-  addRequirement(): void {
-    if (!this.requirementTitle) {
+  addRequiredSkill(): void {
+    if (!this.requiredSkillTitle) {
       return;
     }
 
-    this.requirements.push(this.fb.control(this.requirementTitle ?? ""));
-    this.requirementTitle = "";
+    this.requiredSkills.push(this.fb.control(this.requiredSkillTitle ?? ""));
+    this.requiredSkillTitle = "";
   }
 
-  removeRequirement(index: number): void {
-    this.requirements.removeAt(index);
+  removeRequiredSkill(index: number): void {
+    this.requiredSkills.removeAt(index);
   }
 
-  get requirements(): FormArray {
-    return this.vacancyForm.get("requirements") as FormArray;
+  get requiredSkills(): FormArray {
+    return this.vacancyForm.get("requiredSkills") as FormArray;
   }
 
   vacancyIsSubmitting = false;
 
   submitVacancy(): void {
     if (!this.validationService.getFormValidation(this.vacancyForm)) {
-      const controls = [this.vacancyForm.get("role"), this.vacancyForm.get("requirements")];
+      const controls = [this.vacancyForm.get("role"), this.vacancyForm.get("requiredSkills")];
 
       controls.filter(Boolean).forEach(control => {
         console.debug("Submit vacancy error: ", control);
@@ -177,7 +177,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         next: vacancy => {
           this.vacancies.push(vacancy);
 
-          this.requirements.clear();
+          this.requiredSkills.clear();
           this.vacancyForm.reset();
 
           this.vacancyIsSubmitting = false;
@@ -231,12 +231,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.inviteForm.value.role
       )
       .subscribe({
-        next: profile => {
-          console.log(profile);
+        next: invite => {
           this.inviteFormIsSubmitting = false;
           this.inviteForm.reset();
 
-          this.invites.push(profile);
+          this.invites.push(invite);
         },
         error: () => {
           this.inviteFormIsSubmitting = false;

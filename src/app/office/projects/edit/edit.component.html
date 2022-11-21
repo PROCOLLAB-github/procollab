@@ -200,20 +200,23 @@
             </fieldset>
             <fieldset>
               <ul class="vacancy__form-list">
-                <li *ngFor="let skill of requirements.controls; index as i" class="vacancy__skill">
+                <li
+                  *ngFor="let skill of requiredSkills.controls; index as i"
+                  class="vacancy__skill"
+                >
                   <app-tag class="skill">
                     <span>{{ skill.value }}</span>
-                    <i appIcon icon="basket" appSquare="24" (click)="removeRequirement(i)"></i>
+                    <i appIcon icon="basket" appSquare="24" (click)="removeRequiredSkill(i)"></i>
                   </app-tag>
                 </li>
               </ul>
               <div class="vacancy__form-skill-add">
                 <app-input
                   placeholder="Навыки требуемого специалиста"
-                  (enter)="addRequirement()"
-                  [(appValue)]="requirementTitle"
+                  (enter)="addRequiredSkill()"
+                  [(appValue)]="requiredSkillTitle"
                 ></app-input>
-                <app-button (click)="addRequirement()">
+                <app-button (click)="addRequiredSkill()">
                   <i appIcon icon="check" appWidth="12" appHeight="10"></i>
                 </app-button>
               </div>
