@@ -58,6 +58,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         lastName: profile.lastName ?? "",
         email: profile.email ?? "",
         status: profile.userType ?? "",
+        userType: profile.userType ?? 1,
         birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
         city: profile.city ?? "",
         organization: profile.organization ?? "",
