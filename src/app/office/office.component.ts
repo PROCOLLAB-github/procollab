@@ -30,7 +30,10 @@ export class OfficeComponent implements OnInit, AfterViewInit, OnDestroy {
     private projectService: ProjectService
   ) {}
 
-  invites$: Observable<Invite[]> = this.route.data.pipe(map(r => r["invites"]));
+  invites$: Observable<Invite[]> = this.route.data.pipe(
+    map(r => r["invites"]),
+    map(invites => invites.filter((invite: Invite) => invite.isAccepted === null))
+  );
 
   bodyHeight = "0px";
   @ViewChild("general") general?: ElementRef<HTMLElement>;

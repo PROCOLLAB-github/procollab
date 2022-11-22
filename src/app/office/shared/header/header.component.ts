@@ -3,7 +3,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { NotificationService } from "../../services/notification.service";
 import { AuthService } from "../../../auth/services";
-import { map } from "rxjs";
 import { Invite } from "../../models/invite.model";
 import { InviteService } from "../../services/invite.service";
 import { Router } from "@angular/router";
@@ -21,15 +20,16 @@ export class HeaderComponent implements OnInit {
     private router: Router
   ) {}
 
-  showBall = this.notificationService.hasNotifications.pipe(
-    map(has => has || this.invites.filter(invite => invite.isAccepted === null).length)
-  );
-
-  showNotifications = false;
-
   @Input() invites: Invite[] = [];
 
   ngOnInit(): void {}
+
+  showBall = this.notificationService.hasNotifications;
+
+  showNotifications = false;
+  get hasInvites(): boolean {
+    return !!this.invites.filter(invite => invite.isAccepted === null).length;
+  }
 
   onClickOutside() {
     this.showNotifications = false;
@@ -49,6 +49,7 @@ export class HeaderComponent implements OnInit {
       const index = this.invites.findIndex(invite => invite.id === inviteId);
       const invite = JSON.parse(JSON.stringify(this.invites[index]));
       this.invites.splice(index, 1);
+      console.log(this.invites);
 
       this.showNotifications = false;
       this.router
