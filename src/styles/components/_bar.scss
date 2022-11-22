@@ -112,6 +112,11 @@
     color: var(--black);
   }
 
+  &__name {
+    margin-bottom: 6px;
+    color: var(--gray);
+  }
+
   &__checkbox {
     display: flex;
     align-items: center;
