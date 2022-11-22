@@ -29,6 +29,7 @@ import { InviteManageCardComponent } from "./shared/invite-manage-card/invite-ma
 import { ClickOutsideModule } from "ng-click-outside";
 import { ProjectResponsesComponent } from "./projects/responses/responses.component";
 import { ResponseCardComponent } from "./shared/response-card/response-card.component";
+import { MentorsComponent } from "./mentors/mentors.component";
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { ResponseCardComponent } from "./shared/response-card/response-card.comp
     ProfileDetailComponent,
     ProfileEditComponent,
     MembersComponent,
+    MentorsComponent,
     MemberCardComponent,
     ProjectCardComponent,
     ProjectsListComponent,
