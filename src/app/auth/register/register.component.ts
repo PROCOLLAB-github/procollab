@@ -9,6 +9,9 @@ import { SelectComponent } from "src/app/ui/components";
 import { Router } from "@angular/router";
 import { Observable, of } from "rxjs";
 import * as dayjs from "dayjs";
+import * as cpf from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(cpf);
 
 @Component({
   selector: "app-login",
