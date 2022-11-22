@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<main class="profile">
+<main *ngIf="profileForm.get('userType') as currentType" class="profile">
   <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
     <div class="profile__column">
       <div class="profile__row">
@@ -78,12 +78,16 @@
       </div>
       <div class="profile__row">
         <fieldset *ngIf="profileForm.get('organization') as organization">
-          <label for="organization" class="field-label">Место учебы/работы</label>
+          <label for="organization" class="field-label">{{
+            currentType.value === 1 ? "Место учебы" : "Место работы"
+          }}</label>
           <app-input
             id="organization"
             [error]="organization | controlError"
             type="text"
-            placeholder="вуз / колледж / школа / организация"
+            [placeholder]="
+              currentType.value === 1 ? 'вуз / колледж / школа / организация' : 'Название компании'
+            "
             formControlName="organization"
           ></app-input>
           <div *ngIf="organization | controlError: 'required'" class="text-body-14 error">
