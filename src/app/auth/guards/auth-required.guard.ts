@@ -6,10 +6,11 @@ import { AuthService } from "../services";
 import { catchError, map, Observable } from "rxjs";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class AuthRequiredGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+  }
 
   canActivate(): Observable<boolean> | UrlTree {
     if (this.authService.getTokens() === null) {

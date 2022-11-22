@@ -6,10 +6,11 @@ import { first, Observable } from "rxjs";
 import { environment } from "../../../environments/environment";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
 export class ApiService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   get<T>(path: string, params?: HttpParams, options?: object): Observable<T> {
     return this.http

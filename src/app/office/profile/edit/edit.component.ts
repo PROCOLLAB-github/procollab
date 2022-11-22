@@ -1,13 +1,17 @@
 /** @format */
 
-import { AfterViewInit, Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "../../../auth/services";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "../../../error/models/error-message";
 import { SelectComponent } from "../../../ui/components";
 import { ValidationService } from "../../../core/services";
-import { concatMap, first, Subscription } from "rxjs";
+import { concatMap, first, map, noop, Observable, Subscription, take } from "rxjs";
 import { Router } from "@angular/router";
+import * as dayjs from "dayjs";
+import * as cpf from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(cpf);
 
 @Component({
   selector: "app-profile-edit",
@@ -16,51 +20,72 @@ import { Router } from "@angular/router";
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
+    private cdref: ChangeDetectorRef,
     public authService: AuthService,
     private fb: FormBuilder,
     private validationService: ValidationService,
     private router: Router
   ) {
     this.profileForm = this.fb.group({
-      name: ["", [Validators.required]],
-      surname: ["", [Validators.required]],
+      firstName: ["", [Validators.required]],
+      lastName: ["", [Validators.required]],
       email: [""],
-      status: [""],
-      birthday: [""],
+      userType: [0],
+      birthday: ["", [Validators.required]],
       city: [""],
-      organisation: [""],
+      organization: [""],
       speciality: [""],
       keySkills: this.fb.array([]),
       achievements: this.fb.array([]),
-      photoAddress: [""],
+      avatar: [""],
       aboutMe: [""],
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.profileForm
+      .get("userType")
+      ?.valueChanges.pipe(take(1), concatMap(this.changeUserType.bind(this)))
+      .subscribe(noop);
+  }
 
   ngAfterViewInit(): void {
     this.profile$ = this.authService.profile.pipe(first()).subscribe(profile => {
       this.profileId = profile.id;
 
       this.profileForm.patchValue({
-        name: profile.name ?? "",
-        surname: profile.surname ?? "",
+        firstName: profile.firstName ?? "",
+        lastName: profile.lastName ?? "",
         email: profile.email ?? "",
-        status: profile.status ?? "",
-        birthday: profile.birthday ?? "",
+        status: profile.userType ?? "",
+        userType: profile.userType ?? 1,
+        birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
         city: profile.city ?? "",
-        organisation: profile.organisation ?? "",
+        organization: profile.organization ?? "",
         speciality: profile.speciality ?? "",
-        photoAddress: profile.photoAddress ?? "",
+        avatar: profile.avatar ?? "",
         aboutMe: profile.aboutMe ?? "",
       });
 
+      this.cdref.detectChanges();
+
       profile.achievements.length &&
         profile.achievements?.forEach(achievement =>
-          this.addAchievement(achievement.title, achievement.place)
+          this.addAchievement(achievement.id, achievement.title, achievement.status)
         );
-      profile.keySkills.length && profile.keySkills?.forEach(skill => this.addKeySkill(skill));
+
+      if (profile.userType === 2) {
+        this.profileForm.addControl(
+          "mentor",
+          this.fb.group({
+            preferredIndustries: this.fb.array([]),
+          })
+        );
+      }
+
+      profile.keySkills?.forEach(skill => this.addKeySkill(skill));
+
+      this.cdref.detectChanges();
     });
   }
 
@@ -78,21 +103,19 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   errorMessage = ErrorMessage;
 
-  statusOptions: SelectComponent["options"] = [
-    { id: 1, value: "Ученик", label: "Ученик" },
-    { id: 2, value: "Ментор", label: "Ментор" },
-    { id: 3, value: "Эксперт", label: "Эксперт" },
-    { id: 4, value: "Инвестор", label: "Инвестор" },
-  ];
+  roles: Observable<SelectComponent["options"]> = this.authService.changeableRoles.pipe(
+    map(roles => roles.map(role => ({ id: role.id, value: role.id, label: role.name })))
+  );
 
   profileFormSubmitting = false;
   profileForm: FormGroup;
 
-  addAchievement(title?: string, place?: string): void {
+  addAchievement(id?: number, title?: string, status?: string): void {
     this.achievements.push(
       this.fb.group({
         title: [title ?? "", [Validators.required]],
-        place: [place ?? "", [Validators.required]],
+        status: [status ?? "", [Validators.required]],
+        id: [id],
       })
     );
   }
@@ -106,6 +129,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   newKeySkillTitle = "";
+
   addKeySkill(title?: string): void {
     const fromState = title ?? this.newKeySkillTitle;
     if (!fromState) {
@@ -130,18 +154,34 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.profileFormSubmitting = true;
 
     this.authService
-      .saveProfile(this.profileForm.value)
+      .saveProfile({
+        ...this.profileForm.value,
+        birthday: this.profileForm.value.birthday
+          ? dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD")
+          : undefined,
+      })
       .pipe(concatMap(() => this.authService.getProfile()))
-      .subscribe(
-        () => {
+      .subscribe({
+        next: () => {
           this.profileFormSubmitting = false;
           this.router
             .navigateByUrl(`/office/profile/${this.profileId}`)
             .then(() => console.debug("Router Changed form ProfileEditComponent"));
         },
-        () => {
+        error: () => {
           this.profileFormSubmitting = false;
-        }
-      );
+        },
+      });
+  }
+
+  changeUserType(typeId: number): Observable<void> {
+    return this.authService
+      .saveProfile({
+        email: this.profileForm.value.email,
+        firstName: this.profileForm.value.firstName,
+        lastName: this.profileForm.value.lastName,
+        userType: typeId,
+      })
+      .pipe(map(() => location.reload()));
   }
 }

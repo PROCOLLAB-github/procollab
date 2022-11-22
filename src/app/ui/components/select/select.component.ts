@@ -11,9 +11,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => SelectComponent),
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class SelectComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";
@@ -22,25 +22,33 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
   isOpen = false;
 
   selectedId?: number;
-  constructor() {}
 
-  ngOnInit(): void {}
+  constructor() {
+  }
+
+  ngOnInit(): void {
+  }
 
   writeValue(id: number) {
     this.selectedId = id;
   }
 
   disabled = false;
+
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
   }
 
-  onChange: (value: string | number) => void = () => {};
+  onChange: (value: string | number) => void = () => {
+  };
+
   registerOnChange(fn: any) {
     this.onChange = fn;
   }
 
-  onTouched: () => void = () => {};
+  onTouched: () => void = () => {
+  };
+
   registerOnTouched(fn: any) {
     this.onTouched = fn;
   }

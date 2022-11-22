@@ -4,47 +4,49 @@ export class Project {
   id!: number;
   name!: string;
   description!: string;
+  region!: string;
+  step!: number;
   shortDescription!: string;
-  achievements!: { title: string; place: string }[];
-  industryId!: number;
+  achievements!: { id: number; title: string; status: string }[];
+  industry!: number;
   presentationAddress!: string;
   imageAddress!: string;
   numberOfCollaborators!: number;
   collaborators!: {
-    id: number;
-    name: string;
-    surname: string;
-    photoAddress: string;
-    speciality: string;
+    userId: number;
+    firstName: string;
+    lastName: string;
+    avatar: string;
+    role: string;
   }[];
 
   draft!: boolean;
-  leaderInfo!: string;
-  leaderId!: number;
+  leader!: number;
 
   static default(): Project {
     return {
       id: 0,
       name: "string",
+      region: "sdf",
+      step: 1,
       description: "string",
       shortDescription: "string",
-      achievements: [{ title: "sdf", place: "dsaf" }],
-      industryId: 0,
+      achievements: [{ id: 3, title: "sdf", status: "dsaf" }],
+      industry: 0,
       presentationAddress: "string",
       imageAddress: "string",
       numberOfCollaborators: 10,
       collaborators: [
         {
-          name: "string",
-          surname: "string",
-          id: 0,
-          photoAddress: "string",
-          speciality: "Front-end",
+          firstName: "string",
+          lastName: "string",
+          userId: 0,
+          avatar: "string",
+          role: "Front-end",
         },
       ],
       draft: false,
-      leaderInfo: "string",
-      leaderId: 0,
+      leader: 0,
     };
   }
 }
@@ -52,4 +54,9 @@ export class Project {
 export class ProjectCount {
   all!: number;
   my!: number;
+}
+
+export class ProjectStep {
+  id!: number;
+  name!: string;
 }

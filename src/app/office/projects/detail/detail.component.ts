@@ -2,7 +2,7 @@
 
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { Observable, pluck } from "rxjs";
+import { map, Observable } from "rxjs";
 import { Project } from "../../models/project.model";
 import { IndustryService } from "../../services/industry.service";
 import { NavService } from "../../services/nav.service";
@@ -22,8 +22,15 @@ export class ProjectDetailComponent implements OnInit {
     private navService: NavService
   ) {}
 
-  project$: Observable<Project> = this.route.data.pipe(pluck("data"), pluck(0));
-  vacancies$: Observable<Vacancy[]> = this.route.data.pipe(pluck("data"), pluck(1));
+  project$: Observable<Project> = this.route.data.pipe(
+    map(r => r["data"]),
+    map(r => r[0])
+  );
+
+  vacancies$: Observable<Vacancy[]> = this.route.data.pipe(
+    map(r => r["data"]),
+    map(r => r[1])
+  );
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль проекта");

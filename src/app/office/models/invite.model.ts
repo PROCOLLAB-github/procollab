@@ -1,28 +1,14 @@
 /** @format */
+import { User } from "../../auth/models/user.model";
+import { Project } from "./project.model";
 
 export class Invite {
   id!: number;
-  createdAt!: string;
-  updatedAt!: string;
-  project!: {
-    id: number;
-    photoAddress: string;
-    name: string;
-  };
+  datetimeCreated!: string;
+  datetimeUpdated!: string;
+  isAccepted?: boolean;
+  motivationalLetter?: string;
+  project!: Project;
 
-  inviterProfile!: {
-    id: number;
-    photoAddress: string;
-    name: string;
-    surname: string;
-    speciality: string;
-  };
-
-  targetProfile!: {
-    id: number;
-    photoAddress: string;
-    name: string;
-    surname: string;
-    speciality: string;
-  };
+  user!: User;
 }

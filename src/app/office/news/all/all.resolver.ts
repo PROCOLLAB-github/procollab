@@ -3,16 +3,17 @@
 import { Injectable } from "@angular/core";
 import { Resolve } from "@angular/router";
 import { Observable } from "rxjs";
-import { Advert } from "../../models/article.model";
-import { AdvertSerivce } from "../../services/advert.service";
+import { New } from "../../models/article.model";
+import { AdvertService } from "../../services/advert.service";
 
 @Injectable({
-  providedIn: "root",
+  providedIn: "root"
 })
-export class NewsAllResolver implements Resolve<Advert[]> {
-  constructor(private advertService: AdvertSerivce) {}
+export class NewsAllResolver implements Resolve<New[]> {
+  constructor(private advertService: AdvertService) {
+  }
 
-  resolve(): Observable<Advert[]> {
+  resolve(): Observable<New[]> {
     return this.advertService.getAll();
   }
 }

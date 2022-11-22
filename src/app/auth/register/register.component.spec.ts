@@ -25,10 +25,10 @@ describe("RegisterComponent", () => {
         RouterTestingModule,
         CoreModule,
         UiModule,
-        NgxMaskModule.forRoot(),
+        NgxMaskModule.forRoot()
       ],
       providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [RegisterComponent, InputComponent],
+      declarations: [RegisterComponent, InputComponent]
     }).compileComponents();
   });
 

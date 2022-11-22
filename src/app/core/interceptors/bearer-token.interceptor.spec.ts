@@ -11,12 +11,12 @@ describe("BearerTokenInterceptor", () => {
     const authSpy = jasmine.createSpyObj("AuthService", [
       "getTokens",
       "memTokens",
-      "refreshTokens",
+      "refreshTokens"
     ]);
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [BearerTokenInterceptor, { provide: AuthService, useValue: authSpy }],
+      providers: [BearerTokenInterceptor, { provide: AuthService, useValue: authSpy }]
     });
   });
 

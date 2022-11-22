@@ -2,43 +2,55 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService } from "../../core/services";
-import { map, Observable } from "rxjs";
-import { plainToClass } from "class-transformer";
+import { concatMap, map, Observable, take } from "rxjs";
+import { plainToInstance } from "class-transformer";
 import { Invite } from "../models/invite.model";
+import { HttpParams } from "@angular/common/http";
+import { AuthService } from "../../auth/services";
 
 @Injectable({
   providedIn: "root",
 })
 export class InviteService {
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private authService: AuthService) {}
 
-  sendForUser(userId: number, projectId: number): Observable<Invite> {
+  sendForUser(userId: number, projectId: number, role: string): Observable<Invite> {
     return this.apiService
-      .post("/invite/send", { inviteeId: userId, projectId })
-      .pipe(map(profile => plainToClass(Invite, profile)));
+      .post("/invites/", { user: userId, project: projectId, role })
+      .pipe(map(profile => plainToInstance(Invite, profile)));
   }
 
   revokeInvite(invitationId: number): Observable<Invite> {
-    return this.apiService.delete(`/invite/revoke/${invitationId}`);
+    return this.apiService.delete(`/invites/${invitationId}`);
   }
 
   acceptInvite(inviteId: number): Observable<Invite> {
-    return this.apiService.post(`/invite/accept/${inviteId}`, {});
+    return this.apiService.post(`/invites/${inviteId}/accept/`, {});
   }
 
   rejectInvite(inviteId: number): Observable<Invite> {
-    return this.apiService.post(`/invite/reject/${inviteId}`, {});
+    return this.apiService.post(`/invites/${inviteId}/decline/`, {});
   }
 
   getMy(): Observable<Invite[]> {
-    return this.apiService
-      .get<Invite[]>("/invite/my/")
-      .pipe(map(invites => plainToClass(Invite, invites)));
+    return this.authService.profile.pipe(
+      take(1),
+      concatMap(profile =>
+        this.apiService.get<Invite[]>(
+          "/invites/",
+          new HttpParams({ fromObject: { user_id: profile.id } })
+        )
+      ),
+      map(invites => plainToInstance(Invite, invites))
+    );
   }
 
   getByProject(projectId: number): Observable<Invite[]> {
     return this.apiService
-      .get<Invite[]>(`/invite/all/${projectId}`)
-      .pipe(map(profiles => plainToClass(Invite, profiles)));
+      .get<Invite[]>(
+        "/invites/",
+        new HttpParams({ fromObject: { project: projectId, user: "any" } })
+      )
+      .pipe(map(profiles => plainToInstance(Invite, profiles)));
   }
 }

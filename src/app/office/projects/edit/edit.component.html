@@ -20,6 +20,31 @@
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
         </fieldset>
+        <fieldset *ngIf="projectForm.get('region') as region">
+          <label class="field-label" for="region">Регион проекта</label>
+          <app-input
+            id="region"
+            formControlName="region"
+            [error]="region | controlError"
+            placeholder="Например: Москва"
+          ></app-input>
+          <div *ngIf="region | controlError: 'required'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+        <fieldset *ngIf="projectForm.get('step') as step">
+          <label class="field-label" for="step">Этап на котором находится проект</label>
+          <app-select
+            *ngIf="projectSteps$ | async as steps"
+            id="step"
+            formControlName="step"
+            placeholder="Выберите этап на котором находится ваш проект"
+            [options]="steps"
+          ></app-select>
+          <div *ngIf="step | controlError: 'required'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
         <fieldset *ngIf="projectForm.get('industryId') as industry">
           <label class="field-label" for="industry">Сфера проекта</label>
           <app-select
@@ -62,7 +87,7 @@
           <ng-container formArrayName="achievements">
             <ul id="achievements" class="project__achievements-list">
               <li
-                *ngFor="let achievement of achievements.controls; index as i"
+                *ngFor="let _ of achievements.controls; index as i"
                 class="project__achievement-item"
               >
                 <form [formGroupName]="i" class="achievement">
@@ -86,13 +111,13 @@
                       <i appIcon icon="basket" appSquare="24"></i>
                     </app-button>
                   </div>
-                  <fieldset *ngIf="achievements.at(i).get('place') as place">
+                  <fieldset *ngIf="achievements.at(i).get('status') as status">
                     <app-input
-                      [error]="place | controlError"
+                      [error]="status | controlError"
                       placeholder="Занятое место"
-                      formControlName="place"
+                      formControlName="status"
                     ></app-input>
-                    <div *ngIf="place | controlError: 'required'" class="text-body-14 error">
+                    <div *ngIf="status | controlError: 'required'" class="text-body-14 error">
                       {{ errorMessage.VALIDATION_REQUIRED }}
                     </div>
                   </fieldset>
@@ -175,20 +200,23 @@
             </fieldset>
             <fieldset>
               <ul class="vacancy__form-list">
-                <li *ngFor="let skill of requirements.controls; index as i" class="vacancy__skill">
+                <li
+                  *ngFor="let skill of requiredSkills.controls; index as i"
+                  class="vacancy__skill"
+                >
                   <app-tag class="skill">
                     <span>{{ skill.value }}</span>
-                    <i appIcon icon="basket" appSquare="24" (click)="removeRequirement(i)"></i>
+                    <i appIcon icon="basket" appSquare="24" (click)="removeRequiredSkill(i)"></i>
                   </app-tag>
                 </li>
               </ul>
               <div class="vacancy__form-skill-add">
                 <app-input
                   placeholder="Навыки требуемого специалиста"
-                  (enter)="addRequirement()"
-                  [(appValue)]="requirementTitle"
+                  (enter)="addRequiredSkill()"
+                  [(appValue)]="requiredSkillTitle"
                 ></app-input>
-                <app-button (click)="addRequirement()">
+                <app-button (click)="addRequiredSkill()">
                   <i appIcon icon="check" appWidth="12" appHeight="10"></i>
                 </app-button>
               </div>

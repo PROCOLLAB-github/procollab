@@ -11,9 +11,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => SearchComponent),
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class SearchComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";
@@ -33,7 +33,8 @@ export class SearchComponent implements OnInit, ControlValueAccessor {
   @Output() appValueChange = new EventEmitter<string>();
   @Output() enter = new EventEmitter<void>();
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   @ViewChild("inputEl") inputEl?: ElementRef<HTMLInputElement>;
   open = false;
@@ -59,23 +60,29 @@ export class SearchComponent implements OnInit, ControlValueAccessor {
   }
 
   value = "";
+
   writeValue(value: string): void {
     setTimeout(() => {
       this.value = value;
     });
   }
 
-  onChange: (value: string) => void = () => {};
+  onChange: (value: string) => void = () => {
+  };
+
   registerOnChange(fn: (v: string) => void): void {
     this.onChange = fn;
   }
 
-  onTouch: () => void = () => {};
+  onTouch: () => void = () => {
+  };
+
   registerOnTouched(fn: () => void): void {
     this.onTouch = fn;
   }
 
   disabled = false;
+
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
   }

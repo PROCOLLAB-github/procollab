@@ -2,15 +2,15 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { TextareaComponent } from "./textarea.component";
 
-describe('TextareaComponent', () => {
+describe("TextareaComponent", () => {
   let component: TextareaComponent;
   let fixture: ComponentFixture<TextareaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TextareaComponent ]
+      declarations: [TextareaComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('TextareaComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

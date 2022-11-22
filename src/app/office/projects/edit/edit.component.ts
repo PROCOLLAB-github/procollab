@@ -1,10 +1,10 @@
 /** @format */
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "../../services/industry.service";
-import { distinctUntilChanged, map, Subscription } from "rxjs";
+import { distinctUntilChanged, map, Observable, Subscription } from "rxjs";
 import { ErrorMessage } from "../../../error/models/error-message";
 import { NavService } from "../../services/nav.service";
 import { Project } from "../../models/project.model";
@@ -14,6 +14,7 @@ import { VacancyService } from "../../services/vacancy.service";
 import { InviteService } from "../../services/invite.service";
 import { Invite } from "../../models/invite.model";
 import { ProjectService } from "../../services/project.service";
+import { SelectComponent } from "../../../ui/components";
 
 @Component({
   selector: "app-edit",
@@ -23,6 +24,7 @@ import { ProjectService } from "../../services/project.service";
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private industryService: IndustryService,
     protected projectService: ProjectService,
@@ -35,6 +37,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectForm = this.fb.group({
       imageAddress: ["", [Validators.required]],
       name: ["", [Validators.required]],
+      region: ["", [Validators.required]],
+      step: [null, [Validators.required]],
       industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
       presentationAddress: [""],
@@ -43,7 +47,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.vacancyForm = this.fb.group({
       role: ["", [Validators.required]],
-      requirements: this.fb.array([]),
+      requiredSkills: this.fb.array([]),
     });
 
     this.inviteForm = this.fb.group({
@@ -65,7 +69,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.inviteForm.get("role"),
       this.inviteForm.get("link"),
       this.vacancyForm.get("role"),
-      this.vacancyForm.get("requirements"),
+      this.vacancyForm.get("requiredSkills"),
     ];
 
     controls.filter(Boolean).forEach(control => {
@@ -87,14 +91,16 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.projectForm.patchValue({
           imageAddress: project.imageAddress,
           name: project.name,
-          industryId: project.industryId,
+          region: project.region,
+          step: project.step,
+          industryId: project.industry,
           description: project.description,
           presentationAddress: project.presentationAddress,
         });
 
         project.achievements &&
           project.achievements.forEach(achievement =>
-            this.addAchievement(achievement.title, achievement.place)
+            this.addAchievement(achievement.id, achievement.title, achievement.status)
           );
 
         this.vacancies = vacancies;
@@ -120,35 +126,39 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     )
   );
 
+  projectSteps$: Observable<SelectComponent["options"]> = this.projectService.steps.pipe(
+    map(steps => steps.map(step => ({ id: step.id, label: step.name, value: step.id })))
+  );
+
   subscriptions: (Subscription | undefined)[] = [];
 
   vacancies: Vacancy[] = [];
   vacancyForm: FormGroup;
 
-  requirementTitle = "";
+  requiredSkillTitle = "";
 
-  addRequirement(): void {
-    if (!this.requirementTitle) {
+  addRequiredSkill(): void {
+    if (!this.requiredSkillTitle) {
       return;
     }
 
-    this.requirements.push(this.fb.control(this.requirementTitle ?? ""));
-    this.requirementTitle = "";
+    this.requiredSkills.push(this.fb.control(this.requiredSkillTitle ?? ""));
+    this.requiredSkillTitle = "";
   }
 
-  removeRequirement(index: number): void {
-    this.requirements.removeAt(index);
+  removeRequiredSkill(index: number): void {
+    this.requiredSkills.removeAt(index);
   }
 
-  get requirements(): FormArray {
-    return this.vacancyForm.get("requirements") as FormArray;
+  get requiredSkills(): FormArray {
+    return this.vacancyForm.get("requiredSkills") as FormArray;
   }
 
   vacancyIsSubmitting = false;
 
   submitVacancy(): void {
     if (!this.validationService.getFormValidation(this.vacancyForm)) {
-      const controls = [this.vacancyForm.get("role"), this.vacancyForm.get("requirements")];
+      const controls = [this.vacancyForm.get("role"), this.vacancyForm.get("requiredSkills")];
 
       controls.filter(Boolean).forEach(control => {
         console.debug("Submit vacancy error: ", control);
@@ -168,7 +178,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         next: vacancy => {
           this.vacancies.push(vacancy);
 
-          this.requirements.clear();
+          this.requiredSkills.clear();
           this.vacancyForm.reset();
 
           this.vacancyIsSubmitting = false;
@@ -218,14 +228,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.inviteService
       .sendForUser(
         Number(path[path.length - 1]),
-        Number(this.route.snapshot.paramMap.get("projectId"))
+        Number(this.route.snapshot.paramMap.get("projectId")),
+        this.inviteForm.value.role
       )
       .subscribe({
-        next: profile => {
+        next: invite => {
           this.inviteFormIsSubmitting = false;
           this.inviteForm.reset();
 
-          this.invites.push(profile);
+          this.invites.push(invite);
         },
         error: () => {
           this.inviteFormIsSubmitting = false;
@@ -247,10 +258,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.projectForm.get("achievements") as FormArray;
   }
 
-  addAchievement(title?: string, place?: string): void {
+  addAchievement(id?: number, title?: string, status?: string): void {
     const formGroup = this.fb.group({
       title: [title ?? "", [Validators.required]],
-      place: [place ?? "", [Validators.required]],
+      status: [status ?? "", [Validators.required]],
+      id: [id],
     });
 
     this.achievements.push(formGroup);
@@ -270,8 +282,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectService
       .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), this.projectForm.value)
       .subscribe({
-        next: () => {
+        next: project => {
           this.projectFormIsSubmitting = false;
+          this.router
+            .navigateByUrl(`/office/projects/${project.id}/`)
+            .then(() => console.debug("Route changed from ProjectEditComponent"));
         },
         error: () => {
           this.projectFormIsSubmitting = false;

@@ -2,21 +2,30 @@
 
 <main *ngIf="user | async as user" class="profile">
   <section class="profile__section profile__main">
-    <img class="profile__cover" src="/assets/images/office/profile/detail/cover.png" alt="cover" />
+    <img
+      class="profile__cover"
+      height="170px"
+      src="/assets/images/office/profile/detail/cover.png"
+      alt="cover"
+    />
     <div class="profile__info">
       <app-avatar
         class="profile__avatar"
-        [url]="user.photoAddress"
+        [url]="user.avatar"
         [size]="150"
         [hasBorder]="true"
       ></app-avatar>
       <div class="profile__main-info">
-        <p class="text-body-12 profile__status">{{ user.status }}</p>
-        <h2 class="text-heading-3 profile__name">{{ user.name }} {{ user.surname }}</h2>
+        <p class="text-body-12 profile__status">{{ user.userType | userRole | async }}</p>
+        <h2 class="text-heading-3 profile__name">{{ user.firstName }} {{ user.lastName }}</h2>
         <p class="text-body-12 profile__keys">
-          {{ user.birthday }} • {{ user.city }}, {{ user.region }}
+          <span *ngIf="user.birthday">
+            {{ user.birthday | dayjs: "format":"DD MMMM YYYY" }}
+          </span>
+          <ng-container *ngIf="user.birthday && user.city"> • </ng-container>
+          <span *ngIf="user.city">{{ user.city }}, {{ user.region }}</span>
         </p>
-        <ul *ngIf="user.keySkills.length" class="profile__skills">
+        <ul *ngIf="user.keySkills" class="profile__skills">
           <li *ngFor="let skill of user.keySkills" class="profile__skill">
             <app-tag>{{ skill }}</app-tag>
           </li>
@@ -49,11 +58,11 @@
         *ngFor="let achievement of user.achievements"
         class="text-bold-body-14 profile__achievement"
       >
-        {{ achievement.place }} {{ achievement.title }}
+        {{ achievement.status }} {{ achievement.title }}
       </li>
     </ul>
     <h3 class="text-bold-body-16 profile__title">Место учебы</h3>
-    <p class="text-bold-body-14">{{ user.organisation }}</p>
+    <p class="text-bold-body-14">{{ user.organization }}</p>
   </section>
   <section class="profile__section profile__description">
     <h3 class="text-bold-body-16 profile__title">Обо мне</h3>

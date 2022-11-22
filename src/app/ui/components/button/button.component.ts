@@ -5,15 +5,17 @@ import { Component, Input, OnInit } from "@angular/core";
 @Component({
   selector: "app-button",
   templateUrl: "./button.component.html",
-  styleUrls: ["./button.component.scss"],
+  styleUrls: ["./button.component.scss"]
 })
 export class ButtonComponent implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
   @Input() color: "primary" | "red" = "primary";
   @Input() loader = false;
   @Input() type: "submit" | "reset" | "button" = "button";
   @Input() appearance: "inline" | "outline" = "inline";
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 }

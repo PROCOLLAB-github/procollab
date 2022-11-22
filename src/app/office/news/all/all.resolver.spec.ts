@@ -10,7 +10,7 @@ describe("NewsAllResolver", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule]
     });
     resolver = TestBed.inject(NewsAllResolver);
   });

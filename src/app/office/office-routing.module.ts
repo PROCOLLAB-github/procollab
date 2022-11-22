@@ -26,6 +26,8 @@ import { VacancySendComponent } from "./vacancy/send/send.component";
 import { OfficeResolver } from "./office.resolver";
 import { ProjectResponsesComponent } from "./projects/responses/responses.component";
 import { ProjectResponsesResolver } from "./projects/responses/responses.resolver";
+import { MentorsComponent } from "./mentors/mentors.component";
+import { MentorsResolver } from "./mentors/mentors.resolver";
 
 const routes: Routes = [
   {
@@ -98,6 +100,13 @@ const routes: Routes = [
         component: MembersComponent,
         resolve: {
           data: MembersResolver,
+        },
+      },
+      {
+        path: "mentors",
+        component: MentorsComponent,
+        resolve: {
+          data: MentorsResolver,
         },
       },
       {

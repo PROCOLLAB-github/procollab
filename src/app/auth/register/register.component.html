@@ -4,29 +4,57 @@
   <div class="auth__wrapper">
     <h1 class="text-heading-1 auth__title">Регистрация</h1>
     <div class="auth__row">
-      <fieldset *ngIf="registerForm.get('name') as name" class="auth__field">
+      <fieldset *ngIf="registerForm.get('firstName') as name" class="auth__field">
         <label for="name" class="field-label">Имя</label>
         <app-input
           [error]="name | controlError"
           id="name"
           type="text"
-          formControlName="name"
+          formControlName="firstName"
           placeholder="Иван"
         ></app-input>
         <div *ngIf="name | controlError: 'required'" class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
       </fieldset>
-      <fieldset *ngIf="registerForm.get('surname') as surname" class="auth__field">
+      <fieldset *ngIf="registerForm.get('lastName') as surname" class="auth__field">
         <label for="surname" class="field-label">Фамилия</label>
         <app-input
           [error]="surname | controlError"
           id="surname"
           type="text"
-          formControlName="surname"
+          formControlName="lastName"
           placeholder="Иванов"
         ></app-input>
         <div *ngIf="surname | controlError: 'required'" class="text-body-14 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+      </fieldset>
+    </div>
+    <div class="auth__row">
+      <fieldset *ngIf="registerForm.get('userType') as userType">
+        <label for="userType" class="field-label">Тип аккаунта</label>
+        <app-select
+          *ngIf="roles$ | async as options"
+          id="userType"
+          formControlName="userType"
+          placeholder="Ученик"
+          [options]="options"
+        ></app-select>
+        <div *ngIf="userType | controlError: 'required'" class="text-body-14 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+      </fieldset>
+      <fieldset *ngIf="registerForm.get('birthday') as birthday">
+        <label for="birthday" class="field-label">Дата рождения</label>
+        <app-input
+          id="birthday"
+          [error]="birthday | controlError"
+          type="text"
+          mask="00.00.0000"
+          formControlName="birthday"
+        ></app-input>
+        <div *ngIf="birthday | controlError: 'required'" class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
       </fieldset>

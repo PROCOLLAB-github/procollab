@@ -1,56 +1,66 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { concatMap, map, Observable } from "rxjs";
-import { Project, ProjectCount } from "../models/project.model";
+import { BehaviorSubject, map, Observable, tap } from "rxjs";
+import { Project, ProjectCount, ProjectStep } from "../models/project.model";
 import { ApiService } from "../../core/services";
-import { plainToClass } from "class-transformer";
-import { AuthService } from "../../auth/services";
+import { plainToInstance } from "class-transformer";
+import { HttpParams } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProjectService {
-  constructor(private apiService: ApiService, private authService: AuthService) {}
+  constructor(private apiService: ApiService) {}
 
-  getAll(): Observable<Project[]> {
+  private steps$ = new BehaviorSubject<ProjectStep[]>([]);
+  steps = this.steps$.asObservable();
+
+  getProjectSteps(): Observable<ProjectStep[]> {
+    return this.apiService.get<[number, string][]>("/projects/steps/").pipe(
+      map(steps => steps.map(step => ({ id: step[0], name: step[1] }))),
+      map(steps => plainToInstance(ProjectStep, steps)),
+      tap(steps => this.steps$.next(steps))
+    );
+  }
+
+  getAll(params?: HttpParams): Observable<Project[]> {
     return this.apiService
-      .get<Project[]>("/project/all/")
-      .pipe(map(projects => plainToClass(Project, projects)));
+      .get<Project[]>("/projects/", params)
+      .pipe(map(projects => plainToInstance(Project, projects)));
   }
 
   getOne(id: number): Observable<Project> {
     return this.apiService
-      .get(`/project/${id}`)
-      .pipe(map(project => plainToClass(Project, project)));
+      .get(`/projects/${id}/`)
+      .pipe(map(project => plainToInstance(Project, project)));
   }
 
   getMy(): Observable<Project[]> {
     return this.apiService
-      .get<Project[]>("/project/my/")
-      .pipe(map(projects => plainToClass(Project, projects)));
+      .get<Project[]>("/auth/users/projects/")
+      .pipe(map(projects => plainToInstance(Project, projects)));
   }
 
   getCount(): Observable<ProjectCount> {
     return this.apiService
-      .get("/project/count/")
-      .pipe(map(count => plainToClass(ProjectCount, count)));
+      .get("/projects/count/")
+      .pipe(map(count => plainToInstance(ProjectCount, count)));
   }
 
   remove(projectId: number): Observable<void> {
-    return this.apiService.delete(`/project/${projectId}`);
+    return this.apiService.delete(`/projects/${projectId}/`);
   }
 
   create(): Observable<Project> {
-    return this.authService.profile.pipe(
-      concatMap(profile => this.apiService.post("/project/create", { leaderId: profile.id })),
-      map(project => plainToClass(Project, project))
-    );
+    return this.apiService
+      .post("/projects/", {})
+      .pipe(map(project => plainToInstance(Project, project)));
   }
 
   updateProject(projectId: number, newProject: Partial<Project>): Observable<Project> {
     return this.apiService
-      .put(`/project/update/${projectId}`, newProject)
-      .pipe(map(project => plainToClass(Project, project)));
+      .put(`/projects/${projectId}/`, newProject)
+      .pipe(map(project => plainToInstance(Project, project)));
   }
 }

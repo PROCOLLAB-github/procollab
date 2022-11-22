@@ -18,7 +18,7 @@ describe("HeaderComponent", () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [HeaderComponent],
+      declarations: [HeaderComponent]
     }).compileComponents();
   });
 

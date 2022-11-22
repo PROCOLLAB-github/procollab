@@ -13,7 +13,7 @@
   <app-avatar class="card__photo" [url]="project.imageAddress" [size]="90"></app-avatar>
   <p class="text-heading-4 card__name">{{ project.name }}</p>
   <p *ngIf="industryService.industries | async as industries" class="text-body-12 card__industry">
-    <span *ngIf="industryService.getIndustry(industries, project.industryId) as industry">
+    <span *ngIf="industryService.getIndustry(industries, project.industry) as industry">
       {{ industry ? industry.name : "Error" }}
     </span>
   </p>
@@ -21,7 +21,7 @@
   <div class="collaborators">
     <ul class="collaborators__list">
       <li *ngFor="let member of project.collaborators" class="collaborators__item">
-        <app-avatar [url]="member.photoAddress" [size]="32"></app-avatar>
+        <app-avatar [url]="member.avatar" [size]="32"></app-avatar>
       </li>
     </ul>
     <div

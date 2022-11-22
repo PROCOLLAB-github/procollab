@@ -10,7 +10,7 @@ describe("VacancyCardComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [InviteCardComponent],
+      declarations: [InviteCardComponent]
     }).compileComponents();
   });
 

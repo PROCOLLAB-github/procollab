@@ -1,16 +1,24 @@
+/** @format */
+
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { VacancyCardComponent } from "./vacancy-card.component";
+import { of } from "rxjs";
+import { AuthService } from "../../../auth/services";
 
-describe('VacancyCardComponent', () => {
+describe("VacancyCardComponent", () => {
   let component: VacancyCardComponent;
   let fixture: ComponentFixture<VacancyCardComponent>;
 
   beforeEach(async () => {
+    const authSpy = {
+      roles: of([]),
+    };
+
     await TestBed.configureTestingModule({
-      declarations: [ VacancyCardComponent ]
-    })
-    .compileComponents();
+      providers: [{ provide: AuthService, useValue: authSpy }],
+      declarations: [VacancyCardComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +27,7 @@ describe('VacancyCardComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

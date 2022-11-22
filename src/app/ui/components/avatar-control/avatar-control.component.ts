@@ -4,7 +4,7 @@ import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { nanoid } from "nanoid";
 import { FileService } from "../../../core/services/file.service";
-import { pluck } from "rxjs";
+import { map } from "rxjs";
 
 @Component({
   selector: "app-avatar-control",
@@ -14,16 +14,18 @@ import { pluck } from "rxjs";
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => AvatarControlComponent),
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class AvatarControlComponent implements OnInit, ControlValueAccessor {
-  constructor(private fileService: FileService) {}
+  constructor(private fileService: FileService) {
+  }
 
   @Input() size = 140;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   controlId = nanoid(3);
 
@@ -31,16 +33,21 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfRvoKyPWxl-0EExOVhrqc56QcPcWK-Tloew&usqp=CAU";
 
   value = "";
+
   writeValue(address: string) {
     this.value = address || this.placeholderUrl;
   }
 
-  onTouch: () => void = () => {};
+  onTouch: () => void = () => {
+  };
+
   registerOnTouched(fn: any) {
     this.onTouch = fn;
   }
 
-  onChange: (value: string) => void = () => {};
+  onChange: (value: string) => void = () => {
+  };
+
   registerOnChange(fn: any) {
     this.onChange = fn;
   }
@@ -66,7 +73,10 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
     //     )
     //     .subscribe(this.updateValue);
     // }
-    this.fileService.uploadFile(files[0]).pipe(pluck("url")).subscribe(this.updateValue.bind(this));
+    this.fileService
+      .uploadFile(files[0])
+      .pipe(map(r => r.url))
+      .subscribe(this.updateValue.bind(this));
   }
 
   private updateValue(url: string): void {

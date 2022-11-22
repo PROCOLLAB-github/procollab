@@ -4,7 +4,7 @@ import { Injectable } from "@angular/core";
 import { ApiService } from "../../core/services";
 import { BehaviorSubject, catchError, map, Observable, tap, throwError } from "rxjs";
 import { Industry } from "../models/industry.model";
-import { plainToClass } from "class-transformer";
+import { plainToInstance } from "class-transformer";
 
 @Injectable({
   providedIn: "root",
@@ -16,9 +16,9 @@ export class IndustryService {
   industries = this.industries$.asObservable();
 
   getAll(): Observable<Industry[]> {
-    return this.apiService.get<Industry[]>("/industry/").pipe(
+    return this.apiService.get<Industry[]>("/industries/").pipe(
       catchError(err => throwError(err)),
-      map(industries => plainToClass(Industry, industries)),
+      map(industries => plainToInstance(Industry, industries)),
       tap(industries => {
         this.industries$.next(industries);
       })

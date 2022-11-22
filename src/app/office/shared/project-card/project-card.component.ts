@@ -8,12 +8,14 @@ import { numWord } from "../../../utils/num-word";
 @Component({
   selector: "app-project-card",
   templateUrl: "./project-card.component.html",
-  styleUrls: ["./project-card.component.scss"],
+  styleUrls: ["./project-card.component.scss"]
 })
 export class ProjectCardComponent implements OnInit {
-  constructor(public industryService: IndustryService) {}
+  constructor(public industryService: IndustryService) {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   numWord = numWord;
 

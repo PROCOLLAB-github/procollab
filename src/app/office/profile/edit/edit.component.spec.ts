@@ -21,6 +21,7 @@ describe("ProfileEditComponent", () => {
   beforeEach(async () => {
     const authSpy = {
       profile: of({}),
+      changeableRoles: of([]),
     };
 
     await TestBed.configureTestingModule({

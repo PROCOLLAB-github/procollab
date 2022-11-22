@@ -29,7 +29,7 @@ import { SearchComponent } from "./components/search/search.component";
     ModalComponent,
     AvatarControlComponent,
     UploadFileComponent,
-    SearchComponent,
+    SearchComponent
   ],
   imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule],
   exports: [
@@ -44,7 +44,8 @@ import { SearchComponent } from "./components/search/search.component";
     ModalComponent,
     AvatarControlComponent,
     UploadFileComponent,
-    SearchComponent,
-  ],
+    SearchComponent
+  ]
 })
-export class UiModule {}
+export class UiModule {
+}

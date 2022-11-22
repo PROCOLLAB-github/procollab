@@ -6,6 +6,7 @@ import { NgModule } from "@angular/core";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { EmailVerificationComponent } from "./email-verification/email-verification.component";
+import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
         component: EmailVerificationComponent,
       },
     ],
+  },
+  {
+    path: "verification",
+    component: ConfirmEmailComponent,
   },
 ];
 

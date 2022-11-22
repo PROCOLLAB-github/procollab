@@ -1,11 +1,15 @@
 <!-- @format -->
 
 <div class="card">
-  <app-avatar [url]="user.photoAddress" [size]="90"></app-avatar>
-  <p class="text-body-12 card__status">{{ user.status }}</p>
-  <p class="text-heading-4 card__name">{{ user.name }} {{ user.surname }}</p>
-  <p class="text-body-12 card__info">{{ user.speciality }} • {{ user.birthday }}</p>
-  <ul *ngIf="user.keySkills.length" class="card__skills">
+  <app-avatar [url]="user.avatar" [size]="90"></app-avatar>
+  <p class="text-body-12 card__status">{{ user.userType | userRole | async }}</p>
+  <p class="text-heading-4 card__name">{{ user.firstName }} {{ user.lastName }}</p>
+  <p class="text-body-12 card__info">
+    {{ user.speciality }}
+    <ng-container *ngIf="user.speciality && user.birthday"> • </ng-container>
+    <span *ngIf="user.birthday">{{ user.birthday | dayjs: "format":"DD MMMM YYYY" }}</span>
+  </p>
+  <ul *ngIf="user.keySkills" class="card__skills">
     <li *ngFor="let skill of user.keySkills" class="card__skill">
       <app-tag>{{ skill }}</app-tag>
     </li>

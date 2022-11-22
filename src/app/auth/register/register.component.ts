@@ -7,6 +7,11 @@ import { ValidationService } from "../../core/services";
 import { ErrorMessage } from "../../error/models/error-message";
 import { SelectComponent } from "src/app/ui/components";
 import { Router } from "@angular/router";
+import { Observable, of } from "rxjs";
+import * as dayjs from "dayjs";
+import * as cpf from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(cpf);
 
 @Component({
   selector: "app-login",
@@ -22,12 +27,16 @@ export class RegisterComponent implements OnInit {
     private cdref: ChangeDetectorRef
   ) {
     this.registerForm = this.fb.group({
-      name: ["", [Validators.required]],
-      surname: ["", [Validators.required]],
+      firstName: ["", [Validators.required]],
+      lastName: ["", [Validators.required]],
+      userType: [1, [Validators.required]],
+      birthday: ["", [Validators.required]],
       email: ["", [Validators.required, Validators.email]],
       password: ["", [Validators.required, Validators.minLength(6)]],
     });
   }
+
+  ngOnInit(): void {}
 
   registerForm: FormGroup;
   registerAgreement = false;
@@ -36,43 +45,50 @@ export class RegisterComponent implements OnInit {
   userExistError = false;
 
   errorMessage = ErrorMessage;
-
-  statusOptions: SelectComponent["options"] = [
-    { id: 1, value: "Ученик", label: "Ученик" },
-    { id: 2, value: "Ментор", label: "Ментор" },
-  ];
-
-  ngOnInit(): void {}
+  // TODO: unhardcode later on
+  roles$: Observable<SelectComponent["options"]> = of([
+    { id: 1, value: 1, label: "Участник" },
+    { id: 2, value: 2, label: "Ментор" },
+    { id: 3, value: 3, label: "Эксперт" },
+    { id: 4, value: 4, label: "Инвестор" },
+  ]);
 
   onSubmit() {
     if (!this.validationService.getFormValidation(this.registerForm) || !this.registerAgreement) {
       return;
     }
 
-    const form = { ...this.registerForm.value };
+    const form = {
+      ...this.registerForm.value,
+      birthday: this.registerForm.value.birthday
+        ? dayjs(this.registerForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD")
+        : undefined,
+    };
     delete form.repeatedPassword;
 
     this.registerIsSubmitting = true;
 
-    this.authService.register(form).subscribe(
-      res => {
-        this.authService.memTokens(res);
-        this.router
-          .navigateByUrl("/auth/verification/email")
-          .then(() => console.debug("Route changed from RegisterComponent"));
-
+    this.authService.register(form).subscribe({
+      next: () => {
         this.registerIsSubmitting = false;
 
         this.cdref.detectChanges();
+
+        this.router
+          .navigateByUrl("/auth/verification/email")
+          .then(() => console.debug("Route changed from RegisterComponent"));
       },
-      error => {
-        if (error.status === 409) {
+      error: error => {
+        if (
+          error.status === 400 &&
+          error.error.email.some((msg: string) => msg.includes("email"))
+        ) {
           this.userExistError = true;
         }
 
         this.registerIsSubmitting = false;
         this.cdref.detectChanges();
-      }
-    );
+      },
+    });
   }
 }

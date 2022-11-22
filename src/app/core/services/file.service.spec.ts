@@ -13,7 +13,7 @@ describe("FileService", () => {
     const authSpy = jasmine.createSpyObj(["getTokens"]);
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthService, useValue: authSpy }]
     });
     service = TestBed.inject(FileService);
   });

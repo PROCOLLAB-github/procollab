@@ -13,7 +13,7 @@ describe("NewsAllComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
-      declarations: [NewsAllComponent],
+      declarations: [NewsAllComponent]
     }).compileComponents();
   });
 

@@ -6,22 +6,21 @@ export class LoginRequest {
 }
 
 export class LoginResponse {
-  accessToken!: string;
-  refreshToken!: string;
-  tokenType!: "Bearer";
+  access!: string;
+  refresh!: string;
 }
 
 export class RefreshResponse {
-  accessToken!: string;
-  refreshToken!: string;
-  tokenType!: "Bearer";
+  access!: string;
+  refresh!: string;
 }
 
 export class RegisterRequest {
-  name!: string;
-  surname!: string;
-  birthday!: string;
+  firstName!: string;
+  lastName!: string;
   email!: string;
   password!: string;
 }
-export class RegisterResponse extends LoginResponse {}
+
+export class RegisterResponse extends LoginResponse {
+}

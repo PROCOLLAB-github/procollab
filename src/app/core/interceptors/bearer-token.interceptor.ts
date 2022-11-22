@@ -1,13 +1,20 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from "@angular/common/http";
 import { catchError, Observable, switchMap, throwError } from "rxjs";
 import { AuthService } from "../../auth/services";
 
 @Injectable()
 export class BearerTokenInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
+
   private retry = 0;
   private retryCount = 3;
 
@@ -19,14 +26,14 @@ export class BearerTokenInterceptor implements HttpInterceptor {
 
     if (tokens !== null) {
       // eslint-disable-next-line
-      headers["Authorization"] = `${tokens.tokenType} ${tokens.accessToken}`;
+      headers["Authorization"] = `Bearer ${tokens.access}`;
     }
 
     const req = request.clone({ setHeaders: headers });
     if (tokens !== null && this.retry < this.retryCount) {
       return next.handle(req).pipe(
         catchError((error: HttpErrorResponse) => {
-          if (error.status === 401) {
+          if (error.status === 502) {
             this.retry++;
             return this.handle401(request, next);
           }
@@ -54,7 +61,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
 
         if (tokens) {
           // eslint-disable-next-line
-          headers["Authorization"] = `${tokens.tokenType} ${tokens.accessToken}`;
+          headers["Authorization"] = `Bearer ${tokens.access}`;
         }
 
         return next.handle(

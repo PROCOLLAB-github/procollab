@@ -4,14 +4,18 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { EmailVerificationComponent } from "./email-verification.component";
 import { RouterTestingModule } from "@angular/router/testing";
+import { AuthService } from "../services";
 
 describe("EmailVerificationComponent", () => {
   let component: EmailVerificationComponent;
   let fixture: ComponentFixture<EmailVerificationComponent>;
 
   beforeEach(async () => {
+    const authSpy = jasmine.createSpyObj(["memTokens"]);
+
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule],
+      providers: [{ provide: AuthService, useValue: authSpy }],
       declarations: [EmailVerificationComponent],
     }).compileComponents();
   });

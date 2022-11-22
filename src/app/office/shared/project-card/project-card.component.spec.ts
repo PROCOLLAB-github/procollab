@@ -16,7 +16,7 @@ describe("ProjectCardComponent", () => {
 
     await TestBed.configureTestingModule({
       providers: [{ provide: IndustryService, useValue: industrySpy }],
-      declarations: [ProjectCardComponent],
+      declarations: [ProjectCardComponent]
     }).compileComponents();
   });
 

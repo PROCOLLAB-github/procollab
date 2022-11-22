@@ -1,27 +1,24 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { map, Observable, pluck } from "rxjs";
-import { Advert } from "../models/article.model";
+import { map, Observable } from "rxjs";
+import { New } from "../models/article.model";
 import { ApiService } from "../../core/services";
-import { plainToClass } from "class-transformer";
+import { plainToInstance } from "class-transformer";
 
 @Injectable({
   providedIn: "root",
 })
-export class AdvertSerivce {
+export class AdvertService {
   constructor(private apiService: ApiService) {}
 
-  getAll(): Observable<Advert[]> {
-    return this.apiService.get<{ news: Advert[] }>("/advert/all").pipe(
-      pluck("news"),
-      map(adverts => plainToClass(Advert, adverts))
-    );
+  getAll(): Observable<New[]> {
+    return this.apiService.get<New[]>("/news/").pipe(map(adverts => plainToInstance(New, adverts)));
   }
 
-  getOne(advertId: number): Observable<Advert> {
+  getOne(advertId: number): Observable<New> {
     return this.apiService
-      .get(`/advert/${advertId}`)
-      .pipe(map(advert => plainToClass(Advert, advert)));
+      .get(`/news/${advertId}/`)
+      .pipe(map(advert => plainToInstance(New, advert)));
   }
 }

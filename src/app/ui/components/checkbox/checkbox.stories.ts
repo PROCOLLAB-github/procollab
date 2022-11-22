@@ -5,11 +5,11 @@ import { CheckboxComponent } from "./checkbox.component";
 
 export default {
   title: "Checkbox",
-  component: CheckboxComponent,
+  component: CheckboxComponent
 } as Meta;
 
 const Template: Story = args => ({
-  props: args,
+  props: args
 });
 
 export const Empty = Template.bind({});

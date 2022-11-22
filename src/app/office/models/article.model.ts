@@ -1,6 +1,6 @@
 /** @format */
 
-export class Advert {
+export class New {
   id!: number;
   coverUrl!: string;
   title!: string;
