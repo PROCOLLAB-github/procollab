@@ -44,7 +44,6 @@ export class RegisterComponent implements OnInit {
   errorMessage = ErrorMessage;
   // TODO: unhardcode later on
   roles$: Observable<SelectComponent["options"]> = of([
-    { id: 0, value: 0, label: "Администратор" },
     { id: 1, value: 1, label: "Участник" },
     { id: 2, value: 2, label: "Ментор" },
     { id: 3, value: 3, label: "Эксперт" },
