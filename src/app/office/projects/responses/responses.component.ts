@@ -18,7 +18,7 @@ export class ProjectResponsesComponent implements OnInit, OnDestroy {
     this.responses$ = this.route.data
       .pipe(map(r => r["data"]))
       .subscribe((responses: VacancyResponse[]) => {
-        this.responses = responses.filter(response => response.isApproved !== false);
+        this.responses = responses.filter(response => response.isApproved === null);
       });
   }
 

@@ -47,10 +47,10 @@ export class VacancyService {
   }
 
   acceptResponse(responseId: number): Observable<void> {
-    return this.apiService.post(`/vacancies/responses/${responseId}/accept`, {});
+    return this.apiService.post(`/vacancies/responses/${responseId}/accept/`, {});
   }
 
   rejectResponse(responseId: number): Observable<void> {
-    return this.apiService.post(`/vacancies/responses/${responseId}/decline`, {});
+    return this.apiService.post(`/vacancies/responses/${responseId}/decline/`, {});
   }
 }
