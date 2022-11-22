@@ -67,6 +67,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         aboutMe: profile.aboutMe ?? "",
       });
 
+      this.cdref.detectChanges();
+
       profile.achievements.length &&
         profile.achievements?.forEach(achievement =>
           this.addAchievement(achievement.id, achievement.title, achievement.status)
@@ -101,7 +103,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   errorMessage = ErrorMessage;
 
-  roles: Observable<SelectComponent["options"]> = this.authService.changableRoles.pipe(
+  roles: Observable<SelectComponent["options"]> = this.authService.changeableRoles.pipe(
     map(roles => roles.map(role => ({ id: role.id, value: role.id, label: role.name })))
   );
 

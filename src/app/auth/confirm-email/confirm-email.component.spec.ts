@@ -1,16 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { ConfirmEmailComponent } from './confirm-email.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('ConfirmEmailComponent', () => {
+import { ConfirmEmailComponent } from "./confirm-email.component";
+import { AuthService } from "../services";
+import { RouterTestingModule } from "@angular/router/testing";
+
+describe("ConfirmEmailComponent", () => {
   let component: ConfirmEmailComponent;
   let fixture: ComponentFixture<ConfirmEmailComponent>;
 
   beforeEach(async () => {
+    const authSpy = jasmine.createSpyObj(["getTokens", "memTokens"]);
+
     await TestBed.configureTestingModule({
-      declarations: [ ConfirmEmailComponent ]
-    })
-    .compileComponents();
+      imports: [RouterTestingModule],
+      providers: [{ provide: AuthService, useValue: authSpy }],
+      declarations: [ConfirmEmailComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +26,7 @@ describe('ConfirmEmailComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

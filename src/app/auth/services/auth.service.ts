@@ -72,7 +72,7 @@ export class AuthService {
   roles = this.roles$.asObservable();
 
   private changeableRoles$ = new ReplaySubject<UserRole[]>(1);
-  changableRoles = this.changeableRoles$.asObservable();
+  changeableRoles = this.changeableRoles$.asObservable();
 
   getProfile(): Observable<User> {
     return this.apiService.get<User>("/auth/users/current/").pipe(
