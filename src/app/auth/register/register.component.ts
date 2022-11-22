@@ -69,15 +69,14 @@ export class RegisterComponent implements OnInit {
     this.registerIsSubmitting = true;
 
     this.authService.register(form).subscribe({
-      next: res => {
-        this.authService.memTokens(res);
-        this.router
-          .navigateByUrl("/auth/verification/email")
-          .then(() => console.debug("Route changed from RegisterComponent"));
-
+      next: () => {
         this.registerIsSubmitting = false;
 
         this.cdref.detectChanges();
+
+        this.router
+          .navigateByUrl("/auth/verification/email")
+          .then(() => console.debug("Route changed from RegisterComponent"));
       },
       error: error => {
         if (

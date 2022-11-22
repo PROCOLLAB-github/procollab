@@ -6,6 +6,7 @@ import { NgModule } from "@angular/core";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { EmailVerificationComponent } from "./email-verification/email-verification.component";
+import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
 
 const routes: Routes = [
   {
@@ -14,23 +15,26 @@ const routes: Routes = [
     children: [
       {
         path: "login",
-        component: LoginComponent
+        component: LoginComponent,
       },
       {
         path: "register",
-        component: RegisterComponent
+        component: RegisterComponent,
       },
       {
         path: "verification/email",
-        component: EmailVerificationComponent
-      }
-    ]
-  }
+        component: EmailVerificationComponent,
+      },
+    ],
+  },
+  {
+    path: "verification",
+    component: ConfirmEmailComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AuthRoutingModule {
-}
+export class AuthRoutingModule {}
