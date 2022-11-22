@@ -7,11 +7,13 @@ import { ValidationService } from "../../core/services";
 import { ErrorMessage } from "../../error/models/error-message";
 import { SelectComponent } from "src/app/ui/components";
 import { Router } from "@angular/router";
+import { Observable, of } from "rxjs";
+import * as dayjs from "dayjs";
 
 @Component({
   selector: "app-login",
   templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.scss"]
+  styleUrls: ["./register.component.scss"],
 })
 export class RegisterComponent implements OnInit {
   constructor(
@@ -24,10 +26,14 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.fb.group({
       firstName: ["", [Validators.required]],
       lastName: ["", [Validators.required]],
+      userType: [1, [Validators.required]],
+      birthday: ["", [Validators.required]],
       email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required, Validators.minLength(6)]]
+      password: ["", [Validators.required, Validators.minLength(6)]],
     });
   }
+
+  ngOnInit(): void {}
 
   registerForm: FormGroup;
   registerAgreement = false;
@@ -36,21 +42,26 @@ export class RegisterComponent implements OnInit {
   userExistError = false;
 
   errorMessage = ErrorMessage;
-
-  statusOptions: SelectComponent["options"] = [
-    { id: 1, value: "Ученик", label: "Ученик" },
-    { id: 2, value: "Ментор", label: "Ментор" }
-  ];
-
-  ngOnInit(): void {
-  }
+  // TODO: unhardcode later on
+  roles$: Observable<SelectComponent["options"]> = of([
+    { id: 0, value: 0, label: "Администратор" },
+    { id: 1, value: 1, label: "Участник" },
+    { id: 2, value: 2, label: "Ментор" },
+    { id: 3, value: 3, label: "Эксперт" },
+    { id: 4, value: 4, label: "Инвестор" },
+  ]);
 
   onSubmit() {
     if (!this.validationService.getFormValidation(this.registerForm) || !this.registerAgreement) {
       return;
     }
 
-    const form = { ...this.registerForm.value };
+    const form = {
+      ...this.registerForm.value,
+      birthday: this.registerForm.value.birthday
+        ? dayjs(this.registerForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD")
+        : undefined,
+    };
     delete form.repeatedPassword;
 
     this.registerIsSubmitting = true;
@@ -76,7 +87,7 @@ export class RegisterComponent implements OnInit {
 
         this.registerIsSubmitting = false;
         this.cdref.detectChanges();
-      }
+      },
     });
   }
 }

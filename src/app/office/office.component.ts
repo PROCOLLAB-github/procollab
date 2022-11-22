@@ -40,7 +40,6 @@ export class OfficeComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.dictSub$ = forkJoin([
       this.industryService.getAll(),
-      this.authService.getUserRoles(),
       this.projectService.getProjectSteps(),
     ]).subscribe(noop);
   }

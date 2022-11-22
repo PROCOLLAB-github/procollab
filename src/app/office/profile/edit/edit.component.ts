@@ -100,7 +100,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   errorMessage = ErrorMessage;
 
-  statusOptions: Observable<SelectComponent["options"]> = this.authService.roles.pipe(
+  roles: Observable<SelectComponent["options"]> = this.authService.roles.pipe(
     map(roles => roles.map(role => ({ id: role.id, value: role.id, label: role.name })))
   );
 
