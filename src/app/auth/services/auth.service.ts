@@ -71,6 +71,9 @@ export class AuthService {
   private roles$ = new ReplaySubject<UserRole[]>(1);
   roles = this.roles$.asObservable();
 
+  private changeableRoles$ = new ReplaySubject<UserRole[]>(1);
+  changableRoles = this.changeableRoles$.asObservable();
+
   getProfile(): Observable<User> {
     return this.apiService.get<User>("/auth/users/current/").pipe(
       map(user => plainToInstance(User, user)),
@@ -79,10 +82,18 @@ export class AuthService {
   }
 
   getUserRoles(): Observable<UserRole[]> {
-    return this.apiService.get<[[number, string]]>("/auth/users/roles/").pipe(
+    return this.apiService.get<[[number, string]]>("/auth/users/types/").pipe(
       map(roles => roles.map(role => ({ id: role[0], name: role[1] }))),
       map(roles => plainToInstance(UserRole, roles)),
       tap(roles => this.roles$.next(roles))
+    );
+  }
+
+  getChangableRoles(): Observable<UserRole[]> {
+    return this.apiService.get<[[number, string]]>("/auth/users/roles/").pipe(
+      map(roles => roles.map(role => ({ id: role[0], name: role[1] }))),
+      map(roles => plainToInstance(UserRole, roles)),
+      tap(roles => this.changeableRoles$.next(roles))
     );
   }
 

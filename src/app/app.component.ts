@@ -3,7 +3,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResolveEnd, ResolveStart, Router } from "@angular/router";
 import { AuthService } from "./auth/services";
-import { debounceTime, filter, map, merge, noop, Observable, Subscription } from "rxjs";
+import { debounceTime, filter, forkJoin, map, merge, noop, Observable, Subscription } from "rxjs";
 
 @Component({
   selector: "app-root",
@@ -14,7 +14,10 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.rolesSub$ = this.authService.getUserRoles().subscribe(noop);
+    this.rolesSub$ = forkJoin([
+      this.authService.getUserRoles(),
+      this.authService.getChangableRoles(),
+    ]).subscribe(noop);
 
     this.showLoaderEvents = this.router.events.pipe(
       filter(evt => evt instanceof ResolveStart),
