@@ -79,7 +79,7 @@ export class AuthService {
   }
 
   getUserRoles(): Observable<UserRole[]> {
-    return this.apiService.get<[[number, string]]>("/auth/users/types/").pipe(
+    return this.apiService.get<[[number, string]]>("/auth/users/roles/").pipe(
       map(roles => roles.map(role => ({ id: role[0], name: role[1] }))),
       map(roles => plainToInstance(UserRole, roles)),
       tap(roles => this.roles$.next(roles))
