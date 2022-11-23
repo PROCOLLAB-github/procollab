@@ -110,15 +110,55 @@
           </div>
         </fieldset>
       </div>
+      <div
+        *ngIf="[2, 3, 4].includes(currentType.value) && preferredIndustries"
+        class="profile__row"
+      >
+        <div>
+          <label class="field-label">Область экспертности</label>
+          <ul class="tag-list">
+            <li
+              *ngFor="let industry of preferredIndustries.controls; index as i"
+              class="tag-list__item"
+            >
+              <app-tag>
+                <span>{{ industry.value }}</span>
+                <i
+                  class="tag-list__remove-icon"
+                  appIcon
+                  icon="basket"
+                  appSquare="24"
+                  (click)="removePreferredIndustry(i)"
+                ></i>
+              </app-tag>
+            </li>
+          </ul>
+          <div class="tag-list-form">
+            <app-input
+              (enter)="addPreferredIndustry()"
+              [(appValue)]="newPreferredIndustryTitle"
+              class="tag-list-form__input"
+              placeholder="Введите области вашей экспертности"
+            ></app-input>
+            <app-button
+              type="button"
+              class="tag-list-form__button"
+              (click)="addPreferredIndustry()"
+            >
+              <i appIcon icon="check" appWidth="12" appHeight="10"></i>
+            </app-button>
+          </div>
+        </div>
+      </div>
       <div class="profile__row">
         <div>
           <label class="field-label">Ключевые навыки</label>
-          <ul class="key-skills-list">
-            <li *ngFor="let skill of keySkills.controls; index as i" class="key-skills-list__item">
+          <ul class="tag-list">
+            <li *ngFor="let skill of keySkills.controls; index as i" class="tag-list__item">
               <app-tag>
                 <span>{{ skill.value }}</span>
                 <i
-                  class="key-skills-list__remove-icon"
+                  class="tag-list__remove-icon"
                   appIcon
                   icon="basket"
                   appSquare="24"
@@ -127,14 +167,14 @@
               </app-tag>
             </li>
           </ul>
-          <div class="key-skill-form">
+          <div class="tag-list-form">
             <app-input
               (enter)="addKeySkill()"
               [(appValue)]="newKeySkillTitle"
-              class="key-skill-form__input"
+              class="tag-list-form__input"
               placeholder="Введите свой навык, например: Python"
             ></app-input>
-            <app-button type="button" class="key-skill-form__button" (click)="addKeySkill()">
+            <app-button type="button" class="tag-list-form__button" (click)="addKeySkill()">
               <i appIcon icon="check" appWidth="12" appHeight="10"></i>
             </app-button>
           </div>

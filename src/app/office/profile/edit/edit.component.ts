@@ -6,7 +6,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "../../../error/models/error-message";
 import { SelectComponent } from "../../../ui/components";
 import { ValidationService } from "../../../core/services";
-import { concatMap, first, map, noop, Observable, Subscription, take } from "rxjs";
+import { concatMap, first, map, noop, Observable, skip, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
@@ -39,17 +39,18 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       achievements: this.fb.array([]),
       avatar: [""],
       aboutMe: [""],
+      typeSpecific: this.fb.group({}),
     });
   }
 
   ngOnInit(): void {
     this.profileForm
       .get("userType")
-      ?.valueChanges.pipe(take(1), concatMap(this.changeUserType.bind(this)))
+      ?.valueChanges.pipe(skip(1), concatMap(this.changeUserType.bind(this)))
       .subscribe(noop);
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
     this.profile$ = this.authService.profile.pipe(first()).subscribe(profile => {
       this.profileId = profile.id;
 
@@ -74,13 +75,15 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
           this.addAchievement(achievement.id, achievement.title, achievement.status)
         );
 
-      if (profile.userType === 2) {
-        this.profileForm.addControl(
-          "mentor",
-          this.fb.group({
-            preferredIndustries: this.fb.array([]),
-          })
+      if ([2, 3, 4].includes(profile.userType)) {
+        this.typeSpecific?.addControl("preferredIndustries", this.fb.array([]));
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        profile[this.userTypeMap[profile.userType]].prefferedIndustries.forEach(
+          (industry: string) => this.addPreferredIndustry(industry)
         );
+
+        this.cdref.detectChanges();
       }
 
       profile.keySkills?.forEach(skill => this.addKeySkill(skill));
@@ -96,6 +99,32 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   profileId?: number;
 
   profile$?: Subscription;
+
+  get typeSpecific(): FormGroup {
+    return this.profileForm.get("typeSpecific") as FormGroup;
+  }
+
+  get preferredIndustries(): FormArray {
+    return this.typeSpecific.get("preferredIndustries") as FormArray;
+  }
+
+  newPreferredIndustryTitle = "";
+
+  addPreferredIndustry(title?: string): void {
+    const fromState = title ?? this.newPreferredIndustryTitle;
+    if (!fromState) {
+      return;
+    }
+
+    const control = this.fb.control(fromState, [Validators.required]);
+    this.preferredIndustries.push(control);
+
+    this.newPreferredIndustryTitle = "";
+  }
+
+  removePreferredIndustry(i: number): void {
+    this.preferredIndustries.removeAt(i);
+  }
 
   get achievements(): FormArray {
     return this.profileForm.get("achievements") as FormArray;
@@ -146,6 +175,13 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.keySkills.removeAt(i);
   }
 
+  private userTypeMap: { [type: number]: string } = {
+    1: "member",
+    2: "mentor",
+    3: "expert",
+    4: "investor",
+  };
+
   saveProfile(): void {
     if (!this.validationService.getFormValidation(this.profileForm) || this.profileFormSubmitting) {
       return;
@@ -153,13 +189,17 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.profileFormSubmitting = true;
 
+    const newProfile = {
+      ...this.profileForm.value,
+      [this.userTypeMap[this.profileForm.value.userType]]: this.typeSpecific.value,
+      typeSpecific: undefined,
+      birthday: this.profileForm.value.birthday
+        ? dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD")
+        : undefined,
+    };
+
     this.authService
-      .saveProfile({
-        ...this.profileForm.value,
-        birthday: this.profileForm.value.birthday
-          ? dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD")
-          : undefined,
-      })
+      .saveProfile(newProfile)
       .pipe(concatMap(() => this.authService.getProfile()))
       .subscribe({
         next: () => {

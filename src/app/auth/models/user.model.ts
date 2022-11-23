@@ -20,6 +20,18 @@ export class User {
     usefulToProject: string;
   };
 
+  mentor?: {
+    preferredIndustries: string[];
+  };
+
+  expert?: {
+    preferredIndustries: string[];
+  };
+
+  investor?: {
+    preferredIndustries: string[];
+  };
+
   speciality!: string;
   userType!: number;
   city!: string;
