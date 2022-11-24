@@ -11,7 +11,7 @@
             id="firstName"
             type="text"
             formControlName="firstName"
-            placeholder="Егор"
+            placeholder="Иван"
           ></app-input>
           <div *ngIf="firstName | controlError: 'required'" class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
@@ -24,7 +24,7 @@
             id="lastName"
             type="text"
             formControlName="lastName"
-            placeholder="Токарев"
+            placeholder="Иванов"
           ></app-input>
           <div *ngIf="lastName | controlError: 'required'" class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
