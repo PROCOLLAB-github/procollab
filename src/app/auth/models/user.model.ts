@@ -21,10 +21,12 @@ export class User {
   };
 
   mentor?: {
+    usefulToProject: string;
     preferredIndustries: string[];
   };
 
   expert?: {
+    usefulToProject: string;
     preferredIndustries: string[];
   };
 

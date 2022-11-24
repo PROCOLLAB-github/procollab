@@ -16,7 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.rolesSub$ = forkJoin([
       this.authService.getUserRoles(),
-      this.authService.getChangableRoles(),
+      this.authService.getChangeableRoles(),
     ]).subscribe(noop);
 
     this.showLoaderEvents = this.router.events.pipe(

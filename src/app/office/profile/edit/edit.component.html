@@ -234,16 +234,30 @@
         <label for="avatar" class="field-label">Фотография профиля</label>
         <app-avatar-control id="avatar" formControlName="avatar"></app-avatar-control>
       </fieldset>
-      <fieldset *ngIf="profileForm.get('aboutMe') as aboutMe">
-        <label for="aboutMe" class="field-label">Обо мне</label>
-        <app-textarea
-          id="aboutMe"
-          [error]="aboutMe | controlError"
+      <div class="profile__row">
+        <fieldset *ngIf="profileForm.get('aboutMe') as aboutMe">
+          <label for="aboutMe" class="field-label">Обо мне</label>
+          <app-textarea
+            id="aboutMe"
+            [error]="aboutMe | controlError"
+            type="text"
+            placeholder="Я java developer, очень люблю котиков"
+            formControlName="aboutMe"
+          ></app-textarea>
+          <div *ngIf="aboutMe | controlError: 'required'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+      </div>
+      <fieldset *ngIf="[1, 3, 4].includes(currentType.value) && usefulToProject">
+        <label for="usefulToProject" class="field-label">Чем могу быть полезен в проекте</label>
+        <app-input
+          [error]="usefulToProject | controlError"
+          id="usefulToProject"
           type="text"
-          placeholder="Я java developer, очень люблю котиков"
-          formControlName="aboutMe"
-        ></app-textarea>
-        <div *ngIf="aboutMe | controlError: 'required'" class="text-body-14 error">
+          [formControl]="usefulToProject"
+        ></app-input>
+        <div *ngIf="usefulToProject | controlError: 'required'" class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
       </fieldset>

@@ -2,7 +2,7 @@
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "../../../auth/services";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "../../../error/models/error-message";
 import { SelectComponent } from "../../../ui/components";
 import { ValidationService } from "../../../core/services";
@@ -79,10 +79,15 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         this.typeSpecific?.addControl("preferredIndustries", this.fb.array([]));
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        profile[this.userTypeMap[profile.userType]].prefferedIndustries.forEach(
+        profile[this.userTypeMap[profile.userType]].preferredIndustries.forEach(
           (industry: string) => this.addPreferredIndustry(industry)
         );
 
+        this.cdref.detectChanges();
+      }
+
+      if ([1, 3, 4].includes(profile.userType)) {
+        this.typeSpecific.addControl("usefulToProject", this.fb.control(""));
         this.cdref.detectChanges();
       }
 
@@ -102,6 +107,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   get typeSpecific(): FormGroup {
     return this.profileForm.get("typeSpecific") as FormGroup;
+  }
+
+  get usefulToProject(): FormControl {
+    return this.typeSpecific.get("usefulToProject") as FormControl;
   }
 
   get preferredIndustries(): FormArray {
