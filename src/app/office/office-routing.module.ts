@@ -5,7 +5,6 @@ import { NgModule } from "@angular/core";
 import { OfficeComponent } from "./office.component";
 import { ProjectsComponent } from "./projects/projects.component";
 import { ChatComponent } from "./chat/chat.component";
-import { NewsAllComponent } from "./news/all/all.component";
 import { ProfileDetailComponent } from "./profile/detail/profile-detail.component";
 import { ProfileEditComponent } from "./profile/edit/edit.component";
 import { ProfileDetailResolver } from "./profile/detail/profile-detail.resolver";
@@ -19,9 +18,6 @@ import { ProjectDetailComponent } from "./projects/detail/detail.component";
 import { ProjectDetailResolver } from "./projects/detail/detail.resolver";
 import { ProjectEditComponent } from "./projects/edit/edit.component";
 import { ProjectEditResolver } from "./projects/edit/edit.resolver";
-import { NewsAllResolver } from "./news/all/all.resolver";
-import { NewsDetailComponent } from "./news/detail/detail.component";
-import { NewsDetailResolver } from "./news/detail/detail.resolver";
 import { VacancySendComponent } from "./vacancy/send/send.component";
 import { OfficeResolver } from "./office.resolver";
 import { ProjectResponsesComponent } from "./projects/responses/responses.component";
@@ -112,20 +108,6 @@ const routes: Routes = [
       {
         path: "chat",
         component: ChatComponent,
-      },
-      {
-        path: "news",
-        component: NewsAllComponent,
-        resolve: {
-          data: NewsAllResolver,
-        },
-      },
-      {
-        path: "news/:advertId",
-        component: NewsDetailComponent,
-        resolve: {
-          data: NewsDetailResolver,
-        },
       },
       {
         path: "profile/edit",
