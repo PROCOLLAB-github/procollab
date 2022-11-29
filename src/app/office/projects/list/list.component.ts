@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { concatMap, distinctUntilChanged, map, Subscription } from "rxjs";
+import { concatMap, distinctUntilChanged, map, merge, Subscription } from "rxjs";
 import { AuthService } from "../../../auth/services";
 import { Project } from "../../models/project.model";
 import { User } from "../../../auth/models/user.model";
@@ -40,8 +40,8 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
     });
 
     if (location.href.includes("/all")) {
-      this.queryIndustry$ = this.route.queryParams
-        .pipe(
+      const observable = merge(
+        this.route.queryParams.pipe(
           map(q => q["industry"]),
           distinctUntilChanged(),
           concatMap(industry =>
@@ -49,11 +49,20 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
               industry ? new HttpParams({ fromObject: { industry } }) : undefined
             )
           )
+        ),
+        this.route.queryParams.pipe(
+          map(q => q["step"]),
+          distinctUntilChanged(),
+          concatMap(step =>
+            this.projectService.getAll(step ? new HttpParams({ fromObject: { step } }) : undefined)
+          )
         )
-        .subscribe(projects => {
-          this.projects = projects;
-          this.searchedProjects = projects;
-        });
+      );
+
+      this.queryIndustry$ = observable.subscribe(projects => {
+        this.projects = projects;
+        this.searchedProjects = projects;
+      });
     }
 
     this.projects$ = this.route.data.pipe(map(r => r["data"])).subscribe(projects => {

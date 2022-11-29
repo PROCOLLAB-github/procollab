@@ -43,14 +43,27 @@
           </div>
           <div *ngIf="filterOpen" class="filter__body">
             <h3 class="text-bold-body-16 filter__title">Фильтр</h3>
-            <h4 class="text-body-12 filter__name">Направление</h4>
-            <div
-              class="text-body-14 filter__checkbox"
-              *ngFor="let industry of industries"
-              (click)="filterByIndustry(industry.id)"
-            >
-              <app-checkbox [checked]="industry.id === currentIndustry"></app-checkbox>
-              {{ industry.name }}
+            <div class="filter__block">
+              <h4 class="text-body-12 filter__name">Направление</h4>
+              <div
+                class="text-body-14 filter__checkbox"
+                *ngFor="let step of steps"
+                (click)="filterByStep(step.id)"
+              >
+                <app-checkbox [checked]="step.id === currentStep"></app-checkbox>
+                {{ step.name }}
+              </div>
+            </div>
+            <div class="filter__block">
+              <h4 class="text-body-12 filter__name">Направление</h4>
+              <div
+                class="text-body-14 filter__checkbox"
+                *ngFor="let industry of industries"
+                (click)="filterByIndustry(industry.id)"
+              >
+                <app-checkbox [checked]="industry.id === currentIndustry"></app-checkbox>
+                {{ industry.name }}
+              </div>
             </div>
           </div>
         </div>

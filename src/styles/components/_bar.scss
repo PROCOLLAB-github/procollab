@@ -112,6 +112,10 @@
     color: var(--black);
   }
 
+  &__block {
+    margin-bottom: 14px;
+  }
+
   &__name {
     margin-bottom: 6px;
     color: var(--gray);
