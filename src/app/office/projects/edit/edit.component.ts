@@ -282,10 +282,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectService
       .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), this.projectForm.value)
       .subscribe({
-        next: project => {
+        next: () => {
           this.projectFormIsSubmitting = false;
           this.router
-            .navigateByUrl(`/office/projects/${project.id}/`)
+            .navigateByUrl(`/office/projects/my`)
             .then(() => console.debug("Route changed from ProjectEditComponent"));
         },
         error: () => {
