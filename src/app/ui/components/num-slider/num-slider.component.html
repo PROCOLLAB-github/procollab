@@ -1,8 +1,22 @@
 <!-- @format -->
 
 <div class="num-slider" *ngIf="nums.sort() as sortedNums">
-  <div class="num-slider__range">
-    <div class="num-slider__fill"></div>
+  <div
+    class="num-slider__range"
+    *ngIf="value !== undefined"
+    (mouseup)="onMouseUp()"
+    (mousemove)="onMove($event)"
+  >
+    <div class="num-slider__placeholder"></div>
+    <div
+      class="num-slider__fill"
+      [style.width]="(100 / (sortedNums.length - 1)) * sortedNums.indexOf(value) + '%'"
+    ></div>
+    <div
+      class="num-slider__button"
+      [style.left]="(100 / (sortedNums.length - 1)) * sortedNums.indexOf(value) + '%'"
+      (mousedown)="onMouseDown()"
+    ></div>
   </div>
   <div class="num-slider__nums">
     <span
