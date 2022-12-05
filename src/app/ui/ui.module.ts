@@ -2,7 +2,13 @@
 
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ButtonComponent, CheckboxComponent, IconComponent, InputComponent, SelectComponent } from "./components";
+import {
+  ButtonComponent,
+  CheckboxComponent,
+  IconComponent,
+  InputComponent,
+  SelectComponent,
+} from "./components";
 import { ClickOutsideModule } from "ng-click-outside";
 import { NgxMaskModule } from "ngx-mask";
 import { AvatarComponent } from "./components/avatar/avatar.component";
@@ -14,6 +20,7 @@ import { ModalComponent } from "./components/modal/modal.component";
 import { AvatarControlComponent } from "./components/avatar-control/avatar-control.component";
 import { UploadFileComponent } from "./components/upload-file/upload-file.component";
 import { SearchComponent } from "./components/search/search.component";
+import { NumSliderComponent } from "./components/num-slider/num-slider.component";
 
 @NgModule({
   declarations: [
@@ -29,7 +36,8 @@ import { SearchComponent } from "./components/search/search.component";
     ModalComponent,
     AvatarControlComponent,
     UploadFileComponent,
-    SearchComponent
+    SearchComponent,
+    NumSliderComponent,
   ],
   imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule],
   exports: [
@@ -44,8 +52,8 @@ import { SearchComponent } from "./components/search/search.component";
     ModalComponent,
     AvatarControlComponent,
     UploadFileComponent,
-    SearchComponent
-  ]
+    SearchComponent,
+    NumSliderComponent,
+  ],
 })
-export class UiModule {
-}
+export class UiModule {}

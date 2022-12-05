@@ -1,0 +1,16 @@
+<!-- @format -->
+
+<div class="num-slider" *ngIf="nums.sort() as sortedNums">
+  <div class="num-slider__range">
+    <div class="num-slider__fill"></div>
+  </div>
+  <div class="num-slider__nums">
+    <span
+      class="num-slider__num"
+      *ngFor="let num of sortedNums; index as index"
+      [style.left]="(100 / (sortedNums.length - 1)) * index + '%'"
+    >
+      {{ num }}
+    </span>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+/** @format */
+
+.num-slider {
+  &__nums {
+    position: relative;
+  }
+
+  &__num {
+    position: absolute;
+    transform: translateX(-50%);
+  }
+}
