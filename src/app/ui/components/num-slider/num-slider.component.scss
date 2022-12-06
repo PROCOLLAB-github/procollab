@@ -1,6 +1,8 @@
 /** @format */
 
 .num-slider {
+  padding-bottom: 15px; // to give space for numbers
+
   &__range {
     position: relative;
     height: 16px;
@@ -44,6 +46,8 @@
 
   &__num {
     position: absolute;
+    font-size: 10px;
+    color: var(--dark-gray);
     transform: translateX(-50%);
   }
 }

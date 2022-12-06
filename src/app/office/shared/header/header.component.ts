@@ -49,7 +49,6 @@ export class HeaderComponent implements OnInit {
       const index = this.invites.findIndex(invite => invite.id === inviteId);
       const invite = JSON.parse(JSON.stringify(this.invites[index]));
       this.invites.splice(index, 1);
-      console.log(this.invites);
 
       this.showNotifications = false;
       this.router

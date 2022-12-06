@@ -10,7 +10,7 @@ import {
   Output,
 } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
-import { fromEvent, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-num-slider",
@@ -30,7 +30,6 @@ export class NumSliderComponent implements OnInit, OnDestroy {
   @Input()
   set appNums(value: number[]) {
     this.nums = value;
-    this.value ??= value.sort()[0];
   }
 
   get appNums(): number[] {
@@ -38,49 +37,31 @@ export class NumSliderComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  set appValue(value: number | undefined) {
-    this.value = value;
+  set appValue(value: number | null) {
+    this.value = !value || isNaN(value) ? this.nums.sort()[0] : value;
   }
 
-  get appValue(): number | undefined {
+  get appValue(): number | null {
     return this.value;
   }
 
-  @Output() appValueChange = new EventEmitter<string>();
-  @Output() enter = new EventEmitter<void>();
+  @Output() appValueChange = new EventEmitter<number>();
 
-  ngOnInit(): void {
-    const mouseupSub = fromEvent(document, "mouseup", { capture: true }).subscribe(() => {
-      this.mousePressed = false;
-    });
-    this.subscriptions$.push(mouseupSub);
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
-  // onInput(event: Event): void {
-  //   const value = (event.target as HTMLInputElement).value;
-  //   this.onChange(value);
-  //   this.appValueChange.emit(value);
-  // }
-
   subscriptions$: Subscription[] = [];
 
-  value?: number = 2;
+  value: number | null = null;
 
   nums: number[] = [];
   mousePressed = false;
 
   onBlur(): void {
     this.onTouch();
-  }
-
-  writeValue(value: number): void {
-    setTimeout(() => {
-      this.value = value;
-    });
   }
 
   onChange: (value: number) => void = () => {};
@@ -111,11 +92,13 @@ export class NumSliderComponent implements OnInit, OnDestroy {
   }
 
   private getStepIdxFromX(totalWidth: number, x: number): number {
-    const intervalWidth = totalWidth / (this.nums.length - 1);
+    const intervalWidth = parseInt((totalWidth / (this.nums.length - 1)).toFixed());
 
     for (let i = 0; i < this.nums.length; i++) {
-      const startX = i === 0 ? 0 : i * intervalWidth - intervalWidth / 2 + 1;
-      const endX = i === this.nums.length - 1 ? totalWidth : i * intervalWidth + intervalWidth / 2;
+      const halfInterval = parseInt((intervalWidth / 2).toFixed());
+      const startX = i === 0 ? 0 : i * intervalWidth - halfInterval;
+      const endX = i === this.nums.length - 1 ? totalWidth : i * intervalWidth + halfInterval;
+
       if (startX < x && x < endX) {
         return i;
       }
@@ -124,11 +107,19 @@ export class NumSliderComponent implements OnInit, OnDestroy {
     return 0;
   }
 
-  onMouseDown() {
+  onStartInteraction() {
     this.mousePressed = true;
   }
 
-  onMouseUp() {
+  onStopInteraction(event: Event) {
+    event.stopPropagation();
+
+    this.stopMoving();
+  }
+
+  private stopMoving() {
     this.mousePressed = false;
+    this.onChange(this.value ?? 0);
+    this.appValueChange.emit(this.value ?? 0);
   }
 }

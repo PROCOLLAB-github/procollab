@@ -53,6 +53,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.queries$ = this.route.queryParams.subscribe(queries => {
       this.currentIndustry = parseInt(queries["industry"]);
       this.currentStep = parseInt(queries["step"]);
+      this.currentMembersCount = parseInt(queries["membersCount"]);
     });
   }
 
@@ -69,6 +70,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   currentStep: number | null = null;
   steps: ProjectStep[] = [];
   steps$?: Subscription;
+
+  membersCountOptions = [1, 2, 3, 4, 5, 6];
+  currentMembersCount: number | null = null;
 
   currentIndustry: number | null = null;
   industries: Industry[] = [];
@@ -90,7 +94,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterByStep(stepId?: number): void {
+  onFilterByStep(event: Event, stepId?: number): void {
+    event.stopPropagation();
+
     this.router
       .navigate([], {
         queryParams: { step: stepId === this.currentStep ? undefined : stepId },
@@ -100,7 +106,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       .then(() => console.debug("Query change from ProjectsComponent"));
   }
 
-  filterByIndustry(industryId?: number): void {
+  onFilterByIndustry(event: Event, industryId?: number): void {
+    event.stopPropagation();
+
     this.router
       .navigate([], {
         queryParams: { industry: industryId === this.currentIndustry ? undefined : industryId },
@@ -110,7 +118,19 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       .then(() => console.debug("Query change from ProjectsComponent"));
   }
 
-  onFilterOutside() {
+  onFilterByMembersCount(count?: number): void {
+    this.router
+      .navigate([], {
+        queryParams: {
+          membersCount: count === this.currentMembersCount ? undefined : count,
+        },
+        relativeTo: this.route,
+        queryParamsHandling: "merge",
+      })
+      .then(() => console.debug("Query change from ProjectsComponent"));
+  }
+
+  onFilterClickOutside() {
     if (this.filterOpen && location.href.includes("/all")) {
       this.filterOpen = false;
     }
