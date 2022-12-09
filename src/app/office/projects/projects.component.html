@@ -63,6 +63,14 @@
               ></app-num-slider>
             </div>
             <div class="filter__block">
+              <div class="text-body-12 filter__name">Наличие вакансий</div>
+              <div class="filter__switch">
+                <span class="filter__yes-no" [class.filter__yes-no--active]="!hasVacancies">Нет</span>
+                <app-switch [checked]="hasVacancies" (checkedChange)="onFilterVacancies($event)"></app-switch>
+                <span class="filter__yes-no" [class.filter__yes-no--active]="hasVacancies">Да</span>
+              </div>
+            </div>
+            <div class="filter__block">
               <h4 class="text-body-12 filter__name">Направление</h4>
               <div
                 class="text-body-14 filter__checkbox"

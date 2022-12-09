@@ -54,6 +54,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       this.currentIndustry = parseInt(queries["industry"]);
       this.currentStep = parseInt(queries["step"]);
       this.currentMembersCount = parseInt(queries["membersCount"]);
+      this.hasVacancies = queries["anyVacancies"] === 'true'
     });
   }
 
@@ -64,6 +65,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   filterOpen = false;
+
+  hasVacancies = false
 
   queries$?: Subscription;
 
@@ -123,6 +126,18 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       .navigate([], {
         queryParams: {
           membersCount: count === this.currentMembersCount ? undefined : count,
+        },
+        relativeTo: this.route,
+        queryParamsHandling: "merge",
+      })
+      .then(() => console.debug("Query change from ProjectsComponent"));
+  }
+
+  onFilterVacancies(has: boolean): void {
+    this.router
+      .navigate([], {
+        queryParams: {
+          anyVacancies: has ,
         },
         relativeTo: this.route,
         queryParamsHandling: "merge",

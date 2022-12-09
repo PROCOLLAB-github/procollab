@@ -21,6 +21,7 @@ import { AvatarControlComponent } from "./components/avatar-control/avatar-contr
 import { UploadFileComponent } from "./components/upload-file/upload-file.component";
 import { SearchComponent } from "./components/search/search.component";
 import { NumSliderComponent } from "./components/num-slider/num-slider.component";
+import { SwitchComponent } from './components/switch/switch.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { NumSliderComponent } from "./components/num-slider/num-slider.component
     UploadFileComponent,
     SearchComponent,
     NumSliderComponent,
+    SwitchComponent,
   ],
   imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule],
   exports: [
@@ -54,6 +56,7 @@ import { NumSliderComponent } from "./components/num-slider/num-slider.component
     UploadFileComponent,
     SearchComponent,
     NumSliderComponent,
-  ],
+    SwitchComponent
+  ]
 })
 export class UiModule {}

@@ -53,6 +53,9 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
           if (q["membersCount"]) {
             reqQuery["collaborator__count__gt"] = q["membersCount"];
           }
+          if (q["anyVacancies"]) {
+            reqQuery["any_vacancies"] = q["anyVacancies"]
+          }
 
           try {
             return this.projectService.getAll(new HttpParams({ fromObject: reqQuery }));
