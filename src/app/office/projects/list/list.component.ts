@@ -51,7 +51,7 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
             reqQuery["step"] = q["step"];
           }
           if (q["membersCount"]) {
-            reqQuery["collaborator__count__gt"] = q["membersCount"];
+            reqQuery["collaborator__count__gte"] = q["membersCount"];
           }
           if (q["anyVacancies"]) {
             reqQuery["any_vacancies"] = q["anyVacancies"]
