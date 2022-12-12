@@ -56,9 +56,10 @@
     <ul *ngIf="user.achievements.length" class="profile__ach-list">
       <li
         *ngFor="let achievement of user.achievements"
-        class="text-bold-body-14 profile__achievement"
+        class="profile__achievement achievement"
       >
-        {{ achievement.status }} {{ achievement.title }}
+        <p class="achievement__status text-bold-body-14">{{ achievement.status }}</p>
+        <p class="achievement__title text-body-12">{{ achievement.title }}</p>
       </li>
     </ul>
     <h3 class="text-bold-body-16 profile__title">Место учебы</h3>
