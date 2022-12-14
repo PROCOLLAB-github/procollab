@@ -2,12 +2,14 @@
 
 import {
   Component,
+  ElementRef,
   EventEmitter,
   forwardRef,
   Input,
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Subscription } from "rxjs";
@@ -39,6 +41,13 @@ export class NumSliderComponent implements OnInit, OnDestroy {
   @Input()
   set appValue(value: number | null) {
     this.value = !value || isNaN(value) ? this.nums.sort()[0] : value;
+
+    setTimeout(() => {
+      if (this.pointEl && this.fillEl) {
+        this.pointEl.nativeElement.style.left = `${this.getButtonCoordinate()}%`;
+        this.fillEl.nativeElement.style.width = `${this.getButtonCoordinate()}%`;
+      }
+    });
   }
 
   get appValue(): number | null {
@@ -52,6 +61,10 @@ export class NumSliderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
+
+  @ViewChild("pointEl") pointEl?: ElementRef<HTMLElement>;
+  @ViewChild("rangeEl") rangeEl?: ElementRef<HTMLElement>;
+  @ViewChild("fillEl") fillEl?: ElementRef<HTMLElement>;
 
   subscriptions$: Subscription[] = [];
 
@@ -87,8 +100,14 @@ export class NumSliderComponent implements OnInit, OnDestroy {
 
     const range = event.currentTarget as HTMLElement;
     const { width: totalWidth, x } = range.getBoundingClientRect();
-    const stepIdx = this.getStepIdxFromX(totalWidth, event.clientX - x);
-    this.value = this.nums[stepIdx];
+    const xChange = event.clientX - x;
+
+    if (this.pointEl && xChange > 0 && xChange < totalWidth && this.fillEl) {
+      this.pointEl.nativeElement.style.left = `${xChange}px`;
+      this.fillEl.nativeElement.style.width = `${xChange}px`;
+    }
+
+    if (xChange < 0 && xChange > totalWidth) this.onStopInteraction(event);
   }
 
   private getStepIdxFromX(totalWidth: number, x: number): number {
@@ -111,10 +130,27 @@ export class NumSliderComponent implements OnInit, OnDestroy {
     this.mousePressed = true;
   }
 
-  onStopInteraction(event: Event) {
+  private getButtonCoordinate(): number {
+    return this.value ? (100 / (this.nums.length - 1)) * this.nums.indexOf(this.value) : 0;
+  }
+
+  onStopInteraction(event: MouseEvent) {
     event.stopPropagation();
 
+    this.renderRange();
+
     this.stopMoving();
+  }
+
+  private renderRange() {
+    if (!this.pointEl || !this.rangeEl || !this.fillEl) return;
+    const { width: rangeWidth, x: rangeX } = this.rangeEl.nativeElement.getBoundingClientRect();
+    const { x } = this.pointEl.nativeElement.getBoundingClientRect();
+    const stepIdx = this.getStepIdxFromX(rangeWidth, x - rangeX);
+    this.value = this.nums[stepIdx];
+
+    this.pointEl.nativeElement.style.left = `${this.getButtonCoordinate()}%`;
+    this.fillEl.nativeElement.style.width = `${this.getButtonCoordinate()}%`;
   }
 
   private stopMoving() {
