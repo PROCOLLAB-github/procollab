@@ -43,10 +43,7 @@ export class NumSliderComponent implements OnInit, OnDestroy {
     this.value = !value || isNaN(value) ? this.nums.sort()[0] : value;
 
     setTimeout(() => {
-      if (this.pointEl && this.fillEl) {
-        this.pointEl.nativeElement.style.left = `${this.getButtonCoordinate()}%`;
-        this.fillEl.nativeElement.style.width = `${this.getButtonCoordinate()}%`;
-      }
+      this.setElements();
     });
   }
 
@@ -148,6 +145,12 @@ export class NumSliderComponent implements OnInit, OnDestroy {
     const { x } = this.pointEl.nativeElement.getBoundingClientRect();
     const stepIdx = this.getStepIdxFromX(rangeWidth, x - rangeX);
     this.value = this.nums[stepIdx];
+
+    this.setElements();
+  }
+
+  private setElements() {
+    if (!this.pointEl || !this.fillEl) return;
 
     this.pointEl.nativeElement.style.left = `${this.getButtonCoordinate()}%`;
     this.fillEl.nativeElement.style.width = `${this.getButtonCoordinate()}%`;
