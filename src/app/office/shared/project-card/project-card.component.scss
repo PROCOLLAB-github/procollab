@@ -1,43 +1,41 @@
 .card {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 24px;
+  padding: 24px 15px;
   background-color: var(--white);
   border-radius: var(--rounded-md);
 
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+
   &__basket {
-    position: absolute;
-    top: 24px;
-    right: 24px;
     color: var(--red);
   }
 
   &__draft {
-    margin-bottom: 16px;
     color: var(--red);
   }
 
-  &__photo {
-    display: block;
-    filter: drop-shadow(5px 5px 25px rgb(159 159 159 / 15%));
-  }
-
   &__name {
-    margin: 16px 0 3px;
+    margin-bottom: 3px;
     color: var(--black);
   }
 
   &__industry {
-    margin-bottom: 16px;
     color: var(--dark-gray);
   }
 
   &__description {
-    margin-bottom: 16px;
     color: var(--dark-gray);
-    text-align: center;
+  }
+
+  &__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 

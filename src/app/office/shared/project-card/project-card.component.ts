@@ -20,7 +20,7 @@ export class ProjectCardComponent implements OnInit {
   numWord = numWord;
 
   @Input() project!: Project;
-  @Input() basket?: boolean | null = false;
+  @Input() canDelete?: boolean | null = false;
 
   @Output() remove = new EventEmitter<number>();
 
