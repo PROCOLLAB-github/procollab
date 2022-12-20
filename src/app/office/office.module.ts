@@ -28,6 +28,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { ProjectResponsesComponent } from "./projects/responses/responses.component";
 import { ResponseCardComponent } from "./shared/response-card/response-card.component";
 import { MentorsComponent } from "./mentors/mentors.component";
+import { ProjectsFilterComponent } from "./projects/projects-filter/projects-filter.component";
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { MentorsComponent } from "./mentors/mentors.component";
     InviteManageCardComponent,
     ProjectResponsesComponent,
     ResponseCardComponent,
+    ProjectsFilterComponent,
   ],
   imports: [
     OfficeRoutingModule,

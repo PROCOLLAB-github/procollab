@@ -1,6 +1,7 @@
 <!-- @format -->
 
 <section class="page">
+  <app-projects-filter></app-projects-filter>
   <ul class="page__list">
     <a *ngFor="let project of searchedProjects" [routerLink]="['/office/projects', project.id]">
       <li>
