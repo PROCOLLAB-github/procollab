@@ -24,7 +24,7 @@
         <form [formGroup]="searchForm">
           <app-search *ngIf="isAll | async" formControlName="search"></app-search>
         </form>
-        <div class="filter" (clickOutside)="onFilterOutside()">
+        <div class="filter" (clickOutside)="onFilterClickOutside()">
           <div
             *ngIf="isAll | async"
             class="filter__toggle"
@@ -48,10 +48,26 @@
               <div
                 class="text-body-14 filter__checkbox"
                 *ngFor="let step of steps"
-                (click)="filterByStep(step.id)"
+                (click)="onFilterByStep($event, step.id)"
               >
                 <app-checkbox [checked]="step.id === currentStep"></app-checkbox>
                 {{ step.name }}
+              </div>
+            </div>
+            <div class="filter__block">
+              <h4 class="text-body-12 filter__name">Участники (кол-во)</h4>
+              <app-num-slider
+                [appNums]="membersCountOptions"
+                [appValue]="currentMembersCount"
+                (appValueChange)="onFilterByMembersCount($event)"
+              ></app-num-slider>
+            </div>
+            <div class="filter__block">
+              <div class="text-body-12 filter__name">Наличие вакансий</div>
+              <div class="filter__switch">
+                <span class="filter__yes-no" [class.filter__yes-no--active]="!hasVacancies">Нет</span>
+                <app-switch [checked]="hasVacancies" (checkedChange)="onFilterVacancies($event)"></app-switch>
+                <span class="filter__yes-no" [class.filter__yes-no--active]="hasVacancies">Да</span>
               </div>
             </div>
             <div class="filter__block">
@@ -59,7 +75,7 @@
               <div
                 class="text-body-14 filter__checkbox"
                 *ngFor="let industry of industries"
-                (click)="filterByIndustry(industry.id)"
+                (click)="onFilterByIndustry($event, industry.id)"
               >
                 <app-checkbox [checked]="industry.id === currentIndustry"></app-checkbox>
                 {{ industry.name }}

@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { concatMap, distinctUntilChanged, map, merge, Subscription } from "rxjs";
+import { concatMap, map, Subscription } from "rxjs";
 import { AuthService } from "../../../auth/services";
 import { Project } from "../../models/project.model";
 import { User } from "../../../auth/models/user.model";
@@ -40,23 +40,30 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
     });
 
     if (location.href.includes("/all")) {
-      const observable = merge(
-        this.route.queryParams.pipe(
-          map(q => q["industry"]),
-          distinctUntilChanged(),
-          concatMap(industry =>
-            this.projectService.getAll(
-              industry ? new HttpParams({ fromObject: { industry } }) : undefined
-            )
-          )
-        ),
-        this.route.queryParams.pipe(
-          map(q => q["step"]),
-          distinctUntilChanged(),
-          concatMap(step =>
-            this.projectService.getAll(step ? new HttpParams({ fromObject: { step } }) : undefined)
-          )
-        )
+      const observable = this.route.queryParams.pipe(
+        concatMap(q => {
+          const reqQuery: Record<string, any> = {};
+
+          if (q["industry"]) {
+            reqQuery["industry"] = q["industry"];
+          }
+          if (q["step"]) {
+            reqQuery["step"] = q["step"];
+          }
+          if (q["membersCount"]) {
+            reqQuery["collaborator__count__gte"] = q["membersCount"];
+          }
+          if (q["anyVacancies"]) {
+            reqQuery["any_vacancies"] = q["anyVacancies"]
+          }
+
+          try {
+            return this.projectService.getAll(new HttpParams({ fromObject: reqQuery }));
+          } catch (e) {
+            console.error(e);
+            return this.projectService.getAll();
+          }
+        })
       );
 
       this.queryIndustry$ = observable.subscribe(projects => {

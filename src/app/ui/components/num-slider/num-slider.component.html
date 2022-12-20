@@ -1,0 +1,23 @@
+<!-- @format -->
+
+<div class="num-slider" *ngIf="nums.sort() as sortedNums">
+  <div class="num-slider__range" #rangeEl *ngIf="value !== null" (mousemove)="onMove($event)">
+    <div class="num-slider__placeholder"></div>
+    <div class="num-slider__fill" #fillEl></div>
+    <div
+      class="num-slider__button"
+      #pointEl
+      (mousedown)="onStartInteraction()"
+      (mouseup)="onStopInteraction($event)"
+    ></div>
+  </div>
+  <div class="num-slider__nums">
+    <span
+      class="num-slider__num"
+      *ngFor="let num of sortedNums; index as index"
+      [style.left]="(100 / (sortedNums.length - 1)) * index + '%'"
+    >
+      {{ num }}
+    </span>
+  </div>
+</div>

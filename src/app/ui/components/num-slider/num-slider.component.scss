@@ -1,0 +1,53 @@
+/** @format */
+
+.num-slider {
+  padding-bottom: 15px; // to give space for numbers
+
+  &__range {
+    position: relative;
+    height: 16px;
+  }
+
+  &__placeholder {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    height: 4px;
+    background-color: var(--light-gray);
+    border-radius: var(--rounded-md);
+    transform: translateY(-50%);
+  }
+
+  &__fill {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    height: 4px;
+    background-color: var(--accent);
+    border-radius: var(--rounded-md);
+    transform: translateY(-50%);
+  }
+
+  &__button {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    background-color: var(--accent);
+    border-radius: 50%;
+    transform: translateX(-50%);
+  }
+
+  &__nums {
+    position: relative;
+  }
+
+  &__num {
+    position: absolute;
+    font-size: 10px;
+    color: var(--dark-gray);
+    transform: translateX(-50%);
+  }
+}
