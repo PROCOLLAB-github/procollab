@@ -8,6 +8,7 @@ import { User } from "../../auth/models/user.model";
 import { NavService } from "../services/nav.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import Fuse from "fuse.js";
+import { containerSm } from "../../utils/responsive";
 
 @Component({
   selector: "app-members",
@@ -56,6 +57,9 @@ export class MembersComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     [this.members$, this.searchFormSearch$].forEach($ => $?.unsubscribe());
   }
+
+  containerSm = containerSm;
+  appWidth = window.innerWidth;
 
   members: User[] = [];
   searchedMembers: User[] = [];

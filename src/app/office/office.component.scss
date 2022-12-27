@@ -1,6 +1,6 @@
 /** @format */
 
-@import "src/styles/responsive";
+@use "src/styles/responsive";
 
 .office {
   &__body {
@@ -10,7 +10,11 @@
   }
 
   &__inner {
-    max-width: $container-md;
-    margin: 0 auto;
+    margin: 0 15px;
+
+    @include responsive.apply-desktop {
+      max-width: responsive.$container-md;
+      margin: 0 auto;
+    }
   }
 }

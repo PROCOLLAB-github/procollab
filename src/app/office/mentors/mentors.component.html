@@ -2,7 +2,11 @@
 
 <section class="members">
   <form class="members__bar" [formGroup]="searchForm">
-    <app-search formControlName="search" placeholder="Введите имя участника"></app-search>
+    <app-search
+      formControlName="search"
+      placeholder="Введите имя участника"
+      [openable]="appWidth > containerSm"
+    ></app-search>
   </form>
   <ul class="members__list">
     <a *ngFor="let member of searchedMembers" [routerLink]="['/office/profile', member.id]">
