@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <section class="page">
-  <app-projects-filter></app-projects-filter>
+  <app-projects-filter class="page__filter" *ngIf="isAll | async"></app-projects-filter>
   <ul class="page__list">
     <a *ngFor="let project of searchedProjects" [routerLink]="['/office/projects', project.id]">
       <li>

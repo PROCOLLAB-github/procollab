@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { concatMap, map, Subscription } from "rxjs";
+import { concatMap, map, Observable, Subscription } from "rxjs";
 import { AuthService } from "../../../auth/services";
 import { Project } from "../../models/project.model";
 import { User } from "../../../auth/models/user.model";
@@ -54,7 +54,7 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
             reqQuery["collaborator__count__gte"] = q["membersCount"];
           }
           if (q["anyVacancies"]) {
-            reqQuery["any_vacancies"] = q["anyVacancies"]
+            reqQuery["any_vacancies"] = q["anyVacancies"];
           }
 
           try {
@@ -83,6 +83,8 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
       $?.unsubscribe()
     );
   }
+
+  isAll: Observable<boolean> = this.route.url.pipe(map(() => location.href.includes("/all")));
 
   profile?: User;
   profile$?: Subscription;

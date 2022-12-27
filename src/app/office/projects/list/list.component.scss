@@ -3,11 +3,14 @@
   display: flex;
   align-items: flex-start;
 
+  &__filter {
+    margin-right: 16px;
+  }
+
   &__list {
     display: grid;
     flex-grow: 1;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 16px;
-    margin-left: 16px;
   }
 }
