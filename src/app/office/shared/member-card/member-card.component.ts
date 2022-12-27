@@ -14,4 +14,6 @@ export class MemberCardComponent implements OnInit {
   @Input() user!: User;
 
   ngOnInit(): void {}
+
+  appWidth = window.innerWidth;
 }
