@@ -1,1 +1,7 @@
-$container-sm: 1280px;
+$container-sm: 680px;
+
+@mixin apply-desktop {
+  @media screen and (min-width: #{$container-sm}) {
+    @content
+  }
+}
