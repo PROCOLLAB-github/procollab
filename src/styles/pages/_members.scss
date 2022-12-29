@@ -1,0 +1,24 @@
+/** @format */
+
+@use "src/styles/responsive";
+
+.members {
+  padding-bottom: 100px;
+
+  &__bar {
+    padding: 20px;
+    margin-bottom: 12px;
+    background-color: var(--white);
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 16px;
+    align-items: start;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+}
