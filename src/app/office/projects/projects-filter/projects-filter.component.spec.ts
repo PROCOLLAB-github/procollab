@@ -1,16 +1,20 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { ProjectsFilterComponent } from './projects-filter.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('ProjectsFilterComponent', () => {
+import { ProjectsFilterComponent } from "./projects-filter.component";
+import { RouterTestingModule } from "@angular/router/testing";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+
+describe("ProjectsFilterComponent", () => {
   let component: ProjectsFilterComponent;
   let fixture: ComponentFixture<ProjectsFilterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProjectsFilterComponent ]
-    })
-    .compileComponents();
+      imports: [RouterTestingModule, HttpClientTestingModule],
+      declarations: [ProjectsFilterComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +23,7 @@ describe('ProjectsFilterComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
