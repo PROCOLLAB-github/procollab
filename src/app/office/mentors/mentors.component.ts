@@ -2,7 +2,7 @@
 
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { combineLatest, map, Subscription } from "rxjs";
+import { map, Subscription } from "rxjs";
 import { AuthService } from "../../auth/services";
 import { User } from "../../auth/models/user.model";
 import { NavService } from "../services/nav.service";
@@ -30,19 +30,10 @@ export class MentorsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navService.setNavTitle("Участники");
 
-    this.members$ = combineLatest([
-      this.route.data.pipe(map(r => r["data"])),
-      this.authService.profile,
-    ])
-      .pipe(
-        map(([members, profile]: [User[], User]) =>
-          members.filter(member => member.id !== profile.id)
-        )
-      )
-      .subscribe(members => {
-        this.members = members;
-        this.searchedMembers = members;
-      });
+    this.members$ = this.route.data.pipe(map(r => r["data"])).subscribe(members => {
+      this.members = members;
+      this.searchedMembers = members;
+    });
 
     this.searchFormSearch$ = this.searchForm.get("search")?.valueChanges.subscribe(value => {
       const fuse = new Fuse(this.members, {
