@@ -1,10 +1,14 @@
 <!-- @format -->
 
-<section class="page">
-  <form class="page__bar" [formGroup]="searchForm">
-    <app-search formControlName="search" placeholder="Введите имя участника"></app-search>
+<section class="members">
+  <form class="members__bar" [formGroup]="searchForm">
+    <app-search
+      formControlName="search"
+      placeholder="Введите имя участника"
+      [openable]="appWidth > containerSm"
+    ></app-search>
   </form>
-  <ul class="page__list">
+  <ul class="members__list">
     <a *ngFor="let member of searchedMembers" [routerLink]="['/office/profile', member.id]">
       <li>
         <app-member-card [user]="member"></app-member-card>

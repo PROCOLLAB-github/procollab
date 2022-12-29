@@ -1,14 +1,38 @@
+/** @format */
+
+@use "src/styles/responsive";
+
 .card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   padding: 24px;
   background-color: var(--white);
   border-radius: var(--rounded-md);
 
+  &__body {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+
+    @include responsive.apply-desktop {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &__info {
+    @include responsive.apply-desktop {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
   &__status {
-    margin: 16px 0;
+    margin: 0 0 3px;
     color: var(--dark-gray);
+
+    @include responsive.apply-desktop {
+      margin: 16px 0;
+    }
   }
 
   &__name {
@@ -16,14 +40,14 @@
     color: var(--black);
   }
 
-  &__info {
-    margin-bottom: 16px;
+  &__additional-info {
     color: var(--dark-gray);
   }
 
   &__skills {
     display: flex;
     flex-wrap: wrap;
+    margin-top: 16px;
   }
 
   &__skill {

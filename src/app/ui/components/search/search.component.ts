@@ -1,6 +1,15 @@
 /** @format */
 
-import { Component, ElementRef, EventEmitter, forwardRef, Input, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
@@ -11,15 +20,16 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => SearchComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class SearchComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";
   @Input() type: "text" | "password" | "email" = "text";
   @Input() error = false;
   @Input() mask = "";
+  @Input() openable = true;
 
   @Input()
   set appValue(value: string) {
@@ -34,13 +44,14 @@ export class SearchComponent implements OnInit, ControlValueAccessor {
   @Output() enter = new EventEmitter<void>();
 
   ngOnInit(): void {
+    this.open = !this.openable;
   }
 
   @ViewChild("inputEl") inputEl?: ElementRef<HTMLInputElement>;
   open = false;
 
   onSwitchSearch(value: boolean): void {
-    this.open = value;
+    if (this.openable) this.open = value;
 
     if (value) {
       setTimeout(() => {
@@ -67,15 +78,13 @@ export class SearchComponent implements OnInit, ControlValueAccessor {
     });
   }
 
-  onChange: (value: string) => void = () => {
-  };
+  onChange: (value: string) => void = () => {};
 
   registerOnChange(fn: (v: string) => void): void {
     this.onChange = fn;
   }
 
-  onTouch: () => void = () => {
-  };
+  onTouch: () => void = () => {};
 
   registerOnTouched(fn: () => void): void {
     this.onTouch = fn;
