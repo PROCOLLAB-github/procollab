@@ -2,7 +2,7 @@
 
 <form class="auth" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <div class="auth__wrapper">
-    <h1 class="text-heading-1 auth__title">Вход</h1>
+    <h1 class="auth__title">Вход</h1>
     <fieldset *ngIf="loginForm.get('email') as email" class="auth__field">
       <label for="email" class="field-label">Электронная почта</label>
       <app-input

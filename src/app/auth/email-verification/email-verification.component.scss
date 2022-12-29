@@ -1,9 +1,20 @@
 /** @format */
 
+@import "src/styles/responsive";
+@import "src/styles/typography";
+
 .verification {
   &__title {
-    margin-bottom: 12px;
+    margin-bottom: 20px;
     color: var(--black);
+
+    @include heading-2;
+
+    @include apply-desktop {
+      margin-bottom: 12px;
+
+      @include heading-1;
+    }
   }
 
   &__text {
