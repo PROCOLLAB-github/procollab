@@ -1,13 +1,23 @@
 /** @format */
 
+@import "src/styles/responsive";
+
 .auth {
   &__wrapper {
-    max-width: 415px;
+    @include apply-desktop {
+      max-width: 415px;
+    }
   }
 
   &__title {
     margin-bottom: 12px;
     color: var(--black);
+
+    @include heading-2;
+
+    @include apply-desktop {
+      @include heading-1;
+    }
   }
 
   &__field {
@@ -18,7 +28,6 @@
       display: block;
     }
   }
-
 
   &__row {
     display: flex;

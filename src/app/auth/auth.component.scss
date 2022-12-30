@@ -1,12 +1,18 @@
 /** @format */
 
+@import "src/styles/responsive";
+
 .page {
   position: relative;
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding: 0 100px;
-  background: var(--white) no-repeat right/contain url("/assets/images/auth/bg.svg");
+  padding: 0 15px;
+
+  @include apply-desktop {
+    padding: 0 100px;
+    background: var(--white) no-repeat right/contain url("/assets/images/auth/bg.svg");
+  }
 
   &__header {
     position: absolute;

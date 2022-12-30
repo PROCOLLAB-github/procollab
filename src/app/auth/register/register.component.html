@@ -2,7 +2,7 @@
 
 <form class="auth" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
   <div class="auth__wrapper">
-    <h1 class="text-heading-1 auth__title">Регистрация</h1>
+    <h1 class="auth__title">Регистрация</h1>
     <div class="auth__row">
       <fieldset *ngIf="registerForm.get('firstName') as name" class="auth__field">
         <label for="name" class="field-label">Имя</label>
