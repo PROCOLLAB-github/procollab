@@ -2,6 +2,11 @@
 
 <main class="project">
   <form [formGroup]="projectForm">
+    <div class="project__save-container">
+      <app-button class="project__save" [loader]="projectFormIsSubmitting" (click)="saveProject()">
+        Сохранить
+      </app-button>
+    </div>
     <fieldset class="project__image">
       <label for="imageAddress" class="field-label">Лого проекта</label>
       <app-avatar-control id="imageAddress" formControlName="imageAddress"></app-avatar-control>
@@ -233,8 +238,5 @@
         </div>
       </div>
     </div>
-    <app-button class="project__save" [loader]="projectFormIsSubmitting" (click)="saveProject()">
-      Сохранить
-    </app-button>
   </form>
 </main>

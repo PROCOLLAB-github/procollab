@@ -60,11 +60,21 @@
     color: var(--dark-gray);
   }
 
-  &__save {
+  &__save-container {
     position: absolute;
     top: 24px;
     right: 24px;
+    bottom: 0;
+    left: 0;
+  }
+
+  &__save {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: block;
     width: 255px;
+    margin-left: auto;
   }
 }
 
