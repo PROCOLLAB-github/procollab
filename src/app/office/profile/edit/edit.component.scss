@@ -17,8 +17,8 @@
     flex-basis: 50%;
     flex-grow: 0;
 
-    &:first-child {
-      margin-right: 50px;
+    &:last-child {
+      margin-left: 50px;
     }
   }
 
@@ -52,13 +52,21 @@
     display: block;
   }
 
-  &__save {
+  &__save-container {
     position: absolute;
-    top: 0;
+    top: 24px;
     right: 24px;
+    bottom: 0;
+    left: 0;
+  }
+
+  &__save {
+    position: sticky;
+    top: 0;
+    z-index: 10;
     display: block;
-    width: 250px;
-    margin-top: 20px;
+    width: 255px;
+    margin-left: auto;
   }
 
   &__avatar {

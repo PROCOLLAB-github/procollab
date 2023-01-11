@@ -2,6 +2,11 @@
 
 <main *ngIf="profileForm.get('userType') as currentType" class="profile">
   <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
+    <div class="profile__save-container">
+      <app-button [loader]="profileFormSubmitting" class="profile__save" (click)="saveProfile()">
+        Сохранить
+      </app-button>
+    </div>
     <div class="profile__column">
       <div class="profile__row">
         <fieldset *ngIf="profileForm.get('firstName') as firstName">
@@ -261,9 +266,6 @@
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
       </fieldset>
-      <app-button [loader]="profileFormSubmitting" class="profile__save" (click)="saveProfile()">
-        Сохранить
-      </app-button>
     </div>
   </form>
 </main>
