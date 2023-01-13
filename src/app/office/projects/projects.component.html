@@ -19,7 +19,8 @@
       </ul>
       <div class="bar__right">
         <button *ngIf="isMy | async" (click)="addProject()" class="text-body-14 bar__add-project">
-          Добавить проект <i appIcon icon="plus" appSquare="24"></i>
+          <span class="bar__add-project-text">Добавить проект</span>
+          <i appIcon icon="plus" appSquare="24"></i>
         </button>
         <form [formGroup]="searchForm">
           <app-search *ngIf="isAll | async" formControlName="search"></app-search>
