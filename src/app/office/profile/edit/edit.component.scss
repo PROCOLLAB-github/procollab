@@ -58,6 +58,12 @@
     right: 24px;
     bottom: 0;
     left: 0;
+    z-index: 0;
+  }
+
+  &__clickable {
+    position: relative;
+    z-index: 2;
   }
 
   &__save {

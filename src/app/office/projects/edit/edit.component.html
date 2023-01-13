@@ -3,7 +3,11 @@
 <main class="project">
   <form [formGroup]="projectForm">
     <div class="project__save-container">
-      <app-button class="project__save" [loader]="projectFormIsSubmitting" (click)="saveProject()">
+      <app-button
+        class="project__save project__clickable"
+        [loader]="projectFormIsSubmitting"
+        (click)="saveProject()"
+      >
         Сохранить
       </app-button>
     </div>
@@ -108,7 +112,7 @@
                       </div>
                     </fieldset>
                     <app-button
-                      class="achievement__remove"
+                      class="achievement__remove project__clickable"
                       color="red"
                       (click)="removeAchievement(i)"
                     >
@@ -129,7 +133,10 @@
                 </form>
               </li>
             </ul>
-            <app-button class="project__add-achievement" (click)="addAchievement()">
+            <app-button
+              class="project__add-achievement project__clickable"
+              (click)="addAchievement()"
+            >
               <span>Добавить достижение</span>
               <i appIcon icon="plus" appSquare="24"></i>
             </app-button>
@@ -171,7 +178,7 @@
               </div>
             </fieldset>
             <app-button
-              class="invite__submit"
+              class="invite__submit project__clickable"
               [loader]="inviteFormIsSubmitting"
               (click)="submitInvite()"
             >
@@ -221,13 +228,13 @@
                   (enter)="addRequiredSkill()"
                   [(appValue)]="requiredSkillTitle"
                 ></app-input>
-                <app-button (click)="addRequiredSkill()">
+                <app-button class="project__clickable" (click)="addRequiredSkill()">
                   <i appIcon icon="check" appWidth="12" appHeight="10"></i>
                 </app-button>
               </div>
             </fieldset>
             <app-button
-              class="vacancy__submit"
+              class="vacancy__submit project__clickable"
               [loader]="vacancyIsSubmitting"
               (click)="submitVacancy()"
             >
