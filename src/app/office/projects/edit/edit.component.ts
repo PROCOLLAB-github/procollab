@@ -157,6 +157,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   vacancyIsSubmitting = false;
 
   submitVacancy(): void {
+    console.log(this.validationService.getFormValidation(this.vacancyForm));
     if (!this.validationService.getFormValidation(this.vacancyForm)) {
       const controls = [this.vacancyForm.get("role"), this.vacancyForm.get("requiredSkills")];
 
