@@ -2,12 +2,8 @@
 
 <main class="project">
   <form [formGroup]="projectForm">
-    <div class="project__save-container">
-      <app-button
-        class="project__save project__clickable"
-        [loader]="projectFormIsSubmitting"
-        (click)="saveProject()"
-      >
+    <div #saveButton class="project__save">
+      <app-button [loader]="projectFormIsSubmitting" (click)="saveProject()">
         Сохранить
       </app-button>
     </div>
