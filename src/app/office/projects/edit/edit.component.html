@@ -79,7 +79,11 @@
           </div>
         </fieldset>
         <fieldset>
-          <app-upload-file formControlName="presentationAddress" accept=".pdf,.pptx">
+          <app-upload-file
+            class="project__clickable"
+            formControlName="presentationAddress"
+            accept=".pdf,.pptx"
+          >
             <ng-container emptyPlaceholder>
               <h4 class="text-bold-body-16 project__slides-title">
                 <img src="/assets/images/projects/shared/pdf.svg" alt="pdf" />
