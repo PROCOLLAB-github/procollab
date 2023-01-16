@@ -1,18 +1,10 @@
 /** @format */
 
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "../../services/industry.service";
-import { distinctUntilChanged, fromEvent, map, Observable, Subscription } from "rxjs";
+import { distinctUntilChanged, map, Observable, Subscription } from "rxjs";
 import { ErrorMessage } from "../../../error/models/error-message";
 import { NavService } from "../../services/nav.service";
 import { Project } from "../../models/project.model";
@@ -117,16 +109,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.cdRef.detectChanges();
       });
-
-    this.initSaveButtonScroller();
   }
 
   ngOnDestroy(): void {
     this.profile$?.unsubscribe();
     this.subscriptions.forEach($ => $?.unsubscribe());
   }
-
-  @ViewChild("saveButton") saveButton?: ElementRef<HTMLElement>;
 
   profile$?: Subscription;
 
@@ -148,25 +136,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   vacancyForm: FormGroup;
 
   requiredSkillTitle = "";
-
-  initSaveButtonScroller(): void {
-    const scroller = document.querySelector(".office__body");
-    const container = document.querySelector(".project");
-    const topBar = document.querySelector(".office__top");
-    if (!scroller || !container || !topBar) return;
-
-    const saveButtonScrollSubscriber = fromEvent(scroller, "scroll").subscribe(() => {
-      if (!this.saveButton) return;
-      const { top: containerTop } = container.getBoundingClientRect();
-      const actualScroll = containerTop - topBar.clientHeight;
-
-      if (actualScroll < 0) {
-        this.saveButton.nativeElement.style.top = `${Math.abs(actualScroll) + 24}px`;
-      }
-    });
-
-    this.subscriptions.push(saveButtonScrollSubscriber);
-  }
 
   addRequiredSkill(): void {
     if (!this.requiredSkillTitle) {

@@ -2,7 +2,7 @@
 
 <main class="project">
   <form [formGroup]="projectForm">
-    <div #saveButton class="project__save">
+    <div appEditorSubmitButton containerSelector=".project" class="project__save">
       <app-button [loader]="projectFormIsSubmitting" (click)="saveProject()">
         Сохранить
       </app-button>
