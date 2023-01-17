@@ -52,23 +52,10 @@
     display: block;
   }
 
-  &__save-container {
+  &__save {
     position: absolute;
     top: 24px;
     right: 24px;
-    bottom: 0;
-    left: 0;
-    z-index: 0;
-  }
-
-  &__clickable {
-    position: relative;
-    z-index: 2;
-  }
-
-  &__save {
-    position: sticky;
-    top: 0;
     z-index: 10;
     display: block;
     width: 255px;

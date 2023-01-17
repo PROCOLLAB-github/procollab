@@ -2,12 +2,8 @@
 
 <main class="project">
   <form [formGroup]="projectForm">
-    <div class="project__save-container">
-      <app-button
-        class="project__save project__clickable"
-        [loader]="projectFormIsSubmitting"
-        (click)="saveProject()"
-      >
+    <div appEditorSubmitButton containerSelector=".project" class="project__save">
+      <app-button [loader]="projectFormIsSubmitting" (click)="saveProject()">
         Сохранить
       </app-button>
     </div>
@@ -79,7 +75,11 @@
           </div>
         </fieldset>
         <fieldset>
-          <app-upload-file formControlName="presentationAddress" accept=".pdf,.pptx">
+          <app-upload-file
+            class="project__clickable"
+            formControlName="presentationAddress"
+            accept=".pdf,.pptx"
+          >
             <ng-container emptyPlaceholder>
               <h4 class="text-bold-body-16 project__slides-title">
                 <img src="/assets/images/projects/shared/pdf.svg" alt="pdf" />
@@ -112,7 +112,7 @@
                       </div>
                     </fieldset>
                     <app-button
-                      class="achievement__remove project__clickable"
+                      class="achievement__remove"
                       color="red"
                       (click)="removeAchievement(i)"
                     >
@@ -133,10 +133,7 @@
                 </form>
               </li>
             </ul>
-            <app-button
-              class="project__add-achievement project__clickable"
-              (click)="addAchievement()"
-            >
+            <app-button class="project__add-achievement" (click)="addAchievement()">
               <span>Добавить достижение</span>
               <i appIcon icon="plus" appSquare="24"></i>
             </app-button>
@@ -178,7 +175,7 @@
               </div>
             </fieldset>
             <app-button
-              class="invite__submit project__clickable"
+              class="invite__submit"
               [loader]="inviteFormIsSubmitting"
               (click)="submitInvite()"
             >
@@ -234,7 +231,7 @@
               </div>
             </fieldset>
             <app-button
-              class="vacancy__submit project__clickable"
+              class="vacancy__submit"
               [loader]="vacancyIsSubmitting"
               (click)="submitVacancy()"
             >

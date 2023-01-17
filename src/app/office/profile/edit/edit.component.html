@@ -2,10 +2,8 @@
 
 <main *ngIf="profileForm.get('userType') as currentType" class="profile">
   <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
-    <div class="profile__save-container">
-      <app-button [loader]="profileFormSubmitting" class="profile__save" (click)="saveProfile()">
-        Сохранить
-      </app-button>
+    <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
+      <app-button [loader]="profileFormSubmitting" (click)="saveProfile()"> Сохранить </app-button>
     </div>
     <div class="profile__column">
       <div class="profile__row">
@@ -147,7 +145,7 @@
             ></app-input>
             <app-button
               type="button"
-              class="tag-list-form__button profile__clickable"
+              class="tag-list-form__button"
               (click)="addPreferredIndustry()"
             >
               <i appIcon icon="check" appWidth="12" appHeight="10"></i>
@@ -179,11 +177,7 @@
               class="tag-list-form__input"
               placeholder="Введите свой навык, например: Python"
             ></app-input>
-            <app-button
-              type="button"
-              class="tag-list-form__button profile__clickable"
-              (click)="addKeySkill()"
-            >
+            <app-button type="button" class="tag-list-form__button" (click)="addKeySkill()">
               <i appIcon icon="check" appWidth="12" appHeight="10"></i>
             </app-button>
           </div>
@@ -210,7 +204,7 @@
                     </div>
                   </fieldset>
                   <app-button
-                    class="achievement__remove profile__clickable"
+                    class="achievement__remove"
                     color="red"
                     (click)="removeAchievement(i)"
                   >
@@ -232,7 +226,7 @@
             </li>
           </ul>
         </ng-container>
-        <app-button class="profile__add-achievement profile__clickable" (click)="addAchievement()">
+        <app-button class="profile__add-achievement" (click)="addAchievement()">
           <span>Добавить новое достижение</span>
           <i appIcon icon="plus" appSquare="24"></i>
         </app-button>

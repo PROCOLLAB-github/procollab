@@ -21,7 +21,8 @@ import { AvatarControlComponent } from "./components/avatar-control/avatar-contr
 import { UploadFileComponent } from "./components/upload-file/upload-file.component";
 import { SearchComponent } from "./components/search/search.component";
 import { NumSliderComponent } from "./components/num-slider/num-slider.component";
-import { SwitchComponent } from './components/switch/switch.component';
+import { SwitchComponent } from "./components/switch/switch.component";
+import { EditorSubmitButtonDirective } from "./directives/editor-submit-button.directive";
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { SwitchComponent } from './components/switch/switch.component';
     SearchComponent,
     NumSliderComponent,
     SwitchComponent,
+    EditorSubmitButtonDirective,
   ],
   imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule],
   exports: [
@@ -56,7 +58,8 @@ import { SwitchComponent } from './components/switch/switch.component';
     UploadFileComponent,
     SearchComponent,
     NumSliderComponent,
-    SwitchComponent
-  ]
+    SwitchComponent,
+    EditorSubmitButtonDirective,
+  ],
 })
 export class UiModule {}
