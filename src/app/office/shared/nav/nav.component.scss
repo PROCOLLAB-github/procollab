@@ -5,45 +5,11 @@
 .nav {
   &__inner {
     max-width: $container-md;
-    padding: 36px 0 24px;
+    padding: 20px 0;
     margin: 0 auto;
   }
 
   &__title {
-    margin-bottom: 18px;
     color: var(--black);
-  }
-
-  &__list {
-    display: flex;
-    align-items: center;
-  }
-
-  &__link {
-    color: var(--dark-gray);
-    transition: color 0.2s;
-
-    &:hover {
-      color: var(--black);
-    }
-
-    &:not(:last-child) {
-      margin-right: 38px;
-    }
-
-    &--active {
-      color: var(--black);
-    }
-  }
-
-  &__item {
-    display: flex;
-    align-items: center;
-    color: inherit;
-    cursor: pointer;
-
-    i {
-      margin-right: 12px;
-    }
   }
 }

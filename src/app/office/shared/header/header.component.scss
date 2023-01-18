@@ -8,15 +8,19 @@
   &__inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     max-width: $container-md;
     padding: 20px 0;
     margin: 0 auto;
   }
 
+  &__nav {
+    margin-left: 6%;
+  }
+
   &__right {
     display: flex;
     align-items: center;
+    margin-left: auto;
   }
 
   &__bell {
@@ -83,6 +87,41 @@
       padding-bottom: 16px;
       margin-bottom: 16px;
       border-bottom: 1px solid var(--gray);
+    }
+  }
+}
+
+.nav {
+  &__list {
+    display: flex;
+    align-items: center;
+  }
+
+  &__link {
+    color: var(--dark-gray);
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--black);
+    }
+
+    &:not(:last-child) {
+      margin-right: 38px;
+    }
+
+    &--active {
+      color: var(--black);
+    }
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    color: inherit;
+    cursor: pointer;
+
+    i {
+      margin-right: 12px;
     }
   }
 }
