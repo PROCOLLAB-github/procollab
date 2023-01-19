@@ -19,7 +19,12 @@
   &__toggle {
     position: relative;
     z-index: 10;
+    display: block;
     cursor: pointer;
+
+    @include responsive.apply-desktop {
+      display: none;
+    }
   }
 
   &__title {
@@ -38,6 +43,7 @@
   }
 
   &__mobile-logo {
+    display: block;
     margin-bottom: 105px;
   }
 }
