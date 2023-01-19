@@ -1,7 +1,7 @@
 /** @format */
 
 import { NgModule } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { RouterModule, Routes } from "@angular/router";
 import { ProjectsComponent } from "./projects.component";
 import { ProjectsResolver } from "./projects.resolver";
 import { ProjectsListComponent } from "./list/list.component";
@@ -14,60 +14,60 @@ import { ProjectDetailResolver } from "./detail/detail.resolver";
 import { ProjectResponsesComponent } from "./responses/responses.component";
 import { ProjectResponsesResolver } from "./responses/responses.resolver";
 
-@NgModule({
-  imports: [
-    RouterModule.forChild([
+const routes: Routes = [
+  {
+    path: "",
+    component: ProjectsComponent,
+    resolve: {
+      data: ProjectsResolver,
+    },
+    children: [
       {
         path: "",
-        component: ProjectsComponent,
-        resolve: {
-          data: ProjectsResolver,
-        },
-        children: [
-          {
-            path: "",
-            pathMatch: "full",
-            redirectTo: "my",
-          },
-          {
-            path: "my",
-            component: ProjectsListComponent,
-            resolve: {
-              data: ProjectsMyResolver,
-            },
-          },
-          {
-            path: "all",
-            component: ProjectsListComponent,
-            resolve: {
-              data: ProjectsAllResolver,
-            },
-          },
-          {
-            path: ":projectId/edit",
-            component: ProjectEditComponent,
-            resolve: {
-              data: ProjectEditResolver,
-            },
-          },
-        ],
+        pathMatch: "full",
+        redirectTo: "my",
       },
       {
-        path: ":projectId",
-        component: ProjectDetailComponent,
+        path: "my",
+        component: ProjectsListComponent,
         resolve: {
-          data: ProjectDetailResolver,
+          data: ProjectsMyResolver,
         },
       },
       {
-        path: ":projectId/responses",
-        component: ProjectResponsesComponent,
+        path: "all",
+        component: ProjectsListComponent,
         resolve: {
-          data: ProjectResponsesResolver,
+          data: ProjectsAllResolver,
         },
       },
-    ]),
-  ],
+      {
+        path: ":projectId/edit",
+        component: ProjectEditComponent,
+        resolve: {
+          data: ProjectEditResolver,
+        },
+      },
+    ],
+  },
+  {
+    path: ":projectId",
+    component: ProjectDetailComponent,
+    resolve: {
+      data: ProjectDetailResolver,
+    },
+  },
+  {
+    path: ":projectId/responses",
+    component: ProjectResponsesComponent,
+    resolve: {
+      data: ProjectResponsesResolver,
+    },
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
 export class ProjectsRoutingModule {}
