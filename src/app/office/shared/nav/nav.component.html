@@ -3,5 +3,37 @@
 <div class="nav">
   <div class="nav__inner">
     <h1 class="text-heading-1 nav__title">{{ navService.navTitle }}</h1>
+    <i
+      class="nav__toggle"
+      appIcon
+      [icon]="mobileMenuOpen ? 'menu-cross' : 'menu-burger'"
+      appSquare="40"
+      (click)="mobileMenuOpen = !mobileMenuOpen"
+    ></i>
+  </div>
+  <div *ngIf="mobileMenuOpen" class="nav__mobile-menu">
+    <img class="nav__mobile-logo" src="assets/images/shared/logo.svg" alt="procollab" />
+    <nav class="nav nav--vertical">
+      <ul class="nav__list">
+        <a class="nav__link" routerLink="projects" routerLinkActive="nav__link&#45;&#45;active">
+          <li class="text-body-14 nav__item">
+            <i appIcon icon="projects" appSquare="24"></i>
+            Проекты
+          </li>
+        </a>
+        <a class="nav__link" routerLink="members" routerLinkActive="nav__link&#45;&#45;active">
+          <li class="text-body-14 nav__item">
+            <i appIcon icon="people" appSquare="24"></i>
+            Участники
+          </li>
+        </a>
+        <a class="nav__link" routerLink="mentors" routerLinkActive="nav__link&#45;&#45;active">
+          <li class="text-body-14 nav__item">
+            <i appIcon icon="people" appSquare="24"></i>
+            Менторы
+          </li>
+        </a>
+      </ul>
+    </nav>
   </div>
 </div>

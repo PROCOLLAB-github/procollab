@@ -1,15 +1,43 @@
 /** @format */
 
-@import "src/styles/responsive";
+@use "src/styles/responsive";
 
 .nav {
   &__inner {
-    max-width: $container-md;
-    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: responsive.$container-md;
+    padding: 20px 15px;
     margin: 0 auto;
+
+    @include responsive.apply-desktop {
+      padding: 20px 0;
+    }
+  }
+
+  &__toggle {
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
   }
 
   &__title {
     color: var(--black);
+  }
+
+  &__mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+    padding: 85px 15px 0;
+    background-color: var(--white);
+  }
+
+  &__mobile-logo {
+    margin-bottom: 105px;
   }
 }
