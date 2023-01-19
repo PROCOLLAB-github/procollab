@@ -9,6 +9,14 @@
     background-color: var(--light-gray-1);
   }
 
+  &__header {
+    display: none;
+
+    @include responsive.apply-desktop {
+      display: block;
+    }
+  }
+
   &__inner {
     margin: 0 15px;
 

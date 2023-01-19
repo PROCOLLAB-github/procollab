@@ -5,6 +5,28 @@
     <a href="https://procollab.ru/" target="_blank"
       ><img src="/assets/images/shared/logo.svg" alt="procollab"
     /></a>
+    <nav class="nav header__nav">
+      <ul class="nav__list">
+        <a class="nav__link" routerLink="projects" routerLinkActive="nav__link&#45;&#45;active">
+          <li class="text-body-14 nav__item">
+            <i appIcon icon="projects" appSquare="24"></i>
+            Проекты
+          </li>
+        </a>
+        <a class="nav__link" routerLink="members" routerLinkActive="nav__link&#45;&#45;active">
+          <li class="text-body-14 nav__item">
+            <i appIcon icon="people" appSquare="24"></i>
+            Участники
+          </li>
+        </a>
+        <a class="nav__link" routerLink="mentors" routerLinkActive="nav__link&#45;&#45;active">
+          <li class="text-body-14 nav__item">
+            <i appIcon icon="people" appSquare="24"></i>
+            Менторы
+          </li>
+        </a>
+      </ul>
+    </nav>
     <div class="header__right">
       <div (clickOutside)="onClickOutside()" class="header__bell">
         <div class="attention" *ngIf="(showBall | async) || hasInvites"></div>

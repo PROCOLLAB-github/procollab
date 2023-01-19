@@ -2,7 +2,11 @@
 
 <div class="office">
   <div class="office__top" #general>
-    <app-header *ngIf="invites$ | async as invites" [invites]="invites"></app-header>
+    <app-header
+      class="office__header"
+      *ngIf="invites$ | async as invites"
+      [invites]="invites"
+    ></app-header>
     <app-nav></app-nav>
   </div>
   <div [style.height]="bodyHeight" class="office__body">
