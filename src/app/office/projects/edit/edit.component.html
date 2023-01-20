@@ -2,29 +2,24 @@
 
 <main class="project">
   <form [formGroup]="projectForm">
-    <div appEditorSubmitButton containerSelector=".project" class="project__save">
-      <app-button [loader]="projectFormIsSubmitting" (click)="saveProject()">
-        Сохранить
-      </app-button>
-    </div>
     <nav class="project__nav">
       <ul>
         <li
-          class="project__nav-item text-heading-3"
+          class="project__nav-item"
           [class.project__nav-item--active]="editingStep === 'main'"
           (click)="editingStep = 'main'"
         >
           Основные данные
         </li>
         <li
-          class="project__nav-item text-heading-3"
+          class="project__nav-item"
           [class.project__nav-item--active]="editingStep === 'team'"
           (click)="editingStep = 'team'"
         >
           Участники
         </li>
         <li
-          class="project__nav-item text-heading-3"
+          class="project__nav-item"
           [class.project__nav-item--active]="editingStep === 'achievements'"
           (click)="editingStep = 'achievements'"
         >
@@ -267,6 +262,11 @@
           </form>
         </div>
       </ng-container>
+    </div>
+    <div appEditorSubmitButton containerSelector=".project" class="project__save">
+      <app-button [loader]="projectFormIsSubmitting" (click)="saveProject()">
+        Сохранить
+      </app-button>
     </div>
   </form>
 </main>
