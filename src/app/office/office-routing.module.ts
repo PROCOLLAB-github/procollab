@@ -23,6 +23,11 @@ const routes: Routes = [
     },
     children: [
       {
+        path: "",
+        pathMatch: "full",
+        redirectTo: "projects",
+      },
+      {
         path: "projects",
         loadChildren: () => import("./projects/projects.module").then(m => m.ProjectsModule),
       },
