@@ -1,3 +1,5 @@
+/** @format */
+
 .project {
   position: relative;
   padding: 24px;
@@ -5,27 +7,32 @@
   background-color: var(--white);
   border-radius: var(--rounded-md);
 
+  &__inner > fieldset:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
   &__image {
     margin-bottom: 20px;
   }
 
-  &__inner {
-    display: flex;
-    align-items: flex-start;
+  &__nav {
+    margin-bottom: 24px;
+
+    ul {
+      display: flex;
+    }
   }
 
-  &__column {
-    flex-basis: 50%;
-    flex-grow: 0;
-    max-width: 50%;
+  &__nav-item {
+    color: var(--gray);
+    cursor: pointer;
 
-    &:last-child {
-      margin-left: 80px;
+    &:not(:last-child) {
+      margin-right: 24px;
     }
 
-    > fieldset {
-      display: block;
-      margin-bottom: 20px;
+    &--active {
+      color: var(--black);
     }
   }
 
@@ -68,6 +75,10 @@
     display: block;
     width: 255px;
     margin-left: auto;
+  }
+
+  &__invite {
+    margin-bottom: 50px;
   }
 }
 
