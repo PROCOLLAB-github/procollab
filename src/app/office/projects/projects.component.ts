@@ -17,7 +17,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   constructor(
     private navService: NavService,
     private route: ActivatedRoute,
-    private projectService: ProjectService,
+    public projectService: ProjectService,
     private router: Router,
     private fb: FormBuilder
   ) {
@@ -29,7 +29,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navService.setNavTitle("Проекты");
 
-    this.searchFormSearch$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
+    const searchFormSearch$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
       this.router
         .navigate([], {
           queryParams: { search },
@@ -38,22 +38,35 @@ export class ProjectsComponent implements OnInit, OnDestroy {
         })
         .then(() => console.debug("QueryParams changed from ProjectsComponent"));
     });
+
+    searchFormSearch$ && this.subscriptions$.push(searchFormSearch$);
+
+    const routeData$ = this.route.data
+      .pipe(map(r => r["data"]))
+      .subscribe((count: ProjectCount) => {
+        this.projectService.projectsCount.next(count);
+      });
+
+    routeData$ && this.subscriptions$.push(routeData$);
   }
 
   ngOnDestroy(): void {
-    [this.searchFormSearch$].forEach($ => $?.unsubscribe());
+    this.subscriptions$.forEach($ => $?.unsubscribe());
   }
 
   searchForm: FormGroup;
-  searchFormSearch$?: Subscription;
-
-  projectsCount$: Observable<ProjectCount> = this.route.data.pipe(map(r => r["data"]));
+  subscriptions$: Subscription[] = [];
 
   isMy: Observable<boolean> = this.route.url.pipe(map(() => location.href.includes("/my")));
   isAll: Observable<boolean> = this.route.url.pipe(map(() => location.href.includes("/all")));
 
   addProject(): void {
     this.projectService.create().subscribe(project => {
+      this.projectService.projectsCount.next({
+        ...this.projectService.projectsCount.getValue(),
+        my: this.projectService.projectsCount.getValue().my + 1,
+      });
+
       this.router
         .navigateByUrl(`/office/projects/${project.id}/edit`)
         .then(() => console.debug("Route change from ProjectsComponent"));
