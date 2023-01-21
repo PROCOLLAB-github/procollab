@@ -5,6 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { map, Observable, Subscription } from "rxjs";
 import { VacancyResponse } from "../../models/vacancy-response.model";
 import { VacancyService } from "../../services/vacancy.service";
+import { NavService } from "../../services/nav.service";
 
 @Component({
   selector: "app-responses",
@@ -12,9 +13,15 @@ import { VacancyService } from "../../services/vacancy.service";
   styleUrls: ["./responses.component.scss"],
 })
 export class ProjectResponsesComponent implements OnInit, OnDestroy {
-  constructor(private route: ActivatedRoute, private vacancyService: VacancyService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private vacancyService: VacancyService,
+    private navService: NavService
+  ) {}
 
   ngOnInit(): void {
+    this.navService.setNavTitle("Профиль проекта");
+
     this.responses$ = this.route.data
       .pipe(map(r => r["data"]))
       .subscribe((responses: VacancyResponse[]) => {
