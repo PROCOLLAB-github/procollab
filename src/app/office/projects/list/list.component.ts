@@ -103,6 +103,11 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
     }
 
     this.projectService.remove(projectId).subscribe(() => {
+      this.projectService.projectsCount.next({
+        ...this.projectService.projectsCount.getValue(),
+        my: this.projectService.projectsCount.getValue().my - 1,
+      });
+
       const index = this.projects.findIndex(project => project.id === projectId);
       this.projects.splice(index, 1);
     });

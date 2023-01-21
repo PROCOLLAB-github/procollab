@@ -42,6 +42,9 @@ export class ProjectService {
       .pipe(map(projects => plainToInstance(Project, projects)));
   }
 
+  projectsCount = new BehaviorSubject<ProjectCount>({ my: 0, all: 0 });
+  projectsCount$ = this.projectsCount.asObservable();
+
   getCount(): Observable<ProjectCount> {
     return this.apiService
       .get("/projects/count/")

@@ -2,7 +2,7 @@
 
 <main class="page">
   <div class="bar page__bar">
-    <nav *ngIf="projectsCount$ | async as count" class="bar__nav">
+    <nav *ngIf="projectService.projectsCount$ | async as count" class="bar__nav">
       <ul class="bar__tabs">
         <a class="bar__link" routerLink="/office/projects/my" routerLinkActive="bar__link--active">
           <li class="text-body-14 bar__item">
