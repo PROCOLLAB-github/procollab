@@ -3,16 +3,18 @@
 <section *ngIf="response" class="response">
   <a class="response__profile profile" [routerLink]="['/office/profile', response.user.id]">
     <app-avatar [size]="90" [url]="response.user.avatar"></app-avatar>
-    <p class="text-body-12 profile__status">{{ response.user.userType | userRole | async }}</p>
-    <h3 class="text-heading-4 profile__name">
-      {{ response.user.firstName }} {{ response.user.lastName }}
-    </h3>
-    <p class="text-body-12 profile__info">{{ response.user.speciality }}</p>
-    <ul *ngIf="response.user.keySkills" class="profile__skills">
-      <li *ngFor="let skill of response.user.keySkills" class="profile__skill">
-        <app-tag>{{ skill }}</app-tag>
-      </li>
-    </ul>
+    <div class="profile__body">
+      <p class="text-body-12 profile__status">{{ response.user.userType | userRole | async }}</p>
+      <h3 class="text-heading-4 profile__name">
+        {{ response.user.firstName }} {{ response.user.lastName }}
+      </h3>
+      <p class="text-body-12 profile__info">{{ response.user.speciality }}</p>
+      <ul *ngIf="response.user.keySkills" class="profile__skills">
+        <li *ngFor="let skill of response.user.keySkills" class="profile__skill">
+          <app-tag>{{ skill }}</app-tag>
+        </li>
+      </ul>
+    </div>
   </a>
   <div class="response__text text">
     <h4 class="text-body-14 text__title">Мотивационное письмо</h4>
