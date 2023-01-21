@@ -1,5 +1,8 @@
 /** @format */
 
+@use "src/styles/responsive";
+@use "src/styles/typography";
+
 .project {
   position: relative;
   padding: 24px;
@@ -19,13 +22,22 @@
     margin-bottom: 24px;
 
     ul {
-      display: flex;
+      display: block;
+
+      @include responsive.apply-desktop {
+        display: flex;
+      }
     }
   }
 
   &__nav-item {
     color: var(--gray);
     cursor: pointer;
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      @include typography.heading-3;
+    }
 
     &:not(:last-child) {
       margin-right: 24px;
@@ -68,13 +80,17 @@
   }
 
   &__save {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    z-index: 10;
-    display: block;
-    width: 255px;
-    margin-left: auto;
+    margin-top: 16px;
+
+    @include responsive.apply-desktop {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      z-index: 10;
+      display: block;
+      width: 255px;
+      margin-left: auto;
+    }
   }
 
   &__invite {
