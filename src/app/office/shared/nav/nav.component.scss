@@ -1,6 +1,7 @@
 /** @format */
 
 @use "src/styles/responsive";
+@use "src/styles/typography";
 
 .nav {
   &__inner {
@@ -29,6 +30,11 @@
 
   &__title {
     color: var(--black);
+    @include typography.heading-3;
+
+    @include responsive.apply-desktop {
+      @include typography.heading-1;
+    }
   }
 
   &__mobile-menu {
