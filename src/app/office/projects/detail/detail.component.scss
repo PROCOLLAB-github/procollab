@@ -1,5 +1,7 @@
 /** @format */
 
+@use "src/styles/responsive";
+
 .project {
   margin-bottom: 100px;
 
@@ -9,8 +11,13 @@
 
   &__main {
     display: grid;
-    grid-template-columns: minmax(445px, 1fr) 1fr 1fr;
-    grid-gap: 18px;
+    grid-gap: 8px;
+    grid-template-columns: 1fr;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: minmax(445px, 1fr) 1fr 1fr;
+      grid-gap: 16px;
+    }
   }
 
   &__section {
@@ -20,7 +27,20 @@
   }
 
   &__about {
-    grid-column: span 2;
+    grid-row-start: 4;
+
+    @include responsive.apply-desktop {
+      grid-column: span 2;
+      grid-row-start: unset;
+    }
+  }
+
+  &__achievements {
+    grid-row-start: 2;
+
+    @include responsive.apply-desktop {
+      grid-row-start: unset;
+    }
   }
 }
 
