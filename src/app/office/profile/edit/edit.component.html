@@ -2,10 +2,8 @@
 
 <main *ngIf="profileForm.get('userType') as currentType" class="profile">
   <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
-    <div class="profile__save-container">
-      <app-button [loader]="profileFormSubmitting" class="profile__save" (click)="saveProfile()">
-        Сохранить
-      </app-button>
+    <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
+      <app-button [loader]="profileFormSubmitting" (click)="saveProfile()"> Сохранить </app-button>
     </div>
     <div class="profile__column">
       <div class="profile__row">

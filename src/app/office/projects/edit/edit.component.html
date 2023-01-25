@@ -2,17 +2,36 @@
 
 <main class="project">
   <form [formGroup]="projectForm">
-    <div class="project__save-container">
-      <app-button class="project__save" [loader]="projectFormIsSubmitting" (click)="saveProject()">
-        Сохранить
-      </app-button>
-    </div>
-    <fieldset class="project__image">
-      <label for="imageAddress" class="field-label">Лого проекта</label>
-      <app-avatar-control id="imageAddress" formControlName="imageAddress"></app-avatar-control>
-    </fieldset>
+    <nav class="project__nav">
+      <ul>
+        <li
+          class="project__nav-item"
+          [class.project__nav-item--active]="editingStep === 'main'"
+          (click)="editingStep = 'main'"
+        >
+          Основные данные
+        </li>
+        <li
+          class="project__nav-item"
+          [class.project__nav-item--active]="editingStep === 'team'"
+          (click)="editingStep = 'team'"
+        >
+          Участники
+        </li>
+        <li
+          class="project__nav-item"
+          [class.project__nav-item--active]="editingStep === 'achievements'"
+          (click)="editingStep = 'achievements'"
+        >
+          Достижения проекта
+        </li>
+      </ul>
+    </nav>
     <div class="project__inner">
-      <div class="project__column">
+      <ng-container *ngIf="editingStep === 'main'">
+        <fieldset class="project__image">
+          <app-avatar-control id="imageAddress" formControlName="imageAddress"></app-avatar-control>
+        </fieldset>
         <fieldset *ngIf="projectForm.get('name') as name">
           <label class="field-label" for="name">Название проекта</label>
           <app-input
@@ -67,6 +86,7 @@
           <label for="description" class="field-label">Информация о проекте</label>
           <app-textarea
             id="description"
+            [error]="description | controlError"
             formControlName="description"
             placeholder="Напишите кратко о своем проекте, его суть"
           ></app-textarea>
@@ -75,7 +95,11 @@
           </div>
         </fieldset>
         <fieldset>
-          <app-upload-file formControlName="presentationAddress" accept=".pdf,.pptx">
+          <app-upload-file
+            class="project__clickable"
+            formControlName="presentationAddress"
+            accept=".pdf,.pptx"
+          >
             <ng-container emptyPlaceholder>
               <h4 class="text-bold-body-16 project__slides-title">
                 <img src="/assets/images/projects/shared/pdf.svg" alt="pdf" />
@@ -87,6 +111,8 @@
             </ng-container>
           </app-upload-file>
         </fieldset>
+      </ng-container>
+      <ng-container *ngIf="editingStep === 'achievements'">
         <div>
           <label for="achievements" class="field-label">Достижения</label>
           <ng-container formArrayName="achievements">
@@ -135,9 +161,9 @@
             </app-button>
           </ng-container>
         </div>
-      </div>
-      <div class="project__column">
-        <div class="invite">
+      </ng-container>
+      <ng-container *ngIf="editingStep === 'team'">
+        <div class="invite project__invite">
           <h2 class="text-heading-4 invite__title">Приглашение участников</h2>
           <ul class="invite__list">
             <li *ngFor="let user of invites" class="invite__item">
@@ -180,7 +206,6 @@
             </app-button>
           </form>
         </div>
-        <p class="text-body-14 project__or">или</p>
         <div class="vacancy">
           <h2 class="text-heading-4 vacancy__title">Создание вакансии</h2>
           <ul class="vacancy__list">
@@ -221,7 +246,7 @@
                   (enter)="addRequiredSkill()"
                   [(appValue)]="requiredSkillTitle"
                 ></app-input>
-                <app-button (click)="addRequiredSkill()">
+                <app-button class="project__clickable" (click)="addRequiredSkill()">
                   <i appIcon icon="check" appWidth="12" appHeight="10"></i>
                 </app-button>
               </div>
@@ -236,7 +261,12 @@
             </app-button>
           </form>
         </div>
-      </div>
+      </ng-container>
+    </div>
+    <div appEditorSubmitButton containerSelector=".project" class="project__save">
+      <app-button [loader]="projectFormIsSubmitting" (click)="saveProject()">
+        Сохранить
+      </app-button>
     </div>
   </form>
 </main>

@@ -116,6 +116,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions.forEach($ => $?.unsubscribe());
   }
 
+  /**
+   * Current step of toggle, that navigates through
+   * parts of project info
+   */
+  editingStep: "main" | "team" | "achievements" = "main";
+
   profile$?: Subscription;
 
   errorMessage = ErrorMessage;

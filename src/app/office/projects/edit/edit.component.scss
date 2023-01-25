@@ -1,3 +1,8 @@
+/** @format */
+
+@use "src/styles/responsive";
+@use "src/styles/typography";
+
 .project {
   position: relative;
   padding: 24px;
@@ -5,27 +10,41 @@
   background-color: var(--white);
   border-radius: var(--rounded-md);
 
+  &__inner > fieldset:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
   &__image {
     margin-bottom: 20px;
   }
 
-  &__inner {
-    display: flex;
-    align-items: flex-start;
+  &__nav {
+    margin-bottom: 24px;
+
+    ul {
+      display: block;
+
+      @include responsive.apply-desktop {
+        display: flex;
+      }
+    }
   }
 
-  &__column {
-    flex-basis: 50%;
-    flex-grow: 0;
-    max-width: 50%;
+  &__nav-item {
+    color: var(--gray);
+    cursor: pointer;
+    @include typography.heading-4;
 
-    &:last-child {
-      margin-left: 80px;
+    @include responsive.apply-desktop {
+      @include typography.heading-3;
     }
 
-    > fieldset {
-      display: block;
-      margin-bottom: 20px;
+    &:not(:last-child) {
+      margin-right: 24px;
+    }
+
+    &--active {
+      color: var(--black);
     }
   }
 
@@ -60,21 +79,22 @@
     color: var(--dark-gray);
   }
 
-  &__save-container {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    bottom: 0;
-    left: 0;
+  &__save {
+    margin-top: 16px;
+
+    @include responsive.apply-desktop {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      z-index: 10;
+      display: block;
+      width: 255px;
+      margin-left: auto;
+    }
   }
 
-  &__save {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    display: block;
-    width: 255px;
-    margin-left: auto;
+  &__invite {
+    margin-bottom: 50px;
   }
 }
 
