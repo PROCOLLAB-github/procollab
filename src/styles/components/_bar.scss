@@ -1,3 +1,5 @@
+@use "src/styles/responsive";
+
 .bar {
   background-color: var(--white);
 
@@ -14,9 +16,13 @@
   &__item {
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding: 20px 10px;
     color: var(--dark-gray);
     cursor: pointer;
+
+    @include responsive.apply-desktop {
+      padding: 20px;
+    }
   }
 
   &__ball {
@@ -65,6 +71,14 @@
     i {
       display: block;
       margin-left: 6px;
+    }
+  }
+
+  &__add-project-text {
+    display: none;
+
+    @include responsive.apply-desktop {
+      display: inline;
     }
   }
 }

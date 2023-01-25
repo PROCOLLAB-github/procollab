@@ -1,7 +1,17 @@
 <!-- @format -->
 
 <section class="page">
-  <app-projects-filter class="page__filter" *ngIf="isAll | async"></app-projects-filter>
+  <div class="filter-toggle page__filter-toggle" (click)="isFilterOpen = !isFilterOpen">
+    <span>Фильтр</span>
+    <i appIcon icon="filter" appSquare="34"></i>
+  </div>
+  <div class="filter page__filter" *ngIf="(isAll | async) && isFilterOpen">
+    <div class="filter__overlay" (click)="isFilterOpen = false"></div>
+    <div class="filter__body">
+      <div class="filter__bar"></div>
+      <app-projects-filter></app-projects-filter>
+    </div>
+  </div>
   <ul class="page__list">
     <a *ngFor="let project of searchedProjects" [routerLink]="['/office/projects', project.id]">
       <li>

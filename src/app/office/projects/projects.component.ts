@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NavService } from "../services/nav.service";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { map, Observable, Subscription } from "rxjs";
 import { ProjectCount } from "../models/project.model";
 import { ProjectService } from "../services/project.service";
@@ -48,6 +48,13 @@ export class ProjectsComponent implements OnInit, OnDestroy {
       });
 
     routeData$ && this.subscriptions$.push(routeData$);
+
+    const routeUrl$ = this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.isMy = location.href.includes("/my");
+      }
+    });
+    routeUrl$ && this.subscriptions$.push(routeUrl$);
   }
 
   ngOnDestroy(): void {
@@ -57,8 +64,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   searchForm: FormGroup;
   subscriptions$: Subscription[] = [];
 
-  isMy: Observable<boolean> = this.route.url.pipe(map(() => location.href.includes("/my")));
-  isAll: Observable<boolean> = this.route.url.pipe(map(() => location.href.includes("/all")));
+  isMy = location.href.includes("/my");
 
   addProject(): void {
     this.projectService.create().subscribe(project => {
