@@ -1,11 +1,21 @@
+/** @format */
+
 @use "src/styles/responsive";
 
 .page {
-  display: flex;
-  align-items: flex-start;
+  @include responsive.apply-desktop {
+    display: flex;
+    align-items: flex-start;
+  }
 
   &__filter {
-    margin-right: 16px;
+    @include responsive.apply-desktop {
+      margin-right: 16px;
+    }
+  }
+
+  &__filter-toggle {
+    margin-bottom: 12px;
   }
 
   &__list {
@@ -17,5 +27,85 @@
     @include responsive.apply-desktop {
       grid-template-columns: repeat(2, 1fr);
     }
+  }
+}
+
+.filter {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+
+  @include responsive.apply-desktop {
+    position: static;
+    min-width: 280px;
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: black;
+    opacity: 0.3;
+
+    @include responsive.apply-desktop {
+      display: none;
+    }
+  }
+
+  &__bar {
+    position: fixed;
+    display: flex;
+    width: 100%;
+    height: 25px;
+
+    @include responsive.apply-desktop {
+      display: none;
+    }
+
+    &::after {
+      content: "";
+      display: block;
+      margin: auto;
+      height: 5px;
+      width: 85px;
+      background-color: var(--gray);
+      border-radius: var(--rounded-lg);
+    }
+  }
+
+  &__body {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    height: 800px;
+    overflow-y: auto;
+    background-color: var(--white);
+    border-radius: var(--rounded-lg);
+
+    @include responsive.apply-desktop {
+      position: static;
+      height: unset;
+    }
+  }
+}
+
+.filter-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 10px;
+  cursor: pointer;
+  background-color: var(--white);
+
+  @include responsive.apply-desktop {
+    display: none;
   }
 }

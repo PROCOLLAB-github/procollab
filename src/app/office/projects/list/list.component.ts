@@ -84,6 +84,8 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
     );
   }
 
+  isFilterOpen = window.innerWidth > 680;
+
   isAll: Observable<boolean> = this.route.url.pipe(map(() => location.href.includes("/all")));
 
   profile?: User;
