@@ -18,12 +18,12 @@
         </a>
       </ul>
       <div class="bar__right">
-        <button *ngIf="isMy | async" (click)="addProject()" class="text-body-14 bar__add-project">
+        <button *ngIf="isMy" (click)="addProject()" class="text-body-14 bar__add-project">
           <span class="bar__add-project-text">Добавить проект</span>
           <i appIcon icon="plus" appSquare="24"></i>
         </button>
         <form [formGroup]="searchForm">
-          <app-search *ngIf="isAll | async" formControlName="search"></app-search>
+          <app-search *ngIf="!isMy" formControlName="search"></app-search>
         </form>
       </div>
     </nav>
