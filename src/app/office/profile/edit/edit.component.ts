@@ -10,6 +10,7 @@ import { concatMap, first, map, noop, Observable, skip, Subscription } from "rxj
 import { Router } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
+import { NavService } from "../../services/nav.service";
 
 dayjs.extend(cpf);
 
@@ -24,7 +25,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     public authService: AuthService,
     private fb: FormBuilder,
     private validationService: ValidationService,
-    private router: Router
+    private router: Router,
+    private navService: NavService
   ) {
     this.profileForm = this.fb.group({
       firstName: ["", [Validators.required]],
@@ -44,6 +46,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.navService.setNavTitle("Редактирование профиля")
+
     this.profileForm
       .get("userType")
       ?.valueChanges.pipe(skip(1), concatMap(this.changeUserType.bind(this)))
