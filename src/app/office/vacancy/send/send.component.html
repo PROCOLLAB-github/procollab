@@ -16,7 +16,7 @@
   </app-modal>
   <div class="vacancy__inner">
     <div class="vacancy__sender profile">
-      <app-avatar [size]="140" [url]="profile.avatar"></app-avatar>
+      <app-avatar class="profile__avatar" [size]="140" [url]="profile.avatar"></app-avatar>
       <div class="profile__body">
         <p class="text-body-12 profile__status">{{ profile.userType | userRole | async }}</p>
         <h2 class="text-heading-3 profile__name">{{ profile.firstName }} {{ profile.lastName }}</h2>

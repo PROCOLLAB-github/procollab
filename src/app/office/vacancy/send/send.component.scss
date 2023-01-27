@@ -1,10 +1,22 @@
+/** @format */
+
+@use "src/styles/responsive";
+
 .vacancy {
-  padding: 24px;
-  background: var(--white) no-repeat url("/assets/images/office/vacancy/send/bg.svg") right/contain;
-  border-radius: var(--rounded-md);
+  @include responsive.apply-desktop {
+    padding: 24px;
+    border-radius: var(--rounded-md);
+  }
+
+  @include responsive.apply-desktop {
+    background: var(--white) no-repeat url("/assets/images/office/vacancy/send/bg.svg")
+      right/contain;
+  }
 
   &__inner {
-    width: 50%;
+    @include responsive.apply-desktop {
+      width: 50%;
+    }
   }
 
   &__sender {
@@ -14,10 +26,25 @@
 
 .profile {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
+  padding: 16px;
+  background-color: var(--white);
+  border-radius: var(--rounded-md);
+
+  @include responsive.apply-desktop {
+    flex-direction: row;
+    background-color: transparent;
+    border-radius: 0;
+  }
 
   &__body {
-    margin-left: 18px;
+    margin-top: 18px;
+
+    @include responsive.apply-desktop {
+      margin-top: 0;
+      margin-left: 18px;
+    }
   }
 
   &__status {
@@ -50,6 +77,10 @@
 }
 
 .form {
+  background-color: var(--white);
+  border-radius: var(--rounded-md);
+  padding: 16px;
+
   &__submit {
     display: block;
     margin-top: 20px;
