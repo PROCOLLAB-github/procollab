@@ -22,8 +22,8 @@
           <span class="bar__add-project-text">Добавить проект</span>
           <i appIcon icon="plus" appSquare="24"></i>
         </button>
-        <form [formGroup]="searchForm">
-          <app-search *ngIf="!isMy" formControlName="search"></app-search>
+        <form *ngIf="isAll" [formGroup]="searchForm">
+          <app-search formControlName="search"></app-search>
         </form>
       </div>
     </nav>
