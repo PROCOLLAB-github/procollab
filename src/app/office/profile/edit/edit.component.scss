@@ -1,30 +1,49 @@
 /** @format */
 
+@use "src/styles/responsive";
+
 .profile {
   position: relative;
   margin-bottom: 100px;
 
   &__form {
     display: flex;
-    align-items: flex-start;
-    padding: 24px;
+    flex-direction: column;
+    padding: 15px;
     color: var(--black);
     background-color: var(--white);
     border-radius: var(--rounded-md);
+
+    @include responsive.apply-desktop {
+      padding: 24px;
+      flex-direction: row;
+      align-items: flex-start;
+    }
   }
 
   &__column {
-    flex-basis: 50%;
-    flex-grow: 0;
+    &:first-child {
+      order: 1;
+      margin-top: 16px;
+    }
 
-    &:last-child {
-      margin-left: 50px;
+    @include responsive.apply-desktop {
+      flex-basis: 50%;
+      flex-grow: 0;
+
+      &:first-child {
+        margin-right: 50px;
+        order: unset;
+      }
     }
   }
 
   &__row {
-    display: flex;
     width: 100%;
+
+    @include responsive.apply-desktop {
+      display: flex;
+    }
 
     &:not(:last-child) {
       margin-bottom: 20px;
@@ -38,8 +57,12 @@
       }
     }
 
-    fieldset:first-child {
-      margin-right: 10px;
+    .space {
+      margin-bottom: 16px;
+
+      @include responsive.apply-desktop {
+        margin-right: 10px;
+      }
     }
   }
 
@@ -53,13 +76,19 @@
   }
 
   &__save {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    z-index: 10;
-    display: block;
-    width: 255px;
-    margin-left: auto;
+    margin-top: 16px;
+    order: 3;
+
+    @include responsive.apply-desktop {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      z-index: 10;
+      display: block;
+      order: unset;
+      width: 255px;
+      margin-left: auto;
+    }
   }
 
   &__avatar {
@@ -73,7 +102,6 @@
     margin-bottom: 12px;
   }
 }
-
 
 .tag-list {
   display: flex;

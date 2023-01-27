@@ -2,12 +2,9 @@
 
 <main *ngIf="profileForm.get('userType') as currentType" class="profile">
   <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
-    <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
-      <app-button [loader]="profileFormSubmitting" (click)="saveProfile()"> Сохранить </app-button>
-    </div>
     <div class="profile__column">
       <div class="profile__row">
-        <fieldset *ngIf="profileForm.get('firstName') as firstName">
+        <fieldset *ngIf="profileForm.get('firstName') as firstName" class="space">
           <label for="firstName" class="field-label">Имя</label>
           <app-input
             [error]="firstName | controlError"
@@ -36,7 +33,7 @@
       </div>
       <div class="profile__row">
         <ng-container *ngIf="profileForm.get('userType') as userType">
-          <fieldset *ngIf="userType.value !== 1">
+          <fieldset *ngIf="userType.value !== 1" class="space">
             <label for="userType" class="field-label">Тип аккаунта</label>
             <app-select
               *ngIf="roles | async as options"
@@ -264,6 +261,9 @@
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
       </fieldset>
+    </div>
+    <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
+      <app-button [loader]="profileFormSubmitting" (click)="saveProfile()"> Сохранить </app-button>
     </div>
   </form>
 </main>
