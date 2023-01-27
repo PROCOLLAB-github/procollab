@@ -14,18 +14,16 @@ import { map } from "rxjs";
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => AvatarControlComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class AvatarControlComponent implements OnInit, ControlValueAccessor {
-  constructor(private fileService: FileService) {
-  }
+  constructor(private fileService: FileService) {}
 
   @Input() size = 140;
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   controlId = nanoid(3);
 
@@ -38,15 +36,13 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
     this.value = address || this.placeholderUrl;
   }
 
-  onTouch: () => void = () => {
-  };
+  onTouch: () => void = () => {};
 
   registerOnTouched(fn: any) {
     this.onTouch = fn;
   }
 
-  onChange: (value: string) => void = () => {
-  };
+  onChange: (value: string) => void = () => {};
 
   registerOnChange(fn: any) {
     this.onChange = fn;

@@ -1,5 +1,4 @@
 <!-- @format -->
-
 <main class="project">
   <form [formGroup]="projectForm">
     <nav class="project__nav">
@@ -29,9 +28,9 @@
     </nav>
     <div class="project__inner">
       <ng-container *ngIf="editingStep === 'main'">
-        <fieldset class="project__image">
+        <div class="project__image">
           <app-avatar-control id="imageAddress" formControlName="imageAddress"></app-avatar-control>
-        </fieldset>
+        </div>
         <fieldset *ngIf="projectForm.get('name') as name">
           <label class="field-label" for="name">Название проекта</label>
           <app-input
