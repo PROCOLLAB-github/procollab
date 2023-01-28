@@ -1,0 +1,20 @@
+/** @format */
+
+.user {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &__avatar {
+    display: block;
+    margin-right: 12px;
+  }
+
+  &__name {
+    color: var(--black);
+  }
+
+  &__email {
+    color: var(--dark-gray);
+  }
+}

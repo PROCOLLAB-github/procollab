@@ -51,25 +51,6 @@
     margin: 0 30px;
     background-color: var(--gray);
   }
-
-  &__user {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  &__user-avatar {
-    display: block;
-    margin-right: 12px;
-  }
-
-  &__user-name {
-    color: var(--black);
-  }
-
-  &__user-email {
-    color: var(--dark-gray);
-  }
 }
 
 .notifications {
