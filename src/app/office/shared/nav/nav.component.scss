@@ -9,7 +9,7 @@
     align-items: center;
     justify-content: space-between;
     max-width: responsive.$container-md;
-    padding: 20px 15px;
+    padding: 55px 15px 20px;
     margin: 0 auto;
 
     @include responsive.apply-desktop {
@@ -44,12 +44,18 @@
     bottom: 0;
     left: 0;
     z-index: 5;
-    padding: 85px 15px 0;
+    display: flex;
+    flex-direction: column;
+    padding: 65px 15px 30px;
     background-color: var(--white);
+  }
+
+  &__user {
+    margin-top: auto;
   }
 
   &__mobile-logo {
     display: block;
-    margin-bottom: 105px;
+    margin-bottom: 40px;
   }
 }
