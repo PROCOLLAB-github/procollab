@@ -6,6 +6,7 @@ import { NavComponent } from "./nav.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
 import { AuthService } from "../../../auth/services";
+import { InviteService } from "../../services/invite.service";
 
 describe("NavComponent", () => {
   let component: NavComponent;
@@ -16,9 +17,14 @@ describe("NavComponent", () => {
       profile: of({}),
     };
 
+    const inviteSpy = jasmine.createSpyObj({ acceptInvite: of({}), rejectInvite: of({}) });
+
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [
+        { provide: AuthService, useValue: authSpy },
+        { provide: InviteService, useValue: inviteSpy },
+      ],
       declarations: [NavComponent],
     }).compileComponents();
   });

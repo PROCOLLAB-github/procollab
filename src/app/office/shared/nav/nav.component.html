@@ -1,27 +1,40 @@
 <!-- @format -->
 
-<div class="nav">
-  <div class="nav__inner">
-    <h1 class="text-heading-1 nav__title">{{ navService.navTitle }}</h1>
-    <div>
+<div class="nav-bar">
+  <div class="nav-bar__inner">
+    <h1 class="text-heading-1 nav-bar__title">{{ navService.navTitle }}</h1>
+    <div class="nav-bar__toggle">
       <i
-        class="nav__toggle"
         appIcon
         [icon]="mobileMenuOpen ? 'menu-cross' : 'menu-burger'"
         appSquare="40"
         (click)="mobileMenuOpen = !mobileMenuOpen"
-      ></i>
+      >
+      </i>
       <div
         class="attention"
-        *ngIf="(notificationService.hasNotifications | async) || hasInvites"
+        *ngIf="((notificationService.hasNotifications | async) || hasInvites) && !mobileMenuOpen"
       ></div>
     </div>
   </div>
-  <div *ngIf="mobileMenuOpen" class="nav__mobile-menu">
-    <a class="nav__mobile-logo" href="https://procollab.ru/" target="_blank">
-      <img src="/assets/images/shared/logo.svg" alt="procollab" width="125px" />
-    </a>
-    <nav class="nav nav--vertical">
+  <div *ngIf="mobileMenuOpen" class="nav-bar__mobile-menu">
+    <div class="nav-bar__top">
+      <a class="nav-bar__mobile-logo" href="https://procollab.ru/" target="_blank">
+        <img src="/assets/images/shared/logo.svg" alt="procollab" width="125px" />
+      </a>
+      <div
+        class="nav-bar__notifications-toggle"
+        [class.nav-bar__notifications-toggle--active]="notificationsOpen"
+        (click)="notificationsOpen = !notificationsOpen"
+      >
+        <i appIcon icon="bell" appWidth="20" appHeight="22" appViewBox="0 0 20 22"></i>
+        <div
+          class="attention"
+          *ngIf="(notificationService.hasNotifications | async) || hasInvites"
+        ></div>
+      </div>
+    </div>
+    <nav *ngIf="!notificationsOpen" class="nav nav--vertical">
       <ul class="nav__list">
         <a class="nav__link" routerLink="projects" routerLinkActive="nav__link--active">
           <li class="text-body-14 nav__item">
@@ -43,8 +56,21 @@
         </a>
       </ul>
     </nav>
+    <div *ngIf="notificationsOpen">
+      <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
+      <ul class="notifications__invites">
+        <li *ngFor="let invite of invites" class="notifications__invite">
+          <app-invite-manage-card
+            [invite]="invite"
+            (accept)="onAcceptInvite($event)"
+            (reject)="onRejectInvite($event)"
+          ></app-invite-manage-card>
+        </li>
+      </ul>
+    </div>
+
     <a
-      class="user nav__user"
+      class="user nav-bar__user"
       *ngIf="authService.profile | async as user"
       [routerLink]="['/office/profile', user.id]"
     >
