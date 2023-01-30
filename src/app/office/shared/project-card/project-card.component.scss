@@ -1,9 +1,16 @@
+/** @format */
+
+@use "src/styles/responsive";
+
 .card {
   position: relative;
   padding: 24px 15px;
   background-color: var(--white);
-  border: 1px solid var(--light-gray-2);
   border-radius: var(--rounded-md);
+
+  @include responsive.apply-desktop {
+    border: 1px solid var(--light-gray-2);
+  }
 
   &__head {
     display: flex;
