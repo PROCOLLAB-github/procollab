@@ -1,14 +1,16 @@
 <!-- @format -->
 
 <div class="num-slider" *ngIf="nums.sort() as sortedNums">
-  <div class="num-slider__range" #rangeEl *ngIf="value !== null" (mousemove)="onMove($event)">
+  <div class="num-slider__range" #rangeEl *ngIf="value !== null" (mousemove)="onMove($event)" (touchmove)="onMove($event)">
     <div class="num-slider__placeholder"></div>
     <div class="num-slider__fill" #fillEl></div>
     <div
       class="num-slider__button"
       #pointEl
       (mousedown)="onStartInteraction()"
+      (touchstart)="onStartInteraction()"
       (mouseup)="onStopInteraction($event)"
+      (touchend)="onStopInteraction($event)"
     ></div>
   </div>
   <div class="num-slider__nums">
