@@ -43,6 +43,10 @@ export class User {
   timeCreated!: string;
   timeUpdated!: string;
 
+  doesCompleted(): boolean {
+    return !!this.birthday && !!this.city && !!this.avatar && !!this.aboutMe;
+  }
+
   static default(): User {
     return {
       firstName: "Егор",
