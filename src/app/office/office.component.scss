@@ -26,3 +26,24 @@
     }
   }
 }
+
+.fulfill-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 402px;
+
+  &__title {
+    margin: 18px 0;
+    color: var(--black);
+  }
+
+  &__text {
+    text-align: center;
+    color: var(--dark-gray);
+  }
+
+  &__button {
+    margin-top: 18px;
+  }
+}
