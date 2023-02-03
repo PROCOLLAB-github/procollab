@@ -92,12 +92,15 @@ export class NumSliderComponent implements OnInit, OnDestroy {
     this.disabled = isDisabled;
   }
 
-  onMove(event: MouseEvent) {
+  onMove(event: MouseEvent | TouchEvent) {
     if (!this.mousePressed) return;
 
     const range = event.currentTarget as HTMLElement;
     const { width: totalWidth, x } = range.getBoundingClientRect();
-    const xChange = event.clientX - x;
+    let xChange: number;
+    if (event instanceof MouseEvent) xChange = event.clientX - x;
+    else if (event instanceof TouchEvent) xChange = event.touches[0].clientX - x
+    else throw Error("Non existing type")
 
     if (this.pointEl && xChange > 0 && xChange < totalWidth && this.fillEl) {
       this.pointEl.nativeElement.style.left = `${xChange}px`;
@@ -131,7 +134,7 @@ export class NumSliderComponent implements OnInit, OnDestroy {
     return this.value ? (100 / (this.nums.length - 1)) * this.nums.indexOf(this.value) : 0;
   }
 
-  onStopInteraction(event: MouseEvent) {
+  onStopInteraction(event: MouseEvent | TouchEvent) {
     event.stopPropagation();
 
     this.renderRange();
