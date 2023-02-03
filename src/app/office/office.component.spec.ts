@@ -14,7 +14,7 @@ describe("OfficeComponent", () => {
   let fixture: ComponentFixture<OfficeComponent>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj({ getUserRoles: of([]) });
+    const authSpy = { getUserRoles: of([]), profile: of({}) };
 
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule],

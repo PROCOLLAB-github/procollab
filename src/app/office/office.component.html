@@ -14,4 +14,16 @@
       <router-outlet></router-outlet>
     </div>
   </div>
+  <app-modal [(open)]="completeProfileModal">
+    <div class="fulfill-profile">
+      <img src="/assets/images/office/shared/fulfill-profile.svg" alt="fulfill profile" />
+      <h3 class="fulfill-profile__title text-bold-body-16">Дозаполните данные профиля</h3>
+      <p class="fulfill-profile__text text-body-14">
+        для того, чтобы мы могли рекомендовать команды под ваши навыки
+      </p>
+      <app-button class="fulfill-profile__button" (click)="onGotoProfile()"
+        >К редактированию профиля</app-button
+      >
+    </div>
+  </app-modal>
 </div>
