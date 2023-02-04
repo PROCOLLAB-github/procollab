@@ -121,6 +121,16 @@ $section-padding: 24px;
     }
   }
 
+  &__write-mobile {
+    @include responsive.apply-desktop {
+      display: none;
+    }
+
+    i {
+      margin-left: 16px;
+    }
+  }
+
   &__edit {
     position: absolute;
     top: 18px;
