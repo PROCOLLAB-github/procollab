@@ -57,6 +57,12 @@
         <div *ngIf="birthday | controlError: 'required'" class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
+        <div *ngIf="birthday | controlError: 'tooYoung'" class="text-body-14 error">
+          {{ errorMessage.MINIMAL_AGE }} {{ birthday.errors?.tooYoung.requiredAge }} лет
+        </div>
+        <div *ngIf="birthday | controlError: 'invalidDateFormat'" class="text-body-14 error">
+          {{ errorMessage.INVALID_DATE }}
+        </div>
       </fieldset>
     </div>
     <fieldset *ngIf="registerForm.get('email') as email" class="auth__field">
