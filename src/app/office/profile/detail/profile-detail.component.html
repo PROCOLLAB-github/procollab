@@ -51,6 +51,21 @@
       </ng-container>
     </div>
   </section>
+  <ng-container *ngIf="authService.profile | async as profile">
+    <a class="profile__write-mobile" *ngIf="profile.id !== user.id" [href]="'mailto:' + user.email">
+      <app-button>
+        Написать
+        <i
+          class="profile__chat-icon"
+          appIcon
+          icon="message-inline"
+          appWidth="13"
+          appHeight="12"
+          appViewBox="0 0 13 12"
+        ></i>
+      </app-button>
+    </a>
+  </ng-container>
   <section class="profile__section profile__achievements">
     <h3 class="text-bold-body-16 profile__title">Достижения</h3>
     <ul *ngIf="user.achievements.length" class="profile__ach-list">
