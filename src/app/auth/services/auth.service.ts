@@ -24,6 +24,10 @@ export class AuthService {
       .pipe(map(json => plainToInstance(LoginResponse, json)));
   }
 
+  logout(): Observable<void> {
+    return this.apiService.post("/auth/logout", {}).pipe(map(() => this.clearTokens()));
+  }
+
   register(data: RegisterRequest): Observable<RegisterResponse> {
     return this.apiService
       .post("/auth/users/", data)
