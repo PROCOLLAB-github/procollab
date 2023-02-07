@@ -1,13 +1,13 @@
 /** @format */
 
 import { Component, OnInit } from "@angular/core";
-import { AuthService } from "../../../auth/services";
+import { AuthService } from "@auth/services";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ErrorMessage } from "../../../error/models/error-message";
-import { VacancyService } from "../../services/vacancy.service";
-import { ValidationService } from "../../../core/services";
+import { ErrorMessage } from "@error/models/error-message";
+import { VacancyService } from "@services/vacancy.service";
+import { ValidationService } from "@core/services";
 import { ActivatedRoute } from "@angular/router";
-import { NavService } from "../../services/nav.service";
+import { NavService } from "@services/nav.service";
 
 @Component({
   selector: "app-send",

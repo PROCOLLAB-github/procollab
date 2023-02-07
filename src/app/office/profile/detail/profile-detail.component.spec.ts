@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ProfileDetailComponent } from "./profile-detail.component";
 import { of } from "rxjs";
-import { AuthService } from "../../../auth/services";
+import { AuthService } from "@auth/services";
 import { RouterTestingModule } from "@angular/router/testing";
 
 describe("ProfileDetailComponent", () => {

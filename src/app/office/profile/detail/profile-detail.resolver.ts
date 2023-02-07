@@ -3,8 +3,8 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve } from "@angular/router";
 import { Observable } from "rxjs";
-import { AuthService } from "../../../auth/services";
-import { User } from "../../../auth/models/user.model";
+import { AuthService } from "@auth/services";
+import { User } from "@auth/models/user.model";
 
 @Injectable({
   providedIn: "root",

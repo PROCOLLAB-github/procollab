@@ -1,12 +1,12 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ApiService } from "../../core/services";
+import { ApiService } from "@core/services";
 import { concatMap, map, Observable, take } from "rxjs";
 import { plainToInstance } from "class-transformer";
-import { Invite } from "../models/invite.model";
+import { Invite } from "@models/invite.model";
 import { HttpParams } from "@angular/common/http";
-import { AuthService } from "../../auth/services";
+import { AuthService } from "@auth/services";
 
 @Injectable({
   providedIn: "root",

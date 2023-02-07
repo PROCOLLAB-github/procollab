@@ -11,13 +11,12 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class InputComponent implements OnInit, ControlValueAccessor {
-  constructor() {
-  }
+  constructor() {}
 
   @Input() placeholder = "";
   @Input() type: "text" | "password" | "email" = "text";
@@ -36,8 +35,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   @Output() appValueChange = new EventEmitter<string>();
   @Output() enter = new EventEmitter<void>();
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
@@ -57,15 +55,13 @@ export class InputComponent implements OnInit, ControlValueAccessor {
     });
   }
 
-  onChange: (value: string) => void = () => {
-  };
+  onChange: (value: string) => void = () => {};
 
   registerOnChange(fn: (v: string) => void): void {
     this.onChange = fn;
   }
 
-  onTouch: () => void = () => {
-  };
+  onTouch: () => void = () => {};
 
   registerOnTouched(fn: () => void): void {
     this.onTouch = fn;

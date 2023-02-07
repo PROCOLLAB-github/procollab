@@ -1,22 +1,20 @@
 /** @format */
 
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Invite } from "../../models/invite.model";
+import { Invite } from "@models/invite.model";
 
 @Component({
   selector: "app-invite-card",
   templateUrl: "./invite-card.component.html",
-  styleUrls: ["./invite-card.component.scss"]
+  styleUrls: ["./invite-card.component.scss"],
 })
 export class InviteCardComponent implements OnInit {
-  constructor() {
-  }
+  constructor() {}
 
   @Input() invite?: Invite;
   @Output() remove = new EventEmitter<number>();
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onRemove(event: MouseEvent): void {
     event.stopPropagation();

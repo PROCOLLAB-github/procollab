@@ -13,14 +13,14 @@ const routes: Routes = [
     children: [
       {
         path: "404",
-        component: ErrorNotFoundComponent
+        component: ErrorNotFoundComponent,
       },
       {
         path: ":code",
-        component: ErrorCodeComponent
-      }
-    ]
-  }
+        component: ErrorCodeComponent,
+      },
+    ],
+  },
 ];
 
 @NgModule({

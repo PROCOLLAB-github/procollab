@@ -12,7 +12,7 @@ describe("ErrorCodeComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [ErrorCodeComponent]
+      declarations: [ErrorCodeComponent],
     }).compileComponents();
   });
 

@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ApiService } from "../../core/services";
+import { ApiService } from "@core/services";
 import { concatMap, map, Observable, ReplaySubject, take, tap } from "rxjs";
 import {
   LoginRequest,

@@ -5,9 +5,9 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MembersComponent } from "./members.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
-import { AuthService } from "../../auth/services";
+import { AuthService } from "@auth/services";
 import { ReactiveFormsModule } from "@angular/forms";
-import { UiModule } from "../../ui/ui.module";
+import { UiModule } from "@ui/ui.module";
 
 describe("MembersComponent", () => {
   let component: MembersComponent;

@@ -3,18 +3,18 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { IndustryService } from "../../services/industry.service";
+import { IndustryService } from "@services/industry.service";
 import { distinctUntilChanged, map, Observable, Subscription } from "rxjs";
-import { ErrorMessage } from "../../../error/models/error-message";
-import { NavService } from "../../services/nav.service";
-import { Project } from "../../models/project.model";
-import { Vacancy } from "../../models/vacancy.model";
-import { ValidationService } from "../../../core/services";
-import { VacancyService } from "../../services/vacancy.service";
-import { InviteService } from "../../services/invite.service";
-import { Invite } from "../../models/invite.model";
-import { ProjectService } from "../../services/project.service";
-import { SelectComponent } from "../../../ui/components";
+import { ErrorMessage } from "@error/models/error-message";
+import { NavService } from "@services/nav.service";
+import { Project } from "@models/project.model";
+import { Vacancy } from "@models/vacancy.model";
+import { ValidationService } from "@core/services";
+import { VacancyService } from "@services/vacancy.service";
+import { InviteService } from "@services/invite.service";
+import { Invite } from "@models/invite.model";
+import { ProjectService } from "@services/project.service";
+import { SelectComponent } from "@ui/components";
 
 @Component({
   selector: "app-edit",

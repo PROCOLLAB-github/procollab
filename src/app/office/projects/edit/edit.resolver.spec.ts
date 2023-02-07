@@ -5,7 +5,7 @@ import { TestBed } from "@angular/core/testing";
 import { ProjectEditResolver } from "./edit.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { of } from "rxjs";
-import { AuthService } from "../../../auth/services";
+import { AuthService } from "@auth/services";
 
 describe("ProjectEditResolver", () => {
   let resolver: ProjectEditResolver;

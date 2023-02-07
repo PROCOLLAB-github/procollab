@@ -5,7 +5,7 @@ import { Component, Input, OnInit } from "@angular/core";
 @Component({
   selector: "[appIcon]",
   templateUrl: "./icon.component.html",
-  styleUrls: ["./icon.component.scss"]
+  styleUrls: ["./icon.component.scss"],
 })
 export class IconComponent implements OnInit {
   @Input()
@@ -66,8 +66,7 @@ export class IconComponent implements OnInit {
   width!: string;
   height!: string;
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   viewBoxInfo(viewBox: string): string[] {
     return viewBox.split(" ");

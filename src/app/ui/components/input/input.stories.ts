@@ -1,11 +1,11 @@
 /** @format */
 
 import { Meta, Story } from "@storybook/angular";
-import { InputComponent } from "./input.component";
+import { InputComponent } from "@ui/components";
 
 export default {
   title: "Input",
-  component: InputComponent
+  component: InputComponent,
 } as Meta;
 
 const Template: Story = args => ({

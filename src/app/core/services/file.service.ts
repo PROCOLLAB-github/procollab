@@ -4,19 +4,18 @@ import { Injectable } from "@angular/core";
 import { ApiService } from "./api.service";
 import { Observable } from "rxjs";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { AuthService } from "../../auth/services";
-import { environment } from "../../../environments/environment";
+import { AuthService } from "@auth/services";
+import { environment } from "@environment";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class FileService {
   constructor(
     private apiService: ApiService,
     private httpClient: HttpClient,
     private authService: AuthService
-  ) {
-  }
+  ) {}
 
   uploadFile(file: File): Observable<{ url: string }> {
     const formData = new FormData();
@@ -26,9 +25,9 @@ export class FileService {
       fetch(`${environment.apiUrl}/files/`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${this.authService.getTokens()?.access}`
+          Authorization: `Bearer ${this.authService.getTokens()?.access}`,
         },
-        body: formData
+        body: formData,
       })
         .then(res => res.json())
         .then(res => {

@@ -1,7 +1,7 @@
 /** @format */
 
 import { Pipe, PipeTransform } from "@angular/core";
-import { AuthService } from "../../auth/services";
+import { AuthService } from "@auth/services";
 import { map, Observable } from "rxjs";
 
 @Pipe({

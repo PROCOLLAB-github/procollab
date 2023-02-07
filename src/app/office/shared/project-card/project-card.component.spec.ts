@@ -4,8 +4,8 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ProjectCardComponent } from "./project-card.component";
 import { of } from "rxjs";
-import { IndustryService } from "../../services/industry.service";
-import { Project } from "../../models/project.model";
+import { IndustryService } from "@services/industry.service";
+import { Project } from "@models/project.model";
 
 describe("ProjectCardComponent", () => {
   let component: ProjectCardComponent;
@@ -16,7 +16,7 @@ describe("ProjectCardComponent", () => {
 
     await TestBed.configureTestingModule({
       providers: [{ provide: IndustryService, useValue: industrySpy }],
-      declarations: [ProjectCardComponent]
+      declarations: [ProjectCardComponent],
     }).compileComponents();
   });
 

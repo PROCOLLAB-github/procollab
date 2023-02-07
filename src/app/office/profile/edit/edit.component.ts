@@ -1,16 +1,16 @@
 /** @format */
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
-import { AuthService } from "../../../auth/services";
+import { AuthService } from "@auth/services";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { ErrorMessage } from "../../../error/models/error-message";
-import { SelectComponent } from "../../../ui/components";
-import { ValidationService } from "../../../core/services";
+import { ErrorMessage } from "@error/models/error-message";
+import { SelectComponent } from "@ui/components";
+import { ValidationService } from "@core/services";
 import { concatMap, first, map, noop, Observable, skip, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
-import { NavService } from "../../services/nav.service";
+import { NavService } from "@services/nav.service";
 
 dayjs.extend(cpf);
 
@@ -46,7 +46,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.navService.setNavTitle("Редактирование профиля")
+    this.navService.setNavTitle("Редактирование профиля");
 
     this.profileForm
       .get("userType")

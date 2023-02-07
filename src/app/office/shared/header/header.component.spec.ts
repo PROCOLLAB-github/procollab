@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { HeaderComponent } from "./header.component";
 import { of } from "rxjs";
-import { AuthService } from "../../../auth/services";
+import { AuthService } from "@auth/services";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 
@@ -18,7 +18,7 @@ describe("HeaderComponent", () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [HeaderComponent]
+      declarations: [HeaderComponent],
     }).compileComponents();
   });
 

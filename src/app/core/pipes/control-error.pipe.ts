@@ -8,7 +8,7 @@ import { AbstractControl, ValidationErrors } from "@angular/forms";
   /**
    * Otherwise, don't work
    */
-  pure: false
+  pure: false,
 })
 export class ControlErrorPipe implements PipeTransform {
   transform(value: AbstractControl, errorName?: keyof ValidationErrors): boolean {

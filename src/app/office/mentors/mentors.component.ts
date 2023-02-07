@@ -3,12 +3,12 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { map, Subscription } from "rxjs";
-import { AuthService } from "../../auth/services";
-import { User } from "../../auth/models/user.model";
-import { NavService } from "../services/nav.service";
+import { AuthService } from "@auth/services";
+import { User } from "@auth/models/user.model";
+import { NavService } from "@services/nav.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import Fuse from "fuse.js";
-import { containerSm } from "../../utils/responsive";
+import { containerSm } from "@utils/responsive";
 
 @Component({
   selector: "app-members",

@@ -2,7 +2,7 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { IconComponent } from "./icon.component";
+import { IconComponent } from "@ui/components";
 
 describe("IconComponent", () => {
   let component: IconComponent;
@@ -10,7 +10,7 @@ describe("IconComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [IconComponent]
+      declarations: [IconComponent],
     }).compileComponents();
   });
 

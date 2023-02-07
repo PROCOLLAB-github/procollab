@@ -99,8 +99,8 @@ export class NumSliderComponent implements OnInit, OnDestroy {
     const { width: totalWidth, x } = range.getBoundingClientRect();
     let xChange: number;
     if (event instanceof MouseEvent) xChange = event.clientX - x;
-    else if (event instanceof TouchEvent) xChange = event.touches[0].clientX - x
-    else throw Error("Non existing type")
+    else if (event instanceof TouchEvent) xChange = event.touches[0].clientX - x;
+    else throw Error("Non existing type");
 
     if (this.pointEl && xChange > 0 && xChange < totalWidth && this.fillEl) {
       this.pointEl.nativeElement.style.left = `${xChange}px`;
