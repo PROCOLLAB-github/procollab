@@ -3,7 +3,13 @@
 <a class="user" *ngIf="user" [routerLink]="['/office/profile', user.id]">
   <app-avatar class="user__avatar" [url]="user.avatar"></app-avatar>
   <div>
-    <div class="text-bold-body-14 user__name">{{ user.firstName }} {{ user.lastName }}</div>
+    <div class="user__row">
+      <div class="text-bold-body-14 user__name">{{ user.firstName }} {{ user.lastName }}</div>
+      <button class="user__logout text-bold-body-14" (click)="onLogout()">
+        <span>Выход</span>
+        <i appIcon icon="logout" appSquare="20"></i>
+      </button>
+    </div>
     <div class="text-body-14 user__email">{{ user.email }}</div>
   </div>
 </a>

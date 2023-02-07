@@ -68,17 +68,10 @@
         </li>
       </ul>
     </div>
-
-    <a
-      class="user nav-bar__user"
+    <app-profile-info
+      class="nav-bar__profile"
       *ngIf="authService.profile | async as user"
-      [routerLink]="['/office/profile', user.id]"
-    >
-      <app-avatar class="user__avatar" [url]="user.avatar"></app-avatar>
-      <div>
-        <div class="text-bold-body-14 user__name">{{ user.firstName }} {{ user.lastName }}</div>
-        <div class="text-body-14 user__email">{{ user.email }}</div>
-      </div>
-    </a>
+      [user]="user"
+    ></app-profile-info>
   </div>
 </div>
