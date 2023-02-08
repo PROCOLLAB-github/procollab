@@ -1,8 +1,8 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { concatMap, distinctUntilChanged, map, Observable, of, Subscription } from "rxjs";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { concatMap, distinctUntilChanged, map, of, Subscription } from "rxjs";
 import { AuthService } from "../../../auth/services";
 import { Project } from "../../models/project.model";
 import { User } from "../../../auth/models/user.model";
@@ -23,23 +23,36 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private navService: NavService,
     private projectService: ProjectService,
+    private cdref: ChangeDetectorRef,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.navService.setNavTitle("Проекты");
 
-    this.profile$ = this.authService.profile.subscribe(profile => {
+    const routeUrl$ = this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.isMy = location.href.includes("/my");
+        this.isAll = location.href.includes("/all");
+      }
+    });
+    routeUrl$ && this.subscriptions$.push(routeUrl$);
+
+    const profile$ = this.authService.profile.subscribe(profile => {
       this.profile = profile;
     });
 
-    this.querySearch$ = this.route.queryParams.pipe(map(q => q["search"])).subscribe(search => {
+    profile$ && this.subscriptions$.push(profile$);
+
+    const querySearch$ = this.route.queryParams.pipe(map(q => q["search"])).subscribe(search => {
       const fuse = new Fuse(this.projects, {
         keys: ["name"],
       });
 
       this.searchedProjects = search ? fuse.search(search).map(el => el.item) : this.projects;
     });
+
+    querySearch$ && this.subscriptions$.push(querySearch$);
 
     if (location.href.includes("/all")) {
       const observable = this.route.queryParams.pipe(
@@ -77,40 +90,40 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
         })
       );
 
-      this.queryIndustry$ = observable.subscribe(projects => {
+      const queryIndustry$ = observable.subscribe(projects => {
         if (typeof projects === "number") return;
 
         this.projects = projects;
         this.searchedProjects = projects;
+
+        this.cdref.detectChanges();
       });
+
+      queryIndustry$ && this.subscriptions$.push(queryIndustry$);
     }
 
-    this.projects$ = this.route.data.pipe(map(r => r["data"])).subscribe(projects => {
+    const projects$ = this.route.data.pipe(map(r => r["data"])).subscribe(projects => {
       this.projects = projects ?? [];
       this.searchedProjects = projects ?? [];
     });
+
+    projects$ && this.subscriptions$.push(projects$);
   }
 
   ngOnDestroy(): void {
-    [this.profile$, this.projects$, this.querySearch$, this.queryIndustry$].forEach($ =>
-      $?.unsubscribe()
-    );
+    this.subscriptions$.forEach($ => $?.unsubscribe());
   }
 
   isFilterOpen = window.innerWidth > containerSm;
 
-  isAll: Observable<boolean> = this.route.url.pipe(map(() => location.href.includes("/all")));
+  isAll = location.href.includes("/all");
+  isMy = location.href.includes("/my");
 
   profile?: User;
-  profile$?: Subscription;
-
-  queryIndustry$?: Subscription;
-
-  querySearch$?: Subscription;
+  subscriptions$: Subscription[] = [];
 
   projects: Project[] = [];
   searchedProjects: Project[] = [];
-  projects$?: Subscription;
 
   private previousReqQuery: Record<string, any> = {};
 
