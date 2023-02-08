@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { concatMap, map, Observable, Subscription } from "rxjs";
+import { concatMap, map, Observable, of, Subscription } from "rxjs";
 import { AuthService } from "../../../auth/services";
 import { Project } from "../../models/project.model";
 import { User } from "../../../auth/models/user.model";
@@ -59,12 +59,15 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
             reqQuery["any_vacancies"] = q["anyVacancies"];
           }
 
-          try {
-            return this.projectService.getAll(new HttpParams({ fromObject: reqQuery }));
-          } catch (e) {
-            console.error(e);
-            return this.projectService.getAll();
+          if (Object.keys(reqQuery).length) {
+            try {
+              return this.projectService.getAll(new HttpParams({ fromObject: reqQuery }));
+            } catch (e) {
+              console.error(e);
+              return this.projectService.getAll();
+            }
           }
+          return of(this.searchedProjects);
         })
       );
 
