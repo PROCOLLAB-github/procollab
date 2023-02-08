@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { concatMap, map, Observable, Subscription } from "rxjs";
 import { AuthService } from "../../../auth/services";
 import { Project } from "../../models/project.model";
@@ -22,7 +22,8 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private authService: AuthService,
     private navService: NavService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -74,8 +75,8 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
     }
 
     this.projects$ = this.route.data.pipe(map(r => r["data"])).subscribe(projects => {
-      this.projects = projects;
-      this.searchedProjects = projects;
+      this.projects = projects ?? [];
+      this.searchedProjects = projects ?? [];
     });
   }
 
@@ -113,6 +114,19 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
 
       const index = this.projects.findIndex(project => project.id === projectId);
       this.projects.splice(index, 1);
+    });
+  }
+
+  addProject(): void {
+    this.projectService.create().subscribe(project => {
+      this.projectService.projectsCount.next({
+        ...this.projectService.projectsCount.getValue(),
+        my: this.projectService.projectsCount.getValue().my + 1,
+      });
+
+      this.router
+        .navigateByUrl(`/office/projects/${project.id}/edit`)
+        .then(() => console.debug("Route change from ProjectsComponent"));
     });
   }
 }

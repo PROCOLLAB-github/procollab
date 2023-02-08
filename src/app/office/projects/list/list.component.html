@@ -12,7 +12,7 @@
       <app-projects-filter></app-projects-filter>
     </div>
   </div>
-  <ul class="page__list">
+  <ul class="page__list" *ngIf="searchedProjects.length">
     <a *ngFor="let project of searchedProjects" [routerLink]="['/office/projects', project.id]">
       <li>
         <app-project-card
@@ -23,4 +23,15 @@
       </li>
     </a>
   </ul>
+  <div class="page__empty empty text-body-14" *ngIf="!searchedProjects.length">
+    <button class="empty__action text-body-14" (click)="addProject()">
+      <i appIcon icon="plus" appSquare="32"></i>
+      Добавьте свой первый проект
+    </button>
+    <span class="empty__or">или</span>
+    <a class="empty__action" routerLink="/office/projects/all">
+      <i appIcon icon="search" appSquare="32"></i>
+      Найдите интересующий проект в списке
+    </a>
+  </div>
 </section>
