@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { concatMap, map, Observable, Subscription } from "rxjs";
+import { concatMap, distinctUntilChanged, map, Observable, of, Subscription } from "rxjs";
 import { AuthService } from "../../../auth/services";
 import { Project } from "../../models/project.model";
 import { User } from "../../../auth/models/user.model";
@@ -43,6 +43,7 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
 
     if (location.href.includes("/all")) {
       const observable = this.route.queryParams.pipe(
+        distinctUntilChanged(),
         concatMap(q => {
           const reqQuery: Record<string, any> = {};
 
@@ -59,16 +60,26 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
             reqQuery["any_vacancies"] = q["anyVacancies"];
           }
 
-          try {
-            return this.projectService.getAll(new HttpParams({ fromObject: reqQuery }));
-          } catch (e) {
-            console.error(e);
-            return this.projectService.getAll();
+          if (JSON.stringify(reqQuery) !== JSON.stringify(this.previousReqQuery)) {
+            try {
+              this.previousReqQuery = reqQuery;
+              return this.projectService.getAll(new HttpParams({ fromObject: reqQuery }));
+            } catch (e) {
+              console.error(e);
+              this.previousReqQuery = reqQuery;
+              return this.projectService.getAll();
+            }
           }
+
+          this.previousReqQuery = reqQuery;
+
+          return of(0);
         })
       );
 
       this.queryIndustry$ = observable.subscribe(projects => {
+        if (typeof projects === "number") return;
+
         this.projects = projects;
         this.searchedProjects = projects;
       });
@@ -100,6 +111,8 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
   projects: Project[] = [];
   searchedProjects: Project[] = [];
   projects$?: Subscription;
+
+  private previousReqQuery: Record<string, any> = {};
 
   deleteProject(projectId: number): void {
     if (!confirm("Вы точно хотите удалить проект?")) {
