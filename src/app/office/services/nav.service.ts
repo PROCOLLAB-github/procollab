@@ -1,6 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
+import { distinctUntilChanged, ReplaySubject } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -8,9 +9,10 @@ import { Injectable } from "@angular/core";
 export class NavService {
   constructor() {}
 
-  navTitle = "";
+  navTitle$ = new ReplaySubject<string>(1);
+  navTitle = this.navTitle$.asObservable().pipe(distinctUntilChanged());
 
   setNavTitle(title: string): void {
-    this.navTitle = title;
+    this.navTitle$.next(title);
   }
 }
