@@ -8,19 +8,15 @@
   &__inner {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     max-width: $container-md;
     padding: 20px 0;
     margin: 0 auto;
   }
 
-  &__nav {
-    margin-left: 6%;
-  }
-
   &__right {
     display: flex;
     align-items: center;
-    margin-left: auto;
   }
 
   &__bell {
