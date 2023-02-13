@@ -25,7 +25,9 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return this.apiService.post("/auth/logout/", {}).pipe(map(() => this.clearTokens()));
+    return this.apiService
+      .post("/auth/logout/", { refreshToken: this.getTokens()?.refresh })
+      .pipe(map(() => this.clearTokens()));
   }
 
   register(data: RegisterRequest): Observable<RegisterResponse> {
