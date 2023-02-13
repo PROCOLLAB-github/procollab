@@ -4,7 +4,7 @@ import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { nanoid } from "nanoid";
 import { FileService } from "../../../core/services/file.service";
-import { map } from "rxjs";
+import { concatMap, map } from "rxjs";
 
 @Component({
   selector: "app-avatar-control",
@@ -59,20 +59,14 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
 
     this.loading = true;
 
-    // TODO: return when api will be repaired
-    // if (this.value) {
-    //   this.fileService
-    //     .deleteFile(this.value)
-    //     .pipe(
-    //       concatMap(() => this.fileService.uploadFile(files[0])),
-    //       pluck("url")
-    //     )
-    //     .subscribe(this.updateValue);
-    // }
-    this.fileService
-      .uploadFile(files[0])
-      .pipe(map(r => r.url))
-      .subscribe(this.updateValue.bind(this));
+    const source = this.value
+      ? this.fileService.deleteFile(this.value).pipe(
+          concatMap(() => this.fileService.uploadFile(files[0])),
+          map(r => r["url"])
+        )
+      : this.fileService.uploadFile(files[0]).pipe(map(r => r.url));
+
+    source.subscribe(this.updateValue.bind(this));
   }
 
   private updateValue(url: string): void {
