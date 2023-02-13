@@ -110,3 +110,37 @@
     display: none;
   }
 }
+
+.empty {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 70px;
+  width: 100%;
+
+  @include responsive.apply-desktop {
+    padding-top: 128px;
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    color: var(--accent);
+    transition: color 0.2s;
+    cursor: pointer;
+
+    i {
+      margin-right: 10px;
+    }
+
+    &:hover {
+      color: var(--accent-dark);
+    }
+  }
+
+  &__or {
+    margin: 17.5px 0;
+    color: var(--dark-gray);
+  }
+}

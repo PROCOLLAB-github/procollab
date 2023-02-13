@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <div class="search" (click)="onSwitchSearch(true)" (clickOutside)="onClickOutside($event)">
-  <i class="search__icon" appIcon icon="search" appSquare="20"></i>
+  <i class="search__icon" appIcon icon="search" appSquare="32"></i>
   <div class="search__other" (click)="stopPropagation($event)">
     <p *ngIf="!open" class="text-body-14 search__hidden" (click)="onSwitchSearch(true)">Поиск</p>
     <div *ngIf="open" class="search__input">
