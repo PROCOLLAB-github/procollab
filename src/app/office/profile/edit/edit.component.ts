@@ -54,11 +54,14 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(noop);
     userType$ && this.subscription$.push(userType$);
 
-    const userAvatar$ = this.profileForm.get("avatar")?.valueChanges.pipe(
-      skip(1),
-      concatMap(url => this.authService.saveProfile({ avatar: url }))
-    ).subscribe(noop);
-    userAvatar$ && this.subscription$.push(userAvatar$)
+    const userAvatar$ = this.profileForm
+      .get("avatar")
+      ?.valueChanges.pipe(
+        skip(1),
+        concatMap(url => this.authService.saveAvatar(url))
+      )
+      .subscribe(noop);
+    userAvatar$ && this.subscription$.push(userAvatar$);
   }
 
   ngAfterViewInit() {
