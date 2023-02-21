@@ -1,13 +1,8 @@
 /** @format */
 
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
 import { map, Observable } from "rxjs";
-import { Project } from "@models/project.model";
-import { IndustryService } from "@services/industry.service";
-import { NavService } from "@services/nav.service";
-import { Vacancy } from "@models/vacancy.model";
-import { AuthService } from "@auth/services";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-detail",
@@ -15,26 +10,12 @@ import { AuthService } from "@auth/services";
   styleUrls: ["./detail.component.scss"],
 })
 export class ProjectDetailComponent implements OnInit {
-  constructor(
-    private route: ActivatedRoute,
-    public industryService: IndustryService,
-    public authService: AuthService,
-    private navService: NavService
-  ) {}
+  constructor(private readonly route: ActivatedRoute) {}
 
-  project$: Observable<Project> = this.route.data.pipe(
-    map(r => r["data"]),
-    map(r => r[0])
+  ngOnInit(): void {}
+
+  projectId: Observable<number> = this.route.params.pipe(
+    map(r => r["projectId"]),
+    map(Number)
   );
-
-  vacancies$: Observable<Vacancy[]> = this.route.data.pipe(
-    map(r => r["data"]),
-    map(r => r[1])
-  );
-
-  ngOnInit(): void {
-    this.navService.setNavTitle("Профиль проекта");
-  }
-
-  readFull = false;
 }

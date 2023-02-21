@@ -1,0 +1,15 @@
+<!-- @format -->
+
+<main class="responses">
+  <section class="responses__main">
+    <ul>
+      <li *ngFor="let response of responses">
+        <app-response-card
+          [response]="response"
+          (accept)="acceptResponse($event)"
+          (reject)="rejectResponse($event)"
+        ></app-response-card>
+      </li>
+    </ul>
+  </section>
+</main>

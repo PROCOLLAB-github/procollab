@@ -11,7 +11,7 @@ import { Vacancy } from "@models/vacancy.model";
 @Injectable({
   providedIn: "root",
 })
-export class ProjectDetailResolver implements Resolve<[Project, Vacancy[]]> {
+export class ProjectInfoResolver implements Resolve<[Project, Vacancy[]]> {
   constructor(private projectService: ProjectService, private vacancyService: VacancyService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<[Project, Vacancy[]]> {
