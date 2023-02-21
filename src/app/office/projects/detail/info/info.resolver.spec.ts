@@ -2,13 +2,13 @@
 
 import { TestBed } from "@angular/core/testing";
 
-import { ProjectDetailResolver } from "./detail.resolver";
+import { ProjectInfoResolver } from "./info.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { of } from "rxjs";
-import { AuthService } from "../../../auth/services";
+import { AuthService } from "../../../../auth/services";
 
-describe("ProjectDetailResolver", () => {
-  let resolver: ProjectDetailResolver;
+describe("ProjectInfoResolver", () => {
+  let resolver: ProjectInfoResolver;
 
   beforeEach(() => {
     const authSpy = {
@@ -19,7 +19,7 @@ describe("ProjectDetailResolver", () => {
       imports: [HttpClientTestingModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
     });
-    resolver = TestBed.inject(ProjectDetailResolver);
+    resolver = TestBed.inject(ProjectInfoResolver);
   });
 
   it("should be created", () => {

@@ -9,10 +9,6 @@ import { ProjectsMyResolver } from "./list/my.resolver";
 import { ProjectsAllResolver } from "./list/all.resolver";
 import { ProjectEditComponent } from "./edit/edit.component";
 import { ProjectEditResolver } from "./edit/edit.resolver";
-import { ProjectDetailComponent } from "./detail/detail.component";
-import { ProjectDetailResolver } from "./detail/detail.resolver";
-import { ProjectResponsesComponent } from "./responses/responses.component";
-import { ProjectResponsesResolver } from "./responses/responses.resolver";
 
 const routes: Routes = [
   {
@@ -52,17 +48,7 @@ const routes: Routes = [
   },
   {
     path: ":projectId",
-    component: ProjectDetailComponent,
-    resolve: {
-      data: ProjectDetailResolver,
-    },
-  },
-  {
-    path: ":projectId/responses",
-    component: ProjectResponsesComponent,
-    resolve: {
-      data: ProjectResponsesResolver,
-    },
+    loadChildren: () => import("./detail/detail.module").then(m => m.ProjectDetailModule),
   },
 ];
 

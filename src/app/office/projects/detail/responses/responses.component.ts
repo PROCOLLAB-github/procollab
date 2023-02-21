@@ -3,9 +3,9 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { map, Observable, Subscription } from "rxjs";
-import { VacancyResponse } from "../../models/vacancy-response.model";
-import { VacancyService } from "../../services/vacancy.service";
-import { NavService } from "../../services/nav.service";
+import { VacancyResponse } from "../../../models/vacancy-response.model";
+import { VacancyService } from "../../../services/vacancy.service";
+import { NavService } from "../../../services/nav.service";
 
 @Component({
   selector: "app-responses",
