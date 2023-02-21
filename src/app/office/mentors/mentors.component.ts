@@ -29,7 +29,7 @@ export class MentorsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.navService.setNavTitle("Участники");
+    this.navService.setNavTitle("Менторы");
 
     this.members$ = this.route.data.pipe(map(r => r["data"])).subscribe(members => {
       this.members = members;

@@ -46,16 +46,26 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.navService.setNavTitle("Редактирование профиля")
+    this.navService.setNavTitle("Редактирование профиля");
 
-    this.profileForm
+    const userType$ = this.profileForm
       .get("userType")
       ?.valueChanges.pipe(skip(1), concatMap(this.changeUserType.bind(this)))
       .subscribe(noop);
+    userType$ && this.subscription$.push(userType$);
+
+    const userAvatar$ = this.profileForm
+      .get("avatar")
+      ?.valueChanges.pipe(
+        skip(1),
+        concatMap(url => this.authService.saveAvatar(url))
+      )
+      .subscribe(noop);
+    userAvatar$ && this.subscription$.push(userAvatar$);
   }
 
   ngAfterViewInit() {
-    this.profile$ = this.authService.profile.pipe(first()).subscribe(profile => {
+    const profile$ = this.authService.profile.pipe(first()).subscribe(profile => {
       this.profileId = profile.id;
 
       this.profileForm.patchValue({
@@ -99,15 +109,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.cdref.detectChanges();
     });
+    profile$ && this.subscription$.push(profile$);
   }
 
   ngOnDestroy(): void {
-    this.profile$?.unsubscribe();
+    this.subscription$.forEach($ => $.unsubscribe());
   }
 
   profileId?: number;
 
-  profile$?: Subscription;
+  subscription$: Subscription[] = [];
 
   get typeSpecific(): FormGroup {
     return this.profileForm.get("typeSpecific") as FormGroup;

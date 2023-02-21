@@ -6,11 +6,10 @@ import { first, Observable } from "rxjs";
 import { environment } from "../../../environments/environment";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ApiService {
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   get<T>(path: string, params?: HttpParams, options?: object): Observable<T> {
     return this.http
@@ -20,6 +19,10 @@ export class ApiService {
 
   put<T>(path: string, body: object): Observable<T> {
     return this.http.put<T>(environment.apiUrl + path, body).pipe(first()) as Observable<T>;
+  }
+
+  patch<T>(path: string, body: object): Observable<T> {
+    return this.http.patch(environment.apiUrl + path, body).pipe(first()) as Observable<T>;
   }
 
   post<T>(path: string, body: object): Observable<T> {
