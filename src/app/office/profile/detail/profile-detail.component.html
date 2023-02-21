@@ -22,8 +22,11 @@
           <span *ngIf="user.birthday">
             {{ user.birthday | dayjs: "format":"DD MMMM YYYY" }}
           </span>
-          <ng-container *ngIf="user.birthday && user.city"> • </ng-container>
-          <span *ngIf="user.city">{{ user.city }}, {{ user.region }}</span>
+          <ng-container *ngIf="user.birthday && user.city"> •</ng-container>
+          <span *ngIf="user.city">
+            {{ user.city }}
+            <ng-container *ngIf="user.region">, {{ user.region }}</ng-container>
+          </span>
         </p>
         <ul *ngIf="user.keySkills" class="profile__skills">
           <li *ngFor="let skill of user.keySkills" class="profile__skill">

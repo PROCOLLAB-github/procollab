@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
 import { NavigationStart, Router } from "@angular/router";
 import { Subscription } from "rxjs";
@@ -20,28 +20,39 @@ export class NavComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     public readonly notificationService: NotificationService,
     private readonly inviteService: InviteService,
-    public readonly authService: AuthService
+    public readonly authService: AuthService,
+    private readonly cdref: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.routerEvents$ = this.router.events.subscribe(event => {
+    const routerEvents$ = this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         this.mobileMenuOpen = false;
       }
     });
+    routerEvents$ && this.subscriptions$.push(routerEvents$);
+
+    const title$ = this.navService.navTitle.subscribe(title => {
+      this.title = title;
+      this.cdref.detectChanges();
+    });
+
+    title$ && this.subscriptions$.push(title$);
   }
 
   ngOnDestroy(): void {
-    this.routerEvents$?.unsubscribe();
+    this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
   @Input() invites: Invite[] = [];
 
-  routerEvents$?: Subscription;
+  subscriptions$: Subscription[] = [];
 
   mobileMenuOpen = false;
 
   notificationsOpen = false;
+
+  title = "";
 
   get hasInvites(): boolean {
     return !!this.invites.filter(invite => invite.isAccepted === null).length;

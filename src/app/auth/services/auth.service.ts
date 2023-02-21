@@ -109,6 +109,15 @@ export class AuthService {
       .pipe(map(user => plainToInstance(User, user)));
   }
 
+  saveAvatar(url: string): Observable<User> {
+    return this.profile.pipe(
+      take(1),
+      concatMap(profile =>
+        this.apiService.patch<User>(`/auth/users/${profile.id}`, { avatar: url })
+      )
+    );
+  }
+
   saveProfile(newProfile: Partial<User>): Observable<User> {
     return this.profile.pipe(
       take(1),

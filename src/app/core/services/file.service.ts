@@ -39,7 +39,7 @@ export class FileService {
   }
 
   deleteFile(fileUrl: string): Observable<{ success: true }> {
-    const params = new HttpParams({ fromObject: { url: fileUrl } });
+    const params = new HttpParams({ fromObject: { link: fileUrl } });
     return this.apiService.delete("/files/", params);
   }
 }
