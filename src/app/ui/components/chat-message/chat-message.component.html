@@ -1,6 +1,11 @@
 <!-- @format -->
 
-<div class="message">
+<div
+  class="message"
+  (contextmenu)="onOpenContextmenu($event)"
+  (clickOutside)="onCloseContextmenu()"
+  clickOutsideEvents="contextmenu"
+>
   <div class="message__inner">
     <app-avatar class="message__avatar" [url]="chatMessage.sender.avatar"></app-avatar>
     <div class="message__info">
@@ -15,7 +20,25 @@
       <div class="message__content text-body-14">{{ chatMessage.content }}</div>
     </div>
   </div>
-  <div class="message__menu-dots">
+  <div
+    class="message__menu-dots"
+    (click)="onOpenContextmenu($event)"
+    (clickOutside)="onCloseContextmenu()"
+  >
     <i appIcon icon="dots" appWidth="4" appHeight="16" appViewBox="0 0 4 16"></i>
+    <ul
+      (click)="onClickContextmenu($event)"
+      class="message__contextmenu contextmenu"
+      *ngIf="contextmenuOpen"
+      [style.top]="contextmenuPos.y + 'px'"
+      [style.left]="contextmenuPos.x + 'px'"
+    >
+      <li class="contextmenu__item text-body-14" (click)="onCopyContent($event)">Скопировать</li>
+      <li class="contextmenu__item text-body-14" (click)="onResend($event)">Переслать</li>
+      <li class="contextmenu__item text-body-14" (click)="onEdit($event)">Редактировать</li>
+      <li class="contextmenu__item contextmenu__item--red text-body-14" (click)="onDelete($event)">
+        Удалить
+      </li>
+    </ul>
   </div>
 </div>
