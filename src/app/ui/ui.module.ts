@@ -23,8 +23,8 @@ import { SearchComponent } from "./components/search/search.component";
 import { NumSliderComponent } from "./components/num-slider/num-slider.component";
 import { SwitchComponent } from "./components/switch/switch.component";
 import { EditorSubmitButtonDirective } from "./directives/editor-submit-button.directive";
-import { ProfileInfoComponent } from "./components/profile-info/profile-info.component";
-import { RouterModule } from "@angular/router";
+import { ChatMessageComponent } from "./components/chat-message/chat-message.component";
+import { CoreModule } from "../core/core.module";
 
 @NgModule({
   declarations: [
@@ -44,9 +44,9 @@ import { RouterModule } from "@angular/router";
     NumSliderComponent,
     SwitchComponent,
     EditorSubmitButtonDirective,
-    ProfileInfoComponent,
+    ChatMessageComponent,
   ],
-  imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule, RouterModule],
+  imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule, CoreModule],
   exports: [
     ButtonComponent,
     InputComponent,
@@ -63,6 +63,7 @@ import { RouterModule } from "@angular/router";
     NumSliderComponent,
     SwitchComponent,
     EditorSubmitButtonDirective,
+    ChatMessageComponent,
     ProfileInfoComponent,
   ],
 })

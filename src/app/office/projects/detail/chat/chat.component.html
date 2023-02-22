@@ -1,1 +1,4 @@
-<p>chat works!</p>
+<!-- @format -->
+<div class="chat">
+  <app-chat-message *ngFor="let message of messages" [chatMessage]="message"></app-chat-message>
+</div>
