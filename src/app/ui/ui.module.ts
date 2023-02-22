@@ -23,6 +23,8 @@ import { SearchComponent } from "./components/search/search.component";
 import { NumSliderComponent } from "./components/num-slider/num-slider.component";
 import { SwitchComponent } from "./components/switch/switch.component";
 import { EditorSubmitButtonDirective } from "./directives/editor-submit-button.directive";
+import { ChatMessageComponent } from "./components/chat-message/chat-message.component";
+import { CoreModule } from "../core/core.module";
 
 @NgModule({
   declarations: [
@@ -42,8 +44,9 @@ import { EditorSubmitButtonDirective } from "./directives/editor-submit-button.d
     NumSliderComponent,
     SwitchComponent,
     EditorSubmitButtonDirective,
+    ChatMessageComponent,
   ],
-  imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule],
+  imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule, CoreModule],
   exports: [
     ButtonComponent,
     InputComponent,
@@ -60,6 +63,7 @@ import { EditorSubmitButtonDirective } from "./directives/editor-submit-button.d
     NumSliderComponent,
     SwitchComponent,
     EditorSubmitButtonDirective,
+    ChatMessageComponent,
   ],
 })
 export class UiModule {}

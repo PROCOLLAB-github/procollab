@@ -56,6 +56,8 @@ export class User {
       city: "234sadfas",
       organization: "dfasdfasdf",
       speciality: "asdfasdfasd",
+      avatar:
+        "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/07/07b5228efb2df4d2ded575a785f5dedec1db2687.jpg",
       keySkills: ["sadf"],
       member: {},
       aboutMe: "sdvadf\nsadfasfasdf\nasdf\nasdfas\nfasdf\n  ",
