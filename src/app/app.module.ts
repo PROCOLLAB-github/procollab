@@ -1,8 +1,7 @@
 /** @format */
 
-import { APP_INITIALIZER, NgModule } from "@angular/core";
+import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
-import * as Sentry from "@sentry/angular";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { HttpClientModule } from "@angular/common/http";
@@ -29,14 +28,6 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
     NgxMaskModule.forRoot(),
     BrowserAnimationsModule,
     MatProgressBarModule,
-  ],
-  providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: () => () => {},
-      deps: [Sentry.TraceService],
-      multi: true,
-    },
   ],
   bootstrap: [AppComponent],
 })
