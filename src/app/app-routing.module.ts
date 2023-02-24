@@ -3,7 +3,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
-import { AuthRequiredGuard } from "./auth/guards/auth-required.guard";
+import { AuthRequiredGuard } from "@auth/guards/auth-required.guard";
 
 const routes: Routes = [
   {

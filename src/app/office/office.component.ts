@@ -9,13 +9,13 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { IndustryService } from "./services/industry.service";
+import { IndustryService } from "@services/industry.service";
 import { forkJoin, map, noop, Observable, Subscription } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Invite } from "./models/invite.model";
-import { AuthService } from "../auth/services";
-import { ProjectService } from "./services/project.service";
-import { User } from "../auth/models/user.model";
+import { Invite } from "@models/invite.model";
+import { AuthService } from "@auth/services";
+import { ProjectService } from "@services/project.service";
+import { User } from "@auth/models/user.model";
 
 @Component({
   selector: "app-office",

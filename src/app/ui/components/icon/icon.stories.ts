@@ -1,9 +1,9 @@
 /** @format */
 
 import { Meta } from "@storybook/angular";
-import { IconComponent } from "./icon.component";
+import { IconComponent } from "@ui/components";
 
 export default {
   title: "Icon",
-  component: IconComponent
+  component: IconComponent,
 } as Meta;

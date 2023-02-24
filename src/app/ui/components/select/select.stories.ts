@@ -1,11 +1,11 @@
 /** @format */
 
 import { Meta, Story } from "@storybook/angular";
-import { SelectComponent } from "./select.component";
+import { SelectComponent } from "@ui/components";
 
 export default {
   title: "Select",
-  component: SelectComponent
+  component: SelectComponent,
 } as Meta;
 
 const Template: Story = args => ({ props: args });

@@ -1,11 +1,11 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ApiService } from "../../core/services";
+import { ApiService } from "@core/services";
 import { map, Observable } from "rxjs";
-import { Vacancy } from "../models/vacancy.model";
+import { Vacancy } from "@models/vacancy.model";
 import { plainToInstance } from "class-transformer";
-import { VacancyResponse } from "../models/vacancy-response.model";
+import { VacancyResponse } from "@models/vacancy-response.model";
 import { HttpParams } from "@angular/common/http";
 
 @Injectable({

@@ -5,8 +5,8 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { RegisterComponent } from "./register.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AuthService } from "../services";
-import { InputComponent } from "../../ui/components";
-import { CoreModule } from "../../core/core.module";
+import { InputComponent } from "@ui/components";
+import { CoreModule } from "@core/core.module";
 import { UiModule } from "src/app/ui/ui.module";
 import { NgxMaskModule } from "ngx-mask";
 import { RouterTestingModule } from "@angular/router/testing";
@@ -25,10 +25,10 @@ describe("RegisterComponent", () => {
         RouterTestingModule,
         CoreModule,
         UiModule,
-        NgxMaskModule.forRoot()
+        NgxMaskModule.forRoot(),
       ],
       providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [RegisterComponent, InputComponent]
+      declarations: [RegisterComponent, InputComponent],
     }).compileComponents();
   });
 

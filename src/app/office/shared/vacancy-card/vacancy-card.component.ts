@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Vacancy } from "../../models/vacancy.model";
+import { Vacancy } from "@models/vacancy.model";
 
 @Component({
   selector: "app-vacancy-card",

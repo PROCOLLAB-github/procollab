@@ -1,7 +1,7 @@
 /** @format */
 
 import { UserRolePipe } from "./user-role.pipe";
-import { AuthService } from "../../auth/services";
+import { AuthService } from "@auth/services";
 import { of } from "rxjs";
 
 describe("UserRolePipe", () => {

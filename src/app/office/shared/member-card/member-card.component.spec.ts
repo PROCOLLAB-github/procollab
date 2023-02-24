@@ -3,11 +3,11 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { MemberCardComponent } from "./member-card.component";
-import { User } from "../../../auth/models/user.model";
-import { UserRolePipe } from "../../../core/pipes/user-role.pipe";
+import { User } from "@auth/models/user.model";
+import { UserRolePipe } from "@core/pipes/user-role.pipe";
 import { of } from "rxjs";
-import { AuthService } from "../../../auth/services";
-import { DayjsPipe } from "../../../core/pipes/dayjs.pipe";
+import { AuthService } from "@auth/services";
+import { DayjsPipe } from "@core/pipes/dayjs.pipe";
 
 describe("MemberCardComponent", () => {
   let component: MemberCardComponent;

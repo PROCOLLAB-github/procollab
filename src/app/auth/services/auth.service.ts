@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ApiService } from "../../core/services";
+import { ApiService } from "@core/services";
 import { concatMap, map, Observable, ReplaySubject, take, tap } from "rxjs";
 import {
   LoginRequest,
@@ -22,6 +22,12 @@ export class AuthService {
     return this.apiService
       .post("/api/token/", { email, password })
       .pipe(map(json => plainToInstance(LoginResponse, json)));
+  }
+
+  logout(): Observable<void> {
+    return this.apiService
+      .post("/auth/logout/", { refreshToken: this.getTokens()?.refresh })
+      .pipe(map(() => this.clearTokens()));
   }
 
   register(data: RegisterRequest): Observable<RegisterResponse> {

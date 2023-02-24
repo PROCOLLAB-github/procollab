@@ -2,27 +2,27 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { VacancyCardComponent } from "./vacancy-card.component";
+import { ProfileInfoComponent } from "./profile-info.component";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
+import { RouterTestingModule } from "@angular/router/testing";
 
-describe("VacancyCardComponent", () => {
-  let component: VacancyCardComponent;
-  let fixture: ComponentFixture<VacancyCardComponent>;
+describe("ProfileInfoComponent", () => {
+  let component: ProfileInfoComponent;
+  let fixture: ComponentFixture<ProfileInfoComponent>;
 
   beforeEach(async () => {
-    const authSpy = {
-      roles: of([]),
-    };
+    const authSpy = jasmine.createSpyObj({ logout: of({}) });
 
     await TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [VacancyCardComponent],
+      declarations: [ProfileInfoComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VacancyCardComponent);
+    fixture = TestBed.createComponent(ProfileInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

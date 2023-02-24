@@ -5,11 +5,10 @@ import { Router } from "@angular/router";
 import { ErrorCode } from "../models/error-code";
 
 @Injectable({
-  providedIn: "root"
+  providedIn: "root",
 })
 export class ErrorService {
-  constructor(private router: Router) {
-  }
+  constructor(private router: Router) {}
 
   throwNotFount(): Promise<void> {
     return this.throwError(ErrorCode.NOT_FOUND);

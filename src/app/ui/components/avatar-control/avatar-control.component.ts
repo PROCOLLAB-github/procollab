@@ -3,7 +3,7 @@
 import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { nanoid } from "nanoid";
-import { FileService } from "../../../core/services/file.service";
+import { FileService } from "@core/services/file.service";
 import { concatMap, map } from "rxjs";
 
 @Component({

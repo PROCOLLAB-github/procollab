@@ -3,8 +3,8 @@
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
-import { ValidationService } from "../../core/services";
-import { ErrorMessage } from "../../error/models/error-message";
+import { ValidationService } from "@core/services";
+import { ErrorMessage } from "@error/models/error-message";
 import { SelectComponent } from "src/app/ui/components";
 import { Router } from "@angular/router";
 import { Observable, of } from "rxjs";

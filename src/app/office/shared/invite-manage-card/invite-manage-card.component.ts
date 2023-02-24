@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Invite } from "../../models/invite.model";
+import { Invite } from "@models/invite.model";
 
 @Component({
   selector: "app-invite-manage-card",

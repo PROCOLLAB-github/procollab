@@ -5,7 +5,7 @@ import { TestBed } from "@angular/core/testing";
 import { ProjectService } from "./project.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { of } from "rxjs";
-import { AuthService } from "../../auth/services";
+import { AuthService } from "@auth/services";
 
 describe("ProjectService", () => {
   let service: ProjectService;

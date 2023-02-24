@@ -4,7 +4,7 @@ import { TestBed } from "@angular/core/testing";
 
 import { ProjectsAllResolver } from "./all.resolver";
 import { of } from "rxjs";
-import { ProjectService } from "../../services/project.service";
+import { ProjectService } from "@services/project.service";
 
 describe("ProjectsAllResolver", () => {
   let resolver: ProjectsAllResolver;

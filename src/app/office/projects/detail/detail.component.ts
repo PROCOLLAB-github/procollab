@@ -3,11 +3,11 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { map, Observable } from "rxjs";
-import { Project } from "../../models/project.model";
-import { IndustryService } from "../../services/industry.service";
-import { NavService } from "../../services/nav.service";
-import { Vacancy } from "../../models/vacancy.model";
-import { AuthService } from "../../../auth/services";
+import { Project } from "@models/project.model";
+import { IndustryService } from "@services/industry.service";
+import { NavService } from "@services/nav.service";
+import { Vacancy } from "@models/vacancy.model";
+import { AuthService } from "@auth/services";
 
 @Component({
   selector: "app-detail",

@@ -1,8 +1,8 @@
 /** @format */
 
 import { Component, Input, OnInit } from "@angular/core";
-import { User } from "../../../auth/models/user.model";
-import { containerSm } from "../../../utils/responsive";
+import { User } from "@auth/models/user.model";
+import { containerSm } from "@utils/responsive";
 
 @Component({
   selector: "app-member-card",

@@ -3,14 +3,14 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { concatMap, distinctUntilChanged, map, of, Subscription } from "rxjs";
-import { AuthService } from "../../../auth/services";
-import { Project } from "../../models/project.model";
-import { User } from "../../../auth/models/user.model";
-import { NavService } from "../../services/nav.service";
-import { ProjectService } from "../../services/project.service";
+import { AuthService } from "@auth/services";
+import { Project } from "@models/project.model";
+import { User } from "@auth/models/user.model";
+import { NavService } from "@services/nav.service";
+import { ProjectService } from "@services/project.service";
 import Fuse from "fuse.js";
 import { HttpParams } from "@angular/common/http";
-import { containerSm } from "../../../utils/responsive";
+import { containerSm } from "@utils/responsive";
 
 @Component({
   selector: "app-list",

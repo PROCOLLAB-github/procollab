@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResolveEnd, ResolveStart, Router } from "@angular/router";
-import { AuthService } from "./auth/services";
+import { AuthService } from "@auth/services";
 import { debounceTime, filter, forkJoin, map, merge, noop, Observable, Subscription } from "rxjs";
 
 @Component({

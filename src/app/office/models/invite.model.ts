@@ -1,5 +1,5 @@
 /** @format */
-import { User } from "../../auth/models/user.model";
+import { User } from "@auth/models/user.model";
 import { Project } from "./project.model";
 
 export class Invite {

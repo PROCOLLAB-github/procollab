@@ -2,8 +2,8 @@
 
 import { Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
-import { New } from "../models/article.model";
-import { ApiService } from "../../core/services";
+import { New } from "@models/article.model";
+import { ApiService } from "@core/services";
 import { plainToInstance } from "class-transformer";
 
 @Injectable({

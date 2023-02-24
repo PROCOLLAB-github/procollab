@@ -1,11 +1,11 @@
 /** @format */
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { NavService } from "../services/nav.service";
+import { NavService } from "@services/nav.service";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { map, Subscription } from "rxjs";
-import { ProjectCount } from "../models/project.model";
-import { ProjectService } from "../services/project.service";
+import { ProjectCount } from "@models/project.model";
+import { ProjectService } from "@services/project.service";
 import { FormBuilder, FormGroup } from "@angular/forms";
 
 @Component({

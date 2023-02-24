@@ -1,7 +1,13 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from "@angular/common/http";
+import {
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse,
+} from "@angular/common/http";
 import { map, Observable } from "rxjs";
 import * as snakecaseKeys from "snakecase-keys";
 import camelcaseKeys from "camelcase-keys";

@@ -3,7 +3,7 @@
 import { TestBed } from "@angular/core/testing";
 
 import { BearerTokenInterceptor } from "./bearer-token.interceptor";
-import { AuthService } from "../../auth/services";
+import { AuthService } from "@auth/services";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("BearerTokenInterceptor", () => {
@@ -11,12 +11,12 @@ describe("BearerTokenInterceptor", () => {
     const authSpy = jasmine.createSpyObj("AuthService", [
       "getTokens",
       "memTokens",
-      "refreshTokens"
+      "refreshTokens",
     ]);
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [BearerTokenInterceptor, { provide: AuthService, useValue: authSpy }]
+      providers: [BearerTokenInterceptor, { provide: AuthService, useValue: authSpy }],
     });
   });
 
