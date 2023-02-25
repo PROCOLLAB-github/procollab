@@ -28,8 +28,8 @@ jobs:
         with:
           switches: -avzr --delete
           path: dist/procollab
-          remote_path: /home/gh-deploy
-          remote_user: gh-deploy
+          remote_path: /home/gh_deploy
+          remote_user: gh_deploy
           remote_key: ${{ secrets.DEPLOY_KEY }}
-          remote_host: 5.188.81.232
+          remote_host: 45.131.98.58
 
