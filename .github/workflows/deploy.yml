@@ -31,5 +31,6 @@ jobs:
           remote_path: /var/www/html/
           remote_user: gh-deploy
           remote_key: ${{ secrets.DEPLOY_KEY }}
+          remote_key_pass: ${{ secrets.DEPLOY_KEY_PASS }}
           remote_host: 5.188.81.232
 
