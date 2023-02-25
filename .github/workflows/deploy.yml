@@ -23,6 +23,7 @@ jobs:
           cache: 'npm'
       - run: npm ci --force
       - run: npm run build
+      - run: npm run build:sprite
       - name: deploy to server
         uses: burnett01/rsync-deployments@5.2.1
         with:
