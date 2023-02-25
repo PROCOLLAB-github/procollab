@@ -1,5 +1,56 @@
 /** @format */
 
+@use "src/styles/responsive";
+
 .chat {
   background-color: var(--white);
+
+  @include responsive.apply-desktop {
+    display: flex;
+  }
+
+  &__aside {
+    @include responsive.apply-desktop {
+      flex-basis: 30%;
+      min-width: 300px;
+      border-left: 1px solid var(--gray);
+    }
+  }
+}
+
+.members {
+  padding: 12px 18px 18px 18px;
+  border-bottom: 1px solid var(--gray);
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+
+  &__title {
+    color: var(--black);
+  }
+
+  &__add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--dark-gray);
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    border-radius: 8px;
+    border: 1px solid var(--gray);
+  }
+}
+
+.files {
+  padding: 16px 18px 0 18px;
+
+  &__title {
+    color: var(--black);
+    margin-bottom: 12px;
+  }
 }

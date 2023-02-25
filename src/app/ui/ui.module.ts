@@ -27,6 +27,7 @@ import { ChatMessageComponent } from "./components/chat-message/chat-message.com
 import { ProfileInfoComponent } from "./components/profile-info/profile-info.component";
 import { CoreModule } from "@core/core.module";
 import { RouterModule } from "@angular/router";
+import { FileItemComponent } from "./components/file-item/file-item.component";
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { RouterModule } from "@angular/router";
     EditorSubmitButtonDirective,
     ChatMessageComponent,
     ProfileInfoComponent,
+    FileItemComponent,
   ],
   imports: [
     CommonModule,
@@ -75,6 +77,7 @@ import { RouterModule } from "@angular/router";
     EditorSubmitButtonDirective,
     ChatMessageComponent,
     ProfileInfoComponent,
+    FileItemComponent,
   ],
 })
 export class UiModule {}
