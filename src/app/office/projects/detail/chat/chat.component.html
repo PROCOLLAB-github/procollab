@@ -1,6 +1,45 @@
 <!-- @format -->
 <div class="chat">
-  <app-chat-message *ngFor="let message of messages" [chatMessage]="message"></app-chat-message>
-
-  <app-message-input></app-message-input>
+  <div class="chat__main main">
+    <header class="main__header">
+      <div class="main__project">
+        <div class="main__avatar"></div>
+        <div class="main__name"></div>
+      </div>
+      <div class="main__meta">
+        <ul class="main__members-list">
+          <li class="main__member-avatar"></li>
+        </ul>
+        <div class="main__count"></div>
+        <div class="main__count-online"></div>
+      </div>
+    </header>
+    <div class="main__chat">
+      <app-chat-message [chatMessage]="message" *ngFor="let message of messages"></app-chat-message>
+    </div>
+  </div>
+  <aside class="chat__aside">
+    <div class="members">
+      <header class="members__header">
+        <h2 class="members__title text-bold-body-16">Участники</h2>
+        <button class="members__add">
+          <i appIcon icon="plus" appSquare="24"></i>
+        </button>
+      </header>
+      <ul class="members__list">
+        <li class="members__item member">
+          <app-avatar class="member__avatar"></app-avatar>
+          <div class="member__name"></div>
+        </li>
+      </ul>
+    </div>
+    <div class="files">
+      <h2 class="files__title text-bold-body-16">Файлы</h2>
+      <ul class="files__list">
+        <li class="files__item">
+          <app-file-item></app-file-item>
+        </li>
+      </ul>
+    </div>
+  </aside>
 </div>
