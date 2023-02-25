@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 16
           cache: 'npm'
-      - run: npm ci --force &&
+      - run: npm ci --force
       - run: npm run build
       - name: deploy to server
         uses: burnett01/rsync-deployments@5.2.1
