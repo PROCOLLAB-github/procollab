@@ -1,8 +1,8 @@
 /** @format */
 
 import { Component, OnInit } from "@angular/core";
-import { ChatMessage } from "../../../models/chat-message";
-import { User } from "../../../../auth/models/user.model";
+import { ChatMessage } from "@models/chat-message";
+import { User } from "@auth/models/user.model";
 import * as dayjs from "dayjs";
 
 @Component({

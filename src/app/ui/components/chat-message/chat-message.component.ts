@@ -9,7 +9,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { ChatMessage } from "../../../office/models/chat-message";
+import { ChatMessage } from "@models/chat-message";
 
 @Component({
   selector: "app-chat-message",
