@@ -1,0 +1,35 @@
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy to server
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["master"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
+      - run: npm ci --force
+      - run: npm run build
+      - name: deploy to server
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete
+          path: dist/procollab
+          remote_path: /home/gh_deploy
+          remote_user: gh_deploy
+          remote_key: ${{ secrets.DEPLOY_KEY }}
+          remote_host: app.procollab.ru
+
