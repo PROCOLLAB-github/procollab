@@ -10,9 +10,10 @@ import { ProjectResponsesComponent } from "./responses/responses.component";
 import { ResponseCardComponent } from "../../shared/response-card/response-card.component";
 import { ProjectDetailComponent } from "./detail.component";
 import { ProjectChatComponent } from "./chat/chat.component";
+import { OfficeModule } from "@office/office.module";
 
 @NgModule({
-  imports: [UiModule, CoreModule, CommonModule, ProjectDetailRoutingModule],
+  imports: [UiModule, CoreModule, CommonModule, ProjectDetailRoutingModule, OfficeModule],
   declarations: [
     ProjectInfoComponent,
     ProjectResponsesComponent,
