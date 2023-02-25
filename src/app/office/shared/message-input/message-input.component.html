@@ -1,0 +1,21 @@
+<!-- @format -->
+
+<div class="message-input">
+  <input type="text" class="message-input__field" />
+  <label class="message-input__attach-button text-bold-body-14">
+    <input
+      type="file"
+      [value]="value.text"
+      (input)="onInput($event)"
+      (keydown.enter)="enter.emit()"
+      (blur)="onBlur()"
+      [placeholder]="placeholder"
+      [mask]="mask"
+      [dropSpecialCharacters]="true"
+    />
+    <div class="message-input__attach-button-box">
+      <i appIcon icon="attach" appSquare="24"></i>
+    </div>
+  </label>
+  <button class="message-input__send-button"><i appIcon icon="send" appSquare="24"></i></button>
+</div>

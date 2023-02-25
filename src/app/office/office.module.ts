@@ -19,6 +19,8 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { MentorsComponent } from "./mentors/mentors.component";
 import { ProjectsModule } from "./projects/projects.module";
 import { InviteManageCardComponent } from "./shared/invite-manage-card/invite-manage-card.component";
+import { MessageInputComponent } from "./shared/message-input/message-input.component";
+import { NgxMaskModule } from "ngx-mask";
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { InviteManageCardComponent } from "./shared/invite-manage-card/invite-ma
     MentorsComponent,
     MemberCardComponent,
     AdvertCardComponent,
+    MessageInputComponent,
   ],
   imports: [
     OfficeRoutingModule,
@@ -42,6 +45,8 @@ import { InviteManageCardComponent } from "./shared/invite-manage-card/invite-ma
     CoreModule,
     ClickOutsideModule,
     ReactiveFormsModule,
+    NgxMaskModule,
   ],
+  exports: [MessageInputComponent],
 })
 export class OfficeModule {}

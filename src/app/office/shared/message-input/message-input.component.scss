@@ -1,0 +1,53 @@
+/** @format */
+
+$button-size: 40px;
+
+.message-input {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--gray);
+
+  &__field {
+    color: var(--dark-gray);
+    border: none;
+    outline: none;
+    flex-grow: 1;
+  }
+
+  &__attach-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--gray);
+    margin-left: auto;
+    border-radius: 8px;
+    width: $button-size;
+    height: $button-size;
+    color: var(--dark-gray);
+    cursor: pointer;
+
+    input {
+      display: none;
+    }
+  }
+
+  &__send-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    margin-left: 18px;
+    width: $button-size;
+    height: $button-size;
+    background-color: var(--accent);
+    transition: background-color 0.2s;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--accent-dark);
+    }
+  }
+}
