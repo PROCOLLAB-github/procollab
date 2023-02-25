@@ -24,7 +24,9 @@ import { NumSliderComponent } from "./components/num-slider/num-slider.component
 import { SwitchComponent } from "./components/switch/switch.component";
 import { EditorSubmitButtonDirective } from "./directives/editor-submit-button.directive";
 import { ChatMessageComponent } from "./components/chat-message/chat-message.component";
-import { CoreModule } from "../core/core.module";
+import { ProfileInfoComponent } from "./components/profile-info/profile-info.component";
+import { CoreModule } from "@core/core.module";
+import { RouterModule } from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -45,8 +47,16 @@ import { CoreModule } from "../core/core.module";
     SwitchComponent,
     EditorSubmitButtonDirective,
     ChatMessageComponent,
+    ProfileInfoComponent,
   ],
-  imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule, CoreModule],
+  imports: [
+    CommonModule,
+    ClickOutsideModule,
+    NgxMaskModule,
+    NgxAutogrowModule,
+    CoreModule,
+    RouterModule,
+  ],
   exports: [
     ButtonComponent,
     InputComponent,
@@ -64,6 +74,7 @@ import { CoreModule } from "../core/core.module";
     SwitchComponent,
     EditorSubmitButtonDirective,
     ChatMessageComponent,
+    ProfileInfoComponent,
   ],
 })
 export class UiModule {}

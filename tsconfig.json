@@ -18,7 +18,18 @@
     "importHelpers": true,
     "target": "es2017",
     "module": "es2020",
-    "lib": ["es2020", "dom"]
+    "lib": ["es2020", "dom"],
+    "paths": {
+      "@auth/*": ["src/app/auth/*"],
+      "@ui/*": ["src/app/ui/*"],
+      "@core/*": ["src/app/core/*"],
+      "@office/*": ["src/app/office/*"],
+      "@utils/*": ["src/app/utils/*"],
+      "@environment": ["src/environments/environment.ts"],
+      "@error/*": ["src/app/error/*"],
+      "@services/*": ["src/app/office/services/*"],
+      "@models/*": ["src/app/office/models/*"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

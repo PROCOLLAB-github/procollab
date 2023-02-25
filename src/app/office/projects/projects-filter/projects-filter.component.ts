@@ -3,10 +3,10 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subscription } from "rxjs";
-import { ProjectStep } from "../../models/project.model";
-import { Industry } from "../../models/industry.model";
-import { IndustryService } from "../../services/industry.service";
-import { ProjectService } from "../../services/project.service";
+import { ProjectStep } from "@models/project.model";
+import { Industry } from "@models/industry.model";
+import { IndustryService } from "@services/industry.service";
+import { ProjectService } from "@services/project.service";
 
 @Component({
   selector: "app-projects-filter",

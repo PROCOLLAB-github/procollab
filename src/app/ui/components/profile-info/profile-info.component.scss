@@ -1,0 +1,42 @@
+/** @format */
+
+.user {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &__avatar {
+    display: block;
+    margin-right: 12px;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+  }
+
+  &__logout {
+    display: flex;
+    align-items: center;
+    color: var(--red);
+    transition: color 0.2s;
+    cursor: pointer;
+    margin-left: 20px;
+
+    i {
+      margin-left: 5px;
+    }
+
+    &:hover {
+      color: var(--red-dark);
+    }
+  }
+
+  &__name {
+    color: var(--black);
+  }
+
+  &__email {
+    color: var(--dark-gray);
+  }
+}

@@ -3,8 +3,8 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ProjectsRoutingModule } from "./projects-routing.module";
-import { CoreModule } from "../../core/core.module";
-import { UiModule } from "../../ui/ui.module";
+import { CoreModule } from "@core/core.module";
+import { UiModule } from "@ui/ui.module";
 import { ProjectsComponent } from "./projects.component";
 import { ProjectEditComponent } from "./edit/edit.component";
 import { ProjectsListComponent } from "./list/list.component";

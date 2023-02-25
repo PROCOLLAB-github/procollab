@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { NumSliderComponent } from './num-slider.component';
+import { NumSliderComponent } from "./num-slider.component";
 
-describe('NumSliderComponent', () => {
+describe("NumSliderComponent", () => {
   let component: NumSliderComponent;
   let fixture: ComponentFixture<NumSliderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ NumSliderComponent ]
-    })
-    .compileComponents();
+      declarations: [NumSliderComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('NumSliderComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

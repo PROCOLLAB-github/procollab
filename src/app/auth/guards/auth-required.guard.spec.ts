@@ -14,7 +14,7 @@ describe("AuthRequiredGuard", () => {
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      providers: [{ provide: AuthService, useValue: authSpy }]
+      providers: [{ provide: AuthService, useValue: authSpy }],
     });
     guard = TestBed.inject(AuthRequiredGuard);
   });

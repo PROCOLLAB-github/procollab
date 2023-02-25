@@ -5,7 +5,7 @@ import { Component, Input, OnInit } from "@angular/core";
 @Component({
   selector: "app-avatar",
   templateUrl: "./avatar.component.html",
-  styleUrls: ["./avatar.component.scss"]
+  styleUrls: ["./avatar.component.scss"],
 })
 export class AvatarComponent implements OnInit {
   @Input() url?: string;
@@ -14,9 +14,7 @@ export class AvatarComponent implements OnInit {
 
   placeholderUrl = "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif";
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

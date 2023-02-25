@@ -1,11 +1,11 @@
 /** @format */
 
 import { Meta, Story } from "@storybook/angular";
-import { ButtonComponent } from "./button.component";
+import { ButtonComponent } from "@ui/components";
 
 export default {
   title: "Button",
-  component: ButtonComponent
+  component: ButtonComponent,
 } as Meta;
 
 export const PrimaryMd: Story = () => ({

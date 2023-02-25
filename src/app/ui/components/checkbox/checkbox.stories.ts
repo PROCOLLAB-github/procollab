@@ -1,11 +1,11 @@
 /** @format */
 
 import { Meta, Story } from "@storybook/angular";
-import { CheckboxComponent } from "./checkbox.component";
+import { CheckboxComponent } from "@ui/components";
 
 export default {
   title: "Checkbox",
-  component: CheckboxComponent
+  component: CheckboxComponent,
 } as Meta;
 
 const Template: Story = args => ({

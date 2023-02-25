@@ -3,7 +3,7 @@
 import { TestBed } from "@angular/core/testing";
 
 import { ProfileDetailResolver } from "./profile-detail.resolver";
-import { AuthService } from "../../../auth/services";
+import { AuthService } from "@auth/services";
 
 describe("ProfileDetailResolver", () => {
   let resolver: ProfileDetailResolver;

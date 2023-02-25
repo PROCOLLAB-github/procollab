@@ -1,6 +1,6 @@
 /** @format */
 
-import { User } from "../../auth/models/user.model";
+import { User } from "@auth/models/user.model";
 
 export class VacancyResponse {
   id!: number;

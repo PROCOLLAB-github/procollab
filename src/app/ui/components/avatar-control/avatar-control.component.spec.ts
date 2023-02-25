@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AvatarControlComponent } from "./avatar-control.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { AuthService } from "../../../auth/services";
+import { AuthService } from "@auth/services";
 
 describe("AvatarControlComponent", () => {
   let component: AvatarControlComponent;
@@ -16,7 +16,7 @@ describe("AvatarControlComponent", () => {
     await TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [{ provide: AuthService, useValue: autSpy }],
-      declarations: [AvatarControlComponent]
+      declarations: [AvatarControlComponent],
     }).compileComponents();
   });
 

@@ -52,17 +52,10 @@
         </div>
       </div>
       <div class="header__separator"></div>
-      <a
+      <app-profile-info
         *ngIf="authService.profile | async as user"
-        class="user"
-        [routerLink]="['/office/profile', user.id]"
-      >
-        <app-avatar class="user__avatar" [url]="user.avatar"></app-avatar>
-        <div>
-          <div class="text-bold-body-14 user__name">{{ user.firstName }} {{ user.lastName }}</div>
-          <div class="text-body-14 user__email">{{ user.email }}</div>
-        </div>
-      </a>
+        [user]="user"
+      ></app-profile-info>
     </div>
   </div>
 </header>

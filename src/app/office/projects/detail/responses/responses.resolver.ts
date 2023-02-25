@@ -3,8 +3,8 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve } from "@angular/router";
 import { Observable } from "rxjs";
-import { VacancyResponse } from "../../../models/vacancy-response.model";
-import { VacancyService } from "../../../services/vacancy.service";
+import { VacancyResponse } from "@models/vacancy-response.model";
+import { VacancyService } from "@services/vacancy.service";
 
 @Injectable({
   providedIn: "root",

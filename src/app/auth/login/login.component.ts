@@ -3,7 +3,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
-import { ErrorMessage } from "../../error/models/error-message";
+import { ErrorMessage } from "@error/models/error-message";
 import { ValidationService } from "src/app/core/services";
 import { Router } from "@angular/router";
 

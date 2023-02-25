@@ -1,9 +1,9 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ApiService } from "../../core/services";
+import { ApiService } from "@core/services";
 import { BehaviorSubject, catchError, map, Observable, tap, throwError } from "rxjs";
-import { Industry } from "../models/industry.model";
+import { Industry } from "@models/industry.model";
 import { plainToInstance } from "class-transformer";
 
 @Injectable({

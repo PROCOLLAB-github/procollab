@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { VacancyCardComponent } from "./vacancy-card.component";
 import { of } from "rxjs";
-import { AuthService } from "../../../auth/services";
+import { AuthService } from "@auth/services";
 
 describe("VacancyCardComponent", () => {
   let component: VacancyCardComponent;

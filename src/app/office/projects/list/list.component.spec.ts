@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ProjectsListComponent } from "./list.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
-import { AuthService } from "../../../auth/services";
+import { AuthService } from "@auth/services";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("ProjectsListComponent", () => {

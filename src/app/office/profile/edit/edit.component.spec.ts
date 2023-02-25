@@ -6,12 +6,12 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ProfileEditComponent } from "./edit.component";
 import { of } from "rxjs";
-import { AuthService } from "../../../auth/services";
+import { AuthService } from "@auth/services";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { CoreModule } from "../../../core/core.module";
-import { UiModule } from "../../../ui/ui.module";
+import { CoreModule } from "@core/core.module";
+import { UiModule } from "@ui/ui.module";
 import { NgxMaskModule } from "ngx-mask";
 
 describe("ProfileEditComponent", () => {

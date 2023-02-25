@@ -1,10 +1,10 @@
 /** @format */
 
 import { Component, Input, OnInit } from "@angular/core";
-import { NotificationService } from "../../services/notification.service";
-import { AuthService } from "../../../auth/services";
-import { Invite } from "../../models/invite.model";
-import { InviteService } from "../../services/invite.service";
+import { NotificationService } from "@services/notification.service";
+import { AuthService } from "@auth/services";
+import { Invite } from "@models/invite.model";
+import { InviteService } from "@services/invite.service";
 import { Router } from "@angular/router";
 
 @Component({

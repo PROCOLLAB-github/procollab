@@ -1,13 +1,13 @@
 /** @format */
 
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { NavService } from "../../services/nav.service";
+import { NavService } from "@services/nav.service";
 import { NavigationStart, Router } from "@angular/router";
 import { Subscription } from "rxjs";
-import { NotificationService } from "../../services/notification.service";
-import { Invite } from "../../models/invite.model";
-import { AuthService } from "../../../auth/services";
-import { InviteService } from "../../services/invite.service";
+import { NotificationService } from "@services/notification.service";
+import { Invite } from "@models/invite.model";
+import { AuthService } from "@auth/services";
+import { InviteService } from "@services/invite.service";
 
 @Component({
   selector: "app-nav",

@@ -3,7 +3,7 @@
 import { TestBed } from "@angular/core/testing";
 
 import { MembersResolver } from "./members.resolver";
-import { MemberService } from "../services/member.service";
+import { MemberService } from "@services/member.service";
 
 describe("MembersResolver", () => {
   let resolver: MembersResolver;

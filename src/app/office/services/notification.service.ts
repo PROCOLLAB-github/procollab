@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, map } from "rxjs";
-import { Notification } from "../models/notification.model";
+import { Notification } from "@models/notification.model";
 
 @Injectable({
   providedIn: "root",

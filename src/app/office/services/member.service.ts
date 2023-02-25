@@ -1,9 +1,9 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ApiService } from "../../core/services";
+import { ApiService } from "@core/services";
 import { map, Observable } from "rxjs";
-import { User } from "../../auth/models/user.model";
+import { User } from "@auth/models/user.model";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
 
