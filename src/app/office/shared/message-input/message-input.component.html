@@ -1,18 +1,21 @@
 <!-- @format -->
 
 <div class="message-input">
-  <input type="text" class="message-input__field" />
+  <textarea
+    autosize
+    (input)="onInput($event)"
+    (keydown.enter)="enter.emit()"
+    (blur)="onBlur()"
+    (resized)="resize.emit()"
+    [mask]="mask"
+    [dropSpecialCharacters]="true"
+    [placeholder]="placeholder"
+    rows="1"
+    class="message-input__field text-body-14"
+    >{{ value.text }}</textarea
+  >
   <label class="message-input__attach-button text-bold-body-14">
-    <input
-      type="file"
-      [value]="value.text"
-      (input)="onInput($event)"
-      (keydown.enter)="enter.emit()"
-      (blur)="onBlur()"
-      [placeholder]="placeholder"
-      [mask]="mask"
-      [dropSpecialCharacters]="true"
-    />
+    <input type="file" />
     <div class="message-input__attach-button-box">
       <i appIcon icon="attach" appSquare="24"></i>
     </div>
