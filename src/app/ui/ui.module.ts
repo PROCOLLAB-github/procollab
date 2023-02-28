@@ -14,7 +14,6 @@ import { NgxMaskModule } from "ngx-mask";
 import { AvatarComponent } from "./components/avatar/avatar.component";
 import { TagComponent } from "./components/tag/tag.component";
 import { TextareaComponent } from "./components/textarea/textarea.component";
-import { NgxAutogrowModule } from "ngx-autogrow";
 import { LoaderComponent } from "./components/loader/loader.component";
 import { ModalComponent } from "./components/modal/modal.component";
 import { AvatarControlComponent } from "./components/avatar-control/avatar-control.component";
@@ -28,6 +27,7 @@ import { ProfileInfoComponent } from "./components/profile-info/profile-info.com
 import { CoreModule } from "@core/core.module";
 import { RouterModule } from "@angular/router";
 import { FileItemComponent } from "./components/file-item/file-item.component";
+import { AutosizeModule } from "ngx-autosize";
 
 @NgModule({
   declarations: [
@@ -55,9 +55,9 @@ import { FileItemComponent } from "./components/file-item/file-item.component";
     CommonModule,
     ClickOutsideModule,
     NgxMaskModule,
-    NgxAutogrowModule,
     CoreModule,
     RouterModule,
+    AutosizeModule,
   ],
   exports: [
     ButtonComponent,
