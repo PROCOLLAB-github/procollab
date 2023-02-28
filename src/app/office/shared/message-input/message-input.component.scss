@@ -10,10 +10,15 @@ $button-size: 40px;
   border: 1px solid var(--gray);
 
   &__field {
-    color: var(--dark-gray);
+    color: var(--dark);
     border: none;
     outline: none;
     flex-grow: 1;
+    resize: none;
+
+    &::placeholder {
+      color: var(--dark-gray);
+    }
   }
 
   &__attach-button {

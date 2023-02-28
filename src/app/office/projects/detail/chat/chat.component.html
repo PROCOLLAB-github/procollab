@@ -1,35 +1,67 @@
 <!-- @format -->
-<div class="chat">
-  <div class="chat__main main">
+<div class="chat-page" *ngIf="project$ | async as project">
+  <div class="chat-page__main main">
     <header class="main__header">
       <div class="main__project">
-        <div class="main__avatar"></div>
-        <div class="main__name"></div>
+        <app-avatar class="main__avatar" [url]="project.imageAddress" [size]="26"></app-avatar>
+        <div class="main__name text-heading-4">{{ project.name }}</div>
       </div>
       <div class="main__meta">
-        <ul class="main__members-list">
-          <li class="main__member-avatar"></li>
+        <ul class="main__members-list" [style.width]="members.length * 10 + 10 + 'px'">
+          <li
+            class="main__member-avatar"
+            *ngFor="let member of members; index as index"
+            [style.left]="index * -10 + 'px'"
+            [style.z-index]="index"
+          >
+            <app-avatar [url]="member.avatar" [size]="20"></app-avatar>
+          </li>
         </ul>
-        <div class="main__count"></div>
-        <div class="main__count-online"></div>
+        <div class="main__count">
+          {{ members.length }}
+          {{ pularize(members.length, ["Участник", "Участника", "Участников"]) }}
+        </div>
+        <div class="main__dot">•</div>
+        <div class="main__count-online">{{ membersOnlineCount }} online</div>
       </div>
     </header>
-    <div class="main__chat">
-      <app-chat-message [chatMessage]="message" *ngFor="let message of messages"></app-chat-message>
+    <div class="main__chat chat">
+      <cdk-virtual-scroll-viewport
+        class="chat__messages"
+        [itemSize]="50"
+        minBufferPx="400"
+        maxBufferPx="800"
+      >
+        <app-chat-message
+          [chatMessage]="message"
+          *cdkVirtualFor="let message of messages"
+        ></app-chat-message>
+      </cdk-virtual-scroll-viewport>
+      <form class="chat__input" [formGroup]="messageForm">
+        <app-message-input
+          (resize)="onInputResize()"
+          placeholder="Введите сообщение"
+          formControlName="messageControl"
+        ></app-message-input>
+      </form>
     </div>
   </div>
-  <aside class="chat__aside">
-    <div class="members">
-      <header class="members__header">
-        <h2 class="members__title text-bold-body-16">Участники</h2>
-        <button class="members__add">
+  <aside class="chat-page__aside">
+    <div class="chat-members">
+      <header class="chat-members__header">
+        <h2 class="chat-members__title text-bold-body-16">Участники</h2>
+        <button class="chat-members__add">
           <i appIcon icon="plus" appSquare="24"></i>
         </button>
       </header>
-      <ul class="members__list">
-        <li class="members__item member">
-          <app-avatar class="member__avatar"></app-avatar>
-          <div class="member__name"></div>
+      <ul class="chat-members__list">
+        <li class="chat-members__item" *ngFor="let member of members">
+          <a class="member" [routerLink]="['/office/profile', member.id]">
+            <app-avatar class="member__avatar" [url]="member.avatar" [size]="30"></app-avatar>
+            <div class="member__name text-bold-body-14">
+              {{ member.firstName }} {{ member.lastName }}
+            </div>
+          </a>
         </li>
       </ul>
     </div>
@@ -37,7 +69,7 @@
       <h2 class="files__title text-bold-body-16">Файлы</h2>
       <ul class="files__list">
         <li class="files__item">
-          <app-file-item></app-file-item>
+          <app-file-item name="some name" size="45 mb" type="pdf"></app-file-item>
         </li>
       </ul>
     </div>

@@ -32,10 +32,11 @@ export class MessageInputComponent implements OnInit, ControlValueAccessor {
 
   @Output() appValueChange = new EventEmitter<MessageInputComponent["value"]>();
   @Output() enter = new EventEmitter<void>();
+  @Output() resize = new EventEmitter<void>();
 
   ngOnInit(): void {}
 
-  value: { text: string; files_url: [] } = { text: "", files_url: [] };
+  value: { text: string; filesUrl: [] } = { text: "", filesUrl: [] };
 
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
