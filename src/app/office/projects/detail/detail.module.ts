@@ -11,9 +11,19 @@ import { ResponseCardComponent } from "../../shared/response-card/response-card.
 import { ProjectDetailComponent } from "./detail.component";
 import { ProjectChatComponent } from "./chat/chat.component";
 import { OfficeModule } from "@office/office.module";
+import { ScrollingModule } from "@angular/cdk/scrolling";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
-  imports: [UiModule, CoreModule, CommonModule, ProjectDetailRoutingModule, OfficeModule],
+  imports: [
+    UiModule,
+    CoreModule,
+    CommonModule,
+    ProjectDetailRoutingModule,
+    OfficeModule,
+    ScrollingModule,
+    ReactiveFormsModule,
+  ],
   declarations: [
     ProjectInfoComponent,
     ProjectResponsesComponent,

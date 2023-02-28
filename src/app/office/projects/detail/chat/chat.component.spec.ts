@@ -3,6 +3,8 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ProjectChatComponent } from "./chat.component";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
 
 describe("ChatComponent", () => {
   let component: ProjectChatComponent;
@@ -10,7 +12,8 @@ describe("ChatComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProjectChatComponent],
+      declarations: [ProjectChatComponent, MessageInputComponent],
+      imports: [ReactiveFormsModule],
     }).compileComponents();
   });
 

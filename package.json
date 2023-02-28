@@ -42,7 +42,7 @@
     "fuse.js": "^6.6.2",
     "nanoid": "^4.0.0",
     "ng-click-outside": "^9.0.1",
-    "ngx-autogrow": "^3.0.1",
+    "ngx-autosize": "^2.0.4",
     "ngx-mask": "^13.0.3",
     "rxjs": "~7.5.0",
     "snakecase-keys": "^5.4.2",

@@ -21,6 +21,7 @@ import { ProjectsModule } from "./projects/projects.module";
 import { InviteManageCardComponent } from "./shared/invite-manage-card/invite-manage-card.component";
 import { MessageInputComponent } from "./shared/message-input/message-input.component";
 import { NgxMaskModule } from "ngx-mask";
+import { AutosizeModule } from "ngx-autosize";
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { NgxMaskModule } from "ngx-mask";
     ClickOutsideModule,
     ReactiveFormsModule,
     NgxMaskModule,
+    AutosizeModule,
   ],
   exports: [MessageInputComponent],
 })
