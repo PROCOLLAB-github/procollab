@@ -3,7 +3,12 @@
 @use "src/styles/responsive";
 
 .office {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
   &__body {
+    flex-grow: 1;
     padding: 20px 0 0;
     overflow-y: auto;
     background-color: var(--light-gray-1);
