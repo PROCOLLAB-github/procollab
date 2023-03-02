@@ -7,7 +7,6 @@ import { Observable, of } from "rxjs";
 import { Project } from "@models/project.model";
 import { numWord } from "@utils/num-word";
 import { NavService } from "@services/nav.service";
-import { environment } from "@environment";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { FormBuilder, FormGroup } from "@angular/forms";
 
@@ -25,10 +24,11 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.navService.setNavTitle("Чат проекта");
-    const ws = new WebSocket(environment.websocketUrl + "/chats/");
-    ws.onopen = event => {
-      console.log(event);
-    };
+    // const token = this.authService.getTokens()?.access;
+    // const ws = new WebSocket(environment.websocketUrl + `/chat/?token=${token}`);
+    // ws.onopen = event => {
+    //   console.log(event);
+    // };
   }
 
   ngAfterViewInit(): void {
@@ -68,7 +68,6 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
   membersOnlineCount = 3;
 
   onInputResize() {
-    console.log(this.viewport?.getOffsetToRenderedContentStart());
     if (this.viewport?.getOffsetToRenderedContentStart()) this.viewport?.scrollToIndex(99999);
   }
 }
