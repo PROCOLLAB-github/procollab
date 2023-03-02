@@ -33,12 +33,15 @@
         maxBufferPx="800"
       >
         <app-chat-message
+          class="chat__message"
           [chatMessage]="message"
+          (edit)="onEditMessage($event)"
           *cdkVirtualFor="let message of messages"
         ></app-chat-message>
       </cdk-virtual-scroll-viewport>
       <form class="chat__input" [formGroup]="messageForm">
         <app-message-input
+          [editingMessage]="editingMessage"
           (resize)="onInputResize()"
           placeholder="Введите сообщение"
           formControlName="messageControl"
