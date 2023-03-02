@@ -5,6 +5,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ChatMessage } from "@models/chat-message.model";
 import { map } from "rxjs";
 import { FileService } from "@core/services/file.service";
+import { getFormattedFileSize } from "@utils/formatted-file-size";
 
 @Component({
   selector: "app-message-input",
@@ -100,17 +101,6 @@ export class MessageInputComponent implements OnInit, ControlValueAccessor {
     type: string;
   }[] = [];
 
-  private getFormattedFileSize(bytes: number): string {
-    const sizes = ["Bytes", "KB", "MB", "GB"];
-
-    if (bytes === 0) return "0 Byte";
-
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    const size = Math.round(bytes / Math.pow(1024, i)).toFixed(1);
-
-    return `${size} ${sizes[i]}`;
-  }
-
   onUpload(evt: Event) {
     const files = (evt.currentTarget as HTMLInputElement).files;
 
@@ -121,7 +111,7 @@ export class MessageInputComponent implements OnInit, ControlValueAccessor {
     for (let i = 0; i < files.length; i++) {
       this.loadingFiles.push({
         name: files[i].name,
-        size: this.getFormattedFileSize(files[i].size),
+        size: getFormattedFileSize(files[i].size),
         type: files[i].type,
       });
     }
