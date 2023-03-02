@@ -25,7 +25,7 @@
       class="message-input__field text-body-14"
     ></textarea>
     <label class="message-input__attach-button text-bold-body-14">
-      <input type="file" />
+      <input type="file" multiple accept="image/*" (input)="onUpload($event)" />
       <div class="message-input__attach-button-box">
         <i appIcon icon="attach" appSquare="24"></i>
       </div>
