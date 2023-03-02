@@ -1,13 +1,18 @@
 /** @format */
 
+@use "src/styles/responsive";
+
 $button-size: 40px;
 
 .message-input {
-  display: flex;
-  align-items: center;
   padding: 12px;
   border-radius: 8px;
   border: 1px solid var(--gray);
+
+  &__control {
+    display: flex;
+    align-items: center;
+  }
 
   &__field {
     color: var(--dark);
@@ -15,6 +20,7 @@ $button-size: 40px;
     outline: none;
     flex-grow: 1;
     resize: none;
+    padding-right: 30px;
 
     &::placeholder {
       color: var(--dark-gray);
@@ -54,5 +60,39 @@ $button-size: 40px;
     &:hover {
       background-color: var(--accent-dark);
     }
+  }
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  padding-bottom: 12px;
+
+  &__icon {
+    min-width: 24px;
+    color: var(--accent);
+    margin-right: 18px;
+  }
+
+  &__text {
+    padding-left: 18px;
+    border-left: 2px solid var(--accent);
+    width: 100%;
+
+    @include responsive.apply-desktop {
+      width: 80%;
+    }
+  }
+
+  &__name {
+    color: var(--accent);
+  }
+
+  &__info {
+    color: var(--black);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 500px;
   }
 }

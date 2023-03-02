@@ -1,24 +1,35 @@
 <!-- @format -->
 
 <div class="message-input">
-  <textarea
-    autosize
-    (input)="onInput($event)"
-    (keydown.enter)="enter.emit()"
-    (blur)="onBlur()"
-    (resized)="resize.emit()"
-    [mask]="mask"
-    [dropSpecialCharacters]="true"
-    [placeholder]="placeholder"
-    rows="1"
-    class="message-input__field text-body-14"
-    >{{ value.text }}</textarea
-  >
-  <label class="message-input__attach-button text-bold-body-14">
-    <input type="file" />
-    <div class="message-input__attach-button-box">
-      <i appIcon icon="attach" appSquare="24"></i>
+  <div *ngIf="editingMessage" class="message-input__action action">
+    <i class="action__icon" appIcon icon="edit-pen" appSquare="24"></i>
+    <div class="action__text">
+      <div class="action__name text-body-12">
+        {{ editingMessage.sender.firstName }} {{ editingMessage.sender.lastName }}
+      </div>
+      <div class="action__info text-body-14">{{ editingMessage.content }}</div>
     </div>
-  </label>
-  <button class="message-input__send-button"><i appIcon icon="send" appSquare="24"></i></button>
+  </div>
+  <div class="message-input__control">
+    <textarea
+      autosize
+      (input)="onInput($event)"
+      (keydown.enter)="enter.emit()"
+      (blur)="onBlur()"
+      (resized)="resize.emit()"
+      [mask]="mask"
+      [dropSpecialCharacters]="true"
+      [placeholder]="placeholder"
+      rows="1"
+      [value]="value.text"
+      class="message-input__field text-body-14"
+    ></textarea>
+    <label class="message-input__attach-button text-bold-body-14">
+      <input type="file" />
+      <div class="message-input__attach-button-box">
+        <i appIcon icon="attach" appSquare="24"></i>
+      </div>
+    </label>
+    <button class="message-input__send-button"><i appIcon icon="send" appSquare="24"></i></button>
+  </div>
 </div>

@@ -1,7 +1,7 @@
 /** @format */
 
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
-import { ChatMessage } from "@models/chat-message";
+import { ChatMessage } from "@models/chat-message.model";
 import { User } from "@auth/models/user.model";
 import { Observable, of } from "rxjs";
 import { Project } from "@models/project.model";
@@ -55,6 +55,8 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
 
   project$: Observable<Project> = of(Project.default());
 
+  editingMessage?: ChatMessage;
+
   members: User[] = [
     User.default(),
     User.default(),
@@ -67,7 +69,14 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
 
   membersOnlineCount = 3;
 
-  onInputResize() {
+  onInputResize(): void {
     if (this.viewport?.getOffsetToRenderedContentStart()) this.viewport?.scrollToIndex(99999);
+  }
+
+  onEditMessage(messageId: number): void {
+    const message = this.messages.find(message => message.id === messageId);
+    this.editingMessage = message;
+
+    console.log(message);
   }
 }
