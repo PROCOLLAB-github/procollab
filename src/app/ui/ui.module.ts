@@ -14,7 +14,6 @@ import { NgxMaskModule } from "ngx-mask";
 import { AvatarComponent } from "./components/avatar/avatar.component";
 import { TagComponent } from "./components/tag/tag.component";
 import { TextareaComponent } from "./components/textarea/textarea.component";
-import { NgxAutogrowModule } from "ngx-autogrow";
 import { LoaderComponent } from "./components/loader/loader.component";
 import { ModalComponent } from "./components/modal/modal.component";
 import { AvatarControlComponent } from "./components/avatar-control/avatar-control.component";
@@ -24,7 +23,12 @@ import { NumSliderComponent } from "./components/num-slider/num-slider.component
 import { SwitchComponent } from "./components/switch/switch.component";
 import { EditorSubmitButtonDirective } from "./directives/editor-submit-button.directive";
 import { ChatMessageComponent } from "./components/chat-message/chat-message.component";
-import { CoreModule } from "../core/core.module";
+import { ProfileInfoComponent } from "./components/profile-info/profile-info.component";
+import { CoreModule } from "@core/core.module";
+import { RouterModule } from "@angular/router";
+import { FileItemComponent } from "./components/file-item/file-item.component";
+import { AutosizeModule } from "ngx-autosize";
+import { SnackbarComponent } from "./components/snackbar/snackbar.component";
 
 @NgModule({
   declarations: [
@@ -45,8 +49,18 @@ import { CoreModule } from "../core/core.module";
     SwitchComponent,
     EditorSubmitButtonDirective,
     ChatMessageComponent,
+    ProfileInfoComponent,
+    FileItemComponent,
+    SnackbarComponent,
   ],
-  imports: [CommonModule, ClickOutsideModule, NgxMaskModule, NgxAutogrowModule, CoreModule],
+  imports: [
+    CommonModule,
+    ClickOutsideModule,
+    NgxMaskModule,
+    CoreModule,
+    RouterModule,
+    AutosizeModule,
+  ],
   exports: [
     ButtonComponent,
     InputComponent,
@@ -65,6 +79,8 @@ import { CoreModule } from "../core/core.module";
     EditorSubmitButtonDirective,
     ChatMessageComponent,
     ProfileInfoComponent,
+    FileItemComponent,
+    SnackbarComponent,
   ],
 })
 export class UiModule {}

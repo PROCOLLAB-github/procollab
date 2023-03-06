@@ -10,6 +10,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ChatMessage } from "@models/chat-message.model";
+import { SnackbarService } from "@ui/services/snackbar.service";
 
 @Component({
   selector: "app-chat-message",
@@ -17,7 +18,10 @@ import { ChatMessage } from "@models/chat-message.model";
   styleUrls: ["./chat-message.component.scss"],
 })
 export class ChatMessageComponent implements OnInit {
-  constructor(private readonly elRef: ElementRef<HTMLElement>) {}
+  constructor(
+    private readonly elRef: ElementRef<HTMLElement>,
+    private readonly snackbarService: SnackbarService
+  ) {}
 
   @Input() chatMessage!: ChatMessage;
 
@@ -54,6 +58,7 @@ export class ChatMessageComponent implements OnInit {
     this.contextmenuOpen = false;
 
     navigator.clipboard.writeText(this.chatMessage.content).then(() => {
+      this.snackbarService.success("Сообщение скопированно");
       console.debug("Text copied in ChatMessageComponent");
     });
   }
