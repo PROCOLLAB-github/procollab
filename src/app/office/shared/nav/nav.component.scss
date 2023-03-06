@@ -5,7 +5,7 @@
 
 .nav-bar {
   padding: 55px 0 20px;
-  background-color: var(--light-gray-1);
+  background-color: var(--light-gray);
 
   @include responsive.apply-desktop {
     padding: 20px 0;
