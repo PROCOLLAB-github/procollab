@@ -28,6 +28,7 @@ import { CoreModule } from "@core/core.module";
 import { RouterModule } from "@angular/router";
 import { FileItemComponent } from "./components/file-item/file-item.component";
 import { AutosizeModule } from "ngx-autosize";
+import { SnackbarComponent } from "./components/snackbar/snackbar.component";
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { AutosizeModule } from "ngx-autosize";
     ChatMessageComponent,
     ProfileInfoComponent,
     FileItemComponent,
+    SnackbarComponent,
   ],
   imports: [
     CommonModule,
@@ -78,6 +80,7 @@ import { AutosizeModule } from "ngx-autosize";
     ChatMessageComponent,
     ProfileInfoComponent,
     FileItemComponent,
+    SnackbarComponent,
   ],
 })
 export class UiModule {}
