@@ -1,6 +1,27 @@
 <!-- @format -->
 
 <div class="message-input">
+  <ul *ngIf="attachFiles.length" class="message-input__action action files-list">
+    <li
+      class="files-list__item file"
+      [class.file--loading]="file.loading"
+      *ngFor="let file of attachFiles; index as index"
+    >
+      <i class="file__type" appIcon [icon]="'file_' + file.type" appSquare="24"></i>
+      <h3 class="file__name">{{ file.name }}</h3>
+      <div class="file__size">{{ file.size }}</div>
+
+      <i *ngIf="file.loading" appIcon icon="spinner" appSquare="24"></i>
+      <i
+        class="file__basket"
+        *ngIf="!file.loading"
+        appIcon
+        icon="basket"
+        appSquare="24"
+        (click)="onDeleteFile(index)"
+      ></i>
+    </li>
+  </ul>
   <div *ngIf="editingMessage" class="message-input__action action">
     <i class="action__icon" appIcon icon="edit-pen" appSquare="24"></i>
     <div class="action__text">
@@ -25,7 +46,7 @@
       class="message-input__field text-body-14"
     ></textarea>
     <label class="message-input__attach-button text-bold-body-14">
-      <input type="file" multiple accept="image/*" (input)="onUpload($event)" />
+      <input type="file" multiple accept="*/*" (input)="onUpload($event)" />
       <div class="message-input__attach-button-box">
         <i appIcon icon="attach" appSquare="24"></i>
       </div>

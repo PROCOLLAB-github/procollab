@@ -95,10 +95,12 @@ export class MessageInputComponent implements OnInit, ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  loadingFiles: {
+  attachFiles: {
     name: string;
     size: string;
     type: string;
+    url?: string;
+    loading: boolean;
   }[] = [];
 
   onUpload(evt: Event) {
@@ -109,10 +111,11 @@ export class MessageInputComponent implements OnInit, ControlValueAccessor {
     }
 
     for (let i = 0; i < files.length; i++) {
-      this.loadingFiles.push({
+      this.attachFiles.push({
         name: files[i].name,
         size: getFormattedFileSize(files[i].size),
-        type: files[i].type,
+        type: files[i].type.split("/")[1],
+        loading: true,
       });
     }
 
@@ -130,15 +133,29 @@ export class MessageInputComponent implements OnInit, ControlValueAccessor {
             this.onChange(this.value);
 
             setTimeout(() => {
-              this.loadingFiles.splice(i, 1);
+              this.attachFiles[i].loading = false;
+              this.attachFiles[i].url = url;
             });
           },
           complete: () => {
             setTimeout(() => {
-              this.loadingFiles.splice(i, 1);
+              this.attachFiles[i].loading = false;
             });
           },
         });
     }
+  }
+
+  onDeleteFile(idx: number): void {
+    const file = this.attachFiles[idx];
+    if (!file || !file.url) return;
+
+    this.fileService.deleteFile(file.url).subscribe(() => {
+      this.attachFiles.splice(idx, 1);
+
+      this.value.filesUrl.splice(idx, 1);
+
+      this.onChange(this.value);
+    });
   }
 }

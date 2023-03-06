@@ -1,6 +1,7 @@
 /** @format */
 
 @use "src/styles/responsive";
+@use "src/styles/typography";
 
 $button-size: 40px;
 
@@ -94,5 +95,63 @@ $button-size: 40px;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 500px;
+  }
+}
+
+.files-list {
+  display: flex;
+  padding: 0 0 12px 0;
+  list-style-type: none;
+
+  &__item {
+    &:not(:last-child) {
+      margin-right: 18px;
+    }
+  }
+}
+
+.file {
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid var(--medium-grey-from-outline);
+  min-width: 140px;
+
+  &--loading {
+    .file__name {
+      color: var(--dark-gray);
+    }
+
+    .file__type {
+      opacity: 0.3;
+      filter: grayscale(1);
+    }
+  }
+
+  &__type {
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  &__name {
+    color: var(--black);
+
+    @include typography.body-14;
+  }
+
+  &__size {
+    color: var(--dark-gray);
+    margin-bottom: 12px;
+
+    @include typography.body-12;
+  }
+
+  &__basket {
+    color: var(--red);
+    transition: color 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--red-dark);
+    }
   }
 }
