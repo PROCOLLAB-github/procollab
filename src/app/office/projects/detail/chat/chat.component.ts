@@ -31,6 +31,22 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
     // );
     // ws.onopen = event => {
     //   console.log(event);
+
+    // ws.send(
+    //   JSON.stringify({
+    //     type: "set_online",
+    //     content: {
+    // chat_type: "project",
+    // chat_id: "120",
+    // message: "some info",
+    // reply_to: null,
+    // },
+    // })
+    // );
+
+    // ws.onmessage = message => {
+    //   console.log(message);
+    // };
     // };
   }
 
