@@ -41,6 +41,8 @@ export class MessageInputComponent implements OnInit, ControlValueAccessor {
     return this._editingMessage;
   }
 
+  @Input() replyMessage?: ChatMessage
+
   @Input()
   set appValue(value: MessageInputComponent["value"]) {
     this.value = value;
@@ -53,6 +55,7 @@ export class MessageInputComponent implements OnInit, ControlValueAccessor {
   @Output() appValueChange = new EventEmitter<MessageInputComponent["value"]>();
   @Output() enter = new EventEmitter<void>();
   @Output() resize = new EventEmitter<void>();
+  @Output() cancel = new EventEmitter<void>()
 
   ngOnInit(): void {}
 

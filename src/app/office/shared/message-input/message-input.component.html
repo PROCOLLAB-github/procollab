@@ -30,6 +30,17 @@
       </div>
       <div class="action__info text-body-14">{{ editingMessage.content }}</div>
     </div>
+    <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
+  </div>
+  <div *ngIf="replyMessage" class="message-input__action action">
+    <i class="action__icon" appIcon icon="reply" appSquare="24"></i>
+    <div class="action__text">
+      <div class="action__name text-body-12">
+        {{ replyMessage.sender.firstName }} {{ replyMessage.sender.lastName }}
+      </div>
+      <div class="action__info text-body-14">{{ replyMessage.content }}</div>
+    </div>
+    <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
   </div>
   <div class="message-input__control">
     <textarea

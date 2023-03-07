@@ -25,7 +25,7 @@ export class ChatMessageComponent implements OnInit {
 
   @Input() chatMessage!: ChatMessage;
 
-  @Output() resend = new EventEmitter<number>();
+  @Output() reply = new EventEmitter<number>();
   @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
 
@@ -74,10 +74,10 @@ export class ChatMessageComponent implements OnInit {
     this.contextmenuOpen = false;
   }
 
-  onResend(event: MouseEvent) {
+  onReply(event: MouseEvent) {
     event.stopPropagation();
 
-    this.resend.emit(this.chatMessage.id);
+    this.reply.emit(this.chatMessage.id);
     this.contextmenuOpen = false;
   }
 

@@ -36,13 +36,16 @@
           class="chat__message"
           [chatMessage]="message"
           (edit)="onEditMessage($event)"
+          (reply)="onReplyMessage($event)"
           *cdkVirtualFor="let message of messages"
         ></app-chat-message>
       </cdk-virtual-scroll-viewport>
       <form class="chat__input" [formGroup]="messageForm">
         <app-message-input
           [editingMessage]="editingMessage"
+          [replyMessage]="replyMessage"
           (resize)="onInputResize()"
+          (cancel)="onCancelInput()"
           placeholder="Введите сообщение"
           formControlName="messageControl"
         ></app-message-input>

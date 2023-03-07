@@ -75,6 +75,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
   project$: Observable<Project> = of(Project.default());
 
   editingMessage?: ChatMessage;
+  replyMessage?: ChatMessage;
 
   members: User[] = [
     User.default(),
@@ -93,9 +94,17 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
   }
 
   onEditMessage(messageId: number): void {
-    const message = this.messages.find(message => message.id === messageId);
-    this.editingMessage = message;
+    this.replyMessage = undefined;
+    this.editingMessage = this.messages.find(message => message.id === messageId);
+  }
 
-    console.log(message);
+  onReplyMessage(messageId: number): void {
+    this.editingMessage = undefined;
+    this.replyMessage = this.messages.find(message => message.id === messageId);
+  }
+
+  onCancelInput(): void {
+    this.replyMessage = undefined
+    this.editingMessage = undefined
   }
 }

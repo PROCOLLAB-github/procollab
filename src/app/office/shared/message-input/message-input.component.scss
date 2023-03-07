@@ -96,6 +96,17 @@ $button-size: 40px;
     white-space: nowrap;
     width: 500px;
   }
+
+  &__cross {
+    color: var(--red);
+    margin-left: auto;
+    transition: color 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--red-dark);
+    }
+  }
 }
 
 .files-list {
