@@ -4,7 +4,7 @@ import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
-import { concatMap, map } from "rxjs";
+import { catchError, concatMap, map, of } from "rxjs";
 
 @Component({
   selector: "app-avatar-control",
@@ -56,9 +56,12 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
 
     this.loading = true;
 
-    console.log(this.value);
     const source = this.value
       ? this.fileService.deleteFile(this.value).pipe(
+          catchError(err => {
+            console.error(err);
+            return of({});
+          }),
           concatMap(() => this.fileService.uploadFile(files[0])),
           map(r => r["url"])
         )
