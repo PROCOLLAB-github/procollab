@@ -27,13 +27,10 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
 
   controlId = nanoid(3);
 
-  placeholderUrl =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfRvoKyPWxl-0EExOVhrqc56QcPcWK-Tloew&usqp=CAU";
-
   value = "";
 
   writeValue(address: string) {
-    this.value = address || this.placeholderUrl;
+    this.value = address;
   }
 
   onTouch: () => void = () => {};
@@ -59,6 +56,7 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
 
     this.loading = true;
 
+    console.log(this.value);
     const source = this.value
       ? this.fileService.deleteFile(this.value).pipe(
           concatMap(() => this.fileService.uploadFile(files[0])),

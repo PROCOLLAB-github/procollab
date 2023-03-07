@@ -10,7 +10,12 @@
     (change)="onUpdate($event)"
   />
   <label [for]="controlId" class="control__label">
-    <img [src]="value" alt="avatar" class="control__img" />
+    <img *ngIf="value" [src]="value" alt="avatar" class="control__img" />
+    <img
+      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfRvoKyPWxl-0EExOVhrqc56QcPcWK-Tloew&usqp=CAU"
+      alt="avatar"
+      class="control__img"
+    />
     <div class="control__overlay">
       <i appIcon icon="edit-pen" appSquare="32"></i>
     </div>
