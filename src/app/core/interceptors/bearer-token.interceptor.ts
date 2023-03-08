@@ -16,7 +16,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   private retry = 0;
-  private retryCount = 3;
+  private maxRetryCount = 3;
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const headers: Record<string, string> = {
@@ -30,10 +30,10 @@ export class BearerTokenInterceptor implements HttpInterceptor {
     }
 
     const req = request.clone({ setHeaders: headers });
-    if (tokens !== null && this.retry < this.retryCount) {
+    if (tokens !== null && this.retry < this.maxRetryCount) {
       return next.handle(req).pipe(
         catchError((error: HttpErrorResponse) => {
-          if (error.status === 502) {
+          if (error.status === 401) {
             this.retry++;
             return this.handle401(request, next);
           }
