@@ -16,7 +16,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   private retry = 0;
-  private maxRetryCount = 3;
+  private maxRetryCount = 6;
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const headers: Record<string, string> = {
@@ -64,6 +64,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
           headers["Authorization"] = `Bearer ${tokens.access}`;
         }
 
+        this.retry = 0;
         return next.handle(
           request.clone({
             setHeaders: headers,
