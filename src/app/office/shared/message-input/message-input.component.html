@@ -64,4 +64,20 @@
     </label>
     <button class="message-input__send-button"><i appIcon icon="send" appSquare="24"></i></button>
   </div>
+  <div class="drop-modal" *ngIf="showDropModal">
+    <div class="drop-modal__overlay"></div>
+    <div class="drop-modal__body">
+      <img
+        src="assets/images/projects/chat/drop.png"
+        alt="drop files"
+        class="drop-modal__img"
+        width="105px"
+        height="105px"
+      />
+      <h3 class="drop-modal__title text-bold-body-16">Перетащите сюда файлы для отправки</h3>
+      <p class="drop-modal__comments text-body-14">
+        Вы можете добавить к ним комментарий или отправить отдельно
+      </p>
+    </div>
+  </div>
 </div>

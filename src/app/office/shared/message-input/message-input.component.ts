@@ -1,9 +1,17 @@
 /** @format */
 
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ChatMessage } from "@models/chat-message.model";
-import { map } from "rxjs";
+import { fromEvent, map, Subscription } from "rxjs";
 import { FileService } from "@core/services/file.service";
 import { getFormattedFileSize } from "@utils/formatted-file-size";
 
@@ -19,7 +27,7 @@ import { getFormattedFileSize } from "@utils/formatted-file-size";
     },
   ],
 })
-export class MessageInputComponent implements OnInit, ControlValueAccessor {
+export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
   constructor(private readonly fileService: FileService) {}
 
   @Input() placeholder = "";
@@ -41,7 +49,7 @@ export class MessageInputComponent implements OnInit, ControlValueAccessor {
     return this._editingMessage;
   }
 
-  @Input() replyMessage?: ChatMessage
+  @Input() replyMessage?: ChatMessage;
 
   @Input()
   set appValue(value: MessageInputComponent["value"]) {
@@ -55,9 +63,44 @@ export class MessageInputComponent implements OnInit, ControlValueAccessor {
   @Output() appValueChange = new EventEmitter<MessageInputComponent["value"]>();
   @Output() enter = new EventEmitter<void>();
   @Output() resize = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>()
+  @Output() cancel = new EventEmitter<void>();
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const dragOver$ = fromEvent<DragEvent>(document, "dragover")
+      .pipe()
+      .subscribe(this.handleDragOver.bind(this));
+    dragOver$ && this.subscriptions$.push(dragOver$);
+
+    const drop$ = fromEvent<DragEvent>(document, "drop").subscribe(this.handleDrop.bind(this));
+    drop$ && this.subscriptions$.push(drop$);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions$.forEach($ => $.unsubscribe());
+  }
+
+  private handleDragOver(event: DragEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.showDropModal = true;
+  }
+
+  private handleDrop(event: DragEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const files = event.dataTransfer?.files;
+    if (!files) return;
+
+    this.addFiles(files);
+
+    this.showDropModal = false;
+  }
+
+  showDropModal = false;
+
+  subscriptions$: Subscription[] = [];
 
   value: { text: string; filesUrl: string[] } = { text: "", filesUrl: [] };
 
@@ -113,6 +156,10 @@ export class MessageInputComponent implements OnInit, ControlValueAccessor {
       return;
     }
 
+    this.addFiles(files);
+  }
+
+  private addFiles(files: FileList): void {
     for (let i = 0; i < files.length; i++) {
       this.attachFiles.push({
         name: files[i].name,

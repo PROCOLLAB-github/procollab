@@ -166,3 +166,52 @@ $button-size: 40px;
     }
   }
 }
+
+.drop-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--black);
+    opacity: 0.5;
+  }
+
+  &__body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px;
+    border-radius: 5px;
+    background-color: var(--white);
+    border: 2px dashed var(--accent);
+  }
+
+  &__img {
+    margin-bottom: 12px;
+  }
+
+  &__title {
+    margin-bottom: 12px;
+    text-align: center;
+    width: 245px;
+    color: var(--black);
+  }
+
+  &__comments {
+    text-align: center;
+    width: 325px;
+    color: var(--dark-gray);
+  }
+}
