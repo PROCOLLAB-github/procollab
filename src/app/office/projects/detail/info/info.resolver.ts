@@ -16,7 +16,6 @@ export class ProjectInfoResolver implements Resolve<[Project, Vacancy[]]> {
 
   resolve(route: ActivatedRouteSnapshot): Observable<[Project, Vacancy[]]> {
     const projectId = Number(route.paramMap.get("projectId"));
-    console.log(projectId);
 
     return forkJoin([
       this.projectService.getOne(projectId),
