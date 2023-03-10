@@ -7,10 +7,13 @@
         <div class="main__name text-heading-4">{{ project.name }}</div>
       </div>
       <div class="main__meta">
-        <ul class="main__members-list" [style.width]="members.length * 10 + 10 + 'px'">
+        <ul
+          class="main__members-list"
+          [style.width]="project.collaborators.length * 10 + 10 + 'px'"
+        >
           <li
             class="main__member-avatar"
-            *ngFor="let member of members; index as index"
+            *ngFor="let member of project.collaborators; index as index"
             [style.left]="index * -10 + 'px'"
             [style.z-index]="index"
           >
@@ -18,8 +21,8 @@
           </li>
         </ul>
         <div class="main__count">
-          {{ members.length }}
-          {{ pularize(members.length, ["Участник", "Участника", "Участников"]) }}
+          {{ project.collaborators.length }}
+          {{ pularize(project.collaborators.length, ["Участник", "Участника", "Участников"]) }}
         </div>
         <div class="main__dot">•</div>
         <div class="main__count-online">{{ membersOnlineCount }} online</div>
@@ -56,17 +59,15 @@
     <div class="chat-members">
       <header class="chat-members__header">
         <h2 class="chat-members__title text-bold-body-16">Участники</h2>
-        <button class="chat-members__add">
-          <i appIcon icon="plus" appSquare="24"></i>
-        </button>
       </header>
-      <ul class="chat-members__list">
-        <li class="chat-members__item" *ngFor="let member of members">
-          <a class="member" [routerLink]="['/office/profile', member.id]">
+      <ul class="chat-members__list" *ngIf="currentUserId$ | async as currentUserId">
+        <li class="chat-members__item" *ngFor="let member of project.collaborators">
+          <a class="member" [routerLink]="['/office/profile', member.userId]">
             <app-avatar class="member__avatar" [url]="member.avatar" [size]="30"></app-avatar>
-            <div class="member__name text-bold-body-14">
+            <span class="member__name text-bold-body-14">
               {{ member.firstName }} {{ member.lastName }}
-            </div>
+            </span>
+            <span *ngIf="currentUserId === member.userId" class="member__i text-body-14">(Вы)</span>
           </a>
         </li>
       </ul>

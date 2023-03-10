@@ -2,7 +2,6 @@
 
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { ChatMessage } from "@models/chat-message.model";
-import { User } from "@auth/models/user.model";
 import { map, Observable } from "rxjs";
 import { Project } from "@models/project.model";
 import { numWord } from "@utils/num-word";
@@ -10,6 +9,7 @@ import { NavService } from "@services/nav.service";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { AuthService } from "@auth/services";
 
 @Component({
   selector: "app-chat",
@@ -20,7 +20,8 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
   constructor(
     private readonly navService: NavService,
     private readonly fb: FormBuilder,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly authService: AuthService
   ) {
     this.messageForm = this.fb.group({
       messageControl: [{ text: "", filesUrl: [] }],
@@ -63,11 +64,10 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
 
   project$: Observable<Project> = this.route.data.pipe(map(r => r["data"]));
 
+  currentUserId$: Observable<number> = this.authService.profile.pipe(map(r => r["id"]));
   messageForm: FormGroup;
 
   @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
-
-  messagesElHeight = "0px";
 
   messages: ChatMessage[] = (() => {
     const res = [];
@@ -81,16 +81,6 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
 
   editingMessage?: ChatMessage;
   replyMessage?: ChatMessage;
-
-  members: User[] = [
-    User.default(),
-    User.default(),
-    User.default(),
-    User.default(),
-    User.default(),
-    User.default(),
-    User.default(),
-  ];
 
   membersOnlineCount = 3;
 

@@ -16,8 +16,9 @@ export class Project {
     userId: number;
     firstName: string;
     lastName: string;
-    avatar: string;
     role: string;
+    keySkills: string[];
+    avatar: string;
   }[];
 
   draft!: boolean;
@@ -42,6 +43,7 @@ export class Project {
           lastName: "string",
           userId: 0,
           avatar: "string",
+          keySkills: ["angular"],
           role: "Front-end",
         },
       ],

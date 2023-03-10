@@ -8,13 +8,16 @@ import { MessageInputComponent } from "@office/shared/message-input/message-inpu
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { AuthService } from "@auth/services";
 import { RouterTestingModule } from "@angular/router/testing";
+import { of } from "rxjs";
 
 describe("ChatComponent", () => {
   let component: ProjectChatComponent;
   let fixture: ComponentFixture<ProjectChatComponent>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj("AuthService", ["profile"]);
+    const authSpy = {
+      profile: of({}),
+    };
 
     await TestBed.configureTestingModule({
       declarations: [ProjectChatComponent, MessageInputComponent],
