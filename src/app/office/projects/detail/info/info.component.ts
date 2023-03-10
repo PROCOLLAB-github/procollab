@@ -16,10 +16,10 @@ import { AuthService } from "@auth/services";
 })
 export class ProjectInfoComponent implements OnInit {
   constructor(
-    private route: ActivatedRoute,
-    public industryService: IndustryService,
-    public authService: AuthService,
-    private navService: NavService
+    private readonly route: ActivatedRoute,
+    public readonly industryService: IndustryService,
+    public readonly authService: AuthService,
+    private readonly navService: NavService
   ) {}
 
   project$: Observable<Project> = this.route.data.pipe(

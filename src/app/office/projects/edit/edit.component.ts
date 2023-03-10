@@ -23,16 +23,16 @@ import { SelectComponent } from "@ui/components";
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private fb: FormBuilder,
-    private industryService: IndustryService,
-    protected projectService: ProjectService,
-    private navService: NavService,
-    private validationService: ValidationService,
-    private vacancyService: VacancyService,
-    private inviteService: InviteService,
-    private cdRef: ChangeDetectorRef
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly industryService: IndustryService,
+    protected readonly projectService: ProjectService,
+    private readonly navService: NavService,
+    private readonly validationService: ValidationService,
+    private readonly vacancyService: VacancyService,
+    private readonly inviteService: InviteService,
+    private readonly cdRef: ChangeDetectorRef
   ) {
     this.projectForm = this.fb.group({
       imageAddress: ["", [Validators.required]],

@@ -11,7 +11,7 @@ import { nanoid } from "nanoid";
 export class SnackbarService {
   constructor() {}
 
-  private snacks$ = new Subject<Snack>();
+  private readonly snacks$ = new Subject<Snack>();
   snacks = this.snacks$.asObservable().pipe(distinctUntilChanged());
 
   success(text: string, options: { timeout: number } = { timeout: 5000 }): void {

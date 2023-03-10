@@ -21,12 +21,12 @@ dayjs.extend(cpf);
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
-    private cdref: ChangeDetectorRef,
-    public authService: AuthService,
-    private fb: FormBuilder,
-    private validationService: ValidationService,
-    private router: Router,
-    private navService: NavService
+    private readonly cdref: ChangeDetectorRef,
+    public readonly authService: AuthService,
+    private readonly fb: FormBuilder,
+    private readonly validationService: ValidationService,
+    private readonly router: Router,
+    private readonly navService: NavService
   ) {
     this.profileForm = this.fb.group({
       firstName: ["", [Validators.required]],

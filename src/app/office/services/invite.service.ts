@@ -12,7 +12,7 @@ import { AuthService } from "@auth/services";
   providedIn: "root",
 })
 export class InviteService {
-  constructor(private apiService: ApiService, private authService: AuthService) {}
+  constructor(private readonly apiService: ApiService, private readonly authService: AuthService) {}
 
   sendForUser(userId: number, projectId: number, role: string): Observable<Invite> {
     return this.apiService

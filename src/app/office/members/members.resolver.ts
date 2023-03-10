@@ -10,7 +10,7 @@ import { User } from "@auth/models/user.model";
   providedIn: "root",
 })
 export class MembersResolver implements Resolve<User[]> {
-  constructor(private memberService: MemberService) {}
+  constructor(private readonly memberService: MemberService) {}
 
   resolve(): Observable<User[]> {
     return this.memberService.getMembers();

@@ -12,9 +12,9 @@ import { environment } from "@environment";
 })
 export class FileService {
   constructor(
-    private apiService: ApiService,
-    private httpClient: HttpClient,
-    private authService: AuthService
+    private readonly apiService: ApiService,
+    private readonly httpClient: HttpClient,
+    private readonly authService: AuthService
   ) {}
 
   uploadFile(file: File): Observable<{ url: string }> {

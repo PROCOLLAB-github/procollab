@@ -12,7 +12,10 @@ import { Vacancy } from "@models/vacancy.model";
   providedIn: "root",
 })
 export class ProjectInfoResolver implements Resolve<[Project, Vacancy[]]> {
-  constructor(private projectService: ProjectService, private vacancyService: VacancyService) {}
+  constructor(
+    private readonly projectService: ProjectService,
+    private readonly vacancyService: VacancyService
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<[Project, Vacancy[]]> {
     const projectId = Number(route.paramMap.get("projectId"));

@@ -15,11 +15,11 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
   constructor(
-    private navService: NavService,
-    private route: ActivatedRoute,
-    public projectService: ProjectService,
-    private router: Router,
-    private fb: FormBuilder
+    private readonly navService: NavService,
+    private readonly route: ActivatedRoute,
+    public readonly projectService: ProjectService,
+    private readonly router: Router,
+    private readonly fb: FormBuilder
   ) {
     this.searchForm = this.fb.group({
       search: [""],

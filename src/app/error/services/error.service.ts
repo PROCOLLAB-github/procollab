@@ -8,7 +8,7 @@ import { ErrorCode } from "../models/error-code";
   providedIn: "root",
 })
 export class ErrorService {
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router) {}
 
   throwNotFount(): Promise<void> {
     return this.throwError(ErrorCode.NOT_FOUND);

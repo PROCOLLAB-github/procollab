@@ -12,7 +12,7 @@ import { map } from "rxjs";
 export class ErrorCodeComponent implements OnInit {
   errorCode = this.activatedRoute.params.pipe(map(r => r["code"]));
 
-  constructor(private activatedRoute: ActivatedRoute) {}
+  constructor(private readonly activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {}
 }

@@ -11,9 +11,9 @@ import { HttpParams } from "@angular/common/http";
   providedIn: "root",
 })
 export class ProjectService {
-  constructor(private apiService: ApiService) {}
+  constructor(private readonly apiService: ApiService) {}
 
-  private steps$ = new BehaviorSubject<ProjectStep[]>([]);
+  private readonly steps$ = new BehaviorSubject<ProjectStep[]>([]);
   steps = this.steps$.asObservable();
 
   getProjectSteps(): Observable<ProjectStep[]> {

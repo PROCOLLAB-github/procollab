@@ -9,7 +9,7 @@ import { environment } from "@environment";
   providedIn: "root",
 })
 export class ApiService {
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   get<T>(path: string, params?: HttpParams, options?: object): Observable<T> {
     return this.http
