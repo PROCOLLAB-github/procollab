@@ -3,12 +3,13 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { ChatMessage } from "@models/chat-message.model";
 import { User } from "@auth/models/user.model";
-import { Observable, of } from "rxjs";
+import { map, Observable } from "rxjs";
 import { Project } from "@models/project.model";
 import { numWord } from "@utils/num-word";
 import { NavService } from "@services/nav.service";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { FormBuilder, FormGroup } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-chat",
@@ -16,7 +17,11 @@ import { FormBuilder, FormGroup } from "@angular/forms";
   styleUrls: ["./chat.component.scss"],
 })
 export class ProjectChatComponent implements OnInit, AfterViewInit {
-  constructor(private readonly navService: NavService, private readonly fb: FormBuilder) {
+  constructor(
+    private readonly navService: NavService,
+    private readonly fb: FormBuilder,
+    private readonly route: ActivatedRoute
+  ) {
     this.messageForm = this.fb.group({
       messageControl: [{ text: "", filesUrl: [] }],
     });
@@ -56,6 +61,8 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
     });
   }
 
+  project$: Observable<Project> = this.route.data.pipe(map(r => r["data"]));
+
   messageForm: FormGroup;
 
   @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
@@ -71,8 +78,6 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
   })();
 
   pularize = numWord;
-
-  project$: Observable<Project> = of(Project.default());
 
   editingMessage?: ChatMessage;
   replyMessage?: ChatMessage;
@@ -104,7 +109,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
   }
 
   onCancelInput(): void {
-    this.replyMessage = undefined
-    this.editingMessage = undefined
+    this.replyMessage = undefined;
+    this.editingMessage = undefined;
   }
 }

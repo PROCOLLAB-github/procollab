@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { AuthService } from "@auth/services";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("ChatComponent", () => {
   let component: ProjectChatComponent;
@@ -18,7 +19,7 @@ describe("ChatComponent", () => {
     await TestBed.configureTestingModule({
       declarations: [ProjectChatComponent, MessageInputComponent],
       providers: [{ provide: AuthService, useValue: authSpy }],
-      imports: [ReactiveFormsModule, HttpClientTestingModule],
+      imports: [ReactiveFormsModule, HttpClientTestingModule, RouterTestingModule],
     }).compileComponents();
   });
 

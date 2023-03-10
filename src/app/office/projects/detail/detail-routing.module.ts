@@ -8,6 +8,7 @@ import { ProjectResponsesComponent } from "./responses/responses.component";
 import { ProjectResponsesResolver } from "./responses/responses.resolver";
 import { ProjectDetailComponent } from "./detail.component";
 import { ProjectChatComponent } from "./chat/chat.component";
+import { ProjectChatResolver } from "@office/projects/detail/chat/chat.resolver";
 
 const routes: Routes = [
   {
@@ -31,6 +32,9 @@ const routes: Routes = [
       {
         path: "chat",
         component: ProjectChatComponent,
+        resolve: {
+          data: ProjectChatResolver,
+        },
       },
     ],
   },
