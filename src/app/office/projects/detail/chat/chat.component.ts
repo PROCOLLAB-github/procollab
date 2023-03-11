@@ -32,30 +32,6 @@ export class ProjectChatComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.navService.setNavTitle("Чат проекта");
-
-    this.messageForm.valueChanges.subscribe(console.log);
-    // const ws = new WebSocket(
-    //   environment.websocketUrl + `/chat/?token=${localStorage.getItem("accessToken")}`
-    // );
-    // ws.onopen = event => {
-    //   console.log(event);
-
-    // ws.send(
-    //   JSON.stringify({
-    //     type: "set_online",
-    //     content: {
-    // chat_type: "project",
-    // chat_id: "120",
-    // message: "some info",
-    // reply_to: null,
-    // },
-    // })
-    // );
-
-    // ws.onmessage = message => {
-    //   console.log(message);
-    // };
-    // };
   }
 
   ngAfterViewInit(): void {
