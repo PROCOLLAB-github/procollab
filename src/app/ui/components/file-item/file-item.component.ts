@@ -1,5 +1,6 @@
 /** @format */
 import { Component, Input, OnInit } from "@angular/core";
+import { getFormattedFileSize } from "@utils/formatted-file-size";
 @Component({
   selector: "app-file-item",
   templateUrl: "./file-item.component.html",
@@ -10,9 +11,10 @@ export class FileItemComponent implements OnInit {
 
   @Input() type?: string;
   @Input() name = "";
-  @Input() size = "";
+  @Input() size = 0;
   @Input() link = "";
 
+  getFormattedFileSize = getFormattedFileSize;
   ngOnInit(): void {}
 
   fileMap: Record<string, { size: number; name: string }> = {

@@ -1,5 +1,7 @@
 /** @format */
 
+@use "src/styles/responsive";
+
 .message {
   position: relative;
   display: flex;
@@ -32,6 +34,17 @@
 
   &__avatar {
     margin-right: 15px;
+  }
+
+  &__files {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 4px 32px;
+    margin-bottom: 8px;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
   &__content {
