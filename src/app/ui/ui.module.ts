@@ -29,6 +29,7 @@ import { RouterModule } from "@angular/router";
 import { FileItemComponent } from "./components/file-item/file-item.component";
 import { AutosizeModule } from "ngx-autosize";
 import { SnackbarComponent } from "./components/snackbar/snackbar.component";
+import { DeleteConfirmComponent } from "./components/delete-confirm/delete-confirm.component";
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { SnackbarComponent } from "./components/snackbar/snackbar.component";
     ProfileInfoComponent,
     FileItemComponent,
     SnackbarComponent,
+    DeleteConfirmComponent,
   ],
   imports: [
     CommonModule,
@@ -81,6 +83,7 @@ import { SnackbarComponent } from "./components/snackbar/snackbar.component";
     ProfileInfoComponent,
     FileItemComponent,
     SnackbarComponent,
+    DeleteConfirmComponent,
   ],
 })
 export class UiModule {}

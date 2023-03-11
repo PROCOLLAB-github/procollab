@@ -1,0 +1,36 @@
+/** @format */
+
+.confirm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 310px;
+
+  &__icon {
+    color: var(--red);
+    margin-bottom: 18px;
+  }
+
+  &__main-text {
+    text-align: center;
+    color: var(--black);
+    margin-bottom: 18px;
+  }
+
+  &__sub-text {
+    text-align: center;
+    color: var(--dark-gray);
+    margin-bottom: 18px;
+    max-height: 84px;
+    overflow-y: hidden;
+  }
+
+  &__cancel {
+    width: 100%;
+    margin-bottom: 18px;
+  }
+
+  &__approve {
+    width: 100%;
+  }
+}
