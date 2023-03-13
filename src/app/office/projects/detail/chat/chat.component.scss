@@ -97,6 +97,11 @@ $input-height: 66px + 18px;
     width: 100%;
   }
 
+  &__typing {
+    margin-bottom: 4px;
+    color: var(--dark-gray);
+  }
+
   &__input {
     padding: 0 18px 18px 18px;
     background-color: var(--white);

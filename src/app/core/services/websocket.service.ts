@@ -1,32 +1,34 @@
 /** @format */
 import { Injectable } from "@angular/core";
-import { Observable, Observer, retry } from "rxjs";
+import { filter, map, Observable, Observer, retry, Subject } from "rxjs";
 import { environment } from "@environment";
+import * as snakecaseKeys from "snakecase-keys";
+import camelcaseKeys from "camelcase-keys";
 
 @Injectable({
   providedIn: "root",
 })
-export class WebSocketService {
+export class WebsocketService {
   private socket: WebSocket | null = null;
+  private messages$ = new Subject<MessageEvent>();
 
+  public isConnected = false;
   public connect(path: string): Observable<void> {
     return new Observable((observer: Observer<void>) => {
       this.socket = new WebSocket(environment.websocketUrl + path);
 
       this.socket.onopen = () => {
+        this.isConnected = true;
         observer.next();
-        observer.complete();
       };
 
       this.socket.onerror = error => {
+        this.isConnected = false;
         observer.error(error);
       };
 
-      return () => {
-        if (this.socket) {
-          this.socket.close();
-          this.socket = null;
-        }
+      this.socket.onmessage = message => {
+        this.messages$.next(message);
       };
     }).pipe(
       retry({
@@ -37,39 +39,28 @@ export class WebSocketService {
     );
   }
 
-  public send(event: string, data: any): void {
+  public send(type: string, content: any): void {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      this.socket.send(JSON.stringify({ event, data }));
+      this.socket.send(JSON.stringify({ type, content: snakecaseKeys(content, { deep: true }) }));
     } else {
       throw new Error("WebSocket is not open.");
     }
   }
 
-  public on<T>(event: string): Observable<T> {
-    return new Observable((observer: Observer<T>) => {
-      function handler(evt: MessageEvent) {
-        const message = JSON.parse(evt.data);
-        if (message.event === event) observer.next(message);
-      }
-
-      if (this.socket) {
-        this.socket.addEventListener("message", handler);
-      } else {
-        observer.error(new Error("WebSocket is not open."));
-      }
-
-      return () => {
-        if (this.socket) {
-          this.socket.removeEventListener("message", handler);
-        }
-      };
-    });
+  public on<T>(type: string): Observable<T> {
+    return this.messages$.asObservable().pipe(
+      map(message => JSON.parse(message.data)),
+      filter(message => message.type === type),
+      map(message => camelcaseKeys(message.content, { deep: true }))
+    );
   }
 
   public close(): void {
     if (this.socket) {
       this.socket.close();
       this.socket = null;
+
+      this.isConnected = false;
     }
   }
 }

@@ -3,7 +3,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Project } from "@models/project.model";
 import { IndustryService } from "@services/industry.service";
-import { numWord } from "@utils/num-word";
+import { pluralize } from "@utils/pluralize";
 
 @Component({
   selector: "app-project-card",
@@ -15,7 +15,7 @@ export class ProjectCardComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  numWord = numWord;
+  numWord = pluralize;
 
   @Input() project!: Project;
   @Input() canDelete?: boolean | null = false;

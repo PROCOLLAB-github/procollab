@@ -1,5 +1,5 @@
 <!-- @format -->
-<div class="chat-page" *ngIf="project$ | async as project">
+<div class="chat-page" *ngIf="project">
   <div class="chat-page__main main">
     <header class="main__header">
       <div class="main__project">
@@ -22,7 +22,7 @@
         </ul>
         <div class="main__count">
           {{ project.collaborators.length }}
-          {{ pularize(project.collaborators.length, ["Участник", "Участника", "Участников"]) }}
+          {{ pluralize(project.collaborators.length, ["Участник", "Участника", "Участников"]) }}
         </div>
         <div class="main__dot">•</div>
         <div class="main__count-online">{{ membersOnlineCount }} online</div>
@@ -45,6 +45,17 @@
         ></app-chat-message>
       </cdk-virtual-scroll-viewport>
       <form class="chat__input" [formGroup]="messageForm">
+        <span *ngIf="typingPersons.length" class="chat__typing text-body-14">
+          <ng-container *ngFor="let person of typingPersons.slice(0, 1); last as last">
+            {{ person.firstName }} {{ person.lastName
+            }}<ng-container *ngIf="!last">, </ng-container>
+          </ng-container>
+          <ng-container *ngIf="typingPersons.length > 1">
+            и еще {{ typingPersons.length - 1 }}
+            {{ pluralize(typingPersons.length - 1, ["человек", "человека", "человек"]) }}
+          </ng-container>
+          печатает ...
+        </span>
         <app-message-input
           [editingMessage]="editingMessage"
           [replyMessage]="replyMessage"

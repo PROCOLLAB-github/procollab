@@ -1,6 +1,6 @@
 /** @format */
 
-export function numWord(value: number, words: [string, string, string]): string {
+export function pluralize(value: number, words: [string, string, string]): string {
   value = Math.abs(value) % 100;
   const num = value % 10;
 
