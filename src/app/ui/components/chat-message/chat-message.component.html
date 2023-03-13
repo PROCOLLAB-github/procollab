@@ -17,7 +17,7 @@
           {{ chatMessage.time | dayjs: "format":"hh:mm" }}
         </div>
       </div>
-      <ul class="message__files">
+      <!-- <ul class="message__files">
         <li class="message__file" *ngFor="let file of chatMessage.files">
           <app-file-item
             [name]="file.fileName"
@@ -25,7 +25,7 @@
             [size]="file.fileSize"
           ></app-file-item>
         </li>
-      </ul>
+      </ul>-->
       <div class="message__content text-body-14">{{ chatMessage.content }}</div>
     </div>
   </div>
@@ -37,7 +37,6 @@
     <i appIcon icon="dots" appWidth="4" appHeight="16" appViewBox="0 0 4 16"></i>
   </div>
 </div>
-
 <ng-template #contextMenu>
   <ul class="message__contextmenu contextmenu">
     <li class="contextmenu__item text-body-14" (click)="onCopyContent($event)">Скопировать</li>

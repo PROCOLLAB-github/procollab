@@ -27,7 +27,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly chatService: ChatService
   ) {
     this.messageForm = this.fb.group({
-      messageControl: [{ text: "", filesUrl: [] }],
+      messageControl: [{ text: "" }],
     });
   }
 

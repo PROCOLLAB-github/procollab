@@ -1,10 +1,10 @@
 <!-- @format -->
 
 <div class="message-input">
-  <ul *ngIf="attachFiles.length" class="message-input__action action files-list">
+  <!--<ul *ngIf="attachFiles.length" class="message-input__action action files-list">
     <li
       class="files-list__item file"
-      [class.file--loading]="file.loading"
+      [class.file&#45;&#45;loading]="file.loading"
       *ngFor="let file of attachFiles; index as index"
     >
       <i class="file__type" appIcon [icon]="'file_' + file.type" appSquare="24"></i>
@@ -21,7 +21,7 @@
         (click)="onDeleteFile(index)"
       ></i>
     </li>
-  </ul>
+  </ul>-->
   <div *ngIf="editingMessage" class="message-input__action action">
     <i class="action__icon" appIcon icon="edit-pen" appSquare="24"></i>
     <div class="action__text">
@@ -56,15 +56,15 @@
       [value]="value.text"
       class="message-input__field text-body-14"
     ></textarea>
-    <label class="message-input__attach-button text-bold-body-14">
+    <!--<label class="message-input__attach-button text-bold-body-14">
       <input type="file" multiple accept="*/*" (input)="onUpload($event)" />
       <div class="message-input__attach-button-box">
         <i appIcon icon="attach" appSquare="24"></i>
       </div>
-    </label>
+    </label>-->
     <button class="message-input__send-button"><i appIcon icon="send" appSquare="24"></i></button>
   </div>
-  <div class="drop-modal" *ngIf="showDropModal">
+  <!--<div class="drop-modal" *ngIf="showDropModal">
     <div class="drop-modal__overlay"></div>
     <div class="drop-modal__body">
       <img
@@ -79,5 +79,5 @@
         Вы можете добавить к ним комментарий или отправить отдельно
       </p>
     </div>
-  </div>
+  </div>-->
 </div>
