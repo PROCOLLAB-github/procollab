@@ -35,19 +35,16 @@
     (clickOutside)="onCloseContextmenu()"
   >
     <i appIcon icon="dots" appWidth="4" appHeight="16" appViewBox="0 0 4 16"></i>
-    <ul
-      (click)="onClickContextmenu($event)"
-      class="message__contextmenu contextmenu"
-      *ngIf="contextmenuOpen"
-      [style.top]="contextmenuPos.y + 'px'"
-      [style.left]="contextmenuPos.x + 'px'"
-    >
-      <li class="contextmenu__item text-body-14" (click)="onCopyContent($event)">Скопировать</li>
-      <li class="contextmenu__item text-body-14" (click)="onReply($event)">Ответить</li>
-      <li class="contextmenu__item text-body-14" (click)="onEdit($event)">Редактировать</li>
-      <li class="contextmenu__item contextmenu__item--red text-body-14" (click)="onDelete($event)">
-        Удалить
-      </li>
-    </ul>
   </div>
 </div>
+
+<ng-template #contextMenu>
+  <ul class="message__contextmenu contextmenu">
+    <li class="contextmenu__item text-body-14" (click)="onCopyContent($event)">Скопировать</li>
+    <li class="contextmenu__item text-body-14" (click)="onReply($event)">Ответить</li>
+    <li class="contextmenu__item text-body-14" (click)="onEdit($event)">Редактировать</li>
+    <li class="contextmenu__item contextmenu__item--red text-body-14" (click)="onDelete($event)">
+      Удалить
+    </li>
+  </ul>
+</ng-template>

@@ -1,26 +1,33 @@
 /** @format */
 
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
   Input,
   OnInit,
   Output,
+  TemplateRef,
   ViewChild,
+  ViewContainerRef,
 } from "@angular/core";
 import { ChatMessage } from "@models/chat-message.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
+import { TemplatePortal } from "@angular/cdk/portal";
+import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 
 @Component({
   selector: "app-chat-message",
   templateUrl: "./chat-message.component.html",
   styleUrls: ["./chat-message.component.scss"],
 })
-export class ChatMessageComponent implements OnInit {
+export class ChatMessageComponent implements OnInit, AfterViewInit {
   constructor(
-    private readonly elRef: ElementRef<HTMLElement>,
-    private readonly snackbarService: SnackbarService
+    private readonly elRef: ElementRef,
+    private readonly snackbarService: SnackbarService,
+    private readonly viewContainerRef: ViewContainerRef,
+    private readonly overlay: Overlay
   ) {}
 
   @Input() chatMessage!: ChatMessage;
@@ -30,32 +37,44 @@ export class ChatMessageComponent implements OnInit {
   @Output() delete = new EventEmitter<number>();
 
   ngOnInit(): void {}
+  ngAfterViewInit(): void {
+    this.overlayRef = this.overlay.create({
+      hasBackdrop: false,
+      scrollStrategy: this.overlay.scrollStrategies.close(),
+    });
+    this.templatePortal = new TemplatePortal(this.contextMenuTemplate, this.viewContainerRef);
+  }
 
-  @ViewChild("messageEl") messageEl?: ElementRef<HTMLElement>;
+  @ViewChild("contextMenu") contextMenuTemplate!: TemplateRef<HTMLUListElement>;
 
-  contextmenuOpen = false;
-  contextmenuPos = { x: 0, y: 0 };
+  private overlayRef?: OverlayRef;
+  private templatePortal?: TemplatePortal;
 
   onOpenContextmenu(event: MouseEvent) {
     event.preventDefault();
 
-    this.contextmenuOpen = true;
+    const positionStrategy = this.overlay
+      .position()
+      .global()
+      .left(event.clientX + "px")
+      .top(event.clientY + "px");
+    this.overlayRef?.updatePositionStrategy(positionStrategy);
 
-    const target = this.elRef.nativeElement;
-    const { x, y } = target.getBoundingClientRect();
-
-    this.contextmenuPos.x = event.clientX - x;
-    this.contextmenuPos.y = event.clientY - y;
+    !this.overlayRef?.hasAttached() && this.overlayRef?.attach(this.templatePortal);
   }
 
   onCloseContextmenu() {
-    this.contextmenuOpen = false;
+    this.overlayRef?.detach();
+  }
+
+  onClickContextmenu(event: MouseEvent) {
+    event.stopPropagation();
   }
 
   onCopyContent(event: MouseEvent) {
     event.stopPropagation();
 
-    this.contextmenuOpen = false;
+    this.overlayRef?.detach();
 
     navigator.clipboard.writeText(this.chatMessage.content).then(() => {
       this.snackbarService.success("Сообщение скопированно");
@@ -63,28 +82,24 @@ export class ChatMessageComponent implements OnInit {
     });
   }
 
-  onClickContextmenu(event: MouseEvent) {
-    event.stopPropagation();
-  }
-
   onDelete(event: MouseEvent) {
     event.stopPropagation();
 
     this.delete.emit(this.chatMessage.id);
-    this.contextmenuOpen = false;
+    this.overlayRef?.detach();
   }
 
   onReply(event: MouseEvent) {
     event.stopPropagation();
 
     this.reply.emit(this.chatMessage.id);
-    this.contextmenuOpen = false;
+    this.overlayRef?.detach();
   }
 
   onEdit(event: MouseEvent) {
     event.stopPropagation();
 
     this.edit.emit(this.chatMessage.id);
-    this.contextmenuOpen = false;
+    this.overlayRef?.detach();
   }
 }
