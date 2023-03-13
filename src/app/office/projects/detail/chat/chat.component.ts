@@ -4,7 +4,6 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from "@angular
 import { ChatMessage } from "@models/chat-message.model";
 import { filter, map, noop, Observable, Subscription, tap, throttleTime } from "rxjs";
 import { Project } from "@models/project.model";
-import { pluralize } from "@utils/pluralize";
 import { NavService } from "@services/nav.service";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { FormBuilder, FormGroup } from "@angular/forms";
@@ -77,8 +76,6 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     return res;
   })();
 
-  pluralize = pluralize;
-
   editingMessage?: ChatMessage;
   replyMessage?: ChatMessage;
 
@@ -122,7 +119,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
           const personIdx = this.typingPersons.findIndex(p => p.userId === person.userId);
 
           this.typingPersons.splice(personIdx, 1);
-        }, 10000);
+        }, 2000);
       });
 
     typingEvent$ && this.subscriptions$.push(typingEvent$);
