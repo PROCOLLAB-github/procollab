@@ -2,16 +2,21 @@
 
 import { Injectable } from "@angular/core";
 import { WebsocketService } from "@core/services/websocket.service";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 import { ApiService } from "@core/services";
 import {
   ChatEventType,
   DeleteChatMessageDto,
+  EditChatMessageDto,
+  LoadChatMessages,
   ReadChatMessageDto,
   SendChatMessageDto,
   TypingInChatDto,
   TypingInChatEventDto,
 } from "@models/chat.model";
+import { ChatMessage } from "@models/chat-message.model";
+import { plainToInstance } from "class-transformer";
+import { HttpParams } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
@@ -28,8 +33,14 @@ export class ChatService {
     return this.websocketService.connect(`/chat/?token=${accessToken}`);
   }
 
-  sendMessage(message: SendChatMessageDto): void {
-    this.websocketService.send(ChatEventType.NEW_MESSAGE, message);
+  onTyping(): Observable<TypingInChatEventDto> {
+    return this.websocketService
+      .on<TypingInChatEventDto>(ChatEventType.TYPING)
+      .pipe(map(typing => plainToInstance(TypingInChatEventDto, typing)));
+  }
+
+  startTyping(typing: TypingInChatDto): void {
+    this.websocketService.send(ChatEventType.TYPING, typing);
   }
 
   deleteMessage(deleteChatMessage: DeleteChatMessageDto): void {
@@ -40,11 +51,32 @@ export class ChatService {
     this.websocketService.send(ChatEventType.READ_MESSAGE, readChatMessage);
   }
 
-  onTyping(): Observable<TypingInChatEventDto> {
-    return this.websocketService.on<TypingInChatEventDto>(ChatEventType.TYPING);
+  loadMessage(projectId: number, count = 0, take = 20): Observable<LoadChatMessages> {
+    return this.apiService
+      .get<LoadChatMessages>(
+        `/chats/projects/${projectId}/messages/`,
+        new HttpParams({ fromObject: { previous: count, next: take } })
+      )
+      .pipe(map(messages => plainToInstance(LoadChatMessages, messages)));
   }
 
-  startTyping(typing: TypingInChatDto): void {
-    this.websocketService.send(ChatEventType.TYPING, typing);
+  sendMessage(message: SendChatMessageDto): void {
+    this.websocketService.send(ChatEventType.NEW_MESSAGE, message);
+  }
+
+  onMessage(): Observable<ChatMessage> {
+    return this.websocketService
+      .on<ChatMessage>(ChatEventType.NEW_MESSAGE)
+      .pipe(map(message => plainToInstance(ChatMessage, message)));
+  }
+
+  onEditMessage(): Observable<ChatMessage> {
+    return this.websocketService
+      .on<ChatMessage>(ChatEventType.EDIT_MESSAGE)
+      .pipe(map(message => plainToInstance(ChatMessage, message)));
+  }
+
+  editMessage(message: EditChatMessageDto): void {
+    this.websocketService.send(ChatEventType.EDIT_MESSAGE, message);
   }
 }

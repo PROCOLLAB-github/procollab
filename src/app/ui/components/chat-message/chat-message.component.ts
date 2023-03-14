@@ -76,7 +76,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
 
     this.overlayRef?.detach();
 
-    navigator.clipboard.writeText(this.chatMessage.content).then(() => {
+    navigator.clipboard.writeText(this.chatMessage.text).then(() => {
       this.snackbarService.success("Сообщение скопированно");
       console.debug("Text copied in ChatMessageComponent");
     });

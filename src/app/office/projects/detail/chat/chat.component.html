@@ -62,6 +62,7 @@
           [replyMessage]="replyMessage"
           (resize)="onInputResize()"
           (cancel)="onCancelInput()"
+          (submit)="onSubmitMessage()"
           placeholder="Введите сообщение"
           formControlName="messageControl"
         ></app-message-input>

@@ -37,7 +37,7 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     this._editingMessage = message;
 
     if (message !== undefined) {
-      this.value.text = message.content;
+      this.value.text = message.text;
     } else {
       this.value.text = "";
     }
@@ -59,7 +59,7 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
   }
 
   @Output() appValueChange = new EventEmitter<MessageInputComponent["value"]>();
-  @Output() enter = new EventEmitter<void>();
+  @Output() submit = new EventEmitter<void>();
   @Output() resize = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 

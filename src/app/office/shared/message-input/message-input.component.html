@@ -26,9 +26,9 @@
     <i class="action__icon" appIcon icon="edit-pen" appSquare="24"></i>
     <div class="action__text">
       <div class="action__name text-body-12">
-        {{ editingMessage.sender.firstName }} {{ editingMessage.sender.lastName }}
+        {{ editingMessage.author.firstName }} {{ editingMessage.author.lastName }}
       </div>
-      <div class="action__info text-body-14">{{ editingMessage.content }}</div>
+      <div class="action__info text-body-14">{{ editingMessage.text }}</div>
     </div>
     <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
   </div>
@@ -36,9 +36,9 @@
     <i class="action__icon" appIcon icon="reply" appSquare="24"></i>
     <div class="action__text">
       <div class="action__name text-body-12">
-        {{ replyMessage.sender.firstName }} {{ replyMessage.sender.lastName }}
+        {{ replyMessage.author.firstName }} {{ replyMessage.author.lastName }}
       </div>
-      <div class="action__info text-body-14">{{ replyMessage.content }}</div>
+      <div class="action__info text-body-14">{{ replyMessage.text }}</div>
     </div>
     <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
   </div>
@@ -46,7 +46,7 @@
     <textarea
       autosize
       (input)="onInput($event)"
-      (keydown.enter)="enter.emit()"
+      (keydown.enter)="submit.emit()"
       (blur)="onBlur()"
       (resized)="resize.emit()"
       [mask]="mask"
@@ -62,7 +62,9 @@
         <i appIcon icon="attach" appSquare="24"></i>
       </div>
     </label>-->
-    <button class="message-input__send-button"><i appIcon icon="send" appSquare="24"></i></button>
+    <button class="message-input__send-button" (click)="submit.emit()">
+      <i appIcon icon="send" appSquare="24"></i>
+    </button>
   </div>
   <!--<div class="drop-modal" *ngIf="showDropModal">
     <div class="drop-modal__overlay"></div>

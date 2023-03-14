@@ -7,14 +7,14 @@
   clickOutsideEvents="contextmenu"
 >
   <div class="message__inner">
-    <app-avatar class="message__avatar" [url]="chatMessage.sender.avatar"></app-avatar>
+    <app-avatar class="message__avatar" [url]="chatMessage.author.avatar"></app-avatar>
     <div class="message__info">
       <div class="message__top">
         <div class="message__name text-bold-body-16">
-          {{ chatMessage.sender.firstName }} {{ chatMessage.sender.lastName }}
+          {{ chatMessage.author.firstName }} {{ chatMessage.author.lastName }}
         </div>
         <div class="message__time text-body-14">
-          {{ chatMessage.time | dayjs: "format":"hh:mm" }}
+          {{ chatMessage.createdAt | dayjs: "format":"hh:mm" }}
         </div>
       </div>
       <!-- <ul class="message__files">
@@ -26,7 +26,7 @@
           ></app-file-item>
         </li>
       </ul>-->
-      <div class="message__content text-body-14">{{ chatMessage.content }}</div>
+      <div class="message__content text-body-14">{{ chatMessage.text }}</div>
     </div>
   </div>
   <div

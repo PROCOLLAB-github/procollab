@@ -43,10 +43,18 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
       console.debug("Chat websocket connected from ProjectChatComponent");
 
       this.initTypingEvent();
+      this.initMessageEvent();
+      this.initEditEvent();
     });
     chatSub$ && this.subscriptions$.push(chatSub$);
 
     this.initTypingSend();
+
+    this.chatService
+      .loadMessage(Number(this.route.parent?.snapshot.paramMap.get("projectId")))
+      .subscribe(loadMessages => {
+        this.messages = loadMessages.results;
+      });
   }
 
   ngAfterViewInit(): void {
@@ -68,13 +76,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
 
-  messages: ChatMessage[] = (() => {
-    const res = [];
-    for (let i = 0; i < 10; i++) {
-      res.push(ChatMessage.default());
-    }
-    return res;
-  })();
+  messages: ChatMessage[] = [];
 
   editingMessage?: ChatMessage;
   replyMessage?: ChatMessage;
@@ -125,6 +127,42 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     typingEvent$ && this.subscriptions$.push(typingEvent$);
   }
 
+  private initMessageEvent(): void {
+    const messageEvent$ = this.chatService.onMessage().subscribe(message => {
+      this.messages = [...this.messages, message];
+    });
+
+    messageEvent$ && this.subscriptions$.push(messageEvent$);
+  }
+
+  private initEditEvent(): void {
+    const editEvent$ = this.chatService.onEditMessage().subscribe(message => {
+      const messageIdx = this.messages.findIndex(msg => msg.id === message.id);
+      this.messages = this.messages.splice(messageIdx, 1, message);
+    });
+
+    editEvent$ && this.subscriptions$.push(editEvent$);
+  }
+
+  onSubmitMessage(): void {
+    if (this.editingMessage) {
+      console.log(this.editingMessage);
+      this.chatService.editMessage({
+        message: this.editingMessage.text,
+        messageId: this.editingMessage.id,
+        chatType: "project",
+        chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
+      });
+    } else {
+      this.chatService.sendMessage({
+        replyTo: this.replyMessage?.id ?? null,
+        message: this.messageForm.get("messageControl")?.value.text ?? "",
+        chatType: "project",
+        chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
+      });
+    }
+  }
+
   onInputResize(): void {
     if (this.viewport?.getOffsetToRenderedContentStart()) this.viewport?.scrollToIndex(99999);
   }
@@ -133,7 +171,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     const deletedMessage = this.messages.find(message => message.id === messageId);
 
     this.modalService
-      .confirmDelete("Вы уверены что хотите удалить сообщение?", `“${deletedMessage?.content}”`)
+      .confirmDelete("Вы уверены что хотите удалить сообщение?", `“${deletedMessage?.text}”`)
       .subscribe(noop);
   }
 
