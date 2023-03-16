@@ -2,7 +2,19 @@
 
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ChatMessage } from "@models/chat-message.model";
-import { filter, map, noop, Observable, Subscription, tap, throttleTime } from "rxjs";
+import {
+  concatMap,
+  filter,
+  fromEvent,
+  map,
+  noop,
+  Observable,
+  skip,
+  skipWhile,
+  Subscription,
+  tap,
+  throttleTime,
+} from "rxjs";
 import { Project } from "@models/project.model";
 import { NavService } from "@services/nav.service";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
@@ -11,6 +23,7 @@ import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "@auth/services";
 import { ModalService } from "@ui/models/modal.service";
 import { ChatService } from "@services/chat.service";
+import { LoadChatMessages } from "@models/chat.model";
 
 @Component({
   selector: "app-chat",
@@ -50,22 +63,38 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.initTypingSend();
 
-    this.chatService
-      .loadMessage(Number(this.route.parent?.snapshot.paramMap.get("projectId")))
-      .subscribe(loadMessages => {
-        this.messages = loadMessages.results;
-      });
+    this.fetchMessages().subscribe(() => {
+      this.scrollToBottom();
+    });
   }
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.viewport?.scrollToIndex(9999999);
-    });
+    if (this.viewport) {
+      const viewPortScroll$ = fromEvent(this.viewport?.elementRef.nativeElement, "scroll")
+        .pipe(
+          skip(1),
+          skipWhile(
+            () => this.messages.length >= this.messagesTotalCount && this.messagesTotalCount !== 0
+          ),
+          filter(() => {
+            const offsetTop = this.viewport?.measureScrollOffset("top") ?? 0;
+            return offsetTop < 200;
+          }),
+          throttleTime(1000),
+          concatMap(() => this.fetchMessages())
+        )
+        .subscribe(noop);
+
+      viewPortScroll$ && this.subscriptions$.push(viewPortScroll$);
+    }
   }
 
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
+
+  private readonly messagesPerFetch = 20;
+  private messagesTotalCount = 0;
 
   subscriptions$: Subscription[] = [];
 
@@ -133,22 +162,51 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     messageEvent$ && this.subscriptions$.push(messageEvent$);
+
+    this.scrollToBottom();
   }
 
   private initEditEvent(): void {
     const editEvent$ = this.chatService.onEditMessage().subscribe(message => {
-      const messageIdx = this.messages.findIndex(msg => msg.id === message.id);
-      this.messages = this.messages.splice(messageIdx, 1, message);
+      // TODO: remove all suppresses when back-end model will change
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const messageIdx = this.messages.findIndex(msg => msg.id === message.messageId);
+
+      const messages = JSON.parse(JSON.stringify(this.messages));
+      messages.splice(messageIdx, 1, message);
+
+      this.messages = messages;
     });
 
     editEvent$ && this.subscriptions$.push(editEvent$);
   }
 
+  private fetchMessages(): Observable<LoadChatMessages> {
+    return this.chatService
+      .loadMessage(
+        Number(this.route.parent?.snapshot.paramMap.get("projectId")),
+        this.messages.length,
+        this.messagesPerFetch
+      )
+      .pipe(
+        tap(messages => {
+          this.messages = messages.results.concat(this.messages);
+          this.messagesTotalCount = messages.count;
+        })
+      );
+  }
+
+  private scrollToBottom(): void {
+    setTimeout(() => {
+      this.viewport?.scrollToIndex(999999);
+    });
+  }
+
   onSubmitMessage(): void {
     if (this.editingMessage) {
-      console.log(this.editingMessage);
       this.chatService.editMessage({
-        text: this.editingMessage.text,
+        text: this.messageForm.get("messageControl")?.value.text,
         messageId: this.editingMessage.id,
         chatType: "project",
         chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
