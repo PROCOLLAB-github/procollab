@@ -72,7 +72,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.viewport) {
       const viewPortScroll$ = fromEvent(this.viewport?.elementRef.nativeElement, "scroll")
         .pipe(
-          skip(1),
+          skip(1), // need skip first  scroll event because it's happens programmatically in ngOnInit hook
           skipWhile(
             () => this.messages.length >= this.messagesTotalCount && this.messagesTotalCount !== 0
           ),
