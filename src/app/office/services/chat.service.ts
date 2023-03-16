@@ -9,12 +9,13 @@ import {
   DeleteChatMessageDto,
   EditChatMessageDto,
   LoadChatMessages,
+  OnChatMessageDto,
+  OnEditChatMessageDto,
   ReadChatMessageDto,
   SendChatMessageDto,
   TypingInChatDto,
   TypingInChatEventDto,
 } from "@models/chat.model";
-import { ChatMessage } from "@models/chat-message.model";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
 
@@ -64,16 +65,16 @@ export class ChatService {
     this.websocketService.send(ChatEventType.NEW_MESSAGE, message);
   }
 
-  onMessage(): Observable<ChatMessage> {
+  onMessage(): Observable<OnChatMessageDto> {
     return this.websocketService
-      .on<ChatMessage>(ChatEventType.NEW_MESSAGE)
-      .pipe(map(message => plainToInstance(ChatMessage, message)));
+      .on<OnChatMessageDto>(ChatEventType.NEW_MESSAGE)
+      .pipe(map(message => plainToInstance(OnChatMessageDto, message)));
   }
 
-  onEditMessage(): Observable<ChatMessage> {
+  onEditMessage(): Observable<OnEditChatMessageDto> {
     return this.websocketService
-      .on<ChatMessage>(ChatEventType.EDIT_MESSAGE)
-      .pipe(map(message => plainToInstance(ChatMessage, message)));
+      .on<OnEditChatMessageDto>(ChatEventType.EDIT_MESSAGE)
+      .pipe(map(message => plainToInstance(OnEditChatMessageDto, message)));
   }
 
   editMessage(message: EditChatMessageDto): void {

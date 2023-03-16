@@ -7,6 +7,11 @@ export class LoadChatMessages {
   previous!: string;
   results!: ChatMessage[];
 }
+
+export class OnChatMessageDto {
+  chatId!: string;
+  message!: ChatMessage;
+}
 export class SendChatMessageDto {
   chatType!: "direct" | "project";
   chatId!: string;
@@ -14,6 +19,10 @@ export class SendChatMessageDto {
   replyTo!: number | null;
 }
 
+export class OnEditChatMessageDto {
+  chatId!: string;
+  message!: ChatMessage;
+}
 export class EditChatMessageDto {
   chatType!: "direct" | "project";
   chatId!: string;

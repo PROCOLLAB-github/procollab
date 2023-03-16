@@ -16,6 +16,8 @@ import { ChatMessage } from "@models/chat-message.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { DomPortal } from "@angular/cdk/portal";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
+import { AuthService } from "@auth/services";
+import { map } from "rxjs";
 
 @Component({
   selector: "app-chat-message",
@@ -27,7 +29,8 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly elRef: ElementRef,
     private readonly snackbarService: SnackbarService,
     private readonly viewContainerRef: ViewContainerRef,
-    private readonly overlay: Overlay
+    private readonly overlay: Overlay,
+    private readonly authService: AuthService
   ) {}
 
   @Input() chatMessage!: ChatMessage;
@@ -52,6 +55,10 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private overlayRef?: OverlayRef;
   private portal?: DomPortal;
+
+  isOwner = this.authService.profile.pipe(
+    map(profile => profile.id === this.chatMessage.author.id)
+  );
 
   isOpen = false;
 

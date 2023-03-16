@@ -108,6 +108,8 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
 
     this.onChange(newValue);
     this.appValueChange.emit(newValue);
+
+    this.value = newValue;
   }
 
   onBlur(): void {

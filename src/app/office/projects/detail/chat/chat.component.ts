@@ -40,7 +40,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly chatService: ChatService
   ) {
     this.messageForm = this.fb.group({
-      messageControl: [{ text: "" }],
+      messageControl: [this.messageControlBaseValue],
     }); // the form for send, edit messages
   }
 
@@ -97,6 +97,14 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
+
+  /**
+   * The placeholder value of form control
+   * @private
+   */
+  private readonly messageControlBaseValue = {
+    text: "",
+  };
 
   /**
    * Amount of messages that we fetch
@@ -166,7 +174,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
       ?.valueChanges.pipe(
         throttleTime(2000),
         tap(() => {
-          return this.chatService.startTyping({
+          this.chatService.startTyping({
             chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
             chatType: "project",
           });
@@ -205,8 +213,8 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private initMessageEvent(): void {
-    const messageEvent$ = this.chatService.onMessage().subscribe(message => {
-      this.messages = [...this.messages, message];
+    const messageEvent$ = this.chatService.onMessage().subscribe(result => {
+      this.messages = [...this.messages, result.message];
     });
 
     messageEvent$ && this.subscriptions$.push(messageEvent$);
@@ -215,14 +223,11 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private initEditEvent(): void {
-    const editEvent$ = this.chatService.onEditMessage().subscribe(message => {
-      // TODO: remove all suppresses when back-end model will change
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const messageIdx = this.messages.findIndex(msg => msg.id === message.messageId);
+    const editEvent$ = this.chatService.onEditMessage().subscribe(result => {
+      const messageIdx = this.messages.findIndex(msg => msg.id === result.message.id);
 
       const messages = JSON.parse(JSON.stringify(this.messages));
-      messages.splice(messageIdx, 1, message);
+      messages.splice(messageIdx, 1, result.message);
 
       this.messages = messages;
     });
@@ -267,6 +272,8 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
         chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
       });
     }
+
+    this.messageForm.get("messageControl")?.setValue(this.messageControlBaseValue);
   }
 
   onInputResize(): void {

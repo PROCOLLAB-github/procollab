@@ -7,6 +7,9 @@ export class ChatMessage {
   id!: number;
   author!: User;
   isEdited!: boolean;
+  isRead!: boolean;
+  isDeleted!: boolean;
+  replyTo!: string | null;
   text!: string;
   createdAt!: string;
   // files!: { fileName: string; fileType: string; fileSize: number }[];
@@ -16,6 +19,9 @@ export class ChatMessage {
       author: User.default(),
       createdAt: dayjs().format("YYYY-MM-DD hh:mm:ss"),
       isEdited: false,
+      isDeleted: false,
+      isRead: true,
+      replyTo: null,
       // files: [
       //   { fileName: "some name", fileType: "pdf", fileSize: 10000 },
       //   { fileName: "some name", fileType: "pdf", fileSize: 10000 },
