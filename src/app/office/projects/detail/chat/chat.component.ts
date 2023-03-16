@@ -3,7 +3,7 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ChatMessage } from "@models/chat-message.model";
 import {
-  concatMap,
+  exhaustMap,
   filter,
   fromEvent,
   map,
@@ -41,7 +41,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
     this.messageForm = this.fb.group({
       messageControl: [{ text: "" }],
-    });
+    }); // the form for send, edit messages
   }
 
   ngOnInit(): void {
@@ -49,21 +49,23 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const projectSub$ = this.route.data.pipe(map(r => r["data"])).subscribe(project => {
       this.project = project;
-    });
+    }); // pull info about project
     projectSub$ && this.subscriptions$.push(projectSub$);
 
     const chatSub$ = this.chatService.connect().subscribe(() => {
+      // connecting to chats websocket
       console.debug("Chat websocket connected from ProjectChatComponent");
 
-      this.initTypingEvent();
-      this.initMessageEvent();
-      this.initEditEvent();
+      this.initTypingEvent(); // event for show bare whenever anybody in chat type something
+      this.initMessageEvent(); // Wait for messages from other member, insert into chat
+      this.initEditEvent(); // Wait for messages to be edited by other members
     });
     chatSub$ && this.subscriptions$.push(chatSub$);
 
-    this.initTypingSend();
+    this.initTypingSend(); // event for send info to websocket, that current user is typing
 
     this.fetchMessages().subscribe(() => {
+      // after all messages fetched we need to scroll down
       this.scrollToBottom();
     });
   }
@@ -74,14 +76,17 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
         .pipe(
           skip(1), // need skip first  scroll event because it's happens programmatically in ngOnInit hook
           skipWhile(
-            () => this.messages.length >= this.messagesTotalCount && this.messagesTotalCount !== 0
+            // if we have messages greater or equal than we can have in total we need to skip event
+            () =>
+              this.messages.length >= this.messagesTotalCount ||
+              // because messagesTotalCount pulls from server it's 0 in start of program, in that case we also need to skp event
+              this.messagesTotalCount !== 0
           ),
           filter(() => {
-            const offsetTop = this.viewport?.measureScrollOffset("top") ?? 0;
-            return offsetTop < 200;
+            const offsetTop = this.viewport?.measureScrollOffset("top"); // get amount of pixels that can be scrolled to the top of messages container
+            return offsetTop ? offsetTop < 200 : false;
           }),
-          throttleTime(1000),
-          concatMap(() => this.fetchMessages())
+          exhaustMap(() => this.fetchMessages())
         )
         .subscribe(noop);
 
@@ -93,23 +98,66 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
+  /**
+   * Amount of messages that we fetch
+   * each time {@link fetchMessages} runs
+   * @private
+   */
   private readonly messagesPerFetch = 20;
+  /**
+   * Total messages count in chat
+   * comes from server, set first time {@link fetchMessages} runs
+   * @private
+   */
   private messagesTotalCount = 0;
 
+  /**
+   * Array with all rxjs subscriptions
+   * unsubscribed in {@link ngOnDestroy}
+   */
   subscriptions$: Subscription[] = [];
 
+  /**
+   * Project info
+   * populates with observable call in {@link ngOnInit}
+   */
   project?: Project;
 
+  /**
+   * Get id of logged user
+   */
   currentUserId$: Observable<number> = this.authService.profile.pipe(map(r => r["id"]));
   messageForm: FormGroup;
 
+  /**
+   * The element in template that hold all messages
+   * it from angular cdk virtual scrolling
+   * need to not overpopulate browser engine by big amount of messages
+   */
   @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
 
+  /**
+   * All chat messages
+   * Renders only few of them
+   * See virtual scrolling {@link viewport}
+   */
   messages: ChatMessage[] = [];
 
+  /**
+   * Message that user want to edit
+   * set from {@link onEditMessage}
+   */
   editingMessage?: ChatMessage;
+  /**
+   * Message that user want to reply
+   * set from {@link onReplyMessage}
+   */
   replyMessage?: ChatMessage;
 
+  /**
+   * Amount of online users in chat
+   * @deprecated
+   */
   membersOnlineCount = 3;
 
   private initTypingSend(): void {
