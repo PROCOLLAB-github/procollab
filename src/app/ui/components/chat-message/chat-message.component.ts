@@ -6,15 +6,15 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
-  TemplateRef,
   ViewChild,
   ViewContainerRef,
 } from "@angular/core";
 import { ChatMessage } from "@models/chat-message.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
-import { TemplatePortal } from "@angular/cdk/portal";
+import { DomPortal } from "@angular/cdk/portal";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 
 @Component({
@@ -22,7 +22,7 @@ import { Overlay, OverlayRef } from "@angular/cdk/overlay";
   templateUrl: "./chat-message.component.html",
   styleUrls: ["./chat-message.component.scss"],
 })
-export class ChatMessageComponent implements OnInit, AfterViewInit {
+export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly elRef: ElementRef,
     private readonly snackbarService: SnackbarService,
@@ -40,30 +40,48 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.overlayRef = this.overlay.create({
       hasBackdrop: false,
-      scrollStrategy: this.overlay.scrollStrategies.close(),
     });
-    this.templatePortal = new TemplatePortal(this.contextMenuTemplate, this.viewContainerRef);
+    this.portal = new DomPortal(this.contextMenu);
   }
 
-  @ViewChild("contextMenu") contextMenuTemplate!: TemplateRef<HTMLUListElement>;
+  ngOnDestroy(): void {
+    this.overlayRef?.detach();
+  }
+
+  @ViewChild("contextMenu") contextMenu!: ElementRef<HTMLUListElement>;
 
   private overlayRef?: OverlayRef;
-  private templatePortal?: TemplatePortal;
+  private portal?: DomPortal;
+
+  isOpen = false;
 
   onOpenContextmenu(event: MouseEvent) {
     event.preventDefault();
 
+    this.isOpen = true;
+
+    const contextMenuHeight = this.contextMenu.nativeElement.offsetHeight;
+
+    const positionX = event.clientX;
+    const positionY =
+      contextMenuHeight + event.clientY > window.innerHeight
+        ? event.clientY - contextMenuHeight
+        : event.clientY;
+
     const positionStrategy = this.overlay
       .position()
       .global()
-      .left(event.clientX + "px")
-      .top(event.clientY + "px");
+      .left(positionX + "px")
+      .top(positionY + "px");
     this.overlayRef?.updatePositionStrategy(positionStrategy);
 
-    !this.overlayRef?.hasAttached() && this.overlayRef?.attach(this.templatePortal);
+    !this.overlayRef?.hasAttached() && this.overlayRef?.attach(this.portal);
+
+    this.contextMenu.nativeElement.focus();
   }
 
   onCloseContextmenu() {
+    this.isOpen = false;
     this.overlayRef?.detach();
   }
 
@@ -74,6 +92,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
   onCopyContent(event: MouseEvent) {
     event.stopPropagation();
 
+    this.isOpen = false;
     this.overlayRef?.detach();
 
     navigator.clipboard.writeText(this.chatMessage.text).then(() => {
@@ -86,6 +105,8 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
     event.stopPropagation();
 
     this.delete.emit(this.chatMessage.id);
+
+    this.isOpen = false;
     this.overlayRef?.detach();
   }
 
@@ -93,6 +114,8 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
     event.stopPropagation();
 
     this.reply.emit(this.chatMessage.id);
+
+    this.isOpen = false;
     this.overlayRef?.detach();
   }
 
@@ -100,6 +123,8 @@ export class ChatMessageComponent implements OnInit, AfterViewInit {
     event.stopPropagation();
 
     this.edit.emit(this.chatMessage.id);
+
+    this.isOpen = false;
     this.overlayRef?.detach();
   }
 }

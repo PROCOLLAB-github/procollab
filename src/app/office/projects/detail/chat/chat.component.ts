@@ -148,7 +148,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.editingMessage) {
       console.log(this.editingMessage);
       this.chatService.editMessage({
-        message: this.editingMessage.text,
+        text: this.editingMessage.text,
         messageId: this.editingMessage.id,
         chatType: "project",
         chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
@@ -156,7 +156,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.chatService.sendMessage({
         replyTo: this.replyMessage?.id ?? null,
-        message: this.messageForm.get("messageControl")?.value.text ?? "",
+        text: this.messageForm.get("messageControl")?.value.text ?? "",
         chatType: "project",
         chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
       });

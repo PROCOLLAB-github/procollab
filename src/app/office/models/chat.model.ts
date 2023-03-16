@@ -10,14 +10,14 @@ export class LoadChatMessages {
 export class SendChatMessageDto {
   chatType!: "direct" | "project";
   chatId!: string;
-  message!: string;
+  text!: string;
   replyTo!: number | null;
 }
 
 export class EditChatMessageDto {
   chatType!: "direct" | "project";
   chatId!: string;
-  message!: string;
+  text!: string;
   messageId!: number;
 }
 
