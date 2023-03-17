@@ -10,9 +10,10 @@ import { ControlErrorPipe } from "./pipes/control-error.pipe";
 import { DayjsPipe } from "./pipes/dayjs.pipe";
 import { UserRolePipe } from "./pipes/user-role.pipe";
 import { PluralizePipe } from "./pipes/pluralize.pipe";
+import { FilterPipe } from "./pipes/filter.pipe";
 
 @NgModule({
-  declarations: [ControlErrorPipe, DayjsPipe, UserRolePipe, PluralizePipe],
+  declarations: [ControlErrorPipe, DayjsPipe, UserRolePipe, PluralizePipe, FilterPipe],
   imports: [CommonModule],
   providers: [
     {
@@ -27,6 +28,6 @@ import { PluralizePipe } from "./pipes/pluralize.pipe";
     },
     ApiService,
   ],
-  exports: [ControlErrorPipe, DayjsPipe, UserRolePipe, PluralizePipe],
+  exports: [ControlErrorPipe, DayjsPipe, UserRolePipe, PluralizePipe, FilterPipe],
 })
 export class CoreModule {}

@@ -46,6 +46,11 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.navService.setNavTitle("Чат проекта");
 
+    const profile$ = this.authService.profile.subscribe(profile => {
+      this.currentUserId = profile.id;
+    });
+    profile$ && this.subscriptions$.push(profile$);
+
     const projectSub$ = this.route.data.pipe(map(r => r["data"])).subscribe(project => {
       this.project = project;
     }); // pull info about project
@@ -134,7 +139,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * Get id of logged user
    */
-  currentUserId$: Observable<number> = this.authService.profile.pipe(map(r => r["id"]));
+  currentUserId?: number;
   messageForm: FormGroup;
 
   /**
@@ -199,7 +204,10 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
         filter(Boolean)
       )
       .subscribe(person => {
-        if (!this.typingPersons.map(p => p.userId).includes(person.userId))
+        if (
+          !this.typingPersons.map(p => p.userId).includes(person.userId) &&
+          person.userId !== this.currentUserId
+        )
           this.typingPersons.push(person);
 
         setTimeout(() => {
