@@ -291,11 +291,15 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   onEditMessage(messageId: number): void {
     this.replyMessage = undefined;
     this.editingMessage = this.messages.find(message => message.id === messageId);
+
+    this.scrollToBottom();
   }
 
   onReplyMessage(messageId: number): void {
     this.editingMessage = undefined;
     this.replyMessage = this.messages.find(message => message.id === messageId);
+
+    this.scrollToBottom();
   }
 
   onCancelInput(): void {

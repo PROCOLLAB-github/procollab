@@ -89,12 +89,15 @@ $input-height: 66px + 18px;
   &__messages {
     flex-grow: 1;
     overflow-y: auto;
-    padding-bottom: $input-height + 60px;
   }
 
   &__message {
     display: block;
     width: 100%;
+
+    &:last-child {
+      margin-bottom: 40px;
+    }
   }
 
   &__typing {
