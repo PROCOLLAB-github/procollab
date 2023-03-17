@@ -10,6 +10,7 @@ import {
   EditChatMessageDto,
   LoadChatMessages,
   OnChatMessageDto,
+  OnDeleteChatMessageDto,
   OnEditChatMessageDto,
   ReadChatMessageDto,
   SendChatMessageDto,
@@ -75,6 +76,12 @@ export class ChatService {
     return this.websocketService
       .on<OnEditChatMessageDto>(ChatEventType.EDIT_MESSAGE)
       .pipe(map(message => plainToInstance(OnEditChatMessageDto, message)));
+  }
+
+  onDeleteMessage(): Observable<OnDeleteChatMessageDto> {
+    return this.websocketService
+      .on<OnDeleteChatMessageDto>(ChatEventType.DELETE_MESSAGE)
+      .pipe(map(message => plainToInstance(OnDeleteChatMessageDto, message)));
   }
 
   editMessage(message: EditChatMessageDto): void {

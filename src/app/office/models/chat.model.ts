@@ -23,6 +23,12 @@ export class OnEditChatMessageDto {
   chatId!: string;
   message!: ChatMessage;
 }
+
+export class OnDeleteChatMessageDto {
+  chatType!: "project" | string;
+  chatId!: string;
+  messageId!: number;
+}
 export class EditChatMessageDto {
   chatType!: "direct" | "project";
   chatId!: string;

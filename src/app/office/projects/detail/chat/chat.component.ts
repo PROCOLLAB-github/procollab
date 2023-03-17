@@ -10,7 +10,6 @@ import {
   noop,
   Observable,
   skip,
-  skipWhile,
   Subscription,
   tap,
   throttleTime,
@@ -59,6 +58,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
       this.initTypingEvent(); // event for show bare whenever anybody in chat type something
       this.initMessageEvent(); // Wait for messages from other member, insert into chat
       this.initEditEvent(); // Wait for messages to be edited by other members
+      this.initDeleteEvent(); // Delete messages when following event comes from websocket
     });
     chatSub$ && this.subscriptions$.push(chatSub$);
 
@@ -75,7 +75,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
       const viewPortScroll$ = fromEvent(this.viewport?.elementRef.nativeElement, "scroll")
         .pipe(
           skip(1), // need skip first  scroll event because it's happens programmatically in ngOnInit hook
-          skipWhile(
+          filter(
             // if we have messages greater or equal than we can have in total we need to skip event
             () =>
               this.messages.length >= this.messagesTotalCount ||
@@ -235,6 +235,19 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     editEvent$ && this.subscriptions$.push(editEvent$);
   }
 
+  private initDeleteEvent(): void {
+    const deleteEvent$ = this.chatService.onDeleteMessage().subscribe(result => {
+      const messageIdx = this.messages.findIndex(msg => msg.id === result.messageId);
+
+      const messages = JSON.parse(JSON.stringify(this.messages));
+      messages.splice(messageIdx, 1);
+
+      this.messages = messages;
+    });
+
+    deleteEvent$ && this.subscriptions$.push(deleteEvent$);
+  }
+
   private fetchMessages(): Observable<LoadChatMessages> {
     return this.chatService
       .loadMessage(
@@ -285,7 +298,14 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.modalService
       .confirmDelete("Вы уверены что хотите удалить сообщение?", `“${deletedMessage?.text}”`)
-      .subscribe(noop);
+      .pipe(filter(Boolean))
+      .subscribe(() => {
+        this.chatService.deleteMessage({
+          chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
+          chatType: "project",
+          messageId,
+        });
+      });
   }
 
   onEditMessage(messageId: number): void {
