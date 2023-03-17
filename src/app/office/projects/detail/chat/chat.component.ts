@@ -1,6 +1,6 @@
 /** @format */
 
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ChatMessage } from "@models/chat-message.model";
 import {
   exhaustMap,
@@ -23,6 +23,7 @@ import { AuthService } from "@auth/services";
 import { ModalService } from "@ui/models/modal.service";
 import { ChatService } from "@services/chat.service";
 import { LoadChatMessages } from "@models/chat.model";
+import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
 
 @Component({
   selector: "app-chat",
@@ -97,6 +98,8 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
 
       viewPortScroll$ && this.subscriptions$.push(viewPortScroll$);
     }
+
+    this.focusOnInput();
   }
 
   ngOnDestroy(): void {
@@ -148,6 +151,12 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
    * need to not overpopulate browser engine by big amount of messages
    */
   @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
+
+  /**
+   * Input message component
+   * Write edit reply to messages etc
+   */
+  @ViewChild(MessageInputComponent, { read: ElementRef }) messageInputComponent?: ElementRef;
 
   /**
    * All chat messages
@@ -277,6 +286,12 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  private focusOnInput(): void {
+    setTimeout(() => {
+      this.messageInputComponent?.nativeElement.querySelector("textarea").focus();
+    });
+  }
+
   onSubmitMessage(): void {
     if (this.editingMessage) {
       this.chatService.editMessage({
@@ -298,7 +313,8 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onInputResize(): void {
-    if (this.viewport?.getOffsetToRenderedContentStart()) this.viewport?.scrollToIndex(99999);
+    if (this.viewport && this.viewport.measureScrollOffset("bottom") < 50)
+      this.viewport?.scrollToIndex(99999);
   }
 
   onDeleteMessage(messageId: number): void {
@@ -321,6 +337,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     this.editingMessage = this.messages.find(message => message.id === messageId);
 
     this.scrollToBottom();
+    this.focusOnInput();
   }
 
   onReplyMessage(messageId: number): void {
@@ -328,6 +345,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     this.replyMessage = this.messages.find(message => message.id === messageId);
 
     this.scrollToBottom();
+    this.focusOnInput();
   }
 
   onCancelInput(): void {
