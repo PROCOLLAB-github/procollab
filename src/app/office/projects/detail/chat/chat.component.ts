@@ -314,7 +314,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onInputResize(): void {
     if (this.viewport && this.viewport.measureScrollOffset("bottom") < 50)
-      this.viewport?.scrollToIndex(99999);
+      this.scrollToBottom()
   }
 
   onDeleteMessage(messageId: number): void {
