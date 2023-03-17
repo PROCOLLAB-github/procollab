@@ -232,11 +232,11 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   private initMessageEvent(): void {
     const messageEvent$ = this.chatService.onMessage().subscribe(result => {
       this.messages = [...this.messages, result.message];
+
+      if (result.message.author.id === this.currentUserId) this.scrollToBottom();
     });
 
     messageEvent$ && this.subscriptions$.push(messageEvent$);
-
-    this.scrollToBottom();
   }
 
   private initEditEvent(): void {
