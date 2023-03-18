@@ -81,12 +81,15 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
       const viewPortScroll$ = fromEvent(this.viewport?.elementRef.nativeElement, "scroll")
         .pipe(
           skip(1), // need skip first  scroll event because it's happens programmatically in ngOnInit hook
+          tap(() => {
+            console.log(this.messages.length, this.messagesTotalCount);
+          }),
           filter(
             // if we have messages greater or equal than we can have in total we need to skip event
             () =>
-              this.messages.length >= this.messagesTotalCount ||
-              // because messagesTotalCount pulls from server it's 0 in start of program, in that case we also need to skp event
-              this.messagesTotalCount !== 0
+              this.messages.length < this.messagesTotalCount ||
+              // because messagesTotalCount pulls from server it's 0 in start of program, in that case we also need to make fetch
+              this.messagesTotalCount === 0
           ),
           filter(() => {
             const offsetTop = this.viewport?.measureScrollOffset("top"); // get amount of pixels that can be scrolled to the top of messages container
@@ -269,7 +272,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.chatService
       .loadMessage(
         Number(this.route.parent?.snapshot.paramMap.get("projectId")),
-        this.messages.length,
+        this.messages.length > 0 ? this.messages.length - 1 : 0,
         this.messagesPerFetch
       )
       .pipe(
