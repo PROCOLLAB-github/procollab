@@ -1,12 +1,12 @@
 <!-- @format -->
 
-<div class="detail">
-  <section class="bar detail__bar">
+<div class="detail" *ngIf="project">
+  <section class="bar detail__bar" *ngIf="isInProject$ | async">
     <nav class="bar__nav">
       <ul class="bar__tabs">
         <a
           class="bar__link"
-          [routerLink]="['/office/projects', projectId | async]"
+          [routerLink]="['/office/projects', project.id]"
           [routerLinkActiveOptions]="{ exact: true }"
           routerLinkActive="bar__link--active"
         >
@@ -14,14 +14,14 @@
         </a>
         <a
           class="bar__link"
-          [routerLink]="['/office/projects', projectId | async, 'responses']"
+          [routerLink]="['/office/projects', project.id, 'responses']"
           routerLinkActive="bar__link--active"
         >
           <li class="text-body-14 bar__item">Отклики на вакансию</li>
         </a>
         <a
           class="bar__link"
-          [routerLink]="['/office/projects', projectId | async, 'chat']"
+          [routerLink]="['/office/projects', project.id, 'chat']"
           routerLinkActive="bar__link--active"
         >
           <li class="text-body-14 bar__item">Чат проекта</li>

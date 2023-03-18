@@ -22,15 +22,9 @@ export class ProjectInfoComponent implements OnInit {
     private readonly navService: NavService
   ) {}
 
-  project$: Observable<Project> = this.route.data.pipe(
-    map(r => r["data"]),
-    map(r => r[0])
-  );
+  project$?: Observable<Project> = this.route.parent?.data.pipe(map(r => r["data"]));
 
-  vacancies$: Observable<Vacancy[]> = this.route.data.pipe(
-    map(r => r["data"]),
-    map(r => r[1])
-  );
+  vacancies$: Observable<Vacancy[]> = this.route.data.pipe(map(r => r["data"]));
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль проекта");

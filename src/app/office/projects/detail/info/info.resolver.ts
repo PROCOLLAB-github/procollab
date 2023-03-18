@@ -2,27 +2,19 @@
 
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve } from "@angular/router";
-import { forkJoin, Observable } from "rxjs";
-import { ProjectService } from "@services/project.service";
-import { Project } from "@models/project.model";
+import { Observable } from "rxjs";
 import { VacancyService } from "@services/vacancy.service";
 import { Vacancy } from "@models/vacancy.model";
 
 @Injectable({
   providedIn: "root",
 })
-export class ProjectInfoResolver implements Resolve<[Project, Vacancy[]]> {
-  constructor(
-    private readonly projectService: ProjectService,
-    private readonly vacancyService: VacancyService
-  ) {}
+export class ProjectInfoResolver implements Resolve<Vacancy[]> {
+  constructor(private readonly vacancyService: VacancyService) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<[Project, Vacancy[]]> {
+  resolve(route: ActivatedRouteSnapshot): Observable<Vacancy[]> {
     const projectId = Number(route.paramMap.get("projectId"));
 
-    return forkJoin([
-      this.projectService.getOne(projectId),
-      this.vacancyService.getForProject(projectId),
-    ]);
+    return this.vacancyService.getForProject(projectId);
   }
 }

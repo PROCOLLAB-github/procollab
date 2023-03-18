@@ -1,21 +1,35 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
-import { map, Observable } from "rxjs";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { map, Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
+import { Project } from "@models/project.model";
+import { AuthService } from "@auth/services";
 
 @Component({
   selector: "app-detail",
   templateUrl: "./detail.component.html",
   styleUrls: ["./detail.component.scss"],
 })
-export class ProjectDetailComponent implements OnInit {
-  constructor(private readonly route: ActivatedRoute) {}
+export class ProjectDetailComponent implements OnInit, OnDestroy {
+  constructor(private readonly route: ActivatedRoute, private readonly authService: AuthService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const projectSub$ = this.route.data.pipe(map(r => r["data"])).subscribe(project => {
+      this.project = project;
+    });
+    projectSub$ && this.subscriptions$.push(projectSub$);
+  }
 
-  projectId: Observable<number> = this.route.params.pipe(
-    map(r => r["projectId"]),
-    map(Number)
+  ngOnDestroy(): void {
+    this.subscriptions$.forEach($ => $.unsubscribe());
+  }
+
+  subscriptions$: Subscription[] = [];
+
+  project?: Project;
+
+  isInProject$ = this.authService.profile.pipe(
+    map(profile => this.project?.collaborators.map(person => person.userId).includes(profile.id))
   );
 }
