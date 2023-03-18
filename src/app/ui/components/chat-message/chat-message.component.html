@@ -37,10 +37,15 @@
     <i appIcon icon="dots" appWidth="4" appHeight="16" appViewBox="0 0 4 16"></i>
   </div>
 </div>
-<ul class="message__contextmenu contextmenu" #contextMenu [style.opacity]="isOpen ? 1 : 0">
+<ul
+  #contextMenu
+  class="message__contextmenu contextmenu"
+  *ngIf="authService.profile | async as profile"
+  [style.opacity]="isOpen ? 1 : 0"
+>
   <li class="contextmenu__item text-body-14" (click)="onCopyContent($event)">Скопировать</li>
   <li class="contextmenu__item text-body-14" (click)="onReply($event)">Ответить</li>
-  <ng-container *ngIf="isOwner | async">
+  <ng-container *ngIf="profile.id === chatMessage.author.id">
     <li class="contextmenu__item text-body-14" (click)="onEdit($event)">Редактировать</li>
     <li class="contextmenu__item contextmenu__item--red text-body-14" (click)="onDelete($event)">
       Удалить

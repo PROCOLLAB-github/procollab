@@ -17,7 +17,6 @@ import { SnackbarService } from "@ui/services/snackbar.service";
 import { DomPortal } from "@angular/cdk/portal";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { AuthService } from "@auth/services";
-import { map } from "rxjs";
 
 @Component({
   selector: "app-chat-message",
@@ -30,7 +29,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly snackbarService: SnackbarService,
     private readonly viewContainerRef: ViewContainerRef,
     private readonly overlay: Overlay,
-    private readonly authService: AuthService
+    public readonly authService: AuthService
   ) {}
 
   @Input() chatMessage!: ChatMessage;
@@ -40,6 +39,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() delete = new EventEmitter<number>();
 
   ngOnInit(): void {}
+
   ngAfterViewInit(): void {
     this.overlayRef = this.overlay.create({
       hasBackdrop: false,
@@ -55,10 +55,6 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private overlayRef?: OverlayRef;
   private portal?: DomPortal;
-
-  isOwner = this.authService.profile.pipe(
-    map(profile => profile.id === this.chatMessage.author.id)
-  );
 
   isOpen = false;
 
@@ -90,10 +86,6 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   onCloseContextmenu() {
     this.isOpen = false;
     this.overlayRef?.detach();
-  }
-
-  onClickContextmenu(event: MouseEvent) {
-    event.stopPropagation();
   }
 
   onCopyContent(event: MouseEvent) {
