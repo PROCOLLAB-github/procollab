@@ -81,9 +81,6 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
       const viewPortScroll$ = fromEvent(this.viewport?.elementRef.nativeElement, "scroll")
         .pipe(
           skip(1), // need skip first  scroll event because it's happens programmatically in ngOnInit hook
-          tap(() => {
-            console.log(this.messages.length, this.messagesTotalCount);
-          }),
           filter(
             // if we have messages greater or equal than we can have in total we need to skip event
             () =>
@@ -93,7 +90,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
           ),
           filter(() => {
             const offsetTop = this.viewport?.measureScrollOffset("top"); // get amount of pixels that can be scrolled to the top of messages container
-            return offsetTop ? offsetTop < 200 : false;
+            return offsetTop ? offsetTop <= 200 : false;
           }),
           exhaustMap(() => this.fetchMessages())
         )
@@ -284,8 +281,15 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private scrollToBottom(): void {
+    // Sadly buy it's work only this way
+    // It seems that when first scrollTo works
+    // It didn't render all elements so bottom 0 is not actual bottom of all comments
     setTimeout(() => {
-      this.viewport?.scrollToIndex(999999);
+      this.viewport?.scrollTo({ bottom: 0 });
+
+      setTimeout(() => {
+        this.viewport?.scrollTo({ bottom: 0 });
+      }, 50);
     });
   }
 
@@ -340,7 +344,6 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     this.replyMessage = undefined;
     this.editingMessage = this.messages.find(message => message.id === messageId);
 
-    this.scrollToBottom();
     this.focusOnInput();
   }
 
@@ -348,7 +351,6 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     this.editingMessage = undefined;
     this.replyMessage = this.messages.find(message => message.id === messageId);
 
-    this.scrollToBottom();
     this.focusOnInput();
   }
 
