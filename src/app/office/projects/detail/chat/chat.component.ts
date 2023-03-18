@@ -293,6 +293,8 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSubmitMessage(): void {
+    if (!this.messageForm.get("messageControl")?.value.text.trim()) return;
+
     if (this.editingMessage) {
       this.chatService.editMessage({
         text: this.messageForm.get("messageControl")?.value.text,
@@ -313,8 +315,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onInputResize(): void {
-    if (this.viewport && this.viewport.measureScrollOffset("bottom") < 50)
-      this.scrollToBottom()
+    if (this.viewport && this.viewport.measureScrollOffset("bottom") < 50) this.scrollToBottom();
   }
 
   onDeleteMessage(messageId: number): void {
