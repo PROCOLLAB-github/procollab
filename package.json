@@ -4,7 +4,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start:mock": "./node_modules/.bin/json-server --watch mock.json --no-cors --config json-server.json",
     "build": "npm run build:sprite && ng build",
     "watch": "ng build --watch --configuration development",
     "build:sprite": "svg-sprite -s --dest=src/assets/icons src/assets/icons/svg/*.svg ",
@@ -66,7 +65,6 @@
     "eslint-plugin-promise": "^6.0.0",
     "intl": "^1.2.5",
     "jasmine-core": "~4.0.0",
-    "json-server": "^0.17.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.1.0",
