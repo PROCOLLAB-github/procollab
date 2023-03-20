@@ -38,8 +38,8 @@
 .profile {
   display: flex;
   flex-direction: row-reverse;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 
   @include responsive.apply-desktop {
     flex-direction: column;
@@ -54,7 +54,7 @@
   }
 
   &__status {
-    margin: 0 0 3px 0;
+    margin: 0 0 3px;
     color: var(--dark-gray);
 
     @include responsive.apply-desktop {

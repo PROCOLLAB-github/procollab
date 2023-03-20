@@ -15,9 +15,9 @@
     border-radius: var(--rounded-md);
 
     @include responsive.apply-desktop {
-      padding: 24px;
       flex-direction: row;
       align-items: flex-start;
+      padding: 24px;
     }
   }
 
@@ -32,8 +32,8 @@
       flex-grow: 0;
 
       &:first-child {
-        margin-right: 50px;
         order: unset;
+        margin-right: 50px;
       }
     }
   }
@@ -76,8 +76,8 @@
   }
 
   &__save {
-    margin-top: 16px;
     order: 3;
+    margin-top: 16px;
 
     @include responsive.apply-desktop {
       position: absolute;

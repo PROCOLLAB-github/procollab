@@ -12,7 +12,7 @@
     "test:ci": "ng test --browsers=Headless --no-watch",
     "lint:ts": "eslint src/**/*.ts",
     "format": "prettier --write src/",
-    "lint:scss": "stylelint src/**/*.scss",
+    "lint:scss": "stylelint src/**/*.scss --fix",
     "docs:json": "compodoc -p ./tsconfig.json -e json -d ."
   },
   "precommit": [

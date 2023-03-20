@@ -68,11 +68,11 @@
     }
 
     &::after {
-      content: "";
       display: block;
-      margin: auto;
-      height: 5px;
       width: 85px;
+      height: 5px;
+      margin: auto;
+      content: "";
       background-color: var(--gray);
       border-radius: var(--rounded-lg);
     }
@@ -84,8 +84,8 @@
     bottom: 0;
     left: 0;
     z-index: 10;
-    max-height: 72vh;
     height: 800px;
+    max-height: 72vh;
     overflow-y: auto;
     background-color: var(--white);
     border-radius: var(--rounded-lg);
@@ -113,11 +113,11 @@
 
 .empty {
   display: flex;
-  align-items: center;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding-top: 70px;
   width: 100%;
+  padding-top: 70px;
 
   @include responsive.apply-desktop {
     padding-top: 128px;
@@ -127,8 +127,8 @@
     display: flex;
     align-items: center;
     color: var(--accent);
-    transition: color 0.2s;
     cursor: pointer;
+    transition: color 0.2s;
 
     i {
       margin-right: 10px;
