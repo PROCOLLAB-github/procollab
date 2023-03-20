@@ -9,7 +9,8 @@
   }
 
   @include responsive.apply-desktop {
-    background: var(--white) no-repeat url("/assets/images/office/vacancy/send/bg.svg")
+    background:
+      var(--white) no-repeat url("/assets/images/office/vacancy/send/bg.svg")
       right/contain;
   }
 
@@ -77,9 +78,9 @@
 }
 
 .form {
+  padding: 16px;
   background-color: var(--white);
   border-radius: var(--rounded-md);
-  padding: 16px;
 
   &__submit {
     display: block;
@@ -102,8 +103,8 @@ $succeed-modal-width: 310px;
   }
 
   &__text {
-    color: var(--black);
     margin-bottom: 18px;
+    color: var(--black);
   }
 
   &__link {

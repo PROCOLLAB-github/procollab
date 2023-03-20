@@ -11,8 +11,8 @@
 
   &__main {
     display: grid;
-    grid-gap: 8px;
     grid-template-columns: 1fr;
+    grid-gap: 8px;
 
     @include responsive.apply-desktop {
       grid-template-columns: minmax(445px, 1fr) 1fr 1fr;
@@ -30,8 +30,8 @@
     grid-row-start: 4;
 
     @include responsive.apply-desktop {
-      grid-column: span 2;
       grid-row-start: unset;
+      grid-column: span 2;
     }
   }
 

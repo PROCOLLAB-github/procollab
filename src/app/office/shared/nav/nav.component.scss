@@ -16,8 +16,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 15px;
     max-width: responsive.$container-md;
+    padding: 0 15px;
     margin: 0 auto;
 
     @include responsive.apply-desktop {
@@ -40,9 +40,9 @@
     justify-content: center;
     width: 40px;
     height: 40px;
+    color: var(--black);
     cursor: pointer;
     border-radius: var(--rounded-sm);
-    color: var(--black);
 
     > .attention {
       top: 9px;
@@ -50,8 +50,8 @@
     }
 
     &--active {
-      background-color: var(--accent);
       color: var(--white);
+      background-color: var(--accent);
     }
   }
 
@@ -73,6 +73,7 @@
 
   &__title {
     color: var(--black);
+
     @include typography.heading-3;
 
     @include responsive.apply-desktop {

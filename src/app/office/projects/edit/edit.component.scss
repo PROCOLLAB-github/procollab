@@ -34,6 +34,7 @@
   &__nav-item {
     color: var(--gray);
     cursor: pointer;
+
     @include typography.heading-4;
 
     @include responsive.apply-desktop {
