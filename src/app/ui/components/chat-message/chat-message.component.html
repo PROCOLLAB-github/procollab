@@ -50,6 +50,7 @@
   class="message__contextmenu contextmenu"
   *ngIf="authService.profile | async as profile"
   [style.opacity]="isOpen ? 1 : 0"
+  [style.pointer-events]="isOpen ? 'auto' : 'none'"
 >
   <li class="contextmenu__item text-body-14" (click)="onCopyContent($event)">Скопировать</li>
   <li class="contextmenu__item text-body-14" (click)="onReply($event)">Ответить</li>
