@@ -17,6 +17,14 @@
           {{ chatMessage.createdAt | dayjs: "format":"HH:mm" }}
         </div>
       </div>
+      <div *ngIf="chatMessage.replyTo" class="message__reply reply">
+        <div class="reply__name text-bold-body-16">
+          {{ chatMessage.replyTo.author.firstName }} {{ chatMessage.replyTo.author.lastName }}
+        </div>
+        <p class="reply__message text-body-1">
+          {{ chatMessage.replyTo.text }}
+        </p>
+      </div>
       <!-- <ul class="message__files">
         <li class="message__file" *ngFor="let file of chatMessage.files">
           <app-file-item

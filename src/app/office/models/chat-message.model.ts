@@ -9,7 +9,8 @@ export class ChatMessage {
   isEdited!: boolean;
   isRead!: boolean;
   isDeleted!: boolean;
-  replyTo!: string | null;
+  // eslint-disable-next-line no-use-before-define
+  replyTo!: ChatMessage | null;
   text!: string;
   createdAt!: string;
   // files!: { fileName: string; fileType: string; fileSize: number }[];
