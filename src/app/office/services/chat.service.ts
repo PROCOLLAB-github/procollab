@@ -53,12 +53,13 @@ export class ChatService {
     this.websocketService.send(ChatEventType.READ_MESSAGE, readChatMessage);
   }
 
-  loadMessage(projectId: number, count = 0, take = 20): Observable<LoadChatMessages> {
+  loadMessages(projectId: number, count?: number, take?: number): Observable<LoadChatMessages> {
+    let queries = new HttpParams();
+    if (count !== undefined) queries = queries.set("offset", count);
+    if (take !== undefined) queries = queries.set("limit", take);
+
     return this.apiService
-      .get<LoadChatMessages>(
-        `/chats/projects/${projectId}/messages/`,
-        new HttpParams({ fromObject: { previous: count, next: take } })
-      )
+      .get<LoadChatMessages>(`/chats/projects/${projectId}/messages/`, queries)
       .pipe(map(messages => plainToInstance(LoadChatMessages, messages)));
   }
 

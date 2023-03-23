@@ -267,14 +267,14 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private fetchMessages(): Observable<LoadChatMessages> {
     return this.chatService
-      .loadMessage(
+      .loadMessages(
         Number(this.route.parent?.snapshot.paramMap.get("projectId")),
-        this.messages.length > 0 ? this.messages.length - 1 : 0,
+        this.messages.length > 0 ? this.messages.length : 0,
         this.messagesPerFetch
       )
       .pipe(
         tap(messages => {
-          this.messages = messages.results.concat(this.messages);
+          this.messages = messages.results.reverse().concat(this.messages);
           this.messagesTotalCount = messages.count;
         })
       );
