@@ -152,7 +152,7 @@ export class NumSliderComponent implements OnInit, OnDestroy {
     this.setElements();
   }
 
-  private setElements() {
+  setElements() {
     if (!this.pointEl || !this.fillEl) return;
 
     this.pointEl.nativeElement.style.left = `${this.getButtonCoordinate()}%`;
