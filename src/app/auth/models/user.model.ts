@@ -52,6 +52,7 @@ export class User {
       firstName: "Егор",
       lastName: "Токарев",
       userType: 2,
+      email: "example@google.com",
       birthday: "23.42.3423",
       city: "234sadfas",
       organization: "dfasdfasdf",
