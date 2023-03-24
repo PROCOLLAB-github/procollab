@@ -9,6 +9,7 @@
     (input)="onInput($event)"
     (keydown.enter)="preventEnter($event)"
     (blur)="onBlur()"
+    [disabled]="disabled"
     [placeholder]="placeholder"
     class="text-body-16 field__input"
     [class.field__input--error]="error"
