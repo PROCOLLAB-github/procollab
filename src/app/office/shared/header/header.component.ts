@@ -14,10 +14,10 @@ import { Router } from "@angular/router";
 })
 export class HeaderComponent implements OnInit {
   constructor(
-    private notificationService: NotificationService,
-    public authService: AuthService,
-    private inviteService: InviteService,
-    private router: Router
+    private readonly notificationService: NotificationService,
+    public readonly authService: AuthService,
+    private readonly inviteService: InviteService,
+    private readonly router: Router
   ) {}
 
   @Input() invites: Invite[] = [];

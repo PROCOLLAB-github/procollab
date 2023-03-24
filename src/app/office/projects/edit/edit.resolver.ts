@@ -15,9 +15,9 @@ import { Invite } from "@models/invite.model";
 })
 export class ProjectEditResolver implements Resolve<[Project, Vacancy[], Invite[]]> {
   constructor(
-    private projectService: ProjectService,
-    private vacancyService: VacancyService,
-    private inviteService: InviteService
+    private readonly projectService: ProjectService,
+    private readonly vacancyService: VacancyService,
+    private readonly inviteService: InviteService
   ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<[Project, Vacancy[], Invite[]]> {

@@ -1,0 +1,85 @@
+<!-- @format -->
+
+<div class="message-input">
+  <!--<ul *ngIf="attachFiles.length" class="message-input__action action files-list">
+    <li
+      class="files-list__item file"
+      [class.file&#45;&#45;loading]="file.loading"
+      *ngFor="let file of attachFiles; index as index"
+    >
+      <i class="file__type" appIcon [icon]="'file_' + file.type" appSquare="24"></i>
+      <h3 class="file__name">{{ file.name }}</h3>
+      <div class="file__size">{{ file.size }}</div>
+
+      <i *ngIf="file.loading" appIcon icon="spinner" appSquare="24"></i>
+      <i
+        class="file__basket"
+        *ngIf="!file.loading"
+        appIcon
+        icon="basket"
+        appSquare="24"
+        (click)="onDeleteFile(index)"
+      ></i>
+    </li>
+  </ul>-->
+  <div *ngIf="editingMessage" class="message-input__action action">
+    <i class="action__icon" appIcon icon="edit-pen" appSquare="24"></i>
+    <div class="action__text">
+      <div class="action__name text-body-12">
+        {{ editingMessage.author.firstName }} {{ editingMessage.author.lastName }}
+      </div>
+      <div class="action__info text-body-14">{{ editingMessage.text }}</div>
+    </div>
+    <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
+  </div>
+  <div *ngIf="replyMessage" class="message-input__action action">
+    <i class="action__icon" appIcon icon="reply" appSquare="24"></i>
+    <div class="action__text">
+      <div class="action__name text-body-12">
+        {{ replyMessage.author.firstName }} {{ replyMessage.author.lastName }}
+      </div>
+      <div class="action__info text-body-14">{{ replyMessage.text }}</div>
+    </div>
+    <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
+  </div>
+  <div class="message-input__control">
+    <textarea
+      autosize
+      (input)="onInput($event)"
+      (keydown.enter)="submit.emit()"
+      (blur)="onBlur()"
+      (resized)="resize.emit()"
+      [mask]="mask"
+      [dropSpecialCharacters]="true"
+      [placeholder]="placeholder"
+      rows="1"
+      [value]="value.text"
+      class="message-input__field text-body-14"
+    ></textarea>
+    <!--<label class="message-input__attach-button text-bold-body-14">
+      <input type="file" multiple accept="*/*" (input)="onUpload($event)" />
+      <div class="message-input__attach-button-box">
+        <i appIcon icon="attach" appSquare="24"></i>
+      </div>
+    </label>-->
+    <button class="message-input__send-button" (click)="submit.emit()">
+      <i appIcon icon="send" appSquare="24"></i>
+    </button>
+  </div>
+  <!--<div class="drop-modal" *ngIf="showDropModal">
+    <div class="drop-modal__overlay"></div>
+    <div class="drop-modal__body">
+      <img
+        src="assets/images/projects/chat/drop.png"
+        alt="drop files"
+        class="drop-modal__img"
+        width="105px"
+        height="105px"
+      />
+      <h3 class="drop-modal__title text-bold-body-16">Перетащите сюда файлы для отправки</h3>
+      <p class="drop-modal__comments text-body-14">
+        Вы можете добавить к ним комментарий или отправить отдельно
+      </p>
+    </div>
+  </div>-->
+</div>

@@ -18,10 +18,10 @@ import { containerSm } from "@utils/responsive";
 })
 export class MentorsComponent implements OnInit, OnDestroy {
   constructor(
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    private navService: NavService,
-    private fb: FormBuilder
+    private readonly route: ActivatedRoute,
+    private readonly authService: AuthService,
+    private readonly navService: NavService,
+    private readonly fb: FormBuilder
   ) {
     this.searchForm = this.fb.group({
       search: ["", [Validators.required]],

@@ -1,0 +1,132 @@
+/** @format */
+
+@use "src/styles/responsive";
+@use "src/styles/typography";
+
+.message {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 10px 28px 10px 20px;
+
+  &--active {
+    background-color: var(--accent-light);
+
+    .message__menu-dots {
+      background-color: var(--white);
+    }
+  }
+
+  &__inner {
+    display: flex;
+    align-items: flex-start;
+    max-width: 90%;
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+
+  &__time {
+    color: var(--dark-gray);
+  }
+
+  &__avatar {
+    margin-right: 15px;
+  }
+
+  // &__files {
+  //  display: grid;
+  //  grid-template-columns: 1fr;
+  //  grid-gap: 4px 32px;
+  //  margin-bottom: 8px;
+  //  @include responsive.apply-desktop {
+  //    grid-template-columns: 1fr 1fr;
+  //  }
+  // }
+
+  &__content {
+    color: var(--dark-gray);
+  }
+
+  &__name {
+    margin-right: 15px;
+    color: var(--black);
+  }
+
+  &__menu-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-left: auto;
+    color: var(--dark-gray);
+    cursor: pointer;
+    border-radius: var(--rounded-md);
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: var(--light-gray);
+    }
+  }
+
+  &__contextmenu {
+    position: absolute;
+    z-index: 10;
+  }
+
+  &__reply {
+    margin-bottom: 10px;
+  }
+}
+
+.contextmenu {
+  padding: 8px;
+  background-color: var(--white);
+  border-radius: var(--rounded-lg);
+  box-shadow: 5px 5px 25px rgb(159 159 159 / 15%);
+
+  &__item {
+    padding: 10px;
+    color: var(--dark);
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background-color 0.2s;
+
+    &--red {
+      color: var(--red);
+    }
+
+    &:hover {
+      background-color: var(--light-gray);
+    }
+  }
+}
+
+.reply {
+  position: relative;
+  padding-left: 10px;
+
+  &::before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    content: "";
+    background-color: var(--accent);
+    border-radius: 10px;
+  }
+
+  &__name {
+    color: var(--black);
+  }
+
+  &__message {
+    color: var(--dark-gray);
+  }
+}

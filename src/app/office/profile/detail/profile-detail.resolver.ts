@@ -10,7 +10,7 @@ import { User } from "@auth/models/user.model";
   providedIn: "root",
 })
 export class ProfileDetailResolver implements Resolve<User> {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<User> {
     return this.authService.getUser(parseInt(<string>route.paramMap.get("id")));

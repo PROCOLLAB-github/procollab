@@ -9,9 +9,10 @@ import { CamelcaseInterceptor } from "./interceptors/camelcase.interceptor";
 import { ControlErrorPipe } from "./pipes/control-error.pipe";
 import { DayjsPipe } from "./pipes/dayjs.pipe";
 import { UserRolePipe } from "./pipes/user-role.pipe";
+import { PluralizePipe } from "./pipes/pluralize.pipe";
 
 @NgModule({
-  declarations: [ControlErrorPipe, DayjsPipe, UserRolePipe],
+  declarations: [ControlErrorPipe, DayjsPipe, UserRolePipe, PluralizePipe],
   imports: [CommonModule],
   providers: [
     {
@@ -26,6 +27,6 @@ import { UserRolePipe } from "./pipes/user-role.pipe";
     },
     ApiService,
   ],
-  exports: [ControlErrorPipe, DayjsPipe, UserRolePipe],
+  exports: [ControlErrorPipe, DayjsPipe, UserRolePipe, PluralizePipe],
 })
 export class CoreModule {}

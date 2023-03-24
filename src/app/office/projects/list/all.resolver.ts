@@ -10,7 +10,7 @@ import { ProjectService } from "@services/project.service";
   providedIn: "root",
 })
 export class ProjectsAllResolver implements Resolve<Project[]> {
-  constructor(private projectService: ProjectService) {}
+  constructor(private readonly projectService: ProjectService) {}
 
   resolve(): Observable<Project[]> {
     return this.projectService.getAll();

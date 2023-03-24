@@ -1,8 +1,10 @@
+/** @format */
+
 .invite {
   display: flex;
   align-items: center;
   padding: 10px;
-  background-color: var(--light-gray-1);
+  background-color: var(--light-gray);
   border-radius: var(--rounded-md);
 
   &__role {

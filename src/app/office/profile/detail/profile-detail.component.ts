@@ -14,9 +14,9 @@ import { AuthService } from "@auth/services";
 })
 export class ProfileDetailComponent implements OnInit {
   constructor(
-    private route: ActivatedRoute,
-    private navService: NavService,
-    public authService: AuthService
+    private readonly route: ActivatedRoute,
+    private readonly navService: NavService,
+    public readonly authService: AuthService
   ) {}
 
   user: Observable<User> = this.route.data.pipe(map(r => r["data"]));

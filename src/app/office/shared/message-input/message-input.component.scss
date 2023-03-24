@@ -1,0 +1,217 @@
+/** @format */
+
+@use "src/styles/responsive";
+@use "src/styles/typography";
+
+$button-size: 40px;
+
+.message-input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--gray);
+
+  &__control {
+    display: flex;
+    align-items: center;
+  }
+
+  &__field {
+    color: var(--dark);
+    border: none;
+    outline: none;
+    flex-grow: 1;
+    resize: none;
+    padding-right: 30px;
+
+    &::placeholder {
+      color: var(--dark-gray);
+    }
+  }
+
+  &__attach-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--gray);
+    margin-left: auto;
+    border-radius: 8px;
+    width: $button-size;
+    height: $button-size;
+    color: var(--dark-gray);
+    cursor: pointer;
+
+    input {
+      display: none;
+    }
+  }
+
+  &__send-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    margin-left: 18px;
+    width: $button-size;
+    height: $button-size;
+    background-color: var(--accent);
+    transition: background-color 0.2s;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--accent-dark);
+    }
+  }
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  padding-bottom: 12px;
+
+  &__icon {
+    min-width: 24px;
+    color: var(--accent);
+    margin-right: 18px;
+  }
+
+  &__text {
+    padding-left: 18px;
+    border-left: 2px solid var(--accent);
+    width: 100%;
+
+    @include responsive.apply-desktop {
+      width: 80%;
+    }
+  }
+
+  &__name {
+    color: var(--accent);
+  }
+
+  &__info {
+    color: var(--black);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 500px;
+  }
+
+  &__cross {
+    color: var(--red);
+    margin-left: auto;
+    transition: color 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--red-dark);
+    }
+  }
+}
+
+.files-list {
+  display: flex;
+  padding: 0 0 12px 0;
+  list-style-type: none;
+
+  &__item {
+    &:not(:last-child) {
+      margin-right: 18px;
+    }
+  }
+}
+
+.file {
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid var(--medium-grey-from-outline);
+  min-width: 140px;
+
+  &--loading {
+    .file__name {
+      color: var(--dark-gray);
+    }
+
+    .file__type {
+      opacity: 0.3;
+      filter: grayscale(1);
+    }
+  }
+
+  &__type {
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  &__name {
+    color: var(--black);
+
+    @include typography.body-14;
+  }
+
+  &__size {
+    color: var(--dark-gray);
+    margin-bottom: 12px;
+
+    @include typography.body-12;
+  }
+
+  &__basket {
+    color: var(--red);
+    transition: color 0.2s;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--red-dark);
+    }
+  }
+}
+
+.drop-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--black);
+    opacity: 0.5;
+  }
+
+  &__body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px;
+    border-radius: 5px;
+    background-color: var(--white);
+    border: 2px dashed var(--accent);
+  }
+
+  &__img {
+    margin-bottom: 12px;
+  }
+
+  &__title {
+    margin-bottom: 12px;
+    text-align: center;
+    width: 245px;
+    color: var(--black);
+  }
+
+  &__comments {
+    text-align: center;
+    width: 325px;
+    color: var(--dark-gray);
+  }
+}

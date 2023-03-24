@@ -12,7 +12,7 @@ import { HttpParams } from "@angular/common/http";
   providedIn: "root",
 })
 export class VacancyService {
-  constructor(private apiService: ApiService) {}
+  constructor(private readonly apiService: ApiService) {}
 
   getForProject(projectId: number): Observable<Vacancy[]> {
     return this.apiService

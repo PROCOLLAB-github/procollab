@@ -13,10 +13,10 @@ import { AuthService } from "@auth/services";
 
 @Injectable()
 export class BearerTokenInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   private retry = 0;
-  private maxRetryCount = 6;
+  private readonly maxRetryCount = 6;
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const headers: Record<string, string> = {

@@ -10,7 +10,7 @@ import { Invite } from "@models/invite.model";
   providedIn: "root",
 })
 export class OfficeResolver implements Resolve<Invite[]> {
-  constructor(private inviteService: InviteService) {}
+  constructor(private readonly inviteService: InviteService) {}
 
   resolve(): Observable<Invite[]> {
     return this.inviteService.getMy();

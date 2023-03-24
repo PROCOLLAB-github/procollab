@@ -15,10 +15,10 @@ import { ProjectService } from "@services/project.service";
 })
 export class ProjectsFilterComponent implements OnInit {
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private industryService: IndustryService,
-    private projectService: ProjectService
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly industryService: IndustryService,
+    private readonly projectService: ProjectService
   ) {}
 
   ngOnInit(): void {

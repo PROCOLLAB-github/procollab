@@ -9,7 +9,7 @@ import { NavService } from "@services/nav.service";
   styleUrls: ["./chat.component.scss"],
 })
 export class ChatComponent implements OnInit {
-  constructor(private navService: NavService) {}
+  constructor(private readonly navService: NavService) {}
 
   ngOnInit(): void {
     this.navService.setNavTitle("Чат");
