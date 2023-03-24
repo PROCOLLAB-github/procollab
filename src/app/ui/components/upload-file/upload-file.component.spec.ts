@@ -29,11 +29,10 @@ describe("UploadFileComponent", () => {
   });
 
   it("should upload file and emit change event", () => {
-    const file = new File(["test"], "test.png", { type: "image/png" });
     spyOn(component, "onUpdate");
 
     const input = fixture.nativeElement.querySelector("input[type=file]");
-    const event = new Event("change", { currentTarget: { files: [file] } } as EventInit);
+    const event = new Event("change");
     input.dispatchEvent(event);
 
     expect(component.onUpdate).toHaveBeenCalledWith(event);
