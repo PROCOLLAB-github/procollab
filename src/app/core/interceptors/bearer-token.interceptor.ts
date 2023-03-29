@@ -33,7 +33,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
     if (tokens !== null && this.retry < this.maxRetryCount) {
       return next.handle(req).pipe(
         catchError((error: HttpErrorResponse) => {
-          if (error.status === 401) {
+          if (error.status === 401 && !req.url.includes("/refresh")) {
             this.retry++;
             return this.handle401(request, next);
           }
