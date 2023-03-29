@@ -183,3 +183,13 @@ $section-padding: 24px;
     color: var(--dark-gray);
   }
 }
+
+.profile-bar {
+  display: none;
+  padding: 9px 0;
+  margin-bottom: 12px;
+
+  @include responsive.apply-desktop {
+    display: block;
+  }
+}
