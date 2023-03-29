@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
   styleUrls: ["./profile-info.component.scss"],
 })
 export class ProfileInfoComponent implements OnInit {
-  constructor(private readonly authService: AuthService, private readonly router: Router) {}
+  constructor(private readonly authService: AuthService, readonly router: Router) {}
 
   ngOnInit(): void {}
 
