@@ -14,11 +14,6 @@
     margin-bottom: 20px;
   }
 
-  &__bar {
-    padding: 9px 0;
-    margin-bottom: 12px;
-  }
-
   &__image {
     display: block;
     margin-bottom: 20px;
@@ -186,4 +181,9 @@
     color: var(--red);
     cursor: pointer;
   }
+}
+
+.project-bar {
+  padding: 9px 0;
+  margin-bottom: 12px;
 }
