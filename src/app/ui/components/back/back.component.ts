@@ -1,6 +1,8 @@
 /** @format */
 
 import { Component, Input, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { Location } from "@angular/common";
 
 @Component({
   selector: "app-back",
@@ -8,9 +10,18 @@ import { Component, Input, OnInit } from "@angular/core";
   styleUrls: ["./back.component.scss"],
 })
 export class BackComponent implements OnInit {
-  constructor() {}
+  constructor(private readonly router: Router, private readonly location: Location) {}
 
-  @Input() path = "..";
-
+  @Input() path?: string;
   ngOnInit(): void {}
+
+  onClick(): void {
+    if (this.path) {
+      this.router
+        .navigateByUrl(this.path)
+        .then(() => console.debug("Route changed from BackComponent"));
+    } else {
+      this.location.back();
+    }
+  }
 }
