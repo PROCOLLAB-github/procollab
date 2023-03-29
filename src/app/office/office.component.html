@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <div class="office">
-  <div class="office__top" #general>
+  <div class="office__top">
     <app-header
       class="office__header"
       *ngIf="invites$ | async as invites"
@@ -9,7 +9,7 @@
     ></app-header>
     <app-nav *ngIf="invites$ | async as invites" [invites]="invites"></app-nav>
   </div>
-  <div [style.height]="bodyHeight" class="office__body">
+  <div class="office__body">
     <div class="office__inner">
       <router-outlet></router-outlet>
     </div>
@@ -26,4 +26,6 @@
       >
     </div>
   </app-modal>
+  <app-delete-confirm></app-delete-confirm>
+  <app-snackbar></app-snackbar>
 </div>

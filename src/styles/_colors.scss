@@ -7,14 +7,15 @@
   --gradient: linear-gradient(90deg, #242424 0%, #6c27ff 50%);
   --accent: #6c27ff;
   --accent-dark: #{color.adjust(#6c27ff, $blackness: 20%)};
+  --accent-light: #f7f3ff;
 
   // GRAY
   --white: #fff;
   --black: #332e2d;
   --dark-gray: #8c888a;
   --gray: #d3d3d3;
-  --light-gray-1: #f9f9f9;
-  --light-gray-2: #eee;
+  --light-gray: #f9f9f9;
+  --medium-grey-from-outline: #eee;
 
   // FUNCTIONAL
   --green: #73c66e;

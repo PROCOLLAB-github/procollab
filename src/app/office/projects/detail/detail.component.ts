@@ -1,12 +1,9 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { map, Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
-import { map, Observable } from "rxjs";
 import { Project } from "@models/project.model";
-import { IndustryService } from "@services/industry.service";
-import { NavService } from "@services/nav.service";
-import { Vacancy } from "@models/vacancy.model";
 import { AuthService } from "@auth/services";
 
 @Component({
@@ -14,27 +11,25 @@ import { AuthService } from "@auth/services";
   templateUrl: "./detail.component.html",
   styleUrls: ["./detail.component.scss"],
 })
-export class ProjectDetailComponent implements OnInit {
-  constructor(
-    private route: ActivatedRoute,
-    public industryService: IndustryService,
-    public authService: AuthService,
-    private navService: NavService
-  ) {}
-
-  project$: Observable<Project> = this.route.data.pipe(
-    map(r => r["data"]),
-    map(r => r[0])
-  );
-
-  vacancies$: Observable<Vacancy[]> = this.route.data.pipe(
-    map(r => r["data"]),
-    map(r => r[1])
-  );
+export class ProjectDetailComponent implements OnInit, OnDestroy {
+  constructor(private readonly route: ActivatedRoute, private readonly authService: AuthService) {}
 
   ngOnInit(): void {
-    this.navService.setNavTitle("Профиль проекта");
+    const projectSub$ = this.route.data.pipe(map(r => r["data"])).subscribe(project => {
+      this.project = project;
+    });
+    projectSub$ && this.subscriptions$.push(projectSub$);
   }
 
-  readFull = false;
+  ngOnDestroy(): void {
+    this.subscriptions$.forEach($ => $.unsubscribe());
+  }
+
+  subscriptions$: Subscription[] = [];
+
+  project?: Project;
+
+  isInProject$ = this.authService.profile.pipe(
+    map(profile => this.project?.collaborators.map(person => person.userId).includes(profile.id))
+  );
 }

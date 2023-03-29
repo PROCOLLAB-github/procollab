@@ -10,7 +10,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(isToday);
 
 @Pipe({
-  name: "dayjs"
+  name: "dayjs",
 })
 export class DayjsPipe implements PipeTransform {
   constructor() {
@@ -18,21 +18,20 @@ export class DayjsPipe implements PipeTransform {
   }
 
   transform(value: any, type: string, options?: any): string | number | boolean {
-    switch (type) {
-      case "toX":
-        return dayjs().to(dayjs(value), true);
-      case "diffDay":
-        return dayjs(value).diff(dayjs(), "day");
-      case "diffHour":
-        return dayjs(value).diff(dayjs(), "hour");
-      case "isToday":
-        return dayjs(value).isToday();
-      case "fromX":
-        return dayjs(value).from(dayjs(), true);
-      case "format":
-        return dayjs(value).format(options);
-      default:
-        throw new Error(`Invalid action type specified: ${type}`);
+    if (type === "toX") {
+      return dayjs().to(dayjs(value), true);
+    } else if (type === "diffDay") {
+      return dayjs(value).diff(dayjs(), "day");
+    } else if (type === "diffHour") {
+      return dayjs(value).diff(dayjs(), "hour");
+    } else if (type === "isToday") {
+      return dayjs(value).isToday();
+    } else if (type === "fromX") {
+      return dayjs(value).from(dayjs(), true);
+    } else if (type === "format") {
+      return dayjs(value).format(options);
+    } else {
+      throw new Error(`Invalid action type specified: ${type}`);
     }
   }
 }

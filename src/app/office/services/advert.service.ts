@@ -10,7 +10,7 @@ import { plainToInstance } from "class-transformer";
   providedIn: "root",
 })
 export class AdvertService {
-  constructor(private apiService: ApiService) {}
+  constructor(private readonly apiService: ApiService) {}
 
   getAll(): Observable<New[]> {
     return this.apiService.get<New[]>("/news/").pipe(map(adverts => plainToInstance(New, adverts)));

@@ -11,7 +11,7 @@ import { HttpParams } from "@angular/common/http";
   providedIn: "root",
 })
 export class MemberService {
-  constructor(private apiService: ApiService) {}
+  constructor(private readonly apiService: ApiService) {}
 
   getMembers(): Observable<User[]> {
     return this.apiService

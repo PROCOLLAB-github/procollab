@@ -14,9 +14,9 @@ import { NavService } from "@services/nav.service";
 })
 export class ProjectResponsesComponent implements OnInit, OnDestroy {
   constructor(
-    private route: ActivatedRoute,
-    private vacancyService: VacancyService,
-    private navService: NavService
+    private readonly route: ActivatedRoute,
+    private readonly vacancyService: VacancyService,
+    private readonly navService: NavService
   ) {}
 
   ngOnInit(): void {

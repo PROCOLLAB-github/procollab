@@ -10,7 +10,7 @@ import { plainToInstance } from "class-transformer";
   providedIn: "root",
 })
 export class IndustryService {
-  constructor(private apiService: ApiService) {}
+  constructor(private readonly apiService: ApiService) {}
 
   private industries$ = new BehaviorSubject<Industry[]>([]);
   industries = this.industries$.asObservable();

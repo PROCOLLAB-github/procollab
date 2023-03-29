@@ -10,7 +10,7 @@ import { ProjectService } from "@services/project.service";
   providedIn: "root",
 })
 export class ProjectsResolver implements Resolve<ProjectCount> {
-  constructor(private projectService: ProjectService) {}
+  constructor(private readonly projectService: ProjectService) {}
 
   resolve(): Observable<ProjectCount> {
     return this.projectService.getCount();

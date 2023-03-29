@@ -19,12 +19,12 @@ import { containerSm } from "@utils/responsive";
 })
 export class ProjectsListComponent implements OnInit, OnDestroy {
   constructor(
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    private navService: NavService,
-    private projectService: ProjectService,
-    private cdref: ChangeDetectorRef,
-    private router: Router
+    private readonly route: ActivatedRoute,
+    private readonly authService: AuthService,
+    private readonly navService: NavService,
+    private readonly projectService: ProjectService,
+    private readonly cdref: ChangeDetectorRef,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {

@@ -16,12 +16,12 @@ import { NavService } from "@services/nav.service";
 })
 export class VacancySendComponent implements OnInit {
   constructor(
-    public authService: AuthService,
-    private fb: FormBuilder,
-    private vacancyService: VacancyService,
-    private validationService: ValidationService,
-    private route: ActivatedRoute,
-    private navService: NavService
+    public readonly authService: AuthService,
+    private readonly fb: FormBuilder,
+    private readonly vacancyService: VacancyService,
+    private readonly validationService: ValidationService,
+    private readonly route: ActivatedRoute,
+    private readonly navService: NavService
   ) {
     this.sendForm = this.fb.group({
       whyMe: ["", [Validators.required, Validators.minLength(20), Validators.maxLength(2000)]],

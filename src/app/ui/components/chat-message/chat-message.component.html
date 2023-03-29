@@ -1,0 +1,63 @@
+<!-- @format -->
+
+<div
+  class="message"
+  (contextmenu)="onOpenContextmenu($event)"
+  (clickOutside)="onCloseContextmenu()"
+  clickOutsideEvents="contextmenu"
+>
+  <div class="message__inner">
+    <app-avatar class="message__avatar" [url]="chatMessage.author.avatar"></app-avatar>
+    <div class="message__info">
+      <div class="message__top">
+        <div class="message__name text-bold-body-16">
+          {{ chatMessage.author.firstName }} {{ chatMessage.author.lastName }}
+        </div>
+        <div class="message__time text-body-14">
+          {{ chatMessage.createdAt | dayjs: "format":"HH:mm" }}
+        </div>
+      </div>
+      <div *ngIf="chatMessage.replyTo" class="message__reply reply">
+        <div class="reply__name text-bold-body-16">
+          {{ chatMessage.replyTo.author.firstName }} {{ chatMessage.replyTo.author.lastName }}
+        </div>
+        <p class="reply__message text-body-1">
+          {{ chatMessage.replyTo.text }}
+        </p>
+      </div>
+      <!-- <ul class="message__files">
+        <li class="message__file" *ngFor="let file of chatMessage.files">
+          <app-file-item
+            [name]="file.fileName"
+            [type]="file.fileType"
+            [size]="file.fileSize"
+          ></app-file-item>
+        </li>
+      </ul>-->
+      <div class="message__content text-body-14">{{ chatMessage.text }}</div>
+    </div>
+  </div>
+  <div
+    class="message__menu-dots"
+    (click)="onOpenContextmenu($event)"
+    (clickOutside)="onCloseContextmenu()"
+  >
+    <i appIcon icon="dots" appWidth="4" appHeight="16" appViewBox="0 0 4 16"></i>
+  </div>
+</div>
+<ul
+  #contextMenu
+  class="message__contextmenu contextmenu"
+  *ngIf="authService.profile | async as profile"
+  [style.opacity]="isOpen ? 1 : 0"
+  [style.pointer-events]="isOpen ? 'auto' : 'none'"
+>
+  <li class="contextmenu__item text-body-14" (click)="onCopyContent($event)">Скопировать</li>
+  <li class="contextmenu__item text-body-14" (click)="onReply($event)">Ответить</li>
+  <ng-container *ngIf="profile.id === chatMessage.author.id">
+    <li class="contextmenu__item text-body-14" (click)="onEdit($event)">Редактировать</li>
+    <li class="contextmenu__item contextmenu__item--red text-body-14" (click)="onDelete($event)">
+      Удалить
+    </li>
+  </ng-container>
+</ul>

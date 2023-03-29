@@ -1,0 +1,26 @@
+/** @format */
+
+.file {
+  display: flex;
+  align-items: center;
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    margin-right: 12px;
+    border: 1px solid var(--gray);
+  }
+
+  &__meta {
+    color: var(--dark-gray);
+  }
+
+  &__download {
+    margin-left: auto;
+    cursor: pointer;
+  }
+}
