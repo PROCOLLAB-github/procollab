@@ -3,6 +3,7 @@
 <div class="detail" *ngIf="project">
   <section class="bar detail__bar" *ngIf="isInProject$ | async">
     <nav class="bar__nav">
+      <app-back class="bar__back"></app-back>
       <ul class="bar__tabs">
         <a
           class="bar__link"

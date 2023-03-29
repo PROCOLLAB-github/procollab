@@ -32,6 +32,7 @@ import { SnackbarComponent } from "./components/snackbar/snackbar.component";
 import { DeleteConfirmComponent } from "./components/delete-confirm/delete-confirm.component";
 import { PortalModule } from "@angular/cdk/portal";
 import { OverlayModule } from "@angular/cdk/overlay";
+import { BackComponent } from "./components/back/back.component";
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { OverlayModule } from "@angular/cdk/overlay";
     FileItemComponent,
     SnackbarComponent,
     DeleteConfirmComponent,
+    BackComponent,
   ],
   imports: [
     CommonModule,
@@ -88,6 +90,7 @@ import { OverlayModule } from "@angular/cdk/overlay";
     FileItemComponent,
     SnackbarComponent,
     DeleteConfirmComponent,
+    BackComponent,
   ],
 })
 export class UiModule {}
