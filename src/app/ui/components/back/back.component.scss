@@ -9,6 +9,7 @@
   span {
     display: none;
     margin-left: 10px;
+    line-height: 1;
 
     @include responsive.apply-desktop {
       display: unset;

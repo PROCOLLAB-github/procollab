@@ -5,13 +5,15 @@
 .vacancy {
   @include responsive.apply-desktop {
     padding: 24px;
-    border-radius: var(--rounded-md);
-  }
-
-  @include responsive.apply-desktop {
     background:
       var(--white) no-repeat url("/assets/images/office/vacancy/send/bg.svg")
       right/contain;
+    border-radius: var(--rounded-md);
+  }
+
+  &__bar {
+    padding: 9px 0;
+    margin-bottom: 12px;
   }
 
   &__inner {
