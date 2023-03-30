@@ -10,8 +10,35 @@
       <i class="file__type" appIcon [icon]="'file_' + file.type" appSquare="24"></i>
       <h3 class="file__name">{{ file.name }}</h3>
       <div class="file__size">{{ file.size }}</div>
-
-      <i *ngIf="file.loading" appIcon icon="spinner" appSquare="24"></i>
+      <!--Use hardcoded svg here, because svg sprites
+      aren't capable of animation-->
+      <svg
+        *ngIf="file.loading"
+        class="file__loading"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-dasharray="15"
+          stroke-dashoffset="15"
+          stroke-linecap="round"
+          stroke-width="2"
+          d="M12 3C16.9706 3 21 7.02944 21 12"
+        >
+          <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" />
+          <animateTransform
+            attributeName="transform"
+            dur="1.5s"
+            repeatCount="indefinite"
+            type="rotate"
+            values="0 12 12;360 12 12"
+          />
+        </path>
+      </svg>
       <i
         class="file__basket"
         *ngIf="!file.loading"
