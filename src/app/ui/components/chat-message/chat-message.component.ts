@@ -10,7 +10,6 @@ import {
   OnInit,
   Output,
   ViewChild,
-  ViewContainerRef,
 } from "@angular/core";
 import { ChatMessage } from "@models/chat-message.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
@@ -27,7 +26,6 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly elRef: ElementRef,
     private readonly snackbarService: SnackbarService,
-    private readonly viewContainerRef: ViewContainerRef,
     private readonly overlay: Overlay,
     public readonly authService: AuthService
   ) {}

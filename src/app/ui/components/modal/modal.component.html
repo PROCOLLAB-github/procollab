@@ -1,8 +1,9 @@
 <!-- @format -->
-
-<div *ngIf="open" class="modal">
-  <div class="modal__overlay" (click)="openChange.emit(false)"></div>
-  <div class="modal__body">
-    <ng-content></ng-content>
+<ng-template #modalTemplate>
+  <div class="modal">
+    <div class="modal__overlay" (click)="openChange.emit(false)"></div>
+    <div class="modal__body">
+      <ng-content></ng-content>
+    </div>
   </div>
-</div>
+</ng-template>
