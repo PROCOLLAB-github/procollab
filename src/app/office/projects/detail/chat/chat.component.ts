@@ -40,8 +40,8 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly chatService: ChatService
   ) {
     this.messageForm = this.fb.group({
-      messageControl: [this.messageControlBaseValue],
-    }); // the form for send, edit messages
+      messageControl: [{ text: "", filesUrl: [] }],
+    });
   }
 
   ngOnInit(): void {
