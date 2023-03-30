@@ -121,6 +121,10 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
   writeValue(value: MessageInputComponent["value"]): void {
     setTimeout(() => {
       this.value = value;
+
+      if (!value.filesUrl.length) {
+        this.attachFiles = [];
+      }
     });
   }
 
@@ -147,7 +151,7 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     name: string;
     size: string;
     type: string;
-    url?: string;
+    link?: string;
     loading: boolean;
   }[] = [];
 
@@ -186,7 +190,7 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
 
             setTimeout(() => {
               this.attachFiles[i].loading = false;
-              this.attachFiles[i].url = url;
+              this.attachFiles[i].link = url;
             });
           },
           complete: () => {
@@ -200,9 +204,9 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
 
   onDeleteFile(idx: number): void {
     const file = this.attachFiles[idx];
-    if (!file || !file.url) return;
+    if (!file || !file.link) return;
 
-    this.fileService.deleteFile(file.url).subscribe(() => {
+    this.fileService.deleteFile(file.link).subscribe(() => {
       this.attachFiles.splice(idx, 1);
 
       this.value.filesUrl.splice(idx, 1);

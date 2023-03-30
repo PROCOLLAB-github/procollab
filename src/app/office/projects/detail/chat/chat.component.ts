@@ -112,6 +112,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private readonly messageControlBaseValue = {
     text: "",
+    filesUrl: [],
   };
 
   /**
@@ -313,6 +314,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
       this.chatService.sendMessage({
         replyTo: this.replyMessage?.id ?? null,
         text: this.messageForm.get("messageControl")?.value.text ?? "",
+        fileUrls: this.messageForm.get("messageControl")?.value.filesUrl ?? [],
         chatType: "project",
         chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
       });

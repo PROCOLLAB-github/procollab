@@ -20,7 +20,7 @@ export class FileItemComponent implements OnInit {
   onDownloadFile(): void {
     const link = document.createElement("a");
 
-    link.href = this.link;
+    link.setAttribute("href", this.link);
     link.setAttribute("download", this.name);
 
     document.body.appendChild(link);
