@@ -166,7 +166,7 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
       this.attachFiles.push({
         name: files[i].name,
         size: getFormattedFileSize(files[i].size),
-        type: files[i].type.split("/")[1],
+        type: files[i].type,
         loading: true,
       });
     }

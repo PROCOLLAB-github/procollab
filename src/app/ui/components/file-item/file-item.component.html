@@ -2,12 +2,7 @@
 
 <div class="file">
   <div class="file__icon">
-    <i
-      *ngIf="type"
-      appIcon
-      [icon]="fileMap[type].name"
-      [appSquare]="fileMap[type].size.toString()"
-    ></i>
+    <i *ngIf="type" appIcon [icon]="'file_' + (type | fileType)" appSquare="32"></i>
   </div>
   <div class="file__info">
     <div class="file__name text-bold-body-14">{{ name }}</div>

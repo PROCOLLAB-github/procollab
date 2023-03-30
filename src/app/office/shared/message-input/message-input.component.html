@@ -7,7 +7,8 @@
       [class.file--loading]="file.loading"
       *ngFor="let file of attachFiles; index as index"
     >
-      <i class="file__type" appIcon [icon]="'file_' + file.type" appSquare="24"></i>
+      {{ file.type }}
+      <i class="file__type" appIcon [icon]="'file_' + (file.type | fileType)" appSquare="24"></i>
       <h3 class="file__name">{{ file.name }}</h3>
       <div class="file__size">{{ file.size }}</div>
       <!--Use hardcoded svg here, because svg sprites

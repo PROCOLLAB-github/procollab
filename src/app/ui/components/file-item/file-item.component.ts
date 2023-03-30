@@ -17,17 +17,6 @@ export class FileItemComponent implements OnInit {
   getFormattedFileSize = getFormattedFileSize;
   ngOnInit(): void {}
 
-  fileMap: Record<string, { size: number; name: string }> = {
-    pdf: {
-      size: 24,
-      name: "file_pdf",
-    },
-    doc: {
-      size: 24,
-      name: "file_doc",
-    },
-  };
-
   onDownloadFile(): void {
     const link = document.createElement("a");
 
