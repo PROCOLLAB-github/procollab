@@ -37,14 +37,14 @@ const routes: Routes = [
           data: ProjectsAllResolver,
         },
       },
-      {
-        path: ":projectId/edit",
-        component: ProjectEditComponent,
-        resolve: {
-          data: ProjectEditResolver,
-        },
-      },
     ],
+  },
+  {
+    path: ":projectId/edit",
+    component: ProjectEditComponent,
+    resolve: {
+      data: ProjectEditResolver,
+    },
   },
   {
     path: ":projectId",

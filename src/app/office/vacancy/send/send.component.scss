@@ -5,13 +5,8 @@
 .vacancy {
   @include responsive.apply-desktop {
     padding: 24px;
+    background: var(--white) no-repeat url("/assets/images/office/vacancy/send/bg.svg") right/contain;
     border-radius: var(--rounded-md);
-  }
-
-  @include responsive.apply-desktop {
-    background:
-      var(--white) no-repeat url("/assets/images/office/vacancy/send/bg.svg")
-      right/contain;
   }
 
   &__inner {
@@ -110,4 +105,9 @@ $succeed-modal-width: 310px;
   &__link {
     width: $succeed-modal-width;
   }
+}
+
+.vacancy-bar {
+  padding: 9px 0;
+  margin-bottom: 12px;
 }

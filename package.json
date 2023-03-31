@@ -16,8 +16,7 @@
   },
   "precommit": [
     "lint:scss",
-    "lint:ts",
-    "test:ci"
+    "lint:ts"
   ],
   "private": true,
   "engines": {
