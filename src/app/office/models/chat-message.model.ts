@@ -3,6 +3,14 @@
 import { User } from "@auth/models/user.model";
 import * as dayjs from "dayjs";
 
+export class ChatFile {
+  name!: string;
+  type!: string;
+  size!: number;
+  link!: string;
+  user!: number;
+  datetimeUploaded!: string;
+}
 export class ChatMessage {
   id!: number;
   author!: User;
@@ -13,14 +21,7 @@ export class ChatMessage {
   replyTo!: ChatMessage | null;
   text!: string;
   createdAt!: string;
-  files!: {
-    name: string;
-    type: string;
-    size: number;
-    link: string;
-    user: number;
-    datetimeUploaded: string;
-  }[];
+  files!: ChatFile[];
 
   static default(): ChatMessage {
     return {

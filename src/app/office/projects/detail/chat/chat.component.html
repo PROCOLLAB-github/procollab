@@ -89,8 +89,8 @@
     <div class="files">
       <h2 class="files__title text-bold-body-16">Файлы</h2>
       <ul class="files__list">
-        <li class="files__item">
-          <app-file-item name="some name" [size]="100000" type="pdf"></app-file-item>
+        <li class="files__item" *ngFor="let file of chatFiles">
+          <app-file-item [name]="file.name" [link]="file.link" [type]="file.type" [size]="file.size"></app-file-item>
         </li>
       </ul>
     </div>
