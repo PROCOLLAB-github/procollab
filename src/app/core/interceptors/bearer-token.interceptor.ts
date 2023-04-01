@@ -16,7 +16,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
   constructor(private readonly authService: AuthService) {}
 
   private retry = 0;
-  private readonly maxRetryCount = 6;
+  private readonly maxRetryCount = 20;
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const headers: Record<string, string> = {

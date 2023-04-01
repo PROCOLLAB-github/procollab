@@ -33,6 +33,7 @@ import { DeleteConfirmComponent } from "./components/delete-confirm/delete-confi
 import { PortalModule } from "@angular/cdk/portal";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { FileTypePipe } from './pipes/file-type.pipe';
+import { BackComponent } from "./components/back/back.component";
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { FileTypePipe } from './pipes/file-type.pipe';
     SnackbarComponent,
     DeleteConfirmComponent,
     FileTypePipe,
+    BackComponent,
   ],
   imports: [
     CommonModule,
@@ -90,6 +92,7 @@ import { FileTypePipe } from './pipes/file-type.pipe';
     FileItemComponent,
     SnackbarComponent,
     DeleteConfirmComponent,
+    BackComponent,
     FileTypePipe,
   ],
 })

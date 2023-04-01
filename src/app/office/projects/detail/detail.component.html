@@ -1,9 +1,10 @@
 <!-- @format -->
 
 <div class="detail" *ngIf="project">
-  <section class="bar detail__bar" *ngIf="isInProject$ | async">
+  <section class="bar detail__bar" >
     <nav class="bar__nav">
-      <ul class="bar__tabs">
+      <app-back class="bar__back"></app-back>
+      <ul class="bar__tabs" *ngIf="isInProject$ | async">
         <a
           class="bar__link"
           [routerLink]="['/office/projects', project.id]"
