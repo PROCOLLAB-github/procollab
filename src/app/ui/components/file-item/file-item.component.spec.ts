@@ -1,16 +1,18 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { FileItemComponent } from './file-item.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('FileItemComponent', () => {
+import { FileItemComponent } from "./file-item.component";
+import { FileTypePipe } from "@ui/pipes/file-type.pipe";
+
+describe("FileItemComponent", () => {
   let component: FileItemComponent;
   let fixture: ComponentFixture<FileItemComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FileItemComponent ]
-    })
-    .compileComponents();
+      declarations: [FileItemComponent, FileTypePipe],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +21,7 @@ describe('FileItemComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

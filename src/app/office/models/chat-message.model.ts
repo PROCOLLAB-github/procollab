@@ -5,7 +5,8 @@ import * as dayjs from "dayjs";
 
 export class ChatFile {
   name!: string;
-  type!: string;
+  // TODO: switch to mimetype when back will be ready
+  extension!: string;
   size!: number;
   link!: string;
   user!: number;
@@ -34,7 +35,7 @@ export class ChatMessage {
       files: [
         {
           name: "some name",
-          type: "pdf",
+          extension: "pdf",
           size: 10000,
           user: 12,
           link: "sdfsdf",

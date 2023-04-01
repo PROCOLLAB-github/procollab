@@ -9,7 +9,7 @@ import { getFormattedFileSize } from "@utils/formatted-file-size";
 export class FileItemComponent implements OnInit {
   constructor() {}
 
-  @Input() type?: string;
+  @Input() type = "file";
   @Input() name = "";
   @Input() size = 0;
   @Input() link = "";
