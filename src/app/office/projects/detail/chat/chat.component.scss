@@ -88,12 +88,14 @@ $input-height: 66px + 18px;
 
   &__messages {
     flex-grow: 1;
+    max-width: 100%;
     overflow-y: auto;
   }
 
   &__message {
     display: block;
     width: 100%;
+    max-width: 800px;
 
     &:last-child {
       margin-bottom: 40px;
