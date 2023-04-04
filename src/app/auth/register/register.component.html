@@ -52,6 +52,7 @@
           [error]="birthday | controlError"
           type="text"
           mask="00.00.0000"
+          placeholder="ДД.ММ.ГГГГ"
           formControlName="birthday"
         ></app-input>
         <div *ngIf="birthday | controlError: 'required'" class="text-body-14 error">
