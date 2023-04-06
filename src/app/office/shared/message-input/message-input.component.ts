@@ -11,7 +11,9 @@ import {
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ChatMessage } from "@models/chat-message.model";
-import { Subscription } from "rxjs";
+import { fromEvent, map, Subscription } from "rxjs";
+import { FileService } from "@core/services/file.service";
+import { getFormattedFileSize } from "@utils/formatted-file-size";
 
 @Component({
   selector: "app-message-input",
@@ -26,7 +28,7 @@ import { Subscription } from "rxjs";
   ],
 })
 export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
-  constructor() {}
+  constructor(private readonly fileService: FileService) {}
 
   @Input() placeholder = "";
   @Input() mask = "";
@@ -64,43 +66,43 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
   @Output() cancel = new EventEmitter<void>();
 
   ngOnInit(): void {
-    // const dragOver$ = fromEvent<DragEvent>(document, "dragover")
-    //   .pipe()
-    //   .subscribe(this.handleDragOver.bind(this));
-    // dragOver$ && this.subscriptions$.push(dragOver$);
-    //
-    // const drop$ = fromEvent<DragEvent>(document, "drop").subscribe(this.handleDrop.bind(this));
-    // drop$ && this.subscriptions$.push(drop$);
+    const dragOver$ = fromEvent<DragEvent>(document, "dragover")
+      .pipe()
+      .subscribe(this.handleDragOver.bind(this));
+    dragOver$ && this.subscriptions$.push(dragOver$);
+
+    const drop$ = fromEvent<DragEvent>(document, "drop").subscribe(this.handleDrop.bind(this));
+    drop$ && this.subscriptions$.push(drop$);
   }
 
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
-  // private handleDragOver(event: DragEvent): void {
-  //   event.stopPropagation();
-  //   event.preventDefault();
-  //
-  //   this.showDropModal = true;
-  // }
-  //
-  // private handleDrop(event: DragEvent): void {
-  //   event.stopPropagation();
-  //   event.preventDefault();
-  //
-  //   const files = event.dataTransfer?.files;
-  //   if (!files) return;
-  //
-  //   this.addFiles(files);
-  //
-  //   this.showDropModal = false;
-  // }
-  //
-  // showDropModal = false;
+  private handleDragOver(event: DragEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.showDropModal = true;
+  }
+
+  private handleDrop(event: DragEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const files = event.dataTransfer?.files;
+    if (!files) return;
+
+    this.addFiles(files);
+
+    this.showDropModal = false;
+  }
+
+  showDropModal = false;
 
   subscriptions$: Subscription[] = [];
 
-  value: { text: string } = { text: "" };
+  value: { text: string; filesUrl: string[] } = { text: "", filesUrl: [] };
 
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
@@ -119,6 +121,10 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
   writeValue(value: MessageInputComponent["value"]): void {
     setTimeout(() => {
       this.value = value;
+
+      if (!value.filesUrl.length) {
+        this.attachFiles = [];
+      }
     });
   }
 
@@ -141,71 +147,71 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     this.disabled = isDisabled;
   }
 
-  // attachFiles: {
-  //   name: string;
-  //   size: string;
-  //   type: string;
-  //   url?: string;
-  //   loading: boolean;
-  // }[] = [];
+  attachFiles: {
+    name: string;
+    size: string;
+    type: string;
+    link?: string;
+    loading: boolean;
+  }[] = [];
 
-  // onUpload(evt: Event) {
-  //   const files = (evt.currentTarget as HTMLInputElement).files;
-  //
-  //   if (!files?.length) {
-  //     return;
-  //   }
-  //
-  //   this.addFiles(files);
-  // }
+  onUpload(evt: Event) {
+    const files = (evt.currentTarget as HTMLInputElement).files;
 
-  // private addFiles(files: FileList): void {
-  //   for (let i = 0; i < files.length; i++) {
-  //     this.attachFiles.push({
-  //       name: files[i].name,
-  //       size: getFormattedFileSize(files[i].size),
-  //       type: files[i].type.split("/")[1],
-  //       loading: true,
-  //     });
-  //   }
-  //
-  //   for (let i = 0; i < files.length; i++) {
-  //     this.fileService
-  //       .uploadFile(files[i])
-  //       .pipe(map(r => r.url))
-  //       .subscribe({
-  //         next: url => {
-  //           this.value = {
-  //             ...this.value,
-  //             filesUrl: [...this.value.filesUrl, url],
-  //           };
-  //
-  //           this.onChange(this.value);
-  //
-  //           setTimeout(() => {
-  //             this.attachFiles[i].loading = false;
-  //             this.attachFiles[i].url = url;
-  //           });
-  //         },
-  //         complete: () => {
-  //           setTimeout(() => {
-  //             this.attachFiles[i].loading = false;
-  //           });
-  //         },
-  //       });
-  //   }
-  // }
+    if (!files?.length) {
+      return;
+    }
 
-  // onDeleteFile(idx: number): void {
-  //   const file = this.attachFiles[idx];
-  //   if (!file || !file.url) return;
-  //
-  //   this.fileService.deleteFile(file.url).subscribe(() => {
-  //     this.attachFiles.splice(idx, 1);
-  //
-  // this.value.filesUrl.splice(idx, 1);
-  //
-  //     this.onChange(this.value);
-  //   });
-  // }
+    this.addFiles(files);
+  }
+
+  private addFiles(files: FileList): void {
+    for (let i = 0; i < files.length; i++) {
+      this.attachFiles.push({
+        name: files[i].name,
+        size: getFormattedFileSize(files[i].size),
+        type: files[i].type,
+        loading: true,
+      });
+    }
+
+    for (let i = 0; i < files.length; i++) {
+      this.fileService
+        .uploadFile(files[i])
+        .pipe(map(r => r.url))
+        .subscribe({
+          next: url => {
+            this.value = {
+              ...this.value,
+              filesUrl: [...this.value.filesUrl, url],
+            };
+
+            this.onChange(this.value);
+
+            setTimeout(() => {
+              this.attachFiles[i].loading = false;
+              this.attachFiles[i].link = url;
+            });
+          },
+          complete: () => {
+            setTimeout(() => {
+              this.attachFiles[i].loading = false;
+            });
+          },
+        });
+    }
+  }
+
+  onDeleteFile(idx: number): void {
+    const file = this.attachFiles[idx];
+    if (!file || !file.link) return;
+
+    this.fileService.deleteFile(file.link).subscribe(() => {
+      this.attachFiles.splice(idx, 1);
+
+      this.value.filesUrl.splice(idx, 1);
+
+      this.onChange(this.value);
+    });
+  }
 }

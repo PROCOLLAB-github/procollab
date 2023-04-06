@@ -1,7 +1,7 @@
 /** @format */
 
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ChatMessage } from "@models/chat-message.model";
+import { ChatFile, ChatMessage } from "@models/chat-message.model";
 import {
   exhaustMap,
   filter,
@@ -40,8 +40,8 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly chatService: ChatService
   ) {
     this.messageForm = this.fb.group({
-      messageControl: [this.messageControlBaseValue],
-    }); // the form for send, edit messages
+      messageControl: [{ text: "", filesUrl: [] }],
+    });
   }
 
   ngOnInit(): void {
@@ -74,6 +74,12 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
       // after all messages fetched we need to scroll down
       this.scrollToBottom();
     });
+
+    this.chatService
+      .loadProjectFiles(Number(this.route.parent?.snapshot.paramMap.get("projectId")))
+      .subscribe(files => {
+        this.chatFiles = files
+      });
   }
 
   ngAfterViewInit(): void {
@@ -112,6 +118,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private readonly messageControlBaseValue = {
     text: "",
+    filesUrl: [],
   };
 
   /**
@@ -138,6 +145,11 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
    * populates with observable call in {@link ngOnInit}
    */
   project?: Project;
+
+  /**
+   * All files listed in this chat
+   */
+  chatFiles?: ChatFile[];
 
   /**
    * Get id of logged user
@@ -313,6 +325,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
       this.chatService.sendMessage({
         replyTo: this.replyMessage?.id ?? null,
         text: this.messageForm.get("messageControl")?.value.text ?? "",
+        fileUrls: this.messageForm.get("messageControl")?.value.filesUrl ?? [],
         chatType: "project",
         chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
       });

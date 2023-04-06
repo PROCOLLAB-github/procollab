@@ -19,6 +19,7 @@ import {
 } from "@models/chat.model";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
+import { ChatFile } from "@models/chat-message.model";
 
 @Injectable({
   providedIn: "root",
@@ -61,6 +62,12 @@ export class ChatService {
     return this.apiService
       .get<LoadChatMessages>(`/chats/projects/${projectId}/messages/`, queries)
       .pipe(map(messages => plainToInstance(LoadChatMessages, messages)));
+  }
+
+  loadProjectFiles(projectId: number): Observable<ChatFile[]> {
+    return this.apiService
+      .get<ChatFile[]>(`/chats/projects/${projectId}/files`)
+      .pipe(map(r => plainToInstance(ChatFile, r)));
   }
 
   sendMessage(message: SendChatMessageDto): void {
