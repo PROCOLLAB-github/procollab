@@ -22,6 +22,7 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
   constructor(private fileService: FileService) {}
 
   @Input() size = 140;
+  @Input() error = false
 
   ngOnInit(): void {}
 
