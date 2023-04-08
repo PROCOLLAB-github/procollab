@@ -7,8 +7,8 @@ $button-size: 40px;
 
 .message-input {
   padding: 12px;
-  border-radius: 8px;
   border: 1px solid var(--gray);
+  border-radius: 8px;
 
   &__control {
     display: flex;
@@ -16,12 +16,12 @@ $button-size: 40px;
   }
 
   &__field {
+    flex-grow: 1;
+    padding-right: 30px;
     color: var(--dark);
+    resize: none;
     border: none;
     outline: none;
-    flex-grow: 1;
-    resize: none;
-    padding-right: 30px;
 
     &::placeholder {
       color: var(--dark-gray);
@@ -32,13 +32,13 @@ $button-size: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--gray);
-    margin-left: auto;
-    border-radius: 8px;
     width: $button-size;
     height: $button-size;
+    margin-left: auto;
     color: var(--dark-gray);
     cursor: pointer;
+    border: 1px solid var(--gray);
+    border-radius: 8px;
 
     input {
       display: none;
@@ -49,14 +49,14 @@ $button-size: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--white);
-    margin-left: 18px;
     width: $button-size;
     height: $button-size;
-    background-color: var(--accent);
-    transition: background-color 0.2s;
-    border-radius: 8px;
+    margin-left: 18px;
+    color: var(--white);
     cursor: pointer;
+    background-color: var(--accent);
+    border-radius: 8px;
+    transition: background-color 0.2s;
 
     &:hover {
       background-color: var(--accent-dark);
@@ -71,14 +71,14 @@ $button-size: 40px;
 
   &__icon {
     min-width: 24px;
-    color: var(--accent);
     margin-right: 18px;
+    color: var(--accent);
   }
 
   &__text {
+    width: 100%;
     padding-left: 18px;
     border-left: 2px solid var(--accent);
-    width: 100%;
 
     @include responsive.apply-desktop {
       width: 80%;
@@ -90,18 +90,18 @@ $button-size: 40px;
   }
 
   &__info {
-    color: var(--black);
+    width: 500px;
     overflow: hidden;
+    color: var(--black);
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 500px;
   }
 
   &__cross {
-    color: var(--red);
     margin-left: auto;
-    transition: color 0.2s;
+    color: var(--red);
     cursor: pointer;
+    transition: color 0.2s;
 
     &:hover {
       color: var(--red-dark);
@@ -111,7 +111,7 @@ $button-size: 40px;
 
 .files-list {
   display: flex;
-  padding: 0 0 12px 0;
+  padding: 0 0 12px;
   list-style-type: none;
 
   &__item {
@@ -122,10 +122,10 @@ $button-size: 40px;
 }
 
 .file {
-  padding: 10px;
-  border-radius: 20px;
-  border: 1px solid var(--medium-grey-from-outline);
   min-width: 140px;
+  padding: 10px;
+  border: 1px solid var(--medium-grey-from-outline);
+  border-radius: 20px;
 
   &--loading {
     .file__name {
@@ -133,8 +133,8 @@ $button-size: 40px;
     }
 
     .file__type {
-      opacity: 0.3;
       filter: grayscale(1);
+      opacity: 0.3;
     }
   }
 
@@ -150,16 +150,20 @@ $button-size: 40px;
   }
 
   &__size {
-    color: var(--dark-gray);
     margin-bottom: 12px;
+    color: var(--dark-gray);
 
     @include typography.body-12;
   }
 
+  &__loading {
+    color: var(--accent);
+  }
+
   &__basket {
     color: var(--red);
-    transition: color 0.2s;
     cursor: pointer;
+    transition: color 0.2s;
 
     &:hover {
       color: var(--red-dark);
@@ -173,6 +177,7 @@ $button-size: 40px;
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 10;
 
   &__overlay {
     position: absolute;
@@ -188,14 +193,14 @@ $button-size: 40px;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 36px;
-    border-radius: 5px;
     background-color: var(--white);
     border: 2px dashed var(--accent);
+    border-radius: 5px;
+    transform: translate(-50%, -50%);
   }
 
   &__img {
@@ -203,15 +208,15 @@ $button-size: 40px;
   }
 
   &__title {
-    margin-bottom: 12px;
-    text-align: center;
     width: 245px;
+    margin-bottom: 12px;
     color: var(--black);
+    text-align: center;
   }
 
   &__comments {
-    text-align: center;
     width: 325px;
     color: var(--dark-gray);
+    text-align: center;
   }
 }

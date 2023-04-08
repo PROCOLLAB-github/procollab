@@ -16,6 +16,7 @@ export class SendChatMessageDto {
   chatType!: "direct" | "project";
   chatId!: string;
   text!: string;
+  fileUrls!: string[];
   replyTo!: number | null;
 }
 

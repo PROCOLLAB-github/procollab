@@ -9,7 +9,7 @@ import { getFormattedFileSize } from "@utils/formatted-file-size";
 export class FileItemComponent implements OnInit {
   constructor() {}
 
-  @Input() type?: string;
+  @Input() type = "file";
   @Input() name = "";
   @Input() size = 0;
   @Input() link = "";
@@ -17,21 +17,10 @@ export class FileItemComponent implements OnInit {
   getFormattedFileSize = getFormattedFileSize;
   ngOnInit(): void {}
 
-  fileMap: Record<string, { size: number; name: string }> = {
-    pdf: {
-      size: 24,
-      name: "file_pdf",
-    },
-    doc: {
-      size: 24,
-      name: "file_doc",
-    },
-  };
-
   onDownloadFile(): void {
     const link = document.createElement("a");
 
-    link.href = this.link;
+    link.setAttribute("href", this.link);
     link.setAttribute("download", this.name);
 
     document.body.appendChild(link);

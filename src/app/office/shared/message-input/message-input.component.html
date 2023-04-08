@@ -1,17 +1,44 @@
 <!-- @format -->
 
 <div class="message-input">
-  <!--<ul *ngIf="attachFiles.length" class="message-input__action action files-list">
+  <ul *ngIf="attachFiles.length" class="message-input__action action files-list">
     <li
       class="files-list__item file"
-      [class.file&#45;&#45;loading]="file.loading"
+      [class.file--loading]="file.loading"
       *ngFor="let file of attachFiles; index as index"
     >
-      <i class="file__type" appIcon [icon]="'file_' + file.type" appSquare="24"></i>
+      <i class="file__type" appIcon [icon]="'file_' + (file.type | fileType)" appSquare="24"></i>
       <h3 class="file__name">{{ file.name }}</h3>
       <div class="file__size">{{ file.size }}</div>
-
-      <i *ngIf="file.loading" appIcon icon="spinner" appSquare="24"></i>
+      <!--Use hardcoded svg here, because svg sprites
+      aren't capable of animation-->
+      <svg
+        *ngIf="file.loading"
+        class="file__loading"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-dasharray="15"
+          stroke-dashoffset="15"
+          stroke-linecap="round"
+          stroke-width="2"
+          d="M12 3C16.9706 3 21 7.02944 21 12"
+        >
+          <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" />
+          <animateTransform
+            attributeName="transform"
+            dur="1.5s"
+            repeatCount="indefinite"
+            type="rotate"
+            values="0 12 12;360 12 12"
+          />
+        </path>
+      </svg>
       <i
         class="file__basket"
         *ngIf="!file.loading"
@@ -21,7 +48,7 @@
         (click)="onDeleteFile(index)"
       ></i>
     </li>
-  </ul>-->
+  </ul>
   <div *ngIf="editingMessage" class="message-input__action action">
     <i class="action__icon" appIcon icon="edit-pen" appSquare="24"></i>
     <div class="action__text">
@@ -56,17 +83,17 @@
       [value]="value.text"
       class="message-input__field text-body-14"
     ></textarea>
-    <!--<label class="message-input__attach-button text-bold-body-14">
+    <label class="message-input__attach-button text-bold-body-14">
       <input type="file" multiple accept="*/*" (input)="onUpload($event)" />
       <div class="message-input__attach-button-box">
         <i appIcon icon="attach" appSquare="24"></i>
       </div>
-    </label>-->
+    </label>
     <button class="message-input__send-button" (click)="submit.emit()">
       <i appIcon icon="send" appSquare="24"></i>
     </button>
   </div>
-  <!--<div class="drop-modal" *ngIf="showDropModal">
+  <div class="drop-modal" *ngIf="showDropModal">
     <div class="drop-modal__overlay"></div>
     <div class="drop-modal__body">
       <img
@@ -81,5 +108,5 @@
         Вы можете добавить к ним комментарий или отправить отдельно
       </p>
     </div>
-  </div>-->
+  </div>
 </div>

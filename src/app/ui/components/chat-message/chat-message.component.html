@@ -25,15 +25,16 @@
           {{ chatMessage.replyTo.text }}
         </p>
       </div>
-      <!-- <ul class="message__files">
+      <ul class="message__files">
         <li class="message__file" *ngFor="let file of chatMessage.files">
           <app-file-item
-            [name]="file.fileName"
-            [type]="file.fileType"
-            [size]="file.fileSize"
+            [name]="file.name"
+            [link]="file.link"
+            [type]="file.extension"
+            [size]="file.size"
           ></app-file-item>
         </li>
-      </ul>-->
+      </ul>
       <div class="message__content text-body-14">{{ chatMessage.text }}</div>
     </div>
   </div>
