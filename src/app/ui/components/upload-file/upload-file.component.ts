@@ -64,10 +64,11 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
   }
 
   onRemove(): void {
-    // TODO: make server delete when back will be ready
-    this.value = "";
+    this.fileService.deleteFile(this.value).subscribe(() => {
+      this.value = "";
 
-    this.onTouch();
-    this.onChange("");
+      this.onTouch();
+      this.onChange("");
+    });
   }
 }
