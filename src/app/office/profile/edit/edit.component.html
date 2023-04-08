@@ -230,9 +230,16 @@
       </div>
     </div>
     <div class="profile__column">
-      <fieldset class="profile__avatar">
+      <fieldset class="profile__avatar" *ngIf="profileForm.get('avatar') as avatar">
         <label for="avatar" class="field-label">Фотография профиля</label>
-        <app-avatar-control id="avatar" formControlName="avatar"></app-avatar-control>
+        <app-avatar-control
+          id="avatar"
+          formControlName="avatar"
+          [error]="avatar | controlError"
+        ></app-avatar-control>
+        <div *ngIf="avatar | controlError: 'required'" class="text-body-14 error">
+          {{ errorMessage.EMPTY_AVATAR }}
+        </div>
       </fieldset>
       <div class="profile__row">
         <fieldset *ngIf="profileForm.get('aboutMe') as aboutMe">
@@ -263,7 +270,7 @@
       </fieldset>
     </div>
     <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
-      <app-button [loader]="profileFormSubmitting" (click)="saveProfile()"> Сохранить </app-button>
+      <app-button [loader]="profileFormSubmitting" (click)="saveProfile()"> Сохранить</app-button>
     </div>
   </form>
 </main>
