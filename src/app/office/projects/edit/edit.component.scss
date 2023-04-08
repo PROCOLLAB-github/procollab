@@ -52,6 +52,8 @@
 
   &__slides-title {
     display: flex;
+    justify-content: center;
+    margin-top: 12px;
     color: var(--black);
 
     img {
@@ -63,6 +65,21 @@
     width: 275px;
     margin-top: 12px;
     color: var(--dark-gray);
+    text-align: center;
+  }
+
+  &__slides-error {
+    margin-top: 12px;
+    color: var(--red);
+  }
+
+  &__slides-open-file {
+    color: var(--accent);
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--accent-dark);
+    }
   }
 
   &__add-achievement {

@@ -21,6 +21,7 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
   constructor(private fileService: FileService) {}
 
   @Input() accept = "";
+  @Input() error = false;
 
   ngOnInit(): void {}
 

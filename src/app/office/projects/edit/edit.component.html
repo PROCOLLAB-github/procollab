@@ -100,19 +100,26 @@
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
           </fieldset>
-          <fieldset>
+          <fieldset *ngIf="projectForm.get('presentationAddress') as presentationAddress">
             <app-upload-file
-              class="project__clickable"
               formControlName="presentationAddress"
               accept=".pdf,.pptx"
+              [error]="presentationAddress | controlError"
             >
               <ng-container emptyPlaceholder>
+                <i appIcon icon="upload" appSquare="60"></i>
                 <h4 class="text-bold-body-16 project__slides-title">
-                  <img src="/assets/images/projects/shared/pdf.svg" alt="pdf" />
-                  Добавить файл презентации
+                  Перетащите или&nbsp;
+                  <span class="project__slides-open-file">откройте файл</span>&nbsp; презентации
                 </h4>
                 <p class="text-body-14 project__slides-text">
                   Презентации формата .PDF или .PPTX весом до 50МБ
+                </p>
+                <p
+                  class="project__slides-error text-body-14"
+                  *ngIf="presentationAddress | controlError: 'required'"
+                >
+                  Загрузите файл
                 </p>
               </ng-container>
             </app-upload-file>
