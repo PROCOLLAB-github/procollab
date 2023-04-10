@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <div class="root">
-  <div class="control" *ngIf="!value">
+  <div class="control" [class.control--error]="error" *ngIf="!value">
     <input [id]="controlId" hidden type="file" [accept]="accept" (change)="onUpdate($event)" />
     <label [for]="controlId">
       <div class="control__empty">
