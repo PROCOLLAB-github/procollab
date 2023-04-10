@@ -32,11 +32,15 @@
       </nav>
       <div class="project__inner">
         <ng-container *ngIf="editingStep === 'main'">
-          <div class="project__image">
+          <div class="project__image" *ngIf="projectForm.get('imageAddress') as imagesAddress">
             <app-avatar-control
               id="imageAddress"
               formControlName="imageAddress"
+              [error]="imagesAddress | controlError"
             ></app-avatar-control>
+            <div *ngIf="imagesAddress | controlError: 'required'" class="text-body-14 error">
+              {{ errorMessage.EMPTY_AVATAR }}
+            </div>
           </div>
           <fieldset *ngIf="projectForm.get('name') as name">
             <label class="field-label" for="name">Название проекта</label>

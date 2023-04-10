@@ -28,6 +28,10 @@
         opacity: 1;
       }
     }
+
+    &--error {
+      border: 3px solid var(--red);
+    }
   }
 
   &__img {
