@@ -56,6 +56,7 @@
 .notifications {
   padding: 20px;
   background-color: var(--white);
+  border-radius: var(--rounded-md);
   box-shadow: 5px 5px 50px rgb(196 196 196 / 15%);
 
   &__title {
