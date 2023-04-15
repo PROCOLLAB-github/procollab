@@ -3,6 +3,10 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { User } from "@auth/models/user.model";
 import { containerSm } from "@utils/responsive";
+import * as RelativeTime from "dayjs/plugin/relativeTime";
+import * as dayjs from "dayjs";
+
+dayjs.extend(RelativeTime);
 
 @Component({
   selector: "app-member-card",
@@ -14,7 +18,11 @@ export class MemberCardComponent implements OnInit {
 
   @Input() user!: User;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.yearsOld = parseInt(dayjs(this.user.birthday).fromNow(true));
+  }
+
+  yearsOld?: number;
 
   containerSm = containerSm;
 

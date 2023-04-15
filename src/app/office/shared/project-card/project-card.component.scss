@@ -9,7 +9,7 @@
   border-radius: var(--rounded-md);
 
   @include responsive.apply-desktop {
-    border: 1px solid var(--medium-grey-from-outline);
+    border: 1px solid var(--medium-grey-for-outline);
   }
 
   &__head {

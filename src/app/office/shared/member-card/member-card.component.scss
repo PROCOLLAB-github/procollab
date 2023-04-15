@@ -3,36 +3,23 @@
 @use "src/styles/responsive";
 
 .card {
-  padding: 24px;
+  padding: 20px;
   background-color: var(--white);
-  border-radius: var(--rounded-md);
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 15px;
 
   &__body {
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-
-    @include responsive.apply-desktop {
-      flex-direction: column;
-      align-items: center;
-    }
+    align-items: center;
   }
 
   &__info {
-    @include responsive.apply-desktop {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+    margin-left: 16px;
   }
 
   &__status {
     margin: 0 0 3px;
     color: var(--dark-gray);
-
-    @include responsive.apply-desktop {
-      margin: 16px 0;
-    }
   }
 
   &__name {
@@ -41,7 +28,7 @@
   }
 
   &__additional-info {
-    color: var(--dark-gray);
+    color: var(--accent);
   }
 
   &__skills {
