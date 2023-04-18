@@ -124,6 +124,20 @@
   @include body-18;
 }
 
+@mixin body-bold-18 {
+  font-family: Mont, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 130%;
+}
+
+.text-body-bold-18 {
+  @include body-18;
+}
+
+
+
 @mixin bold-body-16 {
   font-family: Mont, sans-serif;
   font-size: 16px;
