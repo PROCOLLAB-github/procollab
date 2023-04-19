@@ -55,18 +55,14 @@
   }
 
   &__slides-title {
-    display: flex;
-    justify-content: center;
+    max-width: 320px;
     margin-top: 12px;
     color: var(--black);
-
-    img {
-      margin-right: 10px;
-    }
+    text-align: center;
   }
 
   &__slides-text {
-    width: 275px;
+    max-width: 275px;
     margin-top: 12px;
     color: var(--dark-gray);
     text-align: center;
