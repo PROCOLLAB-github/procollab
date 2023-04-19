@@ -2,6 +2,7 @@
 
 import { AfterViewInit, Directive, Input, OnDestroy, ViewContainerRef } from "@angular/core";
 import { fromEvent, Subscription } from "rxjs";
+import { containerSm } from "@utils/responsive";
 
 @Directive({
   selector: "[appEditorSubmitButton]",
@@ -12,9 +13,10 @@ export class EditorSubmitButtonDirective implements AfterViewInit, OnDestroy {
   @Input() containerSelector = "profile";
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.initSaveButtonScroller();
-    }, 0);
+    if (window.innerWidth > containerSm)
+      setTimeout(() => {
+        this.initSaveButtonScroller();
+      }, 0);
   }
 
   ngOnDestroy(): void {
