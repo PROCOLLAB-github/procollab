@@ -12,7 +12,9 @@ import { map } from "rxjs";
 export class EmailVerificationComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
+  ngOnInit(): void {}
+
   userEmail = this.route.queryParams.pipe(map(r => r["email"]));
 
-  ngOnInit(): void {}
+  onResend(): void {}
 }

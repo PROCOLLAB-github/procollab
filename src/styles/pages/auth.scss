@@ -15,6 +15,15 @@
     }
   }
 
+  &__greeting {
+    max-width: 825px;
+    margin-bottom: 20px;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 36px;
+    }
+  }
+
   &__wrapper {
     @include responsive.apply-desktop {
       max-width: 415px;
