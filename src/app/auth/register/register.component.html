@@ -1,8 +1,18 @@
 <!-- @format -->
 
-<form class="auth" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+<form class="auth register" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <img class="auth__logo" src="/assets/images/shared/logo.svg" alt="procollab" width="125px" />
+  <div class="register__greeting">
+    <h3 class="register__title">
+      Привет! 👋 Добро пожаловать в Procollab - платформу, где можно найти стартап, сообщников,
+      инвесторов
+    </h3>
+    <p class="text-body-14 register__info">
+      Заполни основные данные о себе, чтобы ты мог войти в аккаунт, и мы знали, как к тебе
+      обращаться
+    </p>
+  </div>
   <div class="auth__wrapper">
-    <h1 class="auth__title">Регистрация</h1>
     <div class="auth__row">
       <fieldset *ngIf="registerForm.get('firstName') as name" class="auth__field">
         <label for="name" class="field-label">Имя</label>
@@ -89,7 +99,15 @@
         id="passowrd"
         type="password"
         formControlName="password"
-        placeholder="Пароль"
+        placeholder="Придумай пароль"
+      ></app-input>
+      <app-input
+        class="register__repeated-password"
+        [error]="password | controlError"
+        id="repeatedPassword"
+        type="password"
+        formControlName="repeatedPassword"
+        placeholder="Повтори пароль"
       ></app-input>
       <div *ngIf="password | controlError: 'required'" class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
@@ -98,21 +116,19 @@
         {{ errorMessage.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
       </div>
     </fieldset>
-  </div>
-  <div class="register__agreement">
-    <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
-    <span class="text-body-14" (click)="registerAgreement = !registerAgreement">
-      Я ознакомился с соглашением и даю
-      <a href="/assets/downloads/auth/shared/Политика_обработки_перс_данных_2022.docx" download>
-        согласие
-      </a>
-      на обработку персональных данных
-    </span>
-  </div>
-  <div *ngIf="userExistError" class="text-body-14 error">
-    {{ errorMessage.AUTH_EMAIL_EXIST }}
-  </div>
-  <div class="auth__wrapper">
+    <div *ngIf="userExistError" class="text-body-14 error">
+      {{ errorMessage.AUTH_EMAIL_EXIST }}
+    </div>
+    <div class="register__agreement">
+      <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
+      <span class="text-body-14" (click)="registerAgreement = !registerAgreement">
+        Я ознакомился с соглашением и даю
+        <a href="/assets/downloads/auth/shared/Политика_обработки_перс_данных_2022.docx" download>
+          согласие
+        </a>
+        на обработку персональных данных
+      </span>
+    </div>
     <app-button [loader]="registerIsSubmitting" type="submit" class="auth__button">
       <span>Создать аккаунт</span>
       <i
@@ -124,5 +140,6 @@
         appViewBox="0 0 18 9"
       ></i>
     </app-button>
+    <p class="auth__toggle">Есть аккаунт? <a routerLink="/auth/login">Войдите</a></p>
   </div>
 </form>

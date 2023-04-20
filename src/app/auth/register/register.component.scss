@@ -1,5 +1,8 @@
 /** @format */
 
+@use "src/styles/typography";
+@use "src/styles/responsive";
+
 .register {
   &__agreement {
     display: flex;
@@ -10,5 +13,41 @@
     app-checkbox {
       margin-right: 15px;
     }
+  }
+
+  &__greeting {
+    max-width: 825px;
+    margin-bottom: 20px;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 36px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 12px;
+    color: var(--black);
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 6px;
+
+      @include typography.heading-2;
+    }
+  }
+
+  &__info {
+    color: var(--black);
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      @include typography.body-14;
+    }
+  }
+
+  &__repeated-password {
+    margin-top: 6px;
   }
 }
