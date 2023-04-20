@@ -19,7 +19,7 @@ export class MemberCardComponent implements OnInit {
   @Input() user!: User;
 
   ngOnInit(): void {
-    this.yearsOld = parseInt(dayjs(this.user.birthday).fromNow(true));
+    this.yearsOld = Math.floor(dayjs().diff(dayjs(this.user.birthday), "year", true));
   }
 
   yearsOld?: number;
