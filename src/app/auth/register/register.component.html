@@ -115,6 +115,9 @@
       <div *ngIf="password | controlError: 'minlength'" class="text-body-14 error">
         {{ errorMessage.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
       </div>
+      <div *ngIf="registerForm | controlError: 'unMatch'" class="text-body-14 error">
+        {{ errorMessage.VALIDATION_PASSWORD_UNMATCH }}
+      </div>
     </fieldset>
     <div *ngIf="userExistError" class="text-body-14 error">
       {{ errorMessage.AUTH_EMAIL_EXIST }}

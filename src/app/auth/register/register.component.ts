@@ -26,13 +26,16 @@ export class RegisterComponent implements OnInit {
     private validationService: ValidationService,
     private cdref: ChangeDetectorRef
   ) {
-    this.registerForm = this.fb.group({
-      firstName: ["", [Validators.required]],
-      lastName: ["", [Validators.required]],
-      email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required, Validators.minLength(6)]],
-      repeatedPassword: ["", [Validators.required]],
-    });
+    this.registerForm = this.fb.group(
+      {
+        firstName: ["", [Validators.required]],
+        lastName: ["", [Validators.required]],
+        email: ["", [Validators.required, Validators.email]],
+        password: ["", [Validators.required, Validators.minLength(6)]],
+        repeatedPassword: ["", [Validators.required]],
+      },
+      { validators: [this.validationService.useMatchValidator("password", "repeatedPassword")] }
+    );
   }
 
   ngOnInit(): void {}
