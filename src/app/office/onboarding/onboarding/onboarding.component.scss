@@ -13,9 +13,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 40px;
 
   @include responsive.apply-desktop {
     justify-content: unset;
+    margin-bottom: 80px;
   }
 
   &__separator {
