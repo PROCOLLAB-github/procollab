@@ -1,0 +1,107 @@
+@use "src/styles/responsive";
+
+.page {
+  position: relative;
+  padding: 85px 15px 0;
+
+  @include responsive.apply-desktop {
+    padding: 50px 100px 0;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @include responsive.apply-desktop {
+    justify-content: unset;
+  }
+
+  &__separator {
+    display: none;
+    width: 100px;
+    height: 2px;
+    margin: 0 10px;
+    background-color: var(--gray);
+
+    @include responsive.apply-desktop {
+      display: block;
+    }
+
+    &--passed {
+      background-color: var(--accent);
+    }
+  }
+
+  &__steps {
+    display: flex;
+    align-items: center;
+
+    @include responsive.apply-desktop {
+      margin-left: 115px;
+    }
+  }
+
+  &__step {
+    margin-right: 18px;
+
+    @include responsive.apply-desktop {
+      margin-right: 0;
+    }
+  }
+}
+
+.step {
+  display: flex;
+  align-items: center;
+
+  &--active {
+    .step__number {
+      color: var(--white);
+      background-color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .step__text {
+      color: var(--accent);
+    }
+  }
+
+  &--passed {
+    .step__number {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .step__text {
+      color: var(--dark);
+    }
+  }
+
+  &__number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--dark-gray);
+    border: 1.5px solid var(--gray);
+    border-radius: 10px;
+
+    @include responsive.apply-desktop {
+      width: 26px;
+      height: 26px;
+      margin-right: 10px;
+    }
+  }
+
+  &__text {
+    display: none;
+    color: var(--dark-gray);
+
+    @include responsive.apply-desktop {
+      display: block;
+    }
+  }
+}

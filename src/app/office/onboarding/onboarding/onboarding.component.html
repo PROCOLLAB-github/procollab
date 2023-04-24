@@ -1,0 +1,38 @@
+<!-- @format -->
+
+<div class="page">
+  <header class="page__header header">
+    <img src="/assets/images/shared/logo.svg" width="125px" alt="procollab" class="header__logo" />
+    <nav>
+      <ul class="header__steps">
+        <li
+          class="header__step step"
+          [class.step--passed]="stage > 0"
+          [class.step--active]="stage === 0"
+        >
+          <div class="step__number">1</div>
+          <span class="step__text text-bold-body-14">Основные данные</span>
+        </li>
+        <div class="header__separator" [class.header__separator--passed]="stage > 0"></div>
+        <li
+          class="header__step step"
+          [class.step--passed]="stage > 1"
+          [class.step--active]="stage === 1"
+        >
+          <div class="step__number">2</div>
+          <span class="step__text text-bold-body-14">Специальности и скиллы</span>
+        </li>
+        <div class="header__separator" [class.header__separator--passed]="stage > 1"></div>
+        <li
+          class="header__step step"
+          [class.step--passed]="stage > 2"
+          [class.step--active]="stage === 2"
+        >
+          <div class="step__number">3</div>
+          <span class="step__text text-bold-body-14">Тип аккаунта</span>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <router-outlet></router-outlet>
+</div>

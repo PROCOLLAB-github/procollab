@@ -124,4 +124,15 @@ export class AuthService {
       concatMap(profile => this.apiService.put<User>(`/auth/users/${profile.id}/`, newProfile))
     );
   }
+
+  setOnboardingStage(stage: number): Observable<User> {
+    return this.profile.pipe(
+      take(1),
+      concatMap(profile =>
+        this.apiService.put<User>(`/auth/users/${profile.id}/set_onboarding_stage/`, {
+          onboardingStage: stage,
+        })
+      )
+    );
+  }
 }

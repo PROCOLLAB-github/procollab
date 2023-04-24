@@ -34,6 +34,9 @@ export class OfficeComponent implements OnInit, OnDestroy {
       this.profile = profile;
 
       if (!this.profile.doesCompleted()) {
+        this.router
+          .navigateByUrl("/office/onboarding")
+          .then(() => console.debug("Route changed from OfficeComponent"));
         this.completeProfileModal = true;
       }
     });
