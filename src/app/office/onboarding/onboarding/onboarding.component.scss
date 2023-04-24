@@ -99,6 +99,7 @@
   &__text {
     display: none;
     color: var(--dark-gray);
+    white-space: nowrap;
 
     @include responsive.apply-desktop {
       display: block;
