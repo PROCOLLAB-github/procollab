@@ -1,20 +1,44 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { map } from "rxjs";
+import { filter, interval, map, noop, Observable, Subscription } from "rxjs";
+import { AuthService } from "@auth/services";
 
 @Component({
   selector: "app-email-verification",
   templateUrl: "./email-verification.component.html",
   styleUrls: ["./email-verification.component.scss"],
 })
-export class EmailVerificationComponent implements OnInit {
-  constructor(private route: ActivatedRoute) {}
+export class EmailVerificationComponent implements OnInit, OnDestroy {
+  constructor(private route: ActivatedRoute, private readonly authService: AuthService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const emailSub$ = this.route.queryParams.pipe(map(r => r["email"])).subscribe(r => {
+      this.userEmail = r;
+    });
+    this.subscriptions$.push(emailSub$);
 
-  userEmail = this.route.queryParams.pipe(map(r => r["email"]));
+    const timerSub$ = this.timer$.subscribe(noop);
+    this.subscriptions$.push(timerSub$);
+  }
 
-  onResend(): void {}
+  ngOnDestroy(): void {
+    this.subscriptions$.forEach($ => $.unsubscribe());
+  }
+
+  subscriptions$: Subscription[] = [];
+  userEmail?: string;
+  counter = 0;
+  timer$: Observable<number> = interval(1000).pipe(
+    filter(() => this.counter > 0),
+    map(() => this.counter--)
+  );
+
+  onResend(): void {
+    if (!this.userEmail) return;
+    this.authService.resendEmail(this.userEmail).subscribe(() => {
+      this.counter = 60;
+    });
+  }
 }

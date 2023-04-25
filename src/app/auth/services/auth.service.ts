@@ -135,4 +135,10 @@ export class AuthService {
       )
     );
   }
+
+  resendEmail(email: string): Observable<User> {
+    return this.apiService
+      .post<User>("/auth/resend_email/", { email })
+      .pipe(map(user => plainToInstance(User, user)));
+  }
 }
