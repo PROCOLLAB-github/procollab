@@ -33,6 +33,11 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         .then(() => console.debug("Route changed from OnboardingComponent"));
     });
     this.subscriptions$.push(profile);
+
+    const events$ = this.router.events.subscribe(() => {
+      this.activeStage = parseInt(this.router.url.split("-")[1]);
+    });
+    this.subscriptions$.push(events$);
   }
 
   ngOnDestroy(): void {
@@ -40,6 +45,15 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   }
 
   stage = 0;
+  activeStage = 0;
 
   subscriptions$: Subscription[] = [];
+
+  goToStep(stage: number): void {
+    if (this.stage < stage) return;
+
+    this.router
+      .navigate([`stage-${stage}`], { relativeTo: this.route })
+      .then(() => console.debug("Route changed from OnboardingComponent"));
+  }
 }

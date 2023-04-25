@@ -57,6 +57,18 @@
 .step {
   display: flex;
   align-items: center;
+  cursor: pointer;
+
+  &--passed {
+    .step__number {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .step__text {
+      color: var(--dark);
+    }
+  }
 
   &--active {
     .step__number {
@@ -67,17 +79,6 @@
 
     .step__text {
       color: var(--accent);
-    }
-  }
-
-  &--passed {
-    .step__number {
-      color: var(--accent);
-      border-color: var(--accent);
-    }
-
-    .step__text {
-      color: var(--dark);
     }
   }
 
