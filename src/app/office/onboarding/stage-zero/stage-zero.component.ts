@@ -11,8 +11,8 @@ import { User } from "@auth/models/user.model";
 
 @Component({
   selector: "app-stage-zero",
-  templateUrl: "./onboarding-stage-zero.component.html",
-  styleUrls: ["./onboarding-stage-zero.component.scss"],
+  templateUrl: "./stage-zero.component.html",
+  styleUrls: ["./stage-zero.component.scss"],
 })
 export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   constructor(

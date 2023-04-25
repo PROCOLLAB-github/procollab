@@ -121,7 +121,7 @@ export class AuthService {
   saveProfile(newProfile: Partial<User>): Observable<User> {
     return this.profile.pipe(
       take(1),
-      concatMap(profile => this.apiService.put<User>(`/auth/users/${profile.id}/`, newProfile))
+      concatMap(profile => this.apiService.patch<User>(`/auth/users/${profile.id}/`, newProfile))
     );
   }
 

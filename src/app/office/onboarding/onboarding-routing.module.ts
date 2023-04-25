@@ -3,7 +3,8 @@
 import { RouterModule, Routes } from "@angular/router";
 import { NgModule } from "@angular/core";
 import { OnboardingComponent } from "@office/onboarding/onboarding/onboarding.component";
-import { OnboardingStageZeroComponent } from "@office/onboarding/stage-zero/onboarding-stage-zero.component";
+import { OnboardingStageZeroComponent } from "@office/onboarding/stage-zero/stage-zero.component";
+import { OnboardingStageOneComponent } from "@office/onboarding/stage-one/stage-one.component";
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
       {
         path: "stage-0",
         component: OnboardingStageZeroComponent,
+      },
+      {
+        path: "stage-1",
+        component: OnboardingStageOneComponent,
       },
     ],
   },

@@ -45,7 +45,7 @@ export class User {
   timeUpdated!: string;
 
   doesCompleted(): boolean {
-    return this.onboardingStage !== 0;
+    return this.onboardingStage === null;
   }
 
   static default(): User {

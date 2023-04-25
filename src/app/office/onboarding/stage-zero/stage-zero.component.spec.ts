@@ -2,7 +2,7 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { OnboardingStageZeroComponent } from "./onboarding-stage-zero.component";
+import { OnboardingStageZeroComponent } from "./stage-zero.component";
 
 describe("StageOneComponent", () => {
   let component: OnboardingStageZeroComponent;

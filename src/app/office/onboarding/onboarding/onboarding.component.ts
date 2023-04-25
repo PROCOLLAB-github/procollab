@@ -3,7 +3,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "@auth/services";
-import { noop, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-onboarding",
@@ -18,9 +18,6 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    this.authService.setOnboardingStage("хуйсусами").subscribe(noop);
     const profile = this.authService.profile.subscribe(p => {
       if (p.onboardingStage === null) {
         this.router
