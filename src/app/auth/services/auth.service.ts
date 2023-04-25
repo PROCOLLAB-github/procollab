@@ -125,7 +125,7 @@ export class AuthService {
     );
   }
 
-  setOnboardingStage(stage: number): Observable<User> {
+  setOnboardingStage(stage: number | null): Observable<User> {
     return this.profile.pipe(
       take(1),
       concatMap(profile =>
