@@ -1,16 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { OnboardingComponent } from './onboarding.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('OnboardingComponent', () => {
+import { OnboardingComponent } from "./onboarding.component";
+import { RouterTestingModule } from "@angular/router/testing";
+import { of } from "rxjs";
+import { AuthService } from "@auth/services";
+
+describe("OnboardingComponent", () => {
   let component: OnboardingComponent;
   let fixture: ComponentFixture<OnboardingComponent>;
 
   beforeEach(async () => {
+    const authSpy = {
+      profile: of({}),
+    };
+
     await TestBed.configureTestingModule({
-      declarations: [ OnboardingComponent ]
-    })
-    .compileComponents();
+      imports: [RouterTestingModule],
+      providers: [{ provide: AuthService, useValue: authSpy }],
+      declarations: [OnboardingComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +29,7 @@ describe('OnboardingComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
