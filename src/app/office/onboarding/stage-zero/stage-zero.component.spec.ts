@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { OnboardingStageZeroComponent } from "./stage-zero.component";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { CoreModule } from "@core/core.module";
 import { UiModule } from "@ui/ui.module";
