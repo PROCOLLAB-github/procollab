@@ -8,10 +8,12 @@
     position: fixed;
     top: 85px;
     left: 15px;
+    display: none;
 
     @include responsive.apply-desktop {
       top: 50px;
       left: 100px;
+      display: block;
     }
   }
 
@@ -34,7 +36,7 @@
     margin-bottom: 12px;
     color: var(--black);
 
-    @include typography.heading-2;
+    @include typography.heading-4;
 
     @include responsive.apply-desktop {
       @include typography.heading-1;

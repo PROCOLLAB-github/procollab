@@ -10,6 +10,12 @@
     margin-top: 20px;
     cursor: pointer;
 
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      @include typography.body-14;
+    }
+
     app-checkbox {
       margin-right: 15px;
     }
