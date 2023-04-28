@@ -22,7 +22,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
       if (p.onboardingStage === null) {
         this.router
           .navigateByUrl("/office")
-          .then(() => console.debug("Route changed from OnbaordingComponent"));
+          .then(() => console.debug("Route changed from OnboardingComponent"));
         return;
       }
 
@@ -34,9 +34,8 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     });
     this.subscriptions$.push(profile);
 
-    const events$ = this.router.events.subscribe(() => {
-      this.activeStage = parseInt(this.router.url.split("-")[1]);
-    });
+    this.updateActiveStage();
+    const events$ = this.router.events.subscribe(this.updateActiveStage.bind(this));
     this.subscriptions$.push(events$);
   }
 
@@ -48,6 +47,10 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   activeStage = 0;
 
   subscriptions$: Subscription[] = [];
+
+  updateActiveStage(): void {
+    this.activeStage = parseInt(this.router.url.split("-")[1]);
+  }
 
   goToStep(stage: number): void {
     if (this.stage < stage) return;
