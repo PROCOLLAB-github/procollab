@@ -18,7 +18,7 @@
   }
 
   &__greeting {
-    max-width: 825px;
+    max-width: 915px;
     margin-bottom: 20px;
 
     @include responsive.apply-desktop {
@@ -39,7 +39,7 @@
     @include typography.heading-4;
 
     @include responsive.apply-desktop {
-      @include typography.heading-1;
+      @include typography.heading-2;
     }
   }
 
