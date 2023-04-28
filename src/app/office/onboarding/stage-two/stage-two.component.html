@@ -7,51 +7,42 @@
       На платформе есть несколько ролей, каждая роль имеет свои фишки. Выбери, кто ты!
     </p>
   </div>
-  <ul class="page__list">
-    <li class="page__item item" [class.item--active]="userRole === 1" (click)="setUserRole(1)">
-      <div class="item__head">
-        <div class="item__checkbox checkbox"></div>
-        <div class="item__title">Участник</div>
-      </div>
-      <div class="item__text text-body-12">
-        Данный пользователь видит все проекты платформы и всех участников, может написать кому
-        угодно и предложить сотрудничество, владеет какими-то финансами для поддержки
-        проектов-стартапов.
-      </div>
-    </li>
-    <li class="page__item item" [class.item--active]="userRole === 2" (click)="setUserRole(2)">
-      <div class="item__head">
-        <div class="item__checkbox checkbox"></div>
-        <div class="item__title">Ментор</div>
-      </div>
-      <div class="item__text text-body-12">
-        На платформе инвестор - человек, который владеет какими-то финансами для поддержки
-        проектов-стартапов. Данный пользователь видит все проекты платформы и всех участников, может
-        на
-      </div>
-    </li>
-    <li class="page__item item" [class.item--active]="userRole === 3" (click)="setUserRole(3)">
-      <div class="item__head">
-        <div class="item__checkbox checkbox"></div>
-        <div class="item__title">Инвестор</div>
-      </div>
-      <div class="item__text text-body-12">
-        На платформе инвестор - человек, который владеет какими-то финансами для поддержки
-        проектов-стартапов. Данный пользователь видит все проекты платформы и всех участников, может
-        нап
-      </div>
-    </li>
-    <li class="page__item item" [class.item--active]="userRole === 4" (click)="setUserRole(4)">
-      <div class="item__head">
-        <div class="item__checkbox checkbox"></div>
-        <div class="item__title">Эксперт</div>
-      </div>
-      <div class="item__text text-body-12">
-        На платформе инвестор - человек, который владеет какими-то финансами для поддержки
-        проектов-стартапов. Данный пользователь видит все проекты платформы и всех участников, может
-        напи
-      </div>
-    </li>
-  </ul>
+  <div class="page__list">
+    <app-user-type-card [isActive]="userRole === 1" (click)="onSetRole(1)">
+      <ng-container title>Участник</ng-container>
+      <ng-container description>
+        Участник на платформе - это школьники и студенты. Ты сможешь зарегистрировать свой проект
+        или вступить в уже существующий, получить поддержку от ментора, участвовать в мероприятиях,
+        читать новости
+      </ng-container>
+    </app-user-type-card>
+    <app-user-type-card [isActive]="userRole === 2" (click)="onSetRole(2)">
+      <ng-container title>Инвестор</ng-container>
+      <ng-container description>
+        На платформе инвестор - человек, который владеет финансами и может, как профинансировать
+        проект, так и создать свой проект на платформе. К инвестору могут обратиться участники и
+        проекты.
+      </ng-container>
+    </app-user-type-card>
+    <app-user-type-card [isActive]="userRole === 3" (click)="onSetRole(3)">
+      <ng-container title>Ментор</ng-container>
+      <ng-container description>
+        На платформе ментор - человек, который открыт дать помощь инновационной молодежи, к ментору
+        могут обратиться как участники, так и проекты. Сам ментор может написать в проект и
+        поддержать его.
+      </ng-container>
+    </app-user-type-card>
+    <app-user-type-card [isActive]="userRole === 4" (click)="onSetRole(4)">
+      <ng-container title>Эксперт</ng-container>
+      <ng-container description>
+        На платформе эксперт - человек, который открыт дать экспертизу из какой-либо сферы, к
+        эксперту могут обратиться как участники, так и проекты. Сам эксперт может написать в проект
+        и поддержать его.
+      </ng-container>
+    </app-user-type-card>
+  </div>
   <app-button class="page__button" (click)="onSubmit()">Продолжить</app-button>
+  <p class="error page__error" *ngIf="stageTouched && userRole === -1">
+    Вы ничего не выбрали, выберите подходящий пункт и нажмите “продолжить”
+  </p>
 </div>

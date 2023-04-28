@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { UiModule } from "@ui/ui.module";
 import { OnboardingStageOneComponent } from "./stage-one/stage-one.component";
 import { OnboardingStageTwoComponent } from "./stage-two/stage-two.component";
+import { UserTypeCardComponent } from './user-type-card/user-type-card.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { OnboardingStageTwoComponent } from "./stage-two/stage-two.component";
     OnboardingStageZeroComponent,
     OnboardingStageOneComponent,
     OnboardingStageTwoComponent,
+    UserTypeCardComponent,
   ],
   imports: [CommonModule, OnboardingRoutingModule, CoreModule, ReactiveFormsModule, UiModule],
 })

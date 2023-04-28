@@ -1,0 +1,52 @@
+@use "src/styles/responsive";
+@use "src/styles/typography";
+
+.item {
+  padding: 12px;
+  cursor: pointer;
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 15px;
+
+  @include responsive.apply-desktop {
+    padding: 20px;
+  }
+
+  &--active {
+    border-color: var(--accent);
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  &__title {
+    color: var(--dark);
+
+    @include typography.bold-body-16;
+
+    @include responsive.apply-desktop {
+      @include typography.body-bold-18;
+    }
+  }
+
+  &__checkbox {
+    margin-right: 15px;
+  }
+
+  &__text {
+    color: var(--dark-gray);
+  }
+}
+
+.checkbox {
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--gray);
+  border-radius: 50%;
+
+  &--active {
+    border: 8px solid var(--accent);
+  }
+}

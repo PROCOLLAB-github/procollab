@@ -3,6 +3,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
 import { concatMap, Subscription } from "rxjs";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-stage-two",
@@ -10,7 +11,7 @@ import { concatMap, Subscription } from "rxjs";
   styleUrls: ["./stage-two.component.scss"],
 })
 export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly router: Router) {}
 
   ngOnInit(): void {}
 
@@ -19,19 +20,26 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
   }
 
   userRole = -1;
-
+  stageTouched = false;
   subscriptions$: Subscription[] = [];
 
-  setUserRole(role: number) {
+  onSetRole(role: number) {
     this.userRole = role;
   }
 
   onSubmit() {
-    if (this.userRole === -1) return;
+    if (this.userRole === -1) {
+      this.stageTouched = true;
+      return;
+    }
 
     this.authService
       .saveProfile({ userType: this.userRole })
       .pipe(concatMap(() => this.authService.setOnboardingStage(null)))
-      .subscribe(() => {});
+      .subscribe(() => {
+        this.router
+          .navigateByUrl("/office")
+          .then(() => console.debug("Route changed from OnboardingStageTwo"));
+      });
   }
 }

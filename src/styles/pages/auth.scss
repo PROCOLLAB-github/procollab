@@ -43,6 +43,14 @@
     }
   }
 
+  &__info {
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      @include typography.body-14;
+    }
+  }
+
   &__field {
     margin-bottom: 12px;
 
