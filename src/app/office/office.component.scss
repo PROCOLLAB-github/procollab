@@ -4,18 +4,34 @@
 
 .office {
   display: flex;
-  flex-direction: column;
   height: 100vh;
+  background-color: var(--light-gray);
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  &__sidebar {
+    display: none;
+
+    @include responsive.apply-desktop {
+      display: block;
+      min-width: 270px;
+      height: 100vh;
+    }
+  }
 
   &__body {
     flex-grow: 1;
-    padding: 20px 0 0;
+    padding: 20px 20px 0;
     overflow-y: auto;
-    background-color: var(--light-gray);
   }
 
   &__header {
     display: none;
+    background-color: var(--white);
 
     @include responsive.apply-desktop {
       display: block;

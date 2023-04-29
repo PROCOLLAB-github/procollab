@@ -22,6 +22,7 @@ import { InviteManageCardComponent } from "./shared/invite-manage-card/invite-ma
 import { MessageInputComponent } from "./shared/message-input/message-input.component";
 import { NgxMaskModule } from "ngx-mask";
 import { AutosizeModule } from "ngx-autosize";
+import { SidebarComponent } from './shared/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { AutosizeModule } from "ngx-autosize";
     MemberCardComponent,
     AdvertCardComponent,
     MessageInputComponent,
+    SidebarComponent,
   ],
   imports: [
     OfficeRoutingModule,
