@@ -38,6 +38,8 @@ export class OfficeComponent implements OnInit, OnDestroy {
           .navigateByUrl("/office/onboarding")
           .then(() => console.debug("Route changed from OfficeComponent"));
         this.completeProfileModal = true;
+      } else if (this.profile.verificationDate === null) {
+        this.waitVerificationModal = true;
       }
     });
     this.subscriptions$.push(profileSub$);
@@ -53,6 +55,8 @@ export class OfficeComponent implements OnInit, OnDestroy {
   );
 
   subscriptions$: Subscription[] = [];
+
+  waitVerificationModal = true;
 
   completeProfileModal = false;
   profile?: User;

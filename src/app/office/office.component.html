@@ -15,15 +15,25 @@
     </div>
   </div>
   <app-modal [(open)]="completeProfileModal">
-    <div class="fulfill-profile">
+    <div class="message-modal">
       <img src="/assets/images/office/shared/fulfill-profile.svg" alt="fulfill profile" />
-      <h3 class="fulfill-profile__title text-bold-body-16">Дозаполните данные профиля</h3>
-      <p class="fulfill-profile__text text-body-14">
+      <h3 class="message-modal__title text-bold-body-16">Дозаполните данные профиля</h3>
+      <p class="message-modal__text text-body-14">
         для того, чтобы мы могли рекомендовать команды под ваши навыки
       </p>
-      <app-button class="fulfill-profile__button" (click)="onGotoProfile()">
+      <app-button class="message-modal__button" (click)="onGotoProfile()">
         К редактированию профиля
       </app-button>
+    </div>
+  </app-modal>
+  <app-modal [open]="true">
+    <div class="message-modal">
+      <img src="/assets/images/office/shared/wait.png" alt="wait" width="215px" />
+      <h3 class="message-modal__title text-bold-body-16">Ваш аккаунт проходит подтверждение</h3>
+      <p class="message-modal__text text-body-14">
+        Мы проверяем ваши данные и скоро сообщим о подтверждении аккаунта
+      </p>
+      <app-button class="message-modal__button"> На главную </app-button>
     </div>
   </app-modal>
   <app-delete-confirm></app-delete-confirm>

@@ -29,8 +29,10 @@ export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   @Input() set open(value: boolean) {
-    if (value) this.overlayRef?.attach(this.portal);
-    else this.overlayRef?.detach();
+    setTimeout(() => {
+      if (value) this.overlayRef?.attach(this.portal);
+      else this.overlayRef?.detach();
+    });
   }
 
   get open(): boolean {

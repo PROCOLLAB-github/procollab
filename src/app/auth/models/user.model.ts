@@ -43,6 +43,7 @@ export class User {
   achievements!: Achievement[];
   timeCreated!: string;
   timeUpdated!: string;
+  verificationDate!: string;
 
   doesCompleted(): boolean {
     return this.onboardingStage === null;
@@ -67,6 +68,7 @@ export class User {
       id: 0,
       timeCreated: "",
       timeUpdated: "",
+      verificationDate: "",
     } as User;
   }
 }
