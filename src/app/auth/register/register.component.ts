@@ -5,9 +5,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
 import { ValidationService } from "@core/services";
 import { ErrorMessage } from "@error/models/error-message";
-import { SelectComponent } from "src/app/ui/components";
 import { Router } from "@angular/router";
-import { Observable, of } from "rxjs";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 
@@ -30,7 +28,14 @@ export class RegisterComponent implements OnInit {
       {
         firstName: ["", [Validators.required]],
         lastName: ["", [Validators.required]],
-        birthday: ["", [Validators.required]],
+        birthday: [
+          "",
+          [
+            Validators.required,
+            this.validationService.useDateFormatValidator,
+            this.validationService.useAgeValidator(),
+          ],
+        ],
         email: ["", [Validators.required, Validators.email]],
         password: ["", [Validators.required, Validators.minLength(6)]],
         repeatedPassword: ["", [Validators.required]],
@@ -50,13 +55,6 @@ export class RegisterComponent implements OnInit {
   step: "credentials" | "info" = "credentials";
 
   errorMessage = ErrorMessage;
-  // TODO: unhardcode later on
-  roles$: Observable<SelectComponent["options"]> = of([
-    { id: 1, value: 1, label: "Участник" },
-    { id: 2, value: 2, label: "Ментор" },
-    { id: 3, value: 3, label: "Эксперт" },
-    { id: 4, value: 4, label: "Инвестор" },
-  ]);
 
   onInfoStep() {
     const fields = [
@@ -115,13 +113,10 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.step);
     if (this.step === "credentials") {
       this.onInfoStep();
     } else if (this.step === "info") {
       this.onSendForm();
     }
   }
-
-  protected readonly self = self;
 }
