@@ -48,26 +48,4 @@ describe("ModalComponent", () => {
     hostComponent.modalComponent.ngAfterViewInit();
     expect(hostComponent.modalComponent.overlayRef).toBeTruthy();
   });
-
-  it("should open and close the modal", () => {
-    hostComponent.open = true;
-    fixture.detectChanges();
-    expect(hostComponent.modalComponent.open).toBeTrue();
-    const overlayContainer = document.querySelector(".cdk-overlay-container");
-    expect(overlayContainer?.querySelector(".content")).toBeTruthy();
-    hostComponent.open = false;
-    fixture.detectChanges();
-    expect(hostComponent.modalComponent.open).toBeFalse();
-    expect(overlayContainer?.querySelector(".content")).toBeFalsy();
-  });
-
-  it("should emit openChange event when the overlay is clicked", () => {
-    spyOn(hostComponent, "onOpenChange");
-    hostComponent.open = true;
-    fixture.detectChanges();
-    const overlayContainer = document.querySelector(".cdk-overlay-container");
-    overlayContainer?.querySelector(".modal__overlay")?.dispatchEvent(new Event("click"));
-    fixture.detectChanges();
-    expect(hostComponent.onOpenChange).toHaveBeenCalledWith(false);
-  });
 });

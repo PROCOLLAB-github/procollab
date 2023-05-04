@@ -5,6 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { OnboardingStageTwoComponent } from "./stage-two.component";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("StageTwoComponent", () => {
   let component: OnboardingStageTwoComponent;
@@ -17,6 +18,7 @@ describe("StageTwoComponent", () => {
     });
 
     await TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
       declarations: [OnboardingStageTwoComponent],
       providers: [{ provide: AuthService, useValue: authSpy }],
     }).compileComponents();
