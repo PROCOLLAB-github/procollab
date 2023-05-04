@@ -1,10 +1,33 @@
 /** @format */
 
-@import "src/styles/responsive";
+@use "src/styles/responsive";
+@use "src/styles/typography";
 
 .auth {
+  &__logo {
+    position: fixed;
+    top: 85px;
+    left: 15px;
+    display: none;
+
+    @include responsive.apply-desktop {
+      top: 50px;
+      left: 100px;
+      display: block;
+    }
+  }
+
+  &__greeting {
+    max-width: 915px;
+    margin-bottom: 20px;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 36px;
+    }
+  }
+
   &__wrapper {
-    @include apply-desktop {
+    @include responsive.apply-desktop {
       max-width: 415px;
     }
   }
@@ -13,10 +36,18 @@
     margin-bottom: 12px;
     color: var(--black);
 
-    @include heading-2;
+    @include typography.heading-4;
 
-    @include apply-desktop {
-      @include heading-1;
+    @include responsive.apply-desktop {
+      @include typography.heading-2;
+    }
+  }
+
+  &__info {
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      @include typography.body-14;
     }
   }
 
@@ -67,5 +98,14 @@
 
   &__button-icon {
     transform: rotate(90deg);
+  }
+
+  &__toggle {
+    margin-top: 20px;
+    text-align: center;
+
+    @include responsive.apply-desktop {
+      text-align: left;
+    }
   }
 }

@@ -1,51 +1,102 @@
 <!-- @format -->
 
-<form class="auth" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  <div class="auth__wrapper">
-    <h1 class="auth__title">Регистрация</h1>
-    <div class="auth__row">
-      <fieldset *ngIf="registerForm.get('firstName') as name" class="auth__field">
-        <label for="name" class="field-label">Имя</label>
+<div class="auth register">
+  <img class="auth__logo" src="/assets/images/shared/logo.svg" alt="procollab" width="125px" />
+  <div class="auth__greeting">
+    <h3 class="auth__title">
+      <ng-container *ngIf="step === 'credentials'">
+        Привет! 👋 Добро пожаловать в Procollab - платформу, где можно найти стартап, сообщников,
+        инвесторов
+      </ng-container>
+      <ng-container *ngIf="step === 'info'">
+        PROCOLLAB - это не только платформа, но и сообщество самых заряженных школьников и студентов
+      </ng-container>
+    </h3>
+    <p class="auth__info">
+      <ng-container *ngIf="step === 'credentials'">
+        Заполни основные данные о себе, чтобы ты мог войти в аккаунт
+      </ng-container>
+      <ng-container *ngIf="step === 'info'">
+        Заполни основные данные о себе, чтобы мы знали, как к тебе обращаться
+      </ng-container>
+    </p>
+  </div>
+  <form class="auth__wrapper" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <ng-container *ngIf="step === 'credentials'">
+      <fieldset *ngIf="registerForm.get('email') as email" class="auth__field">
+        <label for="email" class="field-label">Почта</label>
         <app-input
-          [error]="name | controlError"
-          id="name"
-          type="text"
-          formControlName="firstName"
-          placeholder="Иван"
+          [error]="email | controlError"
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="mail@example.ru"
         ></app-input>
-        <div *ngIf="name | controlError: 'required'" class="text-body-14 error">
+        <div *ngIf="email | controlError: 'required'" class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
+        <div *ngIf="email | controlError: 'email'" class="text-body-14 error">
+          {{ errorMessage.VALIDATION_EMAIL }}
+        </div>
       </fieldset>
-      <fieldset *ngIf="registerForm.get('lastName') as surname" class="auth__field">
-        <label for="surname" class="field-label">Фамилия</label>
+      <fieldset *ngIf="registerForm.get('password') as password" class="auth__field">
+        <label for="passowrd" class="field-label">Пароль</label>
         <app-input
-          [error]="surname | controlError"
-          id="surname"
-          type="text"
-          formControlName="lastName"
-          placeholder="Иванов"
+          [error]="password | controlError"
+          id="passowrd"
+          type="password"
+          formControlName="password"
+          placeholder="Придумай пароль"
         ></app-input>
-        <div *ngIf="surname | controlError: 'required'" class="text-body-14 error">
+        <app-input
+          class="register__repeated-password"
+          [error]="password | controlError"
+          id="repeatedPassword"
+          type="password"
+          formControlName="repeatedPassword"
+          placeholder="Повтори пароль"
+        ></app-input>
+        <div *ngIf="password | controlError: 'required'" class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
-      </fieldset>
-    </div>
-    <div class="auth__row">
-      <fieldset *ngIf="registerForm.get('userType') as userType">
-        <label for="userType" class="field-label">Тип аккаунта</label>
-        <app-select
-          *ngIf="roles$ | async as options"
-          id="userType"
-          formControlName="userType"
-          placeholder="Ученик"
-          [options]="options"
-        ></app-select>
-        <div *ngIf="userType | controlError: 'required'" class="text-body-14 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
+        <div *ngIf="password | controlError: 'minlength'" class="text-body-14 error">
+          {{ errorMessage.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
+        </div>
+        <div *ngIf="registerForm | controlError: 'unMatch'" class="text-body-14 error">
+          {{ errorMessage.VALIDATION_PASSWORD_UNMATCH }}
         </div>
       </fieldset>
-      <fieldset *ngIf="registerForm.get('birthday') as birthday">
+    </ng-container>
+    <ng-container *ngIf="step === 'info'">
+      <div class="auth__row">
+        <fieldset *ngIf="registerForm.get('firstName') as name" class="auth__field">
+          <label for="name" class="field-label">Имя</label>
+          <app-input
+            [error]="name | controlError"
+            id="name"
+            type="text"
+            formControlName="firstName"
+            placeholder="Иван"
+          ></app-input>
+          <div *ngIf="name | controlError: 'required'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+        <fieldset *ngIf="registerForm.get('lastName') as surname" class="auth__field">
+          <label for="surname" class="field-label">Фамилия</label>
+          <app-input
+            [error]="surname | controlError"
+            id="surname"
+            type="text"
+            formControlName="lastName"
+            placeholder="Иванов"
+          ></app-input>
+          <div *ngIf="surname | controlError: 'required'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        </fieldset>
+      </div>
+      <fieldset *ngIf="registerForm.get('birthday') as birthday" class="auth__field">
         <label for="birthday" class="field-label">Дата рождения</label>
         <app-input
           id="birthday"
@@ -65,64 +116,29 @@
           {{ errorMessage.INVALID_DATE }}
         </div>
       </fieldset>
+    </ng-container>
+    <div *ngIf="userExistError" class="text-body-14 error">
+      {{ errorMessage.AUTH_EMAIL_EXIST }}
     </div>
-    <fieldset *ngIf="registerForm.get('email') as email" class="auth__field">
-      <label for="email" class="field-label">Почта</label>
-      <app-input
-        [error]="email | controlError"
-        id="email"
-        type="email"
-        formControlName="email"
-        placeholder="mail@example.ru"
-      ></app-input>
-      <div *ngIf="email | controlError: 'required'" class="text-body-14 error">
-        {{ errorMessage.VALIDATION_REQUIRED }}
-      </div>
-      <div *ngIf="email | controlError: 'email'" class="text-body-14 error">
-        {{ errorMessage.VALIDATION_EMAIL }}
-      </div>
-    </fieldset>
-    <fieldset *ngIf="registerForm.get('password') as password" class="auth__field">
-      <label for="passowrd" class="field-label">Пароль</label>
-      <app-input
-        [error]="password | controlError"
-        id="passowrd"
-        type="password"
-        formControlName="password"
-        placeholder="Пароль"
-      ></app-input>
-      <div *ngIf="password | controlError: 'required'" class="text-body-14 error">
-        {{ errorMessage.VALIDATION_REQUIRED }}
-      </div>
-      <div *ngIf="password | controlError: 'minlength'" class="text-body-14 error">
-        {{ errorMessage.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
-      </div>
-    </fieldset>
-  </div>
-  <div class="register__agreement">
-    <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
-    <span class="text-body-14" (click)="registerAgreement = !registerAgreement">
-      Я ознакомился с соглашением и даю
-      <a href="/assets/downloads/auth/shared/Политика_обработки_перс_данных_2022.docx" download>
-        согласие
-      </a>
-      на обработку персональных данных
-    </span>
-  </div>
-  <div *ngIf="userExistError" class="text-body-14 error">
-    {{ errorMessage.AUTH_EMAIL_EXIST }}
-  </div>
-  <div class="auth__wrapper">
-    <app-button [loader]="registerIsSubmitting" type="submit" class="auth__button">
-      <span>Создать аккаунт</span>
-      <i
-        class="auth__button-icon"
-        appIcon
-        icon="arrow-no-body"
-        appWidth="12"
-        appHeight="6"
-        appViewBox="0 0 18 9"
-      ></i>
+    <div class="register__agreement" *ngIf="step === 'credentials'">
+      <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
+      <span (click)="registerAgreement = !registerAgreement">
+        Я ознакомился с соглашением и даю
+        <a href="/assets/downloads/auth/shared/Политика_обработки_перс_данных_2022.docx" download>
+          согласие
+        </a>
+        на обработку персональных данных
+      </span>
+    </div>
+    <app-button
+      *ngIf="step === 'info'"
+      [loader]="registerIsSubmitting"
+      type="submit"
+      class="auth__button"
+    >
+      Создать аккаунт
     </app-button>
-  </div>
-</form>
+    <app-button *ngIf="step === 'credentials'" type="submit" class="auth__button">Далее</app-button>
+    <p class="auth__toggle text-body-16">Есть аккаунт? <a routerLink="/auth/login">Войдите</a></p>
+  </form>
+</div>

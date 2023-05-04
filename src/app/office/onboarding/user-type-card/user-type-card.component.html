@@ -1,0 +1,11 @@
+<!-- @format -->
+
+<li class="item" [class.item--active]="isActive">
+  <div class="item__head">
+    <div class="item__checkbox checkbox" [class.checkbox--active]="isActive"></div>
+    <div class="item__title"><ng-content select="[title]"></ng-content></div>
+  </div>
+  <div class="item__text text-body-12">
+    <ng-content select="[description]"></ng-content>
+  </div>
+</li>

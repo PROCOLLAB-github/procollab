@@ -1,9 +1,27 @@
 <!-- @format -->
 
-<main class="verification">
-  <h1 class="verification__title">Подтвердите почту</h1>
-  <p class="text-body-14 verification__text">
-    Сейчас к вам на почту <a [href]="userEmail | async">{{ userEmail | async }}</a> придет письмо с
-    подтверждением. Перейдите к личному профилю по ссылке в письме
-  </p>
+<main class="auth verification">
+  <img class="auth__logo" src="/assets/images/shared/logo.svg" alt="procollab" width="125px" />
+  <div class="verification__inner">
+    <div class="verification__body">
+      <div class="auth__greeting">
+        <h3 class="auth__title">Мы отправили ссылку подтверждения</h3>
+        <p class="auth__info">
+          Мы отправили сслыку подтверждение на твою почту
+          <strong>{{ userEmail }}</strong> Проверь свою почту и перейди по ссылке в письме для
+          продолжения регистрации
+        </p>
+      </div>
+      <div *ngIf="counter === 0" class="verification__action">
+        <p class="text-body-14 verification__text">Не получил письмо? Проверь папку спам или</p>
+        <button class="verification__send-again text-body-14" (click)="onResend()">
+          отправь снова <i appIcon icon="reload" appSquare="17"></i>
+        </button>
+      </div>
+      <div *ngIf="counter > 0" class="verification__text">
+        Письмо отправлено, отправить еще раз через {{ counter }}
+      </div>
+    </div>
+    <img class="verification__img" src="/assets/images/auth/email.png" alt="email" />
+  </div>
 </main>

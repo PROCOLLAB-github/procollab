@@ -107,38 +107,6 @@
   }
 }
 
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-
-  &__item {
-    display: block;
-    margin-bottom: 12px;
-
-    &:not(:last-child) {
-      margin-right: 10px;
-    }
-  }
-
-  &__remove-icon {
-    color: var(--red);
-    cursor: pointer;
-  }
-}
-
-.tag-list-form {
-  display: flex;
-
-  &__input {
-    flex-grow: 1;
-    margin-right: 6px;
-  }
-
-  &__button {
-    width: 52px;
-  }
-}
-
 .achievement {
   &__first-row {
     display: flex;

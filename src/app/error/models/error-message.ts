@@ -8,12 +8,12 @@ export enum ErrorMessage {
   AUTH_EMAIL_NOT_EXIST = "Аккаунт с таким email не зарегистрирован",
 
   // FORM
-  VALIDATION_TOO_LONG = "Максимальная длинна:",
-  VALIDATION_TOO_SHORT = "Минимальная длинна:",
+  VALIDATION_TOO_LONG = "Максимальная длина:",
+  VALIDATION_TOO_SHORT = "Минимальная длина:",
   VALIDATION_REQUIRED = "Обязательное поле",
   MINIMAL_AGE = "Минимальный возраст",
   INVALID_DATE = "Неправильный формат даты",
   VALIDATION_EMAIL = "Введенное значение не соответствует формату email",
   VALIDATION_PASSWORD_UNMATCH = "Пароли не совпадают",
-  EMPTY_AVATAR = "*Выберите фото для профиля"
+  EMPTY_AVATAR = "*Выберите фото для профиля",
 }

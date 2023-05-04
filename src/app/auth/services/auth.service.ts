@@ -32,7 +32,7 @@ export class AuthService {
 
   register(data: RegisterRequest): Observable<RegisterResponse> {
     return this.apiService
-      .post("/auth/users/", data)
+      .post("/auth/users/", { ...data, birthday: "2000-09-09" })
       .pipe(map(json => plainToInstance(RegisterResponse, json)));
   }
 
@@ -121,7 +121,24 @@ export class AuthService {
   saveProfile(newProfile: Partial<User>): Observable<User> {
     return this.profile.pipe(
       take(1),
-      concatMap(profile => this.apiService.put<User>(`/auth/users/${profile.id}/`, newProfile))
+      concatMap(profile => this.apiService.patch<User>(`/auth/users/${profile.id}/`, newProfile))
     );
+  }
+
+  setOnboardingStage(stage: number | null): Observable<User> {
+    return this.profile.pipe(
+      take(1),
+      concatMap(profile =>
+        this.apiService.put<User>(`/auth/users/${profile.id}/set_onboarding_stage/`, {
+          onboardingStage: stage,
+        })
+      )
+    );
+  }
+
+  resendEmail(email: string): Observable<User> {
+    return this.apiService
+      .post<User>("/auth/resend_email/", { email })
+      .pipe(map(user => plainToInstance(User, user)));
   }
 }

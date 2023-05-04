@@ -34,6 +34,7 @@ export class User {
     preferredIndustries: string[];
   };
 
+  onboardingStage!: number | null;
   speciality!: string;
   userType!: number;
   city!: string;
@@ -42,9 +43,10 @@ export class User {
   achievements!: Achievement[];
   timeCreated!: string;
   timeUpdated!: string;
+  verificationDate!: string;
 
   doesCompleted(): boolean {
-    return !!this.birthday && !!this.city && !!this.avatar && !!this.aboutMe;
+    return this.onboardingStage === null;
   }
 
   static default(): User {
@@ -56,6 +58,7 @@ export class User {
       birthday: "23.42.3423",
       city: "234sadfas",
       organization: "dfasdfasdf",
+      onboardingStage: null,
       speciality: "asdfasdfasd",
       avatar:
         "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/07/07b5228efb2df4d2ded575a785f5dedec1db2687.jpg",
@@ -65,6 +68,7 @@ export class User {
       id: 0,
       timeCreated: "",
       timeUpdated: "",
+      verificationDate: "",
     } as User;
   }
 }
