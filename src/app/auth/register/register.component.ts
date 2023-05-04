@@ -44,7 +44,9 @@ export class RegisterComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authService.clearTokens();
+  }
 
   registerForm: FormGroup;
   registerAgreement = false;
