@@ -4,11 +4,11 @@
   <app-sidebar class="office__sidebar"></app-sidebar>
   <div class="office__wrapper">
     <div class="office__top">
-      <app-header
+      <!--<app-header
         class="office__header"
         *ngIf="invites$ | async as invites"
         [invites]="invites"
-      ></app-header>
+      ></app-header>-->
       <app-nav *ngIf="invites$ | async as invites" [invites]="invites"></app-nav>
     </div>
     <div class="office__body">

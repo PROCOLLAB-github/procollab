@@ -32,4 +32,32 @@
       </a>
     </div>
   </nav>
+  <div (clickOutside)="onClickOutside()" class="sidebar__bell">
+    <div class="attention" *ngIf="(showBall | async) || hasInvites"></div>
+    <i
+      appIcon
+      icon="bell"
+      appWidth="20"
+      appHeight="23"
+      appViewBox="0 0 20 22"
+      (click)="showNotifications = true"
+    ></i>
+    <div *ngIf="showNotifications" class="sidebar__notifications notifications">
+      <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
+      <ul class="notifications__invites">
+        <li *ngFor="let invite of invites" class="notifications__invite">
+          <app-invite-manage-card
+            [invite]="invite"
+            (accept)="onAcceptInvite($event)"
+            (reject)="onRejectInvite($event)"
+          ></app-invite-manage-card>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <app-profile-info
+    class="sidebar__profile"
+    *ngIf="authService.profile | async as user"
+    [user]="user"
+  ></app-profile-info>
 </div>
