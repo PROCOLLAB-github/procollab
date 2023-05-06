@@ -1,16 +1,27 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { SidebarComponent } from './sidebar.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('SidebarComponent', () => {
+import { SidebarComponent } from "./sidebar.component";
+import { of } from "rxjs";
+import { AuthService } from "@auth/services";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { RouterTestingModule } from "@angular/router/testing";
+
+describe("SidebarComponent", () => {
   let component: SidebarComponent;
   let fixture: ComponentFixture<SidebarComponent>;
 
   beforeEach(async () => {
+    const authSpy = {
+      profile: of({}),
+    };
+
     await TestBed.configureTestingModule({
-      declarations: [ SidebarComponent ]
-    })
-    .compileComponents();
+      declarations: [SidebarComponent],
+      imports: [HttpClientTestingModule, RouterTestingModule],
+      providers: [{ provide: AuthService, useValue: authSpy }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +30,7 @@ describe('SidebarComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

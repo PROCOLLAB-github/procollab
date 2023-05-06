@@ -14,7 +14,7 @@ describe("LoginComponent", () => {
   let fixture: ComponentFixture<LoginComponent>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj("AuthService", ["login", "memTokens"]);
+    const authSpy = jasmine.createSpyObj("AuthService", ["login", "memTokens", "clearTokens"]);
 
     await TestBed.configureTestingModule({
       imports: [FormsModule, ReactiveFormsModule, RouterTestingModule, CoreModule],
