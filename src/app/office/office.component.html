@@ -1,17 +1,20 @@
 <!-- @format -->
 
 <div class="office">
-  <div class="office__top">
-    <app-header
-      class="office__header"
-      *ngIf="invites$ | async as invites"
-      [invites]="invites"
-    ></app-header>
-    <app-nav *ngIf="invites$ | async as invites" [invites]="invites"></app-nav>
-  </div>
-  <div class="office__body">
-    <div class="office__inner">
-      <router-outlet></router-outlet>
+  <app-sidebar class="office__sidebar"></app-sidebar>
+  <div class="office__wrapper">
+    <div class="office__top">
+      <!--<app-header
+        class="office__header"
+        *ngIf="invites$ | async as invites"
+        [invites]="invites"
+      ></app-header>-->
+      <app-nav *ngIf="invites$ | async as invites" [invites]="invites"></app-nav>
+    </div>
+    <div class="office__body">
+      <div class="office__inner">
+        <router-outlet></router-outlet>
+      </div>
     </div>
   </div>
   <!--<app-modal [(open)]="completeProfileModal">

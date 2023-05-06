@@ -4,10 +4,12 @@
 @use "src/styles/typography";
 
 .nav-bar {
+  display: block;
   padding: 55px 0 20px;
   background-color: var(--light-gray);
 
   @include responsive.apply-desktop {
+    display: none;
     padding: 20px 0;
     background-color: transparent;
   }

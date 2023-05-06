@@ -1,0 +1,63 @@
+<!-- @format -->
+
+<div class="sidebar">
+  <a class="sidebar__logo" routerLink="/office">
+    <img src="/assets/images/shared/logo.svg" alt="procollab" />
+  </a>
+  <nav class="sidebar-nav sidebar__nav">
+    <div class="sidebar-nav__list">
+      <a
+        class="sidebar-nav__item"
+        routerLink="projects"
+        routerLinkActive="sidebar-nav__item&#45;&#45;active"
+      >
+        <i appIcon icon="projects" appSquare="24"></i>
+        Проекты
+      </a>
+      <a
+        class="sidebar-nav__item"
+        routerLink="members"
+        routerLinkActive="sidebar-nav__item&#45;&#45;active"
+      >
+        <i appIcon icon="people" appSquare="24"></i>
+        Участники
+      </a>
+      <a
+        class="sidebar-nav__item"
+        routerLink="mentors"
+        routerLinkActive="sidebar-nav__item&#45;&#45;active"
+      >
+        <i appIcon icon="people" appSquare="24"></i>
+        Менторы
+      </a>
+    </div>
+  </nav>
+  <div (clickOutside)="onClickOutside()" class="sidebar__bell">
+    <div class="attention" *ngIf="(showBall | async) || hasInvites"></div>
+    <i
+      appIcon
+      icon="bell"
+      appWidth="20"
+      appHeight="23"
+      appViewBox="0 0 20 22"
+      (click)="showNotifications = true"
+    ></i>
+    <div *ngIf="showNotifications" class="sidebar__notifications notifications">
+      <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
+      <ul class="notifications__invites">
+        <li *ngFor="let invite of invites" class="notifications__invite">
+          <app-invite-manage-card
+            [invite]="invite"
+            (accept)="onAcceptInvite($event)"
+            (reject)="onRejectInvite($event)"
+          ></app-invite-manage-card>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <app-profile-info
+    class="sidebar__profile"
+    *ngIf="authService.profile | async as user"
+    [user]="user"
+  ></app-profile-info>
+</div>
