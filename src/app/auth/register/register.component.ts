@@ -5,9 +5,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
 import { ValidationService } from "@core/services";
 import { ErrorMessage } from "@error/models/error-message";
-import { SelectComponent } from "src/app/ui/components";
 import { Router } from "@angular/router";
-import { Observable, of } from "rxjs";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 
@@ -26,24 +24,29 @@ export class RegisterComponent implements OnInit {
     private validationService: ValidationService,
     private cdref: ChangeDetectorRef
   ) {
-    this.registerForm = this.fb.group({
-      firstName: ["", [Validators.required]],
-      lastName: ["", [Validators.required]],
-      userType: [1, [Validators.required]],
-      birthday: [
-        "",
-        [
-          Validators.required,
-          this.validationService.useDateFormatValidator,
-          this.validationService.useAgeValidator(),
+    this.registerForm = this.fb.group(
+      {
+        firstName: ["", [Validators.required]],
+        lastName: ["", [Validators.required]],
+        birthday: [
+          "",
+          [
+            Validators.required,
+            this.validationService.useDateFormatValidator,
+            this.validationService.useAgeValidator(),
+          ],
         ],
-      ],
-      email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required, Validators.minLength(6)]],
-    });
+        email: ["", [Validators.required, Validators.email]],
+        password: ["", [Validators.required, Validators.minLength(6)]],
+        repeatedPassword: ["", [Validators.required]],
+      },
+      { validators: [this.validationService.useMatchValidator("password", "repeatedPassword")] }
+    );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authService.clearTokens();
+  }
 
   registerForm: FormGroup;
   registerAgreement = false;
@@ -51,17 +54,29 @@ export class RegisterComponent implements OnInit {
 
   userExistError = false;
 
-  errorMessage = ErrorMessage;
-  // TODO: unhardcode later on
-  roles$: Observable<SelectComponent["options"]> = of([
-    { id: 1, value: 1, label: "Участник" },
-    { id: 2, value: 2, label: "Ментор" },
-    { id: 3, value: 3, label: "Эксперт" },
-    { id: 4, value: 4, label: "Инвестор" },
-  ]);
+  step: "credentials" | "info" = "credentials";
 
-  onSubmit() {
-    if (!this.validationService.getFormValidation(this.registerForm) || !this.registerAgreement) {
+  errorMessage = ErrorMessage;
+
+  onInfoStep() {
+    const fields = [
+      this.registerForm.get("email"),
+      this.registerForm.get("password"),
+      this.registerForm.get("repeatedPassword"),
+    ];
+
+    const errors = fields.map(field => {
+      field?.markAsTouched();
+      return !!field?.valid;
+    });
+
+    if (errors.every(Boolean) && this.registerAgreement) {
+      this.step = "info";
+    }
+  }
+
+  onSendForm(): void {
+    if (!this.validationService.getFormValidation(this.registerForm)) {
       return;
     }
 
@@ -97,5 +112,13 @@ export class RegisterComponent implements OnInit {
         this.cdref.detectChanges();
       },
     });
+  }
+
+  onSubmit() {
+    if (this.step === "credentials") {
+      this.onInfoStep();
+    } else if (this.step === "info") {
+      this.onSendForm();
+    }
   }
 }

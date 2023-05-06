@@ -1,0 +1,55 @@
+<!-- @format -->
+
+<div class="page">
+  <div class="auth__greeting">
+    <h3 class="auth__title">Заполни данные о своей специальности и скиллах</h3>
+    <p class="auth__info">
+      Для того, чтобы участники понимали с кем общаются и платформа могла рекомендовать тебя на
+      самые подходящие вакансии
+    </p>
+  </div>
+  <form [formGroup]="stageFrom" class="page__form">
+    <fieldset class="page__field" *ngIf="stageFrom.get('speciality') as speciality">
+      <label for="speciality" class="field-label">Специальность</label>
+      <app-input
+        id="speciality"
+        [error]="speciality | controlError"
+        type="text"
+        placeholder="Например: Java Developer"
+        formControlName="speciality"
+      ></app-input>
+      <div *ngIf="speciality | controlError: 'required'" class="text-body-14 error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+    </fieldset>
+    <div class="page__field">
+      <label class="field-label">Ключевые навыки</label>
+      <ul class="tag-list">
+        <li *ngFor="let skill of keySkills.controls; index as i" class="tag-list__item">
+          <app-tag>
+            <span>{{ skill.value }}</span>
+            <i
+              class="tag-list__remove-icon"
+              appIcon
+              icon="basket"
+              appSquare="24"
+              (click)="removeKeySkill(i)"
+            ></i>
+          </app-tag>
+        </li>
+      </ul>
+      <div class="tag-list-form">
+        <app-input
+          (enter)="addKeySkill()"
+          [(appValue)]="newKeySkillTitle"
+          class="tag-list-form__input"
+          placeholder="Введите свой навык, например: Python"
+        ></app-input>
+        <app-button type="button" class="tag-list-form__button" (click)="addKeySkill()">
+          <i appIcon icon="check" appWidth="12" appHeight="10"></i>
+        </app-button>
+      </div>
+    </div>
+    <app-button type="submit" (click)="onSubmit()">Продолжить</app-button>
+  </form>
+</div>

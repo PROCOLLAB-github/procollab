@@ -34,7 +34,11 @@ export class OfficeComponent implements OnInit, OnDestroy {
       this.profile = profile;
 
       if (!this.profile.doesCompleted()) {
-        this.completeProfileModal = true;
+        this.router
+          .navigateByUrl("/office/onboarding")
+          .then(() => console.debug("Route changed from OfficeComponent"));
+      } else if (this.profile.verificationDate === null) {
+        this.waitVerificationModal = true;
       }
     });
     this.subscriptions$.push(profileSub$);
@@ -51,16 +55,18 @@ export class OfficeComponent implements OnInit, OnDestroy {
 
   subscriptions$: Subscription[] = [];
 
-  completeProfileModal = false;
+  waitVerificationModal = false;
+
   profile?: User;
-
-  onGotoProfile(): void {
-    if (!this.profile) return;
-
-    this.completeProfileModal = false;
-
-    this.router
-      .navigateByUrl(`/office/profile/${this.profile.id}`)
-      .then(() => console.debug("Route changed OfficeComponent"));
-  }
+  // completeProfileModal = false;
+  //
+  // onGotoProfile(): void {
+  //   if (!this.profile) return;
+  //
+  //   this.completeProfileModal = false;
+  //
+  //   this.router
+  //     .navigateByUrl(`/office/profile/${this.profile.id}`)
+  //     .then(() => console.debug("Route changed OfficeComponent"));
+  // }
 }

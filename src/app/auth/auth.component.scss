@@ -1,6 +1,6 @@
 /** @format */
 
-@import "src/styles/responsive";
+@use "src/styles/responsive";
 
 .page {
   position: relative;
@@ -9,9 +9,8 @@
   height: 100vh;
   padding: 0 15px;
 
-  @include apply-desktop {
+  @include responsive.apply-desktop {
     padding: 0 100px;
-    background: var(--white) no-repeat right/contain url("/assets/images/auth/bg.svg");
   }
 
   &__header {

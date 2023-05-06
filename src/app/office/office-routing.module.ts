@@ -16,6 +16,10 @@ import { MentorsResolver } from "./mentors/mentors.resolver";
 
 const routes: Routes = [
   {
+    path: "onboarding",
+    loadChildren: () => import("./onboarding/onboarding.module").then(m => m.OnboardingModule),
+  },
+  {
     path: "",
     component: OfficeComponent,
     resolve: {

@@ -1,0 +1,53 @@
+<!-- @format -->
+
+<div class="page" *ngIf="profile">
+  <div class="auth__greeting">
+    <h3 class="auth__title">
+      Добро пожаловать, {{ profile.firstName }} {{ profile.lastName }}! ✌️
+    </h3>
+    <p class="auth__info">
+      Пожалуйста, заполни уточняющие данные о себе, чтобы мы знали, какие команды тебе подойдут
+      лучше всего! А также чтобы сами команды могли найти тебя
+    </p>
+  </div>
+  <form [formGroup]="stageForm" class="page__form" (ngSubmit)="onSubmit()">
+    <fieldset class="page__field" *ngIf="stageForm.get('avatar') as avatar">
+      <label for="avatar" class="field-label">Фотография профиля</label>
+      <app-avatar-control
+        id="avatar"
+        formControlName="avatar"
+        [error]="avatar | controlError"
+      ></app-avatar-control>
+      <div *ngIf="avatar | controlError: 'required'" class="text-body-14 error">
+        {{ errorMessage.EMPTY_AVATAR }}
+      </div>
+    </fieldset>
+    <fieldset class="page__field" *ngIf="stageForm.get('city') as city">
+      <label for="city" class="field-label">Город</label>
+      <app-input
+        id="city"
+        [error]="city | controlError"
+        type="text"
+        placeholder="Откуда вы"
+        formControlName="city"
+      ></app-input>
+      <div *ngIf="city | controlError: 'required'" class="text-body-14 error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+    </fieldset>
+    <fieldset class="page__field" *ngIf="stageForm.get('organization') as organization">
+      <label for="organization" class="field-label">Место учебы/работы</label>
+      <app-input
+        id="organization"
+        [error]="organization | controlError"
+        type="text"
+        placeholder="Напиши название организации"
+        formControlName="organization"
+      ></app-input>
+      <div *ngIf="organization | controlError: 'required'" class="text-body-14 error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+    </fieldset>
+    <app-button type="submit">Продолжить</app-button>
+  </form>
+</div>

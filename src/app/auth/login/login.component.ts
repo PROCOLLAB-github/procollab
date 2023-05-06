@@ -35,7 +35,9 @@ export class LoginComponent implements OnInit {
 
   errorMessage = ErrorMessage;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.authService.clearTokens();
+  }
 
   onSubmit() {
     if (!this.validationService.getFormValidation(this.loginForm) || this.loginIsSubmitting) {
