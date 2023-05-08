@@ -18,7 +18,7 @@ $section-padding: 24px;
     padding: $section-padding;
     color: var(--black);
     background-color: var(--white);
-    border-radius: var(--rounded-md);
+    border-radius: 15px;
   }
 
   &__cover {
@@ -26,7 +26,7 @@ $section-padding: 24px;
     max-width: unset;
     margin: 0 -15px;
     object-fit: cover;
-    border-radius: var(--rounded-md);
+    border-radius: 15px 15px 5px 5px;
 
     @include responsive.apply-desktop {
       width: 100%;
@@ -119,6 +119,10 @@ $section-padding: 24px;
     i {
       margin-left: 16px;
     }
+  }
+
+  &__title {
+    color: var(--black);
   }
 
   &__write-mobile {

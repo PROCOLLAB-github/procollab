@@ -9,8 +9,8 @@
       <p class="text-body-12 card__additional-info">
         {{ user.speciality }}
         <ng-container *ngIf="user.speciality && user.birthday"> • </ng-container>
-        <span *ngIf="yearsOld">
-          {{ yearsOld }} {{ yearsOld | pluralize: ["год", "года", "лет"] }}
+        <span *ngIf="user.birthday">
+          {{ user.birthday | yearsFromBirthday }}
         </span>
       </p>
     </div>
