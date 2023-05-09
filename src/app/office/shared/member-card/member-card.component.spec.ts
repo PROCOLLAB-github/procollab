@@ -8,6 +8,7 @@ import { UserRolePipe } from "@core/pipes/user-role.pipe";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
 import { DayjsPipe } from "@core/pipes/dayjs.pipe";
+import { YearsFromBirthdayPipe } from "@core/pipes/years-from-birthday.pipe";
 
 describe("MemberCardComponent", () => {
   let component: MemberCardComponent;
@@ -20,7 +21,7 @@ describe("MemberCardComponent", () => {
 
     await TestBed.configureTestingModule({
       providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [MemberCardComponent, UserRolePipe, DayjsPipe],
+      declarations: [MemberCardComponent, UserRolePipe, DayjsPipe, YearsFromBirthdayPipe],
     }).compileComponents();
   });
 
