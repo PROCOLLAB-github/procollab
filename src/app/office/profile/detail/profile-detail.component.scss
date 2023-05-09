@@ -8,6 +8,7 @@ $section-padding: 24px;
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 18px;
+  align-items: start;
   margin-bottom: 100px;
 
   @include responsive.apply-desktop {
@@ -54,6 +55,10 @@ $section-padding: 24px;
       align-items: flex-start;
       padding: 0 $section-padding;
     }
+  }
+
+  &__about-text {
+    margin-top: 12px;
   }
 
   &__main-info {
