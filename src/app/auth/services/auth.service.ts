@@ -32,7 +32,7 @@ export class AuthService {
 
   register(data: RegisterRequest): Observable<RegisterResponse> {
     return this.apiService
-      .post("/auth/users/", { ...data, birthday: "2000-09-09" })
+      .post("/auth/users/", data)
       .pipe(map(json => plainToInstance(RegisterResponse, json)));
   }
 
