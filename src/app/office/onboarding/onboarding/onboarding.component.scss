@@ -2,7 +2,7 @@
 
 .page {
   position: relative;
-  padding: 85px 15px 0;
+  padding: 30px 15px 0;
 
   @include responsive.apply-desktop {
     padding: 50px 100px 0;
