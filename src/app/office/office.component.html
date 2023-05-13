@@ -4,11 +4,6 @@
   <app-sidebar class="office__sidebar"></app-sidebar>
   <div class="office__wrapper">
     <div class="office__top">
-      <!--<app-header
-        class="office__header"
-        *ngIf="invites$ | async as invites"
-        [invites]="invites"
-      ></app-header>-->
       <app-nav *ngIf="invites$ | async as invites" [invites]="invites"></app-nav>
     </div>
     <div class="office__body">
@@ -17,18 +12,6 @@
       </div>
     </div>
   </div>
-  <!--<app-modal [(open)]="completeProfileModal">
-    <div class="message-modal">
-      <img src="/assets/images/office/shared/fulfill-profile.svg" alt="fulfill profile" />
-      <h3 class="message-modal__title text-bold-body-16">Дозаполните данные профиля</h3>
-      <p class="message-modal__text text-body-14">
-        для того, чтобы мы могли рекомендовать команды под ваши навыки
-      </p>
-      <app-button class="message-modal__button" (click)="onGotoProfile()">
-        К редактированию профиля
-      </app-button>
-    </div>
-  </app-modal>-->
   <app-modal [open]="waitVerificationModal">
     <div class="message-modal">
       <img src="/assets/images/office/shared/wait.png" alt="wait" width="215px" />
