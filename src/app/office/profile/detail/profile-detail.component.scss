@@ -8,6 +8,7 @@ $section-padding: 24px;
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 18px;
+  align-items: start;
   margin-bottom: 100px;
 
   @include responsive.apply-desktop {
@@ -18,7 +19,7 @@ $section-padding: 24px;
     padding: $section-padding;
     color: var(--black);
     background-color: var(--white);
-    border-radius: var(--rounded-md);
+    border-radius: 15px;
   }
 
   &__cover {
@@ -26,7 +27,7 @@ $section-padding: 24px;
     max-width: unset;
     margin: 0 -15px;
     object-fit: cover;
-    border-radius: var(--rounded-md);
+    border-radius: 15px 15px 5px 5px;
 
     @include responsive.apply-desktop {
       width: 100%;
@@ -54,6 +55,10 @@ $section-padding: 24px;
       align-items: flex-start;
       padding: 0 $section-padding;
     }
+  }
+
+  &__about-text {
+    margin-top: 12px;
   }
 
   &__main-info {
@@ -119,6 +124,10 @@ $section-padding: 24px;
     i {
       margin-left: 16px;
     }
+  }
+
+  &__title {
+    color: var(--black);
   }
 
   &__write-mobile {
