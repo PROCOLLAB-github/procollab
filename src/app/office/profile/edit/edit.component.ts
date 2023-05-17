@@ -35,6 +35,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       userType: [0],
       birthday: ["", [Validators.required]],
       city: [""],
+      links: this.fb.array([]),
       organization: [""],
       speciality: [""],
       keySkills: this.fb.array([]),
@@ -88,6 +89,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         profile.achievements?.forEach(achievement =>
           this.addAchievement(achievement.id, achievement.title, achievement.status)
         );
+
+      profile.links.length && profile.links.forEach(l => this.addLink(l));
 
       if ([2, 3, 4].includes(profile.userType)) {
         this.typeSpecific?.addControl("preferredIndustries", this.fb.array([]));
@@ -197,6 +200,25 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   removeKeySkill(i: number): void {
     this.keySkills.removeAt(i);
+  }
+
+  get links(): FormArray {
+    return this.profileForm.get("links") as FormArray;
+  }
+
+  newLink = "";
+
+  addLink(title?: string): void {
+    const fromState = title ?? this.newLink;
+
+    const control = this.fb.control(fromState, [Validators.required]);
+    this.links.push(control);
+
+    this.newLink = "";
+  }
+
+  removeLink(i: number): void {
+    this.links.removeAt(i);
   }
 
   private userTypeMap: { [type: number]: string } = {

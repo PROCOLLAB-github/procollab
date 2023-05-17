@@ -15,6 +15,7 @@ export class User {
   aboutMe!: string;
   birthday!: string;
   avatar!: string;
+  links!: string[];
   keySkills!: string[];
   member?: {
     usefulToProject: string;

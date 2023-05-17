@@ -161,7 +161,7 @@ $section-padding: 24px;
   }
 
   &__ach-list {
-    margin-bottom: 24px;
+    margin: 24px 0;
   }
 
   &__achievement {
@@ -179,6 +179,10 @@ $section-padding: 24px;
     .profile__title {
       margin-bottom: 12px;
     }
+  }
+
+  &__contact-link {
+    margin-top: 12px;
   }
 }
 
@@ -200,5 +204,30 @@ $section-padding: 24px;
 
   @include responsive.apply-desktop {
     display: block;
+  }
+}
+
+.contact-link {
+  color: var(--accent);
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--accent-dark);
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    margin-right: 12px;
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 6px;
   }
 }

@@ -73,17 +73,32 @@
       </a>
     </ng-container>
     <section class="profile__section profile__achievements">
-      <h3 class="text-bold-body-16 profile__title">Достижения</h3>
+      <p class="text-bold-body-14">{{ user.organization }}</p>
       <ul *ngIf="user.achievements.length" class="profile__ach-list">
         <li *ngFor="let achievement of user.achievements" class="profile__achievement achievement">
           <p class="achievement__status text-bold-body-14">{{ achievement.status }}</p>
           <p class="achievement__title text-body-12">{{ achievement.title }}</p>
         </li>
       </ul>
-      <h3 class="text-bold-body-16 profile__title">
-        Место {{ user.userType === 1 ? "учебы" : "работы" }}
-      </h3>
-      <p class="text-bold-body-14">{{ user.organization }}</p>
+      <ng-container *ngIf="user.links.length">
+        <p class="text-bold-body-14">Контакты</p>
+        <ul>
+          <li
+            class="contact-link profile__contact-link text-body-12"
+            *ngFor="let link of user.links"
+          >
+            <a
+              class="contact-link__link"
+              *ngIf="link | userLinks as l"
+              target="_blank"
+              [href]="link"
+            >
+              <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
+              {{ l.tag }}
+            </a>
+          </li>
+        </ul>
+      </ng-container>
     </section>
     <section class="profile__description">
       <h3 class="text-heading-3 profile__title">Обо мне</h3>
