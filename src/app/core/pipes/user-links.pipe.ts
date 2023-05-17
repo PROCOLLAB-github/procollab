@@ -16,8 +16,13 @@ export class UserLinksPipe implements PipeTransform {
     let domain = url.hostname;
     domain = domain.split(".").slice(-2).join(".");
 
-    const tag = url.pathname.replace(/\//g, "");
+    let tag = url.pathname;
+    if (tag.split("/").filter(Boolean).length > 1 || !this.icons[domain]) {
+      tag = value;
+    } else {
+      tag = "@" + tag.replace(/\//g, "");
+    }
 
-    return { iconName: this.icons[domain], tag };
+    return { iconName: this.icons[domain] ?? "link", tag };
   }
 }
