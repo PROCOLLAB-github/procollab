@@ -11,9 +11,17 @@ import { DayjsPipe } from "./pipes/dayjs.pipe";
 import { UserRolePipe } from "./pipes/user-role.pipe";
 import { PluralizePipe } from "./pipes/pluralize.pipe";
 import { YearsFromBirthdayPipe } from "./pipes/years-from-birthday.pipe";
+import { UserLinksPipe } from "./pipes/user-links.pipe";
 
 @NgModule({
-  declarations: [ControlErrorPipe, DayjsPipe, UserRolePipe, PluralizePipe, YearsFromBirthdayPipe],
+  declarations: [
+    ControlErrorPipe,
+    DayjsPipe,
+    UserRolePipe,
+    PluralizePipe,
+    YearsFromBirthdayPipe,
+    UserLinksPipe,
+  ],
   imports: [CommonModule],
   providers: [
     {
@@ -28,6 +36,13 @@ import { YearsFromBirthdayPipe } from "./pipes/years-from-birthday.pipe";
     },
     ApiService,
   ],
-  exports: [ControlErrorPipe, DayjsPipe, UserRolePipe, PluralizePipe, YearsFromBirthdayPipe],
+  exports: [
+    ControlErrorPipe,
+    DayjsPipe,
+    UserRolePipe,
+    PluralizePipe,
+    YearsFromBirthdayPipe,
+    UserLinksPipe,
+  ],
 })
 export class CoreModule {}
