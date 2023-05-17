@@ -5,13 +5,6 @@
     <span>Фильтр</span>
     <i appIcon icon="filter" appSquare="34"></i>
   </div>
-  <div class="filter page__filter" *ngIf="isAll && isFilterOpen">
-    <div class="filter__overlay" (click)="isFilterOpen = false"></div>
-    <div class="filter__body">
-      <div class="filter__bar"></div>
-      <app-projects-filter></app-projects-filter>
-    </div>
-  </div>
   <ul class="page__list" *ngIf="searchedProjects.length">
     <a *ngFor="let project of searchedProjects" [routerLink]="['/office/projects', project.id]">
       <li>
@@ -23,6 +16,13 @@
       </li>
     </a>
   </ul>
+  <div class="filter page__filter" *ngIf="isAll && isFilterOpen">
+    <div class="filter__overlay" (click)="isFilterOpen = false"></div>
+    <div class="filter__body">
+      <div class="filter__bar"></div>
+      <app-projects-filter></app-projects-filter>
+    </div>
+  </div>
   <div class="page__empty empty text-body-14" *ngIf="!searchedProjects.length && isMy">
     <button class="empty__action text-body-14" (click)="addProject()">
       <i appIcon icon="plus" appSquare="32"></i>
