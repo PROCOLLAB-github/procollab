@@ -15,6 +15,7 @@ export class User {
   aboutMe!: string;
   birthday!: string;
   avatar!: string;
+  links!: string[];
   keySkills!: string[];
   member?: {
     usefulToProject: string;
@@ -47,6 +48,17 @@ export class User {
 
   doesCompleted(): boolean {
     return this.onboardingStage === null;
+  }
+
+  get linksIcons(): string[] {
+    return this.links
+      .map(l => new URL(l))
+      .map(l => l.hostname)
+      .map(l => l.split("."))
+      .map(l => {
+        console.log(l);
+        return l.slice(-2, -1).join(".");
+      });
   }
 
   static default(): User {

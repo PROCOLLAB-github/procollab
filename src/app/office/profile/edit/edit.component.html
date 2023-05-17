@@ -242,6 +242,20 @@
         </div>
       </fieldset>
       <div class="profile__row">
+        <div class="">
+          <label class="field-label">Контактная информация</label>
+          <ul formArrayName="links">
+            <li *ngFor="let control of links.controls; index as i" class="profile__achievement">
+              <app-input [formControlName]="i" placeholder="https://t.me/username"></app-input>
+            </li>
+          </ul>
+          <app-button class="profile__add-achievement" (click)="addLink()">
+            <span>Добавить еще одну ссылку</span>
+            <i appIcon icon="plus" appSquare="24"></i>
+          </app-button>
+        </div>
+      </div>
+      <div class="profile__row">
         <fieldset *ngIf="profileForm.get('aboutMe') as aboutMe">
           <label for="aboutMe" class="field-label">Обо мне</label>
           <app-textarea
