@@ -7,7 +7,7 @@
     </h3>
     <p class="auth__info">
       Пожалуйста, заполни уточняющие данные о себе, чтобы мы знали, какие команды тебе подойдут
-      лучше всего! А также чтобы сами команды могли найти тебя
+      лучше всего, и чтобы сами команды могли тебя найти
     </p>
   </div>
   <form [formGroup]="stageForm" class="page__form" (ngSubmit)="onSubmit()">
@@ -28,7 +28,8 @@
         id="city"
         [error]="city | controlError"
         type="text"
-        placeholder="Откуда вы"
+        placeholder="Откуда т
+        ы"
         formControlName="city"
       ></app-input>
       <div *ngIf="city | controlError: 'required'" class="text-body-14 error">
