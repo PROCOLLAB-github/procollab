@@ -1,4 +1,5 @@
 /** @format */
+import { Project } from "@models/project.model";
 
 export class Achievement {
   id!: number;
@@ -42,6 +43,7 @@ export class User {
   region!: string;
   organization!: string;
   achievements!: Achievement[];
+  projects!: Project[];
   timeCreated!: string;
   timeUpdated!: string;
   verificationDate!: string;

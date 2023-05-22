@@ -113,5 +113,11 @@
         </p>
       </div>
     </section>
+    <section class="profile__projects">
+      <h3 class="text-heading-3 profile__title">Проекты</h3>
+      <div class="profile__projects-list">
+        <app-project-card *ngFor="let p of user.projects" [project]="p"></app-project-card>
+      </div>
+    </section>
   </main>
 </div>

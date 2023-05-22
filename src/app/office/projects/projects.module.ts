@@ -27,5 +27,6 @@ import { VacancySendComponent } from "../vacancy/send/send.component";
     VacancySendComponent,
   ],
   imports: [CommonModule, ReactiveFormsModule, CoreModule, UiModule, ProjectsRoutingModule],
+  exports: [ProjectCardComponent],
 })
 export class ProjectsModule {}
