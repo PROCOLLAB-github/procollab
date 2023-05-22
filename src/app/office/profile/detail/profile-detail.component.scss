@@ -184,6 +184,21 @@ $section-padding: 24px;
   &__contact-link {
     margin-top: 12px;
   }
+
+  &__projects {
+    grid-column: span 3;
+  }
+
+  &__projects-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-top: 10px;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
 }
 
 .achievement {

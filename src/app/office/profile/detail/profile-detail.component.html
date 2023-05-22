@@ -113,5 +113,15 @@
         </p>
       </div>
     </section>
+    <section class="profile__projects">
+      <h3 class="text-heading-3 profile__title">Проекты</h3>
+      <ul class="profile__projects-list">
+        <a *ngFor="let p of user.projects" [routerLink]="['/office/projects', p.id]">
+          <li>
+            <app-project-card [project]="p"></app-project-card>
+          </li>
+        </a>
+      </ul>
+    </section>
   </main>
 </div>
