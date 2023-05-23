@@ -35,13 +35,13 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly cdRef: ChangeDetectorRef
   ) {
     this.projectForm = this.fb.group({
-      imageAddress: ["", [Validators.required]],
-      name: ["", [Validators.required]],
-      region: ["", [Validators.required]],
-      step: [null, [Validators.required]],
-      industryId: [undefined, [Validators.required]],
-      description: ["", [Validators.required]],
-      presentationAddress: ["", [Validators.required]],
+      imageAddress: [""],
+      name: [""],
+      region: [""],
+      step: [null],
+      industryId: [undefined],
+      description: [""],
+      presentationAddress: [""],
       achievements: this.fb.array([]),
     });
 
