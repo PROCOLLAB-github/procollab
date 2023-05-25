@@ -12,6 +12,7 @@ export class Project {
   presentationAddress!: string;
   imageAddress!: string;
   numberOfCollaborators!: number;
+  viewsCount!: number;
   collaborators!: {
     userId: number;
     firstName: string;
@@ -34,6 +35,7 @@ export class Project {
       shortDescription: "string",
       achievements: [{ id: 3, title: "sdf", status: "dsaf" }],
       industry: 0,
+      viewsCount: 0,
       presentationAddress: "string",
       imageAddress: "string",
       numberOfCollaborators: 10,
