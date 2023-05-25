@@ -32,6 +32,22 @@
     color: var(--black);
   }
 
+  &__media {
+    display: flex;
+    margin-top: 16px;
+    color: var(--dark-gray);
+  }
+
+  &__views {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+
+    i {
+      margin-right: 5px;
+    }
+  }
+
   &__industry {
     color: var(--dark-gray);
   }
@@ -45,6 +61,10 @@
     align-items: center;
     justify-content: space-between;
     margin-top: 16px;
+
+    &:empty {
+      margin-top: 0;
+    }
   }
 }
 
