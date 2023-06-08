@@ -1,6 +1,6 @@
 /** @format */
 
-@use "../../../../../styles/responsive";
+@use "src/styles/responsive";
 
 .project {
   margin-bottom: 100px;
@@ -11,8 +11,8 @@
 
   &__main {
     display: grid;
-    grid-gap: 8px;
     grid-template-columns: 1fr;
+    grid-gap: 8px;
 
     @include responsive.apply-desktop {
       grid-template-columns: minmax(445px, 1fr) 1fr 1fr;
@@ -26,20 +26,29 @@
     border-radius: var(--rounded-md);
   }
 
-  &__about {
-    grid-row-start: 4;
+  &__info {
+    grid-column: span 3;
+  }
 
+  &__team {
+    grid-column-start: 3;
+  }
+
+  &__vacancy {
+    grid-column-start: 3;
+  }
+
+  &__about {
     @include responsive.apply-desktop {
+      grid-row-start: 2;
       grid-column: span 2;
-      grid-row-start: unset;
     }
   }
 
   &__achievements {
-    grid-row-start: 2;
-
     @include responsive.apply-desktop {
       grid-row-start: unset;
+      grid-column-start: 3;
     }
   }
 }
