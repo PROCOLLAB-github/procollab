@@ -44,70 +44,83 @@
         </a>
       </div>
     </div>
-    <div class="team project__section project__team">
-      <h3 class="text-bold-body-16 team__title">Команда</h3>
-      <ul *ngIf="project.collaborators">
-        <a
-          *ngFor="let member of project.collaborators"
-          class="team__item"
-          [routerLink]="['/office/profile', member.userId]"
-        >
-          <li class="member">
-            <app-avatar class="member__avatar" [url]="member.avatar" [size]="40"></app-avatar>
-            <div class="member__info">
-              <p class="text-bold-body-14 member__name">
-                {{ member.firstName }} {{ member.lastName }}
-              </p>
-              <p class="text-body-12 member__speciality">{{ member.role }}</p>
-            </div>
-            <i
-              *ngIf="member.userId === project.leader"
-              class="member__star"
-              appIcon
-              icon="star"
-              appSquare="14"
-            ></i>
-          </li>
-        </a>
-      </ul>
-    </div>
-    <div
-      *ngIf="vacancies$ | async as vacancies"
-      class="vacancies project__section project__vacancy"
-    >
-      <h3 class="text-bold-body-16 team__title">Вакансии</h3>
-      <ul *ngIf="authService.profile | async as profile" class="vacancies__list">
-        <li *ngFor="let vacancy of vacancies" class="vacancy">
-          <div class="vacancy__info">
-            <a
-              *ngIf="profile.id !== project.leader"
-              [routerLink]="['/office/vacancy', vacancy.id]"
-              class="text-bold-body-14 vacancy__title"
-            >
-              {{ vacancy.role }}
-            </a>
-          </div>
-          <p class="text-body-12 vacancy__requirements">{{ vacancy.requiredSkills.join(" • ") }}</p>
-        </li>
-      </ul>
-    </div>
     <div class="about project__about">
-      <h3 class="text-bold-body-16 about__title">О проекте</h3>
+      <div class="about__head">
+        <h3 class="text-bold-body-16 about__title">О проекте</h3>
+        <div class="about__views">
+          <i appIcon icon="eye" appSquare="22"></i>
+          {{ project.viewsCount }}
+        </div>
+      </div>
       <p class="text-body-14 about__text">
         {{ project.description }}
       </p>
     </div>
-    <div class="achievements project__section project__achievements">
-      <h3 class="text-bold-body-16 achievements__title">Достижения</h3>
-      <ul *ngIf="project.achievements" class="achievements__list">
-        <li
-          *ngFor="let achievement of project.achievements"
-          class="text-bold-body-14 achievements__item achievement"
-        >
-          <p class="text-bold-body-14 achievement__place">{{ achievement.status }}</p>
-          <p class="text-body-12 achievement__title">{{ achievement.title }}</p>
-        </li>
-      </ul>
-    </div>
+    <aside class="project__aside">
+      <div class="team project__section project__team">
+        <h3 class="text-bold-body-16 team__title">Команда</h3>
+        <ul *ngIf="project.collaborators">
+          <a
+            *ngFor="let member of project.collaborators"
+            class="team__item"
+            [routerLink]="['/office/profile', member.userId]"
+          >
+            <li class="member">
+              <app-avatar class="member__avatar" [url]="member.avatar" [size]="40"></app-avatar>
+              <div class="member__info">
+                <p class="text-bold-body-14 member__name">
+                  {{ member.firstName }} {{ member.lastName }}
+                </p>
+                <p class="text-body-12 member__speciality">{{ member.role }}</p>
+              </div>
+              <i
+                *ngIf="member.userId === project.leader"
+                class="member__star"
+                appIcon
+                icon="star"
+                appSquare="14"
+              ></i>
+            </li>
+          </a>
+        </ul>
+      </div>
+      <div
+        *ngIf="vacancies$ | async as vacancies"
+        class="vacancies project__section project__vacancy"
+      >
+        <h3 class="text-bold-body-16 team__title">Вакансии</h3>
+        <ul *ngIf="authService.profile | async as profile" class="vacancies__list">
+          <li *ngFor="let vacancy of vacancies" class="vacancy">
+            <div class="vacancy__info">
+              <a
+                *ngIf="profile.id !== project.leader"
+                [routerLink]="['/office/vacancy', vacancy.id]"
+                class="text-bold-body-14 vacancy__title"
+              >
+                {{ vacancy.role }}
+              </a>
+            </div>
+            <p class="text-body-12 vacancy__requirements">
+              {{ vacancy.requiredSkills.join(" • ") }}
+            </p>
+          </li>
+        </ul>
+      </div>
+      <div
+        *ngIf="project.achievements.length"
+        class="achievements project__section project__achievements"
+      >
+        <h3 class="text-bold-body-16 achievements__title">Достижения</h3>
+        <ul class="achievements__list">
+          <li
+            *ngFor="let achievement of project.achievements"
+            class="text-bold-body-14 achievements__item achievement"
+          >
+            <p class="text-bold-body-14 achievement__place">{{ achievement.status }}</p>
+            <p class="text-body-12 achievement__title">{{ achievement.title }}</p>
+          </li>
+        </ul>
+      </div>
+    </aside>
   </section>
 </main>

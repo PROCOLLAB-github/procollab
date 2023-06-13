@@ -17,9 +17,14 @@
     align-items: start;
 
     @include responsive.apply-desktop {
-      grid-template-columns: minmax(445px, 1fr) 1fr 1fr;
+      grid-template-columns: 2fr 1fr;
       grid-gap: 16px;
     }
+  }
+
+  &__aside {
+    display: grid;
+    gap: 20px;
   }
 
   &__section {
@@ -35,32 +40,9 @@
     }
   }
 
-  &__team {
-    @include responsive.apply-desktop {
-      grid-column-start: 3;
-    }
-  }
-
-  &__vacancy {
-    @include responsive.apply-desktop {
-      grid-column-start: 3;
-    }
-  }
-
   &__about {
-    padding: 24px;
-
-    @include responsive.apply-desktop {
-      grid-row-start: 2;
-      grid-column: span 2;
-    }
-  }
-
-  &__achievements {
-    @include responsive.apply-desktop {
-      grid-row-start: unset;
-      grid-column-start: 3;
-    }
+    grid-row-start: 2;
+    padding: 0 24px;
   }
 }
 
@@ -160,7 +142,7 @@
     align-items: center;
 
     i {
-      margin-right: 8px;
+      margin-right: 5px;
     }
   }
 
@@ -218,9 +200,35 @@
 }
 
 .about {
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    @include responsive.apply-desktop {
+      display: block;
+    }
+  }
+
   &__title {
     margin-bottom: 12px;
     color: var(--black);
+  }
+
+  &__views {
+    display: flex;
+    align-items: center;
+    color: var(--gray);
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      display: none;
+    }
+
+    i {
+      margin-right: 5px;
+    }
   }
 
   &__text {

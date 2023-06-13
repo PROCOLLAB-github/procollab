@@ -31,4 +31,5 @@ export class ProjectInfoComponent implements OnInit {
   }
 
   readFull = false;
+  protected readonly Array = Array;
 }
