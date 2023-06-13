@@ -8,12 +8,22 @@ import {
   HttpInterceptor,
   HttpRequest,
 } from "@angular/common/http";
-import { BehaviorSubject, catchError, filter, Observable, switchMap, take, throwError } from "rxjs";
+import {
+  BehaviorSubject,
+  catchError,
+  filter,
+  Observable,
+  switchMap,
+  take,
+  tap,
+  throwError,
+} from "rxjs";
 import { AuthService } from "@auth/services";
+import { Router } from "@angular/router";
 
 @Injectable()
 export class BearerTokenInterceptor implements HttpInterceptor {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly router: Router) {}
 
   private isRefreshing = false;
   private refreshTokenSubject = new BehaviorSubject<any>(null);
@@ -44,8 +54,12 @@ export class BearerTokenInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
+        if (error.status === 401 && request.url.includes("/api/token/refresh")) {
           return this.handle401(request, next);
+        } else if (error.status === 401 && !request.url.includes("/api/token/refresh")) {
+          this.router
+            .navigateByUrl("/auth/login")
+            .then(() => console.debug("Route changed from BearerTokenInterceptor"));
         }
 
         return throwError(() => error);
@@ -62,6 +76,13 @@ export class BearerTokenInterceptor implements HttpInterceptor {
       this.refreshTokenSubject.next(null);
 
       return this.authService.refreshTokens().pipe(
+        catchError(err => {
+          console.log(err);
+          return throwError(err);
+        }),
+        tap(res => {
+          console.log(res);
+        }),
         switchMap(res => {
           this.isRefreshing = false;
           this.refreshTokenSubject.next(res.access);
@@ -82,13 +103,13 @@ export class BearerTokenInterceptor implements HttpInterceptor {
               setHeaders: headers,
             })
           );
-        }),
-        catchError(err => {
-          this.isRefreshing = false;
-
-          this.authService.clearTokens();
-          return throwError(() => err);
         })
+        // catchError(err => {
+        //   this.isRefreshing = false;
+        //
+        //   this.authService.clearTokens();
+        //   return throwError(() => err);
+        // })
       );
     }
 
