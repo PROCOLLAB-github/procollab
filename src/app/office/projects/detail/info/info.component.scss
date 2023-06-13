@@ -25,7 +25,8 @@
   &__section {
     padding: 24px;
     background-color: var(--white);
-    border-radius: var(--rounded-md);
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 15px;
   }
 
   &__info {
@@ -47,6 +48,8 @@
   }
 
   &__about {
+    padding: 24px;
+
     @include responsive.apply-desktop {
       grid-row-start: 2;
       grid-column: span 2;
@@ -94,6 +97,7 @@
     @include responsive.apply-desktop {
       display: flex;
       align-items: flex-end;
+      padding-top: 10px;
       padding-left: 225px;
       background-color: var(--white);
       border: 1px solid var(--medium-grey-for-outline);
@@ -163,6 +167,7 @@
   &__presentation {
     display: block;
     margin-top: 35px;
+    margin-left: auto;
 
     @include responsive.apply-desktop {
       margin-top: 0;
@@ -266,6 +271,10 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 3px;
+  }
+
+  &__title {
+    text-decoration: underline;
   }
 
   &__action {
