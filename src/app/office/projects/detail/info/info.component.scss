@@ -1,6 +1,7 @@
 /** @format */
 
 @use "src/styles/responsive";
+@use "src/styles/typography";
 
 .project {
   margin-bottom: 100px;
@@ -13,6 +14,7 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 8px;
+    align-items: start;
 
     @include responsive.apply-desktop {
       grid-template-columns: minmax(445px, 1fr) 1fr 1fr;
@@ -27,15 +29,21 @@
   }
 
   &__info {
-    grid-column: span 3;
+    @include responsive.apply-desktop {
+      grid-column: span 3;
+    }
   }
 
   &__team {
-    grid-column-start: 3;
+    @include responsive.apply-desktop {
+      grid-column-start: 3;
+    }
   }
 
   &__vacancy {
-    grid-column-start: 3;
+    @include responsive.apply-desktop {
+      grid-column-start: 3;
+    }
   }
 
   &__about {
@@ -54,41 +62,116 @@
 }
 
 .info {
+  $body-slide: 15px;
+
+  padding: 0;
+  background-color: transparent;
+  border-radius: $body-slide;
+
+  &__cover {
+    position: relative;
+    height: 305px;
+    border-radius: 15px 15px 0 0;
+
+    img {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__body {
+    position: relative;
+    z-index: 2;
+    padding: 40px 24px 24px;
+    margin-top: -$body-slide;
+    border-radius: $body-slide;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      align-items: flex-end;
+      padding-left: 225px;
+      background-color: var(--white);
+      border: 1px solid var(--medium-grey-for-outline);
+    }
+  }
+
+  &__avatar {
+    position: absolute;
+    bottom: $body-slide;
+    left: 50%;
+    z-index: 3;
+    display: block;
+    transform: translateX(-50%) translateY(30px);
+
+    @include responsive.apply-desktop {
+      left: 35px;
+      transform: translateY(50%);
+    }
+  }
+
   &__row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-top: 24px;
+    justify-content: center;
+    margin-top: 2px;
 
-    i {
-      color: var(--accent);
-      cursor: pointer;
-      transition: color 0.2s;
-
-      &:hover {
-        color: var(--accent-dark);
-      }
+    @include responsive.apply-desktop {
+      justify-content: unset;
+      margin-top: 0;
     }
   }
 
   &__title {
     color: var(--black);
+    text-align: center;
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      text-align: unset;
+
+      @include typography.heading-2;
+    }
   }
 
-  &__industry {
-    margin-top: 2px;
+  &__text {
     color: var(--dark-gray);
   }
 
-  &__presentation {
+  &__industry {
+    margin-right: 20px;
+
+    @include responsive.apply-desktop {
+      margin-right: 40px;
+    }
+  }
+
+  &__geo {
     display: flex;
     align-items: center;
-    margin-top: 26px;
-    color: var(--black);
 
-    img {
+    i {
+      margin-right: 8px;
+    }
+  }
+
+  &__presentation {
+    display: block;
+    margin-top: 35px;
+
+    @include responsive.apply-desktop {
+      margin-top: 0;
       margin-right: 10px;
     }
+  }
+
+  &__edit {
+    display: block;
   }
 }
 

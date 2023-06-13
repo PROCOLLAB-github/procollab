@@ -3,33 +3,46 @@
 <main *ngIf="project$ | async as project" class="project">
   <section class="project__main">
     <div class="info project__section project__info">
-      <app-avatar [url]="project.imageAddress" [size]="140"></app-avatar>
-      <div class="info__row">
-        <h1 class="text-heading-2 info__title">{{ project.name }}</h1>
+      <div class="info__cover">
+        <img class="info__cover" src="/assets/images/office/profile/detail/cover.png" alt="cover" />
+        <app-avatar
+          class="info__avatar"
+          [url]="project.imageAddress"
+          [hasBorder]="true"
+          [size]="140"
+        ></app-avatar>
+      </div>
+      <div class="info__body">
+        <div class="info__text">
+          <h1 class="info__title">{{ project.name }}</h1>
+          <div class="info__row">
+            <p
+              *ngIf="industryService.industries | async as industries"
+              class="text-body-14 info__industry"
+            >
+              <ng-container
+                *ngIf="industryService.getIndustry(industries, project.industry) as industry"
+              >
+                {{ industry.name }}
+              </ng-container>
+            </p>
+            <p *ngIf="project.region" class="info__geo">
+              <i appIcon icon="geo-point" appWidth="7" appHeight="10" appViewBox="0 0 7 10"></i>
+              {{ project.region }}
+            </p>
+          </div>
+        </div>
+        <a class="info__presentation" [href]="project.presentationAddress" target="_blank">
+          <app-button color="grey"> Презентация проекта </app-button>
+        </a>
         <a
+          class="info__edit"
           *ngIf="authService.profile | async as profile"
           [routerLink]="['/office/projects', project.id, 'edit']"
         >
-          <i *ngIf="profile.id === project.leader" appIcon icon="settings" appSquare="40"></i>
+          <app-button *ngIf="profile.id === project.leader">редактировать</app-button>
         </a>
       </div>
-      <p
-        *ngIf="industryService.industries | async as industries"
-        class="text-body-14 info__industry"
-      >
-        <span *ngIf="industryService.getIndustry(industries, project.industry) as industry">
-          {{ industry.name }}
-        </span>
-      </p>
-      <a
-        *ngIf="project.presentationAddress"
-        class="text-bold-body-14 info__presentation"
-        [href]="project.presentationAddress"
-        target="_blank"
-      >
-        <img src="assets/images/projects/shared/pdf.svg" alt="pdf" />
-        Презентация проекта.pdf
-      </a>
     </div>
     <div class="team project__section project__team">
       <h3 class="text-bold-body-16 team__title">Команда</h3>
