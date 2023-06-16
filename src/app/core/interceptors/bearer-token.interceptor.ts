@@ -77,7 +77,6 @@ export class BearerTokenInterceptor implements HttpInterceptor {
 
       return this.authService.refreshTokens().pipe(
         catchError(err => {
-          console.log(err);
           return throwError(err);
         }),
         tap(res => {

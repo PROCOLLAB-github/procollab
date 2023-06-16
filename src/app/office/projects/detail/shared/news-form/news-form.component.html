@@ -1,0 +1,16 @@
+<!-- @format -->
+
+<form class="form" [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+  <div class="form__row">
+    <textarea
+      formControlName="text"
+      class="form__textarea text-body-14"
+      autosize
+      placeholder="Чем поделитесь сегодня?"
+      rows="1"
+    ></textarea>
+    <button class="form__submit">
+      <i appIcon icon="send" appSquare="20"></i>
+    </button>
+  </div>
+</form>

@@ -24,7 +24,12 @@
 
   &__aside {
     display: grid;
+    grid-row-start: 3;
     gap: 20px;
+
+    @include responsive.apply-desktop {
+      grid-row-start: unset;
+    }
   }
 
   &__section {
@@ -40,9 +45,24 @@
     }
   }
 
-  &__about {
+  &__content {
     grid-row-start: 2;
+
+    @include responsive.apply-desktop {
+      grid-row-start: unset;
+    }
+  }
+
+  &__about {
     padding: 0 24px;
+  }
+
+  &__news {
+    grid-row-start: 4;
+
+    @include responsive.apply-desktop {
+      grid-row-start: unset;
+    }
   }
 }
 
@@ -51,6 +71,7 @@
 
   padding: 0;
   background-color: transparent;
+  border: none;
   border-radius: $body-slide;
 
   &__cover {
@@ -307,5 +328,12 @@
 
   &__title {
     color: var(--dark-gray);
+  }
+}
+
+.news {
+  &__item {
+    display: block;
+    margin-top: 20px;
   }
 }

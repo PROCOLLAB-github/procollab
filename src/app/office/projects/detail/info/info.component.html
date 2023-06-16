@@ -44,17 +44,28 @@
         </a>
       </div>
     </div>
-    <div class="about project__about">
-      <div class="about__head">
-        <h3 class="text-bold-body-16 about__title">О проекте</h3>
-        <div class="about__views">
-          <i appIcon icon="eye" appSquare="22"></i>
-          {{ project.viewsCount }}
+    <div #contentEl class="project__content">
+      <div class="about project__about">
+        <div class="about__head">
+          <h3 class="text-bold-body-16 about__title">О проекте</h3>
+          <div class="about__views">
+            <i appIcon icon="eye" appSquare="22"></i>
+            {{ project.viewsCount }}
+          </div>
         </div>
+        <p class="text-body-14 about__text">
+          {{ project.description }}
+        </p>
       </div>
-      <p class="text-body-14 about__text">
-        {{ project.description }}
-      </p>
+    </div>
+    <div #newsEl class="project__news news">
+      <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
+      <app-project-news-card
+        class="news__item"
+        *ngFor="let p of news"
+        [newsItem]="p"
+        (delete)="onDeleteNews($event)"
+      ></app-project-news-card>
     </div>
     <aside class="project__aside">
       <div class="team project__section project__team">
