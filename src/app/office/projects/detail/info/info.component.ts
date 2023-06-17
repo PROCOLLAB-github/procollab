@@ -2,7 +2,7 @@
 
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { map, noop, Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 import { Project } from "@models/project.model";
 import { IndustryService } from "@services/industry.service";
 import { NavService } from "@services/nav.service";

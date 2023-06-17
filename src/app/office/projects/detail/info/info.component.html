@@ -58,8 +58,12 @@
         </p>
       </div>
     </div>
-    <div #newsEl class="project__news news">
-      <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
+    <div #newsEl class="project__news news" *ngIf="authService.profile | async as profile">
+      <app-news-form
+        *ngIf="project.leader === profile.id"
+        class="news__form"
+        (addNews)="onAddNews($event)"
+      ></app-news-form>
       <app-project-news-card
         class="news__item"
         *ngFor="let p of news"
