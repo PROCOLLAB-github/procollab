@@ -2,7 +2,7 @@
 
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { map, Observable } from "rxjs";
+import { map, noop, Observable } from "rxjs";
 import { Project } from "@models/project.model";
 import { IndustryService } from "@services/industry.service";
 import { NavService } from "@services/nav.service";
@@ -41,6 +41,17 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit {
 
     this.projectNewsService.fetchNews(this.route.snapshot.params.projectId).subscribe(news => {
       this.news = news;
+
+      setTimeout(() => {
+        const observer = new IntersectionObserver(this.onNewsInVew.bind(this), {
+          root: document.querySelector(".office__body"),
+          rootMargin: "0px 0px 0px 0px",
+          threshold: 0,
+        });
+        document.querySelectorAll(".news__item").forEach(e => {
+          observer.observe(e);
+        });
+      });
     });
   }
 
@@ -50,6 +61,16 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit {
     if (containerSm < window.innerWidth) {
       this.contentEl?.nativeElement.append(this.newsEl?.nativeElement);
     }
+  }
+
+  onNewsInVew(entries: IntersectionObserverEntry[], _observer: IntersectionObserver): void {
+    const ids = entries.map(e => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      return e.target.dataset.id;
+    });
+
+    this.projectNewsService.readNews(this.route.snapshot.params.projectId, ids).subscribe(noop);
   }
 
   news: ProjectNews[] = [];

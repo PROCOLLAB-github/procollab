@@ -66,6 +66,7 @@
       ></app-news-form>
       <app-project-news-card
         class="news__item"
+        [attr.data-id]="p.id"
         *ngFor="let p of news"
         [newsItem]="p"
         (delete)="onDeleteNews($event)"

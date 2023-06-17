@@ -3,7 +3,7 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "@core/services";
 import { ProjectNews } from "@office/projects/models/project-news.model";
-import { map, Observable } from "rxjs";
+import { forkJoin, map, Observable } from "rxjs";
 import { plainToInstance } from "class-transformer";
 
 @Injectable()
@@ -20,6 +20,14 @@ export class ProjectNewsService {
     return this.apiService
       .post(`/projects/${projectId}/news/`, obj)
       .pipe(map(r => plainToInstance(ProjectNews, r)));
+  }
+
+  readNews(projectId: string, newsIds: number[]): Observable<void[]> {
+    return forkJoin(
+      newsIds.map(id =>
+        this.apiService.post<void>(`/projects/${projectId}/news/${id}/set_viewed/`, {})
+      )
+    );
   }
 
   delete(projectId: string, newsId: number): Observable<void> {
