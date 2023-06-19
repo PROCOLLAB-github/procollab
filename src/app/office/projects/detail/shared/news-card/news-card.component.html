@@ -20,7 +20,16 @@
       </ul>
     </div>
   </div>
-  <div class="card__text text-body-14">{{ newsItem.text }}</div>
+  <div class="card__text text-body-14" *ngIf="newsItem.text">
+    {{ readMore ? newsItem.text : newsItem.text.split(" ").slice(0, 40).join(" ") }}
+  </div>
+  <div
+    *ngIf="newsItem.text.split(' ').length > 40"
+    class="read-more"
+    (click)="readMore = !readMore"
+  >
+    {{ readMore ? "Скрыть" : "Читать полностью" }}
+  </div>
   <div class="card__footer footer">
     <div class="footer__left">
       <div class="footer__item text-body-12">

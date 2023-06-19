@@ -63,7 +63,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onNewsInVew(entries: IntersectionObserverEntry[], _observer: IntersectionObserver): void {
+  onNewsInVew(entries: IntersectionObserverEntry[]): void {
     const ids = entries.map(e => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore

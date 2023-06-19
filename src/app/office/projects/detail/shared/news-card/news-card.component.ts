@@ -19,6 +19,8 @@ export class NewsCardComponent implements OnInit {
   @Input() newsItem!: ProjectNews;
   @Output() delete = new EventEmitter<number>();
 
+  readMore = false;
+
   ngOnInit(): void {}
 
   onCopyLink(): void {
