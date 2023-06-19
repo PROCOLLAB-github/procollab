@@ -18,6 +18,7 @@ export class NewsCardComponent implements OnInit {
 
   @Input() newsItem!: ProjectNews;
   @Output() delete = new EventEmitter<number>();
+  @Output() like = new EventEmitter<number>();
 
   readMore = false;
 

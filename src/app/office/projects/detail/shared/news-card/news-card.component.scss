@@ -94,6 +94,10 @@
     align-items: center;
   }
 
+  &__like {
+    cursor: pointer;
+  }
+
   &__item {
     display: flex;
     align-items: center;

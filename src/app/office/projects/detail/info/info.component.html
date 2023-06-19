@@ -81,6 +81,7 @@
         *ngFor="let p of news"
         [newsItem]="p"
         (delete)="onDeleteNews($event)"
+        (like)="onLike($event)"
       ></app-project-news-card>
     </div>
     <aside class="project__aside">

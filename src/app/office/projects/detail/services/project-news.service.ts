@@ -33,4 +33,8 @@ export class ProjectNewsService {
   delete(projectId: string, newsId: number): Observable<void> {
     return this.apiService.delete(`/projects/${projectId}/news/${newsId}/`);
   }
+
+  like(projectId: string, newsId: number): Observable<void> {
+    return this.apiService.post(`/projects/${projectId}/news/${newsId}/set_liked/`, {});
+  }
 }

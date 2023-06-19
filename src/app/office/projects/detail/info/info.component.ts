@@ -95,4 +95,8 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit {
       .delete(this.route.snapshot.params.projectId, newsId)
       .subscribe(() => {});
   }
+
+  onLike(newsId: number) {
+    this.projectNewsService.like(this.route.snapshot.params.projectId, newsId).subscribe(() => {});
+  }
 }
