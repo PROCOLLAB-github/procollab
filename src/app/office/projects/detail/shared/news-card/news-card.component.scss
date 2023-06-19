@@ -94,10 +94,6 @@
     align-items: center;
   }
 
-  &__like {
-    cursor: pointer;
-  }
-
   &__item {
     display: flex;
     align-items: center;
@@ -109,6 +105,14 @@
 
     i {
       margin-right: 3px;
+    }
+  }
+
+  &__like {
+    cursor: pointer;
+
+    &--active {
+      color: var(--accent);
     }
   }
 }

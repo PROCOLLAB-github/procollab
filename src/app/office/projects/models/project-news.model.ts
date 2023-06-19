@@ -8,8 +8,9 @@ export class ProjectNews {
   text!: string;
   datetimeCreated!: string;
   datetimeUpdated!: string;
-  viewsCount!: string;
-  likesCount!: string;
+  viewsCount!: number;
+  likesCount!: number;
+  isUserLiked!: boolean;
 
   static default(): ProjectNews {
     return {
@@ -20,8 +21,16 @@ export class ProjectNews {
       text: "so8df",
       datetimeCreated: dayjs().format(),
       datetimeUpdated: dayjs().format(),
-      viewsCount: "234",
-      likesCount: "234",
+      viewsCount: 234,
+      likesCount: 234,
+      isUserLiked: true,
     };
   }
+}
+
+export class ProjectNewsRes {
+  results!: ProjectNews[];
+  count!: number;
+  next!: string;
+  previous!: string;
 }

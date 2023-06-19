@@ -40,7 +40,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit {
     this.navService.setNavTitle("Профиль проекта");
 
     this.projectNewsService.fetchNews(this.route.snapshot.params.projectId).subscribe(news => {
-      this.news = news;
+      this.news = news.results;
 
       setTimeout(() => {
         const observer = new IntersectionObserver(this.onNewsInVew.bind(this), {
@@ -97,6 +97,14 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit {
   }
 
   onLike(newsId: number) {
-    this.projectNewsService.like(this.route.snapshot.params.projectId, newsId).subscribe(() => {});
+    const item = this.news.find(n => n.id === newsId);
+    if (!item) return;
+
+    this.projectNewsService
+      .toggleLike(this.route.snapshot.params.projectId, newsId, !item.isUserLiked)
+      .subscribe(() => {
+        item.likesCount = item.isUserLiked ? item.likesCount - 1 : item.likesCount + 1;
+        item.isUserLiked = !item.isUserLiked;
+      });
   }
 }

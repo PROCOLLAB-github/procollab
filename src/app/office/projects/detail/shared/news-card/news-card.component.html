@@ -24,7 +24,7 @@
     {{ readMore ? newsItem.text : newsItem.text.split(" ").slice(0, 40).join(" ") }}
   </div>
   <div
-    *ngIf="newsItem.text.split(' ').length > 40"
+    *ngIf="newsItem.text && newsItem.text.split(' ').length > 40"
     class="read-more"
     (click)="readMore = !readMore"
   >
@@ -32,7 +32,11 @@
   </div>
   <div class="card__footer footer">
     <div class="footer__left">
-      <div class="footer__item footer__like text-body-12" (click)="like.emit(newsItem.id)">
+      <div
+        class="footer__item footer__like text-body-12"
+        [class.footer__like--active]="newsItem.isUserLiked"
+        (click)="like.emit(newsItem.id)"
+      >
         <i appIcon icon="like" appSquare="22"></i>
         {{ newsItem.likesCount }}
       </div>
