@@ -75,9 +75,13 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit {
 
   news: ProjectNews[] = [];
 
-  readFull = false;
+  readFullDescription = false;
 
   newsForm: FormGroup;
+
+  readAllAchievements = false;
+  readAllVacancies = false;
+  readAllMembers = false;
 
   onAddNews(news: ProjectNews): void {
     this.news.unshift(news);
