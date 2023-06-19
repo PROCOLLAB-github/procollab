@@ -53,7 +53,7 @@
             {{ project.viewsCount }}
           </div>
         </div>
-        <div class="text-body-14 about__text">
+        <div *ngIf="project.description" class="text-body-14 about__text">
           {{
             readFullDescription
               ? project.description
