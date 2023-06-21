@@ -8,16 +8,7 @@ import {
   HttpInterceptor,
   HttpRequest,
 } from "@angular/common/http";
-import {
-  BehaviorSubject,
-  catchError,
-  filter,
-  Observable,
-  switchMap,
-  take,
-  tap,
-  throwError,
-} from "rxjs";
+import { BehaviorSubject, catchError, filter, Observable, switchMap, take, throwError } from "rxjs";
 import { AuthService } from "@auth/services";
 import { Router } from "@angular/router";
 
@@ -79,9 +70,6 @@ export class BearerTokenInterceptor implements HttpInterceptor {
         catchError(err => {
           return throwError(err);
         }),
-        tap(res => {
-          console.log(res);
-        }),
         switchMap(res => {
           this.isRefreshing = false;
           this.refreshTokenSubject.next(res.access);
@@ -103,12 +91,6 @@ export class BearerTokenInterceptor implements HttpInterceptor {
             })
           );
         })
-        // catchError(err => {
-        //   this.isRefreshing = false;
-        //
-        //   this.authService.clearTokens();
-        //   return throwError(() => err);
-        // })
       );
     }
 
