@@ -72,6 +72,8 @@
   }
 
   &__text {
+    white-space: break-spaces;
+
     @include typography.body-12;
 
     @include responsive.apply-desktop {
@@ -133,5 +135,22 @@
 
   &:hover {
     color: var(--accent-dark);
+  }
+}
+
+.editor-footer {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+  margin-top: 20px;
+  border-top: 1px solid var(--medium-grey-for-outline);
+
+  &__actions {
+    display: flex;
+
+    app-button {
+      display: block;
+      margin-right: 10px;
+    }
   }
 }

@@ -1,0 +1,60 @@
+@use "src/styles/responsive";
+@use "src/styles/typography";
+
+.card {
+  padding: 20px;
+  background-color: var(--white);
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 15px;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    border-radius: 50%;
+  }
+
+  &__title {
+    display: flex;
+  }
+
+  &__name {
+    color: var(--black);
+
+    @include typography.bold-body-14;
+
+    @include responsive.apply-desktop {
+      @include typography.bold-body-16;
+    }
+  }
+
+  &__date {
+    color: var(--dark-gray);
+  }
+}
+
+.footer {
+  padding-top: 10px;
+  margin-top: 20px;
+  border-top: 1px solid var(--medium-grey-for-outline);
+
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__cancel {
+    margin-right: 10px;
+  }
+
+  &__save {
+    width: 180px;
+  }
+}

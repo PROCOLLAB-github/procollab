@@ -18,6 +18,7 @@ import { ProjectNewsService } from "@office/projects/detail/services/project-new
 import { ClickOutsideModule } from "ng-click-outside";
 import { NewsFormComponent } from "./shared/news-form/news-form.component";
 import { AutosizeModule } from "ngx-autosize";
+import { EditNewsCardComponent } from "./shared/edit-news-card/edit-news-card.component";
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import { AutosizeModule } from "ngx-autosize";
     ProjectChatComponent,
     NewsCardComponent,
     NewsFormComponent,
+    EditNewsCardComponent,
   ],
 })
 export class ProjectDetailModule {}

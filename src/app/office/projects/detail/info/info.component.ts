@@ -1,8 +1,8 @@
 /** @format */
 
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { map, noop, Observable } from "rxjs";
+import { map, noop, Observable, Subscription } from "rxjs";
 import { Project } from "@models/project.model";
 import { IndustryService } from "@services/industry.service";
 import { NavService } from "@services/nav.service";
@@ -18,7 +18,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   templateUrl: "./info.component.html",
   styleUrls: ["./info.component.scss"],
 })
-export class ProjectInfoComponent implements OnInit, AfterViewInit {
+export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     public readonly industryService: IndustryService,
@@ -35,24 +35,28 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit {
   project$?: Observable<Project> = this.route.parent?.data.pipe(map(r => r["data"]));
 
   vacancies$: Observable<Vacancy[]> = this.route.data.pipe(map(r => r["data"]));
+  subscriptions$: Subscription[] = [];
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль проекта");
 
-    this.projectNewsService.fetchNews(this.route.snapshot.params.projectId).subscribe(news => {
-      this.news = news.results;
+    const news$ = this.projectNewsService
+      .fetchNews(this.route.snapshot.params.projectId)
+      .subscribe(news => {
+        this.news = news.results;
 
-      setTimeout(() => {
-        const observer = new IntersectionObserver(this.onNewsInVew.bind(this), {
-          root: document.querySelector(".office__body"),
-          rootMargin: "0px 0px 0px 0px",
-          threshold: 0,
-        });
-        document.querySelectorAll(".news__item").forEach(e => {
-          observer.observe(e);
+        setTimeout(() => {
+          const observer = new IntersectionObserver(this.onNewsInVew.bind(this), {
+            root: document.querySelector(".office__body"),
+            rootMargin: "0px 0px 0px 0px",
+            threshold: 0,
+          });
+          document.querySelectorAll(".news__item").forEach(e => {
+            observer.observe(e);
+          });
         });
       });
-    });
+    this.subscriptions$.push(news$);
   }
 
   @ViewChild("newsEl") newsEl?: ElementRef;
@@ -61,6 +65,10 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit {
     if (containerSm < window.innerWidth) {
       this.contentEl?.nativeElement.append(this.newsEl?.nativeElement);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
   onNewsInVew(entries: IntersectionObserverEntry[]): void {
@@ -106,5 +114,11 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit {
         item.likesCount = item.isUserLiked ? item.likesCount - 1 : item.likesCount + 1;
         item.isUserLiked = !item.isUserLiked;
       });
+  }
+
+  onEditNews(news: ProjectNews) {
+    const newsIdx = this.news.findIndex(n => n.id === news.id);
+    // this.news.splice(newsIdx, 1, news);
+    this.news[newsIdx] = news;
   }
 }

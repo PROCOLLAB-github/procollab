@@ -15,13 +15,23 @@
         <i appIcon icon="dots" appWidth="4" appHeight="16" appViewBox="0 0 4 16"></i>
       </div>
       <ul *ngIf="menuOpen" class="card__options">
-        <li class="card__option text-body-14">Редактировать</li>
+        <li *ngIf="!editMode" class="card__option text-body-14" (click)="editMode = true">
+          Редактировать
+        </li>
         <li class="card__option text-body-14" (click)="delete.emit(newsItem.id)">Удалить</li>
       </ul>
     </div>
   </div>
   <div class="card__text text-body-14" *ngIf="newsItem.text">
-    {{ readMore ? newsItem.text : newsItem.text.split(" ").slice(0, 40).join(" ") }}
+    <ng-container *ngIf="!editMode">{{
+      readMore ? newsItem.text : newsItem.text.split(" ").slice(0, 40).join(" ")
+    }}</ng-container>
+    <ng-container *ngIf="editMode">
+      <app-textarea
+        *ngIf="editForm.get('text') as text"
+        [formControl]="text | formControl"
+      ></app-textarea>
+    </ng-container>
   </div>
   <div
     *ngIf="newsItem.text && newsItem.text.split(' ').length > 40"
@@ -30,7 +40,7 @@
   >
     {{ readMore ? "Скрыть" : "Читать полностью" }}
   </div>
-  <div class="card__footer footer">
+  <div class="card__footer footer" *ngIf="!editMode">
     <div class="footer__left">
       <div
         class="footer__item footer__like text-body-12"
@@ -49,6 +59,12 @@
       <div class="footer__share share" (click)="onCopyLink()">
         <i class="share__icon" appIcon icon="share" appSquare="22"></i>
       </div>
+    </div>
+  </div>
+  <div class="editor-footer" *ngIf="editMode">
+    <div class="editor-footer__actions">
+      <app-button color="grey" (click)="editMode = false">Отмена</app-button>
+      <app-button (click)="onEditSubmit()">Сохранить</app-button>
     </div>
   </div>
 </div>

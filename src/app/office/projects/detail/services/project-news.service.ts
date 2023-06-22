@@ -39,4 +39,14 @@ export class ProjectNewsService {
       is_liked: state,
     });
   }
+
+  editNews(
+    projectId: string,
+    newsId: number,
+    newsItem: Partial<ProjectNews>
+  ): Observable<ProjectNews> {
+    return this.apiService
+      .patch(`/projects/${projectId}/news/${newsId}/`, newsItem)
+      .pipe(map(r => plainToInstance(ProjectNews, r)));
+  }
 }
