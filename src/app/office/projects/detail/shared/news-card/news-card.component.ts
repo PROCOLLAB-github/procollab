@@ -7,6 +7,8 @@ import { ActivatedRoute } from "@angular/router";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ValidationService } from "@core/services";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
+import { FileService } from "@core/services/file.service";
+import { nanoid } from "nanoid";
 
 @Component({
   selector: "app-project-news-card",
@@ -19,7 +21,8 @@ export class NewsCardComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
-    private readonly projectNewsService: ProjectNewsService
+    private readonly projectNewsService: ProjectNewsService,
+    private readonly fileService: FileService
   ) {
     this.editForm = this.fb.group({
       text: ["", [Validators.required]],
@@ -40,6 +43,14 @@ export class NewsCardComponent implements OnInit {
     this.editForm.setValue({
       text: this.newsItem.text,
     });
+
+    this.filesList = this.newsItem.files.map(src => ({
+      src,
+      id: nanoid(),
+      error: false,
+      loading: false,
+      tempFile: null,
+    }));
   }
 
   onCopyLink(): void {
@@ -62,11 +73,82 @@ export class NewsCardComponent implements OnInit {
     if (!this.validationService.getFormValidation(this.editForm)) return;
 
     this.projectNewsService
-      .editNews(this.route.snapshot.params.projectId, this.newsItem.id, this.editForm.value)
+      .editNews(this.route.snapshot.params.projectId, this.newsItem.id, {
+        ...this.editForm.value,
+        files: this.filesList.filter(f => f.src).map(f => f.src),
+      })
       .subscribe(resNews => {
         this.editMode = false;
 
         this.edited.emit(resNews);
       });
+  }
+
+  filesList: {
+    id: string;
+    src: string;
+    loading: boolean;
+    error: boolean;
+    tempFile: File | null;
+  }[] = [];
+
+  onUploadFile(event: Event) {
+    const files = (event.currentTarget as HTMLInputElement).files;
+    if (!files) return;
+
+    const fileObj: NewsCardComponent["filesList"][0] = {
+      id: nanoid(2),
+      src: "",
+      loading: true,
+      error: false,
+      tempFile: files[0],
+    };
+    this.filesList.push(fileObj);
+    this.fileService.uploadFile(files[0]).subscribe({
+      next: file => {
+        fileObj.src = file.url;
+        fileObj.loading = false;
+
+        fileObj.tempFile = null;
+      },
+      error: () => {
+        fileObj.error = true;
+        fileObj.loading = false;
+      },
+    });
+  }
+
+  onDeletePhoto(fId: string) {
+    const fileIdx = this.filesList.findIndex(f => f.id === fId);
+
+    if (this.filesList[fileIdx].src) {
+      this.filesList[fileIdx].loading = true;
+      this.fileService.deleteFile(fId).subscribe(() => {
+        this.filesList.splice(fileIdx, 1);
+      });
+    } else {
+      this.filesList.splice(fileIdx, 1);
+    }
+  }
+
+  onRetryUpload(id: string) {
+    const fileObj = this.filesList.find(f => f.id === id);
+    if (!fileObj || !fileObj.tempFile) return;
+
+    fileObj.loading = true;
+    fileObj.error = false;
+
+    this.fileService.uploadFile(fileObj.tempFile).subscribe({
+      next: file => {
+        fileObj.src = file.url;
+        fileObj.loading = false;
+
+        fileObj.tempFile = null;
+      },
+      error: () => {
+        fileObj.error = true;
+        fileObj.loading = false;
+      },
+    });
   }
 }

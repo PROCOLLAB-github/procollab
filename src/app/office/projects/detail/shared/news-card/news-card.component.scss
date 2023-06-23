@@ -153,4 +153,13 @@
       margin-right: 10px;
     }
   }
+
+  &__attach {
+    color: var(--dark-gray);
+    cursor: pointer;
+
+    input {
+      display: none;
+    }
+  }
 }
