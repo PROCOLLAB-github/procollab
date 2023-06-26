@@ -80,6 +80,7 @@
         [attr.data-id]="p.id"
         *ngFor="let p of news"
         [newsItem]="p"
+        [isOwner]="profile.id === project.leader"
         (delete)="onDeleteNews($event)"
         (like)="onLike($event)"
         (edited)="onEditNews($event)"

@@ -10,7 +10,7 @@
         </div>
       </div>
     </div>
-    <div class="card__menu" (clickOutside)="onCloseMenu()">
+    <div *ngIf="isOwner" class="card__menu" (clickOutside)="onCloseMenu()">
       <div class="card__dots" (click)="menuOpen = true">
         <i appIcon icon="dots" appWidth="4" appHeight="16" appViewBox="0 0 4 16"></i>
       </div>
