@@ -50,6 +50,9 @@
   >
     {{ readMore ? "Скрыть" : "Читать полностью" }}
   </div>
+  <div class="card__gallery">
+    <img class="card__img" [src]="f" *ngFor="let f of newsItem.files" alt="" />
+  </div>
   <div class="card__footer footer" *ngIf="!editMode">
     <div class="footer__left">
       <div
