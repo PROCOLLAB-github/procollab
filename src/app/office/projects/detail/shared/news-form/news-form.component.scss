@@ -14,7 +14,6 @@
     margin-right: 20px;
     resize: none;
     border: none;
-    border-bottom: 1px solid var(--medium-grey-for-outline);
     outline: none;
   }
 
@@ -32,6 +31,18 @@
 
     &:hover {
       background-color: var(--accent-dark);
+    }
+  }
+}
+
+.footer {
+  padding-top: 10px;
+  margin-top: 20px;
+  border-top: 1px solid var(--medium-grey-for-outline);
+
+  &__attach {
+    input {
+      display: none;
     }
   }
 }

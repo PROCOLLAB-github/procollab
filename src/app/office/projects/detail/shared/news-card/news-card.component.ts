@@ -123,7 +123,7 @@ export class NewsCardComponent implements OnInit {
 
     if (this.filesList[fileIdx].src) {
       this.filesList[fileIdx].loading = true;
-      this.fileService.deleteFile(fId).subscribe(() => {
+      this.fileService.deleteFile(this.filesList[fileIdx].src).subscribe(() => {
         this.filesList.splice(fileIdx, 1);
       });
     } else {
