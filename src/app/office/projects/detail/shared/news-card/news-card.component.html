@@ -51,7 +51,16 @@
     {{ readMore ? "Скрыть" : "Читать полностью" }}
   </div>
   <div class="card__gallery">
-    <img class="card__img" [src]="f" *ngFor="let f of newsItem.files" alt="" />
+    <div
+      *ngFor="let f of newsItem.files; index as index"
+      class="card__img"
+      (touchend)="onTouchImg($event, index)"
+    >
+      <img class="card__img" [src]="f" alt="" />
+      <div class="card__img-like" [class.card__img-like--show]="showLikes[index]">
+        <i appIcon icon="like" appSquare="40"></i>
+      </div>
+    </div>
   </div>
   <div class="card__footer footer" *ngIf="!editMode">
     <div class="footer__left">

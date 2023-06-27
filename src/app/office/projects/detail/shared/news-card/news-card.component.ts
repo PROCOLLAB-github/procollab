@@ -45,6 +45,8 @@ export class NewsCardComponent implements OnInit {
       text: this.newsItem.text,
     });
 
+    this.showLikes = this.newsItem.files.map(() => false);
+
     this.filesList = this.newsItem.files.map(src => ({
       src,
       id: nanoid(),
@@ -151,5 +153,21 @@ export class NewsCardComponent implements OnInit {
         fileObj.loading = false;
       },
     });
+  }
+
+  showLikes: boolean[] = [];
+
+  lastTouch = 0;
+  onTouchImg(_event: TouchEvent, imgIdx: number) {
+    if (Date.now() - this.lastTouch < 300) {
+      this.like.emit(this.newsItem.id);
+      this.showLikes[imgIdx] = true;
+
+      setTimeout(() => {
+        this.showLikes[imgIdx] = false;
+      }, 1000);
+    }
+
+    this.lastTouch = Date.now();
   }
 }
