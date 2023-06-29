@@ -13,6 +13,11 @@ import { ProjectChatComponent } from "./chat/chat.component";
 import { OfficeModule } from "@office/office.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { ReactiveFormsModule } from "@angular/forms";
+import { NewsCardComponent } from "./shared/news-card/news-card.component";
+import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
+import { ClickOutsideModule } from "ng-click-outside";
+import { NewsFormComponent } from "./shared/news-form/news-form.component";
+import { AutosizeModule } from "ngx-autosize";
 
 @NgModule({
   imports: [
@@ -23,13 +28,18 @@ import { ReactiveFormsModule } from "@angular/forms";
     OfficeModule,
     ScrollingModule,
     ReactiveFormsModule,
+    ClickOutsideModule,
+    AutosizeModule,
   ],
+  providers: [ProjectNewsService],
   declarations: [
     ProjectInfoComponent,
     ProjectResponsesComponent,
     ResponseCardComponent,
     ProjectDetailComponent,
     ProjectChatComponent,
+    NewsCardComponent,
+    NewsFormComponent,
   ],
 })
 export class ProjectDetailModule {}

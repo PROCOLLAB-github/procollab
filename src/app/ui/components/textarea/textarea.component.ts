@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, forwardRef, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 @Component({
@@ -20,6 +20,15 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
   @Input() type: "text" | "password" | "email" = "text";
   @Input() error = false;
   @Input() mask = "";
+  @Input() set text(value: string) {
+    this.value = value;
+  }
+
+  get text(): string {
+    return this.value;
+  }
+
+  @Output() textChange = new EventEmitter<string>();
 
   constructor() {}
 
@@ -28,6 +37,7 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.onChange(value);
+    this.textChange.emit(value);
   }
 
   onBlur(): void {

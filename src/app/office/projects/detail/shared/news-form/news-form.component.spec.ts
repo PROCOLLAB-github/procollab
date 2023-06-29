@@ -2,36 +2,36 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ProjectInfoComponent } from "./info.component";
+import { NewsFormComponent } from "./news-form.component";
 import { RouterTestingModule } from "@angular/router/testing";
+import { ReactiveFormsModule } from "@angular/forms";
+import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
-import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
-import { ReactiveFormsModule } from "@angular/forms";
 
-describe("ProjectInfoComponent", () => {
-  let component: ProjectInfoComponent;
-  let fixture: ComponentFixture<ProjectInfoComponent>;
+describe("NewsFormComponent", () => {
+  let component: NewsFormComponent;
+  let fixture: ComponentFixture<NewsFormComponent>;
 
   beforeEach(async () => {
+    const projectNewsServiceSpy = jasmine.createSpyObj(["addNews"]);
     const authSpy = {
       profile: of({}),
     };
-    const projectNewsServiceSpy = jasmine.createSpyObj({ fetchNews: of({}) });
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule, ReactiveFormsModule],
+      declarations: [NewsFormComponent],
+      imports: [RouterTestingModule, ReactiveFormsModule, HttpClientTestingModule],
       providers: [
-        { provide: AuthService, useValue: authSpy },
         { provide: ProjectNewsService, useValue: projectNewsServiceSpy },
+        { provide: AuthService, useValue: authSpy },
       ],
-      declarations: [ProjectInfoComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProjectInfoComponent);
+    fixture = TestBed.createComponent(NewsFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

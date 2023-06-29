@@ -5,6 +5,7 @@ import { TestBed } from "@angular/core/testing";
 import { BearerTokenInterceptor } from "./bearer-token.interceptor";
 import { AuthService } from "@auth/services";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { RouterTestingModule } from "@angular/router/testing";
 
 describe("BearerTokenInterceptor", () => {
   beforeEach(() => {
@@ -15,7 +16,7 @@ describe("BearerTokenInterceptor", () => {
     ]);
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [BearerTokenInterceptor, { provide: AuthService, useValue: authSpy }],
     });
   });

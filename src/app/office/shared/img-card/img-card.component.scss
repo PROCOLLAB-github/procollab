@@ -1,0 +1,59 @@
+.file {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 130px;
+  height: 130px;
+  border-radius: 15px;
+
+  &--loading {
+    background-color: var(--dark-gray);
+  }
+
+  &--error {
+    border: 1px solid var(--gray);
+  }
+
+  &__loader {
+    color: var(--accent);
+  }
+
+  &__cross {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    cursor: pointer;
+    background-color: var(--white);
+    border-radius: 50%;
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+  }
+}
+
+.loading-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__message {
+    display: flex;
+    max-width: 95px;
+    color: var(--red);
+    text-align: center;
+
+    i {
+      margin-right: 5px;
+    }
+  }
+
+  &__reload {
+    margin-top: 10px;
+    cursor: pointer;
+  }
+}

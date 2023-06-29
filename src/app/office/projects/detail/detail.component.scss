@@ -13,6 +13,8 @@ $detail-bar-mb: 12px;
   &__bar {
     height: $detail-bar-height;
     margin-bottom: $detail-bar-mb;
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 15px;
   }
 
   &__body {
