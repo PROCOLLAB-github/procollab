@@ -5,6 +5,7 @@ import { ApiService } from "@core/services";
 import { ProjectNews, ProjectNewsRes } from "@office/projects/models/project-news.model";
 import { forkJoin, map, Observable } from "rxjs";
 import { plainToInstance } from "class-transformer";
+import { HttpParams } from "@angular/common/http";
 
 @Injectable()
 export class ProjectNewsService {
@@ -12,7 +13,10 @@ export class ProjectNewsService {
 
   fetchNews(projectId: string): Observable<ProjectNewsRes> {
     return this.apiService
-      .get<ProjectNewsRes>(`/projects/${projectId}/news/`)
+      .get<ProjectNewsRes>(
+        `/projects/${projectId}/news/`,
+        new HttpParams({ fromObject: { limit: 100 } })
+      )
       .pipe(map(r => plainToInstance(ProjectNewsRes, r)));
   }
 
