@@ -41,7 +41,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     this.navService.setNavTitle("Профиль проекта");
 
     const news$ = this.projectNewsService
-      .fetchNews(this.route.snapshot.params.projectId)
+      .fetchNews(this.route.snapshot.params["projectId"])
       .subscribe(news => {
         this.news = news.results;
 
@@ -78,7 +78,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       return e.target.dataset.id;
     });
 
-    this.projectNewsService.readNews(this.route.snapshot.params.projectId, ids).subscribe(noop);
+    this.projectNewsService.readNews(this.route.snapshot.params["projectId"], ids).subscribe(noop);
   }
 
   news: ProjectNews[] = [];
@@ -100,7 +100,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     this.news.splice(newsIdx, 1);
 
     this.projectNewsService
-      .delete(this.route.snapshot.params.projectId, newsId)
+      .delete(this.route.snapshot.params["projectId"], newsId)
       .subscribe(() => {});
   }
 
@@ -109,7 +109,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!item) return;
 
     this.projectNewsService
-      .toggleLike(this.route.snapshot.params.projectId, newsId, !item.isUserLiked)
+      .toggleLike(this.route.snapshot.params["projectId"], newsId, !item.isUserLiked)
       .subscribe(() => {
         item.likesCount = item.isUserLiked ? item.likesCount - 1 : item.likesCount + 1;
         item.isUserLiked = !item.isUserLiked;

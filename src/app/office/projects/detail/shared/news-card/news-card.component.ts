@@ -57,7 +57,7 @@ export class NewsCardComponent implements OnInit {
   }
 
   onCopyLink(): void {
-    const projectId = this.route.snapshot.params.projectId;
+    const projectId = this.route.snapshot.params["projectId"];
 
     navigator.clipboard
       .writeText(`https://app.procollab.ru/office/projects/${projectId}/news/${this.newsItem.id}`)
@@ -76,7 +76,7 @@ export class NewsCardComponent implements OnInit {
     if (!this.validationService.getFormValidation(this.editForm)) return;
 
     this.projectNewsService
-      .editNews(this.route.snapshot.params.projectId, this.newsItem.id, {
+      .editNews(this.route.snapshot.params["projectId"], this.newsItem.id, {
         ...this.editForm.value,
         files: this.filesList.filter(f => f.src).map(f => f.src),
       })

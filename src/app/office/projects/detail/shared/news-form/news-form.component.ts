@@ -39,7 +39,7 @@ export class NewsFormComponent implements OnInit {
     }
 
     this.projectNewsService
-      .addNews(this.route.snapshot.params.projectId, {
+      .addNews(this.route.snapshot.params["projectId"], {
         ...this.messageForm.value,
         files: this.imagesList.map(f => f.src),
       })
