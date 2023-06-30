@@ -13,6 +13,6 @@ export class ProjectResponsesResolver implements Resolve<VacancyResponse[]> {
   constructor(private readonly vacancyService: VacancyService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<VacancyResponse[]> {
-    return this.vacancyService.responsesByProject(Number(route.paramMap.get("projectId")));
+    return this.vacancyService.responsesByProject(Number(route.parent?.paramMap.get("projectId")));
   }
 }
