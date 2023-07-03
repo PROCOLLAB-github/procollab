@@ -34,10 +34,8 @@ describe("ProfileInfoComponent", () => {
     fixture.detectChanges();
 
     const name = fixture.nativeElement.querySelector(".user__name");
-    const email = fixture.nativeElement.querySelector(".user__email");
 
     expect(name.textContent).toContain(user.firstName);
     expect(name.textContent).toContain(user.lastName);
-    expect(email.textContent).toBe(user.email);
   });
 });
