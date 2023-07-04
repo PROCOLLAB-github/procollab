@@ -183,6 +183,22 @@
           {{ readAllAchievements ? "Скрыть" : "Читать полностью" }}
         </div>
       </div>
+      <div class="links project__section">
+        <h3 class="links__title text-bold-body-16">Контакты</h3>
+        <ul>
+          <li class="contact-link links__item text-body-12" *ngFor="let link of project.links">
+            <a
+              class="contact-link__link"
+              *ngIf="link | userLinks as l"
+              target="_blank"
+              [href]="link"
+            >
+              <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
+              {{ l.tag }}
+            </a>
+          </li>
+        </ul>
+      </div>
     </aside>
   </section>
 </main>
