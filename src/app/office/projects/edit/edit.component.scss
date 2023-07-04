@@ -82,6 +82,15 @@
     }
   }
 
+  &__add-link {
+    display: block;
+    margin-top: 20px;
+
+    i {
+      margin-left: 10px;
+    }
+  }
+
   &__add-achievement {
     display: block;
     margin-top: 12px;

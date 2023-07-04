@@ -39,6 +39,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       name: ["", [Validators.required]],
       region: ["", [Validators.required]],
       step: [null, [Validators.required]],
+      links: this.fb.array([]),
       industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
       presentationAddress: ["", [Validators.required]],
@@ -102,6 +103,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           project.achievements.forEach(achievement =>
             this.addAchievement(achievement.id, achievement.title, achievement.status)
           );
+
+        project.links && project.links.forEach(l => this.addLink(l));
 
         this.vacancies = vacancies;
 
@@ -298,5 +301,24 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           this.projectFormIsSubmitting = false;
         },
       });
+  }
+
+  get links(): FormArray {
+    return this.projectForm.get("links") as FormArray;
+  }
+
+  newLink = "";
+
+  addLink(title?: string): void {
+    const fromState = title ?? this.newLink;
+
+    const control = this.fb.control(fromState, [Validators.required]);
+    this.links.push(control);
+
+    this.newLink = "";
+  }
+
+  removeLink(i: number): void {
+    this.links.removeAt(i);
   }
 }
