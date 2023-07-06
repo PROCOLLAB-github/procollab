@@ -357,3 +357,15 @@
     color: var(--accent-dark);
   }
 }
+
+.links {
+  &__title {
+    margin-bottom: 12px;
+  }
+
+  &__item {
+    &:not(:last-child) {
+      margin-bottom: 12px;
+    }
+  }
+}
