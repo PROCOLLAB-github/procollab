@@ -69,8 +69,15 @@
           <fieldset>
             <label class="field-label">Ссылка на проект</label>
             <ul formArrayName="links">
-              <li *ngFor="let control of links.controls; index as i">
-                <app-input [formControlName]="i" placeholder="https://t.me/username"></app-input>
+              <li *ngFor="let control of links.controls; index as i" class="link">
+                <app-input
+                  class="link__input"
+                  [formControlName]="i"
+                  placeholder="https://t.me/username"
+                ></app-input>
+                <div class="link__remove" (click)="removeLink(i)">
+                  <i appIcon icon="cross" appSquare="20"></i>
+                </div>
               </li>
             </ul>
             <app-button (click)="addLink()" class="project__add-link">
