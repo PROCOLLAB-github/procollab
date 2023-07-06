@@ -183,7 +183,7 @@
           {{ readAllAchievements ? "Скрыть" : "Читать полностью" }}
         </div>
       </div>
-      <div class="links project__section">
+      <div class="links project__section" *ngIf="project.links.length">
         <h3 class="links__title text-bold-body-16">Контакты</h3>
         <ul>
           <li class="contact-link links__item text-body-12" *ngFor="let link of project.links">
