@@ -33,7 +33,11 @@
   }
 
   &__name {
+    max-width: 100px;
+    overflow: hidden;
     color: var(--black);
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &__verification {
