@@ -32,16 +32,16 @@
             </p>
           </div>
         </div>
+        <a class="info__presentation" [href]="project.presentationAddress" target="_blank">
+          <app-button color="grey"> Презентация проекта</app-button>
+        </a>
         <app-button
-          *ngIf="project.links.length && profile.userType !== 1"
+          *ngIf="project.links.length && profile.userType !== 1 && !(isInProject | async)"
           color="grey"
           (click)="openSupport = true"
         >
           Поддержать проект
         </app-button>
-        <a class="info__presentation" [href]="project.presentationAddress" target="_blank">
-          <app-button color="grey"> Презентация проекта</app-button>
-        </a>
         <a class="info__edit" [routerLink]="['/office/projects', project.id, 'edit']">
           <app-button *ngIf="profile.id === project.leader">редактировать</app-button>
         </a>
