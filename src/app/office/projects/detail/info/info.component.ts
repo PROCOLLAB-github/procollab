@@ -121,4 +121,6 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     // this.news.splice(newsIdx, 1, news);
     this.news[newsIdx] = news;
   }
+
+  openSupport = false;
 }

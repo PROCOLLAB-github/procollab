@@ -12,7 +12,7 @@
           [size]="140"
         ></app-avatar>
       </div>
-      <div class="info__body">
+      <div *ngIf="authService.profile | async as profile" class="info__body">
         <div class="info__text">
           <h1 class="info__title">{{ project.name }}</h1>
           <div class="info__row">
@@ -32,14 +32,17 @@
             </p>
           </div>
         </div>
-        <a class="info__presentation" [href]="project.presentationAddress" target="_blank">
-          <app-button color="grey"> Презентация проекта </app-button>
-        </a>
-        <a
-          class="info__edit"
-          *ngIf="authService.profile | async as profile"
-          [routerLink]="['/office/projects', project.id, 'edit']"
+        <app-button
+          *ngIf="project.links.length && profile.userType !== 1"
+          color="grey"
+          (click)="openSupport = true"
         >
+          Поддержать проект
+        </app-button>
+        <a class="info__presentation" [href]="project.presentationAddress" target="_blank">
+          <app-button color="grey"> Презентация проекта</app-button>
+        </a>
+        <a class="info__edit" [routerLink]="['/office/projects', project.id, 'edit']">
           <app-button *ngIf="profile.id === project.leader">редактировать</app-button>
         </a>
       </div>
@@ -201,4 +204,26 @@
       </div>
     </aside>
   </section>
+  <app-modal [(open)]="openSupport">
+    <div class="support">
+      <i
+        class="support__cross"
+        appIcon
+        icon="cross"
+        appSquare="20"
+        (click)="openSupport = false"
+      ></i>
+      <img src="assets/images/projects/shared/idea.svg" alt="idea" class="support__img" />
+      <h3 class="support__title">Поддержать проект</h3>
+      <p class="support__text">Напишите лидеру проекта, чтобы обсудить оказание поддержки</p>
+      <ul>
+        <li class="contact-link links__item text-body-12" *ngFor="let link of project.links">
+          <a class="contact-link__link" *ngIf="link | userLinks as l" target="_blank" [href]="link">
+            <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
+            {{ l.tag }}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </app-modal>
 </main>
