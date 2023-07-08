@@ -31,6 +31,12 @@
     color: var(--accent);
   }
 
+  &__speciality {
+    display: flex;
+    max-width: 200px;
+    overflow: hidden;
+  }
+
   &__skills {
     display: flex;
     flex-wrap: wrap;
