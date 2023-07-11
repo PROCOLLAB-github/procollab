@@ -132,7 +132,11 @@ export class AuthService {
         this.apiService.put<User>(`/auth/users/${profile.id}/set_onboarding_stage/`, {
           onboardingStage: stage,
         })
-      )
+      ),
+      concatMap(() => this.profile.pipe(take(1))),
+      tap(profile => {
+        this.profile$.next({ ...profile, onboardingStage: stage } as User);
+      })
     );
   }
 

@@ -72,4 +72,9 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
   }
+
+  onEnter(event: Event) {
+    event.preventDefault();
+    this.enter.emit();
+  }
 }
