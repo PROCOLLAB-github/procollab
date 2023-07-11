@@ -82,6 +82,15 @@
     }
   }
 
+  &__add-link {
+    display: block;
+    margin-top: 20px;
+
+    i {
+      margin-left: 10px;
+    }
+  }
+
   &__add-achievement {
     display: block;
     margin-top: 12px;
@@ -203,4 +212,23 @@
 .project-bar {
   padding: 9px 0;
   margin-bottom: 12px;
+}
+
+.link {
+  position: relative;
+
+  &__remove {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    color: var(--white);
+    background-color: var(--gray);
+    cursor: pointer;
+    border-radius: 0 8px 8px 0;
+  }
 }
