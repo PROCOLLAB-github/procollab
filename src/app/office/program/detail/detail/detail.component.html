@@ -1,0 +1,36 @@
+<!-- @format -->
+
+<div class="detail">
+  <section class="bar detail__bar">
+    <nav class="bar__nav">
+      <app-back class="bar__back"></app-back>
+      <ul class="bar__tabs">
+        <a
+          class="bar__link"
+          [routerLink]="['/office/programs']"
+          [routerLinkActiveOptions]="{ exact: true }"
+          routerLinkActive="bar__link--active"
+        >
+          <li class="text-body-14 bar__item">Страница проекта</li>
+        </a>
+        <a
+          class="bar__link"
+          [routerLink]="['/office/projects', 'responses']"
+          routerLinkActive="bar__link--active"
+        >
+          <li class="text-body-14 bar__item">Проекты-участники</li>
+        </a>
+        <a
+          class="bar__link"
+          [routerLink]="['/office/projects', 'chat']"
+          routerLinkActive="bar__link--active"
+        >
+          <li class="text-body-14 bar__item">Участники</li>
+        </a>
+      </ul>
+    </nav>
+  </section>
+  <div class="detail__body">
+    <router-outlet></router-outlet>
+  </div>
+</div>
