@@ -17,6 +17,7 @@ export class Program {
   viewsCount!: number;
   likesCount!: number;
   isUserLiked!: boolean;
+  isUserMember?: boolean;
 
   static default(): Program {
     return {
@@ -36,6 +37,7 @@ export class Program {
       tag: "",
       likesCount: 1,
       isUserLiked: false,
+      isUserMember: false,
     };
   }
 }

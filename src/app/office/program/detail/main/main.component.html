@@ -28,7 +28,10 @@
         </a>
       </div>
     </div>
-    <div #contentEl class="program__content">
+    <div class="program__advertisement" *ngIf="!program.isUserMember">
+      <img [src]="program.advertisementImageAddress" />
+    </div>
+    <div *ngIf="program.isUserMember" #contentEl class="program__content">
       <div class="about program__about">
         <div class="about__head">
           <h3 class="text-bold-body-16 about__title">О программе</h3>

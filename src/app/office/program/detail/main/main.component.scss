@@ -62,6 +62,14 @@
       grid-row-start: unset;
     }
   }
+
+  &__advertisement {
+    grid-column: span 3;
+
+    img {
+      width: 100%;
+    }
+  }
 }
 
 .info {
