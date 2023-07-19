@@ -5,7 +5,7 @@ import { RouterModule, Routes } from "@angular/router";
 
 const routes: Routes = [
   {
-    path: "",
+    path: "list",
     loadChildren: () => import("./list/list.module").then(m => m.ProgramListModule),
   },
   {
