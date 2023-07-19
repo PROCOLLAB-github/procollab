@@ -7,7 +7,7 @@
       <ul class="bar__tabs">
         <a
           class="bar__link"
-          [routerLink]="['/office/programs']"
+          [routerLink]="['/office/program', programId]"
           [routerLinkActiveOptions]="{ exact: true }"
           routerLinkActive="bar__link--active"
         >
@@ -15,14 +15,14 @@
         </a>
         <a
           class="bar__link"
-          [routerLink]="['/office/projects', 'responses']"
+          [routerLink]="['/office/program', programId, 'projects']"
           routerLinkActive="bar__link--active"
         >
           <li class="text-body-14 bar__item">Проекты-участники</li>
         </a>
         <a
           class="bar__link"
-          [routerLink]="['/office/projects', 'chat']"
+          [routerLink]="['/office/program', programId, 'members']"
           routerLinkActive="bar__link--active"
         >
           <li class="text-body-14 bar__item">Участники</li>

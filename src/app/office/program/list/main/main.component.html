@@ -1,0 +1,7 @@
+<!-- @format -->
+
+<div class="programs">
+  <div class="programs__list" *ngIf="programs$ | async as programs">
+    <app-program-card *ngFor="let p of programs" [program]="p"></app-program-card>
+  </div>
+</div>

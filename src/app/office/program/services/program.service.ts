@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService } from "@core/services";
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 import { ProgramsResult } from "@office/program/models/programs-result.model";
 import { HttpParams } from "@angular/common/http";
 import { ProgramCreate } from "@office/program/models/program-create.model";
@@ -22,8 +22,7 @@ export class ProgramService {
   }
 
   getOne(id: number): Observable<Program> {
-    // return this.apiService.get(`/programs/${id}/`);
-    return of(Program.default());
+    return this.apiService.get(`/programs/${id}/`);
   }
 
   create(program: ProgramCreate): Observable<Program> {

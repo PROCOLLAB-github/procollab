@@ -5,6 +5,10 @@ import { RouterModule, Routes } from "@angular/router";
 
 const routes: Routes = [
   {
+    path: "",
+    loadChildren: () => import("./list/list.module").then(m => m.ProgramListModule),
+  },
+  {
     path: ":programId",
     loadChildren: () => import("./detail/detail.module").then(m => m.ProgramDetailModule),
   },

@@ -1,0 +1,53 @@
+<!-- @format -->
+
+<main *ngIf="program$ | async as program" class="project">
+  <section class="program__main">
+    <div class="info program__section program__info">
+      <div class="info__cover">
+        <img class="info__cover" [src]="program.coverImageAddress" alt="cover" />
+        <app-avatar
+          class="info__avatar"
+          [url]="program.imageAddress"
+          [hasBorder]="true"
+          [size]="140"
+        ></app-avatar>
+      </div>
+      <div class="info__body">
+        <div class="info__text">
+          <h1 class="info__title">{{ program.name }}</h1>
+          <div class="info__row">
+            <div class="info__tag">#{{ program.tag }}</div>
+            <div class="info__location">
+              <i appIcon icon="geo-point" appSquare="10"></i>
+              {{ program.city }}
+            </div>
+          </div>
+        </div>
+        <a class="info__presentation" [href]="program.presentationAddress" target="_blank">
+          <app-button color="grey"> Презентация проекта </app-button>
+        </a>
+      </div>
+    </div>
+    <div #contentEl class="program__content">
+      <div class="about program__about">
+        <div class="about__head">
+          <h3 class="text-bold-body-16 about__title">О программе</h3>
+        </div>
+        <div *ngIf="program.description" class="text-body-14 about__text">
+          {{
+            readFullDescription
+              ? program.description
+              : program.description.split(" ").slice(0, 50).join(" ")
+          }}
+          <div
+            *ngIf="program.description.split(' ').length > 50"
+            class="read-more"
+            (click)="readFullDescription = !readFullDescription"
+          >
+            {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
