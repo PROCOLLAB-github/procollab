@@ -45,7 +45,6 @@ export class ProgramRegisterComponent implements OnInit, OnDestroy {
   registerForm?: FormGroup;
 
   schema?: ProgramDataSchema;
-  protected readonly Object = Object;
 
   onSubmit(): void {
     if (!this.validationService.getFormValidation(this.registerForm)) {
