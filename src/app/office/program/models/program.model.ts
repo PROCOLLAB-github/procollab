@@ -41,3 +41,11 @@ export class Program {
     };
   }
 }
+
+export class ProgramDataSchema {
+  [key: string]: {
+    type: "text";
+    name: string;
+    placeholder: string;
+  };
+}

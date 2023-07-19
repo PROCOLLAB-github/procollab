@@ -5,6 +5,8 @@ import { RouterModule, Routes } from "@angular/router";
 import { ProgramDetailComponent } from "@office/program/detail/detail/detail.component";
 import { ProgramDetailResolver } from "@office/program/detail/detail/detail.resolver";
 import { ProgramDetailMainComponent } from "@office/program/detail/main/main.component";
+import { ProgramRegisterComponent } from "@office/program/detail/register/register.component";
+import { ProgramRegisterResolver } from "@office/program/detail/register/register.resolver";
 
 const routes: Routes = [
   {
@@ -19,6 +21,13 @@ const routes: Routes = [
         component: ProgramDetailMainComponent,
       },
     ],
+  },
+  {
+    path: "register",
+    component: ProgramRegisterComponent,
+    resolve: {
+      data: ProgramRegisterResolver,
+    },
   },
 ];
 

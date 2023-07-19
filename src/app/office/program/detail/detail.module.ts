@@ -7,9 +7,11 @@ import { ProgramDetailComponent } from "./detail/detail.component";
 import { UiModule } from "@ui/ui.module";
 import { ProgramDetailMainComponent } from "./main/main.component";
 import { CoreModule } from "@core/core.module";
+import { ProgramRegisterComponent } from "./register/register.component";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
-  declarations: [ProgramDetailComponent, ProgramDetailMainComponent],
-  imports: [CommonModule, ProgramDetailRoutingModule, UiModule, CoreModule],
+  declarations: [ProgramDetailComponent, ProgramDetailMainComponent, ProgramRegisterComponent],
+  imports: [CommonModule, ProgramDetailRoutingModule, UiModule, CoreModule, ReactiveFormsModule],
 })
 export class ProgramDetailModule {}

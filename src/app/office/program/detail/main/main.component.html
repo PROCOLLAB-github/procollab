@@ -23,9 +23,23 @@
             </div>
           </div>
         </div>
-        <a class="info__presentation" [href]="program.presentationAddress" target="_blank">
-          <app-button color="grey"> Презентация проекта </app-button>
-        </a>
+        <div class="info__actions">
+          <a
+            *ngIf="!program.isUserMember"
+            class="info__presentation"
+            [routerLink]="['/office/program', program.id, 'register']"
+          >
+            <app-button> Зарегистрироваться</app-button>
+          </a>
+          <a
+            class="info__presentation"
+            [href]="program.presentationAddress"
+            download=""
+            target="_blank"
+          >
+            <app-button color="grey"> Презентация проекта</app-button>
+          </a>
+        </div>
       </div>
     </div>
     <div class="program__advertisement" *ngIf="!program.isUserMember">

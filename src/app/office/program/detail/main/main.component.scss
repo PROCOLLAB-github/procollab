@@ -139,6 +139,14 @@
     }
   }
 
+  &__actions {
+    margin-left: auto;
+
+    @include responsive.apply-desktop {
+      display: flex;
+    }
+  }
+
   &__tag {
     padding: 4px 10px;
     color: var(--white);
