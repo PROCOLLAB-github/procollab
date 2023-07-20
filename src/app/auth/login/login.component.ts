@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
             .then(() => console.debug("Route changed from LoginComponent"));
         else if (redirectType === "program")
           this.router
-            .navigateByUrl("/office/program")
+            .navigateByUrl("/office/program/list")
             .then(() => console.debug("Route changed from LoginComponent"));
       },
       error: error => {
