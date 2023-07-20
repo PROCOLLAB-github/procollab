@@ -13,6 +13,6 @@ export class ProgramDetailResolver implements Resolve<Program> {
   constructor(private readonly programService: ProgramService) {}
 
   resolve(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<Program> {
-    return this.programService.getOne(route.params.programId);
+    return this.programService.getOne(route.params["programId"]);
   }
 }

@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { generate, map, Subscription } from "rxjs";
+import { map, Subscription } from "rxjs";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ProgramDataSchema } from "@office/program/models/program.model";
 import { ValidationService } from "@core/services";
@@ -52,13 +52,11 @@ export class ProgramRegisterComponent implements OnInit, OnDestroy {
     }
 
     this.programService
-      .register(this.route.snapshot.params.programId, this.registerForm?.value)
+      .register(this.route.snapshot.params["programId"], this.registerForm?.value)
       .subscribe(() => {
         this.router
-          .navigateByUrl(`/office/program/${this.route.snapshot.params.programId}`)
+          .navigateByUrl(`/office/program/${this.route.snapshot.params["programId"]}`)
           .then(() => console.debug("Route changed from ProgramRegisterComponent"));
       });
   }
-
-  protected readonly generate = generate;
 }

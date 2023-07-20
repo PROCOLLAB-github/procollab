@@ -16,6 +16,6 @@ export class ProgramRegisterResolver implements Resolve<ProgramDataSchema> {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<ProgramDataSchema> {
-    return this.programService.getDataSchema(route.params.programId);
+    return this.programService.getDataSchema(route.params["programId"]);
   }
 }
