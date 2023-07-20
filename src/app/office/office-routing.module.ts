@@ -36,6 +36,10 @@ const routes: Routes = [
         loadChildren: () => import("./projects/projects.module").then(m => m.ProjectsModule),
       },
       {
+        path: "program",
+        loadChildren: () => import("./program/program.module").then(m => m.ProgramModule),
+      },
+      {
         path: "vacancy/:vacancyId",
         component: VacancySendComponent,
       },
