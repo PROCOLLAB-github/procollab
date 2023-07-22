@@ -7,6 +7,8 @@ import { ProgramsResult } from "@office/program/models/programs-result.model";
 import { HttpParams } from "@angular/common/http";
 import { ProgramCreate } from "@office/program/models/program-create.model";
 import { Program, ProgramDataSchema } from "@office/program/models/program.model";
+import { Project } from "@models/project.model";
+import { User } from "@auth/models/user.model";
 
 @Injectable({
   providedIn: "root",
@@ -40,5 +42,19 @@ export class ProgramService {
     additionalData: Record<string, string>
   ): Observable<ProgramDataSchema> {
     return this.apiService.post(`/programs/${programId}/register/`, additionalData);
+  }
+
+  getAllProjects(programId: number): Observable<Project[]> {
+    return this.apiService.get(
+      `/projects/`,
+      new HttpParams({ fromObject: { partner_program: programId } })
+    );
+  }
+
+  getAllMembers(programId: number): Observable<User[]> {
+    return this.apiService.get(
+      "/auth/users/",
+      new HttpParams({ fromObject: { partner_program: programId } })
+    );
   }
 }

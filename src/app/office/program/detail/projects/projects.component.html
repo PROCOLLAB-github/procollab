@@ -1,0 +1,8 @@
+<!-- @format -->
+
+<div class="page">
+  <app-program-head *ngIf="program$ | async as program" [program]="program"></app-program-head>
+  <div class="page__list">
+    <app-project-card *ngFor="let p of projects$ | async" [project]="p"></app-project-card>
+  </div>
+</div>
