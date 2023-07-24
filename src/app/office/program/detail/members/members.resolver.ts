@@ -1,8 +1,8 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from "@angular/router";
-import { Observable, of } from "rxjs";
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
+import { Observable } from "rxjs";
 import { User } from "@auth/models/user.model";
 import { ProgramService } from "@office/program/services/program.service";
 
