@@ -4,11 +4,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ActivatedRoute } from "@angular/router";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ValidationService } from "@core/services";
-import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
-import { FileService } from "@core/services/file.service";
-import { nanoid } from "nanoid";
 
 @Component({
   selector: "app-program-news-card",
@@ -42,12 +37,6 @@ export class ProgramNewsCardComponent implements OnInit {
       .then(() => {
         this.snackbarService.success("Ссылка скопирована");
       });
-  }
-
-  menuOpen = false;
-
-  onCloseMenu() {
-    this.menuOpen = false;
   }
 
   showLikes: boolean[] = [];
