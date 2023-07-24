@@ -9,15 +9,19 @@ import { ProgramDetailMainComponent } from "./main/main.component";
 import { CoreModule } from "@core/core.module";
 import { ProgramRegisterComponent } from "./register/register.component";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ProjectDetailModule } from "@office/projects/detail/detail.module";
-import { ProgramNewsCardComponent } from "@office/program/shared/news-card/news-card.component";
+import { ProgramProjectsComponent } from "./projects/projects.component";
+import { ProjectsModule } from "@office/projects/projects.module";
+import { ProgramModule } from "@office/program/program.module";
+import { ProgramMembersComponent } from "./members/members.component";
+import { OfficeModule } from "@office/office.module";
 
 @NgModule({
   declarations: [
     ProgramDetailComponent,
     ProgramDetailMainComponent,
     ProgramRegisterComponent,
-    ProgramNewsCardComponent,
+    ProgramProjectsComponent,
+    ProgramMembersComponent,
   ],
   imports: [
     CommonModule,
@@ -25,7 +29,9 @@ import { ProgramNewsCardComponent } from "@office/program/shared/news-card/news-
     UiModule,
     CoreModule,
     ReactiveFormsModule,
-    ProjectDetailModule,
+    ProjectsModule,
+    ProgramModule,
+    OfficeModule,
   ],
 })
 export class ProgramDetailModule {}
