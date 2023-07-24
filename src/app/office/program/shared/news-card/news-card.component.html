@@ -16,7 +16,7 @@
   </div>
   <div
     *ngIf="newsItem.text && newsItem.text.split(' ').length > 40"
-    class="read-more"
+    class="read-more card__read-more"
     (click)="readMore = !readMore"
   >
     {{ readMore ? "Скрыть" : "Читать полностью" }}
