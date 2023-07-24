@@ -13,6 +13,6 @@ export class ProgramMembersResolver implements Resolve<User[]> {
   constructor(private readonly programService: ProgramService) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<User[]> {
-    return this.programService.getAllMembers(route.parent?.params.programId);
+    return this.programService.getAllMembers(route.parent?.params["programId"]);
   }
 }

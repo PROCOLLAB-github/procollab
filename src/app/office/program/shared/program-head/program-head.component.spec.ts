@@ -1,25 +1,30 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { ProgramHeadComponent } from './program-head.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('ProgramHeadComponent', () => {
+import { ProgramHeadComponent } from "./program-head.component";
+import { RouterTestingModule } from "@angular/router/testing";
+import { Program } from "@office/program/models/program.model";
+
+describe("ProgramHeadComponent", () => {
   let component: ProgramHeadComponent;
   let fixture: ComponentFixture<ProgramHeadComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProgramHeadComponent ]
-    })
-    .compileComponents();
+      imports: [RouterTestingModule],
+      declarations: [ProgramHeadComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ProgramHeadComponent);
     component = fixture.componentInstance;
+    component.program = Program.default();
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -3,12 +3,15 @@
 import { TestBed } from "@angular/core/testing";
 
 import { ProgramMembersResolver } from "./members.resolver";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("MembersResolver", () => {
   let resolver: ProgramMembersResolver;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+    });
     resolver = TestBed.inject(ProgramMembersResolver);
   });
 
