@@ -73,7 +73,9 @@
         <app-program-news-card
           class="news__item"
           *ngFor="let n of news"
+          [attr.data-id]="n.id"
           [newsItem]="n"
+          (like)="onLike($event)"
         ></app-program-news-card>
       </div>
     </div>
