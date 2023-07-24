@@ -10,39 +10,10 @@
         </div>
       </div>
     </div>
-    <div *ngIf="isOwner" class="card__menu" (clickOutside)="onCloseMenu()">
-      <div class="card__dots" (click)="menuOpen = true">
-        <i appIcon icon="dots" appWidth="4" appHeight="16" appViewBox="0 0 4 16"></i>
-      </div>
-      <ul *ngIf="menuOpen" class="card__options">
-        <li *ngIf="!editMode" class="card__option text-body-14" (click)="editMode = true">
-          Редактировать
-        </li>
-        <li class="card__option text-body-14" (click)="delete.emit(newsItem.id)">Удалить</li>
-      </ul>
-    </div>
   </div>
   <div class="card__text text-body-14" *ngIf="newsItem.text">
-    <ng-container *ngIf="!editMode">{{
-      readMore ? newsItem.text : newsItem.text.split(" ").slice(0, 40).join(" ")
-    }}</ng-container>
-    <ng-container *ngIf="editMode">
-      <app-textarea
-        *ngIf="editForm.get('text') as text"
-        [formControl]="text | formControl"
-      ></app-textarea>
-    </ng-container>
+    {{ readMore ? newsItem.text : newsItem.text.split(" ").slice(0, 40).join(" ") }}
   </div>
-  <ul *ngIf="editMode">
-    <app-img-card
-      *ngFor="let f of filesList"
-      [loading]="f.loading"
-      [src]="f.src"
-      [error]="f.error"
-      (cancel)="onDeletePhoto(f.id)"
-      (retry)="onRetryUpload(f.id)"
-    ></app-img-card>
-  </ul>
   <div
     *ngIf="newsItem.text && newsItem.text.split(' ').length > 40"
     class="read-more"
@@ -81,16 +52,6 @@
       <div class="footer__share share" (click)="onCopyLink()">
         <i class="share__icon" appIcon icon="share" appSquare="22"></i>
       </div>
-    </div>
-  </div>
-  <div class="editor-footer" *ngIf="editMode">
-    <label class="editor-footer__attach">
-      <i appIcon icon="attach" appSquare="22"></i>
-      <input type="file" accept="image/*" (change)="onUploadFile($event)" />
-    </label>
-    <div class="editor-footer__actions">
-      <app-button color="grey" (click)="editMode = false">Отмена</app-button>
-      <app-button (click)="onEditSubmit()">Сохранить</app-button>
     </div>
   </div>
 </div>
