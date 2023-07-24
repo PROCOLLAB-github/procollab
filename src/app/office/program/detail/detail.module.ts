@@ -9,9 +9,29 @@ import { ProgramDetailMainComponent } from "./main/main.component";
 import { CoreModule } from "@core/core.module";
 import { ProgramRegisterComponent } from "./register/register.component";
 import { ReactiveFormsModule } from "@angular/forms";
+import { ProgramProjectsComponent } from "./projects/projects.component";
+import { ProjectsModule } from "@office/projects/projects.module";
+import { ProgramModule } from "@office/program/program.module";
+import { ProgramMembersComponent } from "./members/members.component";
+import { OfficeModule } from "@office/office.module";
 
 @NgModule({
-  declarations: [ProgramDetailComponent, ProgramDetailMainComponent, ProgramRegisterComponent],
-  imports: [CommonModule, ProgramDetailRoutingModule, UiModule, CoreModule, ReactiveFormsModule],
+  declarations: [
+    ProgramDetailComponent,
+    ProgramDetailMainComponent,
+    ProgramRegisterComponent,
+    ProgramProjectsComponent,
+    ProgramMembersComponent,
+  ],
+  imports: [
+    CommonModule,
+    ProgramDetailRoutingModule,
+    UiModule,
+    CoreModule,
+    ReactiveFormsModule,
+    ProjectsModule,
+    ProgramModule,
+    OfficeModule,
+  ],
 })
 export class ProgramDetailModule {}
