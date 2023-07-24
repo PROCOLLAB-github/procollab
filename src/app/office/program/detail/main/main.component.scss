@@ -302,3 +302,10 @@
     }
   }
 }
+
+.news {
+  &__item {
+    display: block;
+    margin-top: 20px;
+  }
+}

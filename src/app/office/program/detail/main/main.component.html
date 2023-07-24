@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<main *ngIf="program$ | async as program" class="project">
+<main *ngIf="program" class="project">
   <section class="program__main">
     <div class="info program__section program__info">
       <div class="info__cover">
@@ -68,6 +68,13 @@
             {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
           </div>
         </div>
+      </div>
+      <div class="news">
+        <app-program-news-card
+          class="news__item"
+          *ngFor="let n of news"
+          [newsItem]="n"
+        ></app-program-news-card>
       </div>
     </div>
     <aside class="program__aside">

@@ -9,9 +9,23 @@ import { ProgramDetailMainComponent } from "./main/main.component";
 import { CoreModule } from "@core/core.module";
 import { ProgramRegisterComponent } from "./register/register.component";
 import { ReactiveFormsModule } from "@angular/forms";
+import { ProjectDetailModule } from "@office/projects/detail/detail.module";
+import { ProgramNewsCardComponent } from "@office/program/shared/news-card/news-card.component";
 
 @NgModule({
-  declarations: [ProgramDetailComponent, ProgramDetailMainComponent, ProgramRegisterComponent],
-  imports: [CommonModule, ProgramDetailRoutingModule, UiModule, CoreModule, ReactiveFormsModule],
+  declarations: [
+    ProgramDetailComponent,
+    ProgramDetailMainComponent,
+    ProgramRegisterComponent,
+    ProgramNewsCardComponent,
+  ],
+  imports: [
+    CommonModule,
+    ProgramDetailRoutingModule,
+    UiModule,
+    CoreModule,
+    ReactiveFormsModule,
+    ProjectDetailModule,
+  ],
 })
 export class ProgramDetailModule {}
