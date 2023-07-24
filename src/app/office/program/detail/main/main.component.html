@@ -43,12 +43,16 @@
       </div>
     </div>
     <div class="program__advertisement" *ngIf="!program.isUserMember">
-      <img [src]="program.advertisementImageAddress" />
+      <img [src]="program.advertisementImageAddress" [alt]="program.name" />
     </div>
     <div *ngIf="program.isUserMember" #contentEl class="program__content">
       <div class="about program__about">
         <div class="about__head">
           <h3 class="text-bold-body-16 about__title">О программе</h3>
+          <div class="about__views">
+            <i appIcon icon="eye" appSquare="20"></i>
+            <span>{{ program.viewsCount }}</span>
+          </div>
         </div>
         <div *ngIf="program.description" class="text-body-14 about__text">
           {{
@@ -58,7 +62,7 @@
           }}
           <div
             *ngIf="program.description.split(' ').length > 50"
-            class="read-more"
+            class="read-more about__read-more"
             (click)="readFullDescription = !readFullDescription"
           >
             {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
@@ -66,5 +70,27 @@
         </div>
       </div>
     </div>
+    <aside class="program__aside">
+      <div class="links program__section" *ngIf="program.links.length">
+        <h3 class="links__title text-bold-body-16">Контакты</h3>
+        <ul>
+          <li class="contact-link links__item text-body-12" *ngFor="let link of program.links">
+            <a
+              class="contact-link__link"
+              *ngIf="link | userLinks as l"
+              target="_blank"
+              [href]="link"
+            >
+              <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
+              {{ l.tag }}
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="text-body-12 program__views-desktop">
+        <i appIcon icon="eye" appSquare="20"></i>
+        <span>{{ program.viewsCount }}</span>
+      </div>
+    </aside>
   </section>
 </main>

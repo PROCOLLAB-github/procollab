@@ -10,6 +10,7 @@ export class Program {
   description!: string;
   city!: string;
   tag!: string;
+  links!: string[];
   shortDescription!: string;
   datetimeRegistrationEnds!: string;
   datetimeStarted!: string;
@@ -27,6 +28,7 @@ export class Program {
       city: "",
       imageAddress: "",
       presentationAddress: "",
+      links: [],
       coverImageAddress: "",
       advertisementImageAddress: "",
       shortDescription: "",
