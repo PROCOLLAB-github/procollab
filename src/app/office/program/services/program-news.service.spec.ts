@@ -1,16 +1,21 @@
-import { TestBed } from '@angular/core/testing';
+/** @format */
 
-import { ProgramNewsService } from './program-news.service';
+import { TestBed } from "@angular/core/testing";
 
-describe('ProgramNewsService', () => {
+import { ProgramNewsService } from "./program-news.service";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+
+describe("ProgramNewsService", () => {
   let service: ProgramNewsService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+    });
     service = TestBed.inject(ProgramNewsService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

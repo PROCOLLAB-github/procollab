@@ -22,7 +22,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const program$ = this.programService
-      .getOne(this.route.parent?.snapshot.params.programId)
+      .getOne(this.route.parent?.snapshot.params["programId"])
       .pipe(
         tap(program => {
           this.program = program;
