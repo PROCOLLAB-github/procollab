@@ -2,11 +2,11 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService } from "@core/services";
-import { map, Observable } from "rxjs";
+import { BehaviorSubject, map, Observable, tap } from "rxjs";
 import { ProgramsResult } from "@office/program/models/programs-result.model";
 import { HttpParams } from "@angular/common/http";
 import { ProgramCreate } from "@office/program/models/program-create.model";
-import { Program, ProgramDataSchema } from "@office/program/models/program.model";
+import { Program, ProgramDataSchema, ProgramTag } from "@office/program/models/program.model";
 import { Project } from "@models/project.model";
 import { User } from "@auth/models/user.model";
 
@@ -55,6 +55,15 @@ export class ProgramService {
     return this.apiService.get(
       "/auth/users/",
       new HttpParams({ fromObject: { partner_program: programId } })
+    );
+  }
+
+  programTags$ = new BehaviorSubject<ProgramTag[]>([]);
+  programTags(): Observable<ProgramTag[]> {
+    return this.apiService.get<ProgramTag[]>("/auth/users/current/programs/tags/").pipe(
+      tap(programs => {
+        this.programTags$.next(programs);
+      })
     );
   }
 }

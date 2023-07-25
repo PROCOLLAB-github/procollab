@@ -4,7 +4,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "
 import { ActivatedRoute, Router } from "@angular/router";
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "@services/industry.service";
-import { distinctUntilChanged, map, Observable, Subscription } from "rxjs";
+import { distinctUntilChanged, map, noop, Observable, Subscription } from "rxjs";
 import { ErrorMessage } from "@error/models/error-message";
 import { NavService } from "@services/nav.service";
 import { Project } from "@models/project.model";
@@ -15,6 +15,8 @@ import { InviteService } from "@services/invite.service";
 import { Invite } from "@models/invite.model";
 import { ProjectService } from "@services/project.service";
 import { SelectComponent } from "@ui/components";
+import { ProgramService } from "@office/program/services/program.service";
+import { ProgramTag } from "@office/program/models/program.model";
 
 @Component({
   selector: "app-edit",
@@ -32,7 +34,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly validationService: ValidationService,
     private readonly vacancyService: VacancyService,
     private readonly inviteService: InviteService,
-    private readonly cdRef: ChangeDetectorRef
+    private readonly cdRef: ChangeDetectorRef,
+    private readonly programService: ProgramService
   ) {
     this.projectForm = this.fb.group({
       imageAddress: ["", [Validators.required]],
@@ -43,6 +46,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
       presentationAddress: ["", [Validators.required]],
+      partnerProgramId: [null],
       achievements: this.fb.array([]),
     });
 
@@ -83,6 +87,13 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         })
       );
     });
+
+    this.programService
+      .programTags()
+      .pipe(map(tags => tags.map(t => ({ label: t.name, value: t.id, id: t.id }))))
+      .subscribe(tags => {
+        this.programTags = tags;
+      });
   }
 
   ngAfterViewInit(): void {
@@ -99,6 +110,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           presentationAddress: project.presentationAddress,
         });
 
+        if (project.partnerProgramId) {
+          this.projectForm.patchValue({
+            partnerProgramId: project.partnerProgramId,
+          });
+        }
+
         project.achievements &&
           project.achievements.forEach(achievement =>
             this.addAchievement(achievement.id, achievement.title, achievement.status)
@@ -113,6 +130,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cdRef.detectChanges();
       });
   }
+
+  programTags: SelectComponent["options"] = [];
 
   ngOnDestroy(): void {
     this.profile$?.unsubscribe();

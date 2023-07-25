@@ -25,6 +25,7 @@ export class Project {
   links!: string[];
   draft!: boolean;
   leader!: number;
+  partnerProgramId?: number;
 
   static default(): Project {
     return {
