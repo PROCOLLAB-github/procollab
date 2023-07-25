@@ -51,3 +51,9 @@ export class ProgramDataSchema {
     placeholder: string;
   };
 }
+
+export class ProgramTag {
+  id!: number;
+  name!: string;
+  tag!: string;
+}
