@@ -4,7 +4,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "
 import { ActivatedRoute, Router } from "@angular/router";
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "@services/industry.service";
-import { distinctUntilChanged, map, noop, Observable, Subscription } from "rxjs";
+import { distinctUntilChanged, map, Observable, Subscription } from "rxjs";
 import { ErrorMessage } from "@error/models/error-message";
 import { NavService } from "@services/nav.service";
 import { Project } from "@models/project.model";
@@ -16,7 +16,6 @@ import { Invite } from "@models/invite.model";
 import { ProjectService } from "@services/project.service";
 import { SelectComponent } from "@ui/components";
 import { ProgramService } from "@office/program/services/program.service";
-import { ProgramTag } from "@office/program/models/program.model";
 
 @Component({
   selector: "app-edit",
