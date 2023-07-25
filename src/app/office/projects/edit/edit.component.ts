@@ -4,7 +4,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "
 import { ActivatedRoute, Router } from "@angular/router";
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "@services/industry.service";
-import { distinctUntilChanged, map, Observable, Subscription } from "rxjs";
+import { concatMap, distinctUntilChanged, map, Observable, Subscription, tap } from "rxjs";
 import { ErrorMessage } from "@error/models/error-message";
 import { NavService } from "@services/nav.service";
 import { Project } from "@models/project.model";
@@ -16,6 +16,7 @@ import { Invite } from "@models/invite.model";
 import { ProjectService } from "@services/project.service";
 import { SelectComponent } from "@ui/components";
 import { ProgramService } from "@office/program/services/program.service";
+import { ProgramTag } from "@office/program/models/program.model";
 
 @Component({
   selector: "app-edit",
@@ -86,18 +87,22 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         })
       );
     });
-
-    this.programService
-      .programTags()
-      .pipe(map(tags => tags.map(t => ({ label: t.name, value: t.id, id: t.id }))))
-      .subscribe(tags => {
-        this.programTags = tags;
-      });
   }
 
   ngAfterViewInit(): void {
-    this.profile$ = this.route.data
-      .pipe(map(d => d["data"]))
+    this.programService
+      .programTags()
+      .pipe(
+        tap(tags => {
+          this.programTags = tags;
+        }),
+        map(tags => tags.map(t => ({ label: t.name, value: t.id, id: t.id }))),
+        tap(tags => {
+          this.programTagsOptions = tags;
+        }),
+        concatMap(() => this.route.data),
+        map(d => d["data"])
+      )
       .subscribe(([project, vacancies, invites]: [Project, Vacancy[], Invite[]]) => {
         this.projectForm.patchValue({
           imageAddress: project.imageAddress,
@@ -109,9 +114,13 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           presentationAddress: project.presentationAddress,
         });
 
-        if (project.partnerProgramId) {
+        if (project.partnerProgramsTags?.length) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const tag = this.programTags.find(p => p.tag === project.partnerProgramsTags[0]);
+
           this.projectForm.patchValue({
-            partnerProgramId: project.partnerProgramId,
+            partnerProgramId: tag?.id,
           });
         }
 
@@ -130,7 +139,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  programTags: SelectComponent["options"] = [];
+  programTagsOptions: SelectComponent["options"] = [];
+  programTags: ProgramTag[] = [];
 
   ngOnDestroy(): void {
     this.profile$?.unsubscribe();
