@@ -80,7 +80,7 @@
       </div>
     </div>
     <aside class="program__aside">
-      <div class="links program__section" *ngIf="program.links.length">
+      <div class="links program__section" *ngIf="program.isUserMember && program.links.length">
         <h3 class="links__title text-bold-body-16">Контакты</h3>
         <ul>
           <li class="contact-link links__item text-body-12" *ngFor="let link of program.links">
