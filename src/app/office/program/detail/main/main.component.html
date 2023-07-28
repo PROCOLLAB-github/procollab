@@ -96,7 +96,7 @@
           </li>
         </ul>
       </div>
-      <div class="text-body-12 program__views-desktop">
+      <div *ngIf="program.isUserMember" class="text-body-12 program__views-desktop">
         <i appIcon icon="eye" appSquare="20"></i>
         <span>{{ program.viewsCount }}</span>
       </div>
