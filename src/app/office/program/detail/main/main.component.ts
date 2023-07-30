@@ -3,7 +3,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ProgramService } from "@office/program/services/program.service";
 import { ActivatedRoute } from "@angular/router";
-import { concatMap, noop, of, Subscription, tap } from "rxjs";
+import { concatMap, map, noop, of, Subscription, tap } from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { ProgramNewsService } from "@office/program/services/program-news.service";
 import { ProjectNews, ProjectNewsRes } from "@office/projects/models/project-news.model";
@@ -21,9 +21,9 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const program$ = this.programService
-      .getOne(this.route.parent?.snapshot.params["programId"])
+    const program$ = this.route.data
       .pipe(
+        map(r => r["data"]),
         tap(program => {
           this.program = program;
         }),
