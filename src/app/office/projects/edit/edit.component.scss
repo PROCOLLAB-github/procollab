@@ -64,7 +64,7 @@
   &__slides-text {
     max-width: 275px;
     margin-top: 12px;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
     text-align: center;
   }
 
@@ -104,7 +104,7 @@
 
   &__or {
     margin: 20px 0;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 
   &__save {
@@ -227,8 +227,8 @@
     justify-content: center;
     width: 50px;
     color: var(--white);
-    background-color: var(--gray);
     cursor: pointer;
+    background-color: var(--gray);
     border-radius: 0 8px 8px 0;
   }
 }

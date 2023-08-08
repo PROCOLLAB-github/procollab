@@ -35,7 +35,7 @@
   &__media {
     display: flex;
     margin-top: 16px;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 
   &__views {
@@ -49,11 +49,11 @@
   }
 
   &__industry {
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 
   &__description {
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 
   &__bottom {
@@ -84,6 +84,6 @@
 
   &__other {
     margin-left: 8px;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 }

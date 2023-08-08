@@ -88,7 +88,7 @@
     justify-content: center;
     width: 40px;
     height: 40px;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
     border: 1.5px solid var(--gray);
     border-radius: 10px;
 
@@ -101,7 +101,7 @@
 
   &__text {
     display: none;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
     white-space: nowrap;
 
     @include responsive.apply-desktop {

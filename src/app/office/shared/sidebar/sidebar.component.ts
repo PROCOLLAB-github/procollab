@@ -27,6 +27,10 @@ export class SidebarComponent implements OnInit {
   showBall = this.notificationService.hasNotifications;
 
   showNotifications = false;
+
+  barPosition = 0;
+  showBar = true;
+
   get hasInvites(): boolean {
     return !!this.invites.filter(invite => invite.isAccepted === null).length;
   }
