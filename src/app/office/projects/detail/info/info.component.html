@@ -36,7 +36,7 @@
           <app-button color="grey"> Презентация проекта</app-button>
         </a>
         <app-button
-          *ngIf="project.links.length && profile.userType !== 1 && !(isInProject | async)"
+          *ngIf="profile.userType !== 1 && !(isInProject | async)"
           color="grey"
           (click)="openSupport = true"
         >
