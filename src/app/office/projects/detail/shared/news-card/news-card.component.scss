@@ -24,7 +24,7 @@
     justify-content: center;
     width: 16px;
     height: 16px;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
     cursor: pointer;
   }
 
@@ -69,7 +69,7 @@
   }
 
   &__date {
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 
   &__text {
@@ -131,7 +131,7 @@
   &__item {
     display: flex;
     align-items: center;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
 
     &:not(:last-child) {
       margin-right: 5px;
@@ -152,7 +152,7 @@
 }
 
 .share {
-  color: var(--dark-gray);
+  color: var(--dark-grey);
 
   &__icon {
     cursor: pointer;
@@ -187,7 +187,7 @@
   }
 
   &__attach {
-    color: var(--dark-gray);
+    color: var(--dark-grey);
     cursor: pointer;
 
     input {

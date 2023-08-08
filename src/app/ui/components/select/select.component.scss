@@ -20,7 +20,7 @@
     outline: none;
 
     &--placeholder {
-      color: var(--dark-gray);
+      color: var(--dark-grey);
     }
 
     &--open {
@@ -46,7 +46,7 @@
 
   &__option {
     padding: 18px;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
     cursor: pointer;
     border-radius: var(--rounded-lg);
     transition: background-color 0.2s;
@@ -57,7 +57,7 @@
   }
 
   &__arrow {
-    color: var(--dark-gray);
+    color: var(--dark-grey);
     transition: all 0.2s;
     transform: rotate(180deg);
 

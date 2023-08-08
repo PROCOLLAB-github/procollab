@@ -51,13 +51,24 @@
 .sidebar-nav {
   &__link {
     display: block;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 
   &__list {
+    position: relative;
     display: flex;
     flex-direction: column;
     padding-left: 45px;
+  }
+
+  &__bar {
+    position: absolute;
+    right: 0;
+    width: 3px;
+    height: 35px;
+    background-color: var(--accent);
+    border-radius: 3px 0 0 3px;
+    transition: all 0.2s;
   }
 
   &__item {
@@ -65,38 +76,21 @@
     display: flex;
     align-items: center;
     width: 100%;
-    height: 35px;
-    color: var(--dark-gray);
+    height: 55px;
+    padding-bottom: 20px;
+    color: var(--grey-for-text);
     cursor: pointer;
 
     i {
       margin-right: 12px;
     }
 
-    &::after {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 3px;
-      content: "";
-      border-radius: 3px 0 0 3px;
-    }
-
     &:not(.sidebar-nav__item--active):hover {
       color: var(--black);
     }
 
-    &:not(:last-child) {
-      margin-bottom: 20px;
-    }
-
     &--active {
       color: var(--accent);
-
-      &::after {
-        background-color: var(--accent);
-      }
     }
   }
 }

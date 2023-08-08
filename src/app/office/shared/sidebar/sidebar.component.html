@@ -5,10 +5,16 @@
     <img src="/assets/images/shared/logo.svg" alt="procollab" />
   </a>
   <nav class="sidebar-nav sidebar__nav">
-    <div class="sidebar-nav__list">
+    <div class="sidebar-nav__list" (mouseenter)="showBar = true" (mouseleave)="showBar = false">
+      <div
+        class="sidebar-nav__bar"
+        [style.opacity]="showBar ? 1 : 0"
+        [style.top]="barPosition * 55 + 'px'"
+      ></div>
       <a
         class="sidebar-nav__item"
         routerLink="projects"
+        (mouseenter)="barPosition = 0"
         routerLinkActive="sidebar-nav__item&#45;&#45;active"
       >
         <i appIcon icon="projects" appSquare="24"></i>
@@ -17,6 +23,7 @@
       <a
         class="sidebar-nav__item"
         routerLink="program/list"
+        (mouseenter)="barPosition = 1"
         routerLinkActive="sidebar-nav__item&#45;&#45;active"
       >
         <i appIcon icon="projects" appSquare="24"></i>
@@ -25,6 +32,7 @@
       <a
         class="sidebar-nav__item"
         routerLink="members"
+        (mouseenter)="barPosition = 2"
         routerLinkActive="sidebar-nav__item&#45;&#45;active"
       >
         <i appIcon icon="people" appSquare="24"></i>
@@ -33,6 +41,7 @@
       <a
         class="sidebar-nav__item"
         routerLink="mentors"
+        (mouseenter)="barPosition = 3"
         routerLinkActive="sidebar-nav__item&#45;&#45;active"
       >
         <i appIcon icon="people" appSquare="24"></i>
