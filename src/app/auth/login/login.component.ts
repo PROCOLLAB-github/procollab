@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
 import { ErrorMessage } from "@error/models/error-message";
 import { ValidationService } from "src/app/core/services";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: "app-login",
@@ -15,11 +15,12 @@ import { Router } from "@angular/router";
 })
 export class LoginComponent implements OnInit {
   constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private validationService: ValidationService,
-    private cdref: ChangeDetectorRef
+    private readonly fb: FormBuilder,
+    private readonly authService: AuthService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly validationService: ValidationService,
+    private readonly cdref: ChangeDetectorRef
   ) {
     this.loginForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
@@ -28,7 +29,6 @@ export class LoginComponent implements OnInit {
   }
 
   loginForm: FormGroup;
-  loginMem = false;
   loginIsSubmitting = false;
 
   errorWrongAuth = false;
@@ -40,6 +40,8 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    const redirectType = this.route.snapshot.queryParams["redirect"];
+
     if (!this.validationService.getFormValidation(this.loginForm) || this.loginIsSubmitting) {
       return;
     }
@@ -53,9 +55,14 @@ export class LoginComponent implements OnInit {
 
         this.cdref.detectChanges();
 
-        this.router
-          .navigateByUrl("/office")
-          .then(() => console.debug("Route changed from LoginComponent"));
+        if (!redirectType)
+          this.router
+            .navigateByUrl("/office")
+            .then(() => console.debug("Route changed from LoginComponent"));
+        else if (redirectType === "program")
+          this.router
+            .navigateByUrl("/office/program/list")
+            .then(() => console.debug("Route changed from LoginComponent"));
       },
       error: error => {
         if (error.status === 401) {

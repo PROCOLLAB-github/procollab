@@ -1,0 +1,10 @@
+<!-- @format -->
+
+<div class="page">
+  <app-program-head *ngIf="program$ | async as program" [program]="program"></app-program-head>
+  <div class="page__list">
+    <a [routerLink]="['/office/profile', m.id]" *ngFor="let m of members$ | async">
+      <app-member-card [user]="m"></app-member-card>
+    </a>
+  </div>
+</div>

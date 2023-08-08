@@ -2,11 +2,11 @@
 <div class="card">
   <div class="card__head">
     <div class="card__title">
-      <img class="card__avatar" [src]="newsItem.projectImageAddress" [alt]="newsItem.projectName" />
+      <img class="card__avatar" [src]="newsItem.imageAddress" [alt]="newsItem.name" />
       <div>
-        <div class="card__name">{{ newsItem.projectName }}</div>
+        <div class="card__name">{{ newsItem.name }}</div>
         <div class="card__date text-body-14">
-          {{ newsItem.datetimeCreated | dayjs: "format":"DD MMMM, hh:mm" }}
+          {{ newsItem.datetimeCreated | dayjs: "format":"DD MMMM, HH:mm" }}
         </div>
       </div>
     </div>

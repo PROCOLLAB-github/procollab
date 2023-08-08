@@ -23,12 +23,22 @@
   }
 
   &__name {
+    max-width: 200px;
     margin-bottom: 3px;
+    overflow: hidden;
     color: var(--black);
+    text-overflow: ellipsis;
   }
 
   &__additional-info {
+    display: flex;
     color: var(--accent);
+  }
+
+  &__speciality {
+    display: flex;
+    max-width: 200px;
+    overflow: hidden;
   }
 
   &__skills {

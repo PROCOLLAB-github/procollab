@@ -1,0 +1,9 @@
+<!-- @format -->
+
+<div class="programs">
+  <div class="programs__list" *ngIf="programs$ | async as programs">
+    <a *ngFor="let p of programs" [routerLink]="['/office/program', p.id]">
+      <app-program-card [program]="p"></app-program-card>
+    </a>
+  </div>
+</div>

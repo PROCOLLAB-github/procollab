@@ -98,6 +98,15 @@
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
           </fieldset>
+          <fieldset *ngIf="programTagsOptions.length">
+            <label for="program_tag" class="field-label">Выбор тега</label>
+            <app-select
+              id="program_tag"
+              [options]="programTagsOptions"
+              placeholder="Выберите программу, в которой участвуете"
+              formControlName="partnerProgramId"
+            ></app-select>
+          </fieldset>
           <fieldset *ngIf="projectForm.get('industryId') as industry">
             <label class="field-label" for="industry">Сфера проекта</label>
             <app-select
