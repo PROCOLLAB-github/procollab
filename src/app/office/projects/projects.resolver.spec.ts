@@ -16,7 +16,7 @@ describe("ProjectsResolver", () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, HttpClientTestingModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
     });
     resolver = TestBed.inject(ProjectsResolver);

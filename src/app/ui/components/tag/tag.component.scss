@@ -3,8 +3,11 @@
 .tag {
   display: flex;
   align-items: center;
+  max-width: 300px;
   padding: 5px 10px;
-  color: var(--dark-gray);
+  overflow: hidden;
+  color: var(--dark-grey);
+  text-overflow: ellipsis;
   background-color: var(--light-gray);
   border-radius: var(--rounded-md);
 

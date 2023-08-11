@@ -44,5 +44,6 @@ import { NewsDetailResolver } from "@office/projects/detail/news-detail/news-det
     NewsFormComponent,
     NewsDetailComponent,
   ],
+  exports: [NewsCardComponent],
 })
 export class ProjectDetailModule {}

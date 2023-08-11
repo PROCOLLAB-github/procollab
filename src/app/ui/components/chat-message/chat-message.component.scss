@@ -37,7 +37,7 @@
   }
 
   &__time {
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 
   &__avatar {
@@ -54,7 +54,7 @@
   }
 
   &__content {
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 
   &__name {
@@ -69,7 +69,7 @@
     width: 24px;
     height: 24px;
     margin-left: auto;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
     cursor: pointer;
     border-radius: var(--rounded-md);
     transition: background-color 0.2s;
@@ -133,6 +133,6 @@
   }
 
   &__message {
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 }
