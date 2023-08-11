@@ -41,5 +41,6 @@ import { AutosizeModule } from "ngx-autosize";
     NewsCardComponent,
     NewsFormComponent,
   ],
+  exports: [NewsCardComponent],
 })
 export class ProjectDetailModule {}

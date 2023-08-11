@@ -53,6 +53,6 @@ import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
     NgxMaskModule,
     AutosizeModule,
   ],
-  exports: [MessageInputComponent, ImgCardComponent],
+  exports: [MessageInputComponent, ImgCardComponent, MemberCardComponent],
 })
 export class OfficeModule {}

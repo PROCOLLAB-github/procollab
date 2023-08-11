@@ -23,6 +23,7 @@
     flex-grow: 1;
     grid-template-columns: 1fr;
     grid-gap: 16px;
+    align-items: flex-start;
 
     @include responsive.apply-desktop {
       grid-template-columns: repeat(2, 1fr);
@@ -141,6 +142,6 @@
 
   &__or {
     margin: 17.5px 0;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 }

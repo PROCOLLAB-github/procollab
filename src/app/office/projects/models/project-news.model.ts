@@ -3,8 +3,8 @@ import * as dayjs from "dayjs";
 
 export class ProjectNews {
   id!: number;
-  projectName!: string;
-  projectImageAddress!: string;
+  name!: string;
+  imageAddress!: string;
   text!: string;
   datetimeCreated!: string;
   datetimeUpdated!: string;
@@ -16,8 +16,8 @@ export class ProjectNews {
   static default(): ProjectNews {
     return {
       id: 13,
-      projectName: "w98ef",
-      projectImageAddress:
+      name: "w98ef",
+      imageAddress:
         "https://api.selcdn.ru/v1/SEL_228194/procollab_static/6043715490745844423/9115169748862337773.jpg",
       files: [
         "https://api.selcdn.ru/v1/SEL_228194/procollab_static/6043715490745844423/9115169748862337773.jpg",

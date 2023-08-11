@@ -7,22 +7,22 @@
   max-width: 310px;
 
   &__icon {
-    color: var(--red);
     margin-bottom: 18px;
+    color: var(--red);
   }
 
   &__main-text {
-    text-align: center;
-    color: var(--black);
     margin-bottom: 18px;
+    color: var(--black);
+    text-align: center;
   }
 
   &__sub-text {
-    text-align: center;
-    color: var(--dark-gray);
-    margin-bottom: 18px;
     max-height: 84px;
+    margin-bottom: 18px;
     overflow-y: hidden;
+    color: var(--dark-grey);
+    text-align: center;
   }
 
   &__cancel {

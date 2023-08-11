@@ -1,0 +1,24 @@
+<!-- @format -->
+
+<div class="card" *ngIf="program">
+  <div class="card__head">
+    <div>
+      <p class="text-heading-4 card__name">{{ program.name }}</p>
+    </div>
+    <app-avatar class="card__photo" [url]="program.imageAddress" [size]="60"></app-avatar>
+  </div>
+  <p class="text-body-12 card__description">{{ program.shortDescription }}</p>
+  <p class="text-body-12 card__description">
+    Регистрация открыта до: {{ program.datetimeRegistrationEnds | dayjs: "format":"DD.MM.YYYY" }}
+  </p>
+  <p class="text-body-12 card__description">
+    Дата проведения: {{ program.datetimeStarted | dayjs: "format":"DD.MM.YYYY" }}-{{
+      program.datetimeFinished | dayjs: "format":"DD.MM.YYYY"
+    }}
+  </p>
+  <div class="card__media">
+    <div class="card__views">
+      <i appIcon icon="eye" appSquare="22"></i> {{ program.viewsCount }}
+    </div>
+  </div>
+</div>
