@@ -10,7 +10,7 @@ import { Component, Input, OnInit } from "@angular/core";
 export class ButtonComponent implements OnInit {
   constructor() {}
 
-  @Input() color: "primary" | "red" = "primary";
+  @Input() color: "primary" | "red" | "grey" = "primary";
   @Input() loader = false;
   @Input() type: "submit" | "reset" | "button" = "button";
   @Input() appearance: "inline" | "outline" = "inline";

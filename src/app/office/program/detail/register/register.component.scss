@@ -1,0 +1,17 @@
+.register {
+  &__bar {
+    margin-bottom: 20px;
+  }
+}
+
+.form {
+  padding: 24px;
+  background-color: var(--white);
+  border-radius: 5px;
+
+  &__fieldset {
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+}

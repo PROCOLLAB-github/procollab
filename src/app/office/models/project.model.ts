@@ -22,8 +22,10 @@ export class Project {
     avatar: string;
   }[];
 
+  links!: string[];
   draft!: boolean;
   leader!: number;
+  partnerProgramsTags?: string[];
 
   static default(): Project {
     return {
@@ -36,6 +38,7 @@ export class Project {
       achievements: [{ id: 3, title: "sdf", status: "dsaf" }],
       industry: 0,
       viewsCount: 0,
+      links: [],
       presentationAddress: "string",
       imageAddress: "string",
       numberOfCollaborators: 10,

@@ -2,6 +2,8 @@
 
 .bar {
   background-color: var(--white);
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 15px;
 
   &__nav {
     display: flex;
@@ -18,7 +20,7 @@
     display: flex;
     align-items: center;
     padding: 20px 10px;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
     cursor: pointer;
 
     @include responsive.apply-desktop {

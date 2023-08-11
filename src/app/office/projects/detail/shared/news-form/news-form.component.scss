@@ -1,0 +1,48 @@
+.form {
+  padding: 16px 20px;
+  background-color: var(--white);
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 15px;
+
+  &__row {
+    display: flex;
+  }
+
+  &__textarea {
+    width: 100%;
+    padding-bottom: 10px;
+    margin-right: 20px;
+    resize: none;
+    border: none;
+    outline: none;
+  }
+
+  &__submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: var(--white);
+    cursor: pointer;
+    background-color: var(--accent);
+    border-radius: 8px;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: var(--accent-dark);
+    }
+  }
+}
+
+.footer {
+  padding-top: 10px;
+  margin-top: 20px;
+  border-top: 1px solid var(--medium-grey-for-outline);
+
+  &__attach {
+    input {
+      display: none;
+    }
+  }
+}

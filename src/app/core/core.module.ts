@@ -12,6 +12,7 @@ import { UserRolePipe } from "./pipes/user-role.pipe";
 import { PluralizePipe } from "./pipes/pluralize.pipe";
 import { YearsFromBirthdayPipe } from "./pipes/years-from-birthday.pipe";
 import { UserLinksPipe } from "./pipes/user-links.pipe";
+import { FormControlPipe } from "./pipes/form-control.pipe";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { UserLinksPipe } from "./pipes/user-links.pipe";
     PluralizePipe,
     YearsFromBirthdayPipe,
     UserLinksPipe,
+    FormControlPipe,
   ],
   imports: [CommonModule],
   providers: [
@@ -43,6 +45,7 @@ import { UserLinksPipe } from "./pipes/user-links.pipe";
     PluralizePipe,
     YearsFromBirthdayPipe,
     UserLinksPipe,
+    FormControlPipe,
   ],
 })
 export class CoreModule {}

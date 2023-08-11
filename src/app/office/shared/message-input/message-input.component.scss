@@ -24,7 +24,7 @@ $button-size: 40px;
     outline: none;
 
     &::placeholder {
-      color: var(--dark-gray);
+      color: var(--dark-grey);
     }
   }
 
@@ -35,7 +35,7 @@ $button-size: 40px;
     width: $button-size;
     height: $button-size;
     margin-left: auto;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
     cursor: pointer;
     border: 1px solid var(--gray);
     border-radius: 8px;
@@ -129,7 +129,7 @@ $button-size: 40px;
 
   &--loading {
     .file__name {
-      color: var(--dark-gray);
+      color: var(--dark-grey);
     }
 
     .file__type {
@@ -151,7 +151,7 @@ $button-size: 40px;
 
   &__size {
     margin-bottom: 12px;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
 
     @include typography.body-12;
   }
@@ -216,7 +216,7 @@ $button-size: 40px;
 
   &__comments {
     width: 325px;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
     text-align: center;
   }
 }

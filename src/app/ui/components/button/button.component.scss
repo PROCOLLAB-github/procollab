@@ -36,6 +36,11 @@
         background-color: var(--red-dark);
       }
     }
+
+    &.button--grey {
+      color: var(--black);
+      background-color: var(--grey-button);
+    }
   }
 
   &.button--outline {
