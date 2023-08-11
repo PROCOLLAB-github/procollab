@@ -18,7 +18,7 @@ export class NewsDetailComponent implements OnInit {
 
   onOpenChange(value: boolean) {
     if (!value) {
-      const projectId = this.route.parent?.snapshot.params.projectId;
+      const projectId = this.route.parent?.snapshot.params["projectId"];
       this.router
         .navigateByUrl(`/office/projects/${projectId}`)
         .then(() => console.debug("Route changed from NewsDetailComponent"));
