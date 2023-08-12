@@ -20,7 +20,7 @@
     display: flex;
     align-items: center;
     padding: 20px 10px;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
     cursor: pointer;
 
     @include responsive.apply-desktop {
