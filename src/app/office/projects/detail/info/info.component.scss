@@ -4,7 +4,11 @@
 @use "src/styles/typography";
 
 .project {
-  margin-bottom: 100px;
+  padding-bottom: 100px;
+
+  @include responsive.apply-desktop {
+    padding-bottom: 0;
+  }
 
   &__bar {
     margin-bottom: 12px;
@@ -147,7 +151,7 @@
   }
 
   &__text {
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 
   &__industry {
@@ -211,7 +215,7 @@
   }
 
   &__speciality {
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 
   &__star {
@@ -317,7 +321,7 @@
   }
 
   &__requirements {
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 }
 
@@ -327,7 +331,7 @@
   }
 
   &__title {
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 }
 
@@ -351,5 +355,17 @@
 
   &:hover {
     color: var(--accent-dark);
+  }
+}
+
+.links {
+  &__title {
+    margin-bottom: 12px;
+  }
+
+  &__item {
+    &:not(:last-child) {
+      margin-bottom: 12px;
+    }
   }
 }

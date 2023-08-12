@@ -55,7 +55,7 @@
 
   &__status {
     margin: 0 0 3px;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
 
     @include responsive.apply-desktop {
       margin: 16px 0;
@@ -68,7 +68,7 @@
 
   &__info {
     margin: 3px 0 16px;
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 
   &__skills {
@@ -89,7 +89,7 @@
   }
 
   &__content {
-    color: var(--dark-gray);
+    color: var(--dark-grey);
   }
 }
 

@@ -40,7 +40,7 @@
           *ngIf="authService.profile | async as profile"
           [routerLink]="['/office/projects', project.id, 'edit']"
         >
-          <app-button *ngIf="profile.id === project.leader">редактировать</app-button>
+          <app-button *ngIf="profile.id === project.leader">Редактировать</app-button>
         </a>
       </div>
     </div>
@@ -182,6 +182,22 @@
         >
           {{ readAllAchievements ? "Скрыть" : "Читать полностью" }}
         </div>
+      </div>
+      <div class="links project__section" *ngIf="project.links.length">
+        <h3 class="links__title text-bold-body-16">Контакты</h3>
+        <ul>
+          <li class="contact-link links__item text-body-12" *ngFor="let link of project.links">
+            <a
+              class="contact-link__link"
+              *ngIf="link | userLinks as l"
+              target="_blank"
+              [href]="link"
+            >
+              <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
+              {{ l.tag }}
+            </a>
+          </li>
+        </ul>
       </div>
     </aside>
   </section>

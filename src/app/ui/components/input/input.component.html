@@ -7,7 +7,7 @@
   <input
     [value]="value"
     (input)="onInput($event)"
-    (keydown.enter)="enter.emit()"
+    (keydown.enter)="onEnter($event)"
     (blur)="onBlur()"
     [placeholder]="placeholder"
     [type]="type"
