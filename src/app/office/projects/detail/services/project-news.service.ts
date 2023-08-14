@@ -20,6 +20,12 @@ export class ProjectNewsService {
       .pipe(map(r => plainToInstance(ProjectNewsRes, r)));
   }
 
+  fetchNewsDetail(projectId: string, newsId: string): Observable<ProjectNews> {
+    return this.apiService
+      .get<ProjectNews>(`/projects/${projectId}/news/${newsId}`)
+      .pipe(map(r => plainToInstance(ProjectNews, r)));
+  }
+
   addNews(projectId: string, obj: { text: string; files: string[] }): Observable<ProjectNews> {
     return this.apiService
       .post(`/projects/${projectId}/news/`, obj)
