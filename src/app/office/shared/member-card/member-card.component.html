@@ -6,12 +6,12 @@
     <div class="card__info">
       <p class="text-body-12 card__status">{{ user.userType | userRole | async }}</p>
       <p class="text-body-bold-18 card__name">{{ user.firstName }} {{ user.lastName }}</p>
-      <p class="text-body-12 card__additional-info">
-        <span class="card__speciality">{{ user.speciality }}</span>
+      <p *ngIf="user.speciality" class="text-body-12 card__additional-info">
+        {{ user.speciality }}
         <ng-container *ngIf="user.speciality && user.birthday"> • </ng-container>
-        <span *ngIf="user.birthday">
+        <ng-container *ngIf="user.birthday">
           {{ user.birthday | yearsFromBirthday }}
-        </span>
+        </ng-container>
       </p>
     </div>
   </div>
