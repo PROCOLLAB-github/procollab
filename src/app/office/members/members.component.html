@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<section class="members">
+<section class="members" #membersRoot>
   <form class="members__bar" [formGroup]="searchForm">
     <app-search
       formControlName="search"
@@ -9,7 +9,7 @@
     ></app-search>
   </form>
   <ul class="members__list">
-    <a *ngFor="let member of searchedMembers" [routerLink]="['/office/profile', member.id]">
+    <a *ngFor="let member of members" [routerLink]="['/office/profile', member.id]">
       <li>
         <app-member-card [user]="member"></app-member-card>
       </li>
