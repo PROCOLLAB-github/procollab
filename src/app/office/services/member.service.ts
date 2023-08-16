@@ -22,9 +22,12 @@ export class MemberService {
       .pipe(map(users => plainToInstance(MembersResult, users)));
   }
 
-  getMentors(): Observable<MembersResult> {
+  getMentors(skip: number, take: number): Observable<MembersResult> {
     return this.apiService
-      .get<MembersResult>("/auth/users", new HttpParams({ fromObject: { user_type: "2,3,4" } }))
+      .get<MembersResult>(
+        "/auth/users",
+        new HttpParams({ fromObject: { user_type: "2,3,4", limit: take, offset: skip } })
+      )
       .pipe(map(users => plainToInstance(MembersResult, users)));
   }
 }

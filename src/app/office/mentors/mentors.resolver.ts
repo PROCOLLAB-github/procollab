@@ -13,6 +13,6 @@ export class MentorsResolver implements Resolve<MembersResult> {
   constructor(private readonly memberService: MemberService) {}
 
   resolve(): Observable<MembersResult> {
-    return this.memberService.getMentors();
+    return this.memberService.getMentors(0, 20);
   }
 }

@@ -88,7 +88,6 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
       target.scrollTop -
       this.membersRoot.nativeElement.getBoundingClientRect().height +
       window.innerHeight;
-    console.log(diff);
 
     if (diff > 0) {
       return this.onFetch();
