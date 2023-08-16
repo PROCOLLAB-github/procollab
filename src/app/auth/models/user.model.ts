@@ -80,3 +80,10 @@ export class UserRole {
   id!: number;
   name!: string;
 }
+
+export class MembersResult {
+  count!: number;
+  next!: string;
+  previous!: string;
+  results!: User[];
+}

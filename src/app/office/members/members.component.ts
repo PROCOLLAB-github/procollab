@@ -1,14 +1,23 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { combineLatest, map, Subscription } from "rxjs";
+import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
 import { AuthService } from "@auth/services";
-import { User } from "@auth/models/user.model";
+import { MembersResult, User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import Fuse from "fuse.js";
 import { containerSm } from "@utils/responsive";
+import { MemberService } from "@services/member.service";
 
 @Component({
   selector: "app-members",
@@ -16,12 +25,14 @@ import { containerSm } from "@utils/responsive";
   styleUrls: ["./members.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MembersComponent implements OnInit, OnDestroy {
+export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService,
     private readonly navService: NavService,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private readonly memberService: MemberService,
+    private readonly cdref: ChangeDetectorRef
   ) {
     this.searchForm = this.fb.group({
       search: ["", [Validators.required]],
@@ -31,27 +42,22 @@ export class MembersComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navService.setNavTitle("Участники");
 
-    this.members$ = combineLatest([
-      this.route.data.pipe(map(r => r["data"])),
-      this.authService.profile,
-    ])
-      .pipe(
-        map(([members, profile]: [User[], User]) =>
-          members.filter(member => member.id !== profile.id)
-        )
-      )
-      .subscribe(members => {
-        this.members = members;
-        this.searchedMembers = members;
-      });
+    this.route.data.pipe(map(r => r["data"])).subscribe((members: MembersResult) => {
+      this.membersTotalCount = members.count;
 
-    this.searchFormSearch$ = this.searchForm.get("search")?.valueChanges.subscribe(value => {
-      const fuse = new Fuse(this.members, {
-        keys: ["firstName", "lastName", "keySkills"],
-      });
-
-      this.searchedMembers = value ? fuse.search(value).map(el => el.item) : this.members;
+      this.members = members.results;
     });
+  }
+
+  ngAfterViewInit(): void {
+    const target = document.querySelector(".office__body");
+    if (target)
+      fromEvent(target, "scroll")
+        .pipe(
+          concatMap(() => this.onScroll()),
+          throttleTime(500)
+        )
+        .subscribe(noop);
   }
 
   ngOnDestroy(): void {
@@ -61,10 +67,48 @@ export class MembersComponent implements OnInit, OnDestroy {
   containerSm = containerSm;
   appWidth = window.innerWidth;
 
+  @ViewChild("membersRoot") membersRoot?: ElementRef<HTMLUListElement>;
+  membersTotalCount?: number;
+  membersPage = 1;
+  membersTake = 20;
+
   members: User[] = [];
-  searchedMembers: User[] = [];
   members$?: Subscription;
 
   searchForm: FormGroup;
   searchFormSearch$?: Subscription;
+
+  onScroll() {
+    if (this.membersTotalCount && this.members.length >= this.membersTotalCount) return of({});
+
+    const target = document.querySelector(".office__body");
+    if (!target || !this.membersRoot) return of({});
+
+    const diff =
+      target.scrollTop -
+      this.membersRoot.nativeElement.getBoundingClientRect().height +
+      window.innerHeight;
+    console.log(diff);
+
+    if (diff > 0) {
+      return this.onFetch();
+    }
+
+    return of({});
+  }
+
+  onFetch() {
+    return this.memberService
+      .getMembers(this.membersPage * this.membersTake, this.membersTake)
+      .pipe(
+        tap((members: MembersResult) => {
+          this.membersTotalCount = members.count;
+          this.members = [...this.members, ...members.results];
+
+          this.membersPage++;
+
+          this.cdref.detectChanges();
+        })
+      );
+  }
 }
