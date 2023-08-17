@@ -46,7 +46,7 @@ export class ProgramMembersComponent implements OnInit {
   members: User[] = [];
   membersTotalCount?: number;
   membersPage = 1;
-  membersTake = 3;
+  membersTake = 20;
   @ViewChild("membersRoot") membersRoot?: ElementRef<HTMLUListElement>;
 
   onScroll() {
