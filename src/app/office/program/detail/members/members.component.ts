@@ -14,8 +14,11 @@ import { User } from "@auth/models/user.model";
 export class ProgramMembersComponent implements OnInit {
   constructor(private readonly route: ActivatedRoute) {}
 
-  program$?: Observable<Program> = this.route.parent?.data.pipe(map(r => r["data"]));
-  members$: Observable<User[]> = this.route.data.pipe(map(r => r["data"]));
-
   ngOnInit(): void {}
+
+  program$?: Observable<Program> = this.route.parent?.data.pipe(map(r => r["data"]));
+  members$: Observable<User[]> = this.route.data.pipe(
+    map(r => r["data"]),
+    map(r => r["results"])
+  );
 }
