@@ -8,7 +8,7 @@ import { HttpParams } from "@angular/common/http";
 import { ProgramCreate } from "@office/program/models/program-create.model";
 import { Program, ProgramDataSchema, ProgramTag } from "@office/program/models/program.model";
 import { Project } from "@models/project.model";
-import { MembersResult, User } from "@auth/models/user.model";
+import { MembersResult } from "@auth/models/user.model";
 
 @Injectable({
   providedIn: "root",
