@@ -10,6 +10,9 @@
         <i appIcon icon="logout" appSquare="20"></i>
       </button>
     </div>
-    <div class="text-body-14 user__email">{{ user.email }}</div>
+    <div *ngIf="!user.verificationDate" class="text-body-14 user__email">{{ user.email }}</div>
+    <div class="text-body-14 user__verified">
+      Подтвержден с {{ user.verificationDate | dayjs: "format":"DD.MM.YY" }}
+    </div>
   </div>
 </a>

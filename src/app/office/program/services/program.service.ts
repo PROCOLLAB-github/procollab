@@ -8,7 +8,7 @@ import { HttpParams } from "@angular/common/http";
 import { ProgramCreate } from "@office/program/models/program-create.model";
 import { Program, ProgramDataSchema, ProgramTag } from "@office/program/models/program.model";
 import { Project } from "@models/project.model";
-import { User } from "@auth/models/user.model";
+import { MembersResult } from "@auth/models/user.model";
 
 @Injectable({
   providedIn: "root",
@@ -51,10 +51,10 @@ export class ProgramService {
     );
   }
 
-  getAllMembers(programId: number): Observable<User[]> {
+  getAllMembers(programId: number, skip: number, take: number): Observable<MembersResult> {
     return this.apiService.get(
       "/auth/users/",
-      new HttpParams({ fromObject: { partner_program: programId } })
+      new HttpParams({ fromObject: { partner_program: programId, limit: take, offset: skip } })
     );
   }
 

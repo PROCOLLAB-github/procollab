@@ -59,7 +59,11 @@
   }
 
   &__name {
+    max-width: 200px;
+    overflow: hidden;
     color: var(--black);
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     @include typography.bold-body-14;
 
