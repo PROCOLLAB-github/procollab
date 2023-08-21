@@ -138,8 +138,11 @@
   }
 
   &__title {
+    max-width: 300px;
+    overflow: hidden;
     color: var(--black);
     text-align: center;
+    text-overflow: ellipsis;
 
     @include typography.heading-4;
 
