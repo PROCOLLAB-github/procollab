@@ -1,0 +1,9 @@
+@use "src/styles/responsive";
+
+.item {
+  display: block;
+
+  @include responsive.apply-desktop {
+    min-width: 800px;
+  }
+}

@@ -60,7 +60,7 @@ export class NewsCardComponent implements OnInit {
     const projectId = this.route.snapshot.params["projectId"];
 
     navigator.clipboard
-      .writeText(`https://app.procollab.ru/office/projects/${projectId}/news/${this.newsItem.id}`)
+      .writeText(`${location.origin}/office/projects/${projectId}/news/${this.newsItem.id}`)
       .then(() => {
         this.snackbarService.success("Ссылка скопирована");
       });

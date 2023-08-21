@@ -10,6 +10,8 @@ import { ProjectDetailComponent } from "./detail.component";
 import { ProjectChatComponent } from "./chat/chat.component";
 import { ProjectChatResolver } from "@office/projects/detail/chat/chat.resolver";
 import { ProjectDetailResolver } from "@office/projects/detail/detail.resolver";
+import { NewsDetailComponent } from "@office/projects/detail/news-detail/news-detail.component";
+import { NewsDetailResolver } from "@office/projects/detail/news-detail/news-detail.resolver";
 
 const routes: Routes = [
   {
@@ -25,6 +27,15 @@ const routes: Routes = [
         resolve: {
           data: ProjectInfoResolver,
         },
+        children: [
+          {
+            path: "news/:newsId",
+            component: NewsDetailComponent,
+            resolve: {
+              data: NewsDetailResolver,
+            },
+          },
+        ],
       },
       {
         path: "responses",

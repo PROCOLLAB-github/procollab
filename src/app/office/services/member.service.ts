@@ -3,7 +3,7 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "@core/services";
 import { map, Observable } from "rxjs";
-import { User } from "@auth/models/user.model";
+import { MembersResult } from "@auth/models/user.model";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
 
@@ -13,15 +13,21 @@ import { HttpParams } from "@angular/common/http";
 export class MemberService {
   constructor(private readonly apiService: ApiService) {}
 
-  getMembers(): Observable<User[]> {
+  getMembers(skip: number, take: number): Observable<MembersResult> {
     return this.apiService
-      .get<User[]>("/auth/users/", new HttpParams({ fromObject: { user_type: 1 } }))
-      .pipe(map(users => plainToInstance(User, users)));
+      .get<MembersResult>(
+        "/auth/users/",
+        new HttpParams({ fromObject: { user_type: 1, limit: take, offset: skip } })
+      )
+      .pipe(map(users => plainToInstance(MembersResult, users)));
   }
 
-  getMentors(): Observable<User[]> {
+  getMentors(skip: number, take: number): Observable<MembersResult> {
     return this.apiService
-      .get<User[]>("/auth/users", new HttpParams({ fromObject: { user_type: "2,3,4" } }))
-      .pipe(map(users => plainToInstance(User, users)));
+      .get<MembersResult>(
+        "/auth/users",
+        new HttpParams({ fromObject: { user_type: "2,3,4", limit: take, offset: skip } })
+      )
+      .pipe(map(users => plainToInstance(MembersResult, users)));
   }
 }
