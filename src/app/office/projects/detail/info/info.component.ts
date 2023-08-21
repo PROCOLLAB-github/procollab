@@ -2,7 +2,7 @@
 
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { map, noop, Observable, Subscription } from "rxjs";
+import { concatMap, forkJoin, map, noop, Observable, of, Subscription, take } from "rxjs";
 import { Project } from "@models/project.model";
 import { IndustryService } from "@services/industry.service";
 import { NavService } from "@services/nav.service";
@@ -118,7 +118,12 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onEditNews(news: ProjectNews) {
     const newsIdx = this.news.findIndex(n => n.id === news.id);
-    // this.news.splice(newsIdx, 1, news);
     this.news[newsIdx] = news;
   }
+
+  openSupport = false;
+  isInProject = this.project$?.pipe(
+    concatMap(project => forkJoin([of(project), this.authService.profile.pipe(take(1))])),
+    map(([project, profile]) => project.collaborators.map(c => c.userId).includes(profile.id))
+  );
 }

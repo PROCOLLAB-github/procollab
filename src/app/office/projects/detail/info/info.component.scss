@@ -372,3 +372,50 @@
     }
   }
 }
+
+.support {
+  padding-bottom: 110px;
+
+  @include responsive.apply-desktop {
+    width: 470px;
+  }
+
+  &__cross {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 2;
+    cursor: pointer;
+  }
+
+  &__img {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 195px;
+
+    @include responsive.apply-desktop {
+      height: unset;
+    }
+  }
+
+  &__title {
+    color: var(--black);
+    text-align: center;
+
+    @include typography.bold-body-16;
+
+    @include responsive.apply-desktop {
+      @include typography.heading-4;
+    }
+  }
+
+  &__text {
+    margin: 20px 0;
+    color: var(--black);
+
+    @include responsive.apply-desktop {
+      max-width: 260px;
+    }
+  }
+}
