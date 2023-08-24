@@ -32,7 +32,7 @@ const routes: Routes = [
         component: EmailVerificationComponent,
       },
       {
-        path: "reset_password",
+        path: "reset_password/send_email",
         component: ResetPasswordComponent,
       },
     ],

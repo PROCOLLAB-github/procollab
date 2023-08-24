@@ -140,6 +140,10 @@ export class AuthService {
     );
   }
 
+  resetEmail(email: string): Observable<any> {
+    return this.apiService.put("/auth/password-reset/", { email });
+  }
+
   resendEmail(email: string): Observable<User> {
     return this.apiService
       .post<User>("/auth/resend_email/", { email })
