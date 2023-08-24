@@ -7,6 +7,7 @@ import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { EmailVerificationComponent } from "./email-verification/email-verification.component";
 import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
+import { ResetPasswordComponent } from "@auth/reset-password/reset-password.component";
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
       {
         path: "verification/email",
         component: EmailVerificationComponent,
+      },
+      {
+        path: "reset_password",
+        component: ResetPasswordComponent,
       },
     ],
   },
