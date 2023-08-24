@@ -22,6 +22,7 @@
     padding: 20px 10px;
     color: var(--dark-grey);
     cursor: pointer;
+    transition: color 0.2s;
 
     @include responsive.apply-desktop {
       padding: 20px;
@@ -40,6 +41,7 @@
     color: var(--white);
     background-color: var(--gray);
     border-radius: 7px;
+    transition: background-color 0.2s;
 
     &--small {
       padding: 0;
@@ -55,7 +57,17 @@
       }
 
       .bar__ball {
-        background-color: var(--black);
+        background-color: var(--accent);
+      }
+    }
+
+    &:hover {
+      .bar__item {
+        color: var(--black);
+      }
+
+      .bar__ball {
+        background-color: var(--accent);
       }
     }
   }
