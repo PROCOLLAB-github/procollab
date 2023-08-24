@@ -1,8 +1,19 @@
 /** @format */
 
+@use "src/styles/responsive";
+
 .login {
   &__reg {
-    margin-top: 16px;
+    margin-bottom: 20px;
+  }
+
+  &__forget {
+    display: block;
+    margin-top: 12px;
     text-align: center;
+
+    @include responsive.apply-desktop {
+      text-align: left;
+    }
   }
 }

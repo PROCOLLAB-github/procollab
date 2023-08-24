@@ -3,6 +3,9 @@
 <form class="auth" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <div class="auth__wrapper">
     <h1 class="auth__title">Вход</h1>
+    <p class="text-body-16 login__reg">
+      Нет аккаунта? <a routerLink="/auth/register">Зарегистрируйтесь</a>
+    </p>
     <fieldset *ngIf="loginForm.get('email') as email" class="auth__field">
       <label for="email" class="field-label">Электронная почта</label>
       <app-input
@@ -46,8 +49,6 @@
         appViewBox="0 0 18 9"
       ></i>
     </app-button>
-    <p class="text-body-16 login__reg">
-      Нет аккаунта? <a routerLink="/auth/register">Зарегистрируйтесь</a>
-    </p>
+    <a routerLink="/auth/reset_password" class="login__forget text-body-14">Забыли пароль?</a>
   </div>
 </form>
