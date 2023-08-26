@@ -140,8 +140,12 @@ export class AuthService {
     );
   }
 
-  resetEmail(email: string): Observable<any> {
-    return this.apiService.put("/auth/password-reset/", { email });
+  resetPassword(email: string): Observable<any> {
+    return this.apiService.post("/auth/reset_password/", { email });
+  }
+
+  setPassword(password: string, token: string): Observable<any> {
+    return this.apiService.post("/auth/reset_password/confirm/", { password, token });
   }
 
   resendEmail(email: string): Observable<User> {
