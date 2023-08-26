@@ -8,6 +8,7 @@ import { RegisterComponent } from "./register/register.component";
 import { EmailVerificationComponent } from "./email-verification/email-verification.component";
 import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
 import { ResetPasswordComponent } from "@auth/reset-password/reset-password.component";
+import { SetPasswordComponent } from "@auth/set-password/set-password.component";
 
 const routes: Routes = [
   {
@@ -34,6 +35,10 @@ const routes: Routes = [
       {
         path: "reset_password/send_email",
         component: ResetPasswordComponent,
+      },
+      {
+        path: "reset_password",
+        component: SetPasswordComponent,
       },
     ],
   },
