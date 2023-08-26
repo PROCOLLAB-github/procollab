@@ -9,6 +9,7 @@ import { EmailVerificationComponent } from "./email-verification/email-verificat
 import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
 import { ResetPasswordComponent } from "@auth/reset-password/reset-password.component";
 import { SetPasswordComponent } from "@auth/set-password/set-password.component";
+import { ConfirmPasswordResetComponent } from "@auth/confirm-password-reset/confirm-password-reset.component";
 
 const routes: Routes = [
   {
@@ -39,6 +40,10 @@ const routes: Routes = [
       {
         path: "reset_password",
         component: SetPasswordComponent,
+      },
+      {
+        path: "reset_password/confirm",
+        component: ConfirmPasswordResetComponent,
       },
     ],
   },
