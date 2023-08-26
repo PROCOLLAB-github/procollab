@@ -28,12 +28,27 @@ export class ResetPasswordComponent implements OnInit {
   isSubmitting = false;
 
   errorMessage = ErrorMessage;
+  errorServer = false;
 
   onSubmit(): void {
     if (!this.validationService.getFormValidation(this.resetForm)) return;
 
-    this.authService.resetEmail(this.resetForm.value.email).subscribe(() => {
-      console.log("sdlfkj");
+    this.errorServer = false;
+    this.isSubmitting = true;
+
+    this.authService.resetPassword(this.resetForm.value.email).subscribe({
+      next: () => {
+        console.log("sdlfkj");
+      },
+      error: () => {
+        this.errorServer = true;
+        this.isSubmitting = false;
+
+        this.resetForm.reset();
+      },
+      complete: () => {
+        this.isSubmitting = false;
+      },
     });
   }
 }
