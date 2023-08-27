@@ -2,26 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
-  &__code {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 580px;
-    height: 580px;
-    margin-bottom: 20px;
-    color: var(--error-code);
-    background: radial-gradient(50% 50% at 50% 50%, rgb(0 200 147 / 51%) 0%, rgb(0 200 147 / 0%) 100%);
-  }
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  z-index: -1;
 
   &__title {
-    margin-bottom: 20px;
-    color: var(--gray-100);
-    text-align: center;
-  }
-
-  &__link {
-    display: block;
+    color: var(--dark-grey);
     text-align: center;
   }
 }
