@@ -1,11 +1,11 @@
 .error {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  inset: 0;
   margin: 0;
-  z-index: -1;
 
   &__title {
     color: var(--dark-grey);
