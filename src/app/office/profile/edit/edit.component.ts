@@ -104,7 +104,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       }
 
       if ([1, 3, 4].includes(profile.userType)) {
+        const userTypeData = profile.member ?? profile.mentor ?? profile.expert
         this.typeSpecific.addControl("usefulToProject", this.fb.control(""));
+        this.typeSpecific.get("usefulToProject")?.patchValue(userTypeData?.usefulToProject)
         this.cdref.detectChanges();
       }
 
