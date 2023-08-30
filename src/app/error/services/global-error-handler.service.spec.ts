@@ -10,7 +10,8 @@ describe('GlobalErrorHandlerService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule]
+      imports: [RouterTestingModule],
+      providers: [GlobalErrorHandlerService]
     });
     service = TestBed.inject(GlobalErrorHandlerService);
   });
