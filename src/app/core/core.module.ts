@@ -1,6 +1,6 @@
 /** @format */
 
-import { NgModule } from "@angular/core";
+import { ErrorHandler, NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { BearerTokenInterceptor } from "./interceptors/bearer-token.interceptor";
@@ -13,6 +13,7 @@ import { PluralizePipe } from "./pipes/pluralize.pipe";
 import { YearsFromBirthdayPipe } from "./pipes/years-from-birthday.pipe";
 import { UserLinksPipe } from "./pipes/user-links.pipe";
 import { FormControlPipe } from "./pipes/form-control.pipe";
+import { GlobalErrorHandlerService } from "@error/services/global-error-handler.service";
 
 @NgModule({
   declarations: [
@@ -35,6 +36,10 @@ import { FormControlPipe } from "./pipes/form-control.pipe";
       provide: HTTP_INTERCEPTORS,
       useClass: BearerTokenInterceptor,
       multi: true,
+    },
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandlerService
     },
     ApiService,
   ],

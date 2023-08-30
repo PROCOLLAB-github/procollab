@@ -23,6 +23,10 @@ const routes: Routes = [
     loadChildren: () => import("./office/office.module").then(m => m.OfficeModule),
     canActivate: [AuthRequiredGuard],
   },
+  {
+    path: "**",
+    redirectTo: 'error/404'
+  }
 ];
 
 @NgModule({
