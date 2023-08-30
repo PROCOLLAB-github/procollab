@@ -7,6 +7,10 @@
 
   &__header {
     display: flex;
-    padding: 20px 140px;
+    padding: 20px 10%;
+
+    img {
+      cursor: pointer;
+    }
   }
 }
