@@ -33,12 +33,13 @@
   }
 
   &__title {
-    margin-bottom: 12px;
     color: var(--black);
 
     @include typography.heading-4;
 
     @include responsive.apply-desktop {
+      margin-bottom: 6px;
+
       @include typography.heading-2;
     }
   }

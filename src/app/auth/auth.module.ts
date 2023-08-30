@@ -12,6 +12,9 @@ import { RegisterComponent } from "./register/register.component";
 import { CoreModule } from "@core/core.module";
 import { EmailVerificationComponent } from "./email-verification/email-verification.component";
 import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
+import { ResetPasswordComponent } from "./reset-password/reset-password.component";
+import { SetPasswordComponent } from './set-password/set-password.component';
+import { ConfirmPasswordResetComponent } from './confirm-password-reset/confirm-password-reset.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +23,9 @@ import { ConfirmEmailComponent } from "./confirm-email/confirm-email.component";
     RegisterComponent,
     EmailVerificationComponent,
     ConfirmEmailComponent,
+    ResetPasswordComponent,
+    SetPasswordComponent,
+    ConfirmPasswordResetComponent,
   ],
   providers: [AuthService],
   imports: [CommonModule, AuthRoutingModule, CoreModule, ReactiveFormsModule, UiModule],

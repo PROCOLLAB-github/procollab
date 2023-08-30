@@ -31,7 +31,8 @@ img {
   max-width: 100%;
 }
 
-a {
+a,
+.link {
   color: var(--accent);
   text-decoration: none;
   transition: color 0.2s;
