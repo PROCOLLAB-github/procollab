@@ -1,16 +1,34 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { ResetPasswordComponent } from './reset-password.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('ResetPasswordComponent', () => {
+import { ResetPasswordComponent } from "./reset-password.component";
+import { ReactiveFormsModule } from "@angular/forms";
+import { of } from "rxjs";
+import { AuthService } from "@auth/services";
+import { RouterTestingModule } from "@angular/router/testing";
+import { CoreModule } from "@core/core.module";
+import { UiModule } from "@ui/ui.module";
+import { NgxMaskModule } from "ngx-mask";
+
+describe("ResetPasswordComponent", () => {
   let component: ResetPasswordComponent;
   let fixture: ComponentFixture<ResetPasswordComponent>;
 
   beforeEach(async () => {
+    const authSpy = jasmine.createSpyObj({ resetPassword: of({}) });
+
     await TestBed.configureTestingModule({
-      declarations: [ ResetPasswordComponent ]
-    })
-    .compileComponents();
+      imports: [
+        ReactiveFormsModule,
+        RouterTestingModule,
+        CoreModule,
+        UiModule,
+        NgxMaskModule.forRoot(),
+      ],
+      providers: [{ provide: AuthService, useValue: authSpy }],
+      declarations: [ResetPasswordComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +37,7 @@ describe('ResetPasswordComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
