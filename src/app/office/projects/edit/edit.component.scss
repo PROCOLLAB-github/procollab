@@ -10,6 +10,25 @@
   background-color: var(--white);
   border-radius: var(--rounded-md);
 
+  &__form {
+    display: grid;
+    grid-template-columns: 1fr;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: minmax(380px, 2fr) 1fr;
+    }
+  }
+
+  &__inner {
+    grid-column: 1/3;
+    margin-bottom: 25px;
+
+    @include responsive.apply-desktop {
+      grid-column: 1/2;
+      margin-bottom: 0;
+    }
+  }
+
   &__inner > fieldset:not(:last-child) {
     margin-bottom: 20px;
   }
@@ -23,7 +42,12 @@
     }
   }
 
+  &__file {
+    min-width: 0;
+  }
+
   &__nav {
+    grid-column: 1 / 3;
     margin-bottom: 24px;
 
     ul {
@@ -108,16 +132,16 @@
   }
 
   &__save {
-    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: flex-end;
 
     @include responsive.apply-desktop {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      z-index: 10;
-      display: block;
-      width: 255px;
-      margin-left: auto;
+      app-button {
+        align-self: flex-end;
+        width: 85%;
+      }
     }
   }
 

@@ -4,7 +4,7 @@
     <app-back></app-back>
   </div>
   <main class="project">
-    <form [formGroup]="projectForm">
+    <form [formGroup]="projectForm" class="project__form">
       <nav class="project__nav">
         <ul>
           <li
@@ -132,7 +132,10 @@
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
           </fieldset>
-          <fieldset *ngIf="projectForm.get('presentationAddress') as presentationAddress">
+          <fieldset 
+            *ngIf="projectForm.get('presentationAddress') as presentationAddress"
+            class="project__file"
+          >
             <app-upload-file
               formControlName="presentationAddress"
               accept=".pdf,.pptx"
@@ -309,8 +312,11 @@
         </ng-container>
       </div>
       <div appEditorSubmitButton containerSelector=".project" class="project__save">
-        <app-button [loader]="projectFormIsSubmitting" (click)="saveProject()">
-          Сохранить
+        <app-button color="grey" (click)="saveProjectAsDraft()">
+          Сохранить черновик
+        </app-button>
+        <app-button [loader]="projectFormIsSubmitting" (click)="saveProjectAsPublished()">
+          Опубликовать
         </app-button>
       </div>
     </form>

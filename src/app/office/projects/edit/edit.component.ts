@@ -309,7 +309,17 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.achievements.removeAt(index);
   }
 
-  saveProject(): void {
+  saveProjectAsPublished(): void {
+    this.projectForm.addControl("draft", this.fb.control(false));
+    this.submitProjectForm();
+  }
+
+  saveProjectAsDraft(): void {
+    this.projectForm.addControl("draft", this.fb.control(true));
+    this.submitProjectForm();
+  }
+
+  submitProjectForm(): void {
     if (!this.validationService.getFormValidation(this.projectForm)) {
       return;
     }
