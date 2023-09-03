@@ -49,16 +49,13 @@
       </a>
     </div>
   </nav>
-  <div (clickOutside)="onClickOutside()" class="sidebar__bell">
-    <div class="attention" *ngIf="(showBall | async) || hasInvites"></div>
-    <i
-      appIcon
-      icon="bell"
-      appWidth="20"
-      appHeight="23"
-      appViewBox="0 0 20 22"
-      (click)="showNotifications = true"
-    ></i>
+  <div class="sidebar__bottom-actions">
+    <div class="bottom-action" (click)="showNotifications = true">
+      <div (clickOutside)="onClickOutside()" class="sidebar__bell">
+        <div class="attention" *ngIf="(showBall | async) || hasInvites"></div>
+        <i appIcon icon="bell" appWidth="20" appHeight="23" appViewBox="0 0 20 22"></i>
+      </div>
+    </div>
     <div *ngIf="showNotifications" class="sidebar__notifications notifications">
       <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
       <ul class="notifications__invites">
@@ -71,6 +68,12 @@
         </li>
       </ul>
     </div>
+    <a class="bottom-action" routerLink="/office/chats">
+      <div class="sidebar__bell">
+        <div class="attention"></div>
+        <i appIcon icon="chats" appWidth="23" appHeight="21" appViewBox="0 0 23 21"></i>
+      </div>
+    </a>
   </div>
   <app-profile-info
     class="sidebar__profile"
