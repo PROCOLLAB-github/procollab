@@ -7,7 +7,6 @@ import { OfficeComponent } from "./office.component";
 import { HeaderComponent } from "./shared/header/header.component";
 import { UiModule } from "@ui/ui.module";
 import { NavComponent } from "./shared/nav/nav.component";
-import { ChatComponent } from "./chat/chat.component";
 import { ProfileDetailComponent } from "./profile/detail/profile-detail.component";
 import { ProfileEditComponent } from "./profile/edit/edit.component";
 import { CoreModule } from "@core/core.module";
@@ -30,7 +29,6 @@ import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
     OfficeComponent,
     HeaderComponent,
     NavComponent,
-    ChatComponent,
     InviteManageCardComponent,
     ProfileDetailComponent,
     ProfileEditComponent,
