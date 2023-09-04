@@ -303,6 +303,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setProjFormIsSubmitting!: (status: boolean) => void
 
+  addDraftControl() {
+    if(!this.projectForm.get('draft')) {
+      this.projectForm.addControl("draft", this.fb.control(null));
+    }
+  }
+
   get achievements(): FormArray {
     return this.projectForm.get("achievements") as FormArray;
   }
@@ -322,22 +328,23 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   saveProjectAsPublished(): void {
-    this.projectForm.addControl("draft", this.fb.control(false));
+    this.addDraftControl();
+    this.projectForm.get('draft')?.patchValue(false);
     this.setProjFormIsSubmitting = this.setIsSubmittingAsPublished
+    if (!this.validationService.getFormValidation(this.projectForm)) {
+      return;
+    }
     this.submitProjectForm();
   }
 
   saveProjectAsDraft(): void {
-    this.projectForm.addControl("draft", this.fb.control(true));
-    this.setProjFormIsSubmitting = this.setIsSubmittingAsDraft
+    this.addDraftControl();
+    this.projectForm.get('draft')?.patchValue(true);
+    this.setProjFormIsSubmitting = this.setIsSubmittingAsDraft;
     this.submitProjectForm();
   }
 
   submitProjectForm(): void {
-    if (!this.validationService.getFormValidation(this.projectForm)) {
-      return;
-    }
-
     this.setProjFormIsSubmitting(true);
 
     this.projectService
