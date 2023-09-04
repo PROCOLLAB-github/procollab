@@ -312,10 +312,10 @@
         </ng-container>
       </div>
       <div appEditorSubmitButton containerSelector=".project" class="project__save">
-        <app-button color="grey" (click)="saveProjectAsDraft()">
+        <app-button color="grey" [loader]="projFormIsSubmittingAsDraft" (click)="saveProjectAsDraft()">
           Сохранить черновик
         </app-button>
-        <app-button [loader]="projectFormIsSubmitting" (click)="saveProjectAsPublished()">
+        <app-button [loader]="projFormIsSubmittingAsPublished" (click)="saveProjectAsPublished()">
           Опубликовать
         </app-button>
       </div>

@@ -289,7 +289,19 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   projectForm: FormGroup;
-  projectFormIsSubmitting = false;
+
+  projFormIsSubmittingAsPublished = false;
+  projFormIsSubmittingAsDraft = false;
+
+  setIsSubmittingAsPublished = (status: boolean) => {
+    this.projFormIsSubmittingAsPublished = status;
+  }
+
+  setIsSubmittingAsDraft = (status: boolean) => {
+    this.projFormIsSubmittingAsDraft = status;
+  }
+
+  setProjFormIsSubmitting!: (status: boolean) => void
 
   get achievements(): FormArray {
     return this.projectForm.get("achievements") as FormArray;
@@ -311,11 +323,13 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   saveProjectAsPublished(): void {
     this.projectForm.addControl("draft", this.fb.control(false));
+    this.setProjFormIsSubmitting = this.setIsSubmittingAsPublished
     this.submitProjectForm();
   }
 
   saveProjectAsDraft(): void {
     this.projectForm.addControl("draft", this.fb.control(true));
+    this.setProjFormIsSubmitting = this.setIsSubmittingAsDraft
     this.submitProjectForm();
   }
 
@@ -324,19 +338,19 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.projectFormIsSubmitting = true;
+    this.setProjFormIsSubmitting(true);
 
     this.projectService
       .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), this.projectForm.value)
       .subscribe({
         next: () => {
-          this.projectFormIsSubmitting = false;
+          this.setProjFormIsSubmitting(false);
           this.router
             .navigateByUrl(`/office/projects/my`)
             .then(() => console.debug("Route changed from ProjectEditComponent"));
         },
         error: () => {
-          this.projectFormIsSubmitting = false;
+          this.setProjFormIsSubmitting(false);
         },
       });
   }
