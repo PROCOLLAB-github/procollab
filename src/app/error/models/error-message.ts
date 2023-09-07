@@ -15,5 +15,6 @@ export enum ErrorMessage {
   INVALID_DATE = "Неправильный формат даты",
   VALIDATION_EMAIL = "Введенное значение не соответствует формату email",
   VALIDATION_PASSWORD_UNMATCH = "Пароли не совпадают",
+  VALIDATION_LINK = "Введенное значение не соответствует формату ссылки",
   EMPTY_AVATAR = "*Выберите фото для профиля",
 }
