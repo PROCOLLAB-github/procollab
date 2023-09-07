@@ -48,7 +48,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       presentationAddress: ["", [Validators.required]],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
-      draft: [null]
+      draft: [null],
     });
 
     this.vacancyForm = this.fb.group({
@@ -82,7 +82,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.subscriptions.push(
         control?.valueChanges.pipe(distinctUntilChanged()).subscribe(value => {
           if (value === "") {
-            if(control === this.inviteForm.get('link')) {
+            if (control === this.inviteForm.get("link")) {
               control?.clearValidators();
             }
             control?.removeValidators([Validators.required]);
@@ -259,9 +259,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     const controls = [this.inviteForm.get("role"), this.inviteForm.get("link")];
 
     controls.filter(Boolean).forEach(control => {
-      if(control === this.inviteForm.get('link')) {
+      if (control === this.inviteForm.get("link")) {
         control?.addValidators([
-          Validators.pattern(/^http(s)?:\/\/.+(:[0-9]*)?\/office\/profile\/\d+$/)
+          Validators.pattern(/^http(s)?:\/\/.+(:[0-9]*)?\/office\/profile\/\d+$/),
         ]);
       }
       control?.addValidators([Validators.required]);
@@ -315,15 +315,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   projFormIsSubmittingAsPublished = false;
   projFormIsSubmittingAsDraft = false;
 
-  setIsSubmittingAsPublished = (status: boolean) => {
+  setIsSubmittingAsPublished(status: boolean): void {
     this.projFormIsSubmittingAsPublished = status;
   }
 
-  setIsSubmittingAsDraft = (status: boolean) => {
+  setIsSubmittingAsDraft(status: boolean): void {
     this.projFormIsSubmittingAsDraft = status;
   }
 
-  setProjFormIsSubmitting!: (status: boolean) => void
+  setProjFormIsSubmitting!: (status: boolean) => void;
 
   get achievements(): FormArray {
     return this.projectForm.get("achievements") as FormArray;
@@ -344,31 +344,31 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.achievements.removeAt(index);
   }
 
-  clearAllValidationErrors() {
+  clearAllValidationErrors(): void {
     Object.keys(this.projectForm.controls).forEach(ctrl => {
       this.projectForm.get(ctrl)?.setErrors(null);
-    })
-    this.clearAllAchievementsErrors()
+    });
+    this.clearAllAchievementsErrors();
   }
 
-  clearAllAchievementsErrors() {
+  clearAllAchievementsErrors(): void {
     this.achievements.controls.forEach(achievementForm => {
       Object.keys(achievementForm).forEach(ctrl => {
         this.projectForm.get(ctrl)?.setErrors(null);
-      })
-    })
+      });
+    });
   }
 
   saveProjectAsPublished(): void {
     this.projSubmitInitiated = true;
-    this.projectForm.get('draft')?.patchValue(false);
-    this.setProjFormIsSubmitting = this.setIsSubmittingAsPublished
+    this.projectForm.get("draft")?.patchValue(false);
+    this.setProjFormIsSubmitting = this.setIsSubmittingAsPublished;
     this.submitProjectForm();
   }
 
   saveProjectAsDraft(): void {
     this.clearAllValidationErrors();
-    this.projectForm.get('draft')?.patchValue(true);
+    this.projectForm.get("draft")?.patchValue(true);
     this.setProjFormIsSubmitting = this.setIsSubmittingAsDraft;
     this.submitProjectForm();
   }
@@ -376,14 +376,14 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   submitProjectForm(): void {
     this.achievements.controls.forEach(achievementForm => {
       achievementForm.markAllAsTouched();
-    })
+    });
 
     if (!this.validationService.getFormValidation(this.projectForm)) {
       return;
     }
 
-    if(!this.projectForm.get('industryId')?.value) {
-      delete this.projectForm.value.industryId
+    if (!this.projectForm.get("industryId")?.value) {
+      delete this.projectForm.value.industryId;
     }
 
     this.setProjFormIsSubmitting(true);
@@ -424,7 +424,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   warningModalSeen = false;
 
-  closeWarningModal() {
+  closeWarningModal(): void {
     this.warningModalSeen = true;
   }
 }
