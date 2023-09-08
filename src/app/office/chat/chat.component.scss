@@ -1,0 +1,7 @@
+.page {
+  &__list {
+    overflow: hidden;
+    border: 1px solid var(--grey-button);
+    border-radius: 15px;
+  }
+}

@@ -1,1 +1,9 @@
-<p>chat works!</p>
+<!-- @format -->
+
+<div class="page">
+  <div class="page__list">
+    <a *ngFor="let c of chats | async; last as last" [routerLink]="['/office/chats', c.id]">
+      <app-chat-card [chat]="c" [isLast]="last"></app-chat-card>
+    </a>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+.card {
+  position: relative;
+  padding: 20px;
+  cursor: pointer;
+  background-color: var(--white);
+  border-bottom: 1px solid var(--grey-button);
+
+  &--last {
+    border-bottom: none;
+  }
+
+  &__row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  &__name {
+    margin-bottom: 1px;
+    color: var(--black);
+  }
+
+  &__body {
+    max-width: 90%;
+  }
+
+  &__last-message {
+    display: flex;
+    align-items: center;
+  }
+
+  &__last-text {
+    margin-left: 10px;
+    overflow: hidden;
+    line-height: 100%;
+    color: var(--dark-grey);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__time {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: var(--dark-grey);
+  }
+}
