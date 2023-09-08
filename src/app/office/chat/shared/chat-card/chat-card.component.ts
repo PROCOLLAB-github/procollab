@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, Input, OnInit } from "@angular/core";
-import { ChatItem } from "@office/chat/models/chat-item.model";
+import { ChatListItem } from "@office/chat/models/chat-item.model";
 
 @Component({
   selector: "app-chat-card",
@@ -11,7 +11,7 @@ import { ChatItem } from "@office/chat/models/chat-item.model";
 export class ChatCardComponent implements OnInit {
   constructor() {}
 
-  @Input() chat!: ChatItem;
+  @Input() chat!: ChatListItem;
   @Input() isLast = false;
 
   ngOnInit(): void {}

@@ -1,1 +1,9 @@
-<p>chat-direct works!</p>
+<!-- @format -->
+
+<div class="page">
+  <header class="page__header" *ngIf="chat">
+    <app-avatar class="page__avatar" [url]="chat.imageAddress" [size]="40"></app-avatar>
+    <div class="page__name text-heading-4">{{ chat.name }}</div>
+  </header>
+  <app-chat-window class="page__chat"></app-chat-window>
+</div>
