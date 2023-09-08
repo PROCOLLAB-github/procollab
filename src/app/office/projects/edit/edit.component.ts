@@ -4,7 +4,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "
 import { ActivatedRoute, Router } from "@angular/router";
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "@services/industry.service";
-import { concatMap, distinctUntilChanged, map, Observable, Subscription, tap } from "rxjs";
+import { concatMap, distinctUntilChanged, filter, map, Observable, Subscription, tap } from "rxjs";
 import { ErrorMessage } from "@error/models/error-message";
 import { NavService } from "@services/nav.service";
 import { Project } from "@models/project.model";
@@ -17,6 +17,7 @@ import { ProjectService } from "@services/project.service";
 import { SelectComponent } from "@ui/components";
 import { ProgramService } from "@office/program/services/program.service";
 import { ProgramTag } from "@office/program/models/program.model";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   selector: "app-edit",
@@ -80,15 +81,24 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     controls.filter(Boolean).forEach(control => {
       this.subscriptions.push(
-        control?.valueChanges.pipe(distinctUntilChanged()).subscribe(value => {
-          if (value === "") {
+        control?.valueChanges
+          .pipe(
+            distinctUntilChanged(),
+            tap(() => {
+              if (control === this.inviteForm.get("link") && this.inviteNotExistingError) {
+                this.inviteNotExistingError = null;
+              }
+            }),
+            filter(value => value === "")
+          )
+          .subscribe(() => {
             if (control === this.inviteForm.get("link")) {
               control?.clearValidators();
+            } else {
+              control?.removeValidators([Validators.required]);
             }
-            control?.removeValidators([Validators.required]);
             control?.updateValueAndValidity();
-          }
-        })
+          })
       );
     });
   }
@@ -251,6 +261,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   inviteSubmitInitiated = false;
   inviteFormIsSubmitting = false;
 
+  inviteNotExistingError: Error | null = null;
+
   invites: Invite[] = [];
 
   submitInvite(): void {
@@ -295,7 +307,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
           this.invites.push(invite);
         },
-        error: () => {
+        error: (error: unknown) => {
+          if (error instanceof HttpErrorResponse) {
+            if (error.status === 400) {
+              this.inviteNotExistingError = error;
+            }
+          }
           this.inviteFormIsSubmitting = false;
         },
       });

@@ -287,7 +287,13 @@
                   *ngIf="(link | controlError: 'pattern') && inviteSubmitInitiated" 
                   class="text-body-14 error"
                 >
-                  {{ errorMessage.VALIDATION_LINK }}
+                  {{ errorMessage.VALIDATION_PROFILE_LINK }}
+                </div>
+                <div 
+                  *ngIf="inviteNotExistingError && inviteSubmitInitiated" 
+                  class="text-body-14 error"
+                >
+                  {{ errorMessage.USER_NOT_EXISTING }}
                 </div>
               </fieldset>
               <app-button
