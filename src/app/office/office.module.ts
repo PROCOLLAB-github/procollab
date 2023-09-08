@@ -23,6 +23,8 @@ import { NgxMaskModule } from "ngx-mask";
 import { AutosizeModule } from "ngx-autosize";
 import { SidebarComponent } from "./shared/sidebar/sidebar.component";
 import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
+import { ChatWindowComponent } from "./shared/chat-window/chat-window.component";
+import { ScrollingModule } from "@angular/cdk/scrolling";
 
 @NgModule({
   declarations: [
@@ -39,6 +41,7 @@ import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
     MessageInputComponent,
     SidebarComponent,
     ImgCardComponent,
+    ChatWindowComponent,
   ],
   imports: [
     OfficeRoutingModule,
@@ -50,7 +53,8 @@ import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
     ReactiveFormsModule,
     NgxMaskModule,
     AutosizeModule,
+    ScrollingModule,
   ],
-  exports: [MessageInputComponent, ImgCardComponent, MemberCardComponent],
+  exports: [MessageInputComponent, ImgCardComponent, MemberCardComponent, ChatWindowComponent],
 })
 export class OfficeModule {}

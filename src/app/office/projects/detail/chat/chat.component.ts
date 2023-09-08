@@ -12,12 +12,10 @@ import {
   skip,
   Subscription,
   tap,
-  throttleTime,
 } from "rxjs";
 import { Project } from "@models/project.model";
 import { NavService } from "@services/nav.service";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "@auth/services";
 import { ModalService } from "@ui/models/modal.service";
@@ -33,16 +31,11 @@ import { MessageInputComponent } from "@office/shared/message-input/message-inpu
 export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly navService: NavService,
-    private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService,
     private readonly modalService: ModalService,
     private readonly chatService: ChatService
-  ) {
-    this.messageForm = this.fb.group({
-      messageControl: [{ text: "", filesUrl: [] }],
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.navService.setNavTitle("Чат проекта");
@@ -68,17 +61,12 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     chatSub$ && this.subscriptions$.push(chatSub$);
 
-    this.initTypingSend(); // event for send info to websocket, that current user is typing
-
-    this.fetchMessages().subscribe(() => {
-      // after all messages fetched we need to scroll down
-      this.scrollToBottom();
-    });
+    this.fetchMessages().subscribe(noop);
 
     this.chatService
       .loadProjectFiles(Number(this.route.parent?.snapshot.paramMap.get("projectId")))
       .subscribe(files => {
-        this.chatFiles = files
+        this.chatFiles = files;
       });
   }
 
@@ -104,22 +92,11 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
 
       viewPortScroll$ && this.subscriptions$.push(viewPortScroll$);
     }
-
-    this.focusOnInput();
   }
 
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
-
-  /**
-   * The placeholder value of form control
-   * @private
-   */
-  private readonly messageControlBaseValue = {
-    text: "",
-    filesUrl: [],
-  };
 
   /**
    * Amount of messages that we fetch
@@ -155,7 +132,6 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
    * Get id of logged user
    */
   currentUserId?: number;
-  messageForm: FormGroup;
 
   /**
    * The element in template that hold all messages
@@ -178,38 +154,10 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   messages: ChatMessage[] = [];
 
   /**
-   * Message that user want to edit
-   * set from {@link onEditMessage}
-   */
-  editingMessage?: ChatMessage;
-  /**
-   * Message that user want to reply
-   * set from {@link onReplyMessage}
-   */
-  replyMessage?: ChatMessage;
-
-  /**
    * Amount of online users in chat
    * @deprecated
    */
   membersOnlineCount = 3;
-
-  private initTypingSend(): void {
-    const messageControlSub$ = this.messageForm
-      .get("messageControl")
-      ?.valueChanges.pipe(
-        throttleTime(2000),
-        tap(() => {
-          this.chatService.startTyping({
-            chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
-            chatType: "project",
-          });
-        })
-      )
-      .subscribe(noop);
-
-    messageControlSub$ && this.subscriptions$.push(messageControlSub$);
-  }
 
   typingPersons: Project["collaborators"] = [];
 
@@ -244,8 +192,6 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   private initMessageEvent(): void {
     const messageEvent$ = this.chatService.onMessage().subscribe(result => {
       this.messages = [...this.messages, result.message];
-
-      if (result.message.author.id === this.currentUserId) this.scrollToBottom();
     });
 
     messageEvent$ && this.subscriptions$.push(messageEvent$);
@@ -292,83 +238,30 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
       );
   }
 
-  private scrollToBottom(): void {
-    // Sadly buy it's work only this way
-    // It seems that when first scrollTo works
-    // It didn't render all elements so bottom 0 is not actual bottom of all comments
-    setTimeout(() => {
-      this.viewport?.scrollTo({ bottom: 0 });
-
-      setTimeout(() => {
-        this.viewport?.scrollTo({ bottom: 0 });
-      }, 50);
+  onSubmitMessage(message: any): void {
+    this.chatService.sendMessage({
+      replyTo: message.replyTo,
+      text: message.text,
+      fileUrls: message.fileUrls,
+      chatType: "project",
+      chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
     });
   }
 
-  private focusOnInput(): void {
-    setTimeout(() => {
-      this.messageInputComponent?.nativeElement.querySelector("textarea").focus();
+  onEditMessage(message: any): void {
+    this.chatService.editMessage({
+      text: message.text,
+      messageId: message.id,
+      chatType: "project",
+      chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
     });
-  }
-
-  onSubmitMessage(): void {
-    if (!this.messageForm.get("messageControl")?.value.text.trim()) return;
-
-    if (this.editingMessage) {
-      this.chatService.editMessage({
-        text: this.messageForm.get("messageControl")?.value.text,
-        messageId: this.editingMessage.id,
-        chatType: "project",
-        chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
-      });
-    } else {
-      this.chatService.sendMessage({
-        replyTo: this.replyMessage?.id ?? null,
-        text: this.messageForm.get("messageControl")?.value.text ?? "",
-        fileUrls: this.messageForm.get("messageControl")?.value.filesUrl ?? [],
-        chatType: "project",
-        chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
-      });
-    }
-
-    this.messageForm.get("messageControl")?.setValue(this.messageControlBaseValue);
-  }
-
-  onInputResize(): void {
-    if (this.viewport && this.viewport.measureScrollOffset("bottom") < 50) this.scrollToBottom();
   }
 
   onDeleteMessage(messageId: number): void {
-    const deletedMessage = this.messages.find(message => message.id === messageId);
-
-    this.modalService
-      .confirmDelete("Вы уверены что хотите удалить сообщение?", `“${deletedMessage?.text}”`)
-      .pipe(filter(Boolean))
-      .subscribe(() => {
-        this.chatService.deleteMessage({
-          chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
-          chatType: "project",
-          messageId,
-        });
-      });
-  }
-
-  onEditMessage(messageId: number): void {
-    this.replyMessage = undefined;
-    this.editingMessage = this.messages.find(message => message.id === messageId);
-
-    this.focusOnInput();
-  }
-
-  onReplyMessage(messageId: number): void {
-    this.editingMessage = undefined;
-    this.replyMessage = this.messages.find(message => message.id === messageId);
-
-    this.focusOnInput();
-  }
-
-  onCancelInput(): void {
-    this.replyMessage = undefined;
-    this.editingMessage = undefined;
+    this.chatService.deleteMessage({
+      chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",
+      chatType: "project",
+      messageId,
+    });
   }
 }
