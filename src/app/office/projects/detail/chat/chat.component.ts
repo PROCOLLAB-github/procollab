@@ -2,26 +2,16 @@
 
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ChatFile, ChatMessage } from "@models/chat-message.model";
-import {
-  exhaustMap,
-  filter,
-  fromEvent,
-  map,
-  noop,
-  Observable,
-  skip,
-  Subscription,
-  tap,
-} from "rxjs";
+import { filter, map, noop, Observable, Subscription, tap } from "rxjs";
 import { Project } from "@models/project.model";
 import { NavService } from "@services/nav.service";
-import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "@auth/services";
 import { ModalService } from "@ui/models/modal.service";
 import { ChatService } from "@services/chat.service";
 import { LoadChatMessages } from "@models/chat.model";
 import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
+import { ChatWindowComponent } from "@office/shared/chat-window/chat-window.component";
 
 @Component({
   selector: "app-chat",
@@ -71,27 +61,27 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    if (this.viewport) {
-      const viewPortScroll$ = fromEvent(this.viewport?.elementRef.nativeElement, "scroll")
-        .pipe(
-          skip(1), // need skip first  scroll event because it's happens programmatically in ngOnInit hook
-          filter(
-            // if we have messages greater or equal than we can have in total we need to skip event
-            () =>
-              this.messages.length < this.messagesTotalCount ||
-              // because messagesTotalCount pulls from server it's 0 in start of program, in that case we also need to make fetch
-              this.messagesTotalCount === 0
-          ),
-          filter(() => {
-            const offsetTop = this.viewport?.measureScrollOffset("top"); // get amount of pixels that can be scrolled to the top of messages container
-            return offsetTop ? offsetTop <= 200 : false;
-          }),
-          exhaustMap(() => this.fetchMessages())
-        )
-        .subscribe(noop);
-
-      viewPortScroll$ && this.subscriptions$.push(viewPortScroll$);
-    }
+    // if (this.viewport) {
+    //   const viewPortScroll$ = fromEvent(this.viewport?.elementRef.nativeElement, "scroll")
+    //     .pipe(
+    //       skip(1), // need skip first  scroll event because it's happens programmatically in ngOnInit hook
+    //       filter(
+    //         // if we have messages greater or equal than we can have in total we need to skip event
+    //         () =>
+    //           this.messages.length < this.messagesTotalCount ||
+    //           // because messagesTotalCount pulls from server it's 0 in start of program, in that case we also need to make fetch
+    //           this.messagesTotalCount === 0
+    //       ),
+    //       filter(() => {
+    //         const offsetTop = this.viewport?.measureScrollOffset("top"); // get amount of pixels that can be scrolled to the top of messages container
+    //         return offsetTop ? offsetTop <= 200 : false;
+    //       }),
+    //       exhaustMap(() => this.fetchMessages())
+    //     )
+    //     .subscribe(noop);
+    //
+    //   viewPortScroll$ && this.subscriptions$.push(viewPortScroll$);
+    // }
   }
 
   ngOnDestroy(): void {
@@ -134,13 +124,6 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
   currentUserId?: number;
 
   /**
-   * The element in template that hold all messages
-   * it from angular cdk virtual scrolling
-   * need to not overpopulate browser engine by big amount of messages
-   */
-  @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
-
-  /**
    * Input message component
    * Write edit reply to messages etc
    */
@@ -159,7 +142,7 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   membersOnlineCount = 3;
 
-  typingPersons: Project["collaborators"] = [];
+  typingPersons: ChatWindowComponent["typingPersons"] = [];
 
   private initTypingEvent(): void {
     const typingEvent$ = this.chatService
@@ -177,7 +160,11 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
           !this.typingPersons.map(p => p.userId).includes(person.userId) &&
           person.userId !== this.currentUserId
         )
-          this.typingPersons.push(person);
+          this.typingPersons.push({
+            firstName: person.firstName,
+            lastName: person.lastName,
+            userId: person.userId,
+          });
 
         setTimeout(() => {
           const personIdx = this.typingPersons.findIndex(p => p.userId === person.userId);

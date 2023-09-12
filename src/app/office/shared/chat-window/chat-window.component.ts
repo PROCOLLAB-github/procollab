@@ -16,7 +16,6 @@ import { MessageInputComponent } from "@office/shared/message-input/message-inpu
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { filter, noop, Subscription, tap, throttleTime } from "rxjs";
 import { ModalService } from "@ui/models/modal.service";
-import { Project } from "@models/project.model";
 import { AuthService } from "@auth/services";
 import { User } from "@auth/models/user.model";
 
@@ -61,7 +60,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  typingPersons: Project["collaborators"] = [];
+  typingPersons: { firstName: string; lastName: string; userId: number }[] = [];
 
   @Output() submit = new EventEmitter<any>();
   @Output() edit = new EventEmitter<any>();

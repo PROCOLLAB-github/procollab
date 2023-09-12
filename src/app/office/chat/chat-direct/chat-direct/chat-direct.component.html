@@ -5,5 +5,12 @@
     <app-avatar class="page__avatar" [url]="chat.imageAddress" [size]="40"></app-avatar>
     <div class="page__name text-heading-4">{{ chat.name }}</div>
   </header>
-  <app-chat-window class="page__chat"></app-chat-window>
+  <app-chat-window
+    class="page__chat"
+    [messages]="messages"
+    (submit)="onSubmitMessage($event)"
+    (edit)="onEditMessage($event)"
+    (delete)="onDeleteMessage($event)"
+    (type)="onType()"
+  ></app-chat-window>
 </div>
