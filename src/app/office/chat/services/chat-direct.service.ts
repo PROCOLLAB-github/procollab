@@ -31,8 +31,4 @@ export class ChatDirectService {
       .get<LoadChatMessages>(`/chats/directs/${chatId}/messages/`, queries)
       .pipe(map(messages => plainToInstance(LoadChatMessages, messages)));
   }
-
-  sendMessage(chatId: string, messaage: any): Observable<any> {
-    return this.apiService.post(`/chats/directs/${chatId}/messages`, messaage);
-  }
 }
