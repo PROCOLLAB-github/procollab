@@ -1,6 +1,7 @@
 /** @format */
 
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -14,7 +15,7 @@ import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ChatMessage } from "@models/chat-message.model";
 import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { filter, noop, Subscription, tap, throttleTime } from "rxjs";
+import { filter, fromEvent, noop, skip, Subscription, tap, throttleTime } from "rxjs";
 import { ModalService } from "@ui/models/modal.service";
 import { AuthService } from "@auth/services";
 import { User } from "@auth/models/user.model";
@@ -24,7 +25,7 @@ import { User } from "@auth/models/user.model";
   templateUrl: "./chat-window.component.html",
   styleUrls: ["./chat-window.component.scss"],
 })
-export class ChatWindowComponent implements OnInit, OnDestroy {
+export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly fb: FormBuilder,
     private readonly modalService: ModalService,
@@ -66,6 +67,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<number>();
   @Output() type = new EventEmitter<void>();
+  @Output() fetch = new EventEmitter<void>();
 
   ngOnInit(): void {
     const profile$ = this.authService.profile.subscribe(p => {
@@ -74,6 +76,25 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     this.subscriptions$.push(profile$);
 
     this.initTypingSend(); // event for send info to websocket, that current user is typing
+  }
+
+  ngAfterViewInit(): void {
+    if (this.viewport) {
+      const viewPortScroll$ = fromEvent(this.viewport?.elementRef.nativeElement, "scroll")
+        .pipe(
+          skip(1), // need skip first  scroll event because it's happens programmatically in ngOnInit hook
+
+          filter(() => {
+            const offsetTop = this.viewport?.measureScrollOffset("top"); // get amount of pixels that can be scrolled to the top of messages container
+            return offsetTop ? offsetTop <= 200 : false;
+          })
+        )
+        .subscribe(() => {
+          this.fetch.emit();
+        });
+
+      viewPortScroll$ && this.subscriptions$.push(viewPortScroll$);
+    }
   }
 
   ngOnDestroy(): void {

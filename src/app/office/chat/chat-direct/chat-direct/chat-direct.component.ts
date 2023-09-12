@@ -89,7 +89,6 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
   private initMessageEvent(): void {
     const messageEvent$ = this.chatService.onMessage().subscribe(result => {
       this.messages = [...this.messages, result.message];
-      console.log(result);
     });
 
     messageEvent$ && this.subscriptions$.push(messageEvent$);
@@ -145,6 +144,21 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     });
 
     deleteEvent$ && this.subscriptions$.push(deleteEvent$);
+  }
+
+  fetching = false;
+  onFetchMessages(): void {
+    if (
+      (this.messages.length < this.messagesTotalCount ||
+        // because messagesTotalCount pulls from server it's 0 in start of program, in that case we also need to make fetch
+        this.messagesTotalCount === 0) &&
+      !this.fetching
+    ) {
+      this.fetching = true;
+      this.fetchMessages().subscribe(() => {
+        this.fetching = false;
+      });
+    }
   }
 
   onSubmitMessage(message: any): void {

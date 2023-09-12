@@ -1,6 +1,6 @@
 /** @format */
 
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ChatFile, ChatMessage } from "@models/chat-message.model";
 import { filter, map, noop, Observable, Subscription, tap } from "rxjs";
 import { Project } from "@models/project.model";
@@ -18,7 +18,7 @@ import { ChatWindowComponent } from "@office/shared/chat-window/chat-window.comp
   templateUrl: "./chat.component.html",
   styleUrls: ["./chat.component.scss"],
 })
-export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ProjectChatComponent implements OnInit, OnDestroy {
   constructor(
     private readonly navService: NavService,
     private readonly route: ActivatedRoute,
@@ -58,30 +58,6 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(files => {
         this.chatFiles = files;
       });
-  }
-
-  ngAfterViewInit(): void {
-    // if (this.viewport) {
-    //   const viewPortScroll$ = fromEvent(this.viewport?.elementRef.nativeElement, "scroll")
-    //     .pipe(
-    //       skip(1), // need skip first  scroll event because it's happens programmatically in ngOnInit hook
-    //       filter(
-    //         // if we have messages greater or equal than we can have in total we need to skip event
-    //         () =>
-    //           this.messages.length < this.messagesTotalCount ||
-    //           // because messagesTotalCount pulls from server it's 0 in start of program, in that case we also need to make fetch
-    //           this.messagesTotalCount === 0
-    //       ),
-    //       filter(() => {
-    //         const offsetTop = this.viewport?.measureScrollOffset("top"); // get amount of pixels that can be scrolled to the top of messages container
-    //         return offsetTop ? offsetTop <= 200 : false;
-    //       }),
-    //       exhaustMap(() => this.fetchMessages())
-    //     )
-    //     .subscribe(noop);
-    //
-    //   viewPortScroll$ && this.subscriptions$.push(viewPortScroll$);
-    // }
   }
 
   ngOnDestroy(): void {
@@ -223,6 +199,21 @@ export class ProjectChatComponent implements OnInit, AfterViewInit, OnDestroy {
           this.messagesTotalCount = messages.count;
         })
       );
+  }
+
+  fetching = false;
+  onFetchMessages(): void {
+    if (
+      (this.messages.length < this.messagesTotalCount ||
+        // because messagesTotalCount pulls from server it's 0 in start of program, in that case we also need to make fetch
+        this.messagesTotalCount === 0) &&
+      !this.fetching
+    ) {
+      this.fetching = true;
+      this.fetchMessages().subscribe(() => {
+        this.fetching = false;
+      });
+    }
   }
 
   onSubmitMessage(message: any): void {
