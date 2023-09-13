@@ -1,16 +1,36 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { ChatWindowComponent } from './chat-window.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('ChatWindowComponent', () => {
+import { ChatWindowComponent } from "./chat-window.component";
+import { ReactiveFormsModule } from "@angular/forms";
+import { of } from "rxjs";
+import { AuthService } from "@auth/services";
+import { RouterTestingModule } from "@angular/router/testing";
+import { OfficeModule } from "@office/office.module";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { NgxMaskModule } from "ngx-mask";
+
+describe("ChatWindowComponent", () => {
   let component: ChatWindowComponent;
   let fixture: ComponentFixture<ChatWindowComponent>;
 
   beforeEach(async () => {
+    const authSpy = {
+      profile: of({}),
+    };
+
     await TestBed.configureTestingModule({
-      declarations: [ ChatWindowComponent ]
-    })
-    .compileComponents();
+      declarations: [ChatWindowComponent],
+      imports: [
+        ReactiveFormsModule,
+        RouterTestingModule,
+        HttpClientTestingModule,
+        NgxMaskModule.forRoot(),
+        OfficeModule,
+      ],
+      providers: [{ provide: AuthService, useValue: authSpy }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +39,7 @@ describe('ChatWindowComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

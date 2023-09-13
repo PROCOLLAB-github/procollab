@@ -1,16 +1,21 @@
-import { TestBed } from '@angular/core/testing';
+/** @format */
 
-import { ChatDirectResolver } from './chat-direct.resolver';
+import { TestBed } from "@angular/core/testing";
 
-describe('ChatDirectResolver', () => {
+import { ChatDirectResolver } from "./chat-direct.resolver";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+
+describe("ChatDirectResolver", () => {
   let resolver: ChatDirectResolver;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+    });
     resolver = TestBed.inject(ChatDirectResolver);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(resolver).toBeTruthy();
   });
 });

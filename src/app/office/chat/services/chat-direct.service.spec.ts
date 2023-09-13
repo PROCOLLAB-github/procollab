@@ -1,16 +1,21 @@
-import { TestBed } from '@angular/core/testing';
+/** @format */
 
-import { ChatDirectService } from './chat-direct.service';
+import { TestBed } from "@angular/core/testing";
 
-describe('ChatDirectService', () => {
+import { ChatDirectService } from "./chat-direct.service";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+
+describe("ChatDirectService", () => {
   let service: ChatDirectService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+    });
     service = TestBed.inject(ChatDirectService);
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(service).toBeTruthy();
   });
 });

@@ -1,16 +1,27 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { ChatDirectComponent } from './chat-direct.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('ChatDirectComponent', () => {
+import { ChatDirectComponent } from "./chat-direct.component";
+import { RouterTestingModule } from "@angular/router/testing";
+import { of } from "rxjs";
+import { AuthService } from "@auth/services";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
+
+describe("ChatDirectComponent", () => {
   let component: ChatDirectComponent;
   let fixture: ComponentFixture<ChatDirectComponent>;
 
   beforeEach(async () => {
+    const authSpy = {
+      profile: of({}),
+    };
+
     await TestBed.configureTestingModule({
-      declarations: [ ChatDirectComponent ]
-    })
-    .compileComponents();
+      declarations: [ChatDirectComponent],
+      imports: [RouterTestingModule, HttpClientTestingModule],
+      providers: [{ provide: AuthService, useValue: authSpy }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +30,7 @@ describe('ChatDirectComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
