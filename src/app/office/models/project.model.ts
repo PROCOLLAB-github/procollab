@@ -13,6 +13,7 @@ export class Project {
   imageAddress!: string;
   numberOfCollaborators!: number;
   viewsCount!: number;
+  cover!: null | string;
   collaborators!: {
     userId: number;
     firstName: string;
@@ -39,6 +40,7 @@ export class Project {
       industry: 0,
       viewsCount: 0,
       links: [],
+      cover: null,
       presentationAddress: "string",
       imageAddress: "string",
       numberOfCollaborators: 10,
