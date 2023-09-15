@@ -4,7 +4,11 @@
   <section class="project__main">
     <div class="info project__section project__info">
       <div class="info__cover">
-        <img class="info__cover" src="/assets/images/office/profile/detail/cover.png" alt="cover" />
+        <img
+          class="info__cover"
+          [src]="project.cover ? project.cover : '/assets/images/office/profile/detail/cover.png'"
+          alt="cover"
+        />
         <app-avatar
           class="info__avatar"
           [url]="project.imageAddress"
@@ -57,17 +61,13 @@
           </div>
         </div>
         <div *ngIf="project.description" class="text-body-14 about__text">
-          {{
-            readFullDescription
-              ? project.description
-              : project.description.split(" ").slice(0, 50).join(" ")
-          }}
+          <p #descEl>{{ project.description }}</p>
           <div
-            *ngIf="project.description.split(' ').length > 50"
+            *ngIf="descriptionExpandable"
             class="read-more"
-            (click)="readFullDescription = !readFullDescription"
+            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
           >
-            {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+            {{ readFullDescription ? 'Скрыть' : 'Читать полностью' }}
           </div>
         </div>
       </div>
@@ -93,12 +93,23 @@
       <div class="team project__section project__team">
         <h3 class="text-bold-body-16 team__title">Команда</h3>
         <ul *ngIf="project.collaborators">
+          <ng-container *ngFor="let member of project.collaborators.slice(0, 3)">
+            <ng-container 
+              *ngTemplateOutlet="membersTemp; context: { $implicit: member }"
+            ></ng-container>
+          </ng-container>
+        </ul>
+        <div class="team__remaining" [class.team__remaining--show]="readAllMembers">
+          <ul *ngIf="project.collaborators">
+            <ng-container *ngFor="let member of project.collaborators.slice(3)">
+              <ng-container 
+                *ngTemplateOutlet="membersTemp; context: { $implicit: member }"
+              ></ng-container>
+            </ng-container>
+          </ul>
+        </div>
+        <ng-template #membersTemp let-member>
           <a
-            *ngFor="
-              let member of readAllMembers
-                ? project.collaborators
-                : project.collaborators.slice(0, 3)
-            "
             class="team__item"
             [routerLink]="['/office/profile', member.userId]"
           >
@@ -119,7 +130,7 @@
               ></i>
             </li>
           </a>
-        </ul>
+        </ng-template>
         <div
           *ngIf="project.collaborators.length > 3"
           class="read-more"
@@ -129,20 +140,35 @@
         </div>
       </div>
       <div
-        *ngIf="vacancies$ | async as vacancies"
+        *ngIf="(vacancies$ | async)?.length as vacanciesLength"
         class="vacancies project__section project__vacancy"
       >
         <h3 class="text-bold-body-16 team__title">Вакансии</h3>
-        <ul *ngIf="authService.profile | async as profile" class="vacancies__list">
-          <li
-            *ngFor="let vacancy of readAllVacancies ? vacancies : vacancies.slice(0, 3)"
-            class="vacancy"
-          >
+        <ng-container *ngIf="vacancies$ | async as vacancies">
+          <ul class="vacancies__list" *ngIf="vacancies">
+            <ng-container *ngFor="let vacancy of vacancies.slice(0, 3)">
+              <ng-container 
+                *ngTemplateOutlet="vacanciesTemp; context: { $implicit: vacancy }"
+              ></ng-container>
+            </ng-container>
+          </ul>
+          <div class="vacancies__remaining" [class.vacancies__remaining--show]="readAllVacancies">
+            <ul class="vacancies__list" *ngIf="vacancies">
+              <ng-container *ngFor="let vacancy of vacancies.slice(3)">
+                <ng-container 
+                  *ngTemplateOutlet="vacanciesTemp; context: { $implicit: vacancy }"
+                ></ng-container>
+              </ng-container>
+            </ul>
+          </div>
+        </ng-container>
+        <ng-template #vacanciesTemp let-vacancy>
+          <li class="vacancy">
             <div class="vacancy__info">
               <a
-                *ngIf="profile.id !== project.leader"
                 [routerLink]="['/office/vacancy', vacancy.id]"
                 class="text-bold-body-14 vacancy__title"
+                [class.vacancy__title--disabled]="profileId === project.leader"
               >
                 {{ vacancy.role }}
               </a>
@@ -151,13 +177,13 @@
               {{ vacancy.requiredSkills.join(" • ") }}
             </p>
           </li>
-        </ul>
+        </ng-template>
         <div
-          *ngIf="vacancies.length > 3"
+          *ngIf="vacanciesLength > 3"
           class="read-more"
-          (click)="readAllAchievements = !readAllAchievements"
+          (click)="readAllVacancies = !readAllVacancies"
         >
-          {{ readAllAchievements ? "Скрыть" : "Читать полностью" }}
+          {{ readAllVacancies ? "Скрыть" : "Читать полностью" }}
         </div>
       </div>
       <div
@@ -165,19 +191,31 @@
         class="achievements project__section project__achievements"
       >
         <h3 class="text-bold-body-16 achievements__title">Достижения</h3>
-        <ul class="achievements__list">
-          <li
-            *ngFor="
-              let achievement of readAllAchievements
-                ? project.achievements
-                : project.achievements.slice(0, 3)
-            "
-            class="text-bold-body-14 achievements__item achievement"
+        <ng-container *ngIf="project.achievements as achievements">
+          <ul class="achievements__list" *ngIf="achievements">
+            <li 
+              class="text-bold-body-14 achievements__item achievement"
+              *ngFor="let a of achievements.slice(0, 3)"
+            >
+              <p class="text-bold-body-14 achievement__place">{{ a.status }}</p>
+              <p class="text-body-12 achievement__title">{{ a.title }}</p>
+            </li>
+          </ul>
+          <div 
+            class="achievements__remaining" 
+            [class.achievements__remaining--show]="readAllAchievements"
           >
-            <p class="text-bold-body-14 achievement__place">{{ achievement.status }}</p>
-            <p class="text-body-12 achievement__title">{{ achievement.title }}</p>
-          </li>
-        </ul>
+            <ul class="achievements__list" *ngIf="achievements">
+              <li 
+                class="text-bold-body-14 achievements__item achievement"
+                *ngFor="let a of achievements.slice(3)"
+              >
+                <p class="text-bold-body-14 achievement__place">{{ a.status }}</p>
+                <p class="text-body-12 achievement__title">{{ a.title }}</p>
+              </li>
+            </ul>
+          </div>
+        </ng-container>
         <div
           *ngIf="project.achievements.length > 3"
           class="read-more"

@@ -4,7 +4,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "
 import { ActivatedRoute, Router } from "@angular/router";
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "@services/industry.service";
-import { concatMap, distinctUntilChanged, map, Observable, Subscription, tap } from "rxjs";
+import { concatMap, distinctUntilChanged, filter, map, Observable, Subscription, tap } from "rxjs";
 import { ErrorMessage } from "@error/models/error-message";
 import { NavService } from "@services/nav.service";
 import { Project } from "@models/project.model";
@@ -17,6 +17,7 @@ import { ProjectService } from "@services/project.service";
 import { SelectComponent } from "@ui/components";
 import { ProgramService } from "@office/program/services/program.service";
 import { ProgramTag } from "@office/program/models/program.model";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   selector: "app-edit",
@@ -48,6 +49,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       presentationAddress: ["", [Validators.required]],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
+      draft: [null],
     });
 
     this.vacancyForm = this.fb.group({
@@ -79,12 +81,24 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     controls.filter(Boolean).forEach(control => {
       this.subscriptions.push(
-        control?.valueChanges.pipe(distinctUntilChanged()).subscribe(value => {
-          if (value === "") {
-            control?.removeValidators([Validators.required]);
+        control?.valueChanges
+          .pipe(
+            distinctUntilChanged(),
+            tap(() => {
+              if (control === this.inviteForm.get("link") && this.inviteNotExistingError) {
+                this.inviteNotExistingError = null;
+              }
+            }),
+            filter(value => value === "")
+          )
+          .subscribe(() => {
+            if (control === this.inviteForm.get("link")) {
+              control?.clearValidators();
+            } else {
+              control?.removeValidators([Validators.required]);
+            }
             control?.updateValueAndValidity();
-          }
-        })
+          })
       );
     });
   }
@@ -191,17 +205,22 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.vacancyForm.get("requiredSkills") as FormArray;
   }
 
+  vacancySubmitInitiated = false;
   vacancyIsSubmitting = false;
 
   submitVacancy(): void {
-    if (!this.validationService.getFormValidation(this.vacancyForm)) {
-      const controls = [this.vacancyForm.get("role"), this.vacancyForm.get("requiredSkills")];
+    this.vacancySubmitInitiated = true;
 
+    const controls = [this.vacancyForm.get("role"), this.vacancyForm.get("requiredSkills")];
+
+    controls.filter(Boolean).forEach(control => {
+      control?.addValidators([Validators.required]);
+      control?.updateValueAndValidity({ emitEvent: false });
+    });
+
+    if (!this.validationService.getFormValidation(this.vacancyForm)) {
       controls.filter(Boolean).forEach(control => {
         console.debug("Submit vacancy error: ", control);
-
-        control?.addValidators([Validators.required]);
-        control?.updateValueAndValidity({ emitEvent: false });
       });
 
       return;
@@ -238,19 +257,32 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   inviteForm: FormGroup;
+
+  inviteSubmitInitiated = false;
   inviteFormIsSubmitting = false;
+
+  inviteNotExistingError: Error | null = null;
 
   invites: Invite[] = [];
 
   submitInvite(): void {
-    if (!this.validationService.getFormValidation(this.inviteForm)) {
-      const controls = [this.inviteForm.get("role"), this.inviteForm.get("link")];
+    this.inviteSubmitInitiated = true;
 
+    const controls = [this.inviteForm.get("role"), this.inviteForm.get("link")];
+
+    controls.filter(Boolean).forEach(control => {
+      if (control === this.inviteForm.get("link")) {
+        control?.addValidators([
+          Validators.pattern(/^http(s)?:\/\/.+(:[0-9]*)?\/office\/profile\/\d+$/),
+        ]);
+      }
+      control?.addValidators([Validators.required]);
+      control?.updateValueAndValidity({ emitEvent: false });
+    });
+
+    if (!this.validationService.getFormValidation(this.inviteForm)) {
       controls.filter(Boolean).forEach(control => {
         console.debug("Submit invite error: ", control);
-
-        control?.addValidators([Validators.required]);
-        control?.updateValueAndValidity({ emitEvent: false });
       });
 
       return;
@@ -275,7 +307,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
           this.invites.push(invite);
         },
-        error: () => {
+        error: (error: unknown) => {
+          if (error instanceof HttpErrorResponse) {
+            if (error.status === 400) {
+              this.inviteNotExistingError = error;
+            }
+          }
           this.inviteFormIsSubmitting = false;
         },
       });
@@ -289,7 +326,21 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   projectForm: FormGroup;
-  projectFormIsSubmitting = false;
+
+  projSubmitInitiated = false;
+
+  projFormIsSubmittingAsPublished = false;
+  projFormIsSubmittingAsDraft = false;
+
+  setIsSubmittingAsPublished(status: boolean): void {
+    this.projFormIsSubmittingAsPublished = status;
+  }
+
+  setIsSubmittingAsDraft(status: boolean): void {
+    this.projFormIsSubmittingAsDraft = status;
+  }
+
+  setProjFormIsSubmitting!: (status: boolean) => void;
 
   get achievements(): FormArray {
     return this.projectForm.get("achievements") as FormArray;
@@ -306,27 +357,65 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   removeAchievement(index: number): void {
+    this.achievements.at(index).markAsUntouched();
     this.achievements.removeAt(index);
   }
 
-  saveProject(): void {
+  clearAllValidationErrors(): void {
+    Object.keys(this.projectForm.controls).forEach(ctrl => {
+      this.projectForm.get(ctrl)?.setErrors(null);
+    });
+    this.clearAllAchievementsErrors();
+  }
+
+  clearAllAchievementsErrors(): void {
+    this.achievements.controls.forEach(achievementForm => {
+      Object.keys(achievementForm).forEach(ctrl => {
+        this.projectForm.get(ctrl)?.setErrors(null);
+      });
+    });
+  }
+
+  saveProjectAsPublished(): void {
+    this.projSubmitInitiated = true;
+    this.projectForm.get("draft")?.patchValue(false);
+    this.setProjFormIsSubmitting = this.setIsSubmittingAsPublished;
+    this.submitProjectForm();
+  }
+
+  saveProjectAsDraft(): void {
+    this.clearAllValidationErrors();
+    this.projectForm.get("draft")?.patchValue(true);
+    this.setProjFormIsSubmitting = this.setIsSubmittingAsDraft;
+    this.submitProjectForm();
+  }
+
+  submitProjectForm(): void {
+    this.achievements.controls.forEach(achievementForm => {
+      achievementForm.markAllAsTouched();
+    });
+
     if (!this.validationService.getFormValidation(this.projectForm)) {
       return;
     }
 
-    this.projectFormIsSubmitting = true;
+    if (!this.projectForm.get("industryId")?.value) {
+      delete this.projectForm.value.industryId;
+    }
+
+    this.setProjFormIsSubmitting(true);
 
     this.projectService
       .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), this.projectForm.value)
       .subscribe({
         next: () => {
-          this.projectFormIsSubmitting = false;
+          this.setProjFormIsSubmitting(false);
           this.router
             .navigateByUrl(`/office/projects/my`)
             .then(() => console.debug("Route changed from ProjectEditComponent"));
         },
         error: () => {
-          this.projectFormIsSubmitting = false;
+          this.setProjFormIsSubmitting(false);
         },
       });
   }
@@ -348,5 +437,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   removeLink(i: number): void {
     this.links.removeAt(i);
+  }
+
+  warningModalSeen = false;
+
+  closeWarningModal(): void {
+    this.warningModalSeen = true;
   }
 }

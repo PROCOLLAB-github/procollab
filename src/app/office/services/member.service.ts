@@ -13,12 +13,17 @@ import { HttpParams } from "@angular/common/http";
 export class MemberService {
   constructor(private readonly apiService: ApiService) {}
 
-  getMembers(skip: number, take: number): Observable<MembersResult> {
+  getMembers(
+    skip: number,
+    take: number,
+    otherParams?: Record<string, string | number | boolean>
+  ): Observable<MembersResult> {
+    let allParams = new HttpParams({ fromObject: { user_type: 1, limit: take, offset: skip } });
+    if (otherParams) {
+      allParams = allParams.appendAll(otherParams);
+    }
     return this.apiService
-      .get<MembersResult>(
-        "/auth/users/",
-        new HttpParams({ fromObject: { user_type: 1, limit: take, offset: skip } })
-      )
+      .get<MembersResult>("/auth/users/", allParams)
       .pipe(map(users => plainToInstance(MembersResult, users)));
   }
 

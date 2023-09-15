@@ -13,5 +13,8 @@
   <ng-container *ngIf="!loader">
     <ng-content></ng-content>
   </ng-container>
-  <app-loader *ngIf="loader"></app-loader>
+  <app-loader 
+    *ngIf="loader" 
+    [color]="color === 'grey' ? 'black' : 'white'"
+  ></app-loader>
 </button>
