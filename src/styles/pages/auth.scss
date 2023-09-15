@@ -101,9 +101,7 @@
     width: 100%;
     margin-top: 35px;
 
-    @include typography.bold-body-14;
-
-    &--typography {
+    &-typography {
       @include typography.bold-body-14;
 
       @include responsive.apply-desktop {

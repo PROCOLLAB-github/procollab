@@ -1,5 +1,8 @@
 /** @format */
 
+@use "src/styles/typography";
+@use "src/styles/responsive";
+
 .field {
   position: relative;
   width: 100%;
@@ -27,6 +30,12 @@
       border-color: var(--accent);
       box-shadow: 0 0 6px rgb(109 40 255 / 30%);
     }
+
+    @include typography.body-14;
+
+    @include responsive.apply-desktop {
+      @include typography.body-16;
+    }
   }
 
   &__options {
@@ -53,6 +62,12 @@
 
     &:hover {
       background-color: var(--light-gray);
+    }
+
+    @include typography.body-14;
+
+    @include responsive.apply-desktop {
+      @include typography.body-16;
     }
   }
 
