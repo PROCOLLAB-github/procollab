@@ -12,6 +12,7 @@ import { ProjectNewsService } from "@office/projects/detail/services/project-new
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { containerSm } from "@utils/responsive";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { expandElement } from "@utils/expand-element";
 
 @Component({
   selector: "app-detail",
@@ -33,6 +34,8 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   project$?: Observable<Project> = this.route.parent?.data.pipe(map(r => r["data"]));
+
+  profileId!: number;
 
   vacancies$: Observable<Vacancy[]> = this.route.data.pipe(map(r => r["data"]));
   subscriptions$: Subscription[] = [];
@@ -57,14 +60,22 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
         });
       });
     this.subscriptions$.push(news$);
+
+    this.authService.profile.pipe(take(1)).subscribe(profile => {
+      this.profileId = profile.id;
+    });
   }
 
   @ViewChild("newsEl") newsEl?: ElementRef;
   @ViewChild("contentEl") contentEl?: ElementRef;
+  @ViewChild("descEl") descEl?: ElementRef;
   ngAfterViewInit(): void {
     if (containerSm < window.innerWidth) {
       this.contentEl?.nativeElement.append(this.newsEl?.nativeElement);
     }
+
+    const descElement = this.descEl?.nativeElement;
+    this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
   }
 
   ngOnDestroy(): void {
@@ -84,6 +95,8 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   news: ProjectNews[] = [];
 
   readFullDescription = false;
+
+  descriptionExpandable!: boolean;
 
   newsForm: FormGroup;
 
@@ -126,4 +139,9 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     concatMap(project => forkJoin([of(project), this.authService.profile.pipe(take(1))])),
     map(([project, profile]) => project.collaborators.map(c => c.userId).includes(profile.id))
   );
+
+  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean) {
+    expandElement(elem, expandedClass, isExpanded);
+    this.readFullDescription = !isExpanded;
+  }
 }

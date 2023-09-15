@@ -3,6 +3,23 @@
 @use "src/styles/responsive";
 @use "src/styles/typography";
 
+@mixin expandable-list {
+  &__remaining {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+
+    &--show {
+      grid-template-rows: 1fr;
+    }
+
+    ul {
+      min-height: 0;
+    }
+  }
+}
+
 .project {
   padding-bottom: 100px;
 
@@ -203,6 +220,8 @@
       margin-bottom: 12px;
     }
   }
+
+  @include expandable-list;
 }
 
 .member {
@@ -259,14 +278,23 @@
     }
   }
 
+  /* stylelint-disable value-no-vendor-prefix */
   &__text {
-    overflow: hidden;
-    color: var(--black);
+    p {
+      display: -webkit-box;
+      overflow: hidden;
+      color: var(--black);
+      text-overflow: ellipsis;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+      transition: all 0.7s ease-in-out;
 
-    &--hide {
-      max-height: 66px;
+      &.expanded {
+        -webkit-line-clamp: unset;
+      }
     }
   }
+  /* stylelint-enable value-no-vendor-prefix */
 
   &__read-full {
     margin-top: 2px;
@@ -286,6 +314,8 @@
       margin-bottom: 12px;
     }
   }
+
+  @include expandable-list;
 }
 
 .vacancies {
@@ -299,6 +329,8 @@
       margin-bottom: 12px;
     }
   }
+
+  @include expandable-list;
 }
 
 .vacancy {
@@ -311,6 +343,12 @@
 
   &__title {
     text-decoration: underline;
+
+    &--disabled {
+      color: var(--black);
+      text-decoration: none;
+      pointer-events: none;
+    }
   }
 
   &__action {
@@ -359,6 +397,8 @@
   &:hover {
     color: var(--accent-dark);
   }
+
+  @include typography.body-14;
 }
 
 .links {
