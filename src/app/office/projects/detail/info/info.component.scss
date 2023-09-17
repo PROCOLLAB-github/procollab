@@ -7,7 +7,6 @@
   &__remaining {
     display: grid;
     grid-template-rows: 0fr;
-    margin-top: 12px;
     overflow: hidden;
     transition: all 0.5s ease-in-out;
 
@@ -17,6 +16,16 @@
 
     ul {
       min-height: 0;
+    }
+
+    li {
+      &:first-child {
+        margin-top: 12px;
+      }
+
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
     }
   }
 }
@@ -119,6 +128,10 @@
     margin-top: -$body-slide;
     border-radius: $body-slide;
 
+    app-button ::ng-deep .button--inline {
+      min-height: 38px;
+    }
+
     @include responsive.apply-desktop {
       display: flex;
       align-items: flex-end;
@@ -201,6 +214,10 @@
       margin-top: 0;
       margin-right: 10px;
     }
+
+    i {
+      margin-left: 10px;
+    }
   }
 
   &__edit {
@@ -214,7 +231,7 @@
     color: var(--black);
   }
 
-  &__item {
+  li {
     display: block;
 
     &:not(:last-child) {
@@ -243,7 +260,7 @@
 
   &__star {
     margin-left: auto;
-    color: var(--black);
+    color: var(--accent);
   }
 }
 
@@ -310,7 +327,7 @@
     color: var(--black);
   }
 
-  &__item {
+  li {
     &:not(:last-child) {
       margin-bottom: 12px;
     }

@@ -37,17 +37,34 @@
           </div>
         </div>
         <a class="info__presentation" [href]="project.presentationAddress" target="_blank">
-          <app-button color="grey"> Презентация проекта</app-button>
+          <app-button 
+            class="info__presentation-button"
+            color="grey" 
+            customTypographyClass="text-body-12"
+          >
+            Презентация проекта
+            <i
+              appIcon
+              icon="file_pdf"
+              appSquare="16"
+            ></i>
+          </app-button>
         </a>
         <app-button
           *ngIf="profile.userType !== 1 && !(isInProject | async)"
           color="grey"
+          customTypographyClass="text-body-12"
           (click)="openSupport = true"
         >
           Поддержать проект
         </app-button>
         <a class="info__edit" [routerLink]="['/office/projects', project.id, 'edit']">
-          <app-button *ngIf="profile.id === project.leader">Редактировать</app-button>
+          <app-button 
+            *ngIf="profile.id === project.leader"
+            customTypographyClass="text-body-12"
+          >
+            Редактировать
+          </app-button>
         </a>
       </div>
     </div>
@@ -109,11 +126,8 @@
           </ul>
         </div>
         <ng-template #membersTemp let-member>
-          <a
-            class="team__item"
-            [routerLink]="['/office/profile', member.userId]"
-          >
-            <li class="member">
+          <li>
+            <a class="member" [routerLink]="['/office/profile', member.userId]">
               <app-avatar class="member__avatar" [url]="member.avatar" [size]="40"></app-avatar>
               <div class="member__info">
                 <p class="text-bold-body-14 member__name">
@@ -128,8 +142,8 @@
                 icon="star"
                 appSquare="14"
               ></i>
-            </li>
-          </a>
+            </a>
+          </li>
         </ng-template>
         <div
           *ngIf="project.collaborators.length > 3"

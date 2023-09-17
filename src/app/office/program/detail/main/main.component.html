@@ -25,19 +25,26 @@
         </div>
         <div class="info__actions">
           <a
-            *ngIf="!program.isUserMember"
-            class="info__presentation"
-            [routerLink]="['/office/program', program.id, 'register']"
-          >
-            <app-button> Зарегистрироваться</app-button>
-          </a>
-          <a
             class="info__presentation"
             [href]="program.presentationAddress"
             download=""
             target="_blank"
           >
-            <app-button color="grey">Положение программы</app-button>
+            <app-button color="grey" customTypographyClass="text-body-12">
+              Положение программы
+              <i
+                appIcon
+                icon="file_pdf"
+                appSquare="16"
+              ></i>
+            </app-button>
+          </a>
+          <a
+            *ngIf="!program.isUserMember"
+            class="info__presentation"
+            [routerLink]="['/office/program', program.id, 'register']"
+          >
+            <app-button customTypographyClass="text-body-12">Зарегистрироваться</app-button>
           </a>
         </div>
       </div>

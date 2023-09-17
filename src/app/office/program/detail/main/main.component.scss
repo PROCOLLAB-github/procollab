@@ -209,6 +209,10 @@
     @include responsive.apply-desktop {
       display: flex;
     }
+
+    app-button ::ng-deep .button--inline {
+      min-height: 38px;
+    }
   }
 
   &__tag {
@@ -271,6 +275,10 @@
     @include responsive.apply-desktop {
       margin-top: 0;
       margin-right: 10px;
+    }
+
+    i {
+      margin-left: 10px;
     }
   }
 
