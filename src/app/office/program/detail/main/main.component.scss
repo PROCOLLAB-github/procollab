@@ -204,10 +204,14 @@
   }
 
   &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     margin-left: auto;
 
     @include responsive.apply-desktop {
-      display: flex;
+      flex-direction: row;
+      gap: 10px;
     }
 
     app-button ::ng-deep .button--inline {
@@ -270,11 +274,10 @@
   &__presentation {
     display: block;
     margin-top: 35px;
-    margin-left: auto;
 
     @include responsive.apply-desktop {
       margin-top: 0;
-      margin-right: 10px;
+      margin-left: auto;
     }
 
     i {
