@@ -115,11 +115,12 @@
   }
 
   &__button-icon {
-    display: none;
+    display: none !important;
+    margin-left: 10px;
     transform: rotate(90deg);
 
     @include responsive.apply-desktop {
-      display: block;
+      display: block !important;
     }
   }
 
