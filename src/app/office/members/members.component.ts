@@ -10,14 +10,31 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import {
+  concatMap,
+  distinctUntilChanged,
+  fromEvent,
+  map,
+  noop,
+  of,
+  skip,
+  Subscription,
+  take,
+  tap,
+  throttleTime,
+  debounceTime,
+  BehaviorSubject,
+  switchMap,
+  Observable,
+} from "rxjs";
 import { AuthService } from "@auth/services";
 import { MembersResult, User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
+import { capitalizeString } from "@utils/capitalize-string";
 
 @Component({
   selector: "app-members",
@@ -28,6 +45,7 @@ import { MemberService } from "@services/member.service";
 export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly authService: AuthService,
     private readonly navService: NavService,
     private readonly fb: FormBuilder,
@@ -42,17 +60,55 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.navService.setNavTitle("Участники");
 
-    this.route.data.pipe(map(r => r["data"])).subscribe((members: MembersResult) => {
-      this.membersTotalCount = members.count;
+    this.route.data
+      .pipe(
+        take(1),
+        map(r => r["data"])
+      )
+      .subscribe((members: MembersResult) => {
+        this.membersTotalCount = members.count;
 
-      this.members = members.results;
+        this.members = members.results;
+      });
+
+    this.searchFormChanges$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
+      this.router
+        .navigate([], {
+          queryParams: { search },
+          relativeTo: this.route,
+          queryParamsHandling: "merge",
+        })
+        .then(() => console.debug("QueryParams changed from MembersComponent"));
     });
+
+    this.querySearch$ = this.searchParam$
+      .pipe(
+        tap(search => {
+          this.searchParamSubject$.next(search);
+        }),
+        switchMap(search => {
+          let request: Observable<User[]>;
+          if (!search) {
+            request = this.onFetch(0, 20).pipe(take(1));
+          } else {
+            request = this.onFetch(0, 20, { fullname: search }).pipe(take(1));
+          }
+          request.subscribe(members => {
+            this.members = members;
+            this.membersPage = 1;
+
+            this.cdref.detectChanges();
+          });
+          return of({});
+        })
+      )
+      .subscribe(noop);
   }
 
   ngAfterViewInit(): void {
     const target = document.querySelector(".office__body");
     if (target)
-      fromEvent(target, "scroll")
+      this.scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
           concatMap(() => this.onScroll()),
           throttleTime(500)
@@ -61,7 +117,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    [this.members$, this.searchFormSearch$].forEach($ => $?.unsubscribe());
+    [this.searchFormChanges$, this.querySearch$, this.scrollEvents$].forEach($ => $?.unsubscribe());
   }
 
   containerSm = containerSm;
@@ -73,10 +129,27 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   membersTake = 20;
 
   members: User[] = [];
-  members$?: Subscription;
+
+  querySearch$?: Subscription;
+
+  searchParam$ = this.route.queryParams.pipe(
+    skip(1),
+    debounceTime(500),
+    map(q => {
+      if (q["search"]) {
+        return capitalizeString(q["search"] as string);
+      }
+      return q["search"];
+    }),
+    distinctUntilChanged()
+  );
+
+  searchParamSubject$ = new BehaviorSubject<string>("");
 
   searchForm: FormGroup;
-  searchFormSearch$?: Subscription;
+  searchFormChanges$?: Subscription;
+
+  scrollEvents$?: Subscription;
 
   onScroll() {
     if (this.membersTotalCount && this.members.length >= this.membersTotalCount) return of({});
@@ -90,24 +163,27 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
       window.innerHeight;
 
     if (diff > 0) {
-      return this.onFetch();
+      const search = { fullname: this.searchParamSubject$.value };
+      return this.onFetch(this.membersPage * this.membersTake, this.membersTake, search).pipe(
+        tap(membersChunk => {
+          this.membersPage++;
+          this.members = [...this.members, ...membersChunk];
+
+          this.cdref.detectChanges();
+        })
+      );
     }
 
     return of({});
   }
 
-  onFetch() {
-    return this.memberService
-      .getMembers(this.membersPage * this.membersTake, this.membersTake)
-      .pipe(
-        tap((members: MembersResult) => {
-          this.membersTotalCount = members.count;
-          this.members = [...this.members, ...members.results];
+  onFetch(skip: number, take: number, params?: Record<string, string | number | boolean>) {
+    return this.memberService.getMembers(skip, take, params).pipe(
+      map((members: MembersResult) => {
+        this.membersTotalCount = members.count;
 
-          this.membersPage++;
-
-          this.cdref.detectChanges();
-        })
-      );
+        return members.results;
+      })
+    );
   }
 }
