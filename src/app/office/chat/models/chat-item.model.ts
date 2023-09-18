@@ -12,12 +12,12 @@ export interface ChatListItem {
     reply: ChatListItem["lastMessage"];
     text: string;
   };
-  users: User[];
+  opponent: User;
 }
 
 export interface ChatItem {
   id: string;
   imageAddress: string;
   name: string;
-  users: User[];
+  opponent: User;
 }

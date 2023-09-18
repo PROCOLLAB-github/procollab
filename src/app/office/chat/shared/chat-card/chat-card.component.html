@@ -2,10 +2,10 @@
 
 <div class="card" [class.card--last]="isLast">
   <div class="card__row">
-    <app-avatar class="card__avatar" [url]="chat.users[0].avatar" [size]="60"></app-avatar>
+    <app-avatar class="card__avatar" [url]="chat.opponent.avatar" [size]="60"></app-avatar>
     <div class="card__body">
       <div class="card__name text-body-16">
-        {{ chat.users[0].firstName }} {{ chat.users[0].lastName }}
+        {{ chat.opponent.firstName }} {{ chat.opponent.lastName }}
       </div>
       <div *ngIf="chat.lastMessage && chat.lastMessage.text" class="card__last-message">
         <app-avatar

@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { filter, map, noop, Observable, Subscription, tap } from "rxjs";
+import { map, noop, Observable, Subscription, tap } from "rxjs";
 import { ChatItem } from "@office/chat/models/chat-item.model";
 import { ChatService } from "@services/chat.service";
 import { ChatMessage } from "@models/chat-message.model";
@@ -97,21 +97,17 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
   private initTypingEvent(): void {
     const typingEvent$ = this.chatService
       .onTyping()
-      .pipe(
-        map(() => {
-          return this.chat?.users.find(u => u.id !== this.currentUserId);
-        }),
-        filter(Boolean)
-      )
-      .subscribe(person => {
+
+      .subscribe(() => {
+        if (!this.chat?.opponent) return;
         this.typingPersons.push({
-          firstName: person.firstName,
-          lastName: person.lastName,
-          userId: person.id,
+          firstName: this.chat.opponent.firstName,
+          lastName: this.chat.opponent.lastName,
+          userId: this.chat.opponent.id,
         });
 
         setTimeout(() => {
-          const personIdx = this.typingPersons.findIndex(p => p.userId === person.id);
+          const personIdx = this.typingPersons.findIndex(p => p.userId === this.chat?.opponent.id);
 
           this.typingPersons.splice(personIdx, 1);
         }, 2000);
