@@ -5,6 +5,19 @@
   overflow: hidden;
   border-radius: 10px;
 
+  &__bar {
+    margin-bottom: 20px;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 15px;
+  }
+
   &__header {
     padding: 20px;
     background-color: var(--white);
