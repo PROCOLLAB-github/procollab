@@ -2,7 +2,7 @@
 
 <button
   [type]="type"
-  class="button text-bold-body-16"
+  [class]="'button text-bold-body-16' + ' ' + customTypographyClass"
   [ngClass]="{
     'button--red': color === 'red',
     'button--inline': appearance === 'inline',

@@ -7,12 +7,14 @@
   &__agreement {
     display: flex;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 25px;
     cursor: pointer;
 
     @include typography.body-12;
 
     @include responsive.apply-desktop {
+      margin-top: 20px;
+
       @include typography.body-14;
     }
 

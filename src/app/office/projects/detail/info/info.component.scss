@@ -7,7 +7,6 @@
   &__remaining {
     display: grid;
     grid-template-rows: 0fr;
-    margin-top: 12px;
     overflow: hidden;
     transition: all 0.5s ease-in-out;
 
@@ -17,6 +16,16 @@
 
     ul {
       min-height: 0;
+    }
+
+    li {
+      &:first-child {
+        margin-top: 12px;
+      }
+
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
     }
   }
 }
@@ -115,12 +124,20 @@
   &__body {
     position: relative;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     padding: 40px 24px 24px;
     margin-top: -$body-slide;
     border-radius: $body-slide;
 
+    app-button ::ng-deep .button--inline {
+      min-height: 38px;
+    }
+
     @include responsive.apply-desktop {
-      display: flex;
+      flex-direction: row;
+      gap: 10px;
       align-items: flex-end;
       padding-top: 10px;
       padding-left: 225px;
@@ -195,11 +212,14 @@
   &__presentation {
     display: block;
     margin-top: 35px;
-    margin-left: auto;
 
     @include responsive.apply-desktop {
       margin-top: 0;
-      margin-right: 10px;
+      margin-left: auto;
+    }
+
+    i {
+      margin-left: 10px;
     }
   }
 
@@ -214,7 +234,7 @@
     color: var(--black);
   }
 
-  &__item {
+  li {
     display: block;
 
     &:not(:last-child) {
@@ -243,7 +263,7 @@
 
   &__star {
     margin-left: auto;
-    color: var(--black);
+    color: var(--accent);
   }
 }
 
@@ -310,7 +330,7 @@
     color: var(--black);
   }
 
-  &__item {
+  li {
     &:not(:last-child) {
       margin-bottom: 12px;
     }

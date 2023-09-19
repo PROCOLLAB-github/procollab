@@ -2,10 +2,10 @@
 
 <div class="auth register">
   <div class="auth__greeting">
-    <h3 class="auth__title">
+    <h3 class="auth__title auth__title--register">
       <ng-container *ngIf="step === 'credentials'">
-        Привет! 👋 Добро пожаловать в Procollab - платформу, где можно найти стартап, сообщников,
-        инвесторов
+        Добро пожаловать на Procollab!&nbsp;👋<br>
+        С нами идеи становятся реальностью&nbsp;🚀
       </ng-container>
       <ng-container *ngIf="step === 'info'">
         PROCOLLAB - это не только платформа, но и сообщество самых заряженных школьников и студентов
@@ -13,10 +13,10 @@
     </h3>
     <p class="auth__info">
       <ng-container *ngIf="step === 'credentials'">
-        Заполни основные данные о себе, чтобы ты мог войти в аккаунт
+        Для регистрации введите данные
       </ng-container>
       <ng-container *ngIf="step === 'info'">
-        Заполни основные данные о себе, чтобы мы знали, как к тебе обращаться
+        Заполните основные данные о себе, чтобы мы знали, как к вам обращаться
       </ng-container>
     </p>
   </div>
@@ -45,7 +45,7 @@
           id="passowrd"
           type="password"
           formControlName="password"
-          placeholder="Придумай пароль"
+          placeholder="Придумайте пароль"
         ></app-input>
         <app-input
           class="register__repeated-password"
@@ -53,7 +53,7 @@
           id="repeatedPassword"
           type="password"
           formControlName="repeatedPassword"
-          placeholder="Повтори пароль"
+          placeholder="Повторите пароль"
         ></app-input>
         <div *ngIf="password | controlError: 'required'" class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
@@ -122,11 +122,11 @@
     <div class="register__agreement" *ngIf="step === 'credentials'">
       <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
       <span (click)="registerAgreement = !registerAgreement">
-        Я ознакомился с соглашением и даю
+        Я прочитал 
         <a href="/assets/downloads/auth/shared/Политика_обработки_перс_данных_2022.docx" download>
-          согласие
+          соглашение
         </a>
-        на обработку персональных данных
+        и даю согласие на&nbsp;обработку персональных&nbsp;данных
       </span>
     </div>
     <app-button
@@ -137,7 +137,14 @@
     >
       Создать аккаунт
     </app-button>
-    <app-button *ngIf="step === 'credentials'" type="submit" class="auth__button">Далее</app-button>
-    <p class="auth__toggle text-body-16">Есть аккаунт? <a routerLink="/auth/login">Войдите</a></p>
+    <app-button 
+      *ngIf="step === 'credentials'" 
+      type="submit" 
+      class="auth__button"
+      customTypographyClass="auth__button-typography"
+    >
+      Далее
+    </app-button>
+    <p class="auth__toggle">Есть аккаунт? <a routerLink="/auth/login">Войдите</a></p>
   </form>
 </div>

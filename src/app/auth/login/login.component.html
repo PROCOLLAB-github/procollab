@@ -3,7 +3,7 @@
 <form class="auth" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <div class="auth__wrapper">
     <h1 class="auth__title">Вход</h1>
-    <p class="text-body-16 login__reg">
+    <p class="login__reg">
       Нет аккаунта? <a routerLink="/auth/register">Зарегистрируйтесь</a>
     </p>
     <fieldset *ngIf="loginForm.get('email') as email" class="auth__field">
@@ -23,13 +23,13 @@
       </div>
     </fieldset>
     <fieldset *ngIf="loginForm.get('password') as password" class="auth__field">
-      <label for="password" class="field-label">Ваш пароль</label>
+      <label for="password" class="field-label">Пароль</label>
       <app-input
         [error]="password | controlError"
         id="password"
         type="password"
         formControlName="password"
-        placeholder="Пароль"
+        placeholder="Введите пароль"
       ></app-input>
       <div *ngIf="password | controlError: 'required'" class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
@@ -38,8 +38,13 @@
     <div *ngIf="errorWrongAuth" class="text-body-14 error">
       {{ errorMessage.AUTH_WRONG_AUTH }}
     </div>
-    <app-button [loader]="loginIsSubmitting" class="auth__button" type="submit">
-      <span>Войти</span>
+    <app-button 
+      [loader]="loginIsSubmitting" 
+      class="auth__button" 
+      customTypographyClass="auth__button-typography"
+      type="submit"
+    >
+      Войти
       <i
         class="auth__button-icon"
         appIcon
@@ -49,8 +54,8 @@
         appViewBox="0 0 18 9"
       ></i>
     </app-button>
-    <a routerLink="/auth/reset_password/send_email" class="login__forget text-body-14"
-      >Забыли пароль?</a
-    >
+    <a routerLink="/auth/reset_password/send_email" class="login__forget">
+      Забыли пароль?
+    </a>
   </div>
 </form>

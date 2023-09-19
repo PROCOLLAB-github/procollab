@@ -22,7 +22,7 @@
     margin-bottom: 20px;
 
     @include responsive.apply-desktop {
-      margin-bottom: 36px;
+      margin-bottom: 25px;
     }
   }
 
@@ -33,14 +33,19 @@
   }
 
   &__title {
+    margin-bottom: 6px;
     color: var(--black);
 
-    @include typography.heading-4;
+    &--register {
+      @include typography.heading-4;
+    }
+
+    @include typography.heading-2;
 
     @include responsive.apply-desktop {
-      margin-bottom: 6px;
-
-      @include typography.heading-2;
+      &--register {
+        @include typography.heading-2;
+      }
     }
   }
 
@@ -94,19 +99,54 @@
   &__button {
     display: block;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 35px;
+
+    &-typography {
+      @include typography.bold-body-14;
+
+      @include responsive.apply-desktop {
+        @include typography.bold-body-16;
+      }
+    }
+
+    @include responsive.apply-desktop {
+      margin-top: 30px;
+    }
   }
 
   &__button-icon {
+    display: none !important;
+    margin-left: 10px;
     transform: rotate(90deg);
+
+    @include responsive.apply-desktop {
+      display: block !important;
+    }
   }
 
   &__toggle {
-    margin-top: 20px;
+    @include typography.body-14;
+
+    margin-top: 12vh;
     text-align: center;
 
     @include responsive.apply-desktop {
+      @include typography.body-16;
+
+      margin-top: 20px;
       text-align: left;
+    }
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s;
+
+    &:hover {
+      text-decoration-color: var(--accent);
     }
   }
 }
