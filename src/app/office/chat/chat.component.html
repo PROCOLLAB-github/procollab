@@ -1,9 +1,29 @@
 <!-- @format -->
 
 <div class="page">
+  <div class="bar page__bar">
+    <nav class="bar__nav">
+      <app-back></app-back>
+      <ul class="bar__tabs">
+        <a
+          class="bar__link"
+          routerLink="/office/chats/directs"
+          routerLinkActive="bar__link--active"
+        >
+          <li class="text-body-14 bar__item">Личные чаты</li>
+        </a>
+        <a class="bar__link" routerLink="/office/chats/groups" routerLinkActive="bar__link--active">
+          <li class="text-body-14 bar__item">Чаты проектов</li>
+        </a>
+      </ul>
+    </nav>
+  </div>
   <div class="page__list">
-    <a *ngFor="let c of chats | async; last as last" [routerLink]="['/office/chats', c.id]">
-      <app-chat-card [chat]="c" [isLast]="last"></app-chat-card>
-    </a>
+    <app-chat-card
+      *ngFor="let c of chats | async; last as last"
+      [chat]="c"
+      [isLast]="last"
+      (click)="onGotoChat(c.id)"
+    ></app-chat-card>
   </div>
 </div>

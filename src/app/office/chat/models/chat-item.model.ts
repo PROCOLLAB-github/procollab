@@ -12,7 +12,8 @@ export interface ChatListItem {
     reply: ChatListItem["lastMessage"];
     text: string;
   };
-  opponent: User;
+  name: string;
+  imageAddress: string;
 }
 
 export interface ChatItem {

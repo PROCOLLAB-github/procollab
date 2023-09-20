@@ -1,4 +1,8 @@
 .page {
+  &__bar {
+    margin-bottom: 20px;
+  }
+
   &__list {
     overflow: hidden;
     border: 1px solid var(--grey-button);
