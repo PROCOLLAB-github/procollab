@@ -58,6 +58,13 @@ label.field-label {
 
 .error {
   display: block;
+  gap: 10px;
   margin-top: 6px;
   color: var(--red);
+
+  p {
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
 }

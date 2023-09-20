@@ -4,7 +4,7 @@
   <div class="auth__greeting">
     <h3 class="auth__title auth__title--register">
       <ng-container *ngIf="step === 'credentials'">
-        Добро пожаловать на Procollab!&nbsp;👋<br>
+        Добро пожаловать на Procollab!&nbsp;👋<br />
         С нами идеи становятся реальностью&nbsp;🚀
       </ng-container>
       <ng-container *ngIf="step === 'info'">
@@ -12,9 +12,7 @@
       </ng-container>
     </h3>
     <p class="auth__info">
-      <ng-container *ngIf="step === 'credentials'">
-        Для регистрации введите данные
-      </ng-container>
+      <ng-container *ngIf="step === 'credentials'"> Для регистрации введите данные </ng-container>
       <ng-container *ngIf="step === 'info'">
         Заполните основные данные о себе, чтобы мы знали, как к вам обращаться
       </ng-container>
@@ -116,13 +114,13 @@
         </div>
       </fieldset>
     </ng-container>
-    <div *ngIf="userExistError" class="text-body-14 error">
-      {{ errorMessage.AUTH_EMAIL_EXIST }}
+    <div *ngIf="serverErrors" class="text-body-14 error">
+      <p *ngFor="let e of serverErrors">{{ e }}</p>
     </div>
     <div class="register__agreement" *ngIf="step === 'credentials'">
       <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
       <span (click)="registerAgreement = !registerAgreement">
-        Я прочитал 
+        Я прочитал
         <a href="/assets/downloads/auth/shared/Политика_обработки_перс_данных_2022.docx" download>
           соглашение
         </a>
@@ -137,9 +135,9 @@
     >
       Создать аккаунт
     </app-button>
-    <app-button 
-      *ngIf="step === 'credentials'" 
-      type="submit" 
+    <app-button
+      *ngIf="step === 'credentials'"
+      type="submit"
       class="auth__button"
       customTypographyClass="auth__button-typography"
     >

@@ -52,7 +52,7 @@ export class RegisterComponent implements OnInit {
   registerAgreement = false;
   registerIsSubmitting = false;
 
-  userExistError = false;
+  serverErrors: string[] = [];
 
   step: "credentials" | "info" = "credentials";
 
@@ -105,7 +105,9 @@ export class RegisterComponent implements OnInit {
           error.status === 400 &&
           error.error.email.some((msg: string) => msg.includes("email"))
         ) {
-          this.userExistError = true;
+          // console.log(error);
+          this.serverErrors = Object.values(error.error).flat() as string[];
+          console.log(this.serverErrors);
         }
 
         this.registerIsSubmitting = false;
