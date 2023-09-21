@@ -1,0 +1,42 @@
+<!-- @format -->
+
+<div class="chat">
+  <cdk-virtual-scroll-viewport
+    class="chat__messages"
+    [itemSize]="50"
+    minBufferPx="400"
+    maxBufferPx="800"
+  >
+    <app-chat-message
+      class="chat__message"
+      [chatMessage]="message"
+      (edit)="onEditMessage($event)"
+      (reply)="onReplyMessage($event)"
+      (delete)="onDeleteMessage($event)"
+      *cdkVirtualFor="let message of messages"
+    ></app-chat-message>
+  </cdk-virtual-scroll-viewport>
+  <form class="chat__input" [formGroup]="messageForm">
+    <span *ngIf="typingPersons.length" class="chat__typing text-body-14">
+      <ng-container *ngFor="let person of typingPersons.slice(0, 3); last as last">
+        {{ person.firstName }} {{ person.lastName }}
+        <ng-container *ngIf="!last">, </ng-container>
+      </ng-container>
+      <ng-container *ngIf="typingPersons.length > 3">
+        и еще {{ typingPersons.length - 3 }}
+        {{ typingPersons.length - 3 | pluralize: ["человек", "человека", "человек"] }}
+      </ng-container>
+      {{ typingPersons.length | pluralize: ["печатает", "печатают", "печатают"] }}
+      ...
+    </span>
+    <app-message-input
+      [editingMessage]="editingMessage"
+      [replyMessage]="replyMessage"
+      (resize)="onInputResize()"
+      (cancel)="onCancelInput()"
+      (submit)="onSubmitMessage()"
+      placeholder="Введите сообщение"
+      formControlName="messageControl"
+    ></app-message-input>
+  </form>
+</div>

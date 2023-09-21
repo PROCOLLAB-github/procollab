@@ -2,6 +2,9 @@
 
 import { Component, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { map, Observable } from "rxjs";
+import { ChatListItem } from "@office/chat/models/chat-item.model";
 
 @Component({
   selector: "app-chat",
@@ -9,9 +12,26 @@ import { NavService } from "@services/nav.service";
   styleUrls: ["./chat.component.scss"],
 })
 export class ChatComponent implements OnInit {
-  constructor(private readonly navService: NavService) {}
+  constructor(
+    private readonly navService: NavService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
+  ) {}
+
+  chats: Observable<ChatListItem[]> = this.route.data.pipe(map(r => r["data"]));
 
   ngOnInit(): void {
     this.navService.setNavTitle("Чат");
+  }
+
+  onGotoChat(id: string | number) {
+    const redirectUrl =
+      typeof id === "string" && id.includes("_")
+        ? `/office/chats/${id}`
+        : `/office/projects/${id}/chat`;
+
+    this.router
+      .navigateByUrl(redirectUrl)
+      .then(() => console.debug("Route changed from ChatComponent"));
   }
 }

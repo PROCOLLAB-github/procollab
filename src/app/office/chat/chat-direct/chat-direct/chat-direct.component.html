@@ -1,0 +1,25 @@
+<!-- @format -->
+
+<div class="page">
+  <div class="bar page__bar">
+    <app-back></app-back>
+  </div>
+  <div class="page__main">
+    <header class="page__header" *ngIf="chat">
+      <a class="page__opponent" [routerLink]="['/office/profile', chat.opponent.id]">
+        <app-avatar class="page__avatar" [url]="chat.imageAddress" [size]="40"></app-avatar>
+        <div class="page__name text-heading-4">{{ chat.name }}</div>
+      </a>
+    </header>
+    <div class="page__chat">
+      <app-chat-window
+        [messages]="messages"
+        (submit)="onSubmitMessage($event)"
+        (edit)="onEditMessage($event)"
+        (delete)="onDeleteMessage($event)"
+        (type)="onType()"
+        (fetch)="onFetchMessages()"
+      ></app-chat-window>
+    </div>
+  </div>
+</div>

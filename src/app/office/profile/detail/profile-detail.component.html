@@ -34,7 +34,11 @@
           </p>
         </div>
         <ng-container *ngIf="authService.profile | async as profile">
-          <a *ngIf="profile.id !== user.id" class="profile__write" [href]="'mailto:' + user.email">
+          <a
+            *ngIf="profile.id !== user.id"
+            class="profile__write"
+            [routerLink]="['/office/chats', profile.id + '_' + user.id]"
+          >
             <app-button>
               Написать
               <i
@@ -57,7 +61,7 @@
       <a
         class="profile__write-mobile"
         *ngIf="profile.id !== user.id"
-        [href]="'mailto:' + user.email"
+        [routerLink]="['/office/chats', profile.id + '_' + user.id]"
       >
         <app-button>
           Написать

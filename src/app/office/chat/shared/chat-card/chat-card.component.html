@@ -1,0 +1,21 @@
+<!-- @format -->
+
+<div class="card" [class.card--last]="isLast">
+  <div class="card__row">
+    <app-avatar class="card__avatar" [url]="chat.imageAddress" [size]="60"></app-avatar>
+    <div class="card__body">
+      <div class="card__name text-body-16">
+        {{ chat.name }}
+      </div>
+      <div *ngIf="chat.lastMessage && chat.lastMessage.text" class="card__last-message">
+        <app-avatar
+          class="card__last-user"
+          [url]="chat.lastMessage.author.avatar"
+          [size]="25"
+        ></app-avatar>
+        <div class="card__last-text text-body-12">{{ chat.lastMessage.text }}</div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="chat.lastMessage && chat.lastMessage.text" class="card__time text-body-14">14:10</div>
+</div>

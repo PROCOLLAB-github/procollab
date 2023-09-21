@@ -24,50 +24,17 @@
           {{ project.collaborators.length }}
           {{ project.collaborators.length | pluralize: ["Участник", "Участника", "Участников"] }}
         </div>
-        <!--<div class="main__dot">•</div>
-        <div class="main__count-online">{{ membersOnlineCount }} online</div>-->
       </div>
     </header>
-    <div class="main__chat chat">
-      <cdk-virtual-scroll-viewport
-        class="chat__messages"
-        [itemSize]="50"
-        minBufferPx="400"
-        maxBufferPx="800"
-      >
-        <app-chat-message
-          class="chat__message"
-          [chatMessage]="message"
-          (edit)="onEditMessage($event)"
-          (reply)="onReplyMessage($event)"
-          (delete)="onDeleteMessage($event)"
-          *cdkVirtualFor="let message of messages"
-        ></app-chat-message>
-      </cdk-virtual-scroll-viewport>
-      <form class="chat__input" [formGroup]="messageForm">
-        <span *ngIf="typingPersons.length" class="chat__typing text-body-14">
-          <ng-container *ngFor="let person of typingPersons.slice(0, 3); last as last">
-            {{ person.firstName }} {{ person.lastName }}
-            <ng-container *ngIf="!last">, </ng-container>
-          </ng-container>
-          <ng-container *ngIf="typingPersons.length > 3">
-            и еще {{ typingPersons.length - 3 }}
-            {{ typingPersons.length - 3 | pluralize: ["человек", "человека", "человек"] }}
-          </ng-container>
-          {{ typingPersons.length | pluralize: ["печатает", "печатают", "печатают"] }}
-          ...
-        </span>
-        <app-message-input
-          [editingMessage]="editingMessage"
-          [replyMessage]="replyMessage"
-          (resize)="onInputResize()"
-          (cancel)="onCancelInput()"
-          (submit)="onSubmitMessage()"
-          placeholder="Введите сообщение"
-          formControlName="messageControl"
-        ></app-message-input>
-      </form>
-    </div>
+    <app-chat-window
+      class="main__chat"
+      [messages]="messages"
+      [typingPersons]="typingPersons"
+      (submit)="onSubmitMessage($event)"
+      (edit)="onEditMessage($event)"
+      (delete)="onDeleteMessage($event)"
+      (fetch)="onFetchMessages()"
+    ></app-chat-window>
   </div>
   <aside class="chat-page__aside">
     <div class="chat-members">

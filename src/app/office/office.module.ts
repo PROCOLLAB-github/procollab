@@ -7,7 +7,6 @@ import { OfficeComponent } from "./office.component";
 import { HeaderComponent } from "./shared/header/header.component";
 import { UiModule } from "@ui/ui.module";
 import { NavComponent } from "./shared/nav/nav.component";
-import { ChatComponent } from "./chat/chat.component";
 import { ProfileDetailComponent } from "./profile/detail/profile-detail.component";
 import { ProfileEditComponent } from "./profile/edit/edit.component";
 import { CoreModule } from "@core/core.module";
@@ -24,13 +23,14 @@ import { NgxMaskModule } from "ngx-mask";
 import { AutosizeModule } from "ngx-autosize";
 import { SidebarComponent } from "./shared/sidebar/sidebar.component";
 import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
+import { ChatWindowComponent } from "./shared/chat-window/chat-window.component";
+import { ScrollingModule } from "@angular/cdk/scrolling";
 
 @NgModule({
   declarations: [
     OfficeComponent,
     HeaderComponent,
     NavComponent,
-    ChatComponent,
     InviteManageCardComponent,
     ProfileDetailComponent,
     ProfileEditComponent,
@@ -41,6 +41,7 @@ import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
     MessageInputComponent,
     SidebarComponent,
     ImgCardComponent,
+    ChatWindowComponent,
   ],
   imports: [
     OfficeRoutingModule,
@@ -52,7 +53,8 @@ import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
     ReactiveFormsModule,
     NgxMaskModule,
     AutosizeModule,
+    ScrollingModule,
   ],
-  exports: [MessageInputComponent, ImgCardComponent, MemberCardComponent],
+  exports: [MessageInputComponent, ImgCardComponent, MemberCardComponent, ChatWindowComponent],
 })
 export class OfficeModule {}

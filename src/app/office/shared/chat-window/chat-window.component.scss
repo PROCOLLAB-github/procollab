@@ -1,0 +1,32 @@
+.chat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__messages {
+    flex-grow: 1;
+    max-width: 100%;
+    overflow-y: auto;
+    background-color: var(--white);
+  }
+
+  &__message {
+    display: block;
+    width: 100%;
+
+    &:last-child {
+      margin-bottom: 40px;
+    }
+  }
+
+  &__typing {
+    margin-bottom: 4px;
+    color: var(--dark-grey);
+  }
+
+  &__input {
+    padding: 0 18px 18px;
+    background-color: var(--white);
+  }
+}

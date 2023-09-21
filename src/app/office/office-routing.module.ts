@@ -3,7 +3,6 @@
 import { RouterModule, Routes } from "@angular/router";
 import { NgModule } from "@angular/core";
 import { OfficeComponent } from "./office.component";
-import { ChatComponent } from "./chat/chat.component";
 import { ProfileDetailComponent } from "./profile/detail/profile-detail.component";
 import { ProfileEditComponent } from "./profile/edit/edit.component";
 import { ProfileDetailResolver } from "./profile/detail/profile-detail.resolver";
@@ -44,6 +43,10 @@ const routes: Routes = [
         component: VacancySendComponent,
       },
       {
+        path: "chats",
+        loadChildren: () => import("./chat/chat.module").then(m => m.ChatModule),
+      },
+      {
         path: "members",
         component: MembersComponent,
         resolve: {
@@ -56,10 +59,6 @@ const routes: Routes = [
         resolve: {
           data: MentorsResolver,
         },
-      },
-      {
-        path: "chat",
-        component: ChatComponent,
       },
       {
         path: "profile/edit",

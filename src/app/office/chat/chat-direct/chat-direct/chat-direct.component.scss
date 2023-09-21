@@ -1,0 +1,37 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+
+  &__bar {
+    margin-bottom: 20px;
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 15px;
+  }
+
+  &__header {
+    padding: 20px;
+    background-color: var(--white);
+    border-bottom: 1px solid var(--grey-button);
+  }
+
+  &__opponent {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    color: var(--black);
+  }
+
+  &__chat {
+    flex-grow: 1;
+  }
+}
