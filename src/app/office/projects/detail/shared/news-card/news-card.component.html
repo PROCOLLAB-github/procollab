@@ -23,9 +23,7 @@
     </div>
   </div>
   <div class="card__text text-body-14" *ngIf="newsItem.text">
-    <ng-container *ngIf="!editMode">{{
-      readMore ? newsItem.text : newsItem.text.split(" ").slice(0, 40).join(" ")
-    }}</ng-container>
+    <p *ngIf="!editMode" #newsTextEl [innerText]="newsItem.text"></p>
     <ng-container *ngIf="editMode">
       <app-textarea
         *ngIf="editForm.get('text') as text"
@@ -44,11 +42,11 @@
     ></app-img-card>
   </ul>
   <div
-    *ngIf="newsItem.text && newsItem.text.split(' ').length > 40"
+    *ngIf="newsTextExpandable && !editMode"
     class="read-more"
-    (click)="readMore = !readMore"
+    (click)="onExpandNewsText(newsTextEl?.nativeElement, 'expanded', readMore)"
   >
-    {{ readMore ? "Скрыть" : "Читать полностью" }}
+    {{ readMore ? 'Скрыть' : 'Читать полностью' }}
   </div>
   <div *ngIf="!editMode" class="card__gallery">
     <div

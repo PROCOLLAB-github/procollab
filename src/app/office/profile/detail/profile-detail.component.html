@@ -112,9 +112,7 @@
             <app-tag>{{ skill }}</app-tag>
           </li>
         </ul>
-        <p class="text-body-14 profile__about-text">
-          {{ user.aboutMe }}
-        </p>
+        <p [innerText]="user.aboutMe" class="text-body-14 profile__about-text"></p>
       </div>
     </section>
     <section class="profile__projects">

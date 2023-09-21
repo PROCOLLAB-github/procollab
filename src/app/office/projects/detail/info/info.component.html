@@ -78,7 +78,7 @@
           </div>
         </div>
         <div *ngIf="project.description" class="text-body-14 about__text">
-          <p #descEl>{{ project.description }}</p>
+          <p #descEl [innerText]="project.description"></p>
           <div
             *ngIf="descriptionExpandable"
             class="read-more"

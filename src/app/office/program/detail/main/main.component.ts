@@ -1,12 +1,20 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef,
+} from "@angular/core";
 import { ProgramService } from "@office/program/services/program.service";
 import { ActivatedRoute } from "@angular/router";
 import { concatMap, map, noop, of, Subscription, tap } from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { ProgramNewsService } from "@office/program/services/program-news.service";
 import { ProjectNews, ProjectNewsRes } from "@office/projects/models/project-news.model";
+import { expandElement } from "@utils/expand-element";
 
 @Component({
   selector: "app-main",
@@ -17,7 +25,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   constructor(
     private readonly programService: ProgramService,
     private readonly programNewsService: ProgramNewsService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -55,6 +64,15 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     this.subscriptions$.push(program$);
   }
 
+  @ViewChild("descEl") descEl?: ElementRef;
+
+  ngAfterViewInit(): void {
+    const descElement = this.descEl?.nativeElement;
+    this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
+
+    this.cdRef.detectChanges();
+  }
+
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
@@ -64,6 +82,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   program?: Program;
   // program$?: Observable<Program> = this.route.parent?.data.pipe(map(r => r["data"]));
 
+  descriptionExpandable!: boolean;
   readFullDescription = false;
 
   onNewsInVew(entries: IntersectionObserverEntry[]): void {
@@ -86,5 +105,10 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         item.likesCount = item.isUserLiked ? item.likesCount - 1 : item.likesCount + 1;
         item.isUserLiked = !item.isUserLiked;
       });
+  }
+
+  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
+    expandElement(elem, expandedClass, isExpanded);
+    this.readFullDescription = !isExpanded;
   }
 }
