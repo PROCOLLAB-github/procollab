@@ -34,12 +34,11 @@ export class ValidationService {
     }
   }
 
-  useAgeValidator(age = 14): ValidatorFn {
+  useAgeValidator(age = 12): ValidatorFn {
     return control => {
       const value = dayjs(control.value, "DD.MM.YYYY");
-
-      const difference = parseInt(value.fromNow(true));
-      return difference > age ? null : { tooYoung: { requiredAge: age } };
+      const difference = dayjs().diff(value, "year");
+      return difference >= age ? null : { tooYoung: { requiredAge: age } };
     };
   }
 
