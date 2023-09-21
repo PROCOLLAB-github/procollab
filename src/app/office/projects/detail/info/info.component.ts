@@ -1,6 +1,14 @@
 /** @format */
 
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { concatMap, forkJoin, map, noop, Observable, of, Subscription, take } from "rxjs";
 import { Project } from "@models/project.model";
@@ -26,7 +34,8 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     public readonly authService: AuthService,
     private readonly navService: NavService,
     private readonly projectNewsService: ProjectNewsService,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private readonly cdRef: ChangeDetectorRef
   ) {
     this.newsForm = this.fb.group({
       text: ["", [Validators.required]],
@@ -76,6 +85,8 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const descElement = this.descEl?.nativeElement;
     this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
+
+    this.cdRef.detectChanges();
   }
 
   ngOnDestroy(): void {
@@ -140,7 +151,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     map(([project, profile]) => project.collaborators.map(c => c.userId).includes(profile.id))
   );
 
-  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean) {
+  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
   }

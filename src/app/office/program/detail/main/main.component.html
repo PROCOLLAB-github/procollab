@@ -61,17 +61,13 @@
           </div>
         </div>
         <div *ngIf="program.description" class="text-body-14 about__text">
-          {{
-            readFullDescription
-              ? program.description
-              : program.description.split(" ").slice(0, 50).join(" ")
-          }}
+          <p #descEl [innerText]="program.description"></p>
           <div
-            *ngIf="program.description.split(' ').length > 50"
-            class="read-more about__read-more"
-            (click)="readFullDescription = !readFullDescription"
+            *ngIf="descriptionExpandable"
+            class="read-more"
+            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
           >
-            {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+            {{ readFullDescription ? 'Скрыть' : 'Читать полностью' }}
           </div>
         </div>
       </div>

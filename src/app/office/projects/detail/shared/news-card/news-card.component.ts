@@ -1,6 +1,15 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  ChangeDetectorRef,
+} from "@angular/core";
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ActivatedRoute } from "@angular/router";
@@ -9,6 +18,7 @@ import { ValidationService } from "@core/services";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { FileService } from "@core/services/file.service";
 import { nanoid } from "nanoid";
+import { expandElement } from "@utils/expand-element";
 
 @Component({
   selector: "app-project-news-card",
@@ -22,7 +32,8 @@ export class NewsCardComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly projectNewsService: ProjectNewsService,
-    private readonly fileService: FileService
+    private readonly fileService: FileService,
+    private readonly cdRef: ChangeDetectorRef
   ) {
     this.editForm = this.fb.group({
       text: ["", [Validators.required]],
@@ -35,6 +46,7 @@ export class NewsCardComponent implements OnInit {
   @Output() like = new EventEmitter<number>();
   @Output() edited = new EventEmitter<ProjectNews>();
 
+  newsTextExpandable!: boolean;
   readMore = false;
   editMode = false;
 
@@ -54,6 +66,15 @@ export class NewsCardComponent implements OnInit {
       loading: false,
       tempFile: null,
     }));
+  }
+
+  @ViewChild("newsTextEl") newsTextEl?: ElementRef;
+
+  ngAfterViewInit(): void {
+    const newsTextElem = this.newsTextEl?.nativeElement;
+    this.newsTextExpandable = newsTextElem?.clientHeight < newsTextElem?.scrollHeight;
+
+    this.cdRef.detectChanges();
   }
 
   onCopyLink(): void {
@@ -169,5 +190,10 @@ export class NewsCardComponent implements OnInit {
     }
 
     this.lastTouch = Date.now();
+  }
+
+  onExpandNewsText(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
+    expandElement(elem, expandedClass, isExpanded);
+    this.readMore = !isExpanded;
   }
 }
