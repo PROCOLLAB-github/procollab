@@ -61,7 +61,7 @@
           </div>
         </div>
         <div *ngIf="program.description" class="text-body-14 about__text">
-          <p #descEl [innerText]="program.description"></p>
+          <p #descEl [innerHTML]="program.description | parseLinks | parseBreaks"></p>
           <div
             *ngIf="descriptionExpandable"
             class="read-more"
@@ -93,7 +93,7 @@
               [href]="link"
             >
               <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
-              {{ l.tag }}
+              <span>{{ l.tag }}</span>
             </a>
           </li>
         </ul>

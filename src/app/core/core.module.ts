@@ -14,6 +14,8 @@ import { YearsFromBirthdayPipe } from "./pipes/years-from-birthday.pipe";
 import { UserLinksPipe } from "./pipes/user-links.pipe";
 import { FormControlPipe } from "./pipes/form-control.pipe";
 import { GlobalErrorHandlerService } from "@error/services/global-error-handler.service";
+import { ParseBreaksPipe } from "./pipes/parse-breaks.pipe";
+import { ParseLinksPipe } from "./pipes/parse-links.pipe";
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { GlobalErrorHandlerService } from "@error/services/global-error-handler.
     YearsFromBirthdayPipe,
     UserLinksPipe,
     FormControlPipe,
+    ParseBreaksPipe,
+    ParseLinksPipe,
   ],
   imports: [CommonModule],
   providers: [
@@ -39,7 +43,7 @@ import { GlobalErrorHandlerService } from "@error/services/global-error-handler.
     },
     {
       provide: ErrorHandler,
-      useClass: GlobalErrorHandlerService
+      useClass: GlobalErrorHandlerService,
     },
     ApiService,
   ],
@@ -51,6 +55,8 @@ import { GlobalErrorHandlerService } from "@error/services/global-error-handler.
     YearsFromBirthdayPipe,
     UserLinksPipe,
     FormControlPipe,
+    ParseBreaksPipe,
+    ParseLinksPipe,
   ],
 })
 export class CoreModule {}

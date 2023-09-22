@@ -1,0 +1,11 @@
+.underlined-link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s;
+
+  &:hover {
+    text-decoration-color: var(--accent);
+  }
+}

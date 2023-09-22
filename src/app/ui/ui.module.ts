@@ -32,7 +32,7 @@ import { SnackbarComponent } from "./components/snackbar/snackbar.component";
 import { DeleteConfirmComponent } from "./components/delete-confirm/delete-confirm.component";
 import { PortalModule } from "@angular/cdk/portal";
 import { OverlayModule } from "@angular/cdk/overlay";
-import { FileTypePipe } from './pipes/file-type.pipe';
+import { FileTypePipe } from "./pipes/file-type.pipe";
 import { BackComponent } from "./components/back/back.component";
 
 @NgModule({

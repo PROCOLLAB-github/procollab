@@ -38,6 +38,8 @@
     "core-js": "^3.23.4",
     "dayjs": "^1.11.3",
     "fuse.js": "^6.6.2",
+    "linkify-string": "^4.1.1",
+    "linkifyjs": "^4.1.1",
     "nanoid": "^4.0.0",
     "ng-click-outside": "^9.0.1",
     "ngx-autosize": "^2.0.4",
