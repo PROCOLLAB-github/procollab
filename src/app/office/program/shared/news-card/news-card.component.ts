@@ -1,9 +1,19 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef,
+} from "@angular/core";
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ActivatedRoute } from "@angular/router";
+import { expandElement } from "@utils/expand-element";
 
 @Component({
   selector: "app-program-news-card",
@@ -13,7 +23,8 @@ import { ActivatedRoute } from "@angular/router";
 export class ProgramNewsCardComponent implements OnInit {
   constructor(
     private readonly snackbarService: SnackbarService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly cdRef: ChangeDetectorRef
   ) {}
 
   @Input() newsItem!: ProjectNews;
@@ -22,11 +33,21 @@ export class ProgramNewsCardComponent implements OnInit {
   @Output() like = new EventEmitter<number>();
   @Output() edited = new EventEmitter<ProjectNews>();
 
+  newsTextExpandable!: boolean;
   readMore = false;
   editMode = false;
 
   ngOnInit(): void {
     this.showLikes = this.newsItem.files.map(() => false);
+  }
+
+  @ViewChild("newsTextEl") newsTextEl?: ElementRef;
+
+  ngAfterViewInit(): void {
+    const newsTextElem = this.newsTextEl?.nativeElement;
+    this.newsTextExpandable = newsTextElem?.clientHeight < newsTextElem?.scrollHeight;
+
+    this.cdRef.detectChanges();
   }
 
   onCopyLink(): void {
@@ -53,5 +74,10 @@ export class ProgramNewsCardComponent implements OnInit {
     }
 
     this.lastTouch = Date.now();
+  }
+
+  onExpandNewsText(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
+    expandElement(elem, expandedClass, isExpanded);
+    this.readMore = !isExpanded;
   }
 }
