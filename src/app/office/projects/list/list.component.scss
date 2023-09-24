@@ -9,7 +9,14 @@
   }
 
   &__filter {
+    display: none;
+
+    &--open {
+      display: block;
+    }
+
     @include responsive.apply-desktop {
+      display: block;
       margin-left: 16px;
     }
   }
@@ -85,7 +92,6 @@
     bottom: 0;
     left: 0;
     z-index: 10;
-    height: 800px;
     max-height: 72vh;
     overflow-y: auto;
     background-color: var(--white);
@@ -93,7 +99,7 @@
 
     @include responsive.apply-desktop {
       position: static;
-      height: unset;
+      max-height: unset;
     }
   }
 }

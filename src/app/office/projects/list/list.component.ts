@@ -10,7 +10,6 @@ import { NavService } from "@services/nav.service";
 import { ProjectService } from "@services/project.service";
 import Fuse from "fuse.js";
 import { HttpParams } from "@angular/common/http";
-import { containerSm } from "@utils/responsive";
 
 @Component({
   selector: "app-list",
@@ -114,7 +113,7 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
     this.subscriptions$.forEach($ => $?.unsubscribe());
   }
 
-  isFilterOpen = window.innerWidth > containerSm;
+  isFilterOpen = false;
 
   isAll = location.href.includes("/all");
   isMy = location.href.includes("/my");
