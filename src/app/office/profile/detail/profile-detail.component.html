@@ -86,7 +86,7 @@
       </ul>
       <ng-container *ngIf="user.links.length">
         <p class="text-bold-body-14">Контакты</p>
-        <ul>
+        <ul class="profile__links">
           <li
             class="contact-link profile__contact-link text-body-12"
             *ngFor="let link of user.links"
@@ -98,7 +98,7 @@
               [href]="link"
             >
               <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
-              {{ l.tag }}
+              <span>{{ l.tag }}</span>
             </a>
           </li>
         </ul>
@@ -112,7 +112,10 @@
             <app-tag>{{ skill }}</app-tag>
           </li>
         </ul>
-        <p [innerText]="user.aboutMe" class="text-body-14 profile__about-text"></p>
+        <p 
+          [innerHTML]="user.aboutMe | parseLinks | parseBreaks" 
+          class="text-body-14 profile__about-text"
+        ></p>
       </div>
     </section>
     <section class="profile__projects">

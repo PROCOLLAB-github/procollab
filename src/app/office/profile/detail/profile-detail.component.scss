@@ -151,6 +151,8 @@ $section-padding: 24px;
   }
 
   &__achievements {
+    overflow: hidden;
+
     @include responsive.apply-desktop {
       grid-column: 3/4;
     }
@@ -162,6 +164,15 @@ $section-padding: 24px;
 
   &__ach-list {
     margin: 24px 0;
+  }
+
+  &__links {
+    overflow: hidden;
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   &__achievement {
@@ -178,6 +189,18 @@ $section-padding: 24px;
 
     .profile__title {
       margin-bottom: 12px;
+    }
+
+    ::ng-deep a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
+
+      &:hover {
+        text-decoration-color: var(--accent);
+      }
     }
   }
 

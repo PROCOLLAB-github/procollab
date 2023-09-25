@@ -314,6 +314,18 @@
         -webkit-line-clamp: unset;
       }
     }
+
+    ::ng-deep a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
+
+      &:hover {
+        text-decoration-color: var(--accent);
+      }
+    }
   }
   /* stylelint-enable value-no-vendor-prefix */
 
@@ -423,6 +435,8 @@
 }
 
 .links {
+  overflow: hidden;
+
   &__title {
     margin-bottom: 12px;
   }
@@ -430,6 +444,15 @@
   &__item {
     &:not(:last-child) {
       margin-bottom: 12px;
+    }
+  }
+
+  ul {
+    overflow: hidden;
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }
