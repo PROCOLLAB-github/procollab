@@ -12,14 +12,14 @@
     </div>
   </div>
   <div class="card__text text-body-14" *ngIf="newsItem.text">
-    {{ readMore ? newsItem.text : newsItem.text.split(" ").slice(0, 40).join(" ") }}
+    <p #newsTextEl [innerText]="newsItem.text"></p>
   </div>
   <div
-    *ngIf="newsItem.text && newsItem.text.split(' ').length > 40"
-    class="read-more card__read-more"
-    (click)="readMore = !readMore"
+    *ngIf="newsTextExpandable && !editMode"
+    class="read-more"
+    (click)="onExpandNewsText(newsTextEl?.nativeElement, 'expanded', readMore)"
   >
-    {{ readMore ? "Скрыть" : "Читать полностью" }}
+    {{ readMore ? 'Скрыть' : 'Читать полностью' }}
   </div>
   <div *ngIf="!editMode" class="card__gallery">
     <div
