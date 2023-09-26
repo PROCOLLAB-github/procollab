@@ -38,8 +38,8 @@
               formControlName="imageAddress"
               [error]="(imagesAddress | controlError) && projSubmitInitiated"
             ></app-avatar-control>
-            <div 
-              *ngIf="(imagesAddress | controlError: 'required') && projSubmitInitiated" 
+            <div
+              *ngIf="(imagesAddress | controlError: 'required') && projSubmitInitiated"
               class="text-body-14 error"
             >
               {{ errorMessage.EMPTY_AVATAR }}
@@ -53,8 +53,8 @@
               [error]="(name | controlError) && projSubmitInitiated"
               placeholder="Например: procollab"
             ></app-input>
-            <div 
-              *ngIf="(name | controlError: 'required') && projSubmitInitiated" 
+            <div
+              *ngIf="(name | controlError: 'required') && projSubmitInitiated"
               class="text-body-14 error"
             >
               {{ errorMessage.VALIDATION_REQUIRED }}
@@ -68,8 +68,8 @@
               [error]="(region | controlError) && projSubmitInitiated"
               placeholder="Например: Москва"
             ></app-input>
-            <div 
-              *ngIf="(region | controlError: 'required') && projSubmitInitiated" 
+            <div
+              *ngIf="(region | controlError: 'required') && projSubmitInitiated"
               class="text-body-14 error"
             >
               {{ errorMessage.VALIDATION_REQUIRED }}
@@ -78,13 +78,13 @@
           <fieldset>
             <label class="field-label">Ссылка на проект</label>
             <ul formArrayName="links">
-              <li *ngFor="let control of links.controls; index as i" class="link">
+              <li *ngFor="let control of links.controls; index as i" class="edit-link">
                 <app-input
-                  class="link__input"
+                  class="edit-link__input"
                   [formControlName]="i"
                   placeholder="https://t.me/username"
                 ></app-input>
-                <div class="link__remove" (click)="removeLink(i)">
+                <div class="edit-link__remove" (click)="removeLink(i)">
                   <i appIcon icon="cross" appSquare="20"></i>
                 </div>
               </li>
@@ -137,14 +137,14 @@
               formControlName="description"
               placeholder="Напишите кратко о своем проекте, его суть"
             ></app-textarea>
-            <div 
-              *ngIf="(description | controlError: 'required') && projSubmitInitiated" 
+            <div
+              *ngIf="(description | controlError: 'required') && projSubmitInitiated"
               class="text-body-14 error"
             >
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
           </fieldset>
-          <fieldset 
+          <fieldset
             *ngIf="projectForm.get('presentationAddress') as presentationAddress"
             class="project__file"
           >
@@ -185,20 +185,24 @@
                     <div class="achievement__first-row">
                       <fieldset *ngIf="achievements.at(i)?.get('title') as title">
                         <app-input
-                          [error]="!!(
-                            (title | controlError)
-                            && achievements.at(i).get('title')?.touched 
-                            && projSubmitInitiated
-                          )"
+                          [error]="
+                            !!(
+                              (title | controlError) &&
+                              achievements.at(i).get('title')?.touched &&
+                              projSubmitInitiated
+                            )
+                          "
                           placeholder="Название конкурса"
                           formControlName="title"
                         ></app-input>
-                        <div 
-                          *ngIf="!!(
-                            (title | controlError: 'required')
-                            && achievements.at(i).get('title')?.touched 
-                            && projSubmitInitiated
-                          )" 
+                        <div
+                          *ngIf="
+                            !!(
+                              (title | controlError: 'required') &&
+                              achievements.at(i).get('title')?.touched &&
+                              projSubmitInitiated
+                            )
+                          "
                           class="text-body-14 error"
                         >
                           {{ errorMessage.VALIDATION_REQUIRED }}
@@ -215,20 +219,24 @@
                     </div>
                     <fieldset *ngIf="achievements.at(i).get('status') as status">
                       <app-input
-                        [error]="!!(
-                          (status | controlError)
-                          && achievements.at(i).get('status')?.touched  
-                          && projSubmitInitiated
-                        )"
+                        [error]="
+                          !!(
+                            (status | controlError) &&
+                            achievements.at(i).get('status')?.touched &&
+                            projSubmitInitiated
+                          )
+                        "
                         placeholder="Занятое место"
                         formControlName="status"
                       ></app-input>
-                      <div 
-                        *ngIf="!!(
-                          (status | controlError: 'required') 
-                          && achievements.at(i).get('status')?.touched 
-                          && projSubmitInitiated
-                        )" 
+                      <div
+                        *ngIf="
+                          !!(
+                            (status | controlError: 'required') &&
+                            achievements.at(i).get('status')?.touched &&
+                            projSubmitInitiated
+                          )
+                        "
                         class="text-body-14 error"
                       >
                         {{ errorMessage.VALIDATION_REQUIRED }}
@@ -263,8 +271,8 @@
                   [error]="(role | controlError) && inviteSubmitInitiated"
                   placeholder="Роль"
                 ></app-input>
-                <div 
-                  *ngIf="(role | controlError: 'required') && inviteSubmitInitiated" 
+                <div
+                  *ngIf="(role | controlError: 'required') && inviteSubmitInitiated"
                   class="text-body-14 error"
                 >
                   {{ errorMessage.VALIDATION_REQUIRED }}
@@ -277,20 +285,20 @@
                   [error]="(link | controlError) && inviteSubmitInitiated"
                   placeholder="https://procollab.ru/office/profile/1"
                 ></app-input>
-                <div 
-                  *ngIf="(link | controlError: 'required') && inviteSubmitInitiated" 
+                <div
+                  *ngIf="(link | controlError: 'required') && inviteSubmitInitiated"
                   class="text-body-14 error"
                 >
                   {{ errorMessage.VALIDATION_REQUIRED }}
                 </div>
-                <div 
-                  *ngIf="(link | controlError: 'pattern') && inviteSubmitInitiated" 
+                <div
+                  *ngIf="(link | controlError: 'pattern') && inviteSubmitInitiated"
                   class="text-body-14 error"
                 >
                   {{ errorMessage.VALIDATION_PROFILE_LINK }}
                 </div>
-                <div 
-                  *ngIf="inviteNotExistingError && inviteSubmitInitiated" 
+                <div
+                  *ngIf="inviteNotExistingError && inviteSubmitInitiated"
                   class="text-body-14 error"
                 >
                   {{ errorMessage.USER_NOT_EXISTING }}
@@ -324,8 +332,8 @@
                   [error]="(role | controlError) && vacancySubmitInitiated"
                   placeholder="Роль"
                 ></app-input>
-                <div 
-                  *ngIf="(role | controlError: 'required') && vacancySubmitInitiated" 
+                <div
+                  *ngIf="(role | controlError: 'required') && vacancySubmitInitiated"
                   class="text-body-14 error"
                 >
                   {{ errorMessage.VALIDATION_REQUIRED }}
@@ -367,7 +375,11 @@
         </ng-container>
       </div>
       <div class="project__save">
-        <app-button color="grey" [loader]="projFormIsSubmittingAsDraft" (click)="saveProjectAsDraft()">
+        <app-button
+          color="grey"
+          [loader]="projFormIsSubmittingAsDraft"
+          (click)="saveProjectAsDraft()"
+        >
           Сохранить черновик
         </app-button>
         <app-button [loader]="projFormIsSubmittingAsPublished" (click)="saveProjectAsPublished()">
@@ -379,11 +391,10 @@
       <div class="project__warning-modal">
         <h3 class="text-bold-body-16">📢 Внимание!</h3>
         <p class="text-body-14">
-          Для публикации проекта, 
-          нужно заполнить все <strong>обязательные поля</strong> 
-          (они будут <strong>подсвечены&nbsp;<span>красным</span></strong>). 
-          Если вы пока не знаете что написать, можно сохранить черновик проекта
-          и заполнить поля позже :&#41;  
+          Для публикации проекта, нужно заполнить все <strong>обязательные поля</strong> (они будут
+          <strong>подсвечены&nbsp;<span>красным</span></strong
+          >). Если вы пока не знаете что написать, можно сохранить черновик проекта и заполнить поля
+          позже :&#41;
         </p>
         <app-button (click)="closeWarningModal()">Понятно</app-button>
       </div>

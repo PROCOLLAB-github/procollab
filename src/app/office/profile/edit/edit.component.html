@@ -245,8 +245,18 @@
         <div class="">
           <label class="field-label">Контактная информация</label>
           <ul formArrayName="links">
-            <li *ngFor="let control of links.controls; index as i" class="profile__achievement">
-              <app-input [formControlName]="i" placeholder="https://t.me/username"></app-input>
+            <li
+              *ngFor="let control of links.controls; index as i"
+              class="profile__achievement edit-link"
+            >
+              <app-input
+                [formControlName]="i"
+                placeholder="https://t.me/username"
+                [error]="control | controlError"
+              ></app-input>
+              <div class="edit-link__remove" (click)="removeLink(i)">
+                <i appIcon icon="cross" appSquare="20"></i>
+              </div>
             </li>
           </ul>
           <app-button class="profile__add-achievement" (click)="addLink()">

@@ -253,21 +253,4 @@
   margin-bottom: 12px;
 }
 
-.link {
-  position: relative;
 
-  &__remove {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    color: var(--white);
-    cursor: pointer;
-    background-color: var(--gray);
-    border-radius: 0 8px 8px 0;
-  }
-}
