@@ -11,8 +11,16 @@
       </button>
     </div>
     <div *ngIf="!user.verificationDate" class="text-body-14 user__email">{{ user.email }}</div>
-    <div class="text-body-14 user__verified">
-      Подтвержден с {{ user.verificationDate | dayjs: "format":"DD.MM.YY" }}
+    <div 
+      *ngIf="user.verificationDate as verificationDate; else notVerified"
+      class="text-body-14 user__verified"
+    >
+      Подтвержден с {{ verificationDate | dayjs: "format":"DD.MM.YY" }}
     </div>
+    <ng-template #notVerified>
+      <div class="text-body-14 user__not-verified">
+        Ожидает подтверждения
+      </div>
+    </ng-template>
   </div>
 </a>
