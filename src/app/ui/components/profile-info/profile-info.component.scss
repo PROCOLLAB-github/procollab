@@ -43,4 +43,8 @@
   &__verified {
     color: var(--green);
   }
+
+  &__not-verified {
+    color: var(--red);
+  }
 }
