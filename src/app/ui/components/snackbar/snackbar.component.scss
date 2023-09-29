@@ -2,9 +2,12 @@
 
 .snackbar {
   position: absolute;
-  right: 50px;
-  bottom: 50px;
+  right: 0;
+  bottom: 0;
   z-index: 20;
+  padding-right: 50px;
+  padding-bottom: 50px;
+  overflow-x: hidden;
 
   &__item {
     &:not(:last-child) {
