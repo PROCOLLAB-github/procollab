@@ -14,6 +14,10 @@
   }
 
   &__profile {
+    h3 {
+      text-align: center;
+    }
+
     @include responsive.apply-desktop {
       flex-basis: 20%;
     }
@@ -21,6 +25,7 @@
 
   &__text {
     margin: 16px 0;
+    word-break: break-word;
 
     @include responsive.apply-desktop {
       flex-basis: 50%;
