@@ -1,6 +1,10 @@
 <!-- @format -->
 
-<form class="auth" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+<form class="auth" 
+  [formGroup]="loginForm" 
+  (ngSubmit)="onSubmit()" 
+  (keyup.enter)="onSubmit()"
+>
   <div class="auth__wrapper">
     <h1 class="auth__title">Вход</h1>
     <p class="login__reg">
