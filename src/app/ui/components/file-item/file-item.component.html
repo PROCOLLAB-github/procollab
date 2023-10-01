@@ -1,12 +1,12 @@
 <!-- @format -->
 
 <div class="file">
-  <div class="file__icon">
+  <div class="file__icon" (click)="onDownloadFile()">
     <i *ngIf="type" appIcon [icon]="'file_' + (type | fileType)" appSquare="32"></i>
   </div>
   <div class="file__info">
     <div class="file__name text-bold-body-14">
-      {{ name }}
+      <span (click)="onDownloadFile()">{{ name }}</span>
     </div>
     <div class="file__meta text-body-14">
       {{ type?.toUpperCase() }} {{ getFormattedFileSize(size) }}
