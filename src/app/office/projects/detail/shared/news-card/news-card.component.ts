@@ -59,8 +59,8 @@ export class NewsCardComponent implements OnInit {
 
     this.showLikes = this.newsItem.files.map(() => false);
 
-    this.filesList = this.newsItem.files.map(src => ({
-      src,
+    this.filesList = this.newsItem.files.map(file => ({
+      src: file.link,
       id: nanoid(),
       error: false,
       loading: false,

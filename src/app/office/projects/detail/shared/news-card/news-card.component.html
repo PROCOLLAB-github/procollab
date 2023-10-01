@@ -46,7 +46,7 @@
     class="read-more"
     (click)="onExpandNewsText(newsTextEl?.nativeElement, 'expanded', readMore)"
   >
-    {{ readMore ? 'Скрыть' : 'Читать полностью' }}
+    {{ readMore ? "Скрыть" : "Читать полностью" }}
   </div>
   <div *ngIf="!editMode" class="card__gallery">
     <div
@@ -54,7 +54,7 @@
       class="card__img"
       (touchend)="onTouchImg($event, index)"
     >
-      <img class="card__img" [src]="f" alt="" />
+      <img class="card__img" [src]="f.link" [alt]="f.name" />
       <div class="card__img-like" [class.card__img-like--show]="showLikes[index]">
         <i appIcon icon="like" appSquare="40"></i>
       </div>

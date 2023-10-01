@@ -1,5 +1,6 @@
 /** @format */
 import * as dayjs from "dayjs";
+import { File } from "@models/file.model";
 
 export class ProjectNews {
   id!: number;
@@ -10,7 +11,7 @@ export class ProjectNews {
   datetimeUpdated!: string;
   viewsCount!: number;
   likesCount!: number;
-  files!: string[];
+  files!: File[];
   isUserLiked!: boolean;
 
   static default(): ProjectNews {
@@ -19,11 +20,7 @@ export class ProjectNews {
       name: "w98ef",
       imageAddress:
         "https://api.selcdn.ru/v1/SEL_228194/procollab_static/6043715490745844423/9115169748862337773.jpg",
-      files: [
-        "https://api.selcdn.ru/v1/SEL_228194/procollab_static/6043715490745844423/9115169748862337773.jpg",
-        "https://api.selcdn.ru/v1/SEL_228194/procollab_static/6043715490745844423/9115169748862337773.jpg",
-        "https://api.selcdn.ru/v1/SEL_228194/procollab_static/6043715490745844423/9115169748862337773.jpg",
-      ],
+      files: [File.default()],
       text: "so8df",
       datetimeCreated: dayjs().format(),
       datetimeUpdated: dayjs().format(),
