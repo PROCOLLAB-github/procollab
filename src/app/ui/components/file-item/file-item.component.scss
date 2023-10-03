@@ -12,6 +12,7 @@
     width: 40px;
     height: 40px;
     margin-right: 12px;
+    cursor: pointer;
     border: 1px solid var(--gray);
     border-radius: 8px;
   }
@@ -24,6 +25,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    & span {
+      cursor: pointer;
+    }
   }
 
   &__meta {
