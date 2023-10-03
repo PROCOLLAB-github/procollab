@@ -4,6 +4,12 @@
   flex-direction: column;
   height: 100%;
 
+  cdk-virtual-scroll-viewport {
+    ::ng-deep .cdk-virtual-scroll-content-wrapper {
+      max-width: 100%;
+    }
+  }
+
   &__messages {
     flex-grow: 1;
     max-width: 100%;
