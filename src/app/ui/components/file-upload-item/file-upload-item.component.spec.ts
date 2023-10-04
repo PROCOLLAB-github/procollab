@@ -1,16 +1,20 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { FileUploadItemComponent } from './file-upload-item.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('FileUploadItemComponent', () => {
+import { FileUploadItemComponent } from "./file-upload-item.component";
+import { RouterTestingModule } from "@angular/router/testing";
+import { UiModule } from "@ui/ui.module";
+
+describe("FileUploadItemComponent", () => {
   let component: FileUploadItemComponent;
   let fixture: ComponentFixture<FileUploadItemComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FileUploadItemComponent ]
-    })
-    .compileComponents();
+      declarations: [FileUploadItemComponent],
+      imports: [UiModule, RouterTestingModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +23,7 @@ describe('FileUploadItemComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
