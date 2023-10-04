@@ -13,6 +13,7 @@ export class LoaderComponent implements OnInit {
   @Input() speed = "1s";
   @Input() size = "47px";
   @Input() color = "white";
+  @Input() type: "wave" | "circle" = "wave";
 
   ngOnInit(): void {}
 }
