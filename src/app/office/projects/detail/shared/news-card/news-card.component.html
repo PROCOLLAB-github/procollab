@@ -33,13 +33,25 @@
   </div>
   <ul *ngIf="editMode">
     <app-img-card
-      *ngFor="let f of filesList"
+      *ngFor="let f of imagesEditList"
       [loading]="f.loading"
       [src]="f.src"
       [error]="f.error"
       (cancel)="onDeletePhoto(f.id)"
       (retry)="onRetryUpload(f.id)"
     ></app-img-card>
+  </ul>
+  <ul *ngIf="editMode" class="card__edit-files">
+    <app-file-upload-item
+      *ngFor="let f of filesEditList"
+      [link]="f.src"
+      [type]="f.tempFile?.type ?? f.type"
+      [size]="f.tempFile?.size ?? f.size"
+      [name]="f.tempFile?.name ?? f.name"
+      [error]="f.error"
+      [loading]="f.loading"
+      (delete)="onDeleteFile(f.id)"
+    ></app-file-upload-item>
   </ul>
   <div
     *ngIf="newsTextExpandable && !editMode"
@@ -50,7 +62,7 @@
   </div>
   <div *ngIf="!editMode" class="card__gallery">
     <div
-      *ngFor="let f of newsItem.files; index as index"
+      *ngFor="let f of imagesViewList; index as index"
       class="card__img"
       (touchend)="onTouchImg($event, index)"
     >
@@ -59,6 +71,15 @@
         <i appIcon icon="like" appSquare="40"></i>
       </div>
     </div>
+  </div>
+  <div *ngIf="!editMode" class="card__files">
+    <app-file-item
+      *ngFor="let f of filesViewList"
+      [name]="f.name"
+      [size]="f.size"
+      [type]="f.mimeType"
+      [link]="f.link"
+    ></app-file-item>
   </div>
   <div class="card__footer footer" *ngIf="!editMode">
     <div class="footer__left">
@@ -84,7 +105,7 @@
   <div class="editor-footer" *ngIf="editMode">
     <label class="editor-footer__attach">
       <i appIcon icon="attach" appSquare="22"></i>
-      <input type="file" accept="image/*" (change)="onUploadFile($event)" />
+      <input type="file" accept="*/*" multiple (change)="onUploadFile($event)" />
     </label>
     <div class="editor-footer__actions">
       <app-button color="grey" (click)="editMode = false">Отмена</app-button>

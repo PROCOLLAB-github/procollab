@@ -1,6 +1,6 @@
 /** @format */
 
-export class File {
+export class FileModel {
   datetimeUploaded!: string;
   extension!: string;
   link!: string;

@@ -8,6 +8,16 @@
     display: flex;
   }
 
+  &__files {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &:not(:empty) {
+      margin-top: 20px;
+    }
+  }
+
   &__textarea {
     width: 100%;
     padding-bottom: 10px;
@@ -32,6 +42,12 @@
     &:hover {
       background-color: var(--accent-dark);
     }
+  }
+
+  &__images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 }
 
