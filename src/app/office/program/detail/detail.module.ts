@@ -14,6 +14,7 @@ import { ProjectsModule } from "@office/projects/projects.module";
 import { ProgramModule } from "@office/program/program.module";
 import { ProgramMembersComponent } from "./members/members.component";
 import { OfficeModule } from "@office/office.module";
+import { ProgramNewsCardComponent } from "./shared/news-card/news-card.component";
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { OfficeModule } from "@office/office.module";
     ProgramRegisterComponent,
     ProgramProjectsComponent,
     ProgramMembersComponent,
+    ProgramNewsCardComponent,
   ],
   imports: [
     CommonModule,
@@ -33,5 +35,6 @@ import { OfficeModule } from "@office/office.module";
     ProgramModule,
     OfficeModule,
   ],
+  exports: [ProgramNewsCardComponent],
 })
 export class ProgramDetailModule {}
