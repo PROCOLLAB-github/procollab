@@ -51,10 +51,10 @@ export class ProgramNewsCardComponent implements OnInit {
   }
 
   onCopyLink(): void {
-    const projectId = this.route.snapshot.params["projectId"];
+    const programId = this.route.snapshot.params["programId"];
 
     navigator.clipboard
-      .writeText(`https://app.procollab.ru/office/program/${projectId}/news/${this.newsItem.id}`)
+      .writeText(`https://app.procollab.ru/office/program/${programId}/news/${this.newsItem.id}`)
       .then(() => {
         this.snackbarService.success("Ссылка скопирована");
       });
