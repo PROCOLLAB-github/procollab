@@ -72,7 +72,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="!editMode" class="card__files">
+  <div *ngIf="!editMode && filesViewList.length" class="card__files">
     <app-file-item
       *ngFor="let f of filesViewList"
       [name]="f.name"

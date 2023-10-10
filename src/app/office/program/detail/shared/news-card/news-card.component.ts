@@ -2,45 +2,35 @@
 
 import {
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnInit,
   Output,
   ViewChild,
+  ElementRef,
   ChangeDetectorRef,
 } from "@angular/core";
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ActivatedRoute } from "@angular/router";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ValidationService } from "@core/services";
-import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
-import { FileService } from "@core/services/file.service";
-import { nanoid } from "nanoid";
 import { expandElement } from "@utils/expand-element";
-import { FileModel } from "@models/file.model";
-import { forkJoin, noop, Observable, tap } from "rxjs";
+import { FileModel } from "@office/models/file.model";
+import { nanoid } from "nanoid";
+import { FileService } from "@core/services/file.service";
+import { Observable, tap, forkJoin, noop } from "rxjs";
 
 @Component({
-  selector: "app-project-news-card",
+  selector: "app-program-news-card",
   templateUrl: "./news-card.component.html",
   styleUrls: ["./news-card.component.scss"],
 })
-export class NewsCardComponent implements OnInit {
+export class ProgramNewsCardComponent implements OnInit {
   constructor(
     private readonly snackbarService: SnackbarService,
-    private readonly route: ActivatedRoute,
-    private readonly fb: FormBuilder,
-    private readonly validationService: ValidationService,
-    private readonly projectNewsService: ProjectNewsService,
     private readonly fileService: FileService,
+    private readonly route: ActivatedRoute,
     private readonly cdRef: ChangeDetectorRef
-  ) {
-    this.editForm = this.fb.group({
-      text: ["", [Validators.required]],
-    });
-  }
+  ) {}
 
   @Input() newsItem!: ProjectNews;
   @Input() isOwner!: boolean;
@@ -52,13 +42,8 @@ export class NewsCardComponent implements OnInit {
   readMore = false;
   editMode = false;
 
-  editForm: FormGroup;
-
   ngOnInit(): void {
-    this.editForm.setValue({
-      text: this.newsItem.text,
-    });
-
+    console.log(this.newsItem);
     this.showLikes = this.newsItem.files.map(() => false);
 
     this.imagesViewList = this.newsItem.files.filter(
@@ -101,33 +86,12 @@ export class NewsCardComponent implements OnInit {
   }
 
   onCopyLink(): void {
-    const projectId = this.route.snapshot.params["projectId"];
+    const programId = this.route.snapshot.params["programId"];
 
     navigator.clipboard
-      .writeText(`${location.origin}/office/projects/${projectId}/news/${this.newsItem.id}`)
+      .writeText(`https://app.procollab.ru/office/program/${programId}/news/${this.newsItem.id}`)
       .then(() => {
         this.snackbarService.success("Ссылка скопирована");
-      });
-  }
-
-  menuOpen = false;
-
-  onCloseMenu() {
-    this.menuOpen = false;
-  }
-
-  onEditSubmit(): void {
-    if (!this.validationService.getFormValidation(this.editForm)) return;
-
-    this.projectNewsService
-      .editNews(this.route.snapshot.params["projectId"], this.newsItem.id, {
-        ...this.editForm.value,
-        files: this.imagesEditList.filter(f => f.src).map(f => f.src),
-      })
-      .subscribe(resNews => {
-        this.editMode = false;
-
-        this.edited.emit(resNews);
       });
   }
 
@@ -159,7 +123,7 @@ export class NewsCardComponent implements OnInit {
       const fileType = files[i].type.split("/")[0];
 
       if (fileType === "image") {
-        const fileObj: NewsCardComponent["imagesEditList"][0] = {
+        const fileObj: ProgramNewsCardComponent["imagesEditList"][0] = {
           id: nanoid(2),
           src: "",
           loading: true,
@@ -191,7 +155,7 @@ export class NewsCardComponent implements OnInit {
           )
         );
       } else {
-        const fileObj: NewsCardComponent["filesEditList"][0] = {
+        const fileObj: ProgramNewsCardComponent["filesEditList"][0] = {
           id: nanoid(2),
           loading: true,
           error: "",
@@ -299,7 +263,6 @@ export class NewsCardComponent implements OnInit {
   showLikes: boolean[] = [];
 
   lastTouch = 0;
-
   onTouchImg(_event: TouchEvent, imgIdx: number) {
     if (Date.now() - this.lastTouch < 300) {
       this.like.emit(this.newsItem.id);
