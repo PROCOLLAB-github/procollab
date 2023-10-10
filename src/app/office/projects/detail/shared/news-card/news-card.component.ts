@@ -19,6 +19,8 @@ import { ProjectNewsService } from "@office/projects/detail/services/project-new
 import { FileService } from "@core/services/file.service";
 import { nanoid } from "nanoid";
 import { expandElement } from "@utils/expand-element";
+import { FileModel } from "@models/file.model";
+import { forkJoin, noop, Observable, tap } from "rxjs";
 
 @Component({
   selector: "app-project-news-card",
@@ -59,14 +61,31 @@ export class NewsCardComponent implements OnInit {
 
     this.showLikes = this.newsItem.files.map(() => false);
 
-    this.filesList = this.newsItem.files.map(file => ({
+    this.imagesViewList = this.newsItem.files.filter(f => f.mimeType.split("/")[0] === "image");
+    this.filesViewList = this.newsItem.files.filter(f => f.mimeType.split("/")[0] !== "image");
+
+    this.imagesEditList = this.imagesViewList.map(file => ({
       src: file.link,
       id: nanoid(),
       error: false,
       loading: false,
       tempFile: null,
     }));
+
+    this.filesEditList = this.filesViewList.map(file => ({
+      src: file.link,
+      id: nanoid(),
+      error: "",
+      loading: false,
+      name: file.name,
+      size: file.size,
+      type: file.mimeType,
+      tempFile: null,
+    }));
   }
+
+  imagesViewList: FileModel[] = [];
+  filesViewList: FileModel[] = [];
 
   @ViewChild("newsTextEl") newsTextEl?: ElementRef;
 
@@ -99,7 +118,7 @@ export class NewsCardComponent implements OnInit {
     this.projectNewsService
       .editNews(this.route.snapshot.params["projectId"], this.newsItem.id, {
         ...this.editForm.value,
-        files: this.filesList.filter(f => f.src).map(f => f.src),
+        files: this.imagesEditList.filter(f => f.src).map(f => f.src),
       })
       .subscribe(resNews => {
         this.editMode = false;
@@ -108,7 +127,7 @@ export class NewsCardComponent implements OnInit {
       });
   }
 
-  filesList: {
+  imagesEditList: {
     id: string;
     src: string;
     loading: boolean;
@@ -116,47 +135,144 @@ export class NewsCardComponent implements OnInit {
     tempFile: File | null;
   }[] = [];
 
+  filesEditList: {
+    id: string;
+    src: string;
+    loading: boolean;
+    error: string;
+    name: string;
+    size: number;
+    type: string;
+    tempFile: File | null;
+  }[] = [];
+
   onUploadFile(event: Event) {
     const files = (event.currentTarget as HTMLInputElement).files;
     if (!files) return;
 
-    const fileObj: NewsCardComponent["filesList"][0] = {
-      id: nanoid(2),
-      src: "",
-      loading: true,
-      error: false,
-      tempFile: files[0],
-    };
-    this.filesList.push(fileObj);
-    this.fileService.uploadFile(files[0]).subscribe({
-      next: file => {
-        fileObj.src = file.url;
-        fileObj.loading = false;
+    const observableArray: Observable<any>[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const fileType = files[i].type.split("/")[0];
 
-        fileObj.tempFile = null;
-      },
-      error: () => {
-        fileObj.error = true;
-        fileObj.loading = false;
-      },
-    });
+      if (fileType === "image") {
+        const fileObj: NewsCardComponent["imagesEditList"][0] = {
+          id: nanoid(2),
+          src: "",
+          loading: true,
+          error: false,
+          tempFile: files[0],
+        };
+        this.imagesEditList.push(fileObj);
+
+        observableArray.push(
+          this.fileService.uploadFile(files[i]).pipe(
+            tap(file => {
+              fileObj.src = file.url;
+              fileObj.loading = false;
+
+              if (fileObj.tempFile) {
+                this.imagesViewList.push({
+                  name: fileObj.tempFile.name,
+                  size: fileObj.tempFile.size,
+                  mimeType: fileObj.tempFile.type,
+                  link: fileObj.src,
+                  datetimeUploaded: "",
+                  extension: "",
+                  user: 0,
+                });
+              }
+
+              fileObj.tempFile = null;
+            })
+          )
+        );
+      } else {
+        const fileObj: NewsCardComponent["filesEditList"][0] = {
+          id: nanoid(2),
+          loading: true,
+          error: "",
+          src: "",
+          tempFile: files[0],
+          name: "",
+          size: 0,
+          type: "",
+        };
+        this.filesEditList.push(fileObj);
+
+        observableArray.push(
+          this.fileService.uploadFile(files[i]).pipe(
+            tap(file => {
+              fileObj.loading = false;
+              fileObj.src = file.url;
+
+              if (fileObj.tempFile) {
+                this.filesViewList.push({
+                  name: fileObj.tempFile.name,
+                  size: fileObj.tempFile.size,
+                  mimeType: fileObj.tempFile.type,
+                  link: fileObj.src,
+                  datetimeUploaded: "",
+                  extension: "",
+                  user: 0,
+                });
+              }
+            })
+          )
+        );
+      }
+    }
+
+    forkJoin(observableArray).subscribe(noop);
+    // const fileObj: NewsCardComponent["imagesEditList"][0] = {
+    //   id: nanoid(2),
+    //   src: "",
+    //   loading: true,
+    //   error: false,
+    //   tempFile: files[0],
+    // };
+    // this.imagesEditList.push(fileObj);
+    // this.fileService.uploadFile(files[0]).subscribe({
+    //   next: file => {
+    //     fileObj.src = file.url;
+    //     fileObj.loading = false;
+    //
+    //     fileObj.tempFile = null;
+    //   },
+    //   error: () => {
+    //     fileObj.error = true;
+    //     fileObj.loading = false;
+    //   },
+    // });
   }
 
   onDeletePhoto(fId: string) {
-    const fileIdx = this.filesList.findIndex(f => f.id === fId);
+    const fileIdx = this.imagesEditList.findIndex(f => f.id === fId);
 
-    if (this.filesList[fileIdx].src) {
-      this.filesList[fileIdx].loading = true;
-      this.fileService.deleteFile(this.filesList[fileIdx].src).subscribe(() => {
-        this.filesList.splice(fileIdx, 1);
+    if (this.imagesEditList[fileIdx].src) {
+      this.imagesEditList[fileIdx].loading = true;
+      this.fileService.deleteFile(this.imagesEditList[fileIdx].src).subscribe(() => {
+        this.imagesEditList.splice(fileIdx, 1);
       });
     } else {
-      this.filesList.splice(fileIdx, 1);
+      this.imagesEditList.splice(fileIdx, 1);
+    }
+  }
+
+  onDeleteFile(fId: string) {
+    const fileIdx = this.filesEditList.findIndex(f => f.id === fId);
+
+    if (this.filesEditList[fileIdx].src) {
+      this.filesEditList[fileIdx].loading = true;
+      this.fileService.deleteFile(this.filesEditList[fileIdx].src).subscribe(() => {
+        this.filesEditList.splice(fileIdx, 1);
+      });
+    } else {
+      this.filesEditList.splice(fileIdx, 1);
     }
   }
 
   onRetryUpload(id: string) {
-    const fileObj = this.filesList.find(f => f.id === id);
+    const fileObj = this.imagesEditList.find(f => f.id === id);
     if (!fileObj || !fileObj.tempFile) return;
 
     fileObj.loading = true;
@@ -179,6 +295,7 @@ export class NewsCardComponent implements OnInit {
   showLikes: boolean[] = [];
 
   lastTouch = 0;
+
   onTouchImg(_event: TouchEvent, imgIdx: number) {
     if (Date.now() - this.lastTouch < 300) {
       this.like.emit(this.newsItem.id);

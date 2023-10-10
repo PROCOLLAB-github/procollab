@@ -1,11 +1,25 @@
 <!-- @format -->
-
-<div
-  class="dot-wave"
-  [style]="'--speed:' + speed + ';' + '--size:' + size + ';' + '--color:' + 'var(--' + color + ');'"
->
-  <div class="dot-wave__dot"></div>
-  <div class="dot-wave__dot"></div>
-  <div class="dot-wave__dot"></div>
-  <div class="dot-wave__dot"></div>
+<div>
+  <div
+    *ngIf="type === 'wave'"
+    class="dot-wave"
+    [style]="
+      '--speed:' + speed + ';' + '--size:' + size + ';' + '--color:' + 'var(--' + color + ');'
+    "
+  >
+    <div class="dot-wave__dot"></div>
+    <div class="dot-wave__dot"></div>
+    <div class="dot-wave__dot"></div>
+    <div class="dot-wave__dot"></div>
+  </div>
+  <div
+    *ngIf="type === 'circle'"
+    class="lds-ring"
+    [style]="'--size:' + size + ';' + '--color:' + 'var(--' + color + ');'"
+  >
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
 </div>

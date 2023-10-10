@@ -8,6 +8,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
+import { forkJoin, noop, Observable, tap } from "rxjs";
 
 @Component({
   selector: "app-news-form",
@@ -41,7 +42,7 @@ export class NewsFormComponent implements OnInit {
     this.projectNewsService
       .addNews(this.route.snapshot.params["projectId"], {
         ...this.messageForm.value,
-        files: this.imagesList.map(f => f.src),
+        files: [...this.imagesList.map(f => f.src), ...this.filesList.map(f => f.src)],
       })
       .subscribe(news => {
         this.addNews.emit(news);
@@ -59,30 +60,62 @@ export class NewsFormComponent implements OnInit {
     tempFile: File | null;
   }[] = [];
 
+  filesList: {
+    id: string;
+    loading: boolean;
+    error: string;
+    src: string;
+    tempFile: File;
+  }[] = [];
+
   onUploadFile(event: Event) {
     const files = (event.currentTarget as HTMLInputElement).files;
     if (!files) return;
 
-    const fileObj: NewsFormComponent["imagesList"][0] = {
-      id: nanoid(2),
-      src: "",
-      loading: true,
-      error: false,
-      tempFile: files[0],
-    };
-    this.imagesList.push(fileObj);
-    this.fileService.uploadFile(files[0]).subscribe({
-      next: file => {
-        fileObj.src = file.url;
-        fileObj.loading = false;
+    const observableArray: Observable<any>[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const fileType = files[i].type.split("/")[0];
 
-        fileObj.tempFile = null;
-      },
-      error: () => {
-        fileObj.error = true;
-        fileObj.loading = false;
-      },
-    });
+      if (fileType === "image") {
+        const fileObj: NewsFormComponent["imagesList"][0] = {
+          id: nanoid(2),
+          src: "",
+          loading: true,
+          error: false,
+          tempFile: files[0],
+        };
+        this.imagesList.push(fileObj);
+        observableArray.push(
+          this.fileService.uploadFile(files[i]).pipe(
+            tap(file => {
+              fileObj.src = file.url;
+              fileObj.loading = false;
+
+              fileObj.tempFile = null;
+            })
+          )
+        );
+      } else {
+        const fileObj: NewsFormComponent["filesList"][0] = {
+          id: nanoid(2),
+          loading: true,
+          error: "",
+          src: "",
+          tempFile: files[0],
+        };
+        this.filesList.push(fileObj);
+        observableArray.push(
+          this.fileService.uploadFile(files[i]).pipe(
+            tap(file => {
+              fileObj.loading = false;
+              fileObj.src = file.url;
+            })
+          )
+        );
+      }
+    }
+
+    forkJoin(observableArray).subscribe(noop);
   }
 
   onDeletePhoto(fId: string) {
@@ -98,13 +131,25 @@ export class NewsFormComponent implements OnInit {
     }
   }
 
+  onDeleteFile(fId: string) {
+    const fileIdx = this.filesList.findIndex(f => f.id === fId);
+
+    if (this.filesList[fileIdx].src) {
+      this.filesList[fileIdx].loading = true;
+      this.fileService.deleteFile(this.imagesList[fileIdx].src).subscribe(() => {
+        this.filesList.splice(fileIdx, 1);
+      });
+    } else {
+      this.filesList.splice(fileIdx, 1);
+    }
+  }
+
   onRetryUpload(id: string) {
     const fileObj = this.imagesList.find(f => f.id === id);
     if (!fileObj || !fileObj.tempFile) return;
 
     fileObj.loading = true;
     fileObj.error = false;
-
     this.fileService.uploadFile(fileObj.tempFile).subscribe({
       next: file => {
         fileObj.src = file.url;

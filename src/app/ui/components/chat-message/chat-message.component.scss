@@ -22,12 +22,12 @@
     display: flex;
     flex-grow: 1;
     align-items: flex-start;
-    max-width: 90%;
+    max-width: 95%;
   }
 
   &__info {
     flex-grow: 1;
-    max-width: 100%;
+    min-width: 0;
   }
 
   &__top {
@@ -45,7 +45,6 @@
   }
 
   &__files {
-    max-width: 80%;
     margin-bottom: 8px;
   }
 
@@ -65,6 +64,7 @@
 
   &__menu-dots {
     display: flex;
+    flex-basis: 5%;
     align-items: center;
     justify-content: center;
     width: 24px;

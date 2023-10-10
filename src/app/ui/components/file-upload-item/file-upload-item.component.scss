@@ -3,18 +3,39 @@
 .file {
   display: flex;
   align-items: center;
+  padding: 10px;
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+
+  &--loading {
+    .file__name,
+    .file__icon {
+      opacity: 0.5;
+    }
+  }
+
+  &--error {
+    border-color: var(--red);
+  }
+
+  &__error {
+    display: flex;
+    align-items: center;
+    color: var(--red);
+
+    i {
+      margin-right: 10px;
+    }
+  }
 
   &__icon {
     display: flex;
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 22px;
+    height: 22px;
     margin-right: 12px;
-    cursor: pointer;
-    border: 1px solid var(--gray);
-    border-radius: 8px;
   }
 
   &__info {
@@ -25,17 +46,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-
-    & span {
-      cursor: pointer;
-    }
   }
 
   &__meta {
     color: var(--dark-grey);
   }
 
-  &__download {
+  &__right {
     margin-left: auto;
     cursor: pointer;
   }

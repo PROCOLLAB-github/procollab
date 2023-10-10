@@ -34,6 +34,7 @@ import { PortalModule } from "@angular/cdk/portal";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { FileTypePipe } from "./pipes/file-type.pipe";
 import { BackComponent } from "./components/back/back.component";
+import { FileUploadItemComponent } from "./components/file-upload-item/file-upload-item.component";
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { BackComponent } from "./components/back/back.component";
     DeleteConfirmComponent,
     FileTypePipe,
     BackComponent,
+    FileUploadItemComponent,
   ],
   imports: [
     CommonModule,
@@ -94,6 +96,7 @@ import { BackComponent } from "./components/back/back.component";
     DeleteConfirmComponent,
     BackComponent,
     FileTypePipe,
+    FileUploadItemComponent,
   ],
 })
 export class UiModule {}
