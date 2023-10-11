@@ -14,7 +14,7 @@ export class EmailVerificationComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private readonly authService: AuthService) {}
 
   ngOnInit(): void {
-    const emailSub$ = this.route.queryParams.pipe(map(r => r["email"])).subscribe(r => {
+    const emailSub$ = this.route.queryParams.pipe(map(r => r["adress"])).subscribe(r => {
       this.userEmail = r;
     });
     this.subscriptions$.push(emailSub$);

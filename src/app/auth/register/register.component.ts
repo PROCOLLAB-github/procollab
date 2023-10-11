@@ -97,7 +97,7 @@ export class RegisterComponent implements OnInit {
         this.cdref.detectChanges();
 
         this.router
-          .navigateByUrl("/auth/verification/email")
+          .navigateByUrl("/auth/verification/email?adress=" + form.email)
           .then(() => console.debug("Route changed from RegisterComponent"));
       },
       error: error => {
