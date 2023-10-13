@@ -8,6 +8,7 @@ import { Invite } from "@models/invite.model";
 import { AuthService } from "@auth/services";
 import { ProjectService } from "@services/project.service";
 import { User } from "@auth/models/user.model";
+import { ChatService } from "@services/chat.service";
 
 @Component({
   selector: "app-office",
@@ -20,7 +21,8 @@ export class OfficeComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     public readonly authService: AuthService,
     private readonly projectService: ProjectService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly chatService: ChatService
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +44,8 @@ export class OfficeComponent implements OnInit, OnDestroy {
       }
     });
     this.subscriptions$.push(profileSub$);
+
+    this.chatService.connect().subscribe(() => {});
   }
 
   ngOnDestroy(): void {

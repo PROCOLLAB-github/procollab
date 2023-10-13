@@ -40,16 +40,12 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     }); // pull info about project
     projectSub$ && this.subscriptions$.push(projectSub$);
 
-    const chatSub$ = this.chatService.connect().subscribe(() => {
-      // connecting to chats websocket
-      console.debug("Chat websocket connected from ProjectChatComponent");
+    console.debug("Chat websocket connected from ProjectChatComponent");
 
-      this.initTypingEvent(); // event for show bare whenever anybody in chat type something
-      this.initMessageEvent(); // Wait for messages from other member, insert into chat
-      this.initEditEvent(); // Wait for messages to be edited by other members
-      this.initDeleteEvent(); // Delete messages when following event comes from websocket
-    });
-    chatSub$ && this.subscriptions$.push(chatSub$);
+    this.initTypingEvent(); // event for show bare whenever anybody in chat type something
+    this.initMessageEvent(); // Wait for messages from other member, insert into chat
+    this.initEditEvent(); // Wait for messages to be edited by other members
+    this.initDeleteEvent(); // Delete messages when following event comes from websocket
 
     this.fetchMessages().subscribe(noop);
 

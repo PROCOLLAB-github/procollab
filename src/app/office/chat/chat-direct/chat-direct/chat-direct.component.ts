@@ -32,12 +32,10 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
 
     this.fetchMessages().subscribe(noop);
 
-    this.chatService.connect().subscribe(() => {
-      this.initMessageEvent();
-      this.initTypingEvent();
-      this.initDeleteEvent();
-      this.initEditEvent();
-    });
+    this.initMessageEvent();
+    this.initTypingEvent();
+    this.initDeleteEvent();
+    this.initEditEvent();
 
     this.authService.profile.subscribe(u => {
       this.currentUserId = u.id;
