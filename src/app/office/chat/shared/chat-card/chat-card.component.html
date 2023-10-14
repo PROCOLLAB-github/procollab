@@ -17,5 +17,7 @@
       </div>
     </div>
   </div>
-  <div *ngIf="chat.lastMessage && chat.lastMessage.text" class="card__time text-body-14">14:10</div>
+  <div *ngIf="chat.lastMessage && chat.lastMessage.text" class="card__time text-body-14">
+    {{ chat.lastMessage.createdAt | dayjs: "format":"DD MMMM" }}
+  </div>
 </div>

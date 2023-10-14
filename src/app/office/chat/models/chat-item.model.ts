@@ -11,6 +11,7 @@ export interface ChatListItem {
     isRead: boolean;
     reply: ChatListItem["lastMessage"];
     text: string;
+    createdAt: string;
   };
   name: string;
   imageAddress: string;
