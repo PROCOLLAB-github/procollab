@@ -5,7 +5,7 @@
     <span>Фильтр</span>
     <i appIcon icon="filter" appSquare="34"></i>
   </div>
-  <ul class="page__list" *ngIf="searchedProjects.length">
+  <ul class="page__list">
     <a *ngFor="let project of searchedProjects" [routerLink]="['/office/projects', project.id]">
       <li>
         <app-project-card
