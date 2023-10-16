@@ -2,8 +2,8 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthService } from "@auth/services";
-import { Subscription } from "rxjs";
+import { Subscription, take } from "rxjs";
+import { OnboardingService } from "../services/onboarding.service";
 
 @Component({
   selector: "app-onboarding",
@@ -13,30 +13,34 @@ import { Subscription } from "rxjs";
 export class OnboardingComponent implements OnInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly authService: AuthService,
+    private readonly onboardingService: OnboardingService,
     private readonly router: Router
   ) {}
 
   ngOnInit(): void {
-    const profile = this.authService.profile.subscribe(p => {
-      if (p.onboardingStage === null) {
+    const stage$ = this.onboardingService.currentStage$.subscribe(s => {
+      if (s === null) {
         this.router
           .navigateByUrl("/office")
           .then(() => console.debug("Route changed from OnboardingComponent"));
         return;
       }
 
-      this.stage = p.onboardingStage;
+      if (this.router.url.includes("stage")) {
+        this.stage = parseInt(this.router.url.split("-")[1]);
+      } else {
+        this.stage = s;
+      }
 
       this.router
-        .navigate([`stage-${p.onboardingStage}`], { relativeTo: this.route })
+        .navigate([`stage-${this.stage}`], { relativeTo: this.route })
         .then(() => console.debug("Route changed from OnboardingComponent"));
     });
-    this.subscriptions$.push(profile);
 
-    this.updateActiveStage();
-    const events$ = this.router.events.subscribe(this.updateActiveStage.bind(this));
-    this.subscriptions$.push(events$);
+    this.updateStage();
+    const events$ = this.router.events.subscribe(this.updateStage.bind(this));
+
+    this.subscriptions$.push(stage$, events$);
   }
 
   ngOnDestroy(): void {
@@ -48,8 +52,9 @@ export class OnboardingComponent implements OnInit, OnDestroy {
 
   subscriptions$: Subscription[] = [];
 
-  updateActiveStage(): void {
+  updateStage(): void {
     this.activeStage = parseInt(this.router.url.split("-")[1]);
+    this.stage = parseInt(this.router.url.split("-")[1]);
   }
 
   goToStep(stage: number): void {

@@ -5,6 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { OnboardingStageTwoComponent } from "./stage-two.component";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
+import { OnboardingService } from "../services/onboarding.service";
 import { RouterTestingModule } from "@angular/router/testing";
 
 describe("StageTwoComponent", () => {
@@ -16,11 +17,15 @@ describe("StageTwoComponent", () => {
       saveProfile: of({}),
       setOnboardingStage: of({}),
     });
+    const onboardingSpy = jasmine.createSpyObj({}, { formValue$: of({}) });
 
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule],
       declarations: [OnboardingStageTwoComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [
+        { provide: AuthService, useValue: authSpy },
+        { provide: OnboardingService, useValue: onboardingSpy },
+      ],
     }).compileComponents();
   });
 

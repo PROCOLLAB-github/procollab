@@ -3,10 +3,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
-import { concatMap, Subscription } from "rxjs";
+import { concatMap, Subscription, take } from "rxjs";
 import { AuthService } from "@auth/services";
 import { ValidationService } from "@core/services";
 import { Router } from "@angular/router";
+import { OnboardingService } from "../services/onboarding.service";
 
 @Component({
   selector: "app-stage-one",
@@ -17,25 +18,31 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
+    private readonly onboardingService: OnboardingService,
     private readonly validationService: ValidationService,
     private readonly router: Router
   ) {
-    this.stageFrom = this.fb.group({
+    this.stageForm = this.fb.group({
       speciality: [""],
       keySkills: this.fb.array([]),
     });
   }
 
   ngOnInit(): void {
-    const profile$ = this.authService.profile.subscribe(p => {
-      this.stageFrom.patchValue({
-        speciality: p.speciality,
-        keySkills: p.keySkills,
+    const formValueState$ = this.onboardingService.formValue$.pipe(take(1)).subscribe(fv => {
+      this.stageForm.patchValue({
+        speciality: fv.speciality,
+        keySkills: fv.keySkills,
       });
 
-      p.keySkills?.forEach(skill => this.addKeySkill(skill));
+      fv.keySkills?.forEach(skill => this.addKeySkill(skill));
     });
-    this.subscriptions$.push(profile$);
+
+    const formValueChange$ = this.stageForm.valueChanges.subscribe(value => {
+      this.onboardingService.setFormValue(value);
+    });
+
+    this.subscriptions$.push(formValueState$, formValueChange$);
   }
 
   ngOnDestroy(): void {
@@ -43,12 +50,12 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
   }
 
   subscriptions$: Subscription[] = [];
-  stageFrom: FormGroup;
+  stageForm: FormGroup;
 
   newKeySkillTitle = "";
 
   get keySkills(): FormArray {
-    return this.stageFrom.get("keySkills") as FormArray;
+    return this.stageForm.get("keySkills") as FormArray;
   }
 
   addKeySkill(title?: string): void {
@@ -68,14 +75,17 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
   }
 
   errorMessage = ErrorMessage;
+  stageSubmitting = false;
 
   onSubmit(): void {
-    if (!this.validationService.getFormValidation(this.stageFrom)) {
+    if (!this.validationService.getFormValidation(this.stageForm)) {
       return;
     }
 
+    this.stageSubmitting = true;
+
     this.authService
-      .saveProfile(this.stageFrom.value)
+      .saveProfile(this.stageForm.value)
       .pipe(concatMap(() => this.authService.setOnboardingStage(2)))
       .subscribe(() => {
         this.router

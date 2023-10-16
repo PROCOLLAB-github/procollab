@@ -8,8 +8,8 @@
       самые подходящие вакансии
     </p>
   </div>
-  <form [formGroup]="stageFrom" class="page__form">
-    <fieldset class="page__field" *ngIf="stageFrom.get('speciality') as speciality">
+  <form [formGroup]="stageForm" class="page__form">
+    <fieldset class="page__field" *ngIf="stageForm.get('speciality') as speciality">
       <label for="speciality" class="field-label">Специальность</label>
       <app-input
         id="speciality"
@@ -50,6 +50,6 @@
         </app-button>
       </div>
     </div>
-    <app-button type="submit" (click)="onSubmit()">Продолжить</app-button>
+    <app-button type="submit" [loader]="stageSubmitting" (click)="onSubmit()">Продолжить</app-button>
   </form>
 </div>

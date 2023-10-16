@@ -8,6 +8,7 @@ import { ValidationService } from "@core/services";
 import { concatMap, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { User } from "@auth/models/user.model";
+import { OnboardingService } from "../services/onboarding.service";
 
 @Component({
   selector: "app-stage-zero",
@@ -17,6 +18,7 @@ import { User } from "@auth/models/user.model";
 export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   constructor(
     public readonly authService: AuthService,
+    private readonly onboardingService: OnboardingService,
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly router: Router
@@ -31,14 +33,17 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const profile$ = this.authService.profile.subscribe(p => {
       this.profile = p;
+    });
 
+    const formValueState$ = this.onboardingService.formValue$.subscribe(fv => {
       this.stageForm.patchValue({
-        avatar: p.avatar,
-        city: p.city,
-        organization: p.organization,
+        avatar: fv.avatar,
+        city: fv.city,
+        organization: fv.organization,
       });
     });
-    this.subscriptions$.push(profile$);
+
+    this.subscriptions$.push(profile$, formValueState$);
   }
 
   ngOnDestroy(): void {
@@ -48,6 +53,7 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   stageForm: FormGroup;
   errorMessage = ErrorMessage;
   profile?: User;
+  stageSubmitting = false;
   subscriptions$: Subscription[] = [];
 
   onSubmit(): void {
@@ -55,10 +61,13 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.stageSubmitting = true;
+
     this.authService
       .saveProfile(this.stageForm.value)
       .pipe(concatMap(() => this.authService.setOnboardingStage(1)))
       .subscribe(() => {
+        this.onboardingService.setFormValue(this.stageForm.value);
         this.router
           .navigateByUrl("/office/onboarding/stage-1")
           .then(() => console.debug("Route changed from OnboardingStageZeroComponent"));

@@ -39,7 +39,7 @@
       </ng-container>
     </app-user-type-card>
   </div>
-  <app-button class="page__button" (click)="onSubmit()">Продолжить</app-button>
+  <app-button class="page__button" [loader]='stageSubmitting' (click)="onSubmit()">Продолжить</app-button>
   <p class="error page__error" *ngIf="stageTouched && userRole === -1">
     Вы ничего не выбрали, выберите подходящий пункт и нажмите “продолжить”
   </p>
