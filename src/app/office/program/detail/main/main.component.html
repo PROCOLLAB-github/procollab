@@ -32,11 +32,7 @@
           >
             <app-button color="grey" customTypographyClass="text-body-12">
               Положение программы
-              <i
-                appIcon
-                icon="file_pdf"
-                appSquare="16"
-              ></i>
+              <i appIcon class="info__presentation-icon" icon="file_pdf" appSquare="16"></i>
             </app-button>
           </a>
           <a
@@ -67,7 +63,7 @@
             class="read-more"
             (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
           >
-            {{ readFullDescription ? 'Скрыть' : 'Читать полностью' }}
+            {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
           </div>
         </div>
       </div>

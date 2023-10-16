@@ -204,6 +204,8 @@
     left: 50%;
     z-index: 3;
     display: block;
+    background-color: var(--white);
+    border-radius: 50%;
     transform: translateX(-50%) translateY(30px);
 
     @include responsive.apply-desktop {
@@ -304,6 +306,10 @@
     i {
       margin-left: 10px;
     }
+  }
+
+  &__presentation-icon {
+    min-width: 16px;
   }
 
   &__edit {
