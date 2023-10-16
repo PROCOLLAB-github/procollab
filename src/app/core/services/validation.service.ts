@@ -27,8 +27,11 @@ export class ValidationService {
 
   useDateFormatValidator(control: AbstractControl): ValidationErrors | null {
     try {
-      const value = dayjs(control.value, "DD.MM.YYYY");
-      return value.fromNow().includes("in") ? { invalidDateFormat: true } : null;
+      const value = dayjs(control.value, "DD.MM.YYYY", true);
+      if (value.fromNow().includes("in") || !value.isValid()) {
+        return { invalidDateFormat: true };
+      }
+      return null;
     } catch (e) {
       return { invalidDateFormat: true };
     }
@@ -36,9 +39,12 @@ export class ValidationService {
 
   useAgeValidator(age = 12): ValidatorFn {
     return control => {
-      const value = dayjs(control.value, "DD.MM.YYYY");
-      const difference = dayjs().diff(value, "year");
-      return difference >= age ? null : { tooYoung: { requiredAge: age } };
+      const value = dayjs(control.value, "DD.MM.YYYY", true);
+      if (value.isValid()) {
+        const difference = dayjs().diff(value, "year");
+        return difference >= age ? null : { tooYoung: { requiredAge: age } };
+      }
+      return null;
     };
   }
 
