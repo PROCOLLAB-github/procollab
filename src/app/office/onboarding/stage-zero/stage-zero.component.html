@@ -48,6 +48,6 @@
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
     </fieldset>
-    <app-button type="submit">Продолжить</app-button>
+    <app-button type="submit" [loader]="stageSubmitting">Продолжить</app-button>
   </form>
 </div>
