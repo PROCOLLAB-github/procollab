@@ -1,15 +1,15 @@
 /** @format */
 
 .avatar {
-  overflow: hidden;
-  border-radius: 50%;
-
   img {
     object-fit: cover;
     object-position: center;
+    border-radius: 50%;
   }
 
   &--border {
-    border: 2px solid var(--white);
+    img {
+      border: 2px solid var(--white);
+    }
   }
 }
