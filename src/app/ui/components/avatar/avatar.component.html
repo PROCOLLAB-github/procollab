@@ -12,5 +12,11 @@
     [style.height]="size + 'px'"
     alt="avatar"
   />
-  <div *ngIf="isOnline" class="avatar__online"></div>
+  <div
+    *ngIf="isOnline"
+    [style.width]="onlineBadgeSize + 'px'"
+    [style.height]="onlineBadgeSize + 'px'"
+    [style.border-width]="onlineBadgeBorder + 'px'"
+    class="avatar__online"
+  ></div>
 </div>

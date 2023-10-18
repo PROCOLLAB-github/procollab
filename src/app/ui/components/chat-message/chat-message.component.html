@@ -9,7 +9,10 @@
   <div class="message__inner">
     <app-avatar
       class="message__avatar"
+      [size]="40"
       [isOnline]="chatMessage.author.isOnline"
+      [onlineBadgeBorder]="2"
+      [onlineBadgeSize]="10"
       [url]="chatMessage.author.avatar"
     ></app-avatar>
     <div class="message__info">

@@ -13,6 +13,9 @@ export class AvatarComponent implements OnInit {
   @Input() hasBorder = false;
   @Input() isOnline = false;
 
+  @Input() onlineBadgeSize = 16;
+  @Input() onlineBadgeBorder = 3;
+
   placeholderUrl = "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif";
 
   constructor() {}
