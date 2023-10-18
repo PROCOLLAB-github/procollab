@@ -35,6 +35,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         map(r => r["data"]),
         tap(program => {
           this.program = program;
+          this.registerDateExpired = Date.now() > Date.parse(program.datetimeRegistrationEnds);
         }),
         concatMap(program => {
           if (program.isUserMember) {
@@ -81,6 +82,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   news: ProjectNews[] = [];
   program?: Program;
   // program$?: Observable<Program> = this.route.parent?.data.pipe(map(r => r["data"]));
+
+  registerDateExpired!: boolean;
 
   descriptionExpandable!: boolean;
   readFullDescription = false;
