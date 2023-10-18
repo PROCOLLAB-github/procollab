@@ -15,6 +15,7 @@ export interface ChatListItem {
   };
   name: string;
   imageAddress: string;
+  opponent?: User;
 }
 
 export interface ChatItem {
