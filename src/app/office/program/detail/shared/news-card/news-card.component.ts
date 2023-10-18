@@ -43,7 +43,6 @@ export class ProgramNewsCardComponent implements OnInit {
   editMode = false;
 
   ngOnInit(): void {
-    console.log(this.newsItem);
     this.showLikes = this.newsItem.files.map(() => false);
 
     this.imagesViewList = this.newsItem.files.filter(
