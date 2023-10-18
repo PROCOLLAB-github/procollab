@@ -2,7 +2,6 @@
 
 import { Component, Input, OnInit } from "@angular/core";
 import { User } from "@auth/models/user.model";
-import { containerSm } from "@utils/responsive";
 
 @Component({
   selector: "app-member-card",
@@ -15,8 +14,4 @@ export class MemberCardComponent implements OnInit {
   @Input() user!: User;
 
   ngOnInit(): void {}
-
-  containerSm = containerSm;
-
-  appWidth = window.innerWidth;
 }
