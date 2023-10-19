@@ -1,9 +1,23 @@
 /** @format */
 
 .avatar {
+  position: relative;
+
   img {
     object-fit: cover;
     object-position: center;
+    border-radius: 50%;
+  }
+
+  &__online {
+    position: absolute;
+    right: 0;
+    bottom: -1.5px;
+    z-index: 1;
+    width: 16px;
+    height: 16px;
+    background-color: var(--green);
+    border: 3px solid var(--white);
     border-radius: 50%;
   }
 

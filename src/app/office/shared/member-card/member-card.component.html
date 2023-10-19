@@ -2,7 +2,7 @@
 
 <div class="card">
   <div class="card__body">
-    <app-avatar [url]="user.avatar" [size]="appWidth > containerSm ? 90 : 60"></app-avatar>
+    <app-avatar [url]="user.avatar" [isOnline]="user.isOnline" [size]="60"></app-avatar>
     <div class="card__info">
       <p class="text-body-12 card__status">{{ user.userType | userRole | async }}</p>
       <p class="text-body-bold-18 card__name">{{ user.firstName }} {{ user.lastName }}</p>

@@ -2,7 +2,12 @@
 
 <div class="card" [class.card--last]="isLast">
   <div class="card__row">
-    <app-avatar class="card__avatar" [url]="chat.imageAddress" [size]="60"></app-avatar>
+    <app-avatar
+      class="card__avatar"
+      [isOnline]="chat.opponent ? chat.opponent.isOnline : false"
+      [url]="chat.imageAddress"
+      [size]="60"
+    ></app-avatar>
     <div class="card__body">
       <div class="card__name text-body-16">
         {{ chat.name }}

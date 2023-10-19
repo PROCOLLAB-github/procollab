@@ -18,6 +18,8 @@ export class User {
   avatar!: string;
   links!: string[];
   keySkills!: string[];
+  isOnline!: boolean;
+  isActive!: boolean;
   member?: {
     usefulToProject: string;
   };
