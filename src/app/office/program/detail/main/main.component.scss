@@ -238,6 +238,7 @@
     @include responsive.apply-desktop {
       flex-direction: row;
       gap: 10px;
+      justify-content: flex-end;
 
       & > a {
         flex-grow: 1;
