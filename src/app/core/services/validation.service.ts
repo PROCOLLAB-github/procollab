@@ -17,18 +17,31 @@ export class ValidationService {
 
   useMatchValidator(left: string, right: string): ValidatorFn {
     return group => {
-      if (!group.get(left) || !group.get(right)) {
+      const controls = [group.get(left), group.get(right)];
+      if (!controls.every(Boolean)) {
         throw new Error(`No control with name ${left} or ${right}`);
       }
-
-      return group.get(left)?.value !== group.get(right)?.value ? { unMatch: true } : null;
+      const isMatching = controls[0]?.value === controls[1]?.value;
+      if (!isMatching) {
+        controls.forEach(c => c?.setErrors({ ...(c.errors || {}), unMatch: true }));
+        return { unMatch: true };
+      }
+      controls.forEach(c => {
+        if (c?.errors) {
+          delete c.errors?.["unMatch"];
+          if (!Object.keys(c.errors).length) {
+            c.setErrors(null);
+          }
+        }
+      });
+      return null;
     };
   }
 
   useDateFormatValidator(control: AbstractControl): ValidationErrors | null {
     try {
       const value = dayjs(control.value, "DD.MM.YYYY", true);
-      if (value.fromNow().includes("in") || !value.isValid()) {
+      if (control.value && (value.fromNow().includes("in") || !value.isValid())) {
         return { invalidDateFormat: true };
       }
       return null;
@@ -45,6 +58,12 @@ export class ValidationService {
         return difference >= age ? null : { tooYoung: { requiredAge: age } };
       }
       return null;
+    };
+  }
+
+  useLanguageValidator(): ValidatorFn {
+    return control => {
+      return control.value.match(/^[А-Яа-я]*$/g) ? null : { invalidLanguage: true };
     };
   }
 
