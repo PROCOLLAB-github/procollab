@@ -51,7 +51,7 @@ export class WebsocketService {
     return this.messages$.asObservable().pipe(
       map(message => JSON.parse(message.data)),
       filter(message => message.type === type),
-      map(message => camelcaseKeys(message, { deep: true }))
+      map(message => camelcaseKeys(message.content, { deep: true }))
     );
   }
 
