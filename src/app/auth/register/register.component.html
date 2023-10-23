@@ -23,23 +23,25 @@
       <fieldset *ngIf="registerForm.get('email') as email" class="auth__field">
         <label for="email" class="field-label">Почта</label>
         <app-input
-          [error]="email | controlError"
+          [error]="(email | controlError) && credsSubmitInitiated"
           id="email"
           type="email"
           formControlName="email"
           placeholder="mail@example.ru"
         ></app-input>
-        <div *ngIf="email | controlError: 'required'" class="text-body-14 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        <div *ngIf="email | controlError: 'email'" class="text-body-14 error">
-          {{ errorMessage.VALIDATION_EMAIL }}
-        </div>
+        <ng-container *ngIf="credsSubmitInitiated">
+          <div *ngIf="(email | controlError: 'required')" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          <div *ngIf="(email | controlError: 'email')" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_EMAIL }}
+          </div>
+        </ng-container>
       </fieldset>
       <fieldset *ngIf="registerForm.get('password') as password" class="auth__field">
         <label for="passowrd" class="field-label">Пароль</label>
         <app-input
-          [error]="password | controlError"
+          [error]="(password | controlError) && credsSubmitInitiated"
           id="passowrd"
           type="password"
           formControlName="password"
@@ -47,21 +49,23 @@
         ></app-input>
         <app-input
           class="register__repeated-password"
-          [error]="password | controlError"
+          [error]="(password | controlError) && credsSubmitInitiated"
           id="repeatedPassword"
           type="password"
           formControlName="repeatedPassword"
           placeholder="Повторите пароль"
         ></app-input>
-        <div *ngIf="password | controlError: 'required'" class="text-body-14 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        <div *ngIf="password | controlError: 'minlength'" class="text-body-14 error">
-          {{ errorMessage.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
-        </div>
-        <div *ngIf="registerForm | controlError: 'unMatch'" class="text-body-14 error">
-          {{ errorMessage.VALIDATION_PASSWORD_UNMATCH }}
-        </div>
+        <ng-container *ngIf="credsSubmitInitiated">
+          <div *ngIf="password | controlError: 'required'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          <div *ngIf="password | controlError: 'minlength'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
+          </div>
+          <div *ngIf="password | controlError: 'unMatch'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_PASSWORD_UNMATCH }}
+          </div>
+        </ng-container>
       </fieldset>
     </ng-container>
     <ng-container *ngIf="step === 'info'">
@@ -69,49 +73,67 @@
         <fieldset *ngIf="registerForm.get('firstName') as name" class="auth__field">
           <label for="name" class="field-label">Имя</label>
           <app-input
-            [error]="name | controlError"
+            [error]="(name | controlError) && infoSubmitInitiated"
             id="name"
             type="text"
             formControlName="firstName"
             placeholder="Иван"
           ></app-input>
-          <div *ngIf="name | controlError: 'required'" class="text-body-14 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
+          <ng-container *ngIf="infoSubmitInitiated">
+            <div *ngIf="name | controlError: 'required'" class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            <div 
+              *ngIf="(name | controlError: 'invalidLanguage')" 
+              class="text-body-14 error"
+            >
+              {{ errorMessage.VALIDATION_LANGUAGE }}
+            </div>
+          </ng-container>
         </fieldset>
         <fieldset *ngIf="registerForm.get('lastName') as surname" class="auth__field">
           <label for="surname" class="field-label">Фамилия</label>
           <app-input
-            [error]="surname | controlError"
+            [error]="(surname | controlError) && infoSubmitInitiated"
             id="surname"
             type="text"
             formControlName="lastName"
             placeholder="Иванов"
           ></app-input>
-          <div *ngIf="surname | controlError: 'required'" class="text-body-14 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
+          <ng-container *ngIf="infoSubmitInitiated">
+            <div *ngIf="surname | controlError: 'required'" class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            <div 
+              *ngIf="surname | controlError: 'invalidLanguage'" 
+              class="text-body-14 error"
+            >
+              {{ errorMessage.VALIDATION_LANGUAGE }}
+            </div>
+          </ng-container>
         </fieldset>
       </div>
       <fieldset *ngIf="registerForm.get('birthday') as birthday" class="auth__field">
         <label for="birthday" class="field-label">Дата рождения</label>
         <app-input
           id="birthday"
-          [error]="birthday | controlError"
+          [error]="(birthday | controlError) && infoSubmitInitiated"
           type="text"
           mask="00.00.0000"
           placeholder="ДД.ММ.ГГГГ"
           formControlName="birthday"
         ></app-input>
-        <div *ngIf="birthday | controlError: 'required'" class="text-body-14 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        <div *ngIf="birthday | controlError: 'tooYoung'" class="text-body-14 error">
-          {{ errorMessage.MINIMAL_AGE }} {{ birthday.errors?.tooYoung.requiredAge }} лет
-        </div>
-        <div *ngIf="birthday | controlError: 'invalidDateFormat'" class="text-body-14 error">
-          {{ errorMessage.INVALID_DATE }}
-        </div>
+        <ng-container *ngIf="infoSubmitInitiated">
+          <div *ngIf="birthday | controlError: 'required'" class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          <div *ngIf="birthday | controlError: 'tooYoung'" class="text-body-14 error">
+            {{ errorMessage.MINIMAL_AGE }} {{ birthday.errors?.tooYoung.requiredAge }} лет
+          </div>
+          <div *ngIf="birthday | controlError: 'invalidDateFormat'" class="text-body-14 error">
+            {{ errorMessage.INVALID_DATE }}
+          </div>
+        </ng-container>
       </fieldset>
     </ng-container>
     <div *ngIf="serverErrors" class="text-body-14 error">
