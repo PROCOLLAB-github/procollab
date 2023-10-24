@@ -15,6 +15,10 @@
           [url]="user.avatar"
           [size]="140"
           [hasBorder]="true"
+          [onlineBadgeSize]="30"
+          [onlineBadgeBorder]="6"
+          *ngIf="chatService.userOnlineStatusCache | async as cache"
+          [isOnline]="cache[user.id] !== undefined ? cache[user.id] : user.isOnline"
         ></app-avatar>
         <div class="profile__main-info">
           <h2 class="text-heading-3 profile__name">{{ user.firstName }} {{ user.lastName }}</h2>
@@ -112,8 +116,8 @@
             <app-tag>{{ skill }}</app-tag>
           </li>
         </ul>
-        <p 
-          [innerHTML]="user.aboutMe | parseLinks | parseBreaks" 
+        <p
+          [innerHTML]="user.aboutMe | parseLinks | parseBreaks"
           class="text-body-14 profile__about-text"
         ></p>
       </div>

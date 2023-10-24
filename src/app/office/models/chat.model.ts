@@ -8,6 +8,10 @@ export class LoadChatMessages {
   results!: ChatMessage[];
 }
 
+export class OnChangeStatus {
+  userId!: number;
+}
+
 export class OnChatMessageDto {
   chatId!: string;
   message!: ChatMessage;

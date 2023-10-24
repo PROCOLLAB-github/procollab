@@ -2,13 +2,14 @@
 
 import { Injectable } from "@angular/core";
 import { WebsocketService } from "@core/services/websocket.service";
-import { map, Observable } from "rxjs";
+import { BehaviorSubject, map, Observable } from "rxjs";
 import { ApiService } from "@core/services";
 import {
   ChatEventType,
   DeleteChatMessageDto,
   EditChatMessageDto,
   LoadChatMessages,
+  OnChangeStatus,
   OnChatMessageDto,
   OnDeleteChatMessageDto,
   OnEditChatMessageDto,
@@ -34,6 +35,23 @@ export class ChatService {
     const accessToken = localStorage.getItem("accessToken");
 
     return this.websocketService.connect(`/chat/?token=${accessToken}`);
+  }
+
+  public userOnlineStatusCache = new BehaviorSubject<Record<number, boolean>>({});
+  setOnlineStatus(userId: number, status: boolean) {
+    this.userOnlineStatusCache.next({ ...this.userOnlineStatusCache, [userId]: status });
+  }
+
+  onSetOffline(): Observable<OnChangeStatus> {
+    return this.websocketService
+      .on<OnChangeStatus>(ChatEventType.SET_OFFLINE)
+      .pipe(map(status => plainToInstance(OnChangeStatus, status)));
+  }
+
+  onSetOnline(): Observable<OnChangeStatus> {
+    return this.websocketService
+      .on<OnChangeStatus>(ChatEventType.SET_ONLINE)
+      .pipe(map(status => plainToInstance(OnChangeStatus, status)));
   }
 
   onTyping(): Observable<TypingInChatEventDto> {

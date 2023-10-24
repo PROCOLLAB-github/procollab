@@ -45,7 +45,16 @@ export class OfficeComponent implements OnInit, OnDestroy {
     });
     this.subscriptions$.push(profileSub$);
 
-    this.chatService.connect().subscribe(() => {});
+    this.chatService.connect().subscribe(() => {
+      // Change users online status
+      this.chatService.onSetOffline().subscribe(evt => {
+        this.chatService.setOnlineStatus(evt.userId, false);
+      });
+
+      this.chatService.onSetOnline().subscribe(evt => {
+        this.chatService.setOnlineStatus(evt.userId, true);
+      });
+    });
   }
 
   ngOnDestroy(): void {

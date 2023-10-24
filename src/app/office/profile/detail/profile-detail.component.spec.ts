@@ -6,6 +6,7 @@ import { ProfileDetailComponent } from "./profile-detail.component";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
 import { RouterTestingModule } from "@angular/router/testing";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("ProfileDetailComponent", () => {
   let component: ProfileDetailComponent;
@@ -15,7 +16,7 @@ describe("ProfileDetailComponent", () => {
     const authSpy = jasmine.createSpyObj([{ profile: of({}) }]);
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, HttpClientTestingModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
       declarations: [ProfileDetailComponent],
     }).compileComponents();
