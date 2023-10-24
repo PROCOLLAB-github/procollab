@@ -13,6 +13,7 @@ export enum ErrorMessage {
   VALIDATION_REQUIRED = "Обязательное поле",
   MINIMAL_AGE = "Минимальный возраст",
   INVALID_DATE = "Неправильный формат даты",
+  VALIDATION_LANGUAGE = "Используйте символы кириллического алфавита",
   VALIDATION_EMAIL = "Введенное значение не соответствует формату email",
   VALIDATION_PASSWORD_UNMATCH = "Пароли не совпадают",
   EMPTY_AVATAR = "*Выберите фото для профиля",

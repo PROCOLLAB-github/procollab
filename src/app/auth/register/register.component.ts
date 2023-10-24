@@ -26,8 +26,8 @@ export class RegisterComponent implements OnInit {
   ) {
     this.registerForm = this.fb.group(
       {
-        firstName: ["", [Validators.required]],
-        lastName: ["", [Validators.required]],
+        firstName: ["", [Validators.required, this.validationService.useLanguageValidator()]],
+        lastName: ["", [Validators.required, this.validationService.useLanguageValidator()]],
         birthday: [
           "",
           [
@@ -51,6 +51,8 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   registerAgreement = false;
   registerIsSubmitting = false;
+  credsSubmitInitiated = false;
+  infoSubmitInitiated = false;
 
   serverErrors: string[] = [];
 
@@ -118,8 +120,10 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     if (this.step === "credentials") {
+      this.credsSubmitInitiated = true;
       this.onInfoStep();
     } else if (this.step === "info") {
+      this.infoSubmitInitiated = true;
       this.onSendForm();
     }
   }
