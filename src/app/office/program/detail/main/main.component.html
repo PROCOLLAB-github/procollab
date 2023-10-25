@@ -31,7 +31,11 @@
             target="_blank"
           >
             <app-button color="grey" customTypographyClass="text-body-12">
-              Положение программы
+              {{
+                program.name.includes('Технолидеры Будущего') 
+                ? 'Каталог лучших стартапов 2022/23'
+                : 'Положение программы'
+              }}
               <i appIcon class="info__presentation-icon" icon="file_pdf" appSquare="16"></i>
             </app-button>
           </a>
