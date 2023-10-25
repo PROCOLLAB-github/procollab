@@ -4,6 +4,7 @@ import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { FileService } from "@core/services/file.service";
 import { nanoid } from "nanoid";
+import { catchError } from "rxjs";
 
 @Component({
   selector: "app-upload-file",
@@ -64,11 +65,19 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
   }
 
   onRemove(): void {
-    this.fileService.deleteFile(this.value).subscribe(() => {
-      this.value = "";
+    this.fileService.deleteFile(this.value).subscribe({
+      next: () => {
+        this.value = "";
 
-      this.onTouch();
-      this.onChange("");
+        this.onTouch();
+        this.onChange("");
+      },
+      error: () => {
+        this.value = "";
+
+        this.onTouch();
+        this.onChange("");
+      },
     });
   }
 }

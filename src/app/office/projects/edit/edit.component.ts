@@ -101,6 +101,19 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           })
       );
     });
+
+    this.projectForm
+      .get("presentationAddress")
+      ?.valueChanges.pipe(
+        filter(r => !r),
+        concatMap(() =>
+          this.projectService.updateProject(Number(this.route.snapshot.params.projectId), {
+            presentationAddress: "",
+            draft: true,
+          })
+        )
+      )
+      .subscribe(() => {});
   }
 
   ngAfterViewInit(): void {
@@ -386,6 +399,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   saveProjectAsDraft(): void {
     this.clearAllValidationErrors();
     this.projectForm.get("draft")?.patchValue(true);
+
     this.setProjFormIsSubmitting = this.setIsSubmittingAsDraft;
     this.submitProjectForm();
   }
