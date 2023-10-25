@@ -38,34 +38,36 @@
             </p>
           </div>
         </div>
-        <a
-          class="info__presentation"
-          *ngIf="project.presentationAddress"
-          [href]="project.presentationAddress"
-          target="_blank"
-        >
+        <div class="info__right">
+          <a
+            class="info__presentation"
+            *ngIf="project.presentationAddress"
+            [href]="project.presentationAddress"
+            target="_blank"
+          >
+            <app-button
+              class="info__presentation-button"
+              color="grey"
+              customTypographyClass="text-body-12"
+            >
+              Презентация проекта
+              <i appIcon icon="file_pdf" appSquare="16"></i>
+            </app-button>
+          </a>
           <app-button
-            class="info__presentation-button"
+            *ngIf="profile.userType !== 1 && !(isInProject | async)"
             color="grey"
             customTypographyClass="text-body-12"
+            (click)="openSupport = true"
           >
-            Презентация проекта
-            <i appIcon icon="file_pdf" appSquare="16"></i>
+            Поддержать проект
           </app-button>
-        </a>
-        <app-button
-          *ngIf="profile.userType !== 1 && !(isInProject | async)"
-          color="grey"
-          customTypographyClass="text-body-12"
-          (click)="openSupport = true"
-        >
-          Поддержать проект
-        </app-button>
-        <a class="info__edit" [routerLink]="['/office/projects', project.id, 'edit']">
-          <app-button *ngIf="profile.id === project.leader" customTypographyClass="text-body-12">
-            Редактировать
-          </app-button>
-        </a>
+          <a class="info__edit" [routerLink]="['/office/projects', project.id, 'edit']">
+            <app-button *ngIf="profile.id === project.leader" customTypographyClass="text-body-12">
+              Редактировать
+            </app-button>
+          </a>
+        </div>
       </div>
     </div>
     <div #contentEl class="project__content">
