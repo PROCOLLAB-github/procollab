@@ -210,19 +210,18 @@
   }
 
   &__right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
     @include responsive.apply-desktop {
+      flex-direction: row;
       margin-left: auto;
     }
   }
 
   &__presentation {
     display: block;
-    margin-top: 35px;
-
-    @include responsive.apply-desktop {
-      margin-top: 0;
-      margin-left: auto;
-    }
 
     i {
       margin-left: 10px;
