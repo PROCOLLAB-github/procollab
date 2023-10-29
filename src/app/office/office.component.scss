@@ -4,13 +4,14 @@
 
 .office {
   display: flex;
-  height: 100vh;
+  height: 100%;
   background-color: var(--light-gray);
 
   &__wrapper {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    min-width: 0;
   }
 
   &__sidebar {
@@ -25,8 +26,12 @@
 
   &__body {
     flex-grow: 1;
-    padding: 20px 20px 0;
+    padding: 10px 10px 0;
     overflow-y: auto;
+
+    @include responsive.apply-desktop {
+      padding: 20px 20px 0;
+    }
   }
 
   &__header {
