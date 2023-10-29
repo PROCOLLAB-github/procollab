@@ -66,7 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.rolesSub$?.unsubscribe();
-    this.appHeight$.unsubscribe();
+    this.appHeight$?.unsubscribe();
   }
 
   rolesSub$?: Subscription;
@@ -74,7 +74,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private loadEvent?: Observable<Event>;
   private resizeEvent?: Observable<Event>;
 
-  private appHeight$!: Subscription;
+  private appHeight$?: Subscription;
 
   isLoading$?: Observable<boolean>;
   private showLoaderEvents?: Observable<boolean>;
