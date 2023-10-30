@@ -109,6 +109,10 @@ export class ProjectsListComponent implements OnInit, OnDestroy {
     projects$ && this.subscriptions$.push(projects$);
   }
 
+  identify(_idx: number, item: Project) {
+    return item.id;
+  }
+
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $?.unsubscribe());
   }

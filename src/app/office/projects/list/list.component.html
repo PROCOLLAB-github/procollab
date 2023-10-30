@@ -6,7 +6,10 @@
     <i appIcon icon="filter" appSquare="34"></i>
   </div>
   <ul class="page__list">
-    <a *ngFor="let project of searchedProjects" [routerLink]="['/office/projects', project.id]">
+    <a
+      *ngFor="let project of searchedProjects; trackBy: identify"
+      [routerLink]="['/office/projects', project.id]"
+    >
       <li>
         <app-project-card
           [project]="project"
@@ -16,11 +19,7 @@
       </li>
     </a>
   </ul>
-  <div 
-    *ngIf="isAll"
-    class="filter page__filter" 
-    [class.page__filter--open]="isFilterOpen"
-  >
+  <div *ngIf="isAll" class="filter page__filter" [class.page__filter--open]="isFilterOpen">
     <div class="filter__overlay" (click)="isFilterOpen = false"></div>
     <div class="filter__body">
       <div class="filter__bar"></div>
