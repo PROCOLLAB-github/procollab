@@ -36,7 +36,9 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() edit = new EventEmitter<number>();
   @Output() delete = new EventEmitter<number>();
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.chatMessage);
+  }
 
   ngAfterViewInit(): void {
     this.overlayRef = this.overlay.create({

@@ -2,6 +2,7 @@
 
 <div
   class="message"
+  [class.message--unread]="!chatMessage.isRead"
   (contextmenu)="onOpenContextmenu($event)"
   (clickOutside)="onCloseContextmenu()"
   clickOutsideEvents="contextmenu"
