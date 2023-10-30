@@ -54,6 +54,13 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     if ((diff.length === 1 && diff[0]?.author.id === this.profile?.id) || noMessages) {
       this.scrollToBottom();
     }
+
+    setTimeout(() => {
+      const elementNode = document.querySelectorAll(".chat__message");
+      elementNode.forEach(el => {
+        this.observer?.observe(el);
+      });
+    });
   }
 
   get messages(): ChatMessage[] {
@@ -68,6 +75,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() delete = new EventEmitter<number>();
   @Output() type = new EventEmitter<void>();
   @Output() fetch = new EventEmitter<void>();
+  @Output() read = new EventEmitter<number>();
 
   ngOnInit(): void {
     const profile$ = this.authService.profile.subscribe(p => {
@@ -94,12 +102,20 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
       viewPortScroll$ && this.subscriptions$.push(viewPortScroll$);
+
+      this.observer = new IntersectionObserver(this.onReadMessage.bind(this), {
+        root: this.viewport.elementRef.nativeElement,
+        rootMargin: "0px 0px 0px 0px",
+        threshold: 0,
+      });
     }
   }
 
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
+
+  observer?: IntersectionObserver;
 
   profile?: User;
 
@@ -228,5 +244,14 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => {
         this.delete.emit(messageId);
       });
+  }
+
+  onReadMessage(entries: IntersectionObserverEntry[]): void {
+    entries.forEach(e => {
+      const element = e.target as HTMLElement;
+      !parseInt(element.dataset.beenRead || "1") && this.read.emit(parseInt(element.id));
+
+      element.dataset.beenRead = "1";
+    });
   }
 }

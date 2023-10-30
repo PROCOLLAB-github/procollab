@@ -13,6 +13,7 @@ import {
   OnChatMessageDto,
   OnDeleteChatMessageDto,
   OnEditChatMessageDto,
+  OnReadChatMessageDto,
   ReadChatMessageDto,
   SendChatMessageDto,
   TypingInChatDto,
@@ -108,6 +109,12 @@ export class ChatService {
     return this.websocketService
       .on<OnDeleteChatMessageDto>(ChatEventType.DELETE_MESSAGE)
       .pipe(map(message => plainToInstance(OnDeleteChatMessageDto, message)));
+  }
+
+  onReadMessage(): Observable<OnReadChatMessageDto> {
+    return this.websocketService
+      .on<OnDeleteChatMessageDto>(ChatEventType.READ_MESSAGE)
+      .pipe(map(message => plainToInstance(OnReadChatMessageDto, message)));
   }
 
   editMessage(message: EditChatMessageDto): void {
