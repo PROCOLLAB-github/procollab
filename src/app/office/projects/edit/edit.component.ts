@@ -107,7 +107,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       ?.valueChanges.pipe(
         filter(r => !r),
         concatMap(() =>
-          this.projectService.updateProject(Number(this.route.snapshot.params.projectId), {
+          this.projectService.updateProject(Number(this.route.snapshot.params["projectId"]), {
             presentationAddress: "",
             draft: true,
           })
