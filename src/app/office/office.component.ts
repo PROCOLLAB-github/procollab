@@ -55,6 +55,10 @@ export class OfficeComponent implements OnInit, OnDestroy {
         this.chatService.setOnlineStatus(evt.userId, true);
       });
     });
+
+    if (localStorage.getItem("waitVerificationAccepted") === "true") {
+      this.waitVerificationAccepted = true;
+    }
   }
 
   ngOnDestroy(): void {
@@ -69,6 +73,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   subscriptions$: Subscription[] = [];
 
   waitVerificationModal = false;
+  waitVerificationAccepted = false;
 
   profile?: User;
   // completeProfileModal = false;
@@ -82,4 +87,9 @@ export class OfficeComponent implements OnInit, OnDestroy {
   //     .navigateByUrl(`/office/profile/${this.profile.id}`)
   //     .then(() => console.debug("Route changed OfficeComponent"));
   // }
+
+  onAcceptWaitVerification() {
+    this.waitVerificationAccepted = true;
+    localStorage.setItem("waitVerificationAccepted", "true");
+  }
 }
