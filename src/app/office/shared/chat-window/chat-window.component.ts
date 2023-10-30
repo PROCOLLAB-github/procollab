@@ -250,8 +250,6 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     entries.forEach(e => {
       const element = e.target as HTMLElement;
       !parseInt(element.dataset.beenRead || "1") && this.read.emit(parseInt(element.id));
-
-      element.dataset.beenRead = "1";
     });
   }
 }

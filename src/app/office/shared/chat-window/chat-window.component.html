@@ -11,7 +11,7 @@
       class="chat__message"
       [id]="message.id"
       [chatMessage]="message"
-      [attr.data-been-read]="0"
+      [attr.data-been-read]="message.isRead ? '1' : '0'"
       (edit)="onEditMessage($event)"
       (reply)="onReplyMessage($event)"
       (delete)="onDeleteMessage($event)"
