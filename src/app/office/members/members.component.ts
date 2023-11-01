@@ -12,23 +12,22 @@ import {
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
+  BehaviorSubject,
   concatMap,
+  debounceTime,
   distinctUntilChanged,
   fromEvent,
   map,
   noop,
+  Observable,
   of,
   skip,
   Subscription,
+  switchMap,
   take,
   tap,
   throttleTime,
-  debounceTime,
-  BehaviorSubject,
-  switchMap,
-  Observable,
 } from "rxjs";
-import { AuthService } from "@auth/services";
 import { MembersResult, User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -46,7 +45,6 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly authService: AuthService,
     private readonly navService: NavService,
     private readonly fb: FormBuilder,
     private readonly memberService: MemberService,

@@ -5,7 +5,7 @@
     <span>Фильтр</span>
     <i appIcon icon="filter" appSquare="34"></i>
   </div>
-  <ul class="page__list">
+  <ul class="page__list" #listRoot>
     <a
       *ngFor="let project of searchedProjects; trackBy: identify"
       [routerLink]="['/office/projects', project.id]"

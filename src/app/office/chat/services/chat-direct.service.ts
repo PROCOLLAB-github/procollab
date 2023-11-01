@@ -2,11 +2,10 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService } from "@core/services";
-import { map, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { ChatItem, ChatListItem } from "@office/chat/models/chat-item.model";
 import { LoadChatMessages } from "@models/chat.model";
 import { HttpParams } from "@angular/common/http";
-import { plainToInstance } from "class-transformer";
 
 @Injectable({
   providedIn: "root",
@@ -27,8 +26,6 @@ export class ChatDirectService {
     if (count !== undefined) queries = queries.set("offset", count);
     if (take !== undefined) queries = queries.set("limit", take);
 
-    return this.apiService
-      .get<LoadChatMessages>(`/chats/directs/${chatId}/messages/`, queries)
-      .pipe(map(messages => plainToInstance(LoadChatMessages, messages)));
+    return this.apiService.get<LoadChatMessages>(`/chats/directs/${chatId}/messages/`, queries);
   }
 }
