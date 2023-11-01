@@ -11,7 +11,7 @@
   &__main {
     display: grid;
     grid-template-columns: 1fr;
-    grid-gap: 8px;
+    row-gap: 8px;
     align-items: start;
 
     @include responsive.apply-desktop {

@@ -2,32 +2,45 @@
 <div class="chat-page" *ngIf="project">
   <div class="chat-page__main main">
     <header class="main__header">
-      <div class="main__project">
-        <app-avatar class="main__avatar" [url]="project.imageAddress" [size]="26"></app-avatar>
-        <div class="main__name text-heading-4">{{ project.name }}</div>
-      </div>
-      <div class="main__meta">
-        <ul
-          class="main__members-list"
-          [style.width]="project.collaborators.length * 10 + 10 + 'px'"
-        >
-          <li
-            class="main__member-avatar"
-            *ngFor="let member of project.collaborators; index as index"
-            [style.left]="index * -10 + 'px'"
-            [style.z-index]="index"
+      <div class="main__info">
+        <div class="main__project">
+          <app-avatar class="main__avatar" [url]="project.imageAddress" [size]="26"></app-avatar>
+          <div class="main__name text-heading-4">{{ project.name }}</div>
+        </div>
+        <div class="main__meta">
+          <ul
+            class="main__members-list"
+            [style.width]="project.collaborators.length * 10 + 10 + 'px'"
           >
-            <app-avatar [url]="member.avatar" [size]="20"></app-avatar>
-          </li>
-        </ul>
-        <div class="main__count">
-          {{ project.collaborators.length }}
-          {{ project.collaborators.length | pluralize: ["Участник", "Участника", "Участников"] }}
+            <li
+              class="main__member-avatar"
+              *ngFor="let member of project.collaborators; index as index"
+              [style.left]="index * -10 + 'px'"
+              [style.z-index]="index"
+            >
+              <app-avatar [url]="member.avatar" [size]="20"></app-avatar>
+            </li>
+          </ul>
+          <div class="main__count">
+            {{ project.collaborators.length }}
+            {{ project.collaborators.length | pluralize: ["Участник", "Участника", "Участников"] }}
+          </div>
+        </div>
+      </div>
+      <div class="main__actions">
+        <div class="main__action" (click)="onToggleMobileAside()">
+          <i 
+            appIcon [icon]="isAsideMobileShown ? 'message' : 'people'" 
+            appWidth="20" 
+            appHeight="22" 
+            appViewBox="0 0 20 22"
+          ></i>
         </div>
       </div>
     </header>
     <app-chat-window
       class="main__chat"
+      [class.main__chat-visible]="!isAsideMobileShown"
       [messages]="messages"
       [typingPersons]="typingPersons"
       (submit)="onSubmitMessage($event)"
@@ -36,7 +49,7 @@
       (fetch)="onFetchMessages()"
     ></app-chat-window>
   </div>
-  <aside class="chat-page__aside">
+  <aside class="chat-page__aside" [class.chat-page__aside-visible]="isAsideMobileShown">
     <div class="chat-members">
       <header class="chat-members__header">
         <h2 class="chat-members__title text-bold-body-16">Участники</h2>

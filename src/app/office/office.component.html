@@ -14,13 +14,17 @@
       </div>
     </div>
   </ng-container>
-  <app-modal [open]="waitVerificationModal">
+  <app-modal [open]="waitVerificationModal && !waitVerificationAccepted">
     <div class="message-modal">
       <img src="/assets/images/office/shared/wait.png" alt="wait" width="215px" />
       <h3 class="message-modal__title text-bold-body-16">Ваш аккаунт проходит подтверждение</h3>
       <p class="message-modal__text text-body-14">
-        Мы проверяем ваши данные и скоро сообщим о подтверждении аккаунта
+        Мы проверяем ваши данные и скоро сообщим о подтверждении аккаунта, 
+        а пока можете уже пользоваться платформой
       </p>
+      <app-button class="message-modal__button" (click)="onAcceptWaitVerification()">
+        Хорошо
+      </app-button>
     </div>
   </app-modal>
   <app-delete-confirm></app-delete-confirm>
