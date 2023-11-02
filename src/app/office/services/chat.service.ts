@@ -77,9 +77,7 @@ export class ChatService {
     if (count !== undefined) queries = queries.set("offset", count);
     if (take !== undefined) queries = queries.set("limit", take);
 
-    return this.apiService
-      .get<LoadChatMessages>(`/chats/projects/${projectId}/messages/`, queries)
-      .pipe(map(messages => plainToInstance(LoadChatMessages, messages)));
+    return this.apiService.get<LoadChatMessages>(`/chats/projects/${projectId}/messages/`, queries);
   }
 
   loadProjectFiles(projectId: number): Observable<ChatFile[]> {
