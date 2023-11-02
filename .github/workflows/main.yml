@@ -33,7 +33,7 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - name: Build file
-      run: npm run build --configuration development
+      run: npm run build --configuration procollab-dev
     - name: Deploy production to Netlify
       uses: South-Paw/action-netlify-deploy@v1.2.0
       with:
