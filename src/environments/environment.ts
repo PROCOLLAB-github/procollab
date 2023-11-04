@@ -7,9 +7,9 @@
 export const environment = {
   production: false,
   sentryDns: "https://fc61f416df6044bab8c7e1afd55f4355@o1186023.ingest.sentry.io/6577563",
-  apiUrl: "https://dev.procollab.ru",
+  apiUrl: "https://api.procollab.ru",
   // websockets
-  websocketUrl: "wss://dev.procollab.ru/ws",
+  websocketUrl: "wss://api.procollab.ru/ws",
   websocketReconnectionInterval: 500,
   websocketReconnectionMaxAttempts: 5,
 };
