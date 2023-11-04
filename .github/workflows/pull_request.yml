@@ -36,6 +36,7 @@ jobs:
     - run: npm run build --configuration procollab-dev
     - name: Publish preview
       uses: netlify/actions/cli@master
+      id: publish_preview
       with:
         args: deploy --dir=./dist/procollab
       env:
