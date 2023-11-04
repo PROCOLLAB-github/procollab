@@ -6,6 +6,7 @@ import { Project, ProjectCount, ProjectStep } from "@models/project.model";
 import { ApiService } from "@core/services";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
+import { ApiPagination } from "@models/api-pagination.model";
 
 @Injectable({
   providedIn: "root",
@@ -24,10 +25,8 @@ export class ProjectService {
     );
   }
 
-  getAll(params?: HttpParams): Observable<Project[]> {
-    return this.apiService
-      .get<Project[]>("/projects/", params)
-      .pipe(map(projects => plainToInstance(Project, projects)));
+  getAll(params?: HttpParams): Observable<ApiPagination<Project>> {
+    return this.apiService.get<ApiPagination<Project>>("/projects/", params);
   }
 
   getOne(id: number): Observable<Project> {
@@ -36,10 +35,8 @@ export class ProjectService {
       .pipe(map(project => plainToInstance(Project, project)));
   }
 
-  getMy(): Observable<Project[]> {
-    return this.apiService
-      .get<Project[]>("/auth/users/projects/")
-      .pipe(map(projects => plainToInstance(Project, projects)));
+  getMy(params?: HttpParams): Observable<ApiPagination<Project>> {
+    return this.apiService.get<ApiPagination<Project>>("/auth/users/projects/", params);
   }
 
   projectsCount = new BehaviorSubject<ProjectCount>({ my: 0, all: 0 });

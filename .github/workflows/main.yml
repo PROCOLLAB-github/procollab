@@ -1,4 +1,4 @@
-name: Main test ci
+name: Pull request checks
 
 on:
   pull_request:
@@ -20,3 +20,25 @@ jobs:
       - run: npm run lint:ts
       - run: npm run lint:scss
       - run: npm run test:ci
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16
+        cache: 'npm'
+        cache-dependency-path: package-lock.json
+    - run: npm ci
+    - run: npm run build --configuration procollab-dev
+    - name: Publish a preview application
+      uses: netlify/actions/cli@master
+      with:
+        args: deploy --dir=./dist/procollab
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
+        NETLIFY_PREVIEW_APP: true # or perhaps like this
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NETLIFY_PR_ID: ${{ github.pr_id }}

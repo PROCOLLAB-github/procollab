@@ -8,7 +8,7 @@ export class GlobalErrorHandlerService implements ErrorHandler {
   constructor(private readonly errorService: ErrorService, private readonly zone: NgZone) {}
 
   handleError(err: any): void {
-    // const error = err.rejection ? err.rejection : err;
+    const error = err.rejection ? err.rejection : err;
     // if(error instanceof HttpErrorResponse) {
     //   switch(error.status) {
     //     case 404: {
@@ -17,8 +17,8 @@ export class GlobalErrorHandlerService implements ErrorHandler {
     //     }
     //   }
     // }
-    // if(error instanceof Error) {
-    //   console.error(error)
-    // }
+    if (error instanceof Error) {
+      console.error(error);
+    }
   }
 }

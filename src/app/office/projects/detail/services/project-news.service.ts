@@ -12,12 +12,10 @@ export class ProjectNewsService {
   constructor(private readonly apiService: ApiService) {}
 
   fetchNews(projectId: string): Observable<ProjectNewsRes> {
-    return this.apiService
-      .get<ProjectNewsRes>(
-        `/projects/${projectId}/news/`,
-        new HttpParams({ fromObject: { limit: 100 } })
-      )
-      .pipe(map(r => plainToInstance(ProjectNewsRes, r)));
+    return this.apiService.get<ProjectNewsRes>(
+      `/projects/${projectId}/news/`,
+      new HttpParams({ fromObject: { limit: 100 } })
+    );
   }
 
   fetchNewsDetail(projectId: string, newsId: string): Observable<ProjectNews> {

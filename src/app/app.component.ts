@@ -3,7 +3,19 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResolveEnd, ResolveStart, Router } from "@angular/router";
 import { AuthService } from "@auth/services";
-import { debounceTime, filter, forkJoin, map, merge, noop, Observable, Subscription } from "rxjs";
+import { calcAppHeight } from "@utils/responsive";
+import {
+  debounceTime,
+  filter,
+  forkJoin,
+  fromEvent,
+  map,
+  merge,
+  noop,
+  Observable,
+  Subscription,
+  throttleTime,
+} from "rxjs";
 
 @Component({
   selector: "app-root",
@@ -43,13 +55,26 @@ export class AppComponent implements OnInit, OnDestroy {
           .then(() => console.debug("Route changed From AppComponent"));
       }
     }
+
+    this.loadEvent = fromEvent(window, "load");
+    this.resizeEvent = fromEvent(window, "resize").pipe(throttleTime(500));
+
+    this.appHeight$ = merge(this.loadEvent, this.resizeEvent).subscribe(() => {
+      calcAppHeight();
+    });
   }
 
   ngOnDestroy(): void {
     this.rolesSub$?.unsubscribe();
+    this.appHeight$?.unsubscribe();
   }
 
   rolesSub$?: Subscription;
+
+  private loadEvent?: Observable<Event>;
+  private resizeEvent?: Observable<Event>;
+
+  private appHeight$?: Subscription;
 
   isLoading$?: Observable<boolean>;
   private showLoaderEvents?: Observable<boolean>;

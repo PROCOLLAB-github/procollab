@@ -116,6 +116,12 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
 
   typingPersons: ChatWindowComponent["typingPersons"] = [];
 
+  isAsideMobileShown = false;
+
+  onToggleMobileAside(): void {
+    this.isAsideMobileShown = !this.isAsideMobileShown;
+  }
+
   private initTypingEvent(): void {
     const typingEvent$ = this.chatService
       .onTyping()

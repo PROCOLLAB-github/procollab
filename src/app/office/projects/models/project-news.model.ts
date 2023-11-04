@@ -1,6 +1,7 @@
 /** @format */
 import * as dayjs from "dayjs";
 import { FileModel } from "@models/file.model";
+import { ApiPagination } from "@models/api-pagination.model";
 
 export class ProjectNews {
   id!: number;
@@ -31,9 +32,4 @@ export class ProjectNews {
   }
 }
 
-export class ProjectNewsRes {
-  results!: ProjectNews[];
-  count!: number;
-  next!: string;
-  previous!: string;
-}
+export type ProjectNewsRes = ApiPagination<ProjectNews>;
