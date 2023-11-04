@@ -38,7 +38,7 @@ jobs:
       uses: netlify/actions/cli@master
       id: publish_preview
       with:
-        args: deploy --dir=./dist/procollab
+        args: deploy --dir=./dist/procollab >> $GITHUB_OUTPUT
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
