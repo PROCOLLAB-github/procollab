@@ -22,6 +22,8 @@ jobs:
       - run: npm run test:ci
   build:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js 16.x
@@ -44,3 +46,7 @@ jobs:
         NETLIFY_PR_ID: ${{ github.pr_id }}
     - run: |
         echo steps.publish_preview.outputs
+    - uses: mshick/add-pr-comment@v2
+      with:
+        message: |
+          ${{ steps.publish_preview.outputs }}
