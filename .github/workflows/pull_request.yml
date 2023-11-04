@@ -32,7 +32,7 @@ jobs:
         cache-dependency-path: package-lock.json
     - run: npm ci
     - run: npm run build --configuration procollab-dev
-    - name: Publish a preview application
+    - name: Publish preview
       uses: netlify/actions/cli@master
       with:
         args: deploy --dir=./dist/procollab
@@ -42,3 +42,5 @@ jobs:
         NETLIFY_PREVIEW_APP: true # or perhaps like this
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NETLIFY_PR_ID: ${{ github.pr_id }}
+    - run: |
+        echo steps.publish_preview.outputs
