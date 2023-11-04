@@ -45,7 +45,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NETLIFY_PR_ID: ${{ github.pr_id }}
     - run: |
-        echo ${{ steps.publish_preview.outputs.stdout }}
+        echo ${{ steps.publish_preview.outputs.out }}
 #     - uses: mshick/add-pr-comment@v2
 #       with:
 #         message: |
