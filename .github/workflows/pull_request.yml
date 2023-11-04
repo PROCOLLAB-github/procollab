@@ -49,4 +49,4 @@ jobs:
     - uses: mshick/add-pr-comment@v2
       with:
         message: |
-          hi!
+          hi! ${{steps.publish_preview.outputs}}
