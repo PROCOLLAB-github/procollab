@@ -38,7 +38,7 @@ jobs:
       uses: netlify/actions/cli@master
       id: publish_preview
       with:
-        args: deploy --dir=./dist/procollab >> $GITHUB_OUTPUT
+        args: deploy --dir=./dist/procollab
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
@@ -46,7 +46,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NETLIFY_PR_ID: ${{ github.pr_id }}
     - run: |
-        echo ${{ steps.publish_preview.outputs.out }}
+        echo ${{ steps.publish_preview.outputs.NETLIFY_URL }}
 #     - uses: mshick/add-pr-comment@v2
 #       with:
 #         message: |
