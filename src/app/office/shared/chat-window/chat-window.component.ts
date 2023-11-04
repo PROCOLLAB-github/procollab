@@ -249,7 +249,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   onReadMessage(entries: IntersectionObserverEntry[]): void {
     entries.forEach(e => {
       const element = e.target as HTMLElement;
-      !parseInt(element.dataset.beenRead || "1") && this.read.emit(parseInt(element.id));
+      !parseInt(element.dataset["beenRead"] || "1") && this.read.emit(parseInt(element.id));
     });
   }
 }
