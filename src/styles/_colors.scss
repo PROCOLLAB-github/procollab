@@ -8,6 +8,7 @@
   --accent: #6c27ff;
   --accent-dark: #{color.adjust(#6c27ff, $blackness: 20%)};
   --accent-light: #f7f3ff;
+  --accent-shadow: rgba(#6c27ff, 0.6);
 
   // GRAY
   --white: #fff;

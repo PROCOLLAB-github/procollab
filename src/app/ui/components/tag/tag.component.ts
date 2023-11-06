@@ -1,4 +1,6 @@
-import { Component, OnInit } from "@angular/core";
+/** @format */
+
+import { Component, Input, OnInit } from "@angular/core";
 
 @Component({
   selector: "app-tag",
@@ -7,6 +9,8 @@ import { Component, OnInit } from "@angular/core";
 })
 export class TagComponent implements OnInit {
   constructor() {}
+
+  @Input() color: "primary" | "accent" = "primary";
 
   ngOnInit(): void {}
 }

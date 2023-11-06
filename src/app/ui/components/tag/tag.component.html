@@ -1,5 +1,9 @@
 <!-- @format -->
 
-<div class="text-body-14 tag">
+<div 
+  class="text-body-14 tag" 
+  [class.tag__primary]="color === 'primary'"
+  [class.tag__accent]="color === 'accent'"
+>
   <ng-content></ng-content>
 </div>

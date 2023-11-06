@@ -3,9 +3,7 @@
 import { RouterModule, Routes } from "@angular/router";
 import { NgModule } from "@angular/core";
 import { OfficeComponent } from "./office.component";
-import { ProfileDetailComponent } from "./profile/detail/profile-detail.component";
 import { ProfileEditComponent } from "./profile/edit/edit.component";
-import { ProfileDetailResolver } from "./profile/detail/profile-detail.resolver";
 import { MembersComponent } from "./members/members.component";
 import { MembersResolver } from "./members/members.resolver";
 import { VacancySendComponent } from "./vacancy/send/send.component";
@@ -66,10 +64,8 @@ const routes: Routes = [
       },
       {
         path: "profile/:id",
-        component: ProfileDetailComponent,
-        resolve: {
-          data: ProfileDetailResolver,
-        },
+        loadChildren: () =>
+          import("./profile/detail/profile-detail.module").then(m => m.ProfileDetailModule),
       },
     ],
   },
