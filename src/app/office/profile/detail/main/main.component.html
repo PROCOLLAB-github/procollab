@@ -31,7 +31,12 @@
       *ngIf="user.projects.length as projectsLength"
       class="projects main__section"
     >
-      <h3 class="text-bold-body-16">Проекты</h3>
+      <div class="main__section-top">
+        <h3 class="text-bold-body-16">Проекты</h3>
+        <div class="badge badge__projects">
+          <i icon="people" appIcon appSquare="22"></i>
+        </div>
+      </div>
       <ul>
         <li class="project" *ngFor="let p of user.projects.slice(0, 3)" [routerLink]="['/office/projects', p.id]">
           <ng-container
@@ -57,13 +62,7 @@
             {{ project.name }}
           </a>
         </div>
-        <p class="text-body-12 project__role">
-          {{
-            project.leader === user.id
-            ? 'Основатель'
-            : 'Участник'
-          }}
-        </p>
+        <p class="text-body-12 project__role">{{ project.collaborator?.role }}</p>
       </ng-template>
       <div
         *ngIf="projectsLength > 3"
@@ -76,9 +75,9 @@
     <div class="main__section">
       <div class="main__section-top">
         <h3 class="text-bold-body-16">Образование/работа</h3>
-        <!-- <div class="badge">
+        <div class="badge badge__organization">
           <i icon="academic-hat" appIcon appWidth="24" appHeight="13" appViewBox="0 0 24 13"></i>
-        </div> -->
+        </div>
       </div>
       <p class="text-bold-body-14">{{ user.organization }}</p>
     </div>
@@ -86,7 +85,12 @@
       *ngIf="user.achievements.length as achievementsLength"
       class="main__section achievements" 
     >
-      <h3 class="text-bold-body-16 team__title">Мои достижения</h3>
+      <div class="main__section-top">
+        <h3 class="text-bold-body-16">Мои достижения</h3>
+        <div class="badge badge__achievements">
+          <i icon="medal-outlined" appIcon appWidth="20" appHeight="19" appViewBox="0 0 20 19"></i>
+        </div>
+      </div>
       <ul>
         <li *ngFor="let achievement of user.achievements.slice(0, 3)" class="achievement">
           <p class="achievement__status text-bold-body-14">{{ achievement.status }}</p>
@@ -116,7 +120,12 @@
       *ngIf="user.links.length as linksLength"
       class="main__section links"
     >
-      <h3 class="text-bold-body-16">Контакты</h3>
+      <div class="main__section-top">
+        <h3 class="text-bold-body-16">Контакты</h3>
+        <div class="badge badge__links">
+          <i icon="people-filled" appIcon appSquare="20"></i>
+        </div>
+      </div>
       <ul>
         <li
           class="contact-link text-body-12"

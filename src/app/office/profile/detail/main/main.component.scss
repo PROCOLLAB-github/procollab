@@ -322,6 +322,10 @@ $section-padding: 24px;
   &__title {
     color: var(--dark-grey);
   }
+
+  &__status {
+    margin-bottom: 3px;
+  }
 }
 
 .links {
@@ -416,21 +420,33 @@ $section-padding: 24px;
   width: 45px;
   height: 34px;
   margin: 0 8px 0 12px;
-  background-color: var(--accent);
-  filter: drop-shadow(0 0 26px var(--accent-shadow));
+  color: white;
   border-radius: 0 0 100px 100px;
   transition: all 0.5s ease;
 
   i {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: center;
     height: 100%;
-    padding-bottom: 12px;
   }
 
   &:hover {
     height: 45px;
     margin-bottom: -11px;
+  }
+
+  &__projects,
+  &__achievements {
+    padding-bottom: 5px;
+    background-color: var(--green);
+    box-shadow: 0 0 26px var(--green);
+  }
+
+  &__organization,
+  &__links {
+    padding-bottom: 5px;
+    background-color: var(--accent);
+    box-shadow: 0 0 22px var(--accent-mild);
   }
 }

@@ -1,5 +1,7 @@
 /** @format */
 
+import { Collaborator } from "./collaborator.model";
+
 export class Project {
   id!: number;
   name!: string;
@@ -14,15 +16,8 @@ export class Project {
   numberOfCollaborators!: number;
   viewsCount!: number;
   cover!: null | string;
-  collaborators!: {
-    userId: number;
-    firstName: string;
-    lastName: string;
-    role: string;
-    keySkills: string[];
-    avatar: string;
-  }[];
-
+  collaborators!: Collaborator[];
+  collaborator?: Collaborator;
   links!: string[];
   draft!: boolean;
   leader!: number;
@@ -44,16 +39,7 @@ export class Project {
       presentationAddress: "string",
       imageAddress: "string",
       numberOfCollaborators: 10,
-      collaborators: [
-        {
-          firstName: "string",
-          lastName: "string",
-          userId: 0,
-          avatar: "string",
-          keySkills: ["angular"],
-          role: "Front-end",
-        },
-      ],
+      collaborators: [collaborator],
       draft: false,
       leader: 0,
     };
@@ -69,3 +55,12 @@ export class ProjectStep {
   id!: number;
   name!: string;
 }
+
+const collaborator = {
+  firstName: "string",
+  lastName: "string",
+  userId: 0,
+  avatar: "string",
+  keySkills: ["angular"],
+  role: "Front-end",
+};

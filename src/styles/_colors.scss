@@ -5,10 +5,11 @@
 :root {
   // ACCENT
   --gradient: linear-gradient(90deg, #242424 0%, #6c27ff 50%);
+  --gradient-mild: linear-gradient(90deg, #501d53 0.3%, #3b1f72 22%, #6326e6 100%);
   --accent: #6c27ff;
   --accent-dark: #{color.adjust(#6c27ff, $blackness: 20%)};
+  --accent-mild: #{color.adjust(#6c27ff, $alpha: -0.4)};
   --accent-light: #f7f3ff;
-  --accent-shadow: rgba(#6c27ff, 0.6);
 
   // GRAY
   --white: #fff;
