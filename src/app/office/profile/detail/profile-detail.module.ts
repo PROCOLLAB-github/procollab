@@ -7,6 +7,7 @@ import { UiModule } from "@ui/ui.module";
 import { ProfileDetailRoutingModule } from "./profile-detail-routing.module";
 import { OfficeModule } from "@office/office.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
+import { LayoutModule } from "@angular/cdk/layout";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ClickOutsideModule } from "ng-click-outside";
 import { AutosizeModule } from "ngx-autosize";
@@ -22,6 +23,7 @@ import { ProfileProjectsComponent } from "./projects/projects.component";
     ProfileDetailRoutingModule,
     OfficeModule,
     ScrollingModule,
+    LayoutModule,
     ReactiveFormsModule,
     ClickOutsideModule,
     AutosizeModule,

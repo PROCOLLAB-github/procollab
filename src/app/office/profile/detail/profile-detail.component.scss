@@ -74,8 +74,7 @@ $detail-bar-mb: 12px;
     }
 
     @include responsive.apply-desktop {
-      padding-top: 10px;
-      padding-left: 225px;
+      padding: 21px 19px 21px 227px;
       background-color: var(--white);
       border: 1px solid var(--medium-grey-for-outline);
     }
@@ -120,15 +119,18 @@ $detail-bar-mb: 12px;
 
   &__avatar {
     position: absolute;
+    top: -39%;
     bottom: $body-slide;
     left: 50%;
     z-index: 3;
     display: block;
-    transform: translateX(-50%) translateY(30px);
+    transform: translateX(-50%);
 
     @include responsive.apply-desktop {
-      left: 35px;
-      transform: translateY(50%);
+      top: 50%;
+      bottom: auto;
+      left: 21px;
+      transform: translate(0, -50%);
     }
   }
 

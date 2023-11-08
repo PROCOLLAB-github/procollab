@@ -37,18 +37,19 @@
           src="/assets/images/office/profile/detail/cover.png"
           alt="cover"
         />
+      </div>
+      <div class="info__body">
         <app-avatar
           class="info__avatar"
           [url]="user.avatar"
-          [size]="140"
+          [size]="(desktopMode$ | async) ? 165 : 140"
           [hasBorder]="true"
           [onlineBadgeSize]="30"
           [onlineBadgeBorder]="6"
+          [onlineBadgeOffset]="(desktopMode$ | async) ? 5 : 0"
           *ngIf="chatService.userOnlineStatusCache | async as cache"
           [isOnline]="cache[user.id] !== undefined ? cache[user.id] : user.isOnline"
         ></app-avatar>
-      </div>
-      <div class="info__body">
         <section class="info__top">
           <div class="info__text">
             <h2 class="info__name">{{ user.firstName }} {{ user.lastName }}</h2>
