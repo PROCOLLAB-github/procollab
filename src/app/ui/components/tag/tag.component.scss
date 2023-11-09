@@ -6,10 +6,18 @@
   max-width: 300px;
   padding: 5px 10px;
   overflow: hidden;
-  color: var(--dark-grey);
   text-overflow: ellipsis;
-  background-color: var(--light-gray);
   border-radius: var(--rounded-md);
+
+  &__primary {
+    color: var(--dark-grey);
+    background-color: var(--light-gray);
+  }
+
+  &__accent {
+    color: var(--white);
+    background-color: var(--accent);
+  }
 
   ::ng-deep {
     > * {

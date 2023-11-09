@@ -3,13 +3,37 @@
 @use "src/styles/responsive";
 
 .card {
-  position: relative;
-  padding: 24px 15px;
-  background-color: var(--white);
-  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
 
-  @include responsive.apply-desktop {
-    border: 1px solid var(--medium-grey-for-outline);
+  &__body {
+    padding: 24px 15px;
+    background-color: var(--white);
+    border-radius: 15px;
+
+    @include responsive.apply-desktop {
+      border: 1px solid var(--medium-grey-for-outline);
+    }
+  }
+
+  &__with-tab {
+    margin-top: 24px;
+  }
+
+  &__tab {
+    width: 65%;
+    max-width: 242px;
+    height: 34px;
+    padding: 0 10px 0 15px;
+    margin-top: -24px;
+    margin-bottom: -10px;
+    overflow: hidden;
+    color: white;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    background: var(--gradient-mild);
+    border-radius: 15px 15px 0 0;
   }
 
   &__head {
