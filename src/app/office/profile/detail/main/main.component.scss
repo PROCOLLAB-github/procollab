@@ -62,6 +62,13 @@ $section-padding: 24px;
       display: flex;
       justify-content: space-between;
     }
+
+    &:hover {
+      .badge {
+        height: 45px;
+        margin-bottom: -11px;
+      }
+    }
   }
 
   &__info {
@@ -429,11 +436,6 @@ $section-padding: 24px;
     align-items: center;
     justify-content: center;
     height: 100%;
-  }
-
-  &:hover {
-    height: 45px;
-    margin-bottom: -11px;
   }
 
   &__projects,
