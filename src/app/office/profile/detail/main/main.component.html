@@ -2,10 +2,10 @@
   <div class="main__content" *ngIf="loggedUserId | async as loggedUserId">
     <div class="main__about">
       <h3 class="text-heading-3 about__title">Обо мне</h3>
-      <div class="about__text">
+      <div *ngIf="user.aboutMe as about" class="about__text">
         <p
           #descEl
-          [innerHTML]="user.aboutMe | parseLinks | parseBreaks"
+          [innerHTML]="about | parseLinks | parseBreaks"
           class="text-body-14"
         ></p>
         <div
@@ -16,7 +16,7 @@
           {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
         </div>
       </div>
-      <ul *ngIf="user.keySkills" class="about__skills">
+      <ul *ngIf="user.keySkills.length" class="about__skills">
         <li *ngFor="let skill of user.keySkills" class="about__skill">
           <app-tag color="accent">{{ skill }}</app-tag>
         </li>
