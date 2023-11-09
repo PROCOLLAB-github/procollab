@@ -48,7 +48,14 @@ $detail-bar-mb: 12px;
   &__cover {
     position: relative;
     height: 230px;
+    background: url("/assets/images/office/profile/detail/cover-new.png");
+    background-position: top;
+    background-size: cover;
     border-radius: 15px 15px 0 0;
+
+    @include responsive.apply-desktop {
+      height: 200px;
+    }
 
     img {
       position: absolute;
