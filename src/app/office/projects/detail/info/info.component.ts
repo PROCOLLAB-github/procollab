@@ -21,6 +21,8 @@ import { ProjectNews } from "@office/projects/models/project-news.model";
 import { containerSm } from "@utils/responsive";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { expandElement } from "@utils/expand-element";
+import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
+import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
 
 @Component({
   selector: "app-detail",
@@ -36,11 +38,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly projectNewsService: ProjectNewsService,
     private readonly fb: FormBuilder,
     private readonly cdRef: ChangeDetectorRef
-  ) {
-    this.newsForm = this.fb.group({
-      text: ["", [Validators.required]],
-    });
-  }
+  ) {}
 
   project$?: Observable<Project> = this.route.parent?.data.pipe(map(r => r["data"]));
 
@@ -103,20 +101,26 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectNewsService.readNews(this.route.snapshot.params["projectId"], ids).subscribe(noop);
   }
 
+  @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
+  @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
+
   news: ProjectNews[] = [];
 
   readFullDescription = false;
 
   descriptionExpandable!: boolean;
 
-  newsForm: FormGroup;
-
   readAllAchievements = false;
   readAllVacancies = false;
   readAllMembers = false;
 
-  onAddNews(news: ProjectNews): void {
-    this.news.unshift(news);
+  onAddNews(news: { text: string; files: string[] }): void {
+    this.projectNewsService
+      .addNews(this.route.snapshot.params["projectId"], news)
+      .subscribe(newsRes => {
+        this.newsFormComponent?.onResetForm();
+        this.news.unshift(newsRes);
+      });
   }
 
   onDeleteNews(newsId: number): void {
@@ -140,9 +144,14 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  onEditNews(news: ProjectNews) {
-    const newsIdx = this.news.findIndex(n => n.id === news.id);
-    this.news[newsIdx] = news;
+  onEditNews(news: ProjectNews, newsItemId: number) {
+    this.projectNewsService
+      .editNews(this.route.snapshot.params["projectId"], newsItemId, news)
+      .subscribe(resNews => {
+        const newsIdx = this.news.findIndex(n => n.id === resNews.id);
+        this.news[newsIdx] = resNews;
+        this.newsCardComponent?.onCloseEditMode();
+      });
   }
 
   openSupport = false;

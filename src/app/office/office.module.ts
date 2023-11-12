@@ -25,6 +25,8 @@ import { SidebarComponent } from "./shared/sidebar/sidebar.component";
 import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
 import { ChatWindowComponent } from "./shared/chat-window/chat-window.component";
 import { ScrollingModule } from "@angular/cdk/scrolling";
+import { NewsFormComponent } from "./shared/news-form/news-form.component";
+import { NewsCardComponent } from "./shared/news-card/news-card.component";
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
     SidebarComponent,
     ImgCardComponent,
     ChatWindowComponent,
+    NewsFormComponent,
+    NewsCardComponent,
   ],
   imports: [
     OfficeRoutingModule,
@@ -55,6 +59,13 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
     AutosizeModule,
     ScrollingModule,
   ],
-  exports: [MessageInputComponent, ImgCardComponent, MemberCardComponent, ChatWindowComponent],
+  exports: [
+    MessageInputComponent,
+    ImgCardComponent,
+    MemberCardComponent,
+    ChatWindowComponent,
+    NewsFormComponent,
+    NewsCardComponent,
+  ],
 })
 export class OfficeModule {}

@@ -7,7 +7,9 @@ import { forkJoin, map, Observable } from "rxjs";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
 
-@Injectable()
+@Injectable({
+  providedIn: "root",
+})
 export class ProjectNewsService {
   constructor(private readonly apiService: ApiService) {}
 
