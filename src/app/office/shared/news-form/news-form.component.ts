@@ -2,10 +2,7 @@
 
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { ValidationService } from "@core/services";
-import { ActivatedRoute } from "@angular/router";
-import { ProjectNews } from "@office/projects/models/project-news.model";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
 import { forkJoin, noop, Observable, tap } from "rxjs";
@@ -18,9 +15,7 @@ import { forkJoin, noop, Observable, tap } from "rxjs";
 export class NewsFormComponent implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
-    private readonly projectNewsService: ProjectNewsService,
     private readonly validationService: ValidationService,
-    private readonly route: ActivatedRoute,
     private readonly fileService: FileService
   ) {
     this.messageForm = fb.group({
@@ -28,7 +23,7 @@ export class NewsFormComponent implements OnInit {
     });
   }
 
-  @Output() addNews = new EventEmitter<ProjectNews>();
+  @Output() addNews = new EventEmitter<{ text: string; files: string[] }>();
 
   ngOnInit(): void {}
 
@@ -39,17 +34,15 @@ export class NewsFormComponent implements OnInit {
       return;
     }
 
-    this.projectNewsService
-      .addNews(this.route.snapshot.params["projectId"], {
-        ...this.messageForm.value,
-        files: [...this.imagesList.map(f => f.src), ...this.filesList.map(f => f.src)],
-      })
-      .subscribe(news => {
-        this.addNews.emit(news);
+    this.addNews.emit({
+      ...this.messageForm.value,
+      files: [...this.imagesList.map(f => f.src), ...this.filesList.map(f => f.src)],
+    });
+  }
 
-        this.imagesList = [];
-        this.messageForm.reset();
-      });
+  onResetForm() {
+    this.imagesList = [];
+    this.messageForm.reset();
   }
 
   imagesList: {

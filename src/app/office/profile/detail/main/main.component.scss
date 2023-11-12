@@ -37,7 +37,7 @@ $section-padding: 24px;
 
   @include responsive.apply-desktop {
     flex-direction: row;
-    gap: 0;
+    gap: 14px;
   }
 
   &__aside {
@@ -78,7 +78,10 @@ $section-padding: 24px;
   }
 
   &__content {
+    display: flex;
     flex-basis: 60%;
+    flex-direction: column;
+    gap: 16px;
   }
 
   &__about {
@@ -89,10 +92,14 @@ $section-padding: 24px;
   }
 
   &__news {
-    grid-row-start: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 
-    @include responsive.apply-desktop {
-      grid-row-start: unset;
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
   }
 

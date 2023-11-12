@@ -23,7 +23,7 @@ import { FileModel } from "@models/file.model";
 import { forkJoin, noop, Observable, tap } from "rxjs";
 
 @Component({
-  selector: "app-project-news-card",
+  selector: "app-news-card",
   templateUrl: "./news-card.component.html",
   styleUrls: ["./news-card.component.scss"],
 })
@@ -118,17 +118,14 @@ export class NewsCardComponent implements OnInit {
 
   onEditSubmit(): void {
     if (!this.validationService.getFormValidation(this.editForm)) return;
+    this.edited.emit({
+      ...this.editForm.value,
+      files: this.imagesEditList.filter(f => f.src).map(f => f.src),
+    });
+  }
 
-    this.projectNewsService
-      .editNews(this.route.snapshot.params["projectId"], this.newsItem.id, {
-        ...this.editForm.value,
-        files: this.imagesEditList.filter(f => f.src).map(f => f.src),
-      })
-      .subscribe(resNews => {
-        this.editMode = false;
-
-        this.edited.emit(resNews);
-      });
+  onCloseEditMode() {
+    this.editMode = false;
   }
 
   imagesEditList: {

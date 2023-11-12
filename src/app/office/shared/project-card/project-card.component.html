@@ -1,11 +1,11 @@
 <!-- @format -->
 
-<div class="card" [class.card__with-tab]="project.collaborator?.role">
+<div class="card" [class.card__with-tab]="project.collaborator">
   <div 
-    *ngIf="project.collaborator?.role as role" 
+    *ngIf="project.collaborator as collaborator" 
     class="card__tab text-bold-body-16"
   >
-    {{ role }}
+    {{ collaborator?.role ?? (profileId === project.leader ? 'Основатель' : 'Участник') }}
   </div>
   <div class="card__body">
     <div class="card__head">

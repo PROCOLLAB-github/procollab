@@ -16,9 +16,28 @@
           {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
         </div>
       </div>
-      <ul *ngIf="user.keySkills.length" class="about__skills">
+      <ul *ngIf="user.keySkills?.length" class="about__skills">
         <li *ngFor="let skill of user.keySkills" class="about__skill">
           <app-tag color="accent">{{ skill }}</app-tag>
+        </li>
+      </ul>
+    </div>
+    <div class="main__news">
+      <app-news-form
+        *ngIf="loggedUserId === user.id"
+        (addNews)="onAddNews($event)"
+      ></app-news-form>
+      <ul>
+        <li *ngFor="let n of news">
+          <app-news-card
+            class="news__item"
+            [attr.data-id]="n.id"
+            [newsItem]="n"
+            [isOwner]="loggedUserId === user.id"
+            (delete)="onDeleteNews($event)"
+            (like)="onLike($event)"
+            (edited)="onEditNews($event, n.id)"
+          ></app-news-card>
         </li>
       </ul>
     </div>

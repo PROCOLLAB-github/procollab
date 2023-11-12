@@ -14,7 +14,7 @@
       <ul>
         <li *ngFor="let p of user.projects">
           <a [routerLink]="['/office/projects', p.id]">
-            <app-project-card [project]="p">
+            <app-project-card [project]="p" [profileId]="user.id">
             </app-project-card>
           </a>
         </li>
