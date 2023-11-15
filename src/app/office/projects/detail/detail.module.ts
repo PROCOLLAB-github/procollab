@@ -13,10 +13,8 @@ import { ProjectChatComponent } from "./chat/chat.component";
 import { OfficeModule } from "@office/office.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { ReactiveFormsModule } from "@angular/forms";
-import { NewsCardComponent } from "./shared/news-card/news-card.component";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { ClickOutsideModule } from "ng-click-outside";
-import { NewsFormComponent } from "./shared/news-form/news-form.component";
 import { AutosizeModule } from "ngx-autosize";
 import { NewsDetailComponent } from "./news-detail/news-detail.component";
 import { NewsDetailResolver } from "@office/projects/detail/news-detail/news-detail.resolver";
@@ -40,10 +38,7 @@ import { NewsDetailResolver } from "@office/projects/detail/news-detail/news-det
     ResponseCardComponent,
     ProjectDetailComponent,
     ProjectChatComponent,
-    NewsCardComponent,
-    NewsFormComponent,
     NewsDetailComponent,
   ],
-  exports: [NewsCardComponent],
 })
 export class ProjectDetailModule {}

@@ -1,35 +1,43 @@
 <!-- @format -->
 
-<div class="card">
-  <div class="card__head">
-    <div>
-      <p class="text-heading-4 card__name">{{ project.name }}</p>
-      <p
-        *ngIf="industryService.industries | async as industries"
-        class="text-body-12 card__industry"
-      >
-        <span *ngIf="industryService.getIndustry(industries, project.industry) as industry">
-          {{ industry ? industry.name : "Error" }}
-        </span>
-      </p>
-    </div>
-    <app-avatar class="card__photo" [url]="project.imageAddress" [size]="60"></app-avatar>
+<div class="card" [class.card__with-tab]="project.collaborator">
+  <div 
+    *ngIf="project.collaborator as collaborator" 
+    class="card__tab text-bold-body-16"
+  >
+    {{ collaborator?.role ?? (profileId === project.leader ? 'Основатель' : 'Участник') }}
   </div>
-  <p class="text-body-12 card__description">{{ project.shortDescription }}</p>
-  <div class="card__media">
-    <div class="card__views">
-      <i appIcon icon="eye" appSquare="22"></i> {{ project.viewsCount }}
+  <div class="card__body">
+    <div class="card__head">
+      <div>
+        <p class="text-heading-4 card__name">{{ project.name }}</p>
+        <p
+          *ngIf="industryService.industries | async as industries"
+          class="text-body-12 card__industry"
+        >
+          <span *ngIf="industryService.getIndustry(industries, project.industry) as industry">
+            {{ industry ? industry.name : "Error" }}
+          </span>
+        </p>
+      </div>
+      <app-avatar class="card__photo" [url]="project.imageAddress" [size]="60"></app-avatar>
     </div>
-  </div>
-  <div class="card__bottom">
-    <p *ngIf="project.draft" class="text-body-12 card__draft">Черновик</p>
-    <i
-      *ngIf="canDelete"
-      class="card__basket"
-      appIcon
-      icon="basket"
-      appSquare="24"
-      (click)="onBasket($event)"
-    ></i>
+    <p class="text-body-12 card__description">{{ project.shortDescription }}</p>
+    <div class="card__media">
+      <div class="card__views">
+        <i appIcon icon="eye" appSquare="22"></i> {{ project.viewsCount }}
+      </div>
+    </div>
+    <div class="card__bottom">
+      <p *ngIf="project.draft" class="text-body-12 card__draft">Черновик</p>
+      <i
+        *ngIf="canDelete"
+        class="card__basket"
+        appIcon
+        icon="basket"
+        appSquare="24"
+        (click)="onBasket($event)"
+      ></i>
+    </div>
   </div>
 </div>

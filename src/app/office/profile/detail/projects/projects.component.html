@@ -1,0 +1,33 @@
+<section class="projects" *ngIf="user | async as user">
+  <div 
+    *ngIf="loggedUserId | async as loggedUserId"
+    class="projects__content"
+  >
+    <div class="projects__section">
+      <h3 class="text-heading-3 about__title">
+        {{ 
+          user.id === loggedUserId 
+          ? 'Проекты в которых я состою' 
+          : 'Проекты в которых состоит ' + user.firstName 
+        }}
+      </h3>
+      <ul>
+        <li *ngFor="let p of user.projects">
+          <a [routerLink]="['/office/projects', p.id]">
+            <app-project-card [project]="p" [profileId]="user.id">
+            </app-project-card>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="projects__section">
+      <h3 class="text-heading-3 about__title">
+        {{ 
+          user.id === loggedUserId 
+          ? 'Проекты на которые я подписан' 
+          : 'Проекты на которые подписан ' + user.firstName 
+        }}
+      </h3>
+    </div>
+  </div>
+</section>

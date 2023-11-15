@@ -97,7 +97,7 @@
         class="news__form"
         (addNews)="onAddNews($event)"
       ></app-news-form>
-      <app-project-news-card
+      <app-news-card
         class="news__item"
         [attr.data-id]="p.id"
         *ngFor="let p of news"
@@ -105,8 +105,8 @@
         [isOwner]="profile.id === project.leader"
         (delete)="onDeleteNews($event)"
         (like)="onLike($event)"
-        (edited)="onEditNews($event)"
-      ></app-project-news-card>
+        (edited)="onEditNews($event, p.id)"
+      ></app-news-card>
     </div>
     <aside class="project__aside">
       <div class="team project__section project__team">

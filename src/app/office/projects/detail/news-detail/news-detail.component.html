@@ -1,9 +1,9 @@
 <!-- @format -->
 
 <app-modal [open]="true" (openChange)="onOpenChange($event)">
-  <app-project-news-card
+  <app-news-card
     class="item"
     *ngIf="newsItem | async as item"
     [newsItem]="item"
-  ></app-project-news-card>
+  ></app-news-card>
 </app-modal>
