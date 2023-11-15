@@ -65,9 +65,12 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
     this.subscriptions$.push(messageSub$);
 
-    this.route.data.pipe<ChatListItem[]>(map(r => r["data"])).subscribe(chats => {
-      this.chatsData.next(chats);
-    });
+    const routeData$ = this.route.data
+      .pipe<ChatListItem[]>(map(r => r["data"]))
+      .subscribe(chats => {
+        this.chatsData.next(chats);
+      });
+    this.subscriptions$.push(routeData$);
   }
 
   subscriptions$: Subscription[] = [];
