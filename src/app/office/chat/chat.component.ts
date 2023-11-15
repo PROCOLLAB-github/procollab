@@ -24,16 +24,16 @@ export class ChatComponent implements OnInit {
     this.authService.profile,
     this.route.data.pipe<ChatListItem[]>(map(r => r["data"])),
   ]).pipe(
-    map(([profile, chats]) => {
-      return chats.map(chat => ({
+    map(([profile, chats]) =>
+      chats.map(chat => ({
         ...chat,
-        unread: profile.id !== chat.lastMessage.author.id && chat.lastMessage.isRead,
-      }));
-    }),
+        unRead: profile.id !== chat.lastMessage.author.id && !chat.lastMessage.isRead,
+      }))
+    ),
     map(chats =>
       chats.sort((prev, next) => {
-        if (prev.unread && !next.unread) return -1;
-        else if (!prev.unread && next.unread) return 1;
+        if (prev.unRead && !next.unRead) return -1;
+        else if (!prev.unRead && next.unRead) return 1;
         else return 0;
       })
     ),
