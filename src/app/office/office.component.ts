@@ -76,17 +76,6 @@ export class OfficeComponent implements OnInit, OnDestroy {
   waitVerificationAccepted = false;
 
   profile?: User;
-  // completeProfileModal = false;
-  //
-  // onGotoProfile(): void {
-  //   if (!this.profile) return;
-  //
-  //   this.completeProfileModal = false;
-  //
-  //   this.router
-  //     .navigateByUrl(`/office/profile/${this.profile.id}`)
-  //     .then(() => console.debug("Route changed OfficeComponent"));
-  // }
 
   onAcceptWaitVerification() {
     this.waitVerificationAccepted = true;
