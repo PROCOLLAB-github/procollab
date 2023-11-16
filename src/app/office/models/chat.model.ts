@@ -26,9 +26,15 @@ export class OnEditChatMessageDto {
 }
 
 export class OnDeleteChatMessageDto {
-  chatType!: "project" | string;
+  chatType!: "project" | "direct";
   chatId!: string;
   messageId!: number;
+}
+export class OnReadChatMessageDto {
+  chatType!: "project" | "direct";
+  chatId!: string;
+  messageId!: number;
+  userId!: number;
 }
 export class EditChatMessageDto {
   chatType!: "direct" | "project";

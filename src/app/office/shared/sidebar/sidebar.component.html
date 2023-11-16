@@ -70,7 +70,7 @@
     </div>
     <a class="bottom-action" routerLink="/office/chats">
       <div class="sidebar__bell">
-        <!--        <div class="attention"></div>-->
+        <div *ngIf="hasUnreads" class="attention"></div>
         <i appIcon icon="chats" appWidth="23" appHeight="21" appViewBox="0 0 23 21"></i>
       </div>
     </a>

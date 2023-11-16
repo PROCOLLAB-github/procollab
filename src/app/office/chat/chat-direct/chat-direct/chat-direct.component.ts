@@ -36,6 +36,7 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     this.initTypingEvent();
     this.initDeleteEvent();
     this.initEditEvent();
+    this.initReadEvent();
 
     this.authService.profile.subscribe(u => {
       this.currentUserId = u.id;
@@ -140,6 +141,19 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     deleteEvent$ && this.subscriptions$.push(deleteEvent$);
   }
 
+  private initReadEvent(): void {
+    const readEvent$ = this.chatService.onReadMessage().subscribe(result => {
+      const messageIdx = this.messages.findIndex(msg => msg.id === result.messageId);
+
+      const messages = JSON.parse(JSON.stringify(this.messages));
+      messages.splice(messageIdx, 1, { ...messages[messageIdx], isRead: true });
+
+      this.messages = messages;
+    });
+
+    readEvent$ && this.subscriptions$.push(readEvent$);
+  }
+
   fetching = false;
   onFetchMessages(): void {
     if (
@@ -184,5 +198,13 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
 
   onType() {
     this.chatService.startTyping({ chatType: "direct", chatId: this.chat?.id ?? "" });
+  }
+
+  onReadMessage(messageId: number) {
+    this.chatService.readMessage({
+      chatType: "direct",
+      chatId: this.chat?.id ?? "",
+      messageId,
+    });
   }
 }

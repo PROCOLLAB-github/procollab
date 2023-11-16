@@ -13,6 +13,7 @@ import {
   OnChatMessageDto,
   OnDeleteChatMessageDto,
   OnEditChatMessageDto,
+  OnReadChatMessageDto,
   ReadChatMessageDto,
   SendChatMessageDto,
   TypingInChatDto,
@@ -86,6 +87,13 @@ export class ChatService {
       .pipe(map(r => plainToInstance(ChatFile, r)));
   }
 
+  unread$ = new BehaviorSubject(false);
+  hasUnreads(): Observable<boolean> {
+    return this.apiService
+      .get<{ hasUnreads: boolean }>("/chats/has-unreads")
+      .pipe(map(r => r.hasUnreads));
+  }
+
   sendMessage(message: SendChatMessageDto): void {
     this.websocketService.send(ChatEventType.NEW_MESSAGE, message);
   }
@@ -106,6 +114,12 @@ export class ChatService {
     return this.websocketService
       .on<OnDeleteChatMessageDto>(ChatEventType.DELETE_MESSAGE)
       .pipe(map(message => plainToInstance(OnDeleteChatMessageDto, message)));
+  }
+
+  onReadMessage(): Observable<OnReadChatMessageDto> {
+    return this.websocketService
+      .on<OnDeleteChatMessageDto>(ChatEventType.READ_MESSAGE)
+      .pipe(map(message => plainToInstance(OnReadChatMessageDto, message)));
   }
 
   editMessage(message: EditChatMessageDto): void {

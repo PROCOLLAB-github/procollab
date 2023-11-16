@@ -1,6 +1,7 @@
 /** @format */
 
 import { User } from "@auth/models/user.model";
+import { ChatMessage } from "@models/chat-message.model";
 
 export interface ChatListItem {
   id: string;
@@ -9,7 +10,7 @@ export interface ChatListItem {
     isDeleted: boolean;
     isEdited: boolean;
     isRead: boolean;
-    reply: ChatListItem["lastMessage"];
+    replyTo: ChatMessage | null;
     text: string;
     createdAt: string;
   };

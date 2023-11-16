@@ -3,7 +3,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResolveEnd, ResolveStart, Router } from "@angular/router";
 import { AuthService } from "@auth/services";
-import { calcAppHeight } from "@utils/responsive";
 import {
   debounceTime,
   filter,
@@ -60,7 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.resizeEvent = fromEvent(window, "resize").pipe(throttleTime(500));
 
     this.appHeight$ = merge(this.loadEvent, this.resizeEvent).subscribe(() => {
-      calcAppHeight();
+      document.documentElement.style.setProperty("--app-height", `${window.innerHeight}px`);
     });
   }
 

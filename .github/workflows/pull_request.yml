@@ -22,6 +22,8 @@ jobs:
       - run: npm run test:ci
   build:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js 16.x
@@ -32,8 +34,9 @@ jobs:
         cache-dependency-path: package-lock.json
     - run: npm ci
     - run: npm run build --configuration procollab-dev
-    - name: Publish a preview application
+    - name: Publish preview
       uses: netlify/actions/cli@master
+      id: publish_preview
       with:
         args: deploy --dir=./dist/procollab
       env:
@@ -42,3 +45,7 @@ jobs:
         NETLIFY_PREVIEW_APP: true # or perhaps like this
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NETLIFY_PR_ID: ${{ github.pr_id }}
+    - uses: mshick/add-pr-comment@v2
+      with:
+        message: |
+          Preview url - ${{steps.publish_preview.outputs.NETLIFY_URL}}

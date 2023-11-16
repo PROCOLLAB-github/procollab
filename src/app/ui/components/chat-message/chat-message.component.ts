@@ -24,7 +24,6 @@ import { AuthService } from "@auth/services";
 })
 export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
-    private readonly elRef: ElementRef,
     private readonly snackbarService: SnackbarService,
     private readonly overlay: Overlay,
     public readonly authService: AuthService
