@@ -55,6 +55,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navService.setNavTitle("Чат");
 
+    setTimeout(() => {
+      this.chatService.unread$.next(false);
+    });
+
     const messageSub$ = this.chatService.onMessage().subscribe(result => {
       const newChatsData: ChatListItem[] = JSON.parse(JSON.stringify(this.chatsData.value));
       const chatIdx = newChatsData.findIndex(c => c.id === result.chatId);

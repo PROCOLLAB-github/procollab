@@ -2,7 +2,11 @@
 
 <div class="office">
   <ng-container *ngIf="invites$ | async as invites">
-    <app-sidebar class="office__sidebar" [invites]="invites"></app-sidebar>
+    <app-sidebar
+      class="office__sidebar"
+      [hasUnreads]="!!(chatService.unread$ | async)"
+      [invites]="invites"
+    ></app-sidebar>
     <div class="office__wrapper">
       <div class="office__top">
         <app-nav [invites]="invites"></app-nav>
@@ -19,8 +23,8 @@
       <img src="/assets/images/office/shared/wait.png" alt="wait" width="215px" />
       <h3 class="message-modal__title text-bold-body-16">Ваш аккаунт проходит подтверждение</h3>
       <p class="message-modal__text text-body-14">
-        Мы проверяем ваши данные и скоро сообщим о подтверждении аккаунта, 
-        а пока можете уже пользоваться платформой
+        Мы проверяем ваши данные и скоро сообщим о подтверждении аккаунта, а пока можете уже
+        пользоваться платформой
       </p>
       <app-button class="message-modal__button" (click)="onAcceptWaitVerification()">
         Хорошо

@@ -22,7 +22,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
     public readonly authService: AuthService,
     private readonly projectService: ProjectService,
     private readonly router: Router,
-    private readonly chatService: ChatService
+    public readonly chatService: ChatService
   ) {}
 
   ngOnInit(): void {
@@ -55,6 +55,12 @@ export class OfficeComponent implements OnInit, OnDestroy {
         this.chatService.setOnlineStatus(evt.userId, true);
       });
     });
+
+    if (!this.router.url.includes("chats")) {
+      this.chatService.hasUnreads().subscribe(unreads => {
+        this.chatService.unread$.next(unreads);
+      });
+    }
 
     if (localStorage.getItem("waitVerificationAccepted") === "true") {
       this.waitVerificationAccepted = true;

@@ -21,6 +21,7 @@ export class SidebarComponent implements OnInit {
   ) {}
 
   @Input() invites: Invite[] = [];
+  @Input() hasUnreads = false;
 
   ngOnInit(): void {}
 

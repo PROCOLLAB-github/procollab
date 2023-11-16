@@ -87,6 +87,13 @@ export class ChatService {
       .pipe(map(r => plainToInstance(ChatFile, r)));
   }
 
+  unread$ = new BehaviorSubject(false);
+  hasUnreads(): Observable<boolean> {
+    return this.apiService
+      .get<{ hasUnreads: boolean }>("/chats/has-unreads")
+      .pipe(map(r => r.hasUnreads));
+  }
+
   sendMessage(message: SendChatMessageDto): void {
     this.websocketService.send(ChatEventType.NEW_MESSAGE, message);
   }
