@@ -6,6 +6,7 @@ import { ChatComponent } from "./chat.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("ChatComponent", () => {
   let component: ChatComponent;
@@ -17,7 +18,7 @@ describe("ChatComponent", () => {
     };
     await TestBed.configureTestingModule({
       declarations: [ChatComponent],
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule, HttpClientTestingModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
     }).compileComponents();
   });
