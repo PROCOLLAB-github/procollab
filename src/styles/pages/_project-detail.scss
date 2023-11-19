@@ -1,6 +1,42 @@
 @use "src/styles/responsive";
 @use "src/styles/typography";
 
+.unsubscribe-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 4px 20px;
+
+  h3 {
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  app-avatar {
+    margin-bottom: 30px;
+  }
+
+  app-button ::ng-deep .button--inline {
+    min-height: 38px;
+
+    @include responsive.apply-desktop {
+      min-height: 52px;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: space-between;
+    width: 100%;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+    }
+  }
+}
+
 .unsubscribe-modal-btn {
   &__typography {
     @include typography.bold-body-14;
