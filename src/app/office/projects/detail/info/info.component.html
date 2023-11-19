@@ -17,6 +17,34 @@
           [hasBorder]="true"
           [size]="140"
         ></app-avatar>
+        <div 
+          class="info__subscribe" 
+          [class.info__subscribe-active]="isUserSubscribed"
+          (click)="onSubscribe(project.id)"
+        >
+          <i appIcon appSquare="18" [icon]="isUserSubscribed ? 'check' : 'plus'"></i>
+        </div>
+        <app-modal [(open)]="isUnsubscribeModalOpen">
+          <div class="unsubscribe-modal">
+            <h3>Вы действительно хотите отписаться от проекта?</h3>
+            <app-avatar [url]="project.imageAddress" [size]="130"></app-avatar>
+            <div class="unsubscribe-modal__buttons">
+              <app-button 
+                color="red"
+                customTypographyClass="unsubscribe-modal-btn__typography"
+                (click)="onUnsubscribe(project.id)"
+              >
+                Отписаться
+              </app-button>
+              <app-button 
+                customTypographyClass="unsubscribe-modal-btn__typography"
+                (click)="onCloseUnsubscribeModal()"
+              >
+                Отменить
+              </app-button>
+            </div>
+          </div>
+        </app-modal>
       </div>
       <div *ngIf="authService.profile | async as profile" class="info__body">
         <div class="info__text">

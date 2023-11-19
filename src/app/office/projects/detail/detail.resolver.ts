@@ -2,17 +2,26 @@
 
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, Resolve } from "@angular/router";
-import { Observable } from "rxjs";
+import { Observable, forkJoin, of, switchMap } from "rxjs";
 import { ProjectService } from "@services/project.service";
 import { Project } from "@models/project.model";
+import { SubscriptionService } from "@office/services/subscription.service";
+import { ProjectSubscriber } from "@office/models/project-subscriber.model";
 
 @Injectable({
   providedIn: "root",
 })
-export class ProjectDetailResolver implements Resolve<Project> {
-  constructor(private readonly projectService: ProjectService) {}
+export class ProjectDetailResolver implements Resolve<[Project, ProjectSubscriber[]]> {
+  constructor(
+    private readonly projectService: ProjectService,
+    private readonly subscriptionService: SubscriptionService
+  ) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<Project> {
-    return this.projectService.getOne(Number(route.paramMap.get("projectId")));
+  resolve(route: ActivatedRouteSnapshot): Observable<[Project, ProjectSubscriber[]]> {
+    return this.projectService.getOne(Number(route.paramMap.get("projectId"))).pipe(
+      switchMap(project => {
+        return forkJoin([of(project), this.subscriptionService.getSubscribers(project.id)]);
+      })
+    );
   }
 }

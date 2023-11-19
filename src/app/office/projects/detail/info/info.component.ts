@@ -10,7 +10,21 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { concatMap, forkJoin, map, noop, Observable, of, Subscription, take } from "rxjs";
+import {
+  concatMap,
+  forkJoin,
+  map,
+  merge,
+  noop,
+  Observable,
+  of,
+  Subscriber,
+  Subscription,
+  switchMap,
+  take,
+  tap,
+  withLatestFrom,
+} from "rxjs";
 import { Project } from "@models/project.model";
 import { IndustryService } from "@services/industry.service";
 import { NavService } from "@services/nav.service";
@@ -19,10 +33,11 @@ import { AuthService } from "@auth/services";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { containerSm } from "@utils/responsive";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { expandElement } from "@utils/expand-element";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
+import { SubscriptionService } from "@office/services/subscription.service";
+import { ProjectSubscriber } from "@office/models/project-subscriber.model";
 
 @Component({
   selector: "app-detail",
@@ -36,11 +51,11 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     public readonly authService: AuthService,
     private readonly navService: NavService,
     private readonly projectNewsService: ProjectNewsService,
-    private readonly fb: FormBuilder,
+    private readonly subscriptionService: SubscriptionService,
     private readonly cdRef: ChangeDetectorRef
   ) {}
 
-  project$?: Observable<Project> = this.route.parent?.data.pipe(map(r => r["data"]));
+  project$?: Observable<Project> = this.route.parent?.data.pipe(map(r => r["data"][0]));
 
   profileId!: number;
 
@@ -66,6 +81,19 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
           });
         });
       });
+
+    this.route.parent?.data
+      .pipe(
+        take(1),
+        map(r => r["data"][1] as ProjectSubscriber[]),
+        withLatestFrom(this.authService.profile)
+      )
+      .subscribe(([subs, profile]) => {
+        subs.some(sub => sub.id === profile.id)
+          ? (this.isUserSubscribed = true)
+          : (this.isUserSubscribed = false);
+      });
+
     this.subscriptions$.push(news$);
 
     this.authService.profile.pipe(take(1)).subscribe(profile => {
@@ -152,6 +180,30 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
         this.news[newsIdx] = resNews;
         this.newsCardComponent?.onCloseEditMode();
       });
+  }
+
+  isUserSubscribed!: boolean;
+  isUnsubscribeModalOpen = false;
+
+  onSubscribe(projectId: number): void {
+    if (this.isUserSubscribed) {
+      this.isUnsubscribeModalOpen = true;
+      return;
+    }
+    this.subscriptionService.addSubscription(projectId).subscribe(() => {
+      this.isUserSubscribed = true;
+    });
+  }
+
+  onUnsubscribe(projectId: number): void {
+    this.subscriptionService.deleteSubscription(projectId).subscribe(() => {
+      this.isUserSubscribed = false;
+      this.isUnsubscribeModalOpen = false;
+    });
+  }
+
+  onCloseUnsubscribeModal(): void {
+    this.isUnsubscribeModalOpen = false;
   }
 
   openSupport = false;

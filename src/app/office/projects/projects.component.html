@@ -20,7 +20,7 @@
       <div class="bar__right">
         <button *ngIf="isMy" (click)="addProject()" class="text-body-14 bar__add-project">
           <span class="bar__add-project-text">Добавить проект</span>
-          <i appIcon icon="plus" appSquare="32"></i>
+          <i appIcon icon="plus" appSquare="18"></i>
         </button>
         <form *ngIf="isAll" [formGroup]="searchForm">
           <app-search formControlName="search"></app-search>

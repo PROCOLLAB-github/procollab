@@ -100,6 +100,7 @@
 .info {
   $body-slide: 15px;
 
+  position: relative;
   padding: 0;
   background-color: transparent;
   border: none;
@@ -229,6 +230,33 @@
 
   &__edit {
     display: block;
+  }
+
+  &__subscribe {
+    position: absolute;
+    right: 5%;
+    width: 45px;
+    height: 114px;
+    padding-bottom: 18px;
+    color: white;
+    cursor: pointer;
+    background-color: var(--green);
+    border-radius: 0 0 100px 100px;
+    box-shadow: 0 6px 22px var(--green);
+    transition: all 0.5s ease;
+
+    i {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      height: 100%;
+    }
+
+    &-active {
+      height: 51px;
+      background-color: var(--accent);
+      box-shadow: 0 6px 18px var(--accent);
+    }
   }
 }
 
@@ -504,6 +532,42 @@
 
     @include responsive.apply-desktop {
       max-width: 260px;
+    }
+  }
+}
+
+.unsubscribe-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 4px 20px;
+
+  h3 {
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  app-avatar {
+    margin-bottom: 30px;
+  }
+
+  app-button ::ng-deep .button--inline {
+    min-height: 38px;
+
+    @include responsive.apply-desktop {
+      min-height: 52px;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: space-between;
+    width: 100%;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
     }
   }
 }

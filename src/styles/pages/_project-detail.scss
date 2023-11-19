@@ -1,0 +1,12 @@
+@use "src/styles/responsive";
+@use "src/styles/typography";
+
+.unsubscribe-modal-btn {
+  &__typography {
+    @include typography.bold-body-14;
+
+    @include responsive.apply-desktop {
+      @include typography.bold-body-16;
+    }
+  }
+}
