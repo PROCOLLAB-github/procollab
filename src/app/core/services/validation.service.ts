@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { AbstractControl, AnyForUntypedForms, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { AbstractControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 import * as relativeTime from "dayjs/plugin/relativeTime";
@@ -67,14 +67,15 @@ export class ValidationService {
     };
   }
 
-  getFormValidation(form: AnyForUntypedForms): boolean {
+  getFormValidation(form: UntypedFormGroup): boolean {
     if (form.valid) {
       return true;
     }
 
-    Object.keys(form.controls).forEach(control =>
-      form.get(control).markAsTouched({ onlySelf: true })
-    );
+    Object.keys(form.controls).forEach(controlName => {
+      const control = form.get(controlName);
+      control && control.markAsTouched({ onlySelf: true });
+    });
 
     return false;
   }
