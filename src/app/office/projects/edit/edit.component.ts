@@ -2,13 +2,7 @@
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import {
-  AbstractControl,
-  UntypedFormArray,
-  FormBuilder,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "@services/industry.service";
 import { concatMap, distinctUntilChanged, filter, map, Observable, Subscription, tap } from "rxjs";
 import { ErrorMessage } from "@error/models/error-message";
@@ -220,8 +214,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.requiredSkills.removeAt(index);
   }
 
-  get requiredSkills(): UntypedFormArray {
-    return this.vacancyForm.get("requiredSkills") as UntypedFormArray;
+  get requiredSkills(): FormArray {
+    return this.vacancyForm.get("requiredSkills") as FormArray;
   }
 
   vacancySubmitInitiated = false;
@@ -361,8 +355,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setProjFormIsSubmitting!: (status: boolean) => void;
 
-  get achievements(): UntypedFormArray {
-    return this.projectForm.get("achievements") as UntypedFormArray;
+  get achievements(): FormArray {
+    return this.projectForm.get("achievements") as FormArray;
   }
 
   addAchievement(id?: number, title?: string, status?: string): void {
@@ -440,8 +434,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  get links(): UntypedFormArray {
-    return this.projectForm.get("links") as UntypedFormArray;
+  get links(): FormArray {
+    return this.projectForm.get("links") as FormArray;
   }
 
   newLink = "";

@@ -2,13 +2,7 @@
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
-import {
-  UntypedFormArray,
-  FormBuilder,
-  UntypedFormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { SelectComponent } from "@ui/components";
 import { ValidationService } from "@core/services";
@@ -135,12 +129,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.profileForm.get("typeSpecific") as FormGroup;
   }
 
-  get usefulToProject(): UntypedFormControl {
-    return this.typeSpecific.get("usefulToProject") as UntypedFormControl;
+  get usefulToProject(): FormControl {
+    return this.typeSpecific.get("usefulToProject") as FormControl;
   }
 
-  get preferredIndustries(): UntypedFormArray {
-    return this.typeSpecific.get("preferredIndustries") as UntypedFormArray;
+  get preferredIndustries(): FormArray {
+    return this.typeSpecific.get("preferredIndustries") as FormArray;
   }
 
   newPreferredIndustryTitle = "";
@@ -161,8 +155,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.preferredIndustries.removeAt(i);
   }
 
-  get achievements(): UntypedFormArray {
-    return this.profileForm.get("achievements") as UntypedFormArray;
+  get achievements(): FormArray {
+    return this.profileForm.get("achievements") as FormArray;
   }
 
   errorMessage = ErrorMessage;
@@ -188,8 +182,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.achievements.removeAt(i);
   }
 
-  get keySkills(): UntypedFormArray {
-    return this.profileForm.get("keySkills") as UntypedFormArray;
+  get keySkills(): FormArray {
+    return this.profileForm.get("keySkills") as FormArray;
   }
 
   newKeySkillTitle = "";
@@ -210,8 +204,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.keySkills.removeAt(i);
   }
 
-  get links(): UntypedFormArray {
-    return this.profileForm.get("links") as UntypedFormArray;
+  get links(): FormArray {
+    return this.profileForm.get("links") as FormArray;
   }
 
   newLink = "";
