@@ -13,7 +13,7 @@ import {
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ActivatedRoute } from "@angular/router";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ValidationService } from "@core/services";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { FileService } from "@core/services/file.service";
@@ -31,7 +31,7 @@ export class NewsCardComponent implements OnInit {
   constructor(
     private readonly snackbarService: SnackbarService,
     private readonly route: ActivatedRoute,
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly validationService: ValidationService,
     private readonly projectNewsService: ProjectNewsService,
     private readonly fileService: FileService,
@@ -52,7 +52,7 @@ export class NewsCardComponent implements OnInit {
   readMore = false;
   editMode = false;
 
-  editForm: FormGroup;
+  editForm: UntypedFormGroup;
 
   ngOnInit(): void {
     this.editForm.setValue({

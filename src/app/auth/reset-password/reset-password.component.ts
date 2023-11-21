@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { AuthService } from "@auth/services";
 import { ValidationService } from "@core/services";
@@ -14,7 +14,7 @@ import { Router } from "@angular/router";
 })
 export class ResetPasswordComponent implements OnInit {
   constructor(
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly authService: AuthService,
     private readonly validationService: ValidationService,
     private readonly router: Router
@@ -26,7 +26,7 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  resetForm: FormGroup;
+  resetForm: UntypedFormGroup;
   isSubmitting = false;
 
   errorMessage = ErrorMessage;

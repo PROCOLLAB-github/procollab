@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { ValidationService } from "@core/services";
 import { concatMap, Subscription } from "rxjs";
@@ -19,7 +19,7 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   constructor(
     public readonly authService: AuthService,
     private readonly onboardingService: OnboardingService,
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly validationService: ValidationService,
     private readonly router: Router
   ) {
@@ -50,7 +50,7 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
-  stageForm: FormGroup;
+  stageForm: UntypedFormGroup;
   errorMessage = ErrorMessage;
   profile?: User;
   stageSubmitting = false;

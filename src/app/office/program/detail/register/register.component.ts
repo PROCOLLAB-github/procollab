@@ -3,7 +3,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map, Subscription } from "rxjs";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ProgramDataSchema } from "@office/program/models/program.model";
 import { ValidationService } from "@core/services";
 import { ProgramService } from "@office/program/services/program.service";
@@ -17,7 +17,7 @@ export class ProgramRegisterComponent implements OnInit, OnDestroy {
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly validationService: ValidationService,
     private readonly programService: ProgramService
   ) {}
@@ -42,12 +42,12 @@ export class ProgramRegisterComponent implements OnInit, OnDestroy {
 
   subscriptions$: Subscription[] = [];
 
-  registerForm?: FormGroup;
+  registerForm?: UntypedFormGroup;
 
   schema?: ProgramDataSchema;
 
   onSubmit(): void {
-    if (!this.validationService.getFormValidation(this.registerForm)) {
+    if (this.registerForm && !this.validationService.getFormValidation(this.registerForm)) {
       return;
     }
 

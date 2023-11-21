@@ -15,7 +15,7 @@ import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } 
 import { AuthService } from "@auth/services";
 import { MembersResult, User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
 
@@ -30,7 +30,7 @@ export class MentorsComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService,
     private readonly navService: NavService,
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly memberService: MemberService,
     private readonly cdref: ChangeDetectorRef
   ) {
@@ -75,7 +75,7 @@ export class MentorsComponent implements OnInit, OnDestroy, AfterViewInit {
   members: User[] = [];
   members$?: Subscription;
 
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
   searchFormSearch$?: Subscription;
 
   onScroll() {
