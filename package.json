@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve procollab-dev",
-    "build": "npm run build:sprite && ng build",
+    "build": "npm run build:sprite && ng build procollab",
     "watch": "ng build --watch --configuration development",
     "build:sprite": "svg-sprite -s --dest=src/assets/icons 'src/assets/icons/svg/**/*.svg'",
     "test": "ng test",
