@@ -52,12 +52,14 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
       if (event instanceof NavigationEnd) {
         this.isMy = location.href.includes("/my");
         this.isAll = location.href.includes("/all");
+        this.isSubs = location.href.includes("/subsription");
       }
     });
     routeUrl$ && this.subscriptions$.push(routeUrl$);
 
     const profile$ = this.authService.profile.subscribe(profile => {
       this.profile = profile;
+      this.profileSubscriptionsIds = profile.subscribedProjects.map(sub => sub.id);
     });
 
     profile$ && this.subscriptions$.push(profile$);
@@ -157,8 +159,10 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isAll = location.href.includes("/all");
   isMy = location.href.includes("/my");
+  isSubs = location.href.includes("/subscriptions");
 
   profile?: User;
+  profileSubscriptionsIds?: number[];
   subscriptions$: Subscription[] = [];
 
   projectsCount = 0;
@@ -205,6 +209,10 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onScroll() {
+    if (this.isSubs) {
+      return of({});
+    }
+
     if (this.projectsCount && this.projects.length >= this.projectsCount) return of({});
 
     const target = document.querySelector(".office__body");

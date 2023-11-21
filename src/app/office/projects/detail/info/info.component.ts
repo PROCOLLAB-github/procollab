@@ -14,15 +14,11 @@ import {
   concatMap,
   forkJoin,
   map,
-  merge,
   noop,
   Observable,
   of,
-  Subscriber,
   Subscription,
-  switchMap,
   take,
-  tap,
   withLatestFrom,
 } from "rxjs";
 import { Project } from "@models/project.model";
@@ -33,7 +29,7 @@ import { AuthService } from "@auth/services";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { containerSm } from "@utils/responsive";
-import { UntypedFormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder } from "@angular/forms";
 import { expandElement } from "@utils/expand-element";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
@@ -87,11 +83,11 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     this.route.parent?.data
       .pipe(
         take(1),
-        map(r => r["data"][1] as ProjectSubscriber[]),
+        map(r => r["data"][0] as Project),
         withLatestFrom(this.authService.profile)
       )
-      .subscribe(([subs, profile]) => {
-        subs.some(sub => sub.id === profile.id)
+      .subscribe(([project, profile]) => {
+        profile.subscribedProjects.some(sub => sub.id === project.id)
           ? (this.isUserSubscribed = true)
           : (this.isUserSubscribed = false);
       });

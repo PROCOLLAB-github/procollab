@@ -24,6 +24,9 @@
     </div>
     <p class="text-body-12 card__description">{{ project.shortDescription }}</p>
     <div class="card__media">
+      <div *ngIf='isSubscribed' class="card__subscribed">
+        <i appIcon icon="check" appSquare="14"></i>
+      </div>
       <div class="card__views">
         <i appIcon icon="eye" appSquare="22"></i> {{ project.viewsCount }}
       </div>
