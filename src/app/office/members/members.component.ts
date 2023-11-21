@@ -30,7 +30,7 @@ import {
 } from "rxjs";
 import { MembersResult, User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
 import { capitalizeString } from "@utils/capitalize-string";
@@ -46,7 +46,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly navService: NavService,
-    private readonly fb: UntypedFormBuilder,
+    private readonly fb: FormBuilder,
     private readonly memberService: MemberService,
     private readonly cdref: ChangeDetectorRef
   ) {
@@ -144,7 +144,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
 
   searchParamSubject$ = new BehaviorSubject<string>("");
 
-  searchForm: UntypedFormGroup;
+  searchForm: FormGroup;
   searchFormChanges$?: Subscription;
 
   scrollEvents$?: Subscription;

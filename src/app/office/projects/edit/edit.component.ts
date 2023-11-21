@@ -2,7 +2,13 @@
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  UntypedFormArray,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { IndustryService } from "@services/industry.service";
 import { concatMap, distinctUntilChanged, filter, map, Observable, Subscription, tap } from "rxjs";
 import { ErrorMessage } from "@error/models/error-message";
@@ -28,7 +34,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly fb: UntypedFormBuilder,
+    private readonly fb: FormBuilder,
     private readonly industryService: IndustryService,
     protected readonly projectService: ProjectService,
     private readonly navService: NavService,
@@ -197,7 +203,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   subscriptions: (Subscription | undefined)[] = [];
 
   vacancies: Vacancy[] = [];
-  vacancyForm: UntypedFormGroup;
+  vacancyForm: FormGroup;
 
   requiredSkillTitle = "";
 
@@ -269,7 +275,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  inviteForm: UntypedFormGroup;
+  inviteForm: FormGroup;
 
   inviteSubmitInitiated = false;
   inviteFormIsSubmitting = false;
@@ -338,7 +344,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  projectForm: UntypedFormGroup;
+  projectForm: FormGroup;
 
   projSubmitInitiated = false;
 

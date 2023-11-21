@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ValidationService } from "@core/services";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
@@ -14,7 +14,7 @@ import { forkJoin, noop, Observable, tap } from "rxjs";
 })
 export class NewsFormComponent implements OnInit {
   constructor(
-    private readonly fb: UntypedFormBuilder,
+    private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly fileService: FileService
   ) {
@@ -27,7 +27,7 @@ export class NewsFormComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  messageForm: UntypedFormGroup;
+  messageForm: FormGroup;
 
   onSubmit() {
     if (!this.validationService.getFormValidation(this.messageForm)) {

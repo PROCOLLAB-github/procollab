@@ -6,7 +6,7 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { map, Subscription } from "rxjs";
 import { ProjectCount } from "@models/project.model";
 import { ProjectService } from "@services/project.service";
-import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 
 @Component({
   selector: "app-projects",
@@ -19,7 +19,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     public readonly projectService: ProjectService,
     private readonly router: Router,
-    private readonly fb: UntypedFormBuilder
+    private readonly fb: FormBuilder
   ) {
     this.searchForm = this.fb.group({
       search: [""],
@@ -62,7 +62,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.subscriptions$.forEach($ => $?.unsubscribe());
   }
 
-  searchForm: UntypedFormGroup;
+  searchForm: FormGroup;
   subscriptions$: Subscription[] = [];
 
   isMy = location.href.includes("/my");

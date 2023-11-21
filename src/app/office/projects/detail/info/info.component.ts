@@ -19,7 +19,7 @@ import { AuthService } from "@auth/services";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { containerSm } from "@utils/responsive";
-import { UntypedFormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { expandElement } from "@utils/expand-element";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
@@ -36,7 +36,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     public readonly authService: AuthService,
     private readonly navService: NavService,
     private readonly projectNewsService: ProjectNewsService,
-    private readonly fb: UntypedFormBuilder,
+    private readonly fb: FormBuilder,
     private readonly cdRef: ChangeDetectorRef
   ) {}
 

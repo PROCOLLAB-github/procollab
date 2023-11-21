@@ -2,7 +2,13 @@
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
+import {
+  UntypedFormArray,
+  FormBuilder,
+  UntypedFormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { SelectComponent } from "@ui/components";
 import { ValidationService } from "@core/services";
@@ -23,7 +29,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private readonly cdref: ChangeDetectorRef,
     public readonly authService: AuthService,
-    private readonly fb: UntypedFormBuilder,
+    private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly router: Router,
     private readonly navService: NavService
@@ -104,9 +110,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       }
 
       if ([1, 3, 4].includes(profile.userType)) {
-        const userTypeData = profile.member ?? profile.mentor ?? profile.expert
+        const userTypeData = profile.member ?? profile.mentor ?? profile.expert;
         this.typeSpecific.addControl("usefulToProject", this.fb.control(""));
-        this.typeSpecific.get("usefulToProject")?.patchValue(userTypeData?.usefulToProject)
+        this.typeSpecific.get("usefulToProject")?.patchValue(userTypeData?.usefulToProject);
         this.cdref.detectChanges();
       }
 
@@ -125,8 +131,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   subscription$: Subscription[] = [];
 
-  get typeSpecific(): UntypedFormGroup {
-    return this.profileForm.get("typeSpecific") as UntypedFormGroup;
+  get typeSpecific(): FormGroup {
+    return this.profileForm.get("typeSpecific") as FormGroup;
   }
 
   get usefulToProject(): UntypedFormControl {
@@ -166,7 +172,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   );
 
   profileFormSubmitting = false;
-  profileForm: UntypedFormGroup;
+  profileForm: FormGroup;
 
   addAchievement(id?: number, title?: string, status?: string): void {
     this.achievements.push(
