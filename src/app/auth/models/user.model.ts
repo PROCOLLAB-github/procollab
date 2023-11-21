@@ -46,6 +46,7 @@ export class User {
   organization!: string;
   achievements!: Achievement[];
   projects!: Project[];
+  subscribedProjects!: Project[];
   timeCreated!: string;
   timeUpdated!: string;
   verificationDate!: string;

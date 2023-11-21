@@ -16,6 +16,7 @@ export class ProjectCardComponent implements OnInit {
 
   @Input() project!: Project;
   @Input() canDelete?: boolean | null = false;
+  @Input() isSubscribed?: boolean | null = false;
   @Input() profileId?: number;
 
   @Output() remove = new EventEmitter<number>();

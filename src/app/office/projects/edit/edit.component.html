@@ -91,7 +91,7 @@
             </ul>
             <app-button (click)="addLink()" class="project__add-link">
               Добавить еще одну ссылку
-              <i appIcon icon="plus" appSquare="20"></i>
+              <i appIcon icon="plus" appSquare="12"></i>
             </app-button>
           </fieldset>
           <fieldset *ngIf="projectForm.get('step') as step">
@@ -246,7 +246,7 @@
               </ul>
               <app-button class="project__add-achievement" (click)="addAchievement()">
                 <span>Добавить достижение</span>
-                <i appIcon icon="plus" appSquare="24"></i>
+                <i appIcon icon="plus" appSquare="14"></i>
               </app-button>
             </ng-container>
           </div>
@@ -309,7 +309,7 @@
                 [loader]="inviteFormIsSubmitting"
               >
                 <span>Пригласить участника</span>
-                <i appIcon icon="plus" appSquare="24"></i>
+                <i appIcon icon="plus" appSquare="14"></i>
               </app-button>
             </form>
           </div>
