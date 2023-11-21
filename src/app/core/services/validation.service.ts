@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { AbstractControl, UntypedFormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 import * as relativeTime from "dayjs/plugin/relativeTime";
@@ -67,7 +67,7 @@ export class ValidationService {
     };
   }
 
-  getFormValidation(form: UntypedFormGroup): boolean {
+  getFormValidation(form: FormGroup): boolean {
     if (form.valid) {
       return true;
     }
