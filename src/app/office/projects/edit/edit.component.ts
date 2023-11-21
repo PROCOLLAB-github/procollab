@@ -2,7 +2,7 @@
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { IndustryService } from "@services/industry.service";
 import { concatMap, distinctUntilChanged, filter, map, Observable, Subscription, tap } from "rxjs";
 import { ErrorMessage } from "@error/models/error-message";
@@ -28,7 +28,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly industryService: IndustryService,
     protected readonly projectService: ProjectService,
     private readonly navService: NavService,
@@ -197,7 +197,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   subscriptions: (Subscription | undefined)[] = [];
 
   vacancies: Vacancy[] = [];
-  vacancyForm: FormGroup;
+  vacancyForm: UntypedFormGroup;
 
   requiredSkillTitle = "";
 
@@ -214,8 +214,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.requiredSkills.removeAt(index);
   }
 
-  get requiredSkills(): FormArray {
-    return this.vacancyForm.get("requiredSkills") as FormArray;
+  get requiredSkills(): UntypedFormArray {
+    return this.vacancyForm.get("requiredSkills") as UntypedFormArray;
   }
 
   vacancySubmitInitiated = false;
@@ -269,7 +269,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  inviteForm: FormGroup;
+  inviteForm: UntypedFormGroup;
 
   inviteSubmitInitiated = false;
   inviteFormIsSubmitting = false;
@@ -338,7 +338,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  projectForm: FormGroup;
+  projectForm: UntypedFormGroup;
 
   projSubmitInitiated = false;
 
@@ -355,8 +355,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setProjFormIsSubmitting!: (status: boolean) => void;
 
-  get achievements(): FormArray {
-    return this.projectForm.get("achievements") as FormArray;
+  get achievements(): UntypedFormArray {
+    return this.projectForm.get("achievements") as UntypedFormArray;
   }
 
   addAchievement(id?: number, title?: string, status?: string): void {
@@ -434,8 +434,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  get links(): FormArray {
-    return this.projectForm.get("links") as FormArray;
+  get links(): UntypedFormArray {
+    return this.projectForm.get("links") as UntypedFormArray;
   }
 
   newLink = "";

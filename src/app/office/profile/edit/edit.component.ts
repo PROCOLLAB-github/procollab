@@ -2,7 +2,7 @@
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { SelectComponent } from "@ui/components";
 import { ValidationService } from "@core/services";
@@ -23,7 +23,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private readonly cdref: ChangeDetectorRef,
     public readonly authService: AuthService,
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly validationService: ValidationService,
     private readonly router: Router,
     private readonly navService: NavService
@@ -125,16 +125,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   subscription$: Subscription[] = [];
 
-  get typeSpecific(): FormGroup {
-    return this.profileForm.get("typeSpecific") as FormGroup;
+  get typeSpecific(): UntypedFormGroup {
+    return this.profileForm.get("typeSpecific") as UntypedFormGroup;
   }
 
-  get usefulToProject(): FormControl {
-    return this.typeSpecific.get("usefulToProject") as FormControl;
+  get usefulToProject(): UntypedFormControl {
+    return this.typeSpecific.get("usefulToProject") as UntypedFormControl;
   }
 
-  get preferredIndustries(): FormArray {
-    return this.typeSpecific.get("preferredIndustries") as FormArray;
+  get preferredIndustries(): UntypedFormArray {
+    return this.typeSpecific.get("preferredIndustries") as UntypedFormArray;
   }
 
   newPreferredIndustryTitle = "";
@@ -155,8 +155,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.preferredIndustries.removeAt(i);
   }
 
-  get achievements(): FormArray {
-    return this.profileForm.get("achievements") as FormArray;
+  get achievements(): UntypedFormArray {
+    return this.profileForm.get("achievements") as UntypedFormArray;
   }
 
   errorMessage = ErrorMessage;
@@ -166,7 +166,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   );
 
   profileFormSubmitting = false;
-  profileForm: FormGroup;
+  profileForm: UntypedFormGroup;
 
   addAchievement(id?: number, title?: string, status?: string): void {
     this.achievements.push(
@@ -182,8 +182,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.achievements.removeAt(i);
   }
 
-  get keySkills(): FormArray {
-    return this.profileForm.get("keySkills") as FormArray;
+  get keySkills(): UntypedFormArray {
+    return this.profileForm.get("keySkills") as UntypedFormArray;
   }
 
   newKeySkillTitle = "";
@@ -204,8 +204,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.keySkills.removeAt(i);
   }
 
-  get links(): FormArray {
-    return this.profileForm.get("links") as FormArray;
+  get links(): UntypedFormArray {
+    return this.profileForm.get("links") as UntypedFormArray;
   }
 
   newLink = "";

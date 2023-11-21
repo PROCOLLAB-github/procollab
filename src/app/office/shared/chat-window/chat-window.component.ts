@@ -14,7 +14,7 @@ import {
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ChatMessage } from "@models/chat-message.model";
 import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
 import { filter, fromEvent, noop, skip, Subscription, tap, throttleTime } from "rxjs";
 import { ModalService } from "@ui/models/modal.service";
 import { AuthService } from "@auth/services";
@@ -27,7 +27,7 @@ import { User } from "@auth/models/user.model";
 })
 export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly modalService: ModalService,
     private readonly authService: AuthService
   ) {
@@ -128,7 +128,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     filesUrl: [],
   };
 
-  messageForm: FormGroup;
+  messageForm: UntypedFormGroup;
 
   /**
    * Message that user want to edit

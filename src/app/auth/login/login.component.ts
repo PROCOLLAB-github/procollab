@@ -1,7 +1,7 @@
 /** @format */
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
 import { ErrorMessage } from "@error/models/error-message";
 import { ValidationService } from "src/app/core/services";
@@ -15,7 +15,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 })
 export class LoginComponent implements OnInit {
   constructor(
-    private readonly fb: FormBuilder,
+    private readonly fb: UntypedFormBuilder,
     private readonly authService: AuthService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   loginIsSubmitting = false;
 
   errorWrongAuth = false;

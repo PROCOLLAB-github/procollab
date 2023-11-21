@@ -1,7 +1,7 @@
 /** @format */
 
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { AuthService } from "../services";
 import { ValidationService } from "@core/services";
 import { ErrorMessage } from "@error/models/error-message";
@@ -18,7 +18,7 @@ dayjs.extend(cpf);
 })
 export class RegisterComponent implements OnInit {
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private authService: AuthService,
     private router: Router,
     private validationService: ValidationService,
@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit {
     this.authService.clearTokens();
   }
 
-  registerForm: FormGroup;
+  registerForm: UntypedFormGroup;
   registerAgreement = false;
   registerIsSubmitting = false;
   credsSubmitInitiated = false;
