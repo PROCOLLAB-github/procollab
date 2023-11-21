@@ -19,6 +19,8 @@ export class ProjectsSubscriptionsResolver implements Resolve<{ results: Project
   constructor(private readonly authService: AuthService) {}
 
   resolve(): Observable<{ results: Project[] }> {
-    return this.authService.profile.pipe(switchMap(p => of({ results: p.subscribedProjects })));
+    return this.authService
+      .getProfile()
+      .pipe(switchMap(p => of({ results: p.subscribedProjects })));
   }
 }
