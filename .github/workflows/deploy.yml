@@ -22,8 +22,7 @@ jobs:
           node-version: 16
           cache: 'npm'
       - run: npm ci
-      - run: npm run build
-      - run: npm run build:sprite
+      - run: npm run build:prod
       - name: deploy to server
         uses: burnett01/rsync-deployments@5.2.1
         with:
