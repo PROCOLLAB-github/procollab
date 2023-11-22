@@ -28,6 +28,14 @@
           : 'Проекты на которые подписан ' + user.firstName 
         }}
       </h3>
+      <ul>
+        <li *ngFor="let p of user.subscribedProjects">
+          <a [routerLink]="['/office/projects', p.id]">
+            <app-project-card [project]="p" [profileId]="user.id">
+            </app-project-card>
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </section>

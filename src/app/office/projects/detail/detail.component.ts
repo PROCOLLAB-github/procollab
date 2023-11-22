@@ -15,7 +15,7 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   constructor(private readonly route: ActivatedRoute, private readonly authService: AuthService) {}
 
   ngOnInit(): void {
-    const projectSub$ = this.route.data.pipe(map(r => r["data"])).subscribe(project => {
+    const projectSub$ = this.route.data.pipe(map(r => r["data"][0])).subscribe(project => {
       this.project = project;
     });
     projectSub$ && this.subscriptions$.push(projectSub$);
