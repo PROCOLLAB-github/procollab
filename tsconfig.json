@@ -17,20 +17,42 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2020",
+    "target": "ES2022",
     "module": "es2020",
-    "lib": ["es2020", "dom"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
     "paths": {
-      "@auth/*": ["src/app/auth/*"],
-      "@ui/*": ["src/app/ui/*"],
-      "@core/*": ["src/app/core/*"],
-      "@office/*": ["src/app/office/*"],
-      "@utils/*": ["src/app/utils/*"],
-      "@environment": ["src/environments/environment.ts"],
-      "@error/*": ["src/app/error/*"],
-      "@services/*": ["src/app/office/services/*"],
-      "@models/*": ["src/app/office/models/*"]
-    }
+      "@auth/*": [
+        "src/app/auth/*"
+      ],
+      "@ui/*": [
+        "src/app/ui/*"
+      ],
+      "@core/*": [
+        "src/app/core/*"
+      ],
+      "@office/*": [
+        "src/app/office/*"
+      ],
+      "@utils/*": [
+        "src/app/utils/*"
+      ],
+      "@environment": [
+        "src/environments/environment.ts"
+      ],
+      "@error/*": [
+        "src/app/error/*"
+      ],
+      "@services/*": [
+        "src/app/office/services/*"
+      ],
+      "@models/*": [
+        "src/app/office/models/*"
+      ]
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
