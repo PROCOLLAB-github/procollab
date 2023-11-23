@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { Resolve } from "@angular/router";
+
 import { Observable } from "rxjs";
 import { ProgramService } from "@office/program/services/program.service";
 import { ProgramsResult } from "@office/program/models/programs-result.model";
@@ -9,7 +9,7 @@ import { ProgramsResult } from "@office/program/models/programs-result.model";
 @Injectable({
   providedIn: "root",
 })
-export class ProgramMainResolver implements Resolve<ProgramsResult> {
+export class ProgramMainResolver  {
   constructor(private readonly programService: ProgramService) {}
 
   resolve(): Observable<ProgramsResult> {

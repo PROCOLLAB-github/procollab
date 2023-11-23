@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { Resolve } from "@angular/router";
+
 import { Observable } from "rxjs";
 import { Project } from "@models/project.model";
 import { ProjectService } from "@services/project.service";
@@ -11,7 +11,7 @@ import { HttpParams } from "@angular/common/http";
 @Injectable({
   providedIn: "root",
 })
-export class ProjectsMyResolver implements Resolve<ApiPagination<Project>> {
+export class ProjectsMyResolver  {
   constructor(private readonly projectService: ProjectService) {}
 
   resolve(): Observable<ApiPagination<Project>> {

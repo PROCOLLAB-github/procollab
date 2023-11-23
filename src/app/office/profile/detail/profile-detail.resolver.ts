@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Resolve } from "@angular/router";
+import { ActivatedRouteSnapshot } from "@angular/router";
 import { Observable } from "rxjs";
 import { AuthService } from "@auth/services";
 import { User } from "@auth/models/user.model";
@@ -9,7 +9,7 @@ import { User } from "@auth/models/user.model";
 @Injectable({
   providedIn: "root",
 })
-export class ProfileDetailResolver implements Resolve<User> {
+export class ProfileDetailResolver  {
   constructor(private readonly authService: AuthService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<User> {

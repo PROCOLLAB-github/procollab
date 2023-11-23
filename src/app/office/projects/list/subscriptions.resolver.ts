@@ -1,6 +1,6 @@
 /** @format */
 
-import type { Resolve, ResolveFn } from "@angular/router";
+import type { ResolveFn } from "@angular/router";
 import { inject, Injectable } from "@angular/core";
 import { AuthService } from "@auth/services";
 import { of, switchMap, Observable } from "rxjs";
@@ -15,7 +15,7 @@ import { Project } from "@office/models/project.model";
 @Injectable({
   providedIn: "root",
 })
-export class ProjectsSubscriptionsResolver implements Resolve<{ results: Project[] }> {
+export class ProjectsSubscriptionsResolver {
   constructor(private readonly authService: AuthService) {}
 
   resolve(): Observable<{ results: Project[] }> {

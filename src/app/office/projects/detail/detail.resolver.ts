@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Resolve } from "@angular/router";
+import { ActivatedRouteSnapshot } from "@angular/router";
 import { Observable, forkJoin, of, switchMap } from "rxjs";
 import { ProjectService } from "@services/project.service";
 import { Project } from "@models/project.model";
@@ -11,7 +11,7 @@ import { ProjectSubscriber } from "@office/models/project-subscriber.model";
 @Injectable({
   providedIn: "root",
 })
-export class ProjectDetailResolver implements Resolve<[Project, ProjectSubscriber[]]> {
+export class ProjectDetailResolver  {
   constructor(
     private readonly projectService: ProjectService,
     private readonly subscriptionService: SubscriptionService

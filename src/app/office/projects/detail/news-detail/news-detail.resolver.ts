@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Resolve } from "@angular/router";
+import { ActivatedRouteSnapshot } from "@angular/router";
 import { Observable } from "rxjs";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { ProjectNews } from "@office/projects/models/project-news.model";
@@ -9,7 +9,7 @@ import { ProjectNews } from "@office/projects/models/project-news.model";
 @Injectable({
   providedIn: "root",
 })
-export class NewsDetailResolver implements Resolve<ProjectNews> {
+export class NewsDetailResolver  {
   constructor(private readonly projectNewsService: ProjectNewsService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<ProjectNews> {

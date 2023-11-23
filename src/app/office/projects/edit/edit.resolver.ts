@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Resolve } from "@angular/router";
+import { ActivatedRouteSnapshot } from "@angular/router";
 import { forkJoin, Observable } from "rxjs";
 import { ProjectService } from "@services/project.service";
 import { Project } from "@models/project.model";
@@ -13,7 +13,7 @@ import { Invite } from "@models/invite.model";
 @Injectable({
   providedIn: "root",
 })
-export class ProjectEditResolver implements Resolve<[Project, Vacancy[], Invite[]]> {
+export class ProjectEditResolver  {
   constructor(
     private readonly projectService: ProjectService,
     private readonly vacancyService: VacancyService,

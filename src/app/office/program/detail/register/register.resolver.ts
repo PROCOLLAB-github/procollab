@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { Observable } from "rxjs";
 import { ProgramService } from "@office/program/services/program.service";
 import { ProgramDataSchema } from "@office/program/models/program.model";
@@ -9,7 +9,7 @@ import { ProgramDataSchema } from "@office/program/models/program.model";
 @Injectable({
   providedIn: "root",
 })
-export class ProgramRegisterResolver implements Resolve<ProgramDataSchema> {
+export class ProgramRegisterResolver  {
   constructor(private readonly programService: ProgramService) {}
 
   resolve(
