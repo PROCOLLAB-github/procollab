@@ -49,7 +49,7 @@
     "rxjs": "~7.5.0",
     "snakecase-keys": "^5.4.2",
     "tslib": "^2.3.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "^0.13.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^15.2.10",
