@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, OnInit } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ValidationService } from "@core/services";
 import { ErrorMessage } from "@error/models/error-message";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -14,7 +14,7 @@ import { AuthService } from "@auth/services";
 })
 export class SetPasswordComponent implements OnInit {
   constructor(
-    private readonly fb: UntypedFormBuilder,
+    private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService,
@@ -29,7 +29,7 @@ export class SetPasswordComponent implements OnInit {
     );
   }
 
-  passwordForm: UntypedFormGroup;
+  passwordForm: FormGroup;
   isSubmitting = false;
   errorMessage = ErrorMessage;
   errorRequest = false;

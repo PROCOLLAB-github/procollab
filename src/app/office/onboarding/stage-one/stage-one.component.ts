@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { concatMap, Subscription, take } from "rxjs";
 import { AuthService } from "@auth/services";
@@ -16,7 +16,7 @@ import { OnboardingService } from "../services/onboarding.service";
 })
 export class OnboardingStageOneComponent implements OnInit, OnDestroy {
   constructor(
-    private readonly fb: UntypedFormBuilder,
+    private readonly fb: FormBuilder,
     private readonly authService: AuthService,
     private readonly onboardingService: OnboardingService,
     private readonly validationService: ValidationService,
@@ -50,12 +50,12 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
   }
 
   subscriptions$: Subscription[] = [];
-  stageForm: UntypedFormGroup;
+  stageForm: FormGroup;
 
   newKeySkillTitle = "";
 
-  get keySkills(): UntypedFormArray {
-    return this.stageForm.get("keySkills") as UntypedFormArray;
+  get keySkills(): FormArray {
+    return this.stageForm.get("keySkills") as FormArray;
   }
 
   addKeySkill(title?: string): void {

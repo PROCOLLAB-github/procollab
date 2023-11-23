@@ -2,7 +2,7 @@
 
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { VacancyService } from "@services/vacancy.service";
 import { ValidationService } from "@core/services";
@@ -17,7 +17,7 @@ import { NavService } from "@services/nav.service";
 export class VacancySendComponent implements OnInit {
   constructor(
     public readonly authService: AuthService,
-    private readonly fb: UntypedFormBuilder,
+    private readonly fb: FormBuilder,
     private readonly vacancyService: VacancyService,
     private readonly validationService: ValidationService,
     private readonly route: ActivatedRoute,
@@ -33,7 +33,7 @@ export class VacancySendComponent implements OnInit {
   }
 
   errorMessage = ErrorMessage;
-  sendForm: UntypedFormGroup;
+  sendForm: FormGroup;
   sendFormIsSubmitting = false;
 
   resultModal = false;
