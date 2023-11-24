@@ -1,18 +1,13 @@
 /** @format */
 
-import { Injectable } from "@angular/core";
-
+import { inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { MemberService } from "@services/member.service";
 import { MembersResult } from "@auth/models/user.model";
+import { ResolveFn } from "@angular/router";
 
-@Injectable({
-  providedIn: "root",
-})
-export class MembersResolver  {
-  constructor(private readonly memberService: MemberService) {}
+export const MembersResolver: ResolveFn<MembersResult> = (): Observable<MembersResult> => {
+  const memberService = inject(MemberService);
 
-  resolve(): Observable<MembersResult> {
-    return this.memberService.getMembers(0, 20);
-  }
-}
+  return memberService.getMembers(0, 20);
+};

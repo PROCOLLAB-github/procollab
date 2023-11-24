@@ -1,7 +1,7 @@
 /** @format */
 
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot } from "@angular/router";
+import { inject } from "@angular/core";
+import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { forkJoin, Observable } from "rxjs";
 import { ProjectService } from "@services/project.service";
 import { Project } from "@models/project.model";
@@ -10,22 +10,18 @@ import { VacancyService } from "@services/vacancy.service";
 import { InviteService } from "@services/invite.service";
 import { Invite } from "@models/invite.model";
 
-@Injectable({
-  providedIn: "root",
-})
-export class ProjectEditResolver  {
-  constructor(
-    private readonly projectService: ProjectService,
-    private readonly vacancyService: VacancyService,
-    private readonly inviteService: InviteService
-  ) {}
+export const ProjectEditResolver: ResolveFn<[Project, Vacancy[], Invite[]]> = (
+  route: ActivatedRouteSnapshot
+): Observable<[Project, Vacancy[], Invite[]]> => {
+  const projectService = inject(ProjectService);
+  const vacancyService = inject(VacancyService);
+  const inviteService = inject(InviteService);
 
-  resolve(route: ActivatedRouteSnapshot): Observable<[Project, Vacancy[], Invite[]]> {
-    const projectId = Number(route.paramMap.get("projectId"));
-    return forkJoin([
-      this.projectService.getOne(projectId),
-      this.vacancyService.getForProject(projectId),
-      this.inviteService.getByProject(projectId),
-    ]);
-  }
-}
+  const projectId = Number(route.paramMap.get("projectId"));
+
+  return forkJoin<[Project, Vacancy[], Invite[]]>([
+    projectService.getOne(projectId),
+    vacancyService.getForProject(projectId),
+    inviteService.getByProject(projectId),
+  ]);
+};

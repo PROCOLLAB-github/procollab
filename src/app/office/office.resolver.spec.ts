@@ -6,10 +6,9 @@ import { OfficeResolver } from "./office.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 
 describe("OfficeResolver", () => {
-  let resolver: OfficeResolver;
-
   beforeEach(() => {
     const authSpy = {
       profile: of({}),
@@ -19,10 +18,12 @@ describe("OfficeResolver", () => {
       imports: [HttpClientTestingModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
     });
-    resolver = TestBed.inject(OfficeResolver);
   });
 
   it("should be created", () => {
-    expect(resolver).toBeTruthy();
+    const result = TestBed.runInInjectionContext(() =>
+      OfficeResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+    );
+    expect(result).toBeTruthy();
   });
 });

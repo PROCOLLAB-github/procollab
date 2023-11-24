@@ -1,18 +1,13 @@
 /** @format */
 
-import { Injectable } from "@angular/core";
-
+import { inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { ProgramService } from "@office/program/services/program.service";
 import { ProgramsResult } from "@office/program/models/programs-result.model";
+import { ResolveFn } from "@angular/router";
 
-@Injectable({
-  providedIn: "root",
-})
-export class ProgramMainResolver  {
-  constructor(private readonly programService: ProgramService) {}
+export const ProgramMainResolver: ResolveFn<ProgramsResult> = (): Observable<ProgramsResult> => {
+  const programService = inject(ProgramService);
 
-  resolve(): Observable<ProgramsResult> {
-    return this.programService.getAll(0, 20);
-  }
-}
+  return programService.getAll(0, 20);
+};

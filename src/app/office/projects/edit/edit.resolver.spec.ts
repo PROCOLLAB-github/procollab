@@ -1,14 +1,16 @@
 /** @format */
 
 import { TestBed } from "@angular/core/testing";
-
 import { ProjectEditResolver } from "./edit.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
+import { ActivatedRouteSnapshot, convertToParamMap, RouterStateSnapshot } from "@angular/router";
 
 describe("ProjectEditResolver", () => {
-  let resolver: ProjectEditResolver;
+  const mockRoute = {
+    paramMap: convertToParamMap({ projectId: 1 }),
+  } as unknown as ActivatedRouteSnapshot;
 
   beforeEach(() => {
     const authSpy = {
@@ -19,10 +21,12 @@ describe("ProjectEditResolver", () => {
       imports: [HttpClientTestingModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
     });
-    resolver = TestBed.inject(ProjectEditResolver);
   });
 
   it("should be created", () => {
-    expect(resolver).toBeTruthy();
+    const result = TestBed.runInInjectionContext(() =>
+      ProjectEditResolver(mockRoute, {} as RouterStateSnapshot)
+    );
+    expect(result).toBeTruthy();
   });
 });

@@ -4,18 +4,19 @@ import { TestBed } from "@angular/core/testing";
 
 import { ProgramMainResolver } from "./main.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 
-describe("MainResolver", () => {
-  let resolver: ProgramMainResolver;
-
+describe("ProgramMainResolver", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
-    resolver = TestBed.inject(ProgramMainResolver);
   });
 
   it("should be created", () => {
-    expect(resolver).toBeTruthy();
+    const result = TestBed.runInInjectionContext(() =>
+      ProgramMainResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+    );
+    expect(result).toBeTruthy();
   });
 });

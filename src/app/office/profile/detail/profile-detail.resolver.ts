@@ -1,18 +1,15 @@
 /** @format */
 
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot } from "@angular/router";
+import { inject } from "@angular/core";
+import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { Observable } from "rxjs";
 import { AuthService } from "@auth/services";
 import { User } from "@auth/models/user.model";
 
-@Injectable({
-  providedIn: "root",
-})
-export class ProfileDetailResolver  {
-  constructor(private readonly authService: AuthService) {}
+export const ProfileDetailResolver: ResolveFn<User> = (
+  route: ActivatedRouteSnapshot
+): Observable<User> => {
+  const authService = inject(AuthService);
 
-  resolve(route: ActivatedRouteSnapshot): Observable<User> {
-    return this.authService.getUser(parseInt(<string>route.paramMap.get("id")));
-  }
-}
+  return authService.getUser(Number(route.paramMap.get("id")));
+};

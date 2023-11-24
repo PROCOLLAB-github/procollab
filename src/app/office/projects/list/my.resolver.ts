@@ -1,20 +1,17 @@
 /** @format */
 
-import { Injectable } from "@angular/core";
-
+import { inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { Project } from "@models/project.model";
 import { ProjectService } from "@services/project.service";
 import { ApiPagination } from "@models/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
+import { ResolveFn } from "@angular/router";
 
-@Injectable({
-  providedIn: "root",
-})
-export class ProjectsMyResolver  {
-  constructor(private readonly projectService: ProjectService) {}
+export const ProjectsMyResolver: ResolveFn<ApiPagination<Project>> = (): Observable<
+  ApiPagination<Project>
+> => {
+  const projectService = inject(ProjectService);
 
-  resolve(): Observable<ApiPagination<Project>> {
-    return this.projectService.getMy(new HttpParams({ fromObject: { limit: 16 } }));
-  }
-}
+  return projectService.getMy(new HttpParams({ fromObject: { limit: 16 } }));
+};

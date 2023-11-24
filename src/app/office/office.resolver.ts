@@ -1,18 +1,13 @@
 /** @format */
 
-import { Injectable } from "@angular/core";
-
+import { inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { InviteService } from "@services/invite.service";
 import { Invite } from "@models/invite.model";
+import { ResolveFn } from "@angular/router";
 
-@Injectable({
-  providedIn: "root",
-})
-export class OfficeResolver  {
-  constructor(private readonly inviteService: InviteService) {}
+export const OfficeResolver: ResolveFn<Invite[]> = (): Observable<Invite[]> => {
+  const inviteService = inject(InviteService);
 
-  resolve(): Observable<Invite[]> {
-    return this.inviteService.getMy();
-  }
-}
+  return inviteService.getMy();
+};
