@@ -1,11 +1,11 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { Router, UrlTree } from "@angular/router";
+import { CanActivateFn, Router } from "@angular/router";
 import { AuthService } from "../services";
-import { catchError, map, Observable } from "rxjs";
+import { catchError, map } from "rxjs";
 
-export const AuthRequiredGuard = (): Observable<boolean> | UrlTree => {
+export const AuthRequiredGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
 

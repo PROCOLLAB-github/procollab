@@ -6,6 +6,7 @@ import { AuthRequiredGuard } from "./auth-required.guard";
 import { RouterTestingModule } from "@angular/router/testing";
 import { AuthService } from "../services";
 import { of } from "rxjs";
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 
 describe("AuthRequiredGuard", () => {
   beforeEach(() => {
@@ -18,7 +19,9 @@ describe("AuthRequiredGuard", () => {
   });
 
   it("should be created", () => {
-    const result = TestBed.runInInjectionContext(AuthRequiredGuard);
+    const result = TestBed.runInInjectionContext(() =>
+      AuthRequiredGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+    );
     expect(result).toBeTruthy();
   });
 });

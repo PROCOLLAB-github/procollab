@@ -2,13 +2,10 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { Observable } from "rxjs";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { ProjectNews } from "@office/projects/models/project-news.model";
 
-export const NewsDetailResolver: ResolveFn<ProjectNews> = (
-  route: ActivatedRouteSnapshot
-): Observable<ProjectNews> => {
+export const NewsDetailResolver: ResolveFn<ProjectNews> = (route: ActivatedRouteSnapshot) => {
   const projectNewsService = inject(ProjectNewsService);
 
   const projectId = route.parent?.params["projectId"];
