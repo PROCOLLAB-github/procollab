@@ -22,7 +22,7 @@
   ],
   "private": true,
   "engines": {
-    "node": "~18.10"
+    "node": "~18.16"
   },
   "dependencies": {
     "@angular/animations": "^16.2.12",
@@ -49,7 +49,7 @@
     "rxjs": "~7.5.0",
     "snakecase-keys": "^5.4.2",
     "tslib": "^2.3.0",
-    "zone.js": "^0.13.3"
+    "zone.js": "^0.14.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.2.10",
@@ -82,6 +82,6 @@
     "stylelint-config-recess-order": "^3.0.0",
     "stylelint-config-standard-scss": "^5.0.0",
     "svg-sprite": "^2.0.2",
-    "typescript": "~4.9.5"
+    "typescript": "~5.2"
   }
 }
