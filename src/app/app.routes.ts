@@ -1,11 +1,10 @@
 /** @format */
 
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
 import { AuthRequiredGuard } from "@auth/guards/auth-required.guard";
 
-const routes: Routes = [
+export const APP_ROUTES: Routes = [
   {
     path: "",
     component: AppComponent,
@@ -28,9 +27,3 @@ const routes: Routes = [
     redirectTo: "error/404",
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}
