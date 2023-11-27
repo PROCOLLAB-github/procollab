@@ -5,7 +5,7 @@ import { Component, Input, OnInit } from "@angular/core";
 @Component({
   selector: "[appIcon]",
   templateUrl: "./icon.component.html",
-  styleUrls: ["./icon.component.scss"],
+  styleUrl: "./icon.component.scss",
 })
 export class IconComponent implements OnInit {
   @Input()

@@ -6,7 +6,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 @Component({
   selector: "app-textarea",
   templateUrl: "./textarea.component.html",
-  styleUrls: ["./textarea.component.scss"],
+  styleUrl: "./textarea.component.scss",
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

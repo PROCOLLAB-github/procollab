@@ -9,7 +9,7 @@ import { AnimationService } from "@ui/services/animation.service";
 @Component({
   selector: "app-snackbar",
   templateUrl: "./snackbar.component.html",
-  styleUrls: ["./snackbar.component.scss"],
+  styleUrl: "./snackbar.component.scss",
   animations: [AnimationService.slideInOut],
 })
 export class SnackbarComponent implements OnInit, OnDestroy {

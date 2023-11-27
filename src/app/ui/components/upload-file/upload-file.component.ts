@@ -8,7 +8,7 @@ import { nanoid } from "nanoid";
 @Component({
   selector: "app-upload-file",
   templateUrl: "./upload-file.component.html",
-  styleUrls: ["./upload-file.component.scss"],
+  styleUrl: "./upload-file.component.scss",
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

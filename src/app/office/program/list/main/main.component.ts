@@ -8,7 +8,7 @@ import { Program } from "@office/program/models/program.model";
 @Component({
   selector: "app-main",
   templateUrl: "./main.component.html",
-  styleUrls: ["./main.component.scss"],
+  styleUrl: "./main.component.scss",
 })
 export class ProgramMainComponent implements OnInit {
   constructor(private readonly route: ActivatedRoute) {}

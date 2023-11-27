@@ -6,7 +6,7 @@ import { VacancyResponse } from "@models/vacancy-response.model";
 @Component({
   selector: "app-response-card",
   templateUrl: "./response-card.component.html",
-  styleUrls: ["./response-card.component.scss"],
+  styleUrl: "./response-card.component.scss",
 })
 export class ResponseCardComponent implements OnInit {
   constructor() {}

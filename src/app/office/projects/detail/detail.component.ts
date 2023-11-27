@@ -9,7 +9,7 @@ import { AuthService } from "@auth/services";
 @Component({
   selector: "app-detail",
   templateUrl: "./detail.component.html",
-  styleUrls: ["./detail.component.scss"],
+  styleUrl: "./detail.component.scss",
 })
 export class ProjectDetailComponent implements OnInit, OnDestroy {
   constructor(private readonly route: ActivatedRoute, private readonly authService: AuthService) {}

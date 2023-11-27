@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 @Component({
   selector: "app-program-head",
   templateUrl: "./program-head.component.html",
-  styleUrls: ["./program-head.component.scss"],
+  styleUrl: "./program-head.component.scss",
 })
 export class ProgramHeadComponent implements OnInit {
   constructor(private readonly router: Router, private readonly route: ActivatedRoute) {}

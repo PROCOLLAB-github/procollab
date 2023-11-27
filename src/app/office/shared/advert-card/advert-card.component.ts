@@ -6,7 +6,7 @@ import { New } from "@models/article.model";
 @Component({
   selector: "app-advert-card",
   templateUrl: "./advert-card.component.html",
-  styleUrls: ["./advert-card.component.scss"],
+  styleUrl: "./advert-card.component.scss",
 })
 export class AdvertCardComponent implements OnInit {
   constructor() {}

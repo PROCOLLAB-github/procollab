@@ -10,7 +10,7 @@ import { AuthService } from "@auth/services";
 @Component({
   selector: "app-set-password",
   templateUrl: "./set-password.component.html",
-  styleUrls: ["./set-password.component.scss"],
+  styleUrl: "./set-password.component.scss",
 })
 export class SetPasswordComponent implements OnInit {
   constructor(

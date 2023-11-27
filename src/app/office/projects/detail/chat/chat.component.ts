@@ -16,7 +16,7 @@ import { ChatWindowComponent } from "@office/shared/chat-window/chat-window.comp
 @Component({
   selector: "app-chat",
   templateUrl: "./chat.component.html",
-  styleUrls: ["./chat.component.scss"],
+  styleUrl: "./chat.component.scss",
 })
 export class ProjectChatComponent implements OnInit, OnDestroy {
   constructor(

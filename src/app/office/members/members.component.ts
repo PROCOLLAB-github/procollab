@@ -38,7 +38,7 @@ import { capitalizeString } from "@utils/capitalize-string";
 @Component({
   selector: "app-members",
   templateUrl: "./members.component.html",
-  styleUrls: ["./members.component.scss"],
+  styleUrl: "./members.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {

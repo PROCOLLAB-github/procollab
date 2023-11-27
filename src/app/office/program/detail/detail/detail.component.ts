@@ -7,7 +7,7 @@ import { ActivatedRoute } from "@angular/router";
 @Component({
   selector: "app-detail",
   templateUrl: "./detail.component.html",
-  styleUrls: ["./detail.component.scss"],
+  styleUrl: "./detail.component.scss",
 })
 export class ProgramDetailComponent implements OnInit {
   constructor(private readonly navService: NavService, private readonly route: ActivatedRoute) {}

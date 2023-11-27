@@ -8,7 +8,7 @@ import { ProjectNews } from "@office/projects/models/project-news.model";
 @Component({
   selector: "app-news-detail",
   templateUrl: "./news-detail.component.html",
-  styleUrls: ["./news-detail.component.scss"],
+  styleUrl: "./news-detail.component.scss",
 })
 export class NewsDetailComponent implements OnInit {
   constructor(private readonly route: ActivatedRoute, private readonly router: Router) {}

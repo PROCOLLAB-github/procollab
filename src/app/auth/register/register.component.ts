@@ -14,7 +14,7 @@ dayjs.extend(cpf);
 @Component({
   selector: "app-login",
   templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.scss"],
+  styleUrl: "./register.component.scss",
 })
 export class RegisterComponent implements OnInit {
   constructor(

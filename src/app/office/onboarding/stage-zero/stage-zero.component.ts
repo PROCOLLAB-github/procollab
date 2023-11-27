@@ -13,7 +13,7 @@ import { OnboardingService } from "../services/onboarding.service";
 @Component({
   selector: "app-stage-zero",
   templateUrl: "./stage-zero.component.html",
-  styleUrls: ["./stage-zero.component.scss"],
+  styleUrl: "./stage-zero.component.scss",
 })
 export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   constructor(

@@ -12,7 +12,7 @@ import { NavService } from "@services/nav.service";
 @Component({
   selector: "app-send",
   templateUrl: "./send.component.html",
-  styleUrls: ["./send.component.scss"],
+  styleUrl: "./send.component.scss",
 })
 export class VacancySendComponent implements OnInit {
   constructor(

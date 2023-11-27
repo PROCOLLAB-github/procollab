@@ -33,7 +33,7 @@ import { ApiPagination } from "@models/api-pagination.model";
 @Component({
   selector: "app-list",
   templateUrl: "./list.component.html",
-  styleUrls: ["./list.component.scss"],
+  styleUrl: "./list.component.scss",
 })
 export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

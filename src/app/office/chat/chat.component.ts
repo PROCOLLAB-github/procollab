@@ -11,7 +11,7 @@ import { ChatService } from "@services/chat.service";
 @Component({
   selector: "app-chat",
   templateUrl: "./chat.component.html",
-  styleUrls: ["./chat.component.scss"],
+  styleUrl: "./chat.component.scss",
 })
 export class ChatComponent implements OnInit, OnDestroy {
   constructor(

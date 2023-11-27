@@ -19,7 +19,7 @@ import { TemplatePortal } from "@angular/cdk/portal";
 @Component({
   selector: "app-modal",
   templateUrl: "./modal.component.html",
-  styleUrls: ["./modal.component.scss"],
+  styleUrl: "./modal.component.scss",
 })
 export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

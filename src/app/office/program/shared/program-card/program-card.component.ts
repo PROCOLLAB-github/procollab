@@ -6,7 +6,7 @@ import { Program } from "@office/program/models/program.model";
 @Component({
   selector: "app-program-card",
   templateUrl: "./program-card.component.html",
-  styleUrls: ["./program-card.component.scss"],
+  styleUrl: "./program-card.component.scss",
 })
 export class ProgramCardComponent implements OnInit {
   constructor() {}

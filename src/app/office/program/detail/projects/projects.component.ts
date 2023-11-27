@@ -9,7 +9,7 @@ import { Program } from "@office/program/models/program.model";
 @Component({
   selector: "app-projects",
   templateUrl: "./projects.component.html",
-  styleUrls: ["./projects.component.scss"],
+  styleUrl: "./projects.component.scss",
 })
 export class ProgramProjectsComponent implements OnInit {
   constructor(private readonly route: ActivatedRoute) {}

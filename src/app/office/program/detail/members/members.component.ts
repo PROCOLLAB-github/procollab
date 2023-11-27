@@ -10,7 +10,7 @@ import { ProgramService } from "@office/program/services/program.service";
 @Component({
   selector: "app-members",
   templateUrl: "./members.component.html",
-  styleUrls: ["./members.component.scss"],
+  styleUrl: "./members.component.scss",
 })
 export class ProgramMembersComponent implements OnInit {
   constructor(

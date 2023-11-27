@@ -6,7 +6,7 @@ import { getFormattedFileSize } from "@utils/formatted-file-size";
 @Component({
   selector: "app-file-upload-item",
   templateUrl: "./file-upload-item.component.html",
-  styleUrls: ["./file-upload-item.component.scss"],
+  styleUrl: "./file-upload-item.component.scss",
 })
 export class FileUploadItemComponent implements OnInit {
   constructor() {}

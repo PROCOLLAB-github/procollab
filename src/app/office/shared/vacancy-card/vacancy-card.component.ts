@@ -6,7 +6,7 @@ import { Vacancy } from "@models/vacancy.model";
 @Component({
   selector: "app-vacancy-card",
   templateUrl: "./vacancy-card.component.html",
-  styleUrls: ["./vacancy-card.component.scss"],
+  styleUrl: "./vacancy-card.component.scss",
 })
 export class VacancyCardComponent implements OnInit {
   constructor() {}

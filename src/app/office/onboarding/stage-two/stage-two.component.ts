@@ -9,7 +9,7 @@ import { OnboardingService } from "../services/onboarding.service";
 @Component({
   selector: "app-stage-two",
   templateUrl: "./stage-two.component.html",
-  styleUrls: ["./stage-two.component.scss"],
+  styleUrl: "./stage-two.component.scss",
 })
 export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
   constructor(

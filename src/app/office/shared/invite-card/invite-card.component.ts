@@ -6,7 +6,7 @@ import { Invite } from "@models/invite.model";
 @Component({
   selector: "app-invite-card",
   templateUrl: "./invite-card.component.html",
-  styleUrls: ["./invite-card.component.scss"],
+  styleUrl: "./invite-card.component.scss",
 })
 export class InviteCardComponent implements OnInit {
   constructor() {}

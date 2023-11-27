@@ -17,7 +17,7 @@ dayjs.extend(cpf);
 @Component({
   selector: "app-profile-edit",
   templateUrl: "./edit.component.html",
-  styleUrls: ["./edit.component.scss"],
+  styleUrl: "./edit.component.scss",
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(

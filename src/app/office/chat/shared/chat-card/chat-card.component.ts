@@ -8,7 +8,7 @@ import { map } from "rxjs";
 @Component({
   selector: "app-chat-card",
   templateUrl: "./chat-card.component.html",
-  styleUrls: ["./chat-card.component.scss"],
+  styleUrl: "./chat-card.component.scss",
 })
 export class ChatCardComponent implements OnInit {
   constructor(private readonly authService: AuthService) {}

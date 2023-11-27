@@ -13,7 +13,7 @@ import { ChatService } from "@services/chat.service";
 @Component({
   selector: "app-office",
   templateUrl: "./office.component.html",
-  styleUrls: ["./office.component.scss"],
+  styleUrl: "./office.component.scss",
 })
 export class OfficeComponent implements OnInit, OnDestroy {
   constructor(
