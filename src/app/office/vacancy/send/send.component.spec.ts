@@ -22,16 +22,16 @@ describe("VacancySendComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [
+    imports: [
         HttpClientTestingModule,
         ReactiveFormsModule,
         RouterTestingModule,
         CoreModule,
         UiModule,
-      ],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [VacancySendComponent],
-    }).compileComponents();
+        VacancySendComponent,
+    ],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

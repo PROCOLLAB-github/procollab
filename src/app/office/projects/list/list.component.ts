@@ -9,7 +9,7 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { ActivatedRoute, NavigationEnd, Params, Router } from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Params, Router, RouterLink } from "@angular/router";
 import {
   concatMap,
   distinctUntilChanged,
@@ -29,11 +29,24 @@ import { ProjectService } from "@services/project.service";
 import Fuse from "fuse.js";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@models/api-pagination.model";
+import { ProjectsFilterComponent } from "../projects-filter/projects-filter.component";
+import { ProjectCardComponent } from "../../shared/project-card/project-card.component";
+import { NgFor, NgIf } from "@angular/common";
+import { IconComponent } from "../../../ui/components/icon/icon.component";
 
 @Component({
-  selector: "app-list",
-  templateUrl: "./list.component.html",
-  styleUrl: "./list.component.scss",
+    selector: "app-list",
+    templateUrl: "./list.component.html",
+    styleUrl: "./list.component.scss",
+    standalone: true,
+    imports: [
+        IconComponent,
+        NgFor,
+        RouterLink,
+        ProjectCardComponent,
+        NgIf,
+        ProjectsFilterComponent,
+    ],
 })
 export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

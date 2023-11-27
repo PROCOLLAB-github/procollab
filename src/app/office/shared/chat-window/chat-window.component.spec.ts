@@ -21,16 +21,16 @@ describe("ChatWindowComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [ChatWindowComponent],
-      imports: [
+    imports: [
         ReactiveFormsModule,
         RouterTestingModule,
         HttpClientTestingModule,
         NgxMaskModule.forRoot(),
         OfficeModule,
-      ],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-    }).compileComponents();
+        ChatWindowComponent,
+    ],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

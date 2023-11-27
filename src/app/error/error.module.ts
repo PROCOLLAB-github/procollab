@@ -8,7 +8,6 @@ import { ErrorCodeComponent } from "./code/error-code.component";
 import { ErrorNotFoundComponent } from "./not-found/error-not-found.component";
 
 @NgModule({
-  declarations: [ErrorComponent, ErrorCodeComponent, ErrorNotFoundComponent],
-  imports: [CommonModule, ErrorRoutingModule],
+    imports: [CommonModule, ErrorRoutingModule, ErrorComponent, ErrorCodeComponent, ErrorNotFoundComponent],
 })
 export class ErrorModule {}

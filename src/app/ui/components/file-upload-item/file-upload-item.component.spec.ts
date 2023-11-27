@@ -12,9 +12,8 @@ describe("FileUploadItemComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FileUploadItemComponent],
-      imports: [UiModule, RouterTestingModule],
-    }).compileComponents();
+    imports: [UiModule, RouterTestingModule, FileUploadItemComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {

@@ -1,20 +1,36 @@
 /** @format */
 
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { AuthService } from "../services";
 import { ValidationService } from "@core/services";
 import { ErrorMessage } from "@error/models/error-message";
-import { Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
+import { ControlErrorPipe } from "../../core/pipes/control-error.pipe";
+import { ButtonComponent } from "../../ui/components/button/button.component";
+import { CheckboxComponent } from "../../ui/components/checkbox/checkbox.component";
+import { InputComponent } from "../../ui/components/input/input.component";
+import { NgIf, NgFor } from "@angular/common";
 
 dayjs.extend(cpf);
 
 @Component({
-  selector: "app-login",
-  templateUrl: "./register.component.html",
-  styleUrl: "./register.component.scss",
+    selector: "app-login",
+    templateUrl: "./register.component.html",
+    styleUrl: "./register.component.scss",
+    standalone: true,
+    imports: [
+        NgIf,
+        ReactiveFormsModule,
+        InputComponent,
+        NgFor,
+        CheckboxComponent,
+        ButtonComponent,
+        RouterLink,
+        ControlErrorPipe,
+    ],
 })
 export class RegisterComponent implements OnInit {
   constructor(

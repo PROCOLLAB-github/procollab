@@ -3,15 +3,31 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map, Subscription } from "rxjs";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { ProgramDataSchema } from "@office/program/models/program.model";
 import { ValidationService } from "@core/services";
 import { ProgramService } from "@office/program/services/program.service";
+import { ControlErrorPipe } from "../../../../core/pipes/control-error.pipe";
+import { ButtonComponent } from "../../../../ui/components/button/button.component";
+import { InputComponent } from "../../../../ui/components/input/input.component";
+import { NgIf, NgFor, KeyValuePipe } from "@angular/common";
+import { BackComponent } from "../../../../ui/components/back/back.component";
 
 @Component({
-  selector: "app-register",
-  templateUrl: "./register.component.html",
-  styleUrl: "./register.component.scss",
+    selector: "app-register",
+    templateUrl: "./register.component.html",
+    styleUrl: "./register.component.scss",
+    standalone: true,
+    imports: [
+        BackComponent,
+        NgIf,
+        ReactiveFormsModule,
+        NgFor,
+        InputComponent,
+        ButtonComponent,
+        KeyValuePipe,
+        ControlErrorPipe,
+    ],
 })
 export class ProgramRegisterComponent implements OnInit, OnDestroy {
   constructor(

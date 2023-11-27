@@ -17,10 +17,9 @@ describe("OnboardingComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [OnboardingComponent],
-    }).compileComponents();
+    imports: [RouterTestingModule, OnboardingComponent],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

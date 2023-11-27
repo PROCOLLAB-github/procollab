@@ -10,10 +10,10 @@ describe("AppComponent", () => {
     const authSpy = jasmine.createSpyObj("AuthService", ["getTokens"]);
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [AppComponent],
-    }).compileComponents();
+    imports: [RouterTestingModule],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+    declarations: [AppComponent],
+}).compileComponents();
   });
 
   it("should create the app", () => {

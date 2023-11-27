@@ -13,13 +13,10 @@ import { OnboardingStageTwoComponent } from "./stage-two/stage-two.component";
 import { UserTypeCardComponent } from './user-type-card/user-type-card.component';
 
 @NgModule({
-  declarations: [
-    OnboardingComponent,
-    OnboardingStageZeroComponent,
-    OnboardingStageOneComponent,
-    OnboardingStageTwoComponent,
-    UserTypeCardComponent,
-  ],
-  imports: [CommonModule, OnboardingRoutingModule, CoreModule, ReactiveFormsModule, UiModule],
+    imports: [CommonModule, OnboardingRoutingModule, CoreModule, ReactiveFormsModule, UiModule, OnboardingComponent,
+        OnboardingStageZeroComponent,
+        OnboardingStageOneComponent,
+        OnboardingStageTwoComponent,
+        UserTypeCardComponent],
 })
 export class OnboardingModule {}

@@ -11,19 +11,38 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
+import {
+  CdkVirtualScrollViewport,
+  CdkFixedSizeVirtualScroll,
+  CdkVirtualForOf,
+} from "@angular/cdk/scrolling";
 import { ChatMessage } from "@models/chat-message.model";
 import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { filter, fromEvent, noop, skip, Subscription, tap, throttleTime } from "rxjs";
 import { ModalService } from "@ui/models/modal.service";
 import { AuthService } from "@auth/services";
 import { User } from "@auth/models/user.model";
+import { PluralizePipe } from "../../../core/pipes/pluralize.pipe";
+import { NgIf, NgFor } from "@angular/common";
+import { ChatMessageComponent } from "../../../ui/components/chat-message/chat-message.component";
 
 @Component({
   selector: "app-chat-window",
   templateUrl: "./chat-window.component.html",
   styleUrl: "./chat-window.component.scss",
+  standalone: true,
+  imports: [
+    CdkVirtualScrollViewport,
+    CdkFixedSizeVirtualScroll,
+    CdkVirtualForOf,
+    ChatMessageComponent,
+    ReactiveFormsModule,
+    NgIf,
+    NgFor,
+    MessageInputComponent,
+    PluralizePipe,
+  ],
 })
 export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

@@ -3,7 +3,8 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-  name: "fileType",
+    name: "fileType",
+    standalone: true,
 })
 export class FileTypePipe implements PipeTransform {
   private readonly typeMap: Record<string, string> = {

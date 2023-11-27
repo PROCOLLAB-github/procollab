@@ -16,17 +16,14 @@ import { ProjectCardComponent } from "../shared/project-card/project-card.compon
 import { VacancySendComponent } from "../vacancy/send/send.component";
 
 @NgModule({
-  declarations: [
-    ProjectsComponent,
-    ProjectEditComponent,
-    ProjectsListComponent,
-    ProjectsFilterComponent,
-    ProjectCardComponent,
-    InviteCardComponent,
-    VacancyCardComponent,
-    VacancySendComponent,
-  ],
-  imports: [CommonModule, ReactiveFormsModule, CoreModule, UiModule, ProjectsRoutingModule],
-  exports: [ProjectCardComponent],
+    imports: [CommonModule, ReactiveFormsModule, CoreModule, UiModule, ProjectsRoutingModule, ProjectsComponent,
+        ProjectEditComponent,
+        ProjectsListComponent,
+        ProjectsFilterComponent,
+        ProjectCardComponent,
+        InviteCardComponent,
+        VacancyCardComponent,
+        VacancySendComponent],
+    exports: [ProjectCardComponent],
 })
 export class ProjectsModule {}

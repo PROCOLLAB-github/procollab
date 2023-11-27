@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { map, noop, Observable, Subscription, tap } from "rxjs";
 import { ChatItem } from "@office/chat/models/chat-item.model";
 import { ChatService } from "@services/chat.service";
@@ -10,11 +10,16 @@ import { LoadChatMessages } from "@models/chat.model";
 import { ChatDirectService } from "@office/chat/services/chat-direct.service";
 import { ChatWindowComponent } from "@office/shared/chat-window/chat-window.component";
 import { AuthService } from "@auth/services";
+import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
+import { NgIf } from "@angular/common";
+import { BackComponent } from "../../../../ui/components/back/back.component";
 
 @Component({
   selector: "app-chat-direct",
   templateUrl: "./chat-direct.component.html",
   styleUrl: "./chat-direct.component.scss",
+  standalone: true,
+  imports: [BackComponent, NgIf, RouterLink, AvatarComponent, ChatWindowComponent],
 })
 export class ChatDirectComponent implements OnInit, OnDestroy {
   constructor(

@@ -19,17 +19,17 @@ describe("RegisterComponent", () => {
     const authSpy = jasmine.createSpyObj("AuthService", ["login", "memTokens", "clearTokens"]);
 
     return await TestBed.configureTestingModule({
-      imports: [
+    imports: [
         FormsModule,
         ReactiveFormsModule,
         RouterTestingModule,
         CoreModule,
         UiModule,
         NgxMaskModule.forRoot(),
-      ],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [RegisterComponent, InputComponent],
-    }).compileComponents();
+        RegisterComponent, InputComponent,
+    ],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

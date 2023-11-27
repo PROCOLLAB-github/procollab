@@ -1,16 +1,28 @@
 /** @format */
 
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { ValidationService } from "@core/services";
 import { ErrorMessage } from "@error/models/error-message";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "@auth/services";
+import { ControlErrorPipe } from "../../core/pipes/control-error.pipe";
+import { ButtonComponent } from "../../ui/components/button/button.component";
+import { InputComponent } from "../../ui/components/input/input.component";
+import { NgIf } from "@angular/common";
 
 @Component({
-  selector: "app-set-password",
-  templateUrl: "./set-password.component.html",
-  styleUrl: "./set-password.component.scss",
+    selector: "app-set-password",
+    templateUrl: "./set-password.component.html",
+    styleUrl: "./set-password.component.scss",
+    standalone: true,
+    imports: [
+        ReactiveFormsModule,
+        NgIf,
+        InputComponent,
+        ButtonComponent,
+        ControlErrorPipe,
+    ],
 })
 export class SetPasswordComponent implements OnInit {
   constructor(

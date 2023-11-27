@@ -7,7 +7,6 @@ import { ProgramMainComponent } from "./main/main.component";
 import { ProgramModule } from "@office/program/program.module";
 
 @NgModule({
-  declarations: [ProgramMainComponent],
-  imports: [CommonModule, ProgramListRoutingModule, ProgramModule],
+    imports: [CommonModule, ProgramListRoutingModule, ProgramModule, ProgramMainComponent],
 })
 export class ProgramListModule {}

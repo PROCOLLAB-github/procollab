@@ -19,16 +19,16 @@ describe("ResetPasswordComponent", () => {
     const authSpy = jasmine.createSpyObj({ resetPassword: of({}) });
 
     await TestBed.configureTestingModule({
-      imports: [
+    imports: [
         ReactiveFormsModule,
         RouterTestingModule,
         CoreModule,
         UiModule,
         NgxMaskModule.forRoot(),
-      ],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [ResetPasswordComponent],
-    }).compileComponents();
+        ResetPasswordComponent,
+    ],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

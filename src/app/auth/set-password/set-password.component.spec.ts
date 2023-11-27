@@ -19,17 +19,17 @@ describe("SetPasswordComponent", () => {
     const authSpy = jasmine.createSpyObj({ setPassword: of({}) });
 
     await TestBed.configureTestingModule({
-      imports: [
+    imports: [
         ReactiveFormsModule,
         RouterTestingModule,
         CoreModule,
         ReactiveFormsModule,
         NgxMaskModule.forRoot(),
         UiModule,
-      ],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [SetPasswordComponent],
-    }).compileComponents();
+        SetPasswordComponent,
+    ],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

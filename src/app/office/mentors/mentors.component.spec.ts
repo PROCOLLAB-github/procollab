@@ -18,10 +18,9 @@ describe("MembersComponent", () => {
     const authSpy = jasmine.createSpyObj([{ profile: of({}) }]);
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, ReactiveFormsModule, UiModule, HttpClientTestingModule],
-      declarations: [MentorsComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-    }).compileComponents();
+    imports: [RouterTestingModule, ReactiveFormsModule, UiModule, HttpClientTestingModule, MentorsComponent],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

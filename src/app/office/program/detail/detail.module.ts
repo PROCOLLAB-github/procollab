@@ -17,24 +17,22 @@ import { OfficeModule } from "@office/office.module";
 import { ProgramNewsCardComponent } from "./shared/news-card/news-card.component";
 
 @NgModule({
-  declarations: [
-    ProgramDetailComponent,
-    ProgramDetailMainComponent,
-    ProgramRegisterComponent,
-    ProgramProjectsComponent,
-    ProgramMembersComponent,
-    ProgramNewsCardComponent,
-  ],
-  imports: [
-    CommonModule,
-    ProgramDetailRoutingModule,
-    UiModule,
-    CoreModule,
-    ReactiveFormsModule,
-    ProjectsModule,
-    ProgramModule,
-    OfficeModule,
-  ],
-  exports: [ProgramNewsCardComponent],
+    imports: [
+        CommonModule,
+        ProgramDetailRoutingModule,
+        UiModule,
+        CoreModule,
+        ReactiveFormsModule,
+        ProjectsModule,
+        ProgramModule,
+        OfficeModule,
+        ProgramDetailComponent,
+        ProgramDetailMainComponent,
+        ProgramRegisterComponent,
+        ProgramProjectsComponent,
+        ProgramMembersComponent,
+        ProgramNewsCardComponent,
+    ],
+    exports: [ProgramNewsCardComponent],
 })
 export class ProgramDetailModule {}

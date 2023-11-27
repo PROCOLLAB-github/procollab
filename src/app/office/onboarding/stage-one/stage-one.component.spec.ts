@@ -23,16 +23,16 @@ describe("StageOneComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [
+    imports: [
         ReactiveFormsModule,
         RouterTestingModule,
         CoreModule,
         UiModule,
         NgxMaskModule.forRoot(),
-      ],
-      declarations: [OnboardingStageOneComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-    }).compileComponents();
+        OnboardingStageOneComponent,
+    ],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

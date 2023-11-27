@@ -2,16 +2,28 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { BehaviorSubject, combineLatest, map, Observable, Subscription } from "rxjs";
 import { ChatListItem } from "@office/chat/models/chat-item.model";
 import { AuthService } from "@auth/services";
 import { ChatService } from "@services/chat.service";
+import { ChatCardComponent } from "./shared/chat-card/chat-card.component";
+import { NgFor, AsyncPipe } from "@angular/common";
+import { BackComponent } from "../../ui/components/back/back.component";
 
 @Component({
-  selector: "app-chat",
-  templateUrl: "./chat.component.html",
-  styleUrl: "./chat.component.scss",
+    selector: "app-chat",
+    templateUrl: "./chat.component.html",
+    styleUrl: "./chat.component.scss",
+    standalone: true,
+    imports: [
+        BackComponent,
+        RouterLink,
+        RouterLinkActive,
+        NgFor,
+        ChatCardComponent,
+        AsyncPipe,
+    ],
 })
 export class ChatComponent implements OnInit, OnDestroy {
   constructor(

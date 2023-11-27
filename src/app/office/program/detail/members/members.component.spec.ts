@@ -12,9 +12,8 @@ describe("MembersComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule],
-      declarations: [ProgramMembersComponent],
-    }).compileComponents();
+    imports: [RouterTestingModule, HttpClientTestingModule, ProgramMembersComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {

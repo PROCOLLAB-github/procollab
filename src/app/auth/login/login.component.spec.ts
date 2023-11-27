@@ -17,10 +17,9 @@ describe("LoginComponent", () => {
     const authSpy = jasmine.createSpyObj("AuthService", ["login", "memTokens", "clearTokens"]);
 
     await TestBed.configureTestingModule({
-      imports: [FormsModule, ReactiveFormsModule, RouterTestingModule, CoreModule],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [LoginComponent, InputComponent],
-    }).compileComponents();
+    imports: [FormsModule, ReactiveFormsModule, RouterTestingModule, CoreModule, LoginComponent, InputComponent],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

@@ -24,17 +24,17 @@ describe("StageZeroComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [
+    imports: [
         ReactiveFormsModule,
         RouterTestingModule,
         CoreModule,
         UiModule,
         NgxMaskModule.forRoot(),
         HttpClientTestingModule,
-      ],
-      declarations: [OnboardingStageZeroComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-    }).compileComponents();
+        OnboardingStageZeroComponent,
+    ],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

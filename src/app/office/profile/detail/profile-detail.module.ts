@@ -16,19 +16,19 @@ import { ProjectsModule } from "@office/projects/projects.module";
 import { ProfileProjectsComponent } from "./projects/projects.component";
 
 @NgModule({
-  imports: [
-    UiModule,
-    CoreModule,
-    CommonModule,
-    ProfileDetailRoutingModule,
-    OfficeModule,
-    ScrollingModule,
-    LayoutModule,
-    ReactiveFormsModule,
-    ClickOutsideModule,
-    AutosizeModule,
-    ProjectsModule,
-  ],
-  declarations: [ProfileMainComponent, ProfileProjectsComponent],
+    imports: [
+        UiModule,
+        CoreModule,
+        CommonModule,
+        ProfileDetailRoutingModule,
+        OfficeModule,
+        ScrollingModule,
+        LayoutModule,
+        ReactiveFormsModule,
+        ClickOutsideModule,
+        AutosizeModule,
+        ProjectsModule,
+        ProfileMainComponent, ProfileProjectsComponent,
+    ],
 })
 export class ProfileDetailModule {}

@@ -14,10 +14,9 @@ describe("MessageInputComponent", () => {
     const authSpy = jasmine.createSpyObj("AuthService", ["profile"]);
 
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [MessageInputComponent],
-    }).compileComponents();
+    imports: [HttpClientTestingModule, MessageInputComponent],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

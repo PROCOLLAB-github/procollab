@@ -2,12 +2,20 @@
 
 import { Component, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLinkActive, RouterLink, RouterOutlet } from "@angular/router";
+import { BackComponent } from "../../../../ui/components/back/back.component";
 
 @Component({
-  selector: "app-detail",
-  templateUrl: "./detail.component.html",
-  styleUrl: "./detail.component.scss",
+    selector: "app-detail",
+    templateUrl: "./detail.component.html",
+    styleUrl: "./detail.component.scss",
+    standalone: true,
+    imports: [
+        BackComponent,
+        RouterLinkActive,
+        RouterLink,
+        RouterOutlet,
+    ],
 })
 export class ProgramDetailComponent implements OnInit {
   constructor(private readonly navService: NavService, private readonly route: ActivatedRoute) {}

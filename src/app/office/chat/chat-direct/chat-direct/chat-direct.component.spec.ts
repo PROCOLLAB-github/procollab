@@ -18,10 +18,9 @@ describe("ChatDirectComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [ChatDirectComponent],
-      imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-    }).compileComponents();
+    imports: [RouterTestingModule, HttpClientTestingModule, ChatDirectComponent],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

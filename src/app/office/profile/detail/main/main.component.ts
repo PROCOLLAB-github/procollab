@@ -1,7 +1,7 @@
 /** @format */
 
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { expandElement } from "@utils/expand-element";
@@ -10,11 +10,32 @@ import { ProfileNewsService } from "../services/profile-news.service";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ProfileNews } from "../models/profile-news.model";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
+import { ParseLinksPipe } from "../../../../core/pipes/parse-links.pipe";
+import { ParseBreaksPipe } from "../../../../core/pipes/parse-breaks.pipe";
+import { UserLinksPipe } from "../../../../core/pipes/user-links.pipe";
+import { IconComponent } from "../../../../ui/components/icon/icon.component";
+import { TagComponent } from "../../../../ui/components/tag/tag.component";
+import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-profile-main",
   templateUrl: "./main.component.html",
   styleUrl: "./main.component.scss",
+  standalone: true,
+  imports: [
+    NgIf,
+    NgFor,
+    TagComponent,
+    NewsFormComponent,
+    NewsCardComponent,
+    IconComponent,
+    RouterLink,
+    NgTemplateOutlet,
+    UserLinksPipe,
+    ParseBreaksPipe,
+    ParseLinksPipe,
+    AsyncPipe,
+  ],
 })
 export class ProfileMainComponent implements OnInit {
   constructor(

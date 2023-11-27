@@ -17,10 +17,9 @@ describe("DetailComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [ProjectDetailComponent],
-    }).compileComponents();
+    imports: [RouterTestingModule, ProjectDetailComponent],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

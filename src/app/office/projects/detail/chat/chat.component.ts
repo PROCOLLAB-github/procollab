@@ -5,18 +5,34 @@ import { ChatFile, ChatMessage } from "@models/chat-message.model";
 import { filter, map, noop, Observable, Subscription, tap } from "rxjs";
 import { Project } from "@models/project.model";
 import { NavService } from "@services/nav.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { AuthService } from "@auth/services";
 import { ModalService } from "@ui/models/modal.service";
 import { ChatService } from "@services/chat.service";
 import { LoadChatMessages } from "@models/chat.model";
 import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
 import { ChatWindowComponent } from "@office/shared/chat-window/chat-window.component";
+import { PluralizePipe } from "../../../../core/pipes/pluralize.pipe";
+import { FileItemComponent } from "../../../../ui/components/file-item/file-item.component";
+import { IconComponent } from "../../../../ui/components/icon/icon.component";
+import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
+import { NgIf, NgFor } from "@angular/common";
 
 @Component({
   selector: "app-chat",
   templateUrl: "./chat.component.html",
   styleUrl: "./chat.component.scss",
+  standalone: true,
+  imports: [
+    NgIf,
+    AvatarComponent,
+    NgFor,
+    IconComponent,
+    ChatWindowComponent,
+    RouterLink,
+    FileItemComponent,
+    PluralizePipe,
+  ],
 })
 export class ProjectChatComponent implements OnInit, OnDestroy {
   constructor(

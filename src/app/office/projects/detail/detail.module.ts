@@ -20,25 +20,23 @@ import { NewsDetailComponent } from "./news-detail/news-detail.component";
 import { NewsDetailResolver } from "@office/projects/detail/news-detail/news-detail.resolver";
 
 @NgModule({
-  imports: [
-    UiModule,
-    CoreModule,
-    CommonModule,
-    ProjectDetailRoutingModule,
-    OfficeModule,
-    ScrollingModule,
-    ReactiveFormsModule,
-    ClickOutsideModule,
-    AutosizeModule,
-  ],
-  providers: [ProjectNewsService],
-  declarations: [
-    ProjectInfoComponent,
-    ProjectResponsesComponent,
-    ResponseCardComponent,
-    ProjectDetailComponent,
-    ProjectChatComponent,
-    NewsDetailComponent,
-  ],
+    imports: [
+        UiModule,
+        CoreModule,
+        CommonModule,
+        ProjectDetailRoutingModule,
+        OfficeModule,
+        ScrollingModule,
+        ReactiveFormsModule,
+        ClickOutsideModule,
+        AutosizeModule,
+        ProjectInfoComponent,
+        ProjectResponsesComponent,
+        ResponseCardComponent,
+        ProjectDetailComponent,
+        ProjectChatComponent,
+        NewsDetailComponent,
+    ],
+    providers: [ProjectNewsService],
 })
 export class ProjectDetailModule {}

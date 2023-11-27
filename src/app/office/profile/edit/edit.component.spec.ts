@@ -25,17 +25,17 @@ describe("ProfileEditComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [
+    imports: [
         RouterTestingModule,
         ReactiveFormsModule,
         HttpClientTestingModule,
         CoreModule,
         UiModule,
         NgxMaskModule.forRoot(),
-      ],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [ProfileEditComponent],
-    }).compileComponents();
+        ProfileEditComponent,
+    ],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

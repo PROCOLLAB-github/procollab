@@ -19,17 +19,17 @@ describe("ProjectEditComponent", () => {
     const authSpy = {};
 
     await TestBed.configureTestingModule({
-      imports: [
+    imports: [
         RouterTestingModule,
         ReactiveFormsModule,
         HttpClientTestingModule,
         CoreModule,
         UiModule,
         NgxMaskModule.forRoot(),
-      ],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [ProjectEditComponent],
-    }).compileComponents();
+        ProjectEditComponent,
+    ],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

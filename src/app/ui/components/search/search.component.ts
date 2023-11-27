@@ -11,18 +11,27 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { NgIf } from "@angular/common";
+import { IconComponent } from "../icon/icon.component";
+import { ClickOutsideModule } from "ng-click-outside";
 
 @Component({
-  selector: "app-search",
-  templateUrl: "./search.component.html",
-  styleUrl: "./search.component.scss",
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SearchComponent),
-      multi: true,
-    },
-  ],
+    selector: "app-search",
+    templateUrl: "./search.component.html",
+    styleUrl: "./search.component.scss",
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => SearchComponent),
+            multi: true,
+        },
+    ],
+    standalone: true,
+    imports: [
+        ClickOutsideModule,
+        IconComponent,
+        NgIf,
+    ],
 })
 export class SearchComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";

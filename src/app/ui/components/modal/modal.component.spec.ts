@@ -6,11 +6,13 @@ import { Component, ViewChild } from "@angular/core";
 import { ModalComponent } from "./modal.component";
 
 @Component({
-  template: `
+    template: `
     <app-modal [open]="open" (openChange)="onOpenChange($event)">
       <div class="content">Hello, world!</div>
     </app-modal>
   `,
+    standalone: true,
+    imports: [OverlayModule],
 })
 class TestHostComponent {
   @ViewChild(ModalComponent) modalComponent!: ModalComponent;
@@ -26,9 +28,8 @@ describe("ModalComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OverlayModule],
-      declarations: [ModalComponent, TestHostComponent],
-    }).compileComponents();
+    imports: [OverlayModule, ModalComponent, TestHostComponent],
+}).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
     hostComponent = fixture.componentInstance;

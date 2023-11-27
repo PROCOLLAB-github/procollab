@@ -8,7 +8,8 @@ import * as dayjs from "dayjs";
 dayjs.extend(RelativeTime);
 
 @Pipe({
-  name: "yearsFromBirthday",
+    name: "yearsFromBirthday",
+    standalone: true,
 })
 export class YearsFromBirthdayPipe implements PipeTransform {
   transform(value: string): string {

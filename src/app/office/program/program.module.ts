@@ -10,8 +10,7 @@ import { ProgramHeadComponent } from "./shared/program-head/program-head.compone
 import { FormsModule } from "@angular/forms";
 
 @NgModule({
-  declarations: [ProgramCardComponent, ProgramHeadComponent],
-  imports: [ProgramRoutingModule, CommonModule, UiModule, CoreModule, FormsModule],
-  exports: [ProgramCardComponent, ProgramHeadComponent],
+    imports: [ProgramRoutingModule, CommonModule, UiModule, CoreModule, FormsModule, ProgramCardComponent, ProgramHeadComponent],
+    exports: [ProgramCardComponent, ProgramHeadComponent],
 })
 export class ProgramModule {}

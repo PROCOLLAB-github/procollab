@@ -8,8 +8,8 @@ describe('DeleteConfirmComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DeleteConfirmComponent ]
-    })
+    imports: [DeleteConfirmComponent]
+})
     .compileComponents();
   });
 

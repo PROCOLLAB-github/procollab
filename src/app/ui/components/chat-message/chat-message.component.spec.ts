@@ -19,10 +19,9 @@ describe("ChatMessageComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [UiModule, RouterTestingModule],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [ChatMessageComponent],
-    }).compileComponents();
+    imports: [UiModule, RouterTestingModule, ChatMessageComponent],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

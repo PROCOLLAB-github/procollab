@@ -1,14 +1,16 @@
 /** @format */
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
 import { Subscription, take } from "rxjs";
 import { OnboardingService } from "../services/onboarding.service";
 
 @Component({
-  selector: "app-onboarding",
-  templateUrl: "./onboarding.component.html",
-  styleUrl: "./onboarding.component.scss",
+    selector: "app-onboarding",
+    templateUrl: "./onboarding.component.html",
+    styleUrl: "./onboarding.component.scss",
+    standalone: true,
+    imports: [RouterOutlet],
 })
 export class OnboardingComponent implements OnInit, OnDestroy {
   constructor(

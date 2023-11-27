@@ -12,9 +12,8 @@ describe("ProjectsFilterComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule],
-      declarations: [ProjectsFilterComponent],
-    }).compileComponents();
+    imports: [RouterTestingModule, HttpClientTestingModule, ProjectsFilterComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {

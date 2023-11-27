@@ -5,18 +5,27 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
 import { catchError, concatMap, map, of } from "rxjs";
+import { IconComponent } from "../icon/icon.component";
+import { LoaderComponent } from "../loader/loader.component";
+import { NgIf } from "@angular/common";
 
 @Component({
-  selector: "app-avatar-control",
-  templateUrl: "./avatar-control.component.html",
-  styleUrl: "./avatar-control.component.scss",
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => AvatarControlComponent),
-      multi: true,
-    },
-  ],
+    selector: "app-avatar-control",
+    templateUrl: "./avatar-control.component.html",
+    styleUrl: "./avatar-control.component.scss",
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => AvatarControlComponent),
+            multi: true,
+        },
+    ],
+    standalone: true,
+    imports: [
+        NgIf,
+        LoaderComponent,
+        IconComponent,
+    ],
 })
 export class AvatarControlComponent implements OnInit, ControlValueAccessor {
   constructor(private fileService: FileService) {}

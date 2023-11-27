@@ -3,7 +3,8 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-  name: "userLinks",
+    name: "userLinks",
+    standalone: true,
 })
 export class UserLinksPipe implements PipeTransform {
   icons: Record<string, string> = {

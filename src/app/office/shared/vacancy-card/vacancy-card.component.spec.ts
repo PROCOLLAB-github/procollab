@@ -16,9 +16,9 @@ describe("VacancyCardComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [VacancyCardComponent],
-    }).compileComponents();
+    imports: [VacancyCardComponent],
+    providers: [{ provide: AuthService, useValue: authSpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

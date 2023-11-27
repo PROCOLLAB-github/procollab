@@ -9,7 +9,6 @@ import { CoreModule } from "@core/core.module";
 import { UiModule } from "@ui/ui.module";
 
 @NgModule({
-  declarations: [ChatDirectComponent],
-  imports: [CommonModule, ChatDirectRoutingModule, OfficeModule, CoreModule, UiModule],
+    imports: [CommonModule, ChatDirectRoutingModule, OfficeModule, CoreModule, UiModule, ChatDirectComponent],
 })
 export class ChatDirectModule {}

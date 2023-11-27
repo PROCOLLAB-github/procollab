@@ -10,7 +10,6 @@ import { FormsModule } from "@angular/forms";
 import { CoreModule } from "@core/core.module";
 
 @NgModule({
-  declarations: [ChatComponent, ChatCardComponent],
-  imports: [ChatRoutingModule, CommonModule, UiModule, FormsModule, CoreModule],
+    imports: [ChatRoutingModule, CommonModule, UiModule, FormsModule, CoreModule, ChatComponent, ChatCardComponent],
 })
 export class ChatModule {}

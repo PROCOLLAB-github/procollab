@@ -18,45 +18,42 @@ import { ParseBreaksPipe } from "./pipes/parse-breaks.pipe";
 import { ParseLinksPipe } from "./pipes/parse-links.pipe";
 
 @NgModule({
-  declarations: [
-    ControlErrorPipe,
-    DayjsPipe,
-    UserRolePipe,
-    PluralizePipe,
-    YearsFromBirthdayPipe,
-    UserLinksPipe,
-    FormControlPipe,
-    ParseBreaksPipe,
-    ParseLinksPipe,
-  ],
-  imports: [CommonModule],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: CamelcaseInterceptor,
-      multi: true,
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: BearerTokenInterceptor,
-      multi: true,
-    },
-    {
-      provide: ErrorHandler,
-      useClass: GlobalErrorHandlerService,
-    },
-    ApiService,
-  ],
-  exports: [
-    ControlErrorPipe,
-    DayjsPipe,
-    UserRolePipe,
-    PluralizePipe,
-    YearsFromBirthdayPipe,
-    UserLinksPipe,
-    FormControlPipe,
-    ParseBreaksPipe,
-    ParseLinksPipe,
-  ],
+    imports: [CommonModule, ControlErrorPipe,
+        DayjsPipe,
+        UserRolePipe,
+        PluralizePipe,
+        YearsFromBirthdayPipe,
+        UserLinksPipe,
+        FormControlPipe,
+        ParseBreaksPipe,
+        ParseLinksPipe],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: CamelcaseInterceptor,
+            multi: true,
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: BearerTokenInterceptor,
+            multi: true,
+        },
+        {
+            provide: ErrorHandler,
+            useClass: GlobalErrorHandlerService,
+        },
+        ApiService,
+    ],
+    exports: [
+        ControlErrorPipe,
+        DayjsPipe,
+        UserRolePipe,
+        PluralizePipe,
+        YearsFromBirthdayPipe,
+        UserLinksPipe,
+        FormControlPipe,
+        ParseBreaksPipe,
+        ParseLinksPipe,
+    ],
 })
 export class CoreModule {}

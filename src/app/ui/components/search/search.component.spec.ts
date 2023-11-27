@@ -11,9 +11,8 @@ describe("SearchComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SearchComponent],
-      imports: [FormsModule],
-    }).compileComponents();
+    imports: [FormsModule, SearchComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {
