@@ -1,18 +1,12 @@
 /** @format */
 
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from "@angular/router";
-import { Observable } from "rxjs";
+import { inject } from "@angular/core";
+import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { ProgramService } from "@office/program/services/program.service";
 import { Program } from "@office/program/models/program.model";
 
-@Injectable({
-  providedIn: "root",
-})
-export class ProgramDetailResolver implements Resolve<Program> {
-  constructor(private readonly programService: ProgramService) {}
+export const ProgramDetailResolver: ResolveFn<Program> = (route: ActivatedRouteSnapshot) => {
+  const programService = inject(ProgramService);
 
-  resolve(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot): Observable<Program> {
-    return this.programService.getOne(route.params["programId"]);
-  }
-}
+  return programService.getOne(route.params["programId"]);
+};

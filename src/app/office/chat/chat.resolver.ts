@@ -1,18 +1,12 @@
 /** @format */
 
-import { Injectable } from "@angular/core";
-import { Resolve } from "@angular/router";
-import { Observable } from "rxjs";
+import { inject } from "@angular/core";
 import { ChatDirectService } from "@office/chat/services/chat-direct.service";
 import { ChatListItem } from "@office/chat/models/chat-item.model";
+import { ResolveFn } from "@angular/router";
 
-@Injectable({
-  providedIn: "root",
-})
-export class ChatResolver implements Resolve<ChatListItem[]> {
-  constructor(private readonly chatDirectService: ChatDirectService) {}
+export const ChatResolver: ResolveFn<ChatListItem[]> = () => {
+  const chatDirectService = inject(ChatDirectService);
 
-  resolve(): Observable<ChatListItem[]> {
-    return this.chatDirectService.getDirects();
-  }
-}
+  return chatDirectService.getDirects();
+};

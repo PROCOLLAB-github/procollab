@@ -4,20 +4,22 @@ import { TestBed } from "@angular/core/testing";
 
 import { MentorsResolver } from "./mentors.resolver";
 import { MemberService } from "@services/member.service";
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
+import { of } from "rxjs";
 
-describe("MembersResolver", () => {
-  let resolver: MentorsResolver;
-
+describe("MentorsResolver", () => {
   beforeEach(() => {
-    const memberSpy = jasmine.createSpyObj(["getMembers"]);
+    const memberSpy = jasmine.createSpyObj("memberSpy", { getMentors: of({}) });
 
     TestBed.configureTestingModule({
       providers: [{ provide: MemberService, useValue: memberSpy }],
     });
-    resolver = TestBed.inject(MentorsResolver);
   });
 
   it("should be created", () => {
-    expect(resolver).toBeTruthy();
+    const result = TestBed.runInInjectionContext(() =>
+      MentorsResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+    );
+    expect(result).toBeTruthy();
   });
 });

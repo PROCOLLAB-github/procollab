@@ -31,7 +31,7 @@ import { NewsDetailResolver } from "@office/projects/detail/news-detail/news-det
     ClickOutsideModule,
     AutosizeModule,
   ],
-  providers: [ProjectNewsService, NewsDetailResolver],
+  providers: [ProjectNewsService],
   declarations: [
     ProjectInfoComponent,
     ProjectResponsesComponent,

@@ -1,21 +1,23 @@
 /** @format */
 
 import { TestBed } from "@angular/core/testing";
-
 import { ProgramMembersResolver } from "./members.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 
-describe("MembersResolver", () => {
-  let resolver: ProgramMembersResolver;
+describe("ProgramMembersResolver", () => {
+  const mockRoute = { parent: { params: { programId: 1 } } } as unknown as ActivatedRouteSnapshot;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
-    resolver = TestBed.inject(ProgramMembersResolver);
   });
 
   it("should be created", () => {
-    expect(resolver).toBeTruthy();
+    const result = TestBed.runInInjectionContext(() =>
+      ProgramMembersResolver(mockRoute, {} as RouterStateSnapshot)
+    );
+    expect(result).toBeTruthy();
   });
 });

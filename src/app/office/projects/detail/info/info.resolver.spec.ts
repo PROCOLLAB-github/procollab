@@ -6,10 +6,12 @@ import { ProjectInfoResolver } from "./info.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
+import { ActivatedRouteSnapshot, convertToParamMap, RouterStateSnapshot } from "@angular/router";
 
 describe("ProjectInfoResolver", () => {
-  let resolver: ProjectInfoResolver;
-
+  const mockRoute = {
+    paramMap: convertToParamMap({ projectId: 1 }),
+  } as unknown as ActivatedRouteSnapshot;
   beforeEach(() => {
     const authSpy = {
       profile: of({}),
@@ -19,10 +21,12 @@ describe("ProjectInfoResolver", () => {
       imports: [HttpClientTestingModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
     });
-    resolver = TestBed.inject(ProjectInfoResolver);
   });
 
   it("should be created", () => {
-    expect(resolver).toBeTruthy();
+    const result = TestBed.runInInjectionContext(() =>
+      ProjectInfoResolver(mockRoute, {} as RouterStateSnapshot)
+    );
+    expect(result).toBeTruthy();
   });
 });

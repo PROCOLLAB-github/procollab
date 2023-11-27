@@ -1,21 +1,24 @@
 /** @format */
 
 import { TestBed } from "@angular/core/testing";
-
 import { ProjectDetailResolver } from "./detail.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { ActivatedRouteSnapshot, convertToParamMap, RouterStateSnapshot } from "@angular/router";
 
-describe("DetailResolver", () => {
-  let resolver: ProjectDetailResolver;
-
+describe("ProjectDetailResolver", () => {
+  const mockRoute = {
+    paramMap: convertToParamMap({ projectId: 1 }),
+  } as unknown as ActivatedRouteSnapshot;
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
     });
-    resolver = TestBed.inject(ProjectDetailResolver);
   });
 
   it("should be created", () => {
-    expect(resolver).toBeTruthy();
+    const result = TestBed.runInInjectionContext(() =>
+      ProjectDetailResolver(mockRoute, {} as RouterStateSnapshot)
+    );
+    expect(result).toBeTruthy();
   });
 });
