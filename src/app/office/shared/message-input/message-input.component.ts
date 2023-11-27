@@ -18,7 +18,7 @@ import { getFormattedFileSize } from "@utils/formatted-file-size";
 @Component({
   selector: "app-message-input",
   templateUrl: "./message-input.component.html",
-  styleUrls: ["./message-input.component.scss"],
+  styleUrl: "./message-input.component.scss",
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

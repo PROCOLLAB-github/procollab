@@ -22,7 +22,7 @@ import { MemberService } from "@services/member.service";
 @Component({
   selector: "app-mentors",
   templateUrl: "./mentors.component.html",
-  styleUrls: ["./mentors.component.scss"],
+  styleUrl: "./mentors.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MentorsComponent implements OnInit, OnDestroy, AfterViewInit {

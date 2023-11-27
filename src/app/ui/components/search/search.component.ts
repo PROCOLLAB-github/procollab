@@ -15,7 +15,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 @Component({
   selector: "app-search",
   templateUrl: "./search.component.html",
-  styleUrls: ["./search.component.scss"],
+  styleUrl: "./search.component.scss",
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

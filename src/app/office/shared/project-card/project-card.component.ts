@@ -7,7 +7,7 @@ import { IndustryService } from "@services/industry.service";
 @Component({
   selector: "app-project-card",
   templateUrl: "./project-card.component.html",
-  styleUrls: ["./project-card.component.scss"],
+  styleUrl: "./project-card.component.scss",
 })
 export class ProjectCardComponent implements OnInit {
   constructor(public industryService: IndustryService) {}

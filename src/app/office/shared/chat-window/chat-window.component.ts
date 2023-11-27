@@ -23,7 +23,7 @@ import { User } from "@auth/models/user.model";
 @Component({
   selector: "app-chat-window",
   templateUrl: "./chat-window.component.html",
-  styleUrls: ["./chat-window.component.scss"],
+  styleUrl: "./chat-window.component.scss",
 })
 export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

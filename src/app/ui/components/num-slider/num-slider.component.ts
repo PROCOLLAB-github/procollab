@@ -17,7 +17,7 @@ import { Subscription } from "rxjs";
 @Component({
   selector: "app-num-slider",
   templateUrl: "./num-slider.component.html",
-  styleUrls: ["./num-slider.component.scss"],
+  styleUrl: "./num-slider.component.scss",
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

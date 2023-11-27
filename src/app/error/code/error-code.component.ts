@@ -7,7 +7,7 @@ import { map } from "rxjs";
 @Component({
   selector: "app-code",
   templateUrl: "./error-code.component.html",
-  styleUrls: ["./error-code.component.scss"],
+  styleUrl: "./error-code.component.scss",
 })
 export class ErrorCodeComponent implements OnInit {
   errorCode = this.activatedRoute.params.pipe(map(r => r["code"]));

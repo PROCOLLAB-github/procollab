@@ -8,7 +8,7 @@ import { OnboardingService } from "../services/onboarding.service";
 @Component({
   selector: "app-onboarding",
   templateUrl: "./onboarding.component.html",
-  styleUrls: ["./onboarding.component.scss"],
+  styleUrl: "./onboarding.component.scss",
 })
 export class OnboardingComponent implements OnInit, OnDestroy {
   constructor(

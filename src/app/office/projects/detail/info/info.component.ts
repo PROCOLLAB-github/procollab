@@ -38,7 +38,7 @@ import { SubscriptionService } from "@office/services/subscription.service";
 @Component({
   selector: "app-detail",
   templateUrl: "./info.component.html",
-  styleUrls: ["./info.component.scss"],
+  styleUrl: "./info.component.scss",
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

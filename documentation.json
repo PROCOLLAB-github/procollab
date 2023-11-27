@@ -1078,7 +1078,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component } from \"@angular/core\";\n\n@Component({\n  selector: \"app-root\",\n  templateUrl: \"./app.component.html\",\n  styleUrls: [\"./app.component.scss\"],\n})\nexport class AppComponent {}\n",
+            "sourceCode": "import { Component } from \"@angular/core\";\n\n@Component({\n  selector: \"app-root\",\n  templateUrl: \"./app.component.html\",\n  styleUrls: \"./app.component.scss\"],\n})\nexport class AppComponent {}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1129,7 +1129,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-auth\",\n  templateUrl: \"./auth.component.html\",\n  styleUrls: [\"./auth.component.scss\"],\n})\nexport class AuthComponent implements OnInit {\n  constructor() {}\n\n  ngOnInit(): void {}\n}\n",
+            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-auth\",\n  templateUrl: \"./auth.component.html\",\n  styleUrls: \"./auth.component.scss\"],\n})\nexport class AuthComponent implements OnInit {\n  constructor() {}\n\n  ngOnInit(): void {}\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1191,7 +1191,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-button\",\n  templateUrl: \"./button.component.html\",\n  styleUrls: [\"./button.component.scss\"],\n})\nexport class ButtonComponent implements OnInit {\n  constructor() {}\n\n  ngOnInit(): void {}\n}\n",
+            "sourceCode": "import { Component, Input, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-button\",\n  templateUrl: \"./button.component.html\",\n  styleUrls: \"./button.component.scss\"],\n})\nexport class ButtonComponent implements OnInit {\n  constructor() {}\n\n  ngOnInit(): void {}\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1272,7 +1272,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, EventEmitter, Input, OnInit, Output } from \"@angular/core\";\n\n@Component({\n  selector: \"app-checkbox\",\n  templateUrl: \"./checkbox.component.html\",\n  styleUrls: [\"./checkbox.component.scss\"],\n})\nexport class CheckboxComponent implements OnInit {\n  @Input() checked = false;\n  @Output() checkedChange = new EventEmitter<boolean>();\n\n  ngOnInit(): void {}\n}\n",
+            "sourceCode": "import { Component, EventEmitter, Input, OnInit, Output } from \"@angular/core\";\n\n@Component({\n  selector: \"app-checkbox\",\n  templateUrl: \"./checkbox.component.html\",\n  styleUrls: \"./checkbox.component.scss\"],\n})\nexport class CheckboxComponent implements OnInit {\n  @Input() checked = false;\n  @Output() checkedChange = new EventEmitter<boolean>();\n\n  ngOnInit(): void {}\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1337,7 +1337,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\nimport { ActivatedRoute } from \"@angular/router\";\nimport { pluck } from \"rxjs\";\n\n@Component({\n  selector: \"app-code\",\n  templateUrl: \"./error-code.component.html\",\n  styleUrls: [\"./error-code.component.scss\"],\n})\nexport class ErrorCodeComponent implements OnInit {\n  errorCode = this.activatedRoute.params.pipe(pluck(\"code\"));\n\n  constructor(private activatedRoute: ActivatedRoute) {}\n\n  ngOnInit(): void {}\n}\n",
+            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\nimport { ActivatedRoute } from \"@angular/router\";\nimport { pluck } from \"rxjs\";\n\n@Component({\n  selector: \"app-code\",\n  templateUrl: \"./error-code.component.html\",\n  styleUrls: \"./error-code.component.scss\"],\n})\nexport class ErrorCodeComponent implements OnInit {\n  errorCode = this.activatedRoute.params.pipe(pluck(\"code\"));\n\n  constructor(private activatedRoute: ActivatedRoute) {}\n\n  ngOnInit(): void {}\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1417,7 +1417,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-error',\n  templateUrl: './error.component.html',\n  styleUrls: ['./error.component.scss']\n})\nexport class ErrorComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-error',\n  templateUrl: './error.component.html',\n  styleUrls: './error.component.scss']\n})\nexport class ErrorComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1479,7 +1479,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-error-message',\n  templateUrl: './error-message.component.html',\n  styleUrls: ['./error-message.component.scss']\n})\nexport class ErrorMessageComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n@Component({\n  selector: 'app-error-message',\n  templateUrl: './error-message.component.html',\n  styleUrls: './error-message.component.scss']\n})\nexport class ErrorMessageComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1541,7 +1541,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-not-found\",\n  templateUrl: \"./error-not-found.component.html\",\n  styleUrls: [\"./error-not-found.component.scss\"],\n})\nexport class ErrorNotFoundComponent implements OnInit {\n  constructor() {}\n\n  ngOnInit(): void {}\n}\n",
+            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-not-found\",\n  templateUrl: \"./error-not-found.component.html\",\n  styleUrls: \"./error-not-found.component.scss\"],\n})\nexport class ErrorNotFoundComponent implements OnInit {\n  constructor() {}\n\n  ngOnInit(): void {}\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -1709,7 +1709,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, Input, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-icon\",\n  templateUrl: \"./icon.component.html\",\n  styleUrls: [\"./icon.component.scss\"],\n})\nexport class IconComponent implements OnInit {\n  @Input()\n  set appSquare(square: string) {\n    this.square = square;\n\n    !this.viewBox && (this.viewBox = `0 0 ${square} ${square}`);\n  }\n\n  get appSquare(): string {\n    return this.square;\n  }\n\n  @Input()\n  set appViewBox(viewBox: string) {\n    this.viewBox = viewBox;\n  }\n\n  get appViewBox(): string {\n    return this.viewBox;\n  }\n\n  @Input()\n  set appWidth(width: string) {\n    this.width = width;\n\n    if (this.viewBox) {\n      const viewbox = this.viewBoxInfo(this.viewBox);\n      viewbox[2] = width;\n      !this.viewBox && (this.viewBox = viewbox.join(\" \"));\n    }\n  }\n\n  get appWidth(): string {\n    return this.width;\n  }\n\n  @Input()\n  set appHeight(height: string) {\n    this.height = height;\n\n    if (this.viewBox) {\n      const viewbox = this.viewBoxInfo(this.viewBox);\n      viewbox[3] = height;\n      !this.viewBox && (this.viewBox = viewbox.join(\" \"));\n    }\n  }\n\n  get appHeight(): string {\n    return this.height;\n  }\n\n  @Input() icon!: string;\n\n  square!: string;\n  viewBox!: string;\n\n  width!: string;\n  height!: string;\n\n  ngOnInit(): void {}\n\n  viewBoxInfo(viewBox: string): string[] {\n    return viewBox.split(\" \");\n  }\n}\n",
+            "sourceCode": "import { Component, Input, OnInit } from \"@angular/core\";\n\n@Component({\n  selector: \"app-icon\",\n  templateUrl: \"./icon.component.html\",\n  styleUrls: \"./icon.component.scss\"],\n})\nexport class IconComponent implements OnInit {\n  @Input()\n  set appSquare(square: string) {\n    this.square = square;\n\n    !this.viewBox && (this.viewBox = `0 0 ${square} ${square}`);\n  }\n\n  get appSquare(): string {\n    return this.square;\n  }\n\n  @Input()\n  set appViewBox(viewBox: string) {\n    this.viewBox = viewBox;\n  }\n\n  get appViewBox(): string {\n    return this.viewBox;\n  }\n\n  @Input()\n  set appWidth(width: string) {\n    this.width = width;\n\n    if (this.viewBox) {\n      const viewbox = this.viewBoxInfo(this.viewBox);\n      viewbox[2] = width;\n      !this.viewBox && (this.viewBox = viewbox.join(\" \"));\n    }\n  }\n\n  get appWidth(): string {\n    return this.width;\n  }\n\n  @Input()\n  set appHeight(height: string) {\n    this.height = height;\n\n    if (this.viewBox) {\n      const viewbox = this.viewBoxInfo(this.viewBox);\n      viewbox[3] = height;\n      !this.viewBox && (this.viewBox = viewbox.join(\" \"));\n    }\n  }\n\n  get appHeight(): string {\n    return this.height;\n  }\n\n  @Input() icon!: string;\n\n  square!: string;\n  viewBox!: string;\n\n  width!: string;\n  height!: string;\n\n  ngOnInit(): void {}\n\n  viewBoxInfo(viewBox: string): string[] {\n    return viewBox.split(\" \");\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -2160,7 +2160,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, forwardRef, Input, OnInit } from \"@angular/core\";\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from \"@angular/forms\";\n\n@Component({\n  selector: \"app-input\",\n  templateUrl: \"./input.component.html\",\n  styleUrls: [\"./input.component.scss\"],\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => InputComponent),\n      multi: true,\n    },\n  ],\n})\nexport class InputComponent implements OnInit, ControlValueAccessor {\n  @Input() placeholder = \"\";\n  @Input() type: \"text\" | \"password\" | \"email\" = \"text\";\n  @Input() error = false;\n  @Input() appMask = \"\";\n\n  constructor() {}\n\n  ngOnInit(): void {}\n\n  onInput(event: Event): void {\n    const value = (event.target as HTMLInputElement).value;\n    this.onChange(value);\n  }\n\n  onBlur(): void {\n    this.onTouch();\n  }\n\n  value = \"\";\n  writeValue(value: string): void {\n    this.value = value;\n  }\n\n  onChange: (value: string) => void = () => {};\n  registerOnChange(fn: (v: string) => void): void {\n    this.onChange = fn;\n  }\n\n  onTouch: () => void = () => {};\n  registerOnTouched(fn: () => void): void {\n    this.onTouch = fn;\n  }\n\n  disabled = false;\n  setDisabledState(isDisabled: boolean) {\n    this.disabled = isDisabled;\n  }\n}\n",
+            "sourceCode": "import { Component, forwardRef, Input, OnInit } from \"@angular/core\";\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from \"@angular/forms\";\n\n@Component({\n  selector: \"app-input\",\n  templateUrl: \"./input.component.html\",\n  styleUrls: \"./input.component.scss\"],\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => InputComponent),\n      multi: true,\n    },\n  ],\n})\nexport class InputComponent implements OnInit, ControlValueAccessor {\n  @Input() placeholder = \"\";\n  @Input() type: \"text\" | \"password\" | \"email\" = \"text\";\n  @Input() error = false;\n  @Input() appMask = \"\";\n\n  constructor() {}\n\n  ngOnInit(): void {}\n\n  onInput(event: Event): void {\n    const value = (event.target as HTMLInputElement).value;\n    this.onChange(value);\n  }\n\n  onBlur(): void {\n    this.onTouch();\n  }\n\n  value = \"\";\n  writeValue(value: string): void {\n    this.value = value;\n  }\n\n  onChange: (value: string) => void = () => {};\n  registerOnChange(fn: (v: string) => void): void {\n    this.onChange = fn;\n  }\n\n  onTouch: () => void = () => {};\n  registerOnTouched(fn: () => void): void {\n    this.onTouch = fn;\n  }\n\n  disabled = false;\n  setDisabledState(isDisabled: boolean) {\n    this.disabled = isDisabled;\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -2274,7 +2274,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { ChangeDetectionStrategy, Component, OnInit } from \"@angular/core\";\nimport { FormBuilder, FormGroup, Validators } from \"@angular/forms\";\nimport { AuthService } from \"../services\";\nimport { ErrorMessage } from \"../../error/models/error-message\";\n\n@Component({\n  selector: \"app-login\",\n  templateUrl: \"./login.component.html\",\n  styleUrls: [\"./login.component.scss\"],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class LoginComponent implements OnInit {\n  loginForm: FormGroup;\n  loginMem = false;\n\n  errorWrongAuth = false;\n  errorMessage = ErrorMessage;\n\n  constructor(private fb: FormBuilder, private authService: AuthService) {\n    this.loginForm = this.fb.group({\n      email: [\"\", [Validators.required, Validators.email]],\n      password: [\"\", [Validators.required, Validators.minLength(6)]],\n    });\n  }\n\n  ngOnInit(): void {}\n\n  onSubmit() {\n    if (this.loginForm.invalid) {\n      return;\n    }\n\n    this.authService.login(this.loginForm.value).subscribe(\n      res => {\n        this.authService.memTokens(res, !this.loginMem);\n      },\n      error => {\n        if (error.error?.detail === \"Incorrect email or password\") {\n          this.errorWrongAuth = true;\n        }\n      }\n    );\n  }\n}\n",
+            "sourceCode": "import { ChangeDetectionStrategy, Component, OnInit } from \"@angular/core\";\nimport { FormBuilder, FormGroup, Validators } from \"@angular/forms\";\nimport { AuthService } from \"../services\";\nimport { ErrorMessage } from \"../../error/models/error-message\";\n\n@Component({\n  selector: \"app-login\",\n  templateUrl: \"./login.component.html\",\n  styleUrls: \"./login.component.scss\"],\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class LoginComponent implements OnInit {\n  loginForm: FormGroup;\n  loginMem = false;\n\n  errorWrongAuth = false;\n  errorMessage = ErrorMessage;\n\n  constructor(private fb: FormBuilder, private authService: AuthService) {\n    this.loginForm = this.fb.group({\n      email: [\"\", [Validators.required, Validators.email]],\n      password: [\"\", [Validators.required, Validators.minLength(6)]],\n    });\n  }\n\n  ngOnInit(): void {}\n\n  onSubmit() {\n    if (this.loginForm.invalid) {\n      return;\n    }\n\n    this.authService.login(this.loginForm.value).subscribe(\n      res => {\n        this.authService.memTokens(res, !this.loginMem);\n      },\n      error => {\n        if (error.error?.detail === \"Incorrect email or password\") {\n          this.errorWrongAuth = true;\n        }\n      }\n    );\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -2399,7 +2399,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\nimport { FormBuilder, FormGroup, Validators } from \"@angular/forms\";\nimport { AuthService } from \"../services\";\nimport { ValidationService } from \"../../core/services\";\nimport { ErrorMessage } from \"../../error/models/error-message\";\n\n@Component({\n  selector: \"app-login\",\n  templateUrl: \"./register.component.html\",\n  styleUrls: [\"./register.component.scss\"],\n})\nexport class RegisterComponent implements OnInit {\n  registerForm: FormGroup;\n\n  errorMessages = ErrorMessage;\n\n  constructor(\n    private fb: FormBuilder,\n    private authService: AuthService,\n    private validationService: ValidationService\n  ) {\n    this.registerForm = this.fb.group(\n      {\n        name: [\"\", [Validators.required]],\n        surname: [\"\", [Validators.required]],\n        email: [\"\", [Validators.required, Validators.email]],\n        birthday: [\"\", [Validators.required]],\n        password: [\"\", [Validators.required]],\n        repeatedPassword: [\"\", [Validators.required]],\n      },\n      { validators: [this.validationService.useMatchValidator(\"password\", \"repeatedPassword\")] }\n    );\n  }\n\n  ngOnInit(): void {}\n\n  onSubmit() {\n    if (this.registerForm.invalid) {\n      return;\n    }\n\n    const form = { ...this.registerForm.value };\n    delete form.repeatedPassword;\n    this.authService.register(form).subscribe(res => {\n      this.authService.memTokens(res);\n    });\n  }\n}\n",
+            "sourceCode": "import { Component, OnInit } from \"@angular/core\";\nimport { FormBuilder, FormGroup, Validators } from \"@angular/forms\";\nimport { AuthService } from \"../services\";\nimport { ValidationService } from \"../../core/services\";\nimport { ErrorMessage } from \"../../error/models/error-message\";\n\n@Component({\n  selector: \"app-login\",\n  templateUrl: \"./register.component.html\",\n  styleUrls: \"./register.component.scss\"],\n})\nexport class RegisterComponent implements OnInit {\n  registerForm: FormGroup;\n\n  errorMessages = ErrorMessage;\n\n  constructor(\n    private fb: FormBuilder,\n    private authService: AuthService,\n    private validationService: ValidationService\n  ) {\n    this.registerForm = this.fb.group(\n      {\n        name: [\"\", [Validators.required]],\n        surname: [\"\", [Validators.required]],\n        email: [\"\", [Validators.required, Validators.email]],\n        birthday: [\"\", [Validators.required]],\n        password: [\"\", [Validators.required]],\n        repeatedPassword: [\"\", [Validators.required]],\n      },\n      { validators: [this.validationService.useMatchValidator(\"password\", \"repeatedPassword\")] }\n    );\n  }\n\n  ngOnInit(): void {}\n\n  onSubmit() {\n    if (this.registerForm.invalid) {\n      return;\n    }\n\n    const form = { ...this.registerForm.value };\n    delete form.repeatedPassword;\n    this.authService.register(form).subscribe(res => {\n      this.authService.memTokens(res);\n    });\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {
@@ -2832,7 +2832,7 @@
             "description": "",
             "rawdescription": "\n",
             "type": "component",
-            "sourceCode": "import { Component, forwardRef, Input, OnInit } from \"@angular/core\";\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from \"@angular/forms\";\n\n@Component({\n  selector: \"app-select\",\n  templateUrl: \"./select.component.html\",\n  styleUrls: [\"./select.component.scss\"],\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => SelectComponent),\n      multi: true,\n    },\n  ],\n})\nexport class SelectComponent implements OnInit, ControlValueAccessor {\n  @Input() basicLabel = \"\";\n  @Input() options: { value: string; label: string; id: number }[] = [];\n\n  isOpen = false;\n\n  selectedId?: number;\n  constructor() {}\n\n  ngOnInit(): void {}\n\n  writeValue(label: string) {\n    this.selectedId = this.getId(label);\n  }\n\n  disabled = false;\n  setDisabledState(isDisabled: boolean) {\n    this.disabled = isDisabled;\n  }\n\n  onChange: (value: string) => void = () => {};\n  registerOnChange(fn: any) {\n    this.onChange = fn;\n  }\n\n  onTouched: () => void = () => {};\n  registerOnTouched(fn: any) {\n    this.onTouched = fn;\n  }\n\n  onUpdate(event: MouseEvent, id: number): void {\n    event.stopPropagation();\n    if (this.disabled) {\n      return;\n    }\n\n    this.selectedId = id;\n    this.onChange(this.getValue(id) ?? this.options[0].value);\n\n    this.isOpen = false;\n  }\n\n  getLabel(optionId: number): string | undefined {\n    return this.options.find(el => el.id === optionId)?.label;\n  }\n\n  getValue(optionId: number): string | undefined {\n    return this.options.find(el => el.id === optionId)?.value;\n  }\n\n  getId(label: string): number | undefined {\n    return this.options.find(el => el.label === label)?.id;\n  }\n\n  onClickOutside() {\n    this.isOpen = false;\n  }\n}\n",
+            "sourceCode": "import { Component, forwardRef, Input, OnInit } from \"@angular/core\";\nimport { ControlValueAccessor, NG_VALUE_ACCESSOR } from \"@angular/forms\";\n\n@Component({\n  selector: \"app-select\",\n  templateUrl: \"./select.component.html\",\n  styleUrls: \"./select.component.scss\"],\n  providers: [\n    {\n      provide: NG_VALUE_ACCESSOR,\n      useExisting: forwardRef(() => SelectComponent),\n      multi: true,\n    },\n  ],\n})\nexport class SelectComponent implements OnInit, ControlValueAccessor {\n  @Input() basicLabel = \"\";\n  @Input() options: { value: string; label: string; id: number }[] = [];\n\n  isOpen = false;\n\n  selectedId?: number;\n  constructor() {}\n\n  ngOnInit(): void {}\n\n  writeValue(label: string) {\n    this.selectedId = this.getId(label);\n  }\n\n  disabled = false;\n  setDisabledState(isDisabled: boolean) {\n    this.disabled = isDisabled;\n  }\n\n  onChange: (value: string) => void = () => {};\n  registerOnChange(fn: any) {\n    this.onChange = fn;\n  }\n\n  onTouched: () => void = () => {};\n  registerOnTouched(fn: any) {\n    this.onTouched = fn;\n  }\n\n  onUpdate(event: MouseEvent, id: number): void {\n    event.stopPropagation();\n    if (this.disabled) {\n      return;\n    }\n\n    this.selectedId = id;\n    this.onChange(this.getValue(id) ?? this.options[0].value);\n\n    this.isOpen = false;\n  }\n\n  getLabel(optionId: number): string | undefined {\n    return this.options.find(el => el.id === optionId)?.label;\n  }\n\n  getValue(optionId: number): string | undefined {\n    return this.options.find(el => el.id === optionId)?.value;\n  }\n\n  getId(label: string): number | undefined {\n    return this.options.find(el => el.label === label)?.id;\n  }\n\n  onClickOutside() {\n    this.isOpen = false;\n  }\n}\n",
             "assetsDirs": [],
             "styleUrlsData": [
                 {

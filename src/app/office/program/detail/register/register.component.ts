@@ -11,7 +11,7 @@ import { ProgramService } from "@office/program/services/program.service";
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",
-  styleUrls: ["./register.component.scss"],
+  styleUrl: "./register.component.scss",
 })
 export class ProgramRegisterComponent implements OnInit, OnDestroy {
   constructor(

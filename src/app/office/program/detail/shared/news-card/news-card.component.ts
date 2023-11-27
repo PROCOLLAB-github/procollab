@@ -22,7 +22,7 @@ import { Observable, tap, forkJoin, noop } from "rxjs";
 @Component({
   selector: "app-program-news-card",
   templateUrl: "./news-card.component.html",
-  styleUrls: ["./news-card.component.scss"],
+  styleUrl: "./news-card.component.scss",
 })
 export class ProgramNewsCardComponent implements OnInit {
   constructor(

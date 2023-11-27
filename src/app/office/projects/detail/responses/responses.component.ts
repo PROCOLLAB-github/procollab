@@ -10,7 +10,7 @@ import { NavService } from "@services/nav.service";
 @Component({
   selector: "app-responses",
   templateUrl: "./responses.component.html",
-  styleUrls: ["./responses.component.scss"],
+  styleUrl: "./responses.component.scss",
 })
 export class ProjectResponsesComponent implements OnInit, OnDestroy {
   constructor(

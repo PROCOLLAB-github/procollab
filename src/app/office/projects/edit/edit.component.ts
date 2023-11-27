@@ -22,7 +22,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 @Component({
   selector: "app-edit",
   templateUrl: "./edit.component.html",
-  styleUrls: ["./edit.component.scss"],
+  styleUrl: "./edit.component.scss",
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

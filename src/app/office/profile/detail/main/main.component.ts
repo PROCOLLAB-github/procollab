@@ -14,7 +14,7 @@ import { NewsCardComponent } from "@office/shared/news-card/news-card.component"
 @Component({
   selector: "app-profile-main",
   templateUrl: "./main.component.html",
-  styleUrls: ["./main.component.scss"],
+  styleUrl: "./main.component.scss",
 })
 export class ProfileMainComponent implements OnInit {
   constructor(

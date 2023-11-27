@@ -9,7 +9,7 @@ import { Observable, map } from "rxjs";
 @Component({
   selector: "app-projects",
   templateUrl: "./projects.component.html",
-  styleUrls: ["./projects.component.scss"],
+  styleUrl: "./projects.component.scss",
 })
 export class ProfileProjectsComponent implements OnInit {
   constructor(private readonly route: ActivatedRoute, public readonly authService: AuthService) {}

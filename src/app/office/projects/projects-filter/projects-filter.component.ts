@@ -11,7 +11,7 @@ import { ProjectService } from "@services/project.service";
 @Component({
   selector: "app-projects-filter",
   templateUrl: "./projects-filter.component.html",
-  styleUrls: ["./projects-filter.component.scss"],
+  styleUrl: "./projects-filter.component.scss",
 })
 export class ProjectsFilterComponent implements OnInit {
   constructor(

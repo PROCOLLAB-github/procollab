@@ -8,7 +8,7 @@ import { AuthService } from "@auth/services";
 @Component({
   selector: "app-email-verification",
   templateUrl: "./email-verification.component.html",
-  styleUrls: ["./email-verification.component.scss"],
+  styleUrl: "./email-verification.component.scss",
 })
 export class EmailVerificationComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private readonly authService: AuthService) {}

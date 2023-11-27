@@ -4,7 +4,7 @@ import { getFormattedFileSize } from "@utils/formatted-file-size";
 @Component({
   selector: "app-file-item",
   templateUrl: "./file-item.component.html",
-  styleUrls: ["./file-item.component.scss"],
+  styleUrl: "./file-item.component.scss",
 })
 export class FileItemComponent implements OnInit {
   constructor() {}

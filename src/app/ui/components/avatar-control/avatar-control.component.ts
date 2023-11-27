@@ -9,7 +9,7 @@ import { catchError, concatMap, map, of } from "rxjs";
 @Component({
   selector: "app-avatar-control",
   templateUrl: "./avatar-control.component.html",
-  styleUrls: ["./avatar-control.component.scss"],
+  styleUrl: "./avatar-control.component.scss",
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -22,7 +22,7 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
   constructor(private fileService: FileService) {}
 
   @Input() size = 140;
-  @Input() error = false
+  @Input() error = false;
 
   ngOnInit(): void {}
 
