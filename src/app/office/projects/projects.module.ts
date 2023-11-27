@@ -2,7 +2,6 @@
 
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ProjectsRoutingModule } from "./projects-routing.module";
 import { CoreModule } from "@core/core.module";
 import { UiModule } from "@ui/ui.module";
 import { ProjectsComponent } from "./projects.component";
@@ -16,14 +15,20 @@ import { ProjectCardComponent } from "../shared/project-card/project-card.compon
 import { VacancySendComponent } from "../vacancy/send/send.component";
 
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, CoreModule, UiModule, ProjectsRoutingModule, ProjectsComponent,
-        ProjectEditComponent,
-        ProjectsListComponent,
-        ProjectsFilterComponent,
-        ProjectCardComponent,
-        InviteCardComponent,
-        VacancyCardComponent,
-        VacancySendComponent],
-    exports: [ProjectCardComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    CoreModule,
+    UiModule,
+    ProjectsComponent,
+    ProjectEditComponent,
+    ProjectsListComponent,
+    ProjectsFilterComponent,
+    ProjectCardComponent,
+    InviteCardComponent,
+    VacancyCardComponent,
+    VacancySendComponent,
+  ],
+  exports: [ProjectCardComponent],
 })
 export class ProjectsModule {}

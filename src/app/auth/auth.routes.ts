@@ -1,8 +1,7 @@
 /** @format */
 
-import { RouterModule, Routes } from "@angular/router";
+import { Routes } from "@angular/router";
 import { AuthComponent } from "./auth.component";
-import { NgModule } from "@angular/core";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 import { EmailVerificationComponent } from "./email-verification/email-verification.component";
@@ -11,7 +10,7 @@ import { ResetPasswordComponent } from "@auth/reset-password/reset-password.comp
 import { SetPasswordComponent } from "@auth/set-password/set-password.component";
 import { ConfirmPasswordResetComponent } from "@auth/confirm-password-reset/confirm-password-reset.component";
 
-const routes: Routes = [
+export const AUTH_ROUTES: Routes = [
   {
     path: "",
     component: AuthComponent,
@@ -52,9 +51,3 @@ const routes: Routes = [
     component: ConfirmEmailComponent,
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class AuthRoutingModule {}

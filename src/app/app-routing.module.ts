@@ -12,21 +12,21 @@ const routes: Routes = [
   },
   {
     path: "auth",
-    loadChildren: () => import("./auth/auth.module").then(m => m.AuthModule),
+    loadChildren: () => import("./auth/auth.routes").then(c => c.AUTH_ROUTES),
   },
   {
     path: "error",
-    loadChildren: () => import("./error/error.module").then(m => m.ErrorModule),
+    loadChildren: () => import("./error/error.routes").then(c => c.ERROR_ROUTES),
   },
   {
     path: "office",
-    loadChildren: () => import("./office/office.module").then(m => m.OfficeModule),
+    loadChildren: () => import("./office/office.routes").then(c => c.OFFICE_ROUTES),
     canActivate: [AuthRequiredGuard],
   },
   {
     path: "**",
-    redirectTo: 'error/404'
-  }
+    redirectTo: "error/404",
+  },
 ];
 
 @NgModule({

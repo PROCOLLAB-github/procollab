@@ -1,7 +1,6 @@
 /** @format */
 
-import { RouterModule, Routes } from "@angular/router";
-import { NgModule } from "@angular/core";
+import { Routes } from "@angular/router";
 import { OfficeComponent } from "./office.component";
 import { ProfileEditComponent } from "./profile/edit/edit.component";
 import { MembersComponent } from "./members/members.component";
@@ -11,10 +10,10 @@ import { OfficeResolver } from "./office.resolver";
 import { MentorsComponent } from "./mentors/mentors.component";
 import { MentorsResolver } from "./mentors/mentors.resolver";
 
-const routes: Routes = [
+export const OFFICE_ROUTES: Routes = [
   {
     path: "onboarding",
-    loadChildren: () => import("./onboarding/onboarding.module").then(m => m.OnboardingModule),
+    loadChildren: () => import("./onboarding/onboarding.routes").then(c => c.ONBOARDING_ROUTES),
   },
   {
     path: "",
@@ -30,11 +29,11 @@ const routes: Routes = [
       },
       {
         path: "projects",
-        loadChildren: () => import("./projects/projects.module").then(m => m.ProjectsModule),
+        loadChildren: () => import("./projects/projects.routes").then(c => c.PROJECTS_ROUTES),
       },
       {
         path: "program",
-        loadChildren: () => import("./program/program.module").then(m => m.ProgramModule),
+        loadChildren: () => import("./program/program.routes").then(c => c.PROGRAM_ROUTES),
       },
       {
         path: "vacancy/:vacancyId",
@@ -42,7 +41,7 @@ const routes: Routes = [
       },
       {
         path: "chats",
-        loadChildren: () => import("./chat/chat.module").then(m => m.ChatModule),
+        loadChildren: () => import("./chat/chat.routes").then(c => c.CHAT_ROUTES),
       },
       {
         path: "members",
@@ -65,14 +64,12 @@ const routes: Routes = [
       {
         path: "profile/:id",
         loadChildren: () =>
-          import("./profile/detail/profile-detail.module").then(m => m.ProfileDetailModule),
+          import("./profile/detail/profile-detail.routes").then(c => c.PROFILE_DETAIL_ROUTES),
+      },
+      {
+        path: "**",
+        redirectTo: "/error/404",
       },
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class OfficeRoutingModule {}

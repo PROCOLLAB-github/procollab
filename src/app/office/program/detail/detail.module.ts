@@ -2,7 +2,6 @@
 
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ProgramDetailRoutingModule } from "@office/program/detail/detail-routing.module";
 import { ProgramDetailComponent } from "./detail/detail.component";
 import { UiModule } from "@ui/ui.module";
 import { ProgramDetailMainComponent } from "./main/main.component";
@@ -17,22 +16,21 @@ import { OfficeModule } from "@office/office.module";
 import { ProgramNewsCardComponent } from "./shared/news-card/news-card.component";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        ProgramDetailRoutingModule,
-        UiModule,
-        CoreModule,
-        ReactiveFormsModule,
-        ProjectsModule,
-        ProgramModule,
-        OfficeModule,
-        ProgramDetailComponent,
-        ProgramDetailMainComponent,
-        ProgramRegisterComponent,
-        ProgramProjectsComponent,
-        ProgramMembersComponent,
-        ProgramNewsCardComponent,
-    ],
-    exports: [ProgramNewsCardComponent],
+  imports: [
+    CommonModule,
+    UiModule,
+    CoreModule,
+    ReactiveFormsModule,
+    ProjectsModule,
+    ProgramModule,
+    OfficeModule,
+    ProgramDetailComponent,
+    ProgramDetailMainComponent,
+    ProgramRegisterComponent,
+    ProgramProjectsComponent,
+    ProgramMembersComponent,
+    ProgramNewsCardComponent,
+  ],
+  exports: [ProgramNewsCardComponent],
 })
 export class ProgramDetailModule {}

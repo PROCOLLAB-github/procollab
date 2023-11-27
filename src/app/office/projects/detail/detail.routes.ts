@@ -13,7 +13,7 @@ import { ProjectDetailResolver } from "@office/projects/detail/detail.resolver";
 import { NewsDetailComponent } from "@office/projects/detail/news-detail/news-detail.component";
 import { NewsDetailResolver } from "@office/projects/detail/news-detail/news-detail.resolver";
 
-const routes: Routes = [
+export const PROJECT_DETAIL_ROUTES: Routes = [
   {
     path: "",
     component: ProjectDetailComponent,
@@ -54,9 +54,3 @@ const routes: Routes = [
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ProjectDetailRoutingModule {}

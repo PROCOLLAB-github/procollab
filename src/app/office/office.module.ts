@@ -2,7 +2,6 @@
 
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { OfficeRoutingModule } from "./office-routing.module";
 import { OfficeComponent } from "./office.component";
 import { HeaderComponent } from "./shared/header/header.component";
 import { UiModule } from "@ui/ui.module";
@@ -29,41 +28,40 @@ import { NewsFormComponent } from "./shared/news-form/news-form.component";
 import { NewsCardComponent } from "./shared/news-card/news-card.component";
 
 @NgModule({
-    imports: [
-        OfficeRoutingModule,
-        ProjectsModule,
-        CommonModule,
-        UiModule,
-        CoreModule,
-        ClickOutsideModule,
-        ReactiveFormsModule,
-        NgxMaskModule,
-        AutosizeModule,
-        ScrollingModule,
-        OfficeComponent,
-        HeaderComponent,
-        NavComponent,
-        InviteManageCardComponent,
-        ProfileDetailComponent,
-        ProfileEditComponent,
-        MembersComponent,
-        MentorsComponent,
-        MemberCardComponent,
-        AdvertCardComponent,
-        MessageInputComponent,
-        SidebarComponent,
-        ImgCardComponent,
-        ChatWindowComponent,
-        NewsFormComponent,
-        NewsCardComponent,
-    ],
-    exports: [
-        MessageInputComponent,
-        ImgCardComponent,
-        MemberCardComponent,
-        ChatWindowComponent,
-        NewsFormComponent,
-        NewsCardComponent,
-    ],
+  imports: [
+    ProjectsModule,
+    CommonModule,
+    UiModule,
+    CoreModule,
+    ClickOutsideModule,
+    ReactiveFormsModule,
+    NgxMaskModule,
+    AutosizeModule,
+    ScrollingModule,
+    OfficeComponent,
+    HeaderComponent,
+    NavComponent,
+    InviteManageCardComponent,
+    ProfileDetailComponent,
+    ProfileEditComponent,
+    MembersComponent,
+    MentorsComponent,
+    MemberCardComponent,
+    AdvertCardComponent,
+    MessageInputComponent,
+    SidebarComponent,
+    ImgCardComponent,
+    ChatWindowComponent,
+    NewsFormComponent,
+    NewsCardComponent,
+  ],
+  exports: [
+    MessageInputComponent,
+    ImgCardComponent,
+    MemberCardComponent,
+    ChatWindowComponent,
+    NewsFormComponent,
+    NewsCardComponent,
+  ],
 })
 export class OfficeModule {}

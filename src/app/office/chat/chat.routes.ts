@@ -1,12 +1,11 @@
 /** @format */
 
-import { RouterModule, Routes } from "@angular/router";
+import { Routes } from "@angular/router";
 import { ChatComponent } from "@office/chat/chat.component";
-import { NgModule } from "@angular/core";
 import { ChatResolver } from "@office/chat/chat.resolver";
 import { ChatGroupsResolver } from "@office/chat/chat-groups.resolver";
 
-const routes: Routes = [
+export const CHAT_ROUTES: Routes = [
   {
     path: "",
     pathMatch: "full",
@@ -28,12 +27,6 @@ const routes: Routes = [
   },
   {
     path: ":chatId",
-    loadChildren: () => import("./chat-direct/chat-direct.module").then(m => m.ChatDirectModule),
+    loadChildren: () => import("./chat-direct/chat-direct.routes").then(c => c.CHAT_DIRECT_ROUTES),
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ChatRoutingModule {}

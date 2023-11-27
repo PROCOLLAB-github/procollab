@@ -1,7 +1,6 @@
 /** @format */
 
 import { NgModule } from "@angular/core";
-import { ProjectDetailRoutingModule } from "./detail-routing.module";
 import { UiModule } from "@ui/ui.module";
 import { CoreModule } from "@core/core.module";
 import { CommonModule } from "@angular/common";
@@ -17,26 +16,24 @@ import { ProjectNewsService } from "@office/projects/detail/services/project-new
 import { ClickOutsideModule } from "ng-click-outside";
 import { AutosizeModule } from "ngx-autosize";
 import { NewsDetailComponent } from "./news-detail/news-detail.component";
-import { NewsDetailResolver } from "@office/projects/detail/news-detail/news-detail.resolver";
 
 @NgModule({
-    imports: [
-        UiModule,
-        CoreModule,
-        CommonModule,
-        ProjectDetailRoutingModule,
-        OfficeModule,
-        ScrollingModule,
-        ReactiveFormsModule,
-        ClickOutsideModule,
-        AutosizeModule,
-        ProjectInfoComponent,
-        ProjectResponsesComponent,
-        ResponseCardComponent,
-        ProjectDetailComponent,
-        ProjectChatComponent,
-        NewsDetailComponent,
-    ],
-    providers: [ProjectNewsService],
+  imports: [
+    UiModule,
+    CoreModule,
+    CommonModule,
+    OfficeModule,
+    ScrollingModule,
+    ReactiveFormsModule,
+    ClickOutsideModule,
+    AutosizeModule,
+    ProjectInfoComponent,
+    ProjectResponsesComponent,
+    ResponseCardComponent,
+    ProjectDetailComponent,
+    ProjectChatComponent,
+    NewsDetailComponent,
+  ],
+  providers: [ProjectNewsService],
 })
 export class ProjectDetailModule {}

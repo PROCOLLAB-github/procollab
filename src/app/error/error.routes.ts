@@ -1,12 +1,11 @@
 /** @format */
 
-import { RouterModule, Routes } from "@angular/router";
+import { Routes } from "@angular/router";
 import { ErrorComponent } from "./error.component";
-import { NgModule } from "@angular/core";
 import { ErrorCodeComponent } from "./code/error-code.component";
 import { ErrorNotFoundComponent } from "./not-found/error-not-found.component";
 
-const routes: Routes = [
+export const ERROR_ROUTES: Routes = [
   {
     path: "",
     component: ErrorComponent,
@@ -22,10 +21,3 @@ const routes: Routes = [
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
-export class ErrorRoutingModule {
-}
