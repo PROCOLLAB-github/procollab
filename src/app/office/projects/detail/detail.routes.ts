@@ -1,7 +1,6 @@
 /** @format */
 
-import { RouterModule, Routes } from "@angular/router";
-import { NgModule } from "@angular/core";
+import { Routes } from "@angular/router";
 import { ProjectInfoComponent } from "./info/info.component";
 import { ProjectInfoResolver } from "./info/info.resolver";
 import { ProjectResponsesComponent } from "./responses/responses.component";

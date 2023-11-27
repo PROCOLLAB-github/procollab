@@ -1,7 +1,6 @@
 /** @format */
 
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes, UrlMatchResult, UrlSegment } from "@angular/router";
+import { Routes } from "@angular/router";
 import { ProjectsComponent } from "./projects.component";
 import { ProjectsResolver } from "./projects.resolver";
 import { ProjectsListComponent } from "./list/list.component";
