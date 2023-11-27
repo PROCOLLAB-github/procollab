@@ -7,6 +7,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { NgxMaskModule } from "ngx-mask";
 
 describe("ChatDirectComponent", () => {
   let component: ChatDirectComponent;
@@ -18,9 +19,14 @@ describe("ChatDirectComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, HttpClientTestingModule, ChatDirectComponent],
-    providers: [{ provide: AuthService, useValue: authSpy }],
-}).compileComponents();
+      imports: [
+        RouterTestingModule,
+        HttpClientTestingModule,
+        ChatDirectComponent,
+        NgxMaskModule.forRoot(),
+      ],
+      providers: [{ provide: AuthService, useValue: authSpy }],
+    }).compileComponents();
   });
 
   beforeEach(() => {

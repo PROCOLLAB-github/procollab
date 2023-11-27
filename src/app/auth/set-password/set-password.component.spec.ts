@@ -7,8 +7,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { AuthService } from "@auth/services";
 import { of } from "rxjs";
-import { CoreModule } from "@core/core.module";
-import { UiModule } from "@ui/ui.module";
 import { NgxMaskModule } from "ngx-mask";
 
 describe("SetPasswordComponent", () => {
@@ -19,17 +17,15 @@ describe("SetPasswordComponent", () => {
     const authSpy = jasmine.createSpyObj({ setPassword: of({}) });
 
     await TestBed.configureTestingModule({
-    imports: [
+      imports: [
         ReactiveFormsModule,
         RouterTestingModule,
-        CoreModule,
         ReactiveFormsModule,
         NgxMaskModule.forRoot(),
-        UiModule,
         SetPasswordComponent,
-    ],
-    providers: [{ provide: AuthService, useValue: authSpy }],
-}).compileComponents();
+      ],
+      providers: [{ provide: AuthService, useValue: authSpy }],
+    }).compileComponents();
   });
 
   beforeEach(() => {
