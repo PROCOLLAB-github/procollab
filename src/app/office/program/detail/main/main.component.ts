@@ -9,17 +9,38 @@ import {
   ChangeDetectorRef,
 } from "@angular/core";
 import { ProgramService } from "@office/program/services/program.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { concatMap, map, noop, of, Subscription, tap } from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { ProgramNewsService } from "@office/program/services/program-news.service";
 import { ProjectNews, ProjectNewsRes } from "@office/projects/models/project-news.model";
 import { expandElement } from "@utils/expand-element";
+import { ParseLinksPipe } from "../../../../core/pipes/parse-links.pipe";
+import { ParseBreaksPipe } from "../../../../core/pipes/parse-breaks.pipe";
+import { UserLinksPipe } from "../../../../core/pipes/user-links.pipe";
+import { ProgramNewsCardComponent } from "../shared/news-card/news-card.component";
+import { ButtonComponent } from "../../../../ui/components/button/button.component";
+import { IconComponent } from "../../../../ui/components/icon/icon.component";
+import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
+import { NgIf, NgFor } from "@angular/common";
 
 @Component({
-  selector: "app-main",
-  templateUrl: "./main.component.html",
-  styleUrl: "./main.component.scss",
+    selector: "app-main",
+    templateUrl: "./main.component.html",
+    styleUrl: "./main.component.scss",
+    standalone: true,
+    imports: [
+        NgIf,
+        AvatarComponent,
+        IconComponent,
+        ButtonComponent,
+        RouterLink,
+        NgFor,
+        ProgramNewsCardComponent,
+        UserLinksPipe,
+        ParseBreaksPipe,
+        ParseLinksPipe,
+    ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   constructor(

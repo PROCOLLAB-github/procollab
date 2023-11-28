@@ -10,7 +10,7 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import {
   BehaviorSubject,
   concatMap,
@@ -30,16 +30,27 @@ import {
 } from "rxjs";
 import { MembersResult, User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
 import { capitalizeString } from "@utils/capitalize-string";
+import { MemberCardComponent } from "../shared/member-card/member-card.component";
+import { NgFor } from "@angular/common";
+import { SearchComponent } from "../../ui/components/search/search.component";
 
 @Component({
-  selector: "app-members",
-  templateUrl: "./members.component.html",
-  styleUrl: "./members.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-members",
+    templateUrl: "./members.component.html",
+    styleUrl: "./members.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        ReactiveFormsModule,
+        SearchComponent,
+        NgFor,
+        RouterLink,
+        MemberCardComponent,
+    ],
 })
 export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(

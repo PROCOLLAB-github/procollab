@@ -12,9 +12,8 @@ describe("ProgramHeadComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [ProgramHeadComponent],
-    }).compileComponents();
+    imports: [RouterTestingModule, ProgramHeadComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {

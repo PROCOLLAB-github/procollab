@@ -1,16 +1,28 @@
 /** @format */
 
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { concatMap, fromEvent, map, noop, Observable, of, tap, throttleTime } from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { MembersResult, User } from "@auth/models/user.model";
 import { ProgramService } from "@office/program/services/program.service";
+import { MemberCardComponent } from "../../../shared/member-card/member-card.component";
+import { ProgramHeadComponent } from "../../shared/program-head/program-head.component";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: "app-members",
-  templateUrl: "./members.component.html",
-  styleUrl: "./members.component.scss",
+    selector: "app-members",
+    templateUrl: "./members.component.html",
+    styleUrl: "./members.component.scss",
+    standalone: true,
+    imports: [
+        NgIf,
+        ProgramHeadComponent,
+        NgFor,
+        RouterLink,
+        MemberCardComponent,
+        AsyncPipe,
+    ],
 })
 export class ProgramMembersComponent implements OnInit {
   constructor(

@@ -1,11 +1,15 @@
 /** @format */
 
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { NgIf } from "@angular/common";
 
 @Component({
-  selector: "app-img-card",
-  templateUrl: "./img-card.component.html",
-  styleUrl: "./img-card.component.scss",
+    selector: "app-img-card",
+    templateUrl: "./img-card.component.html",
+    styleUrl: "./img-card.component.scss",
+    standalone: true,
+    imports: [NgIf, IconComponent],
 })
 export class ImgCardComponent implements OnInit {
   constructor() {}

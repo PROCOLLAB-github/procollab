@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ResolveEnd, ResolveStart, Router } from "@angular/router";
+import { ResolveEnd, ResolveStart, Router, RouterOutlet } from "@angular/router";
 import { AuthService } from "@auth/services";
 import {
   debounceTime,
@@ -15,11 +15,20 @@ import {
   Subscription,
   throttleTime,
 } from "rxjs";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { NgIf, AsyncPipe } from "@angular/common";
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrl: "./app.component.scss",
+    selector: "app-root",
+    templateUrl: "./app.component.html",
+    styleUrl: "./app.component.scss",
+    standalone: true,
+    imports: [
+        NgIf,
+        MatProgressBarModule,
+        RouterOutlet,
+        AsyncPipe,
+    ],
 })
 export class AppComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService, private router: Router) {}

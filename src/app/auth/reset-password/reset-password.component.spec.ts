@@ -7,8 +7,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
 import { RouterTestingModule } from "@angular/router/testing";
-import { CoreModule } from "@core/core.module";
-import { UiModule } from "@ui/ui.module";
 import { NgxMaskModule } from "ngx-mask";
 
 describe("ResetPasswordComponent", () => {
@@ -22,12 +20,10 @@ describe("ResetPasswordComponent", () => {
       imports: [
         ReactiveFormsModule,
         RouterTestingModule,
-        CoreModule,
-        UiModule,
         NgxMaskModule.forRoot(),
+        ResetPasswordComponent,
       ],
       providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [ResetPasswordComponent],
     }).compileComponents();
   });
 

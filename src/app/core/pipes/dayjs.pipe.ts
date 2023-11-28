@@ -10,7 +10,8 @@ dayjs.extend(relativeTime);
 dayjs.extend(isToday);
 
 @Pipe({
-  name: "dayjs",
+    name: "dayjs",
+    standalone: true,
 })
 export class DayjsPipe implements PipeTransform {
   constructor() {

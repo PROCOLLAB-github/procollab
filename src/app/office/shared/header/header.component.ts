@@ -6,11 +6,26 @@ import { AuthService } from "@auth/services";
 import { Invite } from "@models/invite.model";
 import { InviteService } from "@services/invite.service";
 import { Router } from "@angular/router";
+import { ProfileInfoComponent } from "../../../ui/components/profile-info/profile-info.component";
+import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
+import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { ClickOutsideModule } from "ng-click-outside";
 
 @Component({
-  selector: "app-header",
-  templateUrl: "./header.component.html",
-  styleUrl: "./header.component.scss",
+    selector: "app-header",
+    templateUrl: "./header.component.html",
+    styleUrl: "./header.component.scss",
+    standalone: true,
+    imports: [
+        ClickOutsideModule,
+        NgIf,
+        IconComponent,
+        NgFor,
+        InviteManageCardComponent,
+        ProfileInfoComponent,
+        AsyncPipe,
+    ],
 })
 export class HeaderComponent implements OnInit {
   constructor(

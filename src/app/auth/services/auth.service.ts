@@ -14,7 +14,9 @@ import { plainToInstance } from "class-transformer";
 import { Tokens } from "../models/tokens.model";
 import { User, UserRole } from "../models/user.model";
 
-@Injectable()
+@Injectable({
+  providedIn: "root",
+})
 export class AuthService {
   constructor(private apiService: ApiService) {}
 

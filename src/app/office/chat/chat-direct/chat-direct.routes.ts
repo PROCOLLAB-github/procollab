@@ -1,11 +1,10 @@
 /** @format */
 
-import { RouterModule, Routes } from "@angular/router";
-import { NgModule } from "@angular/core";
+import { Routes } from "@angular/router";
 import { ChatDirectComponent } from "@office/chat/chat-direct/chat-direct/chat-direct.component";
 import { ChatDirectResolver } from "@office/chat/chat-direct/chat-direct/chat-direct.resolver";
 
-const routes: Routes = [
+export const CHAT_DIRECT_ROUTES: Routes = [
   {
     path: "",
     component: ChatDirectComponent,
@@ -14,9 +13,3 @@ const routes: Routes = [
     },
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ChatDirectRoutingModule {}

@@ -1,13 +1,12 @@
 /** @format */
 
-import { RouterModule, Routes } from "@angular/router";
-import { NgModule } from "@angular/core";
+import { Routes } from "@angular/router";
 import { ProfileDetailComponent } from "./profile-detail.component";
 import { ProfileDetailResolver } from "./profile-detail.resolver";
 import { ProfileMainComponent } from "./main/main.component";
 import { ProfileProjectsComponent } from "./projects/projects.component";
 
-const routes: Routes = [
+export const PROFILE_DETAIL_ROUTES: Routes = [
   {
     path: "",
     component: ProfileDetailComponent,
@@ -26,9 +25,3 @@ const routes: Routes = [
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ProfileDetailRoutingModule {}

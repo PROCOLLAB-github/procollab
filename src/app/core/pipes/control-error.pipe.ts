@@ -4,11 +4,12 @@ import { Pipe, PipeTransform } from "@angular/core";
 import { AbstractControl, ValidationErrors } from "@angular/forms";
 
 @Pipe({
-  name: "controlError",
-  /**
-   * Otherwise, don't work
-   */
-  pure: false,
+    name: "controlError",
+    /**
+     * Otherwise, don't work
+     */
+    pure: false,
+    standalone: true,
 })
 export class ControlErrorPipe implements PipeTransform {
   transform(value: AbstractControl, errorName?: keyof ValidationErrors): boolean {

@@ -13,9 +13,8 @@ describe("RegisterComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, ReactiveFormsModule, HttpClientTestingModule],
-      declarations: [ProgramRegisterComponent],
-    }).compileComponents();
+    imports: [RouterTestingModule, ReactiveFormsModule, HttpClientTestingModule, ProgramRegisterComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {

@@ -7,8 +7,6 @@ import { of } from "rxjs";
 import { AuthService } from "@auth/services";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
-import { CoreModule } from "@core/core.module";
-import { UiModule } from "@ui/ui.module";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { NgxMaskModule } from "ngx-mask";
 
@@ -27,12 +25,10 @@ describe("StageZeroComponent", () => {
       imports: [
         ReactiveFormsModule,
         RouterTestingModule,
-        CoreModule,
-        UiModule,
         NgxMaskModule.forRoot(),
         HttpClientTestingModule,
+        OnboardingStageZeroComponent,
       ],
-      declarations: [OnboardingStageZeroComponent],
       providers: [{ provide: AuthService, useValue: authSpy }],
     }).compileComponents();
   });

@@ -5,11 +5,20 @@ import { AuthService } from "@auth/services";
 import { concatMap, Subscription, take } from "rxjs";
 import { Router } from "@angular/router";
 import { OnboardingService } from "../services/onboarding.service";
+import { NgIf } from "@angular/common";
+import { ButtonComponent } from "../../../ui/components/button/button.component";
+import { UserTypeCardComponent } from "../user-type-card/user-type-card.component";
 
 @Component({
-  selector: "app-stage-two",
-  templateUrl: "./stage-two.component.html",
-  styleUrl: "./stage-two.component.scss",
+    selector: "app-stage-two",
+    templateUrl: "./stage-two.component.html",
+    styleUrl: "./stage-two.component.scss",
+    standalone: true,
+    imports: [
+        UserTypeCardComponent,
+        ButtonComponent,
+        NgIf,
+    ],
 })
 export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
   constructor(

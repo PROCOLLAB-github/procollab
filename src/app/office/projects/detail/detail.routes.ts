@@ -1,7 +1,6 @@
 /** @format */
 
-import { RouterModule, Routes } from "@angular/router";
-import { NgModule } from "@angular/core";
+import { Routes } from "@angular/router";
 import { ProjectInfoComponent } from "./info/info.component";
 import { ProjectInfoResolver } from "./info/info.resolver";
 import { ProjectResponsesComponent } from "./responses/responses.component";
@@ -13,7 +12,7 @@ import { ProjectDetailResolver } from "@office/projects/detail/detail.resolver";
 import { NewsDetailComponent } from "@office/projects/detail/news-detail/news-detail.component";
 import { NewsDetailResolver } from "@office/projects/detail/news-detail/news-detail.resolver";
 
-const routes: Routes = [
+export const PROJECT_DETAIL_ROUTES: Routes = [
   {
     path: "",
     component: ProjectDetailComponent,
@@ -54,9 +53,3 @@ const routes: Routes = [
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ProjectDetailRoutingModule {}

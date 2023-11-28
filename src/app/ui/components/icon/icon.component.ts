@@ -3,9 +3,10 @@
 import { Component, Input, OnInit } from "@angular/core";
 
 @Component({
-  selector: "[appIcon]",
-  templateUrl: "./icon.component.html",
-  styleUrl: "./icon.component.scss",
+    selector: "[appIcon]",
+    templateUrl: "./icon.component.html",
+    styleUrl: "./icon.component.scss",
+    standalone: true,
 })
 export class IconComponent implements OnInit {
   @Input()

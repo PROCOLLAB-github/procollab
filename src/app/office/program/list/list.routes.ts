@@ -1,11 +1,10 @@
 /** @format */
 
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
+import { Routes } from "@angular/router";
 import { ProgramMainComponent } from "@office/program/list/main/main.component";
 import { ProgramMainResolver } from "@office/program/list/main/main.resolver";
 
-const routes: Routes = [
+export const PROGRAM_LIST_ROUTES: Routes = [
   {
     path: "",
     component: ProgramMainComponent,
@@ -14,9 +13,3 @@ const routes: Routes = [
     },
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-})
-export class ProgramListRoutingModule {}

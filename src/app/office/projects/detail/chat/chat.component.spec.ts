@@ -20,10 +20,9 @@ describe("ChatComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [ProjectChatComponent, MessageInputComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
-      imports: [ReactiveFormsModule, HttpClientTestingModule, RouterTestingModule],
-    }).compileComponents();
+    providers: [{ provide: AuthService, useValue: authSpy }],
+    imports: [ReactiveFormsModule, HttpClientTestingModule, RouterTestingModule, ProjectChatComponent, MessageInputComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {

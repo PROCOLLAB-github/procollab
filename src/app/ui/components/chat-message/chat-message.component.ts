@@ -16,11 +16,28 @@ import { SnackbarService } from "@ui/services/snackbar.service";
 import { DomPortal } from "@angular/cdk/portal";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { AuthService } from "@auth/services";
+import { DayjsPipe } from "../../../core/pipes/dayjs.pipe";
+import { IconComponent } from "../icon/icon.component";
+import { FileItemComponent } from "../file-item/file-item.component";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AvatarComponent } from "../avatar/avatar.component";
+import { ClickOutsideModule } from "ng-click-outside";
 
 @Component({
-  selector: "app-chat-message",
-  templateUrl: "./chat-message.component.html",
-  styleUrl: "./chat-message.component.scss",
+    selector: "app-chat-message",
+    templateUrl: "./chat-message.component.html",
+    styleUrl: "./chat-message.component.scss",
+    standalone: true,
+    imports: [
+        ClickOutsideModule,
+        AvatarComponent,
+        NgIf,
+        NgFor,
+        FileItemComponent,
+        IconComponent,
+        AsyncPipe,
+        DayjsPipe,
+    ],
 })
 export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

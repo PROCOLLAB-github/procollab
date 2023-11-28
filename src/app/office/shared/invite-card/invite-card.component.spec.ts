@@ -10,8 +10,8 @@ describe("VacancyCardComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [InviteCardComponent],
-    }).compileComponents();
+    imports: [InviteCardComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {

@@ -2,7 +2,14 @@
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { IndustryService } from "@services/industry.service";
 import { concatMap, distinctUntilChanged, filter, map, Observable, Subscription, tap } from "rxjs";
 import { ErrorMessage } from "@error/models/error-message";
@@ -18,11 +25,44 @@ import { SelectComponent } from "@ui/components";
 import { ProgramService } from "@office/program/services/program.service";
 import { ProgramTag } from "@office/program/models/program.model";
 import { HttpErrorResponse } from "@angular/common/http";
+import { ControlErrorPipe } from "../../../core/pipes/control-error.pipe";
+import { ModalComponent } from "../../../ui/components/modal/modal.component";
+import { TagComponent } from "../../../ui/components/tag/tag.component";
+import { VacancyCardComponent } from "../../shared/vacancy-card/vacancy-card.component";
+import { InviteCardComponent } from "../../shared/invite-card/invite-card.component";
+import { UploadFileComponent } from "../../../ui/components/upload-file/upload-file.component";
+import { TextareaComponent } from "../../../ui/components/textarea/textarea.component";
+import { ButtonComponent } from "../../../ui/components/button/button.component";
+import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { InputComponent } from "../../../ui/components/input/input.component";
+import { AvatarControlComponent } from "../../../ui/components/avatar-control/avatar-control.component";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { BackComponent } from "../../../ui/components/back/back.component";
 
 @Component({
   selector: "app-edit",
   templateUrl: "./edit.component.html",
   styleUrl: "./edit.component.scss",
+  standalone: true,
+  imports: [
+    BackComponent,
+    ReactiveFormsModule,
+    NgIf,
+    AvatarControlComponent,
+    InputComponent,
+    NgFor,
+    IconComponent,
+    ButtonComponent,
+    SelectComponent,
+    TextareaComponent,
+    UploadFileComponent,
+    InviteCardComponent,
+    VacancyCardComponent,
+    TagComponent,
+    ModalComponent,
+    AsyncPipe,
+    ControlErrorPipe,
+  ],
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

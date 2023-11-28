@@ -7,7 +7,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
 import { AuthService } from "@auth/services";
 import { RouterTestingModule } from "@angular/router/testing";
-import { OfficeModule } from "@office/office.module";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { NgxMaskModule } from "ngx-mask";
 
@@ -21,13 +20,12 @@ describe("ChatWindowComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [ChatWindowComponent],
       imports: [
         ReactiveFormsModule,
         RouterTestingModule,
         HttpClientTestingModule,
         NgxMaskModule.forRoot(),
-        OfficeModule,
+        ChatWindowComponent,
       ],
       providers: [{ provide: AuthService, useValue: authSpy }],
     }).compileComponents();

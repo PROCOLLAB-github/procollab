@@ -20,13 +20,12 @@ describe("NavComponent", () => {
     const inviteSpy = jasmine.createSpyObj({ acceptInvite: of({}), rejectInvite: of({}) });
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [
+    imports: [RouterTestingModule, NavComponent],
+    providers: [
         { provide: AuthService, useValue: authSpy },
         { provide: InviteService, useValue: inviteSpy },
-      ],
-      declarations: [NavComponent],
-    }).compileComponents();
+    ],
+}).compileComponents();
   });
 
   beforeEach(() => {

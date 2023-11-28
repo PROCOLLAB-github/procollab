@@ -15,9 +15,9 @@ describe("ProjectCardComponent", () => {
     const industrySpy = jasmine.createSpyObj([{ industries: of([]) }]);
 
     await TestBed.configureTestingModule({
-      providers: [{ provide: IndustryService, useValue: industrySpy }],
-      declarations: [ProjectCardComponent],
-    }).compileComponents();
+    imports: [ProjectCardComponent],
+    providers: [{ provide: IndustryService, useValue: industrySpy }],
+}).compileComponents();
   });
 
   beforeEach(() => {

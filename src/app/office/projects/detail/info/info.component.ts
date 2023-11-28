@@ -9,7 +9,7 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink, RouterOutlet } from "@angular/router";
 import {
   concatMap,
   forkJoin,
@@ -34,11 +34,37 @@ import { expandElement } from "@utils/expand-element";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
 import { SubscriptionService } from "@office/services/subscription.service";
+import { ParseLinksPipe } from "../../../../core/pipes/parse-links.pipe";
+import { ParseBreaksPipe } from "../../../../core/pipes/parse-breaks.pipe";
+import { UserLinksPipe } from "../../../../core/pipes/user-links.pipe";
+import { ButtonComponent } from "../../../../ui/components/button/button.component";
+import { ModalComponent } from "../../../../ui/components/modal/modal.component";
+import { IconComponent } from "../../../../ui/components/icon/icon.component";
+import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
+import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-detail",
   templateUrl: "./info.component.html",
   styleUrl: "./info.component.scss",
+  standalone: true,
+  imports: [
+    NgIf,
+    AvatarComponent,
+    IconComponent,
+    ModalComponent,
+    ButtonComponent,
+    RouterLink,
+    NewsFormComponent,
+    NgFor,
+    NewsCardComponent,
+    NgTemplateOutlet,
+    RouterOutlet,
+    UserLinksPipe,
+    ParseBreaksPipe,
+    ParseLinksPipe,
+    AsyncPipe,
+  ],
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

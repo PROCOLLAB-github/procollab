@@ -10,7 +10,7 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
 import { AuthService } from "@auth/services";
 import { MembersResult, User } from "@auth/models/user.model";
@@ -18,12 +18,20 @@ import { NavService } from "@services/nav.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
+import { MemberCardComponent } from "../shared/member-card/member-card.component";
+import { NgFor } from "@angular/common";
 
 @Component({
-  selector: "app-mentors",
-  templateUrl: "./mentors.component.html",
-  styleUrl: "./mentors.component.scss",
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "app-mentors",
+    templateUrl: "./mentors.component.html",
+    styleUrl: "./mentors.component.scss",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgFor,
+        RouterLink,
+        MemberCardComponent,
+    ],
 })
 export class MentorsComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(

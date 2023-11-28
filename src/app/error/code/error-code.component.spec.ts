@@ -11,9 +11,8 @@ describe("ErrorCodeComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [ErrorCodeComponent],
-    }).compileComponents();
+    imports: [RouterTestingModule, ErrorCodeComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {

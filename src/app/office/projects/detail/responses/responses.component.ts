@@ -6,11 +6,19 @@ import { map, Observable, Subscription } from "rxjs";
 import { VacancyResponse } from "@models/vacancy-response.model";
 import { VacancyService } from "@services/vacancy.service";
 import { NavService } from "@services/nav.service";
+import { ResponseCardComponent } from "../../../shared/response-card/response-card.component";
+import { NgIf, NgFor } from "@angular/common";
 
 @Component({
-  selector: "app-responses",
-  templateUrl: "./responses.component.html",
-  styleUrl: "./responses.component.scss",
+    selector: "app-responses",
+    templateUrl: "./responses.component.html",
+    styleUrl: "./responses.component.scss",
+    standalone: true,
+    imports: [
+        NgIf,
+        NgFor,
+        ResponseCardComponent,
+    ],
 })
 export class ProjectResponsesComponent implements OnInit, OnDestroy {
   constructor(

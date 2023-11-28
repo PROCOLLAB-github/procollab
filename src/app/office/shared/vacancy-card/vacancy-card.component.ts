@@ -2,11 +2,15 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Vacancy } from "@models/vacancy.model";
+import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { NgIf } from "@angular/common";
 
 @Component({
-  selector: "app-vacancy-card",
-  templateUrl: "./vacancy-card.component.html",
-  styleUrl: "./vacancy-card.component.scss",
+    selector: "app-vacancy-card",
+    templateUrl: "./vacancy-card.component.html",
+    styleUrl: "./vacancy-card.component.scss",
+    standalone: true,
+    imports: [NgIf, IconComponent],
 })
 export class VacancyCardComponent implements OnInit {
   constructor() {}

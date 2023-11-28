@@ -3,6 +3,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
 import { InputComponent } from "./input.component";
+import { NgxMaskModule } from "ngx-mask";
 
 describe("InputComponent", () => {
   let component: InputComponent;
@@ -10,8 +11,7 @@ describe("InputComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormsModule],
-      declarations: [InputComponent],
+      imports: [FormsModule, InputComponent, NgxMaskModule.forRoot()],
     }).compileComponents();
   });
 

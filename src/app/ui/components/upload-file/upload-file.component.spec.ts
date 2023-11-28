@@ -15,10 +15,9 @@ describe("UploadFileComponent", () => {
     fileServiceSpy = jasmine.createSpyObj("FileService", {uploadFile: of({}), deleteFile: of({})});
 
     TestBed.configureTestingModule({
-      imports: [FormsModule],
-      declarations: [UploadFileComponent],
-      providers: [{ provide: FileService, useValue: fileServiceSpy }],
-    });
+    imports: [FormsModule, UploadFileComponent],
+    providers: [{ provide: FileService, useValue: fileServiceSpy }],
+});
 
     fixture = TestBed.createComponent(UploadFileComponent);
     component = fixture.componentInstance;

@@ -13,7 +13,7 @@ import {
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ActivatedRoute } from "@angular/router";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { ValidationService } from "@core/services";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { FileService } from "@core/services/file.service";
@@ -21,11 +21,36 @@ import { nanoid } from "nanoid";
 import { expandElement } from "@utils/expand-element";
 import { FileModel } from "@models/file.model";
 import { forkJoin, noop, Observable, tap } from "rxjs";
+import { FormControlPipe } from "../../../core/pipes/form-control.pipe";
+import { DayjsPipe } from "../../../core/pipes/dayjs.pipe";
+import { ButtonComponent } from "../../../ui/components/button/button.component";
+import { FileItemComponent } from "../../../ui/components/file-item/file-item.component";
+import { FileUploadItemComponent } from "../../../ui/components/file-upload-item/file-upload-item.component";
+import { ImgCardComponent } from "../img-card/img-card.component";
+import { TextareaComponent } from "../../../ui/components/textarea/textarea.component";
+import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { ClickOutsideModule } from "ng-click-outside";
+import { NgIf, NgFor } from "@angular/common";
 
 @Component({
-  selector: "app-news-card",
-  templateUrl: "./news-card.component.html",
-  styleUrl: "./news-card.component.scss",
+    selector: "app-news-card",
+    templateUrl: "./news-card.component.html",
+    styleUrl: "./news-card.component.scss",
+    standalone: true,
+    imports: [
+        NgIf,
+        ClickOutsideModule,
+        IconComponent,
+        TextareaComponent,
+        ReactiveFormsModule,
+        NgFor,
+        ImgCardComponent,
+        FileUploadItemComponent,
+        FileItemComponent,
+        ButtonComponent,
+        DayjsPipe,
+        FormControlPipe,
+    ],
 })
 export class NewsCardComponent implements OnInit {
   constructor(

@@ -5,6 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MessageInputComponent } from "./message-input.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { AuthService } from "@auth/services";
+import { NgxMaskModule } from "ngx-mask";
 
 describe("MessageInputComponent", () => {
   let component: MessageInputComponent;
@@ -14,9 +15,8 @@ describe("MessageInputComponent", () => {
     const authSpy = jasmine.createSpyObj("AuthService", ["profile"]);
 
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, MessageInputComponent, NgxMaskModule.forRoot()],
       providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [MessageInputComponent],
     }).compileComponents();
   });
 

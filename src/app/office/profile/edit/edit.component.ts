@@ -2,7 +2,14 @@
 
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { SelectComponent } from "@ui/components";
 import { ValidationService } from "@core/services";
@@ -11,6 +18,15 @@ import { Router } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 import { NavService } from "@services/nav.service";
+import { ControlErrorPipe } from "../../../core/pipes/control-error.pipe";
+import { EditorSubmitButtonDirective } from "../../../ui/directives/editor-submit-button.directive";
+import { TextareaComponent } from "../../../ui/components/textarea/textarea.component";
+import { AvatarControlComponent } from "../../../ui/components/avatar-control/avatar-control.component";
+import { ButtonComponent } from "../../../ui/components/button/button.component";
+import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { TagComponent } from "../../../ui/components/tag/tag.component";
+import { InputComponent } from "../../../ui/components/input/input.component";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 
 dayjs.extend(cpf);
 
@@ -18,6 +34,22 @@ dayjs.extend(cpf);
   selector: "app-profile-edit",
   templateUrl: "./edit.component.html",
   styleUrl: "./edit.component.scss",
+  standalone: true,
+  imports: [
+    NgIf,
+    ReactiveFormsModule,
+    InputComponent,
+    SelectComponent,
+    NgFor,
+    TagComponent,
+    IconComponent,
+    ButtonComponent,
+    AvatarControlComponent,
+    TextareaComponent,
+    EditorSubmitButtonDirective,
+    AsyncPipe,
+    ControlErrorPipe,
+  ],
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(

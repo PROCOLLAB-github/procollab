@@ -10,8 +10,6 @@ import { AuthService } from "@auth/services";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { CoreModule } from "@core/core.module";
-import { UiModule } from "@ui/ui.module";
 import { NgxMaskModule } from "ngx-mask";
 
 describe("ProfileEditComponent", () => {
@@ -29,12 +27,10 @@ describe("ProfileEditComponent", () => {
         RouterTestingModule,
         ReactiveFormsModule,
         HttpClientTestingModule,
-        CoreModule,
-        UiModule,
         NgxMaskModule.forRoot(),
+        ProfileEditComponent,
       ],
       providers: [{ provide: AuthService, useValue: authSpy }],
-      declarations: [ProfileEditComponent],
     }).compileComponents();
   });
 

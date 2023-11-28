@@ -2,17 +2,44 @@
 
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { VacancyService } from "@services/vacancy.service";
 import { ValidationService } from "@core/services";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { NavService } from "@services/nav.service";
+import { UserRolePipe } from "../../../core/pipes/user-role.pipe";
+import { ControlErrorPipe } from "../../../core/pipes/control-error.pipe";
+import { TextareaComponent } from "../../../ui/components/textarea/textarea.component";
+import { TagComponent } from "../../../ui/components/tag/tag.component";
+import { AvatarComponent } from "../../../ui/components/avatar/avatar.component";
+import { ButtonComponent } from "../../../ui/components/button/button.component";
+import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { ModalComponent } from "../../../ui/components/modal/modal.component";
+import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { BackComponent } from "../../../ui/components/back/back.component";
 
 @Component({
-  selector: "app-send",
-  templateUrl: "./send.component.html",
-  styleUrl: "./send.component.scss",
+    selector: "app-send",
+    templateUrl: "./send.component.html",
+    styleUrl: "./send.component.scss",
+    standalone: true,
+    imports: [
+        BackComponent,
+        NgIf,
+        ModalComponent,
+        IconComponent,
+        RouterLink,
+        ButtonComponent,
+        AvatarComponent,
+        NgFor,
+        TagComponent,
+        ReactiveFormsModule,
+        TextareaComponent,
+        AsyncPipe,
+        ControlErrorPipe,
+        UserRolePipe,
+    ],
 })
 export class VacancySendComponent implements OnInit {
   constructor(

@@ -23,13 +23,12 @@ describe("NewsCardComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      declarations: [ProgramNewsCardComponent, DayjsPipe],
-      imports: [RouterTestingModule, ReactiveFormsModule, HttpClientTestingModule],
-      providers: [
+    imports: [RouterTestingModule, ReactiveFormsModule, HttpClientTestingModule, ProgramNewsCardComponent, DayjsPipe],
+    providers: [
         { provide: ProjectNewsService, useValue: projectNewsServiceSpy },
         { provide: AuthService, useValue: authSpy },
-      ],
-    }).compileComponents();
+    ],
+}).compileComponents();
   });
 
   beforeEach(() => {

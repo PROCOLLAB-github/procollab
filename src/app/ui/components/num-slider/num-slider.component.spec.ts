@@ -10,9 +10,8 @@ describe("NumSliderComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormsModule],
-      declarations: [NumSliderComponent],
-    }).compileComponents();
+    imports: [FormsModule, NumSliderComponent],
+}).compileComponents();
   });
 
   beforeEach(() => {
