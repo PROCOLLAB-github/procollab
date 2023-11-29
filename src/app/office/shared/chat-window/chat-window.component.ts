@@ -23,9 +23,9 @@ import { filter, fromEvent, noop, skip, Subscription, tap, throttleTime } from "
 import { ModalService } from "@ui/models/modal.service";
 import { AuthService } from "@auth/services";
 import { User } from "@auth/models/user.model";
-import { PluralizePipe } from "../../../core/pipes/pluralize.pipe";
+import { PluralizePipe } from "@core/pipes/pluralize.pipe";
 import { NgIf, NgFor } from "@angular/common";
-import { ChatMessageComponent } from "../../../ui/components/chat-message/chat-message.component";
+import { ChatMessageComponent } from "@ui/components/chat-message/chat-message.component";
 
 @Component({
   selector: "app-chat-window",

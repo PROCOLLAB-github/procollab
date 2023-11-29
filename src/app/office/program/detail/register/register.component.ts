@@ -7,27 +7,26 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angula
 import { ProgramDataSchema } from "@office/program/models/program.model";
 import { ValidationService } from "@core/services";
 import { ProgramService } from "@office/program/services/program.service";
-import { ControlErrorPipe } from "../../../../core/pipes/control-error.pipe";
-import { ButtonComponent } from "../../../../ui/components/button/button.component";
-import { InputComponent } from "../../../../ui/components/input/input.component";
+import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
+import { ButtonComponent, InputComponent } from "@ui/components";
 import { NgIf, NgFor, KeyValuePipe } from "@angular/common";
-import { BackComponent } from "../../../../ui/components/back/back.component";
+import { BackComponent } from "@ui/components/back/back.component";
 
 @Component({
-    selector: "app-register",
-    templateUrl: "./register.component.html",
-    styleUrl: "./register.component.scss",
-    standalone: true,
-    imports: [
-        BackComponent,
-        NgIf,
-        ReactiveFormsModule,
-        NgFor,
-        InputComponent,
-        ButtonComponent,
-        KeyValuePipe,
-        ControlErrorPipe,
-    ],
+  selector: "app-register",
+  templateUrl: "./register.component.html",
+  styleUrl: "./register.component.scss",
+  standalone: true,
+  imports: [
+    BackComponent,
+    NgIf,
+    ReactiveFormsModule,
+    NgFor,
+    InputComponent,
+    ButtonComponent,
+    KeyValuePipe,
+    ControlErrorPipe,
+  ],
 })
 export class ProgramRegisterComponent implements OnInit, OnDestroy {
   constructor(

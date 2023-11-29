@@ -6,23 +6,16 @@ import { ErrorMessage } from "@error/models/error-message";
 import { AuthService } from "@auth/services";
 import { ValidationService } from "@core/services";
 import { Router } from "@angular/router";
-import { ControlErrorPipe } from "../../core/pipes/control-error.pipe";
-import { ButtonComponent } from "../../ui/components/button/button.component";
-import { InputComponent } from "../../ui/components/input/input.component";
+import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
+import { ButtonComponent, InputComponent } from "@ui/components";
 import { NgIf } from "@angular/common";
 
 @Component({
-    selector: "app-reset-password",
-    templateUrl: "./reset-password.component.html",
-    styleUrl: "./reset-password.component.scss",
-    standalone: true,
-    imports: [
-        ReactiveFormsModule,
-        NgIf,
-        InputComponent,
-        ButtonComponent,
-        ControlErrorPipe,
-    ],
+  selector: "app-reset-password",
+  templateUrl: "./reset-password.component.html",
+  styleUrl: "./reset-password.component.scss",
+  standalone: true,
+  imports: [ReactiveFormsModule, NgIf, InputComponent, ButtonComponent, ControlErrorPipe],
 })
 export class ResetPasswordComponent implements OnInit {
   constructor(

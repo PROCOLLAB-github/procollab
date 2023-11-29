@@ -3,27 +3,22 @@
 import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { NgIf, NgFor } from "@angular/common";
-import { IconComponent } from "../icon/icon.component";
+import { IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
 
 @Component({
-    selector: "app-select",
-    templateUrl: "./select.component.html",
-    styleUrl: "./select.component.scss",
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => SelectComponent),
-            multi: true,
-        },
-    ],
-    standalone: true,
-    imports: [
-        ClickOutsideModule,
-        IconComponent,
-        NgIf,
-        NgFor,
-    ],
+  selector: "app-select",
+  templateUrl: "./select.component.html",
+  styleUrl: "./select.component.scss",
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => SelectComponent),
+      multi: true,
+    },
+  ],
+  standalone: true,
+  imports: [ClickOutsideModule, IconComponent, NgIf, NgFor],
 })
 export class SelectComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";

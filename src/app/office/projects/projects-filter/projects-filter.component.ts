@@ -7,22 +7,17 @@ import { ProjectStep } from "@models/project.model";
 import { Industry } from "@models/industry.model";
 import { IndustryService } from "@services/industry.service";
 import { ProjectService } from "@services/project.service";
-import { SwitchComponent } from "../../../ui/components/switch/switch.component";
-import { NumSliderComponent } from "../../../ui/components/num-slider/num-slider.component";
-import { CheckboxComponent } from "../../../ui/components/checkbox/checkbox.component";
+import { SwitchComponent } from "@ui/components/switch/switch.component";
+import { NumSliderComponent } from "@ui/components/num-slider/num-slider.component";
+import { CheckboxComponent } from "@ui/components";
 import { NgFor } from "@angular/common";
 
 @Component({
-    selector: "app-projects-filter",
-    templateUrl: "./projects-filter.component.html",
-    styleUrl: "./projects-filter.component.scss",
-    standalone: true,
-    imports: [
-        NgFor,
-        CheckboxComponent,
-        NumSliderComponent,
-        SwitchComponent,
-    ],
+  selector: "app-projects-filter",
+  templateUrl: "./projects-filter.component.html",
+  styleUrl: "./projects-filter.component.scss",
+  standalone: true,
+  imports: [NgFor, CheckboxComponent, NumSliderComponent, SwitchComponent],
 })
 export class ProjectsFilterComponent implements OnInit {
   constructor(

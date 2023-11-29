@@ -14,32 +14,25 @@ import { ChatMessage } from "@models/chat-message.model";
 import { fromEvent, map, Subscription } from "rxjs";
 import { FileService } from "@core/services/file.service";
 import { getFormattedFileSize } from "@utils/formatted-file-size";
-import { FileTypePipe } from "../../../ui/pipes/file-type.pipe";
+import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { AutosizeModule } from "ngx-autosize";
 import { NgxMaskModule } from "ngx-mask";
-import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { IconComponent } from "@ui/components";
 import { NgIf, NgFor } from "@angular/common";
 
 @Component({
-    selector: "app-message-input",
-    templateUrl: "./message-input.component.html",
-    styleUrl: "./message-input.component.scss",
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => MessageInputComponent),
-            multi: true,
-        },
-    ],
-    standalone: true,
-    imports: [
-        NgIf,
-        NgFor,
-        IconComponent,
-        NgxMaskModule,
-        AutosizeModule,
-        FileTypePipe,
-    ],
+  selector: "app-message-input",
+  templateUrl: "./message-input.component.html",
+  styleUrl: "./message-input.component.scss",
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => MessageInputComponent),
+      multi: true,
+    },
+  ],
+  standalone: true,
+  imports: [NgIf, NgFor, IconComponent, NgxMaskModule, AutosizeModule, FileTypePipe],
 })
 export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
   constructor(private readonly fileService: FileService) {}

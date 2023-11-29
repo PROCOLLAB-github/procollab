@@ -8,28 +8,26 @@ import { AuthService } from "@auth/services";
 import { ValidationService } from "@core/services";
 import { Router } from "@angular/router";
 import { OnboardingService } from "../services/onboarding.service";
-import { ControlErrorPipe } from "../../../core/pipes/control-error.pipe";
-import { ButtonComponent } from "../../../ui/components/button/button.component";
-import { IconComponent } from "../../../ui/components/icon/icon.component";
-import { TagComponent } from "../../../ui/components/tag/tag.component";
-import { InputComponent } from "../../../ui/components/input/input.component";
+import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
+import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
+import { TagComponent } from "@ui/components/tag/tag.component";
 import { NgIf, NgFor } from "@angular/common";
 
 @Component({
-    selector: "app-stage-one",
-    templateUrl: "./stage-one.component.html",
-    styleUrl: "./stage-one.component.scss",
-    standalone: true,
-    imports: [
-        ReactiveFormsModule,
-        NgIf,
-        InputComponent,
-        NgFor,
-        TagComponent,
-        IconComponent,
-        ButtonComponent,
-        ControlErrorPipe,
-    ],
+  selector: "app-stage-one",
+  templateUrl: "./stage-one.component.html",
+  styleUrl: "./stage-one.component.scss",
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    NgIf,
+    InputComponent,
+    NgFor,
+    TagComponent,
+    IconComponent,
+    ButtonComponent,
+    ControlErrorPipe,
+  ],
 })
 export class OnboardingStageOneComponent implements OnInit, OnDestroy {
   constructor(

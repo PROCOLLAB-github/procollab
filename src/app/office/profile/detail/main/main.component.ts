@@ -10,11 +10,11 @@ import { ProfileNewsService } from "../services/profile-news.service";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ProfileNews } from "../models/profile-news.model";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
-import { ParseLinksPipe } from "../../../../core/pipes/parse-links.pipe";
-import { ParseBreaksPipe } from "../../../../core/pipes/parse-breaks.pipe";
-import { UserLinksPipe } from "../../../../core/pipes/user-links.pipe";
-import { IconComponent } from "../../../../ui/components/icon/icon.component";
-import { TagComponent } from "../../../../ui/components/tag/tag.component";
+import { ParseLinksPipe } from "@core/pipes/parse-links.pipe";
+import { ParseBreaksPipe } from "@core/pipes/parse-breaks.pipe";
+import { UserLinksPipe } from "@core/pipes/user-links.pipe";
+import { IconComponent } from "@ui/components";
+import { TagComponent } from "@ui/components/tag/tag.component";
 import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from "@angular/common";
 
 @Component({

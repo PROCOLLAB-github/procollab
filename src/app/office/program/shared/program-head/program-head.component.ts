@@ -3,14 +3,14 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Program } from "@office/program/models/program.model";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IconComponent } from "../../../../ui/components/icon/icon.component";
+import { IconComponent } from "@ui/components";
 
 @Component({
-    selector: "app-program-head",
-    templateUrl: "./program-head.component.html",
-    styleUrl: "./program-head.component.scss",
-    standalone: true,
-    imports: [IconComponent],
+  selector: "app-program-head",
+  templateUrl: "./program-head.component.html",
+  styleUrl: "./program-head.component.scss",
+  standalone: true,
+  imports: [IconComponent],
 })
 export class ProgramHeadComponent implements OnInit {
   constructor(private readonly router: Router, private readonly route: ActivatedRoute) {}

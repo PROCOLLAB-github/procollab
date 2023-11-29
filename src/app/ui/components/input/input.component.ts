@@ -2,27 +2,23 @@
 
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { IconComponent } from "../icon/icon.component";
+import { IconComponent } from "@ui/components";
 import { NgIf } from "@angular/common";
 import { NgxMaskModule } from "ngx-mask";
 
 @Component({
-    selector: "app-input",
-    templateUrl: "./input.component.html",
-    styleUrl: "./input.component.scss",
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => InputComponent),
-            multi: true,
-        },
-    ],
-    standalone: true,
-    imports: [
-        NgxMaskModule,
-        NgIf,
-        IconComponent,
-    ],
+  selector: "app-input",
+  templateUrl: "./input.component.html",
+  styleUrl: "./input.component.scss",
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputComponent),
+      multi: true,
+    },
+  ],
+  standalone: true,
+  imports: [NgxMaskModule, NgIf, IconComponent],
 })
 export class InputComponent implements OnInit, ControlValueAccessor {
   constructor() {}

@@ -12,10 +12,10 @@ import { ChatService } from "@services/chat.service";
 import { LoadChatMessages } from "@models/chat.model";
 import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
 import { ChatWindowComponent } from "@office/shared/chat-window/chat-window.component";
-import { PluralizePipe } from "../../../../core/pipes/pluralize.pipe";
-import { FileItemComponent } from "../../../../ui/components/file-item/file-item.component";
-import { IconComponent } from "../../../../ui/components/icon/icon.component";
-import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
+import { PluralizePipe } from "@core/pipes/pluralize.pipe";
+import { FileItemComponent } from "@ui/components/file-item/file-item.component";
+import { IconComponent } from "@ui/components";
+import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { NgIf, NgFor } from "@angular/common";
 
 @Component({

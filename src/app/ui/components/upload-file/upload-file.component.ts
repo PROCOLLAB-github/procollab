@@ -4,22 +4,22 @@ import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { FileService } from "@core/services/file.service";
 import { nanoid } from "nanoid";
-import { IconComponent } from "../icon/icon.component";
+import { IconComponent } from "@ui/components";
 import { NgIf } from "@angular/common";
 
 @Component({
-    selector: "app-upload-file",
-    templateUrl: "./upload-file.component.html",
-    styleUrl: "./upload-file.component.scss",
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => UploadFileComponent),
-            multi: true,
-        },
-    ],
-    standalone: true,
-    imports: [NgIf, IconComponent],
+  selector: "app-upload-file",
+  templateUrl: "./upload-file.component.html",
+  styleUrl: "./upload-file.component.scss",
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => UploadFileComponent),
+      multi: true,
+    },
+  ],
+  standalone: true,
+  imports: [NgIf, IconComponent],
 })
 export class UploadFileComponent implements OnInit, ControlValueAccessor {
   constructor(private fileService: FileService) {}

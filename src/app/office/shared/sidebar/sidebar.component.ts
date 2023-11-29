@@ -6,28 +6,28 @@ import { NotificationService } from "@services/notification.service";
 import { InviteService } from "@services/invite.service";
 import { Invite } from "@models/invite.model";
 import { Router, RouterLink, RouterLinkActive } from "@angular/router";
-import { ProfileInfoComponent } from "../../../ui/components/profile-info/profile-info.component";
+import { ProfileInfoComponent } from "@ui/components/profile-info/profile-info.component";
 import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
 import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 import { ClickOutsideModule } from "ng-click-outside";
-import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { IconComponent } from "@ui/components";
 
 @Component({
-    selector: "app-sidebar",
-    templateUrl: "./sidebar.component.html",
-    styleUrl: "./sidebar.component.scss",
-    standalone: true,
-    imports: [
-        RouterLink,
-        RouterLinkActive,
-        IconComponent,
-        ClickOutsideModule,
-        NgIf,
-        NgFor,
-        InviteManageCardComponent,
-        ProfileInfoComponent,
-        AsyncPipe,
-    ],
+  selector: "app-sidebar",
+  templateUrl: "./sidebar.component.html",
+  styleUrl: "./sidebar.component.scss",
+  standalone: true,
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    IconComponent,
+    ClickOutsideModule,
+    NgIf,
+    NgFor,
+    InviteManageCardComponent,
+    ProfileInfoComponent,
+    AsyncPipe,
+  ],
 })
 export class SidebarComponent implements OnInit {
   constructor(

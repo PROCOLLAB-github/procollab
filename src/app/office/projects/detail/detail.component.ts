@@ -5,22 +5,15 @@ import { map, Subscription } from "rxjs";
 import { ActivatedRoute, RouterLinkActive, RouterLink, RouterOutlet } from "@angular/router";
 import { Project } from "@models/project.model";
 import { AuthService } from "@auth/services";
-import { BackComponent } from "../../../ui/components/back/back.component";
+import { BackComponent } from "@ui/components/back/back.component";
 import { NgIf, AsyncPipe } from "@angular/common";
 
 @Component({
-    selector: "app-detail",
-    templateUrl: "./detail.component.html",
-    styleUrl: "./detail.component.scss",
-    standalone: true,
-    imports: [
-        NgIf,
-        BackComponent,
-        RouterLinkActive,
-        RouterLink,
-        RouterOutlet,
-        AsyncPipe,
-    ],
+  selector: "app-detail",
+  templateUrl: "./detail.component.html",
+  styleUrl: "./detail.component.scss",
+  standalone: true,
+  imports: [NgIf, BackComponent, RouterLinkActive, RouterLink, RouterOutlet, AsyncPipe],
 })
 export class ProjectDetailComponent implements OnInit, OnDestroy {
   constructor(private readonly route: ActivatedRoute, private readonly authService: AuthService) {}

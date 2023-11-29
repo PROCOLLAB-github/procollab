@@ -9,25 +9,24 @@ import { concatMap, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { OnboardingService } from "../services/onboarding.service";
-import { ControlErrorPipe } from "../../../core/pipes/control-error.pipe";
-import { ButtonComponent } from "../../../ui/components/button/button.component";
-import { InputComponent } from "../../../ui/components/input/input.component";
-import { AvatarControlComponent } from "../../../ui/components/avatar-control/avatar-control.component";
+import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
+import { ButtonComponent, InputComponent } from "@ui/components";
+import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { NgIf } from "@angular/common";
 
 @Component({
-    selector: "app-stage-zero",
-    templateUrl: "./stage-zero.component.html",
-    styleUrl: "./stage-zero.component.scss",
-    standalone: true,
-    imports: [
-        NgIf,
-        ReactiveFormsModule,
-        AvatarControlComponent,
-        InputComponent,
-        ButtonComponent,
-        ControlErrorPipe,
-    ],
+  selector: "app-stage-zero",
+  templateUrl: "./stage-zero.component.html",
+  styleUrl: "./stage-zero.component.scss",
+  standalone: true,
+  imports: [
+    NgIf,
+    ReactiveFormsModule,
+    AvatarControlComponent,
+    InputComponent,
+    ButtonComponent,
+    ControlErrorPipe,
+  ],
 })
 export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   constructor(

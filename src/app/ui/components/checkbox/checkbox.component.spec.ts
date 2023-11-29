@@ -2,7 +2,7 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { By } from "@angular/platform-browser";
-import { CheckboxComponent } from "./checkbox.component";
+import { CheckboxComponent } from "@ui/components";
 
 describe("CheckboxComponent", () => {
   let component: CheckboxComponent;
@@ -10,8 +10,8 @@ describe("CheckboxComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [CheckboxComponent],
-}).compileComponents();
+      imports: [CheckboxComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -9,21 +9,14 @@ import { AuthService } from "@auth/services";
 import { ChatService } from "@services/chat.service";
 import { ChatCardComponent } from "./shared/chat-card/chat-card.component";
 import { NgFor, AsyncPipe } from "@angular/common";
-import { BackComponent } from "../../ui/components/back/back.component";
+import { BackComponent } from "@ui/components/back/back.component";
 
 @Component({
-    selector: "app-chat",
-    templateUrl: "./chat.component.html",
-    styleUrl: "./chat.component.scss",
-    standalone: true,
-    imports: [
-        BackComponent,
-        RouterLink,
-        RouterLinkActive,
-        NgFor,
-        ChatCardComponent,
-        AsyncPipe,
-    ],
+  selector: "app-chat",
+  templateUrl: "./chat.component.html",
+  styleUrl: "./chat.component.scss",
+  standalone: true,
+  imports: [BackComponent, RouterLink, RouterLinkActive, NgFor, ChatCardComponent, AsyncPipe],
 })
 export class ChatComponent implements OnInit, OnDestroy {
   constructor(

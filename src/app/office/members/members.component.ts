@@ -36,21 +36,15 @@ import { MemberService } from "@services/member.service";
 import { capitalizeString } from "@utils/capitalize-string";
 import { MemberCardComponent } from "../shared/member-card/member-card.component";
 import { NgFor } from "@angular/common";
-import { SearchComponent } from "../../ui/components/search/search.component";
+import { SearchComponent } from "@ui/components/search/search.component";
 
 @Component({
-    selector: "app-members",
-    templateUrl: "./members.component.html",
-    styleUrl: "./members.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        ReactiveFormsModule,
-        SearchComponent,
-        NgFor,
-        RouterLink,
-        MemberCardComponent,
-    ],
+  selector: "app-members",
+  templateUrl: "./members.component.html",
+  styleUrl: "./members.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ReactiveFormsModule, SearchComponent, NgFor, RouterLink, MemberCardComponent],
 })
 export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(

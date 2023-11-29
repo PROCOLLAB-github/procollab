@@ -4,15 +4,15 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { filter, interval, map, noop, Observable, Subscription } from "rxjs";
 import { AuthService } from "@auth/services";
-import { IconComponent } from "../../ui/components/icon/icon.component";
+import { IconComponent } from "@ui/components";
 import { NgIf } from "@angular/common";
 
 @Component({
-    selector: "app-email-verification",
-    templateUrl: "./email-verification.component.html",
-    styleUrl: "./email-verification.component.scss",
-    standalone: true,
-    imports: [NgIf, IconComponent],
+  selector: "app-email-verification",
+  templateUrl: "./email-verification.component.html",
+  styleUrl: "./email-verification.component.scss",
+  standalone: true,
+  imports: [NgIf, IconComponent],
 })
 export class EmailVerificationComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private readonly authService: AuthService) {}

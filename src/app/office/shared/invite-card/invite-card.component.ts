@@ -2,15 +2,15 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Invite } from "@models/invite.model";
-import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { IconComponent } from "@ui/components";
 import { NgIf } from "@angular/common";
 
 @Component({
-    selector: "app-invite-card",
-    templateUrl: "./invite-card.component.html",
-    styleUrl: "./invite-card.component.scss",
-    standalone: true,
-    imports: [NgIf, IconComponent],
+  selector: "app-invite-card",
+  templateUrl: "./invite-card.component.html",
+  styleUrl: "./invite-card.component.scss",
+  standalone: true,
+  imports: [NgIf, IconComponent],
 })
 export class InviteCardComponent implements OnInit {
   constructor() {}

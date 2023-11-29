@@ -32,21 +32,14 @@ import { ApiPagination } from "@models/api-pagination.model";
 import { ProjectsFilterComponent } from "../projects-filter/projects-filter.component";
 import { ProjectCardComponent } from "../../shared/project-card/project-card.component";
 import { NgFor, NgIf } from "@angular/common";
-import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { IconComponent } from "@ui/components";
 
 @Component({
-    selector: "app-list",
-    templateUrl: "./list.component.html",
-    styleUrl: "./list.component.scss",
-    standalone: true,
-    imports: [
-        IconComponent,
-        NgFor,
-        RouterLink,
-        ProjectCardComponent,
-        NgIf,
-        ProjectsFilterComponent,
-    ],
+  selector: "app-list",
+  templateUrl: "./list.component.html",
+  styleUrl: "./list.component.scss",
+  standalone: true,
+  imports: [IconComponent, NgFor, RouterLink, ProjectCardComponent, NgIf, ProjectsFilterComponent],
 })
 export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

@@ -21,36 +21,35 @@ import { nanoid } from "nanoid";
 import { expandElement } from "@utils/expand-element";
 import { FileModel } from "@models/file.model";
 import { forkJoin, noop, Observable, tap } from "rxjs";
-import { FormControlPipe } from "../../../core/pipes/form-control.pipe";
-import { DayjsPipe } from "../../../core/pipes/dayjs.pipe";
-import { ButtonComponent } from "../../../ui/components/button/button.component";
-import { FileItemComponent } from "../../../ui/components/file-item/file-item.component";
-import { FileUploadItemComponent } from "../../../ui/components/file-upload-item/file-upload-item.component";
+import { FormControlPipe } from "@core/pipes/form-control.pipe";
+import { DayjsPipe } from "@core/pipes/dayjs.pipe";
+import { ButtonComponent, IconComponent } from "@ui/components";
+import { FileItemComponent } from "@ui/components/file-item/file-item.component";
+import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { ImgCardComponent } from "../img-card/img-card.component";
-import { TextareaComponent } from "../../../ui/components/textarea/textarea.component";
-import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { NgIf, NgFor } from "@angular/common";
 
 @Component({
-    selector: "app-news-card",
-    templateUrl: "./news-card.component.html",
-    styleUrl: "./news-card.component.scss",
-    standalone: true,
-    imports: [
-        NgIf,
-        ClickOutsideModule,
-        IconComponent,
-        TextareaComponent,
-        ReactiveFormsModule,
-        NgFor,
-        ImgCardComponent,
-        FileUploadItemComponent,
-        FileItemComponent,
-        ButtonComponent,
-        DayjsPipe,
-        FormControlPipe,
-    ],
+  selector: "app-news-card",
+  templateUrl: "./news-card.component.html",
+  styleUrl: "./news-card.component.scss",
+  standalone: true,
+  imports: [
+    NgIf,
+    ClickOutsideModule,
+    IconComponent,
+    TextareaComponent,
+    ReactiveFormsModule,
+    NgFor,
+    ImgCardComponent,
+    FileUploadItemComponent,
+    FileItemComponent,
+    ButtonComponent,
+    DayjsPipe,
+    FormControlPipe,
+  ],
 })
 export class NewsCardComponent implements OnInit {
   constructor(

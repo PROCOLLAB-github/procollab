@@ -18,27 +18,27 @@ import { FileModel } from "@office/models/file.model";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
 import { Observable, tap, forkJoin, noop } from "rxjs";
-import { DayjsPipe } from "../../../../../core/pipes/dayjs.pipe";
-import { FileItemComponent } from "../../../../../ui/components/file-item/file-item.component";
-import { IconComponent } from "../../../../../ui/components/icon/icon.component";
-import { FileUploadItemComponent } from "../../../../../ui/components/file-upload-item/file-upload-item.component";
-import { ImgCardComponent } from "../../../../shared/img-card/img-card.component";
+import { DayjsPipe } from "@core/pipes/dayjs.pipe";
+import { FileItemComponent } from "@ui/components/file-item/file-item.component";
+import { IconComponent } from "@ui/components";
+import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
+import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
 import { NgIf, NgFor } from "@angular/common";
 
 @Component({
-    selector: "app-program-news-card",
-    templateUrl: "./news-card.component.html",
-    styleUrl: "./news-card.component.scss",
-    standalone: true,
-    imports: [
-        NgIf,
-        NgFor,
-        ImgCardComponent,
-        FileUploadItemComponent,
-        IconComponent,
-        FileItemComponent,
-        DayjsPipe,
-    ],
+  selector: "app-program-news-card",
+  templateUrl: "./news-card.component.html",
+  styleUrl: "./news-card.component.scss",
+  standalone: true,
+  imports: [
+    NgIf,
+    NgFor,
+    ImgCardComponent,
+    FileUploadItemComponent,
+    IconComponent,
+    FileItemComponent,
+    DayjsPipe,
+  ],
 })
 export class ProgramNewsCardComponent implements OnInit {
   constructor(

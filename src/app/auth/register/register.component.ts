@@ -8,29 +8,27 @@ import { ErrorMessage } from "@error/models/error-message";
 import { Router, RouterLink } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
-import { ControlErrorPipe } from "../../core/pipes/control-error.pipe";
-import { ButtonComponent } from "../../ui/components/button/button.component";
-import { CheckboxComponent } from "../../ui/components/checkbox/checkbox.component";
-import { InputComponent } from "../../ui/components/input/input.component";
+import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
+import { ButtonComponent, CheckboxComponent, InputComponent } from "@ui/components";
 import { NgIf, NgFor } from "@angular/common";
 
 dayjs.extend(cpf);
 
 @Component({
-    selector: "app-login",
-    templateUrl: "./register.component.html",
-    styleUrl: "./register.component.scss",
-    standalone: true,
-    imports: [
-        NgIf,
-        ReactiveFormsModule,
-        InputComponent,
-        NgFor,
-        CheckboxComponent,
-        ButtonComponent,
-        RouterLink,
-        ControlErrorPipe,
-    ],
+  selector: "app-login",
+  templateUrl: "./register.component.html",
+  styleUrl: "./register.component.scss",
+  standalone: true,
+  imports: [
+    NgIf,
+    ReactiveFormsModule,
+    InputComponent,
+    NgFor,
+    CheckboxComponent,
+    ButtonComponent,
+    RouterLink,
+    ControlErrorPipe,
+  ],
 })
 export class RegisterComponent implements OnInit {
   constructor(

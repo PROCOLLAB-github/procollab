@@ -2,7 +2,7 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
-import { InputComponent } from "./input.component";
+import { InputComponent } from "@ui/components";
 import { NgxMaskModule } from "ngx-mask";
 
 describe("InputComponent", () => {

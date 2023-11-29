@@ -6,27 +6,25 @@ import { AuthService } from "../services";
 import { ErrorMessage } from "@error/models/error-message";
 import { ValidationService } from "src/app/core/services";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { ControlErrorPipe } from "../../core/pipes/control-error.pipe";
-import { IconComponent } from "../../ui/components/icon/icon.component";
-import { ButtonComponent } from "../../ui/components/button/button.component";
-import { InputComponent } from "../../ui/components/input/input.component";
+import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
+import { IconComponent, ButtonComponent, InputComponent } from "@ui/components";
 import { NgIf } from "@angular/common";
 
 @Component({
-    selector: "app-login",
-    templateUrl: "./login.component.html",
-    styleUrl: "./login.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        ReactiveFormsModule,
-        RouterLink,
-        NgIf,
-        InputComponent,
-        ButtonComponent,
-        IconComponent,
-        ControlErrorPipe,
-    ],
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrl: "./login.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    NgIf,
+    InputComponent,
+    ButtonComponent,
+    IconComponent,
+    ControlErrorPipe,
+  ],
 })
 export class LoginComponent implements OnInit {
   constructor(

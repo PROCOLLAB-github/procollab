@@ -8,26 +8,26 @@ import { NotificationService } from "@services/notification.service";
 import { Invite } from "@models/invite.model";
 import { AuthService } from "@auth/services";
 import { InviteService } from "@services/invite.service";
-import { ProfileInfoComponent } from "../../../ui/components/profile-info/profile-info.component";
+import { ProfileInfoComponent } from "@ui/components/profile-info/profile-info.component";
 import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
 import { NgIf, NgFor, AsyncPipe } from "@angular/common";
-import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { IconComponent } from "@ui/components";
 
 @Component({
-    selector: "app-nav",
-    templateUrl: "./nav.component.html",
-    styleUrl: "./nav.component.scss",
-    standalone: true,
-    imports: [
-        IconComponent,
-        NgIf,
-        RouterLink,
-        RouterLinkActive,
-        NgFor,
-        InviteManageCardComponent,
-        ProfileInfoComponent,
-        AsyncPipe,
-    ],
+  selector: "app-nav",
+  templateUrl: "./nav.component.html",
+  styleUrl: "./nav.component.scss",
+  standalone: true,
+  imports: [
+    IconComponent,
+    NgIf,
+    RouterLink,
+    RouterLinkActive,
+    NgFor,
+    InviteManageCardComponent,
+    ProfileInfoComponent,
+    AsyncPipe,
+  ],
 })
 export class NavComponent implements OnInit, OnDestroy {
   constructor(

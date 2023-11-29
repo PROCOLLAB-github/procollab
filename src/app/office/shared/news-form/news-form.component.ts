@@ -6,25 +6,25 @@ import { ValidationService } from "@core/services";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
 import { forkJoin, noop, Observable, tap } from "rxjs";
-import { FileUploadItemComponent } from "../../../ui/components/file-upload-item/file-upload-item.component";
+import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { ImgCardComponent } from "../img-card/img-card.component";
 import { NgFor } from "@angular/common";
-import { IconComponent } from "../../../ui/components/icon/icon.component";
+import { IconComponent } from "@ui/components";
 import { AutosizeModule } from "ngx-autosize";
 
 @Component({
-    selector: "app-news-form",
-    templateUrl: "./news-form.component.html",
-    styleUrl: "./news-form.component.scss",
-    standalone: true,
-    imports: [
-        ReactiveFormsModule,
-        AutosizeModule,
-        IconComponent,
-        NgFor,
-        ImgCardComponent,
-        FileUploadItemComponent,
-    ],
+  selector: "app-news-form",
+  templateUrl: "./news-form.component.html",
+  styleUrl: "./news-form.component.scss",
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    AutosizeModule,
+    IconComponent,
+    NgFor,
+    ImgCardComponent,
+    FileUploadItemComponent,
+  ],
 })
 export class NewsFormComponent implements OnInit {
   constructor(

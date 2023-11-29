@@ -11,21 +11,18 @@ import {
   ReactiveFormsModule,
 } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
-import { SelectComponent } from "@ui/components";
+import { SelectComponent, ButtonComponent, IconComponent, InputComponent } from "@ui/components";
 import { ValidationService } from "@core/services";
 import { concatMap, first, map, noop, Observable, skip, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 import { NavService } from "@services/nav.service";
-import { ControlErrorPipe } from "../../../core/pipes/control-error.pipe";
-import { EditorSubmitButtonDirective } from "../../../ui/directives/editor-submit-button.directive";
-import { TextareaComponent } from "../../../ui/components/textarea/textarea.component";
-import { AvatarControlComponent } from "../../../ui/components/avatar-control/avatar-control.component";
-import { ButtonComponent } from "../../../ui/components/button/button.component";
-import { IconComponent } from "../../../ui/components/icon/icon.component";
-import { TagComponent } from "../../../ui/components/tag/tag.component";
-import { InputComponent } from "../../../ui/components/input/input.component";
+import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
+import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button.directive";
+import { TextareaComponent } from "@ui/components/textarea/textarea.component";
+import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
+import { TagComponent } from "@ui/components/tag/tag.component";
 import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 
 dayjs.extend(cpf);

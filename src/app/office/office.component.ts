@@ -9,30 +9,30 @@ import { AuthService } from "@auth/services";
 import { ProjectService } from "@services/project.service";
 import { User } from "@auth/models/user.model";
 import { ChatService } from "@services/chat.service";
-import { SnackbarComponent } from "../ui/components/snackbar/snackbar.component";
-import { DeleteConfirmComponent } from "../ui/components/delete-confirm/delete-confirm.component";
-import { ButtonComponent } from "../ui/components/button/button.component";
-import { ModalComponent } from "../ui/components/modal/modal.component";
+import { SnackbarComponent } from "@ui/components/snackbar/snackbar.component";
+import { DeleteConfirmComponent } from "@ui/components/delete-confirm/delete-confirm.component";
+import { ButtonComponent } from "@ui/components";
+import { ModalComponent } from "@ui/components/modal/modal.component";
 import { NavComponent } from "./shared/nav/nav.component";
 import { SidebarComponent } from "./shared/sidebar/sidebar.component";
 import { NgIf, AsyncPipe } from "@angular/common";
 
 @Component({
-    selector: "app-office",
-    templateUrl: "./office.component.html",
-    styleUrl: "./office.component.scss",
-    standalone: true,
-    imports: [
-        NgIf,
-        SidebarComponent,
-        NavComponent,
-        RouterOutlet,
-        ModalComponent,
-        ButtonComponent,
-        DeleteConfirmComponent,
-        SnackbarComponent,
-        AsyncPipe,
-    ],
+  selector: "app-office",
+  templateUrl: "./office.component.html",
+  styleUrl: "./office.component.scss",
+  standalone: true,
+  imports: [
+    NgIf,
+    SidebarComponent,
+    NavComponent,
+    RouterOutlet,
+    ModalComponent,
+    ButtonComponent,
+    DeleteConfirmComponent,
+    SnackbarComponent,
+    AsyncPipe,
+  ],
 })
 export class OfficeComponent implements OnInit, OnDestroy {
   constructor(

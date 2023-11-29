@@ -8,30 +8,29 @@ import { NavService } from "@services/nav.service";
 import { AuthService } from "@auth/services";
 import { ChatService } from "@services/chat.service";
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { YearsFromBirthdayPipe } from "../../../core/pipes/years-from-birthday.pipe";
-import { ButtonComponent } from "../../../ui/components/button/button.component";
-import { IconComponent } from "../../../ui/components/icon/icon.component";
-import { AvatarComponent } from "../../../ui/components/avatar/avatar.component";
-import { BackComponent } from "../../../ui/components/back/back.component";
+import { YearsFromBirthdayPipe } from "@core/pipes/years-from-birthday.pipe";
+import { ButtonComponent, IconComponent } from "@ui/components";
+import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { BackComponent } from "@ui/components/back/back.component";
 import { NgIf, AsyncPipe } from "@angular/common";
 
 @Component({
-    selector: "app-profile-detail",
-    templateUrl: "./profile-detail.component.html",
-    styleUrl: "./profile-detail.component.scss",
-    standalone: true,
-    imports: [
-        NgIf,
-        BackComponent,
-        RouterLinkActive,
-        RouterLink,
-        AvatarComponent,
-        IconComponent,
-        ButtonComponent,
-        RouterOutlet,
-        AsyncPipe,
-        YearsFromBirthdayPipe,
-    ],
+  selector: "app-profile-detail",
+  templateUrl: "./profile-detail.component.html",
+  styleUrl: "./profile-detail.component.scss",
+  standalone: true,
+  imports: [
+    NgIf,
+    BackComponent,
+    RouterLinkActive,
+    RouterLink,
+    AvatarComponent,
+    IconComponent,
+    ButtonComponent,
+    RouterOutlet,
+    AsyncPipe,
+    YearsFromBirthdayPipe,
+  ],
 })
 export class ProfileDetailComponent implements OnInit {
   constructor(
