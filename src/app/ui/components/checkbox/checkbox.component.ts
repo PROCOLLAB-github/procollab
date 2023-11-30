@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { IconComponent } from "@ui/components";
+import { IconComponent } from "@ui/components/icon/icon.component";
 
 @Component({
   selector: "app-checkbox",
