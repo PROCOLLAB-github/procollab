@@ -1,0 +1,21 @@
+<!-- @format -->
+
+<div class="range">
+  <input
+    class="range__start range__point"
+    type="number"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    [value]="value[0]"
+    (input)="onInputLeft($event)"
+  />
+  <div class="range__divider"></div>
+  <input
+    class="range__end range__point"
+    type="number"
+    inputmode="numeric"
+    pattern="[0-9]*"
+    [value]="value[1]"
+    (input)="onInputRight($event)"
+  />
+</div>
