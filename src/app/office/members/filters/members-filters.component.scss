@@ -1,0 +1,40 @@
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 63px;
+
+  &__toggle {
+    ::ng-deep .button--inline {
+      width: auto;
+      min-height: auto;
+      padding: 7px 10px;
+      color: var(--black);
+      border: 1px solid transparent;
+    }
+
+    i {
+      margin-left: 10px;
+    }
+
+    &-open {
+      ::ng-deep .button--inline.button--grey {
+        background-color: var(--white);
+        border: 1px solid var(--medium-grey-for-outline);
+      }
+
+      i {
+        color: var(--accent);
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  &__controls {
+    display: none;
+
+    &-open {
+      display: flex;
+    }
+  }
+}
