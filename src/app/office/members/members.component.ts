@@ -92,15 +92,20 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
         this.members = members.results;
       });
 
-    this.saveControlValue(this.searchForm.get("search"), "search");
+    this.saveControlValue(this.searchForm.get("search"), "fullname");
+    this.saveControlValue(this.filterForm.get("keySkill"), "key_skills__contains");
 
-    const querySearch$ = this.searchParam$
+    this.route.queryParams
       .pipe(
-        tap(search => {
-          this.searchParamSubject$.next(search);
-        }),
-        switchMap(search => {
-          return this.onFetch(0, 20, { fullname: search ?? undefined });
+        skip(1),
+        switchMap(params => {
+          const fetchParams: Record<string, string> = {};
+
+          if (params.fullname) fetchParams.fullname = params.fullname;
+          if (params.key_skills__contains)
+            fetchParams.key_skills__contains = params.key_skills__contains;
+
+          return this.onFetch(0, 20, fetchParams);
         })
       )
       .subscribe(members => {
@@ -109,7 +114,6 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.cdref.detectChanges();
       });
-    this.subscriptions$.push(querySearch$);
   }
 
   ngAfterViewInit(): void {
@@ -142,17 +146,17 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
 
   members: User[] = [];
 
-  searchParam$ = this.route.queryParams.pipe(
-    skip(1),
-    debounceTime(500),
-    map(q => {
-      if (q["search"]) {
-        return capitalizeString(q["search"] as string);
-      }
-      return q["search"];
-    }),
-    distinctUntilChanged()
-  );
+  // searchParam$ = this.route.queryParams.pipe(
+  //   skip(1),
+  //   debounceTime(500),
+  //   map(q => {
+  //     if (q["search"]) {
+  //       return capitalizeString(q["search"] as string);
+  //     }
+  //     return q["search"];
+  //   }),
+  //   distinctUntilChanged()
+  // );
 
   searchParamSubject$ = new BehaviorSubject<string>("");
 
