@@ -10,8 +10,9 @@
     <i appIcon icon="arrow-no-body" appWidth="12" appHeight="6" appViewBox="0 0 18 9"> </i>
   </button>
   <div class="filters__controls" [class.filters__controls--open]="filtersOpen">
-    <section>
-      <app-range-input></app-range-input>
-    </section>
+    <form [formGroup]="filterForm">
+      <app-range-input formControlName="age"></app-range-input>
+      <input formControlName="keySkill" type="text" class="input" placeholder="Навыки" />
+    </form>
   </div>
 </div>

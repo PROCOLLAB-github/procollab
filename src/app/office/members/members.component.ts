@@ -19,7 +19,6 @@ import {
   fromEvent,
   map,
   noop,
-  Observable,
   of,
   skip,
   Subscription,
@@ -30,10 +29,15 @@ import {
 } from "rxjs";
 import { MembersResult, User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
-import { capitalizeString } from "@utils/capitalize-string";
 import { MemberCardComponent } from "../shared/member-card/member-card.component";
 import { CommonModule } from "@angular/common";
 import { SearchComponent } from "@ui/components/search/search.component";
@@ -66,6 +70,11 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     this.searchForm = this.fb.group({
       search: ["", [Validators.required]],
     });
+
+    this.filterForm = this.fb.group({
+      keySkill: ["", Validators.required],
+      age: [[null, null]],
+    });
   }
 
   ngOnInit(): void {
@@ -82,53 +91,49 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
         this.members = members.results;
       });
 
-    this.searchFormChanges$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
-      this.router
-        .navigate([], {
-          queryParams: { search },
-          relativeTo: this.route,
-          queryParamsHandling: "merge",
-        })
-        .then(() => console.debug("QueryParams changed from MembersComponent"));
-    });
+    this.saveControlValue(this.searchForm.get("search"), "fullname");
+    this.saveControlValue(this.filterForm.get("keySkill"), "key_skills__contains");
 
-    this.querySearch$ = this.searchParam$
+    this.route.queryParams
       .pipe(
-        tap(search => {
-          this.searchParamSubject$.next(search);
-        }),
-        switchMap(search => {
-          let request: Observable<User[]>;
-          if (!search) {
-            request = this.onFetch(0, 20).pipe(take(1));
-          } else {
-            request = this.onFetch(0, 20, { fullname: search }).pipe(take(1));
-          }
-          request.subscribe(members => {
-            this.members = members;
-            this.membersPage = 1;
+        skip(1),
+        distinctUntilChanged(),
+        debounceTime(100),
+        switchMap(params => {
+          const fetchParams: Record<string, string> = {};
 
-            this.cdref.detectChanges();
-          });
-          return of({});
+          if (params["fullname"]) fetchParams["fullname"] = params["fullname"];
+          if (params["key_skills__contains"])
+            fetchParams["key_skills__contains"] = params["key_skills__contains"];
+
+          this.searchParamsSubject$.next(fetchParams);
+          return this.onFetch(0, 20, fetchParams);
         })
       )
-      .subscribe(noop);
+      .subscribe(members => {
+        this.members = members;
+        this.membersPage = 1;
+
+        this.cdref.detectChanges();
+      });
   }
 
   ngAfterViewInit(): void {
     const target = document.querySelector(".office__body");
-    if (target)
-      this.scrollEvents$ = fromEvent(target, "scroll")
+    if (target) {
+      const scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
           concatMap(() => this.onScroll()),
           throttleTime(500)
         )
         .subscribe(noop);
+
+      this.subscriptions$.push(scrollEvents$);
+    }
   }
 
   ngOnDestroy(): void {
-    [this.searchFormChanges$, this.querySearch$, this.scrollEvents$].forEach($ => $?.unsubscribe());
+    this.subscriptions$.forEach($ => $?.unsubscribe());
   }
 
   containerSm = containerSm;
@@ -139,28 +144,14 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   membersPage = 1;
   membersTake = 20;
 
+  subscriptions$: Subscription[] = [];
+
   members: User[] = [];
 
-  querySearch$?: Subscription;
-
-  searchParam$ = this.route.queryParams.pipe(
-    skip(1),
-    debounceTime(500),
-    map(q => {
-      if (q["search"]) {
-        return capitalizeString(q["search"] as string);
-      }
-      return q["search"];
-    }),
-    distinctUntilChanged()
-  );
-
-  searchParamSubject$ = new BehaviorSubject<string>("");
+  searchParamsSubject$ = new BehaviorSubject<Record<string, string>>({});
 
   searchForm: FormGroup;
-  searchFormChanges$?: Subscription;
-
-  scrollEvents$?: Subscription;
+  filterForm: FormGroup;
 
   onScroll() {
     if (this.membersTotalCount && this.members.length >= this.membersTotalCount) return of({});
@@ -174,8 +165,11 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
       window.innerHeight;
 
     if (diff > 0) {
-      const search = { fullname: this.searchParamSubject$.value };
-      return this.onFetch(this.membersPage * this.membersTake, this.membersTake, search).pipe(
+      return this.onFetch(
+        this.membersPage * this.membersTake,
+        this.membersTake,
+        this.searchParamsSubject$.value
+      ).pipe(
         tap(membersChunk => {
           this.membersPage++;
           this.members = [...this.members, ...membersChunk];
@@ -186,6 +180,27 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     return of({});
+  }
+
+  /**
+   * save value of form control in query params
+   * @param control
+   * @param queryName
+   */
+  saveControlValue(control: AbstractControl | null, queryName: string): void {
+    if (!control) return;
+
+    const sub$ = control.valueChanges.subscribe(value => {
+      this.router
+        .navigate([], {
+          queryParams: { [queryName]: value },
+          relativeTo: this.route,
+          queryParamsHandling: "merge",
+        })
+        .then(() => console.debug("QueryParams changed from MembersComponent"));
+    });
+
+    this.subscriptions$.push(sub$);
   }
 
   onFetch(skip: number, take: number, params?: Record<string, string | number | boolean>) {
