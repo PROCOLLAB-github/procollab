@@ -1,17 +1,17 @@
 <!-- @format -->
 
 <div class="filters">
-  <app-button
-    class="filters__toggle"
+  <button
+    class="filters__toggle text-body-14"
     [class.filters__toggle-open]="filtersOpen"
-    customTypographyClass="text-body-14"
-    color="grey"
     (click)="filtersOpen = !filtersOpen"
   >
     Фильтры
     <i appIcon icon="arrow-no-body" appWidth="12" appHeight="6" appViewBox="0 0 18 9"> </i>
-  </app-button>
+  </button>
   <div class="filters__controls" [class.filters__controls-open]="filtersOpen">
-    <app-range-input></app-range-input>
+    <section>
+      <app-range-input></app-range-input>
+    </section>
   </div>
 </div>

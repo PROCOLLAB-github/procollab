@@ -5,23 +5,23 @@
   margin-bottom: 63px;
 
   &__toggle {
-    ::ng-deep .button--inline {
-      width: auto;
-      min-height: auto;
-      padding: 7px 10px;
-      color: var(--black);
-      border: 1px solid transparent;
-    }
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    padding: 7px 10px;
+    color: var(--black);
+    background-color: var(--grey-button);
+    border: 1px solid transparent;
+    border-radius: var(--rounded-lg);
 
     i {
       margin-left: 10px;
+      transition: transform 0.5s;
     }
 
     &-open {
-      ::ng-deep .button--inline.button--grey {
-        background-color: var(--white);
-        border: 1px solid var(--medium-grey-for-outline);
-      }
+      background-color: var(--white);
+      border: 1px solid var(--medium-grey-for-outline);
 
       i {
         color: var(--accent);
@@ -31,10 +31,24 @@
   }
 
   &__controls {
-    display: none;
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    transition: grid-template-rows 0.5s;
+
+    section {
+      display: flex;
+      min-height: 0;
+      visibility: hidden;
+      transition: visibility 0.5s;
+    }
 
     &-open {
-      display: flex;
+      grid-template-rows: 1fr;
+
+      section {
+        visibility: visible;
+      }
     }
   }
 }
