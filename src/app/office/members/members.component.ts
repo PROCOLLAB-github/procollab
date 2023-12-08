@@ -14,8 +14,6 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import {
   BehaviorSubject,
   concatMap,
-  debounceTime,
-  distinctUntilChanged,
   fromEvent,
   map,
   noop,
@@ -38,7 +36,6 @@ import {
 } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
-import { capitalizeString } from "@utils/capitalize-string";
 import { MemberCardComponent } from "../shared/member-card/member-card.component";
 import { CommonModule } from "@angular/common";
 import { SearchComponent } from "@ui/components/search/search.component";
@@ -105,6 +102,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
           if (params.key_skills__contains)
             fetchParams.key_skills__contains = params.key_skills__contains;
 
+          this.searchParamsSubject$.next(fetchParams);
           return this.onFetch(0, 20, fetchParams);
         })
       )
@@ -146,19 +144,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
 
   members: User[] = [];
 
-  // searchParam$ = this.route.queryParams.pipe(
-  //   skip(1),
-  //   debounceTime(500),
-  //   map(q => {
-  //     if (q["search"]) {
-  //       return capitalizeString(q["search"] as string);
-  //     }
-  //     return q["search"];
-  //   }),
-  //   distinctUntilChanged()
-  // );
-
-  searchParamSubject$ = new BehaviorSubject<string>("");
+  searchParamsSubject$ = new BehaviorSubject<Record<string, string>>({});
 
   searchForm: FormGroup;
   filterForm: FormGroup;
@@ -175,8 +161,11 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
       window.innerHeight;
 
     if (diff > 0) {
-      const search = { fullname: this.searchParamSubject$.value };
-      return this.onFetch(this.membersPage * this.membersTake, this.membersTake, search).pipe(
+      return this.onFetch(
+        this.membersPage * this.membersTake,
+        this.membersTake,
+        this.searchParamsSubject$.value
+      ).pipe(
         tap(membersChunk => {
           this.membersPage++;
           this.members = [...this.members, ...membersChunk];
