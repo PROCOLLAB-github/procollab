@@ -7,6 +7,7 @@
     inputmode="numeric"
     pattern="[0-9]*"
     [value]="value[0]"
+    (blur)="onBlur()"
     (input)="onInputLeft($event)"
   />
   <div class="range__divider"></div>
@@ -16,6 +17,7 @@
     inputmode="numeric"
     pattern="[0-9]*"
     [value]="value[1]"
+    (blur)="onBlur()"
     (input)="onInputRight($event)"
   />
 </div>
