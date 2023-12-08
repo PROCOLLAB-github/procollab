@@ -14,6 +14,8 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import {
   BehaviorSubject,
   concatMap,
+  debounceTime,
+  distinctUntilChanged,
   fromEvent,
   map,
   noop,
@@ -95,6 +97,8 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     this.route.queryParams
       .pipe(
         skip(1),
+        distinctUntilChanged(),
+        debounceTime(100),
         switchMap(params => {
           const fetchParams: Record<string, string> = {};
 
