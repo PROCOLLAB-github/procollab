@@ -35,8 +35,9 @@ import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
 import { capitalizeString } from "@utils/capitalize-string";
 import { MemberCardComponent } from "../shared/member-card/member-card.component";
-import { NgFor } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { SearchComponent } from "@ui/components/search/search.component";
+import { MembersFiltersComponent } from "./filters/members-filters.component";
 
 @Component({
   selector: "app-members",
@@ -44,7 +45,14 @@ import { SearchComponent } from "@ui/components/search/search.component";
   styleUrl: "./members.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [ReactiveFormsModule, SearchComponent, NgFor, RouterLink, MemberCardComponent],
+  imports: [
+    ReactiveFormsModule,
+    SearchComponent,
+    CommonModule,
+    RouterLink,
+    MemberCardComponent,
+    MembersFiltersComponent,
+  ],
 })
 export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(

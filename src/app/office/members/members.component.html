@@ -8,6 +8,7 @@
       [openable]="containerSm < appWidth"
     ></app-search>
   </form>
+  <app-members-filters></app-members-filters>
   <ul class="members__list">
     <a *ngFor="let member of members" [routerLink]="['/office/profile', member.id]">
       <li>
