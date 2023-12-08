@@ -98,9 +98,9 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
         switchMap(params => {
           const fetchParams: Record<string, string> = {};
 
-          if (params.fullname) fetchParams.fullname = params.fullname;
-          if (params.key_skills__contains)
-            fetchParams.key_skills__contains = params.key_skills__contains;
+          if (params["fullname"]) fetchParams["fullname"] = params["fullname"];
+          if (params["key_skills__contains"])
+            fetchParams["key_skills__contains"] = params["key_skills__contains"];
 
           this.searchParamsSubject$.next(fetchParams);
           return this.onFetch(0, 20, fetchParams);
