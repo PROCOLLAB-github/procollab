@@ -29,7 +29,13 @@ import {
 } from "rxjs";
 import { MembersResult, User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
 import { capitalizeString } from "@utils/capitalize-string";
@@ -86,16 +92,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
         this.members = members.results;
       });
 
-    const searchFormChanges$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
-      this.router
-        .navigate([], {
-          queryParams: { search },
-          relativeTo: this.route,
-          queryParamsHandling: "merge",
-        })
-        .then(() => console.debug("QueryParams changed from MembersComponent"));
-    });
-    searchFormChanges$ && this.subscriptions$.push(searchFormChanges$);
+    this.saveControlValue(this.searchForm.get("search"), "search");
 
     const querySearch$ = this.searchParam$
       .pipe(
@@ -186,6 +183,27 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     return of({});
+  }
+
+  /**
+   * save value of form control in query params
+   * @param control
+   * @param queryName
+   */
+  saveControlValue(control: AbstractControl | null, queryName: string): void {
+    if (!control) return;
+
+    const sub$ = control.valueChanges.subscribe(value => {
+      this.router
+        .navigate([], {
+          queryParams: { [queryName]: value },
+          relativeTo: this.route,
+          queryParamsHandling: "merge",
+        })
+        .then(() => console.debug("QueryParams changed from MembersComponent"));
+    });
+
+    this.subscriptions$.push(sub$);
   }
 
   onFetch(skip: number, take: number, params?: Record<string, string | number | boolean>) {
