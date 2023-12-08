@@ -66,6 +66,11 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     this.searchForm = this.fb.group({
       search: ["", [Validators.required]],
     });
+
+    this.filterForm = this.fb.group({
+      keySkill: ["", Validators.required],
+      age: [[null, null]],
+    });
   }
 
   ngOnInit(): void {
@@ -161,6 +166,8 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   searchFormChanges$?: Subscription;
 
   scrollEvents$?: Subscription;
+
+  filterForm: FormGroup;
 
   onScroll() {
     if (this.membersTotalCount && this.members.length >= this.membersTotalCount) return of({});
