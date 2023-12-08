@@ -3,13 +3,13 @@
 <div class="filters">
   <button
     class="filters__toggle text-body-14"
-    [class.filters__toggle-open]="filtersOpen"
+    [class.filters__toggle--open]="filtersOpen"
     (click)="filtersOpen = !filtersOpen"
   >
     Фильтры
     <i appIcon icon="arrow-no-body" appWidth="12" appHeight="6" appViewBox="0 0 18 9"> </i>
   </button>
-  <div class="filters__controls" [class.filters__controls-open]="filtersOpen">
+  <div class="filters__controls" [class.filters__controls--open]="filtersOpen">
     <section>
       <app-range-input></app-range-input>
     </section>
