@@ -87,7 +87,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
         this.members = members.results;
       });
 
-    this.searchFormChanges$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
+    const searchFormChanges$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
       this.router
         .navigate([], {
           queryParams: { search },
@@ -96,8 +96,9 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
         })
         .then(() => console.debug("QueryParams changed from MembersComponent"));
     });
+    searchFormChanges$ && this.subscriptions$.push(searchFormChanges$);
 
-    this.querySearch$ = this.searchParam$
+    const querySearch$ = this.searchParam$
       .pipe(
         tap(search => {
           this.searchParamSubject$.next(search);
@@ -119,21 +120,25 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
         })
       )
       .subscribe(noop);
+    this.subscriptions$.push(querySearch$);
   }
 
   ngAfterViewInit(): void {
     const target = document.querySelector(".office__body");
-    if (target)
-      this.scrollEvents$ = fromEvent(target, "scroll")
+    if (target) {
+      const scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
           concatMap(() => this.onScroll()),
           throttleTime(500)
         )
         .subscribe(noop);
+
+      this.subscriptions$.push(scrollEvents$);
+    }
   }
 
   ngOnDestroy(): void {
-    [this.searchFormChanges$, this.querySearch$, this.scrollEvents$].forEach($ => $?.unsubscribe());
+    this.subscriptions$.forEach($ => $?.unsubscribe());
   }
 
   containerSm = containerSm;
@@ -144,9 +149,9 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   membersPage = 1;
   membersTake = 20;
 
-  members: User[] = [];
+  subscriptions$: Subscription[] = [];
 
-  querySearch$?: Subscription;
+  members: User[] = [];
 
   searchParam$ = this.route.queryParams.pipe(
     skip(1),
@@ -163,10 +168,6 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   searchParamSubject$ = new BehaviorSubject<string>("");
 
   searchForm: FormGroup;
-  searchFormChanges$?: Subscription;
-
-  scrollEvents$?: Subscription;
-
   filterForm: FormGroup;
 
   onScroll() {
