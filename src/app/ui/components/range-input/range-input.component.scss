@@ -12,12 +12,17 @@
 
   &__point {
     flex-grow: 1;
+    padding: 0 10px 6px 0;
     font-size: 12px;
     color: var(--black);
     background-color: transparent;
     border: none;
     border-bottom: 1px solid var(--medium-grey-for-outline);
     outline: none;
+
+    &:focus {
+      border-color: var(--accent);
+    }
   }
 
   // stylelint-disable property-no-vendor-prefix

@@ -53,3 +53,16 @@
     }
   }
 }
+
+.input {
+  padding: 0 10px 6px;
+  font-size: 12px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--grey-button);
+  outline: none;
+
+  &:focus {
+    border-color: var(--accent);
+  }
+}
