@@ -19,7 +19,6 @@ import {
   fromEvent,
   map,
   noop,
-  Observable,
   of,
   skip,
   Subscription,
@@ -30,7 +29,7 @@ import {
 } from "rxjs";
 import { MembersResult, User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
 import { capitalizeString } from "@utils/capitalize-string";
@@ -104,22 +103,15 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
           this.searchParamSubject$.next(search);
         }),
         switchMap(search => {
-          let request: Observable<User[]>;
-          if (!search) {
-            request = this.onFetch(0, 20).pipe(take(1));
-          } else {
-            request = this.onFetch(0, 20, { fullname: search }).pipe(take(1));
-          }
-          request.subscribe(members => {
-            this.members = members;
-            this.membersPage = 1;
-
-            this.cdref.detectChanges();
-          });
-          return of({});
+          return this.onFetch(0, 20, { fullname: search ?? undefined });
         })
       )
-      .subscribe(noop);
+      .subscribe(members => {
+        this.members = members;
+        this.membersPage = 1;
+
+        this.cdref.detectChanges();
+      });
     this.subscriptions$.push(querySearch$);
   }
 
