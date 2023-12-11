@@ -3,10 +3,10 @@
 import { Component, Input, OnInit } from "@angular/core";
 
 @Component({
-    selector: "[appIcon]",
-    templateUrl: "./icon.component.html",
-    styleUrl: "./icon.component.scss",
-    standalone: true,
+  selector: "[appIcon]",
+  templateUrl: "./icon.component.html",
+  styleUrl: "./icon.component.scss",
+  standalone: true,
 })
 export class IconComponent implements OnInit {
   @Input()
@@ -59,7 +59,7 @@ export class IconComponent implements OnInit {
     return this.height;
   }
 
-  @Input() icon!: string;
+  @Input({ required: true }) icon!: string;
 
   square!: string;
   viewBox!: string;

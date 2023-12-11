@@ -11,7 +11,7 @@ import { IconComponent } from "@ui/components/icon/icon.component";
   imports: [IconComponent],
 })
 export class CheckboxComponent implements OnInit {
-  @Input() checked = false;
+  @Input({ required: true }) checked = false;
   @Output() checkedChange = new EventEmitter<boolean>();
 
   ngOnInit(): void {}
