@@ -7,7 +7,8 @@
   [style.height]="size + 'px'"
 >
   <img
-    [src]="url || placeholderUrl"
+    [ngSrc]="url || placeholderUrl"
+    [fill]="true"
     [style.width]="size + 'px'"
     [style.height]="size + 'px'"
     alt="avatar"

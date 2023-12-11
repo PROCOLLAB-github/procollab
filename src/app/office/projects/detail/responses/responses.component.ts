@@ -7,14 +7,14 @@ import { VacancyResponse } from "@models/vacancy-response.model";
 import { VacancyService } from "@services/vacancy.service";
 import { NavService } from "@services/nav.service";
 import { ResponseCardComponent } from "@office/shared/response-card/response-card.component";
-import { NgIf, NgFor } from "@angular/common";
+import { NgIf, NgFor, NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: "app-responses",
   templateUrl: "./responses.component.html",
   styleUrl: "./responses.component.scss",
   standalone: true,
-  imports: [NgIf, NgFor, ResponseCardComponent],
+  imports: [NgIf, NgFor, ResponseCardComponent, NgOptimizedImage],
 })
 export class ProjectResponsesComponent implements OnInit, OnDestroy {
   constructor(

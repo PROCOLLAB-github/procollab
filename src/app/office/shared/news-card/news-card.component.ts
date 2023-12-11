@@ -29,7 +29,7 @@ import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-up
 import { ImgCardComponent } from "../img-card/img-card.component";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { NgIf, NgFor } from "@angular/common";
+import { NgIf, NgFor, NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: "app-news-card",
@@ -49,6 +49,7 @@ import { NgIf, NgFor } from "@angular/common";
     ButtonComponent,
     DayjsPipe,
     FormControlPipe,
+    NgOptimizedImage,
   ],
 })
 export class NewsCardComponent implements OnInit {

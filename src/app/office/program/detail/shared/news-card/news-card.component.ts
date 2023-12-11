@@ -23,7 +23,7 @@ import { FileItemComponent } from "@ui/components/file-item/file-item.component"
 import { IconComponent } from "@ui/components";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
-import { NgIf, NgFor } from "@angular/common";
+import { NgIf, NgFor, NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: "app-program-news-card",
@@ -38,6 +38,7 @@ import { NgIf, NgFor } from "@angular/common";
     IconComponent,
     FileItemComponent,
     DayjsPipe,
+    NgOptimizedImage,
   ],
 })
 export class ProgramNewsCardComponent implements OnInit {

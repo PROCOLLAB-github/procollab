@@ -10,7 +10,7 @@ import { AuthService } from "@auth/services";
 import { InviteService } from "@services/invite.service";
 import { ProfileInfoComponent } from "@ui/components/profile-info/profile-info.component";
 import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { NgIf, NgFor, AsyncPipe, NgOptimizedImage } from "@angular/common";
 import { IconComponent } from "@ui/components";
 
 @Component({
@@ -27,6 +27,7 @@ import { IconComponent } from "@ui/components";
     InviteManageCardComponent,
     ProfileInfoComponent,
     AsyncPipe,
+    NgOptimizedImage,
   ],
 })
 export class NavComponent implements OnInit, OnDestroy {

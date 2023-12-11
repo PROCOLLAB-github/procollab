@@ -13,11 +13,12 @@
     <div *ngIf="loading" class="control__loader">
       <app-loader></app-loader>
     </div>
-    <img *ngIf="value" [src]="value" alt="avatar" class="control__img" />
+    <img *ngIf="value" [ngSrc]="value" alt="avatar" class="control__img" fill />
     <img
-      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfRvoKyPWxl-0EExOVhrqc56QcPcWK-Tloew&usqp=CAU"
+      ngSrc="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfRvoKyPWxl-0EExOVhrqc56QcPcWK-Tloew&usqp=CAU"
       alt="avatar"
       class="control__img"
+      fill
     />
     <div class="control__overlay">
       <i appIcon icon="edit-pen" appSquare="32"></i>

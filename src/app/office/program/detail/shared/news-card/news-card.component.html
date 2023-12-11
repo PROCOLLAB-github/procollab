@@ -2,7 +2,12 @@
 <div class="card">
   <div class="card__head">
     <div class="card__title">
-      <img class="card__avatar" [src]="newsItem.imageAddress" [alt]="newsItem.name" />
+      <img
+        class="card__avatar"
+        [ngSrc]="newsItem.imageAddress"
+        [fill]="true"
+        [alt]="newsItem.name"
+      />
       <div>
         <div class="card__name">{{ newsItem.name }}</div>
         <div class="card__date text-body-14">
@@ -41,7 +46,7 @@
     class="read-more"
     (click)="onExpandNewsText(newsTextEl?.nativeElement, 'expanded', readMore)"
   >
-    {{ readMore ? 'Скрыть' : 'Читать полностью' }}
+    {{ readMore ? "Скрыть" : "Читать полностью" }}
   </div>
   <div *ngIf="!editMode" class="card__gallery">
     <div
@@ -49,7 +54,7 @@
       class="card__img"
       (touchend)="onTouchImg($event, index)"
     >
-      <img class="card__img" [src]="f.link" [alt]="f.name" />
+      <img class="card__img" [ngSrc]="f.link" [fill]="true" [alt]="f.name" />
       <div class="card__img-like" [class.card__img-like--show]="showLikes[index]">
         <i appIcon icon="like" appSquare="40"></i>
       </div>

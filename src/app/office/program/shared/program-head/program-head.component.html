@@ -2,7 +2,7 @@
 
 <div class="page__head head">
   <div class="head__body">
-    <img [src]="program.imageAddress" [alt]="program.name" class="head__avatar" />
+    <img [ngSrc]="program.imageAddress" [fill]="true" [alt]="program.name" class="head__avatar" />
     <div class="head__info">
       <h1 class="head__title">{{ program.name }}</h1>
       <div class="head__row">

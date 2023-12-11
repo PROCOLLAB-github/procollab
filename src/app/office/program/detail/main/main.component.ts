@@ -21,7 +21,7 @@ import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { ProgramNewsCardComponent } from "../shared/news-card/news-card.component";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { NgIf, NgFor } from "@angular/common";
+import { NgIf, NgFor, NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: "app-main",
@@ -39,6 +39,7 @@ import { NgIf, NgFor } from "@angular/common";
     UserLinksPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
+    NgOptimizedImage,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {

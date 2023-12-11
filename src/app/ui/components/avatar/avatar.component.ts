@@ -1,14 +1,14 @@
 /** @format */
 
 import { Component, Input, OnInit } from "@angular/core";
-import { NgIf } from "@angular/common";
+import { NgIf, NgOptimizedImage } from "@angular/common";
 
 @Component({
-    selector: "app-avatar",
-    templateUrl: "./avatar.component.html",
-    styleUrl: "./avatar.component.scss",
-    standalone: true,
-    imports: [NgIf],
+  selector: "app-avatar",
+  templateUrl: "./avatar.component.html",
+  styleUrl: "./avatar.component.scss",
+  standalone: true,
+  imports: [NgIf, NgOptimizedImage],
 })
 export class AvatarComponent implements OnInit {
   @Input() url?: string;

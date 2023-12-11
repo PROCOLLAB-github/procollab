@@ -40,7 +40,7 @@ import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from "@angular/common";
+import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe, NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: "app-detail",
@@ -63,6 +63,7 @@ import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from "@angular/common";
     ParseBreaksPipe,
     ParseLinksPipe,
     AsyncPipe,
+    NgOptimizedImage,
   ],
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {

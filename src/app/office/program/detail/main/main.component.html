@@ -4,7 +4,7 @@
   <section class="program__main">
     <div class="info program__section program__info">
       <div class="info__cover">
-        <img class="info__cover" [src]="program.coverImageAddress" alt="cover" />
+        <img class="info__cover" [ngSrc]="program.coverImageAddress" [fill]="true" alt="cover" />
         <app-avatar
           class="info__avatar"
           [url]="program.imageAddress"
@@ -32,9 +32,9 @@
           >
             <app-button color="grey" customTypographyClass="text-body-12">
               {{
-                program.name.includes('Технолидеры Будущего') 
-                ? 'Каталог лучших стартапов 2022/23'
-                : 'Положение программы'
+                program.name.includes("Технолидеры Будущего")
+                  ? "Каталог лучших стартапов 2022/23"
+                  : "Положение программы"
               }}
               <i appIcon class="info__presentation-icon" icon="file_pdf" appSquare="16"></i>
             </app-button>
@@ -49,7 +49,7 @@
       </div>
     </div>
     <div class="program__advertisement" *ngIf="!program.isUserMember">
-      <img [src]="program.advertisementImageAddress" [alt]="program.name" />
+      <img [ngSrc]="program.advertisementImageAddress" [fill]="true" [alt]="program.name" />
     </div>
     <div *ngIf="program.isUserMember" class="program__content">
       <div class="about program__about">

@@ -15,7 +15,7 @@ import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { NavComponent } from "./shared/nav/nav.component";
 import { SidebarComponent } from "./shared/sidebar/sidebar.component";
-import { NgIf, AsyncPipe } from "@angular/common";
+import { NgIf, AsyncPipe, NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: "app-office",
@@ -32,6 +32,7 @@ import { NgIf, AsyncPipe } from "@angular/common";
     DeleteConfirmComponent,
     SnackbarComponent,
     AsyncPipe,
+    NgOptimizedImage,
   ],
 })
 export class OfficeComponent implements OnInit, OnDestroy {

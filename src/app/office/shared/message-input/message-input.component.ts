@@ -18,7 +18,7 @@ import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { AutosizeModule } from "ngx-autosize";
 import { NgxMaskModule } from "ngx-mask";
 import { IconComponent } from "@ui/components";
-import { NgIf, NgFor } from "@angular/common";
+import { NgIf, NgFor, NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: "app-message-input",
@@ -32,7 +32,15 @@ import { NgIf, NgFor } from "@angular/common";
     },
   ],
   standalone: true,
-  imports: [NgIf, NgFor, IconComponent, NgxMaskModule, AutosizeModule, FileTypePipe],
+  imports: [
+    NgIf,
+    NgFor,
+    IconComponent,
+    NgxMaskModule,
+    AutosizeModule,
+    FileTypePipe,
+    NgOptimizedImage,
+  ],
 })
 export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
   constructor(private readonly fileService: FileService) {}

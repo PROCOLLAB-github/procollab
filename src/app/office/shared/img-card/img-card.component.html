@@ -3,7 +3,8 @@
 <div class="file" [class.file--loading]="loading" [class.file--error]="error">
   <img
     *ngIf="src && !loading && !error"
-    [src]="src"
+    [ngSrc]="src"
+    [fill]="true"
     alt="user-generated content"
     class="file__img"
   />
