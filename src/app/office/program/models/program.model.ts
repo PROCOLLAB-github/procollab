@@ -26,7 +26,7 @@ export class Program {
       name: "",
       description: "",
       city: "",
-      imageAddress: "",
+      imageAddress: "https://google.com",
       presentationAddress: "",
       links: [],
       coverImageAddress: "",
