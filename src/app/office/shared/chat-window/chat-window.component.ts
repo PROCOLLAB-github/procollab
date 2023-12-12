@@ -86,7 +86,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     return this._messages;
   }
 
-  @Input({ required: true })
+  @Input()
   typingPersons: { firstName: string; lastName: string; userId: number }[] = [];
 
   @Output() submit = new EventEmitter<any>();

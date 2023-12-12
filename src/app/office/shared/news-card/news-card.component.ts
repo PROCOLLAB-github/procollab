@@ -1,6 +1,7 @@
 /** @format */
 
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -8,14 +9,12 @@ import {
   OnInit,
   Output,
   ViewChild,
-  ChangeDetectorRef,
 } from "@angular/core";
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ActivatedRoute } from "@angular/router";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ValidationService } from "@core/services";
-import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { FileService } from "@core/services/file.service";
 import { nanoid } from "nanoid";
 import { expandElement } from "@utils/expand-element";
@@ -29,7 +28,7 @@ import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-up
 import { ImgCardComponent } from "../img-card/img-card.component";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { NgIf, NgFor, NgOptimizedImage } from "@angular/common";
+import { NgFor, NgIf, NgOptimizedImage } from "@angular/common";
 
 @Component({
   selector: "app-news-card",
@@ -58,7 +57,6 @@ export class NewsCardComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
-    private readonly projectNewsService: ProjectNewsService,
     private readonly fileService: FileService,
     private readonly cdRef: ChangeDetectorRef
   ) {
@@ -68,7 +66,7 @@ export class NewsCardComponent implements OnInit {
   }
 
   @Input({ required: true }) newsItem!: ProjectNews;
-  @Input({ required: true }) isOwner!: boolean;
+  @Input() isOwner?: boolean;
   @Output() delete = new EventEmitter<number>();
   @Output() like = new EventEmitter<number>();
   @Output() edited = new EventEmitter<ProjectNews>();
