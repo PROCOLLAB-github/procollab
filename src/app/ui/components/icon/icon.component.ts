@@ -17,7 +17,7 @@ export class IconComponent implements OnInit {
   }
 
   get appSquare(): string {
-    return this.square;
+    return this.square ?? "";
   }
 
   @Input()
@@ -26,7 +26,7 @@ export class IconComponent implements OnInit {
   }
 
   get appViewBox(): string {
-    return this.viewBox;
+    return this.viewBox ?? "0 0 0 0";
   }
 
   @Input()
@@ -41,7 +41,7 @@ export class IconComponent implements OnInit {
   }
 
   get appWidth(): string {
-    return this.width;
+    return this.width ?? "";
   }
 
   @Input()
@@ -56,16 +56,16 @@ export class IconComponent implements OnInit {
   }
 
   get appHeight(): string {
-    return this.height;
+    return this.height ?? "";
   }
 
   @Input({ required: true }) icon!: string;
 
-  square!: string;
-  viewBox!: string;
+  square?: string;
+  viewBox?: string;
 
-  width!: string;
-  height!: string;
+  width?: string;
+  height?: string;
 
   ngOnInit(): void {}
 

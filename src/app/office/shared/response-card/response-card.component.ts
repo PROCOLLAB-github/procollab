@@ -28,7 +28,7 @@ import { NgIf, NgFor, AsyncPipe } from "@angular/common";
 export class ResponseCardComponent implements OnInit {
   constructor() {}
 
-  @Input() response?: VacancyResponse;
+  @Input({ required: true }) response!: VacancyResponse;
   @Output() reject = new EventEmitter<number>();
   @Output() accept = new EventEmitter<number>();
 

@@ -14,7 +14,7 @@ import { NgIf } from "@angular/common";
 export class AdvertCardComponent implements OnInit {
   constructor() {}
 
-  @Input() advert?: New;
+  @Input({ required: true }) advert!: New;
   @Input() layout: "vertical" | "horizontal" = "vertical";
 
   ngOnInit(): void {}

@@ -19,7 +19,7 @@ export class ProjectCardComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  @Input() project!: Project;
+  @Input({ required: true }) project!: Project;
   @Input() canDelete?: boolean | null = false;
   @Input() isSubscribed?: boolean | null = false;
   @Input() profileId?: number;
