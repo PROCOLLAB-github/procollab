@@ -21,7 +21,7 @@ export class ProfileInfoComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  @Input() user?: User;
+  @Input({ required: true }) user!: User;
 
   onLogout(): void {
     this.authService.logout().subscribe(() => {

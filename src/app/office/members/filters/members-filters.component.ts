@@ -19,5 +19,5 @@ export class MembersFiltersComponent {
   @Output() filtersChanged = new EventEmitter();
   filtersOpen = false;
 
-  @Input() filterForm!: MembersComponent["filterForm"];
+  @Input({ required: true }) filterForm!: MembersComponent["filterForm"];
 }

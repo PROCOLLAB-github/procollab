@@ -26,7 +26,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 export class MemberCardComponent implements OnInit {
   constructor() {}
 
-  @Input() user!: User;
+  @Input({ required: true }) user!: User;
 
   ngOnInit(): void {}
 }

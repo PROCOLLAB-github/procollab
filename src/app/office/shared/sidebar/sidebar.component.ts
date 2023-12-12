@@ -38,7 +38,7 @@ export class SidebarComponent implements OnInit {
     private readonly router: Router
   ) {}
 
-  @Input() invites: Invite[] = [];
+  @Input({ required: true }) invites: Invite[] = [];
   @Input() hasUnreads = false;
 
   ngOnInit(): void {}
