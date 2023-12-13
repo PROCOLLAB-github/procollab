@@ -11,8 +11,9 @@
   </button>
   <div class="filters__controls" [class.filters__controls--open]="filtersOpen">
     <form [formGroup]="filterForm">
-      <app-range-input formControlName="age"></app-range-input>
+      <input formControlName="speciality" class="input" placeholder="Специальность" type="text" />
       <input formControlName="keySkill" type="text" class="input" placeholder="Навыки" />
+      <app-range-input formControlName="age"></app-range-input>
     </form>
   </div>
 </div>

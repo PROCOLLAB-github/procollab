@@ -73,6 +73,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.filterForm = this.fb.group({
       keySkill: ["", Validators.required],
+      speciality: ["", Validators.required],
       age: [[null, null]],
     });
   }
@@ -92,7 +93,9 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
       });
 
     this.saveControlValue(this.searchForm.get("search"), "fullname");
-    this.saveControlValue(this.filterForm.get("keySkill"), "key_skills__contains");
+    this.saveControlValue(this.filterForm.get("keySkill"), "key_skills__icontains");
+    this.saveControlValue(this.filterForm.get("speciality"), "speciality__icontains");
+    this.saveControlValue(this.filterForm.get("age"), "age");
 
     this.route.queryParams
       .pipe(
@@ -103,8 +106,12 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
           const fetchParams: Record<string, string> = {};
 
           if (params["fullname"]) fetchParams["fullname"] = params["fullname"];
-          if (params["key_skills__contains"])
-            fetchParams["key_skills__contains"] = params["key_skills__contains"];
+          if (params["key_skills__icontains"])
+            fetchParams["key_skills__icontains"] = params["key_skills__icontains"];
+          if (params["speciality__icontains"])
+            fetchParams["speciality__icontains"] = params["speciality__icontains"];
+
+          if (params["age"] && /\d+,\d+/.test(params["age"])) fetchParams["age"] = params["age"];
 
           this.searchParamsSubject$.next(fetchParams);
           return this.onFetch(0, 20, fetchParams);
@@ -191,9 +198,10 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!control) return;
 
     const sub$ = control.valueChanges.subscribe(value => {
+      console.log(value);
       this.router
         .navigate([], {
-          queryParams: { [queryName]: value },
+          queryParams: { [queryName]: value.toString() },
           relativeTo: this.route,
           queryParamsHandling: "merge",
         })
