@@ -57,7 +57,6 @@ export class NewsCardComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
-    private readonly projectNewsService: ProjectNewsService,
     private readonly fileService: FileService,
     private readonly cdRef: ChangeDetectorRef
   ) {
@@ -67,7 +66,7 @@ export class NewsCardComponent implements OnInit {
   }
 
   @Input({ required: true }) newsItem!: ProjectNews;
-  @Input({ required: true }) isOwner!: boolean;
+  @Input() isOwner?: boolean;
   @Output() delete = new EventEmitter<number>();
   @Output() like = new EventEmitter<number>();
   @Output() edited = new EventEmitter<ProjectNews>();

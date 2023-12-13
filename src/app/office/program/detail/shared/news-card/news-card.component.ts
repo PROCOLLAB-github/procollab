@@ -49,7 +49,7 @@ export class ProgramNewsCardComponent implements OnInit {
   ) {}
 
   @Input({ required: true }) newsItem!: ProjectNews;
-  @Input({ required: true }) isOwner!: boolean;
+  @Input() isOwner!: boolean;
   @Output() delete = new EventEmitter<number>();
   @Output() like = new EventEmitter<number>();
   @Output() edited = new EventEmitter<ProjectNews>();
