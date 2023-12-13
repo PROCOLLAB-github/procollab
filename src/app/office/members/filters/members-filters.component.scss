@@ -1,3 +1,5 @@
+@use "src/styles/responsive";
+
 .filters {
   display: flex;
   flex-direction: column;
@@ -39,9 +41,16 @@
 
     form {
       display: flex;
+      flex-direction: column;
+      gap: 40px;
       min-height: 0;
       visibility: hidden;
       transition: visibility 0.5s;
+
+      @include responsive.apply-desktop {
+        flex-direction: row;
+        justify-content: space-between;
+      }
     }
 
     &--open {
@@ -51,6 +60,14 @@
         visibility: visible;
       }
     }
+  }
+
+  &__age {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 168px;
+    font-size: 12px;
   }
 }
 
