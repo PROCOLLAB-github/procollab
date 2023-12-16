@@ -9,7 +9,7 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 
 describe("ProjectsResolver", () => {
   beforeEach(() => {
-    const authSpy = jasmine.createSpyObj("authService", { getProfile: of({}) });
+    const authSpy = jasmine.createSpyObj("authService", {}, { profile: of({}) });
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],

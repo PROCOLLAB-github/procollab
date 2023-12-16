@@ -110,15 +110,15 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       this.profileId = profile.id;
     });
 
-    const checkIfUserIsSubscribed$ = this.projSubscribers$
-      ?.pipe(withLatestFrom(this.authService.profile))
+    this.projSubscribers$
+      ?.pipe(take(1), withLatestFrom(this.authService.profile))
       .subscribe(([projSubs, profile]) => {
         projSubs.some(sub => sub.id === profile.id)
           ? (this.isUserSubscribed = true)
           : (this.isUserSubscribed = false);
-      }) as Subscription;
+      });
 
-    this.subscriptions$.push(news$, profileId$, checkIfUserIsSubscribed$);
+    this.subscriptions$.push(news$, profileId$);
   }
 
   @ViewChild("newsEl") newsEl?: ElementRef;
