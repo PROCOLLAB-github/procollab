@@ -13,13 +13,16 @@ import { ActivatedRoute, NavigationEnd, Params, Router, RouterLink } from "@angu
 import {
   concatMap,
   distinctUntilChanged,
+  forkJoin,
   fromEvent,
   map,
   noop,
   of,
   Subscription,
+  switchMap,
   tap,
   throttleTime,
+  withLatestFrom,
 } from "rxjs";
 import { AuthService } from "@auth/services";
 import { Project } from "@models/project.model";
@@ -33,6 +36,7 @@ import { ProjectsFilterComponent } from "../projects-filter/projects-filter.comp
 import { ProjectCardComponent } from "../../shared/project-card/project-card.component";
 import { NgFor, NgIf } from "@angular/common";
 import { IconComponent } from "@ui/components";
+import { SubscriptionService } from "@office/services/subscription.service";
 
 @Component({
   selector: "app-list",
@@ -48,7 +52,8 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly navService: NavService,
     private readonly projectService: ProjectService,
     private readonly cdref: ChangeDetectorRef,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly subscriptionService: SubscriptionService
   ) {}
 
   ngOnInit(): void {
@@ -63,10 +68,18 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
     routeUrl$ && this.subscriptions$.push(routeUrl$);
 
-    const profile$ = this.authService.profile.subscribe(profile => {
-      this.profile = profile;
-      this.profileSubscriptionsIds = profile.subscribedProjects.map(sub => sub.id);
-    });
+    const profile$ = this.authService.profile
+      .pipe(
+        switchMap(p => {
+          this.profile = p;
+          return this.subscriptionService.getSubscriptions(p.id).pipe(
+            map(resp => {
+              this.profileProjSubsIds = resp.results.map(sub => sub.id);
+            })
+          );
+        })
+      )
+      .subscribe();
 
     profile$ && this.subscriptions$.push(profile$);
 
@@ -168,7 +181,7 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   isSubs = location.href.includes("/subscriptions");
 
   profile?: User;
-  profileSubscriptionsIds?: number[];
+  profileProjSubsIds?: number[];
   subscriptions$: Subscription[] = [];
 
   projectsCount = 0;

@@ -41,7 +41,7 @@ export class ProfileDetailComponent implements OnInit {
     public readonly breakpointObserver: BreakpointObserver
   ) {}
 
-  user$: Observable<User> = this.route.data.pipe(map(r => r["data"]));
+  user$: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
   loggedUserId$: Observable<number> = this.authService.profile.pipe(map(user => user.id));
 
   desktopMode$: Observable<boolean> = this.breakpointObserver
