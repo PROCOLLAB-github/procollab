@@ -17,7 +17,7 @@ import { NgIf } from "@angular/common";
 export class ProgramCardComponent implements OnInit {
   constructor() {}
 
-  @Input() program?: Program;
+  @Input({ required: true }) program?: Program;
 
   ngOnInit(): void {}
 }

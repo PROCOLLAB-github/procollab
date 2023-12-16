@@ -22,7 +22,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 })
 export class SelectComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";
-  @Input() options: { value: string | number; label: string; id: number }[] = [];
+  @Input({ required: true }) options: { value: string | number; label: string; id: number }[] = [];
 
   isOpen = false;
 

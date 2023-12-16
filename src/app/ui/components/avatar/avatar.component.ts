@@ -4,14 +4,14 @@ import { Component, Input, OnInit } from "@angular/core";
 import { NgIf } from "@angular/common";
 
 @Component({
-    selector: "app-avatar",
-    templateUrl: "./avatar.component.html",
-    styleUrl: "./avatar.component.scss",
-    standalone: true,
-    imports: [NgIf],
+  selector: "app-avatar",
+  templateUrl: "./avatar.component.html",
+  styleUrl: "./avatar.component.scss",
+  standalone: true,
+  imports: [NgIf],
 })
 export class AvatarComponent implements OnInit {
-  @Input() url?: string;
+  @Input({ required: true }) url?: string;
   @Input() size = 50;
   @Input() hasBorder = false;
   @Input() isOnline = false;

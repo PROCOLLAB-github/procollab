@@ -15,7 +15,7 @@ import { IconComponent } from "@ui/components";
 export class ProgramHeadComponent implements OnInit {
   constructor(private readonly router: Router, private readonly route: ActivatedRoute) {}
 
-  @Input() program!: Program;
+  @Input({ required: true }) program!: Program;
 
   ngOnInit(): void {}
 

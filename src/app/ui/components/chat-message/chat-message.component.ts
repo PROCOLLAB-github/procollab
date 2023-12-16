@@ -46,7 +46,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
     public readonly authService: AuthService
   ) {}
 
-  @Input() chatMessage!: ChatMessage;
+  @Input({ required: true }) chatMessage!: ChatMessage;
 
   @Output() reply = new EventEmitter<number>();
   @Output() edit = new EventEmitter<number>();

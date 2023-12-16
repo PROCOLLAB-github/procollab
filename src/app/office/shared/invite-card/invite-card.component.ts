@@ -15,7 +15,7 @@ import { NgIf } from "@angular/common";
 export class InviteCardComponent implements OnInit {
   constructor() {}
 
-  @Input() invite?: Invite;
+  @Input({ required: true }) invite!: Invite;
   @Output() remove = new EventEmitter<number>();
 
   ngOnInit(): void {}

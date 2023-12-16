@@ -18,7 +18,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 export class ChatCardComponent implements OnInit {
   constructor(private readonly authService: AuthService) {}
 
-  @Input() chat!: ChatListItem;
+  @Input({ required: true }) chat!: ChatListItem;
   @Input() isLast = false;
 
   public unread = this.authService.profile.pipe(

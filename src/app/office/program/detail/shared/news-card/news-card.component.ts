@@ -48,7 +48,7 @@ export class ProgramNewsCardComponent implements OnInit {
     private readonly cdRef: ChangeDetectorRef
   ) {}
 
-  @Input() newsItem!: ProjectNews;
+  @Input({ required: true }) newsItem!: ProjectNews;
   @Input() isOwner!: boolean;
   @Output() delete = new EventEmitter<number>();
   @Output() like = new EventEmitter<number>();

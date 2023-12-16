@@ -18,7 +18,7 @@ import { NgIf } from "@angular/common";
 export class InviteManageCardComponent implements OnInit {
   constructor() {}
 
-  @Input() invite?: Invite;
+  @Input({ required: true }) invite!: Invite;
   @Output() accept = new EventEmitter<number>();
   @Output() reject = new EventEmitter<number>();
 

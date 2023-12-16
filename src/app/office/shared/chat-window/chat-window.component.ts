@@ -61,7 +61,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
    * Renders only few of them
    * See virtual scrolling {@link viewport}
    */
-  @Input() set messages(value: ChatMessage[]) {
+  @Input({ required: true }) set messages(value: ChatMessage[]) {
     const messagesIds = this._messages.map(m => m.id);
     const diff = value.filter(m => {
       return messagesIds.indexOf(m.id) < 0;
