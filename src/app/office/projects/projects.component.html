@@ -10,15 +10,14 @@
             <div class="bar__ball" [class.bar__ball--small]="count.my < 10">{{ count.my }}</div>
           </li>
         </a>
-        <a 
-          *ngIf='subsCount$ | async as subsCount' 
-          class="bar__link" 
-          routerLink="/office/projects/subscriptions" 
+        <a
+          class="bar__link"
+          routerLink="/office/projects/subscriptions"
           routerLinkActive="bar__link--active"
         >
           <li class="text-body-14 bar__item">
             Мои подписки
-            <div class="bar__ball" [class.bar__ball--small]="subsCount < 10">{{ subsCount }}</div>
+            <div class="bar__ball" [class.bar__ball--small]="count.subs < 10">{{ count.subs }}</div>
           </li>
         </a>
         <a class="bar__link" routerLink="/office/projects/all" routerLinkActive="bar__link--active">

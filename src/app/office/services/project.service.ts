@@ -39,7 +39,7 @@ export class ProjectService {
     return this.apiService.get<ApiPagination<Project>>("/auth/users/projects/", params);
   }
 
-  projectsCount = new BehaviorSubject<ProjectCount>({ my: 0, all: 0 });
+  projectsCount = new BehaviorSubject<ProjectCount>({ my: 0, all: 0, subs: 0 });
   projectsCount$ = this.projectsCount.asObservable();
 
   getCount(): Observable<ProjectCount> {
