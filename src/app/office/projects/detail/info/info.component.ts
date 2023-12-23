@@ -112,7 +112,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
         withLatestFrom(this.authService.profile)
       )
       .subscribe(([project, profile]) => {
-        profile.subscribedProjects.some(sub => sub.id === project.id)
+        profile.subscribedProjects?.some(sub => sub.id === project.id)
           ? (this.isUserSubscribed = true)
           : (this.isUserSubscribed = false);
       });
