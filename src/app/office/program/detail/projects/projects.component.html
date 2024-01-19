@@ -1,10 +1,14 @@
 <!-- @format -->
 
 <div class="page">
-  <app-program-head *ngIf="program$ | async as program" [program]="program"></app-program-head>
+  @if (program$ | async; as program) {
+  <app-program-head [program]="program"></app-program-head>
+  }
   <div class="page__list">
-    <a *ngFor="let p of projects$ | async" [routerLink]="['/office/projects', p.id]">
+    @for (p of projects$ | async; track p.id) {
+    <a [routerLink]="['/office/projects', p.id]">
       <app-project-card [project]="p"></app-project-card>
     </a>
+    }
   </div>
 </div>

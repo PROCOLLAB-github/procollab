@@ -4,17 +4,22 @@
   <div class="bar register__bar">
     <app-back></app-back>
   </div>
-  <form class="register__form form" *ngIf="registerForm && schema" [formGroup]="registerForm">
-    <fieldset *ngFor="let f of schema | keyvalue" class="form__fieldset">
+  @if (registerForm && schema) {
+  <form class="register__form form" [formGroup]="registerForm">
+    @for (f of schema | keyvalue; track f.key) {
+    <fieldset class="form__fieldset">
       <label [for]="f.key" class="field-label">{{ f.value.name }}</label>
+      @if (registerForm.get(f.key); as field) {
       <app-input
-        *ngIf="registerForm.get(f.key) as field"
         [id]="f.key"
         [formControlName]="f.key"
         [placeholder]="f.value.placeholder"
         [error]="field | controlError"
       ></app-input>
+      }
     </fieldset>
+    }
     <app-button (click)="onSubmit()">Зарегистрироваться в программе</app-button>
   </form>
+  }
 </div>
