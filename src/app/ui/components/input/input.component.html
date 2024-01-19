@@ -16,5 +16,7 @@
     class="field__input"
     [class.field__input--error]="error"
   />
-  <i *ngIf="error" class="field__error-icon" appIcon icon="color-error" appSquare="20"></i>
+  @if (error) {
+  <i class="field__error-icon" appIcon icon="color-error" appSquare="20"></i>
+  }
 </div>

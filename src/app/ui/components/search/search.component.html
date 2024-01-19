@@ -3,8 +3,10 @@
 <div class="search" (click)="onSwitchSearch(true)" (clickOutside)="onClickOutside($event)">
   <i class="search__icon" appIcon icon="search" appSquare="32"></i>
   <div class="search__other" (click)="stopPropagation($event)">
-    <p *ngIf="!open" class="text-body-14 search__hidden" (click)="onSwitchSearch(true)">Поиск</p>
-    <div *ngIf="open" class="search__input">
+    @if (!open) {
+    <p class="text-body-14 search__hidden" (click)="onSwitchSearch(true)">Поиск</p>
+    } @else {
+    <div class="search__input">
       <input
         #inputEl
         class="text-body-14"
@@ -13,5 +15,6 @@
         (input)="onInput($event)"
       />
     </div>
+    }
   </div>
 </div>

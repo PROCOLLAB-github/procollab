@@ -1,6 +1,7 @@
 <!-- @format -->
 
-<a class="user" *ngIf="user" [routerLink]="['/office/profile', user.id]">
+@if (user) {
+<a class="user" [routerLink]="['/office/profile', user.id]">
   <app-avatar class="user__avatar" [url]="user.avatar"></app-avatar>
   <div>
     <div class="user__row">
@@ -10,17 +11,15 @@
         <i appIcon icon="logout" appSquare="20"></i>
       </button>
     </div>
-    <div *ngIf="!user.verificationDate" class="text-body-14 user__email">{{ user.email }}</div>
-    <div 
-      *ngIf="user.verificationDate as verificationDate; else notVerified"
-      class="text-body-14 user__verified"
-    >
+    @if (!user.verificationDate) {
+    <div class="text-body-14 user__email">{{ user.email }}</div>
+    } @if (user.verificationDate; as verificationDate) {
+    <div class="text-body-14 user__verified">
       Подтвержден с {{ verificationDate | dayjs: "format":"DD.MM.YY" }}
     </div>
-    <ng-template #notVerified>
-      <div class="text-body-14 user__not-verified">
-        Ожидает подтверждения
-      </div>
-    </ng-template>
+    } @else {
+    <div class="text-body-14 user__not-verified">Ожидает подтверждения</div>
+    }
   </div>
 </a>
+}

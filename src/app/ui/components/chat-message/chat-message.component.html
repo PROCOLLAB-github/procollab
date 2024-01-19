@@ -25,7 +25,8 @@
           {{ chatMessage.createdAt | dayjs: "format":"HH:mm" }}
         </div>
       </div>
-      <div *ngIf="chatMessage.replyTo" class="message__reply reply">
+      @if (chatMessage.replyTo) {
+      <div class="message__reply reply">
         <div class="reply__name text-bold-body-16">
           {{ chatMessage.replyTo.author.firstName }} {{ chatMessage.replyTo.author.lastName }}
         </div>
@@ -33,8 +34,10 @@
           {{ chatMessage.replyTo.text }}
         </p>
       </div>
+      }
       <ul class="message__files">
-        <li class="message__file" *ngFor="let file of chatMessage.files">
+        @for (file of chatMessage.files; track chatMessage.id) {
+        <li class="message__file">
           <app-file-item
             [name]="file.name"
             [link]="file.link"
@@ -42,6 +45,7 @@
             [size]="file.size"
           ></app-file-item>
         </li>
+        }
       </ul>
       <div class="message__content text-body-14">{{ chatMessage.text }}</div>
     </div>
@@ -54,19 +58,22 @@
     <i appIcon icon="dots" appWidth="4" appHeight="16" appViewBox="0 0 4 16"></i>
   </div>
 </div>
+@if (authService.profile | async; as profile) {
 <ul
   #contextMenu
   class="message__contextmenu contextmenu"
-  *ngIf="authService.profile | async as profile"
   [style.opacity]="isOpen ? 1 : 0"
   [style.pointer-events]="isOpen ? 'auto' : 'none'"
 >
   <li class="contextmenu__item text-body-14" (click)="onCopyContent($event)">Скопировать</li>
   <li class="contextmenu__item text-body-14" (click)="onReply($event)">Ответить</li>
-  <ng-container *ngIf="profile.id === chatMessage.author.id">
+  @if (profile.id === chatMessage.author.id) {
+  <ng-container>
     <li class="contextmenu__item text-body-14" (click)="onEdit($event)">Редактировать</li>
     <li class="contextmenu__item contextmenu__item--red text-body-14" (click)="onDelete($event)">
       Удалить
     </li>
   </ng-container>
+  }
 </ul>
+}

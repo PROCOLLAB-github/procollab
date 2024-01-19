@@ -1,6 +1,7 @@
 <!-- @format -->
 
 <ul class="snackbar">
+  @for (snack of snacks; track snack.id) {
   <li
     class="snackbar__item item text-body-12"
     [ngClass]="{
@@ -8,9 +9,9 @@
       'item--error': snack.type === 'error',
       'item--info': snack.type === 'info'
     }"
-    *ngFor="let snack of snacks"
     @slideInOut
   >
     {{ snack.text }}
   </li>
+  }
 </ul>

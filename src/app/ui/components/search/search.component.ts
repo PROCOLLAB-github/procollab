@@ -11,7 +11,6 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { NgIf } from "@angular/common";
 import { IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
 
@@ -27,7 +26,7 @@ import { ClickOutsideModule } from "ng-click-outside";
     },
   ],
   standalone: true,
-  imports: [ClickOutsideModule, IconComponent, NgIf],
+  imports: [ClickOutsideModule, IconComponent],
 })
 export class SearchComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";
