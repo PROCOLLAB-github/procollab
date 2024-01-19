@@ -10,9 +10,11 @@
       </h3>
       <p class="text-body-12 profile__info">{{ response.user.speciality }}</p>
       <ul *ngIf="response.user.keySkills" class="profile__skills">
-        <li *ngFor="let skill of response.user.keySkills" class="profile__skill">
+        @for (skill of response.user.keySkills; track $index) {
+        <li class="profile__skill">
           <app-tag>{{ skill }}</app-tag>
         </li>
+        }
       </ul>
     </div>
   </a>

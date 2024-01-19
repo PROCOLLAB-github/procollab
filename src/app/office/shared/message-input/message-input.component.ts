@@ -221,4 +221,6 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
       this.onChange(this.value);
     });
   }
+
+  protected readonly repl = module;
 }

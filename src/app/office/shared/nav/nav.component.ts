@@ -3,7 +3,7 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
 import { NavigationStart, Router, RouterLink, RouterLinkActive } from "@angular/router";
-import { Subscription } from "rxjs";
+import { noop, Subscription } from "rxjs";
 import { NotificationService } from "@services/notification.service";
 import { Invite } from "@models/invite.model";
 import { AuthService } from "@auth/services";
@@ -97,4 +97,6 @@ export class NavComponent implements OnInit, OnDestroy {
         .then(() => console.debug("Route changed from HeaderComponent"));
     });
   }
+
+  protected readonly noop = noop;
 }

@@ -16,8 +16,10 @@
     </div>
   </div>
   <ul *ngIf="user.keySkills && user.keySkills.length" class="card__skills">
-    <li *ngFor="let skill of user.keySkills" class="card__skill">
+    @for (skill of user.keySkills; track $index) {
+    <li class="card__skill">
       <app-tag>{{ skill }}</app-tag>
     </li>
+    }
   </ul>
 </div>
