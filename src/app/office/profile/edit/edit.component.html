@@ -1,10 +1,12 @@
 <!-- @format -->
 
-<main *ngIf="profileForm.get('userType') as currentType" class="profile">
+@if (profileForm.get('userType'); as currentType) {
+<main class="profile">
   <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
     <div class="profile__column">
       <div class="profile__row">
-        <fieldset *ngIf="profileForm.get('firstName') as firstName" class="space">
+        @if (profileForm.get('firstName'); as firstName) {
+        <fieldset class="space">
           <label for="firstName" class="field-label">Имя</label>
           <app-input
             [error]="firstName | controlError"
@@ -13,11 +15,14 @@
             formControlName="firstName"
             placeholder="Иван"
           ></app-input>
-          <div *ngIf="firstName | controlError: 'required'" class="text-body-14 error">
+          @if (firstName | controlError: 'required') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
+          }
         </fieldset>
-        <fieldset *ngIf="profileForm.get('lastName') as lastName">
+        } @if (profileForm.get('lastName'); as lastName) {
+        <fieldset>
           <label for="lastName" class="field-label">Фамилия</label>
           <app-input
             [error]="lastName | controlError"
@@ -26,28 +31,33 @@
             formControlName="lastName"
             placeholder="Иванов"
           ></app-input>
-          <div *ngIf="lastName | controlError: 'required'" class="text-body-14 error">
+          @if (lastName | controlError: 'required') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
+          }
         </fieldset>
+        }
       </div>
       <div class="profile__row">
-        <ng-container *ngIf="profileForm.get('userType') as userType">
-          <fieldset *ngIf="userType.value !== 1" class="space">
-            <label for="userType" class="field-label">Тип аккаунта</label>
-            <app-select
-              *ngIf="roles | async as options"
-              id="userType"
-              formControlName="userType"
-              placeholder="Ученик"
-              [options]="options"
-            ></app-select>
-            <div *ngIf="userType | controlError: 'required'" class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-          </fieldset>
-        </ng-container>
-        <fieldset *ngIf="profileForm.get('birthday') as birthday">
+        @if (profileForm.get('userType'); as userType) { @if (userType.value !== 1) {
+        <fieldset class="space">
+          <label for="userType" class="field-label">Тип аккаунта</label>
+          @if (roles | async; as options) {
+          <app-select
+            id="userType"
+            formControlName="userType"
+            placeholder="Ученик"
+            [options]="options"
+          ></app-select>
+          } @if (userType | controlError: 'required') {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } } @if (profileForm.get('birthday'); as birthday) {
+        <fieldset>
           <label for="birthday" class="field-label">Дата рождения</label>
           <app-input
             id="birthday"
@@ -56,13 +66,17 @@
             mask="00.00.0000"
             formControlName="birthday"
           ></app-input>
-          <div *ngIf="birthday | controlError: 'required'" class="text-body-14 error">
+          @if (birthday | controlError: 'required') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
+          }
         </fieldset>
+        }
       </div>
       <div class="profile__row">
-        <fieldset *ngIf="profileForm.get('city') as city">
+        @if (profileForm.get('city'); as city) {
+        <fieldset>
           <label for="city" class="field-label">Город</label>
           <app-input
             id="city"
@@ -71,13 +85,17 @@
             placeholder="Откуда вы"
             formControlName="city"
           ></app-input>
-          <div *ngIf="city | controlError: 'required'" class="text-body-14 error">
+          @if (city | controlError: 'required') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
+          }
         </fieldset>
+        }
       </div>
       <div class="profile__row">
-        <fieldset *ngIf="profileForm.get('organization') as organization">
+        @if (profileForm.get('organization'); as organization) {
+        <fieldset>
           <label for="organization" class="field-label">{{
             currentType.value === 1 ? "Место учебы" : "Место работы"
           }}</label>
@@ -90,13 +108,17 @@
             "
             formControlName="organization"
           ></app-input>
-          <div *ngIf="organization | controlError: 'required'" class="text-body-14 error">
+          @if (organization | controlError: 'required') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
+          }
         </fieldset>
+        }
       </div>
       <div class="profile__row">
-        <fieldset *ngIf="profileForm.get('speciality') as speciality">
+        @if (profileForm.get('speciality'); as speciality) {
+        <fieldset>
           <label for="speciality" class="field-label">Специальность</label>
           <app-input
             id="speciality"
@@ -105,22 +127,21 @@
             placeholder="Например: Java Developer"
             formControlName="speciality"
           ></app-input>
-          <div *ngIf="speciality | controlError: 'required'" class="text-body-14 error">
+          @if (speciality | controlError: 'required') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
+          }
         </fieldset>
+        }
       </div>
-      <div
-        *ngIf="[2, 3, 4].includes(currentType.value) && preferredIndustries"
-        class="profile__row"
-      >
+      @if ([2, 3, 4].includes(currentType.value) && preferredIndustries) {
+      <div class="profile__row">
         <div>
           <label class="field-label">Область экспертности</label>
           <ul class="tag-list">
-            <li
-              *ngFor="let industry of preferredIndustries.controls; index as i"
-              class="tag-list__item"
-            >
+            @for (industry of preferredIndustries.controls; let i = $index; track i) {
+            <li class="tag-list__item">
               <app-tag>
                 <span>{{ industry.value }}</span>
                 <i
@@ -132,6 +153,7 @@
                 ></i>
               </app-tag>
             </li>
+            }
           </ul>
           <div class="tag-list-form">
             <app-input
@@ -150,11 +172,13 @@
           </div>
         </div>
       </div>
+      }
       <div class="profile__row">
         <div>
           <label class="field-label">Ключевые навыки</label>
           <ul class="tag-list">
-            <li *ngFor="let skill of keySkills.controls; index as i" class="tag-list__item">
+            @for (skill of keySkills.controls; let i = $index; track i) {
+            <li class="tag-list__item">
               <app-tag>
                 <span>{{ skill.value }}</span>
                 <i
@@ -166,6 +190,7 @@
                 ></i>
               </app-tag>
             </li>
+            }
           </ul>
           <div class="tag-list-form">
             <app-input
@@ -184,22 +209,24 @@
         <label class="field-label">Достижения</label>
         <ng-container formArrayName="achievements">
           <ul>
-            <li
-              *ngFor="let control of achievements.controls; index as i"
-              class="profile__achievement"
-            >
+            @for (control of achievements.controls; let i = $index; track i) {
+            <li class="profile__achievement">
               <form [formGroupName]="i" class="achievement">
                 <div class="achievement__first-row">
-                  <fieldset *ngIf="achievements.at(i)?.get('title') as title">
+                  @if (achievements.at(i)?.get('title'); as title) {
+                  <fieldset>
                     <app-input
                       [error]="title | controlError"
                       placeholder="Название конкурса"
                       formControlName="title"
                     ></app-input>
-                    <div *ngIf="title | controlError: 'required'" class="text-body-14 error">
+                    @if (title | controlError: 'required') {
+                    <div class="text-body-14 error">
                       {{ errorMessage.VALIDATION_REQUIRED }}
                     </div>
+                    }
                   </fieldset>
+                  }
                   <app-button
                     class="achievement__remove"
                     color="red"
@@ -209,18 +236,23 @@
                     <i appIcon icon="basket" appSquare="24"></i>
                   </app-button>
                 </div>
-                <fieldset *ngIf="achievements.at(i).get('status') as status">
+                @if (achievements.at(i).get('status'); as status) {
+                <fieldset>
                   <app-input
                     [error]="status | controlError"
                     placeholder="Занятое место"
                     formControlName="status"
                   ></app-input>
-                  <div *ngIf="status | controlError: 'required'" class="text-body-14 error">
+                  @if (status | controlError: 'required') {
+                  <div class="text-body-14 error">
                     {{ errorMessage.VALIDATION_REQUIRED }}
                   </div>
+                  }
                 </fieldset>
+                }
               </form>
             </li>
+            }
           </ul>
         </ng-container>
         <app-button class="profile__add-achievement" (click)="addAchievement()">
@@ -230,25 +262,27 @@
       </div>
     </div>
     <div class="profile__column">
-      <fieldset class="profile__avatar" *ngIf="profileForm.get('avatar') as avatar">
+      @if (profileForm.get('avatar'); as avatar) {
+      <fieldset class="profile__avatar">
         <label for="avatar" class="field-label">Фотография профиля</label>
         <app-avatar-control
           id="avatar"
           formControlName="avatar"
           [error]="avatar | controlError"
         ></app-avatar-control>
-        <div *ngIf="avatar | controlError: 'required'" class="text-body-14 error">
+        @if (avatar | controlError: 'required') {
+        <div class="text-body-14 error">
           {{ errorMessage.EMPTY_AVATAR }}
         </div>
+        }
       </fieldset>
+      }
       <div class="profile__row">
         <div class="">
           <label class="field-label">Контактная информация</label>
           <ul formArrayName="links">
-            <li
-              *ngFor="let control of links.controls; index as i"
-              class="profile__achievement edit-link"
-            >
+            @for (control of links.controls; let i = $index; track i) {
+            <li class="profile__achievement edit-link">
               <app-input
                 [formControlName]="i"
                 placeholder="https://t.me/username"
@@ -258,6 +292,7 @@
                 <i appIcon icon="cross" appSquare="20"></i>
               </div>
             </li>
+            }
           </ul>
           <app-button class="profile__add-achievement" (click)="addLink()">
             <span>Добавить еще одну ссылку</span>
@@ -266,7 +301,8 @@
         </div>
       </div>
       <div class="profile__row">
-        <fieldset *ngIf="profileForm.get('aboutMe') as aboutMe">
+        @if (profileForm.get('aboutMe'); as aboutMe) {
+        <fieldset>
           <label for="aboutMe" class="field-label">Обо мне</label>
           <app-textarea
             id="aboutMe"
@@ -275,12 +311,16 @@
             placeholder="Я java developer, очень люблю котиков"
             formControlName="aboutMe"
           ></app-textarea>
-          <div *ngIf="aboutMe | controlError: 'required'" class="text-body-14 error">
+          @if (aboutMe | controlError: 'required') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
+          }
         </fieldset>
+        }
       </div>
-      <fieldset *ngIf="[1, 3, 4].includes(currentType.value) && usefulToProject">
+      @if ([1, 3, 4].includes(currentType.value) && usefulToProject) {
+      <fieldset>
         <label for="usefulToProject" class="field-label">Чем могу быть полезен в проекте</label>
         <app-input
           [error]="usefulToProject | controlError"
@@ -288,13 +328,17 @@
           type="text"
           [formControl]="usefulToProject"
         ></app-input>
-        <div *ngIf="usefulToProject | controlError: 'required'" class="text-body-14 error">
+        @if (usefulToProject | controlError: 'required') {
+        <div class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
+        }
       </fieldset>
+      }
     </div>
     <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
       <app-button [loader]="profileFormSubmitting" (click)="saveProfile()"> Сохранить</app-button>
     </div>
   </form>
 </main>
+}
