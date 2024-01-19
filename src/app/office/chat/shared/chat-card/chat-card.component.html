@@ -12,7 +12,8 @@
       <div class="card__name text-body-16">
         {{ chat.name }}
       </div>
-      <div *ngIf="chat.lastMessage && chat.lastMessage.text" class="card__last-message">
+      @if (chat.lastMessage && chat.lastMessage.text) {
+      <div class="card__last-message">
         <app-avatar
           class="card__last-user"
           [url]="chat.lastMessage.author.avatar"
@@ -20,10 +21,15 @@
         ></app-avatar>
         <div class="card__last-text text-body-12">{{ chat.lastMessage.text }}</div>
       </div>
+      }
     </div>
   </div>
-  <div *ngIf="chat.lastMessage && chat.lastMessage.text" class="card__right text-body-14">
+  @if (chat.lastMessage && chat.lastMessage.text) {
+  <div class="card__right text-body-14">
     <p>{{ chat.lastMessage.createdAt | dayjs: "format":"DD MMMM" }}</p>
-    <div *ngIf="unread | async" class="card__unreads"></div>
+    @if (unread | async) {
+    <div class="card__unreads"></div>
+    }
   </div>
+  }
 </div>
