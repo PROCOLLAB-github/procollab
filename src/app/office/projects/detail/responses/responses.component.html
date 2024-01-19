@@ -2,21 +2,22 @@
 
 <main class="responses">
   <section class="responses__main">
-    <div class="responses__no-responses" *ngIf="!responses.length">
-      <img
-        src="assets/images/projects/responses/no-responses.svg" 
-        alt="Отклики отсутствуют"
-      >
+    @if (!responses.length) {
+    <div class="responses__no-responses">
+      <img src="assets/images/projects/responses/no-responses.svg" alt="Отклики отсутствуют" />
       <span class="text-body-14">Откликов на вакансии пока нет, возвращайтесь позже</span>
     </div>
+    }
     <ul>
-      <li *ngFor="let response of responses">
+      @for (response of responses; track response.id) {
+      <li>
         <app-response-card
           [response]="response"
           (accept)="acceptResponse($event)"
           (reject)="rejectResponse($event)"
         ></app-response-card>
       </li>
+      }
     </ul>
   </section>
 </main>

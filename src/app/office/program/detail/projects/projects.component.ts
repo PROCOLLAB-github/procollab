@@ -1,13 +1,13 @@
 /** @format */
 
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { map, Observable } from "rxjs";
 import { Project } from "@models/project.model";
 import { Program } from "@office/program/models/program.model";
 import { ProjectCardComponent } from "@office/shared/project-card/project-card.component";
 import { ProgramHeadComponent } from "../../shared/program-head/program-head.component";
-import { NgIf, NgFor, AsyncPipe, JsonPipe } from "@angular/common";
+import { AsyncPipe, JsonPipe, NgFor, NgIf } from "@angular/common";
 
 @Component({
   selector: "app-projects",

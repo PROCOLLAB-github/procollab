@@ -6,10 +6,8 @@
     <i appIcon icon="filter" appSquare="34"></i>
   </div>
   <ul class="page__list" #listRoot>
-    <a
-      *ngFor="let project of searchedProjects; trackBy: identify"
-      [routerLink]="['/office/projects', project.id]"
-    >
+    @for (project of searchedProjects; track project.id) {
+    <a [routerLink]="['/office/projects', project.id]">
       <li>
         <app-project-card
           [project]="project"
@@ -19,15 +17,18 @@
         ></app-project-card>
       </li>
     </a>
+    }
   </ul>
-  <div *ngIf="isAll" class="filter page__filter" [class.page__filter--open]="isFilterOpen">
+  @if (isAll) {
+  <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
     <div class="filter__overlay" (click)="isFilterOpen = false"></div>
     <div class="filter__body">
       <div class="filter__bar"></div>
       <app-projects-filter></app-projects-filter>
     </div>
   </div>
-  <div class="page__empty empty text-body-14" *ngIf="!searchedProjects.length && isMy">
+  } @else if (!searchedProjects.length && isMy) {
+  <div class="page__empty empty text-body-14">
     <button class="empty__action text-body-14" (click)="addProject()">
       <i appIcon icon="plus" appSquare="18"></i>
       Добавьте свой первый проект
@@ -38,4 +39,5 @@
       Найдите интересующий проект в списке
     </a>
   </div>
+  }
 </section>

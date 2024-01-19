@@ -13,7 +13,6 @@ import { ActivatedRoute, NavigationEnd, Params, Router, RouterLink } from "@angu
 import {
   concatMap,
   distinctUntilChanged,
-  forkJoin,
   fromEvent,
   map,
   noop,
@@ -22,7 +21,6 @@ import {
   switchMap,
   tap,
   throttleTime,
-  withLatestFrom,
 } from "rxjs";
 import { AuthService } from "@auth/services";
 import { Project } from "@models/project.model";
@@ -193,10 +191,6 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("listRoot") listRoot?: ElementRef<HTMLElement>;
 
   private previousReqQuery: Record<string, any> = {};
-
-  identify(_idx: number, item: Project) {
-    return item.id;
-  }
 
   deleteProject(projectId: number): void {
     if (!confirm("Вы точно хотите удалить проект?")) {

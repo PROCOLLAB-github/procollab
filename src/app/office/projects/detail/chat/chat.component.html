@@ -1,5 +1,6 @@
 <!-- @format -->
-<div class="chat-page" *ngIf="project">
+@if (project) {
+<div class="chat-page">
   <div class="chat-page__main main">
     <header class="main__header">
       <div class="main__info">
@@ -12,14 +13,15 @@
             class="main__members-list"
             [style.width]="project.collaborators.length * 10 + 10 + 'px'"
           >
+            @for (member of project.collaborators; let index = $index; track member.userId) {
             <li
               class="main__member-avatar"
-              *ngFor="let member of project.collaborators; index as index"
               [style.left]="index * -10 + 'px'"
               [style.z-index]="index"
             >
               <app-avatar [url]="member.avatar" [size]="20"></app-avatar>
             </li>
+            }
           </ul>
           <div class="main__count">
             {{ project.collaborators.length }}
@@ -29,10 +31,11 @@
       </div>
       <div class="main__actions">
         <div class="main__action" (click)="onToggleMobileAside()">
-          <i 
-            appIcon [icon]="isAsideMobileShown ? 'message' : 'people'" 
-            appWidth="20" 
-            appHeight="22" 
+          <i
+            appIcon
+            [icon]="isAsideMobileShown ? 'message' : 'people'"
+            appWidth="20"
+            appHeight="22"
             appViewBox="0 0 20 22"
           ></i>
         </div>
@@ -55,21 +58,26 @@
         <h2 class="chat-members__title text-bold-body-16">Участники</h2>
       </header>
       <ul class="chat-members__list">
-        <li class="chat-members__item" *ngFor="let member of project.collaborators">
+        @for (member of project.collaborators; track member.userId) {
+        <li class="chat-members__item">
           <a class="member" [routerLink]="['/office/profile', member.userId]">
             <app-avatar class="member__avatar" [url]="member.avatar" [size]="30"></app-avatar>
             <span class="member__name text-bold-body-14">
               {{ member.firstName }} {{ member.lastName }}
             </span>
-            <span *ngIf="currentUserId === member.userId" class="member__i text-body-14">(Вы)</span>
+            @if (currentUserId === member.userId) {
+            <span class="member__i text-body-14">(Вы)</span>
+            }
           </a>
         </li>
+        }
       </ul>
     </div>
     <div class="files">
       <h2 class="files__title text-bold-body-16">Файлы</h2>
       <ul class="files__list">
-        <li class="files__item" *ngFor="let file of chatFiles">
+        @for (file of chatFiles; track $index) {
+        <li class="files__item">
           <app-file-item
             [name]="file.name"
             [link]="file.link"
@@ -77,7 +85,9 @@
             [size]="file.size"
           ></app-file-item>
         </li>
+        }
       </ul>
     </div>
   </aside>
 </div>
+}

@@ -1,10 +1,12 @@
 <!-- @format -->
 
-<div class="detail" *ngIf="project">
-  <section class="bar detail__bar" >
+@if (project) {
+<div class="detail">
+  <section class="bar detail__bar">
     <nav class="bar__nav">
       <app-back class="bar__back"></app-back>
-      <ul class="bar__tabs" *ngIf="isInProject$ | async">
+      @if (isInProject$ | async) {
+      <ul class="bar__tabs">
         <a
           class="bar__link"
           [routerLink]="['/office/projects', project.id]"
@@ -28,9 +30,11 @@
           <li class="text-body-14 bar__item">Чат проекта</li>
         </a>
       </ul>
+      }
     </nav>
   </section>
   <div class="detail__body">
     <router-outlet></router-outlet>
   </div>
 </div>
+}
