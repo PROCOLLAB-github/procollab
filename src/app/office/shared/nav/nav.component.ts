@@ -10,7 +10,7 @@ import { AuthService } from "@auth/services";
 import { InviteService } from "@services/invite.service";
 import { ProfileInfoComponent } from "@ui/components/profile-info/profile-info.component";
 import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { IconComponent } from "@ui/components";
 
 @Component({
@@ -20,10 +20,8 @@ import { IconComponent } from "@ui/components";
   standalone: true,
   imports: [
     IconComponent,
-    NgIf,
     RouterLink,
     RouterLinkActive,
-    NgFor,
     InviteManageCardComponent,
     ProfileInfoComponent,
     AsyncPipe,

@@ -1,16 +1,17 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { UserTypeCardComponent } from './user-type-card.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('UserTypeCardComponent', () => {
+import { UserTypeCardComponent } from "./user-type-card.component";
+
+describe("UserTypeCardComponent", () => {
   let component: UserTypeCardComponent;
   let fixture: ComponentFixture<UserTypeCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [UserTypeCardComponent]
-})
-    .compileComponents();
+      imports: [UserTypeCardComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe('UserTypeCardComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

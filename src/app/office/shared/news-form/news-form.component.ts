@@ -1,14 +1,13 @@
 /** @format */
 
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ValidationService } from "@core/services";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
 import { forkJoin, noop, Observable, tap } from "rxjs";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { ImgCardComponent } from "../img-card/img-card.component";
-import { NgFor } from "@angular/common";
 import { IconComponent } from "@ui/components";
 import { AutosizeModule } from "ngx-autosize";
 
@@ -21,7 +20,6 @@ import { AutosizeModule } from "ngx-autosize";
     ReactiveFormsModule,
     AutosizeModule,
     IconComponent,
-    NgFor,
     ImgCardComponent,
     FileUploadItemComponent,
   ],

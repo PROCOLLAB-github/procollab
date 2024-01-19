@@ -8,8 +8,8 @@ describe("AdvertCardComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [AdvertCardComponent],
-}).compileComponents();
+      imports: [AdvertCardComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

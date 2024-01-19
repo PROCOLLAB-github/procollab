@@ -9,7 +9,7 @@ import { Router } from "@angular/router";
 import { ProfileInfoComponent } from "@ui/components/profile-info/profile-info.component";
 import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
 import { IconComponent } from "@ui/components";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { ClickOutsideModule } from "ng-click-outside";
 
 @Component({
@@ -19,9 +19,7 @@ import { ClickOutsideModule } from "ng-click-outside";
   standalone: true,
   imports: [
     ClickOutsideModule,
-    NgIf,
     IconComponent,
-    NgFor,
     InviteManageCardComponent,
     ProfileInfoComponent,
     AsyncPipe,

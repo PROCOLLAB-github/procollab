@@ -32,7 +32,7 @@ import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@models/api-pagination.model";
 import { ProjectsFilterComponent } from "../projects-filter/projects-filter.component";
 import { ProjectCardComponent } from "../../shared/project-card/project-card.component";
-import { NgFor, NgIf } from "@angular/common";
+import {} from "@angular/common";
 import { IconComponent } from "@ui/components";
 import { SubscriptionService } from "@office/services/subscription.service";
 
@@ -41,7 +41,7 @@ import { SubscriptionService } from "@office/services/subscription.service";
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
   standalone: true,
-  imports: [IconComponent, NgFor, RouterLink, ProjectCardComponent, NgIf, ProjectsFilterComponent],
+  imports: [IconComponent, RouterLink, ProjectCardComponent, ProjectsFilterComponent],
 })
 export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

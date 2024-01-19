@@ -7,22 +7,14 @@ import { Project } from "@models/project.model";
 import { Program } from "@office/program/models/program.model";
 import { ProjectCardComponent } from "@office/shared/project-card/project-card.component";
 import { ProgramHeadComponent } from "../../shared/program-head/program-head.component";
-import { AsyncPipe, JsonPipe, NgFor, NgIf } from "@angular/common";
+import { AsyncPipe, JsonPipe } from "@angular/common";
 
 @Component({
   selector: "app-projects",
   templateUrl: "./projects.component.html",
   styleUrl: "./projects.component.scss",
   standalone: true,
-  imports: [
-    NgIf,
-    ProgramHeadComponent,
-    NgFor,
-    RouterLink,
-    ProjectCardComponent,
-    AsyncPipe,
-    JsonPipe,
-  ],
+  imports: [ProgramHeadComponent, RouterLink, ProjectCardComponent, AsyncPipe, JsonPipe],
 })
 export class ProgramProjectsComponent implements OnInit {
   constructor(private readonly route: ActivatedRoute) {}

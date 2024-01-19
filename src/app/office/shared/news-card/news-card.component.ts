@@ -28,7 +28,6 @@ import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-up
 import { ImgCardComponent } from "../img-card/img-card.component";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { NgFor, NgIf } from "@angular/common";
 
 @Component({
   selector: "app-news-card",
@@ -36,12 +35,10 @@ import { NgFor, NgIf } from "@angular/common";
   styleUrl: "./news-card.component.scss",
   standalone: true,
   imports: [
-    NgIf,
     ClickOutsideModule,
     IconComponent,
     TextareaComponent,
     ReactiveFormsModule,
-    NgFor,
     ImgCardComponent,
     FileUploadItemComponent,
     FileItemComponent,

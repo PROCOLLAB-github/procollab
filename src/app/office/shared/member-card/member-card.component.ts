@@ -5,7 +5,7 @@ import { User } from "@auth/models/user.model";
 import { YearsFromBirthdayPipe } from "@core/pipes/years-from-birthday.pipe";
 import { UserRolePipe } from "@core/pipes/user-role.pipe";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 
 @Component({
@@ -13,15 +13,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
   templateUrl: "./member-card.component.html",
   styleUrl: "./member-card.component.scss",
   standalone: true,
-  imports: [
-    AvatarComponent,
-    NgIf,
-    NgFor,
-    TagComponent,
-    AsyncPipe,
-    UserRolePipe,
-    YearsFromBirthdayPipe,
-  ],
+  imports: [AvatarComponent, TagComponent, AsyncPipe, UserRolePipe, YearsFromBirthdayPipe],
 })
 export class MemberCardComponent implements OnInit {
   constructor() {}

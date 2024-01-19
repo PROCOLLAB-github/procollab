@@ -10,8 +10,8 @@ describe("FileCardComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [ImgCardComponent],
-}).compileComponents();
+      imports: [ImgCardComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

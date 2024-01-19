@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, Output, EventEmitter, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { IconComponent } from "@ui/components";
 import { RangeInputComponent } from "@ui/components/range-input/range-input.component";
 import { MembersComponent } from "@office/members/members.component";

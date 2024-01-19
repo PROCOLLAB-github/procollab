@@ -20,9 +20,9 @@ describe("MemberCardComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-    imports: [MemberCardComponent, UserRolePipe, DayjsPipe, YearsFromBirthdayPipe],
-    providers: [{ provide: AuthService, useValue: authSpy }],
-}).compileComponents();
+      imports: [MemberCardComponent, UserRolePipe, DayjsPipe, YearsFromBirthdayPipe],
+      providers: [{ provide: AuthService, useValue: authSpy }],
+    }).compileComponents();
   });
 
   beforeEach(() => {

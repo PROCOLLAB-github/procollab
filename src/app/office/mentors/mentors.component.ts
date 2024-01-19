@@ -19,19 +19,14 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
 import { MemberCardComponent } from "../shared/member-card/member-card.component";
-import { NgFor } from "@angular/common";
 
 @Component({
-    selector: "app-mentors",
-    templateUrl: "./mentors.component.html",
-    styleUrl: "./mentors.component.scss",
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        NgFor,
-        RouterLink,
-        MemberCardComponent,
-    ],
+  selector: "app-mentors",
+  templateUrl: "./mentors.component.html",
+  styleUrl: "./mentors.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [RouterLink, MemberCardComponent],
 })
 export class MentorsComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(

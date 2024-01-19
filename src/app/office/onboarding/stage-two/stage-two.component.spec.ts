@@ -20,12 +20,12 @@ describe("StageTwoComponent", () => {
     const onboardingSpy = jasmine.createSpyObj({}, { formValue$: of({}) });
 
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, OnboardingStageTwoComponent],
-    providers: [
+      imports: [RouterTestingModule, OnboardingStageTwoComponent],
+      providers: [
         { provide: AuthService, useValue: authSpy },
         { provide: OnboardingService, useValue: onboardingSpy },
-    ],
-}).compileComponents();
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

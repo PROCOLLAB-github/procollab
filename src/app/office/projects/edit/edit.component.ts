@@ -33,7 +33,7 @@ import { InviteCardComponent } from "../../shared/invite-card/invite-card.compon
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { BackComponent } from "@ui/components/back/back.component";
 
 @Component({
@@ -44,10 +44,8 @@ import { BackComponent } from "@ui/components/back/back.component";
   imports: [
     BackComponent,
     ReactiveFormsModule,
-    NgIf,
     AvatarControlComponent,
     InputComponent,
-    NgFor,
     IconComponent,
     ButtonComponent,
     SelectComponent,
