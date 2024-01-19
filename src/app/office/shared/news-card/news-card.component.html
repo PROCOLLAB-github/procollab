@@ -16,11 +16,9 @@
         <i appIcon icon="dots" appWidth="4" appHeight="16" appViewBox="0 0 4 16"></i>
       </div>
       @if (menuOpen) {
-      <ul *ngIf="menuOpen" class="card__options">
+      <ul class="card__options">
         @if (!editMode) {
-        <li *ngIf="!editMode" class="card__option text-body-14" (click)="editMode = true">
-          Редактировать
-        </li>
+        <li class="card__option text-body-14" (click)="editMode = true">Редактировать</li>
         }
         <li class="card__option text-body-14" (click)="delete.emit(newsItem.id)">Удалить</li>
       </ul>

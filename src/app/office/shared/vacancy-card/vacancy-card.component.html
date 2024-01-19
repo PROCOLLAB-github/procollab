@@ -1,11 +1,15 @@
 <!-- @format -->
 
-<div *ngIf="vacancy" class="vacancy">
+@if (vacancy) {
+<div class="vacancy">
   <div>
     <h3 class="text-bold-body-14 vacancy__role">{{ vacancy.role }}</h3>
-    <p *ngIf="vacancy.requiredSkills.length" class="text-body-12 vacancy__requirements">
+    @if (vacancy.requiredSkills.length) {
+    <p class="text-body-12 vacancy__requirements">
       {{ vacancy.requiredSkills.join(" • ") }}
     </p>
+    }
   </div>
   <i class="vacancy__basket" appIcon icon="basket" appSquare="24" (click)="onRemove($event)"></i>
 </div>
+}

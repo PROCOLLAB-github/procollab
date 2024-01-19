@@ -1,6 +1,7 @@
 <!-- @format -->
 
-<section *ngIf="response" class="response">
+@if (response) {
+<section class="response">
   <a class="response__profile profile" [routerLink]="['/office/profile', response.user.id]">
     <app-avatar [size]="90" [url]="response.user.avatar"></app-avatar>
     <div class="profile__body">
@@ -9,13 +10,15 @@
         {{ response.user.firstName }} {{ response.user.lastName }}
       </h3>
       <p class="text-body-12 profile__info">{{ response.user.speciality }}</p>
-      <ul *ngIf="response.user.keySkills" class="profile__skills">
+      @if (response.user.keySkills) {
+      <ul class="profile__skills">
         @for (skill of response.user.keySkills; track $index) {
         <li class="profile__skill">
           <app-tag>{{ skill }}</app-tag>
         </li>
         }
       </ul>
+      }
     </div>
   </a>
   <div class="response__text text">
@@ -34,3 +37,4 @@
     </app-button>
   </div>
 </section>
+}

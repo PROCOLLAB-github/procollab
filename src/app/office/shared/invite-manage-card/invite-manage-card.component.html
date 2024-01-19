@@ -1,6 +1,7 @@
 <!-- @format -->
 
-<div *ngIf="invite" class="invite">
+@if (invite) {
+<div class="invite">
   <div class="invite__main">
     <div class="invite__avatars">
       <app-avatar [size]="52" [url]="invite.user.avatar"></app-avatar>
@@ -25,3 +26,4 @@
     <app-button (click)="accept.emit(invite.id)">Принять</app-button>
   </div>
 </div>
+}

@@ -62,8 +62,8 @@
         </a>
       </ul>
     </nav>
-    }
-    <div *ngIf="notificationsOpen">
+    } @if (notificationsOpen) {
+    <div>
       <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
       <ul class="notifications__invites">
         @for (invite of invites; track invite.id) {
@@ -77,7 +77,7 @@
         }
       </ul>
     </div>
-    @if (authService.profile | async; as user) {
+    } @if (authService.profile | async; as user) {
     <app-profile-info class="nav-bar__profile" [user]="user"></app-profile-info>
     }
   </div>

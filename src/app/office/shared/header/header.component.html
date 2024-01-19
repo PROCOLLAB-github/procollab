@@ -33,10 +33,9 @@
         }
       </div>
       <div class="header__separator"></div>
-      <app-profile-info
-        *ngIf="authService.profile | async as user"
-        [user]="user"
-      ></app-profile-info>
+      @if (authService.profile | async; as user) {
+      <app-profile-info [user]="user"></app-profile-info>
+      }
     </div>
   </div>
 </header>
