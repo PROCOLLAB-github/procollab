@@ -59,9 +59,9 @@
                 <span>
                   {{ user.birthday | yearsFromBirthday }}
                 </span>
-                } @else if (user.birthday && user.speciality) {
+                } @if (user.birthday && user.speciality) {
                 <ng-container>&nbsp;•&nbsp;</ng-container>
-                } @else if (user.speciality) {
+                } @if (user.speciality) {
                 <span>
                   {{ user.speciality }}
                 </span>
