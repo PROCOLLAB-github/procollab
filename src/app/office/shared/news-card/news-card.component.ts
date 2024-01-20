@@ -28,7 +28,7 @@ import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-up
 import { ImgCardComponent } from "../img-card/img-card.component";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { NgFor, NgIf, NgOptimizedImage } from "@angular/common";
+import { NgFor, NgIf } from "@angular/common";
 
 @Component({
   selector: "app-news-card",

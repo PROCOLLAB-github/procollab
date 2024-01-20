@@ -14,7 +14,6 @@ import { map, Subscription } from "rxjs";
 import { ProjectCount } from "@models/project.model";
 import { ProjectService } from "@services/project.service";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { AuthService } from "@auth/services";
 import { SearchComponent } from "@ui/components/search/search.component";
 import { IconComponent } from "@ui/components";
 import { NgIf, AsyncPipe } from "@angular/common";
@@ -41,8 +40,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     public readonly projectService: ProjectService,
     private readonly router: Router,
-    private readonly fb: FormBuilder,
-    private readonly authService: AuthService
+    private readonly fb: FormBuilder
   ) {
     this.searchForm = this.fb.group({
       search: [""],
@@ -92,8 +90,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   isMy = location.href.includes("/my");
   isAll = location.href.includes("/all");
   isSubs = location.href.includes("/subscriptions");
-
-  subsCount$ = this.authService.profile.pipe(map(p => p.subscribedProjects.length));
 
   addProject(): void {
     this.projectService.create().subscribe(project => {

@@ -41,6 +41,7 @@ import { ButtonComponent, IconComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe, NgOptimizedImage } from "@angular/common";
+import { User } from "@auth/models/user.model";
 
 @Component({
   selector: "app-detail",
@@ -79,6 +80,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   project$?: Observable<Project> = this.route.parent?.data.pipe(map(r => r["data"][0]));
+  projSubscribers$?: Observable<User[]> = this.route.parent?.data.pipe(map(r => r["data"][1]));
 
   profileId!: number;
 
@@ -105,23 +107,19 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
         });
       });
 
-    this.route.parent?.data
-      .pipe(
-        take(1),
-        map(r => r["data"][0] as Project),
-        withLatestFrom(this.authService.profile)
-      )
-      .subscribe(([project, profile]) => {
-        profile.subscribedProjects?.some(sub => sub.id === project.id)
+    const profileId$ = this.authService.profile.subscribe(profile => {
+      this.profileId = profile.id;
+    });
+
+    this.projSubscribers$
+      ?.pipe(take(1), withLatestFrom(this.authService.profile))
+      .subscribe(([projSubs, profile]) => {
+        projSubs.some(sub => sub.id === profile.id)
           ? (this.isUserSubscribed = true)
           : (this.isUserSubscribed = false);
       });
 
-    this.subscriptions$.push(news$);
-
-    this.authService.profile.pipe(take(1)).subscribe(profile => {
-      this.profileId = profile.id;
-    });
+    this.subscriptions$.push(news$, profileId$);
   }
 
   @ViewChild("newsEl") newsEl?: ElementRef;

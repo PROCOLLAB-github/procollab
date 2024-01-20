@@ -3,7 +3,6 @@
 import {
   AfterViewInit,
   Component,
-  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
@@ -17,19 +16,18 @@ import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { TemplatePortal } from "@angular/cdk/portal";
 
 @Component({
-    selector: "app-modal",
-    templateUrl: "./modal.component.html",
-    styleUrl: "./modal.component.scss",
-    standalone: true,
+  selector: "app-modal",
+  templateUrl: "./modal.component.html",
+  styleUrl: "./modal.component.scss",
+  standalone: true,
 })
 export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
-    private readonly elRef: ElementRef,
     private readonly overlay: Overlay,
     private readonly viewContainerRef: ViewContainerRef
   ) {}
 
-  @Input() set open(value: boolean) {
+  @Input({ required: true }) set open(value: boolean) {
     setTimeout(() => {
       if (value) this.overlayRef?.attach(this.portal);
       else this.overlayRef?.detach();

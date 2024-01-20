@@ -6,6 +6,7 @@ import { ProfileDetailResolver } from "./profile-detail.resolver";
 import { AuthService } from "@auth/services";
 import { ActivatedRouteSnapshot, convertToParamMap, RouterStateSnapshot } from "@angular/router";
 import { of } from "rxjs";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("ProfileDetailResolver", () => {
   const mockRoute = { paramMap: convertToParamMap({ id: 1 }) } as unknown as ActivatedRouteSnapshot;
@@ -13,6 +14,7 @@ describe("ProfileDetailResolver", () => {
     const authSpy = jasmine.createSpyObj("authService", { getUser: of({}) });
 
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       providers: [{ provide: AuthService, useValue: authSpy }],
     });
   });

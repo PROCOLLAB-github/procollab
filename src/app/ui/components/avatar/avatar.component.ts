@@ -11,7 +11,7 @@ import { NgIf, NgOptimizedImage } from "@angular/common";
   imports: [NgIf, NgOptimizedImage],
 })
 export class AvatarComponent implements OnInit {
-  @Input() url?: string;
+  @Input({ required: true }) url?: string;
   @Input() size = 50;
   @Input() hasBorder = false;
   @Input() isOnline = false;
