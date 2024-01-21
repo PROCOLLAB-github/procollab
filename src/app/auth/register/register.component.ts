@@ -10,7 +10,6 @@ import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { ButtonComponent, CheckboxComponent, InputComponent } from "@ui/components";
-import { NgIf, NgFor } from "@angular/common";
 
 dayjs.extend(cpf);
 
@@ -20,10 +19,8 @@ dayjs.extend(cpf);
   styleUrl: "./register.component.scss",
   standalone: true,
   imports: [
-    NgIf,
     ReactiveFormsModule,
     InputComponent,
-    NgFor,
     CheckboxComponent,
     ButtonComponent,
     RouterLink,

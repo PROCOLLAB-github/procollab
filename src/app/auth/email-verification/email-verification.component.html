@@ -10,15 +10,16 @@
           Для продолжения регистрации проверь свою почту, чтобы перейти по ссылке подтверждения
         </p>
       </div>
-      <div *ngIf="counter === 0" class="verification__action">
+      @if (counter > 0) {
+      <div class="verification__text">Письмо отправлено, отправить еще раз через {{ counter }}</div>
+      } @else {
+      <div class="verification__action">
         <p class="text-body-14 verification__text">Не получил письмо? Проверь папку спам или</p>
         <button class="verification__send-again text-body-14" (click)="onResend()">
           отправь снова <i appIcon icon="reload" appSquare="17"></i>
         </button>
       </div>
-      <div *ngIf="counter > 0" class="verification__text">
-        Письмо отправлено, отправить еще раз через {{ counter }}
-      </div>
+      }
     </div>
     <img class="verification__img" src="/assets/images/auth/email.png" alt="email" />
   </div>
