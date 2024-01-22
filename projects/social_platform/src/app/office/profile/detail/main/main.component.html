@@ -18,11 +18,11 @@
         </div>
         }
       </div>
-      } @if (user.keySkills?.length) {
+      } @if (user.skills?.length) {
       <ul class="about__skills">
-        @for (skill of user.keySkills; track skill) {
+        @for (skill of user.skills; track skill.id) {
         <li class="about__skill">
-          <app-tag color="accent">{{ skill }}</app-tag>
+          <app-tag color="accent">{{ skill.name }}</app-tag>
         </li>
         }
       </ul>

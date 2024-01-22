@@ -2,49 +2,56 @@
 
 <div class="page">
   <div class="auth__greeting">
-    <h3 class="auth__title">Выбери, кем ты будешь на платформе</h3>
-    <p class="auth__info">Выбери, кто ты?</p>
+    <h3 class="auth__title">Заполни данные о своих навыках</h3>
+    <!-- <p class="auth__info">
+      Для того, чтобы участники понимали с кем общаются и платформа могла рекомендовать тебя на
+      самые подходящие вакансии
+    </p> -->
   </div>
-  <div class="page__list">
-    <app-user-type-card [isActive]="userRole === 1" (click)="onSetRole(1)">
-      <ng-container title>Участник</ng-container>
-      <ng-container description>
-        Участник на платформе - это школьник или студент, который может зарегистрировать свой проект
-        или вступить в уже существующий, получить поддержку от ментора, участвовать в мероприятиях,
-        читать новости
-      </ng-container>
-    </app-user-type-card>
-    <app-user-type-card [isActive]="userRole === 2" (click)="onSetRole(2)">
-      <ng-container title>Инвестор</ng-container>
-      <ng-container description>
-        На платформе инвестор - человек, который владеет финансами и может как профинансировать
-        проект, так и создать свой проект на платформе. К инвестору могут обратиться участники и
-        проекты.
-      </ng-container>
-    </app-user-type-card>
-    <app-user-type-card [isActive]="userRole === 3" (click)="onSetRole(3)">
-      <ng-container title>Ментор</ng-container>
-      <ng-container description>
-        На платформе ментор - человек, который открыт дать помощь инновационной молодежи, к ментору
-        могут обратиться как участники, так и проекты. Сам ментор может написать в проект и
-        поддержать его.
-      </ng-container>
-    </app-user-type-card>
-    <app-user-type-card [isActive]="userRole === 4" (click)="onSetRole(4)">
-      <ng-container title>Эксперт</ng-container>
-      <ng-container description>
-        На платформе эксперт - человек, который открыт дать экспертизу из какой-либо сферы. К
-        эксперту могут обратиться как участник, так и проекты. Сам эксперт может написать в проект и
-        поддержать его.
-      </ng-container>
-    </app-user-type-card>
+  <div class="content" [formGroup]="stageForm">
+    <section class="content__section content__left">
+      <div class="content__search">
+        <h4 class="text-heading-4 content__section-heading">Поиск по библиотеке</h4>
+        <app-autocomplete-input
+          [suggestions]="searchedSkills()"
+          fieldToDisplay="name"
+          [clearInputOnSelect]="true"
+          [forceSelect]="true"
+          placeholder="Название навыка"
+          (searchStart)="onSearchSkill($event)"
+          (optionSelected)="onAddSkill($event)"
+        ></app-autocomplete-input>
+      </div>
+      <div class="content__skills">
+        <h4 class="text-heading-4">Выбранные навыки</h4>
+        <app-skills-basket
+          class="content__skills-basket"
+          formControlName="skills"
+          [error]="stageForm.controls['skills'] | controlError"
+        ></app-skills-basket>
+      </div>
+    </section>
+    <section class="content__section content__right">
+      <h4 class="text-heading-4 content__section-heading content__right-heading">Библиотека</h4>
+      <div class="content__skills-groups">
+        <ul class="content__skills-groups-list">
+          @for (skillGroup of nestedSkills$ | async; track skillGroup.id) {
+          <li class="content__skills-groups-list-item">
+            <app-skills-group
+              [title]="skillGroup.name"
+              [options]="skillGroup.skills"
+              [selected]="stageForm.getRawValue().skills"
+              (optionToggled)="onOptionToggled($event)"
+            ></app-skills-group>
+          </li>
+          }
+        </ul>
+      </div>
+    </section>
+    <div class="content__actions">
+      <app-button type="submit" [loader]="stageSubmitting()" (click)="onSubmit()"
+        >Продолжить</app-button
+      >
+    </div>
   </div>
-  <app-button class="page__button" [loader]="stageSubmitting" (click)="onSubmit()"
-    >Продолжить</app-button
-  >
-  @if (stageTouched && userRole === -1) {
-  <p class="error page__error">
-    Вы ничего не выбрали, выберите подходящий пункт и нажмите “продолжить”
-  </p>
-  }
 </div>

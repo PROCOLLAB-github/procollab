@@ -16,11 +16,11 @@
       }
     </div>
   </div>
-  @if (user.keySkills && user.keySkills.length) {
+  @if (user.skills && user.skills.length) {
   <ul class="card__skills">
-    @for (skill of user.keySkills; track $index) {
+    @for (skill of user.skills; track skill.id) {
     <li class="card__skill">
-      <app-tag>{{ skill }}</app-tag>
+      <app-tag>{{ skill.name }}</app-tag>
     </li>
     }
   </ul>

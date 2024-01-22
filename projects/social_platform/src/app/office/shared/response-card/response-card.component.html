@@ -10,11 +10,11 @@
         {{ response.user.firstName }} {{ response.user.lastName }}
       </h3>
       <p class="text-body-12 profile__info">{{ response.user.speciality }}</p>
-      @if (response.user.keySkills) {
+      @if (response.user.skills) {
       <ul class="profile__skills">
-        @for (skill of response.user.keySkills; track $index) {
+        @for (skill of response.user.skills; track skill.id) {
         <li class="profile__skill">
-          <app-tag>{{ skill }}</app-tag>
+          <app-tag>{{ skill.name }}</app-tag>
         </li>
         }
       </ul>

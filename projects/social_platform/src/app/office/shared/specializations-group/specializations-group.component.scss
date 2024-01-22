@@ -1,0 +1,41 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-height: 32px;
+
+  .heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 32px;
+    cursor: pointer;
+
+    i {
+      transform: rotate(90deg);
+    }
+
+    &--open {
+      i {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    &__option {
+      padding: 5px 0;
+      padding-left: 10px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--light-gray);
+      }
+    }
+  }
+}

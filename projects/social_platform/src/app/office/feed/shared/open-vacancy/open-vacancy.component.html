@@ -20,7 +20,7 @@
     <div class="skills__title">Необходимые навыки</div>
     <ul class="skills__list">
       @for (skill of feedItem.requiredSkills; track $index) {
-      <app-tag>{{ skill }}</app-tag>
+      <app-tag>{{ skill.name }}</app-tag>
       }
     </ul>
   </div>
