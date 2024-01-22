@@ -3,6 +3,7 @@
 <div class="page">
   <header class="page__header header">
     <nav>
+      <img src="/assets/images/shared/logo.svg" alt="" />
       <ul class="header__steps">
         <li
           (click)="goToStep(0)"
@@ -21,7 +22,7 @@
           [class.step--active]="activeStage === 1"
         >
           <div class="step__number">2</div>
-          <span class="step__text text-bold-body-14">Специальности и скиллы</span>
+          <span class="step__text text-bold-body-14">Специальность</span>
         </li>
         <div class="header__separator" [class.header__separator--passed]="stage > 1"></div>
         <li
@@ -31,6 +32,16 @@
           [class.step--active]="activeStage === 2"
         >
           <div class="step__number">3</div>
+          <span class="step__text text-bold-body-14">Навыки</span>
+        </li>
+        <div class="header__separator" [class.header__separator--passed]="stage > 2"></div>
+        <li
+          (click)="goToStep(3)"
+          class="header__step step"
+          [class.step--passed]="stage > 3"
+          [class.step--active]="activeStage === 3"
+        >
+          <div class="step__number">4</div>
           <span class="step__text text-bold-body-14">Тип аккаунта</span>
         </li>
       </ul>
