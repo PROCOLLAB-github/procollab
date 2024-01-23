@@ -2,7 +2,6 @@
 
 import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { NgIf, NgFor } from "@angular/common";
 import { IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
 
@@ -18,7 +17,7 @@ import { ClickOutsideModule } from "ng-click-outside";
     },
   ],
   standalone: true,
-  imports: [ClickOutsideModule, IconComponent, NgIf, NgFor],
+  imports: [ClickOutsideModule, IconComponent],
 })
 export class SelectComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";

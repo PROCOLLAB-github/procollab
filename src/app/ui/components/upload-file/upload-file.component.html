@@ -1,7 +1,8 @@
 <!-- @format -->
 
 <div class="root">
-  <div class="control" [class.control--error]="error" *ngIf="!value">
+  @if (!value) {
+  <div class="control" [class.control--error]="error">
     <input [id]="controlId" hidden type="file" [accept]="accept" (change)="onUpdate($event)" />
     <label [for]="controlId">
       <div class="control__empty">
@@ -9,8 +10,10 @@
       </div>
     </label>
   </div>
-  <div *ngIf="value" class="file">
+  } @else {
+  <div class="file">
     <p class="text-bold-body-14 file__title">{{ value }}</p>
     <i class="file__basket" appIcon icon="basket" appSquare="24" (click)="onRemove()"></i>
   </div>
+  }
 </div>

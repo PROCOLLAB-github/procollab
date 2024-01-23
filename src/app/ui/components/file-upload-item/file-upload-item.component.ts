@@ -5,14 +5,14 @@ import { getFormattedFileSize } from "@utils/formatted-file-size";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { LoaderComponent } from "../loader/loader.component";
 import { IconComponent } from "@ui/components";
-import { NgIf, UpperCasePipe } from "@angular/common";
+import { UpperCasePipe } from "@angular/common";
 
 @Component({
   selector: "app-file-upload-item",
   templateUrl: "./file-upload-item.component.html",
   styleUrl: "./file-upload-item.component.scss",
   standalone: true,
-  imports: [NgIf, IconComponent, LoaderComponent, UpperCasePipe, FileTypePipe],
+  imports: [IconComponent, LoaderComponent, UpperCasePipe, FileTypePipe],
 })
 export class FileUploadItemComponent implements OnInit {
   constructor() {}

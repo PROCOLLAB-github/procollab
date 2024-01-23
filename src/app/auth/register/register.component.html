@@ -3,24 +3,32 @@
 <div class="auth register">
   <div class="auth__greeting">
     <h3 class="auth__title auth__title--register">
-      <ng-container *ngIf="step === 'credentials'">
+      @if (step ==='credentials') {
+      <ng-container>
         Добро пожаловать на Procollab!&nbsp;👋<br />
         С нами идеи становятся реальностью&nbsp;🚀
       </ng-container>
-      <ng-container *ngIf="step === 'info'">
+      } @else if (step === 'info') {
+      <ng-container>
         PROCOLLAB - это не только платформа, но и сообщество самых заряженных школьников и студентов
       </ng-container>
+      }
     </h3>
     <p class="auth__info">
-      <ng-container *ngIf="step === 'credentials'"> Для регистрации введите данные </ng-container>
-      <ng-container *ngIf="step === 'info'">
+      @if (step === 'credentials') {
+      <ng-container> Для регистрации введите данные </ng-container>
+      } @else if (step ==='info') {
+      <ng-container>
         Заполните основные данные о себе, чтобы мы знали, как к вам обращаться
       </ng-container>
+      }
     </p>
   </div>
   <form class="auth__wrapper" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <ng-container *ngIf="step === 'credentials'">
-      <fieldset *ngIf="registerForm.get('email') as email" class="auth__field">
+    @if (step === 'credentials') {
+    <ng-container>
+      @if (registerForm.get('email'); as email) {
+      <fieldset class="auth__field">
         <label for="email" class="field-label">Почта</label>
         <app-input
           [error]="(email | controlError) && credsSubmitInitiated"
@@ -29,16 +37,22 @@
           formControlName="email"
           placeholder="mail@example.ru"
         ></app-input>
-        <ng-container *ngIf="credsSubmitInitiated">
-          <div *ngIf="(email | controlError: 'required')" class="text-body-14 error">
+        @if (credsSubmitInitiated) {
+        <ng-container>
+          @if (email | controlError: 'required') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
-          <div *ngIf="(email | controlError: 'email')" class="text-body-14 error">
+          } @if (email | controlError: 'email') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_EMAIL }}
           </div>
+          }
         </ng-container>
+        }
       </fieldset>
-      <fieldset *ngIf="registerForm.get('password') as password" class="auth__field">
+      } @if (registerForm.get('password'); as password) {
+      <fieldset class="auth__field">
         <label for="passowrd" class="field-label">Пароль</label>
         <app-input
           [error]="(password | controlError) && credsSubmitInitiated"
@@ -55,22 +69,31 @@
           formControlName="repeatedPassword"
           placeholder="Повторите пароль"
         ></app-input>
-        <ng-container *ngIf="credsSubmitInitiated">
-          <div *ngIf="password | controlError: 'required'" class="text-body-14 error">
+        @if (credsSubmitInitiated) {
+        <ng-container>
+          @if (password | controlError: 'required') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
-          <div *ngIf="password | controlError: 'minlength'" class="text-body-14 error">
+          } @if (password | controlError: 'minlength') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_TOO_SHORT }} {{ password.errors?.minlength.requiredLength }}
           </div>
-          <div *ngIf="password | controlError: 'unMatch'" class="text-body-14 error">
+          } @if (password | controlError: 'unMatch') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_PASSWORD_UNMATCH }}
           </div>
+          }
         </ng-container>
+        }
       </fieldset>
+      }
     </ng-container>
-    <ng-container *ngIf="step === 'info'">
+    } @else if (step === 'info') {
+    <ng-container>
       <div class="auth__row">
-        <fieldset *ngIf="registerForm.get('firstName') as name" class="auth__field">
+        @if (registerForm.get('firstName'); as name) {
+        <fieldset class="auth__field">
           <label for="name" class="field-label">Имя</label>
           <app-input
             [error]="(name | controlError) && infoSubmitInitiated"
@@ -79,19 +102,22 @@
             formControlName="firstName"
             placeholder="Иван"
           ></app-input>
-          <ng-container *ngIf="infoSubmitInitiated">
-            <div *ngIf="name | controlError: 'required'" class="text-body-14 error">
+          @if (infoSubmitInitiated) {
+          <ng-container>
+            @if (name | controlError: 'required') {
+            <div class="text-body-14 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
-            <div 
-              *ngIf="(name | controlError: 'invalidLanguage')" 
-              class="text-body-14 error"
-            >
+            } @if (name | controlError: 'invalidLanguage') {
+            <div class="text-body-14 error">
               {{ errorMessage.VALIDATION_LANGUAGE }}
             </div>
+            }
           </ng-container>
+          }
         </fieldset>
-        <fieldset *ngIf="registerForm.get('lastName') as surname" class="auth__field">
+        } @if (registerForm.get('lastName'); as surname) {
+        <fieldset class="auth__field">
           <label for="surname" class="field-label">Фамилия</label>
           <app-input
             [error]="(surname | controlError) && infoSubmitInitiated"
@@ -100,20 +126,24 @@
             formControlName="lastName"
             placeholder="Иванов"
           ></app-input>
-          <ng-container *ngIf="infoSubmitInitiated">
-            <div *ngIf="surname | controlError: 'required'" class="text-body-14 error">
+          @if (infoSubmitInitiated) {
+          <ng-container>
+            @if (surname | controlError: 'required') {
+            <div class="text-body-14 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
-            <div 
-              *ngIf="surname | controlError: 'invalidLanguage'" 
-              class="text-body-14 error"
-            >
+            } @if (surname | controlError: 'invalidLanguage') {
+            <div class="text-body-14 error">
               {{ errorMessage.VALIDATION_LANGUAGE }}
             </div>
+            }
           </ng-container>
+          }
         </fieldset>
+        }
       </div>
-      <fieldset *ngIf="registerForm.get('birthday') as birthday" class="auth__field">
+      @if (registerForm.get('birthday'); as birthday) {
+      <fieldset class="auth__field">
         <label for="birthday" class="field-label">Дата рождения</label>
         <app-input
           id="birthday"
@@ -123,23 +153,34 @@
           placeholder="ДД.ММ.ГГГГ"
           formControlName="birthday"
         ></app-input>
-        <ng-container *ngIf="infoSubmitInitiated">
-          <div *ngIf="birthday | controlError: 'required'" class="text-body-14 error">
+        @if (infoSubmitInitiated) {
+        <ng-container>
+          @if (birthday | controlError: 'required') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
-          <div *ngIf="birthday | controlError: 'tooYoung'" class="text-body-14 error">
+          } @if (birthday | controlError: 'tooYoung') {
+          <div class="text-body-14 error">
             {{ errorMessage.MINIMAL_AGE }} {{ birthday.errors?.tooYoung.requiredAge }} лет
           </div>
-          <div *ngIf="birthday | controlError: 'invalidDateFormat'" class="text-body-14 error">
+          } @if (birthday | controlError: 'invalidDateFormat') {
+          <div class="text-body-14 error">
             {{ errorMessage.INVALID_DATE }}
           </div>
+          }
         </ng-container>
+        }
       </fieldset>
+      }
     </ng-container>
-    <div *ngIf="serverErrors" class="text-body-14 error">
-      <p *ngFor="let e of serverErrors">{{ e }}</p>
+    } @if (serverErrors) {
+    <div class="text-body-14 error">
+      @for (e of serverErrors; track $index) {
+      <p>{{ e }}</p>
+      }
     </div>
-    <div class="register__agreement" *ngIf="step === 'credentials'">
+    } @if (step ==='credentials') {
+    <div class="register__agreement">
       <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
       <span (click)="registerAgreement = !registerAgreement">
         Я прочитал
@@ -149,22 +190,14 @@
         и даю согласие на&nbsp;обработку персональных&nbsp;данных
       </span>
     </div>
-    <app-button
-      *ngIf="step === 'info'"
-      [loader]="registerIsSubmitting"
-      type="submit"
-      class="auth__button"
-    >
-      Создать аккаунт
-    </app-button>
-    <app-button
-      *ngIf="step === 'credentials'"
-      type="submit"
-      class="auth__button"
-      customTypographyClass="auth__button-typography"
-    >
+    <app-button type="submit" class="auth__button" customTypographyClass="auth__button-typography">
       Далее
     </app-button>
+    } @else if ('info') {
+    <app-button [loader]="registerIsSubmitting" type="submit" class="auth__button">
+      Создать аккаунт
+    </app-button>
+    }
     <p class="auth__toggle">Есть аккаунт? <a routerLink="/auth/login">Войдите</a></p>
   </form>
 </div>

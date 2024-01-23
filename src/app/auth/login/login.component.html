@@ -1,16 +1,11 @@
 <!-- @format -->
 
-<form class="auth" 
-  [formGroup]="loginForm" 
-  (ngSubmit)="onSubmit()" 
-  (keyup.enter)="onSubmit()"
->
+<form class="auth" [formGroup]="loginForm" (ngSubmit)="onSubmit()" (keyup.enter)="onSubmit()">
   <div class="auth__wrapper">
     <h1 class="auth__title">Вход</h1>
-    <p class="login__reg">
-      Нет аккаунта? <a routerLink="/auth/register">Зарегистрируйтесь</a>
-    </p>
-    <fieldset *ngIf="loginForm.get('email') as email" class="auth__field">
+    <p class="login__reg">Нет аккаунта? <a routerLink="/auth/register">Зарегистрируйтесь</a></p>
+    @if (loginForm.get('email'); as email) {
+    <fieldset class="auth__field">
       <label for="email" class="field-label">Электронная почта</label>
       <app-input
         [error]="email | controlError"
@@ -19,14 +14,18 @@
         formControlName="email"
         placeholder="Введите почту"
       ></app-input>
-      <div *ngIf="email | controlError: 'email'" class="text-body-14 error">
+      @if (email | controlError: 'email') {
+      <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_EMAIL }}
       </div>
-      <div *ngIf="email | controlError: 'required'" class="text-body-14 error">
+      } @if (email | controlError: 'required') {
+      <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
+      }
     </fieldset>
-    <fieldset *ngIf="loginForm.get('password') as password" class="auth__field">
+    } @if (loginForm.get('password'); as password) {
+    <fieldset class="auth__field">
       <label for="password" class="field-label">Пароль</label>
       <app-input
         [error]="password | controlError"
@@ -35,16 +34,20 @@
         formControlName="password"
         placeholder="Введите пароль"
       ></app-input>
-      <div *ngIf="password | controlError: 'required'" class="text-body-14 error">
+      @if (password | controlError: 'required') {
+      <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
+      }
     </fieldset>
-    <div *ngIf="errorWrongAuth" class="text-body-14 error">
+    } @if (errorWrongAuth) {
+    <div class="text-body-14 error">
       {{ errorMessage.AUTH_WRONG_AUTH }}
     </div>
-    <app-button 
-      [loader]="loginIsSubmitting" 
-      class="auth__button" 
+    }
+    <app-button
+      [loader]="loginIsSubmitting"
+      class="auth__button"
       customTypographyClass="auth__button-typography"
       type="submit"
     >
@@ -58,8 +61,6 @@
         appViewBox="0 0 18 9"
       ></i>
     </app-button>
-    <a routerLink="/auth/reset_password/send_email" class="login__forget">
-      Забыли пароль?
-    </a>
+    <a routerLink="/auth/reset_password/send_email" class="login__forget"> Забыли пароль? </a>
   </div>
 </form>

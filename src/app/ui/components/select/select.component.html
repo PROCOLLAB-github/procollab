@@ -17,13 +17,13 @@
       appHeight="9"
     ></i>
   </div>
-  <ul *ngIf="isOpen" class="field__options">
-    <li
-      *ngFor="let option of options"
-      class="text-body-16 field__option"
-      (click)="onUpdate($event, option.id)"
-    >
+  @if (isOpen) {
+  <ul class="field__options">
+    @for (option of options; track option.id) {
+    <li class="text-body-16 field__option" (click)="onUpdate($event, option.id)">
       {{ option.label }}
     </li>
+    }
   </ul>
+  }
 </div>

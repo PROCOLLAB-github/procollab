@@ -1,7 +1,8 @@
 <!-- @format -->
 
 <app-modal [(open)]="modalService.confirmState">
-  <div class="confirm" *ngIf="settings$ | async as settings">
+  @if (settings$ | async; as settings) {
+  <div class="confirm">
     <i class="confirm__icon" appIcon icon="basket" appSquare="80"></i>
     <p class="confirm__main-text text-bold-body-16">{{ settings.mainText }}</p>
     <p class="confirm__sub-text text-body-14">{{ settings.subText }}</p>
@@ -10,4 +11,5 @@
     </app-button>
     <app-button class="confirm__approve" color="red" (click)="onResult(true)">Удалить</app-button>
   </div>
+  }
 </app-modal>

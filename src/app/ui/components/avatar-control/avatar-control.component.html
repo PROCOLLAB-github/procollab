@@ -10,10 +10,13 @@
     (change)="onUpdate($event)"
   />
   <label [for]="controlId" class="control__label" [class.control__label--error]="error">
-    <div *ngIf="loading" class="control__loader">
+    @if (loading) {
+    <div class="control__loader">
       <app-loader></app-loader>
     </div>
-    <img *ngIf="value" [src]="value" alt="avatar" class="control__img" />
+    } @if (value) {
+    <img [src]="value" alt="avatar" class="control__img" />
+    }
     <img
       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfRvoKyPWxl-0EExOVhrqc56QcPcWK-Tloew&usqp=CAU"
       alt="avatar"
