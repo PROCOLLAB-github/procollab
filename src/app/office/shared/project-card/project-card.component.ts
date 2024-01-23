@@ -5,14 +5,14 @@ import { Project } from "@models/project.model";
 import { IndustryService } from "@services/industry.service";
 import { IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { NgIf, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-project-card",
   templateUrl: "./project-card.component.html",
   styleUrl: "./project-card.component.scss",
   standalone: true,
-  imports: [NgIf, AvatarComponent, IconComponent, AsyncPipe],
+  imports: [AvatarComponent, IconComponent, AsyncPipe],
 })
 export class ProjectCardComponent implements OnInit {
   constructor(public industryService: IndustryService) {}

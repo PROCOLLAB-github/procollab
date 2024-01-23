@@ -21,12 +21,17 @@ describe("NewsFormComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, ReactiveFormsModule, HttpClientTestingModule, NewsFormComponent],
-    providers: [
+      imports: [
+        RouterTestingModule,
+        ReactiveFormsModule,
+        HttpClientTestingModule,
+        NewsFormComponent,
+      ],
+      providers: [
         { provide: ProjectNewsService, useValue: projectNewsServiceSpy },
         { provide: AuthService, useValue: authSpy },
-    ],
-}).compileComponents();
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {

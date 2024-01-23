@@ -31,347 +31,342 @@
         </ul>
       </nav>
       <div class="project__inner">
-        <ng-container *ngIf="editingStep === 'main'">
-          <div class="project__image" *ngIf="projectForm.get('imageAddress') as imagesAddress">
-            <app-avatar-control
-              id="imageAddress"
-              formControlName="imageAddress"
-              [error]="(imagesAddress | controlError) && projSubmitInitiated"
-            ></app-avatar-control>
-            <div
-              *ngIf="(imagesAddress | controlError: 'required') && projSubmitInitiated"
-              class="text-body-14 error"
-            >
-              {{ errorMessage.EMPTY_AVATAR }}
-            </div>
+        @if (editingStep === 'main') { @if (projectForm.get('imageAddress'); as imagesAddress) {
+        <div class="project__image">
+          <app-avatar-control
+            id="imageAddress"
+            formControlName="imageAddress"
+            [error]="(imagesAddress | controlError) && projSubmitInitiated"
+          ></app-avatar-control>
+          @if ((imagesAddress | controlError: 'required') && projSubmitInitiated) {
+          <div class="text-body-14 error">
+            {{ errorMessage.EMPTY_AVATAR }}
           </div>
-          <fieldset *ngIf="projectForm.get('name') as name">
-            <label class="field-label" for="name">Название проекта</label>
-            <app-input
-              id="name"
-              formControlName="name"
-              [error]="(name | controlError) && projSubmitInitiated"
-              placeholder="Например: procollab"
-            ></app-input>
-            <div
-              *ngIf="(name | controlError: 'required') && projSubmitInitiated"
-              class="text-body-14 error"
-            >
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-          </fieldset>
-          <fieldset *ngIf="projectForm.get('region') as region">
-            <label class="field-label" for="region">Регион проекта</label>
-            <app-input
-              id="region"
-              formControlName="region"
-              [error]="(region | controlError) && projSubmitInitiated"
-              placeholder="Например: Москва"
-            ></app-input>
-            <div
-              *ngIf="(region | controlError: 'required') && projSubmitInitiated"
-              class="text-body-14 error"
-            >
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-          </fieldset>
-          <fieldset>
-            <label class="field-label">Ссылка на проект</label>
-            <ul formArrayName="links">
-              <li *ngFor="let control of links.controls; index as i" class="edit-link">
-                <app-input
-                  class="edit-link__input"
-                  [formControlName]="i"
-                  placeholder="https://t.me/username"
-                ></app-input>
-                <div class="edit-link__remove" (click)="removeLink(i)">
-                  <i appIcon icon="cross" appSquare="20"></i>
-                </div>
-              </li>
-            </ul>
-            <app-button (click)="addLink()" class="project__add-link">
-              Добавить еще одну ссылку
-              <i appIcon icon="plus" appSquare="12"></i>
-            </app-button>
-          </fieldset>
-          <fieldset *ngIf="projectForm.get('step') as step">
-            <label class="field-label" for="step">Этап на котором находится проект</label>
-            <app-select
-              *ngIf="projectSteps$ | async as steps"
-              id="step"
-              formControlName="step"
-              placeholder="Выберите этап на котором находится ваш проект"
-              [options]="steps"
-            ></app-select>
-            <div *ngIf="step | controlError: 'required'" class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-          </fieldset>
-          <fieldset *ngIf="programTagsOptions.length">
-            <label for="program_tag" class="field-label">Выбор тега</label>
-            <app-select
-              id="program_tag"
-              [options]="programTagsOptions"
-              placeholder="Выберите программу, в которой участвуете"
-              formControlName="partnerProgramId"
-            ></app-select>
-          </fieldset>
-          <fieldset *ngIf="projectForm.get('industryId') as industry">
-            <label class="field-label" for="industry">Сфера проекта</label>
-            <app-select
-              *ngIf="industries$ | async as industries"
-              id="industry"
-              formControlName="industryId"
-              placeholder="Выберите сферу к которой относится ваш проект"
-              [options]="industries"
-            ></app-select>
-            <div *ngIf="industry | controlError: 'required'" class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-          </fieldset>
-          <fieldset *ngIf="projectForm.get('description') as description">
-            <label for="description" class="field-label">Информация о проекте</label>
-            <app-textarea
-              id="description"
-              [error]="(description | controlError) && projSubmitInitiated"
-              formControlName="description"
-              placeholder="Напишите кратко о своем проекте, его суть"
-            ></app-textarea>
-            <div
-              *ngIf="(description | controlError: 'required') && projSubmitInitiated"
-              class="text-body-14 error"
-            >
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-          </fieldset>
-          <fieldset
-            *ngIf="projectForm.get('presentationAddress') as presentationAddress"
-            class="project__file"
+          }
+        </div>
+        } @if (projectForm.get('name'); as name) {
+        <fieldset>
+          <label class="field-label" for="name">Название проекта</label>
+          <app-input
+            id="name"
+            formControlName="name"
+            [error]="(name | controlError) && projSubmitInitiated"
+            placeholder="Например: procollab"
+          ></app-input>
+          @if ((name | controlError: 'required') && projSubmitInitiated) {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (projectForm.get('region'); as region) {
+        <fieldset>
+          <label class="field-label" for="region">Регион проекта</label>
+          <app-input
+            id="region"
+            formControlName="region"
+            [error]="(region | controlError) && projSubmitInitiated"
+            placeholder="Например: Москва"
+          ></app-input>
+          @if ((region | controlError: 'required') && projSubmitInitiated) {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        }
+        <fieldset>
+          <label class="field-label">Ссылка на проект</label>
+          <ul formArrayName="links">
+            @for (control of links.controls; let i = $index; track i) {
+            <li class="edit-link">
+              <app-input
+                class="edit-link__input"
+                [formControlName]="i"
+                placeholder="https://t.me/username"
+              ></app-input>
+              <div class="edit-link__remove" (click)="removeLink(i)">
+                <i appIcon icon="cross" appSquare="20"></i>
+              </div>
+            </li>
+            }
+          </ul>
+          <app-button (click)="addLink()" class="project__add-link">
+            Добавить еще одну ссылку
+            <i appIcon icon="plus" appSquare="12"></i>
+          </app-button>
+        </fieldset>
+        @if (projectForm.get('step'); as step) {
+        <fieldset>
+          <label class="field-label" for="step">Этап на котором находится проект</label>
+          @if (projectSteps$ | async; as steps) {
+          <app-select
+            id="step"
+            formControlName="step"
+            placeholder="Выберите этап на котором находится ваш проект"
+            [options]="steps"
+          ></app-select>
+          } @if (step | controlError: 'required') {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (programTagsOptions.length) {
+        <fieldset>
+          <label for="program_tag" class="field-label">Выбор тега</label>
+          <app-select
+            id="program_tag"
+            [options]="programTagsOptions"
+            placeholder="Выберите программу, в которой участвуете"
+            formControlName="partnerProgramId"
+          ></app-select>
+        </fieldset>
+        } @if (projectForm.get('industryId'); as industry) {
+
+        <fieldset>
+          <label class="field-label" for="industry">Сфера проекта</label>
+          @if (industries$ | async; as industries) {
+          <app-select
+            id="industry"
+            formControlName="industryId"
+            placeholder="Выберите сферу к которой относится ваш проект"
+            [options]="industries"
+          ></app-select>
+          } @if (industry | controlError: 'required') {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (projectForm.get('description'); as description) {
+        <fieldset>
+          <label for="description" class="field-label">Информация о проекте</label>
+          <app-textarea
+            id="description"
+            [error]="(description | controlError) && projSubmitInitiated"
+            formControlName="description"
+            placeholder="Напишите кратко о своем проекте, его суть"
+          ></app-textarea>
+          @if ((description | controlError: 'required') && projSubmitInitiated) {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (projectForm.get('presentationAddress'); as presentationAddress) {
+        <fieldset class="project__file">
+          <app-upload-file
+            formControlName="presentationAddress"
+            accept=".pdf,.pptx"
+            [error]="presentationAddress | controlError"
           >
-            <app-upload-file
-              formControlName="presentationAddress"
-              accept=".pdf,.pptx"
-              [error]="presentationAddress | controlError"
-            >
-              <ng-container emptyPlaceholder>
-                <i appIcon icon="upload" appSquare="60"></i>
-                <h4 class="text-bold-body-16 project__slides-title">
-                  Перетащите или&nbsp;
-                  <span class="project__slides-open-file">откройте файл</span>&nbsp; презентации
-                </h4>
-                <p class="text-body-14 project__slides-text">
-                  Презентации формата .PDF или .PPTX весом до 50МБ
-                </p>
-                <p
-                  class="project__slides-error text-body-14"
-                  *ngIf="presentationAddress | controlError: 'required'"
-                >
-                  Загрузите файл
-                </p>
-              </ng-container>
-            </app-upload-file>
-          </fieldset>
-        </ng-container>
-        <ng-container *ngIf="editingStep === 'achievements'">
-          <div>
-            <ng-container formArrayName="achievements">
-              <ul id="achievements" class="project__achievements-list">
-                <li
-                  *ngFor="let _ of achievements.controls; index as i"
-                  class="project__achievement-item"
-                >
-                  <form [formGroupName]="i" class="achievement">
-                    <div class="achievement__first-row">
-                      <fieldset *ngIf="achievements.at(i)?.get('title') as title">
-                        <app-input
-                          [error]="
-                            !!(
-                              (title | controlError) &&
-                              achievements.at(i).get('title')?.touched &&
-                              projSubmitInitiated
-                            )
-                          "
-                          placeholder="Название конкурса"
-                          formControlName="title"
-                        ></app-input>
-                        <div
-                          *ngIf="
-                            !!(
-                              (title | controlError: 'required') &&
-                              achievements.at(i).get('title')?.touched &&
-                              projSubmitInitiated
-                            )
-                          "
-                          class="text-body-14 error"
-                        >
-                          {{ errorMessage.VALIDATION_REQUIRED }}
-                        </div>
-                      </fieldset>
-                      <app-button
-                        class="achievement__remove"
-                        color="red"
-                        (click)="removeAchievement(i)"
-                      >
-                        <span>Удалить</span>
-                        <i appIcon icon="basket" appSquare="24"></i>
-                      </app-button>
-                    </div>
-                    <fieldset *ngIf="achievements.at(i).get('status') as status">
+            <ng-container emptyPlaceholder>
+              <i appIcon icon="upload" appSquare="60"></i>
+              <h4 class="text-bold-body-16 project__slides-title">
+                Перетащите или&nbsp;
+                <span class="project__slides-open-file">откройте файл</span>&nbsp; презентации
+              </h4>
+              <p class="text-body-14 project__slides-text">
+                Презентации формата .PDF или .PPTX весом до 50МБ
+              </p>
+              @if (presentationAddress | controlError: 'required') {
+              <p class="project__slides-error text-body-14">Загрузите файл</p>
+              }
+            </ng-container>
+          </app-upload-file>
+        </fieldset>
+        } } @else if (editingStep === 'achievements') {
+        <div>
+          <ng-container formArrayName="achievements">
+            <ul id="achievements" class="project__achievements-list">
+              @for (_ of achievements.controls; let i = $index; track i) {
+              <li class="project__achievement-item">
+                <form [formGroupName]="i" class="achievement">
+                  <div class="achievement__first-row">
+                    @if (achievements.at(i)?.get('title'); as title) {
+                    <fieldset>
                       <app-input
                         [error]="
                           !!(
-                            (status | controlError) &&
-                            achievements.at(i).get('status')?.touched &&
+                            (title | controlError) &&
+                            achievements.at(i).get('title')?.touched &&
                             projSubmitInitiated
                           )
                         "
-                        placeholder="Занятое место"
-                        formControlName="status"
+                        placeholder="Название конкурса"
+                        formControlName="title"
                       ></app-input>
-                      <div
-                        *ngIf="
-                          !!(
-                            (status | controlError: 'required') &&
-                            achievements.at(i).get('status')?.touched &&
-                            projSubmitInitiated
-                          )
-                        "
-                        class="text-body-14 error"
-                      >
+                      @if (!!( (title | controlError: 'required') &&
+                      achievements.at(i).get('title')?.touched && projSubmitInitiated )) {
+                      <div class="text-body-14 error">
                         {{ errorMessage.VALIDATION_REQUIRED }}
                       </div>
+                      }
                     </fieldset>
-                  </form>
+                    }
+                    <app-button
+                      class="achievement__remove"
+                      color="red"
+                      (click)="removeAchievement(i)"
+                    >
+                      <span>Удалить</span>
+                      <i appIcon icon="basket" appSquare="24"></i>
+                    </app-button>
+                  </div>
+                  @if (achievements.at(i).get('status'); as status) {
+                  <fieldset>
+                    <app-input
+                      [error]="
+                        !!(
+                          (status | controlError) &&
+                          achievements.at(i).get('status')?.touched &&
+                          projSubmitInitiated
+                        )
+                      "
+                      placeholder="Занятое место"
+                      formControlName="status"
+                    ></app-input>
+                    @if (!!( (status | controlError: 'required') &&
+                    achievements.at(i).get('status')?.touched && projSubmitInitiated )) {
+                    <div class="text-body-14 error">
+                      {{ errorMessage.VALIDATION_REQUIRED }}
+                    </div>
+                    }
+                  </fieldset>
+                  }
+                </form>
+              </li>
+              }
+            </ul>
+            <app-button class="project__add-achievement" (click)="addAchievement()">
+              <span>Добавить достижение</span>
+              <i appIcon icon="plus" appSquare="14"></i>
+            </app-button>
+          </ng-container>
+        </div>
+        } @else if (editingStep === 'team') {
+        <div class="invite project__invite">
+          <h2 class="text-heading-4 invite__title">Приглашение участников</h2>
+          <ul class="invite__list">
+            @for (user of invites; track user.id) {
+            <li class="invite__item">
+              <app-invite-card
+                [invite]="user"
+                (remove)="removeInvitation($event)"
+              ></app-invite-card>
+            </li>
+            }
+          </ul>
+          <form [formGroup]="inviteForm">
+            @if (inviteForm.get('role'); as role) {
+            <fieldset class="invite__role">
+              <app-input
+                id="invite_role"
+                formControlName="role"
+                [error]="(role | controlError) && inviteSubmitInitiated"
+                placeholder="Роль"
+              ></app-input>
+              @if ((role | controlError: 'required') && inviteSubmitInitiated) {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            } @if (inviteForm.get('link'); as link) {
+            <fieldset class="invite__link">
+              <app-input
+                id="invite_link"
+                formControlName="link"
+                [error]="(link | controlError) && inviteSubmitInitiated"
+                placeholder="https://procollab.ru/office/profile/1"
+              ></app-input>
+              @if ((link | controlError: 'required') && inviteSubmitInitiated) {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              } @if ((link | controlError: 'pattern') && inviteSubmitInitiated) {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_PROFILE_LINK }}
+              </div>
+              } @if (inviteNotExistingError && inviteSubmitInitiated) {
+              <div class="text-body-14 error">
+                {{ errorMessage.USER_NOT_EXISTING }}
+              </div>
+              }
+            </fieldset>
+            }
+            <app-button
+              class="invite__submit"
+              (click)="submitInvite()"
+              [loader]="inviteFormIsSubmitting"
+            >
+              <span>Пригласить участника</span>
+              <i appIcon icon="plus" appSquare="14"></i>
+            </app-button>
+          </form>
+        </div>
+        <div class="vacancy">
+          <h2 class="text-heading-4 vacancy__title">Создание вакансии</h2>
+          <ul class="vacancy__list">
+            @for (vacancy of vacancies; track vacancy.id) {
+            <li class="vacancy__item">
+              <app-vacancy-card
+                [vacancy]="vacancy"
+                (remove)="removeVacancy($event)"
+              ></app-vacancy-card>
+            </li>
+            }
+          </ul>
+          <form [formGroup]="vacancyForm">
+            @if (vacancyForm.get('role'); as role) {
+            <fieldset class="vacancy__role">
+              <app-input
+                id="vacancy_role"
+                formControlName="role"
+                [error]="(role | controlError) && vacancySubmitInitiated"
+                placeholder="Роль"
+              ></app-input>
+              @if ((role | controlError: 'required') && vacancySubmitInitiated) {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            }
+            <fieldset>
+              <ul class="vacancy__form-list">
+                @for (skill of requiredSkills.controls; let i = $index; track i) {
+                <li class="vacancy__skill">
+                  <app-tag class="skill">
+                    <span>{{ skill.value }}</span>
+                    <i appIcon icon="basket" appSquare="24" (click)="removeRequiredSkill(i)"></i>
+                  </app-tag>
                 </li>
+                }
               </ul>
-              <app-button class="project__add-achievement" (click)="addAchievement()">
-                <span>Добавить достижение</span>
-                <i appIcon icon="plus" appSquare="14"></i>
-              </app-button>
-            </ng-container>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="editingStep === 'team'">
-          <div class="invite project__invite">
-            <h2 class="text-heading-4 invite__title">Приглашение участников</h2>
-            <ul class="invite__list">
-              <li *ngFor="let user of invites" class="invite__item">
-                <app-invite-card
-                  [invite]="user"
-                  (remove)="removeInvitation($event)"
-                ></app-invite-card>
-              </li>
-            </ul>
-            <form [formGroup]="inviteForm">
-              <fieldset class="invite__role" *ngIf="inviteForm.get('role') as role">
+              <div class="vacancy__form-skill-add">
                 <app-input
-                  id="invite_role"
-                  formControlName="role"
-                  [error]="(role | controlError) && inviteSubmitInitiated"
-                  placeholder="Роль"
+                  placeholder="Навыки требуемого специалиста"
+                  (enter)="addRequiredSkill()"
+                  [(appValue)]="requiredSkillTitle"
                 ></app-input>
-                <div
-                  *ngIf="(role | controlError: 'required') && inviteSubmitInitiated"
-                  class="text-body-14 error"
-                >
-                  {{ errorMessage.VALIDATION_REQUIRED }}
-                </div>
-              </fieldset>
-              <fieldset class="invite__link" *ngIf="inviteForm.get('link') as link">
-                <app-input
-                  id="invite_link"
-                  formControlName="link"
-                  [error]="(link | controlError) && inviteSubmitInitiated"
-                  placeholder="https://procollab.ru/office/profile/1"
-                ></app-input>
-                <div
-                  *ngIf="(link | controlError: 'required') && inviteSubmitInitiated"
-                  class="text-body-14 error"
-                >
-                  {{ errorMessage.VALIDATION_REQUIRED }}
-                </div>
-                <div
-                  *ngIf="(link | controlError: 'pattern') && inviteSubmitInitiated"
-                  class="text-body-14 error"
-                >
-                  {{ errorMessage.VALIDATION_PROFILE_LINK }}
-                </div>
-                <div
-                  *ngIf="inviteNotExistingError && inviteSubmitInitiated"
-                  class="text-body-14 error"
-                >
-                  {{ errorMessage.USER_NOT_EXISTING }}
-                </div>
-              </fieldset>
-              <app-button
-                class="invite__submit"
-                (click)="submitInvite()"
-                [loader]="inviteFormIsSubmitting"
-              >
-                <span>Пригласить участника</span>
-                <i appIcon icon="plus" appSquare="14"></i>
-              </app-button>
-            </form>
-          </div>
-          <div class="vacancy">
-            <h2 class="text-heading-4 vacancy__title">Создание вакансии</h2>
-            <ul class="vacancy__list">
-              <li *ngFor="let vacancy of vacancies" class="vacancy__item">
-                <app-vacancy-card
-                  [vacancy]="vacancy"
-                  (remove)="removeVacancy($event)"
-                ></app-vacancy-card>
-              </li>
-            </ul>
-            <form [formGroup]="vacancyForm">
-              <fieldset class="vacancy__role" *ngIf="vacancyForm.get('role') as role">
-                <app-input
-                  id="vacancy_role"
-                  formControlName="role"
-                  [error]="(role | controlError) && vacancySubmitInitiated"
-                  placeholder="Роль"
-                ></app-input>
-                <div
-                  *ngIf="(role | controlError: 'required') && vacancySubmitInitiated"
-                  class="text-body-14 error"
-                >
-                  {{ errorMessage.VALIDATION_REQUIRED }}
-                </div>
-              </fieldset>
-              <fieldset>
-                <ul class="vacancy__form-list">
-                  <li
-                    *ngFor="let skill of requiredSkills.controls; index as i"
-                    class="vacancy__skill"
-                  >
-                    <app-tag class="skill">
-                      <span>{{ skill.value }}</span>
-                      <i appIcon icon="basket" appSquare="24" (click)="removeRequiredSkill(i)"></i>
-                    </app-tag>
-                  </li>
-                </ul>
-                <div class="vacancy__form-skill-add">
-                  <app-input
-                    placeholder="Навыки требуемого специалиста"
-                    (enter)="addRequiredSkill()"
-                    [(appValue)]="requiredSkillTitle"
-                  ></app-input>
-                  <app-button class="project__clickable" (click)="addRequiredSkill()">
-                    <i appIcon icon="check" appWidth="12" appHeight="10"></i>
-                  </app-button>
-                </div>
-              </fieldset>
-              <app-button
-                class="vacancy__submit"
-                [loader]="vacancyIsSubmitting"
-                (click)="submitVacancy()"
-              >
-                <span>Создать вакансию</span>
-                <i appIcon icon="person" appSquare="24"></i>
-              </app-button>
-            </form>
-          </div>
-        </ng-container>
+                <app-button class="project__clickable" (click)="addRequiredSkill()">
+                  <i appIcon icon="check" appWidth="12" appHeight="10"></i>
+                </app-button>
+              </div>
+            </fieldset>
+            <app-button
+              class="vacancy__submit"
+              [loader]="vacancyIsSubmitting"
+              (click)="submitVacancy()"
+            >
+              <span>Создать вакансию</span>
+              <i appIcon icon="person" appSquare="24"></i>
+            </app-button>
+          </form>
+        </div>
+        }
       </div>
       <div class="project__save">
         <app-button

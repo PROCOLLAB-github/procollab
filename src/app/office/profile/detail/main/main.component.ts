@@ -5,7 +5,7 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { expandElement } from "@utils/expand-element";
-import { Observable, Subscription, map, noop } from "rxjs";
+import { map, noop, Observable, Subscription } from "rxjs";
 import { ProfileNewsService } from "../services/profile-news.service";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ProfileNews } from "../models/profile-news.model";
@@ -15,7 +15,7 @@ import { ParseBreaksPipe } from "@core/pipes/parse-breaks.pipe";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { IconComponent } from "@ui/components";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from "@angular/common";
+import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
 
 @Component({
   selector: "app-profile-main",
@@ -23,8 +23,6 @@ import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from "@angular/common";
   styleUrl: "./main.component.scss",
   standalone: true,
   imports: [
-    NgIf,
-    NgFor,
     TagComponent,
     NewsFormComponent,
     NewsCardComponent,

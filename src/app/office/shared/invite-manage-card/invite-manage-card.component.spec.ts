@@ -10,8 +10,8 @@ describe("InviteManageCardComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [InviteManageCardComponent],
-}).compileComponents();
+      imports: [InviteManageCardComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

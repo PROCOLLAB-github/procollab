@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, RouterLinkActive, RouterLink, RouterOutlet } from "@angular/router";
+import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { map, Observable } from "rxjs";
 import { User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
@@ -12,7 +12,7 @@ import { YearsFromBirthdayPipe } from "@core/pipes/years-from-birthday.pipe";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { BackComponent } from "@ui/components/back/back.component";
-import { NgIf, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-profile-detail",
@@ -20,7 +20,6 @@ import { NgIf, AsyncPipe } from "@angular/common";
   styleUrl: "./profile-detail.component.scss",
   standalone: true,
   imports: [
-    NgIf,
     BackComponent,
     RouterLinkActive,
     RouterLink,

@@ -3,7 +3,8 @@
   <div class="bar vacancy-bar">
     <app-back class="bar__back"></app-back>
   </div>
-  <main *ngIf="authService.profile | async as profile" class="vacancy">
+  @if (authService.profile | async; as profile) {
+  <main class="vacancy">
     <app-modal [(open)]="resultModal">
       <div class="succeed">
         <i class="succeed__check" appIcon icon="inline-check" appSquare="97"></i>
@@ -26,15 +27,20 @@
             {{ profile.firstName }} {{ profile.lastName }}
           </h2>
           <p class="text-body-14 profile__info">{{ profile.speciality }} • {{ profile.city }}</p>
-          <ul *ngIf="profile.keySkills" class="profile__skills">
-            <li *ngFor="let skill of profile.keySkills" class="profile__skill">
+          @if (profile.keySkills) {
+          <ul class="profile__skills">
+            @for (skill of profile.keySkills; track $index) {
+            <li class="profile__skill">
               <app-tag>{{ skill }}</app-tag>
             </li>
+            }
           </ul>
+          }
         </div>
       </div>
       <form class="vacacy__form form" [formGroup]="sendForm" (ngSubmit)="onSubmit()">
-        <fieldset *ngIf="sendForm.get('whyMe') as whyMe">
+        @if (sendForm.get('whyMe'); as whyMe) {
+        <fieldset>
           <label for="whyMe" class="field-label">Мотивационное письмо</label>
           <app-textarea
             id="whyMe"
@@ -42,20 +48,26 @@
             [error]="whyMe | controlError"
             placeholder="Текст письма"
           ></app-textarea>
-          <div *ngIf="whyMe | controlError: 'required'" class="text-body-14 error">
+          @if (whyMe | controlError: 'required') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
-          <div *ngIf="whyMe | controlError: 'maxlength'" class="text-body-14 error">
+          } @if (whyMe | controlError: 'maxlength') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_TOO_LONG }} {{ whyMe.errors?.maxlength.requiredLength }}
           </div>
-          <div *ngIf="whyMe | controlError: 'minlength'" class="text-body-14 error">
+          } @if (whyMe | controlError: 'minlength') {
+          <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_TOO_SHORT }} {{ whyMe.errors?.minlength.requiredLength }}
           </div>
+          }
         </fieldset>
+        }
         <app-button [loader]="sendFormIsSubmitting" type="submit" class="form__submit">
           Отправить отклик
         </app-button>
       </form>
     </div>
   </main>
+  }
 </div>

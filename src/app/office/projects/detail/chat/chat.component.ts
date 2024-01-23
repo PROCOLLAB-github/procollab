@@ -16,7 +16,7 @@ import { PluralizePipe } from "@core/pipes/pluralize.pipe";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { NgIf, NgFor } from "@angular/common";
+import {} from "@angular/common";
 
 @Component({
   selector: "app-chat",
@@ -24,9 +24,7 @@ import { NgIf, NgFor } from "@angular/common";
   styleUrl: "./chat.component.scss",
   standalone: true,
   imports: [
-    NgIf,
     AvatarComponent,
-    NgFor,
     IconComponent,
     ChatWindowComponent,
     RouterLink,

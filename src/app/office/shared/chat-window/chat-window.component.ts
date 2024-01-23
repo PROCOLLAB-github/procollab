@@ -12,9 +12,9 @@ import {
   ViewChild,
 } from "@angular/core";
 import {
-  CdkVirtualScrollViewport,
   CdkFixedSizeVirtualScroll,
   CdkVirtualForOf,
+  CdkVirtualScrollViewport,
 } from "@angular/cdk/scrolling";
 import { ChatMessage } from "@models/chat-message.model";
 import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
@@ -24,7 +24,6 @@ import { ModalService } from "@ui/models/modal.service";
 import { AuthService } from "@auth/services";
 import { User } from "@auth/models/user.model";
 import { PluralizePipe } from "@core/pipes/pluralize.pipe";
-import { NgIf, NgFor } from "@angular/common";
 import { ChatMessageComponent } from "@ui/components/chat-message/chat-message.component";
 
 @Component({
@@ -38,8 +37,6 @@ import { ChatMessageComponent } from "@ui/components/chat-message/chat-message.c
     CdkVirtualForOf,
     ChatMessageComponent,
     ReactiveFormsModule,
-    NgIf,
-    NgFor,
     MessageInputComponent,
     PluralizePipe,
   ],

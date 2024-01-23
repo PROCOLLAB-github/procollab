@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { Observable, map, forkJoin } from "rxjs";
+import { forkJoin, map, Observable } from "rxjs";
 import { ApiService } from "@core/services";
 import { ProfileNews, ProfileNewsRes } from "../models/profile-news.model";
 import { HttpParams } from "@angular/common/http";

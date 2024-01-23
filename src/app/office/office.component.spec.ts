@@ -17,9 +17,9 @@ describe("OfficeComponent", () => {
     const authSpy = { getUserRoles: of([]), profile: of({}) };
 
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, HttpClientTestingModule, OfficeComponent],
-    providers: [IndustryService, { provide: AuthService, useValue: authSpy }],
-}).compileComponents();
+      imports: [RouterTestingModule, HttpClientTestingModule, OfficeComponent],
+      providers: [IndustryService, { provide: AuthService, useValue: authSpy }],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -1,6 +1,7 @@
 <!-- @format -->
 
-<div class="page" *ngIf="profile">
+@if (profile) {
+<div class="page">
   <div class="auth__greeting">
     <h3 class="auth__title">
       Добро пожаловать, {{ profile.firstName }} {{ profile.lastName }}! ✌️
@@ -11,18 +12,22 @@
     </p>
   </div>
   <form [formGroup]="stageForm" class="page__form" (ngSubmit)="onSubmit()">
-    <fieldset class="page__field" *ngIf="stageForm.get('avatar') as avatar">
+    @if (stageForm.get('avatar'); as avatar) {
+    <fieldset class="page__field">
       <label for="avatar" class="field-label">Фотография профиля</label>
       <app-avatar-control
         id="avatar"
         formControlName="avatar"
         [error]="avatar | controlError"
       ></app-avatar-control>
-      <div *ngIf="avatar | controlError: 'required'" class="text-body-14 error">
+      @if (avatar | controlError:'required') {
+      <div class="text-body-14 error">
         {{ errorMessage.EMPTY_AVATAR }}
       </div>
+      }
     </fieldset>
-    <fieldset class="page__field" *ngIf="stageForm.get('city') as city">
+    } @if (stageForm.get('city'); as city) {
+    <fieldset class="page__field">
       <label for="city" class="field-label">Город</label>
       <app-input
         id="city"
@@ -31,11 +36,14 @@
         placeholder="Откуда ты"
         formControlName="city"
       ></app-input>
-      <div *ngIf="city | controlError: 'required'" class="text-body-14 error">
+      @if (city | controlError: 'required') {
+      <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
+      }
     </fieldset>
-    <fieldset class="page__field" *ngIf="stageForm.get('organization') as organization">
+    } @if (stageForm.get('organization'); as organization) {
+    <fieldset class="page__field">
       <label for="organization" class="field-label">Место учебы/работы</label>
       <app-input
         id="organization"
@@ -44,10 +52,14 @@
         placeholder="Напиши название организации"
         formControlName="organization"
       ></app-input>
-      <div *ngIf="organization | controlError: 'required'" class="text-body-14 error">
+      @if (organization | controlError:'required') {
+      <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
+      }
     </fieldset>
+    }
     <app-button type="submit" [loader]="stageSubmitting">Продолжить</app-button>
   </form>
 </div>
+}

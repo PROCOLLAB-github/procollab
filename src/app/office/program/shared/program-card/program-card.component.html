@@ -1,6 +1,7 @@
 <!-- @format -->
 
-<div class="card" *ngIf="program">
+@if (program) {
+<div class="card">
   <div class="card__head">
     <div>
       <p class="text-heading-4 card__name">{{ program.name }}</p>
@@ -22,3 +23,4 @@
     </div>
   </div>
 </div>
+}

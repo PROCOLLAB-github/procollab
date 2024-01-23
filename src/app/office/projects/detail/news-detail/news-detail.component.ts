@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { map, Observable } from "rxjs";
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
-import { NgIf, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 
 @Component({
@@ -13,7 +13,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
   templateUrl: "./news-detail.component.html",
   styleUrl: "./news-detail.component.scss",
   standalone: true,
-  imports: [ModalComponent, NgIf, NewsCardComponent, AsyncPipe],
+  imports: [ModalComponent, NewsCardComponent, AsyncPipe],
 })
 export class NewsDetailComponent implements OnInit {
   constructor(private readonly route: ActivatedRoute, private readonly router: Router) {}

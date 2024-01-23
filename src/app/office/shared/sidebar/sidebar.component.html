@@ -52,32 +52,38 @@
   <div class="sidebar__bottom-actions">
     <div class="bottom-action" (click)="showNotifications = true">
       <div (clickOutside)="onClickOutside()" class="sidebar__bell">
-        <div class="attention" *ngIf="(showBall | async) || hasInvites"></div>
+        @if ((showBall | async) || hasInvites) {
+        <div class="attention"></div>
+        }
         <i appIcon icon="bell" appWidth="20" appHeight="23" appViewBox="0 0 20 22"></i>
       </div>
     </div>
-    <div *ngIf="showNotifications" class="sidebar__notifications notifications">
+    @if (showNotifications) {
+    <div class="sidebar__notifications notifications">
       <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
       <ul class="notifications__invites">
-        <li *ngFor="let invite of invites" class="notifications__invite">
+        @for (invite of invites; track invite.id) {
+        <li class="notifications__invite">
           <app-invite-manage-card
             [invite]="invite"
             (accept)="onAcceptInvite($event)"
             (reject)="onRejectInvite($event)"
           ></app-invite-manage-card>
         </li>
+        }
       </ul>
     </div>
+    }
     <a class="bottom-action" routerLink="/office/chats">
       <div class="sidebar__bell">
-        <div *ngIf="hasUnreads" class="attention"></div>
+        @if (hasUnreads) {
+        <div class="attention"></div>
+        }
         <i appIcon icon="chats" appWidth="23" appHeight="21" appViewBox="0 0 23 21"></i>
       </div>
     </a>
   </div>
-  <app-profile-info
-    class="sidebar__profile"
-    *ngIf="authService.profile | async as user"
-    [user]="user"
-  ></app-profile-info>
+  @if (authService.profile | async; as user) {
+  <app-profile-info class="sidebar__profile" [user]="user"></app-profile-info>
+  }
 </div>

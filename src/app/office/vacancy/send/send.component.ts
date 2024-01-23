@@ -15,7 +15,7 @@ import { TagComponent } from "@ui/components/tag/tag.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { BackComponent } from "@ui/components/back/back.component";
 
 @Component({
@@ -25,13 +25,11 @@ import { BackComponent } from "@ui/components/back/back.component";
   standalone: true,
   imports: [
     BackComponent,
-    NgIf,
     ModalComponent,
     IconComponent,
     RouterLink,
     ButtonComponent,
     AvatarComponent,
-    NgFor,
     TagComponent,
     ReactiveFormsModule,
     TextareaComponent,

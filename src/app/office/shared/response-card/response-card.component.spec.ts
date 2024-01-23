@@ -10,8 +10,8 @@ describe("ResponseCardComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [ResponseCardComponent],
-}).compileComponents();
+      imports: [ResponseCardComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

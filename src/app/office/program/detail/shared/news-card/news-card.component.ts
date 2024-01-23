@@ -1,14 +1,14 @@
 /** @format */
 
 import {
+  ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnInit,
   Output,
   ViewChild,
-  ElementRef,
-  ChangeDetectorRef,
 } from "@angular/core";
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
@@ -17,28 +17,19 @@ import { expandElement } from "@utils/expand-element";
 import { FileModel } from "@office/models/file.model";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
-import { Observable, tap, forkJoin, noop } from "rxjs";
+import { forkJoin, noop, Observable, tap } from "rxjs";
 import { DayjsPipe } from "@core/pipes/dayjs.pipe";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { IconComponent } from "@ui/components";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
-import { NgIf, NgFor } from "@angular/common";
 
 @Component({
   selector: "app-program-news-card",
   templateUrl: "./news-card.component.html",
   styleUrl: "./news-card.component.scss",
   standalone: true,
-  imports: [
-    NgIf,
-    NgFor,
-    ImgCardComponent,
-    FileUploadItemComponent,
-    IconComponent,
-    FileItemComponent,
-    DayjsPipe,
-  ],
+  imports: [ImgCardComponent, FileUploadItemComponent, IconComponent, FileItemComponent, DayjsPipe],
 })
 export class ProgramNewsCardComponent implements OnInit {
   constructor(

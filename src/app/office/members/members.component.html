@@ -10,10 +10,12 @@
   </form>
   <app-members-filters class="members__filter" [filterForm]="filterForm"></app-members-filters>
   <ul class="members__list">
-    <a *ngFor="let member of members" [routerLink]="['/office/profile', member.id]">
+    @for (member of members; track member.id) {
+    <a [routerLink]="['/office/profile', member.id]">
       <li>
         <app-member-card [user]="member"></app-member-card>
       </li>
     </a>
+    }
   </ul>
 </section>

@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { concatMap, Subscription, take } from "rxjs";
 import { AuthService } from "@auth/services";
@@ -11,7 +11,6 @@ import { OnboardingService } from "../services/onboarding.service";
 import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { NgIf, NgFor } from "@angular/common";
 
 @Component({
   selector: "app-stage-one",
@@ -20,9 +19,7 @@ import { NgIf, NgFor } from "@angular/common";
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    NgIf,
     InputComponent,
-    NgFor,
     TagComponent,
     IconComponent,
     ButtonComponent,

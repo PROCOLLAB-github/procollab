@@ -4,9 +4,9 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
-import { Observable, map } from "rxjs";
+import { map, Observable } from "rxjs";
 import { ProjectCardComponent } from "@office/shared/project-card/project-card.component";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { Project } from "@office/models/project.model";
 
 @Component({
@@ -14,7 +14,7 @@ import { Project } from "@office/models/project.model";
   templateUrl: "./projects.component.html",
   styleUrl: "./projects.component.scss",
   standalone: true,
-  imports: [NgIf, NgFor, RouterLink, ProjectCardComponent, AsyncPipe],
+  imports: [RouterLink, ProjectCardComponent, AsyncPipe],
 })
 export class ProfileProjectsComponent implements OnInit {
   constructor(private readonly route: ActivatedRoute, public readonly authService: AuthService) {}

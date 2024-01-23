@@ -1,6 +1,7 @@
 <!-- @format -->
 
-<div *ngIf="advert" class="card" [class.card--vertical]="layout === 'vertical'">
+@if (advert) {
+<div class="card" [class.card--vertical]="layout === 'vertical'">
   <div class="card__cover">
     <img [src]="advert.coverUrl" [alt]="advert.title" />
     <div class="text-heading-4 card__overlay">Смотреть</div>
@@ -10,3 +11,4 @@
     <p class="text-body-12 card__text">{{ advert.shortText }}</p>
   </div>
 </div>
+}

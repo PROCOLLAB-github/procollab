@@ -15,7 +15,7 @@ import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { NavComponent } from "./shared/nav/nav.component";
 import { SidebarComponent } from "./shared/sidebar/sidebar.component";
-import { NgIf, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-office",
@@ -23,7 +23,6 @@ import { NgIf, AsyncPipe } from "@angular/common";
   styleUrl: "./office.component.scss",
   standalone: true,
   imports: [
-    NgIf,
     SidebarComponent,
     NavComponent,
     RouterOutlet,

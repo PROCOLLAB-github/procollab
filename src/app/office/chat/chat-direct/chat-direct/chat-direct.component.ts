@@ -11,7 +11,6 @@ import { ChatDirectService } from "@office/chat/services/chat-direct.service";
 import { ChatWindowComponent } from "@office/shared/chat-window/chat-window.component";
 import { AuthService } from "@auth/services";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { NgIf } from "@angular/common";
 import { BackComponent } from "@ui/components/back/back.component";
 
 @Component({
@@ -19,7 +18,7 @@ import { BackComponent } from "@ui/components/back/back.component";
   templateUrl: "./chat-direct.component.html",
   styleUrl: "./chat-direct.component.scss",
   standalone: true,
-  imports: [BackComponent, NgIf, RouterLink, AvatarComponent, ChatWindowComponent],
+  imports: [BackComponent, RouterLink, AvatarComponent, ChatWindowComponent],
 })
 export class ChatDirectComponent implements OnInit, OnDestroy {
   constructor(

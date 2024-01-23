@@ -17,9 +17,9 @@ describe("ChatComponent", () => {
       profile: of({}),
     };
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, HttpClientTestingModule, ChatComponent],
-    providers: [{ provide: AuthService, useValue: authSpy }],
-}).compileComponents();
+      imports: [RouterTestingModule, HttpClientTestingModule, ChatComponent],
+      providers: [{ provide: AuthService, useValue: authSpy }],
+    }).compileComponents();
   });
 
   beforeEach(() => {

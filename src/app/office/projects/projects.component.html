@@ -2,7 +2,8 @@
 
 <main class="page">
   <div class="bar page__bar">
-    <nav *ngIf="projectService.projectsCount$ | async as count" class="bar__nav">
+    @if (projectService.projectsCount$ | async; as count) {
+    <nav class="bar__nav">
       <ul class="bar__tabs">
         <a class="bar__link" routerLink="/office/projects/my" routerLinkActive="bar__link--active">
           <li class="text-body-14 bar__item">
@@ -28,15 +29,19 @@
         </a>
       </ul>
       <div class="bar__right">
-        <button *ngIf="isMy" (click)="addProject()" class="text-body-14 bar__add-project">
+        @if (isMy) {
+        <button (click)="addProject()" class="text-body-14 bar__add-project">
           <span class="bar__add-project-text">Добавить проект</span>
           <i appIcon icon="plus" appSquare="18"></i>
         </button>
-        <form *ngIf="isAll" [formGroup]="searchForm">
+        } @else if (isAll) {
+        <form [formGroup]="searchForm">
           <app-search formControlName="search"></app-search>
         </form>
+        }
       </div>
     </nav>
+    }
   </div>
   <router-outlet></router-outlet>
 </main>
