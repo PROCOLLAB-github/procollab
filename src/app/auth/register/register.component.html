@@ -3,29 +3,29 @@
 <div class="auth register">
   <div class="auth__greeting">
     <h3 class="auth__title auth__title--register">
-      @switch (step) { @case ('credentials') {
+      @if (step ==='credentials') {
       <ng-container>
         Добро пожаловать на Procollab!&nbsp;👋<br />
         С нами идеи становятся реальностью&nbsp;🚀
       </ng-container>
-      } @case ('info') {
+      } @else if (step === 'info') {
       <ng-container>
         PROCOLLAB - это не только платформа, но и сообщество самых заряженных школьников и студентов
       </ng-container>
-      } }
+      }
     </h3>
     <p class="auth__info">
-      @switch (step) { @case ('credentials') {
+      @if (step === 'credentials') {
       <ng-container> Для регистрации введите данные </ng-container>
-      } @case ('info') {
+      } @else if (step ==='info') {
       <ng-container>
         Заполните основные данные о себе, чтобы мы знали, как к вам обращаться
       </ng-container>
-      } }
+      }
     </p>
   </div>
   <form class="auth__wrapper" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    @switch (step) { @case ('credentials') {
+    @if (step === 'credentials') {
     <ng-container>
       @if (registerForm.get('email'); as email) {
       <fieldset class="auth__field">
@@ -89,7 +89,7 @@
       </fieldset>
       }
     </ng-container>
-    } @case ('info') {
+    } @else if (step === 'info') {
     <ng-container>
       <div class="auth__row">
         @if (registerForm.get('firstName'); as name) {
@@ -173,13 +173,13 @@
       </fieldset>
       }
     </ng-container>
-    } } @if (serverErrors) {
+    } @if (serverErrors) {
     <div class="text-body-14 error">
       @for (e of serverErrors; track $index) {
       <p>{{ e }}</p>
       }
     </div>
-    } @switch (step) { @case('credentials') {
+    } @if (step ==='credentials') {
     <div class="register__agreement">
       <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
       <span (click)="registerAgreement = !registerAgreement">
@@ -193,11 +193,11 @@
     <app-button type="submit" class="auth__button" customTypographyClass="auth__button-typography">
       Далее
     </app-button>
-    } @case ('info') {
+    } @else if ('info') {
     <app-button [loader]="registerIsSubmitting" type="submit" class="auth__button">
       Создать аккаунт
     </app-button>
-    } }
+    }
     <p class="auth__toggle">Есть аккаунт? <a routerLink="/auth/login">Войдите</a></p>
   </form>
 </div>
