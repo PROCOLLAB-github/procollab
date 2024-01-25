@@ -9,12 +9,12 @@
   text-overflow: ellipsis;
   border-radius: var(--rounded-md);
 
-  &__primary {
+  &--primary {
     color: var(--dark-grey);
     background-color: var(--light-gray);
   }
 
-  &__accent {
+  &--accent {
     color: var(--white);
     background-color: var(--accent);
   }
