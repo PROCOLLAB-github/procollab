@@ -16,10 +16,6 @@
     text-align: center;
 
     @include typography.bold-body-16;
-
-    @include responsive.apply-desktop {
-      margin-bottom: 10px;
-    }
   }
 
   &__text {
