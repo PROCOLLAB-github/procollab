@@ -1,0 +1,58 @@
+<!-- @format -->
+
+<div class="desktop">
+  <div class="desktop__header">
+    <h3>Фильтр</h3>
+    <a class="text-body-12" (click)="resetFilter()">Сбросить фильтр</a>
+  </div>
+  <ng-container *ngTemplateOutlet="filter"></ng-container>
+  <div class="desktop__actions">
+    <app-button class="" customTypographyClass="text-body-12" (click)="applyFilter()"
+      >Применить</app-button
+    >
+  </div>
+</div>
+
+<div class="mobile">
+  <div class="select" (clickOutside)="onClickOutside()">
+    <div
+      class="select__input"
+      [class.select__input--open]="filterOpen"
+      (click)="filterOpen = !filterOpen"
+    >
+      Фильтр
+    </div>
+    <i
+      appIcon
+      icon="arrow-no-body"
+      appSquare="15"
+      class="select__dropdown-icon"
+      (click)="filterOpen = !filterOpen"
+    ></i>
+    @if (filterOpen) {
+    <div class="select__dropdown" [@dropdownAnimation]>
+      <ng-container *ngTemplateOutlet="filter"></ng-container>
+      <a class="text-body-12" (click)="resetFilter()">Сбросить фильтр</a>
+    </div>
+    }
+  </div>
+  <app-button class="" customTypographyClass="text-body-14" (click)="applyFilter()"
+    >Применить</app-button
+  >
+</div>
+
+<ng-template #filter>
+  <div class="filter">
+    <span class="text-body-12">Виды новостей</span>
+    @if (includedFilters$ | async; as filters) {
+    <ul>
+      @for (option of filterOptions; track $index) {
+      <li class="text-body-14 filter__checkbox" (click)="setFilter(option.value)">
+        <app-checkbox [checked]="filters.has(option.value)"></app-checkbox>
+        {{ option.label }}
+      </li>
+      }
+    </ul>
+    }
+  </div>
+</ng-template>
