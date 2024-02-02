@@ -1,6 +1,14 @@
 /** @format */
 
-import { Component, forwardRef, Input, OnInit } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  forwardRef,
+  HostListener,
+  Input,
+  Renderer2,
+  ViewChild,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
@@ -19,7 +27,7 @@ import { ClickOutsideModule } from "ng-click-outside";
   standalone: true,
   imports: [ClickOutsideModule, IconComponent],
 })
-export class SelectComponent implements OnInit, ControlValueAccessor {
+export class SelectComponent implements ControlValueAccessor {
   @Input() placeholder = "";
   @Input({ required: true }) options: { value: string | number; label: string; id: number }[] = [];
 
@@ -27,9 +35,66 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
 
   selectedId?: number;
 
-  constructor() {}
+  highlightedIndex = -1;
 
-  ngOnInit(): void {}
+  constructor(private readonly renderer: Renderer2) {}
+
+  @ViewChild("dropdown") dropdown!: ElementRef;
+
+  @HostListener("document:keydown", ["$event"])
+  onKeyDown(event: KeyboardEvent): void {
+    if (!this.isOpen || this.disabled) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const i = this.highlightedIndex;
+
+    switch (event.code) {
+      case "ArrowUp": {
+        if (i < 0) this.highlightedIndex = 0;
+        if (i > 0) this.highlightedIndex--;
+        break;
+      }
+      case "ArrowDown": {
+        if (i < this.options.length - 1) {
+          this.highlightedIndex++;
+        }
+        break;
+      }
+      case "Enter": {
+        if (i >= 0) {
+          this.onUpdate(event, this.options[this.highlightedIndex].id);
+        }
+        break;
+      }
+      case "Escape": {
+        this.hideDropdown();
+      }
+    }
+
+    if (this.isOpen) {
+      setTimeout(() => this.trackHighlightScroll());
+    }
+  }
+
+  trackHighlightScroll(): void {
+    const ddElem = this.dropdown.nativeElement;
+
+    const highlightedElem = ddElem.querySelector(".field__option--highlighted");
+
+    const ddBox = ddElem.getBoundingClientRect();
+    const optBox = highlightedElem.getBoundingClientRect();
+
+    if (optBox.bottom > ddBox.bottom) {
+      const scrollAmount = optBox.bottom - ddBox.bottom + ddElem.scrollTop;
+      this.renderer.setProperty(ddElem, "scrollTop", scrollAmount);
+    } else if (optBox.top < ddBox.top) {
+      const scrollAmount = optBox.top - ddBox.top + ddElem.scrollTop;
+      this.renderer.setProperty(ddElem, "scrollTop", scrollAmount);
+    }
+  }
 
   writeValue(id: number) {
     this.selectedId = id;
@@ -53,7 +118,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  onUpdate(event: MouseEvent, id: number): void {
+  onUpdate(event: Event, id: number): void {
     event.stopPropagation();
     if (this.disabled) {
       return;
@@ -62,7 +127,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
     this.selectedId = id;
     this.onChange(this.getValue(id) ?? this.options[0].value);
 
-    this.isOpen = false;
+    this.hideDropdown();
   }
 
   getLabel(optionId: number): string | undefined {
@@ -77,7 +142,12 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
     return this.options.find(el => el.label === label)?.id;
   }
 
-  onClickOutside() {
+  hideDropdown() {
     this.isOpen = false;
+    this.highlightedIndex = -1;
+  }
+
+  onClickOutside() {
+    this.hideDropdown();
   }
 }

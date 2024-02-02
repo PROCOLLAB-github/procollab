@@ -60,6 +60,10 @@
     border-radius: var(--rounded-lg);
     transition: background-color 0.2s;
 
+    &--highlighted {
+      background-color: var(--light-gray);
+    }
+
     &:hover {
       background-color: var(--light-gray);
     }
