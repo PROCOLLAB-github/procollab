@@ -1,0 +1,46 @@
+/** @format */
+
+@use "src/styles/typography";
+@use "src/styles/responsive";
+
+.field {
+  &__input {
+    width: 24px;
+    height: 24px;
+    color: transparent;
+    text-align: center;
+    text-shadow: 0 0 0 var(--black);
+    background-color: var(--white);
+    border: 1px solid var(--gray);
+    border-radius: var(--rounded-md);
+    outline: none;
+    transition: all 0.2s;
+
+    &--error {
+      border-color: var(--red);
+    }
+
+    &--disabled {
+      pointer-events: none;
+    }
+
+    &:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+    }
+
+    @include typography.body-14;
+  }
+}
+
+// stylelint-disable property-no-vendor-prefix
+input {
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  &[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
