@@ -5,10 +5,11 @@
   <app-program-head [program]="program"></app-program-head>
   }
   <div class="page__list">
-    @for (p of projects$ | async; track p.id) {
+    <!--@for (p of projects$ | async; track p.id) {
     <a [routerLink]="['/office/projects', p.id]">
       <app-project-card [project]="p"></app-project-card>
     </a>
-    }
+    }-->
+    {{ projects$ | async | json }}
   </div>
 </div>
