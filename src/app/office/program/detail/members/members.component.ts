@@ -1,14 +1,22 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { concatMap, fromEvent, map, noop, Observable, of, tap, throttleTime } from "rxjs";
 import { Program } from "@office/program/models/program.model";
-import { MembersResult, User } from "@auth/models/user.model";
+import { User } from "@auth/models/user.model";
 import { ProgramService } from "@office/program/services/program.service";
 import { MemberCardComponent } from "@office/shared/member-card/member-card.component";
 import { ProgramHeadComponent } from "../../shared/program-head/program-head.component";
 import { AsyncPipe } from "@angular/common";
+import { ApiPagination } from "@models/api-pagination.model";
 
 @Component({
   selector: "app-members",
@@ -17,7 +25,7 @@ import { AsyncPipe } from "@angular/common";
   standalone: true,
   imports: [ProgramHeadComponent, RouterLink, MemberCardComponent, AsyncPipe],
 })
-export class ProgramMembersComponent implements OnInit {
+export class ProgramMembersComponent implements OnInit, AfterViewInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly cdref: ChangeDetectorRef,
@@ -25,7 +33,7 @@ export class ProgramMembersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.data.pipe(map(r => r["data"])).subscribe((members: MembersResult) => {
+    this.route.data.pipe(map(r => r["data"])).subscribe((members: ApiPagination<User>) => {
       this.membersTotalCount = members.count;
       this.members = members.results;
     });
@@ -80,7 +88,7 @@ export class ProgramMembersComponent implements OnInit {
         this.membersTake
       )
       .pipe(
-        tap((members: MembersResult) => {
+        tap((members: ApiPagination<User>) => {
           this.membersTotalCount = members.count;
           this.members = [...this.members, ...members.results];
 
