@@ -39,7 +39,7 @@ export class SelectComponent implements ControlValueAccessor {
 
   constructor(private readonly renderer: Renderer2) {}
 
-  @ViewChild("dropdown") dropdown!: ElementRef;
+  @ViewChild("dropdown") dropdown!: ElementRef<HTMLUListElement>;
 
   @HostListener("document:keydown", ["$event"])
   onKeyDown(event: KeyboardEvent): void {
@@ -51,27 +51,22 @@ export class SelectComponent implements ControlValueAccessor {
 
     const i = this.highlightedIndex;
 
-    switch (event.code) {
-      case "ArrowUp": {
-        if (i < 0) this.highlightedIndex = 0;
-        if (i > 0) this.highlightedIndex--;
-        break;
+    if (event.code === "ArrowUp") {
+      if (i < 0) this.highlightedIndex = 0;
+      if (i > 0) this.highlightedIndex--;
+    }
+    if (event.code === "ArrowDown") {
+      if (i < this.options.length - 1) {
+        this.highlightedIndex++;
       }
-      case "ArrowDown": {
-        if (i < this.options.length - 1) {
-          this.highlightedIndex++;
-        }
-        break;
+    }
+    if (event.code === "Enter") {
+      if (i >= 0) {
+        this.onUpdate(event, this.options[this.highlightedIndex].id);
       }
-      case "Enter": {
-        if (i >= 0) {
-          this.onUpdate(event, this.options[this.highlightedIndex].id);
-        }
-        break;
-      }
-      case "Escape": {
-        this.hideDropdown();
-      }
+    }
+    if (event.code === "Escape") {
+      this.hideDropdown();
     }
 
     if (this.isOpen) {
@@ -82,7 +77,7 @@ export class SelectComponent implements ControlValueAccessor {
   trackHighlightScroll(): void {
     const ddElem = this.dropdown.nativeElement;
 
-    const highlightedElem = ddElem.querySelector(".field__option--highlighted");
+    const highlightedElem = ddElem.children[this.highlightedIndex];
 
     const ddBox = ddElem.getBoundingClientRect();
     const optBox = highlightedElem.getBoundingClientRect();
