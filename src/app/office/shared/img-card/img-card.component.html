@@ -1,13 +1,10 @@
 <!-- @format -->
 
 <div class="file" [class.file--loading]="loading" [class.file--error]="error">
-  <img
-    *ngIf="src && !loading && !error"
-    [src]="src"
-    alt="user-generated content"
-    class="file__img"
-  />
-  <div *ngIf="error" class="file__error loading-error">
+  @if (src && !loading && !error) {
+  <img [src]="src" alt="user-generated content" class="file__img" />
+  } @if (error) {
+  <div class="file__error loading-error">
     <div class="loading-error__message text-body-12">
       <i appIcon icon="color-error" appSquare="14"></i>
       Ошибка загрузки
@@ -20,8 +17,8 @@
       (click)="retry.emit()"
     ></i>
   </div>
+  } @if (loading) {
   <svg
-    *ngIf="loading"
     class="file__loader"
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -47,6 +44,7 @@
       />
     </path>
   </svg>
+  }
   <div class="file__cross" (click)="cancel.emit()">
     <i appIcon icon="cross" appSquare="22"></i>
   </div>

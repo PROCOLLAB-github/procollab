@@ -7,11 +7,11 @@ import {
   FormBuilder,
   FormControl,
   FormGroup,
-  Validators,
   ReactiveFormsModule,
+  Validators,
 } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
-import { SelectComponent, ButtonComponent, IconComponent, InputComponent } from "@ui/components";
+import { ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
 import { ValidationService } from "@core/services";
 import { concatMap, first, map, noop, Observable, skip, Subscription } from "rxjs";
 import { Router } from "@angular/router";
@@ -23,7 +23,7 @@ import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 
 dayjs.extend(cpf);
 
@@ -33,11 +33,9 @@ dayjs.extend(cpf);
   styleUrl: "./edit.component.scss",
   standalone: true,
   imports: [
-    NgIf,
     ReactiveFormsModule,
     InputComponent,
     SelectComponent,
-    NgFor,
     TagComponent,
     IconComponent,
     ButtonComponent,

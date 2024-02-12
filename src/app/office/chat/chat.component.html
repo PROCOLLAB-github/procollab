@@ -19,11 +19,8 @@
     </nav>
   </div>
   <div class="page__list">
-    <app-chat-card
-      *ngFor="let c of chats | async; last as last"
-      [chat]="c"
-      [isLast]="last"
-      (click)="onGotoChat(c.id)"
-    ></app-chat-card>
+    @for (c of chats | async; track c.id; let last = $last) {
+    <app-chat-card [chat]="c" [isLast]="last" (click)="onGotoChat(c.id)"></app-chat-card>
+    }
   </div>
 </div>

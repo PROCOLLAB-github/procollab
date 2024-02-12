@@ -1,7 +1,7 @@
 <!-- @format -->
 <div>
+  @if (type === 'wave') {
   <div
-    *ngIf="type === 'wave'"
     class="dot-wave"
     [style]="
       '--speed:' + speed + ';' + '--size:' + size + ';' + '--color:' + 'var(--' + color + ');'
@@ -12,14 +12,12 @@
     <div class="dot-wave__dot"></div>
     <div class="dot-wave__dot"></div>
   </div>
-  <div
-    *ngIf="type === 'circle'"
-    class="lds-ring"
-    [style]="'--size:' + size + ';' + '--color:' + 'var(--' + color + ');'"
-  >
+  } @else if (type === 'circle') {
+  <div class="lds-ring" [style]="'--size:' + size + ';' + '--color:' + 'var(--' + color + ');'">
     <div></div>
     <div></div>
     <div></div>
     <div></div>
   </div>
+  }
 </div>

@@ -18,7 +18,6 @@ import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { AutosizeModule } from "ngx-autosize";
 import { NgxMaskModule } from "ngx-mask";
 import { IconComponent } from "@ui/components";
-import { NgIf, NgFor } from "@angular/common";
 
 @Component({
   selector: "app-message-input",
@@ -32,7 +31,7 @@ import { NgIf, NgFor } from "@angular/common";
     },
   ],
   standalone: true,
-  imports: [NgIf, NgFor, IconComponent, NgxMaskModule, AutosizeModule, FileTypePipe],
+  imports: [IconComponent, NgxMaskModule, AutosizeModule, FileTypePipe],
 })
 export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
   constructor(private readonly fileService: FileService) {}
@@ -221,4 +220,6 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
       this.onChange(this.value);
     });
   }
+
+  protected readonly repl = module;
 }

@@ -12,8 +12,8 @@ describe("MainComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, HttpClientTestingModule, ProgramDetailMainComponent],
-}).compileComponents();
+      imports: [RouterTestingModule, HttpClientTestingModule, ProgramDetailMainComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

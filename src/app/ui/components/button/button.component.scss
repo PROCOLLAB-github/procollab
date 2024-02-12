@@ -41,6 +41,11 @@
       color: var(--black);
       background-color: var(--grey-button);
     }
+
+    &.button--green {
+      color: var(--white);
+      background-color: var(--green);
+    }
   }
 
   &.button--outline {

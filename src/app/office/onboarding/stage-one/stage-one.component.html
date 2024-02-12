@@ -9,7 +9,8 @@
     </p>
   </div>
   <form [formGroup]="stageForm" class="page__form">
-    <fieldset class="page__field" *ngIf="stageForm.get('speciality') as speciality">
+    @if (stageForm.get('speciality'); as speciality) {
+    <fieldset class="page__field">
       <label for="speciality" class="field-label">Специальность</label>
       <app-input
         id="speciality"
@@ -18,14 +19,18 @@
         placeholder="Например: Java Developer"
         formControlName="speciality"
       ></app-input>
-      <div *ngIf="speciality | controlError: 'required'" class="text-body-14 error">
+      @if (speciality | controlError:'required') {
+      <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
+      }
     </fieldset>
+    }
     <div class="page__field">
       <label class="field-label">Ключевые навыки</label>
       <ul class="tag-list">
-        <li *ngFor="let skill of keySkills.controls; index as i" class="tag-list__item">
+        @for (skill of keySkills.controls; let i = $index; track i) {
+        <li class="tag-list__item">
           <app-tag>
             <span>{{ skill.value }}</span>
             <i
@@ -37,6 +42,7 @@
             ></i>
           </app-tag>
         </li>
+        }
       </ul>
       <div class="tag-list-form">
         <app-input
@@ -50,6 +56,8 @@
         </app-button>
       </div>
     </div>
-    <app-button type="submit" [loader]="stageSubmitting" (click)="onSubmit()">Продолжить</app-button>
+    <app-button type="submit" [loader]="stageSubmitting" (click)="onSubmit()"
+      >Продолжить</app-button
+    >
   </form>
 </div>

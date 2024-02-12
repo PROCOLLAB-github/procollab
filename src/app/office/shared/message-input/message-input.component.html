@@ -1,19 +1,17 @@
 <!-- @format -->
 
 <div class="message-input">
-  <ul *ngIf="attachFiles.length" class="message-input__action action files-list">
-    <li
-      class="files-list__item file"
-      [class.file--loading]="file.loading"
-      *ngFor="let file of attachFiles; index as index"
-    >
+  @if (attachFiles.length) {
+  <ul class="message-input__action action files-list">
+    @for (file of attachFiles; let index = $index; track index) {
+    <li class="files-list__item file" [class.file--loading]="file.loading">
       <i class="file__type" appIcon [icon]="'file_' + (file.type | fileType)" appSquare="24"></i>
       <h3 class="file__name">{{ file.name }}</h3>
       <div class="file__size">{{ file.size }}</div>
       <!--Use hardcoded svg here, because svg sprites
       aren't capable of animation-->
+      @if (file.loading) {
       <svg
-        *ngIf="file.loading"
         class="file__loading"
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -39,17 +37,20 @@
           />
         </path>
       </svg>
+      } @else {
       <i
         class="file__basket"
-        *ngIf="!file.loading"
         appIcon
         icon="basket"
         appSquare="24"
         (click)="onDeleteFile(index)"
       ></i>
+      }
     </li>
+    }
   </ul>
-  <div *ngIf="editingMessage" class="message-input__action action">
+  } @if (editingMessage) {
+  <div class="message-input__action action">
     <i class="action__icon" appIcon icon="edit-pen" appSquare="24"></i>
     <div class="action__text">
       <div class="action__name text-body-12">
@@ -59,7 +60,8 @@
     </div>
     <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
   </div>
-  <div *ngIf="replyMessage" class="message-input__action action">
+  } @if (replyMessage) {
+  <div class="message-input__action action">
     <i class="action__icon" appIcon icon="reply" appSquare="24"></i>
     <div class="action__text">
       <div class="action__name text-body-12">
@@ -69,6 +71,7 @@
     </div>
     <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
   </div>
+  }
   <div class="message-input__control">
     <textarea
       autosize
@@ -93,7 +96,8 @@
       <i appIcon icon="send" appSquare="24"></i>
     </button>
   </div>
-  <div class="drop-modal" *ngIf="showDropModal">
+  @if (showDropModal) {
+  <div class="drop-modal">
     <div class="drop-modal__overlay"></div>
     <div class="drop-modal__body">
       <img
@@ -109,4 +113,5 @@
       </p>
     </div>
   </div>
+  }
 </div>

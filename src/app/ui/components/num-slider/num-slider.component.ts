@@ -13,21 +13,19 @@ import {
 } from "@angular/core";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Subscription } from "rxjs";
-import { NgIf, NgFor } from "@angular/common";
 
 @Component({
-    selector: "app-num-slider",
-    templateUrl: "./num-slider.component.html",
-    styleUrl: "./num-slider.component.scss",
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => NumSliderComponent),
-            multi: true,
-        },
-    ],
-    standalone: true,
-    imports: [NgIf, NgFor],
+  selector: "app-num-slider",
+  templateUrl: "./num-slider.component.html",
+  styleUrl: "./num-slider.component.scss",
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => NumSliderComponent),
+      multi: true,
+    },
+  ],
+  standalone: true,
 })
 export class NumSliderComponent implements OnInit, OnDestroy {
   constructor() {}

@@ -3,13 +3,13 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map, Subscription } from "rxjs";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ProgramDataSchema } from "@office/program/models/program.model";
 import { ValidationService } from "@core/services";
 import { ProgramService } from "@office/program/services/program.service";
 import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { ButtonComponent, InputComponent } from "@ui/components";
-import { NgIf, NgFor, KeyValuePipe } from "@angular/common";
+import { KeyValuePipe } from "@angular/common";
 import { BackComponent } from "@ui/components/back/back.component";
 
 @Component({
@@ -19,9 +19,7 @@ import { BackComponent } from "@ui/components/back/back.component";
   standalone: true,
   imports: [
     BackComponent,
-    NgIf,
     ReactiveFormsModule,
-    NgFor,
     InputComponent,
     ButtonComponent,
     KeyValuePipe,

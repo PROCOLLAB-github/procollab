@@ -1,10 +1,12 @@
 <!-- @format -->
 
-<div *ngIf="user$ | async as user" class="profile">
-  <section class="bar profile__bar" >
+@if (user$ | async; as user) {
+<div class="profile">
+  <section class="bar profile__bar">
     <nav class="bar__nav">
       <app-back class="bar__back"></app-back>
-      <ul class="bar__tabs" *ngIf="loggedUserId$ | async as loggedUserId">
+      @if (loggedUserId$ | async; as loggedUserId) {
+      <ul class="bar__tabs">
         <a
           class="bar__link"
           [routerLink]="['/office/profile', user.id]"
@@ -12,11 +14,7 @@
           routerLinkActive="bar__link--active"
         >
           <li class="text-body-14 bar__item">
-            {{
-              user.id === loggedUserId 
-              ? 'Моя страница'
-              : 'Страница пользователя'
-            }}
+            {{ user.id === loggedUserId ? "Моя страница" : "Страница пользователя" }}
           </li>
         </a>
         <a
@@ -27,6 +25,7 @@
           <li class="text-body-14 bar__item">Проекты</li>
         </a>
       </ul>
+      }
     </nav>
   </section>
   <section class="profile__body">
@@ -39,6 +38,7 @@
         /> -->
       </div>
       <div class="info__body">
+        @if (chatService.userOnlineStatusCache | async; as cache) {
         <app-avatar
           class="info__avatar"
           [url]="user.avatar"
@@ -47,51 +47,52 @@
           [onlineBadgeSize]="30"
           [onlineBadgeBorder]="6"
           [onlineBadgeOffset]="(desktopMode$ | async) ? 5 : 0"
-          *ngIf="chatService.userOnlineStatusCache | async as cache"
           [isOnline]="cache[user.id] !== undefined ? cache[user.id] : user.isOnline"
         ></app-avatar>
+        }
         <section class="info__top">
           <div class="info__text">
             <h2 class="info__name">{{ user.firstName }} {{ user.lastName }}</h2>
             <div class="text-body-12 info__keys">
               <div>
-                <span *ngIf="user.birthday">
+                @if (user.birthday) {
+                <span>
                   {{ user.birthday | yearsFromBirthday }}
                 </span>
-                <ng-container *ngIf="user.birthday && user.speciality">&nbsp;•&nbsp;</ng-container>
-                <span *ngIf="user.speciality">
+                } @if (user.birthday && user.speciality) {
+                <ng-container>&nbsp;•&nbsp;</ng-container>
+                } @if (user.speciality) {
+                <span>
                   {{ user.speciality }}
                 </span>
+                }
               </div>
-              <span *ngIf="user.city" class="info__geo">
+              @if (user.city) {
+              <span class="info__geo">
                 <i appIcon icon="geo-point" appSquare="10"></i>
                 {{ user.city }}
-                <ng-container *ngIf="user.region">, {{ user.region }}</ng-container>
+                @if (user.region) { ,
+                {{ user.region }}
+                }
               </span>
+              }
             </div>
           </div>
           <div class="info__right">
-            <ng-container *ngIf="authService.profile | async as profile">
-              <a
-                *ngIf="profile.id !== user.id"
-                class="info__send-message"
-                [routerLink]="['/office/chats', profile.id + '_' + user.id]"
-              >
-                <app-button customTypographyClass="text-body-12">
-                  Написать
-                </app-button>
-              </a>
-              <!-- <a *ngIf="profile.id === user.id" class="info__download-cv">
-                <app-button disabled customTypographyClass="text-body-12">
-                  Скачать CV
-                </app-button>
-              </a> -->
-              <a *ngIf="profile.id === user.id" class="profile__edit" routerLink="/office/profile/edit">
-                <app-button customTypographyClass="text-body-12" color="grey">
-                  Редактировать профиль
-                </app-button>
-              </a>
-            </ng-container>
+            @if (authService.profile | async; as profile) { @if (profile.id !== user.id) {
+            <a
+              class="info__send-message"
+              [routerLink]="['/office/chats', profile.id + '_' + user.id]"
+            >
+              <app-button customTypographyClass="text-body-12"> Написать </app-button>
+            </a>
+            } @else {
+            <a class="profile__edit" routerLink="/office/profile/edit">
+              <app-button customTypographyClass="text-body-12" color="grey">
+                Редактировать профиль
+              </app-button>
+            </a>
+            } }
           </div>
         </section>
         <section class="info__achievements">
@@ -107,3 +108,4 @@
     </div>
   </section>
 </div>
+}

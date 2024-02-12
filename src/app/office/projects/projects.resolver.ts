@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { forkJoin, switchMap, map } from "rxjs";
+import { forkJoin, map, switchMap } from "rxjs";
 import { ProjectCount } from "@models/project.model";
 import { ProjectService } from "@services/project.service";
 import { AuthService } from "@auth/services";

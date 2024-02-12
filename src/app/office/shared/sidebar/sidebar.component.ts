@@ -8,7 +8,7 @@ import { Invite } from "@models/invite.model";
 import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { ProfileInfoComponent } from "@ui/components/profile-info/profile-info.component";
 import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { ClickOutsideModule } from "ng-click-outside";
 import { IconComponent } from "@ui/components";
 
@@ -22,8 +22,6 @@ import { IconComponent } from "@ui/components";
     RouterLinkActive,
     IconComponent,
     ClickOutsideModule,
-    NgIf,
-    NgFor,
     InviteManageCardComponent,
     ProfileInfoComponent,
     AsyncPipe,

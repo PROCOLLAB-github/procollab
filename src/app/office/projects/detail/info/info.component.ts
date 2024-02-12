@@ -40,7 +40,7 @@ import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { NgIf, NgFor, NgTemplateOutlet, AsyncPipe } from "@angular/common";
+import { NgTemplateOutlet, AsyncPipe } from "@angular/common";
 import { User } from "@auth/models/user.model";
 
 @Component({
@@ -49,14 +49,12 @@ import { User } from "@auth/models/user.model";
   styleUrl: "./info.component.scss",
   standalone: true,
   imports: [
-    NgIf,
     AvatarComponent,
     IconComponent,
     ModalComponent,
     ButtonComponent,
     RouterLink,
     NewsFormComponent,
-    NgFor,
     NewsCardComponent,
     NgTemplateOutlet,
     RouterOutlet,

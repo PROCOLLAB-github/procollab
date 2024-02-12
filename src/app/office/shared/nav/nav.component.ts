@@ -3,14 +3,14 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
 import { NavigationStart, Router, RouterLink, RouterLinkActive } from "@angular/router";
-import { Subscription } from "rxjs";
+import { noop, Subscription } from "rxjs";
 import { NotificationService } from "@services/notification.service";
 import { Invite } from "@models/invite.model";
 import { AuthService } from "@auth/services";
 import { InviteService } from "@services/invite.service";
 import { ProfileInfoComponent } from "@ui/components/profile-info/profile-info.component";
 import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { IconComponent } from "@ui/components";
 
 @Component({
@@ -20,10 +20,8 @@ import { IconComponent } from "@ui/components";
   standalone: true,
   imports: [
     IconComponent,
-    NgIf,
     RouterLink,
     RouterLinkActive,
-    NgFor,
     InviteManageCardComponent,
     ProfileInfoComponent,
     AsyncPipe,
@@ -97,4 +95,6 @@ export class NavComponent implements OnInit, OnDestroy {
         .then(() => console.debug("Route changed from HeaderComponent"));
     });
   }
+
+  protected readonly noop = noop;
 }

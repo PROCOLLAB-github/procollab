@@ -11,22 +11,25 @@
       </div>
     </div>
   </div>
-  <div class="card__text text-body-14" *ngIf="newsItem.text">
+  @if (newsItem.text) {
+  <div class="card__text text-body-14">
     <p #newsTextEl [innerText]="newsItem.text"></p>
   </div>
-  <ul *ngIf="editMode">
+  } @if (editMode) {
+  <ul>
+    @for (f of imagesEditList; track f.id) {
     <app-img-card
-      *ngFor="let f of imagesEditList"
       [loading]="f.loading"
       [src]="f.src"
       [error]="f.error"
       (cancel)="onDeletePhoto(f.id)"
       (retry)="onRetryUpload(f.id)"
     ></app-img-card>
+    }
   </ul>
-  <ul *ngIf="editMode" class="card__edit-files">
+  <ul class="card__edit-files">
+    @for (f of filesEditList; track f.id) {
     <app-file-upload-item
-      *ngFor="let f of filesEditList"
       [link]="f.src"
       [type]="f.tempFile?.type ?? f.type"
       [size]="f.tempFile?.size ?? f.size"
@@ -35,36 +38,39 @@
       [loading]="f.loading"
       (delete)="onDeleteFile(f.id)"
     ></app-file-upload-item>
+    }
   </ul>
+  } @if (newsTextExpandable && !editMode) {
   <div
-    *ngIf="newsTextExpandable && !editMode"
     class="read-more"
     (click)="onExpandNewsText(newsTextEl?.nativeElement, 'expanded', readMore)"
   >
-    {{ readMore ? 'Скрыть' : 'Читать полностью' }}
+    {{ readMore ? "Скрыть" : "Читать полностью" }}
   </div>
-  <div *ngIf="!editMode" class="card__gallery">
-    <div
-      *ngFor="let f of imagesViewList; index as index"
-      class="card__img"
-      (touchend)="onTouchImg($event, index)"
-    >
+  } @if (!editMode) {
+  <div class="card__gallery">
+    @for (f of imagesViewList; let index = $index; track index) {
+    <div class="card__img" (touchend)="onTouchImg($event, index)">
       <img class="card__img" [src]="f.link" [alt]="f.name" />
       <div class="card__img-like" [class.card__img-like--show]="showLikes[index]">
         <i appIcon icon="like" appSquare="40"></i>
       </div>
     </div>
+    }
   </div>
-  <div *ngIf="!editMode && filesViewList.length" class="card__files">
+  } @if (!editMode && filesViewList.length) {
+  <div class="card__files">
+    @for (f of filesViewList; track $index) {
     <app-file-item
-      *ngFor="let f of filesViewList"
       [name]="f.name"
       [size]="f.size"
       [type]="f.mimeType"
       [link]="f.link"
     ></app-file-item>
+    }
   </div>
-  <div class="card__footer footer" *ngIf="!editMode">
+  } @if (!editMode) {
+  <div class="card__footer footer">
     <div class="footer__left">
       <div
         class="footer__item footer__like text-body-12"
@@ -85,4 +91,5 @@
       </div>
     </div>
   </div>
+  }
 </div>

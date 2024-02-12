@@ -13,7 +13,6 @@ import { ActivatedRoute, NavigationEnd, Params, Router, RouterLink } from "@angu
 import {
   concatMap,
   distinctUntilChanged,
-  forkJoin,
   fromEvent,
   map,
   noop,
@@ -22,7 +21,6 @@ import {
   switchMap,
   tap,
   throttleTime,
-  withLatestFrom,
 } from "rxjs";
 import { AuthService } from "@auth/services";
 import { Project } from "@models/project.model";
@@ -34,7 +32,7 @@ import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@models/api-pagination.model";
 import { ProjectsFilterComponent } from "../projects-filter/projects-filter.component";
 import { ProjectCardComponent } from "../../shared/project-card/project-card.component";
-import { NgFor, NgIf } from "@angular/common";
+import {} from "@angular/common";
 import { IconComponent } from "@ui/components";
 import { SubscriptionService } from "@office/services/subscription.service";
 
@@ -43,7 +41,7 @@ import { SubscriptionService } from "@office/services/subscription.service";
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
   standalone: true,
-  imports: [IconComponent, NgFor, RouterLink, ProjectCardComponent, NgIf, ProjectsFilterComponent],
+  imports: [IconComponent, RouterLink, ProjectCardComponent, ProjectsFilterComponent],
 })
 export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
@@ -193,10 +191,6 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("listRoot") listRoot?: ElementRef<HTMLElement>;
 
   private previousReqQuery: Record<string, any> = {};
-
-  identify(_idx: number, item: Project) {
-    return item.id;
-  }
 
   deleteProject(projectId: number): void {
     if (!confirm("Вы точно хотите удалить проект?")) {

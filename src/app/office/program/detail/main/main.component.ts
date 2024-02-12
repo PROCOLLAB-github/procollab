@@ -1,12 +1,12 @@
 /** @format */
 
 import {
+  ChangeDetectorRef,
   Component,
+  ElementRef,
   OnDestroy,
   OnInit,
   ViewChild,
-  ElementRef,
-  ChangeDetectorRef,
 } from "@angular/core";
 import { ProgramService } from "@office/program/services/program.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
@@ -21,7 +21,6 @@ import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { ProgramNewsCardComponent } from "../shared/news-card/news-card.component";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { NgIf, NgFor } from "@angular/common";
 
 @Component({
   selector: "app-main",
@@ -29,12 +28,10 @@ import { NgIf, NgFor } from "@angular/common";
   styleUrl: "./main.component.scss",
   standalone: true,
   imports: [
-    NgIf,
     AvatarComponent,
     IconComponent,
     ButtonComponent,
     RouterLink,
-    NgFor,
     ProgramNewsCardComponent,
     UserLinksPipe,
     ParseBreaksPipe,

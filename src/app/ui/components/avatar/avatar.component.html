@@ -12,8 +12,8 @@
     [style.height]="size + 'px'"
     alt="avatar"
   />
+  @if (isOnline) {
   <div
-    *ngIf="isOnline"
     [style.width]="onlineBadgeSize + 'px'"
     [style.height]="onlineBadgeSize + 'px'"
     [style.border-width]="onlineBadgeBorder + 'px'"
@@ -21,4 +21,5 @@
     [style.bottom]="onlineBadgeOffset + 'px'"
     class="avatar__online"
   ></div>
+  }
 </div>

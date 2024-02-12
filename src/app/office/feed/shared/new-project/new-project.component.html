@@ -1,0 +1,16 @@
+<!-- @format -->
+
+<div class="card">
+  <h3 class="card__title title">
+    <span>Добро пожаловать</span>
+    <a class="card__link" routerLink="/office/projects/51">PROCOLLAB</a>
+  </h3>
+  <app-avatar class="card__avatar" [size]="105" url="sadf" [hasBorder]="true"></app-avatar>
+  <p class="card__text">
+    Команда PROCOLLAB искренне поддерживает Вас в творческом начинании! Мы готовы оказать всю
+    необходимую помощь для успешного воплощения вашего проекта
+  </p>
+  <app-button class="card__button" (click)="router.navigateByUrl('/office/projects/51')"
+    >Перейти в проект</app-button
+  >
+</div>

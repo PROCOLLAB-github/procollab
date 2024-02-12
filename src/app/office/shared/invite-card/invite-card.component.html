@@ -1,6 +1,7 @@
 <!-- @format -->
 
-<div *ngIf="invite" class="invite">
+@if (invite) {
+<div class="invite">
   <div>
     <h3 class="text-bold-body-14 invite__role">
       {{ invite.user.firstName }} {{ invite.user.lastName }}
@@ -10,3 +11,4 @@
   <p class="text-body-12 invite__status">Приглашение отправленно</p>
   <i class="invite__cross" appIcon icon="cross" appSquare="24" (click)="onRemove($event)"></i>
 </div>
+}

@@ -19,7 +19,7 @@ import { AuthService } from "@auth/services";
 import { DayjsPipe } from "@core/pipes/dayjs.pipe";
 import { IconComponent } from "@ui/components";
 import { FileItemComponent } from "../file-item/file-item.component";
-import { NgIf, NgFor, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "../avatar/avatar.component";
 import { ClickOutsideModule } from "ng-click-outside";
 
@@ -31,8 +31,6 @@ import { ClickOutsideModule } from "ng-click-outside";
   imports: [
     ClickOutsideModule,
     AvatarComponent,
-    NgIf,
-    NgFor,
     FileItemComponent,
     IconComponent,
     AsyncPipe,

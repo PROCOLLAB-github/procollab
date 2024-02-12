@@ -8,7 +8,6 @@ import { ValidationService } from "src/app/core/services";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { IconComponent, ButtonComponent, InputComponent } from "@ui/components";
-import { NgIf } from "@angular/common";
 
 @Component({
   selector: "app-login",
@@ -19,7 +18,6 @@ import { NgIf } from "@angular/common";
   imports: [
     ReactiveFormsModule,
     RouterLink,
-    NgIf,
     InputComponent,
     ButtonComponent,
     IconComponent,

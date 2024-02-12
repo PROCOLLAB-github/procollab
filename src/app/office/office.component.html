@@ -1,23 +1,24 @@
 <!-- @format -->
 
 <div class="office">
-  <ng-container *ngIf="invites$ | async as invites">
-    <app-sidebar
-      class="office__sidebar"
-      [hasUnreads]="!!(chatService.unread$ | async)"
-      [invites]="invites"
-    ></app-sidebar>
-    <div class="office__wrapper">
-      <div class="office__top">
-        <app-nav [invites]="invites"></app-nav>
-      </div>
-      <div class="office__body">
-        <div class="office__inner">
-          <router-outlet></router-outlet>
-        </div>
+  @if (invites$ | async; as invites) {
+
+  <app-sidebar
+    class="office__sidebar"
+    [hasUnreads]="!!(chatService.unread$ | async)"
+    [invites]="invites"
+  ></app-sidebar>
+  <div class="office__wrapper">
+    <div class="office__top">
+      <app-nav [invites]="invites"></app-nav>
+    </div>
+    <div class="office__body">
+      <div class="office__inner">
+        <router-outlet></router-outlet>
       </div>
     </div>
-  </ng-container>
+  </div>
+  }
   <app-modal [open]="waitVerificationModal && !waitVerificationAccepted">
     <div class="message-modal">
       <img src="/assets/images/office/shared/wait.png" alt="wait" width="215px" />

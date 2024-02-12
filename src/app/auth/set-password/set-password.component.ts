@@ -8,14 +8,13 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "@auth/services";
 import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { ButtonComponent, InputComponent } from "@ui/components";
-import { NgIf } from "@angular/common";
 
 @Component({
   selector: "app-set-password",
   templateUrl: "./set-password.component.html",
   styleUrl: "./set-password.component.scss",
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, InputComponent, ButtonComponent, ControlErrorPipe],
+  imports: [ReactiveFormsModule, InputComponent, ButtonComponent, ControlErrorPipe],
 })
 export class SetPasswordComponent implements OnInit {
   constructor(

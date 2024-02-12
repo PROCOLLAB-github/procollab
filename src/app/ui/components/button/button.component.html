@@ -7,14 +7,15 @@
     'button--red': color === 'red',
     'button--inline': appearance === 'inline',
     'button--outline': appearance === 'outline',
+    'button--green': color === 'green',
     'button--grey': color === 'grey'
   }"
 >
-  <ng-container *ngIf="!loader">
+  @if (loader) {
+  <app-loader [color]="color === 'grey' ? 'black' : 'white'"></app-loader>
+  } @else {
+  <ng-container>
     <ng-content></ng-content>
   </ng-container>
-  <app-loader 
-    *ngIf="loader" 
-    [color]="color === 'grey' ? 'black' : 'white'"
-  ></app-loader>
+  }
 </button>

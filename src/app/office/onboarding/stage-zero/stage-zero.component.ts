@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { ValidationService } from "@core/services";
 import { concatMap, Subscription } from "rxjs";
@@ -12,7 +12,6 @@ import { OnboardingService } from "../services/onboarding.service";
 import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { ButtonComponent, InputComponent } from "@ui/components";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
-import { NgIf } from "@angular/common";
 
 @Component({
   selector: "app-stage-zero",
@@ -20,7 +19,6 @@ import { NgIf } from "@angular/common";
   styleUrl: "./stage-zero.component.scss",
   standalone: true,
   imports: [
-    NgIf,
     ReactiveFormsModule,
     AvatarControlComponent,
     InputComponent,

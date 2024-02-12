@@ -19,7 +19,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 18.13
+          node-version: 18.16
           cache: 'npm'
       - run: npm ci
       - run: npm run build:prod

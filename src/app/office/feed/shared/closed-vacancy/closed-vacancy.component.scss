@@ -1,0 +1,94 @@
+@use "src/styles/responsive";
+@use "src/styles/typography";
+
+.card {
+  padding: 20px;
+  background-color: var(--white);
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 15px;
+
+  &__head {
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    margin-bottom: 10px;
+    text-align: center;
+
+    @include typography.bold-body-16;
+  }
+
+  &__text {
+    color: var(--dark-grey);
+    text-align: center;
+
+    @include typography.body-14;
+  }
+
+  &__action {
+    margin-top: 20px;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: center;
+
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__name {
+    max-width: 200px;
+    overflow: hidden;
+    color: var(--black);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include typography.bold-body-14;
+
+    @include responsive.apply-desktop {
+      @include typography.bold-body-16;
+    }
+  }
+
+  &__date {
+    color: var(--dark-grey);
+  }
+}
+
+.action {
+  @include responsive.apply-desktop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 15px;
+  }
+
+  &__job {
+    display: block;
+    padding: 20px 0;
+    margin-bottom: 15px;
+    text-align: center;
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 15px;
+
+    @include typography.bold-body-14;
+
+    @include responsive.apply-desktop {
+      padding: 0;
+      margin-bottom: 0;
+      border: none;
+    }
+  }
+
+  &__button {
+    width: 150px;
+  }
+}

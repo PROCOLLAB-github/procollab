@@ -1,0 +1,31 @@
+<!-- @format -->
+
+<div class="card">
+  <div class="card__head head">
+    <img class="head__avatar" src="newsItem.imageAddress" alt="newsItem.name" />
+    <div>
+      <div class="head__name">PROCOLLAB</div>
+      <div class="head__date text-body-14">
+        {{ "2024-19-08 12:09:17" | dayjs: "format":"DD MMMM, HH:mm" }}
+      </div>
+    </div>
+  </div>
+  <h3 class="card__title">
+    <span>Тебя ищут в проект</span>
+    <a routerLink="/office/projects/51" class="card__project">PROCOLLAB</a>
+  </h3>
+  <div class="card__skills skills">
+    <div class="skills__title">Необходимые навыки</div>
+    <ul class="skills__list">
+      <app-tag>sdfasdf</app-tag>
+      <app-tag>sdfasdf</app-tag>
+      <app-tag>sdfasdf</app-tag>
+      <app-tag>sdfasdf</app-tag>
+      <app-tag>sdfasdf</app-tag>
+    </ul>
+  </div>
+  <div class="action card__action">
+    <span class="action__job"> Backend developer </span>
+    <app-button (click)="router.navigateByUrl('/office/vacancy/1')">Откликнуться</app-button>
+  </div>
+</div>

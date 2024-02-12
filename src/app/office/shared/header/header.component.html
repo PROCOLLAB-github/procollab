@@ -4,7 +4,9 @@
   <div class="header__inner">
     <div class="header__right">
       <div (clickOutside)="onClickOutside()" class="header__bell">
-        <div class="attention" *ngIf="(showBall | async) || hasInvites"></div>
+        @if ((showBall | async) || hasInvites) {
+        <div class="attention"></div>
+        }
         <i
           appIcon
           icon="bell"
@@ -13,24 +15,27 @@
           appViewBox="0 0 20 22"
           (click)="showNotifications = true"
         ></i>
-        <div *ngIf="showNotifications" class="header__notifications notifications">
+        @if (showNotifications) {
+        <div class="header__notifications notifications">
           <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
           <ul class="notifications__invites">
-            <li *ngFor="let invite of invites" class="notifications__invite">
+            @for (invite of invites; track invite.id) {
+            <li class="notifications__invite">
               <app-invite-manage-card
                 [invite]="invite"
                 (accept)="onAcceptInvite($event)"
                 (reject)="onRejectInvite($event)"
               ></app-invite-manage-card>
             </li>
+            }
           </ul>
         </div>
+        }
       </div>
       <div class="header__separator"></div>
-      <app-profile-info
-        *ngIf="authService.profile | async as user"
-        [user]="user"
-      ></app-profile-info>
+      @if (authService.profile | async; as user) {
+      <app-profile-info [user]="user"></app-profile-info>
+      }
     </div>
   </div>
 </header>

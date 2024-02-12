@@ -6,18 +6,23 @@
     <div class="card__info">
       <p class="text-body-12 card__status">{{ user.userType | userRole | async }}</p>
       <p class="text-body-bold-18 card__name">{{ user.firstName }} {{ user.lastName }}</p>
-      <p *ngIf="user.speciality" class="text-body-12 card__additional-info">
+      @if (user.speciality) {
+      <p class="text-body-12 card__additional-info">
         {{ user.speciality }}
-        <ng-container *ngIf="user.speciality && user.birthday"> • </ng-container>
-        <ng-container *ngIf="user.birthday">
-          {{ user.birthday | yearsFromBirthday }}
-        </ng-container>
+        @if (user.speciality && user.birthday) { • } @if (user.birthday) {
+        {{ user.birthday | yearsFromBirthday }}
+        }
       </p>
+      }
     </div>
   </div>
-  <ul *ngIf="user.keySkills && user.keySkills.length" class="card__skills">
-    <li *ngFor="let skill of user.keySkills" class="card__skill">
+  @if (user.keySkills && user.keySkills.length) {
+  <ul class="card__skills">
+    @for (skill of user.keySkills; track $index) {
+    <li class="card__skill">
       <app-tag>{{ skill }}</app-tag>
     </li>
+    }
   </ul>
+  }
 </div>

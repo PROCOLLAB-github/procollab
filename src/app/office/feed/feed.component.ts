@@ -2,12 +2,21 @@
 
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { OpenVacancyComponent } from "@office/feed/shared/open-vacancy/open-vacancy.component";
+import { NewProjectComponent } from "@office/feed/shared/new-project/new-project.component";
+import { ClosedVacancyComponent } from "@office/feed/shared/closed-vacancy/closed-vacancy.component";
 import { FeedFilterComponent } from "./filter/feed-filter.component";
 
 @Component({
   selector: "app-feed",
   standalone: true,
-  imports: [CommonModule, FeedFilterComponent],
+  imports: [
+    CommonModule,
+    OpenVacancyComponent,
+    NewProjectComponent,
+    ClosedVacancyComponent,
+    FeedFilterComponent,
+  ],
   templateUrl: "./feed.component.html",
   styleUrl: "./feed.component.scss",
 })

@@ -1,34 +1,40 @@
-<section class="main" *ngIf="user | async as user">
-  <div class="main__content" *ngIf="loggedUserId | async as loggedUserId">
+<!-- @format -->
+
+@if (user | async; as user) {
+<section class="main">
+  @if (loggedUserId | async; as loggedUserId) {
+  <div class="main__content">
     <div class="main__about">
       <h3 class="text-heading-3 about__title">Обо мне</h3>
-      <div *ngIf="user.aboutMe as about" class="about__text">
-        <p
-          #descEl
-          [innerHTML]="about | parseLinks | parseBreaks"
-          class="text-body-14"
-        ></p>
+      @if (user.aboutMe; as about) {
+      <div class="about__text">
+        <p #descEl [innerHTML]="about | parseLinks | parseBreaks" class="text-body-14"></p>
+        @if (descriptionExpandable) {
         <div
-          *ngIf="descriptionExpandable"
           class="read-more"
           (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
         >
           {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
         </div>
+        }
       </div>
-      <ul *ngIf="user.keySkills?.length" class="about__skills">
-        <li *ngFor="let skill of user.keySkills" class="about__skill">
+      } @if (user.keySkills?.length) {
+      <ul class="about__skills">
+        @for (skill of user.keySkills; track skill) {
+        <li class="about__skill">
           <app-tag color="accent">{{ skill }}</app-tag>
         </li>
+        }
       </ul>
+      }
     </div>
     <div class="main__news">
-      <app-news-form
-        *ngIf="loggedUserId === user.id"
-        (addNews)="onAddNews($event)"
-      ></app-news-form>
+      @if (loggedUserId === user.id) {
+      <app-news-form (addNews)="onAddNews($event)"></app-news-form>
+      }
       <ul>
-        <li *ngFor="let n of news">
+        @for (n of news; track n.id) {
+        <li>
           <app-news-card
             class="news__item"
             [attr.data-id]="n.id"
@@ -39,17 +45,14 @@
             (edited)="onEditNews($event, n.id)"
           ></app-news-card>
         </li>
+        }
       </ul>
     </div>
   </div>
+  }
   <div class="main__aside">
-    <!-- <div class="profile__section">
-      <h3 class="text-bold-body-16">Коммуникации</h3>
-    </div> -->
-    <div 
-      *ngIf="user.projects.length as projectsLength"
-      class="projects main__section"
-    >
+    @if (user.projects.length; as projectsLength) {
+    <div class="projects main__section">
       <div class="main__section-top">
         <h3 class="text-bold-body-16">Проекты</h3>
         <div class="badge badge__projects">
@@ -57,20 +60,24 @@
         </div>
       </div>
       <ul>
-        <li class="project" *ngFor="let p of user.projects.slice(0, 3)" [routerLink]="['/office/projects', p.id]">
-          <ng-container
-            *ngTemplateOutlet="projectTemp; context: { $implicit: p }"
-          ></ng-container>
+        @for (p of user.projects.slice(0, 3); track p.id) {
+        <li class="project" [routerLink]="['/office/projects', p.id]">
+          <ng-container *ngTemplateOutlet="projectTemp; context: { $implicit: p }"></ng-container>
         </li>
+        }
       </ul>
       <div class="projects__remaining" [class.projects__remaining--show]="readAllProjects">
-        <ul *ngIf="user.projects">
-          <li *ngFor="let project of user.projects.slice(3)">
+        @if (user.projects) {
+        <ul>
+          @for (project of user.projects.slice(3); track project.id) {
+          <li>
             <ng-container
               *ngTemplateOutlet="projectTemp; context: { $implicit: project }"
             ></ng-container>
           </li>
+          }
         </ul>
+        }
       </div>
       <ng-template #projectTemp let-project>
         <div class="project__info">
@@ -83,14 +90,13 @@
         </div>
         <p class="text-body-12 project__role">{{ project.collaborator?.role }}</p>
       </ng-template>
-      <div
-        *ngIf="projectsLength > 3"
-        class="read-more"
-        (click)="readAllProjects = !readAllProjects"
-      >
+      @if (projectsLength > 3) {
+      <div class="read-more" (click)="readAllProjects = !readAllProjects">
         {{ readAllProjects ? "Скрыть" : "Читать полностью" }}
       </div>
+      }
     </div>
+    }
     <div class="main__section">
       <div class="main__section-top">
         <h3 class="text-bold-body-16">Образование/работа</h3>
@@ -100,10 +106,8 @@
       </div>
       <p class="text-bold-body-14">{{ user.organization }}</p>
     </div>
-    <div 
-      *ngIf="user.achievements.length as achievementsLength"
-      class="main__section achievements" 
-    >
+    @if (user.achievements.length; as achievementsLength) {
+    <div class="main__section achievements">
       <div class="main__section-top">
         <h3 class="text-bold-body-16">Мои достижения</h3>
         <div class="badge badge__achievements">
@@ -111,34 +115,36 @@
         </div>
       </div>
       <ul>
-        <li *ngFor="let achievement of user.achievements.slice(0, 3)" class="achievement">
+        @for (achievement of user.achievements.slice(0, 3); track achievement.id) {
+        <li class="achievement">
           <p class="achievement__status text-bold-body-14">{{ achievement.status }}</p>
           <p class="achievement__title text-body-12">{{ achievement.title }}</p>
         </li>
+        }
       </ul>
       <div
         class="achievements__remaining"
         [class.achievements__remaining--show]="readAllAchievements"
       >
-        <ul *ngIf="user.achievements.length">
-          <li *ngFor="let achievement of user.achievements.slice(3)" class="achievement">
+        @if (user.achievements.length) {
+        <ul>
+          @for (achievement of user.achievements.slice(3); track achievement.id) {
+          <li class="achievement">
             <p class="achievement__status text-bold-body-14">{{ achievement.status }}</p>
             <p class="achievement__title text-body-12">{{ achievement.title }}</p>
           </li>
+          }
         </ul>
+        }
       </div>
-      <div
-        *ngIf="achievementsLength > 3"
-        class="read-more"
-        (click)="readAllAchievements = !readAllAchievements"
-      >
+      @if (achievementsLength > 3) {
+      <div class="read-more" (click)="readAllAchievements = !readAllAchievements">
         {{ readAllAchievements ? "Скрыть" : "Читать полностью" }}
       </div>
+      }
     </div>
-    <div 
-      *ngIf="user.links.length as linksLength"
-      class="main__section links"
-    >
+    } @if (user.links.length; as linksLength) {
+    <div class="main__section links">
       <div class="main__section-top">
         <h3 class="text-bold-body-16">Контакты</h3>
         <div class="badge badge__links">
@@ -146,46 +152,37 @@
         </div>
       </div>
       <ul>
-        <li
-          class="contact-link text-body-12"
-          *ngFor="let link of user.links.slice(0, 3)"
-        >
-          <ng-container *ngTemplateOutlet="linkTemp; context: { $implicit: link }">
-          </ng-container>
+        @for (link of user.links.slice(0, 3); track $index) {
+        <li class="contact-link text-body-12">
+          <ng-container *ngTemplateOutlet="linkTemp; context: { $implicit: link }"></ng-container>
         </li>
+        }
       </ul>
-      <div
-        class="links__remaining"
-        [class.links__remaining--show]="readAllLinks"
-      >
+      <div class="links__remaining" [class.links__remaining--show]="readAllLinks">
         <ul class="main__links">
-          <li
-            class="contact-link text-body-12"
-            *ngFor="let link of user.links.slice(3)"
-          >
+          @for (link of user.links.slice(3); track $index) {
+          <li class="contact-link text-body-12">
             <ng-container *ngTemplateOutlet="linkTemp; context: { $implicit: link }">
             </ng-container>
           </li>
+          }
         </ul>
       </div>
       <ng-template #linkTemp let-link>
-        <a
-          class="contact-link__link"
-          *ngIf="link | userLinks as l"
-          target="_blank"
-          [href]="link"
-        >
+        @if (link | userLinks; as l) {
+        <a class="contact-link__link" target="_blank" [href]="link">
           <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
           <span>{{ l.tag }}</span>
         </a>
+        }
       </ng-template>
-      <div
-        *ngIf="linksLength > 3"
-        class="read-more"
-        (click)="readAllLinks = !readAllLinks"
-      >
+      @if (linksLength > 3) {
+      <div class="read-more" (click)="readAllLinks = !readAllLinks">
         {{ readAllLinks ? "Скрыть" : "Читать полностью" }}
       </div>
+      }
     </div>
+    }
   </div>
 </section>
+}

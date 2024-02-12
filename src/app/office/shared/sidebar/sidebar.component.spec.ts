@@ -18,9 +18,9 @@ describe("SidebarComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-    imports: [HttpClientTestingModule, RouterTestingModule, SidebarComponent],
-    providers: [{ provide: AuthService, useValue: authSpy }],
-}).compileComponents();
+      imports: [HttpClientTestingModule, RouterTestingModule, SidebarComponent],
+      providers: [{ provide: AuthService, useValue: authSpy }],
+    }).compileComponents();
   });
 
   beforeEach(() => {

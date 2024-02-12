@@ -11,13 +11,13 @@
         (click)="mobileMenuOpen = !mobileMenuOpen"
       >
       </i>
-      <div
-        class="attention"
-        *ngIf="((notificationService.hasNotifications | async) || hasInvites) && !mobileMenuOpen"
-      ></div>
+      @if (((notificationService.hasNotifications | async) || hasInvites) && !mobileMenuOpen) {
+      <div class="attention"></div>
+      }
     </div>
   </div>
-  <div *ngIf="mobileMenuOpen" class="nav-bar__mobile-menu">
+  @if (mobileMenuOpen) {
+  <div class="nav-bar__mobile-menu">
     <div class="nav-bar__top">
       <a class="nav-bar__mobile-logo" href="https://procollab.ru/" target="_blank">
         <img src="/assets/images/shared/logo.svg" alt="procollab" width="125px" />
@@ -28,13 +28,13 @@
         (click)="notificationsOpen = !notificationsOpen"
       >
         <i appIcon icon="bell" appWidth="20" appHeight="22" appViewBox="0 0 20 22"></i>
-        <div
-          class="attention"
-          *ngIf="(notificationService.hasNotifications | async) || hasInvites"
-        ></div>
+        @if ((notificationService.hasNotifications | async) || hasInvites) {
+        <div class="attention"></div>
+        }
       </div>
     </div>
-    <nav *ngIf="!notificationsOpen" class="nav nav--vertical">
+    @if (!notificationsOpen) {
+    <nav class="nav nav--vertical">
       <ul class="nav__list">
         <a class="nav__link" routerLink="projects" routerLinkActive="nav__link--active">
           <li class="text-body-14 nav__item">
@@ -62,22 +62,24 @@
         </a>
       </ul>
     </nav>
-    <div *ngIf="notificationsOpen">
+    } @else {
+    <div>
       <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
       <ul class="notifications__invites">
-        <li *ngFor="let invite of invites" class="notifications__invite">
+        @for (invite of invites; track invite.id) {
+        <li class="notifications__invite">
           <app-invite-manage-card
             [invite]="invite"
             (accept)="onAcceptInvite($event)"
             (reject)="onRejectInvite($event)"
           ></app-invite-manage-card>
         </li>
+        }
       </ul>
     </div>
-    <app-profile-info
-      class="nav-bar__profile"
-      *ngIf="authService.profile | async as user"
-      [user]="user"
-    ></app-profile-info>
+    } @if (authService.profile | async; as user) {
+    <app-profile-info class="nav-bar__profile" [user]="user"></app-profile-info>
+    }
   </div>
+  }
 </div>

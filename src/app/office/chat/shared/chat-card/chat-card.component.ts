@@ -5,7 +5,7 @@ import { ChatListItem } from "@office/chat/models/chat-item.model";
 import { AuthService } from "@auth/services";
 import { map } from "rxjs";
 import { DayjsPipe } from "@core/pipes/dayjs.pipe";
-import { NgIf, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 
 @Component({
@@ -13,7 +13,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
   templateUrl: "./chat-card.component.html",
   styleUrl: "./chat-card.component.scss",
   standalone: true,
-  imports: [AvatarComponent, NgIf, AsyncPipe, DayjsPipe],
+  imports: [AvatarComponent, AsyncPipe, DayjsPipe],
 })
 export class ChatCardComponent implements OnInit {
   constructor(private readonly authService: AuthService) {}

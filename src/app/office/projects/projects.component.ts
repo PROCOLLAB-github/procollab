@@ -16,7 +16,7 @@ import { ProjectService } from "@services/project.service";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
 import { IconComponent } from "@ui/components";
-import { NgIf, AsyncPipe } from "@angular/common";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-projects",
@@ -24,7 +24,6 @@ import { NgIf, AsyncPipe } from "@angular/common";
   styleUrl: "./projects.component.scss",
   standalone: true,
   imports: [
-    NgIf,
     RouterLink,
     RouterLinkActive,
     IconComponent,

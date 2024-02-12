@@ -1,6 +1,7 @@
 <!-- @format -->
 
-<main *ngIf="project$ | async as project" class="project">
+@if (project$ | async; as project) {
+<main class="project">
   <section class="project__main">
     <div class="info project__section project__info">
       <div class="info__cover">
@@ -17,8 +18,8 @@
           [hasBorder]="true"
           [size]="140"
         ></app-avatar>
-        <div 
-          class="info__subscribe" 
+        <div
+          class="info__subscribe"
           [class.info__subscribe-active]="isUserSubscribed"
           (click)="onSubscribe(project.id)"
         >
@@ -29,14 +30,14 @@
             <h3>Вы действительно хотите отписаться от проекта?</h3>
             <app-avatar [url]="project.imageAddress" [size]="130"></app-avatar>
             <div class="unsubscribe-modal__buttons">
-              <app-button 
+              <app-button
                 color="red"
                 customTypographyClass="unsubscribe-modal-btn__typography"
                 (click)="onUnsubscribe(project.id)"
               >
                 Отписаться
               </app-button>
-              <app-button 
+              <app-button
                 customTypographyClass="unsubscribe-modal-btn__typography"
                 (click)="onCloseUnsubscribeModal()"
               >
@@ -46,33 +47,27 @@
           </div>
         </app-modal>
       </div>
-      <div *ngIf="authService.profile | async as profile" class="info__body">
+      @if (authService.profile | async; as profile) {
+      <div class="info__body">
         <div class="info__text">
           <h1 class="info__title">{{ project.name }}</h1>
           <div class="info__row">
-            <p
-              *ngIf="industryService.industries | async as industries"
-              class="text-body-14 info__industry"
-            >
-              <ng-container
-                *ngIf="industryService.getIndustry(industries, project.industry) as industry"
-              >
-                {{ industry.name }}
-              </ng-container>
+            @if (industryService.industries | async; as industries) {
+            <p class="text-body-14 info__industry">
+              @if (industryService.getIndustry(industries, project.industry); as industry) {
+              {{ industry.name }} }
             </p>
-            <p *ngIf="project.region" class="info__geo">
+            } @if (project.region) {
+            <p class="info__geo">
               <i appIcon icon="geo-point" appWidth="7" appHeight="10" appViewBox="0 0 7 10"></i>
               {{ project.region }}
             </p>
+            }
           </div>
         </div>
         <div class="info__right">
-          <a
-            class="info__presentation"
-            *ngIf="project.presentationAddress"
-            [href]="project.presentationAddress"
-            target="_blank"
-          >
+          @if (project.presentationAddress) {
+          <a class="info__presentation" [href]="project.presentationAddress" target="_blank">
             <app-button
               class="info__presentation-button"
               color="grey"
@@ -82,21 +77,23 @@
               <i appIcon icon="file_pdf" appSquare="16"></i>
             </app-button>
           </a>
+          } @if (profile.userType !== 1 && !(isInProject | async)) {
           <app-button
-            *ngIf="profile.userType !== 1 && !(isInProject | async)"
             color="grey"
             customTypographyClass="text-body-12"
             (click)="openSupport = true"
           >
             Поддержать проект
           </app-button>
+          }
           <a class="info__edit" [routerLink]="['/office/projects', project.id, 'edit']">
-            <app-button *ngIf="profile.id === project.leader" customTypographyClass="text-body-12">
-              Редактировать
-            </app-button>
+            @if (profile.id === project.leader) {
+            <app-button customTypographyClass="text-body-12"> Редактировать </app-button>
+            }
           </a>
         </div>
       </div>
+      }
     </div>
     <div #contentEl class="project__content">
       <div class="about project__about">
@@ -107,53 +104,60 @@
             {{ project.viewsCount }}
           </div>
         </div>
-        <div *ngIf="project.description" class="text-body-14 about__text">
+        @if (project.description) {
+        <div class="text-body-14 about__text">
           <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
+          @if (descriptionExpandable) {
           <div
-            *ngIf="descriptionExpandable"
             class="read-more"
             (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
           >
             {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
           </div>
+          }
         </div>
+        }
       </div>
     </div>
-    <div #newsEl class="project__news news" *ngIf="authService.profile | async as profile">
-      <app-news-form
-        *ngIf="project.leader === profile.id"
-        class="news__form"
-        (addNews)="onAddNews($event)"
-      ></app-news-form>
+    @if (authService.profile | async; as profile) {
+    <div #newsEl class="project__news news">
+      @if (project.leader === profile.id) {
+      <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
+      } @for (n of news; track n.id) {
       <app-news-card
         class="news__item"
-        [attr.data-id]="p.id"
-        *ngFor="let p of news"
-        [newsItem]="p"
+        [attr.data-id]="n.id"
+        [newsItem]="n"
         [isOwner]="profile.id === project.leader"
         (delete)="onDeleteNews($event)"
         (like)="onLike($event)"
-        (edited)="onEditNews($event, p.id)"
+        (edited)="onEditNews($event, n.id)"
       ></app-news-card>
+      }
     </div>
+    }
     <aside class="project__aside">
       <div class="team project__section project__team">
         <h3 class="text-bold-body-16 team__title">Команда</h3>
-        <ul *ngIf="project.collaborators">
-          <ng-container *ngFor="let member of project.collaborators.slice(0, 3)">
+        @if (project.collaborators) {
+        <ul>
+          @for (member of project.collaborators.slice(0, 3); track member.userId) {
+          <ng-container
+            *ngTemplateOutlet="membersTemp; context: { $implicit: member }"
+          ></ng-container>
+          }
+        </ul>
+        }
+        <div class="team__remaining" [class.team__remaining--show]="readAllMembers">
+          @if (project.collaborators) {
+          <ul>
+            @for (member of project.collaborators.slice(3); track member.userId) {
             <ng-container
               *ngTemplateOutlet="membersTemp; context: { $implicit: member }"
             ></ng-container>
-          </ng-container>
-        </ul>
-        <div class="team__remaining" [class.team__remaining--show]="readAllMembers">
-          <ul *ngIf="project.collaborators">
-            <ng-container *ngFor="let member of project.collaborators.slice(3)">
-              <ng-container
-                *ngTemplateOutlet="membersTemp; context: { $implicit: member }"
-              ></ng-container>
-            </ng-container>
+            }
           </ul>
+          }
         </div>
         <ng-template #membersTemp let-member>
           <li>
@@ -165,47 +169,42 @@
                 </p>
                 <p class="text-body-12 member__speciality">{{ member.role }}</p>
               </div>
-              <i
-                *ngIf="member.userId === project.leader"
-                class="member__star"
-                appIcon
-                icon="star"
-                appSquare="14"
-              ></i>
+              @if (member.userId === project.leader) {
+              <i class="member__star" appIcon icon="star" appSquare="14"></i>
+              }
             </a>
           </li>
         </ng-template>
-        <div
-          *ngIf="project.collaborators.length > 3"
-          class="read-more"
-          (click)="readAllMembers = !readAllMembers"
-        >
+        @if (project.collaborators.length > 3) {
+        <div class="read-more" (click)="readAllMembers = !readAllMembers">
           {{ readAllMembers ? "Скрыть" : "Читать полностью" }}
         </div>
+        }
       </div>
-      <div
-        *ngIf="(vacancies$ | async)?.length as vacanciesLength"
-        class="vacancies project__section project__vacancy"
-      >
+      @if ((vacancies$ | async)?.length; as vacanciesLength) {
+      <div class="vacancies project__section project__vacancy">
         <h3 class="text-bold-body-16 team__title">Вакансии</h3>
-        <ng-container *ngIf="vacancies$ | async as vacancies">
-          <ul class="vacancies__list" *ngIf="vacancies">
-            <ng-container *ngFor="let vacancy of vacancies.slice(0, 3)">
-              <ng-container
-                *ngTemplateOutlet="vacanciesTemp; context: { $implicit: vacancy }"
-              ></ng-container>
-            </ng-container>
+        @if (vacancies$ | async; as vacancies) { @if (vacancies) {
+        <ul class="vacancies__list">
+          @for (vacancy of vacancies.slice(0, 3); track vacancy.id) {
+          <ng-container
+            *ngTemplateOutlet="vacanciesTemp; context: { $implicit: vacancy }"
+          ></ng-container>
+          }
+        </ul>
+        }
+        <div class="vacancies__remaining" [class.vacancies__remaining--show]="readAllVacancies">
+          @if (vacancies) {
+          <ul class="vacancies__list">
+            @for (vacancy of vacancies.slice(3); track vacancy.id) {
+            <ng-container
+              *ngTemplateOutlet="vacanciesTemp; context: { $implicit: vacancy }"
+            ></ng-container>
+            }
           </ul>
-          <div class="vacancies__remaining" [class.vacancies__remaining--show]="readAllVacancies">
-            <ul class="vacancies__list" *ngIf="vacancies">
-              <ng-container *ngFor="let vacancy of vacancies.slice(3)">
-                <ng-container
-                  *ngTemplateOutlet="vacanciesTemp; context: { $implicit: vacancy }"
-                ></ng-container>
-              </ng-container>
-            </ul>
-          </div>
-        </ng-container>
+          }
+        </div>
+        }
         <ng-template #vacanciesTemp let-vacancy>
           <li class="vacancy">
             <div class="vacancy__info">
@@ -222,68 +221,63 @@
             </p>
           </li>
         </ng-template>
-        <div
-          *ngIf="vacanciesLength > 3"
-          class="read-more"
-          (click)="readAllVacancies = !readAllVacancies"
-        >
+        @if (vacanciesLength > 3) {
+        <div class="read-more" (click)="readAllVacancies = !readAllVacancies">
           {{ readAllVacancies ? "Скрыть" : "Читать полностью" }}
         </div>
+        }
       </div>
-      <div
-        *ngIf="project.achievements.length"
-        class="achievements project__section project__achievements"
-      >
+      } @if (project.achievements.length) {
+      <div class="achievements project__section project__achievements">
         <h3 class="text-bold-body-16 achievements__title">Достижения</h3>
-        <ng-container *ngIf="project.achievements as achievements">
-          <ul class="achievements__list" *ngIf="achievements">
-            <li
-              class="text-bold-body-14 achievements__item achievement"
-              *ngFor="let a of achievements.slice(0, 3)"
-            >
+        @if (project.achievements; as achievements) { @if (achievements) {
+        <ul class="achievements__list">
+          @for (a of achievements.slice(0, 3); track a.id) {
+          <li class="text-bold-body-14 achievements__item achievement">
+            <p class="text-bold-body-14 achievement__place">{{ a.status }}</p>
+            <p class="text-body-12 achievement__title">{{ a.title }}</p>
+          </li>
+          }
+        </ul>
+        }
+        <div
+          class="achievements__remaining"
+          [class.achievements__remaining--show]="readAllAchievements"
+        >
+          @if (achievements) {
+          <ul class="achievements__list">
+            @for (a of achievements.slice(3); track a.id) {
+            <li class="text-bold-body-14 achievements__item achievement">
               <p class="text-bold-body-14 achievement__place">{{ a.status }}</p>
               <p class="text-body-12 achievement__title">{{ a.title }}</p>
             </li>
+            }
           </ul>
-          <div
-            class="achievements__remaining"
-            [class.achievements__remaining--show]="readAllAchievements"
-          >
-            <ul class="achievements__list" *ngIf="achievements">
-              <li
-                class="text-bold-body-14 achievements__item achievement"
-                *ngFor="let a of achievements.slice(3)"
-              >
-                <p class="text-bold-body-14 achievement__place">{{ a.status }}</p>
-                <p class="text-body-12 achievement__title">{{ a.title }}</p>
-              </li>
-            </ul>
-          </div>
-        </ng-container>
-        <div
-          *ngIf="project.achievements.length > 3"
-          class="read-more"
-          (click)="readAllAchievements = !readAllAchievements"
-        >
+          }
+        </div>
+        } @if (project.achievements.length > 3) {
+        <div class="read-more" (click)="readAllAchievements = !readAllAchievements">
           {{ readAllAchievements ? "Скрыть" : "Читать полностью" }}
         </div>
+        }
       </div>
-      <div class="links project__section" *ngIf="project.links.length">
+      } @if (project.links.length) {
+      <div class="links project__section">
         <h3 class="links__title text-bold-body-16">Контакты</h3>
         <ul>
-          <li class="contact-link links__item text-body-12" *ngFor="let link of project.links">
-            <a
-              class="contact-link__link"
-              *ngIf="link | userLinks as l"
-              target="_blank"
-              [href]="link"
-            >
+          @for (link of project.links; track $index) {
+          <li class="contact-link links__item text-body-12">
+            @if (link | userLinks; as l) {
+            <a class="contact-link__link" target="_blank" [href]="link">
               <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
               <span>{{ l.tag }}</span>
             </a>
+            }
           </li>
+          }
         </ul>
       </div>
+      }
     </aside>
   </section>
   <app-modal [(open)]="openSupport">
@@ -299,14 +293,19 @@
       <h3 class="support__title">Поддержать проект</h3>
       <p class="support__text">Напишите лидеру проекта, чтобы обсудить оказание поддержки</p>
       <ul>
-        <li class="contact-link links__item text-body-12" *ngFor="let link of project.links">
-          <a class="contact-link__link" *ngIf="link | userLinks as l" target="_blank" [href]="link">
+        @for (link of project.links; track $index) {
+        <li class="contact-link links__item text-body-12">
+          @if (link | userLinks; as l) {
+          <a class="contact-link__link" target="_blank" [href]="link">
             <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
             {{ l.tag }}
           </a>
+          }
         </li>
+        }
       </ul>
     </div>
   </app-modal>
   <router-outlet></router-outlet>
 </main>
+}

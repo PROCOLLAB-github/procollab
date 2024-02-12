@@ -1,7 +1,9 @@
 <!-- @format -->
 
-<section class="projects" *ngIf="user | async as user">
-  <div *ngIf="loggedUserId | async as loggedUserId" class="projects__content">
+@if (user | async; as user) {
+<section class="projects">
+  @if (loggedUserId | async; as loggedUserId) {
+  <div class="projects__content">
     <div class="projects__section">
       <h3 class="text-heading-3 about__title">
         {{
@@ -11,11 +13,13 @@
         }}
       </h3>
       <ul>
-        <li *ngFor="let p of user.projects">
+        @for (p of user.projects; track p.id) {
+        <li>
           <a [routerLink]="['/office/projects', p.id]">
             <app-project-card [project]="p" [profileId]="user.id"> </app-project-card>
           </a>
         </li>
+        }
       </ul>
     </div>
     <div class="projects__section">
@@ -26,13 +30,19 @@
             : "Проекты, на которые подписан " + user.firstName
         }}
       </h3>
-      <ul *ngIf="subs | async as subs">
-        <li *ngFor="let p of subs">
+      @if (subs | async; as subs) {
+      <ul>
+        @for (p of subs; track p.id) {
+        <li>
           <a [routerLink]="['/office/projects', p.id]">
             <app-project-card [project]="p" [profileId]="user.id"> </app-project-card>
           </a>
         </li>
+        }
       </ul>
+      }
     </div>
   </div>
+  }
 </section>
+}
