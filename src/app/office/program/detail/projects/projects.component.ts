@@ -18,7 +18,6 @@ import { Program } from "@office/program/models/program.model";
 import { ProjectCardComponent } from "@office/shared/project-card/project-card.component";
 import { ProgramHeadComponent } from "../../shared/program-head/program-head.component";
 import { AsyncPipe, JsonPipe } from "@angular/common";
-import { MembersResult } from "@auth/models/user.model";
 import { ProgramService } from "@office/program/services/program.service";
 
 @Component({

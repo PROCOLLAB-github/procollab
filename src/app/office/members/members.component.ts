@@ -27,7 +27,7 @@ import {
   tap,
   throttleTime,
 } from "rxjs";
-import { MembersResult, User } from "@auth/models/user.model";
+import { User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
 import {
   AbstractControl,
@@ -42,6 +42,7 @@ import { MemberCardComponent } from "../shared/member-card/member-card.component
 import { CommonModule } from "@angular/common";
 import { SearchComponent } from "@ui/components/search/search.component";
 import { MembersFiltersComponent } from "./filters/members-filters.component";
+import { ApiPagination } from "@models/api-pagination.model";
 
 @Component({
   selector: "app-members",
@@ -86,7 +87,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
         take(1),
         map(r => r["data"])
       )
-      .subscribe((members: MembersResult) => {
+      .subscribe((members: ApiPagination<User>) => {
         this.membersTotalCount = members.count;
 
         this.members = members.results;
@@ -213,7 +214,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
 
   onFetch(skip: number, take: number, params?: Record<string, string | number | boolean>) {
     return this.memberService.getMembers(skip, take, params).pipe(
-      map((members: MembersResult) => {
+      map((members: ApiPagination<User>) => {
         this.membersTotalCount = members.count;
 
         return members.results;
