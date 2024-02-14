@@ -40,7 +40,7 @@ describe("NewsCardComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NewsCardComponent);
     component = fixture.componentInstance;
-    component.newsItem = ProjectNews.default();
+    component.feedItem = ProjectNews.default();
     fixture.detectChanges();
   });
 

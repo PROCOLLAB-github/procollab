@@ -127,7 +127,7 @@
       <app-news-card
         class="news__item"
         [attr.data-id]="n.id"
-        [newsItem]="n"
+        [feedItem]="n"
         [isOwner]="profile.id === project.leader"
         (delete)="onDeleteNews($event)"
         (like)="onLike($event)"

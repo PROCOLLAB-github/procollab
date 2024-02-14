@@ -1,11 +1,12 @@
 /** @format */
 
-import { Component, inject } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
 import { DayjsPipe } from "@core/pipes/dayjs.pipe";
 import { Router, RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/components/tag/tag.component";
+import { Vacancy } from "@models/vacancy.model";
 
 @Component({
   selector: "app-open-vacancy",
@@ -15,5 +16,7 @@ import { TagComponent } from "@ui/components/tag/tag.component";
   styleUrl: "./open-vacancy.component.scss",
 })
 export class OpenVacancyComponent {
+  @Input() feedItem!: Vacancy;
+
   constructor(public readonly router: Router) {}
 }

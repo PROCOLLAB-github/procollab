@@ -2,11 +2,11 @@
 <div class="card">
   <div class="card__head">
     <div class="card__title">
-      <img class="card__avatar" [src]="newsItem.imageAddress" [alt]="newsItem.name" />
+      <img class="card__avatar" [src]="feedItem.imageAddress" [alt]="feedItem.name" />
       <div>
-        <div class="card__name">{{ newsItem.name }}</div>
+        <div class="card__name">{{ feedItem.name }}</div>
         <div class="card__date text-body-14">
-          {{ newsItem.datetimeCreated | dayjs: "format":"DD MMMM, HH:mm" }}
+          {{ feedItem.datetimeCreated | dayjs: "format":"DD MMMM, HH:mm" }}
         </div>
       </div>
     </div>
@@ -20,16 +20,16 @@
         @if (!editMode) {
         <li class="card__option text-body-14" (click)="editMode = true">Редактировать</li>
         }
-        <li class="card__option text-body-14" (click)="delete.emit(newsItem.id)">Удалить</li>
+        <li class="card__option text-body-14" (click)="delete.emit(feedItem.id)">Удалить</li>
       </ul>
       }
     </div>
     }
   </div>
-  @if (newsItem.text) {
+  @if (feedItem.text) {
   <div class="card__text text-body-14">
     @if (!editMode) {
-    <p #newsTextEl [innerText]="newsItem.text"></p>
+    <p #newsTextEl [innerText]="feedItem.text"></p>
     } @else{ @if (editForm.get('text'); as text) {
     <app-textarea [formControl]="text | formControl"></app-textarea>
     } }
@@ -93,15 +93,15 @@
     <div class="footer__left">
       <div
         class="footer__item footer__like text-body-12"
-        [class.footer__like--active]="newsItem.isUserLiked"
-        (click)="like.emit(newsItem.id)"
+        [class.footer__like--active]="feedItem.isUserLiked"
+        (click)="like.emit(feedItem.id)"
       >
         <i appIcon icon="like" appSquare="22"></i>
-        {{ newsItem.likesCount }}
+        {{ feedItem.likesCount }}
       </div>
       <div class="footer__item text-body-12">
         <i appIcon icon="views" appSquare="22"></i>
-        {{ newsItem.viewsCount }}
+        {{ feedItem.viewsCount }}
       </div>
     </div>
     <div class="footer__right">
