@@ -32,7 +32,6 @@ import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@models/api-pagination.model";
 import { ProjectsFilterComponent } from "../projects-filter/projects-filter.component";
 import { ProjectCardComponent } from "../../shared/project-card/project-card.component";
-import {} from "@angular/common";
 import { IconComponent } from "@ui/components";
 import { SubscriptionService } from "@office/services/subscription.service";
 
@@ -279,7 +278,7 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   // return this.memberService.getMembers(skip, take, params).pipe(
-  //   map((members: MembersResult) => {
+  //   map((members: ApiPagination<User>) => {
   //     this.membersTotalCount = members.count;
   //
   //     return members.results;
