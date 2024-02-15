@@ -26,6 +26,7 @@ import { ProjectNews } from "@office/projects/models/project-news.model";
 })
 export class FeedComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
+  // projectNewsService = inject(ProjectNewsService);
 
   ngOnInit() {
     const routeData$ = this.route.data.pipe(map(r => r["data"])).subscribe((feed: FeedItem[]) => {
@@ -38,6 +39,23 @@ export class FeedComponent implements OnInit, OnDestroy {
     this.subscriptions$().forEach($ => $.unsubscribe());
   }
 
-  feedItems: FeedItem[] = [];
-  subscriptions$: Subscription[] = [];
+  feedItems = signal<FeedItem[]>([]);
+  subscriptions$ = signal<Subscription[]>([]);
+
+  onLike(newsId: number) {
+    const item = this.feedItems()
+      .filter(itm => itm.type === "news")
+      .map(itm => itm.content)
+      .find(n => n.id === newsId) as ProjectNews | undefined;
+    if (!item) return;
+
+    console.log(item);
+
+    // this.projectNewsService
+    //   .toggleLike(this.route.snapshot.params["projectId"], newsId, !item.isUserLiked)
+    //   .subscribe(() => {
+    //     item.likesCount = item.isUserLiked ? item.likesCount - 1 : item.likesCount + 1;
+    //     item.isUserLiked = !item.isUserLiked;
+    //   });
+  }
 }
