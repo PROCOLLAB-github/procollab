@@ -1,6 +1,13 @@
 /** @format */
 
-import { Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { OpenVacancyComponent } from "@office/feed/shared/open-vacancy/open-vacancy.component";
 import { NewProjectComponent } from "@office/feed/shared/new-project/new-project.component";
@@ -21,6 +28,7 @@ import { ProjectNews } from "@office/projects/models/project-news.model";
     ClosedVacancyComponent,
     NewsCardComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./feed.component.html",
   styleUrl: "./feed.component.scss",
 })
