@@ -17,6 +17,7 @@ import { FeedItem } from "@office/feed/models/feed-item.model";
 import { map, Subscription } from "rxjs";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
 import { ProjectNews } from "@office/projects/models/project-news.model";
+import { ApiPagination } from "@models/api-pagination.model";
 
 @Component({
   selector: "app-feed",
@@ -37,9 +38,12 @@ export class FeedComponent implements OnInit, OnDestroy {
   // projectNewsService = inject(ProjectNewsService);
 
   ngOnInit() {
-    const routeData$ = this.route.data.pipe(map(r => r["data"])).subscribe((feed: FeedItem[]) => {
-      this.feedItems.set(feed);
-    });
+    const routeData$ = this.route.data
+      .pipe(map(r => r["data"]))
+      .subscribe((feed: ApiPagination<FeedItem>) => {
+        this.feedItems.set(feed.results);
+        this.totalItemsCount.set(feed.count);
+      });
     this.subscriptions$().push(routeData$);
   }
 
@@ -47,6 +51,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     this.subscriptions$().forEach($ => $.unsubscribe());
   }
 
+  totalItemsCount = signal(0);
   feedItems = signal<FeedItem[]>([]);
   subscriptions$ = signal<Subscription[]>([]);
 
