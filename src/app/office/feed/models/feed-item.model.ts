@@ -12,10 +12,12 @@ export interface FeedProject {
   leader: number;
 }
 
+export type FeedItemType = "vacancy" | "news" | "project";
+
 export type FeedItem =
-  | ({ type: string } & {
-      type: "project";
+  | ({ typeModel: FeedItemType } & {
+      typeModel: "project";
       content: FeedProject;
     })
-  | { type: "vacancy"; content: Vacancy }
-  | { type: "news"; content: ProjectNews };
+  | { typeModel: "vacancy"; content: Vacancy }
+  | { typeModel: "news"; content: ProjectNews };

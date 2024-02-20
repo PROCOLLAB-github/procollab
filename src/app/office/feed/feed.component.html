@@ -1,12 +1,12 @@
 <!-- @format -->
 
 <div class="page">
-  <div class="page__feed">
-    @for (item of feedItems(); track item.content.id) { @if (item.type === 'vacancy') {
+  <div #feedRoot class="page__feed">
+    @for (item of feedItems(); track item.content.id) { @if (item.typeModel === 'vacancy') {
     <app-open-vacancy [feedItem]="item.content"></app-open-vacancy>
-    } @else if (item.type === 'project') {
+    } @else if (item.typeModel === 'project') {
     <app-new-project [feedItem]="item.content"></app-new-project>
-    } @else if (item.type === 'news') {
+    } @else if (item.typeModel === 'news') {
     <app-news-card [feedItem]="item.content" (like)="onLike($event)"></app-news-card>
     } }
   </div>

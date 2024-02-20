@@ -3,8 +3,9 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "@core/services";
 import { Observable } from "rxjs";
-import { FeedItem } from "@office/feed/models/feed-item.model";
+import { FeedItem, FeedItemType } from "@office/feed/models/feed-item.model";
 import { ApiPagination } from "@models/api-pagination.model";
+import { HttpParams } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
@@ -12,7 +13,20 @@ import { ApiPagination } from "@models/api-pagination.model";
 export class FeedService {
   constructor(private readonly apiService: ApiService) {}
 
-  getFeed(): Observable<ApiPagination<FeedItem>> {
-    return this.apiService.get("/feed/");
+  getFeed(
+    offset: number,
+    limit: number,
+    type: FeedItemType[]
+  ): Observable<ApiPagination<FeedItem>> {
+    return this.apiService.get(
+      "/feed/",
+      new HttpParams({
+        fromObject: {
+          limit,
+          offset,
+          type: type.join("|"),
+        },
+      })
+    );
   }
 }

@@ -9,5 +9,5 @@ import { ApiPagination } from "@models/api-pagination.model";
 export const FeedResolver: ResolveFn<ApiPagination<FeedItem>> = () => {
   const feedService = inject(FeedService);
 
-  return feedService.getFeed();
+  return feedService.getFeed(0, 20, ["vacancy", "news", "project"]);
 };
