@@ -199,7 +199,6 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!control) return;
 
     const sub$ = control.valueChanges.subscribe(value => {
-      console.log(value);
       this.router
         .navigate([], {
           queryParams: { [queryName]: value.toString() },
