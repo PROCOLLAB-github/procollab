@@ -17,7 +17,7 @@
         (mouseenter)="barPosition = 0"
         routerLinkActive="sidebar-nav__item&#45;&#45;active"
       >
-        <i appIcon icon="projects" appSquare="24"></i>
+        <i appIcon icon="projects-filled" appSquare="24" appViewBox="0 0 24 20"></i>
         Проекты
       </a>
       <a
@@ -26,7 +26,7 @@
         (mouseenter)="barPosition = 1"
         routerLinkActive="sidebar-nav__item&#45;&#45;active"
       >
-        <i appIcon icon="projects" appSquare="24"></i>
+        <i appIcon icon="program" appSquare="24" appViewBox="0 0 24 16"></i>
         Программы
       </a>
       <a
@@ -35,7 +35,7 @@
         (mouseenter)="barPosition = 2"
         routerLinkActive="sidebar-nav__item&#45;&#45;active"
       >
-        <i appIcon icon="people" appSquare="24"></i>
+        <i appIcon icon="people-bold" appSquare="24" appViewBox="0 0 24 18"></i>
         Участники
       </a>
       <a
@@ -44,46 +44,18 @@
         (mouseenter)="barPosition = 3"
         routerLinkActive="sidebar-nav__item&#45;&#45;active"
       >
-        <i appIcon icon="people" appSquare="24"></i>
+        <i appIcon icon="two-people" appSquare="24" appViewBox="0 0 28 20"></i>
         Эксперты
       </a>
     </div>
   </nav>
-  <div class="sidebar__bottom-actions">
-    <div class="bottom-action" (click)="showNotifications = true">
-      <div (clickOutside)="onClickOutside()" class="sidebar__bell">
-        @if ((showBall | async) || hasInvites) {
-        <div class="attention"></div>
-        }
-        <i appIcon icon="bell" appWidth="20" appHeight="23" appViewBox="0 0 20 22"></i>
-      </div>
-    </div>
-    @if (showNotifications) {
-    <div class="sidebar__notifications notifications">
-      <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
-      <ul class="notifications__invites">
-        @for (invite of invites; track invite.id) {
-        <li class="notifications__invite">
-          <app-invite-manage-card
-            [invite]="invite"
-            (accept)="onAcceptInvite($event)"
-            (reject)="onRejectInvite($event)"
-          ></app-invite-manage-card>
-        </li>
-        }
-      </ul>
-    </div>
-    }
-    <a class="bottom-action" routerLink="/office/chats">
-      <div class="sidebar__bell">
-        @if (hasUnreads) {
-        <div class="attention"></div>
-        }
-        <i appIcon icon="chats" appWidth="23" appHeight="21" appViewBox="0 0 23 21"></i>
-      </div>
-    </a>
-  </div>
-  @if (authService.profile | async; as user) {
-  <app-profile-info class="sidebar__profile" [user]="user"></app-profile-info>
-  }
+  <app-profile-control-panel
+    [invites]="invites"
+    [hasNotifications]="!!(hasNotifications | async)"
+    [hasUnreads]="hasUnreads"
+    [user]="authService.profile | async"
+    (acceptInvite)="onAcceptInvite($event)"
+    (rejectInvite)="onRejectInvite($event)"
+    (logout)="onLogout()"
+  ></app-profile-control-panel>
 </div>
