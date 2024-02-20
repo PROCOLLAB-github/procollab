@@ -50,6 +50,18 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((feed: ApiPagination<FeedItem>) => {
         this.feedItems.set(feed.results);
         this.totalItemsCount.set(feed.count);
+
+        setTimeout(() => {
+          const observer = new IntersectionObserver(this.onFeedItemView.bind(this), {
+            root: document.querySelector(".office__body"),
+            rootMargin: "0px 0px 0px 0px",
+            threshold: 0,
+          });
+
+          document.querySelectorAll(".page__item").forEach(e => {
+            observer.observe(e);
+          });
+        });
       });
     this.subscriptions$().push(routeData$);
   }
@@ -127,6 +139,36 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
           });
         });
     }
+  }
+
+  onFeedItemView(entries: IntersectionObserverEntry[]): void {
+    const items = entries
+      .map(e => {
+        return Number((e.target as HTMLElement).dataset["id"]);
+      })
+      .map(id => this.feedItems().find(item => item.content.id === id))
+      .filter(Boolean) as FeedItem[];
+
+    const projectNews = items.filter(
+      item => item.typeModel === "news" && !("email" in item.content.contentObject)
+    );
+    const profileNews = items.filter(
+      item => item.typeModel === "news" && "email" in item.content.contentObject
+    );
+
+    projectNews.forEach(news => {
+      if (news.typeModel !== "news") return;
+      this.projectNewsService
+        .readNews(news.content.contentObject.id, [news.content.id])
+        .subscribe(noop);
+    });
+
+    profileNews.forEach(news => {
+      if (news.typeModel !== "news") return;
+      this.profileNewsService
+        .readNews(news.content.contentObject.id, [news.content.id])
+        .subscribe(noop);
+    });
   }
 
   onScroll() {

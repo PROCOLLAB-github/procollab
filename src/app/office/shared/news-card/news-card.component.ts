@@ -12,7 +12,7 @@ import {
 } from "@angular/core";
 import { ProjectNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ValidationService } from "@core/services";
 import { FileService } from "@core/services/file.service";
@@ -36,6 +36,7 @@ import { ClickOutsideModule } from "ng-click-outside";
   standalone: true,
   imports: [
     ClickOutsideModule,
+    RouterLink,
     IconComponent,
     TextareaComponent,
     ReactiveFormsModule,

@@ -1,7 +1,7 @@
 <!-- @format -->
 <div class="card">
   <div class="card__head">
-    <div class="card__title">
+    <a class="card__title" [routerLink]="['/office/projects', feedItem.id]">
       <img class="card__avatar" [src]="feedItem.imageAddress" [alt]="feedItem.name" />
       <div>
         <div class="card__name">{{ feedItem.name }}</div>
@@ -9,7 +9,7 @@
           {{ feedItem.datetimeCreated | dayjs: "format":"DD MMMM, HH:mm" }}
         </div>
       </div>
-    </div>
+    </a>
     @if (isOwner) {
     <div class="card__menu" (clickOutside)="onCloseMenu()">
       <div class="card__dots" (click)="menuOpen = true">
