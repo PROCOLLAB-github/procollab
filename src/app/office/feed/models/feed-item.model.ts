@@ -20,4 +20,4 @@ export type FeedItem =
       content: FeedProject;
     })
   | { typeModel: "vacancy"; content: Vacancy }
-  | { typeModel: "news"; content: ProjectNews };
+  | { typeModel: "news"; content: ProjectNews & { contentObject: { id: number } } };

@@ -19,9 +19,10 @@ import { ActivatedRoute } from "@angular/router";
 import { FeedItem } from "@office/feed/models/feed-item.model";
 import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
-import { ProjectNews } from "@office/projects/models/project-news.model";
 import { ApiPagination } from "@models/api-pagination.model";
 import { FeedService } from "@office/feed/services/feed.service";
+import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
+import { ProfileNewsService } from "@office/profile/detail/services/profile-news.service";
 
 @Component({
   selector: "app-feed",
@@ -39,7 +40,8 @@ import { FeedService } from "@office/feed/services/feed.service";
 })
 export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   route = inject(ActivatedRoute);
-  // projectNewsService = inject(ProjectNewsService);
+  projectNewsService = inject(ProjectNewsService);
+  profileNewsService = inject(ProfileNewsService);
   feedService = inject(FeedService);
 
   ngOnInit() {
@@ -79,17 +81,52 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   subscriptions$ = signal<Subscription[]>([]);
 
   onLike(newsId: number) {
-    const item = this.feedItems()
-      .filter(itm => itm.typeModel === "news")
-      .map(itm => itm.content)
-      .find(n => n.id === newsId) as ProjectNews | undefined;
-    if (!item) return;
-    // this.projectNewsService
-    //   .toggleLike(this.route.snapshot.params["projectId"], newsId, !item.isUserLiked)
-    //   .subscribe(() => {
-    //     item.likesCount = item.isUserLiked ? item.likesCount - 1 : item.likesCount + 1;
-    //     item.isUserLiked = !item.isUserLiked;
-    //   });
+    const itemIdx = this.feedItems().findIndex(n => n.content.id === newsId);
+
+    const item = this.feedItems()[itemIdx];
+    if (!item || item.typeModel !== "news") return;
+
+    if ("email" in item.content.contentObject) {
+      this.profileNewsService
+        .toggleLike(
+          item.content.contentObject.id as unknown as string,
+          newsId,
+          !item.content.isUserLiked
+        )
+        .subscribe(() => {
+          item.content.likesCount = item.content.isUserLiked
+            ? item.content.likesCount - 1
+            : item.content.likesCount + 1;
+          item.content.isUserLiked = !item.content.isUserLiked;
+
+          this.feedItems.update(items => {
+            const newItems = [...items];
+            newItems.splice(itemIdx, 1, item);
+
+            return newItems;
+          });
+        });
+    } else if ("leader" in item.content.contentObject) {
+      this.projectNewsService
+        .toggleLike(
+          item.content.contentObject.id as unknown as string,
+          newsId,
+          !item.content.isUserLiked
+        )
+        .subscribe(() => {
+          item.content.likesCount = item.content.isUserLiked
+            ? item.content.likesCount - 1
+            : item.content.likesCount + 1;
+          item.content.isUserLiked = !item.content.isUserLiked;
+
+          this.feedItems.update(items => {
+            const newItems = [...items];
+            newItems.splice(itemIdx, 1, item);
+
+            return newItems;
+          });
+        });
+    }
   }
 
   onScroll() {
