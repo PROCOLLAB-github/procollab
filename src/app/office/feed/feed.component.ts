@@ -16,8 +16,8 @@ import { OpenVacancyComponent } from "@office/feed/shared/open-vacancy/open-vaca
 import { NewProjectComponent } from "@office/feed/shared/new-project/new-project.component";
 import { ClosedVacancyComponent } from "@office/feed/shared/closed-vacancy/closed-vacancy.component";
 import { ActivatedRoute } from "@angular/router";
-import { FeedItem } from "@office/feed/models/feed-item.model";
-import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
+import { FeedItem, FeedItemType } from "@office/feed/models/feed-item.model";
+import { concatMap, fromEvent, map, noop, of, skip, Subscription, tap, throttleTime } from "rxjs";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
 import { ApiPagination } from "@models/api-pagination.model";
 import { FeedService } from "@office/feed/services/feed.service";
@@ -66,6 +66,25 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         });
       });
     this.subscriptions$().push(routeData$);
+
+    const queryParams$ = this.route.queryParams
+      .pipe(
+        map(params => params["includes"]),
+        tap(includes => {
+          this.includes.set(includes);
+        }),
+        skip(1),
+        concatMap(includes => {
+          this.totalItemsCount.set(0);
+          this.feedPage.set(0);
+
+          return this.onFetch(0, this.perFetchTake(), includes ?? ["vacancy", "project", "news"]);
+        })
+      )
+      .subscribe(feed => {
+        this.feedItems.set(feed);
+      });
+    this.subscriptions$().push(queryParams$);
   }
 
   ngAfterViewInit() {
@@ -92,6 +111,8 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   feedItems = signal<FeedItem[]>([]);
   feedPage = signal(1);
   perFetchTake = signal(20);
+  includes = signal<FeedItemType[]>([]);
+
   subscriptions$ = signal<Subscription[]>([]);
 
   onLike(newsId: number) {
@@ -185,7 +206,11 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       window.innerHeight;
 
     if (diff > 0) {
-      return this.onFetch(this.feedPage() * this.perFetchTake(), this.perFetchTake()).pipe(
+      return this.onFetch(
+        this.feedPage() * this.perFetchTake(),
+        this.perFetchTake(),
+        this.includes()
+      ).pipe(
         tap((feedChunk: FeedItem[]) => {
           this.feedPage.update(page => page + 1);
           this.feedItems.update(items => [...items, ...feedChunk]);
@@ -196,8 +221,12 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     return of({});
   }
 
-  onFetch(offset: number, limit: number) {
-    return this.feedService.getFeed(offset, limit, ["project", "vacancy", "news"]).pipe(
+  onFetch(
+    offset: number,
+    limit: number,
+    includes: FeedItemType[] = ["project", "vacancy", "news"]
+  ) {
+    return this.feedService.getFeed(offset, limit, includes).pipe(
       tap(res => {
         this.totalItemsCount.set(res.count);
       }),

@@ -16,7 +16,7 @@ export class FeedService {
   getFeed(
     offset: number,
     limit: number,
-    type: FeedItemType[]
+    type: FeedItemType[] | FeedItemType
   ): Observable<ApiPagination<FeedItem>> {
     return this.apiService.get(
       "/feed/",
@@ -24,7 +24,11 @@ export class FeedService {
         fromObject: {
           limit,
           offset,
-          type: type.join("|"),
+          type: Array.isArray(type)
+            ? type.length === 0
+              ? ["vacancy", "news", "project"]
+              : type.join("|")
+            : type,
         },
       })
     );
