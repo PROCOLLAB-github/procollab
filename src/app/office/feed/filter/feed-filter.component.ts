@@ -32,7 +32,8 @@ export class FeedFilterComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.includedFilters.set(params["includes"].split(this.feedService.FILTER_SPLIT_SYMBOL));
+      params["includes"] &&
+        this.includedFilters.set(params["includes"].split(this.feedService.FILTER_SPLIT_SYMBOL));
     });
   }
 
