@@ -28,6 +28,7 @@ import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-up
 import { ImgCardComponent } from "../img-card/img-card.component";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
+import { JsonPipe } from "@angular/common";
 
 @Component({
   selector: "app-news-card",
@@ -46,6 +47,7 @@ import { ClickOutsideModule } from "ng-click-outside";
     ButtonComponent,
     DayjsPipe,
     FormControlPipe,
+    JsonPipe,
   ],
 })
 export class NewsCardComponent implements OnInit {
@@ -63,6 +65,8 @@ export class NewsCardComponent implements OnInit {
   }
 
   @Input({ required: true }) feedItem!: FeedNews;
+  @Input({ required: true }) resourceLink!: (string | number)[];
+
   @Input() isOwner?: boolean;
   @Output() delete = new EventEmitter<number>();
   @Output() like = new EventEmitter<number>();

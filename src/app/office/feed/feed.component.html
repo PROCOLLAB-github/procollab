@@ -15,13 +15,23 @@
       [attr.data-id]="item.content.id"
       [feedItem]="item.content"
     ></app-new-project>
-    } @else if (item.typeModel === 'news') {
+    } @else if (item.typeModel === 'news') { @if
+    (item.content.contentObject.hasOwnProperty('email')) {
     <app-news-card
       class="page__item"
       [attr.data-id]="item.content.id"
       [feedItem]="item.content"
+      [resourceLink]="['/office/profile', item.content.contentObject.id]"
       (like)="onLike($event)"
     ></app-news-card>
-    } }
+    } @else {
+    <app-news-card
+      class="page__item"
+      [attr.data-id]="item.content.id"
+      [feedItem]="item.content"
+      [resourceLink]="['/office/projects', item.content.contentObject.id]"
+      (like)="onLike($event)"
+    ></app-news-card>
+    }} }
   </div>
 </div>
