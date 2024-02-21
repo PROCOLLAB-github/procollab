@@ -30,7 +30,7 @@
       (click)="filterOpen.set(!filterOpen())"
     ></i>
     @if (filterOpen()) {
-    <div class="select__dropdown" [@dropdownAnimation]>
+    <div class="select__dropdown" @dropdownAnimation>
       <ng-container *ngTemplateOutlet="filter"></ng-container>
       <a class="text-body-12" (click)="resetFilter()">Сбросить фильтр</a>
     </div>
