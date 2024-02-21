@@ -144,7 +144,9 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       return e.target.dataset.id;
     });
 
-    this.projectNewsService.readNews(this.route.snapshot.params["projectId"], ids).subscribe(noop);
+    this.projectNewsService
+      .readNews(Number(this.route.snapshot.params["projectId"]), ids)
+      .subscribe(noop);
   }
 
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;

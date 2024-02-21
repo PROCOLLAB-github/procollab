@@ -8,7 +8,8 @@ import { HttpParams } from "@angular/common/http";
 import { ProgramCreate } from "@office/program/models/program-create.model";
 import { Program, ProgramDataSchema, ProgramTag } from "@office/program/models/program.model";
 import { Project } from "@models/project.model";
-import { MembersResult } from "@auth/models/user.model";
+import { ApiPagination } from "@models/api-pagination.model";
+import { User } from "@auth/models/user.model";
 
 @Injectable({
   providedIn: "root",
@@ -44,14 +45,18 @@ export class ProgramService {
     return this.apiService.post(`/programs/${programId}/register/`, additionalData);
   }
 
-  getAllProjects(programId: number): Observable<Project[]> {
+  getAllProjects(
+    programId: number,
+    offset: number,
+    limit: number
+  ): Observable<ApiPagination<Project>> {
     return this.apiService.get(
       `/projects/`,
-      new HttpParams({ fromObject: { partner_program: programId } })
+      new HttpParams({ fromObject: { partner_program: programId, offset, limit } })
     );
   }
 
-  getAllMembers(programId: number, skip: number, take: number): Observable<MembersResult> {
+  getAllMembers(programId: number, skip: number, take: number): Observable<ApiPagination<User>> {
     return this.apiService.get(
       "/auth/users/",
       new HttpParams({ fromObject: { partner_program: programId, limit: take, offset: skip } })

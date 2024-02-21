@@ -38,7 +38,7 @@
           <app-news-card
             class="news__item"
             [attr.data-id]="n.id"
-            [newsItem]="n"
+            [feedItem]="n"
             [isOwner]="loggedUserId === user.id"
             (delete)="onDeleteNews($event)"
             (like)="onLike($event)"

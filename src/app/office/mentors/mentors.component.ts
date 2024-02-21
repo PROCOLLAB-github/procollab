@@ -13,12 +13,13 @@ import {
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
 import { AuthService } from "@auth/services";
-import { MembersResult, User } from "@auth/models/user.model";
+import { User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
 import { MemberCardComponent } from "../shared/member-card/member-card.component";
+import { ApiPagination } from "@models/api-pagination.model";
 
 @Component({
   selector: "app-mentors",
@@ -45,7 +46,7 @@ export class MentorsComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.navService.setNavTitle("Участники");
 
-    this.route.data.pipe(map(r => r["data"])).subscribe((members: MembersResult) => {
+    this.route.data.pipe(map(r => r["data"])).subscribe((members: ApiPagination<User>) => {
       this.membersTotalCount = members.count;
 
       this.members = members.results;
@@ -103,7 +104,7 @@ export class MentorsComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.memberService
       .getMentors(this.membersPage * this.membersTake, this.membersTake)
       .pipe(
-        tap((members: MembersResult) => {
+        tap((members: ApiPagination<User>) => {
           this.membersTotalCount = members.count;
           this.members = [...this.members, ...members.results];
 

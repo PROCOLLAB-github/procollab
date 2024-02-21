@@ -1,17 +1,19 @@
 /** @format */
 
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@core/services";
 import { ProjectNews, ProjectNewsRes } from "@office/projects/models/project-news.model";
-import { forkJoin, map, Observable } from "rxjs";
+import { forkJoin, map, Observable, tap } from "rxjs";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
+import { StorageService } from "@services/storage.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProjectNewsService {
-  constructor(private readonly apiService: ApiService) {}
+  storageService = inject(StorageService);
+  apiService = inject(ApiService);
 
   fetchNews(projectId: string): Observable<ProjectNewsRes> {
     return this.apiService.get<ProjectNewsRes>(
@@ -32,11 +34,19 @@ export class ProjectNewsService {
       .pipe(map(r => plainToInstance(ProjectNews, r)));
   }
 
-  readNews(projectId: string, newsIds: number[]): Observable<void[]> {
+  readNews(projectId: number, newsIds: number[]): Observable<void[]> {
+    const readNews = this.storageService.getItem<number[]>("readNews", sessionStorage) ?? [];
+
     return forkJoin(
-      newsIds.map(id =>
-        this.apiService.post<void>(`/projects/${projectId}/news/${id}/set_viewed/`, {})
-      )
+      newsIds
+        .filter(id => !readNews.includes(id))
+        .map(id =>
+          this.apiService.post<void>(`/projects/${projectId}/news/${id}/set_viewed/`, {}).pipe(
+            tap(() => {
+              this.storageService.setItem("readNews", [...readNews, id], sessionStorage);
+            })
+          )
+        )
     );
   }
 

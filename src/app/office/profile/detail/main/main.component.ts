@@ -133,7 +133,7 @@ export class ProfileMainComponent implements OnInit {
       return Number((e.target as HTMLElement).dataset["id"]);
     });
 
-    this.profileNewsService.readNews(this.route.snapshot.params["id"], ids).subscribe(noop);
+    this.profileNewsService.readNews(Number(this.route.snapshot.params["id"]), ids).subscribe(noop);
   }
 
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {

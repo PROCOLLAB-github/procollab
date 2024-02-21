@@ -2,9 +2,26 @@
 
 <div class="page">
   <app-feed-filter class="page__filter"></app-feed-filter>
-  <div class="page__feed">
-    <app-closed-vacancy></app-closed-vacancy>
-    <app-open-vacancy></app-open-vacancy>
-    <app-new-project></app-new-project>
+  <div #feedRoot class="page__feed">
+    @for (item of feedItems(); track item.content.id) { @if (item.typeModel === 'vacancy') {
+    <app-open-vacancy
+      class="page__item"
+      [attr.data-id]="item.content.id"
+      [feedItem]="item.content"
+    ></app-open-vacancy>
+    } @else if (item.typeModel === 'project') {
+    <app-new-project
+      class="page__item"
+      [attr.data-id]="item.content.id"
+      [feedItem]="item.content"
+    ></app-new-project>
+    } @else if (item.typeModel === 'news') {
+    <app-news-card
+      class="page__item"
+      [attr.data-id]="item.content.id"
+      [feedItem]="item.content"
+      (like)="onLike($event)"
+    ></app-news-card>
+    } }
   </div>
 </div>
