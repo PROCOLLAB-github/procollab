@@ -47,7 +47,7 @@
     <ul>
       @for (option of filterOptions; track $index) {
       <li class="text-body-14 filter__checkbox" (click)="setFilter(option.value)">
-        <app-checkbox [checked]="includedFilters().has(option.value)"></app-checkbox>
+        <app-checkbox [checked]="includedFilters().indexOf(option.value) !== -1"></app-checkbox>
         {{ option.label }}
       </li>
       }

@@ -2,7 +2,7 @@
 
 import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ButtonComponent, CheckboxComponent, IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
@@ -25,10 +25,16 @@ import { FeedService } from "@office/feed/services/feed.service";
     ]),
   ],
 })
-export class FeedFilterComponent {
+export class FeedFilterComponent implements OnInit {
   router = inject(Router);
   route = inject(ActivatedRoute);
   feedService = inject(FeedService);
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.includedFilters.set(params["includes"].split(this.feedService.splitSymbol));
+    });
+  }
 
   filterOpen = signal(false);
 
@@ -38,33 +44,33 @@ export class FeedFilterComponent {
     { label: "Новые проекты", value: "project" },
   ];
 
-  includedFilters = signal<Set<string>>(new Set([]));
+  includedFilters = signal<string[]>([]);
 
   applyFilter(): void {
-    const queryParams = JSON.parse(
-      JSON.stringify({
-        includes: Array.from(this.includedFilters()).join(this.feedService.splitSymbol),
-      })
-    );
-
-    console.log(queryParams);
     this.router
       .navigate([], {
-        queryParams,
+        queryParams: { includes: this.includedFilters().join(this.feedService.splitSymbol) },
         relativeTo: this.route,
+        queryParamsHandling: "merge",
       })
       .then(() => console.debug("Query change from FeedFilterComponent"));
   }
 
   setFilter(keyword: string): void {
     this.includedFilters.update(included => {
-      included.has(keyword) ? included.delete(keyword) : included.add(keyword);
+      if (included.indexOf(keyword) !== -1) {
+        const idx = included.indexOf(keyword);
+        included.splice(idx, 1);
+      } else {
+        included.push(keyword);
+      }
+
       return included;
     });
   }
 
   resetFilter(): void {
-    this.includedFilters.set(new Set());
+    this.includedFilters.set([]);
 
     this.applyFilter();
   }
