@@ -83,6 +83,10 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(feed => {
         this.feedItems.set(feed);
+
+        setTimeout(() => {
+          this.feedRoot?.nativeElement.children[0].scrollIntoView({ behavior: "smooth" });
+        });
       });
     this.subscriptions$().push(queryParams$);
   }
