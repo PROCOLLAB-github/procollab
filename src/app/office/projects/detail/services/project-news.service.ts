@@ -2,7 +2,7 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@core/services";
-import { ProjectNews, ProjectNewsRes } from "@office/projects/models/project-news.model";
+import { FeedNews, ProjectNewsRes } from "@office/projects/models/project-news.model";
 import { forkJoin, map, Observable, tap } from "rxjs";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
@@ -22,16 +22,16 @@ export class ProjectNewsService {
     );
   }
 
-  fetchNewsDetail(projectId: string, newsId: string): Observable<ProjectNews> {
+  fetchNewsDetail(projectId: string, newsId: string): Observable<FeedNews> {
     return this.apiService
-      .get<ProjectNews>(`/projects/${projectId}/news/${newsId}`)
-      .pipe(map(r => plainToInstance(ProjectNews, r)));
+      .get<FeedNews>(`/projects/${projectId}/news/${newsId}`)
+      .pipe(map(r => plainToInstance(FeedNews, r)));
   }
 
-  addNews(projectId: string, obj: { text: string; files: string[] }): Observable<ProjectNews> {
+  addNews(projectId: string, obj: { text: string; files: string[] }): Observable<FeedNews> {
     return this.apiService
       .post(`/projects/${projectId}/news/`, obj)
-      .pipe(map(r => plainToInstance(ProjectNews, r)));
+      .pipe(map(r => plainToInstance(FeedNews, r)));
   }
 
   readNews(projectId: number, newsIds: number[]): Observable<void[]> {
@@ -60,13 +60,9 @@ export class ProjectNewsService {
     });
   }
 
-  editNews(
-    projectId: string,
-    newsId: number,
-    newsItem: Partial<ProjectNews>
-  ): Observable<ProjectNews> {
+  editNews(projectId: string, newsId: number, newsItem: Partial<FeedNews>): Observable<FeedNews> {
     return this.apiService
       .patch(`/projects/${projectId}/news/${newsId}/`, newsItem)
-      .pipe(map(r => plainToInstance(ProjectNews, r)));
+      .pipe(map(r => plainToInstance(FeedNews, r)));
   }
 }

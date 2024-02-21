@@ -3,7 +3,7 @@ import * as dayjs from "dayjs";
 import { FileModel } from "@models/file.model";
 import { ApiPagination } from "@models/api-pagination.model";
 
-export class ProjectNews {
+export class FeedNews {
   id!: number;
   name!: string;
   imageAddress!: string;
@@ -15,7 +15,7 @@ export class ProjectNews {
   files!: FileModel[];
   isUserLiked!: boolean;
 
-  static default(): ProjectNews {
+  static default(): FeedNews {
     return {
       id: 13,
       name: "w98ef",
@@ -32,4 +32,4 @@ export class ProjectNews {
   }
 }
 
-export type ProjectNewsRes = ApiPagination<ProjectNews>;
+export type ProjectNewsRes = ApiPagination<FeedNews>;

@@ -10,7 +10,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { ProjectNews } from "@office/projects/models/project-news.model";
+import { FeedNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ActivatedRoute } from "@angular/router";
 import { expandElement } from "@utils/expand-element";
@@ -39,11 +39,11 @@ export class ProgramNewsCardComponent implements OnInit {
     private readonly cdRef: ChangeDetectorRef
   ) {}
 
-  @Input({ required: true }) newsItem!: ProjectNews;
+  @Input({ required: true }) newsItem!: FeedNews;
   @Input() isOwner!: boolean;
   @Output() delete = new EventEmitter<number>();
   @Output() like = new EventEmitter<number>();
-  @Output() edited = new EventEmitter<ProjectNews>();
+  @Output() edited = new EventEmitter<FeedNews>();
 
   newsTextExpandable!: boolean;
   readMore = false;

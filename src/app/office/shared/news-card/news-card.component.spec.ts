@@ -10,7 +10,7 @@ import { ProjectNewsService } from "@office/projects/detail/services/project-new
 import { AuthService } from "@auth/services";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { DayjsPipe } from "@core/pipes/dayjs.pipe";
-import { ProjectNews } from "@office/projects/models/project-news.model";
+import { FeedNews } from "@office/projects/models/project-news.model";
 
 describe("NewsCardComponent", () => {
   let component: NewsCardComponent;
@@ -40,7 +40,7 @@ describe("NewsCardComponent", () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NewsCardComponent);
     component = fixture.componentInstance;
-    component.feedItem = ProjectNews.default();
+    component.feedItem = FeedNews.default();
     fixture.detectChanges();
   });
 

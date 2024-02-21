@@ -1,5 +1,5 @@
 /** @format */
-import { ProjectNews } from "@office/projects/models/project-news.model";
+import { FeedNews } from "@office/projects/models/project-news.model";
 import { Vacancy } from "@models/vacancy.model";
 
 export interface FeedProject {
@@ -20,4 +20,4 @@ export type FeedItem =
       content: FeedProject;
     })
   | { typeModel: "vacancy"; content: Vacancy }
-  | { typeModel: "news"; content: ProjectNews & { contentObject: { id: number } } };
+  | { typeModel: "news"; content: FeedNews & { contentObject: { id: number } } };

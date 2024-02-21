@@ -27,7 +27,7 @@ import { NavService } from "@services/nav.service";
 import { Vacancy } from "@models/vacancy.model";
 import { AuthService } from "@auth/services";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
-import { ProjectNews } from "@office/projects/models/project-news.model";
+import { FeedNews } from "@office/projects/models/project-news.model";
 import { containerSm } from "@utils/responsive";
 import { FormBuilder } from "@angular/forms";
 import { expandElement } from "@utils/expand-element";
@@ -152,7 +152,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
 
-  news: ProjectNews[] = [];
+  news: FeedNews[] = [];
 
   readFullDescription = false;
 
@@ -192,7 +192,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  onEditNews(news: ProjectNews, newsItemId: number) {
+  onEditNews(news: FeedNews, newsItemId: number) {
     this.projectNewsService
       .editNews(this.route.snapshot.params["projectId"], newsItemId, news)
       .subscribe(resNews => {

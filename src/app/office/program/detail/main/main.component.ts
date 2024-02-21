@@ -13,7 +13,7 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { concatMap, map, noop, of, Subscription, tap } from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { ProgramNewsService } from "@office/program/services/program-news.service";
-import { ProjectNews, ProjectNewsRes } from "@office/projects/models/project-news.model";
+import { FeedNews, ProjectNewsRes } from "@office/projects/models/project-news.model";
 import { expandElement } from "@utils/expand-element";
 import { ParseLinksPipe } from "@core/pipes/parse-links.pipe";
 import { ParseBreaksPipe } from "@core/pipes/parse-breaks.pipe";
@@ -96,7 +96,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   subscriptions$: Subscription[] = [];
-  news: ProjectNews[] = [];
+  news: FeedNews[] = [];
   program?: Program;
   // program$?: Observable<Program> = this.route.parent?.data.pipe(map(r => r["data"]));
 

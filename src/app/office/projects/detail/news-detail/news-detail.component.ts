@@ -3,7 +3,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map, Observable } from "rxjs";
-import { ProjectNews } from "@office/projects/models/project-news.model";
+import { FeedNews } from "@office/projects/models/project-news.model";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
 import { AsyncPipe } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
@@ -18,7 +18,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 export class NewsDetailComponent implements OnInit {
   constructor(private readonly route: ActivatedRoute, private readonly router: Router) {}
 
-  newsItem: Observable<ProjectNews> = this.route.data.pipe(map(r => r["data"]));
+  newsItem: Observable<FeedNews> = this.route.data.pipe(map(r => r["data"]));
   ngOnInit(): void {}
 
   onOpenChange(value: boolean) {
