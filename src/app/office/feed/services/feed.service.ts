@@ -13,7 +13,7 @@ import { HttpParams } from "@angular/common/http";
 export class FeedService {
   constructor(private readonly apiService: ApiService) {}
 
-  readonly splitSymbol = "|";
+  readonly FILTER_SPLIT_SYMBOL = "|";
 
   getFeed(
     offset: number,
@@ -23,9 +23,9 @@ export class FeedService {
     let reqType: string;
 
     if (type.length === 0) {
-      reqType = ["vacancy", "news", "project"].join(this.splitSymbol);
+      reqType = ["vacancy", "news", "project"].join(this.FILTER_SPLIT_SYMBOL);
     } else if (Array.isArray(type)) {
-      reqType = type.join(this.splitSymbol);
+      reqType = type.join(this.FILTER_SPLIT_SYMBOL);
     } else {
       reqType = type;
     }

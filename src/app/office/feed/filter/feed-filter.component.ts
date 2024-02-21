@@ -32,7 +32,7 @@ export class FeedFilterComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.includedFilters.set(params["includes"].split(this.feedService.splitSymbol));
+      this.includedFilters.set(params["includes"].split(this.feedService.FILTER_SPLIT_SYMBOL));
     });
   }
 
@@ -49,7 +49,9 @@ export class FeedFilterComponent implements OnInit {
   applyFilter(): void {
     this.router
       .navigate([], {
-        queryParams: { includes: this.includedFilters().join(this.feedService.splitSymbol) },
+        queryParams: {
+          includes: this.includedFilters().join(this.feedService.FILTER_SPLIT_SYMBOL),
+        },
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
