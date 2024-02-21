@@ -6,6 +6,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/cor
 import { ActivatedRoute, Router } from "@angular/router";
 import { ButtonComponent, CheckboxComponent, IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
+import { FeedService } from "@office/feed/services/feed.service";
 
 @Component({
   selector: "app-feed-filter",
@@ -27,6 +28,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 export class FeedFilterComponent {
   router = inject(Router);
   route = inject(ActivatedRoute);
+  feedService = inject(FeedService);
 
   filterOpen = signal(false);
 
@@ -39,11 +41,17 @@ export class FeedFilterComponent {
   includedFilters = signal<Set<string>>(new Set([]));
 
   applyFilter(): void {
+    const queryParams = JSON.parse(
+      JSON.stringify({
+        includes: Array.from(this.includedFilters()).join(this.feedService.splitSymbol),
+      })
+    );
+
+    console.log(queryParams);
     this.router
       .navigate([], {
-        queryParams: { includes: [...Array.from(this.includedFilters())] },
+        queryParams,
         relativeTo: this.route,
-        queryParamsHandling: "merge",
       })
       .then(() => console.debug("Query change from FeedFilterComponent"));
   }
