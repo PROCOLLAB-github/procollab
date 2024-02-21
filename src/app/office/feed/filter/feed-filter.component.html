@@ -17,8 +17,8 @@
   <div class="select" (clickOutside)="onClickOutside()">
     <div
       class="select__input"
-      [class.select__input--open]="filterOpen"
-      (click)="filterOpen = !filterOpen"
+      [class.select__input--open]="filterOpen()"
+      (click)="filterOpen.set(!filterOpen())"
     >
       Фильтр
     </div>
@@ -27,9 +27,9 @@
       icon="arrow-no-body"
       appSquare="15"
       class="select__dropdown-icon"
-      (click)="filterOpen = !filterOpen"
+      (click)="filterOpen.set(!filterOpen())"
     ></i>
-    @if (filterOpen) {
+    @if (filterOpen()) {
     <div class="select__dropdown" [@dropdownAnimation]>
       <ng-container *ngTemplateOutlet="filter"></ng-container>
       <a class="text-body-12" (click)="resetFilter()">Сбросить фильтр</a>
@@ -44,15 +44,13 @@
 <ng-template #filter>
   <div class="filter">
     <span class="text-body-12">Виды новостей</span>
-    @if (includedFilters$ | async; as filters) {
     <ul>
       @for (option of filterOptions; track $index) {
       <li class="text-body-14 filter__checkbox" (click)="setFilter(option.value)">
-        <app-checkbox [checked]="filters.has(option.value)"></app-checkbox>
+        <app-checkbox [checked]="includedFilters().has(option.value)"></app-checkbox>
         {{ option.label }}
       </li>
       }
     </ul>
-    }
   </div>
 </ng-template>

@@ -2,11 +2,10 @@
 
 import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ButtonComponent, CheckboxComponent, IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
-import { BehaviorSubject, Subscription } from "rxjs";
 
 @Component({
   selector: "app-feed-filter",
@@ -26,27 +25,23 @@ import { BehaviorSubject, Subscription } from "rxjs";
   ],
 })
 export class FeedFilterComponent {
-  constructor(private readonly router: Router, private readonly route: ActivatedRoute) {}
+  router = inject(Router);
+  route = inject(ActivatedRoute);
 
-  filterOpen = false;
+  filterOpen = signal(false);
 
   filterOptions = [
-    { label: "Личные новости", value: "profile-news" },
-    { label: "Проектные новости", value: "project-news" },
-    { label: "Вакансии", value: "vacancies" },
-    { label: "Новые проекты", value: "new-projects" },
+    { label: "Новости", value: "news" },
+    { label: "Вакансии", value: "vacancy" },
+    { label: "Новые проекты", value: "project" },
   ];
 
-  includedFilters$ = new BehaviorSubject<Set<string>>(new Set());
-
-  subscriptions: Subscription[] = [];
+  includedFilters = signal<Set<string>>(new Set([]));
 
   applyFilter(): void {
-    const included = this.includedFilters$.value;
-
     this.router
       .navigate([], {
-        queryParams: { includes: [...Array.from(included)] },
+        queryParams: { includes: [...Array.from(this.includedFilters())] },
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
@@ -54,20 +49,19 @@ export class FeedFilterComponent {
   }
 
   setFilter(keyword: string): void {
-    const included = this.includedFilters$.value;
-
-    included.has(keyword) ? included.delete(keyword) : included.add(keyword);
-
-    this.includedFilters$.next(included);
+    this.includedFilters.update(included => {
+      included.has(keyword) ? included.delete(keyword) : included.add(keyword);
+      return included;
+    });
   }
 
   resetFilter(): void {
-    this.includedFilters$.next(new Set());
+    this.includedFilters.set(new Set());
 
     this.applyFilter();
   }
 
   onClickOutside(): void {
-    this.filterOpen = false;
+    this.filterOpen.set(false);
   }
 }
