@@ -26,7 +26,7 @@ export class FeedService {
           offset,
           type: Array.isArray(type)
             ? type.length === 0
-              ? ["vacancy", "news", "project"]
+              ? ["vacancy", "news", "project"].join("|")
               : type.join("|")
             : type,
         },
