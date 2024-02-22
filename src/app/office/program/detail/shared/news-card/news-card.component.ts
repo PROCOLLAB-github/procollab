@@ -1,6 +1,7 @@
 /** @format */
 
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -10,7 +11,6 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { ProjectNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ActivatedRoute } from "@angular/router";
 import { expandElement } from "@utils/expand-element";
@@ -23,6 +23,7 @@ import { FileItemComponent } from "@ui/components/file-item/file-item.component"
 import { IconComponent } from "@ui/components";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
+import { FeedNews } from "@office/projects/models/project-news.model";
 
 @Component({
   selector: "app-program-news-card",
@@ -31,7 +32,7 @@ import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
   standalone: true,
   imports: [ImgCardComponent, FileUploadItemComponent, IconComponent, FileItemComponent, DayjsPipe],
 })
-export class ProgramNewsCardComponent implements OnInit {
+export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
   constructor(
     private readonly snackbarService: SnackbarService,
     private readonly fileService: FileService,
@@ -39,11 +40,11 @@ export class ProgramNewsCardComponent implements OnInit {
     private readonly cdRef: ChangeDetectorRef
   ) {}
 
-  @Input({ required: true }) newsItem!: ProjectNews;
+  @Input({ required: true }) newsItem!: FeedNews;
   @Input() isOwner!: boolean;
   @Output() delete = new EventEmitter<number>();
   @Output() like = new EventEmitter<number>();
-  @Output() edited = new EventEmitter<ProjectNews>();
+  @Output() edited = new EventEmitter<FeedNews>();
 
   newsTextExpandable!: boolean;
   readMore = false;

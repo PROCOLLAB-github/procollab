@@ -10,9 +10,9 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { ProjectNews } from "@office/projects/models/project-news.model";
+import { FeedNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ValidationService } from "@core/services";
 import { FileService } from "@core/services/file.service";
@@ -28,6 +28,7 @@ import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-up
 import { ImgCardComponent } from "../img-card/img-card.component";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
+import { JsonPipe } from "@angular/common";
 
 @Component({
   selector: "app-news-card",
@@ -36,6 +37,7 @@ import { ClickOutsideModule } from "ng-click-outside";
   standalone: true,
   imports: [
     ClickOutsideModule,
+    RouterLink,
     IconComponent,
     TextareaComponent,
     ReactiveFormsModule,
@@ -45,6 +47,7 @@ import { ClickOutsideModule } from "ng-click-outside";
     ButtonComponent,
     DayjsPipe,
     FormControlPipe,
+    JsonPipe,
   ],
 })
 export class NewsCardComponent implements OnInit {
@@ -61,11 +64,13 @@ export class NewsCardComponent implements OnInit {
     });
   }
 
-  @Input({ required: true }) newsItem!: ProjectNews;
+  @Input({ required: true }) feedItem!: FeedNews;
+  @Input({ required: true }) resourceLink!: (string | number)[];
+
   @Input() isOwner?: boolean;
   @Output() delete = new EventEmitter<number>();
   @Output() like = new EventEmitter<number>();
-  @Output() edited = new EventEmitter<ProjectNews>();
+  @Output() edited = new EventEmitter<FeedNews>();
 
   newsTextExpandable!: boolean;
   readMore = false;
@@ -75,15 +80,15 @@ export class NewsCardComponent implements OnInit {
 
   ngOnInit(): void {
     this.editForm.setValue({
-      text: this.newsItem.text,
+      text: this.feedItem.text,
     });
 
-    this.showLikes = this.newsItem.files.map(() => false);
+    this.showLikes = this.feedItem.files.map(() => false);
 
-    this.imagesViewList = this.newsItem.files.filter(
+    this.imagesViewList = this.feedItem.files.filter(
       f => f.mimeType.split("/")[0] === "image" || f.mimeType.split("/")[1] === "x-empty"
     );
-    this.filesViewList = this.newsItem.files.filter(
+    this.filesViewList = this.feedItem.files.filter(
       f => f.mimeType.split("/")[0] !== "image" && f.mimeType.split("/")[1] !== "x-empty"
     );
 
@@ -123,7 +128,7 @@ export class NewsCardComponent implements OnInit {
     const projectId = this.route.snapshot.params["projectId"];
 
     navigator.clipboard
-      .writeText(`${location.origin}/office/projects/${projectId}/news/${this.newsItem.id}`)
+      .writeText(`${location.origin}/office/projects/${projectId}/news/${this.feedItem.id}`)
       .then(() => {
         this.snackbarService.success("Ссылка скопирована");
       });
@@ -318,7 +323,7 @@ export class NewsCardComponent implements OnInit {
 
   onTouchImg(_event: TouchEvent, imgIdx: number) {
     if (Date.now() - this.lastTouch < 300) {
-      this.like.emit(this.newsItem.id);
+      this.like.emit(this.feedItem.id);
       this.showLikes[imgIdx] = true;
 
       setTimeout(() => {

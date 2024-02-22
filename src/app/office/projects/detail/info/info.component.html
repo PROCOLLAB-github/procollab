@@ -126,8 +126,9 @@
       } @for (n of news; track n.id) {
       <app-news-card
         class="news__item"
+        [resourceLink]="['/office/projects', n.id]"
         [attr.data-id]="n.id"
-        [newsItem]="n"
+        [feedItem]="n"
         [isOwner]="profile.id === project.leader"
         (delete)="onDeleteNews($event)"
         (like)="onLike($event)"
