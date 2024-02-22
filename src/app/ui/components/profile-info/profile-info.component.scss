@@ -1,8 +1,9 @@
 /** @format */
+@use "src/styles/responsive";
 
 .user {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   cursor: pointer;
 
   &__avatar {
@@ -13,12 +14,13 @@
   &__row {
     display: flex;
     align-items: center;
+    padding-bottom: 20px;
   }
 
   &__logout {
     display: flex;
     align-items: center;
-    margin-left: 20px;
+    margin-left: auto;
     color: var(--red);
     cursor: pointer;
     transition: color 0.2s;
@@ -30,18 +32,26 @@
     &:hover {
       color: var(--red-dark);
     }
+
+    @include responsive.apply-desktop {
+      display: none;
+    }
   }
 
   &__name {
     color: var(--black);
   }
 
-  &__email {
-    color: var(--dark-grey);
+  &__email,
+  &__verified,
+  &__not-verified {
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
 
+  &__email,
   &__verified {
-    color: var(--green);
+    color: var(--gray);
   }
 
   &__not-verified {

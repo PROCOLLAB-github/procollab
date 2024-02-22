@@ -8,6 +8,7 @@ import { Invite } from "@models/invite.model";
 import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { ProfileInfoComponent } from "@ui/components/profile-info/profile-info.component";
 import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
+import { ProfileControlPanelComponent } from "../profile-control-panel/profile-control-panel.component";
 import { AsyncPipe } from "@angular/common";
 import { ClickOutsideModule } from "ng-click-outside";
 import { IconComponent } from "@ui/components";
@@ -23,6 +24,7 @@ import { IconComponent } from "@ui/components";
     IconComponent,
     ClickOutsideModule,
     InviteManageCardComponent,
+    ProfileControlPanelComponent,
     ProfileInfoComponent,
     AsyncPipe,
   ],
@@ -40,8 +42,6 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  showBall = this.notificationService.hasNotifications;
-
   showNotifications = false;
 
   barPosition = 0;
@@ -50,6 +50,8 @@ export class SidebarComponent implements OnInit {
   get hasInvites(): boolean {
     return !!this.invites.filter(invite => invite.isAccepted === null).length;
   }
+
+  hasNotifications = this.notificationService.hasNotifications;
 
   onClickOutside() {
     this.showNotifications = false;
@@ -73,7 +75,15 @@ export class SidebarComponent implements OnInit {
       this.showNotifications = false;
       this.router
         .navigateByUrl(`/office/projects/${invite.project.id}`)
-        .then(() => console.debug("Route changed from HeaderComponent"));
+        .then(() => console.debug("Route changed from SidebarComponent"));
+    });
+  }
+
+  onLogout(): void {
+    this.authService.logout().subscribe(() => {
+      this.router
+        .navigateByUrl("/auth")
+        .then(() => console.debug("Route changed from SidebarComponent"));
     });
   }
 }
