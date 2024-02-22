@@ -14,7 +14,7 @@ import { NgClass } from "@angular/common";
 export class ButtonComponent implements OnInit {
   constructor() {}
 
-  @Input() color: "primary" | "red" | "grey" = "primary";
+  @Input() color: "primary" | "red" | "grey" | "green" = "primary";
   @Input() loader = false;
   @Input() type: "submit" | "reset" | "button" = "button";
   @Input() appearance: "inline" | "outline" = "inline";

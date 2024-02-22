@@ -2,6 +2,10 @@
 
 <app-modal [open]="true" (openChange)="onOpenChange($event)">
   @if (newsItem | async; as item) {
-  <app-news-card class="item" [newsItem]="item"></app-news-card>
+  <app-news-card
+    class="item"
+    [feedItem]="item"
+    [resourceLink]="['/office/projects', item.id]"
+  ></app-news-card>
   }
 </app-modal>

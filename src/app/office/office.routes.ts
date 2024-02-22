@@ -25,7 +25,11 @@ export const OFFICE_ROUTES: Routes = [
       {
         path: "",
         pathMatch: "full",
-        redirectTo: "projects",
+        redirectTo: "feed",
+      },
+      {
+        path: "feed",
+        loadChildren: () => import("./feed/feed.routes").then(c => c.FEED_ROUTES),
       },
       {
         path: "projects",

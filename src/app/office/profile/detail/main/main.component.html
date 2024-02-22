@@ -37,8 +37,9 @@
         <li>
           <app-news-card
             class="news__item"
+            [resourceLink]="['/office/profile', n.id]"
             [attr.data-id]="n.id"
-            [newsItem]="n"
+            [feedItem]="n"
             [isOwner]="loggedUserId === user.id"
             (delete)="onDeleteNews($event)"
             (like)="onLike($event)"

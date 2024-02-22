@@ -1,0 +1,22 @@
+<!-- @format -->
+
+<div class="card">
+  <div class="card__head head">
+    <img class="head__avatar" src="newsItem.imageAddress" alt="newsItem.name" />
+    <div>
+      <div class="head__name">PROCOLLAB</div>
+      <div class="head__date text-body-14">
+        {{ "2024-19-08 12:09:17" | dayjs: "format":"DD MMMM, HH:mm" }}
+      </div>
+    </div>
+  </div>
+  <h3 class="card__title">
+    Проект <a routerLink="/office/projects/51" class="card__project">PROCOLLAB</a> нашел себе
+    человека в команду
+  </h3>
+  <p class="card__text">Если хочешь также, то скорее выкладывай вакансию в проекте!</p>
+  <div class="action card__action">
+    <span class="action__job"> Backend developer </span>
+    <app-button color="green" class="action__button">Найден</app-button>
+  </div>
+</div>

@@ -1,17 +1,19 @@
 /** @format */
 
-import { Injectable } from "@angular/core";
-import { forkJoin, map, Observable } from "rxjs";
+import { inject, Injectable } from "@angular/core";
+import { forkJoin, map, Observable, tap } from "rxjs";
 import { ApiService } from "@core/services";
 import { ProfileNews, ProfileNewsRes } from "../models/profile-news.model";
 import { HttpParams } from "@angular/common/http";
 import { plainToInstance } from "class-transformer";
+import { StorageService } from "@services/storage.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProfileNewsService {
-  constructor(private readonly apiService: ApiService) {}
+  storageService = inject(StorageService);
+  apiService = inject(ApiService);
 
   fetchNews(userId: string): Observable<ProfileNewsRes> {
     return this.apiService.get<ProfileNewsRes>(
@@ -32,11 +34,19 @@ export class ProfileNewsService {
       .pipe(map(r => plainToInstance(ProfileNews, r)));
   }
 
-  readNews(userId: string, newsIds: number[]): Observable<void[]> {
+  readNews(userId: number, newsIds: number[]): Observable<void[]> {
+    const readNews = this.storageService.getItem<number[]>("readNews", sessionStorage) ?? [];
+
     return forkJoin(
-      newsIds.map(id =>
-        this.apiService.post<void>(`/auth/users/${userId}/news/${id}/set_viewed/`, {})
-      )
+      newsIds
+        .filter(id => !readNews.includes(id))
+        .map(id =>
+          this.apiService.post<void>(`/auth/users/${userId}/news/${id}/set_viewed/`, {}).pipe(
+            tap(() => {
+              this.storageService.setItem("readNews", [...readNews, id], sessionStorage);
+            })
+          )
+        )
     );
   }
 

@@ -13,8 +13,17 @@
       ></div>
       <a
         class="sidebar-nav__item text-body-14"
-        routerLink="projects"
+        routerLink="feed"
         (mouseenter)="barPosition = 0"
+        routerLinkActive="sidebar-nav__item&#45;&#45;active"
+      >
+        <i appIcon icon="feed" appSquare="20"></i>
+        Новости
+      </a>
+      <a
+        class="sidebar-nav__item text-body-14"
+        routerLink="projects"
+        (mouseenter)="barPosition = 1"
         routerLinkActive="sidebar-nav__item&#45;&#45;active"
       >
         <i appIcon icon="projects-filled" appSquare="24" appViewBox="0 0 24 20"></i>
