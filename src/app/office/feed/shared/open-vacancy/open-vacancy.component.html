@@ -4,7 +4,7 @@
   <a class="card__head head" [routerLink]="['/office/projects', feedItem.project.id]">
     <img class="head__avatar" [src]="feedItem.project.imageAddress" alt="newsItem.name" />
     <div>
-      <div class="head__name">{{ feedItem.project.imageAddress }}</div>
+      <div class="head__name">{{ feedItem.project.name }}</div>
       <div class="head__date text-body-14">
         {{ "2024-19-08 12:09:17" | dayjs: "format":"DD MMMM, HH:mm" }}
       </div>
