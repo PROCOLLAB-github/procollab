@@ -24,8 +24,7 @@
       [resourceLink]="['/office/profile', item.content.contentObject.id]"
       (like)="onLike($event)"
     ></app-news-card>
-    } @else if ((item.content.contentObject &&
-    !item.content.contentObject.hasOwnProperty('email')))) {
+    } @else if (item.content.contentObject && !item.content.contentObject.hasOwnProperty('email')) {
     <app-news-card
       class="page__item"
       [attr.data-id]="item.content.id"
@@ -33,6 +32,6 @@
       [resourceLink]="['/office/projects', item.content.contentObject.id]"
       (like)="onLike($event)"
     ></app-news-card>
-    }} }
+    } } }
   </div>
 </div>
