@@ -8,4 +8,6 @@ export class Vacancy {
   project!: Project;
   requiredSkills!: string[];
   description!: string;
+  datetimeCreated!: string;
+  datetimeUpdated!: string;
 }
