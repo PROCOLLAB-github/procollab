@@ -2,18 +2,18 @@
 
 import { Component, Input, OnInit } from "@angular/core";
 import { Program } from "@office/program/models/program.model";
-import { ActivatedRoute, Router } from "@angular/router";
-import { IconComponent } from "@ui/components";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { ButtonComponent, IconComponent } from "@ui/components";
 
 @Component({
   selector: "app-program-head",
   templateUrl: "./program-head.component.html",
   styleUrl: "./program-head.component.scss",
   standalone: true,
-  imports: [IconComponent],
+  imports: [IconComponent, ButtonComponent, RouterLink],
 })
 export class ProgramHeadComponent implements OnInit {
-  constructor(private readonly router: Router, private readonly route: ActivatedRoute) {}
+  constructor(public readonly router: Router, private readonly route: ActivatedRoute) {}
 
   @Input({ required: true }) program!: Program;
 

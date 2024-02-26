@@ -2,12 +2,15 @@
 
 import { Component, Input, forwardRef } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { IconComponent } from "@ui/components";
 import { noop } from "rxjs";
 
 @Component({
   selector: "app-boolean-criterion",
   templateUrl: "./boolean-criterion.component.html",
   styleUrl: "./boolean-criterion.component.scss",
+  standalone: true,
+  imports: [IconComponent],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

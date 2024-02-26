@@ -1,0 +1,224 @@
+/** @format */
+
+@use "src/styles/responsive";
+@use "src/styles/typography";
+
+:host {
+  min-width: 0;
+}
+
+.card {
+  padding: 14px;
+  background-color: var(--white);
+  border-radius: 15px;
+
+  &__upper {
+    background-color: var(--white);
+    border-radius: 15px;
+
+    @include responsive.apply-desktop {
+      background-color: var(--light-gray);
+    }
+  }
+
+  &__heading {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 15px;
+
+    app-button ::ng-deep .button--inline {
+      min-height: 38px;
+    }
+
+    @include responsive.apply-desktop {
+      flex-flow: row wrap;
+      gap: 10px;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 47px 14px 47px 140px;
+    }
+  }
+
+  &__avatar {
+    position: absolute;
+    left: 50%;
+    z-index: 3;
+    display: block;
+    transform: translateX(-50%) translateY(15px);
+
+    @include responsive.apply-desktop {
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 90px;
+    color: var(--dark-grey);
+
+    @include responsive.apply-desktop {
+      flex-basis: 300px;
+      flex-flow: row wrap;
+      flex-grow: 9999;
+      gap: 30px;
+      margin-top: 0;
+    }
+  }
+
+  &__title {
+    overflow: hidden;
+    color: var(--black);
+    text-align: center;
+    text-overflow: ellipsis;
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      text-align: unset;
+
+      @include typography.heading-2;
+    }
+  }
+
+  &__row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+
+    @include responsive.apply-desktop {
+      justify-content: unset;
+      margin-top: 0;
+    }
+  }
+
+  &__industry {
+    margin-right: 20px;
+
+    @include responsive.apply-desktop {
+      margin-right: 40px;
+    }
+  }
+
+  &__geo {
+    display: flex;
+    align-items: center;
+
+    i {
+      margin-right: 5px;
+    }
+  }
+
+  &__info-buttons {
+    flex-grow: 1;
+  }
+
+  &__presentation {
+    display: block;
+
+    i {
+      margin-left: 10px;
+    }
+  }
+
+  &__lower {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+
+    @include responsive.apply-desktop {
+      gap: 24px;
+
+      app-button {
+        width: 50%;
+        max-width: 345px;
+      }
+    }
+  }
+
+  &__rated {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    color: var(--accent);
+  }
+
+  &__lower-icons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  &__rated-icon {
+    color: var(--green);
+  }
+
+  &__redo-rating-icon {
+    color: var(--dark-grey);
+    cursor: pointer;
+  }
+}
+
+.about {
+  margin-top: 35px;
+
+  @include responsive.apply-desktop {
+    padding: 0 10px 24px;
+    margin-top: unset;
+  }
+
+  &__title {
+    margin-bottom: 12px;
+    color: var(--black);
+  }
+
+  /* stylelint-disable value-no-vendor-prefix */
+  &__text {
+    p {
+      display: -webkit-box;
+      overflow: hidden;
+      color: var(--black);
+      text-overflow: ellipsis;
+      word-wrap: break-word;
+      transition: all 0.7s ease-in-out;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+
+      &.expanded {
+        -webkit-line-clamp: unset;
+      }
+    }
+
+    ::ng-deep a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
+
+      &:hover {
+        text-decoration-color: var(--accent);
+      }
+    }
+  }
+  /* stylelint-enable value-no-vendor-prefix */
+
+  &__read-full {
+    margin-top: 2px;
+    color: var(--accent);
+    cursor: pointer;
+  }
+}

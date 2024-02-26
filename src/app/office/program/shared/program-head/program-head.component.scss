@@ -3,12 +3,23 @@
 
 .head {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 20px;
   padding: 15px 30px;
+
+  @include responsive.apply-desktop {
+    flex-flow: row wrap;
+    align-items: center;
+  }
 
   &__body {
     display: flex;
     align-items: flex-start;
+
+    @include responsive.apply-desktop {
+      flex-basis: 600px;
+      flex-grow: 9999;
+    }
   }
 
   &__info {
@@ -66,6 +77,13 @@
   &__search {
     flex-grow: 1;
     margin-left: 60px;
+  }
+
+  &__rate-projects {
+    @include responsive.apply-desktop {
+      flex-grow: 1;
+      margin-left: auto;
+    }
   }
 }
 

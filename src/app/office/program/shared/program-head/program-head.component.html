@@ -14,6 +14,11 @@
       </div>
     </div>
   </div>
+  @if (router.url.includes('projects')) {
+  <a [routerLink]="['../projects-rating']" class="head__rate-projects"
+    ><app-button>Оценить проекты</app-button></a
+  >
+  }
   <!--<div class="head__search search">
     <input type="text" class="text-body-14" [(ngModel)]="searchValue" />
     <div class="search__right">

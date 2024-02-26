@@ -3,7 +3,13 @@
 @use "src/styles/typography";
 @use "src/styles/responsive";
 
+:host {
+  display: block;
+}
+
 .field {
+  text-wrap: nowrap;
+
   &__input {
     width: 24px;
     height: 24px;
