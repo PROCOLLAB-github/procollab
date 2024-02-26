@@ -8,7 +8,6 @@ import {
   ChatEventType,
   DeleteChatMessageDto,
   EditChatMessageDto,
-  LoadChatMessages,
   OnChangeStatus,
   OnChatMessageDto,
   OnDeleteChatMessageDto,
@@ -21,7 +20,8 @@ import {
 } from "@models/chat.model";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
-import { ChatFile } from "@models/chat-message.model";
+import { ChatFile, ChatMessage } from "@models/chat-message.model";
+import { ApiPagination } from "@models/api-pagination.model";
 
 @Injectable({
   providedIn: "root",
@@ -73,12 +73,19 @@ export class ChatService {
     this.websocketService.send(ChatEventType.READ_MESSAGE, readChatMessage);
   }
 
-  loadMessages(projectId: number, count?: number, take?: number): Observable<LoadChatMessages> {
+  loadMessages(
+    projectId: number,
+    count?: number,
+    take?: number
+  ): Observable<ApiPagination<ChatMessage>> {
     let queries = new HttpParams();
     if (count !== undefined) queries = queries.set("offset", count);
     if (take !== undefined) queries = queries.set("limit", take);
 
-    return this.apiService.get<LoadChatMessages>(`/chats/projects/${projectId}/messages/`, queries);
+    return this.apiService.get<ApiPagination<ChatMessage>>(
+      `/chats/projects/${projectId}/messages/`,
+      queries
+    );
   }
 
   loadProjectFiles(projectId: number): Observable<ChatFile[]> {

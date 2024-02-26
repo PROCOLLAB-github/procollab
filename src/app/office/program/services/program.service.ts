@@ -3,7 +3,6 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "@core/services";
 import { BehaviorSubject, map, Observable, tap } from "rxjs";
-import { ProgramsResult } from "@office/program/models/programs-result.model";
 import { HttpParams } from "@angular/common/http";
 import { ProgramCreate } from "@office/program/models/program-create.model";
 import { Program, ProgramDataSchema, ProgramTag } from "@office/program/models/program.model";
@@ -17,7 +16,7 @@ import { User } from "@auth/models/user.model";
 export class ProgramService {
   constructor(private readonly apiService: ApiService) {}
 
-  getAll(skip: number, take: number): Observable<ProgramsResult> {
+  getAll(skip: number, take: number): Observable<ApiPagination<Program>> {
     return this.apiService.get(
       "/programs/",
       new HttpParams({ fromObject: { limit: take, offset: skip } })

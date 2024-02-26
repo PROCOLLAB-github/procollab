@@ -13,7 +13,7 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { concatMap, map, noop, of, Subscription, tap } from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { ProgramNewsService } from "@office/program/services/program-news.service";
-import { FeedNews, ProjectNewsRes } from "@office/projects/models/project-news.model";
+import { FeedNews } from "@office/projects/models/project-news.model";
 import { expandElement } from "@utils/expand-element";
 import { ParseLinksPipe } from "@core/pipes/parse-links.pipe";
 import { ParseBreaksPipe } from "@core/pipes/parse-breaks.pipe";
@@ -21,6 +21,7 @@ import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { ProgramNewsCardComponent } from "../shared/news-card/news-card.component";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { ApiPagination } from "@models/api-pagination.model";
 
 @Component({
   selector: "app-main",
@@ -58,7 +59,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
           if (program.isUserMember) {
             return this.programNewsService.fetchNews(program.id);
           } else {
-            return of({} as ProjectNewsRes);
+            return of({} as ApiPagination<FeedNews>);
           }
         })
       )
