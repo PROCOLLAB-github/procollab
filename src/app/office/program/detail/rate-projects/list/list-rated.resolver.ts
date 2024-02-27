@@ -11,5 +11,5 @@ export const ListRatedResolver: ResolveFn<ApiPagination<ProjectRate>> = (
 ) => {
   const projectRatingService = inject(ProjectRatingService);
 
-  return projectRatingService.getRated(route.parent?.params["programId"], 0, 3);
+  return projectRatingService.getRated(route.parent?.params["programId"], 0, 8);
 };

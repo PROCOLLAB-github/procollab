@@ -37,7 +37,7 @@ export class ListComponent implements OnInit, OnDestroy {
 
   totalProjCount!: number;
   loadedProjCount!: number;
-  fetchLimit = 3;
+  fetchLimit = 4;
   fetchPage = 1;
 
   subscriptions$: Subscription[] = [];
