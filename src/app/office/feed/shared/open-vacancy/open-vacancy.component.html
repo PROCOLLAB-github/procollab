@@ -26,6 +26,11 @@
   </div>
   <div class="action card__action">
     <span class="action__job"> {{ feedItem.role }} </span>
-    <app-button (click)="router.navigateByUrl('/office/vacancy/1')">Откликнуться</app-button>
+    <app-button
+      class="action__button"
+      customTypographyClass="text-body-12"
+      (click)="router.navigateByUrl('/office/vacancy/1')"
+      >Откликнуться</app-button
+    >
   </div>
 </div>

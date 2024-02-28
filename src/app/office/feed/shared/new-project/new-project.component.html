@@ -15,7 +15,10 @@
     Команда {{ feedItem.name }} искренне поддерживает Вас в творческом начинании! Мы готовы оказать
     всю необходимую помощь для успешного воплощения вашего проекта
   </p>
-  <app-button class="card__button" (click)="router.navigateByUrl('/office/projects/' + feedItem.id)"
+  <app-button
+    class="card__button"
+    customTypographyClass="text-body-12"
+    (click)="router.navigateByUrl('/office/projects/' + feedItem.id)"
     >Перейти в проект</app-button
   >
 </div>
