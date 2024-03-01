@@ -1,21 +1,12 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import {
-  BehaviorSubject,
-  concatMap,
-  fromEvent,
-  map,
-  of,
-  Subscription,
-  tap,
-  throttleTime,
-} from "rxjs";
+import { concatMap, fromEvent, map, of, Subscription, tap, throttleTime } from "rxjs";
 import { AsyncPipe } from "@angular/common";
 import { RatingCardComponent } from "@office/program/shared/rating-card/rating-card.component";
 import { ProjectRate } from "@office/program/models/project-rate";
-import { ProjectRatingService } from "@office/shared/project-rating/services/project-rating.service";
+import { ProjectRatingService } from "@office/program/services/project-rating.service";
 
 @Component({
   selector: "app-list",
@@ -24,7 +15,7 @@ import { ProjectRatingService } from "@office/shared/project-rating/services/pro
   standalone: true,
   imports: [RouterLink, RatingCardComponent, AsyncPipe],
 })
-export class ListComponent implements OnInit, OnDestroy {
+export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -33,27 +24,26 @@ export class ListComponent implements OnInit, OnDestroy {
 
   isListOfAll = this.router.url.includes("/all");
 
-  projects$ = new BehaviorSubject<ProjectRate[]>([]);
+  projects = signal<ProjectRate[]>([]);
 
-  totalProjCount!: number;
-  loadedProjCount!: number;
-  fetchLimit = 4;
-  fetchPage = 1;
+  totalProjCount = signal(0);
+  fetchLimit = signal(8);
+  fetchPage = signal(0);
 
-  subscriptions$: Subscription[] = [];
+  subscriptions$ = signal<Subscription[]>([]);
 
   ngOnInit(): void {
     const initProjects$ = this.route.data
       .pipe(
         map(r => r["data"]),
-        map(r => r["results"])
+        map(r => ({ projects: r["results"], count: r["count"] }))
       )
-      .subscribe(projects => {
-        this.projects$.next(projects);
-        this.loadedProjCount = projects.length;
+      .subscribe(({ projects, count }) => {
+        this.projects.set(projects);
+        this.totalProjCount.set(count);
       });
 
-    this.subscriptions$.push(initProjects$);
+    this.subscriptions$().push(initProjects$);
   }
 
   ngAfterViewInit() {
@@ -66,12 +56,16 @@ export class ListComponent implements OnInit, OnDestroy {
         )
         .subscribe();
 
-      this.subscriptions$.push(scrollEvents$);
+      this.subscriptions$().push(scrollEvents$);
     }
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions$().forEach($ => $.unsubscribe());
+  }
+
   onScroll() {
-    if (this.totalProjCount && this.loadedProjCount >= this.totalProjCount) return of({});
+    if (this.projects().length >= this.totalProjCount()) return of({});
 
     const target = document.querySelector(".office__body");
     if (!target) return of({});
@@ -80,7 +74,9 @@ export class ListComponent implements OnInit, OnDestroy {
 
     if (scrollBottom > 0) return of({});
 
-    return this.onFetch(this.fetchPage++ * this.fetchLimit, this.fetchLimit);
+    this.fetchPage.update(p => p + 1);
+
+    return this.onFetch(this.fetchPage() * this.fetchLimit(), this.fetchLimit());
   }
 
   onFetch(offset: number, limit: number) {
@@ -92,13 +88,9 @@ export class ListComponent implements OnInit, OnDestroy {
 
     return observable.pipe(
       tap(({ count, results }) => {
-        this.totalProjCount = count;
-        this.projects$.next([...this.projects$.value, ...results]);
+        this.totalProjCount.set(count);
+        this.projects.update(projects => [...projects, ...results]);
       })
     );
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions$.forEach(s => s.unsubscribe());
   }
 }

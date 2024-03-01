@@ -1,6 +1,6 @@
 /** @format */
 
 export interface ProjectRatingCriterionOutput {
-  criterion_id: number;
+  criterionId: number;
   value: unknown;
 }

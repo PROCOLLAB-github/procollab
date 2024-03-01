@@ -4,7 +4,7 @@ import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { ApiPagination } from "@office/models/api-pagination.model";
 import { ProjectRate } from "@office/program/models/project-rate";
-import { ProjectRatingService } from "@office/shared/project-rating/services/project-rating.service";
+import { ProjectRatingService } from "@office/program/services/project-rating.service";
 
 export const ListAllResolver: ResolveFn<ApiPagination<ProjectRate>> = (
   route: ActivatedRouteSnapshot

@@ -9,5 +9,5 @@ export interface ProjectRatingCriterion {
   type: ProjectRatingCriterionType;
   minValue: number | null;
   maxValue: number | null;
-  value?: unknown;
+  value: string | number;
 }

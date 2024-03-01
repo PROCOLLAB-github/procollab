@@ -8,6 +8,7 @@ import {
   Input,
   OnDestroy,
   ViewChild,
+  signal,
 } from "@angular/core";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
@@ -21,8 +22,9 @@ import { BreakpointObserver } from "@angular/cdk/layout";
 import { IndustryService } from "@office/services/industry.service";
 import { ProjectRatingComponent } from "@office/shared/project-rating/project-rating.component";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
-import { ProjectRatingService } from "@office/shared/project-rating/services/project-rating.service";
+import { ProjectRatingService } from "@office/program/services/project-rating.service";
 import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: "app-rating-card",
@@ -40,6 +42,7 @@ import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
     ParseBreaksPipe,
     ProjectRatingComponent,
     ControlErrorPipe,
+    RouterLink,
   ],
 })
 export class RatingCardComponent implements AfterViewInit, OnDestroy {
@@ -50,48 +53,57 @@ export class RatingCardComponent implements AfterViewInit, OnDestroy {
     private cdRef: ChangeDetectorRef
   ) {}
 
-  @Input({ required: true }) project!: ProjectRate;
+  @Input({ required: true }) set project(proj: ProjectRate) {
+    if (!proj) return;
+    this._project.set(proj);
+    this.projectRated.set(proj.isScored);
+  }
+
+  get project(): ProjectRate | null {
+    return this._project();
+  }
 
   @ViewChild("descEl") descEl?: ElementRef;
 
-  ngOnInit(): void {
-    this.projectRated = this.project?.isScored;
-    this.form.valueChanges.subscribe(console.log);
-  }
-
-  ngAfterViewInit(): void {
-    const descElement = this.descEl?.nativeElement;
-    this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
-    this.cdRef.detectChanges();
-
-    const resizeSub$ = fromEvent(window, "resize")
-      .pipe(debounceTime(50))
-      .subscribe(() => {
-        this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
-      });
-
-    this.subscriptions$.push(resizeSub$);
-  }
+  _project = signal<ProjectRate | null>(null);
 
   form = new FormControl();
 
-  submitLoading = false;
+  submitLoading = signal(false);
 
-  readFullDescription = false;
+  readFullDescription = signal(false);
 
-  descriptionExpandable = false;
+  descriptionExpandable = signal(false);
 
-  projectRated = false;
+  projectRated = signal(false);
 
   desktopMode$: Observable<boolean> = this.breakpointObserver
     .observe("(min-width: 920px)")
     .pipe(map(result => result.matches));
 
-  subscriptions$: Subscription[] = [];
+  subscriptions$ = signal<Subscription[]>([]);
+
+  ngAfterViewInit(): void {
+    const descElement = this.descEl?.nativeElement;
+    this.descriptionExpandable.set(descElement?.clientHeight < descElement?.scrollHeight);
+    this.cdRef.detectChanges();
+
+    const resizeSub$ = fromEvent(window, "resize")
+      .pipe(debounceTime(50))
+      .subscribe(() => {
+        this.descriptionExpandable.set(descElement?.clientHeight < descElement?.scrollHeight);
+      });
+
+    this.subscriptions$().push(resizeSub$);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions$().forEach($ => $.unsubscribe());
+  }
 
   expandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
-    this.readFullDescription = !isExpanded;
+    this.readFullDescription.set(!isExpanded);
   }
 
   submitRating(): void {
@@ -101,21 +113,19 @@ export class RatingCardComponent implements AfterViewInit, OnDestroy {
 
     const fv = this.form.getRawValue();
 
-    const sumbittedVal = this.projectRatingService.formValuesToDTO(this.project.criterias, fv);
+    const project = this.project as ProjectRate;
 
-    this.submitLoading = true;
+    const sumbittedVal = this.projectRatingService.formValuesToDTO(project.criterias, fv);
+
+    this.submitLoading.set(true);
 
     this.projectRatingService
-      .rate(this.project?.id, sumbittedVal)
-      .pipe(finalize(() => (this.submitLoading = false)))
-      .subscribe(() => (this.projectRated = true));
+      .rate(project.id, sumbittedVal)
+      .pipe(finalize(() => this.submitLoading.set(false)))
+      .subscribe(() => this.projectRated.set(true));
   }
 
   redoRating(): void {
-    this.projectRated = false;
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions$.forEach(s => s.unsubscribe());
+    this.projectRated.set(false);
   }
 }

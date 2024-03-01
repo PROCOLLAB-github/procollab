@@ -14,7 +14,7 @@
       </div>
     </div>
   </div>
-  @if (router.url.includes('projects')) {
+  @if (isProjectsList && (isUserExpert | async)) {
   <a [routerLink]="['../projects-rating']" class="head__rate-projects"
     ><app-button>Оценить проекты</app-button></a
   >

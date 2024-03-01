@@ -5,10 +5,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnChanges,
   OnDestroy,
-  SimpleChanges,
   forwardRef,
+  signal,
 } from "@angular/core";
 import {
   AbstractControl,
@@ -24,9 +23,11 @@ import {
 } from "@angular/forms";
 import { InputComponent } from "@ui/components";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
-import { ProjectRatingCriterion } from "./models";
+import { ProjectRatingCriterion } from "@office/program/models/project-rating-criterion";
 import { Subscription, noop } from "rxjs";
-import { BooleanCriterionComponent, RangeCriterionInputComponent } from "./components";
+import { BooleanCriterionComponent } from "./components/boolean-criterion/boolean-criterion.component";
+import { RangeCriterionInputComponent } from "./components/range-criterion-input/range-criterion-input.component";
+import { ErrorMessage } from "@error/models/error-message";
 
 @Component({
   selector: "app-project-rating",
@@ -55,52 +56,36 @@ import { BooleanCriterionComponent, RangeCriterionInputComponent } from "./compo
     },
   ],
 })
-export class ProjectRatingComponent
-  implements OnChanges, OnDestroy, ControlValueAccessor, Validator
-{
-  @Input({ required: true }) criteria!: ProjectRatingCriterion[];
+export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, Validator {
+  @Input({ required: true })
+  set criteria(val: ProjectRatingCriterion[]) {
+    if (!val) return;
+    this._criteria.set(val);
+    this.createFormControls(val);
+    this.trackFormValueChange();
+  }
+
+  get criteria(): ProjectRatingCriterion[] {
+    return this._criteria();
+  }
+
+  _criteria = signal<ProjectRatingCriterion[]>([]);
 
   form!: FormGroup;
 
-  controlCreators: Record<string, any> = {
-    int: (value: number) => new FormControl<number>(value, [Validators.required]),
-    bool: (value: string) =>
-      new FormControl<boolean>(value ? JSON.parse(value.toLowerCase()) : false),
-    str: (value: string) => new FormControl<string>(value),
+  controlCreators: Record<string, (val: number | string) => FormControl> = {
+    int: val => new FormControl<number>(<number>val, [Validators.required]),
+    bool: val => new FormControl<boolean>(val ? JSON.parse((val as string).toLowerCase()) : false),
+    str: val => new FormControl<string>(<string>val),
   };
 
-  subscriptions: Subscription[] = [];
-
-  ngOnChanges({ criteria }: SimpleChanges) {
-    if (criteria && criteria.currentValue) {
-      const formGroupControls: Record<string, FormControl> = {};
-
-      this.criteria.forEach(criterion => {
-        const controlCreator = this.controlCreators[criterion.type];
-
-        formGroupControls[criterion.id] = controlCreator(criterion.value);
-      });
-
-      this.form = new FormGroup(formGroupControls);
-
-      const trackChanged$ = this.form.valueChanges.subscribe(val => {
-        this.onChange(val);
-      });
-
-      this.subscriptions.push(trackChanged$);
-    }
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => this.form.updateValueAndValidity());
-  }
+  subscriptions$ = signal<Subscription[]>([]);
 
   onChange: (val: unknown) => void = noop;
   onTouched: () => void = noop;
 
   writeValue(val: typeof this.form.value): void {
     if (val) {
-      console.log(val);
       this.form.patchValue(val);
     }
   }
@@ -113,13 +98,14 @@ export class ProjectRatingComponent
     this.onTouched = fn;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   validate(_: AbstractControl): ValidationErrors | null {
     let output: ValidationErrors | null = null;
 
     if (this.form.invalid) {
       Object.values(this.form.controls).forEach(control => {
         if (control.errors !== null) {
-          output = { required: "Не все критерии заполнены" };
+          output = { required: ErrorMessage.VALIDATION_UNFILLED_CRITERIA };
         }
       });
     }
@@ -127,6 +113,26 @@ export class ProjectRatingComponent
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions$().forEach($ => $.unsubscribe());
+  }
+
+  private createFormControls(criteria: ProjectRatingCriterion[]): void {
+    const formGroupControls: Record<string, FormControl> = {};
+
+    criteria.forEach(criterion => {
+      const controlCreator = this.controlCreators[criterion.type];
+
+      formGroupControls[criterion.id] = controlCreator(criterion.value);
+    });
+
+    this.form = new FormGroup(formGroupControls);
+  }
+
+  private trackFormValueChange(): void {
+    const trackChanged$ = this.form.valueChanges.subscribe(val => {
+      this.onChange(val);
+    });
+
+    this.subscriptions$().push(trackChanged$);
   }
 }

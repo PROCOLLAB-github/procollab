@@ -1,6 +1,6 @@
 /** @format */
 
-import { ProjectRatingCriterion } from "@office/shared/project-rating/models";
+import { ProjectRatingCriterion } from "./project-rating-criterion";
 
 export interface ProjectRate {
   id: number;

@@ -23,8 +23,6 @@ import { ProjectRatingComponent } from "@office/shared/project-rating/project-ra
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ButtonComponent } from "@ui/components";
 import { AuthService } from "@auth/services";
-import { ProjectRate } from "@office/program/models/project-rate";
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
 
 @Component({
   selector: "app-projects",
@@ -40,7 +38,6 @@ import { FormControl, ReactiveFormsModule } from "@angular/forms";
     ProjectRatingComponent,
     ModalComponent,
     ButtonComponent,
-    ReactiveFormsModule,
   ],
 })
 export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -58,13 +55,9 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
 
   projects: Project[] = [];
 
-  projectsWithCriteria: ProjectRate[] = [];
-
   program$?: Observable<Program> = this.route.parent?.data.pipe(map(r => r["data"]));
 
   subscriptions$: Subscription[] = [];
-
-  criteriaForm = new FormControl();
 
   ngOnInit(): void {
     const routeData$ = this.route.data

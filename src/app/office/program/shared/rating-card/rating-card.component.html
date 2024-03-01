@@ -11,7 +11,9 @@
         [size]="(desktopMode$ | async) ? 83 : 68"
       ></app-avatar>
       <div class="card__info">
-        <h1 class="card__title">{{ project.name }}</h1>
+        <a [routerLink]="['/office/projects/' + project.id]">
+          <h1 class="card__title">{{ project.name }}</h1>
+        </a>
         <div class="card__row">
           @if (industryService.industries | async; as industries) {
           <p class="text-body-14">
@@ -46,12 +48,12 @@
       @if (project.description) {
       <div class="text-body-14 about__text">
         <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
-        @if (descriptionExpandable) {
+        @if (descriptionExpandable()) {
         <div
           class="about__read-full"
-          (click)="expandDescription(descEl, 'expanded', readFullDescription)"
+          (click)="expandDescription(descEl, 'expanded', readFullDescription())"
         >
-          {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+          {{ readFullDescription() ? "Скрыть" : "Читать полностью" }}
         </div>
         }
       </div>
@@ -59,7 +61,7 @@
     </div>
   </div>
   <div class="card__lower">
-    @if (!projectRated) {
+    @if (!projectRated()) {
     <div>
       <app-project-rating [criteria]="project.criterias" [formControl]="form"></app-project-rating>
       @if (form | controlError: 'required'; as error) {
@@ -68,7 +70,7 @@
       </div>
       }
     </div>
-    <app-button (click)="submitRating()" [loader]="submitLoading">Оценить проект</app-button>
+    <app-button (click)="submitRating()" [loader]="submitLoading()">Оценить проект</app-button>
     } @else {
     <div class="card__rated">
       <div class="card__lower-icons">
