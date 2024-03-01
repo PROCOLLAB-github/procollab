@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, OnInit, signal, ViewChild } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
@@ -52,7 +52,7 @@ export class ProfileMainComponent implements OnInit {
     const news$ = this.profileNewsService
       .fetchNews(this.route.snapshot.params["id"])
       .subscribe(news => {
-        this.news = news.results;
+        this.news.set(news.results);
 
         setTimeout(() => {
           const observer = new IntersectionObserver(this.onNewsInView.bind(this), {
@@ -90,24 +90,24 @@ export class ProfileMainComponent implements OnInit {
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
 
-  news: ProfileNews[] = [];
+  news = signal<ProfileNews[]>([]);
 
   onAddNews(news: { text: string; files: string[] }): void {
     this.profileNewsService.addNews(this.route.snapshot.params["id"], news).subscribe(newsRes => {
       this.newsFormComponent?.onResetForm();
-      this.news.unshift(newsRes);
+      this.news.update(news => [newsRes, ...news]);
     });
   }
 
   onDeleteNews(newsId: number): void {
-    const newsIdx = this.news.findIndex(n => n.id === newsId);
-    this.news.splice(newsIdx, 1);
+    const newsIdx = this.news().findIndex(n => n.id === newsId);
+    this.news().splice(newsIdx, 1);
 
     this.profileNewsService.delete(this.route.snapshot.params["id"], newsId).subscribe(() => {});
   }
 
   onLike(newsId: number) {
-    const item = this.news.find(n => n.id === newsId);
+    const item = this.news().find(n => n.id === newsId);
     if (!item) return;
 
     this.profileNewsService
@@ -122,8 +122,8 @@ export class ProfileMainComponent implements OnInit {
     this.profileNewsService
       .editNews(this.route.snapshot.params["id"], newsItemId, news)
       .subscribe(resNews => {
-        const newsIdx = this.news.findIndex(n => n.id === resNews.id);
-        this.news[newsIdx] = resNews;
+        const newsIdx = this.news().findIndex(n => n.id === resNews.id);
+        this.news()[newsIdx] = resNews;
         this.newsCardComponent?.onCloseEditMode();
       });
   }

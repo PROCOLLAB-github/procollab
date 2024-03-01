@@ -8,6 +8,7 @@
       autosize
       placeholder="Чем поделитесь сегодня?"
       (paste)="onPaste($event)"
+      (keydown.meta.enter)="onSubmit()"
       rows="1"
     ></textarea>
     <button class="form__submit">
