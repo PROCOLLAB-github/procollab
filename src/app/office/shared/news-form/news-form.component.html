@@ -7,6 +7,7 @@
       class="form__textarea text-body-14"
       autosize
       placeholder="Чем поделитесь сегодня?"
+      (paste)="onPaste($event)"
       rows="1"
     ></textarea>
     <button class="form__submit">
@@ -39,7 +40,7 @@
   <div class="footer">
     <label class="footer__attach">
       <i appIcon icon="attach" appSquare="22"></i>
-      <input type="file" accept="*/*" multiple (change)="onUploadFile($event)" />
+      <input type="file" accept="*/*" multiple (change)="onInputFiles($event)" />
     </label>
   </div>
 </form>
