@@ -5,6 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ProgramHeadComponent } from "./program-head.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { Program } from "@office/program/models/program.model";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("ProgramHeadComponent", () => {
   let component: ProgramHeadComponent;
@@ -12,8 +13,8 @@ describe("ProgramHeadComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, ProgramHeadComponent],
-}).compileComponents();
+      imports: [RouterTestingModule, ProgramHeadComponent, HttpClientTestingModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {
