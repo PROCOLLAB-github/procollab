@@ -30,7 +30,7 @@ export class NewsFormComponent implements OnInit {
     private readonly validationService: ValidationService,
     private readonly fileService: FileService
   ) {
-    this.messageForm = fb.group({
+    this.messageForm = this.fb.group({
       text: ["", [Validators.required]],
     });
   }
@@ -73,10 +73,7 @@ export class NewsFormComponent implements OnInit {
     tempFile: File;
   }[] = [];
 
-  onUploadFile(event: Event) {
-    const files = (event.currentTarget as HTMLInputElement).files;
-    if (!files) return;
-
+  uploadFiles(files: FileList) {
     const observableArray: Observable<any>[] = [];
     for (let i = 0; i < files.length; i++) {
       const fileType = files[i].type.split("/")[0];
@@ -121,6 +118,20 @@ export class NewsFormComponent implements OnInit {
     }
 
     forkJoin(observableArray).subscribe(noop);
+  }
+
+  onInputFiles(event: Event) {
+    const files = (event.currentTarget as HTMLInputElement).files;
+    if (!files) return;
+
+    this.uploadFiles(files);
+  }
+
+  onPaste(event: ClipboardEvent) {
+    const files = event.clipboardData?.files;
+    if (!files) return;
+
+    this.uploadFiles(files);
   }
 
   onDeletePhoto(fId: string) {

@@ -33,7 +33,7 @@
       <app-news-form (addNews)="onAddNews($event)"></app-news-form>
       }
       <ul>
-        @for (n of news; track n.id) {
+        @for (n of news(); track n.id) {
         <li>
           <app-news-card
             class="news__item"
