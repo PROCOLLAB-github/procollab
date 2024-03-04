@@ -82,4 +82,11 @@ export class RangeCriterionInputComponent implements ControlValueAccessor {
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
   }
+
+  moveCursorToEnd(event: FocusEvent) {
+    const input = event.target as HTMLInputElement;
+    input.type = "text";
+    input.selectionStart = input.selectionEnd = input.value.length;
+    input.type = "number";
+  }
 }

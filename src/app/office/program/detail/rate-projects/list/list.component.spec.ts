@@ -2,25 +2,23 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ProgramHeadComponent } from "./program-head.component";
+import { ListComponent } from "./list.component";
 import { RouterTestingModule } from "@angular/router/testing";
-import { Program } from "@office/program/models/program.model";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
-describe("ProgramHeadComponent", () => {
-  let component: ProgramHeadComponent;
-  let fixture: ComponentFixture<ProgramHeadComponent>;
+describe("ListComponent", () => {
+  let component: ListComponent;
+  let fixture: ComponentFixture<ListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, ProgramHeadComponent, HttpClientTestingModule],
+      imports: [RouterTestingModule, HttpClientTestingModule, ListComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProgramHeadComponent);
+    fixture = TestBed.createComponent(ListComponent);
     component = fixture.componentInstance;
-    component.program = Program.default();
     fixture.detectChanges();
   });
 

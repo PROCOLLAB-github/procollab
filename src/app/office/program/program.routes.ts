@@ -11,4 +11,9 @@ export const PROGRAM_ROUTES: Routes = [
     path: ":programId",
     loadChildren: () => import("./detail/detail.routes").then(c => c.PROGRAM_DETAIL_ROUTES),
   },
+  {
+    path: ":programId/projects-rating",
+    loadChildren: () =>
+      import("./detail/rate-projects/rate-project.routes").then(c => c.RATE_PROJECTS_ROUTES),
+  },
 ];

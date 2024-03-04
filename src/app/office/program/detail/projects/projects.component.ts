@@ -19,18 +19,32 @@ import { ProjectCardComponent } from "@office/shared/project-card/project-card.c
 import { ProgramHeadComponent } from "../../shared/program-head/program-head.component";
 import { AsyncPipe, JsonPipe } from "@angular/common";
 import { ProgramService } from "@office/program/services/program.service";
+import { ProjectRatingComponent } from "@office/shared/project-rating/project-rating.component";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { ButtonComponent } from "@ui/components";
+import { AuthService } from "@auth/services";
 
 @Component({
   selector: "app-projects",
   templateUrl: "./projects.component.html",
   styleUrl: "./projects.component.scss",
   standalone: true,
-  imports: [ProgramHeadComponent, RouterLink, ProjectCardComponent, AsyncPipe, JsonPipe],
+  imports: [
+    ProgramHeadComponent,
+    RouterLink,
+    ProjectCardComponent,
+    AsyncPipe,
+    JsonPipe,
+    ProjectRatingComponent,
+    ModalComponent,
+    ButtonComponent,
+  ],
 })
 export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly programService: ProgramService
+    private readonly programService: ProgramService,
+    public readonly authService: AuthService
   ) {}
 
   @ViewChild("projectsRoot") projectsRoot?: ElementRef<HTMLElement>;
@@ -55,6 +69,7 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
       .subscribe(projects => {
         this.projects = projects;
       });
+
     this.subscriptions$.push(routeData$);
   }
 

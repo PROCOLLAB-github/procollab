@@ -21,4 +21,7 @@ export enum ErrorMessage {
   // Project invitation
   USER_NOT_EXISTING = "По данной ссылке пользователь не найден",
   VALIDATION_PROFILE_LINK = "Введенное значение не соответствует формату ссылки на профиль",
+
+  // Project rating
+  VALIDATION_UNFILLED_CRITERIA = "Не все критерии заполнены",
 }

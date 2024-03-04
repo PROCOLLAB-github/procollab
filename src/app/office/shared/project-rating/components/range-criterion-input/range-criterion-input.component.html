@@ -11,6 +11,7 @@
     (keydown)="onKeydown($event)"
     (blur)="onBlur()"
     (paste)="onPaste($event)"
+    (focus)="moveCursorToEnd($event)"
     class="field__input"
     [class.field__input--error]="error"
   />

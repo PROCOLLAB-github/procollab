@@ -1,0 +1,33 @@
+<!-- @format -->
+<form [formGroup]="form" class="rating">
+  <section class="rating__columns">
+    @for (criterion of criteria; track $index) { @if (criterion.type === 'int') {
+    <div class="rating__field">
+      <label class="text-body-14">{{ criterion.name }}</label>
+      <app-range-criterion-input
+        class="rating__input"
+        [max]="criterion.maxValue!"
+        [formControlName]="criterion.id"
+      ></app-range-criterion-input>
+    </div>
+    } @if (criterion.type === 'bool') {
+    <div class="rating__field">
+      <label class="text-body-14">{{ criterion.name }}</label>
+      <app-boolean-criterion
+        class="rating__input"
+        [formControlName]="criterion.id"
+      ></app-boolean-criterion>
+    </div>
+    } }
+  </section>
+  <section>
+    @for (criterion of criteria; track $index) { @if(criterion.type === 'str') {
+    <div class="rating__comment">
+      <app-textarea
+        [formControlName]="criterion.id"
+        placeholder="Небольшой комментарий, если необходимо"
+      ></app-textarea>
+    </div>
+    } }
+  </section>
+</form>
