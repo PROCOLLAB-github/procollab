@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve procollab-dev",
+    "start": "ng serve social_platform",
     "build": "npm run build:sprite && ng build",
     "build:prod": "npm run build --configuration procollab",
     "build:pr": "npm run build --configuration procollab-dev",
@@ -11,9 +11,9 @@
     "build:sprite": "svg-sprite -s --dest=src/assets/icons 'src/assets/icons/svg/**/*.svg'",
     "test": "ng test",
     "test:ci": "ng test --browsers=Headless --no-watch",
-    "lint:ts": "eslint src/**/*.ts",
-    "format": "prettier --write src/",
-    "lint:scss": "stylelint src/**/*.scss --fix",
+    "lint:ts": "eslint projects/**/*.ts",
+    "format": "prettier --write projects/",
+    "lint:scss": "stylelint projects/**/*.scss --fix",
     "docs:json": "compodoc -p ./tsconfig.json -e json -d ."
   },
   "precommit": [

@@ -25,31 +25,31 @@
     ],
     "paths": {
       "@auth/*": [
-        "src/app/auth/*"
+        "projects/social_platform/src/app/auth/*"
       ],
       "@ui/*": [
-        "src/app/ui/*"
+        "projects/social_platform/src/app/ui/*"
       ],
       "@core/*": [
-        "src/app/core/*"
+        "projects/social_platform/src/app/core/*"
       ],
       "@office/*": [
-        "src/app/office/*"
+        "projects/social_platform/src/app/office/*"
       ],
       "@utils/*": [
-        "src/app/utils/*"
+        "projects/social_platform/src/app/utils/*"
       ],
       "@environment": [
-        "src/environments/environment.ts"
+        "projects/social_platform/src/environments/environment.ts"
       ],
       "@error/*": [
-        "src/app/error/*"
+        "projects/social_platform/src/app/error/*"
       ],
       "@services/*": [
-        "src/app/office/services/*"
+        "projects/social_platform/src/app/office/services/*"
       ],
       "@models/*": [
-        "src/app/office/models/*"
+        "projects/social_platform/src/app/office/models/*"
       ]
     },
     "useDefineForClassFields": false

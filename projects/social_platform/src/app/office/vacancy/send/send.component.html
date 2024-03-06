@@ -1,0 +1,79 @@
+<!-- @format -->
+<div>
+  <div class="bar vacancy-bar">
+    <app-back class="bar__back"></app-back>
+  </div>
+  @if (authService.profile | async; as profile) {
+  <main class="vacancy">
+    <app-modal [(open)]="resultModal">
+      <div class="succeed">
+        <i class="succeed__check" appIcon icon="inline-check" appSquare="97"></i>
+        <p class="text-bold-body-16 succeed__text">Ваш отклик на вакансию отправлен</p>
+        <a
+          class="succeed__link"
+          [routerLink]="['/office/profile', profile.id]"
+          [skipLocationChange]="true"
+        >
+          <app-button>Вернуться в профиль</app-button>
+        </a>
+      </div>
+    </app-modal>
+    <div class="vacancy__inner">
+      <div class="vacancy__sender profile">
+        <app-avatar class="profile__avatar" [size]="140" [url]="profile.avatar"></app-avatar>
+        <div class="profile__body">
+          <p class="text-body-12 profile__status">{{ profile.userType | userRole | async }}</p>
+          <h2 class="text-heading-3 profile__name">
+            {{ profile.firstName }} {{ profile.lastName }}
+          </h2>
+          <p class="text-body-14 profile__info">{{ profile.speciality }} • {{ profile.city }}</p>
+          @if (profile.keySkills) {
+          <ul class="profile__skills">
+            @for (skill of profile.keySkills; track $index) {
+            <li class="profile__skill">
+              <app-tag>{{ skill }}</app-tag>
+            </li>
+            }
+          </ul>
+          }
+        </div>
+      </div>
+      <form class="vacacy__form form" [formGroup]="sendForm" (ngSubmit)="onSubmit()">
+        @if (sendForm.get('whyMe'); as whyMe) {
+        <fieldset>
+          <label for="whyMe" class="field-label">Мотивационное письмо</label>
+          <app-textarea
+            id="whyMe"
+            formControlName="whyMe"
+            [error]="whyMe | controlError"
+            placeholder="Текст письма"
+          ></app-textarea>
+          @if (whyMe | controlError: 'required') {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          } @if (whyMe | controlError: 'maxlength') {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_TOO_LONG }}
+            @if (whyMe.errors) {
+            {{ whyMe.errors["maxlength"]["requiredLength"] }}
+            }
+          </div>
+          } @if (whyMe | controlError: 'minlength') {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_TOO_SHORT }}
+            @if (whyMe.errors) {
+            {{ whyMe.errors["minlength"]["requiredLength"] }}
+            }
+          </div>
+          }
+        </fieldset>
+        }
+        <app-button [loader]="sendFormIsSubmitting" type="submit" class="form__submit">
+          Отправить отклик
+        </app-button>
+      </form>
+    </div>
+  </main>
+  }
+</div>

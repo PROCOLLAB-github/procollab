@@ -1,0 +1,88 @@
+/** @format */
+
+@use "styles/typography";
+@use "styles/responsive";
+
+.field {
+  position: relative;
+  width: 100%;
+
+  &__input {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 20px;
+    color: var(--black);
+    cursor: pointer;
+    background-color: var(--white);
+    border: 1px solid var(--gray);
+    border-radius: var(--rounded-lg);
+    outline: none;
+
+    &--placeholder {
+      color: var(--dark-grey);
+    }
+
+    &--open {
+      border-color: var(--accent);
+      box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+    }
+
+    @include typography.body-14;
+
+    @include responsive.apply-desktop {
+      @include typography.body-16;
+    }
+  }
+
+  &__options {
+    position: absolute;
+    right: 0;
+    bottom: -6px;
+    left: 0;
+    z-index: 3;
+    max-height: 200px;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: var(--white);
+    border: 1px solid var(--gray);
+    border-radius: var(--rounded-lg);
+    transform: translateY(100%);
+  }
+
+  &__option {
+    padding: 18px;
+    color: var(--dark-grey);
+    cursor: pointer;
+    border-radius: var(--rounded-lg);
+    transition: background-color 0.2s;
+
+    &--highlighted {
+      background-color: var(--light-gray);
+    }
+
+    &:hover {
+      background-color: var(--light-gray);
+    }
+
+    @include typography.body-14;
+
+    @include responsive.apply-desktop {
+      @include typography.body-16;
+    }
+  }
+
+  &__arrow {
+    color: var(--dark-grey);
+    transition: all 0.2s;
+    transform: rotate(180deg);
+
+    &--filpped {
+      color: var(--accent);
+      transform: rotate(0deg);
+    }
+  }
+}

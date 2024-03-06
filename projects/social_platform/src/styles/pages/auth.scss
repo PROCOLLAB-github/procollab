@@ -1,0 +1,152 @@
+/** @format */
+
+@use "styles/responsive";
+@use "styles/typography";
+
+.auth {
+  &__logo {
+    position: fixed;
+    top: 85px;
+    left: 15px;
+    display: none;
+
+    @include responsive.apply-desktop {
+      top: 50px;
+      left: 100px;
+      display: block;
+    }
+  }
+
+  &__greeting {
+    max-width: 915px;
+    margin-bottom: 20px;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 25px;
+    }
+  }
+
+  &__wrapper {
+    @include responsive.apply-desktop {
+      max-width: 415px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 6px;
+    color: var(--black);
+
+    &--register {
+      @include typography.heading-4;
+    }
+
+    @include typography.heading-2;
+
+    @include responsive.apply-desktop {
+      &--register {
+        @include typography.heading-2;
+      }
+    }
+  }
+
+  &__info {
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      @include typography.body-14;
+    }
+  }
+
+  &__field {
+    margin-bottom: 12px;
+
+    app-input,
+    app-select {
+      display: block;
+    }
+  }
+
+  &__row {
+    display: flex;
+
+    fieldset {
+      width: 50%;
+
+      &:not(:last-child) {
+        margin-right: 15px;
+      }
+    }
+  }
+
+  &__agreement {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    cursor: pointer;
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+  }
+
+  &__agreement-text {
+    color: var(--gray-100);
+  }
+
+  &__button {
+    display: block;
+    width: 100%;
+    margin-top: 35px;
+
+    &-typography {
+      @include typography.bold-body-14;
+
+      @include responsive.apply-desktop {
+        @include typography.bold-body-16;
+      }
+    }
+
+    @include responsive.apply-desktop {
+      margin-top: 30px;
+    }
+  }
+
+  &__button-icon {
+    display: none !important;
+    margin-left: 10px;
+    transform: rotate(90deg);
+
+    @include responsive.apply-desktop {
+      display: block !important;
+    }
+  }
+
+  &__toggle {
+    @include typography.body-14;
+
+    margin-top: 8vh;
+    text-align: center;
+
+    @include responsive.apply-desktop {
+      @include typography.body-16;
+
+      margin-top: 20px;
+      text-align: left;
+    }
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s;
+
+    &:hover {
+      text-decoration-color: var(--accent);
+    }
+  }
+}

@@ -1,0 +1,23 @@
+@use "styles/responsive";
+
+.back {
+  display: flex;
+  align-items: center;
+  padding: 9px 18px;
+  color: var(--black);
+  cursor: pointer;
+
+  &__icon {
+    flex-shrink: 0;
+  }
+
+  span {
+    display: none;
+    margin-left: 10px;
+    line-height: 1;
+
+    @include responsive.apply-desktop {
+      display: unset;
+    }
+  }
+}
