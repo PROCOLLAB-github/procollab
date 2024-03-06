@@ -8,7 +8,7 @@
     "build:prod": "npm run build --configuration procollab",
     "build:pr": "npm run build --configuration procollab-dev",
     "watch": "ng build --watch --configuration procollab-dev",
-    "build:sprite": "svg-sprite -s --dest=src/assets/icons 'src/assets/icons/svg/**/*.svg'",
+    "build:sprite": "svg-sprite -s --dest=projects/social_platform/src/assets/icons 'projects/social_platform/src/assets/icons/svg/**/*.svg'",
     "test": "ng test",
     "test:ci": "ng test --browsers=Headless --no-watch",
     "lint:ts": "eslint projects/**/*.ts",
