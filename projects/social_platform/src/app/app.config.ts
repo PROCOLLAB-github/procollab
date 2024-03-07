@@ -7,11 +7,10 @@ import { NgxMaskModule } from "ngx-mask";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { GlobalErrorHandlerService } from "@error/services/global-error-handler.service";
-import { BearerTokenInterceptor } from "@core/interceptors/bearer-token.interceptor";
-import { CamelcaseInterceptor } from "@core/interceptors/camelcase.interceptor";
 import { HTTP_INTERCEPTORS, withInterceptorsFromDi, provideHttpClient } from "@angular/common/http";
 import { provideRouter } from "@angular/router";
 import { APP_ROUTES } from "./app.routes";
+import { BearerTokenInterceptor, CamelcaseInterceptor } from "projects/core/src/public-api";
 
 export const APP_CONFIG: ApplicationConfig = {
   providers: [

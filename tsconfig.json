@@ -50,6 +50,9 @@
       ],
       "@models/*": [
         "projects/social_platform/src/app/office/models/*"
+      ],
+      "core": [
+        "./dist/core"
       ]
     },
     "useDefineForClassFields": false
