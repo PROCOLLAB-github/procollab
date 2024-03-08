@@ -3,7 +3,7 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, map, Observable, tap } from "rxjs";
 import { Project, ProjectCount, ProjectStep } from "@models/project.model";
-import { ApiService } from "@core/services";
+import { ApiService } from "projects/core";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@models/api-pagination.model";

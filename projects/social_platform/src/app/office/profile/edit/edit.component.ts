@@ -12,7 +12,7 @@ import {
 } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
-import { ValidationService } from "@core/services";
+import { ValidationService } from "projects/core";
 import { concatMap, first, map, noop, Observable, skip, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import * as dayjs from "dayjs";

@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { AuthService } from "../services";
 import { ErrorMessage } from "@error/models/error-message";
-import { ValidationService } from "projects/social_platform/src/app/core/services";
+import { ValidationService } from "projects/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { IconComponent, ButtonComponent, InputComponent } from "@ui/components";

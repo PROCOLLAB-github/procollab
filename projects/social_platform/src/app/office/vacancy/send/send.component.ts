@@ -5,7 +5,7 @@ import { AuthService } from "@auth/services";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { VacancyService } from "@services/vacancy.service";
-import { ValidationService } from "@core/services";
+import { ValidationService } from "projects/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { NavService } from "@services/nav.service";
 import { UserRolePipe } from "@core/pipes/user-role.pipe";

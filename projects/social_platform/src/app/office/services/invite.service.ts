@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ApiService } from "@core/services";
+import { ApiService } from "projects/core";
 import { concatMap, map, Observable, take } from "rxjs";
 import { plainToInstance } from "class-transformer";
 import { Invite } from "@models/invite.model";

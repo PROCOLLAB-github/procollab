@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ApiService } from "@core/services";
+import { ApiService } from "projects/core";
 import { forkJoin, Observable } from "rxjs";
 import { ProjectNewsRes } from "@office/projects/models/project-news.model";
 

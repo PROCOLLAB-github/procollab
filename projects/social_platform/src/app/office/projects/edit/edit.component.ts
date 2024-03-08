@@ -16,7 +16,7 @@ import { ErrorMessage } from "@error/models/error-message";
 import { NavService } from "@services/nav.service";
 import { Project } from "@models/project.model";
 import { Vacancy } from "@models/vacancy.model";
-import { ValidationService } from "@core/services";
+import { ValidationService } from "projects/core";
 import { VacancyService } from "@services/vacancy.service";
 import { InviteService } from "@services/invite.service";
 import { Invite } from "@models/invite.model";

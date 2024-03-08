@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ApiService } from "@core/services";
+import { ApiService } from "projects/core";
 import { BehaviorSubject, map, Observable, tap } from "rxjs";
 import { ProgramsResult } from "@office/program/models/programs-result.model";
 import { HttpParams } from "@angular/common/http";

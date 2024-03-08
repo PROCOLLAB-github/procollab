@@ -3,7 +3,7 @@
 import { Injectable } from "@angular/core";
 import { WebsocketService } from "@core/services/websocket.service";
 import { BehaviorSubject, map, Observable } from "rxjs";
-import { ApiService } from "@core/services";
+import { ApiService } from "projects/core";
 import {
   ChatEventType,
   DeleteChatMessageDto,

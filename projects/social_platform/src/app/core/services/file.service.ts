@@ -1,9 +1,9 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ApiService } from "./api.service";
+import { ApiService } from "projects/core";
 import { Observable } from "rxjs";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpParams } from "@angular/common/http";
 import { AuthService } from "@auth/services";
 import { environment } from "@environment";
 
@@ -11,11 +11,7 @@ import { environment } from "@environment";
   providedIn: "root",
 })
 export class FileService {
-  constructor(
-    private readonly apiService: ApiService,
-    private readonly httpClient: HttpClient,
-    private readonly authService: AuthService
-  ) {}
+  constructor(private readonly apiService: ApiService, private readonly authService: AuthService) {}
 
   uploadFile(file: File): Observable<{ url: string }> {
     const formData = new FormData();

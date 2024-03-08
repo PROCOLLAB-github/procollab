@@ -3,7 +3,7 @@
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { AuthService } from "../services";
-import { ValidationService } from "@core/services";
+import { ValidationService } from "projects/core";
 import { ErrorMessage } from "@error/models/error-message";
 import { Router, RouterLink } from "@angular/router";
 import * as dayjs from "dayjs";

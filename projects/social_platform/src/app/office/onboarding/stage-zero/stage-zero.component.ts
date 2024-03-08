@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
-import { ValidationService } from "@core/services";
+import { ValidationService } from "projects/core";
 import { concatMap, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { User } from "@auth/models/user.model";

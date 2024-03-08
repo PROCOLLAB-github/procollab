@@ -10,7 +10,7 @@ import { GlobalErrorHandlerService } from "@error/services/global-error-handler.
 import { HTTP_INTERCEPTORS, withInterceptorsFromDi, provideHttpClient } from "@angular/common/http";
 import { provideRouter } from "@angular/router";
 import { APP_ROUTES } from "./app.routes";
-import { BearerTokenInterceptor, CamelcaseInterceptor } from "projects/core/src/public-api";
+import { BearerTokenInterceptor, CamelcaseInterceptor } from "projects/core";
 
 export const APP_CONFIG: ApplicationConfig = {
   providers: [

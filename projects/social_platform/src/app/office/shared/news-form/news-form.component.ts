@@ -2,7 +2,7 @@
 
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ValidationService } from "@core/services";
+import { ValidationService } from "projects/core";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
 import { forkJoin, noop, Observable, tap } from "rxjs";

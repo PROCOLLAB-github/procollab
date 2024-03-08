@@ -5,5 +5,5 @@
  * @format
  */
 
-export * from "./lib/interceptors/camelcase.interceptor";
-export * from "./lib/interceptors/bearer-token.interceptor";
+export * from "./lib/interceptors";
+export * from "./lib/services";

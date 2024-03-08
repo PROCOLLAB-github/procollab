@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ApiService } from "@core/services";
+import { ApiService } from "projects/core";
 import { FeedNews, ProjectNewsRes } from "@office/projects/models/project-news.model";
 import { forkJoin, map, Observable, tap } from "rxjs";
 import { plainToInstance } from "class-transformer";

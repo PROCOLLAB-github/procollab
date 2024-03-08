@@ -2,7 +2,7 @@
 
 import { inject, Injectable } from "@angular/core";
 import { forkJoin, map, Observable, tap } from "rxjs";
-import { ApiService } from "@core/services";
+import { ApiService } from "projects/core";
 import { ProfileNews, ProfileNewsRes } from "../models/profile-news.model";
 import { HttpParams } from "@angular/common/http";
 import { plainToInstance } from "class-transformer";

@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { map, Subscription } from "rxjs";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ProgramDataSchema } from "@office/program/models/program.model";
-import { ValidationService } from "@core/services";
+import { ValidationService } from "projects/core";
 import { ProgramService } from "@office/program/services/program.service";
 import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { ButtonComponent, InputComponent } from "@ui/components";
