@@ -5,10 +5,9 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } fr
 import { ErrorMessage } from "@error/models/error-message";
 import { concatMap, Subscription, take } from "rxjs";
 import { AuthService } from "@auth/services";
-import { ValidationService } from "projects/core";
+import { ValidationService, ControlErrorPipe } from "projects/core";
 import { Router } from "@angular/router";
 import { OnboardingService } from "../services/onboarding.service";
-import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
 import { TagComponent } from "@ui/components/tag/tag.component";
 

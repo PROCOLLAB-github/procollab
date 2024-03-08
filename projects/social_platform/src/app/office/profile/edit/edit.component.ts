@@ -12,13 +12,12 @@ import {
 } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
-import { ValidationService } from "projects/core";
+import { ValidationService, ControlErrorPipe } from "projects/core";
 import { concatMap, first, map, noop, Observable, skip, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 import { NavService } from "@services/nav.service";
-import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button.directive";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";

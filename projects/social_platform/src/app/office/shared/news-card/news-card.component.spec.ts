@@ -9,7 +9,7 @@ import { of } from "rxjs";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { AuthService } from "@auth/services";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { DayjsPipe } from "@core/pipes/dayjs.pipe";
+import { DayjsPipe } from "projects/core";
 import { FeedNews } from "@office/projects/models/project-news.model";
 
 describe("NewsCardComponent", () => {

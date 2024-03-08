@@ -18,7 +18,7 @@ import { FileModel } from "@office/models/file.model";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
 import { forkJoin, noop, Observable, tap } from "rxjs";
-import { DayjsPipe } from "@core/pipes/dayjs.pipe";
+import { DayjsPipe } from "projects/core";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { IconComponent } from "@ui/components";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";

@@ -4,7 +4,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { ChatListItem } from "@office/chat/models/chat-item.model";
 import { AuthService } from "@auth/services";
 import { map } from "rxjs";
-import { DayjsPipe } from "@core/pipes/dayjs.pipe";
+import { DayjsPipe } from "projects/core";
 import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 

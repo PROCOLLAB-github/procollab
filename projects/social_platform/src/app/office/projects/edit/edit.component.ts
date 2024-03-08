@@ -16,7 +16,7 @@ import { ErrorMessage } from "@error/models/error-message";
 import { NavService } from "@services/nav.service";
 import { Project } from "@models/project.model";
 import { Vacancy } from "@models/vacancy.model";
-import { ValidationService } from "projects/core";
+import { ValidationService, ControlErrorPipe } from "projects/core";
 import { VacancyService } from "@services/vacancy.service";
 import { InviteService } from "@services/invite.service";
 import { Invite } from "@models/invite.model";
@@ -25,7 +25,6 @@ import { SelectComponent, ButtonComponent, IconComponent, InputComponent } from 
 import { ProgramService } from "@office/program/services/program.service";
 import { ProgramTag } from "@office/program/models/program.model";
 import { HttpErrorResponse } from "@angular/common/http";
-import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { VacancyCardComponent } from "../../shared/vacancy-card/vacancy-card.component";

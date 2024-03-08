@@ -2,7 +2,7 @@
 
 import { Component, Input, OnInit } from "@angular/core";
 import { User } from "@auth/models/user.model";
-import { YearsFromBirthdayPipe } from "@core/pipes/years-from-birthday.pipe";
+import { YearsFromBirthdayPipe } from "projects/core";
 import { UserRolePipe } from "@core/pipes/user-role.pipe";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { AsyncPipe } from "@angular/common";

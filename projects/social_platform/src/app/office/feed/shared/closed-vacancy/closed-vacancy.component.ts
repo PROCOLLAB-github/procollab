@@ -3,7 +3,7 @@
 import { Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
-import { DayjsPipe } from "@core/pipes/dayjs.pipe";
+import { DayjsPipe } from "projects/core";
 import { Router, RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/components/tag/tag.component";
 

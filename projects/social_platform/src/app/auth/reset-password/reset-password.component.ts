@@ -4,9 +4,8 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { AuthService } from "@auth/services";
-import { ValidationService } from "projects/core";
+import { ValidationService, ControlErrorPipe } from "projects/core";
 import { Router } from "@angular/router";
-import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { ButtonComponent, InputComponent } from "@ui/components";
 
 @Component({

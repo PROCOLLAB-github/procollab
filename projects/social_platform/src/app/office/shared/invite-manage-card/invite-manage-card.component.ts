@@ -2,7 +2,7 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Invite } from "@models/invite.model";
-import { DayjsPipe } from "@core/pipes/dayjs.pipe";
+import { DayjsPipe } from "projects/core";
 import { ButtonComponent } from "@ui/components";
 import { RouterLink } from "@angular/router";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";

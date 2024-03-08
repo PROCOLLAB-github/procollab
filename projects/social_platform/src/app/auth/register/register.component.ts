@@ -3,12 +3,11 @@
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { AuthService } from "../services";
-import { ValidationService } from "projects/core";
+import { ValidationService, ControlErrorPipe } from "projects/core";
 import { ErrorMessage } from "@error/models/error-message";
 import { Router, RouterLink } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
-import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { ButtonComponent, CheckboxComponent, InputComponent } from "@ui/components";
 
 dayjs.extend(cpf);

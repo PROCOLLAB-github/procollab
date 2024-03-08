@@ -16,7 +16,7 @@ import { SnackbarService } from "@ui/services/snackbar.service";
 import { DomPortal } from "@angular/cdk/portal";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { AuthService } from "@auth/services";
-import { DayjsPipe } from "@core/pipes/dayjs.pipe";
+import { DayjsPipe } from "projects/core";
 import { IconComponent } from "@ui/components";
 import { FileItemComponent } from "../file-item/file-item.component";
 import { AsyncPipe } from "@angular/common";

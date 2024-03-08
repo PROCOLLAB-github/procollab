@@ -1,15 +1,15 @@
 /** @format */
 
 import { Pipe, PipeTransform } from "@angular/core";
-import { PluralizePipe } from "@core/pipes/pluralize.pipe";
+import { PluralizePipe } from "projects/core";
 import * as RelativeTime from "dayjs/plugin/relativeTime";
 import * as dayjs from "dayjs";
 
 dayjs.extend(RelativeTime);
 
 @Pipe({
-    name: "yearsFromBirthday",
-    standalone: true,
+  name: "yearsFromBirthday",
+  standalone: true,
 })
 export class YearsFromBirthdayPipe implements PipeTransform {
   transform(value: string): string {

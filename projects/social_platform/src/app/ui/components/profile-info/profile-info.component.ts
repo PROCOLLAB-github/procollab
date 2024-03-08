@@ -4,7 +4,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { Router, RouterLink } from "@angular/router";
-import { DayjsPipe } from "@core/pipes/dayjs.pipe";
+import { DayjsPipe } from "projects/core";
 import { IconComponent } from "@ui/components";
 import { AvatarComponent } from "../avatar/avatar.component";
 

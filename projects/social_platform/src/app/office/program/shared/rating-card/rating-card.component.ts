@@ -14,8 +14,7 @@ import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { CommonModule } from "@angular/common";
 import { ProjectRate } from "@office/program/models/project-rate";
-import { ParseLinksPipe } from "@core/pipes/parse-links.pipe";
-import { ParseBreaksPipe } from "@core/pipes/parse-breaks.pipe";
+import { ParseLinksPipe, ParseBreaksPipe, ControlErrorPipe } from "projects/core";
 import { expandElement } from "@utils/expand-element";
 import { Observable, fromEvent, map, debounceTime, Subscription, finalize } from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
@@ -23,7 +22,6 @@ import { IndustryService } from "@office/services/industry.service";
 import { ProjectRatingComponent } from "@office/shared/project-rating/project-rating.component";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ProjectRatingService } from "@office/program/services/project-rating.service";
-import { ControlErrorPipe } from "@core/pipes/control-error.pipe";
 import { RouterLink } from "@angular/router";
 
 @Component({
