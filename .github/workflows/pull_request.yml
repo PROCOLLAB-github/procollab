@@ -19,19 +19,30 @@ jobs:
         cache-dependency-path: package-lock.json
     - run: npm ci
     - run: npm run build:pr
-    - name: Publish preview
+    - name: Publish preview social
       uses: netlify/actions/cli@master
-      id: publish_preview
+      id: publish_preview_social
       with:
-        args: deploy --dir=./dist
+        args: deploy --dir=./dist/social_platform
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
         NETLIFY_PREVIEW_APP: true # or perhaps like this
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NETLIFY_PR_ID: ${{ github.pr_id }}
+        NETLIFY_PR_ID: ${{ github.pr_id }}-social
+    - name: Publish preview skills
+      uses: netlify/actions/cli@master
+      id: publish_preview_skills
+      with:
+        args: deploy --dir=./dist/social_platform
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SKILLS_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
+        NETLIFY_PREVIEW_APP: true # or perhaps like this
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NETLIFY_PR_ID: ${{ github.pr_id }}-skills
     - uses: mshick/add-pr-comment@v2
       with:
         message: |
-          Social platform url - ${{steps.publish_preview.outputs.NETLIFY_URL}}/social_platform
-          Skills platform url - ${{steps.publish_preview.outputs.NETLIFY_URL}}/skills
+          Social platform url - ${{steps.publish_preview_social.outputs.NETLIFY_URL}}
+          Skills platform url - ${{steps.publish_preview_skills.outputs.NETLIFY_URL}}
