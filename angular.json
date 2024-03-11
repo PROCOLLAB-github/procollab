@@ -37,7 +37,9 @@
             ],
             "scripts": [],
             "stylePreprocessorOptions": {
-              "includePaths": ["projects/social_platform/src"]
+              "includePaths": [
+                "projects/social_platform/src"
+              ]
             },
             "fileReplacements": [
               {
@@ -103,7 +105,9 @@
             ],
             "scripts": [],
             "stylePreprocessorOptions": {
-              "includePaths": ["projects/social_platform/src"]
+              "includePaths": [
+                "projects/social_platform/src"
+              ]
             }
           },
           "configurations": {
@@ -164,7 +168,12 @@
             "styles": [
               "projects/social_platform/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/social_platform/src"
+              ]
+            }
           }
         }
       }
