@@ -34,7 +34,7 @@ jobs:
       uses: netlify/actions/cli@master
       id: publish_preview_skills
       with:
-        args: deploy --dir=./dist/social_platform
+        args: deploy --dir=./dist/skills
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SKILLS_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
