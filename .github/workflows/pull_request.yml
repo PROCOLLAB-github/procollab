@@ -38,7 +38,7 @@ jobs:
       uses: netlify/actions/cli@master
       id: publish_preview
       with:
-        args: deploy --dir=./dist/social_platform
+        args: deploy --dir=./dist
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
@@ -48,4 +48,5 @@ jobs:
     - uses: mshick/add-pr-comment@v2
       with:
         message: |
-          Preview url - ${{steps.publish_preview.outputs.NETLIFY_URL}}
+          Social platform url - ${{steps.publish_preview.outputs.NETLIFY_URL}}/social_platform
+          Skills platform url - ${{steps.publish_preview.outputs.NETLIFY_URL}}/skills

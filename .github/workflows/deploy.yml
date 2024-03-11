@@ -27,7 +27,7 @@ jobs:
         uses: burnett01/rsync-deployments@5.2.1
         with:
           switches: -avzr --delete
-          path: dist/procollab
+          path: dist/social_platform
           remote_path: /home/gh_deploy
           remote_user: gh_deploy
           remote_key: ${{ secrets.DEPLOY_KEY }}
