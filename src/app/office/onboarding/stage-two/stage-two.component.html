@@ -9,9 +9,9 @@
     </p> -->
   </div>
   <div class="content" [formGroup]="stageForm">
-    <section class="content__left">
+    <section class="content__section content__left">
       <div class="content__search">
-        <h4 class="text-heading-4">Поиск по библиотеке</h4>
+        <h4 class="text-heading-4 content__section-heading">Поиск по библиотеке</h4>
         <app-autocomplete-input
           [suggestions]="searchedSkills()"
           fieldToDisplay="name"
@@ -21,20 +21,21 @@
           (optionSelected)="onAddSkill($event)"
         ></app-autocomplete-input>
       </div>
-      <div class="content__skills-basket">
+      <div class="content__skills">
         <h4 class="text-heading-4">Выбранные навыки</h4>
         <app-skills-basket
+          class="content__skills-basket"
           formControlName="skills"
           [error]="stageForm.controls['skills'] | controlError"
         ></app-skills-basket>
       </div>
     </section>
-    <section class="content__right">
-      <h4 class="text-heading-4">Библиотека</h4>
+    <section class="content__section content__right">
+      <h4 class="text-heading-4 content__section-heading content__right-heading">Библиотека</h4>
       <div class="content__skills-groups">
-        <ul>
+        <ul class="content__skills-groups-list">
           @for (skillGroup of nestedSkills$ | async; track skillGroup.id) {
-          <li>
+          <li class="content__skills-groups-list-item">
             <app-skills-group
               [title]="skillGroup.name"
               [options]="skillGroup.skills"

@@ -13,13 +13,13 @@
     height: auto;
   }
 
-  section {
+  &__section {
     display: flex;
     flex-basis: 50%;
     flex-direction: column;
     min-width: 280px;
 
-    h4 {
+    &-heading {
       margin-bottom: 25px;
     }
   }
@@ -39,7 +39,7 @@
       height: 480px;
     }
 
-    h4 {
+    &-heading {
       padding: 14px 14px 0;
     }
   }
@@ -55,14 +55,14 @@
     overflow: auto;
     scrollbar-width: thin;
 
-    ul {
+    &-list {
       display: flex;
       flex-direction: column;
       gap: 20px;
       padding: 0 14px;
     }
 
-    li {
+    &-list-item {
       display: flex;
       align-items: center;
       justify-content: space-between;

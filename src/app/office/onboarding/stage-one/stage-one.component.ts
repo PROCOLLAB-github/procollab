@@ -48,7 +48,7 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
   ) {}
 
   stageForm = this.nnFb.group({
-    speciality: this.nnFb.control("", Validators.required),
+    speciality: ["", Validators.required],
   });
 
   nestedSpecializations$: Observable<SpecializationsGroup[]> = this.route.data.pipe(

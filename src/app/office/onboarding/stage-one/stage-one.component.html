@@ -9,8 +9,8 @@
     </p> -->
   </div>
   <div class="content" [formGroup]="stageForm">
-    <section class="content__left">
-      <h4 class="text-heading-4">Поиск по библиотеке</h4>
+    <section class="content__section content__left">
+      <h4 class="text-heading-4 content__section-heading">Поиск по библиотеке</h4>
       <app-autocomplete-input
         [suggestions]="inlineSpecializations()"
         fieldToDisplay="name"
@@ -28,12 +28,12 @@
       </div>
       }
     </section>
-    <section class="content__right">
-      <h4 class="text-heading-4">Библиотека</h4>
+    <section class="content__section content__right">
+      <h4 class="text-heading-4 content__section-heading content__right-heading">Библиотека</h4>
       <div class="content__specs-groups">
-        <ul>
+        <ul class="content__specs-groups-list">
           @for (spec of nestedSpecializations$ | async; track spec.id) {
-          <li>
+          <li class="content__specs-groups-list-item">
             <app-specializations-group
               [title]="spec.name"
               [options]="spec.specializations"

@@ -16,7 +16,7 @@
     max-height: 480px;
   }
 
-  section {
+  &__section {
     display: flex;
     flex-basis: 50%;
     flex-direction: column;
@@ -24,14 +24,14 @@
     height: 100%;
     overflow: hidden;
 
-    h4 {
+    &-heading {
       margin-bottom: 25px;
     }
   }
 
   &__left,
   &__search,
-  &__skills-basket {
+  &__skills {
     display: flex;
     flex-direction: column;
   }
@@ -40,11 +40,11 @@
     gap: 20px;
   }
 
-  &__skills-basket {
+  &__skills {
     height: 100%;
     overflow: hidden;
 
-    app-skills-basket {
+    &-basket {
       overflow: hidden;
     }
   }
@@ -66,7 +66,7 @@
       height: 100%;
     }
 
-    h4 {
+    &-heading {
       padding: 14px 14px 0;
     }
   }
@@ -82,14 +82,14 @@
     overflow: auto;
     scrollbar-width: thin;
 
-    ul {
+    &-list {
       display: flex;
       flex-direction: column;
       gap: 20px;
       padding: 0 14px;
     }
 
-    li {
+    &-list-item {
       display: flex;
       align-items: center;
       justify-content: space-between;

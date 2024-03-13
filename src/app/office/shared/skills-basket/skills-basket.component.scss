@@ -36,7 +36,7 @@
     background-color: var(--accent);
     border-radius: var(--rounded-md);
 
-    i {
+    &-delete-icon {
       margin-left: 10px;
       cursor: pointer;
     }

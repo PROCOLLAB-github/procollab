@@ -49,11 +49,11 @@
     }
   }
 
-  nav {
+  &__nav {
     width: 100%;
   }
 
-  img {
+  &__logo {
     display: none;
 
     @include responsive.apply-desktop {
