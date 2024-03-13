@@ -31,5 +31,3 @@ export class FeedNews {
     };
   }
 }
-
-export type ProjectNewsRes = ApiPagination<FeedNews>;
