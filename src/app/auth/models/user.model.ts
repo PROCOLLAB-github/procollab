@@ -1,5 +1,6 @@
 /** @format */
 import { Project } from "@models/project.model";
+import { Skill } from "@office/models/skill";
 
 export class Achievement {
   id!: number;
@@ -18,6 +19,8 @@ export class User {
   avatar!: string;
   links!: string[];
   keySkills!: string[];
+  skills!: Skill[];
+  skillsIds!: number[];
   isOnline!: boolean;
   isActive!: boolean;
   member?: {

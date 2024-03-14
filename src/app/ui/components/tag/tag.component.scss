@@ -1,12 +1,12 @@
 /** @format */
 
 .tag {
-  display: flex;
   align-items: center;
   max-width: 300px;
   padding: 5px 10px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   border-radius: var(--rounded-md);
 
   &--primary {

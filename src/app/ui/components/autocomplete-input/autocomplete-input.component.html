@@ -1,0 +1,41 @@
+<!-- @format -->
+
+<div class="field" (clickOutside)="onClickOutside()">
+  <input
+    #input
+    type="text"
+    [value]="inputValue()"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+    (paste)="handlePaste($event)"
+    [placeholder]="value() ? null : placeholder"
+    class="field__input"
+    [class.field__input--error]="error"
+  />
+  @if (fieldToDisplayMode === 'chip' && value()) {
+  <div class="field__chip">
+    <span class="text-body-14">{{ $any(value())[fieldToDisplay] || value() }}</span>
+    <i appIcon icon="basket" appSquare="18" (click)="onClearValue($event)"></i>
+  </div>
+  }
+  <i appIcon icon="search" appSquare="32" class="field__search-icon"></i>
+  @if (loading()) {
+  <app-loader type="circle" color="dark-grey" size="24px" class="field__loading"></app-loader>
+  } @if (isOpen()) {
+  <div class="field__dropdown" [@dropdownAnimation]>
+    @if (noResults()) {
+    <ul class="field__dropdown--no-results">
+      <li class="text-body-14 field__option">{{ "Ничего не найдено :(" }}</li>
+    </ul>
+    } @else {
+    <ul class="field__dropdown--options">
+      @for (suggestion of suggestions; track $index) {
+      <li class="text-body-14 field__option" (click)="onUpdate($event, suggestion)">
+        {{ fieldToDisplay ? suggestion[fieldToDisplay] : suggestion }}
+      </li>
+      }
+    </ul>
+    }
+  </div>
+  }
+</div>
