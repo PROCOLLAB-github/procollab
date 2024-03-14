@@ -2,11 +2,12 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "projects/core";
-import { FeedNews, ProjectNewsRes } from "@office/projects/models/project-news.model";
+import { FeedNews } from "@office/projects/models/project-news.model";
 import { forkJoin, map, Observable, tap } from "rxjs";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
 import { StorageService } from "@services/storage.service";
+import { ApiPagination } from "@models/api-pagination.model";
 
 @Injectable({
   providedIn: "root",
@@ -15,8 +16,8 @@ export class ProjectNewsService {
   storageService = inject(StorageService);
   apiService = inject(ApiService);
 
-  fetchNews(projectId: string): Observable<ProjectNewsRes> {
-    return this.apiService.get<ProjectNewsRes>(
+  fetchNews(projectId: string): Observable<ApiPagination<FeedNews>> {
+    return this.apiService.get<ApiPagination<FeedNews>>(
       `/projects/${projectId}/news/`,
       new HttpParams({ fromObject: { limit: 100 } })
     );

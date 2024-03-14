@@ -3,10 +3,11 @@
 import { inject, Injectable } from "@angular/core";
 import { forkJoin, map, Observable, tap } from "rxjs";
 import { ApiService } from "projects/core";
-import { ProfileNews, ProfileNewsRes } from "../models/profile-news.model";
+import { ProfileNews } from "../models/profile-news.model";
 import { HttpParams } from "@angular/common/http";
 import { plainToInstance } from "class-transformer";
 import { StorageService } from "@services/storage.service";
+import { ApiPagination } from "@models/api-pagination.model";
 
 @Injectable({
   providedIn: "root",
@@ -15,8 +16,8 @@ export class ProfileNewsService {
   storageService = inject(StorageService);
   apiService = inject(ApiService);
 
-  fetchNews(userId: string): Observable<ProfileNewsRes> {
-    return this.apiService.get<ProfileNewsRes>(
+  fetchNews(userId: string): Observable<ApiPagination<ProfileNews>> {
+    return this.apiService.get<ApiPagination<ProfileNews>>(
       `/auth/users/${userId}/news/`,
       new HttpParams({ fromObject: { limit: 10 } })
     );

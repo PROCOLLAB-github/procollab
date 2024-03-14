@@ -2,7 +2,6 @@
 
 import * as dayjs from "dayjs";
 import { FileModel } from "@models/file.model";
-import { ApiPagination } from "@models/api-pagination.model";
 
 export class ProfileNews {
   id!: number;
@@ -32,5 +31,3 @@ export class ProfileNews {
     };
   }
 }
-
-export type ProfileNewsRes = ApiPagination<ProfileNews>;

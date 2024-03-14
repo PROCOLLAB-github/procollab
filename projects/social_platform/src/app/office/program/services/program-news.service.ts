@@ -3,7 +3,8 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "projects/core";
 import { forkJoin, Observable } from "rxjs";
-import { ProjectNewsRes } from "@office/projects/models/project-news.model";
+import { ApiPagination } from "@models/api-pagination.model";
+import { FeedNews } from "@office/projects/models/project-news.model";
 
 @Injectable({
   providedIn: "root",
@@ -11,7 +12,7 @@ import { ProjectNewsRes } from "@office/projects/models/project-news.model";
 export class ProgramNewsService {
   constructor(private readonly apiService: ApiService) {}
 
-  fetchNews(programId: number): Observable<ProjectNewsRes> {
+  fetchNews(programId: number): Observable<ApiPagination<FeedNews>> {
     return this.apiService.get(`/programs/${programId}/news/`);
   }
 

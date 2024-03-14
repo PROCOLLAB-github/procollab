@@ -2,8 +2,6 @@
 import { ChatMessage } from "@models/chat-message.model";
 import { ApiPagination } from "@models/api-pagination.model";
 
-export type LoadChatMessages = ApiPagination<ChatMessage>;
-
 export class OnChangeStatus {
   userId!: number;
 }

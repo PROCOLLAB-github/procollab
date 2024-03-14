@@ -9,7 +9,6 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { AuthService } from "@auth/services";
 import { ModalService } from "@ui/models/modal.service";
 import { ChatService } from "@services/chat.service";
-import { LoadChatMessages } from "@models/chat.model";
 import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
 import { ChatWindowComponent } from "@office/shared/chat-window/chat-window.component";
 import { PluralizePipe } from "projects/core";
@@ -17,6 +16,7 @@ import { FileItemComponent } from "@ui/components/file-item/file-item.component"
 import { IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import {} from "@angular/common";
+import { ApiPagination } from "@models/api-pagination.model";
 
 @Component({
   selector: "app-chat",
@@ -202,7 +202,7 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     deleteEvent$ && this.subscriptions$.push(deleteEvent$);
   }
 
-  private fetchMessages(): Observable<LoadChatMessages> {
+  private fetchMessages(): Observable<ApiPagination<ChatMessage>> {
     return this.chatService
       .loadMessages(
         Number(this.route.parent?.snapshot.paramMap.get("projectId")),
