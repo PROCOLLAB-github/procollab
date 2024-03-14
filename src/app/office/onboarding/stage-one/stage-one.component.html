@@ -2,52 +2,62 @@
 
 <div class="page">
   <div class="auth__greeting">
-    <h3 class="auth__title">Заполни данные о своей специальности</h3>
-    <!-- <p class="auth__info">
+    <h3 class="auth__title">Заполни данные о своей специальности и скиллах</h3>
+    <p class="auth__info">
       Для того, чтобы участники понимали с кем общаются и платформа могла рекомендовать тебя на
       самые подходящие вакансии
-    </p> -->
+    </p>
   </div>
-  <div class="content" [formGroup]="stageForm">
-    <section class="content__section content__left">
-      <h4 class="text-heading-4 content__section-heading">Поиск по библиотеке</h4>
-      <app-autocomplete-input
-        [suggestions]="inlineSpecializations()"
-        fieldToDisplay="name"
-        valueField="name"
-        fieldToDisplayMode="chip"
-        [forceSelect]="true"
-        [error]="stageForm.controls['speciality'] | controlError"
-        (searchStart)="onSearchSpec($event)"
-        placeholder="Название специальности"
+  <form [formGroup]="stageForm" class="page__form">
+    @if (stageForm.get('speciality'); as speciality) {
+    <fieldset class="page__field">
+      <label for="speciality" class="field-label">Специальность</label>
+      <app-input
+        id="speciality"
+        [error]="speciality | controlError"
+        type="text"
+        placeholder="Например: Java Developer"
         formControlName="speciality"
-      ></app-autocomplete-input>
-      @if (stageForm.controls['speciality'] | controlError) {
+      ></app-input>
+      @if (speciality | controlError:'required') {
       <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
       }
-    </section>
-    <section class="content__section content__right">
-      <h4 class="text-heading-4 content__section-heading content__right-heading">Библиотека</h4>
-      <div class="content__specs-groups">
-        <ul class="content__specs-groups-list">
-          @for (spec of nestedSpecializations$ | async; track spec.id) {
-          <li class="content__specs-groups-list-item">
-            <app-specializations-group
-              [title]="spec.name"
-              [options]="spec.specializations"
-              (selectOption)="onSelectSpec($event)"
-            ></app-specializations-group>
-          </li>
-          }
-        </ul>
+    </fieldset>
+    }
+    <div class="page__field">
+      <label class="field-label">Ключевые навыки</label>
+      <ul class="tag-list">
+        @for (skill of keySkills.controls; let i = $index; track i) {
+        <li class="tag-list__item">
+          <app-tag>
+            <span>{{ skill.value }}</span>
+            <i
+              class="tag-list__remove-icon"
+              appIcon
+              icon="basket"
+              appSquare="24"
+              (click)="removeKeySkill(i)"
+            ></i>
+          </app-tag>
+        </li>
+        }
+      </ul>
+      <div class="tag-list-form">
+        <app-input
+          (enter)="addKeySkill()"
+          [(appValue)]="newKeySkillTitle"
+          class="tag-list-form__input"
+          placeholder="Введите свой навык, например: Python"
+        ></app-input>
+        <app-button type="button" class="tag-list-form__button" (click)="addKeySkill()">
+          <i appIcon icon="check" appWidth="12" appHeight="10"></i>
+        </app-button>
       </div>
-    </section>
-    <div class="content__actions">
-      <app-button type="submit" [loader]="stageSubmitting()" (click)="onSubmit()"
-        >Продолжить</app-button
-      >
     </div>
-  </div>
+    <app-button type="submit" [loader]="stageSubmitting" (click)="onSubmit()"
+      >Продолжить</app-button
+    >
+  </form>
 </div>
