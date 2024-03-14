@@ -16,7 +16,7 @@ export class OnboardingService {
         city: p.city,
         organization: p.organization,
         speciality: p.speciality,
-        skills: p.skills,
+        keySkills: p.keySkills,
         userType: p.userType,
       });
 
