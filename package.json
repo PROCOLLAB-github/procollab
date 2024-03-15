@@ -7,7 +7,7 @@
     "build:social:dev": "npm run build:sprite && ng build social_platform_dev",
     "build:social:prod": "npm run build:sprite && ng build social_platform_prod",
     "build:skills:prod": "ng build skills",
-    "build:prod": "npm run build:social:prod & npm run build:social:prod",
+    "build:prod": "npm run build:social:prod & npm run build:skills:prod",
     "build:pr": "npm run build:social:dev && npm run build:skills:prod",
     "watch": "ng build --watch social_platform_dev",
     "build:sprite": "svg-sprite -s --dest=projects/social_platform/src/assets/icons 'projects/social_platform/src/assets/icons/svg/**/*.svg'",
