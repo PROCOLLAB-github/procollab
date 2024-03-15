@@ -2,7 +2,11 @@
 <div class="card">
   <div class="card__head">
     <a class="card__title" [routerLink]="resourceLink">
-      <img class="card__avatar" [src]="feedItem.imageAddress" [alt]="feedItem.name" />
+      <img
+        class="card__avatar"
+        [src]="feedItem.imageAddress || placeholderUrl"
+        [alt]="feedItem.name"
+      />
       <div>
         <div class="card__name">{{ feedItem.name }}</div>
         <div class="card__date text-body-14">

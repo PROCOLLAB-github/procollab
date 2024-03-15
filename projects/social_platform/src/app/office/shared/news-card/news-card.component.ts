@@ -70,6 +70,8 @@ export class NewsCardComponent implements OnInit {
   @Output() like = new EventEmitter<number>();
   @Output() edited = new EventEmitter<FeedNews>();
 
+  placeholderUrl = "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif";
+
   newsTextExpandable!: boolean;
   readMore = false;
   editMode = false;
