@@ -1,0 +1,49 @@
+/** @format */
+
+@use "styles/responsive";
+@use "styles/typography";
+
+.verification {
+  &__send-again {
+    display: flex;
+    align-items: center;
+    color: var(--accent);
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--accent-dark);
+    }
+  }
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__img {
+    width: 335px;
+    margin-top: 55px;
+
+    @include responsive.apply-desktop {
+      width: 470px;
+      margin-top: 0;
+    }
+  }
+
+  &__action {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  &__text {
+    max-width: 185px;
+    color: var(--dark-grey);
+  }
+}

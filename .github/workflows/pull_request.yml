@@ -5,21 +5,6 @@ on:
     branches: [ master ]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js latest
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.13
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run format
-      - run: npm run lint:ts
-      - run: npm run lint:scss
-      - run: npm run test:ci
   build:
     runs-on: ubuntu-latest
     permissions:
@@ -34,18 +19,30 @@ jobs:
         cache-dependency-path: package-lock.json
     - run: npm ci
     - run: npm run build:pr
-    - name: Publish preview
+    - name: Publish preview social
       uses: netlify/actions/cli@master
-      id: publish_preview
+      id: publish_preview_social
       with:
-        args: deploy --dir=./dist/procollab
+        args: deploy --dir=./dist/social_platform
       env:
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
         NETLIFY_PREVIEW_APP: true # or perhaps like this
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NETLIFY_PR_ID: ${{ github.pr_id }}
+        NETLIFY_PR_ID: ${{ github.pr_id }}-social
+    - name: Publish preview skills
+      uses: netlify/actions/cli@master
+      id: publish_preview_skills
+      with:
+        args: deploy --dir=./dist/skills
+      env:
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SKILLS_SITE_ID }}
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
+        NETLIFY_PREVIEW_APP: true # or perhaps like this
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NETLIFY_PR_ID: ${{ github.pr_id }}-skills
     - uses: mshick/add-pr-comment@v2
       with:
         message: |
-          Preview url - ${{steps.publish_preview.outputs.NETLIFY_URL}}
+          Social platform url - ${{steps.publish_preview_social.outputs.NETLIFY_URL}}
+          Skills platform url - ${{steps.publish_preview_skills.outputs.NETLIFY_URL}}

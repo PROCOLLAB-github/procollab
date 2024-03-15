@@ -3,17 +3,19 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve procollab-dev",
-    "build": "npm run build:sprite && ng build",
-    "build:prod": "npm run build --configuration procollab",
-    "build:pr": "npm run build --configuration procollab-dev",
-    "watch": "ng build --watch --configuration procollab-dev",
-    "build:sprite": "svg-sprite -s --dest=src/assets/icons 'src/assets/icons/svg/**/*.svg'",
+    "start": "ng serve social_platform_dev",
+    "build:social:dev": "npm run build:sprite && ng build social_platform_dev",
+    "build:social:prod": "npm run build:sprite && ng build social_platform_prod",
+    "build:skills:prod": "ng build skills",
+    "build:prod": "npm run build:social:prod && npm run build:skills:prod",
+    "build:pr": "npm run build:social:dev && npm run build:skills:prod",
+    "watch": "ng build --watch social_platform_dev",
+    "build:sprite": "svg-sprite -s --dest=projects/social_platform/src/assets/icons 'projects/social_platform/src/assets/icons/svg/**/*.svg'",
     "test": "ng test",
     "test:ci": "ng test --browsers=Headless --no-watch",
-    "lint:ts": "eslint src/**/*.ts",
-    "format": "prettier --write src/",
-    "lint:scss": "stylelint src/**/*.scss --fix",
+    "lint:ts": "eslint projects/**/*.ts",
+    "format": "prettier --write projects/",
+    "lint:scss": "stylelint projects/**/*.scss --fix",
     "docs:json": "compodoc -p ./tsconfig.json -e json -d ."
   },
   "precommit": [
@@ -75,6 +77,7 @@
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
+    "ng-packagr": "^17.0.0",
     "pre-commit": "^1.2.2",
     "prettier": "2.7.1",
     "stylelint": "^14.9.1",
@@ -82,6 +85,6 @@
     "stylelint-config-recess-order": "^3.0.0",
     "stylelint-config-standard-scss": "^5.0.0",
     "svg-sprite": "^2.0.2",
-    "typescript": "~5.2"
+    "typescript": "5.2.2"
   }
 }

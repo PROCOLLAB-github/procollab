@@ -1,0 +1,82 @@
+/** @format */
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use "@angular/material" as mat;
+
+// BASE
+
+@import "styles/colors.scss";
+@import "styles/global.scss";
+@import "styles/responsive.scss";
+@import "styles/rounded.scss";
+@import "styles/typography.scss";
+
+// COMPONENTS
+
+@import "styles/components/bar.scss";
+@import "styles/components/key-skills.scss";
+@import "styles/components/nav.scss";
+@import "styles/components/contact-link.scss";
+
+// PAGES
+
+@import "styles/pages/members.scss";
+@import "styles/pages/auth.scss";
+@import "styles/pages/project-detail.scss";
+
+:root {
+  --app-height: 100%;
+}
+
+html,
+body {
+  min-width: 280px;
+  height: var(--app-height, 100%);
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+
+// stylelint-disable
+@include mat.core();
+
+.mat-progress-bar {
+  z-index: 200;
+}
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$procollab-primary: mat.define-palette(mat.$indigo-palette);
+
+$procollab-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$procollab-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$procollab-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $procollab-primary,
+      accent: $procollab-accent,
+      warn: $procollab-warn,
+    ),
+  )
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($procollab-theme);

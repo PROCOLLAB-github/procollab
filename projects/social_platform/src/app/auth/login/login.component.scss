@@ -1,0 +1,30 @@
+/** @format */
+
+@use "styles/responsive";
+@use "styles/typography";
+
+.login {
+  &__reg {
+    margin-bottom: 30px;
+
+    @include typography.body-14;
+
+    @include responsive.apply-desktop {
+      @include typography.body-16;
+    }
+  }
+
+  &__forget {
+    display: block;
+    margin-top: 12px;
+    text-align: center;
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      text-align: left;
+
+      @include typography.body-14;
+    }
+  }
+}

@@ -9,6 +9,7 @@
       "selector-class-pattern": null,
       "no-descending-specificity": null,
       "no-empty-source": null,
-      "selector-pseudo-element-no-unknown": null
+      "selector-pseudo-element-no-unknown": null,
+      "scss/at-import-partial-extension": null
     }
 }
