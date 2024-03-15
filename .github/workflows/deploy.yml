@@ -22,7 +22,7 @@ jobs:
           node-version: 18.16
           cache: 'npm'
       - run: npm ci
-      - run: ng build social_platform_prod & ng build skills
+      - run: npm run build:prod
       - name: deploy to server
         uses: burnett01/rsync-deployments@5.2.1
         with:
