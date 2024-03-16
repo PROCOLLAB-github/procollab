@@ -8,7 +8,6 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { ProgramService } from "@office/program/services/program.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { concatMap, map, noop, of, Subscription, tap } from "rxjs";
 import { Program } from "@office/program/models/program.model";
@@ -40,7 +39,6 @@ import { ApiPagination } from "@models/api-pagination.model";
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   constructor(
-    private readonly programService: ProgramService,
     private readonly programNewsService: ProgramNewsService,
     private readonly route: ActivatedRoute,
     private readonly cdRef: ChangeDetectorRef
