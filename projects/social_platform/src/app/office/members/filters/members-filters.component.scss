@@ -1,0 +1,85 @@
+@use "styles/responsive";
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 63px;
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    padding: 7px 10px;
+    color: var(--black);
+    cursor: pointer;
+    background-color: var(--grey-button);
+    border: 1px solid transparent;
+    border-radius: var(--rounded-lg);
+
+    i {
+      margin-left: 10px;
+      transition: transform 0.5s;
+    }
+
+    &--open {
+      background-color: var(--white);
+      border: 1px solid var(--medium-grey-for-outline);
+
+      i {
+        color: var(--accent);
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  &__controls {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    transition: grid-template-rows 0.5s;
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      min-height: 0;
+      visibility: hidden;
+      transition: visibility 0.5s;
+
+      @include responsive.apply-desktop {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+
+    &--open {
+      grid-template-rows: 1fr;
+
+      form {
+        visibility: visible;
+      }
+    }
+  }
+
+  &__age {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 168px;
+    font-size: 12px;
+  }
+}
+
+.input {
+  padding: 0 10px 6px;
+  font-size: 12px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--grey-button);
+  outline: none;
+
+  &:focus {
+    border-color: var(--accent);
+  }
+}

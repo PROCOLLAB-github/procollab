@@ -1,0 +1,27 @@
+/** @format */
+
+@use "styles/responsive";
+
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0 15px;
+
+  @include responsive.apply-desktop {
+    padding: 0 100px;
+  }
+
+  &__header {
+    position: absolute;
+    top: 80px;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+  }
+}

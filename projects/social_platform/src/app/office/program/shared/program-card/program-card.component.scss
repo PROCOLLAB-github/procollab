@@ -1,0 +1,73 @@
+/** @format */
+
+@use "styles/responsive";
+
+.card {
+  position: relative;
+  padding: 24px 15px;
+  background-color: var(--white);
+  border-radius: 15px;
+
+  @include responsive.apply-desktop {
+    border: 1px solid var(--medium-grey-for-outline);
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+
+  &__basket {
+    color: var(--red);
+  }
+
+  &__draft {
+    color: var(--red);
+  }
+
+  &__name {
+    margin-bottom: 3px;
+    color: var(--black);
+  }
+
+  &__media {
+    display: flex;
+    margin-top: 16px;
+    color: var(--dark-grey);
+  }
+
+  &__views {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+
+    i {
+      margin-right: 5px;
+    }
+  }
+
+  &__industry {
+    color: var(--dark-grey);
+  }
+
+  &__description {
+    color: var(--dark-grey);
+
+    &:not(:last-child) {
+      margin-bottom: 16px;
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+
+    &:empty {
+      margin-top: 0;
+    }
+  }
+}
