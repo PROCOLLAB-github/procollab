@@ -2,16 +2,14 @@
 
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from "@angular/core";
-import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
-import { ProfileInfoComponent } from "@ui/components/profile-info/profile-info.component";
+import { InviteManageCardComponent, ProfileInfoComponent, IconComponent } from "@uilib";
 import { ClickOutsideModule } from "ng-click-outside";
-import { User } from "@auth/models/user.model";
 import { Invite } from "@office/models/invite.model";
-import { IconComponent } from "@ui/components";
 import { RouterLink } from "@angular/router";
+import { User } from "../../../models/user.model";
 
 @Component({
-  selector: "ui-profile-control-panel",
+  selector: "app-profile-control-panel",
   standalone: true,
   imports: [
     CommonModule,

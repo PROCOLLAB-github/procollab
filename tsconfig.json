@@ -51,6 +51,13 @@
       "@models/*": [
         "projects/social_platform/src/app/office/models/*"
       ],
+      "@uilib": [
+        "./projects/ui/src/public-api.ts"
+      ],
+      "uilib/models": ["./projects/ui/src/models/*"],
+      "@corelib": [
+        "./projects/core/src/public-api.ts"
+      ],
       "core": [
         "./dist/core"
       ],

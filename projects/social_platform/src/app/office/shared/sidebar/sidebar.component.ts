@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { AuthService } from "@auth/services";
 import { NotificationService } from "@services/notification.service";
 import { InviteService } from "@services/invite.service";
@@ -8,13 +8,12 @@ import { Invite } from "@models/invite.model";
 import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { ProfileInfoComponent } from "@ui/components/profile-info/profile-info.component";
 import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
-import { ProfileControlPanelComponent } from "../profile-control-panel/profile-control-panel.component";
 import { AsyncPipe } from "@angular/common";
+import { ProfileControlPanelComponent, IconComponent } from "@uilib";
 import { ClickOutsideModule } from "ng-click-outside";
-import { IconComponent } from "@ui/components";
 
 @Component({
-  selector: "app-sidebar",
+  selector: "ui-sidebar",
   templateUrl: "./sidebar.component.html",
   styleUrl: "./sidebar.component.scss",
   standalone: true,
@@ -39,6 +38,8 @@ export class SidebarComponent implements OnInit {
 
   @Input({ required: true }) invites: Invite[] = [];
   @Input() hasUnreads = false;
+
+  @Output() logout = new EventEmitter<void>();
 
   ngOnInit(): void {}
 

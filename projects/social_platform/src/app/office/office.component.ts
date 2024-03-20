@@ -1,8 +1,8 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, Signal } from "@angular/core";
 import { IndustryService } from "@services/industry.service";
-import { forkJoin, map, noop, Observable, Subscription } from "rxjs";
+import { forkJoin, map, noop, Subscription } from "rxjs";
 import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
 import { Invite } from "@models/invite.model";
 import { AuthService } from "@auth/services";
@@ -14,8 +14,10 @@ import { DeleteConfirmComponent } from "@ui/components/delete-confirm/delete-con
 import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { NavComponent } from "./shared/nav/nav.component";
-import { SidebarComponent } from "./shared/sidebar/sidebar.component";
+import { SidebarComponent } from "@uilib";
 import { AsyncPipe } from "@angular/common";
+import { InviteService } from "@services/invite.service";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-office",
@@ -39,6 +41,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     public readonly authService: AuthService,
     private readonly projectService: ProjectService,
+    private readonly inviteService: InviteService,
     private readonly router: Router,
     public readonly chatService: ChatService
   ) {}
@@ -89,9 +92,11 @@ export class OfficeComponent implements OnInit, OnDestroy {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
-  invites$: Observable<Invite[]> = this.route.data.pipe(
-    map(r => r["invites"]),
-    map(invites => invites.filter((invite: Invite) => invite.isAccepted === null))
+  invites: Signal<Invite[]> = toSignal(
+    this.route.data.pipe(
+      map(r => r["invites"]),
+      map(invites => invites.filter((invite: Invite) => invite.isAccepted === null))
+    )
   );
 
   subscriptions$: Subscription[] = [];
@@ -104,5 +109,34 @@ export class OfficeComponent implements OnInit, OnDestroy {
   onAcceptWaitVerification() {
     this.waitVerificationAccepted = true;
     localStorage.setItem("waitVerificationAccepted", "true");
+  }
+
+  onRejectInvite(inviteId: number): void {
+    this.inviteService.rejectInvite(inviteId).subscribe(() => {
+      const index = this.invites().findIndex(invite => invite.id === inviteId);
+      this.invites().splice(index, 1);
+    });
+  }
+
+  onAcceptInvite(inviteId: number): void {
+    this.inviteService.acceptInvite(inviteId).subscribe(() => {
+      const index = this.invites().findIndex(invite => invite.id === inviteId);
+      const invite = JSON.parse(JSON.stringify(this.invites()[index]));
+      this.invites().splice(index, 1);
+
+      this.router
+        .navigateByUrl(`/office/projects/${invite.project.id}`)
+        .then(() => console.debug("Route changed from SidebarComponent"));
+    });
+  }
+
+  onLogout() {
+    this.authService
+      .logout()
+      .subscribe(() =>
+        this.router
+          .navigateByUrl("/auth")
+          .then(() => console.debug("Route changed from OfficeComponent"))
+      );
   }
 }

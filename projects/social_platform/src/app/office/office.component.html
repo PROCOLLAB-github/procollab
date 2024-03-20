@@ -1,16 +1,21 @@
 <!-- @format -->
 
 <div class="office">
-  @if (invites$ | async; as invites) {
-
-  <app-sidebar
+  @if (authService.profile | async; as user) {
+  <ui-sidebar
     class="office__sidebar"
+    logoSrc="/assets/images/shared/logo.svg"
+    [user]="user"
     [hasUnreads]="!!(chatService.unread$ | async)"
-    [invites]="invites"
-  ></app-sidebar>
+    [invites]="invites()"
+    (logout)="onLogout()"
+    (acceptInvite)="onAcceptInvite($event)"
+    (rejectInvite)="onRejectInvite($event)"
+  ></ui-sidebar>
+  }
   <div class="office__wrapper">
     <div class="office__top">
-      <app-nav [invites]="invites"></app-nav>
+      <app-nav [invites]="invites()"></app-nav>
     </div>
     <div class="office__body">
       <div class="office__inner">
@@ -18,7 +23,6 @@
       </div>
     </div>
   </div>
-  }
   <app-modal [open]="waitVerificationModal && !waitVerificationAccepted">
     <div class="message-modal">
       <img src="/assets/images/office/shared/wait.png" alt="wait" width="215px" />

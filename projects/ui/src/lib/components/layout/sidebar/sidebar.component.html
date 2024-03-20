@@ -1,0 +1,72 @@
+<!-- @format -->
+
+<div class="sidebar">
+  <a class="sidebar__logo" routerLink="/office">
+    <img [src]="logoSrc" alt="logo" />
+  </a>
+  <nav class="sidebar-nav sidebar__nav">
+    <div class="sidebar-nav__list" (mouseenter)="showBar = true" (mouseleave)="showBar = false">
+      <div
+        class="sidebar-nav__bar"
+        [style.opacity]="showBar ? 1 : 0"
+        [style.top]="barPosition * 55 + 'px'"
+      ></div>
+      <a
+        class="sidebar-nav__item text-body-14"
+        routerLink="feed"
+        (mouseenter)="barPosition = 0"
+        routerLinkActive="sidebar-nav__item&#45;&#45;active"
+      >
+        <i appIcon icon="feed" appSquare="24" appViewBox="0 0 24 20"></i>
+        Новости
+      </a>
+      <a
+        class="sidebar-nav__item text-body-14"
+        routerLink="projects"
+        (mouseenter)="barPosition = 1"
+        routerLinkActive="sidebar-nav__item&#45;&#45;active"
+      >
+        <i appIcon icon="projects-filled" appSquare="24" appViewBox="0 0 24 20"></i>
+        Проекты
+      </a>
+      <a
+        class="sidebar-nav__item text-body-14"
+        routerLink="program/list"
+        (mouseenter)="barPosition = 2"
+        routerLinkActive="sidebar-nav__item&#45;&#45;active"
+      >
+        <i appIcon icon="program" appSquare="24" appViewBox="0 0 24 16"></i>
+        Программы
+      </a>
+      <a
+        class="sidebar-nav__item text-body-14"
+        routerLink="members"
+        (mouseenter)="barPosition = 3"
+        routerLinkActive="sidebar-nav__item&#45;&#45;active"
+      >
+        <i appIcon icon="people-bold" appSquare="24" appViewBox="0 0 24 18"></i>
+        Участники
+      </a>
+      <a
+        class="sidebar-nav__item text-body-14"
+        routerLink="mentors"
+        (mouseenter)="barPosition = 4"
+        routerLinkActive="sidebar-nav__item&#45;&#45;active"
+      >
+        <i appIcon icon="two-people" appSquare="24" appViewBox="0 0 28 20"></i>
+        Эксперты
+      </a>
+    </div>
+  </nav>
+  @if (user) {
+  <app-profile-control-panel
+    [invites]="invites"
+    [hasNotifications]="!!(hasNotifications | async)"
+    [hasUnreads]="hasUnreads"
+    [user]="user"
+    (acceptInvite)="acceptInvite.emit($event)"
+    (rejectInvite)="rejectInvite.emit($event)"
+    (logout)="logout.emit()"
+  ></app-profile-control-panel>
+  }
+</div>

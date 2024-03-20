@@ -1,0 +1,25 @@
+<!-- @format -->
+
+<div
+  class="avatar"
+  [class.avatar--border]="hasBorder"
+  [style.width]="size + 'px'"
+  [style.height]="size + 'px'"
+>
+  <img
+    [src]="url || placeholderUrl"
+    [style.width]="size + 'px'"
+    [style.height]="size + 'px'"
+    alt="avatar"
+  />
+  @if (isOnline) {
+  <div
+    [style.width]="onlineBadgeSize + 'px'"
+    [style.height]="onlineBadgeSize + 'px'"
+    [style.border-width]="onlineBadgeBorder + 'px'"
+    [style.right]="onlineBadgeOffset + 'px'"
+    [style.bottom]="onlineBadgeOffset + 'px'"
+    class="avatar__online"
+  ></div>
+  }
+</div>
