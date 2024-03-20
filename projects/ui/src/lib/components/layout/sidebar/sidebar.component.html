@@ -24,11 +24,11 @@
       }
     </div>
   </nav>
-  @if (user && invites && hasUnreads) {
+  @if (user !== undefined && invites !== undefined) {
   <app-profile-control-panel
     [invites]="invites"
     [hasNotifications]="!!(hasNotifications | async)"
-    [hasUnreads]="hasUnreads"
+    [hasUnreads]="!!hasUnreads"
     [user]="user"
     (acceptInvite)="acceptInvite.emit($event)"
     (rejectInvite)="rejectInvite.emit($event)"
