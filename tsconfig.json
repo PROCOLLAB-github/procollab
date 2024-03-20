@@ -53,6 +53,9 @@
       ],
       "core": [
         "./dist/core"
+      ],
+      "ui": [
+        "./dist/ui"
       ]
     },
     "useDefineForClassFields": false
