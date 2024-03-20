@@ -1,0 +1,89 @@
+/** @format */
+
+@import "typography";
+
+/** @format */
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  overflow-y: hidden;
+}
+
+ul,
+li,
+ol {
+  list-style-type: none;
+}
+
+fieldset {
+  border: none;
+  outline: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a,
+.link {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--accent-hover);
+  }
+}
+
+.edit-link {
+  position: relative;
+
+  &__remove {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    color: var(--white);
+    cursor: pointer;
+    background-color: var(--gray);
+    border-radius: 0 8px 8px 0;
+  }
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+label.field-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--black);
+
+  @include body-14;
+}
+
+.error {
+  display: block;
+  gap: 10px;
+  margin-top: 6px;
+  color: var(--red);
+
+  p {
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+}

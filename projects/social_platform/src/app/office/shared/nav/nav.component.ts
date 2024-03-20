@@ -8,10 +8,9 @@ import { NotificationService } from "@services/notification.service";
 import { Invite } from "@models/invite.model";
 import { AuthService } from "@auth/services";
 import { InviteService } from "@services/invite.service";
-import { ProfileInfoComponent } from "@ui/components/profile-info/profile-info.component";
-import { InviteManageCardComponent } from "../invite-manage-card/invite-manage-card.component";
 import { AsyncPipe } from "@angular/common";
 import { IconComponent } from "@ui/components";
+import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
 
 @Component({
   selector: "app-nav",

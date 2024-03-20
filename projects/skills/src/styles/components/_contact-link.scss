@@ -1,0 +1,25 @@
+.contact-link {
+  color: var(--accent);
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--accent-dark);
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+  }
+
+  &__icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    margin-right: 12px;
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 6px;
+  }
+}

@@ -14,6 +14,12 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { BehaviorSubject } from "rxjs";
 import { User } from "../../../models/user.model";
 
+export interface NavItem {
+  link: string;
+  icon: string;
+  name: string;
+}
+
 @Component({
   selector: "ui-sidebar",
   templateUrl: "./sidebar.component.html",
@@ -33,10 +39,11 @@ import { User } from "../../../models/user.model";
 export class SidebarComponent implements OnInit {
   @Input() user?: User;
 
-  @Input() invites: Invite[] = [];
-  @Input() hasUnreads = false;
+  @Input() invites?: Invite[] = [];
+  @Input() hasUnreads?: boolean = false;
   @Input() hasNotifications?: BehaviorSubject<boolean>;
 
+  @Input() navItems: NavItem[] = [];
   @Input({ required: true }) logoSrc!: string;
 
   @Output() logout = new EventEmitter<void>();
@@ -45,11 +52,6 @@ export class SidebarComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  showNotifications = false;
-
   barPosition = 0;
   showBar = true;
-  onClickOutside() {
-    this.showNotifications = false;
-  }
 }

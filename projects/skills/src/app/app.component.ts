@@ -14,4 +14,5 @@ import { SidebarComponent } from "@uilib";
 })
 export class AppComponent {
   title = "skills";
+  navItems = [{ name: "sdfds", icon: "lib", link: "" }];
 }

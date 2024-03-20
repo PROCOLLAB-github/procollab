@@ -1,1 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
+
+/** @format */
+@import "styles/colors.scss";
+@import "styles/global.scss";
+@import "styles/responsive.scss";
+@import "styles/rounded.scss";
+@import "styles/typography.scss";
+
+// COMPONENTS
+
+@import "styles/components/bar.scss";
+@import "styles/components/key-skills.scss";
+@import "styles/components/nav.scss";
+@import "styles/components/contact-link.scss";
+
+// PAGES
+
+@import "styles/pages/members.scss";
+@import "styles/pages/auth.scss";
+@import "styles/pages/project-detail.scss";
+
+:root {
+  --app-height: 100%;
+}
+
+html,
+body {
+  min-width: 280px;
+  height: var(--app-height, 100%);
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

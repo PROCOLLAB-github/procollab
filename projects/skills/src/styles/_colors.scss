@@ -1,0 +1,28 @@
+/** @format */
+
+@use "sass:color";
+
+:root {
+  // ACCENT
+  --gradient: linear-gradient(90deg, #242424 0%, #6c27ff 50%);
+  --gradient-mild: linear-gradient(90deg, #501d53 0.3%, #3b1f72 22%, #6326e6 100%);
+  --accent: #6c27ff;
+  --accent-dark: #{color.adjust(#6c27ff, $blackness: 20%)};
+  --accent-mild: #{color.adjust(#6c27ff, $alpha: -0.4)};
+  --accent-light: #f7f3ff;
+
+  // GRAY
+  --white: #fff;
+  --black: #332e2d;
+  --dark-grey: #8c888a;
+  --gray: #d3d3d3;
+  --light-gray: #f9f9f9;
+  --grey-button: #e5e5e5e5;
+  --medium-grey-for-outline: #eee;
+  --grey-for-text: #a59fb9;
+
+  // FUNCTIONAL
+  --green: #73c66e;
+  --red: #ff5151;
+  --red-dark: #{color.adjust(#ff5151, $blackness: 10%)};
+}

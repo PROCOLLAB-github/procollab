@@ -1,0 +1,197 @@
+/** @format */
+
+@font-face {
+  font-family: Mont;
+  font-style: normal;
+  font-weight: 900;
+  src:
+    local(""),
+    url("../assets/font/Mont-Black.eot?#iefix") format("embedded-opentype"),
+    url("../assets/font/Mont-Black.woff2") format("woff2"),
+    url("../assets/font/Mont-Black.woff") format("woff"),
+    url("../assets/font/Mont-Black.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: Mont;
+  font-style: normal;
+  font-weight: 800;
+  src: url("../assets/font/Mont-Heavy.eot");
+  src:
+    local(""),
+    url("../assets/font/Mont-Heavy.eot?#iefix") format("embedded-opentype"),
+    url("../assets/font/Mont-Heavy.woff2") format("woff2"),
+    url("../assets/font/Mont-Heavy.woff") format("woff"),
+    url("../assets/font/Mont-Heavy.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: Mont;
+  font-style: normal;
+  font-weight: bold;
+  src: url("../assets/font/Mont-Bold.eot");
+  src:
+    local(""),
+    url("../assets/font/Mont-Bold.eot?#iefix") format("embedded-opentype"),
+    url("../assets/font/Mont-Bold.woff2") format("woff2"),
+    url("../assets/font/Mont-Bold.woff") format("woff"),
+    url("../assets/font/Mont-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: Mont;
+  font-style: normal;
+  font-weight: 600;
+  src: url("../assets/font/Mont-SemiBold.eot");
+  src:
+    local(""),
+    url("../assets/font/Mont-SemiBold.eot?#iefix") format("embedded-opentype"),
+    url("../assets/font/Mont-SemiBold.woff2") format("woff2"),
+    url("../assets/font/Mont-SemiBold.woff") format("woff"),
+    url("../assets/font/Mont-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: Mont;
+  font-style: normal;
+  font-weight: normal;
+  src: url("../assets/font/Mont-Regular.eot");
+  src:
+    local(""),
+    url("../assets/font/Mont-Regular.eot?#iefix") format("embedded-opentype"),
+    url("../assets/font/Mont-Regular.woff2") format("woff2"),
+    url("../assets/font/Mont-Regular.woff") format("woff"),
+    url("../assets/font/Mont-Regular.ttf") format("truetype");
+}
+
+@mixin heading-1 {
+  font-family: Mont, sans-serif;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+.text-heading-1 {
+  @include heading-1;
+}
+
+@mixin heading-2 {
+  font-family: Mont, sans-serif;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+.text-heading-2 {
+  @include heading-2;
+}
+
+@mixin heading-3 {
+  font-family: Mont, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+.text-heading-3 {
+  @include heading-3;
+}
+
+@mixin heading-4 {
+  font-family: Mont, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+.text-heading-4 {
+  @include heading-4;
+}
+
+@mixin body-18 {
+  font-family: Mont, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+}
+
+.text-body-18 {
+  @include body-18;
+}
+
+@mixin body-bold-18 {
+  font-family: Mont, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 130%;
+}
+
+.text-body-bold-18 {
+  @include body-18;
+}
+
+@mixin bold-body-16 {
+  font-family: Mont, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+.text-bold-body-16 {
+  @include bold-body-16;
+}
+
+@mixin body-16 {
+  font-family: Mont, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+}
+
+.text-body-16 {
+  @include body-16;
+}
+
+@mixin bold-body-14 {
+  font-family: Mont, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+}
+
+.text-bold-body-14 {
+  @include bold-body-14;
+}
+
+@mixin body-14 {
+  font-family: Mont, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+}
+
+.text-body-14 {
+  @include body-14;
+}
+
+@mixin body-12 {
+  font-family: Mont, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%;
+}
+
+.text-body-12 {
+  @include body-12;
+}

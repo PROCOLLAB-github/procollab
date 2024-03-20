@@ -5,6 +5,7 @@
   <ui-sidebar
     class="office__sidebar"
     logoSrc="/assets/images/shared/logo.svg"
+    [navItems]="navItems"
     [user]="user"
     [hasUnreads]="!!(chatService.unread$ | async)"
     [invites]="invites()"
