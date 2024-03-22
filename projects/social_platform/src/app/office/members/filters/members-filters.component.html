@@ -11,21 +11,33 @@
   </button>
   <div class="filters__controls" [class.filters__controls--open]="filtersOpen">
     <form [formGroup]="filterForm">
-      <input
+      <app-autocomplete-input
+        class="filter__autocomplete"
+        [suggestions]="specsOptions()"
+        [slimVersion]="true"
+        fieldToDisplay="name"
+        valueField="name"
         formControlName="speciality"
-        class="input filter__item"
         placeholder="Специальность"
-        type="text"
-      />
-      <input
+        (searchStart)="onSearchSpec($event)"
+        (inputCleared)="onClearSpecField()"
+      ></app-autocomplete-input>
+      <app-autocomplete-input
+        class="filter__autocomplete"
+        [suggestions]="skillsOptions()"
+        [slimVersion]="true"
+        fieldToDisplay="name"
+        valueField="name"
         formControlName="keySkill"
-        type="text"
-        class="input filter__item"
-        placeholder="Навыки"
-      />
-      <div class="filters__age filter__item">
-        <span>Возраст</span>
-        <app-range-input formControlName="age"></app-range-input>
+        placeholder="Навык"
+        (searchStart)="onSearchSkill($event)"
+        (inputCleared)="onClearSkillField()"
+      ></app-autocomplete-input>
+      <div class="filters__age-wrapper">
+        <div class="filters__age filter__item">
+          <span>Возраст</span>
+          <app-range-input formControlName="age"></app-range-input>
+        </div>
       </div>
     </form>
   </div>

@@ -2,9 +2,9 @@
 
 .field {
   position: relative;
+  width: 100%;
 
   &__input-wrapper {
-    position: relative;
     z-index: 3;
     width: 100%;
     overflow: hidden;
@@ -30,14 +30,6 @@
 
     &:focus {
       border-color: var(--accent);
-
-      +.field__arrow {
-        color: var(--accent);
-
-        i {
-          transform: rotate(0);
-        }
-      }
     }
 
     &--no-icon {
@@ -47,13 +39,35 @@
     @include typography.body-16;
   }
 
+  &__input-slim {
+    width: 100%;
+    padding: 6px 30px 6px 10px;
+    font-size: 12px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--grey-button);
+    outline: none;
+
+    &:focus {
+      border-color: var(--accent);
+
+      +&_arrow {
+        color: var(--accent);
+
+        i {
+          transform: rotate(0);
+        }
+      }
+    }
+  }
+
   &__dropdown {
     position: absolute;
     right: 0;
     left: 0;
     z-index: 4;
     background-color: transparent;
-    box-shadow: 5px 5px 25px 0 var(--gray-for-shadow);
+    box-shadow: 5px 5px 25px 0 var(--gray);
     transform-origin: center top;
 
     &--options,
@@ -78,6 +92,12 @@
     }
 
     @include typography.body-14;
+
+    &-slim {
+      padding: 3px;
+
+      @include typography.body-12;
+    }
   }
 
   &__chip {
@@ -121,22 +141,5 @@
 
   &__loading-icon {
     margin-right: 5px;
-  }
-}
-
-.blink {
-  animation: blink 2s infinite both;
-}
-
-@keyframes blink {
-  0%,
-  50%,
-  100% {
-    opacity: 1;
-  }
-
-  25%,
-  75% {
-    opacity: 0;
   }
 }

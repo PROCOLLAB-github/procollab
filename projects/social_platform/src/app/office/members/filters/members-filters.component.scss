@@ -44,7 +44,6 @@
       flex-direction: column;
       gap: 40px;
       min-height: 0;
-      visibility: hidden;
       transition: visibility 0.5s;
 
       @include responsive.apply-desktop {
@@ -55,10 +54,12 @@
 
     &--open {
       grid-template-rows: 1fr;
+      overflow: unset;
+      animation: 0.5s delay-overflow;
+    }
 
-      form {
-        visibility: visible;
-      }
+    @keyframes delay-overflow {
+      from { overflow: hidden; }
     }
   }
 
@@ -69,17 +70,12 @@
     width: 168px;
     font-size: 12px;
   }
-}
 
-.input {
-  padding: 0 10px 6px;
-  font-size: 12px;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--grey-button);
-  outline: none;
+  &__autocomplete {
+    flex-grow: 1;
 
-  &:focus {
-    border-color: var(--accent);
+    @include responsive.apply-desktop {
+      flex-grow: unset;
+    }
   }
 }
