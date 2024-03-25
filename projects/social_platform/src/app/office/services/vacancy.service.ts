@@ -22,7 +22,7 @@ export class VacancyService {
 
   postVacancy(
     projectId: number,
-    vacancy: { role: string; required_skills: string[] }
+    vacancy: { role: string; requiredSkillsIds: number[] }
   ): Observable<Vacancy> {
     return this.apiService
       .post("/vacancies/", {

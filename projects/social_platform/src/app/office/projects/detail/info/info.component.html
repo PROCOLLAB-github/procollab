@@ -218,7 +218,7 @@
               </a>
             </div>
             <p class="text-body-12 vacancy__requirements">
-              {{ vacancy.requiredSkills.join(" • ") }}
+              {{ vacancy.getSkillsNames().join(" • ") }}
             </p>
           </li>
         </ng-template>

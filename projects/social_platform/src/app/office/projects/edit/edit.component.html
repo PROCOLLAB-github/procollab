@@ -334,28 +334,43 @@
               }
             </fieldset>
             }
-            <fieldset>
-              <ul class="vacancy__form-list">
-                @for (skill of requiredSkills.controls; let i = $index; track i) {
-                <li class="vacancy__skill">
-                  <app-tag class="skill">
-                    <span>{{ skill.value }}</span>
-                    <i appIcon icon="basket" appSquare="24" (click)="removeRequiredSkill(i)"></i>
-                  </app-tag>
-                </li>
-                }
-              </ul>
-              <div class="vacancy__form-skill-add">
-                <app-input
-                  placeholder="Навыки требуемого специалиста"
-                  (enter)="addRequiredSkill()"
-                  [(appValue)]="requiredSkillTitle"
-                ></app-input>
-                <app-button class="project__clickable" (click)="addRequiredSkill()">
-                  <i appIcon icon="check" appWidth="12" appHeight="10"></i>
+
+            <fieldset class="vacancy__search">
+              <div class="vacancies">
+                <app-autocomplete-input
+                  class="vacancies__input"
+                  placeholder="Поиск по навыкам"
+                  searchIcon=""
+                  [suggestions]="inlineSkills()"
+                  fieldToDisplay="name"
+                  [forceSelect]="true"
+                  [clearInputOnSelect]="true"
+                  (searchStart)="onSearchSkill($event)"
+                  (optionSelected)="onAddSkill($event)"
+                ></app-autocomplete-input>
+                <app-button
+                  type="button"
+                  class="vacancies__button"
+                  (click)="toggleSkillsGroupsModal()"
+                >
+                  <i appIcon icon="folder" appWidth="24" appHeight="24"></i>
                 </app-button>
               </div>
             </fieldset>
+
+            @if (vacancyForm.get('skills'); as skills) {
+            <fieldset class="skills-basket">
+              <app-skills-basket
+                formControlName="skills"
+                [error]="skills | controlError"
+              ></app-skills-basket>
+              @if (skills | controlError: 'required') {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            }
             <app-button
               class="vacancy__submit"
               [loader]="vacancyIsSubmitting"
@@ -395,3 +410,26 @@
     </app-modal>
   </main>
 </div>
+
+<app-modal [open]="skillsGroupsModalOpen()" class="modal">
+  <div class="modal__wrapper">
+    <h4 class="text-heading-4">Библиотека навыков</h4>
+    <div class="modal__content">
+      <div class="modal__skills-groups">
+        <ul>
+          @for (skillsGroup of nestedSkills$ | async; track skillsGroup.id) {
+          <li>
+            <app-skills-group
+              [title]="skillsGroup.name"
+              [options]="skillsGroup.skills"
+              [selected]="this.vacancyForm.getRawValue().skills"
+              (optionToggled)="onToggleSkill($event)"
+            ></app-skills-group>
+          </li>
+          }
+        </ul>
+      </div>
+    </div>
+    <app-button (click)="toggleSkillsGroupsModal()">Сохранить</app-button>
+  </div>
+</app-modal>

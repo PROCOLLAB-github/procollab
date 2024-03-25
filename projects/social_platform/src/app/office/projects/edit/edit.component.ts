@@ -1,6 +1,13 @@
 /** @format */
 
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   AbstractControl,
@@ -34,6 +41,11 @@ import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { AsyncPipe } from "@angular/common";
 import { BackComponent } from "@ui/components/back/back.component";
+import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
+import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-basket.component";
+import { Skill } from "@office/models/skill";
+import { SkillsService } from "@office/services/skills.service";
+import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";
 
 @Component({
   selector: "app-edit",
@@ -56,6 +68,9 @@ import { BackComponent } from "@ui/components/back/back.component";
     ModalComponent,
     AsyncPipe,
     ControlErrorPipe,
+    AutoCompleteInputComponent,
+    SkillsBasketComponent,
+    SkillsGroupComponent,
   ],
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -70,7 +85,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly vacancyService: VacancyService,
     private readonly inviteService: InviteService,
     private readonly cdRef: ChangeDetectorRef,
-    private readonly programService: ProgramService
+    private readonly programService: ProgramService,
+    private readonly skillsService: SkillsService
   ) {
     this.projectForm = this.fb.group({
       imageAddress: ["", [Validators.required]],
@@ -88,7 +104,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.vacancyForm = this.fb.group({
       role: ["", [Validators.required]],
-      requiredSkills: this.fb.array([]),
+      skills: [[], Validators.required],
     });
 
     this.inviteForm = this.fb.group({
@@ -233,24 +249,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   vacancies: Vacancy[] = [];
   vacancyForm: FormGroup;
 
-  requiredSkillTitle = "";
+  inlineSkills = signal<Skill[]>([]);
 
-  addRequiredSkill(): void {
-    if (!this.requiredSkillTitle) {
-      return;
-    }
+  nestedSkills$ = this.skillsService.getSkillsNested();
 
-    this.requiredSkills.push(this.fb.control(this.requiredSkillTitle ?? ""));
-    this.requiredSkillTitle = "";
-  }
-
-  removeRequiredSkill(index: number): void {
-    this.requiredSkills.removeAt(index);
-  }
-
-  get requiredSkills(): FormArray {
-    return this.vacancyForm.get("requiredSkills") as FormArray;
-  }
+  skillsGroupsModalOpen = signal(false);
 
   vacancySubmitInitiated = false;
   vacancyIsSubmitting = false;
@@ -275,13 +278,17 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.vacancyIsSubmitting = true;
 
+    const vacancy = {
+      ...this.vacancyForm.value,
+      requiredSkillsIds: this.vacancyForm.value.skills.map((s: Skill) => s.id),
+    };
+
     this.vacancyService
-      .postVacancy(Number(this.route.snapshot.paramMap.get("projectId")), this.vacancyForm.value)
+      .postVacancy(Number(this.route.snapshot.paramMap.get("projectId")), vacancy)
       .subscribe({
         next: vacancy => {
           this.vacancies.push(vacancy);
 
-          this.requiredSkills.clear();
           this.vacancyForm.reset();
 
           this.vacancyIsSubmitting = false;
@@ -491,5 +498,45 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   closeWarningModal(): void {
     this.warningModalSeen = true;
+  }
+
+  onToggleSkill(toggledSkill: Skill): void {
+    const { skills }: { skills: Skill[] } = this.vacancyForm.value;
+
+    const isPresent = skills.some(skill => skill.id === toggledSkill.id);
+
+    if (isPresent) {
+      this.onRemoveSkill(toggledSkill);
+    } else {
+      this.onAddSkill(toggledSkill);
+    }
+  }
+
+  onAddSkill(newSkill: Skill): void {
+    const { skills }: { skills: Skill[] } = this.vacancyForm.value;
+
+    const isPresent = skills.some(skill => skill.id === newSkill.id);
+
+    if (isPresent) return;
+
+    this.vacancyForm.patchValue({ skills: [newSkill, ...skills] });
+  }
+
+  onRemoveSkill(oddSkill: Skill): void {
+    const { skills }: { skills: Skill[] } = this.vacancyForm.value;
+
+    this.vacancyForm.patchValue({
+      skills: skills.filter(skill => skill.id !== oddSkill.id),
+    });
+  }
+
+  onSearchSkill(query: string): void {
+    this.skillsService.getSkillsInline(query, 1000, 0).subscribe(({ results }) => {
+      this.inlineSkills.set(results);
+    });
+  }
+
+  toggleSkillsGroupsModal(): void {
+    this.skillsGroupsModalOpen.update(open => !open);
   }
 }

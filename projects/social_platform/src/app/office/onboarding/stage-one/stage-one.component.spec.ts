@@ -7,7 +7,7 @@ import { of } from "rxjs";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AuthService } from "@auth/services";
 import { RouterTestingModule } from "@angular/router/testing";
-import { NgxMaskModule } from "ngx-mask";
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 
 describe("StageOneComponent", () => {
   let component: OnboardingStageOneComponent;
@@ -24,7 +24,7 @@ describe("StageOneComponent", () => {
       imports: [
         ReactiveFormsModule,
         RouterTestingModule,
-        NgxMaskModule.forRoot(),
+        HttpClientTestingModule,
         OnboardingStageOneComponent,
       ],
       providers: [{ provide: AuthService, useValue: authSpy }],

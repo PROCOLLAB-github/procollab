@@ -1,6 +1,13 @@
 /** @format */
 
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { AuthService } from "@auth/services";
 import {
   FormArray,
@@ -23,6 +30,15 @@ import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { AsyncPipe } from "@angular/common";
+import { Specialization } from "@office/models/specialization";
+import { SpecializationsService } from "@office/services/specializations.service";
+import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
+import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";
+import { SpecializationsGroupComponent } from "@office/shared/specializations-group/specializations-group.component";
+import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-basket.component";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { Skill } from "@office/models/skill";
+import { SkillsService } from "@office/services/skills.service";
 
 dayjs.extend(cpf);
 
@@ -43,6 +59,11 @@ dayjs.extend(cpf);
     EditorSubmitButtonDirective,
     AsyncPipe,
     ControlErrorPipe,
+    AutoCompleteInputComponent,
+    SkillsBasketComponent,
+    SkillsGroupComponent,
+    SpecializationsGroupComponent,
+    ModalComponent,
   ],
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -51,6 +72,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     public readonly authService: AuthService,
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
+    private readonly specsService: SpecializationsService,
+    private readonly skillsService: SkillsService,
     private readonly router: Router,
     private readonly navService: NavService
   ) {
@@ -63,8 +86,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       city: [""],
       links: this.fb.array([]),
       organization: [""],
-      speciality: [""],
-      keySkills: this.fb.array([]),
+      speciality: ["", [Validators.required]],
+      skills: [[], [Validators.required]],
       achievements: this.fb.array([]),
       avatar: [""],
       aboutMe: [""],
@@ -79,6 +102,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       .get("userType")
       ?.valueChanges.pipe(skip(1), concatMap(this.changeUserType.bind(this)))
       .subscribe(noop);
+
     userType$ && this.subscription$.push(userType$);
 
     const userAvatar$ = this.profileForm
@@ -88,6 +112,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         concatMap(url => this.authService.saveAvatar(url))
       )
       .subscribe(noop);
+
     userAvatar$ && this.subscription$.push(userAvatar$);
   }
 
@@ -105,6 +130,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         city: profile.city ?? "",
         organization: profile.organization ?? "",
         speciality: profile.speciality ?? "",
+        skills: profile.skills ?? [],
         avatar: profile.avatar ?? "",
         aboutMe: profile.aboutMe ?? "",
       });
@@ -136,8 +162,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         this.cdref.detectChanges();
       }
 
-      profile.keySkills?.forEach(skill => this.addKeySkill(skill));
-
       this.cdref.detectChanges();
     });
     profile$ && this.subscription$.push(profile$);
@@ -148,6 +172,18 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   profileId?: number;
+
+  inlineSpecs = signal<Specialization[]>([]);
+
+  nestedSpecs$ = this.specsService.getSpecializationsNested();
+
+  specsGroupsModalOpen = signal(false);
+
+  inlineSkills = signal<Skill[]>([]);
+
+  nestedSkills$ = this.skillsService.getSkillsNested();
+
+  skillsGroupsModalOpen = signal(false);
 
   subscription$: Subscription[] = [];
 
@@ -208,28 +244,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.achievements.removeAt(i);
   }
 
-  get keySkills(): FormArray {
-    return this.profileForm.get("keySkills") as FormArray;
-  }
-
-  newKeySkillTitle = "";
-
-  addKeySkill(title?: string): void {
-    const fromState = title ?? this.newKeySkillTitle;
-    if (!fromState) {
-      return;
-    }
-
-    const control = this.fb.control(fromState, [Validators.required]);
-    this.keySkills.push(control);
-
-    this.newKeySkillTitle = "";
-  }
-
-  removeKeySkill(i: number): void {
-    this.keySkills.removeAt(i);
-  }
-
   get links(): FormArray {
     return this.profileForm.get("links") as FormArray;
   }
@@ -270,6 +284,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       birthday: this.profileForm.value.birthday
         ? dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD")
         : undefined,
+      skillsIds: this.profileForm.value.skills.map((s: Skill) => s.id),
     };
 
     this.authService
@@ -297,5 +312,57 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         userType: typeId,
       })
       .pipe(map(() => location.reload()));
+  }
+
+  onSelectSpec(speciality: Specialization): void {
+    this.profileForm.patchValue({ speciality: speciality.name });
+  }
+
+  onSearchSpec(query: string): void {
+    this.specsService.getSpecializationsInline(query, 1000, 0).subscribe(({ results }) => {
+      this.inlineSpecs.set(results);
+    });
+  }
+
+  toggleSpecsGroupsModal(): void {
+    this.specsGroupsModalOpen.update(open => !open);
+  }
+
+  onToggleSkill(toggledSkill: Skill): void {
+    const { skills }: { skills: Skill[] } = this.profileForm.value;
+
+    const isPresent = skills.some(skill => skill.id === toggledSkill.id);
+
+    if (isPresent) {
+      this.onRemoveSkill(toggledSkill);
+    } else {
+      this.onAddSkill(toggledSkill);
+    }
+  }
+
+  onAddSkill(newSkill: Skill): void {
+    const { skills }: { skills: Skill[] } = this.profileForm.value;
+
+    const isPresent = skills.some(skill => skill.id === newSkill.id);
+
+    if (isPresent) return;
+
+    this.profileForm.patchValue({ skills: [newSkill, ...skills] });
+  }
+
+  onRemoveSkill(oddSkill: Skill): void {
+    const { skills }: { skills: Skill[] } = this.profileForm.value;
+
+    this.profileForm.patchValue({ skills: skills.filter(skill => skill.id !== oddSkill.id) });
+  }
+
+  onSearchSkill(query: string): void {
+    this.skillsService.getSkillsInline(query, 1000, 0).subscribe(({ results }) => {
+      this.inlineSkills.set(results);
+    });
+  }
+
+  toggleSkillsGroupsModal(): void {
+    this.skillsGroupsModalOpen.update(open => !open);
   }
 }
