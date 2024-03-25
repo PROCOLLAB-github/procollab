@@ -80,6 +80,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.router.navigate([], { queryParams: {} });
     this.navService.setNavTitle("Участники");
 
     this.route.data
@@ -94,7 +95,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
       });
 
     this.saveControlValue(this.searchForm.get("search"), "fullname");
-    this.saveControlValue(this.filterForm.get("keySkill"), "key_skills__icontains");
+    this.saveControlValue(this.filterForm.get("keySkill"), "skills__contains");
     this.saveControlValue(this.filterForm.get("speciality"), "speciality__icontains");
     this.saveControlValue(this.filterForm.get("age"), "age");
 
@@ -107,8 +108,8 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
           const fetchParams: Record<string, string> = {};
 
           if (params["fullname"]) fetchParams["fullname"] = params["fullname"];
-          if (params["key_skills__icontains"])
-            fetchParams["key_skills__icontains"] = params["key_skills__icontains"];
+          if (params["skills__contains"])
+            fetchParams["skills__contains"] = params["skills__contains"];
           if (params["speciality__icontains"])
             fetchParams["speciality__icontains"] = params["speciality__icontains"];
 

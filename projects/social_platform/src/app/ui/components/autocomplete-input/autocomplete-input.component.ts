@@ -70,11 +70,15 @@ export class AutoCompleteInputComponent<T> {
 
   @Input() searchIcon = "search";
 
+  @Input() slimVersion = false;
+
   @Input() error = false;
 
   @Output() searchStart = new EventEmitter<string>();
 
   @Output() optionSelected = new EventEmitter();
+
+  @Output() inputCleared = new EventEmitter();
 
   @ViewChild("input") inputElem!: ElementRef;
 
@@ -188,6 +192,7 @@ export class AutoCompleteInputComponent<T> {
     if (!query) {
       this.isOpen.set(false);
       this.cdRef.markForCheck();
+      this.inputCleared.emit();
       return;
     }
 
