@@ -1,4 +1,11 @@
 <!-- @format -->
 
-<ui-sidebar [navItems]="navItems" logoSrc="/"></ui-sidebar>
-<router-outlet></router-outlet>
+<div class="app">
+  <ui-sidebar
+    class="app__sidebar"
+    [navItems]="navItems"
+    [user]="user"
+    logoSrc="/assets/images/shared/logo.svg"
+  ></ui-sidebar>
+  <router-outlet></router-outlet>
+</div>

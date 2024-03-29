@@ -1,0 +1,12 @@
+.app {
+  display: flex;
+  height: 100%;
+  background-color: #000;
+
+  &__sidebar {
+    display: block;
+    flex-shrink: 0;
+    width: 234px;
+    height: 100vh;
+  }
+}
