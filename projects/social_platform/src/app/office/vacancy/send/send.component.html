@@ -27,11 +27,11 @@
             {{ profile.firstName }} {{ profile.lastName }}
           </h2>
           <p class="text-body-14 profile__info">{{ profile.speciality }} • {{ profile.city }}</p>
-          @if (profile.keySkills) {
+          @if (profile.skills) {
           <ul class="profile__skills">
-            @for (skill of profile.keySkills; track $index) {
+            @for (skill of profile.skills; track skill.id) {
             <li class="profile__skill">
-              <app-tag>{{ skill }}</app-tag>
+              <app-tag>{{ skill.name }}</app-tag>
             </li>
             }
           </ul>

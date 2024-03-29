@@ -218,21 +218,9 @@
     }
   }
 
-  &__role {
+  &__role,
+  &__search {
     margin-bottom: 12px;
-  }
-
-  &__form-skill-add {
-    display: flex;
-
-    app-input {
-      flex-grow: 1;
-      margin-right: 6px;
-    }
-
-    app-button {
-      width: 52px;
-    }
   }
 
   &__submit {
@@ -248,7 +236,69 @@
   }
 }
 
+.vacancies {
+  display: flex;
+
+  &__input {
+    flex-grow: 1;
+    margin-right: 6px;
+  }
+
+  &__button {
+    width: 52px;
+  }
+}
+
 .project-bar {
   padding: 9px 0;
   margin-bottom: 12px;
+}
+
+.modal {
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 672px;
+
+    app-button {
+      width: 100%;
+      max-width: 366px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 536px;
+    height: 480px;
+    background-color: var(--white);
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 8px;
+    box-shadow: 5px 5px 25px 0 var(--gray-for-shadow);
+  }
+
+  &__specs-groups,
+  &__skills-groups {
+    height: 100%;
+    overflow: auto;
+    scrollbar-width: thin;
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 14px;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+  }
 }
