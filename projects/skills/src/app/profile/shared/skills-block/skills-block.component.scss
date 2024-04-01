@@ -1,0 +1,43 @@
+@use "styles/typography";
+@use "styles/responsive";
+
+.skills {
+  &__main {
+    padding: 20px;
+    background-color: var(--white);
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 15px;
+    margin-bottom: 18px;
+    min-height: 235px;
+  }
+
+  &__title {
+    color: var(--black);
+    margin-bottom: 30px;
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 12px;
+
+      @include typography.heading-3;
+    }
+  }
+
+  &__placeholder-text {
+    color: var(--dark-grey);
+    margin-bottom: 44px;
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 4px;
+
+      @include typography.body-14;
+    }
+  }
+
+  &__select {
+    max-width: 315px;
+  }
+}

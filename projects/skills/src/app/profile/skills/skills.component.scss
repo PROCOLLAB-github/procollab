@@ -1,5 +1,13 @@
 .skills {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 18px;
+
+  &__info {
+    grid-column: span 2;
+  }
+
+  &__month {
+    grid-column: span 2;
+  }
 }
