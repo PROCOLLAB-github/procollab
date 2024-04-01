@@ -1,0 +1,49 @@
+@use "styles/typography";
+@use "styles/responsive";
+
+.month {
+  padding: 20px;
+  border: 1px solid var(--medium-grey-for-outline);
+  background-color: var(--white);
+  border-radius: 15px;
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__status {
+    display: flex;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    margin-bottom: -4px;
+
+    &--passed {
+      color: var(--green);
+    }
+
+    &--failed {
+      color: var(--red);
+    }
+  }
+
+  &__name {
+    display: flex;
+    gap: 5px;
+
+    @include typography.body-18;
+
+    &::before {
+      content: url("/assets/images/profile/olive-branch.svg");
+      transform: scaleX(-1);
+    }
+    &::after {
+      content: url("/assets/images/profile/olive-branch.svg");
+    }
+  }
+}

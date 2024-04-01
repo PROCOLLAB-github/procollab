@@ -1,0 +1,24 @@
+<!-- @format -->
+
+<div class="month">
+  @for (m of months; track $index) {
+  <div class="month__item item">
+    <div
+      class="item__status"
+      [ngClass]="{
+        'item__status--passed': m.status === 'passed',
+        'item__status--failed': m.status === 'failed'
+      }"
+    >
+      @if (m.status === "passed") {
+      <i appIcon icon="check"></i>
+      } @else if (m.status === "failed") {
+      <i appIcon icon="cross"></i>
+      }
+    </div>
+    <div class="item__name">
+      {{ m.name }}
+    </div>
+  </div>
+  }
+</div>
