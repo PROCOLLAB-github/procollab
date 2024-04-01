@@ -5,18 +5,18 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { AutosizeModule } from "ngx-autosize";
 
 @Component({
-    selector: "app-textarea",
-    templateUrl: "./textarea.component.html",
-    styleUrl: "./textarea.component.scss",
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => TextareaComponent),
-            multi: true,
-        },
-    ],
-    standalone: true,
-    imports: [AutosizeModule],
+  selector: "app-textarea",
+  templateUrl: "./textarea.component.html",
+  styleUrl: "./textarea.component.scss",
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => TextareaComponent),
+      multi: true,
+    },
+  ],
+  standalone: true,
+  imports: [AutosizeModule],
 })
 export class TextareaComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";

@@ -5,8 +5,8 @@ import { AuthService } from "@auth/services";
 import { map, Observable } from "rxjs";
 
 @Pipe({
-    name: "userRole",
-    standalone: true,
+  name: "userRole",
+  standalone: true,
 })
 export class UserRolePipe implements PipeTransform {
   constructor(private readonly authService: AuthService) {}

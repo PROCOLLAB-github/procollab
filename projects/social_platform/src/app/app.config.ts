@@ -1,13 +1,13 @@
 /** @format */
 
-import { ErrorHandler, importProvidersFrom, ApplicationConfig } from "@angular/core";
+import { ApplicationConfig, ErrorHandler, importProvidersFrom } from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { NgxMaskModule } from "ngx-mask";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { GlobalErrorHandlerService } from "@error/services/global-error-handler.service";
-import { HTTP_INTERCEPTORS, withInterceptorsFromDi, provideHttpClient } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { provideRouter } from "@angular/router";
 import { APP_ROUTES } from "./app.routes";
 import { BearerTokenInterceptor, CamelcaseInterceptor } from "@corelib";

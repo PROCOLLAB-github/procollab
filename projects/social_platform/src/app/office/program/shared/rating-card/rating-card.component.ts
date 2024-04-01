@@ -7,16 +7,16 @@ import {
   ElementRef,
   Input,
   OnDestroy,
-  ViewChild,
   signal,
+  ViewChild,
 } from "@angular/core";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { CommonModule } from "@angular/common";
 import { ProjectRate } from "@office/program/models/project-rate";
-import { ParseLinksPipe, ParseBreaksPipe, ControlErrorPipe } from "projects/core";
+import { ControlErrorPipe, ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { expandElement } from "@utils/expand-element";
-import { Observable, fromEvent, map, debounceTime, Subscription, finalize } from "rxjs";
+import { debounceTime, finalize, fromEvent, map, Observable, Subscription } from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { IndustryService } from "@office/services/industry.service";
 import { ProjectRatingComponent } from "@office/shared/project-rating/project-rating.component";

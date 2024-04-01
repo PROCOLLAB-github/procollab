@@ -18,9 +18,9 @@ describe("ProjectsListComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, HttpClientTestingModule, ProjectsListComponent],
-    providers: [{ provide: AuthService, useValue: authSpy }],
-}).compileComponents();
+      imports: [RouterTestingModule, HttpClientTestingModule, ProjectsListComponent],
+      providers: [{ provide: AuthService, useValue: authSpy }],
+    }).compileComponents();
   });
 
   beforeEach(() => {

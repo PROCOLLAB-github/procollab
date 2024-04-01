@@ -9,8 +9,8 @@ describe("AvatarComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [AvatarComponent],
-}).compileComponents();
+      imports: [AvatarComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

@@ -11,7 +11,7 @@ import { BreakpointObserver } from "@angular/cdk/layout";
 import { YearsFromBirthdayPipe } from "projects/core";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { BackComponent } from "@ui/components/back/back.component";
+import { BackComponent } from "@uilib";
 import { AsyncPipe } from "@angular/common";
 
 @Component({

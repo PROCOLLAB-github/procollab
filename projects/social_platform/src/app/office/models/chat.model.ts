@@ -1,6 +1,5 @@
 /** @format */
 import { ChatMessage } from "@models/chat-message.model";
-import { ApiPagination } from "@models/api-pagination.model";
 
 export class OnChangeStatus {
   userId!: number;

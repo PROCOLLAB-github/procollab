@@ -1,0 +1,18 @@
+<!-- @format -->
+
+<div class="profile">
+  <div class="bar profile__bar">
+    <nav class="bar__nav">
+      <app-back></app-back>
+      <ul class="bar__tabs">
+        <a class="bar__link" routerLink="/profile" routerLinkActive="bar__link--active">
+          <li class="text-body-14 bar__item">Моя страница</li>
+        </a>
+        <a class="bar__link" routerLink="/profile/skills" routerLinkActive="bar__link--active">
+          <li class="text-body-14 bar__item">Навыки</li>
+        </a>
+      </ul>
+    </nav>
+  </div>
+  <router-outlet></router-outlet>
+</div>

@@ -14,8 +14,8 @@ import {
   FormArray,
   FormBuilder,
   FormGroup,
-  Validators,
   ReactiveFormsModule,
+  Validators,
 } from "@angular/forms";
 import { IndustryService } from "@services/industry.service";
 import { concatMap, distinctUntilChanged, filter, map, Observable, Subscription, tap } from "rxjs";
@@ -23,12 +23,12 @@ import { ErrorMessage } from "@error/models/error-message";
 import { NavService } from "@services/nav.service";
 import { Project } from "@models/project.model";
 import { Vacancy } from "@models/vacancy.model";
-import { ValidationService, ControlErrorPipe } from "projects/core";
+import { ControlErrorPipe, ValidationService } from "projects/core";
 import { VacancyService } from "@services/vacancy.service";
 import { InviteService } from "@services/invite.service";
 import { Invite } from "@models/invite.model";
 import { ProjectService } from "@services/project.service";
-import { SelectComponent, ButtonComponent, IconComponent, InputComponent } from "@ui/components";
+import { ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
 import { ProgramService } from "@office/program/services/program.service";
 import { ProgramTag } from "@office/program/models/program.model";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -40,7 +40,7 @@ import { UploadFileComponent } from "@ui/components/upload-file/upload-file.comp
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { AsyncPipe } from "@angular/common";
-import { BackComponent } from "@ui/components/back/back.component";
+import { BackComponent } from "@uilib";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
 import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-basket.component";
 import { Skill } from "@office/models/skill";

@@ -7,7 +7,6 @@ import { VacancyResponse } from "@models/vacancy-response.model";
 import { VacancyService } from "@services/vacancy.service";
 import { NavService } from "@services/nav.service";
 import { ResponseCardComponent } from "@office/shared/response-card/response-card.component";
-import {} from "@angular/common";
 
 @Component({
   selector: "app-responses",

@@ -11,8 +11,8 @@ describe("NewsDetailComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, NewsDetailComponent],
-}).compileComponents();
+      imports: [RouterTestingModule, NewsDetailComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

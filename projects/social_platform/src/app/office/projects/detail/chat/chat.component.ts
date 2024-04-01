@@ -15,7 +15,6 @@ import { PluralizePipe } from "projects/core";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import {} from "@angular/common";
 import { ApiPagination } from "@models/api-pagination.model";
 
 @Component({

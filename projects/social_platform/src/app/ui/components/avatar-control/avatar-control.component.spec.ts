@@ -14,9 +14,9 @@ describe("AvatarControlComponent", () => {
     const autSpy = jasmine.createSpyObj(["getTokens"]);
 
     await TestBed.configureTestingModule({
-    imports: [HttpClientTestingModule, AvatarControlComponent],
-    providers: [{ provide: AuthService, useValue: autSpy }],
-}).compileComponents();
+      imports: [HttpClientTestingModule, AvatarControlComponent],
+      providers: [{ provide: AuthService, useValue: autSpy }],
+    }).compileComponents();
   });
 
   beforeEach(() => {

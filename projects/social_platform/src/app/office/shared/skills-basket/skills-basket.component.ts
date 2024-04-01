@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, Input, forwardRef, signal } from "@angular/core";
+import { Component, forwardRef, Input, signal } from "@angular/core";
 import { Skill } from "@office/models/skill";
 import { IconComponent } from "@ui/components";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";

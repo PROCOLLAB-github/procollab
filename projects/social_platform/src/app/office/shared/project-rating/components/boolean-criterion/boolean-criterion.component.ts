@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, forwardRef } from "@angular/core";
+import { Component, forwardRef, Input } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
 import { noop } from "rxjs";

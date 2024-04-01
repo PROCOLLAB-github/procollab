@@ -21,12 +21,17 @@ describe("ProjectInfoComponent", () => {
     const projectNewsServiceSpy = jasmine.createSpyObj({ fetchNews: of({}) });
 
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, HttpClientTestingModule, ReactiveFormsModule, ProjectInfoComponent],
-    providers: [
+      imports: [
+        RouterTestingModule,
+        HttpClientTestingModule,
+        ReactiveFormsModule,
+        ProjectInfoComponent,
+      ],
+      providers: [
         { provide: AuthService, useValue: authSpy },
         { provide: ProjectNewsService, useValue: projectNewsServiceSpy },
-    ],
-}).compileComponents();
+      ],
+    }).compileComponents();
   });
 
   beforeEach(() => {
