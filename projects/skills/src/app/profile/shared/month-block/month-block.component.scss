@@ -2,13 +2,13 @@
 @use "styles/responsive";
 
 .month {
-  padding: 20px;
-  border: 1px solid var(--medium-grey-for-outline);
-  background-color: var(--white);
-  border-radius: 15px;
   display: flex;
   gap: 40px;
   align-items: center;
+  padding: 20px;
+  background-color: var(--white);
+  border: 1px solid var(--medium-grey-for-outline);
+  border-radius: 15px;
 }
 
 .item {
@@ -42,6 +42,7 @@
       content: url("/assets/images/profile/olive-branch.svg");
       transform: scaleX(-1);
     }
+
     &::after {
       content: url("/assets/images/profile/olive-branch.svg");
     }
