@@ -88,6 +88,11 @@
   &__return {
     grid-row: 4;
     grid-column: span 3;
+
+    @include responsive.apply-desktop {
+      grid-row: 1;
+      grid-column: 4/span 1;
+    }
   }
 
   &__achievements {
