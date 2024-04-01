@@ -3,17 +3,17 @@
 
 .skills {
   &__main {
+    min-height: 235px;
     padding: 20px;
+    margin-bottom: 18px;
     background-color: var(--white);
     border: 1px solid var(--medium-grey-for-outline);
     border-radius: 15px;
-    margin-bottom: 18px;
-    min-height: 235px;
   }
 
   &__title {
-    color: var(--black);
     margin-bottom: 30px;
+    color: var(--black);
 
     @include typography.heading-4;
 
@@ -25,8 +25,8 @@
   }
 
   &__placeholder-text {
-    color: var(--dark-grey);
     margin-bottom: 44px;
+    color: var(--dark-grey);
 
     @include typography.body-12;
 
@@ -38,6 +38,7 @@
   }
 
   &__select {
+    display: block;
     max-width: 315px;
   }
 }
