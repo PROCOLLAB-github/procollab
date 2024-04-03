@@ -1,0 +1,28 @@
+<!-- @format -->
+
+<div class="skill">
+  <section class="skill__info skill__block info">
+    <h2 class="info__title skill__title">Публичные выступления</h2>
+    <img
+      class="info__img"
+      src="https://i.pinimg.com/564x/72/1b/08/721b0818a7810fee9c3762453234d888.jpg"
+      alt=""
+    />
+    <p class="info__text">
+      Навык выступать публично пригождается тебе ежедневно (даже, если ты не замечаешь, где его
+      используешь). Выступить у доски, презентовать и отстоять свою точку зрения в споре с
+      родителями или даже друзьями (почему нужно обязательно идти в кино на ЭТОТ фильм, а не на
+      другой) – не говоря уже об огромном количестве реальных выступлений, с которыми мы
+      сталкиваемся на конкурсах, стажировках, работе, в процессе реализации собственного проекта..
+      :)
+    </p>
+    <div class="info__level">1 уровень</div>
+  </section>
+  <section class="skill__progress skill__block progress">
+    <h2 class="progress__title skill__title">Ваш прогресс</h2>
+    <app-circle-progress-bar class="progress__bar" [progress]="radius()"></app-circle-progress-bar>
+    <div class="progress__list">
+      @for (_ of Array(20); track $index) { <app-task-card></app-task-card> }
+    </div>
+  </section>
+</div>
