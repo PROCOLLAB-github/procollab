@@ -1,9 +1,9 @@
 /** @format */
 
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BackComponent, IconComponent } from "@uilib";
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { ButtonComponent } from "@ui/components";
 import { SkillCardComponent } from "../shared/skill-card/skill-card.component";
 
@@ -24,4 +24,5 @@ import { SkillCardComponent } from "../shared/skill-card/skill-card.component";
 })
 export class SkillsListComponent {
   protected readonly Array = Array;
+  router = inject(Router);
 }
