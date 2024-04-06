@@ -16,7 +16,7 @@ import { User } from "@auth/models/user.model";
 export class AppComponent {
   title = "skills";
   navItems = [
-    { name: "Навыки", icon: "lib", link: "/" },
+    { name: "Навыки", icon: "lib", link: "/skills" },
     { name: "Рейтинг", icon: "growth", link: "rating" },
   ];
 
