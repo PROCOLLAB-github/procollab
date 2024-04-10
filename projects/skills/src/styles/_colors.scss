@@ -11,6 +11,9 @@
   --accent-mild: #{color.adjust(#6c27ff, $alpha: -0.4)};
   --accent-light: #f7f3ff;
 
+  // GOLD
+  --gold: #f6ff8b;
+
   // GRAY
   --white: #fff;
   --black: #332e2d;
@@ -19,7 +22,6 @@
   --light-gray: #f9f9f9;
   --gray-for-shadow: rgb(159 159 159 / 15%);
   --grey-button: #e5e5e5e5;
-  --medium-grey-for-outline: #eee;
   --grey-for-text: #a59fb9;
 
   // FUNCTIONAL

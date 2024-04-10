@@ -1,0 +1,64 @@
+@use "styles/responsive";
+@use "styles/typography";
+
+.rating-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+
+  @include responsive.apply-desktop {
+    padding: 20px;
+  }
+
+  &__left {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  &__name {
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      @include typography.bold-body-16;
+    }
+  }
+
+  &__info {
+    margin: 3px 0;
+    color: var(--accent);
+  }
+
+  &__right {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+  }
+
+  &__score {
+    display: none;
+    color: var(--gray);
+  }
+
+  &__score-mobile {
+    color: var(--gray);
+
+    @include responsive.apply-desktop {
+      display: none;
+    }
+  }
+
+  &__place {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    color: var(--gray);
+    border: 1px solid var(--gray);
+    border-radius: 50%;
+  }
+}

@@ -1,0 +1,19 @@
+<!-- @format -->
+
+<div
+  class="rating-card"
+  [ngClass]="{ 'rating-card--first': place === 1, 'rating-card--second': place === 2 }"
+>
+  <div class="rating-card__avatar">
+    @if (place === 1) {
+    <img src="assets/images/rating/top-rating.png" alt="" />
+    }
+    <app-avatar
+      url="https://i.pinimg.com/474x/de/a5/09/dea5093c08215a4ccfae75cda21ed94c.jpg"
+      [size]="100"
+    ></app-avatar>
+  </div>
+  <h2 class="rating-card__title">Jordan Barrett</h2>
+  <p class="rating-card__score">1234124 очкоw</p>
+  <div class="rating-card__place text-heading-4">2</div>
+</div>

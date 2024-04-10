@@ -1,0 +1,61 @@
+@use "styles/responsive";
+@use "styles/typography";
+
+.rating-page {
+  &__top3 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+
+    & > :first-child {
+      grid-column: span 2;
+    }
+
+    @for $i from 1 through 3 {
+      :nth-child(#{$i}) {
+        order: $i;
+      }
+    }
+
+    @include responsive.apply-desktop {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+
+      :first-child {
+        grid-column: span 1;
+        order: 3;
+      }
+    }
+  }
+
+  &__rest {
+    padding: 15px;
+    background-color: var(--white);
+    border: 1px solid var(--grey-button);
+    border-radius: 15px;
+
+    @include responsive.apply-desktop {
+      padding: 18px 24px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 20px;
+    text-align: center;
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      text-align: left;
+
+      @include typography.heading-3;
+    }
+  }
+
+  &__basic {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
