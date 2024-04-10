@@ -1,16 +1,25 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, ElementRef, OnInit, signal, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  signal,
+  ViewChild,
+} from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { expandElement } from "@utils/expand-element";
-import { map, noop, Observable, Subscription } from "rxjs";
+import { concatMap, map, noop, Observable, Subscription } from "rxjs";
 import { ProfileNewsService } from "../services/profile-news.service";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ProfileNews } from "../models/profile-news.model";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
-import { ParseLinksPipe, ParseBreaksPipe } from "projects/core";
+import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { IconComponent } from "@ui/components";
 import { TagComponent } from "@ui/components/tag/tag.component";
@@ -34,7 +43,7 @@ import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
     AsyncPipe,
   ],
 })
-export class ProfileMainComponent implements OnInit {
+export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService,
@@ -48,8 +57,11 @@ export class ProfileMainComponent implements OnInit {
   loggedUserId: Observable<number> = this.authService.profile.pipe(map(user => user.id));
 
   ngOnInit(): void {
-    const news$ = this.profileNewsService
-      .fetchNews(this.route.snapshot.params["id"])
+    const route$ = this.route.params
+      .pipe(
+        map(r => r["id"]),
+        concatMap(userId => this.profileNewsService.fetchNews(userId))
+      )
       .subscribe(news => {
         this.news.set(news.results);
 
@@ -64,7 +76,7 @@ export class ProfileMainComponent implements OnInit {
           });
         });
       });
-    this.subscriptions$.push(news$);
+    this.subscriptions$.push(route$);
   }
 
   @ViewChild("descEl") descEl?: ElementRef;
