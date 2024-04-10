@@ -36,6 +36,12 @@
     @if (!notificationsOpen) {
     <nav class="nav nav--vertical">
       <ul class="nav__list">
+        <a class="nav__link" routerLink="feed" routerLinkActive="nav__link--active">
+          <li class="text-body-14 nav__item">
+            <i appIcon icon="feed" appSquare="24" appViewBox="0 0 24 20"></i>
+            Новости
+          </li>
+        </a>
         <a class="nav__link" routerLink="projects" routerLinkActive="nav__link--active">
           <li class="text-body-14 nav__item">
             <i appIcon icon="projects-filled" appSquare="24" appViewBox="0 0 24 20"></i>
