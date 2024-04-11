@@ -17,7 +17,7 @@ import { ProgressBlockComponent } from "../shared/progress-block/progress-block.
     SkillsBlockComponent,
     ProgressBlockComponent,
   ],
-  templateUrl: "./skills.component.html",
-  styleUrl: "./skills.component.scss",
+  templateUrl: "./profile-home.component.html",
+  styleUrl: "./profile-home.component.scss",
 })
-export class SkillsComponent {}
+export class ProfileHomeComponent {}
