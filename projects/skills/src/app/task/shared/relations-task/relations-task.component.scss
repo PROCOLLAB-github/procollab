@@ -1,0 +1,47 @@
+@use "styles/typography";
+@use "styles/responsive";
+
+.relations {
+  padding: 26px;
+  background-color: var(--white);
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+
+  &__grid {
+    display: grid;
+    align-items: flex-start;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: 220px 1fr;
+      gap: 24px 54px;
+    }
+  }
+
+  &__item {
+    padding: 10px;
+    cursor: pointer;
+    border: 1px solid var(--grey-button);
+    border-radius: 10px;
+
+    @include typography.body-14;
+
+    @include responsive.apply-desktop {
+      @include typography.body-12;
+    }
+
+    &--active {
+      border-color: var(--accent);
+    }
+
+    &--disabled {
+      pointer-events: none;
+      opacity: 0.3;
+    }
+  }
+
+  &__a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

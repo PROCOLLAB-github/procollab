@@ -1,0 +1,53 @@
+@use "styles/typography";
+@use "styles/responsive";
+
+.radio {
+  padding: 26px;
+  background-color: var(--white);
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+
+  @include responsive.apply-desktop {
+    display: flex;
+    gap: 60px;
+  }
+
+  &__img {
+    width: 385px;
+    height: 315px;
+    object-fit: cover;
+  }
+
+  &__title {
+    margin-bottom: 15px;
+
+    @include typography.body-18;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 24px;
+
+      @include typography.heading-4;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    @include responsive.apply-desktop {
+      gap: 18px;
+    }
+  }
+
+  &__option {
+    padding: 24px 20px;
+    cursor: pointer;
+    border: 1px solid var(--grey-button);
+    border-radius: 15px;
+
+    &--active {
+      border-color: var(--accent);
+    }
+  }
+}

@@ -1,0 +1,12 @@
+<!-- @format -->
+
+<div class="subtask">
+  @if (taskType() === "video") {
+  <app-video-task></app-video-task>
+  } @else if (taskType() === "radio-select") {
+  <app-radio-select-task></app-radio-select-task>
+  } @else if (taskType() === "relations") {
+  <app-relations-task></app-relations-task>
+  }
+  <app-button>Продолжить</app-button>
+</div>

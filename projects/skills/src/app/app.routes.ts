@@ -20,4 +20,8 @@ export const routes: Routes = [
     path: "rating",
     loadChildren: () => import("./rating/rating.routes").then(c => c.RATING_ROUTES),
   },
+  {
+    path: "task",
+    loadChildren: () => import("./task/task.routes").then(c => c.TASK_ROUTES),
+  },
 ];

@@ -1,0 +1,27 @@
+<!-- @format -->
+
+<div class="task">
+  <div class="task__badge badge">
+    <h1 class="badge__title">Публичные выступления</h1>
+    <img
+      class="badge__img"
+      src="https://i.pinimg.com/564x/9f/ac/9b/9fac9b2c62a353fc352466fa9cd54c71.jpg"
+      alt=""
+    />
+  </div>
+  <div class="task__progress progress">
+    <div class="progress__line"></div>
+    <div class="progress__line-done" [ngStyle]="{ width: progressDoneWidth() + 'px' }"></div>
+    <div class="progress__first progress__border progress__border--done">1 задание</div>
+    @for (id of taskIds(); track $index) {
+    <a
+      #pointEls
+      class="progress__point"
+      [attr.data-id]="id"
+      [ngClass]="{ 'progress__point--done': doneTasks().includes(id) }"
+    ></a>
+    }
+    <div class="progress__last progress__border">2 задание</div>
+  </div>
+  <router-outlet></router-outlet>
+</div>
