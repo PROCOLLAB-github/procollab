@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+/** @format */
+
+import { Component } from "@angular/core";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-exclude-task',
+  selector: "app-exclude-task",
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './exclude-task.component.html',
-  styleUrl: './exclude-task.component.scss'
+  templateUrl: "./exclude-task.component.html",
+  styleUrl: "./exclude-task.component.scss",
 })
 export class ExcludeTaskComponent {
-
+  protected readonly Array = Array;
 }
