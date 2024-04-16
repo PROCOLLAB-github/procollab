@@ -7,6 +7,7 @@ import { RadioSelectTaskComponent } from "../shared/radio-select-task/radio-sele
 import { RelationsTaskComponent } from "../shared/relations-task/relations-task.component";
 import { ButtonComponent } from "@ui/components";
 import { ExcludeTaskComponent } from "../shared/exclude-task/exclude-task.component";
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: "app-subtask",
@@ -18,6 +19,7 @@ import { ExcludeTaskComponent } from "../shared/exclude-task/exclude-task.compon
     RelationsTaskComponent,
     ButtonComponent,
     ExcludeTaskComponent,
+    RouterLink,
   ],
   templateUrl: "./subtask.component.html",
   styleUrl: "./subtask.component.scss",

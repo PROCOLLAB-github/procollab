@@ -21,8 +21,8 @@
 
   &__block {
     background-color: var(--white);
-    border-radius: 15px;
     border: 1px solid var(--grey-button);
+    border-radius: 15px;
   }
 
   &__progress {
@@ -85,32 +85,32 @@
       bottom: 0;
       left: 0;
       width: 4px;
+      content: "";
       border-radius: 4px;
-      content: '';
     }
   }
 
   &__correct {
     &::before {
-      background-color: #92E3A9;
+      background-color: #92e3a9;
     }
   }
 
   &__level {
     &::before {
-      background-color: #F6D067;
+      background-color: #f6d067;
     }
   }
 
   &__amount {
     &::before {
-      background-color: #FF5F39;
+      background-color: #ff5f39;
     }
   }
 
   &__label {
-    color: var(--black);
     margin-bottom: 5px;
+    color: var(--black);
 
     @include typography.body-18;
   }

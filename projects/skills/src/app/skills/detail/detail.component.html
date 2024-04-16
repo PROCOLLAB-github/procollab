@@ -22,7 +22,8 @@
     <h2 class="progress__title skill__title">Ваш прогресс</h2>
     <app-circle-progress-bar class="progress__bar" [progress]="radius()"></app-circle-progress-bar>
     <div class="progress__list">
-      @for (_ of Array(20); track $index) { <app-task-card></app-task-card> }
+      @for (_ of Array(20); track $index) {
+      <app-task-card (click)="router.navigateByUrl('/task/13/23')"></app-task-card> }
     </div>
   </section>
 </div>
