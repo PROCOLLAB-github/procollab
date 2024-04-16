@@ -1,0 +1,123 @@
+@use "styles/responsive";
+@use "styles/typography";
+
+.complete {
+  display: grid;
+
+  @include responsive.apply-desktop {
+    grid-template-columns: 1fr 1fr;
+    gap: 26px 18px;
+  }
+
+  &__title {
+    grid-column: span 2;
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      @include typography.heading-3;
+    }
+  }
+
+  &__block {
+    background-color: var(--white);
+    border-radius: 15px;
+    border: 1px solid var(--grey-button);
+  }
+
+  &__progress {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0;
+  }
+
+  &__progress-bar {
+    display: block;
+    width: 180px;
+    height: 180px;
+
+    @include responsive.apply-desktop {
+      width: 275px;
+      height: 275px;
+    }
+  }
+}
+
+.results {
+  padding: 26px 15px;
+
+  @include responsive.apply-desktop {
+    padding: 26px;
+  }
+
+  &__title {
+    margin-bottom: 28px;
+    color: var(--black);
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      @include typography.heading-3;
+    }
+  }
+
+  &__points {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 76px;
+  }
+
+  &__point {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 4px;
+      border-radius: 4px;
+      content: '';
+    }
+  }
+
+  &__correct {
+    &::before {
+      background-color: #92E3A9;
+    }
+  }
+
+  &__level {
+    &::before {
+      background-color: #F6D067;
+    }
+  }
+
+  &__amount {
+    &::before {
+      background-color: #FF5F39;
+    }
+  }
+
+  &__label {
+    color: var(--black);
+    margin-bottom: 5px;
+
+    @include typography.body-18;
+  }
+
+  &__stat {
+    color: var(--black);
+
+    @include typography.body-bold-18;
+  }
+}
