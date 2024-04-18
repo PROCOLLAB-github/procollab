@@ -9,7 +9,7 @@
       alt=""
     />
   </div>
-  <div class="task__progress progress">
+  <div class="task__progress progress" #progressBarEl>
     <div class="progress__line"></div>
     <div class="progress__line-done" [ngStyle]="{ width: progressDoneWidth() + 'px' }"></div>
     <div class="progress__first progress__border progress__border--done">1 задание</div>
@@ -21,6 +21,12 @@
       [ngClass]="{ 'progress__point--done': doneTasks().includes(id) }"
     ></a>
     }
+    <img
+      src="https://i.pinimg.com/564x/a5/bb/d6/a5bbd6dc85281bd8e3821d1abd12428e.jpg"
+      class="progress__brand-point"
+      [ngStyle]="{ left: progressDoneWidth() + 'px' }"
+      alt=""
+    />
     <div class="progress__last progress__border">2 задание</div>
   </div>
   <router-outlet></router-outlet>

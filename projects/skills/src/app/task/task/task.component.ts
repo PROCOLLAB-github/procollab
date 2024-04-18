@@ -6,6 +6,7 @@ import {
   computed,
   ElementRef,
   signal,
+  ViewChild,
   ViewChildren,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
@@ -20,6 +21,7 @@ import { RouterOutlet } from "@angular/router";
 })
 export class TaskComponent implements AfterViewInit {
   @ViewChildren("pointEls") pointEls?: ElementRef<HTMLAnchorElement>[];
+  @ViewChild("progressBarEl") progressBarEl?: ElementRef<HTMLElement>;
 
   ngAfterViewInit() {
     const targetEl = this.pointEls?.find(el => {
@@ -28,8 +30,11 @@ export class TaskComponent implements AfterViewInit {
 
       return Number(id) === this.currentTaskId();
     });
-    if (targetEl) {
-      const left = targetEl.nativeElement.offsetLeft;
+    if (targetEl && this.progressBarEl) {
+      const { left: leftParent } = this.progressBarEl.nativeElement.getBoundingClientRect();
+      const { left: leftChild } = targetEl.nativeElement.getBoundingClientRect();
+
+      const left = leftChild - leftParent;
       this.progressDoneWidth.set(left);
     }
   }
@@ -42,7 +47,7 @@ export class TaskComponent implements AfterViewInit {
       .map((_, i) => i)
   );
 
-  currentTaskId = signal(3);
+  currentTaskId = signal(8);
 
   doneTasks = computed(() => {
     return this.taskIds().filter(t => t <= this.currentTaskId());
