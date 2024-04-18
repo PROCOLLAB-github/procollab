@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <div class="skill">
-  <section class="skill__info skill__block info">
+  <section class="skill__info skill__block info" [ngStyle]="{ height: blockHeight() + 'px' }">
     <h2 class="info__title skill__title">Публичные выступления</h2>
     <img
       class="info__img"
@@ -18,7 +18,10 @@
     </p>
     <div class="info__level">1 уровень</div>
   </section>
-  <section class="skill__progress skill__block progress">
+  <section
+    class="skill__progress skill__block progress"
+    [ngStyle]="{ height: blockHeight() + 'px' }"
+  >
     <h2 class="progress__title skill__title">Ваш прогресс</h2>
     <app-circle-progress-bar class="progress__bar" [progress]="radius()"></app-circle-progress-bar>
     <div class="progress__list">
