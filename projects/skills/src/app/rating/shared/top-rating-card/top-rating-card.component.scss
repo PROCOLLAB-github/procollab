@@ -26,6 +26,10 @@
       color: var(--gold);
     }
   }
+  
+  &--second {
+    border-color: var(--accent);
+  }
 
   &__avatar {
     position: relative;
