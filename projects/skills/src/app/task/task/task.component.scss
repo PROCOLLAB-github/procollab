@@ -30,10 +30,25 @@
     }
   }
 
+  &__text {
+    color: var(--accent);
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      @include typography.body-16;
+    }
+  }
+
   &__img {
-    width: 400px;
-    height: 80px;
+    width: 80px;
+    height: 20px;
     object-fit: cover;
+
+    @include responsive.apply-desktop {
+      width: 400px;
+      height: 80px;
+    }
   }
 }
 
