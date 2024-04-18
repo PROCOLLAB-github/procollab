@@ -67,8 +67,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 115px;
-    height: 43px;
+    width: 70px;
+    height: 24px;
     color: var(--grey-button);
     background-color: var(--white);
     border: 1px solid var(--grey-button);
@@ -77,6 +77,9 @@
     @include typography.body-12;
 
     @include responsive.apply-desktop {
+      width: 115px;
+      height: 43px;
+
       @include typography.bold-body-16;
     }
 
