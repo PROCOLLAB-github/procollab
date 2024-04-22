@@ -10,7 +10,10 @@ export const PROFILE_ROUTES: Routes = [
     path: "",
     component: ProfileComponent,
     children: [
-      { path: "", component: ProfileHomeComponent },
+      {
+        path: "",
+        loadChildren: () => import("./home/profile-home.routes").then(m => m.PROFILE_HOME_ROUTES),
+      },
       { path: "skills", component: ProfileSkillsRatingComponent },
     ],
   },

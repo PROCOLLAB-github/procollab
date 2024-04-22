@@ -47,6 +47,11 @@
       color: var(--white);
       background-color: var(--green);
     }
+
+    &.button--gold {
+      color: var(--white);
+      background: var(--gold-dark);
+    }
   }
 
   &.button--outline {
