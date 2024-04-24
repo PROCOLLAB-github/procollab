@@ -1,23 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { TopRatingCardComponent } from './top-rating-card.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('TopRatingCardComponent', () => {
+import { TopRatingCardComponent } from "./top-rating-card.component";
+
+describe("TopRatingCardComponent", () => {
   let component: TopRatingCardComponent;
   let fixture: ComponentFixture<TopRatingCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TopRatingCardComponent]
-    })
-    .compileComponents();
-    
+      imports: [TopRatingCardComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(TopRatingCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

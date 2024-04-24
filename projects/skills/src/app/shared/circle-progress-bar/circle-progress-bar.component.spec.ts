@@ -1,23 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { CircleProgressBarComponent } from './circle-progress-bar.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('CircleProgressBarComponent', () => {
+import { CircleProgressBarComponent } from "./circle-progress-bar.component";
+
+describe("CircleProgressBarComponent", () => {
   let component: CircleProgressBarComponent;
   let fixture: ComponentFixture<CircleProgressBarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CircleProgressBarComponent]
-    })
-    .compileComponents();
-    
+      imports: [CircleProgressBarComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(CircleProgressBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

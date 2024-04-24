@@ -1,14 +1,6 @@
 /** @format */
 
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  signal,
-  ViewChildren,
-} from "@angular/core";
+import { AfterViewInit, Component, ElementRef, inject, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { TaskCardComponent } from "../../shared/task-card/task-card.component";
 import { CircleProgressBarComponent } from "../../shared/circle-progress-bar/circle-progress-bar.component";

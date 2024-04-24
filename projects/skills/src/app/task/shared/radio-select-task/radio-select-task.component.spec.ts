@@ -1,23 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { RadioSelectTaskComponent } from './radio-select-task.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('RadioSelectTaskComponent', () => {
+import { RadioSelectTaskComponent } from "./radio-select-task.component";
+
+describe("RadioSelectTaskComponent", () => {
   let component: RadioSelectTaskComponent;
   let fixture: ComponentFixture<RadioSelectTaskComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RadioSelectTaskComponent]
-    })
-    .compileComponents();
-    
+      imports: [RadioSelectTaskComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(RadioSelectTaskComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,23 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { SubscriptionPlansComponent } from './subscription-plans.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('SubscriptionPlansComponent', () => {
+import { SubscriptionPlansComponent } from "./subscription-plans.component";
+
+describe("SubscriptionPlansComponent", () => {
   let component: SubscriptionPlansComponent;
   let fixture: ComponentFixture<SubscriptionPlansComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SubscriptionPlansComponent]
-    })
-    .compileComponents();
-    
+      imports: [SubscriptionPlansComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(SubscriptionPlansComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -1,23 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { BasicRatingCardComponent } from './basic-rating-card.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('BasicRatingCardComponent', () => {
+import { BasicRatingCardComponent } from "./basic-rating-card.component";
+
+describe("BasicRatingCardComponent", () => {
   let component: BasicRatingCardComponent;
   let fixture: ComponentFixture<BasicRatingCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BasicRatingCardComponent]
-    })
-    .compileComponents();
-    
+      imports: [BasicRatingCardComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(BasicRatingCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

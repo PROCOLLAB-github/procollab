@@ -1,23 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { ProgressBlockComponent } from './progress-block.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('ProgressBlockComponent', () => {
+import { ProgressBlockComponent } from "./progress-block.component";
+
+describe("ProgressBlockComponent", () => {
   let component: ProgressBlockComponent;
   let fixture: ComponentFixture<ProgressBlockComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProgressBlockComponent]
-    })
-    .compileComponents();
-    
+      imports: [ProgressBlockComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(ProgressBlockComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

@@ -2,7 +2,7 @@
 
 <div class="rating-page">
   <div class="rating-page__top3">
-    @for (_ of Array(3); track $index) {
+    @for (_ of top3(); track $index) {
     <app-top-rating-card [place]="$index + 1"></app-top-rating-card>
     }
   </div>
@@ -10,7 +10,7 @@
     <div class="rating-page__header">
       <h1 class="rating-page__title">Рейтинг пользователей</h1>
       <div class="rating-page__basic">
-        @for (_ of Array(40); track $index) {
+        @for (_ of rest(); track $index) {
         <app-basic-rating-card></app-basic-rating-card>
         }
       </div>

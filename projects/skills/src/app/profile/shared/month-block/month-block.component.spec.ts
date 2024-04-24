@@ -1,23 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { MonthBlockComponent } from './month-block.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('MonthBlockComponent', () => {
+import { MonthBlockComponent } from "./month-block.component";
+
+describe("MonthBlockComponent", () => {
   let component: MonthBlockComponent;
   let fixture: ComponentFixture<MonthBlockComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MonthBlockComponent]
-    })
-    .compileComponents();
-    
+      imports: [MonthBlockComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(MonthBlockComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
