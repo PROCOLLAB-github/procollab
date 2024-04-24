@@ -2,13 +2,14 @@
 
 import { Routes } from "@angular/router";
 import { ProfileComponent } from "./profile.component";
-import { ProfileHomeComponent } from "./home/profile-home.component";
 import { ProfileSkillsRatingComponent } from "./skills-rating/skills-rating.component";
+import { profileResolver } from "./profile.resolver";
 
 export const PROFILE_ROUTES: Routes = [
   {
     path: "",
     component: ProfileComponent,
+    resolve: { data: profileResolver },
     children: [
       {
         path: "",

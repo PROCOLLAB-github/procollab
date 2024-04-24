@@ -1,8 +1,9 @@
 /** @format */
 
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
+import { Profile } from "../../../../models/profile.model";
 
 @Component({
   selector: "app-month-block",
@@ -12,9 +13,5 @@ import { IconComponent } from "@uilib";
   styleUrl: "./month-block.component.scss",
 })
 export class MonthBlockComponent {
-  months = [
-    { name: "Январь", status: "passed" },
-    { name: "Февраль", status: "failed" },
-    { name: "Март", status: "not-started" },
-  ];
+  @Input({ required: true }) months!: Profile["months"];
 }

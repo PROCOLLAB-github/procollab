@@ -7,12 +7,15 @@
     alt="profile"
   />
   <div class="info__left">
-    <h1 class="info__title">Лилуш Лишушивич</h1>
+    <h1 class="info__title">{{ userData.firstName }} {{ userData.lastName }}</h1>
     <div class="info__keys text-body-14">
-      <div>19 лет • Fullstack developer</div>
+      <div>
+        {{ userData.age }} {{ userData.age | pluralize: ["год", "года", "лет"] }} •
+        {{ userData.specialization }}
+      </div>
       <div class="info__geo">
         <i appIcon icon="geo-point"></i>
-        <span>Саратов, Россия</span>
+        <span>{{ userData.geoPosition }}</span>
       </div>
     </div>
   </div>

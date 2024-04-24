@@ -8,6 +8,11 @@ export const PROFILE_HOME_ROUTES: Routes = [
   {
     path: "",
     component: ProfileHomeComponent,
-    children: [{ path: "plans", component: SubscriptionPlansComponent }],
+    children: [
+      {
+        path: "plans",
+        component: SubscriptionPlansComponent,
+      },
+    ],
   },
 ];

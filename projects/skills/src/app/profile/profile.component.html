@@ -19,6 +19,6 @@
       </ul>
     </nav>
   </div>
-  <app-info-block class="profile__info"></app-info-block>
+  <app-info-block [userData]="profileData()['userData']" class="profile__info"></app-info-block>
   <router-outlet></router-outlet>
 </div>

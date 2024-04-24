@@ -6,18 +6,18 @@
     <div
       class="item__status"
       [ngClass]="{
-        'item__status--passed': m.status === 'passed',
-        'item__status--failed': m.status === 'failed'
+        'item__status--passed': m.isPassed,
+        'item__status--failed': !m.isPassed
       }"
     >
-      @if (m.status === "passed") {
+      @if (m.isPassed) {
       <i appIcon icon="check"></i>
-      } @else if (m.status === "failed") {
+      } @else if (!m.isPassed) {
       <i appIcon icon="cross"></i>
       }
     </div>
     <div class="item__name">
-      {{ m.name }}
+      {{ m.month }}
     </div>
   </div>
   }
