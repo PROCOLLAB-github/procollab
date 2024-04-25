@@ -3,6 +3,7 @@
 import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { AvatarComponent } from "@uilib";
+import { GeneralRating } from "../../../../models/rating.model";
 
 @Component({
   selector: "app-top-rating-card",
@@ -13,4 +14,6 @@ import { AvatarComponent } from "@uilib";
 })
 export class TopRatingCardComponent {
   @Input() place = 3;
+
+  @Input({ required: true }) rating!: GeneralRating;
 }

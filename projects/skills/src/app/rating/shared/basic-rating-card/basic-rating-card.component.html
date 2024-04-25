@@ -7,13 +7,16 @@
       [size]="60"
     ></app-avatar>
     <div class="rating-card__main-info">
-      <div class="rating-card__name">Jordan Barrett</div>
-      <p class="rating-card__info text-body-12">Product Designer • 17 лет</p>
-      <div class="rating-card__score-mobile text-body-12">4743 очкоw</div>
+      <div class="rating-card__name">{{ rating.userName }}</div>
+      <p class="rating-card__info text-body-12">
+        {{ rating.specialization }} • {{ rating.age }}
+        {{ rating.age | pluralize: ["год", "года", "лет"] }}
+      </p>
+      <div class="rating-card__score-mobile text-body-12">{{ rating.scoreCount }} очков</div>
     </div>
   </div>
   <div class="rating-card__right">
-    <div class="rating-card__score text-body-18">4743 очкоw</div>
+    <div class="rating-card__score text-body-18">{{ rating.scoreCount }} очков</div>
     <div class="rating-card__place">3</div>
   </div>
 </div>
