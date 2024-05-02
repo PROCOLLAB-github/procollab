@@ -1,9 +1,10 @@
 /** @format */
 
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
+import { Task } from "../../../models/skill.model";
 
 @Component({
   selector: "app-task-card",
@@ -12,4 +13,6 @@ import { IconComponent } from "@uilib";
   templateUrl: "./task-card.component.html",
   styleUrl: "./task-card.component.scss",
 })
-export class TaskCardComponent {}
+export class TaskCardComponent {
+  @Input({ required: true }) task!: Task;
+}

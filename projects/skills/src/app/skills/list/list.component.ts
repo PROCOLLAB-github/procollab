@@ -3,9 +3,12 @@
 import { Component, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BackComponent, IconComponent } from "@uilib";
-import { Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { ButtonComponent } from "@ui/components";
 import { SkillCardComponent } from "../shared/skill-card/skill-card.component";
+import { map, Observable } from "rxjs";
+import { ApiPagination } from "../../../models/api-pagination.model";
+import { Skill } from "../../../models/skill.model";
 
 @Component({
   selector: "app-list",
@@ -25,4 +28,7 @@ import { SkillCardComponent } from "../shared/skill-card/skill-card.component";
 export class SkillsListComponent {
   protected readonly Array = Array;
   router = inject(Router);
+  route = inject(ActivatedRoute);
+
+  skills = this.route.data.pipe(map(r => r["data"])) as Observable<ApiPagination<Skill>>;
 }

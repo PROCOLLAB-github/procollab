@@ -21,9 +21,11 @@
     </div>
     <app-button class="search__button">Найти</app-button>
   </div>
+  @if (skills | async; as data) {
   <div class="list__items">
-    @for (_ of Array(200); track $index) {
-    <app-skill-card (click)="router.navigateByUrl('/skills/23rsdf')"></app-skill-card>
+    @for (s of data['results']; track $index) {
+    <app-skill-card [skill]="s" (click)="router.navigate(['skills', s.id])"></app-skill-card>
     }
   </div>
+  }
 </div>

@@ -1,19 +1,16 @@
 <!-- @format -->
 
+@if (skillStepsResponse()) {
 <div class="task">
   <div class="task__badge badge">
     <div class="badge__left">
-      <h1 class="badge__title">Публичные выступления</h1>
+      <h1 class="badge__title">{{ skillStepsResponse()?.skillName }}</h1>
       <div class="badge__text">
         развитие навыка стало доступным благодаря <br />
         начните обучение прямо сейчас
       </div>
     </div>
-    <img
-      class="badge__img"
-      src="https://i.pinimg.com/564x/9f/ac/9b/9fac9b2c62a353fc352466fa9cd54c71.jpg"
-      alt=""
-    />
+    <img class="badge__img" [src]="skillStepsResponse()?.file" alt="" />
   </div>
   <div class="task__progress progress" #progressBarEl>
     <div class="progress__line"></div>
@@ -24,11 +21,11 @@
       #pointEls
       class="progress__point"
       [attr.data-id]="id"
-      [ngClass]="{ 'progress__point--done': doneTasks().includes(id) }"
+      [ngClass]="{ 'progress__point--done': doneTasks()?.includes(id) }"
     ></a>
     }
     <img
-      src="https://i.pinimg.com/564x/a5/bb/d6/a5bbd6dc85281bd8e3821d1abd12428e.jpg"
+      [src]="skillStepsResponse()?.file"
       class="progress__brand-point"
       [ngStyle]="{ left: progressDoneWidth() + 'px' }"
       alt=""
@@ -37,3 +34,4 @@
   </div>
   <router-outlet></router-outlet>
 </div>
+}
