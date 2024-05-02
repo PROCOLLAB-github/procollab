@@ -5,11 +5,11 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { map, Subscription } from "rxjs";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ProgramDataSchema } from "@office/program/models/program.model";
-import { ValidationService, ControlErrorPipe } from "projects/core";
+import { ControlErrorPipe, ValidationService } from "projects/core";
 import { ProgramService } from "@office/program/services/program.service";
 import { ButtonComponent, InputComponent } from "@ui/components";
 import { KeyValuePipe } from "@angular/common";
-import { BackComponent } from "@ui/components/back/back.component";
+import { BackComponent } from "@uilib";
 
 @Component({
   selector: "app-register",

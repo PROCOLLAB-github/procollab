@@ -4,9 +4,9 @@ import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   Component,
+  forwardRef,
   Input,
   OnDestroy,
-  forwardRef,
   signal,
 } from "@angular/core";
 import {
@@ -24,7 +24,7 @@ import {
 import { InputComponent } from "@ui/components";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ProjectRatingCriterion } from "@office/program/models/project-rating-criterion";
-import { Subscription, noop } from "rxjs";
+import { noop, Subscription } from "rxjs";
 import { BooleanCriterionComponent } from "./components/boolean-criterion/boolean-criterion.component";
 import { RangeCriterionInputComponent } from "./components/range-criterion-input/range-criterion-input.component";
 import { ErrorMessage } from "@error/models/error-message";

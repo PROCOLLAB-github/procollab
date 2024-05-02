@@ -5,7 +5,7 @@ import { map, Subscription } from "rxjs";
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { Project } from "@models/project.model";
 import { AuthService } from "@auth/services";
-import { BackComponent } from "@ui/components/back/back.component";
+import { BackComponent } from "@uilib";
 import { AsyncPipe } from "@angular/common";
 
 @Component({

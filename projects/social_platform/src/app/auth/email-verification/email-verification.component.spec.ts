@@ -14,9 +14,9 @@ describe("EmailVerificationComponent", () => {
     const authSpy = jasmine.createSpyObj(["memTokens"]);
 
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, EmailVerificationComponent],
-    providers: [{ provide: AuthService, useValue: authSpy }],
-}).compileComponents();
+      imports: [RouterTestingModule, EmailVerificationComponent],
+      providers: [{ provide: AuthService, useValue: authSpy }],
+    }).compileComponents();
   });
 
   beforeEach(() => {

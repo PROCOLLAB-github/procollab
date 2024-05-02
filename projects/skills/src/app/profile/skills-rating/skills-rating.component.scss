@@ -1,0 +1,36 @@
+@use "styles/responsive";
+@use "styles/typography";
+
+.rating {
+  padding: 25px 15px;
+  background-color: var(--white);
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+
+  @include responsive.apply-desktop {
+    padding: 24px 18px;
+  }
+
+  &__title {
+    margin-bottom: 24px;
+    color: var(--black);
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 16px;
+
+      @include typography.heading-3;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    @include responsive.apply-desktop {
+      gap: 18px;
+    }
+  }
+}

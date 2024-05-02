@@ -16,19 +16,14 @@ import {
   throttleTime,
 } from "rxjs";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
-import { NgIf, AsyncPipe } from "@angular/common";
+import { AsyncPipe, NgIf } from "@angular/common";
 
 @Component({
-    selector: "app-root",
-    templateUrl: "./app.component.html",
-    styleUrl: "./app.component.scss",
-    standalone: true,
-    imports: [
-        NgIf,
-        MatProgressBarModule,
-        RouterOutlet,
-        AsyncPipe,
-    ],
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrl: "./app.component.scss",
+  standalone: true,
+  imports: [NgIf, MatProgressBarModule, RouterOutlet, AsyncPipe],
 })
 export class AppComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService, private router: Router) {}

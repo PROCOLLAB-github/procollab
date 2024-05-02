@@ -1,0 +1,84 @@
+@use "styles/typography";
+@use "styles/responsive";
+
+.skill {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  height: 100%;
+
+  @include responsive.apply-desktop {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  &__block {
+    padding: 20px 15px;
+    background-color: var(--white);
+    border: 1px solid var(--grey-button);
+    border-radius: 15px;
+
+    @include responsive.apply-desktop {
+      padding: 30px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 30px;
+    color: var(--black);
+    text-align: center;
+
+    @include typography.heading-2;
+  }
+}
+
+.info {
+  &__img {
+    width: 240px;
+    height: 240px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__text {
+    @include typography.body-14;
+  }
+
+  &__level {
+    padding: 24px 0;
+    margin-top: 45px;
+    text-align: center;
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+
+    @include typography.heading-4;
+  }
+}
+
+.progress {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__bar {
+    display: block;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 45px;
+
+    @include responsive.apply-desktop {
+      width: 240px;
+      height: 240px;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100%;
+    overflow-y: auto;
+  }
+}

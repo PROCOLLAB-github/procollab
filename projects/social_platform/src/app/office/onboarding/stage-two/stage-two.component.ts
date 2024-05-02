@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { concatMap, map, Observable, Subscription, take } from "rxjs";
 import { AuthService } from "@auth/services";
-import { ValidationService, ControlErrorPipe } from "@corelib";
+import { ControlErrorPipe, ValidationService } from "@corelib";
 import { ActivatedRoute, Router } from "@angular/router";
 import { OnboardingService } from "../services/onboarding.service";
 import { ButtonComponent, IconComponent } from "@ui/components";

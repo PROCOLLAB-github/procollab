@@ -12,8 +12,8 @@ describe("ProjectResponsesComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [HttpClientTestingModule, RouterTestingModule, ProjectResponsesComponent],
-}).compileComponents();
+      imports: [HttpClientTestingModule, RouterTestingModule, ProjectResponsesComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

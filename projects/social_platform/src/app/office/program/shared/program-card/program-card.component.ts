@@ -5,7 +5,6 @@ import { Program } from "@office/program/models/program.model";
 import { DayjsPipe } from "projects/core";
 import { IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import {} from "@angular/common";
 
 @Component({
   selector: "app-program-card",

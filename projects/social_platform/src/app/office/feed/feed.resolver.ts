@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { ActivatedRoute, ResolveFn } from "@angular/router";
+import { ResolveFn } from "@angular/router";
 import { FeedItem } from "@office/feed/models/feed-item.model";
 import { FeedService } from "@office/feed/services/feed.service";
 import { ApiPagination } from "@models/api-pagination.model";

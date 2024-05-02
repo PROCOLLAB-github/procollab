@@ -1,0 +1,36 @@
+.task {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border: 1px solid var(--grey-button);
+  border-radius: 10px;
+
+  &--next {
+    border-color: var(--accent);
+  }
+
+  &__left {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+  }
+
+  &__prize {
+    width: 48px;
+    height: 48px;
+    filter: grayscale(1);
+  }
+
+  &__level {
+    color: var(--dark-grey);
+    text-decoration: underline;
+  }
+
+  &__button {
+    display: block;
+
+    i {
+      transform: rotate(90deg);
+    }
+  }
+}

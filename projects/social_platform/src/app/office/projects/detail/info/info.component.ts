@@ -34,12 +34,12 @@ import { expandElement } from "@utils/expand-element";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
 import { SubscriptionService } from "@office/services/subscription.service";
-import { ParseLinksPipe, ParseBreaksPipe } from "projects/core";
+import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { NgTemplateOutlet, AsyncPipe } from "@angular/common";
+import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
 import { User } from "@auth/models/user.model";
 
 @Component({

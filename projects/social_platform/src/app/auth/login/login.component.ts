@@ -1,12 +1,12 @@
 /** @format */
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AuthService } from "../services";
 import { ErrorMessage } from "@error/models/error-message";
-import { ValidationService, ControlErrorPipe } from "projects/core";
+import { ControlErrorPipe, ValidationService } from "projects/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { IconComponent, ButtonComponent, InputComponent } from "@ui/components";
+import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
 
 @Component({
   selector: "app-login",

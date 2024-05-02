@@ -12,12 +12,15 @@ describe("UploadFileComponent", () => {
   let fileServiceSpy: jasmine.SpyObj<FileService>;
 
   beforeEach(() => {
-    fileServiceSpy = jasmine.createSpyObj("FileService", {uploadFile: of({}), deleteFile: of({})});
+    fileServiceSpy = jasmine.createSpyObj("FileService", {
+      uploadFile: of({}),
+      deleteFile: of({}),
+    });
 
     TestBed.configureTestingModule({
-    imports: [FormsModule, UploadFileComponent],
-    providers: [{ provide: FileService, useValue: fileServiceSpy }],
-});
+      imports: [FormsModule, UploadFileComponent],
+      providers: [{ provide: FileService, useValue: fileServiceSpy }],
+    });
 
     fixture = TestBed.createComponent(UploadFileComponent);
     component = fixture.componentInstance;
@@ -48,7 +51,7 @@ describe("UploadFileComponent", () => {
     const button = fixture.nativeElement.querySelector(".file__basket");
     button.dispatchEvent(new Event("click"));
 
-    fixture.detectChanges()
+    fixture.detectChanges();
 
     expect(component.value).toBeFalsy();
     expect(component.onTouch).toHaveBeenCalled();

@@ -15,7 +15,7 @@ import { Program } from "@office/program/models/program.model";
 import { ProgramNewsService } from "@office/program/services/program-news.service";
 import { FeedNews } from "@office/projects/models/project-news.model";
 import { expandElement } from "@utils/expand-element";
-import { ParseLinksPipe, ParseBreaksPipe } from "projects/core";
+import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { ProgramNewsCardComponent } from "../shared/news-card/news-card.component";
 import { ButtonComponent, IconComponent } from "@ui/components";

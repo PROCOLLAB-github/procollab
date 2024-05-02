@@ -1,0 +1,28 @@
+.skill-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  cursor: pointer;
+  background-color: var(--white);
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__partner {
+    color: var(--black);
+  }
+
+  &__text {
+    color: #8c888a;
+  }
+
+  &__level {
+    color: var(--accent);
+  }
+}

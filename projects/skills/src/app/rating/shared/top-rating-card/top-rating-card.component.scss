@@ -1,0 +1,80 @@
+@use "styles/typography";
+@use "styles/responsive";
+
+.rating-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 18px 0 22px;
+  background-color: var(--white);
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+
+  &--first {
+    background-color: var(--accent);
+
+    .rating-card__title {
+      color: var(--white);
+    }
+
+    .rating-card__place {
+      color: var(--accent);
+      background-color: var(--white);
+    }
+
+    .rating-card__score {
+      color: var(--gold);
+    }
+  }
+
+  &--second {
+    border-color: var(--accent);
+  }
+
+  &__avatar {
+    position: relative;
+
+    img {
+      position: absolute;
+      top: -15px;
+      left: -25px;
+      z-index: 2;
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  &__title {
+    margin: 24px 0 5px;
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      margin: 12px 0 5px;
+
+      @include typography.body-bold-18;
+    }
+  }
+
+  &__score {
+    margin-bottom: 5px;
+    color: var(--gray);
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      @include typography.body-18;
+    }
+  }
+
+  &__place {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+  }
+}

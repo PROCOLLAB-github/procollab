@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ProgramCardComponent } from './program-card.component';
+import { ProgramCardComponent } from "./program-card.component";
 
-describe('ProgramCardComponent', () => {
+describe("ProgramCardComponent", () => {
   let component: ProgramCardComponent;
   let fixture: ComponentFixture<ProgramCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [ProgramCardComponent]
-})
-    .compileComponents();
+      imports: [ProgramCardComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('ProgramCardComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

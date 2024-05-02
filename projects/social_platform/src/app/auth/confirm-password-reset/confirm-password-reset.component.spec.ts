@@ -11,8 +11,8 @@ describe("ConfirmPasswordResetComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, ConfirmPasswordResetComponent],
-}).compileComponents();
+      imports: [RouterTestingModule, ConfirmPasswordResetComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

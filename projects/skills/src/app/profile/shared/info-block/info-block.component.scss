@@ -1,0 +1,134 @@
+@use "styles/responsive";
+@use "styles/typography";
+
+.info {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 18px 32px;
+
+  @include responsive.apply-desktop {
+    grid-template-columns: 223px 1fr 1fr 1fr;
+  }
+
+  @include responsive.apply-desktop {
+    gap: 15px;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: var(--white);
+    border: 1px solid var(--grey-button);
+    border-radius: 15px;
+  }
+
+  &__avatar-desktop {
+    grid-row: span 1;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    @include responsive.apply-desktop {
+      grid-row: span 2;
+      width: 165px;
+      height: 165px;
+    }
+  }
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__left {
+    @include responsive.apply-desktop {
+      grid-column: 2/span 2;
+    }
+  }
+
+  &__keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    color: var(--dark-grey);
+
+    @include responsive.apply-desktop {
+      gap: 20px;
+    }
+  }
+
+  &__title {
+    color: var(--black);
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      @include typography.heading-2;
+    }
+  }
+
+  &__geo {
+    display: flex;
+    align-items: center;
+    order: -1;
+
+    @include responsive.apply-desktop {
+      order: unset;
+
+      i {
+        display: none;
+      }
+    }
+
+    i {
+      display: block;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__return {
+    grid-row: 4;
+    grid-column: span 3;
+
+    @include responsive.apply-desktop {
+      grid-row: 1;
+      grid-column: 4/span 1;
+    }
+  }
+
+  &__achievements {
+    grid-row: 3;
+    grid-column: span 3;
+
+    @include responsive.apply-desktop {
+      grid-row-start: 2;
+      grid-column: 2/span 2;
+    }
+  }
+
+  &__score {
+    grid-row: 2;
+    grid-column: span 3;
+    color: var(--accent) !important;
+
+    @include responsive.apply-desktop {
+      grid-row-start: 2;
+      grid-column: 4;
+    }
+  }
+}
+
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  color: var(--dark-grey);
+  background-color: var(--white);
+  border: 1px solid #e8e8e8;
+  border-radius: 15px;
+
+  @include responsive.apply-desktop {
+    height: 90px;
+    background-color: transparent;
+  }
+}

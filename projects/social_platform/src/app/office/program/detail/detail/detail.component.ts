@@ -3,7 +3,7 @@
 import { Component, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
-import { BackComponent } from "@ui/components/back/back.component";
+import { BackComponent } from "@uilib";
 
 @Component({
   selector: "app-detail",

@@ -7,16 +7,16 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  forwardRef,
   Input,
   Output,
-  ViewChild,
-  forwardRef,
   signal,
+  ViewChild,
 } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ClickOutsideModule } from "ng-click-outside";
-import { Subscription, debounce, distinctUntilChanged, fromEvent, map, of, timer } from "rxjs";
+import { debounce, distinctUntilChanged, fromEvent, map, of, Subscription, timer } from "rxjs";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { LoaderComponent } from "@ui/components/loader/loader.component";
 

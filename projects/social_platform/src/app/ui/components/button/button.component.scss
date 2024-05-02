@@ -8,6 +8,7 @@
     width: 100%;
     min-height: 52px;
     padding: 11.5px 18px;
+    font-weight: 400;
     color: var(--white);
     text-align: center;
     cursor: pointer;
@@ -45,6 +46,11 @@
     &.button--green {
       color: var(--white);
       background-color: var(--green);
+    }
+
+    &.button--gold {
+      color: var(--white);
+      background: var(--gold-dark);
     }
   }
 

@@ -5,8 +5,8 @@ import { fromEvent, Subscription } from "rxjs";
 import { containerSm } from "@utils/responsive";
 
 @Directive({
-    selector: "[appEditorSubmitButton]",
-    standalone: true,
+  selector: "[appEditorSubmitButton]",
+  standalone: true,
 })
 export class EditorSubmitButtonDirective implements AfterViewInit, OnDestroy {
   constructor(private readonly viewRef: ViewContainerRef) {}

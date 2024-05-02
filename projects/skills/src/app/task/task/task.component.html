@@ -1,0 +1,37 @@
+<!-- @format -->
+
+@if (skillStepsResponse()) {
+<div class="task">
+  <div class="task__badge badge">
+    <div class="badge__left">
+      <h1 class="badge__title">{{ skillStepsResponse()?.skillName }}</h1>
+      <div class="badge__text">
+        развитие навыка стало доступным благодаря <br />
+        начните обучение прямо сейчас
+      </div>
+    </div>
+    <img class="badge__img" [src]="skillStepsResponse()?.file" alt="" />
+  </div>
+  <div class="task__progress progress" #progressBarEl>
+    <div class="progress__line"></div>
+    <div class="progress__line-done" [ngStyle]="{ width: progressDoneWidth() + 'px' }"></div>
+    <div class="progress__first progress__border progress__border--done">1 задание</div>
+    @for (id of taskIds(); track $index) {
+    <a
+      #pointEls
+      class="progress__point"
+      [attr.data-id]="id"
+      [ngClass]="{ 'progress__point--done': doneTasks()?.includes(id) }"
+    ></a>
+    }
+    <img
+      [src]="skillStepsResponse()?.file"
+      class="progress__brand-point"
+      [ngStyle]="{ left: progressDoneWidth() + 'px' }"
+      alt=""
+    />
+    <div class="progress__last progress__border">2 задание</div>
+  </div>
+  <router-outlet></router-outlet>
+</div>
+}

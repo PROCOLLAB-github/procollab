@@ -10,8 +10,8 @@ describe("SelectComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [FormsModule, SelectComponent],
-}).compileComponents();
+      imports: [FormsModule, SelectComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

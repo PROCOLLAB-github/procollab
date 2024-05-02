@@ -1,8 +1,8 @@
 /** @format */
 
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
-import { ValidationService, ControlErrorPipe } from "projects/core";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { ControlErrorPipe, ValidationService } from "projects/core";
 import { ErrorMessage } from "@error/models/error-message";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "@auth/services";

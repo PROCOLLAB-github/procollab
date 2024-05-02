@@ -1,0 +1,51 @@
+@use "styles/responsive";
+
+.list {
+  &__search {
+    margin: 20px 0;
+  }
+
+  &__items {
+    display: grid;
+    gap: 10px;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+  }
+}
+
+.search {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @include responsive.apply-desktop {
+    flex-direction: row;
+    gap: 18px;
+  }
+
+  &__control {
+    position: relative;
+    flex-grow: 1;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 15px 15px 15px 60px;
+    border: 1px solid var(--grey-button);
+    border-radius: 8px;
+  }
+
+  &__icon {
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+  }
+
+  &__button {
+    min-width: 315px;
+  }
+}

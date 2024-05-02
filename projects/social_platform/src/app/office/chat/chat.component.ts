@@ -9,7 +9,7 @@ import { AuthService } from "@auth/services";
 import { ChatService } from "@services/chat.service";
 import { ChatCardComponent } from "./shared/chat-card/chat-card.component";
 import { AsyncPipe } from "@angular/common";
-import { BackComponent } from "@ui/components/back/back.component";
+import { BackComponent } from "@uilib";
 
 @Component({
   selector: "app-chat",

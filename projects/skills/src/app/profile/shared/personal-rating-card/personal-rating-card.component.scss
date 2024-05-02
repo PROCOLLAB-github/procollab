@@ -1,0 +1,59 @@
+@use "styles/typography";
+@use "styles/responsive";
+
+.rating-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+
+  @include responsive.apply-desktop {
+    padding: 10px 15px;
+  }
+
+  &__left {
+    padding-left: 45px;
+    background-image: url("/assets/images/skills/prize.png");
+    background-repeat: no-repeat;
+    background-position: 0 50%;
+    background-size: 40px 40px;
+
+    @include responsive.apply-desktop {
+      padding-left: 60px;
+      background-size: 48px 48px;
+    }
+  }
+
+  &__name {
+    color: var(--black);
+    text-decoration: underline;
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      @include typography.body-18;
+    }
+  }
+
+  &__level {
+    color: var(--dark-grey);
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      @include typography.body-14;
+    }
+  }
+
+  &__right {
+    color: var(--grey-for-text);
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      @include typography.body-18;
+    }
+  }
+}

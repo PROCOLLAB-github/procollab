@@ -1,0 +1,141 @@
+@use "styles/typography";
+@use "styles/responsive";
+
+.task {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  @include responsive.apply-desktop {
+    gap: 18px;
+  }
+}
+
+.badge {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 24px 15px;
+  background-color: var(--white);
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+
+  &__title {
+    color: var(--black);
+
+    @include typography.body-bold-18;
+
+    @include responsive.apply-desktop {
+      @include typography.heading-3;
+    }
+  }
+
+  &__text {
+    color: var(--accent);
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      @include typography.body-16;
+    }
+  }
+
+  &__img {
+    width: 80px;
+    height: 20px;
+    object-fit: cover;
+
+    @include responsive.apply-desktop {
+      width: 400px;
+      height: 80px;
+    }
+  }
+}
+
+.progress {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__line,
+  &__line-done {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 4px;
+    transform: translateY(-50%);
+  }
+
+  &__line {
+    right: 0;
+    background-color: var(--grey-button);
+  }
+
+  &__line-done {
+    background-color: var(--accent);
+  }
+
+  &__border {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 24px;
+    color: var(--grey-button);
+    background-color: var(--white);
+    border: 1px solid var(--grey-button);
+    border-radius: 10px;
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      width: 115px;
+      height: 43px;
+
+      @include typography.bold-body-16;
+    }
+
+    &--done {
+      color: var(--black);
+      border-color: var(--accent);
+      border-width: 2px;
+    }
+  }
+
+  &__point {
+    position: relative;
+    z-index: 2;
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-color: var(--grey-button);
+    border-radius: 50%;
+
+    @include responsive.apply-desktop {
+      width: 18px;
+      height: 18px;
+    }
+
+    &--done {
+      background-color: var(--accent);
+    }
+  }
+
+  &__brand-point {
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+
+    @include responsive.apply-desktop {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}

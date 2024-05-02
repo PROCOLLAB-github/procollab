@@ -14,7 +14,7 @@ import { FeedNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ValidationService, DayjsPipe, FormControlPipe } from "projects/core";
+import { DayjsPipe, FormControlPipe, ValidationService } from "projects/core";
 import { FileService } from "@core/services/file.service";
 import { nanoid } from "nanoid";
 import { expandElement } from "@utils/expand-element";

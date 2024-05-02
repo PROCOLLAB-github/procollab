@@ -1,0 +1,9 @@
+.profile {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+
+  &__month {
+    grid-column: span 2;
+  }
+}

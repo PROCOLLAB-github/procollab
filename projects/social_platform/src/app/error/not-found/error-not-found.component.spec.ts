@@ -10,8 +10,8 @@ describe("ErrorNotFoundComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [ErrorNotFoundComponent],
-}).compileComponents();
+      imports: [ErrorNotFoundComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

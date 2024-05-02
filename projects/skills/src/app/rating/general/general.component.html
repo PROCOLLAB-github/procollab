@@ -1,0 +1,19 @@
+<!-- @format -->
+
+<div class="rating-page">
+  <div class="rating-page__top3">
+    @for (r of top3(); track $index) {
+    <app-top-rating-card [rating]="r" [place]="$index + 1"></app-top-rating-card>
+    }
+  </div>
+  <div class="rating-page__rest">
+    <div class="rating-page__header">
+      <h1 class="rating-page__title">Рейтинг пользователей</h1>
+      <div class="rating-page__basic">
+        @for (r of rest(); track $index) {
+        <app-basic-rating-card [rating]="r"></app-basic-rating-card>
+        }
+      </div>
+    </div>
+  </div>
+</div>

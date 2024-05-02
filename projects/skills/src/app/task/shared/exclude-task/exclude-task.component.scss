@@ -1,0 +1,51 @@
+@use "styles/responsive";
+@use "styles/typography";
+
+.exclude {
+  padding: 22px 14px;
+  background-color: var(--white);
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+
+  @include responsive.apply-desktop {
+    padding: 26px;
+  }
+
+  &__title {
+    margin-bottom: 20px;
+    color: var(--black);
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 26px;
+
+      @include typography.heading-3;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    @include responsive.apply-desktop {
+      gap: 18px;
+    }
+  }
+
+  &__item {
+    padding: 10px;
+    cursor: pointer;
+    border: 1px solid var(--accent);
+    border-radius: 15px;
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      padding: 10px 14px;
+
+      @include typography.body-14;
+    }
+  }
+}

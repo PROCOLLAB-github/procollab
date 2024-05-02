@@ -1,16 +1,15 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { DeleteConfirmComponent } from './delete-confirm.component';
+import { DeleteConfirmComponent } from "./delete-confirm.component";
 
-describe('DeleteConfirmComponent', () => {
+describe("DeleteConfirmComponent", () => {
   let component: DeleteConfirmComponent;
   let fixture: ComponentFixture<DeleteConfirmComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [DeleteConfirmComponent]
-})
-    .compileComponents();
+      imports: [DeleteConfirmComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('DeleteConfirmComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
