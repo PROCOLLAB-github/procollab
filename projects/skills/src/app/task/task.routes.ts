@@ -17,7 +17,10 @@ export const TASK_ROUTES: Routes = [
         path: "results",
         component: TaskCompleteComponent,
       },
-      { path: ":subTaskId", component: SubtaskComponent },
+      {
+        path: ":subTaskId",
+        component: SubtaskComponent,
+      },
     ],
   },
 ];

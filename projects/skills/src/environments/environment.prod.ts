@@ -2,5 +2,5 @@
 
 export const environment = {
   production: true,
-  apiUrl: "https://skills.procollab.ru",
+  apiUrl: "https://skills.dev.procollab.ru",
 };

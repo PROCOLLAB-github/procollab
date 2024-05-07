@@ -1,7 +1,7 @@
 /** @format */
 
 export interface Skill {
-  file: { file: string };
+  fileLink: string;
   id: number;
   name: string;
   quantityOfLevels: number;
