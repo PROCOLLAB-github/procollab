@@ -3,8 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { ApiPagination } from "../../../models/api-pagination.model";
-import { Skill, SkillDetail, Task, TasksResponse } from "../../../models/skill.model";
-import { map } from "rxjs";
+import { Skill, SkillDetail, TasksResponse } from "../../../models/skill.model";
 
 @Injectable({
   providedIn: "root",
@@ -17,9 +16,7 @@ export class SkillService {
   }
 
   getDetail(skillId: number) {
-    return this.apiService
-      .get<{ skills: { [key: number]: SkillDetail } }>(`/courses/skill-details/${skillId}`)
-      .pipe(map(r => r.skills[1]));
+    return this.apiService.get<SkillDetail>(`/courses/skill-details/${skillId}`);
   }
 
   getTasks(skillId: number) {
