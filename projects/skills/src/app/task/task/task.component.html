@@ -22,6 +22,7 @@
       class="progress__point"
       [attr.data-id]="id"
       [ngClass]="{ 'progress__point--done': doneTasks()?.includes(id) }"
+      (click)="currentSubTaskId.set(id)"
     ></a>
     }
     <img

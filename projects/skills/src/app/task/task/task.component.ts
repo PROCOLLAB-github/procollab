@@ -24,7 +24,7 @@ import { TaskStepsResponse } from "../../../models/skill.model";
   templateUrl: "./task.component.html",
   styleUrl: "./task.component.scss",
 })
-export class TaskComponent implements OnInit, AfterViewInit {
+export class TaskComponent implements OnInit {
   @ViewChildren("pointEls") pointEls?: ElementRef<HTMLAnchorElement>[];
   @ViewChild("progressBarEl") progressBarEl?: ElementRef<HTMLElement>;
 
@@ -40,7 +40,7 @@ export class TaskComponent implements OnInit, AfterViewInit {
           const id = el.nativeElement.dataset["id"];
           if (!id) return false;
 
-          return Number(id) === this.currentTaskId();
+          return Number(id) === this.currentSubTaskId();
         });
         if (targetEl && this.progressBarEl) {
           const { left: leftParent } = this.progressBarEl.nativeElement.getBoundingClientRect();
@@ -52,35 +52,68 @@ export class TaskComponent implements OnInit, AfterViewInit {
       },
       { allowSignalWrites: true }
     );
+
+    effect(
+      () => {
+        const skillsResponse = this.skillStepsResponse();
+        if (!skillsResponse) return;
+
+        // TODO: change `id` to `order` after backend add it
+        const sortedSteps = skillsResponse.stepData.sort((prev, next) => prev.id - next.id);
+
+        const doneSteps = sortedSteps.filter(step => step.isDone);
+        const lastDoneStep = doneSteps[doneSteps.length - 1];
+        if (lastDoneStep) {
+          this.currentSubTaskId.set(lastDoneStep.id);
+        }
+
+        const firstStep = sortedSteps[0];
+        this.currentSubTaskId.set(firstStep.id);
+      },
+      { allowSignalWrites: true }
+    );
+
+    effect(() => {
+      const subTaskId = this.currentSubTaskId();
+      if (!subTaskId) return;
+
+      this.router
+        .navigate(["/task", this.route.snapshot.params["taskId"], subTaskId], {
+          queryParams: { type: this.currentSubTask()?.type ?? "" },
+        })
+        .then(() => console.debug("Route changed from TaskComponent"));
+    });
   }
 
   ngOnInit() {
     this.route.data.pipe(map(r => r["data"])).subscribe(res => {
       this.skillStepsResponse.set(res);
-
-      if (!this.skillStepsResponse()) return;
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const doneIdx = this.skillStepsResponse().stepData.filter(s => s.isDone).length - 1;
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      this.currentTaskId.set(this.skillStepsResponse().stepData[doneIdx].id);
-
-      this.router.navigate([this.currentTaskId()], { relativeTo: this.route });
     });
   }
-
-  ngAfterViewInit() {}
 
   progressDoneWidth = signal(0);
 
   taskIds = computed(() => {
-    return this.skillStepsResponse()?.stepData.map(s => s.id);
+    const stepsResponse = this.skillStepsResponse();
+    if (!stepsResponse) return [];
+
+    return stepsResponse.stepData.map(s => s.id);
   });
 
-  currentTaskId = signal(1);
+  currentSubTaskId = signal<number | null>(null);
+  currentSubTask = computed(() => {
+    const stepsResponse = this.skillStepsResponse();
+    const subTaskId = this.currentSubTaskId();
+
+    if (!stepsResponse || !subTaskId) return;
+
+    return stepsResponse.stepData.find(step => step.id === subTaskId);
+  });
 
   doneTasks = computed(() => {
-    return this.taskIds()?.filter(t => t <= this.currentTaskId());
+    const subTaskId = this.currentSubTaskId();
+    if (!subTaskId) return [];
+
+    return this.taskIds()?.filter(t => t <= subTaskId);
   });
 }
