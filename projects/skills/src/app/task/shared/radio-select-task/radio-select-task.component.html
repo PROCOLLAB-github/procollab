@@ -1,18 +1,14 @@
 <!-- @format -->
 
 <div class="radio">
-  <img
-    src="https://i.pinimg.com/564x/9f/c8/9a/9fc89af7ebda28194b7f0b3463a24714.jpg"
-    alt=""
-    class="radio__img"
-  />
+  <img [src]="data.files[0]" alt="" class="radio__img" />
   <div class="radio__body">
     <h2 class="radio__title">
-      Кто лучше справлялся с дизайнерской задачей «Marshmellow Challenge»?
+      {{ data.questionText }}
     </h2>
     <div class="radio__list">
-      @for (op of options(); track op.id) {
-      <div class="radio__option text-body-14">{{ op.label }}</div>
+      @for (op of data.answers; track op.id) {
+      <div class="radio__option text-body-14">{{ op.answerText }}</div>
       }
     </div>
   </div>

@@ -1,16 +1,22 @@
 <!-- @format -->
 
+@if (loading()) {
+<div class="loading">
+  <app-loader color="accent"></app-loader>
+</div>
+} @else {
 <div class="subtask">
-  @if (taskType() === "video") {
-  <app-video-task></app-video-task>
-  } @else if (taskType() === "radio-select") {
-  <app-radio-select-task></app-radio-select-task>
-  } @else if (taskType() === "relations") {
-  <app-relations-task></app-relations-task>
-  } @else if (taskType() === "exclude") {
-  <app-exclude-task></app-exclude-task>
+  @if (infoSlide(); as is) {
+  <app-info-task [data]="is"></app-info-task>
+  } @if (singleQuestion(); as sq) {
+  <app-radio-select-task [data]="sq"></app-radio-select-task>
+  } @if (connectQuestion(); as cq) {
+  <app-relations-task [data]="cq"></app-relations-task>
+  } @if (excludeQuestion(); as eq) {
+  <app-exclude-task [data]="eq"></app-exclude-task>
   }
-  <a routerLink="/task/sdf/results">
+  <a routerLink="/task/234/results">
     <app-button>Продолжить</app-button>
   </a>
 </div>
+}

@@ -3,3 +3,10 @@
   flex-direction: column;
   gap: 26px;
 }
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+}

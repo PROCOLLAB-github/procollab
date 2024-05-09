@@ -2,18 +2,18 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { VideoTaskComponent } from "./video-task.component";
+import { InfoTaskComponent } from "./info-task.component";
 
 describe("VideoTaskComponent", () => {
-  let component: VideoTaskComponent;
-  let fixture: ComponentFixture<VideoTaskComponent>;
+  let component: InfoTaskComponent;
+  let fixture: ComponentFixture<InfoTaskComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VideoTaskComponent],
+      imports: [InfoTaskComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(VideoTaskComponent);
+    fixture = TestBed.createComponent(InfoTaskComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

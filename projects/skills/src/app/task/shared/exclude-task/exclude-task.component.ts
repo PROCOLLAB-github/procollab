@@ -1,7 +1,8 @@
 /** @format */
 
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { ExcludeQuestion } from "../../../../models/skill.model";
 
 @Component({
   selector: "app-exclude-task",
@@ -11,5 +12,5 @@ import { CommonModule } from "@angular/common";
   styleUrl: "./exclude-task.component.scss",
 })
 export class ExcludeTaskComponent {
-  protected readonly Array = Array;
+  @Input({ required: true }) data!: ExcludeQuestion;
 }

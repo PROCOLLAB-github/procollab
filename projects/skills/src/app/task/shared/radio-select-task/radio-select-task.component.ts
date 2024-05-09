@@ -1,7 +1,8 @@
 /** @format */
 
-import { Component, signal } from "@angular/core";
+import { Component, Input, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { SingleQuestion } from "../../../../models/skill.model";
 
 @Component({
   selector: "app-radio-select-task",
@@ -11,9 +12,11 @@ import { CommonModule } from "@angular/common";
   styleUrl: "./radio-select-task.component.scss",
 })
 export class RadioSelectTaskComponent {
-  options = signal([
-    { id: "ds", label: "Профессиональные архитекторы" },
-    { id: "dsdfs", label: "дети" },
-    { id: "ds234234", label: "Выпускники бизнес-школ" },
-  ]);
+  @Input({ required: true }) data!: SingleQuestion;
+  //
+  // options = signal([
+  //   { id: "ds", label: "Профессиональные архитекторы" },
+  //   { id: "dsdfs", label: "дети" },
+  //   { id: "ds234234", label: "Выпускники бизнес-школ" },
+  // ]);
 }

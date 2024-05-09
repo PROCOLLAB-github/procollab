@@ -1,10 +1,10 @@
 <!-- @format -->
 
 <div class="exclude">
-  <h2 class="exclude__title">Выберите лишнее действие, не относящееся к развитию самодисциплины</h2>
+  <h2 class="exclude__title">{{ data.questionText }}</h2>
   <ul class="exclude__list">
-    @for (_ of Array(20); track $index) {
-    <li class="exclude__item">планирование</li>
+    @for (op of data.answers; track op.id) {
+    <li class="exclude__item">{{ op.answerText }}</li>
     }
   </ul>
 </div>

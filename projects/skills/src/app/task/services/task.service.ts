@@ -2,7 +2,8 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
-import { TaskStep, TaskStepsResponse } from "../../../models/skill.model";
+import { StepType, TaskStep, TaskStepsResponse } from "../../../models/skill.model";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -21,9 +22,9 @@ export class TaskService {
     question_single_answer: "single-correct",
   };
 
-  getStep(taskStep: TaskStep) {
-    const route = `/questions/${this.stepRouteMapping[taskStep.type]}/${taskStep.id}`;
+  getStep(taskStepId: TaskStep["id"], taskStepType: TaskStep["type"]): Observable<StepType> {
+    const route = `/questions/${this.stepRouteMapping[taskStepType]}/${taskStepId}`;
 
-    return this.apiService.get(route);
+    return this.apiService.get<StepType>(route);
   }
 }

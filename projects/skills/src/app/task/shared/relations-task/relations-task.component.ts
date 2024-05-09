@@ -1,7 +1,8 @@
 /** @format */
 
-import { Component } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { ConnectQuestion } from "../../../../models/skill.model";
 
 @Component({
   selector: "app-relations-task",
@@ -10,4 +11,7 @@ import { CommonModule } from "@angular/common";
   templateUrl: "./relations-task.component.html",
   styleUrl: "./relations-task.component.scss",
 })
-export class RelationsTaskComponent {}
+export class RelationsTaskComponent {
+  @Input({ required: true }) data!: ConnectQuestion;
+  protected readonly Array = Array;
+}
