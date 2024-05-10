@@ -1,7 +1,6 @@
 /** @format */
 
 import {
-  AfterViewInit,
   Component,
   computed,
   effect,
@@ -14,10 +13,9 @@ import {
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from "@angular/router";
-import { map, tap } from "rxjs";
+import { map } from "rxjs";
 import { TaskStepsResponse } from "../../../models/skill.model";
 import { ButtonComponent } from "@ui/components";
-import { toSignal } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-task",
