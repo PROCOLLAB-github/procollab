@@ -15,8 +15,6 @@
   } @if (excludeQuestion(); as eq) {
   <app-exclude-task [data]="eq"></app-exclude-task>
   }
-  <a routerLink="/task/234/results">
-    <app-button>Продолжить</app-button>
-  </a>
 </div>
+<app-button (click)="onNext()">Продолжить</app-button>
 }

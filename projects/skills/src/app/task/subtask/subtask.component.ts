@@ -7,7 +7,7 @@ import { RadioSelectTaskComponent } from "../shared/radio-select-task/radio-sele
 import { RelationsTaskComponent } from "../shared/relations-task/relations-task.component";
 import { ButtonComponent } from "@ui/components";
 import { ExcludeTaskComponent } from "../shared/exclude-task/exclude-task.component";
-import { ActivatedRoute, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { concatMap, map, tap } from "rxjs";
 import { LoaderComponent } from "@ui/components/loader/loader.component";
 import { TaskService } from "../services/task.service";
@@ -19,6 +19,7 @@ import {
   StepType,
   TaskStep,
 } from "../../../models/skill.model";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-subtask",
@@ -38,10 +39,18 @@ import {
 })
 export class SubtaskComponent implements OnInit {
   route = inject(ActivatedRoute);
+  router = inject(Router);
   taskService = inject(TaskService);
 
   taskType = this.route.queryParams.pipe(map(p => p["type"]));
   loading = signal(false);
+
+  subTaskId = toSignal(
+    this.route.params.pipe(
+      map(r => r["subTaskId"]),
+      map(Number)
+    )
+  );
 
   // stepData = signal<StepType | null>(null);
   infoSlide = signal<InfoSlide | null>(null);
@@ -57,7 +66,7 @@ export class SubtaskComponent implements OnInit {
           this.loading.set(true);
         }),
         concatMap(subTaskId => {
-          return this.taskService.getStep(subTaskId, this.route.snapshot.queryParams["type"]);
+          return this.taskService.fetchStep(subTaskId, this.route.snapshot.queryParams["type"]);
         })
       )
       .subscribe({
@@ -88,5 +97,19 @@ export class SubtaskComponent implements OnInit {
     } else if (type === "exclude_question") {
       this.excludeQuestion.set(step as ExcludeQuestion);
     }
+  }
+
+  onNext() {
+    const id = this.subTaskId();
+    if (!id) return;
+
+    const nextStep = this.taskService.getNextStep(id);
+    if (!nextStep) return;
+
+    this.router
+      .navigate(["/task", this.route.parent?.snapshot.params["taskId"], nextStep.id], {
+        queryParams: { type: nextStep.type },
+      })
+      .then(() => console.debug("Route changed from SubtaskComponent"));
   }
 }

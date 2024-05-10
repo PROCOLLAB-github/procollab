@@ -13,14 +13,16 @@ import {
   ViewChildren,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
-import { map } from "rxjs";
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from "@angular/router";
+import { map, tap } from "rxjs";
 import { TaskStepsResponse } from "../../../models/skill.model";
+import { ButtonComponent } from "@ui/components";
+import { toSignal } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-task",
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, ButtonComponent, RouterLink],
   templateUrl: "./task.component.html",
   styleUrl: "./task.component.scss",
 })
@@ -89,6 +91,15 @@ export class TaskComponent implements OnInit {
     this.route.data.pipe(map(r => r["data"])).subscribe(res => {
       this.skillStepsResponse.set(res);
     });
+
+    this.route.firstChild?.params
+      .pipe(
+        map(r => r["subTaskId"]),
+        map(Number)
+      )
+      .subscribe(s => {
+        this.currentSubTaskId.set(s);
+      });
   }
 
   progressDoneWidth = signal(0);
@@ -101,6 +112,7 @@ export class TaskComponent implements OnInit {
   });
 
   currentSubTaskId = signal<number | null>(null);
+
   currentSubTask = computed(() => {
     const stepsResponse = this.skillStepsResponse();
     const subTaskId = this.currentSubTaskId();

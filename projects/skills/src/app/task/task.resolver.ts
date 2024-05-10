@@ -8,5 +8,5 @@ import { TaskStepsResponse } from "../../models/skill.model";
 export const taskDetailResolver: ResolveFn<TaskStepsResponse> = (route, state) => {
   const taskService = inject(TaskService);
 
-  return taskService.getSteps(route.params["taskId"]);
+  return taskService.fetchSteps(route.params["taskId"]);
 };

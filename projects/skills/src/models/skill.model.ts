@@ -37,6 +37,7 @@ export interface TaskStep {
   id: number;
   isDone: boolean;
   type: "exclude_question" | "question_single_answer" | "question_connect" | "info_slide";
+  ordinalNumber: number;
 }
 
 export interface TaskStepsResponse extends TaskDetail {
