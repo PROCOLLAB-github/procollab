@@ -15,6 +15,6 @@
   } @if (excludeQuestion(); as eq) {
   <app-exclude-task [data]="eq"></app-exclude-task>
   }
+  <app-button (click)="onNext()">Продолжить</app-button>
 </div>
-<app-button (click)="onNext()">Продолжить</app-button>
 }
