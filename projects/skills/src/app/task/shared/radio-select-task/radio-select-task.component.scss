@@ -12,6 +12,10 @@
     gap: 60px;
   }
 
+  &__body {
+    flex-grow: 1;
+  }
+
   &__img {
     width: 385px;
     height: 315px;

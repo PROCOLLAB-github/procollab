@@ -44,4 +44,10 @@ export class TaskService {
 
     return this.apiService.get<StepType>(route);
   }
+
+  checkStep(taskStepId: TaskStep["id"], taskStepType: TaskStep["type"], body: any) {
+    const route = `/questions/${this.stepRouteMapping[taskStepType]}/check/${taskStepId}`;
+
+    return this.apiService.post<void>(route, body);
+  }
 }

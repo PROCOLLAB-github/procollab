@@ -51,8 +51,8 @@ export interface InfoSlide {
 }
 
 export interface ConnectQuestion {
-  connectLeft: { id: number; answerText: string }[];
-  connectRight: { string: string }[];
+  connectLeft: { id: number; text: string }[];
+  connectRight: { id: number; text: string }[];
   description: string;
   files: string[];
   id: number;
@@ -60,7 +60,7 @@ export interface ConnectQuestion {
   questionText: string;
 }
 export interface SingleQuestion {
-  answers: { id: number; answerText: string }[];
+  answers: { id: number; text: string }[];
   description: string;
   files: string[];
   id: number;
@@ -68,7 +68,7 @@ export interface SingleQuestion {
   questionText: string;
 }
 export interface ExcludeQuestion {
-  answers: { id: number; answerText: string }[];
+  answers: { id: number; text: string }[];
   description: string;
   files: string[];
   id: number;

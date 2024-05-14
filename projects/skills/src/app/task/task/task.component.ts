@@ -62,9 +62,10 @@ export class TaskComponent implements OnInit {
         const sortedSteps = skillsResponse.stepData.sort((prev, next) => prev.id - next.id);
 
         const doneSteps = sortedSteps.filter(step => step.isDone);
-        const lastDoneStep = doneSteps[doneSteps.length - 1];
+        const lastDoneStep = sortedSteps[doneSteps.length];
         if (lastDoneStep) {
           this.currentSubTaskId.set(lastDoneStep.id);
+          return;
         }
 
         const firstStep = sortedSteps[0];

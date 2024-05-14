@@ -42,7 +42,6 @@ export class SubtaskComponent implements OnInit {
   router = inject(Router);
   taskService = inject(TaskService);
 
-  taskType = this.route.queryParams.pipe(map(p => p["type"]));
   loading = signal(false);
 
   subTaskId = toSignal(
@@ -103,13 +102,40 @@ export class SubtaskComponent implements OnInit {
     const id = this.subTaskId();
     if (!id) return;
 
-    const nextStep = this.taskService.getNextStep(id);
-    if (!nextStep) return;
+    const type = this.route.snapshot.queryParams["type"] as TaskStep["type"];
 
-    this.router
-      .navigate(["/task", this.route.parent?.snapshot.params["taskId"], nextStep.id], {
-        queryParams: { type: nextStep.type },
-      })
-      .then(() => console.debug("Route changed from SubtaskComponent"));
+    let body: any;
+
+    if (type === "info_slide") {
+      body = {};
+    } else if (type === "question_connect") {
+      body = [
+        {
+          leftId: this.connectQuestion()?.connectLeft[0].id,
+          rightId: this.connectQuestion()?.connectRight[0].id,
+        },
+        {
+          leftId: this.connectQuestion()?.connectLeft[1].id,
+          rightId: this.connectQuestion()?.connectRight[1].id,
+        },
+      ];
+    } else if (type === "question_single_answer") {
+      body = { answerId: this.singleQuestion()?.answers[0].id };
+    } else if (type === "exclude_question") {
+      body = { excludeId: this.excludeQuestion()?.answers[0].id };
+    }
+
+    this.taskService.checkStep(id, type, body).subscribe(res => {
+      const nextStep = this.taskService.getNextStep(id);
+      if (!nextStep) return;
+      const taskId = this.route.parent?.snapshot.params["taskId"];
+
+      if (!taskId) return;
+      this.router
+        .navigate(["/task", taskId, nextStep.id], {
+          queryParams: { type: nextStep.type },
+        })
+        .then(() => console.debug("Route changed from SubtaskComponent"));
+    });
   }
 }

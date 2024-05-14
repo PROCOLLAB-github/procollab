@@ -3,9 +3,9 @@
 <div class="relations">
   <div class="relations__grid">
     @for (_ of Array(data.connectLeft.length); track $index) {
-    <div class="relations__item relations__a">{{ data.connectLeft[$index].answerText }}</div>
+    <div class="relations__item relations__a">{{ data.connectLeft[$index].text }}</div>
     <div class="relations__item relations__b">
-      {{ data.connectRight[$index].string }}
+      {{ data.connectRight[$index].text }}
     </div>
     }
   </div>
