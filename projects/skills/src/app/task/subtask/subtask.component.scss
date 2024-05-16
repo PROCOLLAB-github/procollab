@@ -1,3 +1,5 @@
+@use "styles/typography";
+
 .subtask {
   display: flex;
   flex-direction: column;
@@ -9,4 +11,41 @@
   align-items: center;
   justify-content: center;
   height: 400px;
+}
+
+.action {
+  position: relative;
+
+  &__button {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    padding: 15px 10px 0;
+    border-radius: 15px 15px 0 0;
+    transition: all 0.2s;
+    transform: translateY(0%);
+
+    &--open {
+      transform: translateY(-80%);
+    }
+  }
+
+  &__error {
+    color: var(--red);
+    background-color: var(--light-red);
+  }
+
+  &__success {
+    color: var(--green);
+    background-color: var(--light-green);
+  }
 }

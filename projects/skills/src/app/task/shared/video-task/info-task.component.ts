@@ -2,7 +2,7 @@
 
 import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { InfoSlide } from "../../../../models/skill.model";
+import { InfoSlide } from "../../../../models/step.model";
 
 @Component({
   selector: "app-info-task",

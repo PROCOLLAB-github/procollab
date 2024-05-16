@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnInit, signal } from "@angular/core";
+import { Component, computed, inject, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { InfoTaskComponent } from "../shared/video-task/info-task.component";
 import { RadioSelectTaskComponent } from "../shared/radio-select-task/radio-select-task.component";
@@ -11,15 +11,18 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { concatMap, map, tap } from "rxjs";
 import { LoaderComponent } from "@ui/components/loader/loader.component";
 import { TaskService } from "../services/task.service";
+import { TaskStep } from "../../../models/skill.model";
+import { toSignal } from "@angular/core/rxjs-interop";
 import {
   ConnectQuestion,
+  ConnectQuestionResponse,
   ExcludeQuestion,
+  ExcludeQuestionResponse,
   InfoSlide,
   SingleQuestion,
+  SingleQuestionResponse,
   StepType,
-  TaskStep,
-} from "../../../models/skill.model";
-import { toSignal } from "@angular/core/rxjs-interop";
+} from "../../../models/step.model";
 
 @Component({
   selector: "app-subtask",
@@ -56,6 +59,12 @@ export class SubtaskComponent implements OnInit {
   singleQuestion = signal<SingleQuestion | null>(null);
   connectQuestion = signal<ConnectQuestion | null>(null);
   excludeQuestion = signal<ExcludeQuestion | null>(null);
+
+  connectQuestionError = signal<ConnectQuestionResponse | null>(null);
+  singleQuestionError = signal<SingleQuestionResponse | null>(null);
+  excludeQuestionError = signal<ExcludeQuestionResponse | null>(null);
+  anyError = signal(false);
+  success = signal(false);
 
   ngOnInit() {
     this.route.params
@@ -98,44 +107,45 @@ export class SubtaskComponent implements OnInit {
     }
   }
 
+  body = signal<any>({});
   onNext() {
     const id = this.subTaskId();
     if (!id) return;
 
     const type = this.route.snapshot.queryParams["type"] as TaskStep["type"];
 
-    let body: any;
+    this.taskService.checkStep(id, type, this.body()).subscribe({
+      next: res => {
+        this.success.set(true);
 
-    if (type === "info_slide") {
-      body = {};
-    } else if (type === "question_connect") {
-      body = [
-        {
-          leftId: this.connectQuestion()?.connectLeft[0].id,
-          rightId: this.connectQuestion()?.connectRight[0].id,
-        },
-        {
-          leftId: this.connectQuestion()?.connectLeft[1].id,
-          rightId: this.connectQuestion()?.connectRight[1].id,
-        },
-      ];
-    } else if (type === "question_single_answer") {
-      body = { answerId: this.singleQuestion()?.answers[0].id };
-    } else if (type === "exclude_question") {
-      body = { excludeId: this.excludeQuestion()?.answers[0].id };
-    }
+        setTimeout(() => {
+          this.success.set(false);
+          const nextStep = this.taskService.getNextStep(id);
+          if (!nextStep) return;
+          const taskId = this.route.parent?.snapshot.params["taskId"];
 
-    this.taskService.checkStep(id, type, body).subscribe(res => {
-      const nextStep = this.taskService.getNextStep(id);
-      if (!nextStep) return;
-      const taskId = this.route.parent?.snapshot.params["taskId"];
+          if (!taskId) return;
+          this.router
+            .navigate(["/task", taskId, nextStep.id], {
+              queryParams: { type: nextStep.type },
+            })
+            .then(() => console.debug("Route changed from SubtaskComponent"));
+        }, 2000);
+      },
+      error: err => {
+        this.anyError.set(true);
+        setTimeout(() => {
+          this.anyError.set(false);
+        }, 2000);
 
-      if (!taskId) return;
-      this.router
-        .navigate(["/task", taskId, nextStep.id], {
-          queryParams: { type: nextStep.type },
-        })
-        .then(() => console.debug("Route changed from SubtaskComponent"));
+        if (type === "question_connect") {
+          this.connectQuestionError.set(err.error);
+        } else if (type === "question_single_answer") {
+          this.singleQuestionError.set(err.error);
+        } else if (type === "exclude_question") {
+          this.excludeQuestionError.set(err.error);
+        }
+      },
     });
   }
 }

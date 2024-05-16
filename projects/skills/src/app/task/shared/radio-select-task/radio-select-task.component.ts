@@ -1,8 +1,8 @@
 /** @format */
 
-import { Component, Input, signal } from "@angular/core";
+import { Component, EventEmitter, Input, Output, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { SingleQuestion } from "../../../../models/skill.model";
+import { SingleQuestion, SingleQuestionResponse } from "../../../../models/step.model";
 
 @Component({
   selector: "app-radio-select-task",
@@ -13,10 +13,27 @@ import { SingleQuestion } from "../../../../models/skill.model";
 })
 export class RadioSelectTaskComponent {
   @Input({ required: true }) data!: SingleQuestion;
-  //
-  // options = signal([
-  //   { id: "ds", label: "Профессиональные архитекторы" },
-  //   { id: "dsdfs", label: "дети" },
-  //   { id: "ds234234", label: "Выпускники бизнес-школ" },
-  // ]);
+  @Input()
+  set error(value: SingleQuestionResponse | null) {
+    this._error.set(value);
+
+    if (value !== null) {
+      this.result.set({ answerId: null });
+    }
+  }
+
+  get error() {
+    return this._error();
+  }
+
+  @Output() update = new EventEmitter<{ answerId: number }>();
+
+  result = signal<{ answerId: number | null }>({ answerId: null });
+  _error = signal<SingleQuestionResponse | null>(null);
+
+  onSelect(id: number) {
+    this.result.set({ answerId: id });
+
+    this.update.emit({ answerId: id });
+  }
 }

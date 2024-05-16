@@ -3,8 +3,21 @@
 <div class="relations">
   <div class="relations__grid">
     @for (_ of Array(data.connectLeft.length); track $index) {
-    <div class="relations__item relations__a">{{ data.connectLeft[$index].text }}</div>
-    <div class="relations__item relations__b">
+    <div
+      class="relations__item relations__a"
+      [class.relations__item--active]="
+        resultLeft().includes(data.connectLeft[$index].id) ||
+        selectedLeftId() === data.connectLeft[$index].id
+      "
+      (click)="onSelectLeft(data.connectLeft[$index].id)"
+    >
+      {{ data.connectLeft[$index].text }}
+    </div>
+    <div
+      class="relations__item relations__b"
+      (click)="onSelectRight(data.connectRight[$index].id)"
+      [class.relations__item--active]="resultRight().includes(data.connectRight[$index].id)"
+    >
       {{ data.connectRight[$index].text }}
     </div>
     }

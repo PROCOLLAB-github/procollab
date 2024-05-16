@@ -27,6 +27,8 @@
 
   // FUNCTIONAL
   --green: #73c66e;
+  --light-green: #e3f8e9;
   --red: #ff5151;
   --red-dark: #{color.adjust(#ff5151, $blackness: 10%)};
+  --light-red: #ffd2d2;
 }

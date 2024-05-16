@@ -4,7 +4,13 @@
   <h2 class="exclude__title">{{ data.questionText }}</h2>
   <ul class="exclude__list">
     @for (op of data.answers; track op.id) {
-    <li class="exclude__item">{{ op.text }}</li>
+    <li
+      class="exclude__item"
+      [class.exclude__item--active]="result().includes(op.id)"
+      (click)="onSelect(op.id)"
+    >
+      {{ op.text }}
+    </li>
     }
   </ul>
 </div>

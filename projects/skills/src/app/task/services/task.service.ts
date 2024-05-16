@@ -2,8 +2,9 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { ApiService } from "@corelib";
-import { StepType, TaskStep, TaskStepsResponse } from "../../../models/skill.model";
+import { TaskStep, TaskStepsResponse } from "../../../models/skill.model";
 import { Observable, tap } from "rxjs";
+import { StepType } from "../../../models/step.model";
 
 @Injectable({
   providedIn: "root",
@@ -34,7 +35,7 @@ export class TaskService {
 
   private readonly stepRouteMapping: Record<TaskStep["type"], string> = {
     question_connect: "connect",
-    exclude_question: "exclude-correct",
+    exclude_question: "exclude",
     info_slide: "info-slide",
     question_single_answer: "single-correct",
   };

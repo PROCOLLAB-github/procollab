@@ -9,12 +9,32 @@
   @if (infoSlide(); as is) {
   <app-info-task [data]="is"></app-info-task>
   } @if (singleQuestion(); as sq) {
-  <app-radio-select-task [data]="sq"></app-radio-select-task>
+  <app-radio-select-task
+    [data]="sq"
+    [error]="singleQuestionError()"
+    (update)="body.set($event)"
+  ></app-radio-select-task>
   } @if (connectQuestion(); as cq) {
-  <app-relations-task [data]="cq"></app-relations-task>
+  <app-relations-task
+    [data]="cq"
+    [error]="connectQuestionError()"
+    (update)="body.set($event)"
+  ></app-relations-task>
   } @if (excludeQuestion(); as eq) {
-  <app-exclude-task [data]="eq"></app-exclude-task>
+  <app-exclude-task
+    [data]="eq"
+    [error]="excludeQuestionError()"
+    (update)="body.set($event)"
+  ></app-exclude-task>
   }
-  <app-button (click)="onNext()">Продолжить</app-button>
+  <div class="action">
+    <div class="action__error action__badge" [class.action__badge--open]="anyError()">
+      Вышла неточность...
+    </div>
+    <div class="action__success action__badge" [class.action__badge--open]="success()">
+      все верно! так держать
+    </div>
+    <app-button class="action__button" (click)="onNext()">Продолжить</app-button>
+  </div>
 </div>
 }

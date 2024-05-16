@@ -8,7 +8,13 @@
     </h2>
     <div class="radio__list">
       @for (op of data.answers; track op.id) {
-      <div class="radio__option text-body-14">{{ op.text }}</div>
+      <div
+        class="radio__option text-body-14"
+        [class.radio__option--active]="result().answerId === op.id"
+        (click)="onSelect(op.id)"
+      >
+        {{ op.text }}
+      </div>
       }
     </div>
   </div>
