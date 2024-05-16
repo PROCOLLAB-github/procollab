@@ -29,7 +29,7 @@ export interface SingleQuestion {
   isAnswered: boolean;
   questionText: string;
 }
-export interface SingleQuestionResponse {
+export interface SingleQuestionError {
   correctAnswer: number;
   isCorrect: boolean;
 }

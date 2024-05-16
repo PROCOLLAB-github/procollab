@@ -33,6 +33,12 @@
       border-color: var(--accent);
     }
 
+    &--success {
+      color: var(--green);
+      background-color: var(--light-green);
+      border-color: var(--green);
+    }
+
     &--disabled {
       pointer-events: none;
       opacity: 0.3;

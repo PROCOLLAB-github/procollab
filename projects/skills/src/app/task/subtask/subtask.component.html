@@ -12,18 +12,21 @@
   <app-radio-select-task
     [data]="sq"
     [error]="singleQuestionError()"
+    [success]="success()"
     (update)="body.set($event)"
   ></app-radio-select-task>
   } @if (connectQuestion(); as cq) {
   <app-relations-task
     [data]="cq"
     [error]="connectQuestionError()"
+    [success]="success()"
     (update)="body.set($event)"
   ></app-relations-task>
   } @if (excludeQuestion(); as eq) {
   <app-exclude-task
     [data]="eq"
     [error]="excludeQuestionError()"
+    [success]="success()"
     (update)="body.set($event)"
   ></app-exclude-task>
   }

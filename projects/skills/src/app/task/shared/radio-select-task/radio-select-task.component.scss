@@ -53,5 +53,11 @@
     &--active {
       border-color: var(--accent);
     }
+
+    &--success {
+      color: var(--green);
+      background-color: var(--light-green);
+      border-color: var(--green);
+    }
   }
 }

@@ -11,6 +11,7 @@
       <div
         class="radio__option text-body-14"
         [class.radio__option--active]="result().answerId === op.id"
+        [class.radio__option--success]="success && result().answerId === op.id"
         (click)="onSelect(op.id)"
       >
         {{ op.text }}

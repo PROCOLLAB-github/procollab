@@ -20,7 +20,7 @@ import {
   ExcludeQuestionResponse,
   InfoSlide,
   SingleQuestion,
-  SingleQuestionResponse,
+  SingleQuestionError,
   StepType,
 } from "../../../models/step.model";
 
@@ -61,7 +61,7 @@ export class SubtaskComponent implements OnInit {
   excludeQuestion = signal<ExcludeQuestion | null>(null);
 
   connectQuestionError = signal<ConnectQuestionResponse | null>(null);
-  singleQuestionError = signal<SingleQuestionResponse | null>(null);
+  singleQuestionError = signal<SingleQuestionError | null>(null);
   excludeQuestionError = signal<ExcludeQuestionResponse | null>(null);
   anyError = signal(false);
   success = signal(false);
@@ -115,22 +115,29 @@ export class SubtaskComponent implements OnInit {
     const type = this.route.snapshot.queryParams["type"] as TaskStep["type"];
 
     this.taskService.checkStep(id, type, this.body()).subscribe({
-      next: res => {
+      next: _res => {
         this.success.set(true);
 
         setTimeout(() => {
           this.success.set(false);
-          const nextStep = this.taskService.getNextStep(id);
-          if (!nextStep) return;
-          const taskId = this.route.parent?.snapshot.params["taskId"];
 
+          const nextStep = this.taskService.getNextStep(id);
+          const taskId = this.route.parent?.snapshot.params["taskId"];
           if (!taskId) return;
+
+          if (!nextStep) {
+            this.router
+              .navigate(["/task", taskId, "results"])
+              .then(() => console.debug("Route changed from SubtaskComponent"));
+            return;
+          }
+
           this.router
             .navigate(["/task", taskId, nextStep.id], {
               queryParams: { type: nextStep.type },
             })
             .then(() => console.debug("Route changed from SubtaskComponent"));
-        }, 2000);
+        }, 1000);
       },
       error: err => {
         this.anyError.set(true);

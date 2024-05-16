@@ -15,6 +15,7 @@ export class ExcludeTaskComponent {
   @Input({ required: true }) data!: ExcludeQuestion;
   @Output() update = new EventEmitter<number[]>();
 
+  @Input() success = false;
   @Input()
   set error(value: ExcludeQuestionResponse | null) {
     this._error.set(value);

@@ -9,6 +9,7 @@
         resultLeft().includes(data.connectLeft[$index].id) ||
         selectedLeftId() === data.connectLeft[$index].id
       "
+      [class.relations__item--success]="success"
       (click)="onSelectLeft(data.connectLeft[$index].id)"
     >
       {{ data.connectLeft[$index].text }}
@@ -17,6 +18,7 @@
       class="relations__item relations__b"
       (click)="onSelectRight(data.connectRight[$index].id)"
       [class.relations__item--active]="resultRight().includes(data.connectRight[$index].id)"
+      [class.relations__item--success]="success"
     >
       {{ data.connectRight[$index].text }}
     </div>

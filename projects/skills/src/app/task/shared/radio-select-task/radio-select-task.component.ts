@@ -2,7 +2,7 @@
 
 import { Component, EventEmitter, Input, Output, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { SingleQuestion, SingleQuestionResponse } from "../../../../models/step.model";
+import { SingleQuestion, SingleQuestionError } from "../../../../models/step.model";
 
 @Component({
   selector: "app-radio-select-task",
@@ -13,8 +13,9 @@ import { SingleQuestion, SingleQuestionResponse } from "../../../../models/step.
 })
 export class RadioSelectTaskComponent {
   @Input({ required: true }) data!: SingleQuestion;
+  @Input() success = false;
   @Input()
-  set error(value: SingleQuestionResponse | null) {
+  set error(value: SingleQuestionError | null) {
     this._error.set(value);
 
     if (value !== null) {
@@ -29,7 +30,7 @@ export class RadioSelectTaskComponent {
   @Output() update = new EventEmitter<{ answerId: number }>();
 
   result = signal<{ answerId: number | null }>({ answerId: null });
-  _error = signal<SingleQuestionResponse | null>(null);
+  _error = signal<SingleQuestionError | null>(null);
 
   onSelect(id: number) {
     this.result.set({ answerId: id });

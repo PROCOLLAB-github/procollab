@@ -21,6 +21,8 @@ export class RelationsTaskComponent {
 
   _error = signal<ConnectQuestionResponse | null>(null);
 
+  @Input() success = false;
+
   @Input()
   set error(error: ConnectQuestionResponse | null) {
     this._error.set(error);
