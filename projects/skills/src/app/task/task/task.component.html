@@ -15,7 +15,7 @@
   <div class="task__progress progress" #progressBarEl>
     <div class="progress__line"></div>
     <div class="progress__line-done" [ngStyle]="{ width: progressDoneWidth() + 'px' }"></div>
-    <div class="progress__first progress__border progress__border--done">1 задание</div>
+    <div class="progress__first progress__border progress__border--done">1 уровень</div>
     @for (id of taskIds(); track $index) {
     <a
       #pointEls
@@ -31,7 +31,7 @@
       [ngStyle]="{ left: progressDoneWidth() + 'px' }"
       alt=""
     />
-    <div class="progress__last progress__border">2 задание</div>
+    <div class="progress__last progress__border">2 уровень</div>
   </div>
   <router-outlet></router-outlet>
 </div>
