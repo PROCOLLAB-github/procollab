@@ -1,10 +1,13 @@
 /** @format */
 
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { CircleProgressBarComponent } from "../../shared/circle-progress-bar/circle-progress-bar.component";
 import { IconComponent } from "@uilib";
 import { ButtonComponent } from "@ui/components";
+import { ActivatedRoute } from "@angular/router";
+import { map, Observable } from "rxjs";
+import { TaskResults } from "../../../models/skill.model";
 
 @Component({
   selector: "app-complete",
@@ -13,4 +16,8 @@ import { ButtonComponent } from "@ui/components";
   templateUrl: "./complete.component.html",
   styleUrl: "./complete.component.scss",
 })
-export class TaskCompleteComponent {}
+export class TaskCompleteComponent {
+  route = inject(ActivatedRoute);
+
+  results = this.route.data.pipe(map(r => r["data"])) as Observable<TaskResults>;
+}

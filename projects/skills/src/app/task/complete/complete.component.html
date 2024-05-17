@@ -1,9 +1,10 @@
 <!-- @format -->
 
+@if (results | async; as res) {
 <div class="complete">
   <h2 class="complete__title">
     Поздравляем! <br />
-    Сегодня ты вывел навык "Публичные выступления" на новый уровень
+    Сегодня ты вывел навык "{{ res.skillName }}" на новый уровень
   </h2>
   <div class="complete__block complete__progress">
     <app-circle-progress-bar
@@ -29,7 +30,7 @@
         </div>
         <div class="">
           <div class="results__label">количество очков</div>
-          <div class="results__stat">+20</div>
+          <div class="results__stat">+{{ res.pointsForTask }}</div>
         </div>
       </div>
       <div class="results__point results__level">
@@ -38,7 +39,7 @@
         </div>
         <div class="">
           <div class="results__label">уровень</div>
-          <div class="results__stat">2</div>
+          <div class="results__stat">{{ res.level }}</div>
         </div>
       </div>
     </div>
@@ -46,3 +47,4 @@
   <app-button appearance="outline">В меню навыков</app-button>
   <app-button>Следующее задание</app-button>
 </div>
+}

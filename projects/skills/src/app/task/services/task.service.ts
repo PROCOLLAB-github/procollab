@@ -2,7 +2,7 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { ApiService } from "@corelib";
-import { TaskStep, TaskStepsResponse } from "../../../models/skill.model";
+import { TaskResults, TaskStep, TaskStepsResponse } from "../../../models/skill.model";
 import { Observable, tap } from "rxjs";
 import { StepType } from "../../../models/step.model";
 
@@ -50,5 +50,9 @@ export class TaskService {
     const route = `/questions/${this.stepRouteMapping[taskStepType]}/check/${taskStepId}`;
 
     return this.apiService.post<void>(route, body);
+  }
+
+  fetchResults(taskId: number) {
+    return this.apiService.get<TaskResults>(`/courses/new-level-stats/${taskId}`);
   }
 }

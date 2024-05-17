@@ -62,6 +62,8 @@ export class TaskComponent implements OnInit {
         const sortedSteps = skillsResponse.stepData.sort((prev, next) => prev.id - next.id);
 
         const doneSteps = sortedSteps.filter(step => step.isDone);
+        if (doneSteps.length === sortedSteps.length) return;
+
         const lastDoneStep = sortedSteps[doneSteps.length];
         if (lastDoneStep) {
           this.currentSubTaskId.set(lastDoneStep.id);
@@ -97,6 +99,7 @@ export class TaskComponent implements OnInit {
         map(Number)
       )
       .subscribe(s => {
+        console.log(s);
         this.currentSubTaskId.set(s);
       });
   }
