@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, computed, inject, OnInit, signal } from "@angular/core";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { InfoTaskComponent } from "../shared/video-task/info-task.component";
 import { RadioSelectTaskComponent } from "../shared/radio-select-task/radio-select-task.component";
@@ -129,6 +129,7 @@ export class SubtaskComponent implements OnInit {
             this.router
               .navigate(["/task", taskId, "results"])
               .then(() => console.debug("Route changed from SubtaskComponent"));
+            this.taskService.currentTaskDone.set(true);
             return;
           }
 

@@ -13,6 +13,7 @@ export class TaskService {
   private apiService = inject(ApiService);
 
   currentSteps = signal<TaskStepsResponse["stepData"]>([]);
+  currentTaskDone = signal(false);
 
   getStep(stepId: number): TaskStep | undefined {
     return this.currentSteps().find(s => s.id === stepId);

@@ -16,6 +16,7 @@ import { ActivatedRoute, Router, RouterLink, RouterOutlet } from "@angular/route
 import { map } from "rxjs";
 import { TaskStepsResponse } from "../../../models/skill.model";
 import { ButtonComponent } from "@ui/components";
+import { TaskService } from "../services/task.service";
 
 @Component({
   selector: "app-task",
@@ -27,21 +28,26 @@ import { ButtonComponent } from "@ui/components";
 export class TaskComponent implements OnInit {
   @ViewChildren("pointEls") pointEls?: ElementRef<HTMLAnchorElement>[];
   @ViewChild("progressBarEl") progressBarEl?: ElementRef<HTMLElement>;
+  @ViewChild("progressDone") progressDone?: ElementRef<HTMLElement>;
 
   route = inject(ActivatedRoute);
   router = inject(Router);
+  taskService = inject(TaskService);
 
   skillStepsResponse = signal<TaskStepsResponse | null>(null);
 
   constructor() {
     effect(
       () => {
-        const targetEl = this.pointEls?.find(el => {
-          const id = el.nativeElement.dataset["id"];
-          if (!id) return false;
+        const targetEl = !this.taskService.currentTaskDone()
+          ? this.pointEls?.find(el => {
+              const subTaskPointId = el.nativeElement.dataset["id"];
+              if (!subTaskPointId) return false;
 
-          return Number(id) === this.currentSubTaskId();
-        });
+              return Number(subTaskPointId) === this.currentSubTaskId();
+            })
+          : this.progressDone;
+
         if (targetEl && this.progressBarEl) {
           const { left: leftParent } = this.progressBarEl.nativeElement.getBoundingClientRect();
           const { left: leftChild } = targetEl.nativeElement.getBoundingClientRect();
@@ -89,8 +95,13 @@ export class TaskComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.data.pipe(map(r => r["data"])).subscribe(res => {
+    this.route.data.pipe(map(r => r["data"])).subscribe((res: TaskStepsResponse) => {
       this.skillStepsResponse.set(res);
+
+      if (res.stepData.filter(s => s.isDone).length === res.stepData.length) {
+        this.taskService.currentTaskDone.set(true);
+        this.router.navigate(["/task", this.route.snapshot.params["taskId"], "results"]);
+      }
     });
 
     this.route.firstChild?.params
@@ -99,9 +110,15 @@ export class TaskComponent implements OnInit {
         map(Number)
       )
       .subscribe(s => {
-        console.log(s);
         this.currentSubTaskId.set(s);
       });
+
+    this.route.firstChild?.url.subscribe(console.log);
+  }
+
+  goToTask(id: number) {
+    if (this.taskService.currentTaskDone()) return;
+    this.currentSubTaskId.set(id);
   }
 
   progressDoneWidth = signal(0);

@@ -21,17 +21,28 @@
       #pointEls
       class="progress__point"
       [attr.data-id]="id"
-      [ngClass]="{ 'progress__point--done': doneTasks()?.includes(id) }"
-      (click)="currentSubTaskId.set(id)"
+      [ngClass]="{
+        'progress__point--done': doneTasks()?.includes(id) || taskService.currentTaskDone()
+      }"
+      (click)="goToTask(id)"
     ></a>
     }
     <img
       [src]="skillStepsResponse()?.file"
       class="progress__brand-point"
-      [ngStyle]="{ left: progressDoneWidth() + 'px' }"
+      [ngStyle]="{
+        left: progressDoneWidth() + 'px',
+        opacity: taskService.currentTaskDone() ? 0 : 1
+      }"
       alt=""
     />
-    <div class="progress__last progress__border">2 уровень</div>
+    <div
+      #progressDone
+      [class.progress__border--done]="taskService.currentTaskDone()"
+      class="progress__last progress__border"
+    >
+      2 уровень
+    </div>
   </div>
   <router-outlet></router-outlet>
 </div>
