@@ -5,11 +5,12 @@ import { CommonModule } from "@angular/common";
 import { RouterOutlet } from "@angular/router";
 import { SidebarComponent } from "@uilib";
 import { User } from "@auth/models/user.model";
+import { SidebarProfileComponent } from "./shared/sidebar-profile/sidebar-profile.component";
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, SidebarComponent],
+  imports: [CommonModule, RouterOutlet, SidebarComponent, SidebarProfileComponent],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
 })
@@ -137,4 +138,6 @@ export class AppComponent {
       },
     ],
   } as unknown as User;
+
+  protected readonly User = User;
 }

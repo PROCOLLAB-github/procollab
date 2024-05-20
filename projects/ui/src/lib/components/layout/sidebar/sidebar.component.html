@@ -24,15 +24,5 @@
       }
     </div>
   </nav>
-  @if (user !== undefined && invites !== undefined) {
-  <app-profile-control-panel
-    [invites]="invites"
-    [hasNotifications]="!!(hasNotifications | async)"
-    [hasUnreads]="!!hasUnreads"
-    [user]="user"
-    (acceptInvite)="acceptInvite.emit($event)"
-    (rejectInvite)="rejectInvite.emit($event)"
-    (logout)="logout.emit()"
-  ></app-profile-control-panel>
-  }
+  <ng-content></ng-content>
 </div>

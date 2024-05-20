@@ -6,13 +6,19 @@
     class="office__sidebar"
     logoSrc="/assets/images/shared/logo.svg"
     [navItems]="navItems"
-    [user]="user"
-    [hasUnreads]="!!(chatService.unread$ | async)"
-    [invites]="invites()"
-    (logout)="onLogout()"
-    (acceptInvite)="onAcceptInvite($event)"
-    (rejectInvite)="onRejectInvite($event)"
-  ></ui-sidebar>
+  >
+    @if (user !== undefined && invites !== undefined) {
+    <app-profile-control-panel
+      [invites]="invites()"
+      [hasNotifications]="false"
+      [hasUnreads]="!!(chatService.unread$ | async)"
+      [user]="user"
+      (acceptInvite)="onAcceptInvite($event)"
+      (rejectInvite)="onRejectInvite($event)"
+      (logout)="onLogout()"
+    ></app-profile-control-panel>
+    }
+  </ui-sidebar>
   }
   <div class="office__wrapper">
     <div class="office__top">

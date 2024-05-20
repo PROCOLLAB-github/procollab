@@ -54,6 +54,6 @@ export class TaskService {
   }
 
   fetchResults(taskId: number) {
-    return this.apiService.get<TaskResults>(`/courses/new-level-stats/${taskId}`);
+    return this.apiService.get<TaskResults>(`/courses/task-result/${taskId}`);
   }
 }

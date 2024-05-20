@@ -1,12 +1,9 @@
 <!-- @format -->
 
 <div class="app">
-  <ui-sidebar
-    class="app__sidebar"
-    [navItems]="navItems"
-    [user]="user"
-    logoSrc="/assets/images/shared/logo.svg"
-  ></ui-sidebar>
+  <ui-sidebar class="app__sidebar" [navItems]="navItems" logoSrc="/assets/images/shared/logo.svg">
+    <app-sidebar-profile [user]="user"></app-sidebar-profile>
+  </ui-sidebar>
   <div class="app__wrapper">
     <div class="app__body">
       <div class="app__inner">

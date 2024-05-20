@@ -14,7 +14,7 @@ import { DeleteConfirmComponent } from "@ui/components/delete-confirm/delete-con
 import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { NavComponent } from "./shared/nav/nav.component";
-import { SidebarComponent } from "@uilib";
+import { ProfileControlPanelComponent, SidebarComponent } from "@uilib";
 import { AsyncPipe } from "@angular/common";
 import { InviteService } from "@services/invite.service";
 import { toSignal } from "@angular/core/rxjs-interop";
@@ -33,6 +33,7 @@ import { toSignal } from "@angular/core/rxjs-interop";
     DeleteConfirmComponent,
     SnackbarComponent,
     AsyncPipe,
+    ProfileControlPanelComponent,
   ],
 })
 export class OfficeComponent implements OnInit, OnDestroy {
