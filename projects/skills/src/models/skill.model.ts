@@ -46,7 +46,11 @@ export interface TaskStepsResponse extends TaskDetail {
 }
 
 export interface TaskResults {
-  pointsForTask: number;
+  pointsGained: number;
+  quantityDoneCorrect: number;
+  quantityAll: number;
+  progress: number;
+  nextTaskId: null | number;
   level: number;
-  skillName: string;
+  // skillName: string;
 }

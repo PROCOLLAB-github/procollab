@@ -4,12 +4,12 @@
 <div class="complete">
   <h2 class="complete__title">
     Поздравляем! <br />
-    Сегодня ты вывел навык "{{ res.skillName }}" на новый уровень
+    Сегодня ты вывел навык "---" на новый уровень
   </h2>
   <div class="complete__block complete__progress">
     <app-circle-progress-bar
       class="complete__progress-bar"
-      [progress]="34"
+      [progress]="res.progress"
     ></app-circle-progress-bar>
   </div>
   <div class="complete__block results">
@@ -21,7 +21,7 @@
         </div>
         <div class="">
           <div class="results__label">отвечено верно</div>
-          <div class="results__stat">24/30</div>
+          <div class="results__stat">{{ res.quantityDoneCorrect }}/{{ res.quantityAll }}</div>
         </div>
       </div>
       <div class="results__point results__amount">
@@ -30,7 +30,7 @@
         </div>
         <div class="">
           <div class="results__label">количество очков</div>
-          <div class="results__stat">+{{ res.pointsForTask }}</div>
+          <div class="results__stat">+{{ res.pointsGained }}</div>
         </div>
       </div>
       <div class="results__point results__level">
@@ -44,7 +44,9 @@
       </div>
     </div>
   </div>
-  <app-button appearance="outline">В меню навыков</app-button>
-  <app-button>Следующее задание</app-button>
+  <app-button (click)="router.navigate(['/skills'])" appearance="outline"
+    >В меню навыков</app-button
+  >
+  <app-button (click)="router.navigate(['/task', res.nextTaskId])">Следующее задание</app-button>
 </div>
 }
