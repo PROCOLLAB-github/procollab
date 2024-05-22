@@ -34,7 +34,13 @@
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": ["projects/social_platform/src"]
-            }
+            },
+            "fileReplacements": [
+              {
+                "replace": "projects/social_platform/src/environments/environment.ts",
+                "with": "projects/social_platform/src/environments/environment.prod.ts"
+              }
+            ]
           },
           "configurations": {
             "production": {
@@ -50,25 +56,13 @@
                   "maximumError": "10kb"
                 }
               ],
-              "outputHashing": "all",
-              "fileReplacements": [
-                {
-                  "replace": "projects/social_platform/src/environments/environment.ts",
-                  "with": "projects/social_platform/src/environments/environment.prod.ts"
-                }
-              ]
+              "outputHashing": "all"
             },
 
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true,
-              "fileReplacements": [
-                {
-                  "replace": "projects/social_platform/src/environments/environment.ts",
-                  "with": "projects/social_platform/src/environments/environment.prod.ts"
-                }
-              ]
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
@@ -77,7 +71,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "social_platform_dev:production"
+              "buildTarget": "social_platform_build:production"
             },
             "development": {
               "buildTarget": "social_platform:build:development"
