@@ -34,13 +34,7 @@
             "scripts": [],
             "stylePreprocessorOptions": {
               "includePaths": ["projects/social_platform/src"]
-            },
-            "fileReplacements": [
-              {
-                "replace": "projects/social_platform/src/environments/environment.ts",
-                "with": "projects/social_platform/src/environments/environment.prod.ts"
-              }
-            ]
+            }
           },
           "configurations": {
             "production": {
@@ -56,7 +50,13 @@
                   "maximumError": "10kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "projects/social_platform/src/environments/environment.ts",
+                  "with": "projects/social_platform/src/environments/environment.prod.ts"
+                }
+              ]
             },
 
             "development": {
