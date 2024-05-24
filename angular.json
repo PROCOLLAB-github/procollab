@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "social_platform_prod": {
+    "social_platform": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,33 +23,28 @@
             "outputPath": "dist/social_platform",
             "index": "projects/social_platform/src/index.html",
             "main": "projects/social_platform/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/social_platform/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               "projects/social_platform/src/favicon.ico",
               "projects/social_platform/src/assets"
             ],
-            "styles": [
-              "projects/social_platform/src/styles.scss"
-            ],
+            "styles": ["projects/social_platform/src/styles.scss"],
             "scripts": [],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "projects/social_platform/src"
-              ]
-            },
-            "fileReplacements": [
-              {
-                "replace": "projects/social_platform/src/environments/environment.ts",
-                "with": "projects/social_platform/src/environments/environment.prod.ts"
-              }
-            ]
+              "includePaths": ["projects/social_platform/src"]
+            }
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/social_platform/src/environments/environment.ts",
+                  "with": "projects/social_platform/src/environments/environment.prod.ts"
+                }
+              ],
+
               "budgets": [
                 {
                   "type": "initial",
@@ -64,68 +59,7 @@
               ],
               "outputHashing": "all"
             },
-            "development": {
-              "optimization": false,
-              "extractLicenses": false,
-              "sourceMap": true
-            }
-          },
-          "defaultConfiguration": "production"
-        }
-      }
-    },
-    "social_platform_dev": {
-      "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
-      "root": "projects/social_platform",
-      "sourceRoot": "projects/social_platform/src",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/social_platform",
-            "index": "projects/social_platform/src/index.html",
-            "main": "projects/social_platform/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
-            "tsConfig": "projects/social_platform/tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              "projects/social_platform/src/favicon.ico",
-              "projects/social_platform/src/assets"
-            ],
-            "styles": [
-              "projects/social_platform/src/styles.scss"
-            ],
-            "scripts": [],
-            "stylePreprocessorOptions": {
-              "includePaths": [
-                "projects/social_platform/src"
-              ]
-            }
-          },
-          "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "10kb"
-                }
-              ],
-              "outputHashing": "all"
-            },
+
             "development": {
               "optimization": false,
               "extractLicenses": false,
@@ -138,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "social_platform_dev:build:production"
+              "buildTarget": "social_platform:build:production"
             },
             "development": {
-              "buildTarget": "social_platform_dev:build:development"
+              "buildTarget": "social_platform:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -149,35 +83,29 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "social_platform_dev:build"
+            "buildTarget": "social_platform:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/social_platform/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               "projects/social_platform/src/favicon.ico",
               "projects/social_platform/src/assets"
             ],
-            "styles": [
-              "projects/social_platform/src/styles.scss"
-            ],
+            "styles": ["projects/social_platform/src/styles.scss"],
             "scripts": [],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "projects/social_platform/src"
-              ]
+              "includePaths": ["projects/social_platform/src"]
             }
           }
         }
       }
     },
+
     "core": {
       "projectType": "library",
       "root": "projects/core",
@@ -203,10 +131,7 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "tsConfig": "projects/core/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": ["zone.js", "zone.js/testing"]
           }
         }
       }
@@ -228,23 +153,14 @@
             "outputPath": "dist/skills",
             "index": "projects/skills/src/index.html",
             "main": "projects/skills/src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/skills/tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "projects/skills/src/favicon.ico",
-              "projects/skills/src/assets"
-            ],
-            "styles": [
-              "projects/skills/src/styles.scss"
-            ],
+            "assets": ["projects/skills/src/favicon.ico", "projects/skills/src/assets"],
+            "styles": ["projects/skills/src/styles.scss"],
             "scripts": [],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "projects/skills/src"
-              ]
+              "includePaths": ["projects/skills/src"]
             }
           },
           "configurations": {
@@ -292,19 +208,11 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "projects/skills/tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              "projects/skills/src/favicon.ico",
-              "projects/skills/src/assets"
-            ],
-            "styles": [
-              "projects/skills/src/styles.scss"
-            ],
+            "assets": ["projects/skills/src/favicon.ico", "projects/skills/src/assets"],
+            "styles": ["projects/skills/src/styles.scss"],
             "scripts": []
           }
         }
@@ -335,10 +243,7 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "tsConfig": "projects/ui/tsconfig.spec.json",
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ]
+            "polyfills": ["zone.js", "zone.js/testing"]
           }
         }
       }
