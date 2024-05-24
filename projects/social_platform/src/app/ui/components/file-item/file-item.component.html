@@ -12,7 +12,7 @@
     </div>
     @if (type) {
     <div class="file__meta text-body-14">
-      {{ type.includes("/") ? (type | fileType).toUpperCase() : type.toUpperCase() }}
+      {{ type.includes("/") ? (type | fileType) : (type | uppercase) }}
       {{ getFormattedFileSize(size) }}
     </div>
     }

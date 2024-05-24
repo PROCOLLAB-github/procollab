@@ -3,13 +3,14 @@ import { Component, Input, OnInit } from "@angular/core";
 import { getFormattedFileSize } from "@utils/formatted-file-size";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { IconComponent } from "@ui/components";
+import { UpperCasePipe } from "@angular/common";
 
 @Component({
   selector: "app-file-item",
   templateUrl: "./file-item.component.html",
   styleUrl: "./file-item.component.scss",
   standalone: true,
-  imports: [IconComponent, FileTypePipe],
+  imports: [IconComponent, FileTypePipe, UpperCasePipe],
 })
 export class FileItemComponent implements OnInit {
   constructor() {}
