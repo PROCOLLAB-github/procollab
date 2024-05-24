@@ -1,12 +1,12 @@
 /** @format */
 
-import { Component, OnInit, inject, signal } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
 import { ButtonComponent } from "@ui/components";
-import { RouterLink } from "@angular/router";
-import { SubscriptionPlansService } from "../../services/subscription-plans.service";
-import { SubscriptionPlan } from "projects/skills/src/models/subscription.model";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { map } from "rxjs";
 
 @Component({
   selector: "app-subscription-plans",
@@ -15,12 +15,8 @@ import { SubscriptionPlan } from "projects/skills/src/models/subscription.model"
   templateUrl: "./subscription-plans.component.html",
   styleUrl: "./subscription-plans.component.scss",
 })
-export class SubscriptionPlansComponent implements OnInit {
-  subscriptionService = inject(SubscriptionPlansService)
-  protected subscriptionPlans = signal<SubscriptionPlan[]>([])
+export class SubscriptionPlansComponent {
+  route = inject(ActivatedRoute)
 
-  ngOnInit(): void {
-    this.subscriptionService.getSubscriptions().subscribe((plans) => this.subscriptionPlans.set(plans as SubscriptionPlan[]))
-  }
-
+  subscriptionPlans = toSignal(this.route.data.pipe(map(r => r['data'])));
 }
