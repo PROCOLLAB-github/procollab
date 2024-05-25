@@ -7,7 +7,7 @@
     <li class="files-list__item file" [class.file--loading]="file.loading">
       <i class="file__type" appIcon [icon]="'file_' + (file.type | fileType)" appSquare="24"></i>
       <h3 class="file__name">{{ file.name }}</h3>
-      <div class="file__size">{{ file.size }}</div>
+      <div class="file__size">{{ +file.size | formatedFileSize }}</div>
       <!--Use hardcoded svg here, because svg sprites
       aren't capable of animation-->
       @if (file.loading) {
