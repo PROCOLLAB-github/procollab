@@ -82,8 +82,8 @@
   &__tariffs {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     gap: 20px;
+    justify-content: center;
     margin-top: 20px;
 
     @include responsive.apply-desktop {
@@ -94,13 +94,13 @@
 }
 
 .tariff {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 24px;
   background-color: var(--white);
   border: 1px solid var(--grey-button);
   border-radius: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 
   &--primary {
     background-color: var(--accent);
