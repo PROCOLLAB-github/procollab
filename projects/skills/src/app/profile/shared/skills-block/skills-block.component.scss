@@ -41,4 +41,56 @@
     display: block;
     max-width: 315px;
   }
+
+  &_list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &_pagination {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 25px;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  &_pages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+
+
+    @include responsive.apply-desktop {
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    &-start {
+      color: var(--dark-grey);
+    }
+
+    &-icon {
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+    }
+
+    &-prev {
+      color: var(--dark-grey);
+    }
+
+    &-next {
+      transform: rotate(180deg);
+    }
+  }
 }

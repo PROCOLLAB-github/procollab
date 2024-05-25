@@ -26,4 +26,6 @@ export class InfoBlockComponent {
   router = inject(Router);
 
   @Input({ required: true }) userData!: Profile["userData"];
+
+  achievementsList = Array
 }

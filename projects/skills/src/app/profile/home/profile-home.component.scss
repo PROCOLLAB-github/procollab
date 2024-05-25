@@ -1,7 +1,13 @@
+@use "styles/responsive";
+
 .profile {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  display: block;
+
+  @include responsive.apply-desktop {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
 
   &__month {
     grid-column: span 2;
