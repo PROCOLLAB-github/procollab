@@ -73,8 +73,6 @@
     flex-direction: column;
     gap: 20px;
     margin-top: 20px;
-
-    @include responsive.apply-desktop {}
   }
 
   &_pagination {
@@ -85,15 +83,15 @@
 
     @include responsive.apply-desktop {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
     }
   }
 
   &_pages {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     margin-bottom: 25px;
 
     @include responsive.apply-desktop {
@@ -107,9 +105,9 @@
     }
 
     &-icon {
-      cursor: pointer;
       width: 32px;
       height: 32px;
+      cursor: pointer;
     }
 
     &-prev {
@@ -120,6 +118,4 @@
       transform: rotate(180deg);
     }
   }
-
-
 }

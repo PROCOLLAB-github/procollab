@@ -57,17 +57,15 @@
     @include responsive.apply-desktop {
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
     }
   }
 
   &_pages {
     display: flex;
-    justify-content: center;
     align-items: center;
-
-
+    justify-content: center;
 
     @include responsive.apply-desktop {
       gap: 10px;
@@ -80,9 +78,9 @@
     }
 
     &-icon {
-      cursor: pointer;
       width: 32px;
       height: 32px;
+      cursor: pointer;
     }
 
     &-prev {
