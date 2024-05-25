@@ -19,7 +19,10 @@
           </li>
           }
         </ul>
-        <app-button [color]="$index === 1 ? 'gold' : 'primary'" class="tariff__buy"
+        <app-button
+          [color]="$index === 1 ? 'gold' : 'primary'"
+          class="tariff__buy"
+          (click)="onBuyClick(subscription.id)"
           >Купить</app-button
         >
       </div>
