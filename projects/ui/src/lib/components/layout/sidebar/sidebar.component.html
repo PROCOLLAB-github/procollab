@@ -11,7 +11,12 @@
         [style.opacity]="showBar ? 1 : 0"
         [style.top]="barPosition * 55 + 'px'"
       ></div>
-      @for (item of navItems; track $index) {
+      @for (item of navItems; track $index) { @if (item.link.includes('http')) {
+      <a [href]="item.link" class="sidebar-nav__item text-body-14">
+        <i appIcon [icon]="item.icon" appSquare="24" appViewBox="0 0 24 20"></i>
+        {{ item.name }}
+      </a>
+      } @else {
       <a
         class="sidebar-nav__item text-body-14"
         [routerLink]="item.link"
@@ -21,7 +26,7 @@
         <i appIcon [icon]="item.icon" appSquare="24" appViewBox="0 0 24 20"></i>
         {{ item.name }}
       </a>
-      }
+      } }
     </div>
   </nav>
   <ng-content></ng-content>

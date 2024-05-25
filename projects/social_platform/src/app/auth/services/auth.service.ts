@@ -13,6 +13,8 @@ import {
 import { plainToInstance } from "class-transformer";
 import { Tokens } from "../models/tokens.model";
 import { User, UserRole } from "../models/user.model";
+import Cookies from "js-cookie";
+import { environment } from "@environment";
 
 @Injectable({
   providedIn: "root",
@@ -40,13 +42,24 @@ export class AuthService {
 
   refreshTokens(): Observable<RefreshResponse> {
     return this.apiService
-      .post("/api/token/refresh/", { refresh: localStorage.getItem("refreshToken") })
+      .post("/api/token/refresh/", { refresh: this.getTokens()?.refresh })
       .pipe(map(json => plainToInstance(RefreshResponse, json)));
   }
 
+  getCookieOptions() {
+    if (environment.production) {
+      return {
+        domain: ".procollab.ru",
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+      };
+    }
+
+    return {};
+  }
+
   getTokens(): Tokens | null {
-    const access = localStorage.getItem("accessToken") ?? sessionStorage.getItem("accessToken");
-    const refresh = localStorage.getItem("refreshToken") ?? sessionStorage.getItem("refreshToken");
+    const access = Cookies.get("accessToken");
+    const refresh = Cookies.get("refreshToken");
 
     if (!access || !refresh) {
       return null;
@@ -56,21 +69,13 @@ export class AuthService {
   }
 
   clearTokens(): void {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-
-    sessionStorage.removeItem("accessToken");
-    sessionStorage.removeItem("refreshToken");
+    Cookies.remove("accessToken", this.getCookieOptions());
+    Cookies.remove("refreshToken", this.getCookieOptions());
   }
 
-  memTokens(tokens: Tokens, session = false): void {
-    if (!session) {
-      localStorage.setItem("accessToken", tokens.access);
-      localStorage.setItem("refreshToken", tokens.refresh);
-    } else {
-      sessionStorage.setItem("accessToken", tokens.access);
-      sessionStorage.setItem("refreshToken", tokens.refresh);
-    }
+  memTokens(tokens: Tokens): void {
+    Cookies.set("accessToken", tokens.access, this.getCookieOptions());
+    Cookies.set("refreshToken", tokens.refresh, this.getCookieOptions());
   }
 
   private profile$ = new ReplaySubject<User>(1);
