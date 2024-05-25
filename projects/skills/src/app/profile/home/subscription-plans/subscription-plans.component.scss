@@ -82,6 +82,7 @@
   &__tariffs {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 20px;
     margin-top: 20px;
 
@@ -97,6 +98,9 @@
   background-color: var(--white);
   border: 1px solid var(--grey-button);
   border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   &--primary {
     background-color: var(--accent);
