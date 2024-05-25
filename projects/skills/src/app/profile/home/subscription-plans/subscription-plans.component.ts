@@ -1,10 +1,12 @@
 /** @format */
 
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
 import { ButtonComponent } from "@ui/components";
-import { RouterLink } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { map, Observable } from "rxjs";
+import { SubscriptionPlan } from "../../../../models/subscription.model";
 
 @Component({
   selector: "app-subscription-plans",
@@ -14,5 +16,7 @@ import { RouterLink } from "@angular/router";
   styleUrl: "./subscription-plans.component.scss",
 })
 export class SubscriptionPlansComponent {
-  protected readonly Array = Array;
+  route = inject(ActivatedRoute);
+
+  subscriptionPlans = this.route.data.pipe(map(r => r["data"])) as Observable<SubscriptionPlan[]>;
 }
