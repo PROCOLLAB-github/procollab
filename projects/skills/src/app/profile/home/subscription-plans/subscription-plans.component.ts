@@ -5,8 +5,8 @@ import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
 import { ButtonComponent } from "@ui/components";
 import { ActivatedRoute, RouterLink } from "@angular/router";
-import { toSignal } from "@angular/core/rxjs-interop";
-import { map } from "rxjs";
+import { map, Observable } from "rxjs";
+import { SubscriptionPlan } from "../../../../models/subscription.model";
 
 @Component({
   selector: "app-subscription-plans",
@@ -16,7 +16,7 @@ import { map } from "rxjs";
   styleUrl: "./subscription-plans.component.scss",
 })
 export class SubscriptionPlansComponent {
-  route = inject(ActivatedRoute)
+  route = inject(ActivatedRoute);
 
-  subscriptionPlans = toSignal(this.route.data.pipe(map(r => r['data'])));
+  subscriptionPlans = this.route.data.pipe(map(r => r["data"])) as Observable<SubscriptionPlan[]>;
 }
