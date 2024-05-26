@@ -13,11 +13,11 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ChatMessage } from "@models/chat-message.model";
 import { fromEvent, map, Subscription } from "rxjs";
 import { FileService } from "@core/services/file.service";
-import { getFormattedFileSize } from "@utils/formatted-file-size";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { AutosizeModule } from "ngx-autosize";
 import { NgxMaskModule } from "ngx-mask";
 import { IconComponent } from "@ui/components";
+import { FormatedFileSizePipe } from "@core/pipes/formatted-file-size.pipe";
 
 @Component({
   selector: "app-message-input",
@@ -31,10 +31,10 @@ import { IconComponent } from "@ui/components";
     },
   ],
   standalone: true,
-  imports: [IconComponent, NgxMaskModule, AutosizeModule, FileTypePipe],
+  imports: [IconComponent, NgxMaskModule, AutosizeModule, FileTypePipe, FormatedFileSizePipe],
 })
 export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
-  constructor(private readonly fileService: FileService) {}
+  constructor(private readonly fileService: FileService) { }
 
   @Input() placeholder = "";
   @Input() mask = "";
@@ -135,13 +135,13 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
   }
 
   // eslint-disable-next-line no-use-before-define
-  onChange: (value: MessageInputComponent["value"]) => void = () => {};
+  onChange: (value: MessageInputComponent["value"]) => void = () => { };
 
   registerOnChange(fn: (v: MessageInputComponent["value"]) => void): void {
     this.onChange = fn;
   }
 
-  onTouch: () => void = () => {};
+  onTouch: () => void = () => { };
 
   registerOnTouched(fn: () => void): void {
     this.onTouch = fn;
@@ -175,7 +175,7 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     for (let i = 0; i < files.length; i++) {
       this.attachFiles.push({
         name: files[i].name,
-        size: getFormattedFileSize(files[i].size),
+        size: files[i].size.toString(),
         type: files[i].type,
         loading: true,
       });
