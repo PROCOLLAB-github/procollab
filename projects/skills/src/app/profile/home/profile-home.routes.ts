@@ -4,8 +4,8 @@ import { Routes } from "@angular/router";
 import { ProfileHomeComponent } from "./profile-home.component";
 import { SubscriptionPlansComponent } from "./subscription-plans/subscription-plans.component";
 import { subscriptionPlansResolver } from "./subscription-plans/subscription-plans.resolver";
-import { SkillChooserComponent } from "../skill-chooser/skill-chooser.component";
 import { skillsListResolver } from "../../skills/list/list.resolver";
+import { SkillChooserComponent } from "../shared/skill-chooser/skill-chooser.component";
 
 export const PROFILE_HOME_ROUTES: Routes = [
   {
@@ -20,7 +20,7 @@ export const PROFILE_HOME_ROUTES: Routes = [
         },
       },
       {
-        path: "skills",
+        path: "skillPlans",
         component: SkillChooserComponent,
         resolve: {
           data: skillsListResolver

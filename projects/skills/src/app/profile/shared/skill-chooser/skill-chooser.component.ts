@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PersonalRatingCardComponent } from '../shared/personal-rating-card/personal-rating-card.component';
 import { ButtonComponent } from '@ui/components';
 import { RouterLink } from '@angular/router';
 import { IconComponent } from '@uilib';
+import { PersonalRatingCardComponent } from '../personal-rating-card/personal-rating-card.component';
 
 @Component({
   selector: 'app-skill-chooser',

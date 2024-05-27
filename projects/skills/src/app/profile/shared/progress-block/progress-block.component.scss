@@ -1,6 +1,63 @@
+@use "styles/typography";
+@use "styles/responsive";
+
 .progress {
   padding: 20px;
   background-color: var(--white);
   border: 1px solid var(--grey-button);
   border-radius: 15px;
+
+  &_text {
+    @include typography.body-14;
+  }
+
+  &-circle {
+    display: none;
+
+    @include responsive.apply-desktop {
+      display: flex;
+    }
+
+    &-responsive {
+      display: flex;
+
+      @include responsive.apply-desktop {
+        display: none;
+      }
+    }
+  }
+
+  &-bar {
+    position: relative;
+    top: 100px;
+    width: 100%;
+
+    @include responsive.apply-desktop {
+      top: -135px;
+    }
+
+    &-circle {
+      position: absolute;
+      top: 0%;
+      left: 0%;
+      width: 100%;
+      max-width: 500px;
+      transform: translate(0%, -50%);
+    }
+  }
+}
+
+.track,
+.filled {
+  fill: none;
+  stroke-width: 17;
+}
+
+.track {
+  stroke: var(--accent-light);
+}
+
+.filled {
+  stroke: var(--accent);
+  transition: all 0.2s;
 }
