@@ -12,7 +12,7 @@ import { CircleProgressBarComponent } from "../../../shared/circle-progress-bar/
   styleUrl: "./progress-block.component.scss",
 })
 export class ProgressBlockComponent {
-  @Input() progress: number = 0;
+  @Input() progress = 0;
 
   radius = 70;
 
@@ -25,5 +25,5 @@ export class ProgressBlockComponent {
     return 2 * Math.PI * this.radius; // 2 * π * radius
   }
 
-  Array = Array
+  Array = Array;
 }
