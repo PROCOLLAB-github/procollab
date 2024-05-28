@@ -24,7 +24,7 @@ export class TokenService {
     if (this.production) {
       return {
         domain: ".procollab.ru",
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
       };
     }
 
