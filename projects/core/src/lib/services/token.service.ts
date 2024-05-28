@@ -4,7 +4,6 @@ import { Inject, Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { RefreshResponse } from "@auth/models/http.model";
 import { plainToInstance } from "class-transformer";
-import { environment } from "@environment";
 import { Tokens } from "@auth/models/tokens.model";
 import Cookies from "js-cookie";
 import { ApiService, PRODUCTION } from "@corelib";
@@ -49,7 +48,7 @@ export class TokenService {
   }
 
   memTokens(tokens: Tokens): void {
-    console.log(environment);
+    console.debug("Is production", this.production);
     Cookies.set("accessToken", tokens.access, this.getCookieOptions());
     Cookies.set("refreshToken", tokens.refresh, this.getCookieOptions());
   }
