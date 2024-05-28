@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AuthService } from "../services";
 import { ErrorMessage } from "@error/models/error-message";
-import { ControlErrorPipe, ValidationService } from "projects/core";
+import { ControlErrorPipe, TokenService, ValidationService } from "projects/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
 
@@ -29,6 +29,7 @@ export class LoginComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly tokenService: TokenService,
     private readonly validationService: ValidationService,
     private readonly cdref: ChangeDetectorRef
   ) {
@@ -46,7 +47,7 @@ export class LoginComponent implements OnInit {
   errorMessage = ErrorMessage;
 
   ngOnInit(): void {
-    this.authService.clearTokens();
+    this.tokenService.clearTokens();
   }
 
   onSubmit() {
@@ -60,7 +61,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: res => {
-        this.authService.memTokens(res);
+        this.tokenService.memTokens(res);
         this.loginIsSubmitting = false;
 
         this.cdref.detectChanges();
