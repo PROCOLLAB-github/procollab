@@ -74,6 +74,7 @@ export class AuthService {
   }
 
   memTokens(tokens: Tokens): void {
+    console.log(environment.production);
     Cookies.set("accessToken", tokens.access, this.getCookieOptions());
     Cookies.set("refreshToken", tokens.refresh, this.getCookieOptions());
   }
