@@ -48,7 +48,6 @@ export class TokenService {
   }
 
   memTokens(tokens: Tokens): void {
-    console.debug("Is production", this.production);
     Cookies.set("accessToken", tokens.access, this.getCookieOptions());
     Cookies.set("refreshToken", tokens.refresh, this.getCookieOptions());
   }
