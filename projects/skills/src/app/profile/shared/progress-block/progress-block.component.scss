@@ -2,14 +2,14 @@
 @use "styles/responsive";
 
 .progress {
-  padding: 20px;
-  background-color: var(--white);
-  border: 1px solid var(--grey-button);
-  border-radius: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  padding: 20px;
+  background-color: var(--white);
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
 
   @include responsive.apply-desktop {
     display: flex;
@@ -30,15 +30,15 @@
 
       &-el {
         display: flex;
-        align-items: center;
         gap: 10px;
+        align-items: center;
       }
 
       &-bullet {
         width: 15px;
         height: 15px;
-        border-radius: 50%;
         background-color: var(--accent);
+        border-radius: 50%;
       }
     }
   }
@@ -59,8 +59,8 @@
       max-width: 500px;
 
       @include responsive.apply-desktop {
-        transform: translate(0%, -50%);
         left: 10%;
+        transform: translate(0%, -50%);
       }
     }
   }
