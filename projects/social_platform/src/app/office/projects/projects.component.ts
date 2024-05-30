@@ -15,7 +15,7 @@ import { ProjectCount } from "@models/project.model";
 import { ProjectService } from "@services/project.service";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
-import { IconComponent } from "@ui/components";
+import { BarComponent, IconComponent } from "@ui/components";
 import { AsyncPipe } from "@angular/common";
 
 @Component({
@@ -31,6 +31,7 @@ import { AsyncPipe } from "@angular/common";
     SearchComponent,
     RouterOutlet,
     AsyncPipe,
+    BarComponent
   ],
 })
 export class ProjectsComponent implements OnInit, OnDestroy {

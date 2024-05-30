@@ -4,7 +4,7 @@ import { Component, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BackComponent, IconComponent } from "@uilib";
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from "@angular/router";
-import { ButtonComponent } from "@ui/components";
+import { BarComponent, ButtonComponent } from "@ui/components";
 import { SkillCardComponent } from "../shared/skill-card/skill-card.component";
 import { map, Observable } from "rxjs";
 import { ApiPagination } from "../../../models/api-pagination.model";
@@ -21,6 +21,7 @@ import { Skill } from "../../../models/skill.model";
     IconComponent,
     ButtonComponent,
     SkillCardComponent,
+    BarComponent
   ],
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",

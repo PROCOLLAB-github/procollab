@@ -1,0 +1,26 @@
+<!-- @format -->
+
+<div class="bar">
+  <nav class="bar__nav">
+    @if (backHave) {<app-back class="bar__back"></app-back>}
+    <ul class="bar__tabs">
+      @for (link of links; track $index) {
+      <a
+        class="bar__link"
+        [routerLinkActiveOptions]="
+          links[$index].isRouterLinkActiveOptions ? { exact: true } : { exact: false }
+        "
+        [routerLink]="[links[$index].link]"
+        routerLinkActive="bar__link--active"
+      >
+        <li class="text-body-14 bar__item">
+          {{ links[$index].linkText }}
+          <div class="bar__ball" [class.bar__ball--small]="links[$index].count! < 10">
+            {{ links[$index].count }}
+          </div>
+        </li>
+      </a>
+      }
+    </ul>
+  </nav>
+</div>

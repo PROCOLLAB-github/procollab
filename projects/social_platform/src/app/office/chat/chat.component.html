@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <div class="page">
-  <div class="bar page__bar">
+  <!-- <div class="bar page__bar">
     <nav class="bar__nav">
       <app-back></app-back>
       <ul class="bar__tabs">
@@ -17,7 +17,27 @@
         </a>
       </ul>
     </nav>
+  </div> -->
+
+  <div class="page__bar">
+    <app-bar
+      [backHave]="true"
+      [links]="[
+        {
+          link: '/office/chats/directs',
+          linkText: 'Личные чаты',
+          isRouterLinkActiveOptions: false,
+          
+        },
+        {
+          link: '/office/chats/groups',
+          linkText: 'Чаты проектов',
+          isRouterLinkActiveOptions: false
+        }
+      ]"
+    ></app-bar>
   </div>
+
   <div class="page__list">
     @for (c of chats | async; track c.id; let last = $last) {
     <app-chat-card [chat]="c" [isLast]="last" (click)="onGotoChat(c.id)"></app-chat-card>

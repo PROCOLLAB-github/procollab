@@ -3,6 +3,7 @@
   <div class="bar project-bar">
     <app-back></app-back>
   </div>
+
   <main class="project">
     <form [formGroup]="projectForm" class="project__form">
       <nav class="project__nav">
@@ -30,6 +31,7 @@
           </li>
         </ul>
       </nav>
+
       <div class="project__inner">
         @if (editingStep === 'main') { @if (projectForm.get('imageAddress'); as imagesAddress) {
         <div class="project__image">
