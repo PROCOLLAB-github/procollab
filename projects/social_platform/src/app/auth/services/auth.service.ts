@@ -2,14 +2,14 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService, TokenService } from "@corelib";
-import { concatMap, map, Observable, ReplaySubject, take, tap } from "rxjs";
+import { plainToInstance } from "class-transformer";
+import { Observable, ReplaySubject, concatMap, map, take, tap } from "rxjs";
 import {
   LoginRequest,
   LoginResponse,
   RegisterRequest,
   RegisterResponse,
 } from "../models/http.model";
-import { plainToInstance } from "class-transformer";
 import { User, UserRole } from "../models/user.model";
 
 @Injectable({
@@ -49,6 +49,13 @@ export class AuthService {
     return this.apiService.get<User>("/auth/users/current/").pipe(
       map(user => plainToInstance(User, user)),
       tap(profile => this.profile$.next(profile))
+    );
+  }
+
+  isSubscribed(): Observable<boolean> {
+    return this.profile.pipe(
+      tap(console.log),
+      map(profile => profile.isSubscribed)
     );
   }
 

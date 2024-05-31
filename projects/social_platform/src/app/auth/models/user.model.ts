@@ -53,6 +53,10 @@ export class User {
   timeCreated!: string;
   timeUpdated!: string;
   verificationDate!: string;
+  isSubscribed!: boolean;
+  lastSubscribeDate!: string;
+  subscriptionDateOver!: string | null;
+  lastSubscriptionType!: string | null;
 
   doesCompleted(): boolean {
     return this.onboardingStage === null;
@@ -78,6 +82,10 @@ export class User {
       timeCreated: "",
       timeUpdated: "",
       verificationDate: "",
+      isSubscribed: false,
+      lastSubscribeDate: "",
+      subscriptionDateOver: null,
+      lastSubscriptionType: null,
     } as User;
   }
 }

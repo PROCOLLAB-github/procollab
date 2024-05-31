@@ -18,6 +18,12 @@
       (logout)="onLogout()"
     ></app-profile-control-panel>
     }
+    <div class="text-body-14 pro-item" (click)="openSkills()" afterNavItems>
+      <div class="pro-item__name">
+        <i appIcon icon="book" appSquare="24"></i> <span> Навыки </span>
+      </div>
+      <div class="pro-item__badge text-body-12">PRO</div>
+    </div>
   </ui-sidebar>
   }
   <div class="office__wrapper">
@@ -45,4 +51,8 @@
   </app-modal>
   <app-delete-confirm></app-delete-confirm>
   <app-snackbar></app-snackbar>
+  <app-subscription-plans
+    [subscriptionPlans]="subscriptions()"
+    [open]="openSubscription()"
+  ></app-subscription-plans>
 </div>
