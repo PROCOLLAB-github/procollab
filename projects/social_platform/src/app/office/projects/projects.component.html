@@ -1,52 +1,13 @@
 <!-- @format -->
 
 <main class="page">
-  <div class="bar page__bar">
+  <div class="page__bar">
     @if (projectService.projectsCount$ | async; as count) {
-    <!-- <nav class="bar__nav">
-      <ul class="bar__tabs">
-        <a class="bar__link" routerLink="/office/projects/my" routerLinkActive="bar__link--active">
-          <li class="text-body-14 bar__item">
-            Мои проекты
-            <div class="bar__ball" [class.bar__ball--small]="count.my < 10">{{ count.my }}</div>
-          </li>
-        </a>
-
-        <a
-          class="bar__link"
-          routerLink="/office/projects/subscriptions"
-          routerLinkActive="bar__link--active"
-        >
-          <li class="text-body-14 bar__item">
-            Мои подписки
-            <div class="bar__ball" [class.bar__ball--small]="count.subs < 10">{{ count.subs }}</div>
-          </li>
-        </a>
-
-        <a class="bar__link" routerLink="/office/projects/all" routerLinkActive="bar__link--active">
-          <li class="text-body-14 bar__item">
-            Все проекты
-            <div class="bar__ball" [class.bar__ball--small]="count.all < 10">{{ count.all }}</div>
-          </li>
-        </a>
-      </ul> -->
-
-      <div class="bar__right">
-        @if (isMy) {
-        <button (click)="addProject()" class="text-body-14 bar__add-project">
-          <span class="bar__add-project-text">Добавить проект</span>
-          <i appIcon icon="plus" appSquare="18"></i>
-        </button>
-        } @else if (isAll) {
-        <form [formGroup]="searchForm">
-          <app-search formControlName="search"></app-search>
-        </form>
-        }
-      </div>
-    <!-- </nav> -->
 
     <app-bar
       [backHave]="false"
+      [ballHave]="true"
+      class="bar"
       [links]="[
         {
           link: '/office/projects/my',
@@ -69,7 +30,20 @@
           count: count.all
         }
       ]"
-    ></app-bar>
+    >
+      <div class="bar__right">
+        @if (isMy) {
+        <button (click)="addProject()" class="text-body-14 bar__add-project">
+          <span class="bar__add-project-text">Добавить проект</span>
+          <i appIcon icon="plus" appSquare="18"></i>
+        </button>
+        } @else if (isAll) {
+        <form [formGroup]="searchForm">
+          <app-search formControlName="search"></app-search>
+        </form>
+        }
+      </div>
+    </app-bar>
     }
   </div>
 

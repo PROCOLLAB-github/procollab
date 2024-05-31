@@ -13,8 +13,9 @@ import { BackComponent } from '@uilib';
 export class BarComponent implements OnInit {
   constructor() { }
 
-  @Input() links!: { link: string | string[]; linkText: string; isRouterLinkActiveOptions: boolean, count?: number }[];
+  @Input() links!: { link: string; linkText: string; isRouterLinkActiveOptions: boolean, count?: number }[];
   @Input() backHave?: boolean;
+  @Input() ballHave?: boolean = false;
 
   ngOnInit(): void { }
 }

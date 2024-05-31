@@ -1,8 +1,6 @@
 <!-- @format -->
 <div>
-  <div class="bar vacancy-bar">
-    <app-back class="bar__back"></app-back>
-  </div>
+  <app-bar class="bar vacancy-bar" [backHave]="true" [links]="[]"></app-bar>
   @if (authService.profile | async; as profile) {
   <main class="vacancy">
     <app-modal [(open)]="resultModal">

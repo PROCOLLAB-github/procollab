@@ -1,6 +1,5 @@
 <!-- @format -->
 
-<div class="bar">
   <nav class="bar__nav">
     @if (backHave) {<app-back class="bar__back"></app-back>}
     <ul class="bar__tabs">
@@ -15,12 +14,17 @@
       >
         <li class="text-body-14 bar__item">
           {{ links[$index].linkText }}
+          @if(ballHave){
           <div class="bar__ball" [class.bar__ball--small]="links[$index].count! < 10">
             {{ links[$index].count }}
           </div>
+          }
         </li>
       </a>
       }
     </ul>
+
+    <ng-container>
+      <ng-content></ng-content>
+    </ng-container>
   </nav>
-</div>
