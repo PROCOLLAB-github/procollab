@@ -7,7 +7,7 @@
     logoSrc="/assets/images/shared/logo.svg"
     [navItems]="navItems"
   >
-    @if (user !== undefined && invites !== undefined) {
+    @if (user !== undefined && invites!== undefined) {
     <app-profile-control-panel
       [invites]="invites()"
       [hasNotifications]="false"

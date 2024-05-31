@@ -24,7 +24,6 @@ import { AsyncPipe } from "@angular/common";
 import { InviteService } from "@services/invite.service";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { SubscriptionPlan, SubscriptionPlansService } from "@corelib";
-import { log } from "console";
 
 @Component({
   selector: "app-office",
@@ -170,12 +169,12 @@ export class OfficeComponent implements OnInit, OnDestroy {
   subscriptions = signal<SubscriptionPlan[]>([]);
   openSkills() {
     this.authService.isSubscribed().subscribe(subscribed => {
-      console.log(subscribed);
-      // if (!subscribed) {
-      //   location.href = "https://skills.procollab.ru";
-      //   return;
-      // }
-      // this.openSubscription.set(true);
+      if (!subscribed) {
+        location.href = "https://skills.procollab.ru";
+        return;
+      }
+
+      this.openSubscription.set(true);
     });
   }
 }

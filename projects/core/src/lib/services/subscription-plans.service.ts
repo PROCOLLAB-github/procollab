@@ -11,11 +11,11 @@ export class SubscriptionPlansService {
   apiService = inject(ApiService);
 
   getSubscriptions() {
-    return this.apiService.get<SubscriptionPlan[]>("/auth/subscription");
+    return this.apiService.get<SubscriptionPlan[]>("/auth/subscription/");
   }
 
   buySubscription(planId: SubscriptionPlan["id"]) {
-    return this.apiService.post<PaymentStatus>("/auth/subscription/buy", {
+    return this.apiService.post<PaymentStatus>("/auth/subscription/buy/", {
       subscriptionId: planId,
       redirectUrl: `${window.location.origin}/profile`,
     });

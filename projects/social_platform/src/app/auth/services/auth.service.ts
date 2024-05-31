@@ -3,7 +3,7 @@
 import { Injectable } from "@angular/core";
 import { ApiService, TokenService } from "@corelib";
 import { plainToInstance } from "class-transformer";
-import { Observable, ReplaySubject, concatMap, map, take, tap } from "rxjs";
+import { concatMap, map, Observable, ReplaySubject, take, tap } from "rxjs";
 import {
   LoginRequest,
   LoginResponse,
@@ -53,10 +53,7 @@ export class AuthService {
   }
 
   isSubscribed(): Observable<boolean> {
-    return this.profile.pipe(
-      tap(console.log),
-      map(profile => profile.isSubscribed)
-    );
+    return this.profile.pipe(map(profile => profile.isSubscribed));
   }
 
   getUserRoles(): Observable<UserRole[]> {
