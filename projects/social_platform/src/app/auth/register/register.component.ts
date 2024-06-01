@@ -2,13 +2,13 @@
 
 import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { AuthService } from "../services";
-import { ControlErrorPipe, ValidationService } from "projects/core";
+import { ControlErrorPipe, TokenService, ValidationService } from "projects/core";
 import { ErrorMessage } from "@error/models/error-message";
 import { Router, RouterLink } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 import { ButtonComponent, CheckboxComponent, InputComponent } from "@ui/components";
+import { AuthService } from "@auth/services";
 
 dayjs.extend(cpf);
 
@@ -29,6 +29,7 @@ dayjs.extend(cpf);
 export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
+    private tokenService: TokenService,
     private authService: AuthService,
     private router: Router,
     private validationService: ValidationService,
@@ -55,7 +56,7 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.clearTokens();
+    this.tokenService.clearTokens();
   }
 
   registerForm: FormGroup;

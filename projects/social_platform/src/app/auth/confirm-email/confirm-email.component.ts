@@ -3,6 +3,7 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../services";
 import { ActivatedRoute, Router } from "@angular/router";
+import { TokenService } from "@corelib";
 
 @Component({
   selector: "app-confirm-email",
@@ -12,7 +13,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 })
 export class ConfirmEmailComponent implements OnInit {
   constructor(
-    private authService: AuthService,
+    private tokenService: TokenService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -20,9 +21,9 @@ export class ConfirmEmailComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe(queries => {
       const { access_token: accessToken, refresh_token: refreshToken } = queries;
-      this.authService.memTokens({ access: accessToken, refresh: refreshToken });
+      this.tokenService.memTokens({ access: accessToken, refresh: refreshToken });
 
-      if (this.authService.getTokens() !== null) {
+      if (this.tokenService.getTokens() !== null) {
         this.router
           .navigateByUrl("/office")
           .then(() => console.debug("Route changed from ConfirmEmailComponent"));

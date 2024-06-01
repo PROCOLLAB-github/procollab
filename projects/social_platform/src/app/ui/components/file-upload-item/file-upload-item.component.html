@@ -11,7 +11,7 @@
         {{ name }}
       </div>
       <div class="file__meta text-body-14">
-        {{ type | uppercase }} {{ getFormattedFileSize(size) }}
+        {{ type | uppercase }} {{ size | formatedFileSize }}
       </div>
     </div>
   </ng-container>

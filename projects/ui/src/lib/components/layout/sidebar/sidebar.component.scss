@@ -57,7 +57,8 @@
     transition: all 0.2s;
   }
 
-  &__item {
+  &__item,
+  ::ng-deep .sidebar-nav__item {
     position: relative;
     display: flex;
     align-items: center;

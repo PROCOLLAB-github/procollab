@@ -8,10 +8,7 @@
     @if (place === 1) {
     <img src="assets/images/rating/top-rating.png" alt="" />
     }
-    <app-avatar
-      url="https://i.pinimg.com/474x/de/a5/09/dea5093c08215a4ccfae75cda21ed94c.jpg"
-      [size]="100"
-    ></app-avatar>
+    <app-avatar [url]="rating.file ?? undefined" [size]="100"></app-avatar>
   </div>
   <h2 class="rating-card__title">{{ rating.userName }}</h2>
   <p class="rating-card__score">{{ rating.scoreCount }} очков</p>

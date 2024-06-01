@@ -4,7 +4,6 @@
   @if (profileData()) {
   <app-month-block [months]="profileData()['months']" class="profile__month"></app-month-block>
   <app-skills-block class="profile__skills"></app-skills-block>
-  <app-progress-block [progress]="70"></app-progress-block>
-  <router-outlet></router-outlet>
+  <app-progress-block></app-progress-block>
   }
 </div>

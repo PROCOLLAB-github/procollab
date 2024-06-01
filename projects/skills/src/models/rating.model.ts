@@ -6,4 +6,5 @@ export interface GeneralRating {
   specialization: string;
   geoPosition: string;
   scoreCount: number;
+  file: string | null;
 }
