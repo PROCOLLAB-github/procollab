@@ -58,6 +58,8 @@ export class User {
   subscriptionDateOver!: string | null;
   lastSubscriptionType!: string | null;
 
+  isAutopayAllowed!: boolean;
+
   doesCompleted(): boolean {
     return this.onboardingStage === null;
   }
@@ -83,6 +85,7 @@ export class User {
       timeUpdated: "",
       verificationDate: "",
       isSubscribed: false,
+      isAutopayAllowed: false,
       lastSubscribeDate: "",
       subscriptionDateOver: null,
       lastSubscriptionType: null,

@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, Input } from "@angular/core";
+import { Component, EventEmitter, inject, Input, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
 import { ButtonComponent } from "@ui/components";
@@ -20,6 +20,8 @@ export class SubscriptionPlansComponent {
 
   @Input() open = false;
   @Input({ required: true }) subscriptionPlans!: SubscriptionPlan[];
+
+  @Output() openChange = new EventEmitter<boolean>();
 
   onBuyClick(planId: SubscriptionPlan["id"]) {
     this.subscriptionService.buySubscription(planId).subscribe(status => {

@@ -54,5 +54,6 @@
   <app-subscription-plans
     [subscriptionPlans]="subscriptions()"
     [open]="openSubscription()"
+    (openChange)="openSubscription.set($event)"
   ></app-subscription-plans>
 </div>
