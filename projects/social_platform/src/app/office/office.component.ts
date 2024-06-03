@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit, Signal } from "@angular/core";
+import { Component, OnDestroy, OnInit, signal, Signal } from "@angular/core";
 import { IndustryService } from "@services/industry.service";
 import { forkJoin, map, noop, Subscription } from "rxjs";
 import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
@@ -14,10 +14,16 @@ import { DeleteConfirmComponent } from "@ui/components/delete-confirm/delete-con
 import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { NavComponent } from "./shared/nav/nav.component";
-import { ProfileControlPanelComponent, SidebarComponent } from "@uilib";
+import {
+  IconComponent,
+  ProfileControlPanelComponent,
+  SidebarComponent,
+  SubscriptionPlansComponent,
+} from "@uilib";
 import { AsyncPipe } from "@angular/common";
 import { InviteService } from "@services/invite.service";
 import { toSignal } from "@angular/core/rxjs-interop";
+import { SubscriptionPlan, SubscriptionPlansService } from "@corelib";
 
 @Component({
   selector: "app-office",
@@ -34,6 +40,8 @@ import { toSignal } from "@angular/core/rxjs-interop";
     SnackbarComponent,
     AsyncPipe,
     ProfileControlPanelComponent,
+    IconComponent,
+    SubscriptionPlansComponent,
   ],
 })
 export class OfficeComponent implements OnInit, OnDestroy {
@@ -44,7 +52,8 @@ export class OfficeComponent implements OnInit, OnDestroy {
     private readonly projectService: ProjectService,
     private readonly inviteService: InviteService,
     private readonly router: Router,
-    public readonly chatService: ChatService
+    public readonly chatService: ChatService,
+    private readonly subscriptionPlansService: SubscriptionPlansService
   ) {}
 
   ngOnInit(): void {
@@ -87,6 +96,13 @@ export class OfficeComponent implements OnInit, OnDestroy {
     if (localStorage.getItem("waitVerificationAccepted") === "true") {
       this.waitVerificationAccepted = true;
     }
+
+    const subscriptionsSub$ = this.subscriptionPlansService
+      .getSubscriptions()
+      .subscribe(subscriptions => {
+        this.subscriptions.set(subscriptions);
+      });
+    this.subscriptions$.push(subscriptionsSub$);
   }
 
   ngOnDestroy(): void {
@@ -147,5 +163,18 @@ export class OfficeComponent implements OnInit, OnDestroy {
           .navigateByUrl("/auth")
           .then(() => console.debug("Route changed from OfficeComponent"))
       );
+  }
+
+  openSubscription = signal(false);
+  subscriptions = signal<SubscriptionPlan[]>([]);
+  openSkills() {
+    this.authService.isSubscribed().subscribe(subscribed => {
+      if (subscribed) {
+        location.href = "https://skills.procollab.ru";
+        return;
+      }
+
+      this.openSubscription.set(true);
+    });
   }
 }

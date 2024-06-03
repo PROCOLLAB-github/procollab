@@ -2,10 +2,7 @@
 
 <div class="rating-card">
   <div class="rating-card__left">
-    <app-avatar
-      url="https://i.pinimg.com/474x/de/a5/09/dea5093c08215a4ccfae75cda21ed94c.jpg"
-      [size]="60"
-    ></app-avatar>
+    <app-avatar [url]="rating.file ?? undefined" [size]="60"></app-avatar>
     <div class="rating-card__main-info">
       <div class="rating-card__name">{{ rating.userName }}</div>
       <p class="rating-card__info text-body-12">

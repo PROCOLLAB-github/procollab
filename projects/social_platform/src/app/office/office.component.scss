@@ -76,3 +76,34 @@
     margin-top: 18px;
   }
 }
+
+.pro-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 20px;
+  color: var(--grey-for-text);
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--black);
+  }
+
+  &__name {
+    display: flex;
+    align-items: center;
+
+    i {
+      margin-right: 12px;
+    }
+  }
+
+  &__badge {
+    padding: 2px 10px;
+    margin-left: auto;
+    color: var(--white);
+    background-color: var(--accent);
+    border-radius: 12px;
+  }
+}

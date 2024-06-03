@@ -11,10 +11,11 @@ import {
 import { BehaviorSubject, catchError, filter, Observable, switchMap, take, throwError } from "rxjs";
 import { AuthService } from "@auth/services";
 import { Router } from "@angular/router";
+import { TokenService } from "../services";
 
 @Injectable()
 export class BearerTokenInterceptor implements HttpInterceptor {
-  constructor(private readonly authService: AuthService, private readonly router: Router) {}
+  constructor(private readonly tokenService: TokenService, private readonly router: Router) {}
 
   private isRefreshing = false;
   private refreshTokenSubject = new BehaviorSubject<any>(null);
@@ -23,7 +24,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
     const headers: Record<string, string> = {
       Accept: "application/json",
     };
-    const tokens = this.authService.getTokens();
+    const tokens = this.tokenService.getTokens();
 
     if (tokens !== null) {
       // eslint-disable-next-line
@@ -66,7 +67,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
 
-      return this.authService.refreshTokens().pipe(
+      return this.tokenService.refreshTokens().pipe(
         catchError(err => {
           return throwError(err);
         }),
@@ -74,12 +75,12 @@ export class BearerTokenInterceptor implements HttpInterceptor {
           this.isRefreshing = false;
           this.refreshTokenSubject.next(res.access);
 
-          this.authService.memTokens(res);
+          this.tokenService.memTokens(res);
           const headers: Record<string, string> = {
             Accept: "application/json",
           };
 
-          const tokens = this.authService.getTokens();
+          const tokens = this.tokenService.getTokens();
 
           if (tokens) {
             headers["Authorization"] = `Bearer ${tokens.access}`;

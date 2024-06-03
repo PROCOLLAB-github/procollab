@@ -17,6 +17,7 @@ import {
 } from "rxjs";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AsyncPipe, NgIf } from "@angular/common";
+import { TokenService } from "@corelib";
 
 @Component({
   selector: "app-root",
@@ -26,7 +27,11 @@ import { AsyncPipe, NgIf } from "@angular/common";
   imports: [NgIf, MatProgressBarModule, RouterOutlet, AsyncPipe],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private tokenService: TokenService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.rolesSub$ = forkJoin([
@@ -47,7 +52,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isLoading$ = merge(this.hideLoaderEvents, this.showLoaderEvents);
 
     if (location.pathname === "/") {
-      if (this.authService.getTokens() === null) {
+      if (this.tokenService.getTokens() === null) {
         this.router
           .navigateByUrl("/auth/login")
           .then(() => console.debug("Route changed from AppComponent"));
