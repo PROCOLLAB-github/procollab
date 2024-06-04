@@ -1,6 +1,6 @@
 <!-- @format -->
 
-@if (data | async; as routeData) {
+@if (data; as routeData) {
 <div class="skill">
   <section class="skill__info skill__block info" [ngStyle]="{ height: blockHeight() + 'px' }">
     <h2 class="info__title skill__title">{{ routeData[1].skillName }}</h2>

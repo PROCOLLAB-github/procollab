@@ -1,6 +1,6 @@
 /** @format */
 
-import { AfterViewInit, Component, ElementRef, inject, OnInit, signal } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, inject, Input, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { TaskCardComponent } from "../../shared/task-card/task-card.component";
 import { CircleProgressBarComponent } from "../../shared/circle-progress-bar/circle-progress-bar.component";
@@ -17,16 +17,17 @@ import { SkillDetailResolve } from "./detail.resolver";
 })
 export class SkillDetailComponent implements OnInit, AfterViewInit {
   protected readonly Array = Array;
+  @Input() data!: SkillDetailResolve;
 
   router = inject(Router);
   route = inject(ActivatedRoute);
   elementRef = inject(ElementRef<HTMLElement>);
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.data.subscribe(r => this.data = r['data']);
+  }
 
   blockHeight = signal(0);
-
-  data = this.route.data.pipe(map(r => r["data"])) as Observable<SkillDetailResolve>;
 
   ngAfterViewInit() {
     this.blockHeight.set(this.elementRef.nativeElement.getBoundingClientRect().height);

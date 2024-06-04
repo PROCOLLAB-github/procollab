@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject } from "@angular/core";
+import { Component, Input, OnInit, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BackComponent, IconComponent } from "@uilib";
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from "@angular/router";
@@ -25,10 +25,14 @@ import { Skill } from "../../../models/skill.model";
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
 })
-export class SkillsListComponent {
+export class SkillsListComponent implements OnInit {
   protected readonly Array = Array;
+  @Input() skills!: ApiPagination<Skill>;
+
   router = inject(Router);
   route = inject(ActivatedRoute);
 
-  skills = this.route.data.pipe(map(r => r["data"])) as Observable<ApiPagination<Skill>>;
+  ngOnInit(): void {
+    this.route.data.subscribe(r => this.skills = r['data'])
+  }
 }

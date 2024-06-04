@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject } from "@angular/core";
+import { Component, Input, OnInit, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { CircleProgressBarComponent } from "../../shared/circle-progress-bar/circle-progress-bar.component";
 import { IconComponent } from "@uilib";
@@ -16,9 +16,13 @@ import { TaskResults } from "../../../models/skill.model";
   templateUrl: "./complete.component.html",
   styleUrl: "./complete.component.scss",
 })
-export class TaskCompleteComponent {
+export class TaskCompleteComponent implements OnInit {
+  @Input() results!: TaskResults;
+
   route = inject(ActivatedRoute);
   router = inject(Router);
 
-  results = this.route.data.pipe(map(r => r["data"])) as Observable<TaskResults>;
+  ngOnInit(): void {
+    this.route.data.subscribe(r => this.results = r['data'])
+  }
 }

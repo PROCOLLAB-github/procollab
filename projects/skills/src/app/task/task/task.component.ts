@@ -41,11 +41,11 @@ export class TaskComponent implements OnInit {
       () => {
         const targetEl = !this.taskService.currentTaskDone()
           ? this.pointEls?.find(el => {
-              const subTaskPointId = el.nativeElement.dataset["id"];
-              if (!subTaskPointId) return false;
+            const subTaskPointId = el.nativeElement.dataset["id"];
+            if (!subTaskPointId) return false;
 
-              return Number(subTaskPointId) === this.currentSubTaskId();
-            })
+            return Number(subTaskPointId) === this.currentSubTaskId();
+          })
           : this.progressDone;
 
         if (targetEl && this.progressBarEl) {
