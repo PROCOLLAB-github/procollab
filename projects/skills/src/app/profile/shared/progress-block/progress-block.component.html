@@ -16,57 +16,57 @@
       />
     </svg>
 
-    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
-      <circle class="track" cx="120" cy="120" [attr.r]="radius" />
+    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 190">
+      <circle class="track" cx="95" cy="95" [attr.r]="radius - 5" />
       <circle
         class="filled"
-        cx="120"
-        cy="120"
+        cx="95"
+        cy="95"
         [attr.r]="radius"
         stroke-linecap="round"
-        transform="rotate(-90 120 120)"
+        transform="rotate(-90 80 80)"
+        [attr.stroke-dashoffset]="calculateStrokeDashOffset()"
+        [attr.stroke-dasharray]="calculateStrokeDashArray()"
+      />
+    </svg>
+
+    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 230">
+      <circle class="track" cx="115" cy="115" [attr.r]="radius - 10" />
+      <circle
+        class="filled"
+        cx="115"
+        cy="115"
+        [attr.r]="radius"
+        stroke-linecap="round"
+        transform="rotate(-90 80 80)"
+        [attr.stroke-dashoffset]="calculateStrokeDashOffset()"
+        [attr.stroke-dasharray]="calculateStrokeDashArray()"
+      />
+    </svg>
+
+    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280">
+      <circle class="track" cx="140" cy="140" [attr.r]="radius - 20" />
+      <circle
+        class="filled"
+        cx="140"
+        cy="140"
+        [attr.r]="radius"
+        stroke-linecap="round"
+        transform="rotate(-90 80 80)"
         [attr.stroke-dashoffset]="calculateStrokeDashOffset()"
         [attr.stroke-dasharray]="calculateStrokeDashArray()"
       />
     </svg>
 
     <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 340">
-      <circle class="track" cx="170" cy="170" [attr.r]="radius" />
+      <circle class="track" cx="170" cy="170" [attr.r]="radius - 30" />
       <circle
         class="filled"
         cx="170"
         cy="170"
         [attr.r]="radius"
         stroke-linecap="round"
-        transform="rotate(-90 170 170)"
-        [attr.stroke-dashoffset]="calculateStrokeDashOffset()"
-        [attr.stroke-dasharray]="calculateStrokeDashArray()"
-      />
-    </svg>
-
-    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 520">
-      <circle class="track" cx="260" cy="260" [attr.r]="radius" />
-      <circle
-        class="filled"
-        cx="260"
-        cy="260"
-        [attr.r]="radius"
-        stroke-linecap="round"
-        transform="rotate(-90 260 260)"
-        [attr.stroke-dashoffset]="calculateStrokeDashOffset()"
-        [attr.stroke-dasharray]="calculateStrokeDashArray()"
-      />
-    </svg>
-
-    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
-      <circle class="track" cx="400" cy="400" [attr.r]="radius" />
-      <circle
-        class="filled"
-        cx="400"
-        cy="400"
-        [attr.r]="radius"
-        stroke-linecap="round"
-        transform="rotate(-90 400 400)"
+        transform="rotate(-90 80 80)"
         [attr.stroke-dashoffset]="calculateStrokeDashOffset()"
         [attr.stroke-dasharray]="calculateStrokeDashArray()"
       />
