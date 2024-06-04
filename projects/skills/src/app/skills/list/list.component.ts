@@ -33,6 +33,9 @@ export class SkillsListComponent implements OnInit {
   route = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    this.route.data.subscribe(r => this.skills = r['data'])
+    this.route.data.subscribe(r => {
+      const data = r['data']
+      this.skills = data;
+    })
   }
 }

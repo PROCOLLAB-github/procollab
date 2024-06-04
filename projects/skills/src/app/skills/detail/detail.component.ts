@@ -24,7 +24,10 @@ export class SkillDetailComponent implements OnInit, AfterViewInit {
   elementRef = inject(ElementRef<HTMLElement>);
 
   ngOnInit(): void {
-    this.route.data.subscribe(r => this.data = r['data']);
+    this.route.data.subscribe(r => {
+      const data = r['data']
+      this.data = data;
+    });
   }
 
   blockHeight = signal(0);

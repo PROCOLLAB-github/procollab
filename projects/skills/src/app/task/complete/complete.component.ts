@@ -23,6 +23,9 @@ export class TaskCompleteComponent implements OnInit {
   router = inject(Router);
 
   ngOnInit(): void {
-    this.route.data.subscribe(r => this.results = r['data'])
+    this.route.data.subscribe(r => {
+      const data = r['data']
+      this.results = data;
+    })
   }
 }

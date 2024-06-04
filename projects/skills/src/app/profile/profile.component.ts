@@ -28,6 +28,9 @@ export class ProfileComponent implements OnInit {
   route = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    this.route.data.subscribe(r => this.profileData = r['data']);
+    this.route.data.subscribe(r => {
+      const data = r['data']
+      this.profileData = data;
+    });
   }
 }
