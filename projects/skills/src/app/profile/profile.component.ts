@@ -29,8 +29,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(r => {
-      const data = r['data']
-      this.profileData = data;
+      this.profileData = r['data']
     });
   }
 }

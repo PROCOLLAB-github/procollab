@@ -6,6 +6,7 @@ import {
   effect,
   ElementRef,
   inject,
+  Input,
   OnInit,
   signal,
   ViewChild,
@@ -29,6 +30,7 @@ export class TaskComponent implements OnInit {
   @ViewChildren("pointEls") pointEls?: ElementRef<HTMLAnchorElement>[];
   @ViewChild("progressBarEl") progressBarEl?: ElementRef<HTMLElement>;
   @ViewChild("progressDone") progressDone?: ElementRef<HTMLElement>;
+  @Input() data!: TaskStepsResponse;
 
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -95,14 +97,15 @@ export class TaskComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.data.pipe(map(r => r["data"])).subscribe((res: TaskStepsResponse) => {
-      this.skillStepsResponse.set(res);
+    this.route.data.subscribe(r => {
+      this.data = r['data']
+      this.skillStepsResponse.set(this.data);
+    })
 
-      if (res.stepData.filter(s => s.isDone).length === res.stepData.length) {
-        this.taskService.currentTaskDone.set(true);
-        this.router.navigate(["/task", this.route.snapshot.params["taskId"], "results"]);
-      }
-    });
+    if (this.data.stepData.filter(s => s.isDone).length === this.data.stepData.length) {
+      this.taskService.currentTaskDone.set(true);
+      this.router.navigate(["/task", this.route.snapshot.params["taskId"], "results"]);
+    }
 
     this.route.firstChild?.params
       .pipe(

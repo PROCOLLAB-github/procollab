@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { map, noop, Observable, Subscription, tap } from "rxjs";
 import { ChatItem } from "@office/chat/models/chat-item.model";
@@ -26,11 +26,13 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     private readonly authService: AuthService,
     private readonly chatService: ChatService,
     private readonly chatDirectService: ChatDirectService
-  ) {}
+  ) { }
+
+  @Input() chat!: ChatItem;
 
   ngOnInit(): void {
-    const routeData$ = this.route.data.pipe(map(r => r["data"])).subscribe(chat => {
-      this.chat = chat;
+    const routeData$ = this.route.data.subscribe(r => {
+      this.chat = r['data']
     });
     this.subscriptions$.push(routeData$);
 
@@ -69,8 +71,6 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
   typingPersons: ChatWindowComponent["typingPersons"] = [];
 
   subscriptions$: Subscription[] = [];
-
-  chat?: ChatItem;
 
   messages: ChatMessage[] = [];
 

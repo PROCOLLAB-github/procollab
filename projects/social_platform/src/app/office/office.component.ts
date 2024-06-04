@@ -54,7 +54,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     public readonly chatService: ChatService,
     private readonly subscriptionPlansService: SubscriptionPlansService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const globalSubscription$ = forkJoin([
