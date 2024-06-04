@@ -1,5 +1,6 @@
 <!-- @format -->
 
+<section class="bar">
   <nav class="bar__nav">
     @if (backHave) {<app-back class="bar__back"></app-back>}
     <ul class="bar__tabs">
@@ -7,16 +8,17 @@
       <a
         class="bar__link"
         [routerLinkActiveOptions]="
-          links[$index].isRouterLinkActiveOptions ? { exact: true } : { exact: false }
+          link.isRouterLinkActiveOptions ? { exact: true } : { exact: false }
         "
-        [routerLink]="[links[$index].link]"
+        [routerLink]="[link.link]"
         routerLinkActive="bar__link--active"
       >
         <li class="text-body-14 bar__item">
-          {{ links[$index].linkText }}
+          {{ link.linkText }}
+
           @if(ballHave){
-          <div class="bar__ball" [class.bar__ball--small]="links[$index].count! < 10">
-            {{ links[$index].count }}
+          <div class="bar__ball" [class.bar__ball--small]="link.count! < 10">
+            {{ link.count }}
           </div>
           }
         </li>
@@ -24,7 +26,6 @@
       }
     </ul>
 
-    <ng-container>
-      <ng-content></ng-content>
-    </ng-container>
+    <ng-content></ng-content>
   </nav>
+</section>

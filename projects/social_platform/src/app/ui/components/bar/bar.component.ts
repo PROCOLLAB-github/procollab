@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { BackComponent } from '@uilib';
@@ -10,12 +10,10 @@ import { BackComponent } from '@uilib';
   templateUrl: './bar.component.html',
   styleUrl: './bar.component.scss'
 })
-export class BarComponent implements OnInit {
+export class BarComponent {
   constructor() { }
 
   @Input() links!: { link: string; linkText: string; isRouterLinkActiveOptions: boolean, count?: number }[];
   @Input() backHave?: boolean;
   @Input() ballHave?: boolean = false;
-
-  ngOnInit(): void { }
 }
