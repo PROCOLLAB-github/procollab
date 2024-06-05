@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { map, Observable } from "rxjs";
 import { User } from "@auth/models/user.model";
@@ -38,9 +38,10 @@ export class ProfileDetailComponent implements OnInit {
     public readonly authService: AuthService,
     public readonly chatService: ChatService,
     public readonly breakpointObserver: BreakpointObserver
-  ) {}
+  ) { }
 
-  user$: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
+  @Input() user$!: User;
+
   loggedUserId$: Observable<number> = this.authService.profile.pipe(map(user => user.id));
 
   desktopMode$: Observable<boolean> = this.breakpointObserver
@@ -49,5 +50,9 @@ export class ProfileDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль");
+
+    this.route.data.subscribe(r => {
+      this.user$ = r['data'][0];
+    })
   }
 }

@@ -6,6 +6,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -43,13 +44,15 @@ export class MentorsComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  @Input() members: User[] = [];
+
   ngOnInit(): void {
     this.navService.setNavTitle("Участники");
 
-    this.route.data.pipe(map(r => r["data"])).subscribe((members: ApiPagination<User>) => {
-      this.membersTotalCount = members.count;
+    this.route.data.subscribe(r => {
+      this.membersTotalCount = r['data'].count;
 
-      this.members = members.results;
+      this.members = r['data'].results;
     });
   }
 
@@ -76,7 +79,6 @@ export class MentorsComponent implements OnInit, OnDestroy, AfterViewInit {
   membersPage = 1;
   membersTake = 20;
 
-  members: User[] = [];
   members$?: Subscription;
 
   searchForm: FormGroup;

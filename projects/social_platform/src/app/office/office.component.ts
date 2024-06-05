@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit, signal, Signal } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, signal, Signal } from "@angular/core";
 import { IndustryService } from "@services/industry.service";
 import { forkJoin, map, noop, Subscription } from "rxjs";
 import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
@@ -56,6 +56,8 @@ export class OfficeComponent implements OnInit, OnDestroy {
     private readonly subscriptionPlansService: SubscriptionPlansService
   ) { }
 
+  @Input() invites!: Invite[];
+
   ngOnInit(): void {
     const globalSubscription$ = forkJoin([
       this.industryService.getAll(),
@@ -103,18 +105,16 @@ export class OfficeComponent implements OnInit, OnDestroy {
         this.subscriptions.set(subscriptions);
       });
     this.subscriptions$.push(subscriptionsSub$);
+
+    this.route.data.subscribe(r => {
+      this.invites = r['invites'];
+      this.invites = this.invites.filter((invite: Invite) => invite.isAccepted === null)
+    })
   }
 
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
-
-  invites: Signal<Invite[]> = toSignal(
-    this.route.data.pipe(
-      map(r => r["invites"]),
-      map(invites => invites.filter((invite: Invite) => invite.isAccepted === null))
-    )
-  );
 
   navItems = [
     { name: "Новости", icon: "feed", link: "feed" },
@@ -138,16 +138,16 @@ export class OfficeComponent implements OnInit, OnDestroy {
 
   onRejectInvite(inviteId: number): void {
     this.inviteService.rejectInvite(inviteId).subscribe(() => {
-      const index = this.invites().findIndex(invite => invite.id === inviteId);
-      this.invites().splice(index, 1);
+      const index = this.invites.findIndex(invite => invite.id === inviteId);
+      this.invites.splice(index, 1);
     });
   }
 
   onAcceptInvite(inviteId: number): void {
     this.inviteService.acceptInvite(inviteId).subscribe(() => {
-      const index = this.invites().findIndex(invite => invite.id === inviteId);
-      const invite = JSON.parse(JSON.stringify(this.invites()[index]));
-      this.invites().splice(index, 1);
+      const index = this.invites.findIndex(invite => invite.id === inviteId);
+      const invite = JSON.parse(JSON.stringify(this.invites[index]));
+      this.invites.splice(index, 1);
 
       this.router
         .navigateByUrl(`/office/projects/${invite.project.id}`)

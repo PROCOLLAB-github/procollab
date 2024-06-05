@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -73,18 +74,22 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly subscriptionService: SubscriptionService,
     private readonly fb: FormBuilder,
     private readonly cdRef: ChangeDetectorRef
-  ) {}
+  ) { }
+
+  @Input() vacancies$!: Observable<Vacancy[]>;
 
   project$?: Observable<Project> = this.route.parent?.data.pipe(map(r => r["data"][0]));
   projSubscribers$?: Observable<User[]> = this.route.parent?.data.pipe(map(r => r["data"][1]));
 
   profileId!: number;
-
-  vacancies$: Observable<Vacancy[]> = this.route.data.pipe(map(r => r["data"]));
   subscriptions$: Subscription[] = [];
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль проекта");
+
+    this.route.data.subscribe(r => {
+      this.vacancies$ = r['data'];
+    })
 
     const news$ = this.projectNewsService
       .fetchNews(this.route.snapshot.params["projectId"])
@@ -176,7 +181,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.projectNewsService
       .delete(this.route.snapshot.params["projectId"], newsId)
-      .subscribe(() => {});
+      .subscribe(() => { });
   }
 
   onLike(newsId: number) {

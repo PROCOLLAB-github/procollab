@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, Input, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { map, Observable } from "rxjs";
 import { Program } from "@office/program/models/program.model";
@@ -15,12 +15,13 @@ import { AsyncPipe } from "@angular/common";
   imports: [RouterLink, ProgramCardComponent, AsyncPipe],
 })
 export class ProgramMainComponent implements OnInit {
-  constructor(private readonly route: ActivatedRoute) {}
+  @Input() programs$!: Observable<Program[]>;
+  route = inject(ActivatedRoute)
 
-  programs$: Observable<Program[]> = this.route.data.pipe(
-    map(r => r["data"]),
-    map(r => r["results"])
-  );
-
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.data.subscribe(r => {
+      this.programs$ = r["data"];
+      this.programs$ = r['results'];
+    })
+  }
 }

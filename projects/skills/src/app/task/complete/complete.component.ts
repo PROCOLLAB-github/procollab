@@ -24,8 +24,7 @@ export class TaskCompleteComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(r => {
-      const data = r['data']
-      this.results = data;
+      this.results = r['data'];
     })
   }
 }

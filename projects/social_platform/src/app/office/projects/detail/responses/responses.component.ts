@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { map, Observable, Subscription } from "rxjs";
 import { VacancyResponse } from "@models/vacancy-response.model";
@@ -20,16 +20,16 @@ export class ProjectResponsesComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly vacancyService: VacancyService,
     private readonly navService: NavService
-  ) {}
+  ) { }
+
+  @Input() responses: VacancyResponse[] = [];
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль проекта");
 
-    this.responses$ = this.route.data
-      .pipe(map(r => r["data"]))
-      .subscribe((responses: VacancyResponse[]) => {
-        this.responses = responses.filter(response => response.isApproved === null);
-      });
+    this.responses$ = this.route.data.subscribe(r => {
+      this.responses = r['data'].responses.filter((response: VacancyResponse) => response.isApproved === null);
+    });
   }
 
   ngOnDestroy(): void {
@@ -42,7 +42,6 @@ export class ProjectResponsesComponent implements OnInit, OnDestroy {
   );
 
   responses$?: Subscription;
-  responses: VacancyResponse[] = [];
 
   acceptResponse(responseId: number) {
     this.vacancyService.acceptResponse(responseId).subscribe(() => {

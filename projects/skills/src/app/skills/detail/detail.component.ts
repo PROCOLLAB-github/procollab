@@ -25,8 +25,7 @@ export class SkillDetailComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(r => {
-      const data = r['data']
-      this.data = data;
+      this.data = r['data']
     });
   }
 

@@ -44,7 +44,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     private readonly programNewsService: ProgramNewsService,
     private readonly route: ActivatedRoute,
     private readonly cdRef: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const program$ = this.route.data

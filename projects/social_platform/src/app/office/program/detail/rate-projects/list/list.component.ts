@@ -1,6 +1,6 @@
 /** @format */
 
-import { AfterViewInit, Component, OnDestroy, OnInit, signal } from "@angular/core";
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { concatMap, fromEvent, map, of, Subscription, tap, throttleTime } from "rxjs";
 import { AsyncPipe } from "@angular/common";
@@ -20,7 +20,9 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly projectRatingService: ProjectRatingService
-  ) {}
+  ) { }
+
+  @Input() initProjects$!: Subscription;
 
   isListOfAll = this.router.url.includes("/all");
 
@@ -33,17 +35,16 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
   subscriptions$ = signal<Subscription[]>([]);
 
   ngOnInit(): void {
-    const initProjects$ = this.route.data
-      .pipe(
-        map(r => r["data"]),
-        map(r => ({ projects: r["results"], count: r["count"] }))
-      )
-      .subscribe(({ projects, count }) => {
-        this.projects.set(projects);
-        this.totalProjCount.set(count);
-      });
+    this.route.data.subscribe(r => {
+      this.initProjects$ = r['data'];
+      const projects = r['resutls'];
+      const count = r['count'];
 
-    this.subscriptions$().push(initProjects$);
+      this.projects.set(projects)
+      this.totalProjCount.set(count)
+    })
+
+    this.subscriptions$().push(this.initProjects$);
   }
 
   ngAfterViewInit() {

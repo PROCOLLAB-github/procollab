@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit, signal } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, signal } from "@angular/core";
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { concatMap, map, Observable, Subscription, take } from "rxjs";
 import { AuthService } from "@auth/services";
@@ -41,13 +41,13 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
     private readonly skillsService: SkillsService,
     private readonly router: Router,
     private readonly route: ActivatedRoute
-  ) {}
+  ) { }
+
+  @Input() nestedSkills$!: Observable<SkillsGroup[]>;
 
   stageForm = this.nnFb.group({
     skills: this.nnFb.control<Skill[]>([], Validators.required),
   });
-
-  nestedSkills$: Observable<SkillsGroup[]> = this.route.data.pipe(map(r => r["data"]));
 
   searchedSkills = signal<Skill[]>([]);
 
@@ -65,6 +65,10 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions$().push(fv$, formValueChange$);
+
+    this.route.data.subscribe(r => {
+      this.nestedSkills$ = r['data'];
+    })
   }
 
   ngOnDestroy(): void {

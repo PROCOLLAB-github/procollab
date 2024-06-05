@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ChatFile, ChatMessage } from "@models/chat-message.model";
 import { filter, map, noop, Observable, Subscription, tap } from "rxjs";
 import { Project } from "@models/project.model";
@@ -38,7 +38,14 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     private readonly authService: AuthService,
     private readonly modalService: ModalService,
     private readonly chatService: ChatService
-  ) {}
+  ) { }
+
+  /**
+   * Project info
+   * populates with observable call in {@link ngOnInit}
+   */
+
+  @Input() project?: Project;
 
   ngOnInit(): void {
     this.navService.setNavTitle("Чат проекта");
@@ -48,8 +55,8 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     });
     profile$ && this.subscriptions$.push(profile$);
 
-    const projectSub$ = this.route.data.pipe(map(r => r["data"])).subscribe(project => {
-      this.project = project;
+    const projectSub$ = this.route.data.subscribe(r => {
+      this.project = r['data'];
     }); // pull info about project
     projectSub$ && this.subscriptions$.push(projectSub$);
 
@@ -91,12 +98,6 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
    * unsubscribed in {@link ngOnDestroy}
    */
   subscriptions$: Subscription[] = [];
-
-  /**
-   * Project info
-   * populates with observable call in {@link ngOnInit}
-   */
-  project?: Project;
 
   /**
    * All files listed in this chat
