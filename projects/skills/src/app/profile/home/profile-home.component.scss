@@ -1,7 +1,40 @@
+@use "styles/typography";
+@use "styles/responsive";
+
 .profile {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  display: flex;
+  flex-direction: column;
+
+  @include responsive.apply-desktop {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    position: relative;
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--accent-light);
+    opacity: 0.7;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    align-content: center;
+    z-index: 10;
+
+    &__text {
+      @include typography.heading-1;
+      color: #A59FB9;
+    }
+
+    &__image {
+      margin: 0 auto;
+    }
+  }
 
   &__month {
     grid-column: span 2;
