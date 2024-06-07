@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Input,
   OnDestroy,
   OnInit,
   signal,
@@ -49,11 +50,11 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly authService: AuthService,
     private readonly profileNewsService: ProfileNewsService,
     private readonly cdRef: ChangeDetectorRef
-  ) {}
+  ) { }
+
+  @Input() user!: Observable<User>;
 
   subscriptions$: Subscription[] = [];
-
-  user: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
   loggedUserId: Observable<number> = this.authService.profile.pipe(map(user => user.id));
 
   ngOnInit(): void {
@@ -77,6 +78,10 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
         });
       });
     this.subscriptions$.push(route$);
+
+    this.route.data.subscribe(r => {
+      this.user = r['data'][0]
+    })
   }
 
   @ViewChild("descEl") descEl?: ElementRef;
@@ -114,7 +119,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     const newsIdx = this.news().findIndex(n => n.id === newsId);
     this.news().splice(newsIdx, 1);
 
-    this.profileNewsService.delete(this.route.snapshot.params["id"], newsId).subscribe(() => {});
+    this.profileNewsService.delete(this.route.snapshot.params["id"], newsId).subscribe(() => { });
   }
 
   onLike(newsId: number) {

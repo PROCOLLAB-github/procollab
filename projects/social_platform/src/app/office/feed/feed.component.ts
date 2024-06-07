@@ -6,6 +6,7 @@ import {
   Component,
   ElementRef,
   inject,
+  Input,
   OnDestroy,
   OnInit,
   signal,
@@ -46,25 +47,27 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   profileNewsService = inject(ProfileNewsService);
   feedService = inject(FeedService);
 
+  @Input() feed!: ApiPagination<FeedItem>;
+
   ngOnInit() {
-    const routeData$ = this.route.data
-      .pipe(map(r => r["data"]))
-      .subscribe((feed: ApiPagination<FeedItem>) => {
-        this.feedItems.set(feed.results);
-        this.totalItemsCount.set(feed.count);
+    const routeData$ = this.route.data.subscribe(r => {
+      this.feed = r['data'];
+      this.feedItems.set(this.feed.results);
+      this.totalItemsCount.set(this.feed.count);
 
-        setTimeout(() => {
-          const observer = new IntersectionObserver(this.onFeedItemView.bind(this), {
-            root: document.querySelector(".office__body"),
-            rootMargin: "0px 0px 0px 0px",
-            threshold: 0,
-          });
+      setTimeout(() => {
+        const observer = new IntersectionObserver(this.onFeedItemView.bind(this), {
+          root: document.querySelector(".office__body"),
+          rootMargin: "0px 0px 0px 0px",
+          threshold: 0,
+        });
 
-          document.querySelectorAll(".page__item").forEach(e => {
-            observer.observe(e);
-          });
+        document.querySelectorAll(".page__item").forEach(e => {
+          observer.observe(e);
         });
       });
+    });
+
     this.subscriptions$().push(routeData$);
 
     const queryParams$ = this.route.queryParams

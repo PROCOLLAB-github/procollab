@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnInit, signal } from "@angular/core";
+import { Component, inject, Input, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { TopRatingCardComponent } from "../shared/top-rating-card/top-rating-card.component";
 import { BasicRatingCardComponent } from "../shared/basic-rating-card/basic-rating-card.component";
@@ -16,18 +16,20 @@ import { GeneralRating } from "../../../models/rating.model";
   styleUrl: "./general.component.scss",
 })
 export class RatingGeneralComponent implements OnInit {
+  @Input() rating!: GeneralRating[];
   protected readonly Array = Array;
 
   route = inject(ActivatedRoute);
-  rating = this.route.data.pipe(map(r => r["data"])) as Observable<GeneralRating[]>;
 
   top3 = signal<GeneralRating[]>([]);
   rest = signal<GeneralRating[]>([]);
 
   ngOnInit() {
-    this.rating.subscribe(r => {
-      this.top3.set(r.slice(0, 2));
-      this.rest.set(r.slice(2));
-    });
+    this.route.data.subscribe(r => {
+      this.rating = r['data'];
+    })
+
+    this.top3.set(this.rating.slice(0, 2));
+    this.rest.set(this.rating.slice(2));
   }
 }

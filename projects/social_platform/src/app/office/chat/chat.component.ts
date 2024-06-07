@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { BehaviorSubject, combineLatest, map, Observable, Subscription } from "rxjs";
@@ -25,9 +25,9 @@ export class ChatComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly chatService: ChatService
-  ) {}
+  ) { }
 
-  chatsData = new BehaviorSubject<ChatListItem[]>([]);
+  @Input() chatsData!: BehaviorSubject<ChatListItem[]>;
 
   chats: Observable<ChatListItem[]> = combineLatest([
     this.authService.profile,
@@ -74,11 +74,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
     this.subscriptions$.push(messageSub$);
 
-    const routeData$ = this.route.data
-      .pipe<ChatListItem[]>(map(r => r["data"]))
-      .subscribe(chats => {
-        this.chatsData.next(chats);
-      });
+    const routeData$ = this.route.data.subscribe(r => this.chatsData.next(r['data']))
     this.subscriptions$.push(routeData$);
   }
 

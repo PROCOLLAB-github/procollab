@@ -61,11 +61,9 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
     searchFormSearch$ && this.subscriptions$.push(searchFormSearch$);
 
-    const routeData$ = this.route.data
-      .pipe(map(r => r["data"]))
-      .subscribe((count: ProjectCount) => {
-        this.projectService.projectsCount.next(count);
-      });
+    const routeData$ = this.route.data.subscribe(r => {
+      this.projectService.projectsCount.next(r['data']);
+    });
 
     routeData$ && this.subscriptions$.push(routeData$);
 

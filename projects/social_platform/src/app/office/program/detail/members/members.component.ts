@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Input,
   OnInit,
   ViewChild,
 } from "@angular/core";
@@ -30,13 +31,27 @@ export class ProgramMembersComponent implements OnInit, AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly cdref: ChangeDetectorRef,
     private readonly programService: ProgramService
-  ) {}
+  ) { }
+
+  @Input() members$?: Observable<User[]>;
+  @Input() program$?: Observable<Program>
+  @Input() members: User[] = [];
+  @Input() membersTotalCount?: number;
 
   ngOnInit(): void {
-    this.route.data.pipe(map(r => r["data"])).subscribe((members: ApiPagination<User>) => {
-      this.membersTotalCount = members.count;
-      this.members = members.results;
+    this.route.data.subscribe(r => {
+      this.membersTotalCount = r['data'].count;
+      this.members = r['data'].results;
     });
+
+    this.route.data.subscribe(r => {
+      this.members$ = r['data'];
+      this.members$ = r['results']
+    })
+
+    this.route.parent?.data.subscribe(r => {
+      this.program$ = r['data']
+    })
   }
 
   ngAfterViewInit(): void {
@@ -50,14 +65,6 @@ export class ProgramMembersComponent implements OnInit, AfterViewInit {
         .subscribe(noop);
   }
 
-  program$?: Observable<Program> = this.route.parent?.data.pipe(map(r => r["data"]));
-  members$: Observable<User[]> = this.route.data.pipe(
-    map(r => r["data"]),
-    map(r => r["results"])
-  );
-
-  members: User[] = [];
-  membersTotalCount?: number;
   membersPage = 1;
   membersTake = 20;
   @ViewChild("membersRoot") membersRoot?: ElementRef<HTMLUListElement>;

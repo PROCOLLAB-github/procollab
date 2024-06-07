@@ -9,7 +9,7 @@
   >
     @if (user !== undefined && invites!== undefined) {
     <app-profile-control-panel
-      [invites]="invites()"
+      [invites]="invites"
       [hasNotifications]="false"
       [hasUnreads]="!!(chatService.unread$ | async)"
       [user]="user"
@@ -28,7 +28,7 @@
   }
   <div class="office__wrapper">
     <div class="office__top">
-      <app-nav [invites]="invites()"></app-nav>
+      <app-nav [invites]="invites"></app-nav>
     </div>
     <div class="office__body">
       <div class="office__inner">

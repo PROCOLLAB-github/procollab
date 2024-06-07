@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map, Subscription } from "rxjs";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
@@ -32,14 +32,16 @@ export class ProgramRegisterComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly programService: ProgramService
-  ) {}
+  ) { }
+
+  @Input() schema?: ProgramDataSchema;
 
   ngOnInit(): void {
-    const route$ = this.route.data.pipe(map(r => r["data"])).subscribe(schema => {
-      this.schema = schema;
+    const route$ = this.route.data.subscribe(r => {
+      this.schema = r['data'];
 
       const group: Record<string, any> = {};
-      for (const cKey in schema) {
+      for (const cKey in this.schema) {
         group[cKey] = ["", [Validators.required]];
       }
 
@@ -55,8 +57,6 @@ export class ProgramRegisterComponent implements OnInit, OnDestroy {
   subscriptions$: Subscription[] = [];
 
   registerForm?: FormGroup;
-
-  schema?: ProgramDataSchema;
 
   onSubmit(): void {
     if (this.registerForm && !this.validationService.getFormValidation(this.registerForm)) {

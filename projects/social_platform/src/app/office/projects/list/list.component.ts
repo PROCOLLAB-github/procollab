@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -51,7 +52,9 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly cdref: ChangeDetectorRef,
     private readonly router: Router,
     private readonly subscriptionService: SubscriptionService
-  ) {}
+  ) { }
+
+  @Input() projects: Project[] = [];
 
   ngOnInit(): void {
     this.navService.setNavTitle("Проекты");
@@ -125,11 +128,12 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
       queryIndustry$ && this.subscriptions$.push(queryIndustry$);
     }
 
-    const projects$ = this.route.data.pipe(map(r => r["data"])).subscribe(projects => {
-      this.projectsCount = projects.count;
+    const projects$ = this.route.data.subscribe(r => {
+      this.projects = r['data'];
+      this.projectsCount = r['data'].count;
 
-      this.projects = projects.results ?? [];
-      this.searchedProjects = projects.results ?? [];
+      this.projects = r['data'].results ?? [];
+      this.searchedProjects = r['data'].results ?? [];
     });
 
     projects$ && this.subscriptions$.push(projects$);
@@ -184,7 +188,6 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   projectsCount = 0;
   currentPage = 1;
   projectsPerFetch = 15;
-  projects: Project[] = [];
   searchedProjects: Project[] = [];
 
   @ViewChild("listRoot") listRoot?: ElementRef<HTMLElement>;

@@ -6,6 +6,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -79,20 +80,18 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  @Input() members: User[] = [];
+
   ngOnInit(): void {
     this.router.navigate([], { queryParams: {} });
     this.navService.setNavTitle("Участники");
 
-    this.route.data
-      .pipe(
-        take(1),
-        map(r => r["data"])
-      )
-      .subscribe((members: ApiPagination<User>) => {
-        this.membersTotalCount = members.count;
+    this.route.data.subscribe(r => {
 
-        this.members = members.results;
-      });
+      this.membersTotalCount = r['data'].count;
+
+      this.members = r['data'].results;
+    });
 
     this.saveControlValue(this.searchForm.get("search"), "fullname");
     this.saveControlValue(this.filterForm.get("keySkill"), "skills__contains");
@@ -154,8 +153,6 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
   membersTake = 20;
 
   subscriptions$: Subscription[] = [];
-
-  members: User[] = [];
 
   searchParamsSubject$ = new BehaviorSubject<Record<string, string>>({});
 

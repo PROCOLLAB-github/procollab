@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit, signal } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, signal } from "@angular/core";
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { map, Observable, Subscription, take } from "rxjs";
 import { AuthService } from "@auth/services";
@@ -44,15 +44,13 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
     private readonly specsService: SpecializationsService,
     private readonly router: Router,
     private readonly route: ActivatedRoute
-  ) {}
+  ) { }
+
+  @Input() nestedSpecializations$!: Observable<SpecializationsGroup[]>;
 
   stageForm = this.nnFb.group({
     speciality: ["", Validators.required],
   });
-
-  nestedSpecializations$: Observable<SpecializationsGroup[]> = this.route.data.pipe(
-    map(r => r["data"])
-  );
 
   inlineSpecializations = signal<Specialization[]>([]);
 
@@ -74,6 +72,10 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions$().push(formValueState$, formValueChange$);
+
+    this.route.data.subscribe(r => {
+      this.nestedSpecializations$ = r['data']
+    })
   }
 
   ngOnDestroy(): void {
