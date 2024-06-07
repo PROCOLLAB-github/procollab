@@ -9,6 +9,7 @@ import { SkillCardComponent } from "../shared/skill-card/skill-card.component";
 import { map, Observable } from "rxjs";
 import { ApiPagination } from "../../../models/api-pagination.model";
 import { Skill } from "../../../models/skill.model";
+import { WriteTaskComponent } from "../../task/shared/write-task/write-task.component";
 
 @Component({
   selector: "app-list",
@@ -21,6 +22,7 @@ import { Skill } from "../../../models/skill.model";
     IconComponent,
     ButtonComponent,
     SkillCardComponent,
+    WriteTaskComponent,
   ],
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",

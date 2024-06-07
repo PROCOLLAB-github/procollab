@@ -29,6 +29,8 @@
     [success]="success()"
     (update)="body.set($event)"
   ></app-exclude-task>
+  } @if (writeQuestion(); as wq) {
+  <app-write-task [data]="wq" [success]="success()"></app-write-task>
   }
   <div class="action">
     <div class="action__error action__badge" [class.action__badge--open]="anyError()">

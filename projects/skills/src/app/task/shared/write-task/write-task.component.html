@@ -1,0 +1,14 @@
+<!-- @format -->
+
+<div class="write-task">
+  <p class="write-task__text text-body-14">{{ data.text }}</p>
+  <div class="write-task__input">
+    <textarea
+      class="write-task__textarea text-body-14"
+      rows="2"
+      [value]="result()"
+      (keydown)="onKeyUp($event)"
+      placeholder="Введите ответ"
+    ></textarea>
+  </div>
+</div>
