@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, EventEmitter, Input, Output, signal } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { WriteQuestion } from "../../../../models/step.model";
 
@@ -13,18 +13,18 @@ import { WriteQuestion } from "../../../../models/step.model";
 })
 export class WriteTaskComponent {
   @Input({ required: true }) data!: WriteQuestion;
-  @Output() update = new EventEmitter<number[]>();
+  @Output() update = new EventEmitter<{ text: string }>();
 
   @Input() success = false;
 
-  result = signal("");
+  // result = signal<{ text: string } | null>(null);
 
   onKeyUp(event: KeyboardEvent) {
     const target = event.target as HTMLTextAreaElement;
 
-    this.result.set(target.value);
-
     target.style.height = "0px";
     target.style.height = target.scrollHeight + "px";
+
+    this.update.emit({ text: target.value });
   }
 }
