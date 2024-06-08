@@ -1,11 +1,11 @@
 <!-- @format -->
 
 <div class="progress">
-  <div class="progress-bar">
-    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-      <circle class="track" cx="80" cy="80" [attr.r]="radius" />
+  <div class="progress__chart chart">
+    <svg class="circle chart__circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+      <circle class="circle__track" cx="80" cy="80" [attr.r]="radius" />
       <circle
-        class="filled"
+        class="circle__filled"
         cx="80"
         cy="80"
         [attr.r]="radius"
@@ -16,10 +16,10 @@
       />
     </svg>
 
-    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 190">
-      <circle class="track" cx="95" cy="95" [attr.r]="radius - 5" />
+    <svg class="circle chart__circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 190">
+      <circle class="circle__track" cx="95" cy="95" [attr.r]="radius - 5" />
       <circle
-        class="filled"
+        class="circle__filled"
         cx="95"
         cy="95"
         [attr.r]="radius"
@@ -30,10 +30,10 @@
       />
     </svg>
 
-    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 230">
-      <circle class="track" cx="115" cy="115" [attr.r]="radius - 10" />
+    <svg class="circle chart__circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 230 230">
+      <circle class="circle__track" cx="115" cy="115" [attr.r]="radius - 10" />
       <circle
-        class="filled"
+        class="circle__filled"
         cx="115"
         cy="115"
         [attr.r]="radius"
@@ -44,10 +44,10 @@
       />
     </svg>
 
-    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280">
-      <circle class="track" cx="140" cy="140" [attr.r]="radius - 20" />
+    <svg class="circle chart__circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280">
+      <circle class="circle__track" cx="140" cy="140" [attr.r]="radius - 20" />
       <circle
-        class="filled"
+        class="circle__filled"
         cx="140"
         cy="140"
         [attr.r]="radius"
@@ -58,10 +58,10 @@
       />
     </svg>
 
-    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 340">
-      <circle class="track" cx="170" cy="170" [attr.r]="radius - 30" />
+    <svg class="circle chart__circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 340">
+      <circle class="circle__track" cx="170" cy="170" [attr.r]="radius - 30" />
       <circle
-        class="filled"
+        class="circle__filled"
         cx="170"
         cy="170"
         [attr.r]="radius"
@@ -73,13 +73,13 @@
     </svg>
   </div>
 
-  <div class="progress-right">
-    <h1 class="progress-title">Прогресс</h1>
+  <div class="progress__info info">
+    <h1 class="text-heading-1">Прогресс</h1>
 
     @for (skill of skillsList(5); track $index) {
-    <ul class="progress-right-list">
-      <li class="progress-right-list-el">
-        <div class="progress-right-list-bullet"></div>
+    <ul class="info__list">
+      <li class="info__item">
+        <div class="info__bullet"></div>
         <p class="text-body-16">Составление ТЗ</p>
       </li>
     </ul>

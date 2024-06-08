@@ -18,65 +18,71 @@
     justify-content: space-evenly;
   }
 
-  &-right {
+  &__info {
     margin-top: 200px;
 
     @include responsive.apply-desktop {
       margin-top: 0;
     }
-
-    &-list {
-      margin-top: 10px;
-
-      &-el {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-      }
-
-      &-bullet {
-        width: 15px;
-        height: 15px;
-        background-color: var(--accent);
-        border-radius: 50%;
-      }
-    }
   }
 
-  &-title {
-    @include typography.heading-1;
-  }
-
-  &-bar {
+  &__chart {
     position: relative;
     width: 100%;
+  }
+}
 
-    &-circle {
-      position: absolute;
-      top: 0%;
-      left: 20%;
-      width: 200px;
+.info {
+  &__list {
+    margin-top: 10px;
+  }
 
-      @include responsive.apply-desktop {
-        left: 0%;
-        width: 260px;
-        transform: translate(0%, -50%);
-      }
+  &__item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  &__bullet {
+    width: 15px;
+    height: 15px;
+    background-color: var(--accent);
+    border-radius: 50%;
+  }
+}
+
+.chart {
+  &__circle {
+    position: absolute;
+    top: 0;
+    left: 20%;
+
+    @include responsive.apply-desktop {
+      left: 0;
+      transform: translate(0%, -50%);
     }
   }
 }
 
-.track,
-.filled {
-  fill: none;
-  stroke-width: 8;
-}
+.circle {
+  width: 200px;
 
-.track {
-  stroke: var(--accent-light);
-}
+  @include responsive.apply-desktop {
+    width: 260px;
+  }
 
-.filled {
-  stroke: var(--accent);
-  transition: all 0.2s;
+  &__track,
+  &__filled {
+    fill: none;
+    stroke-width: 8;
+  }
+
+  &__track {
+    stroke: var(--accent-light);
+  }
+
+  &__filled {
+    stroke: var(--accent);
+    transition: all 0.2s;
+  }
 }
