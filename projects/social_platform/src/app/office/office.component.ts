@@ -169,7 +169,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   subscriptions = signal<SubscriptionPlan[]>([]);
   openSkills() {
     this.authService.isSubscribed().subscribe(subscribed => {
-      if (!subscribed) {
+      if (subscribed) {
         location.href = "https://skills.procollab.ru";
         return;
       }

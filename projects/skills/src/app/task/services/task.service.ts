@@ -39,6 +39,7 @@ export class TaskService {
     exclude_question: "exclude",
     info_slide: "info-slide",
     question_single_answer: "single-correct",
+    question_write: "write",
   };
 
   fetchStep(taskStepId: TaskStep["id"], taskStepType: TaskStep["type"]): Observable<StepType> {

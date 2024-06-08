@@ -47,4 +47,21 @@ export interface ExcludeQuestionResponse {
   wrongAnswers: number[];
 }
 
-export type StepType = InfoSlide | ConnectQuestion | SingleQuestion | ExcludeQuestion;
+// export interface WriteQuestionResponse {
+//   text: "success" | "error";
+// }
+
+export interface WriteQuestion {
+  answer: string | null;
+  description: string;
+  files: string[];
+  id: number;
+  text: string;
+}
+
+export type StepType =
+  | InfoSlide
+  | ConnectQuestion
+  | SingleQuestion
+  | ExcludeQuestion
+  | WriteQuestion;
