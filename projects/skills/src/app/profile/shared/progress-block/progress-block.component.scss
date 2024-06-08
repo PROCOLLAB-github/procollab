@@ -1,5 +1,7 @@
 @use "styles/typography";
 @use "styles/responsive";
+@use "sass:list";
+@use "sass:math";
 
 .progress {
   display: flex;
@@ -18,65 +20,88 @@
     justify-content: space-evenly;
   }
 
-  &-right {
+  &__info {
     margin-top: 200px;
 
     @include responsive.apply-desktop {
       margin-top: 0;
     }
-
-    &-list {
-      margin-top: 10px;
-
-      &-el {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-      }
-
-      &-bullet {
-        width: 15px;
-        height: 15px;
-        background-color: var(--accent);
-        border-radius: 50%;
-      }
-    }
   }
 
-  &-title {
-    @include typography.heading-1;
-  }
-
-  &-bar {
+  &__chart {
     position: relative;
     width: 100%;
-
-    &-circle {
-      position: absolute;
-      top: 0%;
-      left: 20%;
-      width: 200px;
-      height: 200px;
-
-      @include responsive.apply-desktop {
-        left: 0%;
-        transform: translate(0%, -50%);
-      }
-    }
   }
 }
 
-.track,
-.filled {
-  fill: none;
-  stroke-width: 17;
+.info {
+  &__list {
+    margin-top: 10px;
+  }
+
+  &__item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  &__bullet {
+    width: 15px;
+    height: 15px;
+    background-color: var(--accent);
+    border-radius: 50%;
+  }
 }
 
-.track {
-  stroke: var(--accent-light);
+.chart {
+  position: relative;
+  width: 300px;
+  height: 300px;
+
+  &__circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }
 
-.filled {
-  stroke: var(--accent);
-  transition: all 0.2s;
+.circle {
+  $items: ((275, 6), (235, 6.5), (198, 7), (155, 9), (107, 12));
+
+  @for $i from 1 through 5 {
+    &:nth-child(#{$i}) {
+      width: #{list.nth(list.nth($items, $i), 1)}px;
+
+      circle {
+        stroke-width: #{list.nth(list.nth($items, $i), 2)}px;
+
+        // ⬇️ Keep it for some time
+
+        // @if $i == 1 {
+        //   stroke-width: $base-stroke-width;
+        // } @else if $i == 2 {
+        //   stroke-width: $base-stroke-width * (list.nth($items-v2, $i - 1) / list.nth($items-v2, $i));
+        // } @else {
+        // stroke-width: $base-stroke-width *
+        // (list.nth($items-v2, $i - 2) /
+        // list.nth($items-v2, $i - 1)) * (list.nth($items-v2, $i - 1) / list.nth($items-v2, $i));
+        // }
+      }
+    }
+  }
+
+  &__track,
+  &__filled {
+    fill: none;
+  }
+
+  &__track {
+    stroke: var(--accent-light);
+  }
+
+  &__filled {
+    stroke: var(--accent);
+    transition: all 0.2s;
+  }
 }

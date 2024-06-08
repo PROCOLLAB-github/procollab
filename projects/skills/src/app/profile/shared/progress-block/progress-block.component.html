@@ -1,11 +1,12 @@
 <!-- @format -->
 
 <div class="progress">
-  <div class="progress-bar">
-    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-      <circle class="track" cx="80" cy="80" [attr.r]="radius" />
+  <div class="progress__chart chart">
+    @for (circle of circles; track $index) {
+    <svg class="circle chart__circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+      <circle class="circle__track" cx="80" cy="80" [attr.r]="radius" />
       <circle
-        class="filled"
+        class="circle__filled"
         cx="80"
         cy="80"
         [attr.r]="radius"
@@ -15,71 +16,16 @@
         [attr.stroke-dasharray]="calculateStrokeDashArray()"
       />
     </svg>
-
-    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
-      <circle class="track" cx="120" cy="120" [attr.r]="radius" />
-      <circle
-        class="filled"
-        cx="120"
-        cy="120"
-        [attr.r]="radius"
-        stroke-linecap="round"
-        transform="rotate(-90 120 120)"
-        [attr.stroke-dashoffset]="calculateStrokeDashOffset()"
-        [attr.stroke-dasharray]="calculateStrokeDashArray()"
-      />
-    </svg>
-
-    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 340">
-      <circle class="track" cx="170" cy="170" [attr.r]="radius" />
-      <circle
-        class="filled"
-        cx="170"
-        cy="170"
-        [attr.r]="radius"
-        stroke-linecap="round"
-        transform="rotate(-90 170 170)"
-        [attr.stroke-dashoffset]="calculateStrokeDashOffset()"
-        [attr.stroke-dasharray]="calculateStrokeDashArray()"
-      />
-    </svg>
-
-    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 520">
-      <circle class="track" cx="260" cy="260" [attr.r]="radius" />
-      <circle
-        class="filled"
-        cx="260"
-        cy="260"
-        [attr.r]="radius"
-        stroke-linecap="round"
-        transform="rotate(-90 260 260)"
-        [attr.stroke-dashoffset]="calculateStrokeDashOffset()"
-        [attr.stroke-dasharray]="calculateStrokeDashArray()"
-      />
-    </svg>
-
-    <svg class="progress-bar-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
-      <circle class="track" cx="400" cy="400" [attr.r]="radius" />
-      <circle
-        class="filled"
-        cx="400"
-        cy="400"
-        [attr.r]="radius"
-        stroke-linecap="round"
-        transform="rotate(-90 400 400)"
-        [attr.stroke-dashoffset]="calculateStrokeDashOffset()"
-        [attr.stroke-dasharray]="calculateStrokeDashArray()"
-      />
-    </svg>
+    }
   </div>
 
-  <div class="progress-right">
-    <h1 class="progress-title">Прогресс</h1>
+  <div class="progress__info info">
+    <h1 class="text-heading-1">Прогресс</h1>
 
     @for (skill of skillsList(5); track $index) {
-    <ul class="progress-right-list">
-      <li class="progress-right-list-el">
-        <div class="progress-right-list-bullet"></div>
+    <ul class="info__list">
+      <li class="info__item">
+        <div class="info__bullet"></div>
         <p class="text-body-16">Составление ТЗ</p>
       </li>
     </ul>
