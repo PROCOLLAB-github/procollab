@@ -22,7 +22,7 @@ import { WriteTaskComponent } from "../../task/shared/write-task/write-task.comp
     IconComponent,
     ButtonComponent,
     SkillCardComponent,
-    BarComponent
+    BarComponent,
     WriteTaskComponent,
   ],
   templateUrl: "./list.component.html",
