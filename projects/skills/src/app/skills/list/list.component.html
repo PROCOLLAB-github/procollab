@@ -1,19 +1,15 @@
 <!-- @format -->
 
 <div class="list">
-  <div class="bar">
-    <nav class="bar__nav">
-      <app-back></app-back>
-      <ul class="bar__tabs">
-        <a class="bar__link" routerLink="/skills/my" routerLinkActive="bar__link--active">
-          <li class="text-body-14 bar__item">Навыки</li>
-        </a>
-        <a class="bar__link" routerLink="/skills" routerLinkActive="bar__link--active">
-          <li class="text-body-14 bar__item">Все навыки</li>
-        </a>
-      </ul>
-    </nav>
-  </div>
+  <app-bar
+    class="bar"
+    [links]="[
+      { link: '/skills/my', linkText: 'Навыки', isRouterLinkActiveOptions: false },
+      { link: '/skills', linkText: 'Все навыки', isRouterLinkActiveOptions: false }
+    ]"
+    [backHave]="true"
+  ></app-bar>
+
   <div class="list__search search">
     <div class="search__control">
       <i class="search__icon" appIcon icon="search" appSquare="32px"></i>

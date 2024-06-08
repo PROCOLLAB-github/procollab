@@ -1,27 +1,25 @@
 <!-- @format -->
 
 <div class="rate-project">
-  <section class="bar rate-project__bar">
-    <nav class="bar__nav">
-      <app-back class="bar__back"></app-back>
-      <ul class="bar__tabs">
-        <a
-          class="bar__link"
-          [routerLink]="['/office/program', programId, 'projects-rating', 'all']"
-          routerLinkActive="bar__link--active"
-        >
-          <li class="text-body-14 bar__item">Все проекты</li>
-        </a>
-        <a
-          class="bar__link"
-          [routerLink]="['/office/program', programId, 'projects-rating', 'rated']"
-          routerLinkActive="bar__link--active"
-        >
-          <li class="text-body-14 bar__item">Оцененные проекты</li>
-        </a>
-      </ul>
-    </nav>
-  </section>
+  <app-bar
+    class="bar rate-project__bar"
+    [backHave]="true"
+    [links]="[
+      {
+        link:
+          '/office/program' + '/' + programId!.toString() + '/' + 'projects-rating' + '/' + 'all',
+        linkText: 'Все проекты',
+        isRouterLinkActiveOptions: false
+      },
+
+      {
+        link:
+          '/office/program' + '/' + programId!.toString() + '/' + 'projects-rating' + '/' + 'rated',
+        linkText: 'Оцененные проекты',
+        isRouterLinkActiveOptions: false
+      }
+    ]"
+  ></app-bar>
   <div class="rate-project__body">
     <router-outlet></router-outlet>
   </div>

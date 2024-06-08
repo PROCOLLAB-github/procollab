@@ -9,14 +9,14 @@ import { AuthService } from "@auth/services";
 import { ChatService } from "@services/chat.service";
 import { ChatCardComponent } from "./shared/chat-card/chat-card.component";
 import { AsyncPipe } from "@angular/common";
-import { BackComponent } from "@uilib";
+import { BarComponent } from "@ui/components";
 
 @Component({
   selector: "app-chat",
   templateUrl: "./chat.component.html",
   styleUrl: "./chat.component.scss",
   standalone: true,
-  imports: [BackComponent, RouterLink, RouterLinkActive, ChatCardComponent, AsyncPipe],
+  imports: [RouterLink, RouterLinkActive, ChatCardComponent, AsyncPipe, BarComponent],
 })
 export class ChatComponent implements OnInit, OnDestroy {
   constructor(
@@ -25,7 +25,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly chatService: ChatService
-  ) {}
+  ) { }
 
   chatsData = new BehaviorSubject<ChatListItem[]>([]);
 

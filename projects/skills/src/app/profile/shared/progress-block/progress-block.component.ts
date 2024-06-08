@@ -24,8 +24,8 @@ export class ProgressBlockComponent {
   calculateStrokeDashArray(): number {
     return 2 * Math.PI * this.radius; // 2 * π * radius
   }
-
+  
   circles = Array(5);
-
+  
   skillsList = Array;
 }

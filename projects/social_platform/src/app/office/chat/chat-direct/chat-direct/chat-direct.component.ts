@@ -12,13 +12,14 @@ import { AuthService } from "@auth/services";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { BackComponent } from "@uilib";
 import { ApiPagination } from "@models/api-pagination.model";
+import { BarComponent } from "@ui/components";
 
 @Component({
   selector: "app-chat-direct",
   templateUrl: "./chat-direct.component.html",
   styleUrl: "./chat-direct.component.scss",
   standalone: true,
-  imports: [BackComponent, RouterLink, AvatarComponent, ChatWindowComponent],
+  imports: [RouterLink, AvatarComponent, ChatWindowComponent, BarComponent],
 })
 export class ChatDirectComponent implements OnInit, OnDestroy {
   constructor(

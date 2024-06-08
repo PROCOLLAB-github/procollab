@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { ProgramDataSchema } from "@office/program/models/program.model";
 import { ControlErrorPipe, ValidationService } from "projects/core";
 import { ProgramService } from "@office/program/services/program.service";
-import { ButtonComponent, InputComponent } from "@ui/components";
+import { BarComponent, ButtonComponent, InputComponent } from "@ui/components";
 import { KeyValuePipe } from "@angular/common";
 import { BackComponent } from "@uilib";
 
@@ -17,12 +17,12 @@ import { BackComponent } from "@uilib";
   styleUrl: "./register.component.scss",
   standalone: true,
   imports: [
-    BackComponent,
     ReactiveFormsModule,
     InputComponent,
     ButtonComponent,
     KeyValuePipe,
     ControlErrorPipe,
+    BarComponent
   ],
 })
 export class ProgramRegisterComponent implements OnInit, OnDestroy {
@@ -32,7 +32,7 @@ export class ProgramRegisterComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly programService: ProgramService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const route$ = this.route.data.pipe(map(r => r["data"])).subscribe(schema => {

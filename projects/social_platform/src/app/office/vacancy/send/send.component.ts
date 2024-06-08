@@ -12,7 +12,7 @@ import { UserRolePipe } from "@core/pipes/user-role.pipe";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { ButtonComponent, IconComponent } from "@ui/components";
+import { BarComponent, ButtonComponent, IconComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AsyncPipe } from "@angular/common";
 import { BackComponent } from "@uilib";
@@ -23,7 +23,6 @@ import { BackComponent } from "@uilib";
   styleUrl: "./send.component.scss",
   standalone: true,
   imports: [
-    BackComponent,
     ModalComponent,
     IconComponent,
     RouterLink,
@@ -35,6 +34,7 @@ import { BackComponent } from "@uilib";
     AsyncPipe,
     ControlErrorPipe,
     UserRolePipe,
+    BarComponent
   ],
 })
 export class VacancySendComponent implements OnInit {

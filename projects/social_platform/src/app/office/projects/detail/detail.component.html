@@ -2,37 +2,32 @@
 
 @if (project) {
 <div class="detail">
-  <section class="bar detail__bar">
-    <nav class="bar__nav">
-      <app-back class="bar__back"></app-back>
-      @if (isInProject$ | async) {
-      <ul class="bar__tabs">
-        <a
-          class="bar__link"
-          [routerLink]="['/office/projects', project.id]"
-          [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="bar__link--active"
-        >
-          <li class="text-body-14 bar__item">Страница проекта</li>
-        </a>
-        <a
-          class="bar__link"
-          [routerLink]="['/office/projects', project.id, 'responses']"
-          routerLinkActive="bar__link--active"
-        >
-          <li class="text-body-14 bar__item">Отклики на вакансию</li>
-        </a>
-        <a
-          class="bar__link"
-          [routerLink]="['/office/projects', project.id, 'chat']"
-          routerLinkActive="bar__link--active"
-        >
-          <li class="text-body-14 bar__item">Чат проекта</li>
-        </a>
-      </ul>
-      }
-    </nav>
-  </section>
+  <app-bar
+    [links]="
+        (isInProject$ | async)
+          ? [
+              {
+                link: '/office/projects' + '/' + project.id.toString(),
+                linkText: 'Страница проекта',
+                isRouterLinkActiveOptions: true
+              },
+              {
+                link: '/office/projects' + '/' + project.id.toString() + '/' +'responses',
+                linkText: 'Откилики на вакансии',
+                isRouterLinkActiveOptions: false
+              },
+              {
+                link: '/office/projects' + '/' + project.id.toString() + '/' + 'chat',
+                linkText: 'Чат проекта',
+                isRouterLinkActiveOptions: false,
+              },
+            ]
+          : []
+      "
+    [backHave]="true"
+    class="bar detail__bar"
+  ></app-bar>
+
   <div class="detail__body">
     <router-outlet></router-outlet>
   </div>
