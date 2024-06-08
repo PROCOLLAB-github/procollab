@@ -25,5 +25,7 @@ export class ProgressBlockComponent {
     return 2 * Math.PI * this.radius; // 2 * π * radius
   }
 
+  circles = Array(5);
+
   skillsList = Array;
 }

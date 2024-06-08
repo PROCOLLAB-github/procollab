@@ -1,5 +1,7 @@
 @use "styles/typography";
 @use "styles/responsive";
+@use "sass:list";
+@use "sass:math";
 
 .progress {
   display: flex;
@@ -52,29 +54,46 @@
 }
 
 .chart {
+  position: relative;
+  width: 300px;
+  height: 300px;
+
   &__circle {
     position: absolute;
-    top: 0;
-    left: 20%;
-
-    @include responsive.apply-desktop {
-      left: 0;
-      transform: translate(0%, -50%);
-    }
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 
 .circle {
-  width: 200px;
+  $items: ((275, 6), (235, 6.5), (198, 7), (155, 9), (107, 12));
 
-  @include responsive.apply-desktop {
-    width: 260px;
+  @for $i from 1 through 5 {
+    &:nth-child(#{$i}) {
+      width: #{list.nth(list.nth($items, $i), 1)}px;
+
+      circle {
+        stroke-width: #{list.nth(list.nth($items, $i), 2)}px;
+
+        // ⬇️ Keep it for some time
+
+        // @if $i == 1 {
+        //   stroke-width: $base-stroke-width;
+        // } @else if $i == 2 {
+        //   stroke-width: $base-stroke-width * (list.nth($items-v2, $i - 1) / list.nth($items-v2, $i));
+        // } @else {
+        // stroke-width: $base-stroke-width *
+        // (list.nth($items-v2, $i - 2) /
+        // list.nth($items-v2, $i - 1)) * (list.nth($items-v2, $i - 1) / list.nth($items-v2, $i));
+        // }
+      }
+    }
   }
 
   &__track,
   &__filled {
     fill: none;
-    stroke-width: 8;
   }
 
   &__track {
