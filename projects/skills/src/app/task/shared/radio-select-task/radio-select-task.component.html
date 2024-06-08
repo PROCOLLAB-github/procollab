@@ -1,7 +1,9 @@
 <!-- @format -->
 
 <div class="radio">
+  @if (data.files.length) {
   <img [src]="data.files[0]" alt="" class="radio__img" />
+  }
   <div class="radio__body">
     <h2 class="radio__title">
       {{ data.questionText }}

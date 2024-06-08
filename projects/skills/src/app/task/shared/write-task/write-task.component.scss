@@ -1,0 +1,22 @@
+.write-task {
+  padding: 26px;
+  background: var(--white);
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+
+  &__text {
+    margin-bottom: 26px;
+  }
+
+  &__textarea {
+    display: block;
+    width: 100%;
+    padding: 20px 16px;
+    color: var(--color-text-primary);
+    resize: none;
+    border: 1px solid var(--grey-button);
+    border-radius: 15px;
+    outline: none;
+    scrollbar-width: none;
+  }
+}

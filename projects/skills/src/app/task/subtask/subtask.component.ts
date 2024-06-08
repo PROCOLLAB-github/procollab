@@ -22,7 +22,9 @@ import {
   SingleQuestion,
   SingleQuestionError,
   StepType,
+  WriteQuestion,
 } from "../../../models/step.model";
+import { WriteTaskComponent } from "../shared/write-task/write-task.component";
 
 @Component({
   selector: "app-subtask",
@@ -36,6 +38,7 @@ import {
     ExcludeTaskComponent,
     RouterLink,
     LoaderComponent,
+    WriteTaskComponent,
   ],
   templateUrl: "./subtask.component.html",
   styleUrl: "./subtask.component.scss",
@@ -59,6 +62,7 @@ export class SubtaskComponent implements OnInit {
   singleQuestion = signal<SingleQuestion | null>(null);
   connectQuestion = signal<ConnectQuestion | null>(null);
   excludeQuestion = signal<ExcludeQuestion | null>(null);
+  writeQuestion = signal<WriteQuestion | null>(null);
 
   connectQuestionError = signal<ConnectQuestionResponse | null>(null);
   singleQuestionError = signal<SingleQuestionError | null>(null);
@@ -104,6 +108,8 @@ export class SubtaskComponent implements OnInit {
       this.infoSlide.set(step as InfoSlide);
     } else if (type === "exclude_question") {
       this.excludeQuestion.set(step as ExcludeQuestion);
+    } else if (type === "question_write") {
+      this.writeQuestion.set(step as WriteQuestion);
     }
   }
 
