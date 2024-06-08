@@ -1,10 +1,10 @@
 <!-- @format -->
 
 <div class="profile">
-  <!--<div class="profile__overlay">
+  <div class="profile__overlay">
     <img src="assets/images/profile/soon.svg" alt="soon" class="profile__overlay__image" />
     <p class="profile__overlay__text">Скоро...</p>
-  </div>-->
+  </div>
   @if (profileData()) {
   <app-month-block [months]="profileData()['months']" class="profile__month"></app-month-block>
   <app-skills-block class="profile__skills"></app-skills-block>
