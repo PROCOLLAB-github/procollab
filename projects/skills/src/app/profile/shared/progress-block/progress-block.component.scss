@@ -1,6 +1,82 @@
+@use "styles/typography";
+@use "styles/responsive";
+
 .progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   padding: 20px;
   background-color: var(--white);
   border: 1px solid var(--grey-button);
   border-radius: 15px;
+
+  @include responsive.apply-desktop {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  &-right {
+    margin-top: 200px;
+
+    @include responsive.apply-desktop {
+      margin-top: 0;
+    }
+
+    &-list {
+      margin-top: 10px;
+
+      &-el {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      &-bullet {
+        width: 15px;
+        height: 15px;
+        background-color: var(--accent);
+        border-radius: 50%;
+      }
+    }
+  }
+
+  &-title {
+    @include typography.heading-1;
+  }
+
+  &-bar {
+    position: relative;
+    width: 100%;
+
+    &-circle {
+      position: absolute;
+      top: 0%;
+      left: 20%;
+      width: 200px;
+      height: 200px;
+
+      @include responsive.apply-desktop {
+        left: 0%;
+        transform: translate(0%, -50%);
+      }
+    }
+  }
+}
+
+.track,
+.filled {
+  fill: none;
+  stroke-width: 17;
+}
+
+.track {
+  stroke: var(--accent-light);
+}
+
+.filled {
+  stroke: var(--accent);
+  transition: all 0.2s;
 }

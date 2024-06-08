@@ -3,10 +3,25 @@
 <div class="skills">
   <div class="skills__main">
     <h2 class="skills__title">Навыки</h2>
-    <p class="skills__placeholder-text">
-      выберите навыки,которые Вы будете развивать в этом месяце
-    </p>
-    <app-button class="skills__select">Выбрать</app-button>
+    <div class="skills_list">
+      @for (skill of skillsList(2); track $index) {
+        <app-personal-rating-card/>
+      } @empty {
+        <p class="skills__placeholder-text">
+        выберите навыки,которые Вы будете развивать в этом месяце
+      </p>
+      <app-button class="skills__select">Выбрать</app-button>
+      <app-button>Все навыки</app-button>
+      }
+
+      <div class="skills_pagination">
+        <div class="skills_pages">
+          <i appIcon icon="left-arrow" class="skills_pages-prev skills_pages-icon"></i>
+          <p><span class="skills_pages-start">1</span>/3</p>
+          <i appIcon icon="left-arrow" class="skills_pages-next skills_pages-icon"></i>
+        </div>
+       <app-button routerLink="/profile/skillPlans">Перейти</app-button>
+      </div>
+    </div>
   </div>
-  <app-button>Все навыки</app-button>
 </div>

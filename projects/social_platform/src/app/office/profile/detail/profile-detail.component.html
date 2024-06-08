@@ -2,32 +2,32 @@
 
 @if (user$ | async; as user) {
 <div class="profile">
-  <section class="bar profile__bar">
-    <nav class="bar__nav">
-      <app-back class="bar__back"></app-back>
-      @if (loggedUserId$ | async; as loggedUserId) {
-      <ul class="bar__tabs">
-        <a
-          class="bar__link"
-          [routerLink]="['/office/profile', user.id]"
-          [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="bar__link--active"
-        >
-          <li class="text-body-14 bar__item">
-            {{ user.id === loggedUserId ? "Моя страница" : "Страница пользователя" }}
-          </li>
-        </a>
-        <a
-          class="bar__link"
-          [routerLink]="['/office/profile', user.id, 'projects']"
-          routerLinkActive="bar__link--active"
-        >
-          <li class="text-body-14 bar__item">Проекты</li>
-        </a>
-      </ul>
-      }
-    </nav>
+  <section class="profile__bar">
+    @if (loggedUserId$ | async; as loggedUserId) {
+    <app-bar
+      class="bar"
+      [backHave]="true"
+      [links]="
+          [
+              {
+                link: '/office/profile' + '/' + user.id.toString(),
+                linkText: user.id === loggedUserId ? 'Моя страница' : 'Станица пользователя',
+                isRouterLinkActiveOptions: true,
+              },
+
+               {
+                link: '/office/profile' + '/' + user.id.toString() + '/' + 'projects',
+                linkText:'Проекты',
+                isRouterLinkActiveOptions: false
+              },
+            ]
+      "
+    ></app-bar>
+    } @else {
+    <app-bar [backHave]="true" [links]="[]"></app-bar>
+    }
   </section>
+
   <section class="profile__body">
     <div class="info profile__info">
       <div class="info__cover">
@@ -37,6 +37,7 @@
           alt="cover"
         /> -->
       </div>
+
       <div class="info__body">
         @if (chatService.userOnlineStatusCache | async; as cache) {
         <app-avatar

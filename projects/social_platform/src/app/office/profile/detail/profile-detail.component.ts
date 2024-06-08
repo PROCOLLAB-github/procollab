@@ -9,7 +9,7 @@ import { AuthService } from "@auth/services";
 import { ChatService } from "@services/chat.service";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { YearsFromBirthdayPipe } from "projects/core";
-import { ButtonComponent, IconComponent } from "@ui/components";
+import { BarComponent, ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { BackComponent } from "@uilib";
 import { AsyncPipe } from "@angular/common";
@@ -20,7 +20,6 @@ import { AsyncPipe } from "@angular/common";
   styleUrl: "./profile-detail.component.scss",
   standalone: true,
   imports: [
-    BackComponent,
     RouterLinkActive,
     RouterLink,
     AvatarComponent,
@@ -29,6 +28,8 @@ import { AsyncPipe } from "@angular/common";
     RouterOutlet,
     AsyncPipe,
     YearsFromBirthdayPipe,
+    BarComponent,
+    BackComponent
   ],
 })
 export class ProfileDetailComponent implements OnInit {
@@ -38,7 +39,7 @@ export class ProfileDetailComponent implements OnInit {
     public readonly authService: AuthService,
     public readonly chatService: ChatService,
     public readonly breakpointObserver: BreakpointObserver
-  ) {}
+  ) { }
 
   user$: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
   loggedUserId$: Observable<number> = this.authService.profile.pipe(map(user => user.id));

@@ -7,16 +7,17 @@ import { Project } from "@models/project.model";
 import { AuthService } from "@auth/services";
 import { BackComponent } from "@uilib";
 import { AsyncPipe } from "@angular/common";
+import { BarComponent } from "@ui/components";
 
 @Component({
   selector: "app-detail",
   templateUrl: "./detail.component.html",
   styleUrl: "./detail.component.scss",
   standalone: true,
-  imports: [BackComponent, RouterLinkActive, RouterLink, RouterOutlet, AsyncPipe],
+  imports: [RouterLinkActive, RouterLink, RouterOutlet, AsyncPipe, BarComponent, BackComponent],
 })
 export class ProjectDetailComponent implements OnInit, OnDestroy {
-  constructor(private readonly route: ActivatedRoute, private readonly authService: AuthService) {}
+  constructor(private readonly route: ActivatedRoute, private readonly authService: AuthService) { }
 
   ngOnInit(): void {
     const projectSub$ = this.route.data.pipe(map(r => r["data"][0])).subscribe(project => {

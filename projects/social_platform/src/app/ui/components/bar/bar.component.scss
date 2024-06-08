@@ -1,6 +1,8 @@
 @use "styles/responsive";
 
 .bar {
+  display: block;
+  margin-bottom: 15px;
   overflow: hidden;
   background-color: var(--white);
   border: 1px solid var(--medium-grey-for-outline);
@@ -74,31 +76,6 @@
       .bar__ball {
         background-color: var(--accent);
       }
-    }
-  }
-
-  &__right {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-  }
-
-  &__add-project {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-
-    i {
-      display: block;
-      margin-left: 6px;
-    }
-  }
-
-  &__add-project-text {
-    display: none;
-
-    @include responsive.apply-desktop {
-      display: inline;
     }
   }
 }

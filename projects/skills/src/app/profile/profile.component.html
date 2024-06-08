@@ -1,24 +1,17 @@
 <!-- @format -->
 
 <div class="profile">
-  <div class="bar profile__bar">
-    <nav class="bar__nav">
-      <app-back></app-back>
-      <ul class="bar__tabs">
-        <a
-          class="bar__link"
-          routerLink="/profile"
-          [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="bar__link--active"
-        >
-          <li class="text-body-14 bar__item">Моя страница</li>
-        </a>
-        <a class="bar__link" routerLink="/profile/skills" routerLinkActive="bar__link--active">
-          <li class="text-body-14 bar__item">Навыки</li>
-        </a>
-      </ul>
-    </nav>
+  <div class="profile__bar">
+    <app-bar
+      class="bar"
+      [backHave]="true"
+      [links]="[
+        { link: '/profile', linkText: 'Моя страница', isRouterLinkActiveOptions: true },
+        { link: '/profile/skills', linkText: 'Навыки', isRouterLinkActiveOptions: false }
+      ]"
+    ></app-bar>
   </div>
+
   <app-info-block [userData]="profileData()['userData']" class="profile__info"></app-info-block>
   <router-outlet></router-outlet>
 </div>

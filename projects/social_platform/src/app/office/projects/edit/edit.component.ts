@@ -28,7 +28,7 @@ import { VacancyService } from "@services/vacancy.service";
 import { InviteService } from "@services/invite.service";
 import { Invite } from "@models/invite.model";
 import { ProjectService } from "@services/project.service";
-import { ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
+import { BarComponent, ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
 import { ProgramService } from "@office/program/services/program.service";
 import { ProgramTag } from "@office/program/models/program.model";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -53,7 +53,6 @@ import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.c
   styleUrl: "./edit.component.scss",
   standalone: true,
   imports: [
-    BackComponent,
     ReactiveFormsModule,
     AvatarControlComponent,
     InputComponent,
@@ -71,6 +70,7 @@ import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.c
     AutoCompleteInputComponent,
     SkillsBasketComponent,
     SkillsGroupComponent,
+    BarComponent
   ],
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -163,7 +163,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           })
         )
       )
-      .subscribe(() => {});
+      .subscribe(() => { });
   }
 
   ngAfterViewInit(): void {
