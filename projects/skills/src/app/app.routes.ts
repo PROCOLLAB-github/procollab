@@ -24,4 +24,8 @@ export const routes: Routes = [
     path: "task",
     loadChildren: () => import("./task/task.routes").then(c => c.TASK_ROUTES),
   },
+  {
+    path: "subscription",
+    loadChildren: () => import("./subscription/subscription.routes").then(c => c.SUBSCRIPTION_ROUTES),
+  }
 ];

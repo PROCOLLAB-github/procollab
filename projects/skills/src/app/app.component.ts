@@ -19,6 +19,7 @@ export class AppComponent {
   navItems = [
     { name: "Навыки", icon: "lib", link: "/skills" },
     { name: "Рейтинг", icon: "growth", link: "rating" },
+    { name: "Подписка", icon: "receipt", link: "subscription" },
   ];
 
   user = {
