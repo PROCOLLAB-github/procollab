@@ -19,17 +19,11 @@
     border-radius: 15px;
   }
 
-  &__avatar-desktop {
+  &__avatar {
     grid-row: span 1;
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    object-fit: cover;
 
     @include responsive.apply-desktop {
       grid-row: span 2;
-      width: 165px;
-      height: 165px;
     }
   }
 

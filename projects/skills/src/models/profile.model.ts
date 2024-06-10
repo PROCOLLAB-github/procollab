@@ -3,6 +3,7 @@
 interface UserData {
   firstName: string;
   lastName: string;
+  fileLink: string;
   age: number;
   specialization: string;
   geoPosition: string;

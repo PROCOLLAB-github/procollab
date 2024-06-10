@@ -1,11 +1,11 @@
 <!-- @format -->
 
 <div class="info">
-  <img
-    class="info__avatar-desktop"
-    src="https://i.pinimg.com/736x/4c/2f/7d/4c2f7df67f98620e295595890edddd12.jpg"
-    alt="profile"
-  />
+  <app-avatar
+    class="info__avatar"
+    [size]="window.innerWidth > 1200 ? 165 : 90"
+    [url]="userData.fileLink"
+  ></app-avatar>
   <div class="info__left">
     <h1 class="info__title">{{ userData.firstName }} {{ userData.lastName }}</h1>
     <div class="info__keys text-body-14">

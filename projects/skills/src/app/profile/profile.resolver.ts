@@ -8,5 +8,5 @@ import { ProfileService } from "./services/profile.service";
 
 export const profileResolver: ResolveFn<Profile> = () => {
   const profileService = inject(ProfileService);
-  return profileService.getProfile().pipe(tap(console.log));
+  return profileService.getProfile();
 };
