@@ -95,10 +95,7 @@ export class SubtaskComponent implements OnInit {
   setStepData(step: StepType) {
     const type = this.route.snapshot.queryParams["type"] as TaskStep["type"];
 
-    this.singleQuestion.set(null);
-    this.connectQuestion.set(null);
-    this.infoSlide.set(null);
-    this.excludeQuestion.set(null);
+    this.clearData();
 
     if (type === "question_single_answer") {
       this.singleQuestion.set(step as SingleQuestion);
@@ -114,6 +111,19 @@ export class SubtaskComponent implements OnInit {
   }
 
   body = signal<any>({});
+
+  clearData() {
+    [
+      this.singleQuestion,
+      this.connectQuestion,
+      this.infoSlide,
+      this.excludeQuestion,
+      this.writeQuestion,
+      this.singleQuestionError,
+      this.connectQuestionError,
+    ].forEach(s => s.set(null));
+  }
+
   onNext() {
     const id = this.subTaskId();
     if (!id) return;
