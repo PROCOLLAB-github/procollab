@@ -1,12 +1,24 @@
 <!-- @format -->
 
 <div class="subscription">
-  <app-subscription-modal
-    [open]="open()"
-    [checked]="checked()"
-    (openChange)="onOpenChange($event)"
-    (checkedChange)="onCheckedChange($event)"
-  ></app-subscription-modal>
+  <app-modal [open]="open() || checked()" (openChange)="onOpenChange($event)">
+
+    <div class="cancel">
+      <i (click)="onCloseModal()" appIcon icon="cross" class="cancel__cross"></i>
+      <p class="cancel__title">
+        {{
+          checked()
+            ? "Вы действительно хотите влючить автопродление подписки?"
+            : "Вы действительно хотите отменить подписку?"
+        }}
+      </p>
+      <app-button (click)="onCloseModal()" [color]="checked() ? 'primary' : 'grey'">{{
+        checked() ? "Включить" : "Отменить"
+      }}</app-button>
+      <img alt="wave" src="assets/images/subscription/wave.svg" class="cancel__wave" />
+    </div>
+    
+  </app-modal>
 
   <div class="subscription__types">
     <div class="subscription__types__title">Виды подписок</div>

@@ -151,3 +151,51 @@
     @include typography.body-12;
   }
 }
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  padding: 40px 0px 80px 0px;
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 20px;
+    color: var(--black);
+    text-align: center;
+    inline-size: 280px;
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 23px;
+      inline-size: 500px;
+      text-align: center;
+
+      @include typography.heading-3;
+    }
+  }
+
+  &__wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+}
