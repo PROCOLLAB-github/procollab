@@ -8,6 +8,11 @@
     margin-bottom: 26px;
   }
 
+  &__description {
+    margin-bottom: 26px;
+    color: var(--grey-text);
+  }
+
   &__textarea {
     display: block;
     width: 100%;
