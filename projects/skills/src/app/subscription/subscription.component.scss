@@ -19,6 +19,7 @@
     @include responsive.apply-desktop {
       display: flex;
       flex-direction: row;
+      align-items: center;
       justify-content: space-between;
     }
 
@@ -38,6 +39,10 @@
       align-items: center;
       justify-content: space-between;
       margin-top: 15px;
+
+      @include responsive.apply-desktop {
+        margin-top: 0;
+      }
 
       &__text {
         @include typography.body-12;
