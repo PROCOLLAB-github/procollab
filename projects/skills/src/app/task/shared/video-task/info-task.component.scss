@@ -11,6 +11,8 @@
   }
 
   &__text {
+    white-space: pre-line;
+
     @include typography.body-12;
 
     @include responsive.apply-desktop {
