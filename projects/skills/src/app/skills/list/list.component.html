@@ -1,15 +1,7 @@
 <!-- @format -->
 
 <div class="list">
-  <app-bar
-    class="bar"
-    [links]="[
-      { link: '/skills/my', linkText: 'Навыки', isRouterLinkActiveOptions: false },
-      { link: '/skills', linkText: 'Все навыки', isRouterLinkActiveOptions: false }
-    ]"
-    [backHave]="true"
-  ></app-bar>
-
+  <app-bar class="bar" [backHave]="true"></app-bar>
   <div class="list__search search">
     <div class="search__control">
       <i class="search__icon" appIcon icon="search" appSquare="32px"></i>
