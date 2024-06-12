@@ -2,7 +2,6 @@
 
 <div class="subscription">
   <app-modal [open]="open() || checked()" (openChange)="onOpenChange($event)">
-
     <div class="cancel">
       <i (click)="onCloseModal()" appIcon icon="cross" class="cancel__cross"></i>
       <p class="cancel__title">
@@ -17,14 +16,13 @@
       }}</app-button>
       <img alt="wave" src="assets/images/subscription/wave.svg" class="cancel__wave" />
     </div>
-    
   </app-modal>
 
   <div class="subscription__types">
-    <div class="subscription__types__title">Виды подписок</div>
+    <div class="subscription__title">Виды подписок</div>
 
-    <div class="subscription__types__switch">
-      <div class="subscription__types__switch__text">Включить автопродление подписки</div>
+    <div class="subscription__switch">
+      <div class="subscription__text">Включить автопродление подписки</div>
       <app-switch (checkedChange)="onCheckedChange($event)" [checked]="checked()"></app-switch>
     </div>
   </div>

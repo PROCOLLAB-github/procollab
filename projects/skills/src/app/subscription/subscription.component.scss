@@ -22,34 +22,35 @@
       align-items: center;
       justify-content: space-between;
     }
+  }
 
-    &__title {
+  &__title {
+    @include typography.heading-3;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 3px;
+
       @include typography.heading-3;
+    }
+  }
 
-      @include responsive.apply-desktop {
-        margin-bottom: 3px;
+  &__switch {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 15px;
 
-        @include typography.heading-3;
-      }
+    @include responsive.apply-desktop {
+      margin-top: 0;
     }
 
-    &__switch {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 15px;
+  }
 
-      @include responsive.apply-desktop {
-        margin-top: 0;
-      }
+  &__text {
+    @include typography.body-12;
 
-      &__text {
-        @include typography.body-12;
-
-        color: var(--grey-for-text);
-      }
-    }
+    color: var(--grey-for-text);
   }
 }
 
