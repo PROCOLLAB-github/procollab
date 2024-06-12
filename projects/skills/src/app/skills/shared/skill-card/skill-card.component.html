@@ -12,5 +12,8 @@
     Сервис для поиска напарника и эффективной учебы вместе. Помогает найти напарника для обучения
     основываясь на интересах и цели обучения.
   </p>
-  <div class="skill-card__level text-body-12">{{ skill.quantityOfLevels }} уровней</div>
+  <div class="skill-card__level text-body-12">
+    {{ skill.quantityOfLevels }}
+    {{ skill.quantityOfLevels | pluralize: ["уровень", "уровня", "уровней"] }}
+  </div>
 </div>
