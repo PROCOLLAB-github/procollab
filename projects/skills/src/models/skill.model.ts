@@ -61,5 +61,5 @@ export interface TaskResults {
   progress: number;
   nextTaskId: null | number;
   level: number;
-  // skillName: string;
+  skillName: string;
 }
