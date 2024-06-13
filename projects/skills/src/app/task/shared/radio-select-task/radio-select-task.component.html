@@ -5,9 +5,10 @@
   <img [src]="data.files[0]" alt="" class="radio__img" />
   }
   <div class="radio__body">
-    <h2 class="radio__title">
+    <h2 class="radio__title text-body-14">
       {{ data.questionText }}
     </h2>
+    <p class="radio__text">{{ data.description }}</p>
     <div class="radio__list">
       @for (op of data.answers; track op.id) {
       <div

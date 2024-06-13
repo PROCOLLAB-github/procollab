@@ -2,6 +2,7 @@
 
 <div class="exclude">
   <h2 class="exclude__title">{{ data.questionText }}</h2>
+  <p class="exclude__text text-body-14">{{ data.description }}</p>
   <ul class="exclude__list">
     @for (op of data.answers; track op.id) {
     <li
