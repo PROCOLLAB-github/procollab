@@ -6,6 +6,7 @@ export interface Skill {
   name: string;
   quantityOfLevels: number;
   whoCreated: string;
+  description: string;
 }
 
 export interface SkillDetail {
