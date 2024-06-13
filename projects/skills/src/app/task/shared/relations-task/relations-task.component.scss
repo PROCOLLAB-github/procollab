@@ -18,7 +18,9 @@
   }
 
   &__item {
+    max-height: 500px;
     padding: 10px;
+    overflow: hidden;
     cursor: pointer;
     border: 1px solid var(--grey-button);
     border-radius: 10px;

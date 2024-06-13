@@ -12,7 +12,11 @@
       [class.relations__item--success]="success"
       (click)="onSelectLeft(data.connectLeft[$index].id)"
     >
+      @if (data.connectLeft[$index].text) {
       {{ data.connectLeft[$index].text }}
+      } @else if (data.connectLeft[$index].file) {
+      <img [src]="data.connectLeft[$index].file" />
+      }
     </div>
     <div
       class="relations__item relations__b"
@@ -20,7 +24,11 @@
       [class.relations__item--active]="resultRight().includes(data.connectRight[$index].id)"
       [class.relations__item--success]="success"
     >
+      @if (data.connectRight[$index].text) {
       {{ data.connectRight[$index].text }}
+      } @else if (data.connectRight[$index].file) {
+      <img [src]="data.connectRight[$index].file" />
+      }
     </div>
     }
   </div>

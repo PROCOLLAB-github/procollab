@@ -6,8 +6,8 @@ export interface InfoSlide {
 }
 
 export interface ConnectQuestion {
-  connectLeft: { id: number; text: string }[];
-  connectRight: { id: number; text: string }[];
+  connectLeft: { id: number; text?: string; file?: string }[];
+  connectRight: { id: number; text?: string; file?: string }[];
   description: string;
   files: string[];
   id: number;
