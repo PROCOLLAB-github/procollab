@@ -10,7 +10,7 @@
         начните обучение прямо сейчас
       </div>
     </div>
-    <img class="badge__img" [src]="skillStepsResponse()?.file" alt="" />
+    <img class="badge__img" [src]="skillStepsResponse()?.skillPreview" alt="" />
   </div>
   <div class="task__progress progress" #progressBarEl>
     <div class="progress__line"></div>
@@ -28,7 +28,7 @@
     ></a>
     }
     <img
-      [src]="skillStepsResponse()?.file"
+      [src]="skillStepsResponse()?.skillPointLogo"
       class="progress__brand-point"
       [ngStyle]="{
         left: progressDoneWidth() + 'px',

@@ -43,7 +43,6 @@
   &__img {
     width: 80px;
     height: 20px;
-    object-fit: cover;
 
     @include responsive.apply-desktop {
       width: 400px;

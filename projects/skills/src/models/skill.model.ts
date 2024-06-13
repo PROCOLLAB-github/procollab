@@ -48,6 +48,9 @@ export interface TaskStep {
 
 export interface TaskStepsResponse extends TaskDetail {
   count: number;
+  skillName: string;
+  skillPointLogo: string;
+  skillPreview: string;
   stepData: TaskStep[];
 }
 
