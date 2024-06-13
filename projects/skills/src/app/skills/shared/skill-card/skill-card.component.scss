@@ -19,7 +19,13 @@
   }
 
   &__text {
+    display: -webkit-box;
+    height: 75px;
+    overflow: hidden;
     color: var(--dark-grey);
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
   }
 
   &__level {
