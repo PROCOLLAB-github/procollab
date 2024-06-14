@@ -11,7 +11,8 @@
             : "Вы действительно хотите отменить подписку?"
         }}
       </p>
-      <app-button (click)="onCloseModal()" [color]="checked() ? 'primary' : 'grey'">{{
+
+      <app-button (click)="onConfirmAutoPlay(true)" [color]="checked() ? 'primary' : 'grey'">{{
         checked() ? "Включить" : "Отменить"
       }}</app-button>
       <img alt="wave" src="assets/images/subscription/wave.svg" class="cancel__wave" />
@@ -23,29 +24,35 @@
 
     <div class="subscription__switch">
       <div class="subscription__text">Включить автопродление подписки</div>
-      <app-switch (checkedChange)="onCheckedChange($event)" [checked]="checked()"></app-switch>
+      <app-switch
+        (click)="this.onCheckedChange(!checked())"
+        (checkedChange)="onCheckedChange($event)"
+        [checked]="subscriptionData().isAutopayAllowed"
+      ></app-switch>
     </div>
   </div>
 
   <div class="plans">
     <div class="plans__tariffs">
-      @for (subscription of subscriptions; track $index) {
-      <div class="tariff" [ngClass]="{ 'tariff--primary': $index === 1 }">
+      @for (subscription of subscriptions(); track subscription.id) {
+      <div class="tariff" [ngClass]="{ 'tariff--primary': subscription.id === 3 }">
         <div>
-          <div class="tariff__title">Золотой</div>
-          <div class="tariff__price">₽ 4457</div>
+          <div class="tariff__title">{{ subscription.name }}</div>
+          <div class="tariff__price">₽ {{ subscription.price }}</div>
         </div>
 
         <ul class="tariff__points">
-          @for (feature of features; track $index) {
+          @for (feature of subscription.featuresList ; track $index) {
           <li class="tariff__point">
             <i appIcon icon="circle-check" class="tariff__icon"></i>
-            <span> Официальный сертификат </span>
+            <span> {{ feature }} </span>
           </li>
           }
         </ul>
 
-        <div class="tariff__expiration-date">Действует до 28.05.2024</div>
+        <div class="tariff__expiration-date">
+          Действует до {{ subscriptionData().subscriptionDateOver }}
+        </div>
       </div>
       }
     </div>

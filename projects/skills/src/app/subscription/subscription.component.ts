@@ -1,9 +1,14 @@
-import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { IconComponent } from '@uilib';
 import { ButtonComponent } from '@ui/components';
 import { SwitchComponent } from '@ui/components/switch/switch.component';
 import { ModalComponent } from '@ui/components/modal/modal.component';
+import { ActivatedRoute } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
+import { ProfileService } from '../profile/services/profile.service';
+import { SubscriptionData } from '@corelib';
 
 @Component({
   selector: 'app-subscription',
@@ -16,23 +21,40 @@ export class SubscriptionComponent {
   open = signal(false);
   checked = signal(false);
 
-  // subscriptions = signal<SubscriptionPlan[]>([]);
-  subscriptions = Array(3)
+  route = inject(ActivatedRoute);
+  profileService = inject(ProfileService);
 
-  features = Array(5);
+  subscriptions = toSignal(this.route.data.pipe(map(r => r["data"])));
+  subscriptionData = toSignal(this.route.data.pipe(map(r => r['subscriptionData'])));
 
   onOpenChange(event: boolean) {
-    this.open.set(event);
-    this.checked.set(this.checked())
+    if (this.open() && !event) {
+      this.open.set(false);
+    } else {
+      this.open.set(event);
+    }
   }
 
   onCheckedChange(event: boolean) {
-    this.checked.set(event);
-    this.open.set(this.open());
+    if (this.subscriptionData().isAutopayAllowed) {
+      this.profileService.updateSubscriptionDate(false).subscribe(() => {
+        const updatedData = this.subscriptionData();
+        updatedData.isAutopayAllowed = false;
+      })
+    } else this.checked.set(true);
   }
 
   onCloseModal() {
     this.open.set(false);
     this.checked.set(false);
+  }
+
+  onConfirmAutoPlay(event: boolean) {
+    this.profileService.updateSubscriptionDate(event).subscribe(() => {
+      const updatedData = this.subscriptionData();
+      updatedData.isAutopayAllowed = event;
+      this.checked.set(false);
+      this.open.set(false);
+    })
   }
 }

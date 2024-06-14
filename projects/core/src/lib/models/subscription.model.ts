@@ -7,6 +7,14 @@ export interface SubscriptionPlan {
   featuresList: string[];
 }
 
+export interface SubscriptionData {
+  isSubscribed: boolean,
+  lastSubscriptionType: null,
+  lastSubscriptionDate: string,
+  subscriptionDateOver: string,
+  isAutopayAllowed: boolean
+}
+
 export interface PaymentStatus {
   id: string;
   status: string;
