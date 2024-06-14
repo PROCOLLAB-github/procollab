@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ApiService } from "@corelib";
+import { ApiService, SubscriptionData } from "@corelib";
 import { Profile } from "../../../models/profile.model";
 
 @Injectable({
@@ -12,5 +12,15 @@ export class ProfileService {
 
   getProfile() {
     return this.apiService.get<Profile>("/progress/profile/");
+  }
+
+  getSubscriptionData() {
+    return this.apiService.get<SubscriptionData>("/progress/subscription-data/");
+  }
+
+  updateSubscriptionDate(allowed: boolean) {
+    return this.apiService.patch("/progress/update-auto-renewal/", {
+      is_autopay_allowed: allowed
+    })
   }
 }
