@@ -2,10 +2,7 @@
 
 <div class="detail">
   <section class="detail__bar">
-    <app-bar
-    class="bar"
-      [backHave]="true"
-      [links]="[
+    <app-bar class="bar" [backHave]="true" [links]="[
         {
           link: '/office/program' + '/' + programId!.toString(),
           linkText: 'Страница программы',
@@ -14,7 +11,7 @@
 
         {
           link: '/office/program' + '/' + programId!.toString() + '/' + 'projects',
-          linkText: 'Прокты-участники',
+          linkText: 'Проекты-участники',
           isRouterLinkActiveOptions: false
         },
 
@@ -23,8 +20,7 @@
           linkText: 'Участники',
           isRouterLinkActiveOptions: false
         }
-      ]"
-    ></app-bar>
+      ]"></app-bar>
   </section>
 
   <div class="detail__body">
