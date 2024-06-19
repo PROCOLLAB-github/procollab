@@ -41,6 +41,10 @@ export class RelationsTaskComponent {
   resultLeft = computed(() => this.result().map(r => r.leftId));
   resultRight = computed(() => this.result().map(r => r.rightId));
 
+  isImageGrid = computed(() => {
+    return this.data.connectRight.every(itm => !!itm.file);
+  });
+
   @Output() update = new EventEmitter<ConnectQuestionRequest>();
 
   selectedLeftId = signal<number | null>(null);

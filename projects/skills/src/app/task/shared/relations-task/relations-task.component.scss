@@ -7,13 +7,25 @@
   border: 1px solid var(--grey-button);
   border-radius: 15px;
 
-  &__grid {
-    display: grid;
-    align-items: flex-start;
+  &__wrapper {
+    display: flex;
+    gap: 50px;
+    justify-content: space-between;
+  }
 
-    @include responsive.apply-desktop {
-      grid-template-columns: 220px 1fr;
-      gap: 24px 54px;
+  &__column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 220px;
+
+    &:nth-child(2) {
+      flex-grow: 1;
+    }
+
+    &--grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 

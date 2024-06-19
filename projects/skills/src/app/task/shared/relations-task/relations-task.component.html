@@ -1,35 +1,41 @@
 <!-- @format -->
 
 <div class="relations">
-  <div class="relations__grid">
-    @for (_ of Array(data.connectLeft.length); track $index) {
-    <div
-      class="relations__item relations__a"
-      [class.relations__item--active]="
-        resultLeft().includes(data.connectLeft[$index].id) ||
-        selectedLeftId() === data.connectLeft[$index].id
-      "
-      [class.relations__item--success]="success"
-      (click)="onSelectLeft(data.connectLeft[$index].id)"
-    >
-      @if (data.connectLeft[$index].text) {
-      {{ data.connectLeft[$index].text }}
-      } @else if (data.connectLeft[$index].file) {
-      <img [src]="data.connectLeft[$index].file" />
+  <div class="relations__wrapper">
+    <div class="relations__column">
+      @for (_ of Array(data.connectLeft.length); track $index) {
+      <div
+        class="relations__item relations__a"
+        [class.relations__item--active]="
+          resultLeft().includes(data.connectLeft[$index].id) ||
+          selectedLeftId() === data.connectLeft[$index].id
+        "
+        [class.relations__item--success]="success"
+        (click)="onSelectLeft(data.connectLeft[$index].id)"
+      >
+        @if (data.connectLeft[$index].text) {
+        {{ data.connectLeft[$index].text }}
+        } @else if (data.connectLeft[$index].file) {
+        <img [src]="data.connectLeft[$index].file" />
+        }
+      </div>
       }
     </div>
-    <div
-      class="relations__item relations__b"
-      (click)="onSelectRight(data.connectRight[$index].id)"
-      [class.relations__item--active]="resultRight().includes(data.connectRight[$index].id)"
-      [class.relations__item--success]="success"
-    >
-      @if (data.connectRight[$index].text) {
-      {{ data.connectRight[$index].text }}
-      } @else if (data.connectRight[$index].file) {
-      <img [src]="data.connectRight[$index].file" />
+    <div class="relations__column" [class.relations__column--grid]="isImageGrid">
+      @for (_ of Array(data.connectRight.length); track $index) {
+      <div
+        class="relations__item relations__b"
+        (click)="onSelectRight(data.connectRight[$index].id)"
+        [class.relations__item--active]="resultRight().includes(data.connectRight[$index].id)"
+        [class.relations__item--success]="success"
+      >
+        @if (data.connectRight[$index].text) {
+        {{ data.connectRight[$index].text }}
+        } @else if (data.connectRight[$index].file) {
+        <img [src]="data.connectRight[$index].file" />
+        }
+      </div>
       }
     </div>
-    }
   </div>
 </div>
