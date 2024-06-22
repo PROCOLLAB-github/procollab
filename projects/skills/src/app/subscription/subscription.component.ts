@@ -1,21 +1,24 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { AsyncPipe, CommonModule } from '@angular/common';
-import { IconComponent } from '@uilib';
-import { ButtonComponent } from '@ui/components';
-import { SwitchComponent } from '@ui/components/switch/switch.component';
-import { ModalComponent } from '@ui/components/modal/modal.component';
-import { ActivatedRoute } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
-import { ProfileService } from '../profile/services/profile.service';
-import { SubscriptionData } from '@corelib';
+/** @format */
+
+import { Component, OnInit, inject, signal } from "@angular/core";
+import { AsyncPipe, CommonModule } from "@angular/common";
+import { IconComponent } from "@uilib";
+import { ButtonComponent } from "@ui/components";
+import { SwitchComponent } from "@ui/components/switch/switch.component";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { ActivatedRoute } from "@angular/router";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { map } from "rxjs";
+import { ProfileService } from "../profile/services/profile.service";
+import { SubscriptionData } from "@corelib";
+import { log } from "console";
 
 @Component({
-  selector: 'app-subscription',
+  selector: "app-subscription",
   standalone: true,
   imports: [CommonModule, IconComponent, ButtonComponent, SwitchComponent, ModalComponent],
-  templateUrl: './subscription.component.html',
-  styleUrl: './subscription.component.scss'
+  templateUrl: "./subscription.component.html",
+  styleUrl: "./subscription.component.scss",
 })
 export class SubscriptionComponent {
   open = signal(false);
@@ -25,7 +28,7 @@ export class SubscriptionComponent {
   profileService = inject(ProfileService);
 
   subscriptions = toSignal(this.route.data.pipe(map(r => r["data"])));
-  subscriptionData = toSignal(this.route.data.pipe(map(r => r['subscriptionData'])));
+  subscriptionData = toSignal(this.route.data.pipe(map(r => r["subscriptionData"])));
 
   onOpenChange(event: boolean) {
     if (this.open() && !event) {
@@ -40,7 +43,7 @@ export class SubscriptionComponent {
       this.profileService.updateSubscriptionDate(false).subscribe(() => {
         const updatedData = this.subscriptionData();
         updatedData.isAutopayAllowed = false;
-      })
+      });
     } else this.checked.set(true);
   }
 
@@ -55,6 +58,19 @@ export class SubscriptionComponent {
       updatedData.isAutopayAllowed = event;
       this.checked.set(false);
       this.open.set(false);
-    })
+    });
+  }
+
+  onCancelSubscription() {
+    this.profileService.cancelSubscription().subscribe({
+      next: () => {
+        this.open.set(false);
+        location.reload();
+      },
+      error: () => {
+        this.open.set(false);
+        location.reload();
+      },
+    });
   }
 }

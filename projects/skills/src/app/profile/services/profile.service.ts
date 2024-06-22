@@ -20,7 +20,11 @@ export class ProfileService {
 
   updateSubscriptionDate(allowed: boolean) {
     return this.apiService.patch("/progress/update-auto-renewal/", {
-      is_autopay_allowed: allowed
-    })
+      is_autopay_allowed: allowed,
+    });
+  }
+
+  cancelSubscription() {
+    return this.apiService.post("/subscription/refund", {});
   }
 }
