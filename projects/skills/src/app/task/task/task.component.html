@@ -15,33 +15,21 @@
   <div class="task__progress progress" #progressBarEl>
     <div class="progress__line"></div>
     <div class="progress__line-done" [ngStyle]="{ width: progressDoneWidth() + 'px' }"></div>
-    <div class="progress__first progress__border progress__border--done">1 уровень</div>
+    <div class="progress__first progress__border progress__border--done">
+      {{ skillStepsResponse().currentLevel }} уровень
+    </div>
     @for (id of taskIds(); track $index) {
-    <a
-      #pointEls
-      class="progress__point"
-      [attr.data-id]="id"
-      [ngClass]="{
+    <a #pointEls class="progress__point" [attr.data-id]="id" [ngClass]="{
         'progress__point--done': doneTasks()?.includes(id) || taskService.currentTaskDone()
-      }"
-      (click)="goToTask(id)"
-    ></a>
+      }" (click)="goToTask(id)"></a>
     }
-    <img
-      [src]="skillStepsResponse()?.skillPointLogo"
-      class="progress__brand-point"
-      [ngStyle]="{
+    <img [src]="skillStepsResponse()?.skillPointLogo" class="progress__brand-point" [ngStyle]="{
         left: progressDoneWidth() + 'px',
         opacity: taskService.currentTaskDone() ? 0 : 1
-      }"
-      alt=""
-    />
-    <div
-      #progressDone
-      [class.progress__border--done]="taskService.currentTaskDone()"
-      class="progress__last progress__border"
-    >
-      2 уровень
+      }" alt="" />
+    <div #progressDone [class.progress__border--done]="taskService.currentTaskDone()"
+      class="progress__last progress__border">
+      {{ skillStepsResponse().nextLevel }} уровень
     </div>
   </div>
   <router-outlet></router-outlet>
