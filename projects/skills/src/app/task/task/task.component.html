@@ -16,7 +16,7 @@
     <div class="progress__line"></div>
     <div class="progress__line-done" [ngStyle]="{ width: progressDoneWidth() + 'px' }"></div>
     <div class="progress__first progress__border progress__border--done">
-      {{ skillStepsResponse().currentLevel }} уровень
+      {{ skillStepsResponse()?.currentLevel }} уровень
     </div>
     @for (id of taskIds(); track $index) {
     <a #pointEls class="progress__point" [attr.data-id]="id" [ngClass]="{
@@ -29,7 +29,7 @@
       }" alt="" />
     <div #progressDone [class.progress__border--done]="taskService.currentTaskDone()"
       class="progress__last progress__border">
-      {{ skillStepsResponse().nextLevel }} уровень
+      {{ skillStepsResponse()?.nextLevel }} уровень
     </div>
   </div>
   <router-outlet></router-outlet>
