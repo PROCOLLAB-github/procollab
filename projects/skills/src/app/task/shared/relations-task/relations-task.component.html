@@ -1,6 +1,7 @@
 <!-- @format -->
 
 <div class="relations">
+  <div class="relations__description">{{ data.description }}</div>
   <div class="relations__wrapper">
     <div class="relations__column">
       @for (_ of Array(data.connectLeft.length); track $index) {
@@ -21,6 +22,7 @@
       </div>
       }
     </div>
+
     <div class="relations__column" [class.relations__column--grid]="isImageGrid">
       @for (_ of Array(data.connectRight.length); track $index) {
       <div
