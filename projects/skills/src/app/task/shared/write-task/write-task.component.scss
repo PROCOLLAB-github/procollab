@@ -11,6 +11,7 @@
   &__description {
     margin-bottom: 26px;
     color: var(--grey-text);
+    white-space: pre-wrap;
   }
 
   &__textarea {
