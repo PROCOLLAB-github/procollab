@@ -5,9 +5,7 @@
   <section class="skill__info skill__block info" [ngStyle]="{ height: blockHeight() + 'px' }">
     <h2 class="info__title skill__title">{{ routeData[1].skillName }}</h2>
     <img class="info__img" [src]="routeData[1].file" alt="" />
-    <p class="info__text">
-      {{ routeData[1].description }}
-    </p>
+    <p class="info__text">{{ routeData[1].description }}</p>
     <div class="info__level">{{ routeData[1].level }} уровень</div>
   </section>
   <section
