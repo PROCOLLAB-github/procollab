@@ -1,22 +1,38 @@
 /** @format */
 
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, Sanitizer, inject } from "@angular/core";
 import { CommonModule, JsonPipe } from "@angular/common";
 import { WriteQuestion } from "../../../../models/step.model";
-import { YtExtract } from "@corelib";
+import { YtExtractService } from "@corelib";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
 @Component({
   selector: "app-write-task",
   standalone: true,
-  imports: [CommonModule, YtExtract, JsonPipe],
+  imports: [CommonModule, JsonPipe],
   templateUrl: "./write-task.component.html",
   styleUrl: "./write-task.component.scss",
 })
-export class WriteTaskComponent {
+export class WriteTaskComponent implements OnInit {
   @Input({ required: true }) data!: WriteQuestion;
   @Output() update = new EventEmitter<{ text: string }>();
 
   @Input() success = false;
+
+  sanitizer = inject(DomSanitizer);
+  ytExtractService = inject(YtExtractService);
+
+  videoUrl?: SafeResourceUrl;
+  description = "";
+  ngOnInit(): void {
+    const res = this.ytExtractService.transform(
+      this.data.description + "https://www.youtube.com/watch?v=vut7aJ129rE"
+    );
+
+    if (res.extractedLink)
+      this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(res.extractedLink);
+    this.description = res.newText;
+  }
 
   // result = signal<{ text: string } | null>(null);
 
