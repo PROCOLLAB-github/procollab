@@ -25,9 +25,7 @@ export class WriteTaskComponent implements OnInit {
   videoUrl?: SafeResourceUrl;
   description = "";
   ngOnInit(): void {
-    const res = this.ytExtractService.transform(
-      this.data.description + "https://www.youtube.com/watch?v=vut7aJ129rE"
-    );
+    const res = this.ytExtractService.transform(this.data.description);
 
     if (res.extractedLink)
       this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(res.extractedLink);
