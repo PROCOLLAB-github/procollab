@@ -29,8 +29,10 @@ export class YtExtract implements PipeTransform {
     const videoIdMatch = extractedLink.match(videoIdRegex);
     let embedLink = "";
 
+    console.log(videoIdMatch);
     if (videoIdMatch && videoIdMatch[1]) {
       const videoId = videoIdMatch[1];
+      console.log(videoId);
       embedLink = `https://www.youtube.com/embed/${videoId}`;
     }
 
