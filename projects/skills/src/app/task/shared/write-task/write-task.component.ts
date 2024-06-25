@@ -1,14 +1,14 @@
 /** @format */
 
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule, JsonPipe } from "@angular/common";
 import { WriteQuestion } from "../../../../models/step.model";
 import { YtExtract } from "@corelib";
 
 @Component({
   selector: "app-write-task",
   standalone: true,
-  imports: [CommonModule, YtExtract],
+  imports: [CommonModule, YtExtract, JsonPipe],
   templateUrl: "./write-task.component.html",
   styleUrl: "./write-task.component.scss",
 })
