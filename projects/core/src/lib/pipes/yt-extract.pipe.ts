@@ -12,12 +12,14 @@ export class YtExtract implements PipeTransform {
 
     // Find matches in the text
     const match = youtubeRegex.exec(value);
+    console.log(match);
     if (!match) {
       return { newText: value }; // No YouTube link found, return original text
     }
 
     // Extracted YouTube link
     const extractedLink = match[0];
+    console.log(extractedLink);
 
     // Remove the YouTube link from the original text
     const newText = value.replace(extractedLink, "");
@@ -29,7 +31,7 @@ export class YtExtract implements PipeTransform {
 
     if (videoIdMatch && videoIdMatch[1]) {
       const videoId = videoIdMatch[1];
-      embedLink = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+      embedLink = `https://www.youtube.com/embed/${videoId}`;
     }
 
     return { extractedLink: embedLink, newText };
