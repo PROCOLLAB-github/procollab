@@ -7,6 +7,12 @@
   border: 1px solid var(--grey-button);
   border-radius: 15px;
 
+  &__description {
+    margin-bottom: 20px;
+
+    @include typography.body-14;
+  }
+
   &__wrapper {
     display: flex;
     gap: 50px;
