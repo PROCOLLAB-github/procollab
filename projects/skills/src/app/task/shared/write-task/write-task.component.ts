@@ -3,11 +3,12 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { WriteQuestion } from "../../../../models/step.model";
+import { YtExtract } from "@corelib";
 
 @Component({
   selector: "app-write-task",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, YtExtract],
   templateUrl: "./write-task.component.html",
   styleUrl: "./write-task.component.scss",
 })
