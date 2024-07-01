@@ -228,6 +228,12 @@
         </div>
         }
       </div>
+
+      } @if(expertRole){
+      <app-button>
+        <span>Добавить вакансию</span>
+        <i appIcon icon="plus" appSquare="20"></i>
+      </app-button>
       } @if (project.achievements.length) {
       <div class="achievements project__section project__achievements">
         <h3 class="text-bold-body-16 achievements__title">Достижения</h3>

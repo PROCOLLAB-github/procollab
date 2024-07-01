@@ -73,12 +73,13 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly subscriptionService: SubscriptionService,
     private readonly fb: FormBuilder,
     private readonly cdRef: ChangeDetectorRef
-  ) {}
+  ) { }
 
   project$?: Observable<Project> = this.route.parent?.data.pipe(map(r => r["data"][0]));
   projSubscribers$?: Observable<User[]> = this.route.parent?.data.pipe(map(r => r["data"][1]));
 
   profileId!: number;
+  expertRole: User['expert'];
 
   vacancies$: Observable<Vacancy[]> = this.route.data.pipe(map(r => r["data"]));
   subscriptions$: Subscription[] = [];
@@ -106,6 +107,10 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     const profileId$ = this.authService.profile.subscribe(profile => {
       this.profileId = profile.id;
     });
+
+    const expertRole = this.authService.profile.subscribe(profile => {
+      this.expertRole = profile.expert;
+    })
 
     this.projSubscribers$
       ?.pipe(take(1), withLatestFrom(this.authService.profile))
@@ -176,7 +181,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.projectNewsService
       .delete(this.route.snapshot.params["projectId"], newsId)
-      .subscribe(() => {});
+      .subscribe(() => { });
   }
 
   onLike(newsId: number) {
