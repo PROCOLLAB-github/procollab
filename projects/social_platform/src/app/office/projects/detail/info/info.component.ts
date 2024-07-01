@@ -41,6 +41,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
 import { User } from "@auth/models/user.model";
+import { profile } from "console";
 
 @Component({
   selector: "app-detail",
@@ -79,13 +80,17 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   projSubscribers$?: Observable<User[]> = this.route.parent?.data.pipe(map(r => r["data"][1]));
 
   profileId!: number;
-  expertRole: User['expert'];
+  isExpert!: boolean;
 
   vacancies$: Observable<Vacancy[]> = this.route.data.pipe(map(r => r["data"]));
   subscriptions$: Subscription[] = [];
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль проекта");
+
+    this.authService.getProfile().subscribe(profile => {
+      this.isExpert = !!profile.expert
+    });
 
     const news$ = this.projectNewsService
       .fetchNews(this.route.snapshot.params["projectId"])
@@ -107,10 +112,6 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     const profileId$ = this.authService.profile.subscribe(profile => {
       this.profileId = profile.id;
     });
-
-    const expertRole = this.authService.profile.subscribe(profile => {
-      this.expertRole = profile.expert;
-    })
 
     this.projSubscribers$
       ?.pipe(take(1), withLatestFrom(this.authService.profile))
