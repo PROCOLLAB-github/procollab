@@ -203,13 +203,7 @@
             ></ng-container>
             }
           </ul>
-
-          @if(profileId === project.leader){
-          <app-button>
-            <span>Добавить вакансию</span>
-            <i appIcon icon="plus" appSquare="20"></i>
-          </app-button>
-          } }
+          }
         </div>
         }
         <ng-template #vacanciesTemp let-vacancy>
@@ -228,11 +222,19 @@
             </p>
           </li>
         </ng-template>
+
         @if (vacanciesLength > 3) {
         <div class="read-more" (click)="readAllVacancies = !readAllVacancies">
           {{ readAllVacancies ? "Скрыть" : "Читать полностью" }}
         </div>
+
+        } @if(profileId === project.leader){
+        <app-button>
+          <span>Добавить вакансию</span>
+          <i appIcon icon="plus" appSquare="20"></i>
+        </app-button>
         }
+        
       </div>
       } @if (project.achievements.length) {
       <div class="achievements project__section project__achievements">
