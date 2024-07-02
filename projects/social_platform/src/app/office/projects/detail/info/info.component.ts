@@ -80,17 +80,12 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   projSubscribers$?: Observable<User[]> = this.route.parent?.data.pipe(map(r => r["data"][1]));
 
   profileId!: number;
-  isExpert!: boolean;
 
   vacancies$: Observable<Vacancy[]> = this.route.data.pipe(map(r => r["data"]));
   subscriptions$: Subscription[] = [];
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль проекта");
-
-    this.authService.getProfile().subscribe(profile => {
-      this.isExpert = !!profile.expert
-    });
 
     const news$ = this.projectNewsService
       .fetchNews(this.route.snapshot.params["projectId"])
