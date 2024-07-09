@@ -5,13 +5,14 @@ import { Program } from "@office/program/models/program.model";
 import { DayjsPipe } from "projects/core";
 import { IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { DatePipe } from "@angular/common";
 
 @Component({
   selector: "app-program-card",
   templateUrl: "./program-card.component.html",
   styleUrl: "./program-card.component.scss",
   standalone: true,
-  imports: [AvatarComponent, IconComponent, DayjsPipe],
+  imports: [AvatarComponent, IconComponent, DayjsPipe, DatePipe],
 })
 export class ProgramCardComponent implements OnInit {
   constructor() {}
