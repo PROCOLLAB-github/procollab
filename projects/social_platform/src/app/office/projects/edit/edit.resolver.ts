@@ -21,7 +21,7 @@ export const ProjectEditResolver: ResolveFn<[Project, Vacancy[], Invite[]]> = (
 
   return forkJoin<[Project, Vacancy[], Invite[]]>([
     projectService.getOne(projectId),
-    vacancyService.getForProject(projectId),
+    vacancyService.getForProject(0, 20, projectId),
     inviteService.getByProject(projectId),
   ]);
 };

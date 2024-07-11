@@ -9,5 +9,5 @@ export const ProjectInfoResolver: ResolveFn<Vacancy[]> = (route: ActivatedRouteS
   const vacancyService = inject(VacancyService);
   const projectId = Number(route.paramMap.get("projectId"));
 
-  return vacancyService.getForProject(projectId);
+  return vacancyService.getForProject(0, 20, projectId);
 };

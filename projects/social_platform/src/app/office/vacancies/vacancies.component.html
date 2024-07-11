@@ -2,12 +2,12 @@
 
 <div class="page">
   <div class="page__feed">
-    @for (item of feedItems(); track $index) { @if (item.typeModel === 'vacancy') {
+    @for (vacancy of vacanciesList(); track $index) {
     <app-open-vacancy
       class="page__item"
-      [attr.data-id]="item.content.id"
-      [feedItem]="item.content"
+      [attr.data-id]="vacancy.id"
+      [feedItem]="vacancy"
     ></app-open-vacancy>
-    }}
+    }
   </div>
 </div>
