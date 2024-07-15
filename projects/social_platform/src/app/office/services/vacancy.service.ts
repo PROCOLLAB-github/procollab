@@ -15,7 +15,15 @@ export class VacancyService {
   constructor(private readonly apiService: ApiService) { }
 
   getForProject(offset: number, limit: number, projectId?: number): Observable<Vacancy[]> {
-    const params = new HttpParams({ fromObject: { project_id: projectId ?? "", limit: limit, offset: offset } })
+    const params = new HttpParams()
+
+    params.set('limit', limit);
+    params.set('offset', offset);
+
+    if (projectId) {
+      params.set('project_id', projectId);
+    }
+
     return this.apiService
       .get<Vacancy[]>("/vacancies/", params)
       .pipe(map(vacancies => plainToInstance(Vacancy, vacancies)));
