@@ -1,27 +1,27 @@
 /** @format */
 
+import { HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { WebsocketService } from "@core/services/websocket.service";
-import { BehaviorSubject, map, Observable } from "rxjs";
-import { ApiService } from "projects/core";
+import { ApiPagination } from "@models/api-pagination.model";
+import { ChatFile, ChatMessage } from "@models/chat-message.model";
 import {
-  ChatEventType,
-  DeleteChatMessageDto,
-  EditChatMessageDto,
-  OnChangeStatus,
-  OnChatMessageDto,
-  OnDeleteChatMessageDto,
-  OnEditChatMessageDto,
-  OnReadChatMessageDto,
-  ReadChatMessageDto,
-  SendChatMessageDto,
-  TypingInChatDto,
-  TypingInChatEventDto,
+    ChatEventType,
+    DeleteChatMessageDto,
+    EditChatMessageDto,
+    OnChangeStatus,
+    OnChatMessageDto,
+    OnDeleteChatMessageDto,
+    OnEditChatMessageDto,
+    OnReadChatMessageDto,
+    ReadChatMessageDto,
+    SendChatMessageDto,
+    TypingInChatDto,
+    TypingInChatEventDto,
 } from "@models/chat.model";
 import { plainToInstance } from "class-transformer";
-import { HttpParams } from "@angular/common/http";
-import { ChatFile, ChatMessage } from "@models/chat-message.model";
-import { ApiPagination } from "@models/api-pagination.model";
+import { ApiService, TokenService } from "projects/core";
+import { BehaviorSubject, map, Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -29,13 +29,15 @@ import { ApiPagination } from "@models/api-pagination.model";
 export class ChatService {
   constructor(
     private readonly websocketService: WebsocketService,
-    private readonly apiService: ApiService
+    private readonly apiService: ApiService,
+    private readonly tokenService: TokenService
   ) {}
 
   public connect(): Observable<void> {
-    const accessToken = localStorage.getItem("accessToken");
+    const tokens = this.tokenService.getTokens();
+    if (!tokens) throw new Error("No token provided");
 
-    return this.websocketService.connect(`/chat/?token=${accessToken}`);
+    return this.websocketService.connect(`/chat/?token=${tokens.access}`);
   }
 
   public userOnlineStatusCache = new BehaviorSubject<Record<number, boolean>>({});
