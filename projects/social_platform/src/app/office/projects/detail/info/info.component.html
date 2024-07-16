@@ -229,12 +229,11 @@
         </div>
 
         } @if(profileId === project.leader){
-        <app-button>
+        <app-button [routerLink]="['/office/projects/', project.id, 'edit']">
           <span>Добавить вакансию</span>
           <i appIcon icon="plus" appSquare="20"></i>
         </app-button>
         }
-        
       </div>
       } @if (project.achievements.length) {
       <div class="achievements project__section project__achievements">
