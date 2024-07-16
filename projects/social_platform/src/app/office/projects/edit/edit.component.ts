@@ -180,7 +180,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         concatMap(() => this.route.data),
         map(d => d["data"])
       )
-      .subscribe(([project, vacancies, invites]: [Project, ApiPagination<Vacancy>, Invite[]]) => {
+      .subscribe(([project, vacancies, invites]: [Project, Vacancy[], Invite[]]) => {
         this.projectForm.patchValue({
           imageAddress: project.imageAddress,
           name: project.name,
@@ -208,8 +208,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
         project.links && project.links.forEach(l => this.addLink(l));
 
-        console.log(vacancies)
-        this.vacancies = vacancies.results;
+        this.vacancies = vacancies;
 
         this.invites = invites;
 

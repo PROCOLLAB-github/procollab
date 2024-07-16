@@ -7,6 +7,7 @@ import { Vacancy } from "@models/vacancy.model";
 import { plainToInstance } from "class-transformer";
 import { VacancyResponse } from "@models/vacancy-response.model";
 import { HttpParams } from "@angular/common/http";
+import { ApiPagination } from "@office/models/api-pagination.model";
 
 @Injectable({
   providedIn: "root",
@@ -14,10 +15,10 @@ import { HttpParams } from "@angular/common/http";
 export class VacancyService {
   constructor(private readonly apiService: ApiService) {}
 
-  getForProject(projectId: number): Observable<Vacancy[]> {
+  getForProject(projectId: number) {
     return this.apiService
-      .get<Vacancy[]>("/vacancies/", new HttpParams({ fromObject: { project_id: projectId } }))
-      .pipe(map(vacancies => plainToInstance(Vacancy, vacancies)));
+      .get<ApiPagination<Vacancy>>("/vacancies/", new HttpParams({ fromObject: { project_id: projectId } }))
+      .pipe(map(vacancies => plainToInstance(Vacancy, vacancies.results)));
   }
 
   postVacancy(
