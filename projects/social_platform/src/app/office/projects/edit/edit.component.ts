@@ -3,20 +3,20 @@
 import { AsyncPipe } from "@angular/common";
 import { HttpErrorResponse } from "@angular/common/http";
 import {
-    AfterViewInit,
-    ChangeDetectorRef,
-    Component,
-    OnDestroy,
-    OnInit,
-    signal,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  signal,
 } from "@angular/core";
 import {
-    AbstractControl,
-    FormArray,
-    FormBuilder,
-    FormGroup,
-    ReactiveFormsModule,
-    Validators,
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
 } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ErrorMessage } from "@error/models/error-message";
@@ -214,6 +214,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.cdRef.detectChanges();
       });
+
+    this.editingStep = this.route.snapshot.paramMap.get('editingStep') as 'team';
   }
 
   programTagsOptions: SelectComponent["options"] = [];

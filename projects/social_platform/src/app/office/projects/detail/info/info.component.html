@@ -222,14 +222,15 @@
             </p>
           </li>
         </ng-template>
-
-        @if (vacanciesLength > 3) {
+        v @if (vacanciesLength > 3) {
         <div class="read-more" (click)="readAllVacancies = !readAllVacancies">
           {{ readAllVacancies ? "Скрыть" : "Читать полностью" }}
         </div>
 
         } @if(profileId === project.leader){
-        <app-button [routerLink]="['/office/projects/', project.id, 'edit']">
+        <app-button
+          [routerLink]="['/office/projects/', project.id, 'edit', { editingStep: 'team' }]"
+        >
           <span>Добавить вакансию</span>
           <i appIcon icon="plus" appSquare="20"></i>
         </app-button>
