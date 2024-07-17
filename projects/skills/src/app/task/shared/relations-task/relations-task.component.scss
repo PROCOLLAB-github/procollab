@@ -9,6 +9,7 @@
 
   &__description {
     margin-bottom: 20px;
+    white-space: pre-wrap;
 
     @include typography.body-14;
   }
