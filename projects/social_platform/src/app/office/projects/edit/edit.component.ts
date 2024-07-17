@@ -215,7 +215,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cdRef.detectChanges();
       });
 
-    this.editingStep = this.route.snapshot.paramMap.get('editingStep') as 'team';
+    this.editingStep = this.route.snapshot.paramMap.get('editingStep') as 'team' | 'main' | 'achievements' || 'main';
   }
 
   programTagsOptions: SelectComponent["options"] = [];
