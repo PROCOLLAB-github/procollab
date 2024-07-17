@@ -227,8 +227,12 @@
           {{ readAllVacancies ? "Скрыть" : "Читать полностью" }}
         </div>
 
-        } @if(profileId === project.leader){
-        <a [routerLink]="['/office/projects/', project.id, 'edit', { editingStep: 'team' }]">
+        }
+        @if(profileId === project.leader){
+        <a
+          [routerLink]="['/office/projects/', project.id, 'edit']"
+          [queryParams]="{ editingStep: 'team' }"
+        >
           <app-button>
             <span>Добавить вакансию</span>
             <i appIcon icon="plus" appSquare="20"></i>
