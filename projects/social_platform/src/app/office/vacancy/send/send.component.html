@@ -66,6 +66,19 @@
           </div>
           }
         </fieldset>
+        } @if (sendForm.get("accompanyingFile"); as file) {
+        <fieldset>
+          <label for="cv" class="field-label"
+            >Сюда ты можешь прикрепить своё портфолио или другой файл.</label
+          >
+          <app-upload-file id="cv" formControlName="accompanyingFile" accept=".pdf">
+            <ng-container emptyPlaceholder>
+              <p class="text-body-14">
+                Прикрепить файл
+              </p>
+            </ng-container>
+          </app-upload-file>
+        </fieldset>
         }
         <app-button [loader]="sendFormIsSubmitting" type="submit" class="form__submit">
           Отправить отклик
