@@ -1,7 +1,9 @@
 <!-- @format -->
 
 <div class="root">
-  @if (!value) {
+  @if (loading) {
+  <p class="control text-body-bold-18">Загрузка...</p>
+  } @else if (!value) {
   <div class="control" [class.control--error]="error">
     <input [id]="controlId" hidden type="file" [accept]="accept" (change)="onUpdate($event)" />
     <label [for]="controlId">
