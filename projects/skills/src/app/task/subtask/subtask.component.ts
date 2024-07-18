@@ -53,8 +53,8 @@ export class SubtaskComponent implements OnInit {
   subTaskId = toSignal(
     this.route.params.pipe(
       map(r => r["subTaskId"]),
-      map(Number)
-    )
+      map(Number),
+    ),
   );
 
   // stepData = signal<StepType | null>(null);
@@ -79,7 +79,7 @@ export class SubtaskComponent implements OnInit {
         }),
         concatMap(subTaskId => {
           return this.taskService.fetchStep(subTaskId, this.route.snapshot.queryParams["type"]);
-        })
+        }),
       )
       .subscribe({
         next: step => {

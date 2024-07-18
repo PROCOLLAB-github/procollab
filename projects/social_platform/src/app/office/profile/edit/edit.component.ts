@@ -75,7 +75,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly specsService: SpecializationsService,
     private readonly skillsService: SkillsService,
     private readonly router: Router,
-    private readonly navService: NavService
+    private readonly navService: NavService,
   ) {
     this.profileForm = this.fb.group({
       firstName: ["", [Validators.required]],
@@ -109,7 +109,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       .get("avatar")
       ?.valueChanges.pipe(
         skip(1),
-        concatMap(url => this.authService.saveAvatar(url))
+        concatMap(url => this.authService.saveAvatar(url)),
       )
       .subscribe(noop);
 
@@ -139,7 +139,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
       profile.achievements.length &&
         profile.achievements?.forEach(achievement =>
-          this.addAchievement(achievement.id, achievement.title, achievement.status)
+          this.addAchievement(achievement.id, achievement.title, achievement.status),
         );
 
       profile.links.length && profile.links.forEach(l => this.addLink(l));
@@ -149,7 +149,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         profile[this.userTypeMap[profile.userType]].preferredIndustries.forEach(
-          (industry: string) => this.addPreferredIndustry(industry)
+          (industry: string) => this.addPreferredIndustry(industry),
         );
 
         this.cdref.detectChanges();
@@ -224,7 +224,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   errorMessage = ErrorMessage;
 
   roles: Observable<SelectComponent["options"]> = this.authService.changeableRoles.pipe(
-    map(roles => roles.map(role => ({ id: role.id, value: role.id, label: role.name })))
+    map(roles => roles.map(role => ({ id: role.id, value: role.id, label: role.name }))),
   );
 
   profileFormSubmitting = false;
@@ -236,7 +236,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         title: [title ?? "", [Validators.required]],
         status: [status ?? "", [Validators.required]],
         id: [id],
-      })
+      }),
     );
   }
 

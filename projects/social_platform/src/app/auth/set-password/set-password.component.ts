@@ -21,14 +21,14 @@ export class SetPasswordComponent implements OnInit {
     private readonly validationService: ValidationService,
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
   ) {
     this.passwordForm = this.fb.group(
       {
         password: ["", [Validators.required, Validators.minLength(8)]],
         passwordRepeated: ["", [Validators.required]],
       },
-      { validators: [validationService.useMatchValidator("password", "passwordRepeated")] }
+      { validators: [validationService.useMatchValidator("password", "passwordRepeated")] },
     );
   }
 

@@ -1,117 +1,118 @@
 <!-- @format -->
 
 @if (program) {
-<main class="project">
-  <section class="program__main">
-    <div class="info program__section program__info">
-      <div class="info__cover">
-        <img class="info__cover" [src]="program.coverImageAddress" alt="cover" />
-        <app-avatar
-          class="info__avatar"
-          [url]="program.imageAddress"
-          [hasBorder]="true"
-          [size]="140"
-        ></app-avatar>
-      </div>
-      <div class="info__body">
-        <div class="info__text">
-          <h1 class="info__title">{{ program.name }}</h1>
-          <div class="info__row">
-            <div class="info__tag text-body-14">#{{ program.tag }}</div>
-            <div class="info__location">
-              <i appIcon icon="geo-point" appSquare="10"></i>
-              {{ program.city }}
+  <main class="project">
+    <section class="program__main">
+      <div class="info program__section program__info">
+        <div class="info__cover">
+          <img class="info__cover" [src]="program.coverImageAddress" alt="cover" />
+          <app-avatar
+            class="info__avatar"
+            [url]="program.imageAddress"
+            [hasBorder]="true"
+            [size]="140"
+          ></app-avatar>
+        </div>
+        <div class="info__body">
+          <div class="info__text">
+            <h1 class="info__title">{{ program.name }}</h1>
+            <div class="info__row">
+              <div class="info__tag text-body-14">#{{ program.tag }}</div>
+              <div class="info__location">
+                <i appIcon icon="geo-point" appSquare="10"></i>
+                {{ program.city }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="info__actions">
-          <a
-            class="info__presentation"
-            [href]="program.presentationAddress"
-            download=""
-            target="_blank"
-          >
-            <app-button color="grey" customTypographyClass="text-body-12">
-              {{
-                program.name.includes("Технолидеры Будущего")
-                  ? "Каталог лучших стартапов 2022/23"
-                  : "Положение программы"
-              }}
-              <i appIcon class="info__presentation-icon" icon="file_pdf" appSquare="16"></i>
-            </app-button>
-          </a>
-          @if (!program.isUserMember && !registerDateExpired) {
-          <a [routerLink]="['/office/program', program.id, 'register']">
-            <app-button customTypographyClass="text-body-12">Зарегистрироваться</app-button>
-          </a>
-          }
+          <div class="info__actions">
+            <a
+              class="info__presentation"
+              [href]="program.presentationAddress"
+              download=""
+              target="_blank"
+            >
+              <app-button color="grey" customTypographyClass="text-body-12">
+                {{
+                  program.name.includes("Технолидеры Будущего")
+                    ? "Каталог лучших стартапов 2022/23"
+                    : "Положение программы"
+                }}
+                <i appIcon class="info__presentation-icon" icon="file_pdf" appSquare="16"></i>
+              </app-button>
+            </a>
+            @if (!program.isUserMember && !registerDateExpired) {
+              <a [routerLink]="['/office/program', program.id, 'register']">
+                <app-button customTypographyClass="text-body-12">Зарегистрироваться</app-button>
+              </a>
+            }
+          </div>
         </div>
       </div>
-    </div>
-    @if (!program.isUserMember) {
-    <div class="program__advertisement">
-      <img [src]="program.advertisementImageAddress" [alt]="program.name" />
-    </div>
-    } @else {
-    <div class="program__content">
-      <div class="about program__about">
-        <div class="about__head">
-          <h3 class="text-bold-body-16 about__title">О программе</h3>
-          <div class="about__views">
+      @if (!program.isUserMember) {
+        <div class="program__advertisement">
+          <img [src]="program.advertisementImageAddress" [alt]="program.name" />
+        </div>
+      } @else {
+        <div class="program__content">
+          <div class="about program__about">
+            <div class="about__head">
+              <h3 class="text-bold-body-16 about__title">О программе</h3>
+              <div class="about__views">
+                <i appIcon icon="eye" appSquare="20"></i>
+                <span>{{ program.viewsCount }}</span>
+              </div>
+            </div>
+            @if (program.description) {
+              <div class="text-body-14 about__text">
+                <p #descEl [innerHTML]="program.description | parseLinks | parseBreaks"></p>
+                @if (descriptionExpandable) {
+                  <div
+                    class="read-more"
+                    (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+                  >
+                    {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+                  </div>
+                }
+              </div>
+            }
+          </div>
+          <div class="news">
+            @for (n of news; track n.id) {
+              <app-program-news-card
+                class="news__item"
+                [attr.data-id]="n.id"
+                [newsItem]="n"
+                (like)="onLike($event)"
+              ></app-program-news-card>
+            }
+          </div>
+        </div>
+      }
+      <aside class="program__aside">
+        @if (program.isUserMember && program.links.length) {
+          <div class="links program__section">
+            <h3 class="links__title text-bold-body-16">Контакты</h3>
+            <ul>
+              @for (link of program.links; track $index) {
+                <li class="contact-link links__item text-body-12">
+                  @if (link | userLinks; as l) {
+                    <a class="contact-link__link" target="_blank" [href]="link">
+                      <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
+                      <span>{{ l.tag }}</span>
+                    </a>
+                  }
+                </li>
+              }
+            </ul>
+          </div>
+        }
+        @if (program.isUserMember) {
+          <div class="text-body-12 program__views-desktop">
             <i appIcon icon="eye" appSquare="20"></i>
             <span>{{ program.viewsCount }}</span>
           </div>
-        </div>
-        @if (program.description) {
-        <div class="text-body-14 about__text">
-          <p #descEl [innerHTML]="program.description | parseLinks | parseBreaks"></p>
-          @if (descriptionExpandable) {
-          <div
-            class="read-more"
-            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
-          >
-            {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
-          </div>
-          }
-        </div>
         }
-      </div>
-      <div class="news">
-        @for (n of news; track n.id) {
-        <app-program-news-card
-          class="news__item"
-          [attr.data-id]="n.id"
-          [newsItem]="n"
-          (like)="onLike($event)"
-        ></app-program-news-card>
-        }
-      </div>
-    </div>
-    }
-    <aside class="program__aside">
-      @if (program.isUserMember && program.links.length) {
-      <div class="links program__section">
-        <h3 class="links__title text-bold-body-16">Контакты</h3>
-        <ul>
-          @for (link of program.links; track $index) {
-          <li class="contact-link links__item text-body-12">
-            @if (link | userLinks; as l) {
-            <a class="contact-link__link" target="_blank" [href]="link">
-              <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
-              <span>{{ l.tag }}</span>
-            </a>
-            }
-          </li>
-          }
-        </ul>
-      </div>
-      } @if (program.isUserMember) {
-      <div class="text-body-12 program__views-desktop">
-        <i appIcon icon="eye" appSquare="20"></i>
-        <span>{{ program.viewsCount }}</span>
-      </div>
-      }
-    </aside>
-  </section>
-</main>
+      </aside>
+    </section>
+  </main>
 }

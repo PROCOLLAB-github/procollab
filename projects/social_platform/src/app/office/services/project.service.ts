@@ -21,7 +21,7 @@ export class ProjectService {
     return this.apiService.get<[number, string][]>("/projects/steps/").pipe(
       map(steps => steps.map(step => ({ id: step[0], name: step[1] }))),
       map(steps => plainToInstance(ProjectStep, steps)),
-      tap(steps => this.steps$.next(steps))
+      tap(steps => this.steps$.next(steps)),
     );
   }
 

@@ -19,7 +19,7 @@ export class ProjectResponsesComponent implements OnInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly vacancyService: VacancyService,
-    private readonly navService: NavService
+    private readonly navService: NavService,
   ) {}
 
   ngOnInit(): void {
@@ -38,7 +38,7 @@ export class ProjectResponsesComponent implements OnInit, OnDestroy {
 
   projectId: Observable<number> = this.route.params.pipe(
     map(r => r["projectId"]),
-    map(Number)
+    map(Number),
   );
 
   responses$?: Subscription;

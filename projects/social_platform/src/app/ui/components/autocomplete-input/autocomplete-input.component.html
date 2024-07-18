@@ -14,48 +14,50 @@
       [class.field__input--no-icon]="!searchIcon"
       [class.field__input--error]="error"
     />
-    @if (fieldToDisplayMode === 'chip' && value()) {
-    <div class="field__chip">
-      <span class="text-body-14">{{ $any(value())[fieldToDisplay] || value() }}</span>
-      <i appIcon icon="basket" appSquare="18" (click)="onClearValue($event)"></i>
-    </div>
+    @if (fieldToDisplayMode === "chip" && value()) {
+      <div class="field__chip">
+        <span class="text-body-14">{{ $any(value())[fieldToDisplay] || value() }}</span>
+        <i appIcon icon="basket" appSquare="18" (click)="onClearValue($event)"></i>
+      </div>
     }
   </div>
   <div class="field__icons">
     @if (loading() && !slimVersion) {
-    <app-loader
-      class="field__loading-icon"
-      type="circle"
-      color="dark-grey"
-      size="24px"
-    ></app-loader>
-    } @if (searchIcon && slimVersion) {
-    <i appIcon [icon]="searchIcon" appSquare="20"></i>
-    } @if (searchIcon && !slimVersion) {
-    <i appIcon [icon]="searchIcon" appSquare="32"></i>
+      <app-loader
+        class="field__loading-icon"
+        type="circle"
+        color="dark-grey"
+        size="24px"
+      ></app-loader>
+    }
+    @if (searchIcon && slimVersion) {
+      <i appIcon [icon]="searchIcon" appSquare="20"></i>
+    }
+    @if (searchIcon && !slimVersion) {
+      <i appIcon [icon]="searchIcon" appSquare="32"></i>
     }
   </div>
   @if (isOpen()) {
-  <div class="field__dropdown" [@dropdownAnimation]>
-    @if (noResults()) {
-    <ul class="field__dropdown--no-results">
-      <li class="text-body-14 field__option" [class.field__option-slim]="slimVersion">
-        {{ "Ничего не найдено :(" }}
-      </li>
-    </ul>
-    } @else {
-    <ul class="field__dropdown--options">
-      @for (suggestion of suggestions; track $index) {
-      <li
-        class="text-body-14 field__option"
-        [class.field__option-slim]="slimVersion"
-        (click)="onUpdate($event, suggestion)"
-      >
-        {{ fieldToDisplay ? suggestion[fieldToDisplay] : suggestion }}
-      </li>
+    <div class="field__dropdown" [@dropdownAnimation]>
+      @if (noResults()) {
+        <ul class="field__dropdown--no-results">
+          <li class="text-body-14 field__option" [class.field__option-slim]="slimVersion">
+            {{ "Ничего не найдено :(" }}
+          </li>
+        </ul>
+      } @else {
+        <ul class="field__dropdown--options">
+          @for (suggestion of suggestions; track $index) {
+            <li
+              class="text-body-14 field__option"
+              [class.field__option-slim]="slimVersion"
+              (click)="onUpdate($event, suggestion)"
+            >
+              {{ fieldToDisplay ? suggestion[fieldToDisplay] : suggestion }}
+            </li>
+          }
+        </ul>
       }
-    </ul>
-    }
-  </div>
+    </div>
   }
 </div>

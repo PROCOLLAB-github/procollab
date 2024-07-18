@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit {
     private readonly notificationService: NotificationService,
     public readonly authService: AuthService,
     private readonly inviteService: InviteService,
-    private readonly router: Router
+    private readonly router: Router,
   ) {}
 
   @Input() invites: Invite[] = [];

@@ -9,14 +9,14 @@
     'button--outline': appearance === 'outline',
     'button--green': color === 'green',
     'button--grey': color === 'grey',
-    'button--gold': color === 'gold'
+    'button--gold': color === 'gold',
   }"
 >
   @if (loader) {
-  <app-loader [color]="color === 'grey' ? 'black' : 'white'"></app-loader>
+    <app-loader [color]="color === 'grey' ? 'black' : 'white'"></app-loader>
   } @else {
-  <ng-container>
-    <ng-content></ng-content>
-  </ng-container>
+    <ng-container>
+      <ng-content></ng-content>
+    </ng-container>
   }
 </button>

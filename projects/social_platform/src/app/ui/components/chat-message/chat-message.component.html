@@ -22,29 +22,29 @@
           {{ chatMessage.author.firstName }} {{ chatMessage.author.lastName }}
         </div>
         <div class="message__time text-body-14">
-          {{ chatMessage.createdAt | dayjs: "format":"HH:mm" }}
+          {{ chatMessage.createdAt | dayjs: "format" : "HH:mm" }}
         </div>
       </div>
       @if (chatMessage.replyTo) {
-      <div class="message__reply reply">
-        <div class="reply__name text-bold-body-16">
-          {{ chatMessage.replyTo.author.firstName }} {{ chatMessage.replyTo.author.lastName }}
+        <div class="message__reply reply">
+          <div class="reply__name text-bold-body-16">
+            {{ chatMessage.replyTo.author.firstName }} {{ chatMessage.replyTo.author.lastName }}
+          </div>
+          <p class="reply__message text-body-1">
+            {{ chatMessage.replyTo.text }}
+          </p>
         </div>
-        <p class="reply__message text-body-1">
-          {{ chatMessage.replyTo.text }}
-        </p>
-      </div>
       }
       <ul class="message__files">
         @for (file of chatMessage.files; track chatMessage.id) {
-        <li class="message__file">
-          <app-file-item
-            [name]="file.name"
-            [link]="file.link"
-            [type]="file.extension"
-            [size]="file.size"
-          ></app-file-item>
-        </li>
+          <li class="message__file">
+            <app-file-item
+              [name]="file.name"
+              [link]="file.link"
+              [type]="file.extension"
+              [size]="file.size"
+            ></app-file-item>
+          </li>
         }
       </ul>
       <div class="message__content text-body-14">{{ chatMessage.text }}</div>
@@ -59,21 +59,24 @@
   </div>
 </div>
 @if (authService.profile | async; as profile) {
-<ul
-  #contextMenu
-  class="message__contextmenu contextmenu"
-  [style.opacity]="isOpen ? 1 : 0"
-  [style.pointer-events]="isOpen ? 'auto' : 'none'"
->
-  <li class="contextmenu__item text-body-14" (click)="onCopyContent($event)">Скопировать</li>
-  <li class="contextmenu__item text-body-14" (click)="onReply($event)">Ответить</li>
-  @if (profile.id === chatMessage.author.id) {
-  <ng-container>
-    <li class="contextmenu__item text-body-14" (click)="onEdit($event)">Редактировать</li>
-    <li class="contextmenu__item contextmenu__item--red text-body-14" (click)="onDelete($event)">
-      Удалить
-    </li>
-  </ng-container>
-  }
-</ul>
+  <ul
+    #contextMenu
+    class="message__contextmenu contextmenu"
+    [style.opacity]="isOpen ? 1 : 0"
+    [style.pointer-events]="isOpen ? 'auto' : 'none'"
+  >
+    <li class="contextmenu__item text-body-14" (click)="onCopyContent($event)">Скопировать</li>
+    <li class="contextmenu__item text-body-14" (click)="onReply($event)">Ответить</li>
+    @if (profile.id === chatMessage.author.id) {
+      <ng-container>
+        <li class="contextmenu__item text-body-14" (click)="onEdit($event)">Редактировать</li>
+        <li
+          class="contextmenu__item contextmenu__item--red text-body-14"
+          (click)="onDelete($event)"
+        >
+          Удалить
+        </li>
+      </ng-container>
+    }
+  </ul>
 }

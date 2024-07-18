@@ -2,31 +2,34 @@
 
 <div class="file" [class.file--loading]="loading" [class.file--error]="error">
   @if (!error) {
-  <ng-container>
-    <div class="file__icon">
-      <i *ngIf="type" appIcon [icon]="'file_' + (type | fileType)" appSquare="32"></i>
-    </div>
-    <div class="file__info">
-      <div class="file__name text-bold-body-14">
-        {{ name }}
+    <ng-container>
+      <div class="file__icon">
+        <i *ngIf="type" appIcon [icon]="'file_' + (type | fileType)" appSquare="32"></i>
       </div>
-      <div class="file__meta text-body-14">
-        {{ type | uppercase }} {{ size | formatedFileSize }}
+      <div class="file__info">
+        <div class="file__name text-bold-body-14">
+          {{ name }}
+        </div>
+        <div class="file__meta text-body-14">
+          {{ type | uppercase }} {{ size | formatedFileSize }}
+        </div>
       </div>
-    </div>
-  </ng-container>
+    </ng-container>
   } @else {
-  <div class="file__error">
-    <i appIcon icon="color-error" appSquare="20"></i>
-    <span class="text-body-12">{{ error }}</span>
-  </div>
-  } @if (loading && !error) {
-  <app-loader class="file__right" type="circle" size="40px" color="accent"></app-loader>
-  } @if (!loading && !error) {
-  <div class="file__right">
-    <i appIcon icon="basket" appSquare="25" (click)="delete.emit()"></i>
-  </div>
-  } @if (error) {
-  <i appIcon icon="reload" appSquare="25" class="file__right" (click)="retry.emit()"></i>
+    <div class="file__error">
+      <i appIcon icon="color-error" appSquare="20"></i>
+      <span class="text-body-12">{{ error }}</span>
+    </div>
+  }
+  @if (loading && !error) {
+    <app-loader class="file__right" type="circle" size="40px" color="accent"></app-loader>
+  }
+  @if (!loading && !error) {
+    <div class="file__right">
+      <i appIcon icon="basket" appSquare="25" (click)="delete.emit()"></i>
+    </div>
+  }
+  @if (error) {
+    <i appIcon icon="reload" appSquare="25" class="file__right" (click)="retry.emit()"></i>
   }
 </div>

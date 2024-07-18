@@ -73,8 +73,8 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly projectNewsService: ProjectNewsService,
     private readonly subscriptionService: SubscriptionService,
     private readonly fb: FormBuilder,
-    private readonly cdRef: ChangeDetectorRef
-  ) { }
+    private readonly cdRef: ChangeDetectorRef,
+  ) {}
 
   project$?: Observable<Project> = this.route.parent?.data.pipe(map(r => r["data"][0]));
   projSubscribers$?: Observable<User[]> = this.route.parent?.data.pipe(map(r => r["data"][1]));
@@ -177,7 +177,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.projectNewsService
       .delete(this.route.snapshot.params["projectId"], newsId)
-      .subscribe(() => { });
+      .subscribe(() => {});
   }
 
   onLike(newsId: number) {
@@ -229,7 +229,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   openSupport = false;
   isInProject = this.project$?.pipe(
     concatMap(project => forkJoin([of(project), this.authService.profile.pipe(take(1))])),
-    map(([project, profile]) => project.collaborators.map(c => c.userId).includes(profile.id))
+    map(([project, profile]) => project.collaborators.map(c => c.userId).includes(profile.id)),
   );
 
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {

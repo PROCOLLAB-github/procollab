@@ -19,7 +19,7 @@ import { SlicePipe } from "@angular/common";
     },
   ],
   standalone: true,
-  imports: [IconComponent, SlicePipe]
+  imports: [IconComponent, SlicePipe],
 })
 export class UploadFileComponent implements OnInit, ControlValueAccessor {
   constructor(private fileService: FileService) {}

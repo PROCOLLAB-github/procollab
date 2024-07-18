@@ -18,7 +18,7 @@ describe("ProjectsMyResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      ProjectsMyResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+      ProjectsMyResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
     );
     expect(result).toBeTruthy();
   });

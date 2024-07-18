@@ -2,12 +2,12 @@
 
 <div class="programs">
   @if (programs$ | async; as programs) {
-  <div class="programs__list">
-    @for (p of programs; track p.id) {
-    <a [routerLink]="['/office/program', p.id]">
-      <app-program-card [program]="p"></app-program-card>
-    </a>
-    }
-  </div>
+    <div class="programs__list">
+      @for (p of programs; track p.id) {
+        <a [routerLink]="['/office/program', p.id]">
+          <app-program-card [program]="p"></app-program-card>
+        </a>
+      }
+    </div>
   }
 </div>

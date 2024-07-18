@@ -24,7 +24,7 @@ export class ProfileService {
 
   editAchievement(
     achievementId: string,
-    achievement: Omit<Achievement, "id">
+    achievement: Omit<Achievement, "id">,
   ): Observable<Achievement> {
     return this.apiService.put(`/auth/users/achievement/${achievementId}/`, achievement);
   }

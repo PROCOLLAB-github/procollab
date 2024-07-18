@@ -37,7 +37,7 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService,
     private readonly modalService: ModalService,
-    private readonly chatService: ChatService
+    private readonly chatService: ChatService,
   ) {}
 
   ngOnInit(): void {
@@ -141,10 +141,10 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
       .pipe(
         map(typingEvent =>
           this.project?.collaborators.find(
-            collaborator => collaborator.userId === typingEvent.userId
-          )
+            collaborator => collaborator.userId === typingEvent.userId,
+          ),
         ),
-        filter(Boolean)
+        filter(Boolean),
       )
       .subscribe(person => {
         if (
@@ -206,13 +206,13 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
       .loadMessages(
         Number(this.route.parent?.snapshot.paramMap.get("projectId")),
         this.messages.length > 0 ? this.messages.length : 0,
-        this.messagesPerFetch
+        this.messagesPerFetch,
       )
       .pipe(
         tap(messages => {
           this.messages = messages.results.reverse().concat(this.messages);
           this.messagesTotalCount = messages.count;
-        })
+        }),
       );
   }
 

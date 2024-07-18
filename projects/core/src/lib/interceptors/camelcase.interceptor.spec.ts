@@ -8,7 +8,7 @@ describe("CamelcaseInterceptor", () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
       providers: [CamelcaseInterceptor],
-    })
+    }),
   );
 
   it("should be created", () => {

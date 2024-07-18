@@ -22,10 +22,10 @@
         placeholder="Название специальности"
         formControlName="speciality"
       ></app-autocomplete-input>
-      @if (stageForm.controls['speciality'] | controlError) {
-      <div class="text-body-14 error">
-        {{ errorMessage.VALIDATION_REQUIRED }}
-      </div>
+      @if (stageForm.controls["speciality"] | controlError) {
+        <div class="text-body-14 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
       }
     </section>
     <section class="content__section content__right">
@@ -33,13 +33,13 @@
       <div class="content__specs-groups">
         <ul class="content__specs-groups-list">
           @for (spec of nestedSpecializations$ | async; track spec.id) {
-          <li class="content__specs-groups-list-item">
-            <app-specializations-group
-              [title]="spec.name"
-              [options]="spec.specializations"
-              (selectOption)="onSelectSpec($event)"
-            ></app-specializations-group>
-          </li>
+            <li class="content__specs-groups-list-item">
+              <app-specializations-group
+                [title]="spec.name"
+                [options]="spec.specializations"
+                (selectOption)="onSelectSpec($event)"
+              ></app-specializations-group>
+            </li>
           }
         </ul>
       </div>

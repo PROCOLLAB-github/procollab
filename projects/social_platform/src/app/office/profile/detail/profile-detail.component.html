@@ -1,112 +1,115 @@
 <!-- @format -->
 
 @if (user$ | async; as user) {
-<div class="profile">
-  <section class="profile__bar">
-    @if (loggedUserId$ | async; as loggedUserId) {
-    <app-bar
-      class="bar"
-      [backHave]="true"
-      [links]="
-          [
-              {
-                link: '/office/profile' + '/' + user.id.toString(),
-                linkText: user.id === loggedUserId ? 'Моя страница' : 'Станица пользователя',
-                isRouterLinkActiveOptions: true,
-              },
+  <div class="profile">
+    <section class="profile__bar">
+      @if (loggedUserId$ | async; as loggedUserId) {
+        <app-bar
+          class="bar"
+          [backHave]="true"
+          [links]="[
+            {
+              link: '/office/profile' + '/' + user.id.toString(),
+              linkText: user.id === loggedUserId ? 'Моя страница' : 'Станица пользователя',
+              isRouterLinkActiveOptions: true,
+            },
 
-               {
-                link: '/office/profile' + '/' + user.id.toString() + '/' + 'projects',
-                linkText:'Проекты',
-                isRouterLinkActiveOptions: false
-              },
-            ]
-      "
-    ></app-bar>
-    } @else {
-    <app-bar [backHave]="true" [links]="[]"></app-bar>
-    }
-  </section>
+            {
+              link: '/office/profile' + '/' + user.id.toString() + '/' + 'projects',
+              linkText: 'Проекты',
+              isRouterLinkActiveOptions: false,
+            },
+          ]"
+        ></app-bar>
+      } @else {
+        <app-bar [backHave]="true" [links]="[]"></app-bar>
+      }
+    </section>
 
-  <section class="profile__body">
-    <div class="info profile__info">
-      <div class="info__cover">
-        <!-- <img
+    <section class="profile__body">
+      <div class="info profile__info">
+        <div class="info__cover">
+          <!-- <img
           class="info__cover"
           src="/assets/images/office/profile/detail/cover-new.svg"
           alt="cover"
         /> -->
-      </div>
+        </div>
 
-      <div class="info__body">
-        @if (chatService.userOnlineStatusCache | async; as cache) {
-        <app-avatar
-          class="info__avatar"
-          [url]="user.avatar"
-          [size]="(desktopMode$ | async) ? 165 : 140"
-          [hasBorder]="true"
-          [onlineBadgeSize]="30"
-          [onlineBadgeBorder]="6"
-          [onlineBadgeOffset]="(desktopMode$ | async) ? 5 : 0"
-          [isOnline]="cache[user.id] !== undefined ? cache[user.id] : user.isOnline"
-        ></app-avatar>
-        }
-        <section class="info__top">
-          <div class="info__text">
-            <h2 class="info__name">{{ user.firstName }} {{ user.lastName }}</h2>
-            <div class="text-body-12 info__keys">
-              <div>
-                @if (user.birthday) {
-                <span>
-                  {{ user.birthday | yearsFromBirthday }}
-                </span>
-                } @if (user.birthday && user.speciality) {
-                <ng-container>&nbsp;•&nbsp;</ng-container>
-                } @if (user.speciality) {
-                <span>
-                  {{ user.speciality }}
-                </span>
+        <div class="info__body">
+          @if (chatService.userOnlineStatusCache | async; as cache) {
+            <app-avatar
+              class="info__avatar"
+              [url]="user.avatar"
+              [size]="(desktopMode$ | async) ? 165 : 140"
+              [hasBorder]="true"
+              [onlineBadgeSize]="30"
+              [onlineBadgeBorder]="6"
+              [onlineBadgeOffset]="(desktopMode$ | async) ? 5 : 0"
+              [isOnline]="cache[user.id] !== undefined ? cache[user.id] : user.isOnline"
+            ></app-avatar>
+          }
+          <section class="info__top">
+            <div class="info__text">
+              <h2 class="info__name">{{ user.firstName }} {{ user.lastName }}</h2>
+              <div class="text-body-12 info__keys">
+                <div>
+                  @if (user.birthday) {
+                    <span>
+                      {{ user.birthday | yearsFromBirthday }}
+                    </span>
+                  }
+                  @if (user.birthday && user.speciality) {
+                    <ng-container>&nbsp;•&nbsp;</ng-container>
+                  }
+                  @if (user.speciality) {
+                    <span>
+                      {{ user.speciality }}
+                    </span>
+                  }
+                </div>
+                @if (user.city) {
+                  <span class="info__geo">
+                    <i appIcon icon="geo-point" appSquare="10"></i>
+                    {{ user.city }}
+                    @if (user.region) {
+                      ,
+                      {{ user.region }}
+                    }
+                  </span>
                 }
               </div>
-              @if (user.city) {
-              <span class="info__geo">
-                <i appIcon icon="geo-point" appSquare="10"></i>
-                {{ user.city }}
-                @if (user.region) { ,
-                {{ user.region }}
+            </div>
+            <div class="info__right">
+              @if (authService.profile | async; as profile) {
+                @if (profile.id !== user.id) {
+                  <a
+                    class="info__send-message"
+                    [routerLink]="['/office/chats', profile.id + '_' + user.id]"
+                  >
+                    <app-button customTypographyClass="text-body-12"> Написать </app-button>
+                  </a>
+                } @else {
+                  <a class="profile__edit" routerLink="/office/profile/edit">
+                    <app-button customTypographyClass="text-body-12" color="grey">
+                      Редактировать профиль
+                    </app-button>
+                  </a>
                 }
-              </span>
               }
             </div>
-          </div>
-          <div class="info__right">
-            @if (authService.profile | async; as profile) { @if (profile.id !== user.id) {
-            <a
-              class="info__send-message"
-              [routerLink]="['/office/chats', profile.id + '_' + user.id]"
-            >
-              <app-button customTypographyClass="text-body-12"> Написать </app-button>
-            </a>
-            } @else {
-            <a class="profile__edit" routerLink="/office/profile/edit">
-              <app-button customTypographyClass="text-body-12" color="grey">
-                Редактировать профиль
-              </app-button>
-            </a>
-            } }
-          </div>
-        </section>
-        <section class="info__achievements">
-          <p>
-            <span class="body-text-16">В будущем тут будут отображаться </span>
-            <a class="body-text-14">достижения</a>
-          </p>
-        </section>
+          </section>
+          <section class="info__achievements">
+            <p>
+              <span class="body-text-16">В будущем тут будут отображаться </span>
+              <a class="body-text-14">достижения</a>
+            </p>
+          </section>
+        </div>
       </div>
-    </div>
-    <div class="outlet">
-      <router-outlet></router-outlet>
-    </div>
-  </section>
-</div>
+      <div class="outlet">
+        <router-outlet></router-outlet>
+      </div>
+    </section>
+  </div>
 }

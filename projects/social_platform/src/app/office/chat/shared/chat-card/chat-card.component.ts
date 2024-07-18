@@ -22,7 +22,7 @@ export class ChatCardComponent implements OnInit {
   @Input() isLast = false;
 
   public unread = this.authService.profile.pipe(
-    map(p => p.id !== this.chat.lastMessage.author.id && !this.chat.lastMessage.isRead)
+    map(p => p.id !== this.chat.lastMessage.author.id && !this.chat.lastMessage.isRead),
   );
 
   ngOnInit(): void {}

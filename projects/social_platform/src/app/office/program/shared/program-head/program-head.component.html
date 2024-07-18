@@ -15,9 +15,9 @@
     </div>
   </div>
   @if (isProjectsList && (isUserExpert | async)) {
-  <a [routerLink]="['../projects-rating']" class="head__rate-projects"
-    ><app-button>Оценить проекты</app-button></a
-  >
+    <a [routerLink]="['../projects-rating']" class="head__rate-projects"
+      ><app-button>Оценить проекты</app-button></a
+    >
   }
   <!--<div class="head__search search">
     <input type="text" class="text-body-14" [(ngModel)]="searchValue" />

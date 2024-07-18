@@ -16,7 +16,7 @@ describe("ProgramProjectsResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      ProgramProjectsResolver(mockRoute, {} as RouterStateSnapshot)
+      ProgramProjectsResolver(mockRoute, {} as RouterStateSnapshot),
     );
     expect(result).toBeTruthy();
   });

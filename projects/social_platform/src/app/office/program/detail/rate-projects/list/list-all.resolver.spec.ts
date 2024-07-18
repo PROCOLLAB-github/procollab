@@ -15,7 +15,7 @@ describe("ListAllResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      ListAllResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+      ListAllResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
     );
     expect(result).toBeTruthy();
   });

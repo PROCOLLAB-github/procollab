@@ -6,18 +6,18 @@ import { WebsocketService } from "@core/services/websocket.service";
 import { ApiPagination } from "@models/api-pagination.model";
 import { ChatFile, ChatMessage } from "@models/chat-message.model";
 import {
-    ChatEventType,
-    DeleteChatMessageDto,
-    EditChatMessageDto,
-    OnChangeStatus,
-    OnChatMessageDto,
-    OnDeleteChatMessageDto,
-    OnEditChatMessageDto,
-    OnReadChatMessageDto,
-    ReadChatMessageDto,
-    SendChatMessageDto,
-    TypingInChatDto,
-    TypingInChatEventDto,
+  ChatEventType,
+  DeleteChatMessageDto,
+  EditChatMessageDto,
+  OnChangeStatus,
+  OnChatMessageDto,
+  OnDeleteChatMessageDto,
+  OnEditChatMessageDto,
+  OnReadChatMessageDto,
+  ReadChatMessageDto,
+  SendChatMessageDto,
+  TypingInChatDto,
+  TypingInChatEventDto,
 } from "@models/chat.model";
 import { plainToInstance } from "class-transformer";
 import { ApiService, TokenService } from "projects/core";
@@ -30,7 +30,7 @@ export class ChatService {
   constructor(
     private readonly websocketService: WebsocketService,
     private readonly apiService: ApiService,
-    private readonly tokenService: TokenService
+    private readonly tokenService: TokenService,
   ) {}
 
   public connect(): Observable<void> {
@@ -78,7 +78,7 @@ export class ChatService {
   loadMessages(
     projectId: number,
     count?: number,
-    take?: number
+    take?: number,
   ): Observable<ApiPagination<ChatMessage>> {
     let queries = new HttpParams();
     if (count !== undefined) queries = queries.set("offset", count);
@@ -86,7 +86,7 @@ export class ChatService {
 
     return this.apiService.get<ApiPagination<ChatMessage>>(
       `/chats/projects/${projectId}/messages/`,
-      queries
+      queries,
     );
   }
 

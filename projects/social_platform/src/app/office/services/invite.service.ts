@@ -12,7 +12,10 @@ import { AuthService } from "@auth/services";
   providedIn: "root",
 })
 export class InviteService {
-  constructor(private readonly apiService: ApiService, private readonly authService: AuthService) {}
+  constructor(
+    private readonly apiService: ApiService,
+    private readonly authService: AuthService,
+  ) {}
 
   sendForUser(userId: number, projectId: number, role: string): Observable<Invite> {
     return this.apiService
@@ -38,19 +41,18 @@ export class InviteService {
       concatMap(profile =>
         this.apiService.get<Invite[]>(
           "/invites/",
-          new HttpParams({ fromObject: { user_id: profile.id } })
-        )
+          new HttpParams({ fromObject: { user_id: profile.id } }),
+        ),
       ),
-      map(invites => plainToInstance(Invite, invites))
+      map(invites => plainToInstance(Invite, invites)),
     );
   }
 
   getByProject(projectId: number): Observable<Invite[]> {
     return this.apiService
-      .get<Invite[]>(
-        "/invites/",
-        new HttpParams({ fromObject: { project: projectId, user: "any" } })
-      )
+      .get<
+        Invite[]
+      >("/invites/", new HttpParams({ fromObject: { project: projectId, user: "any" } }))
       .pipe(map(profiles => plainToInstance(Invite, profiles)));
   }
 }

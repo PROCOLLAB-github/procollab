@@ -19,7 +19,7 @@ export class ProgramMainComponent implements OnInit {
 
   programs$: Observable<Program[]> = this.route.data.pipe(
     map(r => r["data"]),
-    map(r => r["results"])
+    map(r => r["results"]),
   );
 
   ngOnInit(): void {}

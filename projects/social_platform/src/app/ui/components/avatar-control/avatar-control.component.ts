@@ -68,7 +68,7 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
             return of({});
           }),
           concatMap(() => this.fileService.uploadFile(files[0])),
-          map(r => r["url"])
+          map(r => r["url"]),
         )
       : this.fileService.uploadFile(files[0]).pipe(map(r => r.url));
 

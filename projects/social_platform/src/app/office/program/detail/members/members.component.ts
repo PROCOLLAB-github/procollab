@@ -29,7 +29,7 @@ export class ProgramMembersComponent implements OnInit, AfterViewInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly cdref: ChangeDetectorRef,
-    private readonly programService: ProgramService
+    private readonly programService: ProgramService,
   ) {}
 
   ngOnInit(): void {
@@ -45,7 +45,7 @@ export class ProgramMembersComponent implements OnInit, AfterViewInit {
       fromEvent(target, "scroll")
         .pipe(
           concatMap(() => this.onScroll()),
-          throttleTime(500)
+          throttleTime(500),
         )
         .subscribe(noop);
   }
@@ -53,7 +53,7 @@ export class ProgramMembersComponent implements OnInit, AfterViewInit {
   program$?: Observable<Program> = this.route.parent?.data.pipe(map(r => r["data"]));
   members$: Observable<User[]> = this.route.data.pipe(
     map(r => r["data"]),
-    map(r => r["results"])
+    map(r => r["results"]),
   );
 
   members: User[] = [];
@@ -85,7 +85,7 @@ export class ProgramMembersComponent implements OnInit, AfterViewInit {
       .getAllMembers(
         this.route.parent?.snapshot.params["programId"],
         this.membersPage * this.membersTake,
-        this.membersTake
+        this.membersTake,
       )
       .pipe(
         tap((members: ApiPagination<User>) => {
@@ -95,7 +95,7 @@ export class ProgramMembersComponent implements OnInit, AfterViewInit {
           this.membersPage++;
 
           this.cdref.detectChanges();
-        })
+        }),
       );
   }
 }

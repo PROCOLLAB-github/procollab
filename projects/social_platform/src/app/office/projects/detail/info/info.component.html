@@ -1,320 +1,337 @@
 <!-- @format -->
 
 @if (project$ | async; as project) {
-<main class="project">
-  <section class="project__main">
-    <div class="info project__section project__info">
-      <div class="info__cover">
-        <img
-          class="info__cover"
-          [src]="
-            project.cover ? project.cover.link : '/assets/images/office/profile/detail/cover.png'
-          "
-          alt="cover"
-        />
-        <app-avatar
-          class="info__avatar"
-          [url]="project.imageAddress"
-          [hasBorder]="true"
-          [size]="140"
-        ></app-avatar>
-        <div
-          class="info__subscribe"
-          [class.info__subscribe-active]="isUserSubscribed"
-          (click)="onSubscribe(project.id)"
-        >
-          <i appIcon appSquare="18" [icon]="isUserSubscribed ? 'check' : 'plus'"></i>
-        </div>
-        <app-modal [(open)]="isUnsubscribeModalOpen">
-          <div class="unsubscribe-modal">
-            <h3>Вы действительно хотите отписаться от проекта?</h3>
-            <app-avatar [url]="project.imageAddress" [size]="130"></app-avatar>
-            <div class="unsubscribe-modal__buttons">
-              <app-button
-                color="red"
-                customTypographyClass="unsubscribe-modal-btn__typography"
-                (click)="onUnsubscribe(project.id)"
-              >
-                Отписаться
-              </app-button>
-              <app-button
-                customTypographyClass="unsubscribe-modal-btn__typography"
-                (click)="onCloseUnsubscribeModal()"
-              >
-                Отменить
-              </app-button>
-            </div>
-          </div>
-        </app-modal>
-      </div>
-      @if (authService.profile | async; as profile) {
-      <div class="info__body">
-        <div class="info__text">
-          <h1 class="info__title">{{ project.name }}</h1>
-          <div class="info__row">
-            @if (industryService.industries | async; as industries) {
-            <p class="text-body-14 info__industry">
-              @if (industryService.getIndustry(industries, project.industry); as industry) {
-              {{ industry.name }} }
-            </p>
-            } @if (project.region) {
-            <p class="info__geo">
-              <i appIcon icon="geo-point" appWidth="7" appHeight="10" appViewBox="0 0 7 10"></i>
-              {{ project.region }}
-            </p>
-            }
-          </div>
-        </div>
-        <div class="info__right">
-          @if (project.presentationAddress) {
-          <a class="info__presentation" [href]="project.presentationAddress" target="_blank">
-            <app-button
-              class="info__presentation-button"
-              color="grey"
-              customTypographyClass="text-body-12"
-            >
-              Презентация проекта
-              <i appIcon icon="file_pdf" appSquare="16"></i>
-            </app-button>
-          </a>
-          } @if (profile.userType !== 1 && !(isInProject | async)) {
-          <app-button
-            color="grey"
-            customTypographyClass="text-body-12"
-            (click)="openSupport = true"
-          >
-            Поддержать проект
-          </app-button>
-          }
-          <a class="info__edit" [routerLink]="['/office/projects', project.id, 'edit']">
-            @if (profile.id === project.leader) {
-            <app-button customTypographyClass="text-body-12"> Редактировать </app-button>
-            }
-          </a>
-        </div>
-      </div>
-      }
-    </div>
-    <div #contentEl class="project__content">
-      <div class="about project__about">
-        <div class="about__head">
-          <h3 class="text-bold-body-16 about__title">О проекте</h3>
-          <div class="about__views">
-            <i appIcon icon="eye" appSquare="22"></i>
-            {{ project.viewsCount }}
-          </div>
-        </div>
-        @if (project.description) {
-        <div class="text-body-14 about__text">
-          <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
-          @if (descriptionExpandable) {
+  <main class="project">
+    <section class="project__main">
+      <div class="info project__section project__info">
+        <div class="info__cover">
+          <img
+            class="info__cover"
+            [src]="
+              project.cover ? project.cover.link : '/assets/images/office/profile/detail/cover.png'
+            "
+            alt="cover"
+          />
+          <app-avatar
+            class="info__avatar"
+            [url]="project.imageAddress"
+            [hasBorder]="true"
+            [size]="140"
+          ></app-avatar>
           <div
-            class="read-more"
-            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+            class="info__subscribe"
+            [class.info__subscribe-active]="isUserSubscribed"
+            (click)="onSubscribe(project.id)"
           >
-            {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+            <i appIcon appSquare="18" [icon]="isUserSubscribed ? 'check' : 'plus'"></i>
           </div>
-          }
-        </div>
-        }
-      </div>
-    </div>
-    @if (authService.profile | async; as profile) {
-    <div #newsEl class="project__news news">
-      @if (project.leader === profile.id) {
-      <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
-      } @for (n of news; track n.id) {
-      <app-news-card
-        class="news__item"
-        [resourceLink]="['/office/projects', n.id]"
-        [attr.data-id]="n.id"
-        [feedItem]="n"
-        [isOwner]="profile.id === project.leader"
-        (delete)="onDeleteNews($event)"
-        (like)="onLike($event)"
-        (edited)="onEditNews($event, n.id)"
-      ></app-news-card>
-      }
-    </div>
-    }
-    <aside class="project__aside">
-      <div class="team project__section project__team">
-        <h3 class="text-bold-body-16 team__title">Команда</h3>
-        @if (project.collaborators) {
-        <ul>
-          @for (member of project.collaborators.slice(0, 3); track member.userId) {
-          <ng-container
-            *ngTemplateOutlet="membersTemp; context: { $implicit: member }"
-          ></ng-container>
-          }
-        </ul>
-        }
-        <div class="team__remaining" [class.team__remaining--show]="readAllMembers">
-          @if (project.collaborators) {
-          <ul>
-            @for (member of project.collaborators.slice(3); track member.userId) {
-            <ng-container
-              *ngTemplateOutlet="membersTemp; context: { $implicit: member }"
-            ></ng-container>
-            }
-          </ul>
-          }
-        </div>
-        <ng-template #membersTemp let-member>
-          <li>
-            <a class="member" [routerLink]="['/office/profile', member.userId]">
-              <app-avatar class="member__avatar" [url]="member.avatar" [size]="40"></app-avatar>
-              <div class="member__info">
-                <p class="text-bold-body-14 member__name">
-                  {{ member.firstName }} {{ member.lastName }}
-                </p>
-                <p class="text-body-12 member__speciality">{{ member.role }}</p>
+          <app-modal [(open)]="isUnsubscribeModalOpen">
+            <div class="unsubscribe-modal">
+              <h3>Вы действительно хотите отписаться от проекта?</h3>
+              <app-avatar [url]="project.imageAddress" [size]="130"></app-avatar>
+              <div class="unsubscribe-modal__buttons">
+                <app-button
+                  color="red"
+                  customTypographyClass="unsubscribe-modal-btn__typography"
+                  (click)="onUnsubscribe(project.id)"
+                >
+                  Отписаться
+                </app-button>
+                <app-button
+                  customTypographyClass="unsubscribe-modal-btn__typography"
+                  (click)="onCloseUnsubscribeModal()"
+                >
+                  Отменить
+                </app-button>
               </div>
-              @if (member.userId === project.leader) {
-              <i class="member__star" appIcon icon="star" appSquare="14"></i>
+            </div>
+          </app-modal>
+        </div>
+        @if (authService.profile | async; as profile) {
+          <div class="info__body">
+            <div class="info__text">
+              <h1 class="info__title">{{ project.name }}</h1>
+              <div class="info__row">
+                @if (industryService.industries | async; as industries) {
+                  <p class="text-body-14 info__industry">
+                    @if (industryService.getIndustry(industries, project.industry); as industry) {
+                      {{ industry.name }}
+                    }
+                  </p>
+                }
+                @if (project.region) {
+                  <p class="info__geo">
+                    <i
+                      appIcon
+                      icon="geo-point"
+                      appWidth="7"
+                      appHeight="10"
+                      appViewBox="0 0 7 10"
+                    ></i>
+                    {{ project.region }}
+                  </p>
+                }
+              </div>
+            </div>
+            <div class="info__right">
+              @if (project.presentationAddress) {
+                <a class="info__presentation" [href]="project.presentationAddress" target="_blank">
+                  <app-button
+                    class="info__presentation-button"
+                    color="grey"
+                    customTypographyClass="text-body-12"
+                  >
+                    Презентация проекта
+                    <i appIcon icon="file_pdf" appSquare="16"></i>
+                  </app-button>
+                </a>
               }
-            </a>
-          </li>
-        </ng-template>
-        @if (project.collaborators.length > 3) {
-        <div class="read-more" (click)="readAllMembers = !readAllMembers">
-          {{ readAllMembers ? "Скрыть" : "Читать полностью" }}
-        </div>
-        }
-      </div>
-      @if ((vacancies$ | async)?.length; as vacanciesLength) {
-      <div class="vacancies project__section project__vacancy">
-        <h3 class="text-bold-body-16 team__title">Вакансии</h3>
-        @if (vacancies$ | async; as vacancies) { @if (vacancies) {
-        <ul class="vacancies__list">
-          @for (vacancy of vacancies.slice(0, 3); track vacancy.id) {
-          <ng-container
-            *ngTemplateOutlet="vacanciesTemp; context: { $implicit: vacancy }"
-          ></ng-container>
-          }
-        </ul>
-        }
-        <div class="vacancies__remaining" [class.vacancies__remaining--show]="readAllVacancies">
-          @if (vacancies) {
-          <ul class="vacancies__list">
-            @for (vacancy of vacancies.slice(3); track vacancy.id) {
-            <ng-container
-              *ngTemplateOutlet="vacanciesTemp; context: { $implicit: vacancy }"
-            ></ng-container>
-            }
-          </ul>
-          }
-        </div>
-        }
-        <ng-template #vacanciesTemp let-vacancy>
-          <li class="vacancy">
-            <div class="vacancy__info">
-              <a
-                [routerLink]="['/office/vacancy', vacancy.id]"
-                class="text-bold-body-14 vacancy__title"
-                [class.vacancy__title--disabled]="profileId === project.leader"
-              >
-                {{ vacancy.role }}
+              @if (profile.userType !== 1 && !(isInProject | async)) {
+                <app-button
+                  color="grey"
+                  customTypographyClass="text-body-12"
+                  (click)="openSupport = true"
+                >
+                  Поддержать проект
+                </app-button>
+              }
+              <a class="info__edit" [routerLink]="['/office/projects', project.id, 'edit']">
+                @if (profile.id === project.leader) {
+                  <app-button customTypographyClass="text-body-12"> Редактировать </app-button>
+                }
               </a>
             </div>
-            <p class="text-body-12 vacancy__requirements">
-              {{ vacancy.getSkillsNames().join(" • ") }}
-            </p>
-          </li>
-        </ng-template>
-
-        @if (vacanciesLength > 3) {
-        <div class="read-more" (click)="readAllVacancies = !readAllVacancies">
-          {{ readAllVacancies ? "Скрыть" : "Читать полностью" }}
-        </div>
-
-        } @if(profileId === project.leader){
-        <app-button>
-          <span>Добавить вакансию</span>
-          <i appIcon icon="plus" appSquare="20"></i>
-        </app-button>
+          </div>
         }
-        
       </div>
-      } @if (project.achievements.length) {
-      <div class="achievements project__section project__achievements">
-        <h3 class="text-bold-body-16 achievements__title">Достижения</h3>
-        @if (project.achievements; as achievements) { @if (achievements) {
-        <ul class="achievements__list">
-          @for (a of achievements.slice(0, 3); track a.id) {
-          <li class="text-bold-body-14 achievements__item achievement">
-            <p class="text-bold-body-14 achievement__place">{{ a.status }}</p>
-            <p class="text-body-12 achievement__title">{{ a.title }}</p>
-          </li>
+      <div #contentEl class="project__content">
+        <div class="about project__about">
+          <div class="about__head">
+            <h3 class="text-bold-body-16 about__title">О проекте</h3>
+            <div class="about__views">
+              <i appIcon icon="eye" appSquare="22"></i>
+              {{ project.viewsCount }}
+            </div>
+          </div>
+          @if (project.description) {
+            <div class="text-body-14 about__text">
+              <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
+              @if (descriptionExpandable) {
+                <div
+                  class="read-more"
+                  (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+                >
+                  {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+                </div>
+              }
+            </div>
           }
-        </ul>
-        }
-        <div
-          class="achievements__remaining"
-          [class.achievements__remaining--show]="readAllAchievements"
-        >
-          @if (achievements) {
-          <ul class="achievements__list">
-            @for (a of achievements.slice(3); track a.id) {
-            <li class="text-bold-body-14 achievements__item achievement">
-              <p class="text-bold-body-14 achievement__place">{{ a.status }}</p>
-              <p class="text-body-12 achievement__title">{{ a.title }}</p>
-            </li>
+        </div>
+      </div>
+      @if (authService.profile | async; as profile) {
+        <div #newsEl class="project__news news">
+          @if (project.leader === profile.id) {
+            <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
+          }
+          @for (n of news; track n.id) {
+            <app-news-card
+              class="news__item"
+              [resourceLink]="['/office/projects', n.id]"
+              [attr.data-id]="n.id"
+              [feedItem]="n"
+              [isOwner]="profile.id === project.leader"
+              (delete)="onDeleteNews($event)"
+              (like)="onLike($event)"
+              (edited)="onEditNews($event, n.id)"
+            ></app-news-card>
+          }
+        </div>
+      }
+      <aside class="project__aside">
+        <div class="team project__section project__team">
+          <h3 class="text-bold-body-16 team__title">Команда</h3>
+          @if (project.collaborators) {
+            <ul>
+              @for (member of project.collaborators.slice(0, 3); track member.userId) {
+                <ng-container
+                  *ngTemplateOutlet="membersTemp; context: { $implicit: member }"
+                ></ng-container>
+              }
+            </ul>
+          }
+          <div class="team__remaining" [class.team__remaining--show]="readAllMembers">
+            @if (project.collaborators) {
+              <ul>
+                @for (member of project.collaborators.slice(3); track member.userId) {
+                  <ng-container
+                    *ngTemplateOutlet="membersTemp; context: { $implicit: member }"
+                  ></ng-container>
+                }
+              </ul>
             }
-          </ul>
+          </div>
+          <ng-template #membersTemp let-member>
+            <li>
+              <a class="member" [routerLink]="['/office/profile', member.userId]">
+                <app-avatar class="member__avatar" [url]="member.avatar" [size]="40"></app-avatar>
+                <div class="member__info">
+                  <p class="text-bold-body-14 member__name">
+                    {{ member.firstName }} {{ member.lastName }}
+                  </p>
+                  <p class="text-body-12 member__speciality">{{ member.role }}</p>
+                </div>
+                @if (member.userId === project.leader) {
+                  <i class="member__star" appIcon icon="star" appSquare="14"></i>
+                }
+              </a>
+            </li>
+          </ng-template>
+          @if (project.collaborators.length > 3) {
+            <div class="read-more" (click)="readAllMembers = !readAllMembers">
+              {{ readAllMembers ? "Скрыть" : "Читать полностью" }}
+            </div>
           }
         </div>
-        } @if (project.achievements.length > 3) {
-        <div class="read-more" (click)="readAllAchievements = !readAllAchievements">
-          {{ readAllAchievements ? "Скрыть" : "Читать полностью" }}
-        </div>
+        @if ((vacancies$ | async)?.length; as vacanciesLength) {
+          <div class="vacancies project__section project__vacancy">
+            <h3 class="text-bold-body-16 team__title">Вакансии</h3>
+            @if (vacancies$ | async; as vacancies) {
+              @if (vacancies) {
+                <ul class="vacancies__list">
+                  @for (vacancy of vacancies.slice(0, 3); track vacancy.id) {
+                    <ng-container
+                      *ngTemplateOutlet="vacanciesTemp; context: { $implicit: vacancy }"
+                    ></ng-container>
+                  }
+                </ul>
+              }
+              <div
+                class="vacancies__remaining"
+                [class.vacancies__remaining--show]="readAllVacancies"
+              >
+                @if (vacancies) {
+                  <ul class="vacancies__list">
+                    @for (vacancy of vacancies.slice(3); track vacancy.id) {
+                      <ng-container
+                        *ngTemplateOutlet="vacanciesTemp; context: { $implicit: vacancy }"
+                      ></ng-container>
+                    }
+                  </ul>
+                }
+              </div>
+            }
+            <ng-template #vacanciesTemp let-vacancy>
+              <li class="vacancy">
+                <div class="vacancy__info">
+                  <a
+                    [routerLink]="['/office/vacancy', vacancy.id]"
+                    class="text-bold-body-14 vacancy__title"
+                    [class.vacancy__title--disabled]="profileId === project.leader"
+                  >
+                    {{ vacancy.role }}
+                  </a>
+                </div>
+                <p class="text-body-12 vacancy__requirements">
+                  {{ vacancy.getSkillsNames().join(" • ") }}
+                </p>
+              </li>
+            </ng-template>
+
+            @if (vacanciesLength > 3) {
+              <div class="read-more" (click)="readAllVacancies = !readAllVacancies">
+                {{ readAllVacancies ? "Скрыть" : "Читать полностью" }}
+              </div>
+            }
+            @if (profileId === project.leader) {
+              <app-button>
+                <span>Добавить вакансию</span>
+                <i appIcon icon="plus" appSquare="20"></i>
+              </app-button>
+            }
+          </div>
         }
-      </div>
-      } @if (project.links.length) {
-      <div class="links project__section">
-        <h3 class="links__title text-bold-body-16">Контакты</h3>
+        @if (project.achievements.length) {
+          <div class="achievements project__section project__achievements">
+            <h3 class="text-bold-body-16 achievements__title">Достижения</h3>
+            @if (project.achievements; as achievements) {
+              @if (achievements) {
+                <ul class="achievements__list">
+                  @for (a of achievements.slice(0, 3); track a.id) {
+                    <li class="text-bold-body-14 achievements__item achievement">
+                      <p class="text-bold-body-14 achievement__place">{{ a.status }}</p>
+                      <p class="text-body-12 achievement__title">{{ a.title }}</p>
+                    </li>
+                  }
+                </ul>
+              }
+              <div
+                class="achievements__remaining"
+                [class.achievements__remaining--show]="readAllAchievements"
+              >
+                @if (achievements) {
+                  <ul class="achievements__list">
+                    @for (a of achievements.slice(3); track a.id) {
+                      <li class="text-bold-body-14 achievements__item achievement">
+                        <p class="text-bold-body-14 achievement__place">{{ a.status }}</p>
+                        <p class="text-body-12 achievement__title">{{ a.title }}</p>
+                      </li>
+                    }
+                  </ul>
+                }
+              </div>
+            }
+            @if (project.achievements.length > 3) {
+              <div class="read-more" (click)="readAllAchievements = !readAllAchievements">
+                {{ readAllAchievements ? "Скрыть" : "Читать полностью" }}
+              </div>
+            }
+          </div>
+        }
+        @if (project.links.length) {
+          <div class="links project__section">
+            <h3 class="links__title text-bold-body-16">Контакты</h3>
+            <ul>
+              @for (link of project.links; track $index) {
+                <li class="contact-link links__item text-body-12">
+                  @if (link | userLinks; as l) {
+                    <a class="contact-link__link" target="_blank" [href]="link">
+                      <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
+                      <span>{{ l.tag }}</span>
+                    </a>
+                  }
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      </aside>
+    </section>
+    <app-modal [(open)]="openSupport">
+      <div class="support">
+        <i
+          class="support__cross"
+          appIcon
+          icon="cross"
+          appSquare="20"
+          (click)="openSupport = false"
+        ></i>
+        <img src="assets/images/projects/shared/idea.svg" alt="idea" class="support__img" />
+        <h3 class="support__title">Поддержать проект</h3>
+        <p class="support__text">Напишите лидеру проекта, чтобы обсудить оказание поддержки</p>
         <ul>
           @for (link of project.links; track $index) {
-          <li class="contact-link links__item text-body-12">
-            @if (link | userLinks; as l) {
-            <a class="contact-link__link" target="_blank" [href]="link">
-              <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
-              <span>{{ l.tag }}</span>
-            </a>
-            }
-          </li>
+            <li class="contact-link links__item text-body-12">
+              @if (link | userLinks; as l) {
+                <a class="contact-link__link" target="_blank" [href]="link">
+                  <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
+                  {{ l.tag }}
+                </a>
+              }
+            </li>
           }
         </ul>
       </div>
-      }
-    </aside>
-  </section>
-  <app-modal [(open)]="openSupport">
-    <div class="support">
-      <i
-        class="support__cross"
-        appIcon
-        icon="cross"
-        appSquare="20"
-        (click)="openSupport = false"
-      ></i>
-      <img src="assets/images/projects/shared/idea.svg" alt="idea" class="support__img" />
-      <h3 class="support__title">Поддержать проект</h3>
-      <p class="support__text">Напишите лидеру проекта, чтобы обсудить оказание поддержки</p>
-      <ul>
-        @for (link of project.links; track $index) {
-        <li class="contact-link links__item text-body-12">
-          @if (link | userLinks; as l) {
-          <a class="contact-link__link" target="_blank" [href]="link">
-            <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
-            {{ l.tag }}
-          </a>
-          }
-        </li>
-        }
-      </ul>
-    </div>
-  </app-modal>
-  <router-outlet></router-outlet>
-</main>
+    </app-modal>
+    <router-outlet></router-outlet>
+  </main>
 }

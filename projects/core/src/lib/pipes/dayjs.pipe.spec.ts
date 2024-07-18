@@ -1,3 +1,5 @@
+/** @format */
+
 import { DayjsPipe } from "./dayjs.pipe";
 
 describe("DayjsPipe", () => {

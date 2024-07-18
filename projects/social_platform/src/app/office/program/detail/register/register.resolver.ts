@@ -6,7 +6,7 @@ import { ProgramService } from "@office/program/services/program.service";
 import { ProgramDataSchema } from "@office/program/models/program.model";
 
 export const ProgramRegisterResolver: ResolveFn<ProgramDataSchema> = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ) => {
   const programService = inject(ProgramService);
 

@@ -21,7 +21,7 @@ export class IndustryService {
       map(industries => plainToInstance(Industry, industries)),
       tap(industries => {
         this.industries$.next(industries);
-      })
+      }),
     );
   }
 

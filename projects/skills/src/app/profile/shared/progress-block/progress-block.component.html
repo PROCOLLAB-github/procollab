@@ -3,19 +3,19 @@
 <div class="progress">
   <div class="progress__chart chart">
     @for (circle of circles; track $index) {
-    <svg class="circle chart__circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
-      <circle class="circle__track" cx="80" cy="80" [attr.r]="radius" />
-      <circle
-        class="circle__filled"
-        cx="80"
-        cy="80"
-        [attr.r]="radius"
-        stroke-linecap="round"
-        transform="rotate(-90 80 80)"
-        [attr.stroke-dashoffset]="calculateStrokeDashOffset()"
-        [attr.stroke-dasharray]="calculateStrokeDashArray()"
-      />
-    </svg>
+      <svg class="circle chart__circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+        <circle class="circle__track" cx="80" cy="80" [attr.r]="radius" />
+        <circle
+          class="circle__filled"
+          cx="80"
+          cy="80"
+          [attr.r]="radius"
+          stroke-linecap="round"
+          transform="rotate(-90 80 80)"
+          [attr.stroke-dashoffset]="calculateStrokeDashOffset()"
+          [attr.stroke-dasharray]="calculateStrokeDashArray()"
+        />
+      </svg>
     }
   </div>
 
@@ -23,12 +23,12 @@
     <h1 class="text-heading-1">Прогресс</h1>
 
     @for (skill of skillsList(5); track $index) {
-    <ul class="info__list">
-      <li class="info__item">
-        <div class="info__bullet"></div>
-        <p class="text-body-16">Составление ТЗ</p>
-      </li>
-    </ul>
+      <ul class="info__list">
+        <li class="info__item">
+          <div class="info__bullet"></div>
+          <p class="text-body-16">Составление ТЗ</p>
+        </li>
+      </ul>
     }
   </div>
 </div>

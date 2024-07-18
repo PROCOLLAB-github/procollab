@@ -17,13 +17,15 @@ export class VacancyService {
 
   getForProject(projectId: number) {
     return this.apiService
-      .get<ApiPagination<Vacancy>>("/vacancies/", new HttpParams({ fromObject: { project_id: projectId } }))
+      .get<
+        ApiPagination<Vacancy>
+      >("/vacancies/", new HttpParams({ fromObject: { project_id: projectId } }))
       .pipe(map(vacancies => plainToInstance(Vacancy, vacancies.results)));
   }
 
   postVacancy(
     projectId: number,
-    vacancy: { role: string; requiredSkillsIds: number[] }
+    vacancy: { role: string; requiredSkillsIds: number[] },
   ): Observable<Vacancy> {
     return this.apiService
       .post("/vacancies/", {

@@ -43,7 +43,7 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
     private readonly validationService: ValidationService,
     private readonly specsService: SpecializationsService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
   ) {}
 
   stageForm = this.nnFb.group({
@@ -51,7 +51,7 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
   });
 
   nestedSpecializations$: Observable<SpecializationsGroup[]> = this.route.data.pipe(
-    map(r => r["data"])
+    map(r => r["data"]),
   );
 
   inlineSpecializations = signal<Specialization[]>([]);

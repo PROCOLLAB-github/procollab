@@ -14,7 +14,10 @@ import { IconComponent } from "@ui/components";
   imports: [IconComponent],
 })
 export class EmailVerificationComponent implements OnInit, OnDestroy {
-  constructor(private route: ActivatedRoute, private readonly authService: AuthService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private readonly authService: AuthService,
+  ) {}
 
   ngOnInit(): void {
     const emailSub$ = this.route.queryParams.pipe(map(r => r["adress"])).subscribe(r => {
@@ -35,7 +38,7 @@ export class EmailVerificationComponent implements OnInit, OnDestroy {
   counter = 0;
   timer$: Observable<number> = interval(1000).pipe(
     filter(() => this.counter > 0),
-    map(() => this.counter--)
+    map(() => this.counter--),
   );
 
   onResend(): void {

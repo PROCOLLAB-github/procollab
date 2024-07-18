@@ -1,45 +1,53 @@
 <!-- @format -->
 
 @if (loading()) {
-<div class="loading">
-  <app-loader color="accent"></app-loader>
-</div>
-} @else {
-<div class="subtask">
-  @if (infoSlide(); as is) {
-  <app-info-task [data]="is"></app-info-task>
-  } @if (singleQuestion(); as sq) {
-  <app-radio-select-task
-    [data]="sq"
-    [error]="singleQuestionError()"
-    [success]="success()"
-    (update)="body.set($event)"
-  ></app-radio-select-task>
-  } @if (connectQuestion(); as cq) {
-  <app-relations-task
-    [data]="cq"
-    [error]="connectQuestionError()"
-    [success]="success()"
-    (update)="body.set($event)"
-  ></app-relations-task>
-  } @if (excludeQuestion(); as eq) {
-  <app-exclude-task
-    [data]="eq"
-    [error]="excludeQuestionError()"
-    [success]="success()"
-    (update)="body.set($event)"
-  ></app-exclude-task>
-  } @if (writeQuestion(); as wq) {
-  <app-write-task [data]="wq" [success]="success()" (update)="body.set($event)"></app-write-task>
-  }
-  <div class="action">
-    <div class="action__error action__badge" [class.action__badge--open]="anyError()">
-      Вышла неточность...
-    </div>
-    <div class="action__success action__badge" [class.action__badge--open]="success()">
-      Всё верно! Так держать
-    </div>
-    <app-button class="action__button" (click)="onNext()">Продолжить</app-button>
+  <div class="loading">
+    <app-loader color="accent"></app-loader>
   </div>
-</div>
+} @else {
+  <div class="subtask">
+    @if (infoSlide(); as is) {
+      <app-info-task [data]="is"></app-info-task>
+    }
+    @if (singleQuestion(); as sq) {
+      <app-radio-select-task
+        [data]="sq"
+        [error]="singleQuestionError()"
+        [success]="success()"
+        (update)="body.set($event)"
+      ></app-radio-select-task>
+    }
+    @if (connectQuestion(); as cq) {
+      <app-relations-task
+        [data]="cq"
+        [error]="connectQuestionError()"
+        [success]="success()"
+        (update)="body.set($event)"
+      ></app-relations-task>
+    }
+    @if (excludeQuestion(); as eq) {
+      <app-exclude-task
+        [data]="eq"
+        [error]="excludeQuestionError()"
+        [success]="success()"
+        (update)="body.set($event)"
+      ></app-exclude-task>
+    }
+    @if (writeQuestion(); as wq) {
+      <app-write-task
+        [data]="wq"
+        [success]="success()"
+        (update)="body.set($event)"
+      ></app-write-task>
+    }
+    <div class="action">
+      <div class="action__error action__badge" [class.action__badge--open]="anyError()">
+        Вышла неточность...
+      </div>
+      <div class="action__success action__badge" [class.action__badge--open]="success()">
+        Всё верно! Так держать
+      </div>
+      <app-button class="action__button" (click)="onNext()">Продолжить</app-button>
+    </div>
+  </div>
 }

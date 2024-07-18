@@ -17,7 +17,10 @@ import { Project } from "@office/models/project.model";
   imports: [RouterLink, ProjectCardComponent, AsyncPipe],
 })
 export class ProfileProjectsComponent implements OnInit {
-  constructor(private readonly route: ActivatedRoute, public readonly authService: AuthService) {}
+  constructor(
+    private readonly route: ActivatedRoute,
+    public readonly authService: AuthService,
+  ) {}
 
   user?: Observable<User> = this.route.parent?.data.pipe(map(r => r["data"][0]));
   subs?: Observable<Project[]> = this.route.parent?.data.pipe(map(r => r["data"][1]));

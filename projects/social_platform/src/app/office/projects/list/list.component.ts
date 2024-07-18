@@ -50,7 +50,7 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly projectService: ProjectService,
     private readonly cdref: ChangeDetectorRef,
     private readonly router: Router,
-    private readonly subscriptionService: SubscriptionService
+    private readonly subscriptionService: SubscriptionService,
   ) {}
 
   ngOnInit(): void {
@@ -72,9 +72,9 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
           return this.subscriptionService.getSubscriptions(p.id).pipe(
             map(resp => {
               this.profileProjSubsIds = resp.results.map(sub => sub.id);
-            })
+            }),
           );
-        })
+        }),
       )
       .subscribe();
 
@@ -110,7 +110,7 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.previousReqQuery = reqQuery;
 
           return of(0);
-        })
+        }),
       );
 
       const queryIndustry$ = observable.subscribe(projects => {
@@ -141,7 +141,7 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
       const scrollEvent$ = fromEvent(target, "scroll")
         .pipe(
           concatMap(() => this.onScroll()),
-          throttleTime(500)
+          throttleTime(500),
         )
         .subscribe(noop);
       this.subscriptions$.push(scrollEvent$);
@@ -244,7 +244,7 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
           this.searchedProjects = this.projects;
 
           this.cdref.detectChanges();
-        })
+        }),
       );
     }
 
@@ -259,21 +259,21 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
         .getAll(
           new HttpParams({
             fromObject: { offset: skip, limit: take, ...this.buildFilterQuery(queries) },
-          })
+          }),
         )
         .pipe(
           map((projects: ApiPagination<Project>) => {
             this.searchedProjects = projects.results;
 
             return projects.results;
-          })
+          }),
         );
     } else {
       return this.projectService.getMy().pipe(
         map((projects: ApiPagination<Project>) => {
           this.projectsCount = projects.count;
           return projects.results;
-        })
+        }),
       );
     }
   }

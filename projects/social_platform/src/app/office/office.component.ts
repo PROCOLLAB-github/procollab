@@ -53,7 +53,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
     private readonly inviteService: InviteService,
     private readonly router: Router,
     public readonly chatService: ChatService,
-    private readonly subscriptionPlansService: SubscriptionPlansService
+    private readonly subscriptionPlansService: SubscriptionPlansService,
   ) {}
 
   ngOnInit(): void {
@@ -112,8 +112,8 @@ export class OfficeComponent implements OnInit, OnDestroy {
   invites: Signal<Invite[]> = toSignal(
     this.route.data.pipe(
       map(r => r["invites"]),
-      map(invites => invites.filter((invite: Invite) => invite.isAccepted === null))
-    )
+      map(invites => invites.filter((invite: Invite) => invite.isAccepted === null)),
+    ),
   );
 
   navItems = [
@@ -161,7 +161,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
       .subscribe(() =>
         this.router
           .navigateByUrl("/auth")
-          .then(() => console.debug("Route changed from OfficeComponent"))
+          .then(() => console.debug("Route changed from OfficeComponent")),
       );
   }
 

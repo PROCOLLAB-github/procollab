@@ -1,93 +1,95 @@
 <!-- @format -->
 @if (project) {
-<div class="chat-page">
-  <div class="chat-page__main main">
-    <header class="main__header">
-      <div class="main__info">
-        <div class="main__project">
-          <app-avatar class="main__avatar" [url]="project.imageAddress" [size]="26"></app-avatar>
-          <div class="main__name text-heading-4">{{ project.name }}</div>
-        </div>
-        <div class="main__meta">
-          <ul
-            class="main__members-list"
-            [style.width]="project.collaborators.length * 10 + 10 + 'px'"
-          >
-            @for (member of project.collaborators; let index = $index; track member.userId) {
-            <li
-              class="main__member-avatar"
-              [style.left]="index * -10 + 'px'"
-              [style.z-index]="index"
+  <div class="chat-page">
+    <div class="chat-page__main main">
+      <header class="main__header">
+        <div class="main__info">
+          <div class="main__project">
+            <app-avatar class="main__avatar" [url]="project.imageAddress" [size]="26"></app-avatar>
+            <div class="main__name text-heading-4">{{ project.name }}</div>
+          </div>
+          <div class="main__meta">
+            <ul
+              class="main__members-list"
+              [style.width]="project.collaborators.length * 10 + 10 + 'px'"
             >
-              <app-avatar [url]="member.avatar" [size]="20"></app-avatar>
-            </li>
-            }
-          </ul>
-          <div class="main__count">
-            {{ project.collaborators.length }}
-            {{ project.collaborators.length | pluralize: ["Участник", "Участника", "Участников"] }}
+              @for (member of project.collaborators; let index = $index; track member.userId) {
+                <li
+                  class="main__member-avatar"
+                  [style.left]="index * -10 + 'px'"
+                  [style.z-index]="index"
+                >
+                  <app-avatar [url]="member.avatar" [size]="20"></app-avatar>
+                </li>
+              }
+            </ul>
+            <div class="main__count">
+              {{ project.collaborators.length }}
+              {{
+                project.collaborators.length | pluralize: ["Участник", "Участника", "Участников"]
+              }}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="main__actions">
-        <div class="main__action" (click)="onToggleMobileAside()">
-          <i
-            appIcon
-            [icon]="isAsideMobileShown ? 'message' : 'people'"
-            appWidth="20"
-            appHeight="22"
-            appViewBox="0 0 20 22"
-          ></i>
+        <div class="main__actions">
+          <div class="main__action" (click)="onToggleMobileAside()">
+            <i
+              appIcon
+              [icon]="isAsideMobileShown ? 'message' : 'people'"
+              appWidth="20"
+              appHeight="22"
+              appViewBox="0 0 20 22"
+            ></i>
+          </div>
         </div>
-      </div>
-    </header>
-    <app-chat-window
-      class="main__chat"
-      [class.main__chat-visible]="!isAsideMobileShown"
-      [messages]="messages"
-      [typingPersons]="typingPersons"
-      (submit)="onSubmitMessage($event)"
-      (edit)="onEditMessage($event)"
-      (delete)="onDeleteMessage($event)"
-      (fetch)="onFetchMessages()"
-    ></app-chat-window>
-  </div>
-  <aside class="chat-page__aside" [class.chat-page__aside-visible]="isAsideMobileShown">
-    <div class="chat-members">
-      <header class="chat-members__header">
-        <h2 class="chat-members__title text-bold-body-16">Участники</h2>
       </header>
-      <ul class="chat-members__list">
-        @for (member of project.collaborators; track member.userId) {
-        <li class="chat-members__item">
-          <a class="member" [routerLink]="['/office/profile', member.userId]">
-            <app-avatar class="member__avatar" [url]="member.avatar" [size]="30"></app-avatar>
-            <span class="member__name text-bold-body-14">
-              {{ member.firstName }} {{ member.lastName }}
-            </span>
-            @if (currentUserId === member.userId) {
-            <span class="member__i text-body-14">(Вы)</span>
-            }
-          </a>
-        </li>
-        }
-      </ul>
+      <app-chat-window
+        class="main__chat"
+        [class.main__chat-visible]="!isAsideMobileShown"
+        [messages]="messages"
+        [typingPersons]="typingPersons"
+        (submit)="onSubmitMessage($event)"
+        (edit)="onEditMessage($event)"
+        (delete)="onDeleteMessage($event)"
+        (fetch)="onFetchMessages()"
+      ></app-chat-window>
     </div>
-    <div class="files">
-      <h2 class="files__title text-bold-body-16">Файлы</h2>
-      <ul class="files__list">
-        @for (file of chatFiles; track $index) {
-        <li class="files__item">
-          <app-file-item
-            [name]="file.name"
-            [link]="file.link"
-            [type]="file.extension"
-            [size]="file.size"
-          ></app-file-item>
-        </li>
-        }
-      </ul>
-    </div>
-  </aside>
-</div>
+    <aside class="chat-page__aside" [class.chat-page__aside-visible]="isAsideMobileShown">
+      <div class="chat-members">
+        <header class="chat-members__header">
+          <h2 class="chat-members__title text-bold-body-16">Участники</h2>
+        </header>
+        <ul class="chat-members__list">
+          @for (member of project.collaborators; track member.userId) {
+            <li class="chat-members__item">
+              <a class="member" [routerLink]="['/office/profile', member.userId]">
+                <app-avatar class="member__avatar" [url]="member.avatar" [size]="30"></app-avatar>
+                <span class="member__name text-bold-body-14">
+                  {{ member.firstName }} {{ member.lastName }}
+                </span>
+                @if (currentUserId === member.userId) {
+                  <span class="member__i text-body-14">(Вы)</span>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+      <div class="files">
+        <h2 class="files__title text-bold-body-16">Файлы</h2>
+        <ul class="files__list">
+          @for (file of chatFiles; track $index) {
+            <li class="files__item">
+              <app-file-item
+                [name]="file.name"
+                [link]="file.link"
+                [type]="file.extension"
+                [size]="file.size"
+              ></app-file-item>
+            </li>
+          }
+        </ul>
+      </div>
+    </aside>
+  </div>
 }

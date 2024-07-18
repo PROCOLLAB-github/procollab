@@ -7,7 +7,7 @@ import { Project } from "@models/project.model";
 import { ApiPagination } from "@models/api-pagination.model";
 
 export const ProgramProjectsResolver: ResolveFn<ApiPagination<Project>> = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ) => {
   const programService = inject(ProgramService);
 

@@ -4,46 +4,49 @@
   <div class="auth__wrapper">
     <h1 class="auth__title">Вход</h1>
     <p class="login__reg">Нет аккаунта? <a routerLink="/auth/register">Зарегистрируйтесь</a></p>
-    @if (loginForm.get('email'); as email) {
-    <fieldset class="auth__field">
-      <label for="email" class="field-label">Электронная почта</label>
-      <app-input
-        [error]="email | controlError"
-        id="email"
-        type="email"
-        formControlName="email"
-        placeholder="Введите почту"
-      ></app-input>
-      @if (email | controlError: 'email') {
+    @if (loginForm.get("email"); as email) {
+      <fieldset class="auth__field">
+        <label for="email" class="field-label">Электронная почта</label>
+        <app-input
+          [error]="email | controlError"
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Введите почту"
+        ></app-input>
+        @if (email | controlError: "email") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_EMAIL }}
+          </div>
+        }
+        @if (email | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        }
+      </fieldset>
+    }
+    @if (loginForm.get("password"); as password) {
+      <fieldset class="auth__field">
+        <label for="password" class="field-label">Пароль</label>
+        <app-input
+          [error]="password | controlError"
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Введите пароль"
+        ></app-input>
+        @if (password | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+        }
+      </fieldset>
+    }
+    @if (errorWrongAuth) {
       <div class="text-body-14 error">
-        {{ errorMessage.VALIDATION_EMAIL }}
+        {{ errorMessage.AUTH_WRONG_AUTH }}
       </div>
-      } @if (email | controlError: 'required') {
-      <div class="text-body-14 error">
-        {{ errorMessage.VALIDATION_REQUIRED }}
-      </div>
-      }
-    </fieldset>
-    } @if (loginForm.get('password'); as password) {
-    <fieldset class="auth__field">
-      <label for="password" class="field-label">Пароль</label>
-      <app-input
-        [error]="password | controlError"
-        id="password"
-        type="password"
-        formControlName="password"
-        placeholder="Введите пароль"
-      ></app-input>
-      @if (password | controlError: 'required') {
-      <div class="text-body-14 error">
-        {{ errorMessage.VALIDATION_REQUIRED }}
-      </div>
-      }
-    </fieldset>
-    } @if (errorWrongAuth) {
-    <div class="text-body-14 error">
-      {{ errorMessage.AUTH_WRONG_AUTH }}
-    </div>
     }
     <app-button
       [loader]="loginIsSubmitting"

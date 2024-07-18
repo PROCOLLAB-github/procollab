@@ -15,7 +15,7 @@ describe("ProgramMainResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      ProgramMainResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+      ProgramMainResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
     );
     expect(result).toBeTruthy();
   });

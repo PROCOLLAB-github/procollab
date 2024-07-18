@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
     private readonly router: Router,
     private readonly tokenService: TokenService,
     private readonly validationService: ValidationService,
-    private readonly cdref: ChangeDetectorRef
+    private readonly cdref: ChangeDetectorRef,
   ) {
     this.loginForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],

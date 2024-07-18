@@ -17,25 +17,25 @@
   </div>
   <div class="form__images">
     @for (i of imagesList; track i.id) {
-    <app-img-card
-      [loading]="i.loading"
-      [src]="i.src"
-      [error]="i.error"
-      (cancel)="onDeletePhoto(i.id)"
-      (retry)="onRetryUpload(i.id)"
-    ></app-img-card>
+      <app-img-card
+        [loading]="i.loading"
+        [src]="i.src"
+        [error]="i.error"
+        (cancel)="onDeletePhoto(i.id)"
+        (retry)="onRetryUpload(i.id)"
+      ></app-img-card>
     }
   </div>
   <div class="form__files">
     @for (f of filesList; track f.id) {
-    <app-file-upload-item
-      [name]="f.tempFile.name"
-      [type]="f.tempFile.type"
-      [size]="f.tempFile.size"
-      [loading]="f.loading"
-      [error]="f.error"
-      (delete)="onDeleteFile(f.id)"
-    ></app-file-upload-item>
+      <app-file-upload-item
+        [name]="f.tempFile.name"
+        [type]="f.tempFile.type"
+        [size]="f.tempFile.size"
+        [loading]="f.loading"
+        [error]="f.error"
+        (delete)="onDeleteFile(f.id)"
+      ></app-file-upload-item>
     }
   </div>
   <div class="footer">

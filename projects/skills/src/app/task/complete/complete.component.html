@@ -1,52 +1,52 @@
 <!-- @format -->
 
 @if (results | async; as res) {
-<div class="complete">
-  <h2 class="complete__title">
-    Поздравляем! <br />
-    Сегодня ты вывел навык «{{ res.skillName }}» на новый уровень
-  </h2>
-  <div class="complete__block complete__progress">
-    <app-circle-progress-bar
-      class="complete__progress-bar"
-      [progress]="res.progress"
-    ></app-circle-progress-bar>
-  </div>
-  <div class="complete__block results">
-    <h3 class="results__title">ваш результат</h3>
-    <div class="results__points">
-      <div class="results__point results__correct">
-        <div class="results__icon">
-          <img src="assets/images/task/check.svg" alt="check" />
+  <div class="complete">
+    <h2 class="complete__title">
+      Поздравляем! <br />
+      Сегодня ты вывел навык «{{ res.skillName }}» на новый уровень
+    </h2>
+    <div class="complete__block complete__progress">
+      <app-circle-progress-bar
+        class="complete__progress-bar"
+        [progress]="res.progress"
+      ></app-circle-progress-bar>
+    </div>
+    <div class="complete__block results">
+      <h3 class="results__title">ваш результат</h3>
+      <div class="results__points">
+        <div class="results__point results__correct">
+          <div class="results__icon">
+            <img src="assets/images/task/check.svg" alt="check" />
+          </div>
+          <div class="">
+            <div class="results__label">отвечено верно</div>
+            <div class="results__stat">{{ res.quantityDoneCorrect }}/{{ res.quantityAll }}</div>
+          </div>
         </div>
-        <div class="">
-          <div class="results__label">отвечено верно</div>
-          <div class="results__stat">{{ res.quantityDoneCorrect }}/{{ res.quantityAll }}</div>
+        <div class="results__point results__amount">
+          <div class="results__icon">
+            <img src="assets/images/task/fire.svg" alt="fire" />
+          </div>
+          <div class="">
+            <div class="results__label">количество очков</div>
+            <div class="results__stat">+{{ res.pointsGained }}</div>
+          </div>
         </div>
-      </div>
-      <div class="results__point results__amount">
-        <div class="results__icon">
-          <img src="assets/images/task/fire.svg" alt="fire" />
-        </div>
-        <div class="">
-          <div class="results__label">количество очков</div>
-          <div class="results__stat">+{{ res.pointsGained }}</div>
-        </div>
-      </div>
-      <div class="results__point results__level">
-        <div class="results__icon">
-          <img width="40px" height="37px" src="assets/images/shared/prize.png" alt="prize" />
-        </div>
-        <div class="">
-          <div class="results__label">уровень</div>
-          <div class="results__stat">{{ res.level }}</div>
+        <div class="results__point results__level">
+          <div class="results__icon">
+            <img width="40px" height="37px" src="assets/images/shared/prize.png" alt="prize" />
+          </div>
+          <div class="">
+            <div class="results__label">уровень</div>
+            <div class="results__stat">{{ res.level }}</div>
+          </div>
         </div>
       </div>
     </div>
+    <app-button (click)="router.navigate(['/skills'])" appearance="outline"
+      >В меню навыков</app-button
+    >
+    <app-button (click)="router.navigate(['/task', res.nextTaskId])">Следующее задание</app-button>
   </div>
-  <app-button (click)="router.navigate(['/skills'])" appearance="outline"
-    >В меню навыков</app-button
-  >
-  <app-button (click)="router.navigate(['/task', res.nextTaskId])">Следующее задание</app-button>
-</div>
 }

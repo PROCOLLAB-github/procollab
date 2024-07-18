@@ -31,7 +31,7 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
     private readonly onboardingService: OnboardingService,
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
-    private readonly router: Router
+    private readonly router: Router,
   ) {
     this.stageForm = this.fb.group({
       avatar: ["", [Validators.required]],

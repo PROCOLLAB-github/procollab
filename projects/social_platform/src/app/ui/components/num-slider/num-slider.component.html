@@ -1,27 +1,32 @@
 <!-- @format -->
 
 @if (nums.sort(); as sortedNums) {
-<div class="num-slider">
-  @if (value !== null) {
-  <div class="num-slider__range" #rangeEl (mousemove)="onMove($event)" (touchmove)="onMove($event)">
-    <div class="num-slider__placeholder"></div>
-    <div class="num-slider__fill" #fillEl></div>
-    <div
-      class="num-slider__button"
-      #pointEl
-      (mousedown)="onStartInteraction()"
-      (touchstart)="onStartInteraction()"
-      (mouseup)="onStopInteraction($event)"
-      (touchend)="onStopInteraction($event)"
-    ></div>
-  </div>
-  }
-  <div class="num-slider__nums">
-    @for (num of sortedNums; let index = $index; track index) {
-    <span class="num-slider__num" [style.left]="(100 / (sortedNums.length - 1)) * index + '%'">
-      {{ num }}
-    </span>
+  <div class="num-slider">
+    @if (value !== null) {
+      <div
+        class="num-slider__range"
+        #rangeEl
+        (mousemove)="onMove($event)"
+        (touchmove)="onMove($event)"
+      >
+        <div class="num-slider__placeholder"></div>
+        <div class="num-slider__fill" #fillEl></div>
+        <div
+          class="num-slider__button"
+          #pointEl
+          (mousedown)="onStartInteraction()"
+          (touchstart)="onStartInteraction()"
+          (mouseup)="onStopInteraction($event)"
+          (touchend)="onStopInteraction($event)"
+        ></div>
+      </div>
     }
+    <div class="num-slider__nums">
+      @for (num of sortedNums; let index = $index; track index) {
+        <span class="num-slider__num" [style.left]="(100 / (sortedNums.length - 1)) * index + '%'">
+          {{ num }}
+        </span>
+      }
+    </div>
   </div>
-</div>
 }

@@ -37,7 +37,7 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
     private readonly snackbarService: SnackbarService,
     private readonly fileService: FileService,
     private readonly route: ActivatedRoute,
-    private readonly cdRef: ChangeDetectorRef
+    private readonly cdRef: ChangeDetectorRef,
   ) {}
 
   @Input({ required: true }) newsItem!: FeedNews;
@@ -54,10 +54,10 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
     this.showLikes = this.newsItem.files.map(() => false);
 
     this.imagesViewList = this.newsItem.files.filter(
-      f => f.mimeType.split("/")[0] === "image" || f.mimeType.split("/")[1] === "x-empty"
+      f => f.mimeType.split("/")[0] === "image" || f.mimeType.split("/")[1] === "x-empty",
     );
     this.filesViewList = this.newsItem.files.filter(
-      f => f.mimeType.split("/")[0] !== "image" && f.mimeType.split("/")[1] !== "x-empty"
+      f => f.mimeType.split("/")[0] !== "image" && f.mimeType.split("/")[1] !== "x-empty",
     );
 
     this.imagesEditList = this.imagesViewList.map(file => ({
@@ -158,8 +158,8 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
               }
 
               fileObj.tempFile = null;
-            })
-          )
+            }),
+          ),
         );
       } else {
         const fileObj: ProgramNewsCardComponent["filesEditList"][0] = {
@@ -191,8 +191,8 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
                   user: 0,
                 });
               }
-            })
-          )
+            }),
+          ),
         );
       }
     }

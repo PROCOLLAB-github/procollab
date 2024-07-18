@@ -1,19 +1,20 @@
 <!-- @format -->
 
 @if (project) {
-<div class="detail">
-  <app-bar [links]="
+  <div class="detail">
+    <app-bar
+      [links]="
         (isInProject$ | async)
           ? [
               {
                 link: '/office/projects' + '/' + project.id.toString(),
                 linkText: 'Страница проекта',
-                isRouterLinkActiveOptions: true
+                isRouterLinkActiveOptions: true,
               },
               {
-                link: '/office/projects' + '/' + project.id.toString() + '/' +'responses',
+                link: '/office/projects' + '/' + project.id.toString() + '/' + 'responses',
                 linkText: 'Отклики на вакансии',
-                isRouterLinkActiveOptions: false
+                isRouterLinkActiveOptions: false,
               },
               {
                 link: '/office/projects' + '/' + project.id.toString() + '/' + 'chat',
@@ -22,10 +23,13 @@
               },
             ]
           : []
-      " [backHave]="true" class="bar detail__bar"></app-bar>
+      "
+      [backHave]="true"
+      class="bar detail__bar"
+    ></app-bar>
 
-  <div class="detail__body">
-    <router-outlet></router-outlet>
+    <div class="detail__body">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-</div>
 }

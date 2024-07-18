@@ -19,7 +19,7 @@ describe("MembersResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      MembersResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+      MembersResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
     );
     expect(result).toBeTruthy();
   });

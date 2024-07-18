@@ -7,7 +7,7 @@ import { ApiPagination } from "@models/api-pagination.model";
 import { User } from "@auth/models/user.model";
 
 export const ProgramMembersResolver: ResolveFn<ApiPagination<User>> = (
-  route: ActivatedRouteSnapshot
+  route: ActivatedRouteSnapshot,
 ) => {
   const programService = inject(ProgramService);
 

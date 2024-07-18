@@ -1,23 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { BarComponent } from './bar.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('BarComponent', () => {
+import { BarComponent } from "./bar.component";
+
+describe("BarComponent", () => {
   let component: BarComponent;
   let fixture: ComponentFixture<BarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BarComponent]
-    })
-    .compileComponents();
-    
+      imports: [BarComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(BarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

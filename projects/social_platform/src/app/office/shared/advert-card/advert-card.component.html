@@ -1,14 +1,14 @@
 <!-- @format -->
 
 @if (advert) {
-<div class="card" [class.card--vertical]="layout === 'vertical'">
-  <div class="card__cover">
-    <img [src]="advert.coverUrl" [alt]="advert.title" />
-    <div class="text-heading-4 card__overlay">Смотреть</div>
+  <div class="card" [class.card--vertical]="layout === 'vertical'">
+    <div class="card__cover">
+      <img [src]="advert.coverUrl" [alt]="advert.title" />
+      <div class="text-heading-4 card__overlay">Смотреть</div>
+    </div>
+    <div class="card__body">
+      <h3 class="text-heading-4 card__title">{{ advert.title }}</h3>
+      <p class="text-body-12 card__text">{{ advert.shortText }}</p>
+    </div>
   </div>
-  <div class="card__body">
-    <h3 class="text-heading-4 card__title">{{ advert.title }}</h3>
-    <p class="text-body-12 card__text">{{ advert.shortText }}</p>
-  </div>
-</div>
 }

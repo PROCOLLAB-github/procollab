@@ -3,11 +3,11 @@
 <section class="members" #membersRoot>
   <ul class="members__list">
     @for (member of members; track member.id) {
-    <a [routerLink]="['/office/profile', member.id]">
-      <li>
-        <app-member-card [user]="member"></app-member-card>
-      </li>
-    </a>
+      <a [routerLink]="['/office/profile', member.id]">
+        <li>
+          <app-member-card [user]="member"></app-member-card>
+        </li>
+      </a>
     }
   </ul>
 </section>

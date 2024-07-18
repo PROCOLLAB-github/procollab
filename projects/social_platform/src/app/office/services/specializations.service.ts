@@ -21,11 +21,11 @@ export class SpecializationsService {
   getSpecializationsInline(
     search: string,
     limit: number,
-    offset: number
+    offset: number,
   ): Observable<ApiPagination<Specialization>> {
     return this.apiService.get(
       "/auth/users/specializations/inline",
-      new HttpParams({ fromObject: { limit, offset, name__icontains: search } })
+      new HttpParams({ fromObject: { limit, offset, name__icontains: search } }),
     );
   }
 }

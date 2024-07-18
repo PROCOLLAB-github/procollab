@@ -12,6 +12,6 @@ export const FeedResolver: ResolveFn<ApiPagination<FeedItem>> = route => {
   return feedService.getFeed(
     0,
     20,
-    route.queryParams["includes"] ?? ["vacancy", "news", "project"]
+    route.queryParams["includes"] ?? ["vacancy", "news", "project"],
   );
 };

@@ -1,3 +1,5 @@
+/** @format */
+
 import { UserLinksPipe } from "./user-links.pipe";
 
 describe("UserLinksPipe", () => {

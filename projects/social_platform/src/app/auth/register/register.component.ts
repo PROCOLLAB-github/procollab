@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private validationService: ValidationService,
-    private cdref: ChangeDetectorRef
+    private cdref: ChangeDetectorRef,
   ) {
     this.registerForm = this.fb.group(
       {
@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit {
         password: ["", [Validators.required, Validators.minLength(6)]],
         repeatedPassword: ["", [Validators.required]],
       },
-      { validators: [this.validationService.useMatchValidator("password", "repeatedPassword")] }
+      { validators: [this.validationService.useMatchValidator("password", "repeatedPassword")] },
     );
   }
 

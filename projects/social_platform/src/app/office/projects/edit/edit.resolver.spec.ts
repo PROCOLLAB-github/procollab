@@ -25,7 +25,7 @@ describe("ProjectEditResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      ProjectEditResolver(mockRoute, {} as RouterStateSnapshot)
+      ProjectEditResolver(mockRoute, {} as RouterStateSnapshot),
     );
     expect(result).toBeTruthy();
   });

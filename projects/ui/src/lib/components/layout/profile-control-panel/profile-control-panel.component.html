@@ -5,31 +5,31 @@
     <div class="control-panel__action" (click)="showNotifications = true">
       <div (clickOutside)="onClickOutside()" class="control-panel__bell">
         @if (hasNotifications || hasInvites) {
-        <div class="attention"></div>
+          <div class="attention"></div>
         }
         <i appIcon icon="bell" appWidth="20" appHeight="23" appViewBox="0 0 20 22"></i>
       </div>
     </div>
     @if (showNotifications) {
-    <div class="control-panel__notifications notifications">
-      <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
-      <ul class="notifications__invites">
-        @for (invite of invites; track invite.id) {
-        <li class="notifications__invite">
-          <app-invite-manage-card
-            [invite]="invite"
-            (accept)="acceptInvite.emit($event)"
-            (reject)="rejectInvite.emit($event)"
-          ></app-invite-manage-card>
-        </li>
-        }
-      </ul>
-    </div>
+      <div class="control-panel__notifications notifications">
+        <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
+        <ul class="notifications__invites">
+          @for (invite of invites; track invite.id) {
+            <li class="notifications__invite">
+              <app-invite-manage-card
+                [invite]="invite"
+                (accept)="acceptInvite.emit($event)"
+                (reject)="rejectInvite.emit($event)"
+              ></app-invite-manage-card>
+            </li>
+          }
+        </ul>
+      </div>
     }
     <a class="control-panel__action" routerLink="/office/chats">
       <div class="control-panel__bell">
         @if (hasUnreads) {
-        <div class="attention"></div>
+          <div class="attention"></div>
         }
         <i appIcon icon="chats" appSquare="24"></i>
       </div>
@@ -41,10 +41,10 @@
     </a>
   </div>
   @if (user) {
-  <app-profile-info
-    class="control-panel__profile"
-    [user]="user"
-    (logout)="logout.emit()"
-  ></app-profile-info>
+    <app-profile-info
+      class="control-panel__profile"
+      [user]="user"
+      (logout)="logout.emit()"
+    ></app-profile-info>
   }
 </div>

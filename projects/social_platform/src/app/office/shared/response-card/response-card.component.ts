@@ -15,7 +15,15 @@ import { FileItemComponent } from "@ui/components/file-item/file-item.component"
   templateUrl: "./response-card.component.html",
   styleUrl: "./response-card.component.scss",
   standalone: true,
-  imports: [RouterLink, AvatarComponent, TagComponent, ButtonComponent, UserRolePipe, AsyncPipe, FileItemComponent],
+  imports: [
+    RouterLink,
+    AvatarComponent,
+    TagComponent,
+    ButtonComponent,
+    UserRolePipe,
+    AsyncPipe,
+    FileItemComponent,
+  ],
 })
 export class ResponseCardComponent implements OnInit {
   constructor() {}

@@ -14,15 +14,15 @@
         {
           link: '/office/chats/groups',
           linkText: 'Чаты проектов',
-          isRouterLinkActiveOptions: false
-        }
+          isRouterLinkActiveOptions: false,
+        },
       ]"
     ></app-bar>
   </div>
 
   <div class="page__list">
     @for (c of chats | async; track c.id; let last = $last) {
-    <app-chat-card [chat]="c" [isLast]="last" (click)="onGotoChat(c.id)"></app-chat-card>
+      <app-chat-card [chat]="c" [isLast]="last" (click)="onGotoChat(c.id)"></app-chat-card>
     }
   </div>
 </div>

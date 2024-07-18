@@ -11,14 +11,16 @@
         </p>
       </div>
       @if (counter > 0) {
-      <div class="verification__text">Письмо отправлено, отправить еще раз через {{ counter }}</div>
+        <div class="verification__text">
+          Письмо отправлено, отправить еще раз через {{ counter }}
+        </div>
       } @else {
-      <div class="verification__action">
-        <p class="text-body-14 verification__text">Не получил письмо? Проверь папку спам или</p>
-        <button class="verification__send-again text-body-14" (click)="onResend()">
-          отправь снова <i appIcon icon="reload" appSquare="17"></i>
-        </button>
-      </div>
+        <div class="verification__action">
+          <p class="text-body-14 verification__text">Не получил письмо? Проверь папку спам или</p>
+          <button class="verification__send-again text-body-14" (click)="onResend()">
+            отправь снова <i appIcon icon="reload" appSquare="17"></i>
+          </button>
+        </div>
       }
     </div>
     <img class="verification__img" src="/assets/images/auth/email.png" alt="email" />

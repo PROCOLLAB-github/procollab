@@ -13,7 +13,10 @@ import { IconComponent } from "@ui/components";
   imports: [IconComponent],
 })
 export class BackComponent implements OnInit {
-  constructor(private readonly router: Router, private readonly location: Location) {}
+  constructor(
+    private readonly router: Router,
+    private readonly location: Location,
+  ) {}
 
   @Input() path?: string;
   ngOnInit(): void {}

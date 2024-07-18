@@ -1,3 +1,5 @@
+# @format
+
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy to server
 
@@ -20,7 +22,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.16
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci
       - run: npm run build:prod
       - name: deploy to server
@@ -32,4 +34,3 @@ jobs:
           remote_user: gh_deploy
           remote_key: ${{ secrets.DEPLOY_KEY }}
           remote_host: app.procollab.ru
-

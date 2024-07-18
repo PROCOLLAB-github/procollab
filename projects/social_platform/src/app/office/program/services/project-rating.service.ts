@@ -18,14 +18,14 @@ export class ProjectRatingService {
   getAll(id: number, skip: number, take: number): Observable<ApiPagination<ProjectRate>> {
     return this.apiService.get(
       `/rate-project/${id}`,
-      new HttpParams({ fromObject: { limit: take, offset: skip } })
+      new HttpParams({ fromObject: { limit: take, offset: skip } }),
     );
   }
 
   getRated(id: number, skip: number, take: number): Observable<ApiPagination<ProjectRate>> {
     return this.apiService.get(
       `/rate-project/scored/${id}`,
-      new HttpParams({ fromObject: { limit: take, offset: skip } })
+      new HttpParams({ fromObject: { limit: take, offset: skip } }),
     );
   }
 
@@ -40,7 +40,7 @@ export class ProjectRatingService {
   */
   formValuesToDTO(
     criteria: ProjectRatingCriterion[],
-    outputVals: Record<string, string | number>
+    outputVals: Record<string, string | number>,
   ): ProjectRatingCriterionOutput[] {
     const output: ProjectRatingCriterionOutput[] = [];
 

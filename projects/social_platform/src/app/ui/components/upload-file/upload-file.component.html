@@ -2,20 +2,20 @@
 
 <div class="root">
   @if (loading) {
-  <p class="control text-body-bold-18">Загрузка...</p>
+    <p class="control text-body-bold-18">Загрузка...</p>
   } @else if (!value) {
-  <div class="control" [class.control--error]="error">
-    <input [id]="controlId" hidden type="file" [accept]="accept" (change)="onUpdate($event)" />
-    <label [for]="controlId">
-      <div class="control__empty">
-        <ng-content select="[emptyPlaceholder]"></ng-content>
-      </div>
-    </label>
-  </div>
+    <div class="control" [class.control--error]="error">
+      <input [id]="controlId" hidden type="file" [accept]="accept" (change)="onUpdate($event)" />
+      <label [for]="controlId">
+        <div class="control__empty">
+          <ng-content select="[emptyPlaceholder]"></ng-content>
+        </div>
+      </label>
+    </div>
   } @else {
-  <div class="file">
-    <p class="text-bold-body-14 file__title">{{ value | slice:0:70 }}</p>
-    <i class="file__basket" appIcon icon="basket" appSquare="24" (click)="onRemove()"></i>
-  </div>
+    <div class="file">
+      <p class="text-bold-body-14 file__title">{{ value | slice: 0 : 70 }}</p>
+      <i class="file__basket" appIcon icon="basket" appSquare="24" (click)="onRemove()"></i>
+    </div>
   }
 </div>

@@ -24,8 +24,8 @@ export class ChatComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly authService: AuthService,
-    private readonly chatService: ChatService
-  ) { }
+    private readonly chatService: ChatService,
+  ) {}
 
   chatsData = new BehaviorSubject<ChatListItem[]>([]);
 
@@ -37,14 +37,14 @@ export class ChatComponent implements OnInit, OnDestroy {
       chats.map(chat => ({
         ...chat,
         unread: profile.id !== chat.lastMessage.author.id && !chat.lastMessage.isRead,
-      }))
+      })),
     ),
     map(chats =>
       chats.sort((prev, next) => {
         if (prev.unread && !next.unread) return -1;
         else if (!prev.unread && next.unread) return 1;
         else return 0;
-      })
+      }),
     ),
     map(chats =>
       chats.map(chat => {
@@ -53,8 +53,8 @@ export class ChatComponent implements OnInit, OnDestroy {
         delete chat.unread;
 
         return chat;
-      })
-    )
+      }),
+    ),
   );
 
   ngOnInit(): void {

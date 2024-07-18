@@ -12,7 +12,10 @@ import { ApiService, PRODUCTION } from "@corelib";
   providedIn: "root",
 })
 export class TokenService {
-  constructor(private apiService: ApiService, @Inject(PRODUCTION) private production: boolean) {}
+  constructor(
+    private apiService: ApiService,
+    @Inject(PRODUCTION) private production: boolean,
+  ) {}
 
   refreshTokens(): Observable<RefreshResponse> {
     return this.apiService

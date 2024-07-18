@@ -16,7 +16,7 @@ export class MemberService {
   getMembers(
     skip: number,
     take: number,
-    otherParams?: Record<string, string | number | boolean>
+    otherParams?: Record<string, string | number | boolean>,
   ): Observable<ApiPagination<User>> {
     let allParams = new HttpParams({ fromObject: { user_type: 1, limit: take, offset: skip } });
     if (otherParams) {
@@ -28,7 +28,7 @@ export class MemberService {
   getMentors(skip: number, take: number): Observable<ApiPagination<User>> {
     return this.apiService.get<ApiPagination<User>>(
       "/auth/users",
-      new HttpParams({ fromObject: { user_type: "2,3,4", limit: take, offset: skip } })
+      new HttpParams({ fromObject: { user_type: "2,3,4", limit: take, offset: skip } }),
     );
   }
 }

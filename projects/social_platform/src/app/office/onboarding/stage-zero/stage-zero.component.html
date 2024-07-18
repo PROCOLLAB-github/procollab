@@ -1,65 +1,67 @@
 <!-- @format -->
 
 @if (profile) {
-<div class="page">
-  <div class="auth__greeting">
-    <h3 class="auth__title">
-      Добро пожаловать, {{ profile.firstName }} {{ profile.lastName }}! ✌️
-    </h3>
-    <p class="auth__info">
-      Пожалуйста, заполни уточняющие данные о себе, чтобы мы знали, какие команды тебе подойдут
-      лучше всего, и чтобы сами команды могли тебя найти
-    </p>
+  <div class="page">
+    <div class="auth__greeting">
+      <h3 class="auth__title">
+        Добро пожаловать, {{ profile.firstName }} {{ profile.lastName }}! ✌️
+      </h3>
+      <p class="auth__info">
+        Пожалуйста, заполни уточняющие данные о себе, чтобы мы знали, какие команды тебе подойдут
+        лучше всего, и чтобы сами команды могли тебя найти
+      </p>
+    </div>
+    <form [formGroup]="stageForm" class="page__form" (ngSubmit)="onSubmit()">
+      @if (stageForm.get("avatar"); as avatar) {
+        <fieldset class="page__field">
+          <label for="avatar" class="field-label">Фотография профиля</label>
+          <app-avatar-control
+            id="avatar"
+            formControlName="avatar"
+            [error]="avatar | controlError"
+          ></app-avatar-control>
+          @if (avatar | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.EMPTY_AVATAR }}
+            </div>
+          }
+        </fieldset>
+      }
+      @if (stageForm.get("city"); as city) {
+        <fieldset class="page__field">
+          <label for="city" class="field-label">Город</label>
+          <app-input
+            id="city"
+            [error]="city | controlError"
+            type="text"
+            placeholder="Откуда ты"
+            formControlName="city"
+          ></app-input>
+          @if (city | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+          }
+        </fieldset>
+      }
+      @if (stageForm.get("organization"); as organization) {
+        <fieldset class="page__field">
+          <label for="organization" class="field-label">Место учебы/работы</label>
+          <app-input
+            id="organization"
+            [error]="organization | controlError"
+            type="text"
+            placeholder="Напиши название организации"
+            formControlName="organization"
+          ></app-input>
+          @if (organization | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+          }
+        </fieldset>
+      }
+      <app-button type="submit" [loader]="stageSubmitting">Продолжить</app-button>
+    </form>
   </div>
-  <form [formGroup]="stageForm" class="page__form" (ngSubmit)="onSubmit()">
-    @if (stageForm.get('avatar'); as avatar) {
-    <fieldset class="page__field">
-      <label for="avatar" class="field-label">Фотография профиля</label>
-      <app-avatar-control
-        id="avatar"
-        formControlName="avatar"
-        [error]="avatar | controlError"
-      ></app-avatar-control>
-      @if (avatar | controlError:'required') {
-      <div class="text-body-14 error">
-        {{ errorMessage.EMPTY_AVATAR }}
-      </div>
-      }
-    </fieldset>
-    } @if (stageForm.get('city'); as city) {
-    <fieldset class="page__field">
-      <label for="city" class="field-label">Город</label>
-      <app-input
-        id="city"
-        [error]="city | controlError"
-        type="text"
-        placeholder="Откуда ты"
-        formControlName="city"
-      ></app-input>
-      @if (city | controlError: 'required') {
-      <div class="text-body-14 error">
-        {{ errorMessage.VALIDATION_REQUIRED }}
-      </div>
-      }
-    </fieldset>
-    } @if (stageForm.get('organization'); as organization) {
-    <fieldset class="page__field">
-      <label for="organization" class="field-label">Место учебы/работы</label>
-      <app-input
-        id="organization"
-        [error]="organization | controlError"
-        type="text"
-        placeholder="Напиши название организации"
-        formControlName="organization"
-      ></app-input>
-      @if (organization | controlError:'required') {
-      <div class="text-body-14 error">
-        {{ errorMessage.VALIDATION_REQUIRED }}
-      </div>
-      }
-    </fieldset>
-    }
-    <app-button type="submit" [loader]="stageSubmitting">Продолжить</app-button>
-  </form>
-</div>
 }
