@@ -221,7 +221,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.cdRef.detectChanges();
       });
 
-    this.editingStep = this.route.snapshot.queryParamMap.get('editingStep') as 'main' | 'team' | 'achievements' || 'main';
+    this.editingStep =
+      (this.route.snapshot.queryParamMap.get("editingStep") as "main" | "team" | "achievements") ||
+      "main";
   }
 
   programTagsOptions: SelectComponent["options"] = [];
@@ -318,7 +320,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  navigateStep(step: 'main' | 'team' | 'achievements') {
+  navigateStep(step: "main" | "team" | "achievements") {
     this.router.navigate([], { queryParams: { editingStep: step } });
     this.editingStep = step;
   }
