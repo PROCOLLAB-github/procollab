@@ -24,6 +24,8 @@ jobs:
           node-version: 18.16
           cache: "npm"
       - run: npm ci
+      - run: npm run format:check
+      - run: npm run lint:ts
       - run: npm run build:prod
       - name: deploy to server
         uses: burnett01/rsync-deployments@5.2.1
