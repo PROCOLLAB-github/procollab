@@ -220,6 +220,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.cdRef.detectChanges();
       });
+
+    this.editingStep =
+      (this.route.snapshot.queryParamMap.get("editingStep") as "main" | "team" | "achievements") ||
+      "main";
   }
 
   programTagsOptions: SelectComponent["options"] = [];
@@ -314,6 +318,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       const index = this.vacancies.findIndex(vacancy => vacancy.id === vacancyId);
       this.vacancies.splice(index, 1);
     });
+  }
+
+  navigateStep(step: "main" | "team" | "achievements") {
+    this.router.navigate([], { queryParams: { editingStep: step } });
+    this.editingStep = step;
   }
 
   inviteForm: FormGroup;

@@ -223,16 +223,20 @@
             </p>
           </li>
         </ng-template>
-
         @if (vacanciesLength > 3) {
         <div class="read-more" (click)="readAllVacancies = !readAllVacancies">
           {{ readAllVacancies ? "Скрыть" : "Читать полностью" }}
         </div>
-        } @if (profileId === project.leader) {
-        <app-button>
-          <span>Добавить вакансию</span>
-          <i appIcon icon="plus" appSquare="20"></i>
-        </app-button>
+        } @if(profileId === project.leader){
+        <a
+          [routerLink]="['/office/projects/', project.id, 'edit']"
+          [queryParams]="{ editingStep: 'team' }"
+        >
+          <app-button>
+            <span>Добавить вакансию</span>
+            <i appIcon icon="plus" appSquare="20"></i>
+          </app-button>
+        </a>
         }
       </div>
       } @if (project.achievements.length) {
