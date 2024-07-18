@@ -34,7 +34,13 @@ import { InviteService } from "@services/invite.service";
 import { NavService } from "@services/nav.service";
 import { ProjectService } from "@services/project.service";
 import { VacancyService } from "@services/vacancy.service";
-import { BarComponent, ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
+import {
+  BarComponent,
+  ButtonComponent,
+  IconComponent,
+  InputComponent,
+  SelectComponent,
+} from "@ui/components";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
@@ -70,7 +76,7 @@ import { ApiPagination } from "@office/models/api-pagination.model";
     AutoCompleteInputComponent,
     SkillsBasketComponent,
     SkillsGroupComponent,
-    BarComponent
+    BarComponent,
   ],
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -163,7 +169,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           })
         )
       )
-      .subscribe(() => { });
+      .subscribe(() => {});
   }
 
   ngAfterViewInit(): void {

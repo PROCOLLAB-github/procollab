@@ -34,7 +34,7 @@
   <div class="card__text text-body-14">
     @if (!editMode) {
     <p #newsTextEl [innerText]="feedItem.text"></p>
-    } @else{ @if (editForm.get('text'); as text) {
+    } @else { @if (editForm.get("text"); as text) {
     <app-textarea [formControl]="text | formControl"></app-textarea>
     } }
   </div>

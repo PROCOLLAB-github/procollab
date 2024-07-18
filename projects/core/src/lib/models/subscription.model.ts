@@ -8,11 +8,11 @@ export interface SubscriptionPlan {
 }
 
 export interface SubscriptionData {
-  isSubscribed: boolean,
-  lastSubscriptionType: null,
-  lastSubscriptionDate: string,
-  subscriptionDateOver: string,
-  isAutopayAllowed: boolean
+  isSubscribed: boolean;
+  lastSubscriptionType: null;
+  lastSubscriptionDate: string;
+  subscriptionDateOver: string;
+  isAutopayAllowed: boolean;
 }
 
 export interface PaymentStatus {

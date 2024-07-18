@@ -3,21 +3,21 @@
 <div class="auth register">
   <div class="auth__greeting">
     <h3 class="auth__title auth__title--register">
-      @if (step ==='credentials') {
+      @if (step === "credentials") {
       <ng-container>
         Добро пожаловать на Procollab!&nbsp;👋<br />
         С нами идеи становятся реальностью&nbsp;🚀
       </ng-container>
-      } @else if (step === 'info') {
+      } @else if (step === "info") {
       <ng-container>
         PROCOLLAB - это не только платформа, но и сообщество самых заряженных школьников и студентов
       </ng-container>
       }
     </h3>
     <p class="auth__info">
-      @if (step === 'credentials') {
+      @if (step === "credentials") {
       <ng-container> Для регистрации введите данные </ng-container>
-      } @else if (step ==='info') {
+      } @else if (step === "info") {
       <ng-container>
         Заполните основные данные о себе, чтобы мы знали, как к вам обращаться
       </ng-container>
@@ -25,9 +25,9 @@
     </p>
   </div>
   <form class="auth__wrapper" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    @if (step === 'credentials') {
+    @if (step === "credentials") {
     <ng-container>
-      @if (registerForm.get('email'); as email) {
+      @if (registerForm.get("email"); as email) {
       <fieldset class="auth__field">
         <label for="email" class="field-label">Почта</label>
         <app-input
@@ -39,11 +39,11 @@
         ></app-input>
         @if (credsSubmitInitiated) {
         <ng-container>
-          @if (email | controlError: 'required') {
+          @if (email | controlError: "required") {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
-          } @if (email | controlError: 'email') {
+          } @if (email | controlError: "email") {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_EMAIL }}
           </div>
@@ -51,7 +51,7 @@
         </ng-container>
         }
       </fieldset>
-      } @if (registerForm.get('password'); as password) {
+      } @if (registerForm.get("password"); as password) {
       <fieldset class="auth__field">
         <label for="passowrd" class="field-label">Пароль</label>
         <app-input
@@ -71,18 +71,18 @@
         ></app-input>
         @if (credsSubmitInitiated) {
         <ng-container>
-          @if (password | controlError: 'required') {
+          @if (password | controlError: "required") {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
-          } @if (password | controlError: 'minlength') {
+          } @if (password | controlError: "minlength") {
           <div class="text-body-14 error">
             @if (password.errors) {
             {{ errorMessage.VALIDATION_TOO_SHORT }}
             {{ password.errors["minlength"]["requiredLength"] }}
             }
           </div>
-          } @if (password | controlError: 'unMatch') {
+          } @if (password | controlError: "unMatch") {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_PASSWORD_UNMATCH }}
           </div>
@@ -92,10 +92,10 @@
       </fieldset>
       }
     </ng-container>
-    } @else if (step === 'info') {
+    } @else if (step === "info") {
     <ng-container>
       <div class="auth__row">
-        @if (registerForm.get('firstName'); as name) {
+        @if (registerForm.get("firstName"); as name) {
         <fieldset class="auth__field">
           <label for="name" class="field-label">Имя</label>
           <app-input
@@ -107,11 +107,11 @@
           ></app-input>
           @if (infoSubmitInitiated) {
           <ng-container>
-            @if (name | controlError: 'required') {
+            @if (name | controlError: "required") {
             <div class="text-body-14 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
-            } @if (name | controlError: 'invalidLanguage') {
+            } @if (name | controlError: "invalidLanguage") {
             <div class="text-body-14 error">
               {{ errorMessage.VALIDATION_LANGUAGE }}
             </div>
@@ -119,7 +119,7 @@
           </ng-container>
           }
         </fieldset>
-        } @if (registerForm.get('lastName'); as surname) {
+        } @if (registerForm.get("lastName"); as surname) {
         <fieldset class="auth__field">
           <label for="surname" class="field-label">Фамилия</label>
           <app-input
@@ -131,11 +131,11 @@
           ></app-input>
           @if (infoSubmitInitiated) {
           <ng-container>
-            @if (surname | controlError: 'required') {
+            @if (surname | controlError: "required") {
             <div class="text-body-14 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
-            } @if (surname | controlError: 'invalidLanguage') {
+            } @if (surname | controlError: "invalidLanguage") {
             <div class="text-body-14 error">
               {{ errorMessage.VALIDATION_LANGUAGE }}
             </div>
@@ -145,7 +145,7 @@
         </fieldset>
         }
       </div>
-      @if (registerForm.get('birthday'); as birthday) {
+      @if (registerForm.get("birthday"); as birthday) {
       <fieldset class="auth__field">
         <label for="birthday" class="field-label">Дата рождения</label>
         <app-input
@@ -158,16 +158,17 @@
         ></app-input>
         @if (infoSubmitInitiated) {
         <ng-container>
-          @if (birthday | controlError: 'required') {
+          @if (birthday | controlError: "required") {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
-          } @if (birthday | controlError: 'tooYoung') {
+          } @if (birthday | controlError: "tooYoung") {
           <div class="text-body-14 error">
             @if (birthday.errors) {
-            {{ errorMessage.MINIMAL_AGE }} {{ birthday.errors["tooYoung"]["requiredAge"] }} лет }
+            {{ errorMessage.MINIMAL_AGE }}
+            {{ birthday.errors["tooYoung"]["requiredAge"] }} лет }
           </div>
-          } @if (birthday | controlError: 'invalidDateFormat') {
+          } @if (birthday | controlError: "invalidDateFormat") {
           <div class="text-body-14 error">
             {{ errorMessage.INVALID_DATE }}
           </div>
@@ -183,7 +184,7 @@
       <p>{{ e }}</p>
       }
     </div>
-    } @if (step ==='credentials') {
+    } @if (step === "credentials") {
     <div class="register__agreement">
       <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
       <span (click)="registerAgreement = !registerAgreement">
@@ -197,7 +198,7 @@
     <app-button type="submit" class="auth__button" customTypographyClass="auth__button-typography">
       Далее
     </app-button>
-    } @else if ('info') {
+    } @else if ("info") {
     <app-button [loader]="registerIsSubmitting" type="submit" class="auth__button">
       Создать аккаунт
     </app-button>

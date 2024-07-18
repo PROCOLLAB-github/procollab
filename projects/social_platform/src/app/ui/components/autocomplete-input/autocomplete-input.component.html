@@ -14,7 +14,7 @@
       [class.field__input--no-icon]="!searchIcon"
       [class.field__input--error]="error"
     />
-    @if (fieldToDisplayMode === 'chip' && value()) {
+    @if (fieldToDisplayMode === "chip" && value()) {
     <div class="field__chip">
       <span class="text-body-14">{{ $any(value())[fieldToDisplay] || value() }}</span>
       <i appIcon icon="basket" appSquare="18" (click)="onClearValue($event)"></i>

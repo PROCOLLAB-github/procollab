@@ -12,7 +12,7 @@ export interface ConnectQuestion {
   files: string[];
   id: number;
   isAnswered: boolean;
-  questionText: string;
+  text: string;
 }
 export type ConnectQuestionRequest = { leftId: number; rightId: number }[];
 export type ConnectQuestionResponse = {

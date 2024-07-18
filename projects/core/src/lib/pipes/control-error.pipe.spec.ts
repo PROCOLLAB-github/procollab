@@ -1,3 +1,5 @@
+/** @format */
+
 import { ControlErrorPipe } from "./control-error.pipe";
 
 describe("ControlErrorPipe", () => {

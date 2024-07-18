@@ -37,7 +37,7 @@
         </div>
       </div>
       <form class="vacacy__form form" [formGroup]="sendForm" (ngSubmit)="onSubmit()">
-        @if (sendForm.get('whyMe'); as whyMe) {
+        @if (sendForm.get("whyMe"); as whyMe) {
         <fieldset>
           <label for="whyMe" class="field-label">Мотивационное письмо</label>
           <app-textarea
@@ -46,18 +46,18 @@
             [error]="whyMe | controlError"
             placeholder="Текст письма"
           ></app-textarea>
-          @if (whyMe | controlError: 'required') {
+          @if (whyMe | controlError: "required") {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
-          } @if (whyMe | controlError: 'maxlength') {
+          } @if (whyMe | controlError: "maxlength") {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_TOO_LONG }}
             @if (whyMe.errors) {
             {{ whyMe.errors["maxlength"]["requiredLength"] }}
             }
           </div>
-          } @if (whyMe | controlError: 'minlength') {
+          } @if (whyMe | controlError: "minlength") {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_TOO_SHORT }}
             @if (whyMe.errors) {
@@ -65,6 +65,17 @@
             }
           </div>
           }
+        </fieldset>
+        } @if (sendForm.get("accompanyingFile"); as file) {
+        <fieldset>
+          <label for="cv" class="field-label"
+            >Сюда ты можешь прикрепить своё портфолио или другой файл.</label
+          >
+          <app-upload-file id="cv" formControlName="accompanyingFile" accept=".pdf">
+            <ng-container emptyPlaceholder>
+              <p class="text-body-14">Прикрепить файл</p>
+            </ng-container>
+          </app-upload-file>
         </fieldset>
         }
         <app-button [loader]="sendFormIsSubmitting" type="submit" class="form__submit">

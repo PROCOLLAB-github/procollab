@@ -18,8 +18,8 @@
   </div>
   @if (user.skills && user.skills.length) {
   <ul class="card__skills">
-    @for (skill of user.skills.slice(0, user.skills.length >= 6 ? 6 : user.skills.length); track
-    skill.id) {
+    @for ( skill of user.skills.slice(0, user.skills.length >= 6 ? 6 : user.skills.length); track
+    skill.id ) {
     <li class="card__skill">
       <app-tag>{{
         skill.name.length > 12 ? skill.name.slice(0, 12) + " " + "..." : skill.name

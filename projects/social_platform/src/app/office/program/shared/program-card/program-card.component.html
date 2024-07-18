@@ -10,7 +10,8 @@
   </div>
   <p class="text-body-12 card__description">{{ program.shortDescription }}</p>
   <p class="text-body-12 card__description">
-    Регистрация открыта до: {{ program.datetimeRegistrationEnds | date: "dd MMMM yyyy":"ru-RU" }}
+    Регистрация открыта до:
+    {{ program.datetimeRegistrationEnds | date: "dd MMMM yyyy":"ru-RU" }}
   </p>
   <p class="text-body-12 card__description">
     Дата проведения: {{ program.datetimeStarted | date: "dd MMMM yyyy":"ru-RU" }}-{{

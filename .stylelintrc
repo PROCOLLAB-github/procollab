@@ -1,15 +1,18 @@
+# @format
+
 {
   "extends":
     [
       "stylelint-config-recess-order",
       "stylelint-config-prettier-scss",
-      "stylelint-config-standard-scss"
+      "stylelint-config-standard-scss",
     ],
-    "rules": {
+  "rules":
+    {
       "selector-class-pattern": null,
       "no-descending-specificity": null,
       "no-empty-source": null,
       "selector-pseudo-element-no-unknown": null,
-      "scss/at-import-partial-extension": null
-    }
+      "scss/at-import-partial-extension": null,
+    },
 }

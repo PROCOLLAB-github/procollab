@@ -34,7 +34,7 @@ import { FormatedFileSizePipe } from "@core/pipes/formatted-file-size.pipe";
   imports: [IconComponent, NgxMaskModule, AutosizeModule, FileTypePipe, FormatedFileSizePipe],
 })
 export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
-  constructor(private readonly fileService: FileService) { }
+  constructor(private readonly fileService: FileService) {}
 
   @Input() placeholder = "";
   @Input() mask = "";
@@ -135,13 +135,13 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
   }
 
   // eslint-disable-next-line no-use-before-define
-  onChange: (value: MessageInputComponent["value"]) => void = () => { };
+  onChange: (value: MessageInputComponent["value"]) => void = () => {};
 
   registerOnChange(fn: (v: MessageInputComponent["value"]) => void): void {
     this.onChange = fn;
   }
 
-  onTouch: () => void = () => { };
+  onTouch: () => void = () => {};
 
   registerOnTouched(fn: () => void): void {
     this.onTouch = fn;

@@ -11,4 +11,4 @@ import { CircleProgressBarComponent } from "../../../shared/circle-progress-bar/
   templateUrl: "./personal-rating-card.component.html",
   styleUrl: "./personal-rating-card.component.scss",
 })
-export class PersonalRatingCardComponent { }
+export class PersonalRatingCardComponent {}

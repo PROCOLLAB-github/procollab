@@ -24,8 +24,8 @@
       class="progress__point"
       [attr.data-id]="id"
       [ngClass]="{
-        'progress__point--done': doneTasks()?.includes(id) || taskService.currentTaskDone()
-      }"
+            'progress__point--done': doneTasks()?.includes(id) || taskService.currentTaskDone(),
+          }"
       (click)="goToTask(id)"
     ></a>
     }
@@ -33,9 +33,9 @@
       [src]="skillStepsResponse()?.skillPointLogo"
       class="progress__brand-point"
       [ngStyle]="{
-        left: progressDoneWidth() + 'px',
-        opacity: taskService.currentTaskDone() ? 0 : 1
-      }"
+          left: progressDoneWidth() + 'px',
+          opacity: taskService.currentTaskDone() ? 0 : 1,
+        }"
       alt=""
     />
     <div

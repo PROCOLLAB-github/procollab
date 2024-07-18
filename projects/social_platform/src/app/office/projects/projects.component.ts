@@ -31,7 +31,7 @@ import { AsyncPipe } from "@angular/common";
     SearchComponent,
     RouterOutlet,
     AsyncPipe,
-    BarComponent
+    BarComponent,
   ],
 })
 export class ProjectsComponent implements OnInit, OnDestroy {

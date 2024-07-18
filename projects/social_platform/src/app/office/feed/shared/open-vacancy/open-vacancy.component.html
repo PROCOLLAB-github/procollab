@@ -14,7 +14,7 @@
     <span>Тебя ищут в проект</span>
     <a [routerLink]="['/office/projects', feedItem.project.id]" class="card__project">{{
       feedItem.project.name
-      }}</a>
+    }}</a>
   </h3>
   <div class="card__skills skills">
     <div class="skills__title">Необходимые навыки</div>
@@ -26,7 +26,11 @@
   </div>
   <div class="action card__action">
     <span class="action__job"> {{ feedItem.role }} </span>
-    <app-button class="action__button" customTypographyClass="text-body-12"
-      (click)="router.navigate(['/office/vacancy/', feedItem.id])">Откликнуться</app-button>
+    <app-button
+      class="action__button"
+      customTypographyClass="text-body-12"
+      (click)="router.navigate(['/office/vacancy/', feedItem.id])"
+      >Откликнуться</app-button
+    >
   </div>
 </div>

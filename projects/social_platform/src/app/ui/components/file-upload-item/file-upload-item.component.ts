@@ -15,7 +15,7 @@ import { FormatedFileSizePipe } from "@core/pipes/formatted-file-size.pipe";
   imports: [IconComponent, LoaderComponent, UpperCasePipe, FileTypePipe, FormatedFileSizePipe],
 })
 export class FileUploadItemComponent implements OnInit {
-  constructor() { }
+  constructor() {}
 
   @Input() type = "file";
   @Input() name = "";
@@ -27,5 +27,5 @@ export class FileUploadItemComponent implements OnInit {
   @Output() delete = new EventEmitter<void>();
   @Output() retry = new EventEmitter<void>();
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

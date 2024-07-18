@@ -3,8 +3,8 @@
 import { Pipe, PipeTransform } from "@angular/core";
 
 @Pipe({
-    name: "parseBreaks",
-    standalone: true,
+  name: "parseBreaks",
+  standalone: true,
 })
 export class ParseBreaksPipe implements PipeTransform {
   transform(value: string): string {

@@ -10,11 +10,17 @@ import { RouterLink } from "@angular/router";
 @Component({
   selector: "app-skills-block",
   standalone: true,
-  imports: [CommonModule, ButtonComponent, PersonalRatingCardComponent, NgOptimizedImage, IconComponent, RouterLink],
+  imports: [
+    CommonModule,
+    ButtonComponent,
+    PersonalRatingCardComponent,
+    NgOptimizedImage,
+    IconComponent,
+    RouterLink,
+  ],
   templateUrl: "./skills-block.component.html",
   styleUrl: "./skills-block.component.scss",
 })
 export class SkillsBlockComponent {
-
-  skillsList = Array
+  skillsList = Array;
 }

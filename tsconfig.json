@@ -19,51 +19,22 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "es2020",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2020", "dom"],
     "paths": {
-      "@auth/*": [
-        "projects/social_platform/src/app/auth/*"
-      ],
-      "@ui/*": [
-        "projects/social_platform/src/app/ui/*"
-      ],
-      "@core/*": [
-        "projects/social_platform/src/app/core/*"
-      ],
-      "@office/*": [
-        "projects/social_platform/src/app/office/*"
-      ],
-      "@utils/*": [
-        "projects/social_platform/src/app/utils/*"
-      ],
-      "@environment": [
-        "projects/social_platform/src/environments/environment.ts"
-      ],
-      "@error/*": [
-        "projects/social_platform/src/app/error/*"
-      ],
-      "@services/*": [
-        "projects/social_platform/src/app/office/services/*"
-      ],
-      "@models/*": [
-        "projects/social_platform/src/app/office/models/*"
-      ],
-      "@uilib": [
-        "./projects/ui/src/public-api.ts"
-      ],
+      "@auth/*": ["projects/social_platform/src/app/auth/*"],
+      "@ui/*": ["projects/social_platform/src/app/ui/*"],
+      "@core/*": ["projects/social_platform/src/app/core/*"],
+      "@office/*": ["projects/social_platform/src/app/office/*"],
+      "@utils/*": ["projects/social_platform/src/app/utils/*"],
+      "@environment": ["projects/social_platform/src/environments/environment.ts"],
+      "@error/*": ["projects/social_platform/src/app/error/*"],
+      "@services/*": ["projects/social_platform/src/app/office/services/*"],
+      "@models/*": ["projects/social_platform/src/app/office/models/*"],
+      "@uilib": ["./projects/ui/src/public-api.ts"],
       "uilib/models": ["./projects/ui/src/models/*"],
-      "@corelib": [
-        "./projects/core/src/public-api.ts"
-      ],
-      "core": [
-        "./dist/core"
-      ],
-      "ui": [
-        "./dist/ui"
-      ]
+      "@corelib": ["./projects/core/src/public-api.ts"],
+      "core": ["./dist/core"],
+      "ui": ["./dist/ui"]
     },
     "useDefineForClassFields": false
   },

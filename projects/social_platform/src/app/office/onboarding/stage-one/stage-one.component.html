@@ -22,7 +22,7 @@
         placeholder="Название специальности"
         formControlName="speciality"
       ></app-autocomplete-input>
-      @if (stageForm.controls['speciality'] | controlError) {
+      @if (stageForm.controls["speciality"] | controlError) {
       <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>

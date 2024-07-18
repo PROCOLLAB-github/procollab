@@ -1,23 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { SkillChooserComponent } from './skill-chooser.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('SkillChooserComponent', () => {
+import { SkillChooserComponent } from "./skill-chooser.component";
+
+describe("SkillChooserComponent", () => {
   let component: SkillChooserComponent;
   let fixture: ComponentFixture<SkillChooserComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SkillChooserComponent]
-    })
-    .compileComponents();
-    
+      imports: [SkillChooserComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(SkillChooserComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

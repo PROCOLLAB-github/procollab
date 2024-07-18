@@ -1,3 +1,5 @@
+/** @format */
+
 import { FileTypePipe } from "./file-type.pipe";
 
 describe("FileTypePipe", () => {

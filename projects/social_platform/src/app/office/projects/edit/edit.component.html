@@ -31,20 +31,20 @@
       </nav>
 
       <div class="project__inner">
-        @if (editingStep === 'main') { @if (projectForm.get('imageAddress'); as imagesAddress) {
+        @if (editingStep === "main") { @if (projectForm.get("imageAddress"); as imagesAddress) {
         <div class="project__image">
           <app-avatar-control
             id="imageAddress"
             formControlName="imageAddress"
             [error]="(imagesAddress | controlError) && projSubmitInitiated"
           ></app-avatar-control>
-          @if ((imagesAddress | controlError: 'required') && projSubmitInitiated) {
+          @if ((imagesAddress | controlError: "required") && projSubmitInitiated) {
           <div class="text-body-14 error">
             {{ errorMessage.EMPTY_AVATAR }}
           </div>
           }
         </div>
-        } @if (projectForm.get('name'); as name) {
+        } @if (projectForm.get("name"); as name) {
         <fieldset>
           <label class="field-label" for="name">Название проекта</label>
           <app-input
@@ -53,13 +53,13 @@
             [error]="(name | controlError) && projSubmitInitiated"
             placeholder="Например: procollab"
           ></app-input>
-          @if ((name | controlError: 'required') && projSubmitInitiated) {
+          @if ((name | controlError: "required") && projSubmitInitiated) {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
         </fieldset>
-        } @if (projectForm.get('region'); as region) {
+        } @if (projectForm.get("region"); as region) {
         <fieldset>
           <label class="field-label" for="region">Регион проекта</label>
           <app-input
@@ -68,7 +68,7 @@
             [error]="(region | controlError) && projSubmitInitiated"
             placeholder="Например: Москва"
           ></app-input>
-          @if ((region | controlError: 'required') && projSubmitInitiated) {
+          @if ((region | controlError: "required") && projSubmitInitiated) {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
@@ -96,7 +96,7 @@
             <i appIcon icon="plus" appSquare="12"></i>
           </app-button>
         </fieldset>
-        @if (projectForm.get('step'); as step) {
+        @if (projectForm.get("step"); as step) {
         <fieldset>
           <label class="field-label" for="step">Этап на котором находится проект</label>
           @if (projectSteps$ | async; as steps) {
@@ -106,7 +106,7 @@
             placeholder="Выберите этап на котором находится ваш проект"
             [options]="steps"
           ></app-select>
-          } @if (step | controlError: 'required') {
+          } @if (step | controlError: "required") {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
@@ -122,8 +122,7 @@
             formControlName="partnerProgramId"
           ></app-select>
         </fieldset>
-        } @if (projectForm.get('industryId'); as industry) {
-
+        } @if (projectForm.get("industryId"); as industry) {
         <fieldset>
           <label class="field-label" for="industry">Сфера проекта</label>
           @if (industries$ | async; as industries) {
@@ -133,13 +132,13 @@
             placeholder="Выберите сферу к которой относится ваш проект"
             [options]="industries"
           ></app-select>
-          } @if (industry | controlError: 'required') {
+          } @if (industry | controlError: "required") {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
         </fieldset>
-        } @if (projectForm.get('description'); as description) {
+        } @if (projectForm.get("description"); as description) {
         <fieldset>
           <label for="description" class="field-label">Информация о проекте</label>
           <app-textarea
@@ -148,13 +147,13 @@
             formControlName="description"
             placeholder="Напишите кратко о своем проекте, его суть"
           ></app-textarea>
-          @if ((description | controlError: 'required') && projSubmitInitiated) {
+          @if ((description | controlError: "required") && projSubmitInitiated) {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
         </fieldset>
-        } @if (projectForm.get('presentationAddress'); as presentationAddress) {
+        } @if (projectForm.get("presentationAddress"); as presentationAddress) {
         <fieldset class="project__file">
           <app-upload-file
             formControlName="presentationAddress"
@@ -170,13 +169,13 @@
               <p class="text-body-14 project__slides-text">
                 Презентации формата .PDF или .PPTX весом до 50МБ
               </p>
-              @if (presentationAddress | controlError: 'required') {
+              @if (presentationAddress | controlError: "required") {
               <p class="project__slides-error text-body-14">Загрузите файл</p>
               }
             </ng-container>
           </app-upload-file>
         </fieldset>
-        } } @else if (editingStep === 'achievements') {
+        } } @else if (editingStep === "achievements") {
         <div>
           <ng-container formArrayName="achievements">
             <ul id="achievements" class="project__achievements-list">
@@ -184,7 +183,7 @@
               <li class="project__achievement-item">
                 <form [formGroupName]="i" class="achievement">
                   <div class="achievement__first-row">
-                    @if (achievements.at(i)?.get('title'); as title) {
+                    @if (achievements.at(i)?.get("title"); as title) {
                     <fieldset>
                       <app-input
                         [error]="
@@ -197,8 +196,8 @@
                         placeholder="Название конкурса"
                         formControlName="title"
                       ></app-input>
-                      @if (!!( (title | controlError: 'required') &&
-                      achievements.at(i).get('title')?.touched && projSubmitInitiated )) {
+                      @if ( !!( (title | controlError: "required") &&
+                      achievements.at(i).get("title")?.touched && projSubmitInitiated ) ) {
                       <div class="text-body-14 error">
                         {{ errorMessage.VALIDATION_REQUIRED }}
                       </div>
@@ -214,7 +213,7 @@
                       <i appIcon icon="basket" appSquare="24"></i>
                     </app-button>
                   </div>
-                  @if (achievements.at(i).get('status'); as status) {
+                  @if (achievements.at(i).get("status"); as status) {
                   <fieldset>
                     <app-input
                       [error]="
@@ -227,8 +226,8 @@
                       placeholder="Занятое место"
                       formControlName="status"
                     ></app-input>
-                    @if (!!( (status | controlError: 'required') &&
-                    achievements.at(i).get('status')?.touched && projSubmitInitiated )) {
+                    @if ( !!( (status | controlError: "required") &&
+                    achievements.at(i).get("status")?.touched && projSubmitInitiated ) ) {
                     <div class="text-body-14 error">
                       {{ errorMessage.VALIDATION_REQUIRED }}
                     </div>
@@ -245,7 +244,7 @@
             </app-button>
           </ng-container>
         </div>
-        } @else if (editingStep === 'team') {
+        } @else if (editingStep === "team") {
         <div class="invite project__invite">
           <h2 class="text-heading-4 invite__title">Приглашение участников</h2>
           <ul class="invite__list">
@@ -259,7 +258,7 @@
             }
           </ul>
           <form [formGroup]="inviteForm">
-            @if (inviteForm.get('role'); as role) {
+            @if (inviteForm.get("role"); as role) {
             <fieldset class="invite__role">
               <app-input
                 id="invite_role"
@@ -267,13 +266,13 @@
                 [error]="(role | controlError) && inviteSubmitInitiated"
                 placeholder="Роль"
               ></app-input>
-              @if ((role | controlError: 'required') && inviteSubmitInitiated) {
+              @if ((role | controlError: "required") && inviteSubmitInitiated) {
               <div class="text-body-14 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}
               </div>
               }
             </fieldset>
-            } @if (inviteForm.get('link'); as link) {
+            } @if (inviteForm.get("link"); as link) {
             <fieldset class="invite__link">
               <app-input
                 id="invite_link"
@@ -281,11 +280,11 @@
                 [error]="(link | controlError) && inviteSubmitInitiated"
                 placeholder="https://procollab.ru/office/profile/1"
               ></app-input>
-              @if ((link | controlError: 'required') && inviteSubmitInitiated) {
+              @if ((link | controlError: "required") && inviteSubmitInitiated) {
               <div class="text-body-14 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}
               </div>
-              } @if ((link | controlError: 'pattern') && inviteSubmitInitiated) {
+              } @if ((link | controlError: "pattern") && inviteSubmitInitiated) {
               <div class="text-body-14 error">
                 {{ errorMessage.VALIDATION_PROFILE_LINK }}
               </div>
@@ -319,7 +318,7 @@
             }
           </ul>
           <form [formGroup]="vacancyForm">
-            @if (vacancyForm.get('role'); as role) {
+            @if (vacancyForm.get("role"); as role) {
             <fieldset class="vacancy__role">
               <app-input
                 id="vacancy_role"
@@ -327,7 +326,7 @@
                 [error]="(role | controlError) && vacancySubmitInitiated"
                 placeholder="Роль"
               ></app-input>
-              @if ((role | controlError: 'required') && vacancySubmitInitiated) {
+              @if ((role | controlError: "required") && vacancySubmitInitiated) {
               <div class="text-body-14 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}
               </div>
@@ -358,13 +357,13 @@
               </div>
             </fieldset>
 
-            @if (vacancyForm.get('skills'); as skills) {
+            @if (vacancyForm.get("skills"); as skills) {
             <fieldset class="skills-basket">
               <app-skills-basket
                 formControlName="skills"
                 [error]="skills | controlError"
               ></app-skills-basket>
-              @if (skills | controlError: 'required') {
+              @if (skills | controlError: "required") {
               <div class="text-body-14 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}
               </div>

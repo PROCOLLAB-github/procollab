@@ -2,7 +2,9 @@
 
 <section class="bar">
   <nav class="bar__nav">
-    @if (backHave) {<app-back class="bar__back"></app-back>}
+    @if (backHave) {
+    <app-back class="bar__back"></app-back>
+    }
     <ul class="bar__tabs">
       @for (link of links; track $index) {
       <a
@@ -16,7 +18,7 @@
         <li class="text-body-14 bar__item">
           {{ link.linkText }}
 
-          @if(ballHave){
+          @if (ballHave) {
           <div class="bar__ball" [class.bar__ball--small]="link.count! < 10">
             {{ link.count }}
           </div>

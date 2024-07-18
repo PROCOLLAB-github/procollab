@@ -5,6 +5,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { FileService } from "@core/services/file.service";
 import { nanoid } from "nanoid";
 import { IconComponent } from "@ui/components";
+import { SlicePipe } from "@angular/common";
 
 @Component({
   selector: "app-upload-file",
@@ -18,7 +19,7 @@ import { IconComponent } from "@ui/components";
     },
   ],
   standalone: true,
-  imports: [IconComponent],
+  imports: [IconComponent, SlicePipe],
 })
 export class UploadFileComponent implements OnInit, ControlValueAccessor {
   constructor(private fileService: FileService) {}
