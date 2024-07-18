@@ -9,21 +9,21 @@
           <li
             class="project__nav-item"
             [class.project__nav-item--active]="editingStep === 'main'"
-            (click)="editingStep = 'main'"
+            (click)="navigateStep('main')"
           >
             Основные данные
           </li>
           <li
             class="project__nav-item"
             [class.project__nav-item--active]="editingStep === 'team'"
-            (click)="editingStep = 'team'"
+            (click)="navigateStep('team')"
           >
             Участники
           </li>
           <li
             class="project__nav-item"
             [class.project__nav-item--active]="editingStep === 'achievements'"
-            (click)="editingStep = 'achievements'"
+            (click)="navigateStep('achievements')"
           >
             Достижения проекта
           </li>

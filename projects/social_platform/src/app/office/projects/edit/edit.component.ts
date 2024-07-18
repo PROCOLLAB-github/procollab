@@ -312,6 +312,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  navigateStep(step: 'main' | 'team' | 'achievements') {
+    this.router.navigate([], { queryParams: { editingStep: step } });
+    this.editingStep = step;
+  }
+
   inviteForm: FormGroup;
 
   inviteSubmitInitiated = false;

@@ -359,6 +359,7 @@
       }
     }
   }
+
   /* stylelint-enable value-no-vendor-prefix */
 
   &__read-full {
@@ -396,6 +397,10 @@
   }
 
   @include expandable-list;
+
+  &__list {
+    margin-bottom: 12px;
+  }
 }
 
 .vacancy {
