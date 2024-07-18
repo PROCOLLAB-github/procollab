@@ -16,10 +16,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
   imports: [ModalComponent, NewsCardComponent, AsyncPipe],
 })
 export class NewsDetailComponent implements OnInit {
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-  ) {}
+  constructor(private readonly route: ActivatedRoute, private readonly router: Router) {}
 
   newsItem: Observable<FeedNews> = this.route.data.pipe(map(r => r["data"]));
   ngOnInit(): void {}

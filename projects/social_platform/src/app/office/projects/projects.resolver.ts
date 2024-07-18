@@ -19,6 +19,6 @@ export const ProjectsResolver: ResolveFn<ProjectCount> = () => {
         projectService.getCount(),
         subscriptionService.getSubscriptions(p.id).pipe(map(resp => resp.count)),
       ]).pipe(map(([countData, subsCount]) => ({ ...countData, subs: subsCount })));
-    }),
+    })
   );
 };

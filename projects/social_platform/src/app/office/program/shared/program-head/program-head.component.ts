@@ -19,7 +19,7 @@ export class ProgramHeadComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly authService: AuthService,
+    private readonly authService: AuthService
   ) {}
 
   @Input({ required: true }) program!: Program;

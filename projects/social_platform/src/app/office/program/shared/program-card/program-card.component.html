@@ -1,27 +1,27 @@
 <!-- @format -->
 
 @if (program) {
-  <div class="card">
-    <div class="card__head">
-      <div>
-        <p class="text-heading-4 card__name">{{ program.name }}</p>
-      </div>
-      <app-avatar class="card__photo" [url]="program.imageAddress" [size]="60"></app-avatar>
+<div class="card">
+  <div class="card__head">
+    <div>
+      <p class="text-heading-4 card__name">{{ program.name }}</p>
     </div>
-    <p class="text-body-12 card__description">{{ program.shortDescription }}</p>
-    <p class="text-body-12 card__description">
-      Регистрация открыта до:
-      {{ program.datetimeRegistrationEnds | date: "dd MMMM yyyy" : "ru-RU" }}
-    </p>
-    <p class="text-body-12 card__description">
-      Дата проведения: {{ program.datetimeStarted | date: "dd MMMM yyyy" : "ru-RU" }}-{{
-        program.datetimeFinished | date: "dd MMMM yyyy" : "ru-RU"
-      }}
-    </p>
-    <div class="card__media">
-      <div class="card__views">
-        <i appIcon icon="eye" appSquare="22"></i> {{ program.viewsCount }}
-      </div>
+    <app-avatar class="card__photo" [url]="program.imageAddress" [size]="60"></app-avatar>
+  </div>
+  <p class="text-body-12 card__description">{{ program.shortDescription }}</p>
+  <p class="text-body-12 card__description">
+    Регистрация открыта до:
+    {{ program.datetimeRegistrationEnds | date: "dd MMMM yyyy":"ru-RU" }}
+  </p>
+  <p class="text-body-12 card__description">
+    Дата проведения: {{ program.datetimeStarted | date: "dd MMMM yyyy":"ru-RU" }}-{{
+      program.datetimeFinished | date: "dd MMMM yyyy":"ru-RU"
+    }}
+  </p>
+  <div class="card__media">
+    <div class="card__views">
+      <i appIcon icon="eye" appSquare="22"></i> {{ program.viewsCount }}
     </div>
   </div>
+</div>
 }

@@ -1,51 +1,51 @@
 <!-- @format -->
 
 @if (skillStepsResponse()) {
-  <div class="task">
-    <div class="task__badge badge">
-      <div class="badge__left">
-        <h1 class="badge__title">{{ skillStepsResponse()?.skillName }}</h1>
-        <div class="badge__text">
-          развитие навыка стало доступным благодаря <br />
-          начните обучение прямо сейчас
-        </div>
+<div class="task">
+  <div class="task__badge badge">
+    <div class="badge__left">
+      <h1 class="badge__title">{{ skillStepsResponse()?.skillName }}</h1>
+      <div class="badge__text">
+        развитие навыка стало доступным благодаря <br />
+        начните обучение прямо сейчас
       </div>
-      <img class="badge__img" [src]="skillStepsResponse()?.skillPreview" alt="" />
     </div>
-    <div class="task__progress progress" #progressBarEl>
-      <div class="progress__line"></div>
-      <div class="progress__line-done" [ngStyle]="{ width: progressDoneWidth() + 'px' }"></div>
-      <div class="progress__first progress__border progress__border--done">
-        {{ skillStepsResponse()?.currentLevel }} задание
-      </div>
-      @for (id of taskIds(); track $index) {
-        <a
-          #pointEls
-          class="progress__point"
-          [attr.data-id]="id"
-          [ngClass]="{
+    <img class="badge__img" [src]="skillStepsResponse()?.skillPreview" alt="" />
+  </div>
+  <div class="task__progress progress" #progressBarEl>
+    <div class="progress__line"></div>
+    <div class="progress__line-done" [ngStyle]="{ width: progressDoneWidth() + 'px' }"></div>
+    <div class="progress__first progress__border progress__border--done">
+      {{ skillStepsResponse()?.currentLevel }} задание
+    </div>
+    @for (id of taskIds(); track $index) {
+    <a
+      #pointEls
+      class="progress__point"
+      [attr.data-id]="id"
+      [ngClass]="{
             'progress__point--done': doneTasks()?.includes(id) || taskService.currentTaskDone(),
           }"
-          (click)="goToTask(id)"
-        ></a>
-      }
-      <img
-        [src]="skillStepsResponse()?.skillPointLogo"
-        class="progress__brand-point"
-        [ngStyle]="{
+      (click)="goToTask(id)"
+    ></a>
+    }
+    <img
+      [src]="skillStepsResponse()?.skillPointLogo"
+      class="progress__brand-point"
+      [ngStyle]="{
           left: progressDoneWidth() + 'px',
           opacity: taskService.currentTaskDone() ? 0 : 1,
         }"
-        alt=""
-      />
-      <div
-        #progressDone
-        [class.progress__border--done]="taskService.currentTaskDone()"
-        class="progress__last progress__border"
-      >
-        {{ skillStepsResponse()?.nextLevel }} уровень
-      </div>
+      alt=""
+    />
+    <div
+      #progressDone
+      [class.progress__border--done]="taskService.currentTaskDone()"
+      class="progress__last progress__border"
+    >
+      {{ skillStepsResponse()?.nextLevel }} уровень
     </div>
-    <router-outlet></router-outlet>
   </div>
+  <router-outlet></router-outlet>
+</div>
 }

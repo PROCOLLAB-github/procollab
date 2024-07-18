@@ -6,7 +6,7 @@
     <div>
       <div class="head__name">{{ feedItem.project.name }}</div>
       <div class="head__date text-body-14">
-        {{ feedItem.datetimeCreated | dayjs: "format" : "DD MMMM, HH:mm" }}
+        {{ feedItem.datetimeCreated | dayjs: "format":"DD MMMM, HH:mm" }}
       </div>
     </div>
   </a>
@@ -20,7 +20,7 @@
     <div class="skills__title">Необходимые навыки</div>
     <ul class="skills__list">
       @for (skill of feedItem.requiredSkills; track $index) {
-        <app-tag>{{ skill.name }}</app-tag>
+      <app-tag>{{ skill.name }}</app-tag>
       }
     </ul>
   </div>

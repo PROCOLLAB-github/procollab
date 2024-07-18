@@ -33,7 +33,7 @@ export class NavComponent implements OnInit, OnDestroy {
     public readonly notificationService: NotificationService,
     private readonly inviteService: InviteService,
     public readonly authService: AuthService,
-    private readonly cdref: ChangeDetectorRef,
+    private readonly cdref: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {

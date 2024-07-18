@@ -10,10 +10,7 @@ import { environment } from "@environment";
   providedIn: "root",
 })
 export class FileService {
-  constructor(
-    private readonly tokenService: TokenService,
-    private apiService: ApiService,
-  ) {}
+  constructor(private readonly tokenService: TokenService, private apiService: ApiService) {}
 
   uploadFile(file: File): Observable<{ url: string }> {
     const formData = new FormData();

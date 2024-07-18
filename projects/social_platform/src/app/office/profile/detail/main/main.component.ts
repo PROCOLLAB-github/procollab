@@ -48,7 +48,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService,
     private readonly profileNewsService: ProfileNewsService,
-    private readonly cdRef: ChangeDetectorRef,
+    private readonly cdRef: ChangeDetectorRef
   ) {}
 
   subscriptions$: Subscription[] = [];
@@ -60,7 +60,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     const route$ = this.route.params
       .pipe(
         map(r => r["id"]),
-        concatMap(userId => this.profileNewsService.fetchNews(userId)),
+        concatMap(userId => this.profileNewsService.fetchNews(userId))
       )
       .subscribe(news => {
         this.news.set(news.results);

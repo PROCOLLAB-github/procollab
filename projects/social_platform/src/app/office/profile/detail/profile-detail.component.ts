@@ -38,7 +38,7 @@ export class ProfileDetailComponent implements OnInit {
     private readonly navService: NavService,
     public readonly authService: AuthService,
     public readonly chatService: ChatService,
-    public readonly breakpointObserver: BreakpointObserver,
+    public readonly breakpointObserver: BreakpointObserver
   ) {}
 
   user$: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));

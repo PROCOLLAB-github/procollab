@@ -3,21 +3,21 @@
 <div class="basket" [class.basket--error]="error">
   <div class="basket__content" [class.basket__content--empty]="!value().length">
     @for (skill of value(); track skill.id) {
-      <div class="basket__skill">
-        <span class="text-body-14">{{ skill.name }}</span>
-        <i
-          appIcon
-          class="basket__skill-delete-icon"
-          icon="basket"
-          appSquare="18"
-          (click)="deleteSkill(skill.id)"
-        ></i>
-      </div>
+    <div class="basket__skill">
+      <span class="text-body-14">{{ skill.name }}</span>
+      <i
+        appIcon
+        class="basket__skill-delete-icon"
+        icon="basket"
+        appSquare="18"
+        (click)="deleteSkill(skill.id)"
+      ></i>
+    </div>
     } @empty {
-      <div class="basket__empty-placeholder">
-        <img src="/assets/images/office/onboarding/laptop-guy.svg" alt="" />
-        <span class="text-body-14">Выберите навыки</span>
-      </div>
+    <div class="basket__empty-placeholder">
+      <img src="/assets/images/office/onboarding/laptop-guy.svg" alt="" />
+      <span class="text-body-14">Выберите навыки</span>
+    </div>
     }
   </div>
 </div>

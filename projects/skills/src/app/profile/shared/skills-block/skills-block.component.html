@@ -5,13 +5,13 @@
     <h2 class="skills__title">Навыки</h2>
     <div class="skills_list">
       @for (skill of skillsList(2); track $index) {
-        <app-personal-rating-card />
+      <app-personal-rating-card></app-personal-rating-card>
       } @empty {
-        <p class="skills__placeholder-text">
-          выберите навыки,которые Вы будете развивать в этом месяце
-        </p>
-        <app-button class="skills__select">Выбрать</app-button>
-        <app-button>Все навыки</app-button>
+      <p class="skills__placeholder-text">
+        выберите навыки,которые Вы будете развивать в этом месяце
+      </p>
+      <app-button class="skills__select">Выбрать</app-button>
+      <app-button>Все навыки</app-button>
       }
 
       <div class="skills_pagination">

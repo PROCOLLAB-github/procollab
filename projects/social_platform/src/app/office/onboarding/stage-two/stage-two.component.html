@@ -36,14 +36,14 @@
       <div class="content__skills-groups">
         <ul class="content__skills-groups-list">
           @for (skillGroup of nestedSkills$ | async; track skillGroup.id) {
-            <li class="content__skills-groups-list-item">
-              <app-skills-group
-                [title]="skillGroup.name"
-                [options]="skillGroup.skills"
-                [selected]="stageForm.getRawValue().skills"
-                (optionToggled)="onOptionToggled($event)"
-              ></app-skills-group>
-            </li>
+          <li class="content__skills-groups-list-item">
+            <app-skills-group
+              [title]="skillGroup.name"
+              [options]="skillGroup.skills"
+              [selected]="stageForm.getRawValue().skills"
+              (optionToggled)="onOptionToggled($event)"
+            ></app-skills-group>
+          </li>
           }
         </ul>
       </div>

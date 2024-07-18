@@ -30,7 +30,7 @@ export class TaskService {
     return this.apiService.get<TaskStepsResponse>(`/courses/${taskId}`).pipe(
       tap(res => {
         this.currentSteps.set(res.stepData);
-      }),
+      })
     );
   }
 

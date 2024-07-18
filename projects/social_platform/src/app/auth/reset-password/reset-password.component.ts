@@ -20,7 +20,7 @@ export class ResetPasswordComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
     private readonly validationService: ValidationService,
-    private readonly router: Router,
+    private readonly router: Router
   ) {
     this.resetForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],

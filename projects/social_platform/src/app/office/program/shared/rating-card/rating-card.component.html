@@ -1,96 +1,92 @@
 <!-- @format -->
 
 @if (project) {
-  <div class="card">
-    <div class="card__upper">
-      <div class="card__heading">
-        <app-avatar
-          class="card__avatar"
-          [url]="project.imageAddress"
-          [hasBorder]="true"
-          [size]="(desktopMode$ | async) ? 83 : 68"
-        ></app-avatar>
-        <div class="card__info">
-          <a [routerLink]="['/office/projects/' + project.id]">
-            <h1 class="card__title">{{ project.name }}</h1>
-          </a>
-          <div class="card__row">
-            @if (industryService.industries | async; as industries) {
-              <p class="text-body-14">
-                @if (industryService.getIndustry(industries, project.industry); as industry) {
-                  {{ industry.name }}
-                }
-              </p>
+<div class="card">
+  <div class="card__upper">
+    <div class="card__heading">
+      <app-avatar
+        class="card__avatar"
+        [url]="project.imageAddress"
+        [hasBorder]="true"
+        [size]="(desktopMode$ | async) ? 83 : 68"
+      ></app-avatar>
+      <div class="card__info">
+        <a [routerLink]="['/office/projects/' + project.id]">
+          <h1 class="card__title">{{ project.name }}</h1>
+        </a>
+        <div class="card__row">
+          @if (industryService.industries | async; as industries) {
+          <p class="text-body-14">
+            @if (industryService.getIndustry(industries, project.industry); as industry) {
+            {{ industry.name }}
             }
-            @if (project.region) {
-              <p class="card__geo text-body-14">
-                <i appIcon icon="geo-point" appWidth="7" appHeight="10" appViewBox="0 0 7 10"></i>
-                {{ project.region }}
-              </p>
-            }
-          </div>
-        </div>
-        <div class="card__info-buttons">
-          @if (project.presentationAddress) {
-            <a class="card__presentation" [href]="project.presentationAddress" target="_blank">
-              <app-button
-                class="card__presentation-button"
-                color="grey"
-                customTypographyClass="text-body-12"
-              >
-                Презентация проекта
-                <i appIcon icon="file_pdf" appSquare="16"></i>
-              </app-button>
-            </a>
+          </p>
+          } @if (project.region) {
+          <p class="card__geo text-body-14">
+            <i appIcon icon="geo-point" appWidth="7" appHeight="10" appViewBox="0 0 7 10"></i>
+            {{ project.region }}
+          </p>
           }
         </div>
       </div>
-      <div class="about">
-        <h3 class="text-bold-body-16 about__title">О проекте</h3>
-        @if (project.description) {
-          <div class="text-body-14 about__text">
-            <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
-            @if (descriptionExpandable()) {
-              <div
-                class="about__read-full"
-                (click)="expandDescription(descEl, 'expanded', readFullDescription())"
-              >
-                {{ readFullDescription() ? "Скрыть" : "Читать полностью" }}
-              </div>
-            }
-          </div>
+      <div class="card__info-buttons">
+        @if (project.presentationAddress) {
+        <a class="card__presentation" [href]="project.presentationAddress" target="_blank">
+          <app-button
+            class="card__presentation-button"
+            color="grey"
+            customTypographyClass="text-body-12"
+          >
+            Презентация проекта
+            <i appIcon icon="file_pdf" appSquare="16"></i>
+          </app-button>
+        </a>
         }
       </div>
     </div>
-    <div class="card__lower">
-      @if (!projectRated()) {
-        <div>
-          <app-project-rating
-            [criteria]="project.criterias"
-            [formControl]="form"
-          ></app-project-rating>
-          @if (form | controlError: "required"; as error) {
-            <div class="text-body-12 error">
-              {{ error }}
-            </div>
-          }
+    <div class="about">
+      <h3 class="text-bold-body-16 about__title">О проекте</h3>
+      @if (project.description) {
+      <div class="text-body-14 about__text">
+        <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
+        @if (descriptionExpandable()) {
+        <div
+          class="about__read-full"
+          (click)="expandDescription(descEl, 'expanded', readFullDescription())"
+        >
+          {{ readFullDescription() ? "Скрыть" : "Читать полностью" }}
         </div>
-        <app-button (click)="submitRating()" [loader]="submitLoading()">Оценить проект</app-button>
-      } @else {
-        <div class="card__rated">
-          <div class="card__lower-icons">
-            <i appIcon icon="check" appWidth="30" appHeight="20" class="card__rated-icon"></i>
-            <i
-              appIcon
-              icon="reload"
-              appSquare="30"
-              class="card__redo-rating-icon"
-              (click)="redoRating()"
-            ></i>
-          </div>
-          <div class="text-heading-4">Проект оценен</div>
-        </div>
+        }
+      </div>
       }
     </div>
   </div>
+  <div class="card__lower">
+    @if (!projectRated()) {
+    <div>
+      <app-project-rating [criteria]="project.criterias" [formControl]="form"></app-project-rating>
+      @if (form | controlError: "required"; as error) {
+      <div class="text-body-12 error">
+        {{ error }}
+      </div>
+      }
+    </div>
+    <app-button (click)="submitRating()" [loader]="submitLoading()">Оценить проект</app-button>
+    } @else {
+    <div class="card__rated">
+      <div class="card__lower-icons">
+        <i appIcon icon="check" appWidth="30" appHeight="20" class="card__rated-icon"></i>
+        <i
+          appIcon
+          icon="reload"
+          appSquare="30"
+          class="card__redo-rating-icon"
+          (click)="redoRating()"
+        ></i>
+      </div>
+      <div class="text-heading-4">Проект оценен</div>
+    </div>
+    }
+  </div>
+</div>
 }

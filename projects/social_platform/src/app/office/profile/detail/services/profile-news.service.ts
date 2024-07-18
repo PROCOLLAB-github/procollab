@@ -19,7 +19,7 @@ export class ProfileNewsService {
   fetchNews(userId: string): Observable<ApiPagination<ProfileNews>> {
     return this.apiService.get<ApiPagination<ProfileNews>>(
       `/auth/users/${userId}/news/`,
-      new HttpParams({ fromObject: { limit: 10 } }),
+      new HttpParams({ fromObject: { limit: 10 } })
     );
   }
 
@@ -45,9 +45,9 @@ export class ProfileNewsService {
           this.apiService.post<void>(`/auth/users/${userId}/news/${id}/set_viewed/`, {}).pipe(
             tap(() => {
               this.storageService.setItem("readNews", [...readNews, id], sessionStorage);
-            }),
-          ),
-        ),
+            })
+          )
+        )
     );
   }
 
@@ -64,7 +64,7 @@ export class ProfileNewsService {
   editNews(
     userId: string,
     newsId: number,
-    newsItem: Partial<ProfileNews>,
+    newsItem: Partial<ProfileNews>
   ): Observable<ProfileNews> {
     return this.apiService
       .patch(`/auth/users/${userId}/news/${newsId}/`, newsItem)

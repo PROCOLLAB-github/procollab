@@ -55,7 +55,7 @@ export class NewsCardComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly fileService: FileService,
-    private readonly cdRef: ChangeDetectorRef,
+    private readonly cdRef: ChangeDetectorRef
   ) {
     this.editForm = this.fb.group({
       text: ["", [Validators.required]],
@@ -86,10 +86,10 @@ export class NewsCardComponent implements OnInit {
     this.showLikes = this.feedItem.files.map(() => false);
 
     this.imagesViewList = this.feedItem.files.filter(
-      f => f.mimeType.split("/")[0] === "image" || f.mimeType.split("/")[1] === "x-empty",
+      f => f.mimeType.split("/")[0] === "image" || f.mimeType.split("/")[1] === "x-empty"
     );
     this.filesViewList = this.feedItem.files.filter(
-      f => f.mimeType.split("/")[0] !== "image" && f.mimeType.split("/")[1] !== "x-empty",
+      f => f.mimeType.split("/")[0] !== "image" && f.mimeType.split("/")[1] !== "x-empty"
     );
 
     this.imagesEditList = this.imagesViewList.map(file => ({
@@ -208,8 +208,8 @@ export class NewsCardComponent implements OnInit {
               }
 
               fileObj.tempFile = null;
-            }),
-          ),
+            })
+          )
         );
       } else {
         const fileObj: NewsCardComponent["filesEditList"][0] = {
@@ -241,8 +241,8 @@ export class NewsCardComponent implements OnInit {
                   user: 0,
                 });
               }
-            }),
-          ),
+            })
+          )
         );
       }
     }

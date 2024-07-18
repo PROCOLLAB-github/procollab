@@ -23,7 +23,7 @@ export class ProjectsFilterComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly industryService: IndustryService,
-    private readonly projectService: ProjectService,
+    private readonly projectService: ProjectService
   ) {}
 
   ngOnInit(): void {

@@ -16,7 +16,7 @@ describe("ChatDirectResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      ChatDirectResolver(mockRoute, {} as RouterStateSnapshot),
+      ChatDirectResolver(mockRoute, {} as RouterStateSnapshot)
     );
     expect(result).toBeTruthy();
   });

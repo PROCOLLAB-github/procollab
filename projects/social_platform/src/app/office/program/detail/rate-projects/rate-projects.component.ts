@@ -14,10 +14,7 @@ import { BarComponent } from "@ui/components";
   imports: [RouterLinkActive, RouterLink, RouterOutlet, BackComponent, BarComponent],
 })
 export class RateProjectsComponent implements OnInit {
-  constructor(
-    private readonly navService: NavService,
-    private readonly route: ActivatedRoute,
-  ) {}
+  constructor(private readonly navService: NavService, private readonly route: ActivatedRoute) {}
 
   programId?: number;
 

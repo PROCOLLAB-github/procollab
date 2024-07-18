@@ -15,7 +15,7 @@ describe("ListRatedResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      ListRatedResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
+      ListRatedResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
     );
     expect(result).toBeTruthy();
   });

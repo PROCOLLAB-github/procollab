@@ -40,7 +40,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     public readonly projectService: ProjectService,
     private readonly router: Router,
-    private readonly fb: FormBuilder,
+    private readonly fb: FormBuilder
   ) {
     this.searchForm = this.fb.group({
       search: [""],

@@ -19,7 +19,7 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly projectRatingService: ProjectRatingService,
+    private readonly projectRatingService: ProjectRatingService
   ) {}
 
   isListOfAll = this.router.url.includes("/all");
@@ -36,7 +36,7 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     const initProjects$ = this.route.data
       .pipe(
         map(r => r["data"]),
-        map(r => ({ projects: r["results"], count: r["count"] })),
+        map(r => ({ projects: r["results"], count: r["count"] }))
       )
       .subscribe(({ projects, count }) => {
         this.projects.set(projects);
@@ -52,7 +52,7 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
       const scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
           concatMap(() => this.onScroll()),
-          throttleTime(500),
+          throttleTime(500)
         )
         .subscribe();
 
@@ -90,7 +90,7 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
       tap(({ count, results }) => {
         this.totalProjCount.set(count);
         this.projects.update(projects => [...projects, ...results]);
-      }),
+      })
     );
   }
 }

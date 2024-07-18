@@ -2,82 +2,75 @@
 
 <div class="message-input">
   @if (attachFiles.length) {
-    <ul class="message-input__action action files-list">
-      @for (file of attachFiles; let index = $index; track index) {
-        <li class="files-list__item file" [class.file--loading]="file.loading">
-          <i
-            class="file__type"
-            appIcon
-            [icon]="'file_' + (file.type | fileType)"
-            appSquare="24"
-          ></i>
-          <h3 class="file__name">{{ file.name }}</h3>
-          <div class="file__size">{{ +file.size | formatedFileSize }}</div>
-          <!--Use hardcoded svg here, because svg sprites
+  <ul class="message-input__action action files-list">
+    @for (file of attachFiles; let index = $index; track index) {
+    <li class="files-list__item file" [class.file--loading]="file.loading">
+      <i class="file__type" appIcon [icon]="'file_' + (file.type | fileType)" appSquare="24"></i>
+      <h3 class="file__name">{{ file.name }}</h3>
+      <div class="file__size">{{ +file.size | formatedFileSize }}</div>
+      <!--Use hardcoded svg here, because svg sprites
       aren't capable of animation-->
-          @if (file.loading) {
-            <svg
-              class="file__loading"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="none"
-                stroke="currentColor"
-                stroke-dasharray="15"
-                stroke-dashoffset="15"
-                stroke-linecap="round"
-                stroke-width="2"
-                d="M12 3C16.9706 3 21 7.02944 21 12"
-              >
-                <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" />
-                <animateTransform
-                  attributeName="transform"
-                  dur="1.5s"
-                  repeatCount="indefinite"
-                  type="rotate"
-                  values="0 12 12;360 12 12"
-                />
-              </path>
-            </svg>
-          } @else {
-            <i
-              class="file__basket"
-              appIcon
-              icon="basket"
-              appSquare="24"
-              (click)="onDeleteFile(index)"
-            ></i>
-          }
-        </li>
+      @if (file.loading) {
+      <svg
+        class="file__loading"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+      >
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-dasharray="15"
+          stroke-dashoffset="15"
+          stroke-linecap="round"
+          stroke-width="2"
+          d="M12 3C16.9706 3 21 7.02944 21 12"
+        >
+          <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0" />
+          <animateTransform
+            attributeName="transform"
+            dur="1.5s"
+            repeatCount="indefinite"
+            type="rotate"
+            values="0 12 12;360 12 12"
+          />
+        </path>
+      </svg>
+      } @else {
+      <i
+        class="file__basket"
+        appIcon
+        icon="basket"
+        appSquare="24"
+        (click)="onDeleteFile(index)"
+      ></i>
       }
-    </ul>
-  }
-  @if (editingMessage) {
-    <div class="message-input__action action">
-      <i class="action__icon" appIcon icon="edit-pen" appSquare="24"></i>
-      <div class="action__text">
-        <div class="action__name text-body-12">
-          {{ editingMessage.author.firstName }} {{ editingMessage.author.lastName }}
-        </div>
-        <div class="action__info text-body-14">{{ editingMessage.text }}</div>
+    </li>
+    }
+  </ul>
+  } @if (editingMessage) {
+  <div class="message-input__action action">
+    <i class="action__icon" appIcon icon="edit-pen" appSquare="24"></i>
+    <div class="action__text">
+      <div class="action__name text-body-12">
+        {{ editingMessage.author.firstName }} {{ editingMessage.author.lastName }}
       </div>
-      <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
+      <div class="action__info text-body-14">{{ editingMessage.text }}</div>
     </div>
-  }
-  @if (replyMessage) {
-    <div class="message-input__action action">
-      <i class="action__icon" appIcon icon="reply" appSquare="24"></i>
-      <div class="action__text">
-        <div class="action__name text-body-12">
-          {{ replyMessage.author.firstName }} {{ replyMessage.author.lastName }}
-        </div>
-        <div class="action__info text-body-14">{{ replyMessage.text }}</div>
+    <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
+  </div>
+  } @if (replyMessage) {
+  <div class="message-input__action action">
+    <i class="action__icon" appIcon icon="reply" appSquare="24"></i>
+    <div class="action__text">
+      <div class="action__name text-body-12">
+        {{ replyMessage.author.firstName }} {{ replyMessage.author.lastName }}
       </div>
-      <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
+      <div class="action__info text-body-14">{{ replyMessage.text }}</div>
     </div>
+    <i class="action__cross" appIcon icon="cross" appSquare="24" (click)="cancel.emit()"></i>
+  </div>
   }
   <div class="message-input__control">
     <textarea
@@ -104,21 +97,21 @@
     </button>
   </div>
   @if (showDropModal) {
-    <div class="drop-modal">
-      <div class="drop-modal__overlay"></div>
-      <div class="drop-modal__body">
-        <img
-          src="assets/images/projects/chat/drop.png"
-          alt="drop files"
-          class="drop-modal__img"
-          width="105px"
-          height="105px"
-        />
-        <h3 class="drop-modal__title text-bold-body-16">Перетащите сюда файлы для отправки</h3>
-        <p class="drop-modal__comments text-body-14">
-          Вы можете добавить к ним комментарий или отправить отдельно
-        </p>
-      </div>
+  <div class="drop-modal">
+    <div class="drop-modal__overlay"></div>
+    <div class="drop-modal__body">
+      <img
+        src="assets/images/projects/chat/drop.png"
+        alt="drop files"
+        class="drop-modal__img"
+        width="105px"
+        height="105px"
+      />
+      <h3 class="drop-modal__title text-bold-body-16">Перетащите сюда файлы для отправки</h3>
+      <p class="drop-modal__comments text-body-14">
+        Вы можете добавить к ним комментарий или отправить отдельно
+      </p>
     </div>
+  </div>
   }
 </div>

@@ -11,7 +11,7 @@ import { API_URL } from "../providers";
 export class ApiService {
   constructor(
     private readonly http: HttpClient,
-    @Inject(API_URL) private readonly apiUrl: string,
+    @Inject(API_URL) private readonly apiUrl: string
   ) {}
 
   get<T>(path: string, params?: HttpParams, options?: object): Observable<T> {

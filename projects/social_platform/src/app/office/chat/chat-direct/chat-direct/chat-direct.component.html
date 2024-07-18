@@ -5,12 +5,12 @@
 
   <div class="page__main">
     @if (chat) {
-      <header class="page__header">
-        <a class="page__opponent" [routerLink]="['/office/profile', chat.opponent.id]">
-          <app-avatar class="page__avatar" [url]="chat.imageAddress" [size]="40"></app-avatar>
-          <div class="page__name text-heading-4">{{ chat.name }}</div>
-        </a>
-      </header>
+    <header class="page__header">
+      <a class="page__opponent" [routerLink]="['/office/profile', chat.opponent.id]">
+        <app-avatar class="page__avatar" [url]="chat.imageAddress" [size]="40"></app-avatar>
+        <div class="page__name text-heading-4">{{ chat.name }}</div>
+      </a>
+    </header>
     }
     <div class="page__chat">
       <app-chat-window

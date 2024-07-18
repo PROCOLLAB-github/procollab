@@ -17,10 +17,7 @@ import { BarComponent } from "@ui/components";
   imports: [RouterLinkActive, RouterLink, RouterOutlet, AsyncPipe, BarComponent, BackComponent],
 })
 export class ProjectDetailComponent implements OnInit, OnDestroy {
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly route: ActivatedRoute, private readonly authService: AuthService) {}
 
   ngOnInit(): void {
     const projectSub$ = this.route.data.pipe(map(r => r["data"][0])).subscribe(project => {
@@ -38,6 +35,6 @@ export class ProjectDetailComponent implements OnInit, OnDestroy {
   project?: Project;
 
   isInProject$ = this.authService.profile.pipe(
-    map(profile => this.project?.collaborators.map(person => person.userId).includes(profile.id)),
+    map(profile => this.project?.collaborators.map(person => person.userId).includes(profile.id))
   );
 }

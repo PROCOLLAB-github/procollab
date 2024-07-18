@@ -18,7 +18,7 @@ export class FeedService {
   getFeed(
     offset: number,
     limit: number,
-    type: FeedItemType[] | FeedItemType,
+    type: FeedItemType[] | FeedItemType
   ): Observable<ApiPagination<FeedItem>> {
     let reqType: string;
 
@@ -38,7 +38,7 @@ export class FeedService {
           offset,
           type: reqType,
         },
-      }),
+      })
     );
   }
 }

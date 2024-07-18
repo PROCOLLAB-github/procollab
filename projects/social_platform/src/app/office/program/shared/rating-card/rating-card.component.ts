@@ -48,7 +48,7 @@ export class RatingCardComponent implements AfterViewInit, OnDestroy {
     public industryService: IndustryService,
     private projectRatingService: ProjectRatingService,
     private breakpointObserver: BreakpointObserver,
-    private cdRef: ChangeDetectorRef,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   @Input({ required: true }) set project(proj: ProjectRate) {

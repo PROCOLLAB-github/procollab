@@ -18,7 +18,7 @@ describe("MentorsResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      MentorsResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
+      MentorsResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
     );
     expect(result).toBeTruthy();
   });

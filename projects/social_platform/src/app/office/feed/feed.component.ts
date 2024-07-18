@@ -79,7 +79,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
           this.feedPage.set(0);
 
           return this.onFetch(0, this.perFetchTake(), includes ?? ["vacancy", "project", "news"]);
-        }),
+        })
       )
       .subscribe(feed => {
         this.feedItems.set(feed);
@@ -97,7 +97,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       const scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
           concatMap(() => this.onScroll()),
-          throttleTime(500),
+          throttleTime(500)
         )
         .subscribe(noop);
 
@@ -130,7 +130,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         .toggleLike(
           item.content.contentObject.id as unknown as string,
           newsId,
-          !item.content.isUserLiked,
+          !item.content.isUserLiked
         )
         .subscribe(() => {
           item.content.likesCount = item.content.isUserLiked
@@ -150,7 +150,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         .toggleLike(
           item.content.contentObject.id as unknown as string,
           newsId,
-          !item.content.isUserLiked,
+          !item.content.isUserLiked
         )
         .subscribe(() => {
           item.content.likesCount = item.content.isUserLiked
@@ -177,10 +177,10 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       .filter(Boolean) as FeedItem[];
 
     const projectNews = items.filter(
-      item => item.typeModel === "news" && !("email" in item.content.contentObject),
+      item => item.typeModel === "news" && !("email" in item.content.contentObject)
     );
     const profileNews = items.filter(
-      item => item.typeModel === "news" && "email" in item.content.contentObject,
+      item => item.typeModel === "news" && "email" in item.content.contentObject
     );
 
     projectNews.forEach(news => {
@@ -213,12 +213,12 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       return this.onFetch(
         this.feedPage() * this.perFetchTake(),
         this.perFetchTake(),
-        this.includes(),
+        this.includes()
       ).pipe(
         tap((feedChunk: FeedItem[]) => {
           this.feedPage.update(page => page + 1);
           this.feedItems.update(items => [...items, ...feedChunk]);
-        }),
+        })
       );
     }
 
@@ -228,13 +228,13 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   onFetch(
     offset: number,
     limit: number,
-    includes: FeedItemType[] = ["project", "vacancy", "news"],
+    includes: FeedItemType[] = ["project", "vacancy", "news"]
   ) {
     return this.feedService.getFeed(offset, limit, includes).pipe(
       tap(res => {
         this.totalItemsCount.set(res.count);
       }),
-      map(res => res.results),
+      map(res => res.results)
     );
   }
 }

@@ -26,7 +26,7 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService,
     private readonly chatService: ChatService,
-    private readonly chatDirectService: ChatDirectService,
+    private readonly chatDirectService: ChatDirectService
   ) {}
 
   ngOnInit(): void {
@@ -80,13 +80,13 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
       .loadMessages(
         this.chat?.id ?? "",
         this.messages.length > 0 ? this.messages.length : 0,
-        this.messagesPerFetch,
+        this.messagesPerFetch
       )
       .pipe(
         tap(messages => {
           this.messages = messages.results.reverse().concat(this.messages);
           this.messagesTotalCount = messages.count;
-        }),
+        })
       );
   }
 

@@ -21,7 +21,7 @@ export class SkillsService {
   getSkillsInline(search: string, limit: number, offset: number): Observable<ApiPagination<Skill>> {
     return this.apiService.get(
       "/core/skills/inline",
-      new HttpParams({ fromObject: { limit, offset, name__icontains: search } }),
+      new HttpParams({ fromObject: { limit, offset, name__icontains: search } })
     );
   }
 }

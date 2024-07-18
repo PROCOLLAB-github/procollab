@@ -46,7 +46,7 @@ export class VacancySendComponent implements OnInit {
     private readonly vacancyService: VacancyService,
     private readonly validationService: ValidationService,
     private readonly route: ActivatedRoute,
-    private readonly navService: NavService,
+    private readonly navService: NavService
   ) {
     this.sendForm = this.fb.group({
       whyMe: ["", [Validators.required, Validators.minLength(20), Validators.maxLength(2000)]],

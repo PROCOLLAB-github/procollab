@@ -21,7 +21,7 @@ describe("ProfileDetailResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      ProfileDetailResolver(mockRoute, {} as RouterStateSnapshot),
+      ProfileDetailResolver(mockRoute, {} as RouterStateSnapshot)
     );
     expect(result).toBeTruthy();
   });

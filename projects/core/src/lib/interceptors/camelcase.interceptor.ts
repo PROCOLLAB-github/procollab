@@ -18,7 +18,7 @@ export class CamelcaseInterceptor implements HttpInterceptor {
 
   intercept(
     request: HttpRequest<Record<string, any>>,
-    next: HttpHandler,
+    next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     let req: HttpRequest<Record<string, any>>;
     if (request.body) {
@@ -38,7 +38,7 @@ export class CamelcaseInterceptor implements HttpInterceptor {
         }
 
         return event;
-      }),
+      })
     );
   }
 }

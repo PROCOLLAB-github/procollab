@@ -16,10 +16,7 @@ import { User, UserRole } from "../models/user.model";
   providedIn: "root",
 })
 export class AuthService {
-  constructor(
-    private apiService: ApiService,
-    private tokenService: TokenService,
-  ) {}
+  constructor(private apiService: ApiService, private tokenService: TokenService) {}
 
   login({ email, password }: LoginRequest): Observable<LoginResponse> {
     return this.apiService
@@ -51,7 +48,7 @@ export class AuthService {
   getProfile(): Observable<User> {
     return this.apiService.get<User>("/auth/users/current/").pipe(
       map(user => plainToInstance(User, user)),
-      tap(profile => this.profile$.next(profile)),
+      tap(profile => this.profile$.next(profile))
     );
   }
 
@@ -63,7 +60,7 @@ export class AuthService {
     return this.apiService.get<[[number, string]]>("/auth/users/types/").pipe(
       map(roles => roles.map(role => ({ id: role[0], name: role[1] }))),
       map(roles => plainToInstance(UserRole, roles)),
-      tap(roles => this.roles$.next(roles)),
+      tap(roles => this.roles$.next(roles))
     );
   }
 
@@ -71,7 +68,7 @@ export class AuthService {
     return this.apiService.get<[[number, string]]>("/auth/users/roles/").pipe(
       map(roles => roles.map(role => ({ id: role[0], name: role[1] }))),
       map(roles => plainToInstance(UserRole, roles)),
-      tap(roles => this.changeableRoles$.next(roles)),
+      tap(roles => this.changeableRoles$.next(roles))
     );
   }
 
@@ -85,8 +82,8 @@ export class AuthService {
     return this.profile.pipe(
       take(1),
       concatMap(profile =>
-        this.apiService.patch<User>(`/auth/users/${profile.id}`, { avatar: url }),
-      ),
+        this.apiService.patch<User>(`/auth/users/${profile.id}`, { avatar: url })
+      )
     );
   }
 
@@ -96,7 +93,7 @@ export class AuthService {
       concatMap(profile => this.apiService.patch<User>(`/auth/users/${profile.id}/`, newProfile)),
       tap(profile => {
         this.profile$.next(profile);
-      }),
+      })
     );
   }
 
@@ -106,12 +103,12 @@ export class AuthService {
       concatMap(profile =>
         this.apiService.put<User>(`/auth/users/${profile.id}/set_onboarding_stage/`, {
           onboardingStage: stage,
-        }),
+        })
       ),
       concatMap(() => this.profile.pipe(take(1))),
       tap(profile => {
         this.profile$.next({ ...profile, onboardingStage: stage } as User);
-      }),
+      })
     );
   }
 

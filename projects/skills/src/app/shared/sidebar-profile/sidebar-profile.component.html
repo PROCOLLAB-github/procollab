@@ -15,11 +15,11 @@
     </div>
     <div class="user__row">
       @if (user.verificationDate; as verificationDate) {
-        <div class="text-body-12 user__verified">
-          Подтвержден с {{ verificationDate | dayjs: "format" : "DD.MM.YY" }}
-        </div>
+      <div class="text-body-12 user__verified">
+        Подтвержден с {{ verificationDate | dayjs: "format":"DD.MM.YY" }}
+      </div>
       } @else {
-        <div class="text-body-12 user__not-verified">Ожидает подтверждения</div>
+      <div class="text-body-12 user__not-verified">Ожидает подтверждения</div>
       }
       <button class="user__logout text-bold-body-14" (click)="logout.emit()">
         <span>Выход</span>

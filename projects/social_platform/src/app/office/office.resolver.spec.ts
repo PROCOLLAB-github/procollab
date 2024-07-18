@@ -22,7 +22,7 @@ describe("OfficeResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      OfficeResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot),
+      OfficeResolver({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
     );
     expect(result).toBeTruthy();
   });

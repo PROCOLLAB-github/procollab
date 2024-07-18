@@ -12,81 +12,80 @@
       >
       </i>
       @if (((notificationService.hasNotifications | async) || hasInvites) && !mobileMenuOpen) {
-        <div class="attention"></div>
+      <div class="attention"></div>
       }
     </div>
   </div>
   @if (mobileMenuOpen) {
-    <div class="nav-bar__mobile-menu">
-      <div class="nav-bar__top">
-        <a class="nav-bar__mobile-logo" href="https://procollab.ru/" target="_blank">
-          <img src="/assets/images/shared/logo.svg" alt="procollab" width="125px" />
-        </a>
-        <div
-          class="nav-bar__notifications-toggle"
-          [class.nav-bar__notifications-toggle--active]="notificationsOpen"
-          (click)="notificationsOpen = !notificationsOpen"
-        >
-          <i appIcon icon="bell" appWidth="20" appHeight="22" appViewBox="0 0 20 22"></i>
-          @if ((notificationService.hasNotifications | async) || hasInvites) {
-            <div class="attention"></div>
-          }
-        </div>
+  <div class="nav-bar__mobile-menu">
+    <div class="nav-bar__top">
+      <a class="nav-bar__mobile-logo" href="https://procollab.ru/" target="_blank">
+        <img src="/assets/images/shared/logo.svg" alt="procollab" width="125px" />
+      </a>
+      <div
+        class="nav-bar__notifications-toggle"
+        [class.nav-bar__notifications-toggle--active]="notificationsOpen"
+        (click)="notificationsOpen = !notificationsOpen"
+      >
+        <i appIcon icon="bell" appWidth="20" appHeight="22" appViewBox="0 0 20 22"></i>
+        @if ((notificationService.hasNotifications | async) || hasInvites) {
+        <div class="attention"></div>
+        }
       </div>
-      @if (!notificationsOpen) {
-        <nav class="nav nav--vertical">
-          <ul class="nav__list">
-            <a class="nav__link" routerLink="feed" routerLinkActive="nav__link--active">
-              <li class="text-body-14 nav__item">
-                <i appIcon icon="feed" appSquare="24" appViewBox="0 0 24 20"></i>
-                Новости
-              </li>
-            </a>
-            <a class="nav__link" routerLink="projects" routerLinkActive="nav__link--active">
-              <li class="text-body-14 nav__item">
-                <i appIcon icon="projects-filled" appSquare="24" appViewBox="0 0 24 20"></i>
-                Проекты
-              </li>
-            </a>
-            <a class="nav__link" routerLink="program/list" routerLinkActive="nav__link--active">
-              <li class="text-body-14 nav__item">
-                <i appIcon icon="program" appSquare="24" appViewBox="0 0 24 16"></i>
-                Программы
-              </li>
-            </a>
-            <a class="nav__link" routerLink="members" routerLinkActive="nav__link--active">
-              <li class="text-body-14 nav__item">
-                <i appIcon icon="people-bold" appSquare="24" appViewBox="0 0 24 18"></i>
-                Участники
-              </li>
-            </a>
-            <a class="nav__link" routerLink="mentors" routerLinkActive="nav__link--active">
-              <li class="text-body-14 nav__item">
-                <i appIcon icon="two-people" appSquare="24" appViewBox="0 0 28 20"></i>
-                Эксперты
-              </li>
-            </a>
-          </ul>
-        </nav>
-      } @else {
-        <div>
-          <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
-          <ul class="notifications__invites">
-            @for (invite of invites; track invite.id) {
-              <li class="notifications__invite">
-                <app-invite-manage-card
-                  [invite]="invite"
-                  (accept)="onAcceptInvite($event)"
-                  (reject)="onRejectInvite($event)"
-                ></app-invite-manage-card>
-              </li>
-            }
-          </ul>
-        </div>
-      }
-      @if (authService.profile | async; as user) {
-        <app-profile-info class="nav-bar__profile" [user]="user"></app-profile-info>
-      }
     </div>
+    @if (!notificationsOpen) {
+    <nav class="nav nav--vertical">
+      <ul class="nav__list">
+        <a class="nav__link" routerLink="feed" routerLinkActive="nav__link--active">
+          <li class="text-body-14 nav__item">
+            <i appIcon icon="feed" appSquare="24" appViewBox="0 0 24 20"></i>
+            Новости
+          </li>
+        </a>
+        <a class="nav__link" routerLink="projects" routerLinkActive="nav__link--active">
+          <li class="text-body-14 nav__item">
+            <i appIcon icon="projects-filled" appSquare="24" appViewBox="0 0 24 20"></i>
+            Проекты
+          </li>
+        </a>
+        <a class="nav__link" routerLink="program/list" routerLinkActive="nav__link--active">
+          <li class="text-body-14 nav__item">
+            <i appIcon icon="program" appSquare="24" appViewBox="0 0 24 16"></i>
+            Программы
+          </li>
+        </a>
+        <a class="nav__link" routerLink="members" routerLinkActive="nav__link--active">
+          <li class="text-body-14 nav__item">
+            <i appIcon icon="people-bold" appSquare="24" appViewBox="0 0 24 18"></i>
+            Участники
+          </li>
+        </a>
+        <a class="nav__link" routerLink="mentors" routerLinkActive="nav__link--active">
+          <li class="text-body-14 nav__item">
+            <i appIcon icon="two-people" appSquare="24" appViewBox="0 0 28 20"></i>
+            Эксперты
+          </li>
+        </a>
+      </ul>
+    </nav>
+    } @else {
+    <div>
+      <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
+      <ul class="notifications__invites">
+        @for (invite of invites; track invite.id) {
+        <li class="notifications__invite">
+          <app-invite-manage-card
+            [invite]="invite"
+            (accept)="onAcceptInvite($event)"
+            (reject)="onRejectInvite($event)"
+          ></app-invite-manage-card>
+        </li>
+        }
+      </ul>
+    </div>
+    } @if (authService.profile | async; as user) {
+    <app-profile-info class="nav-bar__profile" [user]="user"></app-profile-info>
+    }
+  </div>
   }
 </div>

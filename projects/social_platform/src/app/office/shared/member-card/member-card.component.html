@@ -7,33 +7,27 @@
       <p class="text-body-12 card__status">{{ user.userType | userRole | async }}</p>
       <p class="text-body-bold-18 card__name">{{ user.firstName }} {{ user.lastName }}</p>
       @if (user.speciality) {
-        <p class="text-body-12 card__additional-info">
-          {{ user.speciality }}
-          @if (user.speciality && user.birthday) {
-            •
-          }
-          @if (user.birthday) {
-            {{ user.birthday | yearsFromBirthday }}
-          }
-        </p>
+      <p class="text-body-12 card__additional-info">
+        {{ user.speciality }}
+        @if (user.speciality && user.birthday) { • } @if (user.birthday) {
+        {{ user.birthday | yearsFromBirthday }}
+        }
+      </p>
       }
     </div>
   </div>
   @if (user.skills && user.skills.length) {
-    <ul class="card__skills">
-      @for (
-        skill of user.skills.slice(0, user.skills.length >= 6 ? 6 : user.skills.length);
-        track skill.id
-      ) {
-        <li class="card__skill">
-          <app-tag>{{
-            skill.name.length > 12 ? skill.name.slice(0, 12) + " " + "..." : skill.name
-          }}</app-tag>
-        </li>
-      }
-      @if (user.skills.length > 6) {
-        <span>...</span>
-      }
-    </ul>
+  <ul class="card__skills">
+    @for ( skill of user.skills.slice(0, user.skills.length >= 6 ? 6 : user.skills.length); track
+    skill.id ) {
+    <li class="card__skill">
+      <app-tag>{{
+        skill.name.length > 12 ? skill.name.slice(0, 12) + " " + "..." : skill.name
+      }}</app-tag>
+    </li>
+    } @if (user.skills.length > 6) {
+    <span>...</span>
+    }
+  </ul>
   }
 </div>

@@ -19,8 +19,8 @@ export class ProgramNewsService {
   readNews(projectId: string, newsIds: number[]): Observable<void[]> {
     return forkJoin(
       newsIds.map(id =>
-        this.apiService.post<void>(`/programs/${projectId}/news/${id}/set_viewed/`, {}),
-      ),
+        this.apiService.post<void>(`/programs/${projectId}/news/${id}/set_viewed/`, {})
+      )
     );
   }
 

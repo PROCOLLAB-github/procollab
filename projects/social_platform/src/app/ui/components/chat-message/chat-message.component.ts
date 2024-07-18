@@ -41,7 +41,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly snackbarService: SnackbarService,
     private readonly overlay: Overlay,
-    public readonly authService: AuthService,
+    public readonly authService: AuthService
   ) {}
 
   @Input({ required: true }) chatMessage!: ChatMessage;

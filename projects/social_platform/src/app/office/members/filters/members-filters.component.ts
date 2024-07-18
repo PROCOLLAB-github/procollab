@@ -45,7 +45,7 @@ export class MembersFiltersComponent {
 
   constructor(
     private readonly specsService: SpecializationsService,
-    private readonly skillsService: SkillsService,
+    private readonly skillsService: SkillsService
   ) {}
 
   onSelectSpec(speciality: Specialization): void {

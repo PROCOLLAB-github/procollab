@@ -5,10 +5,7 @@ import { ErrorService } from "./error.service";
 
 @Injectable()
 export class GlobalErrorHandlerService implements ErrorHandler {
-  constructor(
-    private readonly errorService: ErrorService,
-    private readonly zone: NgZone,
-  ) {}
+  constructor(private readonly errorService: ErrorService, private readonly zone: NgZone) {}
 
   handleError(err: any): void {
     const error = err.rejection ? err.rejection : err;

@@ -2,13 +2,13 @@
 
 <div class="page">
   @if (program$ | async; as program) {
-    <app-program-head [program]="program"></app-program-head>
+  <app-program-head [program]="program"></app-program-head>
   }
   <div class="page__list" #membersRoot>
     @for (m of members; track m.id) {
-      <a [routerLink]="['/office/profile', m.id]">
-        <app-member-card [user]="m"></app-member-card>
-      </a>
+    <a [routerLink]="['/office/profile', m.id]">
+      <app-member-card [user]="m"></app-member-card>
+    </a>
     }
   </div>
 </div>

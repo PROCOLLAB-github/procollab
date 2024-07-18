@@ -9,7 +9,7 @@ import { SubscriptionService } from "@office/services/subscription.service";
 import { ProjectSubscriber } from "@office/models/project-subscriber.model";
 
 export const ProjectDetailResolver: ResolveFn<[Project, ProjectSubscriber[]]> = (
-  route: ActivatedRouteSnapshot,
+  route: ActivatedRouteSnapshot
 ) => {
   const projectService = inject(ProjectService);
   const subscriptionService = inject(SubscriptionService);
@@ -17,6 +17,6 @@ export const ProjectDetailResolver: ResolveFn<[Project, ProjectSubscriber[]]> = 
   return projectService.getOne(Number(route.paramMap.get("projectId"))).pipe(
     switchMap(project => {
       return forkJoin([of(project), subscriptionService.getSubscribers(project.id)]);
-    }),
+    })
   );
 };

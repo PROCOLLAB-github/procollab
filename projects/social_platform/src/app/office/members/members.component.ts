@@ -66,7 +66,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly navService: NavService,
     private readonly fb: FormBuilder,
     private readonly memberService: MemberService,
-    private readonly cdref: ChangeDetectorRef,
+    private readonly cdref: ChangeDetectorRef
   ) {
     this.searchForm = this.fb.group({
       search: ["", [Validators.required]],
@@ -86,7 +86,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     this.route.data
       .pipe(
         take(1),
-        map(r => r["data"]),
+        map(r => r["data"])
       )
       .subscribe((members: ApiPagination<User>) => {
         this.membersTotalCount = members.count;
@@ -117,7 +117,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
 
           this.searchParamsSubject$.next(fetchParams);
           return this.onFetch(0, 20, fetchParams);
-        }),
+        })
       )
       .subscribe(members => {
         this.members = members;
@@ -133,7 +133,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
       const scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
           concatMap(() => this.onScroll()),
-          throttleTime(500),
+          throttleTime(500)
         )
         .subscribe(noop);
 
@@ -177,14 +177,14 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
       return this.onFetch(
         this.membersPage * this.membersTake,
         this.membersTake,
-        this.searchParamsSubject$.value,
+        this.searchParamsSubject$.value
       ).pipe(
         tap(membersChunk => {
           this.membersPage++;
           this.members = [...this.members, ...membersChunk];
 
           this.cdref.detectChanges();
-        }),
+        })
       );
     }
 
@@ -218,7 +218,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
         this.membersTotalCount = members.count;
 
         return members.results;
-      }),
+      })
     );
   }
 }

@@ -36,7 +36,7 @@ export class MentorsComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly navService: NavService,
     private readonly fb: FormBuilder,
     private readonly memberService: MemberService,
-    private readonly cdref: ChangeDetectorRef,
+    private readonly cdref: ChangeDetectorRef
   ) {
     this.searchForm = this.fb.group({
       search: ["", [Validators.required]],
@@ -59,7 +59,7 @@ export class MentorsComponent implements OnInit, OnDestroy, AfterViewInit {
       fromEvent(target, "scroll")
         .pipe(
           concatMap(() => this.onScroll()),
-          throttleTime(500),
+          throttleTime(500)
         )
         .subscribe(noop);
   }
@@ -111,7 +111,7 @@ export class MentorsComponent implements OnInit, OnDestroy, AfterViewInit {
           this.membersPage++;
 
           this.cdref.detectChanges();
-        }),
+        })
       );
   }
 }

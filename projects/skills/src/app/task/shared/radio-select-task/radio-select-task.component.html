@@ -2,7 +2,7 @@
 
 <div class="radio">
   @if (data.files.length) {
-    <img [src]="data.files[0]" alt="" class="radio__img" />
+  <img [src]="data.files[0]" alt="" class="radio__img" />
   }
   <div class="radio__body">
     <h2 class="radio__title text-body-14">
@@ -11,14 +11,14 @@
     <p class="radio__text text-body-14">{{ data.description }}</p>
     <div class="radio__list">
       @for (op of data.answers; track op.id) {
-        <div
-          class="radio__option text-body-14"
-          [class.radio__option--active]="result().answerId === op.id"
-          [class.radio__option--success]="success && result().answerId === op.id"
-          (click)="onSelect(op.id)"
-        >
-          {{ op.text }}
-        </div>
+      <div
+        class="radio__option text-body-14"
+        [class.radio__option--active]="result().answerId === op.id"
+        [class.radio__option--success]="success && result().answerId === op.id"
+        (click)="onSelect(op.id)"
+      >
+        {{ op.text }}
+      </div>
       }
     </div>
   </div>

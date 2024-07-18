@@ -5,14 +5,14 @@
   <p class="exclude__text text-body-14">{{ data.description }}</p>
   <ul class="exclude__list">
     @for (op of data.answers; track op.id) {
-      <li
-        class="exclude__item"
-        [class.exclude__item--active]="result().includes(op.id)"
-        [class.exclude__item--success]="success && result().includes(op.id)"
-        (click)="onSelect(op.id)"
-      >
-        {{ op.text }}
-      </li>
+    <li
+      class="exclude__item"
+      [class.exclude__item--active]="result().includes(op.id)"
+      [class.exclude__item--success]="success && result().includes(op.id)"
+      (click)="onSelect(op.id)"
+    >
+      {{ op.text }}
+    </li>
     }
   </ul>
 </div>

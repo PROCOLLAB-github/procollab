@@ -92,7 +92,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly inviteService: InviteService,
     private readonly cdRef: ChangeDetectorRef,
     private readonly programService: ProgramService,
-    private readonly skillsService: SkillsService,
+    private readonly skillsService: SkillsService
   ) {
     this.projectForm = this.fb.group({
       imageAddress: ["", [Validators.required]],
@@ -145,7 +145,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.inviteNotExistingError = null;
               }
             }),
-            filter(value => value === ""),
+            filter(value => value === "")
           )
           .subscribe(() => {
             if (control === this.inviteForm.get("link")) {
@@ -154,7 +154,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
               control?.removeValidators([Validators.required]);
             }
             control?.updateValueAndValidity();
-          }),
+          })
       );
     });
 
@@ -166,8 +166,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           this.projectService.updateProject(Number(this.route.snapshot.params["projectId"]), {
             presentationAddress: "",
             draft: true,
-          }),
-        ),
+          })
+        )
       )
       .subscribe(() => {});
   }
@@ -184,7 +184,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           this.programTagsOptions = tags;
         }),
         concatMap(() => this.route.data),
-        map(d => d["data"]),
+        map(d => d["data"])
       )
       .subscribe(([project, vacancies, invites]: [Project, Vacancy[], Invite[]]) => {
         this.projectForm.patchValue({
@@ -209,7 +209,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
         project.achievements &&
           project.achievements.forEach(achievement =>
-            this.addAchievement(achievement.id, achievement.title, achievement.status),
+            this.addAchievement(achievement.id, achievement.title, achievement.status)
           );
 
         project.links && project.links.forEach(l => this.addLink(l));
@@ -242,12 +242,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   industries$ = this.industryService.industries.pipe(
     map(industries =>
-      industries.map(industry => ({ value: industry.id, id: industry.id, label: industry.name })),
-    ),
+      industries.map(industry => ({ value: industry.id, id: industry.id, label: industry.name }))
+    )
   );
 
   projectSteps$: Observable<SelectComponent["options"]> = this.projectService.steps.pipe(
-    map(steps => steps.map(step => ({ id: step.id, label: step.name, value: step.id }))),
+    map(steps => steps.map(step => ({ id: step.id, label: step.name, value: step.id })))
   );
 
   subscriptions: (Subscription | undefined)[] = [];
@@ -358,7 +358,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       .sendForUser(
         Number(path[path.length - 1]),
         Number(this.route.snapshot.paramMap.get("projectId")),
-        this.inviteForm.value.role,
+        this.inviteForm.value.role
       )
       .subscribe({
         next: invite => {

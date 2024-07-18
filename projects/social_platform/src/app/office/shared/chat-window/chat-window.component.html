@@ -20,20 +20,15 @@
   </cdk-virtual-scroll-viewport>
   <form class="chat__input" [formGroup]="messageForm">
     @if (typingPersons.length) {
-      <span class="chat__typing text-body-14">
-        @for (person of typingPersons.slice(0, 3); let last = $last; track person.userId) {
-          {{ person.firstName }} {{ person.lastName }}
-          @if (!last) {
-            ,
-          }
-        }
-        @if (typingPersons.length > 3) {
-          и еще {{ typingPersons.length - 3 }}
-          {{ typingPersons.length - 3 | pluralize: ["человек", "человека", "человек"] }}
-        }
-        {{ typingPersons.length | pluralize: ["печатает", "печатают", "печатают"] }}
-        ...
-      </span>
+    <span class="chat__typing text-body-14">
+      @for (person of typingPersons.slice(0, 3); let last = $last; track person.userId) {
+      {{ person.firstName }} {{ person.lastName }} @if (!last) { , } } @if (typingPersons.length >
+      3) { и еще {{ typingPersons.length - 3 }}
+      {{ typingPersons.length - 3 | pluralize: ["человек", "человека", "человек"] }}
+      }
+      {{ typingPersons.length | pluralize: ["печатает", "печатают", "печатают"] }}
+      ...
+    </span>
     }
     <app-message-input
       [editingMessage]="editingMessage"

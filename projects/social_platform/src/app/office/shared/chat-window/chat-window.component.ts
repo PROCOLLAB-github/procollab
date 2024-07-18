@@ -45,7 +45,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly fb: FormBuilder,
     private readonly modalService: ModalService,
-    private readonly authService: AuthService,
+    private readonly authService: AuthService
   ) {
     this.messageForm = this.fb.group({
       messageControl: [{ text: "", filesUrl: [] }],
@@ -111,7 +111,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
           filter(() => {
             const offsetTop = this.viewport?.measureScrollOffset("top"); // get amount of pixels that can be scrolled to the top of messages container
             return offsetTop ? offsetTop <= 200 : false;
-          }),
+          })
         )
         .subscribe(() => {
           this.fetch.emit();
@@ -179,7 +179,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
         throttleTime(2000),
         tap(() => {
           this.type.emit();
-        }),
+        })
       )
       .subscribe(noop);
 

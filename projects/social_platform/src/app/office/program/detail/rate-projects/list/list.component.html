@@ -2,10 +2,10 @@
 
 <div class="projects">
   @if (projects()) {
-    <div class="projects__list">
-      @for (p of projects(); track p.id) {
-        <app-rating-card [project]="p"></app-rating-card>
-      }
-    </div>
+  <div class="projects__list">
+    @for (p of projects(); track p.id) {
+    <app-rating-card [project]="p"></app-rating-card>
+    }
+  </div>
   }
 </div>

@@ -24,7 +24,7 @@ import { TemplatePortal } from "@angular/cdk/portal";
 export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly overlay: Overlay,
-    private readonly viewContainerRef: ViewContainerRef,
+    private readonly viewContainerRef: ViewContainerRef
   ) {}
 
   @Input({ required: true }) set open(value: boolean) {

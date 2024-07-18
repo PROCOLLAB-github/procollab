@@ -30,7 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private tokenService: TokenService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -41,12 +41,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.showLoaderEvents = this.router.events.pipe(
       filter(evt => evt instanceof ResolveStart),
-      map(() => true),
+      map(() => true)
     );
     this.hideLoaderEvents = this.router.events.pipe(
       filter(evt => evt instanceof ResolveEnd),
       debounceTime(200),
-      map(() => false),
+      map(() => false)
     );
 
     this.isLoading$ = merge(this.hideLoaderEvents, this.showLoaderEvents);

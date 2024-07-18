@@ -9,7 +9,7 @@ import { forkJoin, map } from "rxjs";
 import { Project } from "@office/models/project.model";
 
 export const ProfileDetailResolver: ResolveFn<[User, Project[]]> = (
-  route: ActivatedRouteSnapshot,
+  route: ActivatedRouteSnapshot
 ) => {
   const authService = inject(AuthService);
   const subscriptionService = inject(SubscriptionService);

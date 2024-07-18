@@ -19,6 +19,6 @@ export const AuthRequiredGuard: CanActivateFn = () => {
     map(profile => !!profile),
     catchError(() => {
       return router.navigateByUrl("/auth/login");
-    }),
+    })
   );
 };

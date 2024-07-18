@@ -19,7 +19,7 @@ export const APP_CONFIG: ApplicationConfig = {
       BrowserModule,
       ReactiveFormsModule,
       NgxMaskModule.forRoot(),
-      MatProgressBarModule,
+      MatProgressBarModule
     ),
     {
       provide: HTTP_INTERCEPTORS,

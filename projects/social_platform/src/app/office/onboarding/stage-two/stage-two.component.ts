@@ -40,7 +40,7 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
     private readonly validationService: ValidationService,
     private readonly skillsService: SkillsService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
+    private readonly route: ActivatedRoute
   ) {}
 
   stageForm = this.nnFb.group({

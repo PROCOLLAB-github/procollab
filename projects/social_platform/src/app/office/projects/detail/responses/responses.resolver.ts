@@ -6,7 +6,7 @@ import { VacancyResponse } from "@models/vacancy-response.model";
 import { VacancyService } from "@services/vacancy.service";
 
 export const ProjectResponsesResolver: ResolveFn<VacancyResponse[]> = (
-  route: ActivatedRouteSnapshot,
+  route: ActivatedRouteSnapshot
 ) => {
   const vacancyService = inject(VacancyService);
 

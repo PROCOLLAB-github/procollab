@@ -56,7 +56,7 @@ export class TaskComponent implements OnInit {
           this.progressDoneWidth.set(left);
         }
       },
-      { allowSignalWrites: true },
+      { allowSignalWrites: true }
     );
 
     effect(
@@ -79,7 +79,7 @@ export class TaskComponent implements OnInit {
         const firstStep = sortedSteps[0];
         this.currentSubTaskId.set(firstStep.id);
       },
-      { allowSignalWrites: true },
+      { allowSignalWrites: true }
     );
 
     effect(() => {
@@ -107,7 +107,7 @@ export class TaskComponent implements OnInit {
     this.route.firstChild?.params
       .pipe(
         map(r => r["subTaskId"]),
-        map(Number),
+        map(Number)
       )
       .subscribe(s => {
         this.currentSubTaskId.set(s);

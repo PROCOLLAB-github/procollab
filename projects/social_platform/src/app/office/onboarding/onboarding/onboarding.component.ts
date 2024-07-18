@@ -16,7 +16,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly onboardingService: OnboardingService,
-    private readonly router: Router,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {

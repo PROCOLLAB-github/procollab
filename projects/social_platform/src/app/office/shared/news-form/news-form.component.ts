@@ -28,7 +28,7 @@ export class NewsFormComponent implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
-    private readonly fileService: FileService,
+    private readonly fileService: FileService
   ) {
     this.messageForm = this.fb.group({
       text: ["", [Validators.required]],
@@ -94,8 +94,8 @@ export class NewsFormComponent implements OnInit {
               fileObj.loading = false;
 
               fileObj.tempFile = null;
-            }),
-          ),
+            })
+          )
         );
       } else {
         const fileObj: NewsFormComponent["filesList"][0] = {
@@ -111,8 +111,8 @@ export class NewsFormComponent implements OnInit {
             tap(file => {
               fileObj.loading = false;
               fileObj.src = file.url;
-            }),
-          ),
+            })
+          )
         );
       }
     }

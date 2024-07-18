@@ -29,7 +29,7 @@ describe("IconComponent", () => {
     fixture.detectChanges();
     const useElement = fixture.debugElement.query(By.css("use")).nativeElement;
     expect(useElement.getAttribute("xlink:href")).toBe(
-      "assets/icons/symbol/svg/sprite.css.svg#check",
+      "assets/icons/symbol/svg/sprite.css.svg#check"
     );
   });
 

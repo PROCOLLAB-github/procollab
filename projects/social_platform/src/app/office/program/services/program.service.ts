@@ -19,7 +19,7 @@ export class ProgramService {
   getAll(skip: number, take: number): Observable<ApiPagination<Program>> {
     return this.apiService.get(
       "/programs/",
-      new HttpParams({ fromObject: { limit: take, offset: skip } }),
+      new HttpParams({ fromObject: { limit: take, offset: skip } })
     );
   }
 
@@ -39,7 +39,7 @@ export class ProgramService {
 
   register(
     programId: number,
-    additionalData: Record<string, string>,
+    additionalData: Record<string, string>
   ): Observable<ProgramDataSchema> {
     return this.apiService.post(`/programs/${programId}/register/`, additionalData);
   }
@@ -47,18 +47,18 @@ export class ProgramService {
   getAllProjects(
     programId: number,
     offset: number,
-    limit: number,
+    limit: number
   ): Observable<ApiPagination<Project>> {
     return this.apiService.get(
       `/projects/`,
-      new HttpParams({ fromObject: { partner_program: programId, offset, limit } }),
+      new HttpParams({ fromObject: { partner_program: programId, offset, limit } })
     );
   }
 
   getAllMembers(programId: number, skip: number, take: number): Observable<ApiPagination<User>> {
     return this.apiService.get(
       "/auth/users/",
-      new HttpParams({ fromObject: { partner_program: programId, limit: take, offset: skip } }),
+      new HttpParams({ fromObject: { partner_program: programId, limit: take, offset: skip } })
     );
   }
 
@@ -67,7 +67,7 @@ export class ProgramService {
     return this.apiService.get<ProgramTag[]>("/auth/users/current/programs/tags/").pipe(
       tap(programs => {
         this.programTags$.next(programs);
-      }),
+      })
     );
   }
 }

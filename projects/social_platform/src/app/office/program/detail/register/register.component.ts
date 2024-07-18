@@ -31,7 +31,7 @@ export class ProgramRegisterComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
-    private readonly programService: ProgramService,
+    private readonly programService: ProgramService
   ) {}
 
   ngOnInit(): void {

@@ -7,7 +7,7 @@ import { ProjectRate } from "@office/program/models/project-rate";
 import { ProjectRatingService } from "@office/program/services/project-rating.service";
 
 export const ListAllResolver: ResolveFn<ApiPagination<ProjectRate>> = (
-  route: ActivatedRouteSnapshot,
+  route: ActivatedRouteSnapshot
 ) => {
   const projectRatingService = inject(ProjectRatingService);
 

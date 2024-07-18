@@ -41,25 +41,25 @@
   <div class="plans">
     <div class="plans__tariffs">
       @for (subscription of subscriptions(); track subscription.id) {
-        <div class="tariff" [ngClass]="{ 'tariff--primary': subscription.id === 3 }">
-          <div>
-            <div class="tariff__title">{{ subscription.name }}</div>
-            <div class="tariff__price">₽ {{ subscription.price }}</div>
-          </div>
-
-          <ul class="tariff__points">
-            @for (feature of subscription.featuresList; track $index) {
-              <li class="tariff__point">
-                <i appIcon icon="circle-check" class="tariff__icon"></i>
-                <span> {{ feature }} </span>
-              </li>
-            }
-          </ul>
-
-          <div class="tariff__expiration-date">
-            Действует до {{ subscriptionData().subscriptionDateOver }}
-          </div>
+      <div class="tariff" [ngClass]="{ 'tariff--primary': subscription.id === 3 }">
+        <div>
+          <div class="tariff__title">{{ subscription.name }}</div>
+          <div class="tariff__price">₽ {{ subscription.price }}</div>
         </div>
+
+        <ul class="tariff__points">
+          @for (feature of subscription.featuresList; track $index) {
+          <li class="tariff__point">
+            <i appIcon icon="circle-check" class="tariff__icon"></i>
+            <span> {{ feature }} </span>
+          </li>
+          }
+        </ul>
+
+        <div class="tariff__expiration-date">
+          Действует до {{ subscriptionData().subscriptionDateOver }}
+        </div>
+      </div>
       }
     </div>
   </div>

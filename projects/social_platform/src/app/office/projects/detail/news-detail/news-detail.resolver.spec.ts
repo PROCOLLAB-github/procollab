@@ -23,7 +23,7 @@ describe("NewsDetailResolver", () => {
 
   it("should be created", () => {
     const result = TestBed.runInInjectionContext(() =>
-      NewsDetailResolver(mockRoute, {} as RouterStateSnapshot),
+      NewsDetailResolver(mockRoute, {} as RouterStateSnapshot)
     );
     expect(result).toBeTruthy();
   });

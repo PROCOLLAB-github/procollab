@@ -1,47 +1,47 @@
 <!-- @format -->
 
 @if (response) {
-  <section class="response">
-    <a class="response__profile profile" [routerLink]="['/office/profile', response.user.id]">
-      <app-avatar [size]="90" [url]="response.user.avatar"></app-avatar>
-      <div class="profile__body">
-        <p class="text-body-12 profile__status">{{ response.user.userType | userRole | async }}</p>
-        <h3 class="text-heading-4 profile__name">
-          {{ response.user.firstName }} {{ response.user.lastName }}
-        </h3>
-        <p class="text-body-12 profile__info">{{ response.user.speciality }}</p>
-        @if (response.user.skills) {
-          <ul class="profile__skills">
-            @for (skill of response.user.skills; track skill.id) {
-              <li class="profile__skill">
-                <app-tag>{{ skill.name }}</app-tag>
-              </li>
-            }
-          </ul>
+<section class="response">
+  <a class="response__profile profile" [routerLink]="['/office/profile', response.user.id]">
+    <app-avatar [size]="90" [url]="response.user.avatar"></app-avatar>
+    <div class="profile__body">
+      <p class="text-body-12 profile__status">{{ response.user.userType | userRole | async }}</p>
+      <h3 class="text-heading-4 profile__name">
+        {{ response.user.firstName }} {{ response.user.lastName }}
+      </h3>
+      <p class="text-body-12 profile__info">{{ response.user.speciality }}</p>
+      @if (response.user.skills) {
+      <ul class="profile__skills">
+        @for (skill of response.user.skills; track skill.id) {
+        <li class="profile__skill">
+          <app-tag>{{ skill.name }}</app-tag>
+        </li>
         }
-      </div>
-    </a>
-    <div class="response__text text">
-      <h4 class="text-body-14 text__title">Мотивационное письмо</h4>
-      <p class="text-body-12 text__content">{{ response.whyMe }}</p>
-      <app-file-item
-        class="text__file"
-        [link]="response.accompanyingFile.link"
-        [name]="response.accompanyingFile.name"
-        [type]="response.accompanyingFile.mimeType"
-        [size]="response.accompanyingFile.size"
-      ></app-file-item>
-      <div class="text__actions actions">
-        <app-button class="actions__button" (click)="accept.emit(response.id)">Принять</app-button>
-        <app-button
-          class="actions__button"
-          color="red"
-          appearance="outline"
-          (click)="reject.emit(response.id)"
-        >
-          Отклонить
-        </app-button>
-      </div>
+      </ul>
+      }
     </div>
-  </section>
+  </a>
+  <div class="response__text text">
+    <h4 class="text-body-14 text__title">Мотивационное письмо</h4>
+    <p class="text-body-12 text__content">{{ response.whyMe }}</p>
+    <app-file-item
+      class="text__file"
+      [link]="response.accompanyingFile.link"
+      [name]="response.accompanyingFile.name"
+      [type]="response.accompanyingFile.mimeType"
+      [size]="response.accompanyingFile.size"
+    ></app-file-item>
+    <div class="text__actions actions">
+      <app-button class="actions__button" (click)="accept.emit(response.id)">Принять</app-button>
+      <app-button
+        class="actions__button"
+        color="red"
+        appearance="outline"
+        (click)="reject.emit(response.id)"
+      >
+        Отклонить
+      </app-button>
+    </div>
+  </div>
+</section>
 }

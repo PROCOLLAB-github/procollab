@@ -19,7 +19,7 @@ export class ProjectNewsService {
   fetchNews(projectId: string): Observable<ApiPagination<FeedNews>> {
     return this.apiService.get<ApiPagination<FeedNews>>(
       `/projects/${projectId}/news/`,
-      new HttpParams({ fromObject: { limit: 100 } }),
+      new HttpParams({ fromObject: { limit: 100 } })
     );
   }
 
@@ -45,9 +45,9 @@ export class ProjectNewsService {
           this.apiService.post<void>(`/projects/${projectId}/news/${id}/set_viewed/`, {}).pipe(
             tap(() => {
               this.storageService.setItem("readNews", [...readNews, id], sessionStorage);
-            }),
-          ),
-        ),
+            })
+          )
+        )
     );
   }
 

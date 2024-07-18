@@ -1,9 +1,9 @@
 <!-- @format -->
 
 @if (project) {
-  <div class="detail">
-    <app-bar
-      [links]="
+<div class="detail">
+  <app-bar
+    [links]="
         (isInProject$ | async)
           ? [
               {
@@ -24,12 +24,12 @@
             ]
           : []
       "
-      [backHave]="true"
-      class="bar detail__bar"
-    ></app-bar>
+    [backHave]="true"
+    class="bar detail__bar"
+  ></app-bar>
 
-    <div class="detail__body">
-      <router-outlet></router-outlet>
-    </div>
+  <div class="detail__body">
+    <router-outlet></router-outlet>
   </div>
+</div>
 }

@@ -30,10 +30,10 @@
       (click)="filterOpen.set(!filterOpen())"
     ></i>
     @if (filterOpen()) {
-      <div class="select__dropdown" @dropdownAnimation>
-        <ng-container *ngTemplateOutlet="filter"></ng-container>
-        <a class="text-body-12" (click)="resetFilter()">Сбросить фильтр</a>
-      </div>
+    <div class="select__dropdown" @dropdownAnimation>
+      <ng-container *ngTemplateOutlet="filter"></ng-container>
+      <a class="text-body-12" (click)="resetFilter()">Сбросить фильтр</a>
+    </div>
     }
   </div>
   <app-button class="" customTypographyClass="text-body-14" (click)="applyFilter()"
@@ -46,10 +46,10 @@
     <span class="text-body-12">Виды новостей</span>
     <ul>
       @for (option of filterOptions; track $index) {
-        <li class="text-body-14 filter__checkbox" (click)="setFilter(option.value)">
-          <app-checkbox [checked]="includedFilters().indexOf(option.value) !== -1"></app-checkbox>
-          {{ option.label }}
-        </li>
+      <li class="text-body-14 filter__checkbox" (click)="setFilter(option.value)">
+        <app-checkbox [checked]="includedFilters().indexOf(option.value) !== -1"></app-checkbox>
+        {{ option.label }}
+      </li>
       }
     </ul>
   </div>

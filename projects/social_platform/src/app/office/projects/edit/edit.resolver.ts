@@ -11,7 +11,7 @@ import { InviteService } from "@services/invite.service";
 import { Invite } from "@models/invite.model";
 
 export const ProjectEditResolver: ResolveFn<[Project, Vacancy[], Invite[]]> = (
-  route: ActivatedRouteSnapshot,
+  route: ActivatedRouteSnapshot
 ) => {
   const projectService = inject(ProjectService);
   const vacancyService = inject(VacancyService);

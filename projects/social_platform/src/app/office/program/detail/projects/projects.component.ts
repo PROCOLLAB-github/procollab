@@ -44,7 +44,7 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
   constructor(
     private readonly route: ActivatedRoute,
     private readonly programService: ProgramService,
-    public readonly authService: AuthService,
+    public readonly authService: AuthService
   ) {}
 
   @ViewChild("projectsRoot") projectsRoot?: ElementRef<HTMLElement>;
@@ -64,7 +64,7 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
       .pipe(
         map(r => r["data"]),
         tap(r => (this.projectsTotalCount = r["count"])),
-        map(r => r["results"]),
+        map(r => r["results"])
       )
       .subscribe(projects => {
         this.projects = projects;
@@ -80,7 +80,7 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
     const scroll$ = fromEvent(target, "scroll")
       .pipe(
         throttleTime(500),
-        concatMap(() => this.onScroll()),
+        concatMap(() => this.onScroll())
       )
       .subscribe(noop);
     this.subscriptions$.push(scroll$);
@@ -113,7 +113,7 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
       .getAllProjects(
         this.route.parent?.snapshot.params["programId"],
         this.page * this.perPage,
-        this.perPage,
+        this.perPage
       )
       .pipe(
         tap(projects => {
@@ -121,7 +121,7 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
           this.projects = [...this.projects, ...projects.results];
 
           this.page++;
-        }),
+        })
       );
   }
 }

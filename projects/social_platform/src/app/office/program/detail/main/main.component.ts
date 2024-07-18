@@ -43,7 +43,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     private readonly programService: ProgramService,
     private readonly programNewsService: ProgramNewsService,
     private readonly route: ActivatedRoute,
-    private readonly cdRef: ChangeDetectorRef,
+    private readonly cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -60,7 +60,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
           } else {
             return of({} as ApiPagination<FeedNews>);
           }
-        }),
+        })
       )
       .subscribe(news => {
         if (news.results?.length) {

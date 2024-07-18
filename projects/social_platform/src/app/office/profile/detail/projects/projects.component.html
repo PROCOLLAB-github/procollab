@@ -1,48 +1,48 @@
 <!-- @format -->
 
 @if (user | async; as user) {
-  <section class="projects">
-    @if (loggedUserId | async; as loggedUserId) {
-      <div class="projects__content">
-        <div class="projects__section">
-          <h3 class="text-heading-3 about__title">
-            {{
-              user.id === loggedUserId
-                ? "Проекты, в которых я состою"
-                : "Проекты, в которых состоит " + user.firstName
-            }}
-          </h3>
-          <ul>
-            @for (p of user.projects; track p.id) {
-              <li>
-                <a [routerLink]="['/office/projects', p.id]">
-                  <app-project-card [project]="p" [profileId]="user.id"> </app-project-card>
-                </a>
-              </li>
-            }
-          </ul>
-        </div>
-        <div class="projects__section">
-          <h3 class="text-heading-3 about__title">
-            {{
-              user.id === loggedUserId
-                ? "Проекты, на которые я подписан"
-                : "Проекты, на которые подписан " + user.firstName
-            }}
-          </h3>
-          @if (subs | async; as subs) {
-            <ul>
-              @for (p of subs; track p.id) {
-                <li>
-                  <a [routerLink]="['/office/projects', p.id]">
-                    <app-project-card [project]="p" [profileId]="user.id"> </app-project-card>
-                  </a>
-                </li>
-              }
-            </ul>
-          }
-        </div>
-      </div>
-    }
-  </section>
+<section class="projects">
+  @if (loggedUserId | async; as loggedUserId) {
+  <div class="projects__content">
+    <div class="projects__section">
+      <h3 class="text-heading-3 about__title">
+        {{
+          user.id === loggedUserId
+            ? "Проекты, в которых я состою"
+            : "Проекты, в которых состоит " + user.firstName
+        }}
+      </h3>
+      <ul>
+        @for (p of user.projects; track p.id) {
+        <li>
+          <a [routerLink]="['/office/projects', p.id]">
+            <app-project-card [project]="p" [profileId]="user.id"> </app-project-card>
+          </a>
+        </li>
+        }
+      </ul>
+    </div>
+    <div class="projects__section">
+      <h3 class="text-heading-3 about__title">
+        {{
+          user.id === loggedUserId
+            ? "Проекты, на которые я подписан"
+            : "Проекты, на которые подписан " + user.firstName
+        }}
+      </h3>
+      @if (subs | async; as subs) {
+      <ul>
+        @for (p of subs; track p.id) {
+        <li>
+          <a [routerLink]="['/office/projects', p.id]">
+            <app-project-card [project]="p" [profileId]="user.id"> </app-project-card>
+          </a>
+        </li>
+        }
+      </ul>
+      }
+    </div>
+  </div>
+  }
+</section>
 }

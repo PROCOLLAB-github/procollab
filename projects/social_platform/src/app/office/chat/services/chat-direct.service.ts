@@ -25,7 +25,7 @@ export class ChatDirectService {
   loadMessages(
     chatId: string,
     count?: number,
-    take?: number,
+    take?: number
   ): Observable<ApiPagination<ChatMessage>> {
     let queries = new HttpParams();
     if (count !== undefined) queries = queries.set("offset", count);
@@ -33,7 +33,7 @@ export class ChatDirectService {
 
     return this.apiService.get<ApiPagination<ChatMessage>>(
       `/chats/directs/${chatId}/messages/`,
-      queries,
+      queries
     );
   }
 }
