@@ -227,9 +227,7 @@
         <div class="read-more" (click)="readAllVacancies = !readAllVacancies">
           {{ readAllVacancies ? "Скрыть" : "Читать полностью" }}
         </div>
-        }
-
-        @if(profileId === project.leader){
+        } @if(profileId === project.leader){
         <a
           [routerLink]="['/office/projects/', project.id, 'edit']"
           [queryParams]="{ editingStep: 'team' }"
@@ -240,7 +238,6 @@
           </app-button>
         </a>
         }
-        
       </div>
       } @if (project.achievements.length) {
       <div class="achievements project__section project__achievements">
