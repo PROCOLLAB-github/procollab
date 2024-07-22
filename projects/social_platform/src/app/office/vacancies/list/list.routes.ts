@@ -1,3 +1,5 @@
+/** @format */
+
 import { Routes } from "@angular/router";
 import { VacanciesListComponent } from "./list.component";
 import { VacanciesMyResolver } from "./my.resolver";
