@@ -13,16 +13,16 @@ import { ApiPagination } from "@office/models/api-pagination.model";
   providedIn: "root",
 })
 export class VacancyService {
-  constructor(private readonly apiService: ApiService) { }
+  constructor(private readonly apiService: ApiService) {}
 
   getForProject(offset: number, limit: number, projectId?: number): Observable<Vacancy[]> {
-    const params = new HttpParams()
+    const params = new HttpParams();
 
-    params.set('limit', limit);
-    params.set('offset', offset);
+    params.set("limit", limit);
+    params.set("offset", offset);
 
     if (projectId) {
-      params.set('project_id', projectId);
+      params.set("project_id", projectId);
     }
 
     return this.apiService
@@ -31,15 +31,15 @@ export class VacancyService {
   }
 
   getMyVacancies(offset: number, limit: number): Observable<Vacancy[]> {
-    const params = new HttpParams()
+    const params = new HttpParams();
 
-    params.set('limit', limit);
-    params.set('offset', offset);
+    params.set("limit", limit);
+    params.set("offset", offset);
 
     // if (projectId) {
     //   params.set('project_id', projectId);
     // }
-    
+
     return this.apiService
       .get<Vacancy[]>("/vacancies/", params)
       .pipe(map(vacancies => plainToInstance(Vacancy, vacancies)));

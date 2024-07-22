@@ -1,3 +1,5 @@
+/** @format */
+
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
 import { Vacancy } from "@office/models/vacancy.model";
@@ -7,4 +9,4 @@ export const VacanciesMyResolver: ResolveFn<Vacancy[]> = () => {
   const vacanciesService = inject(VacancyService);
 
   return vacanciesService.getMyVacancies(0, 20);
-}
+};
