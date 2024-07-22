@@ -11,8 +11,8 @@ describe("BackComponent", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [RouterTestingModule, BackComponent],
-}).compileComponents();
+      imports: [RouterTestingModule, BackComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

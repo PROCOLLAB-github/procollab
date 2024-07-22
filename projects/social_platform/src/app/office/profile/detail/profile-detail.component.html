@@ -7,21 +7,19 @@
     <app-bar
       class="bar"
       [backHave]="true"
-      [links]="
-          [
-              {
-                link: '/office/profile' + '/' + user.id.toString(),
-                linkText: user.id === loggedUserId ? 'Моя страница' : 'Станица пользователя',
-                isRouterLinkActiveOptions: true,
-              },
+      [links]="[
+            {
+              link: '/office/profile' + '/' + user.id.toString(),
+              linkText: user.id === loggedUserId ? 'Моя страница' : 'Станица пользователя',
+              isRouterLinkActiveOptions: true,
+            },
 
-               {
-                link: '/office/profile' + '/' + user.id.toString() + '/' + 'projects',
-                linkText:'Проекты',
-                isRouterLinkActiveOptions: false
-              },
-            ]
-      "
+            {
+              link: '/office/profile' + '/' + user.id.toString() + '/' + 'projects',
+              linkText: 'Проекты',
+              isRouterLinkActiveOptions: false,
+            },
+          ]"
     ></app-bar>
     } @else {
     <app-bar [backHave]="true" [links]="[]"></app-bar>

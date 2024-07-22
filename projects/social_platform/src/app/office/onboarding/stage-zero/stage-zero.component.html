@@ -12,7 +12,7 @@
     </p>
   </div>
   <form [formGroup]="stageForm" class="page__form" (ngSubmit)="onSubmit()">
-    @if (stageForm.get('avatar'); as avatar) {
+    @if (stageForm.get("avatar"); as avatar) {
     <fieldset class="page__field">
       <label for="avatar" class="field-label">Фотография профиля</label>
       <app-avatar-control
@@ -20,13 +20,13 @@
         formControlName="avatar"
         [error]="avatar | controlError"
       ></app-avatar-control>
-      @if (avatar | controlError:'required') {
+      @if (avatar | controlError: "required") {
       <div class="text-body-14 error">
         {{ errorMessage.EMPTY_AVATAR }}
       </div>
       }
     </fieldset>
-    } @if (stageForm.get('city'); as city) {
+    } @if (stageForm.get("city"); as city) {
     <fieldset class="page__field">
       <label for="city" class="field-label">Город</label>
       <app-input
@@ -36,13 +36,13 @@
         placeholder="Откуда ты"
         formControlName="city"
       ></app-input>
-      @if (city | controlError: 'required') {
+      @if (city | controlError: "required") {
       <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
       }
     </fieldset>
-    } @if (stageForm.get('organization'); as organization) {
+    } @if (stageForm.get("organization"); as organization) {
     <fieldset class="page__field">
       <label for="organization" class="field-label">Место учебы/работы</label>
       <app-input
@@ -52,7 +52,7 @@
         placeholder="Напиши название организации"
         formControlName="organization"
       ></app-input>
-      @if (organization | controlError:'required') {
+      @if (organization | controlError: "required") {
       <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>

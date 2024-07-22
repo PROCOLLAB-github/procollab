@@ -15,7 +15,8 @@
     "test": "ng test",
     "test:ci": "ng test --browsers=Headless --no-watch",
     "lint:ts": "eslint projects/**/*.ts",
-    "format": "prettier --write projects/",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint:scss": "stylelint projects/**/*.scss --fix",
     "docs:json": "compodoc -p ./tsconfig.json -e json -d ."
   },

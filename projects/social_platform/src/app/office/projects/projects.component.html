@@ -3,32 +3,31 @@
 <main class="page">
   <div class="page__bar">
     @if (projectService.projectsCount$ | async; as count) {
-
     <app-bar
       [backHave]="false"
       [ballHave]="true"
       [links]="[
-        {
-          link: '/office/projects/my',
-          linkText: 'Мои проекты',
-          isRouterLinkActiveOptions: false,
-          count: count.my
-        },
+          {
+            link: '/office/projects/my',
+            linkText: 'Мои проекты',
+            isRouterLinkActiveOptions: false,
+            count: count.my,
+          },
 
-        {
-          link: '/office/projects/subscriptions',
-          linkText: 'Мои подписки',
-          isRouterLinkActiveOptions: false,
-          count: count.subs
-        },
+          {
+            link: '/office/projects/subscriptions',
+            linkText: 'Мои подписки',
+            isRouterLinkActiveOptions: false,
+            count: count.subs,
+          },
 
-        {
-          link: '/office/projects/all',
-          linkText: 'Все проекты',
-          isRouterLinkActiveOptions: false,
-          count: count.all
-        }
-      ]"
+          {
+            link: '/office/projects/all',
+            linkText: 'Все проекты',
+            isRouterLinkActiveOptions: false,
+            count: count.all,
+          },
+        ]"
     >
       <div class="bar__right">
         @if (isMy) {

@@ -22,7 +22,7 @@ import { BackComponent } from "@uilib";
     ButtonComponent,
     KeyValuePipe,
     ControlErrorPipe,
-    BarComponent
+    BarComponent,
   ],
 })
 export class ProgramRegisterComponent implements OnInit, OnDestroy {
@@ -32,7 +32,7 @@ export class ProgramRegisterComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly programService: ProgramService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const route$ = this.route.data.pipe(map(r => r["data"])).subscribe(schema => {

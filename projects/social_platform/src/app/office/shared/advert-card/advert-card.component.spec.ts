@@ -1,3 +1,5 @@
+/** @format */
+
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { AdvertCardComponent } from "./advert-card.component";

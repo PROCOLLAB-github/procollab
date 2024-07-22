@@ -18,7 +18,8 @@
           @if (industryService.industries | async; as industries) {
           <p class="text-body-14">
             @if (industryService.getIndustry(industries, project.industry); as industry) {
-            {{ industry.name }} }
+            {{ industry.name }}
+            }
           </p>
           } @if (project.region) {
           <p class="card__geo text-body-14">
@@ -64,7 +65,7 @@
     @if (!projectRated()) {
     <div>
       <app-project-rating [criteria]="project.criterias" [formControl]="form"></app-project-rating>
-      @if (form | controlError: 'required'; as error) {
+      @if (form | controlError: "required"; as error) {
       <div class="text-body-12 error">
         {{ error }}
       </div>

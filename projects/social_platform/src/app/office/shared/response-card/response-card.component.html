@@ -24,17 +24,24 @@
   <div class="response__text text">
     <h4 class="text-body-14 text__title">Мотивационное письмо</h4>
     <p class="text-body-12 text__content">{{ response.whyMe }}</p>
-  </div>
-  <div class="response__actions actions">
-    <app-button class="actions__button" (click)="accept.emit(response.id)">Принять</app-button>
-    <app-button
-      class="actions__button"
-      color="red"
-      appearance="outline"
-      (click)="reject.emit(response.id)"
-    >
-      Отклонить
-    </app-button>
+    <app-file-item
+      class="text__file"
+      [link]="response.accompanyingFile.link"
+      [name]="response.accompanyingFile.name"
+      [type]="response.accompanyingFile.mimeType"
+      [size]="response.accompanyingFile.size"
+    ></app-file-item>
+    <div class="text__actions actions">
+      <app-button class="actions__button" (click)="accept.emit(response.id)">Принять</app-button>
+      <app-button
+        class="actions__button"
+        color="red"
+        appearance="outline"
+        (click)="reject.emit(response.id)"
+      >
+        Отклонить
+      </app-button>
+    </div>
   </div>
 </section>
 }

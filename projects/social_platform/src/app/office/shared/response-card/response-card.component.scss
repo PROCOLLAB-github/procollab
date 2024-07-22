@@ -5,12 +5,10 @@
 .response {
   display: flex;
   flex-direction: column;
-  padding: 24px;
   background-color: var(--white);
 
   @include responsive.apply-desktop {
     flex-direction: row;
-    align-items: flex-start;
   }
 
   &__profile {
@@ -24,18 +22,13 @@
   }
 
   &__text {
+    flex-grow: 1;
     margin: 16px 0;
     word-break: break-word;
 
     @include responsive.apply-desktop {
       flex-basis: 50%;
       margin: 0 25px 0 40px;
-    }
-  }
-
-  &__actions {
-    @include responsive.apply-desktop {
-      flex-basis: 30%;
     }
   }
 }
@@ -45,6 +38,8 @@
   flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between;
+  padding: 24px;
+  border-right: 1px solid var(--medium-grey-for-outline);
 
   @include responsive.apply-desktop {
     flex-direction: column;
@@ -88,6 +83,10 @@
 }
 
 .text {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0;
+
   &__title {
     margin-bottom: 6px;
     color: var(--black);
@@ -96,11 +95,23 @@
   &__content {
     color: var(--dark-grey);
   }
+
+  &__actions {
+    margin-top: auto;
+  }
+
+  &__file {
+    margin: 20px 0;
+  }
 }
 
 .actions {
+  display: flex;
+  gap: 8px;
+
   app-button {
     display: block;
+    width: 250px !important;
 
     &:not(:last-child) {
       margin-bottom: 12px;

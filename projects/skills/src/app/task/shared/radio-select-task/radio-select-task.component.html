@@ -11,8 +11,12 @@
     <p class="radio__text text-body-14">{{ data.description }}</p>
     <div class="radio__list">
       @for (op of data.answers; track op.id) {
-      <div class="radio__option text-body-14" [class.radio__option--active]="result().answerId === op.id"
-        [class.radio__option--success]="success && result().answerId === op.id" (click)="onSelect(op.id)">
+      <div
+        class="radio__option text-body-14"
+        [class.radio__option--active]="result().answerId === op.id"
+        [class.radio__option--success]="success && result().answerId === op.id"
+        (click)="onSelect(op.id)"
+      >
         {{ op.text }}
       </div>
       }

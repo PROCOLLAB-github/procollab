@@ -7,6 +7,7 @@ import { Vacancy } from "@models/vacancy.model";
 import { plainToInstance } from "class-transformer";
 import { VacancyResponse } from "@models/vacancy-response.model";
 import { HttpParams } from "@angular/common/http";
+import { ApiPagination } from "@office/models/api-pagination.model";
 
 @Injectable({
   providedIn: "root",
@@ -38,7 +39,7 @@ export class VacancyService {
     // if (projectId) {
     //   params.set('project_id', projectId);
     // }
-
+    
     return this.apiService
       .get<Vacancy[]>("/vacancies/", params)
       .pipe(map(vacancies => plainToInstance(Vacancy, vacancies)));

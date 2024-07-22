@@ -7,8 +7,22 @@
   border: 1px solid var(--grey-button);
   border-radius: 15px;
 
+  &__title {
+    margin-bottom: 20px;
+    color: var(--black);
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 26px;
+
+      @include typography.heading-3;
+    }
+  }
+
   &__description {
     margin-bottom: 20px;
+    white-space: pre-wrap;
 
     @include typography.body-14;
   }

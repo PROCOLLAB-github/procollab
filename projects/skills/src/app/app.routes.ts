@@ -26,6 +26,7 @@ export const routes: Routes = [
   },
   {
     path: "subscription",
-    loadChildren: () => import("./subscription/subscription.routes").then(c => c.SUBSCRIPTION_ROUTES),
-  }
+    loadChildren: () =>
+      import("./subscription/subscription.routes").then(c => c.SUBSCRIPTION_ROUTES),
+  },
 ];

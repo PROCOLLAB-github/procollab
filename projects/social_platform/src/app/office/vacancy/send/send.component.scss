@@ -73,9 +73,16 @@
 }
 
 .form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   padding: 16px;
   background-color: var(--white);
   border-radius: var(--rounded-md);
+
+  fieldset {
+    max-width: 616px !important;
+  }
 
   &__submit {
     display: block;

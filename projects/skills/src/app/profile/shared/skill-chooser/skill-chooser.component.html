@@ -3,11 +3,11 @@
 <div class="modal">
   <div routerLink="/profile" class="modal__overlay"></div>
   <div class="modal__body plans">
-   <i routerLink="/profile" appIcon icon="cross" class="plans__cross"></i>
+    <i routerLink="/profile" appIcon icon="cross" class="plans__cross"></i>
     <h1 class="plans__title">Выберите 5 навыков</h1>
     <div class="plans__tariffs">
       @for (skill of skillsList(3); track $index) {
-        <app-personal-rating-card/>
+      <app-personal-rating-card></app-personal-rating-card>
       }
 
       <div class="plans_pagination">
@@ -17,8 +17,8 @@
           <i appIcon icon="left-arrow" class="plans_pages-next plans_pages-icon"></i>
         </div>
 
-       <app-button routerLink="/profile">Выбрать</app-button>
+        <app-button routerLink="/profile">Выбрать</app-button>
       </div>
     </div>
-    </div>
+  </div>
 </div>

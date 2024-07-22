@@ -3,20 +3,20 @@
 <div class="page">
   <app-feed-filter class="page__filter"></app-feed-filter>
   <div #feedRoot class="page__feed">
-    @for (item of feedItems(); track $index) { @if (item.typeModel === 'vacancy') {
+    @for (item of feedItems(); track $index) { @if (item.typeModel === "vacancy") {
     <app-open-vacancy
       class="page__item"
       [attr.data-id]="item.content.id"
       [feedItem]="item.content"
     ></app-open-vacancy>
-    } @else if (item.typeModel === 'project') {
+    } @else if (item.typeModel === "project") {
     <app-new-project
       class="page__item"
       [attr.data-id]="item.content.id"
       [feedItem]="item.content"
     ></app-new-project>
-    } @else if (item.typeModel === 'news') { @if (item.content.contentObject &&
-    item.content.contentObject.hasOwnProperty('email')) {
+    } @else if (item.typeModel === "news") { @if (item.content.contentObject &&
+    item.content.contentObject.hasOwnProperty("email")) {
     <app-news-card
       class="page__item"
       [attr.data-id]="item.content.id"
@@ -24,7 +24,8 @@
       [resourceLink]="['/office/profile', item.content.contentObject.id]"
       (like)="onLike($event)"
     ></app-news-card>
-    } @else if (item.content.contentObject && !item.content.contentObject.hasOwnProperty('email')) {
+    } @else if ( item.content.contentObject && !item.content.contentObject.hasOwnProperty("email") )
+    {
     <app-news-card
       class="page__item"
       [attr.data-id]="item.content.id"

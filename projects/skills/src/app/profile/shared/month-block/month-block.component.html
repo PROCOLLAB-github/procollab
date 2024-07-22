@@ -6,9 +6,9 @@
     <div
       class="item__status"
       [ngClass]="{
-        'item__status--passed': m.isPassed,
-        'item__status--failed': !m.isPassed
-      }"
+          'item__status--passed': m.isPassed,
+          'item__status--failed': !m.isPassed,
+        }"
     >
       @if (m.isPassed) {
       <i appIcon icon="check"></i>

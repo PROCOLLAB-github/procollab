@@ -1,5 +1,7 @@
 /** @format */
 
+import { AsyncPipe } from "@angular/common";
+import { HttpErrorResponse } from "@angular/common/http";
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -8,7 +10,6 @@ import {
   OnInit,
   signal,
 } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
 import {
   AbstractControl,
   FormArray,
@@ -17,35 +18,40 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { IndustryService } from "@services/industry.service";
-import { concatMap, distinctUntilChanged, filter, map, Observable, Subscription, tap } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ErrorMessage } from "@error/models/error-message";
-import { NavService } from "@services/nav.service";
+import { Invite } from "@models/invite.model";
 import { Project } from "@models/project.model";
 import { Vacancy } from "@models/vacancy.model";
-import { ControlErrorPipe, ValidationService } from "projects/core";
-import { VacancyService } from "@services/vacancy.service";
-import { InviteService } from "@services/invite.service";
-import { Invite } from "@models/invite.model";
-import { ProjectService } from "@services/project.service";
-import { BarComponent, ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
-import { ProgramService } from "@office/program/services/program.service";
+import { Skill } from "@office/models/skill";
 import { ProgramTag } from "@office/program/models/program.model";
-import { HttpErrorResponse } from "@angular/common/http";
+import { ProgramService } from "@office/program/services/program.service";
+import { SkillsService } from "@office/services/skills.service";
+import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-basket.component";
+import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";
+import { IndustryService } from "@services/industry.service";
+import { InviteService } from "@services/invite.service";
+import { NavService } from "@services/nav.service";
+import { ProjectService } from "@services/project.service";
+import { VacancyService } from "@services/vacancy.service";
+import {
+  BarComponent,
+  ButtonComponent,
+  IconComponent,
+  InputComponent,
+  SelectComponent,
+} from "@ui/components";
+import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
+import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { VacancyCardComponent } from "../../shared/vacancy-card/vacancy-card.component";
-import { InviteCardComponent } from "../../shared/invite-card/invite-card.component";
-import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
-import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
-import { AsyncPipe } from "@angular/common";
-import { BackComponent } from "@uilib";
-import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
-import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-basket.component";
-import { Skill } from "@office/models/skill";
-import { SkillsService } from "@office/services/skills.service";
-import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";
+import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
+import { ControlErrorPipe, ValidationService } from "projects/core";
+import { Observable, Subscription, concatMap, distinctUntilChanged, filter, map, tap } from "rxjs";
+import { InviteCardComponent } from "../../shared/invite-card/invite-card.component";
+import { VacancyCardComponent } from "../../shared/vacancy-card/vacancy-card.component";
+import { ApiPagination } from "@office/models/api-pagination.model";
 
 @Component({
   selector: "app-edit",
@@ -70,7 +76,7 @@ import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.c
     AutoCompleteInputComponent,
     SkillsBasketComponent,
     SkillsGroupComponent,
-    BarComponent
+    BarComponent,
   ],
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -163,7 +169,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           })
         )
       )
-      .subscribe(() => { });
+      .subscribe(() => {});
   }
 
   ngAfterViewInit(): void {
@@ -214,6 +220,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.cdRef.detectChanges();
       });
+
+    this.editingStep =
+      (this.route.snapshot.queryParamMap.get("editingStep") as "main" | "team" | "achievements") ||
+      "main";
   }
 
   programTagsOptions: SelectComponent["options"] = [];
@@ -308,6 +318,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       const index = this.vacancies.findIndex(vacancy => vacancy.id === vacancyId);
       this.vacancies.splice(index, 1);
     });
+  }
+
+  navigateStep(step: "main" | "team" | "achievements") {
+    this.router.navigate([], { queryParams: { editingStep: step } });
+    this.editingStep = step;
   }
 
   inviteForm: FormGroup;

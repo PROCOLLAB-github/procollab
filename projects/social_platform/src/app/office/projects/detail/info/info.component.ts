@@ -41,6 +41,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
 import { User } from "@auth/models/user.model";
+import { profile } from "console";
 
 @Component({
   selector: "app-detail",

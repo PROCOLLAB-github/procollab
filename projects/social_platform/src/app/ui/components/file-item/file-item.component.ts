@@ -13,14 +13,14 @@ import { FormatedFileSizePipe } from "@core/pipes/formatted-file-size.pipe";
   imports: [IconComponent, FileTypePipe, UpperCasePipe, FormatedFileSizePipe],
 })
 export class FileItemComponent implements OnInit {
-  constructor() { }
+  constructor() {}
 
   @Input() type = "file";
   @Input() name = "";
   @Input() size = 0;
   @Input() link = "";
-  
-  ngOnInit(): void { }
+
+  ngOnInit(): void {}
 
   onDownloadFile(): void {
     const link = document.createElement("a");

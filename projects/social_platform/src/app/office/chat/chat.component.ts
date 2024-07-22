@@ -25,7 +25,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly chatService: ChatService
-  ) { }
+  ) {}
 
   chatsData = new BehaviorSubject<ChatListItem[]>([]);
 

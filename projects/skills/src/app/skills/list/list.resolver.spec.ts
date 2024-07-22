@@ -1,17 +1,19 @@
-import { TestBed } from '@angular/core/testing';
-import { ResolveFn } from '@angular/router';
+/** @format */
 
-import { listResolver } from './list.resolver';
+import { TestBed } from "@angular/core/testing";
+import { ResolveFn } from "@angular/router";
 
-describe('listResolver', () => {
-  const executeResolver: ResolveFn<boolean> = (...resolverParameters) => 
-      TestBed.runInInjectionContext(() => listResolver(...resolverParameters));
+import { listResolver } from "./list.resolver";
+
+describe("listResolver", () => {
+  const executeResolver: ResolveFn<boolean> = (...resolverParameters) =>
+    TestBed.runInInjectionContext(() => listResolver(...resolverParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
   });
 
-  it('should be created', () => {
+  it("should be created", () => {
     expect(executeResolver).toBeTruthy();
   });
 });

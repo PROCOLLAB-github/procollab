@@ -16,6 +16,7 @@ import { BarComponent, ButtonComponent, IconComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AsyncPipe } from "@angular/common";
 import { BackComponent } from "@uilib";
+import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 
 @Component({
   selector: "app-send",
@@ -34,7 +35,8 @@ import { BackComponent } from "@uilib";
     AsyncPipe,
     ControlErrorPipe,
     UserRolePipe,
-    BarComponent
+    BarComponent,
+    UploadFileComponent,
   ],
 })
 export class VacancySendComponent implements OnInit {
@@ -48,6 +50,7 @@ export class VacancySendComponent implements OnInit {
   ) {
     this.sendForm = this.fb.group({
       whyMe: ["", [Validators.required, Validators.minLength(20), Validators.maxLength(2000)]],
+      accompanyingFile: ["", [Validators.required]],
     });
   }
 

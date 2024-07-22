@@ -55,7 +55,8 @@
             @if (industryService.industries | async; as industries) {
             <p class="text-body-14 info__industry">
               @if (industryService.getIndustry(industries, project.industry); as industry) {
-              {{ industry.name }} }
+              {{ industry.name }}
+              }
             </p>
             } @if (project.region) {
             <p class="info__geo">
@@ -226,6 +227,16 @@
         <div class="read-more" (click)="readAllVacancies = !readAllVacancies">
           {{ readAllVacancies ? "Скрыть" : "Читать полностью" }}
         </div>
+        } @if(profileId === project.leader){
+        <a
+          [routerLink]="['/office/projects/', project.id, 'edit']"
+          [queryParams]="{ editingStep: 'team' }"
+        >
+          <app-button>
+            <span>Добавить вакансию</span>
+            <i appIcon icon="plus" appSquare="20"></i>
+          </app-button>
+        </a>
         }
       </div>
       } @if (project.achievements.length) {

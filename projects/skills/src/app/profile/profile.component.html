@@ -2,8 +2,11 @@
 
 <div class="profile">
   <div class="profile__bar">
-    <app-bar class="bar" [backHave]="true"
-      [links]="[{ link: '/profile', linkText: 'Моя страница', isRouterLinkActiveOptions: true }]"></app-bar>
+    <app-bar
+      class="bar"
+      [backHave]="true"
+      [links]="[{ link: '/profile', linkText: 'Моя страница', isRouterLinkActiveOptions: true }]"
+    ></app-bar>
   </div>
 
   <app-info-block [userData]="profileData()['userData']" class="profile__info"></app-info-block>
