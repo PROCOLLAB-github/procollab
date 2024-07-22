@@ -12,11 +12,13 @@ export const VACANCIES_ROUTES: Routes = [
     component: VacanciesComponent,
     children: [
       {
+        path: "",
+        redirectTo: "all",
+        pathMatch: "full",
+      },
+      {
         path: "my",
-        component: VacanciesListComponent,
-        resolve: {
-          data: VacanciesMyResolver,
-        },
+        loadChildren: () => import("./list/list.routes").then(c => c.VACANCY_LIST_ROUTES),
       },
       {
         path: "all",
