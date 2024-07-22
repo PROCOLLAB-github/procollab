@@ -21,9 +21,9 @@ export class VacancyService {
     params.set("limit", limit);
     params.set("offset", offset);
 
-    if (projectId) {
-      params.set("project_id", projectId);
-    }
+    // if (projectId) {
+    //   params.set("project_id", projectId);
+    // }
 
     return this.apiService
       .get<Vacancy[]>("/vacancies/", params)
