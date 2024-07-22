@@ -1,5 +1,6 @@
 /** @format */
 
+import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -10,38 +11,38 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ActivatedRoute, RouterLink, RouterOutlet } from "@angular/router";
+import { User } from "@auth/models/user.model";
+import { AuthService } from "@auth/services";
+import { UserLinksPipe } from "@core/pipes/user-links.pipe";
+import { Project } from "@models/project.model";
+import { Vacancy } from "@models/vacancy.model";
+import { Collaborator } from "@office/models/collaborator.model";
+import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
+import { FeedNews } from "@office/projects/models/project-news.model";
+import { SubscriptionService } from "@office/services/subscription.service";
+import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
+import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
+import { IndustryService } from "@services/industry.service";
+import { NavService } from "@services/nav.service";
+import { ButtonComponent, IconComponent } from "@ui/components";
+import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { expandElement } from "@utils/expand-element";
+import { containerSm } from "@utils/responsive";
+import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import {
+  Observable,
+  Subscription,
   concatMap,
   forkJoin,
   map,
   noop,
-  Observable,
   of,
-  Subscription,
   take,
   withLatestFrom,
 } from "rxjs";
-import { Project } from "@models/project.model";
-import { IndustryService } from "@services/industry.service";
-import { NavService } from "@services/nav.service";
-import { Vacancy } from "@models/vacancy.model";
-import { AuthService } from "@auth/services";
-import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
-import { FeedNews } from "@office/projects/models/project-news.model";
-import { containerSm } from "@utils/responsive";
-import { FormBuilder } from "@angular/forms";
-import { expandElement } from "@utils/expand-element";
-import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
-import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
-import { SubscriptionService } from "@office/services/subscription.service";
-import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
-import { UserLinksPipe } from "@core/pipes/user-links.pipe";
-import { ButtonComponent, IconComponent } from "@ui/components";
-import { ModalComponent } from "@ui/components/modal/modal.component";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
-import { User } from "@auth/models/user.model";
-import { profile } from "console";
+import { ProjectMemberCardComponent } from "../shared/project-member-card/project-member-card.component";
+import { ProjectService } from "@office/services/project.service";
 
 @Component({
   selector: "app-detail",
@@ -57,6 +58,7 @@ import { profile } from "console";
     NewsFormComponent,
     NewsCardComponent,
     NgTemplateOutlet,
+    ProjectMemberCardComponent,
     RouterOutlet,
     UserLinksPipe,
     ParseBreaksPipe,
@@ -72,7 +74,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly navService: NavService,
     private readonly projectNewsService: ProjectNewsService,
     private readonly subscriptionService: SubscriptionService,
-    private readonly fb: FormBuilder,
+    private readonly projectService: ProjectService,
     private readonly cdRef: ChangeDetectorRef
   ) {}
 
@@ -200,6 +202,13 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
         this.news[newsIdx] = resNews;
         this.newsCardComponent?.onCloseEditMode();
       });
+  }
+
+  onRemoveMember(id: Collaborator["userId"]) {
+    console.log(id);
+    this.project$
+      ?.pipe(concatMap(project => this.projectService.removeColloborator(project.id, id)))
+      .subscribe(() => {});
   }
 
   isUserSubscribed!: boolean;

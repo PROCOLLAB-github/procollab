@@ -1,0 +1,36 @@
+<!-- @format -->
+
+<li class="member">
+  <a class="member__inner" [routerLink]="['/office/profile', member.userId]">
+    <app-avatar class="member__avatar" [url]="member.avatar" [size]="40"></app-avatar>
+    <div class="member__info">
+      <p class="text-bold-body-14 member__name">{{ member.firstName }} {{ member.lastName }}</p>
+      <p class="text-body-12 member__speciality">{{ member.role }}</p>
+    </div>
+  </a>
+  <div class="member__right">
+    @if (isLeader) {
+    <i class="member__star" appIcon icon="star" appSquare="14"></i>
+    } @else {
+    <i [cdkMenuTriggerFor]="menu" class="member__dots" appIcon icon="dots" appSquare="16"></i>
+    }
+  </div>
+  <ng-template #menu>
+    <ul class="member__menu menu">
+      <li
+        class="menu__item text-body-12"
+        cdkMenuItem
+        (cdkMenuItemTriggered)="remove.emit(member.userId)"
+      >
+        Удалить из команды
+      </li>
+      <li
+        class="menu__item text-body-12"
+        cdkMenuItem
+        (cdkMenuItemTriggered)="transferOwnership.emit(member.userId)"
+      >
+        Сделать основателем
+      </li>
+    </ul>
+  </ng-template>
+</li>
