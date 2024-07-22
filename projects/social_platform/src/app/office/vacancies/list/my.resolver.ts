@@ -3,11 +3,8 @@ import { ResolveFn } from "@angular/router";
 import { Vacancy } from "@office/models/vacancy.model";
 import { VacancyService } from "@office/services/vacancy.service";
 
-export const VacanciesResolver: ResolveFn<Vacancy[]> = (route) => {
+export const VacanciesMyResolver: ResolveFn<Vacancy[]> = () => {
   const vacanciesService = inject(VacancyService);
 
-  return vacanciesService.getForProject(
-    0,
-    20
-  );
-};
+  return vacanciesService.getMyVacancies(0, 20);
+}

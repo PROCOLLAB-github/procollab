@@ -1,0 +1,14 @@
+<!-- @format -->
+
+<div class="page">
+  <!-- <app-vacancy-filter class="page__filter"></app-vacancy-filter> -->
+  <div #vacancyRoot class="page__feed">
+    @for (vacancy of vacancyList(); track $index) {
+    <app-open-vacancy
+      class="page__item"
+      [attr.data-id]="vacancy.id"
+      [feedItem]="vacancy"
+    ></app-open-vacancy>
+    }
+  </div>
+</div>

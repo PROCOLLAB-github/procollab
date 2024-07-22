@@ -1,0 +1,35 @@
+@use "styles/responsive";
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @include responsive.apply-desktop {
+    flex-direction: row-reverse;
+    align-items: flex-start;
+  }
+
+  &__filter {
+    @include responsive.apply-desktop {
+      position: sticky;
+      top: 0;
+      flex-grow: 0.3;
+      max-width: 400px;
+    }
+  }
+
+  &__feed {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0.7;
+    grid-column: unset;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__item {
+    width: 100%;
+  }
+}

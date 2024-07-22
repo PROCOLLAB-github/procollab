@@ -29,6 +29,21 @@ export class VacancyService {
       .pipe(map(vacancies => plainToInstance(Vacancy, vacancies)));
   }
 
+  getMyVacancies(offset: number, limit: number): Observable<Vacancy[]> {
+    const params = new HttpParams()
+
+    params.set('limit', limit);
+    params.set('offset', offset);
+
+    // if (projectId) {
+    //   params.set('project_id', projectId);
+    // }
+
+    return this.apiService
+      .get<Vacancy[]>("/vacancies/", params)
+      .pipe(map(vacancies => plainToInstance(Vacancy, vacancies)));
+  }
+
   postVacancy(
     projectId: number,
     vacancy: { role: string; requiredSkillsIds: number[] }

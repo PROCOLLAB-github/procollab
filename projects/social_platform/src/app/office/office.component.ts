@@ -54,7 +54,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     public readonly chatService: ChatService,
     private readonly subscriptionPlansService: SubscriptionPlansService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const globalSubscription$ = forkJoin([
@@ -118,11 +118,11 @@ export class OfficeComponent implements OnInit, OnDestroy {
 
   navItems = [
     { name: "Новости", icon: "feed", link: "feed" },
-    { name: "Вакансии", icon: "folder", link: "vacancies" },
     { name: "Проекты", icon: "projects-filled", link: "projects" },
     { name: "Программы", icon: "program", link: "program/list" },
     { name: "Участники", icon: "people-bold", link: "members" },
     { name: "Эксперты", icon: "two-people", link: "mentors" },
+    { name: "Вакансии", icon: "search", link: "vacancies" },
   ];
 
   subscriptions$: Subscription[] = [];
