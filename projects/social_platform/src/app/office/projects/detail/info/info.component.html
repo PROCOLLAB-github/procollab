@@ -147,6 +147,8 @@
           <app-project-member-card
             [member]="member"
             [isLeader]="project.leader === member.userId"
+            [manageRights]="project.leader == profileId"
+            (transferOwnership)="onTransferOwnership($event)"
             (remove)="onRemoveMember($event)"
           ></app-project-member-card>
           }
@@ -159,6 +161,8 @@
             <app-project-member-card
               [member]="member"
               [isLeader]="project.leader === member.userId"
+              [manageRights]="project.leader == profileId"
+              (transferOwnership)="onTransferOwnership($event)"
               (remove)="onRemoveMember($event)"
             ></app-project-member-card>
             }

@@ -11,7 +11,7 @@
   <div class="member__right">
     @if (isLeader) {
     <i class="member__star" appIcon icon="star" appSquare="14"></i>
-    } @else {
+    } @else if (manageRights) {
     <i [cdkMenuTriggerFor]="menu" class="member__dots" appIcon icon="dots" appSquare="16"></i>
     }
   </div>

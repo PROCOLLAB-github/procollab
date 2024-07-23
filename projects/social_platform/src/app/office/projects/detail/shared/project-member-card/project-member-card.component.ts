@@ -25,6 +25,7 @@ import { AvatarComponent, IconComponent } from "@uilib";
 export class ProjectMemberCardComponent {
   @Input({ required: true }) member!: Collaborator;
   @Input() isLeader = false;
+  @Input() manageRights = false
 
   @Output() remove = new EventEmitter<Collaborator["userId"]>();
   @Output() transferOwnership = new EventEmitter<Collaborator["userId"]>();
