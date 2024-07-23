@@ -21,6 +21,10 @@
     @include typography.bold-body-16;
   }
 
+  &__description {
+    margin-top: 12px;
+  }
+
   &__action {
     margin-top: 20px;
   }
