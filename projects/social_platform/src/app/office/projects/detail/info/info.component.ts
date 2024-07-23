@@ -39,30 +39,16 @@ import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
 import { User } from "@auth/models/user.model";
 import { profile } from "console";
+import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
 
 @Component({
   selector: "app-detail",
   templateUrl: "./info.component.html",
   styleUrl: "./info.component.scss",
   standalone: true,
-  imports: [
-    AvatarComponent,
-    IconComponent,
-    ModalComponent,
-    ButtonComponent,
-    RouterLink,
-    NewsFormComponent,
-    NewsCardComponent,
-    NgTemplateOutlet,
-    RouterOutlet,
-    UserLinksPipe,
-    ParseBreaksPipe,
-    ParseLinksPipe,
-    AsyncPipe,
-  ],
+  imports: [AvatarComponent, RouterOutlet, RouterLink, ButtonComponent, IconComponent, ModalComponent, NgTemplateOutlet, AsyncPipe, UserLinksPipe, ParseBreaksPipe, ParseLinksPipe, NewsFormComponent, NewsCardComponent, ],
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
@@ -74,7 +60,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly subscriptionService: SubscriptionService,
     private readonly fb: FormBuilder,
     private readonly cdRef: ChangeDetectorRef
-  ) {}
+  ) { }
 
   project$?: Observable<Project> = this.route.parent?.data.pipe(map(r => r["data"][0]));
   projSubscribers$?: Observable<User[]> = this.route.parent?.data.pipe(map(r => r["data"][1]));
@@ -177,7 +163,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.projectNewsService
       .delete(this.route.snapshot.params["projectId"], newsId)
-      .subscribe(() => {});
+      .subscribe(() => { });
   }
 
   onLike(newsId: number) {

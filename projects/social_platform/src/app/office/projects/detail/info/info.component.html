@@ -227,19 +227,20 @@
         <div class="read-more" (click)="readAllVacancies = !readAllVacancies">
           {{ readAllVacancies ? "Скрыть" : "Читать полностью" }}
         </div>
-        } @if(profileId === project.leader){
-        <a
-          [routerLink]="['/office/projects/', project.id, 'edit']"
-          [queryParams]="{ editingStep: 'team' }"
-        >
-          <app-button>
-            <span>Добавить вакансию</span>
-            <i appIcon icon="plus" appSquare="20"></i>
-          </app-button>
-        </a>
         }
       </div>
-      } @if (project.achievements.length) {
+
+      @if(vacanciesLength === 0){
+      <a
+        [routerLink]="['/office/projects/', project.id, 'edit']"
+        [queryParams]="{ editingStep: 'team' }"
+      >
+        <app-button>
+          <span>Добавить вакансию</span>
+          <i appIcon icon="plus" appSquare="20"></i>
+        </app-button>
+      </a>
+      } } @if (project.achievements.length) {
       <div class="achievements project__section project__achievements">
         <h3 class="text-bold-body-16 achievements__title">Достижения</h3>
         @if (project.achievements; as achievements) { @if (achievements) {
