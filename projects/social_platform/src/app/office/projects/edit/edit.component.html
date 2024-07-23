@@ -357,7 +357,21 @@
               </div>
             </fieldset>
 
-            @if (vacancyForm.get("skills"); as skills) {
+            @if (vacancyForm.get("text"); as text) {
+            <fieldset class="vacancy__text">
+              <app-input
+                id="vacancy_text"
+                formControlName="text"
+                [error]="(text | controlError) && vacancySubmitInitiated"
+                placeholder="Описание"
+              ></app-input>
+              @if ((text | controlError: "required") && vacancySubmitInitiated) {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            } @if (vacancyForm.get("skills"); as skills) {
             <fieldset class="skills-basket">
               <app-skills-basket
                 formControlName="skills"
@@ -370,6 +384,7 @@
               }
             </fieldset>
             }
+
             <app-button
               class="vacancy__submit"
               [loader]="vacancyIsSubmitting"
