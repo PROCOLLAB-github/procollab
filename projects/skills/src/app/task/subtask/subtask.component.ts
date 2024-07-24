@@ -74,13 +74,14 @@ export class SubtaskComponent implements OnInit {
   anyError = signal(false);
   success = signal(false);
 
-  openQuestion = signal({
-    info_slide: true,
-    single_question: true,
-    connect_question: true,
-    exclude_question: true,
-    write_question: true,
-  });
+  openQuestion = signal<
+    | "info_slide"
+    | "single_question"
+    | "connect_question"
+    | "exclude_question"
+    | "write_question"
+    | null
+  >("info_slide");
 
   ngOnInit() {
     this.route.params
@@ -185,51 +186,15 @@ export class SubtaskComponent implements OnInit {
     });
   }
 
-  onOpenChange(modalType: string, event: boolean) {
-    if (modalType === "info_slide") {
-      if (this.openQuestion()["info_slide"] && !event) {
-        this.openQuestion().info_slide = false;
-      } else {
-        this.openQuestion().info_slide = event;
-      }
-    } else if (modalType === "single_question") {
-      if (this.openQuestion()["single_question"] && !event) {
-        this.openQuestion().single_question = false;
-      } else {
-        this.openQuestion().single_question = event;
-      }
-    } else if (modalType === "connect_question") {
-      if (this.openQuestion()["connect_question"] && !event) {
-        this.openQuestion().connect_question = false;
-      } else {
-        this.openQuestion().connect_question = event;
-      }
-    } else if (modalType === "exclude_question") {
-      if (this.openQuestion()["exclude_question"] && !event) {
-        this.openQuestion().exclude_question = false;
-      } else {
-        this.openQuestion().exclude_question = event;
-      }
-    } else if (modalType === "write_question") {
-      if (this.openQuestion()["write_question"] && !event) {
-        this.openQuestion().write_question = false;
-      } else {
-        this.openQuestion().write_question = event;
-      }
+  onOpenChange(event: any) {
+    if (!event) {
+      this.openQuestion.set(null);
+    } else {
+      this.openQuestion.set(event);
     }
   }
 
-  onCloseModal(modalType: string) {
-    if (modalType === "info_slide") {
-      this.openQuestion()["info_slide"] = false;
-    } else if (modalType === "single_question") {
-      this.openQuestion()["single_question"] = false;
-    } else if (modalType === "connect_question") {
-      this.openQuestion()["connect_question"] = false;
-    } else if (modalType === "exclude_question") {
-      this.openQuestion()["exclude_question"] = false;
-    } else if (modalType === "write_question") {
-      this.openQuestion()["write_question"] = false;
-    }
+  onCloseModal() {
+    this.openQuestion.set(null);
   }
 }
