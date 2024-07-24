@@ -144,9 +144,13 @@
         @if (project.collaborators) {
         <ul>
           @for (member of project.collaborators.slice(0, 3); track member.userId) {
-          <ng-container
-            *ngTemplateOutlet="membersTemp; context: { $implicit: member }"
-          ></ng-container>
+          <app-project-member-card
+            [member]="member"
+            [isLeader]="project.leader === member.userId"
+            [manageRights]="project.leader == profileId"
+            (transferOwnership)="onTransferOwnership($event)"
+            (remove)="onRemoveMember($event)"
+          ></app-project-member-card>
           }
         </ul>
         }
@@ -154,35 +158,24 @@
           @if (project.collaborators) {
           <ul>
             @for (member of project.collaborators.slice(3); track member.userId) {
-            <ng-container
-              *ngTemplateOutlet="membersTemp; context: { $implicit: member }"
-            ></ng-container>
+            <app-project-member-card
+              [member]="member"
+              [isLeader]="project.leader === member.userId"
+              [manageRights]="project.leader == profileId"
+              (transferOwnership)="onTransferOwnership($event)"
+              (remove)="onRemoveMember($event)"
+            ></app-project-member-card>
             }
           </ul>
           }
         </div>
-        <ng-template #membersTemp let-member>
-          <li>
-            <a class="member" [routerLink]="['/office/profile', member.userId]">
-              <app-avatar class="member__avatar" [url]="member.avatar" [size]="40"></app-avatar>
-              <div class="member__info">
-                <p class="text-bold-body-14 member__name">
-                  {{ member.firstName }} {{ member.lastName }}
-                </p>
-                <p class="text-body-12 member__speciality">{{ member.role }}</p>
-              </div>
-              @if (member.userId === project.leader) {
-              <i class="member__star" appIcon icon="star" appSquare="14"></i>
-              }
-            </a>
-          </li>
-        </ng-template>
         @if (project.collaborators.length > 3) {
         <div class="read-more" (click)="readAllMembers = !readAllMembers">
           {{ readAllMembers ? "Скрыть" : "Читать полностью" }}
         </div>
         }
       </div>
+
       @if ((vacancies$ | async)?.length; as vacanciesLength) {
       <div class="vacancies project__section project__vacancy">
         <h3 class="text-bold-body-16 team__title">Вакансии</h3>
@@ -229,8 +222,7 @@
         </div>
         }
       </div>
-
-      @if(vacanciesLength === 0){
+      } @if(profileId === project.leader){
       <a
         [routerLink]="['/office/projects/', project.id, 'edit']"
         [queryParams]="{ editingStep: 'team' }"
@@ -240,7 +232,7 @@
           <i appIcon icon="plus" appSquare="20"></i>
         </app-button>
       </a>
-      } } @if (project.achievements.length) {
+      } @if (project.achievements.length) {
       <div class="achievements project__section project__achievements">
         <h3 class="text-bold-body-16 achievements__title">Достижения</h3>
         @if (project.achievements; as achievements) { @if (achievements) {
