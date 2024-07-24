@@ -74,11 +74,13 @@ export class SubtaskComponent implements OnInit {
   anyError = signal(false);
   success = signal(false);
 
-  infoSlideOpen = signal(true);
-  singleQuestionOpen = signal(true);
-  connectQuestionOpen = signal(true);
-  excludeQuestionOpen = signal(true);
-  writeQuestionOpen = signal(true);
+  openQuestion = signal({
+    info_slide: true,
+    single_question: true,
+    connect_question: true,
+    exclude_question: true,
+    write_question: true,
+  });
 
   ngOnInit() {
     this.route.params
@@ -184,70 +186,50 @@ export class SubtaskComponent implements OnInit {
   }
 
   onOpenChange(modalType: string, event: boolean) {
-    switch (modalType) {
-      case "info_slide":
-        if (this.infoSlideOpen() && !event) {
-          this.infoSlideOpen.set(false);
-        } else {
-          this.infoSlideOpen.set(event);
-        }
-        break;
-
-      case "single_question":
-        if (this.singleQuestionOpen() && !event) {
-          this.singleQuestionOpen.set(false);
-        } else {
-          this.singleQuestionOpen.set(event);
-        }
-        break;
-
-      case "connect_question":
-        if (this.connectQuestionOpen() && !event) {
-          this.connectQuestionOpen.set(false);
-        } else {
-          this.connectQuestionOpen.set(event);
-        }
-        break;
-
-      case "exclude_question":
-        if (this.excludeQuestionOpen() && !event) {
-          this.excludeQuestionOpen.set(false);
-        } else {
-          this.excludeQuestionOpen.set(event);
-        }
-        break;
-
-      case "write_question":
-        if (this.writeQuestionOpen() && !event) {
-          this.writeQuestionOpen.set(false);
-        } else {
-          this.writeQuestionOpen.set(event);
-        }
-        break;
+    if (modalType === "info_slide") {
+      if (this.openQuestion()["info_slide"] && !event) {
+        this.openQuestion().info_slide = false;
+      } else {
+        this.openQuestion().info_slide = event;
+      }
+    } else if (modalType === "single_question") {
+      if (this.openQuestion()["single_question"] && !event) {
+        this.openQuestion().single_question = false;
+      } else {
+        this.openQuestion().single_question = event;
+      }
+    } else if (modalType === "connect_question") {
+      if (this.openQuestion()["connect_question"] && !event) {
+        this.openQuestion().connect_question = false;
+      } else {
+        this.openQuestion().connect_question = event;
+      }
+    } else if (modalType === "exclude_question") {
+      if (this.openQuestion()["exclude_question"] && !event) {
+        this.openQuestion().exclude_question = false;
+      } else {
+        this.openQuestion().exclude_question = event;
+      }
+    } else if (modalType === "write_question") {
+      if (this.openQuestion()["write_question"] && !event) {
+        this.openQuestion().write_question = false;
+      } else {
+        this.openQuestion().write_question = event;
+      }
     }
   }
 
   onCloseModal(modalType: string) {
-    switch (modalType) {
-      case "info_slide":
-        this.infoSlideOpen.set(false);
-        break;
-
-      case "single_question":
-        this.singleQuestionOpen.set(false);
-        break;
-
-      case "connect_question":
-        this.connectQuestionOpen.set(false);
-        break;
-
-      case "exclude_question":
-        this.excludeQuestionOpen.set(false);
-        break;
-
-      case "write_question":
-        this.writeQuestionOpen.set(false);
-        break;
+    if (modalType === "info_slide") {
+      this.openQuestion()["info_slide"] = false;
+    } else if (modalType === "single_question") {
+      this.openQuestion()["single_question"] = false;
+    } else if (modalType === "connect_question") {
+      this.openQuestion()["connect_question"] = false;
+    } else if (modalType === "exclude_question") {
+      this.openQuestion()["exclude_question"] = false;
+    } else if (modalType === "write_question") {
+      this.openQuestion()["write_question"] = false;
     }
   }
 }
