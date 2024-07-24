@@ -21,9 +21,15 @@
       <p class="cancel__description text-body-14">{{ is.popups[0].text }}</p>
 
       <div class="cancel__file">
-        <i appIcon icon="file" class="cancel__pdf"></i>
+        <i appIcon icon="pds" class="cancel__pdf"></i>
         <p class="cancel__line">|</p>
-        <a>{{ is.popups[0].fileLink }}</a>
+        <a
+          href="{{ is.popups[0].fileLink }}"
+          target="_blank"
+          class="cancel__link text-body-14"
+        >
+          {{ is.popups[0].fileLink }}
+        </a>
       </div>
 
       <app-button (click)="onCloseModal('info_slide')" [color]="'primary'">Продолжить</app-button>
@@ -47,9 +53,15 @@
 
       @if (sq.popups[0].fileLink) {
       <div class="cancel__file">
-        <i appIcon icon="file" class="cancel__pdf"></i>
+        <i appIcon icon="pds" class="cancel__pdf"></i>
         <p class="cancel__line">|</p>
-        <a>{{ sq.popups[0].fileLink }}</a>
+        <a
+          href="{{ sq.popups[0].fileLink }}"
+          target="_blank"
+          class="cancel__link text-body-14"
+        >
+          {{ sq.popups[0].fileLink }}
+        </a>
       </div>
       }
 
@@ -81,9 +93,15 @@
 
       @if (cq.popups[0].fileLink) {
       <div class="cancel__file">
-        <i appIcon icon="file" class="cancel__pdf"></i>
+        <i appIcon icon="pdf" class="cancel__pdf"></i>
         <p class="cancel__line">|</p>
-        <a>{{ cq.popups[0].fileLink }}</a>
+       <a
+          href="{{ cq.popups[0].fileLink }}"
+          target="_blank"
+          class="cancel__link text-body-14"
+        >
+          {{ cq.popups[0].fileLink }}
+        </a>
       </div>
       }
 
@@ -115,9 +133,15 @@
 
       @if (eq.popups[0].fileLink) {
       <div class="cancel__file">
-        <i appIcon icon="file" class="cancel__pdf"></i>
+        <i appIcon icon="pdf" class="cancel__pdf"></i>
         <p class="cancel__line">|</p>
-        <a>{{ eq.popups[0].fileLink }}</a>
+        <a
+          href="{{ eq.popups[0].fileLink }}"
+          target="_blank"
+          class="cancel__link text-body-14"
+        >
+          {{ eq.popups[0].fileLink }}
+        </a>
       </div>
       }
 
@@ -149,9 +173,15 @@
 
       @if (wq.popups[0].fileLink) {
       <div class="cancel__file">
-        <i appIcon icon="file" class="cancel__pdf"></i>
+        <i appIcon icon="pdf" class="cancel__pdf"></i>
         <p class="cancel__line">|</p>
-        <a>{{ wq.popups[0].fileLink }}</a>
+        <a
+          href="{{ wq.popups[0].fileLink }}"
+          target="_blank"
+          class="cancel__link text-body-14"
+        >
+          {{ wq.popups[0].fileLink }}
+        </a>
       </div>
       }
 
