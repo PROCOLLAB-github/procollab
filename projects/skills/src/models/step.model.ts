@@ -1,8 +1,16 @@
 /** @format */
 
+export interface Popup {
+  title: string;
+  text: string;
+  fileLink: string;
+  ordinalNumber: number;
+}
+
 export interface InfoSlide {
   text: string;
   files: string[];
+  popups: Popup[];
 }
 
 export interface ConnectQuestion {
@@ -13,6 +21,7 @@ export interface ConnectQuestion {
   id: number;
   isAnswered: boolean;
   text: string;
+  popups: Popup[];
 }
 export type ConnectQuestionRequest = { leftId: number; rightId: number }[];
 export type ConnectQuestionResponse = {
@@ -28,6 +37,7 @@ export interface SingleQuestion {
   id: number;
   isAnswered: boolean;
   questionText: string;
+  popups: Popup[];
 }
 export interface SingleQuestionError {
   correctAnswer: number;
@@ -41,6 +51,7 @@ export interface ExcludeQuestion {
   id: number;
   isAnswered: boolean;
   questionText: string;
+  popups: Popup[];
 }
 export interface ExcludeQuestionResponse {
   isCorrect: boolean;
@@ -57,6 +68,7 @@ export interface WriteQuestion {
   files: string[];
   id: number;
   text: string;
+  popups: Popup[];
 }
 
 export type StepType =

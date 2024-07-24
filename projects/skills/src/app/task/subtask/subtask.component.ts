@@ -25,6 +25,8 @@ import {
   WriteQuestion,
 } from "../../../models/step.model";
 import { WriteTaskComponent } from "../shared/write-task/write-task.component";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { IconComponent } from "@uilib";
 
 @Component({
   selector: "app-subtask",
@@ -39,6 +41,8 @@ import { WriteTaskComponent } from "../shared/write-task/write-task.component";
     RouterLink,
     LoaderComponent,
     WriteTaskComponent,
+    ModalComponent,
+    IconComponent,
   ],
   templateUrl: "./subtask.component.html",
   styleUrl: "./subtask.component.scss",
@@ -69,6 +73,15 @@ export class SubtaskComponent implements OnInit {
   excludeQuestionError = signal<ExcludeQuestionResponse | null>(null);
   anyError = signal(false);
   success = signal(false);
+
+  openQuestion = signal<
+    | "info_slide"
+    | "single_question"
+    | "connect_question"
+    | "exclude_question"
+    | "write_question"
+    | null
+  >("info_slide");
 
   ngOnInit() {
     this.route.params
@@ -171,5 +184,17 @@ export class SubtaskComponent implements OnInit {
         }
       },
     });
+  }
+
+  onOpenChange(event: any) {
+    if (!event) {
+      this.openQuestion.set(null);
+    } else {
+      this.openQuestion.set(event);
+    }
+  }
+
+  onCloseModal() {
+    this.openQuestion.set(null);
   }
 }
