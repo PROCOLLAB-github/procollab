@@ -13,7 +13,7 @@ import { Collaborator } from "@office/models/collaborator.model";
   providedIn: "root",
 })
 export class ProjectService {
-  constructor(private readonly apiService: ApiService) { }
+  constructor(private readonly apiService: ApiService) {}
 
   private readonly steps$ = new BehaviorSubject<ProjectStep[]>([]);
   steps = this.steps$.asObservable();
@@ -70,6 +70,9 @@ export class ProjectService {
   }
 
   switchLeader(projectId: Project["id"], userId: Collaborator["userId"]): Observable<void> {
-    return this.apiService.patch(`/projects/${projectId}/collaborators/${userId}/switch-leader/`, {});
+    return this.apiService.patch(
+      `/projects/${projectId}/collaborators/${userId}/switch-leader/`,
+      {}
+    );
   }
 }

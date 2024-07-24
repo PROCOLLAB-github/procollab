@@ -64,11 +64,10 @@ import { ProjectMemberCardComponent } from "../shared/project-member-card/projec
     ParseLinksPipe,
     NewsFormComponent,
     NewsCardComponent,
-    AsyncPipe
+    AsyncPipe,
   ],
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
-
   constructor(
     private readonly route: ActivatedRoute,
     public readonly industryService: IndustryService,
@@ -78,7 +77,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly subscriptionService: SubscriptionService,
     private readonly projectService: ProjectService,
     private readonly cdRef: ChangeDetectorRef
-  ) { }
+  ) {}
 
   project$?: Observable<Project> = this.route.parent?.data.pipe(map(r => r["data"][0]));
   projSubscribers$?: Observable<User[]> = this.route.parent?.data.pipe(map(r => r["data"][1]));
@@ -181,7 +180,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.projectNewsService
       .delete(this.route.snapshot.params["projectId"], newsId)
-      .subscribe(() => { });
+      .subscribe(() => {});
   }
 
   onLike(newsId: number) {
@@ -209,13 +208,17 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   onRemoveMember(id: Collaborator["userId"]) {
     this.project$
       ?.pipe(concatMap(project => this.projectService.removeColloborator(project.id, id)))
-      .subscribe(() => { location.reload() });
+      .subscribe(() => {
+        location.reload();
+      });
   }
 
-  onTransferOwnership(id: Collaborator['userId']) {
+  onTransferOwnership(id: Collaborator["userId"]) {
     this.project$
       ?.pipe(concatMap(project => this.projectService.switchLeader(project.id, id)))
-      .subscribe(() => { location.reload() });
+      .subscribe(() => {
+        location.reload();
+      });
   }
 
   isUserSubscribed!: boolean;
