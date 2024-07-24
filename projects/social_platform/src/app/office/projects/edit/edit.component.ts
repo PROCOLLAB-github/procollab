@@ -77,6 +77,7 @@ import { ApiPagination } from "@office/models/api-pagination.model";
     SkillsBasketComponent,
     SkillsGroupComponent,
     BarComponent,
+    TextareaComponent,
   ],
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -111,6 +112,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.vacancyForm = this.fb.group({
       role: ["", [Validators.required]],
       skills: [[], Validators.required],
+      description: ["", Validators.required],
     });
 
     this.inviteForm = this.fb.group({
@@ -133,6 +135,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.inviteForm.get("link"),
       this.vacancyForm.get("role"),
       this.vacancyForm.get("requiredSkills"),
+      this.vacancyForm.get("description"),
     ];
 
     controls.filter(Boolean).forEach(control => {
@@ -271,7 +274,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   submitVacancy(): void {
     this.vacancySubmitInitiated = true;
 
-    const controls = [this.vacancyForm.get("role"), this.vacancyForm.get("requiredSkills")];
+    const controls = [
+      this.vacancyForm.get("role"),
+      this.vacancyForm.get("requiredSkills"),
+      this.vacancyForm.get("description"),
+    ];
 
     controls.filter(Boolean).forEach(control => {
       control?.addValidators([Validators.required]);

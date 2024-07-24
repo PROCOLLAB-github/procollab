@@ -324,9 +324,23 @@
                 id="vacancy_role"
                 formControlName="role"
                 [error]="(role | controlError) && vacancySubmitInitiated"
-                placeholder="Роль"
+                placeholder='Роль (Например: "дизайнер интерфейсов")'
               ></app-input>
               @if ((role | controlError: "required") && vacancySubmitInitiated) {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            } @if (vacancyForm.get("description"); as description) {
+            <fieldset class="vacancy__description">
+              <app-textarea
+                id="vacancy_description"
+                formControlName="description"
+                [error]="(description | controlError) && vacancySubmitInitiated"
+                placeholder="Введите текст"
+              ></app-textarea>
+              @if ((description | controlError: "required") && vacancySubmitInitiated) {
               <div class="text-body-14 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}
               </div>
@@ -338,7 +352,7 @@
               <div class="vacancies">
                 <app-autocomplete-input
                   class="vacancies__input"
-                  placeholder="Поиск по навыкам"
+                  placeholder="Введите свои навыки, например: TypeScript"
                   searchIcon=""
                   [suggestions]="inlineSkills()"
                   fieldToDisplay="name"
@@ -370,6 +384,7 @@
               }
             </fieldset>
             }
+
             <app-button
               class="vacancy__submit"
               [loader]="vacancyIsSubmitting"

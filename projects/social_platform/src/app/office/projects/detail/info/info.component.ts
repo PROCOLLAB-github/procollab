@@ -57,6 +57,7 @@ import { ProjectMemberCardComponent } from "../shared/project-member-card/projec
     IconComponent,
     ModalComponent,
     NgTemplateOutlet,
+    AsyncPipe,
     ProjectMemberCardComponent,
     RouterOutlet,
     UserLinksPipe,
@@ -64,7 +65,6 @@ import { ProjectMemberCardComponent } from "../shared/project-member-card/projec
     ParseLinksPipe,
     NewsFormComponent,
     NewsCardComponent,
-    AsyncPipe,
   ],
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
