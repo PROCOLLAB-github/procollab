@@ -1,5 +1,12 @@
 /** @format */
 
+export interface Popup {
+  title: string;
+  text: string;
+  fileLink: string;
+  ordinalNumber: number;
+}
+
 export interface InfoSlide {
   text: string;
   files: string[];
@@ -64,12 +71,6 @@ export interface WriteQuestion {
   popups: Popup[];
 }
 
-export interface Popup {
-  title: string;
-  text: string;
-  fileLink: string;
-  ordinalNumber: number;
-}
 
 export type StepType =
   | InfoSlide
