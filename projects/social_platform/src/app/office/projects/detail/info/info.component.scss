@@ -266,7 +266,7 @@
     color: var(--black);
   }
 
-  li {
+  ul > * {
     display: block;
 
     &:not(:last-child) {
@@ -275,28 +275,6 @@
   }
 
   @include expandable-list;
-}
-
-.member {
-  display: flex;
-  align-items: center;
-
-  &__avatar {
-    margin-right: 10px;
-  }
-
-  &__name {
-    color: var(--black);
-  }
-
-  &__speciality {
-    color: var(--dark-grey);
-  }
-
-  &__star {
-    margin-left: auto;
-    color: var(--accent);
-  }
 }
 
 .about {

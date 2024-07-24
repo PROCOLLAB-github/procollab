@@ -1,0 +1,60 @@
+.member {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+  }
+
+  &__avatar {
+    margin-right: 10px;
+  }
+
+  &__name {
+    color: var(--black);
+  }
+
+  &__speciality {
+    color: var(--dark-grey);
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+
+  &__star {
+    color: var(--accent);
+  }
+
+  &__dots {
+    color: var(--black);
+    cursor: pointer;
+  }
+}
+
+.menu {
+  padding: 20px 14px;
+  background-color: var(--white);
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+  transform: translateX(-50%);
+
+  &__item {
+    color: var(--dark-grey);
+    text-align: center;
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--black);
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
+}

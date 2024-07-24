@@ -7,6 +7,7 @@ import { ApiService } from "projects/core";
 import { plainToInstance } from "class-transformer";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@models/api-pagination.model";
+import { Collaborator } from "@office/models/collaborator.model";
 
 @Injectable({
   providedIn: "root",
@@ -62,5 +63,16 @@ export class ProjectService {
     return this.apiService
       .put(`/projects/${projectId}/`, newProject)
       .pipe(map(project => plainToInstance(Project, project)));
+  }
+
+  removeColloborator(projectId: Project["id"], userId: Collaborator["userId"]): Observable<void> {
+    return this.apiService.delete(`/projects/${projectId}/collaborators?id=${userId}`);
+  }
+
+  switchLeader(projectId: Project["id"], userId: Collaborator["userId"]): Observable<void> {
+    return this.apiService.patch(
+      `/projects/${projectId}/collaborators/${userId}/switch-leader/`,
+      {}
+    );
   }
 }
