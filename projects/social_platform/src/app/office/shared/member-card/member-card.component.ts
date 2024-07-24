@@ -16,9 +16,9 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
   imports: [AvatarComponent, TagComponent, AsyncPipe, UserRolePipe, YearsFromBirthdayPipe],
 })
 export class MemberCardComponent implements OnInit {
-  constructor() {}
+  constructor() { }
 
   @Input({ required: true }) user!: User;
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

@@ -19,6 +19,7 @@ import { Vacancy } from "@models/vacancy.model";
 import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { FeedNews } from "@office/projects/models/project-news.model";
+import { ProjectService } from "@office/services/project.service";
 import { SubscriptionService } from "@office/services/subscription.service";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
@@ -42,7 +43,6 @@ import {
   withLatestFrom,
 } from "rxjs";
 import { ProjectMemberCardComponent } from "../shared/project-member-card/project-member-card.component";
-import { ProjectService } from "@office/services/project.service";
 
 @Component({
   selector: "app-detail",
@@ -64,6 +64,7 @@ import { ProjectService } from "@office/services/project.service";
     ParseLinksPipe,
     NewsFormComponent,
     NewsCardComponent,
+    AsyncPipe
   ],
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
