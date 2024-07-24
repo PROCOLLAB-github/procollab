@@ -71,7 +71,6 @@ export interface WriteQuestion {
   popups: Popup[];
 }
 
-
 export type StepType =
   | InfoSlide
   | ConnectQuestion
