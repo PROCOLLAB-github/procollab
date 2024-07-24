@@ -6,32 +6,164 @@
 </div>
 } @else {
 <div class="subtask">
-  @if (infoSlide(); as is) {
+  @if (infoSlide(); as is) { @if(is.popups && is.popups.length > 0){
+  <app-modal
+    style="position: relative"
+    [open]="infoSlideOpen()"
+    (openChange)="onOpenChange('info_slide', $event)"
+  >
+    <div class="cancel">
+      <img alt="wave" src="assets/images/task/wave_cropped.svg" class="cancel__wave" />
+
+      <i (click)="onCloseModal('info_slide')" appIcon icon="cross" class="cancel__cross"></i>
+
+      <p class="cancel__title">{{ is.popups[0].title }}</p>
+      <p class="cancel__description text-body-14">{{ is.popups[0].text }}</p>
+
+      <div class="cancel__file">
+        <i appIcon icon="file" class="cancel__pdf"></i>
+        <p class="cancel__line">|</p>
+        <a>{{ is.popups[0].fileLink }}</a>
+      </div>
+
+      <app-button (click)="onCloseModal('info_slide')" [color]="'primary'">Продолжить</app-button>
+    </div>
+  </app-modal>
+  }
   <app-info-task [data]="is"></app-info-task>
-  } @if (singleQuestion(); as sq) {
+  } @if (singleQuestion(); as sq) { @if(sq.popups && sq.popups.length > 0){
+  <app-modal
+    style="position: relative"
+    [open]="singleQuestionOpen()"
+    (openChange)="onOpenChange('single_question', $event)"
+  >
+    <div class="cancel">
+      <img alt="wave" src="assets/images/task/wave_cropped.svg" class="cancel__wave" />
+
+      <i (click)="onCloseModal('single_question')" appIcon icon="cross" class="cancel__cross"></i>
+
+      <p class="cancel__title">{{ sq.popups[0].title }}</p>
+      <p class="cancel__description text-body-14">{{ sq.popups[0].text }}</p>
+
+      @if (sq.popups[0].fileLink) {
+      <div class="cancel__file">
+        <i appIcon icon="file" class="cancel__pdf"></i>
+        <p class="cancel__line">|</p>
+        <a>{{ sq.popups[0].fileLink }}</a>
+      </div>
+      }
+
+      <app-button (click)="onCloseModal('single_question')" [color]="'primary'"
+        >Продолжить</app-button
+      >
+    </div>
+  </app-modal>
+  }
   <app-radio-select-task
     [data]="sq"
     [error]="singleQuestionError()"
     [success]="success()"
     (update)="body.set($event)"
   ></app-radio-select-task>
-  } @if (connectQuestion(); as cq) {
+  } @if (connectQuestion(); as cq) { @if(cq.popups && cq.popups.length > 0){
+  <app-modal
+    style="position: relative"
+    [open]="connectQuestionOpen()"
+    (openChange)="onOpenChange('connect_question', $event)"
+  >
+    <div class="cancel">
+      <img alt="wave" src="assets/images/task/wave_cropped.svg" class="cancel__wave" />
+
+      <i (click)="onCloseModal('connect_question')" appIcon icon="cross" class="cancel__cross"></i>
+
+      <p class="cancel__title">{{ cq.popups[0].title }}</p>
+      <p class="cancel__description text-body-14">{{ cq.popups[0].text }}</p>
+
+      @if (cq.popups[0].fileLink) {
+      <div class="cancel__file">
+        <i appIcon icon="file" class="cancel__pdf"></i>
+        <p class="cancel__line">|</p>
+        <a>{{ cq.popups[0].fileLink }}</a>
+      </div>
+      }
+
+      <app-button (click)="onCloseModal('connect_question')" [color]="'primary'"
+        >Продолжить</app-button
+      >
+    </div>
+  </app-modal>
+  }
   <app-relations-task
     [data]="cq"
     [error]="connectQuestionError()"
     [success]="success()"
     (update)="body.set($event)"
   ></app-relations-task>
-  } @if (excludeQuestion(); as eq) {
+  } @if (excludeQuestion(); as eq) { @if(eq.popups && eq.popups.length > 0){
+  <app-modal
+    style="position: relative"
+    [open]="excludeQuestionOpen()"
+    (openChange)="onOpenChange('exclude_question', $event)"
+  >
+    <div class="cancel">
+      <img alt="wave" src="assets/images/task/wave_cropped.svg" class="cancel__wave" />
+
+      <i (click)="onCloseModal('exclude_question')" appIcon icon="cross" class="cancel__cross"></i>
+
+      <p class="cancel__title">{{ eq.popups[0].title }}</p>
+      <p class="cancel__description text-body-14">{{ eq.popups[0].text }}</p>
+
+      @if (eq.popups[0].fileLink) {
+      <div class="cancel__file">
+        <i appIcon icon="file" class="cancel__pdf"></i>
+        <p class="cancel__line">|</p>
+        <a>{{ eq.popups[0].fileLink }}</a>
+      </div>
+      }
+
+      <app-button (click)="onCloseModal('exclude_question')" [color]="'primary'"
+        >Продолжить</app-button
+      >
+    </div>
+  </app-modal>
+  }
   <app-exclude-task
     [data]="eq"
     [error]="excludeQuestionError()"
     [success]="success()"
     (update)="body.set($event)"
   ></app-exclude-task>
-  } @if (writeQuestion(); as wq) {
+  } @if (writeQuestion(); as wq) { @if(wq.popups && wq.popups.length > 0){
+  <app-modal
+    style="position: relative"
+    [open]="writeQuestionOpen()"
+    (openChange)="onOpenChange('write_question', $event)"
+  >
+    <div class="cancel">
+      <img alt="wave" src="assets/images/task/wave_cropped.svg" class="cancel__wave" />
+
+      <i (click)="onCloseModal('write_question')" appIcon icon="cross" class="cancel__cross"></i>
+
+      <p class="cancel__title">{{ wq.popups[0].title }}</p>
+      <p class="cancel__description text-body-14">{{ wq.popups[0].text }}</p>
+
+      @if (wq.popups[0].fileLink) {
+      <div class="cancel__file">
+        <i appIcon icon="file" class="cancel__pdf"></i>
+        <p class="cancel__line">|</p>
+        <a>{{ wq.popups[0].fileLink }}</a>
+      </div>
+      }
+
+      <app-button (click)="onCloseModal('write_question')" [color]="'primary'"
+        >Продолжить</app-button
+      >
+    </div>
+  </app-modal>
+  }
   <app-write-task [data]="wq" [success]="success()" (update)="body.set($event)"></app-write-task>
   }
+
   <div class="action">
     <div class="action__error action__badge" [class.action__badge--open]="anyError()">
       Вышла неточность...

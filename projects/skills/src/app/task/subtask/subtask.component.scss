@@ -1,4 +1,5 @@
 @use "styles/typography";
+@use "styles/responsive";
 
 .subtask {
   display: flex;
@@ -47,5 +48,76 @@
   &__success {
     color: var(--green);
     background-color: var(--light-green);
+  }
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: calc(100vh - 40px);
+  padding: 40px 0 20px;
+  overflow-y: auto;
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 20px;
+    color: var(--black);
+    inline-size: 280px;
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 23px;
+      inline-size: 500px;
+
+      @include typography.heading-3;
+    }
+  }
+
+  &__description {
+    align-self: self-start;
+    margin-bottom: 40px;
+  }
+
+  &__wave {
+    position: absolute;
+    top: 0%;
+    left: 0;
+    width: 100%;
+  }
+
+  &__file {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    margin-bottom: 50px;
+    border: 1px solid var(--grey-button);
+    border-radius: 15px;
+  }
+
+  &__pdf {
+    display: block;
+    width: 24px;
+    height: 24px;
+  }
+
+  &__line {
+    color: var(--accent);
   }
 }

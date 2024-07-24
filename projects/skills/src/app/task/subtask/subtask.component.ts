@@ -25,6 +25,8 @@ import {
   WriteQuestion,
 } from "../../../models/step.model";
 import { WriteTaskComponent } from "../shared/write-task/write-task.component";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { IconComponent } from "@uilib";
 
 @Component({
   selector: "app-subtask",
@@ -39,6 +41,8 @@ import { WriteTaskComponent } from "../shared/write-task/write-task.component";
     RouterLink,
     LoaderComponent,
     WriteTaskComponent,
+    ModalComponent,
+    IconComponent,
   ],
   templateUrl: "./subtask.component.html",
   styleUrl: "./subtask.component.scss",
@@ -69,6 +73,12 @@ export class SubtaskComponent implements OnInit {
   excludeQuestionError = signal<ExcludeQuestionResponse | null>(null);
   anyError = signal(false);
   success = signal(false);
+
+  infoSlideOpen = signal(true);
+  singleQuestionOpen = signal(true);
+  connectQuestionOpen = signal(true);
+  excludeQuestionOpen = signal(true);
+  writeQuestionOpen = signal(true);
 
   ngOnInit() {
     this.route.params
@@ -171,5 +181,73 @@ export class SubtaskComponent implements OnInit {
         }
       },
     });
+  }
+
+  onOpenChange(modalType: string, event: boolean) {
+    switch (modalType) {
+      case "info_slide":
+        if (this.infoSlideOpen() && !event) {
+          this.infoSlideOpen.set(false);
+        } else {
+          this.infoSlideOpen.set(event);
+        }
+        break;
+
+      case "single_question":
+        if (this.singleQuestionOpen() && !event) {
+          this.singleQuestionOpen.set(false);
+        } else {
+          this.singleQuestionOpen.set(event);
+        }
+        break;
+
+      case "connect_question":
+        if (this.connectQuestionOpen() && !event) {
+          this.connectQuestionOpen.set(false);
+        } else {
+          this.connectQuestionOpen.set(event);
+        }
+        break;
+
+      case "exclude_question":
+        if (this.excludeQuestionOpen() && !event) {
+          this.excludeQuestionOpen.set(false);
+        } else {
+          this.excludeQuestionOpen.set(event);
+        }
+        break;
+
+      case "write_question":
+        if (this.writeQuestionOpen() && !event) {
+          this.writeQuestionOpen.set(false);
+        } else {
+          this.writeQuestionOpen.set(event);
+        }
+        break;
+    }
+  }
+
+  onCloseModal(modalType: string) {
+    switch (modalType) {
+      case "info_slide":
+        this.infoSlideOpen.set(false);
+        break;
+
+      case "single_question":
+        this.singleQuestionOpen.set(false);
+        break;
+
+      case "connect_question":
+        this.connectQuestionOpen.set(false);
+        break;
+
+      case "exclude_question":
+        this.excludeQuestionOpen.set(false);
+        break;
+
+      case "write_question":
+        this.writeQuestionOpen.set(false);
+        break;
+    }
   }
 }
