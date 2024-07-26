@@ -74,7 +74,14 @@ export class SubtaskComponent implements OnInit {
   anyError = signal(false);
   success = signal(false);
 
-  openQuestion = signal<'info_slide' | 'exclude_question' | 'write_question' | 'single_question' | 'connect_question' | null>('info_slide');
+  openQuestion = signal<
+    | "info_slide"
+    | "exclude_question"
+    | "write_question"
+    | "single_question"
+    | "connect_question"
+    | null
+  >("info_slide");
 
   ngOnInit() {
     this.route.params
@@ -97,7 +104,7 @@ export class SubtaskComponent implements OnInit {
         },
       });
 
-    this.openQuestion.set(this.route.snapshot.queryParams['type']);
+    this.openQuestion.set(this.route.snapshot.queryParams["type"]);
   }
 
   setStepData(step: StepType) {
@@ -132,7 +139,7 @@ export class SubtaskComponent implements OnInit {
     ].forEach(s => s.set(null));
   }
 
-    onOpenChange(event: any) {
+  onOpenChange(event: any) {
     if (!event) {
       this.openQuestion.set(null);
     } else {
