@@ -27,6 +27,7 @@ export class VacanciesListComponent {
       .subscribe((vacancy: ApiPagination<Vacancy>) => {
         this.vacancyList.set(vacancy.results);
         this.totalItemsCount.set(vacancy.count);
+        console.log(vacancy.results);
       });
     this.subscriptions$().push(routeData$);
   }

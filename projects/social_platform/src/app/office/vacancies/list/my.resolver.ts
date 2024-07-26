@@ -8,5 +8,5 @@ import { VacancyService } from "@office/services/vacancy.service";
 export const VacanciesMyResolver: ResolveFn<Vacancy[]> = () => {
   const vacanciesService = inject(VacancyService);
 
-  return vacanciesService.getMyVacancies(0, 20);
+  return vacanciesService.getMyVacancies(20, 0);
 };
