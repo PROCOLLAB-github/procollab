@@ -9,7 +9,7 @@
   @if (infoSlide(); as is) { @if(is.popups && is.popups.length > 0){
   <app-modal
     style="position: relative"
-    [open]="openQuestion() === 'info_slide'"
+    [open]="success() && openQuestion() === 'info_slide'"
     (openChange)="onOpenChange($event)"
   >
     <div class="cancel">
@@ -36,7 +36,7 @@
   } @if (singleQuestion(); as sq) { @if(sq.popups && sq.popups.length > 0){
   <app-modal
     style="position: relative"
-    [open]="openQuestion() === 'single_question'"
+    [open]="success() && openQuestion() === 'single_question'"
     (openChange)="onOpenChange($event)"
   >
     <div class="cancel">
@@ -70,7 +70,7 @@
   } @if (connectQuestion(); as cq) { @if(cq.popups && cq.popups.length > 0){
   <app-modal
     style="position: relative"
-    [open]="openQuestion() === 'connect_question'"
+    [open]="success() && openQuestion() === 'connect_question'"
     (openChange)="onOpenChange($event)"
   >
     <div class="cancel">
@@ -104,7 +104,7 @@
   } @if (excludeQuestion(); as eq) { @if(eq.popups && eq.popups.length > 0){
   <app-modal
     style="position: relative"
-    [open]="openQuestion() === 'exclude_question'"
+    [open]="success() && openQuestion() === 'exclude_question'"
     (openChange)="onOpenChange($event)"
   >
     <div class="cancel">
@@ -138,7 +138,7 @@
   } @if (writeQuestion(); as wq) { @if(wq.popups && wq.popups.length > 0){
   <app-modal
     style="position: relative"
-    [open]="openQuestion() === 'write_question'"
+    [open]="success() && openQuestion() === 'write_question'"
     (openChange)="onOpenChange($event)"
   >
     <div class="cancel">

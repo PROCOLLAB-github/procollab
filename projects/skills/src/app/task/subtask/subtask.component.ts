@@ -76,10 +76,10 @@ export class SubtaskComponent implements OnInit {
 
   openQuestion = signal<
     | "info_slide"
-    | "single_question"
-    | "connect_question"
     | "exclude_question"
     | "write_question"
+    | "single_question"
+    | "connect_question"
     | null
   >("info_slide");
 
@@ -103,6 +103,8 @@ export class SubtaskComponent implements OnInit {
           setTimeout(() => this.loading.set(false), 500);
         },
       });
+
+    this.openQuestion.set(this.route.snapshot.queryParams["type"]);
   }
 
   setStepData(step: StepType) {
@@ -137,6 +139,43 @@ export class SubtaskComponent implements OnInit {
     ].forEach(s => s.set(null));
   }
 
+  onOpenChange(event: any) {
+    if (!event) {
+      this.openQuestion.set(null);
+    } else {
+      this.openQuestion.set(event);
+    }
+  }
+
+  onCloseModal() {
+    this.openQuestion.set(null);
+
+    const id = this.subTaskId();
+    if (!id) return;
+
+    setTimeout(() => {
+      this.success.set(false);
+
+      const nextStep = this.taskService.getNextStep(id);
+      const taskId = this.route.parent?.snapshot.params["taskId"];
+      if (!taskId) return;
+
+      if (!nextStep) {
+        this.router
+          .navigate(["/task", taskId, "results"])
+          .then(() => console.debug("Route changed from SubtaskComponent"));
+        this.taskService.currentTaskDone.set(true);
+        return;
+      }
+
+      this.router
+        .navigate(["/task", taskId, nextStep.id], {
+          queryParams: { type: nextStep.type },
+        })
+        .then(() => console.debug("Route changed from SubtaskComponent"));
+    }, 1000);
+  }
+
   onNext() {
     const id = this.subTaskId();
     if (!id) return;
@@ -146,28 +185,6 @@ export class SubtaskComponent implements OnInit {
     this.taskService.checkStep(id, type, this.body()).subscribe({
       next: _res => {
         this.success.set(true);
-
-        setTimeout(() => {
-          this.success.set(false);
-
-          const nextStep = this.taskService.getNextStep(id);
-          const taskId = this.route.parent?.snapshot.params["taskId"];
-          if (!taskId) return;
-
-          if (!nextStep) {
-            this.router
-              .navigate(["/task", taskId, "results"])
-              .then(() => console.debug("Route changed from SubtaskComponent"));
-            this.taskService.currentTaskDone.set(true);
-            return;
-          }
-
-          this.router
-            .navigate(["/task", taskId, nextStep.id], {
-              queryParams: { type: nextStep.type },
-            })
-            .then(() => console.debug("Route changed from SubtaskComponent"));
-        }, 1000);
       },
       error: err => {
         this.anyError.set(true);
@@ -184,17 +201,5 @@ export class SubtaskComponent implements OnInit {
         }
       },
     });
-  }
-
-  onOpenChange(event: any) {
-    if (!event) {
-      this.openQuestion.set(null);
-    } else {
-      this.openQuestion.set(event);
-    }
-  }
-
-  onCloseModal() {
-    this.openQuestion.set(null);
   }
 }
