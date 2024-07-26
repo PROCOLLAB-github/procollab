@@ -37,6 +37,7 @@
   &__title {
     margin-top: 40px;
     color: var(--black);
+
     @include typography.heading-4;
 
     @include responsive.apply-desktop {
