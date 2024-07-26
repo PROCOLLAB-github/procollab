@@ -186,15 +186,13 @@ export class SubtaskComponent implements OnInit {
       next: _res => {
         this.success.set(true);
 
-        if ((type === 'info_slide' && !!this.infoSlide()?.popups.length)
-          || (type === 'exclude_question' && !!this.excludeQuestion()?.popups.length)
-          || (type === 'question_connect' && !!this.connectQuestion()?.popups.length)
-          || (type === 'question_single_answer' && !!this.singleQuestion()?.popups.length)
-          || (type === 'question_write' && !!this.writeQuestion()?.popups.length)) {
-          return;
-        }
-
-        else {
+        if (
+          (type === "info_slide" && !this.infoSlide()?.popups.length) ||
+          (type === "exclude_question" && !this.excludeQuestion()?.popups.length) ||
+          (type === "question_connect" && !this.connectQuestion()?.popups.length) ||
+          (type === "question_single_answer" && !this.singleQuestion()?.popups.length) ||
+          (type === "question_write" && !this.writeQuestion()?.popups.length)
+        ) {
           setTimeout(() => {
             this.success.set(false);
 
@@ -220,7 +218,7 @@ export class SubtaskComponent implements OnInit {
       },
       error: err => {
         this.anyError.set(true);
-        console.log(type === 'info_slide' && !!this.infoSlide()?.popups.length);
+        console.log(type === "info_slide" && !!this.infoSlide()?.popups.length);
         setTimeout(() => {
           this.anyError.set(false);
         }, 2000);
