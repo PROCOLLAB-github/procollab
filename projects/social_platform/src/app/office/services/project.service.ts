@@ -53,6 +53,10 @@ export class ProjectService {
     return this.apiService.delete(`/projects/${projectId}/`);
   }
 
+  leave(projectId: Project["id"]): Observable<void> {
+    return this.apiService.delete(`/projects/${projectId}/collaborators/leave`);
+  }
+
   create(): Observable<Project> {
     return this.apiService
       .post("/projects/", {})

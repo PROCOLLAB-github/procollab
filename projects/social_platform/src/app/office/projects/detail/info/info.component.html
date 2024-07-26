@@ -92,6 +92,11 @@
             <app-button customTypographyClass="text-body-12"> Редактировать </app-button>
             }
           </a>
+          @if (isInProject | async) {
+          <div class="info__exit" (click)="onLeave()">
+            <i appIcon icon="logout" appSquare="32"></i>
+          </div>
+          }
         </div>
       </div>
       }

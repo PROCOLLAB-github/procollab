@@ -10,7 +10,7 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { ActivatedRoute, RouterLink, RouterOutlet } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
@@ -70,6 +70,7 @@ import { ProjectMemberCardComponent } from "../shared/project-member-card/projec
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     public readonly industryService: IndustryService,
     public readonly authService: AuthService,
     private readonly navService: NavService,
@@ -211,6 +212,14 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => {
         location.reload();
       });
+  }
+
+  onLeave() {
+    this.project$?.pipe(concatMap(p => this.projectService.leave(p.id))).subscribe(() => {
+      this.router
+        .navigateByUrl("/office/projects/my")
+        .then(() => console.debug("Route changed from ProjectInfoComponent"));
+    });
   }
 
   onTransferOwnership(id: Collaborator["userId"]) {

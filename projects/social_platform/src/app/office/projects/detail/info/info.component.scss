@@ -258,6 +258,24 @@
       box-shadow: 0 6px 18px var(--accent);
     }
   }
+
+  &__exit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 43px;
+    height: 43px;
+    color: var(--accent);
+    cursor: pointer;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    transition: all 0.2s;
+
+    &:hover {
+      color: var(--accent-dark);
+      border-color: var(--accent-dark);
+    }
+  }
 }
 
 .team {
