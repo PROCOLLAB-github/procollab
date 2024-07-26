@@ -185,9 +185,42 @@ export class SubtaskComponent implements OnInit {
     this.taskService.checkStep(id, type, this.body()).subscribe({
       next: _res => {
         this.success.set(true);
+
+        if ((type === 'info_slide' && !!this.infoSlide()?.popups.length)
+          || (type === 'exclude_question' && !!this.excludeQuestion()?.popups.length)
+          || (type === 'question_connect' && !!this.connectQuestion()?.popups.length)
+          || (type === 'question_single_answer' && !!this.singleQuestion()?.popups.length)
+          || (type === 'question_write' && !!this.writeQuestion()?.popups.length)) {
+          return;
+        }
+
+        else {
+          setTimeout(() => {
+            this.success.set(false);
+
+            const nextStep = this.taskService.getNextStep(id);
+            const taskId = this.route.parent?.snapshot.params["taskId"];
+            if (!taskId) return;
+
+            if (!nextStep) {
+              this.router
+                .navigate(["/task", taskId, "results"])
+                .then(() => console.debug("Route changed from SubtaskComponent"));
+              this.taskService.currentTaskDone.set(true);
+              return;
+            }
+
+            this.router
+              .navigate(["/task", taskId, nextStep.id], {
+                queryParams: { type: nextStep.type },
+              })
+              .then(() => console.debug("Route changed from SubtaskComponent"));
+          }, 1000);
+        }
       },
       error: err => {
         this.anyError.set(true);
+        console.log(type === 'info_slide' && !!this.infoSlide()?.popups.length);
         setTimeout(() => {
           this.anyError.set(false);
         }, 2000);
