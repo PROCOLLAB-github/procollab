@@ -2,19 +2,25 @@
 
 <div class="control-panel">
   <div class="control-panel__actions">
-    <a class="control-panel__action" (click)="logout.emit()">
+    <a class="control-panel__action">
+      <div class="control-panel__bell">
+        <i appIcon icon="bell" appSquare="24"></i>
+      </div>
+    </a>
+
+    <a [href]="'office/profile/' + user?.id" class="control-panel__action" (click)="logout.emit()">
       <div class="control-panel__bell">
         <i appIcon icon="logout2" appSquare="24"></i>
       </div>
     </a>
   </div>
-  <a class="user" [routerLink]="['/office/profile', user.id]">
+  <a class="user" [routerLink]="'/profile'">
     <div class="user__row">
-      <app-avatar class="user__avatar" [url]="user.avatar"></app-avatar>
-      <div class="text-bold-body-14 user__name">{{ user.firstName }} {{ user.lastName }}</div>
+      <app-avatar class="user__avatar" [url]="user?.fileLink"></app-avatar>
+      <div class="text-bold-body-14 user__name">{{ user?.firstName }} {{ user?.lastName }}</div>
     </div>
     <div class="user__row">
-      @if (user.verificationDate; as verificationDate) {
+      @if (user?.verificationDate; as verificationDate) {
       <div class="text-body-12 user__verified">
         Подтвержден с {{ verificationDate | dayjs: "format":"DD.MM.YY" }}
       </div>
