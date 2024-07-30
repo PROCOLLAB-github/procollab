@@ -16,7 +16,7 @@ import { User } from "@auth/models/user.model";
   styleUrl: "./sidebar-profile.component.scss",
 })
 export class SidebarProfileComponent {
-  @Input({ required: true }) user?: Profile['userData'];
+  @Input({ required: true }) user?: Profile["userData"];
 
   @Output() logout = new EventEmitter();
 }

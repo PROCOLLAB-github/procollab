@@ -5,6 +5,7 @@ export interface UserData {
   firstName: string;
   lastName: string;
   fileLink: string;
+  avatar: string;
   age: number;
   specialization: string;
   geoPosition: string;
