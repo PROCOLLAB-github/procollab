@@ -1,23 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/** @format */
 
-import { EmailLetterComponent } from './email-letter.component';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-describe('EmailLetterComponent', () => {
+import { EmailLetterComponent } from "./email-letter.component";
+
+describe("EmailLetterComponent", () => {
   let component: EmailLetterComponent;
   let fixture: ComponentFixture<EmailLetterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EmailLetterComponent]
-    })
-    .compileComponents();
-    
+      imports: [EmailLetterComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(EmailLetterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
