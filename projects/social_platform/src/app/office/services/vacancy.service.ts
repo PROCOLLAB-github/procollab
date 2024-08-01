@@ -30,15 +30,15 @@ export class VacancyService {
       .pipe(map(vacancies => plainToInstance(Vacancy, vacancies)));
   }
 
-  getMyVacancies(limit: number, offset: number): Observable<Vacancy[]> {
+  getMyVacancies(limit: number, offset: number): Observable<VacancyResponse[]> {
     const params = new HttpParams();
 
     params.set("limit", limit);
     params.set("offset", offset);
 
     return this.apiService
-      .get<Vacancy[]>("/vacancies/responses/self", params)
-      .pipe(map(vacancies => plainToInstance(Vacancy, vacancies)));
+      .get<VacancyResponse[]>("/vacancies/responses/self", params)
+      .pipe(map(vacancies => plainToInstance(VacancyResponse, vacancies)));
   }
 
   postVacancy(

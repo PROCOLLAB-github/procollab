@@ -1,35 +1,56 @@
 /** @format */
 
 import { Component, inject, signal } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
 import { OpenVacancyComponent } from "@office/feed/shared/open-vacancy/open-vacancy.component";
 import { VacancyService } from "@office/services/vacancy.service";
 import { Vacancy } from "@office/models/vacancy.model";
 import { ApiPagination } from "@office/models/api-pagination.model";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { VacancyFilterComponent } from "../filter/vacancy-filter.component";
+import { VacancyResponse } from "@office/models/vacancy-response.model";
+import { ResponseCardComponent } from "@office/shared/response-card/response-card.component";
 
 @Component({
   selector: "app-vacancies-list",
   standalone: true,
-  imports: [CommonModule, OpenVacancyComponent, VacancyFilterComponent],
+  imports: [
+    CommonModule,
+    OpenVacancyComponent,
+    VacancyFilterComponent,
+    ResponseCardComponent,
+    AsyncPipe,
+  ],
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
 })
 export class VacanciesListComponent {
   route = inject(ActivatedRoute);
+  router = inject(Router);
   vacancyService = inject(VacancyService);
 
   ngOnInit() {
-    const routeData$ = this.route.data
-      .pipe(map(r => r["data"]))
-      .subscribe((vacancy: ApiPagination<Vacancy>) => {
-        this.vacancyList.set(vacancy.results);
+    const routeData$ =
+      this.type() === "all"
+        ? this.route.data.pipe(map(r => r["data"]))
+        : this.route.data.pipe(map(r => r["data"]));
+
+    const subscription = routeData$.subscribe(
+      (vacancy: ApiPagination<Vacancy> | ApiPagination<VacancyResponse>) => {
+        if (this.type() === "all") {
+          this.vacancyList.set(vacancy.results as Vacancy[]);
+        } else {
+          this.responsesList.set(vacancy.results as VacancyResponse[]);
+        }
         this.totalItemsCount.set(vacancy.count);
         console.log(vacancy.results);
-      });
-    this.subscriptions$().push(routeData$);
+      }
+    );
+
+    this.subscriptions$().push(subscription);
+
+    this.type.set(this.router.url.split("/").slice(-1)[0] as "all" | "my");
   }
 
   ngAfterViewInit() {
@@ -52,8 +73,10 @@ export class VacanciesListComponent {
 
   totalItemsCount = signal(0);
   vacancyList = signal<Vacancy[]>([]);
+  responsesList = signal<VacancyResponse[]>([]);
   vacancyPage = signal(1);
   perFetchTake = signal(20);
+  type = signal<"all" | "my">("all");
 
   subscriptions$ = signal<Subscription[]>([]);
 

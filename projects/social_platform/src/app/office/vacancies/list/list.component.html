@@ -3,14 +3,18 @@
 <div class="page">
   <!-- <app-vacancy-filter class="page__filter"></app-vacancy-filter> -->
   <div #vacancyRoot class="page__feed">
-    @if (vacancyList().length) { @for (vacancy of vacancyList(); track $index) {
+    @if(type() === 'all'){ @if(vacancyList().length){ @for (vacancy of vacancyList(); track $index)
+    {
     <app-open-vacancy
       class="page__item"
       [attr.data-id]="vacancy.id"
       [feedItem]="vacancy"
     ></app-open-vacancy>
-    } }@else {
-    <p class="page__title">Вы не откликнулись ни на одну вакансию!</p>
-    }
+    } } } @if (type() === 'my') { @if (responsesList().length) { @for (response of responsesList();
+    track $index) {
+    <app-response-card [response]="response"></app-response-card>
+    } } }
+
+    <!-- <p class="page__title">Вы не откликнулись ни на одну вакансию!</p> -->
   </div>
 </div>
