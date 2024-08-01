@@ -46,7 +46,6 @@ export class VacanciesListComponent {
           this.responsesList.set(vacancy.results as VacancyResponse[]);
         }
         this.totalItemsCount.set(vacancy.count);
-        console.log(this.vacancyList(), this.responsesList());
       }
     );
 
