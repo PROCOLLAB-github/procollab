@@ -122,6 +122,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
     { name: "Программы", icon: "program", link: "program/list" },
     { name: "Участники", icon: "people-bold", link: "members" },
     { name: "Эксперты", icon: "two-people", link: "mentors" },
+    { name: "Вакансии", icon: "search", link: "vacancies" },
   ];
 
   subscriptions$: Subscription[] = [];

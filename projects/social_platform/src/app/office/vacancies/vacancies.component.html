@@ -1,0 +1,20 @@
+<!-- @format -->
+
+<app-bar
+  style="width: 100%"
+  [backHave]="true"
+  [links]="[
+    {
+      link: '/office/vacancies/all',
+      linkText: 'Вакансии',
+      isRouterLinkActiveOptions: true
+    },
+    {
+      link: '/office/vacancies/my',
+      linkText: 'Мои отклики',
+      isRouterLinkActiveOptions: false
+    }
+  ]"
+></app-bar>
+
+<router-outlet></router-outlet>

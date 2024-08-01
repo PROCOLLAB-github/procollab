@@ -32,6 +32,10 @@ export const OFFICE_ROUTES: Routes = [
         loadChildren: () => import("./feed/feed.routes").then(c => c.FEED_ROUTES),
       },
       {
+        path: "vacancies",
+        loadChildren: () => import("./vacancies/vacancies.routes").then(c => c.VACANCIES_ROUTES),
+      },
+      {
         path: "projects",
         loadChildren: () => import("./projects/projects.routes").then(c => c.PROJECTS_ROUTES),
       },
