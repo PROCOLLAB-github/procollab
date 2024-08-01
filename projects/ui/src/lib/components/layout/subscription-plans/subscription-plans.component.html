@@ -29,6 +29,16 @@
       </div>
       }
     </div>
+
+    <div class="plans__agreement">
+      <app-checkbox [(checked)]="offertAgreement"></app-checkbox>
+      <span (click)="offertAgreement = !offertAgreement">
+        Нажимая на кнопку «Купить», вы соглашаетесь с условиями
+        <a href="/assets/downloads/subscription-plans/shared/Договор Оферты.pdf" download>
+          оферты
+        </a>
+      </span>
+    </div>
   </div>
 </div>
 }

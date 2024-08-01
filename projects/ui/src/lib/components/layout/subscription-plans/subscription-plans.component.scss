@@ -91,6 +91,25 @@
       margin-top: 16px;
     }
   }
+
+  &__agreement {
+    display: flex;
+    align-items: center;
+    margin-top: 25px;
+    cursor: pointer;
+
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      margin-top: 20px;
+
+      @include typography.body-14;
+    }
+
+    app-checkbox {
+      margin-right: 15px;
+    }
+  }
 }
 
 .tariff {

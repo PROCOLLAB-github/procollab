@@ -61,6 +61,7 @@ export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
   registerAgreement = false;
+  ageAgreement = false;
   registerIsSubmitting = false;
   credsSubmitInitiated = false;
   infoSubmitInitiated = false;
@@ -83,7 +84,7 @@ export class RegisterComponent implements OnInit {
       return !!field?.valid;
     });
 
-    if (errors.every(Boolean) && this.registerAgreement) {
+    if (errors.every(Boolean) && this.registerAgreement && this.ageAgreement) {
       this.step = "info";
     }
   }

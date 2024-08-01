@@ -195,6 +195,13 @@
         и даю согласие на&nbsp;обработку персональных&nbsp;данных
       </span>
     </div>
+
+    <div class="register__agreement">
+      <app-checkbox [(checked)]="ageAgreement"></app-checkbox>
+      <span (click)="ageAgreement = !ageAgreement"
+        >Нажимая на кнопку подтверждаете, что вам больше 14 лет</span
+      >
+    </div>
     <app-button type="submit" class="auth__button" customTypographyClass="auth__button-typography">
       Далее
     </app-button>
