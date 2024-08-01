@@ -51,6 +51,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(map(r => r["data"]))
       .subscribe((feed: ApiPagination<FeedItem>) => {
         this.feedItems.set(feed.results);
+        console.log(feed.results);
         this.totalItemsCount.set(feed.count);
 
         setTimeout(() => {
