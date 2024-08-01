@@ -14,6 +14,10 @@ export class ProfileService {
     return this.apiService.get<Profile>("/progress/profile/");
   }
 
+  getUserData() {
+    return this.apiService.get("/progress/user-data/");
+  }
+
   getSubscriptionData() {
     return this.apiService.get<SubscriptionData>("/progress/subscription-data/");
   }

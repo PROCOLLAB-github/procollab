@@ -1,12 +1,15 @@
 /** @format */
 
-interface UserData {
+export interface UserData {
+  id: number;
   firstName: string;
   lastName: string;
   fileLink: string;
+  avatar: string;
   age: number;
   specialization: string;
   geoPosition: string;
+  verificationDate: string;
 }
 
 interface Skill {

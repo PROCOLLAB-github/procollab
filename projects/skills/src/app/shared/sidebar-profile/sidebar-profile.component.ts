@@ -4,8 +4,9 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { AvatarComponent, IconComponent } from "@uilib";
 import { DayjsPipe } from "@corelib";
-import { User } from "../../../../../ui/src/lib/models/user.model";
 import { RouterLink } from "@angular/router";
+import { Profile } from "projects/skills/src/models/profile.model";
+import { User } from "@auth/models/user.model";
 
 @Component({
   selector: "app-sidebar-profile",
@@ -15,7 +16,7 @@ import { RouterLink } from "@angular/router";
   styleUrl: "./sidebar-profile.component.scss",
 })
 export class SidebarProfileComponent {
-  @Input({ required: true }) user!: User;
+  @Input({ required: true }) user!: Profile["userData"];
 
   @Output() logout = new EventEmitter();
 }
