@@ -13,8 +13,8 @@
     } } } @if (type() === 'my') { @if (responsesList().length) { @for (response of responsesList();
     track $index) {
     <app-response-card [response]="response"></app-response-card>
-    } } }
-
-    <!-- <p class="page__title">Вы не откликнулись ни на одну вакансию!</p> -->
+    } }@else {
+    <p class="page__title">Вы не откликнулись ни на одну вакансию!</p>
+    } }
   </div>
 </div>

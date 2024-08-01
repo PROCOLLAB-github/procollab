@@ -31,6 +31,8 @@ export class VacanciesListComponent {
   vacancyService = inject(VacancyService);
 
   ngOnInit() {
+    this.type.set(this.router.url.split("/").slice(-1)[0] as "all" | "my");
+
     const routeData$ =
       this.type() === "all"
         ? this.route.data.pipe(map(r => r["data"]))
@@ -40,17 +42,15 @@ export class VacanciesListComponent {
       (vacancy: ApiPagination<Vacancy> | ApiPagination<VacancyResponse>) => {
         if (this.type() === "all") {
           this.vacancyList.set(vacancy.results as Vacancy[]);
-        } else {
+        } else if(this.type() === 'my') {
           this.responsesList.set(vacancy.results as VacancyResponse[]);
         }
         this.totalItemsCount.set(vacancy.count);
-        console.log(vacancy.results);
+        console.log(this.vacancyList(), this.responsesList());
       }
     );
 
     this.subscriptions$().push(subscription);
-
-    this.type.set(this.router.url.split("/").slice(-1)[0] as "all" | "my");
   }
 
   ngAfterViewInit() {
@@ -76,7 +76,7 @@ export class VacanciesListComponent {
   responsesList = signal<VacancyResponse[]>([]);
   vacancyPage = signal(1);
   perFetchTake = signal(20);
-  type = signal<"all" | "my">("all");
+  type = signal<"all" | "my" | null>(null);
 
   subscriptions$ = signal<Subscription[]>([]);
 
