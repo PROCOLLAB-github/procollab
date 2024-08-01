@@ -42,7 +42,7 @@ export class VacanciesListComponent {
       (vacancy: ApiPagination<Vacancy> | ApiPagination<VacancyResponse>) => {
         if (this.type() === "all") {
           this.vacancyList.set(vacancy.results as Vacancy[]);
-        } else if(this.type() === 'my') {
+        } else if (this.type() === "my") {
           this.responsesList.set(vacancy.results as VacancyResponse[]);
         }
         this.totalItemsCount.set(vacancy.count);
