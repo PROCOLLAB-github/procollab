@@ -75,13 +75,13 @@ export class SubtaskComponent implements OnInit {
   success = signal(false);
 
   openQuestion = signal<
-    | "info_slide"
     | "exclude_question"
-    | "write_question"
-    | "single_question"
-    | "connect_question"
+    | "question_single_answer"
+    | "question_connect"
+    | "info_slide"
+    | "question_write"
     | null
-  >("info_slide");
+  >(null);
 
   ngOnInit() {
     this.route.params
@@ -91,6 +91,8 @@ export class SubtaskComponent implements OnInit {
           this.loading.set(true);
         }),
         concatMap(subTaskId => {
+          // this.taskService.fetchStep(subTaskId, this.route.snapshot.queryParams["type"]).subscribe(data => console.log(data));
+          this.openQuestion.set(this.route.snapshot.queryParams["type"]);
           return this.taskService.fetchStep(subTaskId, this.route.snapshot.queryParams["type"]);
         })
       )
@@ -103,8 +105,6 @@ export class SubtaskComponent implements OnInit {
           setTimeout(() => this.loading.set(false), 500);
         },
       });
-
-    this.openQuestion.set(this.route.snapshot.queryParams["type"]);
   }
 
   setStepData(step: StepType) {
@@ -148,8 +148,6 @@ export class SubtaskComponent implements OnInit {
   }
 
   onCloseModal() {
-    this.openQuestion.set(null);
-
     const id = this.subTaskId();
     if (!id) return;
 
