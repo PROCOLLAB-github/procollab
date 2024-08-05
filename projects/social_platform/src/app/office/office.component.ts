@@ -54,7 +54,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     public readonly chatService: ChatService,
     private readonly subscriptionPlansService: SubscriptionPlansService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const globalSubscription$ = forkJoin([
@@ -122,7 +122,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
     { name: "Программы", icon: "program", link: "program/list" },
     { name: "Участники", icon: "people-bold", link: "members" },
     { name: "Эксперты", icon: "two-people", link: "mentors" },
-    { name: "Вакансии", icon: "search", link: "vacancies" },
+    { name: "Вакансии", icon: "search-sidebar", link: "vacancies" },
   ];
 
   subscriptions$: Subscription[] = [];
