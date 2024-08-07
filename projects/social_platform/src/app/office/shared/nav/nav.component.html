@@ -66,6 +66,18 @@
             Эксперты
           </li>
         </a>
+        <a class="nav__link" routerLink="vacancies" routerLinkActive="nav__link--active">
+          <li class="text-body-14 nav__item">
+            <i appIcon icon="search-sidebar" appSquare="24" appViewBox="0 0 28 20"></i>
+            Вакансии
+          </li>
+        </a>
+        <div class="text-body-14 pro-item" (click)="openSkills()" afterNavItems>
+          <div class="pro-item__name">
+            <i appIcon icon="book" appSquare="24"></i> <span> Навыки </span>
+          </div>
+          <div class="pro-item__badge text-body-12">PRO</div>
+        </div>
       </ul>
     </nav>
     } @else {
@@ -87,5 +99,10 @@
     <app-profile-info class="nav-bar__profile" [user]="user"></app-profile-info>
     }
   </div>
+  <app-subscription-plans
+    [subscriptionPlans]="subscriptions()"
+    [open]="openSubscription()"
+    (openChange)="openSubscription.set($event)"
+  ></app-subscription-plans>
   }
 </div>

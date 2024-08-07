@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit, signal } from "@angular/core";
 import { NavService } from "@services/nav.service";
 import { NavigationStart, Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { noop, Subscription } from "rxjs";
@@ -10,7 +10,8 @@ import { AuthService } from "@auth/services";
 import { InviteService } from "@services/invite.service";
 import { AsyncPipe } from "@angular/common";
 import { IconComponent } from "@ui/components";
-import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
+import { InviteManageCardComponent, ProfileInfoComponent, SubscriptionPlansComponent } from "@uilib";
+import { SubscriptionPlan, SubscriptionPlansService } from "@corelib";
 
 @Component({
   selector: "app-nav",
@@ -23,7 +24,8 @@ import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
     RouterLinkActive,
     InviteManageCardComponent,
     ProfileInfoComponent,
-    AsyncPipe,
+    SubscriptionPlansComponent,
+    AsyncPipe
   ],
 })
 export class NavComponent implements OnInit, OnDestroy {
@@ -33,7 +35,8 @@ export class NavComponent implements OnInit, OnDestroy {
     public readonly notificationService: NotificationService,
     private readonly inviteService: InviteService,
     public readonly authService: AuthService,
-    private readonly cdref: ChangeDetectorRef
+    private readonly cdref: ChangeDetectorRef,
+    private readonly subscriptionPlansService: SubscriptionPlansService,
   ) {}
 
   ngOnInit(): void {
@@ -50,6 +53,13 @@ export class NavComponent implements OnInit, OnDestroy {
     });
 
     title$ && this.subscriptions$.push(title$);
+
+    const subscriptionsSub$ = this.subscriptionPlansService
+      .getSubscriptions()
+      .subscribe(subscriptions => {
+        this.subscriptions.set(subscriptions);
+      });
+    this.subscriptions$.push(subscriptionsSub$);
   }
 
   ngOnDestroy(): void {
@@ -92,6 +102,19 @@ export class NavComponent implements OnInit, OnDestroy {
       this.router
         .navigateByUrl(`/office/projects/${invite.project.id}`)
         .then(() => console.debug("Route changed from HeaderComponent"));
+    });
+  }
+
+  openSubscription = signal(false);
+  subscriptions = signal<SubscriptionPlan[]>([]);
+  openSkills() {
+    this.authService.isSubscribed().subscribe(subscribed => {
+      if (subscribed) {
+        location.href = "https://skills.procollab.ru";
+        return;
+      }
+
+      this.openSubscription.set(true);
     });
   }
 
