@@ -15,7 +15,14 @@ import { AuthService } from "@auth/services";
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, SidebarComponent, SidebarProfileComponent, IconComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
+    SidebarComponent,
+    SidebarProfileComponent,
+    IconComponent,
+  ],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
 })

@@ -10,7 +10,11 @@ import { AuthService } from "@auth/services";
 import { InviteService } from "@services/invite.service";
 import { AsyncPipe } from "@angular/common";
 import { IconComponent } from "@ui/components";
-import { InviteManageCardComponent, ProfileInfoComponent, SubscriptionPlansComponent } from "@uilib";
+import {
+  InviteManageCardComponent,
+  ProfileInfoComponent,
+  SubscriptionPlansComponent,
+} from "@uilib";
 import { SubscriptionPlan, SubscriptionPlansService } from "@corelib";
 
 @Component({
@@ -25,7 +29,7 @@ import { SubscriptionPlan, SubscriptionPlansService } from "@corelib";
     InviteManageCardComponent,
     ProfileInfoComponent,
     SubscriptionPlansComponent,
-    AsyncPipe
+    AsyncPipe,
   ],
 })
 export class NavComponent implements OnInit, OnDestroy {
@@ -36,7 +40,7 @@ export class NavComponent implements OnInit, OnDestroy {
     private readonly inviteService: InviteService,
     public readonly authService: AuthService,
     private readonly cdref: ChangeDetectorRef,
-    private readonly subscriptionPlansService: SubscriptionPlansService,
+    private readonly subscriptionPlansService: SubscriptionPlansService
   ) {}
 
   ngOnInit(): void {

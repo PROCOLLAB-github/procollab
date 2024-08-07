@@ -1,11 +1,7 @@
 <!-- @format -->
 
 <div class="info">
-  <app-avatar
-    class="info__avatar"
-    [size]="avatarSize()"
-    [url]="userData.fileLink"
-  ></app-avatar>
+  <app-avatar class="info__avatar" [size]="avatarSize()" [url]="userData.fileLink"></app-avatar>
   <div class="info__left">
     <h1 class="info__title">{{ userData.firstName }} {{ userData.lastName }}</h1>
     <div class="info__keys text-body-14">

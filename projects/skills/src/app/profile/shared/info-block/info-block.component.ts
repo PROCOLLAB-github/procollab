@@ -32,8 +32,8 @@ export class InfoBlockComponent {
 
   avatarSize = signal(window.innerWidth > 1200 ? 165 : 90);
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event:any) {
+  @HostListener("window:resize", ["$event"])
+  onResize(event: any) {
     this.avatarSize.set(event.target.innerWidth > 1200 ? 165 : 90);
   }
 }
