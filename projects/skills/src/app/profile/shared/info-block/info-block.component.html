@@ -3,7 +3,7 @@
 <div class="info">
   <app-avatar
     class="info__avatar"
-    [size]="window.innerWidth > 1200 ? 165 : 90"
+    [size]="avatarSize()"
     [url]="userData.fileLink"
   ></app-avatar>
   <div class="info__left">

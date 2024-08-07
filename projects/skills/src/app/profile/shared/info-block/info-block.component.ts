@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, Input } from "@angular/core";
+import { Component, HostListener, inject, Input, signal } from "@angular/core";
 import { CommonModule, NgOptimizedImage } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
 import { AvatarComponent, IconComponent } from "@uilib";
@@ -29,5 +29,11 @@ export class InfoBlockComponent {
   @Input({ required: true }) userData!: Profile["userData"];
 
   achievementsList = Array;
-  protected readonly window = window;
+
+  avatarSize = signal(window.innerWidth > 1200 ? 165 : 90);
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event:any) {
+    this.avatarSize.set(event.target.innerWidth > 1200 ? 165 : 90);
+  }
 }
