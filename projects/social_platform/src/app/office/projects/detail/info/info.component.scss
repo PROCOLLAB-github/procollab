@@ -9,9 +9,10 @@
     grid-template-rows: 0fr;
     overflow: hidden;
     transition: all 0.5s ease-in-out;
-
+    
     &--show {
       grid-template-rows: 1fr;
+      margin-top: 12px;
     }
 
     ul {
