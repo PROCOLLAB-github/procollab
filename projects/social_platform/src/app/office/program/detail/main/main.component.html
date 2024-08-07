@@ -96,7 +96,11 @@
           @for (link of program.links; track $index) {
           <li class="contact-link links__item text-body-12">
             @if (link | userLinks; as l) {
-            <a class="contact-link__link" target="_blank" [href]="link">
+            <a
+              class="contact-link__link"
+              target="_blank"
+              [href]="link.includes('@') ? 'mailto:' + link : link"
+            >
               <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
               <span>{{ l.tag }}</span>
             </a>

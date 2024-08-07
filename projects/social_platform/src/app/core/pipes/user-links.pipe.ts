@@ -13,6 +13,11 @@ export class UserLinksPipe implements PipeTransform {
   };
 
   transform(value: string): { iconName: string; tag: string } {
+
+    if(value.includes("@")){
+      return { iconName: "link", tag: value };
+    }
+
     const url = new URL(value);
     let domain = url.hostname;
     domain = domain.split(".").slice(-2).join(".");
