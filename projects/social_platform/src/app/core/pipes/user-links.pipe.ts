@@ -13,8 +13,7 @@ export class UserLinksPipe implements PipeTransform {
   };
 
   transform(value: string): { iconName: string; tag: string } {
-
-    if(value.includes("@")){
+    if (value.includes("@")) {
       return { iconName: "link", tag: value };
     }
 
