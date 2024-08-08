@@ -1,4 +1,5 @@
 @use "styles/responsive";
+@use "styles/typography";
 
 .app {
   display: flex;
@@ -21,6 +22,95 @@
       width: 234px;
       height: 100vh;
     }
+  }
+
+  .nav-bar {
+    display: block;
+    padding: 25px 0 10px;
+    background-color: var(--light-gray);
+
+    @include responsive.apply-desktop {
+      display: none;
+      padding: 20px 0;
+      background-color: transparent;
+    }
+
+    &__top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-right: 50px;
+      margin-bottom: 40px;
+    }
+
+    &__notifications-toggle {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      color: var(--black);
+      cursor: pointer;
+      border-radius: var(--rounded-sm);
+
+      >.attention {
+        top: 9px;
+        right: 11px;
+      }
+
+      &--active {
+        color: var(--white);
+        background-color: var(--accent);
+      }
+    }
+
+    &__toggle {
+      position: relative;
+      z-index: 100;
+      display: block;
+      cursor: pointer;
+
+      >.attention {
+        top: 8px;
+        right: 2px;
+      }
+
+      @include responsive.apply-desktop {
+        display: none;
+      }
+    }
+
+    &__mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      padding: 25px 15px 30px;
+      background-color: var(--white);
+    }
+
+    &__mobile-logo {
+      display: block;
+    }
+
+    &__profile {
+      display: flex;
+      justify-content: flex-start;
+      margin-top: auto;
+    }
+  }
+
+  .attention {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background-color: var(--red);
+    border-radius: 50%;
   }
 
   &__body {

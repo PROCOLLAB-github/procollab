@@ -6,7 +6,61 @@
     <app-sidebar-profile [user]="userData()!"></app-sidebar-profile>
     }
   </ui-sidebar>
+
   <div class="app__wrapper">
+    <div class="app__top">
+      <div class="nav-bar__toggle">
+        <i
+          appIcon
+          [icon]="mobileMenuOpen ? 'menu-cross' : 'menu-burger'"
+          appSquare="40"
+          (click)="mobileMenuOpen = !mobileMenuOpen"
+        >
+        </i>
+      </div>
+    </div>
+
+    @if (mobileMenuOpen) {
+    <div class="nav-bar__mobile-menu">
+      <div class="nav-bar__top">
+        <a class="nav-bar__mobile-logo" href="https://procollab.ru/" target="_blank">
+          <img src="/assets/images/shared/logo.svg" alt="procollab" width="125px" />
+        </a>
+        <div
+          class="nav-bar__notifications-toggle"
+          [class.nav-bar__notifications-toggle--active]="notificationsOpen"
+          (click)="notificationsOpen = !notificationsOpen"
+        >
+          <i appIcon icon="bell" appWidth="20" appHeight="22" appViewBox="0 0 20 22"></i>
+          <!-- @if ((notificationService.hasNotifications | async) || hasInvites) {
+          <div class="attention"></div>
+          } -->
+        </div>
+      </div>
+      @if (!notificationsOpen) {
+      <nav class="nav nav--vertical">
+        <ul class="nav__list">
+          @for (item of navItems; track $index) {
+          <a
+            class="nav__link"
+            (click)="mobileMenuOpen = !mobileMenuOpen"
+            [routerLink]="item.link"
+            routerLinkActive="nav__link--active"
+          >
+            <li class="text-body-14 nav__item">
+              <i appIcon [icon]="item.icon" appSquare="24" appViewBox="0 0 24 20"></i>
+              {{ item.name }}
+            </li>
+          </a>
+          }
+        </ul>
+      </nav>
+      } @if (userData()) {
+      <app-sidebar-profile class="nav-bar__profile" [user]="userData()!"></app-sidebar-profile>
+      }
+    </div>
+    }
+
     <div class="app__body">
       <div class="app__inner">
         <router-outlet></router-outlet>

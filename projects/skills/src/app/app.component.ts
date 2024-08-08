@@ -1,26 +1,38 @@
 /** @format */
 
 import { Component, inject, OnInit, signal } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { Router, RouterOutlet } from "@angular/router";
-import { SidebarComponent } from "@uilib";
+import { AsyncPipe, CommonModule } from "@angular/common";
+import { Router, RouterLink, RouterOutlet } from "@angular/router";
+import { IconComponent, ProfileInfoComponent, SidebarComponent } from "@uilib";
 import { SidebarProfileComponent } from "./shared/sidebar-profile/sidebar-profile.component";
 import { map, tap } from "rxjs";
 import { ProfileService } from "./profile/services/profile.service";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { User } from "@auth/models/user.model";
 import { Profile, UserData } from "../models/profile.model";
+import { AuthService } from "@auth/services";
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, SidebarComponent, SidebarProfileComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    RouterLink,
+    SidebarComponent,
+    SidebarProfileComponent,
+    IconComponent,
+  ],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
 })
 export class AppComponent implements OnInit {
   profileService = inject(ProfileService);
+  authService = inject(AuthService);
   router = inject(Router);
+
+  mobileMenuOpen = false;
+  notificationsOpen = false;
 
   title = "skills";
   navItems = [
