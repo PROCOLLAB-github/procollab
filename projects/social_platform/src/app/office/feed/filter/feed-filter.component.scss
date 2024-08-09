@@ -12,6 +12,7 @@
   align-items: center;
   width: 100%;
   padding: 20px;
+  margin-bottom: 20px;
   background-color: var(--white);
   border: 1px solid var(--medium-grey-for-outline);
   border-radius: 15px;
@@ -44,6 +45,7 @@
   display: grid;
   grid-template-columns: 0.6fr 0.4fr;
   gap: 5px;
+  margin-bottom: 20px;
 
   @include responsive.apply-desktop {
     display: none;
