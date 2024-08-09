@@ -2,7 +2,14 @@
 
 import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ButtonComponent, CheckboxComponent, IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
@@ -14,7 +21,14 @@ import { Subscription } from "rxjs";
 @Component({
   selector: "app-feed-filter",
   standalone: true,
-  imports: [CommonModule, CheckboxComponent, ButtonComponent, ClickOutsideModule, IconComponent, RouterLink],
+  imports: [
+    CommonModule,
+    CheckboxComponent,
+    ButtonComponent,
+    ClickOutsideModule,
+    IconComponent,
+    RouterLink,
+  ],
   templateUrl: "./feed-filter.component.html",
   styleUrl: "./feed-filter.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
