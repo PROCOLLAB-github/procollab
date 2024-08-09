@@ -14,7 +14,8 @@ export class UserLinksPipe implements PipeTransform {
 
   transform(value: string): { iconName: string; tag: string } {
     if (value.includes("@")) {
-      return { iconName: "link", tag: value };
+      const valueTrimed = value.replace(/^https?:\/\//, '');
+      return { iconName: "link", tag: valueTrimed };
     }
 
     const url = new URL(value);
