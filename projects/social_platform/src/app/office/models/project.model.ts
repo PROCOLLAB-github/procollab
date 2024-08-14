@@ -1,6 +1,7 @@
 /** @format */
 
 import { Collaborator } from "./collaborator.model";
+import { Vacancy } from "./vacancy.model";
 
 export class Project {
   id!: number;
@@ -22,6 +23,7 @@ export class Project {
   draft!: boolean;
   leader!: number;
   partnerProgramsTags?: string[];
+  vacancies!: Vacancy[];
 
   static default(): Project {
     return {
@@ -42,6 +44,7 @@ export class Project {
       collaborators: [collaborator],
       draft: false,
       leader: 0,
+      vacancies: [],
     };
   }
 }
