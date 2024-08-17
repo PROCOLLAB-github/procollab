@@ -13,6 +13,7 @@ export class FeedNews {
   likesCount!: number;
   files!: FileModel[];
   isUserLiked!: boolean;
+  pin?: boolean;
 
   static default(): FeedNews {
     return {

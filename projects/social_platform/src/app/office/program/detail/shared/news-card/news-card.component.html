@@ -4,7 +4,12 @@
     <div class="card__title">
       <img class="card__avatar" [src]="newsItem.imageAddress" [alt]="newsItem.name" />
       <div>
-        <div class="card__name">{{ newsItem.name }}</div>
+        <div class="card__top">
+          <div class="card__name">{{ newsItem.name }}</div>
+          @if (newsItem.pin) {
+          <i appIcon icon="pin" appSquare="24"></i>
+          }
+        </div>
         <div class="card__date text-body-14">
           {{ newsItem.datetimeCreated | dayjs: "format":"DD MMMM, HH:mm" }}
         </div>
