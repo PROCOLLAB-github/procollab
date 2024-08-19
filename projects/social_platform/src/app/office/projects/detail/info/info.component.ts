@@ -264,4 +264,8 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
   }
+
+  getSkillsNames(vacancy: Vacancy) {
+    return vacancy.requiredSkills.map((s: any) => s.name).join(" • ");
+  }
 }

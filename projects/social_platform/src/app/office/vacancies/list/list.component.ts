@@ -101,7 +101,7 @@ export class VacanciesListComponent {
   }
 
   onFetch(offset: number, limit: number) {
-    return this.vacancyService.getForProject(offset, limit).pipe(
+    return this.vacancyService.getForProject(limit, offset).pipe(
       tap(res => {
         this.totalItemsCount.set(res.length);
       }),

@@ -181,10 +181,10 @@
         }
       </div>
 
-      @if ((vacancies$ | async)?.length; as vacanciesLength) {
+      @if (project.vacancies.length; as vacanciesLength) {
       <div class="vacancies project__section project__vacancy">
         <h3 class="text-bold-body-16 team__title">Вакансии</h3>
-        @if (vacancies$ | async; as vacancies) { @if (vacancies) {
+        @if (project.vacancies; as vacancies) { @if (vacancies) {
         <ul class="vacancies__list">
           @for (vacancy of vacancies.slice(0, 3); track vacancy.id) {
           <ng-container
@@ -217,7 +217,7 @@
               </a>
             </div>
             <p class="text-body-12 vacancy__requirements">
-              {{ vacancy.getSkillsNames().join(" • ") }}
+              {{ getSkillsNames(vacancy) }}
             </p>
           </li>
         </ng-template>
