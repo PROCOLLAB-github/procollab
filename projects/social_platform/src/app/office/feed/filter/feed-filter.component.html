@@ -41,7 +41,7 @@
   >
 </div>
 
-<app-button [routerLink]="'/office/profile/' + profile.id">Написать новость</app-button>
+<app-button [routerLink]="'/office/profile/' + profile()?.id">Написать новость</app-button>
 
 <ng-template #filter>
   <div class="filter">
