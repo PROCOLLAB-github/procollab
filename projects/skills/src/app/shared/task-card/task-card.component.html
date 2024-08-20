@@ -2,15 +2,24 @@
 
 <div class="task task--next">
   <div class="task__left">
-    <img src="assets/images/shared/prize.png" alt="prize" class="task__prize" />
+    <img
+      src="assets/images/shared/prize.png"
+      alt="prize"
+      class="task__prize"
+      [class.task__prize--colored]="status.isDone"
+    />
     <div class="task__body">
       <h4 class="task__title text-body-bold-18">{{ task.name }}</h4>
       <div class="task__level text-body-14">Задание {{ task.level }}</div>
     </div>
   </div>
   <div class="task__right">
+    @if (status.isDone) {
+    <i appIcon icon="check" appSquare="32" class="task__check"></i>
+    } @else {
     <app-button class="task__button">
       <i appIcon icon="arrow-no-body" appSquare="20"></i>
     </app-button>
+    }
   </div>
 </div>

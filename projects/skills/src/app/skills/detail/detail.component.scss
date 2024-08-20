@@ -30,6 +30,10 @@
 
     @include typography.heading-2;
   }
+
+  &__week {
+    margin: 10px 0;
+  }
 }
 
 .info {
@@ -87,5 +91,16 @@
     gap: 20px;
     height: 100%;
     overflow-y: auto;
+  }
+}
+
+.week-stat {
+  &__passed {
+    color: var(--green);
+    text-decoration: underline;
+
+    &--passed {
+      color: var(--red);
+    }
   }
 }
