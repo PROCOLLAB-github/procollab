@@ -65,7 +65,7 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-      this.subscriptions.forEach($ => $.unsubscribe());
+    this.subscriptions.forEach($ => $.unsubscribe());
   }
 
   filterOpen = signal(false);
