@@ -19,6 +19,10 @@
     width: 48px;
     height: 48px;
     filter: grayscale(1);
+
+    &--colored {
+      filter: unset;
+    }
   }
 
   &__level {
@@ -31,6 +35,21 @@
 
     i {
       transform: rotate(90deg);
+    }
+  }
+
+  &__check {
+    display: flex;
+    color: var(--green);
+
+    &::before {
+      content: url("/assets/images/profile/olive-branch.svg");
+      transform: scaleX(-1) translateX(-35%) translateY(25%);
+    }
+
+    &::after {
+      content: url("/assets/images/profile/olive-branch.svg");
+      transform: translateX(-40%) translateY(25%);
     }
   }
 }

@@ -31,6 +31,11 @@ export interface Task {
 
 export interface TasksResponse {
   tasks: Task[];
+  statsOfWeeks: {
+    doneOnTime: boolean | null;
+    isDone: boolean;
+    week: number;
+  }[];
   progress: number;
 }
 
