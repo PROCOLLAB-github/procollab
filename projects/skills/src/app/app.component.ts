@@ -45,11 +45,6 @@ export class AppComponent implements OnInit {
   logout = signal(false);
 
   ngOnInit(): void {
-    this.profileService.getUserData().subscribe({
-      next: data => this.userData.set(data as UserData),
-      error: () => {
-        location.href = "https://app.procollab.ru/auth/login";
-      },
-    });
+    this.profileService.getUserData().subscribe(data => this.userData.set(data as UserData));
   }
 }
