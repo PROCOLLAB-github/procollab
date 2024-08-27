@@ -2,16 +2,33 @@
 
 import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ButtonComponent, CheckboxComponent, IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
 import { FeedService } from "@office/feed/services/feed.service";
+import { User } from "@auth/models/user.model";
+import { AuthService } from "@auth/services";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-feed-filter",
   standalone: true,
-  imports: [CommonModule, CheckboxComponent, ButtonComponent, ClickOutsideModule, IconComponent],
+  imports: [
+    CommonModule,
+    CheckboxComponent,
+    ButtonComponent,
+    ClickOutsideModule,
+    IconComponent,
+    RouterLink,
+  ],
   templateUrl: "./feed-filter.component.html",
   styleUrl: "./feed-filter.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,16 +42,30 @@ import { FeedService } from "@office/feed/services/feed.service";
     ]),
   ],
 })
-export class FeedFilterComponent implements OnInit {
+export class FeedFilterComponent implements OnInit, OnDestroy {
   router = inject(Router);
   route = inject(ActivatedRoute);
+  authService = inject(AuthService);
   feedService = inject(FeedService);
 
+  profile = signal<User | null>(null);
+  subscriptions: Subscription[] = [];
+
   ngOnInit() {
+    const profileSubscription = this.authService.profile.subscribe(profile => {
+      this.profile.set(profile);
+    });
+
     this.route.queryParams.subscribe(params => {
       params["includes"] &&
         this.includedFilters.set(params["includes"].split(this.feedService.FILTER_SPLIT_SYMBOL));
     });
+
+    this.subscriptions.push(profileSubscription);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach($ => $.unsubscribe());
   }
 
   filterOpen = signal(false);

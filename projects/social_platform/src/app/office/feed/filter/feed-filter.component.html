@@ -41,6 +41,8 @@
   >
 </div>
 
+<app-button [routerLink]="'/office/profile/' + profile()?.id">Написать новость</app-button>
+
 <ng-template #filter>
   <div class="filter">
     <span class="text-body-12">Виды новостей</span>
