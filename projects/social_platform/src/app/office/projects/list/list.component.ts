@@ -51,7 +51,7 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly cdref: ChangeDetectorRef,
     private readonly router: Router,
     private readonly subscriptionService: SubscriptionService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.navService.setNavTitle("Проекты");
