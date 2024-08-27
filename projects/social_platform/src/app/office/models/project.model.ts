@@ -24,6 +24,7 @@ export class Project {
   leader!: number;
   partnerProgramsTags?: string[];
   vacancies!: Vacancy[];
+  isCompany!: boolean;
 
   static default(): Project {
     return {
@@ -45,6 +46,7 @@ export class Project {
       draft: false,
       leader: 0,
       vacancies: [],
+      isCompany: true,
     };
   }
 }
