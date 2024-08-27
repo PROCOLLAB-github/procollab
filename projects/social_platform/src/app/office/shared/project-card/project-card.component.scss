@@ -14,6 +14,12 @@
     @include responsive.apply-desktop {
       border: 1px solid var(--medium-grey-for-outline);
     }
+
+    &--company {
+      @include responsive.apply-desktop {
+        border: 1px solid var(--accent);
+      }
+    }
   }
 
   &__with-tab {
@@ -62,10 +68,36 @@
 
   &__media {
     display: flex;
+    align-items: center;
     gap: 15px;
-    justify-content: flex-end;
-    margin-top: 16px;
+    margin-top: 22px;
     color: var(--dark-grey);
+
+    &--single {
+      justify-content: flex-end;
+    }
+
+    &--multiple {
+      justify-content: space-between;
+    }
+  }
+
+  &__left {
+    display: flex;
+    gap: 15px;
+  }
+
+  &__company-flag {
+    color: var(--accent);
+    display: flex;
+    gap: 5px;
+  }
+
+  &__circle {
+    background-color: var(--accent);
+    border-radius: 50%;
+    width: 13px;
+    height: 13px;
   }
 
   &__views {
