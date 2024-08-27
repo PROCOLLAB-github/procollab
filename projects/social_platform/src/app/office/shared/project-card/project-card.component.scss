@@ -68,8 +68,8 @@
 
   &__media {
     display: flex;
-    align-items: center;
     gap: 15px;
+    align-items: center;
     margin-top: 22px;
     color: var(--dark-grey);
 
@@ -88,16 +88,16 @@
   }
 
   &__company-flag {
-    color: var(--accent);
     display: flex;
     gap: 5px;
+    color: var(--accent);
   }
 
   &__circle {
-    background-color: var(--accent);
-    border-radius: 50%;
     width: 13px;
     height: 13px;
+    background-color: var(--accent);
+    border-radius: 50%;
   }
 
   &__views {
