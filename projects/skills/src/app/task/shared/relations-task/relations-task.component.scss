@@ -29,9 +29,9 @@
 
   &__wrapper {
     display: flex;
+    flex-direction: column;
     gap: 50px;
     justify-content: space-between;
-    flex-direction: column;
 
     @include responsive.apply-desktop {
       flex-direction: row;
