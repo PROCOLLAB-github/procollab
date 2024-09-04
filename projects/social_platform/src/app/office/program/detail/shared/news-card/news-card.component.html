@@ -18,7 +18,7 @@
   </div>
   @if (newsItem.text) {
   <div class="card__text text-body-14">
-    <p #newsTextEl [innerText]="newsItem.text"></p>
+    <p #newsTextEl [innerText]="newsItem.text | parseLinks | parseBreaks"></p>
   </div>
   } @if (editMode) {
   <ul>
