@@ -46,7 +46,7 @@ import { JsonPipe } from "@angular/common";
     DayjsPipe,
     FormControlPipe,
     JsonPipe,
-    ParseLinksPipe
+    ParseLinksPipe,
   ],
 })
 export class NewsCardComponent implements OnInit {
