@@ -14,7 +14,7 @@ import { FeedNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { DayjsPipe, FormControlPipe, ValidationService } from "projects/core";
+import { DayjsPipe, FormControlPipe, ParseLinksPipe, ValidationService } from "projects/core";
 import { FileService } from "@core/services/file.service";
 import { nanoid } from "nanoid";
 import { expandElement } from "@utils/expand-element";
@@ -46,6 +46,7 @@ import { JsonPipe } from "@angular/common";
     DayjsPipe,
     FormControlPipe,
     JsonPipe,
+    ParseLinksPipe
   ],
 })
 export class NewsCardComponent implements OnInit {
