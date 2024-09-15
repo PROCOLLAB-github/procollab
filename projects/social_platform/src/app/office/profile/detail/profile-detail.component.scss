@@ -37,12 +37,12 @@ $detail-bar-mb: 12px;
   }
 
   &__btns {
-    width: 100%;
     display: flex;
-    gap: 10px;
     flex-direction: column;
+    gap: 10px;
+    width: 100%;
 
-    @include responsive.apply-desktop{
+    @include responsive.apply-desktop {
       flex-direction: row;
     }
   }
@@ -228,7 +228,7 @@ $detail-bar-mb: 12px;
     @include responsive.apply-desktop {
       flex-direction: row;
 
-      &>a {
+      & > a {
         flex-grow: 1;
         flex-shrink: 0;
       }
