@@ -22,10 +22,18 @@
       <ul class="about__skills">
         @for (skill of user.skills; track skill.id) {
         <li class="about__skill">
-          <app-tag color="accent">{{ skill.name }}</app-tag>
+          <app-tag color="accent">
+            <span>{{ skill.name }}</span>
+            <span (click)="onApprove()" class="text-body-14">+</span>
+          </app-tag>
         </li>
         }
       </ul>
+
+      <p class="text-body-14">
+        Нажимая на <strong>плюс</strong>, вы подвтерждаете, что {{ user.firstName }} владеет этим
+        навыком
+      </p>
       }
     </div>
     <div class="main__news">
@@ -97,7 +105,53 @@
       </div>
       }
     </div>
+    } @if (user.programs.length; as programsLength) {
+    <div class="projects main__section">
+      <div class="main__section-top">
+        <h3 class="text-bold-body-16">Программы</h3>
+        <div class="badge badge__projects">
+          <i icon="people" appIcon appSquare="22"></i>
+        </div>
+      </div>
+      <ul>
+        @for (p of user.programs.slice(0, 3); track p.id) {
+        <li class="project" [routerLink]="['/office/programs', p.id]">
+          <ng-container *ngTemplateOutlet="programTemp; context: { $implicit: p }"></ng-container>
+        </li>
+        }
+      </ul>
+      <div class="projects__remaining" [class.projects__remaining--show]="readAllPrograms">
+        @if (user.programs) {
+        <ul>
+          @for (program of user.programs.slice(3); track program.id) {
+          <li>
+            <ng-container
+              *ngTemplateOutlet="programTemp; context: { $implicit: program }"
+            ></ng-container>
+          </li>
+          }
+        </ul>
+        }
+      </div>
+      <ng-template #programTemp let-program>
+        <div class="project__info">
+          <a
+            [routerLink]="['/office/program', program.id]"
+            class="text-bold-body-14 project__title"
+          >
+            {{ program.name }}
+          </a>
+        </div>
+        <p class="text-body-12 project__role">{{ program.tag }}</p>
+      </ng-template>
+      @if (programsLength > 3) {
+      <div class="read-more" (click)="readAllPrograms = !readAllPrograms">
+        {{ readAllPrograms ? "Скрыть" : "Читать полностью" }}
+      </div>
+      }
+    </div>
     }
+
     <div class="main__section">
       <div class="main__section-top">
         <h3 class="text-bold-body-16">Образование/работа</h3>

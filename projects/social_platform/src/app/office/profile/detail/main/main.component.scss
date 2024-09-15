@@ -266,6 +266,7 @@ $section-padding: 24px;
   &__skill {
     margin-right: 10px;
     margin-bottom: 10px;
+    cursor: pointer;
   }
 
   &__views {
@@ -312,6 +313,7 @@ $section-padding: 24px;
       }
     }
   }
+
   /* stylelint-enable value-no-vendor-prefix */
 }
 

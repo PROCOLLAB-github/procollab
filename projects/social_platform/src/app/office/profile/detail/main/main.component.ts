@@ -49,7 +49,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly authService: AuthService,
     private readonly profileNewsService: ProfileNewsService,
     private readonly cdRef: ChangeDetectorRef
-  ) {}
+  ) { }
 
   subscriptions$: Subscription[] = [];
 
@@ -95,6 +95,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   readFullDescription = false;
 
   readAllProjects = false;
+  readAllPrograms = false;
   readAllAchievements = false;
   readAllLinks = false;
 
@@ -114,7 +115,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     const newsIdx = this.news().findIndex(n => n.id === newsId);
     this.news().splice(newsIdx, 1);
 
-    this.profileNewsService.delete(this.route.snapshot.params["id"], newsId).subscribe(() => {});
+    this.profileNewsService.delete(this.route.snapshot.params["id"], newsId).subscribe(() => { });
   }
 
   onLike(newsId: number) {
@@ -150,5 +151,9 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
+  }
+
+  onApprove() {
+    console.log('approved')
   }
 }
