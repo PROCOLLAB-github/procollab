@@ -35,6 +35,17 @@ $detail-bar-mb: 12px;
     max-height: calc(100% - #{$detail-bar-height} - #{$detail-bar-mb});
     padding-bottom: 12px;
   }
+
+  &__btns {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+
+    @include responsive.apply-desktop{
+      flex-direction: row;
+    }
+  }
 }
 
 .info {
@@ -217,7 +228,7 @@ $detail-bar-mb: 12px;
     @include responsive.apply-desktop {
       flex-direction: row;
 
-      & > a {
+      &>a {
         flex-grow: 1;
         flex-shrink: 0;
       }

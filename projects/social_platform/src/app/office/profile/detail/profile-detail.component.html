@@ -86,11 +86,19 @@
               <app-button customTypographyClass="text-body-12"> Написать </app-button>
             </a>
             } @else {
-            <a class="profile__edit" routerLink="/office/profile/edit">
-              <app-button customTypographyClass="text-body-12" color="grey">
-                Редактировать профиль
-              </app-button>
-            </a>
+            <div class="profile__btns">
+              <a class="profile__cv">
+                <app-button customTypographyClass="text-body-12" color="primary">
+                  Скачать CV
+                </app-button>
+              </a>
+
+              <a class="profile__edit" routerLink="/office/profile/edit">
+                <app-button customTypographyClass="text-body-12" color="grey">
+                  Редактировать профиль
+                </app-button>
+              </a>
+            </div>
             } }
           </div>
         </section>
