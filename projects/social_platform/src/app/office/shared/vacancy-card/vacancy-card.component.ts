@@ -1,5 +1,6 @@
 /** @format */
 
+import { JsonPipe } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Vacancy } from "@models/vacancy.model";
 import { IconComponent } from "@ui/components";
@@ -9,15 +10,19 @@ import { IconComponent } from "@ui/components";
   templateUrl: "./vacancy-card.component.html",
   styleUrl: "./vacancy-card.component.scss",
   standalone: true,
-  imports: [IconComponent],
+  imports: [IconComponent, JsonPipe],
 })
 export class VacancyCardComponent implements OnInit {
-  constructor() {}
+  constructor() { }
 
   @Input() vacancy?: Vacancy;
   @Output() remove = new EventEmitter<number>();
 
-  ngOnInit(): void {}
+  skillString = ""
+
+  ngOnInit(): void {
+    this.skillString = this.vacancy?.requiredSkills.map(s => s.name).join(" • ") ?? ""
+  }
 
   onRemove(event: MouseEvent): void {
     event.stopPropagation();
