@@ -13,15 +13,15 @@ import { IconComponent } from "@ui/components";
   imports: [IconComponent, JsonPipe],
 })
 export class VacancyCardComponent implements OnInit {
-  constructor() { }
+  constructor() {}
 
   @Input() vacancy?: Vacancy;
   @Output() remove = new EventEmitter<number>();
 
-  skillString = ""
+  skillString = "";
 
   ngOnInit(): void {
-    this.skillString = this.vacancy?.requiredSkills.map(s => s.name).join(" • ") ?? ""
+    this.skillString = this.vacancy?.requiredSkills.map(s => s.name).join(" • ") ?? "";
   }
 
   onRemove(event: MouseEvent): void {
