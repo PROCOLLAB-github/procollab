@@ -385,8 +385,8 @@ $section-padding: 24px;
 
 .project {
   display: flex;
-  align-items: center;
   gap: 12px;
+  align-items: center;
 
   &__info {
     display: flex;
@@ -477,17 +477,17 @@ $section-padding: 24px;
   }
 
   &__text {
-    color: var(--accent);
     margin-left: 15px;
+    color: var(--accent);
     text-decoration: underline;
   }
 
   .approves {
-    margin-top: 24px;
-    margin-bottom: 24px;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    margin-top: 24px;
+    margin-bottom: 24px;
 
     &__info {
       display: flex;
@@ -516,6 +516,7 @@ $section-padding: 24px;
 
   &__more {
     color: var(--accent);
+
     @include typography.body-14;
 
     @include responsive.apply-desktop {
