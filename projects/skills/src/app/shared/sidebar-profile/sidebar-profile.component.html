@@ -27,7 +27,7 @@
       } @else {
       <div class="text-body-12 user__not-verified">Ожидает подтверждения</div>
       }
-      <a href="https://app.procollab.ru/office">
+      <a href="https://app.procollab.ru/office" (click)="$event.stopPropagation()">
         <button class="user__logout text-bold-body-14" (click)="logout.emit()">
           <span>Вернуться</span>
           <i appIcon icon="logout" appSquare="20"></i>
