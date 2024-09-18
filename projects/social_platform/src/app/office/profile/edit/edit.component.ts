@@ -84,6 +84,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       userType: [0],
       birthday: ["", [Validators.required]],
       city: [""],
+      additionalRole: [""],
+      education: ["", [Validators.required]],
+      graduationDate: ["", [Validators.required]],
+      shortDescription: ["", [Validators.required]],
       links: this.fb.array([]),
       organization: [""],
       speciality: ["", [Validators.required]],
@@ -185,6 +189,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   skillsGroupsModalOpen = signal(false);
 
+  educationItems = signal<any[]>([]);
+
   subscription$: Subscription[] = [];
 
   get typeSpecific(): FormGroup {
@@ -242,6 +248,22 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   removeAchievement(i: number): void {
     this.achievements.removeAt(i);
+  }
+
+  addEducation() {
+    const educationItem = this.fb.group({
+      education: this.profileForm.get("education")?.value,
+      graduationDate: this.profileForm.get("graduationDate")?.value,
+      shortDescription: this.profileForm.get("shortDescription")?.value,
+    });
+
+    this.educationItems.update((items) => [...items, educationItem.value]);
+
+    this.profileForm.get('education')?.reset();
+    this.profileForm.get('graduationDate')?.reset();
+    this.profileForm.get('shortDescription')?.reset();
+
+    console.log(this.educationItems());
   }
 
   get links(): FormArray {

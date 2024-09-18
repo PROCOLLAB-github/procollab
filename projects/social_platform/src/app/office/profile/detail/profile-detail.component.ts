@@ -50,6 +50,5 @@ export class ProfileDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль");
-    this.user$.subscribe(user => console.log(user));
   }
 }

@@ -24,6 +24,10 @@ export class User {
   skillsIds!: number[];
   isOnline!: boolean;
   isActive!: boolean;
+  v2Speciality!: {
+    id: number;
+    name: string;
+  }
   member?: {
     usefulToProject: string;
   };

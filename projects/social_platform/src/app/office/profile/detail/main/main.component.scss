@@ -461,3 +461,42 @@ $section-padding: 24px;
     box-shadow: 0 0 22px var(--accent-mild);
   }
 }
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &__body {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__text {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .approves {
+    &__info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &__left {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    &__speciality {
+      color: var(--dark-grey);
+    }
+  }
+
+  &__more {
+    color: var(--accent);
+  }
+}

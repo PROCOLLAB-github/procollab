@@ -58,7 +58,40 @@
       </div>
       }
     </fieldset>
+    } @if (stageForm.get("graduationDate"); as graduationDate) {
+    <fieldset class="page__field">
+      <label for="graduationDate" class="field-label">Дата окончания</label>
+      <app-input
+        id="graduationDate"
+        [error]="graduationDate | controlError"
+        type="text"
+        placeholder="2023 год"
+        formControlName="graduationDate"
+      ></app-input>
+      @if (graduationDate | controlError: "required") {
+      <div class="text-body-14 error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+      }
+    </fieldset>
+    } @if (stageForm.get("shortDescription"); as shortDescription) {
+    <fieldset class="page__field">
+      <label for="shortDescription" class="field-label">Краткое описане</label>
+      <app-input
+        id="shortDescription"
+        [error]="shortDescription | controlError"
+        type="text"
+        placeholder="Востоковедение и Африканистика"
+        formControlName="shortDescription"
+      ></app-input>
+      @if (shortDescription | controlError: "required") {
+      <div class="text-body-14 error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+      }
+    </fieldset>
     }
+
     <app-button type="submit" [loader]="stageSubmitting">Продолжить</app-button>
   </form>
 </div>

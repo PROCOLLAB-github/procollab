@@ -37,6 +37,8 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
       avatar: ["", [Validators.required]],
       city: ["", [Validators.required]],
       organization: ["", [Validators.required]],
+      graduationDate: ["", Validators.required],
+      shortDescription: ["", [Validators.required]],
     });
   }
 

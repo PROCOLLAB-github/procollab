@@ -49,7 +49,7 @@
       margin-bottom: 20px;
     }
 
-    > * {
+    >* {
       flex-basis: 50%;
 
       &:first-child:last-child {
@@ -69,6 +69,11 @@
   &__achievement {
     display: block;
     margin-bottom: 12px;
+  }
+
+  &__education {
+    display: block;
+    margin-bottom: 20px;
   }
 
   &__add-achievement {
@@ -111,6 +116,24 @@
   &__first-row {
     display: flex;
     align-items: flex-start;
+    margin-bottom: 12px;
+
+    > :first-child {
+      flex-grow: 1;
+    }
+  }
+
+  &__remove {
+    width: 155px;
+    margin-left: 10px;
+  }
+}
+
+.education {
+  &__first-row {
+    display: flex;
+    gap: 14px;
+    flex-direction: column;
     margin-bottom: 12px;
 
     > :first-child {

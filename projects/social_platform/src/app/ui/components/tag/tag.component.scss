@@ -8,6 +8,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   border-radius: var(--rounded-md);
+  display: flex;
 
   &--primary {
     color: var(--dark-grey);
@@ -19,8 +20,13 @@
     background-color: var(--accent);
   }
 
+  &--complete {
+    color: var(--white);
+    background-color: var(--green);
+  }
+
   ::ng-deep {
-    > * {
+    >* {
       &:not(:last-child) {
         margin-right: 10px;
       }

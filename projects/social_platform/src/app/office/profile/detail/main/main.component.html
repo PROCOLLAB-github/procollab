@@ -21,10 +21,52 @@
       } @if (user.skills?.length) {
       <ul class="about__skills">
         @for (skill of user.skills; track skill.id) {
-        <li class="about__skill">
-          <app-tag color="accent">
+        <li (click)="onOpenSkill()" class="about__skill">
+          <app-modal [open]="openSkill()" (openChange)="onOpenChange($event)">
+            <div class="modal">
+              <div class="modal__body">
+                <p class="modal__title text-bold-body-16">
+                  Ваш навык подтвердили:
+                  <span class="modal__text"
+                    >{{ skill.approves.length }}
+                    {{
+                      skill.approves.length | pluralize: ["человек", "человека", "человек"]
+                    }}</span
+                  >
+                </p>
+              </div>
+
+              @if (skill.approves.length) {
+              <ul class="approves">
+                @for (approve of skill.approves; track approve.id) {
+                <div class="approves__info">
+                  <div class="approves__left">
+                    <app-avatar [url]="approve.avatar" [size]="40"></app-avatar>
+                    <div class="approves__credentials">
+                      <p class="text-bold-body-14">
+                        {{ approve.firstName }} {{ approve.lastName }}
+                      </p>
+                      <p class="approves__speciality text-body-12">
+                        {{ approve.v2Speciality.name }}
+                      </p>
+                    </div>
+                  </div>
+                  <i appIcon icon="check" appSquare="24"></i>
+                </div>
+                }
+              </ul>
+              }
+              <p class="modal__more text-bold-body-16">Читать полностью</p>
+            </div>
+          </app-modal>
+
+          <app-tag [color]="skill.approves.length ? 'complete' : 'accent'">
             <span>{{ skill.name }}</span>
-            <span (click)="onApprove()" class="text-body-14">+</span>
+            @if (skill.approves.length) {
+            <i (click)="onApprove(skill.id)" appIcon icon="check" appSquare="20"></i>
+            }@else {
+            <i (click)="onApprove(skill.id)" appIcon icon="plus" appSquare="20"></i>
+            }
           </app-tag>
         </li>
         }
