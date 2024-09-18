@@ -1,6 +1,7 @@
 /** @format */
 
 .tag {
+  display: flex;
   align-items: center;
   max-width: 300px;
   padding: 5px 10px;
@@ -8,7 +9,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   border-radius: var(--rounded-md);
-  display: flex;
 
   &--primary {
     color: var(--dark-grey);

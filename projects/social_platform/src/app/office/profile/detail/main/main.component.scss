@@ -486,9 +486,9 @@ $section-padding: 24px;
 
     &__left {
       display: flex;
-      align-items: center;
       flex-direction: column;
       gap: 5px;
+      align-items: center;
     }
 
     &__speciality {
