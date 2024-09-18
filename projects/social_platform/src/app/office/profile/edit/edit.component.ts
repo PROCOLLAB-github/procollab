@@ -85,9 +85,13 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       birthday: ["", [Validators.required]],
       city: [""],
       additionalRole: [""],
-      education: ["", [Validators.required]],
-      graduationDate: ["", [Validators.required]],
-      shortDescription: ["", [Validators.required]],
+      education: this.fb.array([
+        this.fb.group({
+          organizationName: [""],
+          entryYear: [""],
+          description: [""],
+        })
+      ]),
       links: this.fb.array([]),
       organization: [""],
       speciality: ["", [Validators.required]],
@@ -189,8 +193,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   skillsGroupsModalOpen = signal(false);
 
-  educationItems = signal<any[]>([]);
-
   subscription$: Subscription[] = [];
 
   get typeSpecific(): FormGroup {
@@ -227,6 +229,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.profileForm.get("achievements") as FormArray;
   }
 
+  get education(): FormArray {
+    return this.profileForm.get('education') as FormArray;
+  }
+
   errorMessage = ErrorMessage;
 
   roles: Observable<SelectComponent["options"]> = this.authService.changeableRoles.pipe(
@@ -250,20 +256,18 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.achievements.removeAt(i);
   }
 
-  addEducation() {
-    const educationItem = this.fb.group({
-      education: this.profileForm.get("education")?.value,
-      graduationDate: this.profileForm.get("graduationDate")?.value,
-      shortDescription: this.profileForm.get("shortDescription")?.value,
-    });
+  addEducation(organizationName?: string, entryYear?: number, description?: string): void {
+    this.education.push(
+      this.fb.group({
+        organizationName: [organizationName ?? "", [Validators.required]],
+        entryYear: [entryYear ?? "", [Validators.required]],
+        description: [description ?? "", [Validators.required]]
+      })
+    );
+  }
 
-    this.educationItems.update((items) => [...items, educationItem.value]);
-
-    this.profileForm.get('education')?.reset();
-    this.profileForm.get('graduationDate')?.reset();
-    this.profileForm.get('shortDescription')?.reset();
-
-    console.log(this.educationItems());
+  removeEducation(i: number): void {
+    this.education.removeAt(i);
   }
 
   get links(): FormArray {

@@ -72,7 +72,8 @@
   }
 
   &__education {
-    display: block;
+    display: flex;
+    flex-direction: column;
     margin-bottom: 20px;
   }
 
@@ -141,9 +142,8 @@
     }
   }
 
-  &__remove {
-    width: 155px;
-    margin-left: 10px;
+  &__description{
+    margin-top: 12px;
   }
 }
 

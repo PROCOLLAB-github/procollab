@@ -56,7 +56,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly authService: AuthService,
     private readonly profileNewsService: ProfileNewsService,
     private readonly profileApproveSkillService: ProfileService,
-    private readonly cdRef: ChangeDetectorRef
+    private readonly cdRef: ChangeDetectorRef,
   ) { }
 
   subscriptions$: Subscription[] = [];
@@ -106,8 +106,8 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   readAllPrograms = false;
   readAllAchievements = false;
   readAllLinks = false;
-
-  openSkill = signal<boolean>(false);
+  readAllEducation = false;
+  readAllModal = false;
 
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
@@ -163,24 +163,32 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     this.readFullDescription = !isExpanded;
   }
 
-  onApprove(skillId: number) {
-    this.profileApproveSkillService.approveSkill(this.route.snapshot.params["id"], skillId);
-  }
+  onToggleApprove(skillId: number, event: Event, isApproved: boolean) {
+    event.stopPropagation();
+    const userId = this.route.snapshot.params["id"];
 
-  onOpenSkill() {
-    this.openSkill.update(openSkill => !openSkill)
-    console.log(this.openSkill());
-  }
-
-  onOpenChange(event: boolean) {
-    if (this.openSkill() && !event) {
-      this.openSkill.set(false);
+    if (isApproved) {
+      this.profileApproveSkillService.unApproveSkill(userId, skillId).subscribe();
     } else {
-      this.openSkill.set(event);
+      this.profileApproveSkillService.approveSkill(userId, skillId).subscribe();
     }
   }
 
-  onCloseModal() {
-    this.openSkill.set(false);
+  openSkills: any = {};
+
+  onOpenSkill(skillId: number) {
+    this.openSkills[skillId] = !this.openSkills[skillId];
+  }
+
+  onOpenChange(event: boolean, skillId: number) {
+    if (this.openSkills[skillId] && !event) {
+      this.openSkills[skillId] = false;
+    } else {
+      this.openSkills[skillId] = event;
+    }
+  }
+
+  onCloseModal(skillId: number) {
+    this.openSkills[skillId] = false;
   }
 }

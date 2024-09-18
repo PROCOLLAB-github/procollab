@@ -384,6 +384,10 @@ $section-padding: 24px;
 }
 
 .project {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
   &__info {
     display: flex;
     align-items: center;
@@ -474,10 +478,17 @@ $section-padding: 24px;
 
   &__text {
     color: var(--accent);
+    margin-left: 15px;
     text-decoration: underline;
   }
 
   .approves {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
     &__info {
       display: flex;
       align-items: center;
@@ -486,17 +497,29 @@ $section-padding: 24px;
 
     &__left {
       display: flex;
-      flex-direction: column;
-      gap: 5px;
+      gap: 12px;
       align-items: center;
     }
 
     &__speciality {
       color: var(--dark-grey);
     }
+
+    &__text {
+      @include typography.body-12;
+
+      @include responsive.apply-desktop {
+        @include typography.body-14;
+      }
+    }
   }
 
   &__more {
     color: var(--accent);
+    @include typography.body-14;
+
+    @include responsive.apply-desktop {
+      @include typography.body-12;
+    }
   }
 }

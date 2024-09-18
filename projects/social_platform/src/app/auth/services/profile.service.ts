@@ -5,6 +5,7 @@ import { ApiService } from "projects/core";
 import { Achievement, User } from "../models/user.model";
 import { first, last, map, Observable } from "rxjs";
 import { plainToInstance } from "class-transformer";
+import { Approve } from "@office/models/skill";
 
 @Injectable({
   providedIn: "root",
@@ -29,11 +30,11 @@ export class ProfileService {
     return this.apiService.put(`/auth/users/achievement/${achievementId}/`, achievement);
   }
 
-  approveSkill(userId: number, skillId: number) {
+  approveSkill(userId: number, skillId: number): Observable<Approve> {
     return this.apiService.post(`/auth/users/${userId}/approve_skill/${skillId}/`, {});
   }
 
-  unApproveSkill(userId: number, skillId: number) {
+  unApproveSkill(userId: number, skillId: number): Observable<void> {
     return this.apiService.delete(`/auth/users/${userId}/approve_skill/${skillId}/`);
   }
 }

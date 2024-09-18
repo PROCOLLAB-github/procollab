@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { ControlErrorPipe, ValidationService } from "projects/core";
 import { concatMap, Subscription } from "rxjs";
@@ -36,9 +36,13 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
     this.stageForm = this.fb.group({
       avatar: ["", [Validators.required]],
       city: ["", [Validators.required]],
-      organization: ["", [Validators.required]],
-      graduationDate: ["", Validators.required],
-      shortDescription: ["", [Validators.required]],
+      education: this.fb.array([
+        this.fb.group({
+          organizationName: [""],
+          entryYear: [""],
+          description: [""],
+        })
+      ]),
     });
   }
 
@@ -51,7 +55,7 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
       this.stageForm.patchValue({
         avatar: fv.avatar,
         city: fv.city,
-        organization: fv.organization,
+        education: fv.education,
       });
     });
 
@@ -67,6 +71,10 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   profile?: User;
   stageSubmitting = false;
   subscriptions$: Subscription[] = [];
+
+  get education(): FormArray {
+    return this.stageForm.get("education") as FormArray;
+  }
 
   onSubmit(): void {
     if (!this.validationService.getFormValidation(this.stageForm)) {

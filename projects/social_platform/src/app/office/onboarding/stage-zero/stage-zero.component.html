@@ -42,49 +42,49 @@
       </div>
       }
     </fieldset>
-    } @if (stageForm.get("organization"); as organization) {
+    } @if (education.get("organizationName"); as organizationName) {
     <fieldset class="page__field">
-      <label for="organization" class="field-label">Место учебы/работы</label>
+      <label for="organizationName" class="field-label">Место учебы/работы</label>
       <app-input
-        id="organization"
-        [error]="organization | controlError"
+        id="organizationName"
+        [error]="organizationName | controlError"
         type="text"
         placeholder="Напиши название организации"
-        formControlName="organization"
+        formControlName="organizationName"
       ></app-input>
-      @if (organization | controlError: "required") {
+      @if (organizationName | controlError: "required") {
       <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
       }
     </fieldset>
-    } @if (stageForm.get("graduationDate"); as graduationDate) {
+    } @if (education.get("entryYear"); as entryYear) {
     <fieldset class="page__field">
-      <label for="graduationDate" class="field-label">Дата окончания</label>
+      <label for="entryYear" class="field-label">Дата окончания</label>
       <app-input
-        id="graduationDate"
-        [error]="graduationDate | controlError"
+        id="entryYear"
+        [error]="entryYear | controlError"
         type="text"
         placeholder="2023 год"
-        formControlName="graduationDate"
+        formControlName="entryYear"
       ></app-input>
-      @if (graduationDate | controlError: "required") {
+      @if (entryYear | controlError: "required") {
       <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
       }
     </fieldset>
-    } @if (stageForm.get("shortDescription"); as shortDescription) {
+    } @if (education.get("description"); as description) {
     <fieldset class="page__field">
-      <label for="shortDescription" class="field-label">Краткое описане</label>
+      <label for="description" class="field-label">Краткое описане</label>
       <app-input
         id="shortDescription"
-        [error]="shortDescription | controlError"
+        [error]="description | controlError"
         type="text"
         placeholder="Востоковедение и Африканистика"
-        formControlName="shortDescription"
+        formControlName="description"
       ></app-input>
-      @if (shortDescription | controlError: "required") {
+      @if (description | controlError: "required") {
       <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>

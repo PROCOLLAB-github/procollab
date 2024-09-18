@@ -9,35 +9,27 @@ export class Achievement {
   status!: string;
 }
 
+export class Education {
+  description!: string;
+  entryYear!: number;
+  organizationName!: string;
+}
+
 export class User {
   id!: number;
-
   email!: string;
-
   firstName!: string;
-
   lastName!: string;
-
   patronymic!: string;
-
   aboutMe!: string;
-
   birthday!: string;
-
   avatar!: string;
-
   links!: string[];
-
   keySkills!: string[];
-
   skills!: Skill[];
-
   skillsIds!: number[];
-
   isOnline!: boolean;
-
   isActive!: boolean;
-
   v2Speciality!: {
     id: number;
     name: string;
@@ -62,41 +54,23 @@ export class User {
   };
 
   onboardingStage!: number | null;
-
   speciality!: string;
-
   userType!: number;
-
   city!: string;
-
   region!: string;
-
   organization!: string;
-
-  education!: string[];
-
+  education!: Education[];
   achievements!: Achievement[];
-
   programs!: Program[];
-
   projects!: Project[];
-
   subscribedProjects!: Project[];
-
   timeCreated!: string;
-
   timeUpdated!: string;
-
   verificationDate!: string;
-
   isSubscribed!: boolean;
-
   lastSubscribeDate!: string;
-
   subscriptionDateOver!: string | null;
-
   lastSubscriptionType!: string | null;
-
   isAutopayAllowed!: boolean;
 
   doesCompleted(): boolean {
