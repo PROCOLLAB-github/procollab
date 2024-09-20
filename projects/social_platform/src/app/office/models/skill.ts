@@ -10,8 +10,8 @@ export interface Approve {
     v2Speciality: {
       id: number;
       name: string;
-    }
-  }
+    };
+  };
 }
 
 export interface Skill {

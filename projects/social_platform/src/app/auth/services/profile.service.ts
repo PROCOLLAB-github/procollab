@@ -11,7 +11,7 @@ import { Approve } from "@office/models/skill";
   providedIn: "root",
 })
 export class ProfileService {
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService) {}
 
   addAchievement(achievement: Omit<Achievement, "id">): Observable<Achievement> {
     return this.apiService

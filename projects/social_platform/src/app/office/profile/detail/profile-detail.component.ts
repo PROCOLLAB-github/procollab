@@ -39,7 +39,7 @@ export class ProfileDetailComponent implements OnInit {
     public readonly authService: AuthService,
     public readonly chatService: ChatService,
     public readonly breakpointObserver: BreakpointObserver
-  ) { }
+  ) {}
 
   user$: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
   loggedUserId$: Observable<number> = this.authService.profile.pipe(map(user => user.id));

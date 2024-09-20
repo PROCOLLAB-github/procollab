@@ -90,7 +90,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
           organizationName: [""],
           entryYear: [""],
           description: [""],
-        })
+        }),
       ]),
       links: this.fb.array([]),
       organization: [""],
@@ -230,7 +230,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get education(): FormArray {
-    return this.profileForm.get('education') as FormArray;
+    return this.profileForm.get("education") as FormArray;
   }
 
   errorMessage = ErrorMessage;
@@ -261,7 +261,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       this.fb.group({
         organizationName: [organizationName ?? "", [Validators.required]],
         entryYear: [entryYear ?? "", [Validators.required]],
-        description: [description ?? "", [Validators.required]]
+        description: [description ?? "", [Validators.required]],
       })
     );
   }

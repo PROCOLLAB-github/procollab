@@ -41,7 +41,7 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
           organizationName: [""],
           entryYear: [""],
           description: [""],
-        })
+        }),
       ]),
     });
   }
