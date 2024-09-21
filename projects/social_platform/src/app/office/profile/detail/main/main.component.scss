@@ -466,6 +466,12 @@ $section-padding: 24px;
   }
 }
 
+.education {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .modal {
   display: flex;
   flex-direction: column;

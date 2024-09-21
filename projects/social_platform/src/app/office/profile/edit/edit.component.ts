@@ -85,12 +85,15 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       birthday: ["", [Validators.required]],
       city: [""],
       additionalRole: [""],
+      organizationName: [""],
+      entryYear: [""],
+      description: [""],
       education: this.fb.array([
         this.fb.group({
           organizationName: [""],
           entryYear: [""],
           description: [""],
-        }),
+        })
       ]),
       links: this.fb.array([]),
       organization: [""],
@@ -122,6 +125,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(noop);
 
     userAvatar$ && this.subscription$.push(userAvatar$);
+
+    console.log(this.education.value, this.educationItems());
   }
 
   ngAfterViewInit() {
@@ -136,6 +141,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         userType: profile.userType ?? 1,
         birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
         city: profile.city ?? "",
+        education: profile.education ?? [],
+        additionalRole: profile.v2Speciality.name ?? "",
         organization: profile.organization ?? "",
         speciality: profile.speciality ?? "",
         skills: profile.skills ?? [],
@@ -192,6 +199,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   nestedSkills$ = this.skillsService.getSkillsNested();
 
   skillsGroupsModalOpen = signal(false);
+
+  educationItems = signal<any[]>([]);
 
   subscription$: Subscription[] = [];
 
@@ -256,18 +265,31 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.achievements.removeAt(i);
   }
 
-  addEducation(organizationName?: string, entryYear?: number, description?: string): void {
-    this.education.push(
-      this.fb.group({
-        organizationName: [organizationName ?? "", [Validators.required]],
-        entryYear: [entryYear ?? "", [Validators.required]],
-        description: [description ?? "", [Validators.required]],
-      })
-    );
+  addEducation() {
+    const educationItem = this.fb.group({
+      organizationName: this.profileForm.get("organizationName")?.value,
+      entryYear: this.profileForm.get("entryYear")?.value,
+      description: this.profileForm.get("description")?.value,
+    });
+
+    this.educationItems.update((items) => [...items, educationItem.value]);
+
+    this.profileForm.get('organizationName')?.reset();
+    this.profileForm.get('entryYear')?.reset();
+    this.profileForm.get('description')?.reset();
+
+    this.education.push(educationItem);
+
+    console.log(this.educationItems(), this.education.value, this.profileForm.value);
   }
 
-  removeEducation(i: number): void {
+  removeEducation(i: number) {
+    this.educationItems.update((items) => items.filter((_, index) => index !== i));
+
     this.education.removeAt(i);
+
+    console.log(this.educationItems(), this.education.value, this.profileForm.value);
+
   }
 
   get links(): FormArray {

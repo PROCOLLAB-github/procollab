@@ -116,70 +116,74 @@
       </div>
 
       <div class="profile__education">
-        <label class="field-label">Образование</label>
-        <ng-container formArrayName="education">
-          <ul>
-            @for (control of education.controls; let i = $index; track i) {
-            <li class="profile__education">
-              <form [formGroupName]="i" class="education">
-                <div class="education__first-row">
-                  @if (education.at(i)?.get("organizationName"); as organizationName) {
-                  <fieldset>
-                    <app-input
-                      [error]="organizationName | controlError"
-                      placeholder="ВУЗ / школа / колледж"
-                      formControlName="organizationName"
-                    ></app-input>
-                    @if (organizationName | controlError: "required") {
-                    <div class="text-body-14 error">
-                      {{ errorMessage.VALIDATION_REQUIRED }}
-                    </div>
-                    }
-                  </fieldset>
-                  }
-                </div>
-                @if (education.at(i).get("entryYear"); as entryYear) {
-                <fieldset>
-                  <label class="field-label">Дата окончания</label>
-                  <app-input
-                    [error]="entryYear | controlError"
-                    placeholder="2023 год"
-                    formControlName="entryYear"
-                  ></app-input>
-                  @if (entryYear | controlError: "required") {
-                  <div class="text-body-14 error">
-                    {{ errorMessage.VALIDATION_REQUIRED }}
-                  </div>
-                  }
-                </fieldset>
-                } @if (education.at(i).get("description"); as description) {
-                <fieldset class="education__description">
-                  <label class="field-label">Краткое описание</label>
-                  <app-input
-                    [error]="description | controlError"
-                    placeholder="Востоковедение и Африканистика"
-                    formControlName="description"
-                  ></app-input>
-                  @if (description | controlError: "required") {
-                  <div class="text-body-14 error">
-                    {{ errorMessage.VALIDATION_REQUIRED }}
-                  </div>
-                  }
-                </fieldset>
-                <app-button class="achievement__remove" color="red" (click)="removeAchievement(i)">
-                  <span>Удалить</span>
-                  <i appIcon icon="basket" appSquare="24"></i>
-                </app-button>
-                }
-              </form>
-            </li>
+        <div class="education__first-row">
+          @if (profileForm.get("organizationName"); as organizationName) {
+          <fieldset>
+            <label for="organizationName" class="field-label">Образование</label>
+            <app-input
+              [error]="organizationName | controlError"
+              placeholder="ВУЗ / колледж / школа"
+              formControlName="organizationName"
+            ></app-input>
+            @if (organizationName | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
             }
-          </ul>
-        </ng-container>
-        <app-button class="profile__add-achievement" (click)="addEducation()">
+          </fieldset>
+          } @if (profileForm.get("entryYear"); as entryYear) {
+          <fieldset>
+            <label for="entryYear" class="field-label">Дата окончания</label>
+            <app-input
+              [error]="entryYear | controlError"
+              placeholder="2023 год"
+              formControlName="entryYear"
+            ></app-input>
+            @if (entryYear | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (profileForm.get("description"); as description) {
+          <fieldset>
+            <label for="description" class="field-label">Краткое описание</label>
+            <app-input
+              [error]="description | controlError"
+              placeholder="Востоковедение и Африканистика"
+              formControlName="description"
+            ></app-input>
+            @if (description | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
+        <app-button class="profile__add-education" (click)="addEducation()">
           <span>Добавить новое образование</span>
           <i appIcon icon="plus" appSquare="14"></i>
         </app-button>
+      </div>
+
+      <div class="profile__row education__block">
+        @if(educationItems().length || education.length){ @for (educationItem of education.value;
+        track $index) {
+        <div class="education__info">
+          <p class="text-body-16 education__text">
+            {{ educationItem.organizationName }} {{ educationItem.entryYear }}
+            {{ educationItem.description }}
+          </p>
+          <i
+            class="basket"
+            appIcon
+            icon="basket"
+            appSquare="20"
+            (click)="removeEducation($index)"
+          ></i>
+        </div>
+        } }
       </div>
 
       <div class="profile__row">

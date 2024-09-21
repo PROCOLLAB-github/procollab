@@ -142,8 +142,29 @@
     }
   }
 
-  &__description {
-    margin-top: 12px;
+  &__block {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__info {
+    height: 100%;
+    padding: 12px;
+    overflow: hidden;
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__text {
+    color: var(--dark-grey);
+  }
+
+  .basket {
+    color: var(--red);
   }
 }
 
