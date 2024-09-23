@@ -93,7 +93,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
           organizationName: [""],
           entryYear: [""],
           description: [""],
-        })
+        }),
       ]),
       links: this.fb.array([]),
       organization: [""],
@@ -272,11 +272,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       description: this.profileForm.get("description")?.value,
     });
 
-    this.educationItems.update((items) => [...items, educationItem.value]);
+    this.educationItems.update(items => [...items, educationItem.value]);
 
-    this.profileForm.get('organizationName')?.reset();
-    this.profileForm.get('entryYear')?.reset();
-    this.profileForm.get('description')?.reset();
+    this.profileForm.get("organizationName")?.reset();
+    this.profileForm.get("entryYear")?.reset();
+    this.profileForm.get("description")?.reset();
 
     this.education.push(educationItem);
 
@@ -284,12 +284,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   removeEducation(i: number) {
-    this.educationItems.update((items) => items.filter((_, index) => index !== i));
+    this.educationItems.update(items => items.filter((_, index) => index !== i));
 
     this.education.removeAt(i);
 
     console.log(this.educationItems(), this.education.value, this.profileForm.value);
-
   }
 
   get links(): FormArray {
