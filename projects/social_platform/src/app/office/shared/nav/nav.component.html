@@ -27,7 +27,14 @@
         [class.nav-bar__notifications-toggle--active]="notificationsOpen"
         (click)="notificationsOpen = !notificationsOpen"
       >
-        <i routerLink="chats" appIcon icon="chats" appWidth="23" appHeight="21" appViewBox="0 0 23 21"></i>
+        <i
+          routerLink="chats"
+          appIcon
+          icon="chats"
+          appWidth="23"
+          appHeight="21"
+          appViewBox="0 0 23 21"
+        ></i>
 
         <i appIcon icon="bell" appWidth="20" appHeight="22" appViewBox="0 0 20 22"></i>
         @if ((notificationService.hasNotifications | async) || hasInvites) {
