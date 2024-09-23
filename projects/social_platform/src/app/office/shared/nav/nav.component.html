@@ -31,6 +31,8 @@
         @if ((notificationService.hasNotifications | async) || hasInvites) {
         <div class="attention"></div>
         }
+
+        <i appIcon icon="chats" appWidth="23" appHeight="21" appViewBox="0 0 23 21"></i>
       </div>
     </div>
     @if (!notificationsOpen) {
