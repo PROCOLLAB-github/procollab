@@ -52,7 +52,7 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
       const scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
           concatMap(() => this.onScroll()),
-          throttleTime(500)
+          throttleTime(2000)
         )
         .subscribe();
 
@@ -65,7 +65,10 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onScroll() {
-    if (this.projects().length >= this.totalProjCount()) return of({});
+    if (this.projects().length < this.totalProjCount()) {
+      this.fetchPage.update(p => p + 1);
+      return this.onFetch(this.fetchPage() * this.fetchLimit(), this.fetchLimit());
+    }
 
     const target = document.querySelector(".office__body");
     if (!target) return of({});
