@@ -172,7 +172,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           })
         )
       )
-      .subscribe(() => { });
+      .subscribe(() => {});
   }
 
   ngAfterViewInit(): void {
@@ -183,7 +183,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           this.programTags = tags;
         }),
         map(tags => [
-          { label: 'Без тега', value: -1, id: -1 },
+          { label: "Без тега", value: -1, id: -1 },
           ...tags.map(t => ({ label: t.name, value: t.id, id: t.id })),
         ]),
         tap(tags => {

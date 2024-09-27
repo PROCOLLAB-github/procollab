@@ -2,7 +2,13 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from "@angular/router";
 import { BackComponent } from "@uilib";
 import { BarComponent } from "@ui/components";
 import { SearchComponent } from "@ui/components/search/search.component";
@@ -14,10 +20,23 @@ import { Subscription } from "rxjs";
   templateUrl: "./rate-projects.component.html",
   styleUrl: "./rate-projects.component.scss",
   standalone: true,
-  imports: [RouterLinkActive, RouterLink, RouterOutlet, BackComponent, BarComponent, SearchComponent, ReactiveFormsModule],
+  imports: [
+    RouterLinkActive,
+    RouterLink,
+    RouterOutlet,
+    BackComponent,
+    BarComponent,
+    SearchComponent,
+    ReactiveFormsModule,
+  ],
 })
 export class RateProjectsComponent implements OnInit, OnDestroy {
-  constructor(private readonly navService: NavService, private readonly router: Router, private readonly route: ActivatedRoute, private readonly fb: FormBuilder) {
+  constructor(
+    private readonly navService: NavService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly fb: FormBuilder
+  ) {
     this.searchForm = this.fb.group({
       search: [""],
     });
