@@ -29,15 +29,15 @@ import { ClickOutsideModule } from "ng-click-outside";
 })
 export class SelectComponent implements ControlValueAccessor {
   @Input() placeholder = "";
-  @Input({ required: true }) options: { value: string | number; label: string; id: number }[] = [];
+  @Input({ required: true }) options: { value: string | number | null; label: string; id: number | null }[] = [];
 
   isOpen = false;
 
-  selectedId?: number;
+  selectedId?: number | null;
 
   highlightedIndex = -1;
 
-  constructor(private readonly renderer: Renderer2) {}
+  constructor(private readonly renderer: Renderer2) { }
 
   @ViewChild("dropdown") dropdown!: ElementRef<HTMLUListElement>;
 
@@ -101,39 +101,46 @@ export class SelectComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  onChange: (value: string | number) => void = () => {};
+  onChange: (value: string | number | null) => void = () => { };
 
   registerOnChange(fn: any) {
     this.onChange = fn;
   }
 
-  onTouched: () => void = () => {};
+  onTouched: () => void = () => { };
 
   registerOnTouched(fn: any) {
     this.onTouched = fn;
   }
 
-  onUpdate(event: Event, id: number): void {
+  onUpdate(event: Event, id: number | null): void {
     event.stopPropagation();
     if (this.disabled) {
       return;
     }
 
     this.selectedId = id;
-    this.onChange(this.getValue(id) ?? this.options[0].value);
+    if (id !== null) {
+      this.onChange(id === -1 ? null : this.getValue(id) ?? null);
+    } else {
+      this.onChange(null);
+    }
 
     this.hideDropdown();
   }
-
+  
   getLabel(optionId: number): string | undefined {
     return this.options.find(el => el.id === optionId)?.label;
   }
 
-  getValue(optionId: number): string | number | undefined {
+  getValue(optionId: number | null): string | number | null | undefined {
+    if (optionId === null) {
+      return null;
+    }
     return this.options.find(el => el.id === optionId)?.value;
   }
 
-  getId(label: string): number | undefined {
+  getId(label: string): number | null | undefined {
     return this.options.find(el => el.label === label)?.id;
   }
 

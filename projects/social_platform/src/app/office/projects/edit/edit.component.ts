@@ -172,7 +172,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           })
         )
       )
-      .subscribe(() => {});
+      .subscribe(() => { });
   }
 
   ngAfterViewInit(): void {
@@ -182,7 +182,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         tap(tags => {
           this.programTags = tags;
         }),
-        map(tags => tags.map(t => ({ label: t.name, value: t.id, id: t.id }))),
+        map(tags => [
+          { label: 'Без тега', value: -1, id: -1 },
+          ...tags.map(t => ({ label: t.name, value: t.id, id: t.id })),
+        ]),
         tap(tags => {
           this.programTagsOptions = tags;
         }),
@@ -208,6 +211,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           this.projectForm.patchValue({
             partnerProgramId: tag?.id,
           });
+        } else {
+          this.projectForm.patchValue({
+            partnerProgramId: null,
+          });
         }
 
         project.achievements &&
@@ -223,12 +230,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.cdRef.detectChanges();
       });
-
-    this.editingStep =
-      (this.route.snapshot.queryParamMap.get("editingStep") as "main" | "team" | "achievements") ||
-      "main";
-
-    this.cdRef.detectChanges();
   }
 
   programTagsOptions: SelectComponent["options"] = [];

@@ -19,7 +19,15 @@
         isRouterLinkActiveOptions: false,
       },
     ]"
-  ></app-bar>
+  >
+    <div class="bar__right">
+      <form [formGroup]="searchForm">
+        <app-search
+          formControlName="search"
+        ></app-search>
+      </form>
+    </div>
+  </app-bar>
   <div class="rate-project__body">
     <router-outlet></router-outlet>
   </div>
