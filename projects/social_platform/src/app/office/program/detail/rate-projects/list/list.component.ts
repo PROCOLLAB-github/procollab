@@ -21,7 +21,7 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly projectRatingService: ProjectRatingService
-  ) { }
+  ) {}
 
   isListOfAll = this.router.url.includes("/all");
 
