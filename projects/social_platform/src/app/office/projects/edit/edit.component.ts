@@ -183,7 +183,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           this.programTags = tags;
         }),
         map(tags => [
-          { label: "Без тега", value: null, id: null },
+          { label: "Без тега", value: 0, id: 0 },
           ...tags.map(t => ({ label: t.name, value: t.id, id: t.id })),
         ]),
         tap(tags => {
@@ -458,7 +458,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   saveProjectAsPublished(): void {
     this.projSubmitInitiated = true;
     this.projectForm.get("draft")?.patchValue(false);
+
     this.setProjFormIsSubmitting = this.setIsSubmittingAsPublished;
+    const partnerProgramId = this.projectForm.get("partnerProgramId")?.value;
+    this.projectForm.patchValue({ partnerProgramId: partnerProgramId });
     this.submitProjectForm();
   }
 
@@ -467,6 +470,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectForm.get("draft")?.patchValue(true);
 
     this.setProjFormIsSubmitting = this.setIsSubmittingAsDraft;
+    const partnerProgramId = this.projectForm.get("partnerProgramId")?.value;
+    this.projectForm.patchValue({ partnerProgramId: partnerProgramId });
     this.submitProjectForm();
   }
 
@@ -484,6 +489,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.setProjFormIsSubmitting(true);
+
+    console.log(this.projectForm.value);
 
     this.projectService
       .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), this.projectForm.value)

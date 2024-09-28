@@ -66,7 +66,12 @@ export class SelectComponent implements ControlValueAccessor {
     }
     if (event.code === "Enter") {
       if (i >= 0) {
-        this.onUpdate(event, this.options[this.highlightedIndex].id);
+        const id = this.options[this.highlightedIndex].id;
+        if (id !== null) {
+          this.onUpdate(event, id);
+        } else {
+          this.onUpdate(event, null as number | null);
+        }
       }
     }
     if (event.code === "Escape") {
@@ -96,7 +101,12 @@ export class SelectComponent implements ControlValueAccessor {
   }
 
   writeValue(id: number) {
-    this.selectedId = id;
+    if (id === 0) {
+      this.selectedId = 0;
+      this.onChange(0);
+    } else {
+      this.selectedId = id;
+    }
   }
 
   disabled = false;
@@ -124,10 +134,13 @@ export class SelectComponent implements ControlValueAccessor {
     }
 
     this.selectedId = id;
-    if (id !== null) {
-      this.onChange(id === -1 ? null : this.getValue(id) ?? null);
-    } else {
+    if (id === null) {
       this.onChange(null);
+    } else if (id === 0) {
+      // handle the "Без тега" option
+      this.onChange(0);
+    } else {
+      this.onChange(id);
     }
 
     this.hideDropdown();
