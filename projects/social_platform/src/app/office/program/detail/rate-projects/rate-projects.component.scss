@@ -2,4 +2,10 @@
   &__bar {
     margin-bottom: 20px;
   }
+
+  .bar__right {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
 }

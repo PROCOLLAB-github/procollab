@@ -7,6 +7,7 @@ import { AsyncPipe } from "@angular/common";
 import { RatingCardComponent } from "@office/program/shared/rating-card/rating-card.component";
 import { ProjectRate } from "@office/program/models/project-rate";
 import { ProjectRatingService } from "@office/program/services/project-rating.service";
+import Fuse from "fuse.js";
 
 @Component({
   selector: "app-list",
@@ -20,11 +21,12 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly projectRatingService: ProjectRatingService
-  ) {}
+  ) { }
 
   isListOfAll = this.router.url.includes("/all");
 
   projects = signal<ProjectRate[]>([]);
+  initialProjects: ProjectRate[] = [];
 
   totalProjCount = signal(0);
   fetchLimit = signal(8);
@@ -39,11 +41,26 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
         map(r => ({ projects: r["results"], count: r["count"] }))
       )
       .subscribe(({ projects, count }) => {
+        this.initialProjects = projects;
         this.projects.set(projects);
         this.totalProjCount.set(count);
       });
 
+    const querySearch$ = this.route.queryParams.pipe(map(q => q["search"])).subscribe(search => {
+      if (search) {
+        const fuse = new Fuse(this.initialProjects, {
+          keys: ["name"],
+        });
+
+        const filteredProjects = fuse.search(search).map(el => el.item);
+        this.projects.set(filteredProjects);
+      } else {
+        this.projects.set(this.initialProjects);
+      }
+    });
+
     this.subscriptions$().push(initProjects$);
+    this.subscriptions$().push(querySearch$);
   }
 
   ngAfterViewInit() {
