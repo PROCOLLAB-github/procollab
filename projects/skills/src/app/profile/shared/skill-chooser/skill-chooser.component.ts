@@ -19,7 +19,7 @@ import { PersonalSkillCardComponent } from "../personal-skill-card/personal-skil
   styleUrl: "./skill-chooser.component.scss",
 })
 export class SkillChooserComponent implements OnInit {
-  @Input() open: boolean = false;
+  @Input() open = false;
   @Output() openChange: EventEmitter<boolean> = new EventEmitter();
 
   route = inject(ActivatedRoute);
