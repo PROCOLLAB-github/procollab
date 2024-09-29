@@ -1,0 +1,12 @@
+<!-- @format -->
+
+<div class="rating-card">
+  <div class="rating-card__left">
+    <h3 class="rating-card__name">
+      {{ personalSkillCard.name }}
+    </h3>
+  </div>
+  <div class="rating-card__right">
+    <app-checkbox [checked]="isChecked()" (checkedChange)="toggleCheck()"></app-checkbox>
+  </div>
+</div>

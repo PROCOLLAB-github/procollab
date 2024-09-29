@@ -1,8 +1,10 @@
 /** @format */
 
-import { Component } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { PersonalRatingCardComponent } from "../shared/personal-rating-card/personal-rating-card.component";
+import { Profile } from "projects/skills/src/models/profile.model";
+import { ProfileService } from "../services/profile.service";
 
 @Component({
   selector: "app-skills-rating",
@@ -11,6 +13,13 @@ import { PersonalRatingCardComponent } from "../shared/personal-rating-card/pers
   templateUrl: "./skills-rating.component.html",
   styleUrl: "./skills-rating.component.scss",
 })
-export class ProfileSkillsRatingComponent {
-  protected readonly Array = Array;
+export class ProfileSkillsRatingComponent implements OnInit {
+  profileService = inject(ProfileService);
+  skillsList: Profile['skills'] = [];
+
+  ngOnInit(): void {
+    this.profileService.getProfile().subscribe((r: Profile) => {
+      this.skillsList = r['skills'];
+    })
+  }
 }

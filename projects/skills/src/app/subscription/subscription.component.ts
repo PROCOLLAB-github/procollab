@@ -10,8 +10,6 @@ import { ActivatedRoute } from "@angular/router";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { map } from "rxjs";
 import { ProfileService } from "../profile/services/profile.service";
-import { SubscriptionData } from "@corelib";
-import { log } from "console";
 
 @Component({
   selector: "app-subscription",

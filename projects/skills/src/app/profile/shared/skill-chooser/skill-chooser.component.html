@@ -1,24 +1,23 @@
 <!-- @format -->
 
-<div class="modal">
-  <div routerLink="/profile" class="modal__overlay"></div>
-  <div class="modal__body plans">
-    <i routerLink="/profile" appIcon icon="cross" class="plans__cross"></i>
+<app-modal [open]="open" (openChange)="onOpenChange($event)">
+  <div class="plans">
+    <i (click)="onCloseModal()" appIcon icon="cross" class="plans__cross"></i>
     <h1 class="plans__title">Выберите 5 навыков</h1>
     <div class="plans__tariffs">
-      @for (skill of skillsList(3); track $index) {
-      <app-personal-rating-card></app-personal-rating-card>
+      @for (skill of skillsList(); track $index) {
+      <app-personal-skill-card [personalSkillCard]="skill"></app-personal-skill-card>
       }
 
       <div class="plans_pagination">
         <div class="plans_pages">
           <i appIcon icon="left-arrow" class="plans_pages-prev plans_pages-icon"></i>
-          <p><span class="plans_pages-start">1</span>/10</p>
+          <p><span class="plans_pages-start">1</span>/{{ skillsList().length }}</p>
           <i appIcon icon="left-arrow" class="plans_pages-next plans_pages-icon"></i>
         </div>
 
-        <app-button routerLink="/profile">Выбрать</app-button>
+        <app-button (click)="onCloseModal()">Выбрать</app-button>
       </div>
     </div>
   </div>
-</div>
+</app-modal>

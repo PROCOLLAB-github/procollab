@@ -10,16 +10,14 @@ export interface UserData {
   specialization: string;
   geoPosition: string;
   verificationDate: string;
+  points: number;
 }
 
-interface Skill {
+export interface Skill {
+  skillId: number;
   skillName: string;
-  level: number;
-  progress: number;
-}
-
-interface Skills {
-  [key: string]: Skill;
+  skillLevel: number;
+  skillProgress: number;
 }
 
 interface Month {
@@ -29,6 +27,6 @@ interface Month {
 
 export interface Profile {
   userData: UserData;
-  skills: Skills;
+  skills: Skill[];
   months: Month[];
 }

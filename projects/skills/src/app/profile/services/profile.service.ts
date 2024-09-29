@@ -3,6 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService, SubscriptionData } from "@corelib";
 import { Profile } from "../../../models/profile.model";
+import { Skill } from "projects/skills/src/models/skill.model";
 
 @Injectable({
   providedIn: "root",
@@ -30,5 +31,9 @@ export class ProfileService {
 
   cancelSubscription() {
     return this.apiService.post("/subscription/refund", {});
+  }
+
+  addSkill(skill: Skill) {
+    return this.apiService.post('/progress/add-skill/', {})
   }
 }

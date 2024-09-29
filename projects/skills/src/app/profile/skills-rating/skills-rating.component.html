@@ -3,8 +3,8 @@
 <div class="rating">
   <h1 class="rating__title">Навыки месяца</h1>
   <div class="rating__list">
-    @for (_ of Array(34); track $index) {
-    <app-personal-rating-card></app-personal-rating-card>
+    @for (skill of skillsList; track $index) {
+    <app-personal-rating-card [personalRatingCardData]="skill"></app-personal-rating-card>
     }
   </div>
 </div>

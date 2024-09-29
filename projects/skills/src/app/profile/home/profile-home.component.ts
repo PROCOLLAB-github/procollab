@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { InfoBlockComponent } from "../shared/info-block/info-block.component";
 import { MonthBlockComponent } from "../shared/month-block/month-block.component";
