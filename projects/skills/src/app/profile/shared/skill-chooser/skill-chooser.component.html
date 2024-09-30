@@ -6,7 +6,7 @@
     <h1 class="plans__title">Выберите 5 навыков</h1>
     <div class="plans__tariffs">
       @for (skill of skillsList(); track $index) {
-      <app-personal-skill-card [personalSkillCard]="skill"></app-personal-skill-card>
+      <app-personal-skill-card [profileIdSkills]="profileIdSkills" [personalSkillCard]="skill"></app-personal-skill-card>
       }
 
       <div class="plans_pagination">

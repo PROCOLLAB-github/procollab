@@ -33,7 +33,7 @@ export class ProfileService {
     return this.apiService.post("/subscription/refund", {});
   }
 
-  addSkill(skill: Skill) {
-    return this.apiService.post('/progress/add-skill/', {})
+  addSkill(skills: number[]) {
+    return this.apiService.post('/progress/add-skills/', skills)
   }
 }
