@@ -21,7 +21,7 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly projectRatingService: ProjectRatingService
-  ) {}
+  ) { }
 
   isListOfAll = this.router.url.includes("/all");
 
@@ -83,8 +83,16 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onScroll() {
     if (this.projects().length < this.totalProjCount()) {
-      this.fetchPage.update(p => p + 1);
-      return this.onFetch(this.fetchPage() * this.fetchLimit(), this.fetchLimit());
+      return this.onFetch(this.fetchPage() * this.fetchLimit(), this.fetchLimit()).pipe(
+        tap(({ results }) => {
+          this.projects.update(projects => [...projects, ...results]);
+          if (this.projects().length >= this.totalProjCount()) {
+            console.log('Projects count reached!')
+          } else {
+            this.fetchPage.update(p => p + 1);
+          }
+        })
+      );
     }
 
     const target = document.querySelector(".office__body");
