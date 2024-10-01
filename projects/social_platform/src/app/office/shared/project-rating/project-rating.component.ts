@@ -75,10 +75,7 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
 
   controlCreators: Record<string, (val: number | string) => FormControl> = {
     int: val => new FormControl<number>(<number>val, [Validators.required]),
-    bool: val =>
-      new FormControl<boolean>(val ? JSON.parse((val as string).toLowerCase()) : false, [
-        Validators.required,
-      ]),
+    bool: val => new FormControl<boolean>(val ? JSON.parse((val as string).toLowerCase()) : false),
     str: val => new FormControl<string>(<string>val),
   };
 
@@ -101,6 +98,7 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
     this.onTouched = fn;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   validate(_: AbstractControl): ValidationErrors | null {
     let output: ValidationErrors | null = null;
 
