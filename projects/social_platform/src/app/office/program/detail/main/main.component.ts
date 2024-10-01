@@ -47,8 +47,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     private readonly cdRef: ChangeDetectorRef
   ) {}
 
-  currentPage: number = 1;
-  pageSize: number = 10;
+  currentPage = 1;
+  pageSize = 10;
 
   news = signal<FeedNews[]>([]);
   totalNewsCount = signal(0);
