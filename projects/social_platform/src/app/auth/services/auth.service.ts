@@ -11,12 +11,13 @@ import {
   RegisterResponse,
 } from "../models/http.model";
 import { User, UserRole } from "../models/user.model";
+import { HttpParams } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
-  constructor(private apiService: ApiService, private tokenService: TokenService) {}
+  constructor(private apiService: ApiService, private tokenService: TokenService) { }
 
   login({ email, password }: LoginRequest): Observable<LoginResponse> {
     return this.apiService
@@ -34,6 +35,10 @@ export class AuthService {
     return this.apiService
       .post("/auth/users/", data)
       .pipe(map(json => plainToInstance(RegisterResponse, json)));
+  }
+
+  downloadCV(): Observable<any> {
+    return this.apiService.get('/auth/users/download_cv/', new HttpParams(), { responseType: 'text' })
   }
 
   private profile$ = new ReplaySubject<User>(1);
@@ -125,4 +130,6 @@ export class AuthService {
       .post<User>("/auth/resend_email/", { email })
       .pipe(map(user => plainToInstance(User, user)));
   }
+
+
 }

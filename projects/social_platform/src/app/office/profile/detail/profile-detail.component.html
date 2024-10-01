@@ -88,7 +88,11 @@
             } @else {
             <div class="profile__btns">
               <a class="profile__cv">
-                <app-button customTypographyClass="text-body-12" color="primary">
+                <app-button
+                  (click)="downloadCV()"
+                  customTypographyClass="text-body-12"
+                  color="primary"
+                >
                   Скачать CV
                 </app-button>
               </a>
