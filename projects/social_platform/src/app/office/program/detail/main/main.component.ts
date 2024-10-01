@@ -111,8 +111,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
       return this.fetchNews(this.fetchPage() * this.fetchLimit(), this.fetchLimit()).pipe(
         tap(({ results }) => {
           this.news.update(news => [...news, ...results]);
-          if (this.news().length >= this.totalNewsCount()) {
-            console.log("News count reached!");
+          if (results.length < this.fetchLimit()) {
+            console.log("No more news to fetch!");
           } else {
             this.fetchPage.update(p => p + 1);
           }
