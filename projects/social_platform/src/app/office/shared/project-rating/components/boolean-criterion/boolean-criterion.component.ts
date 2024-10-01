@@ -46,5 +46,6 @@ export class BooleanCriterionComponent implements ControlValueAccessor {
     const target = event.target as HTMLInputElement;
     this.isChecked = target && target.checked;
     this.onChange(this.isChecked);
+    this.onTouched();
   }
 }
