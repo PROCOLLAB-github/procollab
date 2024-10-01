@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, forwardRef, Input } from "@angular/core";
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
 import { noop } from "rxjs";
 
@@ -21,14 +21,11 @@ import { noop } from "rxjs";
 })
 export class BooleanCriterionComponent implements ControlValueAccessor {
   @Input() disabled = false;
+  @Input() formControl!: FormControl;
 
   isChecked = false;
-  onChange: (val: boolean) => void = noop;
-  onTouched: () => void = noop;
-
-  writeValue(val: boolean): void {
-    this.isChecked = val;
-  }
+  onChange: (val: boolean) => void = () => {};
+  onTouched: () => void = () => {};
 
   registerOnChange(fn: (v: boolean) => void): void {
     this.onChange = fn;
@@ -38,13 +35,16 @@ export class BooleanCriterionComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+  writeValue(val: boolean): void {
+    this.isChecked = val;
+    this.formControl.setValue(this.isChecked); // Add this line
   }
 
   onChanged(event: Event) {
     const target = event.target as HTMLInputElement;
     this.isChecked = target && target.checked;
+    this.formControl.setValue(this.isChecked);
+    this.formControl.markAsDirty(); // Add this line
     this.onChange(this.isChecked);
     this.onTouched();
   }
