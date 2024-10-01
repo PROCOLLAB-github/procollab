@@ -67,7 +67,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         }),
         concatMap(program => {
           if (program.isUserMember) {
-            return this.fetchNews(this.fetchPage() * this.fetchLimit(), this.fetchLimit());
+            return this.fetchNews(0, this.fetchLimit());
           } else {
             return of({} as ApiPagination<FeedNews>);
           }
