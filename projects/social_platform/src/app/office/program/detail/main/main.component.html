@@ -77,7 +77,7 @@
         }
       </div>
       <div class="news">
-        @for (n of news; track n.id) {
+        @for (n of news(); track n.id) {
         <app-program-news-card
           class="news__item"
           [attr.data-id]="n.id"

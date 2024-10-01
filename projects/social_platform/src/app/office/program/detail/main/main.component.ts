@@ -6,11 +6,12 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
+  signal,
   ViewChild,
 } from "@angular/core";
 import { ProgramService } from "@office/program/services/program.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
-import { concatMap, map, noop, of, Subscription, tap } from "rxjs";
+import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { ProgramNewsService } from "@office/program/services/program-news.service";
 import { FeedNews } from "@office/projects/models/project-news.model";
@@ -46,6 +47,16 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     private readonly cdRef: ChangeDetectorRef
   ) {}
 
+  currentPage: number = 1;
+  pageSize: number = 10;
+
+  news = signal<FeedNews[]>([]);
+  totalNewsCount = signal(0);
+  fetchLimit = signal(10);
+  fetchPage = signal(0);
+
+  subscriptions$ = signal<Subscription[]>([]);
+
   ngOnInit(): void {
     const program$ = this.route.data
       .pipe(
@@ -56,7 +67,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         }),
         concatMap(program => {
           if (program.isUserMember) {
-            return this.programNewsService.fetchNews(program.id);
+            return this.fetchNews(this.fetchPage() * this.fetchLimit(), this.fetchLimit());
           } else {
             return of({} as ApiPagination<FeedNews>);
           }
@@ -64,46 +75,75 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
       )
       .subscribe(news => {
         if (news.results?.length) {
-          this.news = news.results;
-
-          setTimeout(() => {
-            const observer = new IntersectionObserver(this.onNewsInVew.bind(this), {
-              root: document.querySelector(".office__body"),
-              rootMargin: "0px 0px 0px 0px",
-              threshold: 0,
-            });
-            document.querySelectorAll(".news__item").forEach(e => {
-              observer.observe(e);
-            });
-          });
+          this.news.set(news.results);
+          this.totalNewsCount.set(news.count);
         }
       });
 
-    this.subscriptions$.push(program$);
+    this.subscriptions$().push(program$);
   }
 
-  @ViewChild("descEl") descEl?: ElementRef;
-
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
     const descElement = this.descEl?.nativeElement;
     this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
 
     this.cdRef.detectChanges();
+
+    const target = document.querySelector(".office__body");
+    if (target) {
+      const scrollEvents$ = fromEvent(target, "scroll")
+        .pipe(
+          concatMap(() => this.onScroll()),
+          throttleTime(2000)
+        )
+        .subscribe();
+
+      this.subscriptions$().push(scrollEvents$);
+    }
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
+    this.subscriptions$().forEach($ => $.unsubscribe());
   }
 
-  subscriptions$: Subscription[] = [];
-  news: FeedNews[] = [];
-  program?: Program;
-  // program$?: Observable<Program> = this.route.parent?.data.pipe(map(r => r["data"]));
+  onScroll() {
+    if (this.news().length < this.totalNewsCount()) {
+      return this.fetchNews(this.fetchPage() * this.fetchLimit(), this.fetchLimit()).pipe(
+        tap(({ results }) => {
+          this.news.update(news => [...news, ...results]);
+          if (this.news().length >= this.totalNewsCount()) {
+            console.log("News count reached!");
+          } else {
+            this.fetchPage.update(p => p + 1);
+          }
+        })
+      );
+    }
 
-  registerDateExpired!: boolean;
+    const target = document.querySelector(".office__body");
+    if (!target) return of({});
 
-  descriptionExpandable!: boolean;
-  readFullDescription = false;
+    const scrollBottom = target.scrollHeight - target.scrollTop - target.clientHeight;
+
+    if (scrollBottom > 0) return of({});
+
+    this.fetchPage.update(p => p + 1);
+
+    return this.fetchNews(this.fetchPage() * this.fetchLimit(), this.fetchLimit());
+  }
+
+  fetchNews(offset: number, limit: number) {
+    const programId = this.route.snapshot.params["programId"];
+
+    return this.programNewsService.fetchNews(programId, offset, limit).pipe(
+      tap(({ count, results }) => {
+        this.totalNewsCount.set(count);
+        this.news.update(news => [...news, ...results]);
+      })
+    );
+  }
+
+  @ViewChild("descEl") descEl?: ElementRef;
 
   onNewsInVew(entries: IntersectionObserverEntry[]): void {
     const ids = entries.map(e => {
@@ -116,7 +156,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   onLike(newsId: number) {
-    const item = this.news.find(n => n.id === newsId);
+    const item = this.news().find((n: any) => n.id === newsId);
     if (!item) return;
 
     this.programNewsService
@@ -131,4 +171,9 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
   }
+
+  program?: Program;
+  registerDateExpired!: boolean;
+  descriptionExpandable!: boolean;
+  readFullDescription = false;
 }
