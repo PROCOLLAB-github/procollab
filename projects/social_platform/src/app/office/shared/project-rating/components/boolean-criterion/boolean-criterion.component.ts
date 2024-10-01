@@ -44,8 +44,8 @@ export class BooleanCriterionComponent implements ControlValueAccessor {
 
   onChanged(event: Event) {
     const target = event.target as HTMLInputElement;
-    this.isChecked = target && target.checked;
-    this.onChange(this.isChecked);
-    this.onTouched();
+    this.isChecked = target.checked; // Update isChecked based on the checkbox state
+    this.onChange(this.isChecked); // Notify the parent component of the change
+    this.onTouched(); // Mark as touched
   }
 }
