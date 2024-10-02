@@ -43,6 +43,7 @@ export class BooleanCriterionComponent implements ControlValueAccessor {
   }
 
   onChanged() {
+    this.isChecked = !this.isChecked;
     this.onChange(this.isChecked);
     this.onTouched();
   }
