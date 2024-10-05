@@ -41,7 +41,12 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly fb: FormBuilder
   ) {
-    const isRatedByExpert = this.route.snapshot.queryParams['is_rated_by_expert'] === 'true' ? true : this.route.snapshot.queryParams['is_rated_by_expert'] === 'false' ? false : null;
+    const isRatedByExpert =
+      this.route.snapshot.queryParams["is_rated_by_expert"] === "true"
+        ? true
+        : this.route.snapshot.queryParams["is_rated_by_expert"] === "false"
+        ? false
+        : null;
 
     this.searchForm = this.fb.group({
       search: [""],
@@ -54,7 +59,6 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
 
   searchForm: FormGroup;
   filterForm: FormGroup;
-
 
   subscriptions$: Subscription[] = [];
   programId?: number;
@@ -70,10 +74,10 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
       value: true,
     },
     {
-      label: 'Не оцененные',
+      label: "Не оцененные",
       value: false,
-    }
-  ]
+    },
+  ];
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль программы");
@@ -91,8 +95,13 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
     });
 
     const queryParams$ = this.route.queryParams.subscribe(params => {
-      const isRatedByExpert = params['is_rated_by_expert'] === 'true' ? true : params['is_rated_by_expert'] === 'false' ? false : null;
-      this.filterForm.get('filterTag')?.setValue(isRatedByExpert, { emitEvent: false });
+      const isRatedByExpert =
+        params["is_rated_by_expert"] === "true"
+          ? true
+          : params["is_rated_by_expert"] === "false"
+          ? false
+          : null;
+      this.filterForm.get("filterTag")?.setValue(isRatedByExpert, { emitEvent: false });
     });
 
     searchFormSearch$ && this.subscriptions$.push(searchFormSearch$);
@@ -105,14 +114,14 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
 
   setValue(event: Event, tag: boolean | null) {
     event.stopPropagation();
-    this.filterForm.get('filterTag')?.setValue(tag);
+    this.filterForm.get("filterTag")?.setValue(tag);
     this.isOpen = false;
 
     this.router.navigate([], {
       queryParams: { is_rated_by_expert: tag },
       relativeTo: this.route,
       queryParamsHandling: "merge",
-    })
+    });
   }
 
   toggleOpen(event: Event) {

@@ -172,7 +172,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           })
         )
       )
-      .subscribe(() => { });
+      .subscribe(() => {});
   }
 
   ngAfterViewInit(): void {
@@ -251,9 +251,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   errorMessage = ErrorMessage;
 
   errorModalMessage = signal<{
-    programName: string,
-    whenCanEdit: Date,
-    daysUntilResolution: string
+    programName: string;
+    whenCanEdit: Date;
+    daysUntilResolution: string;
   } | null>(null);
 
   industries$ = this.industryService.industries.pipe(

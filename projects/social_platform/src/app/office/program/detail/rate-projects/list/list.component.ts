@@ -21,7 +21,7 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly projectRatingService: ProjectRatingService
-  ) { }
+  ) {}
 
   isListOfAll = this.router.url.includes("/all");
   isRatedByExpert = signal<boolean | undefined>(undefined);
@@ -47,7 +47,13 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.totalProjCount.set(count);
 
         const isRatedByExpertParam = this.route.snapshot.queryParams["is_rated_by_expert"];
-        this.isRatedByExpert.set(isRatedByExpertParam === 'true' ? true : isRatedByExpertParam === 'false' ? false : undefined);
+        this.isRatedByExpert.set(
+          isRatedByExpertParam === "true"
+            ? true
+            : isRatedByExpertParam === "false"
+            ? false
+            : undefined
+        );
       });
 
     const querySearch$ = this.route.queryParams.pipe(map(q => q["search"])).subscribe(search => {
@@ -63,12 +69,16 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
-    const filterParams$ = this.route.queryParams.pipe(map(q => q['is_rated_by_expert'])).subscribe(isRatedByExpert => {
-      this.isRatedByExpert.set(isRatedByExpert === 'true' ? true : isRatedByExpert === 'false' ? false : undefined);
-      this.onFetch(this.fetchPage() * this.fetchLimit(), this.fetchLimit()).subscribe(r => {
-        this.projects.set(r.results);
-      })
-    })
+    const filterParams$ = this.route.queryParams
+      .pipe(map(q => q["is_rated_by_expert"]))
+      .subscribe(isRatedByExpert => {
+        this.isRatedByExpert.set(
+          isRatedByExpert === "true" ? true : isRatedByExpert === "false" ? false : undefined
+        );
+        this.onFetch(this.fetchPage() * this.fetchLimit(), this.fetchLimit()).subscribe(r => {
+          this.projects.set(r.results);
+        });
+      });
 
     this.subscriptions$().push(initProjects$);
     this.subscriptions$().push(querySearch$);
@@ -114,7 +124,12 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onFetch(offset: number, limit: number) {
     const programId = this.route.parent?.snapshot.params["programId"];
-    const observable = this.projectRatingService.getAll(programId, offset, limit, this.isRatedByExpert());
+    const observable = this.projectRatingService.getAll(
+      programId,
+      offset,
+      limit,
+      this.isRatedByExpert()
+    );
 
     return observable.pipe(
       tap(({ count, results }) => {
@@ -123,5 +138,4 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
       })
     );
   }
-
 }
