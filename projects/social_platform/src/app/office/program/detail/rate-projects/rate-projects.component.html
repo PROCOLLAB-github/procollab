@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<div class="rate-project">
+<div class="rate-project" (click)="onClickOutside()">
   <app-bar
     class="bar rate-project__bar"
     [backHave]="true"
@@ -11,21 +11,44 @@
         linkText: 'Все проекты',
         isRouterLinkActiveOptions: false,
       },
-
-      {
-        link:
-          '/office/program' + '/' + programId!.toString() + '/' + 'projects-rating' + '/' + 'rated',
-        linkText: 'Оцененные проекты',
-        isRouterLinkActiveOptions: false,
-      },
     ]"
   >
-    <div class="bar__right">
-      <form [formGroup]="searchForm">
-        <app-search formControlName="search"></app-search>
-      </form>
-    </div>
   </app-bar>
+
+  <div class="filter">
+    <div class="filter__left">
+      <div class="filter__search">
+        <form [formGroup]="searchForm">
+          <app-search formControlName="search"></app-search>
+        </form>
+      </div>
+
+      <div class="filter__category" (click)="toggleOpen($event)">
+        <form [formGroup]="filterForm">
+          <div class="filter__top">
+            <p class="text-body-14">Фильтр</p>
+            <i appIcon icon="arrow-no-body" appWidth="14" appHeight="8" appViewBox="0 0 18 9"> </i>
+          </div>
+
+          @if(isOpen){
+          <div class="filter__controls">
+            @for (tag of filterTags; track $index) {
+            <div class="filter__tags" (click)="setValue($event, tag.value)">
+              <app-checkbox
+                [checked]="this.filterForm.get('filterTag')?.value === tag.value"
+              ></app-checkbox>
+              <p class="text-body-14">{{ tag.label }}</p>
+            </div>
+            }
+          </div>
+          }
+        </form>
+      </div>
+    </div>
+
+    <app-button style="width: 40%">Найти</app-button>
+  </div>
+
   <div class="rate-project__body">
     <router-outlet></router-outlet>
   </div>

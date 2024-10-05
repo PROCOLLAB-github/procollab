@@ -172,7 +172,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           })
         )
       )
-      .subscribe(() => {});
+      .subscribe(() => { });
   }
 
   ngAfterViewInit(): void {
@@ -249,6 +249,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   profile$?: Subscription;
 
   errorMessage = ErrorMessage;
+
+  errorModalMessage = signal<{
+    programName: string,
+    whenCanEdit: Date,
+    daysUntilResolution: string
+  } | null>(null);
 
   industries$ = this.industryService.industries.pipe(
     map(industries =>
@@ -490,8 +496,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.setProjFormIsSubmitting(true);
 
-    console.log(this.projectForm.value);
-
     this.projectService
       .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), this.projectForm.value)
       .subscribe({
@@ -501,7 +505,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
             .navigateByUrl(`/office/projects/my`)
             .then(() => console.debug("Route changed from ProjectEditComponent"));
         },
-        error: () => {
+        error: (error: unknown) => {
+          if (error instanceof HttpErrorResponse) {
+            if (error.status === 400) {
+              console.log(error.error.error);
+            }
+          }
           this.setProjFormIsSubmitting(false);
         },
       });

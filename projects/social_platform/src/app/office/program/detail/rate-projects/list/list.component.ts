@@ -2,7 +2,7 @@
 
 import { AfterViewInit, Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { concatMap, fromEvent, map, of, Subscription, tap, throttleTime } from "rxjs";
+import { concatMap, debounceTime, fromEvent, map, of, Subscription, tap, throttleTime } from "rxjs";
 import { AsyncPipe } from "@angular/common";
 import { RatingCardComponent } from "@office/program/shared/rating-card/rating-card.component";
 import { ProjectRate } from "@office/program/models/project-rate";
@@ -21,9 +21,10 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly projectRatingService: ProjectRatingService
-  ) {}
+  ) { }
 
   isListOfAll = this.router.url.includes("/all");
+  isRatedByExpert = signal<boolean | undefined>(undefined);
 
   projects = signal<ProjectRate[]>([]);
   initialProjects: ProjectRate[] = [];
@@ -44,6 +45,9 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.initialProjects = projects;
         this.projects.set(projects);
         this.totalProjCount.set(count);
+
+        const isRatedByExpertParam = this.route.snapshot.queryParams["is_rated_by_expert"];
+        this.isRatedByExpert.set(isRatedByExpertParam === 'true' ? true : isRatedByExpertParam === 'false' ? false : undefined);
       });
 
     const querySearch$ = this.route.queryParams.pipe(map(q => q["search"])).subscribe(search => {
@@ -59,8 +63,16 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
+    const filterParams$ = this.route.queryParams.pipe(map(q => q['is_rated_by_expert'])).subscribe(isRatedByExpert => {
+      this.isRatedByExpert.set(isRatedByExpert === 'true' ? true : isRatedByExpert === 'false' ? false : undefined);
+      this.onFetch(this.fetchPage() * this.fetchLimit(), this.fetchLimit()).subscribe(r => {
+        this.projects.set(r.results);
+      })
+    })
+
     this.subscriptions$().push(initProjects$);
     this.subscriptions$().push(querySearch$);
+    this.subscriptions$().push(filterParams$);
   }
 
   ngAfterViewInit() {
@@ -68,6 +80,7 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (target) {
       const scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
+          debounceTime(200),
           concatMap(() => this.onScroll()),
           throttleTime(2000)
         )
@@ -82,17 +95,9 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onScroll() {
-    if (this.projects().length < this.totalProjCount()) {
-      return this.onFetch(this.fetchPage() * this.fetchLimit(), this.fetchLimit()).pipe(
-        tap(({ results }) => {
-          this.projects.update(projects => [...projects, ...results]);
-          if (this.projects().length >= this.totalProjCount()) {
-            console.log("Projects count reached!");
-          } else {
-            this.fetchPage.update(p => p + 1);
-          }
-        })
-      );
+    if (this.projects().length >= this.totalProjCount()) {
+      console.log("All projects loaded, no more fetching.");
+      return of({});
     }
 
     const target = document.querySelector(".office__body");
@@ -109,16 +114,14 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onFetch(offset: number, limit: number) {
     const programId = this.route.parent?.snapshot.params["programId"];
-
-    const observable = this.isListOfAll
-      ? this.projectRatingService.getAll(programId, offset, limit)
-      : this.projectRatingService.getRated(programId, offset, limit);
+    const observable = this.projectRatingService.getAll(programId, offset, limit, this.isRatedByExpert());
 
     return observable.pipe(
       tap(({ count, results }) => {
         this.totalProjCount.set(count);
-        this.projects.update(projects => [...projects, ...results]);
+        this.projects.set(results);
       })
     );
   }
+
 }

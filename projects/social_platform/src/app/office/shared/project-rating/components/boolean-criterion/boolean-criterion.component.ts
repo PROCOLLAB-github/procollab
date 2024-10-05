@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, forwardRef, Input } from "@angular/core";
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
 import { noop } from "rxjs";
 
@@ -10,7 +10,7 @@ import { noop } from "rxjs";
   templateUrl: "./boolean-criterion.component.html",
   styleUrl: "./boolean-criterion.component.scss",
   standalone: true,
-  imports: [IconComponent, FormsModule],
+  imports: [IconComponent],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -42,9 +42,14 @@ export class BooleanCriterionComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  onChanged() {
-    this.isChecked = !this.isChecked;
+  onChanged(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.isChecked = target && target.checked;
     this.onChange(this.isChecked);
     this.onTouched();
+  }
+
+  onClickLog() {
+    this.isChecked = !this.isChecked;
   }
 }

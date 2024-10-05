@@ -13,19 +13,12 @@ import { ProjectRatingCriterionOutput } from "../models/project-rating-criterion
   providedIn: "root",
 })
 export class ProjectRatingService {
-  constructor(private readonly apiService: ApiService) {}
+  constructor(private readonly apiService: ApiService) { }
 
-  getAll(id: number, skip: number, take: number): Observable<ApiPagination<ProjectRate>> {
+  getAll(id: number, skip: number, take: number, isRatedByExpert?: boolean): Observable<ApiPagination<ProjectRate>> {
     return this.apiService.get(
       `/rate-project/${id}`,
-      new HttpParams({ fromObject: { limit: take, offset: skip } })
-    );
-  }
-
-  getRated(id: number, skip: number, take: number): Observable<ApiPagination<ProjectRate>> {
-    return this.apiService.get(
-      `/rate-project/scored/${id}`,
-      new HttpParams({ fromObject: { limit: take, offset: skip } })
+      new HttpParams({ fromObject: { limit: take, offset: skip, ...(isRatedByExpert !== undefined && { isRatedByExpert }) } })
     );
   }
 
