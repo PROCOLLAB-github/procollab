@@ -6,9 +6,13 @@
   }
 
   .filter {
-    display: flex;
-    align-items: center;
     margin-bottom: 24px;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 10px;
+    }
 
     &__left {
       display: flex;
@@ -18,17 +22,35 @@
     }
 
     &__search {
-      width: 80%;
       padding: 10px;
       color: var(--black);
       background-color: var(--white);
       border: 1px solid var(--grey-button);
       border-radius: var(--rounded-lg);
+
+      @include responsive.apply-desktop {
+        width: 55%;
+      }
     }
 
     &__category {
-      width: 28%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
       cursor: pointer;
+
+      @include responsive.apply-desktop {
+        gap: 10px;
+        width: 44%;
+        margin-top: 0;
+      }
+    }
+
+    &__form {
+      width: 55%;
+
+      @include responsive.apply-desktop {}
     }
 
     &__top {
@@ -37,25 +59,34 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      width: 100%;
       padding: 15px 12px;
       color: var(--black);
       background-color: var(--white);
       border: 1px solid var(--grey-button);
       border-radius: var(--rounded-lg);
+
+      @include responsive.apply-desktop {}
     }
 
     &__controls {
       position: absolute;
-      top: 15.8%;
+      top: 29.8%;
       z-index: 50;
       display: flex;
       flex-direction: column;
       gap: 12px;
+      width: 52%;
       padding: 15px 12px;
       background-color: var(--white);
       border: 1px solid var(--grey-button);
       border-bottom-right-radius: var(--rounded-lg);
       border-bottom-left-radius: var(--rounded-lg);
+
+      @include responsive.apply-desktop {
+        top: 16%;
+        width: 12.15%;
+      }
     }
 
     &__tags {
@@ -64,6 +95,14 @@
       align-items: center;
       width: 100%;
       color: var(--black);
+    }
+
+    &__button {
+      width: 45%;
+
+      @include responsive.apply-desktop {
+        width: 100%;
+      }
     }
   }
 }

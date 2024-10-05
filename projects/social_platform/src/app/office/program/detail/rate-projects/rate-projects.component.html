@@ -16,37 +16,35 @@
   </app-bar>
 
   <div class="filter">
-    <div class="filter__left">
-      <div class="filter__search">
-        <form [formGroup]="searchForm">
-          <app-search formControlName="search"></app-search>
-        </form>
-      </div>
-
-      <div class="filter__category" (click)="toggleOpen($event)">
-        <form [formGroup]="filterForm">
-          <div class="filter__top">
-            <p class="text-body-14">Фильтр</p>
-            <i appIcon icon="arrow-no-body" appWidth="14" appHeight="8" appViewBox="0 0 18 9"> </i>
-          </div>
-
-          @if(isOpen){
-          <div class="filter__controls">
-            @for (tag of filterTags; track $index) {
-            <div class="filter__tags" (click)="setValue($event, tag.value)">
-              <app-checkbox
-                [checked]="this.filterForm.get('filterTag')?.value === tag.value"
-              ></app-checkbox>
-              <p class="text-body-14">{{ tag.label }}</p>
-            </div>
-            }
-          </div>
-          }
-        </form>
-      </div>
+    <div class="filter__search">
+      <form [formGroup]="searchForm">
+        <app-search formControlName="search"></app-search>
+      </form>
     </div>
 
-    <app-button style="width: 40%">Найти</app-button>
+    <div class="filter__category" (click)="toggleOpen($event)">
+      <form class="filter__form" [formGroup]="filterForm">
+        <div class="filter__top">
+          <p class="text-body-14">Фильтр</p>
+          <i appIcon icon="arrow-no-body" appWidth="14" appHeight="8" appViewBox="0 0 18 9"> </i>
+        </div>
+
+        @if(isOpen){
+        <div class="filter__controls">
+          @for (tag of filterTags; track $index) {
+          <div class="filter__tags" (click)="setValue($event, tag.value)">
+            <app-checkbox
+              [checked]="this.filterForm.get('filterTag')?.value === tag.value"
+            ></app-checkbox>
+            <p class="text-body-14">{{ tag.label }}</p>
+          </div>
+          }
+        </div>
+        }
+      </form>
+
+      <app-button class="filter__button">Найти</app-button>
+    </div>
   </div>
 
   <div class="rate-project__body">
