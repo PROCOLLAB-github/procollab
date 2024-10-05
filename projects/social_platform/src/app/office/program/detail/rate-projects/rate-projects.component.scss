@@ -49,8 +49,6 @@
 
     &__form {
       width: 55%;
-
-      @include responsive.apply-desktop {}
     }
 
     &__top {
@@ -65,8 +63,6 @@
       background-color: var(--white);
       border: 1px solid var(--grey-button);
       border-radius: var(--rounded-lg);
-
-      @include responsive.apply-desktop {}
     }
 
     &__controls {
