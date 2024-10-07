@@ -17,7 +17,7 @@ import { HttpParams } from "@angular/common/http";
   providedIn: "root",
 })
 export class AuthService {
-  constructor(private apiService: ApiService, private tokenService: TokenService) { }
+  constructor(private apiService: ApiService, private tokenService: TokenService) {}
 
   login({ email, password }: LoginRequest): Observable<LoginResponse> {
     return this.apiService
@@ -38,7 +38,10 @@ export class AuthService {
   }
 
   downloadCV(): Observable<Blob> {
-    return this.apiService.get('/auth/users/download_cv/', new HttpParams, { observe: 'response', responseType: 'blob' });
+    return this.apiService.get("/auth/users/download_cv/", new HttpParams(), {
+      observe: "response",
+      responseType: "blob",
+    });
   }
 
   private profile$ = new ReplaySubject<User>(1);
@@ -130,6 +133,4 @@ export class AuthService {
       .post<User>("/auth/resend_email/", { email })
       .pipe(map(user => plainToInstance(User, user)));
   }
-
-
 }
