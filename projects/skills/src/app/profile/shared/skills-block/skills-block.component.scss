@@ -99,7 +99,7 @@
   align-items: center;
   justify-content: center;
   max-height: calc(100vh - 40px);
-  padding: 40px 0 40px;
+  padding: 40px 0;
   overflow-y: auto;
 
   &__cross {
@@ -134,9 +134,9 @@
   }
 
   &__text {
-    color: var(--grey-for-text);
-    margin-bottom: 37px;
     width: 55%;
+    margin-bottom: 37px;
+    color: var(--grey-for-text);
     text-align: center;
   }
 
@@ -148,14 +148,14 @@
     position: absolute;
     top: -10%;
     left: 0;
-    transform: rotate(180deg);
     z-index: 0;
     width: 100%;
+    transform: rotate(180deg);
   }
 
   &__instruction {
     position: absolute;
-    bottom: 0;
     right: 0;
+    bottom: 0;
   }
 }
