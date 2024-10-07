@@ -37,8 +37,8 @@ export class AuthService {
       .pipe(map(json => plainToInstance(RegisterResponse, json)));
   }
 
-  downloadCV(): Observable<any> {
-    return this.apiService.get('/auth/users/download_cv/', new HttpParams(), { responseType: 'text' })
+  downloadCV(): Observable<Blob> {
+    return this.apiService.get('/auth/users/download_cv/', new HttpParams, { observe: 'response', responseType: 'blob' });
   }
 
   private profile$ = new ReplaySubject<User>(1);
