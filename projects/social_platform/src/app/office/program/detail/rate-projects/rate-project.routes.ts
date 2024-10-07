@@ -4,7 +4,7 @@ import { Routes } from "@angular/router";
 import { RateProjectsComponent } from "@office/program/detail/rate-projects/rate-projects.component";
 import { ListComponent } from "./list/list.component";
 import { ListAllResolver } from "./list/list-all.resolver";
-import { ListRatedResolver } from "./list/list-rated.resolver";
+// import { ListRatedResolver } from "./list/list-rated.resolver";
 
 export const RATE_PROJECTS_ROUTES: Routes = [
   {
@@ -23,13 +23,13 @@ export const RATE_PROJECTS_ROUTES: Routes = [
           data: ListAllResolver,
         },
       },
-      {
-        path: "rated",
-        component: ListComponent,
-        resolve: {
-          data: ListRatedResolver,
-        },
-      },
+      // {
+      //   path: "rated",
+      //   component: ListComponent,
+      //   resolve: {
+      //     data: ListRatedResolver,
+      //   },
+      // },
     ],
   },
 ];
