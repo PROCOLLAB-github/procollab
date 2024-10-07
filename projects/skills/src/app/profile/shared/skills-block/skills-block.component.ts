@@ -9,6 +9,8 @@ import { RouterLink } from "@angular/router";
 import { SkillChooserComponent } from "../skill-chooser/skill-chooser.component";
 import { ProfileService } from "../../services/profile.service";
 import { Profile } from "projects/skills/src/models/profile.model";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { PersonalSkillCardComponent } from "../personal-skill-card/personal-skill-card.component";
 
 @Component({
   selector: "app-skills-block",
@@ -17,26 +19,39 @@ import { Profile } from "projects/skills/src/models/profile.model";
     CommonModule,
     ButtonComponent,
     PersonalRatingCardComponent,
+    PersonalSkillCardComponent,
     NgOptimizedImage,
     IconComponent,
     RouterLink,
-    SkillChooserComponent
+    SkillChooserComponent,
+    ModalComponent,
   ],
   templateUrl: "./skills-block.component.html",
   styleUrl: "./skills-block.component.scss",
 })
 export class SkillsBlockComponent implements OnInit {
-  open = false;
-  profileService = inject(ProfileService);
-  skillsList: Profile['skills'] = [];
+  openSkillChoose = false;
+  openInstruction = false;
 
-  onOpenChange(open: boolean) {
-    this.open = open;
+  profileService = inject(ProfileService);
+  skillsList: Profile["skills"] = [];
+
+  onOpenSkillsChange(open: boolean) {
+    this.openSkillChoose = open;
+  }
+
+  onOpenInstructionChange(open: boolean) {
+    this.openSkillChoose = open;
+  }
+
+  nextStepModal() {
+    this.openInstruction = false;
+    this.openSkillChoose = true;
   }
 
   ngOnInit(): void {
     this.profileService.getProfile().subscribe((r: Profile) => {
-      this.skillsList = r['skills'];
-    })
+      this.skillsList = r["skills"];
+    });
   }
 }

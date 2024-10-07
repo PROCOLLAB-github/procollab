@@ -30,6 +30,7 @@
     background-color: var(--white);
     border-radius: var(--rounded-md);
     transform: translate(-50%, -50%);
+    overflow: hidden;
 
     @include responsive.apply-desktop {
       width: unset;

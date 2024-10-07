@@ -17,8 +17,7 @@ export class ProgressBlockComponent implements OnInit {
   route = inject(ActivatedRoute);
 
   radius = 70;
-  skillsList = signal<Skill[]>([])
-
+  skillsList = signal<Skill[]>([]);
 
   calculateStrokeDashOffset(skill: Skill): number {
     const circumference = 2 * Math.PI * this.radius; // 2 * π * radius
@@ -29,10 +28,11 @@ export class ProgressBlockComponent implements OnInit {
     return 2 * Math.PI * this.radius; // 2 * π * radius
   }
 
-
   ngOnInit(): void {
     this.route.data.subscribe(r => {
-      this.skillsList.set(r['data'].skills.sort((a: any, b: any) => b.skillProgress - a.skillProgress));
+      this.skillsList.set(
+        r["data"].skills.sort((a: any, b: any) => b.skillProgress - a.skillProgress)
+      );
     });
   }
 }

@@ -11,42 +11,50 @@ import { SkillService } from "../../../skills/services/skill.service";
 import { Skill } from "projects/skills/src/models/skill.model";
 import { PersonalSkillCardComponent } from "../personal-skill-card/personal-skill-card.component";
 import { ProfileService } from "../../services/profile.service";
-import { Skill as ProfileSkill } from 'projects/skills/src/models/profile.model';
+import { Skill as ProfileSkill } from "projects/skills/src/models/profile.model";
 
 @Component({
   selector: "app-skill-chooser",
   standalone: true,
-  imports: [CommonModule, PersonalRatingCardComponent, ButtonComponent, ModalComponent, RouterLink, IconComponent, PersonalSkillCardComponent],
+  imports: [
+    CommonModule,
+    PersonalRatingCardComponent,
+    ButtonComponent,
+    ModalComponent,
+    RouterLink,
+    IconComponent,
+    PersonalSkillCardComponent,
+  ],
   templateUrl: "./skill-chooser.component.html",
   styleUrl: "./skill-chooser.component.scss",
 })
-  export class SkillChooserComponent implements OnInit {
-    @Input() open = false;
-    @Output() openChange: EventEmitter<boolean> = new EventEmitter();
+export class SkillChooserComponent implements OnInit {
+  @Input() open = false;
+  @Output() openChange: EventEmitter<boolean> = new EventEmitter();
 
-    route = inject(ActivatedRoute);
-    skillService = inject(SkillService);
-    profileService = inject(ProfileService)
+  route = inject(ActivatedRoute);
+  skillService = inject(SkillService);
+  profileService = inject(ProfileService);
 
-    skillsList = signal<Skill[]>([]);
-    profileIdSkills = signal<ProfileSkill['skillId'][]>([]);
+  skillsList = signal<Skill[]>([]);
+  profileIdSkills = signal<ProfileSkill["skillId"][]>([]);
 
-    ngOnInit(): void {
-      this.skillService.getAll().subscribe(r => {
-        this.skillsList.set(r.results);
-      })
+  ngOnInit(): void {
+    this.skillService.getAll().subscribe(r => {
+      this.skillsList.set(r.results);
+    });
 
-      this.route.data.subscribe(r => {
-        this.profileIdSkills.set(r['data'].skills.map((skill: ProfileSkill) => skill.skillId));
-      })
-    }
-
-    onOpenChange(event: boolean) {
-      this.openChange.emit(event);
-    }
-
-    onCloseModal() {
-      this.openChange.emit(false);
-      this.profileService.addSkill(this.profileIdSkills()).subscribe();
-    }
+    this.route.data.subscribe(r => {
+      this.profileIdSkills.set(r["data"].skills.map((skill: ProfileSkill) => skill.skillId));
+    });
   }
+
+  onOpenChange(event: boolean) {
+    this.openChange.emit(event);
+  }
+
+  onCloseModal() {
+    this.openChange.emit(false);
+    this.profileService.addSkill(this.profileIdSkills()).subscribe();
+  }
+}

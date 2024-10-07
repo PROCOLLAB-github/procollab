@@ -34,6 +34,6 @@ export class ProfileService {
   }
 
   addSkill(skills: number[]) {
-    return this.apiService.post('/progress/add-skills/', skills)
+    return this.apiService.patch("/progress/add-skills/", skills);
   }
 }

@@ -15,11 +15,11 @@ import { ProfileService } from "../services/profile.service";
 })
 export class ProfileSkillsRatingComponent implements OnInit {
   profileService = inject(ProfileService);
-  skillsList: Profile['skills'] = [];
+  skillsList: Profile["skills"] = [];
 
   ngOnInit(): void {
     this.profileService.getProfile().subscribe((r: Profile) => {
-      this.skillsList = r['skills'];
-    })
+      this.skillsList = r["skills"];
+    });
   }
 }
