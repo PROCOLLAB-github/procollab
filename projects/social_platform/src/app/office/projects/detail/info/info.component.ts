@@ -120,6 +120,10 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
           : (this.isUserSubscribed = false);
       });
 
+    this.project$?.subscribe(r => {
+      console.log(r);
+    });
+
     this.subscriptions$.push(news$, profileId$);
   }
 
@@ -165,6 +169,8 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   readAllAchievements = false;
   readAllVacancies = false;
   readAllMembers = false;
+
+  isCompleted = false;
 
   onAddNews(news: { text: string; files: string[] }): void {
     this.projectNewsService
