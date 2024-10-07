@@ -120,10 +120,6 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
           : (this.isUserSubscribed = false);
       });
 
-    this.project$?.subscribe(r => {
-      console.log(r);
-    });
-
     this.subscriptions$.push(news$, profileId$);
   }
 
