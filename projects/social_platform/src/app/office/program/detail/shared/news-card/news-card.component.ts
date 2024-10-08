@@ -86,8 +86,6 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
       type: file.mimeType,
       tempFile: null,
     }));
-
-    console.log(this.newsItem.files);
   }
 
   imagesViewList: FileModel[] = [];
