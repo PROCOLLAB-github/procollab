@@ -23,6 +23,21 @@ jobs:
       - run: npm run format:check
       - run: npm run lint:ts
       - run: npm run build:pr
+      - name: Get Secrets
+        uses: bitwarden/sm-action@v2
+        with:
+          access_token: ${{ secrets.BW_ACCESS_TOKEN }}
+          secrets: |
+            fc3a93f4-2a16-445b-b0c4-aeaf0102f0ff > GITHUB_GPG_PRIVATE_KEY
+            bdbb16bc-0b9b-472e-99fa-af4101309076 > GITHUB_GPG_PRIVATE_KEY_PASSPHRASE
+      - name: Import GPG key
+              uses: crazy-max/ghaction-import-gpg@v6
+              with:
+                gpg_private_key: ${{ env.GITHUB_GPG_PRIVATE_KEY }}
+                passphrase: ${{ env.GITHUB_GPG_PRIVATE_KEY_PASSPHRASE }}
+                git_user_signingkey: true
+                git_commit_gpgsign: true
+                
       - name: Publish preview social
         uses: netlify/actions/cli@master
         id: publish_preview_social
