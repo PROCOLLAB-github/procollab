@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, Input, Output, signal, WritableSignal } from "@angular/core";
+import { Component, computed, inject, Input, Output, signal, WritableSignal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { CheckboxComponent } from "../../../../../../social_platform/src/app/ui/components/checkbox/checkbox.component";
 import { Skill } from "projects/skills/src/models/skill.model";
@@ -25,6 +25,7 @@ export class PersonalSkillCardComponent {
 
   skillsIdList = signal<Skill["id"][]>([]);
   isChecked = signal<boolean>(false);
+  selectedCount = computed(() => this.profileIdSkills().length);
 
   ngOnInit(): void {
     this.skillService.getAll().subscribe(r => {
@@ -35,11 +36,13 @@ export class PersonalSkillCardComponent {
 
   toggleCheck(): void {
     if (!this.isChecked()) {
-      this.profileIdSkills.update(ids => [...ids, this.personalSkillCard.id]);
+      if (this.selectedCount() < 2) {
+        this.profileIdSkills.update(ids => [...ids, this.personalSkillCard.id]);
+        this.isChecked.set(true);
+      }
     } else {
       this.profileIdSkills.update(ids => ids.filter(id => id !== this.personalSkillCard.id));
+      this.isChecked.set(false);
     }
-
-    this.isChecked.set(!this.isChecked());
   }
 }

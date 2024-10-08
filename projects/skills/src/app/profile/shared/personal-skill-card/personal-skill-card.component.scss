@@ -9,6 +9,10 @@
   border: 1px solid var(--grey-button);
   border-radius: 15px;
 
+  &--unpicked {
+    opacity: 60%;
+  }
+
   &__left {
     padding-left: 45px;
     background-image: url("/assets/images/skills/prize.png");
