@@ -1,11 +1,18 @@
 /** @format */
 import { Project } from "@models/project.model";
 import { Skill } from "@office/models/skill";
+import { Program } from "@office/program/models/program.model";
 
 export class Achievement {
   id!: number;
   title!: string;
   status!: string;
+}
+
+export class Education {
+  description!: string;
+  entryYear!: number;
+  organizationName!: string;
 }
 
 export class User {
@@ -23,6 +30,11 @@ export class User {
   skillsIds!: number[];
   isOnline!: boolean;
   isActive!: boolean;
+  v2Speciality!: {
+    id: number;
+    name: string;
+  };
+
   member?: {
     usefulToProject: string;
   };
@@ -47,7 +59,9 @@ export class User {
   city!: string;
   region!: string;
   organization!: string;
+  education!: Education[];
   achievements!: Achievement[];
+  programs!: Program[];
   projects!: Project[];
   subscribedProjects!: Project[];
   timeCreated!: string;
@@ -57,7 +71,6 @@ export class User {
   lastSubscribeDate!: string;
   subscriptionDateOver!: string | null;
   lastSubscriptionType!: string | null;
-
   isAutopayAllowed!: boolean;
 
   doesCompleted(): boolean {

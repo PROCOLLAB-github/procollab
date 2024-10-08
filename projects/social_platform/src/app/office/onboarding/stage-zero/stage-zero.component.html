@@ -42,23 +42,56 @@
       </div>
       }
     </fieldset>
-    } @if (stageForm.get("organization"); as organization) {
+    } @if (education.get("organizationName"); as organizationName) {
     <fieldset class="page__field">
-      <label for="organization" class="field-label">Место учебы/работы</label>
+      <label for="organizationName" class="field-label">Место учебы/работы</label>
       <app-input
-        id="organization"
-        [error]="organization | controlError"
+        id="organizationName"
+        [error]="organizationName | controlError"
         type="text"
         placeholder="Напиши название организации"
-        formControlName="organization"
+        formControlName="organizationName"
       ></app-input>
-      @if (organization | controlError: "required") {
+      @if (organizationName | controlError: "required") {
+      <div class="text-body-14 error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+      }
+    </fieldset>
+    } @if (education.get("entryYear"); as entryYear) {
+    <fieldset class="page__field">
+      <label for="entryYear" class="field-label">Дата окончания</label>
+      <app-input
+        id="entryYear"
+        [error]="entryYear | controlError"
+        type="text"
+        placeholder="2023 год"
+        formControlName="entryYear"
+      ></app-input>
+      @if (entryYear | controlError: "required") {
+      <div class="text-body-14 error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+      }
+    </fieldset>
+    } @if (education.get("description"); as description) {
+    <fieldset class="page__field">
+      <label for="description" class="field-label">Краткое описане</label>
+      <app-input
+        id="shortDescription"
+        [error]="description | controlError"
+        type="text"
+        placeholder="Востоковедение и Африканистика"
+        formControlName="description"
+      ></app-input>
+      @if (description | controlError: "required") {
       <div class="text-body-14 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
       }
     </fieldset>
     }
+
     <app-button type="submit" [loader]="stageSubmitting">Продолжить</app-button>
   </form>
 </div>

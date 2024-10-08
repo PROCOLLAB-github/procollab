@@ -11,7 +11,7 @@ import { Component, Input, OnInit } from "@angular/core";
 export class TagComponent implements OnInit {
   constructor() {}
 
-  @Input() color: "primary" | "accent" = "primary";
+  @Input() color: "primary" | "accent" | "complete" = "primary";
 
   ngOnInit(): void {}
 }

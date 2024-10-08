@@ -1,6 +1,7 @@
 /** @format */
 
 .tag {
+  display: flex;
   align-items: center;
   max-width: 300px;
   padding: 5px 10px;
@@ -19,8 +20,13 @@
     background-color: var(--accent);
   }
 
+  &--complete {
+    color: var(--white);
+    background-color: var(--green);
+  }
+
   ::ng-deep {
-    > * {
+    >* {
       &:not(:last-child) {
         margin-right: 10px;
       }

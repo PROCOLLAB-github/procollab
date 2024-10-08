@@ -84,6 +84,17 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       userType: [0],
       birthday: ["", [Validators.required]],
       city: [""],
+      additionalRole: [""],
+      organizationName: [""],
+      entryYear: [""],
+      description: [""],
+      education: this.fb.array([
+        this.fb.group({
+          organizationName: [""],
+          entryYear: [""],
+          description: [""],
+        }),
+      ]),
       links: this.fb.array([]),
       organization: [""],
       speciality: ["", [Validators.required]],
@@ -114,6 +125,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(noop);
 
     userAvatar$ && this.subscription$.push(userAvatar$);
+
+    console.log(this.education.value, this.educationItems());
   }
 
   ngAfterViewInit() {
@@ -128,6 +141,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         userType: profile.userType ?? 1,
         birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
         city: profile.city ?? "",
+        education: profile.education ?? [],
+        additionalRole: profile.v2Speciality.name ?? "",
         organization: profile.organization ?? "",
         speciality: profile.speciality ?? "",
         skills: profile.skills ?? [],
@@ -185,6 +200,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   skillsGroupsModalOpen = signal(false);
 
+  educationItems = signal<any[]>([]);
+
   subscription$: Subscription[] = [];
 
   get typeSpecific(): FormGroup {
@@ -221,6 +238,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.profileForm.get("achievements") as FormArray;
   }
 
+  get education(): FormArray {
+    return this.profileForm.get("education") as FormArray;
+  }
+
   errorMessage = ErrorMessage;
 
   roles: Observable<SelectComponent["options"]> = this.authService.changeableRoles.pipe(
@@ -242,6 +263,32 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   removeAchievement(i: number): void {
     this.achievements.removeAt(i);
+  }
+
+  addEducation() {
+    const educationItem = this.fb.group({
+      organizationName: this.profileForm.get("organizationName")?.value,
+      entryYear: this.profileForm.get("entryYear")?.value,
+      description: this.profileForm.get("description")?.value,
+    });
+
+    this.educationItems.update(items => [...items, educationItem.value]);
+
+    this.profileForm.get("organizationName")?.reset();
+    this.profileForm.get("entryYear")?.reset();
+    this.profileForm.get("description")?.reset();
+
+    this.education.push(educationItem);
+
+    console.log(this.educationItems(), this.education.value, this.profileForm.value);
+  }
+
+  removeEducation(i: number) {
+    this.educationItems.update(items => items.filter((_, index) => index !== i));
+
+    this.education.removeAt(i);
+
+    console.log(this.educationItems(), this.education.value, this.profileForm.value);
   }
 
   get links(): FormArray {

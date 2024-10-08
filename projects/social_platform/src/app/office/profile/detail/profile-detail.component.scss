@@ -35,6 +35,17 @@ $detail-bar-mb: 12px;
     max-height: calc(100% - #{$detail-bar-height} - #{$detail-bar-mb});
     padding-bottom: 12px;
   }
+
+  &__btns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+    }
+  }
 }
 
 .info {

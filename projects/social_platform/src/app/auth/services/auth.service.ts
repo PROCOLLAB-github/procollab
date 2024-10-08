@@ -11,6 +11,7 @@ import {
   RegisterResponse,
 } from "../models/http.model";
 import { User, UserRole } from "../models/user.model";
+import { HttpParams } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
@@ -34,6 +35,12 @@ export class AuthService {
     return this.apiService
       .post("/auth/users/", data)
       .pipe(map(json => plainToInstance(RegisterResponse, json)));
+  }
+
+  downloadCV(): Observable<Blob> {
+    return this.apiService.get("/auth/users/download_cv/", new HttpParams(), {
+      responseType: "blob",
+    });
   }
 
   private profile$ = new ReplaySubject<User>(1);
