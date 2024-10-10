@@ -42,3 +42,5 @@ jobs:
       #     remote_user: gh_deploy
       #     remote_key: ${{ secrets.DEPLOY_KEY }}
       #     remote_host: app.procollab.ru
+        docker compose -f docker-compose.deploy.yml stop &&
+        docker compose -f docker-compose.deploy.yml up --build -d
