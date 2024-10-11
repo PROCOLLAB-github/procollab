@@ -18,14 +18,14 @@
           <p><span class="skills_pages-start">1</span>/{{ skillsList.length }}</p>
           <i appIcon icon="left-arrow" class="skills_pages-next skills_pages-icon"></i>
         </div>
-        <app-button (click)="openSkillChoose = !openSkillChoose">Перейти</app-button>
+        <app-button routerLink="/profile/skills">Перейти</app-button>
       </div>
       }
     </div>
   </div>
-  @if (!skillsList.length) {
+  <!-- @if (!skillsList.length) {
   <app-button routerLink="/profile/skills">Все навыки</app-button>
-  }
+  } -->
 </div>
 
 <app-modal [open]="openInstruction" (openChange)="onOpenInstructionChange($event)">
