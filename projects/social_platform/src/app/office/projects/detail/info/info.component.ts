@@ -166,6 +166,8 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   readAllVacancies = false;
   readAllMembers = false;
 
+  isCompleted = false;
+
   onAddNews(news: { text: string; files: string[] }): void {
     this.projectNewsService
       .addNews(this.route.snapshot.params["projectId"], news)
