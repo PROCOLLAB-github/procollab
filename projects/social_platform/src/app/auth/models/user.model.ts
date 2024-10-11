@@ -13,6 +13,7 @@ export class Education {
   description!: string;
   entryYear!: number;
   organizationName!: string;
+  position!: string;
 }
 
 export class User {
@@ -57,9 +58,12 @@ export class User {
   speciality!: string;
   userType!: number;
   city!: string;
+  phoneNumber!: number;
   region!: string;
   organization!: string;
   education!: Education[];
+  userLanguage!: any[];
+  workExperience!: any[];
   achievements!: Achievement[];
   programs!: Program[];
   projects!: Project[];

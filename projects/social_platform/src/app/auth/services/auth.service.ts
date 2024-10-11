@@ -12,6 +12,7 @@ import {
 } from "../models/http.model";
 import { User, UserRole } from "../models/user.model";
 import { HttpParams } from "@angular/common/http";
+import { atob } from "js-base64";
 
 @Injectable({
   providedIn: "root",
@@ -38,9 +39,18 @@ export class AuthService {
   }
 
   downloadCV(): Observable<Blob> {
-    return this.apiService.get("/auth/users/download_cv/", new HttpParams(), {
-      responseType: "blob",
-    });
+    return this.apiService
+      .get("/auth/users/download_cv/", new HttpParams(), {
+        responseType: "text",
+        params: new HttpParams(),
+      })
+      .pipe(
+        map((response: any) => {
+          // const decodedPdf = atob(response);
+          const blob = new Blob([response], { type: "application/pdf" });
+          return blob;
+        })
+      );
   }
 
   private profile$ = new ReplaySubject<User>(1);

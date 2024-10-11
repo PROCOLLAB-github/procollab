@@ -54,7 +54,7 @@ export class ProfileDetailComponent implements OnInit {
 
   downloadCV() {
     this.authService.downloadCV().subscribe({
-      next: (response: Blob) => {
+      next: response => {
         const url = window.URL.createObjectURL(response);
         const a = document.createElement("a");
         a.href = url;

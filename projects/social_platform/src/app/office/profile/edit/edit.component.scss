@@ -77,6 +77,10 @@
     margin-bottom: 20px;
   }
 
+  &__language {
+    margin-top: 20px;
+  }
+
   &__add-achievement {
     display: block;
   }
@@ -148,6 +152,18 @@
     gap: 20px;
   }
 
+  &__years {
+    display: flex;
+    align-items: center;
+    margin: 10px 0px;
+    gap: 20px;
+
+    .years__left,
+    .years__right {
+      width: 50%;
+    }
+  }
+
   &__info {
     display: flex;
     align-items: center;
@@ -164,7 +180,7 @@
   }
 
   .basket {
-    color: var(--red);
+    color: var(--dark-grey);
   }
 }
 

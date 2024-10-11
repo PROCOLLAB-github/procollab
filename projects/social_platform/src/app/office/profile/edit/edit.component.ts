@@ -64,6 +64,7 @@ dayjs.extend(cpf);
     SkillsGroupComponent,
     SpecializationsGroupComponent,
     ModalComponent,
+    SelectComponent,
   ],
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -84,19 +85,48 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       userType: [0],
       birthday: ["", [Validators.required]],
       city: [""],
+      phoneNumber: [""],
       additionalRole: [""],
       organizationName: [""],
       entryYear: [""],
+      completionYear: [""],
       description: [""],
+      position: [""],
+      educationLevel: [""],
+      language: [""],
+      languageLevel: [null],
+      educationStatus: [null],
       education: this.fb.array([
         this.fb.group({
           organizationName: [""],
           entryYear: [""],
+          completionYear: [""],
           description: [""],
+          educationStatus: [null],
+          educationLevel: [null],
+        }),
+      ]),
+      workExperience: this.fb.array([
+        this.fb.group({
+          organizationName: [""],
+          entryYear: [""],
+          completionYear: [""],
+          description: [""],
+          jobPosition: [null],
+        }),
+      ]),
+      userLanguages: this.fb.array([
+        this.fb.group({
+          language: [""],
+          languageLevel: [""],
         }),
       ]),
       links: this.fb.array([]),
       organization: [""],
+      entryYearWork: [""],
+      completionYearWork: [""],
+      descriptionWork: [""],
+      jobPosition: [null],
       speciality: ["", [Validators.required]],
       skills: [[], [Validators.required]],
       achievements: this.fb.array([]),
@@ -125,8 +155,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(noop);
 
     userAvatar$ && this.subscription$.push(userAvatar$);
-
-    console.log(this.education.value, this.educationItems());
   }
 
   ngAfterViewInit() {
@@ -141,9 +169,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         userType: profile.userType ?? 1,
         birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
         city: profile.city ?? "",
+        phoneNumber: profile.phoneNumber ?? "",
         education: profile.education ?? [],
+        userLanguage: profile.userLanguage ?? [],
+        workExperience: profile.workExperience ?? [],
         additionalRole: profile.v2Speciality.name ?? "",
-        organization: profile.organization ?? "",
         speciality: profile.speciality ?? "",
         skills: profile.skills ?? [],
         avatar: profile.avatar ?? "",
@@ -202,7 +232,281 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   educationItems = signal<any[]>([]);
 
+  workItems = signal<any[]>([]);
+
+  languageItems = signal<any[]>([]);
+
   subscription$: Subscription[] = [];
+
+  yearListEducation = [
+    {
+      value: 2000,
+      id: 0,
+      label: "2000",
+    },
+    {
+      value: 2001,
+      id: 1,
+      label: "2001",
+    },
+    {
+      value: 2002,
+      id: 2,
+      label: "2002",
+    },
+    {
+      value: 2003,
+      id: 3,
+      label: "2003",
+    },
+    {
+      value: 2004,
+      id: 4,
+      label: "2004",
+    },
+    {
+      value: 2005,
+      id: 5,
+      label: "2005",
+    },
+    {
+      value: 2006,
+      id: 6,
+      label: "2006",
+    },
+    {
+      value: 2007,
+      id: 7,
+      label: "2007",
+    },
+    {
+      value: 2008,
+      id: 8,
+      label: "2008",
+    },
+    {
+      value: 2009,
+      id: 9,
+      label: "2009",
+    },
+    {
+      value: 2010,
+      id: 10,
+      label: "2010",
+    },
+    {
+      value: 2011,
+      id: 11,
+      label: "2011",
+    },
+    {
+      value: 2012,
+      id: 12,
+      label: "2012",
+    },
+    {
+      value: 2013,
+      id: 13,
+      label: "2013",
+    },
+    {
+      value: 2014,
+      id: 14,
+      label: "2014",
+    },
+    {
+      value: 2015,
+      id: 15,
+      label: "2015",
+    },
+    {
+      value: 2016,
+      id: 16,
+      label: "2016",
+    },
+    {
+      value: 2017,
+      id: 17,
+      label: "2017",
+    },
+    {
+      value: 2018,
+      id: 18,
+      label: "2018",
+    },
+    {
+      value: 2019,
+      id: 19,
+      label: "2019",
+    },
+    {
+      value: 2020,
+      id: 20,
+      label: "2020",
+    },
+    {
+      value: 2021,
+      id: 21,
+      label: "2021",
+    },
+    {
+      value: 2022,
+      id: 22,
+      label: "2022",
+    },
+    {
+      value: 2023,
+      id: 23,
+      label: "2023",
+    },
+    {
+      label: "2024",
+      id: 24,
+      value: "2024",
+    },
+  ];
+
+  educationStatusList = [
+    {
+      id: 0,
+      value: 0,
+      label: "Ученик",
+    },
+    {
+      id: 1,
+      value: 1,
+      label: "Студент",
+    },
+    {
+      id: 2,
+      value: 2,
+      label: "Выпускник",
+    },
+  ];
+
+  educationLevelList = [
+    {
+      id: 0,
+      value: 0,
+      label: "Среднее общее образование",
+    },
+    {
+      id: 1,
+      value: 1,
+      label: "Среднее профессиональное образование",
+    },
+    {
+      id: 2,
+      value: 2,
+      label: "Высшее образование – бакалавриат, специалитет",
+    },
+    {
+      id: 3,
+      value: 3,
+      label: "Высшее образование – магистратура",
+    },
+    {
+      id: 4,
+      value: 4,
+      label: "Высшее образование – аспирантура",
+    },
+  ];
+
+  languageList = [
+    {
+      id: 0,
+      value: 0,
+      label: "Английский",
+    },
+    {
+      id: 1,
+      value: 1,
+      label: "Испанский",
+    },
+    {
+      id: 2,
+      value: 2,
+      label: "Итальянский",
+    },
+    {
+      id: 3,
+      value: 3,
+      label: "Немецкий",
+    },
+    {
+      id: 4,
+      value: 4,
+      label: "Японский",
+    },
+    {
+      id: 5,
+      value: 5,
+      label: "Китайский",
+    },
+    {
+      id: 6,
+      value: 6,
+      label: "Арабский",
+    },
+    {
+      id: 7,
+      value: 7,
+      label: "Шведский",
+    },
+    {
+      id: 8,
+      value: 8,
+      label: "Польский",
+    },
+    {
+      id: 9,
+      value: 9,
+      label: "Чешский",
+    },
+    {
+      id: 10,
+      value: 10,
+      label: "Русский",
+    },
+    {
+      id: 11,
+      value: 11,
+      label: "Французский",
+    },
+  ];
+
+  languageLevelList = [
+    {
+      id: 0,
+      value: 0,
+      label: "A1",
+    },
+    {
+      id: 1,
+      value: 1,
+      label: "A2",
+    },
+    {
+      id: 2,
+      value: 2,
+      label: "B1",
+    },
+    {
+      id: 3,
+      value: 3,
+      label: "B2",
+    },
+    {
+      id: 4,
+      value: 4,
+      label: "C1",
+    },
+    {
+      id: 5,
+      value: 5,
+      label: "C2",
+    },
+  ];
 
   get typeSpecific(): FormGroup {
     return this.profileForm.get("typeSpecific") as FormGroup;
@@ -242,6 +546,14 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.profileForm.get("education") as FormArray;
   }
 
+  get workExperience(): FormArray {
+    return this.profileForm.get("workExperience") as FormArray;
+  }
+
+  get userLanguages(): FormArray {
+    return this.profileForm.get("language") as FormArray;
+  }
+
   errorMessage = ErrorMessage;
 
   roles: Observable<SelectComponent["options"]> = this.authService.changeableRoles.pipe(
@@ -269,14 +581,21 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     const educationItem = this.fb.group({
       organizationName: this.profileForm.get("organizationName")?.value,
       entryYear: this.profileForm.get("entryYear")?.value,
+      completionYear: this.profileForm.get("completionYear")?.value,
       description: this.profileForm.get("description")?.value,
+      educationStatus: this.profileForm.get("educationStatus")?.value,
+      educationLevel: this.profileForm.get("educationLevel")?.value,
     });
 
     this.educationItems.update(items => [...items, educationItem.value]);
 
     this.profileForm.get("organizationName")?.reset();
     this.profileForm.get("entryYear")?.reset();
+    this.profileForm.get("completionYear")?.reset();
+
     this.profileForm.get("description")?.reset();
+    this.profileForm.get("educationStatus")?.reset();
+    this.profileForm.get("educationLevel")?.reset();
 
     this.education.push(educationItem);
 
@@ -289,6 +608,61 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.education.removeAt(i);
 
     console.log(this.educationItems(), this.education.value, this.profileForm.value);
+  }
+
+  addWork() {
+    const workItem = this.fb.group({
+      organizationName: this.profileForm.get("organization")?.value,
+      entryYearWork: this.profileForm.get("entryYearWork")?.value,
+      completionYearWork: this.profileForm.get("completionYearWork")?.value,
+      descriptionWork: this.profileForm.get("descriptionWork")?.value,
+      jobPosition: this.profileForm.get("jobPosition")?.value,
+    });
+
+    this.workItems.update(items => [...items, workItem.value]);
+
+    this.profileForm.get("organization")?.reset();
+    this.profileForm.get("entryYearWork")?.reset();
+    this.profileForm.get("completionYearWork")?.reset();
+
+    this.profileForm.get("descriptionWork")?.reset();
+    this.profileForm.get("jobPosition")?.reset();
+
+    this.workExperience.push(workItem);
+
+    console.log(this.workItems(), this.workExperience.value, this.profileForm.value);
+  }
+
+  removeWork(i: number) {
+    this.workItems.update(items => items.filter((_, index) => index !== i));
+
+    this.workExperience.removeAt(i);
+
+    console.log(this.workItems(), this.workExperience.value, this.profileForm.value);
+  }
+
+  addLanguage() {
+    const languageItem = this.fb.group({
+      language: this.profileForm.get("language")?.value,
+      languageLevel: this.profileForm.get("languageLevel")?.value,
+    });
+
+    this.languageItems.update(items => [...items, languageItem.value]);
+
+    this.profileForm.get("language")?.reset();
+    this.profileForm.get("languageLevel")?.reset();
+
+    this.userLanguages.push(languageItem);
+
+    console.log(this.languageItems(), this.userLanguages.value, this.profileForm.value);
+  }
+
+  removeLanguage(i: number) {
+    this.languageItems.update(items => items.filter((_, index) => index !== i));
+
+    this.userLanguages.removeAt(i);
+
+    console.log(this.languageItems(), this.userLanguages.value, this.profileForm.value);
   }
 
   get links(): FormArray {
