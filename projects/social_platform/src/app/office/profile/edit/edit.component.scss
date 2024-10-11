@@ -154,9 +154,9 @@
 
   &__years {
     display: flex;
-    align-items: center;
-    margin: 10px 0px;
     gap: 20px;
+    align-items: center;
+    margin: 10px 0;
 
     .years__left,
     .years__right {
