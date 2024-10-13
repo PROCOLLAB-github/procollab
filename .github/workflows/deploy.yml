@@ -38,8 +38,6 @@ jobs:
             git pull origin master &&
             ng build social_platform
 
-
-          
       # - name: deploy to server
       #   uses: burnett01/rsync-deployments@5.2.1
       #   with:

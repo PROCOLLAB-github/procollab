@@ -246,13 +246,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   editingStep: "main" | "team" | "achievements" = "main";
 
+  isCompleted: boolean = false;
+
   profile$?: Subscription;
 
   errorMessage = ErrorMessage;
 
   errorModalMessage = signal<{
-    programName: string;
-    whenCanEdit: Date;
+    program_name: string;
+    whenCanEdit: string;
     daysUntilResolution: string;
   } | null>(null);
 
@@ -507,8 +509,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         error: (error: unknown) => {
           if (error instanceof HttpErrorResponse) {
-            if (error.status === 400) {
-              console.log(error.error.error);
+            if (error.status === 403) {
+              if (error.error) {
+                this.isCompleted = true;
+                this.errorModalMessage.set(error.error);
+                console.log(this.errorModalMessage()?.program_name);
+              }
             }
           }
           this.setProjFormIsSubmitting(false);
