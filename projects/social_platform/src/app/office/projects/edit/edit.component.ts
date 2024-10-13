@@ -172,7 +172,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           })
         )
       )
-      .subscribe(() => {});
+      .subscribe(() => { });
   }
 
   ngAfterViewInit(): void {
@@ -246,7 +246,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   editingStep: "main" | "team" | "achievements" = "main";
 
-  isCompleted: boolean = false;
+  isCompleted = false;
 
   profile$?: Subscription;
 
