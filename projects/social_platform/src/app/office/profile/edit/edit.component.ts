@@ -156,34 +156,39 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.workExperience.clear();
       profile.workExperience.forEach(work => {
-        this.workExperience.push(this.fb.group({
-          organizationName: work.organizationName,
-          entryYear: work.entryYear,
-          completionYear: work.completionYear,
-          description: work.description,
-          jobPosition: work.jobPosition,
-        }));
+        this.workExperience.push(
+          this.fb.group({
+            organizationName: work.organizationName,
+            entryYear: work.entryYear,
+            completionYear: work.completionYear,
+            description: work.description,
+            jobPosition: work.jobPosition,
+          })
+        );
       });
 
       this.education.clear();
       profile.education.forEach(edu => {
-        this.education.push(this.fb.group({
-          organizationName: edu.organizationName,
-          entryYear: edu.entryYear,
-          completionYear: edu.completionYear,
-          description: edu.description,
-          educationStatus: edu.educationStatus,
-          educationLevel: edu.educationLevel,
-        }));
+        this.education.push(
+          this.fb.group({
+            organizationName: edu.organizationName,
+            entryYear: edu.entryYear,
+            completionYear: edu.completionYear,
+            description: edu.description,
+            educationStatus: edu.educationStatus,
+            educationLevel: edu.educationLevel,
+          })
+        );
       });
-
 
       this.userLanguages.clear();
       profile.userLanguages.forEach(lang => {
-        this.userLanguages.push(this.fb.group({
-          language: lang.language,
-          languageLevel: lang.languageLevel,
-        }));
+        this.userLanguages.push(
+          this.fb.group({
+            language: lang.language,
+            languageLevel: lang.languageLevel,
+          })
+        );
       });
 
       this.cdref.detectChanges();
@@ -375,17 +380,17 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   educationStatusList = [
     {
       id: 0,
-      value: 'Ученик',
+      value: "Ученик",
       label: "Ученик",
     },
     {
       id: 1,
-      value: 'Студент',
+      value: "Студент",
       label: "Студент",
     },
     {
       id: 2,
-      value: 'Выпускник',
+      value: "Выпускник",
       label: "Выпускник",
     },
   ];
@@ -561,7 +566,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   errorMessage = ErrorMessage;
-  errorMessagePhoneNumber = ''
+  errorMessagePhoneNumber = "";
 
   roles: Observable<SelectComponent["options"]> = this.authService.changeableRoles.pipe(
     map(roles => roles.map(role => ({ id: role.id, value: role.id, label: role.name })))
@@ -701,7 +706,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
             .navigateByUrl(`/office/profile/${this.profileId}`)
             .then(() => console.debug("Router Changed form ProfileEditComponent"));
         },
-        error: (error) => {
+        error: error => {
           this.profileFormSubmitting = false;
           if (error.error.phone_number) {
             this.errorMessagePhoneNumber = error.error.phone_number[0];

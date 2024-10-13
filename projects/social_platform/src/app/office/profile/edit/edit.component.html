@@ -361,8 +361,8 @@
       </div>
 
       <div class="profile__row education__block">
-        @if(workItems().length || workExperience.length){ @for (workItem of
-        workExperience.value; track $index) {
+        @if(workItems().length || workExperience.length){ @for (workItem of workExperience.value;
+        track $index) {
         <div class="education__info">
           <p class="text-body-16 education__text">
             {{ workItem.organizationName }} {{ workItem.entryYear }} -

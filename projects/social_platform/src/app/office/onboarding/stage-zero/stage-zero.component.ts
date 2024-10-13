@@ -207,17 +207,17 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   educationStatusList = [
     {
       id: 0,
-      value: 'Ученик',
+      value: "Ученик",
       label: "Ученик",
     },
     {
       id: 1,
-      value: 'Студент',
+      value: "Студент",
       label: "Студент",
     },
     {
       id: 2,
-      value: 'Выпускник',
+      value: "Выпускник",
       label: "Выпускник",
     },
   ];
@@ -250,7 +250,6 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
     },
   ];
 
-
   stageForm: FormGroup;
   errorMessage = ErrorMessage;
   profile?: User;
@@ -258,11 +257,11 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   subscriptions$: Subscription[] = [];
 
   get education(): FormArray {
-    return this.stageForm.get('education') as FormArray;
+    return this.stageForm.get("education") as FormArray;
   }
 
   get workExperience(): FormArray {
-    return this.stageForm.get('workExperience') as FormArray;
+    return this.stageForm.get("workExperience") as FormArray;
   }
 
   onSubmit(): void {
@@ -271,21 +270,21 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
     }
 
     const educationItem = this.fb.group({
-      organizationName: this.stageForm.get('organizationName')?.value,
-      entryYear: this.stageForm.get('entryYear')?.value,
-      completionYear: this.stageForm.get('completionYear')?.value,
-      description: this.stageForm.get('description')?.value,
-      educationStatus: this.stageForm.get('educationStatus')?.value,
-      educationLevel: this.stageForm.get('educationLevel')?.value,
-    })
+      organizationName: this.stageForm.get("organizationName")?.value,
+      entryYear: this.stageForm.get("entryYear")?.value,
+      completionYear: this.stageForm.get("completionYear")?.value,
+      description: this.stageForm.get("description")?.value,
+      educationStatus: this.stageForm.get("educationStatus")?.value,
+      educationLevel: this.stageForm.get("educationLevel")?.value,
+    });
 
     const workItem = this.fb.group({
-      organizationName: this.stageForm.get('organizationNameWork')?.value,
-      entryYear: this.stageForm.get('entryYearWork')?.value,
-      completionYear: this.stageForm.get('completionYearWork')?.value,
-      description: this.stageForm.get('descriptionWork')?.value,
-      jobPosition: this.stageForm.get('jobPosition')?.value,
-    })
+      organizationName: this.stageForm.get("organizationNameWork")?.value,
+      entryYear: this.stageForm.get("entryYearWork")?.value,
+      completionYear: this.stageForm.get("completionYearWork")?.value,
+      description: this.stageForm.get("descriptionWork")?.value,
+      jobPosition: this.stageForm.get("jobPosition")?.value,
+    });
 
     this.education.push(educationItem);
     this.workExperience.push(workItem);
