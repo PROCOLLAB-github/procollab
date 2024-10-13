@@ -42,55 +42,205 @@
       </div>
       }
     </fieldset>
-    } @if (education.get("organizationName"); as organizationName) {
-    <fieldset class="page__field">
-      <label for="organizationName" class="field-label">Место учебы/работы</label>
-      <app-input
-        id="organizationName"
-        [error]="organizationName | controlError"
-        type="text"
-        placeholder="Напиши название организации"
-        formControlName="organizationName"
-      ></app-input>
-      @if (organizationName | controlError: "required") {
-      <div class="text-body-14 error">
-        {{ errorMessage.VALIDATION_REQUIRED }}
-      </div>
-      }
-    </fieldset>
-    } @if (education.get("entryYear"); as entryYear) {
-    <fieldset class="page__field">
-      <label for="entryYear" class="field-label">Дата окончания</label>
-      <app-input
-        id="entryYear"
-        [error]="entryYear | controlError"
-        type="text"
-        placeholder="2023 год"
-        formControlName="entryYear"
-      ></app-input>
-      @if (entryYear | controlError: "required") {
-      <div class="text-body-14 error">
-        {{ errorMessage.VALIDATION_REQUIRED }}
-      </div>
-      }
-    </fieldset>
-    } @if (education.get("description"); as description) {
-    <fieldset class="page__field">
-      <label for="description" class="field-label">Краткое описане</label>
-      <app-input
-        id="shortDescription"
-        [error]="description | controlError"
-        type="text"
-        placeholder="Востоковедение и Африканистика"
-        formControlName="description"
-      ></app-input>
-      @if (description | controlError: "required") {
-      <div class="text-body-14 error">
-        {{ errorMessage.VALIDATION_REQUIRED }}
-      </div>
-      }
-    </fieldset>
     }
+
+    <div class="page__first-row">
+      <p class="text-bold-body-14">Образование</p>
+
+      <div class="page__years">
+        @if (stageForm.get("entryYear"); as entryYear) {
+        <fieldset class="years__left">
+          <label for="entryYear" class="field-label">Дата начала</label>
+          <app-select
+            formControlName="entryYear"
+            placeholder="2023 год"
+            [options]="yearListEducation"
+          >
+            <i appIcon icon="arrow-no-body" appSquare="32"></i>
+          </app-select>
+
+          @if (entryYear | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (stageForm.get("completionYear"); as completionYear) {
+        <fieldset class="years__right">
+          <label for="completionYear" class="field-label">Дата окончания</label>
+          <app-select
+            formControlName="completionYear"
+            placeholder="2023 год"
+            [options]="yearListEducation.slice(5)"
+          >
+            <i appIcon icon="arrow-no-body" appSquare="32"></i>
+          </app-select>
+          @if (completionYear | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        }
+      </div>
+
+      @if (stageForm.get("organizationName"); as organizationName) {
+      <fieldset class="page__field">
+        <label for="organizationName" class="field-label">Название учреждения</label>
+        <app-input
+          id="organizationName"
+          [error]="organizationName | controlError"
+          type="text"
+          placeholder="ВУЗ / коллежд / школа"
+          formControlName="organizationName"
+        ></app-input>
+        @if (organizationName | controlError: "required") {
+        <div class="text-body-14 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (stageForm.get("description"); as description) {
+      <fieldset class="page__field">
+        <label for="description" class="field-label">Краткое описане</label>
+        <app-input
+          id="description"
+          [error]="description | controlError"
+          type="text"
+          placeholder="Востоковедение и Африканистика"
+          formControlName="description"
+        ></app-input>
+        @if (description | controlError: "required") {
+        <div class="text-body-14 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (stageForm.get("educationLevel"); as educationLevel) {
+      <fieldset>
+        <label for="educationLevel" class="field-label">Уровень образования</label>
+        <app-select
+          formControlName="educationLevel"
+          placeholder="Высшее образование-магистратура"
+          [options]="educationLevelList"
+        >
+          <i appIcon icon="arrow-no-body" appSquare="32"></i>
+        </app-select>
+        @if (educationLevel | controlError: "required") {
+        <div class="text-body-14 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (stageForm.get("educationStatus"); as educationStatus) {
+      <fieldset>
+        <label for="educationStatus" class="field-label">Должность</label>
+        <app-select
+          formControlName="educationStatus"
+          placeholder="Студент"
+          [options]="educationStatusList"
+        >
+          <i appIcon icon="arrow-no-body" appSquare="32"></i>
+        </app-select>
+        @if (educationStatus | controlError: "required") {
+        <div class="text-body-14 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+
+    <div class="page__first-row">
+      <p class="text-bold-body-14">Место работы</p>
+      <div class="page__years">
+        @if (stageForm.get("entryYearWork"); as entryYearWork) {
+        <fieldset class="years__left">
+          <label for="entryYearWork" class="field-label">Дата начала</label>
+          <app-select
+            formControlName="entryYearWork"
+            placeholder="2023 год"
+            [options]="yearListEducation"
+          >
+            <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__entry"></i>
+          </app-select>
+
+          @if (entryYearWork | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (stageForm.get("completionYearWork"); as completionYearWork) {
+        <fieldset class="years__right">
+          <label for="completionYearWork" class="field-label">Дата окончания</label>
+          <app-select
+            formControlName="completionYearWork"
+            placeholder="2023 год"
+            [options]="yearListEducation"
+          >
+            <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+          </app-select>
+
+          @if (completionYearWork | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        }
+      </div>
+
+      @if ( stageForm.get("organizationNameWork"); as organizationNameWork) {
+      <fieldset>
+        <label for="organizationNameWork" class="field-label">Название</label>
+        <app-input
+          id="organizationNameWork"
+          [error]="organizationNameWork | controlError"
+          type="text"
+          placeholder="Проколлаб"
+          formControlName="organizationNameWork"
+        ></app-input>
+        @if (organizationNameWork | controlError: "required") {
+        <div class="text-body-14 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (stageForm.get("descriptionWork"); as descriptionWork) {
+      <fieldset>
+        <label for="descriptionWork" class="field-label">Краткое описание</label>
+        <app-input
+          id="descriptionWork"
+          [error]="descriptionWork | controlError"
+          type="text"
+          placeholder="Образовательная платформа"
+          formControlName="descriptionWork"
+        ></app-input>
+        @if (descriptionWork | controlError: "required") {
+        <div class="text-body-14 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (stageForm.get("jobPosition"); as jobPosition) {
+      <fieldset>
+        <label for="jobPosition" class="field-label">Должность</label>
+        <app-input
+          id="jobPosition"
+          [error]="jobPosition | controlError"
+          type="text"
+          placeholder="Дизайнер"
+          formControlName="jobPosition"
+        ></app-input>
+        @if (jobPosition | controlError: "required") {
+        <div class="text-body-14 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
 
     <app-button type="submit" [loader]="stageSubmitting">Продолжить</app-button>
   </form>

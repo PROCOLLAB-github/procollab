@@ -57,7 +57,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly profileNewsService: ProfileNewsService,
     private readonly profileApproveSkillService: ProfileService,
     private readonly cdRef: ChangeDetectorRef
-  ) {}
+  ) { }
 
   subscriptions$: Subscription[] = [];
 
@@ -93,6 +93,8 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
 
     this.cdRef.detectChanges();
+
+    this.authService.getProfile().subscribe(r => console.log(r));
   }
 
   ngOnDestroy(): void {
@@ -125,7 +127,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     const newsIdx = this.news().findIndex(n => n.id === newsId);
     this.news().splice(newsIdx, 1);
 
-    this.profileNewsService.delete(this.route.snapshot.params["id"], newsId).subscribe(() => {});
+    this.profileNewsService.delete(this.route.snapshot.params["id"], newsId).subscribe(() => { });
   }
 
   onLike(newsId: number) {

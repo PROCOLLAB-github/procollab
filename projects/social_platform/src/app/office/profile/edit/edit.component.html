@@ -123,6 +123,7 @@
             id="phoneNumber"
             [error]="phoneNumber | controlError"
             type="tel"
+            pattern="[+]7 [0-9]{3} [0-9]{3}-[0-9]{2}-[0-9]{2}"
             placeholder="Введите ваш номер телефона"
             formControlName="phoneNumber"
           ></app-input>
@@ -131,6 +132,8 @@
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
+
+          <p class="text-body-12 error__phone-number">{{ errorMessagePhoneNumber }}</p>
         </fieldset>
         }
       </div>
@@ -142,7 +145,11 @@
             @if (profileForm.get("entryYear"); as entryYear) {
             <fieldset class="years__left">
               <label for="entryYear" class="field-label">Дата начала</label>
-              <app-select placeholder="2023 год" [options]="yearListEducation">
+              <app-select
+                formControlName="entryYear"
+                placeholder="2023 год"
+                [options]="yearListEducation"
+              >
                 <i appIcon icon="arrow-no-body" appSquare="32"></i>
               </app-select>
 
@@ -155,7 +162,11 @@
             } @if (profileForm.get("completionYear"); as completionYear) {
             <fieldset class="years__right">
               <label for="completionYear" class="field-label">Дата окончания</label>
-              <app-select placeholder="2023 год" [options]="yearListEducation.slice(5)">
+              <app-select
+                formControlName="completionYear"
+                placeholder="2023 год"
+                [options]="yearListEducation.slice(5)"
+              >
                 <i appIcon icon="arrow-no-body" appSquare="32"></i>
               </app-select>
               @if (completionYear | controlError: "required") {
@@ -199,6 +210,7 @@
           <fieldset>
             <label for="educationLevel" class="field-label">Уровень образования</label>
             <app-select
+              formControlName="educationLevel"
               placeholder="Высшее образование-магистратура"
               [options]="educationLevelList"
             >
@@ -213,7 +225,11 @@
           } @if (profileForm.get("educationStatus"); as educationStatus) {
           <fieldset>
             <label for="educationStatus" class="field-label">Должность</label>
-            <app-select placeholder="Студент" [options]="educationStatusList">
+            <app-select
+              formControlName="educationStatus"
+              placeholder="Студент"
+              [options]="educationStatusList"
+            >
               <i appIcon icon="arrow-no-body" appSquare="32"></i>
             </app-select>
             @if (educationStatus | controlError: "required") {
@@ -239,13 +255,7 @@
             {{ educationItem.completionYear }} {{ educationItem.description }}
             {{ educationItem.educationStatus }} {{ educationItem.educationLevel }}
           </p>
-          <i
-            class="edit"
-            appIcon
-            icon="edit-pen"
-            appSquare="20"
-            (click)="removeEducation($index)"
-          ></i>
+          <i class="edit" appIcon icon="edit-pen" appSquare="20"></i>
         </div>
         } }
       </div>
@@ -260,7 +270,11 @@
             @if (profileForm.get("entryYearWork"); as entryYearWork) {
             <fieldset class="years__left">
               <label for="entryYearWork" class="field-label">Дата начала</label>
-              <app-select placeholder="2023 год" [options]="yearListEducation">
+              <app-select
+                formControlName="entryYearWork"
+                placeholder="2023 год"
+                [options]="yearListEducation"
+              >
                 <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__entry"></i>
               </app-select>
 
@@ -273,7 +287,11 @@
             } @if (profileForm.get("completionYearWork"); as completionYearWork) {
             <fieldset class="years__right">
               <label for="completionYearWork" class="field-label">Дата окончания</label>
-              <app-select placeholder="2023 год" [options]="yearListEducation">
+              <app-select
+                formControlName="completionYearWork"
+                placeholder="2023 год"
+                [options]="yearListEducation"
+              >
                 <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
               </app-select>
 
@@ -336,27 +354,22 @@
           </fieldset>
           }
         </div>
-        <app-button class="profile__add-education" (click)="addEducation()">
+        <app-button class="profile__add-education" (click)="addWork()">
           <span>Добавить место работы</span>
           <i appIcon icon="plus" appSquare="14"></i>
         </app-button>
       </div>
 
       <div class="profile__row education__block">
-        @if(workItems().length || workExperience.length){ @for (workItem of workExperience.value;
-        track $index) {
+        @if(workItems().length || workExperience.length){ @for (workItem of
+        workExperience.value; track $index) {
         <div class="education__info">
           <p class="text-body-16 education__text">
             {{ workItem.organizationName }} {{ workItem.entryYear }} -
-            {{ workItem.completionYear }} {{ workItem.description }} {{ workItem.jobPosition }}
+            {{ workItem.completionYear }} {{ workItem.description }}
+            {{ workItem.jobPosition }}
           </p>
-          <i
-            class="edit"
-            appIcon
-            icon="edit-pen"
-            appSquare="20"
-            (click)="removeEducation($index)"
-          ></i>
+          <i class="edit" appIcon icon="edit-pen" appSquare="20"></i>
         </div>
         } }
       </div>
@@ -531,7 +544,11 @@
         <div class="education__years">
           @if (profileForm.get("language"); as language) {
           <fieldset class="years__right">
-            <app-select placeholder="Английский" [options]="languageList">
+            <app-select
+              formControlName="language"
+              placeholder="Английский"
+              [options]="languageList"
+            >
               <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
             </app-select>
 
@@ -543,7 +560,11 @@
           </fieldset>
           } @if (profileForm.get("languageLevel"); as languageLevel) {
           <fieldset class="years__right">
-            <app-select placeholder="B1" [options]="languageLevelList">
+            <app-select
+              formControlName="languageLevel"
+              placeholder="B1"
+              [options]="languageLevelList"
+            >
               <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
             </app-select>
 
@@ -559,7 +580,7 @@
         <app-button
           [ariaDisabled]="languageItems().length === 4"
           class="profile__add-education"
-          (click)="addEducation()"
+          (click)="addLanguage()"
         >
           <span>Добавить язык</span>
           <i appIcon icon="plus" appSquare="14"></i>
@@ -573,13 +594,7 @@
           <p class="text-body-16 education__text">
             {{ languageItem.language }} {{ languageItem.languageLevel }}
           </p>
-          <i
-            class="edit"
-            appIcon
-            icon="edit-pen"
-            appSquare="20"
-            (click)="removeEducation($index)"
-          ></i>
+          <i class="edit" appIcon icon="edit-pen" appSquare="20"></i>
         </div>
         } }
       </div>

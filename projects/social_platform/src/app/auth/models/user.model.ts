@@ -10,10 +10,25 @@ export class Achievement {
 }
 
 export class Education {
-  description!: string;
-  entryYear!: number;
   organizationName!: string;
-  position!: string;
+  entryYear!: number;
+  completionYear!: number;
+  description!: string;
+  educationStatus!: string;
+  educationLevel!: string;
+}
+
+export class workExperience {
+  organizationName!: string;
+  entryYear!: number;
+  completionYear!: number;
+  description!: string;
+  jobPosition!: string;
+}
+
+export class userLanguages {
+  language!: string;
+  languageLevel!: string;
 }
 
 export class User {
@@ -62,8 +77,8 @@ export class User {
   region!: string;
   organization!: string;
   education!: Education[];
-  userLanguage!: any[];
-  workExperience!: any[];
+  userLanguages!: userLanguages[];
+  workExperience!: workExperience[];
   achievements!: Achievement[];
   programs!: Program[];
   projects!: Project[];

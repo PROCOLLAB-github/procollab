@@ -12,7 +12,6 @@ import {
 } from "../models/http.model";
 import { User, UserRole } from "../models/user.model";
 import { HttpParams } from "@angular/common/http";
-import { atob } from "js-base64";
 
 @Injectable({
   providedIn: "root",

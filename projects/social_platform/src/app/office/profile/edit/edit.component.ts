@@ -85,48 +85,25 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       userType: [0],
       birthday: ["", [Validators.required]],
       city: [""],
-      phoneNumber: [""],
+      phoneNumber: ["", Validators.required],
       additionalRole: [""],
       organizationName: [""],
       entryYear: [""],
       completionYear: [""],
       description: [""],
-      position: [""],
       educationLevel: [""],
       language: [""],
-      languageLevel: [null],
-      educationStatus: [null],
-      education: this.fb.array([
-        this.fb.group({
-          organizationName: [""],
-          entryYear: [""],
-          completionYear: [""],
-          description: [""],
-          educationStatus: [null],
-          educationLevel: [null],
-        }),
-      ]),
-      workExperience: this.fb.array([
-        this.fb.group({
-          organizationName: [""],
-          entryYear: [""],
-          completionYear: [""],
-          description: [""],
-          jobPosition: [null],
-        }),
-      ]),
-      userLanguages: this.fb.array([
-        this.fb.group({
-          language: [""],
-          languageLevel: [""],
-        }),
-      ]),
+      languageLevel: [""],
+      educationStatus: [""],
+      education: this.fb.array([]),
+      workExperience: this.fb.array([]),
+      userLanguages: this.fb.array([]),
       links: this.fb.array([]),
       organization: [""],
       entryYearWork: [""],
       completionYearWork: [""],
       descriptionWork: [""],
-      jobPosition: [null],
+      jobPosition: [""],
       speciality: ["", [Validators.required]],
       skills: [[], [Validators.required]],
       achievements: this.fb.array([]),
@@ -170,14 +147,43 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
         city: profile.city ?? "",
         phoneNumber: profile.phoneNumber ?? "",
-        education: profile.education ?? [],
-        userLanguage: profile.userLanguage ?? [],
-        workExperience: profile.workExperience ?? [],
         additionalRole: profile.v2Speciality.name ?? "",
         speciality: profile.speciality ?? "",
         skills: profile.skills ?? [],
         avatar: profile.avatar ?? "",
         aboutMe: profile.aboutMe ?? "",
+      });
+
+      this.workExperience.clear();
+      profile.workExperience.forEach(work => {
+        this.workExperience.push(this.fb.group({
+          organizationName: work.organizationName,
+          entryYear: work.entryYear,
+          completionYear: work.completionYear,
+          description: work.description,
+          jobPosition: work.jobPosition,
+        }));
+      });
+
+      this.education.clear();
+      profile.education.forEach(edu => {
+        this.education.push(this.fb.group({
+          organizationName: edu.organizationName,
+          entryYear: edu.entryYear,
+          completionYear: edu.completionYear,
+          description: edu.description,
+          educationStatus: edu.educationStatus,
+          educationLevel: edu.educationLevel,
+        }));
+      });
+
+
+      this.userLanguages.clear();
+      profile.userLanguages.forEach(lang => {
+        this.userLanguages.push(this.fb.group({
+          language: lang.language,
+          languageLevel: lang.languageLevel,
+        }));
       });
 
       this.cdref.detectChanges();
@@ -369,17 +375,17 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   educationStatusList = [
     {
       id: 0,
-      value: 0,
+      value: 'Ученик',
       label: "Ученик",
     },
     {
       id: 1,
-      value: 1,
+      value: 'Студент',
       label: "Студент",
     },
     {
       id: 2,
-      value: 2,
+      value: 'Выпускник',
       label: "Выпускник",
     },
   ];
@@ -387,27 +393,27 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   educationLevelList = [
     {
       id: 0,
-      value: 0,
+      value: "Среднее общее образование",
       label: "Среднее общее образование",
     },
     {
       id: 1,
-      value: 1,
+      value: "Среднее профессиональное образование",
       label: "Среднее профессиональное образование",
     },
     {
       id: 2,
-      value: 2,
+      value: "Высшее образование – бакалавриат, специалитет",
       label: "Высшее образование – бакалавриат, специалитет",
     },
     {
       id: 3,
-      value: 3,
+      value: "Высшее образование – магистратура",
       label: "Высшее образование – магистратура",
     },
     {
       id: 4,
-      value: 4,
+      value: "Высшее образование – аспирантура",
       label: "Высшее образование – аспирантура",
     },
   ];
@@ -415,62 +421,62 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   languageList = [
     {
       id: 0,
-      value: 0,
+      value: "Английский",
       label: "Английский",
     },
     {
       id: 1,
-      value: 1,
+      value: "Испанский",
       label: "Испанский",
     },
     {
       id: 2,
-      value: 2,
+      value: "Итальянский",
       label: "Итальянский",
     },
     {
       id: 3,
-      value: 3,
+      value: "Немецкий",
       label: "Немецкий",
     },
     {
       id: 4,
-      value: 4,
+      value: "Японский",
       label: "Японский",
     },
     {
       id: 5,
-      value: 5,
+      value: "Китайский",
       label: "Китайский",
     },
     {
       id: 6,
-      value: 6,
+      value: "Арабский",
       label: "Арабский",
     },
     {
       id: 7,
-      value: 7,
+      value: "Шведский",
       label: "Шведский",
     },
     {
       id: 8,
-      value: 8,
+      value: "Польский",
       label: "Польский",
     },
     {
       id: 9,
-      value: 9,
+      value: "Чешский",
       label: "Чешский",
     },
     {
       id: 10,
-      value: 10,
+      value: "Русский",
       label: "Русский",
     },
     {
       id: 11,
-      value: 11,
+      value: "Французский",
       label: "Французский",
     },
   ];
@@ -478,33 +484,33 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   languageLevelList = [
     {
       id: 0,
-      value: 0,
-      label: "A1",
+      value: "А1",
+      label: "А1",
     },
     {
       id: 1,
-      value: 1,
-      label: "A2",
+      value: "А2",
+      label: "А2",
     },
     {
       id: 2,
-      value: 2,
+      value: "B1",
       label: "B1",
     },
     {
       id: 3,
-      value: 3,
+      value: "B2",
       label: "B2",
     },
     {
       id: 4,
-      value: 4,
-      label: "C1",
+      value: "С1",
+      label: "С1",
     },
     {
       id: 5,
-      value: 5,
-      label: "C2",
+      value: "С2",
+      label: "С2",
     },
   ];
 
@@ -551,10 +557,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get userLanguages(): FormArray {
-    return this.profileForm.get("language") as FormArray;
+    return this.profileForm.get("userLanguages") as FormArray;
   }
 
   errorMessage = ErrorMessage;
+  errorMessagePhoneNumber = ''
 
   roles: Observable<SelectComponent["options"]> = this.authService.changeableRoles.pipe(
     map(roles => roles.map(role => ({ id: role.id, value: role.id, label: role.name })))
@@ -602,20 +609,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log(this.educationItems(), this.education.value, this.profileForm.value);
   }
 
-  removeEducation(i: number) {
-    this.educationItems.update(items => items.filter((_, index) => index !== i));
-
-    this.education.removeAt(i);
-
-    console.log(this.educationItems(), this.education.value, this.profileForm.value);
-  }
-
   addWork() {
     const workItem = this.fb.group({
       organizationName: this.profileForm.get("organization")?.value,
-      entryYearWork: this.profileForm.get("entryYearWork")?.value,
-      completionYearWork: this.profileForm.get("completionYearWork")?.value,
-      descriptionWork: this.profileForm.get("descriptionWork")?.value,
+      entryYear: this.profileForm.get("entryYearWork")?.value,
+      completionYear: this.profileForm.get("completionYearWork")?.value,
+      description: this.profileForm.get("descriptionWork")?.value,
       jobPosition: this.profileForm.get("jobPosition")?.value,
     });
 
@@ -633,14 +632,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log(this.workItems(), this.workExperience.value, this.profileForm.value);
   }
 
-  removeWork(i: number) {
-    this.workItems.update(items => items.filter((_, index) => index !== i));
-
-    this.workExperience.removeAt(i);
-
-    console.log(this.workItems(), this.workExperience.value, this.profileForm.value);
-  }
-
   addLanguage() {
     const languageItem = this.fb.group({
       language: this.profileForm.get("language")?.value,
@@ -653,14 +644,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.profileForm.get("languageLevel")?.reset();
 
     this.userLanguages.push(languageItem);
-
-    console.log(this.languageItems(), this.userLanguages.value, this.profileForm.value);
-  }
-
-  removeLanguage(i: number) {
-    this.languageItems.update(items => items.filter((_, index) => index !== i));
-
-    this.userLanguages.removeAt(i);
 
     console.log(this.languageItems(), this.userLanguages.value, this.profileForm.value);
   }
@@ -718,8 +701,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
             .navigateByUrl(`/office/profile/${this.profileId}`)
             .then(() => console.debug("Router Changed form ProfileEditComponent"));
         },
-        error: () => {
+        error: (error) => {
           this.profileFormSubmitting = false;
+          if (error.error.phone_number) {
+            this.errorMessagePhoneNumber = error.error.phone_number[0];
+          }
         },
       });
   }

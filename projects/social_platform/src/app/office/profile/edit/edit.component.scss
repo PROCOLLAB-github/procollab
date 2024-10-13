@@ -66,6 +66,11 @@
     }
   }
 
+  .error__phone-number {
+    margin-top: 10px;
+    color: var(--red);
+  }
+
   &__achievement {
     display: block;
     margin-bottom: 12px;
@@ -79,6 +84,7 @@
 
   &__language {
     margin-top: 20px;
+    margin-bottom: 20px;
   }
 
   &__add-achievement {
