@@ -172,7 +172,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           })
         )
       )
-      .subscribe(() => { });
+      .subscribe(() => {});
   }
 
   ngAfterViewInit(): void {
