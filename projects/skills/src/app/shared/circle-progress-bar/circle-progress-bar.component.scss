@@ -2,9 +2,9 @@
 @use "styles/responsive";
 
 .progress-bar {
+  position: relative;
   width: 65px;
   height: 65px;
-  position: relative;
 
   &__text {
     position: absolute;
