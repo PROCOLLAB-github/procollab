@@ -15,17 +15,16 @@ import { Skill } from "projects/skills/src/models/profile.model";
 })
 export class ProgressBlockComponent implements OnInit {
   route = inject(ActivatedRoute);
-
   radius = 70;
   skillsList = signal<Skill[]>([]);
 
-  calculateStrokeDashOffset(skill: Skill): number {
-    const circumference = 2 * Math.PI * this.radius; // 2 * π * radius
-    return circumference - (skill.skillProgress / 100) * circumference;
+  calculateStrokeDashOffset(skillProgress: number): number {
+    const circumference = 2 * Math.PI * this.radius;
+    return circumference - (skillProgress / 100) * circumference;
   }
 
   calculateStrokeDashArray(): number {
-    return 2 * Math.PI * this.radius; // 2 * π * radius
+    return 2 * Math.PI * this.radius;
   }
 
   ngOnInit(): void {

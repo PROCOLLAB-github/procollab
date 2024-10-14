@@ -128,7 +128,8 @@
   height: 50px;
   color: var(--dark-grey);
   background-color: var(--white);
-  border: 1px solid #e8e8e8;
+  border: 2px solid;
+  border-color: var(--gradient);
   border-radius: 15px;
 
   @include responsive.apply-desktop {

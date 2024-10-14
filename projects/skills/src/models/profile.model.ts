@@ -22,7 +22,8 @@ export interface Skill {
 
 interface Month {
   month: string;
-  isPassed: boolean;
+  successfullyDone: boolean;
+  year: number;
 }
 
 export interface Profile {

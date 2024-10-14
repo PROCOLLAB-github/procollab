@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
 import { Profile } from "../../../../models/profile.model";
@@ -12,6 +12,10 @@ import { Profile } from "../../../../models/profile.model";
   templateUrl: "./month-block.component.html",
   styleUrl: "./month-block.component.scss",
 })
-export class MonthBlockComponent {
+export class MonthBlockComponent implements OnInit {
   @Input({ required: true }) months!: Profile["months"];
+
+  ngOnInit(): void {
+    console.log(this.months[0].successfullyDone);
+  }
 }

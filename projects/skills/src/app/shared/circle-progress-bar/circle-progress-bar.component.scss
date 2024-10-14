@@ -2,6 +2,8 @@
 @use "styles/responsive";
 
 .progress-bar {
+  width: 65px;
+  height: 65px;
   position: relative;
 
   &__text {
@@ -13,7 +15,7 @@
     @include typography.heading-3;
 
     @include responsive.apply-desktop {
-      @include typography.heading-1;
+      @include typography.heading-4;
     }
   }
 }
