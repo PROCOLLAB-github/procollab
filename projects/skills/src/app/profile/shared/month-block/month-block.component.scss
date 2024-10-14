@@ -44,7 +44,6 @@
     transition: all 0.8s;
     transform: skew(60deg);
     transform: skew(60deg);
-    transform: skew(60deg);
   }
 
   &::after {
@@ -58,7 +57,6 @@
     background: var(--accent);
     opacity: 0.3;
     transition: all 0.8s;
-    transform: skew(60deg);
     transform: skew(60deg);
     transform: skew(-60deg);
   }
