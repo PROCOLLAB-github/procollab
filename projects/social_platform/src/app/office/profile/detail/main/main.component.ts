@@ -109,6 +109,8 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   readAllAchievements = false;
   readAllLinks = false;
   readAllEducation = false;
+  readAllLanguages = false;
+  readAllWorkExperience = false;
   readAllModal = false;
 
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;

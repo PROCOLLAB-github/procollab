@@ -395,6 +395,11 @@ $section-padding: 24px;
     margin-bottom: 3px;
   }
 
+  &__description {
+    display: flex;
+    gap: 12px;
+  }
+
   &__title {
     text-decoration: underline;
 
