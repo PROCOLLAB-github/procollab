@@ -19,6 +19,7 @@ import { Skill as ProfileSkill } from "projects/skills/src/models/profile.model"
 export class PersonalSkillCardComponent {
   @Input() personalSkillCard!: Skill;
   @Input() profileIdSkills!: WritableSignal<ProfileSkill["skillId"][]>;
+  @Input() isRetryPicked!: WritableSignal<boolean>;
 
   route = inject(ActivatedRoute);
   skillService = inject(SkillService);
@@ -28,7 +29,7 @@ export class PersonalSkillCardComponent {
   selectedCount = computed(() => this.profileIdSkills().length);
 
   ngOnInit(): void {
-    this.skillService.getAll().subscribe(r => {
+    this.skillService.getAllMarked().subscribe(r => {
       this.skillsIdList.set(r.results.map(skill => skill.id));
       this.isChecked.set(this.profileIdSkills().includes(this.personalSkillCard.id));
     });
@@ -39,6 +40,9 @@ export class PersonalSkillCardComponent {
       if (this.selectedCount() < 5) {
         this.profileIdSkills.update(ids => [...ids, this.personalSkillCard.id]);
         this.isChecked.set(true);
+        if (this.personalSkillCard.isDone === false) {
+          this.isRetryPicked.set(true);
+        }
       }
     } else {
       this.profileIdSkills.update(ids => ids.filter(id => id !== this.personalSkillCard.id));

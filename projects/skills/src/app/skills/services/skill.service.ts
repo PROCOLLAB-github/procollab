@@ -24,6 +24,18 @@ export class SkillService {
     );
   }
 
+  getAllMarked(limit = 3, offset = 0) {
+    return this.apiService.get<ApiPagination<Skill>>(
+      "/courses/choose-skills/",
+      new HttpParams({
+        fromObject: {
+          limit,
+          offset,
+        },
+      })
+    );
+  }
+
   getDetail(skillId: number) {
     return this.apiService.get<SkillDetail>(`/courses/skill-details/${skillId}`);
   }

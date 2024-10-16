@@ -42,13 +42,17 @@ export class SkillChooserComponent implements OnInit {
   skillsList = signal<Skill[]>([]);
   profileIdSkills = signal<ProfileSkill["skillId"][]>([]);
 
+  isRetryPicked = signal<boolean>(false);
+
   ngOnInit(): void {
-    this.skillService.getAll(this.limit, this.offset).subscribe(r => {
+    this.skillService.getAllMarked(this.limit, this.offset).subscribe(r => {
       this.skillsList.set(r.results);
+      console.log(r.results);
     });
 
     this.route.data.subscribe(r => {
       this.profileIdSkills.set(r["data"].skills.map((skill: ProfileSkill) => skill.skillId));
+      console.log(r['data'].skills)
     });
   }
 
@@ -66,14 +70,14 @@ export class SkillChooserComponent implements OnInit {
     if (this.offset < 0) {
       this.offset = 0;
     }
-    this.skillService.getAll(this.limit, this.offset).subscribe(r => {
+    this.skillService.getAllMarked(this.limit, this.offset).subscribe(r => {
       this.skillsList.set(r.results);
     });
   }
 
   nextPage(): void {
     this.offset += this.limit;
-    this.skillService.getAll(this.limit, this.offset).subscribe(r => {
+    this.skillService.getAllMarked(this.limit, this.offset).subscribe(r => {
       this.skillsList.set(r.results);
     });
   }
