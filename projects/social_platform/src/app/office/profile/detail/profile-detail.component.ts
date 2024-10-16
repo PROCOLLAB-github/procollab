@@ -84,10 +84,10 @@ export class ProfileDetailComponent implements OnInit {
       next: () => {
         this.isSended = true;
       },
-      error: err => {
+      error: (err) => {
         if (err.status === 400) {
-          this.errorMessageModal.set(err.error.slice(23, 25));
           this.isDelayModalOpen = true;
+          this.errorMessageModal.set(err.error.seconds_after_retry);
         }
       },
     });
