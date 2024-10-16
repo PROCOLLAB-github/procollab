@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
 import { catchError, map, Observable, tap } from "rxjs";
 import { User } from "@auth/models/user.model";
@@ -13,6 +13,8 @@ import { BarComponent, ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { BackComponent } from "@uilib";
 import { AsyncPipe } from "@angular/common";
+import jsPDF from "jspdf";
+import { ModalComponent } from "@ui/components/modal/modal.component";
 
 @Component({
   selector: "app-profile-detail",
@@ -30,6 +32,7 @@ import { AsyncPipe } from "@angular/common";
     YearsFromBirthdayPipe,
     BarComponent,
     BackComponent,
+    ModalComponent
   ],
 })
 export class ProfileDetailComponent implements OnInit {
@@ -39,11 +42,14 @@ export class ProfileDetailComponent implements OnInit {
     public readonly authService: AuthService,
     public readonly chatService: ChatService,
     public readonly breakpointObserver: BreakpointObserver
-  ) {}
+  ) { }
 
   user$: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
   loggedUserId$: Observable<number> = this.authService.profile.pipe(map(user => user.id));
 
+  isDelayModalOpen = false;
+  isSended = false;
+  errorMessageModal = signal('');
   desktopMode$: Observable<boolean> = this.breakpointObserver
     .observe("(min-width: 920px)")
     .pipe(map(result => result.matches));
@@ -54,18 +60,36 @@ export class ProfileDetailComponent implements OnInit {
 
   downloadCV() {
     this.authService.downloadCV().subscribe({
-      next: response => {
-        const url = window.URL.createObjectURL(response);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "cv.pdf";
+      next: (r) => {
+        const blob = new Blob([r.text], { type: 'application/pdf' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'cv.pdf';
         document.body.appendChild(a);
         a.click();
-        window.URL.revokeObjectURL(url);
+        URL.revokeObjectURL(a.href);
+        document.body.removeChild(a);
       },
-      error: err => {
-        console.error("Error downloading the PDF", err);
+      error: (err) => {
+        if (err.status === 400) {
+          this.errorMessageModal.set(err.error.slice(23, 25));
+          this.isDelayModalOpen = true;
+        }
+      }
+    })
+  }
+
+  sendCVEmail() {
+    this.authService.sendCV().subscribe({
+      next: () => {
+        this.isSended = true;
       },
+      error: (err) => {
+        if (err.status === 400) {
+          this.errorMessageModal.set(err.error.slice(23, 25));
+          this.isDelayModalOpen = true;
+        }
+      }
     });
   }
 }

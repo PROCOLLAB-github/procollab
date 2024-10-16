@@ -17,7 +17,7 @@ import { HttpParams } from "@angular/common/http";
   providedIn: "root",
 })
 export class AuthService {
-  constructor(private apiService: ApiService, private tokenService: TokenService) {}
+  constructor(private apiService: ApiService, private tokenService: TokenService) { }
 
   login({ email, password }: LoginRequest): Observable<LoginResponse> {
     return this.apiService
@@ -37,19 +37,16 @@ export class AuthService {
       .pipe(map(json => plainToInstance(RegisterResponse, json)));
   }
 
-  downloadCV(): Observable<Blob> {
+  downloadCV(): Observable<any> {
     return this.apiService
       .get("/auth/users/download_cv/", new HttpParams(), {
         responseType: "text",
         params: new HttpParams(),
       })
-      .pipe(
-        map((response: any) => {
-          // const decodedPdf = atob(response);
-          const blob = new Blob([response], { type: "application/pdf" });
-          return blob;
-        })
-      );
+  }
+
+  sendCV(): Observable<any> {
+    return this.apiService.get("/auth/users/send_mail_cv/");
   }
 
   private profile$ = new ReplaySubject<User>(1);
