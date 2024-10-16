@@ -4,6 +4,7 @@ import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { ApiPagination } from "../../../models/api-pagination.model";
 import { Skill, SkillDetail, TasksResponse } from "../../../models/skill.model";
+import { HttpParams } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
@@ -11,8 +12,28 @@ import { Skill, SkillDetail, TasksResponse } from "../../../models/skill.model";
 export class SkillService {
   apiService = inject(ApiService);
 
-  getAll() {
-    return this.apiService.get<ApiPagination<Skill>>("/courses/all-skills/");
+  getAll(limit = 3, offset = 0) {
+    return this.apiService.get<ApiPagination<Skill>>(
+      "/courses/all-skills/",
+      new HttpParams({
+        fromObject: {
+          limit,
+          offset,
+        },
+      })
+    );
+  }
+
+  getAllMarked(limit = 3, offset = 0) {
+    return this.apiService.get<ApiPagination<Skill>>(
+      "/courses/choose-skills/",
+      new HttpParams({
+        fromObject: {
+          limit,
+          offset,
+        },
+      })
+    );
   }
 
   getDetail(skillId: number) {

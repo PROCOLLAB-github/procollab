@@ -3,6 +3,8 @@
 
 .progress-bar {
   position: relative;
+  width: 65px;
+  height: 65px;
 
   &__text {
     position: absolute;
@@ -13,7 +15,7 @@
     @include typography.heading-3;
 
     @include responsive.apply-desktop {
-      @include typography.heading-1;
+      @include typography.heading-4;
     }
   }
 }

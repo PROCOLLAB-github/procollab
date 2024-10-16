@@ -11,7 +11,7 @@
       <h1 class="rating-page__title">Рейтинг пользователей</h1>
       <div class="rating-page__basic">
         @for (r of rest(); track $index) {
-        <app-basic-rating-card [rating]="r"></app-basic-rating-card>
+        <app-basic-rating-card [rating]="r" [ratingId]="$index + 3"></app-basic-rating-card>
         }
       </div>
     </div>
