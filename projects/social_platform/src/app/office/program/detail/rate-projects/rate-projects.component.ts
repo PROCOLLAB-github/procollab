@@ -41,14 +41,15 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly fb: FormBuilder
   ) {
-    const isRatedByExpert = this.route.snapshot.queryParams["is_rated_by_expert"] === "true"
-      ? true
-      : this.route.snapshot.queryParams["is_rated_by_expert"] === "false"
+    const isRatedByExpert =
+      this.route.snapshot.queryParams["is_rated_by_expert"] === "true"
+        ? true
+        : this.route.snapshot.queryParams["is_rated_by_expert"] === "false"
         ? false
         : null;
 
     const searchValue = this.route.snapshot.queryParams["name__contains"];
-    const decodedSearchValue = searchValue ? decodeURIComponent(searchValue) : '';
+    const decodedSearchValue = searchValue ? decodeURIComponent(searchValue) : "";
 
     this.searchForm = this.fb.group({
       search: [decodedSearchValue],
@@ -77,9 +78,10 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
     this.programId = this.route.snapshot.params["programId"];
 
     const queryParams$ = this.route.queryParams.subscribe(params => {
-      const isRatedByExpert = params["is_rated_by_expert"] === "true"
-        ? true
-        : params["is_rated_by_expert"] === "false"
+      const isRatedByExpert =
+        params["is_rated_by_expert"] === "true"
+          ? true
+          : params["is_rated_by_expert"] === "false"
           ? false
           : null;
 
@@ -127,6 +129,6 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
       queryParamsHandling: "merge",
     });
 
-    this.searchForm.get('search')?.reset();
+    this.searchForm.get("search")?.reset();
   }
 }

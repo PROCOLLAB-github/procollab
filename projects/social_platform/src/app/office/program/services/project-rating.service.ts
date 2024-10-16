@@ -13,7 +13,7 @@ import { ProjectRatingCriterionOutput } from "../models/project-rating-criterion
   providedIn: "root",
 })
 export class ProjectRatingService {
-  constructor(private readonly apiService: ApiService) { }
+  constructor(private readonly apiService: ApiService) {}
 
   getAll(
     id: number,

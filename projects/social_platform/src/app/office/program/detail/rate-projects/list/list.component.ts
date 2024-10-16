@@ -2,7 +2,18 @@
 
 import { AfterViewInit, Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { concatMap, debounceTime, fromEvent, map, of, Subject, Subscription, switchMap, tap, throttleTime } from "rxjs";
+import {
+  concatMap,
+  debounceTime,
+  fromEvent,
+  map,
+  of,
+  Subject,
+  Subscription,
+  switchMap,
+  tap,
+  throttleTime,
+} from "rxjs";
 import { AsyncPipe } from "@angular/common";
 import { RatingCardComponent } from "@office/program/shared/rating-card/rating-card.component";
 import { ProjectRate } from "@office/program/models/project-rate";
@@ -21,11 +32,11 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly projectRatingService: ProjectRatingService
-  ) { }
+  ) {}
 
   isListOfAll = this.router.url.includes("/all");
   isRatedByExpert = signal<boolean | undefined>(undefined);
-  searchValue = signal<string>('')
+  searchValue = signal<string>("");
 
   projects = signal<ProjectRate[]>([]);
   initialProjects: ProjectRate[] = [];
@@ -52,16 +63,18 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(
         debounceTime(200),
         tap(params => {
-          const isRatedByExpert = params["is_rated_by_expert"] === "true" ? true :
-            params["is_rated_by_expert"] === "false" ? false : undefined;
-          const searchValue = params['name__contains'];
+          const isRatedByExpert =
+            params["is_rated_by_expert"] === "true"
+              ? true
+              : params["is_rated_by_expert"] === "false"
+              ? false
+              : undefined;
+          const searchValue = params["name__contains"];
 
           this.isRatedByExpert.set(isRatedByExpert);
           this.searchValue.set(searchValue);
         }),
-        switchMap(() =>
-          this.onFetch(this.fetchPage() * this.fetchLimit(), this.fetchLimit())
-        )
+        switchMap(() => this.onFetch(this.fetchPage() * this.fetchLimit(), this.fetchLimit()))
       )
       .subscribe(result => {
         this.projects.set(result.results);
@@ -69,7 +82,6 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.subscriptions$().push(initProjects$, queryParams$);
   }
-
 
   ngAfterViewInit() {
     const target = document.querySelector(".office__body");
@@ -115,7 +127,7 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
       offset,
       limit,
       this.isRatedByExpert(),
-      this.searchValue(),
+      this.searchValue()
     );
 
     return observable.pipe(
