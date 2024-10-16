@@ -36,8 +36,8 @@ export class SkillChooserComponent implements OnInit {
   skillService = inject(SkillService);
   profileService = inject(ProfileService);
 
-  limit: number = 3;
-  offset: number = 0;
+  limit = 3;
+  offset = 0;
 
   skillsList = signal<Skill[]>([]);
   profileIdSkills = signal<ProfileSkill["skillId"][]>([]);
