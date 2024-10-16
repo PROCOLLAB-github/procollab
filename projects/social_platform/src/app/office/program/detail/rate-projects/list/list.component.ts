@@ -2,7 +2,7 @@
 
 import { AfterViewInit, Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { concatMap, debounceTime, fromEvent, map, of, Subscription, tap, throttleTime } from "rxjs";
+import { concatMap, debounceTime, fromEvent, map, of, Subject, Subscription, switchMap, tap, throttleTime } from "rxjs";
 import { AsyncPipe } from "@angular/common";
 import { RatingCardComponent } from "@office/program/shared/rating-card/rating-card.component";
 import { ProjectRate } from "@office/program/models/project-rate";
@@ -21,10 +21,11 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly projectRatingService: ProjectRatingService
-  ) {}
+  ) { }
 
   isListOfAll = this.router.url.includes("/all");
   isRatedByExpert = signal<boolean | undefined>(undefined);
+  searchValue = signal<string>('')
 
   projects = signal<ProjectRate[]>([]);
   initialProjects: ProjectRate[] = [];
@@ -45,45 +46,30 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.initialProjects = projects;
         this.projects.set(projects);
         this.totalProjCount.set(count);
-
-        const isRatedByExpertParam = this.route.snapshot.queryParams["is_rated_by_expert"];
-        this.isRatedByExpert.set(
-          isRatedByExpertParam === "true"
-            ? true
-            : isRatedByExpertParam === "false"
-            ? false
-            : undefined
-        );
       });
 
-    const querySearch$ = this.route.queryParams.pipe(map(q => q["search"])).subscribe(search => {
-      if (search) {
-        const fuse = new Fuse(this.initialProjects, {
-          keys: ["name"],
-        });
+    const queryParams$ = this.route.queryParams
+      .pipe(
+        debounceTime(200),
+        tap(params => {
+          const isRatedByExpert = params["is_rated_by_expert"] === "true" ? true :
+            params["is_rated_by_expert"] === "false" ? false : undefined;
+          const searchValue = params['name__contains'];
 
-        const filteredProjects = fuse.search(search).map(el => el.item);
-        this.projects.set(filteredProjects);
-      } else {
-        this.projects.set(this.initialProjects);
-      }
-    });
-
-    const filterParams$ = this.route.queryParams
-      .pipe(map(q => q["is_rated_by_expert"]))
-      .subscribe(isRatedByExpert => {
-        this.isRatedByExpert.set(
-          isRatedByExpert === "true" ? true : isRatedByExpert === "false" ? false : undefined
-        );
-        this.onFetch(this.fetchPage() * this.fetchLimit(), this.fetchLimit()).subscribe(r => {
-          this.projects.set(r.results);
-        });
+          this.isRatedByExpert.set(isRatedByExpert);
+          this.searchValue.set(searchValue);
+        }),
+        switchMap(() =>
+          this.onFetch(this.fetchPage() * this.fetchLimit(), this.fetchLimit())
+        )
+      )
+      .subscribe(result => {
+        this.projects.set(result.results);
       });
 
-    this.subscriptions$().push(initProjects$);
-    this.subscriptions$().push(querySearch$);
-    this.subscriptions$().push(filterParams$);
+    this.subscriptions$().push(initProjects$, queryParams$);
   }
+
 
   ngAfterViewInit() {
     const target = document.querySelector(".office__body");
@@ -128,7 +114,8 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
       programId,
       offset,
       limit,
-      this.isRatedByExpert()
+      this.isRatedByExpert(),
+      this.searchValue(),
     );
 
     return observable.pipe(
