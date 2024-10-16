@@ -12,10 +12,6 @@ import { Profile } from "../../../../models/profile.model";
   templateUrl: "./month-block.component.html",
   styleUrl: "./month-block.component.scss",
 })
-export class MonthBlockComponent implements OnInit {
+export class MonthBlockComponent {
   @Input({ required: true }) months!: Profile["months"];
-
-  ngOnInit(): void {
-    console.log(this.months[0].successfullyDone);
-  }
 }

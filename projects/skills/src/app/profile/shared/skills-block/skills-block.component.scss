@@ -102,6 +102,10 @@
   padding: 40px 0;
   overflow-y: auto;
 
+  @include responsive.apply-desktop{
+    padding: 80px 0px;
+  }
+
   &__cross {
     position: absolute;
     top: 0;

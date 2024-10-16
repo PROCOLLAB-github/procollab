@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<div class="rating-card" [class.rating-card--unpicked]="selectedCount() >= 2 && !isChecked()">
+<div class="rating-card" [class.rating-card--unpicked]="selectedCount() >= 5 && !isChecked()">
   <div class="rating-card__left">
     <h3 class="rating-card__name">
       {{ personalSkillCard.name }}
@@ -8,7 +8,7 @@
   </div>
   <div class="rating-card__right">
     <app-checkbox
-      [ariaDisabled]="selectedCount() >= 2 && !isChecked()"
+      [ariaDisabled]="selectedCount() >= 5 && !isChecked()"
       [checked]="isChecked()"
       (checkedChange)="toggleCheck()"
     ></app-checkbox>

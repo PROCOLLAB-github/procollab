@@ -3,7 +3,6 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService, SubscriptionData } from "@corelib";
 import { Profile } from "../../../models/profile.model";
-import { Skill } from "projects/skills/src/models/skill.model";
 
 @Injectable({
   providedIn: "root",

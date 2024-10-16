@@ -36,7 +36,7 @@ export class PersonalSkillCardComponent {
 
   toggleCheck(): void {
     if (!this.isChecked()) {
-      if (this.selectedCount() < 2) {
+      if (this.selectedCount() < 5) {
         this.profileIdSkills.update(ids => [...ids, this.personalSkillCard.id]);
         this.isChecked.set(true);
       }

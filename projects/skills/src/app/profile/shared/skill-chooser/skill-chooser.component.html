@@ -14,9 +14,22 @@
 
       <div class="plans_pagination">
         <div class="plans_pages">
-          <i appIcon icon="left-arrow" class="plans_pages-prev plans_pages-icon"></i>
-          <p><span class="plans_pages-start">1</span>/{{ skillsList().length }}</p>
-          <i appIcon icon="left-arrow" class="plans_pages-next plans_pages-icon"></i>
+          <i
+            appIcon
+            icon="left-arrow"
+            class="plans_pages-prev plans_pages-icon"
+            (click)="prevPage()"
+          ></i>
+          <p>
+            <span class="plans_pages-start">{{ offset + 1 }}</span
+            >/{{ skillsList().length }}
+          </p>
+          <i
+            appIcon
+            icon="left-arrow"
+            class="plans_pages-next plans_pages-icon"
+            (click)="nextPage()"
+          ></i>
         </div>
 
         <app-button (click)="onCloseModal()">Выбрать</app-button>

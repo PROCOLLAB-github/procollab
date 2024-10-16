@@ -2,7 +2,7 @@
 
 <div class="progress">
   <div class="progress__chart chart">
-    @for (skill of skillsList(); track $index) {
+    @if (skillsList().length) { @for (skill of skillsList(); track $index) {
     <svg class="circle chart__circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
       <circle class="circle__track" cx="80" cy="80" [attr.r]="radius" />
       <circle
@@ -16,6 +16,20 @@
         [attr.stroke-dasharray]="calculateStrokeDashArray()"
       />
     </svg>
+    } } @else {
+    <svg class="circle chart__circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+      <circle class="circle__track" cx="80" cy="80" [attr.r]="radius" />
+      <circle
+        class="circle__filled"
+        cx="80"
+        cy="80"
+        [attr.r]="radius"
+        stroke-linecap="round"
+        transform="rotate(-90 80 80)"
+        [attr.stroke-dashoffset]="calculateStrokeDashOffset(0)"
+        [attr.stroke-dasharray]="calculateStrokeDashArray()"
+      />
+    </svg>
     }
   </div>
 
@@ -25,7 +39,11 @@
     @for (skill of skillsList(); track $index) {
     <ul class="info__list">
       <li class="info__item">
-        <div class="info__bullet"></div>
+        <div
+          class="info__bullet"
+          [class.info__bullet--low]="skill.skillProgress <= 20"
+          [class.info__bullet--mid]="40 < skill.skillProgress && skill.skillProgress <= 60"
+        ></div>
         <p class="text-body-16">{{ skill.skillName }}</p>
       </li>
     </ul>

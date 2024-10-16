@@ -36,11 +36,14 @@ export class SkillChooserComponent implements OnInit {
   skillService = inject(SkillService);
   profileService = inject(ProfileService);
 
+  limit: number = 3;
+  offset: number = 0;
+
   skillsList = signal<Skill[]>([]);
   profileIdSkills = signal<ProfileSkill["skillId"][]>([]);
 
   ngOnInit(): void {
-    this.skillService.getAll().subscribe(r => {
+    this.skillService.getAll(this.limit, this.offset).subscribe(r => {
       this.skillsList.set(r.results);
     });
 
@@ -56,5 +59,22 @@ export class SkillChooserComponent implements OnInit {
   onCloseModal() {
     this.openChange.emit(false);
     this.profileService.addSkill(this.profileIdSkills()).subscribe();
+  }
+
+  prevPage(): void {
+    this.offset -= this.limit;
+    if (this.offset < 0) {
+      this.offset = 0;
+    }
+    this.skillService.getAll(this.limit, this.offset).subscribe(r => {
+      this.skillsList.set(r.results);
+    });
+  }
+
+  nextPage(): void {
+    this.offset += this.limit;
+    this.skillService.getAll(this.limit, this.offset).subscribe(r => {
+      this.skillsList.set(r.results);
+    });
   }
 }
