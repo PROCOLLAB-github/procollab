@@ -84,16 +84,6 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
 
     this.programId = this.route.snapshot.params["programId"];
 
-    const searchFormSearch$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
-      this.router
-        .navigate([], {
-          queryParams: { search },
-          relativeTo: this.route,
-          queryParamsHandling: "merge",
-        })
-        .then(() => console.debug("QueryParams changed from ProjectsComponent"));
-    });
-
     const queryParams$ = this.route.queryParams.subscribe(params => {
       const isRatedByExpert =
         params["is_rated_by_expert"] === "true"
@@ -102,9 +92,10 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
           ? false
           : null;
       this.filterForm.get("filterTag")?.setValue(isRatedByExpert, { emitEvent: false });
+      const searchValue = params["name__contains"];
+      this.searchForm.get("search")?.setValue(searchValue, { emitEvent: false });
     });
 
-    searchFormSearch$ && this.subscriptions$.push(searchFormSearch$);
     this.subscriptions$.push(queryParams$);
   }
 
@@ -131,5 +122,15 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
 
   onClickOutside() {
     this.isOpen = false;
+  }
+
+  onSearchClick() {
+    const searchValue = this.searchForm.get("search")?.value;
+    const encodedSearchValue = encodeURIComponent(searchValue);
+    this.router.navigate([], {
+      queryParams: { name__contains: encodedSearchValue },
+      relativeTo: this.route,
+      queryParamsHandling: "merge",
+    });
   }
 }

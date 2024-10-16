@@ -55,9 +55,21 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   fetchLimit = signal(10);
   fetchPage = signal(0);
 
+  programId?: number;
+
   subscriptions$ = signal<Subscription[]>([]);
 
   ngOnInit(): void {
+    const programIdSubscription$ = this.route.params
+      .pipe(
+        map(params => params["programId"]),
+        tap(programId => {
+          this.programId = programId;
+          this.fetchNews(0, this.fetchLimit());
+        })
+      )
+      .subscribe();
+
     const program$ = this.route.data
       .pipe(
         map(r => r["data"]),
@@ -81,6 +93,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
       });
 
     this.subscriptions$().push(program$);
+    this.subscriptions$().push(programIdSubscription$);
   }
 
   ngAfterViewInit() {

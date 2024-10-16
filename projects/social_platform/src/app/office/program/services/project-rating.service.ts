@@ -19,13 +19,15 @@ export class ProjectRatingService {
     id: number,
     skip: number,
     take: number,
-    isRatedByExpert?: boolean
+    isRatedByExpert?: boolean,
+    name__contains?: string
   ): Observable<ApiPagination<ProjectRate>> {
     return this.apiService.get(
       `/rate-project/${id}`,
       new HttpParams({
         fromObject: {
-          ...(isRatedByExpert !== undefined && { 'is_rated_by_expert': isRatedByExpert }),
+          ...(name__contains !== undefined && { name__contains: name__contains }),
+          ...(isRatedByExpert !== undefined && { is_rated_by_expert: isRatedByExpert }),
           limit: take,
           offset: skip,
         },

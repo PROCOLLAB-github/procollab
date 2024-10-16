@@ -22,9 +22,9 @@
       </form>
     </div>
 
-    <div class="filter__category" (click)="toggleOpen($event)">
+    <div class="filter__category">
       <form class="filter__form" [formGroup]="filterForm">
-        <div class="filter__top">
+        <div class="filter__top" (click)="toggleOpen($event)">
           <p class="text-body-14">Фильтр</p>
           <i appIcon icon="arrow-no-body" appWidth="14" appHeight="8" appViewBox="0 0 18 9"> </i>
         </div>
@@ -43,7 +43,7 @@
         }
       </form>
 
-      <app-button class="filter__button">Найти</app-button>
+      <app-button (click)="onSearchClick()" class="filter__button">Найти</app-button>
     </div>
   </div>
 
