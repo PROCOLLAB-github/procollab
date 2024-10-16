@@ -40,7 +40,7 @@ export class PersonalSkillCardComponent {
       if (this.selectedCount() < 5) {
         this.profileIdSkills.update(ids => [...ids, this.personalSkillCard.id]);
         this.isChecked.set(true);
-        if (this.personalSkillCard.isDone === false) {
+        if (this.personalSkillCard.isDone === true) {
           this.isRetryPicked.set(true);
         }
       }

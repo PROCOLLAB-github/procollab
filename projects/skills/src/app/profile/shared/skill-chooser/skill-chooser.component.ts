@@ -38,6 +38,7 @@ export class SkillChooserComponent implements OnInit {
 
   limit = 3;
   offset = 0;
+  currentPage = 1;
 
   skillsList = signal<Skill[]>([]);
   profileIdSkills = signal<ProfileSkill["skillId"][]>([]);
@@ -67,8 +68,10 @@ export class SkillChooserComponent implements OnInit {
 
   prevPage(): void {
     this.offset -= this.limit;
+    this.currentPage -= 1;
     if (this.offset < 0) {
       this.offset = 0;
+      this.currentPage = 1;
     }
     this.skillService.getAllMarked(this.limit, this.offset).subscribe(r => {
       this.skillsList.set(r.results);
@@ -76,9 +79,12 @@ export class SkillChooserComponent implements OnInit {
   }
 
   nextPage(): void {
-    this.offset += this.limit;
-    this.skillService.getAllMarked(this.limit, this.offset).subscribe(r => {
-      this.skillsList.set(r.results);
-    });
+    if (this.currentPage < Math.ceil(this.skillsList().length / this.limit)) {
+      this.currentPage += 1
+      this.offset += this.limit;
+      this.skillService.getAllMarked(this.limit, this.offset).subscribe(r => {
+        this.skillsList.set(r.results);
+      });
+    }
   }
 }
