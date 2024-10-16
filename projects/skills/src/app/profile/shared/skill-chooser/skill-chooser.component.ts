@@ -53,7 +53,7 @@ export class SkillChooserComponent implements OnInit {
 
     this.route.data.subscribe(r => {
       this.profileIdSkills.set(r["data"].skills.map((skill: ProfileSkill) => skill.skillId));
-      console.log(r['data'].skills)
+      console.log(r["data"].skills);
     });
   }
 
@@ -80,7 +80,7 @@ export class SkillChooserComponent implements OnInit {
 
   nextPage(): void {
     if (this.currentPage < Math.ceil(this.skillsList().length / this.limit)) {
-      this.currentPage += 1
+      this.currentPage += 1;
       this.offset += this.limit;
       this.skillService.getAllMarked(this.limit, this.offset).subscribe(r => {
         this.skillsList.set(r.results);
