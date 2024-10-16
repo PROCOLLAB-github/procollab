@@ -13,20 +13,20 @@ import { ProjectRatingCriterionOutput } from "../models/project-rating-criterion
   providedIn: "root",
 })
 export class ProjectRatingService {
-  constructor(private readonly apiService: ApiService) {}
+  constructor(private readonly apiService: ApiService) { }
 
   getAll(
     id: number,
     skip: number,
     take: number,
     isRatedByExpert?: boolean,
-    name__contains?: string
+    nameContains?: string
   ): Observable<ApiPagination<ProjectRate>> {
     return this.apiService.get(
       `/rate-project/${id}`,
       new HttpParams({
         fromObject: {
-          ...(name__contains !== undefined && { name__contains: name__contains }),
+          ...(nameContains !== undefined && { name__contains: nameContains }),
           ...(isRatedByExpert !== undefined && { is_rated_by_expert: isRatedByExpert }),
           limit: take,
           offset: skip,
