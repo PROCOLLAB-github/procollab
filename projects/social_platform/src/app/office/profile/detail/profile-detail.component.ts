@@ -32,7 +32,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
     YearsFromBirthdayPipe,
     BarComponent,
     BackComponent,
-    ModalComponent
+    ModalComponent,
   ],
 })
 export class ProfileDetailComponent implements OnInit {
@@ -42,14 +42,14 @@ export class ProfileDetailComponent implements OnInit {
     public readonly authService: AuthService,
     public readonly chatService: ChatService,
     public readonly breakpointObserver: BreakpointObserver
-  ) { }
+  ) {}
 
   user$: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
   loggedUserId$: Observable<number> = this.authService.profile.pipe(map(user => user.id));
 
   isDelayModalOpen = false;
   isSended = false;
-  errorMessageModal = signal('');
+  errorMessageModal = signal("");
   desktopMode$: Observable<boolean> = this.breakpointObserver
     .observe("(min-width: 920px)")
     .pipe(map(result => result.matches));
@@ -60,23 +60,23 @@ export class ProfileDetailComponent implements OnInit {
 
   downloadCV() {
     this.authService.downloadCV().subscribe({
-      next: (r) => {
-        const blob = new Blob([r.text], { type: 'application/pdf' });
-        const a = document.createElement('a');
+      next: r => {
+        const blob = new Blob([r.text], { type: "application/pdf" });
+        const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = 'cv.pdf';
+        a.download = "cv.pdf";
         document.body.appendChild(a);
         a.click();
         URL.revokeObjectURL(a.href);
         document.body.removeChild(a);
       },
-      error: (err) => {
+      error: err => {
         if (err.status === 400) {
           this.errorMessageModal.set(err.error.slice(23, 25));
           this.isDelayModalOpen = true;
         }
-      }
-    })
+      },
+    });
   }
 
   sendCVEmail() {
@@ -84,12 +84,12 @@ export class ProfileDetailComponent implements OnInit {
       next: () => {
         this.isSended = true;
       },
-      error: (err) => {
+      error: err => {
         if (err.status === 400) {
           this.errorMessageModal.set(err.error.slice(23, 25));
           this.isDelayModalOpen = true;
         }
-      }
+      },
     });
   }
 }

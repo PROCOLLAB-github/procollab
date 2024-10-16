@@ -17,7 +17,7 @@ import { HttpParams } from "@angular/common/http";
   providedIn: "root",
 })
 export class AuthService {
-  constructor(private apiService: ApiService, private tokenService: TokenService) { }
+  constructor(private apiService: ApiService, private tokenService: TokenService) {}
 
   login({ email, password }: LoginRequest): Observable<LoginResponse> {
     return this.apiService
@@ -38,11 +38,10 @@ export class AuthService {
   }
 
   downloadCV(): Observable<any> {
-    return this.apiService
-      .get("/auth/users/download_cv/", new HttpParams(), {
-        responseType: "text",
-        params: new HttpParams(),
-      })
+    return this.apiService.get("/auth/users/download_cv/", new HttpParams(), {
+      responseType: "text",
+      params: new HttpParams(),
+    });
   }
 
   sendCV(): Observable<any> {
