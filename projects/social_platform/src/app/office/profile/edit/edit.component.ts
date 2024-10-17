@@ -240,7 +240,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   nestedSkills$ = this.skillsService.getSkillsNested();
 
   skillsGroupsModalOpen = signal(false);
-  
+
   educationItems = signal<any[]>([]);
 
   workItems = signal<any[]>([]);

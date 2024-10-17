@@ -13,7 +13,6 @@ import { BarComponent, ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { BackComponent } from "@uilib";
 import { AsyncPipe } from "@angular/common";
-import jsPDF from "jspdf";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 
 @Component({
@@ -58,26 +57,26 @@ export class ProfileDetailComponent implements OnInit {
     this.navService.setNavTitle("Профиль");
   }
 
-  downloadCV() {
-    this.authService.downloadCV().subscribe({
-      next: r => {
-        const blob = new Blob([r.text], { type: "application/pdf" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "cv.pdf";
-        document.body.appendChild(a);
-        a.click();
-        URL.revokeObjectURL(a.href);
-        document.body.removeChild(a);
-      },
-      error: err => {
-        if (err.status === 400) {
-          this.errorMessageModal.set(err.error.slice(23, 25));
-          this.isDelayModalOpen = true;
-        }
-      },
-    });
-  }
+  // downloadCV() {
+  //   this.authService.downloadCV().subscribe({
+  //     next: r => {
+  //       const blob = new Blob([r.text], { type: "application/pdf" });
+  //       const a = document.createElement("a");
+  //       a.href = URL.createObjectURL(blob);
+  //       a.download = "cv.pdf";
+  //       document.body.appendChild(a);
+  //       a.click();
+  //       URL.revokeObjectURL(a.href);
+  //       document.body.removeChild(a);
+  //     },
+  //     error: err => {
+  //       if (err.status === 400) {
+  //         this.errorMessageModal.set(err.error.slice(23, 25));
+  //         this.isDelayModalOpen = true;
+  //       }
+  //     },
+  //   });
+  // }
 
   sendCVEmail() {
     this.authService.sendCV().subscribe({
