@@ -19,11 +19,14 @@ import { ProfileNewsService } from "../services/profile-news.service";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ProfileNews } from "../models/profile-news.model";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
-import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
+import { ParseBreaksPipe, ParseLinksPipe, PluralizePipe } from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { IconComponent } from "@ui/components";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
+import { ProfileService } from "@auth/services/profile.service";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
 
 @Component({
   selector: "app-profile-main",
@@ -35,12 +38,16 @@ import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
     NewsFormComponent,
     NewsCardComponent,
     IconComponent,
+    ModalComponent,
+    AvatarComponent,
     RouterLink,
     NgTemplateOutlet,
     UserLinksPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
     AsyncPipe,
+    PluralizePipe,
+    AvatarComponent,
   ],
 })
 export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -48,6 +55,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService,
     private readonly profileNewsService: ProfileNewsService,
+    private readonly profileApproveSkillService: ProfileService,
     private readonly cdRef: ChangeDetectorRef
   ) {}
 
@@ -85,6 +93,8 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
 
     this.cdRef.detectChanges();
+
+    this.authService.getProfile().subscribe(r => console.log(r));
   }
 
   ngOnDestroy(): void {
@@ -95,8 +105,13 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   readFullDescription = false;
 
   readAllProjects = false;
+  readAllPrograms = false;
   readAllAchievements = false;
   readAllLinks = false;
+  readAllEducation = false;
+  readAllLanguages = false;
+  readAllWorkExperience = false;
+  readAllModal = false;
 
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
@@ -150,5 +165,34 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
+  }
+
+  onToggleApprove(skillId: number, event: Event, isApproved: boolean) {
+    event.stopPropagation();
+    const userId = this.route.snapshot.params["id"];
+
+    if (isApproved) {
+      this.profileApproveSkillService.unApproveSkill(userId, skillId).subscribe();
+    } else {
+      this.profileApproveSkillService.approveSkill(userId, skillId).subscribe();
+    }
+  }
+
+  openSkills: any = {};
+
+  onOpenSkill(skillId: number) {
+    this.openSkills[skillId] = !this.openSkills[skillId];
+  }
+
+  onOpenChange(event: boolean, skillId: number) {
+    if (this.openSkills[skillId] && !event) {
+      this.openSkills[skillId] = false;
+    } else {
+      this.openSkills[skillId] = event;
+    }
+  }
+
+  onCloseModal(skillId: number) {
+    this.openSkills[skillId] = false;
   }
 }

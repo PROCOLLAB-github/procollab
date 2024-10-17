@@ -10,6 +10,7 @@ export class Program {
   description!: string;
   city!: string;
   tag!: string;
+  year!: number;
   links!: string[];
   shortDescription!: string;
   datetimeRegistrationEnds!: string;
@@ -38,6 +39,7 @@ export class Program {
       viewsCount: 1,
       tag: "",
       likesCount: 1,
+      year: 0,
       isUserLiked: false,
       isUserMember: false,
     };

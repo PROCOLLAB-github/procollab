@@ -266,6 +266,7 @@ $section-padding: 24px;
   &__skill {
     margin-right: 10px;
     margin-bottom: 10px;
+    cursor: pointer;
   }
 
   &__views {
@@ -312,6 +313,7 @@ $section-padding: 24px;
       }
     }
   }
+
   /* stylelint-enable value-no-vendor-prefix */
 }
 
@@ -382,11 +384,20 @@ $section-padding: 24px;
 }
 
 .project {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
   &__info {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 3px;
+  }
+
+  &__description {
+    display: flex;
+    gap: 12px;
   }
 
   &__title {
@@ -457,5 +468,70 @@ $section-padding: 24px;
     padding-bottom: 5px;
     background-color: var(--accent);
     box-shadow: 0 0 22px var(--accent-mild);
+  }
+}
+
+.education {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &__body {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__text {
+    margin-left: 15px;
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  .approves {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+
+    &__info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &__left {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    &__speciality {
+      color: var(--dark-grey);
+    }
+
+    &__text {
+      @include typography.body-12;
+
+      @include responsive.apply-desktop {
+        @include typography.body-14;
+      }
+    }
+  }
+
+  &__more {
+    color: var(--accent);
+
+    @include typography.body-14;
+
+    @include responsive.apply-desktop {
+      @include typography.body-12;
+    }
   }
 }

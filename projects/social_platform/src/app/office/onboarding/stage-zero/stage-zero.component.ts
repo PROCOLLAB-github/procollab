@@ -2,14 +2,14 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { ControlErrorPipe, ValidationService } from "projects/core";
 import { concatMap, Subscription } from "rxjs";
 import { Router } from "@angular/router";
-import { User } from "@auth/models/user.model";
+import { User, workExperience } from "@auth/models/user.model";
 import { OnboardingService } from "../services/onboarding.service";
-import { ButtonComponent, InputComponent } from "@ui/components";
+import { ButtonComponent, InputComponent, SelectComponent } from "@ui/components";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 
 @Component({
@@ -23,6 +23,7 @@ import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-con
     InputComponent,
     ButtonComponent,
     ControlErrorPipe,
+    SelectComponent,
   ],
 })
 export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
@@ -36,7 +37,21 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
     this.stageForm = this.fb.group({
       avatar: ["", [Validators.required]],
       city: ["", [Validators.required]],
-      organization: ["", [Validators.required]],
+      education: this.fb.array([]),
+      workExperience: this.fb.array([]),
+      // education
+      organizationName: ["", Validators.required],
+      entryYear: [""],
+      completionYear: [""],
+      description: [""],
+      educationStatus: [""],
+      educationLevel: [""],
+      // work
+      organizationNameWork: ["", Validators.required],
+      entryYearWork: [""],
+      completionYearWork: [""],
+      descriptionWork: [""],
+      jobPosition: [""],
     });
   }
 
@@ -49,7 +64,8 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
       this.stageForm.patchValue({
         avatar: fv.avatar,
         city: fv.city,
-        organization: fv.organization,
+        education: fv.education,
+        workExperience: fv.workExperience,
       });
     });
 
@@ -60,16 +76,218 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
+  yearListEducation = [
+    {
+      value: 2000,
+      id: 0,
+      label: "2000",
+    },
+    {
+      value: 2001,
+      id: 1,
+      label: "2001",
+    },
+    {
+      value: 2002,
+      id: 2,
+      label: "2002",
+    },
+    {
+      value: 2003,
+      id: 3,
+      label: "2003",
+    },
+    {
+      value: 2004,
+      id: 4,
+      label: "2004",
+    },
+    {
+      value: 2005,
+      id: 5,
+      label: "2005",
+    },
+    {
+      value: 2006,
+      id: 6,
+      label: "2006",
+    },
+    {
+      value: 2007,
+      id: 7,
+      label: "2007",
+    },
+    {
+      value: 2008,
+      id: 8,
+      label: "2008",
+    },
+    {
+      value: 2009,
+      id: 9,
+      label: "2009",
+    },
+    {
+      value: 2010,
+      id: 10,
+      label: "2010",
+    },
+    {
+      value: 2011,
+      id: 11,
+      label: "2011",
+    },
+    {
+      value: 2012,
+      id: 12,
+      label: "2012",
+    },
+    {
+      value: 2013,
+      id: 13,
+      label: "2013",
+    },
+    {
+      value: 2014,
+      id: 14,
+      label: "2014",
+    },
+    {
+      value: 2015,
+      id: 15,
+      label: "2015",
+    },
+    {
+      value: 2016,
+      id: 16,
+      label: "2016",
+    },
+    {
+      value: 2017,
+      id: 17,
+      label: "2017",
+    },
+    {
+      value: 2018,
+      id: 18,
+      label: "2018",
+    },
+    {
+      value: 2019,
+      id: 19,
+      label: "2019",
+    },
+    {
+      value: 2020,
+      id: 20,
+      label: "2020",
+    },
+    {
+      value: 2021,
+      id: 21,
+      label: "2021",
+    },
+    {
+      value: 2022,
+      id: 22,
+      label: "2022",
+    },
+    {
+      value: 2023,
+      id: 23,
+      label: "2023",
+    },
+    {
+      label: "2024",
+      id: 24,
+      value: "2024",
+    },
+  ];
+
+  educationStatusList = [
+    {
+      id: 0,
+      value: "Ученик",
+      label: "Ученик",
+    },
+    {
+      id: 1,
+      value: "Студент",
+      label: "Студент",
+    },
+    {
+      id: 2,
+      value: "Выпускник",
+      label: "Выпускник",
+    },
+  ];
+
+  educationLevelList = [
+    {
+      id: 0,
+      value: "Среднее общее образование",
+      label: "Среднее общее образование",
+    },
+    {
+      id: 1,
+      value: "Среднее профессиональное образование",
+      label: "Среднее профессиональное образование",
+    },
+    {
+      id: 2,
+      value: "Высшее образование – бакалавриат, специалитет",
+      label: "Высшее образование – бакалавриат, специалитет",
+    },
+    {
+      id: 3,
+      value: "Высшее образование – магистратура",
+      label: "Высшее образование – магистратура",
+    },
+    {
+      id: 4,
+      value: "Высшее образование – аспирантура",
+      label: "Высшее образование – аспирантура",
+    },
+  ];
+
   stageForm: FormGroup;
   errorMessage = ErrorMessage;
   profile?: User;
   stageSubmitting = false;
   subscriptions$: Subscription[] = [];
 
+  get education(): FormArray {
+    return this.stageForm.get("education") as FormArray;
+  }
+
+  get workExperience(): FormArray {
+    return this.stageForm.get("workExperience") as FormArray;
+  }
+
   onSubmit(): void {
     if (!this.validationService.getFormValidation(this.stageForm)) {
       return;
     }
+
+    const educationItem = this.fb.group({
+      organizationName: this.stageForm.get("organizationName")?.value,
+      entryYear: this.stageForm.get("entryYear")?.value,
+      completionYear: this.stageForm.get("completionYear")?.value,
+      description: this.stageForm.get("description")?.value,
+      educationStatus: this.stageForm.get("educationStatus")?.value,
+      educationLevel: this.stageForm.get("educationLevel")?.value,
+    });
+
+    const workItem = this.fb.group({
+      organizationName: this.stageForm.get("organizationNameWork")?.value,
+      entryYear: this.stageForm.get("entryYearWork")?.value,
+      completionYear: this.stageForm.get("completionYearWork")?.value,
+      description: this.stageForm.get("descriptionWork")?.value,
+      jobPosition: this.stageForm.get("jobPosition")?.value,
+    });
+
+    this.education.push(educationItem);
+    this.workExperience.push(workItem);
 
     this.stageSubmitting = true;
 

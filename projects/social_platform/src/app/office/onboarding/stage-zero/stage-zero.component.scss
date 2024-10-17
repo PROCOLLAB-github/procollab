@@ -10,4 +10,27 @@
   &__field {
     margin-bottom: 12px;
   }
+
+  &__first-row {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 12px;
+
+    > :first-child {
+      flex-grow: 1;
+    }
+  }
+
+  &__years {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin: 10px 0;
+
+    .years__left,
+    .years__right {
+      width: 50%;
+    }
+  }
 }

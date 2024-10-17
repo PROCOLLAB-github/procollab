@@ -74,6 +74,27 @@
         </fieldset>
         }
       </div>
+
+      <div class="profile__row">
+        @if (profileForm.get("additionalRole"); as additionalRole) {
+        <fieldset>
+          <label for="additionalRole" class="field-label">Дополнительная роль</label>
+          <app-input
+            id="additionalRole"
+            [error]="additionalRole | controlError"
+            type="text"
+            placeholder="Введите вашу доп. роль"
+            formControlName="additionalRole"
+          ></app-input>
+          @if (additionalRole | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        }
+      </div>
+
       <div class="profile__row">
         @if (profileForm.get("city"); as city) {
         <fieldset>
@@ -93,29 +114,266 @@
         </fieldset>
         }
       </div>
+
       <div class="profile__row">
-        @if (profileForm.get("organization"); as organization) {
+        @if (profileForm.get("phoneNumber"); as phoneNumber) {
         <fieldset>
-          <label for="organization" class="field-label">{{
-            currentType.value === 1 ? "Место учебы" : "Место работы"
-          }}</label>
+          <label for="phoneNumber" class="field-label">Телефон</label>
           <app-input
-            id="organization"
-            [error]="organization | controlError"
-            type="text"
-            [placeholder]="
-              currentType.value === 1 ? 'вуз / колледж / школа / организация' : 'Название компании'
-            "
-            formControlName="organization"
+            id="phoneNumber"
+            [error]="phoneNumber | controlError"
+            type="tel"
+            pattern="[+]7 [0-9]{3} [0-9]{3}-[0-9]{2}-[0-9]{2}"
+            placeholder="Введите ваш номер телефона"
+            formControlName="phoneNumber"
           ></app-input>
-          @if (organization | controlError: "required") {
+          @if (phoneNumber | controlError: "required") {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
+
+          <p class="text-body-12 error__phone-number">{{ errorMessagePhoneNumber }}</p>
         </fieldset>
         }
       </div>
+
+      <p class="text-bold-body-14">Образование</p>
+      <div class="profile__education">
+        <div class="education__first-row">
+          <div class="education__years">
+            @if (profileForm.get("entryYear"); as entryYear) {
+            <fieldset class="years__left">
+              <label for="entryYear" class="field-label">Дата начала</label>
+              <app-select
+                formControlName="entryYear"
+                placeholder="2023 год"
+                [options]="yearListEducation"
+              >
+                <i appIcon icon="arrow-no-body" appSquare="32"></i>
+              </app-select>
+
+              @if (entryYear | controlError: "required") {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            } @if (profileForm.get("completionYear"); as completionYear) {
+            <fieldset class="years__right">
+              <label for="completionYear" class="field-label">Дата окончания</label>
+              <app-select
+                formControlName="completionYear"
+                placeholder="2023 год"
+                [options]="yearListEducation.slice(5)"
+              >
+                <i appIcon icon="arrow-no-body" appSquare="32"></i>
+              </app-select>
+              @if (completionYear | controlError: "required") {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            }
+          </div>
+
+          @if (profileForm.get("organizationName"); as organizationName) {
+          <fieldset>
+            <label for="organizationName" class="field-label">Названия учереждения</label>
+            <app-input
+              [error]="organizationName | controlError"
+              placeholder="ВУЗ / колледж / школа"
+              formControlName="organizationName"
+            ></app-input>
+            @if (organizationName | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (profileForm.get("description"); as description) {
+          <fieldset>
+            <label for="description" class="field-label">Краткое описание</label>
+            <app-input
+              [error]="description | controlError"
+              placeholder="Востоковедение и Африканистика"
+              formControlName="description"
+            ></app-input>
+            @if (description | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (profileForm.get("educationLevel"); as educationLevel) {
+          <fieldset>
+            <label for="educationLevel" class="field-label">Уровень образования</label>
+            <app-select
+              formControlName="educationLevel"
+              placeholder="Высшее образование-магистратура"
+              [options]="educationLevelList"
+            >
+              <i appIcon icon="arrow-no-body" appSquare="32"></i>
+            </app-select>
+            @if (educationLevel | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (profileForm.get("educationStatus"); as educationStatus) {
+          <fieldset>
+            <label for="educationStatus" class="field-label">Должность</label>
+            <app-select
+              formControlName="educationStatus"
+              placeholder="Студент"
+              [options]="educationStatusList"
+            >
+              <i appIcon icon="arrow-no-body" appSquare="32"></i>
+            </app-select>
+            @if (educationStatus | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
+        <app-button class="profile__add-education" (click)="addEducation()">
+          <span>Добавить новое образование</span>
+          <i appIcon icon="plus" appSquare="14"></i>
+        </app-button>
+      </div>
+
+      <div class="profile__row education__block">
+        @if(educationItems().length || education.length){ @for (educationItem of education.value;
+        track $index) {
+        <div class="education__info">
+          <p class="text-body-16 education__text">
+            {{ educationItem.organizationName }} {{ educationItem.entryYear }} -
+            {{ educationItem.completionYear }} {{ educationItem.description }}
+            {{ educationItem.educationStatus }} {{ educationItem.educationLevel }}
+          </p>
+          <i class="edit" appIcon icon="edit-pen" appSquare="20"></i>
+        </div>
+        } }
+      </div>
+
+      <p for="organization" class="field-label text-bold-body-14">
+        {{ currentType.value === 1 ? "Место учебы" : "Место работы" }}
+      </p>
+
+      <div class="profile__education">
+        <div class="education__first-row">
+          <div class="education__years">
+            @if (profileForm.get("entryYearWork"); as entryYearWork) {
+            <fieldset class="years__left">
+              <label for="entryYearWork" class="field-label">Дата начала</label>
+              <app-select
+                formControlName="entryYearWork"
+                placeholder="2023 год"
+                [options]="yearListEducation"
+              >
+                <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__entry"></i>
+              </app-select>
+
+              @if (entryYearWork | controlError: "required") {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            } @if (profileForm.get("completionYearWork"); as completionYearWork) {
+            <fieldset class="years__right">
+              <label for="completionYearWork" class="field-label">Дата окончания</label>
+              <app-select
+                formControlName="completionYearWork"
+                placeholder="2023 год"
+                [options]="yearListEducation"
+              >
+                <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+              </app-select>
+
+              @if (completionYearWork | controlError: "required") {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            }
+          </div>
+
+          @if (profileForm.get("organization"); as organization) {
+          <fieldset>
+            <label for="organization" class="field-label">Название</label>
+            <app-input
+              id="organization"
+              [error]="organization | controlError"
+              type="text"
+              placeholder="Проколлаб"
+              formControlName="organization"
+            ></app-input>
+            @if (organization | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (profileForm.get("descriptionWork"); as descriptionWork) {
+          <fieldset>
+            <label for="descriptionWork" class="field-label">Краткое описание</label>
+            <app-input
+              id="descriptionWork"
+              [error]="descriptionWork | controlError"
+              type="text"
+              placeholder="Образовательная платформа"
+              formControlName="descriptionWork"
+            ></app-input>
+            @if (descriptionWork | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (profileForm.get("jobPosition"); as jobPosition) {
+          <fieldset>
+            <label for="jobPosition" class="field-label">Должность</label>
+            <app-input
+              id="jobPosition"
+              [error]="jobPosition | controlError"
+              type="text"
+              placeholder="Дизайнер"
+              formControlName="jobPosition"
+            ></app-input>
+            @if (jobPosition | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
+        <app-button class="profile__add-education" (click)="addWork()">
+          <span>Добавить место работы</span>
+          <i appIcon icon="plus" appSquare="14"></i>
+        </app-button>
+      </div>
+
+      <div class="profile__row education__block">
+        @if(workItems().length || workExperience.length){ @for (workItem of workExperience.value;
+        track $index) {
+        <div class="education__info">
+          <p class="text-body-16 education__text">
+            {{ workItem.organizationName }} {{ workItem.entryYear }} -
+            {{ workItem.completionYear }} {{ workItem.description }}
+            {{ workItem.jobPosition }}
+          </p>
+          <i class="edit" appIcon icon="edit-pen" appSquare="20"></i>
+        </div>
+        } }
+      </div>
+
       <div class="profile__row">
         @if (profileForm.get("speciality"); as speciality) {
         <fieldset>
@@ -278,6 +536,67 @@
           <span>Добавить новое достижение</span>
           <i appIcon icon="plus" appSquare="14"></i>
         </app-button>
+      </div>
+
+      <div class="profile__language">
+        <label class="field-label">Язык</label>
+        <label for="languageName" class="field-label">Уровень</label>
+        <div class="education__years">
+          @if (profileForm.get("language"); as language) {
+          <fieldset class="years__right">
+            <app-select
+              formControlName="language"
+              placeholder="Английский"
+              [options]="languageList"
+            >
+              <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+            </app-select>
+
+            @if (language | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (profileForm.get("languageLevel"); as languageLevel) {
+          <fieldset class="years__right">
+            <app-select
+              formControlName="languageLevel"
+              placeholder="B1"
+              [options]="languageLevelList"
+            >
+              <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+            </app-select>
+
+            @if (languageLevel | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
+
+        <app-button
+          [ariaDisabled]="languageItems().length === 4"
+          class="profile__add-education"
+          (click)="addLanguage()"
+        >
+          <span>Добавить язык</span>
+          <i appIcon icon="plus" appSquare="14"></i>
+        </app-button>
+      </div>
+
+      <div class="profile__row education__block">
+        @if(languageItems().length || userLanguages.length){ @for (languageItem of
+        userLanguages.value; track $index) {
+        <div class="education__info">
+          <p class="text-body-16 education__text">
+            {{ languageItem.language }} {{ languageItem.languageLevel }}
+          </p>
+          <i class="edit" appIcon icon="edit-pen" appSquare="20"></i>
+        </div>
+        } }
       </div>
     </div>
     <div class="profile__column">

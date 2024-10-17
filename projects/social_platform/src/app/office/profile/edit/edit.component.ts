@@ -64,6 +64,7 @@ dayjs.extend(cpf);
     SkillsGroupComponent,
     SpecializationsGroupComponent,
     ModalComponent,
+    SelectComponent,
   ],
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -84,8 +85,25 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       userType: [0],
       birthday: ["", [Validators.required]],
       city: [""],
+      phoneNumber: ["", Validators.required],
+      additionalRole: [""],
+      organizationName: [""],
+      entryYear: [""],
+      completionYear: [""],
+      description: [""],
+      educationLevel: [""],
+      language: [""],
+      languageLevel: [""],
+      educationStatus: [""],
+      education: this.fb.array([]),
+      workExperience: this.fb.array([]),
+      userLanguages: this.fb.array([]),
       links: this.fb.array([]),
       organization: [""],
+      entryYearWork: [""],
+      completionYearWork: [""],
+      descriptionWork: [""],
+      jobPosition: [""],
       speciality: ["", [Validators.required]],
       skills: [[], [Validators.required]],
       achievements: this.fb.array([]),
@@ -128,11 +146,49 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         userType: profile.userType ?? 1,
         birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
         city: profile.city ?? "",
-        organization: profile.organization ?? "",
+        phoneNumber: profile.phoneNumber ?? "",
+        additionalRole: profile.v2Speciality.name ?? "",
         speciality: profile.speciality ?? "",
         skills: profile.skills ?? [],
         avatar: profile.avatar ?? "",
         aboutMe: profile.aboutMe ?? "",
+      });
+
+      this.workExperience.clear();
+      profile.workExperience.forEach(work => {
+        this.workExperience.push(
+          this.fb.group({
+            organizationName: work.organizationName,
+            entryYear: work.entryYear,
+            completionYear: work.completionYear,
+            description: work.description,
+            jobPosition: work.jobPosition,
+          })
+        );
+      });
+
+      this.education.clear();
+      profile.education.forEach(edu => {
+        this.education.push(
+          this.fb.group({
+            organizationName: edu.organizationName,
+            entryYear: edu.entryYear,
+            completionYear: edu.completionYear,
+            description: edu.description,
+            educationStatus: edu.educationStatus,
+            educationLevel: edu.educationLevel,
+          })
+        );
+      });
+
+      this.userLanguages.clear();
+      profile.userLanguages.forEach(lang => {
+        this.userLanguages.push(
+          this.fb.group({
+            language: lang.language,
+            languageLevel: lang.languageLevel,
+          })
+        );
       });
 
       this.cdref.detectChanges();
@@ -184,11 +240,287 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   nestedSkills$ = this.skillsService.getSkillsNested();
 
   skillsGroupsModalOpen = signal(false);
+  
+  educationItems = signal<any[]>([]);
+
+  workItems = signal<any[]>([]);
+
+  languageItems = signal<any[]>([]);
 
   isModalErrorSkillsChoose = signal(false);
   isModalErrorSkillChooseText = signal("");
 
   subscription$: Subscription[] = [];
+
+  yearListEducation = [
+    {
+      value: 2000,
+      id: 0,
+      label: "2000",
+    },
+    {
+      value: 2001,
+      id: 1,
+      label: "2001",
+    },
+    {
+      value: 2002,
+      id: 2,
+      label: "2002",
+    },
+    {
+      value: 2003,
+      id: 3,
+      label: "2003",
+    },
+    {
+      value: 2004,
+      id: 4,
+      label: "2004",
+    },
+    {
+      value: 2005,
+      id: 5,
+      label: "2005",
+    },
+    {
+      value: 2006,
+      id: 6,
+      label: "2006",
+    },
+    {
+      value: 2007,
+      id: 7,
+      label: "2007",
+    },
+    {
+      value: 2008,
+      id: 8,
+      label: "2008",
+    },
+    {
+      value: 2009,
+      id: 9,
+      label: "2009",
+    },
+    {
+      value: 2010,
+      id: 10,
+      label: "2010",
+    },
+    {
+      value: 2011,
+      id: 11,
+      label: "2011",
+    },
+    {
+      value: 2012,
+      id: 12,
+      label: "2012",
+    },
+    {
+      value: 2013,
+      id: 13,
+      label: "2013",
+    },
+    {
+      value: 2014,
+      id: 14,
+      label: "2014",
+    },
+    {
+      value: 2015,
+      id: 15,
+      label: "2015",
+    },
+    {
+      value: 2016,
+      id: 16,
+      label: "2016",
+    },
+    {
+      value: 2017,
+      id: 17,
+      label: "2017",
+    },
+    {
+      value: 2018,
+      id: 18,
+      label: "2018",
+    },
+    {
+      value: 2019,
+      id: 19,
+      label: "2019",
+    },
+    {
+      value: 2020,
+      id: 20,
+      label: "2020",
+    },
+    {
+      value: 2021,
+      id: 21,
+      label: "2021",
+    },
+    {
+      value: 2022,
+      id: 22,
+      label: "2022",
+    },
+    {
+      value: 2023,
+      id: 23,
+      label: "2023",
+    },
+    {
+      label: "2024",
+      id: 24,
+      value: "2024",
+    },
+  ];
+
+  educationStatusList = [
+    {
+      id: 0,
+      value: "Ученик",
+      label: "Ученик",
+    },
+    {
+      id: 1,
+      value: "Студент",
+      label: "Студент",
+    },
+    {
+      id: 2,
+      value: "Выпускник",
+      label: "Выпускник",
+    },
+  ];
+
+  educationLevelList = [
+    {
+      id: 0,
+      value: "Среднее общее образование",
+      label: "Среднее общее образование",
+    },
+    {
+      id: 1,
+      value: "Среднее профессиональное образование",
+      label: "Среднее профессиональное образование",
+    },
+    {
+      id: 2,
+      value: "Высшее образование – бакалавриат, специалитет",
+      label: "Высшее образование – бакалавриат, специалитет",
+    },
+    {
+      id: 3,
+      value: "Высшее образование – магистратура",
+      label: "Высшее образование – магистратура",
+    },
+    {
+      id: 4,
+      value: "Высшее образование – аспирантура",
+      label: "Высшее образование – аспирантура",
+    },
+  ];
+
+  languageList = [
+    {
+      id: 0,
+      value: "Английский",
+      label: "Английский",
+    },
+    {
+      id: 1,
+      value: "Испанский",
+      label: "Испанский",
+    },
+    {
+      id: 2,
+      value: "Итальянский",
+      label: "Итальянский",
+    },
+    {
+      id: 3,
+      value: "Немецкий",
+      label: "Немецкий",
+    },
+    {
+      id: 4,
+      value: "Японский",
+      label: "Японский",
+    },
+    {
+      id: 5,
+      value: "Китайский",
+      label: "Китайский",
+    },
+    {
+      id: 6,
+      value: "Арабский",
+      label: "Арабский",
+    },
+    {
+      id: 7,
+      value: "Шведский",
+      label: "Шведский",
+    },
+    {
+      id: 8,
+      value: "Польский",
+      label: "Польский",
+    },
+    {
+      id: 9,
+      value: "Чешский",
+      label: "Чешский",
+    },
+    {
+      id: 10,
+      value: "Русский",
+      label: "Русский",
+    },
+    {
+      id: 11,
+      value: "Французский",
+      label: "Французский",
+    },
+  ];
+
+  languageLevelList = [
+    {
+      id: 0,
+      value: "А1",
+      label: "А1",
+    },
+    {
+      id: 1,
+      value: "А2",
+      label: "А2",
+    },
+    {
+      id: 2,
+      value: "B1",
+      label: "B1",
+    },
+    {
+      id: 3,
+      value: "B2",
+      label: "B2",
+    },
+    {
+      id: 4,
+      value: "С1",
+      label: "С1",
+    },
+    {
+      id: 5,
+      value: "С2",
+      label: "С2",
+    },
+  ];
 
   get typeSpecific(): FormGroup {
     return this.profileForm.get("typeSpecific") as FormGroup;
@@ -224,7 +556,20 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.profileForm.get("achievements") as FormArray;
   }
 
+  get education(): FormArray {
+    return this.profileForm.get("education") as FormArray;
+  }
+
+  get workExperience(): FormArray {
+    return this.profileForm.get("workExperience") as FormArray;
+  }
+
+  get userLanguages(): FormArray {
+    return this.profileForm.get("userLanguages") as FormArray;
+  }
+
   errorMessage = ErrorMessage;
+  errorMessagePhoneNumber = "";
 
   roles: Observable<SelectComponent["options"]> = this.authService.changeableRoles.pipe(
     map(roles => roles.map(role => ({ id: role.id, value: role.id, label: role.name })))
@@ -245,6 +590,70 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   removeAchievement(i: number): void {
     this.achievements.removeAt(i);
+  }
+
+  addEducation() {
+    const educationItem = this.fb.group({
+      organizationName: this.profileForm.get("organizationName")?.value,
+      entryYear: this.profileForm.get("entryYear")?.value,
+      completionYear: this.profileForm.get("completionYear")?.value,
+      description: this.profileForm.get("description")?.value,
+      educationStatus: this.profileForm.get("educationStatus")?.value,
+      educationLevel: this.profileForm.get("educationLevel")?.value,
+    });
+
+    this.educationItems.update(items => [...items, educationItem.value]);
+
+    this.profileForm.get("organizationName")?.reset();
+    this.profileForm.get("entryYear")?.reset();
+    this.profileForm.get("completionYear")?.reset();
+
+    this.profileForm.get("description")?.reset();
+    this.profileForm.get("educationStatus")?.reset();
+    this.profileForm.get("educationLevel")?.reset();
+
+    this.education.push(educationItem);
+
+    console.log(this.educationItems(), this.education.value, this.profileForm.value);
+  }
+
+  addWork() {
+    const workItem = this.fb.group({
+      organizationName: this.profileForm.get("organization")?.value,
+      entryYear: this.profileForm.get("entryYearWork")?.value,
+      completionYear: this.profileForm.get("completionYearWork")?.value,
+      description: this.profileForm.get("descriptionWork")?.value,
+      jobPosition: this.profileForm.get("jobPosition")?.value,
+    });
+
+    this.workItems.update(items => [...items, workItem.value]);
+
+    this.profileForm.get("organization")?.reset();
+    this.profileForm.get("entryYearWork")?.reset();
+    this.profileForm.get("completionYearWork")?.reset();
+
+    this.profileForm.get("descriptionWork")?.reset();
+    this.profileForm.get("jobPosition")?.reset();
+
+    this.workExperience.push(workItem);
+
+    console.log(this.workItems(), this.workExperience.value, this.profileForm.value);
+  }
+
+  addLanguage() {
+    const languageItem = this.fb.group({
+      language: this.profileForm.get("language")?.value,
+      languageLevel: this.profileForm.get("languageLevel")?.value,
+    });
+
+    this.languageItems.update(items => [...items, languageItem.value]);
+
+    this.profileForm.get("language")?.reset();
+    this.profileForm.get("languageLevel")?.reset();
+
+    this.userLanguages.push(languageItem);
+
+    console.log(this.languageItems(), this.userLanguages.value, this.profileForm.value);
   }
 
   get links(): FormArray {
@@ -304,6 +713,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
           this.isModalErrorSkillsChoose.set(true);
           this.isModalErrorSkillChooseText.set(error.error[0]);
           this.profileFormSubmitting = false;
+          if (error.error.phone_number) {
+            this.errorMessagePhoneNumber = error.error.phone_number[0];
+          }
         },
       });
   }
