@@ -2,11 +2,23 @@
 
 import { AfterViewInit, Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { concatMap, fromEvent, map, of, Subscription, tap, throttleTime } from "rxjs";
+import {
+  concatMap,
+  debounceTime,
+  fromEvent,
+  map,
+  of,
+  Subject,
+  Subscription,
+  switchMap,
+  tap,
+  throttleTime,
+} from "rxjs";
 import { AsyncPipe } from "@angular/common";
 import { RatingCardComponent } from "@office/program/shared/rating-card/rating-card.component";
 import { ProjectRate } from "@office/program/models/project-rate";
 import { ProjectRatingService } from "@office/program/services/project-rating.service";
+import Fuse from "fuse.js";
 
 @Component({
   selector: "app-list",
@@ -23,8 +35,11 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   isListOfAll = this.router.url.includes("/all");
+  isRatedByExpert = signal<boolean | undefined>(undefined);
+  searchValue = signal<string>("");
 
   projects = signal<ProjectRate[]>([]);
+  initialProjects: ProjectRate[] = [];
 
   totalProjCount = signal(0);
   fetchLimit = signal(8);
@@ -39,11 +54,33 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
         map(r => ({ projects: r["results"], count: r["count"] }))
       )
       .subscribe(({ projects, count }) => {
+        this.initialProjects = projects;
         this.projects.set(projects);
         this.totalProjCount.set(count);
       });
 
-    this.subscriptions$().push(initProjects$);
+    const queryParams$ = this.route.queryParams
+      .pipe(
+        debounceTime(200),
+        tap(params => {
+          const isRatedByExpert =
+            params["is_rated_by_expert"] === "true"
+              ? true
+              : params["is_rated_by_expert"] === "false"
+              ? false
+              : undefined;
+          const searchValue = params["name__contains"];
+
+          this.isRatedByExpert.set(isRatedByExpert);
+          this.searchValue.set(searchValue);
+        }),
+        switchMap(() => this.onFetch(this.fetchPage() * this.fetchLimit(), this.fetchLimit()))
+      )
+      .subscribe(result => {
+        this.projects.set(result.results);
+      });
+
+    this.subscriptions$().push(initProjects$, queryParams$);
   }
 
   ngAfterViewInit() {
@@ -51,8 +88,9 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (target) {
       const scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
+          debounceTime(200),
           concatMap(() => this.onScroll()),
-          throttleTime(500)
+          throttleTime(2000)
         )
         .subscribe();
 
@@ -65,7 +103,10 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onScroll() {
-    if (this.projects().length >= this.totalProjCount()) return of({});
+    if (this.projects().length >= this.totalProjCount()) {
+      console.log("All projects loaded, no more fetching.");
+      return of({});
+    }
 
     const target = document.querySelector(".office__body");
     if (!target) return of({});
@@ -81,15 +122,18 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onFetch(offset: number, limit: number) {
     const programId = this.route.parent?.snapshot.params["programId"];
-
-    const observable = this.isListOfAll
-      ? this.projectRatingService.getAll(programId, offset, limit)
-      : this.projectRatingService.getRated(programId, offset, limit);
+    const observable = this.projectRatingService.getAll(
+      programId,
+      offset,
+      limit,
+      this.isRatedByExpert(),
+      this.searchValue()
+    );
 
     return observable.pipe(
       tap(({ count, results }) => {
         this.totalProjCount.set(count);
-        this.projects.update(projects => [...projects, ...results]);
+        this.projects.set(results);
       })
     );
   }

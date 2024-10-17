@@ -16,23 +16,34 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
+      # - name: Checkout
+      #   uses: actions/checkout@v3
+      # - name: Setup node
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 18.16
+      #     cache: "npm"
+      # - run: npm ci
+      # - run: npm run format:check
+      # - run: npm run lint:ts
+      # - run: npm run build:prod
+      - name: commands on server
+        uses: garygrossgarten/github-action-ssh@release
         with:
-          node-version: 18.16
-          cache: "npm"
-      - run: npm ci
-      - run: npm run format:check
-      - run: npm run lint:ts
-      - run: npm run build:prod
-      - name: deploy to server
-        uses: burnett01/rsync-deployments@5.2.1
-        with:
-          switches: -avzr --delete
-          path: dist/**
-          remote_path: /home/gh_deploy
-          remote_user: gh_deploy
-          remote_key: ${{ secrets.DEPLOY_KEY }}
-          remote_host: app.procollab.ru
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          command: |
+            cd /home/new_deploy &&
+            git pull origin master &&
+            ng build social_platform
+
+      # - name: deploy to server
+      #   uses: burnett01/rsync-deployments@5.2.1
+      #   with:
+      #     switches: -avzr --delete
+      #     path: dist/**
+      #     remote_path: /home/gh_deploy
+      #     remote_user: gh_deploy
+      #     remote_key: ${{ secrets.DEPLOY_KEY }}
+      #     remote_host: app.procollab.ru

@@ -303,3 +303,40 @@
     }
   }
 }
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  max-height: calc(100vh - 40px);
+  padding: 40px 0 80px;
+  overflow-y: auto;
+
+  @include responsive.apply-desktop {
+    width: 50%;
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__title {
+    text-align: center;
+  }
+
+  &__text {
+    text-align: center;
+  }
+}

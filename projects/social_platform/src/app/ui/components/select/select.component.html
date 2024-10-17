@@ -7,7 +7,13 @@
     [class.field__input--open]="isOpen"
     (click)="isOpen = !isOpen; highlightedIndex = -1"
   >
-    {{ selectedId || selectedId === 0 ? getLabel(selectedId) || placeholder : placeholder }}
+    {{
+      selectedId === -1
+        ? "Ничего"
+        : selectedId || selectedId === 0
+        ? getLabel(selectedId) || placeholder
+        : placeholder
+    }}
     <i
       class="field__arrow"
       [class.field__arrow--filpped]="isOpen"

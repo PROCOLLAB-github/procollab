@@ -29,8 +29,13 @@
 
   &__wrapper {
     display: flex;
+    flex-direction: column;
     gap: 50px;
     justify-content: space-between;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+    }
   }
 
   &__column {
@@ -45,7 +50,10 @@
 
     &--grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+
+      @include responsive.apply-desktop {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
   }
 

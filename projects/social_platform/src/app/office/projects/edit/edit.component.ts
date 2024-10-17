@@ -182,14 +182,17 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         tap(tags => {
           this.programTags = tags;
         }),
-        map(tags => tags.map(t => ({ label: t.name, value: t.id, id: t.id }))),
+        map(tags => [
+          { label: "Без тега", value: 0, id: 0 },
+          ...tags.map(t => ({ label: t.name, value: t.id, id: t.id })),
+        ]),
         tap(tags => {
           this.programTagsOptions = tags;
         }),
         concatMap(() => this.route.data),
         map(d => d["data"])
       )
-      .subscribe(([project, vacancies, invites]: [Project, Vacancy[], Invite[]]) => {
+      .subscribe(([project, vacancies, invites]: [Project, ApiPagination<Vacancy>, Invite[]]) => {
         this.projectForm.patchValue({
           imageAddress: project.imageAddress,
           name: project.name,
@@ -208,6 +211,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           this.projectForm.patchValue({
             partnerProgramId: tag?.id,
           });
+        } else {
+          this.projectForm.patchValue({
+            partnerProgramId: null,
+          });
         }
 
         project.achievements &&
@@ -217,16 +224,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
         project.links && project.links.forEach(l => this.addLink(l));
 
-        this.vacancies = vacancies;
+        this.vacancies = vacancies.results;
 
         this.invites = invites;
 
         this.cdRef.detectChanges();
       });
-
-    this.editingStep =
-      (this.route.snapshot.queryParamMap.get("editingStep") as "main" | "team" | "achievements") ||
-      "main";
   }
 
   programTagsOptions: SelectComponent["options"] = [];
@@ -243,9 +246,17 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   editingStep: "main" | "team" | "achievements" = "main";
 
+  isCompleted = false;
+
   profile$?: Subscription;
 
   errorMessage = ErrorMessage;
+
+  errorModalMessage = signal<{
+    program_name: string;
+    whenCanEdit: string;
+    daysUntilResolution: string;
+  } | null>(null);
 
   industries$ = this.industryService.industries.pipe(
     map(industries =>
@@ -455,7 +466,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   saveProjectAsPublished(): void {
     this.projSubmitInitiated = true;
     this.projectForm.get("draft")?.patchValue(false);
+
     this.setProjFormIsSubmitting = this.setIsSubmittingAsPublished;
+    const partnerProgramId = this.projectForm.get("partnerProgramId")?.value;
+    this.projectForm.patchValue({ partnerProgramId: partnerProgramId });
     this.submitProjectForm();
   }
 
@@ -464,6 +478,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectForm.get("draft")?.patchValue(true);
 
     this.setProjFormIsSubmitting = this.setIsSubmittingAsDraft;
+    const partnerProgramId = this.projectForm.get("partnerProgramId")?.value;
+    this.projectForm.patchValue({ partnerProgramId: partnerProgramId });
     this.submitProjectForm();
   }
 
@@ -491,7 +507,16 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
             .navigateByUrl(`/office/projects/my`)
             .then(() => console.debug("Route changed from ProjectEditComponent"));
         },
-        error: () => {
+        error: (error: unknown) => {
+          if (error instanceof HttpErrorResponse) {
+            if (error.status === 403) {
+              if (error.error) {
+                this.isCompleted = true;
+                this.errorModalMessage.set(error.error);
+                console.log(this.errorModalMessage()?.program_name);
+              }
+            }
+          }
           this.setProjFormIsSubmitting(false);
         },
       });

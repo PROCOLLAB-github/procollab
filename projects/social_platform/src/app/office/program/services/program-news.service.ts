@@ -5,6 +5,7 @@ import { ApiService } from "projects/core";
 import { forkJoin, Observable } from "rxjs";
 import { ApiPagination } from "@models/api-pagination.model";
 import { FeedNews } from "@office/projects/models/project-news.model";
+import { HttpParams } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
@@ -12,8 +13,11 @@ import { FeedNews } from "@office/projects/models/project-news.model";
 export class ProgramNewsService {
   constructor(private readonly apiService: ApiService) {}
 
-  fetchNews(programId: number): Observable<ApiPagination<FeedNews>> {
-    return this.apiService.get(`/programs/${programId}/news/`);
+  fetchNews(limit: number, offset: number, programId: number): Observable<ApiPagination<FeedNews>> {
+    return this.apiService.get(
+      `/programs/${programId}/news/`,
+      new HttpParams({ fromObject: { limit, offset } })
+    );
   }
 
   readNews(projectId: string, newsIds: number[]): Observable<void[]> {

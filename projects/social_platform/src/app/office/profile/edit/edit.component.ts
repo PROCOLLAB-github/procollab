@@ -240,12 +240,15 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   nestedSkills$ = this.skillsService.getSkillsNested();
 
   skillsGroupsModalOpen = signal(false);
-
+  
   educationItems = signal<any[]>([]);
 
   workItems = signal<any[]>([]);
 
   languageItems = signal<any[]>([]);
+
+  isModalErrorSkillsChoose = signal(false);
+  isModalErrorSkillChooseText = signal("");
 
   subscription$: Subscription[] = [];
 
@@ -707,6 +710,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
             .then(() => console.debug("Router Changed form ProfileEditComponent"));
         },
         error: error => {
+          this.isModalErrorSkillsChoose.set(true);
+          this.isModalErrorSkillChooseText.set(error.error[0]);
           this.profileFormSubmitting = false;
           if (error.error.phone_number) {
             this.errorMessagePhoneNumber = error.error.phone_number[0];
