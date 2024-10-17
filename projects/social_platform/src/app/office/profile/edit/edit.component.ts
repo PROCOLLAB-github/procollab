@@ -185,6 +185,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   skillsGroupsModalOpen = signal(false);
 
+  isModalErrorSkillsChoose = signal(false);
+  isModalErrorSkillChooseText = signal("");
+
   subscription$: Subscription[] = [];
 
   get typeSpecific(): FormGroup {
@@ -297,7 +300,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
             .navigateByUrl(`/office/profile/${this.profileId}`)
             .then(() => console.debug("Router Changed form ProfileEditComponent"));
         },
-        error: () => {
+        error: error => {
+          this.isModalErrorSkillsChoose.set(true);
+          this.isModalErrorSkillChooseText.set(error.error[0]);
           this.profileFormSubmitting = false;
         },
       });

@@ -121,10 +121,9 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
 
   onSearchClick() {
     const searchValue = this.searchForm.get("search")?.value;
-    const encodedSearchValue = encodeURIComponent(searchValue);
 
     this.router.navigate([], {
-      queryParams: { name__contains: encodedSearchValue },
+      queryParams: { name__contains: searchValue },
       relativeTo: this.route,
       queryParamsHandling: "merge",
     });
