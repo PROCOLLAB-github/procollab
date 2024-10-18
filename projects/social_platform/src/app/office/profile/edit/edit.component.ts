@@ -85,7 +85,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       userType: [0],
       birthday: ["", [Validators.required]],
       city: [""],
-      phoneNumber: [""],
+      phoneNumber: ["", Validators.required],
       additionalRole: [""],
       organizationName: [""],
       entryYear: [""],
