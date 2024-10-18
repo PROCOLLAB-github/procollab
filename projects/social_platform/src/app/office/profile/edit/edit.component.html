@@ -133,7 +133,10 @@
           </div>
           }
 
-          <p class="text-body-12 error__phone-number">{{ errorMessagePhoneNumber }}</p>
+          <p class="text-body-12 error__phone-number">
+            Формат телефона должен соответствовать одному из таких форматов: +7 XXX XX-XX-XX |
+            +375XXXXXXXXX | +995 (XXX) XX-XX-XX
+          </p>
         </fieldset>
         }
       </div>
@@ -665,6 +668,7 @@
           id="usefulToProject"
           type="text"
           [formControl]="usefulToProject"
+          placeholder="У меня много денег, я мамкин инвестор"
         ></app-input>
         @if (usefulToProject | controlError: "required") {
         <div class="text-body-14 error">

@@ -93,8 +93,6 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
 
     this.cdRef.detectChanges();
-
-    this.authService.getProfile().subscribe(r => console.log(r));
   }
 
   ngOnDestroy(): void {

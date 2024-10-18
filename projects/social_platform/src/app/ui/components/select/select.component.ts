@@ -30,14 +30,14 @@ import { ClickOutsideModule } from "ng-click-outside";
 export class SelectComponent implements ControlValueAccessor {
   @Input() placeholder = "";
   @Input({ required: true }) options: {
-    value: string | number | null;
+    value: string | number;
     label: string;
-    id: number | null;
+    id: number;
   }[] = [];
 
   isOpen = false;
 
-  selectedId?: number | null;
+  selectedId?: number;
 
   highlightedIndex = -1;
 
@@ -66,12 +66,7 @@ export class SelectComponent implements ControlValueAccessor {
     }
     if (event.code === "Enter") {
       if (i >= 0) {
-        const id = this.options[this.highlightedIndex].id;
-        if (id !== null) {
-          this.onUpdate(event, id);
-        } else {
-          this.onUpdate(event, null as number | null);
-        }
+        this.onUpdate(event, this.options[this.highlightedIndex].id);
       }
     }
     if (event.code === "Escape") {
@@ -101,12 +96,7 @@ export class SelectComponent implements ControlValueAccessor {
   }
 
   writeValue(id: number) {
-    if (id === 0) {
-      this.selectedId = 0;
-      this.onChange(0);
-    } else {
-      this.selectedId = id;
-    }
+    this.selectedId = id;
   }
 
   disabled = false;
@@ -115,7 +105,7 @@ export class SelectComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  onChange: (value: string | number | null) => void = () => {};
+  onChange: (value: string | number) => void = () => {};
 
   registerOnChange(fn: any) {
     this.onChange = fn;
@@ -127,21 +117,14 @@ export class SelectComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  onUpdate(event: Event, id: number | null): void {
+  onUpdate(event: Event, id: number): void {
     event.stopPropagation();
     if (this.disabled) {
       return;
     }
 
     this.selectedId = id;
-    if (id === null) {
-      this.onChange(null);
-    } else if (id === 0) {
-      // handle the "Без тега" option
-      this.onChange(0);
-    } else {
-      this.onChange(id);
-    }
+    this.onChange(this.getValue(id) ?? this.options[0].value);
 
     this.hideDropdown();
   }
@@ -150,14 +133,11 @@ export class SelectComponent implements ControlValueAccessor {
     return this.options.find(el => el.id === optionId)?.label;
   }
 
-  getValue(optionId: number | null): string | number | null | undefined {
-    if (optionId === null) {
-      return null;
-    }
+  getValue(optionId: number): string | number | null | undefined {
     return this.options.find(el => el.id === optionId)?.value;
   }
 
-  getId(label: string): number | null | undefined {
+  getId(label: string): number | undefined {
     return this.options.find(el => el.label === label)?.id;
   }
 

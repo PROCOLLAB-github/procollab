@@ -85,7 +85,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       userType: [0],
       birthday: ["", [Validators.required]],
       city: [""],
-      phoneNumber: ["", Validators.required],
+      phoneNumber: [""],
       additionalRole: [""],
       organizationName: [""],
       entryYear: [""],
@@ -569,7 +569,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   errorMessage = ErrorMessage;
-  errorMessagePhoneNumber = "";
 
   roles: Observable<SelectComponent["options"]> = this.authService.changeableRoles.pipe(
     map(roles => roles.map(role => ({ id: role.id, value: role.id, label: role.name })))
@@ -710,12 +709,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
             .then(() => console.debug("Router Changed form ProfileEditComponent"));
         },
         error: error => {
+          this.profileFormSubmitting = false;
           this.isModalErrorSkillsChoose.set(true);
           this.isModalErrorSkillChooseText.set(error.error[0]);
-          this.profileFormSubmitting = false;
-          if (error.error.phone_number) {
-            this.errorMessagePhoneNumber = error.error.phone_number[0];
-          }
         },
       });
   }
