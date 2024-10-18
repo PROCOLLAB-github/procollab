@@ -10,7 +10,7 @@ import { VacancyService } from "@services/vacancy.service";
 import { InviteService } from "@services/invite.service";
 import { Invite } from "@models/invite.model";
 
-export const ProjectEditResolver: ResolveFn<[Project, Vacancy[], Invite[]]> = (
+export const ProjectEditResolver: ResolveFn<[Project, Invite[]]> = (
   route: ActivatedRouteSnapshot
 ) => {
   const projectService = inject(ProjectService);
@@ -19,9 +19,8 @@ export const ProjectEditResolver: ResolveFn<[Project, Vacancy[], Invite[]]> = (
 
   const projectId = Number(route.paramMap.get("projectId"));
 
-  return forkJoin<[Project, Vacancy[], Invite[]]>([
+  return forkJoin<[Project, Invite[]]>([
     projectService.getOne(projectId),
-    vacancyService.getForProject(0, 20, projectId),
     inviteService.getByProject(projectId),
   ]);
 };

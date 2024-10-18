@@ -173,6 +173,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         )
       )
       .subscribe(() => {});
+
+    this.editingStep = this.route.snapshot.queryParams["editingStep"];
   }
 
   ngAfterViewInit(): void {
@@ -192,7 +194,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         concatMap(() => this.route.data),
         map(d => d["data"])
       )
-      .subscribe(([project, vacancies, invites]: [Project, ApiPagination<Vacancy>, Invite[]]) => {
+      .subscribe(([project, invites]: [Project, Invite[]]) => {
         this.projectForm.patchValue({
           imageAddress: project.imageAddress,
           name: project.name,
@@ -224,7 +226,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
         project.links && project.links.forEach(l => this.addLink(l));
 
-        this.vacancies = vacancies.results;
+        this.vacancies = project.vacancies;
 
         this.invites = invites;
 
