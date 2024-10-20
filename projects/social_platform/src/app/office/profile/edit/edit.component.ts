@@ -643,25 +643,25 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     const educationItem =
       this.educationItems().length > 0 ? this.educationItems()[index] : this.education.value[index];
 
-    this.yearListEducation.forEach((entryYearWork) => {
+    this.yearListEducation.forEach(entryYearWork => {
       if (entryYearWork.value === educationItem.entryYear) {
         this.selectedEntryYearEducationId.set(entryYearWork.id);
       }
     });
 
-    this.yearListEducation.forEach((completionYearWork) => {
+    this.yearListEducation.forEach(completionYearWork => {
       if (completionYearWork.value === educationItem.completionYear) {
         this.selectedComplitionYearEducationId.set(completionYearWork.id);
       }
     });
 
-    this.educationLevelList.forEach((educationLevel) => {
+    this.educationLevelList.forEach(educationLevel => {
       if (educationLevel.value === educationItem.educationLevel) {
         this.selectedEducationLevelId.set(educationLevel.id);
       }
     });
 
-    this.educationStatusList.forEach((educationStatus) => {
+    this.educationStatusList.forEach(educationStatus => {
       if (educationStatus.value === educationItem.educationStatus) {
         this.selectedEducationStatusId.set(educationStatus.id);
       }
@@ -714,7 +714,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     const workItem =
       this.workItems().length > 0 ? this.workItems()[index] : this.workExperience.value[index];
 
-    this.yearListEducation.forEach((entryYearWork) => {
+    this.yearListEducation.forEach(entryYearWork => {
       if (
         entryYearWork.value === workItem.entryYearWork ||
         entryYearWork.value === workItem.entryYear
@@ -723,7 +723,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
-    this.yearListEducation.forEach((complitionYearWork) => {
+    this.yearListEducation.forEach(complitionYearWork => {
       if (
         complitionYearWork.value === workItem.completionYearWork ||
         complitionYearWork.value === workItem.completionYear
@@ -774,13 +774,13 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         ? this.languageItems()[index]
         : this.userLanguages.value[index];
 
-    this.languageList.forEach((language) => {
+    this.languageList.forEach(language => {
       if (language.value === languageItem.language) {
         this.selectedLanguageId.set(language.id);
       }
     });
 
-    this.languageLevelList.forEach((languageLevel) => {
+    this.languageLevelList.forEach(languageLevel => {
       if (languageLevel.value === languageItem.languageLevel) {
         this.selectedLanguageLevelId.set(languageLevel.id);
       }
