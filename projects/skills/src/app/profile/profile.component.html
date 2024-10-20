@@ -5,10 +5,17 @@
     <app-bar
       class="bar"
       [backHave]="true"
-      [links]="[{ link: '/profile', linkText: 'Моя страница', isRouterLinkActiveOptions: true }]"
+      [links]="[
+        { link: '/profile', linkText: 'Моя страница', isRouterLinkActiveOptions: true },
+        {
+          link: '/profile/skills',
+          linkText: 'Мои навыки',
+          isRouterLinkActiveOptions: false
+        }
+      ]"
     ></app-bar>
   </div>
 
   <app-info-block [userData]="profileData()['userData']" class="profile__info"></app-info-block>
-  <!-- <router-outlet></router-outlet> -->
+  <router-outlet></router-outlet>
 </div>

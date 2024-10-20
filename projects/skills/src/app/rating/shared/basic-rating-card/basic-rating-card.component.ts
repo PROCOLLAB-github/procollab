@@ -1,10 +1,12 @@
 /** @format */
 
-import { Component, Input } from "@angular/core";
+import { Component, inject, Input, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { AvatarComponent } from "@uilib";
 import { GeneralRating } from "../../../../models/rating.model";
 import { PluralizePipe } from "@corelib";
+import { ActivatedRoute } from "@angular/router";
+import { map, Observable } from "rxjs";
 
 @Component({
   selector: "app-basic-rating-card",
@@ -15,4 +17,8 @@ import { PluralizePipe } from "@corelib";
 })
 export class BasicRatingCardComponent {
   @Input({ required: true }) rating!: GeneralRating;
+  @Input() ratingId!: number;
+
+  route = inject(ActivatedRoute);
+  ratingData = this.route.data.pipe(map(r => r["data"])) as Observable<GeneralRating[]>;
 }

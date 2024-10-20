@@ -2,8 +2,16 @@
 
 <div class="rating-card">
   <div class="rating-card__left">
-    <h3 class="rating-card__name">Составление ТЗ</h3>
-    <p class="rating-card__level">1 уровень</p>
+    <h3 class="rating-card__name">
+      {{ personalRatingCardData.skillName }}
+    </h3>
+    <p class="rating-card__level">
+      {{ personalRatingCardData.skillLevel }}
+      {{ personalRatingCardData.skillLevel | pluralize: ["уровень", "уровня", "уровней"] }}
+    </p>
   </div>
-  <div class="rating-card__right">78%</div>
+  <app-circle-progress-bar
+    [progress]="personalRatingCardData.skillProgress"
+  ></app-circle-progress-bar>
+  <!-- <div class="rating-card__right">{{ personalRatingCardData.skillProgress }} %</div> -->
 </div>

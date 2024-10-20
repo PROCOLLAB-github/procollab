@@ -14,7 +14,7 @@ export class RatingService {
 
   getGeneralRating() {
     return this.apiService
-      .get<ApiPagination<GeneralRating>>("/progress/user-rating/")
+      .get<ApiPagination<GeneralRating>>("/progress/user-rating/?time_frame=last_year")
       .pipe(map(res => res.results));
   }
 }

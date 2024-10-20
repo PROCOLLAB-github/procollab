@@ -31,4 +31,8 @@ export class ProfileService {
   cancelSubscription() {
     return this.apiService.post("/subscription/refund", {});
   }
+
+  addSkill(skills: number[]) {
+    return this.apiService.patch("/progress/add-skills/", skills);
+  }
 }

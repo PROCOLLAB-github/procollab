@@ -50,6 +50,15 @@
     height: 15px;
     background-color: var(--accent);
     border-radius: 50%;
+    opacity: 1;
+
+    &--low {
+      opacity: 0.2;
+    }
+
+    &--mid {
+      opacity: 0.5;
+    }
   }
 }
 
@@ -67,7 +76,13 @@
 }
 
 .circle {
-  $items: ((275, 6), (235, 6.5), (198, 7), (155, 9), (107, 12));
+  $items: (
+    (275, 6),
+    (235, 6.5),
+    (198, 7),
+    (155, 9),
+    (107, 12)
+  );
 
   @for $i from 1 through 5 {
     &:nth-child(#{$i}) {

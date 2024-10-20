@@ -39,6 +39,7 @@
 .plans {
   position: relative;
   max-height: calc(100vh - 40px);
+  padding: 10px 60px;
   overflow-y: auto;
 
   &__title {
@@ -117,5 +118,57 @@
     &-next {
       transform: rotate(180deg);
     }
+  }
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: calc(100vh - 40px);
+  padding: 40px 0;
+  overflow-y: auto;
+
+  @include responsive.apply-desktop {
+    padding: 80px 0;
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 20px;
+    color: var(--black);
+    text-align: center;
+    inline-size: 280px;
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 23px;
+      inline-size: 500px;
+      text-align: center;
+
+      @include typography.heading-3;
+    }
+  }
+
+  &__text {
+    width: 55%;
+    margin-bottom: 37px;
+    color: var(--grey-for-text);
+    text-align: center;
   }
 }

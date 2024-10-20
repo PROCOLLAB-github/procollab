@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
 import { Profile } from "../../../../models/profile.model";
