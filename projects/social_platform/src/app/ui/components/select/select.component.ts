@@ -29,6 +29,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 })
 export class SelectComponent implements ControlValueAccessor {
   @Input() placeholder = "";
+  @Input() selectedId?: number;
   @Input({ required: true }) options: {
     value: string | number;
     label: string;
@@ -36,8 +37,6 @@ export class SelectComponent implements ControlValueAccessor {
   }[] = [];
 
   isOpen = false;
-
-  selectedId?: number;
 
   highlightedIndex = -1;
 

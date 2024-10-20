@@ -7,6 +7,7 @@ import {
   OnDestroy,
   OnInit,
   signal,
+  ViewChild,
 } from "@angular/core";
 import { AuthService } from "@auth/services";
 import {
@@ -249,6 +250,19 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   isModalErrorSkillsChoose = signal(false);
   isModalErrorSkillChooseText = signal("");
+
+  editIndex = signal<number | null>(null);
+
+  selectedEntryYearEducationId = signal<number | undefined>(undefined);
+  selectedComplitionYearEducationId = signal<number | undefined>(undefined);
+  selectedEducationStatusId = signal<number | undefined>(undefined);
+  selectedEducationLevelId = signal<number | undefined>(undefined);
+
+  selectedEntryYearWorkId = signal<number | undefined>(undefined);
+  selectedComplitionYearWorkId = signal<number | undefined>(undefined);
+
+  selectedLanguageId = signal<number | undefined>(undefined);
+  selectedLanguageLevelId = signal<number | undefined>(undefined);
 
   subscription$: Subscription[] = [];
 
@@ -601,19 +615,67 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       educationLevel: this.profileForm.get("educationLevel")?.value,
     });
 
-    this.educationItems.update(items => [...items, educationItem.value]);
+    if (this.editIndex !== null) {
+      this.educationItems.update(items => {
+        const updatedItems = [...items];
+        updatedItems[this.editIndex()!] = educationItem.value;
+
+        this.education.at(this.editIndex()!).patchValue(educationItem.value);
+        return updatedItems;
+      });
+      this.editIndex.set(null);
+    } else {
+      this.educationItems.update(items => [...items, educationItem.value]);
+      this.education.push(educationItem);
+    }
 
     this.profileForm.get("organizationName")?.reset();
     this.profileForm.get("entryYear")?.reset();
     this.profileForm.get("completionYear")?.reset();
-
     this.profileForm.get("description")?.reset();
     this.profileForm.get("educationStatus")?.reset();
     this.profileForm.get("educationLevel")?.reset();
 
-    this.education.push(educationItem);
-
     console.log(this.educationItems(), this.education.value, this.profileForm.value);
+  }
+
+  editEducation(index: number) {
+    const educationItem =
+      this.educationItems().length > 0 ? this.educationItems()[index] : this.education.value[index];
+
+    this.yearListEducation.filter(entryYearWork => {
+      if (entryYearWork.value === educationItem.entryYear) {
+        this.selectedEntryYearEducationId.set(entryYearWork.id);
+      }
+    });
+
+    this.yearListEducation.filter(complitionYearWork => {
+      if (complitionYearWork.value === educationItem.completionYear) {
+        this.selectedComplitionYearEducationId.set(complitionYearWork.id);
+      }
+    });
+
+    this.educationLevelList.filter(educationLevel => {
+      if (educationLevel.value === educationItem.educationLevel) {
+        this.selectedEducationLevelId.set(educationLevel.id);
+      }
+    });
+
+    this.educationStatusList.filter(educationStatus => {
+      if (educationStatus.value === educationItem.educationStatus) {
+        this.selectedEducationStatusId.set(educationStatus.id);
+      }
+    });
+
+    this.profileForm.patchValue({
+      organizationName: educationItem.organizationName,
+      entryYear: educationItem.entryYear,
+      completionYear: educationItem.completionYear,
+      description: educationItem.description,
+      educationStatus: educationItem.educationStatus,
+      educationLevel: educationItem.educationLevel,
+    });
+    this.editIndex.set(index);
   }
 
   addWork() {
@@ -625,8 +687,19 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       jobPosition: this.profileForm.get("jobPosition")?.value,
     });
 
-    this.workItems.update(items => [...items, workItem.value]);
+    if (this.editIndex !== null) {
+      this.workItems.update(items => {
+        const updatedItems = [...items];
+        updatedItems[this.editIndex()!] = workItem.value;
 
+        this.workExperience.at(this.editIndex()!).patchValue(workItem.value);
+        return updatedItems;
+      });
+      this.editIndex.set(null);
+    } else {
+      this.workItems.update(items => [...items, workItem.value]);
+      this.workExperience.push(workItem);
+    }
     this.profileForm.get("organization")?.reset();
     this.profileForm.get("entryYearWork")?.reset();
     this.profileForm.get("completionYearWork")?.reset();
@@ -634,9 +707,39 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.profileForm.get("descriptionWork")?.reset();
     this.profileForm.get("jobPosition")?.reset();
 
-    this.workExperience.push(workItem);
-
     console.log(this.workItems(), this.workExperience.value, this.profileForm.value);
+  }
+
+  editWork(index: number) {
+    const workItem =
+      this.workItems().length > 0 ? this.workItems()[index] : this.workExperience.value[index];
+
+    this.yearListEducation.filter(entryYearWork => {
+      if (
+        entryYearWork.value === workItem.entryYearWork ||
+        entryYearWork.value === workItem.entryYear
+      ) {
+        this.selectedEntryYearWorkId.set(entryYearWork.id);
+      }
+    });
+
+    this.yearListEducation.filter(complitionYearWork => {
+      if (
+        complitionYearWork.value === workItem.completionYearWork ||
+        complitionYearWork.value === workItem.completionYear
+      ) {
+        this.selectedComplitionYearWorkId.set(complitionYearWork.id);
+      }
+    });
+
+    this.profileForm.patchValue({
+      organization: workItem.organization || workItem.organizationName,
+      entryYearWork: workItem.entryYearWork || workItem.entryYear,
+      completionYearWork: workItem.completionYearWork || workItem.completionYear,
+      descriptionWork: workItem.descriptionWork || workItem.description,
+      jobPosition: workItem.jobPosition,
+    });
+    this.editIndex.set(index);
   }
 
   addLanguage() {
@@ -645,14 +748,50 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       languageLevel: this.profileForm.get("languageLevel")?.value,
     });
 
-    this.languageItems.update(items => [...items, languageItem.value]);
+    if (this.editIndex !== null) {
+      this.languageItems.update(items => {
+        const updatedItems = [...items];
+        updatedItems[this.editIndex()!] = languageItem.value;
+
+        this.userLanguages.at(this.editIndex()!).patchValue(languageItem.value);
+        return updatedItems;
+      });
+      this.editIndex.set(null);
+    } else {
+      this.languageItems.update(items => [...items, languageItem.value]);
+      this.userLanguages.push(languageItem);
+    }
 
     this.profileForm.get("language")?.reset();
     this.profileForm.get("languageLevel")?.reset();
 
-    this.userLanguages.push(languageItem);
-
     console.log(this.languageItems(), this.userLanguages.value, this.profileForm.value);
+  }
+
+  editLanguage(index: number) {
+    const languageItem =
+      this.languageItems().length > 0
+        ? this.languageItems()[index]
+        : this.userLanguages.value[index];
+
+    this.languageList.filter(language => {
+      if (language.value === languageItem.language) {
+        this.selectedLanguageId.set(language.id);
+      }
+    });
+
+    this.languageLevelList.filter(languageLevel => {
+      if (languageLevel.value === languageItem.languageLevel) {
+        this.selectedLanguageLevelId.set(languageLevel.id);
+      }
+    });
+
+    this.profileForm.patchValue({
+      language: languageItem.language,
+      languageLevel: languageItem.languageLevel,
+    });
+
+    this.editIndex.set(index);
   }
 
   get links(): FormArray {
