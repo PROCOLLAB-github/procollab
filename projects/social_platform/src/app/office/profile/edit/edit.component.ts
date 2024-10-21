@@ -615,7 +615,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       educationLevel: this.profileForm.get("educationLevel")?.value,
     });
 
-    if (this.editIndex !== null) {
+    if (this.editIndex() !== null) {
       this.educationItems.update(items => {
         const updatedItems = [...items];
         updatedItems[this.editIndex()!] = educationItem.value;
@@ -687,7 +687,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       jobPosition: this.profileForm.get("jobPosition")?.value,
     });
 
-    if (this.editIndex !== null) {
+    if (this.editIndex() !== null) {
       this.workItems.update(items => {
         const updatedItems = [...items];
         updatedItems[this.editIndex()!] = workItem.value;
@@ -748,7 +748,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       languageLevel: this.profileForm.get("languageLevel")?.value,
     });
 
-    if (this.editIndex !== null) {
+    if (this.editIndex() !== null) {
       this.languageItems.update(items => {
         const updatedItems = [...items];
         updatedItems[this.editIndex()!] = languageItem.value;
