@@ -388,9 +388,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       label: "2023",
     },
     {
-      label: "2024",
+      value: 2024,
       id: 24,
-      value: "2024",
+      label: "н.в",
     },
   ];
 

@@ -198,9 +198,9 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
       label: "2023",
     },
     {
-      label: "2024",
+      value: 2024,
       id: 24,
-      value: "2024",
+      label: "н.в",
     },
   ];
 
