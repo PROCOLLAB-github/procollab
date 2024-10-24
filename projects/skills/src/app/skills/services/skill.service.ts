@@ -12,19 +12,11 @@ import { HttpParams } from "@angular/common/http";
 export class SkillService {
   apiService = inject(ApiService);
 
-  getAll(limit = 3, offset = 0) {
-    return this.apiService.get<ApiPagination<Skill>>(
-      "/courses/all-skills/",
-      new HttpParams({
-        fromObject: {
-          limit,
-          offset,
-        },
-      })
-    );
+  getAll() {
+    return this.apiService.get<ApiPagination<Skill>>("/courses/all-skills/");
   }
 
-  getAllMarked(limit = 3, offset = 0) {
+  getAllMarked(limit = 5, offset = 0) {
     return this.apiService.get<ApiPagination<Skill>>(
       "/courses/choose-skills/",
       new HttpParams({
