@@ -151,7 +151,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   fetchNews(offset: number, limit: number) {
     const programId = this.route.snapshot.params["programId"];
 
-    return this.programNewsService.fetchNews(offset, limit, programId).pipe(
+    return this.programNewsService.fetchNews(limit, offset, programId).pipe(
       tap(({ count, results }) => {
         this.totalNewsCount.set(count);
         this.news.update(news => [...news, ...results]);
