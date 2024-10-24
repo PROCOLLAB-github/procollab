@@ -4,6 +4,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  computed,
   ElementRef,
   OnDestroy,
   OnInit,
@@ -14,7 +15,7 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { expandElement } from "@utils/expand-element";
-import { concatMap, map, noop, Observable, Subscription } from "rxjs";
+import { BehaviorSubject, concatMap, map, noop, Observable, Subscription, tap } from "rxjs";
 import { ProfileNewsService } from "../services/profile-news.service";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ProfileNews } from "../models/profile-news.model";
@@ -27,6 +28,7 @@ import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
 import { ProfileService } from "@auth/services/profile.service";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
+import { Skill } from "@office/models/skill";
 
 @Component({
   selector: "app-profile-main",
@@ -165,14 +167,20 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     this.readFullDescription = !isExpanded;
   }
 
-  onToggleApprove(skillId: number, event: Event, isApproved: boolean) {
+  onToggleApprove(skillId: number, event: Event, skill: Skill) {
     event.stopPropagation();
     const userId = this.route.snapshot.params["id"];
 
-    if (isApproved) {
-      this.profileApproveSkillService.unApproveSkill(userId, skillId).subscribe();
+    if (skill.approves.length > 0) {
+      this.profileApproveSkillService.unApproveSkill(userId, skillId).subscribe(() => {
+        skill.approves.pop();
+      });
     } else {
-      this.profileApproveSkillService.approveSkill(userId, skillId).subscribe();
+      this.profileApproveSkillService.approveSkill(userId, skillId).subscribe(() => {
+        this.authService.profile.subscribe(response => {
+          skill.approves.push({ confirmedBy: response });
+        });
+      });
     }
   }
 

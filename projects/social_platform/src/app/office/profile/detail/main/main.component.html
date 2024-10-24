@@ -88,7 +88,7 @@
           <app-tag [color]="skill.approves.length ? 'complete' : 'accent'">
             <span>{{ skill.name }}</span>
             <i
-              (click)="onToggleApprove(skill.id, $event, skill.approves.length > 0)"
+              (click)="onToggleApprove(skill.id, $event, skill)"
               appIcon
               [icon]="skill.approves.length ? 'check' : 'plus'"
               appSquare="16"
