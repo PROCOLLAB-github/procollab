@@ -45,9 +45,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     private readonly programNewsService: ProgramNewsService,
     private readonly route: ActivatedRoute,
     private readonly cdRef: ChangeDetectorRef
-  ) {}
-
-  currentPage = 1;
+  ) { }
 
   news = signal<FeedNews[]>([]);
   totalNewsCount = signal(0);
@@ -61,17 +59,13 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const programIdSubscription$ = this.route.params
       .pipe(
-        tap(params => {
-          console.log(params["programId"]);
+        map(params => params["programId"]),
+        tap(programId => {
+          this.programId = programId;
+          this.fetchNews(0, this.fetchLimit());
         })
       )
-      .subscribe(params => {
-        const newProgramId = params["programId"];
-        if (newProgramId !== this.programId) {
-          this.programId = newProgramId;
-          this.fetchNews(0, this.fetchLimit());
-        }
-      });
+      .subscribe();
 
     const program$ = this.route.data
       .pipe(
