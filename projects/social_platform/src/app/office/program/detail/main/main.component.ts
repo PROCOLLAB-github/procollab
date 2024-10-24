@@ -48,7 +48,6 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   ) {}
 
   currentPage = 1;
-  pageSize = 10;
 
   news = signal<FeedNews[]>([]);
   totalNewsCount = signal(0);
@@ -62,13 +61,17 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const programIdSubscription$ = this.route.params
       .pipe(
-        map(params => params["programId"]),
-        tap(programId => {
-          this.programId = programId;
-          this.fetchNews(0, this.fetchLimit());
+        tap(params => {
+          console.log(params["programId"]);
         })
       )
-      .subscribe();
+      .subscribe(params => {
+        const newProgramId = params["programId"];
+        if (newProgramId !== this.programId) {
+          this.programId = newProgramId;
+          this.fetchNews(0, this.fetchLimit());
+        }
+      });
 
     const program$ = this.route.data
       .pipe(
@@ -148,7 +151,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   fetchNews(offset: number, limit: number) {
     const programId = this.route.snapshot.params["programId"];
 
-    return this.programNewsService.fetchNews(programId, offset, limit).pipe(
+    return this.programNewsService.fetchNews(offset, limit, programId).pipe(
       tap(({ count, results }) => {
         this.totalNewsCount.set(count);
         this.news.update(news => [...news, ...results]);
