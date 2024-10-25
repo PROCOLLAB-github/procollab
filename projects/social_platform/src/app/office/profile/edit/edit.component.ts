@@ -21,7 +21,7 @@ import {
 import { ErrorMessage } from "@error/models/error-message";
 import { ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
 import { ControlErrorPipe, ValidationService } from "projects/core";
-import { concatMap, first, map, noop, Observable, skip, Subscription } from "rxjs";
+import { concatMap, first, map, noop, Observable, skip, Subscription, tap } from "rxjs";
 import { Router } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";

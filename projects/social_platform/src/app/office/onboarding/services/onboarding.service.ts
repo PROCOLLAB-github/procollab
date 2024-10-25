@@ -14,7 +14,8 @@ export class OnboardingService {
       this._formValue$.next({
         avatar: p.avatar,
         city: p.city,
-        organization: p.organization,
+        education: p.education,
+        workExperience: p.workExperience,
         speciality: p.speciality,
         skills: p.skills,
         userType: p.userType,

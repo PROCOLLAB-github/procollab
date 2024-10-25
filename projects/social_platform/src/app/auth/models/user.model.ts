@@ -75,7 +75,6 @@ export class User {
   city!: string;
   phoneNumber!: number;
   region!: string;
-  organization!: string;
   education!: Education[];
   userLanguages!: userLanguages[];
   workExperience!: workExperience[];
@@ -104,7 +103,6 @@ export class User {
       email: "example@google.com",
       birthday: "23.42.3423",
       city: "234sadfas",
-      organization: "dfasdfasdf",
       onboardingStage: null,
       speciality: "asdfasdfasd",
       avatar:
