@@ -93,18 +93,18 @@
   &__image {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
     gap: 15px;
-    margin: 30px 0px;
+    align-items: center;
+    justify-content: space-between;
+    margin: 30px 0;
 
     @include responsive.apply-desktop {
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
       gap: 15px;
-      margin: 30px 0px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 30px 0;
     }
   }
 
