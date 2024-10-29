@@ -33,12 +33,14 @@ export class SkillDetailComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.route.data.pipe(map(r => r["data"])).subscribe(data => {
       this.data.set(data);
+      this.tasksData.set(data[0]);
     });
   }
 
   blockHeight = signal(0);
 
   data = signal<SkillDetailResolve | null>(null);
+  tasksData = signal<SkillDetailResolve[0] | null>(null);
 
   doneWeeks = computed(() => {
     const data = this.data();
@@ -49,5 +51,9 @@ export class SkillDetailComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.blockHeight.set(this.elementRef.nativeElement.getBoundingClientRect().height);
+
+    if (this.tasksData()) {
+      this.tasksData()?.tasks.sort((a, b) => a.id - b.id);
+    }
   }
 }

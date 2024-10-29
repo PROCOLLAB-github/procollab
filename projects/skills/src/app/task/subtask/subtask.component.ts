@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, inject, OnInit, signal } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule, NgOptimizedImage } from "@angular/common";
 import { InfoTaskComponent } from "../shared/video-task/info-task.component";
 import { RadioSelectTaskComponent } from "../shared/radio-select-task/radio-select-task.component";
 import { RelationsTaskComponent } from "../shared/relations-task/relations-task.component";
@@ -43,6 +43,7 @@ import { IconComponent } from "@uilib";
     WriteTaskComponent,
     ModalComponent,
     IconComponent,
+    NgOptimizedImage,
   ],
   templateUrl: "./subtask.component.html",
   styleUrl: "./subtask.component.scss",

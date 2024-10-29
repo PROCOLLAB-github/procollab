@@ -16,15 +16,22 @@
       <i (click)="onCloseModal()" appIcon icon="cross" class="cancel__cross"></i>
 
       <p class="cancel__title">{{ is.popups[0].title }}</p>
-      <p class="cancel__description text-body-14">{{ is.popups[0].text }}</p>
 
-      <div class="cancel__file">
-        <i appIcon icon="pds" class="cancel__pdf"></i>
-        <p class="cancel__line">|</p>
-        <a href="{{ is.popups[0].fileLink }}" target="_blank" class="cancel__link text-body-14">
-          {{ is.popups[0].fileLink }}
-        </a>
+      @if (is.popups[0].fileLink; as fileLink) {
+      <div class="cancel__image">
+        <img
+          [ngSrc]="fileLink"
+          [alt]="fileLink"
+          loading="lazy"
+          width="300"
+          height="130"
+          style="object-fit: cover"
+        />
+        <p class="cancel__description text-body-14">{{ is.popups[0].text }}</p>
       </div>
+      } @else {
+      <p class="cancel__description text-body-14">{{ is.popups[0].text }}</p>
+      }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
         >Продолжить</app-button
@@ -44,16 +51,23 @@
       <i (click)="onCloseModal()" appIcon icon="cross" class="cancel__cross"></i>
 
       <p class="cancel__title">{{ sq.popups[0].title }}</p>
-      <p class="cancel__description text-body-14">{{ sq.popups[0].text }}</p>
 
-      @if (sq.popups[0].fileLink) {
-      <div class="cancel__file">
-        <i appIcon icon="pds" class="cancel__pdf"></i>
-        <p class="cancel__line">|</p>
-        <a href="{{ sq.popups[0].fileLink }}" target="_blank" class="cancel__link text-body-14">
-          {{ sq.popups[0].fileLink }}
-        </a>
+      @if (sq.popups[0].fileLink; as fileLink) {
+      <div class="cancel__image">
+        <div class="cancel__file">
+          <img
+            [ngSrc]="fileLink"
+            [alt]="fileLink"
+            loading="lazy"
+            width="300"
+            height="130"
+            style="object-fit: cover"
+          />
+        </div>
+        <p class="cancel__description text-body-14">{{ sq.popups[0].text }}</p>
       </div>
+      } @else {
+      <p class="cancel__description text-body-14">{{ sq.popups[0].text }}</p>
       }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
@@ -79,16 +93,23 @@
       <i (click)="onCloseModal()" appIcon icon="cross" class="cancel__cross"></i>
 
       <p class="cancel__title">{{ cq.popups[0].title }}</p>
-      <p class="cancel__description text-body-14">{{ cq.popups[0].text }}</p>
 
-      @if (cq.popups[0].fileLink) {
-      <div class="cancel__file">
-        <i appIcon icon="pdf" class="cancel__pdf"></i>
-        <p class="cancel__line">|</p>
-        <a href="{{ cq.popups[0].fileLink }}" target="_blank" class="cancel__link text-body-14">
-          {{ cq.popups[0].fileLink }}
-        </a>
+      @if (cq.popups[0].fileLink; as fileLink) {
+      <div class="cancel__image">
+        <div class="cancel__file">
+          <img
+            [ngSrc]="fileLink"
+            [alt]="fileLink"
+            loading="lazy"
+            width="300"
+            height="130"
+            style="object-fit: cover"
+          />
+        </div>
+        <p class="cancel__description text-body-14">{{ cq.popups[0].text }}</p>
       </div>
+      } @else {
+      <p class="cancel__description text-body-14">{{ cq.popups[0].text }}</p>
       }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
@@ -114,16 +135,23 @@
       <i (click)="onCloseModal()" appIcon icon="cross" class="cancel__cross"></i>
 
       <p class="cancel__title">{{ eq.popups[0].title }}</p>
-      <p class="cancel__description text-body-14">{{ eq.popups[0].text }}</p>
 
-      @if (eq.popups[0].fileLink) {
-      <div class="cancel__file">
-        <i appIcon icon="pdf" class="cancel__pdf"></i>
-        <p class="cancel__line">|</p>
-        <a href="{{ eq.popups[0].fileLink }}" target="_blank" class="cancel__link text-body-14">
-          {{ eq.popups[0].fileLink }}
-        </a>
+      @if (eq.popups[0].fileLink; as fileLink) {
+      <div class="cancel__image">
+        <div class="cancel__file">
+          <img
+            [ngSrc]="fileLink"
+            [alt]="fileLink"
+            loading="lazy"
+            width="300"
+            height="130"
+            style="object-fit: cover"
+          />
+        </div>
+        <p class="cancel__description text-body-14">{{ eq.popups[0].text }}</p>
       </div>
+      } @else {
+      <p class="cancel__description text-body-14">{{ eq.popups[0].text }}</p>
       }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
@@ -149,16 +177,23 @@
       <i (click)="onCloseModal()" appIcon icon="cross" class="cancel__cross"></i>
 
       <p class="cancel__title">{{ wq.popups[0].title }}</p>
-      <p class="cancel__description text-body-14">{{ wq.popups[0].text }}</p>
 
-      @if (wq.popups[0].fileLink) {
-      <div class="cancel__file">
-        <i appIcon icon="pdf" class="cancel__pdf"></i>
-        <p class="cancel__line">|</p>
-        <a href="{{ wq.popups[0].fileLink }}" target="_blank" class="cancel__link text-body-14">
-          {{ wq.popups[0].fileLink }}
-        </a>
+      @if (wq.popups[0].fileLink; as fileLink) {
+      <div class="cancel__image">
+        <div class="cancel__file">
+          <img
+            [ngSrc]="fileLink"
+            [alt]="fileLink"
+            loading="lazy"
+            width="300"
+            height="130"
+            style="object-fit: cover"
+          />
+        </div>
+        <p class="cancel__description text-body-14">{{ wq.popups[0].text }}</p>
       </div>
+      } @else {
+      <p class="cancel__description text-body-14">{{ wq.popups[0].text }}</p>
       }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"

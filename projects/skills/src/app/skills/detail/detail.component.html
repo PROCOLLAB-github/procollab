@@ -33,7 +33,7 @@
     </div>
     }
     <div class="progress__list">
-      @for (t of routeData[0].tasks; track $index) {
+      @for (t of tasksData()?.tasks; track $index) {
       <app-task-card
         [task]="t"
         [status]="routeData[0].statsOfWeeks[$index]"

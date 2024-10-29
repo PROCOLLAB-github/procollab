@@ -90,6 +90,24 @@
     }
   }
 
+  &__image {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin: 30px 0px;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin: 30px 0px;
+    }
+  }
+
   &__description {
     align-self: self-start;
     margin-bottom: 40px;
@@ -106,17 +124,6 @@
   &__link {
     color: var(--accent);
     cursor: pointer;
-  }
-
-  &__file {
-    display: flex;
-    gap: 18px;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px;
-    margin-bottom: 50px;
-    border: 1px solid var(--grey-button);
-    border-radius: 15px;
   }
 
   &__pdf {
