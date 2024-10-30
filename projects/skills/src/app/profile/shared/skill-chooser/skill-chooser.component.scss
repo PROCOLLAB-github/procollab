@@ -39,10 +39,10 @@
 .plans {
   position: relative;
   max-height: calc(100vh - 40px);
-  padding: 10px 0px;
+  padding: 10px 0;
   overflow-y: auto;
 
-  @include responsive.apply-desktop{
+  @include responsive.apply-desktop {
     padding: 10px 60px;
   }
 
