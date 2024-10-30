@@ -20,16 +20,18 @@
             icon="left-arrow"
             class="plans_pages-prev plans_pages-icon"
             (click)="prevPage()"
+            [ariaDisabled]="currentPage === 1"
           ></i>
           <p>
-            <span class="plans_pages-start">{{ currentPage }}</span
-            >/{{ skillsList().length / 3 }}
+            <span class="plans_pages-start">{{ currentPage }}</span> /
+            {{ totalPages() }}
           </p>
           <i
             appIcon
             icon="left-arrow"
             class="plans_pages-next plans_pages-icon"
             (click)="nextPage()"
+            [ariaDisabled]="currentPage >= this.totalPages()"
           ></i>
         </div>
 

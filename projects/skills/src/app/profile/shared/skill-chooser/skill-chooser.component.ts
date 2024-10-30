@@ -1,6 +1,15 @@
 /** @format */
 
-import { Component, inject, Input, signal, EventEmitter, Output, OnInit } from "@angular/core";
+import {
+  Component,
+  inject,
+  Input,
+  signal,
+  EventEmitter,
+  Output,
+  OnInit,
+  computed,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
 import { ActivatedRoute, RouterLink } from "@angular/router";
@@ -12,6 +21,7 @@ import { Skill } from "projects/skills/src/models/skill.model";
 import { PersonalSkillCardComponent } from "../personal-skill-card/personal-skill-card.component";
 import { ProfileService } from "../../services/profile.service";
 import { Skill as ProfileSkill } from "projects/skills/src/models/profile.model";
+import { tap } from "rxjs";
 
 @Component({
   selector: "app-skill-chooser",
@@ -39,6 +49,7 @@ export class SkillChooserComponent implements OnInit {
   limit = 3;
   offset = 0;
   currentPage = 1;
+  totalPages = computed(() => Math.ceil(this.skillsList().length / this.limit) + 1);
 
   skillsList = signal<Skill[]>([]);
   profileIdSkills = signal<ProfileSkill["skillId"][]>([]);
@@ -48,12 +59,10 @@ export class SkillChooserComponent implements OnInit {
   ngOnInit(): void {
     this.skillService.getAllMarked(this.limit, this.offset).subscribe(r => {
       this.skillsList.set(r.results);
-      console.log(r.results);
     });
 
     this.route.data.subscribe(r => {
       this.profileIdSkills.set(r["data"].skills.map((skill: ProfileSkill) => skill.skillId));
-      console.log(r["data"].skills);
     });
   }
 
@@ -79,12 +88,15 @@ export class SkillChooserComponent implements OnInit {
   }
 
   nextPage(): void {
-    if (this.currentPage < Math.ceil(this.skillsList().length / this.limit)) {
+    if (this.currentPage < this.totalPages()) {
       this.currentPage += 1;
       this.offset += this.limit;
-      this.skillService.getAllMarked(this.limit, this.offset).subscribe(r => {
-        this.skillsList.set(r.results);
-      });
+      this.skillService
+        .getAllMarked(this.limit, this.offset)
+        .pipe(tap(r => console.log(r.results)))
+        .subscribe(r => {
+          this.skillsList.set(r.results);
+        });
     }
   }
 }

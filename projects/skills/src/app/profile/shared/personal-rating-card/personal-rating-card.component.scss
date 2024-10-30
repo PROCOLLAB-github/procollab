@@ -14,26 +14,19 @@
   }
 
   &__left {
-    padding-left: 45px;
-    background-image: url("/assets/images/skills/prize.png");
-    background-repeat: no-repeat;
-    background-position: 0 50%;
-    background-size: 40px 40px;
-
-    @include responsive.apply-desktop {
-      padding-left: 60px;
-      background-size: 48px 48px;
-    }
+    display: flex;
+    align-items: center;
+    gap: 15px;
   }
 
   &__name {
     color: var(--black);
     text-decoration: underline;
 
-    @include typography.body-12;
+    @include typography.heading-4;
 
     @include responsive.apply-desktop {
-      @include typography.body-18;
+      @include typography.body-bold-18;
     }
   }
 

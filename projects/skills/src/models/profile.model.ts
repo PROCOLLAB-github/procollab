@@ -18,6 +18,7 @@ export interface Skill {
   skillName: string;
   skillLevel: number;
   skillProgress: number;
+  fileLink: string;
 }
 
 interface Month {

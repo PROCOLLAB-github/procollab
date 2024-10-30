@@ -2,9 +2,24 @@
 
 <div class="rating-card" [class.rating-card--unpicked]="selectedCount() >= 5 && !isChecked()">
   <div class="rating-card__left">
-    <h3 class="rating-card__name">
-      {{ personalSkillCard.name }}
-    </h3>
+    <img
+      alt="skill-image"
+      [ngSrc]="personalSkillCard.fileLink"
+      width="50"
+      height="50"
+      loading="lazy"
+      style="object-fit: cover"
+    />
+    <div>
+      <h3 class="rating-card__name">
+        {{ personalSkillCard.name }}
+      </h3>
+
+      <p class="rating-card__level">
+        {{ personalSkillCard.quantityOfLevels }}
+        {{ personalSkillCard.quantityOfLevels | pluralize: ["уровень", "уровня", "уровней"] }}
+      </p>
+    </div>
   </div>
   <div class="rating-card__right">
     <app-checkbox

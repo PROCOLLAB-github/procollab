@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnInit, signal } from "@angular/core";
+import { Component, computed, inject, OnInit, signal } from "@angular/core";
 import { CommonModule, NgOptimizedImage } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
 import { PersonalRatingCardComponent } from "../personal-rating-card/personal-rating-card.component";
@@ -35,6 +35,12 @@ export class SkillsBlockComponent implements OnInit {
 
   profileService = inject(ProfileService);
   skillsList: Profile["skills"] = [];
+  displayedSkills: Profile["skills"] = [];
+
+  limit = 2;
+  offset = 0;
+  currentPage = 1;
+  totalPages = computed(() => Math.ceil(this.skillsList.length / this.limit));
 
   onOpenSkillsChange(open: boolean) {
     this.openSkillChoose = open;
@@ -49,9 +55,34 @@ export class SkillsBlockComponent implements OnInit {
     this.openSkillChoose = true;
   }
 
+  prevPage(): void {
+    this.offset -= this.limit;
+    this.currentPage -= 1;
+
+    if (this.offset < 0) {
+      this.offset = 0;
+      this.currentPage = 1;
+    }
+
+    this.updateDisplayedSkills();
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages()) {
+      this.currentPage += 1;
+      this.offset += this.limit;
+      this.updateDisplayedSkills();
+    }
+  }
+
+  updateDisplayedSkills() {
+    this.displayedSkills = this.skillsList.slice(this.offset, this.offset + this.limit);
+  }
+
   ngOnInit(): void {
     this.profileService.getProfile().subscribe((r: Profile) => {
       this.skillsList = r["skills"];
+      this.updateDisplayedSkills();
     });
   }
 }
