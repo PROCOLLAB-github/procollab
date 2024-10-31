@@ -42,7 +42,7 @@
     display: none;
     color: var(--gray);
 
-    @include responsive.apply-desktop{
+    @include responsive.apply-desktop {
       display: block;
     }
   }
