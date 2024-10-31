@@ -9,6 +9,7 @@ export interface Popup {
 
 export interface InfoSlide {
   text: string;
+  title: string;
   files: string[];
   popups: Popup[];
 }
@@ -36,7 +37,7 @@ export interface SingleQuestion {
   files: string[];
   id: number;
   isAnswered: boolean;
-  questionText: string;
+  text: string;
   popups: Popup[];
 }
 export interface SingleQuestionError {
@@ -50,7 +51,7 @@ export interface ExcludeQuestion {
   files: string[];
   id: number;
   isAnswered: boolean;
-  questionText: string;
+  text: string;
   popups: Popup[];
 }
 export interface ExcludeQuestionResponse {

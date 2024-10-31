@@ -1,18 +1,37 @@
 <!-- @format -->
 
-<div class="exclude">
-  <h2 class="exclude__title">{{ data.questionText }}</h2>
-  <p class="exclude__text text-body-14">{{ data.description }}</p>
-  <ul class="exclude__list">
-    @for (op of data.answers; track op.id) {
-    <li
-      class="exclude__item"
-      [class.exclude__item--active]="result().includes(op.id)"
-      [class.exclude__item--success]="success && result().includes(op.id)"
-      (click)="onSelect(op.id)"
-    >
-      {{ op.text }}
-    </li>
+<div class="exclude" [class.exclude--hasVideo]="!!sanitizedFileUrl">
+  @if (!sanitizedFileUrl) {
+  <h2 class="exclude__title">{{ data.text }}</h2>
+  }
+  <div class="exclude__text text-body-14">
+    @if (sanitizedFileUrl) {
+    <iframe
+      [src]="sanitizedFileUrl"
+      width="100%"
+      height="285px"
+      frameborder="0"
+      allowfullscreen
+    ></iframe>
     }
-  </ul>
+    {{ data.description }}
+  </div>
+
+  <div>
+    @if (sanitizedFileUrl) {
+    <h2 class="exclude__title">{{ data.text }}</h2>
+    }
+    <ul class="exclude__list">
+      @for (op of data.answers; track op.id) {
+      <li
+        class="exclude__item"
+        [class.exclude__item--active]="result().includes(op.id)"
+        [class.exclude__item--success]="success && result().includes(op.id)"
+        (click)="onSelect(op.id)"
+      >
+        {{ op.text }}
+      </li>
+      }
+    </ul>
+  </div>
 </div>

@@ -8,7 +8,7 @@
     gap: 10px;
     margin-bottom: 20px;
 
-    & > :first-child {
+    &> :first-child {
       grid-column: span 2;
     }
 
@@ -37,6 +37,20 @@
 
     @include responsive.apply-desktop {
       padding: 18px 24px;
+    }
+  }
+
+  &__filter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
     }
   }
 

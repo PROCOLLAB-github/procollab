@@ -1,19 +1,33 @@
 <!-- @format -->
 
-<div class="write-task">
+<div class="write-task" [class.write-task--hasVideo]="!!sanitizedFileUrl">
+  @if (!sanitizedFileUrl) {
   <p class="write-task__text text-heading-3">{{ data.text }}</p>
-  <p class="write-task__description text-body-14">
-    @if (videoUrl) {
-    <iframe [src]="videoUrl" width="100%" height="600px" frameborder="0" allowfullscreen></iframe>
+  }
+  <div class="write-task__description text-body-14">
+    @if (sanitizedFileUrl) {
+    <iframe
+      [src]="sanitizedFileUrl"
+      width="100%"
+      height="285px"
+      frameborder="0"
+      allowfullscreen
+    ></iframe>
     }
     {{ description }}
-  </p>
-  <div class="write-task__input">
-    <textarea
-      class="write-task__textarea text-body-14"
-      rows="2"
-      (keydown)="onKeyUp($event)"
-      placeholder="Введите ответ"
-    ></textarea>
+  </div>
+
+  <div>
+    @if (sanitizedFileUrl) {
+    <p class="write-task__text text-heading-3">{{ data.text }}</p>
+    }
+    <div class="write-task__input">
+      <textarea
+        class="write-task__textarea text-body-14"
+        rows="2"
+        (keydown)="onKeyUp($event)"
+        placeholder="Введите ответ"
+      ></textarea>
+    </div>
   </div>
 </div>

@@ -41,6 +41,10 @@
   &__score {
     display: none;
     color: var(--gray);
+
+    @include responsive.apply-desktop{
+      display: block;
+    }
   }
 
   &__score-mobile {

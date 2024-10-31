@@ -24,11 +24,18 @@ export class WriteTaskComponent implements OnInit {
 
   videoUrl?: SafeResourceUrl;
   description = "";
+  sanitizedFileUrl?: SafeResourceUrl;
+
   ngOnInit(): void {
     const res = this.ytExtractService.transform(this.data.description);
 
     if (res.extractedLink)
       this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(res.extractedLink);
+
+    if (this.data.files.length) {
+      this.sanitizedFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.data.files[0]);
+    }
+
     this.description = res.newText;
   }
 

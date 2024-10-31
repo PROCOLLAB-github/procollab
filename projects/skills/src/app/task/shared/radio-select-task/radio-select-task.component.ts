@@ -1,8 +1,10 @@
 /** @format */
 
-import { Component, EventEmitter, Input, Output, signal } from "@angular/core";
+import { Component, EventEmitter, inject, Input, Output, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { SingleQuestion, SingleQuestionError } from "../../../../models/step.model";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { YtExtractService } from "@corelib";
 
 @Component({
   selector: "app-radio-select-task",
@@ -31,6 +33,26 @@ export class RadioSelectTaskComponent {
 
   result = signal<{ answerId: number | null }>({ answerId: null });
   _error = signal<SingleQuestionError | null>(null);
+
+  sanitizer = inject(DomSanitizer);
+  ytExtractService = inject(YtExtractService);
+
+  videoUrl?: SafeResourceUrl;
+  description = "";
+  sanitizedFileUrl?: SafeResourceUrl;
+
+  ngOnInit(): void {
+    const res = this.ytExtractService.transform(this.data.description);
+
+    if (res.extractedLink)
+      this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(res.extractedLink);
+
+    if (this.data.files.length) {
+      this.sanitizedFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.data.files[0]);
+    }
+
+    this.description = res.newText;
+  }
 
   onSelect(id: number) {
     this.result.set({ answerId: id });

@@ -1,8 +1,10 @@
 /** @format */
 
-import { Component, EventEmitter, Input, Output, signal } from "@angular/core";
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ExcludeQuestion, ExcludeQuestionResponse } from "../../../../models/step.model";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
+import { YtExtractService } from "@corelib";
 
 @Component({
   selector: "app-exclude-task",
@@ -11,7 +13,7 @@ import { ExcludeQuestion, ExcludeQuestionResponse } from "../../../../models/ste
   templateUrl: "./exclude-task.component.html",
   styleUrl: "./exclude-task.component.scss",
 })
-export class ExcludeTaskComponent {
+export class ExcludeTaskComponent implements OnInit {
   @Input({ required: true }) data!: ExcludeQuestion;
   @Output() update = new EventEmitter<number[]>();
 
@@ -30,6 +32,13 @@ export class ExcludeTaskComponent {
   result = signal<number[]>([]);
   _error = signal<ExcludeQuestionResponse | null>(null);
 
+  sanitizer = inject(DomSanitizer);
+  ytExtractService = inject(YtExtractService);
+
+  videoUrl?: SafeResourceUrl;
+  description = "";
+  sanitizedFileUrl?: SafeResourceUrl;
+
   onSelect(id: number) {
     if (this.result().includes(id)) {
       this.result.set(this.result().filter(i => i !== id));
@@ -38,5 +47,18 @@ export class ExcludeTaskComponent {
     }
 
     this.update.emit(this.result());
+  }
+
+  ngOnInit(): void {
+    const res = this.ytExtractService.transform(this.data.description);
+
+    if (res.extractedLink)
+      this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(res.extractedLink);
+
+    if (this.data.files.length) {
+      this.sanitizedFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.data.files[0]);
+    }
+
+    this.description = res.newText;
   }
 }

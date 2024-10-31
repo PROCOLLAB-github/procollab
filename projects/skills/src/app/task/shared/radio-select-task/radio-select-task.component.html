@@ -1,12 +1,20 @@
 <!-- @format -->
 
 <div class="radio">
-  @if (data.files.length) {
-  <img [src]="data.files[0]" alt="" class="radio__img" />
-  }
+  <div class="radio__description">
+    @if (sanitizedFileUrl) {
+    <iframe
+      [src]="sanitizedFileUrl"
+      width="100%"
+      height="285px"
+      frameborder="0"
+      allowfullscreen
+    ></iframe>
+    }
+  </div>
   <div class="radio__body">
     <h2 class="radio__title text-body-14">
-      {{ data.questionText }}
+      {{ data.text }}
     </h2>
     <p class="radio__text text-body-14">{{ data.description }}</p>
     <div class="radio__list">
