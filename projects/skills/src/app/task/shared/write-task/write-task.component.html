@@ -4,7 +4,10 @@
   @if (!sanitizedFileUrl) {
   <p class="write-task__text text-heading-3">{{ data.text }}</p>
   }
-  <div class="write-task__description text-body-14">
+  <div
+    class="write-task__description text-body-14"
+    [class.write-task__description--hasVideo]="!!sanitizedFileUrl"
+  >
     @if (sanitizedFileUrl) {
     <iframe
       [src]="sanitizedFileUrl"

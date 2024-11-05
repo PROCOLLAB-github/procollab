@@ -1,8 +1,8 @@
 <!-- @format -->
 
 <div class="radio">
+  @if (sanitizedFileUrl) {
   <div class="radio__description">
-    @if (sanitizedFileUrl) {
     <iframe
       [src]="sanitizedFileUrl"
       width="100%"
@@ -10,8 +10,8 @@
       frameborder="0"
       allowfullscreen
     ></iframe>
-    }
   </div>
+  }
   <div class="radio__body">
     <h2 class="radio__title text-body-14">
       {{ data.text }}

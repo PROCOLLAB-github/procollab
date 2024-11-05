@@ -4,7 +4,7 @@
   @if (!sanitizedFileUrl) {
   <h2 class="exclude__title">{{ data.text }}</h2>
   }
-  <div class="exclude__text text-body-14">
+  <div class="exclude__text text-body-14" [class.exclude__text--hasVideo]="!!sanitizedFileUrl">
     @if (sanitizedFileUrl) {
     <iframe
       [src]="sanitizedFileUrl"
@@ -14,6 +14,7 @@
       allowfullscreen
     ></iframe>
     }
+
     {{ data.description }}
   </div>
 
