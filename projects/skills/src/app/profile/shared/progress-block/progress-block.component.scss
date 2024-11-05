@@ -76,39 +76,39 @@
     (107, 12)
   );
 
-@for $i from 1 through 5 {
-  &:nth-child(#{$i}) {
-    width: #{list.nth(list.nth($items, $i), 1)}px;
+  @for $i from 1 through 5 {
+    &:nth-child(#{$i}) {
+      width: #{list.nth(list.nth($items, $i), 1)}px;
 
-    circle {
-      stroke-width: #{list.nth(list.nth($items, $i), 2)}px;
+      circle {
+        stroke-width: #{list.nth(list.nth($items, $i), 2)}px;
 
-      // ⬇️ Keep it for some time
+        // ⬇️ Keep it for some time
 
-      // @if $i == 1 {
-      //   stroke-width: $base-stroke-width;
-      // } @else if $i == 2 {
-      //   stroke-width: $base-stroke-width * (list.nth($items-v2, $i - 1) / list.nth($items-v2, $i));
-      // } @else {
-      // stroke-width: $base-stroke-width *
-      // (list.nth($items-v2, $i - 2) /
-      // list.nth($items-v2, $i - 1)) * (list.nth($items-v2, $i - 1) / list.nth($items-v2, $i));
-      // }
+        // @if $i == 1 {
+        //   stroke-width: $base-stroke-width;
+        // } @else if $i == 2 {
+        //   stroke-width: $base-stroke-width * (list.nth($items-v2, $i - 1) / list.nth($items-v2, $i));
+        // } @else {
+        // stroke-width: $base-stroke-width *
+        // (list.nth($items-v2, $i - 2) /
+        // list.nth($items-v2, $i - 1)) * (list.nth($items-v2, $i - 1) / list.nth($items-v2, $i));
+        // }
+      }
     }
   }
-}
 
-&__track,
-&__filled {
-  fill: none;
-}
+  &__track,
+  &__filled {
+    fill: none;
+  }
 
-&__track {
-  stroke: var(--accent-light);
-}
+  &__track {
+    stroke: var(--accent-light);
+  }
 
-&__filled {
-  stroke: var(--accent);
-  transition: all 0.2s;
-}
+  &__filled {
+    stroke: var(--accent);
+    transition: all 0.2s;
+  }
 }
