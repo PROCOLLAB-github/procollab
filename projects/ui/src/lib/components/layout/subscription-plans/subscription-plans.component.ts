@@ -14,7 +14,7 @@ import { SubscriptionPlan, SubscriptionPlansService } from "@corelib";
   templateUrl: "./subscription-plans.component.html",
   styleUrl: "./subscription-plans.component.scss",
 })
-export class SubscriptionPlansComponent implements OnInit {
+export class SubscriptionPlansComponent {
   router = inject(Router);
   subscriptionService = inject(SubscriptionPlansService);
 
@@ -29,9 +29,5 @@ export class SubscriptionPlansComponent implements OnInit {
     this.subscriptionService.buySubscription(planId).subscribe(status => {
       location.href = status.confirmation.confirmationUrl;
     });
-  }
-
-  ngOnInit() {
-    console.log(this.subscriptionPlans);
   }
 }

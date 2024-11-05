@@ -99,7 +99,13 @@ export class OfficeComponent implements OnInit, OnDestroy {
 
     const subscriptionsSub$ = this.subscriptionPlansService
       .getSubscriptions()
-      .pipe(tap(r => console.log(r)))
+      .pipe(
+        map(subscription => {
+          if (Array.isArray(subscription)) {
+            return subscription;
+          } else return [subscription];
+        })
+      )
       .subscribe(subscriptions => {
         this.subscriptions.set(subscriptions);
       });
