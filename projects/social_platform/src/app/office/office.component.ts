@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit, signal, Signal } from "@angular/core";
 import { IndustryService } from "@services/industry.service";
-import { forkJoin, map, noop, Subscription } from "rxjs";
+import { forkJoin, map, noop, Subscription, tap } from "rxjs";
 import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
 import { Invite } from "@models/invite.model";
 import { AuthService } from "@auth/services";
@@ -99,6 +99,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
 
     const subscriptionsSub$ = this.subscriptionPlansService
       .getSubscriptions()
+      .pipe(tap(r => console.log(r)))
       .subscribe(subscriptions => {
         this.subscriptions.set(subscriptions);
       });

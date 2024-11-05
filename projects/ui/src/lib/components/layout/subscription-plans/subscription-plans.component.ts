@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, EventEmitter, inject, Input, Output } from "@angular/core";
+import { Component, EventEmitter, inject, Input, OnInit, Output } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
 import { ButtonComponent, CheckboxComponent } from "@ui/components";
@@ -14,7 +14,7 @@ import { SubscriptionPlan, SubscriptionPlansService } from "@corelib";
   templateUrl: "./subscription-plans.component.html",
   styleUrl: "./subscription-plans.component.scss",
 })
-export class SubscriptionPlansComponent {
+export class SubscriptionPlansComponent implements OnInit {
   router = inject(Router);
   subscriptionService = inject(SubscriptionPlansService);
 
@@ -29,5 +29,9 @@ export class SubscriptionPlansComponent {
     this.subscriptionService.buySubscription(planId).subscribe(status => {
       location.href = status.confirmation.confirmationUrl;
     });
+  }
+
+  ngOnInit() {
+    console.log(this.subscriptionPlans);
   }
 }
