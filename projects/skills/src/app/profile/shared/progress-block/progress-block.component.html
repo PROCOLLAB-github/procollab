@@ -14,6 +14,7 @@
         transform="rotate(-90 80 80)"
         [attr.stroke-dashoffset]="calculateStrokeDashOffset(skill.skillProgress)"
         [attr.stroke-dasharray]="calculateStrokeDashArray()"
+        [attr.stroke-opacity]="getOpacity($index)"
       />
     </svg>
     } } @else {
@@ -38,12 +39,13 @@
 
     @for (skill of skillsList(); track $index) {
     <ul class="info__list">
-      <li class="info__item">
-        <div
-          class="info__bullet"
-          [class.info__bullet--low]="skill.skillProgress <= 20"
-          [class.info__bullet--mid]="40 < skill.skillProgress && skill.skillProgress <= 60"
-        ></div>
+      <li
+        class="info__item"
+        [style.opacity]="getOpacity($index)"
+        (mouseenter)="hoveredIndex = $index"
+        (mouseleave)="hoveredIndex = -1"
+      >
+        <div class="info__bullet"></div>
         <p class="text-body-16">{{ skill.skillName }}</p>
       </li>
     </ul>

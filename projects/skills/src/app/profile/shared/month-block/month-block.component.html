@@ -1,5 +1,6 @@
 <!-- @format -->
 
+@if (months.length) {
 <div class="month">
   @for (m of months; track $index) {
   <div class="month__item item" [class.item--done]="m.successfullyDone">
@@ -9,3 +10,4 @@
   </div>
   }
 </div>
+}

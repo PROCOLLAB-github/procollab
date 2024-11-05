@@ -11,7 +11,9 @@
   border-radius: 15px;
 
   &--first {
-    background-color: var(--accent);
+    background-image: url("/assets/images/rating/top-rating.png");
+    background-repeat: no-repeat;
+    background-position: 0 50%;
 
     .rating-card__title {
       color: var(--white);
@@ -33,6 +35,11 @@
 
   &__avatar {
     position: relative;
+
+    &--first {
+      border-radius: 50%;
+      border: 4px solid var(--gold);
+    }
 
     img {
       position: absolute;

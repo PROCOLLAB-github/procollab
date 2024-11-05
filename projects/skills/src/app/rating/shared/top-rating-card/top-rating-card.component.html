@@ -4,10 +4,7 @@
   class="rating-card"
   [ngClass]="{ 'rating-card--first': place === 1, 'rating-card--second': place === 2 }"
 >
-  <div class="rating-card__avatar">
-    @if (place === 1) {
-    <img src="assets/images/rating/top-rating.png" alt="" />
-    }
+  <div class="rating-card__avatar" [ngClass]="{ 'rating-card__avatar--first': place === 1 }">
     <app-avatar [url]="rating.file ?? undefined" [size]="100"></app-avatar>
   </div>
   <h2 class="rating-card__title">{{ rating.userName }}</h2>

@@ -17,6 +17,7 @@ export class ProgressBlockComponent implements OnInit {
   route = inject(ActivatedRoute);
   radius = 70;
   skillsList = signal<Skill[]>([]);
+  hoveredIndex = -1;
 
   calculateStrokeDashOffset(skillProgress: number): number {
     const circumference = 2 * Math.PI * this.radius;
@@ -33,5 +34,12 @@ export class ProgressBlockComponent implements OnInit {
         r["data"].skills.sort((a: any, b: any) => b.skillProgress - a.skillProgress)
       );
     });
+  }
+
+  getOpacity(index: number) {
+    if (this.hoveredIndex === -1) {
+      return 1;
+    }
+    return this.hoveredIndex === index ? 1 : 0.3;
   }
 }
