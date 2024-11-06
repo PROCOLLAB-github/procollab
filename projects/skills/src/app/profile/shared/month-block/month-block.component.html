@@ -3,7 +3,7 @@
 @if (months.length) {
 <div class="month">
   @for (m of months; track $index) {
-  <div class="month__item item" [class.item--done]="m.successfullyDone">
+  <div class="month__item item" [ngClass]="{ 'month__item--done': m.successfullyDone === true }">
     <div class="item__name">
       {{ m.month }}
     </div>

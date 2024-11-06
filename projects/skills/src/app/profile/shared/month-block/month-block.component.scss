@@ -9,6 +9,14 @@
   white-space: nowrap;
   background-color: var(--white);
   border-radius: 15px;
+
+  &__item {
+    opacity: 0.3;
+
+    &--done {
+      opacity: 1;
+    }
+  }
 }
 
 .item {
@@ -40,9 +48,9 @@
     height: 50%;
     content: "";
     background: var(--accent);
-    opacity: 0.3;
     transition: all 0.8s;
     transform: skew(60deg);
+    opacity: 1;
   }
 
   &::after {
@@ -54,10 +62,10 @@
     height: 50%;
     content: "";
     background: var(--accent);
-    opacity: 0.3;
     transition: all 0.8s;
     transform: skew(60deg);
     transform: skew(-60deg);
+    opacity: 1;
   }
 
   &__name {
@@ -69,9 +77,5 @@
     color: var(--white);
 
     @include typography.body-bold-18;
-  }
-
-  &--done {
-    opacity: 1;
   }
 }
