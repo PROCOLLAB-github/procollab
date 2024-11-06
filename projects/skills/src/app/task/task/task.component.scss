@@ -13,7 +13,7 @@
 
 .badge {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   padding: 24px 15px;
   background-color: var(--white);
@@ -41,11 +41,11 @@
   }
 
   &__img {
-    width: 100px;
+    width: 20%;
     height: 20px;
+    object-fit: contain;
 
     @include responsive.apply-desktop {
-      width: 400px;
       height: 80px;
     }
   }

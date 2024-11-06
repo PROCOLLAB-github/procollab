@@ -41,15 +41,5 @@
   &__check {
     display: flex;
     color: var(--green);
-
-    &::before {
-      content: url("/assets/images/profile/olive-branch.svg");
-      transform: scaleX(-1) translateX(-35%) translateY(25%);
-    }
-
-    &::after {
-      content: url("/assets/images/profile/olive-branch.svg");
-      transform: translateX(-40%) translateY(25%);
-    }
   }
 }

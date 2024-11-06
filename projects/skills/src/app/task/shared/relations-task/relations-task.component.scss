@@ -22,7 +22,7 @@
 
   &__description {
     margin-bottom: 20px;
-    white-space: pre-wrap;
+    white-space: pre-line;
 
     @include typography.body-14;
   }

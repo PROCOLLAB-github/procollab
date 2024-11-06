@@ -1,6 +1,11 @@
 <!-- @format -->
 
 <div class="video" [class.video--hasVideo]="contentType === 'mp4'">
+  <div class="video__text-content" [class.video__text-content--hasVideo]="!!sanitizedFileUrl">
+    <p class="video__title">{{ data.title }}</p>
+    <p class="video__text">{{ data.text }}</p>
+  </div>
+
   @if (sanitizedFileUrl) {
   <div class="video__frame" [class.video__frame--hasVideo]="contentType === 'mp4'">
     <iframe
@@ -9,12 +14,8 @@
       height="285px"
       frameborder="0"
       allowfullscreen
+      allowtransparency="true"
     ></iframe>
   </div>
   }
-
-  <div class="video__text-content">
-    <p class="video__title">{{ data.title }}</p>
-    <p class="video__text">{{ data.text }}</p>
-  </div>
 </div>
