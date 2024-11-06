@@ -19,6 +19,18 @@
     }
   }
 
+  &__wrapper {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    max-width: 440px;
+
+    &--hasVideo {
+      justify-content: center;
+      align-self: center;
+    }
+  }
+
   img {
     width: 100%;
     max-width: 430px;
@@ -33,22 +45,20 @@
     max-width: 440px;
     height: 100%;
     max-height: 285px;
+    margin-left: 80px;
 
     &--hasVideo {
       align-self: center;
       min-width: 670px;
+      margin-left: 0;
     }
   }
 
   &__text-content {
     display: flex;
-    flex-basis: 100%;
+    flex-basis: 110%;
     flex-direction: column;
     gap: 10px;
-
-    &--hasVideo {
-      flex-basis: 55%;
-    }
   }
 
   &__text {
