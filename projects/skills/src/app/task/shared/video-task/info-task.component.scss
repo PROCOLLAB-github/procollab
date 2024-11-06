@@ -41,11 +41,11 @@
 
   &__text-content {
     display: flex;
+    flex-basis: 100%;
     flex-direction: column;
     gap: 10px;
-    flex-basis: 100%;
 
-    &--hasVideo{
+    &--hasVideo {
       flex-basis: 55%;
     }
   }
