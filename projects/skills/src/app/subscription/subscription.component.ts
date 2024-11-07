@@ -10,6 +10,7 @@ import { ActivatedRoute } from "@angular/router";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { map } from "rxjs";
 import { ProfileService } from "../profile/services/profile.service";
+import { SubscriptionPlan } from "@corelib";
 
 @Component({
   selector: "app-subscription",
@@ -18,15 +19,30 @@ import { ProfileService } from "../profile/services/profile.service";
   templateUrl: "./subscription.component.html",
   styleUrl: "./subscription.component.scss",
 })
-export class SubscriptionComponent {
+export class SubscriptionComponent implements OnInit {
   open = signal(false);
   checked = signal(false);
 
   route = inject(ActivatedRoute);
   profileService = inject(ProfileService);
 
-  subscriptions = toSignal(this.route.data.pipe(map(r => r["data"])));
+  subscriptions = signal<SubscriptionPlan[]>([]);
   subscriptionData = toSignal(this.route.data.pipe(map(r => r["subscriptionData"])));
+
+  ngOnInit(): void {
+    this.route.data
+      .pipe(map(r => r["data"]))
+      .pipe(
+        map(subscription => {
+          if (Array.isArray(subscription)) {
+            return subscription;
+          } else return [subscription];
+        })
+      )
+      .subscribe(subscriptions => {
+        this.subscriptions.set(subscriptions);
+      });
+  }
 
   onOpenChange(event: boolean) {
     if (this.open() && !event) {
