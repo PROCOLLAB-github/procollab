@@ -27,6 +27,7 @@ import {
 import { WriteTaskComponent } from "../shared/write-task/write-task.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { IconComponent } from "@uilib";
+import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 
 @Component({
   selector: "app-subtask",
@@ -44,6 +45,8 @@ import { IconComponent } from "@uilib";
     ModalComponent,
     IconComponent,
     NgOptimizedImage,
+    ParseBreaksPipe,
+    ParseLinksPipe,
   ],
   templateUrl: "./subtask.component.html",
   styleUrl: "./subtask.component.scss",

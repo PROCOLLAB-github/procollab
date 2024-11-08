@@ -12,7 +12,9 @@ import { ApiPagination } from "../../../models/api-pagination.model";
 export class RatingService {
   apiService = inject(ApiService);
 
-  getGeneralRating(ratingParam: "last_year" | "last_month" | "last_day" = "last_month") {
+  getGeneralRating(
+    ratingParam: "last_year" | "last_month" | "last_day" | "last_week" = "last_month"
+  ) {
     return this.apiService
       .get<ApiPagination<GeneralRating>>(`/progress/user-rating/?time_frame=${ratingParam}`)
       .pipe(map(res => res.results));

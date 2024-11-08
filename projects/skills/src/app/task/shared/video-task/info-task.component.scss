@@ -6,6 +6,10 @@
   flex-direction: column-reverse;
   gap: 20px;
   align-items: center;
+  padding: 26px;
+  background-color: var(--white);
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
 
   @include responsive.apply-desktop {
     flex-direction: row;
@@ -41,23 +45,28 @@
 
   &__frame {
     width: 100%;
-    max-width: 440px;
+    max-width: 315px;
     height: 100%;
-    max-height: 285px;
     margin-left: 40px;
 
     &--hasVideo {
       align-self: center;
-      min-width: 670px;
+      max-width: 670px;
       margin-left: 0;
+    }
+
+    @include responsive.apply-desktop {
+      max-width: 440px;
+      max-height: 285px;
     }
   }
 
   &__text-content {
     display: flex;
-    flex-basis: 110%;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
+    flex-basis: 120%;
   }
 
   &__text {

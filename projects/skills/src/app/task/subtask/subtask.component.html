@@ -23,14 +23,20 @@
           [ngSrc]="fileLink"
           [alt]="fileLink"
           loading="lazy"
-          width="300"
-          height="130"
+          width="225"
+          height="144"
           style="object-fit: contain"
         />
-        <p class="cancel__description text-body-14">{{ is.popups[0].text }}</p>
+        <p
+          class="cancel__description text-body-14"
+          [innerHTML]="is.popups[0].text | parseLinks | parseBreaks"
+        ></p>
       </div>
       } @else {
-      <p class="cancel__description text-body-14">{{ is.popups[0].text }}</p>
+      <p
+        class="cancel__description text-body-14"
+        [innerHTML]="is.popups[0].text | parseLinks | parseBreaks"
+      ></p>
       }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
@@ -59,15 +65,21 @@
             [ngSrc]="fileLink"
             [alt]="fileLink"
             loading="lazy"
-            width="300"
-            height="130"
+            width="225"
+            height="144"
             style="object-fit: contain"
           />
         </div>
-        <p class="cancel__description text-body-14">{{ sq.popups[0].text }}</p>
+        <p
+          class="cancel__description text-body-14"
+          [innerHTML]="sq.popups[0].text | parseLinks | parseBreaks"
+        ></p>
       </div>
       } @else {
-      <p class="cancel__description text-body-14">{{ sq.popups[0].text }}</p>
+      <p
+        class="cancel__description text-body-14"
+        [innerHTML]="sq.popups[0].text | parseLinks | parseBreaks"
+      ></p>
       }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
@@ -101,15 +113,21 @@
             [ngSrc]="fileLink"
             [alt]="fileLink"
             loading="lazy"
-            width="300"
-            height="130"
+            width="225"
+            height="144"
             style="object-fit: contain"
           />
         </div>
-        <p class="cancel__description text-body-14">{{ cq.popups[0].text }}</p>
+        <p
+          class="cancel__description text-body-14"
+          [innerHTML]="cq.popups[0].text | parseLinks | parseBreaks"
+        ></p>
       </div>
       } @else {
-      <p class="cancel__description text-body-14">{{ cq.popups[0].text }}</p>
+      <p
+        class="cancel__description text-body-14"
+        [innerHTML]="cq.popups[0].text | parseLinks | parseBreaks"
+      ></p>
       }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
@@ -143,15 +161,21 @@
             [ngSrc]="fileLink"
             [alt]="fileLink"
             loading="lazy"
-            width="300"
-            height="130"
+            width="225"
+            height="144"
             style="object-fit: contain"
           />
         </div>
-        <p class="cancel__description text-body-14">{{ eq.popups[0].text }}</p>
+        <p
+          class="cancel__description text-body-14"
+          [innerHTML]="eq.popups[0].text | parseLinks | parseBreaks"
+        ></p>
       </div>
       } @else {
-      <p class="cancel__description text-body-14">{{ eq.popups[0].text }}</p>
+      <p
+        class="cancel__description text-body-14"
+        [innerHTML]="eq.popups[0].text | parseLinks | parseBreaks"
+      ></p>
       }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
@@ -185,15 +209,21 @@
             [ngSrc]="fileLink"
             [alt]="fileLink"
             loading="lazy"
-            width="300"
-            height="130"
+            width="225"
+            height="144"
             style="object-fit: contain"
           />
         </div>
-        <p class="cancel__description text-body-14">{{ wq.popups[0].text }}</p>
+        <p
+          class="cancel__description text-body-14"
+          [innerHTML]="wq.popups[0].text | parseLinks | parseBreaks"
+        ></p>
       </div>
       } @else {
-      <p class="cancel__description text-body-14">{{ wq.popups[0].text }}</p>
+      <p
+        class="cancel__description text-body-14"
+        [innerHTML]="wq.popups[0].text | parseLinks | parseBreaks"
+      ></p>
       }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"

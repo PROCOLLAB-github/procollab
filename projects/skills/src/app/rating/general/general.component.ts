@@ -63,6 +63,11 @@ export class RatingGeneralComponent implements OnInit {
       id: 2,
       value: "last_day",
     },
+    {
+      label: "Неделя",
+      id: 3,
+      value: "last_week",
+    },
   ];
 
   ngOnInit() {
@@ -91,7 +96,7 @@ export class RatingGeneralComponent implements OnInit {
     });
   }
 
-  loadRatings(filterParam: "last_month" | "last_year" | "last_day") {
+  loadRatings(filterParam: "last_month" | "last_year" | "last_day" | "last_week") {
     this.ratingService.getGeneralRating(filterParam).subscribe(r => {
       this.updateRatingSignals(r);
     });
