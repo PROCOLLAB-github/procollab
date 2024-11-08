@@ -2,6 +2,7 @@
 
 .page {
   margin-bottom: 50px;
+
   &__form {
     @include responsive.apply-desktop {
       width: 415px;

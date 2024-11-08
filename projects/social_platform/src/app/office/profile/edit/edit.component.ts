@@ -90,7 +90,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       phoneNumber: ["", Validators.required],
       additionalRole: [null],
 
-      //education
+      // education
       organizationName: [""],
       entryYear: [null],
       completionYear: [null],
@@ -98,7 +98,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       educationLevel: [null],
       educationStatus: [null],
 
-      //language
+      // language
       language: [null],
       languageLevel: [null],
 
@@ -107,14 +107,14 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       userLanguages: this.fb.array([]),
       links: this.fb.array([]),
 
-      //work
+      // work
       organization: [""],
       entryYearWork: [null],
       completionYearWork: [null],
       descriptionWork: [null],
       jobPosition: [null],
 
-      //skills
+      // skills
       speciality: ["", [Validators.required]],
       skills: [[], [Validators.required]],
       achievements: this.fb.array([]),
