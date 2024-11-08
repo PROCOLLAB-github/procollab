@@ -63,10 +63,10 @@
 
   &__text-content {
     display: flex;
+    flex-basis: 120%;
     flex-direction: column;
     gap: 10px;
     width: 100%;
-    flex-basis: 120%;
   }
 
   &__text {
