@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
@@ -39,19 +39,21 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
       city: ["", [Validators.required]],
       education: this.fb.array([]),
       workExperience: this.fb.array([]),
+
       // education
-      organizationName: ["", Validators.required],
-      entryYear: [""],
-      completionYear: [""],
-      description: [""],
-      educationStatus: [""],
-      educationLevel: [""],
+      organizationName: [""],
+      entryYear: [null],
+      completionYear: [null],
+      description: [null],
+      educationStatus: [null],
+      educationLevel: [null],
+
       // work
-      organizationNameWork: ["", Validators.required],
-      entryYearWork: [""],
-      completionYearWork: [""],
-      descriptionWork: [""],
-      jobPosition: [""],
+      organizationNameWork: [""],
+      entryYearWork: [null],
+      completionYearWork: [null],
+      descriptionWork: [null],
+      jobPosition: [null],
     });
   }
 
@@ -286,8 +288,50 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
       jobPosition: this.stageForm.get("jobPosition")?.value,
     });
 
-    this.education.push(educationItem);
-    this.workExperience.push(workItem);
+    const educationItemFilled = Object.values(educationItem.value).some(
+      value => value !== null && value !== ""
+    );
+    const workItemFilled = Object.values(workItem.value).some(
+      value => value !== null && value !== ""
+    );
+
+    this.stageSubmitting = false;
+
+    if (educationItemFilled) {
+      if (!educationItem.get("organizationName")?.value) {
+        this.stageForm.get("organizationName")?.setValidators([Validators.required]);
+        this.stageForm.get("organizationName")?.markAsTouched();
+        this.stageSubmitting = true;
+        setTimeout(() => {
+          this.stageSubmitting = false;
+        }, 500);
+      } else {
+        this.education.push(educationItem);
+        this.stageForm.get("organizationName")?.clearValidators();
+        this.stageForm.get("organizationName")?.markAsPristine();
+      }
+      this.stageForm.get("organizationName")?.updateValueAndValidity();
+    }
+
+    if (workItemFilled) {
+      if (!workItem.get("organizationName")?.value) {
+        this.stageForm.get("organizationNameWork")?.setValidators([Validators.required]);
+        this.stageForm.get("organizationNameWork")?.markAsTouched();
+        this.stageSubmitting = true;
+        setTimeout(() => {
+          this.stageSubmitting = false;
+        }, 500);
+      } else {
+        this.workExperience.push(workItem);
+        this.stageForm.get("organizationNameWork")?.clearValidators();
+        this.stageForm.get("organizationNameWork")?.markAsPristine();
+      }
+      this.stageForm.get("organizationNameWork")?.updateValueAndValidity();
+    }
+
+    if (this.stageSubmitting) {
+      return;
+    }
 
     this.stageSubmitting = true;
 

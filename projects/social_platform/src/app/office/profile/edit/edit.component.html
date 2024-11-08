@@ -257,9 +257,18 @@
         track $index) {
         <div class="education__info">
           <p class="text-body-16 education__text">
-            {{ educationItem.organizationName }} {{ educationItem.entryYear }} -
-            {{ educationItem.completionYear }} {{ educationItem.description }}
-            {{ educationItem.educationStatus }} {{ educationItem.educationLevel }}
+            {{ educationItem.organizationName }}
+
+            @if(educationItem.entryYear && educationItem.completionYear) {
+            {{ educationItem.entryYear }} - {{ educationItem.completionYear }}
+            } @else if (educationItem.entryYear && !educationItem.completionYear) {
+            {{ educationItem.entryYear }}
+            } @else if (!educationItem.entryYear && educationItem.completionYear){
+            {{ educationItem.completionYear }}
+            }
+
+            {{ educationItem.description }} {{ educationItem.educationStatus }}
+            {{ educationItem.educationLevel }}
           </p>
           <i
             class="edit"
@@ -379,8 +388,15 @@
         track $index) {
         <div class="education__info">
           <p class="text-body-16 education__text">
-            {{ workItem.organizationName }} {{ workItem.entryYear }} -
-            {{ workItem.completionYear }} {{ workItem.description }}
+            {{ workItem.organizationName }}
+            @if(workItem.entryYear && workItem.completionYear) {
+            {{ workItem.entryYear }} - {{ workItem.completionYear }}
+            } @else if (workItem.entryYear && !workItem.completionYear) {
+            {{ workItem.entryYear }}
+            } @else if (!workItem.entryYear && workItem.completionYear){
+            {{ workItem.completionYear }}
+            }
+            {{ workItem.description }}
             {{ workItem.jobPosition }}
           </p>
           <i class="edit" appIcon icon="edit-pen" appSquare="20" (click)="editWork($index)"></i>
