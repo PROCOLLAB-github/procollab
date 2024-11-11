@@ -50,7 +50,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     const routeData$ = this.route.data
       .pipe(
         map(r => r["data"]),
-        tap(r => console.log(r.results))
+        tap(r => console.log(r))
       )
       .subscribe((feed: ApiPagination<FeedItem>) => {
         this.feedItems.set(feed.results);
