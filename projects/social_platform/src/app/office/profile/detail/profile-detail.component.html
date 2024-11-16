@@ -87,15 +87,16 @@
             </a>
             } @else {
             <div class="profile__btns">
-              <a class="profile__cv">
-                <app-button
-                  (click)="sendCVEmail()"
-                  customTypographyClass="text-body-12"
-                  color="primary"
-                >
-                  Скачать CV
-                </app-button>
-              </a>
+              @if (pdfUrl()) {
+              <a [href]="pdfUrl()" download="cv.pdf" class="profile__cv"></a>
+              }
+              <app-button
+                (click)="downloadCV()"
+                customTypographyClass="text-body-12"
+                color="primary"
+              >
+                Скачать CV
+              </app-button>
 
               <a class="profile__edit" routerLink="/office/profile/edit">
                 <app-button customTypographyClass="text-body-12" color="grey">

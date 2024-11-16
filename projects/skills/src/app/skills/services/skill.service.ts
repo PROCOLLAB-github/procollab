@@ -11,6 +11,8 @@ import { HttpParams } from "@angular/common/http";
 })
 export class SkillService {
   apiService = inject(ApiService);
+  private skillId: number | null = null;
+  private storageKey = "skillId";
 
   getAll() {
     return this.apiService.get<ApiPagination<Skill>>("/courses/all-skills/");
@@ -34,5 +36,15 @@ export class SkillService {
 
   getTasks(skillId: number) {
     return this.apiService.get<TasksResponse>(`/courses/tasks-of-skill/${skillId}`);
+  }
+
+  setSkillId(id: number) {
+    this.skillId = id;
+    localStorage.setItem(this.storageKey, JSON.stringify(id));
+  }
+
+  getSkillId() {
+    const skillValue = localStorage.getItem(this.storageKey);
+    return skillValue ? JSON.parse(skillValue) : null;
   }
 }

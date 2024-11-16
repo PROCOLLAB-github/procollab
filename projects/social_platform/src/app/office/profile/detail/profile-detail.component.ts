@@ -2,7 +2,7 @@
 
 import { Component, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
-import { catchError, map, Observable, tap } from "rxjs";
+import { catchError, map, Observable, tap, timeout } from "rxjs";
 import { User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
 import { AuthService } from "@auth/services";
@@ -46,9 +46,13 @@ export class ProfileDetailComponent implements OnInit {
   user$: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
   loggedUserId$: Observable<number> = this.authService.profile.pipe(map(user => user.id));
 
+  linkData = "";
+
   isDelayModalOpen = false;
   isSended = false;
+
   errorMessageModal = signal("");
+  pdfUrl = signal<string | null>("");
   desktopMode$: Observable<boolean> = this.breakpointObserver
     .observe("(min-width: 920px)")
     .pipe(map(result => result.matches));
@@ -57,38 +61,41 @@ export class ProfileDetailComponent implements OnInit {
     this.navService.setNavTitle("Профиль");
   }
 
-  // downloadCV() {
-  //   this.authService.downloadCV().subscribe({
-  //     next: r => {
-  //       const blob = new Blob([r.text], { type: "application/pdf" });
-  //       const a = document.createElement("a");
-  //       a.href = URL.createObjectURL(blob);
-  //       a.download = "cv.pdf";
-  //       document.body.appendChild(a);
-  //       a.click();
-  //       URL.revokeObjectURL(a.href);
-  //       document.body.removeChild(a);
-  //     },
-  //     error: err => {
-  //       if (err.status === 400) {
-  //         this.errorMessageModal.set(err.error.slice(23, 25));
-  //         this.isDelayModalOpen = true;
-  //       }
-  //     },
-  //   });
-  // }
+  downloadCV() {
+    this.authService.downloadCV().subscribe({
+      next: response => {
+        const url = window.URL.createObjectURL(response);
+        this.pdfUrl.set(url);
 
-  sendCVEmail() {
-    this.authService.sendCV().subscribe({
-      next: () => {
-        this.isSended = true;
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "cv.pdf";
+
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
       },
       error: err => {
         if (err.status === 400) {
+          this.errorMessageModal.set(err.error.slice(23, 25));
           this.isDelayModalOpen = true;
-          this.errorMessageModal.set(err.error.seconds_after_retry);
         }
       },
     });
   }
+
+  // sendCVEmail() {
+  //   this.authService.sendCV().subscribe({
+  //     next: () => {
+  //       this.isSended = true;
+  //     },
+  //     error: err => {
+  //       if (err.status === 400) {
+  //         this.isDelayModalOpen = true;
+  //         this.errorMessageModal.set(err.error.seconds_after_retry);
+  //       }
+  //     },
+  //   });
+  // }
 }

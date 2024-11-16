@@ -12,7 +12,7 @@
   @if (skills | async; as data) {
   <div class="list__items">
     @for (s of data["results"]; track $index) {
-    <app-skill-card [skill]="s" (click)="router.navigate(['skills', s.id])"></app-skill-card>
+    <app-skill-card [skill]="s" (click)="onSkillClick(s.id)"></app-skill-card>
     }
   </div>
   }

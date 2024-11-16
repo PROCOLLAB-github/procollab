@@ -12,6 +12,7 @@ import {
 } from "../models/http.model";
 import { User, UserRole } from "../models/user.model";
 import { HttpParams } from "@angular/common/http";
+import { decode } from "js-base64";
 
 @Injectable({
   providedIn: "root",
@@ -39,8 +40,7 @@ export class AuthService {
 
   downloadCV(): Observable<any> {
     return this.apiService.get("/auth/users/download_cv/", new HttpParams(), {
-      responseType: "text",
-      params: new HttpParams(),
+      responseType: "blob",
     });
   }
 
