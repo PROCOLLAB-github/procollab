@@ -28,7 +28,6 @@ import { WriteTaskComponent } from "../shared/write-task/write-task.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { IconComponent } from "@uilib";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { Location } from "@angular/common";
 import { SkillService } from "../../skills/services/skill.service";
 
 @Component({
