@@ -39,9 +39,7 @@ export class AuthService {
   }
 
   downloadCV(): Observable<any> {
-    return this.apiService.get("/auth/users/download_cv/", new HttpParams(), {
-      responseType: "blob",
-    });
+    return this.apiService.get("/auth/users/download_cv/");
   }
 
   sendCV(): Observable<any> {

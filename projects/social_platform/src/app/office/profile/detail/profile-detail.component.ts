@@ -52,7 +52,6 @@ export class ProfileDetailComponent implements OnInit {
   isSended = false;
 
   errorMessageModal = signal("");
-  pdfUrl = signal<string | null>("");
   desktopMode$: Observable<boolean> = this.breakpointObserver
     .observe("(min-width: 920px)")
     .pipe(map(result => result.matches));
@@ -61,41 +60,40 @@ export class ProfileDetailComponent implements OnInit {
     this.navService.setNavTitle("Профиль");
   }
 
-  downloadCV() {
-    this.authService.downloadCV().subscribe({
-      next: response => {
-        const url = window.URL.createObjectURL(response);
-        this.pdfUrl.set(url);
-
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "cv.pdf";
-
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      },
-      error: err => {
-        if (err.status === 400) {
-          this.errorMessageModal.set(err.error.slice(23, 25));
-          this.isDelayModalOpen = true;
-        }
-      },
-    });
-  }
-
-  // sendCVEmail() {
-  //   this.authService.sendCV().subscribe({
-  //     next: () => {
-  //       this.isSended = true;
+  // downloadCV() {
+  //   this.authService.downloadCV().subscribe({
+  //     next: response => {
+  //       response.blob().then((blob: any) => {
+  //         const url = window.URL.createObjectURL(blob);
+  //         const a = document.createElement('a');
+  //         a.href = url;
+  //         a.download = 'cv.pdf';
+  //         document.body.appendChild(a);
+  //         a.click();
+  //         document.body.removeChild(a);
+  //         window.URL.revokeObjectURL(url);
+  //       })
   //     },
   //     error: err => {
   //       if (err.status === 400) {
+  //         this.errorMessageModal.set(err.error.slice(23, 25));
   //         this.isDelayModalOpen = true;
-  //         this.errorMessageModal.set(err.error.seconds_after_retry);
   //       }
   //     },
   //   });
   // }
+
+  sendCVEmail() {
+    this.authService.sendCV().subscribe({
+      next: () => {
+        this.isSended = true;
+      },
+      error: err => {
+        if (err.status === 400) {
+          this.isDelayModalOpen = true;
+          this.errorMessageModal.set(err.error.seconds_after_retry);
+        }
+      },
+    });
+  }
 }
