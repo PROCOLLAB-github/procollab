@@ -27,17 +27,19 @@
           height="144"
           style="object-fit: contain"
         />
+        @if(is.popups[0].text; as popupText){
         <p
           class="cancel__description text-body-14"
-          [innerHTML]="is.popups[0].text | parseLinks | parseBreaks"
+          [innerHTML]="popupText | parseLinks | parseBreaks"
         ></p>
+        }
       </div>
-      } @else {
+      } @else { @if(is.popups[0].text; as popupText){
       <p
         class="cancel__description text-body-14"
-        [innerHTML]="is.popups[0].text | parseLinks | parseBreaks"
+        [innerHTML]="popupText | parseLinks | parseBreaks"
       ></p>
-      }
+      } }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
         >Продолжить</app-button
@@ -70,17 +72,19 @@
             style="object-fit: contain"
           />
         </div>
+        @if(sq.popups[0].text; as popupText){
         <p
           class="cancel__description text-body-14"
-          [innerHTML]="sq.popups[0].text | parseLinks | parseBreaks"
+          [innerHTML]="popupText | parseLinks | parseBreaks"
         ></p>
+        }
       </div>
-      } @else {
+      } @else { @if(sq.popups[0].text; as popupText){
       <p
         class="cancel__description text-body-14"
-        [innerHTML]="sq.popups[0].text | parseLinks | parseBreaks"
+        [innerHTML]="popupText | parseLinks | parseBreaks"
       ></p>
-      }
+      } }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
         >Продолжить</app-button
@@ -118,17 +122,19 @@
             style="object-fit: contain"
           />
         </div>
+        @if (cq.popups[0].text; as popupText) {
         <p
           class="cancel__description text-body-14"
-          [innerHTML]="cq.popups[0].text | parseLinks | parseBreaks"
+          [innerHTML]="popupText | parseLinks | parseBreaks"
         ></p>
+        }
       </div>
-      } @else {
+      } @else { @if (cq.popups[0].text; as popupText) {
       <p
         class="cancel__description text-body-14"
-        [innerHTML]="cq.popups[0].text | parseLinks | parseBreaks"
+        [innerHTML]="popupText | parseLinks | parseBreaks"
       ></p>
-      }
+      } }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
         >Продолжить</app-button
@@ -166,17 +172,19 @@
             style="object-fit: contain"
           />
         </div>
+        @if (eq.popups[0].text; as popupText) {
         <p
           class="cancel__description text-body-14"
-          [innerHTML]="eq.popups[0].text | parseLinks | parseBreaks"
+          [innerHTML]="popupText | parseLinks | parseBreaks"
         ></p>
+        }
       </div>
-      } @else {
+      } @else { @if (eq.popups[0].text; as popupText) {
       <p
         class="cancel__description text-body-14"
-        [innerHTML]="eq.popups[0].text | parseLinks | parseBreaks"
+        [innerHTML]="popupText | parseLinks | parseBreaks"
       ></p>
-      }
+      } }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
         >Продолжить</app-button
@@ -214,17 +222,19 @@
             style="object-fit: contain"
           />
         </div>
+        @if(wq.popups[0].text; as popupText){
         <p
           class="cancel__description text-body-14"
-          [innerHTML]="wq.popups[0].text | parseLinks | parseBreaks"
+          [innerHTML]="popupText | parseLinks | parseBreaks"
         ></p>
+        }
       </div>
-      } @else {
+      } @else { @if(wq.popups[0].text; as popupText){
       <p
         class="cancel__description text-body-14"
-        [innerHTML]="wq.popups[0].text | parseLinks | parseBreaks"
+        [innerHTML]="popupText | parseLinks | parseBreaks"
       ></p>
-      }
+      } }
 
       <app-button (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
         >Продолжить</app-button

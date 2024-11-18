@@ -18,7 +18,8 @@ export class AvatarComponent implements OnInit {
   @Input() onlineBadgeBorder = 3;
   @Input() onlineBadgeOffset = 0;
 
-  placeholderUrl = "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif";
+  placeholderUrl =
+    "https://uch-ibadan.org.ng/wp-content/uploads/2021/10/Profile_avatar_placeholder_large.png";
 
   constructor() {}
 

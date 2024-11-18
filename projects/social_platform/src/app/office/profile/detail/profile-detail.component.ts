@@ -2,7 +2,7 @@
 
 import { Component, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
-import { catchError, map, Observable, tap } from "rxjs";
+import { catchError, map, Observable, tap, timeout } from "rxjs";
 import { User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
 import { AuthService } from "@auth/services";
@@ -46,8 +46,11 @@ export class ProfileDetailComponent implements OnInit {
   user$: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
   loggedUserId$: Observable<number> = this.authService.profile.pipe(map(user => user.id));
 
+  linkData = "";
+
   isDelayModalOpen = false;
   isSended = false;
+
   errorMessageModal = signal("");
   desktopMode$: Observable<boolean> = this.breakpointObserver
     .observe("(min-width: 920px)")
@@ -59,15 +62,17 @@ export class ProfileDetailComponent implements OnInit {
 
   // downloadCV() {
   //   this.authService.downloadCV().subscribe({
-  //     next: r => {
-  //       const blob = new Blob([r.text], { type: "application/pdf" });
-  //       const a = document.createElement("a");
-  //       a.href = URL.createObjectURL(blob);
-  //       a.download = "cv.pdf";
-  //       document.body.appendChild(a);
-  //       a.click();
-  //       URL.revokeObjectURL(a.href);
-  //       document.body.removeChild(a);
+  //     next: response => {
+  //       response.blob().then((blob: any) => {
+  //         const url = window.URL.createObjectURL(blob);
+  //         const a = document.createElement('a');
+  //         a.href = url;
+  //         a.download = 'cv.pdf';
+  //         document.body.appendChild(a);
+  //         a.click();
+  //         document.body.removeChild(a);
+  //         window.URL.revokeObjectURL(url);
+  //       })
   //     },
   //     error: err => {
   //       if (err.status === 400) {

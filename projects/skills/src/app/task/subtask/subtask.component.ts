@@ -7,7 +7,7 @@ import { RadioSelectTaskComponent } from "../shared/radio-select-task/radio-sele
 import { RelationsTaskComponent } from "../shared/relations-task/relations-task.component";
 import { ButtonComponent } from "@ui/components";
 import { ExcludeTaskComponent } from "../shared/exclude-task/exclude-task.component";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, NavigationStart, Router, RouterLink } from "@angular/router";
 import { concatMap, map, tap } from "rxjs";
 import { LoaderComponent } from "@ui/components/loader/loader.component";
 import { TaskService } from "../services/task.service";
@@ -28,6 +28,7 @@ import { WriteTaskComponent } from "../shared/write-task/write-task.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { IconComponent } from "@uilib";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
+import { SkillService } from "../../skills/services/skill.service";
 
 @Component({
   selector: "app-subtask",
@@ -52,9 +53,10 @@ import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
   styleUrl: "./subtask.component.scss",
 })
 export class SubtaskComponent implements OnInit {
-  route = inject(ActivatedRoute);
   router = inject(Router);
+  route = inject(ActivatedRoute);
   taskService = inject(TaskService);
+  skillService = inject(SkillService);
 
   loading = signal(false);
 
@@ -86,6 +88,16 @@ export class SubtaskComponent implements OnInit {
     | "question_write"
     | null
   >(null);
+
+  constructor() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        if (event.navigationTrigger === "popstate" && event.restoredState) {
+          this.router.navigateByUrl(`/skills/${this.skillService.getSkillId()}`);
+        }
+      }
+    });
+  }
 
   ngOnInit() {
     this.route.params
@@ -203,9 +215,10 @@ export class SubtaskComponent implements OnInit {
             if (!taskId) return;
 
             if (!nextStep) {
-              this.router
-                .navigate(["/task", taskId, "results"])
-                .then(() => console.debug("Route changed from SubtaskComponent"));
+              this.router.navigate(["/task", taskId, "results"]).then(() => {
+                console.debug("Route changed from SubtaskComponent");
+                location.reload();
+              });
               this.taskService.currentTaskDone.set(true);
               return;
             }
@@ -214,7 +227,10 @@ export class SubtaskComponent implements OnInit {
               .navigate(["/task", taskId, nextStep.id], {
                 queryParams: { type: nextStep.type },
               })
-              .then(() => console.debug("Route changed from SubtaskComponent"));
+              .then(() => {
+                console.debug("Route changed from SubtaskComponent");
+                location.reload();
+              });
           }, 1000);
         }
       },

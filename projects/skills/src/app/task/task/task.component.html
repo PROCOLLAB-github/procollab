@@ -19,15 +19,15 @@
       {{ skillStepsResponse()?.currentLevel }} задание
     </div>
     @for (id of taskIds(); track $index) {
-    <a
+    <div
       #pointEls
       class="progress__point"
       [attr.data-id]="id"
       [ngClass]="{
             'progress__point--done': doneTasks()?.includes(id) || taskService.currentTaskDone(),
           }"
-      (click)="goToTask(id)"
-    ></a>
+    ></div>
+    <!-- (click)="goTask(id)"  -->
     }
     <img
       [src]="skillStepsResponse()?.skillPointLogo"

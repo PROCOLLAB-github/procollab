@@ -116,10 +116,10 @@ export class TaskComponent implements OnInit {
     this.route.firstChild?.url.subscribe(console.log);
   }
 
-  goToTask(id: number) {
-    if (this.taskService.currentTaskDone()) return;
-    this.currentSubTaskId.set(id);
-  }
+  // goToTask(id: number) {
+  //   if (this.taskService.currentTaskDone()) return;
+  //   this.currentSubTaskId.set(id);
+  // }
 
   progressDoneWidth = signal(0);
 

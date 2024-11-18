@@ -1,9 +1,9 @@
 /** @format */
 
 export interface Popup {
-  title: string;
-  text: string;
-  fileLink: string;
+  title: string | null;
+  text: string | null;
+  fileLink: string | null;
   ordinalNumber: number;
 }
 
