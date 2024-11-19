@@ -31,6 +31,8 @@
     &--hasVideo {
       align-self: center;
       justify-content: center;
+      border: 1px solid var(--grey-for-text);
+      border-radius: 15px;
     }
   }
 
@@ -41,6 +43,10 @@
     max-height: 285px;
     border-radius: 15px;
     object-fit: cover;
+  }
+
+  iframe{
+    border-radius: 15px;
   }
 
   &__frame {
