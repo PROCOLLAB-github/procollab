@@ -53,6 +53,8 @@
       align-self: center;
       max-width: 670px;
       margin-left: 0;
+      width: 100%;
+      height: 100%;
     }
 
     @include responsive.apply-desktop {
@@ -65,6 +67,8 @@
         align-self: center;
         max-width: 670px;
         margin-left: 0;
+        width: 100%;
+        height: 100%;
       }
     }
   }
