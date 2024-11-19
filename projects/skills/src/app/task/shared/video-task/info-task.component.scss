@@ -51,10 +51,10 @@
 
     &--hasVideo {
       align-self: center;
-      max-width: 670px;
-      margin-left: 0;
       width: 100%;
+      max-width: 670px;
       height: 100%;
+      margin-left: 0;
     }
 
     @include responsive.apply-desktop {
@@ -65,10 +65,10 @@
 
       &--hasVideo {
         align-self: center;
-        max-width: 670px;
-        margin-left: 0;
         width: 100%;
+        max-width: 670px;
         height: 100%;
+        margin-left: 0;
       }
     }
   }
