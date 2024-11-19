@@ -56,10 +56,10 @@
     }
 
     @include responsive.apply-desktop {
-      max-width: 440px;
-      max-height: 285px;
       width: 100%;
+      max-width: 440px;
       height: 100%;
+      max-height: 285px;
 
       &--hasVideo {
         align-self: center;
