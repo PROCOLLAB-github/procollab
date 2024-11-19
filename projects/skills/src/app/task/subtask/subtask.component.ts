@@ -175,9 +175,10 @@ export class SubtaskComponent implements OnInit {
       if (!taskId) return;
 
       if (!nextStep) {
-        this.router
-          .navigate(["/task", taskId, "results"])
-          .then(() => console.debug("Route changed from SubtaskComponent"));
+        this.router.navigate(["/task", taskId, "results"]).then(() => {
+          console.debug("Route changed from SubtaskComponent");
+          location.reload();
+        });
         this.taskService.currentTaskDone.set(true);
         return;
       }
@@ -186,7 +187,10 @@ export class SubtaskComponent implements OnInit {
         .navigate(["/task", taskId, nextStep.id], {
           queryParams: { type: nextStep.type },
         })
-        .then(() => console.debug("Route changed from SubtaskComponent"));
+        .then(() => {
+          console.debug("Route changed from SubtaskComponent");
+          location.reload();
+        });
     }, 1000);
   }
 

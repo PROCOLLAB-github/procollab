@@ -58,6 +58,14 @@
     @include responsive.apply-desktop {
       max-width: 440px;
       max-height: 285px;
+      width: 100%;
+      height: 100%;
+
+      &--hasVideo {
+        align-self: center;
+        max-width: 670px;
+        margin-left: 0;
+      }
     }
   }
 

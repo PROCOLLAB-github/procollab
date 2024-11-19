@@ -8,7 +8,12 @@
 
   @if (sanitizedFileUrl) {
   <div class="video__wrapper" [class.video__wrapper--hasVideo]="contentType === 'mp4'">
-    <div class="video__frame" [class.video__frame--hasVideo]="contentType === 'mp4'">
+    <div
+      [ngClass]="{
+        video__frame: contentType === 'webp',
+        'video__frame--hasVideo': contentType === 'mp4' || contentType === 'gif'
+      }"
+    >
       <iframe
         [src]="sanitizedFileUrl"
         width="100%"

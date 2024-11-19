@@ -63,14 +63,7 @@
       @if (sq.popups[0].fileLink; as fileLink) {
       <div class="cancel__image">
         <div class="cancel__file">
-          <img
-            [ngSrc]="fileLink"
-            [alt]="fileLink"
-            loading="lazy"
-            width="225"
-            height="144"
-            style="object-fit: contain"
-          />
+          <img [ngSrc]="fileLink" [alt]="fileLink" loading="lazy" width="225" height="144" />
         </div>
         @if(sq.popups[0].text; as popupText){
         <p
