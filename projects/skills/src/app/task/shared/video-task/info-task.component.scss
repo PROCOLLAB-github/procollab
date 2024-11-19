@@ -25,8 +25,9 @@
 
   &__wrapper {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     width: 100%;
+    scale: none;
 
     &--hasVideo {
       align-self: center;
@@ -34,16 +35,20 @@
       border: 1px solid var(--grey-for-text);
       border-radius: 15px;
     }
+
+    @include responsive.apply-desktop {
+      scale: 1.2;
+    }
   }
 
-  img {
-    width: 100%;
-    max-width: 430px;
-    height: 100%;
-    max-height: 285px;
-    border-radius: 15px;
-    object-fit: cover;
-  }
+  // img {
+  //   width: 100%;
+  //   max-width: 430px;
+  //   height: 100%;
+  //   max-height: 285px;
+  //   border-radius: 15px;
+  //   object-fit: cover;
+  // }
 
   iframe {
     border-radius: 15px;
