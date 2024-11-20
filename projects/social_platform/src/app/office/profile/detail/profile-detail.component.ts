@@ -2,13 +2,13 @@
 
 import { Component, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
-import { catchError, map, Observable, tap, timeout } from "rxjs";
+import { map, Observable } from "rxjs";
 import { User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
 import { AuthService } from "@auth/services";
 import { ChatService } from "@services/chat.service";
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { YearsFromBirthdayPipe } from "projects/core";
+import { SubscriptionPlansService, YearsFromBirthdayPipe } from "projects/core";
 import { BarComponent, ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { BackComponent } from "@uilib";
@@ -39,6 +39,7 @@ export class ProfileDetailComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly navService: NavService,
     public readonly authService: AuthService,
+    public readonly subscriptionPlansService: SubscriptionPlansService,
     public readonly chatService: ChatService,
     public readonly breakpointObserver: BreakpointObserver
   ) {}
@@ -50,6 +51,7 @@ export class ProfileDetailComponent implements OnInit {
 
   isDelayModalOpen = false;
   isSended = false;
+  isSubscriptionActive = false;
 
   errorMessageModal = signal("");
   desktopMode$: Observable<boolean> = this.breakpointObserver
@@ -58,6 +60,20 @@ export class ProfileDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль");
+
+    this.subscriptionPlansService
+      .getSubscriptions()
+      .pipe(
+        map(r => {
+          if (typeof r === "string") {
+            return !!r;
+          }
+          return false;
+        })
+      )
+      .subscribe(r => {
+        this.isSubscriptionActive = r!;
+      });
   }
 
   // downloadCV() {

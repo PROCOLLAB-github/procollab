@@ -88,6 +88,7 @@
             } @else {
             <div class="profile__btns">
               <a class="profile__cv">
+                @if(isSubscriptionActive){
                 <app-button
                   (click)="sendCVEmail()"
                   customTypographyClass="text-body-12"
@@ -95,6 +96,7 @@
                 >
                   Скачать CV
                 </app-button>
+                }
               </a>
 
               <a class="profile__edit" routerLink="/office/profile/edit">

@@ -12,6 +12,7 @@
       class="video__frame"
       [class.video__frame--hasVideo]="contentType === 'mp4' || contentType === 'gif'"
     >
+      @if (contentType === 'mp4' || contentType === 'gif') {
       <iframe
         [src]="sanitizedFileUrl"
         width="100%"
@@ -20,6 +21,9 @@
         allowfullscreen
         allowtransparency="true"
       ></iframe>
+      } @else {
+      <img [alt]="sanitizedFileUrl" [src]="sanitizedFileUrl" />
+      }
     </div>
   </div>
   }
