@@ -78,17 +78,14 @@ export class ProfileDetailComponent implements OnInit {
 
   // downloadCV() {
   //   this.authService.downloadCV().subscribe({
-  //     next: response => {
-  //       response.blob().then((blob: any) => {
-  //         const url = window.URL.createObjectURL(blob);
-  //         const a = document.createElement('a');
-  //         a.href = url;
-  //         a.download = 'cv.pdf';
-  //         document.body.appendChild(a);
-  //         a.click();
-  //         document.body.removeChild(a);
-  //         window.URL.revokeObjectURL(url);
-  //       })
+  //     next: (response: Blob) => {
+  //       // Создаем URL для Blob
+  //       const blob = new Blob([response], { type: "application/pdf" });
+  //       const link = document.createElement("a");
+  //       link.href = window.URL.createObjectURL(blob);
+  //       link.download = "download.pdf"; // Имя файла для скачивания
+  //       link.click();
+  //       window.URL.revokeObjectURL(link.href);
   //     },
   //     error: err => {
   //       if (err.status === 400) {
