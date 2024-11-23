@@ -5,11 +5,11 @@
   display: flex;
   flex-direction: column-reverse;
   gap: 30px;
+  align-items: center;
   padding: 26px;
   background-color: var(--white);
   border: 1px solid var(--grey-button);
   border-radius: 15px;
-  align-items: center;
 
   @include responsive.apply-desktop {
     flex-direction: row;
@@ -32,17 +32,19 @@
     &--hasVideo {
       align-self: center;
       justify-content: center;
+
       // border: 1px solid var(--grey-for-text);
       border-radius: 15px;
     }
 
     @include responsive.apply-desktop {
-      width: 100%;
       justify-content: flex-end;
+      width: 100%;
 
       &--hasVideo {
         align-self: center;
         justify-content: center;
+
         // border: 1px solid var(--grey-for-text);
         border-radius: 15px;
       }
