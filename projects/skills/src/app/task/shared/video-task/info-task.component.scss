@@ -4,39 +4,48 @@
 .video {
   display: flex;
   flex-direction: column-reverse;
-  gap: 100px;
+  gap: 30px;
   padding: 26px;
   background-color: var(--white);
   border: 1px solid var(--grey-button);
   border-radius: 15px;
+  align-items: center;
 
   @include responsive.apply-desktop {
     flex-direction: row;
+    gap: 180px;
   }
 
   &--hasVideo {
-    flex-direction: column;
+    // flex-direction: column;
 
     @include responsive.apply-desktop {
-      align-items: flex-start;
+      align-items: center;
     }
   }
 
   &__wrapper {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     width: 100%;
 
     &--hasVideo {
       align-self: center;
       justify-content: center;
-      border: 1px solid var(--grey-for-text);
+      // border: 1px solid var(--grey-for-text);
       border-radius: 15px;
     }
 
     @include responsive.apply-desktop {
       width: 100%;
-      max-width: 440px;
+      justify-content: flex-end;
+
+      &--hasVideo {
+        align-self: center;
+        justify-content: center;
+        // border: 1px solid var(--grey-for-text);
+        border-radius: 15px;
+      }
     }
   }
 
