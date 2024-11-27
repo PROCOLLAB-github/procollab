@@ -52,8 +52,8 @@
   }
 
   img {
-    max-width: 440px;
     width: 100%;
+    max-width: 440px;
     height: 100%;
     border-radius: 15px;
   }
@@ -88,7 +88,7 @@
     flex-direction: column;
     width: 100%;
 
-    @include responsive.apply-desktop{
+    @include responsive.apply-desktop {
       width: 130%;
     }
   }
