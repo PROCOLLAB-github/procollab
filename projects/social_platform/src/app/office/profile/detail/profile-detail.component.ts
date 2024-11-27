@@ -76,25 +76,25 @@ export class ProfileDetailComponent implements OnInit {
       });
   }
 
-  // downloadCV() {
-  //   this.authService.downloadCV().subscribe({
-  //     next: (response: Blob) => {
-  //       // Создаем URL для Blob
-  //       const blob = new Blob([response], { type: "application/pdf" });
-  //       const link = document.createElement("a");
-  //       link.href = window.URL.createObjectURL(blob);
-  //       link.download = "download.pdf"; // Имя файла для скачивания
-  //       link.click();
-  //       window.URL.revokeObjectURL(link.href);
-  //     },
-  //     error: err => {
-  //       if (err.status === 400) {
-  //         this.errorMessageModal.set(err.error.slice(23, 25));
-  //         this.isDelayModalOpen = true;
-  //       }
-  //     },
-  //   });
-  // }
+  downloadCV() {
+    // this.authService.downloadCV().subscribe({
+    //   next: (response: Blob) => {
+    //     // Создаем URL для Blob
+    //     const blob = new Blob([response], { type: "application/pdf" });
+    //     const link = document.createElement("a");
+    //     link.href = window.URL.createObjectURL(blob);
+    //     link.download = "download.pdf"; // Имя файла для скачивания
+    //     link.click();
+    //     window.URL.revokeObjectURL(link.href);
+    //   },
+    //   error: err => {
+    //     if (err.status === 400) {
+    //       this.errorMessageModal.set(err.error.slice(23, 25));
+    //       this.isDelayModalOpen = true;
+    //     }
+    //   },
+    // });
+  }
 
   sendCVEmail() {
     this.authService.sendCV().subscribe({

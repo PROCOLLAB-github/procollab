@@ -21,8 +21,8 @@
         allowfullscreen
         allowtransparency="true"
       ></iframe>
-      } @else {
-      <img [alt]="sanitizedFileUrl" [src]="sanitizedFileUrl" />
+      } @else if(data.files[0].length) {
+      <img [alt]="data.files[0]" [src]="data.files[0]" />
       }
     </div>
   </div>
