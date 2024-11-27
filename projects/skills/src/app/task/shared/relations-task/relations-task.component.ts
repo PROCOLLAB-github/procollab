@@ -7,16 +7,18 @@ import {
   ConnectQuestionRequest,
   ConnectQuestionResponse,
 } from "../../../../models/step.model";
+import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 
 @Component({
   selector: "app-relations-task",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ParseBreaksPipe, ParseLinksPipe],
   templateUrl: "./relations-task.component.html",
   styleUrl: "./relations-task.component.scss",
 })
 export class RelationsTaskComponent {
   @Input({ required: true }) data!: ConnectQuestion;
+  @Input() hint!: string;
   protected readonly Array = Array;
 
   _error = signal<ConnectQuestionResponse | null>(null);

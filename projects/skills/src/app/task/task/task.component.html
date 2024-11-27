@@ -43,7 +43,12 @@
       [class.progress__border--done]="taskService.currentTaskDone()"
       class="progress__last progress__border"
     >
-      {{ skillStepsResponse()?.nextLevel }} уровень
+      {{
+        skillStepsResponse()?.nextLevel
+          ? skillStepsResponse()?.nextLevel
+          : skillStepsResponse()?.currentLevel
+      }}
+      уровень
     </div>
   </div>
   <router-outlet></router-outlet>

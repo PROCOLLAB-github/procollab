@@ -4,17 +4,18 @@ import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from "
 import { CommonModule } from "@angular/common";
 import { ExcludeQuestion, ExcludeQuestionResponse } from "../../../../models/step.model";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { YtExtractService } from "@corelib";
+import { ParseBreaksPipe, YtExtractService } from "@corelib";
 
 @Component({
   selector: "app-exclude-task",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ParseBreaksPipe],
   templateUrl: "./exclude-task.component.html",
   styleUrl: "./exclude-task.component.scss",
 })
 export class ExcludeTaskComponent implements OnInit {
   @Input({ required: true }) data!: ExcludeQuestion;
+  @Input() hint!: string;
   @Output() update = new EventEmitter<number[]>();
 
   @Input() success = false;

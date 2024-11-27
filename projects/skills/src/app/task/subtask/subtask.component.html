@@ -91,6 +91,7 @@
     [error]="singleQuestionError()"
     [success]="success()"
     (update)="body.set($event)"
+    [hint]="hint()"
   ></app-radio-select-task>
   } @if (connectQuestion(); as cq) { @if(cq.popups && cq.popups.length > 0){
   <app-modal
@@ -141,6 +142,7 @@
     [error]="connectQuestionError()"
     [success]="success()"
     (update)="body.set($event)"
+    [hint]="hint()"
   ></app-relations-task>
   } @if (excludeQuestion(); as eq) { @if(eq.popups && eq.popups.length > 0){
   <app-modal
@@ -191,6 +193,7 @@
     [error]="excludeQuestionError()"
     [success]="success()"
     (update)="body.set($event)"
+    [hint]="hint()"
   ></app-exclude-task>
   } @if (writeQuestion(); as wq) { @if(wq.popups && wq.popups.length > 0){
   <app-modal

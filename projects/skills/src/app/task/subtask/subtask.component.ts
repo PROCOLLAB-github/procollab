@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnInit, signal } from "@angular/core";
+import { ChangeDetectorRef, Component, inject, OnInit, signal } from "@angular/core";
 import { CommonModule, NgOptimizedImage } from "@angular/common";
 import { InfoTaskComponent } from "../shared/video-task/info-task.component";
 import { RadioSelectTaskComponent } from "../shared/radio-select-task/radio-select-task.component";
@@ -55,10 +55,12 @@ import { SkillService } from "../../skills/services/skill.service";
 export class SubtaskComponent implements OnInit {
   router = inject(Router);
   route = inject(ActivatedRoute);
+  cdref = inject(ChangeDetectorRef);
   taskService = inject(TaskService);
   skillService = inject(SkillService);
 
   loading = signal(false);
+  hint = signal("");
 
   subTaskId = toSignal(
     this.route.params.pipe(
@@ -240,7 +242,11 @@ export class SubtaskComponent implements OnInit {
       },
       error: err => {
         this.anyError.set(true);
-        console.log(type === "info_slide" && !!this.infoSlide()?.popups.length);
+        if (err.error.hint) {
+          this.hint.set(err.error.hint);
+          this.cdref.detectChanges();
+        }
+        console.error(err.error.hint);
         setTimeout(() => {
           this.anyError.set(false);
         }, 2000);

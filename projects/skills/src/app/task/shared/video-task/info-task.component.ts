@@ -4,12 +4,12 @@ import { Component, inject, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { InfoSlide } from "../../../../models/step.model";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { YtExtractService } from "@corelib";
+import { ParseBreaksPipe, ParseLinksPipe, YtExtractService } from "@corelib";
 
 @Component({
   selector: "app-info-task",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ParseLinksPipe, ParseBreaksPipe],
   templateUrl: "./info-task.component.html",
   styleUrl: "./info-task.component.scss",
 })

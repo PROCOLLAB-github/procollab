@@ -17,7 +17,7 @@
     <h2 class="radio__title text-body-14">
       {{ data.text }}
     </h2>
-    <p class="radio__text text-body-14">{{ data.description }}</p>
+    <p class="radio__text text-body-14" [innerHTML]="data.description"></p>
     <div class="radio__list">
       @for (op of data.answers; track op.id) {
       <div
@@ -30,5 +30,8 @@
       </div>
       }
     </div>
+    @if (hint.length) {
+    <div class="radio__hint" [innerHTML]="hint"></div>
+    }
   </div>
 </div>
