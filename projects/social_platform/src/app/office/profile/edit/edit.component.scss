@@ -1,10 +1,27 @@
 /** @format */
 
 @use "styles/responsive";
+@use "styles/typography";
 
 .profile {
   position: relative;
-  margin-bottom: 100px;
+  // overflow-y: hidden;
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 17px;
+    margin-bottom: 18px;
+  }
+
+  &__title {
+    @include typography.heading-1;
+  }
+
+  &__back {
+    width: 20%;
+  }
 
   &__form {
     display: flex;
@@ -13,11 +30,49 @@
     color: var(--black);
     background-color: var(--white);
     border-radius: var(--rounded-md);
+    border: 1px solid var(--grey-button);
 
     @include responsive.apply-desktop {
-      flex-direction: row;
+      flex-direction: column;
       align-items: flex-start;
       padding: 24px;
+    }
+  }
+
+  &__navigation {
+    width: 100%;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--grey-button);
+    padding: 10px 0;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__subtitle {
+    color: var(--grey-for-text);
+    @include typography.heading-4;
+
+    &--active {
+      color: var(--black);
+    }
+  }
+
+  &__image {
+    opacity: 0.5;
+
+    &--active {
+      opacity: 1;
     }
   }
 
@@ -28,8 +83,12 @@
     }
 
     @include responsive.apply-desktop {
-      flex-basis: 50%;
+      // flex-basis: 50%;
       flex-grow: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      gap: 90px;
 
       &:first-child {
         order: unset;
@@ -46,16 +105,17 @@
     }
 
     &:not(:last-child) {
+      margin-top: 20px;
       margin-bottom: 20px;
     }
 
-    >* {
-      flex-basis: 50%;
+    // >* {
+    //   flex-basis: 50%;
 
-      &:first-child:last-child {
-        flex-basis: 100%;
-      }
-    }
+    //   &:first-child:last-child {
+    //     flex-basis: 100%;
+    //   }
+    // }
 
     .space {
       margin-bottom: 16px;
@@ -66,20 +126,19 @@
     }
   }
 
+  &__left,
+  &__right {
+    flex-basis: 50%;
+  }
+
   .error__phone-number {
-    margin-top: 10px;
+    margin-bottom: 10px;
   }
 
-  &__achievement {
-    display: block;
-    margin-bottom: 12px;
-  }
-
-  &__education {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
+  // &__achievement {
+  //   display: block;
+  //   margin-bottom: 12px;
+  // }
 
   &__language {
     margin-top: 20px;
@@ -88,6 +147,7 @@
 
   &__add-achievement {
     display: block;
+    margin-bottom: 100px;
   }
 
   &__save {
@@ -96,12 +156,11 @@
 
     @include responsive.apply-desktop {
       position: absolute;
-      top: 24px;
+      bottom: 24px;
       right: 24px;
       z-index: 10;
-      display: block;
-      order: unset;
       width: 255px;
+      order: unset;
       margin-left: auto;
     }
   }
@@ -125,11 +184,13 @@
 .achievement {
   &__first-row {
     display: flex;
-    align-items: flex-start;
-    margin-bottom: 12px;
+    align-items: center;
+    margin-bottom: -12px;
+    margin-top: 12px;
 
     > :first-child {
       flex-grow: 1;
+      margin-bottom: 25px;
     }
   }
 
@@ -145,6 +206,7 @@
     flex-direction: column;
     gap: 14px;
     margin-bottom: 12px;
+    flex-basis: 50%;
 
     > :first-child {
       flex-grow: 1;
@@ -155,6 +217,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    flex-basis: 50%;
   }
 
   &__years {
@@ -173,19 +236,29 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 100%;
     padding: 12px;
     overflow: hidden;
     border: 1px solid var(--medium-grey-for-outline);
     border-radius: 15px;
+    width: 90%;
   }
 
   &__text {
     color: var(--dark-grey);
   }
 
-  .basket {
+  &__remove {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+  }
+
+  .edit {
     color: var(--dark-grey);
+  }
+
+  .basket {
+    color: var(--red);
   }
 }
 

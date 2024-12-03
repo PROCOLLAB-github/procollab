@@ -2,145 +2,271 @@
 
 @if (profileForm.get("userType"); as currentType) {
 <main class="profile">
+  <div class="profile__top">
+    <p class="profile__title">Редактировать профиль</p>
+    <a class="profile__back" routerLink="'/office/profile'">
+      <app-button [color]="'grey'" customTypographyClass="text-body-12">Назад</app-button>
+    </a>
+  </div>
+
   <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
-    <div class="profile__column">
-      <div class="profile__row">
-        @if (profileForm.get("firstName"); as firstName) {
-        <fieldset class="space">
-          <label for="firstName" class="field-label">Имя</label>
-          <app-input
-            [error]="firstName | controlError"
-            id="firstName"
-            type="text"
-            formControlName="firstName"
-            placeholder="Иван"
-          ></app-input>
-          @if (firstName | controlError: "required") {
-          <div class="text-body-14 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          }
-        </fieldset>
-        } @if (profileForm.get("lastName"); as lastName) {
-        <fieldset>
-          <label for="lastName" class="field-label">Фамилия</label>
-          <app-input
-            [error]="lastName | controlError"
-            id="lastName"
-            type="text"
-            formControlName="lastName"
-            placeholder="Иванов"
-          ></app-input>
-          @if (lastName | controlError: "required") {
-          <div class="text-body-14 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          }
-        </fieldset>
-        }
-      </div>
-      <div class="profile__row">
-        @if (profileForm.get("userType"); as userType) { @if (userType.value !== 1) {
-        <fieldset class="space">
-          <label for="userType" class="field-label">Тип аккаунта</label>
-          @if (roles | async; as options) {
-          <app-select
-            id="userType"
-            formControlName="userType"
-            placeholder="Ученик"
-            [options]="options"
-          ></app-select>
-          } @if (userType | controlError: "required") {
-          <div class="text-body-14 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          }
-        </fieldset>
-        } } @if (profileForm.get("birthday"); as birthday) {
-        <fieldset>
-          <label for="birthday" class="field-label">Дата рождения</label>
-          <app-input
-            id="birthday"
-            [error]="birthday | controlError"
-            type="text"
-            mask="00.00.0000"
-            formControlName="birthday"
-          ></app-input>
-          @if (birthday | controlError: "required") {
-          <div class="text-body-14 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          }
-        </fieldset>
-        }
-      </div>
-
-      <div class="profile__row">
-        @if (profileForm.get("additionalRole"); as additionalRole) {
-        <fieldset>
-          <label for="additionalRole" class="field-label">Дополнительная роль</label>
-          <app-input
-            id="additionalRole"
-            [error]="additionalRole | controlError"
-            type="text"
-            placeholder="Введите вашу доп. роль"
-            formControlName="additionalRole"
-          ></app-input>
-          @if (additionalRole | controlError: "required") {
-          <div class="text-body-14 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          }
-        </fieldset>
-        }
-      </div>
-
-      <div class="profile__row">
-        @if (profileForm.get("city"); as city) {
-        <fieldset>
-          <label for="city" class="field-label">Город</label>
-          <app-input
-            id="city"
-            [error]="city | controlError"
-            type="text"
-            placeholder="Откуда вы"
-            formControlName="city"
-          ></app-input>
-          @if (city | controlError: "required") {
-          <div class="text-body-14 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          }
-        </fieldset>
-        }
-      </div>
-
-      <div class="profile__row">
-        @if (profileForm.get("phoneNumber"); as phoneNumber) {
-        <fieldset>
-          <label for="phoneNumber" class="field-label">Телефон</label>
-          <app-input
-            id="phoneNumber"
-            [error]="phoneNumber | controlError"
-            type="tel"
-            placeholder="Введите ваш номер телефона"
-            formControlName="phoneNumber"
-          ></app-input>
-          @if (phoneNumber | controlError: "required") {
-          <div class="text-body-14 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          }
-
-          <p class="text-body-12 error__phone-number">
-            Формат телефона должен соответствовать одному из таких форматов: +7 XXX XXX-XX-XX |
-            +375XXXXXXXXX | +995 (XXX) XX-XX-XX
+    <div class="profile__navigation">
+      <ul class="profile__nav">
+        @for (item of navItems; track $index) {
+        <li class="profile__item" (click)="navigateStep(item.step)">
+          <img
+            class="profile__image"
+            [class.profile__image--active]="editingStep === item.step"
+            alt="profile-icon"
+            [src]="item.src"
+          />
+          <p
+            class="profile__subtitle"
+            [class.profile__subtitle--active]="editingStep === item.step"
+          >
+            {{ item.label }}
           </p>
-        </fieldset>
+        </li>
         }
+      </ul>
+    </div>
+
+    <div class="profile__column">
+      @if(editingStep === 'main'){
+      <div class="profile__left">
+        <div class="profile__column">
+          @if (profileForm.get("avatar"); as avatar) {
+          <fieldset class="profile__avatar">
+            <app-avatar-control
+              id="avatar"
+              formControlName="avatar"
+              [size]="180"
+              [error]="avatar | controlError"
+            ></app-avatar-control>
+            @if (avatar | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.EMPTY_AVATAR }}
+            </div>
+            }
+          </fieldset>
+          }
+          <!-- <div class="profile__row">
+          <div class="">
+            <label class="field-label">Контактная информация</label>
+            <ul formArrayName="links">
+              @for (control of links.controls; let i = $index; track i) {
+              <li class="profile__achievement edit-link">
+                <app-input
+                  [formControlName]="i"
+                  placeholder="https://t.me/username"
+                  [error]="control | controlError"
+                ></app-input>
+                <div class="edit-link__remove" (click)="removeLink(i)">
+                  <i appIcon icon="cross" appSquare="20"></i>
+                </div>
+              </li>
+              }
+            </ul>
+            <app-button class="profile__add-achievement" (click)="addLink()">
+              <span>Добавить еще одну ссылку</span>
+              <i appIcon icon="plus" appSquare="14"></i>
+            </app-button>
+          </div>
+        </div> -->
+          <!-- @if ([1, 3, 4].includes(currentType.value) && usefulToProject) {
+        <fieldset class="space">
+          <label for="usefulToProject" class="field-label">Чем могу быть полезен в проекте</label>
+          <app-input
+            [error]="usefulToProject | controlError"
+            id="usefulToProject"
+            type="text"
+            [formControl]="usefulToProject"
+            placeholder="У меня много денег, я мамкин инвестор"
+          ></app-input>
+          @if (usefulToProject | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } -->
+        </div>
+
+        <div class="profile__row">
+          @if (profileForm.get("firstName"); as firstName) {
+          <fieldset class="space">
+            <label for="firstName" class="field-label">Имя</label>
+            <app-input
+              [error]="firstName | controlError"
+              id="firstName"
+              type="text"
+              formControlName="firstName"
+              placeholder="Иван"
+            ></app-input>
+            @if (firstName | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (profileForm.get("lastName"); as lastName) {
+          <fieldset>
+            <label for="lastName" class="field-label">Фамилия</label>
+            <app-input
+              [error]="lastName | controlError"
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+              placeholder="Иванов"
+            ></app-input>
+            @if (lastName | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
+
+        <div class="profile__row">
+          @if (profileForm.get("birthday"); as birthday) {
+          <fieldset class="space">
+            <label for="birthday" class="field-label">Дата рождения</label>
+            <app-input
+              id="birthday"
+              [error]="birthday | controlError"
+              type="text"
+              mask="00.00.0000"
+              formControlName="birthday"
+            ></app-input>
+            @if (birthday | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (profileForm.get("phoneNumber"); as phoneNumber) {
+          <fieldset>
+            <label for="phoneNumber" class="field-label">Телефон</label>
+            <app-input
+              id="phoneNumber"
+              [error]="phoneNumber | controlError"
+              type="tel"
+              placeholder="Ваш номер телефона"
+              formControlName="phoneNumber"
+            ></app-input>
+            @if (phoneNumber | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
+
+        <p class="text-body-12 error__phone-number">
+          Формат телефона должен соответствовать одному из таких форматов: +7 XXX XXX-XX-XX |
+          +375XXXXXXXXX | +995 (XXX) XX-XX-XX
+        </p>
+
+        <div class="profile__row">
+          @if (profileForm.get("speciality"); as speciality) {
+          <fieldset>
+            <label for="speciality" class="field-label">Специальность</label>
+            <div class="speciality-field">
+              <app-autocomplete-input
+                class="speciality-field__input"
+                searchIcon=""
+                [suggestions]="inlineSpecs()"
+                fieldToDisplay="name"
+                valueField="name"
+                fieldToDisplayMode="chip"
+                [forceSelect]="true"
+                [error]="speciality | controlError"
+                (searchStart)="onSearchSpec($event)"
+                placeholder="Java Developer"
+                formControlName="speciality"
+              ></app-autocomplete-input>
+              <app-button
+                type="button"
+                class="speciality-field__button"
+                (click)="toggleSpecsGroupsModal()"
+              >
+                <i appIcon icon="folder" appWidth="24" appHeight="24"></i>
+              </app-button>
+            </div>
+            @if (speciality | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
       </div>
 
-      <p class="text-bold-body-14">Образование</p>
+      <div class="profile__right">
+        <div class="profile__row">
+          @if (profileForm.get("city"); as city) {
+          <fieldset>
+            <label for="city" class="field-label">Город</label>
+            <app-input
+              id="city"
+              [error]="city | controlError"
+              type="text"
+              placeholder="Москва"
+              formControlName="city"
+            ></app-input>
+            @if (city | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
+
+        <div class="profile__row">
+          @if (profileForm.get("userType"); as userType) { @if (userType.value !== 1) {
+          <fieldset>
+            <label for="userType" class="field-label">Тип аккаунта</label>
+            @if (roles | async; as options) {
+            <app-select
+              id="userType"
+              formControlName="userType"
+              placeholder="Эксперт"
+              [options]="options"
+            ></app-select>
+            } @if (userType | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } }
+        </div>
+
+        <div class="profile__row">
+          @if (profileForm.get("aboutMe"); as aboutMe) {
+          <fieldset>
+            <label for="aboutMe" class="field-label">Обо мне</label>
+            <app-textarea
+              id="aboutMe"
+              [error]="aboutMe | controlError"
+              type="text"
+              placeholder="Я java developer, очень люблю котиков"
+              formControlName="aboutMe"
+            ></app-textarea>
+            @if (aboutMe | controlError: "required") {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
+      </div>
+      } @if (editingStep === 'education') {
       <div class="profile__education">
         <div class="education__first-row">
           <div class="education__years">
@@ -246,45 +372,47 @@
           </fieldset>
           }
         </div>
+      </div>
+
+      <div class="profile__row education__block">
         <app-button class="profile__add-education" (click)="addEducation()">
           <span>Добавить новое образование</span>
           <i appIcon icon="plus" appSquare="14"></i>
         </app-button>
-      </div>
 
-      <div class="profile__row education__block">
         @if(educationItems().length || education.length){ @for (educationItem of education.value;
         track $index) {
-        <div class="education__info">
-          <p class="text-body-16 education__text">
-            {{ educationItem.organizationName }}
+        <div class="education__remove">
+          <div class="education__info">
+            <p class="text-body-16 education__text">
+              {{ educationItem.organizationName }}
 
-            @if(educationItem.entryYear && educationItem.completionYear) {
-            {{ educationItem.entryYear }} - {{ educationItem.completionYear }}
-            } @else if (educationItem.entryYear && !educationItem.completionYear) {
-            {{ educationItem.entryYear }}
-            } @else if (!educationItem.entryYear && educationItem.completionYear){
-            {{ educationItem.completionYear }}
-            }
+              @if(educationItem.entryYear && educationItem.completionYear) {
+              {{ educationItem.entryYear }} - {{ educationItem.completionYear }}
+              } @else if (educationItem.entryYear && !educationItem.completionYear) {
+              {{ educationItem.entryYear }}
+              } @else if (!educationItem.entryYear && educationItem.completionYear){
+              {{ educationItem.completionYear }}
+              }
 
-            {{ educationItem.description }} {{ educationItem.educationStatus }}
-            {{ educationItem.educationLevel }}
-          </p>
-          <i
-            class="edit"
-            appIcon
-            icon="edit-pen"
-            appSquare="20"
-            (click)="editEducation($index)"
-          ></i>
+              {{ educationItem.description }} {{ educationItem.educationStatus }}
+              {{ educationItem.educationLevel }}
+            </p>
+            <i
+              class="edit"
+              appIcon
+              icon="edit-pen"
+              appSquare="20"
+              (click)="editEducation($index)"
+            ></i>
+          </div>
+          <app-button class="basket" color="red" (click)="removeEducation($index)">
+            <i appIcon icon="basket" appSquare="24"></i>
+          </app-button>
         </div>
         } }
       </div>
-
-      <p for="organization" class="field-label text-bold-body-14">
-        {{ currentType.value === 1 ? "Место учебы" : "Место работы" }}
-      </p>
-
+      } @if (editingStep === 'experience') {
       <div class="profile__education">
         <div class="education__first-row">
           <div class="education__years">
@@ -377,104 +505,236 @@
           </fieldset>
           }
         </div>
+      </div>
+
+      <div class="profile__row education__block">
         <app-button class="profile__add-education" (click)="addWork()">
           <span>Добавить место работы</span>
           <i appIcon icon="plus" appSquare="14"></i>
         </app-button>
-      </div>
 
-      <div class="profile__row education__block">
         @if(workItems().length || workExperience.length){ @for (workItem of workExperience.value;
         track $index) {
-        <div class="education__info">
-          <p class="text-body-16 education__text">
-            {{ workItem.organizationName }}
-            @if(workItem.entryYear && workItem.completionYear) {
-            {{ workItem.entryYear }} - {{ workItem.completionYear }}
-            } @else if (workItem.entryYear && !workItem.completionYear) {
-            {{ workItem.entryYear }}
-            } @else if (!workItem.entryYear && workItem.completionYear){
-            {{ workItem.completionYear }}
-            }
-            {{ workItem.description }}
-            {{ workItem.jobPosition }}
-          </p>
-          <i class="edit" appIcon icon="edit-pen" appSquare="20" (click)="editWork($index)"></i>
+        <div class="education__remove">
+          <div class="education__info">
+            <p class="text-body-16 education__text">
+              {{ workItem.organizationName }}
+              @if(workItem.entryYear && workItem.completionYear) {
+              {{ workItem.entryYear }} - {{ workItem.completionYear }}
+              } @else if (workItem.entryYear && !workItem.completionYear) {
+              {{ workItem.entryYear }}
+              } @else if (!workItem.entryYear && workItem.completionYear){
+              {{ workItem.completionYear }}
+              }
+              {{ workItem.description }}
+              {{ workItem.jobPosition }}
+            </p>
+            <i class="edit" appIcon icon="edit-pen" appSquare="20" (click)="editWork($index)"></i>
+          </div>
+          <app-button class="basket" color="red" (click)="removeWork($index)">
+            <i appIcon icon="basket" appSquare="24"></i>
+          </app-button>
         </div>
         } }
       </div>
+      } @if(editingStep === 'achievements'){
+      <div class="profile__education">
+        <div class="education__first-row">
+          <ng-container formArrayName="achievements">
+            <ul>
+              @for (control of achievements.controls; let i = $index; track i) {
+              <li class="profile__achievement">
+                <form [formGroupName]="i" class="achievement">
+                  <div class="achievement__first-row">
+                    @if (achievements.at(i)?.get("title"); as title) {
+                    <fieldset>
+                      <label class="field-label">Достижения</label>
+                      <app-input
+                        [error]="title | controlError"
+                        placeholder="Название конкурса"
+                        formControlName="title"
+                      ></app-input>
+                      @if (title | controlError: "required") {
+                      <div class="text-body-14 error">
+                        {{ errorMessage.VALIDATION_REQUIRED }}
+                      </div>
+                      }
+                    </fieldset>
+                    }
+                    <app-button
+                      class="achievement__remove"
+                      color="red"
+                      (click)="removeAchievement(i)"
+                    >
+                      <span>Удалить</span>
+                      <i appIcon icon="basket" appSquare="24"></i>
+                    </app-button>
+                  </div>
+                  @if (achievements.at(i).get("status"); as status) {
+                  <fieldset>
+                    <app-input
+                      [error]="status | controlError"
+                      placeholder="Занятое место"
+                      formControlName="status"
+                    ></app-input>
+                    @if (status | controlError: "required") {
+                    <div class="text-body-14 error">
+                      {{ errorMessage.VALIDATION_REQUIRED }}
+                    </div>
+                    }
+                  </fieldset>
+                  }
+                </form>
+              </li>
+              }
+            </ul>
+          </ng-container>
+        </div>
+      </div>
+      <app-button class="profile__add-achievement" (click)="addAchievement()">
+        <span>Добавить новое достижение</span>
+        <i appIcon icon="plus" appSquare="14"></i>
+      </app-button>
+      } @if (editingStep === 'skills') {
+      <div class="education__first-row">
+        <div class="profile__left">
+          <div class="profile__row">
+            <fieldset>
+              <label for="skills" class="field-label">Навыки</label>
+              <div class="skills-field">
+                <app-autocomplete-input
+                  class="skills-field__input"
+                  placeholder="Например: Python"
+                  searchIcon=""
+                  [suggestions]="inlineSkills()"
+                  fieldToDisplay="name"
+                  [forceSelect]="true"
+                  [clearInputOnSelect]="true"
+                  (searchStart)="onSearchSkill($event)"
+                  (optionSelected)="onAddSkill($event)"
+                ></app-autocomplete-input>
+                <app-button
+                  type="button"
+                  class="skills-field__button"
+                  (click)="toggleSkillsGroupsModal()"
+                >
+                  <i appIcon icon="folder" appWidth="24" appHeight="24"></i>
+                </app-button>
+              </div>
+            </fieldset>
+          </div>
 
-      <div class="profile__row">
-        @if (profileForm.get("speciality"); as speciality) {
-        <fieldset>
-          <label for="speciality" class="field-label">Специальность</label>
-          <div class="speciality-field">
-            <app-autocomplete-input
-              class="speciality-field__input"
-              searchIcon=""
-              [suggestions]="inlineSpecs()"
-              fieldToDisplay="name"
-              valueField="name"
-              fieldToDisplayMode="chip"
-              [forceSelect]="true"
-              [error]="speciality | controlError"
-              (searchStart)="onSearchSpec($event)"
-              placeholder="Например: Java Developer"
-              formControlName="speciality"
-            ></app-autocomplete-input>
-            <app-button
-              type="button"
-              class="speciality-field__button"
-              (click)="toggleSpecsGroupsModal()"
-            >
-              <i appIcon icon="folder" appWidth="24" appHeight="24"></i>
+          <div class="profile__row">
+            @if (profileForm.get("skills"); as skills) {
+            <fieldset class="skills-basket">
+              <app-skills-basket
+                formControlName="skills"
+                [error]="skills | controlError"
+              ></app-skills-basket>
+            </fieldset>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="profile__right">
+        <div class="profile__language">
+          <div class="education__years">
+            @if (profileForm.get("language"); as language) {
+            <fieldset class="years__right">
+              <label for="languageName" class="field-label">Язык</label>
+              <app-select
+                [selectedId]="selectedLanguageId()"
+                formControlName="language"
+                placeholder="Английский"
+                [options]="languageList"
+              >
+                <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+              </app-select>
+
+              @if (language | controlError: "required") {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            } @if (profileForm.get("languageLevel"); as languageLevel) {
+            <fieldset class="years__right">
+              <label for="languagLevel" class="field-label">Уровень</label>
+              <app-select
+                [selectedId]="selectedLanguageLevelId()"
+                formControlName="languageLevel"
+                placeholder="B1"
+                [options]="languageLevelList"
+              >
+                <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+              </app-select>
+
+              @if (languageLevel | controlError: "required") {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            }
+          </div>
+
+          <app-button
+            [ariaDisabled]="languageItems().length === 4 || userLanguages.length === 4"
+            class="profile__add-education"
+            (click)="addLanguage()"
+          >
+            <span>Добавить язык</span>
+            <i appIcon icon="plus" appSquare="14"></i>
+          </app-button>
+        </div>
+
+        <div class="profile__row education__block">
+          @if(languageItems().length || userLanguages.length){ @for (languageItem of
+          userLanguages.value; track $index) {
+          <div class="education__remove">
+            <div class="education__info">
+              <p class="text-body-16 education__text">
+                {{ languageItem.language }} {{ languageItem.languageLevel }}
+              </p>
+              <i
+                class="edit"
+                appIcon
+                icon="edit-pen"
+                appSquare="20"
+                (click)="editLanguage($index)"
+              ></i>
+            </div>
+            <app-button class="basket" color="red" (click)="removeLanguage($index)">
+              <i appIcon icon="basket" appSquare="24"></i>
             </app-button>
           </div>
-          @if (speciality | controlError: "required") {
+          } }
+        </div>
+      </div>
+      }
+
+      <!-- <div class="profile__row">
+        @if (profileForm.get("additionalRole"); as additionalRole) {
+        <fieldset>
+          <label for="additionalRole" class="field-label">Дополнительная роль</label>
+          <app-input
+            id="additionalRole"
+            [error]="additionalRole | controlError"
+            type="text"
+            placeholder="Введите вашу доп. роль"
+            formControlName="additionalRole"
+          ></app-input>
+          @if (additionalRole | controlError: "required") {
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
         </fieldset>
         }
-      </div>
-      <div class="profile__row">
-        <fieldset>
-          <label for="skills" class="field-label">Навыки</label>
-          <div class="skills-field">
-            <app-autocomplete-input
-              class="skills-field__input"
-              placeholder="Например: Python"
-              searchIcon=""
-              [suggestions]="inlineSkills()"
-              fieldToDisplay="name"
-              [forceSelect]="true"
-              [clearInputOnSelect]="true"
-              (searchStart)="onSearchSkill($event)"
-              (optionSelected)="onAddSkill($event)"
-            ></app-autocomplete-input>
-            <app-button
-              type="button"
-              class="skills-field__button"
-              (click)="toggleSkillsGroupsModal()"
-            >
-              <i appIcon icon="folder" appWidth="24" appHeight="24"></i>
-            </app-button>
-          </div>
-        </fieldset>
-      </div>
+      </div> -->
 
-      <div class="profile__row">
-        @if (profileForm.get("skills"); as skills) {
-        <fieldset class="skills-basket">
-          <app-skills-basket
-            formControlName="skills"
-            [error]="skills | controlError"
-          ></app-skills-basket>
-        </fieldset>
-        }
-      </div>
-      @if ([2, 3, 4].includes(currentType.value) && preferredIndustries) {
+      <!-- @if ([2, 3, 4].includes(currentType.value) && preferredIndustries) {
       <div class="profile__row">
         <div>
           <label class="field-label">Область экспертности</label>
@@ -511,204 +771,16 @@
           </div>
         </div>
       </div>
-      }
-      <div class="">
-        <label class="field-label">Достижения</label>
-        <ng-container formArrayName="achievements">
-          <ul>
-            @for (control of achievements.controls; let i = $index; track i) {
-            <li class="profile__achievement">
-              <form [formGroupName]="i" class="achievement">
-                <div class="achievement__first-row">
-                  @if (achievements.at(i)?.get("title"); as title) {
-                  <fieldset>
-                    <app-input
-                      [error]="title | controlError"
-                      placeholder="Название конкурса"
-                      formControlName="title"
-                    ></app-input>
-                    @if (title | controlError: "required") {
-                    <div class="text-body-14 error">
-                      {{ errorMessage.VALIDATION_REQUIRED }}
-                    </div>
-                    }
-                  </fieldset>
-                  }
-                  <app-button
-                    class="achievement__remove"
-                    color="red"
-                    (click)="removeAchievement(i)"
-                  >
-                    <span>Удалить</span>
-                    <i appIcon icon="basket" appSquare="24"></i>
-                  </app-button>
-                </div>
-                @if (achievements.at(i).get("status"); as status) {
-                <fieldset>
-                  <app-input
-                    [error]="status | controlError"
-                    placeholder="Занятое место"
-                    formControlName="status"
-                  ></app-input>
-                  @if (status | controlError: "required") {
-                  <div class="text-body-14 error">
-                    {{ errorMessage.VALIDATION_REQUIRED }}
-                  </div>
-                  }
-                </fieldset>
-                }
-              </form>
-            </li>
-            }
-          </ul>
-        </ng-container>
-        <app-button class="profile__add-achievement" (click)="addAchievement()">
-          <span>Добавить новое достижение</span>
-          <i appIcon icon="plus" appSquare="14"></i>
-        </app-button>
-      </div>
-
-      <div class="profile__language">
-        <label class="field-label">Язык</label>
-        <label for="languageName" class="field-label">Уровень</label>
-        <div class="education__years">
-          @if (profileForm.get("language"); as language) {
-          <fieldset class="years__right">
-            <app-select
-              [selectedId]="selectedLanguageId()"
-              formControlName="language"
-              placeholder="Английский"
-              [options]="languageList"
-            >
-              <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
-            </app-select>
-
-            @if (language | controlError: "required") {
-            <div class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-            }
-          </fieldset>
-          } @if (profileForm.get("languageLevel"); as languageLevel) {
-          <fieldset class="years__right">
-            <app-select
-              [selectedId]="selectedLanguageLevelId()"
-              formControlName="languageLevel"
-              placeholder="B1"
-              [options]="languageLevelList"
-            >
-              <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
-            </app-select>
-
-            @if (languageLevel | controlError: "required") {
-            <div class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-            }
-          </fieldset>
-          }
-        </div>
-
-        <app-button
-          [ariaDisabled]="languageItems().length === 4 || userLanguages.length === 4"
-          class="profile__add-education"
-          (click)="addLanguage()"
-        >
-          <span>Добавить язык</span>
-          <i appIcon icon="plus" appSquare="14"></i>
-        </app-button>
-      </div>
-
-      <div class="profile__row education__block">
-        @if(languageItems().length || userLanguages.length){ @for (languageItem of
-        userLanguages.value; track $index) {
-        <div class="education__info">
-          <p class="text-body-16 education__text">
-            {{ languageItem.language }} {{ languageItem.languageLevel }}
-          </p>
-          <i class="edit" appIcon icon="edit-pen" appSquare="20" (click)="editLanguage($index)"></i>
-        </div>
-        } }
-      </div>
-    </div>
-    <div class="profile__column">
-      @if (profileForm.get("avatar"); as avatar) {
-      <fieldset class="profile__avatar">
-        <label for="avatar" class="field-label">Фотография профиля</label>
-        <app-avatar-control
-          id="avatar"
-          formControlName="avatar"
-          [error]="avatar | controlError"
-        ></app-avatar-control>
-        @if (avatar | controlError: "required") {
-        <div class="text-body-14 error">
-          {{ errorMessage.EMPTY_AVATAR }}
-        </div>
-        }
-      </fieldset>
-      }
-      <div class="profile__row">
-        <div class="">
-          <label class="field-label">Контактная информация</label>
-          <ul formArrayName="links">
-            @for (control of links.controls; let i = $index; track i) {
-            <li class="profile__achievement edit-link">
-              <app-input
-                [formControlName]="i"
-                placeholder="https://t.me/username"
-                [error]="control | controlError"
-              ></app-input>
-              <div class="edit-link__remove" (click)="removeLink(i)">
-                <i appIcon icon="cross" appSquare="20"></i>
-              </div>
-            </li>
-            }
-          </ul>
-          <app-button class="profile__add-achievement" (click)="addLink()">
-            <span>Добавить еще одну ссылку</span>
-            <i appIcon icon="plus" appSquare="14"></i>
-          </app-button>
-        </div>
-      </div>
-      <div class="profile__row">
-        @if (profileForm.get("aboutMe"); as aboutMe) {
-        <fieldset>
-          <label for="aboutMe" class="field-label">Обо мне</label>
-          <app-textarea
-            id="aboutMe"
-            [error]="aboutMe | controlError"
-            type="text"
-            placeholder="Я java developer, очень люблю котиков"
-            formControlName="aboutMe"
-          ></app-textarea>
-          @if (aboutMe | controlError: "required") {
-          <div class="text-body-14 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          }
-        </fieldset>
-        }
-      </div>
-      @if ([1, 3, 4].includes(currentType.value) && usefulToProject) {
-      <fieldset>
-        <label for="usefulToProject" class="field-label">Чем могу быть полезен в проекте</label>
-        <app-input
-          [error]="usefulToProject | controlError"
-          id="usefulToProject"
-          type="text"
-          [formControl]="usefulToProject"
-          placeholder="У меня много денег, я мамкин инвестор"
-        ></app-input>
-        @if (usefulToProject | controlError: "required") {
-        <div class="text-body-14 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        }
-      </fieldset>
-      }
+      } -->
     </div>
     <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
-      <app-button [loader]="profileFormSubmitting" (click)="saveProfile()"> Сохранить</app-button>
+      <app-button
+        [loader]="profileFormSubmitting"
+        customTypographyClass="text-body-12"
+        (click)="saveProfile()"
+      >
+        Сохранить</app-button
+      >
     </div>
   </form>
 </main>
