@@ -241,7 +241,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscription$.forEach($ => $.unsubscribe());
   }
 
-  editingStep: 'main' | 'education' | 'experience' | 'achievements' | 'skills' = 'main';
+  editingStep: "main" | "education" | "experience" | "achievements" | "skills" = "main";
 
   profileId?: number;
 
@@ -283,35 +283,35 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   navItems = [
     {
-      step: 'main',
-      src: '/assets/images/profile/main.svg',
-      label: 'Основные данные'
+      step: "main",
+      src: "/assets/images/profile/main.svg",
+      label: "Основные данные",
     },
     {
-      step: 'education',
-      src: '/assets/images/profile/education.svg',
-      label: 'Образование'
+      step: "education",
+      src: "/assets/images/profile/education.svg",
+      label: "Образование",
     },
     {
-      step: 'experience',
-      src: '/assets/images/profile/experience.svg',
-      label: 'Опыт'
+      step: "experience",
+      src: "/assets/images/profile/experience.svg",
+      label: "Опыт",
     },
     {
-      step: 'achievements',
-      src: '/assets/images/profile/achievements.svg',
-      label: 'Достижения'
+      step: "achievements",
+      src: "/assets/images/profile/achievements.svg",
+      label: "Достижения",
     },
     {
-      step: 'skills',
-      src: '/assets/images/profile/skills.svg',
-      label: 'Навыки'
-    }
+      step: "skills",
+      src: "/assets/images/profile/skills.svg",
+      label: "Навыки",
+    },
   ];
 
   navigateStep(step: string) {
     this.router.navigate([], { queryParams: { editingStep: step } });
-    this.editingStep = step as 'main' | 'education' | 'experience' | 'achievements' | 'skills';
+    this.editingStep = step as "main" | "education" | "experience" | "achievements" | "skills";
   }
 
   yearListEducation = [
@@ -886,7 +886,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.userLanguages.removeAt(i);
   }
-
 
   get links(): FormArray {
     return this.profileForm.get("links") as FormArray;

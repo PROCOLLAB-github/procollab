@@ -5,7 +5,6 @@
 
 .profile {
   position: relative;
-
   // overflow-y: hidden;
 
   &__top {
@@ -86,9 +85,6 @@
 
     @include responsive.apply-desktop {
       display: flex;
-
-      // flex-basis: 50%;
-      flex-grow: 0;
       gap: 90px;
       justify-content: space-between;
       width: 100%;

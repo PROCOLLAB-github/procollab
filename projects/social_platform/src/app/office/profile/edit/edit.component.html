@@ -33,8 +33,8 @@
 
     <div class="profile__column">
       @if(editingStep === 'main'){
-      <div class="profile__left">
-        <div class="profile__column">
+      <div class="education__first-row">
+        <div class="education__left">
           @if (profileForm.get("avatar"); as avatar) {
           <fieldset class="profile__avatar">
             <app-avatar-control
@@ -90,86 +90,84 @@
           }
         </fieldset>
         } -->
-        </div>
 
-        <div class="profile__row">
-          @if (profileForm.get("firstName"); as firstName) {
-          <fieldset class="space">
-            <label for="firstName" class="field-label">Имя</label>
-            <app-input
-              [error]="firstName | controlError"
-              id="firstName"
-              type="text"
-              formControlName="firstName"
-              placeholder="Иван"
-            ></app-input>
-            @if (firstName | controlError: "required") {
-            <div class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
+          <div class="profile__row">
+            @if (profileForm.get("firstName"); as firstName) {
+            <fieldset class="space">
+              <label for="firstName" class="field-label">Имя</label>
+              <app-input
+                [error]="firstName | controlError"
+                id="firstName"
+                type="text"
+                formControlName="firstName"
+                placeholder="Иван"
+              ></app-input>
+              @if (firstName | controlError: "required") {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            } @if (profileForm.get("lastName"); as lastName) {
+            <fieldset>
+              <label for="lastName" class="field-label">Фамилия</label>
+              <app-input
+                [error]="lastName | controlError"
+                id="lastName"
+                type="text"
+                formControlName="lastName"
+                placeholder="Иванов"
+              ></app-input>
+              @if (lastName | controlError: "required") {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
             }
-          </fieldset>
-          } @if (profileForm.get("lastName"); as lastName) {
-          <fieldset>
-            <label for="lastName" class="field-label">Фамилия</label>
-            <app-input
-              [error]="lastName | controlError"
-              id="lastName"
-              type="text"
-              formControlName="lastName"
-              placeholder="Иванов"
-            ></app-input>
-            @if (lastName | controlError: "required") {
-            <div class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-            }
-          </fieldset>
-          }
-        </div>
+          </div>
 
-        <div class="profile__row">
-          @if (profileForm.get("birthday"); as birthday) {
-          <fieldset class="space">
-            <label for="birthday" class="field-label">Дата рождения</label>
-            <app-input
-              id="birthday"
-              [error]="birthday | controlError"
-              type="text"
-              mask="00.00.0000"
-              formControlName="birthday"
-            ></app-input>
-            @if (birthday | controlError: "required") {
-            <div class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
+          <div class="profile__row">
+            @if (profileForm.get("birthday"); as birthday) {
+            <fieldset class="space">
+              <label for="birthday" class="field-label">Дата рождения</label>
+              <app-input
+                id="birthday"
+                [error]="birthday | controlError"
+                type="text"
+                mask="00.00.0000"
+                formControlName="birthday"
+              ></app-input>
+              @if (birthday | controlError: "required") {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            } @if (profileForm.get("phoneNumber"); as phoneNumber) {
+            <fieldset>
+              <label for="phoneNumber" class="field-label">Телефон</label>
+              <app-input
+                id="phoneNumber"
+                [error]="phoneNumber | controlError"
+                type="tel"
+                placeholder="Ваш номер телефона"
+                formControlName="phoneNumber"
+              ></app-input>
+              @if (phoneNumber | controlError: "required") {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
             }
-          </fieldset>
-          } @if (profileForm.get("phoneNumber"); as phoneNumber) {
-          <fieldset>
-            <label for="phoneNumber" class="field-label">Телефон</label>
-            <app-input
-              id="phoneNumber"
-              [error]="phoneNumber | controlError"
-              type="tel"
-              placeholder="Ваш номер телефона"
-              formControlName="phoneNumber"
-            ></app-input>
-            @if (phoneNumber | controlError: "required") {
-            <div class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-            }
-          </fieldset>
-          }
-        </div>
+          </div>
 
-        <p class="text-body-12 error__phone-number">
-          Формат телефона должен соответствовать одному из таких форматов: +7 XXX XXX-XX-XX |
-          +375XXXXXXXXX | +995 (XXX) XX-XX-XX
-        </p>
+          <p class="text-body-12 error__phone-number">
+            Формат телефона должен соответствовать одному из таких форматов: +7 XXX XXX-XX-XX |
+            +375XXXXXXXXX | +995 (XXX) XX-XX-XX
+          </p>
 
-        <div class="profile__row">
           @if (profileForm.get("speciality"); as speciality) {
           <fieldset>
             <label for="speciality" class="field-label">Специальность</label>
@@ -205,166 +203,91 @@
         </div>
       </div>
 
-      <div class="profile__right">
-        <div class="profile__row">
-          @if (profileForm.get("city"); as city) {
-          <fieldset>
-            <label for="city" class="field-label">Город</label>
-            <app-input
-              id="city"
-              [error]="city | controlError"
-              type="text"
-              placeholder="Москва"
-              formControlName="city"
-            ></app-input>
-            @if (city | controlError: "required") {
-            <div class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-            }
-          </fieldset>
+      <div class="profile__row education__block">
+        @if (profileForm.get("city"); as city) {
+        <fieldset>
+          <label for="city" class="field-label">Город</label>
+          <app-input
+            id="city"
+            [error]="city | controlError"
+            type="text"
+            placeholder="Москва"
+            formControlName="city"
+          ></app-input>
+          @if (city | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
           }
-        </div>
-
-        <div class="profile__row">
-          @if (profileForm.get("userType"); as userType) { @if (userType.value !== 1) {
-          <fieldset>
-            <label for="userType" class="field-label">Тип аккаунта</label>
-            @if (roles | async; as options) {
-            <app-select
-              id="userType"
-              formControlName="userType"
-              placeholder="Эксперт"
-              [options]="options"
-            ></app-select>
-            } @if (userType | controlError: "required") {
-            <div class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-            }
-          </fieldset>
-          } }
-        </div>
-
-        <div class="profile__row">
-          @if (profileForm.get("aboutMe"); as aboutMe) {
-          <fieldset>
-            <label for="aboutMe" class="field-label">Обо мне</label>
-            <app-textarea
-              id="aboutMe"
-              [error]="aboutMe | controlError"
-              type="text"
-              placeholder="Я java developer, очень люблю котиков"
-              formControlName="aboutMe"
-            ></app-textarea>
-            @if (aboutMe | controlError: "required") {
-            <div class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-            }
-          </fieldset>
+        </fieldset>
+        } @if (profileForm.get("userType"); as userType) { @if (userType.value !== 1) {
+        <fieldset>
+          <label for="userType" class="field-label">Тип аккаунта</label>
+          @if (roles | async; as options) {
+          <app-select
+            id="userType"
+            formControlName="userType"
+            placeholder="Эксперт"
+            [options]="options"
+          ></app-select>
+          } @if (userType | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
           }
-        </div>
+        </fieldset>
+        } } @if (profileForm.get("aboutMe"); as aboutMe) {
+        <fieldset>
+          <label for="aboutMe" class="field-label">Обо мне</label>
+          <app-textarea
+            id="aboutMe"
+            [error]="aboutMe | controlError"
+            type="text"
+            placeholder="Я java developer, очень люблю котиков"
+            formControlName="aboutMe"
+          ></app-textarea>
+          @if (aboutMe | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+
+        }
       </div>
       } @if (editingStep === 'education') {
-      <div class="profile__education">
-        <div class="education__first-row">
-          <div class="education__years">
-            @if (profileForm.get("entryYear"); as entryYear) {
-            <fieldset class="years__left">
-              <label for="entryYear" class="field-label">Дата начала</label>
-              <app-select
-                [selectedId]="selectedEntryYearEducationId()"
-                formControlName="entryYear"
-                placeholder="2023 год"
-                [options]="yearListEducation"
-              >
-                <i appIcon icon="arrow-no-body" appSquare="32"></i>
-              </app-select>
-
-              @if (entryYear | controlError: "required") {
-              <div class="text-body-14 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            } @if (profileForm.get("completionYear"); as completionYear) {
-            <fieldset class="years__right">
-              <label for="completionYear" class="field-label">Дата окончания</label>
-              <app-select
-                [selectedId]="selectedComplitionYearEducationId()"
-                formControlName="completionYear"
-                placeholder="2023 год"
-                [options]="yearListEducation.slice(5)"
-              >
-                <i appIcon icon="arrow-no-body" appSquare="32"></i>
-              </app-select>
-              @if (completionYear | controlError: "required") {
-              <div class="text-body-14 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </div>
-
-          @if (profileForm.get("organizationName"); as organizationName) {
-          <fieldset>
-            <label for="organizationName" class="field-label">Названия учереждения</label>
-            <app-input
-              [error]="organizationName | controlError"
-              placeholder="вуз / колледж / школа"
-              formControlName="organizationName"
-            ></app-input>
-            @if (organizationName | controlError: "required") {
-            <div class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-            }
-          </fieldset>
-          } @if (profileForm.get("description"); as description) {
-          <fieldset>
-            <label for="description" class="field-label">Направление</label>
-            <app-input
-              [error]="description | controlError"
-              placeholder="Востоковедение и Африканистика"
-              formControlName="description"
-            ></app-input>
-            @if (description | controlError: "required") {
-            <div class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-            }
-          </fieldset>
-          } @if (profileForm.get("educationLevel"); as educationLevel) {
-          <fieldset>
-            <label for="educationLevel" class="field-label">Уровень образования</label>
+      <div class="education__first-row">
+        <div class="education__years">
+          @if (profileForm.get("entryYear"); as entryYear) {
+          <fieldset class="years__left">
+            <label for="entryYear" class="field-label">Дата начала</label>
             <app-select
-              [selectedId]="selectedEducationLevelId()"
-              formControlName="educationLevel"
-              placeholder="Высшее образование-магистратура"
-              [options]="educationLevelList"
+              [selectedId]="selectedEntryYearEducationId()"
+              formControlName="entryYear"
+              placeholder="2023 год"
+              [options]="yearListEducation"
             >
               <i appIcon icon="arrow-no-body" appSquare="32"></i>
             </app-select>
-            @if (educationLevel | controlError: "required") {
+
+            @if (entryYear | controlError: "required") {
             <div class="text-body-14 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
           </fieldset>
-          } @if (profileForm.get("educationStatus"); as educationStatus) {
-          <fieldset>
-            <label for="educationStatus" class="field-label">Должность</label>
+          } @if (profileForm.get("completionYear"); as completionYear) {
+          <fieldset class="years__right">
+            <label for="completionYear" class="field-label">Дата окончания</label>
             <app-select
-              [selectedId]="selectedEducationStatusId()"
-              formControlName="educationStatus"
-              placeholder="Студент"
-              [options]="educationStatusList"
+              [selectedId]="selectedComplitionYearEducationId()"
+              formControlName="completionYear"
+              placeholder="2023 год"
+              [options]="yearListEducation.slice(5)"
             >
               <i appIcon icon="arrow-no-body" appSquare="32"></i>
             </app-select>
-            @if (educationStatus | controlError: "required") {
+            @if (completionYear | controlError: "required") {
             <div class="text-body-14 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
@@ -372,6 +295,70 @@
           </fieldset>
           }
         </div>
+
+        @if (profileForm.get("organizationName"); as organizationName) {
+        <fieldset>
+          <label for="organizationName" class="field-label">Названия учереждения</label>
+          <app-input
+            [error]="organizationName | controlError"
+            placeholder="вуз / колледж / школа"
+            formControlName="organizationName"
+          ></app-input>
+          @if (organizationName | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (profileForm.get("description"); as description) {
+        <fieldset>
+          <label for="description" class="field-label">Направление</label>
+          <app-input
+            [error]="description | controlError"
+            placeholder="Востоковедение и Африканистика"
+            formControlName="description"
+          ></app-input>
+          @if (description | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (profileForm.get("educationLevel"); as educationLevel) {
+        <fieldset>
+          <label for="educationLevel" class="field-label">Уровень образования</label>
+          <app-select
+            [selectedId]="selectedEducationLevelId()"
+            formControlName="educationLevel"
+            placeholder="Высшее образование-магистратура"
+            [options]="educationLevelList"
+          >
+            <i appIcon icon="arrow-no-body" appSquare="32"></i>
+          </app-select>
+          @if (educationLevel | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (profileForm.get("educationStatus"); as educationStatus) {
+        <fieldset>
+          <label for="educationStatus" class="field-label">Должность</label>
+          <app-select
+            [selectedId]="selectedEducationStatusId()"
+            formControlName="educationStatus"
+            placeholder="Студент"
+            [options]="educationStatusList"
+          >
+            <i appIcon icon="arrow-no-body" appSquare="32"></i>
+          </app-select>
+          @if (educationStatus | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        }
       </div>
 
       <div class="profile__row education__block">
@@ -413,91 +400,39 @@
         } }
       </div>
       } @if (editingStep === 'experience') {
-      <div class="profile__education">
-        <div class="education__first-row">
-          <div class="education__years">
-            @if (profileForm.get("entryYearWork"); as entryYearWork) {
-            <fieldset class="years__left">
-              <label for="entryYearWork" class="field-label">Дата начала</label>
-              <app-select
-                [selectedId]="selectedEntryYearWorkId()"
-                formControlName="entryYearWork"
-                placeholder="2023 год"
-                [options]="yearListEducation"
-              >
-                <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__entry"></i>
-              </app-select>
+      <div class="education__first-row">
+        <div class="education__years">
+          @if (profileForm.get("entryYearWork"); as entryYearWork) {
+          <fieldset class="years__left">
+            <label for="entryYearWork" class="field-label">Дата начала</label>
+            <app-select
+              [selectedId]="selectedEntryYearWorkId()"
+              formControlName="entryYearWork"
+              placeholder="2023 год"
+              [options]="yearListEducation"
+            >
+              <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__entry"></i>
+            </app-select>
 
-              @if (entryYearWork | controlError: "required") {
-              <div class="text-body-14 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            } @if (profileForm.get("completionYearWork"); as completionYearWork) {
-            <fieldset class="years__right">
-              <label for="completionYearWork" class="field-label">Дата окончания</label>
-              <app-select
-                [selectedId]="selectedComplitionYearWorkId()"
-                formControlName="completionYearWork"
-                placeholder="2023 год"
-                [options]="yearListEducation"
-              >
-                <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
-              </app-select>
-
-              @if (completionYearWork | controlError: "required") {
-              <div class="text-body-14 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </div>
-
-          @if (profileForm.get("organization"); as organization) {
-          <fieldset>
-            <label for="organization" class="field-label">Организация</label>
-            <app-input
-              id="organization"
-              [error]="organization | controlError"
-              type="text"
-              placeholder="Проколлаб"
-              formControlName="organization"
-            ></app-input>
-            @if (organization | controlError: "required") {
+            @if (entryYearWork | controlError: "required") {
             <div class="text-body-14 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
           </fieldset>
-          } @if (profileForm.get("jobPosition"); as jobPosition) {
-          <fieldset>
-            <label for="jobPosition" class="field-label">Должность</label>
-            <app-input
-              id="jobPosition"
-              [error]="jobPosition | controlError"
-              type="text"
-              placeholder="Дизайнер"
-              formControlName="jobPosition"
-            ></app-input>
-            @if (jobPosition | controlError: "required") {
-            <div class="text-body-14 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-            }
-          </fieldset>
-          } @if (profileForm.get("descriptionWork"); as descriptionWork) {
-          <fieldset>
-            <label for="descriptionWork" class="field-label">Краткое описание</label>
-            <app-input
-              id="descriptionWork"
-              [error]="descriptionWork | controlError"
-              type="text"
-              placeholder="Образовательная платформа"
-              formControlName="descriptionWork"
-            ></app-input>
-            @if (descriptionWork | controlError: "required") {
+          } @if (profileForm.get("completionYearWork"); as completionYearWork) {
+          <fieldset class="years__right">
+            <label for="completionYearWork" class="field-label">Дата окончания</label>
+            <app-select
+              [selectedId]="selectedComplitionYearWorkId()"
+              formControlName="completionYearWork"
+              placeholder="2023 год"
+              [options]="yearListEducation"
+            >
+              <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+            </app-select>
+
+            @if (completionYearWork | controlError: "required") {
             <div class="text-body-14 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
@@ -505,6 +440,56 @@
           </fieldset>
           }
         </div>
+
+        @if (profileForm.get("organization"); as organization) {
+        <fieldset>
+          <label for="organization" class="field-label">Организация</label>
+          <app-input
+            id="organization"
+            [error]="organization | controlError"
+            type="text"
+            placeholder="Проколлаб"
+            formControlName="organization"
+          ></app-input>
+          @if (organization | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (profileForm.get("jobPosition"); as jobPosition) {
+        <fieldset>
+          <label for="jobPosition" class="field-label">Должность</label>
+          <app-input
+            id="jobPosition"
+            [error]="jobPosition | controlError"
+            type="text"
+            placeholder="Дизайнер"
+            formControlName="jobPosition"
+          ></app-input>
+          @if (jobPosition | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (profileForm.get("descriptionWork"); as descriptionWork) {
+        <fieldset>
+          <label for="descriptionWork" class="field-label">Краткое описание</label>
+          <app-input
+            id="descriptionWork"
+            [error]="descriptionWork | controlError"
+            type="text"
+            placeholder="Образовательная платформа"
+            formControlName="descriptionWork"
+          ></app-input>
+          @if (descriptionWork | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        }
       </div>
 
       <div class="profile__row education__block">
@@ -604,7 +589,7 @@
               <div class="skills-field">
                 <app-autocomplete-input
                   class="skills-field__input"
-                  placeholder="Например: Python"
+                  placeholder="Python"
                   searchIcon=""
                   [suggestions]="inlineSkills()"
                   fieldToDisplay="name"
