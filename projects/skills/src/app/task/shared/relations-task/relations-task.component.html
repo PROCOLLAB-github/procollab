@@ -2,7 +2,7 @@
 
 <div class="relations">
   <h2 class="relations__title">{{ data.text }}</h2>
-  <div class="relations__description" [innerHTML]="data.description"></div>
+  <div class="relations__description" [innerHTML]="description"></div>
   <div class="relations__wrapper">
     <div class="relations__column">
       @for (_ of Array(data.connectLeft.length); track $index) {

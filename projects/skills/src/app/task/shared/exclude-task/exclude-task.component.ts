@@ -37,7 +37,7 @@ export class ExcludeTaskComponent implements OnInit {
   ytExtractService = inject(YtExtractService);
 
   videoUrl?: SafeResourceUrl;
-  description = "";
+  description: any;
   sanitizedFileUrl?: SafeResourceUrl;
 
   onSelect(id: number) {
@@ -60,6 +60,6 @@ export class ExcludeTaskComponent implements OnInit {
       this.sanitizedFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.data.files[0]);
     }
 
-    this.description = res.newText;
+    this.description = this.sanitizer.bypassSecurityTrustHtml(this.data.description);
   }
 }

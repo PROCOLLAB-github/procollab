@@ -1,6 +1,15 @@
 /** @format */
 
-import { Component, computed, EventEmitter, Input, Output, signal } from "@angular/core";
+import {
+  Component,
+  computed,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+  signal,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
   ConnectQuestion,
@@ -8,6 +17,7 @@ import {
   ConnectQuestionResponse,
 } from "../../../../models/step.model";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "app-relations-task",
@@ -16,7 +26,7 @@ import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
   templateUrl: "./relations-task.component.html",
   styleUrl: "./relations-task.component.scss",
 })
-export class RelationsTaskComponent {
+export class RelationsTaskComponent implements OnInit {
   @Input({ required: true }) data!: ConnectQuestion;
   @Input() hint!: string;
   protected readonly Array = Array;
@@ -43,9 +53,16 @@ export class RelationsTaskComponent {
   resultLeft = computed(() => this.result().map(r => r.leftId));
   resultRight = computed(() => this.result().map(r => r.rightId));
 
+  description: any;
+  sanitizer = inject(DomSanitizer);
+
   isImageGrid = computed(() => {
     return this.data.connectRight.every(itm => !!itm.file);
   });
+
+  ngOnInit() {
+    this.description = this.sanitizer.bypassSecurityTrustHtml(this.data.description);
+  }
 
   @Output() update = new EventEmitter<ConnectQuestionRequest>();
 

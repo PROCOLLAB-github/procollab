@@ -39,7 +39,7 @@ export class RadioSelectTaskComponent {
   ytExtractService = inject(YtExtractService);
 
   videoUrl?: SafeResourceUrl;
-  description = "";
+  description: any;
   sanitizedFileUrl?: SafeResourceUrl;
 
   ngOnInit(): void {
@@ -52,7 +52,7 @@ export class RadioSelectTaskComponent {
       this.sanitizedFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.data.files[0]);
     }
 
-    this.description = res.newText;
+    this.description = this.sanitizer.bypassSecurityTrustHtml(this.data.description);
   }
 
   onSelect(id: number) {
