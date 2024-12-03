@@ -3,13 +3,13 @@
 import { Component, EventEmitter, Input, OnInit, Output, Sanitizer, inject } from "@angular/core";
 import { CommonModule, JsonPipe } from "@angular/common";
 import { WriteQuestion } from "../../../../models/step.model";
-import { YtExtractService } from "@corelib";
+import { ParseBreaksPipe, YtExtractService } from "@corelib";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 
 @Component({
   selector: "app-write-task",
   standalone: true,
-  imports: [CommonModule, JsonPipe],
+  imports: [CommonModule, JsonPipe, ParseBreaksPipe],
   templateUrl: "./write-task.component.html",
   styleUrl: "./write-task.component.scss",
 })
@@ -23,7 +23,7 @@ export class WriteTaskComponent implements OnInit {
   ytExtractService = inject(YtExtractService);
 
   videoUrl?: SafeResourceUrl;
-  description = "";
+  description: any;
   sanitizedFileUrl?: SafeResourceUrl;
 
   ngOnInit(): void {
@@ -36,7 +36,7 @@ export class WriteTaskComponent implements OnInit {
       this.sanitizedFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.data.files[0]);
     }
 
-    this.description = res.newText;
+    this.description = this.sanitizer.bypassSecurityTrustHtml(this.data.text);
   }
 
   // result = signal<{ text: string } | null>(null);

@@ -4,18 +4,19 @@ import { Component, EventEmitter, inject, Input, Output, signal } from "@angular
 import { CommonModule } from "@angular/common";
 import { SingleQuestion, SingleQuestionError } from "../../../../models/step.model";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { YtExtractService } from "@corelib";
+import { ParseBreaksPipe, YtExtractService } from "@corelib";
 
 @Component({
   selector: "app-radio-select-task",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ParseBreaksPipe],
   templateUrl: "./radio-select-task.component.html",
   styleUrl: "./radio-select-task.component.scss",
 })
 export class RadioSelectTaskComponent {
   @Input({ required: true }) data!: SingleQuestion;
   @Input() success = false;
+  @Input() hint!: string;
   @Input()
   set error(value: SingleQuestionError | null) {
     this._error.set(value);
@@ -38,7 +39,7 @@ export class RadioSelectTaskComponent {
   ytExtractService = inject(YtExtractService);
 
   videoUrl?: SafeResourceUrl;
-  description = "";
+  description: any;
   sanitizedFileUrl?: SafeResourceUrl;
 
   ngOnInit(): void {
@@ -51,7 +52,7 @@ export class RadioSelectTaskComponent {
       this.sanitizedFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.data.files[0]);
     }
 
-    this.description = res.newText;
+    this.description = this.sanitizer.bypassSecurityTrustHtml(this.data.description);
   }
 
   onSelect(id: number) {

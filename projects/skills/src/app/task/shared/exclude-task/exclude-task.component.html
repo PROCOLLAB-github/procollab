@@ -16,7 +16,7 @@
     ></iframe>
     }
 
-    {{ data.description }}
+    <div [innerHTML]="description"></div>
   </div>
 
   <div>
@@ -35,5 +35,8 @@
       </li>
       }
     </ul>
+    @if (hint.length) {
+    <div class="exclude__hint" [innerHTML]="hint"></div>
+    }
   </div>
 </div>

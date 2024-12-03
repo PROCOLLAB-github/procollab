@@ -86,4 +86,10 @@
       opacity: 0.3;
     }
   }
+
+  :host ::ng-deep &__hint p {
+    margin-top: 20px;
+
+    @include typography.body-14;
+  }
 }

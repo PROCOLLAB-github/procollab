@@ -4,12 +4,12 @@ import { Component, inject, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { InfoSlide } from "../../../../models/step.model";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { YtExtractService } from "@corelib";
+import { ParseBreaksPipe, ParseLinksPipe, YtExtractService } from "@corelib";
 
 @Component({
   selector: "app-info-task",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ParseLinksPipe, ParseBreaksPipe],
   templateUrl: "./info-task.component.html",
   styleUrl: "./info-task.component.scss",
 })
@@ -20,7 +20,7 @@ export class InfoTaskComponent {
   ytExtractService = inject(YtExtractService);
 
   videoUrl?: SafeResourceUrl;
-  description = "";
+  description: any;
   sanitizedFileUrl?: SafeResourceUrl;
   contentType: "gif" | "webp" | "mp4" | string = "";
 
@@ -37,6 +37,6 @@ export class InfoTaskComponent {
       this.sanitizedFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.data.files[0]);
     }
 
-    this.description = res.newText;
+    this.description = this.sanitizer.bypassSecurityTrustHtml(this.data.text);
   }
 }
