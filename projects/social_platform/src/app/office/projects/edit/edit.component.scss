@@ -32,8 +32,8 @@
       padding: 15px;
       color: var(--black);
       background-color: var(--white);
-      border-radius: var(--rounded-md);
       border: 1px solid var(--grey-button);
+      border-radius: var(--rounded-md);
 
       @include responsive.apply-desktop {
         flex-direction: column;
@@ -45,9 +45,9 @@
 
   &__navigation {
     width: 100%;
+    padding: 10px 0;
     margin-bottom: 22px;
     border-bottom: 1px solid var(--grey-button);
-    padding: 10px 0;
   }
 
   &__nav {
@@ -65,6 +65,7 @@
 
   &__subtitle {
     color: var(--grey-for-text);
+
     @include typography.heading-4;
 
     &--active {
@@ -72,7 +73,7 @@
     }
   }
 
-  &__image {
+  &__icon {
     opacity: 0.5;
 
     &--active {
@@ -86,13 +87,13 @@
     @include responsive.apply-desktop {
       display: flex;
       gap: 90px;
-      margin-bottom: 0;
       justify-content: space-between;
+      margin-bottom: 0;
       margin-bottom: 20px;
     }
   }
 
-  &__inner>fieldset:not(:last-child) {
+  &__inner > fieldset:not(:last-child) {
     margin-bottom: 20px;
   }
 
@@ -108,7 +109,6 @@
         margin-top: 0;
       }
     }
-
   }
 
   &__right {
@@ -134,8 +134,8 @@
 
   &__info {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
   }
 
   &__generals {
@@ -314,8 +314,8 @@
   &__info,
   &__additional {
     display: flex;
-    align-items: center;
     gap: 20px;
+    align-items: center;
 
     :first-child,
     :last-child {

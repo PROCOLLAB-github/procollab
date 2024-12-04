@@ -13,8 +13,8 @@
           @for (item of navItems; track $index) {
           <li class="project__item" (click)="navigateStep(item.step)">
             <img
-              class="project__image"
-              [class.project__image--active]="editingStep === item.step"
+              class="project__icon"
+              [class.project__icon--active]="editingStep === item.step"
               alt="project-icon"
               [src]="item.src"
             />
