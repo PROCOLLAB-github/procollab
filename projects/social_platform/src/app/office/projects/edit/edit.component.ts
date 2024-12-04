@@ -18,7 +18,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ErrorMessage } from "@error/models/error-message";
 import { Invite } from "@models/invite.model";
 import { Project } from "@models/project.model";
@@ -51,7 +51,6 @@ import { ControlErrorPipe, ValidationService } from "projects/core";
 import { Observable, Subscription, concatMap, distinctUntilChanged, filter, map, tap } from "rxjs";
 import { InviteCardComponent } from "../../shared/invite-card/invite-card.component";
 import { VacancyCardComponent } from "../../shared/vacancy-card/vacancy-card.component";
-import { ApiPagination } from "@office/models/api-pagination.model";
 
 @Component({
   selector: "app-edit",
@@ -60,6 +59,7 @@ import { ApiPagination } from "@office/models/api-pagination.model";
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    RouterModule,
     AvatarControlComponent,
     InputComponent,
     IconComponent,
@@ -104,6 +104,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
       presentationAddress: ["", [Validators.required]],
+      coverImageAddress: ["", Validators.required],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
       draft: [null],
@@ -113,6 +114,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       role: ["", [Validators.required]],
       skills: [[], Validators.required],
       description: ["", Validators.required],
+      experience: ["", Validators.required],
+      format: ["", Validators.required],
+      salary: ["", Validators.required],
+      schelude: ["", Validators.required],
     });
 
     this.inviteForm = this.fb.group({
@@ -174,6 +179,19 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(() => {});
 
+    this.projectForm
+      .get("coverImageAddress")
+      ?.valueChanges.pipe(
+        filter(r => !r),
+        concatMap(() =>
+          this.projectService.updateProject(Number(this.route.snapshot.params["projectId"]), {
+            coverImageAddress: "",
+            draft: true,
+          })
+        )
+      )
+      .subscribe(() => {});
+
     this.editingStep = this.route.snapshot.queryParams["editingStep"];
   }
 
@@ -203,6 +221,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           industryId: project.industry,
           description: project.description,
           presentationAddress: project.presentationAddress,
+          coverImageAddress: project.coverImageAddress,
         });
 
         if (project.partnerProgramsTags?.length) {
@@ -246,7 +265,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    * Current step of toggle, that navigates through
    * parts of project info
    */
-  editingStep: "main" | "team" | "achievements" = "main";
+  editingStep: "main" | "contacts" | "team" | "achievements" | "vacancies" = "main";
 
   isCompleted = false;
 
@@ -271,6 +290,105 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   );
 
   subscriptions: (Subscription | undefined)[] = [];
+
+  navItems = [
+    {
+      step: "main",
+      src: "/assets/images/projects/edit/main.svg",
+      label: "Основные данные",
+    },
+    {
+      step: "contacts",
+      src: "/assets/images/projects/edit/contacts.svg",
+      label: "Контакты",
+    },
+    {
+      step: "achievements",
+      src: "/assets/images/projects/edit/achievements.svg",
+      label: "Достижения",
+    },
+    {
+      step: "team",
+      src: "/assets/images/projects/edit/members.svg",
+      label: "Участники",
+    },
+    {
+      step: "vacancies",
+      src: "/assets/images/projects/edit/vacancies.svg",
+      label: "Вакансии",
+    },
+  ];
+
+  experienceList = [
+    {
+      id: 0,
+      value: "Без опыта",
+      label: "Без опыта",
+    },
+    {
+      id: 1,
+      value: "до 1 года",
+      label: "до 1 года",
+    },
+    {
+      id: 2,
+      value: "от 1 года до 3 лет",
+      label: "от 1 года до 3 лет",
+    },
+    {
+      id: 3,
+      value: "от 3 лет и более",
+      label: "от 3 лет и более",
+    },
+  ];
+
+  formatList = [
+    {
+      id: 0,
+      value: "Удаленная работа",
+      label: "Удаленная работа",
+    },
+    {
+      id: 1,
+      value: "Работа в офисе",
+      label: "Работа в офисе",
+    },
+    {
+      id: 2,
+      value: "Смешанная",
+      label: "Смешанная",
+    },
+  ];
+
+  scheludeList = [
+    {
+      id: 0,
+      value: "Полный рабочий день",
+      label: "Полный рабочий день",
+    },
+    {
+      id: 1,
+      value: "Сменный график",
+      label: "Сменный график",
+    },
+    {
+      id: 2,
+      value: "Гибкий график",
+      label: "Гибкий график",
+    },
+    {
+      id: 3,
+      value: "Частичная занятость",
+      label: "Частичная занятость",
+    },
+    {
+      id: 4,
+      value: "Стажировка",
+      label: "Стажировка",
+    },
+  ];
+
+  profileId: number = this.route.snapshot.params["projectId"];
 
   vacancies: Vacancy[] = [];
   vacancyForm: FormGroup;
@@ -340,9 +458,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  navigateStep(step: "main" | "team" | "achievements") {
+  editVacancy(vacancyId: number): void {}
+
+  navigateStep(step: string) {
     this.router.navigate([], { queryParams: { editingStep: step } });
-    this.editingStep = step;
+    this.editingStep = step as "main" | "contacts" | "team" | "achievements" | "vacancies";
   }
 
   inviteForm: FormGroup;

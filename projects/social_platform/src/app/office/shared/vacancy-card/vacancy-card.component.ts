@@ -17,6 +17,7 @@ export class VacancyCardComponent implements OnInit {
 
   @Input() vacancy?: Vacancy;
   @Output() remove = new EventEmitter<number>();
+  @Output() edit = new EventEmitter<number>();
 
   skillString = "";
 
@@ -29,5 +30,12 @@ export class VacancyCardComponent implements OnInit {
     event.preventDefault();
 
     this.remove.emit(this.vacancy?.id);
+  }
+
+  onEdit(event: MouseEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.edit.emit(this.vacancy?.id);
   }
 }

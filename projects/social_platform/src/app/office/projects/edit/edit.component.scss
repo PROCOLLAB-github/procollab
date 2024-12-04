@@ -6,31 +6,121 @@
 .project {
   position: relative;
   padding: 24px;
-  margin-bottom: 100px;
   background-color: var(--white);
   border-radius: var(--rounded-md);
 
-  &__form {
-    display: grid;
-    grid-template-columns: 1fr;
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 17px;
+    margin-bottom: 18px;
+  }
 
-    @include responsive.apply-desktop {
-      grid-template-columns: minmax(380px, 2fr) 1fr;
+  &__title {
+    @include typography.heading-1;
+  }
+
+  &__back {
+    width: 20%;
+  }
+
+  &__form {
+    &__form {
+      display: flex;
+      flex-direction: column;
+      padding: 15px;
+      color: var(--black);
+      background-color: var(--white);
+      border-radius: var(--rounded-md);
+      border: 1px solid var(--grey-button);
+
+      @include responsive.apply-desktop {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px;
+      }
+    }
+  }
+
+  &__navigation {
+    width: 100%;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--grey-button);
+    padding: 10px 0;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__subtitle {
+    color: var(--grey-for-text);
+    @include typography.heading-4;
+
+    &--active {
+      color: var(--black);
+    }
+  }
+
+  &__image {
+    opacity: 0.5;
+
+    &--active {
+      opacity: 1;
     }
   }
 
   &__inner {
-    grid-column: 1/3;
     margin-bottom: 25px;
 
     @include responsive.apply-desktop {
-      grid-column: 1/2;
+      display: flex;
+      gap: 90px;
       margin-bottom: 0;
+      justify-content: space-between;
+      margin-bottom: 20px;
     }
   }
 
-  &__inner > fieldset:not(:last-child) {
+  &__inner>fieldset:not(:last-child) {
     margin-bottom: 20px;
+  }
+
+  &__left {
+    flex-basis: 50%;
+
+    :last-child {
+      margin-top: 10px;
+
+      .edit-link__remove,
+      app-button,
+      fieldset {
+        margin-top: 0;
+      }
+    }
+
+  }
+
+  &__right {
+    flex-basis: 50%;
+
+    :first-child {
+      margin-bottom: 10px;
+    }
+
+    :last-child {
+      margin-top: 10px;
+    }
   }
 
   &__image {
@@ -42,21 +132,32 @@
     }
   }
 
-  &__file {
-    min-width: 0;
+  &__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
-  &__nav {
-    grid-column: 1 / 3;
-    margin-bottom: 24px;
+  &__generals {
+    margin-bottom: 10px;
 
-    ul {
-      display: block;
-
-      @include responsive.apply-desktop {
-        display: flex;
-      }
+    :first-child {
+      margin-bottom: 10px;
     }
+  }
+
+  &__additional {
+    :first-child {
+      margin-bottom: 10px;
+    }
+
+    :last-child {
+      margin-top: 10px;
+    }
+  }
+
+  &__file {
+    min-width: 0;
   }
 
   &__nav-item {
@@ -107,17 +208,9 @@
   }
 
   &__add-link {
-    display: block;
-    margin-top: 20px;
-
     i {
       margin-left: 10px;
     }
-  }
-
-  &__add-achievement {
-    display: block;
-    margin-top: 12px;
   }
 
   &__achievement-item {
@@ -140,7 +233,7 @@
     @include responsive.apply-desktop {
       app-button {
         align-self: flex-end;
-        width: 85%;
+        width: 20%;
       }
     }
   }
@@ -215,6 +308,18 @@
 
     &:not(:last-child) {
       margin-right: 10px;
+    }
+  }
+
+  &__info,
+  &__additional {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    :first-child,
+    :last-child {
+      flex-basis: 50%;
     }
   }
 

@@ -16,6 +16,12 @@
     color: var(--dark-grey);
   }
 
+  &__icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
   &__basket {
     color: var(--red);
     cursor: pointer;
