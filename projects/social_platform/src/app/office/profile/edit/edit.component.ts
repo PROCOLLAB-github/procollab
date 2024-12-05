@@ -30,7 +30,7 @@ import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import { Specialization } from "@office/models/specialization";
 import { SpecializationsService } from "@office/services/specializations.service";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
@@ -40,7 +40,6 @@ import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-baske
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { Skill } from "@office/models/skill";
 import { SkillsService } from "@office/services/skills.service";
-import { profile } from "console";
 
 dayjs.extend(cpf);
 
@@ -55,6 +54,7 @@ dayjs.extend(cpf);
     SelectComponent,
     TagComponent,
     IconComponent,
+    CommonModule,
     ButtonComponent,
     AvatarControlComponent,
     TextareaComponent,

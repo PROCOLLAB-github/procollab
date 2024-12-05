@@ -31,7 +31,10 @@
       </ul>
     </div>
 
-    <div class="profile__column">
+    <div
+      class="profile__column"
+      [class.profile__column-achievements]="editingStep === 'achievements'"
+    >
       @if(editingStep === 'main'){
       <div class="education__first-row">
         <div class="education__left">
