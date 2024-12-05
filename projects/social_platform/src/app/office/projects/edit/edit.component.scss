@@ -5,10 +5,10 @@
 
 .project {
   position: relative;
+  height: 800px;
   padding: 24px;
   background-color: var(--white);
   border-radius: var(--rounded-md);
-  height: 800px;
 
   &__top {
     display: flex;
@@ -94,7 +94,7 @@
     }
   }
 
-  &__inner>fieldset:not(:last-child) {
+  &__inner > fieldset:not(:last-child) {
     margin-bottom: 20px;
   }
 
@@ -230,8 +230,8 @@
       position: absolute;
       right: 24px;
       bottom: 24px;
-      width: 255px;
       order: unset;
+      width: 255px;
 
       app-button {
         align-self: flex-end;
@@ -263,6 +263,7 @@
 .achievement {
   &__first-row {
     display: flex;
+
     // align-items: flex-start;
     margin-bottom: 12px;
 
