@@ -118,7 +118,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.vacancyForm = this.fb.group({
       role: ["", [Validators.required]],
-      skills: [[], Validators.required],
+      requiredSkills: [[], Validators.required],
       description: ["", Validators.required],
       experience: [""],
       format: [""],
@@ -145,8 +145,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.inviteForm.get("role"),
       this.inviteForm.get("link"),
       this.vacancyForm.get("role"),
+      this.vacancyForm.get("requiredSkills"),
       this.vacancyForm.get("description"),
-      this.vacancyForm.get("skills"),
       this.vacancyForm.get("experience"),
       this.vacancyForm.get("format"),
       this.vacancyForm.get("salary"),
@@ -431,7 +431,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     const controls = [
       this.vacancyForm.get("role"),
       this.vacancyForm.get("description"),
-      this.vacancyForm.get("skills"),
+      this.vacancyForm.get("requiredSkills"),
       this.vacancyForm.get("experience"),
       this.vacancyForm.get("format"),
       this.vacancyForm.get("salary"),
@@ -488,12 +488,18 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   editVacancy(index: number): void {
-    // const vacancyItem =
-    //   this.vacancyItems().length > 0 ? this.vacancyItems()[index] : this.vacancies.value[index];
+    const vacancyItem = this.vacancies.length > 0 ? this.vacancies[index] : this.vacancies[index];
 
-    // this.vacancyForm.patchValue({
-    //   link: linkItem.link,
-    // });
+    this.vacancyForm.patchValue({
+      role: vacancyItem.role,
+      skills: vacancyItem.requiredSkills,
+      description: vacancyItem.description,
+      experience: vacancyItem.experience,
+      format: vacancyItem.format,
+      salary: vacancyItem.salary,
+      schelude: vacancyItem.schelude,
+    });
+
     this.editIndex.set(index);
   }
 

@@ -1,6 +1,6 @@
 /** @format */
 
-import { JsonPipe } from "@angular/common";
+import { JsonPipe, UpperCasePipe } from "@angular/common";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { IconComponent } from "@ui/components";
 import { LinkTransformPipe } from "projects/core/src/lib/pipes/link-transform.pipe";
@@ -10,7 +10,7 @@ import { LinkTransformPipe } from "projects/core/src/lib/pipes/link-transform.pi
   templateUrl: "./link-card.component.html",
   styleUrl: "./link-card.component.scss",
   standalone: true,
-  imports: [IconComponent, JsonPipe, LinkTransformPipe],
+  imports: [IconComponent, JsonPipe, LinkTransformPipe, UpperCasePipe],
 })
 export class LinkCardComponent {
   constructor() {}
