@@ -99,7 +99,11 @@
                 }
               </a>
 
-              <a class="profile__edit" routerLink="/office/profile/edit">
+              <a
+                class="profile__edit"
+                routerLink="/office/profile/edit"
+                [queryParams]="{ editingStep: 'main' }"
+              >
                 <app-button customTypographyClass="text-body-12" color="grey">
                   Редактировать профиль
                 </app-button>

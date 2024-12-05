@@ -22,7 +22,7 @@ import { ErrorMessage } from "@error/models/error-message";
 import { ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
 import { ControlErrorPipe, ValidationService } from "projects/core";
 import { concatMap, first, map, noop, Observable, skip, Subscription, tap } from "rxjs";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 import { NavService } from "@services/nav.service";
@@ -30,7 +30,7 @@ import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import { Specialization } from "@office/models/specialization";
 import { SpecializationsService } from "@office/services/specializations.service";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
@@ -40,7 +40,6 @@ import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-baske
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { Skill } from "@office/models/skill";
 import { SkillsService } from "@office/services/skills.service";
-import { profile } from "console";
 
 dayjs.extend(cpf);
 
@@ -55,6 +54,7 @@ dayjs.extend(cpf);
     SelectComponent,
     TagComponent,
     IconComponent,
+    CommonModule,
     ButtonComponent,
     AvatarControlComponent,
     TextareaComponent,
@@ -78,6 +78,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly specsService: SpecializationsService,
     private readonly skillsService: SkillsService,
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly navService: NavService
   ) {
     this.profileForm = this.fb.group({
@@ -143,6 +144,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(noop);
 
     userAvatar$ && this.subscription$.push(userAvatar$);
+
+    this.editingStep = this.route.snapshot.queryParams["editingStep"];
   }
 
   ngAfterViewInit() {
@@ -238,6 +241,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscription$.forEach($ => $.unsubscribe());
   }
 
+  editingStep: "main" | "education" | "experience" | "achievements" | "skills" = "main";
+
   profileId?: number;
 
   inlineSpecs = signal<Specialization[]>([]);
@@ -275,6 +280,39 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   selectedLanguageLevelId = signal<number | undefined>(undefined);
 
   subscription$: Subscription[] = [];
+
+  navItems = [
+    {
+      step: "main",
+      src: "/assets/images/profile/main.svg",
+      label: "Основные данные",
+    },
+    {
+      step: "education",
+      src: "/assets/images/profile/education.svg",
+      label: "Образование",
+    },
+    {
+      step: "experience",
+      src: "/assets/images/profile/experience.svg",
+      label: "Опыт",
+    },
+    {
+      step: "achievements",
+      src: "/assets/images/profile/achievements.svg",
+      label: "Достижения",
+    },
+    {
+      step: "skills",
+      src: "/assets/images/profile/skills.svg",
+      label: "Навыки",
+    },
+  ];
+
+  navigateStep(step: string) {
+    this.router.navigate([], { queryParams: { editingStep: step } });
+    this.editingStep = step as "main" | "education" | "experience" | "achievements" | "skills";
+  }
 
   yearListEducation = [
     {
@@ -701,6 +739,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.editIndex.set(index);
   }
 
+  removeEducation(i: number) {
+    this.educationItems.update(items => items.filter((_, index) => index !== i));
+
+    this.education.removeAt(i);
+  }
+
   addWork() {
     const workItem = this.fb.group({
       organizationName: this.profileForm.get("organization")?.value,
@@ -781,6 +825,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  removeWork(i: number) {
+    this.workItems.update(items => items.filter((_, index) => index !== i));
+
+    this.workExperience.removeAt(i);
+  }
+
   addLanguage() {
     const languageItem = this.fb.group({
       language: this.profileForm.get("language")?.value,
@@ -829,6 +879,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.editIndex.set(index);
+  }
+
+  removeLanguage(i: number) {
+    this.languageItems.update(items => items.filter((_, index) => index !== i));
+
+    this.userLanguages.removeAt(i);
   }
 
   get links(): FormArray {
