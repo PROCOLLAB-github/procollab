@@ -384,7 +384,6 @@
             } @if (vacancyForm.get("description"); as description) {
             <fieldset class="vacancy__description">
               <app-input
-                style="padding-bottom: 50px"
                 id="vacancy_description"
                 formControlName="description"
                 [error]="(description | controlError) && vacancySubmitInitiated"
@@ -400,29 +399,31 @@
 
             <div class="vacancy__work">
               <div class="vacancy__info">
-                @if (vacancyForm.get("experience"); as experience) {
+                @if (vacancyForm.get("requiredExperience"); as requiredExperience) {
                 <fieldset>
                   <app-select
-                    id="experience"
-                    formControlName="experience"
+                    id="requiredExperience"
+                    formControlName="requiredExperience"
                     placeholder="Опыт"
+                    [selectedId]="selectedRequiredExperienceId()"
                     [options]="experienceList"
                   ></app-select>
-                  @if (experience | controlError: "required") {
+                  @if (requiredExperience | controlError: "required") {
                   <div class="text-body-14 error">
                     {{ errorMessage.VALIDATION_REQUIRED }}
                   </div>
                   }
                 </fieldset>
-                } @if (vacancyForm.get("format"); as format) {
+                } @if (vacancyForm.get("workFormat"); as workFormat) {
                 <fieldset>
                   <app-select
-                    id="format"
-                    formControlName="format"
+                    id="workFormat"
+                    formControlName="workFormat"
                     placeholder="Формат"
+                    [selectedId]="selectedWorkFormatId()"
                     [options]="formatList"
                   ></app-select>
-                  @if (format | controlError: "required") {
+                  @if (workFormat | controlError: "required") {
                   <div class="text-body-14 error">
                     {{ errorMessage.VALIDATION_REQUIRED }}
                   </div>
@@ -446,15 +447,16 @@
                   </div>
                   }
                 </fieldset>
-                } @if (vacancyForm.get("schelude"); as schelude) {
+                } @if (vacancyForm.get("workSchelude"); as workSchelude) {
                 <fieldset>
                   <app-select
-                    id="schelude"
-                    formControlName="schelude"
+                    id="workSchelude"
+                    formControlName="workSchelude"
                     placeholder="График"
+                    [selectedId]="selectedWorkScheludeId()"
                     [options]="scheludeList"
                   ></app-select>
-                  @if (schelude | controlError: "required") {
+                  @if (workSchelude | controlError: "required") {
                   <div class="text-body-14 error">
                     {{ errorMessage.VALIDATION_REQUIRED }}
                   </div>
@@ -519,7 +521,7 @@
             <li class="vacancy__item">
               <app-vacancy-card
                 [vacancy]="vacancy"
-                (edit)="editVacancy($event)"
+                (edit)="editVacancy(vacancies.indexOf(vacancy))"
                 (remove)="removeVacancy($event)"
               ></app-vacancy-card>
             </li>

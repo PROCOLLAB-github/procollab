@@ -118,12 +118,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.vacancyForm = this.fb.group({
       role: ["", [Validators.required]],
-      requiredSkills: [[], Validators.required],
+      skills: [[], Validators.required],
       description: ["", Validators.required],
-      experience: [""],
-      format: [""],
+      requiredExperience: [""],
+      workFormat: [""],
       salary: [""],
-      schelude: [""],
+      workSchelude: [""],
     });
 
     this.inviteForm = this.fb.group({
@@ -145,12 +145,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.inviteForm.get("role"),
       this.inviteForm.get("link"),
       this.vacancyForm.get("role"),
-      this.vacancyForm.get("requiredSkills"),
+      this.vacancyForm.get("skills"),
       this.vacancyForm.get("description"),
-      this.vacancyForm.get("experience"),
-      this.vacancyForm.get("format"),
+      this.vacancyForm.get("requiredExperience"),
+      this.vacancyForm.get("workFormat"),
       this.vacancyForm.get("salary"),
-      this.vacancyForm.get("schelude"),
+      this.vacancyForm.get("workSchelude"),
     ];
 
     controls.filter(Boolean).forEach(control => {
@@ -345,40 +345,40 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   experienceList = [
     {
       id: 0,
-      value: "Без опыта",
+      value: "без опыта",
       label: "Без опыта",
     },
     {
       id: 1,
       value: "до 1 года",
-      label: "до 1 года",
+      label: "До 1 года",
     },
     {
       id: 2,
       value: "от 1 года до 3 лет",
-      label: "от 1 года до 3 лет",
+      label: "От 1 года до 3 лет",
     },
     {
       id: 3,
       value: "от 3 лет и более",
-      label: "от 3 лет и более",
+      label: "От 3 лет и более",
     },
   ];
 
   formatList = [
     {
       id: 0,
-      value: "Удаленная работа",
+      value: "удаленная работа",
       label: "Удаленная работа",
     },
     {
       id: 1,
-      value: "Работа в офисе",
+      value: "работа в офисе",
       label: "Работа в офисе",
     },
     {
       id: 2,
-      value: "Смешанная",
+      value: "смешанная",
       label: "Смешанная",
     },
   ];
@@ -386,27 +386,27 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   scheludeList = [
     {
       id: 0,
-      value: "Полный рабочий день",
+      value: "полный рабочий день",
       label: "Полный рабочий день",
     },
     {
       id: 1,
-      value: "Сменный график",
+      value: "сменный график",
       label: "Сменный график",
     },
     {
       id: 2,
-      value: "Гибкий график",
+      value: "гибкий график",
       label: "Гибкий график",
     },
     {
       id: 3,
-      value: "Частичная занятость",
+      value: "частичная занятость",
       label: "Частичная занятость",
     },
     {
       id: 4,
-      value: "Стажировка",
+      value: "стажировка",
       label: "Стажировка",
     },
   ];
@@ -425,17 +425,17 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   vacancySubmitInitiated = false;
   vacancyIsSubmitting = false;
 
+  selectedRequiredExperienceId = signal<number | undefined>(undefined);
+  selectedWorkFormatId = signal<number | undefined>(undefined);
+  selectedWorkScheludeId = signal<number | undefined>(undefined);
+
   submitVacancy(): void {
     this.vacancySubmitInitiated = true;
 
     const controls = [
       this.vacancyForm.get("role"),
       this.vacancyForm.get("description"),
-      this.vacancyForm.get("requiredSkills"),
-      this.vacancyForm.get("experience"),
-      this.vacancyForm.get("format"),
-      this.vacancyForm.get("salary"),
-      this.vacancyForm.get("schelude"),
+      this.vacancyForm.get("skills"),
     ];
 
     controls.filter(Boolean).forEach(control => {
@@ -464,9 +464,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         next: vacancy => {
           this.vacancies.push(vacancy);
 
-          console.log("Form state before reset:", this.vacancyForm.value);
           this.vacancyForm.reset();
-          console.log("Form state after reset:", this.vacancyForm.value);
 
           this.vacancyIsSubmitting = false;
         },
@@ -488,16 +486,34 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   editVacancy(index: number): void {
-    const vacancyItem = this.vacancies.length > 0 ? this.vacancies[index] : this.vacancies[index];
+    const vacancyItem = this.vacancies[index];
+
+    this.experienceList.forEach(experience => {
+      if (experience.value === vacancyItem.requiredExperience) {
+        this.selectedRequiredExperienceId.set(experience.id);
+      }
+    });
+
+    this.formatList.forEach(format => {
+      if (format.value === vacancyItem.workFormat) {
+        this.selectedWorkFormatId.set(format.id);
+      }
+    });
+
+    this.scheludeList.forEach(schelude => {
+      if (schelude.value === vacancyItem.workSchelude) {
+        this.selectedWorkScheludeId.set(schelude.id);
+      }
+    });
 
     this.vacancyForm.patchValue({
       role: vacancyItem.role,
       skills: vacancyItem.requiredSkills,
       description: vacancyItem.description,
-      experience: vacancyItem.experience,
-      format: vacancyItem.format,
+      requiredExperience: vacancyItem.requiredExperience,
+      workFormat: vacancyItem.workFormat,
       salary: vacancyItem.salary,
-      schelude: vacancyItem.schelude,
+      workSchelude: vacancyItem.workSchelude,
     });
 
     this.editIndex.set(index);

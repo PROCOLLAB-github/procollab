@@ -41,10 +41,7 @@ export class VacancyService {
       .pipe(map(vacancies => plainToInstance(VacancyResponse, vacancies)));
   }
 
-  postVacancy(
-    projectId: number,
-    vacancy: { role: string; text: string; requiredSkillsIds: number[] }
-  ): Observable<Vacancy> {
+  postVacancy(projectId: number, vacancy: Vacancy): Observable<Vacancy> {
     return this.apiService
       .post("/vacancies/", {
         ...vacancy,
