@@ -18,7 +18,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ErrorMessage } from "@error/models/error-message";
 import { Invite } from "@models/invite.model";
 import { Project } from "@models/project.model";
@@ -51,7 +51,8 @@ import { ControlErrorPipe, ValidationService } from "projects/core";
 import { Observable, Subscription, concatMap, distinctUntilChanged, filter, map, tap } from "rxjs";
 import { InviteCardComponent } from "../../shared/invite-card/invite-card.component";
 import { VacancyCardComponent } from "../../shared/vacancy-card/vacancy-card.component";
-import { ApiPagination } from "@office/models/api-pagination.model";
+import { LinkCardComponent } from "@office/shared/link-card/link-card.component";
+import { title } from "process";
 
 @Component({
   selector: "app-edit",
@@ -60,6 +61,7 @@ import { ApiPagination } from "@office/models/api-pagination.model";
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    RouterModule,
     AvatarControlComponent,
     InputComponent,
     IconComponent,
@@ -69,6 +71,7 @@ import { ApiPagination } from "@office/models/api-pagination.model";
     UploadFileComponent,
     InviteCardComponent,
     VacancyCardComponent,
+    LinkCardComponent,
     TagComponent,
     ModalComponent,
     AsyncPipe,
@@ -101,11 +104,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       region: ["", [Validators.required]],
       step: [null, [Validators.required]],
       links: this.fb.array([]),
+      link: ["", [Validators.required]],
       industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
       presentationAddress: ["", [Validators.required]],
+      coverImageAddress: ["", Validators.required],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
+      achievementsName: ["", [Validators.required]],
+      achievementsPrize: ["", [Validators.required]],
       draft: [null],
     });
 
@@ -113,6 +120,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       role: ["", [Validators.required]],
       skills: [[], Validators.required],
       description: ["", Validators.required],
+      requiredExperience: ["", Validators.required],
+      workFormat: ["", Validators.required],
+      salary: ["", [Validators.pattern("^(\\d{1,3}( \\d{3})*|\\d+)$")]],
+      workSchedule: ["", Validators.required],
     });
 
     this.inviteForm = this.fb.group({
@@ -134,8 +145,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.inviteForm.get("role"),
       this.inviteForm.get("link"),
       this.vacancyForm.get("role"),
-      this.vacancyForm.get("requiredSkills"),
+      this.vacancyForm.get("skills"),
       this.vacancyForm.get("description"),
+      this.vacancyForm.get("requiredExperience"),
+      this.vacancyForm.get("workFormat"),
+      this.vacancyForm.get("salary"),
+      this.vacancyForm.get("workSchedule"),
     ];
 
     controls.filter(Boolean).forEach(control => {
@@ -174,6 +189,19 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(() => {});
 
+    this.projectForm
+      .get("coverImageAddress")
+      ?.valueChanges.pipe(
+        filter(r => !r),
+        concatMap(() =>
+          this.projectService.updateProject(Number(this.route.snapshot.params["projectId"]), {
+            coverImageAddress: "",
+            draft: true,
+          })
+        )
+      )
+      .subscribe(() => {});
+
     this.editingStep = this.route.snapshot.queryParams["editingStep"];
   }
 
@@ -203,6 +231,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           industryId: project.industry,
           description: project.description,
           presentationAddress: project.presentationAddress,
+          coverImageAddress: project.coverImageAddress,
         });
 
         if (project.partnerProgramsTags?.length) {
@@ -219,12 +248,25 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           });
         }
 
-        project.achievements &&
-          project.achievements.forEach(achievement =>
-            this.addAchievement(achievement.id, achievement.title, achievement.status)
+        this.achievements.clear();
+        project.achievements.forEach(achievement => {
+          this.achievements.push(
+            this.fb.group({
+              id: achievement.id,
+              title: achievement.title,
+              status: achievement.status,
+            })
           );
+        });
 
-        project.links && project.links.forEach(l => this.addLink(l));
+        this.links.clear();
+        project.links.forEach(link => {
+          this.links.push(
+            this.fb.group({
+              link: link,
+            })
+          );
+        });
 
         this.vacancies = project.vacancies;
 
@@ -246,7 +288,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    * Current step of toggle, that navigates through
    * parts of project info
    */
-  editingStep: "main" | "team" | "achievements" = "main";
+  editingStep: "main" | "contacts" | "team" | "achievements" | "vacancies" = "main";
 
   isCompleted = false;
 
@@ -272,6 +314,105 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   subscriptions: (Subscription | undefined)[] = [];
 
+  navItems = [
+    {
+      step: "main",
+      src: "/assets/images/projects/edit/main.svg",
+      label: "Основные данные",
+    },
+    {
+      step: "contacts",
+      src: "/assets/images/projects/edit/contacts.svg",
+      label: "Контакты",
+    },
+    {
+      step: "achievements",
+      src: "/assets/images/projects/edit/achievements.svg",
+      label: "Достижения",
+    },
+    {
+      step: "team",
+      src: "/assets/images/projects/edit/members.svg",
+      label: "Участники",
+    },
+    {
+      step: "vacancies",
+      src: "/assets/images/projects/edit/vacancies.svg",
+      label: "Вакансии",
+    },
+  ];
+
+  experienceList = [
+    {
+      id: 0,
+      value: "без опыта",
+      label: "Без опыта",
+    },
+    {
+      id: 1,
+      value: "до 1 года",
+      label: "До 1 года",
+    },
+    {
+      id: 2,
+      value: "от 1 года до 3 лет",
+      label: "От 1 года до 3 лет",
+    },
+    {
+      id: 3,
+      value: "от 3 лет и более",
+      label: "От 3 лет и более",
+    },
+  ];
+
+  formatList = [
+    {
+      id: 0,
+      value: "удаленная работа",
+      label: "Удаленная работа",
+    },
+    {
+      id: 1,
+      value: "работа в офисе",
+      label: "Работа в офисе",
+    },
+    {
+      id: 2,
+      value: "смешанная",
+      label: "Смешанная",
+    },
+  ];
+
+  scheludeList = [
+    {
+      id: 0,
+      value: "полный рабочий день",
+      label: "Полный рабочий день",
+    },
+    {
+      id: 1,
+      value: "сменный график",
+      label: "Сменный график",
+    },
+    {
+      id: 2,
+      value: "гибкий график",
+      label: "Гибкий график",
+    },
+    {
+      id: 3,
+      value: "частичная занятость",
+      label: "Частичная занятость",
+    },
+    {
+      id: 4,
+      value: "стажировка",
+      label: "Стажировка",
+    },
+  ];
+
+  profileId: number = this.route.snapshot.params["projectId"];
+
   vacancies: Vacancy[] = [];
   vacancyForm: FormGroup;
 
@@ -284,13 +425,23 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   vacancySubmitInitiated = false;
   vacancyIsSubmitting = false;
 
+  selectedRequiredExperienceId = signal<number | undefined>(undefined);
+  selectedWorkFormatId = signal<number | undefined>(undefined);
+  selectedWorkScheduleId = signal<number | undefined>(undefined);
+
+  onEditClicked = signal(false);
+
   submitVacancy(): void {
     this.vacancySubmitInitiated = true;
 
     const controls = [
       this.vacancyForm.get("role"),
-      this.vacancyForm.get("requiredSkills"),
       this.vacancyForm.get("description"),
+      this.vacancyForm.get("skills"),
+      this.vacancyForm.get("requiredExperience"),
+      this.vacancyForm.get("workFormat"),
+      this.vacancyForm.get("salary"),
+      this.vacancyForm.get("workSchedule"),
     ];
 
     controls.filter(Boolean).forEach(control => {
@@ -311,16 +462,18 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     const vacancy = {
       ...this.vacancyForm.value,
       requiredSkillsIds: this.vacancyForm.value.skills.map((s: Skill) => s.id),
+      salary: +this.vacancyForm.get("salary")?.value,
     };
 
     this.vacancyService
       .postVacancy(Number(this.route.snapshot.paramMap.get("projectId")), vacancy)
       .subscribe({
         next: vacancy => {
+          console.log(vacancy);
           this.vacancies.push(vacancy);
+          console.log(this.vacancies);
 
           this.vacancyForm.reset();
-
           this.vacancyIsSubmitting = false;
         },
         error: () => {
@@ -340,9 +493,45 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  navigateStep(step: "main" | "team" | "achievements") {
+  editVacancy(index: number): void {
+    const vacancyItem = this.vacancies[index];
+
+    this.experienceList.forEach(experience => {
+      if (experience.value === vacancyItem.requiredExperience) {
+        this.selectedRequiredExperienceId.set(experience.id);
+      }
+    });
+
+    this.formatList.forEach(format => {
+      if (format.value === vacancyItem.workFormat) {
+        this.selectedWorkFormatId.set(format.id);
+      }
+    });
+
+    this.scheludeList.forEach(schelude => {
+      if (schelude.value === vacancyItem.workSchedule) {
+        this.selectedWorkScheduleId.set(schelude.id);
+      }
+    });
+
+    this.vacancyForm.patchValue({
+      role: vacancyItem.role,
+      skills: vacancyItem.requiredSkills,
+      description: vacancyItem.description,
+      requiredExperience: vacancyItem.requiredExperience,
+      workFormat: vacancyItem.workFormat,
+      salary: vacancyItem.salary,
+      workSchedule: vacancyItem.workSchedule,
+    });
+
+    this.editIndex.set(index);
+
+    this.onEditClicked.set(true);
+  }
+
+  navigateStep(step: string) {
     this.router.navigate([], { queryParams: { editingStep: step } });
-    this.editingStep = step;
+    this.editingStep = step as "main" | "contacts" | "team" | "achievements" | "vacancies";
   }
 
   inviteForm: FormGroup;
@@ -431,23 +620,54 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setProjFormIsSubmitting!: (status: boolean) => void;
 
+  achievementsItems = signal<any[]>([]);
+
   get achievements(): FormArray {
     return this.projectForm.get("achievements") as FormArray;
   }
 
-  addAchievement(id?: number, title?: string, status?: string): void {
-    const formGroup = this.fb.group({
-      title: [title ?? "", [Validators.required]],
-      status: [status ?? "", [Validators.required]],
-      id: [id],
+  addAchievement(): void {
+    const achievementItem = this.fb.group({
+      id: this.achievements.length,
+      title: this.projectForm.get("achievementsName")?.value,
+      status: this.projectForm.get("achievementsPrize")?.value,
     });
 
-    this.achievements.push(formGroup);
+    if (this.editIndex() !== null) {
+      this.achievementsItems.update(items => {
+        const updatedItems = [...items];
+        updatedItems[this.editIndex()!] = achievementItem.value;
+
+        this.achievements.at(this.editIndex()!).patchValue(achievementItem.value);
+        return updatedItems;
+      });
+      this.editIndex.set(null);
+    } else {
+      this.achievementsItems.update(items => [...items, achievementItem.value]);
+      this.achievements.push(achievementItem);
+    }
+
+    this.projectForm.get("achievementsName")?.reset();
+    this.projectForm.get("achievementsPrize")?.reset();
   }
 
-  removeAchievement(index: number): void {
-    this.achievements.at(index).markAsUntouched();
-    this.achievements.removeAt(index);
+  editAchievement(index: number) {
+    const achievementItem =
+      this.achievementsItems().length > 0
+        ? this.achievementsItems()[index]
+        : this.achievements.value[index];
+
+    this.projectForm.patchValue({
+      achievementsName: achievementItem.title,
+      achievementsPrize: achievementItem.status,
+    });
+    this.editIndex.set(index);
+  }
+
+  removeAchievement(i: number): void {
+    this.achievementsItems.update(items => items.filter((_, index) => index !== i));
+
+    this.achievements.removeAt(i);
   }
 
   clearAllValidationErrors(): void {
@@ -524,22 +744,49 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  editIndex = signal<number | null>(null);
+
+  linksItems = signal<any[]>([]);
+
   get links(): FormArray {
     return this.projectForm.get("links") as FormArray;
   }
 
-  newLink = "";
+  addLink() {
+    const linkItem = this.fb.group({
+      link: this.projectForm.get("link")?.value,
+    });
 
-  addLink(title?: string): void {
-    const fromState = title ?? this.newLink;
+    if (this.editIndex() !== null) {
+      this.linksItems.update(items => {
+        const updatedItems = [...items];
+        updatedItems[this.editIndex()!] = linkItem.value;
 
-    const control = this.fb.control(fromState, [Validators.required]);
-    this.links.push(control);
+        this.links.at(this.editIndex()!).patchValue(linkItem.value);
+        return updatedItems;
+      });
+      this.editIndex.set(null);
+    } else {
+      this.linksItems.update(items => [...items, linkItem.value]);
+      this.links.push(linkItem);
+    }
 
-    this.newLink = "";
+    this.projectForm.get("link")?.reset();
+  }
+
+  editLink(index: number) {
+    const linkItem =
+      this.linksItems().length > 0 ? this.linksItems()[index] : this.links.value[index];
+
+    this.projectForm.patchValue({
+      link: linkItem.link,
+    });
+    this.editIndex.set(index);
   }
 
   removeLink(i: number): void {
+    this.linksItems.update(items => items.filter((_, index) => index !== i));
+
     this.links.removeAt(i);
   }
 

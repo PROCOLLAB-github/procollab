@@ -9,6 +9,10 @@ export class Vacancy {
   project!: Project;
   requiredSkills!: Skill[];
   description!: string;
+  requiredExperience!: any;
+  workFormat!: any;
+  salary!: any;
+  workSchedule!: any;
   datetimeCreated!: string;
   datetimeUpdated!: string;
 

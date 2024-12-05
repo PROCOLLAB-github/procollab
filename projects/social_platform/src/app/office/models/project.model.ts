@@ -17,6 +17,7 @@ export class Project {
   numberOfCollaborators!: number;
   viewsCount!: number;
   cover!: null | string;
+  coverImageAddress!: string | null;
   collaborators!: Collaborator[];
   collaborator?: Collaborator;
   links!: string[];
@@ -39,6 +40,7 @@ export class Project {
       viewsCount: 0,
       links: [],
       cover: null,
+      coverImageAddress: null,
       presentationAddress: "string",
       imageAddress: "string",
       numberOfCollaborators: 10,
