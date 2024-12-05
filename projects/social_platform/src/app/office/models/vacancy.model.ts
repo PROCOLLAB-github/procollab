@@ -12,7 +12,7 @@ export class Vacancy {
   requiredExperience!: any;
   workFormat!: any;
   salary!: any;
-  workSchelude!: any;
+  workSchedule!: any;
   datetimeCreated!: string;
   datetimeUpdated!: string;
 

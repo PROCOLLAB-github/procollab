@@ -447,16 +447,16 @@
                   </div>
                   }
                 </fieldset>
-                } @if (vacancyForm.get("workSchelude"); as workSchelude) {
+                } @if (vacancyForm.get("workSchedule"); as workSchedule) {
                 <fieldset>
                   <app-select
-                    id="workSchelude"
-                    formControlName="workSchelude"
+                    id="workSchedule"
+                    formControlName="workSchedule"
                     placeholder="График"
-                    [selectedId]="selectedWorkScheludeId()"
+                    [selectedId]="selectedWorkScheduleId()"
                     [options]="scheludeList"
                   ></app-select>
-                  @if (workSchelude | controlError: "required") {
+                  @if (workSchedule | controlError: "required") {
                   <div class="text-body-14 error">
                     {{ errorMessage.VALIDATION_REQUIRED }}
                   </div>

@@ -120,10 +120,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       role: ["", [Validators.required]],
       skills: [[], Validators.required],
       description: ["", Validators.required],
-      requiredExperience: [""],
-      workFormat: [""],
-      salary: [""],
-      workSchelude: [""],
+      requiredExperience: ["", Validators.required],
+      workFormat: ["", Validators.required],
+      salary: ["", [Validators.pattern("^(\\d{1,3}( \\d{3})*|\\d+)$")]],
+      workSchedule: ["", Validators.required],
     });
 
     this.inviteForm = this.fb.group({
@@ -150,7 +150,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.vacancyForm.get("requiredExperience"),
       this.vacancyForm.get("workFormat"),
       this.vacancyForm.get("salary"),
-      this.vacancyForm.get("workSchelude"),
+      this.vacancyForm.get("workSchedule"),
     ];
 
     controls.filter(Boolean).forEach(control => {
@@ -427,7 +427,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   selectedRequiredExperienceId = signal<number | undefined>(undefined);
   selectedWorkFormatId = signal<number | undefined>(undefined);
-  selectedWorkScheludeId = signal<number | undefined>(undefined);
+  selectedWorkScheduleId = signal<number | undefined>(undefined);
+
+  onEditClicked = signal(false);
 
   submitVacancy(): void {
     this.vacancySubmitInitiated = true;
@@ -436,6 +438,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.vacancyForm.get("role"),
       this.vacancyForm.get("description"),
       this.vacancyForm.get("skills"),
+      this.vacancyForm.get("requiredExperience"),
+      this.vacancyForm.get("workFormat"),
+      this.vacancyForm.get("salary"),
+      this.vacancyForm.get("workSchedule"),
     ];
 
     controls.filter(Boolean).forEach(control => {
@@ -456,16 +462,18 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     const vacancy = {
       ...this.vacancyForm.value,
       requiredSkillsIds: this.vacancyForm.value.skills.map((s: Skill) => s.id),
+      salary: +this.vacancyForm.get("salary")?.value,
     };
 
     this.vacancyService
       .postVacancy(Number(this.route.snapshot.paramMap.get("projectId")), vacancy)
       .subscribe({
         next: vacancy => {
+          console.log(vacancy);
           this.vacancies.push(vacancy);
+          console.log(this.vacancies);
 
           this.vacancyForm.reset();
-
           this.vacancyIsSubmitting = false;
         },
         error: () => {
@@ -501,8 +509,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.scheludeList.forEach(schelude => {
-      if (schelude.value === vacancyItem.workSchelude) {
-        this.selectedWorkScheludeId.set(schelude.id);
+      if (schelude.value === vacancyItem.workSchedule) {
+        this.selectedWorkScheduleId.set(schelude.id);
       }
     });
 
@@ -513,10 +521,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       requiredExperience: vacancyItem.requiredExperience,
       workFormat: vacancyItem.workFormat,
       salary: vacancyItem.salary,
-      workSchelude: vacancyItem.workSchelude,
+      workSchedule: vacancyItem.workSchedule,
     });
 
     this.editIndex.set(index);
+
+    this.onEditClicked.set(true);
   }
 
   navigateStep(step: string) {

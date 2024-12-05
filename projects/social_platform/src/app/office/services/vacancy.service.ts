@@ -50,6 +50,10 @@ export class VacancyService {
       .pipe(map(vacancy => plainToInstance(Vacancy, vacancy)));
   }
 
+  updateVacancy(vacancyId: number, vacancy: Vacancy) {
+    return this.apiService.patch(`/vacancies/${vacancyId}`, { ...vacancy });
+  }
+
   deleteVacancy(vacancyId: number): Observable<void> {
     return this.apiService.delete(`/vacancies/${vacancyId}`);
   }
