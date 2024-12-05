@@ -51,6 +51,8 @@ import { ControlErrorPipe, ValidationService } from "projects/core";
 import { Observable, Subscription, concatMap, distinctUntilChanged, filter, map, tap } from "rxjs";
 import { InviteCardComponent } from "../../shared/invite-card/invite-card.component";
 import { VacancyCardComponent } from "../../shared/vacancy-card/vacancy-card.component";
+import { LinkCardComponent } from "@office/shared/link-card/link-card.component";
+import { title } from "process";
 
 @Component({
   selector: "app-edit",
@@ -69,6 +71,7 @@ import { VacancyCardComponent } from "../../shared/vacancy-card/vacancy-card.com
     UploadFileComponent,
     InviteCardComponent,
     VacancyCardComponent,
+    LinkCardComponent,
     TagComponent,
     ModalComponent,
     AsyncPipe,
@@ -101,12 +104,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       region: ["", [Validators.required]],
       step: [null, [Validators.required]],
       links: this.fb.array([]),
+      link: ["", [Validators.required]],
       industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
       presentationAddress: ["", [Validators.required]],
       coverImageAddress: ["", Validators.required],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
+      achievementsName: ["", [Validators.required]],
+      achievementsPrize: ["", [Validators.required]],
       draft: [null],
     });
 
@@ -114,10 +120,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       role: ["", [Validators.required]],
       skills: [[], Validators.required],
       description: ["", Validators.required],
-      experience: ["", Validators.required],
-      format: ["", Validators.required],
-      salary: ["", Validators.required],
-      schelude: ["", Validators.required],
+      experience: [""],
+      format: [""],
+      salary: [""],
+      schelude: [""],
     });
 
     this.inviteForm = this.fb.group({
@@ -139,8 +145,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.inviteForm.get("role"),
       this.inviteForm.get("link"),
       this.vacancyForm.get("role"),
-      this.vacancyForm.get("requiredSkills"),
       this.vacancyForm.get("description"),
+      this.vacancyForm.get("skills"),
+      this.vacancyForm.get("experience"),
+      this.vacancyForm.get("format"),
+      this.vacancyForm.get("salary"),
+      this.vacancyForm.get("schelude"),
     ];
 
     controls.filter(Boolean).forEach(control => {
@@ -238,12 +248,25 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           });
         }
 
-        project.achievements &&
-          project.achievements.forEach(achievement =>
-            this.addAchievement(achievement.id, achievement.title, achievement.status)
+        this.achievements.clear();
+        project.achievements.forEach(achievement => {
+          this.achievements.push(
+            this.fb.group({
+              id: achievement.id,
+              title: achievement.title,
+              status: achievement.status,
+            })
           );
+        });
 
-        project.links && project.links.forEach(l => this.addLink(l));
+        this.links.clear();
+        project.links.forEach(link => {
+          this.links.push(
+            this.fb.group({
+              link: link,
+            })
+          );
+        });
 
         this.vacancies = project.vacancies;
 
@@ -407,8 +430,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const controls = [
       this.vacancyForm.get("role"),
-      this.vacancyForm.get("requiredSkills"),
       this.vacancyForm.get("description"),
+      this.vacancyForm.get("skills"),
+      this.vacancyForm.get("experience"),
+      this.vacancyForm.get("format"),
+      this.vacancyForm.get("salary"),
+      this.vacancyForm.get("schelude"),
     ];
 
     controls.filter(Boolean).forEach(control => {
@@ -437,7 +464,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         next: vacancy => {
           this.vacancies.push(vacancy);
 
+          console.log("Form state before reset:", this.vacancyForm.value);
           this.vacancyForm.reset();
+          console.log("Form state after reset:", this.vacancyForm.value);
 
           this.vacancyIsSubmitting = false;
         },
@@ -458,7 +487,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  editVacancy(vacancyId: number): void {}
+  editVacancy(index: number): void {
+    // const vacancyItem =
+    //   this.vacancyItems().length > 0 ? this.vacancyItems()[index] : this.vacancies.value[index];
+
+    // this.vacancyForm.patchValue({
+    //   link: linkItem.link,
+    // });
+    this.editIndex.set(index);
+  }
 
   navigateStep(step: string) {
     this.router.navigate([], { queryParams: { editingStep: step } });
@@ -551,23 +588,54 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setProjFormIsSubmitting!: (status: boolean) => void;
 
+  achievementsItems = signal<any[]>([]);
+
   get achievements(): FormArray {
     return this.projectForm.get("achievements") as FormArray;
   }
 
-  addAchievement(id?: number, title?: string, status?: string): void {
-    const formGroup = this.fb.group({
-      title: [title ?? "", [Validators.required]],
-      status: [status ?? "", [Validators.required]],
-      id: [id],
+  addAchievement(): void {
+    const achievementItem = this.fb.group({
+      id: this.achievements.length,
+      title: this.projectForm.get("achievementsName")?.value,
+      status: this.projectForm.get("achievementsPrize")?.value,
     });
 
-    this.achievements.push(formGroup);
+    if (this.editIndex() !== null) {
+      this.achievementsItems.update(items => {
+        const updatedItems = [...items];
+        updatedItems[this.editIndex()!] = achievementItem.value;
+
+        this.achievements.at(this.editIndex()!).patchValue(achievementItem.value);
+        return updatedItems;
+      });
+      this.editIndex.set(null);
+    } else {
+      this.achievementsItems.update(items => [...items, achievementItem.value]);
+      this.achievements.push(achievementItem);
+    }
+
+    this.projectForm.get("achievementsName")?.reset();
+    this.projectForm.get("achievementsPrize")?.reset();
   }
 
-  removeAchievement(index: number): void {
-    this.achievements.at(index).markAsUntouched();
-    this.achievements.removeAt(index);
+  editAchievement(index: number) {
+    const achievementItem =
+      this.achievementsItems().length > 0
+        ? this.achievementsItems()[index]
+        : this.achievements.value[index];
+
+    this.projectForm.patchValue({
+      achievementsName: achievementItem.title,
+      achievementsPrize: achievementItem.status,
+    });
+    this.editIndex.set(index);
+  }
+
+  removeAchievement(i: number): void {
+    this.achievementsItems.update(items => items.filter((_, index) => index !== i));
+
+    this.achievements.removeAt(i);
   }
 
   clearAllValidationErrors(): void {
@@ -644,22 +712,49 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  editIndex = signal<number | null>(null);
+
+  linksItems = signal<any[]>([]);
+
   get links(): FormArray {
     return this.projectForm.get("links") as FormArray;
   }
 
-  newLink = "";
+  addLink() {
+    const linkItem = this.fb.group({
+      link: this.projectForm.get("link")?.value,
+    });
 
-  addLink(title?: string): void {
-    const fromState = title ?? this.newLink;
+    if (this.editIndex() !== null) {
+      this.linksItems.update(items => {
+        const updatedItems = [...items];
+        updatedItems[this.editIndex()!] = linkItem.value;
 
-    const control = this.fb.control(fromState, [Validators.required]);
-    this.links.push(control);
+        this.links.at(this.editIndex()!).patchValue(linkItem.value);
+        return updatedItems;
+      });
+      this.editIndex.set(null);
+    } else {
+      this.linksItems.update(items => [...items, linkItem.value]);
+      this.links.push(linkItem);
+    }
 
-    this.newLink = "";
+    this.projectForm.get("link")?.reset();
+  }
+
+  editLink(index: number) {
+    const linkItem =
+      this.linksItems().length > 0 ? this.linksItems()[index] : this.links.value[index];
+
+    this.projectForm.patchValue({
+      link: linkItem.link,
+    });
+    this.editIndex.set(index);
   }
 
   removeLink(i: number): void {
+    this.linksItems.update(items => items.filter((_, index) => index !== i));
+
     this.links.removeAt(i);
   }
 

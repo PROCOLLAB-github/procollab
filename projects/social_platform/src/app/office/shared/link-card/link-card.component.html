@@ -1,0 +1,20 @@
+<!-- @format -->
+
+@if (data) {
+<div class="vacancy">
+  <div>
+    <div>
+      <h3 class="text-bold-body-14 vacancy__role">
+        {{ type === "link" ? (data.link | linkTransform) : data.title }}
+      </h3>
+      <p class="text-body-12 vacancy__requirements">
+        {{ type === "link" ? data.link : data.status }}
+      </p>
+    </div>
+  </div>
+  <div class="vacancy__icons">
+    <i class="vacancy__edit" appIcon icon="edit" appSquare="24" (click)="onEdit($event)"></i>
+    <i class="vacancy__basket" appIcon icon="basket" appSquare="24" (click)="onRemove($event)"></i>
+  </div>
+</div>
+}
