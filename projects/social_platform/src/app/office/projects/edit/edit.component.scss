@@ -94,22 +94,12 @@
     }
   }
 
-  &__inner > fieldset:not(:last-child) {
+  &__inner>fieldset:not(:last-child) {
     margin-bottom: 20px;
   }
 
   &__left {
     flex-basis: 50%;
-
-    :last-child {
-      margin-top: 10px;
-
-      .edit-link__remove,
-      app-button,
-      fieldset {
-        margin-top: 0;
-      }
-    }
   }
 
   &__right {
@@ -294,6 +284,10 @@
   &__item {
     margin-bottom: 12px;
   }
+
+  &__list{
+    margin-top: 10px;
+  }
 }
 
 .vacancy {
@@ -319,6 +313,7 @@
     display: flex;
     gap: 20px;
     align-items: center;
+    margin-bottom: 10px;
 
     :first-child,
     :last-child {
@@ -334,7 +329,7 @@
 
   &__submit {
     display: block;
-    margin-top: 12px;
+    margin-bottom: 12px;
   }
 
   &__work {

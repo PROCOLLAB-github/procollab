@@ -285,7 +285,7 @@
     color: var(--black);
   }
 
-  ul > * {
+  ul>* {
     display: block;
 
     &:not(:last-child) {
@@ -394,10 +394,6 @@
   }
 
   @include expandable-list;
-
-  &__list {
-    margin-bottom: 12px;
-  }
 }
 
 .vacancy {

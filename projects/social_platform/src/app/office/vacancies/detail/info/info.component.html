@@ -34,10 +34,10 @@
       </div>
 
       <div #contentEl class="vacancy__content">
-        <p class="text-body-16">Описание вакансии</p>
+        <p class="text-body-16 vacancy__title">Описание вакансии</p>
         @if (vacancy.description) {
         <div class="text-body-14 about__text">
-          <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
+          <p #descEl [innerHTML]="vacancy.description | parseLinks | parseBreaks"></p>
           @if (descriptionExpandable) {
           <div
             class="read-more"
@@ -54,14 +54,14 @@
         @if (vacancy.requiredSkills) {
         <div class="card__skills skills">
           <div class="skills__title text-body-16">Необходимые навыки</div>
-          <ul #descEl class="skills__list">
+          <ul #skillsEl class="skills__list">
             @for (skill of vacancy.requiredSkills; track $index) {
             <app-tag>{{ skill.name }}</app-tag>
             }
           </ul>
         </div>
         @if (skillsExpandable) {
-        <div class="read-more" (click)="onExpandDescription(descEl, 'expanded', readFullSkills)">
+        <div class="read-more" (click)="onExpandDescription(skillsEl, 'expanded', readFullSkills)">
           {{ readFullSkills ? "Скрыть" : "Читать полностью" }}
         </div>
         } }

@@ -1,6 +1,14 @@
 /** @format */
 
-import { Component, inject, OnInit, signal } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { AuthService } from "@auth/services";
 import {
@@ -43,6 +51,7 @@ export class VacancyInfoComponent implements OnInit {
   projectService = inject(ProjectService);
   authService = inject(AuthService);
   subscriptionPlansService = inject(SubscriptionPlansService);
+  cdRef = inject(ChangeDetectorRef);
 
   vacancy!: Vacancy;
   project!: Project;
@@ -71,9 +80,23 @@ export class VacancyInfoComponent implements OnInit {
     this.subscriptions$.push(subscriptionsSub$);
   }
 
+  ngAfterViewInit(): void {
+    const descElement = this.descEl?.nativeElement;
+    this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
+
+    const skillsElement = this.skillsEl?.nativeElement;
+    this.skillsExpandable = skillsElement?.clientHeight < skillsElement?.scrollHeight;
+
+    this.cdRef.detectChanges();
+  }
+
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
+
+  @ViewChild("contentEl") contentEl?: ElementRef;
+  @ViewChild("skillsEl") skillsEl?: ElementRef;
+  @ViewChild("descEl") descEl?: ElementRef;
 
   subscriptions$: Subscription[] = [];
 

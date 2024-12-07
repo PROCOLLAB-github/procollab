@@ -91,7 +91,15 @@
     border-radius: 15px;
   }
 
+  &__title {
+    margin-bottom: 15px;
+  }
+
   .skills {
+    &__title {
+      margin-bottom: 15px;
+    }
+
     &__list {
       display: flex;
       flex-wrap: wrap;
@@ -133,6 +141,20 @@
     height: 66px;
     border-radius: 100%;
   }
+
+  .read-more {
+    margin-top: 12px;
+    color: var(--accent);
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--accent-dark);
+    }
+
+    @include typography.body-14;
+  }
+
 
   .about {
 
