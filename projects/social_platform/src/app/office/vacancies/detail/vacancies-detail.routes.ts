@@ -1,7 +1,8 @@
 /** @format */
 
+import { VacancyInfoComponent } from "./info/info.component";
 import { VacanciesDetailComponent } from "./vacancies-detail.component";
-import { VacanciesDetailResolver } from "./detail.resolver";
+import { VacanciesDetailResolver } from "./vacancies-detail.resolver";
 
 export const VACANCIES_DETAIL_ROUTES = [
   {
@@ -10,5 +11,11 @@ export const VACANCIES_DETAIL_ROUTES = [
     resolve: {
       data: VacanciesDetailResolver,
     },
+    children: [
+      {
+        path: "",
+        component: VacancyInfoComponent,
+      },
+    ],
   },
 ];

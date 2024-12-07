@@ -94,9 +94,9 @@ export class VacancyFilterComponent implements OnInit {
         queryParams: {
           includes: this.includedFilters().join(this.feedService.FILTER_SPLIT_SYMBOL),
           required__experience: this.currentExperience(),
-          work__format: this.currentWorkFormat(),
-          work__schedule: this.currentWorkSchedule(),
-          name__contains: this.searchValue,
+          work_format: this.currentWorkFormat(),
+          work_schedule: this.currentWorkSchedule(),
+          name_contains: this.searchValue,
         },
         relativeTo: this.route,
         queryParamsHandling: "merge",
@@ -107,19 +107,16 @@ export class VacancyFilterComponent implements OnInit {
   setExperienceFilter(event: Event, experienceId: string): void {
     event.stopPropagation();
     this.currentExperience.set(experienceId === this.currentExperience() ? null : experienceId);
-    this.applyFilter();
   }
 
   setWorkFormatFilter(event: Event, formatId: string): void {
     event.stopPropagation();
     this.currentWorkFormat.set(formatId === this.currentWorkFormat() ? null : formatId);
-    this.applyFilter();
   }
 
   setWorkScheduleFilter(event: Event, scheduleId: string): void {
     event.stopPropagation();
     this.currentWorkSchedule.set(scheduleId === this.currentWorkSchedule() ? null : scheduleId);
-    this.applyFilter();
   }
 
   setFilter(keyword: string): void {

@@ -1,18 +1,21 @@
 <!-- @format -->
 
 <div class="page">
+  @if(type() === 'all'){
   <app-vacancy-filter
     [searchValue]="this.searchForm.get('search')?.value"
     class="page__filter"
   ></app-vacancy-filter>
+  }
   <div #vacancyRoot class="page__feed">
     <div class="filter">
+      @if(type() === 'all'){
       <div class="filter__search">
         <form [formGroup]="searchForm">
           <app-search formControlName="search"></app-search>
         </form>
       </div>
-      @if(type() === 'all'){ @if(vacancyList().length){ @for (vacancy of vacancyList(); track
+      } @if(type() === 'all'){ @if(vacancyList().length){ @for (vacancy of vacancyList(); track
       $index) {
       <app-open-vacancy
         class="page__item"

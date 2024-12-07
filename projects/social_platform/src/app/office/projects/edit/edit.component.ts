@@ -753,9 +753,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addLink() {
-    const linkItem = this.fb.group({
-      link: this.projectForm.get("link")?.value,
-    });
+    const linkValue = this.projectForm.get("link")?.value;
+
+    const linkItem = this.fb.control(linkValue);
 
     if (this.editIndex() !== null) {
       this.linksItems.update(items => {

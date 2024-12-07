@@ -43,4 +43,12 @@ export class ResponseCardComponent implements OnInit {
       },
     });
   }
+
+  onAccept(responseId: number) {
+    this.accept.emit(responseId);
+  }
+
+  onReject(responseId: number) {
+    this.reject.emit(responseId);
+  }
 }

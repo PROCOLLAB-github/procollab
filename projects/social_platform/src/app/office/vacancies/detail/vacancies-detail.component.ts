@@ -24,7 +24,6 @@ export class VacanciesDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const vacancySub$ = this.route.data.pipe(map(r => r["data"])).subscribe(vacancy => {
-      console.log(vacancy);
       this.vacancy = vacancy;
     });
 
