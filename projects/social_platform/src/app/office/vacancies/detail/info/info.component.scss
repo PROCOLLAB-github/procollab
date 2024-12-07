@@ -29,15 +29,14 @@
   }
 }
 
-
 .vacancy {
   padding-bottom: 100px;
 
   &__cover {
     position: relative;
     height: 230px;
-    border-radius: 15px;
     margin-bottom: 20px;
+    border-radius: 15px;
 
     img {
       position: absolute;
@@ -52,43 +51,43 @@
 
   &__info {
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
     gap: 15px;
+    align-items: center;
   }
 
   &__region {
     display: flex;
+    gap: 5px;
     align-items: center;
     justify-content: center;
-    gap: 5px;
   }
 
   .info__top,
   .info__bottom {
     display: flex;
+    gap: 25px;
     align-items: center;
     justify-content: center;
     width: 100%;
-    gap: 25px;
   }
 
   &__info-element {
+    width: 100%;
+    padding: 12px;
+    text-align: center;
     background-color: var(--white);
     border: 1px solid var(--gray);
-    padding: 12px;
     border-radius: 15px;
-    width: 100%;
-    text-align: center;
 
     @include typography.body-14;
   }
 
   &__content {
-    background-color: var(--white);
-    border: 1px solid var(--gray);
     padding: 20px;
     margin: 20px 0;
+    background-color: var(--white);
+    border: 1px solid var(--gray);
     border-radius: 15px;
   }
 
@@ -109,9 +108,9 @@
 
   &__right {
     display: flex;
+    flex-basis: 20%;
     flex-direction: column;
     gap: 15px;
-    flex-basis: 20%;
   }
 
   &__left {
@@ -120,13 +119,13 @@
 
   &__project {
     display: flex;
+    gap: 15px;
     align-items: center;
-    border-radius: 15px;
+    padding: 15px 12px;
+    cursor: pointer;
     border: 1px solid;
     border-color: var(--gradient);
-    padding: 15px 12px;
-    gap: 15px;
-    cursor: pointer;
+    border-radius: 15px;
   }
 
   &__project-image {
@@ -190,11 +189,11 @@
   overflow-y: auto;
 
   &__top {
-    width: 68%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    width: 68%;
   }
 
   &__image {
@@ -229,8 +228,8 @@
   }
 
   &__title {
-    margin-bottom: 15px;
     margin-top: 15px;
+    margin-bottom: 15px;
     text-align: center;
   }
 }
