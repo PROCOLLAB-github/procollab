@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<div class="card">
+<div class="card" [routerLink]="['/office/vacancies/' + feedItem.id]">
   <a class="card__head head" [routerLink]="['/office/projects', feedItem.project.id]">
     <img class="head__avatar" [src]="feedItem.project.imageAddress" alt="newsItem.name" />
     <div>
@@ -24,7 +24,9 @@
       }
     </ul>
   </div>
-  <p class="card__description text-body-14">{{ feedItem.description }}</p>
+  <div class="action card__action">
+    <p class="card__description text-body-14">{{ feedItem.description }}</p>
+  </div>
   <div class="action card__action">
     <span class="action__job"> {{ feedItem.role }} </span>
     <app-button

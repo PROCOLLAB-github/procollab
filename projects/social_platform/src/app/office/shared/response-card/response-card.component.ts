@@ -9,6 +9,8 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { RouterLink } from "@angular/router";
 import { AsyncPipe } from "@angular/common";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
+import { AuthService } from "@auth/services";
+import { map, tap } from "rxjs";
 
 @Component({
   selector: "app-response-card",
@@ -26,11 +28,19 @@ import { FileItemComponent } from "@ui/components/file-item/file-item.component"
   ],
 })
 export class ResponseCardComponent implements OnInit {
-  constructor() {}
+  constructor(private readonly authService: AuthService) {}
 
   @Input({ required: true }) response!: VacancyResponse;
   @Output() reject = new EventEmitter<number>();
   @Output() accept = new EventEmitter<number>();
 
-  ngOnInit(): void {}
+  profileId!: number;
+
+  ngOnInit(): void {
+    this.authService.getProfile().subscribe({
+      next: profile => {
+        this.profileId = profile.id;
+      },
+    });
+  }
 }

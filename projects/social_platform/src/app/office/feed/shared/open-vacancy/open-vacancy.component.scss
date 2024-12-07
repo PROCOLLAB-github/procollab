@@ -22,7 +22,6 @@
   }
 
   &__description {
-    margin-top: 12px;
     overflow-wrap: break-word;
     white-space: pre-wrap;
   }
@@ -99,6 +98,7 @@
     text-align: center;
     border: 1px solid var(--medium-grey-for-outline);
     border-radius: 15px;
+    cursor: pointer;
 
     @include typography.bold-body-14;
 

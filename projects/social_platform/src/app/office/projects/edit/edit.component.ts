@@ -104,15 +104,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       region: ["", [Validators.required]],
       step: [null, [Validators.required]],
       links: this.fb.array([]),
-      link: ["", [Validators.required]],
+      link: [""],
       industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
       presentationAddress: ["", [Validators.required]],
       coverImageAddress: ["", Validators.required],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
-      achievementsName: ["", [Validators.required]],
-      achievementsPrize: ["", [Validators.required]],
+      achievementsName: [""],
+      achievementsPrize: [""],
       draft: [null],
     });
 

@@ -1,20 +1,30 @@
 <!-- @format -->
 
 <div class="page">
-  <!-- <app-vacancy-filter class="page__filter"></app-vacancy-filter> -->
+  <app-vacancy-filter
+    [searchValue]="this.searchForm.get('search')?.value"
+    class="page__filter"
+  ></app-vacancy-filter>
   <div #vacancyRoot class="page__feed">
-    @if(type() === 'all'){ @if(vacancyList().length){ @for (vacancy of vacancyList(); track $index)
-    {
-    <app-open-vacancy
-      class="page__item"
-      [attr.data-id]="vacancy.id"
-      [feedItem]="vacancy"
-    ></app-open-vacancy>
-    } } } @if (type() === 'my') { @if (responsesList().length) { @for (response of responsesList();
-    track $index) {
-    <app-response-card [response]="response"></app-response-card>
-    } }@else {
-    <p class="page__title">Вы не откликнулись ни на одну вакансию!</p>
-    } }
+    <div class="filter">
+      <div class="filter__search">
+        <form [formGroup]="searchForm">
+          <app-search formControlName="search"></app-search>
+        </form>
+      </div>
+      @if(type() === 'all'){ @if(vacancyList().length){ @for (vacancy of vacancyList(); track
+      $index) {
+      <app-open-vacancy
+        class="page__item"
+        [attr.data-id]="vacancy.id"
+        [feedItem]="vacancy"
+      ></app-open-vacancy>
+      } } } @if (type() === 'my') { @if (responsesList().length) { @for (response of
+      responsesList(); track $index) {
+      <app-response-card [response]="response"></app-response-card>
+      } }@else {
+      <p class="page__title">Вы не откликнулись ни на одну вакансию!</p>
+      } }
+    </div>
   </div>
 </div>

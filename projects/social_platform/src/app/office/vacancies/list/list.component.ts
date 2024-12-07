@@ -8,9 +8,12 @@ import { VacancyService } from "@office/services/vacancy.service";
 import { Vacancy } from "@office/models/vacancy.model";
 import { ApiPagination } from "@office/models/api-pagination.model";
 import { ActivatedRoute, Router } from "@angular/router";
-import { VacancyFilterComponent } from "../filter/vacancy-filter.component";
+import { VacancyFilterComponent } from "../shared/filter/vacancy-filter.component";
 import { VacancyResponse } from "@office/models/vacancy-response.model";
 import { ResponseCardComponent } from "@office/shared/response-card/response-card.component";
+import { InputComponent } from "@ui/components";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { SearchComponent } from "@ui/components/search/search.component";
 
 @Component({
   selector: "app-vacancies-list",
@@ -20,7 +23,10 @@ import { ResponseCardComponent } from "@office/shared/response-card/response-car
     OpenVacancyComponent,
     VacancyFilterComponent,
     ResponseCardComponent,
+    InputComponent,
     AsyncPipe,
+    SearchComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
@@ -30,8 +36,17 @@ export class VacanciesListComponent {
   router = inject(Router);
   vacancyService = inject(VacancyService);
 
+  constructor(private readonly fb: FormBuilder) {
+    this.searchForm = this.fb.group({
+      search: [""],
+    });
+  }
+
   ngOnInit() {
     this.type.set(this.router.url.split("/").slice(-1)[0] as "all" | "my");
+
+    const searchValue = this.route.snapshot.queryParams["name__contains"];
+    this.searchForm.get("search")?.setValue(searchValue || "");
 
     const routeData$ =
       this.type() === "all"
@@ -70,6 +85,7 @@ export class VacanciesListComponent {
     this.subscriptions$().forEach(($: any) => $.unsubscribe());
   }
 
+  searchForm: FormGroup;
   totalItemsCount = signal(0);
   vacancyList = signal<Vacancy[]>([]);
   responsesList = signal<VacancyResponse[]>([]);

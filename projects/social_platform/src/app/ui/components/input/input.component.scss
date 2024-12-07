@@ -45,4 +45,13 @@
     justify-content: center;
     transform: translateY(-50%);
   }
+
+  &__right-icon{
+    position: absolute;
+    right: 24px;
+    top: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

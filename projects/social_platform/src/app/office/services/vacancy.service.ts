@@ -41,6 +41,12 @@ export class VacancyService {
       .pipe(map(vacancies => plainToInstance(VacancyResponse, vacancies)));
   }
 
+  getOne(vacancyId: number) {
+    return this.apiService
+      .get("/vacancies/" + vacancyId)
+      .pipe(map(vacancy => plainToInstance(Vacancy, vacancy)));
+  }
+
   postVacancy(projectId: number, vacancy: Vacancy): Observable<Vacancy> {
     return this.apiService
       .post("/vacancies/", {

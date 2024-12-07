@@ -5,17 +5,93 @@
 .vacancy {
   @include responsive.apply-desktop {
     padding: 24px;
-    background: var(--white) no-repeat url("/assets/images/office/vacancy/send/bg.svg") right/contain;
+    background: var(--white);
     border-radius: var(--rounded-md);
+    margin-top: 24px;
   }
 
   &__inner {
     @include responsive.apply-desktop {
-      width: 50%;
+      display: flex;
+      justify-content: space-between;
+      gap: 120px;
     }
   }
 
   &__sender {
+    margin-bottom: 20px;
+  }
+
+  &__slides-title {
+    max-width: 320px;
+    margin-top: 12px;
+    color: var(--black);
+    text-align: center;
+  }
+
+  &__slides-text {
+    max-width: 275px;
+    margin-top: 12px;
+    color: var(--dark-grey);
+    text-align: center;
+  }
+
+  &__slides-error {
+    margin-top: 12px;
+    color: var(--red);
+
+    // &--active {
+    //   border: 1px solid red;
+    // }
+  }
+
+  &__slides-open-file {
+    color: var(--accent);
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--accent-dark);
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  &__button {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  &__right,
+  &__left {
+    flex-basis: 50%;
+  }
+}
+
+.note {
+  padding: 24px;
+  border: 1px solid var(--gray);
+  border-radius: 15px;
+  margin-bottom: 60px;
+  margin-top: 15px;
+  padding-bottom: 70px;
+
+  &__list {
+    margin-top: 24px;
+    margin-left: 17px;
+
+    :last-child {
+      margin-bottom: 0px;
+    }
+  }
+
+  &__item {
+    list-style-type: decimal;
     margin-bottom: 20px;
   }
 }
@@ -87,6 +163,10 @@
   &__submit {
     display: block;
     margin-top: 20px;
+
+    &-icon {
+      transform: rotate(90deg);
+    }
   }
 }
 
