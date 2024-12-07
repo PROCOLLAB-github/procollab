@@ -94,7 +94,7 @@
     }
   }
 
-  &__inner>fieldset:not(:last-child) {
+  &__inner > fieldset:not(:last-child) {
     margin-bottom: 20px;
   }
 
@@ -285,7 +285,7 @@
     margin-bottom: 12px;
   }
 
-  &__list{
+  &__list {
     margin-top: 10px;
   }
 }
