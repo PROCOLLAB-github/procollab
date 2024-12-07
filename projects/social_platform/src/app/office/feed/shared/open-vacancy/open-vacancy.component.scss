@@ -96,9 +96,9 @@
     padding: 20px 0;
     margin-bottom: 15px;
     text-align: center;
+    cursor: pointer;
     border: 1px solid var(--medium-grey-for-outline);
     border-radius: 15px;
-    cursor: pointer;
 
     @include typography.bold-body-14;
 
