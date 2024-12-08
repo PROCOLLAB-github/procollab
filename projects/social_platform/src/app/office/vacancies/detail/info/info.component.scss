@@ -105,6 +105,14 @@
       flex-wrap: wrap;
       gap: 10px;
     }
+
+    li {
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
+    }
+
+    @include expandable-list;
   }
 
   &__split {

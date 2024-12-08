@@ -33,7 +33,7 @@
         </div>
       </div>
 
-      <div #contentEl class="vacancy__content">
+      <div class="vacancy__content">
         <p class="text-body-16 vacancy__title">Описание вакансии</p>
         @if (vacancy.description) {
         <div class="text-body-14 about__text">
@@ -51,20 +51,32 @@
       </div>
 
       <div #contentEl class="vacancy__content">
-        @if (vacancy.requiredSkills) {
+        @if (vacancy.requiredSkills.length; as skillsLength) {
         <div class="card__skills skills">
           <div class="skills__title text-body-16">Необходимые навыки</div>
-          <ul #skillsEl class="skills__list">
-            @for (skill of vacancy.requiredSkills; track $index) {
+          @if (vacancy.requiredSkills; as requiredSkills) { @if (requiredSkills) {
+          <ul class="skills__list">
+            @for (skill of requiredSkills.slice(0, 8); track $index) {
             <app-tag>{{ skill.name }}</app-tag>
             }
           </ul>
+          }
+          <div class="skills__remaining" [class.skills__remaining--show]="readFullSkills">
+            @if (requiredSkills) {
+            <ul class="skills__list">
+              @for (skill of requiredSkills.slice(8); track $index) {
+              <app-tag>{{ skill.name }}</app-tag>
+              }
+            </ul>
+            }
+          </div>
+          } @if (skillsLength > 8) {
+          <div class="read-more" (click)="readFullSkills = !readFullSkills">
+            {{ readFullSkills ? "Скрыть" : "Читать полностью" }}
+          </div>
+          }
         </div>
-        @if (skillsExpandable) {
-        <div class="read-more" (click)="onExpandDescription(skillsEl, 'expanded', readFullSkills)">
-          {{ readFullSkills ? "Скрыть" : "Читать полностью" }}
-        </div>
-        } }
+        }
       </div>
     </div>
 

@@ -94,7 +94,6 @@ export class VacancyInfoComponent implements OnInit {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
-  @ViewChild("contentEl") contentEl?: ElementRef;
   @ViewChild("skillsEl") skillsEl?: ElementRef;
   @ViewChild("descEl") descEl?: ElementRef;
 
