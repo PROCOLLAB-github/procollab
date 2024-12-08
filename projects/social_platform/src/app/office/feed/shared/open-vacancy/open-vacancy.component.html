@@ -16,21 +16,55 @@
       feedItem.project.name
     }}</a>
   </h3>
+
   <div class="card__skills skills">
+    @if (feedItem.requiredSkills.length; as skillsLength) {
     <div class="skills__title">Необходимые навыки</div>
+    @if (feedItem.requiredSkills; as requiredSkills) { @if (requiredSkills) {
     <ul class="skills__list">
-      @for (skill of feedItem.requiredSkills; track $index) {
+      @for (skill of requiredSkills.slice(0, 8); track $index) {
       <app-tag>{{ skill.name }}</app-tag>
       }
     </ul>
+    }
+    <div class="skills__remaining" [class.skills__remaining--show]="readFullSkills">
+      @if (requiredSkills) {
+      <ul class="skills__list">
+        @for (skill of requiredSkills.slice(8); track $index) {
+        <app-tag>{{ skill.name }}</app-tag>
+        }
+      </ul>
+      }
+    </div>
+    } @if (skillsLength > 8) {
+    <div class="read-more" (click)="readFullSkills = !readFullSkills">
+      {{ readFullSkills ? "Скрыть" : "Читать полностью" }}
+    </div>
+    } }
   </div>
-  <p class="card__description text-body-14">{{ feedItem.description }}</p>
+
+  <div class="action card__action">
+    @if (feedItem.description) {
+    <div class="text-body-14 about__text">
+      <p
+        class="about__text text-body-14"
+        #descEl
+        [innerHTML]="feedItem.description | parseLinks | parseBreaks"
+      ></p>
+      @if (descriptionExpandable) {
+      <div class="read-more" (click)="onExpandDescription(descEl, 'expanded', readFullDescription)">
+        {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+      </div>
+      }
+    </div>
+    }
+  </div>
   <div class="action card__action">
     <span class="action__job"> {{ feedItem.role }} </span>
     <app-button
       class="action__button"
       customTypographyClass="text-body-12"
-      (click)="router.navigate(['/office/vacancy/', feedItem.id])"
+      [routerLink]="['/office/vacancies/' + feedItem.id]"
       >Откликнуться</app-button
     >
   </div>

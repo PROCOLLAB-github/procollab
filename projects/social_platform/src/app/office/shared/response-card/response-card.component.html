@@ -12,13 +12,23 @@
       <p class="text-body-12 profile__info">{{ response.user.speciality }}</p>
       @if (response.user.skills) {
       <ul class="profile__skills">
-        @for (skill of response.user.skills; track skill.id) {
+        @if(response.user.skills.length > 5){ @for (skill of response.user.skills.slice(0, 5); track
+        skill.id) {
         <li class="profile__skill">
           <app-tag>{{ skill.name }}</app-tag>
         </li>
         }
+        <span class="text-body-14">...</span>
+        } @else { @for (skill of response.user.skills; track skill.id) {
+        <li class="profile__skill">
+          <app-tag>{{ skill.name }}</app-tag>
+        </li>
+        } }
       </ul>
       }
+      <a [routerLink]="'/office/profile/' + response.user.id" class="text-body-12"
+        >Смотреть профиль</a
+      >
     </div>
   </a>
   <div class="response__text text">
@@ -32,18 +42,22 @@
       [type]="response.accompanyingFile.mimeType"
       [size]="response.accompanyingFile.size"
     ></app-file-item>
-    }
+    } @if (!(profileId === response.user.id)) {
     <div class="text__actions actions">
-      <app-button class="actions__button" (click)="accept.emit(response.id)">Принять</app-button>
+      <a [routerLink]="['/office/chats', profileId + '_' + response.user.id]">
+        <app-button class="actions__button--inactive">Связаться</app-button>
+      </a>
+      <app-button class="actions__button" (click)="onAccept(response.id)">Принять</app-button>
       <app-button
         class="actions__button"
         color="red"
         appearance="outline"
-        (click)="reject.emit(response.id)"
+        (click)="onReject(response.id)"
       >
         Отклонить
       </app-button>
     </div>
+    }
   </div>
 </section>
 }

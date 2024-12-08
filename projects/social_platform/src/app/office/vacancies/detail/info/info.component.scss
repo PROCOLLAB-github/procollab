@@ -1,0 +1,264 @@
+@use "styles/responsive";
+@use "styles/typography";
+
+@mixin expandable-list {
+  &__remaining {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+
+    &--show {
+      grid-template-rows: 1fr;
+      margin-top: 12px;
+    }
+
+    ul {
+      min-height: 0;
+    }
+
+    li {
+      &:first-child {
+        margin-top: 12px;
+      }
+
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
+    }
+  }
+}
+
+.vacancy {
+  padding-bottom: 100px;
+
+  &__cover {
+    position: relative;
+    height: 230px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+
+    img {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+  }
+
+  &__region {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .info__top,
+  .info__bottom {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  &__info-element {
+    width: 100%;
+    padding: 12px;
+    text-align: center;
+    background-color: var(--white);
+    border: 1px solid var(--gray);
+    border-radius: 15px;
+
+    @include typography.body-14;
+  }
+
+  &__content {
+    padding: 20px;
+    margin: 20px 0;
+    background-color: var(--white);
+    border: 1px solid var(--gray);
+    border-radius: 15px;
+  }
+
+  &__title {
+    margin-bottom: 15px;
+  }
+
+  .skills {
+    &__title {
+      margin-bottom: 15px;
+    }
+
+    &__list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    li {
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
+    }
+
+    @include expandable-list;
+  }
+
+  &__split {
+    display: flex;
+    gap: 24px;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  &__right {
+    display: flex;
+    flex-basis: 20%;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  &__left {
+    flex-basis: 80%;
+  }
+
+  &__project {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 15px 12px;
+    cursor: pointer;
+    border: 1px solid;
+    border-color: var(--gradient);
+    border-radius: 15px;
+  }
+
+  &__project-image {
+    width: 66px;
+    height: 66px;
+    border-radius: 100%;
+  }
+
+  .read-more {
+    margin-top: 12px;
+    color: var(--accent);
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--accent-dark);
+    }
+
+    @include typography.body-14;
+  }
+
+  .about {
+
+    /* stylelint-disable value-no-vendor-prefix */
+    &__text {
+      p {
+        display: -webkit-box;
+        overflow: hidden;
+        color: var(--black);
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5;
+        transition: all 0.7s ease-in-out;
+
+        &.expanded {
+          -webkit-line-clamp: unset;
+        }
+      }
+
+      ::ng-deep a {
+        color: var(--accent);
+        text-decoration: underline;
+        text-decoration-color: transparent;
+        text-underline-offset: 3px;
+        transition: text-decoration-color 0.2s;
+
+        &:hover {
+          text-decoration-color: var(--accent);
+        }
+      }
+    }
+
+    /* stylelint-enable value-no-vendor-prefix */
+
+    &__read-full {
+      margin-top: 2px;
+      color: var(--accent);
+      cursor: pointer;
+    }
+  }
+
+  &__about {
+    padding: 0 24px;
+  }
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: calc(100vh - 40px);
+  padding: 20px;
+  overflow-y: auto;
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 68%;
+  }
+
+  &__image {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 30px 0;
+    }
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__title {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+}

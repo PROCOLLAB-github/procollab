@@ -38,6 +38,14 @@
       }
     }
 
+    &.button--gradient {
+      background: var(--gradient);
+
+      &:hover {
+        background: var(--gradient-mild);
+      }
+    }
+
     &.button--grey {
       color: var(--black);
       background-color: var(--grey-button);

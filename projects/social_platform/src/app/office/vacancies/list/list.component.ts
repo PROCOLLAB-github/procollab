@@ -2,15 +2,30 @@
 
 import { Component, inject, signal } from "@angular/core";
 import { AsyncPipe, CommonModule } from "@angular/common";
-import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
+import {
+  combineLatest,
+  concatMap,
+  debounceTime,
+  fromEvent,
+  map,
+  noop,
+  of,
+  Subscription,
+  switchMap,
+  tap,
+  throttleTime,
+} from "rxjs";
 import { OpenVacancyComponent } from "@office/feed/shared/open-vacancy/open-vacancy.component";
 import { VacancyService } from "@office/services/vacancy.service";
 import { Vacancy } from "@office/models/vacancy.model";
 import { ApiPagination } from "@office/models/api-pagination.model";
 import { ActivatedRoute, Router } from "@angular/router";
-import { VacancyFilterComponent } from "../filter/vacancy-filter.component";
+import { VacancyFilterComponent } from "../shared/filter/vacancy-filter.component";
 import { VacancyResponse } from "@office/models/vacancy-response.model";
 import { ResponseCardComponent } from "@office/shared/response-card/response-card.component";
+import { InputComponent } from "@ui/components";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { SearchComponent } from "@ui/components/search/search.component";
 
 @Component({
   selector: "app-vacancies-list",
@@ -20,7 +35,10 @@ import { ResponseCardComponent } from "@office/shared/response-card/response-car
     OpenVacancyComponent,
     VacancyFilterComponent,
     ResponseCardComponent,
+    InputComponent,
     AsyncPipe,
+    SearchComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
@@ -30,8 +48,19 @@ export class VacanciesListComponent {
   router = inject(Router);
   vacancyService = inject(VacancyService);
 
+  constructor(private readonly fb: FormBuilder) {
+    this.searchForm = this.fb.group({
+      search: [""],
+    });
+  }
+
   ngOnInit() {
-    this.type.set(this.router.url.split("/").slice(-1)[0] as "all" | "my");
+    const urlSegment = this.router.url.split("/").slice(-1)[0];
+    const trimmedSegment = urlSegment.split("?")[0];
+    this.type.set(trimmedSegment as "all" | "my");
+
+    const searchValue = this.route.snapshot.queryParams["name__contains"];
+    this.searchForm.get("search")?.setValue(searchValue || "");
 
     const routeData$ =
       this.type() === "all"
@@ -49,7 +78,31 @@ export class VacanciesListComponent {
       }
     );
 
-    this.subscriptions$().push(subscription);
+    const queryParams$ = this.route.queryParams
+      .pipe(
+        debounceTime(200),
+        tap(params => {
+          const requiredExperience = params["required_experience"]
+            ? params["required_experience"]
+            : undefined;
+          const workFormat = params["work_format"] ? params["work_format"] : undefined;
+          const workSchedule = params["work_schedule"] ? params["work_schedule"] : undefined;
+          const salaryMax = params["salary_max"] ? params["salary_max"] : undefined;
+          const salaryMin = params["salary_min"] ? params["salary_min"] : undefined;
+
+          this.requiredExperience.set(requiredExperience);
+          this.workFormat.set(workFormat);
+          this.workSchedule.set(workSchedule);
+          this.salaryMin.set(salaryMin);
+          this.salaryMax.set(salaryMax);
+        }),
+        switchMap(() => this.onFetch(0, 20))
+      )
+      .subscribe((result: any) => {
+        this.vacancyList.set(result.results);
+      });
+
+    this.subscriptions$().push(subscription, queryParams$);
   }
 
   ngAfterViewInit() {
@@ -70,12 +123,19 @@ export class VacanciesListComponent {
     this.subscriptions$().forEach(($: any) => $.unsubscribe());
   }
 
+  searchForm: FormGroup;
   totalItemsCount = signal(0);
   vacancyList = signal<Vacancy[]>([]);
   responsesList = signal<VacancyResponse[]>([]);
   vacancyPage = signal(1);
   perFetchTake = signal(20);
   type = signal<"all" | "my" | null>(null);
+
+  requiredExperience = signal<string | undefined>(undefined);
+  workFormat = signal<string | undefined>(undefined);
+  workSchedule = signal<string | undefined>(undefined);
+  salaryMin = signal<string | undefined>(undefined);
+  salaryMax = signal<string | undefined>(undefined);
 
   subscriptions$ = signal<Subscription[]>([]);
 
@@ -101,11 +161,23 @@ export class VacanciesListComponent {
   }
 
   onFetch(offset: number, limit: number) {
-    return this.vacancyService.getForProject(limit, offset).pipe(
-      tap(res => {
-        this.totalItemsCount.set(res.length);
-      }),
-      map(res => res)
-    );
+    return this.vacancyService
+      .getForProject(
+        limit,
+        offset,
+        undefined,
+        this.requiredExperience(),
+        this.workFormat(),
+        this.workSchedule(),
+        this.salaryMin(),
+        this.salaryMax()
+      )
+      .pipe(
+        tap((res: any) => {
+          this.totalItemsCount.set(res.count);
+          this.vacancyList.update(items => [...items, ...res.results]);
+        }),
+        map(res => res)
+      );
   }
 }

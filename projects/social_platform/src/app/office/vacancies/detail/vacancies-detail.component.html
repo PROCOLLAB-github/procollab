@@ -1,0 +1,11 @@
+<!-- @format -->
+
+@if (vacancy) {
+<div class="detail">
+  <app-bar class="bar" [backHave]="true" [links]="[]"></app-bar>
+</div>
+
+<div class="detail__body">
+  <router-outlet></router-outlet>
+</div>
+}

@@ -50,7 +50,7 @@ export class VacancySendComponent implements OnInit {
   ) {
     this.sendForm = this.fb.group({
       whyMe: ["", [Validators.required, Validators.minLength(20), Validators.maxLength(2000)]],
-      accompanyingFile: ["", [Validators.required]],
+      accompanyingFile: ["", Validators.required],
     });
   }
 
@@ -83,4 +83,37 @@ export class VacancySendComponent implements OnInit {
         },
       });
   }
+
+  noteList = [
+    {
+      text: "Проверьте описание вакансии.",
+    },
+    {
+      text: "Адаптируйте резюме.",
+    },
+    {
+      text: "Напишите сопроводительное письмо.",
+    },
+    {
+      text: "Проверьте грамматику и орфографию.",
+    },
+    {
+      text: "Убедитесь в правильности контактной информации.",
+    },
+    {
+      text: "Подготовьте дополнительные документы.",
+    },
+    {
+      text: "Проверьте форматирование.",
+    },
+    {
+      text: "Убедитесь в соблюдении сроков.",
+    },
+    {
+      text: "Сохраните копию.",
+    },
+    {
+      text: "Будьте готовы к интервью.",
+    },
+  ];
 }
