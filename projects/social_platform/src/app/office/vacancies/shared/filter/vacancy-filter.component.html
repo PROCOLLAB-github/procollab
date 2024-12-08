@@ -88,13 +88,15 @@
       </ul>
     </div>
 
-    <div class="filter__salary">
-      <span class="text-body-12">Заработная плата</span>
-      <div style="display: flex; gap: 50px">
-        <app-input type="text" placeholder="от 50000"></app-input>
-        <hr style="transform: rotate(90deg)" />
-        <app-input type="text" placeholder="до 150000"></app-input>
+    <form [formGroup]="salaryForm">
+      <div class="filter__salary">
+        <span class="text-body-12">Заработная плата</span>
+        <div style="display: flex; gap: 50px">
+          <app-input type="text" placeholder="от 50000" formControlName="salaryMin"> </app-input>
+          <hr style="transform: rotate(90deg)" />
+          <app-input type="text" placeholder="до 150000" formControlName="salaryMax"> </app-input>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </ng-template>

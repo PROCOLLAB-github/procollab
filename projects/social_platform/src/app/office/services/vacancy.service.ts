@@ -7,7 +7,6 @@ import { Vacancy } from "@models/vacancy.model";
 import { plainToInstance } from "class-transformer";
 import { VacancyResponse } from "@models/vacancy-response.model";
 import { HttpParams } from "@angular/common/http";
-import { ApiPagination } from "@office/models/api-pagination.model";
 
 @Injectable({
   providedIn: "root",
@@ -15,14 +14,40 @@ import { ApiPagination } from "@office/models/api-pagination.model";
 export class VacancyService {
   constructor(private readonly apiService: ApiService) {}
 
-  getForProject(limit: number, offset: number, projectId?: number): Observable<Vacancy[]> {
-    const params = new HttpParams();
+  getForProject(
+    limit: number,
+    offset: number,
+    projectId?: number,
+    required_experience?: string,
+    work_format?: string,
+    work_schedule?: string,
+    salary_min?: string,
+    salary_max?: string
+  ): any {
+    let params = new HttpParams().set("limit", limit.toString()).set("offset", offset.toString());
 
-    params.set("limit", limit);
-    params.set("offset", offset);
+    if (projectId !== undefined) {
+      params = params.set("project_id", projectId.toString());
+    }
 
-    if (projectId) {
-      params.set("project_id", projectId);
+    if (required_experience) {
+      params = params.set("required_experience", required_experience);
+    }
+
+    if (work_format) {
+      params = params.set("work_format", work_format);
+    }
+
+    if (work_schedule) {
+      params = params.set("work_schedule", work_schedule);
+    }
+
+    if (salary_min) {
+      params = params.set("salary_min", salary_min);
+    }
+
+    if (salary_max) {
+      params = params.set("salary_max", salary_max);
     }
 
     return this.apiService

@@ -16,6 +16,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ButtonComponent, CheckboxComponent, IconComponent, InputComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
 import { FeedService } from "@office/feed/services/feed.service";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { VacancyService } from "@office/services/vacancy.service";
+import { map, Subscription, tap } from "rxjs";
 
 @Component({
   selector: "app-vacancy-filter",
@@ -27,6 +30,7 @@ import { FeedService } from "@office/feed/services/feed.service";
     ClickOutsideModule,
     IconComponent,
     InputComponent,
+    ReactiveFormsModule,
   ],
   templateUrl: "./vacancy-filter.component.html",
   styleUrl: "./vacancy-filter.component.scss",
@@ -45,100 +49,175 @@ export class VacancyFilterComponent implements OnInit {
   router = inject(Router);
   route = inject(ActivatedRoute);
   feedService = inject(FeedService);
+  vacancyService = inject(VacancyService);
+
+  constructor(private readonly fb: FormBuilder) {
+    this.salaryForm = this.fb.group({
+      salaryMin: [""],
+      salaryMax: [""],
+    });
+  }
 
   @Input() searchValue: string | null = null;
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.currentExperience.set(params["experience"] || null);
-      this.currentWorkFormat.set(params["workFormat"] || null);
-      this.currentWorkSchedule.set(params["workSchedule"] || null);
-      if (params["includes"]) {
-        this.includedFilters.set(params["includes"].split(this.feedService.FILTER_SPLIT_SYMBOL));
-      }
+    this.queries$ = this.route.queryParams.subscribe(queries => {
+      this.currentExperience.set(queries["required_experience"]);
+      this.currentWorkFormat.set(queries["work_format"]);
+      this.currentWorkSchedule.set(queries["work_schedule"]);
+      this.currentSalaryMin.set(queries["salary_min"]);
+      this.currentSalaryMax.set(queries["salary_max"]);
     });
   }
 
+  queries$?: Subscription;
   filterOpen = signal(false);
+  salaryForm: FormGroup;
+  totalItemsCount = signal(0);
 
-  currentExperience = signal<string | null>(null);
-  currentWorkFormat = signal<string | null>(null);
-  currentWorkSchedule = signal<string | null>(null);
+  currentExperience = signal<string | undefined>(undefined);
+  currentWorkFormat = signal<string | undefined>(undefined);
+  currentWorkSchedule = signal<string | undefined>(undefined);
+
+  currentSalaryMin = signal<string | undefined>(undefined);
+  currentSalaryMax = signal<string | undefined>(undefined);
 
   filterExperienceOptions = [
-    { label: "без опыта", value: "recent" },
-    { label: "до 1 года", value: "viewed" },
-    { label: "от 1 года до 3 лет", value: "clicked" },
-    { label: "от 3 лет и более", value: "non_clicked" },
+    { label: "без опыта", value: "no_experience" },
+    { label: "до 1 года", value: "up_to_a_year" },
+    { label: "от 1 года до 3 лет", value: "from_one_to_three_years" },
+    { label: "от 3 лет и более", value: "from_three_years" },
   ];
 
   filterWorkFormatOptions = [
-    { label: "удаленная работа", value: "recent" },
-    { label: "работа в офисе", value: "viewed" },
-    { label: "смешанный формат", value: "clicked" },
+    { label: "удаленная работа", value: "remote" },
+    { label: "работа в офисе", value: "office" },
+    { label: "смешанный формат", value: "hybrid" },
   ];
 
   filterWorkScheduleOptions = [
-    { label: "полный рабочий день", value: "recent" },
-    { label: "сменный график", value: "viewed" },
-    { label: "гибкий график", value: "clicked" },
-    { label: "частичная занятость", value: "non_clicked" },
-    { label: "стажировка", value: "non_clicked" },
+    { label: "полный рабочий день", value: "full_time" },
+    { label: "сменный график", value: "shift_work" },
+    { label: "гибкий график", value: "flexible_schedule" },
+    { label: "частичная занятость", value: "part_time" },
+    { label: "стажировка", value: "internship" },
   ];
-
-  includedFilters = signal<string[]>([]);
-
-  applyFilter(): void {
-    this.router
-      .navigate([], {
-        queryParams: {
-          includes: this.includedFilters().join(this.feedService.FILTER_SPLIT_SYMBOL),
-          required__experience: this.currentExperience(),
-          work_format: this.currentWorkFormat(),
-          work_schedule: this.currentWorkSchedule(),
-          name_contains: this.searchValue,
-        },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.debug("Query change from FeedFilterComponent"));
-  }
 
   setExperienceFilter(event: Event, experienceId: string): void {
     event.stopPropagation();
-    this.currentExperience.set(experienceId === this.currentExperience() ? null : experienceId);
+    this.currentExperience.set(
+      experienceId === this.currentExperience() ? undefined : experienceId
+    );
+
+    this.router
+      .navigate([], {
+        queryParams: { required_experience: this.currentExperience() },
+        relativeTo: this.route,
+        queryParamsHandling: "merge",
+      })
+      .then(() => console.debug("Query change from ProjectsComponent"));
   }
 
   setWorkFormatFilter(event: Event, formatId: string): void {
     event.stopPropagation();
-    this.currentWorkFormat.set(formatId === this.currentWorkFormat() ? null : formatId);
+    this.currentWorkFormat.set(formatId === this.currentWorkFormat() ? undefined : formatId);
+
+    this.router
+      .navigate([], {
+        queryParams: { work_format: this.currentWorkFormat() },
+        relativeTo: this.route,
+        queryParamsHandling: "merge",
+      })
+      .then(() => console.debug("Query change from ProjectsComponent"));
   }
 
   setWorkScheduleFilter(event: Event, scheduleId: string): void {
     event.stopPropagation();
-    this.currentWorkSchedule.set(scheduleId === this.currentWorkSchedule() ? null : scheduleId);
+    this.currentWorkSchedule.set(
+      scheduleId === this.currentWorkSchedule() ? undefined : scheduleId
+    );
+
+    this.router
+      .navigate([], {
+        queryParams: {
+          work_schedule: this.currentWorkSchedule(),
+        },
+        relativeTo: this.route,
+        queryParamsHandling: "merge",
+      })
+      .then(() => console.debug("Query change from ProjectsComponent"));
   }
 
-  setFilter(keyword: string): void {
-    this.includedFilters.update(included => {
-      if (included.indexOf(keyword) !== -1) {
-        const idx = included.indexOf(keyword);
-        included.splice(idx, 1);
-      } else {
-        included.push(keyword);
-      }
+  applyFilter() {
+    const salaryMin = this.salaryForm.get("salaryMin")?.value || "";
+    const salaryMax = this.salaryForm.get("salaryMax")?.value || "";
 
-      return included;
-    });
+    this.router
+      .navigate([], {
+        queryParams: {
+          salary_min: salaryMin,
+          salary_max: salaryMax,
+        },
+        relativeTo: this.route,
+        queryParamsHandling: "merge",
+      })
+      .then(() => console.debug("Query change from ProjectsComponent"));
+
+    this.onFetch(0, 20);
   }
 
   resetFilter(): void {
-    this.includedFilters.set([]);
+    this.currentExperience.set(undefined);
+    this.currentWorkFormat.set(undefined);
+    this.currentWorkSchedule.set(undefined);
+    this.salaryForm.reset();
 
-    this.applyFilter();
+    this.router
+      .navigate([], {
+        queryParams: {
+          required_experience: null,
+          work_format: null,
+          work_schedule: null,
+          salary_min: null,
+          salary_max: null,
+        },
+        relativeTo: this.route,
+        queryParamsHandling: "merge",
+      })
+      .then(() => console.debug("Filters reset from VacancyFilterComponent"));
   }
 
   onClickOutside(): void {
     this.filterOpen.set(false);
+  }
+
+  onFetch(
+    offset: number,
+    limit: number,
+    projectId?: number,
+    currentExperience?: string,
+    currentWorkFormat?: string,
+    currentWorkSchedule?: string,
+    currentSalaryMin?: string,
+    currentSalaryMax?: string
+  ) {
+    return this.vacancyService
+      .getForProject(
+        limit,
+        offset,
+        projectId,
+        currentExperience,
+        currentWorkFormat,
+        currentWorkSchedule,
+        currentSalaryMin,
+        currentSalaryMax
+      )
+      .pipe(
+        tap((res: any) => {
+          console.log(res);
+          this.totalItemsCount.set(res.length);
+        }),
+        map(res => res)
+      );
   }
 }
