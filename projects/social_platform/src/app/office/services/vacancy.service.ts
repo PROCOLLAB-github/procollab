@@ -18,11 +18,11 @@ export class VacancyService {
     limit: number,
     offset: number,
     projectId?: number,
-    required_experience?: string,
-    work_format?: string,
-    work_schedule?: string,
-    salary_min?: string,
-    salary_max?: string
+    requiredExperience?: string,
+    workFormat?: string,
+    workSchedule?: string,
+    salaryMin?: string,
+    salaryMax?: string
   ): any {
     let params = new HttpParams().set("limit", limit.toString()).set("offset", offset.toString());
 
@@ -30,24 +30,24 @@ export class VacancyService {
       params = params.set("project_id", projectId.toString());
     }
 
-    if (required_experience) {
-      params = params.set("required_experience", required_experience);
+    if (requiredExperience) {
+      params = params.set("required_experience", requiredExperience);
     }
 
-    if (work_format) {
-      params = params.set("work_format", work_format);
+    if (workFormat) {
+      params = params.set("work_format", workFormat);
     }
 
-    if (work_schedule) {
-      params = params.set("work_schedule", work_schedule);
+    if (workSchedule) {
+      params = params.set("work_schedule", workSchedule);
     }
 
-    if (salary_min) {
-      params = params.set("salary_min", salary_min);
+    if (salaryMin) {
+      params = params.set("salary_min", salaryMin);
     }
 
-    if (salary_max) {
-      params = params.set("salary_max", salary_max);
+    if (salaryMax) {
+      params = params.set("salary_max", salaryMax);
     }
 
     return this.apiService
