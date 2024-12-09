@@ -104,15 +104,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       region: ["", [Validators.required]],
       step: [null, [Validators.required]],
       links: this.fb.array([]),
-      link: ["", [Validators.required]],
+      link: [""],
       industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
       presentationAddress: ["", [Validators.required]],
       coverImageAddress: ["", Validators.required],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
-      achievementsName: ["", [Validators.required]],
-      achievementsPrize: ["", [Validators.required]],
+      achievementsName: [""],
+      achievementsPrize: [""],
       draft: [null],
     });
 
@@ -261,11 +261,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.links.clear();
         project.links.forEach(link => {
-          this.links.push(
-            this.fb.group({
-              link: link,
-            })
-          );
+          this.links.push(this.fb.control(link));
         });
 
         this.vacancies = project.vacancies;
@@ -753,41 +749,42 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   addLink() {
-    const linkItem = this.fb.group({
-      link: this.projectForm.get("link")?.value,
-    });
+    const linkValue = this.projectForm.get("link")?.value;
 
-    if (this.editIndex() !== null) {
-      this.linksItems.update(items => {
-        const updatedItems = [...items];
-        updatedItems[this.editIndex()!] = linkItem.value;
+    // Check if the input field has a value
+    if (linkValue) {
+      // Check if we are editing an existing link
+      if (this.editIndex() !== null) {
+        // Update the existing link in the FormArray
+        this.links.at(this.editIndex()!).setValue(linkValue);
+        this.linksItems.update(items => {
+          const updatedItems = [...items];
+          updatedItems[this.editIndex()!] = linkValue; // Update existing item
+          return updatedItems;
+        });
+        this.editIndex.set(null); // Reset edit index
+      } else {
+        // Add new link to both FormArray and local items array
+        this.links.push(this.fb.control(linkValue)); // Add new control
+        this.linksItems.update(items => [...items, linkValue]); // Add new item
+      }
 
-        this.links.at(this.editIndex()!).patchValue(linkItem.value);
-        return updatedItems;
-      });
-      this.editIndex.set(null);
-    } else {
-      this.linksItems.update(items => [...items, linkItem.value]);
-      this.links.push(linkItem);
+      // Reset the input field after adding/updating
+      this.projectForm.get("link")?.reset();
     }
-
-    this.projectForm.get("link")?.reset();
   }
 
   editLink(index: number) {
     const linkItem =
       this.linksItems().length > 0 ? this.linksItems()[index] : this.links.value[index];
 
-    this.projectForm.patchValue({
-      link: linkItem.link,
-    });
+    this.projectForm.patchValue({ link: linkItem });
     this.editIndex.set(index);
   }
 
-  removeLink(i: number): void {
-    this.linksItems.update(items => items.filter((_, index) => index !== i));
-
-    this.links.removeAt(i);
+  removeLink(index: number) {
+    this.links.removeAt(index); // Remove from FormArray
+    this.linksItems.update(items => items.filter((_, i) => i !== index)); // Remove from local items array
   }
 
   warningModalSeen = false;

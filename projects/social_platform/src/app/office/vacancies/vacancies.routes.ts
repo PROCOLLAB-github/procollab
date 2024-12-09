@@ -5,6 +5,7 @@ import { VacanciesComponent } from "./vacancies.component";
 import { VacanciesResolver } from "./vacancies.resolver";
 import { VacanciesMyResolver } from "./list/my.resolver";
 import { VacanciesListComponent } from "./list/list.component";
+import { VacanciesDetailResolver } from "./detail/vacancies-detail.resolver";
 
 export const VACANCIES_ROUTES: Routes = [
   {
@@ -28,5 +29,10 @@ export const VACANCIES_ROUTES: Routes = [
         },
       },
     ],
+  },
+  {
+    path: ":vacancyId",
+    loadChildren: () =>
+      import("./detail/vacancies-detail.routes").then(c => c.VACANCIES_DETAIL_ROUTES),
   },
 ];

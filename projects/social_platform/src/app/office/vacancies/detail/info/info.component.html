@@ -1,0 +1,116 @@
+<!-- @format -->
+
+@if (vacancy) {
+<div class="vacancy">
+  <div class="vacancy__cover">
+    <img
+      class="vacancy__cover"
+      [src]="
+        project.coverImageAddress
+          ? project.coverImageAddress
+          : '/assets/images/office/profile/detail/cover.png'
+      "
+      alt="cover"
+    />
+  </div>
+  <h3 class="text-heading-3">{{ vacancy.role }}</h3>
+
+  <div class="vacancy__split">
+    <div class="vacancy__left">
+      <div class="vacancy__info">
+        <div class="info__top">
+          <div class="vacancy__info-element vacancy__region">
+            <i appIcon icon="geo" appWidth="11" appHeight="14"></i>
+            <span>{{ project.region }}</span>
+          </div>
+          <div class="vacancy__info-element">{{ vacancy.workFormat }}</div>
+          <div class="vacancy__info-element">{{ vacancy.workSchedule }}</div>
+        </div>
+
+        <div class="info__bottom">
+          <div class="vacancy__info-element">{{ vacancy.salary | salaryTransform }} рублей</div>
+          <div class="vacancy__info-element">Опыт {{ vacancy.requiredExperience }}</div>
+        </div>
+      </div>
+
+      <div class="vacancy__content">
+        <p class="text-body-16 vacancy__title">Описание вакансии</p>
+        @if (vacancy.description) {
+        <div class="text-body-14 about__text">
+          <p #descEl [innerHTML]="vacancy.description | parseLinks | parseBreaks"></p>
+          @if (descriptionExpandable) {
+          <div
+            class="read-more"
+            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+          >
+            {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+          </div>
+          }
+        </div>
+        }
+      </div>
+
+      <div #contentEl class="vacancy__content">
+        @if (vacancy.requiredSkills.length; as skillsLength) {
+        <div class="card__skills skills">
+          <div class="skills__title text-body-16">Необходимые навыки</div>
+          @if (vacancy.requiredSkills; as requiredSkills) { @if (requiredSkills) {
+          <ul class="skills__list">
+            @for (skill of requiredSkills.slice(0, 8); track $index) {
+            <app-tag>{{ skill.name }}</app-tag>
+            }
+          </ul>
+          }
+          <div class="skills__remaining" [class.skills__remaining--show]="readFullSkills">
+            @if (requiredSkills) {
+            <ul class="skills__list">
+              @for (skill of requiredSkills.slice(8); track $index) {
+              <app-tag>{{ skill.name }}</app-tag>
+              }
+            </ul>
+            }
+          </div>
+          } @if (skillsLength > 8) {
+          <div class="read-more" (click)="readFullSkills = !readFullSkills">
+            {{ readFullSkills ? "Скрыть" : "Читать полностью" }}
+          </div>
+          }
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="vacancy__right">
+      <app-button [routerLink]="['/office/vacancy/', vacancy.id]">Откликнуться</app-button>
+      <app-button color="gradient" (click)="this.openModal.set(true)">Прокачать себя</app-button>
+
+      <div class="vacancy__project" [routerLink]="['/office/projects/' + vacancy.project.id]">
+        <img [src]="project.imageAddress" class="vacancy__project-image" />
+        <p class="text-bold-body-16">{{ vacancy.project.name }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal [open]="openModal()" (openChange)="openModal.set(!openModal())">
+  <div class="cancel">
+    <div class="cancel__top">
+      <i (click)="openModal.set(false)" appIcon icon="cross" class="cancel__cross"></i>
+      <img class="cancel__image" alt="success" src="/assets/images/vacancies/detail/success.png" />
+      <p class="cancel__title text-bold-body-16">
+        Сделай первый шаг в карьере, в бизнесе, в жизни вместе с подпиской
+      </p>
+    </div>
+    <app-button customTypographyClass="text-body-12" style="width: 35%" (click)="openSkills()"
+      >Узнать подробнее</app-button
+    >
+  </div>
+</app-modal>
+
+<app-subscription-plans
+  [subscriptionPlans]="subscriptions()"
+  [open]="openSubscription()"
+  (openChange)="openSubscription.set($event)"
+></app-subscription-plans>
+
+}

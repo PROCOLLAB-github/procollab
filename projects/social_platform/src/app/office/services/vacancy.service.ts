@@ -7,7 +7,6 @@ import { Vacancy } from "@models/vacancy.model";
 import { plainToInstance } from "class-transformer";
 import { VacancyResponse } from "@models/vacancy-response.model";
 import { HttpParams } from "@angular/common/http";
-import { ApiPagination } from "@office/models/api-pagination.model";
 
 @Injectable({
   providedIn: "root",
@@ -15,14 +14,40 @@ import { ApiPagination } from "@office/models/api-pagination.model";
 export class VacancyService {
   constructor(private readonly apiService: ApiService) {}
 
-  getForProject(limit: number, offset: number, projectId?: number): Observable<Vacancy[]> {
-    const params = new HttpParams();
+  getForProject(
+    limit: number,
+    offset: number,
+    projectId?: number,
+    requiredExperience?: string,
+    workFormat?: string,
+    workSchedule?: string,
+    salaryMin?: string,
+    salaryMax?: string
+  ): any {
+    let params = new HttpParams().set("limit", limit.toString()).set("offset", offset.toString());
 
-    params.set("limit", limit);
-    params.set("offset", offset);
+    if (projectId !== undefined) {
+      params = params.set("project_id", projectId.toString());
+    }
 
-    if (projectId) {
-      params.set("project_id", projectId);
+    if (requiredExperience) {
+      params = params.set("required_experience", requiredExperience);
+    }
+
+    if (workFormat) {
+      params = params.set("work_format", workFormat);
+    }
+
+    if (workSchedule) {
+      params = params.set("work_schedule", workSchedule);
+    }
+
+    if (salaryMin) {
+      params = params.set("salary_min", salaryMin);
+    }
+
+    if (salaryMax) {
+      params = params.set("salary_max", salaryMax);
     }
 
     return this.apiService
@@ -39,6 +64,12 @@ export class VacancyService {
     return this.apiService
       .get<VacancyResponse[]>("/vacancies/responses/self", params)
       .pipe(map(vacancies => plainToInstance(VacancyResponse, vacancies)));
+  }
+
+  getOne(vacancyId: number) {
+    return this.apiService
+      .get("/vacancies/" + vacancyId)
+      .pipe(map(vacancy => plainToInstance(Vacancy, vacancy)));
   }
 
   postVacancy(projectId: number, vacancy: Vacancy): Observable<Vacancy> {

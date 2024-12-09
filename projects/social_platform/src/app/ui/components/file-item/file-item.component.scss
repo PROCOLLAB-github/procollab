@@ -3,6 +3,9 @@
 .file {
   display: flex;
   align-items: center;
+  padding: 10px 30px 10px 10px;
+  border: 1px solid var(--gray);
+  border-radius: 8px;
 
   &__icon {
     display: flex;
@@ -13,7 +16,6 @@
     height: 40px;
     margin-right: 12px;
     cursor: pointer;
-    border: 1px solid var(--gray);
     border-radius: 8px;
   }
 

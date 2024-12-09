@@ -5,10 +5,10 @@
   <div>
     <div>
       <h3 class="text-bold-body-14 vacancy__role">
-        {{ type === "link" ? (data.link | linkTransform | uppercase) : data.title }}
+        {{ type === "link" ? (data | linkTransform | uppercase) : data.title }}
       </h3>
       <p class="text-body-12 vacancy__requirements">
-        {{ type === "link" ? data.link : data.status }}
+        {{ type === "link" ? data : data.status }}
       </p>
     </div>
   </div>
