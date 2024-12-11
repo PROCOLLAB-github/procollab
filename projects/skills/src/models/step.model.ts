@@ -9,7 +9,7 @@ export interface Popup {
 
 export interface InfoSlide {
   text: string;
-  title: string;
+  description: string;
   files: string[];
   popups: Popup[];
 }

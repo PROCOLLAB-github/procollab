@@ -36,7 +36,7 @@ export class WriteTaskComponent implements OnInit {
       this.sanitizedFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.data.files[0]);
     }
 
-    this.description = this.sanitizer.bypassSecurityTrustHtml(this.data.text);
+    this.description = this.sanitizer.bypassSecurityTrustHtml(this.data.description);
   }
 
   // result = signal<{ text: string } | null>(null);
