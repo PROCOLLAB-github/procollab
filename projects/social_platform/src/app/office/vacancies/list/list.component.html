@@ -3,6 +3,7 @@
 <div class="page">
   @if(type() === 'all'){
   <app-vacancy-filter
+    (searchValueChange)="onSearhValueChanged($event)"
     [searchValue]="this.searchForm.get('search')?.value"
     class="page__filter"
   ></app-vacancy-filter>

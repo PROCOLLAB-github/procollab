@@ -22,7 +22,8 @@ export class VacancyService {
     workFormat?: string,
     workSchedule?: string,
     salaryMin?: string,
-    salaryMax?: string
+    salaryMax?: string,
+    searchValue?: string
   ): any {
     let params = new HttpParams().set("limit", limit.toString()).set("offset", offset.toString());
 
@@ -48,6 +49,10 @@ export class VacancyService {
 
     if (salaryMax) {
       params = params.set("salary_max", salaryMax);
+    }
+
+    if (searchValue) {
+      params = params.set("role_contains", searchValue);
     }
 
     return this.apiService

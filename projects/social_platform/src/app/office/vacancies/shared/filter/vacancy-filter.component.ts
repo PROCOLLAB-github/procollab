@@ -58,7 +58,8 @@ export class VacancyFilterComponent implements OnInit {
     });
   }
 
-  @Input() searchValue: string | null = null;
+  @Input() searchValue: string | undefined = undefined;
+  @Output() searchValueChange = new EventEmitter<string>();
 
   ngOnInit() {
     this.queries$ = this.route.queryParams.subscribe(queries => {
@@ -67,6 +68,7 @@ export class VacancyFilterComponent implements OnInit {
       this.currentWorkSchedule.set(queries["work_schedule"]);
       this.currentSalaryMin.set(queries["salary_min"]);
       this.currentSalaryMax.set(queries["salary_max"]);
+      this.searchValue = queries["role_contains"];
     });
   }
 
@@ -157,6 +159,7 @@ export class VacancyFilterComponent implements OnInit {
         queryParams: {
           salary_min: salaryMin,
           salary_max: salaryMax,
+          role_contains: this.searchValue,
         },
         relativeTo: this.route,
         queryParamsHandling: "merge",
@@ -170,6 +173,7 @@ export class VacancyFilterComponent implements OnInit {
     this.currentExperience.set(undefined);
     this.currentWorkFormat.set(undefined);
     this.currentWorkSchedule.set(undefined);
+    this.onSearchValueChanged("");
     this.salaryForm.reset();
 
     this.router
@@ -180,6 +184,7 @@ export class VacancyFilterComponent implements OnInit {
           work_schedule: null,
           salary_min: null,
           salary_max: null,
+          role_contains: null,
         },
         relativeTo: this.route,
         queryParamsHandling: "merge",
@@ -187,30 +192,26 @@ export class VacancyFilterComponent implements OnInit {
       .then(() => console.debug("Filters reset from VacancyFilterComponent"));
   }
 
+  onSearchValueChanged(value: string) {
+    this.searchValueChange.emit(value);
+  }
+
   onClickOutside(): void {
     this.filterOpen.set(false);
   }
 
-  onFetch(
-    offset: number,
-    limit: number,
-    projectId?: number,
-    currentExperience?: string,
-    currentWorkFormat?: string,
-    currentWorkSchedule?: string,
-    currentSalaryMin?: string,
-    currentSalaryMax?: string
-  ) {
+  onFetch(offset: number, limit: number, projectId?: number) {
     return this.vacancyService
       .getForProject(
         limit,
         offset,
         projectId,
-        currentExperience,
-        currentWorkFormat,
-        currentWorkSchedule,
-        currentSalaryMin,
-        currentSalaryMax
+        this.currentExperience(),
+        this.currentWorkFormat(),
+        this.currentWorkSchedule(),
+        this.currentSalaryMin(),
+        this.currentSalaryMax(),
+        this.searchValue
       )
       .pipe(
         tap((res: any) => {

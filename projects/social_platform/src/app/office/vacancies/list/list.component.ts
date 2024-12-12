@@ -35,8 +35,6 @@ import { SearchComponent } from "@ui/components/search/search.component";
     OpenVacancyComponent,
     VacancyFilterComponent,
     ResponseCardComponent,
-    InputComponent,
-    AsyncPipe,
     SearchComponent,
     ReactiveFormsModule,
   ],
@@ -59,7 +57,7 @@ export class VacanciesListComponent {
     const trimmedSegment = urlSegment.split("?")[0];
     this.type.set(trimmedSegment as "all" | "my");
 
-    const searchValue = this.route.snapshot.queryParams["name__contains"];
+    const searchValue = this.route.snapshot.queryParams["role_contains"];
     this.searchForm.get("search")?.setValue(searchValue || "");
 
     const routeData$ =
@@ -160,6 +158,10 @@ export class VacanciesListComponent {
     return of({});
   }
 
+  onSearhValueChanged(event: string) {
+    this.searchForm.get("search")?.setValue(event);
+  }
+
   onFetch(offset: number, limit: number) {
     return this.vacancyService
       .getForProject(
@@ -170,7 +172,8 @@ export class VacanciesListComponent {
         this.workFormat(),
         this.workSchedule(),
         this.salaryMin(),
-        this.salaryMax()
+        this.salaryMax(),
+        this.searchForm.get("search")?.value
       )
       .pipe(
         tap((res: any) => {
