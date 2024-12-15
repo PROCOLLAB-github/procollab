@@ -95,7 +95,7 @@
     }
   }
 
-  &__inner>fieldset:not(:last-child) {
+  &__inner > fieldset:not(:last-child) {
     margin-bottom: 20px;
   }
 
@@ -287,9 +287,9 @@
   }
 
   &__list {
+    max-height: 550px;
     margin-top: 10px;
     margin-bottom: 57px;
-    max-height: 550px;
   }
 }
 
