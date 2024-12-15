@@ -5,7 +5,8 @@
 
 .project {
   position: relative;
-  height: 800px;
+  height: 100%;
+  min-height: 800px;
   padding: 24px;
   background-color: var(--white);
   border-radius: var(--rounded-md);
@@ -94,7 +95,7 @@
     }
   }
 
-  &__inner > fieldset:not(:last-child) {
+  &__inner>fieldset:not(:last-child) {
     margin-bottom: 20px;
   }
 
@@ -287,6 +288,8 @@
 
   &__list {
     margin-top: 10px;
+    margin-bottom: 57px;
+    max-height: 550px;
   }
 }
 

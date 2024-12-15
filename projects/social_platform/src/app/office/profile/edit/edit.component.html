@@ -587,7 +587,7 @@
       <div class="education__first-row">
         <div class="profile__left">
           <div class="profile__row">
-            <fieldset>
+            <fieldset style="width: 100%">
               <label for="skills" class="field-label">Навыки</label>
               <div class="skills-field">
                 <app-autocomplete-input
@@ -614,7 +614,7 @@
 
           <div class="profile__row">
             @if (profileForm.get("skills"); as skills) {
-            <fieldset class="skills-basket">
+            <fieldset class="skills-basket" style="width: 100%">
               <app-skills-basket
                 formControlName="skills"
                 [error]="skills | controlError"

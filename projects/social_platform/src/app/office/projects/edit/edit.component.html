@@ -300,7 +300,7 @@
         </div>
         } @else if (editingStep === "team") {
         <div class="project__left">
-          <h2 class="text-body-14">Приглашение участников</h2>
+          <h2 class="text-body-14" style="margin-bottom: 12px">Приглашение участников</h2>
           <form [formGroup]="inviteForm">
             @if (inviteForm.get("role"); as role) {
             <fieldset class="invite__role">
@@ -352,7 +352,7 @@
             <i appIcon icon="plus" appSquare="14"></i>
           </app-button>
 
-          <ul class="invite__list">
+          <ul class="invite__list" [style.overflow-y]="invites.length > 8 ? 'auto' : 'none'">
             @for (user of invites; track user.id) {
             <li class="invite__item">
               <app-invite-card
