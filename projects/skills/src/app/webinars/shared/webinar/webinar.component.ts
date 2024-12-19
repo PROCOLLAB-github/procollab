@@ -29,7 +29,6 @@ import { Webinar } from "projects/skills/src/models/webinars.model";
     ButtonComponent,
     ModalComponent,
     IconComponent,
-    WebinarComponent,
     ParseBreaksPipe,
     ParseLinksPipe,
   ],
