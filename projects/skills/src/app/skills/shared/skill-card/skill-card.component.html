@@ -11,8 +11,15 @@
   <p class="skill-card__text text-body-12">
     {{ skill.description }}
   </p>
-  <div class="skill-card__level text-body-12">
-    {{ skill.quantityOfLevels }}
-    {{ skill.quantityOfLevels | pluralize: ["уровень", "уровня", "уровней"] }}
+  <div class="skill-card__bottom">
+    <div class="skill-card__level text-body-12">
+      {{ skill.quantityOfLevels }}
+      {{ skill.quantityOfLevels | pluralize: ["уровень", "уровня", "уровней"] }}
+    </div>
+    <!--
+    <div class="skill-card__price text-body-12">
+      {{ skill.quantityOfLevels }}
+      {{ skill.quantityOfLevels | pluralize: ["уровень", "уровня", "уровней"] }}
+    </div> -->
   </div>
 </div>

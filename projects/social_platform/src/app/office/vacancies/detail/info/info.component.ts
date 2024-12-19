@@ -121,24 +121,6 @@ export class VacancyInfoComponent implements OnInit {
   subscriptions = signal<SubscriptionPlan[]>([]);
 
   openSkills() {
-    this.subscriptionPlansService
-      .getSubscriptions()
-      .pipe(
-        map(subscribe => {
-          if (typeof subscribe === "string") {
-            return subscribe;
-          }
-          return !!subscribe;
-        })
-      )
-      .subscribe(subscribed => {
-        if (subscribed) {
-          location.href = "https://skills.procollab.ru";
-          return;
-        }
-
-        this.openModal.set(false);
-        this.openSubscription.set(true);
-      });
+    location.href = "https://skills.procollab.ru";
   }
 }
