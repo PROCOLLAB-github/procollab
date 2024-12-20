@@ -50,7 +50,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
           this.router
             .navigateByUrl("/auth/login")
             .then(() => console.debug("Route changed from BearerTokenInterceptor"));
-        } else if (error.status === 401 && !request.url.includes("/api/token/refresh")) {
+        } else if (error.status === 401 || error.status === 403) {
           return this.handle401(request, next);
         }
 
