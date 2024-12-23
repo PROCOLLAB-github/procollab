@@ -9,7 +9,7 @@ export interface SubscriptionPlan {
 
 export interface SubscriptionData {
   isSubscribed: boolean;
-  lastSubscriptionType: null;
+  lastSubscriptionType: SubscriptionPlan | null;
   lastSubscriptionDate: string;
   subscriptionDateOver: string;
   isAutopayAllowed: boolean;

@@ -75,7 +75,5 @@ export class WebinarsListComponent implements AfterViewInit {
 
   // TODO дописать интерфейс под бэк с вебинарами
 
-  // TODO добавить логику с post запросом на регистрацию
-
   // TODO добавить получение данных с бэка для вебинаров и записей
 }

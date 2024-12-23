@@ -56,7 +56,10 @@
           }
         </ul>
 
-        <div class="tariff__expiration-date">
+        <div
+          class="tariff__expiration-date"
+          [ngStyle]="{ color: subscription.id === 3 ? 'var(--white)' : 'var(--black)' }"
+        >
           Действует до {{ subscriptionData().subscriptionDateOver }}
         </div>
       </div>
