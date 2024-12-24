@@ -1,6 +1,6 @@
 /** @format */
 
-import { CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import {
   ChangeDetectorRef,
   Component,
@@ -32,6 +32,7 @@ import { ProfileService } from "../../../profile/services/profile.service";
     IconComponent,
     ParseBreaksPipe,
     ParseLinksPipe,
+    DatePipe,
   ],
   templateUrl: "./webinar.component.html",
   styleUrl: "./webinar.component.scss",
@@ -47,8 +48,6 @@ export class WebinarComponent implements OnInit {
 
   descriptionExpandable!: boolean;
   readFullDescription = false;
-  description =
-    "В современном мире финансовая независимость и стабильный доход стали важными целями для многих людей. Этот вебинар предназначен для тех, кто хочет узнать о проверенных стратегиях и методах, которые помогут увеличить доход и добиться финансового успеха. Мы рассмотрим не только традиционные способы заработка, но и современные подходы, которые позволяют зарабатывать больше";
 
   type = signal<"webinars" | "records">("webinars");
   isAvailable = signal(true); // TODO дата после которой становиться недоступен вебинар в будущем сделать
@@ -64,6 +63,8 @@ export class WebinarComponent implements OnInit {
     this.profileService.getSubscriptionData().subscribe(r => {
       this.isSubscribed.set(r.isSubscribed);
     });
+
+    this.isRegistrated.set(this.webinar.isRegistrated);
   }
 
   ngAfterViewInit(): void {

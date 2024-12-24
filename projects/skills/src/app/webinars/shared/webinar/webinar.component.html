@@ -3,12 +3,12 @@
 <div class="webinar">
   <div class="webinar__inner">
     <div class="webinar__info">
-      <h3 class="text-heading-3">Как делать много денег</h3>
+      <h3 class="text-heading-3">{{ webinar.title }}</h3>
       <div class="text-body-14 webinar__description">
         <p
           class="webinar__description text-body-14"
           #descEl
-          [innerHTML]="description | parseLinks | parseBreaks"
+          [innerHTML]="webinar.description | parseLinks | parseBreaks"
         ></p>
         @if (descriptionExpandable) {
         <div
@@ -22,17 +22,22 @@
     </div>
 
     <div class="webinar__speaker">
+      @if (webinar.speaker; as speaker) {
       <h3 class="text-heading-3">Спикер</h3>
-      <app-avatar [size]="116" [url]=""></app-avatar>
+      <app-avatar [size]="116" [url]="speaker.photo"></app-avatar>
       <div class="speaker__info">
-        <h4 class="text-heading-4">Петр Птушкин</h4>
-        <p class="text-body-14">Руководитель платформы PROCOLLAB</p>
+        <h4 class="text-heading-4">{{ speaker.fullName }}</h4>
+        <p class="text-body-14">{{ speaker.position }}</p>
       </div>
+      }
     </div>
   </div>
 
   <div class="webinar__registration">
-    <p class="text-bold-body-16">27 декабря 17:00, 1.5 часа</p>
+    <p class="text-bold-body-16">
+      {{ webinar.datetimeStart | date: "dd MMMM yyyy":"ru-RU" }},
+      {{ webinar.duration / 60 | number: "1.0-1" }} часа
+    </p>
     @if(type() === "webinars"){ @if(isRegistrated()){
     <div class="webinar__registrated">
       <i appIcon icon="check" style="color: var(--green)" appSquare="24"></i>
@@ -72,7 +77,7 @@
         src="/assets/images/webinars/smart-people.svg"
       />
       <p class="cancel__title text-body-12">
-        Вы зарегистрировались на вебинар “Как делать много денег”. На вашу почту придет письмо с
+        Вы зарегистрировались на вебинар “{{ webinar.title }}”. На вашу почту придет письмо с
         ссылкой на подключение
       </p>
     </div>
