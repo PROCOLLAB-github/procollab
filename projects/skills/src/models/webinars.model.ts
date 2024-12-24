@@ -1,5 +1,11 @@
 /** @format */
 
+interface Speaker {
+  fullName: string;
+  photo: string;
+  position: string;
+}
+
 export interface Webinar {
   title: string;
   description: string;
@@ -9,10 +15,4 @@ export interface Webinar {
   onlineLink: string | null;
   recordingLink: string | null;
   speaker: Speaker;
-}
-
-interface Speaker {
-  fullName: string;
-  photo: string;
-  position: string;
 }
