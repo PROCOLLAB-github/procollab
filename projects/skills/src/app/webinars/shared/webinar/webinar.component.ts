@@ -12,13 +12,17 @@ import {
   ViewChild,
 } from "@angular/core";
 import { Router, RouterModule } from "@angular/router";
-import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
+import { ParseBreaksPipe, ParseLinksPipe, YtExtractService } from "@corelib";
 import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent, IconComponent } from "@uilib";
 import { expandElement } from "@utils/expand-element";
 import { Webinar } from "projects/skills/src/models/webinars.model";
 import { ProfileService } from "../../../profile/services/profile.service";
+import { DomSanitizer } from "@angular/platform-browser";
+import { WebinarService } from "../../services/webinar.service";
+import { tap, throwError } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   selector: "app-webinar",
@@ -30,9 +34,6 @@ import { ProfileService } from "../../../profile/services/profile.service";
     ButtonComponent,
     ModalComponent,
     IconComponent,
-    ParseBreaksPipe,
-    ParseLinksPipe,
-    DatePipe,
   ],
   templateUrl: "./webinar.component.html",
   styleUrl: "./webinar.component.scss",
@@ -41,30 +42,34 @@ export class WebinarComponent implements OnInit {
   @Input() webinar!: Webinar;
 
   router = inject(Router);
-  private readonly profileService = inject(ProfileService);
+  webinarService = inject(WebinarService);
+
   cdRef = inject(ChangeDetectorRef);
+  sanitizer = inject(DomSanitizer);
 
   @ViewChild("descEl") descEl?: ElementRef;
 
   descriptionExpandable!: boolean;
   readFullDescription = false;
 
-  type = signal<"webinars" | "records">("webinars");
-  isAvailable = signal(true); // TODO дата после которой становиться недоступен вебинар в будущем сделать
-  isRegistrated = signal(false); // TODO сделать на бэк post запрос с регистрацией
-  isSubscribed = signal(false);
+  type = signal<"actual" | "records" | null>(null);
+  isRegistrated = signal(false);
 
   registrationModalOpen = signal(false);
-  unAvailableModalOpen = signal(false);
   isSubscribedModalOpen = signal(false);
+  isSubscribedModalText = signal("");
+
+  formattedDate = signal("");
 
   ngOnInit() {
-    this.type.set(this.router.url.split("/").slice(-1)[0] as "webinars" | "records");
-    this.profileService.getSubscriptionData().subscribe(r => {
-      this.isSubscribed.set(r.isSubscribed);
-    });
+    this.type.set(this.router.url.split("/").slice(-1)[0] as "actual" | "records");
 
-    this.isRegistrated.set(this.webinar.isRegistrated);
+    this.formattedDate.set(
+      new Date(this.webinar.datetimeStart).toLocaleDateString("ru-RU", {
+        day: "numeric",
+        month: "long",
+      })
+    );
   }
 
   ngAfterViewInit(): void {
@@ -79,19 +84,28 @@ export class WebinarComponent implements OnInit {
     this.readFullDescription = !isExpanded;
   }
 
-  onRegistration() {
-    if (this.isAvailable()) {
+  onRegistration(webinarId: number) {
+    if (!this.webinar.isRegistrated) {
+      this.webinarService.registrationOnWebinar(webinarId).subscribe();
       this.registrationModalOpen.set(true);
       this.isRegistrated.set(true);
-    } else {
-      this.unAvailableModalOpen.set(true);
     }
   }
 
-  onWatchRecord(recordLink?: string) {
-    // Убрать ? знак когда логика с ссылкой на запись появиться
-    if (!this.isSubscribed()) {
-      this.isSubscribedModalOpen.set(true);
-    } else window.open("https://eyecannndy.com/", "_blank"); // TODO заменить на ссылку приходящую с бэка у каждой записи
+  onWatchRecord(webinarId: number) {
+    this.webinarService.getWebinarLink(webinarId).subscribe({
+      next: ({ recordingLink }) => {
+        window.open(recordingLink, "_blank");
+      },
+      error: error => {
+        if (error instanceof HttpErrorResponse) {
+          if (error.status === 403) {
+            this.isSubscribedModalText.set(error.error.detail);
+            this.isSubscribedModalOpen.set(true);
+            console.log(error.error.detail);
+          }
+        }
+      },
+    });
   }
 }

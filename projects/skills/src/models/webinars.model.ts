@@ -6,13 +6,13 @@ interface Speaker {
   position: string;
 }
 
-export interface Webinar {
-  title: string;
-  description: string;
-  datetimeStart: string;
-  duration: number;
-  isRegistrated: boolean;
-  onlineLink: string | null;
-  recordingLink: string | null;
-  speaker: Speaker;
+export class Webinar {
+  id!: number;
+  title!: string;
+  description!: string;
+  datetimeStart!: Date;
+  duration!: number;
+  isRegistrated!: boolean | null;
+  recordingLink!: boolean | null;
+  speaker!: Speaker;
 }

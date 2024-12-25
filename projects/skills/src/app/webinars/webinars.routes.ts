@@ -2,7 +2,7 @@
 
 import { Routes } from "@angular/router";
 import { WebinarsComponent } from "./webinars.component";
-import { webinarsResolver } from "./webinars.resolver";
+import { WebinarsResolver } from "./webinars.resolver";
 import { WebinarsListComponent } from "./list/list.component";
 
 export const WEBINARS_ROUTES: Routes = [
@@ -12,9 +12,14 @@ export const WEBINARS_ROUTES: Routes = [
     children: [
       {
         path: "",
+        redirectTo: "actual",
+        pathMatch: "full",
+      },
+      {
+        path: "actual",
         component: WebinarsListComponent,
         resolve: {
-          data: webinarsResolver,
+          data: WebinarsResolver,
         },
       },
       {
