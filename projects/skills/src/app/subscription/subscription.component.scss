@@ -163,7 +163,7 @@
   align-items: center;
   justify-content: center;
   max-height: calc(100vh - 40px);
-  padding: 40px 0 80px;
+  padding: 80px 100px 100px;
   overflow-y: auto;
 
   &__cross {
@@ -182,19 +182,36 @@
 
   &__title {
     margin-bottom: 20px;
-    color: var(--black);
+    color: var(--white);
     text-align: center;
     inline-size: 280px;
 
     @include typography.heading-4;
 
     @include responsive.apply-desktop {
-      margin-bottom: 23px;
+      margin-bottom: 40px;
       inline-size: 500px;
       text-align: center;
 
       @include typography.heading-3;
     }
+  }
+
+  app-button {
+    width: 200%;
+    @include typography.body-12;
+
+    @include responsive.apply-desktop {
+      width: 40%;
+    }
+  }
+
+  &__stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
   &__wave {

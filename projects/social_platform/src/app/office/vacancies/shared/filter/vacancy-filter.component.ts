@@ -215,7 +215,7 @@ export class VacancyFilterComponent implements OnInit {
       )
       .pipe(
         tap((res: any) => {
-          console.log(res);
+          // console.log(res);
           this.totalItemsCount.set(res.length);
         }),
         map(res => res)

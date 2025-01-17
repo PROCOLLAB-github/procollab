@@ -10,7 +10,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
 
-    @include typography.heading-3;
+    @include typography.bold-body-14;
 
     @include responsive.apply-desktop {
       @include typography.heading-4;

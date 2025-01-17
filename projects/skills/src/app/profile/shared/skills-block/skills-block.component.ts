@@ -19,8 +19,6 @@ import { PersonalSkillCardComponent } from "../personal-skill-card/personal-skil
     CommonModule,
     ButtonComponent,
     PersonalRatingCardComponent,
-    PersonalSkillCardComponent,
-    NgOptimizedImage,
     IconComponent,
     RouterLink,
     SkillChooserComponent,

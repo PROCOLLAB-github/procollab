@@ -137,3 +137,81 @@
     background-color: transparent;
   }
 }
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: calc(100vh - 40px);
+  padding: 20px 0px 50px;
+  overflow-y: auto;
+
+  @include responsive.apply-desktop {
+    padding: 20px 0px 60px;
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__check {
+    color: var(--green);
+  }
+
+  &__complete {
+    color: var(--green);
+    border: 2px solid var(--green);
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__title {
+    margin-bottom: 5px;
+    margin-top: 10px;
+    color: var(--black);
+    inline-size: 280px;
+    text-align: center;
+
+    @include typography.heading-3;
+
+    @include responsive.apply-desktop {
+      inline-size: 500px;
+    }
+  }
+
+  &__text {
+    margin-bottom: 24px;
+    color: var(--grey-for-text);
+  }
+
+  app-button {
+    width: 70%;
+
+    @include responsive.apply-desktop {
+      width: 40%
+    }
+  }
+
+  &__wave {
+    position: absolute;
+    bottom: -10%;
+    left: 0;
+    z-index: 0;
+    width: 100%;
+  }
+}

@@ -5,11 +5,13 @@ export interface SubscriptionPlan {
   name: string;
   price: number;
   featuresList: string[];
+  active: boolean;
+  available: boolean;
 }
 
 export interface SubscriptionData {
   isSubscribed: boolean;
-  lastSubscriptionType: null;
+  lastSubscriptionType: null | SubscriptionPlan;
   lastSubscriptionDate: string;
   subscriptionDateOver: string;
   isAutopayAllowed: boolean;
