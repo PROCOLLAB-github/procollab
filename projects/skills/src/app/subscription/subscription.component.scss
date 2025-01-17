@@ -199,6 +199,7 @@
 
   app-button {
     width: 200%;
+
     @include typography.body-12;
 
     @include responsive.apply-desktop {

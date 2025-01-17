@@ -144,11 +144,11 @@
   align-items: center;
   justify-content: center;
   max-height: calc(100vh - 40px);
-  padding: 20px 0px 50px;
+  padding: 20px 0 50px;
   overflow-y: auto;
 
   @include responsive.apply-desktop {
-    padding: 20px 0px 60px;
+    padding: 20px 0 60px;
   }
 
   &__cross {
@@ -170,22 +170,22 @@
   }
 
   &__complete {
-    color: var(--green);
-    border: 2px solid var(--green);
-    border-radius: 100%;
-    width: 50px;
-    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 50px;
+    height: 50px;
+    color: var(--green);
+    border: 2px solid var(--green);
+    border-radius: 100%;
   }
 
   &__title {
-    margin-bottom: 5px;
     margin-top: 10px;
+    margin-bottom: 5px;
     color: var(--black);
-    inline-size: 280px;
     text-align: center;
+    inline-size: 280px;
 
     @include typography.heading-3;
 
@@ -203,7 +203,7 @@
     width: 70%;
 
     @include responsive.apply-desktop {
-      width: 40%
+      width: 40%;
     }
   }
 

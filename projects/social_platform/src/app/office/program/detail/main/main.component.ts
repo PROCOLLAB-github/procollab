@@ -45,7 +45,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     private readonly programNewsService: ProgramNewsService,
     private readonly route: ActivatedRoute,
     private readonly cdRef: ChangeDetectorRef
-  ) {}
+  ) { }
 
   news = signal<FeedNews[]>([]);
   totalNewsCount = signal(0);
@@ -122,6 +122,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         tap(({ results }) => {
           this.news.update(news => [...news, ...results]);
           if (results.length < this.fetchLimit()) {
+            // console.log('No more to fetch')
           } else {
             this.fetchPage.update(p => p + 1);
           }

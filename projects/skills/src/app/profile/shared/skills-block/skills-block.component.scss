@@ -99,11 +99,11 @@
   align-items: flex-start;
   justify-content: center;
   max-height: calc(100vh - 40px);
-  padding: 20px 0px 50px;
+  padding: 20px 0 50px;
   overflow-y: auto;
 
   @include responsive.apply-desktop {
-    padding: 20px 0px 60px;
+    padding: 20px 0 60px;
   }
 
   &__cross {
