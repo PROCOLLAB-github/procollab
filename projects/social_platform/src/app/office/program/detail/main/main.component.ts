@@ -45,7 +45,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     private readonly programNewsService: ProgramNewsService,
     private readonly route: ActivatedRoute,
     private readonly cdRef: ChangeDetectorRef
-  ) { }
+  ) {}
 
   news = signal<FeedNews[]>([]);
   totalNewsCount = signal(0);
