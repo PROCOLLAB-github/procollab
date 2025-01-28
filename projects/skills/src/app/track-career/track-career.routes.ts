@@ -7,5 +7,5 @@ export const TRACK_CAREER_ROUTES: Routes = [
   {
     path: "",
     component: TrackCareerComponent,
-  }
+  },
 ];

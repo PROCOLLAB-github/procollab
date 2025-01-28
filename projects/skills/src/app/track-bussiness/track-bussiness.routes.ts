@@ -7,5 +7,5 @@ export const TRACK_BUSSINESS_ROUTES: Routes = [
   {
     path: "",
     component: TrackBussinessComponent,
-  }
+  },
 ];
