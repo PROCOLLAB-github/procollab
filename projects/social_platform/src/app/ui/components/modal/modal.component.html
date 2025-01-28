@@ -2,7 +2,12 @@
 <ng-template #modalTemplate>
   <div class="modal">
     <div class="modal__overlay" (click)="openChange.emit(false)"></div>
-    <div class="modal__body">
+    <div
+      class="modal__body"
+      [ngClass]="{
+        'modal__body--gradient': color === 'gradient'
+      }"
+    >
       <ng-content></ng-content>
     </div>
   </div>
