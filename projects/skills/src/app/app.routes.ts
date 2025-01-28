@@ -24,6 +24,16 @@ export const routes: Routes = [
     path: "task",
     loadChildren: () => import("./task/task.routes").then(c => c.TASK_ROUTES),
   },
+
+  {
+    path: "trackBuss",
+    loadChildren: () => import("./track-bussiness/track-bussiness.routes").then(c => c.TRACK_BUSSINESS_ROUTES),
+  },
+
+  {
+    path: "trackCar",
+    loadChildren: () => import("./track-career/track-career.routes").then(c => c.TRACK_CAREER_ROUTES),
+  },
   {
     path: "subscription",
     loadChildren: () =>
