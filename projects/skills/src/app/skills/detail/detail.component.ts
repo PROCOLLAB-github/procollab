@@ -51,9 +51,5 @@ export class SkillDetailComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.blockHeight.set(this.elementRef.nativeElement.getBoundingClientRect().height);
-
-    if (this.tasksData()) {
-      this.tasksData()?.tasks.sort((a, b) => a.id - b.id);
-    }
   }
 }

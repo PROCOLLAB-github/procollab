@@ -1,0 +1,11 @@
+<!-- @format -->
+
+<div class="list">
+  @if (type() === 'actual') { @if (webinarList().length) { @for(webinar of webinarList(); track
+  $index){
+  <app-webinar [webinar]="webinar"></app-webinar>
+  } } } @else if (type() === 'records'){ @if (recordsList().length) { @for (record of recordsList();
+  track $index) {
+  <app-webinar [webinar]="record"></app-webinar>
+  } } }
+</div>

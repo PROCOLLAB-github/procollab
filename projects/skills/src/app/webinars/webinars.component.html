@@ -1,0 +1,15 @@
+<!-- @format -->
+
+<app-bar
+  [backHave]="true"
+  [links]="[
+    { link: '/webinars/actual', linkText: 'Вебинары', isRouterLinkActiveOptions: true },
+    {
+      link: '/webinars/records',
+      linkText: 'Записи',
+      isRouterLinkActiveOptions: false
+    }
+  ]"
+></app-bar>
+
+<router-outlet></router-outlet>

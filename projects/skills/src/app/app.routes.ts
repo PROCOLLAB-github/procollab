@@ -29,4 +29,8 @@ export const routes: Routes = [
     loadChildren: () =>
       import("./subscription/subscription.routes").then(c => c.SUBSCRIPTION_ROUTES),
   },
+  {
+    path: "webinars",
+    loadChildren: () => import("./webinars/webinars.routes").then(c => c.WEBINARS_ROUTES),
+  },
 ];
