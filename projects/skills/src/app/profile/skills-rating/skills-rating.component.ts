@@ -7,11 +7,12 @@ import { Profile } from "projects/skills/src/models/profile.model";
 import { ProfileService } from "../services/profile.service";
 import { SkillService } from "../../skills/services/skill.service";
 import { Skill } from "projects/skills/src/models/skill.model";
+import { RouterModule } from "@angular/router";
 
 @Component({
   selector: "app-skills-rating",
   standalone: true,
-  imports: [CommonModule, PersonalRatingCardComponent],
+  imports: [CommonModule, PersonalRatingCardComponent, RouterModule],
   templateUrl: "./skills-rating.component.html",
   styleUrl: "./skills-rating.component.scss",
 })
