@@ -93,7 +93,7 @@ export class SkillChooserComponent implements OnInit {
       this.offset += this.limit;
       this.skillService
         .getAllMarked(this.limit, this.offset)
-        .pipe(tap(r => console.log(r.results)))
+        // .pipe(tap(r => console.log(r.results)))
         .subscribe(r => {
           this.skillsList.set(r.results);
         });

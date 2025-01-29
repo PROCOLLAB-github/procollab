@@ -28,12 +28,16 @@
     width: 90%;
     padding: 24px;
     overflow: hidden;
-    background-color: var(--white);
+    background: var(--white);
     border-radius: var(--rounded-md);
     transform: translate(-50%, -50%);
 
     @include responsive.apply-desktop {
       width: unset;
+    }
+
+    &--gradient {
+      background: var(--gradient);
     }
   }
 }

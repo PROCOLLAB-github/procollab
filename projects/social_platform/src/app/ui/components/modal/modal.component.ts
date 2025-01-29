@@ -14,18 +14,22 @@ import {
 } from "@angular/core";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { TemplatePortal } from "@angular/cdk/portal";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-modal",
   templateUrl: "./modal.component.html",
   styleUrl: "./modal.component.scss",
   standalone: true,
+  imports: [CommonModule],
 })
 export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly overlay: Overlay,
     private readonly viewContainerRef: ViewContainerRef
   ) {}
+
+  @Input() color?: "primary" | "gradient" = "primary";
 
   @Input({ required: true }) set open(value: boolean) {
     setTimeout(() => {

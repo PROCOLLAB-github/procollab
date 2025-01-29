@@ -104,7 +104,6 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onScroll() {
     if (this.projects().length >= this.totalProjCount()) {
-      console.log("All projects loaded, no more fetching.");
       return of({});
     }
 

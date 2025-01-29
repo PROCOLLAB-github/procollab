@@ -465,9 +465,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       .postVacancy(Number(this.route.snapshot.paramMap.get("projectId")), vacancy)
       .subscribe({
         next: vacancy => {
-          console.log(vacancy);
           this.vacancies.push(vacancy);
-          console.log(this.vacancies);
 
           this.vacancyForm.reset();
           this.vacancyIsSubmitting = false;
@@ -731,7 +729,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
               if (error.error) {
                 this.isCompleted = true;
                 this.errorModalMessage.set(error.error);
-                console.log(this.errorModalMessage()?.program_name);
+                // console.log(this.errorModalMessage()?.program_name);
               }
             }
           }

@@ -122,7 +122,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         tap(({ results }) => {
           this.news.update(news => [...news, ...results]);
           if (results.length < this.fetchLimit()) {
-            console.log("No more news to fetch!");
+            // console.log('No more to fetch')
           } else {
             this.fetchPage.update(p => p + 1);
           }

@@ -42,21 +42,17 @@
 
 <app-modal [open]="openInstruction" (openChange)="onOpenInstructionChange($event)">
   <div class="cancel">
-    <img alt="wave" src="assets/images/subscription/wave.svg" class="cancel__wave" />
     <i (click)="openInstruction = !openInstruction" appIcon icon="cross" class="cancel__cross"></i>
 
     <p class="cancel__title">Выбор навыков</p>
     <p class="text-body-14 cancel__text">
-      Вам буду представлены навыки,которые вы будете развивать в ТЕЧЕНИИ МЕСЯЦА. Можно выбрать
-      только 5 НАВЫКОВ ЗА ОДИН ПЕРИОД
-      <span class="text-bold-body-14 cancel__subtext">Подойдите к выбору с умом</span>
+      Тебе предстоит выбрать 5 навыков, развитию которых будет посвящен месяц твоей подписки. Не
+      торопись с выбором. Отменить или поменять его будет нельзя!
     </p>
-    <app-button style="width: 50%" (click)="nextStepModal()">Выбрать</app-button>
-    <img
-      alt="instruction"
-      src="assets/images/profile/instruction.svg"
-      class="cancel__instruction"
-    />
+    <app-button customTypographyClass="text-body-12" style="width: 100%" (click)="nextStepModal()"
+      >Выбрать навыки месяца</app-button
+    >
+    <img alt="wave" src="assets/images/subscription/wave.svg" class="cancel__wave" />
   </div>
 </app-modal>
 

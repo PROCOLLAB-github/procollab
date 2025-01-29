@@ -11,14 +11,7 @@ import { BarComponent } from "@ui/components";
 @Component({
   selector: "app-profile",
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    RouterLinkActive,
-    RouterOutlet,
-    InfoBlockComponent,
-    BarComponent,
-  ],
+  imports: [CommonModule, RouterOutlet, InfoBlockComponent, BarComponent],
   templateUrl: "./profile.component.html",
   styleUrl: "./profile.component.scss",
 })
