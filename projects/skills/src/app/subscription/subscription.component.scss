@@ -69,7 +69,7 @@
 
   &__tariffs {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 20px;
     justify-content: center;
 
@@ -80,6 +80,7 @@
 }
 
 .tariff {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -89,9 +90,12 @@
   border: 1px solid var(--grey-button);
   border-radius: 15px;
 
-  @include responsive.apply-desktop {
-    flex-direction: row;
-    gap: 142px;
+  >div:first-child {
+    flex-grow: 1;
+  }
+
+  app-button {
+    margin-top: auto;
   }
 
   &--primary {
@@ -127,7 +131,7 @@
 
     @include responsive.apply-desktop {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 20px;
     }
   }

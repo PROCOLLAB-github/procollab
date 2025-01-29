@@ -10,7 +10,7 @@ import { ActivatedRoute } from "@angular/router";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { map } from "rxjs";
 import { ProfileService } from "../profile/services/profile.service";
-import { SubscriptionPlan } from "@corelib";
+import { SubscriptionPlan, SubscriptionPlansService } from "@corelib";
 
 @Component({
   selector: "app-subscription",
@@ -25,9 +25,10 @@ export class SubscriptionComponent implements OnInit {
 
   route = inject(ActivatedRoute);
   profileService = inject(ProfileService);
+  subscriptionService = inject(SubscriptionPlansService);
 
   subscriptions = signal<SubscriptionPlan[]>([]);
-  subscriptionData = toSignal(this.route.data.pipe(map(r => r["subscriptionData"])));
+  subscriptionData = toSignal<any>(this.route.data.pipe(map(r => r["subscriptionData"])));
 
   ngOnInit(): void {
     this.route.data
@@ -85,6 +86,12 @@ export class SubscriptionComponent implements OnInit {
         this.open.set(false);
         location.reload();
       },
+    });
+  }
+
+  onBuyClick(planId: SubscriptionPlan["id"]) {
+    this.subscriptionService.buySubscription(planId).subscribe(status => {
+      location.href = status.confirmation.confirmationUrl;
     });
   }
 }

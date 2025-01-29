@@ -22,7 +22,7 @@
     position: relative;
     width: 20px;
 
-    > .attention {
+    >.attention {
       position: absolute;
       top: 0;
       right: 0;
@@ -44,7 +44,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    padding-left: 45px;
+    padding-left: 25px;
   }
 
   &__bar {

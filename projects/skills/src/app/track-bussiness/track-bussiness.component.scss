@@ -1,0 +1,37 @@
+@use "styles/typography";
+@use "styles/responsive";
+
+.profile {
+  display: flex;
+  flex-direction: column;
+
+  @include responsive.apply-desktop {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 500%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    &__text {
+      @include typography.heading-1;
+
+      color: var(--grey-for-text);
+    }
+
+    &__image {
+      margin: 0 auto;
+    }
+  }
+}
