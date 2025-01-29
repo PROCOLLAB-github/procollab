@@ -31,4 +31,17 @@
   &__level {
     color: var(--accent);
   }
+
+  &__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__price {
+    padding: 5px;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 15px;
+  }
 }

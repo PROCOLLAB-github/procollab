@@ -1,0 +1,150 @@
+@use "styles/responsive";
+@use "styles/typography";
+
+.webinar {
+  padding: 24px;
+  background-color: var(--white);
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__info {
+    flex-basis: 46%;
+  }
+
+  &__speaker {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  .speaker__info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-end;
+  }
+
+  &__description {
+    margin-top: 14px;
+
+    p {
+      display: box;
+      overflow: hidden;
+      color: var(--dark-grey);
+      text-overflow: ellipsis;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+      transition: all 0.7s ease-in-out;
+
+      &.expanded {
+        -webkit-line-clamp: unset;
+      }
+    }
+
+    ::ng-deep a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
+
+      &:hover {
+        text-decoration-color: var(--accent);
+      }
+    }
+
+    &__read-full {
+      margin-top: 2px;
+      color: var(--accent);
+      cursor: pointer;
+    }
+  }
+
+  &__registration {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+  }
+
+  &__registrated {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+}
+
+.read-more {
+  margin-top: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--accent-dark);
+  }
+
+  @include typography.body-14;
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: calc(100vh - 40px);
+  padding: 24px;
+  overflow-y: auto;
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 68%;
+    padding-top: 14px;
+  }
+
+  &__image {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 14px 0 5px;
+    }
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 15px;
+    text-align: center;
+  }
+}

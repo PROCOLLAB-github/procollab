@@ -1,0 +1,136 @@
+<!-- @format -->
+
+<div class="webinar">
+  <div class="webinar__inner">
+    <div class="webinar__info">
+      <h3 class="text-heading-3">{{ webinar.title }}</h3>
+      <div class="text-body-14 webinar__description">
+        <p
+          class="webinar__description text-body-14"
+          #descEl
+          [innerHTML]="this.sanitizer.bypassSecurityTrustHtml(webinar.description)"
+        ></p>
+        @if (descriptionExpandable) {
+        <div
+          class="read-more"
+          (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+        >
+          {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="webinar__speaker">
+      @if (webinar.speaker; as speaker) {
+      <h3 class="text-heading-3">Спикер</h3>
+      <app-avatar [size]="116" [url]="speaker.photo"></app-avatar>
+      <div class="speaker__info">
+        <h4 class="text-heading-4">{{ speaker.fullName }}</h4>
+        <p class="text-body-14">{{ speaker.position }}</p>
+      </div>
+      }
+    </div>
+  </div>
+
+  <div class="webinar__registration">
+    <p class="text-bold-body-16">
+      {{ formattedDate() }}, {{ webinar.duration / 60 | number: "1.0-1" }} часа
+    </p>
+    @if(type() === "actual"){ @if(webinar.isRegistrated || isRegistrated()){
+    <div class="webinar__registrated">
+      <i appIcon icon="check" style="color: var(--green)" appSquare="24"></i>
+      <p class="text-body-14" style="color: var(--green)">Вы зарегистрировались</p>
+    </div>
+    } @else {
+    <app-button
+      (click)="onRegistration(webinar.id)"
+      [style.opacity]="webinar.isRegistrated ? '0.5' : '1'"
+      customTypographyClass="text-body-12"
+      style="width: 18%"
+    >
+      Регистрация
+    </app-button>
+    } } @else {
+    <app-button
+      (click)="onWatchRecord(webinar.id)"
+      [style.opacity]="webinar.recordingLink ? '1' : '0.5'"
+      customTypographyClass="text-body-12"
+      style="width: 18%"
+      >Посмотреть запись</app-button
+    >
+    }
+  </div>
+</div>
+
+<app-modal
+  [open]="registrationModalOpen()"
+  (openChange)="registrationModalOpen.set(!registrationModalOpen())"
+>
+  <div class="cancel">
+    <div class="cancel__top">
+      <i (click)="registrationModalOpen.set(false)" appIcon icon="cross" class="cancel__cross"></i>
+      <img
+        class="cancel__image"
+        alt="smart-people"
+        src="/assets/images/webinars/smart-people.svg"
+      />
+      <p class="cancel__title text-body-12">
+        Вы зарегистрировались на вебинар “{{ webinar.title }}”. На вашу почту придет письмо с
+        ссылкой на подключение
+      </p>
+    </div>
+    <app-button
+      customTypographyClass="text-body-12"
+      style="width: 25%"
+      (click)="registrationModalOpen.set(false)"
+      >LETS GO</app-button
+    >
+  </div>
+</app-modal>
+
+<!-- <app-modal
+  [open]="unAvailableModalOpen()"
+  (openChange)="unAvailableModalOpen.set(!unAvailableModalOpen())"
+>
+  <div class="cancel">
+    <div class="cancel__top">
+      <i (click)="unAvailableModalOpen.set(false)" appIcon icon="cross" class="cancel__cross"></i>
+      <img
+        class="cancel__image"
+        alt="smart-people"
+        src="/assets/images/webinars/smart-people-active.svg"
+      />
+      <p class="cancel__title text-body-12">
+        Организаторы пока не выложили запись, вернитесь чуть позже
+      </p>
+    </div>
+    <app-button
+      customTypographyClass="text-body-12"
+      style="width: 35%"
+      (click)="unAvailableModalOpen.set(false)"
+      >Хорошо</app-button
+    >
+  </div>
+</app-modal> -->
+
+<app-modal
+  [open]="isSubscribedModalOpen()"
+  (openChange)="isSubscribedModalOpen.set(!isSubscribedModalOpen())"
+>
+  <div class="cancel">
+    <div class="cancel__top">
+      <i (click)="isSubscribedModalOpen.set(false)" appIcon icon="cross" class="cancel__cross"></i>
+      <img class="cancel__image" alt="smart-people" src="/assets/images/webinars/bro.svg" />
+      <p class="cancel__title text-body-12">
+        {{ isSubscribedModalText() }}
+      </p>
+    </div>
+    <app-button
+      customTypographyClass="text-body-12"
+      style="width: 35%"
+      (click)="isSubscribedModalOpen.set(false)"
+      >Купить</app-button
+    >
+  </div>
+</app-modal>

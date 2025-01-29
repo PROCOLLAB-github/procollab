@@ -11,8 +11,14 @@
   <p class="skill-card__text text-body-12">
     {{ skill.description }}
   </p>
-  <div class="skill-card__level text-body-12">
-    {{ skill.quantityOfLevels }}
-    {{ skill.quantityOfLevels | pluralize: ["уровень", "уровня", "уровней"] }}
+  <div class="skill-card__bottom">
+    <div class="skill-card__level text-body-12">
+      {{ skill.quantityOfLevels }}
+      {{ skill.quantityOfLevels | pluralize: ["уровень", "уровня", "уровней"] }}
+    </div>
+
+    @if (!skill.freeAccess) {
+    <div class="skill-card__price text-body-12">Доступно в подписке PRO</div>
+    }
   </div>
 </div>

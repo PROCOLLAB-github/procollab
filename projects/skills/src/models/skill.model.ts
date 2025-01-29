@@ -8,6 +8,7 @@ export interface Skill {
   whoCreated: string;
   description: string;
   isDone: boolean;
+  freeAccess: boolean;
 }
 
 export interface SkillDetail {
