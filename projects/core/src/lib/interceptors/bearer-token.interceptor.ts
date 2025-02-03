@@ -15,7 +15,7 @@ import { TokenService } from "../services";
 
 @Injectable()
 export class BearerTokenInterceptor implements HttpInterceptor {
-  constructor(private readonly tokenService: TokenService, private readonly router: Router) {}
+  constructor(private readonly tokenService: TokenService, private readonly router: Router) { }
 
   private isRefreshing = false;
   private refreshTokenSubject = new BehaviorSubject<any>(null);
@@ -50,7 +50,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
           this.router
             .navigateByUrl("/auth/login")
             .then(() => console.debug("Route changed from BearerTokenInterceptor"));
-        } else if (error.status === 401 || error.status === 403) {
+        } else if (error.status === 401 && !request.url.includes("/api/token/refresh")) {
           return this.handle401(request, next);
         }
 
