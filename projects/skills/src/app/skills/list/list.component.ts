@@ -39,20 +39,18 @@ export class SkillsListComponent implements OnInit {
   private readonly profileService = inject(ProfileService);
 
   skills = this.route.data.pipe(map(r => r["data"])) as Observable<ApiPagination<Skill>>;
-  isSubscribed = signal(false);
+  // isSubscribed = signal(false);
   subscriptionType = signal<SubscriptionData["lastSubscriptionType"]>(null);
 
   ngOnInit(): void {
     this.profileService.getSubscriptionData().subscribe(r => {
-      this.isSubscribed.set(r.isSubscribed);
+      // this.isSubscribed.set(r.isSubscribed);
       this.subscriptionType.set(r.lastSubscriptionType); // TODO На будущую проверку для скиллов если появиться в будущем
     });
   }
 
   onSkillClick(skillId: number) {
-    if (this.isSubscribed()) {
-      this.skillService.setSkillId(skillId);
-      this.router.navigate(["skills", skillId]);
-    } else this.router.navigate(["subscription"]);
+    this.skillService.setSkillId(skillId);
+    this.router.navigate(["skills", skillId]);
   }
 }

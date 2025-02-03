@@ -15,7 +15,7 @@ export class SubscriptionPlansService {
   }
 
   buySubscription(planId: SubscriptionPlan["id"]) {
-    return this.apiService.post<PaymentStatus>("/auth/subscription/buy/", {
+    return this.apiService.post<PaymentStatus>("/subscription/buy/", {
       subscriptionId: planId,
       redirectUrl: `${window.location.origin}/`,
     });

@@ -3,11 +3,11 @@
 import { TestBed } from "@angular/core/testing";
 import { ResolveFn } from "@angular/router";
 
-import { listResolver } from "./list.resolver";
+import { skillsListResolver } from "./list.resolver";
 
 describe("listResolver", () => {
   const executeResolver: ResolveFn<boolean> = (...resolverParameters) =>
-    TestBed.runInInjectionContext(() => listResolver(...resolverParameters));
+    TestBed.runInInjectionContext(() => skillsListResolver(...resolverParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
