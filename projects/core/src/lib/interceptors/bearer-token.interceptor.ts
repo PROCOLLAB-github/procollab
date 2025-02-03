@@ -15,7 +15,7 @@ import { TokenService } from "../services";
 
 @Injectable()
 export class BearerTokenInterceptor implements HttpInterceptor {
-  constructor(private readonly tokenService: TokenService, private readonly router: Router) { }
+  constructor(private readonly tokenService: TokenService, private readonly router: Router) {}
 
   private isRefreshing = false;
   private refreshTokenSubject = new BehaviorSubject<any>(null);
