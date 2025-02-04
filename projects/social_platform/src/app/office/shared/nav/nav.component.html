@@ -108,10 +108,5 @@
     <app-profile-info class="nav-bar__profile" [user]="user"></app-profile-info>
     }
   </div>
-  <app-subscription-plans
-    [subscriptionPlans]="subscriptions()"
-    [open]="openSubscription()"
-    (openChange)="openSubscription.set($event)"
-  ></app-subscription-plans>
   }
 </div>

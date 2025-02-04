@@ -10,12 +10,7 @@ import { AuthService } from "@auth/services";
 import { InviteService } from "@services/invite.service";
 import { AsyncPipe } from "@angular/common";
 import { IconComponent } from "@ui/components";
-import {
-  InviteManageCardComponent,
-  ProfileInfoComponent,
-  SubscriptionPlansComponent,
-} from "@uilib";
-import { SubscriptionPlan, SubscriptionPlansService } from "@corelib";
+import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
 
 @Component({
   selector: "app-nav",
@@ -28,7 +23,6 @@ import { SubscriptionPlan, SubscriptionPlansService } from "@corelib";
     RouterLinkActive,
     InviteManageCardComponent,
     ProfileInfoComponent,
-    SubscriptionPlansComponent,
     AsyncPipe,
   ],
 })
@@ -39,8 +33,7 @@ export class NavComponent implements OnInit, OnDestroy {
     public readonly notificationService: NotificationService,
     private readonly inviteService: InviteService,
     public readonly authService: AuthService,
-    private readonly cdref: ChangeDetectorRef,
-    private readonly subscriptionPlansService: SubscriptionPlansService
+    private readonly cdref: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -57,13 +50,6 @@ export class NavComponent implements OnInit, OnDestroy {
     });
 
     title$ && this.subscriptions$.push(title$);
-
-    const subscriptionsSub$ = this.subscriptionPlansService
-      .getSubscriptions()
-      .subscribe(subscriptions => {
-        this.subscriptions.set(subscriptions);
-      });
-    this.subscriptions$.push(subscriptionsSub$);
   }
 
   ngOnDestroy(): void {
@@ -109,17 +95,8 @@ export class NavComponent implements OnInit, OnDestroy {
     });
   }
 
-  openSubscription = signal(false);
-  subscriptions = signal<SubscriptionPlan[]>([]);
   openSkills() {
-    this.authService.isSubscribed().subscribe(subscribed => {
-      if (subscribed) {
-        location.href = "https://skills.procollab.ru";
-        return;
-      }
-
-      this.openSubscription.set(true);
-    });
+    location.href = "https://skills.procollab.ru";
   }
 
   protected readonly noop = noop;
