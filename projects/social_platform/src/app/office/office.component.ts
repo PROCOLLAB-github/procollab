@@ -23,7 +23,6 @@ import {
 import { AsyncPipe } from "@angular/common";
 import { InviteService } from "@services/invite.service";
 import { toSignal } from "@angular/core/rxjs-interop";
-import { SubscriptionPlan, SubscriptionPlansService } from "@corelib";
 
 @Component({
   selector: "app-office",
@@ -52,8 +51,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
     private readonly projectService: ProjectService,
     private readonly inviteService: InviteService,
     private readonly router: Router,
-    public readonly chatService: ChatService,
-    private readonly subscriptionPlansService: SubscriptionPlansService
+    public readonly chatService: ChatService
   ) {}
 
   ngOnInit(): void {
@@ -96,20 +94,6 @@ export class OfficeComponent implements OnInit, OnDestroy {
     if (localStorage.getItem("waitVerificationAccepted") === "true") {
       this.waitVerificationAccepted = true;
     }
-
-    const subscriptionsSub$ = this.subscriptionPlansService
-      .getSubscriptions()
-      .pipe(
-        map(subscription => {
-          if (Array.isArray(subscription)) {
-            return subscription;
-          } else return [subscription];
-        })
-      )
-      .subscribe(subscriptions => {
-        this.subscriptions.set(subscriptions);
-      });
-    this.subscriptions$.push(subscriptionsSub$);
   }
 
   ngOnDestroy(): void {
@@ -172,9 +156,6 @@ export class OfficeComponent implements OnInit, OnDestroy {
           .then(() => console.debug("Route changed from OfficeComponent"))
       );
   }
-
-  openSubscription = signal(false);
-  subscriptions = signal<SubscriptionPlan[]>([]);
 
   openSkills() {
     location.href = "https://skills.procollab.ru";
