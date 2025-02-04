@@ -24,26 +24,25 @@ export class PersonalSkillCardComponent {
   route = inject(ActivatedRoute);
   skillService = inject(SkillService);
 
-  skillsIdList = signal<Skill["id"][]>([]);
   isChecked = computed(() => this.profileIdSkills().includes(this.personalSkillCard.id));
   selectedCount = computed(() => this.profileIdSkills().length);
 
-  ngOnInit(): void {
-    this.skillService.getAllMarked().subscribe(r => {
-      this.skillsIdList.set(r.results.map(skill => skill.id));
-    });
-  }
+  ngOnInit(): void {}
 
   toggleCheck(): void {
+    const currentId = this.personalSkillCard.id;
+
     if (!this.isChecked()) {
       if (this.selectedCount() < 5) {
-        this.profileIdSkills.update(ids => [...ids, this.personalSkillCard.id]);
+        this.profileIdSkills.update(ids => [...ids, currentId]);
+        console.log("Added skill:", currentId);
         if (this.personalSkillCard.isDone === true) {
           this.isRetryPicked.set(true);
         }
       }
     } else {
-      this.profileIdSkills.update(ids => ids.filter(id => id !== this.personalSkillCard.id));
+      this.profileIdSkills.update(ids => ids.filter(id => id !== currentId));
+      console.log("Removed skill:", currentId);
     }
   }
 }

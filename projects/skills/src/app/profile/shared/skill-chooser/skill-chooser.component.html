@@ -5,7 +5,7 @@
     <i (click)="onCloseModal()" appIcon icon="cross" class="plans__cross"></i>
     <h1 class="plans__title">Выберите 5 навыков</h1>
     <div class="plans__tariffs">
-      @for (skill of skillsList(); track $index) {
+      @for (skill of skillsList(); track skill.id) {
       <app-personal-skill-card
         [isRetryPicked]="isRetryPicked"
         [profileIdSkills]="profileIdSkills"

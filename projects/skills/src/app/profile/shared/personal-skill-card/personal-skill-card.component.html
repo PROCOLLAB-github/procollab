@@ -23,7 +23,7 @@
   </div>
   <div class="rating-card__right">
     <app-checkbox
-      [ariaDisabled]="selectedCount() >= 5 && !isChecked()"
+      [ariaDisabled]="(selectedCount() >= 5 && !isChecked()) || personalSkillCard.isDone"
       [checked]="isChecked()"
       (checkedChange)="toggleCheck()"
     ></app-checkbox>

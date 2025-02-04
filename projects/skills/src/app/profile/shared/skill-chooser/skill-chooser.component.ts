@@ -49,20 +49,47 @@ export class SkillChooserComponent implements OnInit {
   limit = 3;
   offset = 0;
   currentPage = 1;
-  totalPages = computed(() => Math.ceil(this.skillsList().length / this.limit) + 1);
+
+  totalPages = computed(() => Math.ceil(this.totalSkills() / this.limit));
+  totalSkills = signal<number>(0);
 
   skillsList = signal<Skill[]>([]);
   profileIdSkills = signal<ProfileSkill["skillId"][]>([]);
 
   isRetryPicked = signal<boolean>(false);
 
+  constructor() {
+    this.skillsList.set([]);
+    this.totalSkills.set(0);
+  }
+
   ngOnInit(): void {
-    this.skillService.getAllMarked(this.limit, this.offset).subscribe(r => {
-      this.skillsList.set(r.results);
-    });
+    this.loadSkills();
 
     this.route.data.subscribe(r => {
       this.profileIdSkills.set(r["data"].skills.map((skill: ProfileSkill) => skill.skillId));
+    });
+  }
+
+  private loadSkills(): void {
+    this.skillService.getAllMarked(this.limit, this.offset).subscribe({
+      next: r => {
+        console.log("Received data:", r);
+        if (r.results && Array.isArray(r.results)) {
+          this.skillsList.set(
+            r.results.map(skill => ({
+              ...skill,
+              isSelected: this.profileIdSkills().includes(skill.id),
+            }))
+          );
+          this.totalSkills.set(r.count);
+        } else {
+          console.error("Invalid data format:", r);
+        }
+      },
+      error: err => {
+        console.error("Error loading skills:", err);
+      },
     });
   }
 
@@ -76,27 +103,18 @@ export class SkillChooserComponent implements OnInit {
   }
 
   prevPage(): void {
-    this.offset -= this.limit;
-    this.currentPage -= 1;
-    if (this.offset < 0) {
-      this.offset = 0;
-      this.currentPage = 1;
+    if (this.currentPage > 1) {
+      this.currentPage -= 1;
+      this.offset = (this.currentPage - 1) * this.limit;
+      this.loadSkills();
     }
-    this.skillService.getAllMarked(this.limit, this.offset).subscribe(r => {
-      this.skillsList.set(r.results);
-    });
   }
 
   nextPage(): void {
     if (this.currentPage < this.totalPages()) {
       this.currentPage += 1;
-      this.offset += this.limit;
-      this.skillService
-        .getAllMarked(this.limit, this.offset)
-        // .pipe(tap(r => console.log(r.results)))
-        .subscribe(r => {
-          this.skillsList.set(r.results);
-        });
+      this.offset = (this.currentPage - 1) * this.limit;
+      this.loadSkills();
     }
   }
 }
