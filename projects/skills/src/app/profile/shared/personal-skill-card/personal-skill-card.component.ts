@@ -1,6 +1,15 @@
 /** @format */
 
-import { Component, computed, inject, Input, Output, signal, WritableSignal } from "@angular/core";
+import {
+  Component,
+  computed,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  signal,
+  WritableSignal,
+} from "@angular/core";
 import { CommonModule, NgOptimizedImage } from "@angular/common";
 import { CheckboxComponent } from "../../../../../../social_platform/src/app/ui/components/checkbox/checkbox.component";
 import { Skill } from "projects/skills/src/models/skill.model";
@@ -21,6 +30,8 @@ export class PersonalSkillCardComponent {
   @Input() profileIdSkills!: WritableSignal<ProfileSkill["skillId"][]>;
   @Input() isRetryPicked!: WritableSignal<boolean>;
 
+  @Output() selectedCountChange: EventEmitter<number> = new EventEmitter<number>();
+
   route = inject(ActivatedRoute);
   skillService = inject(SkillService);
 
@@ -35,14 +46,17 @@ export class PersonalSkillCardComponent {
     if (!this.isChecked()) {
       if (this.selectedCount() < 5) {
         this.profileIdSkills.update(ids => [...ids, currentId]);
-        console.log("Added skill:", currentId);
+
+        this.selectedCountChange.emit(this.selectedCount());
+
         if (this.personalSkillCard.isDone === true) {
           this.isRetryPicked.set(true);
         }
       }
     } else {
       this.profileIdSkills.update(ids => ids.filter(id => id !== currentId));
-      console.log("Removed skill:", currentId);
+
+      this.selectedCountChange.emit(this.selectedCount());
     }
   }
 }

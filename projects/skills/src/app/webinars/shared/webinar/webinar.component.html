@@ -47,7 +47,7 @@
       (click)="onRegistration(webinar.id)"
       [style.opacity]="webinar.isRegistrated ? '0.5' : '1'"
       customTypographyClass="text-body-12"
-      style="width: 18%"
+      class="webinar__watch-button"
     >
       Регистрация
     </app-button>
@@ -56,7 +56,7 @@
       (click)="onWatchRecord(webinar.id)"
       [style.opacity]="webinar.recordingLink ? '1' : '0.5'"
       customTypographyClass="text-body-12"
-      style="width: 18%"
+      class="webinar__watch-button"
       >Посмотреть запись</app-button
     >
     }

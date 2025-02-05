@@ -9,12 +9,22 @@
 
   &__inner {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
+    flex-direction: column;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+      align-items: center;
+    }
   }
 
   &__info {
-    flex-basis: 46%;
+
+    @include responsive.apply-desktop {
+      flex-basis: 46%;
+    }
+
   }
 
   &__speaker {
@@ -78,6 +88,14 @@
     display: flex;
     gap: 5px;
     align-items: center;
+  }
+
+  &__watch-button {
+    width: 35%;
+
+    @include responsive.apply-desktop {
+      width: 18%;
+    }
   }
 }
 

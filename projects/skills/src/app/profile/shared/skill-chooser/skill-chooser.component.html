@@ -4,12 +4,17 @@
   <div class="plans">
     <i (click)="onCloseModal()" appIcon icon="cross" class="plans__cross"></i>
     <h1 class="plans__title">Выберите 5 навыков</h1>
+    <p style="color: var(--red)">
+      Пожалуйста, выберите 5 навыков из приведённого ниже списка, которые будут доступны вам в
+      следующем месяце.
+    </p>
     <div class="plans__tariffs">
       @for (skill of skillsList(); track skill.id) {
       <app-personal-skill-card
         [isRetryPicked]="isRetryPicked"
         [profileIdSkills]="profileIdSkills"
         [personalSkillCard]="skill"
+        (selectedCountChange)="onSelectedCountChange($event)"
       ></app-personal-skill-card>
       }
 
@@ -35,7 +40,9 @@
           ></i>
         </div>
 
-        <app-button (click)="onCloseModal()">Выбрать</app-button>
+        <app-button [ariaDisabled]="selectedSkillsCount() < 5" (click)="onCloseModal()"
+          >Выбрать</app-button
+        >
       </div>
     </div>
   </div>

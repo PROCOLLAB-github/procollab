@@ -41,7 +41,7 @@
       <app-switch
         (click)="this.onCheckedChange(!checked())"
         (checkedChange)="onCheckedChange($event)"
-        [checked]="subscriptionData().isAutopayAllowed"
+        [checked]="subscriptionData()!.isAutopayAllowed"
       ></app-switch>
     </div>
   </div>
@@ -81,7 +81,9 @@
     </div>
   </div>
 
+  @if(subscriptionData()?.lastSubscriptionType !== null){
   <app-button class="text-body-12" (click)="this.onOpenChange(true)" [color]="'grey'"
     >Отменить подписку</app-button
   >
+  }
 </div>

@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnInit, inject, signal } from "@angular/core";
+import { Component, OnDestroy, OnInit, inject, signal } from "@angular/core";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
 import { ButtonComponent } from "@ui/components";
@@ -8,9 +8,9 @@ import { SwitchComponent } from "@ui/components/switch/switch.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ActivatedRoute } from "@angular/router";
 import { toSignal } from "@angular/core/rxjs-interop";
-import { map } from "rxjs";
+import { map, Subscription } from "rxjs";
 import { ProfileService } from "../profile/services/profile.service";
-import { SubscriptionPlan, SubscriptionPlansService } from "@corelib";
+import { SubscriptionData, SubscriptionPlan, SubscriptionPlansService } from "@corelib";
 
 @Component({
   selector: "app-subscription",
@@ -19,7 +19,7 @@ import { SubscriptionPlan, SubscriptionPlansService } from "@corelib";
   templateUrl: "./subscription.component.html",
   styleUrl: "./subscription.component.scss",
 })
-export class SubscriptionComponent implements OnInit {
+export class SubscriptionComponent implements OnInit, OnDestroy {
   open = signal(false);
   checked = signal(false);
 
@@ -28,10 +28,16 @@ export class SubscriptionComponent implements OnInit {
   subscriptionService = inject(SubscriptionPlansService);
 
   subscriptions = signal<SubscriptionPlan[]>([]);
-  subscriptionData = toSignal<any>(this.route.data.pipe(map(r => r["subscriptionData"])));
+  subscriptionData = toSignal<SubscriptionData>(
+    this.route.data.pipe(map(r => r["subscriptionData"]))
+  );
+
+  subscriptionType = signal(null);
+
+  subscription: Subscription[] = [];
 
   ngOnInit(): void {
-    this.route.data
+    const subsriptionPlanSub = this.route.data
       .pipe(map(r => r["data"]))
       .pipe(
         map(subscription => {
@@ -43,6 +49,12 @@ export class SubscriptionComponent implements OnInit {
       .subscribe(subscriptions => {
         this.subscriptions.set(subscriptions);
       });
+
+    this.subscription.push(subsriptionPlanSub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.forEach(sub => sub.unsubscribe());
   }
 
   onOpenChange(event: boolean) {
@@ -54,9 +66,9 @@ export class SubscriptionComponent implements OnInit {
   }
 
   onCheckedChange(event: boolean) {
-    if (this.subscriptionData().isAutopayAllowed) {
+    if (this.subscriptionData()?.isAutopayAllowed) {
       this.profileService.updateSubscriptionDate(false).subscribe(() => {
-        const updatedData = this.subscriptionData();
+        const updatedData = this.subscriptionData()!;
         updatedData.isAutopayAllowed = false;
       });
     } else this.checked.set(true);
@@ -69,10 +81,12 @@ export class SubscriptionComponent implements OnInit {
 
   onConfirmAutoPlay(event: boolean) {
     this.profileService.updateSubscriptionDate(event).subscribe(() => {
-      const updatedData = this.subscriptionData();
-      updatedData.isAutopayAllowed = event;
-      this.checked.set(false);
-      this.open.set(false);
+      if (this.subscriptionData()) {
+        const updatedData = this.subscriptionData()!;
+        updatedData.isAutopayAllowed = event;
+        this.checked.set(false);
+        this.open.set(false);
+      }
     });
   }
 

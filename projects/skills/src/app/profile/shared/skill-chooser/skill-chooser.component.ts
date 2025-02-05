@@ -58,6 +58,8 @@ export class SkillChooserComponent implements OnInit {
 
   isRetryPicked = signal<boolean>(false);
 
+  selectedSkillsCount = signal<number>(0);
+
   constructor() {
     this.skillsList.set([]);
     this.totalSkills.set(0);
@@ -116,5 +118,9 @@ export class SkillChooserComponent implements OnInit {
       this.offset = (this.currentPage - 1) * this.limit;
       this.loadSkills();
     }
+  }
+
+  onSelectedCountChange(count: number): void {
+    this.selectedSkillsCount.set(count);
   }
 }

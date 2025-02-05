@@ -69,12 +69,13 @@
 
   &__tariffs {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 20px;
     justify-content: center;
 
     @include responsive.apply-desktop {
       margin-top: 16px;
+      flex-direction: row;
     }
   }
 }

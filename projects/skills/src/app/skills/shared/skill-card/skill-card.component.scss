@@ -1,12 +1,19 @@
+@use "styles/responsive";
+
 .skill-card {
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding: 20px;
+  margin-bottom: 20px;
   cursor: pointer;
   background-color: var(--white);
   border: 1px solid var(--grey-button);
   border-radius: 15px;
+
+  @include responsive.apply-desktop {
+    margin-bottom: 0;
+  }
 
   &__top {
     display: flex;
