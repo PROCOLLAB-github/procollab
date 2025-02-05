@@ -7,11 +7,7 @@
 } @else {
 <div class="subtask">
   @if (infoSlide(); as is) { @if(is.popups && is.popups.length > 0){
-  <app-modal
-    style="position: relative"
-    [open]="success() && openQuestion() === 'info_slide'"
-    (openChange)="onOpenChange($event)"
-  >
+  <app-modal style="position: relative" [open]="success() && openQuestion() === 'info_slide'">
     <div class="cancel">
       <i (click)="onCloseModal()" appIcon icon="cross" class="cancel__cross"></i>
 
@@ -53,7 +49,6 @@
   <app-modal
     style="position: relative"
     [open]="success() && openQuestion() === 'question_single_answer'"
-    (openChange)="onOpenChange($event)"
   >
     <div class="cancel">
       <i (click)="onCloseModal()" appIcon icon="cross" class="cancel__cross"></i>
@@ -94,11 +89,7 @@
     [hint]="hint()"
   ></app-radio-select-task>
   } @if (connectQuestion(); as cq) { @if(cq.popups && cq.popups.length > 0){
-  <app-modal
-    style="position: relative"
-    [open]="success() && openQuestion() === 'question_connect'"
-    (openChange)="onOpenChange($event)"
-  >
+  <app-modal style="position: relative" [open]="success() && openQuestion() === 'question_connect'">
     <div class="cancel">
       <i (click)="onCloseModal()" appIcon icon="cross" class="cancel__cross"></i>
 
@@ -145,11 +136,7 @@
     [hint]="hint()"
   ></app-relations-task>
   } @if (excludeQuestion(); as eq) { @if(eq.popups && eq.popups.length > 0){
-  <app-modal
-    style="position: relative"
-    [open]="success() && openQuestion() === 'exclude_question'"
-    (openChange)="onOpenChange($event)"
-  >
+  <app-modal style="position: relative" [open]="success() && openQuestion() === 'exclude_question'">
     <div class="cancel">
       <i (click)="onCloseModal()" appIcon icon="cross" class="cancel__cross"></i>
 
@@ -196,11 +183,7 @@
     [hint]="hint()"
   ></app-exclude-task>
   } @if (writeQuestion(); as wq) { @if(wq.popups && wq.popups.length > 0){
-  <app-modal
-    style="position: relative"
-    [open]="success() && openQuestion() === 'question_write'"
-    (openChange)="onOpenChange($event)"
-  >
+  <app-modal style="position: relative" [open]="success() && openQuestion() === 'question_write'">
     <div class="cancel">
       <i (click)="onCloseModal()" appIcon icon="cross" class="cancel__cross"></i>
 
