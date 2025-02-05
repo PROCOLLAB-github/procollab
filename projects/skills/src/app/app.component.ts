@@ -38,10 +38,10 @@ export class AppComponent implements OnInit {
   navItems = [
     { name: "Навыки", icon: "lib", link: "skills" },
     { name: "Рейтинг", icon: "growth", link: "rating" },
-    { name: "Траектория бизнеса", icon: "receipt", link: "trackBuss" },
-    { name: "Траектория карьеры", icon: "receipt", link: "trackCar" },
-    { name: "Вебинары", icon: "receipt", link: "webinars" },
     { name: "Подписка", icon: "receipt", link: "subscription" },
+    { name: "Траектория бизнеса", icon: "trackbuss", link: "trackBuss" },
+    { name: "Траектория карьеры", icon: "trackcar", link: "trackCar" },
+    { name: "Вебинары", icon: "webinars", link: "webinars" },
   ];
 
   userData = signal<UserData | null>(null);
