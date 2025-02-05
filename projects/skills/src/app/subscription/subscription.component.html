@@ -25,7 +25,6 @@
 
   <app-modal [open]="checked()" (openChange)="onOpenChange($event)">
     <div class="cancel">
-      <i (click)="onCloseModal()" appIcon icon="cross" class="cancel__cross"></i>
       <p class="cancel__title" style="color: var(--black)">Включим автопродление подписки?</p>
 
       <app-button (click)="onConfirmAutoPlay(true)" [color]="'primary'">Включить</app-button>

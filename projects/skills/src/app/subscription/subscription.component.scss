@@ -74,8 +74,8 @@
     justify-content: center;
 
     @include responsive.apply-desktop {
-      margin-top: 16px;
       flex-direction: row;
+      margin-top: 16px;
     }
   }
 }
