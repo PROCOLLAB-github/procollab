@@ -58,10 +58,12 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
   }
 
   onOpenChange(event: boolean) {
-    if (this.open() && !event) {
+    if ((this.open() && !event) || (this.checked() && !event)) {
       this.open.set(false);
+      this.checked.set(false);
     } else {
       this.open.set(event);
+      this.checked.set(event);
     }
   }
 
