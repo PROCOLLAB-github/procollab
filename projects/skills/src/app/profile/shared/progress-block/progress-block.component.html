@@ -36,7 +36,12 @@
 
   <div class="progress__info info">
     <h1 class="text-heading-1">Прогресс</h1>
-
+    <i appIcon icon="hint" appSquare="24" class="progress__hint"></i>
+    <span
+      class="progress__tooltip text-body-12"
+      [class.progress__tooltip--visible]="isHintVisible"
+      >{{ tooltipText }}</span
+    >
     @for (skill of skillsList().slice(0, 5); track $index) {
     <ul class="info__list">
       <li

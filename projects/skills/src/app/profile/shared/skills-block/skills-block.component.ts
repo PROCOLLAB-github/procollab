@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, computed, inject, OnInit, signal } from "@angular/core";
+import { Component, computed, HostListener, inject, OnInit, signal } from "@angular/core";
 import { CommonModule, NgOptimizedImage } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
 import { PersonalRatingCardComponent } from "../personal-rating-card/personal-rating-card.component";
@@ -11,6 +11,7 @@ import { ProfileService } from "../../services/profile.service";
 import { Profile } from "projects/skills/src/models/profile.model";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { PersonalSkillCardComponent } from "../personal-skill-card/personal-skill-card.component";
+import { animate, style, transition, trigger } from "@angular/animations";
 
 @Component({
   selector: "app-skills-block",
@@ -30,6 +31,7 @@ import { PersonalSkillCardComponent } from "../personal-skill-card/personal-skil
 export class SkillsBlockComponent implements OnInit {
   openSkillChoose = false;
   openInstruction = false;
+  isHintVisible = false;
 
   profileService = inject(ProfileService);
   skillsList: Profile["skills"] = [];
@@ -39,6 +41,18 @@ export class SkillsBlockComponent implements OnInit {
   offset = 0;
   currentPage = 1;
   totalPages = computed(() => Math.ceil(this.skillsList.length / this.limit));
+
+  tooltipText = "В данном блоке отображаются ваши навыки, которые вы выбрали в текущем месяце.";
+
+  @HostListener("mouseenter", ["$event"])
+  onMouseEnter() {
+    this.isHintVisible = true;
+  }
+
+  @HostListener("mouseleave", ["$event"])
+  onMouseLeave() {
+    this.isHintVisible = false;
+  }
 
   onOpenSkillsChange(open: boolean) {
     this.openSkillChoose = open;

@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, Input, OnInit, signal } from "@angular/core";
+import { Component, HostListener, inject, Input, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { CircleProgressBarComponent } from "../../../shared/circle-progress-bar/circle-progress-bar.component";
 import { ActivatedRoute } from "@angular/router";
@@ -18,6 +18,19 @@ export class ProgressBlockComponent implements OnInit {
   radius = 70;
   skillsList = signal<Skill[]>([]);
   hoveredIndex = -1;
+
+  tooltipText = "В блоке «Прогресс» отображаются ваши топ-5 навыков, которые вы проходите";
+  isHintVisible = false;
+
+  @HostListener("mouseenter", ["$event"])
+  onMouseEnter() {
+    this.isHintVisible = true;
+  }
+
+  @HostListener("mouseleave", ["$event"])
+  onMouseLeave() {
+    this.isHintVisible = false;
+  }
 
   calculateStrokeDashOffset(skillProgress: number): number {
     const circumference = 2 * Math.PI * this.radius;

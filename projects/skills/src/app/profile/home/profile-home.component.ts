@@ -28,4 +28,37 @@ export class ProfileHomeComponent {
   route = inject(ActivatedRoute);
 
   profileData = toSignal(this.route.data.pipe(map(r => r["data"])));
+
+  mockMonts = [
+    {
+      month: "Ферваль",
+      successfullyDone: true,
+      year: 2025,
+    },
+    {
+      month: "Март",
+      successfullyDone: true,
+      year: 2025,
+    },
+    {
+      month: "Апрель",
+      successfullyDone: false,
+      year: 2025,
+    },
+    {
+      month: "Май",
+      successfullyDone: false,
+      year: 2025,
+    },
+    {
+      month: "Июнь",
+      successfullyDone: false,
+      year: 2025,
+    },
+    {
+      month: "Июль",
+      successfullyDone: false,
+      year: 2025,
+    },
+  ];
 }

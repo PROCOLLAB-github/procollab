@@ -4,6 +4,7 @@
 @use "sass:math";
 
 .progress {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,6 +32,48 @@
   &__chart {
     position: relative;
     width: 100%;
+  }
+
+  &__hint {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+      opacity: 0.5;
+    }
+  }
+
+  &__tooltip {
+    position: absolute;
+    bottom: 95%;
+    left: 66%;
+    z-index: 100;
+    width: 200px;
+    padding: 12px;
+    color: var(--dark-grey);
+    background-color: var(--white);
+    border: 1px solid var(--dark-grey);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 15px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+
+    &--visible {
+      opacity: 1;
+    }
   }
 }
 

@@ -3,6 +3,7 @@
 
 .skills {
   &__main {
+    position: relative;
     min-height: 235px;
     padding: 20px;
     margin-bottom: 18px;
@@ -21,6 +22,48 @@
       margin-bottom: 12px;
 
       @include typography.heading-3;
+    }
+  }
+
+  &__hint {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+      opacity: 0.5;
+    }
+  }
+
+  &__tooltip {
+    position: absolute;
+    bottom: 95%;
+    left: 93%;
+    z-index: 100;
+    width: 200px;
+    padding: 12px;
+    color: var(--dark-grey);
+    background-color: var(--white);
+    border: 1px solid var(--dark-grey);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+
+    &--visible {
+      opacity: 1;
     }
   }
 
