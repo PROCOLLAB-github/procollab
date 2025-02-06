@@ -37,7 +37,7 @@
   <div class="progress__info info">
     <h1 class="text-heading-1">Прогресс</h1>
 
-    @for (skill of skillsList(); track $index) {
+    @for (skill of skillsList().slice(0, 5); track $index) {
     <ul class="info__list">
       <li
         class="info__item"

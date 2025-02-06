@@ -4,7 +4,7 @@
   <div class="plans">
     <i (click)="onCloseModal()" appIcon icon="cross" class="plans__cross"></i>
     <h1 class="plans__title">Выберите 5 навыков</h1>
-    <p style="color: var(--red)">
+    <p style="color: var(--red); text-align: center">
       Пожалуйста, выберите 5 навыков из приведённого ниже списка, которые будут доступны вам в
       следующем месяце.
     </p>
@@ -40,7 +40,13 @@
           ></i>
         </div>
 
-        <app-button [ariaDisabled]="selectedSkillsCount() < 5" (click)="onCloseModal()"
+        <app-button
+          [ngStyle]="{
+            opacity: selectedSkillsCount() === 5 ? '1' : '0.5',
+          }"
+          [color]="selectedSkillsCount() !== 5 ? 'grey' : 'primary'"
+          [disabled]="selectedSkillsCount() !== 5"
+          (click)="onCloseModal()"
           >Выбрать</app-button
         >
       </div>

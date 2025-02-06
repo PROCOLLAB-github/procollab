@@ -12,6 +12,7 @@
     'button--gold': color === 'gold',
     'button--gradient': color === 'gradient',
   }"
+  [disabled]="disabled"
 >
   @if (loader) {
   <app-loader [color]="color === 'grey' ? 'black' : 'white'"></app-loader>
