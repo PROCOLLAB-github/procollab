@@ -5,11 +5,12 @@ import { CommonModule } from "@angular/common";
 import { CircleProgressBarComponent } from "../../../shared/circle-progress-bar/circle-progress-bar.component";
 import { ActivatedRoute } from "@angular/router";
 import { Skill } from "projects/skills/src/models/profile.model";
+import { IconComponent } from "@uilib";
 
 @Component({
   selector: "app-progress-block",
   standalone: true,
-  imports: [CommonModule, CircleProgressBarComponent],
+  imports: [CommonModule, CircleProgressBarComponent, IconComponent],
   templateUrl: "./progress-block.component.html",
   styleUrl: "./progress-block.component.scss",
 })
