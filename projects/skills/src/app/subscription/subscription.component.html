@@ -3,7 +3,7 @@
 <!-- Модалка с отменой подписки -->
 
 <div class="subscription">
-  <app-modal [open]="open()" [color]="'gradient'" (openChange)="onOpenChange($event)">
+  <app-modal [open]="open()" [color]="'gradient'" (openChange)="onOpenChange(false)">
     <div class="cancel">
       <i
         (click)="onCloseModal()"
@@ -23,7 +23,7 @@
 
   <!-- Модалка с автопродлением подписки  -->
 
-  <app-modal [open]="checked()" (openChange)="onOpenChange($event)">
+  <app-modal [open]="checked()" (openChange)="onOpenChange(false)">
     <div class="cancel">
       <i
         (click)="onCloseModal()"
