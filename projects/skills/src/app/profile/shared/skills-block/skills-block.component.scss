@@ -55,10 +55,7 @@
     color: var(--dark-grey);
     background-color: var(--white);
     border: 1px solid var(--dark-grey);
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 0;
+    border-radius: 15px 15px 15px 0;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
 
