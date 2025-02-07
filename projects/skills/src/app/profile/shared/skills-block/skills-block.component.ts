@@ -44,13 +44,11 @@ export class SkillsBlockComponent implements OnInit {
 
   tooltipText = "В данном блоке отображаются ваши навыки, которые вы выбрали в текущем месяце.";
 
-  @HostListener("mouseenter", ["$event"])
-  onMouseEnter() {
+  showTooltip() {
     this.isHintVisible = true;
   }
 
-  @HostListener("mouseleave", ["$event"])
-  onMouseLeave() {
+  hideTooltip() {
     this.isHintVisible = false;
   }
 

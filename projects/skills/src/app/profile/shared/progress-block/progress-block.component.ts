@@ -23,13 +23,11 @@ export class ProgressBlockComponent implements OnInit {
   tooltipText = "В блоке «Прогресс» отображаются ваши топ-5 навыков, которые вы проходите";
   isHintVisible = false;
 
-  @HostListener("mouseenter", ["$event"])
-  onMouseEnter() {
+  showTooltip() {
     this.isHintVisible = true;
   }
 
-  @HostListener("mouseleave", ["$event"])
-  onMouseLeave() {
+  hideTooltip() {
     this.isHintVisible = false;
   }
 

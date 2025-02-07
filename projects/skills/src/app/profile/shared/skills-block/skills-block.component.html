@@ -3,7 +3,14 @@
 <div class="skills">
   <div class="skills__main">
     <h2 class="skills__title">Навыки</h2>
-    <i appIcon icon="hint" appSquare="24" class="skills__hint"></i>
+    <i
+      appIcon
+      icon="hint"
+      appSquare="24"
+      class="skills__hint"
+      (mouseenter)="showTooltip()"
+      (mouseleave)="hideTooltip()"
+    ></i>
     <span class="skills__tooltip text-body-12" [class.skills__tooltip--visible]="isHintVisible">{{
       tooltipText
     }}</span>

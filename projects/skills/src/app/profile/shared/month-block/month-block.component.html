@@ -2,6 +2,7 @@
 
 @if (months.length) {
 <div class="month">
+  <p class="month__next">Далее</p>
   @for (m of months; track $index) {
   <div class="month__item item" [ngClass]="{ 'month__item--done': m.successfullyDone === true }">
     <div class="item__name">
