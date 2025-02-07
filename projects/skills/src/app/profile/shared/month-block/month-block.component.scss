@@ -2,6 +2,7 @@
 @use "styles/responsive";
 
 .month {
+  position: relative;
   width: 100%;
   height: 100px;
   padding: 50px 18px;
@@ -9,7 +10,6 @@
   white-space: nowrap;
   background-color: var(--white);
   border-radius: 15px;
-  position: relative;
 
   &__item {
     opacity: 0.3;
@@ -19,15 +19,15 @@
     }
   }
 
-    &__next {
-      text-decoration: underline;
-      color: var(--grey-for-text);
-      position: absolute;
-      right: 1.5%;
-      top: 40%;
+  &__next {
+    position: absolute;
+    top: 40%;
+    right: 1.5%;
+    color: var(--grey-for-text);
+    text-decoration: underline;
 
-      @include typography.bold-body-14;
-    }
+    @include typography.bold-body-14;
+  }
 }
 
 .item {
