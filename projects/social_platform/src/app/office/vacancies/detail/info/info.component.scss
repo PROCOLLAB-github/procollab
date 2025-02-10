@@ -36,7 +36,7 @@
     position: relative;
     height: 230px;
     margin-bottom: 20px;
-    border-radius: var(--rounded-xl);
+    border-radius: 15px;
 
     img {
       position: absolute;
@@ -78,7 +78,7 @@
     text-align: center;
     background-color: var(--white);
     border: 1px solid var(--gray);
-    border-radius: var(--rounded-xl);
+    border-radius:15px;
 
     @include typography.body-14;
   }
@@ -88,7 +88,7 @@
     margin: 20px 0;
     background-color: var(--white);
     border: 1px solid var(--gray);
-    border-radius: var(--rounded-xl);
+    border-radius: 15px;
   }
 
   &__title {
@@ -128,8 +128,8 @@
     flex-direction: column;
     gap: 15px;
 
-    app-button {
-      border-radius: var(--rounded-xl);
+    button {
+      border-radius: 15px;
     }
   }
 
