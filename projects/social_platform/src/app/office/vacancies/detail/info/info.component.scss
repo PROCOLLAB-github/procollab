@@ -128,8 +128,11 @@
     flex-direction: column;
     gap: 15px;
 
-    button {
-      border-radius: 15px;
+    ::ng-deep .button {
+      &.button--inline,
+      &.button--outline {
+        border-radius: 15px;
+      }
     }
   }
 
@@ -145,7 +148,7 @@
     cursor: pointer;
     border: 1px solid;
     border-color: var(--gradient);
-    border-radius: var(--rounded-xl);
+    border-radius: 15px;
   }
 
   &__project-image {
