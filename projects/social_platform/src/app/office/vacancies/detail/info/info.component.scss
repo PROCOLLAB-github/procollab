@@ -36,7 +36,7 @@
     position: relative;
     height: 230px;
     margin-bottom: 20px;
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
 
     img {
       position: absolute;
@@ -78,7 +78,7 @@
     text-align: center;
     background-color: var(--white);
     border: 1px solid var(--gray);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
 
     @include typography.body-14;
   }
@@ -88,7 +88,7 @@
     margin: 20px 0;
     background-color: var(--white);
     border: 1px solid var(--gray);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
   }
 
   &__title {
@@ -127,6 +127,10 @@
     flex-basis: 20%;
     flex-direction: column;
     gap: 15px;
+
+    app-button {
+      border-radius: var(--rounded-xl);
+    }
   }
 
   &__left {
@@ -141,7 +145,7 @@
     cursor: pointer;
     border: 1px solid;
     border-color: var(--gradient);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
   }
 
   &__project-image {
