@@ -29,18 +29,18 @@
 
   &__top {
     display: flex;
-    align-items: center;
     gap: 10px;
+    align-items: center;
   }
 
   &__mentor {
-    color: var(--green);
-    border: 1px solid var(--green);
-    padding: 0px 20px;
     display: flex;
     align-items: center;
-    border-radius: 20px;
     height: 23px;
+    padding: 0 20px;
+    color: var(--green);
+    border: 1px solid var(--green);
+    border-radius: 20px;
   }
 
   &__left {

@@ -2,12 +2,12 @@
 @use "styles/typography";
 
 .students {
+  position: relative !important;
+  z-index: 100;
+  padding: 15px 22px;
   background-color: var(--white);
   border: 1px solid var(--grey-button);
   border-radius: 15px;
-  padding: 15px 22px;
-  position: relative !important;
-  z-index: 100;
 
   &__container {
     display: flex;
@@ -17,8 +17,8 @@
 
   &__info {
     display: flex;
-    align-items: center;
     gap: 30px;
+    align-items: center;
   }
 
   &__trajectory {
@@ -44,14 +44,14 @@
   }
 
   &__stats {
-    background-color: var(--white);
-    border-radius: 15px;
-    border: 1px solid var(--grey-button);
     position: absolute;
     top: 92%;
     left: 5%;
-    width: 90%;
     z-index: 10;
+    width: 90%;
+    background-color: var(--white);
+    border: 1px solid var(--grey-button);
+    border-radius: 15px;
     transition: height 0.3s ease;
   }
 }
@@ -72,14 +72,14 @@
   &__skills {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
   }
 
   &__checkbox {
     display: flex;
-    align-items: center;
     gap: 10px;
+    align-items: center;
   }
 
   &__info {
@@ -88,15 +88,15 @@
 
   &__bottom {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     margin-top: 40px;
   }
 
   &__text-content {
     display: flex;
-    align-items: center;
     gap: 10px;
+    align-items: center;
   }
 
   &__point,

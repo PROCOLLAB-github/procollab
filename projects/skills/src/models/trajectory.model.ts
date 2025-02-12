@@ -1,3 +1,3 @@
 /** @format */
 
-export interface Trajectory {}
+// export interface Trajectory {}

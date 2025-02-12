@@ -2,12 +2,12 @@
 @use "styles/typography";
 
 .trajectory {
+  position: relative;
+  height: 385px;
+  padding: 18px 0 0 18px;
   background-color: var(--white);
   border: 1px solid var(--grey-button);
-  padding: 18px 0px 0px 18px;
   border-radius: 15px;
-  height: 385px;
-  position: relative;
 
   &__container {
     display: flex;
@@ -59,9 +59,9 @@
 
   &__info {
     display: flex;
+    flex-basis: 36%;
     flex-direction: column;
     justify-content: space-between;
-    flex-basis: 36%;
   }
 
   &__content {
@@ -69,8 +69,8 @@
   }
 
   &__skills {
-    margin-left: 30px;
     width: 60%;
+    margin-left: 30px;
 
     &-top {
       display: flex;
@@ -79,10 +79,10 @@
     }
 
     &-bottom {
-      margin-top: 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      margin-top: 20px;
     }
 
     &-list {
@@ -99,16 +99,16 @@
   }
 
   &__inner {
-    margin-top: 20px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    margin-top: 20px;
   }
 
   &__skill {
     display: flex;
-    align-items: center;
     gap: 15px;
+    align-items: center;
 
     .skill__image {
       width: 40px;
@@ -116,8 +116,6 @@
       border-radius: 100%;
     }
   }
-
-  &__image {}
 }
 
 .read-more {
@@ -142,16 +140,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 800px;
   max-height: calc(100vh - 40px);
   padding: 52px 50px 24px 42px;
   overflow-y: auto;
-  width: 800px;
 
   &__info {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
     gap: 80px;
+    align-items: flex-start;
+    justify-content: space-between;
   }
 
   &__title {
@@ -192,8 +190,8 @@
 
   &__dots-group {
     display: flex;
-    align-items: center;
     gap: 40px;
+    align-items: center;
   }
 
   .dots-group {
@@ -224,16 +222,14 @@
 
     &__dots {
       display: flex;
-      align-items: center;
       gap: 18px;
+      align-items: center;
     }
-
   }
 
   .dot {
-    border-radius: 100%;
     width: 8px;
     height: 8px;
+    border-radius: 100%;
   }
-
 }
