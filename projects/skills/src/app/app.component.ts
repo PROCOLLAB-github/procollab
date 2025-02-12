@@ -54,5 +54,12 @@ export class AppComponent implements OnInit {
         location.href = "https://app.procollab.ru/auth/login";
       },
     });
+
+    this.profileService.syncProfile().subscribe({
+      next: () => {},
+      error: () => {
+        location.href = "https://app.procollab.ru/auth/login";
+      },
+    });
   }
 }
