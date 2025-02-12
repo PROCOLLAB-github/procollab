@@ -3,7 +3,7 @@
 <div class="app">
   <ui-sidebar class="app__sidebar" [navItems]="navItems" logoSrc="/assets/images/shared/logo.svg">
     @if(userData()){
-    <app-sidebar-profile [user]="userData()!"></app-sidebar-profile>
+    <app-sidebar-profile></app-sidebar-profile>
     }
   </ui-sidebar>
 
@@ -56,7 +56,7 @@
         </ul>
       </nav>
       } @if (userData()) {
-      <app-sidebar-profile class="nav-bar__profile" [user]="userData()!"></app-sidebar-profile>
+      <app-sidebar-profile class="nav-bar__profile"></app-sidebar-profile>
       }
     </div>
     }
