@@ -81,8 +81,17 @@
     </div>
 
     <div class="vacancy__right">
-      <app-button [routerLink]="['/office/vacancy/', vacancy.id]">Откликнуться</app-button>
-      <app-button color="gradient" (click)="this.openModal.set(true)">Прокачать себя</app-button>
+      <app-button
+        customTypographyClass="text-body-14"
+        [routerLink]="['/office/vacancy/', vacancy.id]"
+        >Откликнуться</app-button
+      >
+      <app-button
+        customTypographyClass="text-body-14"
+        color="green"
+        (click)="this.openModal.set(true)"
+        >Прокачать себя</app-button
+      >
 
       <div class="vacancy__project" [routerLink]="['/office/projects/' + vacancy.project.id]">
         <img [src]="project.imageAddress" class="vacancy__project-image" />
