@@ -1,0 +1,211 @@
+<!-- @format -->
+
+<div class="trajectory">
+  <img src="assets\images\trajectories\vertical_line.svg" class="trajectory__line" />
+  <div class="trajectory__container">
+    <div class="trajectory__info">
+      <div class="trajectory__content">
+        <h4 class="text-heading-4">{{ trajectory.title }}</h4>
+        <p
+          class="trajectory__description text-body-12"
+          #descEl
+          [innerHTML]="this.sanitizer.bypassSecurityTrustHtml(trajectory.description)"
+        ></p>
+        @if (descriptionExpandable) {
+        <div
+          class="read-more"
+          (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+        >
+          {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+        </div>
+        }
+      </div>
+
+      <div class="trajectory__seat">
+        <p class="text-bold-body-16">{{ trajectory.termDate }}</p>
+        <p class="text-body-10">{{ trajectory.seat }}</p>
+      </div>
+    </div>
+
+    <div class="trajectory__skills">
+      <div class="trajectory__skills-top">
+        <h4 class="text-heading-4">Навыки которые ты прокачаешь</h4>
+        <p class="text-body-10">Посадочный талон</p>
+      </div>
+      <div class="trajectory__inner">
+        <ul class="trajectory__skills-list">
+          @if(trajectory.skills.length > 0){ @for(skill of trajectory.skills; track $index){
+          <li class="trajectory__skill">
+            <img
+              alt="skill image"
+              class="skill__image"
+              [src]="skill.image ? placeholderUrl : placeholderUrl"
+            />
+            <p class="text-body-14">{{ skill.label }}</p>
+          </li>
+          } }
+        </ul>
+
+        <img
+          src="assets\images\trajectories\trajectories_cover.svg"
+          class="trajectory__image.png"
+        />
+      </div>
+
+      <div class="trajectory__skills-bottom">
+        <p class="text-bold-body-16">и еще 5+ навыков от партнеров</p>
+        <div class="trajectory__buttons-group">
+          <app-button
+            (click)="moreModalOpen.set(true)"
+            customTypographyClass="text-body-12"
+            class="button__more"
+            >Подробнее</app-button
+          >
+          <app-button
+            (click)="onOpenConfirmClick()"
+            customTypographyClass="text-body-12"
+            class="button__pick"
+            >Выбрать</app-button
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal [open]="moreModalOpen()">
+  <div class="cancel">
+    <div class="cancel__info">
+      <div class="cancel__content">
+        <h4 class="cancel__title text-heading-4">Доступно в подписке</h4>
+        <p class="text-body-12 cancel__text">
+          Эта программа — не просто обучение, а полноценный старт в карьере с поддержкой на каждом
+          этапе. Вот что делает её уникальной:
+        </p>
+
+        <ul class="cancel__advantages">
+          @for(advantage of trajectoryMore; track $index){
+          <li class="cancel__advantage">
+            <i appIcon appSquare="32" icon="check" style="color: var(--green)"></i>
+            <p class="text-body-12">{{ advantage.label }}</p>
+          </li>
+          }
+        </ul>
+      </div>
+
+      <img alt="more image" src="assets\images\trajectories\more.svg" class="cancel__image" />
+    </div>
+
+    <app-button
+      customTypographyClass="text-body-12"
+      [color]="'grey'"
+      style="text-align: center; width: 20%"
+      (click)="moreModalOpen.set(false)"
+      >Назад</app-button
+    >
+  </div>
+</app-modal>
+
+@if(isSubscribedConfirmModalOpen()){
+<app-modal [open]="confirmModalOpen()">
+  <div class="cancel" style="padding: 20px 50px 24px 50px !important">
+    <div class="cancel__confirm">
+      <img alt="more image" src="assets\images\trajectories\confirm.svg" class="cancel__image" />
+      <h4 class="confirm__title text-heading-4">Подтверждение</h4>
+      <p class="text-body-12 cancel__text" style="width: 60%">
+        Теперь у вас есть доступ ко всем возможностям платформы. Начните использовать прямо сейчас!
+      </p>
+
+      <div class="cancel__buttons-group">
+        <app-button
+          customTypographyClass="text-body-12"
+          [color]="'grey'"
+          style="width: 100%"
+          (click)="confirmModalOpen.set(false)"
+          >Назад</app-button
+        >
+
+        <app-button
+          customTypographyClass="text-body-12"
+          [color]="'green'"
+          style="width: 100%"
+          (click)="onConfirmClick()"
+          >Поехали</app-button
+        >
+      </div>
+    </div>
+  </div>
+</app-modal>
+} @else {
+<app-modal [open]="nonConfirmerModalOpen()">
+  <div class="cancel" style="padding: 36px 50px 24px 50px !important">
+    <div class="cancel__confirm">
+      <img alt="more image" src="assets\images\trajectories\more.svg" class="cancel__image" />
+      <h4 class="confirm__title text-heading-4">У вас нет активной подписки</h4>
+      <p class="text-body-12 cancel__text" style="width: 60%">
+        Чтобы получить доступ ко всем возможностям платформы, оформите подписку прямо сейчас!
+      </p>
+
+      <div class="cancel__buttons-group">
+        <app-button
+          customTypographyClass="text-body-12"
+          [color]="'grey'"
+          style="width: 100%"
+          (click)="nonConfirmerModalOpen.set(false)"
+          >Назад</app-button
+        >
+
+        <app-button
+          routerLink="/subscription"
+          style="width: 100%"
+          customTypographyClass="text-body-12"
+          [color]="'primary'"
+          >Купить</app-button
+        >
+      </div>
+    </div>
+  </div>
+</app-modal>
+}
+
+<app-modal [open]="instructionModalOpen()">
+  <div class="cancel" style="padding: 44px 50px 24px 30px !important">
+    <div class="cancel__confirm">
+      <img alt="more image" src="assets\images\trajectories\more.svg" class="cancel__image" />
+      <h4 class="confirm__title text-heading-4">Узнай больше</h4>
+      <p class="text-body-12 cancel__text" style="width: 60%">
+        навыки открываются раз в месяц, за месяц тебе необходимо пройти путь навыков, которые
+        отображаются в разделе "Навыки на месяц"
+      </p>
+
+      <div class="cancel__dots-group">
+        <i
+          appIcon
+          appSquare="32"
+          icon="left-arrow"
+          class="dots_group__prev dots-group__icon"
+          (click)="prevPage()"
+          [ngStyle]="{ color: currentPage === 1 ? 'var(--dark-grey)' : 'var(--black)' }"
+          [ariaDisabled]="currentPage === 1"
+        ></i>
+        <div class="dots-group__dots">
+          @for(dot of dotsArray(4); track $index){
+          <div
+            class="dot"
+            [ngStyle]="{
+              backgroundColor: currentPage === $index + 1 ? 'var(--accent)' : 'var(--dark-grey)'
+            }"
+          ></div>
+          }
+        </div>
+        <i
+          appIcon
+          appSquare="32"
+          icon="left-arrow"
+          class="dots-group__next dots-group__icon"
+          (click)="nextPage()"
+        ></i>
+      </div>
+    </div>
+  </div>
+</app-modal>

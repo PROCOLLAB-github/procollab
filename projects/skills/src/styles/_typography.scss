@@ -195,3 +195,16 @@
 .text-body-12 {
   @include body-12;
 }
+
+@mixin body-10 {
+  font-family: Mont, sans-serif;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+  color: var(--grey-button);
+}
+
+.text-body-10 {
+  @include body-10;
+}

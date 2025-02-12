@@ -29,7 +29,18 @@
 
   &__top {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__mentor {
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 0px 20px;
+    display: flex;
+    align-items: center;
+    border-radius: 20px;
+    height: 23px;
   }
 
   &__left {

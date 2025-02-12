@@ -1,0 +1,117 @@
+@use "styles/responsive";
+@use "styles/typography";
+
+.students {
+  background-color: var(--white);
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+  padding: 15px 22px;
+  position: relative !important;
+  z-index: 100;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+
+  &__trajectory {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &__profile {
+    color: var(--dark-grey);
+  }
+
+  app-button {
+    &::ng-deep .button--inline {
+      height: 25px;
+    }
+  }
+
+  &__stats {
+    background-color: var(--white);
+    border-radius: 15px;
+    border: 1px solid var(--grey-button);
+    position: absolute;
+    top: 92%;
+    left: 5%;
+    width: 90%;
+    z-index: 10;
+    transition: height 0.3s ease;
+  }
+}
+
+.stats {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__expand {
+    position: absolute;
+    bottom: 5%;
+    left: 41%;
+  }
+
+  &__skills {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__info {
+    text-align: end;
+  }
+
+  &__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+  }
+
+  &__text-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__point,
+  &__trajectories,
+  &__meeting {
+    color: var(--dark-grey);
+  }
+
+  &__save {
+    width: 13%;
+
+    app-button {
+      &::ng-deep .button--inline {
+        min-height: 38px;
+      }
+    }
+  }
+}

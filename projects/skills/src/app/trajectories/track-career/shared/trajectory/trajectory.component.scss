@@ -1,0 +1,239 @@
+@use "styles/responsive";
+@use "styles/typography";
+
+.trajectory {
+  background-color: var(--white);
+  border: 1px solid var(--grey-button);
+  padding: 18px 0px 0px 18px;
+  border-radius: 15px;
+  height: 385px;
+  position: relative;
+
+  &__container {
+    display: flex;
+    width: 100%;
+  }
+
+  &__line {
+    position: absolute;
+    top: 0;
+    left: 37%;
+  }
+
+  &__description {
+    margin-top: 14px;
+    color: var(--dark-grey);
+
+    p {
+      display: box;
+      overflow: hidden;
+      color: var(--dark-grey);
+      text-overflow: ellipsis;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+      transition: all 0.7s ease-in-out;
+
+      &.expanded {
+        -webkit-line-clamp: unset;
+      }
+    }
+
+    ::ng-deep a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
+
+      &:hover {
+        text-decoration-color: var(--accent);
+      }
+    }
+
+    &__read-full {
+      margin-top: 2px;
+      color: var(--accent);
+      cursor: pointer;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-basis: 36%;
+  }
+
+  &__content {
+    margin-right: 20px;
+  }
+
+  &__skills {
+    margin-left: 30px;
+    width: 60%;
+
+    &-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &-bottom {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+  &__buttons-group {
+    display: flex;
+    gap: 5px;
+    width: 40%;
+  }
+
+  &__inner {
+    margin-top: 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__skill {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    .skill__image {
+      width: 40px;
+      height: 40px;
+      border-radius: 100%;
+    }
+  }
+
+  &__image {}
+}
+
+.read-more {
+  margin-top: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--accent-dark);
+  }
+
+  @include typography.body-14;
+}
+
+.button__pick {
+  width: 90%;
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: calc(100vh - 40px);
+  padding: 52px 50px 24px 42px;
+  overflow-y: auto;
+  width: 800px;
+
+  &__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 80px;
+  }
+
+  &__title {
+    margin-bottom: 10px;
+    color: var(--accent);
+  }
+
+  &__text {
+    margin-bottom: 10px;
+  }
+
+  &__advantages {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__advantage {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__confirm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .confirm__title {
+      margin-bottom: 20px;
+    }
+  }
+
+  &__buttons-group {
+    display: flex;
+    gap: 15px;
+    width: 55%;
+  }
+
+  &__dots-group {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .dots-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+
+    @include responsive.apply-desktop {
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    &__icon {
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+    }
+
+    &-prev {
+      color: var(--dark-grey);
+    }
+
+    &-next {
+      transform: rotate(180deg);
+    }
+
+    &__dots {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+  }
+
+  .dot {
+    border-radius: 100%;
+    width: 8px;
+    height: 8px;
+  }
+
+}
