@@ -55,14 +55,14 @@
   }
 
   &__lost {
+    padding: 5px 40px;
     color: var(--red);
     border: 1px solid var(--red);
-    padding: 5px 40px;
   }
 
   &__complete {
+    padding: 5px 40px;
     color: var(--green);
     border: 1px solid var(--green);
-    padding: 5px 40px;
   }
 }

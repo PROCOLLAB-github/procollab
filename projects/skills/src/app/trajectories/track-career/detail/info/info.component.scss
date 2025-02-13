@@ -90,36 +90,36 @@
 
     &__cover {
       display: flex;
+      flex-basis: 200%;
       flex-direction: column;
       gap: 30px;
-      flex-basis: 200%;
     }
 
     &__info {
       display: flex;
+      flex-basis: 270%;
       flex-direction: column;
       gap: 10px;
-      flex-basis: 270%;
     }
 
     &__info--additional {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      background-color: var(--white);
-      border-radius: 15px;
-      border: 1px solid var(--grey-button);
+      justify-content: space-between;
       padding: 10px 25px;
+      background-color: var(--white);
+      border: 1px solid var(--grey-button);
+      border-radius: 15px;
     }
 
     &__timeline {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 0 25px;
       background-color: var(--white);
-      border-radius: 15px;
       border: 1px solid var(--grey-button);
-      padding: 0px 25px;
+      border-radius: 15px;
 
       ::ng-deep app-month-block {
         display: block;
@@ -143,20 +143,20 @@
 
     &__mentor {
       display: flex;
+      gap: 12px;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      background-color: var(--white);
-      border-radius: 15px;
-      border: 1px solid var(--grey-button);
       padding: 10px 25px;
+      background-color: var(--white);
+      border: 1px solid var(--grey-button);
+      border-radius: 15px;
     }
 
     &__description {
-      background-color: var(--white);
-      border-radius: 15px;
-      border: 1px solid var(--grey-button);
       padding: 18px 25px;
+      background-color: var(--white);
+      border: 1px solid var(--grey-button);
+      border-radius: 15px;
     }
   }
 
@@ -166,11 +166,11 @@
 
   .info__additional {
     display: flex;
+    gap: 10px;
     align-items: center;
+    padding: 5px 24px;
     text-align: center;
     border-radius: 15px;
-    padding: 5px 24px;
-    gap: 10px;
 
     p {
       width: 100%;
@@ -184,8 +184,8 @@
 
     &__info {
       display: flex;
-      align-items: center;
       gap: 12px;
+      align-items: center;
     }
   }
 
