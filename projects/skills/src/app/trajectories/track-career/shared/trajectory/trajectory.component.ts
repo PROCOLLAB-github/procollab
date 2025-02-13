@@ -19,11 +19,20 @@ import { TrajectoriesService } from "../../../trajectories.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { expandElement } from "@utils/expand-element";
 import { IconComponent } from "@uilib";
+import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 
 @Component({
   selector: "app-trajectory",
   standalone: true,
-  imports: [CommonModule, ButtonComponent, ModalComponent, IconComponent, RouterModule],
+  imports: [
+    CommonModule,
+    ButtonComponent,
+    ModalComponent,
+    IconComponent,
+    RouterModule,
+    ParseLinksPipe,
+    ParseBreaksPipe,
+  ],
   templateUrl: "./trajectory.component.html",
   styleUrl: "./trajectory.component.scss",
 })
@@ -70,8 +79,6 @@ export class TrajectoryComponent implements OnInit, AfterViewInit {
       label: "Действия > Обучение",
     },
   ];
-
-  instructions = [{}];
 
   ngOnInit(): void {
     this.type.set(this.router.url.split("/").slice(-1)[0] as "all" | "my");

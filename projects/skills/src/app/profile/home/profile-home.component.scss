@@ -5,6 +5,13 @@
   display: flex;
   flex-direction: column;
 
+  @include responsive.apply-desktop {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
   &__overlay {
     position: absolute;
     top: 0;

@@ -45,10 +45,24 @@
     justify-content: space-between;
   }
 
-  &__price {
+  &__price,
+  &__lost,
+  &__complete {
     padding: 5px;
     color: var(--accent);
     border: 1px solid var(--accent);
     border-radius: 15px;
+  }
+
+  &__lost {
+    color: var(--red);
+    border: 1px solid var(--red);
+    padding: 5px 40px;
+  }
+
+  &__complete {
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 5px 40px;
   }
 }

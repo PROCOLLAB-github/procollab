@@ -2,7 +2,7 @@
 <div class="students">
   <div class="students__container">
     <div class="students__info">
-      <app-avatar [size]="94" [url]="placeholderUrl"></app-avatar>
+      <app-avatar [size]="94" [url]="placeholderUrl ? placeholderUrl : placeholderUrl"></app-avatar>
       <div class="students__content">
         <p class="text-heading-2">Тест Тестович</p>
         <p class="students__profile text-body-14">19 лет * Frontend Developer</p>

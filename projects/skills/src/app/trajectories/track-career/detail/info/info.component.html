@@ -1,3 +1,116 @@
 <!-- @format -->
 
-<div>trajectory by id</div>
+<div class="trajectory__info">
+  <div class="trajectory">
+    <div class="trajectory__cover">
+      <h2 class="text-heading-2">Старт в карьеру</h2>
+      <img
+        alt="cover image"
+        src="assets\images\trajectories\trajectories_cover.svg"
+        width="275px"
+        height="275px"
+      />
+    </div>
+
+    <div class="trajectory__info">
+      <div class="trajectory__timeline">
+        <p class="timeline__data text-body-14">01.01.2025</p>
+        <app-month-block [months]="mockMonts" [hasNext]="false"></app-month-block>
+        <p class="timeline__data text-body-14">01.04.2025</p>
+      </div>
+
+      <div class="trajectory__mentor">
+        <div class="mentor__info">
+          <app-avatar
+            [url]="placeholderUrl ? placeholderUrl : placeholderUrl"
+            [size]="46"
+          ></app-avatar>
+          <div class="mentor">
+            <p class="text-heading-4">Слава Попов</p>
+            <p class="text-body-12 mentor__years">2 года опыта преподавания</p>
+          </div>
+        </div>
+        <app-button customTypographyClass="text-body-12">Написать наставнику</app-button>
+      </div>
+
+      <div class="trajectory__description">
+        @if (description) {
+        <div class="text-body-14 about__text">
+          <p #descEl [innerHTML]="description | parseLinks | parseBreaks"></p>
+          @if (descriptionExpandable) {
+          <div
+            class="read-more"
+            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+          >
+            {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+          </div>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="trajectory__info--additional">
+        <div
+          class="info__additional"
+          [ngStyle]="{ backgroundColor: 1 === 1 ? 'var(--green)' : 'var(--grey-button)' }"
+        >
+          <p
+            [ngStyle]="{ color: 1 === 1 ? 'var(--white)' : 'var(--dark-grey)s' }"
+            class="text-body-12"
+          >
+            Начальная встреча с наставником
+          </p>
+          <i
+            appIcon
+            appSquare="15"
+            icon="check"
+            [ngStyle]="{ color: 1 === 1 ? 'var(--white)' : 'var(--dark-grey)' }"
+          ></i>
+        </div>
+
+        <div
+          class="info__additional"
+          [ngStyle]="{ backgroundColor: 1 !== 1 ? 'var(--green)' : 'var(--grey-button)' }"
+        >
+          <p
+            [ngStyle]="{ color: 1 !== 1 ? 'var(--white)' : 'var(--dark-grey)' }"
+            class="text-body-12"
+          >
+            Финальная встреча с наставником
+          </p>
+          <i
+            appIcon
+            appSquare="15"
+            icon="check"
+            [ngStyle]="{ color: 1 !== 1 ? 'var(--white)' : 'var(--dark-grey)' }"
+          ></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="skills">
+    <h4 class="text-heading-4">Навыки текущего месяца</h4>
+    <div class="skills__now">
+      <app-skill-card [skill]="skill"></app-skill-card>
+      <app-skill-card [skill]="skill"></app-skill-card>
+      <app-skill-card [skill]="skill"></app-skill-card>
+      <app-skill-card [skill]="skill"></app-skill-card>
+      <app-skill-card [skill]="skill"></app-skill-card>
+    </div>
+
+    <h4 class="text-heading-4">Грядущие навыки</h4>
+    <div class="skills__future">
+      <app-skill-card [skill]="skill"></app-skill-card>
+      <app-skill-card [skill]="skill"></app-skill-card>
+      <app-skill-card [skill]="skill"></app-skill-card>
+    </div>
+
+    <h4 class="text-heading-4">Пройденные навыки</h4>
+    <div class="skills__past">
+      <app-skill-card [skill]="skill"></app-skill-card>
+      <app-skill-card [skill]="skill"></app-skill-card>
+      <app-skill-card [skill]="skill"></app-skill-card>
+    </div>
+  </div>
+</div>

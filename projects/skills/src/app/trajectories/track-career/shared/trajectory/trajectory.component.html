@@ -2,23 +2,26 @@
 
 <div class="trajectory">
   <img src="assets\images\trajectories\vertical_line.svg" class="trajectory__line" />
+  <img src="assets\images\trajectories\rocket.svg" class="trajectory__rocket" />
   <div class="trajectory__container">
     <div class="trajectory__info">
       <div class="trajectory__content">
         <h4 class="text-heading-4">{{ trajectory.title }}</h4>
-        <p
-          class="trajectory__description text-body-12"
-          #descEl
-          [innerHTML]="this.sanitizer.bypassSecurityTrustHtml(trajectory.description)"
-        ></p>
-        @if (descriptionExpandable) {
-        <div
-          class="read-more"
-          (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
-        >
-          {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+        <div class="trajectory__description">
+          @if (trajectory.description) {
+          <div class="text-body-14 about__text">
+            <p #descEl [innerHTML]="trajectory.description | parseLinks | parseBreaks"></p>
+            @if (descriptionExpandable) {
+            <div
+              class="read-more"
+              (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+            >
+              {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+            </div>
+            }
+          </div>
+          }
         </div>
-        }
       </div>
 
       <div class="trajectory__seat">

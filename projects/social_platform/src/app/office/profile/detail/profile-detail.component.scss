@@ -108,6 +108,21 @@ $detail-bar-mb: 12px;
       gap: 10px;
       align-items: flex-end;
     }
+
+    &-more {
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+  &__mentor {
+    display: flex;
+    align-items: center;
+    height: 23px;
+    padding: 0 20px;
+    color: var(--green);
+    border: 1px solid var(--green);
+    border-radius: 20px;
   }
 
   &__achievements {
@@ -228,7 +243,7 @@ $detail-bar-mb: 12px;
     @include responsive.apply-desktop {
       flex-direction: row;
 
-      & > a {
+      &>a {
         flex-grow: 1;
         flex-shrink: 0;
       }
