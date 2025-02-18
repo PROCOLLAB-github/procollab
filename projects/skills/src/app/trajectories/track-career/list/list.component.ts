@@ -114,14 +114,6 @@ export class TrajectoriesListComponent implements OnInit, AfterViewInit, OnDestr
         }),
         map(res => res)
       );
-    } else if (this.type() === "my") {
-      return this.trajectoriesService.getMyTrajectories(limit, offset).pipe(
-        tap((res: any) => {
-          this.totalItemsCount.set(res.count);
-          this.myTrajectoriesList.update(items => [...items, ...res.results]);
-        }),
-        map(res => res)
-      );
     }
 
     return of([]);

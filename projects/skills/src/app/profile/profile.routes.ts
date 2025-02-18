@@ -17,7 +17,7 @@ export const PROFILE_ROUTES: Routes = [
         loadChildren: () => import("./home/profile-home.routes").then(m => m.PROFILE_HOME_ROUTES),
       },
       { path: "skills", component: ProfileSkillsRatingComponent },
-      { path: "students", component: ProfileStudentsComponent },
+      // { path: "students", component: ProfileStudentsComponent },
     ],
   },
 ];

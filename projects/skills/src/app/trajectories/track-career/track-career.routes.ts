@@ -22,10 +22,6 @@ export const TRACK_CAREER_ROUTES: Routes = [
           data: TrajectoriesResolver,
         },
       },
-      {
-        path: "my",
-        loadChildren: () => import("./list/list.routes").then(c => c.MY_TRAJECTORIES_ROUTES),
-      },
     ],
   },
   {

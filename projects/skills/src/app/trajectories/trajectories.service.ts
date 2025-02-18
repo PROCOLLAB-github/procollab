@@ -53,15 +53,6 @@ export class TrajectoriesService {
     return this.trajectories;
   }
 
-  getMyTrajectories(limit: number, offset: number) {
-    const params = new HttpParams();
-
-    params.set("limit", limit);
-    params.set("offset", offset);
-
-    return this.trajectories;
-  }
-
   getOne(id: number) {
     return this.trajectories.pipe(
       map((trajectories: any) => trajectories.skills.find((t: any) => t.id === id))
