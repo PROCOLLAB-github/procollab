@@ -25,7 +25,7 @@
       </div>
 
       <div class="trajectory__seat">
-        <p class="text-bold-body-16">{{ trajectory.termDate }}</p>
+        <p class="text-bold-body-16 trajectory__date">{{ trajectory.termDate }}</p>
         <p class="text-body-10">{{ trajectory.seat }}</p>
       </div>
     </div>
@@ -49,10 +49,7 @@
           } }
         </ul>
 
-        <img
-          src="assets\images\trajectories\trajectories_cover.svg"
-          class="trajectory__image.png"
-        />
+        <img src="assets\images\trajectories\trajectories_cover.svg" class="trajectory__image" />
       </div>
 
       <div class="trajectory__skills-bottom">
@@ -100,9 +97,9 @@
     </div>
 
     <app-button
+      class="cancel__button"
       customTypographyClass="text-body-12"
       [color]="'grey'"
-      style="text-align: center; width: 20%"
       (click)="moreModalOpen.set(false)"
       >Назад</app-button
     >
@@ -111,11 +108,11 @@
 
 @if(isSubscribedConfirmModalOpen()){
 <app-modal [open]="confirmModalOpen()">
-  <div class="cancel" style="padding: 20px 50px 24px 50px !important">
+  <div class="confirm">
     <div class="cancel__confirm">
-      <img alt="more image" src="assets\images\trajectories\confirm.svg" class="cancel__image" />
+      <img alt="more image" src="assets\images\trajectories\confirm.svg" class="confirm__image" />
       <h4 class="confirm__title text-heading-4">Подтверждение</h4>
-      <p class="text-body-12 cancel__text" style="width: 60%">
+      <p class="text-body-12 cancel__subtext">
         Теперь у вас есть доступ ко всем возможностям платформы. Начните использовать прямо сейчас!
       </p>
 
@@ -141,11 +138,11 @@
 </app-modal>
 } @else {
 <app-modal [open]="nonConfirmerModalOpen()">
-  <div class="cancel" style="padding: 36px 50px 24px 50px !important">
+  <div class="confirm">
+    <h4 class="confirm__title text-heading-4">У вас нет активной подписки</h4>
     <div class="cancel__confirm">
-      <img alt="more image" src="assets\images\trajectories\more.svg" class="cancel__image" />
-      <h4 class="confirm__title text-heading-4">У вас нет активной подписки</h4>
-      <p class="text-body-12 cancel__text" style="width: 60%">
+      <img alt="more image" src="assets\images\trajectories\more.svg" class="confirm__image" />
+      <p class="text-body-12 cancel__subtext">
         Чтобы получить доступ ко всем возможностям платформы, оформите подписку прямо сейчас!
       </p>
 
@@ -172,16 +169,16 @@
 }
 
 <app-modal [open]="instructionModalOpen()">
-  <div class="cancel" style="padding: 44px 50px 24px 30px !important">
+  <div class="confirm">
     <div class="cancel__confirm">
       <img alt="more image" src="assets\images\trajectories\more.svg" class="cancel__image" />
       <h4 class="confirm__title text-heading-4">Узнай больше</h4>
-      <p class="text-body-12 cancel__text" style="width: 60%">
+      <p class="text-body-12 cancel__subtext">
         навыки открываются раз в месяц, за месяц тебе необходимо пройти путь навыков, которые
         отображаются в разделе "Навыки на месяц"
       </p>
 
-      <div class="cancel__dots-group">
+      <div class="confirm__dots-group">
         <i
           appIcon
           appSquare="32"

@@ -19,8 +19,13 @@ export class TrajectoryDetailComponent implements OnInit, OnDestroy {
   subscriptions$: Subscription[] = [];
 
   trajectory?: any;
+  trackId?: string;
 
   ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      this.trackId = params["trackId"];
+    });
+
     // const trajectorySub$ = this.route.data.pipe(map(r => r["data"])).subscribe(trajectory => {
     //   this.trajectory = trajectory;
     // });

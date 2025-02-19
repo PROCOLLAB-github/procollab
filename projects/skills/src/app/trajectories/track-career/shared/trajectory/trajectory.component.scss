@@ -84,21 +84,36 @@
 
 .trajectory {
   position: relative;
-  height: 385px;
-  padding: 18px 0 0 18px;
+  height: 100%;
+  padding: 18px 0 20px 18px;
   background-color: var(--white);
   border: 1px solid var(--grey-button);
   border-radius: 15px;
+  margin-bottom: 30px;
 
   &__container {
     display: flex;
+    flex-direction: column;
     width: 100%;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+    }
   }
 
   &__line {
     position: absolute;
-    top: 0;
-    left: 37%;
+    left: 44%;
+    bottom: 34%;
+    width: 1px;
+    transform: rotate(90deg);
+
+    @include responsive.apply-desktop {
+      height: 100%;
+      top: 0;
+      transform: rotate(0);
+      left: 37%;
+    }
   }
 
   &__rocket {
@@ -106,6 +121,41 @@
     top: 0%;
     right: 0%;
     z-index: 0;
+    display: none;
+
+    @include responsive.apply-desktop {
+      display: block;
+    }
+  }
+
+  &__image {
+    width: 85px;
+    height: 80px;
+
+    @include responsive.apply-desktop {
+      width: 150px;
+      height: 135px;
+    }
+  }
+
+  &__seat {
+    p {
+      display: none;
+
+      @include responsive.apply-desktop {
+        display: block;
+      }
+    }
+  }
+
+  &__date {
+    display: block !important;
+    margin-top: 48px;
+    margin-bottom: 36px;
+
+    @include responsive.apply-desktop {
+      margin: 0;
+    }
   }
 
   &__description {
@@ -157,22 +207,40 @@
   }
 
   &__skills {
-    width: 60%;
-    margin-left: 30px;
+    width: 100%;
+    margin: 0;
+
+    @include responsive.apply-desktop {
+      width: 60%;
+      margin-left: 30px;
+    }
 
     &-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
+
+      p {
+        display: none;
+
+        @include responsive.apply-desktop {
+          display: inline;
+        }
+      }
     }
 
     &-bottom {
       position: sticky;
       z-index: 10;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
       margin-top: 20px;
+
+      @include responsive.apply-desktop {
+        align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
+      }
     }
 
     &-list {
@@ -185,7 +253,18 @@
   &__buttons-group {
     display: flex;
     gap: 5px;
-    width: 40%;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+
+    app-button {
+      width: 100%;
+    }
+
+    @include responsive.apply-desktop {
+      width: 40%;
+    }
   }
 
   &__inner {
@@ -217,16 +296,42 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 800px;
+  width: 340px;
+  padding: 24px 20px 20px 24px;
   max-height: calc(100vh - 40px);
-  padding: 52px 50px 24px 42px;
   overflow-y: auto;
+
+  @include responsive.apply-desktop {
+    width: 800px;
+    padding: 52px 50px 24px 42px;
+  }
 
   &__info {
     display: flex;
-    gap: 80px;
-    align-items: flex-start;
-    justify-content: space-between;
+    flex-direction: column-reverse;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      flex-direction: row;
+      gap: 80px;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+  }
+
+  &__image {
+    width: 130px;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    margin-bottom: 18px;
+
+    @include responsive.apply-desktop {
+      width: 100%;
+      height: 218px;
+    }
   }
 
   &__title {
@@ -235,7 +340,29 @@
   }
 
   &__text {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 10px;
+    }
+  }
+
+  &__subtext {
+    width: 100%;
+    margin-bottom: 24px;
+
+    @include responsive.apply-desktop {
+      width: 60%;
+    }
+  }
+
+  &__button {
+    width: 100%;
+    text-align: center;
+
+    @include responsive.apply-desktop {
+      width: 20%;
+    }
   }
 
   &__advantages {
@@ -248,21 +375,60 @@
     gap: 10px;
   }
 
+  &__buttons-group {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+
+    app-button {
+      width: 100%;
+    }
+
+    @include responsive.apply-desktop {
+      width: 55%;
+    }
+  }
+
   &__confirm {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
 
-    .confirm__title {
-      margin-bottom: 20px;
+
+    @include responsive.apply-desktop {
+      align-items: center;
+      text-align: center;
     }
   }
+}
 
-  &__buttons-group {
-    display: flex;
-    gap: 15px;
-    width: 55%;
+
+.confirm {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  @include responsive.apply-desktop {
+    padding: 20px 50px 24px 50px;
+  }
+
+  &__title {
+    margin-bottom: 20px;
+  }
+
+  &__image {
+    margin-top: 24px;
+    margin-bottom: 18px;
+    width: 130px;
+    height: 125px;
+
+    @include responsive.apply-desktop {
+      width: 100%;
+      height: 218px;
+    }
   }
 
   &__dots-group {
