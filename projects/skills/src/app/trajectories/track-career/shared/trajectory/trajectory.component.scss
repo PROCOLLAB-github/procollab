@@ -86,10 +86,10 @@
   position: relative;
   height: 100%;
   padding: 18px 0 20px 18px;
+  margin-bottom: 30px;
   background-color: var(--white);
   border: 1px solid var(--grey-button);
   border-radius: 15px;
-  margin-bottom: 30px;
 
   &__container {
     display: flex;
@@ -103,16 +103,16 @@
 
   &__line {
     position: absolute;
-    left: 44%;
     bottom: 34%;
+    left: 44%;
     width: 1px;
     transform: rotate(90deg);
 
     @include responsive.apply-desktop {
-      height: 100%;
       top: 0;
-      transform: rotate(0);
       left: 37%;
+      height: 100%;
+      transform: rotate(0);
     }
   }
 
@@ -237,8 +237,8 @@
       margin-top: 20px;
 
       @include responsive.apply-desktop {
-        align-items: center;
         flex-direction: row;
+        align-items: center;
         justify-content: space-between;
       }
     }
@@ -253,8 +253,8 @@
   &__buttons-group {
     display: flex;
     gap: 5px;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     width: 100%;
     margin-top: 10px;
 
@@ -297,8 +297,8 @@
   align-items: center;
   justify-content: center;
   width: 340px;
-  padding: 24px 20px 20px 24px;
   max-height: calc(100vh - 40px);
+  padding: 24px 20px 20px 24px;
   overflow-y: auto;
 
   @include responsive.apply-desktop {
@@ -320,12 +320,12 @@
   }
 
   &__image {
-    width: 130px;
-    height: 110px;
     display: flex;
     align-items: center;
-    justify-content: center;
     align-self: center;
+    justify-content: center;
+    width: 130px;
+    height: 110px;
     margin-bottom: 18px;
 
     @include responsive.apply-desktop {
@@ -394,7 +394,6 @@
     flex-direction: column;
     align-items: center;
 
-
     @include responsive.apply-desktop {
       align-items: center;
       text-align: center;
@@ -402,17 +401,16 @@
   }
 }
 
-
 .confirm {
-  padding: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  padding: 0;
   text-align: center;
 
   @include responsive.apply-desktop {
-    padding: 20px 50px 24px 50px;
+    padding: 20px 50px 24px;
   }
 
   &__title {
@@ -420,10 +418,10 @@
   }
 
   &__image {
-    margin-top: 24px;
-    margin-bottom: 18px;
     width: 130px;
     height: 125px;
+    margin-top: 24px;
+    margin-bottom: 18px;
 
     @include responsive.apply-desktop {
       width: 100%;

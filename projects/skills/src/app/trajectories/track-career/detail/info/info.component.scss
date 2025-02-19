@@ -85,9 +85,9 @@
 .trajectory__infoItem {
   .trajectory {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    flex-direction: column;
 
     @include responsive.apply-desktop {
       flex-direction: row;
@@ -118,6 +118,7 @@
 
     &__title {
       @include typography.heading-4;
+
       width: 100%;
 
       @include responsive.apply-desktop {
@@ -134,10 +135,10 @@
 
     &__info--additional {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
       flex-direction: column;
       gap: 12px;
+      align-items: center;
+      justify-content: space-between;
       padding: 10px 25px;
       background-color: var(--white);
       border: 1px solid var(--grey-button);
@@ -150,9 +151,9 @@
 
     &__timeline {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      flex-direction: column;
       padding: 0 25px;
       background-color: var(--white);
       border: 1px solid var(--grey-button);
@@ -178,6 +179,7 @@
             @include responsive.apply-desktop {
               top: -50%;
               left: 50%;
+
               @include typography.body-14;
             }
           }
@@ -196,9 +198,9 @@
     &__mentor {
       display: flex;
       flex-direction: column;
+      gap: 20px;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 20px;
       padding: 10px 25px;
       background-color: var(--white);
       border: 1px solid var(--grey-button);
@@ -210,8 +212,8 @@
 
       @include responsive.apply-desktop {
         flex-direction: row;
-        align-items: center;
         gap: 12px;
+        align-items: center;
 
         app-button {
           width: inherit;
@@ -236,9 +238,9 @@
   }
 
   .timeline__start {
+    align-self: baseline;
     margin-top: 10px;
     color: var(--dark-grey);
-    align-self: baseline;
 
     @include responsive.apply-desktop {
       margin: 0;
@@ -246,9 +248,9 @@
   }
 
   .timeline__end {
+    align-self: end;
     margin-bottom: 10px;
     color: var(--dark-grey);
-    align-self: end;
 
     @include responsive.apply-desktop {
       margin: 0;
