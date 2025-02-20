@@ -2,6 +2,11 @@
 
 import { Skill } from "./skill.model";
 
+interface SkillInfo {
+  fileLink: string | null;
+  name: string;
+}
+
 export interface Trajectory {
   id: number;
   name: string;
@@ -16,9 +21,4 @@ export interface TrajectorySkills {
   availableSkills: Skill[];
   unavailableSkills: Skill[];
   completedSkills: Skill[];
-}
-
-interface SkillInfo {
-  fileLink: string | null;
-  name: string;
 }
