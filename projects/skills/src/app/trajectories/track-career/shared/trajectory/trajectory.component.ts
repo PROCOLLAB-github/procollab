@@ -20,6 +20,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { expandElement } from "@utils/expand-element";
 import { IconComponent } from "@uilib";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
+import { Trajectory } from "projects/skills/src/models/trajectory.model";
 
 @Component({
   selector: "app-trajectory",
@@ -37,7 +38,7 @@ import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
   styleUrl: "./trajectory.component.scss",
 })
 export class TrajectoryComponent implements OnInit, AfterViewInit {
-  @Input() trajectory!: any;
+  @Input() trajectory!: Trajectory;
   protected readonly dotsArray = Array;
 
   router = inject(Router);
@@ -47,9 +48,6 @@ export class TrajectoryComponent implements OnInit, AfterViewInit {
   sanitizer = inject(DomSanitizer);
 
   @ViewChild("descEl") descEl?: ElementRef;
-
-  placeholderUrl =
-    "https://uch-ibadan.org.ng/wp-content/uploads/2021/10/Profile_avatar_placeholder_large.png";
 
   descriptionExpandable!: boolean;
   readFullDescription = false;
@@ -111,11 +109,11 @@ export class TrajectoryComponent implements OnInit, AfterViewInit {
     }
   }
 
-  nextPage(): void {
+  nextPage(id: number): void {
     if (this.currentPage < 4) {
       this.currentPage += 1;
     } else if (this.currentPage === 4) {
-      this.router.navigate(["/trackCar/1"]);
+      this.router.navigate(["/trackCar/" + id]);
     }
   }
 

@@ -4,6 +4,7 @@ import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterOutlet } from "@angular/router";
 import { BarComponent } from "@ui/components";
+import { Trajectory } from "projects/skills/src/models/trajectory.model";
 import { concatMap, map, Subscription } from "rxjs";
 
 @Component({
@@ -18,7 +19,7 @@ export class TrajectoryDetailComponent implements OnInit, OnDestroy {
 
   subscriptions$: Subscription[] = [];
 
-  trajectory?: any;
+  trajectory?: Trajectory;
   trackId?: string;
 
   ngOnInit(): void {
@@ -26,10 +27,10 @@ export class TrajectoryDetailComponent implements OnInit, OnDestroy {
       this.trackId = params["trackId"];
     });
 
-    // const trajectorySub$ = this.route.data.pipe(map(r => r["data"])).subscribe(trajectory => {
-    //   this.trajectory = trajectory;
-    // });
-    // trajectorySub$ && this.subscriptions$.push(trajectorySub$);
+    const trajectorySub$ = this.route.data.pipe(map(r => r["data"])).subscribe(trajectory => {
+      this.trajectory = trajectory;
+    });
+    trajectorySub$ && this.subscriptions$.push(trajectorySub$);
   }
 
   ngOnDestroy(): void {

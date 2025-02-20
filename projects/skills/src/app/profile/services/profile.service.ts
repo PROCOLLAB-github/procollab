@@ -2,7 +2,7 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ApiService, SubscriptionData } from "@corelib";
-import { Profile } from "../../../models/profile.model";
+import { Profile, UserData } from "../../../models/profile.model";
 
 @Injectable({
   providedIn: "root",
@@ -15,7 +15,7 @@ export class ProfileService {
   }
 
   getUserData() {
-    return this.apiService.get("/progress/user-data/");
+    return this.apiService.get<UserData>("/progress/user-data/");
   }
 
   getSubscriptionData() {

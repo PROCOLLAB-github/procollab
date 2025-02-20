@@ -19,13 +19,9 @@
 
     @if (!skill.freeAccess) {
     <div class="skill-card__price text-body-12">Доступно в подписке PRO</div>
-    }
-
-    <!-- @if (skill.freeAccess) {
+    } @if (skill.overdue) {
     <div class="skill-card__lost text-body-12">Просроченный навык</div>
-    } -->
-
-    @if (1 === 1) {
+    } @if (skill.completed) {
     <div class="skill-card__complete text-body-12">Выполненный</div>
     }
   </div>

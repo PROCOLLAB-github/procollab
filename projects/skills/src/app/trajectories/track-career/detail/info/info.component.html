@@ -17,7 +17,7 @@
       <div class="trajectory__mentor">
         <div class="mentor__info">
           <app-avatar
-            [url]="placeholderUrl ? placeholderUrl : placeholderUrl"
+            [url]="placeholderUrl ? trajectory.avatar! : placeholderUrl"
             [size]="46"
           ></app-avatar>
           <div class="mentor">
@@ -87,25 +87,23 @@
   <div class="skills">
     <h4 class="text-heading-4">Навыки текущего месяца</h4>
     <div class="skills__now">
+      @if (trajectorySkills.availableSkills) { @for(skill of trajectorySkills.availableSkills; track
+      $index) {
       <app-skill-card [skill]="skill"></app-skill-card>
-      <app-skill-card [skill]="skill"></app-skill-card>
-      <app-skill-card [skill]="skill"></app-skill-card>
-      <app-skill-card [skill]="skill"></app-skill-card>
-      <app-skill-card [skill]="skill"></app-skill-card>
+      } }
     </div>
 
     <h4 class="text-heading-4">Грядущие навыки</h4>
     <div class="skills__future">
+      @if (trajectorySkills.unavailableSkills) { @for(skill of trajectorySkills.unavailableSkills;
+      track $index) {
       <app-skill-card [skill]="skill"></app-skill-card>
-      <app-skill-card [skill]="skill"></app-skill-card>
-      <app-skill-card [skill]="skill"></app-skill-card>
+      } }
     </div>
 
-    <h4 class="text-heading-4">Пройденные навыки</h4>
+    <!-- <h4 class="text-heading-4">Пройденные навыки</h4>
     <div class="skills__past">
       <app-skill-card [skill]="skill"></app-skill-card>
-      <app-skill-card [skill]="skill"></app-skill-card>
-      <app-skill-card [skill]="skill"></app-skill-card>
-    </div>
+    </div> -->
   </div>
 </div>

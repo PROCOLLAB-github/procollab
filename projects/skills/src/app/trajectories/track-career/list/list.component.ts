@@ -15,6 +15,7 @@ import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } 
 import { Webinar } from "projects/skills/src/models/webinars.model";
 import { TrajectoriesService } from "../../trajectories.service";
 import { TrajectoryComponent } from "../shared/trajectory/trajectory.component";
+import { Trajectory } from "projects/skills/src/models/trajectory.model";
 
 @Component({
   selector: "app-list",
@@ -30,29 +31,17 @@ export class TrajectoriesListComponent implements OnInit, AfterViewInit, OnDestr
   cdRef = inject(ChangeDetectorRef);
 
   totalItemsCount = signal(0);
-  trajectoriesList = signal<Webinar[]>([]);
-  myTrajectoriesList = signal<Webinar[]>([]);
+  trajectoriesList = signal<Trajectory[]>([]);
   trajectoriesPage = signal(1);
   perFetchTake = signal(20);
-
-  type = signal<"all" | "my" | null>(null);
 
   subscriptions$ = signal<Subscription[]>([]);
 
   ngOnInit(): void {
-    this.type.set(this.router.url.split("/").slice(-1)[0] as "all" | "my");
+    const routeData$ = this.route.data.pipe(map(r => r["data"]));
 
-    const routeData$ =
-      this.type() === "all"
-        ? this.route.data.pipe(map(r => r["data"]))
-        : this.route.data.pipe(map(r => r["data"]));
-
-    const subscription = routeData$.subscribe((trajectories: any) => {
-      if (this.type() === "all") {
-        this.trajectoriesList.set(trajectories as any[]);
-      } else if (this.type() === "my") {
-        this.myTrajectoriesList.set(trajectories as any[]);
-      }
+    const subscription = routeData$.subscribe((trajectories: Trajectory[]) => {
+      this.trajectoriesList.set(trajectories);
       this.totalItemsCount.set(trajectories.length);
     });
 
@@ -77,9 +66,6 @@ export class TrajectoriesListComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   onScroll() {
-    if (this.totalItemsCount() && this.myTrajectoriesList().length >= this.totalItemsCount())
-      return of({});
-
     if (this.totalItemsCount() && this.trajectoriesList().length >= this.totalItemsCount())
       return of({});
 
@@ -90,14 +76,9 @@ export class TrajectoriesListComponent implements OnInit, AfterViewInit, OnDestr
 
     if (diff > 0) {
       return this.onFetch(this.trajectoriesPage() * this.perFetchTake(), this.perFetchTake()).pipe(
-        tap((webinarChunk: Webinar[]) => {
-          if (this.type() === "all") {
-            this.trajectoriesPage.update(page => page + 1);
-            this.trajectoriesList.update(items => [...items, ...webinarChunk]);
-          } else if (this.type() === "my") {
-            this.trajectoriesPage.update(page => page + 1);
-            this.myTrajectoriesList.update(items => [...items, ...webinarChunk]);
-          }
+        tap((trajectoryChunk: Trajectory[]) => {
+          this.trajectoriesPage.update(page => page + 1);
+          this.trajectoriesList.update(items => [...items, ...trajectoryChunk]);
         })
       );
     }
@@ -106,16 +87,12 @@ export class TrajectoriesListComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   onFetch(offset: number, limit: number) {
-    if (this.type() === "all") {
-      return this.trajectoriesService.getTrajectories(limit, offset).pipe(
-        tap((res: any) => {
-          this.totalItemsCount.set(res.count);
-          this.trajectoriesList.update(items => [...items, ...res.results]);
-        }),
-        map(res => res)
-      );
-    }
-
-    return of([]);
+    return this.trajectoriesService.getTrajectories(limit, offset).pipe(
+      tap((res: any) => {
+        this.totalItemsCount.set(res.count);
+        this.trajectoriesList.update(items => [...items, ...res.results]);
+      }),
+      map(res => res)
+    );
   }
 }

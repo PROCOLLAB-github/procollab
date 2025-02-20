@@ -1,11 +1,7 @@
 <!-- @format -->
 
 <div class="list">
-  @if (type() === 'all') { @if (trajectoriesList().length) { @for(trajectory of trajectoriesList();
-  track $index){
+  @if (trajectoriesList().length) { @for(trajectory of trajectoriesList(); track $index){
   <app-trajectory [trajectory]="trajectory"></app-trajectory>
-  } } } @else if (type() === 'my'){ @if (myTrajectoriesList().length) { @for (trajectory of
-  myTrajectoriesList(); track $index) {
-  <app-trajectory [trajectory]="trajectory"></app-trajectory>
-  } } }
+  } }
 </div>

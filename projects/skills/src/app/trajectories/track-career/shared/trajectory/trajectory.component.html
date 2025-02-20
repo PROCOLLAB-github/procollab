@@ -6,7 +6,7 @@
   <div class="trajectory__container">
     <div class="trajectory__info">
       <div class="trajectory__content">
-        <h4 class="text-heading-4">{{ trajectory.title }}</h4>
+        <h4 class="text-heading-4">{{ trajectory.name }}</h4>
         <div class="trajectory__description">
           @if (trajectory.description) {
           <div class="text-body-14 about__text">
@@ -25,8 +25,8 @@
       </div>
 
       <div class="trajectory__seat">
-        <p class="text-bold-body-16 trajectory__date">{{ trajectory.termDate }}</p>
-        <p class="text-body-10">{{ trajectory.seat }}</p>
+        <p class="text-bold-body-16 trajectory__date">4 месяца + 2 встречи с наставником</p>
+        <p class="text-body-10">ряд 43, место А320</p>
       </div>
     </div>
 
@@ -39,12 +39,8 @@
         <ul class="trajectory__skills-list">
           @if(trajectory.skills.length > 0){ @for(skill of trajectory.skills; track $index){
           <li class="trajectory__skill">
-            <img
-              alt="skill image"
-              class="skill__image"
-              [src]="skill.image ? placeholderUrl : placeholderUrl"
-            />
-            <p class="text-body-14">{{ skill.label }}</p>
+            <img alt="skill image" class="skill__image" [src]="skill.fileLink" />
+            <p class="text-body-14">{{ skill.name }}</p>
           </li>
           } }
         </ul>
@@ -203,7 +199,7 @@
           appSquare="32"
           icon="left-arrow"
           class="dots-group__next dots-group__icon"
-          (click)="nextPage()"
+          (click)="nextPage(trajectory.id)"
         ></i>
       </div>
     </div>

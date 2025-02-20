@@ -5,32 +5,25 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  Inject,
   inject,
   OnInit,
   signal,
   ViewChild,
 } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { AuthService } from "@auth/services";
-import {
-  ParseBreaksPipe,
-  ParseLinksPipe,
-  SubscriptionPlan,
-  SubscriptionPlansService,
-} from "@corelib";
-import { Project } from "@office/models/project.model";
-import { Vacancy } from "@office/models/vacancy.model";
-import { ProjectService } from "@office/services/project.service";
+import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { ButtonComponent } from "@ui/components";
-import { ModalComponent } from "@ui/components/modal/modal.component";
-import { TagComponent } from "@ui/components/tag/tag.component";
-import { AvatarComponent, IconComponent, SubscriptionPlansComponent } from "@uilib";
+import { AvatarComponent, IconComponent } from "@uilib";
 import { expandElement } from "@utils/expand-element";
-import { SalaryTransformPipe } from "projects/core/src/lib/pipes/salary-transform.pipe";
 import { map, Subscription } from "rxjs";
 import { SkillCardComponent } from "../../../../skills/shared/skill-card/skill-card.component";
 import { CommonModule } from "@angular/common";
 import { MonthBlockComponent } from "projects/skills/src/app/profile/shared/month-block/month-block.component";
+import { Trajectory, TrajectorySkills } from "projects/skills/src/models/trajectory.model";
+import { TrajectoriesService } from "../../../trajectories.service";
+import { UserData } from "projects/skills/src/models/profile.model";
+import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
 
 @Component({
   selector: "app-detail",
@@ -52,23 +45,33 @@ import { MonthBlockComponent } from "projects/skills/src/app/profile/shared/mont
 export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
+
   cdRef = inject(ChangeDetectorRef);
+
+  trajectoryService = inject(TrajectoriesService);
+  profileService = inject(ProfileService);
+
   subscriptions$: Subscription[] = [];
+
+  trajectory!: Trajectory;
+  trajectorySkills!: TrajectorySkills;
+  mentor!: UserData;
 
   @ViewChild("descEl") descEl?: ElementRef;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.data.pipe(map(r => r["data"])).subscribe((r: Trajectory) => {
+      this.trajectory = r;
+    });
 
-  skill = {
-    fileLink: "",
-    id: 1,
-    name: "Создание CV1",
-    quantityOfLevels: 1,
-    whoCreated: "Я",
-    description: "Навык по созданию CV",
-    isDone: false,
-    freeAccess: true,
-  };
+    this.trajectoryService.getTrajectorySkills(this.trajectory.id).subscribe(skills => {
+      this.trajectorySkills = skills;
+    });
+
+    this.profileService.getUserData().subscribe((r: UserData) => {
+      this.mentor = r;
+    });
+  }
 
   mockMonts = [
     {
