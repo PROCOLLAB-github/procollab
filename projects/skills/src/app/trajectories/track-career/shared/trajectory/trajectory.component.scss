@@ -416,13 +416,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0;
   width: 340px;
+  padding: 0;
   text-align: center;
 
   @include responsive.apply-desktop {
-    padding: 20px 50px 24px;
     width: 750px;
+    padding: 20px 50px 24px;
   }
 
   &__title {
