@@ -21,10 +21,10 @@ export interface Skill {
   fileLink: string;
 }
 
-interface Month {
+export interface Month {
   month: string;
   successfullyDone: boolean;
-  year: number;
+  year?: number;
 }
 
 export interface Profile {

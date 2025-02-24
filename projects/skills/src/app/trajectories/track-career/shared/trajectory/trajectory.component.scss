@@ -128,6 +128,11 @@
     }
   }
 
+  &__images {
+    display: flex;
+    justify-content: center;
+  }
+
   &__image {
     width: 85px;
     height: 80px;
@@ -356,6 +361,11 @@
     }
   }
 
+  &__text-block {
+    display: flex;
+    justify-content: center;
+  }
+
   &__button {
     width: 100%;
     text-align: center;
@@ -407,10 +417,12 @@
   align-items: center;
   justify-content: center;
   padding: 0;
+  width: 340px;
   text-align: center;
 
   @include responsive.apply-desktop {
     padding: 20px 50px 24px;
+    width: 750px;
   }
 
   &__title {
@@ -426,6 +438,18 @@
     @include responsive.apply-desktop {
       width: 100%;
       height: 218px;
+    }
+  }
+
+  &__explaining {
+    width: 278px;
+    height: 125px;
+    margin-top: 24px;
+    margin-bottom: 18px;
+
+    @include responsive.apply-desktop {
+      width: 100%;
+      height: 150px;
     }
   }
 

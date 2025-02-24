@@ -5,7 +5,7 @@ import { Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { plainToInstance } from "class-transformer";
 import { BehaviorSubject, map, Observable } from "rxjs";
-import { Trajectory, TrajectorySkills } from "../../models/trajectory.model";
+import { Trajectory, TrajectorySkills, UserTrajectory } from "../../models/trajectory.model";
 
 @Injectable({
   providedIn: "root",
@@ -26,7 +26,13 @@ export class TrajectoriesService {
     return this.apiService.get<Trajectory>("/trajectories/" + id);
   }
 
-  getTrajectorySkills(id: number) {
-    return this.apiService.get<TrajectorySkills>("/trajectories/trajectories/" + id + "/skills");
+  getUserTrajectoryInfo() {
+    return this.apiService.get<UserTrajectory>("/trajectories/user-trajectory/");
+  }
+
+  activateTrajectory(trajectoryId: number) {
+    return this.apiService.post("/trajectories/user-trajectory/create/", {
+      trajectory_id: trajectoryId,
+    });
   }
 }

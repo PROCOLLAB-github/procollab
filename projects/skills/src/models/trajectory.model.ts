@@ -22,3 +22,19 @@ export interface TrajectorySkills {
   unavailableSkills: Skill[];
   completedSkills: Skill[];
 }
+
+export interface UserTrajectory {
+  trajectoryId: number;
+  startDate: string;
+  endDate: string;
+  isActive: boolean;
+  mentorFirstName: string;
+  mentorLastName: string;
+  mentorAvatar: string | null;
+  firstMeetingDone: boolean;
+  finalMeetingDone: boolean;
+  availableSkills: Skill[];
+  unavailableSkills: Skill[];
+  completedSkills: Skill[];
+  activeMonth: number;
+}

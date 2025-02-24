@@ -45,7 +45,10 @@
           } }
         </ul>
 
-        <img src="assets\images\trajectories\trajectories_cover.svg" class="trajectory__image" />
+        <img
+          [src]="trajectory.avatar ? trajectory.avatar : placeholderUrl"
+          class="trajectory__image"
+        />
       </div>
 
       <div class="trajectory__skills-bottom">
@@ -167,12 +170,54 @@
 <app-modal [open]="instructionModalOpen()">
   <div class="confirm">
     <div class="cancel__confirm">
-      <img alt="more image" src="assets\images\trajectories\more.svg" class="cancel__image" />
+      <div [ngSwitch]="currentPage" class="cancel__images">
+        <img
+          *ngSwitchCase="1"
+          alt="more image"
+          src="assets\images\trajectories\explaining\explaining1.svg"
+          class="cancel__explaining"
+        />
+
+        <img
+          *ngSwitchCase="2"
+          alt="more image"
+          src="assets\images\trajectories\explaining\explaining2.svg"
+          class="cancel__explaining"
+        />
+
+        <img
+          *ngSwitchCase="3"
+          alt="more image"
+          src="assets\images\trajectories\explaining\explaining3.svg"
+          class="cancel__explaining"
+        />
+
+        <img
+          *ngSwitchCase="4"
+          alt="more image"
+          src="assets\images\trajectories\explaining\explaining4.svg"
+          class="cancel__explaining"
+        />
+      </div>
       <h4 class="confirm__title text-heading-4">Узнай больше</h4>
-      <p class="text-body-12 cancel__subtext">
-        навыки открываются раз в месяц, за месяц тебе необходимо пройти путь навыков, которые
-        отображаются в разделе "Навыки на месяц"
-      </p>
+      <div [ngSwitch]="currentPage" class="cancel__text-block">
+        <p *ngSwitchCase="1" class="text-body-12 cancel__subtext">
+          Навыки открываются раз в месяц, за месяц тебе необходимо пройти путь навыков, которые
+          отображаются в разделе "Навыки на месяц
+        </p>
+
+        <p *ngSwitchCase="2" class="text-body-12 cancel__subtext">
+          Здесь отображаются,которые буду ждать тебя дальше
+        </p>
+
+        <p *ngSwitchCase="3" class="text-body-12 cancel__subtext">
+          Здесь отображаются пройденные навыки
+        </p>
+
+        <p *ngSwitchCase="4" class="text-body-12 cancel__subtext">
+          Здесь отображаются пройденные навыки
+        </p>
+      </div>
 
       <div class="confirm__dots-group">
         <i
@@ -199,7 +244,7 @@
           appSquare="32"
           icon="left-arrow"
           class="dots-group__next dots-group__icon"
-          (click)="nextPage(trajectory.id)"
+          (click)="activateTrajectory()"
         ></i>
       </div>
     </div>

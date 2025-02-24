@@ -5,10 +5,8 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  Inject,
   inject,
   OnInit,
-  signal,
   ViewChild,
 } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
@@ -20,9 +18,13 @@ import { map, Subscription } from "rxjs";
 import { SkillCardComponent } from "../../../../skills/shared/skill-card/skill-card.component";
 import { CommonModule } from "@angular/common";
 import { MonthBlockComponent } from "projects/skills/src/app/profile/shared/month-block/month-block.component";
-import { Trajectory, TrajectorySkills } from "projects/skills/src/models/trajectory.model";
+import {
+  Trajectory,
+  TrajectorySkills,
+  UserTrajectory,
+} from "projects/skills/src/models/trajectory.model";
 import { TrajectoriesService } from "../../../trajectories.service";
-import { UserData } from "projects/skills/src/models/profile.model";
+import { Month, UserData } from "projects/skills/src/models/profile.model";
 import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
 
 @Component({
@@ -54,53 +56,38 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
   subscriptions$: Subscription[] = [];
 
   trajectory!: Trajectory;
-  trajectorySkills!: TrajectorySkills;
-  mentor!: UserData;
+  userTrajectory!: UserTrajectory;
+  profileId!: number;
 
   @ViewChild("descEl") descEl?: ElementRef;
 
   ngOnInit(): void {
-    this.route.data.pipe(map(r => r["data"])).subscribe((r: Trajectory) => {
-      this.trajectory = r;
-    });
-
-    this.trajectoryService.getTrajectorySkills(this.trajectory.id).subscribe(skills => {
-      this.trajectorySkills = skills;
+    this.route.data.pipe(map(r => r["data"])).subscribe(r => {
+      this.trajectory = r[0];
+      this.userTrajectory = r[1];
     });
 
     this.profileService.getUserData().subscribe((r: UserData) => {
-      this.mentor = r;
+      this.profileId = r.id;
+    });
+
+    this.mockMonts = Array.from({ length: 4 }, (_, index) => {
+      const monthNumber = index + 1;
+
+      return {
+        month: `${monthNumber} месяц`,
+        successfullyDone: monthNumber <= this.userTrajectory.activeMonth,
+      };
     });
   }
 
-  mockMonts = [
-    {
-      month: "1 месяц",
-      successfullyDone: true,
-      year: 2025,
-    },
-    {
-      month: "2 месяц",
-      successfullyDone: true,
-      year: 2025,
-    },
-    {
-      month: "3 месяц",
-      successfullyDone: false,
-      year: 2025,
-    },
-    {
-      month: "4 месяц",
-      successfullyDone: false,
-      year: 2025,
-    },
-  ];
+  mockMonts: Month[] = [];
+
+  placeholderUrl =
+    "https://uch-ibadan.org.ng/wp-content/uploads/2021/10/Profile_avatar_placeholder_large.png";
 
   readFullDescription = false;
   descriptionExpandable?: boolean;
-
-  description =
-    "Четырехмесячный интенсив, в котором ты поймешь азы карьерного планирования. С опытным наставником, ты разберешь свои сильные стороны, проработаешь барьеры на пути к успешной карьере. Четырехмесячный интенсив, в котором ты поймешь азы карьерного планирования. С опытным наставником, ты разберешь свои сильные стороны, проработаешь барьеры на пути к успешной карьере. ";
 
   ngAfterViewInit(): void {
     const descElement = this.descEl?.nativeElement;
@@ -117,7 +104,4 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
   }
-
-  placeholderUrl =
-    "https://uch-ibadan.org.ng/wp-content/uploads/2021/10/Profile_avatar_placeholder_large.png";
 }

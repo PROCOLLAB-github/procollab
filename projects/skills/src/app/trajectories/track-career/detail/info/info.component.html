@@ -3,35 +3,43 @@
 <div class="trajectory__infoItem">
   <div class="trajectory">
     <div class="trajectory__cover">
-      <p class="trajectory__title">Старт в карьеру</p>
-      <img alt="cover image" src="assets\images\trajectories\trajectories_cover.svg" />
+      <p class="trajectory__title">{{ trajectory.name }}</p>
+      <img alt="cover image" [src]="trajectory.avatar ? trajectory.avatar : placeholderUrl" />
     </div>
 
     <div class="trajectory__info">
       <div class="trajectory__timeline">
-        <p class="timeline__start timeline__date text-body-14">01.01.2025</p>
+        <p class="timeline__start timeline__date text-body-14">{{ userTrajectory.startDate }}</p>
         <app-month-block [months]="mockMonts" [hasNext]="false"></app-month-block>
-        <p class="timeline__end timeline__date text-body-14">01.04.2025</p>
+        <p class="timeline__end timeline__date text-body-14">{{ userTrajectory.endDate }}</p>
       </div>
 
       <div class="trajectory__mentor">
         <div class="mentor__info">
           <app-avatar
-            [url]="placeholderUrl ? trajectory.avatar! : placeholderUrl"
+            [url]="userTrajectory.mentorAvatar ? userTrajectory.mentorAvatar! : placeholderUrl"
             [size]="46"
           ></app-avatar>
           <div class="mentor">
-            <p class="text-heading-4">Слава Попов</p>
+            <p class="text-heading-4">
+              {{ userTrajectory.mentorFirstName }} {{ userTrajectory.mentorLastName }}
+            </p>
             <p class="text-body-12 mentor__years">2 года опыта преподавания</p>
           </div>
         </div>
-        <app-button customTypographyClass="text-body-12">Написать наставнику</app-button>
+        <a
+          [href]="
+            'https://app.procollab.ru/office/chats/' + profileId! + '_' + trajectory.mentors[0]
+          "
+        >
+          <app-button customTypographyClass="text-body-12">Написать наставнику</app-button>
+        </a>
       </div>
 
       <div class="trajectory__description">
-        @if (description) {
+        @if (trajectory.description) {
         <div class="text-body-14 about__text">
-          <p #descEl [innerHTML]="description | parseLinks | parseBreaks"></p>
+          <p #descEl [innerHTML]="trajectory.description | parseLinks | parseBreaks"></p>
           @if (descriptionExpandable) {
           <div
             class="read-more"
@@ -47,10 +55,14 @@
       <div class="trajectory__info--additional">
         <div
           class="info__additional"
-          [ngStyle]="{ backgroundColor: 1 === 1 ? 'var(--green)' : 'var(--grey-button)' }"
+          [ngStyle]="{
+            backgroundColor: userTrajectory.firstMeetingDone ? 'var(--green)' : 'var(--grey-button)'
+          }"
         >
           <p
-            [ngStyle]="{ color: 1 === 1 ? 'var(--white)' : 'var(--dark-grey)s' }"
+            [ngStyle]="{
+              color: userTrajectory.firstMeetingDone ? 'var(--white)' : 'var(--dark-grey)'
+            }"
             class="text-body-12"
           >
             Начальная встреча с наставником
@@ -59,16 +71,22 @@
             appIcon
             appSquare="15"
             icon="check"
-            [ngStyle]="{ color: 1 === 1 ? 'var(--white)' : 'var(--dark-grey)' }"
+            [ngStyle]="{
+              color: userTrajectory.firstMeetingDone ? 'var(--white)' : 'var(--dark-grey)'
+            }"
           ></i>
         </div>
 
         <div
           class="info__additional"
-          [ngStyle]="{ backgroundColor: 1 !== 1 ? 'var(--green)' : 'var(--grey-button)' }"
+          [ngStyle]="{
+            backgroundColor: userTrajectory.finalMeetingDone ? 'var(--green)' : 'var(--grey-button)'
+          }"
         >
           <p
-            [ngStyle]="{ color: 1 !== 1 ? 'var(--white)' : 'var(--dark-grey)' }"
+            [ngStyle]="{
+              color: userTrajectory.finalMeetingDone ? 'var(--white)' : 'var(--dark-grey)'
+            }"
             class="text-body-12"
           >
             Финальная встреча с наставником
@@ -77,7 +95,9 @@
             appIcon
             appSquare="15"
             icon="check"
-            [ngStyle]="{ color: 1 !== 1 ? 'var(--white)' : 'var(--dark-grey)' }"
+            [ngStyle]="{
+              color: userTrajectory.finalMeetingDone ? 'var(--white)' : 'var(--dark-grey)'
+            }"
           ></i>
         </div>
       </div>
@@ -86,7 +106,7 @@
 
   <div class="skills">
     <h4 class="text-heading-4">Навыки текущего месяца</h4>
-    <div class="skills__now">
+    <!-- <div class="skills__now">
       @if (trajectorySkills.availableSkills) { @for(skill of trajectorySkills.availableSkills; track
       $index) {
       <app-skill-card [skill]="skill"></app-skill-card>
@@ -99,7 +119,7 @@
       track $index) {
       <app-skill-card [skill]="skill"></app-skill-card>
       } }
-    </div>
+    </div> -->
 
     <!-- <h4 class="text-heading-4">Пройденные навыки</h4>
     <div class="skills__past">

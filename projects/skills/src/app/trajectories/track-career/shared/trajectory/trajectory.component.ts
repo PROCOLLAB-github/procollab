@@ -21,6 +21,7 @@ import { expandElement } from "@utils/expand-element";
 import { IconComponent } from "@uilib";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { Trajectory } from "projects/skills/src/models/trajectory.model";
+import { trajectoryMore } from "projects/core/src/consts/trajectoryMore";
 
 @Component({
   selector: "app-trajectory",
@@ -37,9 +38,10 @@ import { Trajectory } from "projects/skills/src/models/trajectory.model";
   templateUrl: "./trajectory.component.html",
   styleUrl: "./trajectory.component.scss",
 })
-export class TrajectoryComponent implements OnInit, AfterViewInit {
+export class TrajectoryComponent implements AfterViewInit {
   @Input() trajectory!: Trajectory;
   protected readonly dotsArray = Array;
+  protected readonly trajectoryMore = trajectoryMore;
 
   router = inject(Router);
   trajectoryService = inject(TrajectoriesService);
@@ -61,26 +63,8 @@ export class TrajectoryComponent implements OnInit, AfterViewInit {
   nonConfirmerModalOpen = signal(false);
   instructionModalOpen = signal(false);
 
-  type = signal<"all" | "my" | null>(null);
-
-  trajectoryMore = [
-    {
-      label: "Работа с наставником",
-    },
-    {
-      label: "Индивидуальный набор навыков",
-    },
-    {
-      label: "Трекинг прогресса",
-    },
-    {
-      label: "Действия > Обучение",
-    },
-  ];
-
-  ngOnInit(): void {
-    this.type.set(this.router.url.split("/").slice(-1)[0] as "all" | "my");
-  }
+  placeholderUrl =
+    "https://uch-ibadan.org.ng/wp-content/uploads/2021/10/Profile_avatar_placeholder_large.png";
 
   ngAfterViewInit(): void {
     const descElement = this.descEl?.nativeElement;
@@ -90,11 +74,15 @@ export class TrajectoryComponent implements OnInit, AfterViewInit {
   }
 
   onOpenConfirmClick() {
-    this.isSubscribedConfirmModalOpen.set(!this.isSubscribedConfirmModalOpen());
-    if (this.isSubscribedConfirmModalOpen()) {
-      this.confirmModalOpen.set(true);
+    if (!this.trajectory.isActiveForUser) {
+      this.isSubscribedConfirmModalOpen.set(!this.isSubscribedConfirmModalOpen());
+      if (this.isSubscribedConfirmModalOpen()) {
+        this.confirmModalOpen.set(true);
+      } else {
+        this.nonConfirmerModalOpen.set(true);
+      }
     } else {
-      this.nonConfirmerModalOpen.set(true);
+      this.router.navigate(["/trackCar/" + this.trajectory.id]);
     }
   }
 
@@ -109,16 +97,22 @@ export class TrajectoryComponent implements OnInit, AfterViewInit {
     }
   }
 
-  nextPage(id: number): void {
+  nextPage(): void {
     if (this.currentPage < 4) {
       this.currentPage += 1;
-    } else if (this.currentPage === 4) {
-      this.router.navigate(["/trackCar/" + id]);
     }
   }
 
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
+  }
+
+  activateTrajectory() {
+    if (this.currentPage === 4) {
+      this.trajectoryService.activateTrajectory(this.trajectory.id).subscribe(_ => {
+        this.router.navigate(["/trackCar/" + this.trajectory.id]);
+      });
+    } else this.nextPage();
   }
 }
