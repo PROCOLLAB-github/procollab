@@ -10,14 +10,14 @@
 
   &__container {
     display: flex;
+    flex-direction: column;
+    gap: 20px;
     align-items: flex-start;
     justify-content: space-between;
-    flex-direction: column;
-    border: 1px solid var(--grey-button);
+    padding: 24px 15px 48px;
     background-color: var(--white);
-    padding: 24px 15px 48px 15px;
+    border: 1px solid var(--grey-button);
     border-radius: 15px;
-    gap: 20px;
 
     @include responsive.apply-desktop {
       flex-direction: row;
@@ -78,12 +78,12 @@
     left: 5%;
     z-index: 10;
     width: 90%;
+    height: 40px;
+    padding: 10px;
     background-color: var(--white);
     border: 1px solid var(--grey-button);
     border-radius: 15px;
     transition: height 0.3s ease;
-    height: 40px;
-    padding: 10px;
 
     &--expanded {
       height: 400px;
@@ -118,10 +118,10 @@
     position: absolute;
     bottom: 5%;
     left: 21%;
-    cursor: pointer;
     display: flex;
-    align-items: center;
     gap: 5px;
+    align-items: center;
+    cursor: pointer;
 
     &--expanded {
       left: 31%;
@@ -141,9 +141,9 @@
 
   &__checkbox {
     display: flex;
+    flex-direction: row-reverse;
     gap: 10px;
     align-items: center;
-    flex-direction: row-reverse;
 
     @include responsive.apply-desktop {
       flex-direction: row;
@@ -160,11 +160,11 @@
 
   &__bottom {
     display: flex;
+    flex-direction: column;
+    gap: 20px;
     align-items: center;
     justify-content: space-between;
     margin-top: 40px;
-    flex-direction: column;
-    gap: 20px;
 
     @include responsive.apply-desktop {
       flex-direction: row;
@@ -202,7 +202,6 @@
         }
       }
     }
-
   }
 }
 

@@ -69,14 +69,12 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
       this.trajectory = r[0];
       this.userTrajectory = r[1];
 
-      this.userTrajectory.availableSkills.map(i => (i.freeAccess = true));
-
-      this.userTrajectory.completedSkills.map(i => {
+      this.userTrajectory.availableSkills.forEach(i => (i.freeAccess = true));
+      this.userTrajectory.completedSkills.forEach(i => {
         i.freeAccess = true;
         i.completed = true;
       });
-
-      this.userTrajectory.unavailableSkills.map(i => (i.freeAccess = true));
+      this.userTrajectory.unavailableSkills.forEach(i => (i.freeAccess = true));
     });
 
     this.profileService.getUserData().subscribe((r: UserData) => {
