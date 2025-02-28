@@ -26,6 +26,7 @@ import {
 import { TrajectoriesService } from "../../../trajectories.service";
 import { Month, UserData } from "projects/skills/src/models/profile.model";
 import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
+import { SkillService } from "projects/skills/src/app/skills/services/skill.service";
 
 @Component({
   selector: "app-detail",
@@ -52,7 +53,9 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
 
   trajectoryService = inject(TrajectoriesService);
   profileService = inject(ProfileService);
+  skillService = inject(SkillService);
 
+  completedSkills: UserTrajectory["completedSkills"] = [];
   subscriptions$: Subscription[] = [];
 
   trajectory!: Trajectory;
@@ -65,13 +68,22 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
     this.route.data.pipe(map(r => r["data"])).subscribe(r => {
       this.trajectory = r[0];
       this.userTrajectory = r[1];
+
+      this.userTrajectory.availableSkills.map(i => (i.freeAccess = true));
+
+      this.userTrajectory.completedSkills.map(i => {
+        i.freeAccess = true;
+        i.completed = true;
+      });
+
+      this.userTrajectory.unavailableSkills.map(i => (i.freeAccess = true));
     });
 
     this.profileService.getUserData().subscribe((r: UserData) => {
       this.profileId = r.id;
     });
 
-    this.mockMonts = Array.from({ length: 4 }, (_, index) => {
+    this.mockMonts = Array.from({ length: this.userTrajectory.durationMonths }, (_, index) => {
       const monthNumber = index + 1;
 
       return {
@@ -103,5 +115,10 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
+  }
+
+  onSkillClick(skillId: number) {
+    this.skillService.setSkillId(skillId);
+    this.router.navigate(["skills", skillId]);
   }
 }

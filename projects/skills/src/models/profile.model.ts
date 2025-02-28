@@ -11,6 +11,7 @@ export interface UserData {
   geoPosition: string;
   verificationDate: string;
   points: number;
+  isMentor: boolean;
 }
 
 export interface Skill {

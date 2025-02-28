@@ -87,7 +87,6 @@
   height: 100%;
   padding: 18px 0 20px 18px;
   margin-bottom: 30px;
-  background-color: var(--white);
   border: 1px solid var(--grey-button);
   border-radius: 15px;
 
@@ -252,6 +251,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+      height: 225px;
     }
   }
 
@@ -265,6 +265,7 @@
 
     app-button {
       width: 100%;
+      border-radius: 15px;
     }
 
     @include responsive.apply-desktop {
@@ -392,6 +393,7 @@
 
     app-button {
       width: 100%;
+      border-radius: 15px;
     }
 
     @include responsive.apply-desktop {

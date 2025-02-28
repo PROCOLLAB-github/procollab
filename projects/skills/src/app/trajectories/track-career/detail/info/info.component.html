@@ -8,13 +8,17 @@
     </div>
 
     <div class="trajectory__info">
-      <div class="trajectory__timeline">
-        <p class="timeline__start timeline__date text-body-14">{{ userTrajectory.startDate }}</p>
+      <div class="trajectory__timeline" [style.background-color]="trajectory.backgroundColor">
+        <p class="timeline__start timeline__date text-body-14">
+          {{ userTrajectory.startDate | date: "yyyy.MM.dd" }}
+        </p>
         <app-month-block [months]="mockMonts" [hasNext]="false"></app-month-block>
-        <p class="timeline__end timeline__date text-body-14">{{ userTrajectory.endDate }}</p>
+        <p class="timeline__end timeline__date text-body-14">
+          {{ userTrajectory.endDate | date: "yyyy.MM.dd" }}
+        </p>
       </div>
 
-      <div class="trajectory__mentor">
+      <div class="trajectory__mentor" [style.background-color]="trajectory.backgroundColor">
         <div class="mentor__info">
           <app-avatar
             [url]="userTrajectory.mentorAvatar ? userTrajectory.mentorAvatar! : placeholderUrl"
@@ -29,14 +33,18 @@
         </div>
         <a
           [href]="
-            'https://app.procollab.ru/office/chats/' + profileId! + '_' + trajectory.mentors[0]
+            'https://app.procollab.ru/office/chats/' + profileId! + '_' + userTrajectory.mentorId
           "
         >
-          <app-button customTypographyClass="text-body-12">Написать наставнику</app-button>
+          <app-button
+            customTypographyClass="text-body-12"
+            [style.background-color]="trajectory.selectButtonColor"
+            >Написать наставнику</app-button
+          >
         </a>
       </div>
 
-      <div class="trajectory__description">
+      <div class="trajectory__description" [style.background-color]="trajectory.backgroundColor">
         @if (trajectory.description) {
         <div class="text-body-14 about__text">
           <p #descEl [innerHTML]="trajectory.description | parseLinks | parseBreaks"></p>
@@ -52,7 +60,10 @@
         }
       </div>
 
-      <div class="trajectory__info--additional">
+      <div
+        class="trajectory__info--additional"
+        [style.background-color]="trajectory.backgroundColor"
+      >
         <div
           class="info__additional"
           [ngStyle]="{
@@ -106,24 +117,27 @@
 
   <div class="skills">
     <h4 class="text-heading-4">Навыки текущего месяца</h4>
-    <!-- <div class="skills__now">
-      @if (trajectorySkills.availableSkills) { @for(skill of trajectorySkills.availableSkills; track
+    <div class="skills__now">
+      @if (userTrajectory.availableSkills) { @for(skill of userTrajectory.availableSkills; track
       $index) {
-      <app-skill-card [skill]="skill"></app-skill-card>
+      <app-skill-card [skill]="skill" (click)="onSkillClick(skill.id)"></app-skill-card>
       } }
     </div>
 
     <h4 class="text-heading-4">Грядущие навыки</h4>
     <div class="skills__future">
-      @if (trajectorySkills.unavailableSkills) { @for(skill of trajectorySkills.unavailableSkills;
-      track $index) {
-      <app-skill-card [skill]="skill"></app-skill-card>
+      @if (userTrajectory.unavailableSkills) { @for(skill of userTrajectory.unavailableSkills; track
+      $index) {
+      <app-skill-card [skill]="skill" (click)="onSkillClick(skill.id)"></app-skill-card>
       } }
-    </div> -->
+    </div>
 
-    <!-- <h4 class="text-heading-4">Пройденные навыки</h4>
+    <h4 class="text-heading-4">Пройденные навыки</h4>
     <div class="skills__past">
-      <app-skill-card [skill]="skill"></app-skill-card>
-    </div> -->
+      @if (userTrajectory.completedSkills) { @for (skill of userTrajectory.completedSkills; track
+      $index) {
+      <app-skill-card [skill]="skill" (click)="onSkillClick(skill.id)"></app-skill-card>
+      } }
+    </div>
   </div>
 </div>

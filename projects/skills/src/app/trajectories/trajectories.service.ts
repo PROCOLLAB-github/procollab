@@ -5,7 +5,12 @@ import { Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { plainToInstance } from "class-transformer";
 import { BehaviorSubject, map, Observable } from "rxjs";
-import { Trajectory, TrajectorySkills, UserTrajectory } from "../../models/trajectory.model";
+import {
+  Student,
+  Trajectory,
+  TrajectorySkills,
+  UserTrajectory,
+} from "../../models/trajectory.model";
 
 @Injectable({
   providedIn: "root",
@@ -28,6 +33,10 @@ export class TrajectoriesService {
 
   getUserTrajectoryInfo() {
     return this.apiService.get<UserTrajectory>("/trajectories/user-trajectory/");
+  }
+
+  getMentorStudents() {
+    return this.apiService.get<Student[]>("/trajectories/mentor/students/");
   }
 
   activateTrajectory(trajectoryId: number) {

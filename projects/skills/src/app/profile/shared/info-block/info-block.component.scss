@@ -37,10 +37,16 @@
     display: flex;
     align-items: center;
     height: 23px;
-    padding: 0 20px;
+    padding: 0 15px;
     color: var(--green);
     border: 1px solid var(--green);
     border-radius: 20px;
+    width: 100%;
+
+    @include responsive.apply-desktop {
+      padding: 0 20px;
+      width: inherit;
+    }
   }
 
   &__left {

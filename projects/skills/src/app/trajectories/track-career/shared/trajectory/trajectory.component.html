@@ -1,12 +1,12 @@
 <!-- @format -->
 
-<div class="trajectory">
+<div class="trajectory" [style.background-color]="trajectory.backgroundColor">
   <img src="assets\images\trajectories\vertical_line.svg" class="trajectory__line" />
   <img src="assets\images\trajectories\rocket.svg" class="trajectory__rocket" />
   <div class="trajectory__container">
     <div class="trajectory__info">
       <div class="trajectory__content">
-        <h4 class="text-heading-4">{{ trajectory.name }}</h4>
+        <h4 class="text-heading-4" [style.color]="trajectory.textColor">{{ trajectory.name }}</h4>
         <div class="trajectory__description">
           @if (trajectory.description) {
           <div class="text-body-14 about__text">
@@ -25,14 +25,18 @@
       </div>
 
       <div class="trajectory__seat">
-        <p class="text-bold-body-16 trajectory__date">4 месяца + 2 встречи с наставником</p>
+        <p class="text-bold-body-16 trajectory__date" [style.color]="trajectory.textColor">
+          4 месяца + 2 встречи с наставником
+        </p>
         <p class="text-body-10">ряд 43, место А320</p>
       </div>
     </div>
 
     <div class="trajectory__skills">
       <div class="trajectory__skills-top">
-        <h4 class="text-heading-4">Навыки которые ты прокачаешь</h4>
+        <h4 class="text-heading-4" [style.color]="trajectory.textColor">
+          Навыки которые ты прокачаешь
+        </h4>
         <p class="text-body-10">Посадочный талон</p>
       </div>
       <div class="trajectory__inner">
@@ -52,15 +56,19 @@
       </div>
 
       <div class="trajectory__skills-bottom">
-        <p class="text-bold-body-16">и еще 5+ навыков от партнеров</p>
+        <p class="text-bold-body-16" [style.color]="trajectory.textColor">
+          и еще 5+ навыков от партнеров
+        </p>
         <div class="trajectory__buttons-group">
           <app-button
+            [style.background-color]="trajectory.buttonColor"
             (click)="moreModalOpen.set(true)"
             customTypographyClass="text-body-12"
             class="button__more"
             >Подробнее</app-button
           >
           <app-button
+            [style.background-color]="trajectory.selectButtonColor"
             (click)="onOpenConfirmClick()"
             customTypographyClass="text-body-12"
             class="button__pick"
@@ -105,7 +113,6 @@
   </div>
 </app-modal>
 
-@if(isSubscribedConfirmModalOpen()){
 <app-modal [open]="confirmModalOpen()">
   <div class="confirm">
     <div class="cancel__confirm">
@@ -135,7 +142,7 @@
     </div>
   </div>
 </app-modal>
-} @else {
+
 <app-modal [open]="nonConfirmerModalOpen()">
   <div class="confirm">
     <h4 class="confirm__title text-heading-4">У вас нет активной подписки</h4>
@@ -165,7 +172,6 @@
     </div>
   </div>
 </app-modal>
-}
 
 <app-modal [open]="instructionModalOpen()">
   <div class="confirm">
@@ -244,7 +250,7 @@
           appSquare="32"
           icon="left-arrow"
           class="dots-group__next dots-group__icon"
-          (click)="activateTrajectory()"
+          (click)="nextPage()"
         ></i>
       </div>
     </div>

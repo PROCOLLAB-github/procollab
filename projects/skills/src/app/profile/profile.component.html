@@ -11,6 +11,11 @@
           link: '/profile/skills',
           linkText: 'Мои навыки',
           isRouterLinkActiveOptions: false
+        },
+        {
+          link: '/profile/students',
+          linkText: 'Ученики',
+          isRouterLinkActiveOptions: false
         }
       ]"
     ></app-bar>
@@ -19,11 +24,3 @@
   <app-info-block [userData]="profileData()['userData']" class="profile__info"></app-info-block>
   <router-outlet></router-outlet>
 </div>
-
-<!--
-{
-  link: '/profile/students',
-  linkText: 'Ученики',
-  isRouterLinkActiveOptions: false
-}
- -->

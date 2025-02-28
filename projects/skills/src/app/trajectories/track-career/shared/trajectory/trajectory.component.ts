@@ -22,6 +22,7 @@ import { IconComponent } from "@uilib";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { Trajectory } from "projects/skills/src/models/trajectory.model";
 import { trajectoryMore } from "projects/core/src/consts/trajectoryMore";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   selector: "app-trajectory",
@@ -57,7 +58,6 @@ export class TrajectoryComponent implements AfterViewInit {
   currentPage = 1;
 
   moreModalOpen = signal(false);
-  isSubscribedConfirmModalOpen = signal(false);
 
   confirmModalOpen = signal(false);
   nonConfirmerModalOpen = signal(false);
@@ -75,15 +75,21 @@ export class TrajectoryComponent implements AfterViewInit {
 
   onOpenConfirmClick() {
     if (!this.trajectory.isActiveForUser) {
-      this.isSubscribedConfirmModalOpen.set(!this.isSubscribedConfirmModalOpen());
-      if (this.isSubscribedConfirmModalOpen()) {
-        this.confirmModalOpen.set(true);
-      } else {
-        this.nonConfirmerModalOpen.set(true);
-      }
+      this.confirmModalOpen.set(true);
     } else {
       this.router.navigate(["/trackCar/" + this.trajectory.id]);
     }
+
+    this.trajectoryService.activateTrajectory(this.trajectory.id).subscribe({
+      next: () => {},
+      error: err => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 403) {
+            this.nonConfirmerModalOpen.set(true);
+          }
+        }
+      },
+    });
   }
 
   onConfirmClick() {
@@ -98,7 +104,9 @@ export class TrajectoryComponent implements AfterViewInit {
   }
 
   nextPage(): void {
-    if (this.currentPage < 4) {
+    if (this.currentPage === 4) {
+      this.router.navigate(["/trackCar/" + this.trajectory.id]);
+    } else if (this.currentPage < 4) {
       this.currentPage += 1;
     }
   }
@@ -106,13 +114,5 @@ export class TrajectoryComponent implements AfterViewInit {
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
-  }
-
-  activateTrajectory() {
-    if (this.currentPage === 4) {
-      this.trajectoryService.activateTrajectory(this.trajectory.id).subscribe(_ => {
-        this.router.navigate(["/trackCar/" + this.trajectory.id]);
-      });
-    } else this.nextPage();
   }
 }

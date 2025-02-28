@@ -1,84 +1,113 @@
 <!-- @format -->
 <div class="students">
-  <div class="students__container">
-    <div class="students__info">
-      <app-avatar [size]="94" [url]="placeholderUrl ? placeholderUrl : placeholderUrl"></app-avatar>
-      <div class="students__content">
-        <p class="text-heading-2">Тест Тестович</p>
-        <p class="students__profile text-body-14">19 лет * Frontend Developer</p>
-        <app-button customTypographyClass="text-body-12" class="students__button"
-          >Чат с участником</app-button
-        >
+  @if (students) { @for (student of students; track $index) {
+  <div class="student-item">
+    <div class="students__container">
+      <div class="students__info">
+        <app-avatar
+          [size]="avatarSize()"
+          [url]="student.student.avatar ? student.student.avatar : placeholderUrl"
+        ></app-avatar>
+        <div class="students__content">
+          <p class="students__title">
+            {{ student.student.firstName }} {{ student.student.lastName }}
+          </p>
+          <p class="students__profile text-body-14">
+            {{ student.student.age }}
+            {{ student.student.age | pluralize: ["год", "года", "лет"] }} •
+            {{ student.student.specialization }}
+          </p>
+          <a
+            [href]="
+              'https://app.procollab.ru/office/chats/' + student.student.id + '_' + student.mentorId
+            "
+          >
+            <app-button customTypographyClass="text-body-12" class="students__button"
+              >Чат с участником</app-button
+            >
+          </a>
+        </div>
+      </div>
+
+      <div class="students__trajectory">
+        <p class="text-heading-4">{{ student.trajectory.name }}</p>
+        <img
+          class="trajectory__image"
+          alt="trajectory image"
+          [src]="student.trajectory.avatar ? student.trajectory.avatar : placeholderUrl"
+        />
       </div>
     </div>
 
-    <div class="students__trajectory">
-      <p class="text-heading-4">Старт карьеры</p>
-      <img alt="trajectory image" src="assets\images\trajectories\trajectories_cover.svg" />
+    <div
+      class="students__stats"
+      [class.students__stats--expanded]="expandedStudentId === student.student.id"
+    >
+      @if(expandedStudentId === student.student.id){
+      <div class="stats">
+        <div class="stats__container">
+          <div class="stats__skills">
+            <div class="stats__checkbox">
+              <div class="stats__info">
+                <p class="text-heading-4">Начальная встреча с наставником</p>
+                <p class="text-body-12 stats__meeting">Встреча прошла</p>
+              </div>
+              <app-checkbox [checked]="student.initialMeeting"></app-checkbox>
+            </div>
+          </div>
+
+          <div class="stats__skills">
+            <div class="stats__checkbox">
+              <div class="stats__info">
+                <p class="text-heading-4">Финальная встреча с наставником</p>
+                <p class="text-body-12 stats__meeting">Встреча прошла</p>
+              </div>
+              <app-checkbox [checked]="student.finalMeeting"></app-checkbox>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats__bottom">
+          <div class="stats__text-content">
+            <div>
+              <p class="text-bold-body-16">
+                {{ student.remainingDays }}
+                {{ student.remainingDays | pluralize: ["день", "дня", "дней"] }}
+              </p>
+              <p class="text-body-12 stats__trajectories">До конца траектории</p>
+            </div>
+
+            <div>
+              <p class="text-bold-body-16">0</p>
+              <p class="text-body-12 stats__point">Количество баллов</p>
+            </div>
+          </div>
+
+          <div class="stats__save">
+            <app-button
+              customTypographyClass="text-body-12"
+              (click)="toggleExpand(student.student.id)"
+              >Сохранить</app-button
+            >
+          </div>
+        </div>
+      </div>
+      }
+
+      <div
+        class="stats__expand"
+        [class.stats__expand--expanded]="expandedStudentId === student.student.id"
+      >
+        <p (click)="toggleExpand(student.student.id)" class="text-body-14">
+          {{ expandedStudentId === student.student.id ? "Скрыть" : "Посмотреть" }} статистику
+        </p>
+        @if (expandedStudentId === student.student.id) {
+        <i appIcon icon="arrow-no-body" appSquare="32" class="icon"></i>
+        } @else {
+        <i appIcon icon="arrow-no-body" appSquare="32" class="icon__unexpanded"></i>
+        }
+      </div>
     </div>
   </div>
-
-  <div
-    class="students__stats"
-    [ngStyle]="{ height: expanded ? '240px' : '40px', padding: expanded ? '36px 24px' : '10px' }"
-  >
-    @if(expanded){
-    <div class="stats">
-      <div class="stats__container">
-        <div class="stats__skills">
-          <p class="text-heading-4" [ngStyle]="{ color: 1 === 1 ? 'var(--green)' : 'var(--red)' }">
-            Выполненный навык: 2
-          </p>
-          <div class="stats__checkbox">
-            <div class="stats__info">
-              <p class="text-heading-4">Начальная встреча с наставником</p>
-              <p class="text-body-12 stats__meeting">Встреча прошла</p>
-            </div>
-            <app-checkbox [checked]="true"></app-checkbox>
-          </div>
-        </div>
-
-        <div class="stats__skills">
-          <p
-            class="text-heading-4"
-            [ngStyle]="{ color: 1 + 1 === 3 ? 'var(--green)' : 'var(--red)' }"
-          >
-            Выполненный навык: 1
-          </p>
-          <div class="stats__checkbox">
-            <div class="stats__info">
-              <p class="text-heading-4">Начальная встреча с наставником</p>
-              <p class="text-body-12 stats__meeting">Встреча прошла</p>
-            </div>
-            <app-checkbox [checked]="false"></app-checkbox>
-          </div>
-        </div>
-      </div>
-
-      <div class="stats__bottom">
-        <div class="stats__text-content">
-          <div>
-            <p class="text-bold-body-16">15 дней</p>
-            <p class="text-body-12 stats__trajectories">До конца траектории</p>
-          </div>
-
-          <div>
-            <p class="text-bold-body-16">36</p>
-            <p class="text-body-12 stats__point">Количество баллов</p>
-          </div>
-        </div>
-
-        <div class="stats__save">
-          <app-button customTypographyClass="text-body-12" (click)="expanded = !expanded"
-            >Сохранить</app-button
-          >
-        </div>
-      </div>
-    </div>
-    }
-
-    <p (click)="expanded = !expanded" class="text-body-14 stats__expand">
-      {{ expanded ? "Скрыть" : "Посмотреть" }} статистику
-    </p>
-  </div>
+  } }
 </div>

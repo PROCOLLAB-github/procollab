@@ -2,17 +2,36 @@
 @use "styles/typography";
 
 .students {
-  position: relative !important;
+  position: relative;
   z-index: 100;
-  padding: 15px 22px;
-  background-color: var(--white);
-  border: 1px solid var(--grey-button);
-  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 
   &__container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+    flex-direction: column;
+    border: 1px solid var(--grey-button);
+    background-color: var(--white);
+    padding: 24px 15px 48px 15px;
+    border-radius: 15px;
+    gap: 20px;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+      align-items: center;
+      padding: 15px 22px;
+    }
+  }
+
+  &__title {
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      @include typography.heading-2;
+    }
   }
 
   &__info {
@@ -25,6 +44,16 @@
     display: flex;
     gap: 30px;
     align-items: center;
+  }
+
+  .trajectory__image {
+    width: 85px;
+    height: 80px;
+
+    @include responsive.apply-desktop {
+      width: 90px;
+      height: 94px;
+    }
   }
 
   &__content {
@@ -44,8 +73,8 @@
   }
 
   &__stats {
-    position: absolute;
-    top: 92%;
+    position: relative;
+    top: auto;
     left: 5%;
     z-index: 10;
     width: 90%;
@@ -53,6 +82,23 @@
     border: 1px solid var(--grey-button);
     border-radius: 15px;
     transition: height 0.3s ease;
+    height: 40px;
+    padding: 10px;
+
+    &--expanded {
+      height: 400px;
+      padding: 36px 24px;
+    }
+
+    @include responsive.apply-desktop {
+      &--expanded {
+        height: 240px;
+        padding: 36px 24px;
+      }
+
+      height: 40px;
+      padding: 10px;
+    }
   }
 }
 
@@ -61,12 +107,29 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    align-items: flex-start;
+
+    @include responsive.apply-desktop {
+      align-items: flex-end;
+    }
   }
 
   &__expand {
     position: absolute;
     bottom: 5%;
-    left: 41%;
+    left: 21%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    &--expanded {
+      left: 31%;
+    }
+
+    @include responsive.apply-desktop {
+      left: 41%;
+    }
   }
 
   &__skills {
@@ -80,10 +143,19 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    flex-direction: row-reverse;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+    }
   }
 
   &__info {
-    text-align: end;
+    text-align: start;
+
+    @include responsive.apply-desktop {
+      text-align: end;
+    }
   }
 
   &__bottom {
@@ -91,6 +163,13 @@
     align-items: center;
     justify-content: space-between;
     margin-top: 40px;
+    flex-direction: column;
+    gap: 20px;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+      gap: 0;
+    }
   }
 
   &__text-content {
@@ -106,12 +185,29 @@
   }
 
   &__save {
-    width: 13%;
+    width: 100%;
 
     app-button {
       &::ng-deep .button--inline {
-        min-height: 38px;
+        min-height: 45px;
       }
     }
+
+    @include responsive.apply-desktop {
+      width: 13%;
+
+      app-button {
+        &::ng-deep .button--inline {
+          min-height: 38px;
+        }
+      }
+    }
+
+  }
+}
+
+.icon {
+  &__unexpanded {
+    transform: rotate(180deg);
   }
 }

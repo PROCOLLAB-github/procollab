@@ -5,7 +5,9 @@
   <div class="info__left">
     <div class="info__top">
       <h1 class="info__title">{{ userData.firstName }} {{ userData.lastName }}</h1>
+      @if (isMentor) {
       <p class="info__mentor text-body-12">Наставник skills</p>
+      }
     </div>
     <div class="info__keys text-body-14">
       <div>

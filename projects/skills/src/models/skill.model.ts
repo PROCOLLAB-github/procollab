@@ -13,12 +13,6 @@ export interface Skill {
   completed?: boolean;
 }
 
-export interface SkillDetail {
-  skillName: string;
-  description: string;
-  level: number;
-  file: string;
-}
 export interface TaskDetail {
   skillName: string;
   description: string;

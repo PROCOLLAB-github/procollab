@@ -1,5 +1,6 @@
 /** @format */
 
+import { UserData } from "./profile.model";
 import { Skill } from "./skill.model";
 
 interface SkillInfo {
@@ -15,6 +16,10 @@ export interface Trajectory {
   avatar: string | null;
   mentors: number[];
   skills: SkillInfo[];
+  backgroundColor: string;
+  buttonColor: string;
+  selectButtonColor: string;
+  textColor: string;
 }
 
 export interface TrajectorySkills {
@@ -31,10 +36,23 @@ export interface UserTrajectory {
   mentorFirstName: string;
   mentorLastName: string;
   mentorAvatar: string | null;
+  mentorId: number;
   firstMeetingDone: boolean;
   finalMeetingDone: boolean;
   availableSkills: Skill[];
   unavailableSkills: Skill[];
   completedSkills: Skill[];
   activeMonth: number;
+  company: string;
+  durationMonths: number;
+}
+
+export interface Student {
+  trajectory: Trajectory;
+  finalMeeting: boolean;
+  initialMeeting: boolean;
+  remainingDays: number;
+  userTrajectoryId: number;
+  student: UserData;
+  mentorId: number;
 }
