@@ -23,13 +23,21 @@
             <i appIcon icon="geo" appWidth="11" appHeight="14"></i>
             <span>{{ project.region }}</span>
           </div>
-          <div class="vacancy__info-element">{{ vacancy.workFormat }}</div>
-          <div class="vacancy__info-element">{{ vacancy.workSchedule }}</div>
+          @if (vacancy.workFormat) {
+            <div class="vacancy__info-element">{{ vacancy.workFormat }}</div>
+          }
+          @if (vacancy.workSchedule) {
+            <div class="vacancy__info-element">{{ vacancy.workSchedule }}</div>
+          }
         </div>
 
         <div class="info__bottom">
-          <div class="vacancy__info-element">{{ vacancy.salary | salaryTransform }} рублей</div>
-          <div class="vacancy__info-element">Опыт {{ vacancy.requiredExperience }}</div>
+          @if (vacancy.salary) {
+            <div class="vacancy__info-element">{{ vacancy.salary | salaryTransform }} рублей</div>
+          }
+          @if (vacancy.requiredExperience) {
+            <div class="vacancy__info-element">Опыт {{ vacancy.requiredExperience }}</div>
+          }
         </div>
       </div>
 
