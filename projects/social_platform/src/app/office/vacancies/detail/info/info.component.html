@@ -23,13 +23,19 @@
             <i appIcon icon="geo" appWidth="11" appHeight="14"></i>
             <span>{{ project.region }}</span>
           </div>
+          @if (vacancy.workFormat) {
           <div class="vacancy__info-element">{{ vacancy.workFormat }}</div>
+          } @if (vacancy.workSchedule) {
           <div class="vacancy__info-element">{{ vacancy.workSchedule }}</div>
+          }
         </div>
 
         <div class="info__bottom">
+          @if (vacancy.salary) {
           <div class="vacancy__info-element">{{ vacancy.salary | salaryTransform }} рублей</div>
+          } @if (vacancy.requiredExperience) {
           <div class="vacancy__info-element">Опыт {{ vacancy.requiredExperience }}</div>
+          }
         </div>
       </div>
 
