@@ -10,7 +10,13 @@
         <div class="trajectory__description">
           @if (trajectory.description) {
           <div class="text-body-14 about__text">
-            <p #descEl [innerHTML]="trajectory.description | parseLinks | parseBreaks"></p>
+            <p
+              #descEl
+              [innerHTML]="trajectory.description | parseLinks | parseBreaks"
+              [style.color]="
+                trajectory.company === 'Procollab' ? 'var(--dark-grey)' : trajectory.textColor
+              "
+            ></p>
             @if (descriptionExpandable) {
             <div
               class="read-more"
@@ -26,7 +32,9 @@
 
       <div class="trajectory__seat">
         <p class="text-bold-body-16 trajectory__date" [style.color]="trajectory.textColor">
-          4 месяца + 2 встречи с наставником
+          {{ trajectory.durationMonths }}
+          {{ trajectory.durationMonths | pluralize: ["месяц", "месяца", "месяцев"] }} + 2 встречи с
+          наставником
         </p>
         <p class="text-body-10">ряд 43, место А320</p>
       </div>
@@ -44,7 +52,7 @@
           @if(trajectory.skills.length > 0){ @for(skill of trajectory.skills; track $index){
           <li class="trajectory__skill">
             <img alt="skill image" class="skill__image" [src]="skill.fileLink" />
-            <p class="text-body-14">{{ skill.name }}</p>
+            <p class="text-body-14" [style.color]="trajectory.textColor">{{ skill.name }}</p>
           </li>
           } }
         </ul>
@@ -61,16 +69,16 @@
         </p>
         <div class="trajectory__buttons-group">
           <app-button
-            [style.background-color]="trajectory.buttonColor"
             (click)="moreModalOpen.set(true)"
             customTypographyClass="text-body-12"
             class="button__more"
+            [backgroundColor]="trajectory.buttonColor"
             >Подробнее</app-button
           >
           <app-button
-            [style.background-color]="trajectory.selectButtonColor"
             (click)="onOpenConfirmClick()"
             customTypographyClass="text-body-12"
+            [backgroundColor]="trajectory.selectButtonColor"
             class="button__pick"
             >Выбрать</app-button
           >
@@ -167,6 +175,25 @@
           customTypographyClass="text-body-12"
           [color]="'primary'"
           >Купить</app-button
+        >
+      </div>
+    </div>
+  </div>
+</app-modal>
+
+<app-modal [open]="activatedModalOpen()">
+  <div class="confirm">
+    <h4 class="confirm__title text-heading-4">У вас уже есть активная траектория!</h4>
+    <div class="cancel__confirm">
+      <img alt="more image" src="assets\images\trajectories\more.svg" class="confirm__image" />
+
+      <div class="cancel__buttons-group">
+        <app-button
+          customTypographyClass="text-body-12"
+          [color]="'grey'"
+          style="width: 100%"
+          (click)="activatedModalOpen.set(false)"
+          >Назад</app-button
         >
       </div>
     </div>

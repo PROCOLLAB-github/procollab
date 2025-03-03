@@ -8,7 +8,7 @@
     </div>
 
     <div class="trajectory__info">
-      <div class="trajectory__timeline" [style.background-color]="trajectory.backgroundColor">
+      <div class="trajectory__timeline">
         <p class="timeline__start timeline__date text-body-14">
           {{ userTrajectory.startDate | date: "yyyy.MM.dd" }}
         </p>
@@ -25,10 +25,22 @@
             [size]="46"
           ></app-avatar>
           <div class="mentor">
-            <p class="text-heading-4">
+            <p
+              class="text-heading-4"
+              [style.color]="
+                trajectory.company === 'Procollab' ? 'var(--dark-grey)' : trajectory.textColor
+              "
+            >
               {{ userTrajectory.mentorFirstName }} {{ userTrajectory.mentorLastName }}
             </p>
-            <p class="text-body-12 mentor__years">2 года опыта преподавания</p>
+            <p
+              class="text-body-12 mentor__years"
+              [style.color]="
+                trajectory.company === 'Procollab' ? 'var(--dark-grey)' : trajectory.textColor
+              "
+            >
+              2 года опыта преподавания
+            </p>
           </div>
         </div>
         <a
@@ -38,7 +50,7 @@
         >
           <app-button
             customTypographyClass="text-body-12"
-            [style.background-color]="trajectory.selectButtonColor"
+            [backgroundColor]="trajectory.selectButtonColor"
             >Написать наставнику</app-button
           >
         </a>
@@ -47,7 +59,13 @@
       <div class="trajectory__description" [style.background-color]="trajectory.backgroundColor">
         @if (trajectory.description) {
         <div class="text-body-14 about__text">
-          <p #descEl [innerHTML]="trajectory.description | parseLinks | parseBreaks"></p>
+          <p
+            #descEl
+            [innerHTML]="trajectory.description | parseLinks | parseBreaks"
+            [style.color]="
+              trajectory.company === 'Procollab' ? 'var(--dark-grey)' : trajectory.textColor
+            "
+          ></p>
           @if (descriptionExpandable) {
           <div
             class="read-more"

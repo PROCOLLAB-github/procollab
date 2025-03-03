@@ -19,7 +19,7 @@ import { TrajectoriesService } from "../../../trajectories.service";
 import { DomSanitizer } from "@angular/platform-browser";
 import { expandElement } from "@utils/expand-element";
 import { IconComponent } from "@uilib";
-import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
+import { ParseBreaksPipe, ParseLinksPipe, PluralizePipe } from "@corelib";
 import { Trajectory } from "projects/skills/src/models/trajectory.model";
 import { trajectoryMore } from "projects/core/src/consts/trajectoryMore";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -34,6 +34,7 @@ import { HttpErrorResponse } from "@angular/common/http";
     IconComponent,
     RouterModule,
     ParseLinksPipe,
+    PluralizePipe,
     ParseBreaksPipe,
   ],
   templateUrl: "./trajectory.component.html",
@@ -62,6 +63,7 @@ export class TrajectoryComponent implements AfterViewInit {
   confirmModalOpen = signal(false);
   nonConfirmerModalOpen = signal(false);
   instructionModalOpen = signal(false);
+  activatedModalOpen = signal(false);
 
   placeholderUrl =
     "https://uch-ibadan.org.ng/wp-content/uploads/2021/10/Profile_avatar_placeholder_large.png";
@@ -74,18 +76,23 @@ export class TrajectoryComponent implements AfterViewInit {
   }
 
   onOpenConfirmClick() {
-    if (!this.trajectory.isActiveForUser) {
-      this.confirmModalOpen.set(true);
-    } else {
-      this.router.navigate(["/trackCar/" + this.trajectory.id]);
-    }
-
     this.trajectoryService.activateTrajectory(this.trajectory.id).subscribe({
-      next: () => {},
+      next: () => {
+        if (!this.trajectory.isActiveForUser) {
+          this.confirmModalOpen.set(true);
+        } else {
+          this.router.navigate(["/trackCar/" + this.trajectory.id]);
+        }
+      },
       error: err => {
         if (err instanceof HttpErrorResponse) {
           if (err.status === 403) {
             this.nonConfirmerModalOpen.set(true);
+          } else if (err.status === 400) {
+            this.activatedModalOpen.set(true);
+            this.nonConfirmerModalOpen.set(false);
+            this.instructionModalOpen.set(false);
+            this.confirmModalOpen.set(false);
           }
         }
       },

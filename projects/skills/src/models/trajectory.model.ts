@@ -20,6 +20,8 @@ export interface Trajectory {
   buttonColor: string;
   selectButtonColor: string;
   textColor: string;
+  company: string;
+  durationMonths: number;
 }
 
 export interface TrajectorySkills {
@@ -43,7 +45,6 @@ export interface UserTrajectory {
   unavailableSkills: Skill[];
   completedSkills: Skill[];
   activeMonth: number;
-  company: string;
   durationMonths: number;
 }
 
