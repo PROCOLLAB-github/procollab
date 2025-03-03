@@ -3,7 +3,7 @@
 <div class="app">
   <ui-sidebar class="app__sidebar" [navItems]="navItems" logoSrc="/assets/images/shared/logo.svg">
     @if(userData()){
-    <app-sidebar-profile [user]="userData()!"></app-sidebar-profile>
+    <app-sidebar-profile></app-sidebar-profile>
     }
   </ui-sidebar>
 
@@ -23,7 +23,7 @@
     @if (mobileMenuOpen) {
     <div class="nav-bar__mobile-menu">
       <div class="nav-bar__top">
-        <a class="nav-bar__mobile-logo" href="https://procollab.ru/" target="_blank">
+        <a class="nav-bar__mobile-logo" href="https://app.procollab.ru" target="_blank">
           <img src="/assets/images/shared/logo.svg" alt="procollab" width="125px" />
         </a>
         <div
@@ -56,7 +56,7 @@
         </ul>
       </nav>
       } @if (userData()) {
-      <app-sidebar-profile class="nav-bar__profile" [user]="userData()!"></app-sidebar-profile>
+      <app-sidebar-profile class="nav-bar__profile"></app-sidebar-profile>
       }
     </div>
     }

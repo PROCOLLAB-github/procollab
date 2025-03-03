@@ -35,4 +35,8 @@ export class ProfileService {
   addSkill(skills: number[]) {
     return this.apiService.patch("/progress/add-skills/", skills);
   }
+
+  syncProfile() {
+    return this.apiService.post("/progress/sync-profile/", {});
+  }
 }

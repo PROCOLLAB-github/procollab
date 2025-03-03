@@ -15,7 +15,6 @@ import { map } from "rxjs";
   standalone: true,
   imports: [
     CommonModule,
-    InfoBlockComponent,
     MonthBlockComponent,
     SkillsBlockComponent,
     ProgressBlockComponent,
