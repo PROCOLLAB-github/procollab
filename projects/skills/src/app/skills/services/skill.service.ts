@@ -3,7 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { ApiPagination } from "../../../models/api-pagination.model";
-import { Skill, SkillDetail, TasksResponse } from "../../../models/skill.model";
+import { Skill, TasksResponse } from "../../../models/skill.model";
 import { HttpParams } from "@angular/common/http";
 
 @Injectable({
@@ -31,7 +31,7 @@ export class SkillService {
   }
 
   getDetail(skillId: number) {
-    return this.apiService.get<SkillDetail>(`/courses/skill-details/${skillId}`);
+    return this.apiService.get<Skill>(`/courses/skill-details/${skillId}`);
   }
 
   getTasks(skillId: number) {

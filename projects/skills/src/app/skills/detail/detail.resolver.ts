@@ -4,9 +4,9 @@ import { ResolveFn } from "@angular/router";
 import { inject } from "@angular/core";
 import { SkillService } from "../services/skill.service";
 import { forkJoin } from "rxjs";
-import { SkillDetail, TasksResponse } from "../../../models/skill.model";
+import { TasksResponse, Skill } from "projects/skills/src/models/skill.model";
 
-export type SkillDetailResolve = [TasksResponse, SkillDetail];
+export type SkillDetailResolve = [TasksResponse, Skill];
 export const skillDetailResolver: ResolveFn<SkillDetailResolve> = (route, state) => {
   const skillService = inject(SkillService);
 

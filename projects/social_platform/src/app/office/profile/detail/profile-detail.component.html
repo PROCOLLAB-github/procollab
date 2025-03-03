@@ -51,7 +51,10 @@
         }
         <section class="info__top">
           <div class="info__text">
-            <h2 class="info__name">{{ user.firstName }} {{ user.lastName }}</h2>
+            <div class="info__top-more">
+              <h2 class="info__name">{{ user.firstName }} {{ user.lastName }}</h2>
+              <!-- <p class="info__mentor text-body-12">Наставник skills</p> -->
+            </div>
             <div class="text-body-12 info__keys">
               <div>
                 @if (user.birthday) {

@@ -14,4 +14,5 @@ import { Profile } from "../../../../models/profile.model";
 })
 export class MonthBlockComponent {
   @Input({ required: true }) months!: Profile["months"];
+  @Input() hasNext = true;
 }

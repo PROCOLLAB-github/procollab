@@ -18,6 +18,7 @@ export class ButtonComponent implements OnInit {
   @Input() loader = false;
   @Input() type: "submit" | "reset" | "button" = "button";
   @Input() appearance: "inline" | "outline" = "inline";
+  @Input() backgroundColor?: string;
   @Input() disabled = false;
   @Input() customTypographyClass?: string;
 

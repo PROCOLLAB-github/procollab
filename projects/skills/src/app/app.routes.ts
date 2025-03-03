@@ -28,13 +28,15 @@ export const routes: Routes = [
   {
     path: "trackBuss",
     loadChildren: () =>
-      import("./track-bussiness/track-bussiness.routes").then(c => c.TRACK_BUSSINESS_ROUTES),
+      import("./trajectories/track-bussiness/track-bussiness.routes").then(
+        c => c.TRACK_BUSSINESS_ROUTES
+      ),
   },
 
   {
     path: "trackCar",
     loadChildren: () =>
-      import("./track-career/track-career.routes").then(c => c.TRACK_CAREER_ROUTES),
+      import("./trajectories/track-career/track-career.routes").then(c => c.TRACK_CAREER_ROUTES),
   },
   {
     path: "subscription",

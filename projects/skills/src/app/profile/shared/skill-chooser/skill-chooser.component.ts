@@ -76,7 +76,6 @@ export class SkillChooserComponent implements OnInit {
   private loadSkills(): void {
     this.skillService.getAllMarked(this.limit, this.offset).subscribe({
       next: r => {
-        console.log("Received data:", r);
         if (r.results && Array.isArray(r.results)) {
           this.skillsList.set(
             r.results.map(skill => ({

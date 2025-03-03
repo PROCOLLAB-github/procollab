@@ -2,13 +2,17 @@
 
 <div class="profile">
   <div class="profile__bar">
-    <app-bar class="bar" [backHave]="true" [links]="[]"></app-bar>
+    <app-bar
+      class="bar"
+      [backHave]="true"
+      [links]="[{ link: '/trackCar/all', linkText: 'Траектории', isRouterLinkActiveOptions: true }]"
+    ></app-bar>
   </div>
 
-  <div class="profile__overlay">
+  <!-- <div class="profile__overlay">
     <img src="assets/images/profile/soon.svg" alt="soon" class="profile__overlay__image" />
     <p class="profile__overlay__text">Скоро...</p>
-  </div>
+  </div> -->
 
   <router-outlet></router-outlet>
 </div>

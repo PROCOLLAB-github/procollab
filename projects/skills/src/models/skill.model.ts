@@ -1,22 +1,18 @@
 /** @format */
 
 export interface Skill {
-  fileLink: string;
   id: number;
   name: string;
   quantityOfLevels: number;
+  fileLink: string;
   whoCreated: string;
   description: string;
   isDone: boolean;
   freeAccess: boolean;
+  overdue?: boolean;
+  completed?: boolean;
 }
 
-export interface SkillDetail {
-  skillName: string;
-  description: string;
-  level: number;
-  file: string;
-}
 export interface TaskDetail {
   skillName: string;
   description: string;

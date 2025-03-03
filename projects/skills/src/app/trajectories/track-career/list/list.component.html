@@ -1,0 +1,7 @@
+<!-- @format -->
+
+<div class="list">
+  @if (trajectoriesList().length) { @for(trajectory of trajectoriesList(); track $index){
+  <app-trajectory [trajectory]="trajectory"></app-trajectory>
+  } }
+</div>
