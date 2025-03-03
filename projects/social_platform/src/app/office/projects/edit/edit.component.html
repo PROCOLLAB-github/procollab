@@ -441,7 +441,7 @@
                     [error]="(salary | controlError) && projSubmitInitiated"
                     placeholder="Заработная плата"
                   ></app-input>
-                  @if ((salary | controlError: "required") && projSubmitInitiated) {
+                  @if ((salary | controlError: "required") || projSubmitInitiated) {
                   <div class="text-body-14 error">
                     {{ errorMessage.VALIDATION_REQUIRED }}
                   </div>
