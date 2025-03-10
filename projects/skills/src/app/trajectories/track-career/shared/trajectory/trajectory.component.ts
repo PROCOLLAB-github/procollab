@@ -89,10 +89,14 @@ export class TrajectoryComponent implements AfterViewInit {
           if (err.status === 403) {
             this.nonConfirmerModalOpen.set(true);
           } else if (err.status === 400) {
-            this.activatedModalOpen.set(true);
-            this.nonConfirmerModalOpen.set(false);
-            this.instructionModalOpen.set(false);
-            this.confirmModalOpen.set(false);
+            if (!this.trajectory.isActiveForUser) {
+              this.activatedModalOpen.set(true);
+              this.nonConfirmerModalOpen.set(false);
+              this.instructionModalOpen.set(false);
+              this.confirmModalOpen.set(false);
+            } else {
+              this.router.navigate(["/trackCar/" + this.trajectory.id]);
+            }
           }
         }
       },
