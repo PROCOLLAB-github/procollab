@@ -39,6 +39,16 @@ export class TrajectoriesService {
     return this.apiService.get<Student[]>("/trajectories/mentor/students/");
   }
 
+  updateMeetings(id: number, initialMeeting: boolean, finalMeeting: boolean) {
+    const body = {
+      meeting_id: id,
+      initial_meeting: initialMeeting,
+      final_meeting: finalMeeting,
+    };
+
+    return this.apiService.post<typeof body>("/trajectories/meetings/update/", body);
+  }
+
   activateTrajectory(trajectoryId: number) {
     return this.apiService.post("/trajectories/user-trajectory/create/", {
       trajectory_id: trajectoryId,

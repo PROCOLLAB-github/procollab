@@ -19,6 +19,8 @@ import { ButtonComponent, CheckboxComponent } from "@ui/components";
 import { AvatarComponent, IconComponent } from "@uilib";
 import { Student } from "projects/skills/src/models/trajectory.model";
 import { map, Subscription } from "rxjs";
+import { TrajectoriesService } from "../../trajectories/trajectories.service";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-students",
@@ -36,7 +38,15 @@ import { map, Subscription } from "rxjs";
   styleUrl: "./students.component.scss",
 })
 export class ProfileStudentsComponent implements OnInit, OnDestroy {
+  constructor(private readonly fb: FormBuilder) {
+    this.studentForm = this.fb.group({
+      initialMeeting: [false, Validators.required],
+      finalMeeting: [false, Validators.required],
+    });
+  }
+
   route = inject(ActivatedRoute);
+  trajectoryService = inject(TrajectoriesService);
 
   placeholderUrl =
     "https://uch-ibadan.org.ng/wp-content/uploads/2021/10/Profile_avatar_placeholder_large.png";
@@ -48,8 +58,29 @@ export class ProfileStudentsComponent implements OnInit, OnDestroy {
   students?: Student[];
   subscriptions: Subscription[] = [];
 
+  studentForm: FormGroup;
+
   toggleExpand(studentId: number) {
-    this.expandedStudentId = this.expandedStudentId === studentId ? null : studentId;
+    if (this.expandedStudentId === studentId) {
+      this.expandedStudentId = null;
+    } else {
+      this.expandedStudentId = studentId;
+      const student = this.students?.find(s => s.student.id === studentId);
+      if (student) {
+        this.studentForm.patchValue({
+          initialMeeting: student.initialMeeting,
+          finalMeeting: student.finalMeeting,
+        });
+      }
+    }
+  }
+
+  onSelect(key: string, value: boolean) {
+    if (key === "initialMeeting") {
+      this.studentForm.get("initialMeeting")?.setValue(value);
+    } else {
+      this.studentForm.get("finalMeeting")?.setValue(value);
+    }
   }
 
   ngOnInit(): void {
@@ -62,6 +93,20 @@ export class ProfileStudentsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
+  }
+
+  onSave(id: number) {
+    if (this.studentForm.invalid) return;
+
+    const { initialMeeting, finalMeeting } = this.studentForm.value;
+    this.trajectoryService.updateMeetings(id, initialMeeting, finalMeeting).subscribe(() => {
+      const student = this.students?.find(s => s.meetingId === id);
+      if (student) {
+        student.initialMeeting = initialMeeting;
+        student.finalMeeting = finalMeeting;
+      }
+      this.expandedStudentId = null;
+    });
   }
 
   @HostListener("window:resize", ["$event"])

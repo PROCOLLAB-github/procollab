@@ -54,6 +54,7 @@ export interface Student {
   initialMeeting: boolean;
   remainingDays: number;
   userTrajectoryId: number;
+  meetingId: number;
   student: UserData;
   mentorId: number;
 }

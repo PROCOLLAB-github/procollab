@@ -52,7 +52,10 @@
                 <p class="text-heading-4">Начальная встреча с наставником</p>
                 <p class="text-body-12 stats__meeting">Встреча прошла</p>
               </div>
-              <app-checkbox [checked]="student.initialMeeting"></app-checkbox>
+              <app-checkbox
+                (click)="onSelect('initialMeeting', !studentForm.get('initialMeeting')?.value)"
+                [checked]="studentForm.get('initialMeeting')?.value"
+              ></app-checkbox>
             </div>
           </div>
 
@@ -62,7 +65,10 @@
                 <p class="text-heading-4">Финальная встреча с наставником</p>
                 <p class="text-body-12 stats__meeting">Встреча прошла</p>
               </div>
-              <app-checkbox [checked]="student.finalMeeting"></app-checkbox>
+              <app-checkbox
+                (click)="onSelect('finalMeeting', !studentForm.get('finalMeeting')?.value)"
+                [checked]="studentForm.get('finalMeeting')?.value"
+              ></app-checkbox>
             </div>
           </div>
         </div>
@@ -84,9 +90,7 @@
           </div>
 
           <div class="stats__save">
-            <app-button
-              customTypographyClass="text-body-12"
-              (click)="toggleExpand(student.student.id)"
+            <app-button customTypographyClass="text-body-12" (click)="onSave(student.meetingId)"
               >Сохранить</app-button
             >
           </div>
