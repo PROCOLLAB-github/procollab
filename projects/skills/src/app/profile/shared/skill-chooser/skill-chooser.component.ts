@@ -22,6 +22,7 @@ import { PersonalSkillCardComponent } from "../personal-skill-card/personal-skil
 import { ProfileService } from "../../services/profile.service";
 import { Skill as ProfileSkill } from "projects/skills/src/models/profile.model";
 import { tap } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   selector: "app-skill-chooser",
@@ -57,6 +58,7 @@ export class SkillChooserComponent implements OnInit {
   profileIdSkills = signal<ProfileSkill["skillId"][]>([]);
 
   isRetryPicked = signal<boolean>(false);
+  nonConfirmerModalOpen = signal<boolean>(false);
 
   selectedSkillsCount = signal<number>(0);
 
@@ -84,12 +86,14 @@ export class SkillChooserComponent implements OnInit {
             }))
           );
           this.totalSkills.set(r.count);
-        } else {
-          console.error("Invalid data format:", r);
         }
       },
       error: err => {
-        console.error("Error loading skills:", err);
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 404) {
+            this.nonConfirmerModalOpen.set(true);
+          }
+        }
       },
     });
   }

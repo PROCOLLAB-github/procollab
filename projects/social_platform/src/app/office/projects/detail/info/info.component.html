@@ -322,6 +322,21 @@
       </ul>
     </div>
   </app-modal>
+
+  <app-modal [open]="leaderLeaveModal">
+    <div class="unsubscribe-modal">
+      <h3>Прежде чем выйти из проекта смените основателя!</h3>
+      <app-avatar [url]="project.imageAddress" [size]="130"></app-avatar>
+      <div class="unsubscribe-modal__buttons--additional">
+        <app-button
+          customTypographyClass="unsubscribe-modal-btn__typography"
+          (click)="onCloseLeaderLeaveModal()"
+        >
+          Хорошо
+        </app-button>
+      </div>
+    </div>
+  </app-modal>
   <router-outlet></router-outlet>
 </main>
 }

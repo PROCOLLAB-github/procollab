@@ -20,22 +20,42 @@
       <div class="vacancy__info">
         <div class="info__top">
           <div class="vacancy__info-element vacancy__region">
+            @if (project.region) {
             <i appIcon icon="geo" appWidth="11" appHeight="14"></i>
             <span>{{ project.region }}</span>
+            } @else {
+            <span>Не указано</span>
+            }
           </div>
-          <div class="vacancy__info-element">{{ vacancy.workFormat }}</div>
-          <div class="vacancy__info-element">{{ vacancy.workSchedule }}</div>
+          <div class="vacancy__info-element">
+            {{ vacancy.workFormat ? vacancy.workFormat : "Формат работы не указан" }}
+          </div>
+          <div class="vacancy__info-element">
+            {{ vacancy.workSchedule ? vacancy.workSchedule : "График не указан" }}
+          </div>
         </div>
 
         <div class="info__bottom">
-          <div class="vacancy__info-element">{{ vacancy.salary | salaryTransform }} рублей</div>
-          <div class="vacancy__info-element">Опыт {{ vacancy.requiredExperience }}</div>
+          <div class="vacancy__info-element">
+            {{
+              vacancy.salary
+                ? (vacancy.salary | salaryTransform) + " " + "рублей"
+                : "Зарплата  не указана"
+            }}
+          </div>
+          <div class="vacancy__info-element">
+            {{
+              vacancy.requiredExperience
+                ? "Опыт" + " " + vacancy.requiredExperience
+                : "Опыт не указан"
+            }}
+          </div>
         </div>
       </div>
 
+      @if (vacancy.description) {
       <div class="vacancy__content">
         <p class="text-body-16 vacancy__title">Описание вакансии</p>
-        @if (vacancy.description) {
         <div class="text-body-14 about__text">
           <p #descEl [innerHTML]="vacancy.description | parseLinks | parseBreaks"></p>
           @if (descriptionExpandable) {
@@ -47,8 +67,8 @@
           </div>
           }
         </div>
-        }
       </div>
+      }
 
       <div #contentEl class="vacancy__content">
         @if (vacancy.requiredSkills.length; as skillsLength) {

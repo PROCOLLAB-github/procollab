@@ -58,7 +58,16 @@ export class VacancyFilterComponent implements OnInit {
     });
   }
 
-  @Input() searchValue: string | undefined = undefined;
+  private _searchValue: string | undefined;
+
+  @Input() set searchValue(value: string | undefined) {
+    this._searchValue = value;
+  }
+
+  get searchValue(): string | undefined {
+    return this._searchValue;
+  }
+
   @Output() searchValueChange = new EventEmitter<string>();
 
   ngOnInit() {
@@ -154,19 +163,15 @@ export class VacancyFilterComponent implements OnInit {
     const salaryMin = this.salaryForm.get("salaryMin")?.value || "";
     const salaryMax = this.salaryForm.get("salaryMax")?.value || "";
 
-    this.router
-      .navigate([], {
-        queryParams: {
-          salary_min: salaryMin,
-          salary_max: salaryMax,
-          role_contains: this.searchValue,
-        },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.debug("Query change from ProjectsComponent"));
-
-    this.onFetch(0, 20);
+    this.router.navigate([], {
+      queryParams: {
+        role_contains: this.searchValue || null,
+        salary_min: salaryMin,
+        salary_max: salaryMax,
+      },
+      queryParamsHandling: "merge",
+      relativeTo: this.route,
+    });
   }
 
   resetFilter(): void {
@@ -215,7 +220,6 @@ export class VacancyFilterComponent implements OnInit {
       )
       .pipe(
         tap((res: any) => {
-          // console.log(res);
           this.totalItemsCount.set(res.length);
         }),
         map(res => res)
