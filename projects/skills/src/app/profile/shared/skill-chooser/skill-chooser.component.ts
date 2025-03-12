@@ -90,7 +90,7 @@ export class SkillChooserComponent implements OnInit {
       },
       error: err => {
         if (err instanceof HttpErrorResponse) {
-          if (err.status === 404) {
+          if (err.status === 403) {
             this.nonConfirmerModalOpen.set(true);
           }
         }
