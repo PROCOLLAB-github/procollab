@@ -29,7 +29,6 @@ import { HttpErrorResponse } from "@angular/common/http";
   standalone: true,
   imports: [
     CommonModule,
-    PersonalRatingCardComponent,
     ButtonComponent,
     ModalComponent,
     RouterLink,
@@ -40,7 +39,7 @@ import { HttpErrorResponse } from "@angular/common/http";
   styleUrl: "./skill-chooser.component.scss",
 })
 export class SkillChooserComponent implements OnInit {
-  @Input() open = false;
+  @Input() open!: boolean;
   @Output() openChange: EventEmitter<boolean> = new EventEmitter();
 
   route = inject(ActivatedRoute);
@@ -68,9 +67,7 @@ export class SkillChooserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.open) {
-      this.loadSkills();
-    }
+    this.loadSkills();
 
     this.route.data.subscribe(r => {
       this.profileIdSkills.set(r["data"].skills.map((skill: ProfileSkill) => skill.skillId));
@@ -107,6 +104,11 @@ export class SkillChooserComponent implements OnInit {
   onCloseModal() {
     this.openChange.emit(false);
     this.profileService.addSkill(this.profileIdSkills()).subscribe();
+  }
+
+  onSubscriptionModalClosed() {
+    this.nonConfirmerModalOpen.set(false);
+    this.open = false;
   }
 
   prevPage(): void {
