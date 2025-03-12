@@ -68,7 +68,9 @@ export class SkillChooserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadSkills();
+    if (this.open) {
+      this.loadSkills();
+    }
 
     this.route.data.subscribe(r => {
       this.profileIdSkills.set(r["data"].skills.map((skill: ProfileSkill) => skill.skillId));
