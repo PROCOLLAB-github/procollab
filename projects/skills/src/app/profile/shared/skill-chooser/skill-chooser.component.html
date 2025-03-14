@@ -1,5 +1,6 @@
 <!-- @format -->
 
+@if (open && !nonConfirmerModalOpen()) {
 <app-modal [open]="open" (openChange)="onOpenChange($event)">
   <div class="plans">
     <i (click)="onCloseModal()" appIcon icon="cross" class="plans__cross"></i>
@@ -42,8 +43,8 @@
 
         <app-button
           [ngStyle]="{
-            opacity: selectedSkillsCount() === 5 ? '1' : '0.5',
-          }"
+              opacity: selectedSkillsCount() === 5 ? '1' : '0.5',
+            }"
           [color]="selectedSkillsCount() !== 5 ? 'grey' : 'primary'"
           [disabled]="selectedSkillsCount() !== 5"
           (click)="onCloseModal()"
@@ -53,6 +54,7 @@
     </div>
   </div>
 </app-modal>
+}
 
 <app-modal [open]="isRetryPicked()" (openChange)="isRetryPicked.set(!isRetryPicked())">
   <div class="cancel">
@@ -65,3 +67,33 @@
     </p>
   </div>
 </app-modal>
+
+@if (open && nonConfirmerModalOpen()) {
+<app-modal [open]="nonConfirmerModalOpen()">
+  <div class="confirm">
+    <h4 class="confirm__title text-heading-4">У вас нет активной подписки</h4>
+    <div class="cancel__confirm">
+      <img alt="more image" src="assets\images\trajectories\more.svg" class="confirm__image" />
+      <p class="text-body-12 cancel__subtext">
+        Чтобы получить доступ ко всем возможностям платформы, оформите подписку прямо сейчас!
+      </p>
+
+      <div class="cancel__buttons-group">
+        <app-button
+          customTypographyClass="text-body-12"
+          [color]="'grey'"
+          (click)="onSubscriptionModalClosed()"
+          >Назад</app-button
+        >
+
+        <app-button
+          routerLink="/subscription"
+          customTypographyClass="text-body-12"
+          [color]="'primary'"
+          >Купить</app-button
+        >
+      </div>
+    </div>
+  </div>
+</app-modal>
+}

@@ -11,6 +11,7 @@ export interface UserData {
   geoPosition: string;
   verificationDate: string;
   points: number;
+  isMentor: boolean;
 }
 
 export interface Skill {
@@ -21,10 +22,10 @@ export interface Skill {
   fileLink: string;
 }
 
-interface Month {
+export interface Month {
   month: string;
   successfullyDone: boolean;
-  year: number;
+  year?: number;
 }
 
 export interface Profile {

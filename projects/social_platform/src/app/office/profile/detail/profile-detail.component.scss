@@ -107,6 +107,21 @@ $detail-bar-mb: 12px;
       gap: 10px;
       align-items: flex-end;
     }
+
+    &-more {
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+  &__mentor {
+    display: flex;
+    align-items: center;
+    height: 23px;
+    padding: 0 20px;
+    color: var(--green);
+    border: 1px solid var(--green);
+    border-radius: 20px;
   }
 
   &__achievements {

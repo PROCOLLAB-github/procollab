@@ -6,6 +6,7 @@ import {
   combineLatest,
   concatMap,
   debounceTime,
+  distinctUntilChanged,
   fromEvent,
   map,
   noop,
@@ -57,8 +58,20 @@ export class VacanciesListComponent {
     const trimmedSegment = urlSegment.split("?")[0];
     this.type.set(trimmedSegment as "all" | "my");
 
-    const searchValue = this.route.snapshot.queryParams["role_contains"];
-    this.searchForm.get("search")?.setValue(searchValue || "");
+    this.searchForm
+      .get("search")
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        tap(value => {
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { role_contains: value || null },
+            queryParamsHandling: "merge",
+          });
+        })
+      )
+      .subscribe();
 
     const routeData$ =
       this.type() === "all"
@@ -83,6 +96,11 @@ export class VacanciesListComponent {
           const requiredExperience = params["required_experience"]
             ? params["required_experience"]
             : undefined;
+
+          this.searchForm
+            .get("search")
+            ?.setValue(params["role_contains"] || "", { emitEvent: false });
+
           const workFormat = params["work_format"] ? params["work_format"] : undefined;
           const workSchedule = params["work_schedule"] ? params["work_schedule"] : undefined;
           const salaryMax = params["salary_max"] ? params["salary_max"] : undefined;
@@ -160,6 +178,15 @@ export class VacanciesListComponent {
 
   onSearhValueChanged(event: string) {
     this.searchForm.get("search")?.setValue(event);
+  }
+
+  onSearchSubmit() {
+    const value = this.searchForm.get("search")?.value;
+    this.router.navigate([], {
+      queryParams: { role_contains: value || null },
+      queryParamsHandling: "merge",
+      relativeTo: this.route,
+    });
   }
 
   onFetch(offset: number, limit: number) {

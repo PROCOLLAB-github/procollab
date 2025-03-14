@@ -1,0 +1,502 @@
+@use "styles/responsive";
+@use "styles/typography";
+
+@mixin expandable-list {
+  &__remaining {
+    display: grid;
+    grid-template-rows: 0fr;
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+
+    &--show {
+      grid-template-rows: 1fr;
+      margin-top: 12px;
+    }
+
+    ul {
+      min-height: 0;
+    }
+
+    li {
+      &:first-child {
+        margin-top: 12px;
+      }
+
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
+    }
+  }
+}
+
+.read-more {
+  margin-top: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--accent-dark);
+  }
+
+  @include typography.body-14;
+}
+
+.about {
+
+  /* stylelint-disable value-no-vendor-prefix */
+  &__text {
+    p {
+      display: -webkit-box;
+      overflow: hidden;
+      color: var(--dark-grey);
+      text-overflow: ellipsis;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+      transition: all 0.7s ease-in-out;
+
+      &.expanded {
+        -webkit-line-clamp: unset;
+      }
+    }
+
+    ::ng-deep a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
+
+      &:hover {
+        text-decoration-color: var(--accent);
+      }
+    }
+  }
+
+  /* stylelint-enable value-no-vendor-prefix */
+
+  &__read-full {
+    margin-top: 2px;
+    color: var(--accent);
+    cursor: pointer;
+  }
+}
+
+.trajectory {
+  position: relative;
+  height: 100%;
+  padding: 18px 0 20px 18px;
+  margin-bottom: 30px;
+  border: 1px solid var(--grey-button);
+  border-radius: 15px;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+    }
+  }
+
+  &__line {
+    position: absolute;
+    bottom: 34%;
+    left: 44%;
+    width: 1px;
+    transform: rotate(90deg);
+
+    @include responsive.apply-desktop {
+      top: 0;
+      left: 37%;
+      height: 100%;
+      transform: rotate(0);
+    }
+  }
+
+  &__rocket {
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    z-index: 0;
+    display: none;
+
+    @include responsive.apply-desktop {
+      display: block;
+    }
+  }
+
+  &__images {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__image {
+    width: 85px;
+    height: 80px;
+
+    @include responsive.apply-desktop {
+      width: 150px;
+      height: 135px;
+    }
+  }
+
+  &__seat {
+    p {
+      display: none;
+
+      @include responsive.apply-desktop {
+        display: block;
+      }
+    }
+  }
+
+  &__date {
+    display: block !important;
+    margin-top: 48px;
+    margin-bottom: 36px;
+
+    @include responsive.apply-desktop {
+      margin: 0;
+    }
+  }
+
+  &__description {
+    margin-top: 14px;
+
+    p {
+      display: box;
+      overflow: hidden;
+      color: var(--dark-grey);
+      text-overflow: ellipsis;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+      transition: all 0.7s ease-in-out;
+
+      &.expanded {
+        -webkit-line-clamp: unset;
+      }
+    }
+
+    ::ng-deep a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
+
+      &:hover {
+        text-decoration-color: var(--accent);
+      }
+    }
+
+    &__read-full {
+      margin-top: 2px;
+      color: var(--accent);
+      cursor: pointer;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-basis: 36%;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__content {
+    margin-right: 20px;
+  }
+
+  &__skills {
+    width: 100%;
+    margin: 0;
+
+    @include responsive.apply-desktop {
+      width: 60%;
+      margin-left: 30px;
+    }
+
+    &-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      p {
+        display: none;
+
+        @include responsive.apply-desktop {
+          display: inline;
+        }
+      }
+    }
+
+    &-bottom {
+      position: sticky;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+
+      @include responsive.apply-desktop {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    &-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: 225px;
+    }
+  }
+
+  &__buttons-group {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+
+    app-button {
+      width: 100%;
+      border-radius: 15px;
+    }
+
+    @include responsive.apply-desktop {
+      width: 40%;
+    }
+  }
+
+  &__inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  &__skill {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+
+    .skill__image {
+      width: 40px;
+      height: 40px;
+      border-radius: 100%;
+    }
+  }
+}
+
+.button__pick {
+  width: 90%;
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 340px;
+  max-height: calc(100vh - 40px);
+  padding: 24px 20px 20px 24px;
+  overflow-y: auto;
+
+  @include responsive.apply-desktop {
+    width: 800px;
+    padding: 52px 50px 24px 42px;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column-reverse;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      flex-direction: row;
+      gap: 80px;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+  }
+
+  &__image {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    width: 130px;
+    height: 110px;
+    margin-bottom: 18px;
+
+    @include responsive.apply-desktop {
+      width: 100%;
+      height: 218px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 10px;
+    color: var(--accent);
+  }
+
+  &__text {
+    margin-bottom: 5px;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 10px;
+    }
+  }
+
+  &__subtext {
+    width: 100%;
+    margin-bottom: 24px;
+
+    @include responsive.apply-desktop {
+      width: 60%;
+    }
+  }
+
+  &__text-block {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__button {
+    width: 100%;
+    text-align: center;
+
+    @include responsive.apply-desktop {
+      width: 20%;
+    }
+  }
+
+  &__advantages {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__advantage {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  &__buttons-group {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+
+    app-button {
+      width: 100%;
+      border-radius: 15px;
+    }
+
+    @include responsive.apply-desktop {
+      width: 55%;
+    }
+  }
+
+  &__confirm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @include responsive.apply-desktop {
+      align-items: center;
+      text-align: center;
+    }
+  }
+}
+
+.confirm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 340px;
+  padding: 0;
+  text-align: center;
+
+  @include responsive.apply-desktop {
+    width: 750px;
+    padding: 20px 50px 24px;
+  }
+
+  &__title {
+    margin-bottom: 20px;
+  }
+
+  &__image {
+    width: 130px;
+    height: 125px;
+    margin-top: 24px;
+    margin-bottom: 18px;
+
+    @include responsive.apply-desktop {
+      width: 100%;
+      height: 218px;
+    }
+  }
+
+  &__explaining {
+    width: 278px;
+    height: 125px;
+    margin-top: 24px;
+    margin-bottom: 18px;
+
+    @include responsive.apply-desktop {
+      width: 100%;
+      height: 150px;
+    }
+  }
+
+  &__dots-group {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .dots-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+
+    @include responsive.apply-desktop {
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    &__icon {
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+    }
+
+    &-prev {
+      color: var(--dark-grey);
+    }
+
+    &-next {
+      transform: rotate(180deg);
+    }
+
+    &__dots {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+  }
+}

@@ -12,7 +12,7 @@
     <div class="filter">
       @if(type() === 'all'){
       <div class="filter__search">
-        <form [formGroup]="searchForm">
+        <form [formGroup]="searchForm" (submit)="onSearchSubmit()">
           <app-search formControlName="search"></app-search>
         </form>
       </div>

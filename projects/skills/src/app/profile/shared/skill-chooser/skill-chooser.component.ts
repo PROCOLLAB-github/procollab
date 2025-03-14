@@ -22,13 +22,13 @@ import { PersonalSkillCardComponent } from "../personal-skill-card/personal-skil
 import { ProfileService } from "../../services/profile.service";
 import { Skill as ProfileSkill } from "projects/skills/src/models/profile.model";
 import { tap } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   selector: "app-skill-chooser",
   standalone: true,
   imports: [
     CommonModule,
-    PersonalRatingCardComponent,
     ButtonComponent,
     ModalComponent,
     RouterLink,
@@ -39,7 +39,7 @@ import { tap } from "rxjs";
   styleUrl: "./skill-chooser.component.scss",
 })
 export class SkillChooserComponent implements OnInit {
-  @Input() open = false;
+  @Input() open!: boolean;
   @Output() openChange: EventEmitter<boolean> = new EventEmitter();
 
   route = inject(ActivatedRoute);
@@ -57,6 +57,7 @@ export class SkillChooserComponent implements OnInit {
   profileIdSkills = signal<ProfileSkill["skillId"][]>([]);
 
   isRetryPicked = signal<boolean>(false);
+  nonConfirmerModalOpen = signal<boolean>(false);
 
   selectedSkillsCount = signal<number>(0);
 
@@ -76,7 +77,6 @@ export class SkillChooserComponent implements OnInit {
   private loadSkills(): void {
     this.skillService.getAllMarked(this.limit, this.offset).subscribe({
       next: r => {
-        console.log("Received data:", r);
         if (r.results && Array.isArray(r.results)) {
           this.skillsList.set(
             r.results.map(skill => ({
@@ -85,12 +85,14 @@ export class SkillChooserComponent implements OnInit {
             }))
           );
           this.totalSkills.set(r.count);
-        } else {
-          console.error("Invalid data format:", r);
         }
       },
       error: err => {
-        console.error("Error loading skills:", err);
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 403) {
+            this.nonConfirmerModalOpen.set(true);
+          }
+        }
       },
     });
   }
@@ -102,6 +104,11 @@ export class SkillChooserComponent implements OnInit {
   onCloseModal() {
     this.openChange.emit(false);
     this.profileService.addSkill(this.profileIdSkills()).subscribe();
+  }
+
+  onSubscriptionModalClosed() {
+    this.nonConfirmerModalOpen.set(false);
+    this.open = false;
   }
 
   prevPage(): void {

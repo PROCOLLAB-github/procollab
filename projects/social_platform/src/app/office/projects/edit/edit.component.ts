@@ -430,43 +430,19 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   submitVacancy(): void {
     this.vacancySubmitInitiated = true;
 
-    const controls = [
-      this.vacancyForm.get("role"),
-      this.vacancyForm.get("description"),
-      this.vacancyForm.get("skills"),
-      this.vacancyForm.get("requiredExperience"),
-      this.vacancyForm.get("workFormat"),
-      this.vacancyForm.get("salary"),
-      this.vacancyForm.get("workSchedule"),
-    ];
-
-    controls.filter(Boolean).forEach(control => {
-      control?.addValidators([Validators.required]);
-      control?.updateValueAndValidity({ emitEvent: false });
-    });
-
-    if (!this.validationService.getFormValidation(this.vacancyForm)) {
-      controls.filter(Boolean).forEach(control => {
-        console.debug("Submit vacancy error: ", control);
-      });
-
-      return;
-    }
+    if (!this.validationService.getFormValidation(this.vacancyForm)) return;
 
     this.vacancyIsSubmitting = true;
-
     const vacancy = {
       ...this.vacancyForm.value,
       requiredSkillsIds: this.vacancyForm.value.skills.map((s: Skill) => s.id),
       salary: +this.vacancyForm.get("salary")?.value,
     };
-
     this.vacancyService
       .postVacancy(Number(this.route.snapshot.paramMap.get("projectId")), vacancy)
       .subscribe({
         next: vacancy => {
           this.vacancies.push(vacancy);
-
           this.vacancyForm.reset();
           this.vacancyIsSubmitting = false;
         },
@@ -540,31 +516,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   submitInvite(): void {
     this.inviteSubmitInitiated = true;
 
-    const controls = [this.inviteForm.get("role"), this.inviteForm.get("link")];
-
-    controls.filter(Boolean).forEach(control => {
-      if (control === this.inviteForm.get("link")) {
-        control?.addValidators([
-          Validators.pattern(/^http(s)?:\/\/.+(:[0-9]*)?\/office\/profile\/\d+$/),
-        ]);
-      }
-      control?.addValidators([Validators.required]);
-      control?.updateValueAndValidity({ emitEvent: false });
-    });
-
-    if (!this.validationService.getFormValidation(this.inviteForm)) {
-      controls.filter(Boolean).forEach(control => {
-        console.debug("Submit invite error: ", control);
-      });
-
-      return;
-    }
+    if (!this.validationService.getFormValidation(this.inviteForm)) return;
 
     this.inviteFormIsSubmitting = true;
-
     const link = new URL(this.inviteForm.get("link")?.value);
-
-    // Sure that it's works because of regex validation
     const path = link.pathname.split("/");
     this.inviteService
       .sendForUser(
@@ -574,17 +529,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe({
         next: invite => {
-          this.inviteFormIsSubmitting = false;
-          this.inviteForm.reset();
-
           this.invites.push(invite);
+          this.inviteForm.reset();
+          this.inviteFormIsSubmitting = false;
         },
-        error: (error: unknown) => {
-          if (error instanceof HttpErrorResponse) {
-            if (error.status === 400) {
-              this.inviteNotExistingError = error;
-            }
-          }
+        error: () => {
           this.inviteFormIsSubmitting = false;
         },
       });
@@ -626,12 +575,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       title: this.projectForm.get("achievementsName")?.value,
       status: this.projectForm.get("achievementsPrize")?.value,
     });
-
     if (this.editIndex() !== null) {
       this.achievementsItems.update(items => {
         const updatedItems = [...items];
         updatedItems[this.editIndex()!] = achievementItem.value;
-
         this.achievements.at(this.editIndex()!).patchValue(achievementItem.value);
         return updatedItems;
       });
@@ -640,7 +587,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.achievementsItems.update(items => [...items, achievementItem.value]);
       this.achievements.push(achievementItem);
     }
-
     this.projectForm.get("achievementsName")?.reset();
     this.projectForm.get("achievementsPrize")?.reset();
   }
@@ -682,10 +628,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   saveProjectAsPublished(): void {
     this.projSubmitInitiated = true;
     this.projectForm.get("draft")?.patchValue(false);
-
     this.setProjFormIsSubmitting = this.setIsSubmittingAsPublished;
-    const partnerProgramId = this.projectForm.get("partnerProgramId")?.value;
-    this.projectForm.patchValue({ partnerProgramId: partnerProgramId });
     this.submitProjectForm();
   }
 
@@ -703,36 +646,18 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.achievements.controls.forEach(achievementForm => {
       achievementForm.markAllAsTouched();
     });
-
     if (!this.validationService.getFormValidation(this.projectForm)) {
       return;
     }
-
-    if (!this.projectForm.get("industryId")?.value) {
-      delete this.projectForm.value.industryId;
-    }
-
     this.setProjFormIsSubmitting(true);
-
     this.projectService
       .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), this.projectForm.value)
       .subscribe({
         next: () => {
           this.setProjFormIsSubmitting(false);
-          this.router
-            .navigateByUrl(`/office/projects/my`)
-            .then(() => console.debug("Route changed from ProjectEditComponent"));
+          this.router.navigateByUrl(`/office/projects/my`);
         },
-        error: (error: unknown) => {
-          if (error instanceof HttpErrorResponse) {
-            if (error.status === 403) {
-              if (error.error) {
-                this.isCompleted = true;
-                this.errorModalMessage.set(error.error);
-                // console.log(this.errorModalMessage()?.program_name);
-              }
-            }
-          }
+        error: () => {
           this.setProjFormIsSubmitting(false);
         },
       });
@@ -749,25 +674,19 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   addLink() {
     const linkValue = this.projectForm.get("link")?.value;
 
-    // Check if the input field has a value
     if (linkValue) {
-      // Check if we are editing an existing link
       if (this.editIndex() !== null) {
-        // Update the existing link in the FormArray
         this.links.at(this.editIndex()!).setValue(linkValue);
         this.linksItems.update(items => {
           const updatedItems = [...items];
-          updatedItems[this.editIndex()!] = linkValue; // Update existing item
+          updatedItems[this.editIndex()!] = linkValue;
           return updatedItems;
         });
-        this.editIndex.set(null); // Reset edit index
+        this.editIndex.set(null);
       } else {
-        // Add new link to both FormArray and local items array
-        this.links.push(this.fb.control(linkValue)); // Add new control
-        this.linksItems.update(items => [...items, linkValue]); // Add new item
+        this.links.push(this.fb.control(linkValue));
+        this.linksItems.update(items => [...items, linkValue]);
       }
-
-      // Reset the input field after adding/updating
       this.projectForm.get("link")?.reset();
     }
   }

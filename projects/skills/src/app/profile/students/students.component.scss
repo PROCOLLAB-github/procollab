@@ -1,0 +1,212 @@
+@use "styles/responsive";
+@use "styles/typography";
+
+.students {
+  position: relative;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 24px 15px 48px;
+    background-color: var(--white);
+    border: 1px solid var(--grey-button);
+    border-radius: 15px;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+      align-items: center;
+      padding: 15px 22px;
+    }
+  }
+
+  &__title {
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      @include typography.heading-2;
+    }
+  }
+
+  &__info {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+
+  &__trajectory {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+
+  .trajectory__image {
+    width: 85px;
+    height: 80px;
+
+    @include responsive.apply-desktop {
+      width: 90px;
+      height: 94px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &__profile {
+    color: var(--dark-grey);
+  }
+
+  app-button {
+    &::ng-deep .button--inline {
+      height: 25px;
+    }
+  }
+
+  &__stats {
+    position: relative;
+    top: auto;
+    left: 5%;
+    z-index: 10;
+    width: 90%;
+    height: 40px;
+    padding: 10px;
+    background-color: var(--white);
+    border: 1px solid var(--grey-button);
+    border-radius: 15px;
+    transition: height 0.3s ease;
+
+    &--expanded {
+      height: 400px;
+      padding: 36px 24px;
+    }
+
+    @include responsive.apply-desktop {
+      &--expanded {
+        height: 240px;
+        padding: 36px 24px;
+      }
+
+      height: 40px;
+      padding: 10px;
+    }
+  }
+}
+
+.stats {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+
+    @include responsive.apply-desktop {
+      align-items: flex-end;
+    }
+  }
+
+  &__expand {
+    position: absolute;
+    bottom: 5%;
+    left: 21%;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    cursor: pointer;
+
+    &--expanded {
+      left: 31%;
+    }
+
+    @include responsive.apply-desktop {
+      left: 41%;
+    }
+  }
+
+  &__skills {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__checkbox {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 10px;
+    align-items: center;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+    }
+  }
+
+  &__info {
+    text-align: start;
+
+    @include responsive.apply-desktop {
+      text-align: end;
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 40px;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+      gap: 0;
+    }
+  }
+
+  &__text-content {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  &__point,
+  &__trajectories,
+  &__meeting {
+    color: var(--dark-grey);
+  }
+
+  &__save {
+    width: 100%;
+
+    app-button {
+      &::ng-deep .button--inline {
+        min-height: 45px;
+      }
+    }
+
+    @include responsive.apply-desktop {
+      width: 13%;
+
+      app-button {
+        &::ng-deep .button--inline {
+          min-height: 38px;
+        }
+      }
+    }
+  }
+}
+
+.icon {
+  &__unexpanded {
+    transform: rotate(180deg);
+  }
+}

@@ -2,16 +2,21 @@
 
 <div class="list">
   <app-bar class="bar" [backHave]="true"></app-bar>
-  <div class="list__search search">
+  <form class="list__search search" [formGroup]="searchForm">
     <div class="search__control">
       <i class="search__icon" appIcon icon="search" appSquare="32px"></i>
-      <input type="text" placeholder="Поиск" class="search__input text-body-14" />
+      <input
+        formControlName="search"
+        type="text"
+        placeholder="Поиск"
+        class="search__input text-body-14"
+      />
     </div>
-    <app-button class="search__button">Найти</app-button>
-  </div>
-  @if (skills | async; as data) {
+    <app-button class="search__button" (click)="onSearchClick()">Найти</app-button>
+  </form>
+  @if (skills()) {
   <div class="list__items">
-    @for (s of data["results"]; track $index) {
+    @for (s of skills(); track $index) {
     <app-skill-card [skill]="s" (click)="onSkillClick(s.id)"></app-skill-card>
     }
   </div>

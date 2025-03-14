@@ -53,6 +53,8 @@ export class WebinarsListComponent implements OnInit, AfterViewInit {
       }
       this.totalItemsCount.set(vacancy.count);
     });
+
+    this.subscriptions$().push(subscription);
   }
 
   ngAfterViewInit(): void {

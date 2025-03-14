@@ -43,6 +43,7 @@ import {
   withLatestFrom,
 } from "rxjs";
 import { ProjectMemberCardComponent } from "../shared/project-member-card/project-member-card.component";
+import { HttpResponse } from "@angular/common/http";
 
 @Component({
   selector: "app-detail",
@@ -168,6 +169,8 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isCompleted = false;
 
+  leaderLeaveModal = false;
+
   onAddNews(news: { text: string; files: string[] }): void {
     this.projectNewsService
       .addNews(this.route.snapshot.params["projectId"], news)
@@ -217,11 +220,16 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onLeave() {
-    this.project$?.pipe(concatMap(p => this.projectService.leave(p.id))).subscribe(() => {
-      this.router
-        .navigateByUrl("/office/projects/my")
-        .then(() => console.debug("Route changed from ProjectInfoComponent"));
-    });
+    this.project$?.pipe(concatMap(p => this.projectService.leave(p.id))).subscribe(
+      () => {
+        this.router
+          .navigateByUrl("/office/projects/my")
+          .then(() => console.debug("Route changed from ProjectInfoComponent"));
+      },
+      () => {
+        this.leaderLeaveModal = true;
+      }
+    );
   }
 
   onTransferOwnership(id: Collaborator["userId"]) {
@@ -254,6 +262,10 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onCloseUnsubscribeModal(): void {
     this.isUnsubscribeModalOpen = false;
+  }
+
+  onCloseLeaderLeaveModal(): void {
+    this.leaderLeaveModal = false;
   }
 
   openSupport = false;
