@@ -69,6 +69,10 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
       this.trajectory = r[0];
       this.userTrajectory = r[1];
 
+      if (!this.trajectory.isActiveForUser) {
+        this.router.navigate(["/trackCar/all"]);
+      }
+
       this.userTrajectory.availableSkills.forEach(i => (i.freeAccess = true));
       this.userTrajectory.completedSkills.forEach(i => {
         i.freeAccess = true;

@@ -35,14 +35,22 @@ export class TrajectoriesListComponent implements OnInit, AfterViewInit, OnDestr
   trajectoriesPage = signal(1);
   perFetchTake = signal(20);
 
+  type = signal<"all" | "my" | null>(null);
+
   subscriptions$ = signal<Subscription[]>([]);
 
   ngOnInit(): void {
+    this.type.set(this.router.url.split("/").slice(-1)[0] as "all" | "my");
+
     const routeData$ = this.route.data.pipe(map(r => r["data"]));
 
     const subscription = routeData$.subscribe((trajectories: Trajectory[]) => {
-      this.trajectoriesList.set(trajectories);
-      this.totalItemsCount.set(trajectories.length);
+      if (this.type() === "all") {
+        this.trajectoriesList.set(trajectories);
+        this.totalItemsCount.set(trajectories.length);
+      } else {
+        this.trajectoriesList.set(trajectories);
+      }
     });
 
     this.subscriptions$().push(subscription);

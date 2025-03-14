@@ -40,7 +40,7 @@ import { HttpErrorResponse } from "@angular/common/http";
   templateUrl: "./trajectory.component.html",
   styleUrl: "./trajectory.component.scss",
 })
-export class TrajectoryComponent implements AfterViewInit {
+export class TrajectoryComponent implements AfterViewInit, OnInit {
   @Input() trajectory!: Trajectory;
   protected readonly dotsArray = Array;
   protected readonly trajectoryMore = trajectoryMore;
@@ -65,8 +65,14 @@ export class TrajectoryComponent implements AfterViewInit {
   instructionModalOpen = signal(false);
   activatedModalOpen = signal(false);
 
+  type = signal<"all" | "my" | null>(null);
+
   placeholderUrl =
     "https://uch-ibadan.org.ng/wp-content/uploads/2021/10/Profile_avatar_placeholder_large.png";
+
+  ngOnInit() {
+    this.type.set(this.router.url.split("/").slice(-1)[0] as "all" | "my");
+  }
 
   ngAfterViewInit(): void {
     const descElement = this.descEl?.nativeElement;
@@ -80,8 +86,6 @@ export class TrajectoryComponent implements AfterViewInit {
       next: () => {
         if (!this.trajectory.isActiveForUser) {
           this.confirmModalOpen.set(true);
-        } else {
-          this.router.navigate(["/trackCar/" + this.trajectory.id]);
         }
       },
       error: err => {
@@ -89,14 +93,10 @@ export class TrajectoryComponent implements AfterViewInit {
           if (err.status === 403) {
             this.nonConfirmerModalOpen.set(true);
           } else if (err.status === 400) {
-            if (!this.trajectory.isActiveForUser) {
-              this.activatedModalOpen.set(true);
-              this.nonConfirmerModalOpen.set(false);
-              this.instructionModalOpen.set(false);
-              this.confirmModalOpen.set(false);
-            } else {
-              this.router.navigate(["/trackCar/" + this.trajectory.id]);
-            }
+            this.activatedModalOpen.set(true);
+            this.nonConfirmerModalOpen.set(false);
+            this.instructionModalOpen.set(false);
+            this.confirmModalOpen.set(false);
           }
         }
       },
@@ -116,10 +116,14 @@ export class TrajectoryComponent implements AfterViewInit {
 
   nextPage(): void {
     if (this.currentPage === 4) {
-      this.router.navigate(["/trackCar/" + this.trajectory.id]);
+      this.navigateOnTrajectory();
     } else if (this.currentPage < 4) {
       this.currentPage += 1;
     }
+  }
+
+  navigateOnTrajectory() {
+    this.router.navigate(["/trackCar/" + this.trajectory.id]);
   }
 
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {

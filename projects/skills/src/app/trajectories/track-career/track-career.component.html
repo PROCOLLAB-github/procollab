@@ -5,7 +5,10 @@
     <app-bar
       class="bar"
       [backHave]="true"
-      [links]="[{ link: '/trackCar/all', linkText: 'Траектории', isRouterLinkActiveOptions: true }]"
+      [links]="[
+        { link: '/trackCar/all', linkText: 'Траектории', isRouterLinkActiveOptions: true },
+        { link: '/trackCar/my', linkText: 'Моя траектория', isRouterLinkActiveOptions: false }
+      ]"
     ></app-bar>
   </div>
 

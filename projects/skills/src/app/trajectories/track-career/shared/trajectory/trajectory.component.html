@@ -68,6 +68,15 @@
           и еще 5+ навыков от партнеров
         </p>
         <div class="trajectory__buttons-group">
+          @if (type() === "my") {
+          <app-button
+            (click)="navigateOnTrajectory()"
+            customTypographyClass="text-body-12"
+            class="button__more"
+            [backgroundColor]="trajectory.buttonColor"
+            >Перейти</app-button
+          >
+          } @else {
           <app-button
             (click)="moreModalOpen.set(true)"
             customTypographyClass="text-body-12"
@@ -82,6 +91,7 @@
             class="button__pick"
             >Выбрать</app-button
           >
+          }
         </div>
       </div>
     </div>

@@ -24,7 +24,17 @@ export class TrajectoriesService {
     params.set("limit", limit);
     params.set("offset", offset);
 
-    return this.apiService.get<Trajectory>("/trajectories/");
+    return this.apiService.get<Trajectory[]>("/trajectories/");
+  }
+
+  getMyTrajectory() {
+    return this.apiService.get<Trajectory[]>("/trajectories/").pipe(
+      map(track => {
+        const choosedTrajctory = track.find(trajectory => trajectory.isActiveForUser === true);
+
+        return [choosedTrajctory];
+      })
+    );
   }
 
   getOne(id: number) {
