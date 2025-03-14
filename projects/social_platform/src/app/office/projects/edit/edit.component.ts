@@ -122,7 +122,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       description: ["", Validators.required],
       requiredExperience: ["", Validators.required],
       workFormat: ["", Validators.required],
-      salary: ["", [Validators.pattern("^(\\d{1,3}( \\d{3})*|\\d+)$")]],
+      salary: ["", [Validators.required, Validators.pattern("^(\\d{1,3}( \\d{3})*|\\d+)$")]],
       workSchedule: ["", Validators.required],
     });
 

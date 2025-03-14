@@ -81,7 +81,6 @@ $detail-bar-mb: 12px;
 
   &__body {
     position: relative;
-    z-index: 2;
     gap: 20px;
     padding: 40px 24px 24px;
     margin-top: -$body-slide;
@@ -155,7 +154,6 @@ $detail-bar-mb: 12px;
     top: -39%;
     bottom: $body-slide;
     left: 50%;
-    z-index: 3;
     display: block;
     transform: translateX(-50%);
 
