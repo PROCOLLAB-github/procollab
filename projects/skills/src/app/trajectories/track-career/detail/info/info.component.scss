@@ -163,7 +163,8 @@
         width: 100%;
 
         .month {
-          padding: 50px 8px;
+          display: flex;
+          justify-content: center;
         }
 
         .item {
@@ -177,7 +178,7 @@
 
             @include responsive.apply-desktop {
               top: -50%;
-              left: 50%;
+              left: 44%;
 
               @include typography.body-14;
             }
@@ -276,6 +277,10 @@
       display: flex;
       gap: 12px;
       align-items: center;
+    }
+
+    &__soon {
+      color: var(--accent);
     }
   }
 

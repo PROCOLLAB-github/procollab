@@ -19,6 +19,7 @@
       </div>
 
       <div class="trajectory__mentor" [style.background-color]="trajectory.backgroundColor">
+        @if (userTrajectory.mentorFirstName && userTrajectory.mentorLastName) {
         <div class="mentor__info">
           <app-avatar
             [url]="userTrajectory.mentorAvatar ? userTrajectory.mentorAvatar! : placeholderUrl"
@@ -49,11 +50,15 @@
           "
         >
           <app-button
+            [ariaDisabled]="!userTrajectory.mentorId || !profileId"
             customTypographyClass="text-body-12"
             [backgroundColor]="trajectory.selectButtonColor"
             >Написать наставнику</app-button
           >
         </a>
+        } @else {
+        <p class="text-bold-body-16 mentor__soon">Скоро тут будет наставник!</p>
+        }
       </div>
 
       <div class="trajectory__description" [style.background-color]="trajectory.backgroundColor">
