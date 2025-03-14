@@ -10,11 +10,11 @@
     <div class="trajectory__info">
       <div class="trajectory__timeline">
         <p class="timeline__start timeline__date text-body-14">
-          {{ userTrajectory.startDate | date: "yyyy.MM.dd" }}
+          {{ userTrajectory.startDate | date: "dd.MM.yyyy" }}
         </p>
         <app-month-block [months]="mockMonts" [hasNext]="false"></app-month-block>
         <p class="timeline__end timeline__date text-body-14">
-          {{ userTrajectory.endDate | date: "yyyy.MM.dd" }}
+          {{ userTrajectory.endDate | date: "dd.MM.yyyy" }}
         </p>
       </div>
 
