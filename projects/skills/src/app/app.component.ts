@@ -51,14 +51,14 @@ export class AppComponent implements OnInit {
     this.profileService.getUserData().subscribe({
       next: data => this.userData.set(data as UserData),
       error: () => {
-        location.href = "https://app.procollab.ru/auth/login";
+        // location.href = "https://app.procollab.ru/auth/login";
       },
     });
 
     this.profileService.syncProfile().subscribe({
       next: () => {},
       error: () => {
-        location.href = "https://app.procollab.ru/auth/login";
+        // location.href = "https://app.procollab.ru/auth/login";
       },
     });
   }
