@@ -6,8 +6,13 @@
   <div class="carousel__indexes">
     <span>{{ currentIndex + 1 }} / {{ images.length }}</span>
   </div>
-  <button class="carousel__btn carousel__btn--prev" (click)="prev()">&#60;</button>
-  <button class="carousel__btn carousel__btn--next" (click)="next()">&#62;</button>
+  <button class="carousel__btn carousel__btn--prev" (click)="prev()">
+    <i appIcon icon="arrowright" appSquare="20"></i>
+  </button>
+
+  <button class="carousel__btn carousel__btn--next" (click)="next()">
+    <i appIcon icon="arrowright" appSquare="20"></i>
+  </button>
   }
   <div class="carousel__image-wrapper" (touchend)="onTouchImg($event)">
     <img [src]="images[currentIndex]?.link" [alt]="images[currentIndex]?.name" />

@@ -2,9 +2,11 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FileModel } from "@office/models/file.model";
+import { IconComponent } from "@uilib";
 
 @Component({
   selector: "app-carousel",
+  imports: [IconComponent],
   templateUrl: "./carousel.component.html",
   styleUrls: ["./carousel.component.scss"],
   standalone: true,
