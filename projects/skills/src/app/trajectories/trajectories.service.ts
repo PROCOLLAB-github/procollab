@@ -60,6 +60,7 @@ export class TrajectoriesService {
           return [];
         }),
         catchError(error => {
+          console.log("Error with fetch individual skills", error);
           return of([]);
         })
       );
