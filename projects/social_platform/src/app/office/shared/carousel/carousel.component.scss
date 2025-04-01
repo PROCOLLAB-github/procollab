@@ -26,7 +26,7 @@
     right: 10px;
     z-index: 10;
     padding: 2px 20px;
-    color: rgba($color: #fff, $alpha: 50%);
+    color: var(--dark-grey);
     background-color: rgb(66 66 66 / 30%);
     border-radius: 15px;
 
@@ -45,6 +45,7 @@
     cursor: pointer;
     border: none;
     border-radius: 100%;
+    background-color: rgb(66 66 66 / 30%);
     transform: translateY(-50%);
   }
 
