@@ -14,6 +14,7 @@ import { SkillService } from "../services/skill.service";
 import { ProfileService } from "../../profile/services/profile.service";
 import { SubscriptionData } from "@corelib";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { ModalComponent } from "@ui/components/modal/modal.component";
 
 @Component({
   selector: "app-list",
@@ -22,6 +23,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
     CommonModule,
     IconComponent,
     ButtonComponent,
+    ModalComponent,
     SkillCardComponent,
     BarComponent,
     ReactiveFormsModule,
@@ -48,6 +50,8 @@ export class SkillsListComponent implements OnInit, OnDestroy {
   skills = signal<Skill[]>([]);
   originalSkills = signal<Skill[]>([]);
   subscriptionType = signal<SubscriptionData["lastSubscriptionType"]>(null);
+
+  nonConfirmerModalOpen = signal(false);
 
   ngOnInit(): void {
     const profileSub = this.profileService.getSubscriptionData().subscribe(r => {
@@ -84,6 +88,10 @@ export class SkillsListComponent implements OnInit, OnDestroy {
 
   onSkillClick(skillId: number) {
     this.skillService.setSkillId(skillId);
-    this.router.navigate(["skills", skillId]);
+    this.router.navigate(["skills", skillId]).catch(err => {
+      if (err.status === 403) {
+        this.nonConfirmerModalOpen.set(true);
+      }
+    });
   }
 }

@@ -10,7 +10,6 @@ export interface Skill {
   isDone: boolean;
   freeAccess: boolean;
   overdue?: boolean;
-  completed?: boolean;
 }
 
 export interface TaskDetail {

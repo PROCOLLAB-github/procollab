@@ -12,5 +12,6 @@ export const TrajectoryDetailResolver = (route: ActivatedRouteSnapshot) => {
   return forkJoin([
     trajectoryService.getOne(trajectoryId),
     trajectoryService.getUserTrajectoryInfo(),
+    trajectoryService.getIndividualSkills(),
   ]);
 };

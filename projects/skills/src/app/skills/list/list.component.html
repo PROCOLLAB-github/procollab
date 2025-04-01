@@ -22,3 +22,33 @@
   </div>
   }
 </div>
+
+<app-modal [open]="nonConfirmerModalOpen()">
+  <div class="confirm">
+    <h4 class="confirm__title text-heading-4">У вас нет активной подписки</h4>
+    <div class="cancel__confirm">
+      <img alt="more image" src="assets\images\trajectories\more.svg" class="confirm__image" />
+      <p class="text-body-12 cancel__subtext">
+        Чтобы получить доступ ко всем возможностям платформы, оформите подписку прямо сейчас!
+      </p>
+
+      <div class="cancel__buttons-group">
+        <app-button
+          customTypographyClass="text-body-12"
+          [color]="'grey'"
+          style="width: 100%"
+          (click)="nonConfirmerModalOpen.set(false)"
+          >Назад</app-button
+        >
+
+        <app-button
+          routerLink="/subscription"
+          style="width: 100%"
+          customTypographyClass="text-body-12"
+          [color]="'primary'"
+          >Купить</app-button
+        >
+      </div>
+    </div>
+  </div>
+</app-modal>

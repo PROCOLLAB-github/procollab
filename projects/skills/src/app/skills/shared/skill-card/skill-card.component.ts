@@ -15,4 +15,5 @@ import { PluralizePipe } from "@corelib";
 })
 export class SkillCardComponent {
   @Input({ required: true }) skill!: Skill;
+  @Input() type: "personal" | "base" = "base";
 }

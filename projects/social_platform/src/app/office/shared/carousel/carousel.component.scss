@@ -1,0 +1,78 @@
+@use "styles/typography";
+
+.carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__image-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 15px;
+    }
+  }
+
+  &__indexes {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: rgba(66, 66, 66, 0.3);
+    border-radius: 15px;
+    padding: 5px 15px;
+    z-index: 10;
+
+    span {
+      color: var(--gray);
+      @include typography.body-12;
+    }
+  }
+
+  &__btn {
+    position: absolute;
+    background-color: rgba(66, 66, 66, 0.3);
+    color: var(--gray);
+    border: none;
+    border-radius: 100%;
+    padding: 10px 12px;
+    cursor: pointer;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+  }
+
+  &__btn--prev {
+    left: 10px;
+  }
+
+  &__btn--next {
+    right: 10px;
+  }
+
+  &__img-like {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 75px;
+    height: 75px;
+    color: var(--accent);
+    background-color: var(--white);
+    border-radius: 15px;
+    transition: transform 0.1s ease-in-out;
+    transform: translate(-50%, -50%) scale(0);
+
+    &--show {
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+}

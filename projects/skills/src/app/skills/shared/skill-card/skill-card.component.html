@@ -1,9 +1,17 @@
 <!-- @format -->
 
-<div class="skill-card">
+<div
+  class="skill-card"
+  [ngStyle]="{ backgroundColor: type === 'personal' ? 'var(--accent-light)' : 'var(--white)' }"
+>
   <div class="skill-card__top">
     <div class="skill-card__info">
-      <h3 class="skill-card__title text-heading-4">{{ skill.name }}</h3>
+      <h3
+        class="skill-card__title text-heading-4"
+        [ngStyle]="{ color: type === 'personal' ? 'var(--accent)' : 'var(--black)' }"
+      >
+        {{ skill.name }}
+      </h3>
       <div class="skill-card__partner text-body-12">{{ skill.whoCreated }}</div>
     </div>
     <app-avatar [size]="60" [url]="skill.fileLink"> </app-avatar>
@@ -21,7 +29,7 @@
     <div class="skill-card__price text-body-12">Доступно в подписке PRO</div>
     } @if (skill.overdue) {
     <div class="skill-card__lost text-body-12">Просроченный навык</div>
-    } @if(skill.completed) {
+    } @if(skill.isDone) {
     <div class="skill-card__complete text-body-12">Выполненный</div>
     }
   </div>

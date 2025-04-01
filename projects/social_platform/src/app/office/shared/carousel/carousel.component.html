@@ -1,0 +1,19 @@
+<!-- @format -->
+
+@if(images.length) {
+<div class="carousel">
+  @if(images.length !== 1) {
+  <div class="carousel__indexes">
+    <span>{{ currentIndex + 1 }} / {{ images.length }}</span>
+  </div>
+  <button class="carousel__btn carousel__btn--prev" (click)="prev()">&#60;</button>
+  <button class="carousel__btn carousel__btn--next" (click)="next()">&#62;</button>
+  }
+  <div class="carousel__image-wrapper" (touchend)="onTouchImg($event)">
+    <img [src]="images[currentIndex]?.link" [alt]="images[currentIndex]?.name" />
+    <div class="carousel__img-like" [class.carousel__img-like--show]="showLike">
+      <i appIcon icon="like" appSquare="40"></i>
+    </div>
+  </div>
+</div>
+}

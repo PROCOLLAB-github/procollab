@@ -4,9 +4,11 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  computed,
   ElementRef,
   inject,
   OnInit,
+  signal,
   ViewChild,
 } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
@@ -55,42 +57,55 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
   profileService = inject(ProfileService);
   skillService = inject(SkillService);
 
-  completedSkills: UserTrajectory["completedSkills"] = [];
   subscriptions$: Subscription[] = [];
 
   trajectory!: Trajectory;
-  userTrajectory!: UserTrajectory;
+  userTrajectory = signal<UserTrajectory | null>(null);
   profileId!: number;
+
+  completeAllMainSkills = computed(
+    () => this.userTrajectory()?.availableSkills.every(skill => skill.isDone) ?? false
+  );
+
+  availableSkills = computed(
+    () => this.userTrajectory()?.availableSkills.filter(s => !s.isDone) ?? []
+  );
+
+  completedSkills = computed(() => [
+    ...(this.userTrajectory()?.completedSkills ?? []),
+    ...(this.userTrajectory()?.availableSkills.filter(s => s.isDone) ?? []),
+  ]);
 
   @ViewChild("descEl") descEl?: ElementRef;
 
   ngOnInit(): void {
     this.route.data.pipe(map(r => r["data"])).subscribe(r => {
       this.trajectory = r[0];
-      this.userTrajectory = r[1];
+      this.userTrajectory.set({ ...r[1], individualSkills: r[2] });
 
       if (!this.trajectory.isActiveForUser) {
         this.router.navigate(["/trackCar/all"]);
       }
 
-      this.userTrajectory.availableSkills.forEach(i => (i.freeAccess = true));
-      this.userTrajectory.completedSkills.forEach(i => {
+      this.userTrajectory()?.availableSkills.forEach(i => (i.freeAccess = true));
+      this.userTrajectory()?.completedSkills.forEach(i => {
         i.freeAccess = true;
-        i.completed = true;
+        i.isDone = true;
       });
-      this.userTrajectory.unavailableSkills.forEach(i => (i.freeAccess = true));
+      this.userTrajectory()?.unavailableSkills.forEach(i => (i.freeAccess = true));
+      this.userTrajectory()?.individualSkills.forEach(i => (i.freeAccess = true));
     });
 
     this.profileService.getUserData().subscribe((r: UserData) => {
       this.profileId = r.id;
     });
 
-    this.mockMonts = Array.from({ length: this.userTrajectory.durationMonths }, (_, index) => {
+    this.mockMonts = Array.from({ length: this.userTrajectory()!.durationMonths }, (_, index) => {
       const monthNumber = index + 1;
 
       return {
         month: `${monthNumber} месяц`,
-        successfullyDone: monthNumber <= this.userTrajectory.activeMonth,
+        successfullyDone: monthNumber <= this.userTrajectory()!.activeMonth,
       };
     });
   }

@@ -1,5 +1,6 @@
 <!-- @format -->
 
+@if (trajectory) {
 <div class="trajectory" [style.background-color]="trajectory.backgroundColor">
   <img src="assets\images\trajectories\vertical_line.svg" class="trajectory__line" />
   <img src="assets\images\trajectories\rocket.svg" class="trajectory__rocket" />
@@ -97,6 +98,11 @@
     </div>
   </div>
 </div>
+} @else {
+<h3 class="text-heading-3" style="text-align: center; margin-top: 20px">
+  У вас нет выбранной траектории!
+</h3>
+}
 
 <app-modal [open]="moreModalOpen()">
   <div class="cancel">

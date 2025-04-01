@@ -10,19 +10,21 @@
     <div class="trajectory__info">
       <div class="trajectory__timeline">
         <p class="timeline__start timeline__date text-body-14">
-          {{ userTrajectory.startDate | date: "dd.MM.yyyy" }}
+          {{ userTrajectory()?.startDate | date: "dd.MM.yyyy" }}
         </p>
         <app-month-block [months]="mockMonts" [hasNext]="false"></app-month-block>
         <p class="timeline__end timeline__date text-body-14">
-          {{ userTrajectory.endDate | date: "dd.MM.yyyy" }}
+          {{ userTrajectory()?.endDate | date: "dd.MM.yyyy" }}
         </p>
       </div>
 
       <div class="trajectory__mentor" [style.background-color]="trajectory.backgroundColor">
-        @if (userTrajectory.mentorFirstName && userTrajectory.mentorLastName) {
+        @if (userTrajectory()?.mentorFirstName && userTrajectory()?.mentorLastName) {
         <div class="mentor__info">
           <app-avatar
-            [url]="userTrajectory.mentorAvatar ? userTrajectory.mentorAvatar! : placeholderUrl"
+            [url]="
+              userTrajectory()?.mentorAvatar ? userTrajectory()?.mentorAvatar! : placeholderUrl
+            "
             [size]="46"
           ></app-avatar>
           <div class="mentor">
@@ -32,7 +34,7 @@
                 trajectory.company === 'Procollab' ? 'var(--dark-grey)' : trajectory.textColor
               "
             >
-              {{ userTrajectory.mentorFirstName }} {{ userTrajectory.mentorLastName }}
+              {{ userTrajectory()?.mentorFirstName }} {{ userTrajectory()?.mentorLastName }}
             </p>
             <p
               class="text-body-12 mentor__years"
@@ -46,11 +48,11 @@
         </div>
         <a
           [href]="
-            'https://app.procollab.ru/office/chats/' + profileId! + '_' + userTrajectory.mentorId
+            'https://app.procollab.ru/office/chats/' + profileId! + '_' + userTrajectory()?.mentorId
           "
         >
           <app-button
-            [ariaDisabled]="!userTrajectory.mentorId || !profileId"
+            [ariaDisabled]="!userTrajectory()?.mentorId || !profileId"
             customTypographyClass="text-body-12"
             [backgroundColor]="trajectory.selectButtonColor"
             >Написать наставнику</app-button
@@ -90,12 +92,14 @@
         <div
           class="info__additional"
           [ngStyle]="{
-            backgroundColor: userTrajectory.firstMeetingDone ? 'var(--green)' : 'var(--grey-button)'
+            backgroundColor: userTrajectory()?.firstMeetingDone
+              ? 'var(--green)'
+              : 'var(--grey-button)'
           }"
         >
           <p
             [ngStyle]="{
-              color: userTrajectory.firstMeetingDone ? 'var(--white)' : 'var(--dark-grey)'
+              color: userTrajectory()?.firstMeetingDone ? 'var(--white)' : 'var(--dark-grey)'
             }"
             class="text-body-12"
           >
@@ -106,7 +110,7 @@
             appSquare="15"
             icon="check"
             [ngStyle]="{
-              color: userTrajectory.firstMeetingDone ? 'var(--white)' : 'var(--dark-grey)'
+              color: userTrajectory()?.firstMeetingDone ? 'var(--white)' : 'var(--dark-grey)'
             }"
           ></i>
         </div>
@@ -114,12 +118,14 @@
         <div
           class="info__additional"
           [ngStyle]="{
-            backgroundColor: userTrajectory.finalMeetingDone ? 'var(--green)' : 'var(--grey-button)'
+            backgroundColor: userTrajectory()?.finalMeetingDone
+              ? 'var(--green)'
+              : 'var(--grey-button)'
           }"
         >
           <p
             [ngStyle]="{
-              color: userTrajectory.finalMeetingDone ? 'var(--white)' : 'var(--dark-grey)'
+              color: userTrajectory()?.finalMeetingDone ? 'var(--white)' : 'var(--dark-grey)'
             }"
             class="text-body-12"
           >
@@ -130,7 +136,7 @@
             appSquare="15"
             icon="check"
             [ngStyle]="{
-              color: userTrajectory.finalMeetingDone ? 'var(--white)' : 'var(--dark-grey)'
+              color: userTrajectory()?.finalMeetingDone ? 'var(--white)' : 'var(--dark-grey)'
             }"
           ></i>
         </div>
@@ -139,26 +145,42 @@
   </div>
 
   <div class="skills">
-    <h4 class="text-heading-4">Навыки текущего месяца</h4>
-    <div class="skills__now">
-      @if (userTrajectory.availableSkills) { @for(skill of userTrajectory.availableSkills; track
-      $index) {
-      <app-skill-card [skill]="skill" (click)="onSkillClick(skill.id)"></app-skill-card>
+    <h4 class="text-heading-4">Персональные навыки</h4>
+    <div class="skills__future">
+      @if (userTrajectory()?.individualSkills) { @for(skill of userTrajectory()?.individualSkills;
+      track $index) {
+      <app-skill-card
+        [type]="'personal'"
+        [skill]="skill"
+        (click)="onSkillClick(skill.id)"
+      ></app-skill-card>
       } }
+    </div>
+
+    <h4 class="text-heading-4">Навыки текущего месяца</h4>
+    <div [ngClass]="{ '': completeAllMainSkills(), skills__now: !completeAllMainSkills() }">
+      @if (userTrajectory()?.availableSkills) { @for(skill of availableSkills(); track $index) {
+      <app-skill-card [skill]="skill" (click)="onSkillClick(skill.id)"></app-skill-card>
+      } } @if (completeAllMainSkills()) {
+      <img
+        alt="complete all"
+        src="assets/images/trajectories/completeAll.png"
+        class="skills__complete"
+      />
+      }
     </div>
 
     <h4 class="text-heading-4">Грядущие навыки</h4>
     <div class="skills__future">
-      @if (userTrajectory.unavailableSkills) { @for(skill of userTrajectory.unavailableSkills; track
-      $index) {
+      @if (userTrajectory()?.unavailableSkills) { @for(skill of userTrajectory()?.unavailableSkills;
+      track $index) {
       <app-skill-card [skill]="skill" (click)="onSkillClick(skill.id)"></app-skill-card>
       } }
     </div>
 
     <h4 class="text-heading-4">Пройденные навыки</h4>
     <div class="skills__past">
-      @if (userTrajectory.completedSkills) { @for (skill of userTrajectory.completedSkills; track
-      $index) {
+      @if (userTrajectory()?.completedSkills) { @for (skill of completedSkills(); track $index) {
       <app-skill-card [skill]="skill" (click)="onSkillClick(skill.id)"></app-skill-card>
       } }
     </div>

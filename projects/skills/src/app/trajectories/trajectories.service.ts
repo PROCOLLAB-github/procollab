@@ -49,6 +49,12 @@ export class TrajectoriesService {
     return this.apiService.get<Student[]>("/trajectories/mentor/students/");
   }
 
+  getIndividualSkills() {
+    return this.apiService
+      .get<UserTrajectory["individualSkills"][] | any>("/trajectories/individual-skills/")
+      .pipe(map(r => r[0].skills));
+  }
+
   updateMeetings(id: number, initialMeeting: boolean, finalMeeting: boolean) {
     const body = {
       meeting_id: id,

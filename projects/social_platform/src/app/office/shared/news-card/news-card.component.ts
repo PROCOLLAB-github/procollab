@@ -27,6 +27,7 @@ import { ImgCardComponent } from "../img-card/img-card.component";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { JsonPipe } from "@angular/common";
+import { CarouselComponent } from "../carousel/carousel.component";
 
 @Component({
   selector: "app-news-card",
@@ -43,6 +44,7 @@ import { JsonPipe } from "@angular/common";
     FileUploadItemComponent,
     FileItemComponent,
     ButtonComponent,
+    CarouselComponent,
     DayjsPipe,
     FormControlPipe,
     JsonPipe,
@@ -333,6 +335,10 @@ export class NewsCardComponent implements OnInit {
     }
 
     this.lastTouch = Date.now();
+  }
+
+  handleLike(index: number): void {
+    console.log("Лайк на изображении с индексом: ", index);
   }
 
   onExpandNewsText(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {

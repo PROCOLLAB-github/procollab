@@ -44,6 +44,7 @@ export interface UserTrajectory {
   availableSkills: Skill[];
   unavailableSkills: Skill[];
   completedSkills: Skill[];
+  individualSkills: Skill[];
   activeMonth: number;
   durationMonths: number;
 }
