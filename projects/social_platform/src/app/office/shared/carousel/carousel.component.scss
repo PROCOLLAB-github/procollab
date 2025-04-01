@@ -26,12 +26,12 @@
     right: 10px;
     z-index: 10;
     padding: 2px 20px;
-    background-color: rgb(66 66 66 / 30%);
+    background-color: #81818180;
     border-radius: 15px;
 
     span {
-      color: var(--white);
-      opacity: 0.6;
+      color: var(--black);
+      opacity: 0.7;
 
       @include typography.body-12;
     }
