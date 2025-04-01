@@ -4,7 +4,7 @@ import { HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { plainToInstance } from "class-transformer";
-import { BehaviorSubject, map, Observable } from "rxjs";
+import { BehaviorSubject, catchError, map, Observable, of } from "rxjs";
 import {
   Student,
   Trajectory,
@@ -52,7 +52,17 @@ export class TrajectoriesService {
   getIndividualSkills() {
     return this.apiService
       .get<UserTrajectory["individualSkills"][] | any>("/trajectories/individual-skills/")
-      .pipe(map(r => r[0].skills));
+      .pipe(
+        map(response => {
+          if (Array.isArray(response) && response.length > 0) {
+            return response[0].skills || [];
+          }
+          return [];
+        }),
+        catchError(error => {
+          return of([]);
+        })
+      );
   }
 
   updateMeetings(id: number, initialMeeting: boolean, finalMeeting: boolean) {
