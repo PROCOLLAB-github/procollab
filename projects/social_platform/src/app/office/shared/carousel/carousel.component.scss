@@ -26,12 +26,12 @@
     right: 10px;
     z-index: 10;
     padding: 2px 20px;
-    color: var(--dark-grey);
     background-color: rgb(66 66 66 / 30%);
     border-radius: 15px;
 
     span {
-      color: var(--gray);
+      color: var(--white);
+      opacity: 0.6;
 
       @include typography.body-12;
     }
@@ -41,12 +41,12 @@
     position: absolute;
     top: 50%;
     z-index: 1;
-    padding: 10px 12px;
+    padding: 5px;
     cursor: pointer;
     background-color: rgb(66 66 66 / 30%);
     border: none;
     border-radius: 100%;
-    transform: translateY(-50%);
+    transform: translateY(-50%) rotate(180deg);
   }
 
   &__btn--prev {
