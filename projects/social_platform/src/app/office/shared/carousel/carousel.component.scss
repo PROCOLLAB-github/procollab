@@ -7,45 +7,46 @@
   justify-content: center;
 
   &__image-wrapper {
+    position: relative;
     width: 100%;
     height: 100%;
-    position: relative;
     overflow: hidden;
 
     img {
-      width: 100%;
-      object-fit: cover;
       display: block;
+      width: 100%;
       border-radius: 15px;
+      object-fit: cover;
     }
   }
 
   &__indexes {
     position: absolute;
-    right: 10px;
     top: 10px;
-    background-color: rgba(66, 66, 66, 0.3);
-    border-radius: 15px;
-    padding: 5px 15px;
+    right: 10px;
     z-index: 10;
+    padding: 5px 15px;
+    background-color: rgb(66 66 66 / 30%);
+    border-radius: 15px;
 
     span {
       color: var(--gray);
+
       @include typography.body-12;
     }
   }
 
   &__btn {
     position: absolute;
-    background-color: rgba(66, 66, 66, 0.3);
+    top: 50%;
+    z-index: 1;
+    padding: 10px 12px;
     color: var(--gray);
+    cursor: pointer;
+    background-color: rgb(66 66 66 / 30%);
     border: none;
     border-radius: 100%;
-    padding: 10px 12px;
-    cursor: pointer;
-    top: 50%;
     transform: translateY(-50%);
-    z-index: 1;
   }
 
   &__btn--prev {

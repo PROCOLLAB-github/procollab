@@ -13,9 +13,9 @@ export class CarouselComponent implements OnInit {
   @Input() images: FileModel[] = [];
   @Output() like: EventEmitter<number> = new EventEmitter<number>();
 
-  currentIndex: number = 0;
-  lastTouch: number = 0;
-  showLike: boolean = false;
+  currentIndex = 0;
+  lastTouch = 0;
+  showLike = false;
 
   ngOnInit(): void {}
 
