@@ -43,18 +43,19 @@
     z-index: 1;
     padding: 5px;
     cursor: pointer;
-    background-color: rgb(66 66 66 / 30%);
+    background-color: rgba(30, 30, 30, 0.5);
     border: none;
     border-radius: 100%;
-    transform: translateY(-50%) rotate(180deg);
   }
 
   &__btn--prev {
     left: 10px;
+    transform: translateY(-50%) rotate(180deg);
   }
 
   &__btn--next {
     right: 10px;
+    transform: translateY(-50%) rotate(0deg);
   }
 
   &__img-like {
