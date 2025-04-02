@@ -174,7 +174,7 @@
     <div class="skills__future">
       @if (userTrajectory()?.unavailableSkills) { @for(skill of userTrajectory()?.unavailableSkills;
       track $index) {
-      <app-skill-card [skill]="skill" (click)="onSkillClick(skill.id)"></app-skill-card>
+      <app-skill-card [skill]="skill"></app-skill-card>
       } }
     </div>
 

@@ -123,7 +123,11 @@ export class TrajectoryComponent implements AfterViewInit, OnInit {
   }
 
   navigateOnTrajectory() {
-    this.router.navigate(["/trackCar/" + this.trajectory.id]);
+    this.router.navigate(["/trackCar/" + this.trajectory.id]).catch(err => {
+      if (err.status === 403) {
+        this.nonConfirmerModalOpen.set(true);
+      }
+    });
   }
 
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
