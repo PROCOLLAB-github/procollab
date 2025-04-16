@@ -74,7 +74,7 @@
     grid-gap: 12px;
 
     @include responsive.apply-desktop {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       margin-top: 16px;
     }
   }
