@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <div class="rating">
-  <h1 class="rating__title">Навыки месяца</h1>
+  <h1 class="rating__title">Навыки</h1>
   <div class="rating__list">
     @for (skill of skillsList; track $index) {
     <div style="cursor: pointer" [routerLink]="['/skills', skill.skillId]">

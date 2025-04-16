@@ -21,10 +21,12 @@
         [personalRatingCardData]="skill"
       ></app-personal-rating-card>
       } @empty {
-      <p class="skills__placeholder-text">
+      <!-- <p class="skills__placeholder-text">
         выберите навыки,которые Вы будете развивать в этом месяце
-      </p>
-      <app-button class="skills__select" (click)="openInstruction = true">Выбрать</app-button>
+      </p> -->
+
+      <p class="skills__placeholder-text">начините проходить навыки, чтобы увидеть свой прогресс</p>
+      <!-- <app-button class="skills__select" (click)="openInstruction = true">Выбрать</app-button> -->
       } @if (displayedSkills.length) {
       <div class="skills_pagination">
         <div class="skills_pages">
