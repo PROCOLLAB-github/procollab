@@ -3,7 +3,13 @@
 import { Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BackComponent, IconComponent } from "@uilib";
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from "@angular/router";
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterModule,
+} from "@angular/router";
 import { BarComponent, ButtonComponent } from "@ui/components";
 import { SkillCardComponent } from "../shared/skill-card/skill-card.component";
 import { map, Observable, Subscription } from "rxjs";
@@ -27,6 +33,8 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
     SkillCardComponent,
     BarComponent,
     ReactiveFormsModule,
+    RouterLink,
+    RouterModule,
   ],
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",

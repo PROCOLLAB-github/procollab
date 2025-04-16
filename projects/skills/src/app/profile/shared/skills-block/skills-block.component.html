@@ -16,10 +16,9 @@
     }}</span>
     <div class="skills_list">
       @for (skill of displayedSkills; track $index) {
-      <app-personal-rating-card
-        [routerLink]="['/skills', skill.skillId]"
-        [personalRatingCardData]="skill"
-      ></app-personal-rating-card>
+      <div (click)="onSkillClick(skill.skillId)">
+        <app-personal-rating-card [personalRatingCardData]="skill"></app-personal-rating-card>
+      </div>
       } @empty {
       <!-- <p class="skills__placeholder-text">
         выберите навыки,которые Вы будете развивать в этом месяце
@@ -69,6 +68,36 @@
       >Выбрать навыки месяца</app-button
     >
     <img alt="wave" src="assets/images/subscription/wave.svg" class="cancel__wave" />
+  </div>
+</app-modal>
+
+<app-modal [open]="nonConfirmerModalOpen()">
+  <div class="confirm">
+    <h4 class="confirm__title text-heading-4">У вас нет активной подписки</h4>
+    <div class="cancel__confirm">
+      <img alt="more image" src="assets\images\trajectories\more.svg" class="confirm__image" />
+      <p class="text-body-12 cancel__subtext">
+        Чтобы получить доступ ко всем возможностям платформы, оформите подписку прямо сейчас!
+      </p>
+
+      <div class="cancel__buttons-group">
+        <app-button
+          customTypographyClass="text-body-12"
+          [color]="'grey'"
+          style="width: 100%"
+          (click)="nonConfirmerModalOpen.set(false)"
+          >Назад</app-button
+        >
+
+        <app-button
+          routerLink="/subscription"
+          style="width: 100%"
+          customTypographyClass="text-body-12"
+          [color]="'primary'"
+          >Купить</app-button
+        >
+      </div>
+    </div>
   </div>
 </app-modal>
 

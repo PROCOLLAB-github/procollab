@@ -46,6 +46,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
           } else return [subscription];
         })
       )
+      .pipe(map(subs => subs.sort((a, b) => a.price - b.price)))
       .subscribe(subscriptions => {
         this.subscriptions.set(subscriptions);
       });

@@ -5,13 +5,14 @@ import { CommonModule, NgOptimizedImage } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
 import { PersonalRatingCardComponent } from "../personal-rating-card/personal-rating-card.component";
 import { IconComponent } from "@uilib";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { SkillChooserComponent } from "../skill-chooser/skill-chooser.component";
 import { ProfileService } from "../../services/profile.service";
 import { Profile } from "projects/skills/src/models/profile.model";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { PersonalSkillCardComponent } from "../personal-skill-card/personal-skill-card.component";
 import { animate, style, transition, trigger } from "@angular/animations";
+import { SkillService } from "../../../skills/services/skill.service";
 
 @Component({
   selector: "app-skills-block",
@@ -34,8 +35,12 @@ export class SkillsBlockComponent implements OnInit {
   isHintVisible = false;
 
   profileService = inject(ProfileService);
+  skillService = inject(SkillService);
+  router = inject(Router);
+
   skillsList: Profile["skills"] = [];
   displayedSkills: Profile["skills"] = [];
+  nonConfirmerModalOpen = signal(false);
 
   limit = 2;
   offset = 0;
@@ -87,6 +92,15 @@ export class SkillsBlockComponent implements OnInit {
 
   updateDisplayedSkills() {
     this.displayedSkills = this.skillsList.slice(this.offset, this.offset + this.limit);
+  }
+
+  onSkillClick(skillId: number) {
+    this.skillService.setSkillId(skillId);
+    this.router.navigate(["skills", skillId]).catch(err => {
+      if (err.status === 403) {
+        this.nonConfirmerModalOpen.set(true);
+      }
+    });
   }
 
   ngOnInit(): void {
