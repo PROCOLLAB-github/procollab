@@ -69,10 +69,10 @@
 
   &__tariffs {
     display: grid;
+    grid-template-rows: 1fr;
     grid-template-columns: 1fr;
-    gird-template-rows: 1fr;
     grid-gap: 12px;
-    
+
     @include responsive.apply-desktop {
       grid-template-columns: repeat(3, 1fr);
       margin-top: 16px;
