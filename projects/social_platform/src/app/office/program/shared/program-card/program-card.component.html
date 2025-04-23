@@ -11,13 +11,17 @@
   <p class="text-body-12 card__description">{{ program.shortDescription }}</p>
   <p class="text-body-12 card__description">
     Регистрация открыта до:
-    {{ program.datetimeRegistrationEnds | date: "dd MMMM yyyy":"ru-RU" }}
+    {{ program.datetimeRegistrationEnds | date: "dd MMMM yyyy" }}
   </p>
-  <p class="text-body-12 card__description">
-    Дата проведения: {{ program.datetimeStarted | date: "dd MMMM yyyy":"ru-RU" }}-{{
-      program.datetimeFinished | date: "dd MMMM yyyy":"ru-RU"
-    }}
-  </p>
+  <div class="card__dates">
+    <p class="text-body-12 card__description">
+      Дата проведения: {{ program.datetimeStarted | date: "dd MMMM yyyy" }}
+    </p>
+    <p class="text-body-12 card__description">-</p>
+    <p class="text-body-12 card__description">
+      {{ program.datetimeFinished | date: "dd MMMM yyyy" }}
+    </p>
+  </div>
   <div class="card__media">
     <div class="card__views">
       <i appIcon icon="eye" appSquare="22"></i> {{ program.viewsCount }}

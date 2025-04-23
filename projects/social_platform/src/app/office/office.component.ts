@@ -110,7 +110,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   navItems = [
     { name: "Новости", icon: "feed", link: "feed" },
     { name: "Проекты", icon: "projects-filled", link: "projects" },
-    { name: "Программы", icon: "program", link: "program/list" },
+    { name: "Программы", icon: "program", link: "program" },
     { name: "Участники", icon: "people-bold", link: "members" },
     { name: "Эксперты", icon: "two-people", link: "mentors" },
     { name: "Вакансии", icon: "search-sidebar", link: "vacancies" },

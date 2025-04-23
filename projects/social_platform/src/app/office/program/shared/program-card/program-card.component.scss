@@ -48,6 +48,11 @@
     }
   }
 
+  &__dates {
+    display: flex;
+    gap: 5px;
+  }
+
   &__industry {
     color: var(--dark-grey);
   }

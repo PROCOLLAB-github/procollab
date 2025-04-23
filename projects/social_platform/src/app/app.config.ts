@@ -1,6 +1,6 @@
 /** @format */
 
-import { ApplicationConfig, ErrorHandler, importProvidersFrom } from "@angular/core";
+import { ApplicationConfig, ErrorHandler, importProvidersFrom, LOCALE_ID } from "@angular/core";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { NgxMaskModule } from "ngx-mask";
@@ -12,9 +12,14 @@ import { provideRouter } from "@angular/router";
 import { APP_ROUTES } from "./app.routes";
 import { API_URL, BearerTokenInterceptor, CamelcaseInterceptor, PRODUCTION } from "@corelib";
 import { environment } from "@environment";
+import { registerLocaleData } from "@angular/common";
+import localeRu from "@angular/common/locales/ru";
+
+registerLocaleData(localeRu, "ru-RU");
 
 export const APP_CONFIG: ApplicationConfig = {
   providers: [
+    { provide: LOCALE_ID, useValue: "ru-RU" },
     importProvidersFrom(
       BrowserModule,
       ReactiveFormsModule,

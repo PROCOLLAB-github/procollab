@@ -99,9 +99,34 @@
             }
           </a>
           @if (isInProject | async) {
-          <div class="info__exit" (click)="onLeave()">
+          <div class="info__exit" (click)="this.isLeaveProjectModalOpen = true">
             <i appIcon icon="logout" appSquare="32"></i>
           </div>
+
+          <app-modal [(open)]="isLeaveProjectModalOpen">
+            <div class="unsubscribe-modal">
+              <h3>Выход из проекта</h3>
+              <img alt="leave image" src="/assets/images/projects/detail/leaveProject.svg" />
+              <p class="text-body-14" style="width: 55%; text-align: center; margin-bottom: 18px">
+                Ты уверен, что хочешь выйти из проекта? Это действие нельзя будет отменить.
+              </p>
+              <div class="unsubscribe-modal__buttons" style="justify-content: center">
+                <app-button
+                  color="grey"
+                  customTypographyClass="unsubscribe-modal-btn__typography"
+                  (click)="onLeave()"
+                >
+                  Да
+                </app-button>
+                <app-button
+                  customTypographyClass="unsubscribe-modal-btn__typography"
+                  (click)="onCloseLeaveProjectModal()"
+                >
+                  Нет, хочу остаться
+                </app-button>
+              </div>
+            </div>
+          </app-modal>
           }
         </div>
       </div>

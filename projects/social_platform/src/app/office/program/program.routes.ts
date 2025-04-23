@@ -1,11 +1,35 @@
 /** @format */
 
 import { Routes } from "@angular/router";
+import { ProgramComponent } from "./program.component";
+import { ProgramMainComponent } from "./list/main/main.component";
+import { ProgramMainResolver } from "./list/main/main.resolver";
 
 export const PROGRAM_ROUTES: Routes = [
   {
-    path: "list",
-    loadChildren: () => import("./list/list.routes").then(c => c.PROGRAM_LIST_ROUTES),
+    path: "",
+    component: ProgramComponent,
+    children: [
+      {
+        path: "",
+        pathMatch: "full",
+        redirectTo: "all",
+      },
+      // {
+      //   path: "my",
+      //   component: ProgramMainComponent,
+      //   resolve: {
+      //     data: ProgramMainResolver,
+      //   },
+      // },
+      {
+        path: "all",
+        component: ProgramMainComponent,
+        resolve: {
+          data: ProgramMainResolver,
+        },
+      },
+    ],
   },
   {
     path: ":programId",

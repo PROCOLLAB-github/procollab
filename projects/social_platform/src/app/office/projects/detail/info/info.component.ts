@@ -243,6 +243,8 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   isUserSubscribed!: boolean;
   isUnsubscribeModalOpen = false;
 
+  isLeaveProjectModalOpen = false;
+
   onSubscribe(projectId: number): void {
     if (this.isUserSubscribed) {
       this.isUnsubscribeModalOpen = true;
@@ -266,6 +268,10 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onCloseLeaderLeaveModal(): void {
     this.leaderLeaveModal = false;
+  }
+
+  onCloseLeaveProjectModal(): void {
+    this.isLeaveProjectModalOpen = false;
   }
 
   openSupport = false;

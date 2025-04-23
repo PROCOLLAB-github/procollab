@@ -134,6 +134,25 @@
       margin-right: 15px;
     }
   }
+
+  &__salary-line {
+    display: none;
+
+    @include responsive.apply-desktop {
+      display: block;
+    }
+  }
+
+  &__amounts {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+      gap: 50px;
+    }
+  }
 }
 
 a:hover {

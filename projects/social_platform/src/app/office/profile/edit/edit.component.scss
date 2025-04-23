@@ -239,6 +239,7 @@
 
   &__info {
     display: flex;
+    gap: 20px;
     align-items: center;
     justify-content: space-between;
     width: 90%;
@@ -259,6 +260,7 @@
   }
 
   .edit {
+    width: 10%;
     color: var(--dark-grey);
   }
 
