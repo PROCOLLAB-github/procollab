@@ -106,10 +106,12 @@
     display: flex;
     gap: 5px;
     color: var(--white);
+
     @include typography.body-12;
 
     @include responsive.apply-desktop {
-    left: 55%;
+      left: 55%;
+
       @include typography.bold-body-14;
     }
   }

@@ -29,11 +29,11 @@
     position: absolute;
     top: 0;
     right: 0;
+    z-index: 10;
     display: inline-block;
     width: 24px;
     height: 24px;
     cursor: pointer;
-    z-index: 10;
 
     &:hover {
       opacity: 1;
@@ -51,19 +51,19 @@
     bottom: 98%;
     left: 42%;
     z-index: 100;
+    display: none;
     width: 200px;
     padding: 12px;
     color: var(--dark-grey);
     background-color: var(--white);
     border: 1px solid var(--dark-grey);
-    border-radius: 15px 15px 0px 15px;
+    border-radius: 15px 15px 0;
     opacity: 0;
-    display: none;
     transition: opacity 0.3s ease-in-out;
 
     &--visible {
-      opacity: 1;
       display: block;
+      opacity: 1;
     }
 
     @include responsive.apply-desktop {
