@@ -2,6 +2,7 @@
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   computed,
@@ -51,6 +52,7 @@ import { Skill } from "@office/models/skill";
     PluralizePipe,
     AvatarComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

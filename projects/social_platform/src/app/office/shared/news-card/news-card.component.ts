@@ -28,6 +28,8 @@ import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { JsonPipe } from "@angular/common";
 import { CarouselComponent } from "../carousel/carousel.component";
+import { User } from "@auth/models/user.model";
+import { Project } from "@office/models/project.model";
 
 @Component({
   selector: "app-news-card",
@@ -67,6 +69,7 @@ export class NewsCardComponent implements OnInit {
 
   @Input({ required: true }) feedItem!: FeedNews;
   @Input({ required: true }) resourceLink!: (string | number)[];
+  @Input({ required: false }) contentId?: number;
 
   @Input() isOwner?: boolean;
   @Output() delete = new EventEmitter<number>();
@@ -86,14 +89,32 @@ export class NewsCardComponent implements OnInit {
       text: this.feedItem.text,
     });
 
+    const processedFiles = this.feedItem.files.map(file => {
+      if (typeof file === "string") {
+        return {
+          link: file,
+          name: "Image",
+          mimeType: "image/jpeg",
+          size: 0,
+          datetimeUploaded: "",
+          extension: "",
+          user: 0,
+        } as FileModel;
+      }
+      return file;
+    });
+
     this.showLikes = this.feedItem.files.map(() => false);
 
-    this.imagesViewList = this.feedItem.files.filter(
-      f => f.mimeType.split("/")[0] === "image" || f.mimeType.split("/")[1] === "x-empty"
-    );
-    this.filesViewList = this.feedItem.files.filter(
-      f => f.mimeType.split("/")[0] !== "image" && f.mimeType.split("/")[1] !== "x-empty"
-    );
+    this.imagesViewList = processedFiles.filter(f => {
+      const [type] = (f.mimeType || "").split("/");
+      return type === "image" || f.mimeType === "x-empty";
+    });
+
+    this.filesViewList = processedFiles.filter(f => {
+      const [type] = (f.mimeType || "").split("/");
+      return type !== "image" && f.mimeType !== "x-empty";
+    });
 
     this.imagesEditList = this.imagesViewList.map(file => ({
       src: file.link,
@@ -128,13 +149,20 @@ export class NewsCardComponent implements OnInit {
   }
 
   onCopyLink(): void {
-    const projectId = this.route.snapshot.params["projectId"];
+    // const projectId = this.route.snapshot.params["projectId"];
+    // const userId = this.route.snapshot.params["id"];
+    const isProject = this.resourceLink[0].toString().includes("projects");
+    let fullUrl = "";
 
-    navigator.clipboard
-      .writeText(`${location.origin}/office/projects/${projectId}/news/${this.feedItem.id}`)
-      .then(() => {
-        this.snackbarService.success("Ссылка скопирована");
-      });
+    if (isProject) {
+      fullUrl = `${location.origin}/office/projects/${this.contentId}/news/${this.feedItem.id}`;
+    } else {
+      fullUrl = `${location.origin}/office/profile/${this.contentId}/news/${this.feedItem.id}`;
+    }
+
+    navigator.clipboard.writeText(fullUrl).then(() => {
+      this.snackbarService.success("Ссылка скопирована");
+    });
   }
 
   menuOpen = false;

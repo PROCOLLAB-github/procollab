@@ -135,6 +135,8 @@
   &__image {
     width: 85px;
     height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
 
     @include responsive.apply-desktop {
       width: 150px;

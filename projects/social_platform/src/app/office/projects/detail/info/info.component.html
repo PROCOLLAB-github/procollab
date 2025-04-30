@@ -20,12 +20,22 @@
           [hasBorder]="true"
           [size]="140"
         ></app-avatar>
-        <div
-          class="info__subscribe"
-          [class.info__subscribe-active]="isUserSubscribed"
-          (click)="onSubscribe(project.id)"
-        >
-          <i appIcon appSquare="18" [icon]="isUserSubscribed ? 'check' : 'plus'"></i>
+        <div class="info__subscribe">
+          <app-button
+            (click)="onSubscribe(project.id)"
+            customTypographyClass="text-body-12"
+            color="white"
+          >
+            <p [ngStyle]="{ color: isUserSubscribed ? 'var(--green)' : 'var(--accent)' }">
+              {{ isUserSubscribed ? "Вы подписаны" : "Подписаться" }}
+            </p>
+            <i
+              appIcon
+              appSquare="24"
+              [ngStyle]="{ color: isUserSubscribed ? 'var(--green)' : '' }"
+              [icon]="isUserSubscribed ? 'check' : ''"
+            ></i>
+          </app-button>
         </div>
         <app-modal [(open)]="isUnsubscribeModalOpen">
           <div class="unsubscribe-modal">

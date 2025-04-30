@@ -36,8 +36,18 @@
     border-radius: var(--rounded-md);
   }
 
-  &__title {
+  &__titles {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 14px;
+  }
+
+  &__clear {
+    cursor: pointer;
+  }
+
+  &__title {
     color: var(--black);
 
     @include typography.heading-3;

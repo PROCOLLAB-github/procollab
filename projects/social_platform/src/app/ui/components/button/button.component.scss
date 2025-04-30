@@ -60,6 +60,11 @@
       color: var(--white);
       background: var(--gold-dark);
     }
+
+    &.button--white {
+      color: var(--accent);
+      background: var(--white);
+    }
   }
 
   &.button--outline {

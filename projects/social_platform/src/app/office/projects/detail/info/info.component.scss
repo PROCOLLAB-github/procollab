@@ -235,29 +235,28 @@
 
   &__subscribe {
     position: absolute;
-    right: 5%;
-    width: 45px;
-    height: 114px;
-    padding-bottom: 18px;
-    color: white;
+    right: 20px;
+    top: 20px;
     cursor: pointer;
-    background-color: var(--green);
-    border-radius: 0 0 100px 100px;
-    box-shadow: 0 6px 22px var(--green);
-    transition: all 0.5s ease;
+    // color: white;
+    // padding-bottom: 18px;
+    // background-color: var(--green);
+    // border-radius: 0 0 100px 100px;
+    // box-shadow: 0 6px 22px var(--green);
+    // transition: all 0.5s ease;
 
-    i {
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      height: 100%;
-    }
+    // i {
+    //   display: flex;
+    //   align-items: flex-end;
+    //   justify-content: center;
+    //   height: 100%;
+    // }
 
-    &-active {
-      height: 51px;
-      background-color: var(--accent);
-      box-shadow: 0 6px 18px var(--accent);
-    }
+    // &-active {
+    //   height: 51px;
+    //   background-color: var(--accent);
+    //   box-shadow: 0 6px 18px var(--accent);
+    // }
   }
 
   &__exit {

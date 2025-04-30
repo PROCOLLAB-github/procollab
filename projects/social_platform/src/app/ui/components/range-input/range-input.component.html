@@ -7,6 +7,8 @@
     inputmode="numeric"
     pattern="[0-9]*"
     [value]="value[0]"
+    min="0"
+    max="150"
     (blur)="onBlur()"
     (input)="onInputLeft($event)"
   />
@@ -17,6 +19,8 @@
     inputmode="numeric"
     pattern="[0-9]*"
     [value]="value[1]"
+    min="0"
+    max="150"
     (blur)="onBlur()"
     (input)="onInputRight($event)"
   />

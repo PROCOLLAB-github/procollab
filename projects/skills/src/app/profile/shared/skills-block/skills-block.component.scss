@@ -33,6 +33,7 @@
     width: 24px;
     height: 24px;
     cursor: pointer;
+    z-index: 10;
 
     &:hover {
       opacity: 1;
@@ -48,19 +49,26 @@
   &__tooltip {
     position: absolute;
     bottom: 98%;
-    left: 96%;
+    left: 42%;
     z-index: 100;
     width: 200px;
     padding: 12px;
     color: var(--dark-grey);
     background-color: var(--white);
     border: 1px solid var(--dark-grey);
-    border-radius: 15px 15px 15px 0;
+    border-radius: 15px 15px 0px 15px;
     opacity: 0;
+    display: none;
     transition: opacity 0.3s ease-in-out;
 
     &--visible {
       opacity: 1;
+      display: block;
+    }
+
+    @include responsive.apply-desktop {
+      left: 96%;
+      border-radius: 15px 15px 15px 0;
     }
   }
 

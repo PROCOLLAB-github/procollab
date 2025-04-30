@@ -21,6 +21,7 @@
       class="page__item"
       [attr.data-id]="item.content.id"
       [feedItem]="item.content"
+      [contentId]="item.content.contentObject.id"
       [resourceLink]="['/office/profile', item.content.contentObject.id]"
       (like)="onLike($event)"
     ></app-news-card>
@@ -30,6 +31,7 @@
       class="page__item"
       [attr.data-id]="item.content.id"
       [feedItem]="item.content"
+      [contentId]="item.content.contentObject.id"
       [resourceLink]="['/office/projects', item.content.contentObject.id]"
       (like)="onLike($event)"
     ></app-news-card>

@@ -2,7 +2,7 @@
 
 import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { RouterLink, RouterModule } from "@angular/router";
 import { BarComponent } from "@ui/components";
 
 @Component({

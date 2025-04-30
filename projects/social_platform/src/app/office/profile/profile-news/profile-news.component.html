@@ -1,0 +1,11 @@
+<!-- @format -->
+
+<app-modal [open]="true" (openChange)="onOpenChange($event)">
+  @if (newsItem()) {
+  <app-news-card
+    class="item"
+    [feedItem]="newsItem()!"
+    [resourceLink]="['/office/profile', userId]"
+  ></app-news-card>
+  }
+</app-modal>

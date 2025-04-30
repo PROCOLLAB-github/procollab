@@ -12,7 +12,7 @@ import { IconComponent } from "@uilib";
   standalone: true,
 })
 export class CarouselComponent implements OnInit {
-  @Input() images: FileModel[] = [];
+  @Input() images: Array<FileModel | string> = [];
   @Output() like: EventEmitter<number> = new EventEmitter<number>();
 
   currentIndex = 0;
@@ -43,5 +43,13 @@ export class CarouselComponent implements OnInit {
       }, 1000);
     }
     this.lastTouch = now;
+  }
+
+  getImageUrl(image: FileModel | string): string {
+    return typeof image === "string" ? image : image.link;
+  }
+
+  getImageName(image: FileModel | string): string {
+    return typeof image === "string" ? "Image" : image.name || "Image";
   }
 }

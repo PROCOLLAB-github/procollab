@@ -105,4 +105,19 @@ export class ProjectsFilterComponent implements OnInit {
       })
       .then(() => console.debug("Query change from ProjectsComponent"));
   }
+
+  clearFilters(): void {
+    this.router
+      .navigate([], {
+        queryParams: {
+          step: undefined,
+          anyVacancies: undefined,
+          membersCount: undefined,
+          industry: undefined,
+        },
+        relativeTo: this.route,
+        queryParamsHandling: "merge",
+      })
+      .then(() => console.log("Query change from ProjectsComponent"));
+  }
 }

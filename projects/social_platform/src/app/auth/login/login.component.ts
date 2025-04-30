@@ -46,8 +46,14 @@ export class LoginComponent implements OnInit {
 
   errorMessage = ErrorMessage;
 
+  showPassword = false;
+
   ngOnInit(): void {
     this.tokenService.clearTokens();
+  }
+
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
   }
 
   onSubmit() {

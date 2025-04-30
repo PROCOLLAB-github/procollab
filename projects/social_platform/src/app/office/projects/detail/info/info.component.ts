@@ -1,6 +1,6 @@
 /** @format */
 
-import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
+import { AsyncPipe, CommonModule, NgTemplateOutlet } from "@angular/common";
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -66,6 +66,7 @@ import { HttpResponse } from "@angular/common/http";
     ParseLinksPipe,
     NewsFormComponent,
     NewsCardComponent,
+    CommonModule,
   ],
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
