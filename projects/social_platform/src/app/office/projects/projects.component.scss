@@ -16,10 +16,10 @@
   }
 
   .bar__bottom {
-    background-color: var(--white);
-    border-radius: 15px;
     padding: 20px 0;
+    background-color: var(--white);
     border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 15px;
   }
 
   .bar__add-project {
