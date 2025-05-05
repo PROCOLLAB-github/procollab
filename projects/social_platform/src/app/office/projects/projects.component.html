@@ -29,19 +29,23 @@
           },
         ]"
     >
-      <div class="bar__right">
-        @if (isMy) {
+    </app-bar>
+    <div class="bar__right">
+      @if (isMy) {
+      <div>
         <button (click)="addProject()" class="text-body-14 bar__add-project">
           <span class="bar__add-project-text">Добавить проект</span>
           <i appIcon icon="plus" appSquare="18"></i>
         </button>
-        } @else if (isAll) {
+      </div>
+      } @else if (isAll) {
+      <div class="bar__bottom">
         <form [formGroup]="searchForm">
           <app-search formControlName="search"></app-search>
         </form>
-        }
       </div>
-    </app-bar>
+      }
+    </div>
     }
   </div>
 

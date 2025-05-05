@@ -24,9 +24,14 @@
   @if (isAll) {
   <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
     <div class="filter__overlay" (click)="isFilterOpen = false"></div>
-    <div class="filter__body">
-      <div class="filter__bar"></div>
-      <app-projects-filter></app-projects-filter>
+    <div class="filter__body" #filterBody>
+      <div
+        class="filter__bar"
+        (touchstart)="onSwipeStart($event)"
+        (touchmove)="onSwipeMove($event)"
+        (touchend)="onSwipeEnd($event)"
+      ></div>
+      <app-projects-filter (closeFilter)="closeFilter()"></app-projects-filter>
     </div>
   </div>
   } @else if (!searchedProjects.length && isMy) {

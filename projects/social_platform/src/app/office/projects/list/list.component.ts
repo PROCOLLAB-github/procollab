@@ -7,6 +7,7 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
+  Renderer2,
   ViewChild,
 } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Params, Router, RouterLink } from "@angular/router";
@@ -50,8 +51,11 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly projectService: ProjectService,
     private readonly cdref: ChangeDetectorRef,
     private readonly router: Router,
-    private readonly subscriptionService: SubscriptionService
+    private readonly subscriptionService: SubscriptionService,
+    private readonly renderer: Renderer2
   ) {}
+
+  @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;
 
   ngOnInit(): void {
     this.navService.setNavTitle("Проекты");
@@ -218,6 +222,49 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
         .navigateByUrl(`/office/projects/${project.id}/edit`)
         .then(() => console.debug("Route change from ProjectsComponent"));
     });
+  }
+
+  private swipeStartY = 0;
+  private swipeThreshold = 50;
+  private isSwiping = false;
+
+  onSwipeStart(event: TouchEvent): void {
+    this.swipeStartY = event.touches[0].clientY;
+    this.isSwiping = true;
+  }
+
+  onSwipeMove(event: TouchEvent): void {
+    if (!this.isSwiping) return;
+
+    const currentY = event.touches[0].clientY;
+    const deltaY = currentY - this.swipeStartY;
+
+    // Добавляем визуальную индикацию
+    const progress = Math.min(deltaY / this.swipeThreshold, 1);
+    this.renderer.setStyle(
+      this.filterBody.nativeElement,
+      "transform",
+      `translateY(${progress * 100}px)`
+    );
+  }
+
+  onSwipeEnd(event: TouchEvent): void {
+    if (!this.isSwiping) return;
+
+    const endY = event.changedTouches[0].clientY;
+    const deltaY = endY - this.swipeStartY;
+
+    if (deltaY > this.swipeThreshold) {
+      this.closeFilter();
+    }
+
+    this.isSwiping = false;
+
+    this.renderer.setStyle(this.filterBody.nativeElement, "transform", "translateY(0)");
+  }
+
+  closeFilter(): void {
+    this.isFilterOpen = false;
   }
 
   onScroll() {
