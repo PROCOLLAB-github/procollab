@@ -500,6 +500,15 @@ $section-padding: 24px;
     margin-top: 24px;
     margin-bottom: 24px;
 
+    // &__text {
+    //   color: var(--black);
+    //   @include typography.body-12;
+
+    //   @include responsive.apply-desktop {
+    //     @include typography.body-14;
+    //   }
+    // }
+
     &__info {
       display: flex;
       gap: 80px;
@@ -515,14 +524,6 @@ $section-padding: 24px;
 
     &__speciality {
       color: var(--dark-grey);
-    }
-
-    &__text {
-      @include typography.body-12;
-
-      @include responsive.apply-desktop {
-        @include typography.body-14;
-      }
     }
   }
 

@@ -16,7 +16,17 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { expandElement } from "@utils/expand-element";
-import { BehaviorSubject, concatMap, map, noop, Observable, Subscription, tap } from "rxjs";
+import {
+  BehaviorSubject,
+  concatMap,
+  map,
+  noop,
+  Observable,
+  of,
+  Subscription,
+  switchMap,
+  tap,
+} from "rxjs";
 import { ProfileNewsService } from "../services/profile-news.service";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ProfileNews } from "../models/profile-news.model";
@@ -175,14 +185,28 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (skill.approves.length > 0) {
       this.profileApproveSkillService.unApproveSkill(userId, skillId).subscribe(() => {
-        skill.approves.pop();
+        skill.approves = skill.approves.slice(0, -1);
+        this.cdRef.markForCheck();
       });
     } else {
-      this.profileApproveSkillService.approveSkill(userId, skillId).subscribe(() => {
-        this.authService.profile.subscribe(response => {
-          skill.approves.push({ confirmedBy: response });
+      this.profileApproveSkillService
+        .approveSkill(userId, skillId)
+        .pipe(
+          switchMap(newApprove =>
+            newApprove.confirmedBy
+              ? of(newApprove)
+              : this.authService.profile.pipe(
+                  map(profile => ({
+                    ...newApprove,
+                    confirmedBy: profile,
+                  }))
+                )
+          )
+        )
+        .subscribe(updatedApprove => {
+          skill.approves = [...skill.approves, updatedApprove];
+          this.cdRef.markForCheck();
         });
-      });
     }
   }
 

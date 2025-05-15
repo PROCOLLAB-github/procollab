@@ -115,6 +115,8 @@
   justify-content: space-between;
   padding: 15px 10px;
   cursor: pointer;
+ border:  1px solid var(--medium-medium-grey-for-outline);
+  border-radius: 15px;
   background-color: var(--white);
 
   @include responsive.apply-desktop {

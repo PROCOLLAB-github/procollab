@@ -32,12 +32,10 @@
     </app-bar>
     <div class="bar__right">
       @if (isMy) {
-      <div>
-        <button (click)="addProject()" class="text-body-14 bar__add-project">
-          <span class="bar__add-project-text">Добавить проект</span>
-          <i appIcon icon="plus" appSquare="18"></i>
-        </button>
-      </div>
+      <app-button (click)="addProject()" customTypographyClass="ext-body-14 bar__add-project">
+        <span class="bar__add-project-text">Добавить проект</span>
+        <i appIcon icon="plus" appSquare="18"></i>
+      </app-button>
       } @else if (isAll) {
       <div class="bar__bottom">
         <form [formGroup]="searchForm">

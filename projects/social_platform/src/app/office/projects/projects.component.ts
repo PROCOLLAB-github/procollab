@@ -2,20 +2,13 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterLink,
-  RouterLinkActive,
-  RouterOutlet,
-} from "@angular/router";
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
 import { map, Subscription } from "rxjs";
 import { ProjectCount } from "@models/project.model";
 import { ProjectService } from "@services/project.service";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
-import { BarComponent, IconComponent } from "@ui/components";
+import { BarComponent, ButtonComponent, IconComponent } from "@ui/components";
 import { AsyncPipe } from "@angular/common";
 
 @Component({
@@ -24,11 +17,10 @@ import { AsyncPipe } from "@angular/common";
   styleUrl: "./projects.component.scss",
   standalone: true,
   imports: [
-    RouterLink,
-    RouterLinkActive,
     IconComponent,
     ReactiveFormsModule,
     SearchComponent,
+    ButtonComponent,
     RouterOutlet,
     AsyncPipe,
     BarComponent,
