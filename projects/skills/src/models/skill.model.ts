@@ -7,6 +7,8 @@ export interface Skill {
   fileLink: string;
   whoCreated: string;
   description: string;
+  isFromTrajectory: boolean;
+  requiresSubscription: boolean;
   isDone: boolean;
   freeAccess: boolean;
   overdue?: boolean;

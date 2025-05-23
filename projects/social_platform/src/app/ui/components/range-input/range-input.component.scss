@@ -1,6 +1,8 @@
 .range {
   display: flex;
   align-items: center;
+  width: 100%;
+  color: var(--black);
 
   &__divider {
     flex-shrink: 0;
@@ -11,14 +13,10 @@
   }
 
   &__point {
-    width: 40px;
-    padding: 0 10px 6px 0;
     font-size: 12px;
-    color: var(--black);
-    background-color: transparent;
     border: none;
-    border-bottom: 1px solid var(--medium-grey-for-outline);
     outline: none;
+    transition: all 0.2s;
 
     &:focus {
       border-color: var(--accent);

@@ -25,8 +25,8 @@
       {{ skill.quantityOfLevels | pluralize: ["уровень", "уровня", "уровней"] }}
     </div>
 
-    @if (!skill.freeAccess) {
-    <div class="skill-card__price text-body-12">Доступно в подписке PRO</div>
+    @if (skill.requiresSubscription) {
+    <div class="skill-card__price text-body-12">Доступно в подписке</div>
     } @if (skill.overdue) {
     <div class="skill-card__lost text-body-12">Просроченный навык</div>
     } @if(skill.isDone) {

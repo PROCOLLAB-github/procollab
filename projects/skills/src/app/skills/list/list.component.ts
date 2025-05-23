@@ -60,6 +60,7 @@ export class SkillsListComponent implements OnInit, OnDestroy {
   subscriptionType = signal<SubscriptionData["lastSubscriptionType"]>(null);
 
   nonConfirmerModalOpen = signal(false);
+  isFromTrajectoryModal = signal(false);
 
   ngOnInit(): void {
     const profileSub = this.profileService.getSubscriptionData().subscribe(r => {
@@ -94,10 +95,11 @@ export class SkillsListComponent implements OnInit, OnDestroy {
     this.skills.set(filteredSkills);
   }
 
-  onSkillClick(skillId: number) {
+  onSkillClick(skillId: number, isFromTrajectory: boolean) {
     this.skillService.setSkillId(skillId);
     this.router.navigate(["skills", skillId]).catch(err => {
       if (err.status === 403) {
+        this.isFromTrajectoryModal.set(isFromTrajectory);
         this.nonConfirmerModalOpen.set(true);
       }
     });

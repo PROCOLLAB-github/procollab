@@ -153,6 +153,20 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     this.disabled = isDisabled;
   }
 
+  onTextareaKeydown(event: any) {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      const textarea = event.target as HTMLTextAreaElement;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+
+      textarea.value = textarea.value.substring(0, start) + "\t" + textarea.value.substring(end);
+
+      textarea.selectionStart = textarea.selectionEnd = start + 1;
+      this.onInput(event);
+    }
+  }
+
   attachFiles: {
     name: string;
     size: string;

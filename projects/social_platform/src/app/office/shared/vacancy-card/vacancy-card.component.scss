@@ -20,15 +20,24 @@
     display: flex;
     gap: 15px;
     align-items: center;
+    margin-left: 15px;
   }
 
   &__basket {
     color: var(--red);
     cursor: pointer;
+
+    svg {
+      max-width: 24px;
+    }
   }
 
   &__edit {
     color: var(--dark-grey);
     cursor: pointer;
+
+    svg {
+      max-width: 24px;
+    }
   }
 }

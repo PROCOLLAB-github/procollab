@@ -73,7 +73,7 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
   filterOptions = [
     { label: "Новости", value: "news" },
     { label: "Вакансии", value: "vacancy" },
-    { label: "Новые проекты", value: "project" },
+    { label: "Новости проектов", value: "project" },
   ];
 
   includedFilters = signal<string[]>([]);

@@ -4,7 +4,7 @@
 <main class="profile">
   <div class="profile__top">
     <p class="profile__title">Редактировать профиль</p>
-    <a class="profile__back" routerLink="'/office/profile'">
+    <a class="profile__back" (click)="onBack()">
       <app-button [color]="'grey'" customTypographyClass="text-body-12">Назад</app-button>
     </a>
   </div>

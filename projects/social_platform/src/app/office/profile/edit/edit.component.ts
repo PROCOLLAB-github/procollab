@@ -22,7 +22,7 @@ import { ErrorMessage } from "@error/models/error-message";
 import { ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
 import { ControlErrorPipe, ValidationService } from "projects/core";
 import { concatMap, first, map, noop, Observable, skip, Subscription, tap } from "rxjs";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 import { NavService } from "@services/nav.service";
@@ -30,7 +30,7 @@ import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { AsyncPipe, CommonModule } from "@angular/common";
+import { AsyncPipe, CommonModule, Location } from "@angular/common";
 import { Specialization } from "@office/models/specialization";
 import { SpecializationsService } from "@office/services/specializations.service";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
@@ -67,6 +67,7 @@ dayjs.extend(cpf);
     SpecializationsGroupComponent,
     ModalComponent,
     SelectComponent,
+    RouterModule,
   ],
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -79,7 +80,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly skillsService: SkillsService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly navService: NavService
+    private readonly navService: NavService,
+    private readonly location: Location
   ) {
     this.profileForm = this.fb.group({
       firstName: ["", [Validators.required]],
@@ -438,6 +440,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     {
       value: 2024,
       id: 24,
+      label: "2024",
+    },
+    {
+      value: 2025,
+      id: 25,
       label: "н.в",
     },
   ];
@@ -1009,5 +1016,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   toggleSkillsGroupsModal(): void {
     this.skillsGroupsModalOpen.update(open => !open);
+  }
+
+  onBack() {
+    this.location.back();
   }
 }

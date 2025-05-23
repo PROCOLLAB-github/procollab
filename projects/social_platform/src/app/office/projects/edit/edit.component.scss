@@ -20,6 +20,12 @@
   }
 
   &__title {
+    display: none;
+
+    @include responsive.apply-desktop {
+      display: block;
+    }
+
     @include typography.heading-1;
   }
 
@@ -28,7 +34,6 @@
   }
 
   &__form {
-    &__form {
       display: flex;
       flex-direction: column;
       padding: 15px;
@@ -42,7 +47,6 @@
         align-items: flex-start;
         padding: 24px;
       }
-    }
   }
 
   &__navigation {

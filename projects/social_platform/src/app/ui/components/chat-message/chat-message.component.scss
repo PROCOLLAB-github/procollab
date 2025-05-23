@@ -59,6 +59,7 @@
   &__content {
     color: var(--dark-grey);
     word-break: break-word;
+    white-space: pre-wrap;
   }
 
   &__name {

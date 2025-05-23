@@ -29,12 +29,14 @@
             <p [ngStyle]="{ color: isUserSubscribed ? 'var(--green)' : 'var(--accent)' }">
               {{ isUserSubscribed ? "Вы подписаны" : "Подписаться" }}
             </p>
+            @if (isUserSubscribed) {
             <i
               appIcon
               appSquare="24"
               [ngStyle]="{ color: isUserSubscribed ? 'var(--green)' : '' }"
               [icon]="isUserSubscribed ? 'check' : ''"
             ></i>
+            }
           </app-button>
         </div>
         <app-modal [(open)]="isUnsubscribeModalOpen">
@@ -271,7 +273,7 @@
       } @if(profileId === project.leader){
       <a
         [routerLink]="['/office/projects/', project.id, 'edit']"
-        [queryParams]="{ editingStep: 'team' }"
+        [queryParams]="{ editingStep: 'main' }"
       >
         <app-button>
           <span>Добавить вакансию</span>

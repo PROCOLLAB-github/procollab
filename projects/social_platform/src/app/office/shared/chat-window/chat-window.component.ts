@@ -229,7 +229,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSubmitMessage() {
-    if (!this.messageForm.get("messageControl")?.value.text.trim()) return;
+    if (!this.messageForm.get("messageControl")?.value.text) return;
 
     if (this.editingMessage) {
       this.edit.emit({

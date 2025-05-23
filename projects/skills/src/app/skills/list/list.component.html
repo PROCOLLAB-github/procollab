@@ -17,7 +17,7 @@
   @if (skills()) {
   <div class="list__items">
     @for (s of skills(); track $index) {
-    <app-skill-card [skill]="s" (click)="onSkillClick(s.id)"></app-skill-card>
+    <app-skill-card [skill]="s" (click)="onSkillClick(s.id, s.isFromTrajectory)"></app-skill-card>
     }
   </div>
   }
@@ -25,11 +25,17 @@
 
 <app-modal [open]="nonConfirmerModalOpen()">
   <div class="confirm">
-    <h4 class="confirm__title text-heading-4">У вас нет активной подписки</h4>
+    <h4 class="confirm__title text-heading-4">
+      {{ isFromTrajectoryModal() ? "Этот навык из траектории" : "У вас нет активной подписки" }}
+    </h4>
     <div class="cancel__confirm">
       <img alt="more image" src="assets\images\trajectories\more.svg" class="confirm__image" />
       <p class="text-body-12 cancel__subtext">
-        Чтобы получить доступ ко всем возможностям платформы, оформите подписку прямо сейчас!
+        {{
+          isFromTrajectoryModal()
+            ? "Чтобы получить доступ к этому навыку выберите нужную траекторию или завершите выбранную ранее траекторию!"
+            : "Чтобы получить доступ ко всем возможностям платформы, оформите подписку прямо сейчас!"
+        }}
       </p>
 
       <div class="cancel__buttons-group">
@@ -42,11 +48,11 @@
         >
 
         <app-button
-          routerLink="/subscription"
+          [routerLink]="isFromTrajectoryModal() ? '/trackCar' : '/subscription'"
           style="width: 100%"
           customTypographyClass="text-body-12"
           [color]="'primary'"
-          >Купить</app-button
+          >{{ isFromTrajectoryModal() ? "К траекториям" : "Купить" }}</app-button
         >
       </div>
     </div>
