@@ -270,7 +270,7 @@
     width: 10%;
     color: var(--dark-grey);
 
-    svg {
+    i, .icon {
       max-width: 24px;
     }
   }
@@ -283,7 +283,7 @@
 .edit {
   cursor: pointer;
 
-  svg {
+  i, .icon {
     max-width: 24px;
   }
 }
