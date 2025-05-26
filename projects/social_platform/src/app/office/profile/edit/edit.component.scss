@@ -269,6 +269,10 @@
   .edit {
     width: 10%;
     color: var(--dark-grey);
+
+    svg {
+      max-width: 24px;
+    }
   }
 
   .basket {
@@ -278,6 +282,10 @@
 
 .edit {
   cursor: pointer;
+
+  svg {
+      max-width: 24px;
+  }
 }
 
 .speciality-field,
