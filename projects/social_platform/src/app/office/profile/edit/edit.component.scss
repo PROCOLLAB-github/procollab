@@ -269,11 +269,6 @@
   .edit {
     width: 10%;
     color: var(--dark-grey);
-
-    i,
-    .icon {
-      max-width: 24px;
-    }
   }
 
   .basket {
@@ -282,12 +277,8 @@
 }
 
 .edit {
+  width: 10%;
   cursor: pointer;
-
-  i,
-  .icon {
-    max-width: 24px;
-  }
 }
 
 .speciality-field,
