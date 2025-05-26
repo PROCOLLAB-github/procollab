@@ -270,7 +270,8 @@
     width: 10%;
     color: var(--dark-grey);
 
-    i, .icon {
+    i,
+    .icon {
       max-width: 24px;
     }
   }
@@ -283,7 +284,8 @@
 .edit {
   cursor: pointer;
 
-  i, .icon {
+  i,
+  .icon {
     max-width: 24px;
   }
 }
