@@ -211,5 +211,39 @@
     </app-button>
     }
     <p class="auth__toggle">Есть аккаунт? <a routerLink="/auth/login">Войдите</a></p>
+
+    <app-modal
+      [open]="isUserCreationModalError"
+      (openChange)="isUserCreationModalError = !isUserCreationModalError"
+    >
+      <div class="cancel">
+        <i
+          (click)="isUserCreationModalError = !isUserCreationModalError"
+          appIcon
+          icon="cross"
+          class="register__cross"
+        ></i>
+
+        <p class="register__title">Привет!</p>
+
+        <p class="text-body-14 register__text">
+          Подтверждение аккаунтов на платформе временно выполняется вручную, процесс может занять до
+          6 часов.
+        </p>
+
+        <p class="text-body-14 register__text">
+          Как только твой аккаунт будет подтвержден, ты получишь уведомление на почту.
+        </p>
+
+        <p class="text-body-14 register__text">
+          Мы уже решаем эту проблему, чтобы сделать использование платформы максимально комфортным
+          для тебя ❤️
+          <br />
+          <br />
+          По любым вопросам пиши в
+          <a href="https://t.me/procollab_support">аккаунт поддержки в Telegram</a>
+        </p>
+      </div>
+    </app-modal>
   </form>
 </div>

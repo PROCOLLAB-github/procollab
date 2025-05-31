@@ -35,4 +35,53 @@
   &__repeated-password {
     margin-top: 6px;
   }
+
+  &__text {
+    margin-bottom: 30px;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 20px;
+    }
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 20px;
+    color: var(--black);
+    inline-size: 280px;
+
+    @include typography.heading-3;
+
+    @include responsive.apply-desktop {
+      inline-size: 500px;
+    }
+  }
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  max-width: 600px;
+  max-height: calc(100vh - 40px);
+  padding: 20px 0;
+
+  @include responsive.apply-desktop {
+    padding: 20px 0;
+  }
 }

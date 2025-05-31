@@ -9,6 +9,7 @@ import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 import { ButtonComponent, CheckboxComponent, InputComponent } from "@ui/components";
 import { AuthService } from "@auth/services";
+import { ModalComponent } from "@ui/components/modal/modal.component";
 
 dayjs.extend(cpf);
 
@@ -22,6 +23,7 @@ dayjs.extend(cpf);
     InputComponent,
     CheckboxComponent,
     ButtonComponent,
+    ModalComponent,
     RouterLink,
     ControlErrorPipe,
   ],
@@ -65,6 +67,8 @@ export class RegisterComponent implements OnInit {
   registerIsSubmitting = false;
   credsSubmitInitiated = false;
   infoSubmitInitiated = false;
+
+  isUserCreationModalError = false;
 
   serverErrors: string[] = [];
 
@@ -122,6 +126,8 @@ export class RegisterComponent implements OnInit {
           // console.log(error);
           this.serverErrors = Object.values(error.error).flat() as string[];
           console.log(this.serverErrors);
+        } else if (error.status === 500) {
+          this.isUserCreationModalError = true;
         }
 
         this.registerIsSubmitting = false;
