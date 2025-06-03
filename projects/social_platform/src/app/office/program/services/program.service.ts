@@ -57,7 +57,7 @@ export class ProgramService {
 
   getAllMembers(programId: number, skip: number, take: number): Observable<ApiPagination<User>> {
     return this.apiService.get(
-      "/auth/users/",
+      "/auth/public-users/",
       new HttpParams({ fromObject: { partner_program: programId, limit: take, offset: skip } })
     );
   }

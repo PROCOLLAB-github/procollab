@@ -121,7 +121,7 @@
     margin-bottom: 24px;
     color: var(--grey-for-text);
 
-    @include typography.heading-2;
+    @include typography.heading-1;
   }
 
   &__points {

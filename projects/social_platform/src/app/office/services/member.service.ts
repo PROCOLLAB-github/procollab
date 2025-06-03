@@ -22,12 +22,12 @@ export class MemberService {
     if (otherParams) {
       allParams = allParams.appendAll(otherParams);
     }
-    return this.apiService.get<ApiPagination<User>>("/auth/users/", allParams);
+    return this.apiService.get<ApiPagination<User>>("/auth/public-users/", allParams);
   }
 
   getMentors(skip: number, take: number): Observable<ApiPagination<User>> {
     return this.apiService.get<ApiPagination<User>>(
-      "/auth/users",
+      "/auth/public-users/",
       new HttpParams({ fromObject: { user_type: "2,3,4", limit: take, offset: skip } })
     );
   }

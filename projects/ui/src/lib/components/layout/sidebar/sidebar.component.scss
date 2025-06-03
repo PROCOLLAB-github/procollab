@@ -72,11 +72,11 @@
       margin-right: 12px;
     }
 
-    &:not(.sidebar-nav__item--active):hover {
-      color: var(--black);
-    }
+    // &:not(.sidebar-nav__item--active):hover {
+    //   color: var(--black);
+    // }
 
-    &--active {
+    &--active, &:hover {
       color: var(--accent);
     }
   }

@@ -37,7 +37,13 @@ export class SetPasswordComponent implements OnInit {
   errorMessage = ErrorMessage;
   errorRequest = false;
 
+  showPassword = false;
+
   ngOnInit(): void {}
+
+  toggleShowPassword() {
+    this.showPassword = !this.showPassword;
+  }
 
   onSubmit() {
     const token = this.route.snapshot.queryParamMap.get("token");

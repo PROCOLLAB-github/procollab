@@ -22,16 +22,16 @@
           <div class="vacancy__info-element vacancy__region">
             @if (project.region) {
             <i appIcon icon="geo" appWidth="11" appHeight="14"></i>
-            <span>{{ project.region }}</span>
+            <span>{{ project.region | capitalize }}</span>
             } @else {
             <span>Не указано</span>
             }
           </div>
           <div class="vacancy__info-element">
-            {{ vacancy.workFormat ? vacancy.workFormat : "Формат работы не указан" }}
+            {{ vacancy.workFormat ? (vacancy.workFormat | capitalize) : "Формат работы не указан" }}
           </div>
           <div class="vacancy__info-element">
-            {{ vacancy.workSchedule ? vacancy.workSchedule : "График не указан" }}
+            {{ vacancy.workSchedule ? (vacancy.workSchedule | capitalize) : "График не указан" }}
           </div>
         </div>
 
@@ -39,14 +39,16 @@
           <div class="vacancy__info-element">
             {{
               vacancy.salary
-                ? (vacancy.salary | salaryTransform) + " " + "рублей"
+                ? (vacancy.salary | salaryTransform | capitalize) + " " + "рублей"
                 : "Зарплата  не указана"
             }}
           </div>
           <div class="vacancy__info-element">
             {{
               vacancy.requiredExperience
-                ? "Опыт" + " " + vacancy.requiredExperience
+                ? (vacancy.requiredExperience.toLowerCase().includes("без опыта")
+                    ? ""
+                    : "Опыт" + " ") + (vacancy.requiredExperience | capitalize)
                 : "Опыт не указан"
             }}
           </div>

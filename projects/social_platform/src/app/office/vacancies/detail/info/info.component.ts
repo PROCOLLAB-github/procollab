@@ -27,6 +27,7 @@ import { IconComponent, SubscriptionPlansComponent } from "@uilib";
 import { expandElement } from "@utils/expand-element";
 import { SalaryTransformPipe } from "projects/core/src/lib/pipes/salary-transform.pipe";
 import { map, Subscription } from "rxjs";
+import { CapitalizePipe } from "projects/core/src/lib/pipes/capitalize.pipe";
 
 @Component({
   selector: "app-detail",
@@ -41,6 +42,7 @@ import { map, Subscription } from "rxjs";
     ParseBreaksPipe,
     ParseLinksPipe,
     SalaryTransformPipe,
+    CapitalizePipe,
   ],
   templateUrl: "./info.component.html",
   styleUrl: "./info.component.scss",

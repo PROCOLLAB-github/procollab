@@ -52,7 +52,6 @@ import { Observable, Subscription, concatMap, distinctUntilChanged, filter, map,
 import { InviteCardComponent } from "../../shared/invite-card/invite-card.component";
 import { VacancyCardComponent } from "../../shared/vacancy-card/vacancy-card.component";
 import { LinkCardComponent } from "@office/shared/link-card/link-card.component";
-import { title } from "process";
 
 @Component({
   selector: "app-edit",

@@ -5,7 +5,15 @@
   <section class="program__main">
     <div class="info program__section program__info">
       <div class="info__cover">
-        <img class="info__cover" [src]="program.coverImageAddress" alt="cover" />
+        <img
+          class="info__cover"
+          [src]="
+            program.coverImageAddress
+              ? program.coverImageAddress
+              : '/assets/images/office/profile/detail/cover.png'
+          "
+          alt="cover"
+        />
         <app-avatar
           class="info__avatar"
           [url]="program.imageAddress"
