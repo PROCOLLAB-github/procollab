@@ -76,7 +76,8 @@
     //   color: var(--black);
     // }
 
-    &--active, &:hover {
+    &--active,
+    &:hover {
       color: var(--accent);
     }
   }
