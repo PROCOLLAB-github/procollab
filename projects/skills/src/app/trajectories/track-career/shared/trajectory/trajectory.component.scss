@@ -349,10 +349,9 @@
   &__text {
     margin-bottom: 5px;
 
-
     @include responsive.apply-desktop {
-      margin-bottom: 10px;
       width: 108%;
+      margin-bottom: 10px;
     }
   }
 

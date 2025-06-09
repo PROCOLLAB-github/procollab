@@ -59,13 +59,13 @@
   &__nav {
     display: flex;
     flex-wrap: wrap;
+    gap: 10px;
     align-items: center;
     justify-content: center;
-    gap: 10px;
 
     @include responsive.apply-desktop {
+      gap: 0;
       justify-content: space-between;
-      gap: 0px;
     }
   }
 
@@ -95,8 +95,8 @@
   }
 
   &__inner {
-    margin-bottom: 25px;
     width: 100%;
+    margin-bottom: 25px;
 
     @include responsive.apply-desktop {
       display: flex;
@@ -124,11 +124,11 @@
     flex-basis: 50%;
 
     :first-child & :not(span, fieldset, label, h4, p, i) {
-      margin-bottom: 10px;
       margin-top: 26px;
+      margin-bottom: 10px;
     }
 
-    :last-child  {
+    :last-child {
       margin-top: 10px;
     }
   }

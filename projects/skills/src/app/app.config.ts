@@ -6,12 +6,10 @@ import { routes } from "./app.routes";
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { API_URL, BearerTokenInterceptor, CamelcaseInterceptor, PRODUCTION } from "@corelib";
 import { environment } from "../environments/environment";
-import { provideAnimations } from "@angular/platform-browser/animations";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideAnimations(),
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: BearerTokenInterceptor },
     { provide: HTTP_INTERCEPTORS, multi: true, useClass: CamelcaseInterceptor },
     { provide: API_URL, useValue: environment.apiUrl },
