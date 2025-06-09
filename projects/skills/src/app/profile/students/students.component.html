@@ -41,9 +41,11 @@
 
     <div
       class="students__stats"
-      [class.students__stats--expanded]="expandedStudentId === student.student.id"
+      [ngClass]="{ 'students__stats--expanded': expandedStudentId === student.student.id }"
     >
-      @if(expandedStudentId === student.student.id){
+      @if(expandedStudentId === student.student.id){ @if(showLoader()) {
+      <app-loader color="accent" type="circle" class="students__loader"></app-loader>
+      } @else {
       <div class="stats">
         <div class="stats__container">
           <div class="stats__skills">
@@ -96,11 +98,11 @@
           </div>
         </div>
       </div>
-      }
+      } }
 
       <div
         class="stats__expand"
-        [class.stats__expand--expanded]="expandedStudentId === student.student.id"
+        [ngClass]="{ 'stats__expand--expanded': expandedStudentId === student.student.id }"
       >
         <p (click)="toggleExpand(student.student.id)" class="text-body-14">
           {{ expandedStudentId === student.student.id ? "Скрыть" : "Посмотреть" }} статистику

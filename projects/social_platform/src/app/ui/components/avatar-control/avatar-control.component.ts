@@ -27,6 +27,7 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
 
   @Input() size = 140;
   @Input() error = false;
+  @Input() type: "avatar" | "project" = "avatar";
 
   ngOnInit(): void {}
 

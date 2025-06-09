@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, OnDestroy, OnInit, inject, signal } from "@angular/core";
-import { AsyncPipe, CommonModule } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
 import { ButtonComponent } from "@ui/components";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
@@ -21,7 +21,7 @@ import { SubscriptionData, SubscriptionPlan, SubscriptionPlansService } from "@c
 })
 export class SubscriptionComponent implements OnInit, OnDestroy {
   open = signal(false);
-  checked = signal(false);
+  autoRenewModalOpen = signal(false);
 
   route = inject(ActivatedRoute);
   profileService = inject(ProfileService);
@@ -59,27 +59,36 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
   }
 
   onOpenChange(event: boolean) {
-    if ((this.open() && !event) || (this.checked() && !event)) {
+    if ((this.open() && !event) || (this.autoRenewModalOpen() && !event)) {
       this.open.set(false);
-      this.checked.set(false);
+      this.autoRenewModalOpen.set(false);
     } else {
       this.open.set(event);
-      this.checked.set(event);
+      this.autoRenewModalOpen.set(event);
     }
   }
 
-  onCheckedChange(event: boolean) {
+  onCheckedChange() {
     if (this.subscriptionData()?.isAutopayAllowed) {
       this.profileService.updateSubscriptionDate(false).subscribe(() => {
         const updatedData = this.subscriptionData()!;
         updatedData.isAutopayAllowed = false;
       });
-    } else this.checked.set(true);
+    } else {
+      this.autoRenewModalOpen.set(true);
+    }
   }
 
-  onCloseModal() {
-    this.open.set(false);
-    this.checked.set(false);
+  onCancelModalClose(event: boolean) {
+    if (!event) this.open.set(false);
+  }
+
+  onAutoRenewModalClose(event: boolean) {
+    if (!event) this.autoRenewModalOpen.set(false);
+  }
+
+  openCancelModal() {
+    this.open.set(true);
   }
 
   onConfirmAutoPlay(event: boolean) {
@@ -87,7 +96,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
       if (this.subscriptionData()) {
         const updatedData = this.subscriptionData()!;
         updatedData.isAutopayAllowed = event;
-        this.checked.set(false);
+        this.autoRenewModalOpen.set(false);
         this.open.set(false);
       }
     });

@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, HostListener, inject, Input, OnInit, signal } from "@angular/core";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { CircleProgressBarComponent } from "../../../shared/circle-progress-bar/circle-progress-bar.component";
 import { ActivatedRoute } from "@angular/router";

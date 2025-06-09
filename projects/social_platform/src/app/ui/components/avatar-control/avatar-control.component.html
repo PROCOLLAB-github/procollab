@@ -16,12 +16,15 @@
     </div>
     } @if (value) {
     <img [src]="value" alt="avatar" class="control__img" />
-    }
+    } @if(type === 'avatar') {
     <img
       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfRvoKyPWxl-0EExOVhrqc56QcPcWK-Tloew&usqp=CAU"
       alt="avatar"
       class="control__img"
     />
+    }@else {
+    <div class="control__img placeholder"></div>
+    }
     <div class="control__overlay">
       <i appIcon icon="edit-pen" appSquare="32"></i>
     </div>

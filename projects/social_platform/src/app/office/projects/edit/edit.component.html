@@ -39,6 +39,7 @@
               <app-avatar-control
                 id="imageAddress"
                 formControlName="imageAddress"
+                type="project"
                 [error]="(imagesAddress | controlError) && projSubmitInitiated"
               ></app-avatar-control>
               @if ((imagesAddress | controlError: "required") && projSubmitInitiated) {
@@ -138,7 +139,7 @@
 
         <div class="project__right">
           @if (programTagsOptions.length) {
-          <fieldset>
+          <fieldset class="project__tags">
             <label for="program_tag" class="field-label">Выбор тега</label>
             <app-select
               id="program_tag"
@@ -211,9 +212,9 @@
         </fieldset>
         }
 
-        <div class="project__left">
-          <app-button (click)="addLink()" class="project__add-link">
-            Добавить еще одну ссылку
+        <div class="project__right">
+          <app-button (click)="addLink()" class="vacancy__submit">
+            <span>Добавить ещё одну ссылку</span>
             <i appIcon icon="plus" appSquare="12"></i>
           </app-button>
 
@@ -278,8 +279,8 @@
           </fieldset>
           }
         </div>
-        <div class="project__left">
-          <app-button class="project__add-achievement" (click)="addAchievement()">
+        <div class="project__right">
+          <app-button class="vacancy__submit" (click)="addAchievement()">
             <span>Добавить достижение</span>
             <i appIcon icon="plus" appSquare="14"></i>
           </app-button>
@@ -300,7 +301,7 @@
         </div>
         } @else if (editingStep === "team") {
         <div class="project__left">
-          <h2 class="text-body-14" style="margin-bottom: 12px">Приглашение участников</h2>
+          <label class="field-label">Приглашение участников</label>
           <form [formGroup]="inviteForm">
             @if (inviteForm.get("role"); as role) {
             <fieldset class="invite__role">
@@ -342,9 +343,9 @@
           </form>
         </div>
 
-        <div class="project__left">
+        <div class="project__right">
           <app-button
-            class="invite__submit"
+            class="vacancy__submit"
             (click)="submitInvite()"
             [loader]="inviteFormIsSubmitting"
           >
@@ -365,7 +366,7 @@
         </div>
         } @else if (editingStep === "vacancies"){
         <div class="vacancy project__left">
-          <h2 class="text-body-14 vacancy__title">Создание вакансии</h2>
+          <label class="field-label">Создание вакансии</label>
           <form [formGroup]="vacancyForm">
             @if (vacancyForm.get("role"); as role) {
             <fieldset class="vacancy__role">
@@ -506,7 +507,7 @@
           </form>
         </div>
 
-        <div class="project__left">
+        <div class="project__right">
           <app-button
             class="vacancy__submit"
             [loader]="vacancyIsSubmitting"

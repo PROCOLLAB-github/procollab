@@ -7,7 +7,11 @@
       <div class="info__cover">
         <img
           class="info__cover"
-          [src]="'/assets/images/office/profile/detail/cover.png'"
+          [src]="
+            project.coverImageAddress
+              ? project.coverImageAddress
+              : '/assets/images/office/profile/detail/cover.png'
+          "
           alt="cover"
         />
         <app-avatar
@@ -22,14 +26,14 @@
             customTypographyClass="text-body-12"
             color="white"
           >
-            <p [ngStyle]="{ color: isUserSubscribed ? 'var(--green)' : 'var(--accent)' }">
+            <p [style]="{ color: isUserSubscribed ? 'var(--green)' : 'var(--accent)' }">
               {{ isUserSubscribed ? "Вы подписаны" : "Подписаться" }}
             </p>
             @if (isUserSubscribed) {
             <i
               appIcon
               appSquare="24"
-              [ngStyle]="{ color: isUserSubscribed ? 'var(--green)' : '' }"
+              [style]="{ color: isUserSubscribed ? 'var(--green)' : '' }"
               [icon]="isUserSubscribed ? 'check' : ''"
             ></i>
             }

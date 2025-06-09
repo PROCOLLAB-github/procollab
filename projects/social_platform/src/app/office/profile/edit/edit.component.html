@@ -763,7 +763,13 @@
     </div>
     <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
       <app-button
+        [disabled]="editEducationClick || editWorkClick || editLanguageClick"
         [loader]="profileFormSubmitting"
+        [ngStyle]="{
+          opacity: editEducationClick || editWorkClick || editLanguageClick ? '0.6' : '1',
+          cursor:
+            editEducationClick || editWorkClick || editLanguageClick ? 'not-allowed' : 'pointer'
+        }"
         customTypographyClass="text-body-12"
         (click)="saveProfile()"
       >

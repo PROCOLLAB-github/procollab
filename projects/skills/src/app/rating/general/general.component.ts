@@ -5,12 +5,13 @@ import { CommonModule } from "@angular/common";
 import { TopRatingCardComponent } from "../shared/top-rating-card/top-rating-card.component";
 import { BasicRatingCardComponent } from "../shared/basic-rating-card/basic-rating-card.component";
 import { ActivatedRoute, Router } from "@angular/router";
-import { map, Observable, tap } from "rxjs";
+import { map, Observable } from "rxjs";
 import { GeneralRating } from "../../../models/rating.model";
 import { SelectComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { RatingService } from "../services/rating.service";
+import { ratingFiltersList } from "projects/core/src/consts/rating-filters";
 
 @Component({
   selector: "app-general",
@@ -47,28 +48,7 @@ export class RatingGeneralComponent implements OnInit {
 
   ratingForm: FormGroup;
 
-  filterParams = [
-    {
-      label: "Месяц",
-      id: 0,
-      value: "last_month",
-    },
-    {
-      label: "Год",
-      id: 1,
-      value: "last_year",
-    },
-    {
-      label: "День",
-      id: 2,
-      value: "last_day",
-    },
-    {
-      label: "Неделя",
-      id: 3,
-      value: "last_week",
-    },
-  ];
+  readonly filterParams = ratingFiltersList;
 
   ngOnInit() {
     this.loadInitialRatings();

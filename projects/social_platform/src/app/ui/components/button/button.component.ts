@@ -2,14 +2,14 @@
 
 import { Component, Input, OnInit } from "@angular/core";
 import { LoaderComponent } from "../loader/loader.component";
-import { NgClass } from "@angular/common";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-button",
   templateUrl: "./button.component.html",
   styleUrl: "./button.component.scss",
   standalone: true,
-  imports: [NgClass, LoaderComponent],
+  imports: [CommonModule, LoaderComponent],
 })
 export class ButtonComponent implements OnInit {
   constructor() {}

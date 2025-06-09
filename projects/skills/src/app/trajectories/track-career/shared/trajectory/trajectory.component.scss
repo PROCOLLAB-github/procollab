@@ -349,8 +349,10 @@
   &__text {
     margin-bottom: 5px;
 
+
     @include responsive.apply-desktop {
       margin-bottom: 10px;
+      width: 108%;
     }
   }
 
@@ -386,6 +388,10 @@
     display: flex;
     gap: 10px;
     align-items: center;
+
+    p {
+      width: 105%;
+    }
   }
 
   &__buttons-group {

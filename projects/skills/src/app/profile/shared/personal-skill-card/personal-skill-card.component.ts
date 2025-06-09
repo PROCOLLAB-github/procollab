@@ -7,7 +7,6 @@ import {
   inject,
   Input,
   Output,
-  signal,
   WritableSignal,
 } from "@angular/core";
 import { CommonModule, NgOptimizedImage } from "@angular/common";

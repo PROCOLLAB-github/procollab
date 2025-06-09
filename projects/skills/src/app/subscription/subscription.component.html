@@ -3,37 +3,35 @@
 <!-- Модалка с отменой подписки -->
 
 <div class="subscription">
-  <app-modal [open]="open()" [color]="'gradient'" (openChange)="onOpenChange($event)">
+  <app-modal [open]="open()" [color]="'gradient'" (openChange)="onCancelModalClose($event)">
     <div class="cancel">
       <i
-        (click)="onCloseModal()"
+        (click)="open.set(false)"
         appIcon
         icon="cross"
         class="cancel__cross"
         style="color: var(--white)"
       ></i>
       <p class="cancel__title">Ты действительно хочешь отменить подписку?</p>
-
-      <app-button (click)="onCancelSubscription()" style="color: var(--dark-grey)" [color]="'grey'"
-        >Отменить</app-button
-      >
+      <app-button (click)="onCancelSubscription()" style="color: var(--dark-grey)" [color]="'grey'">
+        Отменить
+      </app-button>
       <img alt="stars" src="assets/images/subscription/stars.svg" class="cancel__stars" />
     </div>
   </app-modal>
 
   <!-- Модалка с автопродлением подписки  -->
 
-  <app-modal [open]="checked()" (openChange)="onOpenChange($event)">
+  <app-modal [open]="autoRenewModalOpen()" (openChange)="onAutoRenewModalClose($event)">
     <div class="cancel">
       <i
-        (click)="onCloseModal()"
+        (click)="autoRenewModalOpen.set(false)"
         appIcon
         icon="cross"
         class="cancel__cross"
         style="color: var(--black)"
       ></i>
       <p class="cancel__title" style="color: var(--black)">Включим автопродление подписки?</p>
-
       <app-button (click)="onConfirmAutoPlay(true)" [color]="'primary'">Включить</app-button>
       <img alt="wave" src="assets/images/subscription/wave.svg" class="cancel__wave" />
     </div>
@@ -45,8 +43,8 @@
     <div class="subscription__switch">
       <div class="subscription__text">Включить автопродление подписки</div>
       <app-switch
-        (click)="this.onCheckedChange(!checked())"
-        (checkedChange)="onCheckedChange($event)"
+        (click)="this.onCheckedChange()"
+        (checkedChange)="onCheckedChange()"
         [checked]="subscriptionData()!.isAutopayAllowed"
       ></app-switch>
     </div>
@@ -87,9 +85,9 @@
     </div>
   </div>
 
-  @if(subscriptionData()?.lastSubscriptionType !== null){
-  <app-button class="text-body-12" (click)="this.onOpenChange(true)" [color]="'grey'"
-    >Отменить подписку</app-button
-  >
+  @if(subscriptionData()?.lastSubscriptionType !== null) {
+  <app-button class="text-body-12" (click)="openCancelModal()" [color]="'grey'">
+    Отменить подписку
+  </app-button>
   }
 </div>

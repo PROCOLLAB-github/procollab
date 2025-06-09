@@ -5,15 +5,15 @@ import { SnackbarService } from "@ui/services/snackbar.service";
 import { Snack } from "@ui/models/snack.model";
 import { Subscription } from "rxjs";
 import { AnimationService } from "@ui/services/animation.service";
-import { NgClass } from "@angular/common";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-snackbar",
   templateUrl: "./snackbar.component.html",
   styleUrl: "./snackbar.component.scss",
   animations: [AnimationService.slideInOut],
+  imports: [CommonModule],
   standalone: true,
-  imports: [NgClass],
 })
 export class SnackbarComponent implements OnInit, OnDestroy {
   constructor(private readonly snackbarService: SnackbarService) {}

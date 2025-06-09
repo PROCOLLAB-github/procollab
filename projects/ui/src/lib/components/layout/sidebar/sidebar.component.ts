@@ -41,4 +41,8 @@ export class SidebarComponent implements OnInit {
 
   barPosition = 0;
   showBar = true;
+
+  redirectToHome(): void {
+    window.location.href = "https://app.procollab.ru/office/feed";
+  }
 }

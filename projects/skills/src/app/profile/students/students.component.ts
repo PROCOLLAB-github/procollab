@@ -1,19 +1,8 @@
 /** @format */
 
-import { AsyncPipe, CommonModule } from "@angular/common";
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  HostListener,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-  ViewChild,
-} from "@angular/core";
-import { toSignal } from "@angular/core/rxjs-interop";
-import { ActivatedRoute, RouterModule, RouterOutlet } from "@angular/router";
+import { CommonModule } from "@angular/common";
+import { Component, HostListener, inject, OnDestroy, OnInit, signal } from "@angular/core";
+import { ActivatedRoute, RouterModule } from "@angular/router";
 import { PluralizePipe } from "@corelib";
 import { ButtonComponent, CheckboxComponent } from "@ui/components";
 import { AvatarComponent, IconComponent } from "@uilib";
@@ -21,6 +10,7 @@ import { Student } from "projects/skills/src/models/trajectory.model";
 import { map, Subscription } from "rxjs";
 import { TrajectoriesService } from "../../trajectories/trajectories.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { LoaderComponent } from "@ui/components/loader/loader.component";
 
 @Component({
   selector: "app-students",
@@ -32,6 +22,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
     AvatarComponent,
     ButtonComponent,
     IconComponent,
+    LoaderComponent,
     CheckboxComponent,
   ],
   templateUrl: "./students.component.html",
@@ -55,6 +46,8 @@ export class ProfileStudentsComponent implements OnInit, OnDestroy {
   avatarSize = signal(window.innerWidth > 1200 ? 94 : 48);
   expandedStudentId: number | null = null;
 
+  showLoader = signal(true);
+
   students?: Student[];
   subscriptions: Subscription[] = [];
 
@@ -65,6 +58,11 @@ export class ProfileStudentsComponent implements OnInit, OnDestroy {
       this.expandedStudentId = null;
     } else {
       this.expandedStudentId = studentId;
+
+      setTimeout(() => {
+        this.showLoader.set(false);
+      }, 600);
+
       const student = this.students?.find(s => s.student.id === studentId);
       if (student) {
         this.studentForm.patchValue({

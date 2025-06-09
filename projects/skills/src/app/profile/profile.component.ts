@@ -1,8 +1,8 @@
 /** @format */
 
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
+import { ActivatedRoute, RouterOutlet } from "@angular/router";
 import { InfoBlockComponent } from "./shared/info-block/info-block.component";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { map } from "rxjs";

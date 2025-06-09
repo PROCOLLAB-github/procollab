@@ -40,6 +40,10 @@ import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-baske
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { Skill } from "@office/models/skill";
 import { SkillsService } from "@office/services/skills.service";
+import { navItems } from "projects/core/src/consts/navProfileItems";
+import { yearList } from "projects/core/src/consts/list-years";
+import { educationUserLevel, educationUserType } from "projects/core/src/consts/list-education";
+import { languageLevelsList, languageNamesList } from "projects/core/src/consts/list-language";
 
 dayjs.extend(cpf);
 
@@ -52,7 +56,6 @@ dayjs.extend(cpf);
     ReactiveFormsModule,
     InputComponent,
     SelectComponent,
-    TagComponent,
     IconComponent,
     CommonModule,
     ButtonComponent,
@@ -270,6 +273,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   editIndex = signal<number | null>(null);
 
+  editEducationClick = false;
+  editWorkClick = false;
+  editLanguageClick = false;
+
   selectedEntryYearEducationId = signal<number | undefined>(undefined);
   selectedComplitionYearEducationId = signal<number | undefined>(undefined);
   selectedEducationStatusId = signal<number | undefined>(undefined);
@@ -283,313 +290,22 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   subscription$: Subscription[] = [];
 
-  navItems = [
-    {
-      step: "main",
-      src: "/assets/images/profile/main.svg",
-      label: "Основные данные",
-    },
-    {
-      step: "education",
-      src: "/assets/images/profile/education.svg",
-      label: "Образование",
-    },
-    {
-      step: "experience",
-      src: "/assets/images/profile/experience.svg",
-      label: "Опыт",
-    },
-    {
-      step: "achievements",
-      src: "/assets/images/profile/achievements.svg",
-      label: "Достижения",
-    },
-    {
-      step: "skills",
-      src: "/assets/images/profile/skills.svg",
-      label: "Навыки",
-    },
-  ];
+  readonly navItems = navItems;
 
   navigateStep(step: string) {
     this.router.navigate([], { queryParams: { editingStep: step } });
     this.editingStep = step as "main" | "education" | "experience" | "achievements" | "skills";
   }
 
-  yearListEducation = [
-    {
-      value: 2000,
-      id: 0,
-      label: "2000",
-    },
-    {
-      value: 2001,
-      id: 1,
-      label: "2001",
-    },
-    {
-      value: 2002,
-      id: 2,
-      label: "2002",
-    },
-    {
-      value: 2003,
-      id: 3,
-      label: "2003",
-    },
-    {
-      value: 2004,
-      id: 4,
-      label: "2004",
-    },
-    {
-      value: 2005,
-      id: 5,
-      label: "2005",
-    },
-    {
-      value: 2006,
-      id: 6,
-      label: "2006",
-    },
-    {
-      value: 2007,
-      id: 7,
-      label: "2007",
-    },
-    {
-      value: 2008,
-      id: 8,
-      label: "2008",
-    },
-    {
-      value: 2009,
-      id: 9,
-      label: "2009",
-    },
-    {
-      value: 2010,
-      id: 10,
-      label: "2010",
-    },
-    {
-      value: 2011,
-      id: 11,
-      label: "2011",
-    },
-    {
-      value: 2012,
-      id: 12,
-      label: "2012",
-    },
-    {
-      value: 2013,
-      id: 13,
-      label: "2013",
-    },
-    {
-      value: 2014,
-      id: 14,
-      label: "2014",
-    },
-    {
-      value: 2015,
-      id: 15,
-      label: "2015",
-    },
-    {
-      value: 2016,
-      id: 16,
-      label: "2016",
-    },
-    {
-      value: 2017,
-      id: 17,
-      label: "2017",
-    },
-    {
-      value: 2018,
-      id: 18,
-      label: "2018",
-    },
-    {
-      value: 2019,
-      id: 19,
-      label: "2019",
-    },
-    {
-      value: 2020,
-      id: 20,
-      label: "2020",
-    },
-    {
-      value: 2021,
-      id: 21,
-      label: "2021",
-    },
-    {
-      value: 2022,
-      id: 22,
-      label: "2022",
-    },
-    {
-      value: 2023,
-      id: 23,
-      label: "2023",
-    },
-    {
-      value: 2024,
-      id: 24,
-      label: "2024",
-    },
-    {
-      value: 2025,
-      id: 25,
-      label: "н.в",
-    },
-  ];
+  readonly yearListEducation = yearList;
 
-  educationStatusList = [
-    {
-      id: 0,
-      value: "Ученик",
-      label: "Ученик",
-    },
-    {
-      id: 1,
-      value: "Студент",
-      label: "Студент",
-    },
-    {
-      id: 2,
-      value: "Выпускник",
-      label: "Выпускник",
-    },
-  ];
+  readonly educationStatusList = educationUserType;
 
-  educationLevelList = [
-    {
-      id: 0,
-      value: "Среднее общее образование",
-      label: "Среднее общее образование",
-    },
-    {
-      id: 1,
-      value: "Среднее профессиональное образование",
-      label: "Среднее профессиональное образование",
-    },
-    {
-      id: 2,
-      value: "Высшее образование – бакалавриат, специалитет",
-      label: "Высшее образование – бакалавриат, специалитет",
-    },
-    {
-      id: 3,
-      value: "Высшее образование – магистратура",
-      label: "Высшее образование – магистратура",
-    },
-    {
-      id: 4,
-      value: "Высшее образование – аспирантура",
-      label: "Высшее образование – аспирантура",
-    },
-  ];
+  readonly educationLevelList = educationUserLevel;
 
-  languageList = [
-    {
-      id: 0,
-      value: "Английский",
-      label: "Английский",
-    },
-    {
-      id: 1,
-      value: "Испанский",
-      label: "Испанский",
-    },
-    {
-      id: 2,
-      value: "Итальянский",
-      label: "Итальянский",
-    },
-    {
-      id: 3,
-      value: "Немецкий",
-      label: "Немецкий",
-    },
-    {
-      id: 4,
-      value: "Японский",
-      label: "Японский",
-    },
-    {
-      id: 5,
-      value: "Китайский",
-      label: "Китайский",
-    },
-    {
-      id: 6,
-      value: "Арабский",
-      label: "Арабский",
-    },
-    {
-      id: 7,
-      value: "Шведский",
-      label: "Шведский",
-    },
-    {
-      id: 8,
-      value: "Польский",
-      label: "Польский",
-    },
-    {
-      id: 9,
-      value: "Чешский",
-      label: "Чешский",
-    },
-    {
-      id: 10,
-      value: "Русский",
-      label: "Русский",
-    },
-    {
-      id: 11,
-      value: "Французский",
-      label: "Французский",
-    },
-  ];
+  readonly languageList = languageNamesList;
 
-  languageLevelList = [
-    {
-      id: 0,
-      value: "А1",
-      label: "А1",
-    },
-    {
-      id: 1,
-      value: "А2",
-      label: "А2",
-    },
-    {
-      id: 2,
-      value: "B1",
-      label: "B1",
-    },
-    {
-      id: 3,
-      value: "B2",
-      label: "B2",
-    },
-    {
-      id: 4,
-      value: "С1",
-      label: "С1",
-    },
-    {
-      id: 5,
-      value: "С2",
-      label: "С2",
-    },
-  ];
+  readonly languageLevelList = languageLevelsList;
 
   get typeSpecific(): FormGroup {
     return this.profileForm.get("typeSpecific") as FormGroup;
@@ -705,11 +421,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         this.profileForm.get("educationLevel")?.setValue("");
       }
     }
+    this.editEducationClick = false;
   }
 
   editEducation(index: number) {
-    const educationItem =
-      this.educationItems().length > 0 ? this.educationItems()[index] : this.education.value[index];
+    this.editEducationClick = true;
+    const educationItem = this.education.value[index];
 
     this.yearListEducation.forEach(entryYearWork => {
       if (entryYearWork.value === educationItem.entryYear) {
@@ -796,11 +513,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         this.profileForm.get("jobPosition")?.setValue("");
       }
     }
+    this.editWorkClick = false;
   }
 
   editWork(index: number) {
-    const workItem =
-      this.workItems().length > 0 ? this.workItems()[index] : this.workExperience.value[index];
+    this.editWorkClick = true;
+    const workItem = this.workExperience.value[index];
 
     if (workItem) {
       this.yearListEducation.forEach(entryYearWork => {
@@ -860,13 +578,13 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.profileForm.get("language")?.reset();
     this.profileForm.get("languageLevel")?.reset();
+
+    this.editLanguageClick = true;
   }
 
   editLanguage(index: number) {
-    const languageItem =
-      this.languageItems().length > 0
-        ? this.languageItems()[index]
-        : this.userLanguages.value[index];
+    this.editLanguageClick = true;
+    const languageItem = this.userLanguages.value[index];
 
     this.languageList.forEach(language => {
       if (language.value === languageItem.language) {

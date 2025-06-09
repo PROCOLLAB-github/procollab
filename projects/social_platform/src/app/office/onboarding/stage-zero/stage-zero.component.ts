@@ -1,16 +1,19 @@
 /** @format */
 
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { AuthService } from "@auth/services";
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { ControlErrorPipe, ValidationService } from "projects/core";
 import { concatMap, Subscription } from "rxjs";
 import { Router } from "@angular/router";
-import { User, workExperience } from "@auth/models/user.model";
+import { User } from "@auth/models/user.model";
 import { OnboardingService } from "../services/onboarding.service";
 import { ButtonComponent, InputComponent, SelectComponent } from "@ui/components";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
+import { CommonModule } from "@angular/common";
+import { yearList } from "projects/core/src/consts/list-years";
+import { educationUserLevel, educationUserType } from "projects/core/src/consts/list-education";
 
 @Component({
   selector: "app-stage-zero",
@@ -24,6 +27,7 @@ import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-con
     ButtonComponent,
     ControlErrorPipe,
     SelectComponent,
+    CommonModule,
   ],
 })
 export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
@@ -78,184 +82,11 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
-  yearListEducation = [
-    {
-      value: 2000,
-      id: 0,
-      label: "2000",
-    },
-    {
-      value: 2001,
-      id: 1,
-      label: "2001",
-    },
-    {
-      value: 2002,
-      id: 2,
-      label: "2002",
-    },
-    {
-      value: 2003,
-      id: 3,
-      label: "2003",
-    },
-    {
-      value: 2004,
-      id: 4,
-      label: "2004",
-    },
-    {
-      value: 2005,
-      id: 5,
-      label: "2005",
-    },
-    {
-      value: 2006,
-      id: 6,
-      label: "2006",
-    },
-    {
-      value: 2007,
-      id: 7,
-      label: "2007",
-    },
-    {
-      value: 2008,
-      id: 8,
-      label: "2008",
-    },
-    {
-      value: 2009,
-      id: 9,
-      label: "2009",
-    },
-    {
-      value: 2010,
-      id: 10,
-      label: "2010",
-    },
-    {
-      value: 2011,
-      id: 11,
-      label: "2011",
-    },
-    {
-      value: 2012,
-      id: 12,
-      label: "2012",
-    },
-    {
-      value: 2013,
-      id: 13,
-      label: "2013",
-    },
-    {
-      value: 2014,
-      id: 14,
-      label: "2014",
-    },
-    {
-      value: 2015,
-      id: 15,
-      label: "2015",
-    },
-    {
-      value: 2016,
-      id: 16,
-      label: "2016",
-    },
-    {
-      value: 2017,
-      id: 17,
-      label: "2017",
-    },
-    {
-      value: 2018,
-      id: 18,
-      label: "2018",
-    },
-    {
-      value: 2019,
-      id: 19,
-      label: "2019",
-    },
-    {
-      value: 2020,
-      id: 20,
-      label: "2020",
-    },
-    {
-      value: 2021,
-      id: 21,
-      label: "2021",
-    },
-    {
-      value: 2022,
-      id: 22,
-      label: "2022",
-    },
-    {
-      value: 2023,
-      id: 23,
-      label: "2023",
-    },
-    {
-      value: 2024,
-      id: 24,
-      label: "2024",
-    },
-    {
-      value: 2025,
-      id: 25,
-      label: "н.в",
-    },
-  ];
+  readonly yearListEducation = yearList;
 
-  educationStatusList = [
-    {
-      id: 0,
-      value: "Ученик",
-      label: "Ученик",
-    },
-    {
-      id: 1,
-      value: "Студент",
-      label: "Студент",
-    },
-    {
-      id: 2,
-      value: "Выпускник",
-      label: "Выпускник",
-    },
-  ];
+  readonly educationStatusList = educationUserType;
 
-  educationLevelList = [
-    {
-      id: 0,
-      value: "Среднее общее образование",
-      label: "Среднее общее образование",
-    },
-    {
-      id: 1,
-      value: "Среднее профессиональное образование",
-      label: "Среднее профессиональное образование",
-    },
-    {
-      id: 2,
-      value: "Высшее образование – бакалавриат, специалитет",
-      label: "Высшее образование – бакалавриат, специалитет",
-    },
-    {
-      id: 3,
-      value: "Высшее образование – магистратура",
-      label: "Высшее образование – магистратура",
-    },
-    {
-      id: 4,
-      value: "Высшее образование – аспирантура",
-      label: "Высшее образование – аспирантура",
-    },
-  ];
+  educationLevelList = educationUserLevel;
 
   stageForm: FormGroup;
   errorMessage = ErrorMessage;

@@ -1,7 +1,7 @@
 /** @format */
 
-import { Component, computed, HostListener, inject, OnInit, signal } from "@angular/core";
-import { CommonModule, NgOptimizedImage } from "@angular/common";
+import { Component, computed, inject, OnInit, signal } from "@angular/core";
+import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
 import { PersonalRatingCardComponent } from "../personal-rating-card/personal-rating-card.component";
 import { IconComponent } from "@uilib";
@@ -10,8 +10,6 @@ import { SkillChooserComponent } from "../skill-chooser/skill-chooser.component"
 import { ProfileService } from "../../services/profile.service";
 import { Profile } from "projects/skills/src/models/profile.model";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { PersonalSkillCardComponent } from "../personal-skill-card/personal-skill-card.component";
-import { animate, style, transition, trigger } from "@angular/animations";
 import { SkillService } from "../../../skills/services/skill.service";
 
 @Component({

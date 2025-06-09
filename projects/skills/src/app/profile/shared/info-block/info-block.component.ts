@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, HostListener, inject, Input, OnDestroy, OnInit, signal } from "@angular/core";
-import { CommonModule, NgClass, NgOptimizedImage, NgStyle } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
 import { AvatarComponent, IconComponent } from "@uilib";
 import { Router } from "@angular/router";
