@@ -10,6 +10,8 @@ import * as cpf from "dayjs/plugin/customParseFormat";
 import { ButtonComponent, CheckboxComponent, InputComponent } from "@ui/components";
 import { AuthService } from "@auth/services";
 import { ModalComponent } from "@ui/components/modal/modal.component";
+import { IconComponent } from "@uilib";
+import { CommonModule } from "@angular/common";
 
 dayjs.extend(cpf);
 
@@ -19,12 +21,14 @@ dayjs.extend(cpf);
   styleUrl: "./register.component.scss",
   standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     InputComponent,
     CheckboxComponent,
     ButtonComponent,
     ModalComponent,
     RouterLink,
+    IconComponent,
     ControlErrorPipe,
   ],
 })
@@ -68,6 +72,9 @@ export class RegisterComponent implements OnInit {
   credsSubmitInitiated = false;
   infoSubmitInitiated = false;
 
+  showPassword = false;
+  showPasswordRepeat = false;
+
   isUserCreationModalError = false;
 
   serverErrors: string[] = [];
@@ -75,6 +82,14 @@ export class RegisterComponent implements OnInit {
   step: "credentials" | "info" = "credentials";
 
   errorMessage = ErrorMessage;
+
+  toggleShowPassword(type: "repeat" | "first") {
+    if (type === 'repeat') {
+      this.showPasswordRepeat = !this.showPasswordRepeat
+    } else {
+      this.showPassword = !this.showPassword;
+    }
+  }
 
   onInfoStep() {
     const fields = [

@@ -57,18 +57,66 @@
         <app-input
           [error]="(password | controlError) && credsSubmitInitiated"
           id="passowrd"
-          type="password"
+          [type]="showPassword ? 'text' : 'password'"
           formControlName="password"
           placeholder="Придумайте пароль"
-        ></app-input>
+        >
+          @if(showPassword) {
+          <i
+            appIcon
+            icon="eye"
+            appSquare="24"
+            appWidth="24"
+            appHeight="24"
+            appViewBox="0 0 24 24"
+            class="icon"
+            (click)="toggleShowPassword('first')"
+          ></i>
+          } @else {
+          <i
+            appIcon
+            icon="eye-off"
+            appSquare="24"
+            appWidth="24"
+            appHeight="24"
+            appViewBox="0 0 24 24"
+            class="icon"
+            (click)="toggleShowPassword('first')"
+          ></i>
+          }
+        </app-input>
         <app-input
           class="register__repeated-password"
           [error]="(password | controlError) && credsSubmitInitiated"
           id="repeatedPassword"
-          type="password"
+          [type]="showPasswordRepeat ? 'text' : 'password'"
           formControlName="repeatedPassword"
           placeholder="Повторите пароль"
-        ></app-input>
+        >
+          @if(showPasswordRepeat) {
+          <i
+            appIcon
+            icon="eye"
+            appSquare="24"
+            appWidth="24"
+            appHeight="24"
+            appViewBox="0 0 24 24"
+            class="icon"
+            (click)="toggleShowPassword('repeat')"
+          ></i>
+          } @else {
+          <i
+            appIcon
+            icon="eye-off"
+            appSquare="24"
+            appWidth="24"
+            appHeight="24"
+            appViewBox="0 0 24 24"
+            class="icon"
+            (click)="toggleShowPassword('repeat')"
+          ></i>
+          }
+        </app-input>
         @if (credsSubmitInitiated) {
         <ng-container>
           @if (password | controlError: "required") {

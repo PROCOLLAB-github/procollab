@@ -7,6 +7,7 @@ import { ErrorMessage } from "@error/models/error-message";
 import { ControlErrorPipe, TokenService, ValidationService } from "projects/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-login",
@@ -15,6 +16,7 @@ import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     RouterLink,
     InputComponent,
