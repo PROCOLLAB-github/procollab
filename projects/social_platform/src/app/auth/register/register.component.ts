@@ -84,8 +84,8 @@ export class RegisterComponent implements OnInit {
   errorMessage = ErrorMessage;
 
   toggleShowPassword(type: "repeat" | "first") {
-    if (type === 'repeat') {
-      this.showPasswordRepeat = !this.showPasswordRepeat
+    if (type === "repeat") {
+      this.showPasswordRepeat = !this.showPasswordRepeat;
     } else {
       this.showPassword = !this.showPassword;
     }
