@@ -12,7 +12,7 @@ import { SubscriptionPlansService, YearsFromBirthdayPipe } from "projects/core";
 import { BarComponent, ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { BackComponent } from "@uilib";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 
 @Component({
@@ -21,6 +21,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
   styleUrl: "./profile-detail.component.scss",
   standalone: true,
   imports: [
+    CommonModule,
     RouterLinkActive,
     RouterLink,
     AvatarComponent,

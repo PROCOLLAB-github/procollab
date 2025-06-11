@@ -7,8 +7,8 @@
       Добро пожаловать, {{ profile.firstName }} {{ profile.lastName }}! ✌️
     </h3>
     <p class="auth__info">
-      Пожалуйста, заполни уточняющие данные о себе, чтобы мы знали, какие команды тебе подойдут
-      лучше всего, и чтобы сами команды могли тебя найти
+      Заполни уточняющие данные о себе, которые помогут сформировать сильное резюме и будут отражать
+      твой опыт.
     </p>
   </div>
   <form [formGroup]="stageForm" class="page__form" (ngSubmit)="onSubmit()">
@@ -100,22 +100,6 @@
         </div>
         }
       </fieldset>
-      } @if (stageForm.get("description"); as description) {
-      <fieldset class="page__field">
-        <label for="description" class="field-label">Краткое описане</label>
-        <app-input
-          id="description"
-          [error]="description | controlError"
-          type="text"
-          placeholder="Востоковедение и Африканистика"
-          formControlName="description"
-        ></app-input>
-        @if (description | controlError: "required") {
-        <div class="text-body-14 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        }
-      </fieldset>
       } @if (stageForm.get("educationLevel"); as educationLevel) {
       <fieldset>
         <label for="educationLevel" class="field-label">Уровень образования</label>
@@ -143,6 +127,22 @@
           <i appIcon icon="arrow-no-body" appSquare="32"></i>
         </app-select>
         @if (educationStatus | controlError: "required") {
+        <div class="text-body-14 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (stageForm.get("description"); as description) {
+      <fieldset class="page__field">
+        <label for="description" class="field-label">Краткое описание</label>
+        <app-input
+          id="description"
+          [error]="description | controlError"
+          type="text"
+          placeholder="Бизнес информатика"
+          formControlName="description"
+        ></app-input>
+        @if (description | controlError: "required") {
         <div class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
