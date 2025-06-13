@@ -7,9 +7,10 @@
   height: 130px;
   overflow: hidden;
   white-space: nowrap;
+  cursor: pointer;
   border-radius: 15px;
   transition: ease 0.3s;
-  cursor: pointer;
+
   // padding: 50px 50px 50px 18px;
   // background-color: var(--white);
 
@@ -24,7 +25,7 @@
   &__image {
     height: 100%;
     object-fit: cover;
-    
+
     @include responsive.apply-desktop {
       width: 100%;
       height: auto;
@@ -35,9 +36,9 @@
   ::ng-deep {
     app-button {
       position: absolute;
-      width: 30%;
       top: 17%;
       right: 0%;
+      width: 30%;
 
       @include responsive.apply-desktop {
         top: 30%;
