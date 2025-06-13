@@ -45,6 +45,9 @@
       </div>
     </section>
     <div class="content__actions">
+      <app-button (click)="onSkipRegistration()" color="grey" [loader]="skipSubmitting()"
+        >Закончить регистрацию позже</app-button
+      >
       <app-button type="submit" [loader]="stageSubmitting()" (click)="onSubmit()"
         >Продолжить</app-button
       >

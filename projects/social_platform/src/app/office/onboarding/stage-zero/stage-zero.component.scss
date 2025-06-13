@@ -11,17 +11,50 @@
 
   &__field {
     margin-bottom: 12px;
+
+    ::ng-deep {
+      app-avatar-control {
+        .control {
+          border-radius: 50%;
+          border: 3px solid var(--accent);
+        }
+      }
+    }
   }
 
   &__first-row {
     display: flex;
     flex-direction: column;
     gap: 14px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 
     > :first-child {
       flex-grow: 1;
     }
+
+    > :last-child {
+       margin-bottom: 10px;
+    }
+  }
+
+  &__years {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+    .years__left,
+    .years__right {
+      width: 50%;
+    }
+  }
+}
+
+.education {
+  &__block {
+    display: flex;
+    flex-basis: 50%;
+    flex-direction: column;
+    gap: 20px;
   }
 
   &__years {
@@ -34,5 +67,93 @@
     .years__right {
       width: 50%;
     }
+  }
+
+  &__info {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    padding: 12px;
+    overflow: hidden;
+    border: 1px solid var(--medium-grey-for-outline);
+    border-radius: 15px;
+  }
+
+  &__text {
+    color: var(--dark-grey);
+  }
+
+  &__remove {
+    display: flex;
+    gap: 13px;
+    align-items: center;
+  }
+}
+
+.achievement {
+  &__first-row {
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+    margin-bottom: -12px;
+
+    > :first-child {
+      flex-grow: 1;
+      margin-bottom: 25px;
+    }
+  }
+
+  &__remove {
+    width: 155px;
+    margin-left: 10px;
+  }
+}
+
+.edit {
+  width: 10%;
+  color: var(--dark-grey);
+  cursor: pointer;
+}
+
+.basket {
+  color: var(--red);
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: calc(100vh - 40px);
+  padding: 40px 0 80px;
+  overflow-y: auto;
+
+  @include responsive.apply-desktop {
+    width: 80%;
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  &__text {
+    text-align: center;
   }
 }

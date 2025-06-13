@@ -261,6 +261,10 @@ $section-padding: 24px;
   &__skills {
     display: flex;
     flex-wrap: wrap;
+
+    ::ng-deep .tag {
+      max-width: 100%;
+    }
   }
 
   &__skill {

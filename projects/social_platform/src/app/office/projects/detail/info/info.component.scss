@@ -287,10 +287,7 @@
 
   ul > * {
     display: block;
-
-    &:not(:last-child) {
-      margin-bottom: 12px;
-    }
+    margin-bottom: 12px;
   }
 
   @include expandable-list;

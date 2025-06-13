@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit, signal } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { concatMap, map, Observable, Subscription, take } from "rxjs";
 import { AuthService } from "@auth/services";
@@ -40,11 +40,12 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
     private readonly validationService: ValidationService,
     private readonly skillsService: SkillsService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly cdref: ChangeDetectorRef
   ) {}
 
   stageForm = this.nnFb.group({
-    skills: this.nnFb.control<Skill[]>([], Validators.required),
+    skills: this.nnFb.control<Skill[]>([]),
   });
 
   nestedSkills$: Observable<SkillsGroup[]> = this.route.data.pipe(map(r => r["data"]));
@@ -52,6 +53,7 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
   searchedSkills = signal<Skill[]>([]);
 
   stageSubmitting = signal(false);
+  skipSubmitting = signal(false);
 
   subscriptions$ = signal<Subscription[]>([]);
 
@@ -67,8 +69,26 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
     this.subscriptions$().push(fv$, formValueChange$);
   }
 
+  ngAfterViewInit(): void {
+    const skillsProfile$ = this.onboardingService.formValue$.subscribe(fv => {
+      this.stageForm.patchValue({ skills: fv.skills });
+    });
+
+    this.cdref.detectChanges();
+
+    skillsProfile$ && this.subscriptions$().push(skillsProfile$);
+  }
+
   ngOnDestroy(): void {
     this.subscriptions$().forEach($ => $.unsubscribe());
+  }
+
+  onSkipRegistration(): void {
+    if (!this.validationService.getFormValidation(this.stageForm)) {
+      return;
+    }
+
+    this.completeRegistration(null);
   }
 
   onSubmit(): void {
@@ -83,10 +103,9 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
     this.authService
       .saveProfile({ skillsIds: skills.map(skill => skill.id) })
       .pipe(concatMap(() => this.authService.setOnboardingStage(2)))
-      .subscribe(() => {
-        this.router
-          .navigateByUrl("/office/onboarding/stage-3")
-          .then(() => console.debug("Route changed from OnboardingStageOneComponent"));
+      .subscribe({
+        next: () => this.authService.setOnboardingStage(3),
+        error: () => this.stageSubmitting.set(false),
       });
   }
 
@@ -122,5 +141,14 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
     this.skillsService
       .getSkillsInline(query, 1000, 0)
       .subscribe(({ results }) => this.searchedSkills.set(results));
+  }
+
+  private completeRegistration(stage: number | null): void {
+    this.skipSubmitting.set(true);
+    this.onboardingService.setFormValue(this.stageForm.value);
+    this.authService.setOnboardingStage(stage).subscribe(() => {
+      this.router.navigateByUrl(stage !== null ? "/office/onboarding/stage-3" : "/office/feed");
+    });
+    this.skipSubmitting.set(false);
   }
 }

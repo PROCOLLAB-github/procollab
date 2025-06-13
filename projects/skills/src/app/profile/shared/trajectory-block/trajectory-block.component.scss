@@ -1,0 +1,104 @@
+@use "styles/typography";
+@use "styles/responsive";
+
+.trajectory {
+  position: relative;
+  width: 100%;
+  height: 130px;
+  overflow: hidden;
+  white-space: nowrap;
+  border-radius: 15px;
+  transition: ease 0.3s;
+  cursor: pointer;
+  // padding: 50px 50px 50px 18px;
+  // background-color: var(--white);
+
+  &:hover {
+    box-shadow: 0 0 6px var(--gray);
+  }
+
+  @include responsive.apply-desktop {
+    height: 100px;
+  }
+
+  &__image {
+    height: 100%;
+    object-fit: cover;
+    
+    @include responsive.apply-desktop {
+      width: 100%;
+      height: auto;
+      object-fit: fill;
+    }
+  }
+
+  ::ng-deep {
+    app-button {
+      position: absolute;
+      width: 30%;
+      top: 17%;
+      right: 0%;
+
+      @include responsive.apply-desktop {
+        top: 30%;
+        right: 3%;
+        width: 20%;
+      }
+    }
+  }
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: calc(100vh - 40px);
+  padding: 20px 0 50px;
+  overflow-y: auto;
+
+  @include responsive.apply-desktop {
+    padding: 20px 0 60px;
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__title {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: var(--black);
+    text-align: center;
+    inline-size: 280px;
+
+    @include typography.heading-3;
+
+    @include responsive.apply-desktop {
+      inline-size: 500px;
+    }
+  }
+
+  &__text {
+    margin-bottom: 24px;
+    color: var(--grey-for-text);
+  }
+
+  app-button {
+    width: 70%;
+
+    @include responsive.apply-desktop {
+      width: 40%;
+    }
+  }
+}

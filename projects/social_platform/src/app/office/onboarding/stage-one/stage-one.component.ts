@@ -1,8 +1,8 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit, signal } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { map, Observable, Subscription, take } from "rxjs";
+import { concatMap, map, Observable, Subscription, take } from "rxjs";
 import { AuthService } from "@auth/services";
 import { ControlErrorPipe, ValidationService } from "@corelib";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -43,11 +43,12 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
     private readonly validationService: ValidationService,
     private readonly specsService: SpecializationsService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly cdref: ChangeDetectorRef
   ) {}
 
   stageForm = this.nnFb.group({
-    speciality: ["", Validators.required],
+    speciality: [""],
   });
 
   nestedSpecializations$: Observable<SpecializationsGroup[]> = this.route.data.pipe(
@@ -57,6 +58,7 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
   inlineSpecializations = signal<Specialization[]>([]);
 
   stageSubmitting = signal(false);
+  skipSubmitting = signal(false);
 
   errorMessage = ErrorMessage;
 
@@ -76,8 +78,26 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
     this.subscriptions$().push(formValueState$, formValueChange$);
   }
 
+  ngAfterViewInit(): void {
+    const specialityProfile$ = this.onboardingService.formValue$.subscribe(fv => {
+      this.stageForm.patchValue({ speciality: fv.speciality });
+    });
+
+    this.cdref.detectChanges();
+
+    specialityProfile$ && this.subscriptions$().push(specialityProfile$);
+  }
+
   ngOnDestroy(): void {
     this.subscriptions$().forEach($ => $.unsubscribe());
+  }
+
+  onSkipRegistration(): void {
+    if (!this.validationService.getFormValidation(this.stageForm)) {
+      return;
+    }
+
+    this.completeRegistration(null);
   }
 
   onSubmit(): void {
@@ -87,11 +107,13 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
 
     this.stageSubmitting.set(true);
 
-    this.authService.saveProfile(this.stageForm.value).subscribe(() => {
-      this.router
-        .navigateByUrl("/office/onboarding/stage-2")
-        .then(() => console.debug("Route changed from OnboardingStageOneComponent"));
-    });
+    this.authService
+      .saveProfile(this.stageForm.value)
+      .pipe(concatMap(() => this.authService.setOnboardingStage(2)))
+      .subscribe({
+        next: () => this.completeRegistration(2),
+        error: () => this.stageSubmitting.set(false),
+      });
   }
 
   onSelectSpec(speciality: Specialization): void {
@@ -105,5 +127,14 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
       .subscribe(({ results }) => {
         this.inlineSpecializations.set(results);
       });
+  }
+
+  private completeRegistration(stage: number | null): void {
+    this.skipSubmitting.set(true);
+    this.onboardingService.setFormValue(this.stageForm.value);
+    this.authService.setOnboardingStage(stage).subscribe(() => {
+      this.router.navigateByUrl(stage !== null ? "/office/onboarding/stage-2" : "/office/feed");
+    });
+    this.skipSubmitting.set(false);
   }
 }

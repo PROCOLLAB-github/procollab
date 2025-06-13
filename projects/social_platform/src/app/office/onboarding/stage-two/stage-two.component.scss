@@ -75,6 +75,21 @@
     grid-column: 1/2;
     order: 3;
     margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+      
+      :first-child {
+        width: 100%;
+      }
+  
+      :last-child {
+        width: 60%;
+      }
+    }
   }
 
   &__skills-groups {
