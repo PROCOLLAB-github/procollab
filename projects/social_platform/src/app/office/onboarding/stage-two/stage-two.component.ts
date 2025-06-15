@@ -88,7 +88,7 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.completeRegistration(null);
+    this.completeRegistration(3);
   }
 
   onSubmit(): void {
@@ -143,11 +143,11 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
       .subscribe(({ results }) => this.searchedSkills.set(results));
   }
 
-  private completeRegistration(stage: number | null): void {
+  private completeRegistration(stage: number): void {
     this.skipSubmitting.set(true);
     this.onboardingService.setFormValue(this.stageForm.value);
     this.authService.setOnboardingStage(stage).subscribe(() => {
-      this.router.navigateByUrl(stage !== null ? "/office/onboarding/stage-3" : "/office/feed");
+      this.router.navigateByUrl("/office/onboarding/stage-3");
     });
     this.skipSubmitting.set(false);
   }
