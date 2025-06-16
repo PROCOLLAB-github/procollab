@@ -1,7 +1,6 @@
 /** @format */
 
-import { AsyncPipe } from "@angular/common";
-import { HttpErrorResponse } from "@angular/common/http";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -52,6 +51,10 @@ import { Observable, Subscription, concatMap, distinctUntilChanged, filter, map,
 import { InviteCardComponent } from "../../shared/invite-card/invite-card.component";
 import { VacancyCardComponent } from "../../shared/vacancy-card/vacancy-card.component";
 import { LinkCardComponent } from "@office/shared/link-card/link-card.component";
+import { navItems } from "projects/core/src/consts/navProjectItems";
+import { experienceList } from "projects/core/src/consts/list-experience";
+import { formatList } from "projects/core/src/consts/list-format";
+import { scheludeList } from "projects/core/src/consts/list-schelude";
 
 @Component({
   selector: "app-edit",
@@ -60,6 +63,7 @@ import { LinkCardComponent } from "@office/shared/link-card/link-card.component"
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    CommonModule,
     RouterModule,
     AvatarControlComponent,
     InputComponent,
@@ -116,13 +120,13 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.vacancyForm = this.fb.group({
-      role: ["", [Validators.required]],
-      skills: [[], Validators.required],
-      description: ["", Validators.required],
-      requiredExperience: ["", Validators.required],
-      workFormat: ["", Validators.required],
-      salary: ["", [Validators.pattern("^(\\d{1,3}( \\d{3})*|\\d+)$")]],
-      workSchedule: ["", Validators.required],
+      role: [null],
+      skills: [[]],
+      description: [""],
+      requiredExperience: [null],
+      workFormat: [null],
+      salary: [""],
+      workSchedule: [null],
     });
 
     this.inviteForm = this.fb.group({
@@ -309,102 +313,13 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   subscriptions: (Subscription | undefined)[] = [];
 
-  navItems = [
-    {
-      step: "main",
-      src: "/assets/images/projects/edit/main.svg",
-      label: "Основные данные",
-    },
-    {
-      step: "contacts",
-      src: "/assets/images/projects/edit/contacts.svg",
-      label: "Контакты",
-    },
-    {
-      step: "achievements",
-      src: "/assets/images/projects/edit/achievements.svg",
-      label: "Достижения",
-    },
-    {
-      step: "team",
-      src: "/assets/images/projects/edit/members.svg",
-      label: "Участники",
-    },
-    {
-      step: "vacancies",
-      src: "/assets/images/projects/edit/vacancies.svg",
-      label: "Вакансии",
-    },
-  ];
+  readonly navItems = navItems;
 
-  experienceList = [
-    {
-      id: 0,
-      value: "без опыта",
-      label: "Без опыта",
-    },
-    {
-      id: 1,
-      value: "до 1 года",
-      label: "До 1 года",
-    },
-    {
-      id: 2,
-      value: "от 1 года до 3 лет",
-      label: "От 1 года до 3 лет",
-    },
-    {
-      id: 3,
-      value: "от 3 лет и более",
-      label: "От 3 лет и более",
-    },
-  ];
+  readonly experienceList = experienceList;
 
-  formatList = [
-    {
-      id: 0,
-      value: "удаленная работа",
-      label: "Удаленная работа",
-    },
-    {
-      id: 1,
-      value: "работа в офисе",
-      label: "Работа в офисе",
-    },
-    {
-      id: 2,
-      value: "смешанная",
-      label: "Смешанная",
-    },
-  ];
+  readonly formatList = formatList;
 
-  scheludeList = [
-    {
-      id: 0,
-      value: "полный рабочий день",
-      label: "Полный рабочий день",
-    },
-    {
-      id: 1,
-      value: "сменный график",
-      label: "Сменный график",
-    },
-    {
-      id: 2,
-      value: "гибкий график",
-      label: "Гибкий график",
-    },
-    {
-      id: 3,
-      value: "частичная занятость",
-      label: "Частичная занятость",
-    },
-    {
-      id: 4,
-      value: "стажировка",
-      label: "Стажировка",
-    },
-  ];
+  readonly scheludeList = scheludeList;
 
   profileId: number = this.route.snapshot.params["projectId"];
 
@@ -427,6 +342,30 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   onEditClicked = signal(false);
 
   submitVacancy(): void {
+    [
+      "role",
+      "skills",
+      "description",
+      "requiredExperience",
+      "workFormat",
+      "salary",
+      "workSchedule",
+    ].forEach(name => this.vacancyForm.get(name)?.clearValidators());
+
+    ["role", "skills", "requiredExperience", "workFormat", "workSchedule"].forEach(name =>
+      this.vacancyForm.get(name)?.setValidators([Validators.required])
+    );
+
+    this.vacancyForm
+      .get("salary")
+      ?.setValidators([Validators.pattern("^(\\d{1,3}( \\d{3})*|\\d+)$")]);
+
+    ["role", "skills", "requiredExperience", "workFormat", "salary", "workSchedule"].forEach(name =>
+      this.vacancyForm.get(name)?.updateValueAndValidity()
+    );
+
+    ["role", "skills"].forEach(name => this.vacancyForm.get(name)?.markAsTouched());
+
     this.vacancySubmitInitiated = true;
 
     if (!this.validationService.getFormValidation(this.vacancyForm)) return;
@@ -435,14 +374,31 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     const vacancy = {
       ...this.vacancyForm.value,
       requiredSkillsIds: this.vacancyForm.value.skills.map((s: Skill) => s.id),
-      salary: +this.vacancyForm.get("salary")?.value,
+      salary:
+        typeof this.vacancyForm.get("salary")?.value === "string"
+          ? +this.vacancyForm.get("salary")?.value
+          : null,
     };
     this.vacancyService
       .postVacancy(Number(this.route.snapshot.paramMap.get("projectId")), vacancy)
       .subscribe({
         next: vacancy => {
           this.vacancies.push(vacancy);
-          this.vacancyForm.reset();
+          [
+            "role",
+            "skills",
+            "description",
+            "requiredExperience",
+            "workFormat",
+            "salary",
+            "workSchedule",
+          ].forEach(name => {
+            this.vacancyForm.get(name)?.reset();
+            this.vacancyForm.get(name)?.setValue("");
+            this.vacancyForm.get(name)?.clearValidators();
+            this.vacancyForm.get(name)?.markAsPristine();
+            this.vacancyForm.get(name)?.updateValueAndValidity();
+          });
           this.vacancyIsSubmitting = false;
         },
         error: () => {
@@ -489,7 +445,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       description: vacancyItem.description,
       requiredExperience: vacancyItem.requiredExperience,
       workFormat: vacancyItem.workFormat,
-      salary: vacancyItem.salary,
+      salary: vacancyItem.salary ?? null,
       workSchedule: vacancyItem.workSchedule,
     });
 

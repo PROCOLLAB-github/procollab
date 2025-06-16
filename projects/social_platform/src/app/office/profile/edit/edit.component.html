@@ -206,7 +206,7 @@
         </div>
       </div>
 
-      <div class="profile__row education__block">
+      <div class="profile__row education__block" style="margin-top: 12px !important">
         @if (profileForm.get("city"); as city) {
         <fieldset>
           <label for="city" class="field-label">Город</label>
@@ -318,7 +318,7 @@
           <label for="description" class="field-label">Направление</label>
           <app-input
             [error]="description | controlError"
-            placeholder="Востоковедение и Африканистика"
+            placeholder="Бизнес информатика"
             formControlName="description"
           ></app-input>
           @if (description | controlError: "required") {
@@ -365,8 +365,16 @@
       </div>
 
       <div class="profile__row education__block">
-        <app-button class="profile__add-education" (click)="addEducation()">
-          <span>Добавить новое образование</span>
+        <app-button
+          [disabled]="!isEducationDirty"
+          [ngStyle]="{
+            opacity: !isEducationDirty ? '0.6' : '1',
+            cursor: !isEducationDirty ? 'not-allowed' : 'pointer'
+          }"
+          class="profile__add-education"
+          (click)="addEducation()"
+        >
+          <span>Добавить образование</span>
           <i appIcon icon="plus" appSquare="14"></i>
         </app-button>
 
@@ -378,12 +386,10 @@
               {{ educationItem.organizationName }}
 
               @if(educationItem.entryYear && educationItem.completionYear) {
-              {{ educationItem.entryYear }} - {{ educationItem.completionYear }}
-              } @else if (educationItem.entryYear && !educationItem.completionYear) {
-              {{ educationItem.entryYear }}
-              } @else if (!educationItem.entryYear && educationItem.completionYear){
-              {{ educationItem.completionYear }}
-              }
+              {{ educationItem.entryYear }} год - {{ educationItem.completionYear }} год } @else if
+              (educationItem.entryYear && !educationItem.completionYear) {
+              {{ educationItem.entryYear }} год } @else if (!educationItem.entryYear &&
+              educationItem.completionYear){ {{ educationItem.completionYear }} год }
 
               {{ educationItem.description }} {{ educationItem.educationStatus }}
               {{ educationItem.educationLevel }}
@@ -496,7 +502,15 @@
       </div>
 
       <div class="profile__row education__block">
-        <app-button class="profile__add-education" (click)="addWork()">
+        <app-button
+          [disabled]="!isWorkDirty"
+          [ngStyle]="{
+            opacity: !isWorkDirty ? '0.6' : '1',
+            cursor: !isWorkDirty ? 'not-allowed' : 'pointer'
+          }"
+          class="profile__add-education"
+          (click)="addWork()"
+        >
           <span>Добавить место работы</span>
           <i appIcon icon="plus" appSquare="14"></i>
         </app-button>
@@ -508,12 +522,10 @@
             <p class="text-body-16 education__text">
               {{ workItem.organizationName }}
               @if(workItem.entryYear && workItem.completionYear) {
-              {{ workItem.entryYear }} - {{ workItem.completionYear }}
-              } @else if (workItem.entryYear && !workItem.completionYear) {
-              {{ workItem.entryYear }}
-              } @else if (!workItem.entryYear && workItem.completionYear){
-              {{ workItem.completionYear }}
-              }
+              {{ workItem.entryYear }} год - {{ workItem.completionYear }} год } @else if
+              (workItem.entryYear && !workItem.completionYear) { {{ workItem.entryYear }} год }
+              @else if (!workItem.entryYear && workItem.completionYear){
+              {{ workItem.completionYear }} год }
               {{ workItem.description }}
               {{ workItem.jobPosition }}
             </p>
@@ -530,7 +542,7 @@
         <div class="education__first-row">
           <ng-container formArrayName="achievements">
             <ul>
-              @for (control of achievements.controls; let i = $index; track i) {
+              @for (control of achievements.controls; track control.value.id; let i = $index) {
               <li class="profile__achievement">
                 <form [formGroupName]="i" class="achievement">
                   <div class="achievement__first-row">
@@ -580,7 +592,7 @@
         </div>
       </div>
       <app-button class="profile__add-achievement" (click)="addAchievement()">
-        <span>Добавить новое достижение</span>
+        <span>Добавить достижение</span>
         <i appIcon icon="plus" appSquare="14"></i>
       </app-button>
       } @if (editingStep === 'skills') {
@@ -668,7 +680,13 @@
           </div>
 
           <app-button
-            [ariaDisabled]="languageItems().length === 4 || userLanguages.length === 4"
+            [disabled]="
+              !isLanguageDirty || languageItems().length === 4 || userLanguages.length === 4
+            "
+            [ngStyle]="{
+              opacity: !isLanguageDirty ? '0.6' : '1',
+              cursor: !isLanguageDirty ? 'not-allowed' : 'pointer'
+            }"
             class="profile__add-education"
             (click)="addLanguage()"
           >
@@ -763,12 +781,34 @@
     </div>
     <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
       <app-button
-        [disabled]="editEducationClick || editWorkClick || editLanguageClick"
+        [disabled]="
+          editEducationClick ||
+          editWorkClick ||
+          editLanguageClick ||
+          isEducationDirty ||
+          isWorkDirty ||
+          isLanguageDirty
+        "
         [loader]="profileFormSubmitting"
         [ngStyle]="{
-          opacity: editEducationClick || editWorkClick || editLanguageClick ? '0.6' : '1',
+          opacity:
+            editEducationClick ||
+            editWorkClick ||
+            editLanguageClick ||
+            isEducationDirty ||
+            isWorkDirty ||
+            isLanguageDirty
+              ? '0.6'
+              : '1',
           cursor:
-            editEducationClick || editWorkClick || editLanguageClick ? 'not-allowed' : 'pointer'
+            editEducationClick ||
+            editWorkClick ||
+            editLanguageClick ||
+            isEducationDirty ||
+            isWorkDirty ||
+            isLanguageDirty
+              ? 'not-allowed'
+              : 'pointer'
         }"
         customTypographyClass="text-body-12"
         (click)="saveProfile()"
@@ -792,7 +832,7 @@
         icon="cross"
         class="cancel__cross"
       ></i>
-      <p class="cancel__title text-bold-body-16">Произошла ошибка при редактированиия!</p>
+      <p class="cancel__title text-bold-body-16">Произошла ошибка при редактировании!</p>
     </div>
     <p class="text-body-14 cancel__text">{{ isModalErrorSkillChooseText() }}.</p>
   </div>

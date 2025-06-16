@@ -7,6 +7,7 @@ import { FileService } from "@core/services/file.service";
 import { catchError, concatMap, map, of } from "rxjs";
 import { IconComponent } from "@ui/components";
 import { LoaderComponent } from "../loader/loader.component";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-avatar-control",
@@ -20,7 +21,7 @@ import { LoaderComponent } from "../loader/loader.component";
     },
   ],
   standalone: true,
-  imports: [LoaderComponent, IconComponent],
+  imports: [LoaderComponent, IconComponent, CommonModule],
 })
 export class AvatarControlComponent implements OnInit, ControlValueAccessor {
   constructor(private fileService: FileService) {}

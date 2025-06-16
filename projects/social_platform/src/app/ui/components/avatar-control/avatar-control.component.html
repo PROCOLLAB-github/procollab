@@ -1,6 +1,14 @@
 <!-- @format -->
 
-<div class="control" [style.width]="size + 'px'" [style.height]="size + 'px'">
+<div
+  [ngStyle]="{
+  border: type === 'project' ? '3px solid var(--accent)' : '3px solid var(--accent)',
+  borderRadius: type === 'project' ? '50%' : '0%',
+}"
+  class="control"
+  [style.width]="size + 'px'"
+  [style.height]="size + 'px'"
+>
   <input
     [id]="controlId"
     hidden

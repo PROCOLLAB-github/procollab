@@ -7,7 +7,6 @@ import {
   OnDestroy,
   OnInit,
   signal,
-  ViewChild,
 } from "@angular/core";
 import { AuthService } from "@auth/services";
 import {
@@ -21,7 +20,7 @@ import {
 import { ErrorMessage } from "@error/models/error-message";
 import { ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
 import { ControlErrorPipe, ValidationService } from "projects/core";
-import { concatMap, first, map, noop, Observable, skip, Subscription, tap } from "rxjs";
+import { concatMap, first, map, noop, Observable, skip, Subscription } from "rxjs";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
@@ -29,7 +28,6 @@ import { NavService } from "@services/nav.service";
 import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button.directive";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
-import { TagComponent } from "@ui/components/tag/tag.component";
 import { AsyncPipe, CommonModule, Location } from "@angular/common";
 import { Specialization } from "@office/models/specialization";
 import { SpecializationsService } from "@office/services/specializations.service";
@@ -44,6 +42,8 @@ import { navItems } from "projects/core/src/consts/navProfileItems";
 import { yearList } from "projects/core/src/consts/list-years";
 import { educationUserLevel, educationUserType } from "projects/core/src/consts/list-education";
 import { languageLevelsList, languageNamesList } from "projects/core/src/consts/list-language";
+import { transformYearStringToNumber } from "@utils/transformYear";
+import { yearRangeValidators } from "@utils/yearRangeValidators";
 
 dayjs.extend(cpf);
 
@@ -54,10 +54,10 @@ dayjs.extend(cpf);
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    CommonModule,
     InputComponent,
     SelectComponent,
     IconComponent,
-    CommonModule,
     ButtonComponent,
     AvatarControlComponent,
     TextareaComponent,
@@ -93,7 +93,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       userType: [0],
       birthday: ["", [Validators.required]],
       city: [""],
-      phoneNumber: ["", Validators.required],
+      phoneNumber: [""],
       additionalRole: [null],
 
       // education
@@ -102,7 +102,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       completionYear: [null],
       description: [null],
       educationLevel: [null],
-      educationStatus: [null],
+      educationStatus: [""],
 
       // language
       language: [null],
@@ -118,11 +118,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       entryYearWork: [null],
       completionYearWork: [null],
       descriptionWork: [null],
-      jobPosition: [null],
+      jobPosition: [""],
 
       // skills
       speciality: ["", [Validators.required]],
-      skills: [[], [Validators.required]],
+      skills: [[]],
       achievements: this.fb.array([]),
       avatar: [""],
       aboutMe: [""],
@@ -176,27 +176,37 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       this.workExperience.clear();
       profile.workExperience.forEach(work => {
         this.workExperience.push(
-          this.fb.group({
-            organizationName: work.organizationName,
-            entryYear: work.entryYear,
-            completionYear: work.completionYear,
-            description: work.description,
-            jobPosition: work.jobPosition,
-          })
+          this.fb.group(
+            {
+              organizationName: work.organizationName,
+              entryYear: work.entryYear,
+              completionYear: work.completionYear,
+              description: work.description,
+              jobPosition: work.jobPosition,
+            },
+            {
+              validators: yearRangeValidators("entryYear", "completionYear"),
+            }
+          )
         );
       });
 
       this.education.clear();
       profile.education.forEach(edu => {
         this.education.push(
-          this.fb.group({
-            organizationName: edu.organizationName,
-            entryYear: edu.entryYear,
-            completionYear: edu.completionYear,
-            description: edu.description,
-            educationStatus: edu.educationStatus,
-            educationLevel: edu.educationLevel,
-          })
+          this.fb.group(
+            {
+              organizationName: edu.organizationName,
+              entryYear: edu.entryYear,
+              completionYear: edu.completionYear,
+              description: edu.description,
+              educationStatus: edu.educationStatus,
+              educationLevel: edu.educationLevel,
+            },
+            {
+              validators: yearRangeValidators("entryYear", "completionYear"),
+            }
+          )
         );
       });
 
@@ -353,6 +363,34 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.profileForm.get("userLanguages") as FormArray;
   }
 
+  get isEducationDirty(): boolean {
+    const f = this.profileForm;
+    return [
+      "organizationName",
+      "entryYear",
+      "completionYear",
+      "description",
+      "educationStatus",
+      "educationLevel",
+    ].some(name => f.get(name)?.dirty);
+  }
+
+  get isWorkDirty(): boolean {
+    const f = this.profileForm;
+    return [
+      "organization",
+      "entryYearWork",
+      "completionYearWork",
+      "descriptionWork",
+      "jobPosition",
+    ].some(name => f.get(name)?.dirty);
+  }
+
+  get isLanguageDirty(): boolean {
+    const f = this.profileForm;
+    return ["language", "languageLevel"].some(name => f.get(name)?.dirty);
+  }
+
   errorMessage = ErrorMessage;
 
   roles: Observable<SelectComponent["options"]> = this.authService.changeableRoles.pipe(
@@ -377,49 +415,75 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addEducation() {
+    ["organizationName", "educationStatus"].forEach(name =>
+      this.profileForm.get(name)?.clearValidators()
+    );
+    ["organizationName", "educationStatus"].forEach(name =>
+      this.profileForm.get(name)?.setValidators([Validators.required])
+    );
+    ["organizationName", "educationStatus"].forEach(name =>
+      this.profileForm.get(name)?.updateValueAndValidity()
+    );
+    ["organizationName", "educationStatus"].forEach(name =>
+      this.profileForm.get(name)?.markAsTouched()
+    );
+
+    const entryYear =
+      typeof this.profileForm.get("entryYear")?.value === "string"
+        ? +this.profileForm.get("entryYear")?.value.slice(0, 5)
+        : this.profileForm.get("entryYear")?.value;
+    const completionYear =
+      typeof this.profileForm.get("completionYear")?.value === "string"
+        ? +this.profileForm.get("completionYear")?.value.slice(0, 5)
+        : this.profileForm.get("completionYear")?.value;
+
+    if (entryYear !== null && completionYear !== null && entryYear > completionYear) {
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set("Год начала обучения должен быть меньше года окончания");
+      return;
+    }
+
     const educationItem = this.fb.group({
       organizationName: this.profileForm.get("organizationName")?.value,
-      entryYear: this.profileForm.get("entryYear")?.value,
-      completionYear: this.profileForm.get("completionYear")?.value,
+      entryYear,
+      completionYear,
       description: this.profileForm.get("description")?.value,
       educationStatus: this.profileForm.get("educationStatus")?.value,
       educationLevel: this.profileForm.get("educationLevel")?.value,
     });
 
-    const educationItemFilled = Object.values(educationItem.value).some(
-      value => value !== null && value !== ""
-    );
+    const isOrganizationValid = this.profileForm.get("organizationName")?.valid;
+    const isStatusValid = this.profileForm.get("educationStatus")?.valid;
 
-    if (educationItemFilled) {
-      if (!educationItem.get("organizationName")?.value) {
-        this.profileForm.get("organizationName")?.setValidators([Validators.required]);
-        this.profileForm.get("organizationName")?.markAsTouched();
-        this.profileForm.get("organizationName")?.updateValueAndValidity();
+    if (isOrganizationValid && isStatusValid) {
+      if (this.editIndex() !== null) {
+        this.educationItems.update(items => {
+          const updatedItems = [...items];
+          updatedItems[this.editIndex()!] = educationItem.value;
+
+          this.education.at(this.editIndex()!).patchValue(educationItem.value);
+          return updatedItems;
+        });
+        this.editIndex.set(null);
       } else {
-        if (this.editIndex() !== null) {
-          this.educationItems.update(items => {
-            const updatedItems = [...items];
-            updatedItems[this.editIndex()!] = educationItem.value;
-
-            this.education.at(this.editIndex()!).patchValue(educationItem.value);
-            return updatedItems;
-          });
-          this.editIndex.set(null);
-        } else {
-          this.educationItems.update(items => [...items, educationItem.value]);
-          this.education.push(educationItem);
-        }
-        this.profileForm.get("organizationName")?.clearValidators();
-        this.profileForm.get("organizationName")?.markAsPristine();
-        this.profileForm.get("organizationName")?.updateValueAndValidity();
-
-        this.profileForm.get("organizationName")?.reset();
-        this.profileForm.get("entryYear")?.setValue("");
-        this.profileForm.get("completionYear")?.setValue("");
-        this.profileForm.get("description")?.setValue("");
-        this.profileForm.get("educationStatus")?.setValue("");
-        this.profileForm.get("educationLevel")?.setValue("");
+        this.educationItems.update(items => [...items, educationItem.value]);
+        this.education.push(educationItem);
       }
+
+      [
+        "organizationName",
+        "entryYear",
+        "completionYear",
+        "description",
+        "educationStatus",
+        "educationLevel",
+      ].forEach(name => {
+        this.profileForm.get(name)?.reset();
+        this.profileForm.get(name)?.setValue("");
+        this.profileForm.get(name)?.clearValidators();
+        this.profileForm.get(name)?.markAsPristine();
+        this.profileForm.get(name)?.updateValueAndValidity();
+      });
     }
     this.editEducationClick = false;
   }
@@ -429,13 +493,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     const educationItem = this.education.value[index];
 
     this.yearListEducation.forEach(entryYearWork => {
-      if (entryYearWork.value === educationItem.entryYear) {
+      if (transformYearStringToNumber(entryYearWork.value as string) === educationItem.entryYear) {
         this.selectedEntryYearEducationId.set(entryYearWork.id);
       }
     });
 
     this.yearListEducation.forEach(completionYearWork => {
-      if (completionYearWork.value === educationItem.completionYear) {
+      if (
+        transformYearStringToNumber(completionYearWork.value as string) ===
+        educationItem.completionYear
+      ) {
         this.selectedComplitionYearEducationId.set(completionYearWork.id);
       }
     });
@@ -470,48 +537,69 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addWork() {
+    ["organization", "jobPosition"].forEach(name => this.profileForm.get(name)?.clearValidators());
+    ["organization", "jobPosition"].forEach(name =>
+      this.profileForm.get(name)?.setValidators([Validators.required])
+    );
+    ["organization", "jobPosition"].forEach(name =>
+      this.profileForm.get(name)?.updateValueAndValidity()
+    );
+    ["organization", "jobPosition"].forEach(name => this.profileForm.get(name)?.markAsTouched());
+
+    const entryYear =
+      typeof this.profileForm.get("entryYearWork")?.value === "string"
+        ? this.profileForm.get("entryYearWork")?.value.slice(0, 5)
+        : this.profileForm.get("entryYearWork")?.value;
+    const completionYear =
+      typeof this.profileForm.get("completionYearWork")?.value === "string"
+        ? this.profileForm.get("completionYearWork")?.value.slice(0, 5)
+        : this.profileForm.get("completionYearWork")?.value;
+
+    if (entryYear !== null && completionYear !== null && entryYear > completionYear) {
+      this.isModalErrorSkillsChoose.set(true);
+      this.isModalErrorSkillChooseText.set("Год начала работы должен быть меньше года окончания");
+      return;
+    }
+
     const workItem = this.fb.group({
       organizationName: this.profileForm.get("organization")?.value,
-      entryYear: this.profileForm.get("entryYearWork")?.value,
-      completionYear: this.profileForm.get("completionYearWork")?.value,
+      entryYear,
+      completionYear,
       description: this.profileForm.get("descriptionWork")?.value,
       jobPosition: this.profileForm.get("jobPosition")?.value,
     });
 
-    const workItemFilled = Object.values(workItem.value).some(
-      value => value !== null && value !== ""
-    );
+    const isOrganizationValid = this.profileForm.get("organization")?.valid;
+    const isPositionValid = this.profileForm.get("jobPosition")?.valid;
 
-    if (workItemFilled) {
-      if (!workItem.get("organizationName")?.value) {
-        this.profileForm.get("organization")?.setValidators([Validators.required]);
-        this.profileForm.get("organization")?.markAsTouched();
-        this.profileForm.get("organization")?.updateValueAndValidity();
+    if (isOrganizationValid && isPositionValid) {
+      if (this.editIndex() !== null) {
+        this.workItems.update(items => {
+          const updatedItems = [...items];
+          updatedItems[this.editIndex()!] = workItem.value;
+
+          this.workExperience.at(this.editIndex()!).patchValue(workItem.value);
+          return updatedItems;
+        });
+        this.editIndex.set(null);
       } else {
-        if (this.editIndex() !== null) {
-          this.workItems.update(items => {
-            const updatedItems = [...items];
-            updatedItems[this.editIndex()!] = workItem.value;
-
-            this.workExperience.at(this.editIndex()!).patchValue(workItem.value);
-            return updatedItems;
-          });
-          this.editIndex.set(null);
-        } else {
-          this.workItems.update(items => [...items, workItem.value]);
-          this.workExperience.push(workItem);
-        }
-
-        this.profileForm.get("organization")?.clearValidators();
-        this.profileForm.get("organization")?.markAsPristine();
-        this.profileForm.get("organization")?.updateValueAndValidity();
-
-        this.profileForm.get("organization")?.reset();
-        this.profileForm.get("entryYearWork")?.setValue("");
-        this.profileForm.get("completionYearWork")?.setValue("");
-        this.profileForm.get("descriptionWork")?.setValue("");
-        this.profileForm.get("jobPosition")?.setValue("");
+        this.workItems.update(items => [...items, workItem.value]);
+        this.workExperience.push(workItem);
       }
+
+      [
+        "organization",
+        "entryYearWork",
+        "completionYearWork",
+        "descriptionWork",
+        "jobPosition",
+      ].forEach(name => {
+        this.profileForm.get(name)?.reset();
+        this.profileForm.get(name)?.setValue("");
+        this.profileForm.get(name)?.clearValidators();
+        this.profileForm.get(name)?.markAsPristine();
+        this.profileForm.get(name)?.updateValueAndValidity();
+      });
     }
     this.editWorkClick = false;
   }
@@ -523,8 +611,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     if (workItem) {
       this.yearListEducation.forEach(entryYearWork => {
         if (
-          entryYearWork.value === workItem.entryYearWork ||
-          entryYearWork.value === workItem.entryYear
+          transformYearStringToNumber(entryYearWork.value as string) === workItem.entryYearWork ||
+          transformYearStringToNumber(entryYearWork.value as string) === workItem.entryYear
         ) {
           this.selectedEntryYearWorkId.set(entryYearWork.id);
         }
@@ -532,8 +620,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.yearListEducation.forEach(complitionYearWork => {
         if (
-          complitionYearWork.value === workItem.completionYearWork ||
-          complitionYearWork.value === workItem.completionYear
+          transformYearStringToNumber(complitionYearWork.value as string) ===
+            workItem.completionYearWork ||
+          transformYearStringToNumber(complitionYearWork.value as string) ===
+            workItem.completionYear
         ) {
           this.selectedComplitionYearWorkId.set(complitionYearWork.id);
         }
@@ -557,6 +647,15 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addLanguage() {
+    ["language", "languageLevel"].forEach(name => this.profileForm.get(name)?.clearValidators());
+    ["language", "languageLevel"].forEach(name =>
+      this.profileForm.get(name)?.setValidators([Validators.required])
+    );
+    ["language", "languageLevel"].forEach(name =>
+      this.profileForm.get(name)?.updateValueAndValidity()
+    );
+    ["language", "languageLevel"].forEach(name => this.profileForm.get(name)?.markAsTouched());
+
     const languageItem = this.fb.group({
       language: this.profileForm.get("language")?.value,
       languageLevel: this.profileForm.get("languageLevel")?.value,
@@ -653,6 +752,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         ? dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD")
         : undefined,
       skillsIds: this.profileForm.value.skills.map((s: Skill) => s.id),
+      phoneNumber:
+        typeof this.profileForm.value.phoneNumber === "string"
+          ? this.profileForm.value.phoneNumber.replace(/^([87])/, "+7")
+          : this.profileForm.value.phoneNumber,
     };
 
     this.authService
@@ -668,7 +771,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         error: error => {
           this.profileFormSubmitting = false;
           this.isModalErrorSkillsChoose.set(true);
-          this.isModalErrorSkillChooseText.set(error.error[0]);
+          if (error.error.phone_number) {
+            this.isModalErrorSkillChooseText.set(error.error.phone_number[0]);
+          } else {
+            this.isModalErrorSkillChooseText.set(error.error[0]);
+          }
         },
       });
   }

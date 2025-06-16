@@ -198,7 +198,7 @@
 
         } @else if (editingStep === "contacts") { @if(projectForm.get('link'); as link){
         <fieldset class="project__left">
-          <label class="field-label">Ссылка на проект</label>
+          <label class="field-label">Ссылка на контакты</label>
           <app-input
             class="edit-link__input"
             formControlName="link"
@@ -439,10 +439,10 @@
                   <app-input
                     id="salary"
                     formControlName="salary"
-                    [error]="(salary | controlError) && projSubmitInitiated"
+                    [error]="(salary | controlError) && vacancySubmitInitiated"
                     placeholder="Заработная плата"
                   ></app-input>
-                  @if ((salary | controlError: "required") || projSubmitInitiated) {
+                  @if ((salary | controlError: "required") && vacancySubmitInitiated) {
                   <div class="text-body-14 error">
                     {{ errorMessage.VALIDATION_REQUIRED }}
                   </div>
