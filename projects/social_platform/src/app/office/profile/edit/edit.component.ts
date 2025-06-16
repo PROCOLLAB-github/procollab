@@ -739,6 +739,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   saveProfile(): void {
     if (!this.validationService.getFormValidation(this.profileForm) || this.profileFormSubmitting) {
+      this.isModalErrorSkillsChoose.set(true);
       return;
     }
 

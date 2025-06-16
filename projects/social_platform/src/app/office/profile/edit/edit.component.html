@@ -43,6 +43,7 @@
             <app-avatar-control
               id="avatar"
               formControlName="avatar"
+              type="profile"
               [size]="180"
               [error]="avatar | controlError"
             ></app-avatar-control>
@@ -834,7 +835,15 @@
       ></i>
       <p class="cancel__title text-bold-body-16">Произошла ошибка при редактировании!</p>
     </div>
+    @if (isModalErrorSkillChooseText()) {
     <p class="text-body-14 cancel__text">{{ isModalErrorSkillChooseText() }}.</p>
+    } @else {
+    <p class="text-body-14 cancel__text">
+      Для публикации профиля, нужно заполнить все <strong>обязательные поля</strong> (они будут
+      <strong>подсвечены&nbsp;<span>красным</span></strong
+      >).
+    </p>
+    }
   </div>
 </app-modal>
 

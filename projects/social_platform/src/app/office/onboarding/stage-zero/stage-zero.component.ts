@@ -579,6 +579,7 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     if (!this.validationService.getFormValidation(this.stageForm)) {
+      this.achievements.markAllAsTouched();
       return;
     }
 

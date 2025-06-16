@@ -55,7 +55,6 @@
         <fieldset class="years__left">
           <label for="entryYear" class="field-label">Дата начала</label>
           <app-select
-            [selectedId]="selectedEntryYearEducationId()"
             formControlName="entryYear"
             placeholder="2023 год"
             [options]="yearListEducation"
@@ -73,7 +72,6 @@
         <fieldset class="years__right">
           <label for="completionYear" class="field-label">Дата окончания</label>
           <app-select
-            [selectedId]="selectedComplitionYearEducationId()"
             formControlName="completionYear"
             placeholder="2023 год"
             [options]="yearListEducation.slice(5)"
@@ -167,7 +165,7 @@
           class="page__add-education"
           (click)="addEducation()"
         >
-          <span>Добавить образование</span>
+          <span>{{ editEducationClick ? "Созранить изменения" : "Добавить образование" }}</span>
           <i appIcon icon="plus" appSquare="14"></i>
         </app-button>
 
@@ -305,7 +303,7 @@
           class="page__add-education"
           (click)="addWork()"
         >
-          <span>Добавить место работы</span>
+          <span>{{ editWorkClick ? "Сохранить изменения" : "Добавить место работы" }}</span>
           <i appIcon icon="plus" appSquare="14"></i>
         </app-button>
 
@@ -435,7 +433,7 @@
         class="page__add-education"
         (click)="addLanguage()"
       >
-        <span>Добавить язык</span>
+        <span>{{ editLanguageClick ? "Сохранить изменения" : "Добавить язык" }}</span>
         <i appIcon icon="plus" appSquare="14"></i>
       </app-button>
 

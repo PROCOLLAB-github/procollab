@@ -2,9 +2,8 @@
 
 <div
   [ngStyle]="{
-  border: type === 'project' ? '3px solid var(--accent)' : '3px solid var(--accent)',
-  borderRadius: type === 'project' ? '50%' : '0%',
-}"
+    border: (type === 'project' || type === 'profile') ? '3px solid var(--accent)' : 'none',
+  }"
   class="control"
   [style.width]="size + 'px'"
   [style.height]="size + 'px'"
