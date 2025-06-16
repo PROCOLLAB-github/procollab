@@ -287,7 +287,8 @@
     gap: 20px;
     margin-top: 10px;
 
-    &__future-container, &__personal-container {
+    &__future-container,
+    &__personal-container {
       display: none;
     }
 

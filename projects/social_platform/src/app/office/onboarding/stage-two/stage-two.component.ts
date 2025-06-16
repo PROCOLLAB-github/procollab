@@ -1,6 +1,13 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { concatMap, map, Observable, Subscription, take } from "rxjs";
 import { AuthService } from "@auth/services";
@@ -15,6 +22,8 @@ import { SkillsService } from "@office/services/skills.service";
 import { SkillsGroup } from "@office/models/skills-group";
 import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";
 import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-basket.component";
+import { HttpResponse } from "@angular/common/http";
+import { ModalComponent } from "@ui/components/modal/modal.component";
 
 @Component({
   selector: "app-stage-two",
@@ -26,6 +35,7 @@ import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-baske
     ReactiveFormsModule,
     IconComponent,
     ButtonComponent,
+    ModalComponent,
     ControlErrorPipe,
     AutoCompleteInputComponent,
     SkillsGroupComponent,
@@ -54,6 +64,9 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
 
   stageSubmitting = signal(false);
   skipSubmitting = signal(false);
+
+  isChooseSkill = signal(false);
+  isChooseSkillText = signal("");
 
   subscriptions$ = signal<Subscription[]>([]);
 
@@ -104,8 +117,14 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
       .saveProfile({ skillsIds: skills.map(skill => skill.id) })
       .pipe(concatMap(() => this.authService.setOnboardingStage(2)))
       .subscribe({
-        next: () => this.authService.setOnboardingStage(3),
-        error: () => this.stageSubmitting.set(false),
+        next: () => this.completeRegistration(3),
+        error: err => {
+          this.stageSubmitting.set(false);
+          if (err.status === 400) {
+            this.isChooseSkill.set(true);
+            this.isChooseSkillText.set(err.error[0]);
+          }
+        },
       });
   }
 
@@ -146,9 +165,7 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
   private completeRegistration(stage: number): void {
     this.skipSubmitting.set(true);
     this.onboardingService.setFormValue(this.stageForm.value);
-    this.authService.setOnboardingStage(stage).subscribe(() => {
-      this.router.navigateByUrl("/office/onboarding/stage-3");
-    });
+    stage === 3 && this.router.navigateByUrl("/office/onboarding/stage-3");
     this.skipSubmitting.set(false);
   }
 }

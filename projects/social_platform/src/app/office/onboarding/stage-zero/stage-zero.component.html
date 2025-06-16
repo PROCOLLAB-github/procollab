@@ -167,7 +167,7 @@
           class="page__add-education"
           (click)="addEducation()"
         >
-          <span>Добавить новое образование</span>
+          <span>Добавить образование</span>
           <i appIcon icon="plus" appSquare="14"></i>
         </app-button>
 
@@ -380,7 +380,7 @@
         </ul>
       </ng-container>
       <app-button class="page__add-achievement" (click)="addAchievement()">
-        <span>Добавить новое достижение</span>
+        <span>Добавить достижение</span>
         <i appIcon icon="plus" appSquare="14"></i>
       </app-button>
     </div>
@@ -473,8 +473,7 @@
           editWorkClick ||
           editLanguageClick ||
           isEducationDirty ||
-          isWorkDirty ||
-          isLanguageDirty
+          isWorkDirty
         "
         [ngStyle]="{
           opacity:
@@ -482,8 +481,7 @@
             editWorkClick ||
             editLanguageClick ||
             isEducationDirty ||
-            isWorkDirty ||
-            isLanguageDirty
+            isWorkDirty
               ? '0.6'
               : '1',
           cursor:
@@ -491,8 +489,7 @@
             editWorkClick ||
             editLanguageClick ||
             isEducationDirty ||
-            isWorkDirty ||
-            isLanguageDirty
+            isWorkDirty
               ? 'not-allowed'
               : 'pointer'
         }"

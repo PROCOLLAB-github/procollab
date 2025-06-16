@@ -1,7 +1,7 @@
 /** @format */
 
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from "@angular/core";
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { NonNullableFormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { concatMap, map, Observable, Subscription, take } from "rxjs";
 import { AuthService } from "@auth/services";
 import { ControlErrorPipe, ValidationService } from "@corelib";
@@ -132,11 +132,9 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
   private completeRegistration(stage: number): void {
     this.skipSubmitting.set(true);
     this.onboardingService.setFormValue(this.stageForm.value);
-    this.authService.setOnboardingStage(stage).subscribe(() => {
-      this.router.navigateByUrl(
-        stage !== 3 ? "/office/onboarding/stage-2" : "/office/onboarding/stage-3"
-      );
-    });
+    this.router.navigateByUrl(
+      stage === 2 ? "/office/onboarding/stage-2" : "/office/onboarding/stage-3"
+    );
     this.skipSubmitting.set(false);
   }
 }
