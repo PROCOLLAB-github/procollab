@@ -7,7 +7,7 @@
   gap: 18px 32px;
 
   @include responsive.apply-desktop {
-    grid-template-columns: 223px 1fr 1fr 1fr;
+    grid-template-columns: 223px 1fr 1fr 0.8fr;
   }
 
   @include responsive.apply-desktop {

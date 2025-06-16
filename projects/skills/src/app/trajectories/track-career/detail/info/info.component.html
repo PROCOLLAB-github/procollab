@@ -147,16 +147,18 @@
   </div>
 
   <div class="skills">
-    <h4 class="text-heading-4">Персональные навыки</h4>
-    <div class="skills__future">
-      @if (userTrajectory()?.individualSkills) { @for(skill of userTrajectory()?.individualSkills;
-      track $index) {
-      <app-skill-card
-        [type]="'personal'"
-        [skill]="skill"
-        (click)="onSkillClick(skill.id)"
-      ></app-skill-card>
-      } }
+    <div class="skills__personal-container">
+      <h4 class="text-heading-4">Персональные навыки</h4>
+      <div class="skills__personal">
+        @if (userTrajectory()?.individualSkills) { @for(skill of userTrajectory()?.individualSkills;
+        track $index) {
+        <app-skill-card
+          [type]="'personal'"
+          [skill]="skill"
+          (click)="onSkillClick(skill.id)"
+        ></app-skill-card>
+        } }
+      </div>
     </div>
 
     <h4 class="text-heading-4">Навыки текущего месяца</h4>
@@ -172,12 +174,14 @@
       }
     </div>
 
-    <h4 class="text-heading-4">Грядущие навыки</h4>
-    <div class="skills__future">
-      @if (userTrajectory()?.unavailableSkills) { @for(skill of userTrajectory()?.unavailableSkills;
-      track $index) {
-      <app-skill-card [skill]="skill"></app-skill-card>
-      } }
+    <div class="skills__future-container">
+      <h4 class="text-heading-4">Грядущие навыки</h4>
+      <div class="skills__future">
+        @if (userTrajectory()?.unavailableSkills) { @for(skill of
+        userTrajectory()?.unavailableSkills; track $index) {
+        <app-skill-card [skill]="skill"></app-skill-card>
+        } }
+      </div>
     </div>
 
     <h4 class="text-heading-4">Пройденные навыки</h4>

@@ -134,7 +134,7 @@
     }
 
     &__info--additional {
-      display: flex;
+      display: none;
       flex-direction: column;
       gap: 12px;
       align-items: center;
@@ -287,8 +287,13 @@
     gap: 20px;
     margin-top: 10px;
 
+    &__future-container, &__personal-container {
+      display: none;
+    }
+
     &__now,
     &__past,
+    &__personal,
     &__future {
       display: grid;
       grid-template-columns: 1fr;
