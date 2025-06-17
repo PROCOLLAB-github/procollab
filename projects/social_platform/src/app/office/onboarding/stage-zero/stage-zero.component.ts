@@ -522,7 +522,7 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
       this.stageForm.get(name)?.updateValueAndValidity();
     });
 
-    this.editLanguageClick = true;
+    this.editLanguageClick = false;
   }
 
   editLanguage(index: number) {
