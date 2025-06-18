@@ -16,7 +16,7 @@
     <div class="progress__line"></div>
     <div class="progress__line-done" [ngStyle]="{ width: progressDoneWidth() + 'px' }"></div>
     <div class="progress__first progress__border progress__border--done">
-      {{ skillStepsResponse()?.currentLevel }} задание
+      Задание {{ skillStepsResponse()?.currentLevel }}
     </div>
     @for (id of taskIds(); track $index) {
     <div

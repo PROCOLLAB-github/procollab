@@ -83,6 +83,9 @@
 }
 
 .trajectory__infoItem {
+  @include responsive.apply-desktop {
+    margin-left: 50px;
+  }
   .trajectory {
     display: flex;
     flex-direction: column;
@@ -114,6 +117,13 @@
           height: 275px;
         }
       }
+    }
+
+    &__image {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
     }
 
     &__title {
@@ -153,7 +163,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      padding: 0 25px;
+      padding: 10px;
       background-color: var(--white);
       border: 1px solid var(--grey-button);
       border-radius: 15px;
@@ -228,32 +238,41 @@
     }
   }
 
-  .timeline__date {
-    color: var(--dark-grey);
+  .timeline {
+    &__images {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        gap: 20px;
+      }
 
-    @include responsive.apply-desktop {
-      align-self: center !important;
-    }
-  }
+      &__date {
+        color: var(--dark-grey);
 
-  .timeline__start {
-    align-self: baseline;
-    margin-top: 10px;
-    color: var(--dark-grey);
+        @include responsive.apply-desktop {
+          align-self: center !important;
+        }
+      }
+      
+      &__start {
+        align-self: baseline;
+        margin-top: 10px;
+        color: var(--dark-grey);
 
-    @include responsive.apply-desktop {
-      margin: 0;
-    }
-  }
+        @include responsive.apply-desktop {
+          margin: 0;
+        }
+      }
 
-  .timeline__end {
-    align-self: end;
-    margin-bottom: 10px;
-    color: var(--dark-grey);
+      &__end {
+        align-self: end;
+        margin-bottom: 10px;
+        color: var(--dark-grey);
 
-    @include responsive.apply-desktop {
-      margin: 0;
-    }
+        @include responsive.apply-desktop {
+          margin: 0;
+        }
+      }
   }
 
   .info__additional {
@@ -288,8 +307,20 @@
     margin-top: 10px;
 
     &__future-container,
-    &__personal-container {
+    &__personal-container,
+    &__past-container {
       display: none;
+    }
+
+    &__now-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      h4 {
+        display: none;
+      }
     }
 
     &__now,

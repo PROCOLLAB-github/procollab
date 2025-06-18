@@ -12,7 +12,12 @@
         <p class="timeline__start timeline__date text-body-14">
           {{ userTrajectory()?.startDate | date: "dd.MM.yyyy" }}
         </p>
-        <app-month-block [months]="mockMonts" [hasNext]="false"></app-month-block>
+        <!-- <app-month-block [months]="mockMonts" [hasNext]="false"></app-month-block> -->
+        <div class="timeline__images">
+          @for (skillImage of trajectory.skills; track $index) {
+          <img [src]="skillImage.fileLink" alt="skill" class="trajectory__image" />
+          }
+        </div>
         <p class="timeline__end timeline__date text-body-14">
           {{ userTrajectory()?.endDate | date: "dd.MM.yyyy" }}
         </p>
@@ -161,17 +166,19 @@
       </div>
     </div>
 
-    <h4 class="text-heading-4">Навыки текущего месяца</h4>
-    <div [ngClass]="{ '': completeAllMainSkills(), skills__now: !completeAllMainSkills() }">
-      @if (userTrajectory()?.availableSkills) { @for(skill of availableSkills(); track $index) {
-      <app-skill-card [skill]="skill" (click)="onSkillClick(skill.id)"></app-skill-card>
-      } } @if (completeAllMainSkills()) {
-      <img
-        alt="complete all"
-        src="assets/images/trajectories/completeAll.png"
-        class="skills__complete"
-      />
-      }
+    <div class="skills__now-container">
+      <h4 class="text-heading-4">Навыки текущего месяца</h4>
+      <div [ngClass]="{ '': completeAllMainSkills(), skills__now: !completeAllMainSkills() }">
+        @if (userTrajectory()?.availableSkills) { @for(skill of availableSkills(); track $index) {
+        <app-skill-card [skill]="skill" (click)="onSkillClick(skill.id)"></app-skill-card>
+        } } @if (completeAllMainSkills()) {
+        <img
+          alt="complete all"
+          src="assets/images/trajectories/completeAll.png"
+          class="skills__complete"
+        />
+        }
+      </div>
     </div>
 
     <div class="skills__future-container">
@@ -184,11 +191,13 @@
       </div>
     </div>
 
-    <h4 class="text-heading-4">Пройденные навыки</h4>
-    <div class="skills__past">
-      @if (userTrajectory()?.completedSkills) { @for (skill of completedSkills(); track $index) {
-      <app-skill-card [skill]="skill" (click)="onSkillClick(skill.id)"></app-skill-card>
-      } }
+    <div class="skills__past-container">
+      <h4 class="text-heading-4">Пройденные навыки</h4>
+      <div class="skills__past">
+        @if (userTrajectory()?.completedSkills) { @for (skill of completedSkills(); track $index) {
+        <app-skill-card [skill]="skill" (click)="onSkillClick(skill.id)"></app-skill-card>
+        } }
+      </div>
     </div>
   </div>
 </div>
