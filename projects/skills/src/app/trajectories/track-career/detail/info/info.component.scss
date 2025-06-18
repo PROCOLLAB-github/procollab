@@ -86,6 +86,7 @@
   @include responsive.apply-desktop {
     margin-left: 50px;
   }
+
   .trajectory {
     display: flex;
     flex-direction: column;
@@ -240,39 +241,39 @@
 
   .timeline {
     &__images {
-        display: flex;
-        align-items: center;
-        flex-direction: row;
-        gap: 20px;
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      align-items: center;
+    }
+
+    &__date {
+      color: var(--dark-grey);
+
+      @include responsive.apply-desktop {
+        align-self: center !important;
       }
+    }
 
-      &__date {
-        color: var(--dark-grey);
+    &__start {
+      align-self: baseline;
+      margin-top: 10px;
+      color: var(--dark-grey);
 
-        @include responsive.apply-desktop {
-          align-self: center !important;
-        }
+      @include responsive.apply-desktop {
+        margin: 0;
       }
-      
-      &__start {
-        align-self: baseline;
-        margin-top: 10px;
-        color: var(--dark-grey);
+    }
 
-        @include responsive.apply-desktop {
-          margin: 0;
-        }
+    &__end {
+      align-self: end;
+      margin-bottom: 10px;
+      color: var(--dark-grey);
+
+      @include responsive.apply-desktop {
+        margin: 0;
       }
-
-      &__end {
-        align-self: end;
-        margin-bottom: 10px;
-        color: var(--dark-grey);
-
-        @include responsive.apply-desktop {
-          margin: 0;
-        }
-      }
+    }
   }
 
   .info__additional {
@@ -313,10 +314,10 @@
     }
 
     &__now-container {
-      margin-top: 20px;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      margin-top: 20px;
 
       h4 {
         display: none;
