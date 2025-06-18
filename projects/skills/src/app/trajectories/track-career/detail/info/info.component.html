@@ -71,7 +71,16 @@
       </div>
 
       <div class="trajectory__description" [style.background-color]="trajectory.backgroundColor">
-        @if (trajectory.description) {
+        @if (trajectory.description) { @if (desktopMode$ | async; as desktopMode) {
+        <div class="text-body-14">
+          <p
+            [innerHTML]="trajectory.description | parseLinks | parseBreaks"
+            [style.color]="
+              trajectory.company === 'Procollab' ? 'var(--dark-grey)' : trajectory.textColor
+            "
+          ></p>
+        </div>
+        } @else {
         <div class="text-body-14 about__text">
           <p
             #descEl
@@ -89,7 +98,7 @@
           </div>
           }
         </div>
-        }
+        } }
       </div>
 
       <div

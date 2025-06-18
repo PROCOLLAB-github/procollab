@@ -16,7 +16,7 @@ import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { ButtonComponent } from "@ui/components";
 import { AvatarComponent, IconComponent } from "@uilib";
 import { expandElement } from "@utils/expand-element";
-import { map, Subscription } from "rxjs";
+import { map, Observable, Subscription } from "rxjs";
 import { SkillCardComponent } from "../../../../skills/shared/skill-card/skill-card.component";
 import { CommonModule } from "@angular/common";
 import { MonthBlockComponent } from "projects/skills/src/app/profile/shared/month-block/month-block.component";
@@ -29,6 +29,7 @@ import { TrajectoriesService } from "../../../trajectories.service";
 import { Month, UserData } from "projects/skills/src/models/profile.model";
 import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
 import { SkillService } from "projects/skills/src/app/skills/services/skill.service";
+import { BreakpointObserver } from "@angular/cdk/layout";
 
 @Component({
   selector: "app-detail",
@@ -56,6 +57,7 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
   trajectoryService = inject(TrajectoriesService);
   profileService = inject(ProfileService);
   skillService = inject(SkillService);
+  breakpointObserver = inject(BreakpointObserver);
 
   subscriptions$: Subscription[] = [];
 
@@ -78,7 +80,13 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
 
   @ViewChild("descEl") descEl?: ElementRef;
 
+  desktopMode$: Observable<boolean> = this.breakpointObserver
+    .observe("(min-width: 920px)")
+    .pipe(map(result => result.matches));
+
   ngOnInit(): void {
+    this.desktopMode$.subscribe(r => console.log(r));
+
     this.route.data.pipe(map(r => r["data"])).subscribe(r => {
       this.trajectory = r[0];
       this.userTrajectory.set({ ...r[1], individualSkills: r[2] });
