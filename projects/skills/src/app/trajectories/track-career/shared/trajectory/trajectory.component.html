@@ -34,8 +34,9 @@
       <div class="trajectory__seat">
         <p class="text-bold-body-16 trajectory__date" [style.color]="trajectory.textColor">
           {{ trajectory.durationMonths }}
-          {{ trajectory.durationMonths | pluralize: ["месяц", "месяца", "месяцев"] }} + 2 встречи с
-          наставником
+          {{ trajectory.durationMonths | pluralize: ["месяц", "месяца", "месяцев"] }}
+          <!-- {{ trajectory.durationMonths | pluralize: ["месяц", "месяца", "месяцев"] }} + 2 встречи с
+          наставником -->
         </p>
         <p class="text-body-10">ряд 43, место А320</p>
       </div>
