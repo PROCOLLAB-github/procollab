@@ -233,10 +233,10 @@
     }
 
     &__description {
+      height: auto;
       padding: 18px 25px;
       border: 1px solid var(--grey-button);
       border-radius: 15px;
-      height: auto;
 
       @include responsive.apply-desktop {
         height: 235px;
