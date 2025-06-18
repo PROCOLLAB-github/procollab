@@ -23,6 +23,8 @@ import { ParseBreaksPipe, ParseLinksPipe, PluralizePipe } from "@corelib";
 import { Trajectory } from "projects/skills/src/models/trajectory.model";
 import { trajectoryMore } from "projects/core/src/consts/trajectoryMore";
 import { HttpErrorResponse } from "@angular/common/http";
+import { BreakpointObserver } from "@angular/cdk/layout";
+import { map, Observable } from "rxjs";
 
 @Component({
   selector: "app-trajectory",
@@ -47,6 +49,11 @@ export class TrajectoryComponent implements AfterViewInit, OnInit {
 
   router = inject(Router);
   trajectoryService = inject(TrajectoriesService);
+  breakpointObserver = inject(BreakpointObserver);
+
+  desktopMode$: Observable<boolean> = this.breakpointObserver
+    .observe("(min-width: 920px)")
+    .pipe(map(result => result.matches));
 
   cdRef = inject(ChangeDetectorRef);
   sanitizer = inject(DomSanitizer);
