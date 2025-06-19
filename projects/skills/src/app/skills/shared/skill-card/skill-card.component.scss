@@ -9,6 +9,11 @@
   cursor: pointer;
   border: 1px solid var(--grey-button);
   border-radius: 15px;
+  transition: all 0.3s;
+
+  &:hover {
+    box-shadow: 0 0 6px var(--gray);
+  }
 
   @include responsive.apply-desktop {
     margin-bottom: 0;
