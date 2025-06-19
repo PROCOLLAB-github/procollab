@@ -3,17 +3,40 @@
 .avatar {
   position: relative;
 
+  &__progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    background:
+      conic-gradient(
+        var(--progress-color) 0 var(--progress),
+        transparent var(--progress) 100%
+      );
+    border-radius: 50%;
+    mask:
+      radial-gradient(
+        circle,
+        transparent calc(50% - var(--progress-width)),
+        white calc(50% - var(--progress-width))
+      );
+  }
+
   img {
+    position: relative;
+    z-index: 1;
+    border-radius: 50%;
     object-fit: cover;
     object-position: center;
-    border-radius: 50%;
   }
 
   &__online {
     position: absolute;
     right: 0;
     bottom: -1.5px;
-    z-index: 1;
+    z-index: 3;
     width: 16px;
     height: 16px;
     background-color: var(--green);

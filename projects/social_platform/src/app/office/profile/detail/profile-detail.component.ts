@@ -14,6 +14,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { BackComponent } from "@uilib";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
+import { calculateProfileProgress } from "@utils/calculateProgress";
 
 @Component({
   selector: "app-profile-detail",
@@ -45,14 +46,18 @@ export class ProfileDetailComponent implements OnInit {
     public readonly breakpointObserver: BreakpointObserver
   ) {}
 
-  user$: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
-  loggedUserId$: Observable<number> = this.authService.profile.pipe(map(user => user.id));
+  user$: Observable<User> = this.route.data.pipe(
+    map(r => r["data"][0]),
+    map(user => ({ ...user, progress: calculateProfileProgress(user) }))
+  );
 
-  linkData = "";
+  loggedUserId$: Observable<number> = this.authService.profile.pipe(map(user => user.id));
 
   isDelayModalOpen = false;
   isSended = false;
-  isSubscriptionActive = false;
+  isSubscriptionActive = signal(false);
+
+  isProfileFill = false;
 
   errorMessageModal = signal("");
   desktopMode$: Observable<boolean> = this.breakpointObserver
@@ -62,19 +67,10 @@ export class ProfileDetailComponent implements OnInit {
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль");
 
-    this.subscriptionPlansService
-      .getSubscriptions()
-      .pipe(
-        map(r => {
-          if (typeof r === "string") {
-            return !!r;
-          }
-          return false;
-        })
-      )
-      .subscribe(r => {
-        this.isSubscriptionActive = r!;
-      });
+    this.user$.subscribe(r => {
+      this.isProfileFill =
+        r.progress! < 100 ? (this.isProfileFill = true) : (this.isProfileFill = false);
+    });
   }
 
   downloadCV() {

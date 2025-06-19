@@ -281,6 +281,7 @@ $detail-bar-mb: 12px;
 
   @include responsive.apply-desktop {
     width: 50%;
+    min-width: 700px;
   }
 
   &__cross {
@@ -297,11 +298,23 @@ $detail-bar-mb: 12px;
     }
   }
 
+  &__image {
+    margin-bottom: 20px;
+  }
+
   &__title {
+    margin-bottom: 10px;
     text-align: center;
   }
 
   &__text {
     text-align: center;
+  }
+
+  ::ng-deep {
+    app-button {
+      display: block;
+      margin-top: 20px;
+    }
   }
 }

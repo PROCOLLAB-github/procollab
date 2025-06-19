@@ -14,6 +14,8 @@ export class AvatarComponent implements OnInit {
   @Input() hasBorder = false;
   @Input() isOnline = false;
 
+  @Input() progress?: number;
+
   @Input() onlineBadgeSize = 16;
   @Input() onlineBadgeBorder = 3;
   @Input() onlineBadgeOffset = 0;

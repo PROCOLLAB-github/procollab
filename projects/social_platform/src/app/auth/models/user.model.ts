@@ -46,6 +46,7 @@ export class User {
   skillsIds!: number[];
   isOnline!: boolean;
   isActive!: boolean;
+  progress?: number;
   v2Speciality!: {
     id: number;
     name: string;
