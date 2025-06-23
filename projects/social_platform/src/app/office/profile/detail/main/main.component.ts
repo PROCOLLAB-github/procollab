@@ -40,6 +40,7 @@ import { ProfileService } from "@auth/services/profile.service";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
 import { Skill } from "@office/models/skill";
+import { ProfileService as SkillsProfileService } from "projects/skills/src/app/profile/services/profile.service";
 
 @Component({
   selector: "app-profile-main",
@@ -70,6 +71,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly authService: AuthService,
     private readonly profileNewsService: ProfileNewsService,
     private readonly profileApproveSkillService: ProfileService,
+    private readonly profileSkillsService: SkillsProfileService,
     private readonly cdRef: ChangeDetectorRef
   ) {}
 
@@ -79,6 +81,8 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   loggedUserId: Observable<number> = this.authService.profile.pipe(map(user => user.id));
 
   ngOnInit(): void {
+    // this.profileSkillsService.getSubscriptionData().subscribe(r => console.log(r));
+
     const route$ = this.route.params
       .pipe(
         map(r => r["id"]),
