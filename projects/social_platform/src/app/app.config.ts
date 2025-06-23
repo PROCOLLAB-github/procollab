@@ -10,7 +10,13 @@ import { GlobalErrorHandlerService } from "@error/services/global-error-handler.
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { provideRouter } from "@angular/router";
 import { APP_ROUTES } from "./app.routes";
-import { API_URL, BearerTokenInterceptor, CamelcaseInterceptor, PRODUCTION } from "@corelib";
+import {
+  API_URL,
+  BearerTokenInterceptor,
+  CamelcaseInterceptor,
+  PRODUCTION,
+  SKILLS_API_URL,
+} from "@corelib";
 import { environment } from "@environment";
 import { registerLocaleData } from "@angular/common";
 import localeRu from "@angular/common/locales/ru";
@@ -39,6 +45,10 @@ export const APP_CONFIG: ApplicationConfig = {
     {
       provide: API_URL,
       useValue: environment.apiUrl,
+    },
+    {
+      provide: SKILLS_API_URL,
+      useValue: environment.skillsApiUrl,
     },
     { provide: PRODUCTION, useValue: environment.production },
     {

@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ApiService } from "@corelib";
+import { SkillsApiService } from "@corelib";
 import { GeneralRating } from "../../../models/rating.model";
 import { map } from "rxjs";
 import { ApiPagination } from "../../../models/api-pagination.model";
@@ -10,7 +10,7 @@ import { ApiPagination } from "../../../models/api-pagination.model";
   providedIn: "root",
 })
 export class RatingService {
-  apiService = inject(ApiService);
+  apiService = inject(SkillsApiService);
 
   getGeneralRating(
     ratingParam: "last_year" | "last_month" | "last_day" | "last_week" = "last_month"

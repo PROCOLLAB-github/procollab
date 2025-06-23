@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { ApiService } from "@corelib";
+import { SkillsApiService } from "@corelib";
 import { TaskResults, TaskStep, TaskStepsResponse } from "../../../models/skill.model";
 import { Observable, tap } from "rxjs";
 import { StepType } from "../../../models/step.model";
@@ -10,7 +10,7 @@ import { StepType } from "../../../models/step.model";
   providedIn: "root",
 })
 export class TaskService {
-  private apiService = inject(ApiService);
+  private apiService = inject(SkillsApiService);
 
   currentSteps = signal<TaskStepsResponse["stepData"]>([]);
   currentTaskDone = signal(false);

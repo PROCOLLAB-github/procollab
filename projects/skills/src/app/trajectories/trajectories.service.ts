@@ -2,21 +2,15 @@
 
 import { HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { ApiService } from "@corelib";
-import { plainToInstance } from "class-transformer";
-import { BehaviorSubject, catchError, map, Observable, of } from "rxjs";
-import {
-  Student,
-  Trajectory,
-  TrajectorySkills,
-  UserTrajectory,
-} from "../../models/trajectory.model";
+import { SkillsApiService } from "@corelib";
+import { catchError, map, of } from "rxjs";
+import { Student, Trajectory, UserTrajectory } from "../../models/trajectory.model";
 
 @Injectable({
   providedIn: "root",
 })
 export class TrajectoriesService {
-  constructor(private readonly apiService: ApiService) {}
+  constructor(private readonly apiService: SkillsApiService) {}
 
   getTrajectories(limit: number, offset: number) {
     const params = new HttpParams();

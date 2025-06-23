@@ -1,6 +1,7 @@
 /** @format */
 
 export * from "./api.service";
+export * from "./skillsApi.service";
 export * from "./subscription-plans.service";
 export * from "./token.service";
 export * from "./yt-extract.service";
