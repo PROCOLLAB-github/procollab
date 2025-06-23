@@ -91,7 +91,7 @@
             </a>
             } @else {
             <div class="profile__btns">
-              <!-- <a class="profile__cv">
+              <a class="profile__cv">
                 @if(isSubscriptionActive()){
                 <app-button
                   (click)="sendCVEmail()"
@@ -101,7 +101,7 @@
                   Скачать CV
                 </app-button>
                 }
-              </a> -->
+              </a>
 
               <a
                 class="profile__edit"
@@ -161,13 +161,13 @@
 
     <app-modal [open]="isProfileFill" (openChange)="isProfileFill = !isProfileFill">
       <div class="cancel">
+        <img
+          alt="profile unfill image"
+          class="cancel__image"
+          src="/assets/images/profile/profile-unfill.png"
+        />
         <div class="cancel__top">
           <i (click)="isProfileFill = false" appIcon icon="cross" class="cancel__cross"></i>
-          <img
-            alt="profile unfill image"
-            class="cancel__image"
-            src="/assets/images/profile/profile-unfill.png"
-          />
           <p class="cancel__title text-heading-4">
             Заполни все поля, чтобы использовать Procollab на максимум
           </p>

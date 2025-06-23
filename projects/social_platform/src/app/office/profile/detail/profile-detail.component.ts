@@ -15,6 +15,7 @@ import { BackComponent } from "@uilib";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { calculateProfileProgress } from "@utils/calculateProgress";
+import { ProfileService as SkillsProfileService } from "projects/skills/src/app/profile/services/profile.service";
 
 @Component({
   selector: "app-profile-detail",
@@ -43,6 +44,7 @@ export class ProfileDetailComponent implements OnInit {
     public readonly authService: AuthService,
     public readonly subscriptionPlansService: SubscriptionPlansService,
     public readonly chatService: ChatService,
+    public readonly skillsProfileService: SkillsProfileService,
     public readonly breakpointObserver: BreakpointObserver
   ) {}
 
@@ -66,6 +68,10 @@ export class ProfileDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль");
+
+    this.skillsProfileService.getSubscriptionData().subscribe(r => {
+      this.isSubscriptionActive.set(r.isSubscribed);
+    });
 
     this.user$.subscribe(r => {
       this.isProfileFill =
