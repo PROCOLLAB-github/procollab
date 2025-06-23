@@ -81,7 +81,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   loggedUserId: Observable<number> = this.authService.profile.pipe(map(user => user.id));
 
   ngOnInit(): void {
-    // this.profileSkillsService.getSubscriptionData().subscribe(r => console.log(r));
+    this.profileSkillsService.getSubscriptionData().subscribe(r => console.log(r));
 
     const route$ = this.route.params
       .pipe(

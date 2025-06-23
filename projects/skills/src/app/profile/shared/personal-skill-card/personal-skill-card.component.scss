@@ -22,6 +22,7 @@
 
   &__name {
     color: var(--black);
+    text-decoration: underline;
 
     @include typography.heading-4;
 
