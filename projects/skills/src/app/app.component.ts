@@ -37,10 +37,10 @@ export class AppComponent implements OnInit {
   title = "skills";
   navItems = [
     // { name: "Навыки", icon: "lib", link: "skills" },
+    { name: "Старт в карьеру", icon: "trackcar", link: "trackCar" },
+    { name: "Траектории", icon: "receipt", link: "subscription" },
     { name: "Рейтинг", icon: "growth", link: "rating" },
-    { name: "Подписка", icon: "receipt", link: "subscription" },
     // { name: "Траектория бизнеса", icon: "trackbuss", link: "trackBuss" },
-    { name: "Траектория карьеры", icon: "trackcar", link: "trackCar" },
     // { name: "Вебинары", icon: "webinars", link: "webinars" },
   ];
 

@@ -10,7 +10,8 @@
       </ng-container>
       } @else if (step === "info") {
       <ng-container>
-        PROCOLLAB - это не только платформа, но и сообщество самых заряженных школьников и студентов
+        PROCOLLAB — твой путь к первой работе, давай начнем создавать твое первое резюме прямо
+        сейчас
       </ng-container>
       }
     </h3>
@@ -19,7 +20,7 @@
       <ng-container> Для регистрации введите данные </ng-container>
       } @else if (step === "info") {
       <ng-container>
-        Начни заполнять данные, которые в дальнейшем станут основой твоего резюме
+        <!-- Начни заполнять данные, которые в дальнейшем станут основой твоего резюме -->
       </ng-container>
       }
     </p>
@@ -253,7 +254,7 @@
     <app-button type="submit" class="auth__button" customTypographyClass="auth__button-typography">
       Далее
     </app-button>
-    } @else if ("info") {
+    } @else if (step === "info") {
     <app-button [loader]="registerIsSubmitting" type="submit" class="auth__button">
       Создать аккаунт
     </app-button>
