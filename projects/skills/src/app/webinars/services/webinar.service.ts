@@ -2,7 +2,7 @@
 
 import { HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { ApiService } from "@corelib";
+import { SkillsApiService } from "@corelib";
 import { plainToInstance } from "class-transformer";
 import { Webinar } from "projects/skills/src/models/webinars.model";
 import { map, Observable } from "rxjs";
@@ -11,7 +11,7 @@ import { map, Observable } from "rxjs";
   providedIn: "root",
 })
 export class WebinarService {
-  constructor(private readonly apiService: ApiService) {}
+  constructor(private readonly apiService: SkillsApiService) {}
 
   getActualWebinars(limit: number, offset: number): Observable<Webinar[]> {
     const params = new HttpParams();

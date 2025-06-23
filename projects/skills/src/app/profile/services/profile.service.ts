@@ -1,14 +1,14 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ApiService, SubscriptionData } from "@corelib";
+import { SkillsApiService, SubscriptionData } from "@corelib";
 import { Profile, UserData } from "../../../models/profile.model";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProfileService {
-  apiService = inject(ApiService);
+  apiService = inject(SkillsApiService);
 
   getProfile() {
     return this.apiService.get<Profile>("/progress/profile/");

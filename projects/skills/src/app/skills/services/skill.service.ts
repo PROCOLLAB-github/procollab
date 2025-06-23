@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ApiService } from "@corelib";
+import { SkillsApiService } from "@corelib";
 import { ApiPagination } from "../../../models/api-pagination.model";
 import { Skill, TasksResponse } from "../../../models/skill.model";
 import { HttpParams } from "@angular/common/http";
@@ -10,7 +10,7 @@ import { HttpParams } from "@angular/common/http";
   providedIn: "root",
 })
 export class SkillService {
-  apiService = inject(ApiService);
+  apiService = inject(SkillsApiService);
   private skillId: number | null = null;
   private storageKey = "skillId";
 
