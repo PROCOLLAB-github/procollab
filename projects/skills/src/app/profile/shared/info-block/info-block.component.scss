@@ -62,7 +62,7 @@
     color: var(--dark-grey);
 
     @include responsive.apply-desktop {
-      gap: 20px;
+      // gap: 20px;
     }
   }
 
