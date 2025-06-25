@@ -27,12 +27,16 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
   profileService = inject(ProfileService);
   subscriptionService = inject(SubscriptionPlansService);
 
+  isSubscribedModalOpen = signal(false);
+
   subscriptions = signal<SubscriptionPlan[]>([]);
   subscriptionData = toSignal<SubscriptionData>(
     this.route.data.pipe(map(r => r["subscriptionData"]))
   );
 
-  subscriptionType = signal(null);
+  isSubscribed = toSignal<SubscriptionData>(
+    this.route.data.pipe(map(r => r["subscriptionData"].isSubscribed))
+  );
 
   subscription: Subscription[] = [];
 
@@ -116,8 +120,12 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
   }
 
   onBuyClick(planId: SubscriptionPlan["id"]) {
-    this.subscriptionService.buySubscription(planId).subscribe(status => {
-      location.href = status.confirmation.confirmationUrl;
-    });
+    if (!this.isSubscribed()) {
+      this.subscriptionService.buySubscription(planId).subscribe(status => {
+        location.href = status.confirmation.confirmationUrl;
+      });
+    } else {
+      this.isSubscribedModalOpen.set(true);
+    }
   }
 }

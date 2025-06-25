@@ -37,6 +37,20 @@
     </div>
   </app-modal>
 
+  <app-modal [open]="isSubscribedModalOpen()" (openChange)="isSubscribedModalOpen.set(false)">
+    <div class="cancel">
+      <i
+        (click)="isSubscribedModalOpen.set(false)"
+        appIcon
+        icon="cross"
+        class="cancel__cross"
+        style="color: var(--black)"
+      ></i>
+      <p class="cancel__title" style="color: var(--black)">У вас уже есть активная подписка!</p>
+      <img alt="wave" src="assets/images/subscription/wave.svg" class="cancel__wave" />
+    </div>
+  </app-modal>
+
   <div class="subscription__types">
     <div class="subscription__title">Виды подписок</div>
 

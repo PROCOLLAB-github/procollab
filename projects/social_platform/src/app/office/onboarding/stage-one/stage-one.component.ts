@@ -57,8 +57,8 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
 
   tooltipAuthText =
     "Дизайнер, веб-разработчик, инженер? Определяйся и пиши тем, кем хотел бы стать или уже стал P.S. Дальше можно будет изменить выбор";
-  
-    tooltipLibText =
+
+  tooltipLibText =
     "Это наша база со всеми специальностями. Если не найдешь свою пиши в @procollab_support и мы обязательно добавим твою профессию и ты получишь +респект";
 
   isHintAuthVisible = false;

@@ -64,8 +64,8 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
 
   tooltipAuthText =
     "Постарайся вспомнить все, чему тебя учили и то, что ты делал (читать, считать, программировать) Постарайся не врать, но и не будь сильно критичным к себе.";
-  
-    tooltipLibText =
+
+  tooltipLibText =
     "База с навыками, которая может пополняться благодаря тебе! Если не найдешь свой навык, смело пиши на @procollab_support и мы добавим твой уникальный навык";
 
   isHintAuthVisible = false;
