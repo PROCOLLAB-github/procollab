@@ -161,6 +161,42 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
+  tooltipPhotoText =
+    "Идеальная фотография для резюме: свежая, с твоим лицом, хорошо различимым на нейтральном фоне (котиков мы конечно любим, но их не в этот раз)";
+  
+    tooltipCityText = "Напиши город, в котором ты сейчас живешь";
+  
+  tooltipEducationText =
+    "Заполни информацию о том, что ты изучал. Даже если это трехнедельный интенсив по созданию роликов — для резюме важна каждая деталь";
+  
+    tooltipEducationDescriptionText =
+    "Мат. вертикаль, прикладная информатика, биотехнологии — комментарии излишни, просто пиши!";
+  
+    tooltipWorkText =
+    "Укажи свой опыт. Разработка бота для школы, дизайн сайта для родительского бизнеса — любой опыт, которая оценила какая-либо организация — твой ключ к первой работе.";
+  
+    tooltipWorkNameText =
+    "Укажи название организации, которая оценивала/принимала твою работу (ту самую школу, для которой ты делал бота)";
+  
+    tooltipWorkDescriptionText =
+    "В свободной форме расскажи, чем занимался в рамках рабочего опыта (смотрел рилсы, двигал пиксели, зарабатывал деньги) P.S. Шутка";
+  
+    tooltipAchievementsText =
+    "Кенгуру, медвежонок, а может победа во всероссийском акселераторе технологических проектов? Твоему будущему работодателю надо видеть, что ты самый активный!";
+  
+    tooltipLanguageText =
+    "Вот и понадобились те самые много лет школьной программы английского, французского, китайского, а может и японского — рассказывай все!";
+
+  isHintPhotoVisible = false;
+  isHintCityVisible = false;
+  isHintEducationVisible = false;
+  isHintEducationDescriptionVisible = false;
+  isHintWorkVisible = false;
+  isHintWorkNameVisible = false;
+  isHintWorkDescriptionVisible = false;
+  isHintAchievementsVisible = false;
+  isHintLanguageVisible = false;
+
   readonly yearListEducation = yearList;
 
   readonly educationStatusList = educationUserType;
@@ -247,6 +283,92 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   get isLanguageDirty(): boolean {
     const f = this.stageForm;
     return ["language", "languageLevel"].some(name => f.get(name)?.dirty);
+  }
+
+  showTooltip(
+    type:
+      | "photo"
+      | "city"
+      | "education"
+      | "educationDescription"
+      | "work"
+      | "workName"
+      | "workDescription"
+      | "achievements"
+      | "language"
+  ): void {
+    switch (type) {
+      case "photo":
+        this.isHintPhotoVisible = true;
+        break;
+      case "city":
+        this.isHintCityVisible = true;
+        break;
+      case "education":
+        this.isHintEducationVisible = true;
+        break;
+      case "educationDescription":
+        this.isHintEducationDescriptionVisible = true;
+        break;
+      case "work":
+        this.isHintWorkVisible = true;
+        break;
+      case "workName":
+        this.isHintWorkNameVisible = true;
+        break;
+      case "workDescription":
+        this.isHintWorkDescriptionVisible = true;
+        break;
+      case "achievements":
+        this.isHintAchievementsVisible = true;
+        break;
+      case "language":
+        this.isHintLanguageVisible = true;
+        break;
+    }
+  }
+
+  hideTooltip(
+    type:
+      | "photo"
+      | "city"
+      | "education"
+      | "educationDescription"
+      | "work"
+      | "workName"
+      | "workDescription"
+      | "achievements"
+      | "language"
+  ): void {
+    switch (type) {
+      case "photo":
+        this.isHintPhotoVisible = false;
+        break;
+      case "city":
+        this.isHintCityVisible = false;
+        break;
+      case "education":
+        this.isHintEducationVisible = false;
+        break;
+      case "educationDescription":
+        this.isHintEducationDescriptionVisible = false;
+        break;
+      case "work":
+        this.isHintWorkVisible = false;
+        break;
+      case "workName":
+        this.isHintWorkNameVisible = false;
+        break;
+      case "workDescription":
+        this.isHintWorkDescriptionVisible = false;
+        break;
+      case "achievements":
+        this.isHintAchievementsVisible = false;
+        break;
+      case "language":
+        this.isHintLanguageVisible = false;
+        break;
+    }
   }
 
   addEducation() {

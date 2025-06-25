@@ -10,7 +10,23 @@
     <div class="page__first-row">
       @if (stageForm.get("avatar"); as avatar) {
       <fieldset class="page__field">
-        <label for="avatar" class="field-label">Фотография профиля</label>
+        <div class="content">
+          <label for="avatar" class="field-label">Фотография профиля</label>
+          <i
+            appIcon
+            icon="hint"
+            appSquare="24"
+            class="content__hint"
+            (mouseenter)="showTooltip('photo')"
+            (mouseleave)="hideTooltip('photo')"
+          ></i>
+          <span
+            class="content__tooltip text-body-12"
+            style="left: 42%"
+            [class.content__tooltip--visible]="isHintPhotoVisible"
+            >{{ tooltipPhotoText }}</span
+          >
+        </div>
         <app-avatar-control
           type="project"
           id="avatar"
@@ -32,7 +48,22 @@
           type="text"
           placeholder="Где живешь?"
           formControlName="city"
-        ></app-input>
+        >
+          <i
+            appIcon
+            icon="hint"
+            appSquare="24"
+            class="content__hint"
+            (mouseenter)="showTooltip('city')"
+            (mouseleave)="hideTooltip('city')"
+          ></i>
+          <span
+            class="content__tooltip text-body-12"
+            style="left: 100%; top: 100%"
+            [class.content__tooltip--visible]="isHintCityVisible"
+            >{{ tooltipCityText }}</span
+          >
+        </app-input>
         @if (city | controlError: "required") {
         <div class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
@@ -43,7 +74,23 @@
     </div>
 
     <div class="page__first-row">
-      <p class="text-bold-body-14">Образование</p>
+      <div class="content">
+        <p class="text-bold-body-14">Образование</p>
+        <i
+          appIcon
+          icon="hint"
+          appSquare="24"
+          class="content__hint"
+          (mouseenter)="showTooltip('education')"
+          (mouseleave)="hideTooltip('education')"
+        ></i>
+        <span
+          class="content__tooltip text-body-12"
+          style="left: 28%"
+          [class.content__tooltip--visible]="isHintEducationVisible"
+          >{{ tooltipEducationText }}</span
+        >
+      </div>
 
       @if (stageForm.get("educationLevel"); as educationLevel) {
       <fieldset>
@@ -143,7 +190,22 @@
           type="text"
           placeholder="Бизнес информатика"
           formControlName="description"
-        ></app-input>
+        >
+          <i
+            appIcon
+            icon="hint"
+            appSquare="24"
+            class="content__hint"
+            (mouseenter)="showTooltip('educationDescription')"
+            (mouseleave)="hideTooltip('educationDescription')"
+          ></i>
+          <span
+            class="content__tooltip text-body-12"
+            style="left: 100%; top: 100%"
+            [class.content__tooltip--visible]="isHintEducationDescriptionVisible"
+            >{{ tooltipEducationDescriptionText }}</span
+          >
+        </app-input>
         @if (description | controlError: "required") {
         <div class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
@@ -199,7 +261,23 @@
     </div>
 
     <div class="page__first-row">
-      <p class="text-bold-body-14">Место работы</p>
+      <div class="content">
+        <p class="text-bold-body-14">Место работы</p>
+        <i
+          appIcon
+          icon="hint"
+          appSquare="24"
+          class="content__hint"
+          (mouseenter)="showTooltip('work')"
+          (mouseleave)="hideTooltip('work')"
+        ></i>
+        <span
+          class="content__tooltip text-body-12"
+          style="left: 28%"
+          [class.content__tooltip--visible]="isHintWorkVisible"
+          >{{ tooltipWorkText }}</span
+        >
+      </div>
 
       @if (stageForm.get("organizationNameWork"); as organizationNameWork) {
       <fieldset>
@@ -210,7 +288,22 @@
           type="text"
           placeholder="Проколлаб"
           formControlName="organizationNameWork"
-        ></app-input>
+        >
+          <i
+            appIcon
+            icon="hint"
+            appSquare="24"
+            class="content__hint"
+            (mouseenter)="showTooltip('workName')"
+            (mouseleave)="hideTooltip('workName')"
+          ></i>
+          <span
+            class="content__tooltip text-body-12"
+            style="left: 100%; top: 100%"
+            [class.content__tooltip--visible]="isHintWorkNameVisible"
+            >{{ tooltipWorkNameText }}</span
+          >
+        </app-input>
         @if (organizationNameWork | controlError: "required") {
         <div class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
@@ -284,7 +377,22 @@
           type="text"
           placeholder="Образовательная платформа"
           formControlName="descriptionWork"
-        ></app-input>
+        >
+          <i
+            appIcon
+            icon="hint"
+            appSquare="24"
+            class="content__hint"
+            (mouseenter)="showTooltip('workDescription')"
+            (mouseleave)="hideTooltip('workDescription')"
+          ></i>
+          <span
+            class="content__tooltip text-body-12"
+            style="left: 100%; top: 100%; width: 220px"
+            [class.content__tooltip--visible]="isHintWorkDescriptionVisible"
+            >{{ tooltipWorkDescriptionText }}</span
+          >
+        </app-input>
         @if (descriptionWork | controlError: "required") {
         <div class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
@@ -340,7 +448,23 @@
               <div class="achievement__first-row">
                 @if (achievements.at(i)?.get("title"); as title) {
                 <fieldset>
-                  <label class="field-label">Достижения</label>
+                  <div class="content">
+                    <label class="field-label">Достижения</label>
+                    <i
+                      appIcon
+                      icon="hint"
+                      appSquare="24"
+                      class="content__hint"
+                      (mouseenter)="showTooltip('achievements')"
+                      (mouseleave)="hideTooltip('achievements')"
+                    ></i>
+                    <span
+                      class="content__tooltip text-body-12"
+                      style="left: 42%; width: 270px"
+                      [class.content__tooltip--visible]="isHintAchievementsVisible"
+                      >{{ tooltipAchievementsText }}</span
+                    >
+                  </div>
                   <app-input
                     [error]="title | controlError"
                     placeholder="Название конкурса"
@@ -384,7 +508,23 @@
     </div>
 
     <div class="page__first-row">
-      <p class="text-bold-body-14">Язык</p>
+      <div class="content">
+        <p class="text-bold-body-14">Язык</p>
+        <i
+          appIcon
+          icon="hint"
+          appSquare="24"
+          class="content__hint"
+          (mouseenter)="showTooltip('language')"
+          (mouseleave)="hideTooltip('language')"
+        ></i>
+        <span
+          class="content__tooltip text-body-12"
+          style="left: 14%"
+          [class.content__tooltip--visible]="isHintLanguageVisible"
+          >{{ tooltipLanguageText }}</span
+        >
+      </div>
       <div class="page__years">
         @if (stageForm.get("language"); as language) {
         <fieldset class="years__left">

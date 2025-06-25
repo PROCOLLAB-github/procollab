@@ -62,6 +62,15 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
 
   searchedSkills = signal<Skill[]>([]);
 
+  tooltipAuthText =
+    "Постарайся вспомнить все, чему тебя учили и то, что ты делал (читать, считать, программировать) Постарайся не врать, но и не будь сильно критичным к себе.";
+  
+    tooltipLibText =
+    "База с навыками, которая может пополняться благодаря тебе! Если не найдешь свой навык, смело пиши на @procollab_support и мы добавим твой уникальный навык";
+
+  isHintAuthVisible = false;
+  isHintLibVisible = false;
+
   stageSubmitting = signal(false);
   skipSubmitting = signal(false);
 
@@ -94,6 +103,14 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions$().forEach($ => $.unsubscribe());
+  }
+
+  showTooltip(type: "auth" | "lib"): void {
+    type === "auth" ? (this.isHintAuthVisible = true) : (this.isHintLibVisible = true);
+  }
+
+  hideTooltip(type: "auth" | "lib"): void {
+    type === "auth" ? (this.isHintAuthVisible = false) : (this.isHintLibVisible = false);
   }
 
   onSkipRegistration(): void {

@@ -1,5 +1,14 @@
 @use "styles/responsive";
 
+.auth {
+  &__greeting {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+}
+
 .content {
   display: grid;
   grid-template-columns: 1fr;
@@ -41,6 +50,44 @@
 
     &-heading {
       padding: 14px 14px 0;
+      margin-bottom: 25px;
+    }
+  }
+
+  &__hint {
+    z-index: 10;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    @include responsive.apply-desktop {
+      opacity: 0.5;
+    }
+  }
+
+  &__tooltip {
+    position: absolute;
+    top: 65%;
+    left: 38%;
+    z-index: 100;
+    display: none;
+    width: 250px;
+    padding: 12px;
+    color: var(--dark-grey);
+    background-color: var(--white);
+    border: 1px solid var(--dark-grey);
+    border-radius: 0 15px 15px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+
+    &--visible {
+      display: block;
+      opacity: 1;
     }
   }
 

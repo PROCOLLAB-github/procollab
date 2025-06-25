@@ -8,7 +8,7 @@ import { NavService } from "@services/nav.service";
 import { AuthService } from "@auth/services";
 import { ChatService } from "@services/chat.service";
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { SubscriptionPlansService, YearsFromBirthdayPipe } from "projects/core";
+import { YearsFromBirthdayPipe } from "projects/core";
 import { BarComponent, ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { BackComponent } from "@uilib";
@@ -42,7 +42,6 @@ export class ProfileDetailComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly navService: NavService,
     public readonly authService: AuthService,
-    public readonly subscriptionPlansService: SubscriptionPlansService,
     public readonly chatService: ChatService,
     public readonly skillsProfileService: SkillsProfileService,
     public readonly breakpointObserver: BreakpointObserver

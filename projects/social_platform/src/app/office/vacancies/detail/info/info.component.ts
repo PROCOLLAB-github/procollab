@@ -23,7 +23,7 @@ import { ProjectService } from "@office/services/project.service";
 import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { IconComponent, SubscriptionPlansComponent } from "@uilib";
+import { IconComponent } from "@uilib";
 import { expandElement } from "@utils/expand-element";
 import { SalaryTransformPipe } from "projects/core/src/lib/pipes/salary-transform.pipe";
 import { map, Subscription } from "rxjs";
@@ -37,7 +37,6 @@ import { CapitalizePipe } from "projects/core/src/lib/pipes/capitalize.pipe";
     TagComponent,
     ButtonComponent,
     ModalComponent,
-    SubscriptionPlansComponent,
     RouterModule,
     ParseBreaksPipe,
     ParseLinksPipe,

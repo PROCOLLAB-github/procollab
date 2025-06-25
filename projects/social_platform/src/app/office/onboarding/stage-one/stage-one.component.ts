@@ -55,6 +55,15 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
     map(r => r["data"])
   );
 
+  tooltipAuthText =
+    "Дизайнер, веб-разработчик, инженер? Определяйся и пиши тем, кем хотел бы стать или уже стал P.S. Дальше можно будет изменить выбор";
+  
+    tooltipLibText =
+    "Это наша база со всеми специальностями. Если не найдешь свою пиши в @procollab_support и мы обязательно добавим твою профессию и ты получишь +респект";
+
+  isHintAuthVisible = false;
+  isHintLibVisible = false;
+
   inlineSpecializations = signal<Specialization[]>([]);
 
   stageSubmitting = signal(false);
@@ -90,6 +99,14 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions$().forEach($ => $.unsubscribe());
+  }
+
+  showTooltip(type: "auth" | "lib"): void {
+    type === "auth" ? (this.isHintAuthVisible = true) : (this.isHintLibVisible = true);
+  }
+
+  hideTooltip(type: "auth" | "lib"): void {
+    type === "auth" ? (this.isHintAuthVisible = false) : (this.isHintLibVisible = false);
   }
 
   onSkipRegistration(): void {
