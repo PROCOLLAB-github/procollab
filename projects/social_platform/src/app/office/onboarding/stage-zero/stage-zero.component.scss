@@ -19,6 +19,12 @@
           border-radius: 50%;
         }
       }
+
+      app-input {
+        .field__right-icon {
+          top: 25%;
+        }
+      }
     }
   }
 
@@ -67,6 +73,7 @@
     }
 
     @include responsive.apply-desktop {
+      margin-bottom: 6px;
       opacity: 0.5;
     }
   }
