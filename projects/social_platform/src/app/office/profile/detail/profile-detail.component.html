@@ -117,8 +117,15 @@
                     appIcon
                     icon="color-error"
                     appSquare="16"
+                    (mouseenter)="showTooltip()"
+                    (mouseleave)="hideTooltip()"
                     style="color: var(--accent); margin-left: 5px"
                   ></i>
+                  <span
+                    class="profile__tooltip text-body-12"
+                    [class.profile__tooltip--visible]="isHintVisible"
+                    >{{ tooltipText }}</span
+                  >
                   }
                 </app-button>
               </a>
@@ -160,6 +167,7 @@
       </div>
     </app-modal>
 
+    @if (authService.profile | async; as profile;) { @if (profile.id === user.id) {
     <app-modal [open]="isProfileFill" (openChange)="isProfileFill = !isProfileFill">
       <div class="cancel">
         <img
@@ -180,6 +188,7 @@
         </a>
       </div>
     </app-modal>
+    } }
 
     <div class="outlet">
       <router-outlet></router-outlet>

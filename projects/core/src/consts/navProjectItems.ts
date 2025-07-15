@@ -9,7 +9,7 @@ export const navItems = [
   {
     step: "contacts",
     src: "/assets/images/projects/edit/contacts.svg",
-    label: "Контакты",
+    label: "Контакты и ссылки",
   },
   {
     step: "achievements",
@@ -17,13 +17,13 @@ export const navItems = [
     label: "Достижения",
   },
   {
-    step: "team",
-    src: "/assets/images/projects/edit/members.svg",
-    label: "Участники",
-  },
-  {
     step: "vacancies",
     src: "/assets/images/projects/edit/vacancies.svg",
     label: "Вакансии",
+  },
+  {
+    step: "team",
+    src: "/assets/images/projects/edit/team.svg",
+    label: "Команда",
   },
 ];

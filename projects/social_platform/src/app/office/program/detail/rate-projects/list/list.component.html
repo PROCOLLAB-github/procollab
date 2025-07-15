@@ -3,8 +3,14 @@
 <div class="projects">
   @if (projects()) {
   <div class="projects__list">
-    @for (p of projects(); track p.id) {
-    <app-rating-card [project]="p"></app-rating-card>
+    @for (p of projects().slice(currentIndex(), currentIndex() + 1); track p.id) {
+    <app-rating-card
+      [project]="p"
+      [projects]="projects()"
+      [currentIndex]="currentIndex()"
+      (onNext)="toggleProject('next')"
+      (onPrev)="toggleProject('prev')"
+    ></app-rating-card>
     }
   </div>
   }

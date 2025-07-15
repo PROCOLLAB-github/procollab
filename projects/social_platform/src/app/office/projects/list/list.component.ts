@@ -171,6 +171,13 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (q["anyVacancies"]) {
       reqQuery["any_vacancies"] = q["anyVacancies"];
     }
+    if (q["is_rated_by_expert"]) {
+      reqQuery["is_rated_by_expert"] = q["is_rated_by_expert"];
+    }
+    if (q["is_mospolytech"]) {
+      reqQuery["is_mospolytech"] = q["is_mospolytech"];
+      reqQuery["partner_program"] = q["partner_program"];
+    }
 
     return reqQuery;
   }
@@ -239,7 +246,6 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     const currentY = event.touches[0].clientY;
     const deltaY = currentY - this.swipeStartY;
 
-    // Добавляем визуальную индикацию
     const progress = Math.min(deltaY / this.swipeThreshold, 1);
     this.renderer.setStyle(
       this.filterBody.nativeElement,

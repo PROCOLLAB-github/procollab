@@ -34,21 +34,23 @@
 
         <div class="project__left">
           <div class="project__info">
-            @if (projectForm.get("imageAddress"); as imagesAddress) {
-            <div class="project__image">
-              <app-avatar-control
-                id="imageAddress"
-                formControlName="imageAddress"
-                type="project"
-                [error]="(imagesAddress | controlError) && projSubmitInitiated"
-              ></app-avatar-control>
-              @if ((imagesAddress | controlError: "required") && projSubmitInitiated) {
-              <div class="text-body-14 error">
-                {{ errorMessage.EMPTY_AVATAR }}
+            <div class="project__avatar">
+              @if (projectForm.get("imageAddress"); as imagesAddress) {
+              <div class="project__image">
+                <app-avatar-control
+                  id="imageAddress"
+                  formControlName="imageAddress"
+                  type="project"
+                  [error]="(imagesAddress | controlError) && projSubmitInitiated"
+                ></app-avatar-control>
+                @if ((imagesAddress | controlError: "required") && projSubmitInitiated) {
+                <div class="text-body-14 error">
+                  {{ errorMessage.EMPTY_AVATAR }}
+                </div>
+                }
               </div>
               }
             </div>
-            }
 
             <div class="project__generals">
               @if (projectForm.get("name"); as name) {
@@ -133,13 +135,86 @@
               </div>
               }
             </fieldset>
+            } @if (projectForm.get("actuality"); as actuality) {
+            <fieldset>
+              <label class="field-label" for="name">Актуальность проекта</label>
+              <app-input
+                id="actuality"
+                formControlName="actuality"
+                [error]="actuality | controlError"
+                placeholder="Опиши в чём актуальность твоего проекта"
+              ></app-input>
+              @if ((actuality | controlError: "required")) {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            } @if (projectForm.get("goal"); as goal) {
+            <fieldset>
+              <label class="field-label" for="goal">Цель проекта</label>
+              <app-input
+                id="goal"
+                formControlName="goal"
+                [error]="(goal | controlError) && projSubmitInitiated"
+                placeholder="Опиши в чём цель твоего проекта"
+              ></app-input>
+              @if ((goal | controlError: "required") && projSubmitInitiated) {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            } @if (projectForm.get("problem"); as problem) {
+            <fieldset>
+              <label class="field-label" for="problem">Проблема проекта</label>
+              <app-input
+                id="problem"
+                formControlName="problem"
+                [error]="(problem | controlError) && projSubmitInitiated"
+                placeholder="Опиши проблему на которую направлен твой проекта"
+              ></app-input>
+              @if ((problem | controlError: "required") && projSubmitInitiated) {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            } @if (projectForm.get("track"); as track) {
+            <fieldset>
+              <app-select
+                id="track"
+                formControlName="track"
+                placeholder="Трек"
+                [options]="trackList"
+              ></app-select>
+              @if ((track | controlError: "required")) {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            } @if (projectForm.get("direction"); as direction) {
+            <fieldset>
+              <app-select
+                id="direction"
+                formControlName="direction"
+                placeholder="Направление"
+                [options]="directionList"
+              ></app-select>
+              @if ((direction | controlError: "required")) {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
             }
           </div>
         </div>
 
         <div class="project__right">
           @if (programTagsOptions.length) {
-          <fieldset class="project__tags">
+          <fieldset class="project__tags" style="margin-top: -10px">
             <label for="program_tag" class="field-label">Выбор тега</label>
             <app-select
               id="program_tag"
@@ -299,71 +374,6 @@
             } }
           </ul>
         </div>
-        } @else if (editingStep === "team") {
-        <div class="project__left">
-          <label class="field-label">Приглашение участников</label>
-          <form [formGroup]="inviteForm">
-            @if (inviteForm.get("role"); as role) {
-            <fieldset class="invite__role">
-              <app-input
-                id="invite_role"
-                formControlName="role"
-                [error]="(role | controlError) && inviteSubmitInitiated"
-                placeholder="Напишите роль участника в команде"
-              ></app-input>
-              @if ((role | controlError: "required") && inviteSubmitInitiated) {
-              <div class="text-body-14 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            } @if (inviteForm.get("link"); as link) {
-            <fieldset class="invite__link">
-              <app-input
-                id="invite_link"
-                formControlName="link"
-                [error]="(link | controlError) && inviteSubmitInitiated"
-                placeholder="Вставьте ссылку на участника на платформе procollab"
-              ></app-input>
-              @if ((link | controlError: "required") && inviteSubmitInitiated) {
-              <div class="text-body-14 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              } @if ((link | controlError: "pattern") && inviteSubmitInitiated) {
-              <div class="text-body-14 error">
-                {{ errorMessage.VALIDATION_PROFILE_LINK }}
-              </div>
-              } @if (inviteNotExistingError && inviteSubmitInitiated) {
-              <div class="text-body-14 error">
-                {{ errorMessage.USER_NOT_EXISTING }}
-              </div>
-              }
-            </fieldset>
-            }
-          </form>
-        </div>
-
-        <div class="project__right">
-          <app-button
-            class="vacancy__submit"
-            (click)="submitInvite()"
-            [loader]="inviteFormIsSubmitting"
-          >
-            <span>Пригласить участника</span>
-            <i appIcon icon="plus" appSquare="14"></i>
-          </app-button>
-
-          <ul class="invite__list" [style.overflow-y]="invites.length > 8 ? 'auto' : 'none'">
-            @for (user of invites; track user.id) {
-            <li class="invite__item">
-              <app-invite-card
-                [invite]="user"
-                (remove)="removeInvitation($event)"
-              ></app-invite-card>
-            </li>
-            }
-          </ul>
-        </div>
         } @else if (editingStep === "vacancies"){
         <div class="vacancy project__left">
           <label class="field-label">Создание вакансии</label>
@@ -504,6 +514,26 @@
               }
             </fieldset>
             }
+
+            <label class="field-label" style="color: var(--accent)"
+              >Для проектов ПД.МосПолитех</label
+            >
+            @if (vacancyForm.get("specialization"); as specialization) {
+            <fieldset>
+              <app-select
+                id="specialization"
+                formControlName="specialization"
+                placeholder="Специальность"
+                [selectedId]="selectedVacanciesSpecializationId()"
+                [options]="rolesMembersList"
+              ></app-select>
+              @if ((specialization | controlError: "required") && vacancySubmitInitiated) {
+              <div class="text-body-14 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            }
           </form>
         </div>
 
@@ -529,17 +559,113 @@
             }
           </ul>
         </div>
+        } @else if (editingStep === "team") {
+        <div class="project__team">
+          <div class="project__invite">
+            <label class="text-heading-4 field-label">Команда</label>
+            <ul
+              class="invite__team"
+              [style.overflow-y]="invites.length > 8 ? 'auto' : 'none'"
+              [style.display]="invitesFill ? 'grid' : 'none'"
+            >
+              @for (user of invites; track user.id) { @if (user.isAccepted === null) {
+              <li class="invite__item">
+                <app-invite-card
+                  [invite]="user"
+                  (edit)="editInvitation($event)"
+                  (remove)="removeInvitation($event)"
+                ></app-invite-card>
+              </li>
+              } }
+            </ul>
+            <app-button
+              (click)="isInviteModalOpen.set(true)"
+              class="invite__submit"
+              customTypographyClass="text-body-12"
+            >
+              <span>Пригласить участника</span>
+              <i appIcon icon="plus" appSquare="20"></i>
+            </app-button>
+          </div>
+
+          <app-modal [open]="isInviteModalOpen()" (openChange)="isInviteModalOpen.set(false)">
+            <div class="project__warning-modal">
+              <div class="project__left" style="display: flex; flex-direction: column">
+                <label class="text-bold-body-16" style="margin-bottom: 20px; align-self: center"
+                  >Приглашение участников</label
+                >
+                <form [formGroup]="inviteForm">
+                  @if (inviteForm.get("role"); as role) {
+                  <fieldset class="invite__role">
+                    <label class="field-label">Роль</label>
+                    <app-input
+                      id="invite_role"
+                      formControlName="role"
+                      [error]="(role | controlError) && inviteSubmitInitiated"
+                      placeholder="Напишите роль участника в команде"
+                    ></app-input>
+                    @if ((role | controlError: "required") && inviteSubmitInitiated) {
+                    <div class="text-body-14 error">
+                      {{ errorMessage.VALIDATION_REQUIRED }}
+                    </div>
+                    }
+                  </fieldset>
+                  } @if (inviteForm.get("link"); as link) {
+                  <fieldset class="invite__link">
+                    <app-input
+                      id="invite_link"
+                      formControlName="link"
+                      [error]="(link | controlError) && inviteSubmitInitiated"
+                      placeholder="Вставьте ссылку на участника на платформе procollab"
+                    ></app-input>
+                    @if ((link | controlError: "required") && inviteSubmitInitiated) {
+                    <div class="text-body-14 error">
+                      {{ errorMessage.VALIDATION_REQUIRED }}
+                    </div>
+                    } @if ((link | controlError: "pattern") && inviteSubmitInitiated) {
+                    <div class="text-body-14 error">
+                      {{ errorMessage.VALIDATION_PROFILE_LINK }}
+                    </div>
+                    } @if (inviteNotExistingError && inviteSubmitInitiated) {
+                    <div class="text-body-14 error">
+                      {{ errorMessage.USER_NOT_EXISTING }}
+                    </div>
+                    }
+                  </fieldset>
+                  }
+                  <label class="field-label" style="color: var(--accent)"
+                    >Для проектов ПД.МосПолитех</label
+                  >
+                  @if (inviteForm.get("specialization"); as specialization) {
+                  <fieldset style="margin-bottom: 220px">
+                    <app-select
+                      id="specialization"
+                      formControlName="specialization"
+                      placeholder="Специальность"
+                      [options]="rolesMembersList"
+                    ></app-select>
+                    @if ((specialization | controlError: "required") && inviteSubmitInitiated) {
+                    <div class="text-body-14 error">
+                      {{ errorMessage.VALIDATION_REQUIRED }}
+                    </div>
+                    }
+                  </fieldset>
+                  }
+                </form>
+              </div>
+
+              <app-button
+                customTypographyClass="text-body-12"
+                (click)="submitInvite()"
+                [loader]="inviteFormIsSubmitting"
+                >Отправить</app-button
+              >
+            </div>
+          </app-modal>
+        </div>
         }
       </div>
       <div class="project__save">
-        <!-- <app-button
-          customTypographyClass="text-body-12"
-          color="grey"
-          [loader]="projFormIsSubmittingAsDraft"
-          (click)="saveProjectAsDraft()"
-        >
-          Сохранить черновик
-        </app-button> -->
         <app-button
           customTypographyClass="text-body-12"
           [loader]="projFormIsSubmittingAsPublished"

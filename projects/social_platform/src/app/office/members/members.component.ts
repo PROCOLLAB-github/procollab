@@ -76,6 +76,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
       keySkill: ["", Validators.required],
       speciality: ["", Validators.required],
       age: [[null, null]],
+      isMosPolytechStudent: [false],
     });
   }
 
@@ -98,6 +99,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     this.saveControlValue(this.filterForm.get("keySkill"), "skills__contains");
     this.saveControlValue(this.filterForm.get("speciality"), "speciality__icontains");
     this.saveControlValue(this.filterForm.get("age"), "age");
+    this.saveControlValue(this.filterForm.get("isMosPolytechStudent"), "is_mospolytech_student");
 
     this.route.queryParams
       .pipe(
@@ -112,6 +114,8 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
             fetchParams["skills__contains"] = params["skills__contains"];
           if (params["speciality__icontains"])
             fetchParams["speciality__icontains"] = params["speciality__icontains"];
+          if (params["is_mospolytech_student"])
+            fetchParams["is_mospolytech_student"] = params["is_mospolytech_student"];
 
           if (params["age"] && /\d+,\d+/.test(params["age"])) fetchParams["age"] = params["age"];
 

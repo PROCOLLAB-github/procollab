@@ -80,9 +80,12 @@
   }
 
   &__rate-projects {
+    width: 100%;
+
     @include responsive.apply-desktop {
       flex-grow: 1;
       margin-left: auto;
+      width: 30%;
     }
   }
 }

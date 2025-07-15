@@ -44,6 +44,8 @@ import { educationUserLevel, educationUserType } from "projects/core/src/consts/
 import { languageLevelsList, languageNamesList } from "projects/core/src/consts/list-language";
 import { transformYearStringToNumber } from "@utils/transformYear";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
+import { CheckboxComponent } from "../../../ui/components/checkbox/checkbox.component";
+import { User } from "@auth/models/user.model";
 
 dayjs.extend(cpf);
 
@@ -71,6 +73,7 @@ dayjs.extend(cpf);
     ModalComponent,
     SelectComponent,
     RouterModule,
+    CheckboxComponent,
   ],
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -89,20 +92,22 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.profileForm = this.fb.group({
       firstName: ["", [Validators.required]],
       lastName: ["", [Validators.required]],
-      email: [""],
+      email: ["", [Validators.email, Validators.max(50)]],
       userType: [0],
       birthday: ["", [Validators.required]],
-      city: [""],
+      city: ["", Validators.max(100)],
       phoneNumber: [""],
       additionalRole: [null],
 
       // education
-      organizationName: [""],
+      organizationName: ["", Validators.max(100)],
       entryYear: [null],
       completionYear: [null],
-      description: [null],
+      description: [null, Validators.max(1000)],
       educationLevel: [null],
       educationStatus: [""],
+      isMospolytechStudent: [false],
+      studyGroup: ["", Validators.max(10)],
 
       // language
       language: [null],
@@ -114,10 +119,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       links: this.fb.array([]),
 
       // work
-      organization: [""],
+      organization: ["", Validators.max(100)],
       entryYearWork: [null],
       completionYearWork: [null],
-      descriptionWork: [null],
+      descriptionWork: [null, Validators.max(1000)],
       jobPosition: [""],
 
       // skills
@@ -150,11 +155,26 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
     userAvatar$ && this.subscription$.push(userAvatar$);
 
+    const isMospolytechStudentSub$ = this.profileForm
+      .get("isMospolytechStudent")
+      ?.valueChanges.subscribe(isStudent => {
+        const studyGroup = this.profileForm.get("studyGroup");
+        if (isStudent) {
+          studyGroup?.setValidators([Validators.required]);
+        } else {
+          studyGroup?.clearValidators();
+        }
+
+        studyGroup?.updateValueAndValidity();
+      });
+
+    isMospolytechStudentSub$ && this.subscription$.push(isMospolytechStudentSub$);
+
     this.editingStep = this.route.snapshot.queryParams["editingStep"];
   }
 
   ngAfterViewInit() {
-    const profile$ = this.authService.profile.pipe(first()).subscribe(profile => {
+    const profile$ = this.authService.profile.pipe(first()).subscribe((profile: User) => {
       this.profileId = profile.id;
 
       this.profileForm.patchValue({
@@ -171,6 +191,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         skills: profile.skills ?? [],
         avatar: profile.avatar ?? "",
         aboutMe: profile.aboutMe ?? "",
+        isMospolytechStudent: profile.isMospolytechStudent ?? false,
+        studyGroup: profile.studyGroup ?? "",
       });
 
       this.workExperience.clear();
@@ -305,6 +327,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   navigateStep(step: string) {
     this.router.navigate([], { queryParams: { editingStep: step } });
     this.editingStep = step as "main" | "education" | "experience" | "achievements" | "skills";
+  }
+
+  isStudentMosPolytech(): void {
+    const ctl = this.profileForm.get("isMospolytechStudent");
+    ctl?.setValue(!ctl.value);
   }
 
   readonly yearListEducation = yearList;

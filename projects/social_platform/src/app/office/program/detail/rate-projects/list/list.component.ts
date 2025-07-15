@@ -1,31 +1,28 @@
 /** @format */
 
 import { AfterViewInit, Component, OnDestroy, OnInit, signal } from "@angular/core";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import {
   concatMap,
   debounceTime,
   fromEvent,
   map,
   of,
-  Subject,
   Subscription,
   switchMap,
   tap,
   throttleTime,
 } from "rxjs";
-import { AsyncPipe } from "@angular/common";
 import { RatingCardComponent } from "@office/program/shared/rating-card/rating-card.component";
 import { ProjectRate } from "@office/program/models/project-rate";
 import { ProjectRatingService } from "@office/program/services/project-rating.service";
-import Fuse from "fuse.js";
 
 @Component({
   selector: "app-list",
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
   standalone: true,
-  imports: [RouterLink, RatingCardComponent, AsyncPipe],
+  imports: [RatingCardComponent],
 })
 export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
@@ -40,6 +37,7 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   projects = signal<ProjectRate[]>([]);
   initialProjects: ProjectRate[] = [];
+  currentIndex = signal(0);
 
   totalProjCount = signal(0);
   fetchLimit = signal(8);
@@ -100,6 +98,14 @@ export class ListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions$().forEach($ => $.unsubscribe());
+  }
+
+  toggleProject(type: "next" | "prev"): void {
+    if (this.currentIndex() >= 0) {
+      if (type === "prev") {
+        this.currentIndex.update(() => this.currentIndex() - 1);
+      } else this.currentIndex.update(() => this.currentIndex() + 1);
+    }
   }
 
   onScroll() {

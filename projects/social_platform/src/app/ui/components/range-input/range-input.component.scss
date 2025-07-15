@@ -1,8 +1,14 @@
 .range {
   display: flex;
   align-items: center;
+  gap: 10px;
   width: 100%;
   color: var(--black);
+
+  label {
+    color: var(--gray);
+    margin-right: 5px;
+  }
 
   &__divider {
     flex-shrink: 0;
@@ -12,9 +18,17 @@
     background-color: var(--dark-grey);
   }
 
+  &__start,
+  &__end {
+    background-color: var(--white);
+    border: 1px solid var(--gray);
+    border-radius: var(--rounded-lg);
+    padding: 8px 10px;
+    width: 100px;
+  }
+
   &__point {
     font-size: 12px;
-    border: none;
     outline: none;
     transition: all 0.2s;
 

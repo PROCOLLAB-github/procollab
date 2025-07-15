@@ -7,6 +7,11 @@ export class Project {
   id!: number;
   name!: string;
   description!: string;
+  track!: string;
+  direction!: string;
+  actuality!: string;
+  goal!: string;
+  problem!: string;
   region!: string;
   step!: number;
   shortDescription!: string;
@@ -33,6 +38,11 @@ export class Project {
       name: "string",
       region: "sdf",
       step: 1,
+      track: "",
+      direction: "",
+      actuality: "",
+      goal: "",
+      problem: "",
       description: "string",
       shortDescription: "string",
       achievements: [{ id: 3, title: "sdf", status: "dsaf" }],

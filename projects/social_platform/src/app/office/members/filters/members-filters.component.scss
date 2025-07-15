@@ -4,63 +4,78 @@
 .filters {
   display: flex;
   flex-direction: column;
-  gap: 24px;
   margin-bottom: 40px;
+  min-width: 280px;
+  width: 100%;
+  gap: 0px;
+  padding: 26px;
+  background-color: var(--white);
+  border-radius: 8px;
+  
+  @include responsive.apply-desktop {
+    padding: 26px 16px;
+    gap: 24px;
+  }
 
-  &__toggle {
+  &__titles {
     display: flex;
     align-items: center;
-    width: fit-content;
-    padding: 7px 10px;
-    color: var(--black);
-    cursor: pointer;
-    background-color: var(--grey-button);
-    border: 1px solid transparent;
-    border-radius: var(--rounded-lg);
+    justify-content: space-between;
+  }
 
-    i {
-      margin-left: 10px;
-      transition: transform 0.5s;
+  &__clear {
+    cursor: pointer;
+  }
+
+  &__title {
+    color: var(--black);
+
+    @include typography.heading-3;
+
+    @include responsive.apply-desktop {
+      @include typography.bold-body-16;
+    }
+  }
+
+  &__block {
+    margin-bottom: 0;
+    
+    @include responsive.apply-desktop {
+      margin-bottom: 10px;
     }
 
-    &--open {
-      background-color: var(--white);
-      border: 1px solid var(--medium-grey-for-outline);
+    .filter__name {
+      color: var(--gray);
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
 
-      i {
-        color: var(--accent);
-        transform: rotate(180deg);
+    label {
+      display: flex;
+      gap: 5px;
+
+      span {
+        margin-bottom: 0;
+        margin-top: 2px;
       }
     }
   }
 
   &__controls {
     display: grid;
-    grid-template-rows: 0fr;
-    overflow: hidden;
-    transition: grid-template-rows 0.5s;
+    grid-template-rows: 1fr;
+    overflow: unset;
 
     form {
       display: flex;
       flex-direction: column;
-      gap: 40px;
+      gap: 20px;
       min-height: 0;
       transition: visibility 0.5s;
 
       @include responsive.apply-desktop {
-        flex-direction: row;
-        justify-content: space-between;
+        gap: 5px;
       }
-    }
-
-    &--open {
-      grid-template-rows: 1fr;
-      overflow: unset;
-      animation: 0.5s delay-overflow;
-    }
-
-    @keyframes delay-overflow {
-      from { overflow: hidden; }
     }
   }
 
@@ -68,14 +83,10 @@
     display: flex;
     gap: 10px;
     align-items: center;
-    padding: 12px 20px;
 
     // width: 168px;
     font-size: 12px;
     color: var(--black);
-    background-color: var(--white);
-    border: 1px solid var(--gray);
-    border-radius: var(--rounded-lg);
 
     span {
       color: var(--dark-grey);

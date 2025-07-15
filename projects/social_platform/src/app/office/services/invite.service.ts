@@ -14,9 +14,14 @@ import { AuthService } from "@auth/services";
 export class InviteService {
   constructor(private readonly apiService: ApiService, private readonly authService: AuthService) {}
 
-  sendForUser(userId: number, projectId: number, role: string): Observable<Invite> {
+  sendForUser(
+    userId: number,
+    projectId: number,
+    role: string,
+    specialization?: string
+  ): Observable<Invite> {
     return this.apiService
-      .post("/invites/", { user: userId, project: projectId, role })
+      .post("/invites/", { user: userId, project: projectId, role, specialization })
       .pipe(map(profile => plainToInstance(Invite, profile)));
   }
 
@@ -30,6 +35,10 @@ export class InviteService {
 
   rejectInvite(inviteId: number): Observable<Invite> {
     return this.apiService.post(`/invites/${inviteId}/decline/`, {});
+  }
+
+  updateInvite(inviteId: number, role: string, specialization?: string): Observable<Invite> {
+    return this.apiService.patch(`/invites/${inviteId}`, { role, specialization });
   }
 
   getMy(): Observable<Invite[]> {

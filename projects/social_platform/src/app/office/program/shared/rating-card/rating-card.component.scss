@@ -8,16 +8,16 @@
 }
 
 .card {
-  padding: 14px;
-  background-color: var(--white);
   border-radius: 15px;
 
   &__upper {
+    padding: 14px;
     background-color: var(--white);
     border-radius: 15px;
+    border: 1px solid var(--accent);
 
     @include responsive.apply-desktop {
-      background-color: var(--light-gray);
+      min-height: 550px;
     }
   }
 
@@ -134,6 +134,7 @@
     flex-direction: column;
     gap: 15px;
     margin-top: 25px;
+    padding: 14px;
 
     @include responsive.apply-desktop {
       gap: 24px;
@@ -169,6 +170,17 @@
   &__redo-rating-icon {
     color: var(--dark-grey);
     cursor: pointer;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__next-btn,
+  &__last-btn {
+    margin: 0 10px;
   }
 }
 

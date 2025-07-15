@@ -46,6 +46,8 @@ export class User {
   skillsIds!: number[];
   isOnline!: boolean;
   isActive!: boolean;
+  isMospolytechStudent?: boolean;
+  studyGroup?: string;
   progress?: number;
   v2Speciality!: {
     id: number;

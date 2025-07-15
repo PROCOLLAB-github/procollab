@@ -147,10 +147,19 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-
+    
+    ::ng-deep {
+      app-input {
+        input {
+          padding: 10px 12px;
+          @include typography.body-12;
+        }
+      }
+    }
+    
     @include responsive.apply-desktop {
       flex-direction: row;
-      gap: 50px;
+      gap: 50px;  
     }
   }
 }

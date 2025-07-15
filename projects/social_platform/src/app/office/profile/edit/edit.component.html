@@ -362,7 +362,41 @@
           </div>
           }
         </fieldset>
-        }
+        } @if (profileForm.get("isMospolytechStudent"); as isMospolytechStudent) {
+        <fieldset style="display: flex; gap: 10px">
+          <app-checkbox
+            [checked]="profileForm.get('isMospolytechStudent')?.value"
+            (checkedChange)="profileForm.get('isMospolytechStudent')?.setValue($event)"
+          >
+          </app-checkbox>
+          <label (click)="isStudentMosPolytech()" class="field-label" style="cursor: pointer">
+            Студент Московского Политеха
+          </label>
+          @if (isMospolytechStudent | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (profileForm.get("isMospolytechStudent")?.value) { @if (profileForm.get("studyGroup");
+        as studyGroup) {
+        <fieldset>
+          <label for="studyGroup" class="field-label"
+            >Учебная группа -
+            <span style="color: var(--accent)">Для студентов Московского Политеха</span></label
+          >
+          <app-input
+            [error]="studyGroup | controlError"
+            placeholder="Б 5121.9367.01"
+            formControlName="studyGroup"
+          ></app-input>
+          @if (studyGroup | controlError: "required") {
+          <div class="text-body-14 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } }
       </div>
 
       <div class="profile__row education__block">

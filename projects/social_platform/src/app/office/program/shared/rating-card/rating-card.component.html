@@ -71,7 +71,37 @@
       </div>
       }
     </div>
-    <app-button (click)="submitRating()" [loader]="submitLoading()">Оценить проект</app-button>
+    <div class="card__buttons">
+      <app-button
+        appearance="outline"
+        color="primary"
+        [hasBorder]="false"
+        (click)="toggleRate('prev')"
+        [disabled]="_currentIndex() === 0"
+        [ngStyle]="{
+        opacity: _currentIndex() !== 0 ? '1': '0.5',
+      }"
+      >
+        <i appIcon icon="arrowright" appSquare="20" style="transform: rotate(180deg)"></i>
+        <span class="card__last-btn">Предыдущий проект</span>
+      </app-button>
+
+      <app-button (click)="submitRating()" [loader]="submitLoading()">Оценить проект</app-button>
+
+      <app-button
+        appearance="outline"
+        color="primary"
+        [hasBorder]="false"
+        (click)="toggleRate('next')"
+        [disabled]="_projects().length - 1 === _currentIndex()"
+        [ngStyle]="{
+      opacity: _projects().length - 1 !== _currentIndex() ? '1': '0.5',
+    }"
+      >
+        <span class="card__next-btn">Следующий проект</span>
+        <i appIcon icon="arrowright" appSquare="20"></i>
+      </app-button>
+    </div>
     } @else {
     <div class="card__rated">
       <div class="card__lower-icons">

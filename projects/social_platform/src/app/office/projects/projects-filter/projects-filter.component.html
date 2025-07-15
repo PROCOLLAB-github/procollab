@@ -6,8 +6,31 @@
       <h3 class="filter__title">Фильтр</h3>
       <a class="text-body-12 filter__clear" (click)="clearFilters()">Сбросить фильтры</a>
     </div>
+
+    <!-- Скрыть пока не появится программа для мос политеха -->
+    <!-- <div class="filter__block">
+      <div class="filter__switch--one">
+        <app-switch
+          [checked]="isMospolytech"
+          (checkedChange)="onFilterMospolytech($event)"
+        ></app-switch>
+        <span class="filter__yes-no text-body-14" [class.filter__yes-no--active]="isMospolytech"
+          >Проект ПД.МосПолитеха
+        </span>
+      </div>
+    </div> -->
+
     <div class="filter__block">
-      <h4 class="text-body-12 filter__name">Статус проекта</h4>
+      <h4 class="text-body-12 filter__name">Проекты</h4>
+      @for (tag of filterTags; track tag.id) {
+      <div class="text-body-14 filter__checkbox" (click)="onFilterProjectType($event, tag.id)">
+        <app-checkbox [checked]="tag.id === currentFilterTag"></app-checkbox>
+        {{ tag.label }}
+      </div>
+      }
+    </div>
+    <div class="filter__block">
+      <h4 class="text-body-12 filter__name">Этап проекта</h4>
       @for (step of steps; track step.id) {
       <div class="text-body-14 filter__checkbox" (click)="onFilterByStep($event, step.id)">
         <app-checkbox [checked]="step.id === currentStep"></app-checkbox>
@@ -26,12 +49,16 @@
     <div class="filter__block">
       <div class="text-body-12 filter__name">Наличие вакансий</div>
       <div class="filter__switch">
-        <span class="filter__yes-no" [class.filter__yes-no--active]="!hasVacancies">Нет</span>
+        <span class="filter__yes-no text-body-14" [class.filter__yes-no--active]="!hasVacancies"
+          >Нет</span
+        >
         <app-switch
           [checked]="hasVacancies"
           (checkedChange)="onFilterVacancies($event)"
         ></app-switch>
-        <span class="filter__yes-no" [class.filter__yes-no--active]="hasVacancies">Да</span>
+        <span class="filter__yes-no text-body-14" [class.filter__yes-no--active]="hasVacancies"
+          >Да</span
+        >
       </div>
     </div>
     <div class="filter__block">

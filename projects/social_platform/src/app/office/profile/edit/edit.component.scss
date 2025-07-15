@@ -291,6 +291,16 @@
     margin-right: 6px;
   }
 
+  ::ng-deep {
+    app-autocomplete-input {
+      .field__input {
+        padding: 12px 20px;
+
+        @include typography.body-16;
+      }
+    }
+  }
+
   &__button {
     flex-shrink: 0;
     width: 52px;

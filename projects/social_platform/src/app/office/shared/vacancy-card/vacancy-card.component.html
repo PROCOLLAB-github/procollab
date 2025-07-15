@@ -6,7 +6,8 @@
     <h3 class="text-bold-body-14 vacancy__role">{{ vacancy.role }}</h3>
     @if (vacancy.requiredSkills.length) {
     <p class="text-body-12 vacancy__requirements">
-      {{ skillString }}
+      {{ skillString }} {{ vacancy.specialization ? "•" : "" }}
+      {{ vacancy.specialization ? vacancy.specialization : "" }}
     </p>
     }
   </div>

@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve social_platform",
+    "start:social": "ng serve social_platform --open",
+    "start:skills": "ng serve skills --open",
     "build:social:dev": "npm run build:sprite && ng build social_platform --configuration=development",
     "build:social:prod": "npm run build:sprite && ng build social_platform --configuration=production",
     "build:skills:prod": "ng build skills --configuration=production",

@@ -3,10 +3,18 @@
 <div class="relations">
   <h2 class="relations__title">{{ data.text }}</h2>
   <div class="relations__description" [innerHTML]="description"></div>
-  <div class="relations__wrapper">
+  <div class="relations__wrapper" style="position: relative">
+    <svg
+      #svgOverlay
+      class="svg-overlay"
+      style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none"
+    ></svg>
+
     <div class="relations__column">
       @for (_ of Array(data.connectLeft.length); track $index) {
       <div
+        #leftItem
+        [attr.data-id]="data.connectLeft[$index].id"
         class="relations__item relations__a"
         [class.relations__item--active]="
           resultLeft().includes(data.connectLeft[$index].id) ||
@@ -27,6 +35,8 @@
     <div class="relations__column" [class.relations__column--grid]="isImageGrid">
       @for (_ of Array(data.connectRight.length); track $index) {
       <div
+        #rightItem
+        [attr.data-id]="data.connectRight[$index].id"
         class="relations__item relations__b"
         (click)="onSelectRight(data.connectRight[$index].id)"
         [class.relations__item--active]="resultRight().includes(data.connectRight[$index].id)"

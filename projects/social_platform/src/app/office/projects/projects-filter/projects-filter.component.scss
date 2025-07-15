@@ -70,6 +70,12 @@
     display: flex;
     margin-top: 6px;
 
+    &--one {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
     app-switch {
       margin: 0 20px;
     }

@@ -5,8 +5,10 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnDestroy,
+  Output,
   signal,
   ViewChild,
 } from "@angular/core";
@@ -51,7 +53,7 @@ export class RatingCardComponent implements AfterViewInit, OnDestroy {
     private cdRef: ChangeDetectorRef
   ) {}
 
-  @Input({ required: true }) set project(proj: ProjectRate) {
+  @Input({ required: true }) set project(proj: ProjectRate | null) {
     if (!proj) return;
     this._project.set(proj);
     this.projectRated.set(proj.isScored);
@@ -61,9 +63,32 @@ export class RatingCardComponent implements AfterViewInit, OnDestroy {
     return this._project();
   }
 
+  @Input({ required: true }) set projects(proj: ProjectRate[] | null) {
+    if (!proj) return;
+    this._projects.set(proj);
+  }
+
+  get projects(): ProjectRate[] | null {
+    return this._projects();
+  }
+
+  @Input({ required: true }) set currentIndex(curIndx: number) {
+    if (!curIndx) return;
+    this._currentIndex.set(curIndx);
+  }
+
+  get currentIndex(): number {
+    return this._currentIndex();
+  }
+
+  @Output() onNext: EventEmitter<void> = new EventEmitter();
+  @Output() onPrev: EventEmitter<void> = new EventEmitter();
+
   @ViewChild("descEl") descEl?: ElementRef;
 
   _project = signal<ProjectRate | null>(null);
+  _currentIndex = signal<number>(0);
+  _projects = signal<ProjectRate[]>([]);
 
   form = new FormControl();
 
@@ -125,5 +150,13 @@ export class RatingCardComponent implements AfterViewInit, OnDestroy {
 
   redoRating(): void {
     this.projectRated.set(false);
+  }
+
+  toggleRate(type: "next" | "prev"): void {
+    if (type === "next") {
+      this.onNext.emit();
+    } else {
+      this.onPrev.emit();
+    }
   }
 }

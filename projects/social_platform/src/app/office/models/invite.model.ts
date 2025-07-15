@@ -9,6 +9,8 @@ export class Invite {
   isAccepted?: boolean;
   motivationalLetter?: string;
   project!: Project;
+  role!: string;
+  specialization?: string;
 
   user!: User;
 }

@@ -60,6 +60,17 @@ export class ProfileDetailComponent implements OnInit {
 
   isProfileFill = false;
 
+  tooltipText = "Заполни до конца — и открой весь функционал платформы!";
+  isHintVisible = false;
+
+  showTooltip() {
+    this.isHintVisible = true;
+  }
+
+  hideTooltip() {
+    this.isHintVisible = false;
+  }
+
   errorMessageModal = signal("");
   desktopMode$: Observable<boolean> = this.breakpointObserver
     .observe("(min-width: 920px)")

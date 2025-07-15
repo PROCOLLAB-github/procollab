@@ -1,6 +1,7 @@
 <!-- @format -->
 
 <section class="members" #membersRoot>
+  <h1 class="text-heading-1 members__title">Участники</h1>
   <form class="members__bar" [formGroup]="searchForm">
     <app-search
       formControlName="search"
@@ -8,14 +9,16 @@
       [openable]="containerSm < appWidth"
     ></app-search>
   </form>
-  <app-members-filters class="members__filter" [filterForm]="filterForm"></app-members-filters>
-  <ul class="members__list">
-    @for (member of members; track member.id) {
-    <a [routerLink]="['/office/profile', member.id]">
-      <li>
-        <app-member-card [user]="member"></app-member-card>
-      </li>
-    </a>
-    }
-  </ul>
+  <div class="members__content">
+    <ul class="members__list">
+      @for (member of members; track member.id) {
+      <a [routerLink]="['/office/profile', member.id]">
+        <li>
+          <app-member-card [user]="member"></app-member-card>
+        </li>
+      </a>
+      }
+    </ul>
+    <app-members-filters class="members__filter" [filterForm]="filterForm"></app-members-filters>
+  </div>
 </section>

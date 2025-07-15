@@ -22,6 +22,7 @@ import { ProgramNewsCardComponent } from "../shared/news-card/news-card.componen
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ApiPagination } from "@models/api-pagination.model";
+import { TagComponent } from "@ui/components/tag/tag.component";
 
 @Component({
   selector: "app-main",
@@ -34,6 +35,7 @@ import { ApiPagination } from "@models/api-pagination.model";
     ButtonComponent,
     RouterLink,
     ProgramNewsCardComponent,
+    TagComponent,
     UserLinksPipe,
     ParseBreaksPipe,
     ParseLinksPipe,

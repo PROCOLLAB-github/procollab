@@ -10,6 +10,8 @@ import { ProjectService } from "@services/project.service";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
 import { NumSliderComponent } from "@ui/components/num-slider/num-slider.component";
 import { CheckboxComponent } from "@ui/components";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { filterTags } from "projects/core/src/consts/filter-tags";
 
 @Component({
   selector: "app-projects-filter",
@@ -26,6 +28,8 @@ export class ProjectsFilterComponent implements OnInit {
     private readonly projectService: ProjectService
   ) {}
 
+  readonly filterTags = filterTags;
+
   ngOnInit(): void {
     this.industries$ = this.industryService.industries.subscribe(industries => {
       this.industries = industries;
@@ -40,6 +44,14 @@ export class ProjectsFilterComponent implements OnInit {
       this.currentStep = parseInt(queries["step"]);
       this.currentMembersCount = parseInt(queries["membersCount"]);
       this.hasVacancies = queries["anyVacancies"] === "true";
+      this.isMospolytech = queries["is_mospolytech"] === "true";
+
+      const tagParam = queries["is_rated_by_expert"];
+      if (tagParam === undefined || isNaN(parseInt(tagParam))) {
+        this.currentFilterTag = 2;
+      } else {
+        this.currentFilterTag = parseInt(tagParam);
+      }
     });
   }
 
@@ -54,9 +66,12 @@ export class ProjectsFilterComponent implements OnInit {
   industries$?: Subscription;
 
   hasVacancies = false;
+  isMospolytech = false;
 
   membersCountOptions = [1, 2, 3, 4, 5, 6];
   currentMembersCount: number | null = null;
+
+  currentFilterTag = 2;
 
   onFilterByStep(event: Event, stepId?: number): void {
     event.stopPropagation();
@@ -106,7 +121,32 @@ export class ProjectsFilterComponent implements OnInit {
       .then(() => console.debug("Query change from ProjectsComponent"));
   }
 
+  onFilterMospolytech(isMospolytech: boolean): void {
+    this.router
+      .navigate([], {
+        queryParams: {
+          is_mospolytech: isMospolytech,
+          partner_program: 3, // TODO: заменить когда появиться итоговое id программы для политеха
+        },
+        relativeTo: this.route,
+        queryParamsHandling: "merge",
+      })
+      .then(() => console.debug("Query change from ProjectsComponent"));
+  }
+
+  onFilterProjectType(event: Event, tagId?: number | null): void {
+    event.stopPropagation();
+
+    this.router.navigate([], {
+      queryParams: { is_rated_by_expert: tagId === this.currentFilterTag ? undefined : tagId },
+      relativeTo: this.route,
+      queryParamsHandling: "merge",
+    });
+  }
+
   clearFilters(): void {
+    this.currentFilterTag = 2;
+
     this.router
       .navigate([], {
         queryParams: {
@@ -114,6 +154,9 @@ export class ProjectsFilterComponent implements OnInit {
           anyVacancies: undefined,
           membersCount: undefined,
           industry: undefined,
+          is_rated_by_expert: undefined,
+          is_mospolytech: undefined,
+          partner_program: undefined,
         },
         relativeTo: this.route,
         queryParamsHandling: "merge",

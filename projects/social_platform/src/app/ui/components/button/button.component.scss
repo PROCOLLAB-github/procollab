@@ -65,6 +65,10 @@
       color: var(--accent);
       background: var(--white);
     }
+
+    &.button--no-border {
+      border: none;
+    }
   }
 
   &.button--outline {
@@ -72,7 +76,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: 52px;
+    max-height: 52px;
     padding: 11.5px 18px;
     color: var(--accent);
     text-align: center;
@@ -95,6 +99,10 @@
         color: var(--red-dark);
         border-color: var(--red-dark);
       }
+    }
+
+    &.button--no-border {
+      border: none;
     }
   }
 }

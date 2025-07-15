@@ -49,6 +49,21 @@
       </app-button>
     </div>
   </app-modal>
+
+  <app-modal [open]="inviteErrorModal">
+    <div class="message-modal">
+      <h3 class="message-modal__title text-bold-body-16">
+        Приглашение на текущий проект было удалено
+      </h3>
+      <p class="message-modal__text text-body-14">
+        Проверьте наличие вас в списке участников проекта или обратитесь к создателю проекта, чтобы
+        вас заново пригласили!
+      </p>
+      <app-button class="message-modal__button" (click)="inviteErrorModal = false">
+        Хорошо
+      </app-button>
+    </div>
+  </app-modal>
   <app-delete-confirm></app-delete-confirm>
   <app-snackbar></app-snackbar>
 </div>

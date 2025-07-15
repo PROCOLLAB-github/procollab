@@ -115,6 +115,8 @@ export class OfficeComponent implements OnInit, OnDestroy {
   waitVerificationModal = false;
   waitVerificationAccepted = false;
 
+  inviteErrorModal = false;
+
   profile?: User;
 
   onAcceptWaitVerification() {
@@ -123,21 +125,31 @@ export class OfficeComponent implements OnInit, OnDestroy {
   }
 
   onRejectInvite(inviteId: number): void {
-    this.inviteService.rejectInvite(inviteId).subscribe(() => {
-      const index = this.invites().findIndex(invite => invite.id === inviteId);
-      this.invites().splice(index, 1);
+    this.inviteService.rejectInvite(inviteId).subscribe({
+      next: () => {
+        const index = this.invites().findIndex(invite => invite.id === inviteId);
+        this.invites().splice(index, 1);
+      },
+      error: () => {
+        this.inviteErrorModal = true;
+      },
     });
   }
 
   onAcceptInvite(inviteId: number): void {
-    this.inviteService.acceptInvite(inviteId).subscribe(() => {
-      const index = this.invites().findIndex(invite => invite.id === inviteId);
-      const invite = JSON.parse(JSON.stringify(this.invites()[index]));
-      this.invites().splice(index, 1);
+    this.inviteService.acceptInvite(inviteId).subscribe({
+      next: () => {
+        const index = this.invites().findIndex(invite => invite.id === inviteId);
+        const invite = JSON.parse(JSON.stringify(this.invites()[index]));
+        this.invites().splice(index, 1);
 
-      this.router
-        .navigateByUrl(`/office/projects/${invite.project.id}`)
-        .then(() => console.debug("Route changed from SidebarComponent"));
+        this.router
+          .navigateByUrl(`/office/projects/${invite.project.id}`)
+          .then(() => console.debug("Route changed from SidebarComponent"));
+      },
+      error: () => {
+        this.inviteErrorModal = true;
+      },
     });
   }
 

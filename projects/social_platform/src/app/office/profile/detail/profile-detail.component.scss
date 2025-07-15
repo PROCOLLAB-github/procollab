@@ -37,6 +37,7 @@ $detail-bar-mb: 12px;
   }
 
   &__btns {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -44,6 +45,27 @@ $detail-bar-mb: 12px;
 
     @include responsive.apply-desktop {
       flex-direction: row;
+    }
+  }
+
+  &__tooltip {
+    position: absolute;
+    bottom: 90%;
+    right: 0%;
+    z-index: 100;
+    display: none;
+    width: 220px;
+    padding: 12px;
+    color: var(--accent);
+    background-color: var(--white);
+    box-shadow: 0 0 6px var(--gray);
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+
+    &--visible {
+      display: block;
+      opacity: 1;
     }
   }
 }

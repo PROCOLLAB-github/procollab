@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, inject, OnInit, signal } from "@angular/core";
+import { ChangeDetectorRef, Component, inject, OnInit, signal, ViewChild } from "@angular/core";
 import { CommonModule, NgOptimizedImage } from "@angular/common";
 import { InfoTaskComponent } from "../shared/video-task/info-task.component";
 import { RadioSelectTaskComponent } from "../shared/radio-select-task/radio-select-task.component";
@@ -69,6 +69,8 @@ export class SubtaskComponent implements OnInit {
     )
   );
 
+  @ViewChild(RelationsTaskComponent) relationsTask: RelationsTaskComponent | null = null;
+
   // stepData = signal<StepType | null>(null);
   infoSlide = signal<InfoSlide | null>(null);
   singleQuestion = signal<SingleQuestion | null>(null);
@@ -109,7 +111,6 @@ export class SubtaskComponent implements OnInit {
           this.loading.set(true);
         }),
         concatMap(subTaskId => {
-          // this.taskService.fetchStep(subTaskId, this.route.snapshot.queryParams["type"]).subscribe(data => console.log(data));
           this.openQuestion.set(this.route.snapshot.queryParams["type"]);
           return this.taskService.fetchStep(subTaskId, this.route.snapshot.queryParams["type"]);
         })
@@ -253,6 +254,7 @@ export class SubtaskComponent implements OnInit {
 
         if (type === "question_connect") {
           this.connectQuestionError.set(err.error);
+          this.relationsTask?.removeLines();
         } else if (type === "question_single_answer") {
           this.singleQuestionError.set(err.error);
         } else if (type === "exclude_question") {

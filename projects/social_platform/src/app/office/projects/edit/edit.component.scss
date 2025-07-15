@@ -115,8 +115,13 @@
     flex-basis: 50%;
     margin-bottom: 20px;
 
-    @include responsive.apply-desktop {
-      margin-bottom: 0;
+    form {
+      width: 100%;
+      max-width: 280px;
+
+      @include responsive.apply-desktop {
+        max-width: 600px;
+      }
     }
   }
 
@@ -148,7 +153,6 @@
 
   &__info {
     display: flex;
-    align-items: center;
     justify-content: space-between;
   }
 
@@ -161,12 +165,8 @@
   }
 
   &__additional {
-    :first-child {
+    fieldset {
       margin-bottom: 10px;
-    }
-
-    :last-child {
-      margin-top: 10px;
     }
   }
 
@@ -233,6 +233,17 @@
     }
   }
 
+  &__team {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0;
+    
+    @include responsive.apply-desktop {
+      padding: 60px 50px;
+    }
+  }
+
   &__or {
     margin: 20px 0;
     color: var(--dark-grey);
@@ -254,7 +265,17 @@
   }
 
   &__invite {
-    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+
+    app-button {
+      width: 90%;
+
+      @include responsive.apply-desktop {
+        width: 25%;
+        @include typography.bold-body-16;
+      }
+    }
   }
 
   &__warning-modal {
@@ -309,15 +330,28 @@
   }
 
   &__list {
-    max-height: 550px;
+    width: 557px;
+    width: 100%;
     margin-top: 10px;
-    margin-bottom: 57px;
+  }
+
+  &__team {
+    grid-template-columns: repeat(1, 270px);    
+    margin-top: 10px;
+    
+    @include responsive.apply-desktop {
+      grid-template-columns: repeat(3, 350px);
+    }
   }
 }
 
 .vacancy {
   &__item {
     margin-bottom: 12px;
+  }
+
+  fieldset {
+    margin-bottom: 10px;
   }
 
   &__form-list {
@@ -338,7 +372,6 @@
     display: flex;
     gap: 20px;
     align-items: center;
-    margin-bottom: 10px;
 
     :first-child,
     :last-child {
@@ -346,19 +379,18 @@
     }
   }
 
-  &__role,
-  &__search,
-  &__description {
-    margin-bottom: 12px;
-  }
-
   &__submit {
     display: block;
-    margin-bottom: 12px;
   }
 
-  &__work {
-    margin-bottom: 12px;
+  &__description {
+    ::ng-deep {
+      app-input {
+        .field__input {
+          padding: 40px 20px;
+        }
+      }
+    }
   }
 }
 
@@ -375,6 +407,16 @@
   &__input {
     flex-grow: 1;
     margin-right: 6px;
+  }
+
+  ::ng-deep {
+    app-autocomplete-input {
+      .field__input {
+        padding: 12px 20px;
+
+        @include typography.body-16;
+      }
+    }
   }
 
   &__button {

@@ -22,6 +22,8 @@ export class BarComponent {
     count?: number;
   }[];
 
+  @Input() backRoute?: string;
+
   @Input() backHave?: boolean;
 
   @Input() ballHave?: boolean = false;

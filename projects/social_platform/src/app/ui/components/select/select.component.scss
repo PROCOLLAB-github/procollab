@@ -65,7 +65,8 @@
     }
 
     &:hover {
-      background-color: var(--light-gray);
+      color: var(--white);
+      background-color: var(--accent);
     }
 
     @include typography.body-14;

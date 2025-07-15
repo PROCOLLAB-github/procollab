@@ -16,6 +16,7 @@ export class ButtonComponent implements OnInit {
 
   @Input() color: "primary" | "red" | "grey" | "green" | "gold" | "gradient" | "white" = "primary";
   @Input() loader = false;
+  @Input() hasBorder = true;
   @Input() type: "submit" | "reset" | "button" = "button";
   @Input() appearance: "inline" | "outline" = "inline";
   @Input() backgroundColor?: string;

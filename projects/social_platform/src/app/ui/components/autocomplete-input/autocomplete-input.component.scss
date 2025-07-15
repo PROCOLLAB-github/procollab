@@ -12,7 +12,7 @@
 
   &__input {
     width: 100%;
-    padding: 12px 20px;
+    padding: 8px 10px;
     color: var(--black);
     background-color: var(--white);
     border: 1px solid var(--gray);
@@ -37,7 +37,7 @@
       padding-right: 45px;
     }
 
-    @include typography.body-16;
+    @include typography.body-12;
   }
 
   &__input-slim {

@@ -1,9 +1,12 @@
 /** @format */
 
+@use "styles/typography";
+
 .invite {
   display: flex;
-  align-items: center;
-  padding: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 15px 10px;
   background-color: var(--light-gray);
   border-radius: var(--rounded-md);
 
@@ -16,12 +19,78 @@
   }
 
   &__status {
-    margin: 0 10px 0 auto;
+    margin: 5px 10px 0 auto;
     color: var(--accent);
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &__warning-modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    width: 400px;
+
+    p {
+      margin-bottom: 15px;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    :nth-child(2) {
+      margin-bottom: 220px;
+    }
+
+    ::ng-deep {
+      app-button {
+        width: 30%;
+        align-self: center;
+      }
+
+      app-input {
+        input {
+          @include typography.body-12;
+        }
+      }
+
+      app-select {
+        .field__input, ul, li {
+          @include typography.body-12;
+        }
+      }
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__icons {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__icon {
+    cursor: pointer;
+  }
+
+  &__edit {
+    color: var(--dark-grey);
   }
 
   &__cross {
     color: var(--red);
-    cursor: pointer;
   }
 }

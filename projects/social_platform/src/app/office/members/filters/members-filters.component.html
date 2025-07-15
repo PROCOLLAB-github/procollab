@@ -1,43 +1,59 @@
 <!-- @format -->
 
 <div class="filters">
-  <button
-    class="filters__toggle text-body-14"
-    [class.filters__toggle--open]="filtersOpen"
-    (click)="filtersOpen = !filtersOpen"
-  >
-    Фильтры
-    <i appIcon icon="arrow-no-body" appWidth="12" appHeight="6" appViewBox="0 0 18 9"> </i>
-  </button>
-  <div class="filters__controls" [class.filters__controls--open]="filtersOpen">
+  <div class="filters__titles">
+    <h3 class="filters__title">Фильтр</h3>
+    <a class="text-body-12 filters__clear" (click)="clearFilters()">Сбросить фильтры</a>
+  </div>
+
+  <div class="filters__controls">
     <form [formGroup]="filterForm">
-      <app-autocomplete-input
-        class="filter__autocomplete"
-        [suggestions]="specsOptions()"
-        [slimVersion]="false"
-        fieldToDisplay="name"
-        valueField="name"
-        formControlName="speciality"
-        placeholder="Специальность"
-        (searchStart)="onSearchSpec($event)"
-        (inputCleared)="onClearSpecField()"
-      ></app-autocomplete-input>
-      <app-autocomplete-input
-        class="filter__autocomplete"
-        [suggestions]="skillsOptions()"
-        [slimVersion]="false"
-        fieldToDisplay="name"
-        valueField="name"
-        formControlName="keySkill"
-        placeholder="Навык"
-        (searchStart)="onSearchSkill($event)"
-        (inputCleared)="onClearSkillField()"
-      ></app-autocomplete-input>
-      <div class="filters__age-wrapper">
-        <div class="filters__age filter__item">
-          <span>Возраст</span>
-          <app-range-input formControlName="age"></app-range-input>
+      <div class="filters__block" style="margin-top: 10px">
+        <h4 class="text-body-12 filter__name">Специальность</h4>
+        <app-autocomplete-input
+          class="filter__autocomplete"
+          [suggestions]="specsOptions()"
+          [slimVersion]="false"
+          [searchIcon]="'search'"
+          fieldToDisplay="name"
+          valueField="name"
+          formControlName="speciality"
+          placeholder="Поиск"
+          (searchStart)="onSearchSpec($event)"
+          (inputCleared)="onClearSpecField()"
+        ></app-autocomplete-input>
+      </div>
+
+      <div class="filters__block">
+        <h4 class="text-body-12 filter__name">Навык</h4>
+        <app-autocomplete-input
+          class="filter__autocomplete"
+          [suggestions]="skillsOptions()"
+          [slimVersion]="false"
+          [searchIcon]="'search'"
+          fieldToDisplay="name"
+          valueField="name"
+          formControlName="keySkill"
+          placeholder="Поиск"
+          (searchStart)="onSearchSkill($event)"
+          (inputCleared)="onClearSkillField()"
+        ></app-autocomplete-input>
+      </div>
+
+      <div class="filters__block">
+        <h4 class="text-body-12 filter__name">Возраст</h4>
+        <div class="filters__age-wrapper">
+          <div class="filters__age filter__item">
+            <app-range-input formControlName="age"></app-range-input>
+          </div>
         </div>
+      </div>
+
+      <div class="filters__block">
+        <label (click)="onToggleStudentMosPolitech()">
+          <app-checkbox [checked]="filterForm.get('isMosPolytechStudent')?.value"> </app-checkbox>
+          <span class="text-body-12 filter__name">Студент Московского Политеха</span>
+        </label>
       </div>
     </form>
   </div>

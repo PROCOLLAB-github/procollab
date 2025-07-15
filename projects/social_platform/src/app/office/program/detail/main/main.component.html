@@ -25,7 +25,7 @@
         <div class="info__text">
           <h1 class="info__title">{{ program.name }}</h1>
           <div class="info__row">
-            <div class="info__tag text-body-14">#{{ program.tag }}</div>
+            <app-tag color="accent">#{{ program.tag }}</app-tag>
             <div class="info__location">
               <i appIcon icon="geo-point" appSquare="10"></i>
               {{ program.city }}

@@ -55,6 +55,12 @@ import { navItems } from "projects/core/src/consts/navProjectItems";
 import { experienceList } from "projects/core/src/consts/list-experience";
 import { formatList } from "projects/core/src/consts/list-format";
 import { scheludeList } from "projects/core/src/consts/list-schelude";
+import { trackProjectList } from "projects/core/src/consts/list-track-project";
+import { rolesMembersList } from "projects/core/src/consts/list-roles-members";
+import { directionProjectList } from "projects/core/src/consts/list-direction-project";
+import { CheckboxComponent } from "../../../ui/components/checkbox/checkbox.component";
+import { stringToArray } from "linkifyjs";
+import { stripNullish } from "@utils/stripNull";
 
 @Component({
   selector: "app-edit",
@@ -84,6 +90,7 @@ import { scheludeList } from "projects/core/src/consts/list-schelude";
     SkillsGroupComponent,
     BarComponent,
     TextareaComponent,
+    CheckboxComponent,
   ],
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -102,16 +109,21 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly skillsService: SkillsService
   ) {
     this.projectForm = this.fb.group({
-      imageAddress: ["", [Validators.required]],
+      imageAddress: [""],
       name: ["", [Validators.required]],
       region: ["", [Validators.required]],
       step: [null, [Validators.required]],
+      track: [""],
+      direction: [""],
       links: this.fb.array([]),
       link: [""],
       industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
       presentationAddress: ["", [Validators.required]],
       coverImageAddress: ["", Validators.required],
+      actuality: ["", [Validators.max(1000)]],
+      goal: ["", [Validators.required, Validators.max(500)]],
+      problem: ["", [Validators.required, Validators.max(1000)]],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
       achievementsName: [""],
@@ -127,6 +139,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       workFormat: [null],
       salary: [""],
       workSchedule: [null],
+      specialization: [null],
     });
 
     this.inviteForm = this.fb.group({
@@ -139,14 +152,20 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           Validators.pattern(/^http(s)?:\/\/.+(:[0-9]*)?\/office\/profile\/\d+$/),
         ],
       ],
+      specialization: [null],
     });
   }
+
+  projectForm: FormGroup;
+  vacancyForm: FormGroup;
+  inviteForm: FormGroup;
 
   ngOnInit(): void {
     this.navService.setNavTitle("Создание проекта");
     const controls: (AbstractControl | null)[] = [
       this.inviteForm.get("role"),
       this.inviteForm.get("link"),
+      this.inviteForm.get("specialization"),
       this.vacancyForm.get("role"),
       this.vacancyForm.get("skills"),
       this.vacancyForm.get("description"),
@@ -154,6 +173,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.vacancyForm.get("workFormat"),
       this.vacancyForm.get("salary"),
       this.vacancyForm.get("workSchedule"),
+      this.vacancyForm.get("specialization"),
     ];
 
     controls.filter(Boolean).forEach(control => {
@@ -233,6 +253,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           step: project.step,
           industryId: project.industry,
           description: project.description,
+          track: project.track,
+          direction: project.direction,
+          actuality: project.actuality,
+          goal: project.goal,
+          problem: project.problem,
           presentationAddress: project.presentationAddress,
           coverImageAddress: project.coverImageAddress,
         });
@@ -287,7 +312,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    * Current step of toggle, that navigates through
    * parts of project info
    */
-  editingStep: "main" | "contacts" | "team" | "achievements" | "vacancies" = "main";
+  editingStep: "main" | "contacts" | "achievements" | "vacancies" | "team" = "main";
 
   isCompleted = false;
 
@@ -321,16 +346,22 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly scheludeList = scheludeList;
 
+  readonly trackList = trackProjectList;
+
+  readonly directionList = directionProjectList;
+
+  readonly rolesMembersList = rolesMembersList;
+
   profileId: number = this.route.snapshot.params["projectId"];
 
   vacancies: Vacancy[] = [];
-  vacancyForm: FormGroup;
 
   inlineSkills = signal<Skill[]>([]);
 
   nestedSkills$ = this.skillsService.getSkillsNested();
 
   skillsGroupsModalOpen = signal(false);
+  isInviteModalOpen = signal(false);
 
   vacancySubmitInitiated = false;
   vacancyIsSubmitting = false;
@@ -338,6 +369,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedRequiredExperienceId = signal<number | undefined>(undefined);
   selectedWorkFormatId = signal<number | undefined>(undefined);
   selectedWorkScheduleId = signal<number | undefined>(undefined);
+  selectedVacanciesSpecializationId = signal<number | undefined>(undefined);
 
   onEditClicked = signal(false);
 
@@ -350,6 +382,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       "workFormat",
       "salary",
       "workSchedule",
+      "specialization",
     ].forEach(name => this.vacancyForm.get(name)?.clearValidators());
 
     ["role", "skills", "requiredExperience", "workFormat", "workSchedule"].forEach(name =>
@@ -392,12 +425,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
             "workFormat",
             "salary",
             "workSchedule",
+            "specialization",
           ].forEach(name => {
             this.vacancyForm.get(name)?.reset();
             this.vacancyForm.get(name)?.setValue("");
+            this.vacancyForm.get(name)?.setValue([]);
             this.vacancyForm.get(name)?.clearValidators();
             this.vacancyForm.get(name)?.markAsPristine();
             this.vacancyForm.get(name)?.updateValueAndValidity();
+            this.vacancyForm.reset();
           });
           this.vacancyIsSubmitting = false;
         },
@@ -408,9 +444,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   removeVacancy(vacancyId: number): void {
-    if (!confirm("Вы точно хотите удалить вакансию?")) {
-      return;
-    }
+    if (!confirm("Вы точно хотите удалить вакансию?")) return;
 
     this.vacancyService.deleteVacancy(vacancyId).subscribe(() => {
       const index = this.vacancies.findIndex(vacancy => vacancy.id === vacancyId);
@@ -439,6 +473,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
+    this.rolesMembersList.forEach(specialization => {
+      if (specialization.value === vacancyItem.specialization) {
+        this.selectedVacanciesSpecializationId.set(specialization.id);
+      }
+    });
+
     this.vacancyForm.patchValue({
       role: vacancyItem.role,
       skills: vacancyItem.requiredSkills,
@@ -447,6 +487,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       workFormat: vacancyItem.workFormat,
       salary: vacancyItem.salary ?? null,
       workSchedule: vacancyItem.workSchedule,
+      specialization: vacancyItem.specialization,
     });
 
     this.editIndex.set(index);
@@ -454,12 +495,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.onEditClicked.set(true);
   }
 
-  navigateStep(step: string) {
+  navigateStep(step: string): void {
     this.router.navigate([], { queryParams: { editingStep: step } });
     this.editingStep = step as "main" | "contacts" | "team" | "achievements" | "vacancies";
   }
-
-  inviteForm: FormGroup;
 
   inviteSubmitInitiated = false;
   inviteFormIsSubmitting = false;
@@ -467,6 +506,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   inviteNotExistingError: Error | null = null;
 
   invites: Invite[] = [];
+  invitesFill = this.invites.every(invite => invite.isAccepted !== null);
 
   submitInvite(): void {
     this.inviteSubmitInitiated = true;
@@ -476,22 +516,47 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.inviteFormIsSubmitting = true;
     const link = new URL(this.inviteForm.get("link")?.value);
     const path = link.pathname.split("/");
+
     this.inviteService
       .sendForUser(
         Number(path[path.length - 1]),
         Number(this.route.snapshot.paramMap.get("projectId")),
-        this.inviteForm.value.role
+        this.inviteForm.get("role")?.value,
+        this.inviteForm.get("specialization")?.value
       )
       .subscribe({
         next: invite => {
           this.invites.push(invite);
           this.inviteForm.reset();
           this.inviteFormIsSubmitting = false;
+          this.isInviteModalOpen.set(false);
         },
         error: () => {
           this.inviteFormIsSubmitting = false;
         },
       });
+  }
+
+  editInvitation({
+    inviteId,
+    role,
+    specialization,
+  }: {
+    inviteId: number;
+    role: string;
+    specialization: string;
+  }): void {
+    this.inviteService.updateInvite(inviteId, role, specialization).subscribe({
+      next: () => {
+        this.invites.map(invite => {
+          if (invite.id === inviteId) {
+            invite.role = role;
+            invite.specialization = specialization;
+          }
+          return this.invites;
+        });
+      },
+    });
   }
 
   removeInvitation(invitationId: number): void {
@@ -500,8 +565,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.invites.splice(index, 1);
     });
   }
-
-  projectForm: FormGroup;
 
   projSubmitInitiated = false;
 
@@ -601,12 +664,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.achievements.controls.forEach(achievementForm => {
       achievementForm.markAllAsTouched();
     });
+    const payload = stripNullish(this.projectForm.value);
+
     if (!this.validationService.getFormValidation(this.projectForm)) {
       return;
     }
+
     this.setProjFormIsSubmitting(true);
     this.projectService
-      .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), this.projectForm.value)
+      .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), payload)
       .subscribe({
         next: () => {
           this.setProjFormIsSubmitting(false);
@@ -655,8 +721,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   removeLink(index: number) {
-    this.links.removeAt(index); // Remove from FormArray
-    this.linksItems.update(items => items.filter((_, i) => i !== index)); // Remove from local items array
+    this.links.removeAt(index);
+    this.linksItems.update(items => items.filter((_, i) => i !== index));
   }
 
   warningModalSeen = false;

@@ -8,14 +8,14 @@
       {
         link:
           '/office/program' + '/' + programId!.toString() + '/' + 'projects-rating' + '/' + 'all',
-        linkText: 'Все проекты',
+        linkText: 'Страница проекта',
         isRouterLinkActiveOptions: false,
       },
     ]"
   >
   </app-bar>
 
-  <div class="filter">
+  <!-- <div class="filter">
     <div class="filter__search">
       <form [formGroup]="searchForm">
         <app-search formControlName="search"></app-search>
@@ -45,7 +45,7 @@
 
       <app-button (click)="onSearchClick()" class="filter__button">Найти</app-button>
     </div>
-  </div>
+  </div> -->
 
   <div class="rate-project__body">
     <router-outlet></router-outlet>
