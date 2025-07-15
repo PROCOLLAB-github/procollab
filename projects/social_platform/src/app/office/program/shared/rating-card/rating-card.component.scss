@@ -13,8 +13,8 @@
   &__upper {
     padding: 14px;
     background-color: var(--white);
-    border-radius: 15px;
     border: 1px solid var(--accent);
+    border-radius: 15px;
 
     @include responsive.apply-desktop {
       min-height: 550px;
@@ -133,8 +133,8 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-top: 25px;
     padding: 14px;
+    margin-top: 25px;
 
     @include responsive.apply-desktop {
       gap: 24px;

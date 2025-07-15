@@ -1,11 +1,10 @@
-
 @use "styles/responsive";
 @use "styles/typography";
 
 .members {
   &__title {
     display: none;
-    
+
     @include responsive.apply-desktop {
       display: block;
       margin-bottom: 14px;
@@ -18,8 +17,8 @@
 
     @include responsive.apply-desktop {
       flex-direction: row;
-      justify-content: space-between;
       gap: 24px;
+      justify-content: space-between;
     }
   }
 

@@ -238,7 +238,7 @@
     justify-content: space-between;
     width: 100%;
     padding: 0;
-    
+
     @include responsive.apply-desktop {
       padding: 60px 50px;
     }
@@ -273,6 +273,7 @@
 
       @include responsive.apply-desktop {
         width: 25%;
+
         @include typography.bold-body-16;
       }
     }
@@ -336,9 +337,9 @@
   }
 
   &__team {
-    grid-template-columns: repeat(1, 270px);    
+    grid-template-columns: repeat(1, 270px);
     margin-top: 10px;
-    
+
     @include responsive.apply-desktop {
       grid-template-columns: repeat(3, 350px);
     }

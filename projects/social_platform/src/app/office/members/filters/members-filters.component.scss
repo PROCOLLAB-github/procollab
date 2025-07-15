@@ -4,17 +4,17 @@
 .filters {
   display: flex;
   flex-direction: column;
-  margin-bottom: 40px;
-  min-width: 280px;
+  gap: 0;
   width: 100%;
-  gap: 0px;
+  min-width: 280px;
   padding: 26px;
+  margin-bottom: 40px;
   background-color: var(--white);
   border-radius: 8px;
-  
+
   @include responsive.apply-desktop {
-    padding: 26px 16px;
     gap: 24px;
+    padding: 26px 16px;
   }
 
   &__titles {
@@ -39,14 +39,14 @@
 
   &__block {
     margin-bottom: 0;
-    
+
     @include responsive.apply-desktop {
       margin-bottom: 10px;
     }
 
     .filter__name {
-      color: var(--gray);
       margin-bottom: 5px;
+      color: var(--gray);
       cursor: pointer;
     }
 
@@ -55,8 +55,8 @@
       gap: 5px;
 
       span {
-        margin-bottom: 0;
         margin-top: 2px;
+        margin-bottom: 0;
       }
     }
   }

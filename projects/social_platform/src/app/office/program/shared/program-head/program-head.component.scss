@@ -84,8 +84,8 @@
 
     @include responsive.apply-desktop {
       flex-grow: 1;
-      margin-left: auto;
       width: 30%;
+      margin-left: auto;
     }
   }
 }

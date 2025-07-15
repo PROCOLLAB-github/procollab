@@ -33,8 +33,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: center;
     width: 400px;
+    text-align: center;
 
     p {
       margin-bottom: 15px;
@@ -52,8 +52,8 @@
 
     ::ng-deep {
       app-button {
-        width: 30%;
         align-self: center;
+        width: 30%;
       }
 
       app-input {
@@ -63,7 +63,9 @@
       }
 
       app-select {
-        .field__input, ul, li {
+        .field__input,
+        ul,
+        li {
           @include typography.body-12;
         }
       }
@@ -72,14 +74,14 @@
 
   &__buttons {
     display: flex;
-    align-items: center;
     gap: 10px;
+    align-items: center;
   }
 
   &__icons {
     display: flex;
-    align-items: center;
     gap: 5px;
+    align-items: center;
   }
 
   &__icon {
