@@ -116,11 +116,10 @@
     margin-bottom: 20px;
 
     form {
-      width: 100%;
-      max-width: 280px;
+      width: 280px;
 
       @include responsive.apply-desktop {
-        max-width: 600px;
+        width: 600px;
       }
     }
   }
@@ -269,7 +268,8 @@
     flex-direction: column;
 
     app-button {
-      width: 90%;
+      width: 100%;
+      @include typography.body-12;
 
       @include responsive.apply-desktop {
         width: 25%;

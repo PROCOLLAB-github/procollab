@@ -255,9 +255,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           description: project.description,
           track: project.track,
           direction: project.direction,
-          actuality: project.actuality,
-          goal: project.goal,
-          problem: project.problem,
+          actuality: project.actuality ?? "",
+          goal: project.goal ?? "",
+          problem: project.problem ?? "",
           presentationAddress: project.presentationAddress,
           coverImageAddress: project.coverImageAddress,
         });
