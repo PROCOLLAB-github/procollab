@@ -30,6 +30,12 @@
     }
   }
 
+  &__left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
   &__section {
     padding: 24px;
     background-color: var(--white);
@@ -366,6 +372,11 @@
 }
 
 .news {
+  &__form {
+    display: block;
+    margin-top: 20px;
+  }
+  
   &__item {
     display: block;
     margin-top: 20px;

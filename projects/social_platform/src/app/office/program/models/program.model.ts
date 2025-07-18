@@ -7,11 +7,13 @@ export class Program {
   presentationAddress!: string;
   advertisementImageAddress!: string;
   name!: string;
+  leader!: number;
   description!: string;
   city!: string;
   tag!: string;
   year!: number;
   links!: string[];
+  materials!: string[];
   shortDescription!: string;
   datetimeRegistrationEnds!: string;
   datetimeStarted!: string;
@@ -27,9 +29,11 @@ export class Program {
       name: "",
       description: "",
       city: "",
+      leader: 0,
       imageAddress: "",
       presentationAddress: "",
       links: [],
+      materials: [],
       coverImageAddress: "",
       advertisementImageAddress: "",
       shortDescription: "",

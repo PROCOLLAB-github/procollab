@@ -13,9 +13,17 @@ export class UserLinksPipe implements PipeTransform {
   };
 
   transform(value: string): { iconName: string; tag: string } {
-    if (value.includes("@")) {
+    if (
+      value.includes("@") ||
+      value.includes("procollab_media") ||
+      value.includes("api.selcdn.ru/v1")
+    ) {
       const valueTrimed = value.replace(/^https?:\/\//, "");
-      return { iconName: "link", tag: valueTrimed };
+      return {
+        iconName:
+          value.includes("procollab_media") || value.includes("api.selcdn.ru/v1") ? "file" : "link",
+        tag: valueTrimed,
+      };
     }
 
     const url = new URL(value);

@@ -23,6 +23,9 @@ import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ApiPagination } from "@models/api-pagination.model";
 import { TagComponent } from "@ui/components/tag/tag.component";
+import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
+import { AsyncPipe } from "@angular/common";
+import { AuthService } from "@auth/services";
 
 @Component({
   selector: "app-main",
@@ -39,12 +42,15 @@ import { TagComponent } from "@ui/components/tag/tag.component";
     UserLinksPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
+    AsyncPipe,
+    NewsFormComponent,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   constructor(
     private readonly programService: ProgramService,
     private readonly programNewsService: ProgramNewsService,
+    public readonly authService: AuthService,
     private readonly route: ActivatedRoute,
     private readonly cdRef: ChangeDetectorRef
   ) {}
@@ -155,6 +161,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     );
   }
 
+  @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild("descEl") descEl?: ElementRef;
 
   onNewsInVew(entries: IntersectionObserverEntry[]): void {
@@ -165,6 +172,15 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     });
 
     this.programNewsService.readNews(this.route.snapshot.params["programId"], ids).subscribe(noop);
+  }
+
+  onAddNews(news: { text: string; files: string[] }): void {
+    this.programNewsService
+      .addNews(this.route.snapshot.params["programId"], news)
+      .subscribe(newsRes => {
+        this.newsFormComponent?.onResetForm();
+        this.news.update(news => [newsRes, ...news]);
+      });
   }
 
   onLike(newsId: number) {

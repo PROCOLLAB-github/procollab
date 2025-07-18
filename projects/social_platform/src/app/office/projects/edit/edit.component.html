@@ -668,6 +668,14 @@
       <div class="project__save">
         <app-button
           customTypographyClass="text-body-12"
+          color="grey"
+          [loader]="projFormIsSubmittingAsDraft"
+          (click)="saveProjectAsDraft()"
+        >
+          Сохранить черновик
+        </app-button>
+        <app-button
+          customTypographyClass="text-body-12"
           [loader]="projFormIsSubmittingAsPublished"
           (click)="saveProjectAsPublished()"
         >
