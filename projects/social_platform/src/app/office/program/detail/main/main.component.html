@@ -85,9 +85,11 @@
         }
       </div>
       <div class="news">
-        @if (authService.profile | async; as profile) { @if (program.leader === profile.id) {
+        @if (authService.profile | async; as profile) {
+        <!-- @if (program.leader === profile.id) { -->
         <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
-        } } @for (n of news(); track n.id) {
+        <!-- } -->
+        } @for (n of news(); track n.id) {
         <app-program-news-card
           class="news__item"
           [attr.data-id]="n.id"
