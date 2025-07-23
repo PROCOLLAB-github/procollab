@@ -315,6 +315,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   editingStep: "main" | "contacts" | "achievements" | "vacancies" | "team" = "main";
 
   isCompleted = false;
+  isSendDescisionToPartnerProgramProject = false;
 
   profile$?: Subscription;
 
@@ -729,6 +730,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   closeWarningModal(): void {
     this.warningModalSeen = true;
+  }
+
+  closeSendingDescisionModal(): void {
+    this.isSendDescisionToPartnerProgramProject = false;
+    console.log("sended");
   }
 
   onToggleSkill(toggledSkill: Skill): void {

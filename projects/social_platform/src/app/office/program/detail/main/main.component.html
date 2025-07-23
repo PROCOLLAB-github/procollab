@@ -85,10 +85,8 @@
         }
       </div>
       <div class="news">
-        @if (authService.profile | async; as profile) {
-        <!-- @if (program.leader === profile.id) { -->
+        @if (program.isUserManager) {
         <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
-        <!-- } -->
         } @for (n of news(); track n.id) {
         <app-program-news-card
           class="news__item"
@@ -130,16 +128,16 @@
         <div class="links program__section">
           <h3 class="links__title text-bold-body-16">Материалы</h3>
           <ul>
-            @for (link of program.materials; track $index) {
+            @for (material of program.materials; track $index) {
             <li class="contact-link links__item text-body-12">
-              @if (link | userLinks; as l) {
+              @if (material.url | userLinks; as l) {
               <a
                 class="contact-link__link"
                 target="_blank"
-                [href]="link.includes('@') ? 'mailto:' + link : link"
+                [href]="material.url.includes('@') ? 'mailto:' + material.url : material.url"
               >
                 <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
-                <span>{{ l.tag }}</span>
+                <span>{{ material.title }}</span>
               </a>
               }
             </li>

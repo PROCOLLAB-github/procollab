@@ -137,9 +137,9 @@ export class TrajectoryComponent implements AfterViewInit, OnInit {
     });
   }
 
-  onCloseModalActiveTrajectory() {
+  onCloseModalActiveTrajectory(trajectoryId: number | string) {
     this.activatedModalOpen.set(false);
-    this.router.navigate(["/trackCar/my"]);
+    this.router.navigate([`/trackCar/${trajectoryId}`]);
   }
 
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {

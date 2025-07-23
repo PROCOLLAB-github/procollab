@@ -245,6 +245,7 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   isUnsubscribeModalOpen = false;
 
   isLeaveProjectModalOpen = false;
+  isEditDisable = false;
 
   onSubscribe(projectId: number): void {
     if (this.isUserSubscribed) {

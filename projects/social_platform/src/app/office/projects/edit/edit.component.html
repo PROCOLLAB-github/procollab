@@ -679,7 +679,7 @@
           [loader]="projFormIsSubmittingAsPublished"
           (click)="saveProjectAsPublished()"
         >
-          Сохранить
+          {{ projectForm.get("partnerProgramId")?.value ? "Отправить заявку" : "Сохранить" }}
         </app-button>
       </div>
     </form>
@@ -734,5 +734,38 @@
       </div>
     </div>
     <app-button (click)="toggleSkillsGroupsModal()">Сохранить</app-button>
+  </div>
+</app-modal>
+
+<app-modal
+  [open]="isSendDescisionToPartnerProgramProject"
+  (openChange)="isSendDescisionToPartnerProgramProject = !isSendDescisionToPartnerProgramProject"
+>
+  <div class="cancel">
+    <div class="cancel__top">
+      <i
+        (click)="isSendDescisionToPartnerProgramProject = false"
+        appIcon
+        icon="cross"
+        class="cancel__cross"
+      ></i>
+      <img alt="end" src="assets/images/projects/detail/bid.svg" class="cancel__img" />
+      <h4 class="cancel__title text-heading-4">Отправить заявку?</h4>
+    </div>
+
+    <p class="text-body-12 cancel__text">
+      После отправки заявку нельзя будет редактировать до окончания конкурса.
+      <br />Вы уверены, что хотите отправить заявку сейчас?
+    </p>
+
+    <app-button
+      customTypographyClass="text-body-12"
+      color="grey"
+      (click)="isSendDescisionToPartnerProgramProject = false"
+      >Отмена</app-button
+    >
+    <app-button customTypographyClass="text-body-12" (click)="closeSendingDescisionModal()"
+      >Отправить</app-button
+    >
   </div>
 </app-modal>

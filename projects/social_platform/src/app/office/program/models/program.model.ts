@@ -7,13 +7,12 @@ export class Program {
   presentationAddress!: string;
   advertisementImageAddress!: string;
   name!: string;
-  leader!: number;
   description!: string;
   city!: string;
   tag!: string;
   year!: number;
   links!: string[];
-  materials!: string[];
+  materials!: { title: string; url: string }[];
   shortDescription!: string;
   datetimeRegistrationEnds!: string;
   datetimeStarted!: string;
@@ -21,6 +20,7 @@ export class Program {
   viewsCount!: number;
   likesCount!: number;
   isUserLiked!: boolean;
+  isUserManager?: boolean;
   isUserMember?: boolean;
 
   static default(): Program {
@@ -29,7 +29,6 @@ export class Program {
       name: "",
       description: "",
       city: "",
-      leader: 0,
       imageAddress: "",
       presentationAddress: "",
       links: [],
@@ -46,6 +45,7 @@ export class Program {
       year: 0,
       isUserLiked: false,
       isUserMember: false,
+      isUserManager: false,
     };
   }
 }
