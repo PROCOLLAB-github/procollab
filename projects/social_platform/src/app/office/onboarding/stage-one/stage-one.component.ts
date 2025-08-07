@@ -7,8 +7,7 @@ import { AuthService } from "@auth/services";
 import { ControlErrorPipe, ValidationService } from "@corelib";
 import { ActivatedRoute, Router } from "@angular/router";
 import { OnboardingService } from "../services/onboarding.service";
-import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
-import { TagComponent } from "@ui/components/tag/tag.component";
+import { ButtonComponent, IconComponent } from "@ui/components";
 import { CommonModule } from "@angular/common";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
 import { SpecializationsGroup } from "@office/models/specializations-group";
@@ -17,6 +16,35 @@ import { Specialization } from "@office/models/specialization";
 import { SpecializationsService } from "@office/services/specializations.service";
 import { ErrorMessage } from "@error/models/error-message";
 
+/**
+ * КОМПОНЕНТ ПЕРВОГО ЭТАПА ОНБОРДИНГА
+ *
+ * Назначение: Этап выбора специализации пользователя из предложенных вариантов
+ *
+ * Что делает:
+ * - Отображает форму для ввода/выбора специализации
+ * - Предоставляет автокомплит для поиска специализаций
+ * - Показывает группированные специализации из базы данных
+ * - Валидирует введенные данные
+ * - Сохраняет специализацию в профиле и переходит к следующему этапу
+ * - Предоставляет возможность пропустить этап
+ *
+ * Что принимает:
+ * - Данные специализаций через ActivatedRoute (из StageOneResolver)
+ * - Текущее состояние формы из OnboardingService
+ * - Пользовательский ввод в поле специализации
+ * - Поисковые запросы для автокомплита
+ *
+ * Что возвращает:
+ * - Интерфейс с полем ввода специализации
+ * - Список предложенных специализаций для выбора
+ * - Навигацию на следующий этап (stage-2) или финальный (stage-3)
+ *
+ * Особенности:
+ * - Использует сигналы Angular для реактивного состояния
+ * - Поддерживает поиск специализаций в реальном времени
+ * - Интегрирован с сервисом специализаций для получения данных
+ */
 @Component({
   selector: "app-stage-one",
   templateUrl: "./stage-one.component.html",
@@ -24,12 +52,9 @@ import { ErrorMessage } from "@error/models/error-message";
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    InputComponent,
-    TagComponent,
     IconComponent,
     ButtonComponent,
     ControlErrorPipe,
-    InputComponent,
     AutoCompleteInputComponent,
     SpecializationsGroupComponent,
     CommonModule,

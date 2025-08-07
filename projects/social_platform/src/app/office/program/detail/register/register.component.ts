@@ -9,8 +9,39 @@ import { ControlErrorPipe, ValidationService } from "projects/core";
 import { ProgramService } from "@office/program/services/program.service";
 import { BarComponent, ButtonComponent, InputComponent } from "@ui/components";
 import { KeyValuePipe } from "@angular/common";
-import { BackComponent } from "@uilib";
 
+/**
+ * Компонент регистрации в программе
+ *
+ * Предоставляет форму для регистрации пользователя в программе.
+ * Динамически генерирует поля формы на основе схемы данных программы.
+ *
+ * Принимает:
+ * @param {Router} router - Для навигации после успешной регистрации
+ * @param {ActivatedRoute} route - Для получения данных из резолвера
+ * @param {FormBuilder} fb - Для создания реактивных форм
+ * @param {ValidationService} validationService - Для валидации форм
+ * @param {ProgramService} programService - Для отправки данных регистрации
+ *
+ * Данные из резолвера:
+ * @property {ProgramDataSchema} schema - Схема дополнительных полей программы
+ *
+ * Форма:
+ * @property {FormGroup} registerForm - Динамически генерируемая форма регистрации
+ *
+ * Жизненный цикл:
+ * - OnInit: Получает схему из резолвера и создает форму с валидаторами
+ * - OnDestroy: Отписывается от всех подписок
+ *
+ * Методы:
+ * @method onSubmit() - Обработчик отправки формы
+ *   - Валидирует форму
+ *   - Отправляет данные через ProgramService
+ *   - Перенаправляет на страницу программы при успехе
+ *
+ * Возвращает:
+ * HTML шаблон с динамической формой регистрации
+ */
 @Component({
   selector: "app-register",
   templateUrl: "./register.component.html",

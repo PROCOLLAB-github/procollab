@@ -10,6 +10,18 @@ import { ResetPasswordComponent } from "@auth/reset-password/reset-password.comp
 import { SetPasswordComponent } from "@auth/set-password/set-password.component";
 import { ConfirmPasswordResetComponent } from "@auth/confirm-password-reset/confirm-password-reset.component";
 
+/**
+ * Конфигурация маршрутов для модуля аутентификации
+ *
+ * Назначение: Определяет все маршруты для страниц аутентификации
+ * Принимает: Не принимает параметров
+ * Возвращает: Массив конфигураций маршрутов Angular
+ *
+ * Функциональность:
+ * - Настраивает маршруты для входа, регистрации, сброса пароля
+ * - Определяет дочерние маршруты для AuthComponent
+ * - Настраивает редиректы и компоненты для каждого пути
+ */
 export const AUTH_ROUTES: Routes = [
   {
     path: "",

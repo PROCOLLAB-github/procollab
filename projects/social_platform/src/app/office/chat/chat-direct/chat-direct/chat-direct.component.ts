@@ -10,10 +10,23 @@ import { ChatDirectService } from "@office/chat/services/chat-direct.service";
 import { ChatWindowComponent } from "@office/shared/chat-window/chat-window.component";
 import { AuthService } from "@auth/services";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { BackComponent } from "@uilib";
 import { ApiPagination } from "@models/api-pagination.model";
 import { BarComponent } from "@ui/components";
 
+/**
+ * Компонент для отображения конкретного прямого чата
+ *
+ * Функциональность:
+ * - Отображение сообщений чата с пагинацией
+ * - Отправка, редактирование и удаление сообщений
+ * - Обработка событий WebSocket (новые сообщения, печатание, редактирование, удаление, прочтение)
+ * - Индикация печатающих пользователей
+ * - Прочтение сообщений
+ *
+ * @selector app-chat-direct
+ * @templateUrl ./chat-direct.component.html
+ * @styleUrl ./chat-direct.component.scss
+ */
 @Component({
   selector: "app-chat-direct",
   templateUrl: "./chat-direct.component.html",
@@ -29,52 +42,76 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     private readonly chatDirectService: ChatDirectService
   ) {}
 
+  /**
+   * Инициализация компонента
+   * - Загружает данные чата из резолвера
+   * - Загружает первую порцию сообщений
+   * - Инициализирует обработчики WebSocket событий
+   * - Получает ID текущего пользователя
+   */
   ngOnInit(): void {
+    // Загрузка данных чата из резолвера
     const routeData$ = this.route.data.pipe(map(r => r["data"])).subscribe(chat => {
       this.chat = chat;
     });
     this.subscriptions$.push(routeData$);
 
+    // Загрузка первой порции сообщений
     this.fetchMessages().subscribe(noop);
 
+    // Инициализация обработчиков WebSocket событий
     this.initMessageEvent();
     this.initTypingEvent();
     this.initDeleteEvent();
     this.initEditEvent();
     this.initReadEvent();
 
+    // Получение ID текущего пользователя
     this.authService.profile.subscribe(u => {
       this.currentUserId = u.id;
     });
   }
 
+  /**
+   * Очистка подписок при уничтожении компонента
+   */
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
+  /** ID текущего пользователя */
   currentUserId?: number;
 
   /**
-   * Amount of messages that we fetch
-   * each time {@link fetchMessages} runs
+   * Количество сообщений, загружаемых за один запрос
    * @private
    */
   private readonly messagesPerFetch = 20;
+
   /**
-   * Total messages count in chat
-   * comes from server, set first time {@link fetchMessages} runs
+   * Общее количество сообщений в чате (приходит с сервера)
    * @private
    */
   private messagesTotalCount = 0;
 
+  /** Список пользователей, которые сейчас печатают */
   typingPersons: ChatWindowComponent["typingPersons"] = [];
 
+  /** Массив подписок для очистки */
   subscriptions$: Subscription[] = [];
 
+  /** Данные текущего чата */
   chat?: ChatItem;
 
+  /** Массив сообщений чата */
   messages: ChatMessage[] = [];
 
+  /**
+   * Загружает сообщения чата с сервера с поддержкой пагинации
+   *
+   * @private
+   * @returns {Observable<ApiPagination<ChatMessage>>} Observable с пагинированными сообщениями
+   */
   private fetchMessages(): Observable<ApiPagination<ChatMessage>> {
     return this.chatDirectService
       .loadMessages(
@@ -84,12 +121,17 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
       )
       .pipe(
         tap(messages => {
+          // Добавляем новые сообщения в начало массива (реверсируем порядок с сервера)
           this.messages = messages.results.reverse().concat(this.messages);
           this.messagesTotalCount = messages.count;
         })
       );
   }
 
+  /**
+   * Инициализирует обработчик события получения нового сообщения
+   * @private
+   */
   private initMessageEvent(): void {
     const messageEvent$ = this.chatService.onMessage().subscribe(result => {
       this.messages = [...this.messages, result.message];
@@ -98,28 +140,35 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     messageEvent$ && this.subscriptions$.push(messageEvent$);
   }
 
+  /**
+   * Инициализирует обработчик события печатания
+   * Показывает индикатор печатания на 2 секунды
+   * @private
+   */
   private initTypingEvent(): void {
-    const typingEvent$ = this.chatService
-      .onTyping()
+    const typingEvent$ = this.chatService.onTyping().subscribe(() => {
+      if (!this.chat?.opponent) return;
 
-      .subscribe(() => {
-        if (!this.chat?.opponent) return;
-        this.typingPersons.push({
-          firstName: this.chat.opponent.firstName,
-          lastName: this.chat.opponent.lastName,
-          userId: this.chat.opponent.id,
-        });
-
-        setTimeout(() => {
-          const personIdx = this.typingPersons.findIndex(p => p.userId === this.chat?.opponent.id);
-
-          this.typingPersons.splice(personIdx, 1);
-        }, 2000);
+      this.typingPersons.push({
+        firstName: this.chat.opponent.firstName,
+        lastName: this.chat.opponent.lastName,
+        userId: this.chat.opponent.id,
       });
+
+      // Убираем индикатор через 2 секунды
+      setTimeout(() => {
+        const personIdx = this.typingPersons.findIndex(p => p.userId === this.chat?.opponent.id);
+        this.typingPersons.splice(personIdx, 1);
+      }, 2000);
+    });
 
     typingEvent$ && this.subscriptions$.push(typingEvent$);
   }
 
+  /**
+   * Инициализирует обработчик события редактирования сообщения
+   * @private
+   */
   private initEditEvent(): void {
     const editEvent$ = this.chatService.onEditMessage().subscribe(result => {
       const messageIdx = this.messages.findIndex(msg => msg.id === result.message.id);
@@ -133,6 +182,10 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     editEvent$ && this.subscriptions$.push(editEvent$);
   }
 
+  /**
+   * Инициализирует обработчик события удаления сообщения
+   * @private
+   */
   private initDeleteEvent(): void {
     const deleteEvent$ = this.chatService.onDeleteMessage().subscribe(result => {
       const messageIdx = this.messages.findIndex(msg => msg.id === result.messageId);
@@ -146,6 +199,10 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     deleteEvent$ && this.subscriptions$.push(deleteEvent$);
   }
 
+  /**
+   * Инициализирует обработчик события прочтения сообщения
+   * @private
+   */
   private initReadEvent(): void {
     const readEvent$ = this.chatService.onReadMessage().subscribe(result => {
       const messageIdx = this.messages.findIndex(msg => msg.id === result.messageId);
@@ -159,11 +216,17 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     readEvent$ && this.subscriptions$.push(readEvent$);
   }
 
+  /** Флаг процесса загрузки сообщений */
   fetching = false;
+
+  /**
+   * Обработчик запроса на загрузку дополнительных сообщений
+   * Загружает следующую порцию сообщений если есть еще сообщения на сервере
+   */
   onFetchMessages(): void {
     if (
       (this.messages.length < this.messagesTotalCount ||
-        // because messagesTotalCount pulls from server it's 0 in start of program, in that case we also need to make fetch
+        // messagesTotalCount равен 0 в начале, поэтому тоже нужно загружать
         this.messagesTotalCount === 0) &&
       !this.fetching
     ) {
@@ -174,6 +237,10 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Обработчик отправки нового сообщения
+   * @param message - Объект сообщения с текстом, файлами и ответом
+   */
   onSubmitMessage(message: any): void {
     this.chatService.sendMessage({
       replyTo: message.replyTo,
@@ -184,6 +251,10 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Обработчик редактирования сообщения
+   * @param message - Объект сообщения с новым текстом и ID
+   */
   onEditMessage(message: any): void {
     this.chatService.editMessage({
       text: message.text,
@@ -193,6 +264,10 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Обработчик удаления сообщения
+   * @param messageId - ID удаляемого сообщения
+   */
   onDeleteMessage(messageId: number): void {
     this.chatService.deleteMessage({
       chatId: this.chat?.id ?? "",
@@ -201,10 +276,18 @@ export class ChatDirectComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Обработчик события печатания
+   * Отправляет уведомление о том, что пользователь печатает
+   */
   onType() {
     this.chatService.startTyping({ chatType: "direct", chatId: this.chat?.id ?? "" });
   }
 
+  /**
+   * Обработчик прочтения сообщения
+   * @param messageId - ID прочитанного сообщения
+   */
   onReadMessage(messageId: number) {
     this.chatService.readMessage({
       chatType: "direct",

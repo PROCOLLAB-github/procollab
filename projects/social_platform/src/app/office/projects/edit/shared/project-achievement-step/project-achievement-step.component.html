@@ -1,0 +1,71 @@
+<!-- @format -->
+
+<div [formGroup]="projectForm" class="project__inner">
+  <div class="project__left">
+    <div class="achievement__first-row">
+      @if(achievementsName; as achievementsName){
+      <fieldset>
+        <label class="field-label" for="achievementsName">Достижения</label>
+        <app-input
+          [error]="
+            !!(
+              (achievementsName | controlError) &&
+              achievementsName?.touched &&
+              projSubmitInitiated
+            )
+          "
+          placeholder="Напишите название мероприятия, конкурса и т.д."
+          formControlName="achievementsName"
+        ></app-input>
+        @if ( !!( (achievementsName | controlError: "required") &&
+        projectForm.get('achievementsName')?.touched && projSubmitInitiated ) ) {
+        <div class="text-body-14 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+    @if (achievementsPrize; as achievementsPrize) {
+    <fieldset>
+      <app-input
+        [error]="
+          !!(
+            (achievementsPrize | controlError) &&
+            achievementsPrize?.touched &&
+            projSubmitInitiated
+          )
+        "
+        placeholder="Опишите достижение (победитель, призер или другое)"
+        formControlName="achievementsPrize"
+      ></app-input>
+      @if ( !!( (achievementsPrize | controlError: "required") && achievementsPrize?.touched &&
+      projSubmitInitiated ) ) {
+      <div class="text-body-14 error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+      }
+    </fieldset>
+    }
+  </div>
+  <div class="project__right">
+    <app-button class="vacancy__submit" (click)="addAchievement()">
+      <span>Добавить достижение</span>
+      <i appIcon icon="plus" appSquare="14"></i>
+    </app-button>
+
+    <ul class="invite__list">
+      @if(achievementsItems().length || achievements.length){ @for (achievementItem of
+      achievements.value; track $index) {
+      <li class="invite__item">
+        <app-link-card
+          [type]="'achievement'"
+          (remove)="removeAchievement($index)"
+          (edit)="editAchievement($index)"
+          [data]="achievementItem"
+        ></app-link-card>
+      </li>
+      } }
+    </ul>
+  </div>
+</div>

@@ -49,51 +49,6 @@
     }
   }
 
-  &__navigation {
-    width: 100%;
-    padding: 10px 0;
-    margin-bottom: 22px;
-    border-bottom: 1px solid var(--grey-button);
-  }
-
-  &__nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-
-    @include responsive.apply-desktop {
-      gap: 0;
-      justify-content: space-between;
-    }
-  }
-
-  &__item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  &__subtitle {
-    color: var(--grey-for-text);
-
-    @include typography.heading-4;
-
-    &--active {
-      color: var(--black);
-    }
-  }
-
-  &__icon {
-    opacity: 0.5;
-
-    &--active {
-      opacity: 1;
-    }
-  }
-
   &__inner {
     width: 100%;
     margin-bottom: 25px;
@@ -137,10 +92,6 @@
     }
   }
 
-  &__tags {
-    margin-bottom: 10px;
-  }
-
   &__image {
     display: block;
     margin-bottom: 20px;
@@ -155,94 +106,6 @@
     justify-content: space-between;
   }
 
-  &__generals {
-    margin-bottom: 10px;
-
-    :first-child {
-      margin-bottom: 10px;
-    }
-  }
-
-  &__additional {
-    fieldset {
-      margin-bottom: 10px;
-    }
-  }
-
-  &__file {
-    min-width: 0;
-  }
-
-  &__nav-item {
-    color: var(--gray);
-    cursor: pointer;
-
-    @include typography.heading-4;
-
-    @include responsive.apply-desktop {
-      @include typography.heading-3;
-    }
-
-    &:not(:last-child) {
-      margin-right: 24px;
-    }
-
-    &--active {
-      color: var(--black);
-    }
-  }
-
-  &__slides-title {
-    max-width: 320px;
-    margin-top: 12px;
-    color: var(--black);
-    text-align: center;
-  }
-
-  &__slides-text {
-    max-width: 275px;
-    margin-top: 12px;
-    color: var(--dark-grey);
-    text-align: center;
-  }
-
-  &__slides-error {
-    margin-top: 12px;
-    color: var(--red);
-  }
-
-  &__slides-open-file {
-    color: var(--accent);
-    transition: color 0.2s;
-
-    &:hover {
-      color: var(--accent-dark);
-    }
-  }
-
-  &__add-link {
-    i {
-      margin-left: 10px;
-    }
-  }
-
-  &__achievement-item {
-    &:not(:last-child) {
-      margin-bottom: 12px;
-    }
-  }
-
-  &__team {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0;
-
-    @include responsive.apply-desktop {
-      padding: 60px 50px;
-    }
-  }
-
   &__or {
     margin: 20px 0;
     color: var(--dark-grey);
@@ -252,30 +115,16 @@
     @include responsive.apply-desktop {
       position: absolute;
       right: 24px;
-      bottom: 24px;
+      bottom: 48px;
       order: unset;
-      width: 255px;
+      width: 90%;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
 
       app-button {
         align-self: flex-end;
         width: 20%;
-      }
-    }
-  }
-
-  &__invite {
-    display: flex;
-    flex-direction: column;
-
-    app-button {
-      width: 100%;
-
-      @include typography.body-12;
-
-      @include responsive.apply-desktop {
-        width: 25%;
-
-        @include typography.bold-body-16;
       }
     }
   }
@@ -285,6 +134,7 @@
     flex-direction: column;
     gap: 20px;
     align-items: center;
+    z-index: 1000;
 
     app-button {
       width: 250px;
@@ -296,133 +146,10 @@
   }
 }
 
-.achievement {
-  &__first-row {
-    display: flex;
-
-    // align-items: flex-start;
-    margin-bottom: 12px;
-
-    > :first-child {
-      flex-grow: 1;
-    }
-  }
-
-  &__remove {
-    width: 155px;
-    margin-left: 10px;
-  }
-}
-
-.invite {
-  &__title {
-    margin-bottom: 12px;
-  }
-
-  &__role {
-    margin-bottom: 12px;
-  }
-
-  &__link {
-    margin-bottom: 12px;
-  }
-
-  &__item {
-    margin-bottom: 12px;
-  }
-
-  &__list {
-    width: 557px;
-    width: 100%;
-    margin-top: 10px;
-  }
-
-  &__team {
-    grid-template-columns: repeat(1, 270px);
-    margin-top: 10px;
-
-    @include responsive.apply-desktop {
-      grid-template-columns: repeat(3, 350px);
-    }
-  }
-}
-
-.vacancy {
-  &__item {
-    margin-bottom: 12px;
-  }
-
-  fieldset {
-    margin-bottom: 10px;
-  }
-
-  &__form-list {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  &__skill {
-    margin-bottom: 12px;
-
-    &:not(:last-child) {
-      margin-right: 10px;
-    }
-  }
-
-  &__info,
-  &__additional {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-
-    :first-child,
-    :last-child {
-      flex-basis: 50%;
-    }
-  }
-
-  &__submit {
-    display: block;
-  }
-
-  &__description {
-    ::ng-deep {
-      app-input {
-        .field__input {
-          padding: 40px 20px;
-        }
-      }
-    }
-  }
-}
-
 .skill {
   i {
     color: var(--red);
     cursor: pointer;
-  }
-}
-
-.vacancies {
-  display: flex;
-
-  &__input {
-    flex-grow: 1;
-    margin-right: 6px;
-  }
-
-  ::ng-deep {
-    app-autocomplete-input {
-      .field__input {
-        padding: 12px 20px;
-
-        @include typography.body-16;
-      }
-    }
-  }
-
-  &__button {
-    width: 52px;
   }
 }
 
@@ -508,11 +235,37 @@
     }
   }
 
+  &__top {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+
   &__title {
     text-align: center;
   }
 
   &__text {
     text-align: center;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+
+    ::ng-deep {
+      app-button {
+        .button {
+          padding-left: 52px;
+          padding-right: 52px;
+        }
+      }
+    }
+  }
+
+  &__button {
+    margin-top: 20px;
   }
 }

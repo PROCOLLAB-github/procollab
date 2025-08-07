@@ -1,0 +1,19 @@
+<!-- @format -->
+
+<nav class="project__navigation">
+  <ul class="project__nav">
+    @for (item of navItems; track $index) {
+    <li class="project__item" (click)="onStepClick(item.step)">
+      <img
+        class="project__icon"
+        [class.project__icon--active]="currentStep() === item.step"
+        alt="project-icon"
+        [src]="item.src"
+      />
+      <p class="project__subtitle" [class.project__subtitle--active]="currentStep() === item.step">
+        {{ item.label }}
+      </p>
+    </li>
+    }
+  </ul>
+</nav>

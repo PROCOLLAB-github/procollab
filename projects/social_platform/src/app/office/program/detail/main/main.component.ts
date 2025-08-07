@@ -25,6 +25,50 @@ import { ApiPagination } from "@models/api-pagination.model";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 
+/**
+ * Главный компонент детальной страницы программы
+ *
+ * Отображает основную информацию о программе и новостную ленту:
+ * - Детальное описание программы с возможностью развернуть/свернуть
+ * - Информацию о датах и регистрации
+ * - Новостную ленту для участников программы
+ * - Форму добавления новостей
+ * - Взаимодействие с новостями (лайки, просмотры)
+ *
+ * Принимает:
+ * @param {ProgramService} programService - Сервис программ
+ * @param {ProgramNewsService} programNewsService - Сервис новостей программы
+ * @param {ActivatedRoute} route - Для получения данных программы
+ * @param {ChangeDetectorRef} cdRef - Для ручного обновления представления
+ *
+ * Состояние (signals):
+ * @property {Signal<FeedNews[]>} news - Массив новостей программы
+ * @property {Signal<number>} totalNewsCount - Общее количество новостей
+ * @property {Signal<number>} fetchLimit - Лимит загрузки новостей (10)
+ * @property {Signal<number>} fetchPage - Текущая страница новостей
+ * @property {Signal<Subscription[]>} subscriptions$ - Подписки для очистки
+ *
+ * Данные программы:
+ * @property {Program} program - Объект программы
+ * @property {boolean} registerDateExpired - Истек ли срок регистрации
+ * @property {boolean} descriptionExpandable - Можно ли развернуть описание
+ * @property {boolean} readFullDescription - Развернуто ли описание
+ *
+ * ViewChild:
+ * @ViewChild NewsFormComponent - Ссылка на компонент формы новостей
+ * @ViewChild descEl - Ссылка на элемент описания
+ *
+ * Методы:
+ * @method fetchNews(offset, limit) - Загружает новости с пагинацией
+ * @method onScroll() - Обработчик прокрутки для подгрузки новостей
+ * @method onNewsInVew(entries) - Отмечает новости как просмотренные
+ * @method onAddNews(news) - Добавляет новую новость
+ * @method onLike(newsId) - Переключает лайк новости
+ * @method onExpandDescription() - Разворачивает/сворачивает описание
+ *
+ * Возвращает:
+ * HTML шаблон с информацией о программе и новостной лентой
+ */
 @Component({
   selector: "app-main",
   templateUrl: "./main.component.html",

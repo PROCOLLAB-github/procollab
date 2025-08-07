@@ -1,6 +1,13 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, inject, OnInit, signal, ViewChild } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  type OnInit,
+  signal,
+  ViewChild,
+} from "@angular/core";
 import { CommonModule, NgOptimizedImage } from "@angular/common";
 import { InfoTaskComponent } from "../shared/video-task/info-task.component";
 import { RadioSelectTaskComponent } from "../shared/radio-select-task/radio-select-task.component";
@@ -11,9 +18,9 @@ import { ActivatedRoute, NavigationStart, Router, RouterLink } from "@angular/ro
 import { concatMap, map, tap } from "rxjs";
 import { LoaderComponent } from "@ui/components/loader/loader.component";
 import { TaskService } from "../services/task.service";
-import { TaskStep } from "../../../models/skill.model";
+import type { TaskStep } from "../../../models/skill.model";
 import { toSignal } from "@angular/core/rxjs-interop";
-import {
+import type {
   ConnectQuestion,
   ConnectQuestionResponse,
   ExcludeQuestion,
@@ -30,6 +37,29 @@ import { IconComponent } from "@uilib";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { SkillService } from "../../skills/services/skill.service";
 
+/**
+ * Компонент подзадания
+ *
+ * Обрабатывает выполнение отдельных шагов задания и взаимодействие пользователя.
+ * Этот компонент динамически отображает различные типы вопросов и заданий
+ * на основе типа шага, управляет ответами пользователя и обрабатывает навигацию
+ * между шагами.
+ *
+ * Поддерживаемые типы шагов:
+ * - info_slide: Отображение информации без взаимодействия
+ * - question_single_answer: Вопросы с единственным выбором
+ * - question_connect: Задания на соединение/сопоставление
+ * - exclude_question: Задания на исключение
+ * - question_write: Задания с письменным ответом
+ *
+ * Функции:
+ * - Динамическое отображение компонентов на основе типа шага
+ * - Проверка ответов в реальном времени и обратная связь
+ * - Обработка ошибок с подсказками и исправлениями
+ * - Автоматическое продвижение к следующим шагам
+ * - Модальные всплывающие окна для дополнительной информации
+ * - Состояния загрузки
+ */
 @Component({
   selector: "app-subtask",
   standalone: true,
@@ -53,15 +83,18 @@ import { SkillService } from "../../skills/services/skill.service";
   styleUrl: "./subtask.component.scss",
 })
 export class SubtaskComponent implements OnInit {
+  // Внедренные сервисы
   router = inject(Router);
   route = inject(ActivatedRoute);
   cdref = inject(ChangeDetectorRef);
   taskService = inject(TaskService);
   skillService = inject(SkillService);
 
+  // Состояние UI
   loading = signal(false);
   hint = signal("");
 
+  // Получение ID подзадания из параметров маршрута
   subTaskId = toSignal(
     this.route.params.pipe(
       map(r => r["subTaskId"]),
@@ -69,21 +102,24 @@ export class SubtaskComponent implements OnInit {
     )
   );
 
+  // Ссылка на компонент отношений для управления линиями соединения
   @ViewChild(RelationsTaskComponent) relationsTask: RelationsTaskComponent | null = null;
 
-  // stepData = signal<StepType | null>(null);
+  // Сигналы состояния для различных типов шагов
   infoSlide = signal<InfoSlide | null>(null);
   singleQuestion = signal<SingleQuestion | null>(null);
   connectQuestion = signal<ConnectQuestion | null>(null);
   excludeQuestion = signal<ExcludeQuestion | null>(null);
   writeQuestion = signal<WriteQuestion | null>(null);
 
+  // Сигналы ошибок для различных типов вопросов
   connectQuestionError = signal<ConnectQuestionResponse | null>(null);
   singleQuestionError = signal<SingleQuestionError | null>(null);
   excludeQuestionError = signal<ExcludeQuestionResponse | null>(null);
   anyError = signal(false);
   success = signal(false);
 
+  // Текущий открытый тип вопроса для модального окна
   openQuestion = signal<
     | "exclude_question"
     | "question_single_answer"
@@ -94,6 +130,7 @@ export class SubtaskComponent implements OnInit {
   >(null);
 
   constructor() {
+    // Обработка навигации назад через браузер
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         if (event.navigationTrigger === "popstate" && event.restoredState) {
@@ -104,6 +141,7 @@ export class SubtaskComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Загрузка данных шага при изменении параметров маршрута
     this.route.params
       .pipe(
         map(p => p["subTaskId"]),
@@ -126,6 +164,10 @@ export class SubtaskComponent implements OnInit {
       });
   }
 
+  /**
+   * Устанавливает данные шага на основе типа
+   * Очищает предыдущие данные и устанавливает новые в соответствующий сигнал
+   */
   setStepData(step: StepType) {
     const type = this.route.snapshot.queryParams["type"] as TaskStep["type"];
 
@@ -144,8 +186,13 @@ export class SubtaskComponent implements OnInit {
     }
   }
 
+  // Тело запроса для отправки ответов
   body = signal<any>({});
 
+  /**
+   * Очищает все данные шагов
+   * Сбрасывает все сигналы состояния к null
+   */
   clearData() {
     [
       this.singleQuestion,
@@ -158,6 +205,9 @@ export class SubtaskComponent implements OnInit {
     ].forEach(s => s.set(null));
   }
 
+  /**
+   * Обработчик изменения состояния модального окна
+   */
   onOpenChange(event: any) {
     if (!event) {
       this.openQuestion.set(null);
@@ -166,6 +216,10 @@ export class SubtaskComponent implements OnInit {
     }
   }
 
+  /**
+   * Обработчик закрытия модального окна
+   * Переходит к следующему шагу или к результатам
+   */
   onCloseModal() {
     const id = this.subTaskId();
     if (!id) return;
@@ -179,7 +233,7 @@ export class SubtaskComponent implements OnInit {
 
       if (!nextStep) {
         this.router.navigate(["/task", taskId, "results"]).then(() => {
-          console.debug("Route changed from SubtaskComponent");
+          console.debug("Маршрут изменен из SubtaskComponent");
           location.reload();
         });
         this.taskService.currentTaskDone.set(true);
@@ -191,22 +245,28 @@ export class SubtaskComponent implements OnInit {
           queryParams: { type: nextStep.type },
         })
         .then(() => {
-          console.debug("Route changed from SubtaskComponent");
+          console.debug("Маршрут изменен из SubtaskComponent");
           location.reload();
         });
     }, 1000);
   }
 
+  /**
+   * Обработчик перехода к следующему шагу
+   * Отправляет ответ пользователя и обрабатывает результат
+   */
   onNext() {
     const id = this.subTaskId();
     if (!id) return;
 
     const type = this.route.snapshot.queryParams["type"] as TaskStep["type"];
 
+    // Отправка ответа на сервер для проверки
     this.taskService.checkStep(id, type, this.body()).subscribe({
       next: _res => {
         this.success.set(true);
 
+        // Проверка наличия всплывающих окон для отображения
         if (
           (type === "info_slide" && !this.infoSlide()?.popups.length) ||
           (type === "exclude_question" && !this.excludeQuestion()?.popups.length) ||
@@ -214,6 +274,7 @@ export class SubtaskComponent implements OnInit {
           (type === "question_single_answer" && !this.singleQuestion()?.popups.length) ||
           (type === "question_write" && !this.writeQuestion()?.popups.length)
         ) {
+          // Автоматический переход к следующему шагу, если нет всплывающих окон
           setTimeout(() => {
             this.success.set(false);
 
@@ -223,7 +284,7 @@ export class SubtaskComponent implements OnInit {
 
             if (!nextStep) {
               this.router.navigate(["/task", taskId, "results"]).then(() => {
-                console.debug("Route changed from SubtaskComponent");
+                console.debug("Маршрут изменен из SubtaskComponent");
                 location.reload();
               });
               this.taskService.currentTaskDone.set(true);
@@ -235,13 +296,14 @@ export class SubtaskComponent implements OnInit {
                 queryParams: { type: nextStep.type },
               })
               .then(() => {
-                console.debug("Route changed from SubtaskComponent");
+                console.debug("Маршрут изменен из SubtaskComponent");
                 location.reload();
               });
           }, 1000);
         }
       },
       error: err => {
+        // Обработка ошибок и отображение подсказок
         this.anyError.set(true);
         if (err.error.hint) {
           this.hint.set(err.error.hint);
@@ -252,6 +314,7 @@ export class SubtaskComponent implements OnInit {
           this.anyError.set(false);
         }, 2000);
 
+        // Установка специфичных ошибок для разных типов вопросов
         if (type === "question_connect") {
           this.connectQuestionError.set(err.error);
           this.relationsTask?.removeLines();

@@ -10,15 +10,15 @@
     padding: 24px 15px;
     background-color: var(--white);
     border-radius: 15px;
+    height: 200px;
+
 
     @include responsive.apply-desktop {
       border: 1px solid var(--medium-grey-for-outline);
     }
 
     &--company {
-      @include responsive.apply-desktop {
-        border: 1px solid var(--accent);
-      }
+      border: 1px solid var(--accent);
     }
   }
 
@@ -50,6 +50,7 @@
   }
 
   &__basket {
+    margin-left: auto;
     color: var(--red);
   }
 

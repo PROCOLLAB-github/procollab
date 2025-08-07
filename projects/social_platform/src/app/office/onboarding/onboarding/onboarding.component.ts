@@ -5,6 +5,42 @@ import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
 import { Subscription } from "rxjs";
 import { OnboardingService } from "../services/onboarding.service";
 
+/**
+ * ОСНОВНОЙ КОМПОНЕНТ ОНБОРДИНГА
+ *
+ * Назначение: Контейнер и координатор для всех этапов процесса онбординга
+ *
+ * Что делает:
+ * - Управляет навигацией между этапами онбординга (stage-0 до stage-3)
+ * - Отслеживает текущий и активный этапы процесса
+ * - Обеспечивает правильную последовательность прохождения этапов
+ * - Предоставляет интерфейс для перехода к предыдущим этапам
+ * - Автоматически перенаправляет в основное приложение при завершении
+ * - Синхронизирует состояние с OnboardingService
+ *
+ * Что принимает:
+ * - Данные о текущем этапе из OnboardingService.currentStage$
+ * - События навигации от Angular Router
+ * - Пользовательские действия (клики по этапам)
+ *
+ * Что возвращает:
+ * - Контейнер с индикатором прогресса этапов
+ * - RouterOutlet для отображения компонентов текущего этапа
+ * - Навигационные элементы для перехода между этапами
+ *
+ * Логика навигации:
+ * - stage: текущий этап из URL
+ * - activeStage: этап, отображаемый в UI
+ * - Запрет перехода на будущие этапы (stage < targetStage)
+ * - Автоматическое перенаправление при currentStage$ = null
+ *
+ * Состояния этапов:
+ * - 0: Базовая информация профиля
+ * - 1: Выбор специализации
+ * - 2: Выбор навыков
+ * - 3: Выбор роли пользователя
+ * - null: Онбординг завершен, переход в /office
+ */
 @Component({
   selector: "app-onboarding",
   templateUrl: "./onboarding.component.html",
@@ -29,7 +65,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
       }
 
       if (this.router.url.includes("stage")) {
-        this.stage = parseInt(this.router.url.split("-")[1]);
+        this.stage = Number.parseInt(this.router.url.split("-")[1]);
       } else {
         this.stage = s;
       }
@@ -55,8 +91,8 @@ export class OnboardingComponent implements OnInit, OnDestroy {
   subscriptions$: Subscription[] = [];
 
   updateStage(): void {
-    this.activeStage = parseInt(this.router.url.split("-")[1]);
-    this.stage = parseInt(this.router.url.split("-")[1]);
+    this.activeStage = Number.parseInt(this.router.url.split("-")[1]);
+    this.stage = Number.parseInt(this.router.url.split("-")[1]);
   }
 
   goToStep(stage: number): void {

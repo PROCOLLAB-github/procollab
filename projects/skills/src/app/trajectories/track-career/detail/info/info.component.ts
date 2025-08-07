@@ -1,13 +1,13 @@
 /** @format */
 
 import {
-  AfterViewInit,
+  type AfterViewInit,
   ChangeDetectorRef,
   Component,
   computed,
-  ElementRef,
+  type ElementRef,
   inject,
-  OnInit,
+  type OnInit,
   signal,
   ViewChild,
 } from "@angular/core";
@@ -16,21 +16,27 @@ import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { ButtonComponent } from "@ui/components";
 import { AvatarComponent, IconComponent } from "@uilib";
 import { expandElement } from "@utils/expand-element";
-import { map, Observable, Subscription } from "rxjs";
+import { map, type Observable, type Subscription } from "rxjs";
 import { SkillCardComponent } from "../../../../skills/shared/skill-card/skill-card.component";
 import { CommonModule } from "@angular/common";
 import { MonthBlockComponent } from "projects/skills/src/app/profile/shared/month-block/month-block.component";
-import {
-  Trajectory,
-  TrajectorySkills,
-  UserTrajectory,
-} from "projects/skills/src/models/trajectory.model";
+import type { Trajectory, UserTrajectory } from "projects/skills/src/models/trajectory.model";
 import { TrajectoriesService } from "../../../trajectories.service";
-import { Month, UserData } from "projects/skills/src/models/profile.model";
+import type { Month, UserData } from "projects/skills/src/models/profile.model";
 import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
 import { SkillService } from "projects/skills/src/app/skills/services/skill.service";
 import { BreakpointObserver } from "@angular/cdk/layout";
 
+/**
+ * Компонент детальной информации о траектории
+ * Отображает полную информацию о выбранной траектории пользователя:
+ * - Основную информацию (название, изображение, описание)
+ * - Временную шкалу траектории
+ * - Информацию о наставнике
+ * - Навыки (персональные, текущие, будущие, пройденные)
+ *
+ * Поддерживает навигацию к отдельным навыкам и взаимодействие с наставником
+ */
 @Component({
   selector: "app-detail",
   standalone: true,
@@ -43,7 +49,6 @@ import { BreakpointObserver } from "@angular/cdk/layout";
     SkillCardComponent,
     AvatarComponent,
     CommonModule,
-    MonthBlockComponent,
   ],
   templateUrl: "./info.component.html",
   styleUrl: "./info.component.scss",
@@ -65,6 +70,7 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
   userTrajectory = signal<UserTrajectory | null>(null);
   profileId!: number;
 
+  // Вычисляемые свойства для состояния навыков
   completeAllMainSkills = computed(
     () => this.userTrajectory()?.availableSkills.every(skill => skill.isDone) ?? false
   );
@@ -84,6 +90,10 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
     .observe("(min-width: 920px)")
     .pipe(map(result => result.matches));
 
+  /**
+   * Инициализация компонента
+   * Загружает данные траектории, пользовательскую информацию и настраивает навыки
+   */
   ngOnInit(): void {
     this.desktopMode$.subscribe(r => console.log(r));
 
@@ -91,10 +101,7 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
       this.trajectory = r[0];
       this.userTrajectory.set({ ...r[1], individualSkills: r[2] });
 
-      if (!this.trajectory.isActiveForUser) {
-        this.router.navigate(["/trackCar/all"]);
-      }
-
+      // Настройка доступности навыков
       this.userTrajectory()?.availableSkills.forEach(i => (i.freeAccess = true));
       this.userTrajectory()?.completedSkills.forEach(i => {
         i.freeAccess = true;
@@ -108,6 +115,7 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
       this.profileId = r.id;
     });
 
+    // Создание макета месяцев для временной шкалы
     this.mockMonts = Array.from({ length: this.userTrajectory()!.durationMonths }, (_, index) => {
       const monthNumber = index + 1;
 
@@ -126,6 +134,9 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
   readFullDescription = false;
   descriptionExpandable?: boolean;
 
+  /**
+   * Проверка возможности расширения описания после инициализации представления
+   */
   ngAfterViewInit(): void {
     const descElement = this.descEl?.nativeElement;
     this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
@@ -133,15 +144,29 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
     this.cdRef.detectChanges();
   }
 
+  /**
+   * Очистка ресурсов при уничтожении компонента
+   */
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
+  /**
+   * Переключение развернутого/свернутого состояния описания
+   * @param elem - HTML элемент описания
+   * @param expandedClass - CSS класс для развернутого состояния
+   * @param isExpanded - текущее состояние (развернуто/свернуто)
+   */
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
   }
 
+  /**
+   * Обработчик клика по навыку
+   * Устанавливает ID навыка в сервисе и переходит к странице навыка
+   * @param skillId - ID выбранного навыка
+   */
   onSkillClick(skillId: number) {
     this.skillService.setSkillId(skillId);
     this.router.navigate(["skills", skillId]);

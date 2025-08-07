@@ -1,7 +1,21 @@
 /** @format */
 
 import { Collaborator } from "./collaborator.model";
+import { PartnerProgramFields, PartnerProgramFieldsValues } from "./partner-program-fields.model";
 import { Vacancy } from "./vacancy.model";
+
+/**
+ * Основная модель проекта и связанные классы
+ * Представляет проект со всей необходимой информацией
+ *
+ * Project содержит:
+ * - Основную информацию (название, описание, цели)
+ * - Участников и вакансии
+ * - Медиа-файлы и ссылки
+ *
+ * ProjectCount - счетчики проектов по категориям
+ * ProjectStep - этапы развития проекта
+ */
 
 export class Project {
   id!: number;
@@ -29,6 +43,9 @@ export class Project {
   draft!: boolean;
   leader!: number;
   partnerProgramsTags?: string[];
+  partnerProgramId!: number | null;
+  partnerProgramFields!: PartnerProgramFields[];
+  partnerProgramFieldValues!: PartnerProgramFieldsValues[];
   vacancies!: Vacancy[];
   isCompany!: boolean;
 
@@ -49,6 +66,9 @@ export class Project {
       industry: 0,
       viewsCount: 0,
       links: [],
+      partnerProgramId: null,
+      partnerProgramFields: [],
+      partnerProgramFieldValues: [],
       cover: null,
       coverImageAddress: null,
       presentationAddress: "string",

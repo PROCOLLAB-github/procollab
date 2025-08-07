@@ -1,17 +1,25 @@
 /** @format */
 
+/**
+ * Конфигурация полей профиля пользователя
+ * Определяет какие поля являются массивами, а какие строками
+ * Используется для валидации и обработки данных профиля
+ */
 export const fieldsProfile = [
-  { key: "education", type: "array" },
-  { key: "workExperience", type: "array" },
-  { key: "userLanguages", type: "array" },
-  { key: "achievements", type: "array" },
-  { key: "skills", type: "array" },
-  { key: "birthday", type: "string" },
-  { key: "phoneNumber", type: "string" },
-  { key: "speciality", type: "string" },
-  { key: "aboutMe", type: "string" },
-  { key: "avatar", type: "string" },
-  { key: "city", type: "string" },
-  { key: "firstName", type: "string" },
-  { key: "lastName", type: "string" },
+  // Поля-массивы (содержат несколько элементов)
+  { key: "education", type: "array" }, // Образование
+  { key: "workExperience", type: "array" }, // Опыт работы
+  { key: "userLanguages", type: "array" }, // Языки пользователя
+  { key: "achievements", type: "array" }, // Достижения
+  { key: "skills", type: "array" }, // Навыки
+
+  // Строковые поля (одиночные значения)
+  { key: "birthday", type: "string" }, // Дата рождения
+  { key: "phoneNumber", type: "string" }, // Номер телефона
+  { key: "speciality", type: "string" }, // Специальность
+  { key: "aboutMe", type: "string" }, // О себе
+  { key: "avatar", type: "string" }, // Аватар (URL)
+  { key: "city", type: "string" }, // Город
+  { key: "firstName", type: "string" }, // Имя
+  { key: "lastName", type: "string" }, // Фамилия
 ];

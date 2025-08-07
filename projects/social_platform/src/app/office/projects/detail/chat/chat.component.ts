@@ -17,6 +17,28 @@ import { IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ApiPagination } from "@models/api-pagination.model";
 
+/**
+ * Компонент чата проекта
+ *
+ * Функциональность:
+ * - Отображение чата проекта с сообщениями участников
+ * - Отправка, редактирование и удаление сообщений
+ * - Показ индикатора набора текста
+ * - Загрузка файлов чата
+ * - Пагинация сообщений при прокрутке
+ * - Мобильная версия с переключением между чатом и боковой панелью
+ *
+ * Принимает:
+ * - Данные проекта через ActivatedRoute
+ * - WebSocket события через ChatService
+ * - Профиль пользователя через AuthService
+ *
+ * Предоставляет:
+ * - Список сообщений чата
+ * - Список участников проекта
+ * - Файлы, загруженные в чат
+ * - Интерфейс для отправки сообщений
+ */
 @Component({
   selector: "app-chat",
   templateUrl: "./chat.component.html",
@@ -43,25 +65,30 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navService.setNavTitle("Чат проекта");
 
+    // Получение ID текущего пользователя
     const profile$ = this.authService.profile.subscribe(profile => {
       this.currentUserId = profile.id;
     });
     profile$ && this.subscriptions$.push(profile$);
 
+    // Загрузка данных проекта
     const projectSub$ = this.route.data.pipe(map(r => r["data"])).subscribe(project => {
       this.project = project;
-    }); // pull info about project
+    });
     projectSub$ && this.subscriptions$.push(projectSub$);
 
     console.debug("Chat websocket connected from ProjectChatComponent");
 
-    this.initTypingEvent(); // event for show bare whenever anybody in chat type something
-    this.initMessageEvent(); // Wait for messages from other member, insert into chat
-    this.initEditEvent(); // Wait for messages to be edited by other members
-    this.initDeleteEvent(); // Delete messages when following event comes from websocket
+    // Инициализация WebSocket событий
+    this.initTypingEvent(); // Показ индикатора набора текста
+    this.initMessageEvent(); // Получение новых сообщений
+    this.initEditEvent(); // Обновление отредактированных сообщений
+    this.initDeleteEvent(); // Удаление сообщений
 
+    // Загрузка истории сообщений
     this.fetchMessages().subscribe(noop);
 
+    // Загрузка файлов чата
     this.chatService
       .loadProjectFiles(Number(this.route.parent?.snapshot.paramMap.get("projectId")))
       .subscribe(files => {
@@ -74,67 +101,55 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Amount of messages that we fetch
-   * each time {@link fetchMessages} runs
+   * Количество сообщений, загружаемых за один запрос
    * @private
    */
   private readonly messagesPerFetch = 20;
+
   /**
-   * Total messages count in chat
-   * comes from server, set first time {@link fetchMessages} runs
+   * Общее количество сообщений в чате
+   * Устанавливается при первой загрузке
    * @private
    */
   private messagesTotalCount = 0;
 
-  /**
-   * Array with all rxjs subscriptions
-   * unsubscribed in {@link ngOnDestroy}
-   */
+  /** Массив всех подписок компонента */
   subscriptions$: Subscription[] = [];
 
-  /**
-   * Project info
-   * populates with observable call in {@link ngOnInit}
-   */
+  /** Данные проекта */
   project?: Project;
 
-  /**
-   * All files listed in this chat
-   */
+  /** Все файлы, загруженные в чат */
   chatFiles?: ChatFile[];
 
-  /**
-   * Get id of logged user
-   */
+  /** ID текущего пользователя */
   currentUserId?: number;
 
-  /**
-   * Input message component
-   * Write edit reply to messages etc
-   */
+  /** Ссылка на компонент ввода сообщений */
   @ViewChild(MessageInputComponent, { read: ElementRef }) messageInputComponent?: ElementRef;
 
-  /**
-   * All chat messages
-   * Renders only few of them
-   * See virtual scrolling {@link viewport}
-   */
+  /** Все сообщения чата */
   messages: ChatMessage[] = [];
 
-  /**
-   * Amount of online users in chat
-   * @deprecated
-   */
+  /** Количество пользователей онлайн (устарело) */
   membersOnlineCount = 3;
 
+  /** Список пользователей, которые сейчас печатают */
   typingPersons: ChatWindowComponent["typingPersons"] = [];
 
+  /** Флаг отображения боковой панели на мобильных устройствах */
   isAsideMobileShown = false;
 
+  /** Переключение боковой панели на мобильных устройствах */
   onToggleMobileAside(): void {
     this.isAsideMobileShown = !this.isAsideMobileShown;
   }
 
+  /**
+   * Инициализация обработки события набора текста
+   * Показывает индикатор, когда другие участники печатают
+   * @private
+   */
   private initTypingEvent(): void {
     const typingEvent$ = this.chatService
       .onTyping()
@@ -157,9 +172,9 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
             userId: person.userId,
           });
 
+        // Автоматическое скрытие индикатора через 2 секунды
         setTimeout(() => {
           const personIdx = this.typingPersons.findIndex(p => p.userId === person.userId);
-
           this.typingPersons.splice(personIdx, 1);
         }, 2000);
       });
@@ -167,6 +182,11 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     typingEvent$ && this.subscriptions$.push(typingEvent$);
   }
 
+  /**
+   * Инициализация обработки новых сообщений
+   * Добавляет новые сообщения в конец списка
+   * @private
+   */
   private initMessageEvent(): void {
     const messageEvent$ = this.chatService.onMessage().subscribe(result => {
       this.messages = [...this.messages, result.message];
@@ -175,6 +195,11 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     messageEvent$ && this.subscriptions$.push(messageEvent$);
   }
 
+  /**
+   * Инициализация обработки редактирования сообщений
+   * Обновляет отредактированные сообщения в списке
+   * @private
+   */
   private initEditEvent(): void {
     const editEvent$ = this.chatService.onEditMessage().subscribe(result => {
       const messageIdx = this.messages.findIndex(msg => msg.id === result.message.id);
@@ -188,6 +213,11 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     editEvent$ && this.subscriptions$.push(editEvent$);
   }
 
+  /**
+   * Инициализация обработки удаления сообщений
+   * Удаляет сообщения из списка
+   * @private
+   */
   private initDeleteEvent(): void {
     const deleteEvent$ = this.chatService.onDeleteMessage().subscribe(result => {
       const messageIdx = this.messages.findIndex(msg => msg.id === result.messageId);
@@ -201,6 +231,11 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     deleteEvent$ && this.subscriptions$.push(deleteEvent$);
   }
 
+  /**
+   * Загрузка сообщений чата с сервера
+   * @private
+   * @returns Observable с пагинированными сообщениями
+   */
   private fetchMessages(): Observable<ApiPagination<ChatMessage>> {
     return this.chatService
       .loadMessages(
@@ -216,12 +251,13 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
       );
   }
 
+  /** Флаг процесса загрузки сообщений */
   fetching = false;
+
+  /** Загрузка дополнительных сообщений при прокрутке */
   onFetchMessages(): void {
     if (
-      (this.messages.length < this.messagesTotalCount ||
-        // because messagesTotalCount pulls from server it's 0 in start of program, in that case we also need to make fetch
-        this.messagesTotalCount === 0) &&
+      (this.messages.length < this.messagesTotalCount || this.messagesTotalCount === 0) &&
       !this.fetching
     ) {
       this.fetching = true;
@@ -231,6 +267,7 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Отправка нового сообщения */
   onSubmitMessage(message: any): void {
     this.chatService.sendMessage({
       replyTo: message.replyTo,
@@ -241,6 +278,7 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     });
   }
 
+  /** Редактирование существующего сообщения */
   onEditMessage(message: any): void {
     this.chatService.editMessage({
       text: message.text,
@@ -250,6 +288,7 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     });
   }
 
+  /** Удаление сообщения */
   onDeleteMessage(messageId: number): void {
     this.chatService.deleteMessage({
       chatId: this.route.parent?.snapshot.paramMap.get("projectId") ?? "",

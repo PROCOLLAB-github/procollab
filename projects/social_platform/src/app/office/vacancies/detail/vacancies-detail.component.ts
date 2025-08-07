@@ -3,11 +3,29 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterOutlet } from "@angular/router";
-import { Project } from "@office/models/project.model";
 import { Vacancy } from "@office/models/vacancy.model";
 import { BarComponent } from "@ui/components";
-import { concatMap, map, Subscription } from "rxjs";
+import { map, Subscription } from "rxjs";
 
+/**
+ * Компонент детального просмотра вакансии
+ *
+ * Функциональность:
+ * - Получает данные вакансии из резолвера через ActivatedRoute
+ * - Отображает навигационную панель с кнопкой "Назад"
+ * - Содержит router-outlet для дочерних компонентов (информация о вакансии)
+ * - Управляет подписками для предотвращения утечек памяти
+ *
+ * Жизненный цикл:
+ * - OnInit: подписывается на данные маршрута и извлекает объект вакансии
+ * - OnDestroy: отписывается от всех активных подписок
+ *
+ * @property {Vacancy} vacancy - объект вакансии, полученный из резолвера
+ * @property {Subscription[]} subscriptions$ - массив подписок для управления памятью
+ *
+ * @selector app-vacancies-detail
+ * @standalone true - автономный компонент
+ */
 @Component({
   selector: "app-vacancies-detail",
   standalone: true,

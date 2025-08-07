@@ -9,10 +9,38 @@ import { ProjectRate } from "../models/project-rate";
 import { ProjectRatingCriterion } from "../models/project-rating-criterion";
 import { ProjectRatingCriterionOutput } from "../models/project-rating-criterion-output";
 
+/**
+ * Сервис для оценки проектов в рамках программы
+ *
+ * Предоставляет функциональность для экспертной оценки проектов:
+ * - Получение списка проектов для оценки с фильтрацией
+ * - Отправка оценок проектов
+ * - Преобразование данных форм в формат API
+ *
+ * Принимает:
+ * @param {ApiService} apiService - Сервис для HTTP запросов
+ *
+ * Методы:
+ * @method getAll(id, skip, take, isRatedByExpert?, nameContains?) - Получает проекты для оценки
+ *   @param {number} id - ID программы
+ *   @param {number} skip - Количество пропускаемых записей
+ *   @param {number} take - Количество загружаемых записей
+ *   @param {boolean} isRatedByExpert - Фильтр по статусу оценки экспертом
+ *   @param {string} nameContains - Фильтр по названию проекта
+ *
+ * @method rate(projectId: number, scores: ProjectRatingCriterionOutput[]) - Отправляет оценку проекта
+ *
+ * @method formValuesToDTO(criteria, outputVals) - Преобразует данные формы в DTO
+ *   Конвертирует объект вида {1: 'value', 2: '5', 3: true} в массив
+ *   [{criterionId: 1, value: 'value'}, {criterionId: 2, value: 5}, ...]
+ *   Обрабатывает типы данных согласно типу критерия (bool -> string, int -> number)
+ */
 @Injectable({
   providedIn: "root",
 })
 export class ProjectRatingService {
+  private readonly RATE_PROJECT_URL = "/rate-project";
+
   constructor(private readonly apiService: ApiService) {}
 
   getAll(
@@ -23,7 +51,7 @@ export class ProjectRatingService {
     nameContains?: string
   ): Observable<ApiPagination<ProjectRate>> {
     return this.apiService.get(
-      `/rate-project/${id}`,
+      `${this.RATE_PROJECT_URL}/${id}`,
       new HttpParams({
         fromObject: {
           ...(nameContains !== undefined && { name__contains: nameContains }),
@@ -36,7 +64,7 @@ export class ProjectRatingService {
   }
 
   rate(projectId: number, scores: ProjectRatingCriterionOutput[]): Observable<void> {
-    return this.apiService.post(`/rate-project/rate/${projectId}`, scores);
+    return this.apiService.post(`${this.RATE_PROJECT_URL}/rate/${projectId}`, scores);
   }
 
   /*

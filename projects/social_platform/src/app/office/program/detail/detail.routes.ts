@@ -11,6 +11,19 @@ import { ProgramProjectsResolver } from "@office/program/detail/projects/project
 import { ProgramMembersComponent } from "@office/program/detail/members/members.component";
 import { ProgramMembersResolver } from "@office/program/detail/members/members.resolver";
 
+/**
+ * Маршруты для детальной страницы программы
+ *
+ * Определяет структуру навигации внутри детальной страницы программы:
+ * - Основная информация (по умолчанию)
+ * - Список проектов программы
+ * - Список участников программы
+ * - Страница регистрации в программе
+ *
+ * Все маршруты используют резолверы для предзагрузки данных.
+ *
+ * @returns {Routes} Конфигурация маршрутов для детальной страницы программы
+ */
 export const PROGRAM_DETAIL_ROUTES: Routes = [
   {
     path: "",

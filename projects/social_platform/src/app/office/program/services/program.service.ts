@@ -10,30 +10,62 @@ import { Project } from "@models/project.model";
 import { ApiPagination } from "@models/api-pagination.model";
 import { User } from "@auth/models/user.model";
 
+/**
+ * Сервис для работы с программами
+ *
+ * Предоставляет методы для взаимодействия с API программ:
+ * - Получение списка программ с пагинацией
+ * - Получение детальной информации о программе
+ * - Создание новой программы
+ * - Регистрация в программе
+ * - Получение проектов и участников программы
+ * - Работа с тегами программ
+ *
+ * Принимает:
+ * @param {ApiService} apiService - Сервис для HTTP запросов
+ *
+ * Методы:
+ * @method getAll(skip: number, take: number) - Получает список программ с пагинацией
+ * @method getOne(programId: number) - Получает детальную информацию о программе
+ * @method create(program: ProgramCreate) - Создает новую программу
+ * @method getDataSchema(programId: number) - Получает схему дополнительных полей программы
+ * @method register(programId: number, additionalData: Record<string, string>) - Регистрирует пользователя в программе
+ * @method getAllProjects(programId: number, offset: number, limit: number) - Получает проекты программы
+ * @method getAllMembers(programId: number, skip: number, take: number) - Получает участников программы
+ * @method programTags() - Получает и кеширует теги программ пользователя
+ *
+ * Свойства:
+ * @property {BehaviorSubject<ProgramTag[]>} programTags$ - Реактивный поток тегов программ
+ */
 @Injectable({
   providedIn: "root",
 })
 export class ProgramService {
+  private readonly PROGRAMS_URL = "/programs";
+  private readonly PROJECTS_URL = "/projects";
+  private readonly AUTH_PUBLIC_USERS_URL = "/auth/public-users";
+  private readonly AUTH_USERS_CURRENT_URL = "/auth/users/current";
+
   constructor(private readonly apiService: ApiService) {}
 
   getAll(skip: number, take: number): Observable<ApiPagination<Program>> {
     return this.apiService.get(
-      "/programs/",
+      `${this.PROGRAMS_URL}/`,
       new HttpParams({ fromObject: { limit: take, offset: skip } })
     );
   }
 
   getOne(programId: number): Observable<Program> {
-    return this.apiService.get(`/programs/${programId}/`);
+    return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/`);
   }
 
   create(program: ProgramCreate): Observable<Program> {
-    return this.apiService.post("/programs/", program);
+    return this.apiService.post(`${this.PROGRAMS_URL}/`, program);
   }
 
   getDataSchema(programId: number): Observable<ProgramDataSchema> {
     return this.apiService
-      .get<{ dataSchema: ProgramDataSchema }>(`/programs/${programId}/schema/`)
+      .get<{ dataSchema: ProgramDataSchema }>(`${this.PROGRAMS_URL}/${programId}/schema/`)
       .pipe(map(r => r["dataSchema"]));
   }
 
@@ -41,30 +73,23 @@ export class ProgramService {
     programId: number,
     additionalData: Record<string, string>
   ): Observable<ProgramDataSchema> {
-    return this.apiService.post(`/programs/${programId}/register/`, additionalData);
+    return this.apiService.post(`${this.PROGRAMS_URL}/${programId}/register/`, additionalData);
   }
 
-  getAllProjects(
-    programId: number,
-    offset: number,
-    limit: number
-  ): Observable<ApiPagination<Project>> {
-    return this.apiService.get(
-      `/projects/`,
-      new HttpParams({ fromObject: { partner_program: programId, offset, limit } })
-    );
+  getAllProjects(params?: HttpParams): Observable<ApiPagination<Project>> {
+    return this.apiService.get(`${this.PROJECTS_URL}/`, params);
   }
 
   getAllMembers(programId: number, skip: number, take: number): Observable<ApiPagination<User>> {
     return this.apiService.get(
-      "/auth/public-users/",
+      `${this.AUTH_PUBLIC_USERS_URL}/`,
       new HttpParams({ fromObject: { partner_program: programId, limit: take, offset: skip } })
     );
   }
 
   programTags$ = new BehaviorSubject<ProgramTag[]>([]);
   programTags(): Observable<ProgramTag[]> {
-    return this.apiService.get<ProgramTag[]>("/auth/users/current/programs/tags/").pipe(
+    return this.apiService.get<ProgramTag[]>(`${this.AUTH_USERS_CURRENT_URL}/programs/tags/`).pipe(
       tap(programs => {
         this.programTags$.next(programs);
       })

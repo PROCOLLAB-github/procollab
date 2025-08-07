@@ -9,6 +9,23 @@ import { IconComponent, ButtonComponent, SelectComponent, InputComponent } from 
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { rolesMembersList } from "projects/core/src/consts/list-roles-members";
 
+/**
+ * Компонент карточки приглашения в команду или проект
+ *
+ * Функциональность:
+ * - Отображает информацию о приглашении (роль, специализация)
+ * - Позволяет редактировать роль и специализацию приглашенного пользователя
+ * - Предоставляет возможность удаления приглашения
+ * - Управляет модальными окнами для подтверждения действий
+ *
+ * Входные параметры:
+ * @Input invite - объект приглашения (обязательный)
+ * @Input type - тип приглашения: "team" или "members" (по умолчанию "members")
+ *
+ * Выходные события:
+ * @Output remove - событие удаления приглашения, передает ID приглашения
+ * @Output edit - событие редактирования приглашения, передает объект с ID, ролью и специализацией
+ */
 @Component({
   selector: "app-invite-card",
   templateUrl: "./invite-card.component.html",
@@ -52,9 +69,14 @@ export class InviteCardComponent implements OnInit {
     }
   }
 
+  // Сигналы для управления состоянием модальных окон
   isRemoveInviteModal = signal(false);
   isEditInviteModal = signal(false);
 
+  /**
+   * Обработчик удаления приглашения
+   * Предотвращает всплытие события и эмитит событие удаления
+   */
   onRemove(event: MouseEvent): void {
     event.stopPropagation();
     event.preventDefault();
@@ -62,6 +84,10 @@ export class InviteCardComponent implements OnInit {
     this.remove.emit(this.invite?.id);
   }
 
+  /**
+   * Обработчик редактирования приглашения
+   * Закрывает модальное окно и эмитит событие редактирования с данными формы
+   */
   onEdit(event: MouseEvent): void {
     event.stopPropagation();
     event.preventDefault();

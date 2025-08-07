@@ -6,6 +6,19 @@ import { filter, interval, map, noop, Observable, Subscription } from "rxjs";
 import { AuthService } from "@auth/services";
 import { IconComponent } from "@ui/components";
 
+/**
+ * Компонент подтверждения email адреса
+ *
+ * Назначение: Отображает страницу ожидания подтверждения email после регистрации
+ * Принимает: email адрес через query параметры маршрута
+ * Возвращает: Интерфейс с возможностью повторной отправки письма подтверждения
+ *
+ * Функциональность:
+ * - Показывает инструкции по подтверждению email
+ * - Реализует таймер для повторной отправки письма (60 секунд)
+ * - Позволяет отправить письмо подтверждения повторно
+ * - Получает email из query параметров маршрута
+ */
 @Component({
   selector: "app-email-verification",
   templateUrl: "./email-verification.component.html",

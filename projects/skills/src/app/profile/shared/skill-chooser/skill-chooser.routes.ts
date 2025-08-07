@@ -1,6 +1,5 @@
 /** @format */
 
-import { resolve } from "dns";
 import { SkillChooserComponent } from "./skill-chooser.component";
 import { skillChooserResolver } from "./skill-chooser.resolver";
 

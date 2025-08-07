@@ -43,8 +43,32 @@ import {
   withLatestFrom,
 } from "rxjs";
 import { ProjectMemberCardComponent } from "../shared/project-member-card/project-member-card.component";
-import { HttpResponse } from "@angular/common/http";
 
+/**
+ * КОМПОНЕНТ ДЕТАЛЬНОЙ ИНФОРМАЦИИ О ПРОЕКТЕ
+ *
+ * Этот компонент отображает подробную информацию о проекте, включая:
+ * - Основную информацию (название, описание, обложка)
+ * - Команду проекта с возможностью управления
+ * - Новости проекта с возможностью добавления/редактирования
+ * - Вакансии, достижения и контакты
+ * - Функции подписки и поддержки проекта
+ *
+ * @param:
+ * - Получает данные проекта через резолвер из маршрута
+ * - Использует параметр projectId из URL
+ *
+ * - Отображение информации о проекте
+ * - Управление подпиской на проект
+ * - Добавление/редактирование/удаление новостей
+ * - Управление командой проекта (для лидера)
+ * - Выход из проекта
+ * - Передача лидерства другому участнику
+ *
+ * @returns:
+ * - Отображает HTML-шаблон с информацией о проекте
+ * - Обрабатывает пользовательские действия через методы компонента
+ */
 @Component({
   selector: "app-detail",
   templateUrl: "./info.component.html",
@@ -71,33 +95,42 @@ import { HttpResponse } from "@angular/common/http";
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    public readonly industryService: IndustryService,
-    public readonly authService: AuthService,
-    private readonly navService: NavService,
-    private readonly projectNewsService: ProjectNewsService,
-    private readonly subscriptionService: SubscriptionService,
-    private readonly projectService: ProjectService,
-    private readonly cdRef: ChangeDetectorRef
+    private readonly route: ActivatedRoute, // Сервис для работы с активным маршрутом
+    private readonly router: Router, // Сервис для навигации
+    public readonly industryService: IndustryService, // Сервис для работы с отраслями
+    public readonly authService: AuthService, // Сервис аутентификации
+    private readonly navService: NavService, // Сервис навигации
+    private readonly projectNewsService: ProjectNewsService, // Сервис новостей проекта
+    private readonly subscriptionService: SubscriptionService, // Сервис подписок
+    private readonly projectService: ProjectService, // Сервис проектов
+    private readonly cdRef: ChangeDetectorRef // Сервис для ручного запуска обнаружения изменений
   ) {}
 
+  // Observable с данными проекта из резолвера
   project$?: Observable<Project> = this.route.parent?.data.pipe(map(r => r["data"][0]));
+  // Observable с подписчиками проекта
   projSubscribers$?: Observable<User[]> = this.route.parent?.data.pipe(map(r => r["data"][1]));
 
-  profileId!: number;
+  profileId!: number; // ID текущего пользователя
 
+  // Observable с вакансиями проекта
   vacancies$: Observable<Vacancy[]> = this.route.data.pipe(map(r => r["data"]));
-  subscriptions$: Subscription[] = [];
+  subscriptions$: Subscription[] = []; // Массив подписок для очистки
 
+  /**
+   * Инициализация компонента
+   * Устанавливает заголовок навигации, загружает новости, определяет статус подписки
+   */
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль проекта");
 
+    // Загрузка новостей проекта
     const news$ = this.projectNewsService
       .fetchNews(this.route.snapshot.params["projectId"])
       .subscribe(news => {
         this.news = news.results;
 
+        // Настройка наблюдателя для отслеживания просмотра новостей
         setTimeout(() => {
           const observer = new IntersectionObserver(this.onNewsInVew.bind(this), {
             root: document.querySelector(".office__body"),
@@ -110,10 +143,12 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
         });
       });
 
+    // Получение ID текущего пользователя
     const profileId$ = this.authService.profile.subscribe(profile => {
       this.profileId = profile.id;
     });
 
+    // Проверка статуса подписки пользователя на проект
     this.projSubscribers$
       ?.pipe(take(1), withLatestFrom(this.authService.profile))
       .subscribe(([projSubs, profile]) => {
@@ -122,27 +157,52 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
           : (this.isUserSubscribed = false);
       });
 
-    this.subscriptions$.push(news$, profileId$);
+    const isEditDisable$ = this.project$
+      ? this.project$.subscribe(project => {
+          this.isEditDisable =
+            !project.draft &&
+            project.partnerProgramFieldValues &&
+            !!project.partnerProgramFieldValues.length;
+        })
+      : Subscription.EMPTY;
+
+    this.subscriptions$.push(news$, profileId$, isEditDisable$);
   }
 
+  // Ссылки на элементы DOM
   @ViewChild("newsEl") newsEl?: ElementRef;
   @ViewChild("contentEl") contentEl?: ElementRef;
   @ViewChild("descEl") descEl?: ElementRef;
+
+  /**
+   * Хук после инициализации представления
+   * Перемещает новости в контентную область на десктопе, проверяет необходимость кнопки "Читать полностью"
+   */
   ngAfterViewInit(): void {
+    // На десктопе перемещаем новости в основной контент
     if (containerSm < window.innerWidth) {
       this.contentEl?.nativeElement.append(this.newsEl?.nativeElement);
     }
 
+    // Проверяем, нужна ли кнопка "Читать полностью" для описания
     const descElement = this.descEl?.nativeElement;
     this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
 
     this.cdRef.detectChanges();
   }
 
+  /**
+   * Очистка подписок при уничтожении компонента
+   */
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
+  /**
+   * Обработчик появления новостей в области видимости
+   * Отмечает новости как просмотренные
+   * @param entries - массив элементов, попавших в область видимости
+   */
   onNewsInVew(entries: IntersectionObserverEntry[]): void {
     const ids = entries.map(e => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -155,32 +215,37 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(noop);
   }
 
+  // Ссылки на дочерние компоненты
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
 
-  news: FeedNews[] = [];
+  // Состояние компонента
+  news: FeedNews[] = []; // Массив новостей
+  readFullDescription = false; // Флаг развернутого описания
+  descriptionExpandable!: boolean; // Флаг необходимости кнопки "Читать полностью"
+  readAllAchievements = false; // Флаг показа всех достижений
+  readAllVacancies = false; // Флаг показа всех вакансий
+  readAllMembers = false; // Флаг показа всех участников
+  isCompleted = false; // Флаг завершенности проекта
+  leaderLeaveModal = false; // Флаг модального окна предупреждения лидера
 
-  readFullDescription = false;
-
-  descriptionExpandable!: boolean;
-
-  readAllAchievements = false;
-  readAllVacancies = false;
-  readAllMembers = false;
-
-  isCompleted = false;
-
-  leaderLeaveModal = false;
-
+  /**
+   * Добавление новой новости
+   * @param news - объект с текстом и файлами новости
+   */
   onAddNews(news: { text: string; files: string[] }): void {
     this.projectNewsService
       .addNews(this.route.snapshot.params["projectId"], news)
       .subscribe(newsRes => {
         this.newsFormComponent?.onResetForm();
-        this.news.unshift(newsRes);
+        this.news.unshift(newsRes); // Добавляем новость в начало списка
       });
   }
 
+  /**
+   * Удаление новости
+   * @param newsId - ID удаляемой новости
+   */
   onDeleteNews(newsId: number): void {
     const newsIdx = this.news.findIndex(n => n.id === newsId);
     this.news.splice(newsIdx, 1);
@@ -190,6 +255,10 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => {});
   }
 
+  /**
+   * Переключение лайка новости
+   * @param newsId - ID новости для лайка
+   */
   onLike(newsId: number) {
     const item = this.news.find(n => n.id === newsId);
     if (!item) return;
@@ -202,6 +271,11 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  /**
+   * Редактирование новости
+   * @param news - обновленные данные новости
+   * @param newsItemId - ID редактируемой новости
+   */
   onEditNews(news: FeedNews, newsItemId: number) {
     this.projectNewsService
       .editNews(this.route.snapshot.params["projectId"], newsItemId, news)
@@ -212,14 +286,21 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  /**
+   * Удаление участника из проекта
+   * @param id - ID удаляемого участника
+   */
   onRemoveMember(id: Collaborator["userId"]) {
     this.project$
       ?.pipe(concatMap(project => this.projectService.removeColloborator(project.id, id)))
       .subscribe(() => {
-        location.reload();
+        location.reload(); // Перезагружаем страницу для обновления данных
       });
   }
 
+  /**
+   * Выход из проекта
+   */
   onLeave() {
     this.project$?.pipe(concatMap(p => this.projectService.leave(p.id))).subscribe(
       () => {
@@ -228,11 +309,15 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
           .then(() => console.debug("Route changed from ProjectInfoComponent"));
       },
       () => {
-        this.leaderLeaveModal = true;
+        this.leaderLeaveModal = true; // Показываем предупреждение для лидера
       }
     );
   }
 
+  /**
+   * Передача лидерства другому участнику
+   * @param id - ID нового лидера
+   */
   onTransferOwnership(id: Collaborator["userId"]) {
     this.project$
       ?.pipe(concatMap(project => this.projectService.switchLeader(project.id, id)))
@@ -241,12 +326,17 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  isUserSubscribed!: boolean;
-  isUnsubscribeModalOpen = false;
+  // Состояние подписки и модальных окон
+  isUserSubscribed!: boolean; // Флаг подписки пользователя
+  isUnsubscribeModalOpen = false; // Флаг модального окна отписки
+  isLeaveProjectModalOpen = false; // Флаг модального окна выхода
+  isEditDisable = false; // Флаг недоступности редактирования
+  isEditDisableModal = false; // Флаг недоступности редактирования для модалки
 
-  isLeaveProjectModalOpen = false;
-  isEditDisable = false;
-
+  /**
+   * Подписка на проект или открытие модального окна отписки
+   * @param projectId - ID проекта
+   */
   onSubscribe(projectId: number): void {
     if (this.isUserSubscribed) {
       this.isUnsubscribeModalOpen = true;
@@ -257,6 +347,10 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  /**
+   * Отписка от проекта
+   * @param projectId - ID проекта
+   */
   onUnsubscribe(projectId: number): void {
     this.subscriptionService.deleteSubscription(projectId).subscribe(() => {
       this.isUserSubscribed = false;
@@ -264,29 +358,62 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  /**
+   * Закрытие модального окна отписки
+   */
   onCloseUnsubscribeModal(): void {
     this.isUnsubscribeModalOpen = false;
   }
 
+  /**
+   * Закрытие модального окна предупреждения лидера
+   */
   onCloseLeaderLeaveModal(): void {
     this.leaderLeaveModal = false;
   }
 
+  /**
+   * Закрытие модального окна выхода из проекта
+   */
   onCloseLeaveProjectModal(): void {
     this.isLeaveProjectModalOpen = false;
   }
 
-  openSupport = false;
+  /**
+   * Закрытие модального окна для невозможности редактировать проект
+   */
+  onUnableEditingProject(): void {
+    if (this.isEditDisable) {
+      this.isEditDisableModal = true;
+    } else {
+      this.isEditDisableModal = false;
+    }
+  }
+
+  openSupport = false; // Флаг модального окна поддержки
+
+  // Проверка участия пользователя в проекте
   isInProject = this.project$?.pipe(
     concatMap(project => forkJoin([of(project), this.authService.profile.pipe(take(1))])),
     map(([project, profile]) => project.collaborators.map(c => c.userId).includes(profile.id))
   );
 
+  /**
+   * Развертывание/свертывание описания проекта
+   * @param elem - HTML элемент с описанием
+   * @param expandedClass - CSS класс для развернутого состояния
+   * @param isExpanded - текущее состояние (развернуто/свернуто)
+   */
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
   }
 
+  /**
+   * Получение названий навыков для вакансии
+   * @param vacancy - объект вакансии
+   * @returns строка с названиями навыков, разделенными точками
+   */
   getSkillsNames(vacancy: Vacancy) {
     return vacancy.requiredSkills.map((s: any) => s.name).join(" • ");
   }

@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, computed, inject, OnInit, signal } from "@angular/core";
+import { Component, computed, inject, type OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
 import { PersonalRatingCardComponent } from "../personal-rating-card/personal-rating-card.component";
@@ -8,10 +8,28 @@ import { IconComponent } from "@uilib";
 import { Router, RouterLink } from "@angular/router";
 import { SkillChooserComponent } from "../skill-chooser/skill-chooser.component";
 import { ProfileService } from "../../services/profile.service";
-import { Profile } from "projects/skills/src/models/profile.model";
+import type { Profile } from "projects/skills/src/models/profile.model";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { SkillService } from "../../../skills/services/skill.service";
 
+/**
+ * Компонент блока навыков пользователя
+ *
+ * Отображает список выбранных навыков пользователя с пагинацией.
+ * Поддерживает навигацию к детальной странице навыка и выбор новых навыков.
+ * Обрабатывает ошибки доступа для пользователей без подписки.
+ *
+ * @component SkillsBlockComponent
+ * @selector app-skills-block
+ *
+ * @property openSkillChoose - Флаг модального окна выбора навыков
+ * @property openInstruction - Флаг модального окна инструкций
+ * @property skillsList - Полный список навыков пользователя
+ * @property displayedSkills - Навыки для отображения на текущей странице
+ * @property limit - Количество навыков на странице (2)
+ * @property currentPage - Текущая страница
+ * @property totalPages - Общее количество страниц (вычисляемое)
+ */
 @Component({
   selector: "app-skills-block",
   standalone: true,
@@ -47,27 +65,45 @@ export class SkillsBlockComponent implements OnInit {
 
   tooltipText = "В данном блоке отображаются ваши навыки, которые вы выбрали в текущем месяце.";
 
+  /**
+   * Показывает подсказку
+   */
   showTooltip() {
     this.isHintVisible = true;
   }
 
+  /**
+   * Скрывает подсказку
+   */
   hideTooltip() {
     this.isHintVisible = false;
   }
 
+  /**
+   * Обрабатывает изменение состояния модального окна выбора навыков
+   */
   onOpenSkillsChange(open: boolean) {
     this.openSkillChoose = open;
   }
 
+  /**
+   * Обрабатывает изменение состояния модального окна инструкций
+   */
   onOpenInstructionChange(open: boolean) {
     this.openSkillChoose = open;
   }
 
+  /**
+   * Переходит от инструкций к выбору навыков
+   */
   nextStepModal() {
     this.openInstruction = false;
     this.openSkillChoose = true;
   }
 
+  /**
+   * Переходит к предыдущей странице навыков
+   */
   prevPage(): void {
     this.offset -= this.limit;
     this.currentPage -= 1;
@@ -80,6 +116,9 @@ export class SkillsBlockComponent implements OnInit {
     this.updateDisplayedSkills();
   }
 
+  /**
+   * Переходит к следующей странице навыков
+   */
   nextPage(): void {
     if (this.currentPage < this.totalPages()) {
       this.currentPage += 1;
@@ -88,10 +127,17 @@ export class SkillsBlockComponent implements OnInit {
     }
   }
 
+  /**
+   * Обновляет список отображаемых навыков на основе текущей страницы
+   */
   updateDisplayedSkills() {
     this.displayedSkills = this.skillsList.slice(this.offset, this.offset + this.limit);
   }
 
+  /**
+   * Обрабатывает клик по навыку для перехода к детальной странице
+   * @param skillId - ID навыка
+   */
   onSkillClick(skillId: number) {
     this.skillService.setSkillId(skillId);
     this.router.navigate(["skills", skillId]).catch(err => {

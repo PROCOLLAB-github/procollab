@@ -8,6 +8,28 @@ import { Project } from "@models/project.model";
 import { InviteService } from "@services/invite.service";
 import { Invite } from "@models/invite.model";
 
+/**
+ * Resolver для загрузки данных редактирования проекта
+ *
+ * Функциональность:
+ * - Загружает данные проекта по ID из параметров маршрута
+ * - Получает список приглашений для проекта
+ * - Объединяет данные в единый массив для компонента
+ *
+ * Принимает:
+ * - ActivatedRouteSnapshot с параметром projectId
+ *
+ * Возвращает:
+ * - Observable<[Project, Invite[]]> с данными:
+ *   - Project: полная информация о проекте
+ *   - Invite[]: массив приглашений в проект
+ *
+ * Используется перед загрузкой ProjectEditComponent для предварительной
+ * загрузки всех необходимых данных для редактирования.
+ *
+ * Применяет forkJoin для параллельной загрузки данных проекта и приглашений,
+ * что оптимизирует время загрузки страницы.
+ */
 export const ProjectEditResolver: ResolveFn<[Project, Invite[]]> = (
   route: ActivatedRouteSnapshot
 ) => {

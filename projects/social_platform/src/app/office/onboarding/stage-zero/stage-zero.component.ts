@@ -20,6 +20,52 @@ import { transformYearStringToNumber } from "@utils/transformYear";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 
+/**
+ * КОМПОНЕНТ НУЛЕВОГО ЭТАПА ОНБОРДИНГА
+ *
+ * Назначение: Начальный этап сбора базовой информации профиля пользователя
+ *
+ * Что делает:
+ * - Собирает основную информацию: фото, город, образование, опыт работы, языки, достижения
+ * - Управляет сложными формами с динамическими массивами (FormArray)
+ * - Валидирует данные с учетом временных диапазонов (годы обучения/работы)
+ * - Предоставляет интерфейс для добавления/редактирования/удаления записей
+ * - Поддерживает загрузку аватара пользователя
+ * - Сохраняет данные в профиле и переходит к следующему этапу
+ *
+ * Что принимает:
+ * - Текущий профиль пользователя из AuthService
+ * - Состояние формы из OnboardingService
+ * - Пользовательский ввод во все поля формы
+ * - Файлы изображений для аватара
+ *
+ * Что возвращает:
+ * - Комплексный интерфейс с множественными секциями:
+ *   * Загрузка аватара
+ *   * Поле города
+ *   * Управление образованием (добавление/редактирование записей)
+ *   * Управление опытом работы
+ *   * Управление языками
+ *   * Управление достижениями
+ * - Модальные окна для ошибок валидации
+ * - Навигацию на следующий этап (stage-1) или финальный (stage-3)
+ *
+ * Сложные функции управления данными:
+ * - addEducation/editEducation/removeEducation: управление записями образования
+ * - addWork/editWork/removeWork: управление записями опыта работы
+ * - addLanguage/editLanguage/removeLanguage: управление языками
+ * - addAchievement/removeAchievement: управление достижениями
+ *
+ * Валидация:
+ * - Обязательные поля: аватар, город
+ * - Валидация временных диапазонов (год начала < года окончания)
+ * - Динамическая валидация для записей в массивах
+ *
+ * Состояние компонента:
+ * - Множественные сигналы для управления элементами UI
+ * - Отслеживание режимов редактирования для каждого типа записей
+ * - Управление видимостью подсказок и модальных окон
+ */
 @Component({
   selector: "app-stage-zero",
   templateUrl: "./stage-zero.component.html",
@@ -426,7 +472,6 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
         this.educationItems.update(items => [...items, educationItem.value]);
         this.education.push(educationItem);
       }
-
       [
         "organizationName",
         "entryYear",
@@ -547,7 +592,6 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
         this.workItems.update(items => [...items, workItem.value]);
         this.workExperience.push(workItem);
       }
-
       [
         "organizationNameWork",
         "entryYearWork",
@@ -635,7 +679,6 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
       this.languageItems.update(items => [...items, languageItem.value]);
       this.userLanguages.push(languageItem);
     }
-
     ["language", "languageLevel"].forEach(name => {
       this.stageForm.get(name)?.reset();
       this.stageForm.get(name)?.setValue("");

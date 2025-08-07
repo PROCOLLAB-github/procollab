@@ -17,6 +17,22 @@ import { SkillService } from "../../../skills/services/skill.service";
 import { ActivatedRoute } from "@angular/router";
 import { Skill as ProfileSkill } from "projects/skills/src/models/profile.model";
 
+/**
+ * Компонент карточки навыка для выбора в личном кабинете
+ *
+ * Отображает информацию о навыке с возможностью выбора/отмены выбора.
+ * Ограничивает выбор до 5 навыков максимум.
+ * Показывает состояние навыка (выполнен/не выполнен).
+ *
+ * @component PersonalSkillCardComponent
+ * @selector app-personal-skill-card
+ *
+ * @input personalSkillCard - Данные навыка для отображения
+ * @input profileIdSkills - Сигнал с массивом ID выбранных навыков
+ * @input isRetryPicked - Сигнал флага повторного выбора навыка
+ *
+ * @output selectedCountChange - Событие изменения количества выбранных навыков
+ */
 @Component({
   selector: "app-personal-skill-card",
   standalone: true,
@@ -34,11 +50,18 @@ export class PersonalSkillCardComponent {
   route = inject(ActivatedRoute);
   skillService = inject(SkillService);
 
+  /** Вычисляемое свойство - выбран ли текущий навык */
   isChecked = computed(() => this.profileIdSkills().includes(this.personalSkillCard.id));
+  /** Вычисляемое свойство - количество выбранных навыков */
   selectedCount = computed(() => this.profileIdSkills().length);
 
   ngOnInit(): void {}
 
+  /**
+   * Переключает состояние выбора навыка
+   * Проверяет ограничения на количество выбранных навыков (максимум 5)
+   * Устанавливает флаг повторного выбора если навык уже был выполнен
+   */
   toggleCheck(): void {
     const currentId = this.personalSkillCard.id;
 

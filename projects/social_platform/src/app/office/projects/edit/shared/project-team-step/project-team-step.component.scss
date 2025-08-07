@@ -1,0 +1,105 @@
+/** @format */
+
+@use "styles/responsive";
+@use "styles/typography";
+
+.project {
+  &__inner {
+    width: 100%;
+    margin-bottom: 25px;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      gap: 90px;
+      justify-content: space-between;
+      margin-bottom: 0;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__inner > fieldset:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  &__left {
+    flex-basis: 50%;
+    margin-bottom: 20px;
+
+    form {
+      width: 280px;
+
+      @include responsive.apply-desktop {
+        width: 600px;
+      }
+    }
+  }
+
+  &__right {
+    flex-basis: 50%;
+
+    :first-child & :not(span, fieldset, label, h4, p, i) {
+      margin-top: 26px;
+      margin-bottom: 10px;
+    }
+
+    :last-child & :not(i, span) {
+      margin-top: 10px;
+    }
+  }
+
+  &__invite {
+    display: flex;
+    flex-direction: column;
+
+    app-button {
+      width: 100%;
+
+      @include typography.body-12;
+
+      @include responsive.apply-desktop {
+        width: 25%;
+        @include typography.bold-body-16;
+      }
+    }
+  }
+}
+
+.invite {
+  &__title {
+    margin-bottom: 12px;
+  }
+
+  &__role {
+    margin-bottom: 12px;
+  }
+
+  &__link {
+    margin-bottom: 12px;
+  }
+
+  &__item {
+    margin-bottom: 12px;
+  }
+
+  &__list {
+    width: 557px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  &__team {
+    grid-template-columns: repeat(1, 270px);
+    grid-gap: 20px;
+    margin-top: 10px;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: repeat(3, 350px);
+    }
+  }
+}
+
+.vacancy {
+  &__submit {
+    display: block;
+  }
+}

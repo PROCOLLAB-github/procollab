@@ -11,6 +11,24 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ProfileService } from "../../services/profile.service";
 import { Subscription } from "rxjs";
 
+/**
+ * Компонент информационного блока пользователя
+ *
+ * Отображает основную информацию о пользователе:
+ * - Аватар, имя, возраст, специализацию
+ * - Статус наставника (если применимо)
+ * - Количество баллов
+ * - Модальное окно уведомления о подписке
+ *
+ * @component InfoBlockComponent
+ * @selector app-info-block
+ *
+ * @input userData - Данные пользователя для отображения
+ *
+ * @property avatarSize - Размер аватара (адаптивный)
+ * @property openSuscriptionBought - Флаг модального окна подписки
+ * @property isMentor - Флаг статуса наставника
+ */
 @Component({
   selector: "app-info-block",
   standalone: true,
@@ -63,6 +81,9 @@ export class InfoBlockComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
 
+  /**
+   * Обрабатывает изменение размера окна для адаптивного размера аватара
+   */
   @HostListener("window:resize", ["$event"])
   onResize(event: any) {
     this.avatarSize.set(event.target.innerWidth > 1200 ? 165 : 90);

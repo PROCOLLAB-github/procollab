@@ -18,6 +18,23 @@ import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { Subscription } from "rxjs";
 
+/**
+ * КОМПОНЕНТ ФИЛЬТРАЦИИ ЛЕНТЫ
+ *
+ * Предоставляет интерфейс для фильтрации элементов ленты по типам контента.
+ * Позволяет пользователю выбирать, какие типы элементов отображать в ленте.
+ *
+ * ОСНОВНЫЕ ФУНКЦИИ:
+ * - Отображение выпадающего меню с опциями фильтрации
+ * - Управление состоянием активных фильтров
+ * - Синхронизация фильтров с URL параметрами
+ * - Применение и сброс фильтров
+ *
+ * ДОСТУПНЫЕ ФИЛЬТРЫ:
+ * - Новости (news)
+ * - Вакансии (vacancy)
+ * - Новости проектов (project)
+ */
 @Component({
   selector: "app-feed-filter",
   standalone: true,
@@ -51,11 +68,20 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
   profile = signal<User | null>(null);
   subscriptions: Subscription[] = [];
 
+  /**
+   * ИНИЦИАЛИЗАЦИЯ КОМПОНЕНТА
+   *
+   * ЧТО ДЕЛАЕТ:
+   * - Подписывается на изменения профиля пользователя
+   * - Читает текущие фильтры из URL параметров
+   * - Инициализирует состояние фильтров
+   */
   ngOnInit() {
     const profileSubscription = this.authService.profile.subscribe(profile => {
       this.profile.set(profile);
     });
 
+    // Читаем активные фильтры из URL
     this.route.queryParams.subscribe(params => {
       params["includes"] &&
         this.includedFilters.set(params["includes"].split(this.feedService.FILTER_SPLIT_SYMBOL));
@@ -68,16 +94,33 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach($ => $.unsubscribe());
   }
 
+  // Состояние выпадающего меню фильтров
   filterOpen = signal(false);
 
+  /**
+   * ОПЦИИ ФИЛЬТРАЦИИ
+   *
+   * Массив доступных опций для фильтрации ленты:
+   * - label: отображаемое название на русском языке
+   * - value: значение для API запроса
+   */
   filterOptions = [
     { label: "Новости", value: "news" },
     { label: "Вакансии", value: "vacancy" },
     { label: "Новости проектов", value: "project" },
   ];
 
+  // Массив активных фильтров
   includedFilters = signal<string[]>([]);
 
+  /**
+   * ПРИМЕНЕНИЕ ФИЛЬТРОВ
+   *
+   * ЧТО ДЕЛАЕТ:
+   * - Обновляет URL параметры с выбранными фильтрами
+   * - Инициирует перезагрузку ленты с новыми фильтрами
+   * - Сохраняет другие параметры запроса
+   */
   applyFilter(): void {
     this.router
       .navigate([], {
@@ -90,12 +133,25 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
       .then(() => console.debug("Query change from FeedFilterComponent"));
   }
 
+  /**
+   * ПЕРЕКЛЮЧЕНИЕ ФИЛЬТРА
+   *
+   * ЧТО ПРИНИМАЕТ:
+   * @param keyword - значение фильтра для переключения
+   *
+   * ЧТО ДЕЛАЕТ:
+   * - Добавляет фильтр, если он не активен
+   * - Удаляет фильтр, если он уже активен
+   * - Обновляет состояние активных фильтров
+   */
   setFilter(keyword: string): void {
     this.includedFilters.update(included => {
       if (included.indexOf(keyword) !== -1) {
+        // Удаляем фильтр, если он уже активен
         const idx = included.indexOf(keyword);
         included.splice(idx, 1);
       } else {
+        // Добавляем новый фильтр
         included.push(keyword);
       }
 
@@ -103,12 +159,26 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * СБРОС ВСЕХ ФИЛЬТРОВ
+   *
+   * ЧТО ДЕЛАЕТ:
+   * - Очищает все активные фильтры
+   * - Применяет пустой набор фильтров
+   * - Возвращает ленту к состоянию по умолчанию
+   */
   resetFilter(): void {
     this.includedFilters.set([]);
-
     this.applyFilter();
   }
 
+  /**
+   * ЗАКРЫТИЕ ВЫПАДАЮЩЕГО МЕНЮ
+   *
+   * ЧТО ДЕЛАЕТ:
+   * - Закрывает выпадающее меню при клике вне его области
+   * - Используется директивой ClickOutside
+   */
   onClickOutside(): void {
     this.filterOpen.set(false);
   }

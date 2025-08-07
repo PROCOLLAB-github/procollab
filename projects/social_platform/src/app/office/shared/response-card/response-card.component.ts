@@ -10,8 +10,28 @@ import { RouterLink } from "@angular/router";
 import { AsyncPipe } from "@angular/common";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { AuthService } from "@auth/services";
-import { map, tap } from "rxjs";
 
+/**
+ * Компонент карточки отклика на вакансию
+ *
+ * Функциональность:
+ * - Отображает информацию об отклике на вакансию (кандидат, роль, файлы)
+ * - Показывает аватар и основную информацию о кандидате
+ * - Отображает прикрепленные файлы (резюме, портфолио)
+ * - Предоставляет кнопки для принятия или отклонения отклика
+ * - Ссылка на профиль кандидата
+ * - Получает ID текущего пользователя для проверки прав доступа
+ *
+ * Входные параметры:
+ * @Input response - объект отклика на вакансию (обязательный)
+ *
+ * Выходные события:
+ * @Output reject - событие отклонения отклика, передает ID отклика
+ * @Output accept - событие принятия отклика, передает ID отклика
+ *
+ * Внутренние свойства:
+ * - profileId - ID текущего пользователя для проверки прав
+ */
 @Component({
   selector: "app-response-card",
   templateUrl: "./response-card.component.html",
@@ -44,10 +64,18 @@ export class ResponseCardComponent implements OnInit {
     });
   }
 
+  /**
+   * Обработчик принятия отклика
+   * Эмитит событие с ID отклика
+   */
   onAccept(responseId: number) {
     this.accept.emit(responseId);
   }
 
+  /**
+   * Обработчик отклонения отклика
+   * Эмитит событие с ID отклика
+   */
   onReject(responseId: number) {
     this.reject.emit(responseId);
   }

@@ -1,8 +1,8 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit, signal, Signal } from "@angular/core";
+import { Component, OnDestroy, OnInit, Signal } from "@angular/core";
 import { IndustryService } from "@services/industry.service";
-import { forkJoin, map, noop, Subscription, tap } from "rxjs";
+import { forkJoin, map, noop, Subscription } from "rxjs";
 import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
 import { Invite } from "@models/invite.model";
 import { AuthService } from "@auth/services";
@@ -19,6 +19,18 @@ import { AsyncPipe } from "@angular/common";
 import { InviteService } from "@services/invite.service";
 import { toSignal } from "@angular/core/rxjs-interop";
 
+/**
+ * Главный компонент офиса - корневой компонент рабочего пространства
+ * Управляет общим состоянием приложения, навигацией и модальными окнами
+ *
+ * Принимает:
+ * - Данные о приглашениях через резолвер
+ * - События от сервисов (auth, chat, invite)
+ *
+ * Возвращает:
+ * - Рендерит основной интерфейс офиса с сайдбаром, навигацией и роутер-аутлетом
+ * - Управляет модальными окнами для верификации и приглашений
+ */
 @Component({
   selector: "app-office",
   templateUrl: "./office.component.html",

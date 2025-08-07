@@ -1,61 +1,88 @@
 /** @format */
 
-import { UserData } from "./profile.model";
-import { Skill } from "./skill.model";
+import type { UserData } from "./profile.model";
+import type { Skill } from "./skill.model";
 
+/**
+ * Информация о навыке в контексте траектории
+ * Упрощенная версия интерфейса Skill для отображения траектории
+ */
 interface SkillInfo {
-  fileLink: string | null;
-  name: string;
+  fileLink: string | null; // URL к ресурсам навыка
+  name: string; // Отображаемое название навыка
 }
 
+/**
+ * Определение траектории обучения
+ *
+ * Траектории - это структурированные пути обучения, которые направляют пользователей через
+ * серию навыков и компетенций для достижения конкретных карьерных или
+ * бизнес-целей.
+ */
 export interface Trajectory {
   id: number;
-  name: string;
-  description: string;
-  isActiveForUser: boolean;
-  avatar: string | null;
-  mentors: number[];
-  skills: SkillInfo[];
-  backgroundColor: string;
-  buttonColor: string;
-  selectButtonColor: string;
-  textColor: string;
-  company: string;
-  durationMonths: number;
+  name: string; // Отображаемое название траектории
+  description: string; // Подробное описание того, что охватывает траектория
+  isActiveForUser: boolean; // Зарегистрирован ли текущий пользователь в этой траектории
+  avatar: string | null; // URL логотипа/аватара траектории
+  mentors: number[]; // Массив ID пользователей-менторов, назначенных на эту траекторию
+  skills: SkillInfo[]; // Навыки, включенные в эту траекторию
+  backgroundColor: string; // Пользовательский цвет фона для темизации UI
+  buttonColor: string; // Пользовательский цвет кнопки для темизации UI
+  selectButtonColor: string; // Пользовательский цвет кнопки выбора
+  textColor: string; // Пользовательский цвет текста для темизации UI
+  company: string; // Компания или организация, предлагающая эту траекторию
+  durationMonths: number; // Ожидаемая продолжительность в месяцах
 }
 
+/**
+ * Навыки, категоризированные по статусу доступности в рамках траектории
+ * Помогает пользователям понимать их прогресс и что доступно далее
+ */
 export interface TrajectorySkills {
-  availableSkills: Skill[];
-  unavailableSkills: Skill[];
-  completedSkills: Skill[];
+  availableSkills: Skill[]; // Навыки, к которым пользователь может получить доступ в настоящее время
+  unavailableSkills: Skill[]; // Навыки, заблокированные до выполнения предварительных условий
+  completedSkills: Skill[]; // Навыки, которые пользователь успешно завершил
 }
 
+/**
+ * Регистрация и прогресс пользователя в конкретной траектории
+ *
+ * Содержит всю информацию о путешествии пользователя через траекторию,
+ * включая назначение ментора, статус встреч и прогресс по навыкам.
+ */
 export interface UserTrajectory {
-  trajectoryId: number;
-  startDate: string;
-  endDate: string;
-  isActive: boolean;
-  mentorFirstName: string;
-  mentorLastName: string;
-  mentorAvatar: string | null;
-  mentorId: number;
-  firstMeetingDone: boolean;
-  finalMeetingDone: boolean;
-  availableSkills: Skill[];
-  unavailableSkills: Skill[];
-  completedSkills: Skill[];
-  individualSkills: Skill[];
-  activeMonth: number;
-  durationMonths: number;
+  trajectoryId: number; // ID зарегистрированной траектории
+  startDate: string; // ISO строка даты начала регистрации
+  endDate: string; // ISO строка даты ожидаемого завершения
+  isActive: boolean; // Активна ли регистрация в настоящее время
+  mentorFirstName: string; // Имя назначенного ментора
+  mentorLastName: string; // Фамилия назначенного ментора
+  mentorAvatar: string | null; // URL фотографии профиля назначенного ментора
+  mentorId: number; // ID пользователя назначенного ментора
+  firstMeetingDone: boolean; // Состоялась ли первоначальная встреча с ментором
+  finalMeetingDone: boolean; // Состоялась ли финальная оценочная встреча
+  availableSkills: Skill[]; // Навыки, доступные пользователю в настоящее время
+  unavailableSkills: Skill[]; // Навыки, заблокированные в ожидании предварительных условий
+  completedSkills: Skill[]; // Навыки, успешно завершенные пользователем
+  individualSkills: Skill[]; // Пользовательские навыки, назначенные специально этому пользователю
+  activeMonth: number; // Текущий месяц траектории (начиная с 1)
+  durationMonths: number; // Общая продолжительность траектории в месяцах
 }
 
+/**
+ * Информация о студенте для панели ментора
+ *
+ * Используется менторами для отслеживания прогресса назначенных им студентов
+ * и управления менторскими отношениями.
+ */
 export interface Student {
-  trajectory: Trajectory;
-  finalMeeting: boolean;
-  initialMeeting: boolean;
-  remainingDays: number;
-  userTrajectoryId: number;
-  meetingId: number;
-  student: UserData;
-  mentorId: number;
+  trajectory: Trajectory; // Траектория, в которой зарегистрирован студент
+  finalMeeting: boolean; // Была ли завершена финальная встреча
+  initialMeeting: boolean; // Была ли завершена первоначальная встреча
+  remainingDays: number; // Дни, оставшиеся в траектории
+  userTrajectoryId: number; // ID регистрации пользователя в траектории
+  meetingId: number; // ID записи встречи
+  student: UserData; // Полная информация профиля студента
+  mentorId: number; // ID назначенного ментора
 }

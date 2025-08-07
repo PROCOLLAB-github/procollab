@@ -2,7 +2,7 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { BehaviorSubject, combineLatest, map, Observable, Subscription } from "rxjs";
 import { ChatListItem } from "@office/chat/models/chat-item.model";
 import { AuthService } from "@auth/services";
@@ -11,12 +11,24 @@ import { ChatCardComponent } from "./shared/chat-card/chat-card.component";
 import { AsyncPipe } from "@angular/common";
 import { BarComponent } from "@ui/components";
 
+/**
+ * Компонент списка чатов - отображает все чаты пользователя
+ * Управляет отображением прямых и групповых чатов с сортировкой по непрочитанным
+ *
+ * Принимает:
+ * - Данные чатов через резолвер
+ * - События новых сообщений через WebSocket
+ *
+ * Возвращает:
+ * - Отсортированный список чатов с индикаторами непрочитанных сообщений
+ * - Навигацию к конкретным чатам
+ */
 @Component({
   selector: "app-chat",
   templateUrl: "./chat.component.html",
   styleUrl: "./chat.component.scss",
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, ChatCardComponent, AsyncPipe, BarComponent],
+  imports: [ChatCardComponent, AsyncPipe, BarComponent],
 })
 export class ChatComponent implements OnInit, OnDestroy {
   constructor(

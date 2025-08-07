@@ -1,9 +1,27 @@
 /** @format */
 
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, type OnInit } from "@angular/core";
 import { LoaderComponent } from "../loader/loader.component";
 import { CommonModule } from "@angular/common";
 
+/**
+ * Универсальный компонент кнопки с различными стилями и состояниями.
+ * Поддерживает различные цветовые схемы, индикатор загрузки и настройки внешнего вида.
+ *
+ * Входящие параметры:
+ * - color: цветовая схема кнопки ("primary" | "red" | "grey" | "green" | "gold" | "gradient" | "white")
+ * - loader: показывать индикатор загрузки
+ * - hasBorder: отображать рамку кнопки
+ * - type: тип кнопки для HTML ("submit" | "reset" | "button")
+ * - appearance: стиль отображения ("inline" | "outline")
+ * - backgroundColor: кастомный цвет фона
+ * - disabled: состояние блокировки кнопки
+ * - customTypographyClass: кастомный CSS класс для типографики
+ *
+ * Использование:
+ * - Вставлять контент кнопки через ng-content
+ * - Автоматически показывает лоадер при loader=true
+ */
 @Component({
   selector: "app-button",
   templateUrl: "./button.component.html",
@@ -14,13 +32,28 @@ import { CommonModule } from "@angular/common";
 export class ButtonComponent implements OnInit {
   constructor() {}
 
+  /** Цветовая схема кнопки */
   @Input() color: "primary" | "red" | "grey" | "green" | "gold" | "gradient" | "white" = "primary";
+
+  /** Показывать индикатор загрузки */
   @Input() loader = false;
+
+  /** Отображать рамку */
   @Input() hasBorder = true;
+
+  /** Тип HTML кнопки */
   @Input() type: "submit" | "reset" | "button" = "button";
+
+  /** Стиль отображения */
   @Input() appearance: "inline" | "outline" = "inline";
+
+  /** Кастомный цвет фона */
   @Input() backgroundColor?: string;
+
+  /** Состояние блокировки */
   @Input() disabled = false;
+
+  /** Кастомный класс типографики */
   @Input() customTypographyClass?: string;
 
   ngOnInit(): void {}

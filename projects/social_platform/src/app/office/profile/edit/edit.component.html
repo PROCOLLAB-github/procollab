@@ -364,11 +364,10 @@
         </fieldset>
         } @if (profileForm.get("isMospolytechStudent"); as isMospolytechStudent) {
         <fieldset style="display: flex; gap: 10px">
-          <app-checkbox
+          <app-switch
             [checked]="profileForm.get('isMospolytechStudent')?.value"
             (checkedChange)="profileForm.get('isMospolytechStudent')?.setValue($event)"
-          >
-          </app-checkbox>
+          ></app-switch>
           <label (click)="isStudentMosPolytech()" class="field-label" style="cursor: pointer">
             Студент Московского Политеха
           </label>

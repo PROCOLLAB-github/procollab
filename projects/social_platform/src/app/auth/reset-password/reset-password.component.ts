@@ -8,6 +8,20 @@ import { ControlErrorPipe, ValidationService } from "projects/core";
 import { Router } from "@angular/router";
 import { ButtonComponent, InputComponent } from "@ui/components";
 
+/**
+ * Компонент запроса сброса пароля
+ *
+ * Назначение: Позволяет пользователю запросить сброс пароля по email
+ * Принимает: Email адрес пользователя через форму
+ * Возвращает: Перенаправление на страницу подтверждения или отображение ошибки
+ *
+ * Функциональность:
+ * - Форма с полем email для запроса сброса пароля
+ * - Валидация email адреса
+ * - Отправка запроса на сервер
+ * - Обработка ошибок (неверный email)
+ * - Перенаправление на страницу подтверждения при успехе
+ */
 @Component({
   selector: "app-reset-password",
   templateUrl: "./reset-password.component.html",

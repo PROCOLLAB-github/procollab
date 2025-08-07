@@ -1,0 +1,138 @@
+/** @format */
+
+@use "styles/responsive";
+@use "styles/typography";
+
+.project {
+  &__inner {
+    width: 100%;
+    margin-bottom: 25px;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      gap: 90px;
+      justify-content: space-between;
+      margin-bottom: 0;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__inner > fieldset:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  &__left {
+    flex-basis: 50%;
+    margin-bottom: 20px;
+
+    form {
+      width: 280px;
+
+      @include responsive.apply-desktop {
+        width: 600px;
+      }
+    }
+  }
+
+  &__right {
+    flex-basis: 50%;
+
+    :first-child & :not(span, fieldset, label, h4, p, i) {
+      margin-top: 26px;
+      margin-bottom: 10px;
+    }
+
+    :last-child & :not(i, span) {
+      margin-top: 10px;
+    }
+  }
+
+  &__team {
+    width: 90%;
+    &--additional {
+      gap: 10px;
+    }
+  }
+
+  &__additional {
+    &-wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      ::ng-deep {
+        app-input {
+          input {
+            color: var(--black) !important;
+            @include typography.body-10;
+          }
+        }
+
+        app-textarea {
+          textarea {
+            color: var(--black) !important;
+            @include typography.body-10;
+          }
+        }
+
+        app-select {
+          .field__input {
+            color: var(--black) !important;
+            &--placeholder {
+              color: var(--grey-for-text) !important;
+            }
+            @include typography.body-10;
+          }
+        }
+      }
+
+      @include responsive.apply-desktop {
+        width: 60%;
+
+        ::ng-deep {
+          app-input {
+            input {
+              @include typography.body-14;
+            }
+          }
+
+          app-textarea {
+            textarea {
+              @include typography.body-14;
+            }
+          }
+
+          app-select {
+            .field__input {
+              @include typography.body-14;
+            }
+          }
+        }
+      }
+    }
+
+    fieldset {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.invite {
+  &__item {
+    margin-bottom: 12px;
+  }
+
+  &__list {
+    width: 557px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+}
+
+.vacancy {
+  &__submit {
+    display: block;
+  }
+}
