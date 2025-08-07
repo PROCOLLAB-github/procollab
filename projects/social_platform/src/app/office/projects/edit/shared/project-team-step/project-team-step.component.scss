@@ -58,6 +58,7 @@
 
       @include responsive.apply-desktop {
         width: 25%;
+
         @include typography.bold-body-16;
       }
     }

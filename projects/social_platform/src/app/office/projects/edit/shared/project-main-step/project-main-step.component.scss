@@ -4,7 +4,7 @@
 @use "styles/typography";
 
 .project {
-   &__inner {
+  &__inner {
     width: 100%;
     margin-bottom: 25px;
 
@@ -54,7 +54,7 @@
     display: flex;
     flex-direction: column;
 
-    @include responsive.apply-desktop{
+    @include responsive.apply-desktop {
       flex-direction: row;
       justify-content: space-between;
     }
@@ -87,15 +87,16 @@
 
   &__additional {
     &-wrapper {
-      width: 100%;
       display: flex;
       flex-direction: column;
       gap: 20px;
+      width: 100%;
 
       ::ng-deep {
         app-input {
           input {
             color: var(--black) !important;
+
             @include typography.body-10;
           }
         }
@@ -103,6 +104,7 @@
         app-textarea {
           textarea {
             color: var(--black) !important;
+
             @include typography.body-10;
           }
         }
@@ -110,9 +112,11 @@
         app-select {
           .field__input {
             color: var(--black) !important;
+
             &--placeholder {
               color: var(--grey-for-text) !important;
             }
+
             @include typography.body-10;
           }
         }
