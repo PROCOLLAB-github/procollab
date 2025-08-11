@@ -28,6 +28,7 @@ export class ProjectFormService {
   private readonly route = inject(ActivatedRoute);
   private readonly projectService = inject(ProjectService);
   public editIndex = signal<number | null>(null);
+  public relationId = signal<number>(0);
 
   constructor() {
     this.initializeForm();
@@ -110,6 +111,10 @@ export class ProjectFormService {
       coverImageAddress: project.coverImageAddress,
       partnerProgramId: project.partnerProgramId ?? null,
     });
+
+    if (project.partnerProgram) {
+      this.relationId.set(project.partnerProgram?.programLinkId);
+    }
 
     this.populateLinksFormArray(project.links || []);
 

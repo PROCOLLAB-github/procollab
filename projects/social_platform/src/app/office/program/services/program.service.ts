@@ -32,6 +32,7 @@ import { User } from "@auth/models/user.model";
  * @method register(programId: number, additionalData: Record<string, string>) - Регистрирует пользователя в программе
  * @method getAllProjects(programId: number, offset: number, limit: number) - Получает проекты программы
  * @method getAllMembers(programId: number, skip: number, take: number) - Получает участников программы
+ * @method submitCompettetiveProject(prelationId: number) - Cохранить и "подать проект" на сдачу в программу конкурсную
  * @method programTags() - Получает и кеширует теги программ пользователя
  *
  * Свойства:
@@ -84,6 +85,13 @@ export class ProgramService {
     return this.apiService.get(
       `${this.AUTH_PUBLIC_USERS_URL}/`,
       new HttpParams({ fromObject: { partner_program: programId, limit: take, offset: skip } })
+    );
+  }
+
+  submitCompettetiveProject(relationId: number): Observable<Project> {
+    return this.apiService.post(
+      `${this.PROGRAMS_URL}/partner-program-projects/${relationId}/submit/`,
+      {}
     );
   }
 

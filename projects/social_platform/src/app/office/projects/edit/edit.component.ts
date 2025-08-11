@@ -25,7 +25,15 @@ import { ProjectService } from "@services/project.service";
 import { ButtonComponent, IconComponent, SelectComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ValidationService } from "projects/core";
-import { Observable, Subscription, concatMap, distinctUntilChanged, map, tap } from "rxjs";
+import {
+  Observable,
+  Subscription,
+  concatMap,
+  distinctUntilChanged,
+  finalize,
+  map,
+  tap,
+} from "rxjs";
 import { CommonModule, AsyncPipe } from "@angular/common";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ProjectAssign } from "../models/project-assign.model";
@@ -41,6 +49,7 @@ import { ProjectTeamStepComponent } from "./shared/project-team-step/project-tea
 import { ProjectTeamService } from "./services/project-team.service";
 import { ProjectAdditionalStepComponent } from "./shared/project-additional-step/project-additional-step.component";
 import { ProjectAdditionalService } from "./services/project-additional.service";
+import { ProjectAchievementsService } from "./services/project-achievements.service";
 
 /**
  * Компонент редактирования проекта
@@ -94,12 +103,9 @@ import { ProjectAdditionalService } from "./services/project-additional.service"
   ],
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild("additionalStepComponent") additionalStepComponent?: ProjectAdditionalStepComponent;
-
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly fb: FormBuilder,
     private readonly industryService: IndustryService,
     protected readonly projectService: ProjectService,
     private readonly navService: NavService,
@@ -110,6 +116,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly projectFormService: ProjectFormService,
     private readonly projectVacancyService: ProjectVacancyService,
     private readonly projectTeamService: ProjectTeamService,
+    private readonly projectAchievementsService: ProjectAchievementsService,
     private readonly skillsService: SkillsService,
     private readonly projectAdditionalService: ProjectAdditionalService
   ) {}
@@ -124,13 +131,24 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.projectVacancyService.getVacancyForm();
   }
 
+  // Получаем форму вакансии из сервиса
+  get additionalForm(): FormGroup {
+    return this.projectAdditionalService.getAdditionalForm();
+  }
+
   // Получаем сигналы из сервиса
   get achievements() {
     return this.projectFormService.achievements;
   }
 
+  // Id редатируемой части проекта
   get editIndex() {
     return this.projectFormService.editIndex;
+  }
+
+  // Id связи проекта и программы
+  get relationId() {
+    return this.projectFormService.relationId;
   }
 
   // Геттеры для доступа к данным из сервиса дополнительных полей
@@ -181,6 +199,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Id Лидера проекта
   leaderId = 0;
+
+  // Маркер того является ли проект привязанный к конкурсной программе
+  isCompetitive = false;
 
   // Текущий шаг редактирования
   get editingStep(): EditStep {
@@ -298,18 +319,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   clearAllValidationErrors(): void {
     // Очистка основной формы
     this.projectFormService.clearAllValidationErrors();
-    this.clearAllAchievementsErrors();
-  }
-
-  private clearAllAchievementsErrors(): void {
-    const achievements = this.projectFormService.achievements;
-    achievements.controls.forEach(achievementForm => {
-      if (achievementForm instanceof FormGroup) {
-        Object.keys(achievementForm.controls).forEach(controlName => {
-          achievementForm.get(controlName)?.setErrors(null);
-        });
-      }
-    });
+    this.projectAchievementsService.clearAllAchievementsErrors(this.achievements);
   }
 
   /**
@@ -320,17 +330,19 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectForm.get("draft")?.patchValue(false);
     this.setProjFormIsSubmitting = this.setIsSubmittingAsPublished;
 
-    const partnerProgramFields = this.projectAdditionalService.getPartnerProgramFields();
-    if (!partnerProgramFields?.length) {
+    if (!this.isCompetitive) {
       this.submitProjectForm();
       return;
     }
 
-    // Получаем ссылку на компонент дополнительных полей через ViewChild или другим способом
-    const additionalStepComponent = this.getAdditionalStepComponent();
-    if (additionalStepComponent?.validateAdditionalFields()) {
+    this.projectForm.markAllAsTouched();
+    this.projectFormService.achievements.markAllAsTouched();
+
+    if (this.validateAdditionalFields()) {
       return;
     }
+
+    this.additionalForm.markAllAsTouched();
 
     this.isSendDescisionToPartnerProgramProject = true;
     this.cdRef.markForCheck();
@@ -358,7 +370,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const payload = this.projectFormService.getFormValue();
 
-    if (!this.validationService.getFormValidation(this.projectForm)) {
+    if (
+      !this.validationService.getFormValidation(this.projectForm) &&
+      !this.validationService.getFormValidation(this.additionalForm)
+    ) {
       return;
     }
 
@@ -384,17 +399,70 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   closeSendingDescisionModal(): void {
     this.isSendDescisionToPartnerProgramProject = false;
 
-    const additionalStepComponent = this.getAdditionalStepComponent();
     const projectId = Number(this.route.snapshot.params["projectId"]);
+    const relationId = this.relationId();
 
-    additionalStepComponent?.closeSendingDecisionModal(projectId, () => {
+    this.sendAdditionalFields(projectId, relationId, () => {
       this.submitProjectForm();
+      this.router.navigateByUrl(`/office/projects/${projectId}`);
     });
   }
 
   closeAssignProjectToProgramModal(): void {
     this.isAssignProjectToProgramModalOpen.set(false);
     this.router.navigateByUrl(`/office/projects/my`);
+  }
+
+  /**
+   * Валидация дополнительных полей для публикации
+   * Делегирует валидацию сервису
+   * @returns true если есть ошибки валидации
+   */
+  private validateAdditionalFields(): boolean {
+    const partnerProgramFields = this.projectAdditionalService.getPartnerProgramFields();
+
+    if (!partnerProgramFields?.length) {
+      return false;
+    }
+
+    const hasInvalid = this.projectAdditionalService.validateRequiredFields();
+
+    if (hasInvalid) {
+      this.cdRef.markForCheck();
+      return true;
+    }
+
+    // Подготавливаем поля для отправки
+    this.projectAdditionalService.prepareFieldsForSubmit();
+    return false;
+  }
+
+  /**
+   * Отправка дополнительных полей через сервис
+   * @param projectId - ID проекта
+   * @param relationId - ID связи проекта и конкурсной программы
+   * @param onSuccess - колбэк при успешной отправке
+   */
+  private sendAdditionalFields(
+    projectId: number,
+    relationId: number,
+    onSuccess?: () => void
+  ): void {
+    this.projectAdditionalService
+      .sendAdditionalFieldsValues(projectId)
+      .pipe(
+        concatMap(() => this.projectAdditionalService.submitCompettetiveProject(relationId)),
+        finalize(() => this.projectAdditionalService.resetSendingState())
+      )
+      .subscribe({
+        next: () => {
+          onSuccess?.();
+        },
+        error: error => {
+          console.error("Error sending additional fields:", error);
+          this.setProjFormIsSubmitting(false);
+        },
+      });
   }
 
   /**
@@ -454,13 +522,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.skillsGroupsModalOpen.update(open => !open);
   }
 
-  /**
-   * Получение ссылки на компонент дополнительных полей
-   */
-  private getAdditionalStepComponent(): ProjectAdditionalStepComponent | null {
-    return this.editingStep === "additional" ? this.additionalStepComponent || null : null;
-  }
-
   private setupEditingStep(): void {
     const stepFromUrl = this.route.snapshot.queryParams["editingStep"] as EditStep;
     if (stepFromUrl) {
@@ -511,10 +572,14 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         this.projectTeamService.setInvites(invites);
 
         // Инициализируем дополнительные поля через сервис
-        this.projectAdditionalService.initializeAdditionalForm(
-          project.partnerProgramFields,
-          project.partnerProgramFieldValues
-        );
+        if (project.partnerProgram) {
+          this.isCompetitive = project.partnerProgram.canSubmit;
+
+          this.projectAdditionalService.initializeAdditionalForm(
+            project.partnerProgram?.programFields,
+            project.partnerProgram?.programFieldValues
+          );
+        }
 
         this.projectVacancyService.setVacancies(project.vacancies);
         this.projectTeamService.setInvites(invites);

@@ -7,6 +7,7 @@ import {
   PartnerProgramFieldsValues,
   projectNewAdditionalProgramVields,
 } from "@office/models/partner-program-fields.model";
+import { ProgramService } from "@office/program/services/program.service";
 import { ProjectService } from "@services/project.service";
 import { Observable } from "rxjs";
 
@@ -23,6 +24,7 @@ export class ProjectAdditionalService {
 
   private readonly fb = inject(FormBuilder);
   private readonly projectService = inject(ProjectService);
+  private readonly programService = inject(ProgramService);
 
   private isSendingDecision = signal(false);
   private isAssignProjectToProgramError = signal(false);
@@ -168,6 +170,15 @@ export class ProjectAdditionalService {
 
     this.isSendingDecision.set(true);
     return this.projectService.sendNewProjectFieldsValues(projectId, payload);
+  }
+
+  /**
+   * Сабмитит проект привязанный к конкурсной программе
+   * @param relationId идентификатор связи
+   * @returns Observable<any> результат запроса
+   */
+  public submitCompettetiveProject(relationId: number): Observable<any> {
+    return this.programService.submitCompettetiveProject(relationId);
   }
 
   /**

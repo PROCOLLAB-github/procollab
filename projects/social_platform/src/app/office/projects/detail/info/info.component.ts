@@ -157,16 +157,14 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
           : (this.isUserSubscribed = false);
       });
 
-    const isEditDisable$ = this.project$
-      ? this.project$.subscribe(project => {
-          this.isEditDisable =
-            !project.draft &&
-            project.partnerProgramFieldValues &&
-            !!project.partnerProgramFieldValues.length;
-        })
-      : Subscription.EMPTY;
+    const projectEditSub$ =
+      this.project$?.subscribe(project => {
+        if (project.partnerProgram) {
+          this.isEditDisable = project.partnerProgram?.isSubmitted;
+        }
+      }) ?? Subscription.EMPTY;
 
-    this.subscriptions$.push(news$, profileId$, isEditDisable$);
+    this.subscriptions$.push(news$, profileId$, projectEditSub$);
   }
 
   // Ссылки на элементы DOM

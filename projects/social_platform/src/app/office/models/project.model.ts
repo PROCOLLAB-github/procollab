@@ -17,6 +17,15 @@ import { Vacancy } from "./vacancy.model";
  * ProjectStep - этапы развития проекта
  */
 
+export class PartnerProgramInfo {
+  programLinkId!: number;
+  programId!: number;
+  isSubmitted!: boolean;
+  canSubmit!: boolean;
+  programFields!: PartnerProgramFields[];
+  programFieldValues!: PartnerProgramFieldsValues[];
+}
+
 export class Project {
   id!: number;
   name!: string;
@@ -44,8 +53,7 @@ export class Project {
   leader!: number;
   partnerProgramsTags?: string[];
   partnerProgramId!: number | null;
-  partnerProgramFields!: PartnerProgramFields[];
-  partnerProgramFieldValues!: PartnerProgramFieldsValues[];
+  partnerProgram!: PartnerProgramInfo | null;
   vacancies!: Vacancy[];
   isCompany!: boolean;
 
@@ -67,8 +75,7 @@ export class Project {
       viewsCount: 0,
       links: [],
       partnerProgramId: null,
-      partnerProgramFields: [],
-      partnerProgramFieldValues: [],
+      partnerProgram: null,
       cover: null,
       coverImageAddress: null,
       presentationAddress: "string",

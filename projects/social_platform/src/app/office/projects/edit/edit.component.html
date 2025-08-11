@@ -66,13 +66,15 @@
           [loader]="projFormIsSubmittingAsPublished"
           (click)="saveProjectAsPublished()"
         >
-          {{
-            partnerProgramFields.length && partnerProgramFields ? "Отправить заявку" : "Сохранить"
-          }}
+          {{ isCompetitive ? "Отправить заявку" : "Сохранить" }}
         </app-button>
       </div>
     </form>
-    <app-modal [open]="projectForm.invalid && projSubmitInitiated && !warningModalSeen">
+    <app-modal
+      [open]="
+        (projectForm.invalid || additionalForm.invalid) && projSubmitInitiated && !warningModalSeen
+      "
+    >
       <div class="project__warning-modal">
         <h3 class="text-bold-body-16">📢 Внимание!</h3>
         <p class="text-body-14">

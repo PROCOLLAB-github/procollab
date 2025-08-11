@@ -19,7 +19,7 @@ export const ProjectEditRequiredGuard: CanActivateFn = (
 
   return projectService.getOne(projectId).pipe(
     map(project => {
-      if (project.partnerProgramFieldValues && project.partnerProgramFieldValues.length > 0) {
+      if (project.partnerProgram?.isSubmitted) {
         return router.createUrlTree([`/office/projects/${projectId}`]);
       }
       return true;
