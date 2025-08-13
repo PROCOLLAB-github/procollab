@@ -109,7 +109,8 @@
 
     ::ng-deep {
       app-select {
-        .field__input, li {
+        .field__input,
+        li {
           @include typography.body-12;
         }
       }
