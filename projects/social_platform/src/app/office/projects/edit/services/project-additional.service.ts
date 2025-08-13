@@ -163,13 +163,18 @@ export class ProjectAdditionalService {
    * @returns Observable<any> результат запроса
    */
   public sendAdditionalFieldsValues(projectId: number): Observable<any> {
-    const payload: projectNewAdditionalProgramVields[] = this.partnerProgramFields.map(field => ({
-      field_id: field.id,
-      value_text: String(this.additionalForm.get(field.name)?.value),
-    }));
-
     this.isSendingDecision.set(true);
-    return this.projectService.sendNewProjectFieldsValues(projectId, payload);
+    const newFieldsFormValues: projectNewAdditionalProgramVields[] = [];
+
+    this.partnerProgramFields.forEach((field: PartnerProgramFields) => {
+      const fieldValue = this.additionalForm.get(field.name)?.value;
+      newFieldsFormValues.push({
+        field_id: field.id,
+        value_text: String(fieldValue),
+      });
+    });
+
+    return this.projectService.sendNewProjectFieldsValues(projectId, newFieldsFormValues);
   }
 
   /**

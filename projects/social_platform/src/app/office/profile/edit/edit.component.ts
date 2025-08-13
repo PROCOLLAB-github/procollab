@@ -757,7 +757,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.profileForm.get("language")?.reset();
     this.profileForm.get("languageLevel")?.reset();
 
-    this.editLanguageClick = true;
+    this.editLanguageClick = false;
   }
 
   editLanguage(index: number) {

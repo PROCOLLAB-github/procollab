@@ -19,6 +19,7 @@ export class PartnerProgramFields {
   isRequired!: boolean;
   helpText!: string;
   options!: string[];
+  showFilter?: boolean;
 }
 
 export class PartnerProgramFieldsValues {

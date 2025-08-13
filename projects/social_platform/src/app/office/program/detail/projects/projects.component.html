@@ -35,7 +35,10 @@
           (touchmove)="onSwipeMove($event)"
           (touchend)="onSwipeEnd($event)"
         ></div>
-        <app-projects-filter (closeFilter)="closeFilter()"></app-projects-filter>
+        <app-projects-filter
+          (filtersLoaded)="onFiltersLoaded($event)"
+          (closeFilter)="closeFilter()"
+        ></app-projects-filter>
       </div>
     </div>
   </div>

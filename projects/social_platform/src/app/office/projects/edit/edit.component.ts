@@ -6,10 +6,9 @@ import {
   Component,
   OnDestroy,
   OnInit,
-  ViewChild,
   signal,
 } from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ErrorMessage } from "@error/models/error-message";
 import { Invite } from "@models/invite.model";
@@ -326,7 +325,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    * Сохранение проекта как опубликованного с проверкой доп. полей
    */
   saveProjectAsPublished(): void {
-    this.projSubmitInitiated = true;
     this.projectForm.get("draft")?.patchValue(false);
     this.setProjFormIsSubmitting = this.setIsSubmittingAsPublished;
 
@@ -338,11 +336,20 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectForm.markAllAsTouched();
     this.projectFormService.achievements.markAllAsTouched();
 
-    if (this.validateAdditionalFields()) {
+    const projectValid = this.validationService.getFormValidation(this.projectForm);
+    const additionalValid = this.validationService.getFormValidation(this.additionalForm);
+
+    if (!projectValid || !additionalValid) {
+      this.projSubmitInitiated = true;
+      this.cdRef.markForCheck();
       return;
     }
 
-    this.additionalForm.markAllAsTouched();
+    if (this.validateAdditionalFields()) {
+      this.projSubmitInitiated = true;
+      this.cdRef.markForCheck();
+      return;
+    }
 
     this.isSendDescisionToPartnerProgramProject = true;
     this.cdRef.markForCheck();
@@ -371,7 +378,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     const payload = this.projectFormService.getFormValue();
 
     if (
-      !this.validationService.getFormValidation(this.projectForm) &&
+      !this.validationService.getFormValidation(this.projectForm) ||
       !this.validationService.getFormValidation(this.additionalForm)
     ) {
       return;
@@ -402,10 +409,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     const projectId = Number(this.route.snapshot.params["projectId"]);
     const relationId = this.relationId();
 
-    this.sendAdditionalFields(projectId, relationId, () => {
-      this.submitProjectForm();
-      this.router.navigateByUrl(`/office/projects/${projectId}`);
-    });
+    this.sendAdditionalFields(projectId, relationId);
   }
 
   closeAssignProjectToProgramModal(): void {
@@ -441,28 +445,19 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    * Отправка дополнительных полей через сервис
    * @param projectId - ID проекта
    * @param relationId - ID связи проекта и конкурсной программы
-   * @param onSuccess - колбэк при успешной отправке
    */
-  private sendAdditionalFields(
-    projectId: number,
-    relationId: number,
-    onSuccess?: () => void
-  ): void {
-    this.projectAdditionalService
-      .sendAdditionalFieldsValues(projectId)
-      .pipe(
-        concatMap(() => this.projectAdditionalService.submitCompettetiveProject(relationId)),
-        finalize(() => this.projectAdditionalService.resetSendingState())
-      )
-      .subscribe({
-        next: () => {
-          onSuccess?.();
-        },
-        error: error => {
-          console.error("Error sending additional fields:", error);
-          this.setProjFormIsSubmitting(false);
-        },
-      });
+  private sendAdditionalFields(projectId: number, relationId: number): void {
+    this.projectAdditionalService.sendAdditionalFieldsValues(projectId).subscribe({
+      next: () => {
+        this.projectAdditionalService.submitCompettetiveProject(relationId).subscribe(_ => {
+          this.submitProjectForm();
+        });
+      },
+      error: error => {
+        console.error("Error sending additional fields:", error);
+        this.setProjFormIsSubmitting(false);
+      },
+    });
   }
 
   /**

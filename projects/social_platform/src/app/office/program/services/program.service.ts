@@ -9,6 +9,7 @@ import { Program, ProgramDataSchema, ProgramTag } from "@office/program/models/p
 import { Project } from "@models/project.model";
 import { ApiPagination } from "@models/api-pagination.model";
 import { User } from "@auth/models/user.model";
+import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
 
 /**
  * Сервис для работы с программами
@@ -33,6 +34,7 @@ import { User } from "@auth/models/user.model";
  * @method getAllProjects(programId: number, offset: number, limit: number) - Получает проекты программы
  * @method getAllMembers(programId: number, skip: number, take: number) - Получает участников программы
  * @method submitCompettetiveProject(prelationId: number) - Cохранить и "подать проект" на сдачу в программу конкурсную
+ * @method getProgramFilters(programId: number) - Получение данных для фильтра проектов-участников по доп полям
  * @method programTags() - Получает и кеширует теги программ пользователя
  *
  * Свойства:
@@ -86,6 +88,19 @@ export class ProgramService {
       `${this.AUTH_PUBLIC_USERS_URL}/`,
       new HttpParams({ fromObject: { partner_program: programId, limit: take, offset: skip } })
     );
+  }
+
+  getProgramFilters(programId: number): Observable<PartnerProgramFields[]> {
+    return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/filters/`);
+  }
+
+  createProgramFilters(
+    programId: number,
+    filters: { filters: { string: string[] } }
+  ): Observable<ApiPagination<Project>> {
+    return this.apiService.post(`${this.PROGRAMS_URL}/${programId}/projects/filter/`, {
+      filters,
+    });
   }
 
   submitCompettetiveProject(relationId: number): Observable<Project> {

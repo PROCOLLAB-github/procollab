@@ -1,16 +1,21 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subscription } from "rxjs";
-import { ProjectStep } from "@models/project.model";
-import { Industry } from "@models/industry.model";
-import { IndustryService } from "@services/industry.service";
-import { ProjectService } from "@services/project.service";
+import { debounceTime, distinctUntilChanged, map, Subscription } from "rxjs";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
-import { NumSliderComponent } from "@ui/components/num-slider/num-slider.component";
-import { CheckboxComponent } from "@ui/components";
-import { filterTags } from "projects/core/src/consts/filter-tags";
+import { CheckboxComponent, SelectComponent } from "@ui/components";
+import { ProgramService } from "@office/program/services/program.service";
+import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
+import { ToSelectOptionsPipe } from "projects/core/src/lib/pipes/options-transform.pipe";
+import { CommonModule } from "@angular/common";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
 
 /**
  * Компонент фильтрации проектов
@@ -43,161 +48,75 @@ import { filterTags } from "projects/core/src/consts/filter-tags";
   templateUrl: "./projects-filter.component.html",
   styleUrl: "./projects-filter.component.scss",
   standalone: true,
-  imports: [CheckboxComponent, NumSliderComponent, SwitchComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    CheckboxComponent,
+    SwitchComponent,
+    SelectComponent,
+    ToSelectOptionsPipe,
+  ],
 })
 export class ProjectsFilterComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly industryService: IndustryService,
-    private readonly projectService: ProjectService
-  ) {}
+    private readonly fb: FormBuilder,
+    private readonly programService: ProgramService
+  ) {
+    this.filterForm = this.fb.group({});
+  }
+
+  @Output() filtersLoaded = new EventEmitter<PartnerProgramFields[]>();
 
   // Константы для фильтрации по типу проекта
-  readonly filterTags = filterTags;
+  private programId = 0;
 
   ngOnInit(): void {
-    // Подписка на данные об отраслях
-    this.industries$ = this.industryService.industries.subscribe(industries => {
-      this.industries = industries;
-    });
+    this.programId = this.route.parent?.snapshot.params["programId"];
 
-    // Подписка на данные об этапах проектов
-    this.steps$ = this.projectService.steps.subscribe(steps => {
-      this.steps = steps;
-    });
-
-    // Восстановление состояния фильтров из query параметров
-    this.queries$ = this.route.queryParams.subscribe(queries => {
-      const tagParam = queries["is_rated_by_expert"];
-      if (tagParam === undefined || isNaN(Number.parseInt(tagParam))) {
-        this.currentFilterTag = 2;
-      } else {
-        this.currentFilterTag = Number.parseInt(tagParam);
-      }
+    this.programService.getProgramFilters(this.programId).subscribe({
+      next: filter => {
+        this.filters.set(filter);
+        this.initializeFilterForm();
+        this.restoreFiltersFromUrl();
+        this.subscribeToFormChanges();
+        this.filtersLoaded.emit(filter);
+      },
+      error(err) {
+        console.log(err);
+      },
     });
   }
+
+  ngOnDestroy(): void {
+    this.queries$?.unsubscribe();
+  }
+
+  // Инициализация формы для фильтра
+  filterForm: FormGroup;
 
   // Подписки для управления жизненным циклом
   queries$?: Subscription;
 
-  // Состояние фильтра по этапу проекта
-  currentStep: number | null = null;
-  steps: ProjectStep[] = [];
-  steps$?: Subscription;
-
-  // Состояние фильтра по отрасли
-  currentIndustry: number | null = null;
-  industries: Industry[] = [];
-  industries$?: Subscription;
-
-  // Состояние остальных фильтров
-  hasVacancies = false;
-  isMospolytech = false;
-
-  // Опции для фильтра по количеству участников
-  membersCountOptions = [1, 2, 3, 4, 5, 6];
-  currentMembersCount: number | null = null;
-
-  // Текущий тип проекта (по умолчанию - все проекты)
-  currentFilterTag = 2;
+  // Массив фильтров по дополнительным полям привязанным к конкретной программе
+  filters = signal<PartnerProgramFields[] | null>(null);
 
   /**
-   * Обработчик фильтрации по этапу проекта
-   * @param event - событие клика
-   * @param stepId - ID этапа проекта (undefined для сброса)
+   * Переключение значения для checkbox и radio полей
+   * @param fieldType - тип поля
+   * @param fieldName - имя поля
    */
-  onFilterByStep(event: Event, stepId?: number): void {
-    event.stopPropagation();
-
-    this.router
-      .navigate([], {
-        queryParams: { step: stepId === this.currentStep ? undefined : stepId },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.debug("Query change from ProjectsComponent"));
-  }
-
-  /**
-   * Обработчик фильтрации по отрасли
-   * @param event - событие клика
-   * @param industryId - ID отрасли (undefined для сброса)
-   */
-  onFilterByIndustry(event: Event, industryId?: number): void {
-    event.stopPropagation();
-
-    this.router
-      .navigate([], {
-        queryParams: { industry: industryId === this.currentIndustry ? undefined : industryId },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.debug("Query change from ProjectsComponent"));
-  }
-
-  /**
-   * Обработчик фильтрации по количеству участников
-   * @param count - количество участников (undefined для сброса)
-   */
-  onFilterByMembersCount(count?: number): void {
-    this.router
-      .navigate([], {
-        queryParams: {
-          membersCount: count === this.currentMembersCount ? undefined : count,
-        },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.debug("Query change from ProjectsComponent"));
-  }
-
-  /**
-   * Обработчик фильтрации по наличию вакансий
-   * @param has - наличие вакансий
-   */
-  onFilterVacancies(has: boolean): void {
-    this.router
-      .navigate([], {
-        queryParams: {
-          anyVacancies: has,
-        },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.debug("Query change from ProjectsComponent"));
-  }
-
-  /**
-   * Обработчик фильтрации по принадлежности к МосПолитех
-   * @param isMospolytech - принадлежность к программе
-   */
-  onFilterMospolytech(isMospolytech: boolean): void {
-    this.router
-      .navigate([], {
-        queryParams: {
-          is_mospolytech: isMospolytech,
-          partner_program: 3, // TODO: заменить когда появится итоговое id программы для политеха
-        },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.debug("Query change from ProjectsComponent"));
-  }
-
-  /**
-   * Обработчик фильтрации по типу проекта
-   * @param event - событие клика
-   * @param tagId - ID типа проекта (null для сброса)
-   */
-  onFilterProjectType(event: Event, tagId?: number | null): void {
-    event.stopPropagation();
-
-    this.router.navigate([], {
-      queryParams: { is_rated_by_expert: tagId === this.currentFilterTag ? undefined : tagId },
-      relativeTo: this.route,
-      queryParamsHandling: "merge",
-    });
+  toggleAdditionalFormValues(
+    fieldType: "text" | "textarea" | "checkbox" | "select" | "radio" | "file",
+    fieldName: string
+  ): void {
+    if (fieldType === "checkbox" || fieldType === "radio") {
+      const control = this.filterForm.get(fieldName);
+      if (control) {
+        control.setValue(!control.value);
+      }
+    }
   }
 
   /**
@@ -205,23 +124,92 @@ export class ProjectsFilterComponent implements OnInit {
    * Очищает все query параметры и возвращает к состоянию по умолчанию
    */
   clearFilters(): void {
-    this.currentFilterTag = 2;
+    this.filterForm.reset();
 
     this.router
       .navigate([], {
         queryParams: {
-          step: undefined,
-          anyVacancies: undefined,
-          membersCount: undefined,
-          industry: undefined,
-          is_rated_by_expert: undefined,
-          is_mospolytech: undefined,
-          partner_program: undefined,
           search: undefined,
         },
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
       .then(() => console.log("Query change from ProjectsComponent"));
+  }
+
+  private initializeFilterForm(): void {
+    const formControls: { [key: string]: FormControl } = {};
+
+    this.filters()?.forEach(field => {
+      const validators = field.isRequired ? [Validators.required] : [];
+      const initialValue =
+        field.fieldType === "checkbox" || field.fieldType === "radio" ? false : "";
+      formControls[field.name] = new FormControl(initialValue, validators);
+    });
+
+    this.filterForm = this.fb.group(formControls);
+  }
+
+  private restoreFiltersFromUrl(): void {
+    this.queries$ = this.route.queryParams.subscribe(queries => {
+      Object.keys(queries).forEach(key => {
+        const control = this.filterForm.get(key);
+        if (control && queries[key] !== undefined) {
+          const field = this.filters()?.find(f => f.name === key);
+          if (field && (field.fieldType === "checkbox" || field.fieldType === "radio")) {
+            control.setValue(queries[key] === "true", { emitEvent: false });
+          } else {
+            control.setValue(queries[key], { emitEvent: false });
+          }
+        }
+      });
+    });
+  }
+
+  private subscribeToFormChanges(): void {
+    this.filterForm.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe(formValue => {
+        this.updateQueryParams(formValue);
+      });
+  }
+
+  private updateQueryParams(formValue: any): void {
+    const currentParams = { ...this.route.snapshot.queryParams };
+
+    Object.keys(formValue).forEach(fieldName => {
+      const value = formValue[fieldName];
+      const field = this.filters()?.find(f => f.name === fieldName);
+
+      if (this.shouldAddToQueryParams(value, field?.fieldType)) {
+        currentParams[fieldName] = value;
+      } else {
+        delete currentParams[fieldName];
+      }
+    });
+
+    this.router
+      .navigate([], {
+        queryParams: currentParams,
+        relativeTo: this.route,
+      })
+      .then(() => {
+        console.log("Query params updated:", currentParams);
+      });
+  }
+
+  private shouldAddToQueryParams(
+    value: any,
+    fieldType?: "text" | "textarea" | "checkbox" | "select" | "radio" | "file"
+  ): boolean {
+    if (fieldType === "checkbox" || fieldType === "radio") {
+      return value === true;
+    }
+
+    if (fieldType === "select" || fieldType === "text" || fieldType === "textarea") {
+      return value !== null && value !== undefined && value !== "";
+    }
+
+    return !!value;
   }
 }

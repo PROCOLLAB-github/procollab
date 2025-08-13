@@ -223,6 +223,18 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
       });
   }
 
+  onDelete(newsId: number) {
+    const item = this.news().find((n: any) => n.id === newsId);
+    if (!item) return;
+
+    this.programNewsService.deleteNews(this.route.snapshot.params["programId"], newsId).subscribe({
+      next: () => {
+        const index = this.news().findIndex(news => news.id === newsId);
+        this.news().splice(index, 1);
+      },
+    });
+  }
+
   onLike(newsId: number) {
     const item = this.news().find((n: any) => n.id === newsId);
     if (!item) return;

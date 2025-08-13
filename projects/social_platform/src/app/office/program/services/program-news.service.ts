@@ -25,6 +25,7 @@ import { plainToInstance } from "class-transformer";
  * @method readNews(projectId: string, newsIds: number[]) - Отмечает новости как прочитанные
  * @method toggleLike(projectId: string, newsId: number, state: boolean) - Переключает лайк новости
  * @method addNews(programId: number, obj: {text: string; files: string[]}) - Добавляет новую новость
+ * @method deleteNews(programId: number, newsId: number) - Удаляет новость
  *
  * @returns Соответствующие Observable для каждого метода
  */
@@ -61,5 +62,9 @@ export class ProgramNewsService {
     return this.apiService
       .post(`${this.PROGRAMS_URL}/${programId}/news/`, obj)
       .pipe(map(r => plainToInstance(FeedNews, r)));
+  }
+
+  deleteNews(programId: number, newsId: number) {
+    return this.apiService.delete(`${this.PROGRAMS_URL}/${programId}/news/${newsId}`);
   }
 }

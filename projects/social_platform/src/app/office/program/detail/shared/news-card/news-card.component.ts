@@ -113,6 +113,16 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
   readMore = false;
   editMode = false;
 
+  /** Состояние меню действий */
+  menuOpen = false;
+
+  /**
+   * Закрытие меню действий
+   */
+  onCloseMenu() {
+    this.menuOpen = false;
+  }
+
   ngOnInit(): void {
     this.showLikes = this.newsItem.files.map(() => false);
 

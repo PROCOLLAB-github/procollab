@@ -92,7 +92,9 @@
           class="news__item"
           [attr.data-id]="n.id"
           [newsItem]="n"
+          [isOwner]="program.isUserMember"
           (like)="onLike($event)"
+          (delete)="onDelete($event)"
         ></app-program-news-card>
         }
       </div>

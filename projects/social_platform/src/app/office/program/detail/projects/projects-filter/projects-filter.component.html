@@ -1,61 +1,56 @@
 <!-- @format -->
 
 <div class="filter">
-  <div class="filter__body">
+  <div class="filter__body" [formGroup]="filterForm">
     <div class="filter__titles">
       <h3 class="filter__title">Фильтр</h3>
       <a class="text-body-12 filter__clear" (click)="clearFilters()">Сбросить фильтры</a>
     </div>
 
+    @if (filters()?.length && filterForm.controls) { @for (field of filters(); track field.id) { @if
+    (filterForm.get(field.name)) {
     <div class="filter__block">
-      <h4 class="text-body-12 filter__name">Проектs</h4>
-      @for (tag of filterTags; track tag.id) {
-      <div class="text-body-14 filter__checkbox" (click)="onFilterProjectType($event, tag.id)">
-        <app-checkbox [checked]="tag.id === currentFilterTag"></app-checkbox>
-        {{ tag.label }}
+      @switch (field.fieldType) { @case ("checkbox") {
+      <h4 class="text-body-12 filter__name">{{ field.label }}</h4>
+      <div
+        class="text-body-14 filter__checkbox"
+        (click)="toggleAdditionalFormValues(field.fieldType, field.name)"
+      >
+        <app-checkbox [checked]="filterForm.get(field.name)?.value"></app-checkbox>
+        {{ field.label }}
       </div>
-      }
-    </div>
-    <div class="filter__block">
-      <h4 class="text-body-12 filter__name">Этап проекта</h4>
-      @for (step of steps; track step.id) {
-      <div class="text-body-14 filter__checkbox" (click)="onFilterByStep($event, step.id)">
-        <app-checkbox [checked]="step.id === currentStep"></app-checkbox>
-        {{ step.name }}
-      </div>
-      }
-    </div>
-    <div class="filter__block">
-      <h4 class="text-body-12 filter__name">Участники (кол-во)</h4>
-      <app-num-slider
-        [appNums]="membersCountOptions"
-        [appValue]="currentMembersCount"
-        (appValueChange)="onFilterByMembersCount($event)"
-      ></app-num-slider>
-    </div>
-    <div class="filter__block">
-      <div class="text-body-12 filter__name">Наличие вакансий</div>
+      } @case ("radio") {
+      <h4 class="text-body-12 filter__name">{{ field.label }}</h4>
       <div class="filter__switch">
-        <span class="filter__yes-no text-body-14" [class.filter__yes-no--active]="!hasVacancies"
-          >Нет</span
+        <span
+          class="filter__yes-no text-body-14"
+          [class.filter__yes-no--active]="!filterForm.get(field.name)?.value"
         >
+          Нет
+        </span>
         <app-switch
-          [checked]="hasVacancies"
-          (checkedChange)="onFilterVacancies($event)"
+          [checked]="filterForm.get(field.name)?.value"
+          (checkedChange)="filterForm.get(field.name)?.setValue($event)"
         ></app-switch>
-        <span class="filter__yes-no text-body-14" [class.filter__yes-no--active]="hasVacancies"
-          >Да</span
+        <span
+          class="filter__yes-no text-body-14"
+          [class.filter__yes-no--active]="filterForm.get(field.name)?.value"
         >
+          Да
+        </span>
       </div>
-    </div>
-    <div class="filter__block">
-      <h4 class="text-body-12 filter__name">Направление</h4>
-      @for (industry of industries; track industry.id) {
-      <div class="text-body-14 filter__checkbox" (click)="onFilterByIndustry($event, industry.id)">
-        <app-checkbox [checked]="industry.id === currentIndustry"></app-checkbox>
-        {{ industry.name }}
+      } @case ("select") {
+      <h4 class="text-body-12 filter__name">{{ field.label }}</h4>
+      <div class="filter__select">
+        <app-select
+          [id]="field.name"
+          [formControlName]="field.name"
+          [placeholder]="field.helpText || field.label"
+          [options]="field.options | toSelectOptions"
+        ></app-select>
       </div>
-      }
+      } }
     </div>
+    } } }
   </div>
 </div>

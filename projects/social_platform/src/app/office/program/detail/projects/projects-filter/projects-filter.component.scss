@@ -30,7 +30,10 @@
   }
 
   &__body {
-    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    min-width: 330px;
+    min-height: 50vh;
     padding: 22px;
     background-color: var(--white);
     border-radius: var(--rounded-md);
@@ -96,6 +99,20 @@
 
     app-checkbox {
       margin-right: 15px;
+    }
+  }
+
+  &__select {
+    margin-bottom: 6px;
+    color: var(--black);
+    cursor: pointer;
+
+    ::ng-deep {
+      app-select {
+        .field__input, li {
+          @include typography.body-12;
+        }
+      }
     }
   }
 }

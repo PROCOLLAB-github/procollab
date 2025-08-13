@@ -12,6 +12,7 @@ import {
 } from "@angular/core";
 import { ActivatedRoute, Params, Router, RouterLink } from "@angular/router";
 import {
+  catchError,
   concatMap,
   distinctUntilChanged,
   fromEvent,
@@ -36,6 +37,7 @@ import Fuse from "fuse.js";
 import { ProjectsFilterComponent } from "@office/program/detail/projects/projects-filter/projects-filter.component";
 import { HttpParams } from "@angular/common/http";
 import { IconComponent } from "@uilib";
+import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
 
 /**
  * Компонент списка проектов программы
@@ -121,6 +123,7 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
   subscriptions$: Subscription[] = [];
 
   private previousReqQuery: Record<string, any> = {};
+  private availableFilters: PartnerProgramFields[] = [];
 
   ngOnInit(): void {
     const routeData$ = this.route.data
@@ -163,25 +166,36 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
         const programId = this.route.parent?.snapshot.params["programId"];
 
         if (JSON.stringify(reqQuery) !== JSON.stringify(this.previousReqQuery)) {
-          try {
-            this.previousReqQuery = reqQuery;
-            return this.programService.getAllProjects(
-              new HttpParams({ fromObject: { partner_program: programId, ...reqQuery } })
+          this.previousReqQuery = reqQuery;
+
+          const hasFilters =
+            reqQuery && reqQuery["filters"] && Object.keys(reqQuery["filters"]).length > 0;
+
+          const params = new HttpParams({ fromObject: { partner_program: programId } });
+
+          if (hasFilters) {
+            return this.programService.createProgramFilters(programId, reqQuery["filters"]).pipe(
+              catchError(err => {
+                console.error("createFilters failed, fallback to getAllProjects()", err);
+                return this.programService.getAllProjects(params);
+              })
             );
-          } catch (e) {
-            console.error(e);
-            this.previousReqQuery = reqQuery;
-            return this.programService.getAllProjects();
           }
+
+          return this.programService.getAllProjects(params).pipe(
+            catchError(err => {
+              console.error("getAllProjects failed", err);
+              return this.programService.getAllProjects(params);
+            })
+          );
         }
 
         this.previousReqQuery = reqQuery;
-
         return of(0);
       })
     );
 
-    const queryIndustry$ = observable.subscribe(projects => {
+    const projects$ = observable.subscribe(projects => {
       if (typeof projects === "number") return;
 
       this.projects = projects.results;
@@ -190,7 +204,7 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
       this.cdref.detectChanges();
     });
 
-    queryIndustry$ && this.subscriptions$.push(queryIndustry$);
+    projects$ && this.subscriptions$.push(projects$);
 
     this.subscriptions$.push(routeData$);
   }
@@ -256,6 +270,10 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
     this.isFilterOpen = false;
   }
 
+  onFiltersLoaded(filters: PartnerProgramFields[]): void {
+    this.availableFilters = filters;
+  }
+
   private onScroll() {
     if (this.projectsTotalCount && this.projects.length >= this.projectsTotalCount) return of({});
 
@@ -275,16 +293,12 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   private onFetch() {
-    const queries = this.route.snapshot.queryParams;
-    const params = this.buildFilterQuery(queries);
     const programId = this.route.parent?.snapshot.params["programId"];
     const offset = this.page * this.perPage;
     const limit = this.perPage;
 
     return this.programService
-      .getAllProjects(
-        new HttpParams({ fromObject: { partner_program: programId, offset, limit, ...params } })
-      )
+      .getAllProjects(new HttpParams({ fromObject: { partner_program: programId, offset, limit } }))
       .pipe(
         tap(projects => {
           this.projectsTotalCount = projects.count;
@@ -298,13 +312,24 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
       );
   }
 
-  private buildFilterQuery(q: Params): Record<string, string> {
-    const reqQuery: Record<string, any> = {};
+  private buildFilterQuery(q: Params): Record<string, any> {
+    const filters: Record<string, any[]> = {};
 
-    if (q["is_rated_by_expert"]) {
-      reqQuery["is_rated_by_expert"] = q["is_rated_by_expert"];
+    if (this.availableFilters.length === 0) {
+      Object.keys(q).forEach(key => {
+        if (key !== "search" && q[key] !== undefined && q[key] !== "") {
+          filters[key] = Array.isArray(q[key]) ? q[key] : [q[key]];
+        }
+      });
+    } else {
+      this.availableFilters.forEach((filter: PartnerProgramFields) => {
+        const value = q[filter.name];
+        if (value !== undefined && value !== "") {
+          filters[filter.name] = Array.isArray(value) ? value : [value];
+        }
+      });
     }
 
-    return reqQuery;
+    return { filters };
   }
 }
