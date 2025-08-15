@@ -726,38 +726,60 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addLanguage() {
-    ["language", "languageLevel"].forEach(name => this.profileForm.get(name)?.clearValidators());
-    ["language", "languageLevel"].forEach(name =>
-      this.profileForm.get(name)?.setValidators([Validators.required])
-    );
-    ["language", "languageLevel"].forEach(name =>
-      this.profileForm.get(name)?.updateValueAndValidity()
-    );
-    ["language", "languageLevel"].forEach(name => this.profileForm.get(name)?.markAsTouched());
+    const languageValue = this.profileForm.get("language")?.value;
+    const languageLevelValue = this.profileForm.get("languageLevel")?.value;
 
-    const languageItem = this.fb.group({
-      language: this.profileForm.get("language")?.value,
-      languageLevel: this.profileForm.get("languageLevel")?.value,
+    ["language", "languageLevel"].forEach(name => {
+      this.profileForm.get(name)?.clearValidators();
     });
 
-    if (this.editIndex() !== null) {
-      this.languageItems.update(items => {
-        const updatedItems = [...items];
-        updatedItems[this.editIndex()!] = languageItem.value;
-
-        this.userLanguages.at(this.editIndex()!).patchValue(languageItem.value);
-        return updatedItems;
+    if ((languageValue && !languageLevelValue) || (!languageValue && languageLevelValue)) {
+      ["language", "languageLevel"].forEach(name => {
+        this.profileForm.get(name)?.setValidators([Validators.required]);
       });
-      this.editIndex.set(null);
-    } else {
-      this.languageItems.update(items => [...items, languageItem.value]);
-      this.userLanguages.push(languageItem);
     }
 
-    this.profileForm.get("language")?.reset();
-    this.profileForm.get("languageLevel")?.reset();
+    ["language", "languageLevel"].forEach(name => {
+      this.profileForm.get(name)?.updateValueAndValidity();
+      this.profileForm.get(name)?.markAsTouched();
+    });
 
-    this.editLanguageClick = false;
+    const isLanguageValid = this.profileForm.get("language")?.valid;
+    const isLanguageLevelValid = this.profileForm.get("languageLevel")?.valid;
+
+    if (!isLanguageValid || !isLanguageLevelValid) {
+      return;
+    }
+
+    const languageItem = this.fb.group({
+      language: languageValue,
+      languageLevel: languageLevelValue,
+    });
+
+    if (languageValue && languageLevelValue) {
+      if (this.editIndex() !== null) {
+        this.languageItems.update(items => {
+          const updatedItems = [...items];
+          updatedItems[this.editIndex()!] = languageItem.value;
+          this.userLanguages.at(this.editIndex()!).patchValue(languageItem.value);
+          return updatedItems;
+        });
+        this.editIndex.set(null);
+      } else {
+        this.languageItems.update(items => [...items, languageItem.value]);
+        this.userLanguages.push(languageItem);
+      }
+
+      ["language", "languageLevel"].forEach(name => {
+        this.profileForm.get(name)?.reset();
+        this.profileForm.get(name)?.setValue(null);
+        this.profileForm.get(name)?.clearValidators();
+        this.profileForm.get(name)?.markAsPristine();
+        this.profileForm.get(name)?.updateValueAndValidity();
+      });
+
+      this.editLanguageClick = false;
+    }
   }
 
   editLanguage(index: number) {
@@ -857,6 +879,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
           this.isModalErrorSkillsChoose.set(true);
           if (error.error.phone_number) {
             this.isModalErrorSkillChooseText.set(error.error.phone_number[0]);
+          } else if (error.error.language) {
+            this.isModalErrorSkillChooseText.set(error.error.language);
           } else {
             this.isModalErrorSkillChooseText.set(error.error[0]);
           }

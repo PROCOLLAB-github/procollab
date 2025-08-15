@@ -1,9 +1,9 @@
 /** @format */
 
 export const filterWorkSchedule = [
-  { label: "полный рабочий день", value: "full_time" },
-  { label: "сменный график", value: "shift_work" },
-  { label: "гибкий график", value: "flexible_schedule" },
-  { label: "частичная занятость", value: "part_time" },
-  { label: "стажировка", value: "internship" },
+  { label: "Полный рабочий день", value: "full_time" },
+  { label: "Сменный график", value: "shift_work" },
+  { label: "Гибкий график", value: "flexible_schedule" },
+  { label: "Частичная занятость", value: "part_time" },
+  { label: "Стажировка", value: "internship" },
 ];

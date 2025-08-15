@@ -302,10 +302,10 @@
 
         @if (profileForm.get("organizationName"); as organizationName) {
         <fieldset>
-          <label for="organizationName" class="field-label">Названия учереждения</label>
+          <label for="organizationName" class="field-label">Название учереждения</label>
           <app-input
             [error]="organizationName | controlError"
-            placeholder="вуз / колледж / школа"
+            placeholder="Вуз / Колледж / Школа"
             formControlName="organizationName"
           ></app-input>
           @if (organizationName | controlError: "required") {
@@ -672,45 +672,50 @@
       </div>
 
       <div class="profile__right">
-        <div class="profile__language">
-          <div class="education__years">
-            @if (profileForm.get("language"); as language) {
-            <fieldset class="years__right">
-              <label for="languageName" class="field-label">Язык</label>
-              <app-select
-                [selectedId]="selectedLanguageId()"
-                formControlName="language"
-                placeholder="Английский"
-                [options]="languageList"
-              >
-                <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
-              </app-select>
+        <div class="profile__language--wrapper">
+          <div class="profile__language">
+            <div class="education__years">
+              @if (profileForm.get("language"); as language) {
+              <fieldset class="years__right">
+                <label for="languageName" class="field-label">Язык</label>
+                <app-select
+                  [selectedId]="selectedLanguageId()"
+                  formControlName="language"
+                  placeholder="Английский"
+                  [options]="languageList"
+                >
+                  <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+                </app-select>
 
-              @if (language | controlError: "required") {
-              <div class="text-body-14 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            } @if (profileForm.get("languageLevel"); as languageLevel) {
-            <fieldset class="years__right">
-              <label for="languagLevel" class="field-label">Уровень</label>
-              <app-select
-                [selectedId]="selectedLanguageLevelId()"
-                formControlName="languageLevel"
-                placeholder="B1"
-                [options]="languageLevelList"
-              >
-                <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
-              </app-select>
+                @if (language | controlError: "required") {
+                <div class="text-body-14 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              } @if (profileForm.get("languageLevel"); as languageLevel) {
+              <fieldset class="years__right">
+                <label for="languagLevel" class="field-label">Уровень</label>
+                <app-select
+                  [selectedId]="selectedLanguageLevelId()"
+                  formControlName="languageLevel"
+                  placeholder="B1"
+                  [options]="languageLevelList"
+                >
+                  <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+                </app-select>
 
-              @if (languageLevel | controlError: "required") {
-              <div class="text-body-14 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
+                @if (languageLevel | controlError: "required") {
+                <div class="text-body-14 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
               }
-            </fieldset>
-            }
+            </div>
+            <span class="text-body-12 profile__language--attention"
+              >Количество добавляемых языков не более 4-х</span
+            >
           </div>
 
           <app-button
@@ -719,7 +724,7 @@
             "
             [ngStyle]="{
               opacity: !isLanguageDirty ? '0.6' : '1',
-              cursor: !isLanguageDirty ? 'not-allowed' : 'pointer'
+              cursor: !isLanguageDirty ? 'not-allowed' : 'pointer',
             }"
             class="profile__add-education"
             (click)="addLanguage()"
