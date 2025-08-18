@@ -1,0 +1,91 @@
+/** @format */
+
+@use "styles/responsive";
+@use "styles/typography";
+
+.project {
+  &__inner {
+    width: 100%;
+    margin-bottom: 25px;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      gap: 90px;
+      justify-content: space-between;
+      margin-bottom: 0;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__inner > fieldset:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  &__left {
+    flex-basis: 50%;
+    margin-bottom: 20px;
+
+    form {
+      width: 280px;
+
+      @include responsive.apply-desktop {
+        width: 600px;
+      }
+    }
+  }
+
+  &__right {
+    flex-basis: 50%;
+
+    :first-child & :not(span, fieldset, label, h4, p, i) {
+      margin-top: 26px;
+      margin-bottom: 10px;
+    }
+
+    :last-child & :not(i, span) {
+      margin-top: 10px;
+    }
+  }
+
+  &__achievement-item {
+    &:not(:last-child) {
+      margin-bottom: 12px;
+    }
+  }
+}
+
+.achievement {
+  &__first-row {
+    display: flex;
+
+    // align-items: flex-start;
+    margin-bottom: 12px;
+
+    > :first-child {
+      flex-grow: 1;
+    }
+  }
+
+  &__remove {
+    width: 155px;
+    margin-left: 10px;
+  }
+}
+
+.invite {
+  &__item {
+    margin-bottom: 12px;
+  }
+
+  &__list {
+    width: 557px;
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+.vacancy {
+  &__submit {
+    display: block;
+  }
+}

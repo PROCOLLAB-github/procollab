@@ -8,6 +8,17 @@ import { Router } from "@angular/router";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 
+/**
+ * Компонент блока траектории обучения
+ *
+ * Отображает интерактивный блок для перехода к траектории обучения.
+ * Обрабатывает ошибки навигации и показывает модальные окна с уведомлениями.
+ *
+ * @component TrajectoryBlockComponent
+ * @selector app-trajectory-block
+ *
+ * @property isErrorTrajectoryModalOpen - Флаг отображения модального окна ошибки
+ */
 @Component({
   selector: "app-trajectory-block",
   standalone: true,
@@ -20,10 +31,17 @@ export class TrajectoryBlockComponent {
 
   isErrorTrajectoryModalOpen = false;
 
+  /**
+   * Переключает состояние модального окна ошибки траектории
+   */
   onOpenErorTrajectoryModalChange = (): void => {
     this.isErrorTrajectoryModalOpen = !this.isErrorTrajectoryModalOpen;
   };
 
+  /**
+   * Выполняет навигацию к траектории обучения
+   * При ошибке 404 показывает модальное окно с уведомлением
+   */
   navigateToTrajectory = (): void => {
     this.router.navigateByUrl("/trackCar/1").catch(err => {
       if (err instanceof HttpErrorResponse) {

@@ -5,6 +5,16 @@ import { ChatComponent } from "@office/chat/chat.component";
 import { ChatResolver } from "@office/chat/chat.resolver";
 import { ChatGroupsResolver } from "@office/chat/chat-groups.resolver";
 
+/**
+ * Маршруты для модуля чатов
+ * Определяет пути для прямых чатов, групповых чатов и конкретных диалогов
+ *
+ * Принимает:
+ * - URL пути чатов
+ *
+ * Возвращает:
+ * - Конфигурацию маршрутов с соответствующими резолверами
+ */
 export const CHAT_ROUTES: Routes = [
   {
     path: "",

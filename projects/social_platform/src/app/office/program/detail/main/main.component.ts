@@ -23,7 +23,52 @@ import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ApiPagination } from "@models/api-pagination.model";
 import { TagComponent } from "@ui/components/tag/tag.component";
+import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 
+/**
+ * Главный компонент детальной страницы программы
+ *
+ * Отображает основную информацию о программе и новостную ленту:
+ * - Детальное описание программы с возможностью развернуть/свернуть
+ * - Информацию о датах и регистрации
+ * - Новостную ленту для участников программы
+ * - Форму добавления новостей
+ * - Взаимодействие с новостями (лайки, просмотры)
+ *
+ * Принимает:
+ * @param {ProgramService} programService - Сервис программ
+ * @param {ProgramNewsService} programNewsService - Сервис новостей программы
+ * @param {ActivatedRoute} route - Для получения данных программы
+ * @param {ChangeDetectorRef} cdRef - Для ручного обновления представления
+ *
+ * Состояние (signals):
+ * @property {Signal<FeedNews[]>} news - Массив новостей программы
+ * @property {Signal<number>} totalNewsCount - Общее количество новостей
+ * @property {Signal<number>} fetchLimit - Лимит загрузки новостей (10)
+ * @property {Signal<number>} fetchPage - Текущая страница новостей
+ * @property {Signal<Subscription[]>} subscriptions$ - Подписки для очистки
+ *
+ * Данные программы:
+ * @property {Program} program - Объект программы
+ * @property {boolean} registerDateExpired - Истек ли срок регистрации
+ * @property {boolean} descriptionExpandable - Можно ли развернуть описание
+ * @property {boolean} readFullDescription - Развернуто ли описание
+ *
+ * ViewChild:
+ * @ViewChild NewsFormComponent - Ссылка на компонент формы новостей
+ * @ViewChild descEl - Ссылка на элемент описания
+ *
+ * Методы:
+ * @method fetchNews(offset, limit) - Загружает новости с пагинацией
+ * @method onScroll() - Обработчик прокрутки для подгрузки новостей
+ * @method onNewsInVew(entries) - Отмечает новости как просмотренные
+ * @method onAddNews(news) - Добавляет новую новость
+ * @method onLike(newsId) - Переключает лайк новости
+ * @method onExpandDescription() - Разворачивает/сворачивает описание
+ *
+ * Возвращает:
+ * HTML шаблон с информацией о программе и новостной лентой
+ */
 @Component({
   selector: "app-main",
   templateUrl: "./main.component.html",
@@ -39,6 +84,7 @@ import { TagComponent } from "@ui/components/tag/tag.component";
     UserLinksPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
+    NewsFormComponent,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
@@ -155,6 +201,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     );
   }
 
+  @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild("descEl") descEl?: ElementRef;
 
   onNewsInVew(entries: IntersectionObserverEntry[]): void {
@@ -165,6 +212,27 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     });
 
     this.programNewsService.readNews(this.route.snapshot.params["programId"], ids).subscribe(noop);
+  }
+
+  onAddNews(news: { text: string; files: string[] }): void {
+    this.programNewsService
+      .addNews(this.route.snapshot.params["programId"], news)
+      .subscribe(newsRes => {
+        this.newsFormComponent?.onResetForm();
+        this.news.update(news => [newsRes, ...news]);
+      });
+  }
+
+  onDelete(newsId: number) {
+    const item = this.news().find((n: any) => n.id === newsId);
+    if (!item) return;
+
+    this.programNewsService.deleteNews(this.route.snapshot.params["programId"], newsId).subscribe({
+      next: () => {
+        const index = this.news().findIndex(news => news.id === newsId);
+        this.news().splice(index, 1);
+      },
+    });
   }
 
   onLike(newsId: number) {

@@ -7,6 +7,16 @@ import { profileResolver } from "./profile.resolver";
 import { ProfileStudentsComponent } from "./students/students.component";
 import { studentsResolver } from "./students/students.resolver";
 
+/**
+ * Конфигурация маршрутов для модуля профиля пользователя
+ *
+ * Определяет структуру навигации в разделе профиля:
+ * - Главная страница профиля с дочерними маршрутами
+ * - Страница навыков пользователя
+ * - Страница студентов (для наставников)
+ *
+ * @returns {Routes} Массив конфигураций маршрутов
+ */
 export const PROFILE_ROUTES: Routes = [
   {
     path: "",

@@ -1,0 +1,69 @@
+/** @format */
+
+@use "styles/responsive";
+@use "styles/typography";
+
+.project {
+  &__navigation {
+    padding: 10px 0;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--grey-button);
+  }
+
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+
+    @include responsive.apply-desktop {
+      gap: 0;
+      justify-content: space-between;
+    }
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  &__subtitle {
+    color: var(--grey-for-text);
+
+    @include typography.heading-4;
+
+    &--active {
+      color: var(--black);
+    }
+  }
+
+  &__icon {
+    opacity: 0.5;
+
+    &--active {
+      opacity: 1;
+    }
+  }
+
+  &__nav-item {
+    color: var(--gray);
+    cursor: pointer;
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      @include typography.heading-3;
+    }
+
+    &:not(:last-child) {
+      margin-right: 24px;
+    }
+
+    &--active {
+      color: var(--black);
+    }
+  }
+}

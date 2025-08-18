@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, type OnInit } from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import {
   IconComponent,
@@ -11,12 +11,33 @@ import {
 import { AsyncPipe } from "@angular/common";
 import { ClickOutsideModule } from "ng-click-outside";
 
+/**
+ * Интерфейс для элемента навигации в боковой панели
+ */
 export interface NavItem {
+  /** Ссылка для роутинга Angular */
   link: string;
+  /** Название иконки из спрайта */
   icon: string;
+  /** Отображаемое название пункта меню */
   name: string;
 }
 
+/**
+ * Компонент боковой панели навигации
+ *
+ * Отображает логотип, список навигационных элементов и дополнительный контент.
+ * Поддерживает анимированную полосу при наведении на элементы навигации.
+ *
+ * @example
+ * \`\`\`html
+ * <ui-sidebar
+ *   [navItems]="navigationItems"
+ *   [logoSrc]="logoUrl">
+ *   <app-profile-control-panel></app-profile-control-panel>
+ * </ui-sidebar>
+ * \`\`\`
+ */
 @Component({
   selector: "ui-sidebar",
   templateUrl: "./sidebar.component.html",
@@ -34,14 +55,24 @@ export interface NavItem {
   ],
 })
 export class SidebarComponent implements OnInit {
+  /** Массив элементов навигации */
   @Input() navItems: NavItem[] = [];
+
+  /** Путь к изображению логотипа (обязательный параметр) */
   @Input({ required: true }) logoSrc!: string;
 
   ngOnInit(): void {}
 
+  /** Позиция анимированной полосы (индекс элемента навигации) */
   barPosition = 0;
+
+  /** Флаг отображения анимированной полосы */
   showBar = true;
 
+  /**
+   * Перенаправляет пользователя на главную страницу приложения
+   * Используется при клике на логотип
+   */
   redirectToHome(): void {
     window.location.href = "https://app.procollab.ru/office/feed";
   }

@@ -11,6 +11,25 @@ import { ImgCardComponent } from "../img-card/img-card.component";
 import { IconComponent } from "@ui/components";
 import { AutosizeModule } from "ngx-autosize";
 
+/**
+ * Компонент формы создания новости
+ *
+ * Функциональность:
+ * - Создание новой новости с текстом и прикрепленными файлами
+ * - Загрузка файлов через input или drag&drop, а также вставка из буфера обмена
+ * - Разделение файлов на изображения и документы
+ * - Предварительный просмотр загруженных файлов
+ * - Управление состояниями загрузки и ошибок для каждого файла
+ * - Возможность удаления и повторной загрузки файлов
+ *
+ * Выходные события:
+ * @Output addNews - событие добавления новости, передает объект с текстом и массивом URL файлов
+ *
+ * Внутренние свойства:
+ * - messageForm - форма с полем текста новости (обязательное)
+ * - imagesList - массив объектов изображений с состояниями загрузки
+ * - filesList - массив объектов файлов с состояниями загрузки
+ */
 @Component({
   selector: "app-news-form",
   templateUrl: "./news-form.component.html",
@@ -41,6 +60,10 @@ export class NewsFormComponent implements OnInit {
 
   messageForm: FormGroup;
 
+  /**
+   * Обработчик отправки формы
+   * Валидирует форму и эмитит событие с данными новости
+   */
   onSubmit() {
     if (!this.validationService.getFormValidation(this.messageForm)) {
       return;
@@ -52,11 +75,15 @@ export class NewsFormComponent implements OnInit {
     });
   }
 
+  /**
+   * Сброс формы и очистка списков файлов
+   */
   onResetForm() {
     this.imagesList = [];
     this.messageForm.reset();
   }
 
+  // Массив изображений с метаданными
   imagesList: {
     id: string;
     src: string;
@@ -65,6 +92,7 @@ export class NewsFormComponent implements OnInit {
     tempFile: File | null;
   }[] = [];
 
+  // Массив файлов с метаданными
   filesList: {
     id: string;
     loading: boolean;
@@ -73,6 +101,10 @@ export class NewsFormComponent implements OnInit {
     tempFile: File;
   }[] = [];
 
+  /**
+   * Загрузка файлов на сервер
+   * Разделяет файлы на изображения и документы, загружает параллельно
+   */
   uploadFiles(files: FileList) {
     const observableArray: Observable<any>[] = [];
     for (let i = 0; i < files.length; i++) {
@@ -92,7 +124,6 @@ export class NewsFormComponent implements OnInit {
             tap(file => {
               fileObj.src = file.url;
               fileObj.loading = false;
-
               fileObj.tempFile = null;
             })
           )
@@ -120,6 +151,9 @@ export class NewsFormComponent implements OnInit {
     forkJoin(observableArray).subscribe(noop);
   }
 
+  /**
+   * Обработчик выбора файлов через input
+   */
   onInputFiles(event: Event) {
     const files = (event.currentTarget as HTMLInputElement).files;
     if (!files) return;
@@ -127,6 +161,9 @@ export class NewsFormComponent implements OnInit {
     this.uploadFiles(files);
   }
 
+  /**
+   * Обработчик вставки файлов из буфера обмена
+   */
   onPaste(event: ClipboardEvent) {
     const files = event.clipboardData?.files;
     if (!files) return;
@@ -134,6 +171,10 @@ export class NewsFormComponent implements OnInit {
     this.uploadFiles(files);
   }
 
+  /**
+   * Удаление изображения из списка
+   * Если файл уже загружен на сервер, удаляет его оттуда
+   */
   onDeletePhoto(fId: string) {
     const fileIdx = this.imagesList.findIndex(f => f.id === fId);
 
@@ -147,6 +188,10 @@ export class NewsFormComponent implements OnInit {
     }
   }
 
+  /**
+   * Удаление файла из списка
+   * Если файл уже загружен на сервер, удаляет его оттуда
+   */
   onDeleteFile(fId: string) {
     const fileIdx = this.filesList.findIndex(f => f.id === fId);
 
@@ -160,6 +205,10 @@ export class NewsFormComponent implements OnInit {
     }
   }
 
+  /**
+   * Повторная попытка загрузки изображения
+   * Используется при ошибке загрузки
+   */
   onRetryUpload(id: string) {
     const fileObj = this.imagesList.find(f => f.id === id);
     if (!fileObj || !fileObj.tempFile) return;
@@ -170,7 +219,6 @@ export class NewsFormComponent implements OnInit {
       next: file => {
         fileObj.src = file.url;
         fileObj.loading = false;
-
         fileObj.tempFile = null;
       },
       error: () => {

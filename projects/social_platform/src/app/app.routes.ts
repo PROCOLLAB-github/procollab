@@ -4,6 +4,16 @@ import { Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
 import { AuthRequiredGuard } from "@auth/guards/auth-required.guard";
 
+/**
+ * Основные маршруты приложения
+ *
+ * Определяет структуру навигации приложения:
+ * - /auth - модуль аутентификации
+ * - /office - основной рабочий модуль (требует авторизации)
+ * - /error - страницы ошибок
+ * - /** - перенаправление на страницу 404
+ */
+
 export const APP_ROUTES: Routes = [
   {
     path: "",

@@ -19,7 +19,19 @@ import { FeedService } from "@office/feed/services/feed.service";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { VacancyService } from "@office/services/vacancy.service";
 import { map, Subscription, tap } from "rxjs";
+import { filterExperience } from "projects/core/src/consts/filter-experience";
+import { filterWorkFormat } from "projects/core/src/consts/filter-work-format";
+import { filterWorkSchedule } from "projects/core/src/consts/filter-work-schedule";
 
+/**
+ * Компонент фильтра вакансий
+ * Предоставляет интерфейс для фильтрации вакансий по различным критериям:
+ * - Опыт работы
+ * - Формат работы (удаленно/офис/гибрид)
+ * - График работы
+ * - Диапазон зарплаты
+ * Поддерживает как десктопную, так и мобильную версии интерфейса
+ */
 @Component({
   selector: "app-vacancy-filter",
   standalone: true,
@@ -46,32 +58,57 @@ import { map, Subscription, tap } from "rxjs";
   ],
 })
 export class VacancyFilterComponent implements OnInit {
+  /** Сервис роутера для навигации */
   router = inject(Router);
+  /** Сервис текущего маршрута */
   route = inject(ActivatedRoute);
+  /** Сервис ленты новостей */
   feedService = inject(FeedService);
+  /** Сервис для работы с вакансиями */
   vacancyService = inject(VacancyService);
 
+  /**
+   * Конструктор компонента
+   * @param fb - FormBuilder для создания формы зарплатного диапазона
+   */
   constructor(private readonly fb: FormBuilder) {
+    // Создание формы для фильтрации по зарплате
     this.salaryForm = this.fb.group({
-      salaryMin: [""],
-      salaryMax: [""],
+      salaryMin: [""], // Минимальная зарплата
+      salaryMax: [""], // Максимальная зарплата
     });
   }
 
+  /** Приватное поле для хранения значения поиска */
   private _searchValue: string | undefined;
 
+  /**
+   * Сеттер для значения поиска
+   * @param value - новое значение поиска
+   */
   @Input() set searchValue(value: string | undefined) {
     this._searchValue = value;
   }
 
+  /**
+   * Геттер для получения значения поиска
+   * @returns текущее значение поиска
+   */
   get searchValue(): string | undefined {
     return this._searchValue;
   }
 
+  /** Событие изменения значения поиска */
   @Output() searchValueChange = new EventEmitter<string>();
 
+  /**
+   * Инициализация компонента
+   * Подписывается на изменения параметров запроса для синхронизации фильтров
+   */
   ngOnInit() {
+    // Подписка на изменения параметров запроса
     this.queries$ = this.route.queryParams.subscribe(queries => {
+      // Синхронизация текущих значений фильтров с URL
       this.currentExperience.set(queries["required_experience"]);
       this.currentWorkFormat.set(queries["work_format"]);
       this.currentWorkSchedule.set(queries["work_schedule"]);
@@ -81,45 +118,49 @@ export class VacancyFilterComponent implements OnInit {
     });
   }
 
+  /** Подписка на параметры запроса */
   queries$?: Subscription;
+  /** Состояние открытия фильтра (для мобильной версии) */
   filterOpen = signal(false);
+  /** Форма для фильтрации по зарплате */
   salaryForm: FormGroup;
+  /** Общее количество элементов */
   totalItemsCount = signal(0);
 
+  // Сигналы для текущих значений фильтров
+  /** Текущий фильтр по опыту */
   currentExperience = signal<string | undefined>(undefined);
+  /** Текущий фильтр по формату работы */
   currentWorkFormat = signal<string | undefined>(undefined);
+  /** Текущий фильтр по графику работы */
   currentWorkSchedule = signal<string | undefined>(undefined);
-
+  /** Текущая минимальная зарплата */
   currentSalaryMin = signal<string | undefined>(undefined);
+  /** Текущая максимальная зарплата */
   currentSalaryMax = signal<string | undefined>(undefined);
 
-  filterExperienceOptions = [
-    { label: "без опыта", value: "no_experience" },
-    { label: "до 1 года", value: "up_to_a_year" },
-    { label: "от 1 года до 3 лет", value: "from_one_to_three_years" },
-    { label: "от 3 лет и более", value: "from_three_years" },
-  ];
+  /** Опции фильтра по опыту работы */
+  readonly filterExperienceOptions = filterExperience;
 
-  filterWorkFormatOptions = [
-    { label: "удаленная работа", value: "remote" },
-    { label: "работа в офисе", value: "office" },
-    { label: "смешанный формат", value: "hybrid" },
-  ];
+  /** Опции фильтра по формату работы */
+  readonly filterWorkFormatOptions = filterWorkFormat;
 
-  filterWorkScheduleOptions = [
-    { label: "полный рабочий день", value: "full_time" },
-    { label: "сменный график", value: "shift_work" },
-    { label: "гибкий график", value: "flexible_schedule" },
-    { label: "частичная занятость", value: "part_time" },
-    { label: "стажировка", value: "internship" },
-  ];
+  /** Опции фильтра по графику работы */
+  filterWorkScheduleOptions = filterWorkSchedule;
 
+  /**
+   * Установка фильтра по опыту работы
+   * @param event - событие клика
+   * @param experienceId - идентификатор выбранного опыта
+   */
   setExperienceFilter(event: Event, experienceId: string): void {
     event.stopPropagation();
+    // Переключение фильтра (снятие если уже выбран)
     this.currentExperience.set(
       experienceId === this.currentExperience() ? undefined : experienceId
     );
 
+    // Обновление URL с новым параметром
     this.router
       .navigate([], {
         queryParams: { required_experience: this.currentExperience() },
@@ -129,6 +170,11 @@ export class VacancyFilterComponent implements OnInit {
       .then(() => console.debug("Query change from ProjectsComponent"));
   }
 
+  /**
+   * Установка фильтра по формату работы
+   * @param event - событие клика
+   * @param formatId - идентификатор выбранного формата
+   */
   setWorkFormatFilter(event: Event, formatId: string): void {
     event.stopPropagation();
     this.currentWorkFormat.set(formatId === this.currentWorkFormat() ? undefined : formatId);
@@ -142,6 +188,11 @@ export class VacancyFilterComponent implements OnInit {
       .then(() => console.debug("Query change from ProjectsComponent"));
   }
 
+  /**
+   * Установка фильтра по графику работы
+   * @param event - событие клика
+   * @param scheduleId - идентификатор выбранного графика
+   */
   setWorkScheduleFilter(event: Event, scheduleId: string): void {
     event.stopPropagation();
     this.currentWorkSchedule.set(
@@ -159,6 +210,10 @@ export class VacancyFilterComponent implements OnInit {
       .then(() => console.debug("Query change from ProjectsComponent"));
   }
 
+  /**
+   * Применение фильтров
+   * Обновляет URL с текущими значениями всех фильтров
+   */
   applyFilter() {
     const salaryMin = this.salaryForm.get("salaryMin")?.value || "";
     const salaryMax = this.salaryForm.get("salaryMax")?.value || "";
@@ -174,6 +229,10 @@ export class VacancyFilterComponent implements OnInit {
     });
   }
 
+  /**
+   * Сброс всех фильтров
+   * Очищает все параметры фильтрации и обновляет URL
+   */
   resetFilter(): void {
     this.currentExperience.set(undefined);
     this.currentWorkFormat.set(undefined);
@@ -197,14 +256,29 @@ export class VacancyFilterComponent implements OnInit {
       .then(() => console.debug("Filters reset from VacancyFilterComponent"));
   }
 
+  /**
+   * Обработчик изменения значения поиска
+   * @param value - новое значение поиска
+   */
   onSearchValueChanged(value: string) {
     this.searchValueChange.emit(value);
   }
 
+  /**
+   * Обработчик клика вне компонента
+   * Закрывает мобильное меню фильтров
+   */
   onClickOutside(): void {
     this.filterOpen.set(false);
   }
 
+  /**
+   * Загрузка данных с применением текущих фильтров
+   * @param offset - смещение для пагинации
+   * @param limit - количество элементов для загрузки
+   * @param projectId - идентификатор проекта (опционально)
+   * @returns Observable с отфильтрованными данными
+   */
   onFetch(offset: number, limit: number, projectId?: number) {
     return this.vacancyService
       .getForProject(

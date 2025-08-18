@@ -17,6 +17,52 @@ import { RatingCardComponent } from "@office/program/shared/rating-card/rating-c
 import { ProjectRate } from "@office/program/models/project-rate";
 import { ProjectRatingService } from "@office/program/services/project-rating.service";
 
+/**
+ * Компонент списка проектов для оценки
+ *
+ * Отображает проекты программы в формате карточек для экспертной оценки.
+ * Поддерживает фильтрацию, поиск и бесконечную прокрутку.
+ *
+ * Принимает:
+ * @param {ActivatedRoute} route - Для получения данных и query параметров
+ * @param {Router} router - Для определения текущего URL
+ * @param {ProjectRatingService} projectRatingService - Сервис оценки проектов
+ *
+ * Состояние (signals):
+ * @property {Signal<ProjectRate[]>} projects - Массив проектов для оценки
+ * @property {Signal<number>} currentIndex - Индекс текущего проекта
+ * @property {Signal<number>} totalProjCount - Общее количество проектов
+ * @property {Signal<number>} fetchLimit - Лимит загрузки (8 проектов)
+ * @property {Signal<number>} fetchPage - Текущая страница
+ * @property {Signal<boolean | undefined>} isRatedByExpert - Фильтр по статусу оценки
+ * @property {Signal<string>} searchValue - Поисковый запрос
+ *
+ * Фильтрация и поиск:
+ * - Реагирует на изменения query параметров
+ * - Поддерживает фильтр по статусу оценки экспертом
+ * - Поиск по названию проекта
+ * - Автоматическое обновление списка при изменении фильтров
+ *
+ * Пагинация:
+ * - Бесконечная прокрутка для подгрузки проектов
+ * - Throttling для предотвращения избыточных запросов
+ * - Отслеживание позиции прокрутки
+ *
+ * Навигация между проектами:
+ * @method toggleProject(type: "next" | "prev") - Переключение между проектами
+ *
+ * Методы загрузки:
+ * @method onScroll() - Обработчик прокрутки для подгрузки
+ * @method onFetch(offset, limit) - Загрузка проектов с фильтрами
+ *
+ * Жизненный цикл:
+ * - OnInit: Загрузка начальных данных и настройка подписок
+ * - AfterViewInit: Настройка обработчика прокрутки
+ * - OnDestroy: Очистка подписок
+ *
+ * Возвращает:
+ * HTML шаблон с карточками проектов для оценки
+ */
 @Component({
   selector: "app-list",
   templateUrl: "./list.component.html",

@@ -18,6 +18,43 @@ import { ProgramHeadComponent } from "../../shared/program-head/program-head.com
 import { AsyncPipe } from "@angular/common";
 import { ApiPagination } from "@models/api-pagination.model";
 
+/**
+ * Компонент списка участников программы
+ *
+ * Отображает всех участников программы с поддержкой:
+ * - Бесконечной прокрутки для подгрузки участников
+ * - Адаптивного дизайна
+ * - Интеграции с заголовком программы
+ *
+ * Принимает:
+ * @param {ActivatedRoute} route - Для получения данных из резолвера
+ * @param {ChangeDetectorRef} cdref - Для ручного обновления представления
+ * @param {ProgramService} programService - Сервис для загрузки участников
+ *
+ * Данные:
+ * @property {User[]} members - Массив участников программы
+ * @property {number} membersTotalCount - Общее количество участников
+ * @property {Observable<Program>} program$ - Поток данных программы
+ * @property {Observable<User[]>} members$ - Поток участников из резолвера
+ *
+ * Пагинация:
+ * @property {number} membersPage - Текущая страница
+ * @property {number} membersTake - Количество участников на странице (20)
+ *
+ * ViewChild:
+ * @ViewChild membersRoot - Ссылка на DOM элемент списка участников
+ *
+ * Жизненный цикл:
+ * - OnInit: Загружает начальные данные из резолвера
+ * - AfterViewInit: Настраивает обработчик прокрутки
+ *
+ * Методы:
+ * @method onScroll() - Проверяет необходимость подгрузки данных
+ * @method onFetch() - Загружает следующую порцию участников
+ *
+ * Возвращает:
+ * HTML шаблон со списком карточек участников
+ */
 @Component({
   selector: "app-members",
   templateUrl: "./members.component.html",

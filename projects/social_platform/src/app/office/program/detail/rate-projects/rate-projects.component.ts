@@ -2,21 +2,44 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
-import {
-  ActivatedRoute,
-  Router,
-  RouterLink,
-  RouterLinkActive,
-  RouterOutlet,
-} from "@angular/router";
-import { BackComponent, IconComponent } from "@uilib";
-import { BarComponent, ButtonComponent, SelectComponent } from "@ui/components";
-import { SearchComponent } from "@ui/components/search/search.component";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
+import { BarComponent } from "@ui/components";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { Subscription } from "rxjs";
-import { CheckboxComponent } from "../../../../ui/components/checkbox/checkbox.component";
-import { filterTags } from "projects/core/src/consts/filter-tags";
 
+/**
+ * Компонент страницы оценки проектов программы
+ *
+ * Основной компонент для экспертной оценки проектов в рамках программы.
+ * Предоставляет интерфейс поиска и фильтрации проектов для оценки.
+ *
+ * Функциональность:
+ * - Поиск проектов по названию
+ * - Навигационная панель
+ * - Router outlet для дочерних компонентов (список проектов)
+ * - Обработка URL параметров поиска
+ *
+ * Принимает:
+ * @param {NavService} navService - Сервис навигации для установки заголовка
+ * @param {Router} router - Для навигации и изменения URL параметров
+ * @param {ActivatedRoute} route - Для получения параметров маршрута
+ * @param {FormBuilder} fb - Для создания реактивных форм
+ *
+ * Формы:
+ * @property {FormGroup} searchForm - Форма поиска проектов
+ *
+ * Состояние:
+ * @property {number} programId - ID текущей программы
+ * @property {boolean} isOpen - Состояние открытия фильтров
+ * @property {Subscription[]} subscriptions$ - Массив подписок для очистки
+ *
+ * Методы:
+ * @method onSearchClick() - Обработчик поиска, обновляет URL параметры
+ * @method onClickOutside() - Закрывает выпадающие меню при клике вне
+ *
+ * Возвращает:
+ * HTML шаблон с поиском и router-outlet для списка проектов
+ */
 @Component({
   selector: "app-rate-projects",
   templateUrl: "./rate-projects.component.html",

@@ -46,9 +46,31 @@ import { transformYearStringToNumber } from "@utils/transformYear";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
 import { CheckboxComponent } from "../../../ui/components/checkbox/checkbox.component";
 import { User } from "@auth/models/user.model";
+import { SwitchComponent } from "@ui/components/switch/switch.component";
 
 dayjs.extend(cpf);
 
+/**
+ * Компонент редактирования профиля пользователя
+ *
+ * Этот компонент предоставляет полнофункциональную форму для редактирования профиля пользователя
+ * с поддержкой множественных разделов (основная информация, образование, опыт работы, достижения, навыки).
+ *
+ * Основные возможности:
+ * - Редактирование основной информации (имя, фамилия, дата рождения, город, телефон)
+ * - Управление образованием (добавление, редактирование, удаление записей об образовании)
+ * - Управление опытом работы (добавление, редактирование, удаление записей о работе)
+ * - Управление языками (добавление, редактирование, удаление языковых навыков)
+ * - Управление достижениями (добавление, редактирование, удаление достижений)
+ * - Управление навыками через автокомплит и модальные окна с группировкой
+ * - Загрузка и обновление аватара пользователя
+ * - Пошаговая навигация между разделами формы
+ * - Валидация всех полей формы с отображением ошибок
+ *
+ * @implements OnInit - для инициализации компонента и подписок
+ * @implements OnDestroy - для очистки подписок
+ * @implements AfterViewInit - для работы с DOM после инициализации представления
+ */
 @Component({
   selector: "app-profile-edit",
   templateUrl: "./edit.component.html",
@@ -73,7 +95,7 @@ dayjs.extend(cpf);
     ModalComponent,
     SelectComponent,
     RouterModule,
-    CheckboxComponent,
+    SwitchComponent,
   ],
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -135,6 +157,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  /**
+   * Инициализация компонента
+   * Настраивает форму, подписки на изменения, валидацию и заголовок навигации
+   */
   ngOnInit(): void {
     this.navService.setNavTitle("Редактирование профиля");
 
@@ -173,6 +199,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.editingStep = this.route.snapshot.queryParams["editingStep"];
   }
 
+  /**
+   * Инициализация после создания представления
+   * Загружает данные профиля пользователя и заполняет форму
+   */
   ngAfterViewInit() {
     const profile$ = this.authService.profile.pipe(first()).subscribe((profile: User) => {
       this.profileId = profile.id;
@@ -274,6 +304,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     profile$ && this.subscription$.push(profile$);
   }
 
+  /**
+   * Очистка ресурсов при уничтожении компонента
+   * Отписывается от всех активных подписок
+   */
   ngOnDestroy(): void {
     this.subscription$.forEach($ => $.unsubscribe());
   }
@@ -324,6 +358,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   readonly navItems = navItems;
 
+  /**
+   * Навигация между шагами редактирования профиля
+   * @param step - название шага ('main' | 'education' | 'experience' | 'achievements' | 'skills')
+   */
   navigateStep(step: string) {
     this.router.navigate([], { queryParams: { editingStep: step } });
     this.editingStep = step as "main" | "education" | "experience" | "achievements" | "skills";
@@ -441,6 +479,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.achievements.removeAt(i);
   }
 
+  /**
+   * Добавление записи об образовании
+   * Валидирует форму и добавляет новую запись в массив образования
+   */
   addEducation() {
     ["organizationName", "educationStatus"].forEach(name =>
       this.profileForm.get(name)?.clearValidators()
@@ -496,7 +538,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         this.educationItems.update(items => [...items, educationItem.value]);
         this.education.push(educationItem);
       }
-
       [
         "organizationName",
         "entryYear",
@@ -515,6 +556,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.editEducationClick = false;
   }
 
+  /**
+   * Редактирование записи об образовании
+   * @param index - индекс записи в массиве образования
+   */
   editEducation(index: number) {
     this.editEducationClick = true;
     const educationItem = this.education.value[index];
@@ -557,12 +602,20 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.editIndex.set(index);
   }
 
+  /**
+   * Удаление записи об образовании
+   * @param i - индекс записи для удаления
+   */
   removeEducation(i: number) {
     this.educationItems.update(items => items.filter((_, index) => index !== i));
 
     this.education.removeAt(i);
   }
 
+  /**
+   * Добавление записи об опыте работы
+   * Валидирует форму и добавляет новую запись в массив опыта работы
+   */
   addWork() {
     ["organization", "jobPosition"].forEach(name => this.profileForm.get(name)?.clearValidators());
     ["organization", "jobPosition"].forEach(name =>
@@ -613,7 +666,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         this.workItems.update(items => [...items, workItem.value]);
         this.workExperience.push(workItem);
       }
-
       [
         "organization",
         "entryYearWork",
@@ -674,38 +726,60 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addLanguage() {
-    ["language", "languageLevel"].forEach(name => this.profileForm.get(name)?.clearValidators());
-    ["language", "languageLevel"].forEach(name =>
-      this.profileForm.get(name)?.setValidators([Validators.required])
-    );
-    ["language", "languageLevel"].forEach(name =>
-      this.profileForm.get(name)?.updateValueAndValidity()
-    );
-    ["language", "languageLevel"].forEach(name => this.profileForm.get(name)?.markAsTouched());
+    const languageValue = this.profileForm.get("language")?.value;
+    const languageLevelValue = this.profileForm.get("languageLevel")?.value;
 
-    const languageItem = this.fb.group({
-      language: this.profileForm.get("language")?.value,
-      languageLevel: this.profileForm.get("languageLevel")?.value,
+    ["language", "languageLevel"].forEach(name => {
+      this.profileForm.get(name)?.clearValidators();
     });
 
-    if (this.editIndex() !== null) {
-      this.languageItems.update(items => {
-        const updatedItems = [...items];
-        updatedItems[this.editIndex()!] = languageItem.value;
-
-        this.userLanguages.at(this.editIndex()!).patchValue(languageItem.value);
-        return updatedItems;
+    if ((languageValue && !languageLevelValue) || (!languageValue && languageLevelValue)) {
+      ["language", "languageLevel"].forEach(name => {
+        this.profileForm.get(name)?.setValidators([Validators.required]);
       });
-      this.editIndex.set(null);
-    } else {
-      this.languageItems.update(items => [...items, languageItem.value]);
-      this.userLanguages.push(languageItem);
     }
 
-    this.profileForm.get("language")?.reset();
-    this.profileForm.get("languageLevel")?.reset();
+    ["language", "languageLevel"].forEach(name => {
+      this.profileForm.get(name)?.updateValueAndValidity();
+      this.profileForm.get(name)?.markAsTouched();
+    });
 
-    this.editLanguageClick = true;
+    const isLanguageValid = this.profileForm.get("language")?.valid;
+    const isLanguageLevelValid = this.profileForm.get("languageLevel")?.valid;
+
+    if (!isLanguageValid || !isLanguageLevelValid) {
+      return;
+    }
+
+    const languageItem = this.fb.group({
+      language: languageValue,
+      languageLevel: languageLevelValue,
+    });
+
+    if (languageValue && languageLevelValue) {
+      if (this.editIndex() !== null) {
+        this.languageItems.update(items => {
+          const updatedItems = [...items];
+          updatedItems[this.editIndex()!] = languageItem.value;
+          this.userLanguages.at(this.editIndex()!).patchValue(languageItem.value);
+          return updatedItems;
+        });
+        this.editIndex.set(null);
+      } else {
+        this.languageItems.update(items => [...items, languageItem.value]);
+        this.userLanguages.push(languageItem);
+      }
+
+      ["language", "languageLevel"].forEach(name => {
+        this.profileForm.get(name)?.reset();
+        this.profileForm.get(name)?.setValue(null);
+        this.profileForm.get(name)?.clearValidators();
+        this.profileForm.get(name)?.markAsPristine();
+        this.profileForm.get(name)?.updateValueAndValidity();
+      });
+
+      this.editLanguageClick = false;
+    }
   }
 
   editLanguage(index: number) {
@@ -764,6 +838,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     4: "investor",
   };
 
+  /**
+   * Сохранение профиля пользователя
+   * Валидирует всю форму и отправляет данные на сервер
+   */
   saveProfile(): void {
     if (!this.validationService.getFormValidation(this.profileForm) || this.profileFormSubmitting) {
       this.isModalErrorSkillsChoose.set(true);
@@ -801,6 +879,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
           this.isModalErrorSkillsChoose.set(true);
           if (error.error.phone_number) {
             this.isModalErrorSkillChooseText.set(error.error.phone_number[0]);
+          } else if (error.error.language) {
+            this.isModalErrorSkillChooseText.set(error.error.language);
           } else {
             this.isModalErrorSkillChooseText.set(error.error[0]);
           }
@@ -808,6 +888,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       });
   }
 
+  /**
+   * Изменение типа пользователя
+   * @param typeId - новый тип пользователя
+   * @returns Observable<void> - результат операции изменения типа
+   */
   changeUserType(typeId: number): Observable<void> {
     return this.authService
       .saveProfile({
@@ -819,20 +904,28 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(map(() => location.reload()));
   }
 
+  /**
+   * Выбор специальности из автокомплита
+   * @param speciality - выбранная специальность
+   */
   onSelectSpec(speciality: Specialization): void {
     this.profileForm.patchValue({ speciality: speciality.name });
   }
 
+  /**
+   * Поиск специальностей для автокомплита
+   * @param query - поисковый запрос
+   */
   onSearchSpec(query: string): void {
     this.specsService.getSpecializationsInline(query, 1000, 0).subscribe(({ results }) => {
       this.inlineSpecs.set(results);
     });
   }
 
-  toggleSpecsGroupsModal(): void {
-    this.specsGroupsModalOpen.update(open => !open);
-  }
-
+  /**
+   * Переключение навыка (добавление/удаление)
+   * @param toggledSkill - навык для переключения
+   */
   onToggleSkill(toggledSkill: Skill): void {
     const { skills }: { skills: Skill[] } = this.profileForm.value;
 
@@ -845,6 +938,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  /**
+   * Добавление нового навыка
+   * @param newSkill - новый навык для добавления
+   */
   onAddSkill(newSkill: Skill): void {
     const { skills }: { skills: Skill[] } = this.profileForm.value;
 
@@ -855,6 +952,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.profileForm.patchValue({ skills: [newSkill, ...skills] });
   }
 
+  /**
+   * Удаление навыка
+   * @param oddSkill - навык для удаления
+   */
   onRemoveSkill(oddSkill: Skill): void {
     const { skills }: { skills: Skill[] } = this.profileForm.value;
 
@@ -869,6 +970,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   toggleSkillsGroupsModal(): void {
     this.skillsGroupsModalOpen.update(open => !open);
+  }
+
+  toggleSpecsGroupsModal(): void {
+    this.specsGroupsModalOpen.update(open => !open);
   }
 
   onBack() {

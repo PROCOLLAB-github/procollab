@@ -8,6 +8,26 @@ import { AuthService } from "@auth/services";
 import { ResolveFn } from "@angular/router";
 import { SubscriptionService } from "@office/services/subscription.service";
 
+/**
+ * Resolver для загрузки данных о количестве проектов
+ *
+ * Функциональность:
+ * - Загружает количество проектов пользователя в разных категориях
+ * - Получает количество подписок пользователя
+ * - Объединяет данные в единый объект ProjectCount
+ *
+ * Принимает:
+ * - Не принимает параметры (использует текущего пользователя)
+ *
+ * Возвращает:
+ * - Observable<ProjectCount> с данными:
+ *   - my: количество собственных проектов
+ *   - all: общее количество проектов в системе
+ *   - subs: количество подписок пользователя
+ *
+ * Используется перед загрузкой ProjectsComponent для предварительной
+ * загрузки необходимых данных.
+ */
 export const ProjectsResolver: ResolveFn<ProjectCount> = () => {
   const projectService = inject(ProjectService);
   const authService = inject(AuthService);
@@ -16,8 +36,8 @@ export const ProjectsResolver: ResolveFn<ProjectCount> = () => {
   return authService.profile.pipe(
     switchMap(p => {
       return forkJoin([
-        projectService.getCount(),
-        subscriptionService.getSubscriptions(p.id).pipe(map(resp => resp.count)),
+        projectService.getCount(), // Получение количества проектов
+        subscriptionService.getSubscriptions(p.id).pipe(map(resp => resp.count)), // Получение количества подписок
       ]).pipe(map(([countData, subsCount]) => ({ ...countData, subs: subsCount })));
     })
   );

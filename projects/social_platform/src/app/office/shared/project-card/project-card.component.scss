@@ -7,6 +7,7 @@
   flex-direction: column;
 
   &__body {
+    height: 200px;
     padding: 24px 15px;
     background-color: var(--white);
     border-radius: 15px;
@@ -16,9 +17,7 @@
     }
 
     &--company {
-      @include responsive.apply-desktop {
-        border: 1px solid var(--accent);
-      }
+      border: 1px solid var(--accent);
     }
   }
 
@@ -50,6 +49,7 @@
   }
 
   &__basket {
+    margin-left: auto;
     color: var(--red);
   }
 

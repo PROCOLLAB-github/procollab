@@ -13,6 +13,25 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
 
+/**
+ * Компонент выпадающего списка для выбора значения из предустановленных опций.
+ * Реализует ControlValueAccessor для интеграции с Angular Forms.
+ * Поддерживает навигацию с клавиатуры и автоматический скролл к выделенному элементу.
+ *
+ * Входящие параметры:
+ * - placeholder: текст подсказки при отсутствии выбора
+ * - selectedId: ID выбранной опции
+ * - options: массив опций для выбора с полями value, label, id
+ *
+ * Возвращает:
+ * - Значение выбранной опции через ControlValueAccessor
+ *
+ * Функциональность:
+ * - Навигация стрелками вверх/вниз
+ * - Выбор по Enter, закрытие по Escape
+ * - Автоматический скролл к выделенному элементу
+ * - Закрытие при клике вне компонента
+ */
 @Component({
   selector: "app-select",
   templateUrl: "./select.component.html",
@@ -28,22 +47,31 @@ import { ClickOutsideModule } from "ng-click-outside";
   imports: [ClickOutsideModule, IconComponent],
 })
 export class SelectComponent implements ControlValueAccessor {
+  /** Текст подсказки */
   @Input() placeholder = "";
+
+  /** ID выбранной опции */
   @Input() selectedId?: number;
+
+  /** Массив доступных опций */
   @Input({ required: true }) options: {
     value: string | number;
     label: string;
     id: number;
   }[] = [];
 
+  /** Состояние открытия выпадающего списка */
   isOpen = false;
 
+  /** Индекс подсвеченного элемента при навигации */
   highlightedIndex = -1;
 
   constructor(private readonly renderer: Renderer2) {}
 
+  /** Ссылка на элемент выпадающего списка */
   @ViewChild("dropdown") dropdown!: ElementRef<HTMLUListElement>;
 
+  /** Обработчик клавиатурных событий для навигации */
   @HostListener("document:keydown", ["$event"])
   onKeyDown(event: KeyboardEvent): void {
     if (!this.isOpen || this.disabled) {
@@ -77,6 +105,7 @@ export class SelectComponent implements ControlValueAccessor {
     }
   }
 
+  /** Автоматический скролл к выделенному элементу */
   trackHighlightScroll(): void {
     const ddElem = this.dropdown.nativeElement;
 
@@ -94,8 +123,18 @@ export class SelectComponent implements ControlValueAccessor {
     }
   }
 
-  writeValue(id: number) {
-    this.selectedId = id;
+  // Методы ControlValueAccessor
+  writeValue(value: number | string) {
+    if (typeof value === "string") {
+      // Найти ID по значению или label
+      this.selectedId = this.getIdByValue(value) || this.getId(value);
+    } else {
+      this.selectedId = value;
+    }
+  }
+
+  getIdByValue(value: string | number): number | undefined {
+    return this.options.find(el => el.value === value)?.id;
   }
 
   disabled = false;
@@ -116,6 +155,7 @@ export class SelectComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
+  /** Обработчик выбора опции */
   onUpdate(event: Event, id: number): void {
     event.stopPropagation();
     if (this.disabled) {
@@ -128,23 +168,28 @@ export class SelectComponent implements ControlValueAccessor {
     this.hideDropdown();
   }
 
+  /** Получение текста метки по ID опции */
   getLabel(optionId: number): string | undefined {
     return this.options.find(el => el.id === optionId)?.label;
   }
 
+  /** Получение значения по ID опции */
   getValue(optionId: number): string | number | null | undefined {
     return this.options.find(el => el.id === optionId)?.value;
   }
 
+  /** Получение ID по тексту метки */
   getId(label: string): number | undefined {
     return this.options.find(el => el.label === label)?.id;
   }
 
+  /** Скрытие выпадающего списка */
   hideDropdown() {
     this.isOpen = false;
     this.highlightedIndex = -1;
   }
 
+  /** Обработчик клика вне компонента */
   onClickOutside() {
     this.hideDropdown();
   }

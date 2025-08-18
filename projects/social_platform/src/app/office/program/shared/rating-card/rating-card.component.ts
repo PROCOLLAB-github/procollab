@@ -26,6 +26,42 @@ import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ProjectRatingService } from "@office/program/services/project-rating.service";
 import { RouterLink } from "@angular/router";
 
+/**
+ * Компонент карточки оценки проекта
+ *
+ * Отображает детальную информацию о проекте и форму для его оценки экспертами.
+ * Поддерживает навигацию между проектами и различные типы критериев оценки.
+ *
+ * Принимает:
+ * @Input project: ProjectRate | null - Текущий проект для оценки
+ * @Input projects: ProjectRate[] | null - Список всех проектов
+ * @Input currentIndex: number - Индекс текущего проекта в списке
+ *
+ * Генерирует:
+ * @Output onNext: EventEmitter<void> - Событие перехода к следующему проекту
+ * @Output onPrev: EventEmitter<void> - Событие перехода к предыдущему проекту
+ *
+ * Зависимости:
+ * @param {IndustryService} industryService - Сервис для работы с отраслями
+ * @param {ProjectRatingService} projectRatingService - Сервис оценки проектов
+ * @param {BreakpointObserver} breakpointObserver - Для адаптивного дизайна
+ * @param {ChangeDetectorRef} cdRef - Для ручного обновления представления
+ *
+ * Функциональность:
+ * - Отображение информации о проекте (название, описание, изображения)
+ * - Форма оценки с различными типами критериев
+ * - Возможность развернуть/свернуть описание проекта
+ * - Навигация между проектами
+ * - Отправка оценки и обработка результата
+ * - Адаптивный дизайн для мобильных устройств
+ *
+ * Состояния:
+ * @property {FormControl} form - Реактивная форма для оценки
+ * @property {Signal<boolean>} submitLoading - Состояние загрузки при отправке
+ * @property {Signal<boolean>} readFullDescription - Развернуто ли описание
+ * @property {Signal<boolean>} descriptionExpandable - Можно ли развернуть описание
+ * @property {Signal<boolean>} projectRated - Оценен ли проект
+ */
 @Component({
   selector: "app-rating-card",
   templateUrl: "./rating-card.component.html",

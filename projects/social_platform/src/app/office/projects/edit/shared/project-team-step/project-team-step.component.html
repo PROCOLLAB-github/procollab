@@ -1,0 +1,108 @@
+<!-- @format -->
+
+<div class="project__team">
+  <div class="project__invite">
+    <label class="text-heading-4 field-label">Команда</label>
+    <ul
+      class="invite__team"
+      [style.overflow-y]="invites.length > 8 ? 'auto' : 'none'"
+      [style.display]="invitesFill() ? 'grid' : 'none'"
+    >
+      @for (user of invites; track user.id) { @if (user.isAccepted === null) {
+      <li class="invite__item">
+        <app-invite-card
+          [invite]="user"
+          (edit)="editInvitation($event)"
+          (remove)="removeInvitation($event)"
+        ></app-invite-card>
+      </li>
+      } }
+    </ul>
+    <app-button
+      (click)="openInviteModal()"
+      class="invite__submit"
+      customTypographyClass="text-bold-body-16"
+    >
+      <span>Пригласить участника</span>
+      <i appIcon icon="plus" appSquare="20"></i>
+    </app-button>
+  </div>
+
+  <app-modal [open]="isInviteModalOpen()" (openChange)="onModalOpenChange($event)">
+    <div class="project__warning-modal">
+      <div class="project__left" style="display: flex; flex-direction: column">
+        <label class="text-bold-body-16" style="margin-bottom: 20px; align-self: center">
+          Приглашение участников
+        </label>
+
+        <form [formGroup]="inviteForm">
+          @if (role; as role) {
+          <fieldset class="invite__role">
+            <label class="field-label">Роль</label>
+            <app-input
+              id="invite_role"
+              formControlName="role"
+              [error]="(role | controlError) && inviteSubmitInitiated()"
+              placeholder="Напишите роль участника в команде"
+            ></app-input>
+            @if ((role | controlError: "required") && inviteSubmitInitiated()) {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (link; as link) {
+          <fieldset class="invite__link">
+            <app-input
+              id="invite_link"
+              formControlName="link"
+              [error]="(link | controlError) && inviteSubmitInitiated()"
+              placeholder="Вставьте ссылку на участника на платформе procollab"
+            ></app-input>
+            @if ((link | controlError: "required") && inviteSubmitInitiated()) {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            } @if ((link | controlError: "pattern") && inviteSubmitInitiated()) {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_PROFILE_LINK }}
+            </div>
+            } @if (inviteNotExistingError() && inviteSubmitInitiated()) {
+            <div class="text-body-14 error">
+              {{ errorMessage.USER_NOT_EXISTING }}
+            </div>
+            }
+          </fieldset>
+          }
+
+          <label class="field-label" style="color: var(--accent)">
+            Для проектов ПД.МосПолитех
+          </label>
+          @if (specialization; as specialization) {
+          <fieldset style="margin-bottom: 220px">
+            <app-select
+              id="specialization"
+              formControlName="specialization"
+              placeholder="Специальность"
+              [options]="rolesMembersList"
+            ></app-select>
+            @if ((specialization | controlError: "required") && inviteSubmitInitiated()) {
+            <div class="text-body-14 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </form>
+      </div>
+
+      <app-button
+        customTypographyClass="text-body-12"
+        (click)="submitInvite()"
+        [loader]="inviteFormIsSubmitting()"
+      >
+        Отправить
+      </app-button>
+    </div>
+  </app-modal>
+</div>

@@ -6,6 +6,19 @@ import { CircleProgressBarComponent } from "../../../shared/circle-progress-bar/
 import { Skill } from "projects/skills/src/models/profile.model";
 import { PluralizePipe } from "@corelib";
 
+/**
+ * Компонент карточки навыка с отображением рейтинга и прогресса
+ *
+ * Показывает информацию о навыке пользователя:
+ * - Название и изображение навыка
+ * - Текущий уровень навыка
+ * - Круговой индикатор прогресса
+ *
+ * @component PersonalRatingCardComponent
+ * @selector app-personal-rating-card
+ *
+ * @input personalRatingCardData - Данные навыка с прогрессом для отображения
+ */
 @Component({
   selector: "app-personal-rating-card",
   standalone: true,

@@ -5,6 +5,18 @@ import { ProgramComponent } from "./program.component";
 import { ProgramMainComponent } from "./list/main/main.component";
 import { ProgramMainResolver } from "./list/main/main.resolver";
 
+/**
+ * Конфигурация маршрутов для модуля "Программы"
+ *
+ * Описание маршрутов:
+ * - "" - корневой маршрут программ с дочерними маршрутами
+ *   - "" - редирект на "/all"
+ *   - "all" - список всех программ с резолвером данных
+ * - ":programId" - детальная страница программы (ленивая загрузка)
+ * - ":programId/projects-rating" - страница оценки проектов программы (ленивая загрузка)
+ *
+ * @returns {Routes} Массив конфигураций маршрутов для Angular Router
+ */
 export const PROGRAM_ROUTES: Routes = [
   {
     path: "",

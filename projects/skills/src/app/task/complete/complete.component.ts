@@ -6,9 +6,19 @@ import { CircleProgressBarComponent } from "../../shared/circle-progress-bar/cir
 import { IconComponent } from "@uilib";
 import { ButtonComponent } from "@ui/components";
 import { ActivatedRoute, Router } from "@angular/router";
-import { map, Observable } from "rxjs";
-import { TaskResults } from "../../../models/skill.model";
+import { map, type Observable } from "rxjs";
+import type { TaskResults } from "../../../models/skill.model";
 
+/**
+ * Компонент завершения задачи
+ * Отображает результаты выполнения задачи: прогресс, статистику, баллы
+ *
+ * Функциональность:
+ * - Показывает круговую диаграмму прогресса
+ * - Отображает количество правильных ответов
+ * - Показывает заработанные баллы
+ * - Предоставляет навигацию к следующему заданию или в меню навыков
+ */
 @Component({
   selector: "app-complete",
   standalone: true,
@@ -17,8 +27,9 @@ import { TaskResults } from "../../../models/skill.model";
   styleUrl: "./complete.component.scss",
 })
 export class TaskCompleteComponent {
-  route = inject(ActivatedRoute);
-  router = inject(Router);
+  route = inject(ActivatedRoute); // Сервис для работы с активным маршрутом
+  router = inject(Router); // Сервис для навигации
 
+  // Получаем результаты задачи из данных маршрута
   results = this.route.data.pipe(map(r => r["data"])) as Observable<TaskResults>;
 }

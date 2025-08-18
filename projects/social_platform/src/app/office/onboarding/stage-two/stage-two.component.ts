@@ -1,14 +1,7 @@
 /** @format */
 
-import {
-  ChangeDetectorRef,
-  Component,
-  ComponentFactoryResolver,
-  OnDestroy,
-  OnInit,
-  signal,
-} from "@angular/core";
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from "@angular/core";
+import { NonNullableFormBuilder, ReactiveFormsModule } from "@angular/forms";
 import { concatMap, map, Observable, Subscription, take } from "rxjs";
 import { AuthService } from "@auth/services";
 import { ControlErrorPipe, ValidationService } from "@corelib";
@@ -22,9 +15,46 @@ import { SkillsService } from "@office/services/skills.service";
 import { SkillsGroup } from "@office/models/skills-group";
 import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";
 import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-basket.component";
-import { HttpResponse } from "@angular/common/http";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 
+/**
+ * КОМПОНЕНТ ВТОРОГО ЭТАПА ОНБОРДИНГА
+ *
+ * Назначение: Этап выбора навыков пользователя из каталога доступных навыков
+ *
+ * Что делает:
+ * - Отображает интерфейс для поиска и выбора навыков
+ * - Управляет корзиной выбранных навыков
+ * - Предоставляет группированный каталог навыков
+ * - Поддерживает поиск навыков в реальном времени
+ * - Валидирует выбранные навыки перед отправкой
+ * - Сохраняет навыки в профиле и переходит к следующему этапу
+ * - Обрабатывает ошибки валидации от сервера
+ *
+ * Что принимает:
+ * - Данные групп навыков через ActivatedRoute (из StageTwoResolver)
+ * - Текущее состояние формы из OnboardingService
+ * - Пользовательские действия (поиск, добавление/удаление навыков)
+ * - Результаты поиска от SkillsService
+ *
+ * Что возвращает:
+ * - Интерфейс с поиском навыков и автокомплитом
+ * - Группированный каталог навыков для выбора
+ * - Корзину выбранных навыков с возможностью удаления
+ * - Модальное окно с ошибками валидации
+ * - Навигацию на следующий этап (stage-3)
+ *
+ * Особенности работы с навыками:
+ * - Предотвращение дублирования навыков в корзине
+ * - Переключение состояния навыка (добавить/удалить) одним действием
+ * - Отправка только ID навыков на сервер (skillsIds)
+ * - Обработка серверных ошибок с отображением в модальном окне
+ *
+ * Состояния компонента:
+ * - searchedSkills: результаты поиска навыков
+ * - stageSubmitting: флаг процесса отправки
+ * - isChooseSkill: флаг отображения модального окна с ошибкой
+ */
 @Component({
   selector: "app-stage-two",
   templateUrl: "./stage-two.component.html",

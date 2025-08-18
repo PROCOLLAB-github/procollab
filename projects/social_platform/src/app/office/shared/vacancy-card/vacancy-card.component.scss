@@ -26,18 +26,15 @@
   &__basket {
     color: var(--red);
     cursor: pointer;
-
-    svg {
-      max-width: 24px;
-    }
   }
 
   &__edit {
     color: var(--dark-grey);
     cursor: pointer;
+  }
 
-    svg {
-      max-width: 24px;
-    }
+  i {
+    width: 24px;
+    height: 24px;
   }
 }

@@ -1,6 +1,5 @@
 /** @format */
 
-import { AsyncPipe, CommonModule } from "@angular/common";
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -9,59 +8,76 @@ import {
   OnInit,
   signal,
 } from "@angular/core";
-import {
-  AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
+import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ErrorMessage } from "@error/models/error-message";
 import { Invite } from "@models/invite.model";
 import { Project } from "@models/project.model";
-import { Vacancy } from "@models/vacancy.model";
 import { Skill } from "@office/models/skill";
 import { ProgramTag } from "@office/program/models/program.model";
 import { ProgramService } from "@office/program/services/program.service";
 import { SkillsService } from "@office/services/skills.service";
-import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-basket.component";
 import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";
 import { IndustryService } from "@services/industry.service";
-import { InviteService } from "@services/invite.service";
 import { NavService } from "@services/nav.service";
 import { ProjectService } from "@services/project.service";
-import { VacancyService } from "@services/vacancy.service";
-import {
-  BarComponent,
-  ButtonComponent,
-  IconComponent,
-  InputComponent,
-  SelectComponent,
-} from "@ui/components";
-import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
-import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
+import { ButtonComponent, IconComponent, SelectComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { TagComponent } from "@ui/components/tag/tag.component";
-import { TextareaComponent } from "@ui/components/textarea/textarea.component";
-import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
-import { ControlErrorPipe, ValidationService } from "projects/core";
-import { Observable, Subscription, concatMap, distinctUntilChanged, filter, map, tap } from "rxjs";
-import { InviteCardComponent } from "../../shared/invite-card/invite-card.component";
-import { VacancyCardComponent } from "../../shared/vacancy-card/vacancy-card.component";
-import { LinkCardComponent } from "@office/shared/link-card/link-card.component";
-import { navItems } from "projects/core/src/consts/navProjectItems";
-import { experienceList } from "projects/core/src/consts/list-experience";
-import { formatList } from "projects/core/src/consts/list-format";
-import { scheludeList } from "projects/core/src/consts/list-schelude";
-import { trackProjectList } from "projects/core/src/consts/list-track-project";
-import { rolesMembersList } from "projects/core/src/consts/list-roles-members";
-import { directionProjectList } from "projects/core/src/consts/list-direction-project";
-import { CheckboxComponent } from "../../../ui/components/checkbox/checkbox.component";
-import { stringToArray } from "linkifyjs";
-import { stripNullish } from "@utils/stripNull";
+import { ValidationService } from "projects/core";
+import {
+  Observable,
+  Subscription,
+  concatMap,
+  distinctUntilChanged,
+  finalize,
+  map,
+  tap,
+} from "rxjs";
+import { CommonModule, AsyncPipe } from "@angular/common";
+import { HttpErrorResponse } from "@angular/common/http";
+import { ProjectAssign } from "../models/project-assign.model";
+import { ProjectNavigationComponent } from "./shared/project-navigation/project-navigation.component";
+import { EditStep, ProjectStepService } from "./services/project-step.service";
+import { ProjectMainStepComponent } from "./shared/project-main-step/project-main-step.component";
+import { ProjectFormService } from "./services/project-form.service";
+import { ProjectContactsStepComponent } from "./shared/project-contacts-step/project-contacts-step.component";
+import { ProjectAchievementStepComponent } from "./shared/project-achievement-step/project-achievement-step.component";
+import { ProjectVacancyStepComponent } from "./shared/project-vacancy-step/project-vacancy-step.component";
+import { ProjectVacancyService } from "./services/project-vacancy.service";
+import { ProjectTeamStepComponent } from "./shared/project-team-step/project-team-step.component";
+import { ProjectTeamService } from "./services/project-team.service";
+import { ProjectAdditionalStepComponent } from "./shared/project-additional-step/project-additional-step.component";
+import { ProjectAdditionalService } from "./services/project-additional.service";
+import { ProjectAchievementsService } from "./services/project-achievements.service";
 
+/**
+ * Компонент редактирования проекта
+ *
+ * Функциональность:
+ * - Многошаговое редактирование проекта (основная информация, контакты, достижения, вакансии, команда)
+ * - Управление формами для проекта, вакансий и приглашений
+ * - Загрузка файлов (презентация, обложка, аватар)
+ * - Создание и редактирование вакансий с навыками
+ * - Приглашение участников в команду
+ * - Управление достижениями и ссылками проекта
+ * - Сохранение как черновик или публикация
+ *
+ * Принимает:
+ * - ID проекта из URL параметров
+ * - Данные проекта и приглашений через resolver
+ * - Query параметр editingStep для определения активного шага
+ *
+ * Возвращает:
+ * - Интерфейс редактирования с навигацией по шагам
+ * - Формы для ввода данных проекта
+ * - Модальные окна для управления навыками и приглашениями
+ *
+ * Особенности:
+ * - Реактивные формы с валидацией
+ * - Динамическое управление массивами (достижения, ссылки)
+ * - Интеграция с внешними сервисами (навыки, программы)
+ * - Поддержка автокомплита для навыков
+ */
 @Component({
   selector: "app-edit",
   templateUrl: "./edit.component.html",
@@ -71,261 +87,147 @@ import { stripNullish } from "@utils/stripNull";
     ReactiveFormsModule,
     CommonModule,
     RouterModule,
-    AvatarControlComponent,
-    InputComponent,
     IconComponent,
     ButtonComponent,
-    SelectComponent,
-    TextareaComponent,
-    UploadFileComponent,
-    InviteCardComponent,
-    VacancyCardComponent,
-    LinkCardComponent,
-    TagComponent,
     ModalComponent,
     AsyncPipe,
-    ControlErrorPipe,
-    AutoCompleteInputComponent,
-    SkillsBasketComponent,
     SkillsGroupComponent,
-    BarComponent,
-    TextareaComponent,
-    CheckboxComponent,
+    ProjectNavigationComponent,
+    ProjectMainStepComponent,
+    ProjectContactsStepComponent,
+    ProjectAchievementStepComponent,
+    ProjectVacancyStepComponent,
+    ProjectTeamStepComponent,
+    ProjectAdditionalStepComponent,
   ],
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly fb: FormBuilder,
     private readonly industryService: IndustryService,
     protected readonly projectService: ProjectService,
     private readonly navService: NavService,
     private readonly validationService: ValidationService,
-    private readonly vacancyService: VacancyService,
-    private readonly inviteService: InviteService,
     private readonly cdRef: ChangeDetectorRef,
     private readonly programService: ProgramService,
-    private readonly skillsService: SkillsService
-  ) {
-    this.projectForm = this.fb.group({
-      imageAddress: [""],
-      name: ["", [Validators.required]],
-      region: ["", [Validators.required]],
-      step: [null, [Validators.required]],
-      track: [""],
-      direction: [""],
-      links: this.fb.array([]),
-      link: [""],
-      industryId: [undefined, [Validators.required]],
-      description: ["", [Validators.required]],
-      presentationAddress: ["", [Validators.required]],
-      coverImageAddress: ["", Validators.required],
-      actuality: ["", [Validators.max(1000)]],
-      goal: ["", [Validators.required, Validators.max(500)]],
-      problem: ["", [Validators.required, Validators.max(1000)]],
-      partnerProgramId: [null],
-      achievements: this.fb.array([]),
-      achievementsName: [""],
-      achievementsPrize: [""],
-      draft: [null],
-    });
+    private readonly projectStepService: ProjectStepService,
+    private readonly projectFormService: ProjectFormService,
+    private readonly projectVacancyService: ProjectVacancyService,
+    private readonly projectTeamService: ProjectTeamService,
+    private readonly projectAchievementsService: ProjectAchievementsService,
+    private readonly skillsService: SkillsService,
+    private readonly projectAdditionalService: ProjectAdditionalService
+  ) {}
 
-    this.vacancyForm = this.fb.group({
-      role: [null],
-      skills: [[]],
-      description: [""],
-      requiredExperience: [null],
-      workFormat: [null],
-      salary: [""],
-      workSchedule: [null],
-      specialization: [null],
-    });
-
-    this.inviteForm = this.fb.group({
-      role: ["", [Validators.required]],
-      // eslint-disable-next-line
-      link: [
-        "",
-        [
-          Validators.required,
-          Validators.pattern(/^http(s)?:\/\/.+(:[0-9]*)?\/office\/profile\/\d+$/),
-        ],
-      ],
-      specialization: [null],
-    });
+  // Получаем форму проекта из сервиса
+  get projectForm(): FormGroup {
+    return this.projectFormService.getForm();
   }
 
-  projectForm: FormGroup;
-  vacancyForm: FormGroup;
-  inviteForm: FormGroup;
+  // Получаем форму вакансии из сервиса
+  get vacancyForm(): FormGroup {
+    return this.projectVacancyService.getVacancyForm();
+  }
+
+  // Получаем форму вакансии из сервиса
+  get additionalForm(): FormGroup {
+    return this.projectAdditionalService.getAdditionalForm();
+  }
+
+  // Получаем сигналы из сервиса
+  get achievements() {
+    return this.projectFormService.achievements;
+  }
+
+  // Id редатируемой части проекта
+  get editIndex() {
+    return this.projectFormService.editIndex;
+  }
+
+  // Id связи проекта и программы
+  get relationId() {
+    return this.projectFormService.relationId;
+  }
+
+  // Геттеры для доступа к данным из сервиса дополнительных полей
+  get partnerProgramFields() {
+    return this.projectAdditionalService.getPartnerProgramFields();
+  }
+
+  get isAssignProjectToProgramError() {
+    return this.projectAdditionalService.getIsAssignProjectToProgramError()();
+  }
+
+  get errorAssignProjectToProgramModalMessage() {
+    return this.projectAdditionalService.getErrorAssignProjectToProgramModalMessage();
+  }
+
+  // Методы для управления состоянием ошибок через сервис
+  setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
+    this.projectAdditionalService.setAssignProjectToProgramError(error);
+  }
+
+  clearAssignProjectToProgramError(): void {
+    this.projectAdditionalService.clearAssignProjectToProgramError();
+  }
 
   ngOnInit(): void {
     this.navService.setNavTitle("Создание проекта");
-    const controls: (AbstractControl | null)[] = [
-      this.inviteForm.get("role"),
-      this.inviteForm.get("link"),
-      this.inviteForm.get("specialization"),
-      this.vacancyForm.get("role"),
-      this.vacancyForm.get("skills"),
-      this.vacancyForm.get("description"),
-      this.vacancyForm.get("requiredExperience"),
-      this.vacancyForm.get("workFormat"),
-      this.vacancyForm.get("salary"),
-      this.vacancyForm.get("workSchedule"),
-      this.vacancyForm.get("specialization"),
-    ];
 
-    controls.filter(Boolean).forEach(control => {
-      this.subscriptions.push(
-        control?.valueChanges
-          .pipe(
-            distinctUntilChanged(),
-            tap(() => {
-              if (control === this.inviteForm.get("link") && this.inviteNotExistingError) {
-                this.inviteNotExistingError = null;
-              }
-            }),
-            filter(value => value === "")
-          )
-          .subscribe(() => {
-            if (control === this.inviteForm.get("link")) {
-              control?.clearValidators();
-            } else {
-              control?.removeValidators([Validators.required]);
-            }
-            control?.updateValueAndValidity();
-          })
-      );
-    });
+    // Получение текущего шага редактирования из query параметров
+    this.setupEditingStep();
 
-    this.projectForm
-      .get("presentationAddress")
-      ?.valueChanges.pipe(
-        filter(r => !r),
-        concatMap(() =>
-          this.projectService.updateProject(Number(this.route.snapshot.params["projectId"]), {
-            presentationAddress: "",
-            draft: true,
-          })
-        )
-      )
-      .subscribe(() => {});
-
-    this.projectForm
-      .get("coverImageAddress")
-      ?.valueChanges.pipe(
-        filter(r => !r),
-        concatMap(() =>
-          this.projectService.updateProject(Number(this.route.snapshot.params["projectId"]), {
-            coverImageAddress: "",
-            draft: true,
-          })
-        )
-      )
-      .subscribe(() => {});
-
-    this.editingStep = this.route.snapshot.queryParams["editingStep"];
+    // Получение Id лидера проекта
+    this.setupLeaderIdSubscription();
   }
 
   ngAfterViewInit(): void {
-    this.programService
-      .programTags()
-      .pipe(
-        tap(tags => {
-          this.programTags = tags;
-        }),
-        map(tags => [
-          { label: "Без тега", value: 0, id: 0 },
-          ...tags.map(t => ({ label: t.name, value: t.id, id: t.id })),
-        ]),
-        tap(tags => {
-          this.programTagsOptions = tags;
-        }),
-        concatMap(() => this.route.data),
-        map(d => d["data"])
-      )
-      .subscribe(([project, invites]: [Project, Invite[]]) => {
-        this.projectForm.patchValue({
-          imageAddress: project.imageAddress,
-          name: project.name,
-          region: project.region,
-          step: project.step,
-          industryId: project.industry,
-          description: project.description,
-          track: project.track,
-          direction: project.direction,
-          actuality: project.actuality ?? "",
-          goal: project.goal ?? "",
-          problem: project.problem ?? "",
-          presentationAddress: project.presentationAddress,
-          coverImageAddress: project.coverImageAddress,
-        });
-
-        if (project.partnerProgramsTags?.length) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          const tag = this.programTags.find(p => p.tag === project.partnerProgramsTags[0]);
-
-          this.projectForm.patchValue({
-            partnerProgramId: tag?.id,
-          });
-        } else {
-          this.projectForm.patchValue({
-            partnerProgramId: null,
-          });
-        }
-
-        this.achievements.clear();
-        project.achievements.forEach(achievement => {
-          this.achievements.push(
-            this.fb.group({
-              id: achievement.id,
-              title: achievement.title,
-              status: achievement.status,
-            })
-          );
-        });
-
-        this.links.clear();
-        project.links.forEach(link => {
-          this.links.push(this.fb.control(link));
-        });
-
-        this.vacancies = project.vacancies;
-
-        this.invites = invites;
-
-        this.cdRef.detectChanges();
-      });
+    // Загрузка данных программных тегов и проекта
+    this.loadProgramTagsAndProject();
   }
-
-  programTagsOptions: SelectComponent["options"] = [];
-  programTags: ProgramTag[] = [];
 
   ngOnDestroy(): void {
     this.profile$?.unsubscribe();
     this.subscriptions.forEach($ => $?.unsubscribe());
   }
 
-  /**
-   * Current step of toggle, that navigates through
-   * parts of project info
-   */
-  editingStep: "main" | "contacts" | "achievements" | "vacancies" | "team" = "main";
+  // Опции для программных тегов
+  programTagsOptions: SelectComponent["options"] = [];
+  programTags: ProgramTag[] = [];
 
+  // Id Лидера проекта
+  leaderId = 0;
+
+  // Маркер того является ли проект привязанный к конкурсной программе
+  isCompetitive = false;
+
+  // Текущий шаг редактирования
+  get editingStep(): EditStep {
+    return this.projectStepService.getCurrentStep()();
+  }
+
+  // Состояние компонента
   isCompleted = false;
+  isSendDescisionToPartnerProgramProject = false;
 
   profile$?: Subscription;
-
   errorMessage = ErrorMessage;
 
+  // Сигналы для работы с модальными окнами с ошибкой
   errorModalMessage = signal<{
     program_name: string;
     whenCanEdit: string;
     daysUntilResolution: string;
   } | null>(null);
 
+  onEditClicked = signal(false);
+  warningModalSeen = false;
+
+  // Сигналы для работы с модальными окнами с текстом
+  assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
+
+  // Observables для данных
   industries$ = this.industryService.industries.pipe(
     map(industries =>
       industries.map(industry => ({ value: industry.id, id: industry.id, label: industry.name }))
@@ -338,239 +240,54 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   subscriptions: (Subscription | undefined)[] = [];
 
-  readonly navItems = navItems;
-
-  readonly experienceList = experienceList;
-
-  readonly formatList = formatList;
-
-  readonly scheludeList = scheludeList;
-
-  readonly trackList = trackProjectList;
-
-  readonly directionList = directionProjectList;
-
-  readonly rolesMembersList = rolesMembersList;
-
   profileId: number = this.route.snapshot.params["projectId"];
 
-  vacancies: Vacancy[] = [];
-
+  // Сигналы для управления состоянием
   inlineSkills = signal<Skill[]>([]);
-
   nestedSkills$ = this.skillsService.getSkillsNested();
-
   skillsGroupsModalOpen = signal(false);
-  isInviteModalOpen = signal(false);
+  isAssignProjectToProgramModalOpen = signal(false);
 
-  vacancySubmitInitiated = false;
-  vacancyIsSubmitting = false;
-
-  selectedRequiredExperienceId = signal<number | undefined>(undefined);
-  selectedWorkFormatId = signal<number | undefined>(undefined);
-  selectedWorkScheduleId = signal<number | undefined>(undefined);
-  selectedVacanciesSpecializationId = signal<number | undefined>(undefined);
-
-  onEditClicked = signal(false);
-
-  submitVacancy(): void {
-    [
-      "role",
-      "skills",
-      "description",
-      "requiredExperience",
-      "workFormat",
-      "salary",
-      "workSchedule",
-      "specialization",
-    ].forEach(name => this.vacancyForm.get(name)?.clearValidators());
-
-    ["role", "skills", "requiredExperience", "workFormat", "workSchedule"].forEach(name =>
-      this.vacancyForm.get(name)?.setValidators([Validators.required])
-    );
-
-    this.vacancyForm
-      .get("salary")
-      ?.setValidators([Validators.pattern("^(\\d{1,3}( \\d{3})*|\\d+)$")]);
-
-    ["role", "skills", "requiredExperience", "workFormat", "salary", "workSchedule"].forEach(name =>
-      this.vacancyForm.get(name)?.updateValueAndValidity()
-    );
-
-    ["role", "skills"].forEach(name => this.vacancyForm.get(name)?.markAsTouched());
-
-    this.vacancySubmitInitiated = true;
-
-    if (!this.validationService.getFormValidation(this.vacancyForm)) return;
-
-    this.vacancyIsSubmitting = true;
-    const vacancy = {
-      ...this.vacancyForm.value,
-      requiredSkillsIds: this.vacancyForm.value.skills.map((s: Skill) => s.id),
-      salary:
-        typeof this.vacancyForm.get("salary")?.value === "string"
-          ? +this.vacancyForm.get("salary")?.value
-          : null,
-    };
-    this.vacancyService
-      .postVacancy(Number(this.route.snapshot.paramMap.get("projectId")), vacancy)
-      .subscribe({
-        next: vacancy => {
-          this.vacancies.push(vacancy);
-          [
-            "role",
-            "skills",
-            "description",
-            "requiredExperience",
-            "workFormat",
-            "salary",
-            "workSchedule",
-            "specialization",
-          ].forEach(name => {
-            this.vacancyForm.get(name)?.reset();
-            this.vacancyForm.get(name)?.setValue("");
-            this.vacancyForm.get(name)?.setValue([]);
-            this.vacancyForm.get(name)?.clearValidators();
-            this.vacancyForm.get(name)?.markAsPristine();
-            this.vacancyForm.get(name)?.updateValueAndValidity();
-            this.vacancyForm.reset();
-          });
-          this.vacancyIsSubmitting = false;
-        },
-        error: () => {
-          this.vacancyIsSubmitting = false;
-        },
-      });
-  }
-
-  removeVacancy(vacancyId: number): void {
-    if (!confirm("Вы точно хотите удалить вакансию?")) return;
-
-    this.vacancyService.deleteVacancy(vacancyId).subscribe(() => {
-      const index = this.vacancies.findIndex(vacancy => vacancy.id === vacancyId);
-      this.vacancies.splice(index, 1);
-    });
-  }
-
-  editVacancy(index: number): void {
-    const vacancyItem = this.vacancies[index];
-
-    this.experienceList.forEach(experience => {
-      if (experience.value === vacancyItem.requiredExperience) {
-        this.selectedRequiredExperienceId.set(experience.id);
-      }
-    });
-
-    this.formatList.forEach(format => {
-      if (format.value === vacancyItem.workFormat) {
-        this.selectedWorkFormatId.set(format.id);
-      }
-    });
-
-    this.scheludeList.forEach(schelude => {
-      if (schelude.value === vacancyItem.workSchedule) {
-        this.selectedWorkScheduleId.set(schelude.id);
-      }
-    });
-
-    this.rolesMembersList.forEach(specialization => {
-      if (specialization.value === vacancyItem.specialization) {
-        this.selectedVacanciesSpecializationId.set(specialization.id);
-      }
-    });
-
-    this.vacancyForm.patchValue({
-      role: vacancyItem.role,
-      skills: vacancyItem.requiredSkills,
-      description: vacancyItem.description,
-      requiredExperience: vacancyItem.requiredExperience,
-      workFormat: vacancyItem.workFormat,
-      salary: vacancyItem.salary ?? null,
-      workSchedule: vacancyItem.workSchedule,
-      specialization: vacancyItem.specialization,
-    });
-
-    this.editIndex.set(index);
-
-    this.onEditClicked.set(true);
-  }
-
-  navigateStep(step: string): void {
-    this.router.navigate([], { queryParams: { editingStep: step } });
-    this.editingStep = step as "main" | "contacts" | "team" | "achievements" | "vacancies";
-  }
-
-  inviteSubmitInitiated = false;
-  inviteFormIsSubmitting = false;
-
-  inviteNotExistingError: Error | null = null;
-
-  invites: Invite[] = [];
-  invitesFill = this.invites.every(invite => invite.isAccepted !== null);
-
-  submitInvite(): void {
-    this.inviteSubmitInitiated = true;
-
-    if (!this.validationService.getFormValidation(this.inviteForm)) return;
-
-    this.inviteFormIsSubmitting = true;
-    const link = new URL(this.inviteForm.get("link")?.value);
-    const path = link.pathname.split("/");
-
-    this.inviteService
-      .sendForUser(
-        Number(path[path.length - 1]),
-        Number(this.route.snapshot.paramMap.get("projectId")),
-        this.inviteForm.get("role")?.value,
-        this.inviteForm.get("specialization")?.value
-      )
-      .subscribe({
-        next: invite => {
-          this.invites.push(invite);
-          this.inviteForm.reset();
-          this.inviteFormIsSubmitting = false;
-          this.isInviteModalOpen.set(false);
-        },
-        error: () => {
-          this.inviteFormIsSubmitting = false;
-        },
-      });
-  }
-
-  editInvitation({
-    inviteId,
-    role,
-    specialization,
-  }: {
-    inviteId: number;
-    role: string;
-    specialization: string;
-  }): void {
-    this.inviteService.updateInvite(inviteId, role, specialization).subscribe({
-      next: () => {
-        this.invites.map(invite => {
-          if (invite.id === inviteId) {
-            invite.role = role;
-            invite.specialization = specialization;
-          }
-          return this.invites;
-        });
-      },
-    });
-  }
-
-  removeInvitation(invitationId: number): void {
-    this.inviteService.revokeInvite(invitationId).subscribe(() => {
-      const index = this.invites.findIndex(invite => invite.id === invitationId);
-      this.invites.splice(index, 1);
-    });
-  }
-
+  // Состояние отправки форм
   projSubmitInitiated = false;
-
   projFormIsSubmittingAsPublished = false;
   projFormIsSubmittingAsDraft = false;
 
+  /**
+   * Навигация между шагами редактирования
+   * @param step - название шага
+   */
+  navigateStep(step: EditStep): void {
+    this.projectStepService.navigateToStep(step);
+  }
+
+  /**
+   * Привязка проекта к программе выбранной
+   * Перенаправление её на редактирование "нового" проекта
+   */
+  assignProjectToProgram(): void {
+    this.projectService
+      .assignProjectToProgram(
+        Number(this.route.snapshot.paramMap.get("projectId")),
+        this.projectForm.get("partnerProgramId")?.value
+      )
+      .subscribe({
+        next: r => {
+          this.assignProjectToProgramModalMessage.set(r);
+          this.isAssignProjectToProgramModalOpen.set(true);
+        },
+
+        error: err => {
+          if (err instanceof HttpErrorResponse) {
+            if (err.status === 400) {
+              this.setAssignProjectToProgramError(err.error);
+            }
+          }
+        },
+      });
+  }
+
+  // Методы для управления состоянием отправки форм
   setIsSubmittingAsPublished(status: boolean): void {
     this.projFormIsSubmittingAsPublished = status;
   }
@@ -581,92 +298,89 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setProjFormIsSubmitting!: (status: boolean) => void;
 
-  achievementsItems = signal<any[]>([]);
-
-  get achievements(): FormArray {
-    return this.projectForm.get("achievements") as FormArray;
-  }
-
-  addAchievement(): void {
-    const achievementItem = this.fb.group({
-      id: this.achievements.length,
-      title: this.projectForm.get("achievementsName")?.value,
-      status: this.projectForm.get("achievementsPrize")?.value,
-    });
-    if (this.editIndex() !== null) {
-      this.achievementsItems.update(items => {
-        const updatedItems = [...items];
-        updatedItems[this.editIndex()!] = achievementItem.value;
-        this.achievements.at(this.editIndex()!).patchValue(achievementItem.value);
-        return updatedItems;
-      });
-      this.editIndex.set(null);
+  /**
+   * Выполнение сохранения проекта
+   * Из дочернего компонента project-main-step через emit
+   *
+   * @param event тип проекта для публикации или для черновика
+   */
+  onSaveProject(event: { type: "draft" | "published" }): void {
+    if (event.type === "draft") {
+      this.saveProjectAsDraft();
     } else {
-      this.achievementsItems.update(items => [...items, achievementItem.value]);
-      this.achievements.push(achievementItem);
+      this.saveProjectAsPublished();
     }
-    this.projectForm.get("achievementsName")?.reset();
-    this.projectForm.get("achievementsPrize")?.reset();
   }
 
-  editAchievement(index: number) {
-    const achievementItem =
-      this.achievementsItems().length > 0
-        ? this.achievementsItems()[index]
-        : this.achievements.value[index];
-
-    this.projectForm.patchValue({
-      achievementsName: achievementItem.title,
-      achievementsPrize: achievementItem.status,
-    });
-    this.editIndex.set(index);
-  }
-
-  removeAchievement(i: number): void {
-    this.achievementsItems.update(items => items.filter((_, index) => index !== i));
-
-    this.achievements.removeAt(i);
-  }
-
+  /**
+   * Очистка всех ошибок валидации
+   */
   clearAllValidationErrors(): void {
-    Object.keys(this.projectForm.controls).forEach(ctrl => {
-      this.projectForm.get(ctrl)?.setErrors(null);
-    });
-    this.clearAllAchievementsErrors();
+    // Очистка основной формы
+    this.projectFormService.clearAllValidationErrors();
+    this.projectAchievementsService.clearAllAchievementsErrors(this.achievements);
   }
 
-  clearAllAchievementsErrors(): void {
-    this.achievements.controls.forEach(achievementForm => {
-      Object.keys(achievementForm).forEach(ctrl => {
-        this.projectForm.get(ctrl)?.setErrors(null);
-      });
-    });
-  }
-
+  /**
+   * Сохранение проекта как опубликованного с проверкой доп. полей
+   */
   saveProjectAsPublished(): void {
-    this.projSubmitInitiated = true;
     this.projectForm.get("draft")?.patchValue(false);
     this.setProjFormIsSubmitting = this.setIsSubmittingAsPublished;
-    this.submitProjectForm();
+
+    if (!this.isCompetitive) {
+      this.submitProjectForm();
+      return;
+    }
+
+    this.projectForm.markAllAsTouched();
+    this.projectFormService.achievements.markAllAsTouched();
+
+    const projectValid = this.validationService.getFormValidation(this.projectForm);
+    const additionalValid = this.validationService.getFormValidation(this.additionalForm);
+
+    if (!projectValid || !additionalValid) {
+      this.projSubmitInitiated = true;
+      this.cdRef.markForCheck();
+      return;
+    }
+
+    if (this.validateAdditionalFields()) {
+      this.projSubmitInitiated = true;
+      this.cdRef.markForCheck();
+      return;
+    }
+
+    this.isSendDescisionToPartnerProgramProject = true;
+    this.cdRef.markForCheck();
   }
 
+  /**
+   * Сохранение проекта как черновика
+   */
   saveProjectAsDraft(): void {
     this.clearAllValidationErrors();
     this.projectForm.get("draft")?.patchValue(true);
-
     this.setProjFormIsSubmitting = this.setIsSubmittingAsDraft;
     const partnerProgramId = this.projectForm.get("partnerProgramId")?.value;
-    this.projectForm.patchValue({ partnerProgramId: partnerProgramId });
+    this.projectForm.patchValue({ partnerProgramId });
     this.submitProjectForm();
   }
 
+  /**
+   * Отправка формы проекта
+   */
   submitProjectForm(): void {
-    this.achievements.controls.forEach(achievementForm => {
+    this.projectFormService.achievements.controls.forEach(achievementForm => {
       achievementForm.markAllAsTouched();
     });
-    const payload = stripNullish(this.projectForm.value);
 
-    if (!this.validationService.getFormValidation(this.projectForm)) {
+    const payload = this.projectFormService.getFormValue();
+
+    if (
+      !this.validationService.getFormValidation(this.projectForm) ||
+      !this.validationService.getFormValidation(this.additionalForm)
+    ) {
       return;
     }
 
@@ -684,56 +398,109 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  editIndex = signal<number | null>(null);
-
-  linksItems = signal<any[]>([]);
-
-  get links(): FormArray {
-    return this.projectForm.get("links") as FormArray;
-  }
-
-  addLink() {
-    const linkValue = this.projectForm.get("link")?.value;
-
-    if (linkValue) {
-      if (this.editIndex() !== null) {
-        this.links.at(this.editIndex()!).setValue(linkValue);
-        this.linksItems.update(items => {
-          const updatedItems = [...items];
-          updatedItems[this.editIndex()!] = linkValue;
-          return updatedItems;
-        });
-        this.editIndex.set(null);
-      } else {
-        this.links.push(this.fb.control(linkValue));
-        this.linksItems.update(items => [...items, linkValue]);
-      }
-      this.projectForm.get("link")?.reset();
-    }
-  }
-
-  editLink(index: number) {
-    const linkItem =
-      this.linksItems().length > 0 ? this.linksItems()[index] : this.links.value[index];
-
-    this.projectForm.patchValue({ link: linkItem });
-    this.editIndex.set(index);
-  }
-
-  removeLink(index: number) {
-    this.links.removeAt(index);
-    this.linksItems.update(items => items.filter((_, i) => i !== index));
-  }
-
-  warningModalSeen = false;
-
+  // Методы для работы с модальными окнами
   closeWarningModal(): void {
     this.warningModalSeen = true;
   }
 
-  onToggleSkill(toggledSkill: Skill): void {
+  closeSendingDescisionModal(): void {
+    this.isSendDescisionToPartnerProgramProject = false;
+
+    const projectId = Number(this.route.snapshot.params["projectId"]);
+    const relationId = this.relationId();
+
+    this.sendAdditionalFields(projectId, relationId);
+  }
+
+  closeAssignProjectToProgramModal(): void {
+    this.isAssignProjectToProgramModalOpen.set(false);
+    this.router.navigateByUrl(`/office/projects/my`);
+  }
+
+  /**
+   * Валидация дополнительных полей для публикации
+   * Делегирует валидацию сервису
+   * @returns true если есть ошибки валидации
+   */
+  private validateAdditionalFields(): boolean {
+    const partnerProgramFields = this.projectAdditionalService.getPartnerProgramFields();
+
+    if (!partnerProgramFields?.length) {
+      return false;
+    }
+
+    const hasInvalid = this.projectAdditionalService.validateRequiredFields();
+
+    if (hasInvalid) {
+      this.cdRef.markForCheck();
+      return true;
+    }
+
+    // Подготавливаем поля для отправки
+    this.projectAdditionalService.prepareFieldsForSubmit();
+    return false;
+  }
+
+  /**
+   * Отправка дополнительных полей через сервис
+   * @param projectId - ID проекта
+   * @param relationId - ID связи проекта и конкурсной программы
+   */
+  private sendAdditionalFields(projectId: number, relationId: number): void {
+    this.projectAdditionalService.sendAdditionalFieldsValues(projectId).subscribe({
+      next: () => {
+        this.projectAdditionalService.submitCompettetiveProject(relationId).subscribe(_ => {
+          this.submitProjectForm();
+        });
+      },
+      error: error => {
+        console.error("Error sending additional fields:", error);
+        this.setProjFormIsSubmitting(false);
+      },
+    });
+  }
+
+  /**
+   * Добавление навыка
+   * @param newSkill - новый навык
+   */
+  onAddSkill(newSkill: Skill): void {
+    const { skills }: { skills: Skill[] } = this.vacancyForm.value;
+    const isPresent = skills.some(skill => skill.id === newSkill.id);
+
+    if (isPresent) return;
+
+    this.vacancyForm.patchValue({ skills: [newSkill, ...skills] });
+  }
+
+  /**
+   * Удаление навыка
+   * @param oddSkill - навык для удаления
+   */
+  onRemoveSkill(oddSkill: Skill): void {
     const { skills }: { skills: Skill[] } = this.vacancyForm.value;
 
+    this.vacancyForm.patchValue({
+      skills: skills.filter(skill => skill.id !== oddSkill.id),
+    });
+  }
+
+  /**
+   * Поиск навыков
+   * @param query - поисковый запрос
+   */
+  onSearchSkill(query: string): void {
+    this.skillsService.getSkillsInline(query, 1000, 0).subscribe(({ results }) => {
+      this.inlineSkills.set(results);
+    });
+  }
+
+  /**
+   * Переключение навыка в списке выбранных
+   * @param toggledSkill - навык для переключения
+   */
+  onToggleSkill(toggledSkill: Skill): void {
+    const { skills }: { skills: Skill[] } = this.vacancyForm.value;
     const isPresent = skills.some(skill => skill.id === toggledSkill.id);
 
     if (isPresent) {
@@ -743,31 +510,76 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onAddSkill(newSkill: Skill): void {
-    const { skills }: { skills: Skill[] } = this.vacancyForm.value;
-
-    const isPresent = skills.some(skill => skill.id === newSkill.id);
-
-    if (isPresent) return;
-
-    this.vacancyForm.patchValue({ skills: [newSkill, ...skills] });
-  }
-
-  onRemoveSkill(oddSkill: Skill): void {
-    const { skills }: { skills: Skill[] } = this.vacancyForm.value;
-
-    this.vacancyForm.patchValue({
-      skills: skills.filter(skill => skill.id !== oddSkill.id),
-    });
-  }
-
-  onSearchSkill(query: string): void {
-    this.skillsService.getSkillsInline(query, 1000, 0).subscribe(({ results }) => {
-      this.inlineSkills.set(results);
-    });
-  }
-
+  /**
+   * Переключение модального окна групп навыков
+   */
   toggleSkillsGroupsModal(): void {
     this.skillsGroupsModalOpen.update(open => !open);
+  }
+
+  private setupEditingStep(): void {
+    const stepFromUrl = this.route.snapshot.queryParams["editingStep"] as EditStep;
+    if (stepFromUrl) {
+      this.projectStepService.setStepFromRoute(stepFromUrl);
+    }
+
+    const editingStepSub$ = this.route.queryParams.subscribe(params => {
+      const step = params["editingStep"] as EditStep;
+      if (step && step !== this.editingStep) {
+        this.projectStepService.setStepFromRoute(step);
+      }
+    });
+
+    this.subscriptions.push(editingStepSub$);
+  }
+
+  private setupLeaderIdSubscription(): void {
+    this.route.data
+      .pipe(
+        distinctUntilChanged(),
+        map(d => d["data"])
+      )
+      .subscribe(([project]: [Project]) => {
+        this.leaderId = project.leader;
+      });
+  }
+
+  private loadProgramTagsAndProject(): void {
+    this.programService
+      .programTags()
+      .pipe(
+        tap(tags => {
+          this.programTags = tags;
+        }),
+        map(tags => [
+          { label: "Без тега", value: 0, id: 0 },
+          ...tags.map(t => ({ label: t.name, value: t.id, id: t.id })),
+        ]),
+        tap(tags => {
+          this.programTagsOptions = tags;
+        }),
+        concatMap(() => this.route.data),
+        map(d => d["data"])
+      )
+      .subscribe(([project, invites]: [Project, Invite[]]) => {
+        // Используем сервис для инициализации данных проекта
+        this.projectFormService.initializeProjectData(project);
+        this.projectTeamService.setInvites(invites);
+
+        // Инициализируем дополнительные поля через сервис
+        if (project.partnerProgram) {
+          this.isCompetitive = project.partnerProgram.canSubmit;
+
+          this.projectAdditionalService.initializeAdditionalForm(
+            project.partnerProgram?.programFields,
+            project.partnerProgram?.programFieldValues
+          );
+        }
+
+        this.projectVacancyService.setVacancies(project.vacancies);
+        this.projectTeamService.setInvites(invites);
+
+        this.cdRef.detectChanges();
+      });
   }
 }

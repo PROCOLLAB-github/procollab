@@ -11,18 +11,24 @@ import {
   map,
   merge,
   noop,
-  Observable,
-  Subscription,
+  type Observable,
+  type Subscription,
   throttleTime,
 } from "rxjs";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { TokenService } from "@corelib";
 
+/**
+ * Корневой компонент приложения
+ *
+ * Основной компонент, который служит точкой входа в приложение.
+ * Содержит router-outlet для отображения различных страниц приложения.
+ */
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
-  styleUrl: "./app.component.scss",
+  styleUrls: ["./app.component.scss"],
   standalone: true,
   imports: [NgIf, MatProgressBarModule, RouterOutlet, AsyncPipe],
 })

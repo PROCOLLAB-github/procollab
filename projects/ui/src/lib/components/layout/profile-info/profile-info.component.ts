@@ -1,11 +1,25 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, type OnInit, Output } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { DayjsPipe } from "projects/core";
 import { AvatarComponent, IconComponent } from "@uilib";
-import { User } from "../../../models/user.model";
+import type { User } from "../../../models/user.model";
 
+/**
+ * Компонент отображения информации о профиле пользователя
+ *
+ * Показывает аватар, имя пользователя, статус верификации и кнопку выхода.
+ * Поддерживает переход к профилю пользователя по клику.
+ *
+ * @example
+ * \`\`\`html
+ * <app-profile-info
+ *   [user]="currentUser"
+ *   (logout)="handleLogout()">
+ * </app-profile-info>
+ * \`\`\`
+ */
 @Component({
   selector: "app-profile-info",
   templateUrl: "./profile-info.component.html",
@@ -18,6 +32,9 @@ export class ProfileInfoComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  /** Данные пользователя для отображения */
   @Input({ required: true }) user!: User;
+
+  /** Событие выхода из системы */
   @Output() logout = new EventEmitter<void>();
 }

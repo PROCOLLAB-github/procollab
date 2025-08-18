@@ -11,6 +11,18 @@ import { SearchComponent } from "@ui/components/search/search.component";
 import { BarComponent, ButtonComponent, IconComponent } from "@ui/components";
 import { AsyncPipe } from "@angular/common";
 
+/**
+ * Главный компонент модуля проектов
+ * Управляет отображением списка проектов, поиском и созданием новых проектов
+ *
+ * Принимает:
+ * - Счетчики проектов через резолвер
+ * - Параметры поиска из URL
+ *
+ * Возвращает:
+ * - Интерфейс управления проектами с поиском и фильтрацией
+ * - Навигацию между разделами "Мои", "Все", "Подписки"
+ */
 @Component({
   selector: "app-projects",
   templateUrl: "./projects.component.html",

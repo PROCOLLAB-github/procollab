@@ -5,6 +5,11 @@ import { Component } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { BarComponent } from "@ui/components";
 
+/**
+ * Главный компонент модуля отслеживания карьерных траекторий
+ * Служит контейнером для дочерних компонентов и маршрутизации
+ * Отображает навигационную панель с вкладками "Траектории" и "Моя траектория"
+ */
 @Component({
   selector: "app-track-career",
   standalone: true,

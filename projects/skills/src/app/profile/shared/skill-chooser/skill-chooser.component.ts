@@ -14,16 +14,33 @@ import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { IconComponent } from "@uilib";
-import { PersonalRatingCardComponent } from "../personal-rating-card/personal-rating-card.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { SkillService } from "../../../skills/services/skill.service";
 import { Skill } from "projects/skills/src/models/skill.model";
 import { PersonalSkillCardComponent } from "../personal-skill-card/personal-skill-card.component";
 import { ProfileService } from "../../services/profile.service";
 import { Skill as ProfileSkill } from "projects/skills/src/models/profile.model";
-import { tap } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 
+/**
+ * Компонент выбора навыков для месячной подписки
+ *
+ * Позволяет пользователю выбрать 5 навыков из доступного списка.
+ * Поддерживает пагинацию, валидацию выбора и обработку ошибок подписки.
+ *
+ * @component SkillChooserComponent
+ * @selector app-skill-chooser
+ *
+ * @input open - Флаг отображения модального окна выбора
+ * @output openChange - Событие изменения состояния модального окна
+ *
+ * @property limit - Количество навыков на странице (3)
+ * @property offset - Смещение для пагинации
+ * @property currentPage - Текущая страница
+ * @property totalPages - Общее количество страниц (вычисляемое)
+ * @property skillsList - Список доступных навыков
+ * @property profileIdSkills - Выбранные навыки пользователя
+ */
 @Component({
   selector: "app-skill-chooser",
   standalone: true,
@@ -74,6 +91,10 @@ export class SkillChooserComponent implements OnInit {
     });
   }
 
+  /**
+   * Загружает список навыков с сервера с учетом пагинации
+   * Обрабатывает ошибку 403 (нет подписки)
+   */
   private loadSkills(): void {
     this.skillService.getAllMarked(this.limit, this.offset).subscribe({
       next: r => {
@@ -97,20 +118,32 @@ export class SkillChooserComponent implements OnInit {
     });
   }
 
+  /**
+   * Обрабатывает изменение состояния модального окна
+   */
   onOpenChange(event: boolean) {
     this.openChange.emit(event);
   }
 
+  /**
+   * Закрывает модальное окно и сохраняет выбранные навыки
+   */
   onCloseModal() {
     this.openChange.emit(false);
     this.profileService.addSkill(this.profileIdSkills()).subscribe();
   }
 
+  /**
+   * Закрывает модальное окно подписки
+   */
   onSubscriptionModalClosed() {
     this.nonConfirmerModalOpen.set(false);
     this.open = false;
   }
 
+  /**
+   * Переходит к предыдущей странице навыков
+   */
   prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage -= 1;
@@ -119,6 +152,9 @@ export class SkillChooserComponent implements OnInit {
     }
   }
 
+  /**
+   * Переходит к следующей странице навыков
+   */
   nextPage(): void {
     if (this.currentPage < this.totalPages()) {
       this.currentPage += 1;
@@ -127,6 +163,9 @@ export class SkillChooserComponent implements OnInit {
     }
   }
 
+  /**
+   * Обрабатывает изменение количества выбранных навыков
+   */
   onSelectedCountChange(count: number): void {
     this.selectedSkillsCount.set(count);
   }

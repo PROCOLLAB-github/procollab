@@ -5,7 +5,6 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  computed,
   ElementRef,
   OnDestroy,
   OnInit,
@@ -16,17 +15,7 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { expandElement } from "@utils/expand-element";
-import {
-  BehaviorSubject,
-  concatMap,
-  map,
-  noop,
-  Observable,
-  of,
-  Subscription,
-  switchMap,
-  tap,
-} from "rxjs";
+import { concatMap, map, noop, Observable, of, Subscription, switchMap } from "rxjs";
 import { ProfileNewsService } from "../services/profile-news.service";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ProfileNews } from "../models/profile-news.model";
@@ -41,6 +30,28 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
 import { Skill } from "@office/models/skill";
 
+/**
+ * Главный компонент страницы профиля пользователя
+ *
+ * Отображает основную информацию профиля пользователя, включая:
+ * - Раздел "Обо мне" с описанием и навыками пользователя
+ * - Ленту новостей пользователя с возможностью добавления, редактирования и удаления
+ * - Боковую панель с информацией о проектах, образовании, работе, достижениях и контактах
+ * - Систему подтверждения навыков другими пользователями
+ * - Модальные окна для детального просмотра подтверждений навыков
+ *
+ * Функциональность:
+ * - Управление новостями (CRUD операции)
+ * - Система лайков для новостей
+ * - Отслеживание просмотров новостей через Intersection Observer
+ * - Подтверждение/отмена подтверждения навыков пользователя
+ * - Раскрывающиеся списки для длинных списков (проекты, достижения и т.д.)
+ * - Адаптивное отображение контента
+ *
+ * @implements OnInit - для инициализации и загрузки новостей
+ * @implements AfterViewInit - для работы с DOM элементами
+ * @implements OnDestroy - для очистки подписок и observers
+ */
 @Component({
   selector: "app-profile-main",
   templateUrl: "./main.component.html",
@@ -78,6 +89,10 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   user: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
   loggedUserId: Observable<number> = this.authService.profile.pipe(map(user => user.id));
 
+  /**
+   * Инициализация компонента
+   * Загружает новости пользователя и настраивает Intersection Observer для отслеживания просмотров
+   */
   ngOnInit(): void {
     const route$ = this.route.params
       .pipe(
@@ -102,6 +117,10 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @ViewChild("descEl") descEl?: ElementRef;
+  /**
+   * Инициализация после создания представления
+   * Проверяет необходимость отображения кнопки "Читать полностью" для описания профиля
+   */
   ngAfterViewInit(): void {
     const descElement = this.descEl?.nativeElement;
     this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
@@ -109,6 +128,10 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cdRef.detectChanges();
   }
 
+  /**
+   * Очистка ресурсов при уничтожении компонента
+   * Отписывается от всех активных подписок
+   */
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
@@ -130,6 +153,10 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   news = signal<ProfileNews[]>([]);
 
+  /**
+   * Добавление новой новости в профиль
+   * @param news - объект с текстом и файлами новости
+   */
   onAddNews(news: { text: string; files: string[] }): void {
     this.profileNewsService.addNews(this.route.snapshot.params["id"], news).subscribe(newsRes => {
       this.newsFormComponent?.onResetForm();
@@ -137,6 +164,10 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  /**
+   * Удаление новости из профиля
+   * @param newsId - идентификатор удаляемой новости
+   */
   onDeleteNews(newsId: number): void {
     const newsIdx = this.news().findIndex(n => n.id === newsId);
     this.news().splice(newsIdx, 1);
@@ -144,6 +175,10 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     this.profileNewsService.delete(this.route.snapshot.params["id"], newsId).subscribe(() => {});
   }
 
+  /**
+   * Переключение лайка новости
+   * @param newsId - идентификатор новости для лайка/дизлайка
+   */
   onLike(newsId: number) {
     const item = this.news().find(n => n.id === newsId);
     if (!item) return;
@@ -156,6 +191,11 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  /**
+   * Редактирование существующей новости
+   * @param news - обновленные данные новости
+   * @param newsItemId - идентификатор редактируемой новости
+   */
   onEditNews(news: ProfileNews, newsItemId: number) {
     this.profileNewsService
       .editNews(this.route.snapshot.params["id"], newsItemId, news)
@@ -166,6 +206,11 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
+  /**
+   * Обработчик появления новостей в области видимости
+   * Отмечает новости как просмотренные при скролле
+   * @param entries - массив элементов, попавших в область видимости
+   */
   onNewsInView(entries: IntersectionObserverEntry[]): void {
     const ids = entries.map(e => {
       return Number((e.target as HTMLElement).dataset["id"]);
@@ -174,11 +219,23 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     this.profileNewsService.readNews(Number(this.route.snapshot.params["id"]), ids).subscribe(noop);
   }
 
+  /**
+   * Раскрытие/сворачивание описания профиля
+   * @param elem - DOM элемент описания
+   * @param expandedClass - CSS класс для раскрытого состояния
+   * @param isExpanded - текущее состояние (раскрыто/свернуто)
+   */
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
   }
 
+  /**
+   * Подтверждение или отмена подтверждения навыка пользователя
+   * @param skillId - идентификатор навыка
+   * @param event - событие клика для предотвращения всплытия
+   * @param skill - объект навыка для обновления
+   */
   onToggleApprove(skillId: number, event: Event, skill: Skill) {
     event.stopPropagation();
     const userId = this.route.snapshot.params["id"];
@@ -212,10 +269,19 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   openSkills: any = {};
 
+  /**
+   * Открытие модального окна с информацией о подтверждениях навыка
+   * @param skillId - идентификатор навыка
+   */
   onOpenSkill(skillId: number) {
     this.openSkills[skillId] = !this.openSkills[skillId];
   }
 
+  /**
+   * Обработчик изменения состояния модального окна навыка
+   * @param event - новое состояние модального окна
+   * @param skillId - идентификатор навыка
+   */
   onOpenChange(event: boolean, skillId: number) {
     if (this.openSkills[skillId] && !event) {
       this.openSkills[skillId] = false;

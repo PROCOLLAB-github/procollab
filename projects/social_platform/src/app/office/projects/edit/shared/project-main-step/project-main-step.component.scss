@@ -1,0 +1,199 @@
+/** @format */
+
+@use "styles/responsive";
+@use "styles/typography";
+
+.project {
+  &__inner {
+    width: 100%;
+    margin-bottom: 25px;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      gap: 90px;
+      justify-content: space-between;
+      margin-bottom: 0;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__inner > fieldset:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  &__left {
+    flex-basis: 50%;
+    margin-bottom: 20px;
+
+    form {
+      width: 280px;
+
+      @include responsive.apply-desktop {
+        width: 600px;
+      }
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    color: var(--black);
+    background-color: var(--white);
+    border: 1px solid var(--grey-button);
+    border-radius: var(--rounded-md);
+
+    @include responsive.apply-desktop {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 24px;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__right {
+    flex-basis: 50%;
+
+    :first-child & :not(span, fieldset, label, h4, p, i) {
+      margin-top: 26px;
+      margin-bottom: 10px;
+    }
+
+    :last-child & :not(i, span) {
+      margin-top: 10px;
+    }
+  }
+
+  &__generals {
+    margin-bottom: 10px;
+
+    :first-child {
+      margin-bottom: 10px;
+    }
+  }
+
+  &__tags {
+    margin-bottom: 10px;
+  }
+
+  &__additional {
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+
+      ::ng-deep {
+        app-input {
+          input {
+            color: var(--black) !important;
+
+            @include typography.body-10;
+          }
+        }
+
+        app-textarea {
+          textarea {
+            color: var(--black) !important;
+
+            @include typography.body-10;
+          }
+        }
+
+        app-select {
+          .field__input {
+            color: var(--black) !important;
+
+            &--placeholder {
+              color: var(--grey-for-text) !important;
+            }
+
+            @include typography.body-10;
+          }
+        }
+      }
+
+      @include responsive.apply-desktop {
+        width: 60%;
+
+        ::ng-deep {
+          app-input {
+            input {
+              @include typography.body-14;
+            }
+          }
+
+          app-textarea {
+            textarea {
+              @include typography.body-14;
+            }
+          }
+
+          app-select {
+            .field__input {
+              @include typography.body-14;
+            }
+          }
+        }
+      }
+    }
+
+    fieldset {
+      margin-bottom: 10px;
+    }
+  }
+
+  &__image {
+    display: block;
+    margin-bottom: 20px;
+
+    .error {
+      margin-top: 15px;
+    }
+  }
+
+  &__avatar {
+    margin-bottom: 20px;
+  }
+
+  &__file {
+    min-width: 0;
+  }
+
+  &__slides-title {
+    max-width: 320px;
+    margin-top: 12px;
+    color: var(--black);
+    text-align: center;
+  }
+
+  &__slides-text {
+    max-width: 275px;
+    margin-top: 12px;
+    color: var(--dark-grey);
+    text-align: center;
+  }
+
+  &__slides-error {
+    margin-top: 12px;
+    color: var(--red);
+  }
+
+  &__slides-open-file {
+    color: var(--accent);
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--accent-dark);
+    }
+  }
+}

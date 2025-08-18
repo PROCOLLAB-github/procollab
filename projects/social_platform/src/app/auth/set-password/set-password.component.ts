@@ -8,6 +8,22 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "@auth/services";
 import { ButtonComponent, InputComponent } from "@ui/components";
 
+/**
+ * Компонент установки нового пароля
+ *
+ * Назначение: Позволяет пользователю установить новый пароль после сброса
+ * Принимает: Новый пароль, подтверждение пароля, токен сброса из URL
+ * Возвращает: Перенаправление на страницу входа при успехе или отображение ошибок
+ *
+ * Функциональность:
+ * - Форма с полями нового пароля и его подтверждения
+ * - Валидация длины пароля (минимум 8 символов)
+ * - Проверка совпадения паролей
+ * - Показ/скрытие пароля
+ * - Получение токена сброса из query параметров
+ * - Отправка нового пароля на сервер
+ * - Перенаправление на страницу входа при успехе
+ */
 @Component({
   selector: "app-set-password",
   templateUrl: "./set-password.component.html",
@@ -39,7 +55,13 @@ export class SetPasswordComponent implements OnInit {
 
   showPassword = false;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const token = this.route.snapshot.queryParamMap.get("token");
+    if (!token) {
+      // Handle the case where token is not present
+      console.error("Token is missing");
+    }
+  }
 
   toggleShowPassword() {
     this.showPassword = !this.showPassword;
@@ -53,6 +75,10 @@ export class SetPasswordComponent implements OnInit {
     this.authService.setPassword(this.passwordForm.value.password, token).subscribe({
       next: () => {
         this.router.navigateByUrl("/auth/login").then(() => console.debug("SetPasswordComponent"));
+      },
+      error: error => {
+        console.error("Error setting password:", error);
+        this.errorRequest = true;
       },
     });
   }

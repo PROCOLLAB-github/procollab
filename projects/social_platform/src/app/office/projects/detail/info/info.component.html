@@ -103,11 +103,24 @@
           }
           <a
             class="info__edit"
-            [routerLink]="['/office/projects', project.id, 'edit']"
-            [queryParams]="{ editingStep: 'main' }"
+            [routerLink]="
+              isEditDisable
+                ? ['/office/projects', project.id]
+                : ['/office/projects', project.id, 'edit']
+            "
+            [queryParams]="isEditDisable ? {} : { editingStep: 'main' }"
           >
             @if (profile.id === project.leader) {
-            <app-button customTypographyClass="text-body-12"> Редактировать </app-button>
+            <app-button
+              customTypographyClass="text-body-12"
+              (click)="onUnableEditingProject()"
+              [ngStyle]="{
+                opacity: isEditDisable ? '0.5' : '1',
+              }"
+              [color]="isEditDisable ? 'grey' : 'primary'"
+            >
+              Редактировать
+            </app-button>
             }
           </a>
           @if (isInProject | async) {
@@ -370,6 +383,63 @@
           (click)="onCloseLeaderLeaveModal()"
         >
           Хорошо
+        </app-button>
+      </div>
+    </div>
+  </app-modal>
+
+  <app-modal [(open)]="isEditDisableModal">
+    <div
+      class="unsubscribe-modal"
+      style="text-align: center; padding: 20px 80px 20px; position: relative"
+    >
+      <i
+        style="right: 0px; top: 0px"
+        class="support__cross"
+        appIcon
+        icon="cross"
+        appSquare="24"
+        (click)="isEditDisableModal = false"
+      ></i>
+      <img
+        src="assets/images/projects/shared/edit_disable.svg"
+        alt="idea"
+        class="unsubscribe-modal__img"
+      />
+      <h4 class="support__title">Редактирование недоступно</h4>
+
+      <p class="support__text text-body-12" style="max-width: 100%">
+        Этот проект уже отправлен на конкурс. <br />Изменения будут доступны только после окончания
+        конкурса.
+      </p>
+
+      <app-button
+        color="grey"
+        style="width: 50%"
+        customTypographyClass="text-body-12"
+        (click)="isEditDisableModal = false"
+        >Отмена</app-button
+      >
+    </div>
+  </app-modal>
+
+  <app-modal [(open)]="isUnsubscribeModalOpen">
+    <div class="unsubscribe-modal">
+      <h3>Вы действительно хотите отписаться от проекта?</h3>
+      <app-avatar [url]="project.imageAddress" [size]="130"></app-avatar>
+      <div class="unsubscribe-modal__buttons">
+        <app-button
+          color="red"
+          customTypographyClass="unsubscribe-modal-btn__typography"
+          (click)="onUnsubscribe(project.id)"
+        >
+          Отписаться
+        </app-button>
+        <app-button
+          customTypographyClass="unsubscribe-modal-btn__typography"
+          (click)="onCloseUnsubscribeModal()"
+        >
+          Отменить
         </app-button>
       </div>
     </div>

@@ -16,6 +16,22 @@ import { CircleProgressBarComponent } from "../../shared/circle-progress-bar/cir
 import { TaskCardComponent } from "../../shared/task-card/task-card.component";
 import { SkillDetailResolve } from "./detail.resolver";
 
+/**
+ * Компонент детальной страницы навыка
+ *
+ * Отображает подробную информацию о навыке, прогресс пользователя,
+ * статистику по неделям и список задач
+ *
+ * Принимает данные через резолвер маршрута:
+ * - Информацию о задачах и статистике пользователя
+ * - Детальную информацию о навыке
+ *
+ * Функциональность:
+ * - Отображение прогресса в виде круговой диаграммы
+ * - Навигация к задачам по клику
+ * - Адаптивная высота блоков
+ * - Фильтрация выполненных недель
+ */
 @Component({
   selector: "app-detail",
   standalone: true,

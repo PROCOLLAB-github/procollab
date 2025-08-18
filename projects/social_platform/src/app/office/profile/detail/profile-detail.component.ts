@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, OnInit, signal } from "@angular/core";
-import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from "@angular/router";
+import { ActivatedRoute, RouterLink, RouterOutlet } from "@angular/router";
 import { map, Observable } from "rxjs";
 import { User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
@@ -11,12 +11,30 @@ import { BreakpointObserver } from "@angular/cdk/layout";
 import { YearsFromBirthdayPipe } from "projects/core";
 import { BarComponent, ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { BackComponent } from "@uilib";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { calculateProfileProgress } from "@utils/calculateProgress";
 import { ProfileService as SkillsProfileService } from "projects/skills/src/app/profile/services/profile.service";
 
+/**
+ * Компонент детального просмотра профиля пользователя
+ *
+ * Основной компонент для отображения полной информации о пользователе, включая:
+ * - Аватар с индикатором онлайн-статуса
+ * - Основную информацию (имя, возраст, специальность, город)
+ * - Кнопки действий (написать сообщение, редактировать профиль, скачать CV)
+ * - Навигационную панель для переключения между разделами
+ * - Модальные окна для различных уведомлений
+ *
+ * Функциональность:
+ * - Отображение профиля текущего или другого пользователя
+ * - Отправка CV на email с ограничениями по времени
+ * - Проверка статуса подписки для доступа к функциям
+ * - Адаптивный дизайн для мобильных и десктопных устройств
+ * - Интеграция с чат-сервисом для отправки сообщений
+ *
+ * @implements OnInit - для инициализации компонента и загрузки данных
+ */
 @Component({
   selector: "app-profile-detail",
   templateUrl: "./profile-detail.component.html",
@@ -24,7 +42,6 @@ import { ProfileService as SkillsProfileService } from "projects/skills/src/app/
   standalone: true,
   imports: [
     CommonModule,
-    RouterLinkActive,
     RouterLink,
     AvatarComponent,
     IconComponent,
@@ -33,7 +50,6 @@ import { ProfileService as SkillsProfileService } from "projects/skills/src/app/
     AsyncPipe,
     YearsFromBirthdayPipe,
     BarComponent,
-    BackComponent,
     ModalComponent,
   ],
 })
@@ -63,10 +79,16 @@ export class ProfileDetailComponent implements OnInit {
   tooltipText = "Заполни до конца — и открой весь функционал платформы!";
   isHintVisible = false;
 
+  /**
+   * Показать подсказку для незаполненного профиля
+   */
   showTooltip() {
     this.isHintVisible = true;
   }
 
+  /**
+   * Скрыть подсказку для незаполненного профиля
+   */
   hideTooltip() {
     this.isHintVisible = false;
   }
@@ -76,6 +98,11 @@ export class ProfileDetailComponent implements OnInit {
     .observe("(min-width: 920px)")
     .pipe(map(result => result.matches));
 
+  /**
+   * Инициализация компонента
+   * Настраивает заголовок навигации, проверяет статус подписки,
+   * определяет необходимость заполнения профиля
+   */
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль");
 
@@ -89,26 +116,10 @@ export class ProfileDetailComponent implements OnInit {
     });
   }
 
-  downloadCV() {
-    // this.authService.downloadCV().subscribe({
-    //   next: (response: Blob) => {
-    //     // Создаем URL для Blob
-    //     const blob = new Blob([response], { type: "application/pdf" });
-    //     const link = document.createElement("a");
-    //     link.href = window.URL.createObjectURL(blob);
-    //     link.download = "download.pdf"; // Имя файла для скачивания
-    //     link.click();
-    //     window.URL.revokeObjectURL(link.href);
-    //   },
-    //   error: err => {
-    //     if (err.status === 400) {
-    //       this.errorMessageModal.set(err.error.slice(23, 25));
-    //       this.isDelayModalOpen = true;
-    //     }
-    //   },
-    // });
-  }
-
+  /**
+   * Отправка CV пользователя на email
+   * Проверяет ограничения по времени и отправляет CV на почту пользователя
+   */
   sendCVEmail() {
     this.authService.sendCV().subscribe({
       next: () => {

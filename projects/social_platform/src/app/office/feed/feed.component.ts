@@ -14,7 +14,6 @@ import {
 import { CommonModule } from "@angular/common";
 import { OpenVacancyComponent } from "@office/feed/shared/open-vacancy/open-vacancy.component";
 import { NewProjectComponent } from "@office/feed/shared/new-project/new-project.component";
-import { ClosedVacancyComponent } from "@office/feed/shared/closed-vacancy/closed-vacancy.component";
 import { ActivatedRoute } from "@angular/router";
 import { FeedItem, FeedItemType } from "@office/feed/models/feed-item.model";
 import { concatMap, fromEvent, map, noop, of, skip, Subscription, tap, throttleTime } from "rxjs";
@@ -25,6 +24,25 @@ import { ProjectNewsService } from "@office/projects/detail/services/project-new
 import { ProfileNewsService } from "@office/profile/detail/services/profile-news.service";
 import { FeedFilterComponent } from "@office/feed/filter/feed-filter.component";
 
+/**
+ * ОСНОВНОЙ КОМПОНЕНТ ЛЕНТЫ НОВОСТЕЙ
+ *
+ * Главный компонент для отображения ленты новостей, вакансий и проектов.
+ * Поддерживает бесконечную прокрутку, фильтрацию и отслеживание просмотров.
+ *
+ * ОСНОВНЫЕ ФУНКЦИИ:
+ * - Отображение элементов ленты (новости, вакансии, проекты)
+ * - Бесконечная прокрутка для подгрузки новых элементов
+ * - Фильтрация по типам контента
+ * - Отслеживание просмотров элементов
+ * - Лайки новостей
+ *
+ * ИСПОЛЬЗУЕМЫЕ СИГНАЛЫ:
+ * - totalItemsCount: общее количество элементов
+ * - feedItems: массив элементов ленты
+ * - feedPage: текущая страница для пагинации
+ * - includes: активные фильтры
+ */
 @Component({
   selector: "app-feed",
   standalone: true,
@@ -32,7 +50,6 @@ import { FeedFilterComponent } from "@office/feed/filter/feed-filter.component";
     CommonModule,
     OpenVacancyComponent,
     NewProjectComponent,
-    ClosedVacancyComponent,
     NewsCardComponent,
     FeedFilterComponent,
   ],
@@ -46,13 +63,23 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   profileNewsService = inject(ProfileNewsService);
   feedService = inject(FeedService);
 
+  /**
+   * ИНИЦИАЛИЗАЦИЯ КОМПОНЕНТА
+   *
+   * ЧТО ДЕЛАЕТ:
+   * - Загружает начальные данные из резолвера
+   * - Настраивает наблюдение за изменениями фильтров
+   * - Инициализирует отслеживание просмотров элементов
+   */
   ngOnInit() {
+    // Получаем предзагруженные данные из резолвера
     const routeData$ = this.route.data
       .pipe(map(r => r["data"]))
       .subscribe((feed: ApiPagination<FeedItem>) => {
         this.feedItems.set(feed.results);
         this.totalItemsCount.set(feed.count);
 
+        // Настраиваем отслеживание просмотров элементов
         setTimeout(() => {
           const observer = new IntersectionObserver(this.onFeedItemView.bind(this), {
             root: document.querySelector(".office__body"),
@@ -67,13 +94,14 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     this.subscriptions$().push(routeData$);
 
+    // Отслеживаем изменения параметров фильтрации
     const queryParams$ = this.route.queryParams
       .pipe(
         map(params => params["includes"]),
         tap(includes => {
           this.includes.set(includes);
         }),
-        skip(1),
+        skip(1), // Пропускаем первое значение (уже загружено резолвером)
         concatMap(includes => {
           this.totalItemsCount.set(0);
           this.feedPage.set(0);
@@ -84,6 +112,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(feed => {
         this.feedItems.set(feed);
 
+        // Плавная прокрутка к началу ленты после фильтрации
         setTimeout(() => {
           this.feedRoot?.nativeElement.children[0].scrollIntoView({ behavior: "smooth" });
         });
@@ -91,13 +120,20 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions$().push(queryParams$);
   }
 
+  /**
+   * НАСТРОЙКА БЕСКОНЕЧНОЙ ПРОКРУТКИ
+   *
+   * ЧТО ДЕЛАЕТ:
+   * - Подписывается на события прокрутки
+   * - Загружает новые элементы при достижении конца списка
+   */
   ngAfterViewInit() {
     const target = document.querySelector(".office__body");
     if (target) {
       const scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
           concatMap(() => this.onScroll()),
-          throttleTime(500)
+          throttleTime(500) // Ограничиваем частоту запросов
         )
         .subscribe(noop);
 
@@ -111,21 +147,35 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild("feedRoot") feedRoot?: ElementRef<HTMLElement>;
 
-  totalItemsCount = signal(0);
-  feedItems = signal<FeedItem[]>([]);
-  feedPage = signal(1);
-  perFetchTake = signal(20);
-  includes = signal<FeedItemType[]>([]);
+  // Сигналы состояния компонента
+  totalItemsCount = signal(0); // Общее количество элементов
+  feedItems = signal<FeedItem[]>([]); // Массив элементов ленты
+  feedPage = signal(1); // Текущая страница
+  perFetchTake = signal(20); // Количество элементов за запрос
+  includes = signal<FeedItemType[]>([]); // Активные фильтры
 
   subscriptions$ = signal<Subscription[]>([]);
 
+  /**
+   * ОБРАБОТКА ЛАЙКОВ НОВОСТЕЙ
+   *
+   * ЧТО ПРИНИМАЕТ:
+   * @param newsId - ID новости для лайка/дизлайка
+   *
+   * ЧТО ДЕЛАЕТ:
+   * - Переключает состояние лайка
+   * - Обновляет счетчик лайков
+   * - Различает новости проектов и профилей
+   */
   onLike(newsId: number) {
     const itemIdx = this.feedItems().findIndex(n => n.content.id === newsId);
 
     const item = this.feedItems()[itemIdx];
     if (!item || item.typeModel !== "news") return;
 
+    // Определяем тип новости по структуре contentObject
     if ("email" in item.content.contentObject) {
+      // Новость профиля
       this.profileNewsService
         .toggleLike(
           item.content.contentObject.id as unknown as string,
@@ -141,11 +191,11 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
           this.feedItems.update(items => {
             const newItems = [...items];
             newItems.splice(itemIdx, 1, item);
-
             return newItems;
           });
         });
     } else if ("leader" in item.content.contentObject) {
+      // Новость проекта
       this.projectNewsService
         .toggleLike(
           item.content.contentObject.id as unknown as string,
@@ -161,13 +211,22 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
           this.feedItems.update(items => {
             const newItems = [...items];
             newItems.splice(itemIdx, 1, item);
-
             return newItems;
           });
         });
     }
   }
 
+  /**
+   * ОТСЛЕЖИВАНИЕ ПРОСМОТРОВ ЭЛЕМЕНТОВ
+   *
+   * ЧТО ПРИНИМАЕТ:
+   * @param entries - массив элементов, попавших в область видимости
+   *
+   * ЧТО ДЕЛАЕТ:
+   * - Отмечает новости как прочитанные при попадании в область видимости
+   * - Различает новости проектов и профилей
+   */
   onFeedItemView(entries: IntersectionObserverEntry[]): void {
     const items = entries
       .map(e => {
@@ -183,6 +242,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       item => item.typeModel === "news" && "email" in item.content.contentObject
     );
 
+    // Отмечаем новости проектов как прочитанные
     projectNews.forEach(news => {
       if (news.typeModel !== "news") return;
       this.projectNewsService
@@ -190,6 +250,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         .subscribe(noop);
     });
 
+    // Отмечаем новости профилей как прочитанные
     profileNews.forEach(news => {
       if (news.typeModel !== "news") return;
       this.profileNewsService
@@ -198,12 +259,24 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  /**
+   * ОБРАБОТКА ПРОКРУТКИ ДЛЯ БЕСКОНЕЧНОЙ ЗАГРУЗКИ
+   *
+   * ЧТО ВОЗВРАЩАЕТ:
+   * @returns Observable с новыми элементами или пустой объект
+   *
+   * ЧТО ДЕЛАЕТ:
+   * - Проверяет, достигнут ли конец списка
+   * - Загружает следующую порцию элементов при необходимости
+   */
   onScroll() {
+    // Проверяем, загружены ли все элементы
     if (this.totalItemsCount() && this.feedItems().length >= this.totalItemsCount()) return of({});
 
     const target = document.querySelector(".office__body");
     if (!target || !this.feedRoot) return of({});
 
+    // Вычисляем, нужно ли загружать новые элементы
     const diff =
       target.scrollTop -
       this.feedRoot.nativeElement.getBoundingClientRect().height +
@@ -225,6 +298,17 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     return of({});
   }
 
+  /**
+   * ЗАГРУЗКА ЭЛЕМЕНТОВ ЛЕНТЫ
+   *
+   * ЧТО ПРИНИМАЕТ:
+   * @param offset - смещение для пагинации
+   * @param limit - количество элементов для загрузки
+   * @param includes - типы элементов для включения в результат
+   *
+   * ЧТО ВОЗВРАЩАЕТ:
+   * @returns Observable<FeedItem[]> - массив элементов ленты
+   */
   onFetch(
     offset: number,
     limit: number,

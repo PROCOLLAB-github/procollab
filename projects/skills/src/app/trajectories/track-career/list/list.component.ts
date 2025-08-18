@@ -1,22 +1,27 @@
 /** @format */
 
 import {
-  AfterViewInit,
+  type AfterViewInit,
   ChangeDetectorRef,
   Component,
   inject,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   signal,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
-import { Webinar } from "projects/skills/src/models/webinars.model";
 import { TrajectoriesService } from "../../trajectories.service";
 import { TrajectoryComponent } from "../shared/trajectory/trajectory.component";
 import { Trajectory } from "projects/skills/src/models/trajectory.model";
 
+/**
+ * Компонент списка траекторий
+ * Отображает список доступных траекторий с поддержкой пагинации
+ * Поддерживает два режима: "all" (все траектории) и "my" (пользовательские)
+ * Реализует бесконечную прокрутку для загрузки дополнительных элементов
+ */
 @Component({
   selector: "app-list",
   standalone: true,
@@ -39,6 +44,10 @@ export class TrajectoriesListComponent implements OnInit, AfterViewInit, OnDestr
 
   subscriptions$ = signal<Subscription[]>([]);
 
+  /**
+   * Инициализация компонента
+   * Определяет тип списка (all/my) и загружает начальные данные
+   */
   ngOnInit(): void {
     this.type.set(this.router.url.split("/").slice(-1)[0] as "all" | "my");
 
@@ -56,6 +65,10 @@ export class TrajectoriesListComponent implements OnInit, AfterViewInit, OnDestr
     this.subscriptions$().push(subscription);
   }
 
+  /**
+   * Настройка обработчика прокрутки после инициализации представления
+   * Подписывается на события прокрутки для реализации бесконечной загрузки
+   */
   ngAfterViewInit(): void {
     const target = document.querySelector(".office__body");
     if (target) {
@@ -69,10 +82,18 @@ export class TrajectoriesListComponent implements OnInit, AfterViewInit, OnDestr
     }
   }
 
+  /**
+   * Очистка ресурсов при уничтожении компонента
+   */
   ngOnDestroy(): void {
     this.subscriptions$().forEach(s => s.unsubscribe());
   }
 
+  /**
+   * Обработчик события прокрутки
+   * Проверяет достижение конца списка и загружает дополнительные элементы
+   * @returns Observable с результатом загрузки или пустой объект
+   */
   onScroll() {
     if (this.totalItemsCount() && this.trajectoriesList().length >= this.totalItemsCount())
       return of({});
@@ -94,6 +115,12 @@ export class TrajectoriesListComponent implements OnInit, AfterViewInit, OnDestr
     return of({});
   }
 
+  /**
+   * Загрузка дополнительных траекторий
+   * @param offset - смещение для пагинации
+   * @param limit - количество элементов для загрузки
+   * @returns Observable с данными траекторий
+   */
   onFetch(offset: number, limit: number) {
     return this.trajectoriesService.getTrajectories(limit, offset).pipe(
       tap((res: any) => {

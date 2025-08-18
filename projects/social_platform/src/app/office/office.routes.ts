@@ -10,6 +10,17 @@ import { OfficeResolver } from "./office.resolver";
 import { MentorsComponent } from "./mentors/mentors.component";
 import { MentorsResolver } from "./mentors/mentors.resolver";
 
+/**
+ * Конфигурация маршрутов для модуля офиса
+ * Определяет все доступные пути и их компоненты в рабочем пространстве
+ *
+ * Принимает:
+ * - URL пути от роутера Angular
+ *
+ * Возвращает:
+ * - Конфигурацию маршрутов с ленивой загрузкой модулей
+ * - Резолверы для предзагрузки данных
+ */
 export const OFFICE_ROUTES: Routes = [
   {
     path: "onboarding",

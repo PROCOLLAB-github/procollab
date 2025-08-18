@@ -1,12 +1,17 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
+import { Component, inject, type OnDestroy, type OnInit } from "@angular/core";
+import { ActivatedRoute, RouterOutlet } from "@angular/router";
 import { BarComponent } from "@ui/components";
-import { Trajectory } from "projects/skills/src/models/trajectory.model";
-import { concatMap, map, Subscription } from "rxjs";
+import type { Trajectory } from "projects/skills/src/models/trajectory.model";
+import { map, type Subscription } from "rxjs";
 
+/**
+ * Компонент детального просмотра траектории
+ * Отображает навигационную панель и служит контейнером для дочерних компонентов
+ * Управляет состоянием выбранной траектории и ID траектории из URL
+ */
 @Component({
   selector: "app-trajectory-detail",
   standalone: true,
@@ -22,6 +27,10 @@ export class TrajectoryDetailComponent implements OnInit, OnDestroy {
   trajectory?: Trajectory;
   trackId?: string;
 
+  /**
+   * Инициализация компонента
+   * Подписывается на параметры маршрута и данные траектории
+   */
   ngOnInit(): void {
     const trackIdSub = this.route.params.subscribe(params => {
       this.trackId = params["trackId"];
@@ -35,6 +44,10 @@ export class TrajectoryDetailComponent implements OnInit, OnDestroy {
     trackIdSub && this.subscriptions$.push(trackIdSub);
   }
 
+  /**
+   * Очистка ресурсов при уничтожении компонента
+   * Отписывается от всех активных подписок
+   */
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }

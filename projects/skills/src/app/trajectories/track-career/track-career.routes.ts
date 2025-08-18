@@ -6,6 +6,15 @@ import { TrajectoriesListComponent } from "./list/list.component";
 import { TrajectoriesResolver } from "./track-career.resolver";
 import { TrajectoriesMyResolver } from "./track-career-my.resolver";
 
+/**
+ * Конфигурация маршрутов для модуля карьерных траекторий
+ * Определяет структуру навигации:
+ * - "" - редирект на "all"
+ * - "all" - список всех доступных траекторий
+ * - "my" - пользовательская траектория
+ * - ":trackId" - детальная информация о конкретной траектории
+ */
+
 export const TRACK_CAREER_ROUTES: Routes = [
   {
     path: "",

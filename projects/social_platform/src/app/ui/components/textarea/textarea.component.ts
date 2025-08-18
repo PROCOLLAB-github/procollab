@@ -4,6 +4,24 @@ import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@ang
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { AutosizeModule } from "ngx-autosize";
 
+/**
+ * Компонент многострочного поля ввода с автоматическим изменением размера.
+ * Реализует ControlValueAccessor для интеграции с Angular Forms.
+ * Автоматически подстраивает высоту под содержимое.
+ *
+ * Входящие параметры:
+ * - placeholder: текст подсказки в поле
+ * - type: тип поля (наследуется от input, но используется как textarea)
+ * - error: состояние ошибки для стилизации
+ * - mask: маска для форматирования (наследуется, но не используется)
+ * - text: значение текста (двустороннее связывание)
+ *
+ * События:
+ * - textChange: изменение текста в поле
+ *
+ * Возвращает:
+ * - Введенный многострочный текст через ControlValueAccessor
+ */
 @Component({
   selector: "app-textarea",
   templateUrl: "./textarea.component.html",
@@ -19,10 +37,19 @@ import { AutosizeModule } from "ngx-autosize";
   imports: [AutosizeModule],
 })
 export class TextareaComponent implements OnInit, ControlValueAccessor {
+  /** Текст подсказки */
   @Input() placeholder = "";
+
+  /** Тип поля (наследуется от базового компонента) */
   @Input() type: "text" | "password" | "email" = "text";
+
+  /** Состояние ошибки */
   @Input() error = false;
+
+  /** Маска (наследуется, но не используется) */
   @Input() mask = "";
+
+  /** Двустороннее связывание текста */
   @Input() set text(value: string) {
     this.value = value;
   }
@@ -31,24 +58,29 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
     return this.value;
   }
 
+  /** Событие изменения текста */
   @Output() textChange = new EventEmitter<string>();
 
   constructor() {}
 
   ngOnInit(): void {}
 
+  /** Обработчик ввода текста */
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.onChange(value);
     this.textChange.emit(value);
   }
 
+  /** Обработчик потери фокуса */
   onBlur(): void {
     this.onTouch();
   }
 
+  /** Текущее значение поля */
   value = "";
 
+  // Методы ControlValueAccessor
   writeValue(value: string): void {
     this.value = value;
   }
@@ -65,12 +97,14 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
     this.onTouch = fn;
   }
 
+  /** Состояние блокировки */
   disabled = false;
 
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
   }
 
+  /** Предотвращение перехода на новую строку по Enter */
   preventEnter(event: Event) {
     event.preventDefault();
   }

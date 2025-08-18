@@ -8,6 +8,19 @@ import { Project } from "@models/project.model";
 import { SubscriptionService } from "@office/services/subscription.service";
 import { ProjectSubscriber } from "@office/models/project-subscriber.model";
 
+/**
+ * Резолвер для загрузки данных проекта и его подписчиков
+ *
+ * Принимает:
+ * - ActivatedRouteSnapshot с параметром projectId
+ *
+ * Возвращает:
+ * - Observable<[Project, ProjectSubscriber[]]> - кортеж с данными проекта и списком подписчиков
+ *
+ * Использует:
+ * - ProjectService для получения данных проекта
+ * - SubscriptionService для получения списка подписчиков
+ */
 export const ProjectDetailResolver: ResolveFn<[Project, ProjectSubscriber[]]> = (
   route: ActivatedRouteSnapshot
 ) => {

@@ -151,6 +151,10 @@
   &__language {
     margin-top: 20px;
     margin-bottom: 20px;
+
+    &--attention {
+      color: var(--dark-grey);
+    }
   }
 
   &__add-achievement {

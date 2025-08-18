@@ -2,26 +2,39 @@
 
 import { Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { BackComponent, IconComponent } from "@uilib";
-import {
-  ActivatedRoute,
-  Router,
-  RouterLink,
-  RouterLinkActive,
-  RouterModule,
-} from "@angular/router";
+import { IconComponent } from "@uilib";
+import { ActivatedRoute, Router, RouterLink, RouterModule } from "@angular/router";
 import { BarComponent, ButtonComponent } from "@ui/components";
 import { SkillCardComponent } from "../shared/skill-card/skill-card.component";
-import { map, Observable, Subscription } from "rxjs";
-import { ApiPagination } from "../../../models/api-pagination.model";
+import { map, Subscription } from "rxjs";
 import { Skill } from "../../../models/skill.model";
-import { WriteTaskComponent } from "../../task/shared/write-task/write-task.component";
 import { SkillService } from "../services/skill.service";
 import { ProfileService } from "../../profile/services/profile.service";
 import { SubscriptionData } from "@corelib";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 
+/**
+ * Компонент списка навыков
+ *
+ * Отображает список всех доступных навыков с возможностью поиска
+ * и переходом к детальной странице
+ *
+ * Функциональность:
+ * - Загрузка и отображение списка навыков
+ * - Поиск навыков по названию
+ * - Проверка типа подписки пользователя
+ * - Обработка ограничений доступа к навыкам
+ * - Отображение модальных окон для пользователей без доступа
+ *
+ * Принимает данные через резолвер маршрута:
+ * - Список навыков с пагинацией
+ *
+ * Управляет состоянием:
+ * - Отфильтрованный список навыков
+ * - Состояние модальных окон
+ * - Форма поиска
+ */
 @Component({
   selector: "app-list",
   standalone: true,

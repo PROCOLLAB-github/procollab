@@ -18,13 +18,69 @@ import { FileModel } from "@office/models/file.model";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
 import { forkJoin, noop, Observable, tap } from "rxjs";
-import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "projects/core";
+import { DayjsPipe, ParseLinksPipe } from "projects/core";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { IconComponent } from "@ui/components";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
 import { FeedNews } from "@office/projects/models/project-news.model";
 
+/**
+ * Компонент карточки новости программы
+ *
+ * Отображает отдельную новость в ленте программы с полным функционалом:
+ * - Просмотр текста новости с возможностью развернуть/свернуть
+ * - Отображение прикрепленных файлов (изображения и документы)
+ * - Режим редактирования новости (для владельца)
+ * - Взаимодействие с новостью (лайки, копирование ссылки)
+ * - Загрузка и удаление файлов в режиме редактирования
+ *
+ * Принимает:
+ * @Input newsItem: FeedNews - Объект новости для отображения
+ * @Input isOwner: boolean - Является ли пользователь владельцем новости
+ *
+ * Генерирует события:
+ * @Output delete: EventEmitter<number> - Удаление новости
+ * @Output like: EventEmitter<number> - Лайк/дизлайк новости
+ * @Output edited: EventEmitter<FeedNews> - Редактирование новости
+ *
+ * Зависимости:
+ * @param {SnackbarService} snackbarService - Для уведомлений
+ * @param {FileService} fileService - Для работы с файлами
+ * @param {ActivatedRoute} route - Для получения ID программы
+ * @param {ChangeDetectorRef} cdRef - Для обновления представления
+ *
+ * Состояние:
+ * @property {boolean} newsTextExpandable - Можно ли развернуть текст
+ * @property {boolean} readMore - Развернут ли текст новости
+ * @property {boolean} editMode - Активен ли режим редактирования
+ * @property {boolean[]} showLikes - Массив состояний показа лайков для изображений
+ *
+ * Файлы:
+ * @property {FileModel[]} imagesViewList - Изображения для просмотра
+ * @property {FileModel[]} filesViewList - Файлы для просмотра
+ * @property {Array} imagesEditList - Изображения в режиме редактирования
+ * @property {Array} filesEditList - Файлы в режиме редактирования
+ *
+ * Методы:
+ * @method onCopyLink() - Копирует ссылку на новость в буфер обмена
+ * @method onUploadFile(event) - Загружает новые файлы
+ * @method onDeletePhoto(fId) - Удаляет изображение
+ * @method onDeleteFile(fId) - Удаляет файл
+ * @method onRetryUpload(id) - Повторяет загрузку файла при ошибке
+ * @method onTouchImg(event, imgIdx) - Обработчик двойного тапа для лайка
+ * @method onExpandNewsText() - Разворачивает/сворачивает текст новости
+ *
+ * Особенности:
+ * - Разделение файлов на изображения и документы
+ * - Поддержка drag&drop для загрузки файлов
+ * - Обработка ошибок загрузки с возможностью повтора
+ * - Двойной тап на изображениях для лайка (мобильные устройства)
+ * - Автоматическое определение высоты текста для кнопки "Читать далее"
+ *
+ * Возвращает:
+ * HTML шаблон карточки новости со всем функционалом
+ */
 @Component({
   selector: "app-program-news-card",
   templateUrl: "./news-card.component.html",
@@ -37,7 +93,6 @@ import { FeedNews } from "@office/projects/models/project-news.model";
     FileItemComponent,
     DayjsPipe,
     ParseLinksPipe,
-    ParseBreaksPipe,
   ],
 })
 export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
@@ -57,6 +112,16 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
   newsTextExpandable!: boolean;
   readMore = false;
   editMode = false;
+
+  /** Состояние меню действий */
+  menuOpen = false;
+
+  /**
+   * Закрытие меню действий
+   */
+  onCloseMenu() {
+    this.menuOpen = false;
+  }
 
   ngOnInit(): void {
     this.showLikes = this.newsItem.files.map(() => false);

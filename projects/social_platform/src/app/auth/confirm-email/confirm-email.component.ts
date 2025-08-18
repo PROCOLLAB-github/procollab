@@ -1,10 +1,22 @@
 /** @format */
 
 import { Component, OnInit } from "@angular/core";
-import { AuthService } from "../services";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TokenService } from "@corelib";
 
+/**
+ * Компонент подтверждения email адреса
+ *
+ * Назначение: Обрабатывает подтверждение email через ссылку из письма
+ * Принимает: Access и refresh токены из query параметров URL
+ * Возвращает: Перенаправление в офис при успешном подтверждении
+ *
+ * Функциональность:
+ * - Получает токены из query параметров URL
+ * - Сохраняет токены в TokenService
+ * - Перенаправляет пользователя в офис при успешной аутентификации
+ * - Автоматически выполняется при переходе по ссылке из письма
+ */
 @Component({
   selector: "app-confirm-email",
   templateUrl: "./confirm-email.component.html",

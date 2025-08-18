@@ -3,20 +3,39 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
-import { map, Subscription, tap } from "rxjs";
-import { ProjectCount } from "@models/project.model";
+import { Subscription } from "rxjs";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
 import { BarComponent } from "@ui/components";
-import { AsyncPipe } from "@angular/common";
 import { ProgramService } from "./services/program.service";
 
+/**
+ * Основной компонент модуля "Программы"
+ *
+ * Функциональность:
+ * - Отображает заголовок навигации "Программы"
+ * - Предоставляет форму поиска программ
+ * - Управляет состоянием активных вкладок (My/All)
+ * - Обрабатывает изменения поисковых параметров в URL
+ * - Содержит router-outlet для дочерних компонентов
+ *
+ * Принимает:
+ * - NavService - для установки заголовка навигации
+ * - ActivatedRoute - для работы с параметрами маршрута
+ * - ProgramService - сервис для работы с программами
+ * - Router - для навигации и изменения URL параметров
+ * - FormBuilder - для создания реактивных форм
+ *
+ * Возвращает:
+ * - HTML шаблон с формой поиска и router-outlet
+ * - Управляет состоянием флагов isMy и isAll
+ */
 @Component({
   selector: "app-program",
   templateUrl: "./program.component.html",
   styleUrl: "./program.component.scss",
   standalone: true,
-  imports: [ReactiveFormsModule, SearchComponent, RouterOutlet, AsyncPipe, BarComponent],
+  imports: [ReactiveFormsModule, SearchComponent, RouterOutlet, BarComponent],
 })
 export class ProgramComponent implements OnInit, OnDestroy {
   constructor(

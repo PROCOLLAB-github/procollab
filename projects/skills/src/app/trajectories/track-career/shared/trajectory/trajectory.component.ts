@@ -2,13 +2,13 @@
 
 import { CommonModule } from "@angular/common";
 import {
-  AfterViewInit,
+  type AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
+  type ElementRef,
   inject,
   Input,
-  OnInit,
+  type OnInit,
   signal,
   ViewChild,
 } from "@angular/core";
@@ -26,6 +26,14 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { map, Observable } from "rxjs";
 
+/**
+ * Компонент отображения карточки траектории
+ * Показывает информацию о траектории: название, описание, навыки, длительность
+ * Поддерживает различные модальные окна для взаимодействия с пользователем
+ * Обрабатывает выбор траектории и навигацию к детальной информации
+ *
+ * @Input trajectory - объект траектории для отображения
+ */
 @Component({
   selector: "app-trajectory",
   standalone: true,
@@ -65,8 +73,8 @@ export class TrajectoryComponent implements AfterViewInit, OnInit {
 
   currentPage = 1;
 
+  // Состояния модальных окон
   moreModalOpen = signal(false);
-
   confirmModalOpen = signal(false);
   nonConfirmerModalOpen = signal(false);
   instructionModalOpen = signal(false);
@@ -77,10 +85,17 @@ export class TrajectoryComponent implements AfterViewInit, OnInit {
   placeholderUrl =
     "https://uch-ibadan.org.ng/wp-content/uploads/2021/10/Profile_avatar_placeholder_large.png";
 
+  /**
+   * Инициализация компонента
+   * Определяет тип отображения (all/my) на основе текущего URL
+   */
   ngOnInit() {
     this.type.set(this.router.url.split("/").slice(-1)[0] as "all" | "my");
   }
 
+  /**
+   * Проверка возможности расширения описания после инициализации представления
+   */
   ngAfterViewInit(): void {
     const descElement = this.descEl?.nativeElement;
     this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
@@ -88,6 +103,10 @@ export class TrajectoryComponent implements AfterViewInit, OnInit {
     this.cdRef.detectChanges();
   }
 
+  /**
+   * Обработчик клика по кнопке "Выбрать"
+   * Активирует траекторию и обрабатывает различные сценарии ответа сервера
+   */
   onOpenConfirmClick() {
     this.trajectoryService.activateTrajectory(this.trajectory.id).subscribe({
       next: () => {
@@ -110,17 +129,27 @@ export class TrajectoryComponent implements AfterViewInit, OnInit {
     });
   }
 
+  /**
+   * Подтверждение выбора траектории
+   * Закрывает модальное окно подтверждения и открывает инструкции
+   */
   onConfirmClick() {
     this.confirmModalOpen.set(false);
     this.instructionModalOpen.set(true);
   }
 
+  /**
+   * Переход к предыдущей странице инструкций
+   */
   prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage -= 1;
     }
   }
 
+  /**
+   * Переход к следующей странице инструкций или к траектории
+   */
   nextPage(): void {
     if (this.currentPage === 4) {
       this.navigateOnTrajectory();
@@ -129,6 +158,9 @@ export class TrajectoryComponent implements AfterViewInit, OnInit {
     }
   }
 
+  /**
+   * Навигация к детальной странице траектории
+   */
   navigateOnTrajectory() {
     this.router.navigate(["/trackCar/" + this.trajectory.id]).catch(err => {
       if (err.status === 403) {
@@ -137,11 +169,21 @@ export class TrajectoryComponent implements AfterViewInit, OnInit {
     });
   }
 
-  onCloseModalActiveTrajectory() {
+  /**
+   * Закрытие модального окна активной траектории и переход к ней
+   * @param trajectoryId - ID траектории для перехода
+   */
+  onCloseModalActiveTrajectory(trajectoryId: number | string) {
     this.activatedModalOpen.set(false);
-    this.router.navigate(["/trackCar/my"]);
+    this.router.navigate([`/trackCar/${trajectoryId}`]);
   }
 
+  /**
+   * Переключение развернутого/свернутого состояния описания
+   * @param elem - HTML элемент описания
+   * @param expandedClass - CSS класс для развернутого состояния
+   * @param isExpanded - текущее состояние (развернуто/свернуто)
+   */
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;

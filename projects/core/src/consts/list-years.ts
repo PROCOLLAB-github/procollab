@@ -164,6 +164,6 @@ export const yearList = [
   {
     value: 2025,
     id: 25,
-    label: "н.в",
+    label: "настоящее время",
   },
 ];

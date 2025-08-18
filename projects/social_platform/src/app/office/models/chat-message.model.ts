@@ -3,6 +3,18 @@
 import { User } from "@auth/models/user.model";
 import * as dayjs from "dayjs";
 
+/**
+ * Модели для системы чатов
+ *
+ * ChatFile - представляет файл, прикрепленный к сообщению
+ * ChatMessage - модель сообщения в чате
+ *
+ * Содержат:
+ * - Информацию об авторе и времени создания
+ * - Текст сообщения и прикрепленные файлы
+ * - Статусы прочтения, редактирования и удаления
+ * - Ссылки на сообщения для ответов
+ */
 export class ChatFile {
   name!: string;
   // TODO: switch to mimetype when back will be ready
