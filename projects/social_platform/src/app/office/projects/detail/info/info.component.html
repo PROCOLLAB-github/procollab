@@ -286,7 +286,7 @@
       } @if(profileId === project.leader){
       <a
         [routerLink]="['/office/projects/', project.id, 'edit']"
-        [queryParams]="{ editingStep: 'main' }"
+        [queryParams]="{ editingStep: 'vacancies' }"
       >
         <app-button>
           <span>Добавить вакансию</span>

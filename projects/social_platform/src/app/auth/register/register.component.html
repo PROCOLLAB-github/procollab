@@ -217,6 +217,12 @@
             {{ errorMessage.MINIMAL_AGE }}
             {{ birthday.errors["tooYoung"]["requiredAge"] }} лет }
           </div>
+          } @if (birthday | controlError: "tooOld") {
+          <div class="text-body-14 error">
+            @if (birthday.errors) {
+            {{ errorMessage.MAXIMAL_AGE }}
+            {{ birthday.errors["tooOld"]["requiredAge"] }} лет }
+          </div>
           } @if (birthday | controlError: "invalidDateFormat") {
           <div class="text-body-14 error">
             {{ errorMessage.INVALID_DATE }}
@@ -251,7 +257,16 @@
         >Нажимая на кнопку подтверждаете, что вам больше 14 лет</span
       >
     </div>
-    <app-button type="submit" class="auth__button" customTypographyClass="auth__button-typography">
+    <app-button
+      type="submit"
+      class="auth__button"
+      [disabled]="!(ageAgreement && registerAgreement)"
+      [ngStyle]="{
+        opacity: !(ageAgreement && registerAgreement) ? '0.6' : '1',
+        cursor: !(ageAgreement && registerAgreement) ? 'not-allowed' : 'pointer'
+      }"
+      customTypographyClass="auth__button-typography"
+    >
       Далее
     </app-button>
     } @else if (step === "info") {

@@ -287,7 +287,7 @@
               [selectedId]="selectedComplitionYearEducationId()"
               formControlName="completionYear"
               placeholder="2023 год"
-              [options]="yearListEducation.slice(5)"
+              [options]="yearListEducation"
             >
               <i appIcon icon="arrow-no-body" appSquare="32"></i>
             </app-select>
@@ -347,7 +347,7 @@
         </fieldset>
         } @if (profileForm.get("educationStatus"); as educationStatus) {
         <fieldset>
-          <label for="educationStatus" class="field-label">Должность</label>
+          <label for="educationStatus" class="field-label">Статус</label>
           <app-select
             [selectedId]="selectedEducationStatusId()"
             formControlName="educationStatus"

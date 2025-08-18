@@ -652,42 +652,60 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   }
 
   addLanguage() {
-    ["language", "languageLevel"].forEach(name => this.stageForm.get(name)?.clearValidators());
-    ["language", "languageLevel"].forEach(name =>
-      this.stageForm.get(name)?.setValidators([Validators.required])
-    );
-    ["language", "languageLevel"].forEach(name =>
-      this.stageForm.get(name)?.updateValueAndValidity()
-    );
-    ["language", "languageLevel"].forEach(name => this.stageForm.get(name)?.markAsTouched());
+    const languageValue = this.stageForm.get("language")?.value;
+    const languageLevelValue = this.stageForm.get("languageLevel")?.value;
+
+    ["language", "languageLevel"].forEach(name => {
+      this.stageForm.get(name)?.clearValidators();
+    });
+
+    if ((languageValue && !languageLevelValue) || (!languageValue && languageLevelValue)) {
+      ["language", "languageLevel"].forEach(name => {
+        this.stageForm.get(name)?.setValidators([Validators.required]);
+      });
+    }
+
+    ["language", "languageLevel"].forEach(name => {
+      this.stageForm.get(name)?.updateValueAndValidity();
+      this.stageForm.get(name)?.markAsTouched();
+    });
+
+    const isLanguageValid = this.stageForm.get("language")?.valid;
+    const isLanguageLevelValid = this.stageForm.get("languageLevel")?.valid;
+
+    if (!isLanguageValid || !isLanguageLevelValid) {
+      return;
+    }
 
     const languageItem = this.fb.group({
-      language: this.stageForm.get("language")?.value,
-      languageLevel: this.stageForm.get("languageLevel")?.value,
+      language: languageValue,
+      languageLevel: languageLevelValue,
     });
 
-    if (this.editIndex() !== null) {
-      this.languageItems.update(items => {
-        const updatedItems = [...items];
-        updatedItems[this.editIndex()!] = languageItem.value;
+    if (languageValue && languageLevelValue) {
+      if (this.editIndex() !== null) {
+        this.languageItems.update(items => {
+          const updatedItems = [...items];
+          updatedItems[this.editIndex()!] = languageItem.value;
 
-        this.userLanguages.at(this.editIndex()!).patchValue(languageItem.value);
-        return updatedItems;
+          this.userLanguages.at(this.editIndex()!).patchValue(languageItem.value);
+          return updatedItems;
+        });
+        this.editIndex.set(null);
+      } else {
+        this.languageItems.update(items => [...items, languageItem.value]);
+        this.userLanguages.push(languageItem);
+      }
+      ["language", "languageLevel"].forEach(name => {
+        this.stageForm.get(name)?.reset();
+        this.stageForm.get(name)?.setValue(null);
+        this.stageForm.get(name)?.clearValidators();
+        this.stageForm.get(name)?.markAsPristine();
+        this.stageForm.get(name)?.updateValueAndValidity();
       });
-      this.editIndex.set(null);
-    } else {
-      this.languageItems.update(items => [...items, languageItem.value]);
-      this.userLanguages.push(languageItem);
-    }
-    ["language", "languageLevel"].forEach(name => {
-      this.stageForm.get(name)?.reset();
-      this.stageForm.get(name)?.setValue("");
-      this.stageForm.get(name)?.clearValidators();
-      this.stageForm.get(name)?.markAsPristine();
-      this.stageForm.get(name)?.updateValueAndValidity();
-    });
 
-    this.editLanguageClick = false;
+      this.editLanguageClick = false;
+    }
   }
 
   editLanguage(index: number) {
@@ -763,7 +781,13 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
       .pipe(concatMap(() => this.authService.setOnboardingStage(1)))
       .subscribe({
         next: () => this.completeRegistration(1),
-        error: () => this.stageSubmitting.set(false),
+        error: error => {
+          this.stageSubmitting.set(false);
+          this.isModalErrorYear.set(true);
+          if (error.error.language) {
+            this.isModalErrorYearText.set(error.error.language);
+          }
+        },
       });
   }
 
