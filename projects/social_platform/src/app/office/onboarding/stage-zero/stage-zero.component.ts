@@ -4,7 +4,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from "@angula
 import { AuthService } from "@auth/services";
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
-import { ControlErrorPipe, ValidationService } from "projects/core";
+import { ControlErrorPipe, ValidationService, YearsFromBirthdayPipe } from "projects/core";
 import { concatMap, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { User } from "@auth/models/user.model";
@@ -12,13 +12,13 @@ import { OnboardingService } from "../services/onboarding.service";
 import { ButtonComponent, InputComponent, SelectComponent } from "@ui/components";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { CommonModule } from "@angular/common";
-import { yearList } from "projects/core/src/consts/list-years";
 import { educationUserLevel, educationUserType } from "projects/core/src/consts/list-education";
 import { languageLevelsList, languageNamesList } from "projects/core/src/consts/list-language";
 import { IconComponent } from "@uilib";
 import { transformYearStringToNumber } from "@utils/transformYear";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
 import { ModalComponent } from "@ui/components/modal/modal.component";
+import { generateYearList } from "@utils/generate-year-list";
 
 /**
  * КОМПОНЕНТ НУЛЕВОГО ЭТАПА ОНБОРДИНГА
@@ -243,7 +243,7 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   isHintAchievementsVisible = false;
   isHintLanguageVisible = false;
 
-  readonly yearListEducation = yearList;
+  readonly yearListEducation = generateYearList(55);
 
   readonly educationStatusList = educationUserType;
 
