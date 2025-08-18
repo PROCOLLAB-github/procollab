@@ -140,13 +140,49 @@ export class ValidationService {
   useAgeValidator(age = 14): ValidatorFn {
     return control => {
       const value = dayjs(control.value, "DD.MM.YYYY", true);
+      const difference = dayjs().diff(value, "year");
 
-      if (value.isValid()) {
-        const difference = dayjs().diff(value, "year");
-        return difference >= age ? null : { tooYoung: { requiredAge: age } };
+      const isInvalidDate = !value.isValid() || value.year() < 1900;
+      const isTooYoung = difference < age;
+      const isTooOld = difference > 100;
+
+      return isInvalidDate
+        ? { invalidDateFormat: { requiredAge: 100 } }
+        : isTooYoung
+        ? { tooYoung: { requiredAge: age } }
+        : isTooOld
+        ? { tooOld: { requiredAge: 100 } }
+        : null;
+    };
+  }
+
+  /**
+   * Создает валидатор для проверки валидности полного email
+   * @returns ValidatorFn для проверки возраста
+   *
+   * Применение:
+   * - Проверка валидности
+   * - Валидация полного email
+   *
+   * Логика:
+   * 1. Создаем регулрку для email
+   * 2. Тестируем подходит ли она нам
+   *
+   * Пример использования:
+   * email: ['', [
+   *   Validators.required,
+   *   this.validationService.useEmailValidator()
+   * ]]
+   */
+  useEmailValidator(): ValidatorFn {
+    return control => {
+      const value = control.value;
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (regex.test(value)) {
+        return null;
+      } else {
+        return { invalidEmail: {} };
       }
-
-      return null;
     };
   }
 
