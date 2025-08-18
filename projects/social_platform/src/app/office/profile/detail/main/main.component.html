@@ -185,7 +185,7 @@
       </div>
       <ul>
         @for (p of user.programs.slice(0, 3); track p.id) {
-        <li class="project" [routerLink]="['/office/programs', p.id]">
+        <li class="project" [routerLink]="['/office/program', p.id]">
           <ng-container *ngTemplateOutlet="programTemp; context: { $implicit: p }"></ng-container>
         </li>
         }

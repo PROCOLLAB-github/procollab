@@ -39,14 +39,13 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { Skill } from "@office/models/skill";
 import { SkillsService } from "@office/services/skills.service";
 import { navItems } from "projects/core/src/consts/navProfileItems";
-import { yearList } from "projects/core/src/consts/list-years";
 import { educationUserLevel, educationUserType } from "projects/core/src/consts/list-education";
 import { languageLevelsList, languageNamesList } from "projects/core/src/consts/list-language";
 import { transformYearStringToNumber } from "@utils/transformYear";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
-import { CheckboxComponent } from "../../../ui/components/checkbox/checkbox.component";
 import { User } from "@auth/models/user.model";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
+import { generateYearList } from "@utils/generate-year-list";
 
 dayjs.extend(cpf);
 
@@ -372,7 +371,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     ctl?.setValue(!ctl.value);
   }
 
-  readonly yearListEducation = yearList;
+  readonly yearListEducation = generateYearList(55);
 
   readonly educationStatusList = educationUserType;
 
@@ -974,9 +973,5 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   toggleSpecsGroupsModal(): void {
     this.specsGroupsModalOpen.update(open => !open);
-  }
-
-  onBack() {
-    this.location.back();
   }
 }
