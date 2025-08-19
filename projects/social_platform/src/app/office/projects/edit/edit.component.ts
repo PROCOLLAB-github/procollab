@@ -318,6 +318,21 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
+   * Удаление проекта с проверкой удаления у пользователя
+   */
+  deleteProject(): void {
+    if (!confirm("Вы точно хотите удалить проект?")) {
+      return;
+    }
+
+    this.projectService.remove(Number(this.route.snapshot.paramMap.get("projectId"))).subscribe({
+      next: () => {
+        this.router.navigateByUrl(`/office/projects/my`);
+      },
+    });
+  }
+
+  /**
    * Сохранение проекта как опубликованного с проверкой доп. полей
    */
   saveProjectAsPublished(): void {
