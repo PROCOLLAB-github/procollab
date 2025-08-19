@@ -11,6 +11,9 @@
     padding: 24px 15px;
     background-color: var(--white);
     border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     @include responsive.apply-desktop {
       border: 1px solid var(--medium-grey-for-outline);
@@ -39,6 +42,12 @@
     pointer-events: none;
     background: var(--gradient-mild);
     border-radius: 15px 15px 0 0;
+  }
+
+  &__content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
   }
 
   &__head {
@@ -70,7 +79,7 @@
     display: flex;
     gap: 15px;
     align-items: center;
-    margin-top: 22px;
+    margin-top: 15px;
     color: var(--dark-grey);
 
     &--single {
@@ -128,10 +137,10 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 16px;
+    margin-top: auto;
 
     &:empty {
-      margin-top: 0;
+      margin-top: auto;
     }
   }
 }
