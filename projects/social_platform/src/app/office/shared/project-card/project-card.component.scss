@@ -7,13 +7,13 @@
   flex-direction: column;
 
   &__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     height: 200px;
     padding: 24px 15px;
     background-color: var(--white);
     border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
 
     @include responsive.apply-desktop {
       border: 1px solid var(--medium-grey-for-outline);
@@ -45,9 +45,9 @@
   }
 
   &__content {
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
   }
 
   &__head {
