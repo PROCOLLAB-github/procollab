@@ -576,6 +576,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         // Используем сервис для инициализации данных проекта
         this.projectFormService.initializeProjectData(project);
         this.projectTeamService.setInvites(invites);
+        this.projectTeamService.setCollaborators(project.collaborators);
 
         // Инициализируем дополнительные поля через сервис
         if (project.partnerProgram) {
