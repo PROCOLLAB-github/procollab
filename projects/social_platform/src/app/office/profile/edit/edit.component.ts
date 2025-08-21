@@ -107,8 +107,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly skillsService: SkillsService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly navService: NavService,
-    private readonly location: Location
+    private readonly navService: NavService
   ) {
     this.profileForm = this.fb.group({
       firstName: ["", [Validators.required]],
