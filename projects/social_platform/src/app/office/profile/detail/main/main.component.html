@@ -85,12 +85,12 @@
             </div>
           </app-modal>
 
-          <app-tag [color]="skill.approves.length ? 'complete' : 'accent'">
+          <app-tag [color]="isUserApproveSkill(skill, loggedUserId) ? 'complete' : 'accent'">
             <span>{{ skill.name }}</span>
             <i
-              (click)="onToggleApprove(skill.id, $event, skill)"
+              (click)="onToggleApprove(skill.id, $event, skill, loggedUserId)"
               appIcon
-              [icon]="skill.approves.length ? 'check' : 'plus'"
+              [icon]="isUserApproveSkill(skill, loggedUserId) ? 'check' : 'plus'"
               appSquare="16"
             ></i>
           </app-tag>
@@ -451,4 +451,15 @@
     }
   </div>
 </section>
+
+<app-modal [open]="approveOwnSkillModal" (openChange)="approveOwnSkillModal = $event">
+  <div class="modal">
+    <div class="modal__body">
+      <p class="modal__title text-bold-body-16">
+        Ошибка при подитверждении навыка!
+        <span class="text-body-14">Вы не можете подтверждать навыки своего профиля</span>
+      </p>
+    </div>
+  </div>
+</app-modal>
 }
