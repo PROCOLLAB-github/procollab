@@ -30,6 +30,28 @@ $section-padding: 24px;
   }
 }
 
+.languages {
+  &__title {
+    margin-bottom: 12px;
+    color: var(--black);
+  }
+
+  ul {
+    overflow: hidden;
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  li:not(:last-child) {
+    margin-bottom: 12px;
+  }
+
+  @include expandable-list;
+}
+
 .main {
   display: flex;
   flex-direction: column;
