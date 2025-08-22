@@ -109,8 +109,10 @@ export class ProjectFormService {
       problem: project.problem ?? "",
       presentationAddress: project.presentationAddress,
       coverImageAddress: project.coverImageAddress,
-      partnerProgramId: project.partnerProgramId ?? null,
+      partnerProgramId: project.partnerProgram?.programId ?? null,
     });
+
+    console.log(project.partnerProgram?.programId);
 
     if (project.partnerProgram) {
       this.relationId.set(project.partnerProgram?.programLinkId);
