@@ -8,7 +8,7 @@
   </div>
   }
   <ul class="page__list" #listRoot>
-    @for (project of searchedProjects; track project.id) {
+    @for (project of projects; track project.id) {
     <a [routerLink]="['/office/projects', project.id]">
       <li>
         <app-project-card
@@ -34,7 +34,7 @@
       <app-projects-filter (closeFilter)="closeFilter()"></app-projects-filter>
     </div>
   </div>
-  } @else if (!searchedProjects.length && isMy) {
+  } @else if (!projects.length && isMy) {
   <div class="page__empty empty text-body-14">
     <button class="empty__action text-body-14" (click)="addProject()">
       <i appIcon icon="plus" appSquare="18"></i>

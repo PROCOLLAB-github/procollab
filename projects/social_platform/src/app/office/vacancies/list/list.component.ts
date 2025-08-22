@@ -113,14 +113,14 @@ export class VacanciesListComponent {
     // Подписка на изменения параметров запроса для фильтрации
     const queryParams$ = this.route.queryParams
       .pipe(
-        debounceTime(200), // Задержка для избежания частых запросов
+        debounceTime(200), // Задержка
         tap(params => {
           // Извлечение параметров фильтрации из URL
           const requiredExperience = params["required_experience"]
             ? params["required_experience"]
             : undefined;
 
-          // Установка значения поиска без вызова события
+          // Установка значения поиска
           this.searchForm
             .get("search")
             ?.setValue(params["role_contains"] || "", { emitEvent: false });
@@ -137,7 +137,7 @@ export class VacanciesListComponent {
           this.salaryMin.set(salaryMin);
           this.salaryMax.set(salaryMax);
         }),
-        switchMap(() => this.onFetch(0, 20)) // Загрузка данных с новыми фильтрами
+        switchMap(() => this.onFetch(0, 20))
       )
       .subscribe((result: any) => {
         this.vacancyList.set(result.results);

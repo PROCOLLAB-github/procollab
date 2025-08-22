@@ -44,7 +44,6 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
   @Input() projectId!: number;
 
   @Output() assignToProgram = new EventEmitter<void>();
-  @Output() saveProject = new EventEmitter<{ type: "draft" | "published" }>();
 
   private subscription = new Subscription();
 

@@ -64,7 +64,6 @@ export class ProjectsFilterComponent implements OnInit {
 
     // Восстановление состояния фильтров из query параметров
     this.queries$ = this.route.queryParams.subscribe(queries => {
-      console.log(queries);
       this.currentIndustry = parseInt(queries["industry"]);
       this.currentMembersCount = parseInt(queries["membersCount"]);
       this.hasVacancies = queries["anyVacancies"] === "true";
@@ -196,7 +195,7 @@ export class ProjectsFilterComponent implements OnInit {
           is_rated_by_expert: undefined,
           is_mospolytech: undefined,
           partner_program: undefined,
-          search: undefined,
+          name__contains: undefined,
         },
         relativeTo: this.route,
         queryParamsHandling: "merge",

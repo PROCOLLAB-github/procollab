@@ -257,9 +257,9 @@
 
         <div class="project__description">
           <div>
-            <a class="text-bold-body-14 project__title">
+            <p class="text-bold-body-14 project__title">
               {{ education.organizationName }}
-            </a>
+            </p>
 
             <p class="text-body-14 project__role">{{ education.description }}</p>
           </div>
@@ -315,9 +315,9 @@
         </p>
 
         <div>
-          <a class="text-bold-body-14 project__title">
+          <p class="text-bold-body-14 project__title">
             {{ workExperience.organizationName }}
-          </a>
+          </p>
 
           <div class="project__description">
             <p class="text-body-14 project__role">{{ workExperience.description }}</p>
@@ -340,7 +340,7 @@
         </div>
       </div>
       <ul class="languages">
-        @for (p of user.userLanguages.slice(0, 3); track $index) {
+        @for (p of user.userLanguages.slice(0, 2); track $index) {
         <li class="project">
           <ng-container
             *ngTemplateOutlet="userLanguagesTemp; context: { $implicit: p }"
@@ -348,10 +348,10 @@
         </li>
         }
       </ul>
-      <div class="languages__remaining" [class.languages__remaining--show]="readAllLanguages">
-        @if (user.userLanguages) {
+      <div class="projects__remaining" [class.projects__remaining--show]="readAllLanguages">
+        @if (user.userLanguages.length > 2) {
         <ul>
-          @for (userLanguagesItem of user.userLanguages.slice(3); track $index) {
+          @for (userLanguagesItem of user.userLanguages.slice(2); track $index) {
           <li>
             <ng-container
               *ngTemplateOutlet="userLanguagesTemp; context: { $implicit: userLanguagesItem }"
@@ -366,7 +366,7 @@
           {{ userLanguages.language }} {{ userLanguages.languageLevel }}
         </p>
       </ng-template>
-      @if (userLanguagesLength > 3) {
+      @if (userLanguagesLength > 2) {
       <div class="read-more" (click)="readAllLanguages = !readAllLanguages">
         {{ readAllLanguages ? "Скрыть" : "Читать полностью" }}
       </div>
@@ -457,6 +457,7 @@
     <div class="modal__body">
       <p class="modal__title text-bold-body-16">
         Ошибка при подитверждении навыка!
+        <br />
         <span class="text-body-14">Вы не можете подтверждать навыки своего профиля</span>
       </p>
     </div>

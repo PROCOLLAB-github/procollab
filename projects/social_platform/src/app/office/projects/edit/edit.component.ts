@@ -295,20 +295,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   setProjFormIsSubmitting!: (status: boolean) => void;
 
   /**
-   * Выполнение сохранения проекта
-   * Из дочернего компонента project-main-step через emit
-   *
-   * @param event тип проекта для публикации или для черновика
-   */
-  onSaveProject(event: { type: "draft" | "published" }): void {
-    if (event.type === "draft") {
-      this.saveProjectAsDraft();
-    } else {
-      this.saveProjectAsPublished();
-    }
-  }
-
-  /**
    * Очистка всех ошибок валидации
    */
   clearAllValidationErrors(): void {
@@ -387,26 +373,30 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     const payload = this.projectFormService.getFormValue();
+    const projectId = Number(this.route.snapshot.paramMap.get("projectId"));
+
+    if (this.vacancyForm.dirty) {
+      this.projectVacancyService.submitVacancy(projectId);
+    }
 
     if (
       !this.validationService.getFormValidation(this.projectForm) ||
-      !this.validationService.getFormValidation(this.additionalForm)
+      !this.validationService.getFormValidation(this.additionalForm) ||
+      !this.validationService.getFormValidation(this.vacancyForm)
     ) {
       return;
     }
 
     this.setProjFormIsSubmitting(true);
-    this.projectService
-      .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), payload)
-      .subscribe({
-        next: () => {
-          this.setProjFormIsSubmitting(false);
-          this.router.navigateByUrl(`/office/projects/my`);
-        },
-        error: () => {
-          this.setProjFormIsSubmitting(false);
-        },
-      });
+    this.projectService.updateProject(projectId, payload).subscribe({
+      next: () => {
+        this.setProjFormIsSubmitting(false);
+        this.router.navigateByUrl(`/office/projects/my`);
+      },
+      error: () => {
+        this.setProjFormIsSubmitting(false);
+      },
+    });
   }
 
   // Методы для работы с модальными окнами
