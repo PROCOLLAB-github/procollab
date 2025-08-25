@@ -92,6 +92,21 @@
   }
 }
 
+.bar__add-project {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  i {
+    display: block;
+    margin-left: 6px;
+  }
+}
+
+.bar__add-project-text {
+  display: inline;
+}
+
 .about {
   &__head {
     display: flex;

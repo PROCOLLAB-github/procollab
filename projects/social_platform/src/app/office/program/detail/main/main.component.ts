@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ProgramService } from "@office/program/services/program.service";
-import { ActivatedRoute, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { ProgramNewsService } from "@office/program/services/program-news.service";
@@ -24,6 +24,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ApiPagination } from "@models/api-pagination.model";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
+import { ProjectService } from "@office/services/project.service";
 
 /**
  * Главный компонент детальной страницы программы
@@ -91,6 +92,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   constructor(
     private readonly programService: ProgramService,
     private readonly programNewsService: ProgramNewsService,
+    private readonly projectService: ProjectService,
+    private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly cdRef: ChangeDetectorRef
   ) {}
@@ -250,6 +253,19 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
+  }
+
+  addProject(): void {
+    this.projectService.create().subscribe(project => {
+      this.projectService.projectsCount.next({
+        ...this.projectService.projectsCount.getValue(),
+        my: this.projectService.projectsCount.getValue().my + 1,
+      });
+
+      this.router
+        .navigateByUrl(`/office/projects/${project.id}/edit?editingStep=main`)
+        .then(() => console.debug("Route change from ProjectsComponent"));
+    });
   }
 
   program?: Program;
