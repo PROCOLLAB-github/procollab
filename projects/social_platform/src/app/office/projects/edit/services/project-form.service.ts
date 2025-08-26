@@ -112,8 +112,6 @@ export class ProjectFormService {
       partnerProgramId: project.partnerProgram?.programId ?? null,
     });
 
-    console.log(project.partnerProgram?.programId);
-
     if (project.partnerProgram) {
       this.relationId.set(project.partnerProgram?.programLinkId);
     }
