@@ -18,7 +18,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { FeedService } from "@office/feed/services/feed.service";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { VacancyService } from "@office/services/vacancy.service";
-import { map, Subscription, tap } from "rxjs";
+import { debounceTime, map, Subscription, tap } from "rxjs";
 import { filterExperience } from "projects/core/src/consts/filter-experience";
 import { filterWorkFormat } from "projects/core/src/consts/filter-work-format";
 import { filterWorkSchedule } from "projects/core/src/consts/filter-work-schedule";
@@ -106,6 +106,10 @@ export class VacancyFilterComponent implements OnInit {
    * Подписывается на изменения параметров запроса для синхронизации фильтров
    */
   ngOnInit() {
+    this.salaryForm.valueChanges.pipe(debounceTime(300)).subscribe(vacancyFormValues => {
+      console.log(vacancyFormValues.salary_max);
+    });
+
     // Подписка на изменения параметров запроса
     this.queries$ = this.route.queryParams.subscribe(queries => {
       // Синхронизация текущих значений фильтров с URL

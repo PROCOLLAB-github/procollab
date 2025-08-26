@@ -1,5 +1,5 @@
 <!-- @format -->
-
+@if (filters()?.length) {
 <div class="filter">
   <div class="filter__body" [formGroup]="filterForm">
     <div class="filter__titles">
@@ -54,3 +54,4 @@
     } } }
   </div>
 </div>
+}
