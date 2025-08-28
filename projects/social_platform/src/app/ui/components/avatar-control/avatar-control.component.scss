@@ -104,15 +104,15 @@
     width: 100%;
     max-width: 500px;
     margin: 20px 0;
-    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     background: var(--background-secondary, #f8f9fa);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
 
     ::ng-deep {
       .ngx-ic-main {
-        border-radius: 8px;
         background: white;
+        border-radius: 8px;
       }
 
       .ngx-ic-overlay {
@@ -121,44 +121,46 @@
 
       .ngx-ic-crop {
         border-radius: 50%;
-        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 0 9999px rgb(0 0 0 / 50%);
       }
 
-      .ngx-ic-move, .ngx-ic-resize {
+      .ngx-ic-move,
+      .ngx-ic-resize {
         background: var(--accent, #007bff);
         border: 2px solid white;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
       }
 
       .ngx-ic-crop::before {
-        border-color: rgba(255, 255, 255, 0.5);
+        border-color: rgb(255 255 255 / 50%);
       }
     }
   }
 
   &__preview {
-    margin: 20px 0;
-    text-align: center;
-    padding: 20px;
-    background: var(--background-tertiary, #f0f0f0);
-    border-radius: 12px;
     width: 100%;
     max-width: 300px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    background: var(--background-tertiary, #f0f0f0);
+    border-radius: 12px;
 
     &-label {
+      margin-bottom: 15px;
       font-size: 14px;
       font-weight: 500;
       color: var(--text-secondary, #666);
-      margin-bottom: 15px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     &-img {
       border: 3px solid var(--border-color, #ddd);
-      object-fit: cover;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
       transition: transform 0.2s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      object-fit: cover;
+      animation: fadeInScale 0.3s ease-out;
 
       &:hover {
         transform: scale(1.05);
@@ -203,10 +205,4 @@
   &__button {
     margin-top: 20px;
   }
-
-  &__preview-img {
-    animation: fadeInScale 0.3s ease-out;
-  }
-
-
 }
