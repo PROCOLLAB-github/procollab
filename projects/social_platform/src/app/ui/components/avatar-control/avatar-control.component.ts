@@ -5,14 +5,17 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
 import { catchError, concatMap, map, of } from "rxjs";
-import { IconComponent } from "@ui/components";
+import { IconComponent, ButtonComponent } from "@ui/components";
 import { LoaderComponent } from "../loader/loader.component";
 import { CommonModule } from "@angular/common";
+import { ImageCroppedEvent, ImageCropperComponent } from "ngx-image-cropper";
+import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
+import { ModalComponent } from "../modal/modal.component";
 
 /**
  * Компонент для управления аватаром пользователя.
  * Реализует ControlValueAccessor для интеграции с Angular Forms.
- * Позволяет загружать, обновлять и удалять изображение аватара.
+ * Позволяет загружать, обрезать, обновлять и удалять изображение аватара.
  *
  * Входящие параметры:
  * - size: размер аватара в пикселях (по умолчанию 140)
@@ -34,12 +37,19 @@ import { CommonModule } from "@angular/common";
     },
   ],
   standalone: true,
-  imports: [LoaderComponent, IconComponent, CommonModule],
+  imports: [
+    LoaderComponent,
+    IconComponent,
+    CommonModule,
+    ImageCropperComponent,
+    ModalComponent,
+    ButtonComponent,
+  ],
 })
 export class AvatarControlComponent implements OnInit, ControlValueAccessor {
-  constructor(private fileService: FileService) {}
+  constructor(private fileService: FileService, private sanitizer: DomSanitizer) {}
 
-  /** Размер авата��а в пикселях */
+  /** Размер аватара в пикселях */
   @Input() size = 140;
 
   /** Состояние ошибки */
@@ -55,6 +65,21 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
 
   /** Текущее значение URL изображения */
   value = "";
+
+  /** Показывать ли модальное окно кроппера */
+  showCropperModal = false;
+
+  /** Текст ошибки при обрезки фотографии */
+  showCropperModalErrorMessage = "";
+
+  /** Исходное изображение для обрезки */
+  imageChangedEvent: Event | null = null;
+
+  /** Обрезанное изображение */
+  croppedImage: SafeUrl = "";
+
+  /** Blob обрезанного изображения для загрузки */
+  croppedBlob: Blob | null = null;
 
   /** Записывает значение URL изображения */
   writeValue(address: string) {
@@ -77,17 +102,63 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
   loading = false;
 
   /**
-   * Обработчик обновления изображения
-   * Загружает новый файл, при наличии старого - сначала удаляет его
+   * Обработчик выбора файла - открывает кроппер
    */
-  onUpdate(event: Event) {
+  onFileSelected(event: Event) {
     const files = (event.currentTarget as HTMLInputElement).files;
 
     if (!files?.length) {
       return;
     }
 
+    this.imageChangedEvent = event;
+    this.showCropperModal = true;
+  }
+
+  /**
+   * Обработчик обрезки изображения
+   */
+  imageCropped(event: ImageCroppedEvent) {
+    if (event.objectUrl) {
+      this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(event.objectUrl);
+    }
+    this.croppedBlob = event.blob || null;
+  }
+
+  /**
+   * Обработчик загружено фото или нет
+   */
+  imageLoaded() {}
+
+  /**
+   * Обработчик готовности обрезки фотографии
+   */
+  cropperReady() {}
+
+  /**
+   * Обработчик ошибки загрузки
+   */
+  loadImageFailed() {
+    console.error("Не удалось загрузить изображение");
+    this.showCropperModalErrorMessage = "Не удалось загрузить изображение. Попробуйте ещё раз!";
+  }
+
+  /**
+   * Сохранить обрезанное изображение
+   */
+  saveCroppedImage() {
+    if (!this.croppedBlob) {
+      return;
+    }
+
     this.loading = true;
+    this.showCropperModal = false;
+
+    // Создаем файл из blob
+    const file = new File([this.croppedBlob], "cropped-avatar.jpg", {
+      type: "image/jpeg",
+      lastModified: Date.now(),
+    });
 
     const source = this.value
       ? this.fileService.deleteFile(this.value).pipe(
@@ -95,12 +166,28 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
             console.error(err);
             return of({});
           }),
-          concatMap(() => this.fileService.uploadFile(files[0])),
+          concatMap(() => this.fileService.uploadFile(file)),
           map(r => r["url"])
         )
-      : this.fileService.uploadFile(files[0]).pipe(map(r => r.url));
+      : this.fileService.uploadFile(file).pipe(map(r => r.url));
 
     source.subscribe(this.updateValue.bind(this));
+  }
+
+  /**
+   * Закрыть кроппер без сохранения
+   */
+  closeCropper() {
+    this.showCropperModal = false;
+    this.imageChangedEvent = null;
+    this.croppedImage = "";
+    this.croppedBlob = null;
+
+    // Сбрасываем значение input
+    const input = document.getElementById(this.controlId) as HTMLInputElement;
+    if (input) {
+      input.value = "";
+    }
   }
 
   /**
