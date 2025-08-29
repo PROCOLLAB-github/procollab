@@ -55,15 +55,16 @@
               <i appIcon class="info__presentation-icon" icon="file_pdf" appSquare="16"></i>
             </app-button>
           </a>
-          @if (!program.isUserMember && !registerDateExpired) {
-          <!-- <a [routerLink]="['/office/program', program.id, 'register']">
-            <app-button customTypographyClass="text-body-12">Зарегистрироваться</app-button>
-          </a> -->
-
+          @if (!program.isUserMember && !registerDateExpired) { @if
+          (program.name.includes("кейс-чемпионат по предпринимательству MIR")) {
           <a href="https://case-champ.ru/corporate#rec1176757836">
             <app-button customTypographyClass="text-body-12">Зарегистрироваться</app-button>
           </a>
-          }
+          } @else {
+          <a [routerLink]="['/office/program', program.id, 'register']">
+            <app-button customTypographyClass="text-body-12">Зарегистрироваться</app-button>
+          </a>
+          } }
         </div>
       </div>
     </div>
