@@ -73,20 +73,6 @@
       ></image-cropper>
     </div>
 
-    <div class="cancel__preview">
-      <div class="cancel__preview-label">Предварительный просмотр:</div>
-      @if (croppedImage) {
-      <img
-        [src]="croppedImage"
-        alt="Preview"
-        class="cancel__preview-img"
-        [style.width]="size + 'px'"
-        [style.height]="size + 'px'"
-        [class.cancel__preview-img--round]="type === 'avatar'"
-      />
-      }
-    </div>
-
     <div class="cancel__buttons">
       <app-button
         class="cancel__button"

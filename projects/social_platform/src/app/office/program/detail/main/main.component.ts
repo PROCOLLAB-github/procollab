@@ -25,6 +25,7 @@ import { ApiPagination } from "@models/api-pagination.model";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ProjectService } from "@office/services/project.service";
+import { ModalComponent } from "@ui/components/modal/modal.component";
 
 /**
  * Главный компонент детальной страницы программы
@@ -86,6 +87,7 @@ import { ProjectService } from "@office/services/project.service";
     ParseBreaksPipe,
     ParseLinksPipe,
     NewsFormComponent,
+    ModalComponent,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
@@ -103,6 +105,9 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   fetchLimit = signal(10);
   fetchPage = signal(0);
 
+  showProgramModal = signal(false);
+  showProgramModalErrorMessage = signal<string | null>(null);
+
   programId?: number;
 
   subscriptions$ = signal<Subscription[]>([]);
@@ -117,6 +122,20 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+
+    const routeModalSub$ = this.route.queryParams.subscribe(param => {
+      if (param["access"] === "accessDenied") {
+        this.showProgramModal.set(true);
+        this.showProgramModalErrorMessage.set("У вас не доступа к этой вкладке!");
+
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { access: null },
+          queryParamsHandling: "merge",
+          replaceUrl: true,
+        });
+      }
+    });
 
     const program$ = this.route.data
       .pipe(
@@ -142,6 +161,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
     this.subscriptions$().push(program$);
     this.subscriptions$().push(programIdSubscription$);
+    this.subscriptions$().push(routeModalSub$);
   }
 
   ngAfterViewInit() {
@@ -266,6 +286,10 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         .navigateByUrl(`/office/projects/${project.id}/edit?editingStep=main`)
         .then(() => console.debug("Route change from ProjectsComponent"));
     });
+  }
+
+  closeModal(): void {
+    this.showProgramModal.set(false);
   }
 
   program?: Program;
