@@ -79,8 +79,8 @@ export class ProgramService {
     return this.apiService.post(`${this.PROGRAMS_URL}/${programId}/register/`, additionalData);
   }
 
-  getAllProjects(params?: HttpParams): Observable<ApiPagination<Project>> {
-    return this.apiService.get(`${this.PROJECTS_URL}/`, params);
+  getAllProjects(programId: number, params?: HttpParams): Observable<ApiPagination<Project>> {
+    return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/projects`, params);
   }
 
   getAllMembers(programId: number, skip: number, take: number): Observable<ApiPagination<User>> {

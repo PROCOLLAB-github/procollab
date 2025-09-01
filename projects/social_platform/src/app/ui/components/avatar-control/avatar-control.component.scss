@@ -126,48 +126,12 @@
 
       .ngx-ic-move,
       .ngx-ic-resize {
-        background: var(--accent, #007bff);
         border: 2px solid white;
         box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
       }
 
       .ngx-ic-crop::before {
         border-color: rgb(255 255 255 / 50%);
-      }
-    }
-  }
-
-  &__preview {
-    width: 100%;
-    max-width: 300px;
-    padding: 20px;
-    margin: 20px 0;
-    text-align: center;
-    background: var(--background-tertiary, #f0f0f0);
-    border-radius: 12px;
-
-    &-label {
-      margin-bottom: 15px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-secondary, #666);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    &-img {
-      border: 3px solid var(--border-color, #ddd);
-      box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
-      transition: transform 0.2s ease;
-      object-fit: cover;
-      animation: fadeInScale 0.3s ease-out;
-
-      &:hover {
-        transform: scale(1.05);
-      }
-
-      &--round {
-        border-radius: 50%;
       }
     }
   }

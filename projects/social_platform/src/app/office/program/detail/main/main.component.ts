@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ProgramService } from "@office/program/services/program.service";
-import { ActivatedRoute, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { ProgramNewsService } from "@office/program/services/program-news.service";
@@ -24,6 +24,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ApiPagination } from "@models/api-pagination.model";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
+import { ModalComponent } from "@ui/components/modal/modal.component";
 
 /**
  * Главный компонент детальной страницы программы
@@ -85,6 +86,7 @@ import { NewsFormComponent } from "@office/shared/news-form/news-form.component"
     ParseBreaksPipe,
     ParseLinksPipe,
     NewsFormComponent,
+    ModalComponent,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
@@ -92,6 +94,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     private readonly programService: ProgramService,
     private readonly programNewsService: ProgramNewsService,
     private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly cdRef: ChangeDetectorRef
   ) {}
 
@@ -99,6 +102,9 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   totalNewsCount = signal(0);
   fetchLimit = signal(10);
   fetchPage = signal(0);
+
+  showProgramModal = signal(false);
+  showProgramModalErrorMessage = signal<string | null>(null);
 
   programId?: number;
 
@@ -114,6 +120,20 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+
+    const routeModalSub$ = this.route.queryParams.subscribe(param => {
+      if (param["access"] === "accessDenied") {
+        this.showProgramModal.set(true);
+        this.showProgramModalErrorMessage.set("У вас не доступа к этой вкладке!");
+
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { access: null },
+          queryParamsHandling: "merge",
+          replaceUrl: true,
+        });
+      }
+    });
 
     const program$ = this.route.data
       .pipe(
@@ -139,6 +159,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
     this.subscriptions$().push(program$);
     this.subscriptions$().push(programIdSubscription$);
+    this.subscriptions$().push(routeModalSub$);
   }
 
   ngAfterViewInit() {
@@ -250,6 +271,10 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
+  }
+
+  closeModal(): void {
+    this.showProgramModal.set(false);
   }
 
   program?: Program;

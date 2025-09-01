@@ -41,7 +41,7 @@ export class SetPasswordComponent implements OnInit {
   ) {
     this.passwordForm = this.fb.group(
       {
-        password: ["", [Validators.required, Validators.minLength(8)]],
+        password: ["", [Validators.required, this.validationService.usePasswordValidator(8)]],
         passwordRepeated: ["", [Validators.required]],
       },
       { validators: [validationService.useMatchValidator("password", "passwordRepeated")] }
@@ -52,6 +52,7 @@ export class SetPasswordComponent implements OnInit {
   isSubmitting = false;
   errorMessage = ErrorMessage;
   errorRequest = false;
+  credsSubmitInitiated = false;
 
   showPassword = false;
 
@@ -68,6 +69,7 @@ export class SetPasswordComponent implements OnInit {
   }
 
   onSubmit() {
+    this.credsSubmitInitiated = true;
     const token = this.route.snapshot.queryParamMap.get("token");
 
     if (!token || !this.validationService.getFormValidation(this.passwordForm)) return;
