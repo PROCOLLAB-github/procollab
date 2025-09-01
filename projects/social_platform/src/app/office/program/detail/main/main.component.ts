@@ -1,5 +1,4 @@
 /** @format */
-
 import {
   ChangeDetectorRef,
   Component,
@@ -97,7 +96,6 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     private readonly projectService: ProjectService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly router: Router,
     private readonly cdRef: ChangeDetectorRef
   ) {}
 
@@ -112,7 +110,6 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   programId?: number;
 
   subscriptions$ = signal<Subscription[]>([]);
-
   ngOnInit(): void {
     const programIdSubscription$ = this.route.params
       .pipe(
@@ -168,9 +165,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   ngAfterViewInit() {
     const descElement = this.descEl?.nativeElement;
     this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
-
     this.cdRef.detectChanges();
-
     const target = document.querySelector(".office__body");
     if (target) {
       const scrollEvents$ = fromEvent(target, "scroll")
@@ -179,7 +174,6 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
           throttleTime(2000)
         )
         .subscribe();
-
       this.subscriptions$().push(scrollEvents$);
     }
   }
@@ -204,19 +198,14 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
     const target = document.querySelector(".office__body");
     if (!target) return of({});
-
     const scrollBottom = target.scrollHeight - target.scrollTop - target.clientHeight;
-
     if (scrollBottom > 0) return of({});
-
     this.fetchPage.update(p => p + 1);
-
     return this.fetchNews(this.fetchPage() * this.fetchLimit(), this.fetchLimit());
   }
 
   fetchNews(offset: number, limit: number) {
     const programId = this.route.snapshot.params["programId"];
-
     return this.programNewsService.fetchNews(limit, offset, programId).pipe(
       tap(({ count, results }) => {
         this.totalNewsCount.set(count);
@@ -227,14 +216,12 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild("descEl") descEl?: ElementRef;
-
   onNewsInVew(entries: IntersectionObserverEntry[]): void {
     const ids = entries.map(e => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       return e.target.dataset.id;
     });
-
     this.programNewsService.readNews(this.route.snapshot.params["programId"], ids).subscribe(noop);
   }
 
@@ -250,7 +237,6 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   onDelete(newsId: number) {
     const item = this.news().find((n: any) => n.id === newsId);
     if (!item) return;
-
     this.programNewsService.deleteNews(this.route.snapshot.params["programId"], newsId).subscribe({
       next: () => {
         const index = this.news().findIndex(news => news.id === newsId);
@@ -262,7 +248,6 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   onLike(newsId: number) {
     const item = this.news().find((n: any) => n.id === newsId);
     if (!item) return;
-
     this.programNewsService
       .toggleLike(this.route.snapshot.params["programId"], newsId, !item.isUserLiked)
       .subscribe(() => {
@@ -276,7 +261,6 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     this.readFullDescription = !isExpanded;
   }
 
-
   closeModal(): void {
     this.showProgramModal.set(false);
   }
@@ -287,7 +271,6 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         ...this.projectService.projectsCount.getValue(),
         my: this.projectService.projectsCount.getValue().my + 1,
       });
-
       this.router
         .navigateByUrl(`/office/projects/${project.id}/edit?editingStep=main`)
         .then(() => console.debug("Route change from ProjectsComponent"));
