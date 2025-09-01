@@ -49,7 +49,8 @@
             </app-button>
           </a>
           @if (!program.isUserMember && !registerDateExpired) { @if
-          (program.name.includes("кейс-чемпионат по предпринимательству MIR")) {
+          (program.name.includes("кейс-чемпионат по предпринимательству MIR") ||
+          program.name.includes("Кейс-чемпионат MIR")) {
           <a href="https://case-champ.ru/corporate#rec1176757836">
             <app-button customTypographyClass="text-body-12">Зарегистрироваться</app-button>
           </a>
