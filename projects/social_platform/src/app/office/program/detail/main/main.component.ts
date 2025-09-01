@@ -25,6 +25,7 @@ import { ApiPagination } from "@models/api-pagination.model";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
+import { ProjectService } from "@office/services/project.service";
 
 /**
  * Главный компонент детальной страницы программы
@@ -93,6 +94,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   constructor(
     private readonly programService: ProgramService,
     private readonly programNewsService: ProgramNewsService,
+    private readonly projectService: ProjectService,
+    private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly cdRef: ChangeDetectorRef
@@ -273,8 +276,22 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     this.readFullDescription = !isExpanded;
   }
 
+
   closeModal(): void {
     this.showProgramModal.set(false);
+  }
+
+  addProject(): void {
+    this.projectService.create().subscribe(project => {
+      this.projectService.projectsCount.next({
+        ...this.projectService.projectsCount.getValue(),
+        my: this.projectService.projectsCount.getValue().my + 1,
+      });
+
+      this.router
+        .navigateByUrl(`/office/projects/${project.id}/edit?editingStep=main`)
+        .then(() => console.debug("Route change from ProjectsComponent"));
+    });
   }
 
   program?: Program;
