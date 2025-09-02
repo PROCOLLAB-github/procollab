@@ -10,7 +10,17 @@ import {
 } from "@angular/core";
 import { ProgramService } from "@office/program/services/program.service";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
+import {
+  concatMap,
+  fromEvent,
+  map,
+  noop,
+  Observable,
+  of,
+  Subscription,
+  tap,
+  throttleTime,
+} from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { ProgramNewsService } from "@office/program/services/program-news.service";
 import { FeedNews } from "@office/projects/models/project-news.model";
@@ -25,51 +35,10 @@ import { TagComponent } from "@ui/components/tag/tag.component";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ProjectService } from "@office/services/project.service";
+import { MatProgressBarModule } from "@angular/material/progress-bar";
+import { AsyncPipe } from "@angular/common";
+import { LoadingService } from "@office/services/loading.service";
 
-/**
- * Главный компонент детальной страницы программы
- *
- * Отображает основную информацию о программе и новостную ленту:
- * - Детальное описание программы с возможностью развернуть/свернуть
- * - Информацию о датах и регистрации
- * - Новостную ленту для участников программы
- * - Форму добавления новостей
- * - Взаимодействие с новостями (лайки, просмотры)
- *
- * Принимает:
- * @param {ProgramService} programService - Сервис программ
- * @param {ProgramNewsService} programNewsService - Сервис новостей программы
- * @param {ActivatedRoute} route - Для получения данных программы
- * @param {ChangeDetectorRef} cdRef - Для ручного обновления представления
- *
- * Состояние (signals):
- * @property {Signal<FeedNews[]>} news - Массив новостей программы
- * @property {Signal<number>} totalNewsCount - Общее количество новостей
- * @property {Signal<number>} fetchLimit - Лимит загрузки новостей (10)
- * @property {Signal<number>} fetchPage - Текущая страница новостей
- * @property {Signal<Subscription[]>} subscriptions$ - Подписки для очистки
- *
- * Данные программы:
- * @property {Program} program - Объект программы
- * @property {boolean} registerDateExpired - Истек ли срок регистрации
- * @property {boolean} descriptionExpandable - Можно ли развернуть описание
- * @property {boolean} readFullDescription - Развернуто ли описание
- *
- * ViewChild:
- * @ViewChild NewsFormComponent - Ссылка на компонент формы новостей
- * @ViewChild descEl - Ссылка на элемент описания
- *
- * Методы:
- * @method fetchNews(offset, limit) - Загружает новости с пагинацией
- * @method onScroll() - Обработчик прокрутки для подгрузки новостей
- * @method onNewsInVew(entries) - Отмечает новости как просмотренные
- * @method onAddNews(news) - Добавляет новую новость
- * @method onLike(newsId) - Переключает лайк новости
- * @method onExpandDescription() - Разворачивает/сворачивает описание
- *
- * Возвращает:
- * HTML шаблон с информацией о программе и новостной лентой
- */
 @Component({
   selector: "app-main",
   templateUrl: "./main.component.html",
@@ -83,10 +52,12 @@ import { ProjectService } from "@office/services/project.service";
     ProgramNewsCardComponent,
     TagComponent,
     UserLinksPipe,
+    AsyncPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
     NewsFormComponent,
     ModalComponent,
+    MatProgressBarModule,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
@@ -96,7 +67,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     private readonly projectService: ProjectService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private readonly cdRef: ChangeDetectorRef
+    private readonly cdRef: ChangeDetectorRef,
+    private readonly loadingService: LoadingService
   ) {}
 
   news = signal<FeedNews[]>([]);
@@ -110,6 +82,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   programId?: number;
 
   subscriptions$ = signal<Subscription[]>([]);
+
   ngOnInit(): void {
     const programIdSubscription$ = this.route.params
       .pipe(
@@ -123,6 +96,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
     const routeModalSub$ = this.route.queryParams.subscribe(param => {
       if (param["access"] === "accessDenied") {
+        this.loadingService.hide();
+
         this.showProgramModal.set(true);
         this.showProgramModalErrorMessage.set("У вас не доступа к этой вкладке!");
 
@@ -150,12 +125,24 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
           }
         })
       )
-      .subscribe(news => {
-        if (news.results?.length) {
-          this.news.set(news.results);
-          this.totalNewsCount.set(news.count);
-        }
+      .subscribe({
+        next: news => {
+          if (news.results?.length) {
+            this.news.set(news.results);
+            this.totalNewsCount.set(news.count);
+          }
+
+          this.loadingService.hide();
+        },
+        error: () => {
+          this.loadingService.hide();
+
+          this.showProgramModal.set(true);
+          this.showProgramModalErrorMessage.set("Произошла ошибка при загрузке программы");
+        },
       });
+
+    this.loadEvent = fromEvent(window, "load");
 
     this.subscriptions$().push(program$);
     this.subscriptions$().push(programIdSubscription$);
@@ -216,6 +203,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild("descEl") descEl?: ElementRef;
+
   onNewsInVew(entries: IntersectionObserverEntry[]): void {
     const ids = entries.map(e => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -263,19 +251,32 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   closeModal(): void {
     this.showProgramModal.set(false);
+    this.loadingService.hide();
   }
 
   addProject(): void {
-    this.projectService.create().subscribe(project => {
-      this.projectService.projectsCount.next({
-        ...this.projectService.projectsCount.getValue(),
-        my: this.projectService.projectsCount.getValue().my + 1,
-      });
-      this.router
-        .navigateByUrl(`/office/projects/${project.id}/edit?editingStep=main`)
-        .then(() => console.debug("Route change from ProjectsComponent"));
+    this.loadingService.show();
+
+    this.projectService.create().subscribe({
+      next: project => {
+        this.projectService.projectsCount.next({
+          ...this.projectService.projectsCount.getValue(),
+          my: this.projectService.projectsCount.getValue().my + 1,
+        });
+        this.router
+          .navigateByUrl(`/office/projects/${project.id}/edit?editingStep=main`)
+          .then(() => {
+            console.debug("Route change from ProjectsComponent");
+          });
+      },
+      error: error => {
+        this.loadingService.hide();
+        console.error("Project creation error:", error);
+      },
     });
   }
+
+  private loadEvent?: Observable<Event>;
 
   program?: Program;
   registerDateExpired!: boolean;
