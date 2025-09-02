@@ -1,3 +1,5 @@
+@use "styles/responsive";
+
 .control {
   border-radius: 50%;
 
@@ -68,4 +70,103 @@
 
 .placeholder {
   background-color: var(--gray);
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  max-height: calc(100vh - 40px);
+  padding: 40px 0 80px;
+  overflow-y: auto;
+
+  @include responsive.apply-desktop {
+    width: 50%;
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__cropper-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 20px 0;
+    overflow: hidden;
+    background: var(--background-secondary, #f8f9fa);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+
+    ::ng-deep {
+      .ngx-ic-main {
+        background: white;
+        border-radius: 8px;
+      }
+
+      .ngx-ic-overlay {
+        border-radius: 8px;
+      }
+
+      .ngx-ic-crop {
+        border-radius: 50%;
+        box-shadow: 0 0 0 9999px rgb(0 0 0 / 50%);
+      }
+
+      .ngx-ic-move,
+      .ngx-ic-resize {
+        border: 2px solid white;
+        box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
+      }
+
+      .ngx-ic-crop::before {
+        border-color: rgb(255 255 255 / 50%);
+      }
+    }
+  }
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    text-align: center;
+  }
+
+  &__text {
+    text-align: center;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 20px;
+
+    ::ng-deep {
+      app-button {
+        .button {
+          padding-right: 52px;
+          padding-left: 52px;
+        }
+      }
+    }
+  }
+
+  &__button {
+    margin-top: 20px;
+  }
 }

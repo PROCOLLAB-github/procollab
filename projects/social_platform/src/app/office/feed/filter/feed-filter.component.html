@@ -6,11 +6,6 @@
     <a class="text-body-12" (click)="resetFilter()">Сбросить фильтр</a>
   </div>
   <ng-container *ngTemplateOutlet="filter"></ng-container>
-  <div class="desktop__actions">
-    <app-button class="" customTypographyClass="text-body-12" (click)="applyFilter()"
-      >Применить</app-button
-    >
-  </div>
 </div>
 
 <div class="mobile">
@@ -36,9 +31,6 @@
     </div>
     }
   </div>
-  <app-button class="" customTypographyClass="text-body-14" (click)="applyFilter()"
-    >Применить</app-button
-  >
 </div>
 
 <app-button [routerLink]="'/office/profile/' + profile()?.id">Написать новость</app-button>

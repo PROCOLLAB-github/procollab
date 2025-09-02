@@ -18,6 +18,7 @@ import {
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { TokenService } from "@corelib";
+import { LoadingService } from "@office/services/loading.service";
 
 /**
  * Корневой компонент приложения
@@ -36,7 +37,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private tokenService: TokenService,
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
@@ -45,17 +47,26 @@ export class AppComponent implements OnInit, OnDestroy {
       this.authService.getChangeableRoles(),
     ]).subscribe(noop);
 
-    this.showLoaderEvents = this.router.events.pipe(
+    const showLoaderEvents = this.router.events.pipe(
       filter(evt => evt instanceof ResolveStart),
       map(() => true)
     );
-    this.hideLoaderEvents = this.router.events.pipe(
+
+    const hideLoaderEvents = this.router.events.pipe(
       filter(evt => evt instanceof ResolveEnd),
       debounceTime(200),
       map(() => false)
     );
 
-    this.isLoading$ = merge(this.hideLoaderEvents, this.showLoaderEvents);
+    this.routerLoadingSub$ = merge(hideLoaderEvents, showLoaderEvents).subscribe(isLoading => {
+      if (isLoading) {
+        this.loadingService.show();
+      } else {
+        this.loadingService.hide();
+      }
+    });
+
+    this.isLoading$ = this.loadingService.isLoading$;
 
     if (location.pathname === "/") {
       if (this.tokenService.getTokens() === null) {
@@ -80,10 +91,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.rolesSub$?.unsubscribe();
+    this.routerLoadingSub$?.unsubscribe();
     this.appHeight$?.unsubscribe();
   }
 
   rolesSub$?: Subscription;
+  routerLoadingSub$?: Subscription;
 
   private loadEvent?: Observable<Event>;
   private resizeEvent?: Observable<Event>;
@@ -91,7 +104,4 @@ export class AppComponent implements OnInit, OnDestroy {
   private appHeight$?: Subscription;
 
   isLoading$?: Observable<boolean>;
-  private showLoaderEvents?: Observable<boolean>;
-
-  private hideLoaderEvents?: Observable<boolean>;
 }

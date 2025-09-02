@@ -124,12 +124,34 @@
           <div class="text-body-14 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
-          } @if (password | controlError: "minlength") {
+          } @if (password | controlError: "passwordTooShort") {
           <div class="text-body-14 error">
-            @if (password.errors) {
-            {{ errorMessage.VALIDATION_TOO_SHORT }}
-            {{ password.errors["minlength"]["requiredLength"] }}
-            }
+            @if (password.errors) { Пароль должен содержать минимум
+            {{ password.errors["passwordTooShort"]["requiredLength"] }} символов }
+          </div>
+          } @if (password | controlError: "passwordNoUppercase") {
+          <div class="text-body-14 error">
+            Пароль должен содержать минимум одну заглавную букву (A-Z)
+          </div>
+          } @if (password | controlError: "passwordNoLowercase") {
+          <div class="text-body-14 error">
+            Пароль должен содержать минимум одну строчную букву (a-z)
+          </div>
+          } @if (password | controlError: "passwordNoNumber") {
+          <div class="text-body-14 error">Пароль должен содержать минимум одну цифру (0-9)</div>
+          } @if (password | controlError: "passwordNoSpecialChar") {
+          <div class="text-body-14 error">
+            Пароль должен содержать минимум один специальный символ
+          </div>
+          } @if (password | controlError: "passwordHasSpaces") {
+          <div class="text-body-14 error">Пароль не должен содержать пробелы</div>
+          } @if (password | controlError: "passwordHasSequence") {
+          <div class="text-body-14 error">
+            Пароль не должен содержать последовательности символов (123456, abcdef и т.д.)
+          </div>
+          } @if (password | controlError: "passwordHasRepeating") {
+          <div class="text-body-14 error">
+            Пароль не должен содержать более 2 одинаковых символов подряд
           </div>
           } @if (password | controlError: "unMatch") {
           <div class="text-body-14 error">
@@ -217,6 +239,12 @@
             {{ errorMessage.MINIMAL_AGE }}
             {{ birthday.errors["tooYoung"]["requiredAge"] }} лет }
           </div>
+          } @if (birthday | controlError: "tooOld") {
+          <div class="text-body-14 error">
+            @if (birthday.errors) {
+            {{ errorMessage.MAXIMAL_AGE }}
+            {{ birthday.errors["tooOld"]["requiredAge"] }} лет }
+          </div>
           } @if (birthday | controlError: "invalidDateFormat") {
           <div class="text-body-14 error">
             {{ errorMessage.INVALID_DATE }}
@@ -251,7 +279,16 @@
         >Нажимая на кнопку подтверждаете, что вам больше 14 лет</span
       >
     </div>
-    <app-button type="submit" class="auth__button" customTypographyClass="auth__button-typography">
+    <app-button
+      type="submit"
+      class="auth__button"
+      [disabled]="!(ageAgreement && registerAgreement)"
+      [ngStyle]="{
+        opacity: !(ageAgreement && registerAgreement) ? '0.6' : '1',
+        cursor: !(ageAgreement && registerAgreement) ? 'not-allowed' : 'pointer'
+      }"
+      customTypographyClass="auth__button-typography"
+    >
       Далее
     </app-button>
     } @else if (step === "info") {

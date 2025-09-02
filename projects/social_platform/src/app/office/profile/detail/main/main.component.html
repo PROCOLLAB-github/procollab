@@ -26,7 +26,7 @@
             <div class="modal">
               <div class="modal__body">
                 <p class="modal__title text-bold-body-16">
-                  Ваш навык подтвердили:
+                  Этот навык подтвердили:
                   <span class="modal__text"
                     >{{ skill.approves.length }}
                     {{
@@ -85,12 +85,12 @@
             </div>
           </app-modal>
 
-          <app-tag [color]="skill.approves.length ? 'complete' : 'accent'">
+          <app-tag [color]="isUserApproveSkill(skill, loggedUserId) ? 'complete' : 'accent'">
             <span>{{ skill.name }}</span>
             <i
-              (click)="onToggleApprove(skill.id, $event, skill)"
+              (click)="onToggleApprove(skill.id, $event, skill, loggedUserId)"
               appIcon
-              [icon]="skill.approves.length ? 'check' : 'plus'"
+              [icon]="isUserApproveSkill(skill, loggedUserId) ? 'check' : 'plus'"
               appSquare="16"
             ></i>
           </app-tag>
@@ -185,7 +185,7 @@
       </div>
       <ul>
         @for (p of user.programs.slice(0, 3); track p.id) {
-        <li class="project" [routerLink]="['/office/programs', p.id]">
+        <li class="project" [routerLink]="['/office/program', p.id]">
           <ng-container *ngTemplateOutlet="programTemp; context: { $implicit: p }"></ng-container>
         </li>
         }
@@ -257,9 +257,9 @@
 
         <div class="project__description">
           <div>
-            <a class="text-bold-body-14 project__title">
+            <p class="text-bold-body-14 project__title">
               {{ education.organizationName }}
-            </a>
+            </p>
 
             <p class="text-body-14 project__role">{{ education.description }}</p>
           </div>
@@ -315,9 +315,9 @@
         </p>
 
         <div>
-          <a class="text-bold-body-14 project__title">
+          <p class="text-bold-body-14 project__title">
             {{ workExperience.organizationName }}
-          </a>
+          </p>
 
           <div class="project__description">
             <p class="text-body-14 project__role">{{ workExperience.description }}</p>
@@ -340,7 +340,7 @@
         </div>
       </div>
       <ul class="languages">
-        @for (p of user.userLanguages.slice(0, 3); track $index) {
+        @for (p of user.userLanguages.slice(0, 2); track $index) {
         <li class="project">
           <ng-container
             *ngTemplateOutlet="userLanguagesTemp; context: { $implicit: p }"
@@ -348,10 +348,10 @@
         </li>
         }
       </ul>
-      <div class="languages__remaining" [class.languages__remaining--show]="readAllLanguages">
-        @if (user.userLanguages) {
+      <div class="projects__remaining" [class.projects__remaining--show]="readAllLanguages">
+        @if (user.userLanguages.length > 2) {
         <ul>
-          @for (userLanguagesItem of user.userLanguages.slice(3); track $index) {
+          @for (userLanguagesItem of user.userLanguages.slice(2); track $index) {
           <li>
             <ng-container
               *ngTemplateOutlet="userLanguagesTemp; context: { $implicit: userLanguagesItem }"
@@ -366,7 +366,7 @@
           {{ userLanguages.language }} {{ userLanguages.languageLevel }}
         </p>
       </ng-template>
-      @if (userLanguagesLength > 3) {
+      @if (userLanguagesLength > 2) {
       <div class="read-more" (click)="readAllLanguages = !readAllLanguages">
         {{ readAllLanguages ? "Скрыть" : "Читать полностью" }}
       </div>
@@ -451,4 +451,16 @@
     }
   </div>
 </section>
+
+<app-modal [open]="approveOwnSkillModal" (openChange)="approveOwnSkillModal = $event">
+  <div class="modal">
+    <div class="modal__body">
+      <p class="modal__title text-bold-body-16">
+        Ошибка при подитверждении навыка!
+        <br />
+        <span class="text-body-14">Вы не можете подтверждать навыки своего профиля</span>
+      </p>
+    </div>
+  </div>
+</app-modal>
 }

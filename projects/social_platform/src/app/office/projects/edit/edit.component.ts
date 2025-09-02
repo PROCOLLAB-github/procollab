@@ -202,6 +202,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   // Маркер того является ли проект привязанный к конкурсной программе
   isCompetitive = false;
 
+  // Маркер что проект привязан
+  isProjectBoundToProgram = false;
+
   // Текущий шаг редактирования
   get editingStep(): EditStep {
     return this.projectStepService.getCurrentStep()();
@@ -299,26 +302,27 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   setProjFormIsSubmitting!: (status: boolean) => void;
 
   /**
-   * Выполнение сохранения проекта
-   * Из дочернего компонента project-main-step через emit
-   *
-   * @param event тип проекта для публикации или для черновика
-   */
-  onSaveProject(event: { type: "draft" | "published" }): void {
-    if (event.type === "draft") {
-      this.saveProjectAsDraft();
-    } else {
-      this.saveProjectAsPublished();
-    }
-  }
-
-  /**
    * Очистка всех ошибок валидации
    */
   clearAllValidationErrors(): void {
     // Очистка основной формы
     this.projectFormService.clearAllValidationErrors();
     this.projectAchievementsService.clearAllAchievementsErrors(this.achievements);
+  }
+
+  /**
+   * Удаление проекта с проверкой удаления у пользователя
+   */
+  deleteProject(): void {
+    if (!confirm("Вы точно хотите удалить проект?")) {
+      return;
+    }
+
+    this.projectService.remove(Number(this.route.snapshot.paramMap.get("projectId"))).subscribe({
+      next: () => {
+        this.router.navigateByUrl(`/office/projects/my`);
+      },
+    });
   }
 
   /**
@@ -376,26 +380,30 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     const payload = this.projectFormService.getFormValue();
+    const projectId = Number(this.route.snapshot.paramMap.get("projectId"));
+
+    if (this.vacancyForm.dirty) {
+      this.projectVacancyService.submitVacancy(projectId);
+    }
 
     if (
       !this.validationService.getFormValidation(this.projectForm) ||
-      !this.validationService.getFormValidation(this.additionalForm)
+      !this.validationService.getFormValidation(this.additionalForm) ||
+      !this.validationService.getFormValidation(this.vacancyForm)
     ) {
       return;
     }
 
     this.setProjFormIsSubmitting(true);
-    this.projectService
-      .updateProject(Number(this.route.snapshot.paramMap.get("projectId")), payload)
-      .subscribe({
-        next: () => {
-          this.setProjFormIsSubmitting(false);
-          this.router.navigateByUrl(`/office/projects/my`);
-        },
-        error: () => {
-          this.setProjFormIsSubmitting(false);
-        },
-      });
+    this.projectService.updateProject(projectId, payload).subscribe({
+      next: () => {
+        this.setProjFormIsSubmitting(false);
+        this.router.navigateByUrl(`/office/projects/my`);
+      },
+      error: () => {
+        this.setProjFormIsSubmitting(false);
+      },
+    });
   }
 
   // Методы для работы с модальными окнами
@@ -565,10 +573,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         // Используем сервис для инициализации данных проекта
         this.projectFormService.initializeProjectData(project);
         this.projectTeamService.setInvites(invites);
+        this.projectTeamService.setCollaborators(project.collaborators);
 
         // Инициализируем дополнительные поля через сервис
         if (project.partnerProgram) {
           this.isCompetitive = project.partnerProgram.canSubmit;
+          this.isProjectBoundToProgram = !!project.partnerProgram.programId;
 
           this.projectAdditionalService.initializeAdditionalForm(
             project.partnerProgram?.programFields,

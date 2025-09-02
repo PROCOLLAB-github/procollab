@@ -1,0 +1,33 @@
+/** @format */
+
+@use "styles/typography";
+
+.collaborator {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 15px 10px;
+  background-color: var(--light-gray);
+  border-radius: var(--rounded-md);
+
+  &__role {
+    color: var(--black);
+  }
+
+  &__requirements {
+    color: var(--dark-grey);
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &__skills {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 0;
+  }
+}

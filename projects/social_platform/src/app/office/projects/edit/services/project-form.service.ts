@@ -109,7 +109,7 @@ export class ProjectFormService {
       problem: project.problem ?? "",
       presentationAddress: project.presentationAddress,
       coverImageAddress: project.coverImageAddress,
-      partnerProgramId: project.partnerProgramId ?? null,
+      partnerProgramId: project.partnerProgram?.programId ?? null,
     });
 
     if (project.partnerProgram) {
