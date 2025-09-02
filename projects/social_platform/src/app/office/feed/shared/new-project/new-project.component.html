@@ -2,7 +2,7 @@
 
 <div class="card">
   <h3 class="card__title title">
-    <span>Добро пожаловать</span>
+    <span>Добро пожаловать на платформу!</span>
     <a class="card__link" [routerLink]="['/office/projects/', feedItem.id]">{{ feedItem.name }}</a>
   </h3>
   <app-avatar
@@ -11,15 +11,15 @@
     [url]="feedItem.imageAddress"
     [hasBorder]="true"
   ></app-avatar>
-  <p class="card__text">
+  <!-- <p class="card__text">
     Команда {{ feedItem.name }} искренне поддерживает Вас в творческом начинании! Мы готовы оказать
     всю необходимую помощь для успешного воплощения вашего проекта
   </p>
-  <p class="card__description text-body-14">{{ feedItem.shortDescription }}</p>
+  <p class="card__description text-body-14">{{ feedItem.shortDescription }}</p> -->
   <app-button
     class="card__button"
     customTypographyClass="text-body-12"
     (click)="router.navigateByUrl('/office/projects/' + feedItem.id)"
-    >Перейти в проект</app-button
+    >Посмотреть проект</app-button
   >
 </div>
