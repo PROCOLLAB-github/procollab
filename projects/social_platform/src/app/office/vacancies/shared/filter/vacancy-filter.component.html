@@ -6,11 +6,6 @@
     <a class="text-body-12" (click)="resetFilter()">Сбросить фильтр</a>
   </div>
   <ng-container *ngTemplateOutlet="filter"></ng-container>
-  <div class="desktop__actions">
-    <app-button class="" customTypographyClass="text-body-12" (click)="applyFilter()"
-      >Применить</app-button
-    >
-  </div>
 </div>
 
 <div class="mobile">
@@ -36,9 +31,6 @@
     </div>
     }
   </div>
-  <app-button class="" customTypographyClass="text-body-14" (click)="applyFilter()"
-    >Применить</app-button
-  >
 </div>
 
 <ng-template #filter>
@@ -88,15 +80,27 @@
       </ul>
     </div>
 
-    <form [formGroup]="salaryForm">
-      <div class="filter__salary">
-        <span class="text-body-12">Заработная плата</span>
-        <div class="filter__amounts">
-          <app-input type="text" placeholder="от 50000" formControlName="salaryMin"></app-input>
-          <hr style="transform: rotate(90deg)" class="filter__salary-line" />
-          <app-input type="text" placeholder="до 150000" formControlName="salaryMax"></app-input>
-        </div>
+    <div class="filter__salary">
+      <span class="text-body-12">Заработная плата</span>
+      <div class="filter__amounts">
+        <app-input
+          type="text"
+          placeholder="от 50000"
+          [appValue]="salaryMinValue()"
+          (appValueChange)="onSalaryMinChange($event)"
+        >
+        </app-input>
+
+        <hr style="transform: rotate(90deg)" class="filter__salary-line" />
+
+        <app-input
+          type="text"
+          placeholder="до 150000"
+          [appValue]="salaryMaxValue()"
+          (appValueChange)="onSalaryMaxChange($event)"
+        >
+        </app-input>
       </div>
-    </form>
+    </div>
   </div>
 </ng-template>

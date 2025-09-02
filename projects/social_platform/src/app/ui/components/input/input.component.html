@@ -19,7 +19,12 @@
   @if (error) {
   <i class="field__error-icon" appIcon icon="color-error" appSquare="20"></i>
   }
-  <div class="field__right-icon">
+  <div
+    class="field__right-icon"
+    [ngStyle]="{
+      right: error ? '60px' : '24px',
+    }"
+  >
     <ng-content></ng-content>
   </div>
 </div>

@@ -20,7 +20,7 @@ import { rolesMembersList } from "projects/core/src/consts/list-roles-members";
  *
  * Входные параметры:
  * @Input invite - объект приглашения (обязательный)
- * @Input type - тип приглашения: "team" или "members" (по умолчанию "members")
+ * @Input type - тип приглашения: "team" или "invite" (по умолчанию "invite")
  *
  * Выходные события:
  * @Output remove - событие удаления приглашения, передает ID приглашения
@@ -55,7 +55,6 @@ export class InviteCardComponent implements OnInit {
   errorMessage = ErrorMessage;
 
   @Input({ required: true }) invite!: Invite;
-  @Input() type: "team" | "members" = "members";
 
   @Output() remove = new EventEmitter<number>();
   @Output() edit = new EventEmitter<{ inviteId: number; role: string; specialization: string }>();

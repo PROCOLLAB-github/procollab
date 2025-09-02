@@ -10,7 +10,7 @@
       <div>
         <div class="card__name">{{ feedItem.name }}</div>
         <div class="card__date text-body-14">
-          {{ feedItem.datetimeCreated | dayjs: "format":"DD MMMM, HH:mm" }}
+          {{ feedItem.datetimeCreated | dayjs: "format":"DD MMMM YYYY, HH:mm" }}
         </div>
       </div>
     </a>
@@ -98,14 +98,14 @@
         <i appIcon icon="like" appSquare="22"></i>
         {{ feedItem.likesCount }}
       </div>
-      <div class="footer__item text-body-12">
-        <i appIcon icon="views" appSquare="22"></i>
-        {{ feedItem.viewsCount }}
+      <div class="footer__share share" (click)="onCopyLink()">
+        <i class="share__icon" appIcon icon="share" appSquare="22"></i>
       </div>
     </div>
     <div class="footer__right">
-      <div class="footer__share share" (click)="onCopyLink()">
-        <i class="share__icon" appIcon icon="share" appSquare="22"></i>
+      <div class="footer__item text-body-12">
+        <i appIcon icon="views" appSquare="22"></i>
+        {{ feedItem.viewsCount }}
       </div>
     </div>
   </div>

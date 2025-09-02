@@ -23,11 +23,12 @@ import { Subscription } from "rxjs";
  *
  * Предоставляет интерфейс для фильтрации элементов ленты по типам контента.
  * Позволяет пользователю выбирать, какие типы элементов отображать в ленте.
+ * Обновления URL происходят мгновенно при каждом изменении фильтра.
  *
  * ОСНОВНЫЕ ФУНКЦИИ:
  * - Отображение выпадающего меню с опциями фильтрации
  * - Управление состоянием активных фильтров
- * - Синхронизация фильтров с URL параметрами
+ * - Мгновенная синхронизация фильтров с URL параметрами
  * - Применение и сброс фильтров
  *
  * ДОСТУПНЫЕ ФИЛЬТРЫ:
@@ -82,12 +83,15 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
     });
 
     // Читаем активные фильтры из URL
-    this.route.queryParams.subscribe(params => {
-      params["includes"] &&
-        this.includedFilters.set(params["includes"].split(this.feedService.FILTER_SPLIT_SYMBOL));
+    const routeSubscription = this.route.queryParams.subscribe(queries => {
+      if (queries["includes"]) {
+        this.includedFilters.set(queries["includes"].split(this.feedService.FILTER_SPLIT_SYMBOL));
+      } else {
+        this.includedFilters.set([]);
+      }
     });
 
-    this.subscriptions.push(profileSubscription);
+    this.subscriptions.push(profileSubscription, routeSubscription);
   }
 
   ngOnDestroy(): void {
@@ -114,18 +118,21 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
   includedFilters = signal<string[]>([]);
 
   /**
-   * ПРИМЕНЕНИЕ ФИЛЬТРОВ
+   * ОБНОВЛЕНИЕ URL С ТЕКУЩИМИ ФИЛЬТРАМИ
    *
-   * ЧТО ДЕЛАЕТ:
-   * - Обновляет URL параметры с выбранными фильтрами
-   * - Инициирует перезагрузку ленты с новыми фильтрами
-   * - Сохраняет другие параметры запроса
+   * Приватный метод для обновления URL параметров.
+   * Вызывается автоматически при любом изменении фильтров.
    */
-  applyFilter(): void {
+  private updateUrl(): void {
+    const includesParam =
+      this.includedFilters().length > 0
+        ? this.includedFilters().join(this.feedService.FILTER_SPLIT_SYMBOL)
+        : null;
+
     this.router
       .navigate([], {
         queryParams: {
-          includes: this.includedFilters().join(this.feedService.FILTER_SPLIT_SYMBOL),
+          includes: includesParam,
         },
         relativeTo: this.route,
         queryParamsHandling: "merge",
@@ -134,7 +141,7 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * ПЕРЕКЛЮЧЕНИЕ ФИЛЬТРА
+   * ПЕРЕКЛЮЧЕНИЕ ФИЛЬТРА С МГНОВЕННЫМ ОБНОВЛЕНИЕМ URL
    *
    * ЧТО ПРИНИМАЕТ:
    * @param keyword - значение фильтра для переключения
@@ -142,21 +149,26 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
    * ЧТО ДЕЛАЕТ:
    * - Добавляет фильтр, если он не активен
    * - Удаляет фильтр, если он уже активен
-   * - Обновляет состояние активных фильтров
+   * - Мгновенно обновляет URL параметры
    */
   setFilter(keyword: string): void {
     this.includedFilters.update(included => {
-      if (included.indexOf(keyword) !== -1) {
+      const newIncluded = [...included];
+
+      if (newIncluded.indexOf(keyword) !== -1) {
         // Удаляем фильтр, если он уже активен
-        const idx = included.indexOf(keyword);
-        included.splice(idx, 1);
+        const idx = newIncluded.indexOf(keyword);
+        newIncluded.splice(idx, 1);
       } else {
         // Добавляем новый фильтр
-        included.push(keyword);
+        newIncluded.push(keyword);
       }
 
-      return included;
+      return newIncluded;
     });
+
+    // Мгновенно обновляем URL
+    this.updateUrl();
   }
 
   /**
@@ -164,12 +176,12 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
    *
    * ЧТО ДЕЛАЕТ:
    * - Очищает все активные фильтры
-   * - Применяет пустой набор фильтров
+   * - Мгновенно обновляет URL
    * - Возвращает ленту к состоянию по умолчанию
    */
   resetFilter(): void {
     this.includedFilters.set([]);
-    this.applyFilter();
+    this.updateUrl();
   }
 
   /**

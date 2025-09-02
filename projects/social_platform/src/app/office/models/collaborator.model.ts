@@ -15,7 +15,15 @@ export class Collaborator {
   /** Роль участника в проекте (например, "Разработчик", "Дизайнер") */
   role!: string;
   /** Массив ключевых навыков участника */
-  keySkills!: string[];
+  skills!: {
+    id: number;
+    name: string;
+    category: {
+      id: number;
+      name: string;
+    };
+  }[];
+
   /** URL аватара участника */
   avatar!: string;
 }

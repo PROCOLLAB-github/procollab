@@ -3,6 +3,7 @@
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ValidationService } from "@corelib";
+import { Collaborator } from "@office/models/collaborator.model";
 import { Invite } from "@office/models/invite.model";
 import { InviteService } from "@services/invite.service";
 
@@ -19,6 +20,7 @@ export class ProjectTeamService {
   private readonly validationService = inject(ValidationService);
 
   public readonly invites = signal<Invite[]>([]);
+  public readonly collaborators = signal<Collaborator[]>([]);
   public readonly isInviteModalOpen = signal<boolean>(false);
   public readonly inviteNotExistingError = signal<Error | null>(null);
 
@@ -64,6 +66,22 @@ export class ProjectTeamService {
   }
 
   /**
+   * Устанавливает список команды
+   * @param collaborators массив Collaborator
+   */
+  public setCollaborators(collaborators: Collaborator[]): void {
+    this.collaborators.set(collaborators);
+  }
+
+  /**
+   * Возвращает текущий список команды.
+   * @returns Collaborator[] массив команды
+   */
+  public getCollaborators(): Collaborator[] {
+    return this.collaborators();
+  }
+
+  /**
    * Возвращает текущий список приглашений.
    * @returns Invite[] массив приглашений
    */
@@ -83,14 +101,6 @@ export class ProjectTeamService {
   public get specialization() {
     return this.inviteForm.get("specialization");
   }
-
-  /**
-   * Проверяет, заполнены ли все приглашения (accepted === null).
-   * @returns boolean true если все приглашения приняты или отклонены
-   */
-  public readonly invitesFill = computed(
-    () => this.invites().length > 0 && this.invites().every(inv => inv.isAccepted === null)
-  );
 
   /**
    * Открывает модальное окно для отправки приглашения.

@@ -47,10 +47,16 @@
     display: flex;
     gap: 20px;
     align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
 
     .years__left,
     .years__right {
       width: 50%;
+    }
+
+    &--attention {
+      color: var(--dark-grey);
     }
   }
 }
@@ -82,7 +88,7 @@
     position: absolute;
     top: 65%;
     left: 38%;
-    z-index: 100;
+    z-index: 10;
     display: none;
     width: 250px;
     padding: 12px;
@@ -125,7 +131,7 @@
     gap: 20px;
     align-items: center;
     justify-content: space-between;
-    width: 90%;
+    width: 100%;
     padding: 12px;
     overflow: hidden;
     border: 1px solid var(--medium-grey-for-outline);
@@ -133,6 +139,7 @@
   }
 
   &__text {
+    width: 90%;
     color: var(--dark-grey);
   }
 
@@ -163,13 +170,16 @@
 }
 
 .edit {
-  width: 10%;
   color: var(--dark-grey);
   cursor: pointer;
 }
 
 .basket {
   color: var(--red);
+}
+
+i {
+  width: 24px;
 }
 
 .cancel {

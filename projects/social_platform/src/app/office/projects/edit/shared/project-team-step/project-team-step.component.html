@@ -5,8 +5,27 @@
     <label class="text-heading-4 field-label">Команда</label>
     <ul
       class="invite__team"
-      [style.overflow-y]="invites.length > 8 ? 'auto' : 'none'"
-      [style.display]="invitesFill() ? 'grid' : 'none'"
+      [style.overflow-x]="collaborators.length > 8 ? 'auto' : 'none'"
+      [style.display]="collaborators.length ? 'grid' : 'none'"
+    >
+      @for (collaborator of collaborators; track collaborator.userId) {
+      <li class="invite__item">
+        <app-collaborator-card [collaborator]="collaborator"></app-collaborator-card>
+      </li>
+      }
+    </ul>
+
+    <label
+      class="text-heading-4 field-label"
+      style="margin-top: 30px"
+      [style.display]="invitesFill ? 'block' : 'none'"
+    >
+      Приглашения в команду
+    </label>
+    <ul
+      class="invite__team"
+      [style.overflow-x]="invites.length > 8 ? 'auto' : 'none'"
+      [style.display]="invitesFill ? 'grid' : 'none'"
     >
       @for (user of invites; track user.id) { @if (user.isAccepted === null) {
       <li class="invite__item">

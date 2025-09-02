@@ -182,8 +182,8 @@
   </div>
 
   <div class="project__right">
-    @if (authService.profile | async; as profile) { @if (profile.id == leaderId) { @if
-    (programTagsOptions.length) {
+    @if (!isProjectBoundToProgram) { @if (authService.profile | async; as profile) { @if (profile.id
+    == leaderId) { @if (programTagsOptions.length) {
     <fieldset class="project__tags" style="margin-top: -10px">
       <label for="program_tag" class="field-label">Выбор тега</label>
       <app-select
@@ -197,7 +197,7 @@
     <app-button (click)="onAssignToProgram()" customTypographyClass="text-body-12">
       Привязать проект к программе
     </app-button>
-    } } } @if (presentationAddress; as presentationAddress) {
+    } } } } @if (presentationAddress; as presentationAddress) {
     <fieldset class="project__file">
       <app-upload-file
         formControlName="presentationAddress"
