@@ -30,10 +30,10 @@ export class Project {
   id!: number;
   name!: string;
   description!: string;
-  track!: string;
-  direction!: string;
+  targetAudience!: string;
+  implementationDeadline!: string;
+  trl!: string;
   actuality!: string;
-  goal!: string;
   problem!: string;
   region!: string;
   step!: number;
@@ -63,10 +63,10 @@ export class Project {
       name: "string",
       region: "sdf",
       step: 1,
-      track: "",
-      direction: "",
+      targetAudience: "",
+      implementationDeadline: "",
       actuality: "",
-      goal: "",
+      trl: "",
       problem: "",
       description: "string",
       shortDescription: "string",

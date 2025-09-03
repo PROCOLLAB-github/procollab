@@ -223,11 +223,7 @@
 
   &__actions {
     display: flex;
-
-    app-button {
-      display: block;
-      margin-right: 10px;
-    }
+    gap: 10px;
   }
 
   &__attach {

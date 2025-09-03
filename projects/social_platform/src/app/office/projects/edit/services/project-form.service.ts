@@ -44,8 +44,8 @@ export class ProjectFormService {
       name: ["", [Validators.required]],
       region: ["", [Validators.required]],
       step: [null, [Validators.required]],
-      track: [null],
-      direction: [null],
+      implementationDeadline: [null],
+      trl: [null],
       links: this.fb.array([]),
       link: ["", Validators.pattern(/^(https?:\/\/)/)],
       industryId: [undefined, [Validators.required]],
@@ -53,7 +53,7 @@ export class ProjectFormService {
       presentationAddress: ["", [Validators.required]],
       coverImageAddress: ["", [Validators.required]],
       actuality: ["", [Validators.max(1000)]],
-      goal: ["", [Validators.required, Validators.max(500)]],
+      targetAudience: ["", [Validators.required, Validators.max(500)]],
       problem: ["", [Validators.required, Validators.max(1000)]],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
@@ -102,10 +102,10 @@ export class ProjectFormService {
       step: project.step,
       industryId: project.industry,
       description: project.description,
-      track: project.track ?? null,
-      direction: project.direction ?? null,
+      implementationDeadline: project.implementationDeadline ?? null,
+      targetAudience: project.targetAudience ?? null,
       actuality: project.actuality ?? "",
-      goal: project.goal ?? "",
+      trl: project.trl ?? "",
       problem: project.problem ?? "",
       presentationAddress: project.presentationAddress,
       coverImageAddress: project.coverImageAddress,
@@ -219,20 +219,20 @@ export class ProjectFormService {
     return this.projectForm.get("actuality");
   }
 
-  public get goal() {
-    return this.projectForm.get("goal");
+  public get implementationDeadline() {
+    return this.projectForm.get("implementationDeadline");
   }
 
   public get problem() {
     return this.projectForm.get("problem");
   }
 
-  public get track() {
-    return this.projectForm.get("track");
+  public get targetAudience() {
+    return this.projectForm.get("targetAudience");
   }
 
-  public get direction() {
-    return this.projectForm.get("direction");
+  public get trl() {
+    return this.projectForm.get("trl");
   }
 
   public get presentationAddress() {

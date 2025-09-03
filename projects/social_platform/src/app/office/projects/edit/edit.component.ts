@@ -234,10 +234,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     )
   );
 
-  projectSteps$: Observable<SelectComponent["options"]> = this.projectService.steps.pipe(
-    map(steps => steps.map(step => ({ id: step.id, label: step.name, value: step.id })))
-  );
-
   subscriptions: (Subscription | undefined)[] = [];
 
   profileId: number = this.route.snapshot.params["projectId"];

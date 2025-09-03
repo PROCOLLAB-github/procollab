@@ -44,11 +44,13 @@
       </div>
     </div>
   </div>
-  <app-button (click)="router.navigate(['/skills'])" appearance="outline"
+  <app-button size="big" (click)="router.navigate(['/skills'])" appearance="outline"
     >В меню навыков</app-button
   >
   @if (res.nextTaskId) {
-  <app-button (click)="router.navigate(['/task', res.nextTaskId])">Следующее задание</app-button>
+  <app-button size="big" (click)="router.navigate(['/task', res.nextTaskId])"
+    >Следующее задание</app-button
+  >
   }
 </div>
 }

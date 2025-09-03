@@ -251,11 +251,16 @@
         >Нажимая на кнопку подтверждаете, что вам больше 14 лет</span
       >
     </div>
-    <app-button type="submit" class="auth__button" customTypographyClass="auth__button-typography">
+    <app-button
+      size="big"
+      type="submit"
+      class="auth__button"
+      customTypographyClass="auth__button-typography"
+    >
       Далее
     </app-button>
     } @else if (step === "info") {
-    <app-button [loader]="registerIsSubmitting" type="submit" class="auth__button">
+    <app-button size="medium" [loader]="registerIsSubmitting" type="submit" class="auth__button">
       Создать аккаунт
     </app-button>
     }

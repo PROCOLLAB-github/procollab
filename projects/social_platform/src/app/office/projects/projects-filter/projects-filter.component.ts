@@ -62,16 +62,10 @@ export class ProjectsFilterComponent implements OnInit {
       this.industries = industries;
     });
 
-    // Подписка на данные об этапах проектов
-    this.steps$ = this.projectService.steps.subscribe(steps => {
-      this.steps = steps;
-    });
-
     // Восстановление состояния фильтров из query параметров
     this.queries$ = this.route.queryParams.subscribe(queries => {
       console.log(queries);
       this.currentIndustry = parseInt(queries["industry"]);
-      this.currentStep = parseInt(queries["step"]);
       this.currentMembersCount = parseInt(queries["membersCount"]);
       this.hasVacancies = queries["anyVacancies"] === "true";
       this.isMospolytech = queries["is_mospolytech"] === "true";
@@ -88,11 +82,6 @@ export class ProjectsFilterComponent implements OnInit {
   // Подписки для управления жизненным циклом
   queries$?: Subscription;
 
-  // Состояние фильтра по этапу проекта
-  currentStep: number | null = null;
-  steps: ProjectStep[] = [];
-  steps$?: Subscription;
-
   // Состояние фильтра по отрасли
   currentIndustry: number | null = null;
   industries: Industry[] = [];
@@ -108,24 +97,6 @@ export class ProjectsFilterComponent implements OnInit {
 
   // Текущий тип проекта (по умолчанию - все проекты)
   currentFilterTag = 2;
-
-  /**
-   * Обработчик фильтрации по этапу проекта
-   * @param event - событие клика
-   * @param stepId - ID этапа проекта (undefined для сброса)
-   */
-  onFilterByStep(event: Event, stepId?: number): void {
-    event.stopPropagation();
-
-    this.router
-      .navigate([], {
-        queryParams: { step: stepId === this.currentStep ? undefined : stepId },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.debug("Query change from ProjectsComponent"));
-    console.log(stepId, this.currentStep);
-  }
 
   /**
    * Обработчик фильтрации по отрасли

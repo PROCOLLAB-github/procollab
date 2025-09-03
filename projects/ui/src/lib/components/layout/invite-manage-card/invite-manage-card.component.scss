@@ -43,13 +43,6 @@
   &__actions {
     display: flex;
     margin-top: 16px;
-
-    app-button {
-      flex-basis: 50%;
-
-      &:first-child {
-        margin-right: 15px;
-      }
-    }
+    gap: 12px;
   }
 }

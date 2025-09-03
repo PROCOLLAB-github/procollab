@@ -7,7 +7,7 @@
   </div>
   <ng-container *ngTemplateOutlet="filter"></ng-container>
   <div class="desktop__actions">
-    <app-button class="" customTypographyClass="text-body-12" (click)="applyFilter()"
+    <app-button size="big" class="" customTypographyClass="text-body-12" (click)="applyFilter()"
       >Применить</app-button
     >
   </div>
@@ -41,7 +41,9 @@
   >
 </div>
 
-<app-button [routerLink]="'/office/profile/' + profile()?.id">Написать новость</app-button>
+<app-button size="big" [routerLink]="'/office/profile/' + profile()?.id"
+  >Написать новость</app-button
+>
 
 <ng-template #filter>
   <div class="filter">

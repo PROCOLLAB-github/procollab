@@ -12,7 +12,9 @@
           [routerLink]="['/office/profile', profile.id]"
           [skipLocationChange]="true"
         >
-          <app-button>Вернуться в профиль</app-button>
+          <app-button size="big" customTypographyClass="text-body-14"
+            >Вернуться в профиль</app-button
+          >
         </a>
       </div>
     </app-modal>
@@ -79,7 +81,9 @@
           <fieldset class="vacancy__buttons">
             <div class="vacancy__button">
               <label for="cv" class="field-label">Сюда можете прикрепить своё резюме</label>
-              <app-button class="text-body-14">Прикрепить резюме от PROCOLLAB</app-button>
+              <app-button size="big" class="text-body-12"
+                >Прикрепить резюме от PROCOLLAB</app-button
+              >
             </div>
             <div
               [class.vacancy__slides-error--active]="accompanyingFile | controlError: 'required'"
@@ -119,13 +123,14 @@
         </div>
 
         <app-button
+          size="medium"
           (click)="onSubmit()"
           [loader]="sendFormIsSubmitting"
           type="submit"
           class="form__submit"
         >
           <span>Отправить отклик</span>
-          <i class="form__submit-icon" appIcon icon="arrow-no-body" appSquare="20"></i>
+          <i class="form__submit-icon" appIcon icon="arrow-no-body" appSquare="18"></i>
         </app-button>
       </div>
     </div>

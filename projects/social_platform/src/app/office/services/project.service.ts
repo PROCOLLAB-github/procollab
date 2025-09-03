@@ -37,27 +37,6 @@ export class ProjectService {
   readonly steps$ = new BehaviorSubject<ProjectStep[]>([]);
 
   /**
-   * Observable для подписки на изменения этапов проектов
-   * @returns Observable<ProjectStep[]> - поток данных с этапами проектов
-   */
-  steps = this.steps$.asObservable();
-
-  /**
-   * Получает список всех этапов проектов с сервера
-   * Преобразует данные из формата [number, string][] в объекты ProjectStep
-   * Обновляет локальный кеш этапов
-   *
-   * @returns Observable<ProjectStep[]> - массив этапов проектов с полями id и name
-   */
-  getProjectSteps(): Observable<ProjectStep[]> {
-    return this.apiService.get<[number, string][]>(`${this.PROJECTS_URL}/steps/`).pipe(
-      map(steps => steps.map(step => ({ id: step[0], name: step[1] }))),
-      map(steps => plainToInstance(ProjectStep, steps)),
-      tap(steps => this.steps$.next(steps))
-    );
-  }
-
-  /**
    * Получает список всех проектов с пагинацией
    *
    * @param params - HttpParams с параметрами запроса (limit, offset, фильтры)

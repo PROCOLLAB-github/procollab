@@ -30,15 +30,6 @@
       }
     </div>
     <div class="filter__block">
-      <h4 class="text-body-12 filter__name">Этап проекта</h4>
-      @for (step of steps; track step.id) {
-      <div class="text-body-14 filter__checkbox" (click)="onFilterByStep($event, step.id)">
-        <app-checkbox [checked]="step.id === currentStep"></app-checkbox>
-        {{ step.name }}
-      </div>
-      }
-    </div>
-    <div class="filter__block">
       <h4 class="text-body-12 filter__name">Участники (кол-во)</h4>
       <app-num-slider
         [appNums]="membersCountOptions"

@@ -114,18 +114,12 @@
   &__save {
     @include responsive.apply-desktop {
       position: absolute;
-      right: 24px;
+      right: 50px;
       bottom: 48px;
       display: flex;
       gap: 10px;
       justify-content: flex-end;
       order: unset;
-      width: 90%;
-
-      app-button {
-        align-self: flex-end;
-        width: 20%;
-      }
     }
   }
 
@@ -135,10 +129,6 @@
     flex-direction: column;
     gap: 20px;
     align-items: center;
-
-    app-button {
-      width: 250px;
-    }
 
     span {
       color: var(--red);
@@ -165,11 +155,6 @@
     gap: 20px;
     align-items: center;
     width: 672px;
-
-    app-button {
-      width: 100%;
-      max-width: 366px;
-    }
   }
 
   &__content {
@@ -254,15 +239,6 @@
     gap: 10px;
     align-items: center;
     margin-top: 20px;
-
-    ::ng-deep {
-      app-button {
-        .button {
-          padding-right: 52px;
-          padding-left: 52px;
-        }
-      }
-    }
   }
 
   &__button {

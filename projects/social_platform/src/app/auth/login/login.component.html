@@ -26,7 +26,10 @@
     </fieldset>
     } @if (loginForm.get("password"); as password) {
     <fieldset class="auth__field">
-      <label for="password" class="field-label">Пароль</label>
+      <div class="login__password">
+        <label class="field-label" for="password">Пароль</label>
+        <a routerLink="/auth/reset_password/send_email" class="login__forget"> Забыли пароль? </a>
+      </div>
       <app-input
         [error]="password | controlError"
         id="password"
@@ -70,6 +73,7 @@
     </div>
     }
     <app-button
+      size="big"
       [loader]="loginIsSubmitting"
       class="auth__button"
       customTypographyClass="auth__button-typography"
@@ -85,6 +89,5 @@
         appViewBox="0 0 18 9"
       ></i>
     </app-button>
-    <a routerLink="/auth/reset_password/send_email" class="login__forget"> Забыли пароль? </a>
   </div>
 </form>

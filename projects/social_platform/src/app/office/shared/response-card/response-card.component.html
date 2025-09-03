@@ -45,10 +45,23 @@
     } @if (!(profileId === response.user.id)) {
     <div class="text__actions actions">
       <a [routerLink]="['/office/chats', profileId + '_' + response.user.id]">
-        <app-button class="actions__button--inactive">Связаться</app-button>
+        <app-button
+          customTypographyClass="text-body-12"
+          size="medium"
+          class="actions__button--inactive"
+          >Связаться</app-button
+        >
       </a>
-      <app-button class="actions__button" (click)="onAccept(response.id)">Принять</app-button>
       <app-button
+        customTypographyClass="text-body-12"
+        size="medium"
+        class="actions__button"
+        (click)="onAccept(response.id)"
+        >Принять</app-button
+      >
+      <app-button
+        customTypographyClass="text-body-12"
+        size="medium"
         class="actions__button"
         color="red"
         appearance="outline"

@@ -32,7 +32,7 @@
             @if (isUserSubscribed) {
             <i
               appIcon
-              appSquare="24"
+              appSquare="18"
               [style]="{ color: isUserSubscribed ? 'var(--green)' : '' }"
               [icon]="isUserSubscribed ? 'check' : ''"
             ></i>
@@ -288,9 +288,9 @@
         [routerLink]="['/office/projects/', project.id, 'edit']"
         [queryParams]="{ editingStep: 'main' }"
       >
-        <app-button>
-          <span>Добавить вакансию</span>
-          <i appIcon icon="plus" appSquare="20"></i>
+        <app-button size="big">
+          <span class="text-body-14">Добавить вакансию</span>
+          <i appIcon icon="plus" appSquare="14"></i>
         </app-button>
       </a>
       } @if (project.achievements.length) {
@@ -415,7 +415,6 @@
 
       <app-button
         color="grey"
-        style="width: 50%"
         customTypographyClass="text-body-12"
         (click)="isEditDisableModal = false"
         >Отмена</app-button

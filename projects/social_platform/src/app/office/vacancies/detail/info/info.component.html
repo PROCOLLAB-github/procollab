@@ -104,12 +104,14 @@
 
     <div class="vacancy__right">
       <app-button
-        customTypographyClass="text-body-14"
+        size="big"
+        customTypographyClass="text-body-12"
         [routerLink]="['/office/vacancy/', vacancy.id]"
         >Откликнуться</app-button
       >
       <app-button
-        customTypographyClass="text-body-14"
+        size="big"
+        customTypographyClass="text-body-12"
         color="green"
         (click)="this.openModal.set(true)"
         >Прокачать себя</app-button
@@ -132,15 +134,13 @@
         Сделай первый шаг в карьере, в бизнесе, в жизни вместе с подпиской
       </p>
     </div>
-    <app-button customTypographyClass="text-body-12" style="width: 35%" (click)="openSkills()"
+    <app-button
+      size="big"
+      customTypographyClass="text-body-12"
+      style="width: 35%"
+      (click)="openSkills()"
       >Узнать подробнее</app-button
     >
   </div>
 </app-modal>
-
-<!-- <app-subscription-plans
-  [subscriptionPlans]="subscriptions()"
-  [open]="openSubscription()"
-  (openChange)="openSubscription.set($event)"
-></app-subscription-plans> -->
 }

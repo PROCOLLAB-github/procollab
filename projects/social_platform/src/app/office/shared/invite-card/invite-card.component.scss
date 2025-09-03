@@ -51,11 +51,6 @@
     }
 
     ::ng-deep {
-      app-button {
-        align-self: center;
-        width: 30%;
-      }
-
       app-input {
         input {
           @include typography.body-12;

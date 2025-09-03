@@ -118,7 +118,7 @@
             (optionSelected)="onAddSkill($event)"
           ></app-autocomplete-input>
           <app-button type="button" class="vacancies__button" (click)="onToggleSkillsGroupsModal()">
-            <i appIcon icon="folder" appWidth="24" appHeight="24"></i>
+            <i appIcon icon="folder" appWidth="18" appHeight="18"></i>
           </app-button>
         </div>
       </fieldset>
@@ -158,7 +158,12 @@
   </div>
 
   <div class="project__right">
-    <app-button class="vacancy__submit" [loader]="vacancyIsSubmitting()" (click)="submitVacancy()">
+    <app-button
+      size="big"
+      class="vacancy__submit"
+      [loader]="vacancyIsSubmitting()"
+      (click)="submitVacancy()"
+    >
       <span>Создать вакансию</span>
       <i appIcon icon="person" appSquare="24"></i>
     </app-button>

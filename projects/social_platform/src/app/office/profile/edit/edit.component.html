@@ -5,7 +5,9 @@
   <div class="profile__top">
     <p class="profile__title">Редактировать профиль</p>
     <a class="profile__back" (click)="onBack()">
-      <app-button [color]="'grey'" customTypographyClass="text-body-12">Назад</app-button>
+      <app-button size="big" [color]="'grey'" customTypographyClass="text-body-12"
+        >Назад</app-button
+      >
     </a>
   </div>
 
@@ -189,12 +191,8 @@
                 placeholder="Java Developer"
                 formControlName="speciality"
               ></app-autocomplete-input>
-              <app-button
-                type="button"
-                class="speciality-field__button"
-                (click)="toggleSpecsGroupsModal()"
-              >
-                <i appIcon icon="folder" appWidth="24" appHeight="24"></i>
+              <app-button type="button" (click)="toggleSpecsGroupsModal()">
+                <i appIcon icon="folder" appWidth="18" appHeight="18"></i>
               </app-button>
             </div>
             @if (speciality | controlError: "required") {
@@ -400,6 +398,7 @@
 
       <div class="profile__row education__block">
         <app-button
+          size="big"
           [disabled]="!isEducationDirty"
           [ngStyle]="{
             opacity: !isEducationDirty ? '0.6' : '1',
@@ -537,6 +536,7 @@
 
       <div class="profile__row education__block">
         <app-button
+          size="big"
           [disabled]="!isWorkDirty"
           [ngStyle]="{
             opacity: !isWorkDirty ? '0.6' : '1',
@@ -625,7 +625,7 @@
           </ng-container>
         </div>
       </div>
-      <app-button class="profile__add-achievement" (click)="addAchievement()">
+      <app-button size="medium" class="profile__add-achievement" (click)="addAchievement()">
         <span>Добавить достижение</span>
         <i appIcon icon="plus" appSquare="14"></i>
       </app-button>
@@ -647,12 +647,8 @@
                   (searchStart)="onSearchSkill($event)"
                   (optionSelected)="onAddSkill($event)"
                 ></app-autocomplete-input>
-                <app-button
-                  type="button"
-                  class="skills-field__button"
-                  (click)="toggleSkillsGroupsModal()"
-                >
-                  <i appIcon icon="folder" appWidth="24" appHeight="24"></i>
+                <app-button type="button" (click)="toggleSkillsGroupsModal()">
+                  <i appIcon icon="folder" appWidth="18" appHeight="18"></i>
                 </app-button>
               </div>
             </fieldset>
@@ -719,6 +715,7 @@
           </div>
 
           <app-button
+            size="big"
             [disabled]="
               !isLanguageDirty || languageItems().length === 4 || userLanguages.length === 4
             "
@@ -820,6 +817,7 @@
     </div>
     <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
       <app-button
+        size="big"
         [disabled]="
           editEducationClick ||
           editWorkClick ||

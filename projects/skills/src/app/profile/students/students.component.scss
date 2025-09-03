@@ -74,12 +74,6 @@
     color: var(--dark-grey);
   }
 
-  app-button {
-    &::ng-deep .button--inline {
-      height: 25px;
-    }
-  }
-
   &__stats {
     position: relative;
     top: auto;
@@ -193,26 +187,6 @@
   &__trajectories,
   &__meeting {
     color: var(--dark-grey);
-  }
-
-  &__save {
-    width: 100%;
-
-    app-button {
-      &::ng-deep .button--inline {
-        min-height: 45px;
-      }
-    }
-
-    @include responsive.apply-desktop {
-      width: 13%;
-
-      app-button {
-        &::ng-deep .button--inline {
-          min-height: 38px;
-        }
-      }
-    }
   }
 }
 

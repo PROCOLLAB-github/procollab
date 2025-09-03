@@ -26,18 +26,6 @@
     justify-content: space-between;
     width: 100%;
   }
-
-  &__actions {
-    align-self: flex-start;
-    width: 50%;
-
-    app-button {
-      &::ng-deep .button--inline {
-        min-height: 38px;
-        padding: 0;
-      }
-    }
-  }
 }
 
 .mobile {
@@ -47,13 +35,6 @@
 
   @include responsive.apply-desktop {
     display: none;
-  }
-
-  app-button {
-    &::ng-deep .button--inline {
-      min-height: 38px;
-      padding: 0;
-    }
   }
 }
 

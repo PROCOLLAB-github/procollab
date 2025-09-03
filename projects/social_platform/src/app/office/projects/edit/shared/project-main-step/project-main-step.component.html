@@ -119,16 +119,16 @@
         </div>
         }
       </fieldset>
-      } @if (goal; as goal) {
+      } @if (implementationDeadline; as implementationDeadline) {
       <fieldset>
-        <label class="field-label" for="goal">Цель проекта</label>
+        <label class="field-label" for="implementationDeadline">Цель проекта</label>
         <app-input
-          id="goal"
-          formControlName="goal"
-          [error]="(goal | controlError) && projSubmitInitiated"
+          id="implementationDeadline"
+          formControlName="implementationDeadline"
+          [error]="(implementationDeadline | controlError) && projSubmitInitiated"
           placeholder="Опиши в чём цель твоего проекта"
         ></app-input>
-        @if ((goal | controlError: "required") && projSubmitInitiated) {
+        @if ((implementationDeadline | controlError: "required") && projSubmitInitiated) {
         <div class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
@@ -149,29 +149,29 @@
         </div>
         }
       </fieldset>
-      } @if (trackControl; as track) {
+      } @if (trl; as trl) {
       <fieldset>
         <app-select
-          id="track"
-          formControlName="track"
+          id="trl"
+          formControlName="trl"
           placeholder="Трек"
           [options]="trackList"
         ></app-select>
-        @if ((track | controlError: "required")) {
+        @if ((trl | controlError: "required")) {
         <div class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
       </fieldset>
-      } @if (direction; as direction) {
+      } @if (targetAudience; as targetAudience) {
       <fieldset>
         <app-select
-          id="direction"
-          formControlName="direction"
+          id="targetAudience"
+          formControlName="targetAudience"
           placeholder="Направление"
           [options]="directionList"
         ></app-select>
-        @if ((direction | controlError: "required")) {
+        @if ((targetAudience | controlError: "required")) {
         <div class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>

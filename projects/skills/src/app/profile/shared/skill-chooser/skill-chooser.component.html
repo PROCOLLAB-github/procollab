@@ -1,7 +1,7 @@
 <!-- @format -->
 
 @if (open && !nonConfirmerModalOpen()) {
-<app-modal [open]="open" (openChange)="onOpenChange($event)">
+<app-modal [open]="true" (openChange)="onOpenChange($event)">
   <div class="plans">
     <i (click)="onCloseModal()" appIcon icon="cross" class="plans__cross"></i>
     <h1 class="plans__title">Выберите 5 навыков</h1>
@@ -80,6 +80,7 @@
 
       <div class="cancel__buttons-group">
         <app-button
+          size="medium"
           customTypographyClass="text-body-12"
           [color]="'grey'"
           (click)="onSubscriptionModalClosed()"
@@ -87,6 +88,7 @@
         >
 
         <app-button
+          size="medium"
           routerLink="/subscription"
           customTypographyClass="text-body-12"
           [color]="'primary'"

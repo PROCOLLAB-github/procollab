@@ -3,7 +3,9 @@
   <div class="project__top">
     <p class="project__title">Редактировать проект</p>
     <a class="project__back" [routerLink]="'/office/projects/' + profileId">
-      <app-button [color]="'grey'" customTypographyClass="text-body-12">Назад</app-button>
+      <app-button size="big" [color]="'grey'" customTypographyClass="text-body-12"
+        >Назад</app-button
+      >
     </a>
   </div>
   <main class="project">
@@ -18,7 +20,6 @@
         <app-project-main-step
           style="width: 100%"
           [industries$]="industries$"
-          [projectSteps$]="projectSteps$"
           [programTagsOptions]="programTagsOptions"
           [leaderId]="leaderId"
           [projSubmitInitiated]="projSubmitInitiated"
@@ -54,6 +55,7 @@
       </div>
       <div class="project__save">
         <app-button
+          size="medium"
           customTypographyClass="text-body-12"
           color="grey"
           [loader]="projFormIsSubmittingAsDraft"
@@ -62,6 +64,7 @@
           Сохранить черновик
         </app-button>
         <app-button
+          size="medium"
           customTypographyClass="text-body-12"
           [loader]="projFormIsSubmittingAsPublished"
           (click)="saveProjectAsPublished()"
@@ -109,6 +112,7 @@
     </p>
 
     <app-button
+      size="medium"
       class="cancel__button"
       customTypographyClass="text-body-12"
       (click)="clearAssignProjectToProgramError()"
@@ -140,6 +144,7 @@
     </p>
 
     <app-button
+      size="medium"
       class="cancel__button"
       customTypographyClass="text-body-12"
       (click)="closeAssignProjectToProgramModal()"
@@ -210,12 +215,16 @@
 
     <div class="cancel__buttons">
       <app-button
+        size="medium"
         customTypographyClass="text-body-12"
         color="grey"
         (click)="isSendDescisionToPartnerProgramProject = false"
         >Отмена</app-button
       >
-      <app-button customTypographyClass="text-body-12" (click)="closeSendingDescisionModal()"
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        (click)="closeSendingDescisionModal()"
         >Отправить</app-button
       >
     </div>

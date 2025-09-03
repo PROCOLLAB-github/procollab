@@ -43,12 +43,13 @@
     <p class="text-body-12">Вы, действительно, хотите удалить приглашение в команду?</p>
     <div class="invite__buttons">
       <app-button
+        size="medium"
         customTypographyClass="text-body-12"
         (click)="isRemoveInviteModal.set(false)"
         appearance="outline"
         >Отмена</app-button
       >
-      <app-button customTypographyClass="text-body-12" (click)="onRemove($event)"
+      <app-button size="medium" customTypographyClass="text-body-12" (click)="onRemove($event)"
         >Удалить</app-button
       >
     </div>
@@ -89,7 +90,7 @@
         }
       </fieldset>
       }
-      <app-button customTypographyClass="text-body-12" (click)="onEdit($event)"
+      <app-button size="big" customTypographyClass="text-body-12" (click)="onEdit($event)"
         >Сохранить</app-button
       >
     </form>

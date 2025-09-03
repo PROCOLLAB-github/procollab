@@ -216,6 +216,7 @@
 
       <div class="profile__row education__block">
         <app-button
+          size="big"
           [disabled]="!isEducationDirty"
           [ngStyle]="{
             opacity: !isEducationDirty ? '0.6' : '1',
@@ -403,6 +404,7 @@
 
       <div class="page__row education__block">
         <app-button
+          size="big"
           [disabled]="!isWorkDirty"
           [ngStyle]="{
             opacity: !isWorkDirty ? '0.6' : '1',
@@ -477,7 +479,12 @@
                   }
                 </fieldset>
                 }
-                <app-button class="achievement__remove" color="red" (click)="removeAchievement(i)">
+                <app-button
+                  size="big"
+                  class="achievement__remove"
+                  color="red"
+                  (click)="removeAchievement(i)"
+                >
                   <span>Удалить</span>
                   <i appIcon icon="basket" appSquare="24"></i>
                 </app-button>
@@ -501,7 +508,7 @@
           }
         </ul>
       </ng-container>
-      <app-button class="page__add-achievement" (click)="addAchievement()">
+      <app-button size="big" class="page__add-achievement" (click)="addAchievement()">
         <span>Добавить достижение</span>
         <i appIcon icon="plus" appSquare="14"></i>
       </app-button>
@@ -565,6 +572,7 @@
       </div>
 
       <app-button
+        size="big"
         [disabled]="!isLanguageDirty || languageItems().length === 4 || userLanguages.length === 4"
         [ngStyle]="{
           opacity: !isLanguageDirty ? '0.6' : '1',
@@ -602,10 +610,11 @@
     </div>
 
     <div class="page__first-row">
-      <app-button (click)="onSkipRegistration()" color="grey" [loader]="skipSubmitting()"
+      <app-button size="big" (click)="onSkipRegistration()" color="grey" [loader]="skipSubmitting()"
         >Закончить регистрацию позже</app-button
       >
       <app-button
+        size="big"
         [disabled]="
           editEducationClick ||
           editWorkClick ||

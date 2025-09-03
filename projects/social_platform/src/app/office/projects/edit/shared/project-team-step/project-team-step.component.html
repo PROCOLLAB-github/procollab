@@ -19,6 +19,7 @@
       } }
     </ul>
     <app-button
+      size="big"
       (click)="openInviteModal()"
       class="invite__submit"
       customTypographyClass="text-bold-body-16"
@@ -97,6 +98,7 @@
       </div>
 
       <app-button
+        size="big"
         customTypographyClass="text-body-12"
         (click)="submitInvite()"
         [loader]="inviteFormIsSubmitting()"

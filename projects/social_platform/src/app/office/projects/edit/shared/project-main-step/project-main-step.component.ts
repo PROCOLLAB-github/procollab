@@ -95,20 +95,20 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
     return this.projectFormService.actuality;
   }
 
-  get goal() {
-    return this.projectFormService.goal;
+  get implementationDeadline() {
+    return this.projectFormService.implementationDeadline;
   }
 
   get problem() {
     return this.projectFormService.problem;
   }
 
-  get trackControl() {
-    return this.projectFormService.track;
+  get targetAudience() {
+    return this.projectFormService.targetAudience;
   }
 
-  get direction() {
-    return this.projectFormService.direction;
+  get trl() {
+    return this.projectFormService.trl;
   }
 
   get presentationAddress() {

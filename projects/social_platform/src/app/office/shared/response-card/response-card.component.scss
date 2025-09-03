@@ -107,16 +107,7 @@
 
 .actions {
   display: flex;
-  gap: 8px;
-
-  app-button {
-    display: block;
-    width: 250px !important;
-
-    &:not(:last-child) {
-      margin-bottom: 12px;
-    }
-  }
+  gap: 12px;
 
   &__button {
     &--inactive {
