@@ -1,7 +1,8 @@
 /** @format */
 
-import { Component, EventEmitter, forwardRef, Input, type OnInit, Output } from "@angular/core";
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { CommonModule } from "@angular/common";
+import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@angular/core";
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
 import { NgxMaskModule } from "ngx-mask";
 
@@ -35,7 +36,7 @@ import { NgxMaskModule } from "ngx-mask";
     },
   ],
   standalone: true,
-  imports: [NgxMaskModule, IconComponent],
+  imports: [CommonModule, NgxMaskModule, IconComponent],
 })
 export class InputComponent implements OnInit, ControlValueAccessor {
   constructor() {}

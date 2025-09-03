@@ -23,8 +23,8 @@
           [programTagsOptions]="programTagsOptions"
           [leaderId]="leaderId"
           [projSubmitInitiated]="projSubmitInitiated"
+          [isProjectBoundToProgram]="isProjectBoundToProgram"
           (assignToProgram)="assignProjectToProgram()"
-          (saveProject)="onSaveProject($event)"
         ></app-project-main-step>
 
         } @else if (editingStep === "contacts") {
@@ -54,6 +54,9 @@
         }
       </div>
       <div class="project__save">
+        <app-button customTypographyClass="text-body-12" color="red" (click)="deleteProject()">
+          Удалить проект
+        </app-button>
         <app-button
           size="medium"
           customTypographyClass="text-body-12"

@@ -57,7 +57,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     const searchFormSearch$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
       this.router
         .navigate([], {
-          queryParams: { search },
+          queryParams: { name__contains: search },
           relativeTo: this.route,
           queryParamsHandling: "merge",
         })

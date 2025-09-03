@@ -12,6 +12,7 @@ import { ProjectTeamService } from "../../services/project-team.service";
 import { rolesMembersList } from "projects/core/src/consts/list-roles-members";
 import { ActivatedRoute } from "@angular/router";
 import { IconComponent } from "@uilib";
+import { CollaboratorCardComponent } from "@office/shared/collaborator-card/collaborator-card.component";
 
 @Component({
   selector: "app-project-team-step",
@@ -28,6 +29,7 @@ import { IconComponent } from "@uilib";
     ControlErrorPipe,
     InviteCardComponent,
     ModalComponent,
+    CollaboratorCardComponent,
   ],
 })
 export class ProjectTeamStepComponent implements OnInit {
@@ -41,6 +43,7 @@ export class ProjectTeamStepComponent implements OnInit {
 
   ngOnInit(): void {
     this.projectTeamService.setInvites(this.invites);
+    this.projectTeamService.setCollaborators(this.collaborators);
 
     // Настраиваем динамическую валидацию
     this.projectTeamService.setupDynamicValidation();
@@ -68,8 +71,12 @@ export class ProjectTeamStepComponent implements OnInit {
     return this.projectTeamService.getInvites();
   }
 
-  get invitesFill() {
-    return this.projectTeamService.invitesFill;
+  get collaborators() {
+    return this.projectTeamService.getCollaborators();
+  }
+
+  get invitesFill(): boolean {
+    return this.invites.some(inv => inv.isAccepted === null);
   }
 
   get isInviteModalOpen() {

@@ -130,13 +130,14 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     profile$ && this.subscriptions$.push(profile$);
 
-    const querySearch$ = this.route.queryParams.pipe(map(q => q["search"])).subscribe(search => {
-      const fuse = new Fuse(this.projects, {
-        keys: ["name"],
+    const querySearch$ = this.route.queryParams
+      .pipe(map(q => q["name__contains"]))
+      .subscribe(search => {
+        if (search !== this.currentSearchQuery) {
+          this.currentSearchQuery = search;
+          this.currentPage = 1;
+        }
       });
-
-      this.searchedProjects = search ? fuse.search(search).map(el => el.item) : this.projects;
-    });
 
     querySearch$ && this.subscriptions$.push(querySearch$);
 
@@ -167,7 +168,6 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
         if (typeof projects === "number") return;
 
         this.projects = projects.results;
-        this.searchedProjects = projects.results;
 
         this.cdref.detectChanges();
       });
@@ -179,7 +179,6 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectsCount = projects.count;
 
       this.projects = projects.results ?? [];
-      this.searchedProjects = projects.results ?? [];
     });
 
     projects$ && this.subscriptions$.push(projects$);
@@ -205,6 +204,9 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   private buildFilterQuery(q: Params): Record<string, string> {
     const reqQuery: Record<string, any> = {};
 
+    if (q["name__contains"]) {
+      reqQuery["name__contains"] = q["name__contains"];
+    }
     if (q["industry"]) {
       reqQuery["industry"] = q["industry"];
     }
@@ -242,7 +244,8 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   currentPage = 1;
   projectsPerFetch = 15;
   projects: Project[] = [];
-  searchedProjects: Project[] = [];
+
+  currentSearchQuery?: string;
 
   @ViewChild("listRoot") listRoot?: ElementRef<HTMLElement>;
 
@@ -335,12 +338,10 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
       window.innerHeight;
 
     if (diff > 0) {
-      // const search = { fullname: this.searchParamSubject$.value };
       return this.onFetch(this.currentPage * this.projectsPerFetch, this.projectsPerFetch).pipe(
         tap(chunk => {
           this.currentPage++;
           this.projects = [...this.projects, ...chunk];
-          this.searchedProjects = this.projects;
 
           this.cdref.detectChanges();
         })
@@ -354,19 +355,17 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.isAll) {
       const queries = this.route.snapshot.queryParams;
 
-      return this.projectService
-        .getAll(
-          new HttpParams({
-            fromObject: { offset: skip, limit: take, ...this.buildFilterQuery(queries) },
-          })
-        )
-        .pipe(
-          map((projects: ApiPagination<Project>) => {
-            this.searchedProjects = projects.results;
+      const queryParams = {
+        offset: skip,
+        limit: take,
+        ...this.buildFilterQuery(queries),
+      };
 
-            return projects.results;
-          })
-        );
+      return this.projectService.getAll(new HttpParams({ fromObject: queryParams })).pipe(
+        map((projects: ApiPagination<Project>) => {
+          return projects.results;
+        })
+      );
     } else {
       return this.projectService.getMy().pipe(
         map((projects: ApiPagination<Project>) => {
@@ -376,12 +375,4 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
       );
     }
   }
-  // return this.memberService.getMembers(skip, take, params).pipe(
-  //   map((members: ApiPagination<User>) => {
-  //     this.membersTotalCount = members.count;
-  //
-  //     return members.results;
-  //   })
-  // );
-  // }
 }

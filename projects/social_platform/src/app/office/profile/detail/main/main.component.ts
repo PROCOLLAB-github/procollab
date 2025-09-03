@@ -29,6 +29,7 @@ import { ProfileService } from "@auth/services/profile.service";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
 import { Skill } from "@office/models/skill";
+import { HttpErrorResponse } from "@angular/common/http";
 
 /**
  * Главный компонент страницы профиля пользователя
@@ -148,6 +149,8 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   readAllWorkExperience = false;
   readAllModal = false;
 
+  approveOwnSkillModal = false;
+
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
 
@@ -236,13 +239,17 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param event - событие клика для предотвращения всплытия
    * @param skill - объект навыка для обновления
    */
-  onToggleApprove(skillId: number, event: Event, skill: Skill) {
+  onToggleApprove(skillId: number, event: Event, skill: Skill, profileId: number) {
     event.stopPropagation();
     const userId = this.route.snapshot.params["id"];
 
-    if (skill.approves.length > 0) {
+    const isApprovedByCurrentUser = skill.approves.some(approve => {
+      return approve.confirmedBy.id === profileId;
+    });
+
+    if (isApprovedByCurrentUser) {
       this.profileApproveSkillService.unApproveSkill(userId, skillId).subscribe(() => {
-        skill.approves = skill.approves.slice(0, -1);
+        skill.approves = skill.approves.filter(approve => approve.confirmedBy.id !== profileId);
         this.cdRef.markForCheck();
       });
     } else {
@@ -260,11 +267,25 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
                 )
           )
         )
-        .subscribe(updatedApprove => {
-          skill.approves = [...skill.approves, updatedApprove];
-          this.cdRef.markForCheck();
+        .subscribe({
+          next: updatedApprove => {
+            skill.approves = [...skill.approves, updatedApprove];
+            this.cdRef.markForCheck();
+          },
+          error: err => {
+            if (err instanceof HttpErrorResponse) {
+              if (err.status === 400) {
+                this.approveOwnSkillModal = true;
+                this.cdRef.markForCheck();
+              }
+            }
+          },
         });
     }
+  }
+
+  isUserApproveSkill(skill: Skill, profileId: number): boolean {
+    return skill.approves.some(approve => approve.confirmedBy.id === profileId);
   }
 
   openSkills: any = {};

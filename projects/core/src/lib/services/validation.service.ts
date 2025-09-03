@@ -2,6 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { PasswordValidationErrors } from "@auth/models/password-errors.model";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 import * as relativeTime from "dayjs/plugin/relativeTime";
@@ -58,7 +59,6 @@ export class ValidationService {
     return group => {
       const controls = [group.get(left), group.get(right)];
 
-      // Проверяем существование контролов
       if (!controls.every(Boolean)) {
         throw new Error(`No control with name ${left} or ${right}`);
       }
@@ -66,16 +66,13 @@ export class ValidationService {
       const isMatching = controls[0]?.value === controls[1]?.value;
 
       if (!isMatching) {
-        // Устанавливаем ошибку для обоих контролов
         controls.forEach(c => c?.setErrors({ ...(c.errors || {}), unMatch: true }));
         return { unMatch: true };
       }
 
-      // Удаляем ошибку если поля совпадают
       controls.forEach(c => {
         if (c?.errors) {
           delete c.errors?.["unMatch"];
-          // Если других ошибок нет, очищаем errors полностью
           if (!Object.keys(c.errors).length) {
             c.setErrors(null);
           }
@@ -84,6 +81,123 @@ export class ValidationService {
 
       return null;
     };
+  }
+
+  /**
+   * Валидатор для проверки силы пароля
+   *
+   * Требования к паролю:
+   * - Минимум 8 символов
+   * - Минимум одна заглавная буква (A-Z)
+   * - Минимум одна строчная буква (a-z)
+   * - Минимум одна цифра (0-9)
+   * - Минимум один специальный символ (!@#$%^&*()_+-=[]{}|;:,.<>?)
+   * - Не должен содержать пробелы
+   * - Не должен содержать последовательности типа "123456" или "abcdef"
+   * - Не должен содержать повторяющиеся символы более 2 раз подряд
+   */
+  usePasswordValidator(minLength = 6): ValidatorFn {
+    return (control: AbstractControl): PasswordValidationErrors | null => {
+      const value: string = control.value;
+
+      if (!value) {
+        return null;
+      }
+
+      const errors: PasswordValidationErrors = {};
+
+      if (value.length < minLength) {
+        errors.passwordTooShort = {
+          requiredLength: minLength,
+          actualLength: value.length,
+        };
+      }
+
+      if (!/[A-Z]/.test(value)) {
+        errors.passwordNoUppercase = {
+          message: "Пароль должен содержать минимум одну заглавную букву",
+        };
+      }
+
+      if (!/[a-z]/.test(value)) {
+        errors.passwordNoLowercase = {
+          message: "Пароль должен содержать минимум одну строчную букву",
+        };
+      }
+
+      if (!/[0-9]/.test(value)) {
+        errors.passwordNoNumber = {
+          message: "Пароль должен содержать минимум одну цифру",
+        };
+      }
+
+      if (!/[!@#$%^&*()_+\-=[\]{}|;:,.<>?]/.test(value)) {
+        errors.passwordNoSpecialChar = {
+          message: "Пароль должен содержать минимум один специальный символ (!@#$%^&* и т.д.)",
+        };
+      }
+
+      if (/\s/.test(value)) {
+        errors.passwordHasSpaces = {
+          message: "Пароль не должен содержать пробелы",
+        };
+      }
+
+      if (this.hasSequence(value)) {
+        errors.passwordHasSequence = {
+          message: "Пароль не должен содержать последовательности символов",
+        };
+      }
+
+      if (this.hasRepeatingChars(value)) {
+        errors.passwordHasRepeating = {
+          message: "Пароль не должен содержать более 2 одинаковых символов подряд",
+        };
+      }
+
+      return Object.keys(errors).length > 0 ? errors : null;
+    };
+  }
+
+  /**
+   * Проверяет наличие последовательностей в пароле
+   */
+  private hasSequence(password: string): boolean {
+    const sequences = [
+      "01234567890",
+      "09876543210",
+      "abcdefghijklmnopqrstuvwxyz",
+      "zyxwvutsrqponmlkjihgfedcba",
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "ZYXWVUTSRQPONMLKJIHGFEDCBA",
+      "qwertyuiopasdfghjklzxcvbnm",
+      "йцукенгшщзхъфывапролджэячсмитьбю",
+    ];
+
+    const lowerPassword = password.toLowerCase();
+
+    for (const sequence of sequences) {
+      for (let i = 0; i <= sequence.length - 4; i++) {
+        const subSequence = sequence.substring(i, i + 4);
+        if (lowerPassword.includes(subSequence)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Проверяет наличие более 2 повторяющихся символов подряд
+   */
+  private hasRepeatingChars(password: string): boolean {
+    for (let i = 0; i < password.length - 2; i++) {
+      if (password[i] === password[i + 1] && password[i + 1] === password[i + 2]) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -101,10 +215,8 @@ export class ValidationService {
    */
   useDateFormatValidator(control: AbstractControl): ValidationErrors | null {
     try {
-      // Строгая проверка формата DD.MM.YYYY
       const value = dayjs(control.value, "DD.MM.YYYY", true);
 
-      // Проверяем что дата не в будущем и валидна
       if (control.value && (value.fromNow().includes("in") || !value.isValid())) {
         return { invalidDateFormat: true };
       }
@@ -140,13 +252,49 @@ export class ValidationService {
   useAgeValidator(age = 14): ValidatorFn {
     return control => {
       const value = dayjs(control.value, "DD.MM.YYYY", true);
+      const difference = dayjs().diff(value, "year");
 
-      if (value.isValid()) {
-        const difference = dayjs().diff(value, "year");
-        return difference >= age ? null : { tooYoung: { requiredAge: age } };
+      const isInvalidDate = !value.isValid() || value.year() < 1900;
+      const isTooYoung = difference < age;
+      const isTooOld = difference > 100;
+
+      return isInvalidDate
+        ? { invalidDateFormat: { requiredAge: 100 } }
+        : isTooYoung
+        ? { tooYoung: { requiredAge: age } }
+        : isTooOld
+        ? { tooOld: { requiredAge: 100 } }
+        : null;
+    };
+  }
+
+  /**
+   * Создает валидатор для проверки валидности полного email
+   * @returns ValidatorFn для проверки возраста
+   *
+   * Применение:
+   * - Проверка валидности
+   * - Валидация полного email
+   *
+   * Логика:
+   * 1. Создаем регулрку для email
+   * 2. Тестируем подходит ли она нам
+   *
+   * Пример использования:
+   * email: ['', [
+   *   Validators.required,
+   *   this.validationService.useEmailValidator()
+   * ]]
+   */
+  useEmailValidator(): ValidatorFn {
+    return control => {
+      const value = control.value;
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (regex.test(value)) {
+        return null;
+      } else {
+        return { invalidEmail: {} };
       }
-
-      return null;
     };
   }
 

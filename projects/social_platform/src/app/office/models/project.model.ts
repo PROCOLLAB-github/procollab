@@ -106,6 +106,15 @@ const collaborator = {
   lastName: "string",
   userId: 0,
   avatar: "string",
-  keySkills: ["angular"],
+  skills: [
+    {
+      id: 309,
+      name: "Python",
+      category: {
+        id: 7,
+        name: "Back-end",
+      },
+    },
+  ],
   role: "Front-end",
 };

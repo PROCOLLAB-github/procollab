@@ -7,43 +7,46 @@
   </div>
   }
   <div class="card__body" [ngClass]="{ 'card__body--company': project.isCompany }">
-    <div class="card__head">
-      <div>
-        <p class="text-heading-4 card__name">{{ project.name }}</p>
-        @if (industryService.industries | async; as industries) {
-        <p class="text-body-12 card__industry">
-          @if (industryService.getIndustry(industries, project.industry); as industry) {
-          <span>
-            {{ industry ? industry.name : "Error" }}
-          </span>
+    <div class="card__content">
+      <div class="card__head">
+        <div>
+          <p class="text-heading-4 card__name">{{ project.name }}</p>
+          @if (industryService.industries | async; as industries) {
+          <p class="text-body-12 card__industry">
+            @if (industryService.getIndustry(industries, project.industry); as industry) {
+            <span>
+              {{ industry ? industry.name : "Error" }}
+            </span>
+            }
+          </p>
           }
-        </p>
-        }
-      </div>
-      <app-avatar class="card__photo" [url]="project.imageAddress" [size]="60"></app-avatar>
-    </div>
-    <p class="text-body-12 card__description">{{ project.shortDescription }}</p>
-    <div
-      class="card__media"
-      [ngStyle]="{ 'justify-content': project.isCompany ? 'space-between' : 'flex-end' }"
-    >
-      <div class="card__left">
-        @if (isSubscribed) {
-        <div class="card__subscribed">
-          <i appIcon icon="check" appSquare="14"></i>
         </div>
-        } @if (project.isCompany) {
-        <div class="card__company-flag">
-          <div class="card__circle"></div>
-          <p class="text-body-12">Компания</p>
-        </div>
-        }
+        <app-avatar class="card__photo" [url]="project.imageAddress" [size]="60"></app-avatar>
       </div>
+      <p class="text-body-12 card__description">{{ project.shortDescription }}</p>
+      <div
+        class="card__media"
+        [ngStyle]="{ 'justify-content': project.isCompany ? 'space-between' : 'flex-end' }"
+      >
+        <div class="card__left">
+          @if (isSubscribed) {
+          <div class="card__subscribed">
+            <i appIcon icon="check" appSquare="14"></i>
+          </div>
+          } @if (project.isCompany) {
+          <div class="card__company-flag">
+            <div class="card__circle"></div>
+            <p class="text-body-12">Компания</p>
+          </div>
+          }
+        </div>
 
-      <!-- <div class="card__views">
-        <i appIcon icon="eye" appSquare="22"></i> {{ project.viewsCount }}
-      </div> -->
+        <!-- <div class="card__views">
+          <i appIcon icon="eye" appSquare="22"></i> {{ project.viewsCount }}
+        </div> -->
+      </div>
     </div>
+
     <div class="card__bottom">
       @if (project.draft) {
       <p class="text-body-12 card__draft">Черновик</p>

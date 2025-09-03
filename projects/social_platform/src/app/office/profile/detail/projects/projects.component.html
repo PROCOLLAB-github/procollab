@@ -1,9 +1,9 @@
 <!-- @format -->
-
 @if (user | async; as user) {
 <section class="projects">
   @if (loggedUserId | async; as loggedUserId) {
   <div class="projects__content">
+    @if (user.projects.length) {
     <div class="projects__section">
       <h3 class="text-heading-3 about__title">
         {{
@@ -16,12 +16,13 @@
         @for (p of user.projects; track p.id) {
         <li>
           <a [routerLink]="['/office/projects', p.id]">
-            <app-project-card [project]="p" [profileId]="user.id"> </app-project-card>
+            <app-project-card [project]="p" [profileId]="user.id"></app-project-card>
           </a>
         </li>
         }
       </ul>
     </div>
+    } @if (subs | async; as subs) { @if (subs.length) {
     <div class="projects__section">
       <h3 class="text-heading-3 about__title">
         {{
@@ -30,18 +31,25 @@
             : "Проекты, на которые подписан " + user.firstName
         }}
       </h3>
-      @if (subs | async; as subs) {
       <ul>
         @for (p of subs; track p.id) {
         <li>
           <a [routerLink]="['/office/projects', p.id]">
-            <app-project-card [project]="p" [profileId]="user.id"> </app-project-card>
+            <app-project-card [project]="p" [profileId]="user.id"></app-project-card>
           </a>
         </li>
         }
       </ul>
-      }
     </div>
+    } } @if (!user.projects.length) { @if (subs | async; as subs) { @if (!subs.length) {
+    <h3 class="text-heading-3 about__title">
+      Вы пока не состоите ни в одном проекте и не подписаны ни на один.
+    </h3>
+    } } @else {
+    <h3 class="text-heading-3 about__title">
+      Вы пока не состоите ни в одном проекте и не подписаны ни на один.
+    </h3>
+    } }
   </div>
   }
 </section>

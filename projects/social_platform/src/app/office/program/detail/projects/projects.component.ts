@@ -132,9 +132,11 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
         tap(r => (this.projectsTotalCount = r["count"])),
         map(r => r["results"])
       )
-      .subscribe(projects => {
-        this.projects = projects;
-        this.searchedProjects = projects;
+      .subscribe({
+        next: projects => {
+          this.projects = projects;
+          this.searchedProjects = projects;
+        },
       });
 
     const searchFormSearch$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
@@ -171,21 +173,21 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
           const hasFilters =
             reqQuery && reqQuery["filters"] && Object.keys(reqQuery["filters"]).length > 0;
 
-          const params = new HttpParams({ fromObject: { partner_program: programId } });
+          const params = new HttpParams({ fromObject: { offset: 0, limit: 21 } });
 
           if (hasFilters) {
             return this.programService.createProgramFilters(programId, reqQuery["filters"]).pipe(
               catchError(err => {
                 console.error("createFilters failed, fallback to getAllProjects()", err);
-                return this.programService.getAllProjects(params);
+                return this.programService.getAllProjects(programId, params);
               })
             );
           }
 
-          return this.programService.getAllProjects(params).pipe(
+          return this.programService.getAllProjects(programId, params).pipe(
             catchError(err => {
               console.error("getAllProjects failed", err);
-              return this.programService.getAllProjects(params);
+              return this.programService.getAllProjects(programId, params);
             })
           );
         }
@@ -298,7 +300,7 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
     const limit = this.perPage;
 
     return this.programService
-      .getAllProjects(new HttpParams({ fromObject: { partner_program: programId, offset, limit } }))
+      .getAllProjects(programId, new HttpParams({ fromObject: { offset, limit } }))
       .pipe(
         tap(projects => {
           this.projectsTotalCount = projects.count;

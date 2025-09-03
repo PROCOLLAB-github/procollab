@@ -30,6 +30,7 @@ export enum ErrorMessage {
   VALIDATION_TOO_SHORT = "Минимальная длина:",
   VALIDATION_REQUIRED = "Обязательное поле",
   MINIMAL_AGE = "Минимальный возраст",
+  MAXIMAL_AGE = "Максимальный возраст",
   INVALID_DATE = "Неправильный формат даты",
   VALIDATION_LANGUAGE = "Используйте символы кириллического алфавита",
   VALIDATION_EMAIL = "Введенное значение не соответствует формату email",

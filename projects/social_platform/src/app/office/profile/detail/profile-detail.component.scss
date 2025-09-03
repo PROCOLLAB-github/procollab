@@ -31,7 +31,7 @@ $detail-bar-mb: 12px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    gap: 20px;
+    gap: 10px;
     max-height: calc(100% - #{$detail-bar-height} - #{$detail-bar-mb});
     padding-bottom: 12px;
   }
@@ -180,7 +180,7 @@ $detail-bar-mb: 12px;
     transform: translateX(-50%);
 
     @include responsive.apply-desktop {
-      top: 50%;
+      top: 10%;
       bottom: auto;
       left: 21px;
       transform: translate(0, -50%);

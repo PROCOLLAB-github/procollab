@@ -11,7 +11,7 @@
           }
         </div>
         <div class="card__date text-body-14">
-          {{ newsItem.datetimeCreated | dayjs: "format":"DD MMMM, HH:mm" }}
+          {{ newsItem.datetimeCreated | dayjs: "format":"DD MMMM YYYY, HH:mm" }}
         </div>
       </div>
     </div>
@@ -97,14 +97,14 @@
         <i appIcon icon="like" appSquare="22"></i>
         {{ newsItem.likesCount }}
       </div>
-      <div class="footer__item text-body-12">
-        <i appIcon icon="views" appSquare="22"></i>
-        {{ newsItem.viewsCount }}
+      <div class="footer__share share" (click)="onCopyLink()">
+        <i class="share__icon" appIcon icon="share" appSquare="22"></i>
       </div>
     </div>
     <div class="footer__right">
-      <div class="footer__share share" (click)="onCopyLink()">
-        <i class="share__icon" appIcon icon="share" appSquare="22"></i>
+      <div class="footer__item text-body-12">
+        <i appIcon icon="views" appSquare="22"></i>
+        {{ newsItem.viewsCount }}
       </div>
     </div>
   </div>

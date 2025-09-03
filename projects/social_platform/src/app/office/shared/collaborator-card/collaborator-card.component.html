@@ -1,0 +1,22 @@
+<!-- @format -->
+
+@if (collaborator) {
+<div class="collaborator">
+  <div class="collaborator__info">
+    <h3 class="text-bold-body-14 collaborator__role">
+      {{ collaborator.firstName }} {{ collaborator.lastName }}
+    </h3>
+
+    <div class="text-body-12 collaborator__requirements">
+      @for (skill of collaborator.skills; track $index) {
+      <div class="collaborator__skills">
+        <p>Категория - {{ skill.category.name }}</p>
+        <p>Навык - {{ skill.name }}</p>
+      </div>
+      }
+    </div>
+
+    <p class="text-body-10 collaborator__requirements">Роль - {{ collaborator.role }}</p>
+  </div>
+</div>
+}
