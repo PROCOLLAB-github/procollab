@@ -18,7 +18,7 @@
 
     &:hover {
       background-color: var(--accent-light);
-      box-shadow: -2px 3px 3px rgba(51, 51, 51, 0.2);
+      box-shadow: -2px 3px 3px rgb(51 51 51 / 20%);
     }
 
     ::ng-deep *:not(.dot-wave) {
@@ -74,8 +74,8 @@
     }
 
     &.button--big {
-      padding: 12px 24px;
       width: 100%;
+      padding: 12px 24px;
     }
 
     &.button--no-border {
@@ -120,8 +120,8 @@
     }
 
     &.button--big {
-      padding: 12px 24px;
       width: 100%;
+      padding: 12px 24px;
     }
 
     &.button--no-border {

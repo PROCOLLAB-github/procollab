@@ -17,7 +17,6 @@
   }
 
   app-button ::ng-deep .button--inline {
-
     @include responsive.apply-desktop {
       min-height: 52px;
     }
