@@ -56,14 +56,14 @@ export class ProjectAchievementsService {
 
     // Считываем вводимые данные
     const achievementsName = projectForm.get("achievementsName")?.value;
-    const achievementsPrize = projectForm.get("achievementsPrize")?.value;
+    const achievementsDate = projectForm.get("achievementsDate")?.value;
 
     // Проверяем, что поля не пустые
     if (
       !achievementsName ||
-      !achievementsPrize ||
+      !achievementsDate ||
       achievementsName.trim().length === 0 ||
-      achievementsPrize.trim().length === 0
+      achievementsDate.trim().length === 0
     ) {
       return; // Выходим из функции, если поля пустые
     }
@@ -71,8 +71,8 @@ export class ProjectAchievementsService {
     // Создаем FormGroup для нового достижения
     const achievementItem = this.fb.group({
       id: achievementsFormArray.length,
-      title: achievementsName.trim(),
-      status: achievementsPrize.trim(),
+      achievementsName: achievementsName.trim(),
+      achievementsDate: achievementsDate.trim(),
     });
 
     // Проверяем, редактируется ли существующее достижение
@@ -97,8 +97,8 @@ export class ProjectAchievementsService {
     projectForm.get("achievementsName")?.reset();
     projectForm.get("achievementsName")?.setValue("");
 
-    projectForm.get("achievementsPrize")?.reset();
-    projectForm.get("achievementsPrize")?.setValue("");
+    projectForm.get("achievementsDate")?.reset();
+    projectForm.get("achievementsDate")?.setValue("");
   }
 
   /**
@@ -120,8 +120,8 @@ export class ProjectAchievementsService {
 
     // Заполняем поля формы проекта для редактирования
     projectForm.patchValue({
-      achievementsName: source?.title || "",
-      achievementsPrize: source?.status || "",
+      achievementsName: source?.achievementsName || "",
+      achievementsDate: source?.achievementsDate || "",
     });
     // Устанавливаем текущий индекс редактирования в сервисе
     this.projectFormService.editIndex.set(index);

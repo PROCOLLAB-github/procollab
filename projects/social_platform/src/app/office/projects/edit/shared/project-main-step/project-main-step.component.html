@@ -73,17 +73,15 @@
         </div>
         }
       </fieldset>
-      } @if (step; as step) {
+      } @if (trl; as trl) {
       <fieldset>
-        <label class="field-label" for="step">Этап на котором находится проект</label>
-        @if (projectSteps$ | async; as steps) {
         <app-select
-          id="step"
-          formControlName="step"
-          placeholder="Выберите этап на котором находится ваш проект"
-          [options]="steps"
+          id="trl"
+          formControlName="trl"
+          placeholder="TRL"
+          [options]="trlList"
         ></app-select>
-        } @if (step | controlError: "required") {
+        @if (trl | controlError: "required") {
         <div class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
@@ -121,9 +119,10 @@
       </fieldset>
       } @if (implementationDeadline; as implementationDeadline) {
       <fieldset>
-        <label class="field-label" for="implementationDeadline">Цель проекта</label>
+        <label class="field-label" for="implementationDeadline">Дата дедлайна</label>
         <app-input
           id="implementationDeadline"
+          type="date"
           formControlName="implementationDeadline"
           [error]="(implementationDeadline | controlError) && projSubmitInitiated"
           placeholder="Опиши в чём цель твоего проекта"
@@ -144,20 +143,6 @@
           placeholder="Опиши проблему на которую направлен твой проекта"
         ></app-input>
         @if ((problem | controlError: "required") && projSubmitInitiated) {
-        <div class="text-body-14 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        }
-      </fieldset>
-      } @if (trl; as trl) {
-      <fieldset>
-        <app-select
-          id="trl"
-          formControlName="trl"
-          placeholder="Трек"
-          [options]="trackList"
-        ></app-select>
-        @if ((trl | controlError: "required")) {
         <div class="text-body-14 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
@@ -194,7 +179,7 @@
       ></app-select>
     </fieldset>
 
-    <app-button (click)="onAssignToProgram()" customTypographyClass="text-body-12">
+    <app-button size="big" (click)="onAssignToProgram()" customTypographyClass="text-body-12">
       Привязать проект к программе
     </app-button>
     } } } } @if (presentationAddress; as presentationAddress) {

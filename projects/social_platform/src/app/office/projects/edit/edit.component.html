@@ -1,12 +1,37 @@
 <!-- @format -->
 <div>
   <div class="project__top">
-    <p class="project__title">Редактировать проект</p>
-    <a class="project__back" [routerLink]="'/office/projects/' + profileId">
-      <app-button size="big" [color]="'grey'" customTypographyClass="text-body-12"
-        >Назад</app-button
+    <div class="project__back" [routerLink]="'/office/projects/' + profileId">
+      <i appIcon icon="left-arrow" appSquare="24"></i>
+      <h1 class="project__title">Редактировать проект</h1>
+    </div>
+    <div class="project__save">
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        color="red"
+        (click)="deleteProject()"
       >
-    </a>
+        Удалить проект
+      </app-button>
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        appearance="outline"
+        [loader]="projFormIsSubmittingAsDraft"
+        (click)="saveProjectAsDraft()"
+      >
+        Сохранить черновик
+      </app-button>
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        [loader]="projFormIsSubmittingAsPublished"
+        (click)="saveProjectAsPublished()"
+      >
+        {{ isCompetitive ? "Отправить заявку" : "Сохранить" }}
+      </app-button>
+    </div>
   </div>
   <main class="project">
     <form [formGroup]="projectForm" class="project__form">
@@ -52,28 +77,6 @@
           [programTagsOptions]="programTagsOptions"
         ></app-project-additional-step>
         }
-      </div>
-      <div class="project__save">
-        <app-button customTypographyClass="text-body-12" color="red" (click)="deleteProject()">
-          Удалить проект
-        </app-button>
-        <app-button
-          size="medium"
-          customTypographyClass="text-body-12"
-          color="grey"
-          [loader]="projFormIsSubmittingAsDraft"
-          (click)="saveProjectAsDraft()"
-        >
-          Сохранить черновик
-        </app-button>
-        <app-button
-          size="medium"
-          customTypographyClass="text-body-12"
-          [loader]="projFormIsSubmittingAsPublished"
-          (click)="saveProjectAsPublished()"
-        >
-          {{ isCompetitive ? "Отправить заявку" : "Сохранить" }}
-        </app-button>
       </div>
     </form>
     <app-modal

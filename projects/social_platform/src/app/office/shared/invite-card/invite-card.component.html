@@ -3,6 +3,14 @@
 @if (invite) {
 <div class="invite">
   <div class="invite__info">
+    <div class="invite__top">
+      <p class="text-body-12">{{ invite.specialization }}</p>
+      @if(invite.isAccepted === null) {
+      <p class="text-body-12 invite__status">• Приглашение отправлено</p>
+      }
+    </div>
+
+    <app-avatar [url]="invite.user.avatar" [size]="40"></app-avatar>
     <h3 class="text-bold-body-14 invite__role">
       {{ invite.user.firstName }} {{ invite.user.lastName }}
     </h3>
@@ -10,30 +18,20 @@
     <p class="text-body-12 invite__requirements">
       {{ invite.role }}
     </p>
-
-    <p class="text-body-10 invite__requirements">Роль - {{ invite.specialization }}</p>
-
-    @if(invite.isAccepted === null) {
-    <p class="text-body-12 invite__status">Приглашение отправлено</p>
-    }
   </div>
 
   <div class="invite__icons">
-    <i
+    <!-- <i
       class="invite__edit invite__icon"
       appIcon
       icon="edit-pen"
       appSquare="24"
       (click)="isEditInviteModal.set(true)"
-    ></i>
+    ></i> -->
 
-    <i
-      class="invite__cross invite__icon"
-      appIcon
-      icon="cross"
-      appSquare="24"
-      (click)="isRemoveInviteModal.set(true)"
-    ></i>
+    <app-button class="basket" size="big" color="red" (click)="isRemoveInviteModal.set(true)">
+      <i appIcon icon="basket" appSquare="14" class="invite__cross invite__icon"></i>
+    </app-button>
   </div>
 </div>
 }

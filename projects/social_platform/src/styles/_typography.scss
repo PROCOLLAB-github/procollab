@@ -66,9 +66,9 @@
 
 @mixin heading-1 {
   font-family: Mont, sans-serif;
-  font-size: 36px;
+  font-size: 18px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 150%;
 }
 
@@ -76,16 +76,40 @@
   @include heading-1;
 }
 
+@mixin heading-1-bold {
+  font-family: Mont, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+}
+
+.text-heading-1-bold {
+  @include heading-1-bold;
+}
+
 @mixin heading-2 {
   font-family: Mont, sans-serif;
-  font-size: 28px;
+  font-size: 16px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 150%;
 }
 
 .text-heading-2 {
   @include heading-2;
+}
+
+@mixin heading-2-bold {
+  font-family: Mont, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+}
+
+.text-heading-2-bold {
+  @include heading-2-bold;
 }
 
 @mixin heading-3 {
@@ -188,12 +212,24 @@
   font-family: Mont, sans-serif;
   font-size: 12px;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 130%;
 }
 
 .text-body-12 {
   @include body-12;
+}
+
+@mixin body-12-bold {
+  font-family: Mont, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 130%;
+}
+
+.text-body-12-bold {
+  @include body-12-bold;
 }
 
 @mixin body-10 {

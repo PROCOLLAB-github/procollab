@@ -4,12 +4,14 @@
   <ul class="project__nav">
     @for (item of navItems; track $index) {
     <li class="project__item" (click)="onStepClick(item.step)">
-      <img
+      <i
+        appIcon
+        [icon]="item.step"
         class="project__icon"
+        appSquare="24"
         [class.project__icon--active]="currentStep() === item.step"
         alt="project-icon"
-        [src]="item.src"
-      />
+      ></i>
       <p class="project__subtitle" [class.project__subtitle--active]="currentStep() === item.step">
         {{ item.label }}
       </p>

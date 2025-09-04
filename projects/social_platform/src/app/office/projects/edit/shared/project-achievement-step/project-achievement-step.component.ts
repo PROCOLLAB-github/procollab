@@ -2,7 +2,7 @@
 
 import { CommonModule } from "@angular/common";
 import { Component, inject, Input } from "@angular/core";
-import { FormArray, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { InputComponent, ButtonComponent } from "@ui/components";
 import { LinkCardComponent } from "@office/shared/link-card/link-card.component";
 import { ControlErrorPipe } from "@corelib";
@@ -31,8 +31,12 @@ export class ProjectAchievementStepComponent {
 
   private readonly projectAchievementService = inject(ProjectAchievementsService);
   private readonly projectFormService = inject(ProjectFormService);
+  private readonly fb = inject(FormBuilder);
 
   readonly errorMessage = ErrorMessage;
+
+  // Состояние для показа полей ввода
+  public showInputFields = false;
 
   // Получаем форму из сервиса
   get projectForm(): FormGroup {
@@ -61,10 +65,52 @@ export class ProjectAchievementStepComponent {
   }
 
   /**
+   * Проверяет, есть ли достижения для отображения
+   */
+  get hasAchievements(): boolean {
+    return this.achievementsItems().length > 0 || this.achievements.length > 0;
+  }
+
+  /**
+   * Показывает поля для ввода достижения
+   */
+  showFields(): void {
+    this.showInputFields = true;
+  }
+
+  /**
+   * Скрывает поля ввода и очищает их
+   */
+  hideFields(): void {
+    this.showInputFields = false;
+    this.clearInputFields();
+  }
+
+  /**
+   * Очищает поля ввода
+   */
+  private clearInputFields(): void {
+    this.projectForm.get("achievementsName")?.reset();
+    this.projectForm.get("achievementsName")?.setValue("");
+
+    if (this.editIndex() !== null) {
+      this.projectFormService.editIndex.set(null);
+    }
+  }
+
+  /**
    * Добавление достижения
    */
-  addAchievement(): void {
-    this.projectAchievementService.addAchievement(this.achievements, this.projectForm);
+  addAchievement(id?: number, achievementsName?: string, achievementsDate?: string): void {
+    // this.projectAchievementService.addAchievement(this.achievements, this.projectForm);
+
+    this.achievements.push(
+      this.fb.group({
+        achievementsName: [achievementsName ?? "", [Validators.required]],
+        achievementsDate: [achievementsDate ?? "", [Validators.required]],
+        id: [id],
+      })
+    );
   }
 
   /**
@@ -72,6 +118,7 @@ export class ProjectAchievementStepComponent {
    * @param index - индекс достижения
    */
   editAchievement(index: number): void {
+    this.showInputFields = true;
     this.projectAchievementService.editAchievement(index, this.achievements, this.projectForm);
   }
 

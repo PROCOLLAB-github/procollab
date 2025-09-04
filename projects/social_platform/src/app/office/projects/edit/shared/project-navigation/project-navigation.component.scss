@@ -5,7 +5,7 @@
 
 .project {
   &__navigation {
-    padding: 10px 0;
+    padding: 22px 0;
     margin-bottom: 22px;
     border-bottom: 1px solid var(--grey-button);
   }
@@ -25,15 +25,15 @@
 
   &__item {
     display: flex;
-    flex-direction: column;
+    gap: 5px;
     align-items: center;
     cursor: pointer;
   }
 
   &__subtitle {
-    color: var(--grey-for-text);
+    color: var(--dark-grey);
 
-    @include typography.heading-4;
+    @include typography.body-12;
 
     &--active {
       color: var(--black);
@@ -41,7 +41,7 @@
   }
 
   &__icon {
-    opacity: 0.5;
+    opacity: 0.1;
 
     &--active {
       opacity: 1;

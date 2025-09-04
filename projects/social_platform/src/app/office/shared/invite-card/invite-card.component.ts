@@ -8,6 +8,7 @@ import { Invite } from "@models/invite.model";
 import { IconComponent, ButtonComponent, SelectComponent, InputComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { rolesMembersList } from "projects/core/src/consts/list-roles-members";
+import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 
 /**
  * Компонент карточки приглашения в команду или проект
@@ -39,6 +40,7 @@ import { rolesMembersList } from "projects/core/src/consts/list-roles-members";
     ControlErrorPipe,
     ReactiveFormsModule,
     InputComponent,
+    AvatarComponent,
   ],
 })
 export class InviteCardComponent implements OnInit {

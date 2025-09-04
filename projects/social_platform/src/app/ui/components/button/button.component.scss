@@ -92,13 +92,14 @@
     text-align: center;
     cursor: pointer;
     background-color: transparent;
-    border: 2px solid var(--accent);
+    border: 1px solid var(--accent);
     border-radius: var(--rounded-xl);
     transition: all 0.2s;
 
     &:hover {
       color: var(--accent-light);
       border-color: var(--accent-light);
+      box-shadow: -2px 3px 3px rgb(51 51 51 / 20%);
     }
 
     &.button--red {

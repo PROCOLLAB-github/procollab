@@ -19,14 +19,21 @@
   }
 
   &__status {
-    margin: 5px 10px 0 auto;
-    color: var(--accent);
+    color: var(--dark-grey);
   }
 
   &__info {
     display: flex;
     flex-direction: column;
     gap: 5px;
+  }
+
+  &__top {
+    display: flex;
+    gap: 15px;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--dark-grey);
   }
 
   &__warning-modal {
