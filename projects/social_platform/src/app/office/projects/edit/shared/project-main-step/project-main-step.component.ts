@@ -15,6 +15,7 @@ import { AsyncPipe, CommonModule } from "@angular/common";
 import { ControlErrorPipe } from "@corelib";
 import { ProjectFormService } from "../../services/project-form.service";
 import { IconComponent } from "@uilib";
+import { generateTrlList } from "@utils/generate-trl-list";
 
 @Component({
   selector: "app-project-main-step",
@@ -54,6 +55,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
   readonly errorMessage = ErrorMessage;
   readonly trackList = trackProjectList;
   readonly directionList = directionProjectList;
+  readonly trlList = generateTrlList(9);
 
   // Получаем форму из сервиса
   get projectForm(): FormGroup {
@@ -81,10 +83,6 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
 
   get industry() {
     return this.projectFormService.industry;
-  }
-
-  get step() {
-    return this.projectFormService.step;
   }
 
   get description() {

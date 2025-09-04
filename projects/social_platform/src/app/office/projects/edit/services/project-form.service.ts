@@ -43,7 +43,6 @@ export class ProjectFormService {
       imageAddress: [""],
       name: ["", [Validators.required]],
       region: ["", [Validators.required]],
-      step: [null, [Validators.required]],
       implementationDeadline: [null],
       trl: [null],
       links: this.fb.array([]),
@@ -52,13 +51,13 @@ export class ProjectFormService {
       description: ["", [Validators.required]],
       presentationAddress: ["", [Validators.required]],
       coverImageAddress: ["", [Validators.required]],
-      actuality: ["", [Validators.max(1000)]],
-      targetAudience: ["", [Validators.required, Validators.max(500)]],
-      problem: ["", [Validators.required, Validators.max(1000)]],
+      actuality: ["", [Validators.maxLength(1000)]],
+      targetAudience: ["", [Validators.required, Validators.maxLength(500)]],
+      problem: ["", [Validators.required, Validators.maxLength(1000)]],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
       achievementsName: [""],
-      achievementsPrize: [""],
+      achievementsDate: [""],
       draft: [null],
     });
 
@@ -99,7 +98,6 @@ export class ProjectFormService {
       imageAddress: project.imageAddress,
       name: project.name,
       region: project.region,
-      step: project.step,
       industryId: project.industry,
       description: project.description,
       implementationDeadline: project.implementationDeadline ?? null,
@@ -146,17 +144,15 @@ export class ProjectFormService {
   private populateAchievementsFormArray(achievements: any[]): void {
     const achievementsFormArray = this.projectForm.get("achievements") as FormArray;
 
-    // Очищаем существующие контролы
     while (achievementsFormArray.length !== 0) {
       achievementsFormArray.removeAt(0);
     }
 
-    // Добавляем новые контролы
     achievements.forEach((achievement, index) => {
       const achievementGroup = this.fb.group({
         id: achievement.id ?? index,
-        title: achievement.title || "",
-        status: achievement.status || "",
+        achievementsName: [achievement.achievementsName || "", Validators.required],
+        achievementsDate: [achievement.achievementsDate || "", Validators.required],
       });
       achievementsFormArray.push(achievementGroup);
     });
@@ -205,10 +201,6 @@ export class ProjectFormService {
 
   public get industry() {
     return this.projectForm.get("industryId");
-  }
-
-  public get step() {
-    return this.projectForm.get("step");
   }
 
   public get description() {

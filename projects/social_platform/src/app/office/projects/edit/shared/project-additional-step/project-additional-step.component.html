@@ -3,8 +3,8 @@
 <div class="project__inner">
   <div [formGroup]="additionalForm" class="project__team">
     <div class="project__additional-wrapper">
-      <label class="text-heading-4 field-label">Дополнительные сведения</label>
       @if (partnerProgramFields.length) { @for (field of partnerProgramFields; track field.id) {
+      <label class="text-heading-4 field-label">Дополнительные сведения</label>
       <fieldset>
         @switch (field.fieldType) { @case ("text") { @if (additionalForm.get(field.name); as
         control) {
@@ -89,7 +89,18 @@
         </div>
         } }
       </fieldset>
-      } }
+      } } @else {
+      <div class="project__additional--no-items">
+        <p class="text-body-12">Пока ты не участвуешь ни в одной программе</p>
+        <a routerLink="/office/program/all">
+          <app-button size="medium" appearance="outline" customTypographyClass="text-body-12"
+            >Программы</app-button
+          >
+        </a>
+
+        <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
+      </div>
+      }
     </div>
   </div>
 </div>

@@ -5,6 +5,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { Collaborator } from "@office/models/collaborator.model";
+import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 
 /**
  * Компонент карточки участника команды или проект
@@ -20,7 +21,7 @@ import { Collaborator } from "@office/models/collaborator.model";
   templateUrl: "./collaborator-card.component.html",
   styleUrl: "./collaborator-card.component.scss",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AvatarComponent],
 })
 export class CollaboratorCardComponent implements OnInit {
   constructor(private readonly fb: FormBuilder) {

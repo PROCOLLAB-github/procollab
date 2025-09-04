@@ -3,7 +3,12 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit, inject, ChangeDetectorRef } from "@angular/core";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { InputComponent, CheckboxComponent, SelectComponent } from "@ui/components";
+import {
+  InputComponent,
+  CheckboxComponent,
+  SelectComponent,
+  ButtonComponent,
+} from "@ui/components";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
 import { ControlErrorPipe } from "@corelib";
@@ -11,6 +16,8 @@ import { ErrorMessage } from "@error/models/error-message";
 import { ToSelectOptionsPipe } from "projects/core/src/lib/pipes/options-transform.pipe";
 import { ProjectAdditionalService } from "../../services/project-additional.service";
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
+import { RouterLink } from "@angular/router";
+import { IconComponent } from "@uilib";
 
 @Component({
   selector: "app-project-additional-step",
@@ -21,12 +28,15 @@ import { PartnerProgramFields } from "@office/models/partner-program-fields.mode
     CommonModule,
     ReactiveFormsModule,
     InputComponent,
+    IconComponent,
     CheckboxComponent,
     SwitchComponent,
     SelectComponent,
     TextareaComponent,
     ControlErrorPipe,
     ToSelectOptionsPipe,
+    ButtonComponent,
+    RouterLink,
   ],
 })
 export class ProjectAdditionalStepComponent implements OnInit {

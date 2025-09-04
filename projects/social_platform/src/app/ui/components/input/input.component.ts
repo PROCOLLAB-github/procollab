@@ -45,7 +45,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   @Input() placeholder = "";
 
   /** Тип поля ввода */
-  @Input() type: "text" | "password" | "email" | "tel" = "text";
+  @Input() type: "text" | "password" | "email" | "tel" | "date" = "text";
 
   /** Состояние ошибки */
   @Input() error = false;

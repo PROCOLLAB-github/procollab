@@ -74,16 +74,11 @@
     margin-bottom: 12px;
   }
 
-  &__link {
-    margin-bottom: 12px;
-  }
-
   &__item {
     margin-bottom: 12px;
   }
 
   &__list {
-    width: 557px;
     width: 100%;
     margin-top: 10px;
   }
@@ -94,7 +89,14 @@
     margin-top: 10px;
 
     @include responsive.apply-desktop {
-      grid-template-columns: repeat(3, 350px);
+      grid-template-columns: repeat(5, 150px);
+    }
+  }
+
+  &__link {
+    margin-bottom: 12px;
+    &--wrapper {
+      flex-basis: 50%;
     }
   }
 }

@@ -7,16 +7,21 @@
   position: relative;
   height: 100%;
   min-height: 800px;
-  padding: 24px;
+  padding: 100px 24px;
   background-color: var(--white);
   border-radius: var(--rounded-md);
 
   &__top {
+    position: fixed;
+    top: 5%;
+    left: 20%;
+    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 17px;
-    margin-bottom: 18px;
+    width: 72%;
+    background-color: var(--white);
+    border-radius: var(--rounded-xl);
   }
 
   &__title {
@@ -30,23 +35,16 @@
   }
 
   &__back {
-    width: 20%;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    cursor: pointer;
   }
 
   &__form {
     display: flex;
     flex-direction: column;
-    padding: 15px;
     color: var(--black);
-    background-color: var(--white);
-    border: 1px solid var(--grey-button);
-    border-radius: var(--rounded-md);
-
-    @include responsive.apply-desktop {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 24px;
-    }
   }
 
   &__inner {
@@ -113,13 +111,8 @@
 
   &__save {
     @include responsive.apply-desktop {
-      position: absolute;
-      right: 50px;
-      bottom: 48px;
       display: flex;
       gap: 10px;
-      justify-content: flex-end;
-      order: unset;
     }
   }
 
