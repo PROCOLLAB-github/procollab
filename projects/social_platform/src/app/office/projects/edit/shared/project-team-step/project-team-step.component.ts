@@ -41,6 +41,8 @@ export class ProjectTeamStepComponent implements OnInit {
   // Константы для селектов
   readonly rolesMembersList = rolesMembersList;
 
+  showFields = false;
+
   ngOnInit(): void {
     this.projectTeamService.setInvites(this.invites);
     this.projectTeamService.setCollaborators(this.collaborators);
@@ -93,6 +95,13 @@ export class ProjectTeamStepComponent implements OnInit {
 
   get inviteFormIsSubmitting() {
     return this.projectTeamService.inviteFormIsSubmitting;
+  }
+
+  /**
+   * Открытие блоков для создания приглашения
+   */
+  createInvitationBlock(): void {
+    this.showFields = true;
   }
 
   /**

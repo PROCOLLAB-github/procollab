@@ -3,12 +3,16 @@
 <nav class="project__navigation">
   <ul class="project__nav">
     @for (item of navItems; track $index) {
-    <li class="project__item" (click)="onStepClick(item.step)">
+    <li
+      class="project__item"
+      [class.project__item--active]="currentStep() === item.step"
+      (click)="onStepClick(item.step)"
+    >
       <i
         appIcon
         [icon]="item.step"
         class="project__icon"
-        appSquare="24"
+        appSquare="14"
         [class.project__icon--active]="currentStep() === item.step"
         alt="project-icon"
       ></i>

@@ -117,7 +117,7 @@
   cursor: pointer;
   background-color: var(--white);
   border: 1px solid var(--medium-medium-grey-for-outline);
-  border-radius: 15px;
+  border-radius: var(--rounded-xl);
 
   @include responsive.apply-desktop {
     display: none;

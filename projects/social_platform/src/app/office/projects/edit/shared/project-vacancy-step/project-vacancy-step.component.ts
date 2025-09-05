@@ -44,6 +44,7 @@ export class ProjectVacancyStepComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
 
   readonly errorMessage = ErrorMessage;
+  showFields = false;
 
   ngOnInit(): void {
     this.projectVacancyService.setVacancies(this.vacancies);
@@ -129,6 +130,13 @@ export class ProjectVacancyStepComponent implements OnInit {
 
   get vacancyIsSubmitting() {
     return this.projectVacancyService.vacancyIsSubmitting;
+  }
+
+  /**
+   *
+   */
+  createVacancyBlock(): void {
+    this.showFields = true;
   }
 
   /**

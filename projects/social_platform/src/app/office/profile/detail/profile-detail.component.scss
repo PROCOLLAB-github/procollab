@@ -18,7 +18,7 @@ $detail-bar-mb: 12px;
     height: $detail-bar-height;
     margin-bottom: $detail-bar-mb;
     border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
   }
 
   &__info {
@@ -154,7 +154,7 @@ $detail-bar-mb: 12px;
     padding: 0 20px;
     margin-top: 15px;
     border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
 
     p {
       text-align: center;

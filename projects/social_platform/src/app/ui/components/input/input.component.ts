@@ -47,6 +47,9 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   /** Тип поля ввода */
   @Input() type: "text" | "password" | "email" | "tel" | "date" = "text";
 
+  /** Размер поля ввода */
+  @Input() size: "small" | "medium" | "big" = "small";
+
   /** Состояние ошибки */
   @Input() error = false;
 
@@ -63,13 +66,22 @@ export class InputComponent implements OnInit, ControlValueAccessor {
     return this.value;
   }
 
+  /** Изначальный тип поля (для восстановления после blur) */
+  private originalType: "text" | "password" | "email" | "tel" | "date" = "text";
+
+  /** Текущий активный тип поля */
+  currentType: "text" | "password" | "email" | "tel" | "date" = "text";
+
   /** Событие изменения значения */
   @Output() appValueChange = new EventEmitter<string>();
 
   /** Событие нажатия Enter */
   @Output() enter = new EventEmitter<void>();
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.originalType = this.type;
+    this.currentType = this.type === "date" ? "text" : this.type;
+  }
 
   /** Обработчик ввода текста */
   onInput(event: Event): void {
@@ -80,7 +92,17 @@ export class InputComponent implements OnInit, ControlValueAccessor {
 
   /** Обработчик потери фокуса */
   onBlur(): void {
+    if (this.originalType === "date") {
+      this.currentType = "text";
+    }
     this.onTouch();
+  }
+
+  /** Обработчик при фокусе */
+  onFocus(): void {
+    if (this.originalType === "date") {
+      this.currentType = "date";
+    }
   }
 
   /** Текущее значение поля */

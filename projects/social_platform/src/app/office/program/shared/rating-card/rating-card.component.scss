@@ -8,13 +8,13 @@
 }
 
 .card {
-  border-radius: 15px;
+  border-radius: var(--rounded-xl);
 
   &__upper {
     padding: 14px;
     background-color: var(--white);
     border: 1px solid var(--accent);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
 
     @include responsive.apply-desktop {
       min-height: 550px;
@@ -27,7 +27,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
 
     app-button ::ng-deep .button--inline {
       min-height: 38px;

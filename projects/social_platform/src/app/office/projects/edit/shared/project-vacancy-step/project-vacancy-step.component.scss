@@ -4,13 +4,15 @@
 @use "styles/typography";
 
 .project {
+  position: relative;
+
   &__inner {
     width: 100%;
     margin-bottom: 25px;
 
     @include responsive.apply-desktop {
       display: flex;
-      gap: 90px;
+      gap: 20px;
       justify-content: space-between;
       margin-bottom: 0;
       margin-bottom: 20px;
@@ -22,20 +24,12 @@
   }
 
   &__left {
-    flex-basis: 50%;
+    flex-basis: 60%;
     margin-bottom: 20px;
-
-    form {
-      width: 280px;
-
-      @include responsive.apply-desktop {
-        width: 600px;
-      }
-    }
   }
 
   &__right {
-    flex-basis: 50%;
+    flex-basis: 40%;
 
     :first-child & :not(span, fieldset, label, h4, p, i) {
       margin-top: 26px;
@@ -45,6 +39,12 @@
     :last-child & :not(i, span) {
       margin-top: 10px;
     }
+  }
+
+  &__no-items {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
   }
 }
 
@@ -56,7 +56,7 @@
 
 .vacancy {
   &__item {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   fieldset {

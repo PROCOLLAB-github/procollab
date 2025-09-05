@@ -74,7 +74,7 @@ $section-padding: 24px;
     padding: 24px;
     background-color: var(--white);
     border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
 
     h3 {
       margin-bottom: 12px;

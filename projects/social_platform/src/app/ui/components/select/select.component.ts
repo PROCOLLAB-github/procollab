@@ -53,6 +53,8 @@ export class SelectComponent implements ControlValueAccessor {
   /** ID выбранной опции */
   @Input() selectedId?: number;
 
+  @Input() size: "small" | "big" = "small";
+
   /** Массив доступных опций */
   @Input({ required: true }) options: {
     value: string | number;

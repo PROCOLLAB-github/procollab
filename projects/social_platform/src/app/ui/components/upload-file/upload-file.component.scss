@@ -1,9 +1,14 @@
 /** @format */
 
 .control {
-  padding: 26px;
-  border: 2px dashed var(--accent);
+  padding: 18px 30px;
+  height: 120px;
   border-radius: var(--rounded-md);
+  border: 1px solid var(--dark-grey);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
 
   &__empty {
     display: flex;
@@ -12,15 +17,28 @@
     cursor: pointer;
   }
 
+  &__success {
+    display: flex;
+    flex: 1;
+    align-self: stretch;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
   &--error {
     border: 2px solid var(--red);
+  }
+
+  &:hover {
+    border: 1px solid var(--gray);
   }
 }
 
 .file {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
   padding: 10px;
   background-color: var(--light-gray);
   border-radius: var(--rounded-lg);
@@ -37,6 +55,7 @@
     color: var(--red);
     cursor: pointer;
     transition: color 0.2s;
+    align-self: flex-end;
 
     &:hover {
       color: var(--red-dark);

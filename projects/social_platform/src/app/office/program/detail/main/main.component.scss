@@ -40,7 +40,7 @@
     padding: 24px;
     background-color: var(--white);
     border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
   }
 
   &__info {

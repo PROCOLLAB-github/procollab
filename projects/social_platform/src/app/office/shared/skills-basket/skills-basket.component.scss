@@ -10,7 +10,7 @@
   padding: 12px 0 12px 12px;
   overflow: hidden;
   border: 1px solid var(--medium-grey-for-outline);
-  border-radius: 15px;
+  border-radius: var(--rounded-xl);
 
   &__content {
     display: flex;
@@ -31,14 +31,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5px 10px;
-    color: var(--white);
-    background-color: var(--accent);
-    border-radius: var(--rounded-md);
+    padding: 5px 25px;
+    color: var(--accent);
+    background-color: var(--white);
+    border: 1px solid var(--accent);
+    border-radius: var(--rounded-xxl);
 
     &-delete-icon {
       margin-left: 10px;
       cursor: pointer;
+    }
+
+    &--soft {
+      color: var(--white);
+      background-color: var(--accent);
+      border: 0;
     }
   }
 

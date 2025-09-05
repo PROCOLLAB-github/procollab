@@ -15,7 +15,7 @@
     img {
       display: block;
       width: 100%;
-      border-radius: 15px;
+      border-radius: var(--rounded-xl);
       object-fit: cover;
     }
   }
@@ -27,7 +27,7 @@
     z-index: 10;
     padding: 2px 20px;
     background-color: #81818180;
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
 
     span {
       color: var(--black);
@@ -69,7 +69,7 @@
     height: 75px;
     color: var(--accent);
     background-color: var(--white);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
     transition: transform 0.1s ease-in-out;
     transform: translate(-50%, -50%) scale(0);
 

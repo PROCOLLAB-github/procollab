@@ -44,10 +44,16 @@
     </ul>
   </div>
 
-  <div class="project__right">
-    <app-button size="big" appearance="outline" class="vacancy__submit" (click)="addAchievement()">
+  <div class="project__right" [style.margin-top]="achievements.length ? '15px' : '0px'">
+    <app-button
+      size="big"
+      customTypographyClass="text-body-12"
+      appearance="outline"
+      class="vacancy__submit"
+      (click)="addAchievement()"
+    >
       <span class="vacancy__submit--text">Добавить достижение</span>
-      <i appIcon icon="plus" appSquare="14"></i>
+      <i appIcon icon="plus" appSquare="12"></i>
     </app-button>
 
     @if (!achievements.length) {
