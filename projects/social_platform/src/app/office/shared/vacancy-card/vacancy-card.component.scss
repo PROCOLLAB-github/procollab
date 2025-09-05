@@ -2,8 +2,8 @@
 
 .vacancy {
   &__requirements {
-    color: var(--accent);
     padding: 5px 40px;
+    color: var(--accent);
     background: transparent;
     border: 1px solid var(--accent);
     border-radius: var(--rounded-xxl);
@@ -20,16 +20,15 @@
     flex-direction: column;
 
     &--text {
-      border-bottom: 1px solid var(--dark-grey);
       padding-bottom: 5px;
       margin-bottom: 10px;
+      border-bottom: 1px solid var(--dark-grey);
     }
   }
 
   &__skills {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
     gap: 10px;
   }
 
@@ -48,8 +47,8 @@
   }
 
   i {
-    cursor: pointer;
     width: 24px;
     height: 24px;
+    cursor: pointer;
   }
 }

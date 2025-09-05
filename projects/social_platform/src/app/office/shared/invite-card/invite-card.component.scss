@@ -5,9 +5,9 @@
 .invite {
   display: flex;
   flex-direction: column;
+  gap: 15px;
   justify-content: space-between;
   padding: 15px 10px;
-  gap: 15px;
   background-color: var(--light-gray);
   border-radius: var(--rounded-md);
 
@@ -31,8 +31,8 @@
 
   &__user {
     display: flex;
-    align-items: center;
     gap: 10px;
+    align-items: center;
   }
 
   &__top {

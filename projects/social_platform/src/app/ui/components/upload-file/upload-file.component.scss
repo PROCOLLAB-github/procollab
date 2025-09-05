@@ -1,14 +1,14 @@
 /** @format */
 
 .control {
-  padding: 18px 30px;
-  height: 120px;
-  border-radius: var(--rounded-md);
-  border: 1px solid var(--dark-grey);
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 120px;
+  padding: 18px 30px;
   cursor: pointer;
+  border: 1px solid var(--dark-grey);
+  border-radius: var(--rounded-md);
 
   &__empty {
     display: flex;
@@ -20,10 +20,10 @@
   &__success {
     display: flex;
     flex: 1;
-    align-self: stretch;
-    align-items: center;
-    justify-content: center;
     gap: 10px;
+    align-items: center;
+    align-self: stretch;
+    justify-content: center;
   }
 
   &--error {
@@ -37,8 +37,8 @@
 
 .file {
   display: flex;
-  align-items: center;
   gap: 10px;
+  align-items: center;
   padding: 10px;
   background-color: var(--light-gray);
   border-radius: var(--rounded-lg);
@@ -52,10 +52,10 @@
   }
 
   &__basket {
+    align-self: flex-end;
     color: var(--red);
     cursor: pointer;
     transition: color 0.2s;
-    align-self: flex-end;
 
     &:hover {
       color: var(--red-dark);
