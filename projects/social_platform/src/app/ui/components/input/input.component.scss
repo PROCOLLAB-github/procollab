@@ -19,8 +19,8 @@
     }
 
     &--small {
-      padding: 12px;
       max-width: 70px;
+      padding: 12px;
       text-align: center;
     }
 
@@ -46,8 +46,8 @@
 
     input[type="date"]::-webkit-inner-spin-button,
     input[type="date"]::-webkit-calendar-picker-indicator {
-        display: none;
-        -webkit-appearance: none;
+      display: none;
+      appearance: none;
     }
   }
 

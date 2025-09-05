@@ -7,15 +7,14 @@
   position: relative;
 
   &__input {
-
+    min-height: 162px;
+    padding: 12px 18px;
     color: var(--black);
     resize: none;
     background-color: var(--white);
     border: 1px solid var(--gray);
     border-radius: var(--rounded-xl);
     outline: none;
-    min-height: 162px;
-    padding: 12px 18px;
     transition: all 0.2s;
 
     &::placeholder {
