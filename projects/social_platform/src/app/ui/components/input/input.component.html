@@ -9,11 +9,15 @@
     (input)="onInput($event)"
     (keydown.enter)="onEnter($event)"
     (blur)="onBlur()"
+    (focus)="onFocus()"
     [placeholder]="placeholder"
-    [type]="type"
+    [type]="currentType"
     [mask]="mask"
     [dropSpecialCharacters]="true"
     class="field__input"
+    [class.field__input--small]="size === 'small'"
+    [class.field__input--medium]="size === 'medium'"
+    [class.field__input--big]="size === 'big'"
     [class.field__input--error]="error"
   />
   @if (error) {

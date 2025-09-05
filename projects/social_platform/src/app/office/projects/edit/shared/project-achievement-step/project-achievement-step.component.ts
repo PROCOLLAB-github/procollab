@@ -102,8 +102,6 @@ export class ProjectAchievementStepComponent {
    * Добавление достижения
    */
   addAchievement(id?: number, achievementsName?: string, achievementsDate?: string): void {
-    // this.projectAchievementService.addAchievement(this.achievements, this.projectForm);
-
     this.achievements.push(
       this.fb.group({
         achievementsName: [achievementsName ?? "", [Validators.required]],
@@ -111,6 +109,8 @@ export class ProjectAchievementStepComponent {
         id: [id],
       })
     );
+
+    this.projectAchievementService.addAchievement(this.achievements, this.projectForm);
   }
 
   /**

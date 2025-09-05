@@ -4,6 +4,8 @@
 @use "styles/typography";
 
 .project {
+  position: relative;
+
   &__inner {
     width: 100%;
     margin-bottom: 25px;
@@ -63,6 +65,12 @@
       }
     }
   }
+
+  &__no-items {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+  }
 }
 
 .invite {
@@ -86,7 +94,7 @@
   &__team {
     grid-template-columns: repeat(1, 270px);
     grid-gap: 20px;
-    margin-top: 10px;
+    margin: 15px 0px;
 
     @include responsive.apply-desktop {
       grid-template-columns: repeat(5, 150px);
@@ -94,12 +102,18 @@
   }
 
   &__link {
+    display: flex;
     margin-bottom: 12px;
+    gap: 20px;
 
-    &--wrapper {
-      flex-basis: 50%;
+    app-button {
+      flex-basis: 70%;
     }
   }
+}
+
+.error {
+  color: var(--red) !important;
 }
 
 .vacancy {

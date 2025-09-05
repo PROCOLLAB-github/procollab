@@ -10,29 +10,27 @@
       }
     </div>
 
-    <app-avatar [url]="invite.user.avatar" [size]="40"></app-avatar>
-    <h3 class="text-bold-body-14 invite__role">
-      {{ invite.user.firstName }} {{ invite.user.lastName }}
-    </h3>
-
-    <p class="text-body-12 invite__requirements">
-      {{ invite.role }}
-    </p>
+    <div class="invite__user">
+      <app-avatar [url]="invite.user.avatar" [size]="40"></app-avatar>
+      <h3 class="text-body-12 invite__role">
+        {{ invite.user.firstName }} {{ invite.user.lastName }}
+      </h3>
+    </div>
   </div>
 
-  <div class="invite__icons">
-    <!-- <i
+  <app-button size="big" color="red" (click)="isRemoveInviteModal.set(true)">
+    <i appIcon icon="basket" appSquare="18" class="invite__cross invite__icon"></i>
+  </app-button>
+
+  <!-- <div class="invite__icons"> -->
+  <!-- <i
       class="invite__edit invite__icon"
       appIcon
       icon="edit-pen"
       appSquare="24"
       (click)="isEditInviteModal.set(true)"
     ></i> -->
-
-    <app-button class="basket" size="big" color="red" (click)="isRemoveInviteModal.set(true)">
-      <i appIcon icon="basket" appSquare="14" class="invite__cross invite__icon"></i>
-    </app-button>
-  </div>
+  <!-- </div> -->
 </div>
 }
 

@@ -12,7 +12,7 @@
     cursor: pointer;
     background: var(--accent);
     border: 2px solid transparent;
-    border-radius: var(--rounded-xl);
+    border-radius: var(--rounded-xxl);
     outline: none;
     transition: background-color 0.2s;
 
@@ -93,7 +93,7 @@
     cursor: pointer;
     background-color: transparent;
     border: 1px solid var(--accent);
-    border-radius: var(--rounded-xl);
+    border-radius: var(--rounded-xxl);
     transition: all 0.2s;
 
     &:hover {
@@ -127,6 +127,14 @@
 
     &.button--no-border {
       border: none;
+    }
+
+    ::ng-deep *:not(.dot-wave) {
+      display: block;
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
     }
   }
 }

@@ -2,10 +2,11 @@
 
 <div class="project__inner">
   <div class="vacancy project__left">
-    <label class="field-label">Создание вакансии</label>
+    @if (showFields) {
     <form [formGroup]="vacancyForm">
       @if (role; as role) {
       <fieldset class="vacancy__role">
+        <label class="field-label">Название вакансии</label>
         <app-input
           id="vacancy_role"
           formControlName="role"
@@ -20,6 +21,7 @@
       </fieldset>
       } @if (description; as description) {
       <fieldset class="vacancy__description">
+        <label class="field-label">Описание вакансии</label>
         <app-input
           id="vacancy_description"
           formControlName="description"
@@ -38,6 +40,7 @@
         <div class="vacancy__info">
           @if (requiredExperience; as requiredExperience) {
           <fieldset>
+            <label class="field-label">Опыт</label>
             <app-select
               id="requiredExperience"
               formControlName="requiredExperience"
@@ -53,6 +56,7 @@
           </fieldset>
           } @if (workFormat; as workFormat) {
           <fieldset>
+            <label class="field-label">Формат</label>
             <app-select
               id="workFormat"
               formControlName="workFormat"
@@ -72,6 +76,7 @@
         <div class="vacancy__additional">
           @if (salary; as salary) {
           <fieldset>
+            <label class="field-label">Заработная плата</label>
             <app-input
               id="salary"
               formControlName="salary"
@@ -86,6 +91,7 @@
           </fieldset>
           } @if (workSchedule; as workSchedule) {
           <fieldset>
+            <label class="field-label">График</label>
             <app-select
               id="workSchedule"
               formControlName="workSchedule"
@@ -104,11 +110,11 @@
       </div>
 
       <fieldset class="vacancy__search">
-        <label class="field-label">Навыки</label>
+        <label class="field-label">Навыки необходимые для кандидата</label>
         <div class="vacancies">
           <app-autocomplete-input
             class="vacancies__input"
-            placeholder="Введите необходимый для соискателя навык"
+            placeholder="Введите навык"
             searchIcon=""
             [suggestions]="inlineSkills"
             fieldToDisplay="name"
@@ -137,7 +143,7 @@
       </fieldset>
       }
 
-      <label class="field-label" style="color: var(--accent)">Для проектов ПД.МосПолитех</label>
+      <!-- <label class="field-label" style="color: var(--accent)">Для проектов ПД.МосПолитех</label>
       @if (specialization; as specialization) {
       <fieldset>
         <app-select
@@ -153,21 +159,23 @@
         </div>
         }
       </fieldset>
-      }
+      } -->
     </form>
+    }
+    <app-button
+      size="big"
+      appearance="outline"
+      customTypographyClass="text-body-12"
+      class="vacancy__submit"
+      [loader]="vacancyIsSubmitting()"
+      (click)="showFields ? submitVacancy() : createVacancyBlock()"
+    >
+      <span>{{ showFields ? "Добавить вакансию" : "Создать вакансию" }}</span>
+      <i appIcon icon="plus" appSquare="10"></i>
+    </app-button>
   </div>
 
   <div class="project__right">
-    <app-button
-      size="big"
-      class="vacancy__submit"
-      [loader]="vacancyIsSubmitting()"
-      (click)="submitVacancy()"
-    >
-      <span>Создать вакансию</span>
-      <i appIcon icon="person" appSquare="24"></i>
-    </app-button>
-
     <ul class="vacancy__list">
       @for (vacancy of vacancies; track vacancy.id) {
       <li class="vacancy__item">
@@ -180,4 +188,8 @@
       }
     </ul>
   </div>
+
+  @if (!vacancies.length) {
+  <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
+  }
 </div>

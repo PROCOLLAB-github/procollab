@@ -7,17 +7,26 @@
   position: relative;
 
   &__input {
-    width: 100%;
-    padding: 13px 20px;
-    color: var(--black);
+    color: var(--black) !important;
     background-color: var(--white);
     border: 1px solid var(--gray);
-    border-radius: var(--rounded-xl);
+    border-radius: var(--rounded-xxl);
     outline: none;
     transition: all 0.2s;
 
     &::placeholder {
       color: var(--dark-grey);
+    }
+
+    &--small {
+      padding: 12px;
+      max-width: 70px;
+      text-align: center;
+    }
+
+    &--big {
+      width: 100%;
+      padding: 12px 105px 12px 12px;
     }
 
     &--error {
@@ -29,10 +38,16 @@
       box-shadow: 0 0 6px rgb(109 40 255 / 30%);
     }
 
-    @include typography.body-14;
+    @include typography.body-10;
 
     @include responsive.apply-desktop {
-      @include typography.body-16;
+      @include typography.body-12;
+    }
+
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
     }
   }
 

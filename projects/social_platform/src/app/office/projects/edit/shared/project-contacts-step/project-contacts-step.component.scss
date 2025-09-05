@@ -4,9 +4,10 @@
 @use "styles/typography";
 
 .project {
+  position: relative;
+
   &__inner {
     width: 100%;
-    margin-bottom: 25px;
 
     @include responsive.apply-desktop {
       display: flex;
@@ -17,40 +18,18 @@
     }
   }
 
-  &__inner > fieldset:not(:last-child) {
-    margin-bottom: 20px;
-  }
-
   &__left {
     flex-basis: 50%;
-    margin-bottom: 20px;
-
-    form {
-      width: 280px;
-
-      @include responsive.apply-desktop {
-        width: 600px;
-      }
-    }
   }
 
   &__right {
     flex-basis: 50%;
-
-    :first-child & :not(span, fieldset, label, h4, p, i) {
-      margin-top: 26px;
-      margin-bottom: 10px;
-    }
-
-    :last-child & :not(i, span) {
-      margin-top: 10px;
-    }
   }
 
-  &__add-link {
-    i {
-      margin-left: 10px;
-    }
+  &__no-items {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
   }
 }
 

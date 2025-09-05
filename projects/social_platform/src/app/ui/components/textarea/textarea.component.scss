@@ -7,18 +7,27 @@
   position: relative;
 
   &__input {
-    width: 100%;
-    padding: 12px 20px;
+
     color: var(--black);
     resize: none;
     background-color: var(--white);
     border: 1px solid var(--gray);
-    border-radius: var(--rounded-lg);
+    border-radius: var(--rounded-xl);
     outline: none;
+    min-height: 162px;
+    padding: 12px 18px;
     transition: all 0.2s;
 
     &::placeholder {
       color: var(--dark-grey);
+    }
+
+    &--small {
+      min-width: 245px;
+    }
+
+    &--big {
+      width: 100%;
     }
 
     &--error {
@@ -28,12 +37,6 @@
     &:focus {
       border-color: var(--accent);
       box-shadow: 0 0 6px rgb(109 40 255 / 30%);
-    }
-
-    @include typography.body-14;
-
-    @include responsive.apply-desktop {
-      @include typography.body-16;
     }
   }
 

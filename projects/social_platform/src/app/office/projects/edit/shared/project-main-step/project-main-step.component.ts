@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, Input, Output, EventEmitter, inject, OnInit, OnDestroy } from "@angular/core";
-import { FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormArray, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { AuthService } from "@auth/services";
 import { ErrorMessage } from "@error/models/error-message";
 import { directionProjectList } from "projects/core/src/consts/list-direction-project";

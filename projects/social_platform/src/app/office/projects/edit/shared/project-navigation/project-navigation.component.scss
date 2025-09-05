@@ -16,6 +16,9 @@
     gap: 10px;
     align-items: center;
     justify-content: center;
+    background-color: var(--gray);
+    border-radius: var(--rounded-xxl);
+    padding: 2px;
 
     @include responsive.apply-desktop {
       gap: 0;
@@ -28,6 +31,12 @@
     gap: 5px;
     align-items: center;
     cursor: pointer;
+
+    &--active {
+      background-color: var(--white);
+      padding: 0px 10px;
+      border-radius: var(--rounded-xxl);
+    }
   }
 
   &__subtitle {
@@ -49,7 +58,7 @@
   }
 
   &__nav-item {
-    color: var(--gray);
+    color: var(--dark-grey);
     cursor: pointer;
 
     @include typography.heading-4;

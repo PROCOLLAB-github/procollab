@@ -36,7 +36,6 @@ export class Project {
   actuality!: string;
   problem!: string;
   region!: string;
-  step!: number;
   shortDescription!: string;
   achievements!: { id: number; title: string; status: string }[];
   industry!: number;
@@ -62,7 +61,6 @@ export class Project {
       id: 0,
       name: "string",
       region: "sdf",
-      step: 1,
       targetAudience: "",
       implementationDeadline: "",
       actuality: "",

@@ -46,6 +46,8 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
   /** Состояние ошибки */
   @Input() error = false;
 
+  @Input() size: "small" | "medium" | "big" = "small";
+
   /** Маска (наследуется, но не используется) */
   @Input() mask = "";
 

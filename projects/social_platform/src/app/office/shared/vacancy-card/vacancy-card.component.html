@@ -2,18 +2,41 @@
 
 @if (vacancy) {
 <div class="vacancy">
-  <div>
-    <h3 class="text-bold-body-14 vacancy__role">{{ vacancy.role }}</h3>
-    @if (vacancy.requiredSkills.length) {
-    <p class="text-body-12 vacancy__requirements">
-      {{ skillString }} {{ vacancy.specialization ? "•" : "" }}
-      {{ vacancy.specialization ? vacancy.specialization : "" }}
-    </p>
-    }
+  <div class="vacancy__info">
+    <div class="vacancy__info--text">
+      <h3 class="text-body-12 vacancy__role">{{ vacancy.role }}</h3>
+    </div>
+    <div class="vacancy__skills">
+      @if (vacancy.requiredSkills.length) { @for (skill of vacancy.requiredSkills; track $index) {
+      <p
+        class="text-body-12 vacancy__requirements"
+        [class.vacancy__requirements--soft]="skill.category.name.includes('Soft')"
+      >
+        {{ skill.name }}
+      </p>
+
+      @if (vacancy.specialization) {
+      <p class="text-body-12 vacancy__requirements">
+        {{ vacancy.specialization ? vacancy.specialization : "" }}
+      </p>
+      } } }
+    </div>
   </div>
+
   <div class="vacancy__icons">
-    <i class="vacancy__edit" appIcon icon="edit-pen" appSquare="24" (click)="onEdit($event)"></i>
-    <i class="vacancy__basket" appIcon icon="basket" appSquare="24" (click)="onRemove($event)"></i>
+    <app-button size="big" appearance="outline">
+      <i class="vacancy__edit" appIcon icon="edit-pen" appSquare="16" (click)="onEdit($event)"></i>
+    </app-button>
+
+    <app-button size="big" color="red">
+      <i
+        class="vacancy__basket"
+        appIcon
+        icon="basket"
+        appSquare="24"
+        (click)="onRemove($event)"
+      ></i>
+    </app-button>
   </div>
 </div>
 }

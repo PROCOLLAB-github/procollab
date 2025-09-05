@@ -1,39 +1,54 @@
 /** @format */
 
 .vacancy {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  background-color: var(--light-gray);
-  border-radius: var(--rounded-md);
+  &__requirements {
+    color: var(--accent);
+    padding: 5px 40px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    border-radius: var(--rounded-xxl);
 
-  &__role {
-    color: var(--black);
+    &--soft {
+      color: var(--white);
+      background-color: var(--accent);
+      border: none;
+    }
   }
 
-  &__requirements {
-    color: var(--dark-grey);
+  &__info {
+    display: flex;
+    flex-direction: column;
+
+    &--text {
+      border-bottom: 1px solid var(--dark-grey);
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+    }
+  }
+
+  &__skills {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   &__icons {
     display: flex;
-    gap: 15px;
-    align-items: center;
-    margin-left: 15px;
-  }
+    gap: 20px;
+    margin-top: 10px;
 
-  &__basket {
-    color: var(--red);
-    cursor: pointer;
+    app-button {
+      flex-grow: 1;
+    }
   }
 
   &__edit {
-    color: var(--dark-grey);
-    cursor: pointer;
+    margin-top: 8px;
   }
 
   i {
+    cursor: pointer;
     width: 24px;
     height: 24px;
   }

@@ -20,7 +20,7 @@
 
   &__no-items {
     position: absolute;
-    top: 60%;
+    bottom: 0%;
     left: 50%;
   }
 
@@ -30,15 +30,6 @@
 
   &__right {
     flex-basis: 50%;
-
-    :first-child & :not(span, fieldset, label, h4, p, i) {
-      margin-top: 26px;
-      margin-bottom: 10px;
-    }
-
-    :last-child & :not(i, span) {
-      margin-top: 10px;
-    }
   }
 }
 

@@ -4,9 +4,10 @@
 
 .invite {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
   justify-content: space-between;
   padding: 15px 10px;
+  gap: 15px;
   background-color: var(--light-gray);
   border-radius: var(--rounded-md);
 
@@ -26,6 +27,12 @@
     display: flex;
     flex-direction: column;
     gap: 5px;
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
   &__top {
@@ -92,9 +99,5 @@
 
   &__edit {
     color: var(--dark-grey);
-  }
-
-  &__cross {
-    color: var(--red);
   }
 }

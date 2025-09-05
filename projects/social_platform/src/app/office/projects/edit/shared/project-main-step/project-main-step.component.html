@@ -1,77 +1,69 @@
 <!-- @format -->
 
 <div class="project__inner" [formGroup]="projectForm">
-  <div class="project__left">
-    <div class="project__info">
-      <div class="project__avatar">
-        @if (imageAddress; as imageAddress) {
-        <div class="project__image">
-          <app-avatar-control
-            id="imageAddress"
-            formControlName="imageAddress"
-            type="project"
-            [error]="(imageAddress | controlError) && projSubmitInitiated"
-          ></app-avatar-control>
-          @if ((imageAddress | controlError: "required") && projSubmitInitiated) {
-          <div class="text-body-14 error">
-            {{ errorMessage.EMPTY_AVATAR }}
-          </div>
-          }
+  <div class="project__info">
+    <div class="project__grid" style="grid-template-columns: 0.1fr 1fr 1fr 0.15fr">
+      @if (imageAddress; as imageAddress) {
+      <div class="project__image">
+        <label class="field-label text-body-12" style="text-align: center" for="name"
+          >Логотип</label
+        >
+        <app-avatar-control
+          id="imageAddress"
+          [size]="68"
+          formControlName="imageAddress"
+          type="project"
+          [error]="(imageAddress | controlError) && projSubmitInitiated"
+        ></app-avatar-control>
+        @if ((imageAddress | controlError: "required") && projSubmitInitiated) {
+        <div class="text-body-10 error">
+          {{ errorMessage.EMPTY_AVATAR }}
         </div>
         }
       </div>
-
-      <div class="project__generals">
-        @if (name; as name) {
-        <fieldset>
-          <label class="field-label" for="name">Название проекта</label>
-          <app-input
-            id="name"
-            formControlName="name"
-            [error]="(name | controlError) && projSubmitInitiated"
-            placeholder="Название"
-          ></app-input>
-          @if ((name | controlError: "required") && projSubmitInitiated) {
-          <div class="text-body-14 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          }
-        </fieldset>
-        } @if (region; as region) {
-        <fieldset>
-          <label class="field-label" for="region">Регион проекта</label>
-          <app-input
-            id="region"
-            formControlName="region"
-            [error]="(region | controlError) && projSubmitInitiated"
-            placeholder="Введите регион"
-          ></app-input>
-          @if ((region | controlError: "required") && projSubmitInitiated) {
-          <div class="text-body-14 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          }
-        </fieldset>
-        }
-      </div>
-    </div>
-
-    <div class="project__additional">
-      @if (industry; as industry) {
-      <fieldset>
-        <label class="field-label" for="industry">Сфера проекта</label>
-        @if (industries$ | async; as industries) {
-        <app-select
-          id="industry"
-          formControlName="industryId"
-          placeholder="Выберите сферу к которой относится ваш проект"
-          [options]="industries"
-        ></app-select>
-        } @if (industry | controlError: "required") {
-        <div class="text-body-14 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        }
+      } @if (presentationAddress; as presentationAddress) {
+      <fieldset class="project__file">
+        <label class="field-label text-body-12" style="text-align: center" for="name"
+          >Презентация</label
+        >
+        <app-upload-file
+          formControlName="presentationAddress"
+          accept=".pdf,.pptx"
+          [error]="presentationAddress | controlError"
+        >
+          <ng-container emptyPlaceholder>
+            <i appIcon icon="file" appSquare="16"></i>
+            <p class="text-body-12 project__slides-text">
+              Презентации формата .PDF<br />
+              или .PPTX весом до 50МБ
+            </p>
+            @if (presentationAddress | controlError: "required") {
+            <p class="project__slides-error text-body-10">Загрузите файл</p>
+            }
+          </ng-container>
+        </app-upload-file>
+      </fieldset>
+      } @if (coverImageAddress; as coverImageAddress) {
+      <fieldset class="project__file">
+        <label class="field-label text-body-12" for="name" style="text-align: center"
+          >Обложка</label
+        >
+        <app-upload-file
+          formControlName="coverImageAddress"
+          accept=".jpg,.png,.jpeg"
+          [error]="coverImageAddress | controlError"
+        >
+          <ng-container emptyPlaceholder>
+            <i appIcon icon="file" appSquare="16"></i>
+            <p class="text-body-12 project__slides-text">
+              Презентации формата .jpg, .jpeg, .png
+              <br />Размер изображения 1280 x 230
+            </p>
+            @if (coverImageAddress | controlError: "required") {
+            <p class="project__slides-error text-body-10">Загрузите файл</p>
+            }
+          </ng-container>
+        </app-upload-file>
       </fieldset>
       } @if (trl; as trl) {
       <fieldset>
@@ -82,82 +74,82 @@
           [options]="trlList"
         ></app-select>
         @if (trl | controlError: "required") {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
       </fieldset>
-      } @if (description; as description) {
+      }
+    </div>
+
+    <div class="project__grid" style="grid-template-columns: 1fr 1fr 1fr 0.2fr">
+      @if (name; as name) {
       <fieldset>
-        <label for="description" class="field-label">Информация о проекте</label>
-        <app-textarea
-          id="description"
-          [error]="(description | controlError) && projSubmitInitiated"
-          formControlName="description"
-          placeholder="Напишите кратко о своем проекте, описав в 2-3 предложениях его суть"
-        ></app-textarea>
-        @if ((description | controlError: "required") && projSubmitInitiated) {
-        <div class="text-body-14 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        }
-      </fieldset>
-      } @if (actuality; as actuality) {
-      <fieldset>
-        <label class="field-label" for="actuality">Актуальность проекта</label>
+        <label class="field-label text-body-12" for="name">Название</label>
         <app-input
-          id="actuality"
-          formControlName="actuality"
-          [error]="actuality | controlError"
-          placeholder="Опиши в чём актуальность твоего проекта"
+          size="big"
+          id="name"
+          formControlName="name"
+          [error]="(name | controlError) && projSubmitInitiated"
+          placeholder="Название"
         ></app-input>
-        @if ((actuality | controlError: "required")) {
-        <div class="text-body-14 error">
+        @if ((name | controlError: "required") && projSubmitInitiated) {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (region; as region) {
+      <fieldset>
+        <label class="field-label text-body-12" for="region">Регион</label>
+        <app-input
+          size="big"
+          id="region"
+          formControlName="region"
+          [error]="(region | controlError) && projSubmitInitiated"
+          placeholder="Введите регион"
+        ></app-input>
+        @if ((region | controlError: "required") && projSubmitInitiated) {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (industry; as industry) {
+      <fieldset>
+        <label class="field-label text-body-12" for="industry">Сфера</label>
+        @if (industries$ | async; as industries) {
+        <app-select
+          size="big"
+          id="industry"
+          formControlName="industryId"
+          placeholder="Выберите сферу к которой относится ваш проект"
+          [options]="industries"
+        ></app-select>
+        } @if (industry | controlError: "required") {
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
       </fieldset>
       } @if (implementationDeadline; as implementationDeadline) {
       <fieldset>
-        <label class="field-label" for="implementationDeadline">Дата дедлайна</label>
+        <label
+          class="field-label text-body-12"
+          for="implementationDeadline"
+          style="text-align: center"
+          >Дата</label
+        >
         <app-input
+          size="small"
           id="implementationDeadline"
           type="date"
           formControlName="implementationDeadline"
           [error]="(implementationDeadline | controlError) && projSubmitInitiated"
-          placeholder="Опиши в чём цель твоего проекта"
+          placeholder="25.01.25"
         ></app-input>
         @if ((implementationDeadline | controlError: "required") && projSubmitInitiated) {
-        <div class="text-body-14 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        }
-      </fieldset>
-      } @if (problem; as problem) {
-      <fieldset>
-        <label class="field-label" for="problem">Проблема проекта</label>
-        <app-input
-          id="problem"
-          formControlName="problem"
-          [error]="(problem | controlError) && projSubmitInitiated"
-          placeholder="Опиши проблему на которую направлен твой проекта"
-        ></app-input>
-        @if ((problem | controlError: "required") && projSubmitInitiated) {
-        <div class="text-body-14 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        }
-      </fieldset>
-      } @if (targetAudience; as targetAudience) {
-      <fieldset>
-        <app-select
-          id="targetAudience"
-          formControlName="targetAudience"
-          placeholder="Направление"
-          [options]="directionList"
-        ></app-select>
-        @if ((targetAudience | controlError: "required")) {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -166,8 +158,77 @@
     </div>
   </div>
 
-  <div class="project__right">
-    @if (!isProjectBoundToProgram) { @if (authService.profile | async; as profile) { @if (profile.id
+  @if (problem; as problem) {
+  <fieldset class="project__problem">
+    <label class="field-label text-body-12" for="problem">Проблема, которую решает проект</label>
+    <app-input
+      size="big"
+      id="problem"
+      formControlName="problem"
+      [error]="(problem | controlError) && projSubmitInitiated"
+      placeholder="Улучшить качество жизни студентов"
+    ></app-input>
+    @if ((problem | controlError: "required") && projSubmitInitiated) {
+    <div class="text-body-10 error">
+      {{ errorMessage.VALIDATION_REQUIRED }}
+    </div>
+    }
+  </fieldset>
+  } @if (description; as description) {
+  <fieldset class="project__description">
+    <label for="description" class="field-label text-body-12">Информация</label>
+    <app-textarea
+      size="big"
+      id="description"
+      [error]="(description | controlError) && projSubmitInitiated"
+      formControlName="description"
+      placeholder="Проект начал свое существование с 2020 года"
+    ></app-textarea>
+    @if ((description | controlError: "required") && projSubmitInitiated) {
+    <div class="text-body-10 error">
+      {{ errorMessage.VALIDATION_REQUIRED }}
+    </div>
+    }
+  </fieldset>
+  }
+
+  <div class="project__info--additional">
+    @if (actuality; as actuality) {
+    <fieldset>
+      <label class="field-label text-body-12" for="actuality">Актуальность</label>
+      <app-textarea
+        size="big"
+        id="actuality"
+        formControlName="actuality"
+        [error]="actuality | controlError"
+        placeholder="Указом президента от 03.07.2023 "
+      ></app-textarea>
+      @if ((actuality | controlError: "required")) {
+      <div class="text-body-10 error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+      }
+    </fieldset>
+    } @if (targetAudience; as targetAudience) {
+    <fieldset>
+      <label class="field-label text-body-12" for="actuality">Целевая аудтория</label>
+      <app-textarea
+        size="big"
+        id="targetAudience"
+        formControlName="targetAudience"
+        placeholder="30% потери времени студентов во время работы"
+      ></app-textarea>
+      @if ((targetAudience | controlError: "required")) {
+      <div class="text-body-10 error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+      }
+    </fieldset>
+    }
+  </div>
+
+  <div class="project__options">
+    <!-- @if (!isProjectBoundToProgram) { @if (authService.profile | async; as profile) { @if (profile.id
     == leaderId) { @if (programTagsOptions.length) {
     <fieldset class="project__tags" style="margin-top: -10px">
       <label for="program_tag" class="field-label">Выбор тега</label>
@@ -182,49 +243,16 @@
     <app-button size="big" (click)="onAssignToProgram()" customTypographyClass="text-body-12">
       Привязать проект к программе
     </app-button>
-    } } } } @if (presentationAddress; as presentationAddress) {
-    <fieldset class="project__file">
-      <app-upload-file
-        formControlName="presentationAddress"
-        accept=".pdf,.pptx"
-        [error]="presentationAddress | controlError"
-      >
-        <ng-container emptyPlaceholder>
-          <i appIcon icon="upload" appSquare="60"></i>
-          <h4 class="text-bold-body-16 project__slides-title">
-            Добавьте&nbsp;
-            <span class="project__slides-open-file">файл</span>&nbsp; презентации
-          </h4>
-          <p class="text-body-14 project__slides-text">
-            Презентации формата .PDF или .PPTX весом до 50МБ
-          </p>
-          @if (presentationAddress | controlError: "required") {
-          <p class="project__slides-error text-body-14">Загрузите файл</p>
-          }
-        </ng-container>
-      </app-upload-file>
-    </fieldset>
-    } @if (coverImageAddress; as coverImageAddress) {
-    <fieldset class="project__file">
-      <app-upload-file
-        formControlName="coverImageAddress"
-        accept=".jpg,.png,.jpeg"
-        [error]="coverImageAddress | controlError"
-      >
-        <ng-container emptyPlaceholder>
-          <i appIcon icon="upload" appSquare="60"></i>
-          <h4 class="text-bold-body-16 project__slides-title">
-            Добавьте&nbsp;
-            <span class="project__slides-open-file">обложку</span>&nbsp; проекта
-          </h4>
-          <p class="text-body-14 project__slides-text">Презентации формата .jpg, .jpeg, .png</p>
-          <p class="text-body-14 project__slides-text">Размер изображения 1280 x 230</p>
-          @if (coverImageAddress | controlError: "required") {
-          <p class="project__slides-error text-body-14">Загрузите файл</p>
-          }
-        </ng-container>
-      </app-upload-file>
-    </fieldset>
-    }
+    } } } } -->
+
+    <app-button size="big" appearance="outline" customTypographyClass="text-body-12">
+      <span>Добавить краткосрочную цель проекта</span>
+      <i appIcon icon="plus" appSquare="12"></i>
+    </app-button>
+
+    <app-button size="big" appearance="outline" customTypographyClass="text-body-12">
+      <span>Добавить ссылку на контакты и сообщества</span>
+      <i appIcon icon="plus" appSquare="12"></i>
+    </app-button>
   </div>
 </div>
