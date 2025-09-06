@@ -1,15 +1,15 @@
 /** @format */
 
 .button {
-  max-height: 52px;
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  max-height: 52px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s;
   border-radius: var(--rounded-xxl);
-  position: relative;
+  transition: all 0.2s;
 
   &.button--inline {
     font-weight: 400;

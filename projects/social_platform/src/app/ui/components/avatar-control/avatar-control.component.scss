@@ -1,8 +1,8 @@
 @use "styles/responsive";
 
 .control {
-  border-radius: 50%;
   position: relative;
+  border-radius: 50%;
 
   &__overlay {
     position: absolute;
@@ -70,10 +70,10 @@
 
   &__tooltip-wrapper {
     position: absolute;
-    right: -10px;
     top: 10%;
-    transform: translateY(-50%);
+    right: -10px;
     z-index: 10;
+    transform: translateY(-50%);
   }
 }
 
