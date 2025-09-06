@@ -19,7 +19,7 @@
   <label [for]="controlId" class="control__label" [class.control__label--error]="error">
     @if (loading) {
     <div class="control__loader">
-      <app-loader></app-loader>
+      <app-loader type="circle" color="accent" size="20px"></app-loader>
     </div>
     } @if (value) {
     <img [src]="value" alt="avatar" class="control__img" />
@@ -36,6 +36,21 @@
       <i appIcon icon="edit-pen-old" appSquare="18"></i>
     </div>
   </label>
+
+  @if (haveHint && tooltipText) {
+  <div class="control__tooltip-wrapper">
+    <app-tooltip
+      [text]="tooltipText"
+      [isVisible]="isTooltipVisible"
+      [position]="tooltipPosition"
+      [iconSize]="'24'"
+      [tooltipWidth]="tooltipWidth"
+      customClass="control__tooltip-icon"
+      (show)="showTooltip()"
+      (hide)="hideTooltip()"
+    ></app-tooltip>
+  </div>
+  }
 </div>
 
 <app-modal [open]="showCropperModal" (openChange)="showCropperModal = !showCropperModal">

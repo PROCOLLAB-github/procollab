@@ -10,6 +10,12 @@
         >
         <app-avatar-control
           id="imageAddress"
+          [haveHint]="true"
+          [tooltipText]="
+            'Загрузите логотип проекта, отражающий вашу индивидуальность. Разместите его в центре круга.'
+          "
+          [tooltipPosition]="'right'"
+          [tooltipWidth]="300"
           [size]="68"
           formControlName="imageAddress"
           type="project"
@@ -144,6 +150,12 @@
         <app-input
           size="small"
           id="implementationDeadline"
+          [haveHint]="true"
+          [tooltipText]="
+            'Расскажи, до какого времени будет реализовываться проект. Если проект бессрочный, поставь на 5 лет вперед :)'
+          "
+          [tooltipPosition]="'left'"
+          [tooltipWidth]="300"
           type="date"
           formControlName="implementationDeadline"
           [error]="(implementationDeadline | controlError) && projSubmitInitiated"
@@ -181,6 +193,12 @@
     <app-textarea
       size="big"
       id="description"
+      [haveHint]="true"
+      [tooltipText]="
+        'Расскажи основную информацию о своем проекте. Про что твой проект, история твоего проекта, как он появился'
+      "
+      [tooltipPosition]="'left'"
+      [tooltipWidth]="350"
       [error]="(description | controlError) || projSubmitInitiated"
       formControlName="description"
       placeholder="Проект начал свое существование с 2020 года"
@@ -200,6 +218,12 @@
       <app-textarea
         size="big"
         id="actuality"
+        [haveHint]="true"
+        [tooltipText]="
+          'Расскажи, почему твой проект актуален именно сейчас. Укажи на правительственные инициативы, мировые и национальные тренды, которые подтверждают его важность.'
+        "
+        [tooltipPosition]="'right'"
+        [tooltipWidth]="350"
         formControlName="actuality"
         [error]="actuality | controlError"
         placeholder="Указом президента от 03.07.2023 "
@@ -216,6 +240,12 @@
       <app-textarea
         size="big"
         id="targetAudience"
+        [haveHint]="true"
+        [tooltipText]="
+          'Расскажи, кто твой целевой клиент и какую проблему он решает с помощью твоего проекта. Помни, что вся Россия не может быть целевой аудиторией. Чем конкретнее и меньше аудитория, тем лучше!'
+        "
+        [tooltipPosition]="'left'"
+        [tooltipWidth]="350"
         [error]="(targetAudience | controlError) || projSubmitInitiated"
         formControlName="targetAudience"
         placeholder="30% потери времени студентов во время работы"

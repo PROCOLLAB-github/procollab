@@ -110,6 +110,16 @@
       flex-basis: 60%;
     }
   }
+
+  &__submit {
+    position: relative;
+
+    app-tooltip {
+      position: absolute;
+      bottom: 70%;
+      right: -2%;
+    }
+  }
 }
 
 .error {

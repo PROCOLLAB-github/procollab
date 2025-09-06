@@ -16,6 +16,7 @@ import { SkillsGroup } from "@office/models/skills-group";
 import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";
 import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-basket.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 
 /**
  * КОМПОНЕНТ ВТОРОГО ЭТАПА ОНБОРДИНГА
@@ -70,6 +71,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
     AutoCompleteInputComponent,
     SkillsGroupComponent,
     SkillsBasketComponent,
+    TooltipComponent,
   ],
 })
 export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
@@ -91,12 +93,6 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
   nestedSkills$: Observable<SkillsGroup[]> = this.route.data.pipe(map(r => r["data"]));
 
   searchedSkills = signal<Skill[]>([]);
-
-  tooltipAuthText =
-    "Постарайся вспомнить все, чему тебя учили и то, что ты делал (читать, считать, программировать) Постарайся не врать, но и не будь сильно критичным к себе.";
-
-  tooltipLibText =
-    "База с навыками, которая может пополняться благодаря тебе! Если не найдешь свой навык, смело пиши на @procollab_support и мы добавим твой уникальный навык";
 
   isHintAuthVisible = false;
   isHintLibVisible = false;

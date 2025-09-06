@@ -11,6 +11,12 @@
             <label class="text-body-12 field-label">Описание достижения</label>
             <app-input
               size="big"
+              [haveHint]="true"
+              [tooltipText]="
+                'Расскажи какие достижения ты сделал в своем проекте. Про что они были, их история'
+              "
+              [tooltipPosition]="'left'"
+              [tooltipWidth]="350"
               [error]="achievementsName | controlError"
               placeholder="Название конкурса"
               formControlName="achievementsName"
@@ -25,9 +31,14 @@
           <fieldset>
             <label class="text-body-12 field-label" style="text-align: center">Дата</label>
             <app-input
+              size="small"
+              [haveHint]="true"
+              [tooltipText]="'Расскажи, в каком году было получено достижениe.'"
+              [tooltipPosition]="'left'"
+              [tooltipWidth]="300"
               [error]="achievementsDate | controlError"
               type="date"
-              placeholder="20.10.25"
+              placeholder="2022"
               formControlName="achievementsDate"
             ></app-input>
             @if (achievementsDate | controlError: "required") {

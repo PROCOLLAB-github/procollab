@@ -96,9 +96,18 @@
       <div class="project__additional--no-items">
         <p class="text-body-12">Пока ты не участвуешь ни в одной программе</p>
         <a routerLink="/office/program/all">
-          <app-button size="medium" appearance="outline" customTypographyClass="text-body-12"
-            >Программы</app-button
-          >
+          <app-button size="medium" appearance="outline" customTypographyClass="text-body-12">
+            <span>Программы</span>
+            <app-tooltip
+              [text]="'Перейди по ссылке и ознакомься с тем, где можно сейчас поучаствовать'"
+              [isVisible]="isTooltipVisible"
+              [position]="'right'"
+              [tooltipWidth]="300"
+              customClass="content__hint"
+              (show)="showTooltip()"
+              (hide)="hideTooltip()"
+            ></app-tooltip>
+          </app-button>
         </a>
 
         <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>

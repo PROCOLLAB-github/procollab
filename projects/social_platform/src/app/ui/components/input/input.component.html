@@ -18,6 +18,7 @@
     [class.field__input--small]="size === 'small'"
     [class.field__input--big]="size === 'big'"
     [class.field__input--error]="error"
+    [class.field__input--with-tooltip]="size === 'small' ? !haveHint : haveHint"
   />
   @if (error) {
   <i
@@ -29,11 +30,24 @@
       right: size === 'small' ? '10px' : '26px'
     }"
   ></i>
+  } @else if (haveHint && tooltipText) {
+  <div class="field__tooltip-wrapper" [class.field__tooltip-wrapper--small]="size === 'small'">
+    <app-tooltip
+      [text]="tooltipText"
+      [isVisible]="isTooltipVisible"
+      [position]="tooltipPosition"
+      [iconSize]="'24'"
+      [tooltipWidth]="tooltipWidth"
+      customClass="field__tooltip-icon"
+      (show)="showTooltip()"
+      (hide)="hideTooltip()"
+    ></app-tooltip>
+  </div>
   }
   <div
     class="field__right-icon"
     [ngStyle]="{
-      right: error ? '60px' : '24px',
+      right: error ? '60px' : haveHint ? '50px' : '24px'
     }"
   >
     <ng-content></ng-content>

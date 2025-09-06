@@ -19,6 +19,7 @@ import { transformYearStringToNumber } from "@utils/transformYear";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { generateYearList } from "@utils/generate-year-list";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 
 /**
  * КОМПОНЕНТ НУЛЕВОГО ЭТАПА ОНБОРДИНГА
@@ -81,6 +82,7 @@ import { generateYearList } from "@utils/generate-year-list";
     SelectComponent,
     ModalComponent,
     CommonModule,
+    TooltipComponent,
   ],
 })
 export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
@@ -206,32 +208,6 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
-
-  tooltipPhotoText =
-    "Идеальная фотография для резюме: свежая, с твоим лицом, хорошо различимым на нейтральном фоне (котиков мы конечно любим, но их не в этот раз)";
-
-  tooltipCityText = "Напиши город, в котором ты сейчас живешь";
-
-  tooltipEducationText =
-    "Заполни информацию о том, что ты изучал. Даже если это трехнедельный интенсив по созданию роликов — для резюме важна каждая деталь";
-
-  tooltipEducationDescriptionText =
-    "Мат. вертикаль, прикладная информатика, биотехнологии — комментарии излишни, просто пиши!";
-
-  tooltipWorkText =
-    "Укажи свой опыт. Разработка бота для школы, дизайн сайта для родительского бизнеса — любой опыт, которая оценила какая-либо организация — твой ключ к первой работе.";
-
-  tooltipWorkNameText =
-    "Укажи название организации, которая оценивала/принимала твою работу (ту самую школу, для которой ты делал бота)";
-
-  tooltipWorkDescriptionText =
-    "В свободной форме расскажи, чем занимался в рамках рабочего опыта (смотрел рилсы, двигал пиксели, зарабатывал деньги) P.S. Шутка";
-
-  tooltipAchievementsText =
-    "Кенгуру, медвежонок, а может победа во всероссийском акселераторе технологических проектов? Твоему будущему работодателю надо видеть, что ты самый активный!";
-
-  tooltipLanguageText =
-    "Вот и понадобились те самые много лет школьной программы английского, французского, китайского, а может и японского — рассказывай все!";
 
   isHintPhotoVisible = false;
   isHintCityVisible = false;

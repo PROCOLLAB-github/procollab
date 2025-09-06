@@ -29,6 +29,10 @@
       width: 100%;
     }
 
+    &--with-tooltip {
+      padding-right: 130px;
+    }
+
     &--error {
       border-color: var(--red);
     }
@@ -47,5 +51,13 @@
     align-items: center;
     justify-content: center;
     transform: translateY(-50%);
+  }
+
+  &__tooltip-wrapper {
+    position: absolute;
+    right: 20px;
+    top: 20%;
+    transform: translateY(-50%);
+    z-index: 10;
   }
 }

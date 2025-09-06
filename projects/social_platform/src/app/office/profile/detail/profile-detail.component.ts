@@ -15,6 +15,7 @@ import { AsyncPipe, CommonModule } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { calculateProfileProgress } from "@utils/calculateProgress";
 import { ProfileService as SkillsProfileService } from "projects/skills/src/app/profile/services/profile.service";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 
 /**
  * Компонент детального просмотра профиля пользователя
@@ -51,6 +52,7 @@ import { ProfileService as SkillsProfileService } from "projects/skills/src/app/
     YearsFromBirthdayPipe,
     BarComponent,
     ModalComponent,
+    TooltipComponent,
   ],
 })
 export class ProfileDetailComponent implements OnInit {

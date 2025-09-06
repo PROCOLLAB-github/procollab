@@ -26,6 +26,12 @@
         <app-textarea
           size="big"
           id="vacancy_description"
+          [haveHint]="true"
+          [tooltipText]="
+            'Расскажи, кого ты ищешь для своего проекта? Опиши подробно, чтобы привлечь именно тех людей, которые тебе нужны.'
+          "
+          [tooltipPosition]="'right'"
+          [tooltipWidth]="350"
           formControlName="description"
           [error]="(description | controlError) && vacancySubmitInitiated()"
           placeholder="Опишите вакансию"

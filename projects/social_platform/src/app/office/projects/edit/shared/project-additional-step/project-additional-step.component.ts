@@ -18,6 +18,7 @@ import { ProjectAdditionalService } from "../../services/project-additional.serv
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
 import { RouterLink } from "@angular/router";
 import { IconComponent } from "@uilib";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 
 @Component({
   selector: "app-project-additional-step",
@@ -37,6 +38,7 @@ import { IconComponent } from "@uilib";
     ToSelectOptionsPipe,
     ButtonComponent,
     RouterLink,
+    TooltipComponent,
   ],
 })
 export class ProjectAdditionalStepComponent implements OnInit {
@@ -71,6 +73,28 @@ export class ProjectAdditionalStepComponent implements OnInit {
 
   get errorAssignProjectToProgramModalMessage() {
     return this.projectAdditionalService.getErrorAssignProjectToProgramModalMessage();
+  }
+
+  /** Наличие подсказки */
+  haveHint = false;
+
+  /** Текст для подсказки */
+  tooltipText?: string;
+
+  /** Позиция подсказки */
+  tooltipPosition: "left" | "right" = "right";
+
+  /** Состояние видимости подсказки */
+  isTooltipVisible = false;
+
+  /** Показать подсказку */
+  showTooltip(): void {
+    this.isTooltipVisible = true;
+  }
+
+  /** Скрыть подсказку */
+  hideTooltip(): void {
+    this.isTooltipVisible = false;
   }
 
   /**

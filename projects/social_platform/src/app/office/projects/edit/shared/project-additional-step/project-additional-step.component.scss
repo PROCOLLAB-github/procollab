@@ -124,9 +124,15 @@
     }
 
     &--no-items {
-      display: flex;
+      display: inline-flex;
       flex-direction: column;
       gap: 10px;
+
+      app-tooltip {
+        position: absolute;
+        bottom: 70%;
+        right: -10%;
+      }
     }
   }
 

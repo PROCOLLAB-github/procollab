@@ -3,10 +3,11 @@
 import { Component, Input, type OnInit } from "@angular/core";
 import { LoaderComponent } from "../loader/loader.component";
 import { CommonModule } from "@angular/common";
+import { IconComponent } from "@uilib";
 
 /**
- * Универсальный компонент кнопки с различными стилями и состояниями.
- * Поддерживает различные цветовые схемы, индикатор загрузки и настройки внешнего вида.
+ * Универсальный компонент кнопки с различными стилями, состояниями и встроенной подсказкой.
+ * Поддерживает различные цветовые схемы, индикатор загрузки, настройки внешнего вида и tooltip.
  *
  * Входящие параметры:
  * - color: цветовая схема кнопки ("primary" | "red" | "grey" | "green" | "gold" | "gradient" | "white")
@@ -17,17 +18,22 @@ import { CommonModule } from "@angular/common";
  * - backgroundColor: кастомный цвет фона
  * - disabled: состояние блокировки кнопки
  * - customTypographyClass: кастомный CSS класс для типографики
+ * - haveHint: наличие подсказки
+ * - tooltipText: текст подсказки
+ * - tooltipPosition: позиция подсказки
+ * - tooltipWidth: ширина подсказки
  *
  * Использование:
  * - Вставлять контент кнопки через ng-content
  * - Автоматически показывает лоадер при loader=true
+ * - Показывает tooltip при наведении, если указан tooltipText
  */
 @Component({
   selector: "app-button",
   templateUrl: "./button.component.html",
   styleUrl: "./button.component.scss",
   standalone: true,
-  imports: [CommonModule, LoaderComponent],
+  imports: [CommonModule, LoaderComponent, IconComponent],
 })
 export class ButtonComponent implements OnInit {
   constructor() {}

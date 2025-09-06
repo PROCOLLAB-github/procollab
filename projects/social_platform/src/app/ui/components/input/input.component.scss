@@ -29,6 +29,10 @@
       padding: 12px 105px 12px 12px;
     }
 
+    &--with-tooltip {
+      padding-right: 130px;
+    }
+
     &--error {
       border-color: var(--red);
     }
@@ -67,5 +71,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  &__tooltip-wrapper {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+
+    &--small {
+      right: -10px;
+      top: 10%;
+    }
   }
 }

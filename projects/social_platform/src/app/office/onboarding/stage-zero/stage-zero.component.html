@@ -11,21 +11,18 @@
       @if (stageForm.get("avatar"); as avatar) {
       <fieldset class="page__field">
         <div class="content">
-          <p class="text-bold-body-12">Фотография профиля</p>
-          <i
-            appIcon
-            icon="hint"
-            appSquare="24"
-            class="content__hint"
-            (mouseenter)="showTooltip('photo')"
-            (mouseleave)="hideTooltip('photo')"
-          ></i>
-          <span
-            class="content__tooltip text-body-12"
-            style="left: 42%"
-            [class.content__tooltip--visible]="isHintPhotoVisible"
-            >{{ tooltipPhotoText }}</span
-          >
+          <p class="text-bold-body-14">Фотография профиля</p>
+          <app-tooltip
+            [text]="
+              'Идеальная фотография для резюме: свежая, с твоим лицом, хорошо различимым на нейтральном фоне (котиков мы конечно любим, но их не в этот раз)'
+            "
+            [isVisible]="isHintPhotoVisible"
+            [position]="'right'"
+            [tooltipWidth]="300"
+            customClass="content__hint"
+            (show)="showTooltip('photo')"
+            (hide)="hideTooltip('photo')"
+          ></app-tooltip>
         </div>
         <app-avatar-control
           type="project"
@@ -45,25 +42,15 @@
         <app-input
           size="big"
           id="city"
+          [haveHint]="true"
+          [tooltipText]="'Напиши город, в котором ты сейчас живешь'"
+          [tooltipPosition]="'right'"
+          [tooltipWidth]="220"
           [error]="city | controlError"
           type="text"
           placeholder="Где живешь?"
           formControlName="city"
         >
-          <i
-            appIcon
-            icon="hint"
-            appSquare="24"
-            class="content__hint"
-            (mouseenter)="showTooltip('city')"
-            (mouseleave)="hideTooltip('city')"
-          ></i>
-          <span
-            class="content__tooltip text-body-12"
-            style="left: 100%; top: 100%"
-            [class.content__tooltip--visible]="isHintCityVisible"
-            >{{ tooltipCityText }}</span
-          >
         </app-input>
         @if (city | controlError: "required") {
         <div class="text-body-10 error">
@@ -76,21 +63,20 @@
 
     <div class="page__first-row">
       <div class="content">
-        <p class="text-bold-body-14">Образование</p>
-        <i
-          appIcon
-          icon="hint"
-          appSquare="24"
-          class="content__hint"
-          (mouseenter)="showTooltip('education')"
-          (mouseleave)="hideTooltip('education')"
-        ></i>
-        <span
-          class="content__tooltip text-body-12"
-          style="left: 28%"
-          [class.content__tooltip--visible]="isHintEducationVisible"
-          >{{ tooltipEducationText }}</span
-        >
+        <div class="content">
+          <p class="text-bold-body-14">Образование</p>
+          <app-tooltip
+            [text]="
+              'Заполни информацию о том, что ты изучал. Даже если это трехнедельный интенсив по созданию роликов — для резюме важна каждая деталь'
+            "
+            [isVisible]="isHintEducationVisible"
+            [position]="'right'"
+            [tooltipWidth]="300"
+            customClass="content__hint"
+            (show)="showTooltip('education')"
+            (hide)="hideTooltip('education')"
+          ></app-tooltip>
+        </div>
       </div>
 
       @if (stageForm.get("educationLevel"); as educationLevel) {
@@ -193,25 +179,17 @@
         <app-input
           size="big"
           id="description"
+          [haveHint]="true"
+          [tooltipText]="
+            'Мат. вертикаль, прикладная информатика, биотехнологии — комментарии излишни, просто пиши!'
+          "
+          [tooltipPosition]="'right'"
+          [tooltipWidth]="280"
           [error]="description | controlError"
           type="text"
           placeholder="Бизнес информатика"
           formControlName="description"
         >
-          <i
-            appIcon
-            icon="hint"
-            appSquare="24"
-            class="content__hint"
-            (mouseenter)="showTooltip('educationDescription')"
-            (mouseleave)="hideTooltip('educationDescription')"
-          ></i>
-          <span
-            class="content__tooltip text-body-12"
-            style="left: 100%; top: 100%"
-            [class.content__tooltip--visible]="isHintEducationDescriptionVisible"
-            >{{ tooltipEducationDescriptionText }}</span
-          >
         </app-input>
         @if (description | controlError: "required") {
         <div class="text-body-10 error">
@@ -271,21 +249,20 @@
 
     <div class="page__first-row">
       <div class="content">
-        <p class="text-bold-body-14">Место работы</p>
-        <i
-          appIcon
-          icon="hint"
-          appSquare="24"
-          class="content__hint"
-          (mouseenter)="showTooltip('work')"
-          (mouseleave)="hideTooltip('work')"
-        ></i>
-        <span
-          class="content__tooltip text-body-12"
-          style="left: 28%"
-          [class.content__tooltip--visible]="isHintWorkVisible"
-          >{{ tooltipWorkText }}</span
-        >
+        <div class="content">
+          <p class="text-bold-body-14">Место работы</p>
+          <app-tooltip
+            [text]="
+              'Укажи свой опыт. Разработка бота для школы, дизайн сайта для родительского бизнеса — любой опыт, которая оценила какая-либо организация — твой ключ к первой работе.'
+            "
+            [isVisible]="isHintWorkVisible"
+            [position]="'right'"
+            [tooltipWidth]="350"
+            customClass="work-section__hint"
+            (show)="showTooltip('work')"
+            (hide)="hideTooltip('work')"
+          ></app-tooltip>
+        </div>
       </div>
 
       @if (stageForm.get("organizationNameWork"); as organizationNameWork) {
@@ -294,25 +271,17 @@
         <app-input
           size="big"
           id="organizationNameWork"
+          [haveHint]="true"
+          [tooltipText]="
+            'Укажи название организации, которая оценивала/принимала твою работу (ту самую школу, для которой ты делал бота)'
+          "
+          [tooltipPosition]="'right'"
+          [tooltipWidth]="300"
           [error]="organizationNameWork | controlError"
           type="text"
           placeholder="Проколлаб"
           formControlName="organizationNameWork"
         >
-          <i
-            appIcon
-            icon="hint"
-            appSquare="24"
-            class="content__hint"
-            (mouseenter)="showTooltip('workName')"
-            (mouseleave)="hideTooltip('workName')"
-          ></i>
-          <span
-            class="content__tooltip text-body-12"
-            style="left: 100%; top: 100%"
-            [class.content__tooltip--visible]="isHintWorkNameVisible"
-            >{{ tooltipWorkNameText }}</span
-          >
         </app-input>
         @if (organizationNameWork | controlError: "required") {
         <div class="text-body-10 error">
@@ -387,25 +356,17 @@
         <app-input
           size="big"
           id="descriptionWork"
+          [haveHint]="true"
+          [tooltipText]="
+            'В свободной форме расскажи, чем занимался в рамках рабочего опыта (смотрел рилсы, двигал пиксели, зарабатывал деньги) P.S. Шутка'
+          "
+          [tooltipPosition]="'right'"
+          [tooltipWidth]="300"
           [error]="descriptionWork | controlError"
           type="text"
           placeholder="Образовательная платформа"
           formControlName="descriptionWork"
         >
-          <i
-            appIcon
-            icon="hint"
-            appSquare="24"
-            class="content__hint"
-            (mouseenter)="showTooltip('workDescription')"
-            (mouseleave)="hideTooltip('workDescription')"
-          ></i>
-          <span
-            class="content__tooltip text-body-12"
-            style="left: 100%; top: 100%; width: 220px"
-            [class.content__tooltip--visible]="isHintWorkDescriptionVisible"
-            >{{ tooltipWorkDescriptionText }}</span
-          >
         </app-input>
         @if (descriptionWork | controlError: "required") {
         <div class="text-body-10 error">
@@ -465,21 +426,18 @@
                 @if (achievements.at(i)?.get("title"); as title) {
                 <fieldset>
                   <div class="content">
-                    <label class="field-label">Достижения</label>
-                    <i
-                      appIcon
-                      icon="hint"
-                      appSquare="24"
-                      class="content__hint"
-                      (mouseenter)="showTooltip('achievements')"
-                      (mouseleave)="hideTooltip('achievements')"
-                    ></i>
-                    <span
-                      class="content__tooltip text-body-12"
-                      style="left: 42%; width: 270px"
-                      [class.content__tooltip--visible]="isHintAchievementsVisible"
-                      >{{ tooltipAchievementsText }}</span
-                    >
+                    <p class="text-bold-body-14">Достижения</p>
+                    <app-tooltip
+                      [text]="
+                        'Кенгуру, медвежонок, а может победа во всероссийском акселераторе технологических проектов? Твоему будущему работодателю надо видеть, что ты самый активный!'
+                      "
+                      [isVisible]="isHintAchievementsVisible"
+                      [position]="'right'"
+                      [tooltipWidth]="300"
+                      customClass="content__hint"
+                      (show)="showTooltip('achievements')"
+                      (hide)="hideTooltip('achievements')"
+                    ></app-tooltip>
                   </div>
                   <app-input
                     size="big"
@@ -537,21 +495,20 @@
 
     <div class="page__first-row">
       <div class="content">
-        <p class="text-bold-body-14">Язык</p>
-        <i
-          appIcon
-          icon="hint"
-          appSquare="24"
-          class="content__hint"
-          (mouseenter)="showTooltip('language')"
-          (mouseleave)="hideTooltip('language')"
-        ></i>
-        <span
-          class="content__tooltip text-body-12"
-          style="left: 14%"
-          [class.content__tooltip--visible]="isHintLanguageVisible"
-          >{{ tooltipLanguageText }}</span
-        >
+        <div class="content">
+          <p class="text-bold-body-14">Язык</p>
+          <app-tooltip
+            [text]="
+              'Вот и понадобились те самые много лет школьной программы английского, французского, китайского, а может и японского — рассказывай все!'
+            "
+            [isVisible]="isHintLanguageVisible"
+            [position]="'right'"
+            [tooltipWidth]="300"
+            customClass="content__hint"
+            (show)="showTooltip('language')"
+            (hide)="hideTooltip('language')"
+          ></app-tooltip>
+        </div>
       </div>
       <div class="page__years--wrapper">
         <div class="page__years">

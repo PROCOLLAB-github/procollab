@@ -13,6 +13,7 @@ import {
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 import { NgxMaskModule } from "ngx-mask";
 
 /**
@@ -25,6 +26,9 @@ import { NgxMaskModule } from "ngx-mask";
  * - error: состояние ошибки для стилизации
  * - mask: маска для форматирования ввода
  * - appValue: значение поля (двустороннее связывание)
+ * - haveHint: наличие подсказки
+ * - tooltipText: текст подсказки
+ * - tooltipPosition: позиция подсказки
  *
  * События:
  * - appValueChange: изменение значения поля
@@ -45,7 +49,7 @@ import { NgxMaskModule } from "ngx-mask";
     },
   ],
   standalone: true,
-  imports: [CommonModule, NgxMaskModule, IconComponent],
+  imports: [CommonModule, NgxMaskModule, IconComponent, TooltipComponent],
 })
 export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
   constructor() {}
@@ -58,6 +62,18 @@ export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
 
   /** Размер поля ввода */
   @Input() size: "small" | "big" = "small";
+
+  /** Наличие подсказки */
+  @Input() haveHint = false;
+
+  /** Текст для подсказки */
+  @Input() tooltipText?: string;
+
+  /** Позиция подсказки */
+  @Input() tooltipPosition: "left" | "right" = "right";
+
+  /** Ширина подсказки */
+  @Input() tooltipWidth = 250;
 
   /** Состояние ошибки */
   @Input() error = false;
@@ -83,6 +99,9 @@ export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
 
   /** Флаг для отслеживания фокуса на поле даты */
   private isDateFieldFocused = false;
+
+  /** Состояние видимости подсказки */
+  isTooltipVisible = false;
 
   /** Событие изменения значения */
   @Output() appValueChange = new EventEmitter<string>();
@@ -110,6 +129,16 @@ export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
     } else {
       this.currentType = this.type;
     }
+  }
+
+  /** Показать подсказку */
+  showTooltip(): void {
+    this.isTooltipVisible = true;
+  }
+
+  /** Скрыть подсказку */
+  hideTooltip(): void {
+    this.isTooltipVisible = false;
   }
 
   /** Обработчик ввода текста */

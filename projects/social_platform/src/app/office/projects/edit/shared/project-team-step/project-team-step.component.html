@@ -51,6 +51,10 @@
           <app-input
             size="big"
             id="invite_role"
+            [haveHint]="true"
+            [tooltipText]="'Расскажи, кем будет человек, которого ты приглашаешь'"
+            [tooltipPosition]="'right'"
+            [tooltipWidth]="300"
             formControlName="role"
             [error]="(role | controlError) && inviteSubmitInitiated()"
             placeholder="Напишите роль участника в команде"
@@ -120,6 +124,18 @@
     >
       <span>{{ showFields ? "Отправить приглашение" : "Создать приглашение" }}</span>
       <i appIcon icon="plus" appSquare="10"></i>
+
+      <app-tooltip
+        [text]="
+          'Пару советов на старте: Оптимальный размер команды 2–5 человек. Это обеспечивает гибкость и эффективность коммуникации. Стремитесь к разнообразию навыков среди участников. Четко распределите роли и зоны ответственности на старте.'
+        "
+        [isVisible]="isTooltipVisible"
+        [position]="'right'"
+        [tooltipWidth]="400"
+        customClass="content__hint"
+        (show)="showTooltip()"
+        (hide)="hideTooltip()"
+      ></app-tooltip>
     </app-button>
 
     @if (!invites.length || !collaborators.length) {

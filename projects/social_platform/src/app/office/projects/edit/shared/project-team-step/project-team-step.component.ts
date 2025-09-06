@@ -13,6 +13,7 @@ import { rolesMembersList } from "projects/core/src/consts/list-roles-members";
 import { ActivatedRoute } from "@angular/router";
 import { IconComponent } from "@uilib";
 import { CollaboratorCardComponent } from "@office/shared/collaborator-card/collaborator-card.component";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 
 @Component({
   selector: "app-project-team-step",
@@ -30,6 +31,7 @@ import { CollaboratorCardComponent } from "@office/shared/collaborator-card/coll
     InviteCardComponent,
     ModalComponent,
     CollaboratorCardComponent,
+    TooltipComponent,
   ],
 })
 export class ProjectTeamStepComponent implements OnInit {
@@ -95,6 +97,28 @@ export class ProjectTeamStepComponent implements OnInit {
 
   get inviteFormIsSubmitting() {
     return this.projectTeamService.inviteFormIsSubmitting;
+  }
+
+  /** Наличие подсказки */
+  haveHint = false;
+
+  /** Текст для подсказки */
+  tooltipText?: string;
+
+  /** Позиция подсказки */
+  tooltipPosition: "left" | "right" = "right";
+
+  /** Состояние видимости подсказки */
+  isTooltipVisible = false;
+
+  /** Показать подсказку */
+  showTooltip(): void {
+    this.isTooltipVisible = true;
+  }
+
+  /** Скрыть подсказку */
+  hideTooltip(): void {
+    this.isTooltipVisible = false;
   }
 
   /**

@@ -19,5 +19,18 @@
   >
   @if (error) {
   <i class="field__error-icon" appIcon icon="error" appSquare="20"></i>
+  } @else if (haveHint && tooltipText) {
+  <div class="field__tooltip-wrapper">
+    <app-tooltip
+      [text]="tooltipText"
+      [isVisible]="isTooltipVisible"
+      [position]="tooltipPosition"
+      [iconSize]="'24'"
+      [tooltipWidth]="tooltipWidth"
+      customClass="field__tooltip-icon"
+      (show)="showTooltip()"
+      (hide)="hideTooltip()"
+    ></app-tooltip>
+  </div>
   }
 </div>
