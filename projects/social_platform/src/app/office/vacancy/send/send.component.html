@@ -52,24 +52,25 @@
           <fieldset>
             <label for="whyMe" class="field-label">Мотивационное письмо</label>
             <app-textarea
+              size="big"
               id="whyMe"
               formControlName="whyMe"
               [error]="whyMe | controlError"
               placeholder="Расскажи почему вы хотите попробовать себя имменно в этом проекте. Что вами движет?"
             ></app-textarea>
             @if (whyMe | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             } @if (whyMe | controlError: "maxlength") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_TOO_LONG }}
               @if (whyMe.errors) {
               {{ whyMe.errors["maxlength"]["requiredLength"] }}
               }
             </div>
             } @if (whyMe | controlError: "minlength") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_TOO_SHORT }}
               @if (whyMe.errors) {
               {{ whyMe.errors["minlength"]["requiredLength"] }}

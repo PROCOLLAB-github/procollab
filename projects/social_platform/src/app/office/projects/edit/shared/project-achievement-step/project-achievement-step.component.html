@@ -10,6 +10,7 @@
           <fieldset style="flex-grow: 1">
             <label class="text-body-12 field-label">Описание достижения</label>
             <app-input
+              size="big"
               [error]="achievementsName | controlError"
               placeholder="Название конкурса"
               formControlName="achievementsName"
@@ -22,9 +23,10 @@
           </fieldset>
           } @if (achievements.at(i).get("achievementsDate"); as achievementsDate) {
           <fieldset>
-            <label class="text-body-12 field-label">Дата</label>
+            <label class="text-body-12 field-label" style="text-align: center">Дата</label>
             <app-input
               [error]="achievementsDate | controlError"
+              type="date"
               placeholder="20.10.25"
               formControlName="achievementsDate"
             ></app-input>

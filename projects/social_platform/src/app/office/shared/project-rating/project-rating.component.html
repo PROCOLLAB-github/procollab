@@ -24,6 +24,7 @@
     @for (criterion of criteria; track $index) { @if (criterion.type === "str") {
     <div class="rating__comment">
       <app-textarea
+        size="big"
         [formControlName]="criterion.id"
         placeholder="Небольшой комментарий, если необходимо"
       ></app-textarea>

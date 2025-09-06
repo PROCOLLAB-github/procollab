@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<div class="field" [class.field--error]="error">
+<div class="field" [class.field--error]="error" [style.width]="size === 'small' ? '70px' : '100%'">
   <div class="field__left-icon">
     <ng-content select="left-icon"></ng-content>
   </div>
@@ -16,12 +16,19 @@
     [dropSpecialCharacters]="true"
     class="field__input"
     [class.field__input--small]="size === 'small'"
-    [class.field__input--medium]="size === 'medium'"
     [class.field__input--big]="size === 'big'"
     [class.field__input--error]="error"
   />
   @if (error) {
-  <i class="field__error-icon" appIcon icon="error" appSquare="20"></i>
+  <i
+    class="field__error-icon"
+    appIcon
+    icon="error"
+    appSquare="20"
+    [ngStyle]="{
+      right: size === 'small' ? '10px' : '26px'
+    }"
+  ></i>
   }
   <div
     class="field__right-icon"

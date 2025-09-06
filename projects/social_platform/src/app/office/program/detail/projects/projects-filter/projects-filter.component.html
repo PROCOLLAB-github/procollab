@@ -43,6 +43,7 @@
       <h4 class="text-body-12 filter__name">{{ field.label }}</h4>
       <div class="filter__select">
         <app-select
+          size="big"
           [id]="field.name"
           [formControlName]="field.name"
           [placeholder]="field.helpText || field.label"

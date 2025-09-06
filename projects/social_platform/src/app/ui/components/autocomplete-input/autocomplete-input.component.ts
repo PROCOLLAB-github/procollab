@@ -111,6 +111,8 @@ export class AutoCompleteInputComponent<T> {
   /** Состояние ошибки */
   @Input() error = false;
 
+  @Output() openSkillsFunc = new EventEmitter<void>();
+
   /** Событие начала поиска */
   @Output() searchStart = new EventEmitter<string>();
 

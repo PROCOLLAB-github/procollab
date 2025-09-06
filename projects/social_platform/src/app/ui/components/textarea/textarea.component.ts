@@ -2,6 +2,7 @@
 
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { IconComponent } from "@uilib";
 import { AutosizeModule } from "ngx-autosize";
 
 /**
@@ -34,7 +35,7 @@ import { AutosizeModule } from "ngx-autosize";
     },
   ],
   standalone: true,
-  imports: [AutosizeModule],
+  imports: [AutosizeModule, IconComponent],
 })
 export class TextareaComponent implements OnInit, ControlValueAccessor {
   /** Текст подсказки */
@@ -46,7 +47,7 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
   /** Состояние ошибки */
   @Input() error = false;
 
-  @Input() size: "small" | "medium" | "big" = "small";
+  @Input() size: "small" | "big" = "small";
 
   /** Маска (наследуется, но не используется) */
   @Input() mask = "";

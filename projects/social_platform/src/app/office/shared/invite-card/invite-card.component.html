@@ -60,13 +60,14 @@
       @if (inviteForm.get("role"); as role) {
       <fieldset class="invite__role">
         <app-input
+          size="big"
           id="invite_role"
           formControlName="role"
           [error]="role | controlError"
           placeholder="Напишите роль участника в команде"
         ></app-input>
         @if ((role | controlError: "required")) {
-        <div class="text-body-12 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -74,13 +75,14 @@
       } @if (inviteForm.get("specialization"); as specialization) {
       <fieldset>
         <app-select
+          size="big"
           id="specialization"
           formControlName="specialization"
           placeholder="Специальность"
           [options]="rolesMembersList"
         ></app-select>
         @if ((specialization | controlError: "required")) {
-        <div class="text-body-12 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }

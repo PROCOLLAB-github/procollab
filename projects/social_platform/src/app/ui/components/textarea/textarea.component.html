@@ -13,9 +13,11 @@
     [placeholder]="placeholder"
     class="text-body-12 field__input"
     [class.field__input--small]="size === 'small'"
-    [class.field__input--medium]="size === 'medium'"
     [class.field__input--big]="size === 'big'"
     [class.field__input--error]="error"
     >{{ value }}</textarea
   >
+  @if (error) {
+  <i class="field__error-icon" appIcon icon="error" appSquare="20"></i>
+  }
 </div>

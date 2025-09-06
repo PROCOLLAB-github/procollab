@@ -11,7 +11,7 @@
       @if (stageForm.get("avatar"); as avatar) {
       <fieldset class="page__field">
         <div class="content">
-          <p class="text-bold-body-14">Фотография профиля</p>
+          <p class="text-bold-body-12">Фотография профиля</p>
           <i
             appIcon
             icon="hint"
@@ -34,7 +34,7 @@
           [error]="avatar | controlError"
         ></app-avatar-control>
         @if (avatar | controlError: "required") {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.EMPTY_AVATAR }}
         </div>
         }
@@ -43,6 +43,7 @@
       <fieldset class="page__field">
         <label for="city" class="field-label">Город</label>
         <app-input
+          size="big"
           id="city"
           [error]="city | controlError"
           type="text"
@@ -65,7 +66,7 @@
           >
         </app-input>
         @if (city | controlError: "required") {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -96,6 +97,7 @@
       <fieldset>
         <label for="educationLevel" class="field-label">Уровень образования</label>
         <app-select
+          size="big"
           [selectedId]="selectedEducationLevelId()"
           formControlName="educationLevel"
           placeholder="Высшее образование-магистратура"
@@ -104,7 +106,7 @@
           <i appIcon icon="arrow-no-body" appSquare="32"></i>
         </app-select>
         @if (educationLevel | controlError: "required") {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -116,6 +118,7 @@
         <fieldset class="years__left">
           <label for="entryYear" class="field-label">Дата начала</label>
           <app-select
+            size="big"
             formControlName="entryYear"
             placeholder="2023 год"
             [options]="yearListEducation"
@@ -124,7 +127,7 @@
           </app-select>
 
           @if (entryYear | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -133,6 +136,7 @@
         <fieldset class="years__right">
           <label for="completionYear" class="field-label">Дата окончания</label>
           <app-select
+            size="big"
             formControlName="completionYear"
             placeholder="2023 год"
             [options]="yearListEducation"
@@ -140,7 +144,7 @@
             <i appIcon icon="arrow-no-body" appSquare="32"></i>
           </app-select>
           @if (completionYear | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -152,6 +156,7 @@
       <fieldset class="page__field">
         <label for="organizationName" class="field-label">Название учреждения</label>
         <app-input
+          size="big"
           id="organizationName"
           [error]="organizationName | controlError"
           type="text"
@@ -159,7 +164,7 @@
           formControlName="organizationName"
         ></app-input>
         @if (organizationName | controlError: "required") {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -168,6 +173,7 @@
       <fieldset>
         <label for="educationStatus" class="field-label">Статус</label>
         <app-select
+          size="big"
           [selectedId]="selectedEducationStatusId()"
           formControlName="educationStatus"
           placeholder="Студент"
@@ -176,7 +182,7 @@
           <i appIcon icon="arrow-no-body" appSquare="32"></i>
         </app-select>
         @if (educationStatus | controlError: "required") {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -185,6 +191,7 @@
       <fieldset class="page__field">
         <label for="description" class="field-label">Профиль обучения</label>
         <app-input
+          size="big"
           id="description"
           [error]="description | controlError"
           type="text"
@@ -207,7 +214,7 @@
           >
         </app-input>
         @if (description | controlError: "required") {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -217,6 +224,7 @@
       <div class="profile__row education__block">
         <app-button
           size="big"
+          customTypographyClass="text-body-12"
           [disabled]="!isEducationDirty"
           [ngStyle]="{
             opacity: !isEducationDirty ? '0.6' : '1',
@@ -226,14 +234,14 @@
           (click)="addEducation()"
         >
           <span>{{ editEducationClick ? "Созранить изменения" : "Добавить образование" }}</span>
-          <i appIcon icon="plus" appSquare="14"></i>
+          <i appIcon icon="plus" appSquare="12"></i>
         </app-button>
 
         @if(educationItems().length || education.length){ @for (educationItem of education.value;
         track $index) {
         <div class="education__remove">
           <div class="education__info">
-            <p class="text-body-16 education__text">
+            <p class="text-body-12 education__text">
               {{ educationItem.organizationName }}
 
               @if(educationItem.entryYear && educationItem.completionYear) {
@@ -249,7 +257,7 @@
               class="edit"
               appIcon
               icon="edit-pen"
-              appSquare="24"
+              appSquare="16"
               (click)="editEducation($index)"
             ></i>
           </div>
@@ -284,6 +292,7 @@
       <fieldset>
         <label for="organizationNameWork" class="field-label">Название</label>
         <app-input
+          size="big"
           id="organizationNameWork"
           [error]="organizationNameWork | controlError"
           type="text"
@@ -306,7 +315,7 @@
           >
         </app-input>
         @if (organizationNameWork | controlError: "required") {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -318,6 +327,7 @@
         <fieldset class="years__left">
           <label for="entryYearWork" class="field-label">Дата начала</label>
           <app-select
+            size="big"
             [selectedId]="selectedEntryYearWorkId()"
             formControlName="entryYearWork"
             placeholder="2023 год"
@@ -327,7 +337,7 @@
           </app-select>
 
           @if (entryYearWork | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -336,6 +346,7 @@
         <fieldset class="years__right">
           <label for="completionYearWork" class="field-label">Дата окончания</label>
           <app-select
+            size="big"
             [selectedId]="selectedComplitionYearWorkId()"
             formControlName="completionYearWork"
             placeholder="2023 год"
@@ -345,7 +356,7 @@
           </app-select>
 
           @if (completionYearWork | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -357,6 +368,7 @@
       <fieldset>
         <label for="jobPosition" class="field-label">Должность</label>
         <app-input
+          size="big"
           id="jobPosition"
           [error]="jobPosition | controlError"
           type="text"
@@ -364,7 +376,7 @@
           formControlName="jobPosition"
         ></app-input>
         @if (jobPosition | controlError: "required") {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -373,6 +385,7 @@
       <fieldset>
         <label for="descriptionWork" class="field-label">Краткое описание</label>
         <app-input
+          size="big"
           id="descriptionWork"
           [error]="descriptionWork | controlError"
           type="text"
@@ -395,7 +408,7 @@
           >
         </app-input>
         @if (descriptionWork | controlError: "required") {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -404,6 +417,7 @@
 
       <div class="page__row education__block">
         <app-button
+          customTypographyClass="text-body-12"
           size="big"
           [disabled]="!isWorkDirty"
           [ngStyle]="{
@@ -414,7 +428,7 @@
           (click)="addWork()"
         >
           <span>{{ editWorkClick ? "Сохранить изменения" : "Добавить место работы" }}</span>
-          <i appIcon icon="plus" appSquare="14"></i>
+          <i appIcon icon="plus" appSquare="12"></i>
         </app-button>
 
         @if(workItems().length || workExperience.length){ @for (workItem of workExperience.value;
@@ -468,12 +482,13 @@
                     >
                   </div>
                   <app-input
+                    size="big"
                     [error]="title | controlError"
                     placeholder="Название конкурса"
                     formControlName="title"
                   ></app-input>
                   @if (title | controlError: "required") {
-                  <div class="text-body-14 error">
+                  <div class="text-body-10 error">
                     {{ errorMessage.VALIDATION_REQUIRED }}
                   </div>
                   }
@@ -492,12 +507,13 @@
               @if (achievements.at(i).get("status"); as status) {
               <fieldset>
                 <app-input
+                  size="big"
                   [error]="status | controlError"
                   placeholder="Занятое место"
                   formControlName="status"
                 ></app-input>
                 @if (status | controlError: "required") {
-                <div class="text-body-14 error">
+                <div class="text-body-10 error">
                   {{ errorMessage.VALIDATION_REQUIRED }}
                 </div>
                 }
@@ -508,9 +524,14 @@
           }
         </ul>
       </ng-container>
-      <app-button size="big" class="page__add-achievement" (click)="addAchievement()">
+      <app-button
+        size="big"
+        customTypographyClass="text-body-12"
+        class="page__add-achievement"
+        (click)="addAchievement()"
+      >
         <span>Добавить достижение</span>
-        <i appIcon icon="plus" appSquare="14"></i>
+        <i appIcon icon="plus" appSquare="12"></i>
       </app-button>
     </div>
 
@@ -538,6 +559,7 @@
           <fieldset class="years__left">
             <label for="language" class="field-label">Уровень</label>
             <app-select
+              size="big"
               [selectedId]="selectedLanguageId()"
               formControlName="language"
               placeholder="Английский"
@@ -547,7 +569,7 @@
             </app-select>
 
             @if (language | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
@@ -555,6 +577,7 @@
           } @if (stageForm.get("languageLevel"); as languageLevel) {
           <fieldset class="years__right" style="margin-top: 26px">
             <app-select
+              size="big"
               [selectedId]="selectedLanguageLevelId()"
               formControlName="languageLevel"
               placeholder="B1"
@@ -564,7 +587,7 @@
             </app-select>
 
             @if (languageLevel | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
@@ -578,6 +601,7 @@
 
       <app-button
         size="big"
+        customTypographyClass="text-body-12"
         [disabled]="!isLanguageDirty || languageItems().length === 4 || userLanguages.length === 4"
         [ngStyle]="{
           opacity: !isLanguageDirty ? '0.6' : '1',
@@ -587,7 +611,7 @@
         (click)="addLanguage()"
       >
         <span>{{ editLanguageClick ? "Сохранить изменения" : "Добавить язык" }}</span>
-        <i appIcon icon="plus" appSquare="14"></i>
+        <i appIcon icon="plus" appSquare="12"></i>
       </app-button>
 
       <div class="page__row education__block">
@@ -615,7 +639,12 @@
     </div>
 
     <div class="page__first-row">
-      <app-button size="big" (click)="onSkipRegistration()" color="grey" [loader]="skipSubmitting()"
+      <app-button
+        customTypographyClass="text-body-12"
+        size="big"
+        (click)="onSkipRegistration()"
+        color="grey"
+        [loader]="skipSubmitting()"
         >Закончить регистрацию позже</app-button
       >
       <app-button
@@ -646,6 +675,7 @@
               : 'pointer'
         }"
         type="submit"
+        customTypographyClass="text-body-12"
         [loader]="stageSubmitting()"
         >Продолжить</app-button
       >
@@ -656,9 +686,9 @@
     <div class="cancel">
       <div class="cancel__top">
         <i (click)="isModalErrorYear.set(false)" appIcon icon="cross" class="cancel__cross"></i>
-        <p class="cancel__title text-bold-body-16">Произошла ошибка при отправке данных!</p>
+        <p class="cancel__title text-bold-body-14">Произошла ошибка при отправке данных!</p>
       </div>
-      <p class="text-body-14 cancel__text">{{ isModalErrorYearText() }}.</p>
+      <p class="text-body-10 cancel__text">{{ isModalErrorYearText() }}.</p>
     </div>
   </app-modal>
 </div>

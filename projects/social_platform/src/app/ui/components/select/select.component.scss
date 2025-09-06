@@ -40,6 +40,10 @@
       box-shadow: 0 0 6px rgb(109 40 255 / 30%);
     }
 
+    &--error {
+      border-color: var(--red) !important;
+    }
+
     @include typography.body-12;
   }
 
