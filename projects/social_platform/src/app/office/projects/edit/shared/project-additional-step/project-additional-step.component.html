@@ -16,6 +16,7 @@
           >{{ field.label }}</label
         >
         <app-input
+          size="big"
           [id]="field.name"
           formControlName="{{ field.name }}"
           [error]="control | controlError: 'required'"
@@ -31,6 +32,7 @@
         >
         @if (additionalForm.get(field.name); as control) {
         <app-textarea
+          size="big"
           [id]="field.name"
           formControlName="{{ field.name }}"
           [error]="control | controlError"
@@ -77,6 +79,7 @@
           >{{ field.label }}</label
         >
         <app-select
+          size="big"
           [id]="field.name"
           formControlName="{{ field.name }}"
           [placeholder]="field.helpText || field.label"
@@ -84,7 +87,7 @@
         ></app-select>
         } } @if (additionalForm.get(field.name); as control) { @if (control | controlError:
         "required") {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         } }

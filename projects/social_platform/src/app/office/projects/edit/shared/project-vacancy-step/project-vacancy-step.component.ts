@@ -13,6 +13,7 @@ import { Skill } from "@office/models/skill";
 import { ProjectVacancyService } from "../../services/project-vacancy.service";
 import { ActivatedRoute } from "@angular/router";
 import { IconComponent } from "@uilib";
+import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 
 @Component({
   selector: "app-project-vacancy-step",
@@ -30,6 +31,7 @@ import { IconComponent } from "@uilib";
     AutoCompleteInputComponent,
     SkillsBasketComponent,
     VacancyCardComponent,
+    TextareaComponent,
   ],
 })
 export class ProjectVacancyStepComponent implements OnInit {

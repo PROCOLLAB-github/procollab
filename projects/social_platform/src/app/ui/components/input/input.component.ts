@@ -1,7 +1,16 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  Output,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
 import { NgxMaskModule } from "ngx-mask";
@@ -38,7 +47,7 @@ import { NgxMaskModule } from "ngx-mask";
   standalone: true,
   imports: [CommonModule, NgxMaskModule, IconComponent],
 })
-export class InputComponent implements OnInit, ControlValueAccessor {
+export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
   constructor() {}
 
   /** Текст подсказки */
@@ -48,7 +57,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   @Input() type: "text" | "password" | "email" | "tel" | "date" = "text";
 
   /** Размер поля ввода */
-  @Input() size: "small" | "medium" | "big" = "small";
+  @Input() size: "small" | "big" = "small";
 
   /** Состояние ошибки */
   @Input() error = false;
@@ -72,6 +81,9 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   /** Текущий активный тип поля */
   currentType: "text" | "password" | "email" | "tel" | "date" = "text";
 
+  /** Флаг для отслеживания фокуса на поле даты */
+  private isDateFieldFocused = false;
+
   /** Событие изменения значения */
   @Output() appValueChange = new EventEmitter<string>();
 
@@ -79,8 +91,25 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   @Output() enter = new EventEmitter<void>();
 
   ngOnInit(): void {
+    this.updateCurrentType();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["type"]) {
+      this.updateCurrentType();
+    }
+  }
+
+  /** Обновляет currentType на основе входящего type */
+  private updateCurrentType(): void {
     this.originalType = this.type;
-    this.currentType = this.type === "date" ? "text" : this.type;
+
+    // Для поля даты показываем text, пока не в фокусе
+    if (this.type === "date" && !this.isDateFieldFocused) {
+      this.currentType = "text";
+    } else {
+      this.currentType = this.type;
+    }
   }
 
   /** Обработчик ввода текста */
@@ -93,6 +122,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   /** Обработчик потери фокуса */
   onBlur(): void {
     if (this.originalType === "date") {
+      this.isDateFieldFocused = false;
       this.currentType = "text";
     }
     this.onTouch();
@@ -101,6 +131,7 @@ export class InputComponent implements OnInit, ControlValueAccessor {
   /** Обработчик при фокусе */
   onFocus(): void {
     if (this.originalType === "date") {
+      this.isDateFieldFocused = true;
       this.currentType = "date";
     }
   }

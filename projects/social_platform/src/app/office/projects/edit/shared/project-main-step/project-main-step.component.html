@@ -68,6 +68,7 @@
       } @if (trl; as trl) {
       <fieldset>
         <app-select
+          size="small"
           id="trl"
           formControlName="trl"
           placeholder="TRL"
@@ -90,10 +91,10 @@
           size="big"
           id="name"
           formControlName="name"
-          [error]="(name | controlError) && projSubmitInitiated"
+          [error]="(name | controlError) || projSubmitInitiated"
           placeholder="Название"
         ></app-input>
-        @if ((name | controlError: "required") && projSubmitInitiated) {
+        @if ((name | controlError: "required") || projSubmitInitiated) {
         <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
@@ -106,10 +107,10 @@
           size="big"
           id="region"
           formControlName="region"
-          [error]="(region | controlError) && projSubmitInitiated"
+          [error]="(region | controlError) || projSubmitInitiated"
           placeholder="Введите регион"
         ></app-input>
-        @if ((region | controlError: "required") && projSubmitInitiated) {
+        @if ((region | controlError: "required") || projSubmitInitiated) {
         <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
@@ -165,10 +166,10 @@
       size="big"
       id="problem"
       formControlName="problem"
-      [error]="(problem | controlError) && projSubmitInitiated"
+      [error]="(problem | controlError) || projSubmitInitiated"
       placeholder="Улучшить качество жизни студентов"
     ></app-input>
-    @if ((problem | controlError: "required") && projSubmitInitiated) {
+    @if ((problem | controlError: "required") || projSubmitInitiated) {
     <div class="text-body-10 error">
       {{ errorMessage.VALIDATION_REQUIRED }}
     </div>
@@ -180,11 +181,11 @@
     <app-textarea
       size="big"
       id="description"
-      [error]="(description | controlError) && projSubmitInitiated"
+      [error]="(description | controlError) || projSubmitInitiated"
       formControlName="description"
       placeholder="Проект начал свое существование с 2020 года"
     ></app-textarea>
-    @if ((description | controlError: "required") && projSubmitInitiated) {
+    @if ((description | controlError: "required") || projSubmitInitiated) {
     <div class="text-body-10 error">
       {{ errorMessage.VALIDATION_REQUIRED }}
     </div>
@@ -215,10 +216,11 @@
       <app-textarea
         size="big"
         id="targetAudience"
+        [error]="(targetAudience | controlError) || projSubmitInitiated"
         formControlName="targetAudience"
         placeholder="30% потери времени студентов во время работы"
       ></app-textarea>
-      @if ((targetAudience | controlError: "required")) {
+      @if ((targetAudience | controlError: "required") || projSubmitInitiated) {
       <div class="text-body-10 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>

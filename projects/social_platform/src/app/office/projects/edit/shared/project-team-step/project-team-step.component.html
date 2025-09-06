@@ -17,12 +17,13 @@
 
   @if (showFields) {
   <div class="">
-    <div class="" style="display: flex; flex-direction: column; width: 70%">
+    <div class="" style="display: flex; flex-direction: column; width: 60%">
       <form [formGroup]="inviteForm">
         @if (link; as link) {
         <fieldset class="invite__role">
           <label class="text-body-12 field-label">Ссылка на пользователя внутри procollab</label>
           <app-input
+            size="big"
             id="invite_link"
             formControlName="link"
             [error]="(link | controlError) && inviteSubmitInitiated()"
@@ -38,7 +39,9 @@
           </div>
           } @if (inviteNotExistingError() && inviteSubmitInitiated()) {
           <div class="text-body-10 error">
-            {{ errorMessage.USER_NOT_EXISTING }}
+            {{ errorMessage.USER_NOT_EXISTING }} либо<br />
+            {{ errorMessage.USER_IS_LEADER }} либо <br />
+            {{ errorMessage.USER_IS_MEMBER }} либо <br />
           </div>
           }
         </fieldset>
@@ -46,6 +49,7 @@
         <fieldset class="invite__role">
           <label class="text-body-12 field-label">Роль в проекте</label>
           <app-input
+            size="big"
             id="invite_role"
             formControlName="role"
             [error]="(role | controlError) && inviteSubmitInitiated()"
@@ -71,7 +75,7 @@
               [options]="rolesMembersList"
             ></app-select>
             @if ((specialization | controlError: "required") && inviteSubmitInitiated()) {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
@@ -91,7 +95,7 @@
   </div>
   }
 
-  <div class="invite__link" [style.flex-direction]="!invites.length ? 'row' : 'row-reverse'">
+  <div class="invite__link" [style.flex-direction]="invitesFill ? 'row-reverse' : 'row'">
     <ul
       class="invite__link--wrapper"
       [style.overflow-x]="invites.length > 8 ? 'auto' : 'none'"

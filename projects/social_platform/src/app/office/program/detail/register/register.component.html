@@ -9,6 +9,7 @@
       <label [for]="f.key" class="field-label">{{ f.value.name }}</label>
       @if (registerForm.get(f.key); as field) {
       <app-input
+        size="big"
         [id]="f.key"
         [formControlName]="f.key"
         [placeholder]="f.value.placeholder"

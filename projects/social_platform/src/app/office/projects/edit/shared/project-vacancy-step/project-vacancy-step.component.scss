@@ -91,16 +91,10 @@
   &__submit {
     display: block;
   }
+}
 
-  &__description {
-    ::ng-deep {
-      app-input {
-        .field__input {
-          padding: 40px 20px;
-        }
-      }
-    }
-  }
+.error {
+  color: var(--red) !important;
 }
 
 .vacancies {
@@ -109,15 +103,5 @@
   &__input {
     flex-grow: 1;
     margin-right: 6px;
-  }
-
-  ::ng-deep {
-    app-autocomplete-input {
-      .field__input {
-        padding: 12px 20px;
-
-        @include typography.body-16;
-      }
-    }
   }
 }

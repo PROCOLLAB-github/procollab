@@ -48,7 +48,7 @@
               [error]="avatar | controlError"
             ></app-avatar-control>
             @if (avatar | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.EMPTY_AVATAR }}
             </div>
             }
@@ -88,7 +88,7 @@
             placeholder="У меня много денег, я мамкин инвестор"
           ></app-input>
           @if (usefulToProject | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -100,6 +100,7 @@
             <fieldset class="space">
               <label for="firstName" class="field-label">Имя</label>
               <app-input
+                size="big"
                 [error]="firstName | controlError"
                 id="firstName"
                 type="text"
@@ -107,7 +108,7 @@
                 placeholder="Иван"
               ></app-input>
               @if (firstName | controlError: "required") {
-              <div class="text-body-14 error">
+              <div class="text-body-10 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}
               </div>
               }
@@ -116,6 +117,7 @@
             <fieldset>
               <label for="lastName" class="field-label">Фамилия</label>
               <app-input
+                size="big"
                 [error]="lastName | controlError"
                 id="lastName"
                 type="text"
@@ -123,7 +125,7 @@
                 placeholder="Иванов"
               ></app-input>
               @if (lastName | controlError: "required") {
-              <div class="text-body-14 error">
+              <div class="text-body-10 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}
               </div>
               }
@@ -136,6 +138,7 @@
             <fieldset class="space">
               <label for="birthday" class="field-label">Дата рождения</label>
               <app-input
+                size="big"
                 id="birthday"
                 [error]="birthday | controlError"
                 type="text"
@@ -143,7 +146,7 @@
                 formControlName="birthday"
               ></app-input>
               @if (birthday | controlError: "required") {
-              <div class="text-body-14 error">
+              <div class="text-body-10 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}
               </div>
               }
@@ -152,6 +155,7 @@
             <fieldset>
               <label for="phoneNumber" class="field-label">Телефон</label>
               <app-input
+                size="big"
                 id="phoneNumber"
                 [error]="phoneNumber | controlError"
                 type="tel"
@@ -159,7 +163,7 @@
                 formControlName="phoneNumber"
               ></app-input>
               @if (phoneNumber | controlError: "required") {
-              <div class="text-body-14 error">
+              <div class="text-body-10 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}
               </div>
               }
@@ -167,7 +171,7 @@
             }
           </div>
 
-          <p class="text-body-12 error__phone-number">
+          <p class="text-body-10 error__phone-number">
             Формат телефона должен соответствовать одному из таких форматов: +7 XXX XXX-XX-XX |
             +375XXXXXXXXX | +995 (XXX) XX-XX-XX
           </p>
@@ -190,11 +194,11 @@
                 formControlName="speciality"
               ></app-autocomplete-input>
               <app-button type="button" (click)="toggleSpecsGroupsModal()">
-                <i appIcon icon="folder" appWidth="18" appHeight="18"></i>
+                <i appIcon icon="folder" appWidth="16" appHeight="16"></i>
               </app-button>
             </div>
             @if (speciality | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
@@ -208,6 +212,7 @@
         <fieldset>
           <label for="city" class="field-label">Город</label>
           <app-input
+            size="big"
             id="city"
             [error]="city | controlError"
             type="text"
@@ -215,7 +220,7 @@
             formControlName="city"
           ></app-input>
           @if (city | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -225,13 +230,14 @@
           <label for="userType" class="field-label">Тип аккаунта</label>
           @if (roles | async; as options) {
           <app-select
+            size="big"
             id="userType"
             formControlName="userType"
             placeholder="Эксперт"
             [options]="options"
           ></app-select>
           } @if (userType | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -240,6 +246,7 @@
         <fieldset>
           <label for="aboutMe" class="field-label">Обо мне</label>
           <app-textarea
+            size="big"
             id="aboutMe"
             [error]="aboutMe | controlError"
             type="text"
@@ -247,7 +254,7 @@
             formControlName="aboutMe"
           ></app-textarea>
           @if (aboutMe | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -262,6 +269,7 @@
           <fieldset class="years__left">
             <label for="entryYear" class="field-label">Дата начала</label>
             <app-select
+              size="big"
               [selectedId]="selectedEntryYearEducationId()"
               formControlName="entryYear"
               placeholder="2023 год"
@@ -271,7 +279,7 @@
             </app-select>
 
             @if (entryYear | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
@@ -280,6 +288,7 @@
           <fieldset class="years__right">
             <label for="completionYear" class="field-label">Дата окончания</label>
             <app-select
+              size="big"
               [selectedId]="selectedComplitionYearEducationId()"
               formControlName="completionYear"
               placeholder="2023 год"
@@ -288,7 +297,7 @@
               <i appIcon icon="arrow-no-body" appSquare="32"></i>
             </app-select>
             @if (completionYear | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
@@ -300,12 +309,13 @@
         <fieldset>
           <label for="organizationName" class="field-label">Название учереждения</label>
           <app-input
+            size="big"
             [error]="organizationName | controlError"
             placeholder="Вуз / Колледж / Школа"
             formControlName="organizationName"
           ></app-input>
           @if (organizationName | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -314,12 +324,13 @@
         <fieldset>
           <label for="description" class="field-label">Направление</label>
           <app-input
+            size="big"
             [error]="description | controlError"
             placeholder="Бизнес информатика"
             formControlName="description"
           ></app-input>
           @if (description | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -328,6 +339,7 @@
         <fieldset>
           <label for="educationLevel" class="field-label">Уровень образования</label>
           <app-select
+            size="big"
             [selectedId]="selectedEducationLevelId()"
             formControlName="educationLevel"
             placeholder="Высшее образование-магистратура"
@@ -336,7 +348,7 @@
             <i appIcon icon="arrow-no-body" appSquare="32"></i>
           </app-select>
           @if (educationLevel | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -345,6 +357,7 @@
         <fieldset>
           <label for="educationStatus" class="field-label">Статус</label>
           <app-select
+            size="big"
             [selectedId]="selectedEducationStatusId()"
             formControlName="educationStatus"
             placeholder="Студент"
@@ -353,7 +366,7 @@
             <i appIcon icon="arrow-no-body" appSquare="32"></i>
           </app-select>
           @if (educationStatus | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -368,7 +381,7 @@
             Студент Московского Политеха
           </label>
           @if (isMospolytechStudent | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -381,12 +394,13 @@
             <span style="color: var(--accent)">Для студентов Московского Политеха</span></label
           >
           <app-input
+            size="big"
             [error]="studyGroup | controlError"
             placeholder="Б 5121.9367.01"
             formControlName="studyGroup"
           ></app-input>
           @if (studyGroup | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -396,6 +410,7 @@
 
       <div class="profile__row education__block">
         <app-button
+          customTypographyClass="text-body-12"
           size="big"
           [disabled]="!isEducationDirty"
           [ngStyle]="{
@@ -406,7 +421,7 @@
           (click)="addEducation()"
         >
           <span>Добавить образование</span>
-          <i appIcon icon="plus" appSquare="14"></i>
+          <i appIcon icon="plus" appSquare="12"></i>
         </app-button>
 
         @if(educationItems().length || education.length){ @for (educationItem of education.value;
@@ -429,7 +444,7 @@
               class="edit"
               appIcon
               icon="edit-pen"
-              appSquare="20"
+              appSquare="16"
               (click)="editEducation($index)"
             ></i>
           </div>
@@ -446,6 +461,7 @@
           <fieldset class="years__left">
             <label for="entryYearWork" class="field-label">Дата начала</label>
             <app-select
+              size="big"
               [selectedId]="selectedEntryYearWorkId()"
               formControlName="entryYearWork"
               placeholder="2023 год"
@@ -455,7 +471,7 @@
             </app-select>
 
             @if (entryYearWork | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
@@ -464,6 +480,7 @@
           <fieldset class="years__right">
             <label for="completionYearWork" class="field-label">Дата окончания</label>
             <app-select
+              size="big"
               [selectedId]="selectedComplitionYearWorkId()"
               formControlName="completionYearWork"
               placeholder="2023 год"
@@ -473,7 +490,7 @@
             </app-select>
 
             @if (completionYearWork | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
@@ -485,6 +502,7 @@
         <fieldset>
           <label for="organization" class="field-label">Организация</label>
           <app-input
+            size="big"
             id="organization"
             [error]="organization | controlError"
             type="text"
@@ -492,7 +510,7 @@
             formControlName="organization"
           ></app-input>
           @if (organization | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -501,6 +519,7 @@
         <fieldset>
           <label for="jobPosition" class="field-label">Должность</label>
           <app-input
+            size="big"
             id="jobPosition"
             [error]="jobPosition | controlError"
             type="text"
@@ -508,7 +527,7 @@
             formControlName="jobPosition"
           ></app-input>
           @if (jobPosition | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -517,6 +536,7 @@
         <fieldset>
           <label for="descriptionWork" class="field-label">Профиль обучения</label>
           <app-input
+            size="big"
             id="descriptionWork"
             [error]="descriptionWork | controlError"
             type="text"
@@ -524,7 +544,7 @@
             formControlName="descriptionWork"
           ></app-input>
           @if (descriptionWork | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -534,6 +554,7 @@
 
       <div class="profile__row education__block">
         <app-button
+          customTypographyClass="text-body-12"
           size="big"
           [disabled]="!isWorkDirty"
           [ngStyle]="{
@@ -544,7 +565,7 @@
           (click)="addWork()"
         >
           <span>Добавить место работы</span>
-          <i appIcon icon="plus" appSquare="14"></i>
+          <i appIcon icon="plus" appSquare="12"></i>
         </app-button>
 
         @if(workItems().length || workExperience.length){ @for (workItem of workExperience.value;
@@ -561,7 +582,7 @@
               {{ workItem.description }}
               {{ workItem.jobPosition }}
             </p>
-            <i class="edit" appIcon icon="edit-pen" appSquare="20" (click)="editWork($index)"></i>
+            <i class="edit" appIcon icon="edit-pen" appSquare="16" (click)="editWork($index)"></i>
           </div>
           <app-button class="basket" color="red" (click)="removeWork($index)">
             <i appIcon icon="basket" appSquare="24"></i>
@@ -582,12 +603,13 @@
                     <fieldset>
                       <label class="field-label">Достижения</label>
                       <app-input
+                        size="big"
                         [error]="title | controlError"
                         placeholder="Название конкурса"
                         formControlName="title"
                       ></app-input>
                       @if (title | controlError: "required") {
-                      <div class="text-body-14 error">
+                      <div class="text-body-10 error">
                         {{ errorMessage.VALIDATION_REQUIRED }}
                       </div>
                       }
@@ -605,12 +627,13 @@
                   @if (achievements.at(i).get("status"); as status) {
                   <fieldset>
                     <app-input
+                      size="big"
                       [error]="status | controlError"
                       placeholder="Занятое место"
                       formControlName="status"
                     ></app-input>
                     @if (status | controlError: "required") {
-                    <div class="text-body-14 error">
+                    <div class="text-body-10 error">
                       {{ errorMessage.VALIDATION_REQUIRED }}
                     </div>
                     }
@@ -623,9 +646,14 @@
           </ng-container>
         </div>
       </div>
-      <app-button size="medium" class="profile__add-achievement" (click)="addAchievement()">
+      <app-button
+        customTypographyClass="text-body-12"
+        size="medium"
+        class="profile__add-achievement"
+        (click)="addAchievement()"
+      >
         <span>Добавить достижение</span>
-        <i appIcon icon="plus" appSquare="14"></i>
+        <i appIcon icon="plus" appSquare="12"></i>
       </app-button>
       } @if (editingStep === 'skills') {
       <div class="education__first-row">
@@ -646,7 +674,7 @@
                   (optionSelected)="onAddSkill($event)"
                 ></app-autocomplete-input>
                 <app-button type="button" (click)="toggleSkillsGroupsModal()">
-                  <i appIcon icon="folder" appWidth="18" appHeight="18"></i>
+                  <i appIcon icon="folder" appWidth="16" appHeight="16"></i>
                 </app-button>
               </div>
             </fieldset>
@@ -673,6 +701,7 @@
               <fieldset class="years__right">
                 <label for="languageName" class="field-label">Язык</label>
                 <app-select
+                  size="big"
                   [selectedId]="selectedLanguageId()"
                   formControlName="language"
                   placeholder="Английский"
@@ -682,7 +711,7 @@
                 </app-select>
 
                 @if (language | controlError: "required") {
-                <div class="text-body-14 error">
+                <div class="text-body-10 error">
                   {{ errorMessage.VALIDATION_REQUIRED }}
                 </div>
                 }
@@ -691,6 +720,7 @@
               <fieldset class="years__right">
                 <label for="languagLevel" class="field-label">Уровень</label>
                 <app-select
+                  size="big"
                   [selectedId]="selectedLanguageLevelId()"
                   formControlName="languageLevel"
                   placeholder="B1"
@@ -700,7 +730,7 @@
                 </app-select>
 
                 @if (languageLevel | controlError: "required") {
-                <div class="text-body-14 error">
+                <div class="text-body-10 error">
                   {{ errorMessage.VALIDATION_REQUIRED }}
                 </div>
                 }
@@ -713,6 +743,7 @@
           </div>
 
           <app-button
+            customTypographyClass="text-body-12"
             size="big"
             [disabled]="
               !isLanguageDirty || languageItems().length === 4 || userLanguages.length === 4
@@ -725,7 +756,7 @@
             (click)="addLanguage()"
           >
             <span>Добавить язык</span>
-            <i appIcon icon="plus" appSquare="14"></i>
+            <i appIcon icon="plus" appSquare="12"></i>
           </app-button>
         </div>
 
@@ -741,7 +772,7 @@
                 class="edit"
                 appIcon
                 icon="edit-pen"
-                appSquare="20"
+                appSquare="16"
                 (click)="editLanguage($index)"
               ></i>
             </div>
@@ -766,7 +797,7 @@
             formControlName="additionalRole"
           ></app-input>
           @if (additionalRole | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           }
@@ -899,7 +930,9 @@
         </ul>
       </div>
     </div>
-    <app-button (click)="toggleSpecsGroupsModal()">Сохранить</app-button>
+    <app-button customTypographyClass="text-body-12" (click)="toggleSpecsGroupsModal()"
+      >Сохранить</app-button
+    >
   </div>
 </app-modal>
 
@@ -922,6 +955,8 @@
         </ul>
       </div>
     </div>
-    <app-button (click)="toggleSkillsGroupsModal()">Сохранить</app-button>
+    <app-button customTypographyClass="text-body-12" (click)="toggleSkillsGroupsModal()"
+      >Сохранить</app-button
+    >
   </div>
 </app-modal>

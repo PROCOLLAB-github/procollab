@@ -8,13 +8,14 @@
       <fieldset class="vacancy__role">
         <label class="field-label">Название вакансии</label>
         <app-input
+          size="big"
           id="vacancy_role"
           formControlName="role"
           [error]="(role | controlError) && vacancySubmitInitiated()"
           placeholder="Напишите роль, которую вы хотите закрыть в вашем проекте"
         ></app-input>
         @if ((role | controlError: "required") && vacancySubmitInitiated()) {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -22,14 +23,15 @@
       } @if (description; as description) {
       <fieldset class="vacancy__description">
         <label class="field-label">Описание вакансии</label>
-        <app-input
+        <app-textarea
+          size="big"
           id="vacancy_description"
           formControlName="description"
           [error]="(description | controlError) && vacancySubmitInitiated()"
           placeholder="Опишите вакансию"
-        ></app-input>
+        ></app-textarea>
         @if ((description | controlError: "required") && vacancySubmitInitiated()) {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -42,14 +44,16 @@
           <fieldset>
             <label class="field-label">Опыт</label>
             <app-select
+              size="big"
               id="requiredExperience"
               formControlName="requiredExperience"
               placeholder="Опыт"
+              [error]="(requiredExperience | controlError) || vacancySubmitInitiated()"
               [selectedId]="selectedRequiredExperienceId()"
               [options]="experienceList"
             ></app-select>
             @if (requiredExperience | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
@@ -58,14 +62,16 @@
           <fieldset>
             <label class="field-label">Формат</label>
             <app-select
+              size="big"
               id="workFormat"
               formControlName="workFormat"
+              [error]="(workFormat | controlError) || vacancySubmitInitiated()"
               placeholder="Формат"
               [selectedId]="selectedWorkFormatId()"
               [options]="formatList"
             ></app-select>
             @if (workFormat | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
@@ -78,13 +84,14 @@
           <fieldset>
             <label class="field-label">Заработная плата</label>
             <app-input
+              size="big"
               id="salary"
               formControlName="salary"
               [error]="(salary | controlError) && vacancySubmitInitiated()"
               placeholder="Заработная плата"
             ></app-input>
             @if ((salary | controlError: "required") && vacancySubmitInitiated()) {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
@@ -93,14 +100,16 @@
           <fieldset>
             <label class="field-label">График</label>
             <app-select
+              size="big"
               id="workSchedule"
               formControlName="workSchedule"
+              [error]="(workSchedule | controlError) || vacancySubmitInitiated()"
               placeholder="График"
               [selectedId]="selectedWorkScheduleId()"
               [options]="scheludeList"
             ></app-select>
             @if (workSchedule | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
@@ -115,17 +124,16 @@
           <app-autocomplete-input
             class="vacancies__input"
             placeholder="Введите навык"
-            searchIcon=""
+            searchIcon="box"
+            (openSkillsFunc)="onToggleSkillsGroupsModal()"
             [suggestions]="inlineSkills"
             fieldToDisplay="name"
             [forceSelect]="true"
             [clearInputOnSelect]="true"
             (searchStart)="onSearchSkill($event)"
             (optionSelected)="onAddSkill($event)"
-          ></app-autocomplete-input>
-          <app-button type="button" class="vacancies__button" (click)="onToggleSkillsGroupsModal()">
-            <i appIcon icon="folder" appWidth="18" appHeight="18"></i>
-          </app-button>
+          >
+          </app-autocomplete-input>
         </div>
       </fieldset>
 
@@ -136,7 +144,7 @@
           [error]="skills | controlError"
         ></app-skills-basket>
         @if (skills | controlError: "required") {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -154,7 +162,7 @@
           [options]="rolesMembersList"
         ></app-select>
         @if ((specialization | controlError: "required") && vacancySubmitInitiated()) {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }

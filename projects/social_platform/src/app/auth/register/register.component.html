@@ -32,6 +32,7 @@
       <fieldset class="auth__field">
         <label for="email" class="field-label">Почта</label>
         <app-input
+          size="big"
           [error]="(email | controlError) && credsSubmitInitiated"
           id="email"
           type="email"
@@ -41,11 +42,11 @@
         @if (credsSubmitInitiated) {
         <ng-container>
           @if (email | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           } @if (email | controlError: "email") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_EMAIL }}
           </div>
           }
@@ -56,6 +57,7 @@
       <fieldset class="auth__field">
         <label for="passowrd" class="field-label">Пароль</label>
         <app-input
+          size="big"
           [error]="(password | controlError) && credsSubmitInitiated"
           id="passowrd"
           [type]="showPassword ? 'text' : 'password'"
@@ -87,6 +89,7 @@
           }
         </app-input>
         <app-input
+          size="big"
           class="register__repeated-password"
           [error]="(password | controlError) && credsSubmitInitiated"
           id="repeatedPassword"
@@ -121,40 +124,40 @@
         @if (credsSubmitInitiated) {
         <ng-container>
           @if (password | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           } @if (password | controlError: "passwordTooShort") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             @if (password.errors) { Пароль должен содержать минимум
             {{ password.errors["passwordTooShort"]["requiredLength"] }} символов }
           </div>
           } @if (password | controlError: "passwordNoUppercase") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             Пароль должен содержать минимум одну заглавную букву (A-Z)
           </div>
           } @if (password | controlError: "passwordNoLowercase") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             Пароль должен содержать минимум одну строчную букву (a-z)
           </div>
           } @if (password | controlError: "passwordNoNumber") {
-          <div class="text-body-14 error">Пароль должен содержать минимум одну цифру (0-9)</div>
+          <div class="text-body-10 error">Пароль должен содержать минимум одну цифру (0-9)</div>
           } @if (password | controlError: "passwordNoSpecialChar") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             Пароль должен содержать минимум один специальный символ
           </div>
           } @if (password | controlError: "passwordHasSpaces") {
-          <div class="text-body-14 error">Пароль не должен содержать пробелы</div>
+          <div class="text-body-10 error">Пароль не должен содержать пробелы</div>
           } @if (password | controlError: "passwordHasSequence") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             Пароль не должен содержать последовательности символов (123456, abcdef и т.д.)
           </div>
           } @if (password | controlError: "passwordHasRepeating") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             Пароль не должен содержать более 2 одинаковых символов подряд
           </div>
           } @if (password | controlError: "unMatch") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_PASSWORD_UNMATCH }}
           </div>
           }
@@ -170,6 +173,7 @@
         <fieldset class="auth__field">
           <label for="name" class="field-label">Имя</label>
           <app-input
+            size="big"
             [error]="(name | controlError) && infoSubmitInitiated"
             id="name"
             type="text"
@@ -179,11 +183,11 @@
           @if (infoSubmitInitiated) {
           <ng-container>
             @if (name | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             } @if (name | controlError: "invalidLanguage") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_LANGUAGE }}
             </div>
             }
@@ -194,6 +198,7 @@
         <fieldset class="auth__field">
           <label for="surname" class="field-label">Фамилия</label>
           <app-input
+            size="big"
             [error]="(surname | controlError) && infoSubmitInitiated"
             id="surname"
             type="text"
@@ -203,11 +208,11 @@
           @if (infoSubmitInitiated) {
           <ng-container>
             @if (surname | controlError: "required") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             } @if (surname | controlError: "invalidLanguage") {
-            <div class="text-body-14 error">
+            <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_LANGUAGE }}
             </div>
             }
@@ -220,6 +225,7 @@
       <fieldset class="auth__field">
         <label for="birthday" class="field-label">Дата рождения</label>
         <app-input
+          size="big"
           id="birthday"
           [error]="(birthday | controlError) && infoSubmitInitiated"
           type="text"
@@ -230,23 +236,23 @@
         @if (infoSubmitInitiated) {
         <ng-container>
           @if (birthday | controlError: "required") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.VALIDATION_REQUIRED }}
           </div>
           } @if (birthday | controlError: "tooYoung") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             @if (birthday.errors) {
             {{ errorMessage.MINIMAL_AGE }}
             {{ birthday.errors["tooYoung"]["requiredAge"] }} лет }
           </div>
           } @if (birthday | controlError: "tooOld") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             @if (birthday.errors) {
             {{ errorMessage.MAXIMAL_AGE }}
             {{ birthday.errors["tooOld"]["requiredAge"] }} лет }
           </div>
           } @if (birthday | controlError: "invalidDateFormat") {
-          <div class="text-body-14 error">
+          <div class="text-body-10 error">
             {{ errorMessage.INVALID_DATE }}
           </div>
           }
@@ -256,7 +262,7 @@
       }
     </ng-container>
     } @if (serverErrors) {
-    <div class="text-body-14 error">
+    <div class="text-body-10 error">
       @for (e of serverErrors; track $index) {
       <p>{{ e }}</p>
       }
@@ -292,7 +298,13 @@
       Далее
     </app-button>
     } @else if (step === "info") {
-    <app-button size="medium" [loader]="registerIsSubmitting" type="submit" class="auth__button">
+    <app-button
+      size="big"
+      [loader]="registerIsSubmitting"
+      type="submit"
+      customTypographyClass="text-body-12"
+      class="auth__button"
+    >
       Создать аккаунт
     </app-button>
     }

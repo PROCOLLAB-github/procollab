@@ -35,7 +35,7 @@
     @if (!editMode) {
     <p #newsTextEl [innerHTML]="feedItem.text | parseLinks"></p>
     } @else { @if (editForm.get("text"); as text) {
-    <app-textarea [formControl]="text | formControl"></app-textarea>
+    <app-textarea size="big" [formControl]="text | formControl"></app-textarea>
     } }
   </div>
   } @if (editMode) {

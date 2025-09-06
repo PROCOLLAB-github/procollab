@@ -100,19 +100,19 @@
         ::ng-deep {
           app-input {
             input {
-              @include typography.body-14;
+              @include typography.body-12;
             }
           }
 
           app-textarea {
             textarea {
-              @include typography.body-14;
+              @include typography.body-12;
             }
           }
 
           app-select {
             .field__input {
-              @include typography.body-14;
+              @include typography.body-12;
             }
           }
         }
@@ -153,4 +153,8 @@
   &__submit {
     display: block;
   }
+}
+
+.error {
+  color: var(--red) !important;
 }
