@@ -35,7 +35,7 @@ export class LoaderComponent implements OnInit {
   @Input() color = "white";
 
   /** Тип анимации */
-  @Input() type: "wave" | "circle" = "wave";
+  @Input() type: "wave" | "circle" = "circle";
 
   ngOnInit(): void {}
 }

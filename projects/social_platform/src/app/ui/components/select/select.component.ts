@@ -1,5 +1,6 @@
 /** @format */
 
+import { CommonModule } from "@angular/common";
 import {
   Component,
   ElementRef,
@@ -44,7 +45,7 @@ import { ClickOutsideModule } from "ng-click-outside";
     },
   ],
   standalone: true,
-  imports: [ClickOutsideModule, IconComponent],
+  imports: [ClickOutsideModule, IconComponent, CommonModule],
 })
 export class SelectComponent implements ControlValueAccessor {
   /** Текст подсказки */
@@ -53,12 +54,16 @@ export class SelectComponent implements ControlValueAccessor {
   /** ID выбранной опции */
   @Input() selectedId?: number;
 
+  @Input() size: "small" | "big" = "small";
+
   /** Массив доступных опций */
   @Input({ required: true }) options: {
     value: string | number;
     label: string;
     id: number;
   }[] = [];
+
+  @Input() error = false;
 
   /** Состояние открытия выпадающего списка */
   isOpen = false;

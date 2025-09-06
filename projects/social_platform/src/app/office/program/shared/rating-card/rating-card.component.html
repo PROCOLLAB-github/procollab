@@ -66,7 +66,7 @@
     <div>
       <app-project-rating [criteria]="project.criterias" [formControl]="form"></app-project-rating>
       @if (form | controlError: "required"; as error) {
-      <div class="text-body-12 error">
+      <div class="text-body-10 error">
         {{ error }}
       </div>
       }
@@ -86,7 +86,9 @@
         <span class="card__last-btn">Предыдущий проект</span>
       </app-button>
 
-      <app-button (click)="submitRating()" [loader]="submitLoading()">Оценить проект</app-button>
+      <app-button size="big" (click)="submitRating()" [loader]="submitLoading()"
+        >Оценить проект</app-button
+      >
 
       <app-button
         appearance="outline"

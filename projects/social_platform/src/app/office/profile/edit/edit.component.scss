@@ -170,14 +170,8 @@
     @include responsive.apply-desktop {
       z-index: 10;
       order: unset;
-      width: 255px;
       margin-top: auto;
       margin-left: auto;
-    }
-
-    app-button {
-      align-self: flex-end;
-      width: 20%;
     }
   }
 
@@ -258,7 +252,7 @@
     padding: 12px;
     overflow: hidden;
     border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
   }
 
   &__text {
@@ -322,11 +316,6 @@
     gap: 20px;
     align-items: center;
     width: 672px;
-
-    app-button {
-      width: 100%;
-      max-width: 366px;
-    }
   }
 
   &__content {

@@ -32,7 +32,11 @@
     </app-bar>
     <div class="bar__right">
       @if (isMy) {
-      <app-button (click)="addProject()" customTypographyClass="ext-body-14 bar__add-project">
+      <app-button
+        size="medium"
+        (click)="addProject()"
+        customTypographyClass="text-body-12 bar__add-project"
+      >
         <span class="bar__add-project-text">Добавить проект</span>
         <i appIcon icon="plus" appSquare="18"></i>
       </app-button>

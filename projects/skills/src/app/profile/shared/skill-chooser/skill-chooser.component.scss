@@ -179,13 +179,6 @@
   &__buttons-group {
     display: flex;
     gap: 15px;
-    width: 100%;
-    margin-top: 20px;
-
-    app-button {
-      width: 100%;
-      border-radius: 15px;
-    }
   }
 
   &__confirm {

@@ -3,38 +3,34 @@
 @if (invite) {
 <div class="invite">
   <div class="invite__info">
-    <h3 class="text-bold-body-14 invite__role">
-      {{ invite.user.firstName }} {{ invite.user.lastName }}
-    </h3>
+    <div class="invite__top">
+      <p class="text-body-12">{{ invite.specialization }}</p>
+      @if(invite.isAccepted === null) {
+      <p class="text-body-12 invite__status">• Приглашение отправлено</p>
+      }
+    </div>
 
-    <p class="text-body-12 invite__requirements">
-      {{ invite.role }}
-    </p>
-
-    <p class="text-body-10 invite__requirements">Роль - {{ invite.specialization }}</p>
-
-    @if(invite.isAccepted === null) {
-    <p class="text-body-12 invite__status">Приглашение отправлено</p>
-    }
+    <div class="invite__user">
+      <app-avatar [url]="invite.user.avatar" [size]="40"></app-avatar>
+      <h3 class="text-body-12 invite__role">
+        {{ invite.user.firstName }} {{ invite.user.lastName }}
+      </h3>
+    </div>
   </div>
 
-  <div class="invite__icons">
-    <i
+  <app-button size="big" color="red" (click)="isRemoveInviteModal.set(true)">
+    <i appIcon icon="basket" appSquare="18" class="invite__cross invite__icon"></i>
+  </app-button>
+
+  <!-- <div class="invite__icons"> -->
+  <!-- <i
       class="invite__edit invite__icon"
       appIcon
       icon="edit-pen"
       appSquare="24"
       (click)="isEditInviteModal.set(true)"
-    ></i>
-
-    <i
-      class="invite__cross invite__icon"
-      appIcon
-      icon="cross"
-      appSquare="24"
-      (click)="isRemoveInviteModal.set(true)"
-    ></i>
-  </div>
+    ></i> -->
+  <!-- </div> -->
 </div>
 }
 
@@ -43,12 +39,13 @@
     <p class="text-body-12">Вы, действительно, хотите удалить приглашение в команду?</p>
     <div class="invite__buttons">
       <app-button
+        size="medium"
         customTypographyClass="text-body-12"
         (click)="isRemoveInviteModal.set(false)"
         appearance="outline"
         >Отмена</app-button
       >
-      <app-button customTypographyClass="text-body-12" (click)="onRemove($event)"
+      <app-button size="medium" customTypographyClass="text-body-12" (click)="onRemove($event)"
         >Удалить</app-button
       >
     </div>
@@ -63,13 +60,14 @@
       @if (inviteForm.get("role"); as role) {
       <fieldset class="invite__role">
         <app-input
+          size="big"
           id="invite_role"
           formControlName="role"
           [error]="role | controlError"
           placeholder="Напишите роль участника в команде"
         ></app-input>
         @if ((role | controlError: "required")) {
-        <div class="text-body-12 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
@@ -77,19 +75,20 @@
       } @if (inviteForm.get("specialization"); as specialization) {
       <fieldset>
         <app-select
+          size="big"
           id="specialization"
           formControlName="specialization"
           placeholder="Специальность"
           [options]="rolesMembersList"
         ></app-select>
         @if ((specialization | controlError: "required")) {
-        <div class="text-body-12 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         }
       </fieldset>
       }
-      <app-button customTypographyClass="text-body-12" (click)="onEdit($event)"
+      <app-button size="big" customTypographyClass="text-body-12" (click)="onEdit($event)"
         >Сохранить</app-button
       >
     </form>

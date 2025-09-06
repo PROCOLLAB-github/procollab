@@ -36,7 +36,7 @@
         formControlName="speciality"
       ></app-autocomplete-input>
       @if (stageForm.controls["speciality"] | controlError) {
-      <div class="text-body-14 error">
+      <div class="text-body-10 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
       }
@@ -77,7 +77,7 @@
       <app-button (click)="onSkipRegistration()" color="grey" [loader]="skipSubmitting()"
         >Закончить регистрацию позже</app-button
       >
-      <app-button type="submit" [loader]="stageSubmitting()" (click)="onSubmit()"
+      <app-button size="big" type="submit" [loader]="stageSubmitting()" (click)="onSubmit()"
         >Продолжить</app-button
       >
     </div>

@@ -54,17 +54,13 @@ export class OfficeComponent implements OnInit, OnDestroy {
     private readonly industryService: IndustryService,
     private readonly route: ActivatedRoute,
     public readonly authService: AuthService,
-    private readonly projectService: ProjectService,
     private readonly inviteService: InviteService,
     private readonly router: Router,
     public readonly chatService: ChatService
   ) {}
 
   ngOnInit(): void {
-    const globalSubscription$ = forkJoin([
-      this.industryService.getAll(),
-      this.projectService.getProjectSteps(),
-    ]).subscribe(noop);
+    const globalSubscription$ = forkJoin([this.industryService.getAll()]).subscribe(noop);
     this.subscriptions$.push(globalSubscription$);
 
     const profileSub$ = this.authService.profile.subscribe(profile => {

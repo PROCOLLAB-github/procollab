@@ -22,7 +22,7 @@
               'https://app.procollab.ru/office/chats/' + student.student.id + '_' + student.mentorId
             "
           >
-            <app-button customTypographyClass="text-body-12" class="students__button"
+            <app-button customTypographyClass="text-body-10" size="big" class="students__button"
               >Чат с участником</app-button
             >
           </a>
@@ -92,7 +92,10 @@
           </div>
 
           <div class="stats__save">
-            <app-button customTypographyClass="text-body-12" (click)="onSave(student.meetingId)"
+            <app-button
+              size="medium"
+              customTypographyClass="text-body-10"
+              (click)="onSave(student.meetingId)"
               >Сохранить</app-button
             >
           </div>
@@ -108,9 +111,9 @@
           {{ expandedStudentId === student.student.id ? "Скрыть" : "Посмотреть" }} статистику
         </p>
         @if (expandedStudentId === student.student.id) {
-        <i appIcon icon="arrow-no-body" appSquare="32" class="icon"></i>
+        <i appIcon icon="arrow-no-body" appSquare="18" class="icon"></i>
         } @else {
-        <i appIcon icon="arrow-no-body" appSquare="32" class="icon__unexpanded"></i>
+        <i appIcon icon="arrow-no-body" appSquare="18" class="icon__unexpanded"></i>
         }
       </div>
     </div>

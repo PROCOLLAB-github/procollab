@@ -11,8 +11,7 @@
       <div class="text-body-12 invite__text">
         <a [routerLink]="['/office/profile', invite.user.id]"
           >{{ invite.user.firstName }} {{ invite.user.lastName }}</a
-        >
-        пригласил в проект
+        >, вас пригласили в проект
         <a [routerLink]="['/office/projects', invite.project.id]">"{{ invite.project.name }}"</a>
       </div>
       <div class="text-body-12 invite__time">
@@ -22,8 +21,16 @@
     </div>
   </div>
   <div class="invite__actions">
-    <app-button appearance="outline" (click)="reject.emit(invite.id)">Отклонить</app-button>
-    <app-button (click)="accept.emit(invite.id)">Принять</app-button>
+    <app-button
+      customTypographyClass="text-body-12"
+      size="medium"
+      appearance="outline"
+      (click)="reject.emit(invite.id)"
+      >Отклонить</app-button
+    >
+    <app-button customTypographyClass="text-body-12" size="medium" (click)="accept.emit(invite.id)"
+      >Принять</app-button
+    >
   </div>
 </div>
 }

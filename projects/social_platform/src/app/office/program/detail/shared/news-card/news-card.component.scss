@@ -5,7 +5,7 @@
   padding: 20px;
   background-color: var(--white);
   border: 1px solid var(--medium-grey-for-outline);
-  border-radius: 15px;
+  border-radius: var(--rounded-xl);
 
   &__head {
     display: flex;
@@ -34,7 +34,7 @@
     padding: 20px 0;
     background-color: var(--white);
     border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
   }
 
   &__option {
@@ -150,7 +150,7 @@
     height: 75px;
     color: var(--accent);
     background-color: var(--white);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
     transition: transform 0.1s ease-in-out;
     transform: translate(-50%, -50%) scale(0);
 

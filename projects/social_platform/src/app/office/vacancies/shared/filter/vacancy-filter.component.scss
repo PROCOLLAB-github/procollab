@@ -14,7 +14,7 @@
   padding: 20px;
   background-color: var(--white);
   border: 1px solid var(--medium-grey-for-outline);
-  border-radius: 15px;
+  border-radius: var(--rounded-xl);
 
   @include responsive.apply-desktop {
     display: flex;
@@ -26,18 +26,6 @@
     justify-content: space-between;
     width: 100%;
   }
-
-  &__actions {
-    align-self: flex-start;
-    width: 50%;
-
-    app-button {
-      &::ng-deep .button--inline {
-        min-height: 38px;
-        padding: 0;
-      }
-    }
-  }
 }
 
 .mobile {
@@ -47,13 +35,6 @@
 
   @include responsive.apply-desktop {
     display: none;
-  }
-
-  app-button {
-    &::ng-deep .button--inline {
-      min-height: 38px;
-      padding: 0;
-    }
   }
 }
 
@@ -151,7 +132,7 @@
     ::ng-deep {
       app-input {
         input {
-          padding: 10px 12px;
+          padding: 12px;
 
           @include typography.body-12;
         }

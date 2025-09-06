@@ -39,7 +39,7 @@
       </ng-container>
     </app-user-type-card>
   </div>
-  <app-button class="page__button" [loader]="stageSubmitting" (click)="onSubmit()"
+  <app-button size="big" class="page__button" [loader]="stageSubmitting" (click)="onSubmit()"
     >Продолжить</app-button
   >
   @if (stageTouched && userRole === -1) {

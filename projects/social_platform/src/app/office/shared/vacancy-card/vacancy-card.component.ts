@@ -2,7 +2,7 @@
 
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Vacancy } from "@models/vacancy.model";
-import { IconComponent } from "@ui/components";
+import { IconComponent, ButtonComponent } from "@ui/components";
 
 /**
  * Компонент карточки вакансии
@@ -29,7 +29,7 @@ import { IconComponent } from "@ui/components";
   templateUrl: "./vacancy-card.component.html",
   styleUrl: "./vacancy-card.component.scss",
   standalone: true,
-  imports: [IconComponent],
+  imports: [IconComponent, ButtonComponent],
 })
 export class VacancyCardComponent implements OnInit {
   constructor() {}
@@ -40,10 +40,7 @@ export class VacancyCardComponent implements OnInit {
 
   skillString = "";
 
-  ngOnInit(): void {
-    // Формирование строки навыков с разделителем
-    this.skillString = this.vacancy?.requiredSkills.map(s => s.name).join(" • ") ?? "";
-  }
+  ngOnInit(): void {}
 
   /**
    * Обработчик удаления вакансии

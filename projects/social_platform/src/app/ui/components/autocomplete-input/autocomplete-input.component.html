@@ -16,7 +16,7 @@
     />
     @if (fieldToDisplayMode === "chip" && value()) {
     <div class="field__chip">
-      <span class="text-body-14">{{ $any(value())[fieldToDisplay] || value() }}</span>
+      <span class="text-body-12">{{ $any(value())[fieldToDisplay] || value() }}</span>
       <i appIcon icon="basket" appSquare="18" (click)="onClearValue($event)"></i>
     </div>
     }
@@ -30,16 +30,16 @@
       size="24px"
     ></app-loader>
     } @if (searchIcon && slimVersion) {
-    <i appIcon [icon]="searchIcon" appSquare="20"></i>
+    <i appIcon [icon]="searchIcon" appSquare="12"></i>
     } @if (searchIcon && !slimVersion) {
-    <i appIcon [icon]="searchIcon" appSquare="32"></i>
+    <i (click)="openSkillsFunc.emit()" appIcon [icon]="searchIcon" appSquare="16"></i>
     }
   </div>
   @if (isOpen()) {
   <div class="field__dropdown" [@dropdownAnimation]>
     @if (noResults()) {
     <ul class="field__dropdown--no-results">
-      <li class="text-body-14 field__option" [class.field__option-slim]="slimVersion">
+      <li class="text-body-12 field__option" [class.field__option-slim]="slimVersion">
         {{ "Ничего не найдено :(" }}
       </li>
     </ul>
@@ -47,7 +47,7 @@
     <ul class="field__dropdown--options">
       @for (suggestion of suggestions; track $index) {
       <li
-        class="text-body-14 field__option"
+        class="text-body-12 field__option"
         [class.field__option-slim]="slimVersion"
         (click)="onUpdate($event, suggestion)"
       >
