@@ -35,40 +35,4 @@ export class ProjectContactsStepComponent {
   get projectForm(): FormGroup {
     return this.projectFormService.getForm();
   }
-
-  // Получаем поля из формы из сервиса
-  get linksItems() {
-    return this.projectContactsService.linksItems;
-  }
-
-  get link() {
-    return this.projectContactsService.link;
-  }
-
-  get links(): FormArray {
-    return this.projectContactsService.links;
-  }
-
-  /**
-   * Добавление ссылки
-   */
-  addLink(): void {
-    this.projectContactsService.addLink();
-  }
-
-  /**
-   * Редактирование ссылки
-   * @param index - индекс ссылки
-   */
-  editLink(index: number): void {
-    this.projectContactsService.editLink(index);
-  }
-
-  /**
-   * Удаление ссылки
-   * @param index - индекс ссылки
-   */
-  removeLink(index: number): void {
-    this.projectContactsService.removeLink(index);
-  }
 }

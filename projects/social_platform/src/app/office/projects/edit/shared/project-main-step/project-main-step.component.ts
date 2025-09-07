@@ -1,7 +1,7 @@
 /** @format */
 
 import { Component, Input, Output, EventEmitter, inject, OnInit, OnDestroy } from "@angular/core";
-import { FormArray, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { AuthService } from "@auth/services";
 import { ErrorMessage } from "@error/models/error-message";
 import { directionProjectList } from "projects/core/src/consts/list-direction-project";
@@ -16,6 +16,7 @@ import { ControlErrorPipe } from "@corelib";
 import { ProjectFormService } from "../../services/project-form.service";
 import { IconComponent } from "@uilib";
 import { generateTrlList } from "@utils/generate-trl-list";
+import { ProjectContactsService } from "../../services/project-contacts.service";
 
 @Component({
   selector: "app-project-main-step",
@@ -51,6 +52,8 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
 
   readonly authService = inject(AuthService);
   private readonly projectFormService = inject(ProjectFormService);
+  private readonly projectContactsService = inject(ProjectContactsService);
+  private readonly fb = inject(FormBuilder);
 
   readonly errorMessage = ErrorMessage;
   readonly trackList = trackProjectList;
@@ -123,5 +126,58 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
 
   get partnerProgramId() {
     return this.projectFormService.partnerProgramId;
+  }
+
+  // Геттеры для работы со ссылками
+  get linksItems() {
+    return this.projectContactsService.linksItems;
+  }
+
+  get link() {
+    return this.projectContactsService.link;
+  }
+
+  get links(): FormArray {
+    return this.projectContactsService.links;
+  }
+
+  get editIndex() {
+    return this.projectFormService.editIndex;
+  }
+
+  /**
+   * Проверяет, есть ли ссылки для отображения
+   */
+  get hasLinks(): boolean {
+    return this.linksItems().length > 0 || this.links.length > 0;
+  }
+
+  /**
+   * Добавление ссылки
+   */
+  addLink(link?: string): void {
+    this.links.push(
+      this.fb.group({
+        link: [link, [Validators.required]],
+      })
+    );
+
+    this.projectContactsService.addLink(this.links, this.projectForm);
+  }
+
+  /**
+   * Редактирование ссылки
+   * @param index - индекс ссылки
+   */
+  editLink(index: number): void {
+    this.projectContactsService.editLink(index, this.links, this.projectForm);
+  }
+
+  /**
+   * Удаление ссылки
+   * @param index - индекс ссылки
+   */
+  removeLink(index: number): void {
+    this.projectContactsService.removeLink(index, this.links);
   }
 }

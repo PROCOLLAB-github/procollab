@@ -126,12 +126,10 @@ export class ProjectFormService {
   private populateLinksFormArray(links: string[]): void {
     const linksFormArray = this.projectForm.get("links") as FormArray;
 
-    // Очищаем существующие контролы
     while (linksFormArray.length !== 0) {
       linksFormArray.removeAt(0);
     }
 
-    // Добавляем новые контролы
     links.forEach(link => {
       linksFormArray.push(this.fb.control(link));
     });

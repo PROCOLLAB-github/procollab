@@ -282,7 +282,49 @@
       <i appIcon icon="plus" appSquare="12"></i>
     </app-button>
 
-    <app-button size="big" appearance="outline" customTypographyClass="text-body-12">
+    <div>
+      @if (hasLinks) {
+      <ul formArrayName="links" class="project__links--wrapper">
+        @for (control of links.controls; track i; let i = $index) {
+        <li class="project__links">
+          <form [formGroupName]="i" class="project__links">
+            @if (links.at(i)?.get("link"); as link) {
+            <fieldset style="flex-grow: 1">
+              <label class="text-body-12 field-label">Ссылка на контакты и сообщества</label>
+              <app-input
+                size="big"
+                [error]="link | controlError"
+                placeholder="@eeeasycarrer"
+                formControlName="link"
+              ></app-input>
+              @if (link | controlError: "required") {
+              <div class="text-body-10 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            }
+          </form>
+          <app-button
+            class="project__links--remove"
+            color="red"
+            (click)="removeLink(i)"
+            type="button"
+          >
+            <i appIcon icon="basket" appSquare="20"></i>
+          </app-button>
+        </li>
+        }
+      </ul>
+      }
+    </div>
+
+    <app-button
+      (click)="addLink()"
+      size="big"
+      appearance="outline"
+      customTypographyClass="text-body-12"
+    >
       <span>Добавить ссылку на контакты и сообщества</span>
       <i appIcon icon="plus" appSquare="12"></i>
     </app-button>

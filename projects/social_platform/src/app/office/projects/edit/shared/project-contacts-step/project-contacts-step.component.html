@@ -1,22 +1,6 @@
 <!-- @format -->
 
 <div [formGroup]="projectForm" class="project__inner">
-  <!-- @if(link; as link){
-  <fieldset class="project__left">
-    <label class="field-label">Ссылка на контакты</label>
-    <app-input
-      class="edit-link__input"
-      formControlName="link"
-      placeholder="https://example.com"
-    ></app-input>
-    @if (link | controlError: "pattern") {
-    <div class="text-body-10 error">
-      {{ errorMessage.VALIDATION_PATTERN }}
-    </div>
-    }
-  </fieldset>
-  } -->
-
   <div class="project__left">
     <!-- <ul class="invite__list">
       @if(linksItems().length || links.length){ @for (linkItem of links.value; track $index) {
@@ -35,7 +19,6 @@
       size="big"
       appearance="outline"
       customTypographyClass="text-body-12"
-      (click)="addLink()"
       class="vacancy__submit"
     >
       <span>Добавить партнера</span>
@@ -61,7 +44,6 @@
       size="big"
       appearance="outline"
       customTypographyClass="text-body-12"
-      (click)="addLink()"
       class="vacancy__submit"
     >
       <span>Добавить ресурс</span>
@@ -69,7 +51,7 @@
     </app-button>
   </div>
 
-  @if (!links.length) {
+  <!-- @if (!resources.length) {
   <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
-  }
+  } -->
 </div>
