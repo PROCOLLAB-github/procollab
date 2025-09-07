@@ -18,8 +18,8 @@
   &__options {
     display: flex;
     flex-direction: column;
-    width: 100%;
     gap: 35px;
+    width: 100%;
     margin-top: 35px;
   }
 
@@ -96,16 +96,16 @@
     }
   }
 
- &__links {
+  &__links {
     display: flex;
-    width: 100%;
     gap: 20px;
+    width: 100%;
 
     &--wrapper {
       display: flex;
       flex-direction: column;
-      width: 100%;
       gap: 20px;
+      width: 100%;
     }
 
     li {
@@ -114,8 +114,8 @@
 
       form {
         display: flex;
-        width: 100%;
         align-items: center;
+        width: 100%;
 
         fieldset {
           width: 100%;
