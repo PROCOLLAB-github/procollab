@@ -4,6 +4,16 @@
   <div class="field__left-icon">
     <ng-content select="left-icon"></ng-content>
   </div>
+  @if (type === 'radio') {
+  <input
+    type="radio"
+    [name]="name"
+    [value]="appValue"
+    [checked]="checked"
+    (change)="onRadioChange($event)"
+    class="field__input"
+  />
+  } @else {
   <input
     [value]="value"
     (input)="onInput($event)"
@@ -13,14 +23,15 @@
     [placeholder]="placeholder"
     [type]="currentType"
     [mask]="mask"
+    [name]="name"
     [dropSpecialCharacters]="true"
     class="field__input"
     [class.field__input--small]="size === 'small'"
     [class.field__input--big]="size === 'big'"
     [class.field__input--error]="error"
-    [class.field__input--with-tooltip]="size === 'small' ? !haveHint : haveHint"
+    [class.field__input--with-tooltip]="size !== 'small'"
   />
-  @if (error) {
+  } @if (error) {
   <i
     class="field__error-icon"
     appIcon
@@ -36,7 +47,6 @@
       [text]="tooltipText"
       [isVisible]="isTooltipVisible"
       [position]="tooltipPosition"
-      [iconSize]="'24'"
       [tooltipWidth]="tooltipWidth"
       customClass="field__tooltip-icon"
       (show)="showTooltip()"

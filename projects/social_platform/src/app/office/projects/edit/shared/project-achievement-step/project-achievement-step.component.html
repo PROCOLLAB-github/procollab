@@ -2,11 +2,11 @@
 
 <div [formGroup]="projectForm" class="project__inner">
   <div class="project__left">
-    <ul formArrayName="achievements">
+    <ul formArrayName="achievements" class="project__achievements">
       @for (control of achievements.controls; track control.value.id; let i = $index) {
       <li class="profile__achievement">
         <form [formGroupName]="i" class="achievement">
-          @if (achievements.at(i)?.get("achievementsName"); as achievementsName) {
+          @if (achievements.at(i)?.get("title"); as achievementsName) {
           <fieldset style="flex-grow: 1">
             <label class="text-body-12 field-label">Описание достижения</label>
             <app-input
@@ -19,7 +19,7 @@
               [tooltipWidth]="350"
               [error]="achievementsName | controlError"
               placeholder="Название конкурса"
-              formControlName="achievementsName"
+              formControlName="title"
             ></app-input>
             @if (achievementsName | controlError: "required") {
             <div class="text-body-10 error">
@@ -27,7 +27,7 @@
             </div>
             }
           </fieldset>
-          } @if (achievements.at(i).get("achievementsDate"); as achievementsDate) {
+          } @if (achievements.at(i).get("status"); as achievementsDate) {
           <fieldset>
             <label class="text-body-12 field-label" style="text-align: center">Дата</label>
             <app-input
@@ -39,7 +39,7 @@
               [error]="achievementsDate | controlError"
               type="date"
               placeholder="2022"
-              formControlName="achievementsDate"
+              formControlName="status"
             ></app-input>
             @if (achievementsDate | controlError: "required") {
             <div class="text-body-10 error">

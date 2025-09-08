@@ -29,6 +29,8 @@ import { NgxMaskModule } from "ngx-mask";
  * - haveHint: наличие подсказки
  * - tooltipText: текст подсказки
  * - tooltipPosition: позиция подсказки
+ * - checked: состояние для радио-кнопок
+ * - name: имя для радио-кнопок
  *
  * События:
  * - appValueChange: изменение значения поля
@@ -58,7 +60,7 @@ export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
   @Input() placeholder = "";
 
   /** Тип поля ввода */
-  @Input() type: "text" | "password" | "email" | "tel" | "date" = "text";
+  @Input() type: "text" | "password" | "email" | "tel" | "date" | "radio" = "text";
 
   /** Размер поля ввода */
   @Input() size: "small" | "big" = "small";
@@ -81,6 +83,12 @@ export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
   /** Маска для форматирования */
   @Input() mask = "";
 
+  /** Имя для инпута типа radio */
+  @Input() name = "";
+
+  /** Состояние checked для радио-кнопок */
+  @Input() checked = false;
+
   /** Двустороннее связывание значения */
   @Input()
   set appValue(value: string) {
@@ -92,10 +100,10 @@ export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
   }
 
   /** Изначальный тип поля (для восстановления после blur) */
-  private originalType: "text" | "password" | "email" | "tel" | "date" = "text";
+  private originalType: "text" | "password" | "email" | "tel" | "date" | "radio" = "text";
 
   /** Текущий активный тип поля */
-  currentType: "text" | "password" | "email" | "tel" | "date" = "text";
+  currentType: "text" | "password" | "email" | "tel" | "date" | "radio" = "text";
 
   /** Флаг для отслеживания фокуса на поле даты */
   private isDateFieldFocused = false;
@@ -109,6 +117,9 @@ export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
   /** Событие нажатия Enter */
   @Output() enter = new EventEmitter<void>();
 
+  /** Событие изменения состояния радио (для внешних обработчиков) */
+  @Output() change = new EventEmitter<Event>();
+
   ngOnInit(): void {
     this.updateCurrentType();
   }
@@ -116,6 +127,18 @@ export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["type"]) {
       this.updateCurrentType();
+    }
+  }
+
+  /** Обработчик для радио */
+  onRadioChange(event: Event): void {
+    if (this.type === "radio") {
+      const target = event.target as HTMLInputElement;
+      this.value = target.value;
+      this.onChange(this.value);
+      this.appValueChange.emit(this.value);
+      this.change.emit(event); // Эмитим событие для внешних обработчиков
+      this.onTouch();
     }
   }
 

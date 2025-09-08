@@ -52,8 +52,8 @@ export class ProjectAchievementStepComponent {
     return this.projectForm.get("achievementsName");
   }
 
-  get achievementsPrize() {
-    return this.projectForm.get("achievementsPrize");
+  get achievementsDate() {
+    return this.projectForm.get("achievementsDate");
   }
 
   get achievementsItems() {
@@ -104,9 +104,9 @@ export class ProjectAchievementStepComponent {
   addAchievement(id?: number, achievementsName?: string, achievementsDate?: string): void {
     this.achievements.push(
       this.fb.group({
-        achievementsName: [achievementsName ?? "", [Validators.required]],
-        achievementsDate: [achievementsDate ?? "", [Validators.required]],
         id: [id],
+        title: [achievementsName ?? "", [Validators.required]],
+        status: [achievementsDate ?? "", [Validators.required]],
       })
     );
 

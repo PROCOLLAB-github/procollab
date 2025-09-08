@@ -1,5 +1,4 @@
 /** @format */
-
 import { CommonModule } from "@angular/common";
 import {
   ChangeDetectionStrategy,
@@ -22,19 +21,17 @@ import { Skill } from "@office/models/skill";
  * - Синхронизирует состояние выбранных навыков с внешним состоянием
  * - Использует Angular Signals для реактивности
  * - Использует OnPush стратегию для оптимизации производительности
+ * - Поддерживает disabled состояние когда открыты другие группы
  *
  * Входные параметры:
  * @Input options - массив доступных навыков (обязательный)
  * @Input selected - массив выбранных навыков (обязательный)
  * @Input title - заголовок группы навыков (обязательный)
+ * @Input disabled - флаг отключения взаимодействия с группой
  *
  * Выходные события:
  * @Output optionToggled - событие переключения навыка, передает навык который был включен/выключен
- *
- * Внутренние свойства:
- * - _options - сигнал с массивом навыков и их состоянием выбора
- * - _selected - сигнал с массивом выбранных навыков
- * - contentVisible - сигнал видимости содержимого группы
+ * @Output groupToggled - событие переключения видимости группы
  */
 @Component({
   selector: "app-skills-group",
@@ -76,6 +73,9 @@ export class SkillsGroupComponent {
   }
 
   @Input({ required: true }) title!: string;
+  @Input() hasOpenGroups = false;
+  @Input() disabled = false;
+  @Output() groupToggled = new EventEmitter<boolean>();
   @Output() optionToggled = new EventEmitter<Skill>();
 
   _options = signal<(Skill & { checked?: boolean })[]>([]);
@@ -84,8 +84,26 @@ export class SkillsGroupComponent {
 
   /**
    * Переключение видимости содержимого группы
+   * Теперь учитывает disabled состояние
    */
-  toggleContentVisible(): void {
-    this.contentVisible.update(visible => !visible);
+  toggleContentVisible() {
+    if (this.disabled) {
+      return;
+    }
+
+    this.contentVisible.update(val => !val);
+    this.groupToggled.emit(this.contentVisible());
+  }
+
+  /**
+   * Обработка клика по опции навыка
+   * Теперь учитывает disabled состояние
+   */
+  onOptionClick(opt: Skill) {
+    if (this.disabled) {
+      return;
+    }
+
+    this.optionToggled.emit(opt);
   }
 }

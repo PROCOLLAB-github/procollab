@@ -83,6 +83,7 @@
   }
 
   &__item {
+    flex-grow: 1;
     margin-bottom: 12px;
   }
 
@@ -107,7 +108,12 @@
     margin-bottom: 12px;
 
     app-button {
-      flex-basis: 60%;
+      flex-basis: 59%;
+    }
+
+    &--wrapper {
+      flex-direction: column-reverse;
+      flex-basis: 40%;
     }
   }
 

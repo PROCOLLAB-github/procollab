@@ -17,7 +17,7 @@
 
   @if (showFields) {
   <div class="">
-    <div class="" style="display: flex; flex-direction: column; width: 60%">
+    <div class="" style="display: flex; flex-direction: column; width: 59%">
       <form [formGroup]="inviteForm">
         @if (link; as link) {
         <fieldset class="invite__role">
@@ -99,7 +99,7 @@
   </div>
   }
 
-  <div class="invite__link" [style.flex-direction]="invitesFill ? 'row-reverse' : 'row'">
+  <div class="invite__link" [style.flex-direction]="!invites.length ? 'row' : 'row-reverse'">
     <ul
       class="invite__link--wrapper"
       [style.overflow-x]="invites.length > 8 ? 'auto' : 'none'"
@@ -125,6 +125,7 @@
       <span>{{ showFields ? "Отправить приглашение" : "Создать приглашение" }}</span>
       <i appIcon icon="plus" appSquare="10"></i>
 
+      @if (!showFields) {
       <app-tooltip
         [text]="
           'Пару советов на старте: Оптимальный размер команды 2–5 человек. Это обеспечивает гибкость и эффективность коммуникации. Стремитесь к разнообразию навыков среди участников. Четко распределите роли и зоны ответственности на старте.'
@@ -136,6 +137,7 @@
         (show)="showTooltip()"
         (hide)="hideTooltip()"
       ></app-tooltip>
+      }
     </app-button>
 
     @if (!invites.length || !collaborators.length) {

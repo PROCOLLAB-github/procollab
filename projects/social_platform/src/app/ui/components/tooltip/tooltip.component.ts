@@ -37,7 +37,7 @@ export class TooltipComponent {
   @Input() position: "left" | "right" = "right";
 
   /** Размер иконки */
-  @Input() iconSize = "24";
+  @Input() iconSize = "16";
 
   /** Ширина подсказки */
   @Input() tooltipWidth = 250;

@@ -3,10 +3,10 @@
 .snackbar {
   position: absolute;
   right: 0;
-  bottom: 0;
+  top: 0;
   z-index: 20;
   padding-right: 50px;
-  padding-bottom: 50px;
+  padding-top: 50px;
   overflow-x: hidden;
 
   &__item {
@@ -17,11 +17,20 @@
 }
 
 .item {
-  padding: 12px;
-  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 20px;
+  border-radius: 10px;
 
   &--success {
     color: var(--white);
     background-color: var(--green);
+  }
+
+  &--error {
+    color: var(--white);
+    background-color: var(--red);
   }
 }

@@ -55,24 +55,19 @@ export class ProjectAchievementsService {
     this.initializeAchievementsItems(achievementsFormArray);
 
     // Считываем вводимые данные
-    const achievementsName = projectForm.get("achievementsName")?.value;
-    const achievementsDate = projectForm.get("achievementsDate")?.value;
+    const title = projectForm.get("title")?.value;
+    const status = projectForm.get("status")?.value;
 
     // Проверяем, что поля не пустые
-    if (
-      !achievementsName ||
-      !achievementsDate ||
-      achievementsName.trim().length === 0 ||
-      achievementsDate.trim().length === 0
-    ) {
+    if (!title || !status || title.trim().length === 0 || status.trim().length === 0) {
       return; // Выходим из функции, если поля пустые
     }
 
     // Создаем FormGroup для нового достижения
     const achievementItem = this.fb.group({
       id: achievementsFormArray.length,
-      achievementsName: achievementsName.trim(),
-      achievementsDate: achievementsDate.trim(),
+      title: title.trim(),
+      status: status.trim(),
     });
 
     // Проверяем, редактируется ли существующее достижение
@@ -94,11 +89,11 @@ export class ProjectAchievementsService {
     }
 
     // Очищаем поля ввода формы проекта
-    projectForm.get("achievementsName")?.reset();
-    projectForm.get("achievementsName")?.setValue("");
+    projectForm.get("title")?.reset();
+    projectForm.get("title")?.setValue("");
 
-    projectForm.get("achievementsDate")?.reset();
-    projectForm.get("achievementsDate")?.setValue("");
+    projectForm.get("status")?.reset();
+    projectForm.get("status")?.setValue("");
   }
 
   /**

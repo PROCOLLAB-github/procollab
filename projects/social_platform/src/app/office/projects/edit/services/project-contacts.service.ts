@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup, FormControl } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms";
 import { ProjectFormService } from "./project-form.service";
 
 /**
@@ -104,7 +104,7 @@ export class ProjectContactsService {
     } else {
       // Добавляем новую ссылку в сигнал и FormArray
       this.linksItems.update(items => [...items, trimmedLink.value]);
-      linksFormArray.push(trimmedLink);
+      linksFormArray.push(this.fb.control(trimmedLink, Validators.required));
     }
 
     // Очищаем поле ввода формы проекта

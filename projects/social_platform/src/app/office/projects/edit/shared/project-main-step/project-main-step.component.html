@@ -277,47 +277,166 @@
     </app-button>
     } } } } -->
 
-    <app-button size="big" appearance="outline" customTypographyClass="text-body-12">
+    @if (hasGoals) {
+    <ul formArrayName="goals" class="project__links--wrapper">
+      @for (control of goals.controls; track i; let i = $index) {
+      <li class="project__links">
+        <form [formGroupName]="i" class="project__links">
+          @if (goals.at(i)?.get("goalName"); as goalName) {
+          <fieldset style="flex-grow: 1">
+            <label class="text-body-12 field-label">Краткосрочные цели проекта</label>
+            <app-input
+              size="big"
+              [error]="goalName | controlError"
+              placeholder="Заработать много денег"
+              formControlName="goalName"
+            ></app-input>
+            @if (goalName | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (goals.at(i)?.get("goalDate"); as goalDate) {
+          <fieldset>
+            <label class="text-body-12 field-label" style="text-align: center">Дата</label>
+            <app-input
+              size="small"
+              type="date"
+              [error]="goalDate | controlError"
+              placeholder="21.05.25"
+              formControlName="goalDate"
+            ></app-input>
+            @if (goalDate | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (goals.at(i)?.get("goalLeader"); as goalLeader) {
+          <fieldset>
+            <label class="text-body-12 field-label" style="text-align: center">Лидер</label>
+
+            @if (getSelectedLeaderForGoal(i); as selectedLeader) {
+            <div class="selected-leader" (click)="toggleGoalLeaderModal(i)">
+              <app-avatar [url]="selectedLeader.avatar" [size]="40"></app-avatar>
+            </div>
+            } @else {
+            <app-button (click)="toggleGoalLeaderModal(i)" size="small" appearance="outline">
+              <i appIcon icon="add-person" appSquare="14"></i>
+            </app-button>
+            } @if (goalLeader | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </form>
+        <app-button
+          class="project__links--remove"
+          color="red"
+          (click)="removeGoal(i)"
+          type="button"
+        >
+          <i appIcon icon="basket" appSquare="20"></i>
+        </app-button>
+      </li>
+      }
+    </ul>
+    }
+
+    <app-modal [open]="goalLeaderShowModal" (openChange)="toggleGoalLeaderModal()">
+      <div class="cancel">
+        <div class="cancel__top">
+          <i
+            (click)="toggleGoalLeaderModal()"
+            appIcon
+            appSquare="24"
+            icon="cross"
+            class="cancel__cross"
+          ></i>
+          <p class="cancel__title text-body-14">Выберите ответственного</p>
+
+          <div class="project__invite">
+            <ul
+              class="invite__team"
+              [style.overflow-x]="collaborators.length > 8 ? 'auto' : 'none'"
+            >
+              @for (collaborator of collaborators; track collaborator.userId) {
+              <li class="invite__item">
+                <div class="invite__item--info">
+                  <app-avatar [url]="collaborator.avatar" [size]="40"></app-avatar>
+                  <p class="text-body-12">
+                    {{ collaborator.firstName }} {{ collaborator.lastName }}
+                  </p>
+                </div>
+                <app-input
+                  type="radio"
+                  name="goalLeaderSelection"
+                  [appValue]="collaborator.userId.toLocaleString()"
+                  [checked]="selectedLeaderId === collaborator.userId.toString()"
+                  (change)="onLeaderRadioChange($event)"
+                ></app-input>
+              </li>
+              }
+            </ul>
+          </div>
+        </div>
+
+        <app-button
+          size="medium"
+          appearance="outline"
+          class="cancel__button"
+          customTypographyClass="text-body-12"
+          (click)="addLeader()"
+          [disabled]="!selectedLeaderId"
+        >
+          Подтвердить выбор
+        </app-button>
+      </div>
+    </app-modal>
+
+    <app-button
+      (click)="addGoal()"
+      size="big"
+      appearance="outline"
+      customTypographyClass="text-body-12"
+    >
       <span>Добавить краткосрочную цель проекта</span>
       <i appIcon icon="plus" appSquare="12"></i>
     </app-button>
 
-    <div>
-      @if (hasLinks) {
-      <ul formArrayName="links" class="project__links--wrapper">
-        @for (control of links.controls; track i; let i = $index) {
-        <li class="project__links">
-          <form [formGroupName]="i" class="project__links">
-            @if (links.at(i)?.get("link"); as link) {
-            <fieldset style="flex-grow: 1">
-              <label class="text-body-12 field-label">Ссылка на контакты и сообщества</label>
-              <app-input
-                size="big"
-                [error]="link | controlError"
-                placeholder="@eeeasycarrer"
-                formControlName="link"
-              ></app-input>
-              @if (link | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </form>
-          <app-button
-            class="project__links--remove"
-            color="red"
-            (click)="removeLink(i)"
-            type="button"
-          >
-            <i appIcon icon="basket" appSquare="20"></i>
-          </app-button>
-        </li>
-        }
-      </ul>
+    @if (hasLinks) {
+    <ul formArrayName="links" class="project__links--wrapper">
+      @for (control of links.controls; track i; let i = $index) {
+      <li class="project__links">
+        <fieldset style="flex-grow: 1">
+          <label class="text-body-12 field-label">Ссылка на контакты и сообщества</label>
+          <app-input
+            size="big"
+            [error]="links.at(i) | controlError"
+            placeholder="@eeeasycarrer"
+            [formControlName]="i"
+          ></app-input>
+          @if (links.at(i) | controlError: "required") {
+          <div class="text-body-10 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        <app-button
+          class="project__links--remove"
+          color="red"
+          (click)="removeLink(i)"
+          type="button"
+        >
+          <i appIcon icon="basket" appSquare="20"></i>
+        </app-button>
+      </li>
       }
-    </div>
+    </ul>
+    }
 
     <app-button
       (click)="addLink()"

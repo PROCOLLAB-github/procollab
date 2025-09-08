@@ -177,7 +177,7 @@
 
 <app-modal [open]="skillsGroupsModalOpen()" class="modal">
   <div class="modal__wrapper">
-    <h4 class="text-heading-4">Библиотека навыков</h4>
+    <p class="text-body-14">Библиотека навыков</p>
     <div class="modal__content">
       <div class="modal__skills-groups">
         <ul>
@@ -187,7 +187,10 @@
               [title]="skillsGroup.name"
               [options]="skillsGroup.skills"
               [selected]="this.vacancyForm.getRawValue().skills"
+              [hasOpenGroups]="hasOpenSkillsGroups"
+              [disabled]="hasOpenSkillsGroups && !openGroupIds.has(skillsGroup.id)"
               (optionToggled)="onToggleSkill($event)"
+              (groupToggled)="onGroupToggled($event, skillsGroup.id)"
             ></app-skills-group>
           </li>
           }

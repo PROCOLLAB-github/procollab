@@ -26,10 +26,8 @@ import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
     InputComponent,
     ButtonComponent,
     IconComponent,
-    SelectComponent,
     ControlErrorPipe,
     InviteCardComponent,
-    ModalComponent,
     CollaboratorCardComponent,
     TooltipComponent,
   ],
@@ -147,7 +145,14 @@ export class ProjectTeamStepComponent implements OnInit {
    */
   submitInvite(): void {
     const projectId = Number(this.route.snapshot.paramMap.get("projectId"));
-    this.projectTeamService.submitInvite(projectId);
+
+    if (this.link?.value.trim() || this.role?.value.trim()) {
+      this.projectTeamService.submitInvite(projectId);
+      this.showFields = false;
+      return;
+    }
+
+    this.showFields = false;
   }
 
   /**

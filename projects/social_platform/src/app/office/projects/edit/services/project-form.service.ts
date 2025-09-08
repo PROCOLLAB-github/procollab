@@ -10,6 +10,7 @@ import {
   ValidatorFn,
 } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
+import { Goal } from "@office/models/goals.model";
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
 import { Project } from "@office/models/project.model";
 import { ProjectService } from "@office/services/project.service";
@@ -56,8 +57,14 @@ export class ProjectFormService {
       problem: ["", [Validators.required, Validators.maxLength(1000)]],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
-      achievementsName: [""],
-      achievementsDate: [""],
+      title: [""],
+      status: [""],
+
+      goals: this.fb.array([]),
+      goalName: [""],
+      goalDate: [""],
+      goalLeader: [null],
+
       draft: [null],
     });
 
@@ -92,7 +99,7 @@ export class ProjectFormService {
    * Заполняет основную форму данными существующего проекта.
    * @param project экземпляр Project с текущими данными
    */
-  public initializeProjectData(project: Project): void {
+  public initializeProjectData(project: Project, goals: Goal[]): void {
     // Заполняем простые поля
     this.projectForm.patchValue({
       imageAddress: project.imageAddress,
@@ -117,6 +124,8 @@ export class ProjectFormService {
     this.populateLinksFormArray(project.links || []);
 
     this.populateAchievementsFormArray(project.achievements || []);
+
+    this.populateGoalsFormArray(goals || []);
   }
 
   /**
@@ -131,7 +140,7 @@ export class ProjectFormService {
     }
 
     links.forEach(link => {
-      linksFormArray.push(this.fb.control(link));
+      linksFormArray.push(this.fb.control(link, [Validators.required]));
     });
   }
 
@@ -149,10 +158,32 @@ export class ProjectFormService {
     achievements.forEach((achievement, index) => {
       const achievementGroup = this.fb.group({
         id: achievement.id ?? index,
-        achievementsName: [achievement.achievementsName || "", Validators.required],
-        achievementsDate: [achievement.achievementsDate || "", Validators.required],
+        title: [achievement.title || "", Validators.required],
+        status: [achievement.status || "", Validators.required],
       });
       achievementsFormArray.push(achievementGroup);
+    });
+  }
+
+  /**
+   * Заполняет FormArray цели данными из проекта
+   * @param goals массив целей из проекта
+   */
+  private populateGoalsFormArray(goals: any[]): void {
+    const goalsFormArray = this.projectForm.get("goals") as FormArray;
+
+    while (goalsFormArray.length !== 0) {
+      goalsFormArray.removeAt(0);
+    }
+
+    goals.forEach(goal => {
+      const goalsGroup = this.fb.group({
+        goalName: [goal.goalName || "", Validators.required],
+        goalDate: [goal.goalDate || "", Validators.required],
+        goalLeader: [goal.goalLeader || "", Validators.required],
+        isDone: false,
+      });
+      goalsFormArray.push(goalsGroup);
     });
   }
 

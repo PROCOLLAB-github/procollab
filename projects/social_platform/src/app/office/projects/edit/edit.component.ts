@@ -49,6 +49,9 @@ import { ProjectTeamService } from "./services/project-team.service";
 import { ProjectAdditionalStepComponent } from "./shared/project-additional-step/project-additional-step.component";
 import { ProjectAdditionalService } from "./services/project-additional.service";
 import { ProjectAchievementsService } from "./services/project-achievements.service";
+import { Goal } from "@office/models/goals.model";
+import { ProjectGoalService } from "./services/project-goals.service";
+import { SnackbarService } from "@ui/services/snackbar.service";
 
 /**
  * Компонент редактирования проекта
@@ -116,6 +119,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly projectVacancyService: ProjectVacancyService,
     private readonly projectTeamService: ProjectTeamService,
     private readonly projectAchievementsService: ProjectAchievementsService,
+    private readonly snackBarService: SnackbarService,
     private readonly skillsService: SkillsService,
     private readonly projectAdditionalService: ProjectAdditionalService
   ) {}
@@ -210,6 +214,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.projectStepService.getCurrentStep()();
   }
 
+  get hasOpenSkillsGroups(): boolean {
+    return this.openGroupIds.size > 0;
+  }
+
   // Состояние компонента
   isCompleted = false;
   isSendDescisionToPartnerProgramProject = false;
@@ -251,6 +259,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   projSubmitInitiated = false;
   projFormIsSubmittingAsPublished = false;
   projFormIsSubmittingAsDraft = false;
+  openGroupIds = new Set<number>();
 
   /**
    * Навигация между шагами редактирования
@@ -258,6 +267,14 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   navigateStep(step: EditStep): void {
     this.projectStepService.navigateToStep(step);
+  }
+
+  onGroupToggled(isOpen: boolean, groupId: number) {
+    if (isOpen) {
+      this.openGroupIds.add(groupId);
+    } else {
+      this.openGroupIds.delete(groupId);
+    }
   }
 
   /**
@@ -382,6 +399,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectVacancyService.submitVacancy(projectId);
     }
 
+    console.log(payload.goals);
+
     if (
       !this.validationService.getFormValidation(this.projectForm) ||
       !this.validationService.getFormValidation(this.additionalForm) ||
@@ -391,15 +410,17 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.setProjFormIsSubmitting(true);
-    this.projectService.updateProject(projectId, payload).subscribe({
-      next: () => {
-        this.setProjFormIsSubmitting(false);
-        this.router.navigateByUrl(`/office/projects/my`);
-      },
-      error: () => {
-        this.setProjFormIsSubmitting(false);
-      },
-    });
+    // this.projectService.updateProject(projectId, payload).subscribe({
+    //   next: () => {
+    //     this.snackBarService.success("Данные успешно сохранены");
+    //     this.setProjFormIsSubmitting(false);
+    //     this.router.navigateByUrl(`/office/projects/my`);
+    //   },
+    //   error: () => {
+    //     this.setProjFormIsSubmitting(false);
+    //     this.snackBarService.error("Что-то пошло не так!");
+    //   },
+    // });
   }
 
   // Методы для работы с модальными окнами
@@ -565,9 +586,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         concatMap(() => this.route.data),
         map(d => d["data"])
       )
-      .subscribe(([project, invites]: [Project, Invite[]]) => {
+      .subscribe(([project, goals, invites]: [Project, Goal[], Invite[]]) => {
         // Используем сервис для инициализации данных проекта
-        this.projectFormService.initializeProjectData(project);
+        this.projectFormService.initializeProjectData(project, goals);
         this.projectTeamService.setInvites(invites);
         this.projectTeamService.setCollaborators(project.collaborators);
 

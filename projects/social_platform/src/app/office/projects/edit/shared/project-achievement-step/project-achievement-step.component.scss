@@ -31,6 +31,12 @@
   &__right {
     flex-basis: 50%;
   }
+
+  &__achievements {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
 }
 
 .achievement {

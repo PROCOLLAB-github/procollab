@@ -10,6 +10,7 @@ import { ApiPagination } from "@models/api-pagination.model";
 import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectAssign } from "@office/projects/models/project-assign.model";
 import { projectNewAdditionalProgramVields } from "@office/models/partner-program-fields.model";
+import { Goal } from "@office/models/goals.model";
 
 /**
  * Сервис для управления проектами
@@ -67,6 +68,15 @@ export class ProjectService {
    */
   getMy(params?: HttpParams): Observable<ApiPagination<Project>> {
     return this.apiService.get<ApiPagination<Project>>(`${this.AUTH_USERS_URL}/projects/`, params);
+  }
+
+  /**
+   * Получает список целей проекта
+   *
+   * @returns Observable<Goal> - объект с массивом целей проекта
+   */
+  getGoals(projectId: number): Observable<Goal[]> {
+    return this.apiService.get<Goal[]>(`${this.PROJECTS_URL}/${projectId}/goals/`);
   }
 
   /**
