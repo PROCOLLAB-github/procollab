@@ -14,6 +14,7 @@ import { ActivatedRoute } from "@angular/router";
 import { IconComponent } from "@uilib";
 import { CollaboratorCardComponent } from "@office/shared/collaborator-card/collaborator-card.component";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
+import { Collaborator } from "@office/models/collaborator.model";
 
 @Component({
   selector: "app-project-team-step",
@@ -176,5 +177,9 @@ export class ProjectTeamStepComponent implements OnInit {
     if (!open) {
       this.closeInviteModal();
     }
+  }
+
+  onCollaboratorRemove(collaboratorId: number): void {
+    this.projectTeamService.removeCollaborator(collaboratorId);
   }
 }

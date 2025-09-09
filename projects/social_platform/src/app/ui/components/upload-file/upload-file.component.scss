@@ -7,7 +7,7 @@
   height: 120px;
   padding: 18px 30px;
   cursor: pointer;
-  border: 1px solid var(--dark-grey);
+  border: 0.5px solid var(--dark-grey);
   border-radius: var(--rounded-md);
 
   &__empty {
@@ -27,11 +27,11 @@
   }
 
   &--error {
-    border: 2px solid var(--red);
+    border: 0.5px solid var(--red);
   }
 
   &:hover {
-    border: 1px solid var(--gray);
+    border: 0.5px solid var(--gray);
   }
 }
 

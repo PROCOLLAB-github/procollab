@@ -51,7 +51,7 @@ export class ButtonComponent implements OnInit {
   @Input() hasBorder = true;
 
   /** Тип HTML кнопки */
-  @Input() type: "submit" | "reset" | "button" = "button";
+  @Input() type: "submit" | "reset" | "button" | "icon" = "button";
 
   /** Стиль отображения */
   @Input() appearance: "inline" | "outline" = "inline";

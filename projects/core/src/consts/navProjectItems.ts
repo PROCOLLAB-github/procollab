@@ -9,26 +9,26 @@ import { EditStep } from "@office/projects/edit/services/project-step.service";
 export const navItems = [
   {
     step: "main" as EditStep, // Идентификатор шага
-    label: "Основные данные", // Отображаемый текст
+    label: "основные данные", // Отображаемый текст
   },
   {
     step: "contacts" as EditStep,
-    label: "Партнеры и ресурсы",
+    label: "партнеры и ресурсы",
   },
   {
     step: "achievements" as EditStep,
-    label: "Достижения",
+    label: "достижения",
   },
   {
     step: "vacancies" as EditStep,
-    label: "Вакансии",
+    label: "вакансии",
   },
   {
     step: "team" as EditStep,
-    label: "Команда",
+    label: "команда",
   },
   {
     step: "additional" as EditStep,
-    label: "Данные для конкурсов",
+    label: "данные для конкурсов",
   },
 ];

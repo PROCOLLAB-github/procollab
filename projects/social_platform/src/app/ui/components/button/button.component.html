@@ -1,6 +1,6 @@
 <!-- @format -->
 <button
-  [type]="type"
+  [type]="type === 'icon' ? 'button' : type"
   [class]="'button text-body-12' + ' ' + customTypographyClass"
   [ngClass]="{
     'button--red': color === 'red',
@@ -14,7 +14,10 @@
     'button--white': color === 'white',
     'button--small': size === 'small',
     'button--medium': size === 'medium',
-    'button--big': size === 'big'
+    'button--big': size === 'big',
+    'button--small--icon': size === 'small' && type === 'icon',
+    'button--medium--icon': size === 'medium' && type === 'icon',
+    'button--big--icon': size === 'big' && type === 'icon',
   }"
   [style.background-color]="backgroundColor"
   [disabled]="disabled"

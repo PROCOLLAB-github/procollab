@@ -6,7 +6,7 @@
       @if (imageAddress; as imageAddress) {
       <div class="project__image">
         <label class="field-label text-body-12" style="text-align: center" for="name"
-          >Логотип</label
+          >логотип</label
         >
         <app-avatar-control
           id="imageAddress"
@@ -30,7 +30,7 @@
       } @if (presentationAddress; as presentationAddress) {
       <fieldset class="project__file">
         <label class="field-label text-body-12" style="text-align: center" for="name"
-          >Презентация</label
+          >презентация</label
         >
         <app-upload-file
           formControlName="presentationAddress"
@@ -52,7 +52,7 @@
       } @if (coverImageAddress; as coverImageAddress) {
       <fieldset class="project__file">
         <label class="field-label text-body-12" for="name" style="text-align: center"
-          >Обложка</label
+          >обложка</label
         >
         <app-upload-file
           formControlName="coverImageAddress"
@@ -92,7 +92,7 @@
     <div class="project__grid" style="grid-template-columns: 1fr 1fr 1fr 0.2fr">
       @if (name; as name) {
       <fieldset>
-        <label class="field-label text-body-12" for="name">Название</label>
+        <label class="field-label text-body-12" for="name">название</label>
         <app-input
           size="big"
           id="name"
@@ -108,7 +108,7 @@
       </fieldset>
       } @if (region; as region) {
       <fieldset>
-        <label class="field-label text-body-12" for="region">Регион</label>
+        <label class="field-label text-body-12" for="region">регион</label>
         <app-input
           size="big"
           id="region"
@@ -124,7 +124,7 @@
       </fieldset>
       } @if (industry; as industry) {
       <fieldset>
-        <label class="field-label text-body-12" for="industry">Сфера</label>
+        <label class="field-label text-body-12" for="industry">сфера</label>
         @if (industries$ | async; as industries) {
         <app-select
           size="big"
@@ -145,7 +145,7 @@
           class="field-label text-body-12"
           for="implementationDeadline"
           style="text-align: center"
-          >Дата</label
+          >дата</label
         >
         <app-input
           size="small"
@@ -173,7 +173,7 @@
 
   @if (problem; as problem) {
   <fieldset class="project__problem">
-    <label class="field-label text-body-12" for="problem">Проблема, которую решает проект</label>
+    <label class="field-label text-body-12" for="problem">проблема, которую решает проект</label>
     <app-input
       size="big"
       id="problem"
@@ -189,7 +189,7 @@
   </fieldset>
   } @if (description; as description) {
   <fieldset class="project__description">
-    <label for="description" class="field-label text-body-12">Информация</label>
+    <label for="description" class="field-label text-body-12">информация</label>
     <app-textarea
       size="big"
       id="description"
@@ -214,7 +214,7 @@
   <div class="project__info--additional">
     @if (actuality; as actuality) {
     <fieldset>
-      <label class="field-label text-body-12" for="actuality">Актуальность</label>
+      <label class="field-label text-body-12" for="actuality">актуальность</label>
       <app-textarea
         size="big"
         id="actuality"
@@ -236,7 +236,7 @@
     </fieldset>
     } @if (targetAudience; as targetAudience) {
     <fieldset>
-      <label class="field-label text-body-12" for="actuality">Целевая аудтория</label>
+      <label class="field-label text-body-12" for="actuality">целевая аудтория</label>
       <app-textarea
         size="big"
         id="targetAudience"
@@ -288,7 +288,7 @@
         <div [formGroupName]="i" class="project__links">
           @if (goals.at(i)?.get("title"); as goalName) {
           <fieldset style="flex-grow: 1">
-            <label class="text-body-12 field-label">Краткосрочные цели проекта</label>
+            <label class="text-body-12 field-label">краткосрочные цели проекта</label>
             <app-input
               size="big"
               [error]="goalName | controlError"
@@ -303,7 +303,7 @@
           </fieldset>
           } @if (goals.at(i)?.get("completionDate"); as goalDate) {
           <fieldset>
-            <label class="text-body-12 field-label" style="text-align: center">Дата</label>
+            <label class="text-body-12 field-label" style="text-align: center">дата</label>
             <app-input
               size="small"
               type="date"
@@ -319,14 +319,19 @@
           </fieldset>
           } @if (goals.at(i)?.get("responsible"); as goalLeader) {
           <fieldset>
-            <label class="text-body-12 field-label" style="text-align: center">Лидер</label>
+            <label class="text-body-12 field-label" style="text-align: center">лидер</label>
 
             @if (getSelectedLeaderForGoal(i); as selectedLeader) {
             <div class="selected-leader" (click)="toggleGoalLeaderModal(i)">
               <app-avatar [url]="selectedLeader.avatar" [size]="40"></app-avatar>
             </div>
             } @else {
-            <app-button (click)="toggleGoalLeaderModal(i)" size="small" appearance="outline">
+            <app-button
+              type="icon"
+              (click)="toggleGoalLeaderModal(i)"
+              size="small"
+              appearance="outline"
+            >
               <i appIcon icon="add-person" appSquare="14"></i>
             </app-button>
             } @if (goalLeader | controlError: "required") {
@@ -341,9 +346,9 @@
           class="project__links--remove"
           color="red"
           (click)="removeGoal(i, goals.value[i].id)"
-          type="button"
+          type="icon"
         >
-          <i appIcon icon="basket" appSquare="20"></i>
+          <i appIcon icon="basket" appSquare="14"></i>
         </app-button>
       </li>
       }
@@ -360,7 +365,7 @@
             icon="cross"
             class="cancel__cross"
           ></i>
-          <p class="cancel__title text-body-14">Выберите ответственного</p>
+          <p class="cancel__title text-body-14">выберите ответственного</p>
 
           <div class="project__invite">
             <ul
@@ -396,7 +401,7 @@
           (click)="addLeader()"
           [disabled]="!selectedLeaderId"
         >
-          Подтвердить выбор
+          подтвердить выбор
         </app-button>
       </div>
     </app-modal>
@@ -408,7 +413,7 @@
       customTypographyClass="text-body-12"
       [style.margin-bottom]="hasGoals ? '12px' : '35px'"
     >
-      <span>Добавить краткосрочную цель проекта</span>
+      <span>добавить краткосрочную цель проекта</span>
       <i appIcon icon="plus" appSquare="12"></i>
     </app-button>
 
@@ -417,7 +422,7 @@
       @for (control of links.controls; track i; let i = $index) {
       <li class="project__links">
         <fieldset style="flex-grow: 1">
-          <label class="text-body-12 field-label">Ссылка на контакты и сообщества</label>
+          <label class="text-body-12 field-label">ссылка на контакты и сообщества</label>
           <app-input
             size="big"
             [error]="links.at(i) | controlError"
@@ -430,13 +435,8 @@
           </div>
           }
         </fieldset>
-        <app-button
-          class="project__links--remove"
-          color="red"
-          (click)="removeLink(i)"
-          type="button"
-        >
-          <i appIcon icon="basket" appSquare="20"></i>
+        <app-button class="project__links--remove" color="red" (click)="removeLink(i)" type="icon">
+          <i appIcon icon="basket" appSquare="14"></i>
         </app-button>
       </li>
       }
@@ -449,7 +449,7 @@
       appearance="outline"
       customTypographyClass="text-body-12"
     >
-      <span>Добавить ссылку на контакты и сообщества</span>
+      <span>добавить ссылку на контакты и сообщества</span>
       <i appIcon icon="plus" appSquare="12"></i>
     </app-button>
   </div>

@@ -12,12 +12,13 @@
   &__top {
     position: fixed;
     top: 5%;
-    left: 20%;
+    left: 12%;
     z-index: 10;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 72%;
+    justify-content: space-evenly;
+    gap: 12%;
+    width: 88%;
     background-color: var(--white);
     border-radius: var(--rounded-xxl);
   }
@@ -111,6 +112,7 @@
     @include responsive.apply-desktop {
       display: flex;
       gap: 10px;
+      align-items: center;
     }
   }
 

@@ -17,7 +17,7 @@
     @if (fieldToDisplayMode === "chip" && value()) {
     <div class="field__chip">
       <span class="text-body-12">{{ $any(value())[fieldToDisplay] || value() }}</span>
-      <i appIcon icon="basket" appSquare="18" (click)="onClearValue($event)"></i>
+      <i appIcon icon="basket" appSquare="14" (click)="onClearValue($event)"></i>
     </div>
     }
   </div>
@@ -32,7 +32,13 @@
     } @if (searchIcon && slimVersion) {
     <i appIcon [icon]="searchIcon" appSquare="12"></i>
     } @if (searchIcon && !slimVersion) {
-    <i (click)="openSkillsFunc.emit()" appIcon [icon]="searchIcon" appSquare="16"></i>
+    <i
+      (click)="openSkillsFunc.emit()"
+      [style.color]="searchIcon === 'box' ? 'var(--accent)' : 'var(--black)'"
+      appIcon
+      [icon]="searchIcon"
+      appSquare="16"
+    ></i>
     }
   </div>
   @if (isOpen()) {

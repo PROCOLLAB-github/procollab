@@ -6,7 +6,7 @@
     <form [formGroup]="vacancyForm">
       @if (role; as role) {
       <fieldset class="vacancy__role">
-        <label class="field-label">Название вакансии</label>
+        <label class="field-label">название вакансии</label>
         <app-input
           size="big"
           id="vacancy_role"
@@ -22,7 +22,7 @@
       </fieldset>
       } @if (description; as description) {
       <fieldset class="vacancy__description">
-        <label class="field-label">Описание вакансии</label>
+        <label class="field-label">описание вакансии</label>
         <app-textarea
           size="big"
           id="vacancy_description"
@@ -34,7 +34,7 @@
           [tooltipWidth]="350"
           formControlName="description"
           [error]="(description | controlError) && vacancySubmitInitiated()"
-          placeholder="Опишите вакансию"
+          placeholder="опишите вакансию"
         ></app-textarea>
         @if ((description | controlError: "required") && vacancySubmitInitiated()) {
         <div class="text-body-10 error">
@@ -48,7 +48,7 @@
         <div class="vacancy__info">
           @if (requiredExperience; as requiredExperience) {
           <fieldset>
-            <label class="field-label">Опыт</label>
+            <label class="field-label">опыт</label>
             <app-select
               size="big"
               id="requiredExperience"
@@ -66,7 +66,7 @@
           </fieldset>
           } @if (workFormat; as workFormat) {
           <fieldset>
-            <label class="field-label">Формат</label>
+            <label class="field-label">формат</label>
             <app-select
               size="big"
               id="workFormat"
@@ -88,7 +88,7 @@
         <div class="vacancy__additional">
           @if (salary; as salary) {
           <fieldset>
-            <label class="field-label">Заработная плата</label>
+            <label class="field-label">заработная плата</label>
             <app-input
               size="big"
               id="salary"
@@ -104,7 +104,7 @@
           </fieldset>
           } @if (workSchedule; as workSchedule) {
           <fieldset>
-            <label class="field-label">График</label>
+            <label class="field-label">график</label>
             <app-select
               size="big"
               id="workSchedule"
@@ -125,7 +125,7 @@
       </div>
 
       <fieldset class="vacancy__search">
-        <label class="field-label">Навыки необходимые для кандидата</label>
+        <label class="field-label">навыки необходимые для кандидата</label>
         <div class="vacancies">
           <app-autocomplete-input
             class="vacancies__input"
@@ -184,7 +184,7 @@
       [loader]="vacancyIsSubmitting()"
       (click)="showFields ? submitVacancy() : createVacancyBlock()"
     >
-      <span>{{ showFields ? "Добавить вакансию" : "Создать вакансию" }}</span>
+      <span>{{ showFields ? "добавить вакансию" : "создать вакансию" }}</span>
       <i appIcon icon="plus" appSquare="10"></i>
     </app-button>
   </div>

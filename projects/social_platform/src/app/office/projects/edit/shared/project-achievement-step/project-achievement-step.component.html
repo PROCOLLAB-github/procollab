@@ -8,7 +8,7 @@
         <form [formGroupName]="i" class="achievement">
           @if (achievements.at(i)?.get("title"); as achievementsName) {
           <fieldset style="flex-grow: 1">
-            <label class="text-body-12 field-label">Описание достижения</label>
+            <label class="text-body-12 field-label">описание достижения</label>
             <app-input
               size="big"
               [haveHint]="true"
@@ -18,7 +18,7 @@
               [tooltipPosition]="'left'"
               [tooltipWidth]="350"
               [error]="achievementsName | controlError"
-              placeholder="Название конкурса"
+              placeholder="Isakovsanya56@yandex.ru"
               formControlName="title"
             ></app-input>
             @if (achievementsName | controlError: "required") {
@@ -29,7 +29,7 @@
           </fieldset>
           } @if (achievements.at(i).get("status"); as achievementsDate) {
           <fieldset>
-            <label class="text-body-12 field-label" style="text-align: center">Дата</label>
+            <label class="text-body-12 field-label" style="text-align: center">дата</label>
             <app-input
               size="small"
               [haveHint]="true"
@@ -48,8 +48,13 @@
             }
           </fieldset>
           }
-          <app-button class="achievement__remove" color="red" (click)="removeAchievement(i)">
-            <i appIcon icon="basket" appSquare="20"></i>
+          <app-button
+            class="achievement__remove"
+            type="icon"
+            color="red"
+            (click)="removeAchievement(i)"
+          >
+            <i appIcon icon="basket" appSquare="14"></i>
           </app-button>
         </form>
       </li>
@@ -65,7 +70,7 @@
       class="vacancy__submit"
       (click)="addAchievement()"
     >
-      <span class="vacancy__submit--text">Добавить достижение</span>
+      <span class="vacancy__submit--text">добавить достижение</span>
       <i appIcon icon="plus" appSquare="12"></i>
     </app-button>
 

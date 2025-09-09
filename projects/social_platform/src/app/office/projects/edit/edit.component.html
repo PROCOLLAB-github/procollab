@@ -3,7 +3,7 @@
   <div class="project__top">
     <div class="project__back" [routerLink]="'/office/projects/' + profileId">
       <i appIcon icon="left-arrow" appSquare="24"></i>
-      <h1 class="project__title">Редактировать проект</h1>
+      <h1 class="project__title">редактировать проект</h1>
     </div>
     <div class="project__save">
       <app-button
@@ -12,7 +12,7 @@
         color="red"
         (click)="deleteProject()"
       >
-        Удалить проект
+        удалить проект
       </app-button>
       <app-button
         size="medium"
@@ -21,7 +21,7 @@
         [loader]="projFormIsSubmittingAsDraft"
         (click)="saveProjectAsDraft()"
       >
-        Сохранить черновик
+        сохранить черновик
       </app-button>
       <app-button
         size="medium"
@@ -29,7 +29,7 @@
         [loader]="projFormIsSubmittingAsPublished"
         (click)="saveProjectAsPublished()"
       >
-        {{ isCompetitive ? "Отправить заявку" : "Сохранить" }}
+        {{ isCompetitive ? "отправить заявку" : "сохранить" }}
       </app-button>
     </div>
   </div>

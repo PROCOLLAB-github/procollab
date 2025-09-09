@@ -9,7 +9,10 @@
     >
       @for (collaborator of collaborators; track collaborator.userId) {
       <li class="invite__item">
-        <app-collaborator-card [collaborator]="collaborator"></app-collaborator-card>
+        <app-collaborator-card
+          (collaboratorRemoved)="onCollaboratorRemove($event)"
+          [collaborator]="collaborator"
+        ></app-collaborator-card>
       </li>
       }
     </ul>
@@ -21,7 +24,7 @@
       <form [formGroup]="inviteForm">
         @if (link; as link) {
         <fieldset class="invite__role">
-          <label class="text-body-12 field-label">Ссылка на пользователя внутри procollab</label>
+          <label class="text-body-12 field-label">ссылка на пользователя внутри procollab</label>
           <app-input
             size="big"
             id="invite_link"
@@ -47,7 +50,7 @@
         </fieldset>
         } @if (role; as role) {
         <fieldset class="invite__role">
-          <label class="text-body-12 field-label">Роль в проекте</label>
+          <label class="text-body-12 field-label">роль в проекте</label>
           <app-input
             size="big"
             id="invite_role"
@@ -122,7 +125,7 @@
       class="invite__submit"
       customTypographyClass="text-body-12"
     >
-      <span>{{ showFields ? "Отправить приглашение" : "Создать приглашение" }}</span>
+      <span>{{ showFields ? "отправить приглашение" : "создать приглашение" }}</span>
       <i appIcon icon="plus" appSquare="10"></i>
 
       @if (!showFields) {
