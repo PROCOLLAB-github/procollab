@@ -39,6 +39,7 @@ import { ProjectTeamService } from "../../services/project-team.service";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ProjectService } from "@office/services/project.service";
 import { Goal } from "@office/models/goals.model";
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: "app-project-main-step",
@@ -60,6 +61,7 @@ import { Goal } from "@office/models/goals.model";
     ModalComponent,
     AvatarComponent,
     FormsModule,
+    RouterLink,
   ],
 })
 export class ProjectMainStepComponent implements OnInit, OnDestroy {

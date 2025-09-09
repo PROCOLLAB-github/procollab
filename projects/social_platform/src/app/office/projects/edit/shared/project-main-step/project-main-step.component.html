@@ -322,8 +322,10 @@
             <label class="text-body-12 field-label" style="text-align: center">лидер</label>
 
             @if (getSelectedLeaderForGoal(i); as selectedLeader) {
-            <div class="selected-leader" (click)="toggleGoalLeaderModal(i)">
-              <app-avatar [url]="selectedLeader.avatar" [size]="40"></app-avatar>
+            <div class="selected-leader">
+              <a [routerLink]="'/office/profile/' + selectedLeader.userId">
+                <app-avatar [url]="selectedLeader.avatar" [size]="40"></app-avatar>
+              </a>
             </div>
             } @else {
             <app-button
