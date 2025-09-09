@@ -10,11 +10,18 @@
  * @format
  */
 
-class responsibleInfo {
+class ResponsibleInfo {
   id!: number;
   firstName!: string;
   lastName!: string;
   avatar!: string | null;
+}
+
+export class GoalPostForm {
+  title!: string;
+  completionDate!: string;
+  responsible!: number;
+  isDone!: boolean;
 }
 
 export class Goal {
@@ -22,7 +29,7 @@ export class Goal {
   project!: number;
   title!: string;
   completionDate!: string;
-  responsibleId!: number;
-  responsibleInfo!: responsibleInfo;
+  responsible!: number;
+  responsibleInfo!: ResponsibleInfo;
   isDone!: boolean;
 }

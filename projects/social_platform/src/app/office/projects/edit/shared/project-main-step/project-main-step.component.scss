@@ -99,7 +99,6 @@
   &__links {
     display: flex;
     gap: 20px;
-    align-items: center;
     width: 100%;
 
     &--wrapper {
@@ -107,6 +106,7 @@
       flex-direction: column;
       gap: 20px;
       width: 100%;
+      margin-bottom: 15px;
     }
 
     li {
@@ -126,7 +126,7 @@
     }
 
     &--remove {
-      margin-top: 18px;
+      margin-top: 15px;
     }
   }
 
@@ -178,21 +178,6 @@
 
   &__button {
     margin-top: 20px;
-  }
-}
-
-.selected-leader {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 4px 8px;
-  cursor: pointer;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #f5f5f5;
   }
 }
 

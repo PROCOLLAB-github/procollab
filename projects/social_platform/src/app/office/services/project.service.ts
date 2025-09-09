@@ -10,7 +10,7 @@ import { ApiPagination } from "@models/api-pagination.model";
 import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectAssign } from "@office/projects/models/project-assign.model";
 import { projectNewAdditionalProgramVields } from "@office/models/partner-program-fields.model";
-import { Goal } from "@office/models/goals.model";
+import { Goal, GoalPostForm } from "@office/models/goals.model";
 
 /**
  * Сервис для управления проектами
@@ -77,6 +77,22 @@ export class ProjectService {
    */
   getGoals(projectId: number): Observable<Goal[]> {
     return this.apiService.get<Goal[]>(`${this.PROJECTS_URL}/${projectId}/goals/`);
+  }
+
+  /**
+   * Отправляем цель
+   */
+  postGoals(projectId: number, params: GoalPostForm) {
+    return this.apiService.post<GoalPostForm>(`${this.PROJECTS_URL}/${projectId}/goals/`, params);
+  }
+
+  /**
+   * Удаляем цель
+   */
+  deleteGoals(projectId: number, goalId: number) {
+    return this.apiService.delete<GoalPostForm>(
+      `${this.PROJECTS_URL}/${projectId}/goals/${goalId}`
+    );
   }
 
   /**

@@ -259,7 +259,11 @@
     }
   </div>
 
-  <div class="project__options">
+  <div
+    class="project__options"
+    [formGroup]="goalForm"
+    [style.gap]="hasGoals || hasLinks ? '0px' : '35px'"
+  >
     <!-- @if (!isProjectBoundToProgram) { @if (authService.profile | async; as profile) { @if (profile.id
     == leaderId) { @if (programTagsOptions.length) {
     <fieldset class="project__tags" style="margin-top: -10px">
@@ -281,15 +285,15 @@
     <ul formArrayName="goals" class="project__links--wrapper">
       @for (control of goals.controls; track i; let i = $index) {
       <li class="project__links">
-        <form [formGroupName]="i" class="project__links">
-          @if (goals.at(i)?.get("goalName"); as goalName) {
+        <div [formGroupName]="i" class="project__links">
+          @if (goals.at(i)?.get("title"); as goalName) {
           <fieldset style="flex-grow: 1">
             <label class="text-body-12 field-label">Краткосрочные цели проекта</label>
             <app-input
               size="big"
               [error]="goalName | controlError"
               placeholder="Заработать много денег"
-              formControlName="goalName"
+              formControlName="title"
             ></app-input>
             @if (goalName | controlError: "required") {
             <div class="text-body-10 error">
@@ -297,7 +301,7 @@
             </div>
             }
           </fieldset>
-          } @if (goals.at(i)?.get("goalDate"); as goalDate) {
+          } @if (goals.at(i)?.get("completionDate"); as goalDate) {
           <fieldset>
             <label class="text-body-12 field-label" style="text-align: center">Дата</label>
             <app-input
@@ -305,7 +309,7 @@
               type="date"
               [error]="goalDate | controlError"
               placeholder="21.05.25"
-              formControlName="goalDate"
+              formControlName="completionDate"
             ></app-input>
             @if (goalDate | controlError: "required") {
             <div class="text-body-10 error">
@@ -313,7 +317,7 @@
             </div>
             }
           </fieldset>
-          } @if (goals.at(i)?.get("goalLeader"); as goalLeader) {
+          } @if (goals.at(i)?.get("responsible"); as goalLeader) {
           <fieldset>
             <label class="text-body-12 field-label" style="text-align: center">Лидер</label>
 
@@ -332,11 +336,11 @@
             }
           </fieldset>
           }
-        </form>
+        </div>
         <app-button
           class="project__links--remove"
           color="red"
-          (click)="removeGoal(i)"
+          (click)="removeGoal(i, goals.value[i].id)"
           type="button"
         >
           <i appIcon icon="basket" appSquare="20"></i>
@@ -402,6 +406,7 @@
       size="big"
       appearance="outline"
       customTypographyClass="text-body-12"
+      [style.margin-bottom]="hasGoals ? '12px' : '35px'"
     >
       <span>Добавить краткосрочную цель проекта</span>
       <i appIcon icon="plus" appSquare="12"></i>

@@ -10,13 +10,11 @@ import {
   ValidatorFn,
 } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { Goal } from "@office/models/goals.model";
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
 import { Project } from "@office/models/project.model";
 import { ProjectService } from "@office/services/project.service";
 import { stripNullish } from "@utils/stripNull";
 import { concatMap, filter } from "rxjs";
-
 /**
  * Сервис для управления основной формой проекта и формой дополнительных полей партнерской программы.
  * Обеспечивает создание, инициализацию, валидацию, автосохранение, сброс и получение данных форм.
@@ -60,11 +58,6 @@ export class ProjectFormService {
       title: [""],
       status: [""],
 
-      goals: this.fb.array([]),
-      goalName: [""],
-      goalDate: [""],
-      goalLeader: [null],
-
       draft: [null],
     });
 
@@ -99,7 +92,7 @@ export class ProjectFormService {
    * Заполняет основную форму данными существующего проекта.
    * @param project экземпляр Project с текущими данными
    */
-  public initializeProjectData(project: Project, goals: Goal[]): void {
+  public initializeProjectData(project: Project): void {
     // Заполняем простые поля
     this.projectForm.patchValue({
       imageAddress: project.imageAddress,
@@ -122,10 +115,7 @@ export class ProjectFormService {
     }
 
     this.populateLinksFormArray(project.links || []);
-
     this.populateAchievementsFormArray(project.achievements || []);
-
-    this.populateGoalsFormArray(goals || []);
   }
 
   /**
@@ -162,28 +152,6 @@ export class ProjectFormService {
         status: [achievement.status || "", Validators.required],
       });
       achievementsFormArray.push(achievementGroup);
-    });
-  }
-
-  /**
-   * Заполняет FormArray цели данными из проекта
-   * @param goals массив целей из проекта
-   */
-  private populateGoalsFormArray(goals: any[]): void {
-    const goalsFormArray = this.projectForm.get("goals") as FormArray;
-
-    while (goalsFormArray.length !== 0) {
-      goalsFormArray.removeAt(0);
-    }
-
-    goals.forEach(goal => {
-      const goalsGroup = this.fb.group({
-        goalName: [goal.goalName || "", Validators.required],
-        goalDate: [goal.goalDate || "", Validators.required],
-        goalLeader: [goal.goalLeader || "", Validators.required],
-        isDone: false,
-      });
-      goalsFormArray.push(goalsGroup);
     });
   }
 
@@ -338,8 +306,6 @@ export class ProjectFormService {
   public resetForms(): void {
     this.projectForm.reset();
     this.additionalForm?.reset();
-
-    // Очищаем FormArray
     this.clearFormArrays();
   }
 
@@ -360,11 +326,14 @@ export class ProjectFormService {
   }
 
   /**
-   * Проверяет валидность обеих форм (основной и дополнительной).
-   * @returns true если обе формы валидны
+   * Проверяет валидность обеих форм (основной и дополнительной) включая цели.
+   * @returns true если все формы валидны
    */
   public validateAllForms(): boolean {
-    return this.validateForm() && this.validateAdditionalForm();
+    const mainFormValid = this.validateForm();
+    const additionalFormValid = this.validateAdditionalForm();
+
+    return mainFormValid && additionalFormValid;
   }
 
   /**

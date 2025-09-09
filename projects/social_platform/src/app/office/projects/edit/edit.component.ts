@@ -49,7 +49,7 @@ import { ProjectTeamService } from "./services/project-team.service";
 import { ProjectAdditionalStepComponent } from "./shared/project-additional-step/project-additional-step.component";
 import { ProjectAdditionalService } from "./services/project-additional.service";
 import { ProjectAchievementsService } from "./services/project-achievements.service";
-import { Goal } from "@office/models/goals.model";
+import { Goal, GoalPostForm } from "@office/models/goals.model";
 import { ProjectGoalService } from "./services/project-goals.service";
 import { SnackbarService } from "@ui/services/snackbar.service";
 
@@ -62,24 +62,8 @@ import { SnackbarService } from "@ui/services/snackbar.service";
  * - Загрузка файлов (презентация, обложка, аватар)
  * - Создание и редактирование вакансий с навыками
  * - Приглашение участников в команду
- * - Управление достижениями и ссылками проекта
+ * - Управление достижениями, ссылками и целями проекта
  * - Сохранение как черновик или публикация
- *
- * Принимает:
- * - ID проекта из URL параметров
- * - Данные проекта и приглашений через resolver
- * - Query параметр editingStep для определения активного шага
- *
- * Возвращает:
- * - Интерфейс редактирования с навигацией по шагам
- * - Формы для ввода данных проекта
- * - Модальные окна для управления навыками и приглашениями
- *
- * Особенности:
- * - Реактивные формы с валидацией
- * - Динамическое управление массивами (достижения, ссылки)
- * - Интеграция с внешними сервисами (навыки, программы)
- * - Поддержка автокомплита для навыков
  */
 @Component({
   selector: "app-edit",
@@ -121,7 +105,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly projectAchievementsService: ProjectAchievementsService,
     private readonly snackBarService: SnackbarService,
     private readonly skillsService: SkillsService,
-    private readonly projectAdditionalService: ProjectAdditionalService
+    private readonly projectAdditionalService: ProjectAdditionalService,
+    private readonly projectGoalService: ProjectGoalService // Добавляем ProjectGoalService
   ) {}
 
   // Получаем форму проекта из сервиса
@@ -134,7 +119,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.projectVacancyService.getVacancyForm();
   }
 
-  // Получаем форму вакансии из сервиса
+  // Получаем форму дополнительных полей из сервиса
   get additionalForm(): FormGroup {
     return this.projectAdditionalService.getAdditionalForm();
   }
@@ -144,7 +129,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.projectFormService.achievements;
   }
 
-  // Id редатируемой части проекта
+  // Id редактируемой части проекта
   get editIndex() {
     return this.projectFormService.editIndex;
   }
@@ -194,6 +179,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.profile$?.unsubscribe();
     this.subscriptions.forEach($ => $?.unsubscribe());
+
+    // Сброс состояния ProjectGoalService при уничтожении компонента
+    this.projectGoalService.reset();
   }
 
   // Опции для программных тегов
@@ -321,6 +309,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     // Очистка основной формы
     this.projectFormService.clearAllValidationErrors();
     this.projectAchievementsService.clearAllAchievementsErrors(this.achievements);
+
+    // Очистка ошибок целей теперь входит в clearAllValidationErrors() ProjectFormService
   }
 
   /**
@@ -399,8 +389,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectVacancyService.submitVacancy(projectId);
     }
 
-    console.log(payload.goals);
-
     if (
       !this.validationService.getFormValidation(this.projectForm) ||
       !this.validationService.getFormValidation(this.additionalForm) ||
@@ -410,17 +398,22 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.setProjFormIsSubmitting(true);
-    // this.projectService.updateProject(projectId, payload).subscribe({
-    //   next: () => {
-    //     this.snackBarService.success("Данные успешно сохранены");
-    //     this.setProjFormIsSubmitting(false);
-    //     this.router.navigateByUrl(`/office/projects/my`);
-    //   },
-    //   error: () => {
-    //     this.setProjFormIsSubmitting(false);
-    //     this.snackBarService.error("Что-то пошло не так!");
-    //   },
-    // });
+
+    this.projectService.updateProject(projectId, payload).subscribe({
+      next: () => {
+        this.projectGoalService.saveGoals(projectId).subscribe({
+          next: () => {
+            this.snackBarService.success("Данные успешно сохранены");
+            this.setProjFormIsSubmitting(false);
+            this.router.navigateByUrl(`/office/projects/my`);
+          },
+        });
+      },
+      error: () => {
+        this.setProjFormIsSubmitting(false);
+        this.snackBarService.error("Что-то пошло не так!");
+      },
+    });
   }
 
   // Методы для работы с модальными окнами
@@ -588,11 +581,11 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(([project, goals, invites]: [Project, Goal[], Invite[]]) => {
         // Используем сервис для инициализации данных проекта
-        this.projectFormService.initializeProjectData(project, goals);
+        this.projectFormService.initializeProjectData(project);
+        this.projectGoalService.initializeGoalsFromProject(goals);
         this.projectTeamService.setInvites(invites);
         this.projectTeamService.setCollaborators(project.collaborators);
 
-        // Инициализируем дополнительные поля через сервис
         if (project.partnerProgram) {
           this.isCompetitive = project.partnerProgram.canSubmit;
           this.isProjectBoundToProgram = !!project.partnerProgram.programId;

@@ -37,6 +37,8 @@ import { ProjectGoalService } from "../../services/project-goals.service";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ProjectTeamService } from "../../services/project-team.service";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { ProjectService } from "@office/services/project.service";
+import { Goal } from "@office/models/goals.model";
 
 @Component({
   selector: "app-project-main-step",
@@ -74,6 +76,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
 
   readonly authService = inject(AuthService);
+  private readonly projectService = inject(ProjectService);
   private readonly projectFormService = inject(ProjectFormService);
   private readonly projectContactsService = inject(ProjectContactsService);
   private readonly projectGoalsService = inject(ProjectGoalService);
@@ -92,6 +95,10 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
   // Получаем форму из сервиса
   get projectForm(): FormGroup {
     return this.projectFormService.getForm();
+  }
+
+  get goalForm(): FormGroup {
+    return this.projectGoalsService.getForm();
   }
 
   ngOnInit(): void {}
@@ -240,24 +247,25 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
   /**
    * Добавление цели
    */
-  addGoal(goalName?: string, goalDate?: string, goalLeader?: any): void {
+  addGoal(goalName?: string, goalDate?: string, goalLeader?: string): void {
     this.goals.push(
       this.fb.group({
-        goalName: [goalName, [Validators.required]],
-        goalDate: [goalDate, [Validators.required]],
-        goalLeader: [goalLeader, [Validators.required]],
+        title: [goalName, [Validators.required]],
+        completionDate: [goalDate, [Validators.required]],
+        responsible: [goalLeader, [Validators.required]],
       })
     );
 
-    this.projectGoalsService.addGoal(this.goals, this.projectForm);
+    this.projectGoalsService.addGoal(goalName, goalDate, goalLeader);
   }
 
   /**
    * Удаление цели
    * @param index - индекс цели
    */
-  removeGoal(index: number): void {
-    this.projectGoalsService.removeGoal(index, this.goals);
+  removeGoal(index: number, goalId: number): void {
+    this.projectGoalsService.removeGoal(index);
+    this.projectService.deleteGoals(this.projectId, goalId);
   }
 
   /**
@@ -265,7 +273,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
    */
   getSelectedLeaderForGoal(goalIndex: number) {
     const goalFormGroup = this.goals.at(goalIndex);
-    const leaderId = goalFormGroup?.get("goalLeader")?.value;
+    const leaderId = goalFormGroup?.get("responsible")?.value;
 
     if (!leaderId) return null;
 
@@ -296,21 +304,8 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
 
     // Устанавливаем выбранного лидера в форму
     const goalFormGroup = this.goals.at(goalIndex);
-    goalFormGroup?.get("goalLeader")?.setValue(this.selectedLeaderId);
+    goalFormGroup?.get("responsible")?.setValue(this.selectedLeaderId);
 
-    const selectedCollaborator = this.collaborators.find(
-      collab => collab.userId.toString() === this.selectedLeaderId
-    );
-
-    console.log("Выбран лидер для цели", goalIndex, ":", {
-      leaderId: this.selectedLeaderId,
-      leaderName: selectedCollaborator
-        ? `${selectedCollaborator.firstName} ${selectedCollaborator.lastName}`
-        : "Неизвестно",
-      goalName: goalFormGroup?.get("goalName")?.value,
-    });
-
-    // Закрываем модальное окно и очищаем состояние
     this.toggleGoalLeaderModal();
     this.selectedLeaderId = "";
   }
@@ -323,7 +318,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
 
     if (index !== undefined) {
       this.activeGoalIndex.set(index);
-      const currentLeader = this.goals.at(index)?.get("goalLeader")?.value;
+      const currentLeader = this.goals.at(index)?.get("responsible")?.value;
       this.selectedLeaderId = currentLeader || "";
     } else {
       this.activeGoalIndex.set(null);
