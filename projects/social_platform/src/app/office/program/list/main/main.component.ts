@@ -1,12 +1,15 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { map, Subscription } from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { ProgramCardComponent } from "../../shared/program-card/program-card.component";
 import { NavService } from "@office/services/nav.service";
 import Fuse from "fuse.js";
+import { CheckboxComponent, SelectComponent } from "@ui/components";
+import { generateOptionsList } from "@utils/generate-options-list";
+import { ClickOutsideModule } from "ng-click-outside";
 
 /**
  * Главный компонент списка программ
@@ -47,7 +50,13 @@ import Fuse from "fuse.js";
   templateUrl: "./main.component.html",
   styleUrl: "./main.component.scss",
   standalone: true,
-  imports: [RouterLink, ProgramCardComponent],
+  imports: [
+    RouterLink,
+    ProgramCardComponent,
+    CheckboxComponent,
+    SelectComponent,
+    ClickOutsideModule,
+  ],
 })
 export class ProgramMainComponent implements OnInit, OnDestroy {
   constructor(private readonly route: ActivatedRoute, private readonly navService: NavService) {}
@@ -57,6 +66,13 @@ export class ProgramMainComponent implements OnInit, OnDestroy {
   programs: Program[] = [];
   searchedPrograms: Program[] = [];
   subscriptions$: Subscription[] = [];
+
+  readonly programOptionsFilter = generateOptionsList(4, "strings", [
+    "все",
+    "актуальные",
+    "архив",
+    "учавстсвовал",
+  ]);
 
   ngOnInit(): void {
     this.navService.setNavTitle("Программы");
@@ -78,6 +94,15 @@ export class ProgramMainComponent implements OnInit, OnDestroy {
     });
 
     programs$ && this.subscriptions$.push(programs$);
+  }
+
+  isPparticipating = signal<boolean>(false);
+
+  /**
+   * Переключает состояние чекбокса
+   */
+  onTogglePparticipating(): void {
+    this.isPparticipating.set(!this.isPparticipating());
   }
 
   ngOnDestroy(): void {

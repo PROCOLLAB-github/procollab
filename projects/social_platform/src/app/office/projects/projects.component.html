@@ -3,7 +3,7 @@
 <main class="page">
   <div class="page__bar">
     @if (projectService.projectsCount$ | async; as count) {
-    <app-bar
+    <!-- <app-bar
       [backHave]="false"
       [ballHave]="true"
       [links]="[
@@ -29,7 +29,7 @@
           },
         ]"
     >
-    </app-bar>
+    </app-bar> -->
     <div class="bar__right">
       @if (isMy) {
       <app-button

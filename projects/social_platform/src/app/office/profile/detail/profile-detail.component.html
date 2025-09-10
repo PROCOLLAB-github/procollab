@@ -4,7 +4,7 @@
 <div class="profile">
   <section class="profile__bar">
     @if (loggedUserId$ | async; as loggedUserId) {
-    <app-bar
+    <!-- <app-bar
       class="bar"
       [backHave]="true"
       [links]="[
@@ -20,9 +20,9 @@
               isRouterLinkActiveOptions: false,
             },
           ]"
-    ></app-bar>
+    ></app-bar> -->
     } @else {
-    <app-bar [backHave]="true" [links]="[]"></app-bar>
+    <!-- <app-bar [backHave]="true" [links]="[]"></app-bar> -->
     }
   </section>
 

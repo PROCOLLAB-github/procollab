@@ -4,6 +4,7 @@ import { Component, OnInit } from "@angular/core";
 import { NavService } from "@services/nav.service";
 import { ActivatedRoute, RouterOutlet } from "@angular/router";
 import { BarComponent } from "@ui/components";
+import { BackComponent } from "@uilib";
 
 /**
  * Основной компонент детальной страницы программы
@@ -41,7 +42,7 @@ import { BarComponent } from "@ui/components";
   templateUrl: "./detail.component.html",
   styleUrl: "./detail.component.scss",
   standalone: true,
-  imports: [RouterOutlet, BarComponent],
+  imports: [RouterOutlet, BarComponent, BackComponent],
 })
 export class ProgramDetailComponent implements OnInit {
   constructor(private readonly navService: NavService, private readonly route: ActivatedRoute) {}

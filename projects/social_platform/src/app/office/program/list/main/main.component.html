@@ -10,4 +10,15 @@
     }
   </div>
   }
+
+  <div class="programs__filter">
+    <p class="text-body-14">фильтры</p>
+
+    <label (click)="onTogglePparticipating()" class="programs__filter--block">
+      <app-checkbox [checked]="isPparticipating()"></app-checkbox>
+      <span class="text-body-12 programs__filter--text">участвую</span>
+    </label>
+
+    <app-select size="big" placeholder="все" [options]="programOptionsFilter"></app-select>
+  </div>
 </div>

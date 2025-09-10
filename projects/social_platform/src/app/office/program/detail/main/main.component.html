@@ -1,5 +1,28 @@
 <!-- @format -->
 
+<!-- <app-bar
+  class="bar"
+  [links]="[
+    {
+      link: '/office/program' + '/' + programId!.toString(),
+      linkText: 'Страница программы',
+      isRouterLinkActiveOptions: true,
+    },
+
+    {
+      link: '/office/program' + '/' + programId!.toString() + '/' + 'projects',
+      linkText: 'Проекты-участники',
+      isRouterLinkActiveOptions: false,
+    },
+
+    {
+      link: '/office/program' + '/' + programId!.toString() + '/' + 'members',
+      linkText: 'Участники',
+      isRouterLinkActiveOptions: false,
+    },
+  ]"
+></app-bar> -->
+
 @if (program) {
 <main class="project">
   <section class="program__main">
@@ -18,24 +41,34 @@
           class="info__avatar"
           [url]="program.imageAddress"
           [hasBorder]="true"
-          [size]="140"
+          borderColor="dark-grey"
+          [size]="123"
+          (click)="onOpenDetailProgram()"
         ></app-avatar>
       </div>
+
       <div class="info__body">
-        <div class="info__text">
-          <h1 class="info__title">{{ program.name }}</h1>
-          <div class="info__row">
-            <app-tag color="accent">#{{ program.tag }}</app-tag>
-            <div class="info__location">
-              <i appIcon icon="geo-point" appSquare="10"></i>
-              {{ program.city }}
-            </div>
-          </div>
-        </div>
         <div class="info__actions">
-          @if (program.isUserMember || program.isUserManager) {
-          <app-button (click)="addProject()" customTypographyClass="text-body-12 bar__add-project">
-            <span class="bar__add-project-text">Добавить проект</span>
+          @if (!program.isUserMember && !registerDateExpired) { @if
+          (program.name.includes("Кейс-чемпионат MIR")) {
+          <a href="https://case-champ.ru/corporate#rec1176757836">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
+              >Зарегистрироваться</app-button
+            >
+          </a>
+          } @else {
+          <a [routerLink]="['/office/program', program.id, 'register']">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
+              >Зарегистрироваться</app-button
+            >
+          </a>
+          } } @else if (program.isUserMember || program.isUserManager) {
+          <app-button
+            size="medium"
+            (click)="addProject()"
+            customTypographyClass="text-body-12 bar__add-project"
+          >
+            <span class="bar__add-project-text">подать проект</span>
             <i appIcon icon="plus" appSquare="10"></i>
           </app-button>
           }
@@ -46,33 +79,39 @@
             download=""
             target="_blank"
           >
-            <app-button color="grey" customTypographyClass="text-body-12">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
               {{
                 program.name.includes("Технолидеры Будущего")
                   ? "Каталог лучших стартапов 2022/23"
-                  : "Положение программы"
+                  : "положение"
               }}
-              <i appIcon class="info__presentation-icon" icon="file_pdf" appSquare="16"></i>
+              <i appIcon class="info__presentation-icon" icon="arrow-down" appSquare="10"></i>
             </app-button>
           </a>
-          @if (!program.isUserMember && !registerDateExpired) { @if
-          (program.name.includes("Кейс-чемпионат MIR")) {
-          <a href="https://case-champ.ru/corporate#rec1176757836">
-            <app-button customTypographyClass="text-body-12">Зарегистрироваться</app-button>
+
+          <!-- TODO: внести ссылку на сайт программы когда это поле будет на бэке -->
+          <a class="info__more" [href]="program.presentationAddress" target="_blank">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
+              >узнать подробнее</app-button
+            >
           </a>
-          } @else {
-          <a [routerLink]="['/office/program', program.id, 'register']">
-            <app-button customTypographyClass="text-body-12">Зарегистрироваться</app-button>
+
+          <!-- добавить информацию с ссылок или чего-то в дизайне телефон но не у каждой программы есть телефон в контактах -->
+          <a class="info__contacts">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
+              >информация с ссылок</app-button
+            >
           </a>
-          } }
         </div>
       </div>
     </div>
-    @if (!program.isUserMember) {
+
+    <!-- advertisementImageAddress поле только для тех кто не участник программы поэтому нельзя сделать toggle и давать появляться или нет полю -->
+    @if (!program.isUserMember && !showDetails) {
     <div class="program__advertisement">
       <img [src]="program.advertisementImageAddress" [alt]="program.name" />
     </div>
-    } @else {
+    } @else if (program.isUserMember && showDetails) {
     <div class="program__content">
       <div class="about program__about">
         <div class="about__head">
@@ -83,7 +122,7 @@
           </div>
         </div>
         @if (program.description) {
-        <div class="text-body-14 about__text">
+        <div class="text-body-12 about__text">
           <p #descEl [innerHTML]="program.description | parseLinks | parseBreaks"></p>
           @if (descriptionExpandable) {
           <div
@@ -111,7 +150,7 @@
         }
       </div>
     </div>
-    }
+
     <div class="program__left">
       <aside class="program__aside">
         @if (program.isUserMember && (program.links?.length && program.links)) {
@@ -166,6 +205,7 @@
         }
       </aside>
     </div>
+    }
   </section>
 </main>
 
@@ -179,7 +219,7 @@
     </div>
 
     @if (showProgramModalErrorMessage()) {
-    <p class="text-body-14 cancel__text">
+    <p class="text-body-12 cancel__text">
       {{ showProgramModalErrorMessage() }}
     </p>
     }

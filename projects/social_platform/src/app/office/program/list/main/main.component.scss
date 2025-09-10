@@ -1,7 +1,30 @@
 .programs {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  justify-content: space-between;
+
   &__list {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 330px 330px;
+    column-gap: 80px;
+  }
+
+  &__filter {
+    display: flex;
+    flex-direction: column;
     gap: 20px;
+    flex-basis: 18%;
+    margin-top: 14px;
+
+    &--block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    &--text {
+      color: var(--dark-grey);
+    }
   }
 }

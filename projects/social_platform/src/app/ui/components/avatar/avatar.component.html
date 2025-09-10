@@ -1,34 +1,33 @@
 <!-- @format -->
 
-<div
-  class="avatar"
-  [class.avatar--border]="hasBorder"
-  [style.width]="size + 'px'"
-  [style.height]="size + 'px'"
->
-  @if (progress) {
-  <div
-    class="avatar__progress"
-    [style.--progress]="progress + '%'"
-    [style.--progress-width]="'-18px'"
-    [style.--progress-color]="'var(--accent)'"
-  ></div>
-  }
+<div class="avatar">
+  <div [class.avatar--border]="hasBorder">
+    @if (progress) {
+    <div
+      class="avatar__progress"
+      [style.--progress]="progress + '%'"
+      [style.--progress-width]="'-18px'"
+      [style.--progress-color]="'var(--accent)'"
+    ></div>
+    }
 
-  <img
-    [src]="url || placeholderUrl"
-    [style.width]="size + 'px'"
-    [style.height]="size + 'px'"
-    alt="avatar"
-  />
-  @if (isOnline) {
-  <div
-    [style.width]="onlineBadgeSize + 'px'"
-    [style.height]="onlineBadgeSize + 'px'"
-    [style.border-width]="onlineBadgeBorder + 'px'"
-    [style.right]="onlineBadgeOffset + 'px'"
-    [style.bottom]="onlineBadgeOffset + 'px'"
-    class="avatar__online"
-  ></div>
-  }
+    <img
+      [src]="url || placeholderUrl"
+      [style.width]="size + 'px'"
+      [style.height]="size + 'px'"
+      [style.border-color]="'var(--' + borderColor + ')'"
+      alt="avatar"
+    />
+
+    @if (isOnline) {
+    <div
+      [style.width]="onlineBadgeSize + 'px'"
+      [style.height]="onlineBadgeSize + 'px'"
+      [style.border-width]="onlineBadgeBorder + 'px'"
+      [style.right]="onlineBadgeOffset + 'px'"
+      [style.bottom]="onlineBadgeOffset + 'px'"
+      class="avatar__online"
+    ></div>
+    }
+  </div>
 </div>

@@ -59,7 +59,7 @@
 
   &__basket {
     margin-left: auto;
-    color: var(--red);
+    color: var(--red) !important;
   }
 
   &__draft {

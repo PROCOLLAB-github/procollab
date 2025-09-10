@@ -2,29 +2,35 @@
 
 @if (program) {
 <div class="card">
-  <div class="card__head">
-    <div>
-      <p class="text-heading-4 card__name">{{ program.name }}</p>
-    </div>
-    <app-avatar class="card__photo" [url]="program.imageAddress" [size]="60"></app-avatar>
+  <div class="card__photo">
+    <app-avatar [url]="program.imageAddress" [size]="100"></app-avatar>
   </div>
-  <p class="text-body-12 card__description">{{ program.shortDescription }}</p>
-  <p class="text-body-12 card__description">
-    Регистрация открыта до:
-    {{ program.datetimeRegistrationEnds | date: "dd MMMM yyyy" }}
-  </p>
-  <div class="card__dates">
-    <p class="text-body-12 card__description">
-      Дата проведения: {{ program.datetimeStarted | date: "dd MMMM yyyy" }}
+
+  <div class="card__info">
+    <p class="text-body-10 card__name" style="padding-left: 30px">{{ program.name }}</p>
+
+    <p
+      class="text-body-10 card__description card__registration"
+      [ngClass]="{
+        'card__registration--actual': type === 'actual',
+        'card__registration--participating': type === 'participating',
+        'card__registration--ended': type === 'ended',
+      }"
+    >
+      Регистрация до:
+      {{ program.datetimeRegistrationEnds | date: "dd MMMM" }}
     </p>
-    <p class="text-body-12 card__description">-</p>
-    <p class="text-body-12 card__description">
-      {{ program.datetimeFinished | date: "dd MMMM yyyy" }}
-    </p>
-  </div>
-  <div class="card__media">
-    <div class="card__views">
-      <i appIcon icon="eye" appSquare="22"></i> {{ program.viewsCount }}
+
+    <div class="card__dates">
+      <p class="text-body-10 card__description" style="padding-left: 30px">
+        {{ program.datetimeStarted | date: "dd.MM.yyyy" }}
+      </p>
+      <p class="text-body-10 card__description">-</p>
+      <p class="text-body-10 card__description">
+        {{ program.datetimeFinished | date: "dd.MM.yyyy" }}
+      </p>
+      <!-- TODO: изменить когда на бэке для программ будет возможность для регионов поле -->
+      <p class="text-body-10 card__description">• для всей России</p>
     </div>
   </div>
 </div>

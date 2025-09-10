@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, type OnInit } from "@angular/core";
+import { Component, inject, Input, type OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Location } from "@angular/common";
 import { IconComponent } from "@ui/components";
@@ -29,10 +29,13 @@ import { IconComponent } from "@ui/components";
   imports: [IconComponent],
 })
 export class BackComponent implements OnInit {
-  constructor(private readonly router: Router, private readonly location: Location) {}
+  private readonly router = inject(Router);
+  private readonly location = inject(Location);
 
-  /** Опциональный путь для перехода (если не указан, используется history.back()) */
+  /** Путь для перехода (если не указан, используется history.back()) */
   @Input() path?: string;
+
+  @Input() namespace?: string;
 
   ngOnInit(): void {}
 

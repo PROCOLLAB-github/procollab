@@ -45,7 +45,7 @@ import { transformYearStringToNumber } from "@utils/transformYear";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
 import { User } from "@auth/models/user.model";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
-import { generateYearList } from "@utils/generate-year-list";
+import { generateOptionsList } from "@utils/generate-options-list";
 
 dayjs.extend(cpf);
 
@@ -370,7 +370,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     ctl?.setValue(!ctl.value);
   }
 
-  readonly yearListEducation = generateYearList(55);
+  readonly yearListEducation = generateOptionsList(55, "years");
 
   readonly educationStatusList = educationUserType;
 

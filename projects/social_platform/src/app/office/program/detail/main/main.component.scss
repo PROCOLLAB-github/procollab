@@ -205,34 +205,21 @@
   &__body {
     position: relative;
     z-index: 2;
-    padding: 40px 24px 24px;
-    margin-top: -$body-slide;
-    border-radius: $body-slide;
-
-    @include responsive.apply-desktop {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      align-items: flex-end;
-      padding-top: 10px;
-      padding-left: 225px;
-      background-color: var(--white);
-      border: 1px solid var(--medium-grey-for-outline);
-    }
+    padding: 14px 0px 45px 0px;
   }
 
   &__avatar {
     position: absolute;
     bottom: $body-slide;
-    left: 50%;
+    left: 45%;
     z-index: 3;
     display: block;
     background-color: var(--white);
     border-radius: 50%;
-    transform: translateX(-50%) translateY(30px);
+    transform: translateX(-50%);
+    cursor: pointer;
 
     @include responsive.apply-desktop {
-      left: 35px;
       transform: translateY(50%);
     }
   }
@@ -252,95 +239,17 @@
 
   &__actions {
     display: flex;
-    flex-direction: column;
-    flex-grow: 1;
+    align-items: center;
     gap: 20px;
-
-    @include responsive.apply-desktop {
-      flex-direction: row;
-      gap: 10px;
-      justify-content: flex-end;
-
-      & > a {
-        flex-grow: 1;
-        flex-shrink: 0;
-      }
-    }
-
-    app-button ::ng-deep .button--inline {
-      min-height: 38px;
-    }
-  }
-
-  &__tag {
-    padding: 4px 10px;
-    color: var(--white);
-    background-color: var(--accent);
-    border-radius: 5px;
-  }
-
-  &__location {
-    display: flex;
-    align-items: center;
-
-    i {
-      margin-right: 5px;
-    }
-  }
-
-  &__title {
-    margin-bottom: 10px;
-    color: var(--black);
-    text-align: center;
-
-    @include typography.heading-4;
-
-    @include responsive.apply-desktop {
-      text-align: unset;
-
-      @include typography.heading-2;
-    }
-  }
-
-  &__text {
-    flex-basis: 300px;
-    flex-grow: 9999;
-    color: var(--dark-grey);
-  }
-
-  &__industry {
-    margin-right: 20px;
-
-    @include responsive.apply-desktop {
-      margin-right: 40px;
-    }
-  }
-
-  &__geo {
-    display: flex;
-    align-items: center;
-
-    i {
-      margin-right: 5px;
-    }
   }
 
   &__presentation {
     display: block;
-    margin-top: 35px;
-
-    @include responsive.apply-desktop {
-      margin-top: 0;
-      margin-left: auto;
-    }
 
     i {
-      margin-left: 10px;
+      margin-left: 15px;
+      color: var(--accent);
     }
-  }
-
-  &__presentation-icon {
-    min-width: 16px;
   }
 
   &__edit {

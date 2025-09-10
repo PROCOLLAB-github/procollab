@@ -31,15 +31,14 @@ import { AsyncPipe, CommonModule } from "@angular/common";
 import { ControlErrorPipe } from "@corelib";
 import { ProjectFormService } from "../../services/project-form.service";
 import { IconComponent } from "@uilib";
-import { generateTrlList } from "@utils/generate-trl-list";
 import { ProjectContactsService } from "../../services/project-contacts.service";
 import { ProjectGoalService } from "../../services/project-goals.service";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ProjectTeamService } from "../../services/project-team.service";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ProjectService } from "@office/services/project.service";
-import { Goal } from "@office/models/goals.model";
 import { RouterLink } from "@angular/router";
+import { generateOptionsList } from "@utils/generate-options-list";
 
 @Component({
   selector: "app-project-main-step",
@@ -88,7 +87,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
   readonly errorMessage = ErrorMessage;
   readonly trackList = trackProjectList;
   readonly directionList = directionProjectList;
-  readonly trlList = generateTrlList(9);
+  readonly trlList = generateOptionsList(9, "numbers");
 
   goalLeaderShowModal = false;
   activeGoalIndex = signal<number | null>(null);

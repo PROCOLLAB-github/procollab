@@ -4,7 +4,7 @@ import { Component, Input, OnInit } from "@angular/core";
 import { Program } from "@office/program/models/program.model";
 import { IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { DatePipe } from "@angular/common";
+import { DatePipe, NgClass } from "@angular/common";
 
 /**
  * Компонент карточки программы
@@ -36,7 +36,7 @@ import { DatePipe } from "@angular/common";
   templateUrl: "./program-card.component.html",
   styleUrl: "./program-card.component.scss",
   standalone: true,
-  imports: [AvatarComponent, IconComponent, DatePipe],
+  imports: [AvatarComponent, IconComponent, DatePipe, NgClass],
 })
 export class ProgramCardComponent implements OnInit {
   constructor() {}
@@ -44,4 +44,7 @@ export class ProgramCardComponent implements OnInit {
   @Input({ required: true }) program?: Program;
 
   ngOnInit(): void {}
+
+  // TODO: изменить когда у нас появятся в информации о программе состояние о завершенности/участии
+  type = "actual";
 }

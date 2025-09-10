@@ -142,8 +142,6 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         },
       });
 
-    this.loadEvent = fromEvent(window, "load");
-
     this.subscriptions$().push(program$);
     this.subscriptions$().push(programIdSubscription$);
     this.subscriptions$().push(routeModalSub$);
@@ -163,6 +161,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         .subscribe();
       this.subscriptions$().push(scrollEvents$);
     }
+
+    console.log(this.showDetails, this.program?.isUserMember);
   }
 
   ngOnDestroy(): void {
@@ -276,10 +276,15 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     });
   }
 
-  private loadEvent?: Observable<Event>;
+  onOpenDetailProgram(): void {
+    if (!this.program?.isUserMember) return;
+
+    this.showDetails = true;
+  }
 
   program?: Program;
   registerDateExpired!: boolean;
   descriptionExpandable!: boolean;
   readFullDescription = false;
+  showDetails = false;
 }

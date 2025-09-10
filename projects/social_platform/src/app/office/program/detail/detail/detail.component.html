@@ -2,29 +2,7 @@
 
 <div class="detail">
   <section class="detail__bar">
-    <app-bar
-      class="bar"
-      [backHave]="true"
-      [links]="[
-        {
-          link: '/office/program' + '/' + programId!.toString(),
-          linkText: 'Страница программы',
-          isRouterLinkActiveOptions: true,
-        },
-
-        {
-          link: '/office/program' + '/' + programId!.toString() + '/' + 'projects',
-          linkText: 'Проекты-участники',
-          isRouterLinkActiveOptions: false,
-        },
-
-        {
-          link: '/office/program' + '/' + programId!.toString() + '/' + 'members',
-          linkText: 'Участники',
-          isRouterLinkActiveOptions: false,
-        },
-      ]"
-    ></app-bar>
+    <app-back path="/office/program/all"></app-back>
   </section>
 
   <div class="detail__body">
