@@ -144,6 +144,26 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.projectAdditionalService.getPartnerProgramFields();
   }
 
+  get isAssignProjectToProgramError() {
+    return this.projectAdditionalService.getIsAssignProjectToProgramError()();
+  }
+
+  get errorAssignProjectToProgramModalMessage() {
+    return this.projectAdditionalService.getErrorAssignProjectToProgramModalMessage();
+  }
+
+  // Методы для управления состоянием ошибок через сервис
+  setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
+    this.projectAdditionalService.setAssignProjectToProgramError(error);
+  }
+
+  clearAssignProjectToProgramError(): void {
+    this.projectAdditionalService.clearAssignProjectToProgramError();
+  }
+
+  // Сигналы для работы с модальными окнами с текстом
+  assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
+
   ngOnInit(): void {
     this.navService.setNavTitle("Создание проекта");
 
@@ -217,6 +237,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   inlineSkills = signal<Skill[]>([]);
   nestedSkills$ = this.skillsService.getSkillsNested();
   skillsGroupsModalOpen = signal(false);
+  isAssignProjectToProgramModalOpen = signal(false);
 
   // Состояние отправки форм
   projSubmitInitiated = false;
@@ -232,12 +253,31 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectStepService.navigateToStep(step);
   }
 
-  onGroupToggled(isOpen: boolean, groupId: number) {
-    if (isOpen) {
-      this.openGroupIds.add(groupId);
-    } else {
-      this.openGroupIds.delete(groupId);
-    }
+  /**
+   * Привязка проекта к программе выбранной
+   * Перенаправление её на редактирование "нового" проекта
+   */
+  assignProjectToProgram(): void {
+    this.projectService
+      .assignProjectToProgram(
+        Number(this.route.snapshot.paramMap.get("projectId")),
+        this.projectForm.get("partnerProgramId")?.value
+      )
+      .subscribe({
+        next: r => {
+          this.assignProjectToProgramModalMessage.set(r);
+          this.isAssignProjectToProgramModalOpen.set(true);
+          this.router.navigateByUrl(`/office/projects/${r.newProjectId}/edit?editingStep=main`);
+        },
+
+        error: err => {
+          if (err instanceof HttpErrorResponse) {
+            if (err.status === 400) {
+              this.setAssignProjectToProgramError(err.error);
+            }
+          }
+        },
+      });
   }
 
   // Методы для управления состоянием отправки форм
@@ -377,6 +417,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     const relationId = this.relationId();
 
     this.sendAdditionalFields(projectId, relationId);
+  }
+
+  closeAssignProjectToProgramModal(): void {
+    this.isAssignProjectToProgramModalOpen.set(false);
   }
 
   /**
