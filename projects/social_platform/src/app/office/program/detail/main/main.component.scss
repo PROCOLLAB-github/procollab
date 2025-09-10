@@ -205,7 +205,7 @@
   &__body {
     position: relative;
     z-index: 2;
-    padding: 14px 0px 45px 0px;
+    padding: 14px 0 45px;
   }
 
   &__avatar {
@@ -214,10 +214,10 @@
     left: 45%;
     z-index: 3;
     display: block;
+    cursor: pointer;
     background-color: var(--white);
     border-radius: 50%;
     transform: translateX(-50%);
-    cursor: pointer;
 
     @include responsive.apply-desktop {
       transform: translateY(50%);
@@ -239,8 +239,8 @@
 
   &__actions {
     display: flex;
-    align-items: center;
     gap: 20px;
+    align-items: center;
   }
 
   &__presentation {

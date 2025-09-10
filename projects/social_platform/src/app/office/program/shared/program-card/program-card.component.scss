@@ -11,21 +11,21 @@
 
   &__photo {
     position: relative;
-    border-radius: 50%;
-    border: 0.5px solid var(--dark-grey);
-    padding: 12px;
     z-index: 10;
+    padding: 12px;
     background: var(--white);
+    border: 0.5px solid var(--dark-grey);
+    border-radius: 50%;
   }
 
   &__info {
-    border: 0.5px solid var(--dark-grey);
-    border-radius: var(--rounded-lg);
-    padding: 22px 22px 22px 50px;
     position: absolute;
     left: 17%;
-    width: 100%;
     z-index: 1;
+    width: 100%;
+    padding: 22px 22px 22px 50px;
+    border: 0.5px solid var(--dark-grey);
+    border-radius: var(--rounded-lg);
   }
 
   &__name {
@@ -42,9 +42,9 @@
   }
 
   &__registration {
+    padding: 2px 2px 2px 30px;
     margin-top: 2px;
     margin-bottom: 6px;
-    padding: 2px 2px 2px 30px;
     color: var(--white);
     border-radius: var(--rounded-lg);
 

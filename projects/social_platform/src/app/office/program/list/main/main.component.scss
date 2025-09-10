@@ -1,7 +1,7 @@
 .programs {
   display: flex;
-  align-items: flex-start;
   gap: 20px;
+  align-items: flex-start;
   justify-content: space-between;
 
   &__list {
@@ -12,15 +12,15 @@
 
   &__filter {
     display: flex;
+    flex-basis: 18%;
     flex-direction: column;
     gap: 20px;
-    flex-basis: 18%;
     margin-top: 14px;
 
     &--block {
       display: flex;
-      align-items: center;
       gap: 12px;
+      align-items: center;
     }
 
     &--text {
