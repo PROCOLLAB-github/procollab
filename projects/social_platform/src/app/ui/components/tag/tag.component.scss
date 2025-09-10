@@ -3,13 +3,13 @@
 .tag {
   display: flex;
   align-items: center;
-  padding: 5px 40px;
-  border-radius: var(--rounded-xxl);
   max-width: 300px;
+  padding: 5px 40px;
   overflow: hidden;
+  color: var(--accent);
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--accent);
+  border-radius: var(--rounded-xxl);
 
   &--primary {
     color: var(--white);

@@ -12,7 +12,7 @@
     ::ng-deep app-input {
       input {
         width: 100%;
-        padding: 12px 105px 6px 0px;
+        padding: 12px 105px 6px 0;
         background-color: transparent;
       }
     }
@@ -29,17 +29,17 @@
   }
 
   &__send {
-    color: var(--accent);
     margin-left: 20px;
+    color: var(--accent);
     cursor: pointer;
   }
 
   &__input {
+    flex-grow: 1;
     resize: none;
+    background: transparent;
     border: none;
     outline: none;
-    background: transparent;
-    flex-grow: 1;
   }
 
   &__images {
@@ -58,8 +58,8 @@
     }
 
     i {
-      cursor: pointer;
       color: var(--dark-grey);
+      cursor: pointer;
     }
   }
 }
