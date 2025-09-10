@@ -11,26 +11,9 @@
   &__main {
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 8px;
-    align-items: start;
-
-    @include responsive.apply-desktop {
-      grid-template-columns: 2fr 1fr;
-      grid-gap: 16px;
-    }
   }
 
-  &__aside {
-    display: grid;
-    grid-row-start: 3;
-    gap: 20px;
-
-    @include responsive.apply-desktop {
-      grid-row-start: unset;
-    }
-  }
-
-  &__left {
+  &__right {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -39,8 +22,8 @@
   &__section {
     padding: 24px;
     background-color: var(--white);
-    border: 1px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-xl);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
   }
 
   &__info {
@@ -55,10 +38,6 @@
     @include responsive.apply-desktop {
       grid-row-start: unset;
     }
-  }
-
-  &__about {
-    padding: 0 24px;
   }
 
   &__news {
@@ -77,18 +56,10 @@
     }
   }
 
-  &__views-desktop {
-    display: none;
-    color: var(--dark-grey);
-
-    @include responsive.apply-desktop {
-      display: flex;
-      align-items: center;
-    }
-
-    i {
-      margin-right: 5px;
-    }
+  &__details {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: 2fr 5fr 3fr;
   }
 }
 
@@ -108,35 +79,25 @@
 }
 
 .about {
+  background-color: var(--light-white);
+  border-radius: var(--rounded-lg);
+  padding: 24px;
+
   &__head {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom: 0.5px solid var(--accent);
+    margin-bottom: 8px;
 
-    @include responsive.apply-desktop {
-      display: block;
+    &--icon {
+      color: var(--accent);
     }
   }
 
   &__title {
-    margin-bottom: 12px;
-    color: var(--black);
-  }
-
-  &__views {
-    display: flex;
-    align-items: center;
-    color: var(--gray);
-
-    @include typography.body-12;
-
-    @include responsive.apply-desktop {
-      display: none;
-    }
-
-    i {
-      margin-right: 5px;
-    }
+    margin-bottom: 8px;
+    color: var(--accent);
   }
 
   /* stylelint-disable value-no-vendor-prefix */
@@ -170,7 +131,7 @@
   /* stylelint-enable value-no-vendor-prefix */
 
   &__read-full {
-    margin-top: 2px;
+    margin-top: 8px;
     color: var(--accent);
     cursor: pointer;
   }
@@ -241,6 +202,7 @@
     display: flex;
     gap: 20px;
     align-items: center;
+    justify-content: space-between;
   }
 
   &__presentation {
@@ -258,7 +220,7 @@
 }
 
 .read-more {
-  margin-top: 12px;
+  margin-top: 8px;
   color: var(--accent);
   cursor: pointer;
   transition: background-color 0.2s;
@@ -271,22 +233,32 @@
 .links {
   overflow: hidden;
 
+  &__section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.5px solid var(--accent);
+    margin-bottom: 8px;
+  }
+
+  &__icon {
+    color: var(--accent);
+  }
+
   &__title {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+    color: var(--accent);
   }
 
   &__item {
-    &:not(:last-child) {
-      margin-bottom: 3px;
-
-      @include responsive.apply-desktop {
-        margin-bottom: 12px;
-      }
-    }
+    cursor: pointer;
   }
 
   ul {
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
     span {
       overflow: hidden;

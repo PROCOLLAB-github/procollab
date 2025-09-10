@@ -3,6 +3,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Vacancy } from "@models/vacancy.model";
 import { IconComponent, ButtonComponent } from "@ui/components";
+import { TagComponent } from "@ui/components/tag/tag.component";
 
 /**
  * Компонент карточки вакансии
@@ -29,7 +30,7 @@ import { IconComponent, ButtonComponent } from "@ui/components";
   templateUrl: "./vacancy-card.component.html",
   styleUrl: "./vacancy-card.component.scss",
   standalone: true,
-  imports: [IconComponent, ButtonComponent],
+  imports: [IconComponent, ButtonComponent, TagComponent],
 })
 export class VacancyCardComponent implements OnInit {
   constructor() {}

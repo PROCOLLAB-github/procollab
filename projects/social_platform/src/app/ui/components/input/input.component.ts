@@ -65,6 +65,9 @@ export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
   /** Размер поля ввода */
   @Input() size: "small" | "big" = "small";
 
+  /** Наличие обводки */
+  @Input() hasBorder = true;
+
   /** Наличие подсказки */
   @Input() haveHint = false;
 

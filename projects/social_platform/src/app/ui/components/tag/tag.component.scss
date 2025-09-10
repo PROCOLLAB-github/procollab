@@ -3,16 +3,22 @@
 .tag {
   display: flex;
   align-items: center;
+  padding: 5px 40px;
+  border-radius: var(--rounded-xxl);
   max-width: 300px;
-  padding: 5px 10px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  border-radius: var(--rounded-md);
+  color: var(--accent);
 
   &--primary {
-    color: var(--dark-grey);
-    background-color: var(--grey-button);
+    color: var(--white);
+    background-color: var(--accent);
+  }
+
+  &--secondary {
+    background: transparent;
+    border: 0.5px solid var(--accent);
   }
 
   &--accent {

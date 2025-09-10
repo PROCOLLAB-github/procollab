@@ -8,8 +8,9 @@ import { FileService } from "@core/services/file.service";
 import { forkJoin, noop, Observable, tap } from "rxjs";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { ImgCardComponent } from "../img-card/img-card.component";
-import { IconComponent } from "@ui/components";
+import { IconComponent, ButtonComponent, InputComponent } from "@ui/components";
 import { AutosizeModule } from "ngx-autosize";
+import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 
 /**
  * Компонент формы создания новости
@@ -41,6 +42,9 @@ import { AutosizeModule } from "ngx-autosize";
     IconComponent,
     ImgCardComponent,
     FileUploadItemComponent,
+    ButtonComponent,
+    TextareaComponent,
+    InputComponent,
   ],
 })
 export class NewsFormComponent implements OnInit {

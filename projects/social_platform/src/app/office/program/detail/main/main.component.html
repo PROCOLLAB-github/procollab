@@ -112,98 +112,124 @@
       <img [src]="program.advertisementImageAddress" [alt]="program.name" />
     </div>
     } @else if (program.isUserMember && showDetails) {
-    <div class="program__content">
-      <div class="about program__about">
-        <div class="about__head">
-          <h3 class="text-bold-body-16 about__title">О программе</h3>
-          <div class="about__views">
-            <i appIcon icon="eye" appSquare="20"></i>
-            <span>{{ program.viewsCount }}</span>
+    <div class="program__details">
+      <div class="program__left">
+        <aside class="program__aside">
+          @if (program.isUserMember && (program.links?.length && program.links)) {
+          <div class="links program__section">
+            <h3 class="links__title text-body-12">контакты</h3>
+            <ul>
+              @for (link of program.links; track $index) {
+              <li class="contact-link links__item text-body-10">
+                @if (link | userLinks; as l) {
+                <a
+                  class="contact-link__link"
+                  target="_blank"
+                  [href]="link.includes('@') ? 'mailto:' + link : link"
+                >
+                  <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
+                  <span>{{ l.tag }}</span>
+                </a>
+                }
+              </li>
+              }
+            </ul>
           </div>
-        </div>
-        @if (program.description) {
-        <div class="text-body-12 about__text">
-          <p #descEl [innerHTML]="program.description | parseLinks | parseBreaks"></p>
-          @if (descriptionExpandable) {
-          <div
-            class="read-more"
-            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
-          >
-            {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+          }
+        </aside>
+      </div>
+
+      <div class="program__content">
+        <div class="about program__about">
+          <div class="about__head">
+            <h3 class="text-body-12 about__title">о программе</h3>
+            <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
+          </div>
+          @if (program.description) {
+          <div class="text-body-10 about__text">
+            <p #descEl [innerHTML]="program.description | parseLinks | parseBreaks"></p>
+            @if (descriptionExpandable) {
+            <div
+              class="read-more"
+              (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+            >
+              {{ readFullDescription ? "cкрыть" : "подробнее" }}
+            </div>
+            }
           </div>
           }
         </div>
-        }
+        <div class="news">
+          @if (program.isUserManager) {
+          <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
+          } @for (n of news(); track n.id) {
+          <app-program-news-card
+            class="news__item"
+            [attr.data-id]="n.id"
+            [newsItem]="n"
+            [isOwner]="program.isUserMember"
+            (like)="onLike($event)"
+            (delete)="onDelete($event)"
+          ></app-program-news-card>
+          }
+        </div>
       </div>
-      <div class="news">
-        @if (program.isUserManager) {
-        <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
-        } @for (n of news(); track n.id) {
-        <app-program-news-card
-          class="news__item"
-          [attr.data-id]="n.id"
-          [newsItem]="n"
-          [isOwner]="program.isUserMember"
-          (like)="onLike($event)"
-          (delete)="onDelete($event)"
-        ></app-program-news-card>
-        }
+
+      <div class="program__right">
+        <aside class="program__aside">
+          @if (program.isUserMember && (program.links?.length && program.links)) {
+          <div class="links program__section">
+            <div class="links__section">
+              <h3 class="links__title text-body-12">контакты</h3>
+              <i appIcon icon="phone" class="links__icon" appSquare="12"></i>
+            </div>
+            <ul>
+              @for (link of program.links; track $index) {
+              <li class="contact-link links__item text-body-10">
+                @if (link | userLinks; as l) {
+                <a
+                  class="contact-link__link"
+                  target="_blank"
+                  [href]="link.includes('@') ? 'mailto:' + link : link"
+                >
+                  <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
+                  <span>{{ l.tag }}</span>
+                </a>
+                }
+              </li>
+              }
+            </ul>
+          </div>
+          }
+        </aside>
+
+        <aside class="program__aside">
+          @if (program.isUserMember && (program.materials?.length && program.materials)) {
+          <div class="links program__section">
+            <div class="links__section">
+              <h3 class="links__title text-body-12">материалы</h3>
+              <i appIcon icon="book" appSquare="12" class="links__icon"></i>
+            </div>
+            <ul>
+              @for (material of program.materials; track $index) {
+              <li class="contact-link links__item text-body-10">
+                @if (material.url | userLinks; as l) {
+                <a
+                  class="contact-link__link"
+                  target="_blank"
+                  [href]="material.url.includes('@') ? 'mailto:' + material.url : material.url"
+                >
+                  <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
+                  <span>{{ material.title }}</span>
+                </a>
+                }
+              </li>
+              }
+            </ul>
+          </div>
+          }
+        </aside>
       </div>
-    </div>
-
-    <div class="program__left">
-      <aside class="program__aside">
-        @if (program.isUserMember && (program.links?.length && program.links)) {
-        <div class="links program__section">
-          <h3 class="links__title text-bold-body-16">Контакты</h3>
-          <ul>
-            @for (link of program.links; track $index) {
-            <li class="contact-link links__item text-body-12">
-              @if (link | userLinks; as l) {
-              <a
-                class="contact-link__link"
-                target="_blank"
-                [href]="link.includes('@') ? 'mailto:' + link : link"
-              >
-                <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
-                <span>{{ l.tag }}</span>
-              </a>
-              }
-            </li>
-            }
-          </ul>
-        </div>
-        }
-      </aside>
-
-      <aside class="program__aside">
-        @if (program.isUserMember && (program.materials?.length && program.materials)) {
-        <div class="links program__section">
-          <h3 class="links__title text-bold-body-16">Материалы</h3>
-          <ul>
-            @for (material of program.materials; track $index) {
-            <li class="contact-link links__item text-body-12">
-              @if (material.url | userLinks; as l) {
-              <a
-                class="contact-link__link"
-                target="_blank"
-                [href]="material.url.includes('@') ? 'mailto:' + material.url : material.url"
-              >
-                <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
-                <span>{{ material.title }}</span>
-              </a>
-              }
-            </li>
-            }
-          </ul>
-        </div>
-        } @if (program.isUserMember) {
-        <div class="text-body-12 program__views-desktop">
-          <i appIcon icon="eye" appSquare="20"></i>
-          <span>{{ program.viewsCount }}</span>
-        </div>
-        }
-      </aside>
     </div>
     }
   </section>

@@ -2,18 +2,17 @@
 
 <form class="form" [formGroup]="messageForm" (ngSubmit)="onSubmit()">
   <div class="form__row">
-    <textarea
+    <app-input
+      size="big"
       formControlName="text"
-      class="form__textarea text-body-14"
+      [hasBorder]="false"
+      class="form__input text-body-12"
       autosize
-      placeholder="Чем поделитесь сегодня?"
+      placeholder="сегодня был хороший день"
       (paste)="onPaste($event)"
       (keydown.meta.enter)="onSubmit()"
-      rows="1"
-    ></textarea>
-    <button class="form__submit">
-      <i appIcon icon="send" appSquare="20"></i>
-    </button>
+    ></app-input>
+    <i appIcon icon="send" appSquare="12" class="form__send" ((click))="onSubmit()"></i>
   </div>
   <div class="form__images">
     @for (i of imagesList; track i.id) {
@@ -40,7 +39,7 @@
   </div>
   <div class="footer">
     <label class="footer__attach">
-      <i appIcon icon="attach" appSquare="22"></i>
+      <i appIcon icon="attach" appSquare="12"></i>
       <input type="file" accept="*/*" multiple (change)="onInputFiles($event)" />
     </label>
   </div>

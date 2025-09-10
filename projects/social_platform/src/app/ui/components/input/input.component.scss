@@ -9,8 +9,7 @@
   &__input {
     color: var(--black) !important;
     background-color: var(--white);
-    border: 0.5px solid var(--gray);
-    border-radius: var(--rounded-xxl);
+    border: none;
     outline: none;
     transition: all 0.2s;
 
@@ -33,13 +32,18 @@
       padding-right: 130px;
     }
 
-    &--error {
-      border-color: var(--red);
+    &--border {
+      border: 0.5px solid var(--gray);
+      border-radius: var(--rounded-xxl);
+
+      &:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+      }
     }
 
-    &:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+    &--error {
+      border-color: var(--red);
     }
 
     @include typography.body-10;
