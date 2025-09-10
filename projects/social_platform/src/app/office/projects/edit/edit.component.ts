@@ -278,6 +278,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         next: r => {
           this.assignProjectToProgramModalMessage.set(r);
           this.isAssignProjectToProgramModalOpen.set(true);
+          this.router.navigateByUrl(`/office/projects/${r.newProjectId}/edit?editingStep=main`);
         },
 
         error: err => {
@@ -422,7 +423,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   closeAssignProjectToProgramModal(): void {
     this.isAssignProjectToProgramModalOpen.set(false);
-    this.router.navigateByUrl(`/office/projects/my`);
   }
 
   /**
