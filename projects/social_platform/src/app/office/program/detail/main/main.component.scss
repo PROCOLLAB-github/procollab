@@ -61,6 +61,13 @@
     grid-template-columns: 2fr 5fr 3fr;
     grid-gap: 20px;
   }
+
+  &__analytics {
+    padding: 12px;
+    border-radius: var(--rounded-lg);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    background-color: var(--light-white);
+  }
 }
 
 .bar__add-project {
@@ -76,6 +83,88 @@
 
 .bar__add-project-text {
   display: inline;
+}
+
+.project {
+  margin-top: 40px;
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+
+     max-height: none;
+
+    &--scrollable {
+      max-height: 180px;
+      overflow-y: auto;
+    }
+  }
+
+  &__item {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: space-between;
+    width: 300px;
+    margin-bottom: 12px;
+
+    &--info {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+  }
+}
+
+.analytics {
+  text-align: center;
+
+  &__soon {
+    position: relative;
+    border-radius: var(--rounded-lg);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    margin-bottom: 4px;
+  }
+
+  &__closed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 24px 37px;
+
+     &--text {
+      color: var(--dark-grey);
+    }
+
+    i {
+      color: var(--dark-grey);
+    }
+  }
+
+  app-button {
+    position: absolute;
+    top: 82%;
+    left: 41%;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    margin-top: 8px;
+
+    p {
+      width: 60%;
+      text-align: center;
+      color: var(--accent);
+    }
+  }
 }
 
 .about {
@@ -284,21 +373,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 80%;
   max-height: calc(100vh - 40px);
-  padding: 40px 0 80px;
-  overflow-y: auto;
-
-  @include responsive.apply-desktop {
-    width: 50%;
-  }
+  padding: 24px 54px;
 
   &__cross {
     position: absolute;
     top: 0;
     right: 0;
-    width: 32px;
-    height: 32px;
     cursor: pointer;
 
     @include responsive.apply-desktop {
@@ -311,6 +392,8 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
+    gap: 10px;
+    align-items: center;
   }
 
   &__title {

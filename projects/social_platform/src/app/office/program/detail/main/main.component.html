@@ -1,28 +1,5 @@
 <!-- @format -->
 
-<!-- <app-bar
-  class="bar"
-  [links]="[
-    {
-      link: '/office/program' + '/' + programId!.toString(),
-      linkText: 'Страница программы',
-      isRouterLinkActiveOptions: true,
-    },
-
-    {
-      link: '/office/program' + '/' + programId!.toString() + '/' + 'projects',
-      linkText: 'Проекты-участники',
-      isRouterLinkActiveOptions: false,
-    },
-
-    {
-      link: '/office/program' + '/' + programId!.toString() + '/' + 'members',
-      linkText: 'Участники',
-      isRouterLinkActiveOptions: false,
-    },
-  ]"
-></app-bar> -->
-
 @if (program) {
 <main class="project">
   <section class="program__main">
@@ -49,28 +26,34 @@
 
       <div class="info__body">
         <div class="info__actions">
-          @if (!program.isUserMember && !registerDateExpired) { @if
+          @if (!program.isUserMember && !program.isUserManager && !registerDateExpired) { @if
           (program.name.includes("Кейс-чемпионат MIR")) {
           <a href="https://case-champ.ru/corporate#rec1176757836">
-            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
-              >Зарегистрироваться</app-button
-            >
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+              зарегистрироваться
+            </app-button>
           </a>
           } @else {
           <a [routerLink]="['/office/program', program.id, 'register']">
-            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
-              >Зарегистрироваться</app-button
-            >
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+              зарегистрироваться
+            </app-button>
           </a>
-          } } @else if (program.isUserMember || program.isUserManager) {
+          } } @else if (program.isUserMember) {
           <app-button
             size="medium"
-            (click)="addProject()"
+            (click)="toggleSubmitProjectModal()"
             customTypographyClass="text-body-12 bar__add-project"
           >
             <span class="bar__add-project-text">подать проект</span>
             <i appIcon icon="plus" appSquare="10"></i>
           </app-button>
+          } @else if (program.isUserManager) {
+          <a [routerLink]="'/office/program/' + program.id + '/projects-rating'">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+              оценка проектов
+            </app-button>
+          </a>
           }
 
           <a
@@ -90,50 +73,65 @@
           </a>
 
           <!-- TODO: внести ссылку на сайт программы когда это поле будет на бэке -->
+          @if (!program.isUserManager) {
           <a class="info__more" [href]="program.presentationAddress" target="_blank">
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
               >узнать подробнее</app-button
             >
           </a>
-
+          } @else {
+          <a [routerLink]="'/office/program/' + program.id + '/projects'">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+              проекты-участники
+            </app-button>
+          </a>
+          } @if (!program.isUserManager) {
           <!-- добавить информацию с ссылок или чего-то в дизайне телефон но не у каждой программы есть телефон в контактах -->
           <a class="info__contacts">
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
               >информация с ссылок</app-button
             >
           </a>
+          } @else {
+          <a [routerLink]="'/office/program/' + program.id + '/projects'">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+              участники
+            </app-button>
+          </a>
+          }
         </div>
       </div>
     </div>
 
     <!-- advertisementImageAddress поле только для тех кто не участник программы поэтому нельзя сделать toggle и давать появляться или нет полю -->
-    @if (!program.isUserMember && !showDetails) {
+    @if ((!program.isUserMember || program.isUserManager) && !showDetails) {
     <div class="program__advertisement">
       <img [src]="program.advertisementImageAddress" [alt]="program.name" />
     </div>
-    } @else if (program.isUserMember && showDetails) {
+    } @else if ((program.isUserMember && showDetails) || program.isUserManager) {
     <div class="program__details">
       <div class="program__left">
         <aside class="program__aside">
-          @if (program.isUserMember && (program.links?.length && program.links)) {
-          <div class="links program__section">
-            <h3 class="links__title text-body-12">контакты</h3>
-            <ul>
-              @for (link of program.links; track $index) {
-              <li class="contact-link links__item text-body-10">
-                @if (link | userLinks; as l) {
-                <a
-                  class="contact-link__link"
-                  target="_blank"
-                  [href]="link.includes('@') ? 'mailto:' + link : link"
+          @if (program.isUserMember) {
+          <div class="program__analytics">
+            <div class="analytics">
+              <div class="analytics__soon">
+                <div class="analytics__closed">
+                  <i appIcon icon="lock" appSquare="10"></i>
+                  <span class="text-body-6 analytics__closed--text">пока закрыто</span>
+                </div>
+                <app-button customTypographyClass="text-body-6" color="green" size="extra-small"
+                  >скоро</app-button
                 >
-                  <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
-                  <span>{{ l.tag }}</span>
-                </a>
-                }
-              </li>
-              }
-            </ul>
+              </div>
+
+              <div class="analytics__info">
+                <p class="text-body-12">аналитика</p>
+                <p class="text-body-6">
+                  уровень включённости студентов, статистика достижения целей в проектах
+                </p>
+              </div>
+            </div>
           </div>
           }
         </aside>
@@ -253,6 +251,57 @@
     <app-button class="cancel__button" (click)="closeModal()" customTypographyClass="text-body-12"
       >Хорошо</app-button
     >
+  </div>
+</app-modal>
+
+<app-modal [open]="showSubmitProjectModal()" (openChange)="toggleSubmitProjectModal()">
+  <div class="cancel">
+    <div class="cancel__top">
+      <i
+        (click)="toggleSubmitProjectModal()"
+        appIcon
+        appSquare="24"
+        icon="cross"
+        class="cancel__cross"
+      ></i>
+      <p class="cancel__title text-body-14">выберите проект для подачи</p>
+      <p class="cancel__text text-body-10" style="width: 41%">
+        после выбора проекта будет создан дубликат данного проекта для заполнения под конкретный
+        конкурс
+      </p>
+
+      <div class="project">
+        <ul class="project__list" [class.project__list--scrollable]="memberProjects.length > 3">
+          @for (project of memberProjects; track project.id) {
+          <li class="project__item">
+            <div class="project__item--info">
+              <app-avatar [url]="project.imageAddress" [size]="40"></app-avatar>
+              <p class="text-body-12">
+                {{ project.name }}
+              </p>
+            </div>
+            <app-input
+              type="radio"
+              name="goalLeaderSelection"
+              [appValue]="project.id.toLocaleString()"
+              [checked]="selectedProjectId === project.id"
+              (change)="onProjectRadioChange($event)"
+            ></app-input>
+          </li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <app-button
+      size="medium"
+      class="cancel__button"
+      customTypographyClass="text-body-12"
+      [disabled]="!selectedProjectId"
+      (click)="addProjectModal()"
+    >
+      выбрать проект
+    </app-button>
   </div>
 </app-modal>
 }

@@ -372,7 +372,7 @@
           <div class="project__invite">
             <ul
               class="invite__team"
-              [style.overflow-x]="collaborators.length > 8 ? 'auto' : 'none'"
+              [style.overflow-y]="collaborators.length > 8 ? 'auto' : 'none'"
             >
               @for (collaborator of collaborators; track collaborator.userId) {
               <li class="invite__item">

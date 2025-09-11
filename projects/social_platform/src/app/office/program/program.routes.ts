@@ -27,13 +27,6 @@ export const PROGRAM_ROUTES: Routes = [
         pathMatch: "full",
         redirectTo: "all",
       },
-      // {
-      //   path: "my",
-      //   component: ProgramMainComponent,
-      //   resolve: {
-      //     data: ProgramMainResolver,
-      //   },
-      // },
       {
         path: "all",
         component: ProgramMainComponent,

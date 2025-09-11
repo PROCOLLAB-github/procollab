@@ -244,3 +244,16 @@
 .text-body-10 {
   @include body-10;
 }
+
+
+@mixin body-6 {
+  font-family: Mont, sans-serif;
+  font-size: 6px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+}
+
+.text-body-6 {
+  @include body-6;
+}

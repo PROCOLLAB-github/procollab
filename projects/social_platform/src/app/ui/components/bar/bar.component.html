@@ -2,6 +2,9 @@
 
 <section class="bar">
   <nav class="bar__nav">
+    @if (backHave) {
+    <app-back [path]="backRoute" class="bar__back"></app-back>
+    }
     <ul class="bar__tabs">
       @for (link of links; track $index) {
       <a

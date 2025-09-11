@@ -28,7 +28,7 @@ import { expandElement } from "@utils/expand-element";
 import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { ProgramNewsCardComponent } from "../shared/news-card/news-card.component";
-import { ButtonComponent, IconComponent } from "@ui/components";
+import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ApiPagination } from "@models/api-pagination.model";
 import { TagComponent } from "@ui/components/tag/tag.component";
@@ -38,6 +38,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AsyncPipe } from "@angular/common";
 import { LoadingService } from "@office/services/loading.service";
+import { Project } from "@office/models/project.model";
 
 @Component({
   selector: "app-main",
@@ -58,6 +59,7 @@ import { LoadingService } from "@office/services/loading.service";
     NewsFormComponent,
     ModalComponent,
     MatProgressBarModule,
+    InputComponent,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
@@ -78,6 +80,10 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   showProgramModal = signal(false);
   showProgramModalErrorMessage = signal<string | null>(null);
+
+  showSubmitProjectModal = signal(false);
+
+  selectedProjectId = 0;
 
   programId?: number;
 
@@ -142,7 +148,14 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         },
       });
 
+    const memeberProjects$ = this.projectService.getMy().subscribe({
+      next: projects => {
+        this.memberProjects = projects.results;
+      },
+    });
+
     this.subscriptions$().push(program$);
+    this.subscriptions$().push(memeberProjects$);
     this.subscriptions$().push(programIdSubscription$);
     this.subscriptions$().push(routeModalSub$);
   }
@@ -161,8 +174,6 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         .subscribe();
       this.subscriptions$().push(scrollEvents$);
     }
-
-    console.log(this.showDetails, this.program?.isUserMember);
   }
 
   ngOnDestroy(): void {
@@ -254,6 +265,56 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     this.loadingService.hide();
   }
 
+  /**
+   * Переключатель для модалки выбора проекта
+   */
+  toggleSubmitProjectModal(): void {
+    this.showSubmitProjectModal.set(!this.showSubmitProjectModal());
+
+    if (!this.showSubmitProjectModal()) {
+      this.selectedProjectId = 0;
+    }
+  }
+
+  /**
+   * Добавление проекта на программу
+   */
+  addProjectModal(): void {
+    if (!this.selectedProjectId) {
+      return;
+    }
+
+    const selectedProject = this.memberProjects.find(
+      project => project.id === this.selectedProjectId
+    );
+
+    console.log("Submitting project:", {
+      projectId: this.selectedProjectId,
+      projectName: selectedProject?.name,
+      programId: this.programId,
+    });
+
+    this.toggleSubmitProjectModal();
+    this.selectedProjectId = 0;
+  }
+
+  /**
+   * Обработчик изменения радио-кнопки для выбора проекта
+   */
+  onProjectRadioChange(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.selectedProjectId = +target.value;
+
+    if (this.selectedProjectId) {
+      const selectedProject = this.memberProjects.find(
+        project => project.id === this.selectedProjectId
+      );
+
+      console.log("Selected Project ID:", this.selectedProjectId);
+      console.log("Selected Project Info:", selectedProject);
+    }
+  }
+
   addProject(): void {
     this.loadingService.show();
 
@@ -277,12 +338,13 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   onOpenDetailProgram(): void {
-    if (!this.program?.isUserMember) return;
+    if (!this.program?.isUserMember && !this.program?.isUserManager) return;
 
     this.showDetails = true;
   }
 
   program?: Program;
+  memberProjects: Project[] = [];
   registerDateExpired!: boolean;
   descriptionExpandable!: boolean;
   readFullDescription = false;

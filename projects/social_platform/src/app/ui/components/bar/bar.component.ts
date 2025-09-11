@@ -3,6 +3,7 @@
 import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterLink, RouterLinkActive } from "@angular/router";
+import { BackComponent } from "@uilib";
 
 /**
  * Компонент навигационной панели с табами и кнопкой "Назад".
@@ -26,7 +27,7 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
 @Component({
   selector: "app-bar",
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkActive, BackComponent],
   templateUrl: "./bar.component.html",
   styleUrl: "./bar.component.scss",
 })
@@ -43,4 +44,10 @@ export class BarComponent {
 
   /** Показывать индикатор в виде шарика */
   @Input() ballHave?: boolean = false;
+
+  /** Маршрут для кнопки "Назад" */
+  @Input() backRoute?: string;
+
+  /** Показывать кнопку "Назад" */
+  @Input() backHave?: boolean;
 }

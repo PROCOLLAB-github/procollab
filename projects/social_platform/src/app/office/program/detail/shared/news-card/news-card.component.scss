@@ -2,10 +2,10 @@
 @use "styles/responsive";
 
 .card {
-  padding: 20px;
-  background-color: var(--white);
-  border: 1px solid var(--medium-grey-for-outline);
-  border-radius: var(--rounded-xl);
+  padding: 24px 12px;
+  background-color: var(--light-white);
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-lg);
 
   &__head {
     display: flex;
@@ -24,7 +24,7 @@
     justify-content: center;
     width: 16px;
     height: 16px;
-    color: var(--dark-grey);
+    color: var(--black);
     cursor: pointer;
   }
 
@@ -56,6 +56,8 @@
 
   &__title {
     display: flex;
+    align-items: center;
+    margin-right: 8px;
   }
 
   &__top {
@@ -66,12 +68,6 @@
 
   &__name {
     color: var(--black);
-
-    @include typography.bold-body-14;
-
-    @include responsive.apply-desktop {
-      @include typography.bold-body-16;
-    }
   }
 
   &__date {
@@ -94,12 +90,6 @@
       &.expanded {
         -webkit-line-clamp: unset;
       }
-    }
-
-    @include typography.body-12;
-
-    @include responsive.apply-desktop {
-      @include typography.body-16;
     }
   }
 

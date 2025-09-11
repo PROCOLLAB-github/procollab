@@ -12,7 +12,7 @@
       (paste)="onPaste($event)"
       (keydown.meta.enter)="onSubmit()"
     ></app-input>
-    <i appIcon icon="send" appSquare="12" class="form__send" ((click))="onSubmit()"></i>
+    <i appIcon icon="send" appSquare="12" class="form__send" (click)="onSubmit()"></i>
   </div>
   <div class="form__images">
     @for (i of imagesList; track i.id) {

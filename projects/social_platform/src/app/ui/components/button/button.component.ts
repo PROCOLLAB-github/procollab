@@ -45,7 +45,7 @@ export class ButtonComponent implements OnInit {
   @Input() loader = false;
 
   /** Размер кнопки */
-  @Input() size: "small" | "medium" | "big" = "small";
+  @Input() size: "extra-small" | "small" | "medium" | "big" = "small";
 
   /** Отображать рамку */
   @Input() hasBorder = true;

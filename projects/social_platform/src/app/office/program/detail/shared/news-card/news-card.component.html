@@ -5,31 +5,28 @@
       <img class="card__avatar" [src]="newsItem.imageAddress" [alt]="newsItem.name" />
       <div>
         <div class="card__top">
-          <div class="card__name">{{ newsItem.name }}</div>
+          <div class="card__name text-body-10">{{ newsItem.name }}</div>
           @if (newsItem.pin) {
-          <i appIcon icon="pin" appSquare="24"></i>
+          <i appIcon icon="pin" appSquare="12"></i>
           }
-        </div>
-        <div class="card__date text-body-14">
-          {{ newsItem.datetimeCreated | dayjs: "format":"DD MMMM YYYY, HH:mm" }}
         </div>
       </div>
     </div>
     @if(isOwner) {
     <div class="card__menu" (clickOutside)="onCloseMenu()">
       <div class="card__dots" (click)="menuOpen = true">
-        <i appIcon icon="dots" appWidth="4" appHeight="16" appViewBox="0 0 4 16"></i>
+        <i appIcon icon="dots" appWidth="4" appHeight="10" appViewBox="0 0 4 10"></i>
       </div>
       @if (menuOpen) {
       <ul class="card__options">
-        <li class="card__option text-body-14" (click)="delete.emit(newsItem.id)">Удалить</li>
+        <li class="card__option text-body-10" (click)="delete.emit(newsItem.id)">Удалить</li>
       </ul>
       }
     </div>
     }
   </div>
   @if (newsItem.text) {
-  <div class="card__text text-body-14">
+  <div class="card__text text-body-10">
     <p #newsTextEl [innerHTML]="newsItem.text | parseLinks"></p>
   </div>
   } @if (editMode) {
@@ -90,21 +87,25 @@
   <div class="card__footer footer">
     <div class="footer__left">
       <div
-        class="footer__item footer__like text-body-12"
+        class="footer__item footer__like text-body-10"
         [class.footer__like--active]="newsItem.isUserLiked"
         (click)="like.emit(newsItem.id)"
       >
-        <i appIcon icon="like" appSquare="22"></i>
+        <i appIcon icon="like" appSquare="10"></i>
         {{ newsItem.likesCount }}
       </div>
+
+      <div class="footer__share share">
+        <i class="share__icon" appIcon icon="message" appSquare="10"></i>
+      </div>
+
       <div class="footer__share share" (click)="onCopyLink()">
-        <i class="share__icon" appIcon icon="share" appSquare="22"></i>
+        <i class="share__icon" appIcon icon="share" appSquare="12"></i>
       </div>
     </div>
     <div class="footer__right">
-      <div class="footer__item text-body-12">
-        <i appIcon icon="views" appSquare="22"></i>
-        {{ newsItem.viewsCount }}
+      <div class="card__date text-body-10">
+        {{ newsItem.datetimeCreated | dayjs: "format":"DD.MM.YY" }}
       </div>
     </div>
   </div>

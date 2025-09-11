@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <div class="register">
-  <!-- <app-bar class="bar register__bar" [backHave]="true" [links]="[]"></app-bar> -->
+  <app-bar class="bar register__bar" [backHave]="true" [links]="[]"></app-bar>
   @if (registerForm && schema) {
   <form class="register__form form" [formGroup]="registerForm">
     @for (f of schema | keyvalue; track f.key) {
