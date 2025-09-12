@@ -86,7 +86,6 @@
 }
 
 .project {
-
   &__list {
     display: flex;
     flex-direction: column;
@@ -106,8 +105,8 @@
     align-items: center;
     justify-content: space-between;
     width: 300px;
-    margin-left: 40px;
     margin-bottom: 12px;
+    margin-left: 40px;
 
     &--info {
       display: flex;
@@ -388,9 +387,9 @@
   }
 
   &__text {
-    text-align: center;
-    color: var(--dark-grey);
     width: 40%;
+    color: var(--dark-grey);
+    text-align: center;
   }
 
   &__button {
