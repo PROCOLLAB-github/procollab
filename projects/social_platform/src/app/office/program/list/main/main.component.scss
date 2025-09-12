@@ -1,8 +1,8 @@
 .programs {
   display: grid;
   grid-template-columns: 8fr 2fr;
-  justify-content: space-between;
   grid-gap: 20px;
+  justify-content: space-between;
 
   &__list {
     display: grid;

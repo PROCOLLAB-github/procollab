@@ -7,10 +7,10 @@
 
   &__body {
     position: relative;
+    padding: 50px 0 12px;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-for-outline);
     border-radius: var(--rounded-xl);
-    padding: 50px 0px 12px 0px;
   }
 
   &__photo {
@@ -21,8 +21,8 @@
 
   &__content {
     display: flex;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
     text-align: center;
   }
@@ -41,22 +41,22 @@
   }
 
   &__industry {
+    padding: 2px 36px;
     color: var(--light-white);
     background-color: var(--green);
-    padding: 2px 36px;
     border-radius: var(--rounded-xl);
   }
 
   &__description {
+    margin-bottom: 10px;
     color: var(--dark-grey);
     word-break: break-word;
-    margin-bottom: 10px;
   }
 
   &__project {
     padding: 2px 24px;
-    border-radius: var(--rounded-xl);
     background-color: var(--accent);
+    border-radius: var(--rounded-xl);
 
     &--text {
       color: var(--white);

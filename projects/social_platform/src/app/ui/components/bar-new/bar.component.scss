@@ -20,12 +20,12 @@
 
   &__item {
     display: flex;
+    gap: 4px;
     align-items: center;
     padding: 5px 30px;
-    border-radius: var(--rounded-xl);
-    gap: 4px;
-    cursor: pointer;
     color: var(--grey-for-text);
+    cursor: pointer;
+    border-radius: var(--rounded-xl);
     transition: color 0.2s;
 
     &:hover {
@@ -33,7 +33,6 @@
         color: var(--accent);
       }
     }
-
   }
 
   &__link {
@@ -41,8 +40,8 @@
 
     &--active {
       .bar__item {
-        border: 0.5px solid var(--dark-grey);
         background-color: var(--light-white);
+        border: 0.5px solid var(--dark-grey);
       }
     }
 
