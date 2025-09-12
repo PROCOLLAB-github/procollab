@@ -3,67 +3,32 @@
 @use "styles/responsive";
 
 .card {
-  display: flex;
-  flex-direction: column;
+  height: 171px;
 
   &__body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 200px;
-    padding: 24px 15px;
-    background-color: var(--white);
+    position: relative;
+    background-color: var(--light-white);
+    border: 0.5px solid var(--medium-for-outline);
     border-radius: var(--rounded-xl);
-
-    @include responsive.apply-desktop {
-      border: 1px solid var(--medium-grey-for-outline);
-    }
-
-    &--company {
-      border: 1px solid var(--accent);
-    }
+    padding: 50px 0px 12px 0px;
   }
 
-  &__with-tab {
-    margin-top: 24px;
-  }
-
-  &__tab {
-    width: 65%;
-    max-width: 242px;
-    height: 34px;
-    padding: 0 10px 0 15px;
-    margin-top: -24px;
-    margin-bottom: -10px;
-    overflow: hidden;
-    color: white;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    pointer-events: none;
-    background: var(--gradient-mild);
-    border-radius: 15px 15px 0 0;
+  &__photo {
+    position: absolute;
+    bottom: 72%;
+    left: 36%;
   }
 
   &__content {
     display: flex;
+    align-items: center;
     flex-direction: column;
-    flex-grow: 1;
+    justify-content: center;
+    text-align: center;
   }
 
   &__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     margin-bottom: 15px;
-  }
-
-  &__basket {
-    margin-left: auto;
-    color: var(--red) !important;
-  }
-
-  &__draft {
-    color: var(--red);
   }
 
   &__name {
@@ -75,92 +40,26 @@
     white-space: nowrap;
   }
 
-  &__media {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    margin-top: 15px;
-    color: var(--dark-grey);
-
-    &--single {
-      justify-content: flex-end;
-    }
-
-    &--multiple {
-      justify-content: space-between;
-    }
-  }
-
-  &__left {
-    display: flex;
-    gap: 15px;
-  }
-
-  &__company-flag {
-    display: flex;
-    gap: 5px;
-    color: var(--accent);
-  }
-
-  &__circle {
-    width: 13px;
-    height: 13px;
-    background-color: var(--accent);
-    border-radius: 50%;
-  }
-
-  &__views {
-    display: flex;
-    align-items: center;
-
-    i {
-      margin-right: 5px;
-    }
-  }
-
-  &__subscribed {
-    display: flex;
-    align-items: center;
-    color: var(--accent);
-  }
-
   &__industry {
-    color: var(--dark-grey);
+    color: var(--light-white);
+    background-color: var(--green);
+    padding: 2px 36px;
+    border-radius: var(--rounded-xl);
   }
 
   &__description {
     color: var(--dark-grey);
     word-break: break-word;
+    margin-bottom: 10px;
   }
 
-  &__bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: auto;
+  &__project {
+    padding: 2px 24px;
+    border-radius: var(--rounded-xl);
+    background-color: var(--accent);
 
-    &:empty {
-      margin-top: auto;
+    &--text {
+      color: var(--white);
     }
-  }
-}
-
-.collaborators {
-  display: flex;
-  align-items: center;
-
-  &__list {
-    display: flex;
-  }
-
-  &__item {
-    &:not(:first-child) {
-      margin-left: -10px;
-    }
-  }
-
-  &__other {
-    margin-left: 8px;
-    color: var(--dark-grey);
   }
 }

@@ -8,8 +8,10 @@ import { ProjectCount } from "@models/project.model";
 import { ProjectService } from "@services/project.service";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
-import { BarComponent, ButtonComponent, IconComponent } from "@ui/components";
+import { ButtonComponent, IconComponent } from "@ui/components";
 import { AsyncPipe } from "@angular/common";
+import { BarNewComponent } from "@ui/components/bar-new/bar.component";
+import { BackComponent } from "@uilib";
 
 /**
  * Главный компонент модуля проектов
@@ -34,8 +36,9 @@ import { AsyncPipe } from "@angular/common";
     SearchComponent,
     ButtonComponent,
     RouterOutlet,
+    BarNewComponent,
     AsyncPipe,
-    BarComponent,
+    BackComponent,
   ],
 })
 export class ProjectsComponent implements OnInit, OnDestroy {

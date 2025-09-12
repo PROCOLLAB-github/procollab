@@ -16,14 +16,14 @@
     background: var(--white);
     border: 0.5px solid var(--dark-grey);
     border-radius: 50%;
+    flex-shrink: 0;
   }
 
   &__info {
-    position: absolute;
-    left: 17%;
+    position: relative;
     z-index: 1;
-    width: 100%;
-    padding: 22px 22px 22px 50px;
+    margin-left: -12%;
+    padding: 22px;
     border: 0.5px solid var(--dark-grey);
     border-radius: var(--rounded-lg);
   }

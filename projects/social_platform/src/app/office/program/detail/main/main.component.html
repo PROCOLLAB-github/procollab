@@ -74,8 +74,12 @@
 
           <!-- TODO: внести ссылку на сайт программы когда это поле будет на бэке -->
           @if (!program.isUserManager) {
-          <a class="info__more" [href]="program.presentationAddress" target="_blank">
-            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
+          <a class="info__more">
+            <app-button
+              appearance="outline"
+              [disabled]="true"
+              size="medium"
+              customTypographyClass="text-body-12"
               >узнать подробнее</app-button
             >
           </a>
@@ -88,7 +92,11 @@
           } @if (!program.isUserManager) {
           <!-- добавить информацию с ссылок или чего-то в дизайне телефон но не у каждой программы есть телефон в контактах -->
           <a class="info__contacts">
-            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
+            <app-button
+              [disabled]="true"
+              appearance="outline"
+              size="medium"
+              customTypographyClass="text-body-12"
               >информация с ссылок</app-button
             >
           </a>

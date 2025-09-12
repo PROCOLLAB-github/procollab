@@ -12,7 +12,7 @@
     @slideInOut
   >
     {{ snack.text }}
-    <i appIcon icon="check" appSquare="12"></i>
+    <i appIcon [icon]="snack.type === 'success' ? 'check' : 'error'" appSquare="12"></i>
   </li>
   }
 </ul>

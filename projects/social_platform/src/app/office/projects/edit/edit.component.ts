@@ -392,7 +392,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       next: () => {
         this.projectGoalService.saveGoals(projectId).subscribe({
           next: () => {
-            this.snackBarService.success("Данные успешно сохранены");
+            this.snackBarService.success("данные успешно сохранены");
             this.setProjFormIsSubmitting(false);
             this.router.navigateByUrl(`/office/projects/my`);
           },
@@ -400,7 +400,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       error: () => {
         this.setProjFormIsSubmitting(false);
-        this.snackBarService.error("Что-то пошло не так!");
+        this.snackBarService.error("ошибка при сохранении данных");
       },
     });
   }

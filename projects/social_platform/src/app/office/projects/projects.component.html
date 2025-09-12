@@ -2,54 +2,81 @@
 
 <main class="page">
   <div class="page__bar">
-    @if (projectService.projectsCount$ | async; as count) {
-    <app-bar
-      [backHave]="false"
-      [ballHave]="true"
-      [links]="[
-          {
-            link: '/office/projects/my',
-            linkText: 'Мои проекты',
-            isRouterLinkActiveOptions: false,
-            count: count.my,
-          },
+    <app-back namespace="проекты" path="/office/projects/main"></app-back>
 
-          {
-            link: '/office/projects/subscriptions',
-            linkText: 'Мои подписки',
-            isRouterLinkActiveOptions: false,
-            count: count.subs,
-          },
-
-          {
-            link: '/office/projects/all',
-            linkText: 'Все проекты',
-            isRouterLinkActiveOptions: false,
-            count: count.all,
-          },
-        ]"
-    >
-    </app-bar>
-    <div class="bar__right">
-      @if (isMy) {
-      <app-button
-        size="medium"
-        (click)="addProject()"
-        customTypographyClass="text-body-12 bar__add-project"
-      >
-        <span class="bar__add-project-text text-body-12">Добавить проект</span>
-        <i appIcon icon="plus" appSquare="12"></i>
-      </app-button>
-      } @else if (isAll) {
-      <div class="bar__bottom">
+    <div class="page__info">
+      <div class="page__outlet">
         <form [formGroup]="searchForm">
           <app-search formControlName="search"></app-search>
         </form>
-      </div>
-      }
-    </div>
-    }
-  </div>
 
-  <router-outlet></router-outlet>
+        <app-bar-new
+          [links]="[
+            {
+              link: '/office/projects/my',
+              linkText: 'Мои проекты',
+              iconName: 'main',
+              isRouterLinkActiveOptions: false,
+            },
+
+            {
+              link: '/office/projects/subscriptions',
+              linkText: 'Мои подписки',
+              iconName: 'favourites',
+              isRouterLinkActiveOptions: false,
+            },
+
+            {
+              link: '/office/projects/invites',
+              linkText: 'Мои приглашения',
+              iconName: 'send',
+              isRouterLinkActiveOptions: false,
+            },
+
+            {
+              link: '/office/projects/all',
+              linkText: 'Все проекты',
+              iconName: 'folders',
+              isRouterLinkActiveOptions: false,
+            },
+          ]"
+        >
+        </app-bar-new>
+
+        <router-outlet></router-outlet>
+      </div>
+
+      <div class="page__create">
+        <app-button
+          size="medium"
+          (click)="addProject()"
+          customTypographyClass="text-body-12 bar__add-project"
+        >
+          <span class="bar__add-project-text text-body-12">создать проект</span>
+          <i appIcon icon="plus" appSquare="10"></i>
+        </app-button>
+
+        <div class="page__left">
+          <div class="page__analytics">
+            <div class="analytics">
+              <div class="analytics__soon">
+                <div class="analytics__closed">
+                  <i appIcon icon="lock" appSquare="10"></i>
+                  <span class="text-body-6 analytics__closed--text">пока закрыто</span>
+                </div>
+                <app-button customTypographyClass="text-body-6" color="green" size="extra-small"
+                  >скоро</app-button
+                >
+              </div>
+
+              <div class="analytics__info">
+                <p class="text-body-12">статистика</p>
+                <p class="text-body-6">количество проектов, команды, эффективность</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>

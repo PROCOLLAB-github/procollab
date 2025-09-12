@@ -6,6 +6,7 @@
   @include responsive.apply-desktop {
     display: flex;
     align-items: flex-start;
+    margin-top: 16px;
   }
 
   &__filter {
@@ -29,11 +30,12 @@
     display: grid;
     flex-grow: 1;
     grid-template-columns: 1fr;
-    grid-gap: 16px;
+    row-gap: 20px;
+    column-gap: 40px;
     align-items: flex-start;
 
     @include responsive.apply-desktop {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 2fr);
     }
   }
 }
