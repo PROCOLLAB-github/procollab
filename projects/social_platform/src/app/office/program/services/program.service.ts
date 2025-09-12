@@ -109,13 +109,4 @@ export class ProgramService {
       {}
     );
   }
-
-  programTags$ = new BehaviorSubject<ProgramTag[]>([]);
-  programTags(): Observable<ProgramTag[]> {
-    return this.apiService.get<ProgramTag[]>(`${this.AUTH_USERS_CURRENT_URL}/programs/tags/`).pipe(
-      tap(programs => {
-        this.programTags$.next(programs);
-      })
-    );
-  }
 }

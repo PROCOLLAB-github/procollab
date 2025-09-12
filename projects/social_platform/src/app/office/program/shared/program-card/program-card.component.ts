@@ -43,8 +43,9 @@ export class ProgramCardComponent implements OnInit {
 
   @Input({ required: true }) program?: Program;
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.registerDateExpired = Date.now() > Date.parse(this.program!.datetimeRegistrationEnds);
+  }
 
-  // TODO: изменить когда у нас появятся в информации о программе состояние о завершенности/участии
-  type = "actual";
+  registerDateExpired?: boolean;
 }

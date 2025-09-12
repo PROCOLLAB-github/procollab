@@ -39,6 +39,9 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AsyncPipe } from "@angular/common";
 import { LoadingService } from "@office/services/loading.service";
 import { Project } from "@office/models/project.model";
+import { HttpErrorResponse } from "@angular/common/http";
+import { ProjectAssign } from "@office/projects/models/project-assign.model";
+import { ProjectAdditionalService } from "@office/projects/edit/services/project-additional.service";
 
 @Component({
   selector: "app-main",
@@ -67,23 +70,46 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     private readonly programService: ProgramService,
     private readonly programNewsService: ProgramNewsService,
     private readonly projectService: ProjectService,
+    private readonly projectAdditionalService: ProjectAdditionalService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly cdRef: ChangeDetectorRef,
     private readonly loadingService: LoadingService
   ) {}
 
+  get isAssignProjectToProgramError() {
+    return this.projectAdditionalService.getIsAssignProjectToProgramError()();
+  }
+
+  get errorAssignProjectToProgramModalMessage() {
+    return this.projectAdditionalService.getErrorAssignProjectToProgramModalMessage();
+  }
+
   news = signal<FeedNews[]>([]);
   totalNewsCount = signal(0);
   fetchLimit = signal(10);
   fetchPage = signal(0);
 
+  // Сигналы для работы с модальными окнами с текстом
   showProgramModal = signal(false);
   showProgramModalErrorMessage = signal<string | null>(null);
+  assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
 
+  // Сигналы для управления состоянием
   showSubmitProjectModal = signal(false);
+  isAssignProjectToProgramModalOpen = signal(false);
+
+  // Методы для управления состоянием ошибок через сервис
+  setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
+    this.projectAdditionalService.setAssignProjectToProgramError(error);
+  }
+
+  clearAssignProjectToProgramError(): void {
+    this.projectAdditionalService.clearAssignProjectToProgramError();
+  }
 
   selectedProjectId = 0;
+  dubplicatedProjectId = 0;
 
   programId?: number;
 
@@ -150,7 +176,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
     const memeberProjects$ = this.projectService.getMy().subscribe({
       next: projects => {
-        this.memberProjects = projects.results;
+        this.memberProjects = projects.results.filter(project => !project.draft);
       },
     });
 
@@ -277,6 +303,18 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Обработчик изменения радио-кнопки для выбора проекта
+   */
+  onProjectRadioChange(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.selectedProjectId = +target.value;
+
+    if (this.selectedProjectId) {
+      this.memberProjects.find(project => project.id === this.selectedProjectId);
+    }
+  }
+
+  /**
    * Добавление проекта на программу
    */
   addProjectModal(): void {
@@ -288,53 +326,41 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
       project => project.id === this.selectedProjectId
     );
 
-    console.log("Submitting project:", {
-      projectId: this.selectedProjectId,
-      projectName: selectedProject?.name,
-      programId: this.programId,
-    });
-
-    this.toggleSubmitProjectModal();
-    this.selectedProjectId = 0;
+    this.assignProjectToProgram(selectedProject!);
   }
 
+  /** Эмитим логику для привязки проекта к программе */
   /**
-   * Обработчик изменения радио-кнопки для выбора проекта
+   * Привязка проекта к программе выбранной
+   * Перенаправление её на редактирование "нового" проекта
    */
-  onProjectRadioChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.selectedProjectId = +target.value;
+  assignProjectToProgram(project: Project): void {
+    if (this.programId) {
+      this.projectService.assignProjectToProgram(project.id, this.programId).subscribe({
+        next: r => {
+          this.dubplicatedProjectId = r.newProjectId;
+          this.assignProjectToProgramModalMessage.set(r);
+          this.isAssignProjectToProgramModalOpen.set(true);
+          this.toggleSubmitProjectModal();
+          this.selectedProjectId = 0;
+        },
 
-    if (this.selectedProjectId) {
-      const selectedProject = this.memberProjects.find(
-        project => project.id === this.selectedProjectId
-      );
-
-      console.log("Selected Project ID:", this.selectedProjectId);
-      console.log("Selected Project Info:", selectedProject);
+        error: err => {
+          if (err instanceof HttpErrorResponse) {
+            if (err.status === 400) {
+              this.setAssignProjectToProgramError(err.error);
+            }
+          }
+        },
+      });
     }
   }
 
-  addProject(): void {
-    this.loadingService.show();
-
-    this.projectService.create().subscribe({
-      next: project => {
-        this.projectService.projectsCount.next({
-          ...this.projectService.projectsCount.getValue(),
-          my: this.projectService.projectsCount.getValue().my + 1,
-        });
-        this.router
-          .navigateByUrl(`/office/projects/${project.id}/edit?editingStep=main`)
-          .then(() => {
-            console.debug("Route change from ProjectsComponent");
-          });
-      },
-      error: error => {
-        this.loadingService.hide();
-        console.error("Project creation error:", error);
-      },
-    });
+  closeAssignProjectToProgramModal(): void {
+    this.isAssignProjectToProgramModalOpen.set(false);
+    this.router.navigateByUrl(
+      `/office/projects/${this.dubplicatedProjectId}/edit?editingStep=main`
+    );
   }
 
   onOpenDetailProgram(): void {

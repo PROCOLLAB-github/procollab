@@ -65,14 +65,9 @@ import { generateOptionsList } from "@utils/generate-options-list";
 })
 export class ProjectMainStepComponent implements OnInit, OnDestroy {
   @Input() industries$!: Observable<any[]>;
-  @Input() projectSteps$!: Observable<any[]>;
-  @Input() programTagsOptions: any[] = [];
   @Input() leaderId = 0;
   @Input() projSubmitInitiated = false;
   @Input() projectId!: number;
-  @Input() isProjectBoundToProgram = false;
-
-  @Output() assignToProgram = new EventEmitter<void>();
 
   private subscription = new Subscription();
 
@@ -102,14 +97,13 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
     return this.projectGoalsService.getForm();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.hasGoals || this.hasLinks);
+    console.log(this.hasGoals, this.hasLinks);
+  }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-  }
-
-  onAssignToProgram(): void {
-    this.assignToProgram.emit();
   }
 
   // Геттеры для удобного доступа к контролам формы
@@ -166,10 +160,6 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
   }
 
   // Геттеры для работы со ссылками
-  get linksItems() {
-    return this.projectContactsService.linksItems;
-  }
-
   get link() {
     return this.projectContactsService.link;
   }
@@ -179,10 +169,6 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
   }
 
   // Геттеры для работы с целями
-  get goalItems() {
-    return this.projectGoalsService.goalItems;
-  }
-
   get goals(): FormArray {
     return this.projectGoalsService.goals;
   }
@@ -211,14 +197,14 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
    * Проверяет, есть ли ссылки для отображения
    */
   get hasLinks(): boolean {
-    return this.linksItems().length > 0 || this.links.length > 0;
+    return this.links.length > 0;
   }
 
   /**
    * Проверяет, есть ли цели для отображения
    */
   get hasGoals(): boolean {
-    return this.goalItems().length > 0 || this.goals.length > 0;
+    return this.goals.length > 0;
   }
 
   /**
@@ -266,7 +252,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
    */
   removeGoal(index: number, goalId: number): void {
     this.projectGoalsService.removeGoal(index);
-    this.projectService.deleteGoals(this.projectId, goalId);
+    this.projectService.deleteGoals(this.projectId, goalId).subscribe();
   }
 
   /**

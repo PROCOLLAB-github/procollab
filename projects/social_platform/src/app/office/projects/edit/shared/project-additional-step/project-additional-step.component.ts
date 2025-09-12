@@ -42,8 +42,6 @@ import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
   ],
 })
 export class ProjectAdditionalStepComponent implements OnInit {
-  @Input() programTagsOptions: any[] = [];
-
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   private readonly cdRef = inject(ChangeDetectorRef);
 

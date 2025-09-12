@@ -86,7 +86,6 @@
 }
 
 .project {
-  margin-top: 40px;
 
   &__list {
     display: flex;
@@ -107,6 +106,7 @@
     align-items: center;
     justify-content: space-between;
     width: 300px;
+    margin-left: 40px;
     margin-bottom: 12px;
 
     &--info {
@@ -375,18 +375,6 @@
   max-height: calc(100vh - 40px);
   padding: 24px 54px;
 
-  &__cross {
-    position: absolute;
-    top: 0;
-    right: 0;
-    cursor: pointer;
-
-    @include responsive.apply-desktop {
-      top: 8px;
-      right: 8px;
-    }
-  }
-
   &__top {
     display: flex;
     flex-direction: column;
@@ -401,6 +389,8 @@
 
   &__text {
     text-align: center;
+    color: var(--dark-grey);
+    width: 40%;
   }
 
   &__button {

@@ -106,7 +106,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly snackBarService: SnackbarService,
     private readonly skillsService: SkillsService,
     private readonly projectAdditionalService: ProjectAdditionalService,
-    private readonly projectGoalService: ProjectGoalService // Добавляем ProjectGoalService
+    private readonly projectGoalService: ProjectGoalService
   ) {}
 
   // Получаем форму проекта из сервиса
@@ -144,23 +144,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.projectAdditionalService.getPartnerProgramFields();
   }
 
-  get isAssignProjectToProgramError() {
-    return this.projectAdditionalService.getIsAssignProjectToProgramError()();
-  }
-
-  get errorAssignProjectToProgramModalMessage() {
-    return this.projectAdditionalService.getErrorAssignProjectToProgramModalMessage();
-  }
-
-  // Методы для управления состоянием ошибок через сервис
-  setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
-    this.projectAdditionalService.setAssignProjectToProgramError(error);
-  }
-
-  clearAssignProjectToProgramError(): void {
-    this.projectAdditionalService.clearAssignProjectToProgramError();
-  }
-
   ngOnInit(): void {
     this.navService.setNavTitle("Создание проекта");
 
@@ -186,16 +169,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Опции для программных тегов
   programTagsOptions: SelectComponent["options"] = [];
-  programTags: ProgramTag[] = [];
 
   // Id Лидера проекта
   leaderId = 0;
 
   // Маркер того является ли проект привязанный к конкурсной программе
   isCompetitive = false;
-
-  // Маркер что проект привязан
-  isProjectBoundToProgram = false;
 
   // Текущий шаг редактирования
   get editingStep(): EditStep {
@@ -223,9 +202,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   onEditClicked = signal(false);
   warningModalSeen = false;
 
-  // Сигналы для работы с модальными окнами с текстом
-  assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
-
   // Observables для данных
   industries$ = this.industryService.industries.pipe(
     map(industries =>
@@ -235,13 +211,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   subscriptions: (Subscription | undefined)[] = [];
 
-  profileId: number = this.route.snapshot.params["projectId"];
+  profileId: number = +this.route.snapshot.params["projectId"];
 
   // Сигналы для управления состоянием
   inlineSkills = signal<Skill[]>([]);
   nestedSkills$ = this.skillsService.getSkillsNested();
   skillsGroupsModalOpen = signal(false);
-  isAssignProjectToProgramModalOpen = signal(false);
 
   // Состояние отправки форм
   projSubmitInitiated = false;
@@ -263,32 +238,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.openGroupIds.delete(groupId);
     }
-  }
-
-  /**
-   * Привязка проекта к программе выбранной
-   * Перенаправление её на редактирование "нового" проекта
-   */
-  assignProjectToProgram(): void {
-    this.projectService
-      .assignProjectToProgram(
-        Number(this.route.snapshot.paramMap.get("projectId")),
-        this.projectForm.get("partnerProgramId")?.value
-      )
-      .subscribe({
-        next: r => {
-          this.assignProjectToProgramModalMessage.set(r);
-          this.isAssignProjectToProgramModalOpen.set(true);
-        },
-
-        error: err => {
-          if (err instanceof HttpErrorResponse) {
-            if (err.status === 400) {
-              this.setAssignProjectToProgramError(err.error);
-            }
-          }
-        },
-      });
   }
 
   // Методы для управления состоянием отправки форм
@@ -430,11 +379,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sendAdditionalFields(projectId, relationId);
   }
 
-  closeAssignProjectToProgramModal(): void {
-    this.isAssignProjectToProgramModalOpen.set(false);
-    this.router.navigateByUrl(`/office/projects/my`);
-  }
-
   /**
    * Валидация дополнительных полей для публикации
    * Делегирует валидацию сервису
@@ -563,22 +507,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private loadProgramTagsAndProject(): void {
-    this.programService
-      .programTags()
-      .pipe(
-        tap(tags => {
-          this.programTags = tags;
-        }),
-        map(tags => [
-          { label: "Без тега", value: 0, id: 0 },
-          ...tags.map(t => ({ label: t.name, value: t.id, id: t.id })),
-        ]),
-        tap(tags => {
-          this.programTagsOptions = tags;
-        }),
-        concatMap(() => this.route.data),
-        map(d => d["data"])
-      )
+    this.route.data
+      .pipe(map(d => d["data"]))
       .subscribe(([project, goals, invites]: [Project, Goal[], Invite[]]) => {
         // Используем сервис для инициализации данных проекта
         this.projectFormService.initializeProjectData(project);
@@ -588,7 +518,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (project.partnerProgram) {
           this.isCompetitive = project.partnerProgram.canSubmit;
-          this.isProjectBoundToProgram = !!project.partnerProgram.programId;
 
           this.projectAdditionalService.initializeAdditionalForm(
             project.partnerProgram?.programFields,

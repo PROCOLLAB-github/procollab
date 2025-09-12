@@ -263,24 +263,8 @@
     class="project__options"
     [formGroup]="goalForm"
     [style.gap]="hasGoals || hasLinks ? '0px' : '35px'"
+    [style.margin-top]="hasGoals && hasLinks ? '20px' : hasGoals ? '20px' : '35px'"
   >
-    <!-- @if (!isProjectBoundToProgram) { @if (authService.profile | async; as profile) { @if (profile.id
-    == leaderId) { @if (programTagsOptions.length) {
-    <fieldset class="project__tags" style="margin-top: -10px">
-      <label for="program_tag" class="field-label">Выбор тега</label>
-      <app-select
-        id="program_tag"
-        [options]="programTagsOptions"
-        placeholder="Выберите программу, в которой участвуете"
-        formControlName="partnerProgramId"
-      ></app-select>
-    </fieldset>
-
-    <app-button size="big" (click)="onAssignToProgram()" customTypographyClass="text-body-12">
-      Привязать проект к программе
-    </app-button>
-    } } } } -->
-
     @if (hasGoals) {
     <ul formArrayName="goals" class="project__links--wrapper">
       @for (control of goals.controls; track i; let i = $index) {
@@ -370,10 +354,7 @@
           <p class="cancel__title text-body-14">выберите ответственного</p>
 
           <div class="project__invite">
-            <ul
-              class="invite__team"
-              [style.overflow-y]="collaborators.length > 8 ? 'auto' : 'none'"
-            >
+            <ul class="invite__team" [class.invite__team--scrollable]="collaborators.length > 8">
               @for (collaborator of collaborators; track collaborator.userId) {
               <li class="invite__item">
                 <div class="invite__item--info">
@@ -413,7 +394,7 @@
       size="big"
       appearance="outline"
       customTypographyClass="text-body-12"
-      [style.margin-bottom]="hasGoals ? '12px' : '35px'"
+      [style.margin-bottom]="hasGoals && hasLinks ? '12px' : hasGoals ? '35px' : '0px'"
     >
       <span>добавить краткосрочную цель проекта</span>
       <i appIcon icon="plus" appSquare="12"></i>

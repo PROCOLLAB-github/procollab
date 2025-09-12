@@ -45,11 +45,9 @@
         <app-project-main-step
           style="width: 100%"
           [industries$]="industries$"
-          [programTagsOptions]="programTagsOptions"
           [leaderId]="leaderId"
           [projSubmitInitiated]="projSubmitInitiated"
-          [isProjectBoundToProgram]="isProjectBoundToProgram"
-          (assignToProgram)="assignProjectToProgram()"
+          [projectId]="profileId"
         ></app-project-main-step>
 
         } @else if (editingStep === "contacts") {
@@ -74,7 +72,6 @@
         <app-project-additional-step
           #additionalStepComponent
           style="width: 100%"
-          [programTagsOptions]="programTagsOptions"
         ></app-project-additional-step>
         }
       </div>
@@ -97,67 +94,6 @@
     </app-modal>
   </main>
 </div>
-
-<app-modal
-  [open]="isAssignProjectToProgramError"
-  (openChange)="isAssignProjectToProgramError ? clearAssignProjectToProgramError() : null"
->
-  <div class="cancel" style="width: 80%; padding: 40px 0px 40px">
-    <div class="cancel__top">
-      <i
-        (click)="clearAssignProjectToProgramError()"
-        appIcon
-        icon="cross"
-        class="cancel__cross"
-      ></i>
-      <p class="cancel__title text-bold-body-16">Ошибка привязки проекта к программе!</p>
-    </div>
-
-    <p class="text-body-14 cancel__text">
-      {{ (errorAssignProjectToProgramModalMessage()?.non_field_errors)![0] }}
-    </p>
-
-    <app-button
-      size="medium"
-      class="cancel__button"
-      customTypographyClass="text-body-12"
-      (click)="clearAssignProjectToProgramError()"
-      >Понятно</app-button
-    >
-  </div>
-</app-modal>
-
-<app-modal
-  [open]="isAssignProjectToProgramModalOpen()"
-  (openChange)="isAssignProjectToProgramModalOpen.set(!isAssignProjectToProgramModalOpen)"
->
-  <div class="cancel" style="width: 80%; padding: 40px 0px 40px">
-    <div class="cancel__top">
-      <i
-        (click)="closeAssignProjectToProgramModal()"
-        appIcon
-        icon="cross"
-        class="cancel__cross"
-      ></i>
-      <p class="cancel__title text-bold-body-16">Поздравляем!</p>
-    </div>
-
-    <p class="text-body-14 cancel__text">
-      Мы создали дубликат проекта, который вы привязали к выбранной программе
-      <span
-        ><strong>{{ assignProjectToProgramModalMessage()?.partnerProgram }}</strong></span
-      >, теперь его можно отредактировать!
-    </p>
-
-    <app-button
-      size="medium"
-      class="cancel__button"
-      customTypographyClass="text-body-12"
-      (click)="closeAssignProjectToProgramModal()"
-      >Понятно</app-button
-    >
-  </div>
-</app-modal>
 
 <app-modal [open]="isCompleted" (openChange)="isCompleted = !isCompleted">
   <div class="cancel">

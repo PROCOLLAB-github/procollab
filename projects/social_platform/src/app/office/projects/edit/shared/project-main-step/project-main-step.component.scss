@@ -18,9 +18,7 @@
   &__options {
     display: flex;
     flex-direction: column;
-    gap: 35px;
     width: 100%;
-    margin-top: 35px;
   }
 
   &__info {
@@ -204,5 +202,10 @@
     gap: 10px;
     align-items: flex-start;
     justify-content: space-between;
+
+    &--scrollable {
+      max-height: 180px;
+      overflow-y: auto;
+    }
   }
 }

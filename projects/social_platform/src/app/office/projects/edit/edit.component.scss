@@ -12,13 +12,13 @@
   &__top {
     position: fixed;
     top: 5%;
-    left: 12%;
+    left: 6%;
     z-index: 10;
     display: flex;
     gap: 12%;
     align-items: center;
     justify-content: space-evenly;
-    width: 88%;
+    width: 100%;
     background-color: var(--white);
     border-radius: var(--rounded-xxl);
   }
