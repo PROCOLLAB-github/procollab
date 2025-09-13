@@ -15,30 +15,94 @@
         <i appIcon icon="team" appSquare="4"></i>
       </div>
     </div>
-    } @if (haveBadge) { @if (isSubscribed) {
-    <i
-      (click)="onUnsubscribe($event, profileId!)"
-      appIcon
-      appWidth="10"
-      class="card__subscribe-badge"
-      appHeight="16"
-      icon="subscribe-badge"
-    ></i>
-    } @else {
-    <i
-      (click)="onSubscribe($event, profileId!)"
-      appIcon
-      appWidth="10"
-      class="card__subscribe-badge"
-      appHeight="16"
-      icon="unsubscribe-badge"
-    ></i>
-    } }
+    }
+
+    <div class="card__badge">
+      @if (haveBadge) { @if (isSubscribed) {
+      <i
+        (click)="onUnsubscribe($event, profileId!)"
+        appIcon
+        appWidth="10"
+        class="card__subscribe-badge"
+        appHeight="16"
+        icon="subscribe-badge"
+      ></i>
+      } @else {
+      <i
+        (click)="onSubscribe($event, profileId!)"
+        appIcon
+        appWidth="10"
+        class="card__subscribe-badge"
+        appHeight="16"
+        icon="unsubscribe-badge"
+      ></i>
+      } }
+    </div>
+
+    <app-avatar class="card__photo" [url]="project.imageAddress" [size]="70"></app-avatar>
+
+    <div class="card__content">
+      <div class="card__head">
+        <div>
+          <p class="text-body-12 card__name">{{ project.name }}</p>
+          @if (industryService.industries | async; as industries) {
+          <p class="text-body-6 card__industry">
+            @if (industryService.getIndustry(industries, project.industry); as industry) {
+            <span>
+              {{ industry ? industry.name : "Error" }}
+            </span>
+            }
+          </p>
+          }
+        </div>
+      </div>
+
+      @if (type === 'invite') {
+      <div class="card__description invite-description">
+        <p class="text-body-6 card__user">вас приглашает</p>
+        <p class="text-body-10 card__user--invite">{{ project.shortDescription }}</p>
+      </div>
+      } @else {
+      <div class="card__description">
+        <p class="text-body-6">{{ project.shortDescription }}</p>
+      </div>
+      }
+
+      <div class="card__project">
+        @if (type === 'project') {
+        <app-button
+          customTypographyClass="text-body-6"
+          size="extra-small"
+          class="card__project--text"
+        >
+          проект
+        </app-button>
+        } @else {
+        <app-button
+          (click)="onAcceptInvite($event, project.inviteId)"
+          customTypographyClass="text-body-6"
+          size="extra-small"
+          appearance="inline"
+        >
+          принять
+        </app-button>
+
+        <app-button
+          (click)="onRejectInvite($event, project.inviteId)"
+          customTypographyClass="text-body-6"
+          size="extra-small"
+          appearance="outline"
+        >
+          отклонить
+        </app-button>
+        }
+      </div>
+    </div>
 
     <app-modal [(open)]="isUnsubscribeModalOpen">
       <div class="unsubscribe-modal">
         <h3>Вы действительно хотите отписаться от проекта?</h3>
-        <app-avatar [url]="project.imageAddress" [size]="130"></app-avatar>
+        <app-avatar [url]="project.imageAddress" [size]="70"></app-avatar>
         <div class="unsubscribe-modal__buttons">
           <app-button
             color="red"
@@ -56,57 +120,6 @@
         </div>
       </div>
     </app-modal>
-
-    <div class="card__content">
-      <div class="card__head">
-        <app-avatar class="card__photo" [url]="project.imageAddress" [size]="70"></app-avatar>
-        <div>
-          <p class="text-body-12 card__name">{{ project.name }}</p>
-          @if (industryService.industries | async; as industries) {
-          <p class="text-body-6 card__industry">
-            @if (industryService.getIndustry(industries, project.industry); as industry) {
-            <span>
-              {{ industry ? industry.name : "Error" }}
-            </span>
-            }
-          </p>
-          }
-        </div>
-      </div>
-      @if (type === 'invite') {
-      <p class="text-body-6 card__user">вас приглашает</p>
-      <p class="text-body-10 card__user--invite">{{ project.shortDescription }}</p>
-      } @else {
-      <p class="text-body-6 card__description">{{ project.shortDescription }}</p>
-      }
-
-      <div class="card__project">
-        @if (type === 'project') {
-        <app-button
-          customTypographyClass="text-body-6"
-          size="extra-small"
-          class="card__project--text"
-          >проект</app-button
-        >
-        } @else {
-        <app-button
-          (click)="onAcceptInvite($event, project.inviteId)"
-          customTypographyClass="text-body-6"
-          size="extra-small"
-          appearance="inline"
-          >принять</app-button
-        >
-
-        <app-button
-          (click)="onRejectInvite($event, project.inviteId)"
-          customTypographyClass="text-body-6"
-          size="extra-small"
-          appearance="outline"
-          >отклонить</app-button
-        >
-        }
-      </div>
-    </div>
 
     <app-modal [open]="inviteErrorModal">
       <div class="message-modal">

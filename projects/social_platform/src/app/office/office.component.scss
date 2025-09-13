@@ -27,12 +27,7 @@
 
   &__body {
     flex-grow: 1;
-    padding: 10px 10px 0;
     overflow-y: auto;
-
-    @include responsive.apply-desktop {
-      padding: 20px 20px 0;
-    }
   }
 
   &__header {

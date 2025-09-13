@@ -7,17 +7,6 @@
     logoSrc="/assets/images/shared/logo.svg"
     [navItems]="navItems"
   >
-    @if (user !== undefined && invites !== undefined) {
-    <app-profile-control-panel
-      [invites]="invites()"
-      [hasNotifications]="false"
-      [hasUnreads]="!!(chatService.unread$ | async)"
-      [user]="user"
-      (acceptInvite)="onAcceptInvite($event)"
-      (rejectInvite)="onRejectInvite($event)"
-      (logout)="onLogout()"
-    ></app-profile-control-panel>
-    }
     <div class="text-body-14 pro-item" (click)="openSkills()" afterNavItems>
       <div class="pro-item__name">
         <i appIcon icon="book" appSquare="24"></i> <span> Траектории </span>
@@ -25,17 +14,28 @@
       <div class="pro-item__badge text-body-12">PRO</div>
     </div>
   </ui-sidebar>
-  }
   <div class="office__wrapper">
     <div class="office__top">
       <app-nav [invites]="invites()"></app-nav>
     </div>
     <div class="office__body">
       <div class="office__inner">
+        @if (user !== undefined && invites !== undefined) {
+        <app-profile-control-panel
+          [invites]="invites()"
+          [hasNotifications]="false"
+          [hasUnreads]="!!(chatService.unread$ | async)"
+          [user]="user"
+          (acceptInvite)="onAcceptInvite($event)"
+          (rejectInvite)="onRejectInvite($event)"
+          (logout)="onLogout()"
+        ></app-profile-control-panel>
+        }
         <router-outlet></router-outlet>
       </div>
     </div>
   </div>
+  }
   <app-modal [open]="waitVerificationModal && !waitVerificationAccepted">
     <div class="message-modal">
       <img src="/assets/images/office/shared/wait.png" alt="wait" width="215px" />
