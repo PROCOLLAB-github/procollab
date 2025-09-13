@@ -10,21 +10,21 @@
 
   &__soon {
     position: relative;
+    display: grid;
+    place-items: center;
     margin-bottom: 4px;
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
-    display: grid;
-    place-items: center;
   }
 
   &__closed {
     display: flex;
     flex-direction: column;
+    grid-area: 1 / 1;
     gap: 2px;
     align-items: center;
     justify-content: center;
     padding: 24px 37px;
-    grid-area: 1 / 1;
 
     &--text {
       color: var(--dark-grey);
