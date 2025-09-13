@@ -2,6 +2,61 @@
 
 <div class="card" [class.card__with-tab]="project.collaborator">
   <div class="card__body">
+    @if (type === 'project') {
+    <div class="card__info">
+      <!-- TODO: добавить возможность для карточки внутри бэка полей с vacancies и collaborators -->
+      <div class="card__info--vacancies">
+        <p class="text-body-6">12</p>
+        <i appIcon icon="suitcase" appSquare="4"></i>
+      </div>
+
+      <div class="card__info--collaborators">
+        <p class="text-body-6">12</p>
+        <i appIcon icon="team" appSquare="4"></i>
+      </div>
+    </div>
+    } @if (haveBadge) { @if (isSubscribed) {
+    <i
+      (click)="onUnsubscribe($event, profileId!)"
+      appIcon
+      appWidth="10"
+      class="card__subscribe-badge"
+      appHeight="16"
+      icon="subscribe-badge"
+    ></i>
+    } @else {
+    <i
+      (click)="onSubscribe($event, profileId!)"
+      appIcon
+      appWidth="10"
+      class="card__subscribe-badge"
+      appHeight="16"
+      icon="unsubscribe-badge"
+    ></i>
+    } }
+
+    <app-modal [(open)]="isUnsubscribeModalOpen">
+      <div class="unsubscribe-modal">
+        <h3>Вы действительно хотите отписаться от проекта?</h3>
+        <app-avatar [url]="project.imageAddress" [size]="130"></app-avatar>
+        <div class="unsubscribe-modal__buttons">
+          <app-button
+            color="red"
+            customTypographyClass="unsubscribe-modal-btn__typography"
+            (click)="onUnsubscribe($event, project.id)"
+          >
+            Отписаться
+          </app-button>
+          <app-button
+            customTypographyClass="unsubscribe-modal-btn__typography"
+            (click)="onCloseUnsubscribeModal()"
+          >
+            Отменить
+          </app-button>
+        </div>
+      </div>
+    </app-modal>
+
     <div class="card__content">
       <div class="card__head">
         <app-avatar class="card__photo" [url]="project.imageAddress" [size]="70"></app-avatar>
@@ -18,11 +73,59 @@
           }
         </div>
       </div>
+      @if (type === 'invite') {
+      <p class="text-body-6 card__user">вас приглашает</p>
+      <p class="text-body-10 card__user--invite">{{ project.shortDescription }}</p>
+      } @else {
       <p class="text-body-6 card__description">{{ project.shortDescription }}</p>
+      }
 
       <div class="card__project">
-        <p class="text-body-6 card__project--text">проект</p>
+        @if (type === 'project') {
+        <app-button
+          customTypographyClass="text-body-6"
+          size="extra-small"
+          class="card__project--text"
+          >проект</app-button
+        >
+        } @else {
+        <app-button
+          (click)="onAcceptInvite($event, project.inviteId)"
+          customTypographyClass="text-body-6"
+          size="extra-small"
+          appearance="inline"
+          >принять</app-button
+        >
+
+        <app-button
+          (click)="onRejectInvite($event, project.inviteId)"
+          customTypographyClass="text-body-6"
+          size="extra-small"
+          appearance="outline"
+          >отклонить</app-button
+        >
+        }
       </div>
     </div>
+
+    <app-modal [open]="inviteErrorModal">
+      <div class="message-modal">
+        <h3 class="message-modal__title text-body-14">
+          Приглашение на текущий проект было удалено
+        </h3>
+        <p class="message-modal__text text-body-10">
+          Проверьте наличие вас в списке участников проекта или обратитесь к создателю проекта,
+          чтобы вас заново пригласили!
+        </p>
+        <app-button
+          customTypographyClass="text-body-12"
+          size="medium"
+          class="message-modal__button"
+          (click)="inviteErrorModal = false"
+        >
+          Хорошо
+        </app-button>
+      </div>
+    </app-modal>
   </div>
 </div>

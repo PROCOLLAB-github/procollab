@@ -13,38 +13,14 @@
       <li>
         <app-project-card
           [project]="project"
-          [canDelete]="project.leader === profile?.id"
+          [type]="isInvites ? 'invite' : 'project'"
           [isSubscribed]="profileProjSubsIds?.includes(project.id)"
-          (remove)="deleteProject($event)"
+          [profileId]="project.id"
+          (onAcceptingInvite)="onAcceptInvite($event)"
+          (onRejectingInvite)="onRejectInvite($event)"
         ></app-project-card>
       </li>
     </a>
     }
   </ul>
-  @if (isAll) {
-  <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
-    <div class="filter__overlay" (click)="isFilterOpen = false"></div>
-    <div class="filter__body" #filterBody>
-      <div
-        class="filter__bar"
-        (touchstart)="onSwipeStart($event)"
-        (touchmove)="onSwipeMove($event)"
-        (touchend)="onSwipeEnd($event)"
-      ></div>
-      <app-projects-filter (closeFilter)="closeFilter()"></app-projects-filter>
-    </div>
-  </div>
-  } @else if (!projects.length && isMy) {
-  <div class="page__empty empty text-body-12">
-    <button class="empty__action text-body-12" (click)="addProject()">
-      <i appIcon icon="plus" appSquare="12"></i>
-      Добавьте свой первый проект
-    </button>
-    <span class="empty__or">или</span>
-    <a class="empty__action" routerLink="/office/projects/all">
-      <i appIcon icon="search" appSquare="32"></i>
-      Найдите интересующий проект в списке
-    </a>
-  </div>
-  }
 </section>

@@ -55,6 +55,7 @@ export class Project {
   partnerProgram!: PartnerProgramInfo | null;
   vacancies!: Vacancy[];
   isCompany!: boolean;
+  inviteId!: number;
 
   static default(): Project {
     return {
@@ -84,6 +85,7 @@ export class Project {
       leader: 0,
       vacancies: [],
       isCompany: true,
+      inviteId: 0,
     };
   }
 }

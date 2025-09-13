@@ -7,7 +7,7 @@
 
   &__body {
     position: relative;
-    padding: 50px 0 12px;
+    padding: 15px 0 12px;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-for-outline);
     border-radius: var(--rounded-xl);
@@ -16,7 +16,8 @@
   &__photo {
     position: absolute;
     bottom: 72%;
-    left: 36%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   &__content {
@@ -25,10 +26,40 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    padding-top: 40px;
   }
 
   &__head {
     margin-bottom: 15px;
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 10px;
+
+    &--vacancies, &--collaborators {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--grey-for-text);
+    }
+  }
+
+  &__subscribe-badge {
+    display: block;
+    transform: translateY(10px);
+    color: var(--accent);
+    cursor: pointer;
+  }
+
+  &__user {
+    color: var(--grey-for-text);
+
+    &--invite {
+      color: var(--accent);
+    }
   }
 
   &__name {
@@ -55,11 +86,36 @@
 
   &__project {
     padding: 2px 24px;
-    background-color: var(--accent);
     border-radius: var(--rounded-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     &--text {
       color: var(--white);
     }
+  }
+}
+
+.message-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 402px;
+
+  &__title {
+    margin: 18px 0;
+    color: var(--black);
+    text-align: center;
+  }
+
+  &__text {
+    color: var(--dark-grey);
+    text-align: center;
+  }
+
+  &__button {
+    margin-top: 18px;
   }
 }

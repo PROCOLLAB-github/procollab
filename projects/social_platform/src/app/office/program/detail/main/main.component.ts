@@ -42,6 +42,7 @@ import { Project } from "@office/models/project.model";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ProjectAssign } from "@office/projects/models/project-assign.model";
 import { ProjectAdditionalService } from "@office/projects/edit/services/project-additional.service";
+import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
 
 @Component({
   selector: "app-main",
@@ -63,6 +64,7 @@ import { ProjectAdditionalService } from "@office/projects/edit/services/project
     ModalComponent,
     MatProgressBarModule,
     InputComponent,
+    SoonCardComponent,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {

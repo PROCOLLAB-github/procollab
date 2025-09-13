@@ -3,7 +3,6 @@
 import { Component, Input, type OnInit } from "@angular/core";
 import { LoaderComponent } from "../loader/loader.component";
 import { CommonModule } from "@angular/common";
-import { IconComponent } from "@uilib";
 
 /**
  * Универсальный компонент кнопки с различными стилями, состояниями и встроенной подсказкой.
@@ -33,7 +32,7 @@ import { IconComponent } from "@uilib";
   templateUrl: "./button.component.html",
   styleUrl: "./button.component.scss",
   standalone: true,
-  imports: [CommonModule, LoaderComponent, IconComponent],
+  imports: [CommonModule, LoaderComponent],
 })
 export class ButtonComponent implements OnInit {
   constructor() {}

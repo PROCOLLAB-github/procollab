@@ -31,7 +31,6 @@
 
   &__body {
     max-width: 280px;
-    padding: 22px;
     background-color: var(--white);
     border-radius: var(--rounded-md);
   }
@@ -45,16 +44,6 @@
 
   &__clear {
     cursor: pointer;
-  }
-
-  &__title {
-    color: var(--black);
-
-    @include typography.heading-3;
-
-    @include responsive.apply-desktop {
-      @include typography.bold-body-16;
-    }
   }
 
   &__block {

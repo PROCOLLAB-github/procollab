@@ -30,8 +30,8 @@
     display: grid;
     flex-grow: 1;
     grid-template-columns: 1fr;
-    row-gap: 20px;
-    column-gap: 40px;
+    row-gap: 40px;
+    column-gap: 20px;
     align-items: flex-start;
 
     @include responsive.apply-desktop {

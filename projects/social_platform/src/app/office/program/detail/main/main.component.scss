@@ -61,13 +61,6 @@
     grid-template-columns: 2fr 5fr 3fr;
     grid-gap: 20px;
   }
-
-  &__analytics {
-    padding: 12px;
-    background-color: var(--light-white);
-    border: 0.5px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-lg);
-  }
 }
 
 .bar__add-project {
@@ -112,55 +105,6 @@
       display: flex;
       gap: 20px;
       align-items: center;
-    }
-  }
-}
-
-.analytics {
-  text-align: center;
-
-  &__soon {
-    position: relative;
-    margin-bottom: 4px;
-    border: 0.5px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-lg);
-  }
-
-  &__closed {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 37px;
-
-    &--text {
-      color: var(--dark-grey);
-    }
-
-    i {
-      color: var(--dark-grey);
-    }
-  }
-
-  app-button {
-    position: absolute;
-    top: 82%;
-    left: 41%;
-  }
-
-  &__info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    align-items: center;
-    justify-content: center;
-    margin-top: 8px;
-
-    p {
-      width: 60%;
-      color: var(--accent);
-      text-align: center;
     }
   }
 }

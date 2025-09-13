@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  inject,
   OnDestroy,
   OnInit,
   Renderer2,
@@ -28,13 +29,14 @@ import { Project } from "@models/project.model";
 import { User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
 import { ProjectService } from "@services/project.service";
-import Fuse from "fuse.js";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@models/api-pagination.model";
 import { ProjectsFilterComponent } from "../projects-filter/projects-filter.component";
 import { ProjectCardComponent } from "../../shared/project-card/project-card.component";
 import { IconComponent } from "@ui/components";
 import { SubscriptionService } from "@office/services/subscription.service";
+import { Invite } from "@office/models/invite.model";
+import { InviteService } from "@office/services/invite.service";
 
 /**
  * КОМПОНЕНТ СПИСКА ПРОЕКТОВ
@@ -69,7 +71,7 @@ import { SubscriptionService } from "@office/services/subscription.service";
  * - searchedProjects[] - отфильтрованный список для отображения
  * - profile - данные текущего пользователя
  * - isFilterOpen - состояние панели фильтров (мобильные)
- * - isAll/isMy/isSubs - флаги текущего режима просмотра
+ * - isAll/isMy/isSubs/isInvites - флаги текущего режима просмотра
  *
  * Жизненный цикл:
  * - OnInit: настройка подписок, инициализация данных
@@ -87,19 +89,17 @@ import { SubscriptionService } from "@office/services/subscription.service";
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
   standalone: true,
-  imports: [IconComponent, RouterLink, ProjectCardComponent, ProjectsFilterComponent],
+  imports: [IconComponent, RouterLink, ProjectCardComponent],
 })
 export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly authService: AuthService,
-    private readonly navService: NavService,
-    private readonly projectService: ProjectService,
-    private readonly cdref: ChangeDetectorRef,
-    private readonly router: Router,
-    private readonly subscriptionService: SubscriptionService,
-    private readonly renderer: Renderer2
-  ) {}
+  private readonly renderer = inject(Renderer2);
+  private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
+  private readonly navService = inject(NavService);
+  private readonly projectService = inject(ProjectService);
+  private readonly cdref = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
+  private readonly subscriptionService = inject(SubscriptionService);
 
   @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;
 
@@ -111,6 +111,7 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isMy = location.href.includes("/my");
         this.isAll = location.href.includes("/all");
         this.isSubs = location.href.includes("/subsription");
+        this.isInvites = location.href.includes("/invites");
       }
     });
     routeUrl$ && this.subscriptions$.push(routeUrl$);
@@ -178,7 +179,20 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     const projects$ = this.route.data.pipe(map(r => r["data"])).subscribe(projects => {
       this.projectsCount = projects.count;
 
-      this.projects = projects.results ?? [];
+      if (this.isInvites) {
+        this.projects = (projects ?? []).map((invite: Invite) => ({
+          inviteId: invite.id,
+          id: invite.project.id,
+          imageAddress: invite.project.imageAddress,
+          vacancies: invite.project.vacancies,
+          collaborators: invite.project.collaborators,
+          name: invite.project.name,
+          shortDescription: invite.user.firstName + " " + invite.user.lastName,
+          industry: invite.project.industry,
+        }));
+      } else {
+        this.projects = projects.results ?? [];
+      }
     });
 
     projects$ && this.subscriptions$.push(projects$);
@@ -235,6 +249,7 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   isAll = location.href.includes("/all");
   isMy = location.href.includes("/my");
   isSubs = location.href.includes("/subscriptions");
+  isInvites = location.href.includes("/invites");
 
   profile?: User;
   profileProjSubsIds?: number[];
@@ -251,33 +266,36 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private previousReqQuery: Record<string, any> = {};
 
-  deleteProject(projectId: number): void {
-    if (!confirm("Вы точно хотите удалить проект?")) {
-      return;
-    }
+  // deleteProject(projectId: number): void {
+  //   if (!confirm("Вы точно хотите удалить проект?")) {
+  //     return;
+  //   }
 
-    this.projectService.remove(projectId).subscribe(() => {
-      this.projectService.projectsCount.next({
-        ...this.projectService.projectsCount.getValue(),
-        my: this.projectService.projectsCount.getValue().my - 1,
-      });
+  //   this.projectService.remove(projectId).subscribe(() => {
+  //     this.projectService.projectsCount.next({
+  //       ...this.projectService.projectsCount.getValue(),
+  //       my: this.projectService.projectsCount.getValue().my - 1,
+  //     });
 
-      const index = this.projects.findIndex(project => project.id === projectId);
-      this.projects.splice(index, 1);
-    });
+  //     const index = this.projects.findIndex(project => project.id === projectId);
+  //     this.projects.splice(index, 1);
+  //   });
+  // }
+
+  onAcceptInvite(event: number): void {
+    this.sliceInvitesArray(event);
   }
 
-  addProject(): void {
-    this.projectService.create().subscribe(project => {
-      this.projectService.projectsCount.next({
-        ...this.projectService.projectsCount.getValue(),
-        my: this.projectService.projectsCount.getValue().my + 1,
-      });
+  onRejectInvite(event: number): void {
+    this.sliceInvitesArray(event);
+  }
 
-      this.router
-        .navigateByUrl(`/office/projects/${project.id}/edit`)
-        .then(() => console.debug("Route change from ProjectsComponent"));
-    });
+  private sliceInvitesArray(inviteId: number): void {
+    const index = this.projects.findIndex(p => p.inviteId === inviteId);
+    if (index !== -1) {
+      this.projects.splice(index, 1);
+      this.projectsCount = Math.max(0, this.projectsCount - 1);
+    }
   }
 
   private swipeStartY = 0;
@@ -322,8 +340,8 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isFilterOpen = false;
   }
 
-  onScroll() {
-    if (this.isSubs) {
+  private onScroll() {
+    if (this.isSubs || this.isInvites) {
       return of({});
     }
 
@@ -351,7 +369,7 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     return of({});
   }
 
-  onFetch(skip: number, take: number) {
+  private onFetch(skip: number, take: number) {
     if (this.isAll) {
       const queries = this.route.snapshot.queryParams;
 

@@ -34,7 +34,6 @@ export interface NavItem {
  * <ui-sidebar
  *   [navItems]="navigationItems"
  *   [logoSrc]="logoUrl">
- *   <app-profile-control-panel></app-profile-control-panel>
  * </ui-sidebar>
  * \`\`\`
  */
@@ -43,16 +42,7 @@ export interface NavItem {
   templateUrl: "./sidebar.component.html",
   styleUrl: "./sidebar.component.scss",
   standalone: true,
-  imports: [
-    RouterLink,
-    RouterLinkActive,
-    IconComponent,
-    ClickOutsideModule,
-    InviteManageCardComponent,
-    ProfileControlPanelComponent,
-    ProfileInfoComponent,
-    AsyncPipe,
-  ],
+  imports: [RouterLink, RouterLinkActive, IconComponent, ClickOutsideModule],
 })
 export class SidebarComponent implements OnInit {
   /** Массив элементов навигации */

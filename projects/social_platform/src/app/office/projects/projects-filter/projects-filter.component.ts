@@ -2,15 +2,17 @@
 
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subscription } from "rxjs";
+import { map, Subscription } from "rxjs";
 import { ProjectStep } from "@models/project.model";
 import { Industry } from "@models/industry.model";
 import { IndustryService } from "@services/industry.service";
 import { ProjectService } from "@services/project.service";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
 import { NumSliderComponent } from "@ui/components/num-slider/num-slider.component";
-import { CheckboxComponent } from "@ui/components";
+import { CheckboxComponent, SelectComponent } from "@ui/components";
 import { filterTags } from "projects/core/src/consts/filter-tags";
+import { generateOptionsList, optionsListElement } from "@utils/generate-options-list";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
 
 /**
  * Компонент фильтрации проектов
@@ -43,7 +45,13 @@ import { filterTags } from "projects/core/src/consts/filter-tags";
   templateUrl: "./projects-filter.component.html",
   styleUrl: "./projects-filter.component.scss",
   standalone: true,
-  imports: [CheckboxComponent, NumSliderComponent, SwitchComponent],
+  imports: [
+    CheckboxComponent,
+    NumSliderComponent,
+    SwitchComponent,
+    SelectComponent,
+    ReactiveFormsModule,
+  ],
 })
 export class ProjectsFilterComponent implements OnInit {
   constructor(
@@ -58,8 +66,23 @@ export class ProjectsFilterComponent implements OnInit {
 
   ngOnInit(): void {
     // Подписка на данные об отраслях
-    this.industries$ = this.industryService.industries.subscribe(industries => {
-      this.industries = industries;
+    this.industries$ = this.industryService.industries
+      .pipe(
+        map(industries =>
+          industries.map(industry => ({
+            id: industry.id,
+            label: industry.name,
+            value: industry.name,
+          }))
+        )
+      )
+      .subscribe(industries => {
+        this.industries = industries;
+      });
+
+    this.industryControl.valueChanges.subscribe(value => {
+      const industryId = this.industries.find(industry => industry.value === value);
+      this.onFilterByIndustry(industryId?.id);
     });
 
     // Восстановление состояния фильтров из query параметров
@@ -81,9 +104,11 @@ export class ProjectsFilterComponent implements OnInit {
   // Подписки для управления жизненным циклом
   queries$?: Subscription;
 
+  industryControl = new FormControl(null);
+
   // Состояние фильтра по отрасли
   currentIndustry: number | null = null;
-  industries: Industry[] = [];
+  industries: optionsListElement[] = [];
   industries$?: Subscription;
 
   // Состояние остальных фильтров
@@ -102,9 +127,7 @@ export class ProjectsFilterComponent implements OnInit {
    * @param event - событие клика
    * @param industryId - ID отрасли (undefined для сброса)
    */
-  onFilterByIndustry(event: Event, industryId?: number): void {
-    event.stopPropagation();
-
+  onFilterByIndustry(industryId?: number | null): void {
     this.router
       .navigate([], {
         queryParams: { industry: industryId === this.currentIndustry ? undefined : industryId },

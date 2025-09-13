@@ -46,7 +46,7 @@
         <router-outlet></router-outlet>
       </div>
 
-      <div class="page__create">
+      <div class="page__create" [style.gap]="isMy ? '20px' : '0px'">
         <app-button
           size="medium"
           (click)="addProject()"
@@ -57,24 +57,26 @@
         </app-button>
 
         <div class="page__left">
-          <div class="page__analytics">
-            <div class="analytics">
-              <div class="analytics__soon">
-                <div class="analytics__closed">
-                  <i appIcon icon="lock" appSquare="10"></i>
-                  <span class="text-body-6 analytics__closed--text">пока закрыто</span>
-                </div>
-                <app-button customTypographyClass="text-body-6" color="green" size="extra-small"
-                  >скоро</app-button
-                >
-              </div>
-
-              <div class="analytics__info">
-                <p class="text-body-12">статистика</p>
-                <p class="text-body-6">количество проектов, команды, эффективность</p>
-              </div>
+          @if (isMy) {
+          <app-soon-card
+            title="статистика"
+            description="количество проектов, команды, эффективность"
+          >
+          </app-soon-card>
+          } @if (isAll) {
+          <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
+            <div class="filter__overlay" (click)="isFilterOpen = false"></div>
+            <div class="filter__body" #filterBody>
+              <div
+                class="filter__bar"
+                (touchstart)="onSwipeStart($event)"
+                (touchmove)="onSwipeMove($event)"
+                (touchend)="onSwipeEnd($event)"
+              ></div>
+              <app-projects-filter (closeFilter)="closeFilter()"></app-projects-filter>
             </div>
           </div>
+          }
         </div>
       </div>
     </div>

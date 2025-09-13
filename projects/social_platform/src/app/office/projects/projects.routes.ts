@@ -10,6 +10,7 @@ import { ProjectEditComponent } from "./edit/edit.component";
 import { ProjectEditResolver } from "./edit/edit.resolver";
 import { ProjectsSubscriptionsResolver } from "./list/subscriptions.resolver";
 import { ProjectEditRequiredGuard } from "./edit/guards/projects-edit.guard";
+import { ProjectsInvitesResolver } from "./list/invites.resolver";
 
 /**
  * Конфигурация маршрутов для модуля проектов
@@ -59,6 +60,13 @@ export const PROJECTS_ROUTES: Routes = [
         component: ProjectsListComponent,
         resolve: {
           data: ProjectsSubscriptionsResolver,
+        },
+      },
+      {
+        path: "invites",
+        component: ProjectsListComponent,
+        resolve: {
+          data: ProjectsInvitesResolver,
         },
       },
       {

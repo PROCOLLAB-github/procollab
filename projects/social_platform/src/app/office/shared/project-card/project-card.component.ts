@@ -1,11 +1,16 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, inject, Input, OnInit, Output } from "@angular/core";
 import { Project } from "@models/project.model";
 import { IndustryService } from "@services/industry.service";
-import { IconComponent } from "@ui/components";
+import { IconComponent, ButtonComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { AsyncPipe, CommonModule } from "@angular/common";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { SubscriptionService } from "@office/services/subscription.service";
+import { InviteService } from "@office/services/invite.service";
+import { Router } from "@angular/router";
+import { ClickOutsideModule } from "ng-click-outside";
 
 /**
  * Компонент карточки проекта
@@ -35,27 +40,100 @@ import { AsyncPipe, CommonModule } from "@angular/common";
   templateUrl: "./project-card.component.html",
   styleUrl: "./project-card.component.scss",
   standalone: true,
-  imports: [CommonModule, AvatarComponent, IconComponent, AsyncPipe],
+  imports: [
+    CommonModule,
+    AvatarComponent,
+    IconComponent,
+    AsyncPipe,
+    ModalComponent,
+    ButtonComponent,
+    ClickOutsideModule,
+  ],
 })
 export class ProjectCardComponent implements OnInit {
-  constructor(public industryService: IndustryService) {}
-
-  ngOnInit(): void {}
+  private readonly inviteService = inject(InviteService);
+  private readonly subscriptionService = inject(SubscriptionService);
+  private readonly router = inject(Router);
+  public readonly industryService = inject(IndustryService);
 
   @Input({ required: true }) project!: Project;
+  @Input() type: "invite" | "project" = "project";
   @Input() canDelete?: boolean | null = false;
   @Input() isSubscribed?: boolean | null = false;
   @Input() profileId?: number;
 
-  @Output() remove = new EventEmitter<number>();
+  @Output() onAcceptingInvite = new EventEmitter<number>();
+  @Output() onRejectingInvite = new EventEmitter<number>();
 
-  /**
-   * Обработчик удаления проекта (клик по корзине)
-   * Предотвращает всплытие события и эмитит событие удаления
-   */
-  onBasket(event: MouseEvent) {
+  ngOnInit(): void {}
+
+  onRejectInvite(event: Event, inviteId: number): void {
     event.stopPropagation();
     event.preventDefault();
-    this.remove.emit(this.project.id);
+
+    this.inviteService.rejectInvite(inviteId).subscribe({
+      next: () => {
+        this.onRejectingInvite.emit(inviteId || this.project.inviteId);
+      },
+      error: () => {
+        this.inviteErrorModal = true;
+      },
+    });
+  }
+
+  onAcceptInvite(event: Event, inviteId: number): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.inviteService.acceptInvite(inviteId).subscribe({
+      next: () => {
+        this.onAcceptingInvite.emit(inviteId || this.project.inviteId);
+      },
+      error: () => {
+        this.inviteErrorModal = true;
+      },
+    });
+  }
+
+  isUnsubscribeModalOpen = false; // Флаг модального окна отписки
+  inviteErrorModal = false; // Флаг модального окна для ошибки приглашения
+  haveBadge = location.href.includes("/subscriptions") || location.href.includes("/all");
+
+  /**
+   * Подписка на проект или открытие модального окна отписки
+   * @param projectId - ID проекта
+   */
+  onSubscribe(event: Event, projectId: number): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    if (this.isSubscribed) {
+      this.isUnsubscribeModalOpen = true;
+      return;
+    }
+    this.subscriptionService.addSubscription(projectId).subscribe(() => {
+      this.isSubscribed = true;
+    });
+  }
+
+  /**
+   * Отписка от проекта
+   * @param projectId - ID проекта
+   */
+  onUnsubscribe(event: Event, projectId: number): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    this.subscriptionService.deleteSubscription(projectId).subscribe(() => {
+      this.isSubscribed = false;
+      this.isUnsubscribeModalOpen = false;
+    });
+  }
+
+  /**
+   * Закрытие модального окна отписки
+   */
+  onCloseUnsubscribeModal(): void {
+    this.isUnsubscribeModalOpen = false;
   }
 }

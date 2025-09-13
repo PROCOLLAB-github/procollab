@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from "@angular/core";
 import { NavService } from "@services/nav.service";
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
 import { map, Subscription } from "rxjs";
@@ -12,6 +12,8 @@ import { ButtonComponent, IconComponent } from "@ui/components";
 import { AsyncPipe } from "@angular/common";
 import { BarNewComponent } from "@ui/components/bar-new/bar.component";
 import { BackComponent } from "@uilib";
+import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
+import { ProjectsFilterComponent } from "./projects-filter/projects-filter.component";
 
 /**
  * Главный компонент модуля проектов
@@ -37,8 +39,9 @@ import { BackComponent } from "@uilib";
     ButtonComponent,
     RouterOutlet,
     BarNewComponent,
-    AsyncPipe,
     BackComponent,
+    SoonCardComponent,
+    ProjectsFilterComponent,
   ],
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
@@ -47,12 +50,15 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     public readonly projectService: ProjectService,
     private readonly router: Router,
+    private readonly renderer: Renderer2,
     private readonly fb: FormBuilder
   ) {
     this.searchForm = this.fb.group({
       search: [""],
     });
   }
+
+  @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;
 
   ngOnInit(): void {
     this.navService.setNavTitle("Проекты");
@@ -97,6 +103,51 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   isMy = location.href.includes("/my");
   isAll = location.href.includes("/all");
   isSubs = location.href.includes("/subscriptions");
+  isInvites = location.href.includes("/invites");
+
+  isFilterOpen = false;
+
+  private swipeStartY = 0;
+  private swipeThreshold = 50;
+  private isSwiping = false;
+
+  onSwipeStart(event: TouchEvent): void {
+    this.swipeStartY = event.touches[0].clientY;
+    this.isSwiping = true;
+  }
+
+  onSwipeMove(event: TouchEvent): void {
+    if (!this.isSwiping) return;
+
+    const currentY = event.touches[0].clientY;
+    const deltaY = currentY - this.swipeStartY;
+
+    const progress = Math.min(deltaY / this.swipeThreshold, 1);
+    this.renderer.setStyle(
+      this.filterBody.nativeElement,
+      "transform",
+      `translateY(${progress * 100}px)`
+    );
+  }
+
+  onSwipeEnd(event: TouchEvent): void {
+    if (!this.isSwiping) return;
+
+    const endY = event.changedTouches[0].clientY;
+    const deltaY = endY - this.swipeStartY;
+
+    if (deltaY > this.swipeThreshold) {
+      this.closeFilter();
+    }
+
+    this.isSwiping = false;
+
+    this.renderer.setStyle(this.filterBody.nativeElement, "transform", "translateY(0)");
+  }
+
+  closeFilter(): void {
+    this.isFilterOpen = false;
+  }
 
   addProject(): void {
     this.projectService.create().subscribe(project => {

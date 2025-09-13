@@ -1,6 +1,6 @@
 /** @format */
 
-interface optionsListElement {
+export interface optionsListElement {
   id: number; // порядковый номер в массиве
   value: number | string; // строка, которую будем показывать в UI
   label: string; // то же самое, что и value (можно использовать обе подписи)

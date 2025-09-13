@@ -20,7 +20,6 @@ import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { FeedNews } from "@office/projects/models/project-news.model";
 import { ProjectService } from "@office/services/project.service";
-import { SubscriptionService } from "@office/services/subscription.service";
 import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
 import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { IndustryService } from "@services/industry.service";
@@ -101,7 +100,6 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     public readonly authService: AuthService, // Сервис аутентификации
     private readonly navService: NavService, // Сервис навигации
     private readonly projectNewsService: ProjectNewsService, // Сервис новостей проекта
-    private readonly subscriptionService: SubscriptionService, // Сервис подписок
     private readonly projectService: ProjectService, // Сервис проектов
     private readonly cdRef: ChangeDetectorRef // Сервис для ручного запуска обнаружения изменений
   ) {}
@@ -147,15 +145,6 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
     const profileId$ = this.authService.profile.subscribe(profile => {
       this.profileId = profile.id;
     });
-
-    // Проверка статуса подписки пользователя на проект
-    this.projSubscribers$
-      ?.pipe(take(1), withLatestFrom(this.authService.profile))
-      .subscribe(([projSubs, profile]) => {
-        projSubs.some(sub => sub.id === profile.id)
-          ? (this.isUserSubscribed = true)
-          : (this.isUserSubscribed = false);
-      });
 
     const projectEditSub$ =
       this.project$?.subscribe(project => {
@@ -325,43 +314,9 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // Состояние подписки и модальных окон
-  isUserSubscribed!: boolean; // Флаг подписки пользователя
-  isUnsubscribeModalOpen = false; // Флаг модального окна отписки
   isLeaveProjectModalOpen = false; // Флаг модального окна выхода
   isEditDisable = false; // Флаг недоступности редактирования
   isEditDisableModal = false; // Флаг недоступности редактирования для модалки
-
-  /**
-   * Подписка на проект или открытие модального окна отписки
-   * @param projectId - ID проекта
-   */
-  onSubscribe(projectId: number): void {
-    if (this.isUserSubscribed) {
-      this.isUnsubscribeModalOpen = true;
-      return;
-    }
-    this.subscriptionService.addSubscription(projectId).subscribe(() => {
-      this.isUserSubscribed = true;
-    });
-  }
-
-  /**
-   * Отписка от проекта
-   * @param projectId - ID проекта
-   */
-  onUnsubscribe(projectId: number): void {
-    this.subscriptionService.deleteSubscription(projectId).subscribe(() => {
-      this.isUserSubscribed = false;
-      this.isUnsubscribeModalOpen = false;
-    });
-  }
-
-  /**
-   * Закрытие модального окна отписки
-   */
-  onCloseUnsubscribeModal(): void {
-    this.isUnsubscribeModalOpen = false;
-  }
 
   /**
    * Закрытие модального окна предупреждения лидера
