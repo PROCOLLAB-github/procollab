@@ -5,9 +5,9 @@
 .card {
   &__body {
     position: relative;
-    height: 170px;
     display: flex;
     flex-direction: column;
+    height: 170px;
     padding: 15px 0 12px;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-for-outline);
@@ -16,10 +16,10 @@
 
   &__info {
     display: flex;
+    flex-shrink: 0;
     gap: 10px;
     align-items: center;
     justify-content: space-evenly;
-    flex-shrink: 0;
 
     &--vacancies,
     &--collaborators {
@@ -33,7 +33,7 @@
   &__badge {
     position: absolute;
     top: 30px;
-    left: 0px;
+    left: 0;
     z-index: 1;
   }
 
@@ -47,27 +47,27 @@
     position: absolute;
     top: -35px;
     left: 50%;
-    transform: translateX(-50%);
     z-index: 2;
+    transform: translateX(-50%);
   }
 
   &__content {
     display: flex;
+    flex: 1;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    flex: 1;
     padding-top: 40px;
-    text-align: center;
     overflow: hidden;
+    text-align: center;
   }
 
   &__head {
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
     align-items: center;
     margin-bottom: 8px;
-    flex-shrink: 0;
   }
 
   &__name {
@@ -88,14 +88,14 @@
 
   &__description {
     display: flex;
+    flex: 1;
     flex-direction: column;
     align-items: center;
-    text-align: center;
-    color: var(--dark-grey);
-    word-break: break-word;
-    flex: 1;
     max-height: 20px;
     overflow: hidden;
+    color: var(--dark-grey);
+    text-align: center;
+    word-break: break-word;
 
     &.invite-description {
       justify-content: center;
@@ -103,8 +103,8 @@
   }
 
   &__user {
-    color: var(--grey-for-text);
     margin-bottom: 2px;
+    color: var(--grey-for-text);
 
     &--invite {
       color: var(--accent);
@@ -151,8 +151,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
   padding: 20px;
+  text-align: center;
 
   h3 {
     margin-bottom: 16px;
