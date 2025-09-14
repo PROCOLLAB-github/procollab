@@ -2,16 +2,13 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding-top: 60px;
-  padding-bottom: 20px;
+  padding-top: 20px;
   background-color: var(--white);
-  border-radius: 0 15px 15px 0;
 
   &__logo {
-    align-self: center;
-    width: 122px;
-    height: 23px;
-    margin-bottom: 100px;
+    width: 110px;
+    height: 33px;
+    margin-bottom: 30px;
     cursor: pointer;
   }
 
@@ -38,23 +35,22 @@
 .sidebar-nav {
   &__link {
     display: block;
-    color: var(--dark-grey);
   }
 
   &__list {
     position: relative;
     display: flex;
     flex-direction: column;
-    padding-left: 25px;
+    gap: 24px;
   }
 
   &__bar {
     position: absolute;
     right: 0;
-    width: 3px;
-    height: 35px;
+    width: 4px;
+    height: 4px;
     background-color: var(--accent);
-    border-radius: 3px 0 0 3px;
+    border-radius: 50%;
     transition: all 0.2s;
   }
 
@@ -63,22 +59,18 @@
     position: relative;
     display: flex;
     align-items: center;
-    width: 100%;
-    height: 55px;
-    padding-bottom: 20px;
-    color: var(--dark-grey);
+    color: var(--black);
     cursor: pointer;
 
-    i {
-      margin-right: 12px;
+    &:hover {
+      color: var(--dark-grey);
     }
 
-    // &:not(.sidebar-nav__item--active):hover {
-    //   color: var(--black);
-    // }
+    i {
+      margin-right: 10px;
+    }
 
-    &--active,
-    &:hover {
+    &--active {
       color: var(--accent);
     }
   }

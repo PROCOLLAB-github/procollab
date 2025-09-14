@@ -70,13 +70,6 @@ export const OFFICE_ROUTES: Routes = [
         },
       },
       {
-        path: "mentors",
-        component: MentorsComponent,
-        resolve: {
-          data: MentorsResolver,
-        },
-      },
-      {
         path: "profile/edit",
         component: ProfileEditComponent,
       },

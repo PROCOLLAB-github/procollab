@@ -112,10 +112,11 @@ export class OfficeComponent implements OnInit, OnDestroy {
   navItems = [
     { name: "Новости", icon: "feed", link: "feed" },
     { name: "Проекты", icon: "projects-filled", link: "projects" },
-    { name: "Программы", icon: "program", link: "program" },
     { name: "Участники", icon: "people-bold", link: "members" },
-    { name: "Эксперты", icon: "two-people", link: "mentors" },
+    { name: "Программы", icon: "program", link: "program" },
     { name: "Вакансии", icon: "search-sidebar", link: "vacancies" },
+    { name: "Траектории", icon: "book", link: "skills", isExternal: true, isActive: false },
+    { name: "Чаты", icon: "message", link: "chats", isExternal: true, isActive: false },
   ];
 
   subscriptions$: Subscription[] = [];
@@ -169,9 +170,5 @@ export class OfficeComponent implements OnInit, OnDestroy {
           .navigateByUrl("/auth")
           .then(() => console.debug("Route changed from OfficeComponent"))
       );
-  }
-
-  openSkills() {
-    location.href = "https://skills.procollab.ru";
   }
 }

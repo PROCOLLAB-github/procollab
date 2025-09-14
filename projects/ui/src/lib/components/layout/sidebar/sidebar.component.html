@@ -9,16 +9,19 @@
       <div
         class="sidebar-nav__bar"
         [style.opacity]="showBar ? 1 : 0"
-        [style.top]="barPosition * 55 + 'px'"
+        [style.transform]="'translateY(' + barPosition + 'px)'"
       ></div>
       @for (item of navItems; track $index) {
       <a
-        class="sidebar-nav__item text-body-14"
-        [routerLink]="item.link"
-        (mouseenter)="barPosition = $index"
-        routerLinkActive="sidebar-nav__item&#45;&#45;active"
+        #navItem
+        (click)="handleItemClick(item)"
+        class="sidebar-nav__item text-body-12"
+        [routerLink]="item.isExternal ? null : item.link"
+        (mouseenter)="updateBarPosition(navItem)"
+        [routerLinkActive]="item.isExternal ? '' : 'sidebar-nav__item--active'"
+        [class.sidebar-nav__item--active]="item.isExternal && item.isActive"
       >
-        <i appIcon [icon]="item.icon" appSquare="24" appViewBox="0 0 24 20"></i>
+        <i appIcon [icon]="item.icon" appSquare="8" appViewBox="0 0 8 8"></i>
         {{ item.name }}
       </a>
       }

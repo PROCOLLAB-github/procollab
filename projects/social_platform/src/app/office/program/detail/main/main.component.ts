@@ -95,23 +95,6 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   // Сигналы для работы с модальными окнами с текстом
   showProgramModal = signal(false);
   showProgramModalErrorMessage = signal<string | null>(null);
-  assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
-
-  // Сигналы для управления состоянием
-  showSubmitProjectModal = signal(false);
-  isAssignProjectToProgramModalOpen = signal(false);
-
-  // Методы для управления состоянием ошибок через сервис
-  setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
-    this.projectAdditionalService.setAssignProjectToProgramError(error);
-  }
-
-  clearAssignProjectToProgramError(): void {
-    this.projectAdditionalService.clearAssignProjectToProgramError();
-  }
-
-  selectedProjectId = 0;
-  dubplicatedProjectId = 0;
 
   programId?: number;
 
@@ -176,14 +159,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         },
       });
 
-    const memeberProjects$ = this.projectService.getMy().subscribe({
-      next: projects => {
-        this.memberProjects = projects.results.filter(project => !project.draft);
-      },
-    });
-
     this.subscriptions$().push(program$);
-    this.subscriptions$().push(memeberProjects$);
     this.subscriptions$().push(programIdSubscription$);
     this.subscriptions$().push(routeModalSub$);
   }
@@ -293,88 +269,12 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     this.loadingService.hide();
   }
 
-  /**
-   * Переключатель для модалки выбора проекта
-   */
-  toggleSubmitProjectModal(): void {
-    this.showSubmitProjectModal.set(!this.showSubmitProjectModal());
-
-    if (!this.showSubmitProjectModal()) {
-      this.selectedProjectId = 0;
-    }
-  }
-
-  /**
-   * Обработчик изменения радио-кнопки для выбора проекта
-   */
-  onProjectRadioChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.selectedProjectId = +target.value;
-
-    if (this.selectedProjectId) {
-      this.memberProjects.find(project => project.id === this.selectedProjectId);
-    }
-  }
-
-  /**
-   * Добавление проекта на программу
-   */
-  addProjectModal(): void {
-    if (!this.selectedProjectId) {
-      return;
-    }
-
-    const selectedProject = this.memberProjects.find(
-      project => project.id === this.selectedProjectId
-    );
-
-    this.assignProjectToProgram(selectedProject!);
-  }
-
-  /** Эмитим логику для привязки проекта к программе */
-  /**
-   * Привязка проекта к программе выбранной
-   * Перенаправление её на редактирование "нового" проекта
-   */
-  assignProjectToProgram(project: Project): void {
-    if (this.programId) {
-      this.projectService.assignProjectToProgram(project.id, this.programId).subscribe({
-        next: r => {
-          this.dubplicatedProjectId = r.newProjectId;
-          this.assignProjectToProgramModalMessage.set(r);
-          this.isAssignProjectToProgramModalOpen.set(true);
-          this.toggleSubmitProjectModal();
-          this.selectedProjectId = 0;
-        },
-
-        error: err => {
-          if (err instanceof HttpErrorResponse) {
-            if (err.status === 400) {
-              this.setAssignProjectToProgramError(err.error);
-            }
-          }
-        },
-      });
-    }
-  }
-
-  closeAssignProjectToProgramModal(): void {
-    this.isAssignProjectToProgramModalOpen.set(false);
-    this.router.navigateByUrl(
-      `/office/projects/${this.dubplicatedProjectId}/edit?editingStep=main`
-    );
-  }
-
-  onOpenDetailProgram(): void {
-    if (!this.program?.isUserMember && !this.program?.isUserManager) return;
-
-    this.showDetails = true;
+  clearAssignProjectToProgramError(): void {
+    this.projectAdditionalService.clearAssignProjectToProgramError();
   }
 
   program?: Program;
-  memberProjects: Project[] = [];
   registerDateExpired!: boolean;
   descriptionExpandable!: boolean;
   readFullDescription = false;
-  showDetails = false;
 }
