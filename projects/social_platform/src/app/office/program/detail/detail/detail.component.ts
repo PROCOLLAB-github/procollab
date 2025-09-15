@@ -7,7 +7,7 @@ import { BarComponent, ButtonComponent, InputComponent } from "@ui/components";
 import { BackComponent } from "@uilib";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { CommonModule } from "@angular/common";
+import { CommonModule, Location } from "@angular/common";
 import { ProjectAssign } from "@office/projects/models/project-assign.model";
 import { ProjectAdditionalService } from "@office/projects/edit/services/project-additional.service";
 import { Project } from "@office/models/project.model";
@@ -15,6 +15,8 @@ import { ProjectService } from "@office/services/project.service";
 import { HttpErrorResponse } from "@angular/common/http";
 import { map, Subscription, tap } from "rxjs";
 import { Program } from "@office/program/models/program.model";
+import { AutosizeModule } from "ngx-autosize";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 
 /**
  * Основной компонент детальной страницы программы
@@ -61,6 +63,8 @@ import { Program } from "@office/program/models/program.model";
     InputComponent,
     AvatarComponent,
     ModalComponent,
+    AutosizeModule,
+    TooltipComponent,
   ],
 })
 export class ProgramDetailComponent implements OnInit, OnDestroy {
@@ -69,6 +73,7 @@ export class ProgramDetailComponent implements OnInit, OnDestroy {
   private readonly navService = inject(NavService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly location = inject(Location);
 
   programId?: number;
 
@@ -89,6 +94,12 @@ export class ProgramDetailComponent implements OnInit, OnDestroy {
   isAssignProjectToProgramModalOpen = signal(false);
   showDetails = false;
 
+  isTooltipVisible = false;
+
+  isProjectsPage = false;
+  isMembersPage = false;
+  isProjectsRatingPage = false;
+
   // Методы для управления состоянием ошибок через сервис
   setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
     this.projectAdditionalService.setAssignProjectToProgramError(error);
@@ -96,6 +107,12 @@ export class ProgramDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль программы");
+
+    this.updatePageStates();
+
+    this.location.onUrlChange(url => {
+      this.updatePageStates(url);
+    });
 
     const program$ = this.route.data
       .pipe(
@@ -191,5 +208,27 @@ export class ProgramDetailComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(
       `/office/projects/${this.dubplicatedProjectId}/edit?editingStep=main`
     );
+  }
+
+  /** Показать подсказку */
+  showTooltip(): void {
+    this.isTooltipVisible = true;
+  }
+
+  /** Скрыть подсказку */
+  hideTooltip(): void {
+    this.isTooltipVisible = false;
+  }
+
+  /**
+   * Обновляет состояния страниц на основе URL
+   */
+  private updatePageStates(url?: string): void {
+    const currentUrl = url || this.router.url;
+
+    this.isProjectsPage =
+      currentUrl.includes("/projects") && !currentUrl.includes("/projects-rating");
+    this.isMembersPage = currentUrl.includes("/members");
+    this.isProjectsRatingPage = currentUrl.includes("/projects-rating");
   }
 }

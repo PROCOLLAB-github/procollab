@@ -54,13 +54,11 @@ import { ErrorMessage } from "@error/models/error-message";
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
-      // Регистрация как ControlValueAccessor для работы с формами
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ProjectRatingComponent),
       multi: true,
     },
     {
-      // Регистрация как Validator для валидации
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => ProjectRatingComponent),
       multi: true,

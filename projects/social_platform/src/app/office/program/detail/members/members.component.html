@@ -1,14 +1,41 @@
 <!-- @format -->
 
-<div class="page">
-  @if (program$ | async; as program) {
-  <app-program-head [program]="program"></app-program-head>
-  }
-  <div class="page__list" #membersRoot>
-    @for (m of members; track m.id) {
-    <a [routerLink]="['/office/profile', m.id]">
-      <app-member-card [user]="m"></app-member-card>
-    </a>
-    }
+<div class="page" #projectsRoot>
+  <div class="page__outlet">
+    <div class="page__search">
+      <form [formGroup]="searchForm">
+        <app-search formControlName="search"></app-search>
+      </form>
+    </div>
+
+    <div class="filter-toggle page__filter-toggle" (click)="isFilterOpen = !isFilterOpen">
+      <span>Фильтр</span>
+      <i appIcon icon="filter" appSquare="34"></i>
+    </div>
+
+    <ul class="page__list" #membersRoot>
+      @for (m of searchedMembers; track m.id) {
+      <a [routerLink]="['/office/profile', m.id]">
+        <app-member-card [user]="m"></app-member-card>
+      </a>
+      }
+    </ul>
+  </div>
+
+  <div class="page__create">
+    <div class="page__left">
+      <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
+        <div class="filter__overlay" (click)="isFilterOpen = false"></div>
+        <div class="filter__body" #filterBody>
+          <div
+            class="filter__bar"
+            (touchstart)="onSwipeStart($event)"
+            (touchmove)="onSwipeMove($event)"
+            (touchend)="onSwipeEnd($event)"
+          ></div>
+          <app-projects-filter (closeFilter)="closeFilter()"></app-projects-filter>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

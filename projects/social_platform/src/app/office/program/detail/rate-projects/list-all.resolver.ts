@@ -1,10 +1,11 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
+import { ActivatedRouteSnapshot, ResolveFn, Router } from "@angular/router";
 import { ApiPagination } from "@office/models/api-pagination.model";
 import { ProjectRate } from "@office/program/models/project-rate";
 import { ProjectRatingService } from "@office/program/services/project-rating.service";
+import { catchError, EMPTY } from "rxjs";
 
 /**
  * Резолвер для предзагрузки проектов для оценки
@@ -45,6 +46,19 @@ export const ListAllResolver: ResolveFn<ApiPagination<ProjectRate>> = (
   route: ActivatedRouteSnapshot
 ) => {
   const projectRatingService = inject(ProjectRatingService);
+  const router = inject(Router);
 
-  return projectRatingService.getAll(route.parent?.params["programId"], 0, 8);
+  return projectRatingService.getAll(route.parent?.params["programId"], 0, 8).pipe(
+    catchError(error => {
+      if (error.status === 403) {
+        router.navigate([], {
+          queryParams: { access: "accessDenied" },
+          queryParamsHandling: "merge",
+          replaceUrl: true,
+        });
+      }
+
+      return EMPTY;
+    })
+  );
 };

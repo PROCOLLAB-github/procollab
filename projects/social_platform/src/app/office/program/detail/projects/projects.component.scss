@@ -2,16 +2,22 @@
 @use "styles/typography";
 
 .page {
-  &__list--wrapper {
+  display: grid;
+  grid-template-columns: 8fr 2fr;
+  gap: 20px;
+  padding-bottom: 100px;
+
+  &__search {
+    flex-grow: 1;
+  }
+
+  &__outlet {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    margin-top: 20px;
-
-    @include responsive.apply-desktop {
-      flex-direction: row;
-      justify-content: space-between;
-    }
+    width: 100%;
+    margin-top: 10px;
+    flex-grow: 1;
   }
 
   &__filter {
@@ -29,24 +35,28 @@
 
   &__list {
     display: grid;
+    flex-grow: 1;
     grid-template-columns: 1fr;
-    grid-gap: 20px;
-    width: 100%;
+    row-gap: 50px;
+    column-gap: 20px;
+    align-items: flex-start;
+    margin-top: 50px;
 
     @include responsive.apply-desktop {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px 40px;
-      width: 70%;
-      height: 100%;
+      grid-template-columns: repeat(4, 2fr);
     }
   }
 
-  &__search {
+  &__create {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+    align-items: center;
+  }
+
+  &__left {
     width: 100%;
-    padding: 20px;
-    background-color: var(--white);
-    border: 1px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-xl);
   }
 }
 
@@ -60,7 +70,6 @@
 
   @include responsive.apply-desktop {
     position: static;
-    min-width: 280px;
   }
 
   &__overlay {

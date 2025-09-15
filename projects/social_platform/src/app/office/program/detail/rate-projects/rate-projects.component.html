@@ -1,37 +1,31 @@
 <!-- @format -->
 
-<div class="rate-project" (click)="onClickOutside()">
-  <app-bar
-    class="bar rate-project__bar"
-    [backHave]="true"
-    [links]="[
-      {
-        link:
-          '/office/program' + '/' + programId!.toString() + '/' + 'projects-rating' + '/' + 'all',
-        linkText: 'Страница проекта',
-        isRouterLinkActiveOptions: false,
-      },
-    ]"
-  >
-  </app-bar>
-
-  <!-- <div class="filter">
-    <div class="filter__search">
+<div class="page" #projectsRoot>
+  <div class="page__outlet">
+    <div class="page__search">
       <form [formGroup]="searchForm">
         <app-search formControlName="search"></app-search>
       </form>
     </div>
 
-    <div class="filter__category">
-      <form class="filter__form" [formGroup]="filterForm">
-        <div class="filter__top" (click)="toggleOpen($event)">
-          <p class="text-body-14">Фильтр</p>
-          <i appIcon icon="arrow-no-body" appWidth="14" appHeight="8" appViewBox="0 0 18 9"> </i>
-        </div>
+    <div class="filter-toggle page__filter-toggle" (click)="isFilterOpen = !isFilterOpen">
+      <span>фильтр</span>
+      <i appIcon icon="filter" appSquare="34"></i>
+    </div>
 
-        @if(isOpen){
+    <ul class="page__list" #rateProjectRoot>
+      @for (p of projects; track p.id) {
+      <app-rating-card [project]="p"></app-rating-card>
+      }
+    </ul>
+  </div>
+
+  <div class="page__create">
+    <div class="page__left">
+      <form class="filter__form" [formGroup]="filterForm">
+        <p class="text-body-12">фильтр</p>
         <div class="filter__controls">
-          @for (tag of filterTags; track $index) {
+          @for (tag of ratingOptionsList; track $index) {
           <div class="filter__tags" (click)="setValue($event, tag.value)">
             <app-checkbox
               [checked]="this.filterForm.get('filterTag')?.value === tag.value"
@@ -40,14 +34,7 @@
           </div>
           }
         </div>
-        }
       </form>
-
-      <app-button (click)="onSearchClick()" class="filter__button">Найти</app-button>
     </div>
-  </div> -->
-
-  <div class="rate-project__body">
-    <router-outlet></router-outlet>
   </div>
 </div>

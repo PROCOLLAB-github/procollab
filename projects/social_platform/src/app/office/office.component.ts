@@ -110,13 +110,13 @@ export class OfficeComponent implements OnInit, OnDestroy {
   );
 
   navItems = [
-    { name: "Новости", icon: "feed", link: "feed" },
-    { name: "Проекты", icon: "projects-filled", link: "projects" },
-    { name: "Участники", icon: "people-bold", link: "members" },
-    { name: "Программы", icon: "program", link: "program" },
-    { name: "Вакансии", icon: "search-sidebar", link: "vacancies" },
-    { name: "Траектории", icon: "book", link: "skills", isExternal: true, isActive: false },
-    { name: "Чаты", icon: "message", link: "chats", isExternal: true, isActive: false },
+    { name: "новости", icon: "feed", link: "feed" },
+    { name: "проекты", icon: "projects", link: "projects" },
+    { name: "участники", icon: "people-bold", link: "members" },
+    { name: "программы", icon: "program", link: "program" },
+    { name: "вакансии", icon: "search-sidebar", link: "vacancies" },
+    { name: "траектории", icon: "trajectories", link: "skills", isExternal: true, isActive: false },
+    { name: "чаты", icon: "message", link: "chats" },
   ];
 
   subscriptions$: Subscription[] = [];

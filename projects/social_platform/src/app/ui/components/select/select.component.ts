@@ -58,7 +58,7 @@ export class SelectComponent implements ControlValueAccessor {
 
   /** Массив доступных опций */
   @Input({ required: true }) options: {
-    value: string | number;
+    value: string | number | boolean | null;
     label: string;
     id: number;
   }[] = [];
@@ -148,7 +148,7 @@ export class SelectComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  onChange: (value: string | number) => void = () => {};
+  onChange: (value: string | number | null | boolean) => void = () => {};
 
   registerOnChange(fn: any) {
     this.onChange = fn;
@@ -179,7 +179,7 @@ export class SelectComponent implements ControlValueAccessor {
   }
 
   /** Получение значения по ID опции */
-  getValue(optionId: number): string | number | null | undefined {
+  getValue(optionId: number): string | number | null | undefined | boolean {
     return this.options.find(el => el.id === optionId)?.value;
   }
 

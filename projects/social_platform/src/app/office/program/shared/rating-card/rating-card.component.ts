@@ -25,6 +25,7 @@ import { ProjectRatingComponent } from "@office/shared/project-rating/project-ra
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ProjectRatingService } from "@office/program/services/project-rating.service";
 import { RouterLink } from "@angular/router";
+import { TagComponent } from "@ui/components/tag/tag.component";
 
 /**
  * Компонент карточки оценки проекта
@@ -79,6 +80,7 @@ import { RouterLink } from "@angular/router";
     ProjectRatingComponent,
     ControlErrorPipe,
     RouterLink,
+    TagComponent,
   ],
 })
 export class RatingCardComponent implements AfterViewInit, OnDestroy {
@@ -98,27 +100,6 @@ export class RatingCardComponent implements AfterViewInit, OnDestroy {
   get project(): ProjectRate | null {
     return this._project();
   }
-
-  @Input({ required: true }) set projects(proj: ProjectRate[] | null) {
-    if (!proj) return;
-    this._projects.set(proj);
-  }
-
-  get projects(): ProjectRate[] | null {
-    return this._projects();
-  }
-
-  @Input({ required: true }) set currentIndex(curIndx: number) {
-    if (!curIndx) return;
-    this._currentIndex.set(curIndx);
-  }
-
-  get currentIndex(): number {
-    return this._currentIndex();
-  }
-
-  @Output() onNext: EventEmitter<void> = new EventEmitter();
-  @Output() onPrev: EventEmitter<void> = new EventEmitter();
 
   @ViewChild("descEl") descEl?: ElementRef;
 
@@ -186,13 +167,5 @@ export class RatingCardComponent implements AfterViewInit, OnDestroy {
 
   redoRating(): void {
     this.projectRated.set(false);
-  }
-
-  toggleRate(type: "next" | "prev"): void {
-    if (type === "next") {
-      this.onNext.emit();
-    } else {
-      this.onPrev.emit();
-    }
   }
 }

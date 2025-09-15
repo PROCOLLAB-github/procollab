@@ -17,13 +17,15 @@
     background: var(--white);
     border: 0.5px solid var(--dark-grey);
     border-radius: 50%;
+    width: 123px;
+    height: 123px;
   }
 
   &__info {
     position: relative;
     z-index: 1;
     padding: 22px;
-    margin-left: -12%;
+    margin-left: -18%;
     border: 0.5px solid var(--dark-grey);
     border-radius: var(--rounded-lg);
   }

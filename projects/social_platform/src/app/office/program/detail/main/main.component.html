@@ -118,10 +118,10 @@
 </main>
 
 <app-modal [open]="showProgramModal()" (openChange)="showProgramModal.set(!showProgramModal)">
-  <div class="cancel" style="width: 500px; padding: 40px 0px 40px">
+  <div class="cancel">
     <div class="cancel__top">
-      <i appIcon icon="cross" class="cancel__cross" (click)="closeModal()"></i>
-      <p class="cancel__title text-body-14">
+      <i appIcon icon="cross" class="cancel__cross" appSquare="12" (click)="closeModal()"></i>
+      <p class="cancel__title text-body-12">
         вы не являетесь экспертом или организатором программы!
       </p>
     </div>
@@ -132,7 +132,11 @@
     </p>
     }
 
-    <app-button class="cancel__button" (click)="closeModal()" customTypographyClass="text-body-12"
+    <app-button
+      class="cancel__button"
+      size="medium"
+      (click)="closeModal()"
+      customTypographyClass="text-body-10"
       >хорошо</app-button
     >
   </div>

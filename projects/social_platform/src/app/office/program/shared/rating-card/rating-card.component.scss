@@ -3,73 +3,43 @@
 @use "styles/responsive";
 @use "styles/typography";
 
-:host {
-  min-width: 0;
-}
-
 .card {
-  border-radius: var(--rounded-xl);
+  display: grid;
+  grid-template-columns: 5fr 3fr;
+  gap: 20px;
 
-  &__upper {
-    padding: 14px;
-    background-color: var(--white);
-    border: 1px solid var(--accent);
-    border-radius: var(--rounded-xl);
-
-    @include responsive.apply-desktop {
-      min-height: 550px;
-    }
+  &__wrapper {
+    padding: 24px;
+    background-color: var(--light-white);
+    border: 0.5px solid var(--dark-grey);
+    border-radius: var(--rounded-lg);
   }
 
-  &__heading {
-    position: relative;
-    z-index: 2;
+  &__inner {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    border-radius: var(--rounded-xl);
-
-    app-button ::ng-deep .button--inline {
-      min-height: 38px;
-    }
-
-    @include responsive.apply-desktop {
-      flex-flow: row wrap;
-      gap: 10px;
-      align-items: flex-end;
-      justify-content: space-between;
-      padding: 47px 14px 47px 140px;
-    }
-  }
-
-  &__avatar {
-    position: absolute;
-    left: 50%;
-    z-index: 3;
-    display: block;
-    transform: translateX(-50%) translateY(15px);
-
-    @include responsive.apply-desktop {
-      top: 50%;
-      left: 10px;
-      transform: translateY(-50%);
-    }
+    align-items: center;
+    justify-content: space-between;
   }
 
   &__info {
     display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  &__naming {
+    display: flex;
     flex-direction: column;
     gap: 5px;
-    margin-top: 90px;
-    color: var(--dark-grey);
+    width: 60%;
 
-    @include responsive.apply-desktop {
-      flex-basis: 300px;
-      flex-flow: row wrap;
-      flex-grow: 9999;
-      gap: 30px;
-      margin-top: 0;
+    &--text {
+      color: var(--black);
     }
+  }
+
+  &__industry {
+    display: inline-flex;
   }
 
   &__title {
@@ -77,73 +47,6 @@
     color: var(--black);
     text-align: center;
     text-overflow: ellipsis;
-
-    @include typography.heading-4;
-
-    @include responsive.apply-desktop {
-      text-align: unset;
-
-      @include typography.heading-2;
-    }
-  }
-
-  &__row {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    justify-content: center;
-    margin-top: 2px;
-
-    @include responsive.apply-desktop {
-      justify-content: unset;
-      margin-top: 0;
-    }
-  }
-
-  &__industry {
-    margin-right: 20px;
-
-    @include responsive.apply-desktop {
-      margin-right: 40px;
-    }
-  }
-
-  &__geo {
-    display: flex;
-    align-items: center;
-
-    i {
-      margin-right: 5px;
-    }
-  }
-
-  &__info-buttons {
-    flex-grow: 1;
-  }
-
-  &__presentation {
-    display: block;
-
-    i {
-      margin-left: 10px;
-    }
-  }
-
-  &__lower {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding: 14px;
-    margin-top: 25px;
-
-    @include responsive.apply-desktop {
-      gap: 24px;
-
-      app-button {
-        width: 50%;
-        max-width: 345px;
-      }
-    }
   }
 
   &__rated {
@@ -157,11 +60,50 @@
     color: var(--accent);
   }
 
-  &__lower-icons {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+  &__presentation {
+    ::ng-deep {
+      app-button {
+        button {
+          padding-top: 4px;
+          padding-bottom: 4px;
+        }
+      }
+    }
   }
+
+  &__lower {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    
+    &--info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 0.5px solid var(--dark-grey);
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+
+      p, i {
+        color: var(--accent);
+      }
+    }
+
+    ::ng-deep {
+      app-button {
+        button {
+          padding-top: 4px;
+          padding-bottom: 4px;
+        }
+      }
+    }
+    &-icons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+  }
+
 
   &__rated-icon {
     color: var(--green);
@@ -171,34 +113,31 @@
     color: var(--dark-grey);
     cursor: pointer;
   }
-
-  &__buttons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &__next-btn,
-  &__last-btn {
-    margin: 0 10px;
-  }
 }
 
 .about {
-  margin-top: 35px;
-
-  @include responsive.apply-desktop {
-    padding: 0 10px 24px;
-    margin-top: unset;
-  }
+  /* stylelint-disable value-no-vendor-prefix */
+  margin-top: 10px;
 
   &__title {
-    margin-bottom: 12px;
-    color: var(--black);
+    color: var(--accent);
   }
 
-  /* stylelint-disable value-no-vendor-prefix */
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 0.5px solid var(--dark-grey);
+    padding-bottom: 10px;
+
+    i {
+      color: var(--accent);
+    }
+  }
+
   &__text {
+    margin-top: 10px;
+
     p {
       display: -webkit-box;
       overflow: hidden;

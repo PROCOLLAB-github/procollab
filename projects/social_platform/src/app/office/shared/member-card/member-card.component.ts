@@ -7,6 +7,7 @@ import { UserRolePipe } from "@core/pipes/user-role.pipe";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { ButtonComponent } from "@ui/components";
 
 /**
  * Компонент карточки участника команды
@@ -35,7 +36,14 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
   templateUrl: "./member-card.component.html",
   styleUrl: "./member-card.component.scss",
   standalone: true,
-  imports: [AvatarComponent, TagComponent, AsyncPipe, UserRolePipe, YearsFromBirthdayPipe],
+  imports: [
+    AvatarComponent,
+    TagComponent,
+    AsyncPipe,
+    UserRolePipe,
+    YearsFromBirthdayPipe,
+    ButtonComponent,
+  ],
 })
 export class MemberCardComponent implements OnInit {
   constructor() {}

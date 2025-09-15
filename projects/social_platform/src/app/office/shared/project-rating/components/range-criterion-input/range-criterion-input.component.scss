@@ -10,15 +10,19 @@
 .field {
   text-wrap: nowrap;
 
+  span {
+    color: var(--black);
+  }
+
   &__input {
-    width: 24px;
-    height: 24px;
+    width: 15px;
+    height: 15px;
     color: transparent;
     text-align: center;
     text-shadow: 0 0 0 var(--black);
     background-color: var(--white);
-    border: 1px solid var(--gray);
-    border-radius: var(--rounded-md);
+    border: 0.5px solid var(--gray);
+    border-radius: var(--rounded-sm);
     outline: none;
     transition: all 0.2s;
 

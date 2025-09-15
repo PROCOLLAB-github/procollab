@@ -1,11 +1,27 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { NavService } from "@services/nav.service";
-import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
-import { BarComponent } from "@ui/components";
-import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { Subscription } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import {
+  concatMap,
+  debounceTime,
+  fromEvent,
+  map,
+  of,
+  Subscription,
+  switchMap,
+  tap,
+  throttleTime,
+} from "rxjs";
+import { ProjectRate } from "@office/program/models/project-rate";
+import { ProjectRatingService } from "@office/program/services/project-rating.service";
+import { CommonModule } from "@angular/common";
+import { RatingCardComponent } from "@office/program/shared/rating-card/rating-card.component";
+import { CheckboxComponent, ButtonComponent, SelectComponent } from "@ui/components";
+import { filterTags } from "projects/core/src/consts/filter-tags";
+import { SearchComponent } from "@ui/components/search/search.component";
 
 /**
  * Компонент страницы оценки проектов программы
@@ -30,7 +46,6 @@ import { Subscription } from "rxjs";
  *
  * Состояние:
  * @property {number} programId - ID текущей программы
- * @property {boolean} isOpen - Состояние открытия фильтров
  * @property {Subscription[]} subscriptions$ - Массив подписок для очистки
  *
  * Методы:
@@ -45,21 +60,28 @@ import { Subscription } from "rxjs";
   templateUrl: "./rate-projects.component.html",
   styleUrl: "./rate-projects.component.scss",
   standalone: true,
-  imports: [BarComponent, RouterOutlet, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RatingCardComponent,
+    CheckboxComponent,
+    SearchComponent,
+  ],
 })
 export class RateProjectsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly navService: NavService,
+    private readonly projectRatingService: ProjectRatingService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly fb: FormBuilder
   ) {
-    // const isRatedByExpert =
-    //   this.route.snapshot.queryParams["is_rated_by_expert"] === "true"
-    //     ? true
-    //     : this.route.snapshot.queryParams["is_rated_by_expert"] === "false"
-    //     ? false
-    //     : null;
+    const isRatedByExpert =
+      this.route.snapshot.queryParams["is_rated_by_expert"] === "true"
+        ? true
+        : this.route.snapshot.queryParams["is_rated_by_expert"] === "false"
+        ? false
+        : null;
 
     const searchValue = this.route.snapshot.queryParams["name__contains"];
     const decodedSearchValue = searchValue ? decodeURIComponent(searchValue) : "";
@@ -68,55 +90,103 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
       search: [decodedSearchValue],
     });
 
-    // this.filterForm = this.fb.group({
-    //   filterTag: [isRatedByExpert, Validators.required],
-    // });
+    this.filterForm = this.fb.group({
+      filterTag: [isRatedByExpert, Validators.required],
+    });
   }
 
+  readonly ratingOptionsList = filterTags;
+
   searchForm: FormGroup;
-  // filterForm: FormGroup;
+  filterForm: FormGroup;
 
   subscriptions$: Subscription[] = [];
   programId?: number;
 
-  isOpen = false;
-  // readonly filterTags = filterTags;
+  isFilterOpen = false;
+
+  isListOfAll = this.router.url.includes("/all");
+  isRatedByExpert = signal<boolean | undefined>(undefined);
+  searchValue = signal<string>("");
+
+  projects: ProjectRate[] = [];
+  initialProjects: ProjectRate[] = [];
+
+  totalProjCount = 0;
+  fetchLimit = 8;
+  fetchPage = 0;
 
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль программы");
     this.programId = this.route.snapshot.params["programId"];
 
-    const queryParams$ = this.route.queryParams.subscribe(params => {
-      const searchValue = params["name__contains"];
-      this.searchForm.get("search")?.setValue(searchValue, { emitEvent: false });
-    });
+    const initProjects$ = this.route.data
+      .pipe(
+        map(r => r["data"]),
+        map(r => ({ projects: r["results"], count: r["count"] }))
+      )
+      .subscribe(({ projects, count }) => {
+        this.initialProjects = projects;
+        this.projects = projects;
+        this.totalProjCount = count;
+      });
+
+    const queryParams$ = this.route.queryParams
+      .pipe(
+        debounceTime(200),
+        tap(params => {
+          const isRatedByExpert =
+            params["is_rated_by_expert"] === "true"
+              ? true
+              : params["is_rated_by_expert"] === "false"
+              ? false
+              : undefined;
+          const searchValue = params["name__contains"];
+
+          this.isRatedByExpert.set(isRatedByExpert);
+          this.searchValue.set(searchValue);
+        }),
+        switchMap(() => this.onFetch(this.fetchPage * this.fetchLimit, this.fetchLimit))
+      )
+      .subscribe((params: any) => {
+        this.projects = params.results;
+        const searchValue = params["name__contains"];
+        this.searchForm.get("search")?.setValue(searchValue, { emitEvent: false });
+      });
+
+    this.subscriptions$.push(initProjects$, queryParams$);
 
     this.subscriptions$.push(queryParams$);
+  }
+
+  ngAfterViewInit() {
+    const target = document.querySelector(".office__body");
+    if (target) {
+      const scrollEvents$ = fromEvent(target, "scroll")
+        .pipe(
+          debounceTime(200),
+          concatMap(() => this.onScroll()),
+          throttleTime(2000)
+        )
+        .subscribe();
+
+      this.subscriptions$.push(scrollEvents$);
+    }
   }
 
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $?.unsubscribe());
   }
 
-  // setValue(event: Event, tag: boolean | null) {
-  //   event.stopPropagation();
-  //   this.filterForm.get("filterTag")?.setValue(tag);
-  //   this.isOpen = false;
+  setValue(event: Event, tag: boolean | null) {
+    event.stopPropagation();
+    this.filterForm.get("filterTag")?.setValue(tag);
 
-  //   this.router.navigate([], {
-  //     queryParams: { is_rated_by_expert: tag },
-  //     relativeTo: this.route,
-  //     queryParamsHandling: "merge",
-  //   });
-  // }
-
-  // toggleOpen(event: Event) {
-  //   event.stopPropagation();
-  //   this.isOpen = !this.isOpen;
-  // }
-
-  onClickOutside() {
-    this.isOpen = false;
+    this.router.navigate([], {
+      queryParams: { is_rated_by_expert: tag },
+      relativeTo: this.route,
+      queryParamsHandling: "merge",
+    });
   }
 
   onSearchClick() {
@@ -129,5 +199,40 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
     });
 
     this.searchForm.get("search")?.reset();
+  }
+
+  onScroll() {
+    if (this.projects.length >= this.totalProjCount) {
+      return of({});
+    }
+
+    const target = document.querySelector(".office__body");
+    if (!target) return of({});
+
+    const scrollBottom = target.scrollHeight - target.scrollTop - target.clientHeight;
+
+    if (scrollBottom > 0) return of({});
+
+    this.fetchPage += 1;
+
+    return this.onFetch(this.fetchPage * this.fetchLimit, this.fetchLimit);
+  }
+
+  onFetch(offset: number, limit: number) {
+    const programId = this.route.parent?.snapshot.params["programId"];
+    const observable = this.projectRatingService.getAll(
+      programId,
+      offset,
+      limit,
+      this.isRatedByExpert(),
+      this.searchValue()
+    );
+
+    return observable.pipe(
+      tap(({ count, results }) => {
+        this.totalProjCount = count;
+        this.projects = results;
+      })
+    );
   }
 }

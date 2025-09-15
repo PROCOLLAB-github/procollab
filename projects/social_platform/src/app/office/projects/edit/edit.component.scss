@@ -10,8 +10,8 @@
   border-radius: var(--rounded-md);
 
   &__top {
-    position: fixed;
-    top: 5%;
+    position: sticky;
+    top: 10%;
     left: 6%;
     z-index: 10;
     display: flex;

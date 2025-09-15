@@ -9,22 +9,18 @@
   width: 100%;
 
   &__columns {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 10px 8%;
-    align-content: center;
-    justify-content: space-around;
-
-    @include responsive.apply-desktop {
-      grid-template-columns: repeat(2, 1fr min-content);
-    }
+    display: flex;
+    align-items: center;
   }
 
   &__field {
-    display: grid;
-    grid-template-columns: subgrid;
-    grid-column: span 2;
+    display: flex;
+    align-items: center;
     gap: 10px;
+
+    label {
+      margin-top: 5px;
+    }
   }
 
   &__input {
@@ -36,9 +32,9 @@
 
     app-textarea {
       ::ng-deep .field__input {
-        padding: 10px;
+        color: var(--dark-grey);
 
-        @include typography.body-12;
+        @include typography.body-10;
       }
     }
   }

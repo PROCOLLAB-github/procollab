@@ -10,6 +10,7 @@ import { ProgramProjectsComponent } from "@office/program/detail/projects/projec
 import { ProgramProjectsResolver } from "@office/program/detail/projects/projects.resolver";
 import { ProgramMembersComponent } from "@office/program/detail/members/members.component";
 import { ProgramMembersResolver } from "@office/program/detail/members/members.resolver";
+import { RateProjectsComponent } from "./rate-projects/rate-projects.component";
 
 /**
  * Маршруты для детальной страницы программы
@@ -49,6 +50,10 @@ export const PROGRAM_DETAIL_ROUTES: Routes = [
         resolve: {
           data: ProgramMembersResolver,
         },
+      },
+      {
+        path: "projects-rating",
+        component: RateProjectsComponent,
       },
     ],
   },

@@ -1,44 +1,46 @@
 <!-- @format -->
 
 <div class="page" #projectsRoot>
-  @if (program$ | async; as program) {
-  <app-program-head [program]="program"></app-program-head>
+  <div class="page__outlet">
+    <div class="page__search">
+      <form [formGroup]="searchForm">
+        <app-search formControlName="search"></app-search>
+      </form>
+    </div>
 
-  <div class="page__search">
-    <form [formGroup]="searchForm">
-      <app-search formControlName="search"></app-search>
-    </form>
-  </div>
-
-  }
-  <div class="page__list--wrapper">
     <div class="filter-toggle page__filter-toggle" (click)="isFilterOpen = !isFilterOpen">
       <span>Фильтр</span>
       <i appIcon icon="filter" appSquare="34"></i>
     </div>
+
     <ul class="page__list">
-      @for (p of searchedProjects; track p.id) {
+      @for (project of searchedProjects; track project.id) {
       <li class="page__item">
-        <a [routerLink]="['/office/projects', p.id]">
-          <app-project-card [project]="p"></app-project-card>
+        <a [routerLink]="['/office/projects', project.id]">
+          <app-project-card
+            [profileId]="project.id"
+            [isSubscribed]="profileProjSubsIds?.includes(project.id)"
+            [project]="project"
+          ></app-project-card>
         </a>
       </li>
       }
     </ul>
+  </div>
 
-    <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
-      <div class="filter__overlay" (click)="isFilterOpen = false"></div>
-      <div class="filter__body" #filterBody>
-        <div
-          class="filter__bar"
-          (touchstart)="onSwipeStart($event)"
-          (touchmove)="onSwipeMove($event)"
-          (touchend)="onSwipeEnd($event)"
-        ></div>
-        <app-projects-filter
-          (filtersLoaded)="onFiltersLoaded($event)"
-          (closeFilter)="closeFilter()"
-        ></app-projects-filter>
+  <div class="page__create">
+    <div class="page__left">
+      <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
+        <div class="filter__overlay" (click)="isFilterOpen = false"></div>
+        <div class="filter__body" #filterBody>
+          <div
+            class="filter__bar"
+            (touchstart)="onSwipeStart($event)"
+            (touchmove)="onSwipeMove($event)"
+            (touchend)="onSwipeEnd($event)"
+          ></div>
+          <app-projects-filter (closeFilter)="closeFilter()"></app-projects-filter>
+        </div>
       </div>
     </div>
   </div>

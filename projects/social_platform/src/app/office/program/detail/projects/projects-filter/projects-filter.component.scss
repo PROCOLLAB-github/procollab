@@ -32,11 +32,6 @@
   &__body {
     display: flex;
     flex-direction: column;
-    min-width: 330px;
-    min-height: 50vh;
-    padding: 22px;
-    background-color: var(--white);
-    border-radius: var(--rounded-md);
   }
 
   &__titles {
@@ -52,12 +47,6 @@
 
   &__title {
     color: var(--black);
-
-    @include typography.heading-3;
-
-    @include responsive.apply-desktop {
-      @include typography.bold-body-16;
-    }
   }
 
   &__block {
@@ -111,7 +100,7 @@
       app-select {
         .field__input,
         li {
-          @include typography.body-12;
+          @include typography.body-10;
         }
       }
     }

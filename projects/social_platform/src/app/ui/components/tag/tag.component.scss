@@ -11,24 +11,70 @@
   white-space: nowrap;
   border-radius: var(--rounded-xxl);
 
-  &--primary {
+  &--inline {
     color: var(--white);
-    background-color: var(--accent);
+    border: 0.5px solid transparent;
+
+    &.tag--primary {
+      color: var(--white);
+      background-color: var(--accent);
+    }
+
+    &.tag--secondary {
+      background: var(--dark-grey);
+      border: 0.5px solid var(--grey-for-text);
+    }
+
+    &.tag--accent {
+      color: var(--white);
+      background-color: var(--accent);
+    }
+
+    &.tag--complete {
+      color: var(--white);
+      background-color: var(--green);
+    }
+
+    &.tag--soft {
+      color: var(--gold);
+      border: transparent;
+      background: var(--gold);
+    }
   }
 
-  &--secondary {
-    background: transparent;
+  &--outline {
     border: 0.5px solid var(--accent);
-  }
+    background: transparent;
+    color: var(--accent);
 
-  &--accent {
-    color: var(--white);
-    background-color: var(--accent);
-  }
+    &.tag--primary {
+      color: var(--accent);
+      border: 0.5px solid var(--accent);
+    }
 
-  &--complete {
-    color: var(--white);
-    background-color: var(--green);
+    &.tag--secondary {
+      background: transparent;
+      color: var(--grey-for-text);
+      border: 0.5px solid var(--dark-grey);
+    }
+
+    &.tag--accent {
+      color: var(--accent);
+      background: transparent;
+      border: 0.5px solid var(--accent);
+    }
+
+    &.tag--complete {
+      color: var(--green);
+      background: transparent;
+      border: 0.5px solid var(--green);
+    }
+
+    &.tag--soft {
+      color: var(--gold);
+      border: 0.5px solid var(--gold);
+      background: transparent;
+    }
   }
 
   ::ng-deep {

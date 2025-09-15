@@ -21,13 +21,13 @@ import {
   Observable,
   of,
   Subscription,
+  switchMap,
   tap,
   throttleTime,
 } from "rxjs";
 import { Project } from "@models/project.model";
 import { Program } from "@office/program/models/program.model";
 import { ProjectCardComponent } from "@office/shared/project-card/project-card.component";
-import { ProgramHeadComponent } from "../../shared/program-head/program-head.component";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { ProgramService } from "@office/program/services/program.service";
 import { AuthService } from "@auth/services";
@@ -38,6 +38,8 @@ import { ProjectsFilterComponent } from "@office/program/detail/projects/project
 import { HttpParams } from "@angular/common/http";
 import { IconComponent } from "@uilib";
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
+import { SubscriptionService } from "@office/services/subscription.service";
+import { User } from "@auth/models/user.model";
 
 /**
  * Компонент списка проектов программы
@@ -83,7 +85,6 @@ import { PartnerProgramFields } from "@office/models/partner-program-fields.mode
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    ProgramHeadComponent,
     RouterLink,
     ProjectCardComponent,
     IconComponent,
@@ -99,6 +100,7 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
     private readonly fb: FormBuilder,
     private readonly cdref: ChangeDetectorRef,
     private readonly programService: ProgramService,
+    private readonly subscriptionService: SubscriptionService,
     public readonly authService: AuthService,
     private readonly renderer: Renderer2
   ) {
@@ -114,10 +116,10 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
   page = 1;
   perPage = 21;
 
+  profile?: User;
   projects: Project[] = [];
   searchedProjects: Project[] = [];
-
-  program$?: Observable<Program> = this.route.parent?.data.pipe(map(r => r["data"]));
+  profileProjSubsIds?: number[];
 
   searchForm: FormGroup;
   subscriptions$: Subscription[] = [];
@@ -150,6 +152,21 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
     });
 
     searchFormSearch$ && this.subscriptions$.push(searchFormSearch$);
+
+    const profile$ = this.authService.profile
+      .pipe(
+        switchMap(p => {
+          this.profile = p;
+          return this.subscriptionService.getSubscriptions(p.id).pipe(
+            map(resp => {
+              this.profileProjSubsIds = resp.results.map(sub => sub.id);
+            })
+          );
+        })
+      )
+      .subscribe();
+
+    profile$ && this.subscriptions$.push(profile$);
 
     const querySearch$ = this.route.queryParams.pipe(map(q => q["search"])).subscribe(search => {
       const fuse = new Fuse(this.projects, {

@@ -3,7 +3,7 @@
 import { Routes } from "@angular/router";
 import { RateProjectsComponent } from "@office/program/detail/rate-projects/rate-projects.component";
 import { ListComponent } from "./list/list.component";
-import { ListAllResolver } from "./list/list-all.resolver";
+import { ListAllResolver } from "./list-all.resolver";
 // import { ListRatedResolver } from "./list/list-rated.resolver";
 
 /**

@@ -3,27 +3,27 @@
 <div class="filter">
   <div class="filter__body" [formGroup]="filterForm">
     <div class="filter__titles">
-      <h3 class="filter__title">Фильтр</h3>
-      <a class="text-body-12 filter__clear" (click)="clearFilters()">Сбросить фильтры</a>
+      <p class="text-body-14">фильтры</p>
+      <!-- <a class="text-body-12 filter__clear" (click)="clearFilters()">Сбросить фильтры</a> -->
     </div>
 
     @if (filters()?.length && filterForm.controls) { @for (field of filters(); track field.id) { @if
     (filterForm.get(field.name)) {
     <div class="filter__block">
       @switch (field.fieldType) { @case ("checkbox") {
-      <h4 class="text-body-12 filter__name">{{ field.label }}</h4>
+      <!-- <h4 class="text-body-12 filter__name">{{ field.label }}</h4> -->
       <div
-        class="text-body-14 filter__checkbox"
+        class="text-body-10 filter__checkbox"
         (click)="toggleAdditionalFormValues(field.fieldType, field.name)"
       >
         <app-checkbox [checked]="filterForm.get(field.name)?.value"></app-checkbox>
         {{ field.label }}
       </div>
       } @case ("radio") {
-      <h4 class="text-body-12 filter__name">{{ field.label }}</h4>
+      <!-- <h4 class="text-body-12 filter__name">{{ field.label }}</h4> -->
       <div class="filter__switch">
         <span
-          class="filter__yes-no text-body-14"
+          class="filter__yes-no text-body-10"
           [class.filter__yes-no--active]="!filterForm.get(field.name)?.value"
         >
           Нет
@@ -33,15 +33,15 @@
           (checkedChange)="filterForm.get(field.name)?.setValue($event)"
         ></app-switch>
         <span
-          class="filter__yes-no text-body-14"
+          class="filter__yes-no text-body-10"
           [class.filter__yes-no--active]="filterForm.get(field.name)?.value"
         >
           Да
         </span>
       </div>
       } @case ("select") {
-      <h4 class="text-body-12 filter__name">{{ field.label }}</h4>
-      <div class="filter__select">
+      <!-- <h4 class="text-body-12 filter__name">{{ field.label }}</h4> -->
+      <div class="filter__select text-body-10">
         <app-select
           size="big"
           [id]="field.name"

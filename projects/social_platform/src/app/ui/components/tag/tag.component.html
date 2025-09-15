@@ -1,11 +1,14 @@
 <!-- @format -->
 
 <div
-  class="text-body-12 tag"
+  class="text-body-6 tag"
+  [class.tag--inline]="appearance === 'inline'"
+  [class.tag--outline]="appearance === 'outline'"
   [class.tag--primary]="color === 'primary'"
   [class.tag--secondary]="color === 'secondary'"
   [class.tag--accent]="color === 'accent'"
   [class.tag--complete]="color === 'complete'"
+  [class.tag--soft]="color === 'soft'"
 >
   <ng-content></ng-content>
 </div>

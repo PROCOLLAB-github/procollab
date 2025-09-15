@@ -12,6 +12,9 @@
     position: absolute;
     top: 0;
     left: 0;
+    width: 100%;
+    max-width: 130px;
+    padding-right: 20px;
   }
 
   &__wrapper {
@@ -30,18 +33,43 @@
     flex-grow: 1;
     justify-content: center;
     overflow-y: auto;
+    padding: 0 200px;
+
+    @media (max-width: 1600px) {
+      padding: 0 150px;
+    }
+
+    @media (max-width: 1400px) {
+      padding: 0 100px;
+    }
+
+    @media (max-width: 1200px) {
+      padding: 0 50px;
+    }
+
+    @media (max-width: 992px) {
+      padding: 0 20px;
+    }
+
+    @media (max-width: 768px) {
+      padding: 0 15px;
+    }
   }
 
   &__inner {
     display: flex;
     width: 100%;
-    max-width: responsive.$container-md;
+    max-width: 1040px;
     height: 100%;
 
     &--wrapper {
-      display: flex;
-      gap: 20px;
+      display: grid;
+      grid-template-columns: 2fr 10fr;
       width: 100%;
+
+      @media (max-width: 992px) {
+        grid-template-columns: 1fr;
+      }
     }
 
     &--content {
@@ -55,8 +83,6 @@
 
     @include responsive.apply-desktop {
       display: block;
-      flex-shrink: 0;
-      width: 150px;
     }
 
     &--text {
@@ -97,5 +123,32 @@
 
   &__button {
     min-width: 100px;
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 200px;
+
+  @media (max-width: 1600px) {
+    padding: 0 150px;
+  }
+
+  @media (max-width: 1400px) {
+    padding: 0 100px;
+  }
+
+  @media (max-width: 1200px) {
+    padding: 0 50px;
+  }
+
+  @media (max-width: 992px) {
+    padding: 0 20px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 15px;
   }
 }

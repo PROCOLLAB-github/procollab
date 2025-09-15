@@ -97,7 +97,10 @@ export class ProjectCardComponent implements OnInit {
 
   isUnsubscribeModalOpen = false; // Флаг модального окна отписки
   inviteErrorModal = false; // Флаг модального окна для ошибки приглашения
-  haveBadge = location.href.includes("/subscriptions") || location.href.includes("/all");
+  haveBadge =
+    location.href.includes("/subscriptions") ||
+    location.href.includes("/all") ||
+    location.href.includes("/projects");
 
   /**
    * Подписка на проект или открытие модального окна отписки

@@ -3,6 +3,9 @@
   align-items: center;
   justify-content: flex-end;
   margin: 15px auto;
+  position: sticky;
+  top: 15px;
+  z-index: 1000;
 
   &__actions {
     display: flex;
@@ -23,25 +26,11 @@
 
   &__notifications {
     position: absolute;
-    top: 0%;
+    top: 100%;
+    right: 0;
     z-index: 20;
     width: 120px;
     max-height: 240px;
-    transform: translate(-50%, 120%);
-  }
-}
-
-.notifications {
-  padding: 20px;
-  background-color: var(--light-white);
-  border-radius: var(--rounded-md);
-  box-shadow: 5px 5px 50px rgb(196 196 196 / 15%);
-
-  &__invite {
-    &:not(:last-child) {
-      padding-bottom: 16px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid var(--gray);
-    }
+    margin-top: 10px;
   }
 }

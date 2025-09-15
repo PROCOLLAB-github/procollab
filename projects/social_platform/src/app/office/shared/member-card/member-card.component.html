@@ -1,33 +1,49 @@
 <!-- @format -->
 
+<!-- @format -->
+
 <div class="card">
   <div class="card__body">
-    <app-avatar [url]="user.avatar" [isOnline]="user.isOnline" [size]="60"></app-avatar>
-    <div class="card__info">
-      <p class="text-body-12 card__status">{{ user.userType | userRole | async }}</p>
-      <p class="text-heading-4 card__name">{{ user.firstName }} {{ user.lastName }}</p>
-      @if (user.speciality) {
-      <p class="text-body-12 card__additional-info">
-        {{ user.speciality }}
-        @if (user.speciality && user.birthday) { • } @if (user.birthday) {
-        {{ user.birthday | yearsFromBirthday }}
-        }
-      </p>
-      }
+    <app-avatar class="card__photo" [url]="user.avatar" [size]="70"></app-avatar>
+
+    <div class="card__content">
+      <div class="card__head">
+        <div>
+          <p class="text-body-12 card__name">{{ user.firstName }} {{ user.lastName }}</p>
+
+          @if (user.speciality) {
+          <p class="text-body-6 card__additional-info">
+            {{ user.speciality }}
+            @if (user.speciality && user.birthday) { • } @if (user.birthday) {
+            {{ user.birthday | yearsFromBirthday }}
+            }
+          </p>
+          } @if (user.skills && user.skills.length) {
+          <ul class="card__skills">
+            @for ( skill of user.skills.slice(0, 3); track skill.id ) {
+            <li class="card__skill">
+              <app-tag
+                [color]="skill.category.name.includes('Soft skills') ? 'soft' : 'complete'"
+                >{{
+                  skill.name.length > 10 ? skill.name.slice(0, 10) + " " + "..." : skill.name
+                }}</app-tag
+              >
+            </li>
+            }
+          </ul>
+          }
+        </div>
+      </div>
+
+      <div class="card__project">
+        <app-button
+          customTypographyClass="text-body-6"
+          size="extra-small"
+          class="card__project--text"
+        >
+          профиль
+        </app-button>
+      </div>
     </div>
   </div>
-  @if (user.skills && user.skills.length) {
-  <ul class="card__skills">
-    @for ( skill of user.skills.slice(0, user.skills.length >= 4 ? 4 : user.skills.length); track
-    skill.id ) {
-    <li class="card__skill">
-      <app-tag color="accent">{{
-        skill.name.length > 10 ? skill.name.slice(0, 10) + " " + "..." : skill.name
-      }}</app-tag>
-    </li>
-    } @if (user.skills.length > 4) {
-    <span>...</span>
-    }
-  </ul>
-  }
 </div>
