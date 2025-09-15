@@ -13,12 +13,12 @@
     position: relative;
     z-index: 10;
     flex-shrink: 0;
+    width: 123px;
+    height: 123px;
     padding: 12px;
     background: var(--white);
     border: 0.5px solid var(--dark-grey);
     border-radius: 50%;
-    width: 123px;
-    height: 123px;
   }
 
   &__info {

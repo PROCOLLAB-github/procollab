@@ -23,8 +23,8 @@
 
   &__info {
     display: flex;
-    align-items: center;
     gap: 20px;
+    align-items: center;
   }
 
   &__naming {
@@ -75,16 +75,17 @@
     display: flex;
     flex-direction: column;
     gap: 14px;
-    
+
     &--info {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 0.5px solid var(--dark-grey);
       padding-bottom: 10px;
       margin-bottom: 10px;
+      border-bottom: 0.5px solid var(--dark-grey);
 
-      p, i {
+      p,
+      i {
         color: var(--accent);
       }
     }
@@ -97,13 +98,13 @@
         }
       }
     }
+
     &-icons {
       display: flex;
       gap: 10px;
       align-items: center;
     }
   }
-
 
   &__rated-icon {
     color: var(--green);
@@ -127,8 +128,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 0.5px solid var(--dark-grey);
     padding-bottom: 10px;
+    border-bottom: 0.5px solid var(--dark-grey);
 
     i {
       color: var(--accent);

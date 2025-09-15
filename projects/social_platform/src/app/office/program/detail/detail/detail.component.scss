@@ -67,9 +67,9 @@
 
   &__actions {
     display: grid;
+    grid-template-columns: repeat(5, 2fr);
     gap: 20px;
     align-items: center;
-    grid-template-columns: repeat(5, 2fr);
   }
 
   &__presentation {
@@ -80,11 +80,11 @@
       color: var(--accent);
     }
 
-     app-tooltip {
-      z-index: 1000;
+    app-tooltip {
       position: absolute;
       right: -11%;
       bottom: 48%;
+      z-index: 1000;
     }
   }
 

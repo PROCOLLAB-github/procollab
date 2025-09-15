@@ -14,10 +14,10 @@
   &__outlet {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     gap: 20px;
     width: 100%;
     margin-top: 10px;
-    flex-grow: 1;
   }
 
   &__filter {
@@ -51,8 +51,8 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    margin-top: 20px;
     align-items: center;
+    margin-top: 20px;
   }
 
   &__left {

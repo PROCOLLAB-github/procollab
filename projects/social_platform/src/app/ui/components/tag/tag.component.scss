@@ -37,15 +37,15 @@
 
     &.tag--soft {
       color: var(--gold);
-      border: transparent;
       background: var(--gold);
+      border: transparent;
     }
   }
 
   &--outline {
-    border: 0.5px solid var(--accent);
-    background: transparent;
     color: var(--accent);
+    background: transparent;
+    border: 0.5px solid var(--accent);
 
     &.tag--primary {
       color: var(--accent);
@@ -53,8 +53,8 @@
     }
 
     &.tag--secondary {
-      background: transparent;
       color: var(--grey-for-text);
+      background: transparent;
       border: 0.5px solid var(--dark-grey);
     }
 
@@ -72,8 +72,8 @@
 
     &.tag--soft {
       color: var(--gold);
-      border: 0.5px solid var(--gold);
       background: transparent;
+      border: 0.5px solid var(--gold);
     }
   }
 

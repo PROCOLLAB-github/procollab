@@ -1,11 +1,11 @@
 .control-panel {
+  position: sticky;
+  top: 15px;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   margin: 15px auto;
-  position: sticky;
-  top: 15px;
-  z-index: 1000;
 
   &__actions {
     display: flex;
