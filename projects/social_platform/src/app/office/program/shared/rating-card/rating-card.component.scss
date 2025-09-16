@@ -11,7 +11,7 @@
   &__wrapper {
     padding: 24px;
     background-color: var(--light-white);
-    border: 0.5px solid var(--dark-grey);
+    border: 0.5px solid var(--grey-button);
     border-radius: var(--rounded-lg);
   }
 
@@ -51,13 +51,17 @@
 
   &__rated {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
     align-items: center;
-    justify-content: center;
-    padding-top: 15px;
-    padding-bottom: 10px;
-    color: var(--accent);
+    gap: 4px;
+
+    &--icon {
+    ::ng-deep {
+        button {
+          width: 50px;
+          padding: 8px !important;
+        }
+      }
+    }
   }
 
   &__presentation {
@@ -98,21 +102,6 @@
         }
       }
     }
-
-    &-icons {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-  }
-
-  &__rated-icon {
-    color: var(--green);
-  }
-
-  &__redo-rating-icon {
-    color: var(--dark-grey);
-    cursor: pointer;
   }
 }
 
@@ -172,5 +161,34 @@
     margin-top: 2px;
     color: var(--accent);
     cursor: pointer;
+  }
+}
+
+.cancel {
+  position: relative;
+  display: block;
+  width: 350px;
+  max-height: calc(100vh - 40px);
+
+  i {
+    color: var(--green);
+    padding: 36px 0px;
+  }
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    text-align: center;
+  }
+
+  &__text {
+    width: 40%;
+    color: var(--dark-grey);
+    text-align: center;
   }
 }

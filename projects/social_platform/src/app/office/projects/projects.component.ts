@@ -4,16 +4,17 @@ import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from "
 import { NavService } from "@services/nav.service";
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
 import { map, Subscription } from "rxjs";
-import { ProjectCount } from "@models/project.model";
-import { ProjectService } from "@services/project.service";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
 import { ButtonComponent, IconComponent } from "@ui/components";
-import { AsyncPipe } from "@angular/common";
 import { BarNewComponent } from "@ui/components/bar-new/bar.component";
 import { BackComponent } from "@uilib";
 import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
 import { ProjectsFilterComponent } from "./projects-filter/projects-filter.component";
+import { ProjectCardComponent } from "@office/shared/project-card/project-card.component";
+import { Project } from "@office/models/project.model";
+import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
+import { ProjectsService } from "./services/projects.service";
 
 /**
  * Главный компонент модуля проектов
@@ -42,13 +43,14 @@ import { ProjectsFilterComponent } from "./projects-filter/projects-filter.compo
     BackComponent,
     SoonCardComponent,
     ProjectsFilterComponent,
+    ProjectCardComponent,
   ],
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
   constructor(
     private readonly navService: NavService,
     private readonly route: ActivatedRoute,
-    public readonly projectService: ProjectService,
+    private readonly projectsService: ProjectsService,
     private readonly router: Router,
     private readonly renderer: Renderer2,
     private readonly fb: FormBuilder
@@ -63,6 +65,12 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.navService.setNavTitle("Проекты");
 
+    this.route.data.pipe(map(r => r["data"])).subscribe({
+      next: invites => {
+        this.myInvites = inviteToProjectMapper(invites.slice(0, 1));
+      },
+    });
+
     const searchFormSearch$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
       this.router
         .navigate([], {
@@ -75,19 +83,13 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
     searchFormSearch$ && this.subscriptions$.push(searchFormSearch$);
 
-    const routeData$ = this.route.data
-      .pipe(map(r => r["data"]))
-      .subscribe((count: ProjectCount) => {
-        this.projectService.projectsCount.next(count);
-      });
-
-    routeData$ && this.subscriptions$.push(routeData$);
-
     const routeUrl$ = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isMy = location.href.includes("/my");
         this.isAll = location.href.includes("/all");
         this.isSubs = location.href.includes("/subscriptions");
+        this.isInvites = location.href.includes("/invites");
+        this.isDashboard = location.href.includes("/dashboard");
       }
     });
     routeUrl$ && this.subscriptions$.push(routeUrl$);
@@ -98,12 +100,16 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   searchForm: FormGroup;
+
+  myInvites: Project[] = [];
+
   subscriptions$: Subscription[] = [];
 
   isMy = location.href.includes("/my");
   isAll = location.href.includes("/all");
   isSubs = location.href.includes("/subscriptions");
   isInvites = location.href.includes("/invites");
+  isDashboard = location.href.includes("/dashboard");
 
   isFilterOpen = false;
 
@@ -150,15 +156,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   }
 
   addProject(): void {
-    this.projectService.create().subscribe(project => {
-      this.projectService.projectsCount.next({
-        ...this.projectService.projectsCount.getValue(),
-        my: this.projectService.projectsCount.getValue().my + 1,
-      });
-
-      this.router
-        .navigateByUrl(`/office/projects/${project.id}/edit?editingStep=main`)
-        .then(() => console.debug("Route change from ProjectsComponent"));
-    });
+    this.projectsService.addProject();
   }
 }

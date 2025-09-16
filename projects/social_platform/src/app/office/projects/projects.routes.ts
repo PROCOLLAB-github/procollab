@@ -11,6 +11,7 @@ import { ProjectEditResolver } from "./edit/edit.resolver";
 import { ProjectsSubscriptionsResolver } from "./list/subscriptions.resolver";
 import { ProjectEditRequiredGuard } from "./edit/guards/projects-edit.guard";
 import { ProjectsInvitesResolver } from "./list/invites.resolver";
+import { DashboardProjectsComponent } from "./dashboard/dashboard.component";
 
 /**
  * Конфигурация маршрутов для модуля проектов
@@ -40,13 +41,20 @@ export const PROJECTS_ROUTES: Routes = [
     path: "",
     component: ProjectsComponent,
     resolve: {
-      data: ProjectsResolver,
+      data: ProjectsInvitesResolver,
     },
     children: [
       {
         path: "",
         pathMatch: "full",
-        redirectTo: "my",
+        redirectTo: "dashboard",
+      },
+      {
+        path: "dashboard",
+        component: DashboardProjectsComponent,
+        resolve: {
+          data: ProjectsResolver,
+        },
       },
       {
         path: "my",

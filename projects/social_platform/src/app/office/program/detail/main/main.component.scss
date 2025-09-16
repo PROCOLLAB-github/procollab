@@ -16,14 +16,14 @@
   &__right {
     display: flex;
     flex-direction: column;
-    gap: 20px;
   }
 
   &__section {
     padding: 24px;
-    background-color: var(--white);
+    background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
+    margin-bottom: 14px;
   }
 
   &__info {
@@ -61,21 +61,6 @@
     grid-template-columns: 2fr 5fr 3fr;
     grid-gap: 20px;
   }
-}
-
-.bar__add-project {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-
-  i {
-    display: block;
-    margin-left: 6px;
-  }
-}
-
-.bar__add-project-text {
-  display: inline;
 }
 
 .about {

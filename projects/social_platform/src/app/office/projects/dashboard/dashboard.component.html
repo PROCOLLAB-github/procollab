@@ -1,0 +1,23 @@
+<!-- @format -->
+
+<div class="dashboard">
+  <app-dashboard-item
+    sectionName="my"
+    title="мои проекты"
+    iconName="main"
+    [arrayItems]="myProjects"
+  ></app-dashboard-item>
+  <app-dashboard-item
+    sectionName="subscriptions"
+    title="мои подписки"
+    iconName="favourities"
+    [arrayItems]="mySubs"
+  ></app-dashboard-item>
+  <app-dashboard-item
+    [profileProjSubsIds]="profileProjSubsIds"
+    sectionName="all"
+    title="витрина проектов"
+    iconName="folders"
+    [arrayItems]="allProjects"
+  ></app-dashboard-item>
+</div>

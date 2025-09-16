@@ -1,144 +1,163 @@
 <!-- @format -->
 
-<div class="card">
+<div
+  class="card"
+  [class.card--empty]="appereance === 'empty'"
+  (click)="appereance === 'empty' ? onCreateProject($event) : null"
+>
   <div class="card__body">
-    @if (type === 'project') {
+    @if (shouldShowProjectInfo()) {
     <div class="card__info">
-      <!-- TODO: добавить возможность для карточки внутри бэка полей с vacancies и collaborators -->
       <div class="card__info--vacancies">
         <p class="text-body-6">12</p>
         <i appIcon icon="suitcase" appSquare="4"></i>
       </div>
-
       <div class="card__info--collaborators">
         <p class="text-body-6">12</p>
         <i appIcon icon="team" appSquare="4"></i>
       </div>
     </div>
+    } @if (shouldShowSubscriptionBadge()) {
+    <div class="card__badge">
+      <i
+        appIcon
+        [icon]="isSubscribed ? 'subscribe-badge' : 'unsubscribe-badge'"
+        appWidth="12"
+        appHeight="18"
+        class="card__subscribe-badge"
+        (click)="toggleSubscription($event)"
+      ></i>
+    </div>
     }
 
-    <div class="card__badge">
-      @if (haveBadge) { @if (isSubscribed) {
-      <i
-        (click)="onUnsubscribe($event, profileId!)"
-        appIcon
-        appWidth="10"
-        class="card__subscribe-badge"
-        appHeight="16"
-        icon="subscribe-badge"
-      ></i>
-      } @else {
-      <i
-        (click)="onSubscribe($event, profileId!)"
-        appIcon
-        appWidth="10"
-        class="card__subscribe-badge"
-        appHeight="16"
-        icon="unsubscribe-badge"
-      ></i>
-      } }
-    </div>
-
-    <app-avatar class="card__photo" [url]="project.imageAddress" [size]="70"></app-avatar>
+    <app-avatar class="card__photo" [url]="getAvatarUrl()" [size]="70"></app-avatar>
 
     <div class="card__content">
       <div class="card__head">
         <div>
-          <p class="text-body-12 card__name">{{ project.name }}</p>
-          @if (industryService.industries | async; as industries) {
-          <p class="text-body-6 card__industry">
-            @if (industryService.getIndustry(industries, project.industry); as industry) {
-            <span>
-              {{ industry ? industry.name : "Error" }}
-            </span>
-            }
-          </p>
+          @if (appereance === 'empty') {
+          <ng-container *ngTemplateOutlet="emptyCardContent"></ng-container>
+          } @else {
+          <ng-container *ngTemplateOutlet="regularCardHeader"></ng-container>
           }
         </div>
       </div>
 
-      @if (type === 'invite') {
-      <div class="card__description invite-description">
-        <p class="text-body-6 card__user">вас приглашает</p>
-        <p class="text-body-10 card__user--invite">{{ project.shortDescription }}</p>
-      </div>
-      } @else {
-      <div class="card__description">
-        <p class="text-body-6">{{ project.shortDescription }}</p>
-      </div>
+      @if (appereance !== 'empty') {
+      <ng-container *ngTemplateOutlet="cardDescription"></ng-container>
       }
 
-      <div class="card__project">
-        @if (type === 'project') {
-        <app-button
-          customTypographyClass="text-body-6"
-          size="extra-small"
-          class="card__project--text"
-        >
-          проект
-        </app-button>
+      <div class="card__footer">
+        @if (appereance === 'empty') {
+        <i appIcon icon="main" appSquare="22" class="card__empty--icon"></i>
         } @else {
-        <app-button
-          (click)="onAcceptInvite($event, project.inviteId)"
-          customTypographyClass="text-body-6"
-          size="extra-small"
-          appearance="inline"
-        >
-          принять
-        </app-button>
-
-        <app-button
-          (click)="onRejectInvite($event, project.inviteId)"
-          customTypographyClass="text-body-6"
-          size="extra-small"
-          appearance="outline"
-        >
-          отклонить
-        </app-button>
+        <ng-container *ngTemplateOutlet="cardActions"></ng-container>
         }
       </div>
     </div>
 
-    <app-modal [(open)]="isUnsubscribeModalOpen">
-      <div class="unsubscribe-modal">
-        <h3>Вы действительно хотите отписаться от проекта?</h3>
-        <app-avatar [url]="project.imageAddress" [size]="70"></app-avatar>
-        <div class="unsubscribe-modal__buttons">
-          <app-button
-            color="red"
-            customTypographyClass="unsubscribe-modal-btn__typography"
-            (click)="onUnsubscribe($event, project.id)"
-          >
-            Отписаться
-          </app-button>
-          <app-button
-            customTypographyClass="unsubscribe-modal-btn__typography"
-            (click)="onCloseUnsubscribeModal()"
-          >
-            Отменить
-          </app-button>
-        </div>
-      </div>
-    </app-modal>
-
-    <app-modal [open]="inviteErrorModal">
-      <div class="message-modal">
-        <h3 class="message-modal__title text-body-14">
-          Приглашение на текущий проект было удалено
-        </h3>
-        <p class="message-modal__text text-body-10">
-          Проверьте наличие вас в списке участников проекта или обратитесь к создателю проекта,
-          чтобы вас заново пригласили!
-        </p>
-        <app-button
-          customTypographyClass="text-body-12"
-          size="medium"
-          class="message-modal__button"
-          (click)="inviteErrorModal = false"
-        >
-          Хорошо
-        </app-button>
-      </div>
-    </app-modal>
+    <ng-container *ngTemplateOutlet="modals"></ng-container>
   </div>
 </div>
+
+<ng-template #emptyCardContent>
+  <p class="text-body-12 card__name">{{ project?.name }}</p>
+  <img src="/assets/images/projects/shared/arrow.svg" class="card__empty--image" alt="Стрелка" />
+  <p class="card__empty--name text-body-10">создай первый проект</p>
+</ng-template>
+
+<ng-template #regularCardHeader>
+  <p class="text-body-12 card__name">{{ project?.name || "Без названия" }}</p>
+  @if (industryService.industries | async; as industries) {
+  <p class="text-body-6 card__industry">
+    @if (industryService.getIndustry(industries, project?.industry!); as industry) {
+    <span>{{ industry?.name || "Отрасль не указана" }}</span>
+    }
+  </p>
+  }
+</ng-template>
+
+<ng-template #cardDescription>
+  <div class="card__description" [class.invite-description]="type === 'invite'">
+    @if (type === 'invite') {
+    <p class="text-body-6 card__user">вас приглашает</p>
+    <p class="text-body-10 card__user--invite">{{ project?.shortDescription }}</p>
+    } @else {
+    <p class="text-body-6">{{ project?.shortDescription }}</p>
+    }
+  </div>
+</ng-template>
+
+<ng-template #cardActions>
+  <div class="card__project">
+    @if (type === 'project') {
+    <app-button customTypographyClass="text-body-6" size="extra-small" class="card__project--text">
+      проект
+    </app-button>
+    } @else {
+    <div class="card__invite-actions">
+      <app-button
+        (click)="onAcceptInvite($event, project?.inviteId!)"
+        customTypographyClass="text-body-6"
+        size="extra-small"
+        appearance="inline"
+        [disabled]="!project?.inviteId"
+      >
+        принять
+      </app-button>
+      <app-button
+        (click)="onRejectInvite($event, project?.inviteId!)"
+        customTypographyClass="text-body-6"
+        size="extra-small"
+        appearance="outline"
+        [disabled]="!project?.inviteId"
+      >
+        отклонить
+      </app-button>
+    </div>
+    }
+  </div>
+</ng-template>
+
+<ng-template #modals>
+  <app-modal [(open)]="isUnsubscribeModalOpen">
+    <div class="unsubscribe-modal">
+      <h3>Вы действительно хотите отписаться от проекта?</h3>
+      <app-avatar [url]="project?.imageAddress" [size]="70"></app-avatar>
+      <div class="unsubscribe-modal__buttons">
+        <app-button
+          color="red"
+          customTypographyClass="unsubscribe-modal-btn__typography"
+          (click)="onUnsubscribe($event, project?.id!)"
+          [disabled]="!project?.id"
+        >
+          Отписаться
+        </app-button>
+        <app-button
+          customTypographyClass="unsubscribe-modal-btn__typography"
+          (click)="onCloseUnsubscribeModal()"
+        >
+          Отменить
+        </app-button>
+      </div>
+    </div>
+  </app-modal>
+
+  <app-modal [open]="inviteErrorModal">
+    <div class="message-modal">
+      <h3 class="message-modal__title text-body-14">Приглашение на текущий проект было удалено</h3>
+      <p class="message-modal__text text-body-10">
+        Проверьте наличие вас в списке участников проекта или обратитесь к создателю проекта, чтобы
+        вас заново пригласили!
+      </p>
+      <app-button
+        customTypographyClass="text-body-12"
+        size="medium"
+        class="message-modal__button"
+        (click)="inviteErrorModal = false"
+      >
+        Хорошо
+      </app-button>
+    </div>
+  </app-modal>
+</ng-template>

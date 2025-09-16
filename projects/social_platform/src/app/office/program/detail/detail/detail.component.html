@@ -48,7 +48,7 @@
             (click)="toggleSubmitProjectModal()"
             customTypographyClass="text-body-12 bar__add-project"
           >
-            <span class="bar__add-project-text">подать проект</span>
+            <span>подать проект</span>
             <i appIcon icon="plus" appSquare="10"></i>
           </app-button>
           } @else if (program.isUserManager) {
@@ -93,8 +93,9 @@
                 (show)="showTooltip()"
                 (hide)="hideTooltip()"
               ></app-tooltip>
-              }
+              } @if (!program.isUserManager) {
               <i appIcon class="info__presentation-icon" icon="arrow-down" appSquare="10"></i>
+              }
             </app-button>
           </a>
 

@@ -2,46 +2,48 @@
 
 <main class="page">
   <div class="page__bar">
-    <app-back namespace="проекты" path="/office/projects/main"></app-back>
+    <app-back namespace="проекты" path="/office/feed"></app-back>
 
     <div class="page__info">
-      <div class="page__outlet">
+      <div class="page__outlet" [style.gap]="isDashboard ? '8px' : '20px'">
         <form [formGroup]="searchForm">
           <app-search formControlName="search"></app-search>
         </form>
 
+        @if(!isDashboard) {
         <app-bar-new
           [links]="[
-            {
-              link: '/office/projects/my',
-              linkText: 'Мои проекты',
-              iconName: 'main',
-              isRouterLinkActiveOptions: false,
-            },
+              {
+                link: '/office/projects/my',
+                linkText: 'Мои проекты',
+                iconName: 'main',
+                isRouterLinkActiveOptions: false,
+              },
 
-            {
-              link: '/office/projects/subscriptions',
-              linkText: 'Мои подписки',
-              iconName: 'favourites',
-              isRouterLinkActiveOptions: false,
-            },
+              {
+                link: '/office/projects/subscriptions',
+                linkText: 'Мои подписки',
+                iconName: 'favourites',
+                isRouterLinkActiveOptions: false,
+              },
 
-            {
-              link: '/office/projects/invites',
-              linkText: 'Мои приглашения',
-              iconName: 'send',
-              isRouterLinkActiveOptions: false,
-            },
+              {
+                link: '/office/projects/invites',
+                linkText: 'Мои приглашения',
+                iconName: 'send',
+                isRouterLinkActiveOptions: false,
+              },
 
-            {
-              link: '/office/projects/all',
-              linkText: 'Все проекты',
-              iconName: 'folders',
-              isRouterLinkActiveOptions: false,
-            },
-          ]"
+              {
+                link: '/office/projects/all',
+                linkText: 'Все проекты',
+                iconName: 'folders',
+                isRouterLinkActiveOptions: false,
+              },
+            ]"
         >
         </app-bar-new>
+        }
 
         <router-outlet></router-outlet>
       </div>
@@ -50,14 +52,34 @@
         <app-button
           size="medium"
           (click)="addProject()"
-          customTypographyClass="text-body-12 bar__add-project"
+          class="bar__add-project"
+          customTypographyClass="text-body-12"
         >
           <span class="bar__add-project-text text-body-12">создать проект</span>
           <i appIcon icon="plus" appSquare="10"></i>
         </app-button>
 
         <div class="page__left">
-          @if (isMy) {
+          @if (isDashboard) {
+          <div class="page__invites">
+            <div class="page__invites--wrapper">
+              <p class="text-body-12">мои приглашения</p>
+              <i appIcon icon="send" appSquare="12"></i>
+            </div>
+
+            @if (myInvites.length) {
+            <ul class="page__invites--list">
+              @for (invite of myInvites; track invite.id) {
+              <app-project-card type="invite" [project]="invite"></app-project-card>
+              }
+            </ul>
+            } @else {
+            <div class="page__invites--no-items">
+              <p class="text-body-12">пока нет приглашений</p>
+            </div>
+            }
+          </div>
+          } @if (isMy || isDashboard) {
           <app-soon-card
             title="статистика"
             description="количество проектов, команды, эффективность"

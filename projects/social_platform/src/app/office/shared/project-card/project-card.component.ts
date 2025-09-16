@@ -9,31 +9,10 @@ import { AsyncPipe, CommonModule } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { SubscriptionService } from "@office/services/subscription.service";
 import { InviteService } from "@office/services/invite.service";
-import { Router } from "@angular/router";
 import { ClickOutsideModule } from "ng-click-outside";
 
 /**
  * Компонент карточки проекта
- *
- * Функциональность:
- * - Отображает основную информацию о проекте (название, описание, участники)
- * - Показывает аватары участников проекта
- * - Отображает информацию об отрасли проекта через IndustryService
- * - Предоставляет кнопку удаления проекта (корзина) при наличии прав
- * - Поддерживает индикацию подписки на проект
- * - Проверяет права доступа на основе ID профиля пользователя
- *
- * Входные параметры:
- * @Input project - объект проекта (обязательный)
- * @Input canDelete - флаг возможности удаления проекта (по умолчанию false)
- * @Input isSubscribed - флаг подписки на проект (по умолчанию false)
- * @Input profileId - ID профиля текущего пользователя
- *
- * Выходные события:
- * @Output remove - событие удаления проекта, передает ID проекта
- *
- * Внутренние свойства:
- * - industryService - сервис для работы с отраслями (публичный для использования в шаблоне)
  */
 @Component({
   selector: "app-project-card",
@@ -53,83 +32,154 @@ import { ClickOutsideModule } from "ng-click-outside";
 export class ProjectCardComponent implements OnInit {
   private readonly inviteService = inject(InviteService);
   private readonly subscriptionService = inject(SubscriptionService);
-  private readonly router = inject(Router);
   public readonly industryService = inject(IndustryService);
 
-  @Input({ required: true }) project!: Project;
+  @Input() project?: Project;
   @Input() type: "invite" | "project" = "project";
+  @Input() appereance: "my" | "subs" | "base" | "empty" = "base";
   @Input() canDelete?: boolean | null = false;
   @Input() isSubscribed?: boolean | null = false;
   @Input() profileId?: number;
 
   @Output() onAcceptingInvite = new EventEmitter<number>();
   @Output() onRejectingInvite = new EventEmitter<number>();
+  @Output() onCreate = new EventEmitter<void>();
 
-  ngOnInit(): void {}
+  // Состояние компонента
+  isUnsubscribeModalOpen = false;
+  inviteErrorModal = false;
+  haveBadge = this.calculateHaveBadge();
 
+  ngOnInit(): void {
+    this.validateInputs();
+  }
+
+  /**
+   * Определяет, нужно ли показывать информацию о проекте
+   */
+  shouldShowProjectInfo(): boolean {
+    return this.type === "project" && this.appereance !== "subs" && this.appereance !== "empty";
+  }
+
+  /**
+   * Определяет, нужно ли показывать бейдж подписки
+   */
+  shouldShowSubscriptionBadge(): boolean {
+    return (
+      this.appereance !== "empty" &&
+      this.haveBadge &&
+      this.appereance === "base" &&
+      this.type !== "invite"
+    );
+  }
+
+  /**
+   * Возвращает URL для аватара
+   */
+  getAvatarUrl(): string {
+    return this.project?.imageAddress || "/assets/images/projects/shared/add-project.svg";
+  }
+
+  /**
+   * Переключение подписки (универсальный метод)
+   */
+  toggleSubscription(event: Event): void {
+    if (this.isSubscribed) {
+      this.onSubscribe(event, this.profileId!);
+    } else {
+      this.onSubscribe(event, this.profileId!);
+    }
+  }
+
+  /**
+   * Обработка отклонения приглашения
+   */
   onRejectInvite(event: Event, inviteId: number): void {
-    event.stopPropagation();
-    event.preventDefault();
+    if (!this.project || !inviteId) {
+      console.warn("Cannot reject invite: missing project or inviteId");
+      return;
+    }
+
+    this.stopEventPropagation(event);
 
     this.inviteService.rejectInvite(inviteId).subscribe({
       next: () => {
-        this.onRejectingInvite.emit(inviteId || this.project.inviteId);
+        this.onRejectingInvite.emit(inviteId || this.project!.inviteId);
       },
-      error: () => {
+      error: error => {
+        console.error("Error rejecting invite:", error);
         this.inviteErrorModal = true;
       },
     });
   }
 
+  /**
+   * Обработка принятия приглашения
+   */
   onAcceptInvite(event: Event, inviteId: number): void {
-    event.stopPropagation();
-    event.preventDefault();
+    if (!this.project || !inviteId) {
+      console.warn("Cannot accept invite: missing project or inviteId");
+      return;
+    }
+
+    this.stopEventPropagation(event);
 
     this.inviteService.acceptInvite(inviteId).subscribe({
       next: () => {
-        this.onAcceptingInvite.emit(inviteId || this.project.inviteId);
+        this.onAcceptingInvite.emit(inviteId || this.project!.inviteId);
       },
-      error: () => {
+      error: error => {
+        console.error("Error accepting invite:", error);
         this.inviteErrorModal = true;
       },
     });
   }
 
-  isUnsubscribeModalOpen = false; // Флаг модального окна отписки
-  inviteErrorModal = false; // Флаг модального окна для ошибки приглашения
-  haveBadge =
-    location.href.includes("/subscriptions") ||
-    location.href.includes("/all") ||
-    location.href.includes("/projects");
-
   /**
    * Подписка на проект или открытие модального окна отписки
-   * @param projectId - ID проекта
    */
   onSubscribe(event: Event, projectId: number): void {
-    event.stopPropagation();
-    event.preventDefault();
+    if (!projectId) {
+      console.warn("Cannot subscribe: missing projectId");
+      return;
+    }
+
+    this.stopEventPropagation(event);
 
     if (this.isSubscribed) {
       this.isUnsubscribeModalOpen = true;
       return;
     }
-    this.subscriptionService.addSubscription(projectId).subscribe(() => {
-      this.isSubscribed = true;
+
+    this.subscriptionService.addSubscription(projectId).subscribe({
+      next: () => {
+        this.isSubscribed = true;
+      },
+      error: error => {
+        console.error("Error subscribing to project:", error);
+      },
     });
   }
 
   /**
    * Отписка от проекта
-   * @param projectId - ID проекта
    */
   onUnsubscribe(event: Event, projectId: number): void {
-    event.stopPropagation();
-    event.preventDefault();
+    if (!projectId) {
+      console.warn("Cannot unsubscribe: missing projectId");
+      return;
+    }
 
-    this.subscriptionService.deleteSubscription(projectId).subscribe(() => {
-      this.isSubscribed = false;
-      this.isUnsubscribeModalOpen = false;
+    this.stopEventPropagation(event);
+
+    this.subscriptionService.deleteSubscription(projectId).subscribe({
+      next: () => {
+        this.isSubscribed = false;
+        this.isUnsubscribeModalOpen = false;
+      },
+      error: error => {
+        console.error("Error unsubscribing from project:", error);
+      },
     });
   }
 
@@ -138,5 +188,41 @@ export class ProjectCardComponent implements OnInit {
    */
   onCloseUnsubscribeModal(): void {
     this.isUnsubscribeModalOpen = false;
+  }
+
+  /**
+   * Обработка создания нового проекта
+   */
+  onCreateProject(event: Event): void {
+    this.stopEventPropagation(event);
+    this.onCreate.emit();
+  }
+
+  /**
+   * Остановка всплытия события
+   */
+  private stopEventPropagation(event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  /**
+   * Вычисление флага haveBadge
+   */
+  private calculateHaveBadge(): boolean {
+    return (
+      location.href.includes("/subscriptions") ||
+      location.href.includes("/all") ||
+      location.href.includes("/projects")
+    );
+  }
+
+  /**
+   * Валидация входных параметров
+   */
+  private validateInputs(): void {
+    if (this.appereance !== "empty" && !this.project) {
+      console.warn('ProjectCardComponent: project is required when appearance is not "empty"');
+    }
   }
 }

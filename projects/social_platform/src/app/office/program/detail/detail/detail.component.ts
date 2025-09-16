@@ -4,7 +4,7 @@ import { Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
 import { NavService } from "@services/nav.service";
 import { ActivatedRoute, Router, RouterModule, RouterOutlet } from "@angular/router";
 import { BarComponent, ButtonComponent, InputComponent } from "@ui/components";
-import { BackComponent } from "@uilib";
+import { BackComponent, IconComponent } from "@uilib";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { CommonModule, Location } from "@angular/common";
@@ -61,6 +61,7 @@ import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
     RouterModule,
     ButtonComponent,
     InputComponent,
+    IconComponent,
     AvatarComponent,
     ModalComponent,
     AutosizeModule,

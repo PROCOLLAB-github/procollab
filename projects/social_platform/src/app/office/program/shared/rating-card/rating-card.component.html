@@ -57,9 +57,9 @@
     </div>
   </div>
 
+  <!-- Блок оценки всегда показывается -->
   <div class="card__lower">
-    @if (!projectRated()) {
-    <div class="card__wrapper">
+    <div class="card__wrapper" [style.overflow-y]="isProjectCriterias() > 4 ? 'auto' : 'none'">
       <div class="card__lower--info">
         <p class="text-body-12">оценка проекта</p>
         <i appIcon icon="medal" appWidth="8" appHeight="12"></i>
@@ -71,28 +71,57 @@
       </div>
       }
     </div>
-    <app-button
-      customTypographyClass="text-body-12"
-      size="big"
-      (click)="submitRating()"
-      [loader]="submitLoading()"
-      >оценить проект</app-button
-    >
-    } @else {
+
+    @if (showRatingForm || showRatedWithEdit || showConfirmedState) {
     <div class="card__rated">
-      <div class="card__lower-icons">
-        <i appIcon icon="check" appWidth="30" appHeight="20" class="card__rated-icon"></i>
-        <i
-          appIcon
-          icon="reload"
-          appSquare="30"
-          class="card__redo-rating-icon"
-          (click)="redoRating()"
-        ></i>
-      </div>
-      <p class="text-body-12">Проект оценен</p>
+      <app-button
+        style="flex-grow: 1"
+        customTypographyClass="text-body-12"
+        size="big"
+        [loader]="submitLoading() || confirmLoading()"
+        [color]="showRatedWithEdit ? 'green' : 'primary'"
+        [disabled]="showConfirmedState"
+        [appearance]="showConfirmedState ? 'outline' : 'inline'"
+        [style.opacity]="showConfirmedState ? '0.5' : '1'"
+        (click)="showRatingForm ? confirmLoading() : null"
+      >
+        {{ showRatingForm ? "оценить проект" : "проект оценен" }}
+      </app-button>
+
+      @if (showRatedWithEdit) {
+      <app-button
+        appearance="outline"
+        size="small"
+        type="icon"
+        class="card__rated--icon"
+        (click)="redoRating()"
+      >
+        <i appIcon icon="edit-pen" appSquare="10" class="card__redo-rating-icon"></i>
+      </app-button>
+      }
     </div>
     }
+
+    <app-modal
+      [open]="showConfirmRateModal()"
+      (openChange)="showConfirmRateModal.set(!showConfirmRateModal())"
+    >
+      <div class="cancel">
+        <div class="cancel__top">
+          <p class="cancel__title text-body-14">подтвердите оценку</p>
+          <i appIcon icon="check" appSquare="60"></i>
+        </div>
+
+        <app-button
+          size="big"
+          class="cancel__button"
+          customTypographyClass="text-body-12"
+          (click)="confirmRateProject()"
+        >
+          подтверждаю
+        </app-button>
+      </div>
+    </app-modal>
   </div>
 </div>
 }

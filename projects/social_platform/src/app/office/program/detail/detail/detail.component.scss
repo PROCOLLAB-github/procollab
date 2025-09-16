@@ -68,7 +68,6 @@
   &__actions {
     display: grid;
     grid-template-columns: repeat(5, 2fr);
-    gap: 20px;
     align-items: center;
   }
 
@@ -82,7 +81,7 @@
 
     app-tooltip {
       position: absolute;
-      right: -11%;
+      right: -5%;
       bottom: 48%;
       z-index: 1000;
     }

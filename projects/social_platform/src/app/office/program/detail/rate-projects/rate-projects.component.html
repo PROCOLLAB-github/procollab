@@ -25,14 +25,10 @@
       <form class="filter__form" [formGroup]="filterForm">
         <p class="text-body-12">фильтр</p>
         <div class="filter__controls">
-          @for (tag of ratingOptionsList; track $index) {
-          <div class="filter__tags" (click)="setValue($event, tag.value)">
-            <app-checkbox
-              [checked]="this.filterForm.get('filterTag')?.value === tag.value"
-            ></app-checkbox>
-            <p class="text-body-14">{{ tag.label }}</p>
-          </div>
-          }
+          <label class="filter__tags" (click)="setValue($event)">
+            <app-checkbox [checked]="this.filterForm.get('filterTag')?.value"></app-checkbox>
+            <p class="text-body-12">проекты без оценки</p>
+          </label>
         </div>
       </form>
     </div>

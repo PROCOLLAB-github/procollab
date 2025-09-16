@@ -178,12 +178,12 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
     this.subscriptions$.forEach($ => $?.unsubscribe());
   }
 
-  setValue(event: Event, tag: boolean | null) {
+  setValue(event: Event) {
     event.stopPropagation();
-    this.filterForm.get("filterTag")?.setValue(tag);
+    this.filterForm.get("filterTag")?.setValue(!this.filterForm.get("filterTag")?.value);
 
     this.router.navigate([], {
-      queryParams: { is_rated_by_expert: tag },
+      queryParams: { is_rated_by_expert: this.filterForm.get("filterTag")?.value },
       relativeTo: this.route,
       queryParamsHandling: "merge",
     });

@@ -1,12 +1,14 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { forkJoin, map, switchMap } from "rxjs";
-import { ProjectCount } from "@models/project.model";
+import { forkJoin, switchMap } from "rxjs";
+import { Project } from "@models/project.model";
 import { ProjectService } from "@services/project.service";
 import { AuthService } from "@auth/services";
 import { ResolveFn } from "@angular/router";
 import { SubscriptionService } from "@office/services/subscription.service";
+import { HttpParams } from "@angular/common/http";
+import { ApiPagination } from "@office/models/api-pagination.model";
 
 /**
  * Resolver для загрузки данных о количестве проектов
@@ -28,17 +30,25 @@ import { SubscriptionService } from "@office/services/subscription.service";
  * Используется перед загрузкой ProjectsComponent для предварительной
  * загрузки необходимых данных.
  */
-export const ProjectsResolver: ResolveFn<ProjectCount> = () => {
+
+export interface DashboardProjectsData {
+  all: ApiPagination<Project>;
+  my: ApiPagination<Project>;
+  subs: ApiPagination<Project>;
+}
+
+export const ProjectsResolver: ResolveFn<DashboardProjectsData> = () => {
   const projectService = inject(ProjectService);
   const authService = inject(AuthService);
   const subscriptionService = inject(SubscriptionService);
 
   return authService.profile.pipe(
-    switchMap(p => {
-      return forkJoin([
-        projectService.getCount(), // Получение количества проектов
-        subscriptionService.getSubscriptions(p.id).pipe(map(resp => resp.count)), // Получение количества подписок
-      ]).pipe(map(([countData, subsCount]) => ({ ...countData, subs: subsCount })));
-    })
+    switchMap(user =>
+      forkJoin({
+        all: projectService.getAll(new HttpParams({ fromObject: { limit: 16 } })),
+        my: projectService.getMy(new HttpParams({ fromObject: { limit: 16 } })),
+        subs: subscriptionService.getSubscriptions(user.id),
+      })
+    )
   );
 };

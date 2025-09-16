@@ -37,6 +37,7 @@ import { IconComponent } from "@ui/components";
 import { SubscriptionService } from "@office/services/subscription.service";
 import { Invite } from "@office/models/invite.model";
 import { InviteService } from "@office/services/invite.service";
+import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
 
 /**
  * КОМПОНЕНТ СПИСКА ПРОЕКТОВ
@@ -180,16 +181,7 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectsCount = projects.count;
 
       if (this.isInvites) {
-        this.projects = (projects ?? []).map((invite: Invite) => ({
-          inviteId: invite.id,
-          id: invite.project.id,
-          imageAddress: invite.project.imageAddress,
-          vacancies: invite.project.vacancies,
-          collaborators: invite.project.collaborators,
-          name: invite.project.name,
-          shortDescription: invite.user.firstName + " " + invite.user.lastName,
-          industry: invite.project.industry,
-        }));
+        this.projects = inviteToProjectMapper(projects ?? []);
       } else {
         this.projects = projects.results ?? [];
       }

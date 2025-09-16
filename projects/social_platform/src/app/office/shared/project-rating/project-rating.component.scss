@@ -20,6 +20,7 @@
 
     label {
       margin-top: 5px;
+      color: var(--grey-for-text);
     }
   }
 
@@ -33,6 +34,9 @@
     app-textarea {
       ::ng-deep .field__input {
         color: var(--dark-grey);
+        background-color: transparent;
+        border-color: var(--grey-button);
+        min-height: 66px !important;
 
         @include typography.body-10;
       }
