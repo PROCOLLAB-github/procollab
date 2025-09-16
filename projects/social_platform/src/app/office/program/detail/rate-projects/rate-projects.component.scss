@@ -4,8 +4,8 @@
 .page {
   display: grid;
   grid-template-columns: 8fr 2fr;
-  padding-bottom: 100px;
   gap: 20px;
+  padding-bottom: 100px;
 
   &__search {
     flex-grow: 1;
@@ -63,16 +63,16 @@
   }
 
   &__controls {
-    margin-top: 18px;
     display: flex;
     flex-direction: column;
     gap: 14px;
+    margin-top: 18px;
   }
 
   &__tags {
     display: flex;
-    align-items: center;
     gap: 12px;
+    align-items: center;
 
     p {
       color: var(--grey-for-text);

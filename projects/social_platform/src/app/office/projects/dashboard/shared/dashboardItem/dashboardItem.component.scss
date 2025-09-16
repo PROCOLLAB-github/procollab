@@ -5,11 +5,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 0.5px solid var(--accent);
     padding-bottom: 10px;
     margin-bottom: 10px;
+    border-bottom: 0.5px solid var(--accent);
 
-    i, p {
+    i,
+    p {
       color: var(--accent);
     }
   }
@@ -19,8 +20,8 @@
     flex-grow: 1;
     grid-template-columns: 1fr;
     column-gap: 20px;
-    margin-top: 50px;
     align-items: flex-start;
+    margin-top: 50px;
 
     @include responsive.apply-desktop {
       grid-template-columns: repeat(4, 2fr);
@@ -29,10 +30,10 @@
 
   &__link {
     display: flex;
+    gap: 10px;
     align-items: center;
     justify-content: center;
     margin-top: 10px;
-    gap: 10px;
     color: var(--grey-for-text) !important;
     opacity: 1;
 

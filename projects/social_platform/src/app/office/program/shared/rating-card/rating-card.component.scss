@@ -51,11 +51,11 @@
 
   &__rated {
     display: flex;
-    align-items: center;
     gap: 4px;
+    align-items: center;
 
     &--icon {
-    ::ng-deep {
+      ::ng-deep {
         button {
           width: 50px;
           padding: 8px !important;
@@ -171,8 +171,8 @@
   max-height: calc(100vh - 40px);
 
   i {
+    padding: 36px 0;
     color: var(--green);
-    padding: 36px 0px;
   }
 
   &__top {

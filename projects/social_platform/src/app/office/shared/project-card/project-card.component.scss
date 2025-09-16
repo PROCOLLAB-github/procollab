@@ -7,8 +7,8 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    height: 170px;
     width: 156px;
+    height: 170px;
     padding: 15px 0 12px;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-for-outline);
@@ -126,14 +126,14 @@
   }
 
   &__empty {
-    border: 0.5px dashed var(--accent);
-    padding: 35px 0px 12px;
-    background: transparent;
-    margin-top: 50px;
     position: relative;
+    padding: 35px 0 12px;
+    margin-top: 50px;
+    cursor: pointer;
+    background: transparent;
+    border: 0.5px dashed var(--accent);
     opacity: 1;
     transition: opacity 0.2s ease;
-    cursor: pointer;
 
     &:hover {
       opacity: 0.7;
@@ -141,16 +141,16 @@
 
     &--image {
       position: absolute;
-      right: 20%;
       top: 15%;
+      right: 20%;
     }
 
     &--name {
       display: flex;
       justify-content: center;
       width: 90%;
-      color: var(--accent);
       margin-left: 8px;
+      color: var(--accent);
     }
 
     &--icon {
