@@ -13,7 +13,7 @@
       <i appIcon icon="filter" appSquare="34"></i>
     </div>
 
-    <ul class="page__list">
+    <ul class="page__list" [class.page__list--rating]="listType === 'rating'">
       @for (listItem of searchedList; track listItem.id) {
       <li class="page__item">
         @if (listType === 'projects') {
@@ -24,10 +24,12 @@
             [project]="listItem"
           ></app-project-card>
         </a>
-        } @else {
+        } @else if (listType === 'members') {
         <a [routerLink]="['/office/profile', listItem.id]">
           <app-member-card [user]="listItem"></app-member-card>
         </a>
+        } @else {
+        <app-rating-card [project]="listItem"></app-rating-card>
         }
       </li>
       }
@@ -36,6 +38,7 @@
 
   <div class="page__create">
     <div class="page__left">
+      @if (listType === 'projects') {
       <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
         <div class="filter__overlay" (click)="isFilterOpen = false"></div>
         <div class="filter__body" #filterBody>
@@ -48,6 +51,17 @@
           <app-projects-filter (closeFilter)="closeFilter()"></app-projects-filter>
         </div>
       </div>
+      } @else {
+      <form class="filter__form" [formGroup]="filterForm">
+        <p class="text-body-12">фильтр</p>
+        <div class="filter__controls">
+          <label class="filter__tags" (click)="setValue($event)">
+            <app-checkbox [checked]="this.filterForm.get('filterTag')?.value"></app-checkbox>
+            <p class="text-body-12">проекты без оценки</p>
+          </label>
+        </div>
+      </form>
+      }
     </div>
   </div>
 </div>

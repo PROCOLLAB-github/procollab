@@ -1,15 +1,14 @@
 /** @format */
 
 import { Routes } from "@angular/router";
-import { ProgramDetailComponent } from "@office/program/detail/detail/detail.component";
-import { ProgramDetailResolver } from "@office/program/detail/detail/detail.resolver";
 import { ProgramDetailMainComponent } from "@office/program/detail/main/main.component";
 import { ProgramRegisterComponent } from "@office/program/detail/register/register.component";
 import { ProgramRegisterResolver } from "@office/program/detail/register/register.resolver";
 import { ProgramProjectsResolver } from "@office/program/detail/list/projects.resolver";
 import { ProgramMembersResolver } from "@office/program/detail/list/members.resolver";
-import { RateProjectsComponent } from "./rate-projects/rate-projects.component";
 import { ProgramListComponent } from "./list/list.component";
+import { ProgramDetailComponent } from "./detail.component";
+import { ProgramDetailResolver } from "./detail.resolver";
 
 /**
  * Маршруты для детальной страницы программы
@@ -54,7 +53,8 @@ export const PROGRAM_DETAIL_ROUTES: Routes = [
       },
       {
         path: "projects-rating",
-        component: RateProjectsComponent,
+        component: ProgramListComponent,
+        data: { listType: "rating" },
       },
     ],
   },
