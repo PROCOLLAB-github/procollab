@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Project } from "@office/models/project.model";
 import { Subscription } from "rxjs";
 import { DashboardItemComponent } from "./shared/dashboardItem/dashboardItem.component";
+import { DashboardItem, dashboardItemBuilder } from "@utils/dashboardItemBuilder";
 
 @Component({
   selector: "app-dashboard",
@@ -16,11 +17,8 @@ import { DashboardItemComponent } from "./shared/dashboardItem/dashboardItem.com
 })
 export class DashboardProjectsComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
 
-  allProjects: Project[] = [];
-  myProjects: Project[] = [];
-  mySubs: Project[] = [];
+  dashboardItems: DashboardItem[] = [];
   profileProjSubsIds?: number[];
 
   subscriptions$: Subscription[] = [];
@@ -28,10 +26,18 @@ export class DashboardProjectsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.data.subscribe({
       next: ({ data: { all, my, subs } }) => {
-        this.allProjects = all.results.slice(0, 4);
-        this.myProjects = my.results.filter((project: Project) => !project.draft).slice(0, 4);
-        this.mySubs = subs.results.slice(0, 4);
+        const allProjects = all.results.slice(0, 4);
+        const myProjects = my.results.filter((project: Project) => !project.draft).slice(0, 4);
+        const mySubs = subs.results.slice(0, 4);
         this.profileProjSubsIds = subs.results.map((project: Project) => project.id);
+
+        this.dashboardItems = dashboardItemBuilder(
+          3,
+          ["my", "subscriptions", "all"],
+          ["мои проекты", "мои подписки", "витрина проектов"],
+          ["main", "favourities", "folders"],
+          [myProjects, mySubs, allProjects]
+        );
       },
     });
   }

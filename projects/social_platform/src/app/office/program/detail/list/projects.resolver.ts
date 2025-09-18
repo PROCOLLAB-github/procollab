@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router } from "@angular/router";
+import { ActivatedRouteSnapshot, ResolveFn, Router } from "@angular/router";
 import { ProgramService } from "@office/program/services/program.service";
 import { Project } from "@models/project.model";
 import { ApiPagination } from "@models/api-pagination.model";

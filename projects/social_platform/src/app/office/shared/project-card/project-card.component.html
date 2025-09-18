@@ -2,10 +2,16 @@
 
 <div
   class="card"
-  [class.card--empty]="appereance === 'empty'"
-  (click)="appereance === 'empty' ? onCreateProject($event) : null"
+  [class.card__empty]="appereance === 'empty'"
+  (click)="
+    appereance === 'empty' && section === 'projects'
+      ? onCreateProject($event)
+      : appereance === 'empty' && section === 'subscriptions'
+      ? redirectToProjects()
+      : null
+  "
 >
-  <div class="card__body">
+  <div class="card__body" [class.card__body--empty]="appereance === 'empty'">
     @if (shouldShowProjectInfo()) {
     <div class="card__info">
       <div class="card__info--vacancies">
@@ -32,7 +38,7 @@
 
     <app-avatar class="card__photo" [url]="getAvatarUrl()" [size]="70"></app-avatar>
 
-    <div class="card__content">
+    <div class="card__content" [class.card__content--empty]="appereance === 'empty'">
       <div class="card__head">
         <div>
           @if (appereance === 'empty') {
@@ -48,9 +54,9 @@
       }
 
       <div class="card__footer">
-        @if (appereance === 'empty') {
+        @if (appereance === 'empty') { @if (section === 'projects') {
         <i appIcon icon="main" appSquare="22" class="card__empty--icon"></i>
-        } @else {
+        } } @else {
         <ng-container *ngTemplateOutlet="cardActions"></ng-container>
         }
       </div>
@@ -62,12 +68,16 @@
 
 <ng-template #emptyCardContent>
   <p class="text-body-12 card__name">{{ project?.name }}</p>
-  <img src="/assets/images/projects/shared/arrow.svg" class="card__empty--image" alt="Стрелка" />
+  <img src="/assets/images/projects/shared/arrow.svg" class="card__empty--image" alt="arrow" />
+  @if (section === 'subscriptions') {
+  <p class="card__empty--name text-body-10" style="margin-left: 5px">перейти к проектам</p>
+  } @else {
   <p class="card__empty--name text-body-10">создай первый проект</p>
+  }
 </ng-template>
 
 <ng-template #regularCardHeader>
-  <p class="text-body-12 card__name">{{ project?.name || "Без названия" }}</p>
+  <p class="text-body-12 card__name">{{ project?.name }}</p>
   @if (industryService.industries | async; as industries) {
   <p class="text-body-6 card__industry">
     @if (industryService.getIndustry(industries, project?.industry!); as industry) {

@@ -10,6 +10,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { SubscriptionService } from "@office/services/subscription.service";
 import { InviteService } from "@office/services/invite.service";
 import { ClickOutsideModule } from "ng-click-outside";
+import { Router } from "@angular/router";
 
 /**
  * Компонент карточки проекта
@@ -33,10 +34,12 @@ export class ProjectCardComponent implements OnInit {
   private readonly inviteService = inject(InviteService);
   private readonly subscriptionService = inject(SubscriptionService);
   public readonly industryService = inject(IndustryService);
+  private readonly router = inject(Router);
 
   @Input() project?: Project;
   @Input() type: "invite" | "project" = "project";
   @Input() appereance: "my" | "subs" | "base" | "empty" = "base";
+  @Input() section: "projects" | "subscriptions" | "other" = "projects";
   @Input() canDelete?: boolean | null = false;
   @Input() isSubscribed?: boolean | null = false;
   @Input() profileId?: number;
@@ -77,7 +80,13 @@ export class ProjectCardComponent implements OnInit {
    * Возвращает URL для аватара
    */
   getAvatarUrl(): string {
-    return this.project?.imageAddress || "/assets/images/projects/shared/add-project.svg";
+    const currentImageAddress =
+      this.appereance === "empty" && this.section === "projects"
+        ? "/assets/images/projects/shared/add-project.svg"
+        : this.appereance === "empty" && this.section === "subscriptions"
+        ? "/assets/images/projects/shared/add-project.svg"
+        : "";
+    return this.project?.imageAddress || currentImageAddress;
   }
 
   /**
@@ -204,6 +213,15 @@ export class ProjectCardComponent implements OnInit {
   private stopEventPropagation(event: Event): void {
     event.stopPropagation();
     event.preventDefault();
+  }
+
+  /**
+   * Редирект на проеты при случае что подписки пустые
+   */
+  redirectToProjects(): void {
+    this.router
+      .navigateByUrl(`/office/projects/all`)
+      .then(() => console.debug("Route change from ProjectsComponent"));
   }
 
   /**

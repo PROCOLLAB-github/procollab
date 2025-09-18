@@ -53,6 +53,7 @@
     display: flex;
     gap: 4px;
     align-items: center;
+    margin-top: 14px;
 
     &--icon {
       ::ng-deep {
@@ -78,7 +79,6 @@
   &__lower {
     display: flex;
     flex-direction: column;
-    gap: 14px;
 
     &--info {
       display: flex;

@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<div class="page" #projectsRoot>
+<div class="page" #listRoots>
   <div class="page__outlet">
     <div class="page__search">
       <form [formGroup]="searchForm">
@@ -14,15 +14,21 @@
     </div>
 
     <ul class="page__list">
-      @for (project of searchedProjects; track project.id) {
+      @for (listItem of searchedList; track listItem.id) {
       <li class="page__item">
-        <a [routerLink]="['/office/projects', project.id]">
+        @if (listType === 'projects') {
+        <a [routerLink]="['/office/projects', listItem.id]">
           <app-project-card
-            [profileId]="project.id"
-            [isSubscribed]="profileProjSubsIds?.includes(project.id)"
-            [project]="project"
+            [profileId]="listItem.id"
+            [isSubscribed]="profileProjSubsIds?.includes(listItem.id)"
+            [project]="listItem"
           ></app-project-card>
         </a>
+        } @else {
+        <a [routerLink]="['/office/profile', listItem.id]">
+          <app-member-card [user]="listItem"></app-member-card>
+        </a>
+        }
       </li>
       }
     </ul>

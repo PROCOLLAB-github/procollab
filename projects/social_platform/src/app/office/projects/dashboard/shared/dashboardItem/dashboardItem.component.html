@@ -19,8 +19,18 @@
     }
   </ul>
   } @else {
-  <div (click)="addProject()">
-    <app-project-card appereance="empty"></app-project-card>
+  <div>
+    <app-project-card
+      (onCreate)="addProject()"
+      [section]="
+        sectionName === 'my'
+          ? 'projects'
+          : sectionName === 'subscriptions'
+          ? 'subscriptions'
+          : 'other'
+      "
+      appereance="empty"
+    ></app-project-card>
   </div>
   }
 

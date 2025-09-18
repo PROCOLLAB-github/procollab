@@ -31,12 +31,9 @@ import { NavService } from "@services/nav.service";
 import { ProjectService } from "@services/project.service";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@models/api-pagination.model";
-import { ProjectsFilterComponent } from "../projects-filter/projects-filter.component";
 import { ProjectCardComponent } from "../../shared/project-card/project-card.component";
 import { IconComponent } from "@ui/components";
 import { SubscriptionService } from "@office/services/subscription.service";
-import { Invite } from "@office/models/invite.model";
-import { InviteService } from "@office/services/invite.service";
 import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
 
 /**

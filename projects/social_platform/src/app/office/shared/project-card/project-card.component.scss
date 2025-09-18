@@ -13,6 +13,11 @@
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-for-outline);
     border-radius: var(--rounded-xl);
+
+    &--empty {
+      background: transparent;
+      border: 0.5px dashed var(--accent);
+    }
   }
 
   &__info {
@@ -61,6 +66,10 @@
     padding-top: 40px;
     overflow: hidden;
     text-align: center;
+
+    &--empty {
+      padding-top: 60px;
+    }
   }
 
   &__head {
@@ -128,10 +137,9 @@
   &__empty {
     position: relative;
     padding: 35px 0 12px;
-    margin-top: 50px;
+    margin-top: 20px;
     cursor: pointer;
     background: transparent;
-    border: 0.5px dashed var(--accent);
     opacity: 1;
     transition: opacity 0.2s ease;
 

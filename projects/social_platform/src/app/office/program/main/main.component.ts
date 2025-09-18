@@ -4,12 +4,12 @@ import { Component, OnDestroy, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { map, Subscription } from "rxjs";
 import { Program } from "@office/program/models/program.model";
-import { ProgramCardComponent } from "../../shared/program-card/program-card.component";
 import { NavService } from "@office/services/nav.service";
 import Fuse from "fuse.js";
 import { CheckboxComponent, SelectComponent } from "@ui/components";
 import { generateOptionsList } from "@utils/generate-options-list";
 import { ClickOutsideModule } from "ng-click-outside";
+import { ProgramCardComponent } from "../shared/program-card/program-card.component";
 
 /**
  * Главный компонент списка программ

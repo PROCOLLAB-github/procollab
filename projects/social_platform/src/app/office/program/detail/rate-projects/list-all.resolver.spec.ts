@@ -2,7 +2,7 @@
 
 import { TestBed } from "@angular/core/testing";
 
-import { ListAllResolver } from "./list-all.resolver";
+import { ListAllResolver } from "../list/list-all.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 

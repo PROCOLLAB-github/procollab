@@ -2,8 +2,8 @@
 
 import { Routes } from "@angular/router";
 import { ProgramComponent } from "./program.component";
-import { ProgramMainComponent } from "./list/main/main.component";
-import { ProgramMainResolver } from "./list/main/main.resolver";
+import { ProgramMainComponent } from "./main/main.component";
+import { ProgramMainResolver } from "./main/main.resolver";
 
 /**
  * Конфигурация маршрутов для модуля "Программы"

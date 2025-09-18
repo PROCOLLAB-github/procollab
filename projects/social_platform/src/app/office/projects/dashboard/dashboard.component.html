@@ -1,23 +1,13 @@
 <!-- @format -->
 
 <div class="dashboard">
+  @for (dashboardItem of dashboardItems; track $index) {
   <app-dashboard-item
-    sectionName="my"
-    title="мои проекты"
-    iconName="main"
-    [arrayItems]="myProjects"
+    [sectionName]="dashboardItem.sectionName"
+    [title]="dashboardItem.title"
+    [iconName]="dashboardItem.iconName"
+    [arrayItems]="dashboardItem.arrayItems"
+    [profileProjSubsIds]="dashboardItem.sectionName === 'all' ? profileProjSubsIds : []"
   ></app-dashboard-item>
-  <app-dashboard-item
-    sectionName="subscriptions"
-    title="мои подписки"
-    iconName="favourities"
-    [arrayItems]="mySubs"
-  ></app-dashboard-item>
-  <app-dashboard-item
-    [profileProjSubsIds]="profileProjSubsIds"
-    sectionName="all"
-    title="витрина проектов"
-    iconName="folders"
-    [arrayItems]="allProjects"
-  ></app-dashboard-item>
+  }
 </div>

@@ -5,8 +5,8 @@ import { Component, inject, Input, OnInit } from "@angular/core";
 import { Project } from "@office/models/project.model";
 import { ProjectCardComponent } from "@office/shared/project-card/project-card.component";
 import { IconComponent } from "@uilib";
-import { RouterLink } from "@angular/router";
 import { ProjectsService } from "@office/projects/services/projects.service";
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: "app-dashboard-item",
@@ -30,6 +30,7 @@ export class DashboardItemComponent implements OnInit {
     switch (this.iconName) {
       case "favourities":
         this.appereance = "subs";
+
         break;
 
       case "main":
