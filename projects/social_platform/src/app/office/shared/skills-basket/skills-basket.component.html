@@ -3,7 +3,10 @@
 <div class="basket" [class.basket--error]="error">
   <div class="basket__content" [class.basket__content--empty]="!value().length">
     @for (skill of value(); track skill.id) {
-    <div class="basket__skill" [class.basket__skill--soft]="skill.category.name.includes('Soft')">
+    <div
+      class="basket__skill"
+      [class.basket__skill--soft]="skill.category.name.includes('Soft skills')"
+    >
       <span class="text-body-12">{{ skill.name }}</span>
       <i
         appIcon

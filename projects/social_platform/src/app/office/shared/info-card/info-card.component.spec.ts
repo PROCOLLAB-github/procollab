@@ -2,29 +2,27 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { ProjectCardComponent } from "./project-card.component";
 import { of } from "rxjs";
 import { IndustryService } from "@services/industry.service";
-import { Project } from "@models/project.model";
+import { InfoCardComponent } from "./info-card.component";
 
 describe("ProjectCardComponent", () => {
-  let component: ProjectCardComponent;
-  let fixture: ComponentFixture<ProjectCardComponent>;
+  let component: InfoCardComponent;
+  let fixture: ComponentFixture<InfoCardComponent>;
 
   beforeEach(async () => {
     const industrySpy = jasmine.createSpyObj([{ industries: of([]) }]);
 
     await TestBed.configureTestingModule({
-      imports: [ProjectCardComponent],
+      imports: [InfoCardComponent],
       providers: [{ provide: IndustryService, useValue: industrySpy }],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProjectCardComponent);
+    fixture = TestBed.createComponent(InfoCardComponent);
 
     component = fixture.componentInstance;
-    component.project = Project.default();
 
     fixture.detectChanges();
   });

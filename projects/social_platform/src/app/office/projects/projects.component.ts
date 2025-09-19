@@ -11,10 +11,10 @@ import { BarNewComponent } from "@ui/components/bar-new/bar.component";
 import { BackComponent } from "@uilib";
 import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
 import { ProjectsFilterComponent } from "./projects-filter/projects-filter.component";
-import { ProjectCardComponent } from "@office/shared/project-card/project-card.component";
 import { Project } from "@office/models/project.model";
 import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
 import { ProjectsService } from "./services/projects.service";
+import { InfoCardComponent } from "@office/shared/info-card/info-card.component";
 
 /**
  * Главный компонент модуля проектов
@@ -43,7 +43,7 @@ import { ProjectsService } from "./services/projects.service";
     BackComponent,
     SoonCardComponent,
     ProjectsFilterComponent,
-    ProjectCardComponent,
+    InfoCardComponent,
   ],
 })
 export class ProjectsComponent implements OnInit, OnDestroy {

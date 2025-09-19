@@ -67,7 +67,7 @@
 </div>
 
 <ng-template #emptyCardContent>
-  <p class="text-body-12 card__name">{{ project?.name }}</p>
+  <p class="text-body-12 card__name">{{ info?.name }}</p>
   <img src="/assets/images/projects/shared/arrow.svg" class="card__empty--image" alt="arrow" />
   @if (section === 'subscriptions') {
   <p class="card__empty--name text-body-10" style="margin-left: 5px">перейти к проектам</p>
@@ -77,50 +77,74 @@
 </ng-template>
 
 <ng-template #regularCardHeader>
-  <p class="text-body-12 card__name">{{ project?.name }}</p>
+  @if (type === 'projects') {
+  <p class="text-body-12 card__name">{{ info?.name }}</p>
   @if (industryService.industries | async; as industries) {
   <p class="text-body-6 card__industry">
-    @if (industryService.getIndustry(industries, project?.industry!); as industry) {
-    <span>{{ industry?.name || "Отрасль не указана" }}</span>
+    @if (industryService.getIndustry(industries, info?.industry!); as industry) {
+    <span>{{ industry?.name }}</span>
     }
   </p>
-  }
+  } } @else {
+  <p class="text-body-12 card__name">{{ info?.firstName }} {{ info?.lastName }}</p>
+  @if (info?.speciality) {
+  <p class="text-body-6 card__additional-info">
+    {{ info?.speciality }}
+    @if (info?.speciality && info?.birthday) { • } @if (info?.birthday) {
+    {{ info?.birthday! | yearsFromBirthday }}
+    }
+  </p>
+  } }
 </ng-template>
 
 <ng-template #cardDescription>
   <div class="card__description" [class.invite-description]="type === 'invite'">
     @if (type === 'invite') {
     <p class="text-body-6 card__user">вас приглашает</p>
-    <p class="text-body-10 card__user--invite">{{ project?.shortDescription }}</p>
-    } @else {
-    <p class="text-body-6">{{ project?.shortDescription }}</p>
-    }
+    <p class="text-body-10 card__user--invite">{{ info?.shortDescription }}</p>
+    } @else if (type === 'projects') {
+    <p class="text-body-6">{{ info?.shortDescription }}</p>
+    } @else { @if (info?.skills && info?.skills?.length) {
+    <ul class="card__skills">
+      @for ( skill of info?.skills?.slice(0, 3); track skill.id ) {
+      <li class="card__skill">
+        <app-tag [color]="skill.category.name.includes('Soft skills') ? 'soft' : 'complete'">{{
+          skill.name.length > 10 ? skill.name.slice(0, 10) + " " + "..." : skill.name
+        }}</app-tag>
+      </li>
+      }
+    </ul>
+    } }
   </div>
 </ng-template>
 
 <ng-template #cardActions>
-  <div class="card__project">
-    @if (type === 'project') {
-    <app-button customTypographyClass="text-body-6" size="extra-small" class="card__project--text">
+  <div class="card__info">
+    @if (type === 'projects') {
+    <app-button customTypographyClass="text-body-6" size="extra-small" class="card__info--text">
       проект
+    </app-button>
+    } @else if (type === 'members') {
+    <app-button customTypographyClass="text-body-6" size="extra-small" class="card__info--text">
+      профиль
     </app-button>
     } @else {
     <div class="card__invite-actions">
       <app-button
-        (click)="onAcceptInvite($event, project?.inviteId!)"
+        (click)="onAcceptInvite($event, info?.inviteId!)"
         customTypographyClass="text-body-6"
         size="extra-small"
         appearance="inline"
-        [disabled]="!project?.inviteId"
+        [disabled]="!info?.inviteId"
       >
         принять
       </app-button>
       <app-button
-        (click)="onRejectInvite($event, project?.inviteId!)"
+        (click)="onRejectInvite($event, info?.inviteId!)"
         customTypographyClass="text-body-6"
         size="extra-small"
         appearance="outline"
-        [disabled]="!project?.inviteId"
+        [disabled]="!info?.inviteId"
       >
         отклонить
       </app-button>
@@ -133,13 +157,13 @@
   <app-modal [(open)]="isUnsubscribeModalOpen">
     <div class="unsubscribe-modal">
       <h3>Вы действительно хотите отписаться от проекта?</h3>
-      <app-avatar [url]="project?.imageAddress" [size]="70"></app-avatar>
+      <app-avatar [url]="info?.imageAddress" [size]="70"></app-avatar>
       <div class="unsubscribe-modal__buttons">
         <app-button
           color="red"
           customTypographyClass="unsubscribe-modal-btn__typography"
-          (click)="onUnsubscribe($event, project?.id!)"
-          [disabled]="!project?.id"
+          (click)="onUnsubscribe($event, info?.id!)"
+          [disabled]="!info?.id"
         >
           Отписаться
         </app-button>

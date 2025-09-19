@@ -70,7 +70,7 @@
             @if (myInvites.length) {
             <ul class="page__invites--list">
               @for (invite of myInvites; track invite.id) {
-              <app-project-card type="invite" [project]="invite"></app-project-card>
+              <app-info-card type="invite" [info]="invite"></app-info-card>
               }
             </ul>
             } @else {

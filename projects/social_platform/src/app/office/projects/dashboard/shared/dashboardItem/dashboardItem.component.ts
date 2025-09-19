@@ -3,17 +3,17 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, Input, OnInit } from "@angular/core";
 import { Project } from "@office/models/project.model";
-import { ProjectCardComponent } from "@office/shared/project-card/project-card.component";
 import { IconComponent } from "@uilib";
 import { ProjectsService } from "@office/projects/services/projects.service";
 import { RouterLink } from "@angular/router";
+import { InfoCardComponent } from "@office/shared/info-card/info-card.component";
 
 @Component({
   selector: "app-dashboard-item",
   templateUrl: "./dashboardItem.component.html",
   styleUrl: "./dashboardItem.component.scss",
   standalone: true,
-  imports: [ProjectCardComponent, CommonModule, IconComponent, RouterLink],
+  imports: [CommonModule, IconComponent, RouterLink, InfoCardComponent],
 })
 export class DashboardItemComponent implements OnInit {
   @Input() title!: string;

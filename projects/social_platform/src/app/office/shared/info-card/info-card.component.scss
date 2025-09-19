@@ -89,6 +89,10 @@
     white-space: nowrap;
   }
 
+  &__additional-info {
+    color: var(--accent);
+  }
+
   &__industry {
     padding: 2px 36px;
     color: var(--light-white);
@@ -164,6 +168,12 @@
     &--icon {
       color: var(--accent);
     }
+  }
+
+  &__skills {
+    display: flex;
+    flex-flow: wrap;
+    margin-bottom: 9px;
   }
 }
 

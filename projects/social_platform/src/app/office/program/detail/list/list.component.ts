@@ -34,9 +34,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { SearchComponent } from "@ui/components/search/search.component";
 import { User } from "@auth/models/user.model";
 import { Project } from "@office/models/project.model";
-import { ProjectRate } from "@office/program/models/project-rate";
-import { ProjectCardComponent } from "@office/shared/project-card/project-card.component";
-import { MemberCardComponent } from "@office/shared/member-card/member-card.component";
 import { RatingCardComponent } from "@office/program/shared/rating-card/rating-card.component";
 import { ProgramService } from "@office/program/services/program.service";
 import { ProjectRatingService } from "@office/program/services/project-rating.service";
@@ -47,6 +44,7 @@ import { HttpParams } from "@angular/common/http";
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
 import { CheckboxComponent } from "@ui/components";
 import { filterTags } from "projects/core/src/consts/filter-tags";
+import { InfoCardComponent } from "@office/shared/info-card/info-card.component";
 
 @Component({
   selector: "app-list",
@@ -58,10 +56,9 @@ import { filterTags } from "projects/core/src/consts/filter-tags";
     RouterModule,
     ProjectsFilterComponent,
     SearchComponent,
-    ProjectCardComponent,
-    MemberCardComponent,
     RatingCardComponent,
     CheckboxComponent,
+    InfoCardComponent,
   ],
   standalone: true,
 })
@@ -126,6 +123,19 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   isFilterOpen = false;
 
   subscriptions$: Subscription[] = [];
+
+  routerLink(linkId: number): string {
+    switch (this.listType) {
+      case "projects":
+        return `/office/projects/${linkId}`;
+
+      case "members":
+        return `/office/profile/${linkId}`;
+
+      default:
+        return "";
+    }
+  }
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {

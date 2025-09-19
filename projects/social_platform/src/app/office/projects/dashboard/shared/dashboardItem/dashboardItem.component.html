@@ -10,17 +10,17 @@
   <ul class="dashboard__list">
     @for (project of arrayItems; track project.id) {
     <a [routerLink]="'/office/projects/' + project.id">
-      <app-project-card
+      <app-info-card
         [isSubscribed]="profileProjSubsIds?.includes(project.id)"
         [appereance]="appereance"
-        [project]="project"
-      ></app-project-card>
+        [info]="project"
+      ></app-info-card>
     </a>
     }
   </ul>
   } @else {
   <div>
-    <app-project-card
+    <app-info-card
       (onCreate)="addProject()"
       [section]="
         sectionName === 'my'
@@ -30,7 +30,7 @@
           : 'other'
       "
       appereance="empty"
-    ></app-project-card>
+    ></app-info-card>
   </div>
   }
 

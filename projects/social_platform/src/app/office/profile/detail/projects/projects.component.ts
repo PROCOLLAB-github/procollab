@@ -5,9 +5,9 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { map, Observable } from "rxjs";
-import { ProjectCardComponent } from "@office/shared/project-card/project-card.component";
 import { AsyncPipe } from "@angular/common";
 import { Project } from "@office/models/project.model";
+import { InfoCardComponent } from "@office/shared/info-card/info-card.component";
 
 /**
  * Компонент для отображения проектов пользователя
@@ -29,7 +29,7 @@ import { Project } from "@office/models/project.model";
   templateUrl: "./projects.component.html",
   styleUrl: "./projects.component.scss",
   standalone: true,
-  imports: [RouterLink, ProjectCardComponent, AsyncPipe],
+  imports: [RouterLink, AsyncPipe, InfoCardComponent],
 })
 export class ProfileProjectsComponent implements OnInit {
   constructor(private readonly route: ActivatedRoute, public readonly authService: AuthService) {}

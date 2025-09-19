@@ -68,7 +68,6 @@ export class ProgramComponent implements OnInit, OnDestroy {
 
     const routeUrl$ = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.isMy = location.href.includes("/my");
         this.isAll = location.href.includes("/all");
       }
     });
@@ -82,6 +81,5 @@ export class ProgramComponent implements OnInit, OnDestroy {
   searchForm: FormGroup;
   subscriptions$: Subscription[] = [];
 
-  isMy = location.href.includes("/my");
   isAll = location.href.includes("/all");
 }

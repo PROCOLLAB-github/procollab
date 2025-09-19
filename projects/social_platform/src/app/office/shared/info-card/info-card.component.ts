@@ -11,14 +11,18 @@ import { SubscriptionService } from "@office/services/subscription.service";
 import { InviteService } from "@office/services/invite.service";
 import { ClickOutsideModule } from "ng-click-outside";
 import { Router } from "@angular/router";
+import { User } from "@auth/models/user.model";
+import { TagComponent } from "@ui/components/tag/tag.component";
+import { YearsFromBirthdayPipe } from "@corelib";
+import { Invite } from "@office/models/invite.model";
 
 /**
- * Компонент карточки проекта
+ * Компонент карточки информации с разным наполнением, в зависимости от контекста
  */
 @Component({
-  selector: "app-project-card",
-  templateUrl: "./project-card.component.html",
-  styleUrl: "./project-card.component.scss",
+  selector: "app-info-card",
+  templateUrl: "./info-card.component.html",
+  styleUrl: "./info-card.component.scss",
   standalone: true,
   imports: [
     CommonModule,
@@ -28,16 +32,18 @@ import { Router } from "@angular/router";
     ModalComponent,
     ButtonComponent,
     ClickOutsideModule,
+    TagComponent,
+    YearsFromBirthdayPipe,
   ],
 })
-export class ProjectCardComponent implements OnInit {
+export class InfoCardComponent implements OnInit {
   private readonly inviteService = inject(InviteService);
   private readonly subscriptionService = inject(SubscriptionService);
   public readonly industryService = inject(IndustryService);
   private readonly router = inject(Router);
 
-  @Input() project?: Project;
-  @Input() type: "invite" | "project" = "project";
+  @Input() info?: any;
+  @Input() type: "invite" | "projects" | "members" = "projects";
   @Input() appereance: "my" | "subs" | "base" | "empty" = "base";
   @Input() section: "projects" | "subscriptions" | "other" = "projects";
   @Input() canDelete?: boolean | null = false;
@@ -61,7 +67,7 @@ export class ProjectCardComponent implements OnInit {
    * Определяет, нужно ли показывать информацию о проекте
    */
   shouldShowProjectInfo(): boolean {
-    return this.type === "project" && this.appereance !== "subs" && this.appereance !== "empty";
+    return this.type === "projects" && this.appereance !== "subs" && this.appereance !== "empty";
   }
 
   /**
@@ -86,7 +92,7 @@ export class ProjectCardComponent implements OnInit {
         : this.appereance === "empty" && this.section === "subscriptions"
         ? "/assets/images/projects/shared/add-project.svg"
         : "";
-    return this.project?.imageAddress || currentImageAddress;
+    return this.info?.imageAddress || this.info?.avatar || currentImageAddress;
   }
 
   /**
@@ -104,7 +110,7 @@ export class ProjectCardComponent implements OnInit {
    * Обработка отклонения приглашения
    */
   onRejectInvite(event: Event, inviteId: number): void {
-    if (!this.project || !inviteId) {
+    if (!this.info || !inviteId) {
       console.warn("Cannot reject invite: missing project or inviteId");
       return;
     }
@@ -113,7 +119,7 @@ export class ProjectCardComponent implements OnInit {
 
     this.inviteService.rejectInvite(inviteId).subscribe({
       next: () => {
-        this.onRejectingInvite.emit(inviteId || this.project!.inviteId);
+        this.onRejectingInvite.emit(inviteId || this.info!.inviteId);
       },
       error: error => {
         console.error("Error rejecting invite:", error);
@@ -126,7 +132,7 @@ export class ProjectCardComponent implements OnInit {
    * Обработка принятия приглашения
    */
   onAcceptInvite(event: Event, inviteId: number): void {
-    if (!this.project || !inviteId) {
+    if (!this.info || !inviteId) {
       console.warn("Cannot accept invite: missing project or inviteId");
       return;
     }
@@ -135,7 +141,7 @@ export class ProjectCardComponent implements OnInit {
 
     this.inviteService.acceptInvite(inviteId).subscribe({
       next: () => {
-        this.onAcceptingInvite.emit(inviteId || this.project!.inviteId);
+        this.onAcceptingInvite.emit(inviteId || this.info!.inviteId);
       },
       error: error => {
         console.error("Error accepting invite:", error);
@@ -239,7 +245,7 @@ export class ProjectCardComponent implements OnInit {
    * Валидация входных параметров
    */
   private validateInputs(): void {
-    if (this.appereance !== "empty" && !this.project) {
+    if (this.appereance !== "empty" && !this.info) {
       console.warn('ProjectCardComponent: project is required when appearance is not "empty"');
     }
   }

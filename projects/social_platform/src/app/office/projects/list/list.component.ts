@@ -31,7 +31,7 @@ import { NavService } from "@services/nav.service";
 import { ProjectService } from "@services/project.service";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@models/api-pagination.model";
-import { ProjectCardComponent } from "../../shared/project-card/project-card.component";
+import { InfoCardComponent } from "../../shared/info-card/info-card.component";
 import { IconComponent } from "@ui/components";
 import { SubscriptionService } from "@office/services/subscription.service";
 import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
@@ -87,7 +87,7 @@ import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
   standalone: true,
-  imports: [IconComponent, RouterLink, ProjectCardComponent],
+  imports: [IconComponent, RouterLink, InfoCardComponent],
 })
 export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly renderer = inject(Renderer2);

@@ -16,17 +16,14 @@
     <ul class="page__list" [class.page__list--rating]="listType === 'rating'">
       @for (listItem of searchedList; track listItem.id) {
       <li class="page__item">
-        @if (listType === 'projects') {
-        <a [routerLink]="['/office/projects', listItem.id]">
-          <app-project-card
+        @if (listType === 'projects' || listType === 'members') {
+        <a [routerLink]="[routerLink]">
+          <app-info-card
+            [type]="listType"
             [profileId]="listItem.id"
             [isSubscribed]="profileProjSubsIds?.includes(listItem.id)"
-            [project]="listItem"
-          ></app-project-card>
-        </a>
-        } @else if (listType === 'members') {
-        <a [routerLink]="['/office/profile', listItem.id]">
-          <app-member-card [user]="listItem"></app-member-card>
+            [info]="listItem"
+          ></app-info-card>
         </a>
         } @else {
         <app-rating-card [project]="listItem"></app-rating-card>

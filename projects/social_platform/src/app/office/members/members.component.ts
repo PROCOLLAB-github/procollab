@@ -39,11 +39,11 @@ import {
 } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
-import { MemberCardComponent } from "../shared/member-card/member-card.component";
 import { CommonModule } from "@angular/common";
 import { SearchComponent } from "@ui/components/search/search.component";
 import { MembersFiltersComponent } from "./filters/members-filters.component";
 import { ApiPagination } from "@models/api-pagination.model";
+import { InfoCardComponent } from "@office/shared/info-card/info-card.component";
 
 /**
  * Компонент для отображения списка участников с возможностью поиска и фильтрации
@@ -68,8 +68,8 @@ import { ApiPagination } from "@models/api-pagination.model";
     SearchComponent,
     CommonModule,
     RouterLink,
-    MemberCardComponent,
     MembersFiltersComponent,
+    InfoCardComponent,
   ],
 })
 export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {

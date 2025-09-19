@@ -13,10 +13,10 @@
         }}
       </h3>
       <ul>
-        @for (p of user.projects; track p.id) {
+        @for (project of user.projects; track project.id) {
         <li>
-          <a [routerLink]="['/office/projects', p.id]">
-            <app-project-card [project]="p" [profileId]="user.id"></app-project-card>
+          <a [routerLink]="['/office/projects', project.id]">
+            <app-info-card [info]="project" [profileId]="user.id"></app-info-card>
           </a>
         </li>
         }
@@ -32,10 +32,10 @@
         }}
       </h3>
       <ul>
-        @for (p of subs; track p.id) {
+        @for (project of subs; track project.id) {
         <li>
-          <a [routerLink]="['/office/projects', p.id]">
-            <app-project-card [project]="p" [profileId]="user.id"></app-project-card>
+          <a [routerLink]="['/office/projects', project.id]">
+            <app-info-card [info]="project" [profileId]="user.id"></app-info-card>
           </a>
         </li>
         }

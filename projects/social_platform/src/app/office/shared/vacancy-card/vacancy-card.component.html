@@ -9,12 +9,12 @@
     <div class="vacancy__skills">
       @if (vacancy.requiredSkills.length) { @for (skill of vacancy.requiredSkills.slice(0, 5); track
       $index) {
-      <app-tag [color]="skill.category.name.includes('Soft') ? 'primary' : 'secondary'">{{
+      <app-tag [appearance]="skill.category.name.includes('Soft') ? 'inline' : 'outline'">{{
         skill.name
       }}</app-tag>
 
       @if (vacancy.specialization) {
-      <app-tag [color]="skill.category.name.includes('Soft') ? 'primary' : 'secondary'">{{
+      <app-tag [appearance]="skill.category.name.includes('Soft') ? 'inline' : 'outline'">{{
         vacancy.specialization ? vacancy.specialization : ""
       }}</app-tag>
       } } @if (vacancy.requiredSkills.length > 5) {

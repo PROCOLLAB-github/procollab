@@ -11,14 +11,14 @@
     @for (project of projects; track project.id) {
     <a [routerLink]="['/office/projects', project.id]">
       <li>
-        <app-project-card
-          [project]="project"
-          [type]="isInvites ? 'invite' : 'project'"
+        <app-info-card
+          [info]="project"
+          [type]="isInvites ? 'invite' : 'projects'"
           [isSubscribed]="profileProjSubsIds?.includes(project.id)"
           [profileId]="project.id"
           (onAcceptingInvite)="onAcceptInvite($event)"
           (onRejectingInvite)="onRejectInvite($event)"
-        ></app-project-card>
+        ></app-info-card>
       </li>
     </a>
     }
