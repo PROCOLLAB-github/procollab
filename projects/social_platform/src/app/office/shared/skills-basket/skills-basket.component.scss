@@ -32,11 +32,10 @@
     align-items: center;
     justify-content: center;
     padding: 5px 25px;
-    border-radius: var(--rounded-xxl);
     color: var(--accent);
     background-color: var(--white);
     border: 0.5px solid var(--accent);
-
+    border-radius: var(--rounded-xxl);
 
     &-delete-icon {
       margin-left: 10px;
