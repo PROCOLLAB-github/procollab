@@ -47,7 +47,7 @@ $detail-bar-mb: 12px;
   }
 
   &__body {
-   position: relative;
+    position: relative;
     z-index: 2;
     padding: 14px 0 40px;
     margin-bottom: 26px;
@@ -81,11 +81,11 @@ $detail-bar-mb: 12px;
   }
 
   &__title {
+    margin-top: 10px;
     overflow: hidden;
     color: var(--black);
     text-align: center;
     text-overflow: ellipsis;
-    margin-top: 10px;
   }
 
   &__text {

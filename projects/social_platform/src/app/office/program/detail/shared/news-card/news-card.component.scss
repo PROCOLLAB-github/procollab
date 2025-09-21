@@ -76,6 +76,7 @@
   /* stylelint-disable value-no-vendor-prefix */
   &__text {
     white-space: break-spaces;
+
     @include typography.body-10;
 
     p {

@@ -100,8 +100,8 @@
   &__directions {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    align-items: center;
     grid-gap: 20px;
+    align-items: center;
     margin-top: 14px;
   }
 }
@@ -343,13 +343,13 @@
 
   &__item {
     display: flex;
-    align-items: center;
     gap: 6px;
+    align-items: center;
 
     &--status {
       padding: 8px;
-      border-radius: var(--rounded-xl);
       border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: var(--rounded-xl);
     }
 
     &--title {
@@ -357,10 +357,10 @@
     }
 
     i {
-      border-radius: var(--rounded-xl);
       padding: 6px;
-      border: 0.5px solid var(--medium-grey-for-outline);
       background-color: var(--light-white);
+      border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: var(--rounded-xl);
     }
 
     p {
