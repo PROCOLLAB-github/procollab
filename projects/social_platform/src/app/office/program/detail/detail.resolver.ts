@@ -4,6 +4,8 @@ import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { ProgramService } from "@office/program/services/program.service";
 import { Program } from "@office/program/models/program.model";
+import { tap } from "rxjs";
+import { ProgramDataService } from "../services/program-data.service";
 
 /**
  * Резолвер для получения детальной информации о программе
@@ -37,6 +39,9 @@ import { Program } from "@office/program/models/program.model";
  */
 export const ProgramDetailResolver: ResolveFn<Program> = (route: ActivatedRouteSnapshot) => {
   const programService = inject(ProgramService);
+  const programDataService = inject(ProgramDataService);
 
-  return programService.getOne(route.params["programId"]);
+  return programService
+    .getOne(route.params["programId"])
+    .pipe(tap(program => programDataService.setProgram(program)));
 };

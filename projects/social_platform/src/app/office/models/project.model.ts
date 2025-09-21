@@ -50,6 +50,7 @@ export class Project {
   links!: string[];
   draft!: boolean;
   leader!: number;
+  leaderInfo?: { firstName: string; lastName: string };
   partnerProgramsTags?: string[];
   partnerProgramId!: number | null;
   partnerProgram!: PartnerProgramInfo | null;

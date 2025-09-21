@@ -13,10 +13,11 @@ import { ProjectAdditionalService } from "@office/projects/edit/services/project
 import { Project } from "@office/models/project.model";
 import { ProjectService } from "@office/services/project.service";
 import { HttpErrorResponse } from "@angular/common/http";
-import { map, Subscription, tap } from "rxjs";
+import { filter, map, Subscription, take, tap } from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { AutosizeModule } from "ngx-autosize";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
+import { ProgramDataService } from "../services/program-data.service";
 
 /**
  * Основной компонент детальной страницы программы
@@ -75,6 +76,7 @@ export class ProgramDetailComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly location = inject(Location);
+  private readonly programDataService = inject(ProgramDataService);
 
   programId?: number;
 
@@ -115,12 +117,15 @@ export class ProgramDetailComponent implements OnInit, OnDestroy {
       this.updatePageStates(url);
     });
 
-    const program$ = this.route.data
+    const program$ = this.programDataService.program$
       .pipe(
-        map(r => r["data"]),
+        filter(program => !!program),
+        take(1),
         tap(program => {
-          this.program = program;
-          this.registerDateExpired = Date.now() > Date.parse(program.datetimeRegistrationEnds);
+          if (program) {
+            this.program = program;
+            this.registerDateExpired = Date.now() > Date.parse(program.datetimeRegistrationEnds);
+          }
         })
       )
       .subscribe();

@@ -2,10 +2,10 @@
 @use "styles/responsive";
 
 .card {
-  padding: 20px;
-  background-color: var(--white);
-  border: 1px solid var(--medium-grey-for-outline);
-  border-radius: var(--rounded-xl);
+  padding: 24px 12px;
+  background-color: var(--light-white);
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-lg);
 
   &__head {
     display: flex;
@@ -59,18 +59,14 @@
     display: flex;
   }
 
+  &__top {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
   &__name {
-    max-width: 200px;
-    overflow: hidden;
     color: var(--black);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    @include typography.bold-body-14;
-
-    @include responsive.apply-desktop {
-      @include typography.bold-body-16;
-    }
   }
 
   &__date {
@@ -93,12 +89,6 @@
       &.expanded {
         -webkit-line-clamp: unset;
       }
-    }
-
-    @include typography.body-12;
-
-    @include responsive.apply-desktop {
-      @include typography.body-16;
     }
   }
   /* stylelint-enable value-no-vendor-prefix */

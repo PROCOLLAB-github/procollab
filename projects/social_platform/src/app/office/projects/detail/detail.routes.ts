@@ -11,6 +11,8 @@ import { ProjectChatResolver } from "@office/projects/detail/chat/chat.resolver"
 import { ProjectDetailResolver } from "@office/projects/detail/detail.resolver";
 import { NewsDetailComponent } from "@office/projects/detail/news-detail/news-detail.component";
 import { NewsDetailResolver } from "@office/projects/detail/news-detail/news-detail.resolver";
+import { ProjectTeamComponent } from "./team/team.component";
+import { ProjectVacanciesComponent } from "./vacancies/vacancies.component";
 
 /**
  * Конфигурация маршрутов для детального просмотра проекта
@@ -47,6 +49,14 @@ export const PROJECT_DETAIL_ROUTES: Routes = [
             },
           },
         ],
+      },
+      {
+        path: "vacancies",
+        component: ProjectVacanciesComponent,
+      },
+      {
+        path: "team",
+        component: ProjectTeamComponent,
       },
       {
         path: "responses",

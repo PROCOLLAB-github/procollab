@@ -18,10 +18,7 @@ export const dashboardItemBuilder = (
 ): DashboardItem[] => {
   if (amount <= 0) return [];
 
-  const minLength = Math.min(sections.length, titles.length, icons.length, arrays.length);
-  const actualAmount = Math.min(amount, minLength);
-
-  return Array.from({ length: actualAmount }, (_, i) => ({
+  return Array.from({ length: amount }, (_, i) => ({
     sectionName: sections[i],
     title: titles[i],
     iconName: icons[i],

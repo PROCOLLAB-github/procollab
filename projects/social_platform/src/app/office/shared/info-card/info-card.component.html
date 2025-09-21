@@ -98,7 +98,12 @@
 </ng-template>
 
 <ng-template #cardDescription>
-  <div class="card__description" [class.invite-description]="type === 'invite'">
+  <div
+    class="card__description"
+    [style.max-height]="type === 'members' ? '50px' : '20px'"
+    [style.]
+    [class.invite-description]="type === 'invite'"
+  >
     @if (type === 'invite') {
     <p class="text-body-6 card__user">вас приглашает</p>
     <p class="text-body-10 card__user--invite">{{ info?.shortDescription }}</p>

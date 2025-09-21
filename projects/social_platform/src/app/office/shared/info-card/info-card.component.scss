@@ -105,7 +105,6 @@
     flex: 1;
     flex-direction: column;
     align-items: center;
-    max-height: 20px;
     overflow: hidden;
     color: var(--dark-grey);
     text-align: center;
@@ -173,6 +172,8 @@
   &__skills {
     display: flex;
     flex-flow: wrap;
+    justify-content: center;
+    gap: 2px;
     margin-bottom: 9px;
   }
 }

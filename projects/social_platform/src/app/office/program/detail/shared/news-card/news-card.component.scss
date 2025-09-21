@@ -1,5 +1,5 @@
-@use "styles/typography";
 @use "styles/responsive";
+@use "styles/typography";
 
 .card {
   padding: 24px 12px;
@@ -57,7 +57,6 @@
   &__title {
     display: flex;
     align-items: center;
-    margin-right: 8px;
   }
 
   &__top {
@@ -77,6 +76,7 @@
   /* stylelint-disable value-no-vendor-prefix */
   &__text {
     white-space: break-spaces;
+    @include typography.body-10;
 
     p {
       display: -webkit-box;

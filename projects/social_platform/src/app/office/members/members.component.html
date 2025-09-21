@@ -14,7 +14,7 @@
       @for (member of members; track member.id) {
       <a [routerLink]="['/office/profile', member.id]">
         <li>
-          <app-info-card [info]="member"></app-info-card>
+          <app-info-card type="members" [info]="member"></app-info-card>
         </li>
       </a>
       }

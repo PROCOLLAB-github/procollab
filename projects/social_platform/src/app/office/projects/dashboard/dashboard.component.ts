@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Project } from "@office/models/project.model";
 import { Subscription } from "rxjs";
 import { DashboardItemComponent } from "./shared/dashboardItem/dashboardItem.component";
-import { DashboardItem, dashboardItemBuilder } from "@utils/dashboardItemBuilder";
+import { DashboardItem, dashboardItemBuilder } from "@utils/helpers/dashboardItemBuilder";
 
 @Component({
   selector: "app-dashboard",
