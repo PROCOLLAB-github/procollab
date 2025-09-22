@@ -5,8 +5,9 @@ import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { AuthService } from "@auth/services";
 import { User } from "@auth/models/user.model";
 import { SubscriptionService } from "@office/services/subscription.service";
-import { forkJoin, map } from "rxjs";
+import { forkJoin, map, tap } from "rxjs";
 import { Project } from "@office/models/project.model";
+import { ProfileDataService } from "./services/profile-date.service";
 
 /**
  * Резолвер для загрузки данных профиля пользователя
@@ -31,9 +32,13 @@ export const ProfileDetailResolver: ResolveFn<[User, Project[]]> = (
 ) => {
   const authService = inject(AuthService);
   const subscriptionService = inject(SubscriptionService);
+  const profileDataService = inject(ProfileDataService);
 
   return forkJoin([
-    authService.getUser(Number(route.paramMap.get("id"))),
+    authService
+      .getUser(Number(route.paramMap.get("id")))
+      .pipe(tap(profile => profileDataService.setProfile(profile))),
+
     subscriptionService
       .getSubscriptions(Number(route.paramMap.get("id")))
       .pipe(map(resp => resp.results)),

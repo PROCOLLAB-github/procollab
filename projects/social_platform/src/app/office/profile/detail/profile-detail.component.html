@@ -1,6 +1,6 @@
 <!-- @format -->
 
-@if (user$ | async; as user) {
+@if (user) {
 <div class="profile">
   <section class="profile__bar">
     @if (loggedUserId$ | async; as loggedUserId) {

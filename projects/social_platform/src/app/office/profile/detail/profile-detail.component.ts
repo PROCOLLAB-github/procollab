@@ -1,8 +1,8 @@
 /** @format */
 
-import { Component, OnInit, signal } from "@angular/core";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, RouterLink, RouterOutlet } from "@angular/router";
-import { map, Observable } from "rxjs";
+import { filter, map, Observable, take } from "rxjs";
 import { User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
 import { AuthService } from "@auth/services";
@@ -16,6 +16,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { calculateProfileProgress } from "@utils/calculateProgress";
 import { ProfileService as SkillsProfileService } from "projects/skills/src/app/profile/services/profile.service";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
+import { ProfileDataService } from "./services/profile-date.service";
 
 /**
  * Компонент детального просмотра профиля пользователя
@@ -52,23 +53,46 @@ import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
     YearsFromBirthdayPipe,
     BarComponent,
     ModalComponent,
-    TooltipComponent,
   ],
 })
 export class ProfileDetailComponent implements OnInit {
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly navService: NavService,
-    public readonly authService: AuthService,
-    public readonly chatService: ChatService,
-    public readonly skillsProfileService: SkillsProfileService,
-    public readonly breakpointObserver: BreakpointObserver
-  ) {}
+  private readonly route = inject(ActivatedRoute);
+  private readonly navService = inject(NavService);
+  private readonly profileDataService = inject(ProfileDataService);
+  public readonly authService = inject(AuthService);
+  public readonly chatService = inject(ChatService);
+  public readonly skillsProfileService = inject(SkillsProfileService);
+  public readonly breakpointObserver = inject(BreakpointObserver);
 
-  user$: Observable<User> = this.route.data.pipe(
-    map(r => r["data"][0]),
-    map(user => ({ ...user, progress: calculateProfileProgress(user) }))
-  );
+  /**
+   * Инициализация компонента
+   * Настраивает заголовок навигации, проверяет статус подписки,
+   * определяет необходимость заполнения профиля
+   */
+  ngOnInit(): void {
+    this.navService.setNavTitle("Профиль");
+
+    this.profileDataService
+      .getProfile()
+      .pipe(
+        map(user => ({ ...user, progress: calculateProfileProgress(user!) })),
+        filter(user => !!user),
+        take(1)
+      )
+      .subscribe({
+        next: user => {
+          this.user = user as User;
+          this.isProfileFill =
+            user.progress! < 100 ? (this.isProfileFill = true) : (this.isProfileFill = false);
+        },
+      });
+
+    this.skillsProfileService.getSubscriptionData().subscribe(r => {
+      this.isSubscriptionActive.set(r.isSubscribed);
+    });
+  }
+
+  user?: User;
 
   loggedUserId$: Observable<number> = this.authService.profile.pipe(map(user => user.id));
 
@@ -80,6 +104,11 @@ export class ProfileDetailComponent implements OnInit {
 
   tooltipText = "Заполни до конца — и открой весь функционал платформы!";
   isHintVisible = false;
+
+  errorMessageModal = signal("");
+  desktopMode$: Observable<boolean> = this.breakpointObserver
+    .observe("(min-width: 920px)")
+    .pipe(map(result => result.matches));
 
   /**
    * Показать подсказку для незаполненного профиля
@@ -93,29 +122,6 @@ export class ProfileDetailComponent implements OnInit {
    */
   hideTooltip() {
     this.isHintVisible = false;
-  }
-
-  errorMessageModal = signal("");
-  desktopMode$: Observable<boolean> = this.breakpointObserver
-    .observe("(min-width: 920px)")
-    .pipe(map(result => result.matches));
-
-  /**
-   * Инициализация компонента
-   * Настраивает заголовок навигации, проверяет статус подписки,
-   * определяет необходимость заполнения профиля
-   */
-  ngOnInit(): void {
-    this.navService.setNavTitle("Профиль");
-
-    this.skillsProfileService.getSubscriptionData().subscribe(r => {
-      this.isSubscriptionActive.set(r.isSubscribed);
-    });
-
-    this.user$.subscribe(r => {
-      this.isProfileFill =
-        r.progress! < 100 ? (this.isProfileFill = true) : (this.isProfileFill = false);
-    });
   }
 
   /**
