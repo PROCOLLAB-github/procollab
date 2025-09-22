@@ -1,1 +1,12 @@
 <!-- @format -->
+@if (vacancies) { @if (vacancies.length) {
+<div class="vacancies">
+  <ul class="vacancies__list">
+    @for (vacancy of vacancies; track vacancy.id) {
+    <li class="vacancies__item">
+      <app-project-vacancy-card [vacancy]="vacancy"></app-project-vacancy-card>
+    </li>
+    }
+  </ul>
+</div>
+} }

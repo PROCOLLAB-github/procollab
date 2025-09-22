@@ -15,7 +15,6 @@ import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { Project } from "@models/project.model";
-import { Vacancy } from "@models/vacancy.model";
 import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { FeedNews } from "@office/projects/models/project-news.model";
@@ -30,19 +29,8 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { expandElement } from "@utils/expand-element";
 import { containerSm } from "@utils/responsive";
 import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
-import {
-  Observable,
-  Subscription,
-  concatMap,
-  forkJoin,
-  map,
-  noop,
-  of,
-  switchMap,
-  take,
-} from "rxjs";
+import { Observable, Subscription, map, noop, switchMap } from "rxjs";
 import { ProjectMemberCardComponent } from "../shared/project-member-card/project-member-card.component";
-import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button.directive";
 import { DirectionItem, directionItemBuilder } from "@utils/helpers/directionItemBuilder";
 import { ProjectDirectionCard } from "../shared/project-direction-card/project-direction-card.component";
 
@@ -77,15 +65,9 @@ import { ProjectDirectionCard } from "../shared/project-direction-card/project-d
   styleUrl: "./info.component.scss",
   standalone: true,
   imports: [
-    AvatarComponent,
     RouterOutlet,
-    RouterLink,
-    ButtonComponent,
     IconComponent,
-    ModalComponent,
-    NgTemplateOutlet,
     AsyncPipe,
-    ProjectMemberCardComponent,
     RouterOutlet,
     UserLinksPipe,
     ParseBreaksPipe,
@@ -99,7 +81,6 @@ import { ProjectDirectionCard } from "../shared/project-direction-card/project-d
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly route: ActivatedRoute, // Сервис для работы с активным маршрутом
-    private readonly router: Router, // Сервис для навигации
     public readonly industryService: IndustryService, // Сервис сфер проекта
     public readonly authService: AuthService, // Сервис аутентификации
     private readonly navService: NavService, // Сервис навигации
@@ -338,15 +319,6 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
-  }
-
-  /**
-   * Получение названий навыков для вакансии
-   * @param vacancy - объект вакансии
-   * @returns строка с названиями навыков, разделенными точками
-   */
-  getSkillsNames(vacancy: Vacancy) {
-    return vacancy.requiredSkills.map((s: any) => s.name).join(" • ");
   }
 
   private checkDescriptionExpandable(): void {

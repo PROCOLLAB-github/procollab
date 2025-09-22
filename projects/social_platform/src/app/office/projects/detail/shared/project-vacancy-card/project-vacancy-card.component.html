@@ -1,0 +1,35 @@
+<!-- @format -->
+
+<div class="vacancy">
+  <div class="vacancy__info">
+    <p class="text-body-12 vacancy__role">{{ vacancy.role }}</p>
+    <div class="vacancy__salary">
+      <i appIcon icon="contacts" appWidth="5" appHeight="8"></i>
+      <p class="text-body-12">{{ vacancy.salary ?? "по договоренности" }}</p>
+    </div>
+  </div>
+
+  <div class="vacancy__description">
+    @if (vacancy.description) {
+    <div class="text-body-10 about__text">
+      <p #descEl [innerHTML]="vacancy.description | parseLinks | parseBreaks"></p>
+      @if (descriptionExpandable) {
+      <div class="read-more" (click)="onExpandDescription(descEl, 'expanded', readFullDescription)">
+        {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+      </div>
+      }
+    </div>
+    }
+
+    <p class="text-body-6 vacancy__skills">{{ getSkillsNames(vacancy) }}</p>
+  </div>
+
+  <div class="vacancy__actions">
+    <app-button [routerLink]="'/office/vacancies/' + vacancy.id" appearance="outline" size="medium"
+      >подробнее</app-button
+    >
+    <app-button [routerLink]="'/office/vacancy/' + vacancy.id" size="medium"
+      >откликнуться</app-button
+    >
+  </div>
+</div>

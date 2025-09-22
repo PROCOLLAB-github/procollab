@@ -78,7 +78,8 @@ export class InfoCardComponent implements OnInit {
       this.appereance !== "empty" &&
       this.haveBadge &&
       this.appereance === "base" &&
-      this.type !== "invite"
+      this.type !== "invite" &&
+      this.type !== "members"
     );
   }
 
