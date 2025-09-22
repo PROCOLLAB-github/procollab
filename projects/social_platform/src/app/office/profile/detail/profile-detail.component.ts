@@ -1,8 +1,8 @@
 /** @format */
 
-import { Component, inject, OnInit, signal } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, RouterLink, RouterOutlet } from "@angular/router";
-import { filter, map, Observable, take } from "rxjs";
+import { filter, map, Observable, Subscription, take } from "rxjs";
 import { User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
 import { AuthService } from "@auth/services";
@@ -55,7 +55,7 @@ import { ProfileDataService } from "./services/profile-date.service";
     ModalComponent,
   ],
 })
-export class ProfileDetailComponent implements OnInit {
+export class ProfileDetailComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly navService = inject(NavService);
   private readonly profileDataService = inject(ProfileDataService);
@@ -72,7 +72,7 @@ export class ProfileDetailComponent implements OnInit {
   ngOnInit(): void {
     this.navService.setNavTitle("Профиль");
 
-    this.profileDataService
+    const profileDataSub$ = this.profileDataService
       .getProfile()
       .pipe(
         map(user => ({ ...user, progress: calculateProfileProgress(user!) })),
@@ -87,14 +87,35 @@ export class ProfileDetailComponent implements OnInit {
         },
       });
 
+    const profileIdDataSub$ = this.profileDataService
+      .getProfileId()
+      .pipe(
+        filter(userId => !!userId),
+        take(1)
+      )
+      .subscribe({
+        next: profileId => {
+          this.loggedUserId = profileId;
+        },
+      });
+
     this.skillsProfileService.getSubscriptionData().subscribe(r => {
       this.isSubscriptionActive.set(r.isSubscribed);
     });
+
+    profileDataSub$ && this.subscriptions.push(profileDataSub$);
+    profileIdDataSub$ && this.subscriptions.push(profileIdDataSub$);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach($ => $.unsubscribe());
   }
 
   user?: User;
 
-  loggedUserId$: Observable<number> = this.authService.profile.pipe(map(user => user.id));
+  loggedUserId?: number;
+
+  subscriptions: Subscription[] = [];
 
   isDelayModalOpen = false;
   isSended = false;

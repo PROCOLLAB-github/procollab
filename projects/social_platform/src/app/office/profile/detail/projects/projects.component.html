@@ -1,7 +1,7 @@
 <!-- @format -->
-@if (user | async; as user) {
+@if (user) {
 <section class="projects">
-  @if (loggedUserId | async; as loggedUserId) {
+  @if (loggedUserId) {
   <div class="projects__content">
     @if (user.projects.length) {
     <div class="projects__section">
@@ -22,7 +22,7 @@
         }
       </ul>
     </div>
-    } @if (subs | async; as subs) { @if (subs.length) {
+    } @if (subs) { @if (subs.length) {
     <div class="projects__section">
       <h3 class="text-heading-3 about__title">
         {{
@@ -41,7 +41,7 @@
         }
       </ul>
     </div>
-    } } @if (!user.projects.length) { @if (subs | async; as subs) { @if (!subs.length) {
+    } } @if (!user.projects.length) { @if (subs) { @if (!subs.length) {
     <h3 class="text-heading-3 about__title">
       Вы пока не состоите ни в одном проекте и не подписаны ни на один.
     </h3>

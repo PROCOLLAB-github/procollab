@@ -3,7 +3,7 @@
 @if (user) {
 <div class="profile">
   <section class="profile__bar">
-    @if (loggedUserId$ | async; as loggedUserId) {
+    @if (loggedUserId) {
     <app-bar
       class="bar"
       [backHave]="true"
