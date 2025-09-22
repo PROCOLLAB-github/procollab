@@ -8,7 +8,7 @@ import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@error/models/error-message";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
 import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-basket.component";
-import { VacancyCardComponent } from "@office/shared/vacancy-card/vacancy-card.component";
+import { VacancyCardComponent } from "@office/features/vacancy-card/vacancy-card.component";
 import { Skill } from "@office/models/skill";
 import { ProjectVacancyService } from "../../services/project-vacancy.service";
 import { ActivatedRoute } from "@angular/router";

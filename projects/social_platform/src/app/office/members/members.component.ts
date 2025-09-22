@@ -43,7 +43,7 @@ import { CommonModule } from "@angular/common";
 import { SearchComponent } from "@ui/components/search/search.component";
 import { MembersFiltersComponent } from "./filters/members-filters.component";
 import { ApiPagination } from "@models/api-pagination.model";
-import { InfoCardComponent } from "@office/shared/info-card/info-card.component";
+import { InfoCardComponent } from "@office/features/info-card/info-card.component";
 
 /**
  * Компонент для отображения списка участников с возможностью поиска и фильтрации

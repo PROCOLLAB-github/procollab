@@ -6,7 +6,7 @@ import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { InputComponent, ButtonComponent, SelectComponent } from "@ui/components";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@error/models/error-message";
-import { InviteCardComponent } from "@office/shared/invite-card/invite-card.component";
+import { InviteCardComponent } from "@office/features/invite-card/invite-card.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ProjectTeamService } from "../../services/project-team.service";
 import { rolesMembersList } from "projects/core/src/consts/list-roles-members";

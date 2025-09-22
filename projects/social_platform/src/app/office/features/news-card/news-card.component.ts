@@ -23,10 +23,10 @@ import { forkJoin, noop, Observable, tap } from "rxjs";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
-import { ImgCardComponent } from "../img-card/img-card.component";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { CarouselComponent } from "../carousel/carousel.component";
+import { CarouselComponent } from "@office/shared/carousel/carousel.component";
+import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
 
 /**
  * Компонент карточки новости
@@ -44,14 +44,14 @@ import { CarouselComponent } from "../carousel/carousel.component";
     IconComponent,
     TextareaComponent,
     ReactiveFormsModule,
-    ImgCardComponent,
     FileUploadItemComponent,
     FileItemComponent,
     ButtonComponent,
-    CarouselComponent,
     DayjsPipe,
     FormControlPipe,
     ParseLinksPipe,
+    CarouselComponent,
+    ImgCardComponent,
   ],
 })
 export class NewsCardComponent implements OnInit {

@@ -17,12 +17,12 @@ import { NewProjectComponent } from "@office/feed/shared/new-project/new-project
 import { ActivatedRoute } from "@angular/router";
 import { FeedItem, FeedItemType } from "@office/feed/models/feed-item.model";
 import { concatMap, fromEvent, map, noop, of, skip, Subscription, tap, throttleTime } from "rxjs";
-import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
 import { ApiPagination } from "@models/api-pagination.model";
 import { FeedService } from "@office/feed/services/feed.service";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { ProfileNewsService } from "@office/profile/detail/services/profile-news.service";
 import { FeedFilterComponent } from "@office/feed/filter/feed-filter.component";
+import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 
 /**
  * ОСНОВНОЙ КОМПОНЕНТ ЛЕНТЫ НОВОСТЕЙ
@@ -50,8 +50,8 @@ import { FeedFilterComponent } from "@office/feed/filter/feed-filter.component";
     CommonModule,
     OpenVacancyComponent,
     NewProjectComponent,
-    NewsCardComponent,
     FeedFilterComponent,
+    NewsCardComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./feed.component.html",

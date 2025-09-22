@@ -7,10 +7,9 @@ import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
 import { forkJoin, noop, Observable, tap } from "rxjs";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
-import { ImgCardComponent } from "../img-card/img-card.component";
-import { IconComponent, ButtonComponent, InputComponent } from "@ui/components";
+import { IconComponent, InputComponent } from "@ui/components";
 import { AutosizeModule } from "ngx-autosize";
-import { TextareaComponent } from "@ui/components/textarea/textarea.component";
+import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
 
 /**
  * Компонент формы создания новости
@@ -40,11 +39,9 @@ import { TextareaComponent } from "@ui/components/textarea/textarea.component";
     ReactiveFormsModule,
     AutosizeModule,
     IconComponent,
-    ImgCardComponent,
     FileUploadItemComponent,
-    ButtonComponent,
-    TextareaComponent,
     InputComponent,
+    ImgCardComponent,
   ],
 })
 export class NewsFormComponent implements OnInit {

@@ -44,7 +44,7 @@ import { HttpParams } from "@angular/common/http";
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
 import { CheckboxComponent } from "@ui/components";
 import { filterTags } from "projects/core/src/consts/filter-tags";
-import { InfoCardComponent } from "@office/shared/info-card/info-card.component";
+import { InfoCardComponent } from "@office/features/info-card/info-card.component";
 
 @Component({
   selector: "app-list",

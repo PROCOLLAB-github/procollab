@@ -7,7 +7,7 @@ import { AuthService } from "@auth/services";
 import { filter, Subscription, take } from "rxjs";
 import { AsyncPipe } from "@angular/common";
 import { Project } from "@office/models/project.model";
-import { InfoCardComponent } from "@office/shared/info-card/info-card.component";
+import { InfoCardComponent } from "@office/features/info-card/info-card.component";
 import { ProfileDataService } from "../services/profile-date.service";
 
 /**

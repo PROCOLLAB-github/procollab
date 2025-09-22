@@ -6,7 +6,7 @@ import { Project } from "@office/models/project.model";
 import { IconComponent } from "@uilib";
 import { ProjectsService } from "@office/projects/services/projects.service";
 import { RouterLink } from "@angular/router";
-import { InfoCardComponent } from "@office/shared/info-card/info-card.component";
+import { InfoCardComponent } from "@office/features/info-card/info-card.component";
 
 @Component({
   selector: "app-dashboard-item",

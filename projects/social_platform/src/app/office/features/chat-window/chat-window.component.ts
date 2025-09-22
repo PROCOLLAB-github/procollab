@@ -17,7 +17,7 @@ import {
   CdkVirtualScrollViewport,
 } from "@angular/cdk/scrolling";
 import { ChatMessage } from "@models/chat-message.model";
-import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
+import { MessageInputComponent } from "@office/features/message-input/message-input.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { filter, fromEvent, noop, skip, Subscription, tap, throttleTime } from "rxjs";
 import { ModalService } from "@ui/models/modal.service";

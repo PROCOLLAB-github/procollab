@@ -22,7 +22,7 @@ import { expandElement } from "@utils/expand-element";
 import { debounceTime, finalize, fromEvent, map, Observable, Subscription } from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { IndustryService } from "@office/services/industry.service";
-import { ProjectRatingComponent } from "@office/shared/project-rating/project-rating.component";
+import { ProjectRatingComponent } from "@office/features/project-rating/project-rating.component";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ProjectRatingService } from "@office/program/services/project-rating.service";
 import { RouterLink } from "@angular/router";

@@ -17,9 +17,7 @@ import { AuthService } from "@auth/services";
 import { expandElement } from "@utils/expand-element";
 import { concatMap, map, noop, Observable, of, Subscription, switchMap } from "rxjs";
 import { ProfileNewsService } from "../services/profile-news.service";
-import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ProfileNews } from "../models/profile-news.model";
-import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
 import { ParseBreaksPipe, ParseLinksPipe, PluralizePipe } from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { IconComponent } from "@ui/components";
@@ -30,6 +28,8 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
 import { Skill } from "@office/models/skill";
 import { HttpErrorResponse } from "@angular/common/http";
+import { NewsFormComponent } from "@office/features/news-form/news-form.component";
+import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 
 /**
  * Главный компонент страницы профиля пользователя
@@ -60,8 +60,6 @@ import { HttpErrorResponse } from "@angular/common/http";
   standalone: true,
   imports: [
     TagComponent,
-    NewsFormComponent,
-    NewsCardComponent,
     IconComponent,
     ModalComponent,
     AvatarComponent,
@@ -73,6 +71,8 @@ import { HttpErrorResponse } from "@angular/common/http";
     AsyncPipe,
     PluralizePipe,
     AvatarComponent,
+    NewsCardComponent,
+    NewsFormComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

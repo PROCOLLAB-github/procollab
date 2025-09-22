@@ -9,18 +9,8 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ProgramService } from "@office/program/services/program.service";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import {
-  concatMap,
-  fromEvent,
-  map,
-  noop,
-  Observable,
-  of,
-  Subscription,
-  tap,
-  throttleTime,
-} from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { ProgramNewsService } from "@office/program/services/program-news.service";
 import { FeedNews } from "@office/projects/models/project-news.model";
@@ -28,21 +18,16 @@ import { expandElement } from "@utils/expand-element";
 import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { ProgramNewsCardComponent } from "../shared/news-card/news-card.component";
-import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { ButtonComponent, IconComponent } from "@ui/components";
 import { ApiPagination } from "@models/api-pagination.model";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ProjectService } from "@office/services/project.service";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
-import { AsyncPipe } from "@angular/common";
 import { LoadingService } from "@office/services/loading.service";
-import { Project } from "@office/models/project.model";
-import { HttpErrorResponse } from "@angular/common/http";
-import { ProjectAssign } from "@office/projects/models/project-assign.model";
 import { ProjectAdditionalService } from "@office/projects/edit/services/project-additional.service";
 import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
+import { NewsFormComponent } from "@office/features/news-form/news-form.component";
 
 @Component({
   selector: "app-main",
@@ -50,21 +35,16 @@ import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component"
   styleUrl: "./main.component.scss",
   standalone: true,
   imports: [
-    AvatarComponent,
     IconComponent,
     ButtonComponent,
-    RouterLink,
     ProgramNewsCardComponent,
-    TagComponent,
     UserLinksPipe,
-    AsyncPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
-    NewsFormComponent,
     ModalComponent,
     MatProgressBarModule,
-    InputComponent,
     SoonCardComponent,
+    NewsFormComponent,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {

@@ -1,6 +1,6 @@
 /** @format */
 
-import { AsyncPipe, CommonModule, NgTemplateOutlet } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -10,7 +10,7 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { ActivatedRoute, Router, RouterLink, RouterOutlet } from "@angular/router";
+import { ActivatedRoute, RouterOutlet } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
@@ -19,20 +19,17 @@ import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { FeedNews } from "@office/projects/models/project-news.model";
 import { ProjectService } from "@office/services/project.service";
-import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
-import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { IndustryService } from "@services/industry.service";
 import { NavService } from "@services/nav.service";
-import { ButtonComponent, IconComponent } from "@ui/components";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { ModalComponent } from "@ui/components/modal/modal.component";
 import { expandElement } from "@utils/expand-element";
 import { containerSm } from "@utils/responsive";
 import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { Observable, Subscription, map, noop, switchMap } from "rxjs";
-import { ProjectMemberCardComponent } from "../shared/project-member-card/project-member-card.component";
 import { DirectionItem, directionItemBuilder } from "@utils/helpers/directionItemBuilder";
 import { ProjectDirectionCard } from "../shared/project-direction-card/project-direction-card.component";
+import { IconComponent } from "@uilib";
+import { NewsFormComponent } from "@office/features/news-form/news-form.component";
+import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 
 /**
  * КОМПОНЕНТ ДЕТАЛЬНОЙ ИНФОРМАЦИИ О ПРОЕКТЕ
@@ -72,10 +69,10 @@ import { ProjectDirectionCard } from "../shared/project-direction-card/project-d
     UserLinksPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
-    NewsFormComponent,
-    NewsCardComponent,
     CommonModule,
     ProjectDirectionCard,
+    NewsCardComponent,
+    NewsFormComponent,
   ],
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {

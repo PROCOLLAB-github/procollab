@@ -13,7 +13,7 @@ import { SnackbarComponent } from "@ui/components/snackbar/snackbar.component";
 import { DeleteConfirmComponent } from "@ui/components/delete-confirm/delete-confirm.component";
 import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { NavComponent } from "./shared/nav/nav.component";
+import { NavComponent } from "./features/nav/nav.component";
 import { IconComponent, ProfileControlPanelComponent, SidebarComponent } from "@uilib";
 import { AsyncPipe } from "@angular/common";
 import { InviteService } from "@services/invite.service";

@@ -31,7 +31,7 @@ import { NavService } from "@services/nav.service";
 import { ProjectService } from "@services/project.service";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "@models/api-pagination.model";
-import { InfoCardComponent } from "../../shared/info-card/info-card.component";
+import { InfoCardComponent } from "../../features/info-card/info-card.component";
 import { IconComponent } from "@ui/components";
 import { SubscriptionService } from "@office/services/subscription.service";
 import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";

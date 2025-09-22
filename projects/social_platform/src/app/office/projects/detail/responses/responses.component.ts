@@ -6,7 +6,7 @@ import { map, Observable, Subscription } from "rxjs";
 import { VacancyResponse } from "@models/vacancy-response.model";
 import { VacancyService } from "@services/vacancy.service";
 import { NavService } from "@services/nav.service";
-import { ResponseCardComponent } from "@office/shared/response-card/response-card.component";
+import { ResponseCardComponent } from "@office/features/response-card/response-card.component";
 
 /**
  * Компонент для отображения откликов на вакансии проекта
