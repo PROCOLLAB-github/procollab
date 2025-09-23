@@ -25,7 +25,6 @@
       </div>
       @if (authService.profile | async; as profile) {
       <div class="info__body">
-        <div class="info__text"></div>
         <div class="info__actions">
           @if (project.presentationAddress) {
           <a class="info__presentation" [href]="project.presentationAddress" target="_blank">

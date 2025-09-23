@@ -6,6 +6,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  inject,
   OnDestroy,
   OnInit,
   signal,
@@ -15,14 +16,19 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { expandElement } from "@utils/expand-element";
-import { concatMap, map, noop, Observable, of, Subscription, switchMap } from "rxjs";
+import { concatMap, filter, map, noop, Observable, of, Subscription, switchMap } from "rxjs";
 import { ProfileNewsService } from "../services/profile-news.service";
 import { ProfileNews } from "../models/profile-news.model";
-import { ParseBreaksPipe, ParseLinksPipe, PluralizePipe } from "projects/core";
+import {
+  ParseBreaksPipe,
+  ParseLinksPipe,
+  PluralizePipe,
+  YearsFromBirthdayPipe,
+} from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { IconComponent } from "@ui/components";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
+import { AsyncPipe, CommonModule, NgTemplateOutlet } from "@angular/common";
 import { ProfileService } from "@auth/services/profile.service";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
@@ -30,6 +36,7 @@ import { Skill } from "@office/models/skill";
 import { HttpErrorResponse } from "@angular/common/http";
 import { NewsFormComponent } from "@office/features/news-form/news-form.component";
 import { NewsCardComponent } from "@office/features/news-card/news-card.component";
+import { ProfileDataService } from "../services/profile-date.service";
 
 /**
  * Главный компонент страницы профиля пользователя
@@ -59,6 +66,7 @@ import { NewsCardComponent } from "@office/features/news-card/news-card.componen
   styleUrl: "./main.component.scss",
   standalone: true,
   imports: [
+    CommonModule,
     TagComponent,
     IconComponent,
     ModalComponent,
@@ -68,7 +76,7 @@ import { NewsCardComponent } from "@office/features/news-card/news-card.componen
     UserLinksPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
-    AsyncPipe,
+    YearsFromBirthdayPipe,
     PluralizePipe,
     AvatarComponent,
     NewsCardComponent,
@@ -77,24 +85,40 @@ import { NewsCardComponent } from "@office/features/news-card/news-card.componen
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly authService: AuthService,
-    private readonly profileNewsService: ProfileNewsService,
-    private readonly profileApproveSkillService: ProfileService,
-    private readonly cdRef: ChangeDetectorRef
-  ) {}
+  private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
+  private readonly profileNewsService = inject(ProfileNewsService);
+  private readonly profileDataService = inject(ProfileDataService);
+  private readonly profileApproveSkillService = inject(ProfileService);
+  private readonly cdRef = inject(ChangeDetectorRef);
+
+  user?: User;
+  loggedUserId?: number;
 
   subscriptions$: Subscription[] = [];
-
-  user: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
-  loggedUserId: Observable<number> = this.authService.profile.pipe(map(user => user.id));
-
   /**
    * Инициализация компонента
    * Загружает новости пользователя и настраивает Intersection Observer для отслеживания просмотров
    */
   ngOnInit(): void {
+    const profileDataSub$ = this.profileDataService
+      .getProfile()
+      .pipe(filter(user => !!user))
+      .subscribe({
+        next: user => {
+          this.user = user as User;
+        },
+      });
+
+    const profileIdDataSub$ = this.profileDataService
+      .getProfileId()
+      .pipe(filter(userId => !!userId))
+      .subscribe({
+        next: profileId => {
+          this.loggedUserId = profileId;
+        },
+      });
+
     const route$ = this.route.params
       .pipe(
         map(r => r["id"]),
@@ -114,7 +138,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
           });
         });
       });
-    this.subscriptions$.push(route$);
+    this.subscriptions$.push(profileDataSub$, profileIdDataSub$, route$);
   }
 
   @ViewChild("descEl") descEl?: ElementRef;

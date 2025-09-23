@@ -1,0 +1,224 @@
+<!-- @format -->
+
+<div class="detail">
+  <section class="detail__bar">
+    <app-back [path]="backPath"></app-back>
+  </section>
+
+  <!-- замена project на detail в классах -->
+  <div class="detail__body">
+    <!-- @if(program) {
+    <div class="info detail__section detail__info">
+      <div class="info__cover">
+        <img
+          class="info__cover"
+          [src]="
+            program.coverImageAddress
+              ? program.coverImageAddress
+              : '/assets/images/office/profile/detail/cover.png'
+          "
+          alt="cover"
+        />
+        <app-avatar
+          class="info__avatar"
+          [url]="program.imageAddress"
+          [hasBorder]="true"
+          borderColor="dark-grey"
+          [size]="123"
+        ></app-avatar>
+      </div>
+
+      <div class="info__body">
+        <div class="info__actions">
+          @if (!program.isUserMember && !program.isUserManager && !registerDateExpired) { @if
+          (program.name.includes("Кейс-чемпионат MIR")) {
+          <a href="https://case-champ.ru/corporate#rec1176757836">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+              зарегистрироваться
+            </app-button>
+          </a>
+          } @else {
+          <a [routerLink]="['/office/program', program.id, 'register']">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+              зарегистрироваться
+            </app-button>
+          </a>
+          } } @else if (program.isUserMember) {
+          <app-button
+            size="medium"
+            (click)="toggleSubmitProjectModal()"
+            customTypographyClass="text-body-12 bar__add-project"
+          >
+            <span>подать проект</span>
+            <i appIcon icon="plus" appSquare="10"></i>
+          </app-button>
+          } @else if (program.isUserManager) {
+          <a [routerLink]="'/office/program/' + program.id + '/projects-rating'">
+            <app-button
+              [appearance]="isProjectsRatingPage ? 'inline' : 'outline'"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
+              оценка проектов
+            </app-button>
+          </a>
+          }
+
+          <a
+            class="info__presentation"
+            [href]="program.presentationAddress"
+            download=""
+            target="_blank"
+          >
+            <app-button
+              [disabled]="program.isUserManager"
+              [style.opacity]="program.isUserManager ? '0.3' : '1'"
+              appearance="outline"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
+              <span>{{
+                program.name.includes("Технолидеры Будущего")
+                  ? "Каталог лучших стартапов 2022/23"
+                  : program.isUserManager
+                  ? "аналитика"
+                  : "положение"
+              }}</span>
+              @if (program.isUserManager) {
+              <app-tooltip
+                [text]="'Скоро здесь будет аналитика по включенности участников и проектов'"
+                [isVisible]="isTooltipVisible"
+                [position]="'right'"
+                [tooltipWidth]="180"
+                customClass="content__hint"
+                (show)="showTooltip()"
+                (hide)="hideTooltip()"
+              ></app-tooltip>
+              } @if (!program.isUserManager) {
+              <i appIcon class="info__presentation-icon" icon="arrow-down" appSquare="6"></i>
+              }
+            </app-button>
+          </a>
+
+          <div class="info__divider"></div>
+
+          TODO: внести ссылку на сайт программы когда это поле будет на бэке
+          @if (!program.isUserManager) {
+          <a class="info__more">
+            <app-button
+              appearance="outline"
+              [disabled]="true"
+              size="medium"
+              customTypographyClass="text-body-12"
+              >узнать подробнее</app-button
+            >
+          </a>
+          } @else {
+          <a [routerLink]="'/office/program/' + program.id + '/projects'">
+            <app-button
+              [appearance]="isProjectsPage ? 'inline' : 'outline'"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
+              проекты-участники
+            </app-button>
+          </a>
+          } @if (!program.isUserManager) {
+          TODO: добавить информацию с ссылок или чего-то в дизайне телефон но не у каждой программы есть телефон в контактах
+          <a class="info__contacts">
+            <app-button
+              [disabled]="true"
+              appearance="outline"
+              size="medium"
+              customTypographyClass="text-body-12"
+              >информация с ссылок</app-button
+            >
+          </a>
+          } @else {
+          <a [routerLink]="'/office/program/' + program.id + '/members'">
+            <app-button
+              [appearance]="isMembersPage ? 'inline' : 'outline'"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
+              участники
+            </app-button>
+          </a>
+          }
+        </div>
+      </div>
+    </div>
+    } -->
+
+    <!-- <app-modal [open]="showSubmitProjectModal()" (openChange)="toggleSubmitProjectModal()">
+      <div class="cancel">
+        <div class="cancel__top">
+          <p class="cancel__title text-body-14">выберите проект для подачи</p>
+          <p class="cancel__text text-body-10">
+            после выбора проекта будет создан дубликат данного проекта для заполнения под конкретный
+            конкурс
+          </p>
+
+          <div class="project">
+            <ul class="project__list" [class.project__list--scrollable]="memberProjects.length > 3">
+              @for (project of memberProjects; track project.id) {
+              <li class="project__item">
+                <div class="project__item--info">
+                  <app-avatar [url]="project.imageAddress" [size]="40"></app-avatar>
+                  <p class="text-body-12">
+                    {{ project.name }}
+                  </p>
+                </div>
+                <app-input
+                  type="radio"
+                  [appValue]="project.id.toLocaleString()"
+                  [checked]="selectedProjectId === project.id"
+                  (change)="onProjectRadioChange($event)"
+                ></app-input>
+              </li>
+              }
+            </ul>
+          </div>
+        </div>
+
+        <app-button
+          size="medium"
+          class="cancel__button"
+          customTypographyClass="text-body-12"
+          [disabled]="!selectedProjectId"
+          (click)="addProjectModal()"
+        >
+          выбрать проект
+        </app-button>
+      </div>
+    </app-modal>
+
+    <app-modal
+      [open]="isAssignProjectToProgramModalOpen()"
+      (openChange)="isAssignProjectToProgramModalOpen.set(!isAssignProjectToProgramModalOpen)"
+    >
+      <div class="cancel" style="padding: 24px">
+        <div class="cancel__top">
+          <p class="cancel__title text-body-14">поздравляем!</p>
+        </div>
+
+        <p class="text-body-10 cancel__text">
+          мы создали дубликат проекта, который вы привязали к выбранной программе
+          <span
+            ><strong>{{ assignProjectToProgramModalMessage()?.partnerProgram }}</strong></span
+          >, теперь его можно отредактировать!
+        </p>
+
+        <app-button
+          size="medium"
+          class="cancel__button"
+          customTypographyClass="text-body-12"
+          (click)="closeAssignProjectToProgramModal()"
+          >вперед</app-button
+        >
+      </div>
+    </app-modal> -->
+
+    <router-outlet></router-outlet>
+  </div>
+</div>

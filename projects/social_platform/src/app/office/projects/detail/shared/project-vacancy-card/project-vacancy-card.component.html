@@ -9,19 +9,29 @@
     </div>
   </div>
 
+  <div class="vacancy__skills">
+    @for (skill of vacancy.requiredSkills.slice(0, 5); track $index) {
+    <app-tag
+      [color]="skill.category.name.includes('Soft skills') ? 'soft' : 'complete'"
+      class="text-body-6 vacancy__skill"
+      >{{ skill.name }}</app-tag
+    >
+    } @if (vacancy.requiredSkills.length > 5) {
+    <p class="vacancy__skill--more">+ {{ vacancy.requiredSkills.length - 5 }}</p>
+    }
+  </div>
+
   <div class="vacancy__description">
     @if (vacancy.description) {
     <div class="text-body-10 about__text">
       <p #descEl [innerHTML]="vacancy.description | parseLinks | parseBreaks"></p>
       @if (descriptionExpandable) {
       <div class="read-more" (click)="onExpandDescription(descEl, 'expanded', readFullDescription)">
-        {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+        {{ readFullDescription ? "Скрыть" : "Подробнее" }}
       </div>
       }
     </div>
     }
-
-    <p class="text-body-6 vacancy__skills">{{ getSkillsNames(vacancy) }}</p>
   </div>
 
   <div class="vacancy__actions">

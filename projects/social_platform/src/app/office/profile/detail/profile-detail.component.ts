@@ -17,6 +17,7 @@ import { calculateProfileProgress } from "@utils/calculateProgress";
 import { ProfileService as SkillsProfileService } from "projects/skills/src/app/profile/services/profile.service";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 import { ProfileDataService } from "./services/profile-date.service";
+import { BackComponent } from "@uilib";
 
 /**
  * Компонент детального просмотра профиля пользователя
@@ -53,6 +54,7 @@ import { ProfileDataService } from "./services/profile-date.service";
     YearsFromBirthdayPipe,
     BarComponent,
     ModalComponent,
+    BackComponent,
   ],
 })
 export class ProfileDetailComponent implements OnInit, OnDestroy {
@@ -76,8 +78,7 @@ export class ProfileDetailComponent implements OnInit, OnDestroy {
       .getProfile()
       .pipe(
         map(user => ({ ...user, progress: calculateProfileProgress(user!) })),
-        filter(user => !!user),
-        take(1)
+        filter(user => !!user)
       )
       .subscribe({
         next: user => {
@@ -89,10 +90,7 @@ export class ProfileDetailComponent implements OnInit, OnDestroy {
 
     const profileIdDataSub$ = this.profileDataService
       .getProfileId()
-      .pipe(
-        filter(userId => !!userId),
-        take(1)
-      )
+      .pipe(filter(userId => !!userId))
       .subscribe({
         next: profileId => {
           this.loggedUserId = profileId;

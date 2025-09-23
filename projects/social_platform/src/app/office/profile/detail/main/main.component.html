@@ -1,464 +1,507 @@
 <!-- @format -->
 
-@if (user | async; as user) {
-<section class="main">
-  @if (loggedUserId | async; as loggedUserId) {
-  <div class="main__content">
-    <div class="main__about">
-      <h3 class="text-heading-3 about__title">Обо мне</h3>
-      @if (user.aboutMe; as about) {
-      <div class="about__text">
-        <p #descEl [innerHTML]="about | parseLinks | parseBreaks" class="text-body-14"></p>
-        @if (descriptionExpandable) {
-        <div
-          class="read-more"
-          (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
-        >
-          {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+@if (user) {
+<section class="profile">
+  <div class="profile__details">
+    <div class="profile__left">
+      <div class="lists profile__section">
+        <div class="lists__section">
+          <h3 class="text-body-12 lists__title">метаданные</h3>
+          <i appIcon icon="anchor" class="lists__icon" appSquare="12"></i>
         </div>
-        }
+
+        <ul class="lists__list">
+          <li class="lists__item">
+            <i appIcon icon="geo-point" class="lists__icon" style="opacity: 0.6" appSquare="10"></i>
+            <p class="text-body-10">{{ user.region ?? "не указан" }}</p>
+          </li>
+
+          <li class="lists__item">
+            <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
+            <p class="text-body-10">{{ user.speciality ?? "не указана" }}</p>
+          </li>
+
+          <li class="lists__item">
+            <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
+            <p class="text-body-10">{{ (user.birthday | yearsFromBirthday) ?? "не указан" }}</p>
+          </li>
+
+          <li class="lists__item">
+            <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
+            <p class="text-body-10">{{ user.city ?? "не указан" }}</p>
+          </li>
+
+          <li class="lists__item">
+            <i appIcon icon="geo-point" class="lists__icon" appSquare="10"></i>
+            <p class="text-body-10">{{ user.lastName }} {{ user.firstName }}</p>
+          </li>
+        </ul>
       </div>
-      } @if (user.skills.length) {
-      <ul class="about__skills">
-        @for (skill of user.skills; track skill.id) {
-        <li (click)="onOpenSkill(skill.id)" class="about__skill">
-          <app-modal [open]="openSkills[skill.id]" (openChange)="onOpenChange($event, skill.id)">
-            <div class="modal">
-              <div class="modal__body">
-                <p class="modal__title text-bold-body-16">
-                  Этот навык подтвердили:
-                  <span class="modal__text"
-                    >{{ skill.approves.length }}
-                    {{
-                      skill.approves.length | pluralize: ["человек", "человека", "человек"]
-                    }}</span
-                  >
-                </p>
-              </div>
+    </div>
 
-              @if (skill.approves.length) {
-              <ul class="approves">
-                @for (p of skill.approves.slice(0, 3); track p.confirmedBy.id) {
-                <li class="project">
-                  <ng-container
-                    *ngTemplateOutlet="approveTemp; context: { $implicit: p }"
-                  ></ng-container>
-                </li>
-                }
-              </ul>
+    @if (loggedUserId) {
+    <div class="profile__content">
+      <div class="about profile__about">
+        <div class="about__head">
+          <h3 class="text-body-12 about__title">обо мне</h3>
+          <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
+        </div>
 
-              <div class="projects__remaining" [class.projects__remaining--show]="readAllProjects">
-                @if (skill.approves) {
-                <ul>
-                  @for (approve of skill.approves.slice(3); track approve.confirmedBy.id) {
-                  <li>
+        @if (user.aboutMe; as about) {
+        <div class="text-body-10 about__text">
+          <p #descEl [innerHTML]="about | parseLinks | parseBreaks"></p>
+          @if (descriptionExpandable) {
+          <div
+            class="read-more text-body-10"
+            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+          >
+            {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+          </div>
+          }
+        </div>
+        } @if (user.skills.length) {
+        <ul class="about__skills">
+          @for (skill of user.skills; track skill.id) {
+          <li (click)="onOpenSkill(skill.id)" class="about__skill">
+            <app-modal [open]="openSkills[skill.id]" (openChange)="onOpenChange($event, skill.id)">
+              <div class="modal">
+                <div class="modal__body">
+                  <p class="modal__title text-body-14">
+                    Этот навык подтвердили:
+                    <span class="modal__text"
+                      >{{ skill.approves.length }}
+                      {{
+                        skill.approves.length | pluralize: ["человек", "человека", "человек"]
+                      }}</span
+                    >
+                  </p>
+                </div>
+
+                @if (skill.approves.length) {
+                <ul class="approves">
+                  @for (p of skill.approves.slice(0, 3); track p.confirmedBy.id) {
+                  <li class="project">
                     <ng-container
-                      *ngTemplateOutlet="approveTemp; context: { $implicit: approve }"
+                      *ngTemplateOutlet="approveTemp; context: { $implicit: p }"
                     ></ng-container>
                   </li>
                   }
                 </ul>
-                }
-              </div>
 
-              <ng-template #approveTemp let-approve>
-                <div class="approves__info">
-                  <div class="approves__left">
-                    <app-avatar [url]="approve.confirmedBy.avatar" [size]="50"></app-avatar>
-                    <div class="approves__credentials">
-                      <p class="text-bold-body-16">
-                        {{ approve.confirmedBy.firstName }} {{ approve.confirmedBy.lastName }}
-                      </p>
-                      <p class="approves__speciality text-body-12">
-                        {{ approve.confirmedBy.v2Speciality?.name }}
-                      </p>
-                    </div>
-                  </div>
-                  <i appIcon icon="check" appSquare="24"></i>
+                <div
+                  class="projects__remaining"
+                  [class.projects__remaining--show]="readAllProjects"
+                >
+                  @if (skill.approves) {
+                  <ul>
+                    @for (approve of skill.approves.slice(3); track approve.confirmedBy.id) {
+                    <li>
+                      <ng-container
+                        *ngTemplateOutlet="approveTemp; context: { $implicit: approve }"
+                      ></ng-container>
+                    </li>
+                    }
+                  </ul>
+                  }
                 </div>
-              </ng-template>
-              @if (skill.approves.length > 3) {
-              <p class="modal__more" (click)="readAllModal = !readAllModal">
-                {{ readAllModal ? "Скрыть" : "Читать полностью" }}
-              </p>
-              } }
-            </div>
-          </app-modal>
 
-          <app-tag [color]="isUserApproveSkill(skill, loggedUserId) ? 'complete' : 'accent'">
-            <span>{{ skill.name }}</span>
-            <i
-              (click)="onToggleApprove(skill.id, $event, skill, loggedUserId)"
-              appIcon
-              [icon]="isUserApproveSkill(skill, loggedUserId) ? 'check' : 'plus'"
-              appSquare="16"
-            ></i>
-          </app-tag>
-        </li>
-        }
-      </ul>
+                <ng-template #approveTemp let-approve>
+                  <div class="approves__info">
+                    <div class="approves__left">
+                      <app-avatar [url]="approve.confirmedBy.avatar" [size]="50"></app-avatar>
+                      <div class="approves__credentials">
+                        <p class="text-body-14">
+                          {{ approve.confirmedBy.firstName }} {{ approve.confirmedBy.lastName }}
+                        </p>
+                        <p class="approves__speciality text-body-10">
+                          {{ approve.confirmedBy.v2Speciality?.name }}
+                        </p>
+                      </div>
+                    </div>
+                    <i appIcon icon="check" appSquare="12"></i>
+                  </div>
+                </ng-template>
+                @if (skill.approves.length > 3) {
+                <p class="modal__more text-body-10" (click)="readAllModal = !readAllModal">
+                  {{ readAllModal ? "Скрыть" : "Читать полностью" }}
+                </p>
+                } }
+              </div>
+            </app-modal>
 
-      <p class="approves__text text-body-14">
-        Нажимая на <strong>плюс</strong>, вы подтверждаете, что {{ user.firstName }} владеет этим
-        навыком
-      </p>
-      }
-    </div>
-    <div class="main__news">
-      @if (loggedUserId === user.id) {
-      <app-news-form (addNews)="onAddNews($event)"></app-news-form>
-      }
-      <ul>
-        @for (n of news(); track n.id) {
-        <li>
-          <app-news-card
-            class="news__item"
-            [resourceLink]="['/office/profile', n.id]"
-            [attr.data-id]="n.id"
-            [feedItem]="n"
-            [isOwner]="loggedUserId === user.id"
-            (delete)="onDeleteNews($event)"
-            (like)="onLike($event)"
-            (edited)="onEditNews($event, n.id)"
-          ></app-news-card>
-        </li>
-        }
-      </ul>
-    </div>
-  </div>
-  }
-  <div class="main__aside">
-    @if (user.projects.length; as projectsLength) {
-    <div class="projects main__section">
-      <div class="main__section-top">
-        <h3 class="text-bold-body-16">Проекты</h3>
-        <div class="badge badge__projects">
-          <i icon="people" appIcon appSquare="22"></i>
-        </div>
-      </div>
-      <ul>
-        @for (p of user.projects.slice(0, 3); track p.id) {
-        <li class="project" [routerLink]="['/office/projects', p.id]">
-          <ng-container *ngTemplateOutlet="projectTemp; context: { $implicit: p }"></ng-container>
-        </li>
-        }
-      </ul>
-      <div class="projects__remaining" [class.projects__remaining--show]="readAllProjects">
-        @if (user.projects) {
-        <ul>
-          @for (project of user.projects.slice(3); track project.id) {
-          <li>
-            <ng-container
-              *ngTemplateOutlet="projectTemp; context: { $implicit: project }"
-            ></ng-container>
+            <app-tag [color]="isUserApproveSkill(skill, loggedUserId) ? 'complete' : 'accent'">
+              <span>{{ skill.name }}</span>
+              <i
+                (click)="onToggleApprove(skill.id, $event, skill, loggedUserId)"
+                appIcon
+                [icon]="isUserApproveSkill(skill, loggedUserId) ? 'check' : 'plus'"
+                appSquare="6"
+              ></i>
+            </app-tag>
           </li>
           }
         </ul>
-        }
-      </div>
-      <ng-template #projectTemp let-project>
-        <div>
-          <div class="project__info">
-            <a
-              [routerLink]="['/office/projects', project.id]"
-              class="text-bold-body-14 project__title"
-            >
-              {{ project.name }}
-            </a>
-          </div>
-          <p class="text-body-12 project__role">{{ project.collaborator?.role }}</p>
-        </div>
-      </ng-template>
-      @if (projectsLength > 3) {
-      <div class="read-more" (click)="readAllProjects = !readAllProjects">
-        {{ readAllProjects ? "Скрыть" : "Читать полностью" }}
-      </div>
-      }
-    </div>
-    } @if (user.programs.length; as programsLength) {
-    <div class="projects main__section">
-      <div class="main__section-top">
-        <h3 class="text-bold-body-16">Программы</h3>
-        <div class="badge badge__projects">
-          <i icon="people" appIcon appSquare="22"></i>
-        </div>
-      </div>
-      <ul>
-        @for (p of user.programs.slice(0, 3); track p.id) {
-        <li class="project" [routerLink]="['/office/program', p.id]">
-          <ng-container *ngTemplateOutlet="programTemp; context: { $implicit: p }"></ng-container>
-        </li>
-        }
-      </ul>
-      <div class="programs__remaining" [class.programs__remaining--show]="readAllPrograms">
-        @if (user.programs) {
-        <ul>
-          @for (program of user.programs.slice(3); track program.id) {
-          <li>
-            <ng-container
-              *ngTemplateOutlet="programTemp; context: { $implicit: program }"
-            ></ng-container>
-          </li>
-          }
-        </ul>
-        }
-      </div>
-      <ng-template #programTemp let-program>
-        <div>
-          <div class="project__info">
-            <a
-              [routerLink]="['/office/program', program.id]"
-              class="text-bold-body-14 project__title"
-            >
-              {{ program.name }}
-            </a>
-          </div>
-          <p class="text-body-12 project__role">{{ program.tag }}</p>
-        </div>
-      </ng-template>
-      @if (programsLength > 3) {
-      <div class="read-more" (click)="readAllPrograms = !readAllPrograms">
-        {{ readAllPrograms ? "Скрыть" : "Читать полностью" }}
-      </div>
-      }
-    </div>
-    } @if (user.education.length; as educationLength) {
-    <div class="main__section">
-      <div class="main__section-top">
-        <h3 class="text-bold-body-16">Образование</h3>
-        <div class="badge badge__organization">
-          <i icon="academic-hat" appIcon appWidth="24" appHeight="13" appViewBox="0 0 24 13"></i>
-        </div>
-      </div>
-      <ul class="education">
-        @for (p of user.education.slice(0, 3); track $index) {
-        <li class="project">
-          <ng-container *ngTemplateOutlet="educationTemp; context: { $implicit: p }"></ng-container>
-        </li>
-        }
-      </ul>
-      <div class="education__remaining" [class.education__remaining--show]="readAllEducation">
-        @if (user.education) {
-        <ul>
-          @for (educationItem of user.education.slice(3); track $index) {
-          <li>
-            <ng-container
-              *ngTemplateOutlet="educationTemp; context: { $implicit: educationItem }"
-            ></ng-container>
-          </li>
-          }
-        </ul>
-        }
-      </div>
-      <ng-template #educationTemp let-education>
-        <p class="text-body-12 project__role">
-          {{ education.entryYear }}-{{ education.completionYear }}
+
+        <p class="approves__text text-body-10">
+          Нажимая на <strong>плюс</strong>, вы подтверждаете, что {{ user.firstName }} владеет этим
+          навыком
         </p>
-
-        <div class="project__description">
-          <div>
-            <p class="text-bold-body-14 project__title">
-              {{ education.organizationName }}
-            </p>
-
-            <p class="text-body-14 project__role">{{ education.description }}</p>
-          </div>
-
-          <div class="project__description">
-            <p class="text-body-14 project__role">{{ education.educationLevel }}</p>
-            <p class="text-body-14 project__role">{{ education.educationStatus }}</p>
-          </div>
-        </div>
-      </ng-template>
-      @if (educationLength > 3) {
-      <div class="read-more" (click)="readAllEducation = !readAllEducation">
-        {{ readAllEducation ? "Скрыть" : "Читать полностью" }}
-      </div>
-      }
-    </div>
-    } @if (user.workExperience.length; as workExperienceLength) {
-    <div class="main__section">
-      <div class="main__section-top">
-        <h3 class="text-bold-body-16">Работа</h3>
-        <div class="badge badge__organization">
-          <i icon="work" appIcon appWidth="24" appHeight="13" appViewBox="0 0 24 13"></i>
-        </div>
-      </div>
-      <ul class="work-experience">
-        @for (p of user.workExperience.slice(0, 3); track $index) {
-        <li class="project">
-          <ng-container
-            *ngTemplateOutlet="workExperienceTemp; context: { $implicit: p }"
-          ></ng-container>
-        </li>
         }
-      </ul>
-      <div
-        class="work-experience__remaining"
-        [class.work-experience__remaining--show]="readAllWorkExperience"
-      >
-        @if (user.workExperience) {
+      </div>
+      <div class="profile__news news">
+        @if (loggedUserId === user.id) {
+        <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
+        }
         <ul>
-          @for (workExperienceItem of user.workExperience.slice(3); track $index) {
+          @for (n of news(); track n.id) {
           <li>
-            <ng-container
-              *ngTemplateOutlet="workExperienceTemp; context: { $implicit: workExperienceItem }"
-            ></ng-container>
-          </li>
-          }
-        </ul>
-        }
-      </div>
-      <ng-template #workExperienceTemp let-workExperience>
-        <p class="text-body-12 project__role">
-          {{ workExperience.entryYear }}-{{ workExperience.completionYear }}
-        </p>
-
-        <div>
-          <p class="text-bold-body-14 project__title">
-            {{ workExperience.organizationName }}
-          </p>
-
-          <div class="project__description">
-            <p class="text-body-14 project__role">{{ workExperience.description }}</p>
-            <p class="text-body-14 project__role">{{ workExperience.jobPosition }}</p>
-          </div>
-        </div>
-      </ng-template>
-      @if (workExperienceLength > 3) {
-      <div class="read-more" (click)="readAllWorkExperience = !readAllWorkExperience">
-        {{ readAllWorkExperience ? "Скрыть" : "Читать полностью" }}
-      </div>
-      }
-    </div>
-    } @if (user.userLanguages.length; as userLanguagesLength) {
-    <div class="main__section">
-      <div class="main__section-top">
-        <h3 class="text-bold-body-16">Языки</h3>
-        <div class="badge badge__organization">
-          <i icon="work" appIcon appWidth="24" appHeight="13" appViewBox="0 0 24 13"></i>
-        </div>
-      </div>
-      <ul class="languages">
-        @for (p of user.userLanguages.slice(0, 2); track $index) {
-        <li class="project">
-          <ng-container
-            *ngTemplateOutlet="userLanguagesTemp; context: { $implicit: p }"
-          ></ng-container>
-        </li>
-        }
-      </ul>
-      <div class="projects__remaining" [class.projects__remaining--show]="readAllLanguages">
-        @if (user.userLanguages.length > 2) {
-        <ul>
-          @for (userLanguagesItem of user.userLanguages.slice(2); track $index) {
-          <li>
-            <ng-container
-              *ngTemplateOutlet="userLanguagesTemp; context: { $implicit: userLanguagesItem }"
-            ></ng-container>
-          </li>
-          }
-        </ul>
-        }
-      </div>
-      <ng-template #userLanguagesTemp let-userLanguages>
-        <p class="text-bold-body-16 project__role">
-          {{ userLanguages.language }} {{ userLanguages.languageLevel }}
-        </p>
-      </ng-template>
-      @if (userLanguagesLength > 2) {
-      <div class="read-more" (click)="readAllLanguages = !readAllLanguages">
-        {{ readAllLanguages ? "Скрыть" : "Читать полностью" }}
-      </div>
-      }
-    </div>
-    } @if (user.achievements.length; as achievementsLength) {
-    <div class="main__section achievements">
-      <div class="main__section-top">
-        <h3 class="text-bold-body-16">Мои достижения</h3>
-        <div class="badge badge__achievements">
-          <i icon="medal-outlined" appIcon appWidth="20" appHeight="19" appViewBox="0 0 20 19"></i>
-        </div>
-      </div>
-      <ul>
-        @for (achievement of user.achievements.slice(0, 3); track achievement.id) {
-        <li class="achievement">
-          <p class="achievement__status text-bold-body-14">{{ achievement.status }}</p>
-          <p class="achievement__title text-body-12">{{ achievement.title }}</p>
-        </li>
-        }
-      </ul>
-      <div
-        class="achievements__remaining"
-        [class.achievements__remaining--show]="readAllAchievements"
-      >
-        @if (user.achievements.length) {
-        <ul>
-          @for (achievement of user.achievements.slice(3); track achievement.id) {
-          <li class="achievement">
-            <p class="achievement__status text-bold-body-14">{{ achievement.status }}</p>
-            <p class="achievement__title text-body-12">{{ achievement.title }}</p>
-          </li>
-          }
-        </ul>
-        }
-      </div>
-      @if (achievementsLength > 3) {
-      <div class="read-more" (click)="readAllAchievements = !readAllAchievements">
-        {{ readAllAchievements ? "Скрыть" : "Читать полностью" }}
-      </div>
-      }
-    </div>
-    } @if (user.links.length; as linksLength) {
-    <div class="main__section links">
-      <div class="main__section-top">
-        <h3 class="text-bold-body-16">Контакты</h3>
-        <div class="badge badge__links">
-          <i icon="people-filled" appIcon appSquare="20"></i>
-        </div>
-      </div>
-      <ul>
-        @for (link of user.links.slice(0, 3); track $index) {
-        <li class="contact-link text-body-12">
-          <ng-container *ngTemplateOutlet="linkTemp; context: { $implicit: link }"></ng-container>
-        </li>
-        }
-      </ul>
-      <div class="links__remaining" [class.links__remaining--show]="readAllLinks">
-        <ul class="main__links">
-          @for (link of user.links.slice(3); track $index) {
-          <li class="contact-link text-body-12">
-            <ng-container *ngTemplateOutlet="linkTemp; context: { $implicit: link }">
-            </ng-container>
+            <app-news-card
+              class="news__item"
+              [resourceLink]="['/office/profile', n.id]"
+              [attr.data-id]="n.id"
+              [feedItem]="n"
+              [isOwner]="loggedUserId === user.id"
+              (delete)="onDeleteNews($event)"
+              (like)="onLike($event)"
+              (edited)="onEditNews($event, n.id)"
+            ></app-news-card>
           </li>
           }
         </ul>
       </div>
-      <ng-template #linkTemp let-link>
-        @if (link | userLinks; as l) {
-        <a class="contact-link__link" target="_blank" [href]="link">
-          <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
-          <span>{{ l.tag }}</span>
-        </a>
-        }
-      </ng-template>
-      @if (linksLength > 3) {
-      <div class="read-more" (click)="readAllLinks = !readAllLinks">
-        {{ readAllLinks ? "Скрыть" : "Читать полностью" }}
-      </div>
-      }
     </div>
     }
+
+    <div class="profile__right">
+      <div class="profile__aside">
+        @if (user.projects.length; as projectsLength) {
+        <div class="lists profile__section">
+          <div class="lists__section">
+            <h3 class="text-body-12 lists__title">проекты</h3>
+            <i class="lists__icon" icon="people" appIcon appSquare="12"></i>
+          </div>
+          <ul>
+            @for (p of user.projects.slice(0, 3); track p.id) {
+            <li class="lists__item" [routerLink]="['/office/projects', p.id]">
+              <ng-container
+                *ngTemplateOutlet="projectTemp; context: { $implicit: p }"
+              ></ng-container>
+            </li>
+            }
+          </ul>
+          <div class="lists__remaining" [class.lists__remaining--show]="readAllProjects">
+            @if (user.projects) {
+            <ul>
+              @for (project of user.projects.slice(3); track project.id) {
+              <li>
+                <ng-container
+                  *ngTemplateOutlet="projectTemp; context: { $implicit: project }"
+                ></ng-container>
+              </li>
+              }
+            </ul>
+            }
+          </div>
+          <ng-template #projectTemp let-project>
+            <div>
+              <div class="lists__info">
+                <a
+                  [routerLink]="['/office/projects', project.id]"
+                  class="text-body-10 lists__title"
+                >
+                  {{ project.name }}
+                </a>
+              </div>
+              <p class="text-body-10">{{ project.collaborator?.role }}</p>
+            </div>
+          </ng-template>
+          @if (projectsLength > 3) {
+          <div class="read-more text-body-10" (click)="readAllProjects = !readAllProjects">
+            {{ readAllProjects ? "Скрыть" : "Читать полностью" }}
+          </div>
+          }
+        </div>
+        } @if (user.programs.length; as programsLength) {
+        <div class="lists profile__section">
+          <div class="lists__section">
+            <h3 class="text-body-12 lists__title">программы</h3>
+            <i class="lists__icon" icon="people" appIcon appSquare="12"></i>
+          </div>
+          <ul>
+            @for (p of user.programs.slice(0, 3); track p.id) {
+            <li class="lists__item" [routerLink]="['/office/program', p.id]">
+              <ng-container
+                *ngTemplateOutlet="programTemp; context: { $implicit: p }"
+              ></ng-container>
+            </li>
+            }
+          </ul>
+          <div class="lists__remaining" [class.lists__remaining--show]="readAllPrograms">
+            @if (user.programs) {
+            <ul>
+              @for (program of user.programs.slice(3); track program.id) {
+              <li>
+                <ng-container
+                  *ngTemplateOutlet="programTemp; context: { $implicit: program }"
+                ></ng-container>
+              </li>
+              }
+            </ul>
+            }
+          </div>
+          <ng-template #programTemp let-program>
+            <div>
+              <div class="lists__info">
+                <a [routerLink]="['/office/program', program.id]" class="text-body-10 lists__title">
+                  {{ program.name }}
+                </a>
+              </div>
+              <p class="text-body-10">{{ program.tag }}</p>
+            </div>
+          </ng-template>
+          @if (programsLength > 3) {
+          <div class="read-more text-body-10" (click)="readAllPrograms = !readAllPrograms">
+            {{ readAllPrograms ? "Скрыть" : "Читать полностью" }}
+          </div>
+          }
+        </div>
+        } @if (user.education.length; as educationLength) {
+        <div class="lists profile__section">
+          <div class="lists__section">
+            <h3 class="text-body-12 lists__title">образование</h3>
+            <i
+              class="lists__icon"
+              icon="academic-hat"
+              appIcon
+              appWidth="12"
+              appHeight="6"
+              appViewBox="0 0 12 6"
+            ></i>
+          </div>
+          <ul class="lists__list">
+            @for (p of user.education.slice(0, 3); track $index) {
+            <li class="lists__item">
+              <ng-container
+                *ngTemplateOutlet="educationTemp; context: { $implicit: p }"
+              ></ng-container>
+            </li>
+            }
+          </ul>
+          <div class="lists__remaining" [class.lists__remaining--show]="readAllEducation">
+            @if (user.education) {
+            <ul>
+              @for (educationItem of user.education.slice(3); track $index) {
+              <li>
+                <ng-container
+                  *ngTemplateOutlet="educationTemp; context: { $implicit: educationItem }"
+                ></ng-container>
+              </li>
+              }
+            </ul>
+            }
+          </div>
+          <ng-template #educationTemp let-education>
+            <p class="text-body-10 lists__role">
+              {{ education.entryYear }}-{{ education.completionYear }}
+            </p>
+
+            <div class="lists__description">
+              <div>
+                <p class="text-body-10 lists__title">
+                  {{ education.organizationName }}
+                </p>
+
+                <p class="text-body-10 lists__role">{{ education.description }}</p>
+              </div>
+
+              <div class="lists__description">
+                <p class="text-body-10 lists__role">{{ education.educationLevel }}</p>
+                <p class="text-body-10 lists__role">{{ education.educationStatus }}</p>
+              </div>
+            </div>
+          </ng-template>
+          @if (educationLength > 3) {
+          <div class="read-more text-body-10" (click)="readAllEducation = !readAllEducation">
+            {{ readAllEducation ? "Скрыть" : "Читать полностью" }}
+          </div>
+          }
+        </div>
+        } @if (user.workExperience.length; as workExperienceLength) {
+        <div class="lists profile__section">
+          <div class="lists__section">
+            <h3 class="text-body-12 lists__title">работа</h3>
+            <i class="lists__icon" icon="work" appIcon appSquare="12"></i>
+          </div>
+          <ul class="lists__list">
+            @for (p of user.workExperience.slice(0, 3); track $index) {
+            <li class="lists__item">
+              <ng-container
+                *ngTemplateOutlet="workExperienceTemp; context: { $implicit: p }"
+              ></ng-container>
+            </li>
+            }
+          </ul>
+          <div class="lists__remaining" [class.lists__remaining--show]="readAllWorkExperience">
+            @if (user.workExperience) {
+            <ul>
+              @for (workExperienceItem of user.workExperience.slice(3); track $index) {
+              <li>
+                <ng-container
+                  *ngTemplateOutlet="workExperienceTemp; context: { $implicit: workExperienceItem }"
+                ></ng-container>
+              </li>
+              }
+            </ul>
+            }
+          </div>
+          <ng-template #workExperienceTemp let-workExperience>
+            <p class="text-body-10 lists__role">
+              {{ workExperience.entryYear }}-{{ workExperience.completionYear }}
+            </p>
+
+            <div>
+              <p class="text-body-10 lists__title">
+                {{ workExperience.organizationName }}
+              </p>
+
+              <div class="lists__description">
+                <p class="text-body-10 lists__role">{{ workExperience.description }}</p>
+                <p class="text-body-10 lists__role">{{ workExperience.jobPosition }}</p>
+              </div>
+            </div>
+          </ng-template>
+          @if (workExperienceLength > 3) {
+          <div
+            class="read-more text-body-10"
+            (click)="readAllWorkExperience = !readAllWorkExperience"
+          >
+            {{ readAllWorkExperience ? "Скрыть" : "Читать полностью" }}
+          </div>
+          }
+        </div>
+        } @if (user.userLanguages.length; as userLanguagesLength) {
+        <div class="lists profile__section">
+          <div class="lists__section">
+            <h3 class="text-body-12 lists__title">языки</h3>
+            <i class="lists__icon" icon="work" appIcon appSquare="12"></i>
+          </div>
+          <ul class="lists__list">
+            @for (p of user.userLanguages.slice(0, 2); track $index) {
+            <li class="lists__item">
+              <ng-container
+                *ngTemplateOutlet="userLanguagesTemp; context: { $implicit: p }"
+              ></ng-container>
+            </li>
+            }
+          </ul>
+          <div class="lists__remaining" [class.lists__remaining--show]="readAllLanguages">
+            @if (user.userLanguages.length > 2) {
+            <ul>
+              @for (userLanguagesItem of user.userLanguages.slice(2); track $index) {
+              <li>
+                <ng-container
+                  *ngTemplateOutlet="userLanguagesTemp; context: { $implicit: userLanguagesItem }"
+                ></ng-container>
+              </li>
+              }
+            </ul>
+            }
+          </div>
+          <ng-template #userLanguagesTemp let-userLanguages>
+            <p class="text-body-10 lists__role">
+              {{ userLanguages.language }} {{ userLanguages.languageLevel }}
+            </p>
+          </ng-template>
+          @if (userLanguagesLength > 2) {
+          <div class="read-more text-body-10" (click)="readAllLanguages = !readAllLanguages">
+            {{ readAllLanguages ? "Скрыть" : "Читать полностью" }}
+          </div>
+          }
+        </div>
+        } @if (user.achievements.length; as achievementsLength) {
+        <div class="lists profile__section">
+          <div class="lists__section">
+            <h3 class="text-body-12 lists__title">достижения</h3>
+            <i class="lists__icon" icon="medal" appIcon appSquare="12" appViewBox="0 0 12 12"></i>
+          </div>
+          <ul>
+            @for (achievement of user.achievements.slice(0, 3); track achievement.id) {
+            <li class="lists__item">
+              <p class="lists__staus text-body-10">{{ achievement.status }}</p>
+              <p class="lists__title text-body-10">{{ achievement.title }}</p>
+            </li>
+            }
+          </ul>
+          <div class="lists__remaining" [class.lists__remaining--show]="readAllAchievements">
+            @if (user.achievements.length) {
+            <ul>
+              @for (achievement of user.achievements.slice(3); track achievement.id) {
+              <li class="lists__item">
+                <p class="lists__status text-body-10">{{ achievement.status }}</p>
+                <p class="lists__title text-body-12">{{ achievement.title }}</p>
+              </li>
+              }
+            </ul>
+            }
+          </div>
+          @if (achievementsLength > 3) {
+          <div class="read-more text-body-10" (click)="readAllAchievements = !readAllAchievements">
+            {{ readAllAchievements ? "Скрыть" : "Читать полностью" }}
+          </div>
+          }
+        </div>
+        } @if (user.links.length; as linksLength) {
+        <div class="profile__section lists">
+          <div class="lists__section">
+            <h3 class="text-body-12 lists__title">контакты</h3>
+            <i class="lists__icon" icon="phone" appIcon appSquare="12"></i>
+          </div>
+          <ul>
+            @for (link of user.links.slice(0, 3); track $index) {
+            <li class="lists__item text-body-10">
+              <ng-container
+                *ngTemplateOutlet="linkTemp; context: { $implicit: link }"
+              ></ng-container>
+            </li>
+            }
+          </ul>
+          <div class="lists__remaining" [class.links__remaining--show]="readAllLinks">
+            <ul class="lists__list">
+              @for (link of user.links.slice(3); track $index) {
+              <li class="lists__item text-body-12">
+                <ng-container *ngTemplateOutlet="linkTemp; context: { $implicit: link }">
+                </ng-container>
+              </li>
+              }
+            </ul>
+          </div>
+          <ng-template #linkTemp let-link>
+            @if (link | userLinks; as l) {
+            <a class="lists__item" target="_blank" [href]="link">
+              <i class="lists__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
+              <span>{{ l.tag }}</span>
+            </a>
+            }
+          </ng-template>
+          @if (linksLength > 3) {
+          <div class="read-more text-body-10" (click)="readAllLinks = !readAllLinks">
+            {{ readAllLinks ? "Скрыть" : "Читать полностью" }}
+          </div>
+          }
+        </div>
+        }
+      </div>
+    </div>
   </div>
 </section>
 
 <app-modal [open]="approveOwnSkillModal" (openChange)="approveOwnSkillModal = $event">
   <div class="modal">
     <div class="modal__body">
-      <p class="modal__title text-bold-body-16">
+      <p class="modal__title text-body-14">
         Ошибка при подитверждении навыка!
         <br />
-        <span class="text-body-14">Вы не можете подтверждать навыки своего профиля</span>
+        <span class="text-body-10">Вы не можете подтверждать навыки своего профиля</span>
       </p>
     </div>
   </div>

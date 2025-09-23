@@ -7,6 +7,7 @@ import { IconComponent } from "@uilib";
 import { ButtonComponent } from "@ui/components";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { expandElement } from "@utils/expand-element";
+import { TagComponent } from "@ui/components/tag/tag.component";
 
 /**
  * КОМПОНЕНТ КАРТОЧКИ ВАКАНСИИ ПРОЕКТА
@@ -36,6 +37,7 @@ import { expandElement } from "@utils/expand-element";
     ButtonComponent,
     ParseLinksPipe,
     ParseBreaksPipe,
+    TagComponent,
   ],
   templateUrl: "./project-vacancy-card.component.html",
   styleUrl: "./project-vacancy-card.component.scss",
@@ -43,9 +45,7 @@ import { expandElement } from "@utils/expand-element";
 export class ProjectVacancyCardComponent implements OnInit {
   @Input({ required: true }) vacancy!: Vacancy; // Данные вакансии (обязательное поле)
 
-  ngOnInit(): void {
-    this.getSkillsNames(this.vacancy);
-  }
+  ngOnInit(): void {}
 
   descriptionExpandable!: boolean; // Флаг необходимости кнопки "Читать полностью"
   readFullDescription = false; // Флаг показа всех вакансий
@@ -59,14 +59,5 @@ export class ProjectVacancyCardComponent implements OnInit {
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
-  }
-
-  /**
-   * Получение названий навыков для вакансии
-   * @param vacancy - объект вакансии
-   * @returns строка с названиями навыков, разделенными точками
-   */
-  getSkillsNames(vacancy: Vacancy) {
-    return vacancy.requiredSkills.map((s: any) => s.name).join(" • ");
   }
 }
