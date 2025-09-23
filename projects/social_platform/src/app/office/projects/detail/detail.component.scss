@@ -63,8 +63,8 @@ $detail-bar-mb: 12px;
     border-radius: 50%;
 
     @include responsive.apply-desktop {
-      transform: translate(-50%, 50%);
       width: 110px;
+      transform: translate(-50%, 50%);
     }
   }
 
