@@ -5,7 +5,6 @@ import { ProjectInfoComponent } from "./info/info.component";
 import { ProjectInfoResolver } from "./info/info.resolver";
 import { ProjectResponsesComponent } from "./responses/responses.component";
 import { ProjectResponsesResolver } from "./responses/responses.resolver";
-import { ProjectDetailComponent } from "./detail.component";
 import { ProjectChatComponent } from "./chat/chat.component";
 import { ProjectChatResolver } from "@office/projects/detail/chat/chat.resolver";
 import { ProjectDetailResolver } from "@office/projects/detail/detail.resolver";
@@ -13,6 +12,7 @@ import { NewsDetailComponent } from "@office/projects/detail/news-detail/news-de
 import { NewsDetailResolver } from "@office/projects/detail/news-detail/news-detail.resolver";
 import { ProjectTeamComponent } from "./team/team.component";
 import { ProjectVacanciesComponent } from "./vacancies/vacancies.component";
+import { DeatilComponent } from "@office/features/detail/detail.component";
 
 /**
  * Конфигурация маршрутов для детального просмотра проекта
@@ -29,10 +29,11 @@ import { ProjectVacanciesComponent } from "./vacancies/vacancies.component";
 export const PROJECT_DETAIL_ROUTES: Routes = [
   {
     path: "",
-    component: ProjectDetailComponent,
+    component: DeatilComponent,
     resolve: {
       data: ProjectDetailResolver,
     },
+    data: { listType: "project" },
     children: [
       {
         path: "",

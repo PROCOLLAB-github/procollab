@@ -7,8 +7,8 @@ import { ProgramRegisterResolver } from "@office/program/detail/register/registe
 import { ProgramProjectsResolver } from "@office/program/detail/list/projects.resolver";
 import { ProgramMembersResolver } from "@office/program/detail/list/members.resolver";
 import { ProgramListComponent } from "./list/list.component";
-import { ProgramDetailComponent } from "./detail.component";
 import { ProgramDetailResolver } from "./detail.resolver";
+import { DeatilComponent } from "@office/features/detail/detail.component";
 
 /**
  * Маршруты для детальной страницы программы
@@ -26,10 +26,11 @@ import { ProgramDetailResolver } from "./detail.resolver";
 export const PROGRAM_DETAIL_ROUTES: Routes = [
   {
     path: "",
-    component: ProgramDetailComponent,
+    component: DeatilComponent,
     resolve: {
       data: ProgramDetailResolver,
     },
+    data: { listType: "program" },
     children: [
       {
         path: "",
