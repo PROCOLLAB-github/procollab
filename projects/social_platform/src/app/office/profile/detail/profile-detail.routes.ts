@@ -1,12 +1,12 @@
 /** @format */
 
 import { Routes } from "@angular/router";
-import { ProfileDetailComponent } from "./profile-detail.component";
 import { ProfileDetailResolver } from "./profile-detail.resolver";
 import { ProfileMainComponent } from "./main/main.component";
 import { ProfileProjectsComponent } from "./projects/projects.component";
 import { ProfileMainResolver } from "./main/main.resolver";
 import { ProfileNewsComponent } from "../profile-news/profile-news.component";
+import { DeatilComponent } from "@office/features/detail/detail.component";
 
 /**
  * Конфигурация маршрутов для детального просмотра профиля пользователя
@@ -25,10 +25,11 @@ import { ProfileNewsComponent } from "../profile-news/profile-news.component";
 export const PROFILE_DETAIL_ROUTES: Routes = [
   {
     path: "",
-    component: ProfileDetailComponent,
+    component: DeatilComponent,
     resolve: {
       data: ProfileDetailResolver,
     },
+    data: { listType: "profile" },
     children: [
       {
         path: "",

@@ -19,6 +19,10 @@ import { ProjectAssign } from "@office/projects/models/project-assign.model";
 import { ProjectAdditionalService } from "@office/projects/edit/services/project-additional.service";
 import { ProjectDataService } from "@office/projects/detail/services/project-data.service";
 import { ProgramDataService } from "@office/program/services/program-data.service";
+import { ChatService } from "@office/services/chat.service";
+import { calculateProfileProgress } from "@utils/calculateProgress";
+import { ProfileDataService } from "@office/profile/detail/services/profile-date.service";
+import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
 
 @Component({
   selector: "app-detail",
@@ -46,19 +50,26 @@ export class DeatilComponent implements OnInit, OnDestroy {
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   private readonly router = inject(Router);
   private readonly location = inject(Location);
+  private readonly profileDataService = inject(ProfileDataService);
+  public readonly skillsProfileService = inject(ProfileService);
+  public readonly chatService = inject(ChatService);
 
   // Основные данные(типы данных, данные)
   info?: any;
+  loggedUserId?: number;
   profile?: User;
   listType: "project" | "program" | "profile" = "project";
 
   // Переменная для подсказок
   isTooltipVisible = false;
 
+  tooltipText = "Заполни до конца — и открой весь функционал платформы!";
+
   // Переменные для отображения данных в зависимости от url
   isProjectsPage = false;
   isMembersPage = false;
   isProjectsRatingPage = false;
+
   isTeamPage = false;
   isVacanciesPage = false;
 
@@ -67,6 +78,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
   registerDateExpired?: boolean;
   isInProject?: boolean;
 
+  isSended = false;
+  isSubscriptionActive = signal(false);
+  isProfileFill = false;
+
   // Переменные для работы с модалкой подачи проекта
   selectedProjectId = 0;
   dubplicatedProjectId = 0;
@@ -74,6 +89,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   // Сигналы для работы с модальными окнами с текстом
   assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
+  errorMessageModal = signal("");
 
   // Переменные для работы с модалками
   isAssignProjectToProgramModalOpen = signal(false);
@@ -83,6 +99,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   isEditDisableModal = false; // Флаг недоступности редактирования для модалки
   openSupport = false; // Флаг модального окна поддержки
   leaderLeaveModal = false; // Флаг модального окна предупреждения лидера
+  isDelayModalOpen = false;
 
   subscriptions: Subscription[] = [];
 
@@ -257,6 +274,24 @@ export class DeatilComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Отправка CV пользователя на email
+   * Проверяет ограничения по времени и отправляет CV на почту пользователя
+   */
+  sendCVEmail() {
+    this.authService.sendCV().subscribe({
+      next: () => {
+        this.isSended = true;
+      },
+      error: err => {
+        if (err.status === 400) {
+          this.isDelayModalOpen = true;
+          this.errorMessageModal.set(err.error.seconds_after_retry);
+        }
+      },
+    });
+  }
+
+  /**
    * Обновляет состояния страниц на основе URL
    */
   private updatePageStates(url?: string): void {
@@ -266,6 +301,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
       currentUrl.includes("/projects") && !currentUrl.includes("/projects-rating");
     this.isMembersPage = currentUrl.includes("/members");
     this.isProjectsRatingPage = currentUrl.includes("/projects-rating");
+    this.isTeamPage = currentUrl.includes("/team");
+    this.isVacanciesPage = currentUrl.includes("/vacancies");
   }
 
   private initializeInfo() {
@@ -304,6 +341,36 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
       this.subscriptions.push(program$);
       this.subscriptions.push(memeberProjects$);
+    } else {
+      const profileDataSub$ = this.profileDataService
+        .getProfile()
+        .pipe(
+          map(user => ({ ...user, progress: calculateProfileProgress(user!) })),
+          filter(user => !!user)
+        )
+        .subscribe({
+          next: user => {
+            this.info = user as User;
+            this.isProfileFill =
+              user.progress! < 100 ? (this.isProfileFill = true) : (this.isProfileFill = false);
+          },
+        });
+
+      const profileIdDataSub$ = this.profileDataService
+        .getProfileId()
+        .pipe(filter(userId => !!userId))
+        .subscribe({
+          next: profileId => {
+            this.loggedUserId = profileId;
+          },
+        });
+
+      this.skillsProfileService.getSubscriptionData().subscribe(r => {
+        this.isSubscriptionActive.set(r.isSubscribed);
+      });
+
+      profileDataSub$ && this.subscriptions.push(profileDataSub$);
+      profileIdDataSub$ && this.subscriptions.push(profileIdDataSub$);
     }
   }
 
@@ -316,7 +383,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
     } else if (this.listType === "program") {
       this.backPath = "/office/program/all";
     } else {
-      this.backPath = "/office/members/all";
+      this.backPath = "/office/members";
     }
   }
 }
