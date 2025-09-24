@@ -35,9 +35,8 @@ $detail-bar-mb: 12px;
 
   &__cover {
     position: relative;
-    border-radius: 15px 15px 0 0;
-
     height: 136px;
+    border-radius: 15px 15px 0 0;
 
     &--program {
       height: 155px;
@@ -79,7 +78,6 @@ $detail-bar-mb: 12px;
     }
 
     @include responsive.apply-desktop {
-
       transform: translate(-50%, 50%);
     }
   }
@@ -113,8 +111,8 @@ $detail-bar-mb: 12px;
     display: grid;
     grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
     gap: 20px;
-    padding: 24px 0 30px;
     align-items: center;
+    padding: 24px 0 30px;
   }
 
   &__presentation {
@@ -268,4 +266,3 @@ $detail-bar-mb: 12px;
     align-items: center;
   }
 }
-
