@@ -43,7 +43,9 @@
       <div class="info__body">
         <div class="info__actions">
           <ng-container
-            *ngTemplateOutlet="listType === 'program' ? programTpl : projectTpl"
+            *ngTemplateOutlet="
+              listType === 'program' ? programTpl : listType === 'profile' ? profileTpl : projectTpl
+            "
           ></ng-container>
         </div>
 
@@ -343,14 +345,7 @@
         </ng-template>
 
         <ng-template #profileTpl>
-          @if (profile) { @if (profile.id !== info.id) {
-          <a
-            class="info__send-message"
-            [routerLink]="['/office/chats', profile.id + '_' + info.id]"
-          >
-            <app-button size="medium" customTypographyClass="text-body-12"> Написать </app-button>
-          </a>
-          } @else {
+          @if (profile) {
           <div class="profile__btns">
             <a class="profile__cv">
               @if(isSubscriptionActive()){
@@ -364,14 +359,24 @@
               }
             </a>
 
+            @if (+profile.id !== +info.id) {
+            <a
+              class="info__send-message"
+              [routerLink]="['/office/chats', profile.id + '_' + info.id]"
+            >
+              <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
+                >написать</app-button
+              >
+            </a>
+            } @else {
             <a
               class="profile__edit"
               routerLink="/office/profile/edit"
               [queryParams]="{ editingStep: 'main' }"
             >
-              <app-button size="medium" customTypographyClass="text-body-12">
+              <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
                 {{
-                  info.progress! === 100 ? "Редактировать профиль" : "Закончить заполнение резюме"
+                  info.progress! === 100 ? "редактировать профиль" : "закончить заполнение резюме"
                 }}
                 @if (info.progress !== 100) {
                 <i
@@ -390,8 +395,9 @@
                 }
               </app-button>
             </a>
+            }
           </div>
-          } } @if (profile) { @if (profile.id === info.id) {
+          } @if (profile) { @if (profile.id === info.id) {
           <app-modal [open]="isProfileFill" (openChange)="isProfileFill = !isProfileFill">
             <div class="cancel">
               <img

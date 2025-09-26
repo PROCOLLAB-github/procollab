@@ -12,31 +12,50 @@
 
         <ul class="lists__list">
           <li class="lists__item">
+            <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
+            <p class="text-body-10">{{ (user.birthday | yearsFromBirthday) ?? "не указан" }}</p>
+          </li>
+
+          <li class="lists__item">
             <i appIcon icon="geo-point" class="lists__icon" style="opacity: 0.6" appSquare="10"></i>
-            <p class="text-body-10">{{ user.region ?? "не указан" }}</p>
+            <p class="text-body-10">{{ user.city ?? "не указан" }}</p>
           </li>
 
           <li class="lists__item">
             <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
             <p class="text-body-10">{{ user.speciality ?? "не указана" }}</p>
           </li>
+        </ul>
+      </div>
 
+      <div class="lists profile__section">
+        <div class="lists__section">
+          <h3 class="text-body-12 lists__title">топ навыков</h3>
+          <i appIcon icon="slide" class="lists__icon" appSquare="12"></i>
+        </div>
+
+        <ul class="lists__list">
           <li class="lists__item">
-            <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
+            <div class="lists__index text-body-10">1</div>
             <p class="text-body-10">{{ (user.birthday | yearsFromBirthday) ?? "не указан" }}</p>
           </li>
 
           <li class="lists__item">
-            <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
+            <div class="lists__index text-body-10">2</div>
             <p class="text-body-10">{{ user.city ?? "не указан" }}</p>
           </li>
 
           <li class="lists__item">
-            <i appIcon icon="geo-point" class="lists__icon" appSquare="10"></i>
-            <p class="text-body-10">{{ user.lastName }} {{ user.firstName }}</p>
+            <div class="lists__index text-body-10">3</div>
+            <p class="text-body-10">{{ user.speciality ?? "не указана" }}</p>
           </li>
         </ul>
+
+        <p class="text-body-6 lists__item--more">Подробнее</p>
       </div>
+
+      <app-soon-card title="статистика" description="топ навыков, баллы в общем рейтинге">
+      </app-soon-card>
     </div>
 
     @if (loggedUserId) {
@@ -269,14 +288,7 @@
         <div class="lists profile__section">
           <div class="lists__section">
             <h3 class="text-body-12 lists__title">образование</h3>
-            <i
-              class="lists__icon"
-              icon="academic-hat"
-              appIcon
-              appWidth="12"
-              appHeight="6"
-              appViewBox="0 0 12 6"
-            ></i>
+            <i class="lists__icon" icon="in-search" appIcon appSquare="12"></i>
           </div>
           <ul class="lists__list">
             @for (p of user.education.slice(0, 3); track $index) {
@@ -468,7 +480,7 @@
           <div class="lists__remaining" [class.links__remaining--show]="readAllLinks">
             <ul class="lists__list">
               @for (link of user.links.slice(3); track $index) {
-              <li class="lists__item text-body-12">
+              <li class="lists__item text-body-12" style="color: var(--black)">
                 <ng-container *ngTemplateOutlet="linkTemp; context: { $implicit: link }">
                 </ng-container>
               </li>
@@ -477,7 +489,7 @@
           </div>
           <ng-template #linkTemp let-link>
             @if (link | userLinks; as l) {
-            <a class="lists__item" target="_blank" [href]="link">
+            <a class="lists__item" style="color: var(--black)" target="_blank" [href]="link">
               <i class="lists__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
               <span>{{ l.tag }}</span>
             </a>

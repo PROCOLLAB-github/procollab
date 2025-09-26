@@ -1,28 +1,52 @@
 @use "styles/responsive";
-@use "styles/typography";
 
-.members {
-  &__title {
-    display: none;
-
-    @include responsive.apply-desktop {
-      display: block;
-      margin-bottom: 14px;
-    }
-  }
-
-  &__content {
-    display: flex;
-    flex-direction: column-reverse;
-
-    @include responsive.apply-desktop {
-      flex-direction: row;
-      gap: 24px;
-      justify-content: space-between;
-    }
+.page {
+  &__bar {
+    display: grid;
+    grid-gap: 20px;
+    justify-content: space-between;
+    grid-template-columns: 8fr 2fr;
   }
 
   &__list {
-    flex-basis: 73%;
+    display: grid;
+    flex-grow: 1;
+    grid-template-columns: 1fr;
+    row-gap: 50px;
+    column-gap: 20px;
+    align-items: flex-start;
+    margin-top: 50px;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: repeat(4, 2fr);
+    }
+  }
+
+
+  &__info {
+    display: flex;
+    justify-content: space-between;
+
+    app-search {
+      width: 100%;
+    }
+  }
+
+  &__outlet {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 20px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  &__create {
+    display: inline-flex;
+    flex-direction: column;
+  }
+
+  &__left {
+    width: 157px;
   }
 }

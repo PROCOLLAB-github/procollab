@@ -128,6 +128,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
     profileInfoSub$ && this.subscriptions.push(profileInfoSub$);
     listTypeSub$ && this.subscriptions.push(listTypeSub$);
+
+    console.log(this.info.id, this.profile?.id);
   }
 
   ngOnDestroy(): void {

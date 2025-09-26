@@ -17,6 +17,7 @@ import {
   concatMap,
   debounceTime,
   distinctUntilChanged,
+  filter,
   fromEvent,
   map,
   noop,
@@ -44,6 +45,11 @@ import { SearchComponent } from "@ui/components/search/search.component";
 import { MembersFiltersComponent } from "./filters/members-filters.component";
 import { ApiPagination } from "@models/api-pagination.model";
 import { InfoCardComponent } from "@office/features/info-card/info-card.component";
+import { BackComponent } from "@uilib";
+import { ButtonComponent } from "@ui/components";
+import { ProfileDataService } from "@office/profile/detail/services/profile-date.service";
+import { AuthService } from "@auth/services";
+import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
 
 /**
  * Компонент для отображения списка участников с возможностью поиска и фильтрации
@@ -70,6 +76,9 @@ import { InfoCardComponent } from "@office/features/info-card/info-card.componen
     RouterLink,
     MembersFiltersComponent,
     InfoCardComponent,
+    BackComponent,
+    ButtonComponent,
+    SoonCardComponent,
   ],
 })
 export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -93,6 +102,7 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly navService: NavService,
     private readonly fb: FormBuilder,
     private readonly memberService: MemberService,
+    private readonly authService: AuthService,
     private readonly cdref: ChangeDetectorRef,
     private readonly renderer: Renderer2
   ) {
@@ -125,6 +135,14 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // Устанавливаем заголовок страницы
     this.navService.setNavTitle("Участники");
+
+    const profileIdSub$ = this.authService.profile.pipe(filter(user => !!user)).subscribe({
+      next: user => {
+        this.profileId = user.id;
+      },
+    });
+
+    profileIdSub$ && this.subscriptions$.push(profileIdSub$);
 
     // Загружаем начальные данные участников из резолвера
     this.route.data
@@ -217,6 +235,8 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
 
   members: User[] = []; // Массив участников для отображения
 
+  profileId?: number;
+
   searchParamsSubject$ = new BehaviorSubject<Record<string, string>>({}); // Subject для параметров поиска
 
   searchForm: FormGroup; // Форма поиска
@@ -295,5 +315,9 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
         return members.results;
       })
     );
+  }
+
+  redirectToProfile(): void {
+    this.router.navigateByUrl(`/office/profile/${this.profileId}`);
   }
 }

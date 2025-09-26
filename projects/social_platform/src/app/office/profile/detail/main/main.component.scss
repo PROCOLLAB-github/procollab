@@ -336,8 +336,17 @@
       color: var(--black);
     }
 
-    i {
-      padding: 6px;
+    &--more {
+      color: var(--accent);
+      margin-top: 8px;
+    }
+
+    i, .lists__index {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background-color: var(--light-white);
       border: 0.5px solid var(--medium-grey-for-outline);
       border-radius: var(--rounded-xl);

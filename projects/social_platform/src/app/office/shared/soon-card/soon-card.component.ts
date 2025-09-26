@@ -13,7 +13,7 @@ import { IconComponent } from "@uilib";
   standalone: true,
 })
 export class SoonCardComponent {
-  @Input() title!: string;
+  @Input({ required: true }) title!: string;
 
-  @Input() description!: string;
+  @Input({ required: true }) description!: string;
 }

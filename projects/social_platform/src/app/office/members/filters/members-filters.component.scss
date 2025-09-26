@@ -4,18 +4,8 @@
 .filters {
   display: flex;
   flex-direction: column;
-  gap: 0;
-  width: 100%;
-  min-width: 280px;
-  padding: 26px;
-  margin-bottom: 40px;
-  background-color: var(--white);
-  border-radius: 8px;
-
-  @include responsive.apply-desktop {
-    gap: 24px;
-    padding: 26px 16px;
-  }
+  gap: 14px;
+  margin-top: 10px;
 
   &__titles {
     display: flex;
@@ -24,17 +14,12 @@
   }
 
   &__clear {
+    color: var(--accent);
     cursor: pointer;
   }
 
   &__title {
     color: var(--black);
-
-    @include typography.heading-3;
-
-    @include responsive.apply-desktop {
-      @include typography.bold-body-16;
-    }
   }
 
   &__block {
@@ -61,45 +46,16 @@
     }
   }
 
-  &__controls {
-    display: grid;
-    grid-template-rows: 1fr;
-    overflow: unset;
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      min-height: 0;
-      transition: visibility 0.5s;
-
-      @include responsive.apply-desktop {
-        gap: 5px;
-      }
-    }
-  }
-
   &__age {
     display: flex;
     gap: 10px;
     align-items: center;
 
-    // width: 168px;
     font-size: 12px;
     color: var(--black);
 
     span {
       color: var(--dark-grey);
-
-      @include typography.body-16;
-    }
-  }
-
-  &__autocomplete {
-    flex-grow: 1;
-
-    @include responsive.apply-desktop {
-      flex-grow: unset;
     }
   }
 }

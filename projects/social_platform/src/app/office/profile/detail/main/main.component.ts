@@ -37,6 +37,7 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { NewsFormComponent } from "@office/features/news-form/news-form.component";
 import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 import { ProfileDataService } from "../services/profile-date.service";
+import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
 
 /**
  * Главный компонент страницы профиля пользователя
@@ -81,6 +82,7 @@ import { ProfileDataService } from "../services/profile-date.service";
     AvatarComponent,
     NewsCardComponent,
     NewsFormComponent,
+    SoonCardComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
