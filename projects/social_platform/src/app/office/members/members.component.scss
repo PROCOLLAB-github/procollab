@@ -3,9 +3,9 @@
 .page {
   &__bar {
     display: grid;
+    grid-template-columns: 8fr 2fr;
     grid-gap: 20px;
     justify-content: space-between;
-    grid-template-columns: 8fr 2fr;
   }
 
   &__list {
@@ -21,7 +21,6 @@
       grid-template-columns: repeat(4, 2fr);
     }
   }
-
 
   &__info {
     display: flex;

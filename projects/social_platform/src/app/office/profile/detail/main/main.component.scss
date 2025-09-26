@@ -337,16 +337,17 @@
     }
 
     &--more {
-      color: var(--accent);
       margin-top: 8px;
+      color: var(--accent);
     }
 
-    i, .lists__index {
-      width: 20px;
-      height: 20px;
+    i,
+    .lists__index {
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 20px;
+      height: 20px;
       background-color: var(--light-white);
       border: 0.5px solid var(--medium-grey-for-outline);
       border-radius: var(--rounded-xl);
