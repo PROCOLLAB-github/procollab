@@ -6,9 +6,9 @@
 
   &__name {
     overflow: hidden;
+    color: var(--black);
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: var(--black);
 
     span {
       cursor: pointer;
@@ -20,19 +20,19 @@
   }
 
   &__download {
-    width: 20px;
-    height: 20px;
-    border-radius: var(--rounded-xl);
     display: flex;
     align-items: center;
-    justify-content: center;
     align-self: center;
-    border: 0.5px solid var(--medium-grey-for-outline);
+    justify-content: center;
+    width: 20px;
+    height: 20px;
     margin-right: 6px;
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-xl);
   }
 
   i {
-    cursor: pointer;
     color: var(--accent);
+    cursor: pointer;
   }
 }
