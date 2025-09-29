@@ -17,7 +17,7 @@ $button-size: 40px;
 
   &__field {
     flex-grow: 1;
-    padding-right: 30px;
+    background: transparent;
     color: var(--dark);
     resize: none;
     border: none;
@@ -29,16 +29,11 @@ $button-size: 40px;
   }
 
   &__attach-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: $button-size;
-    height: $button-size;
-    margin-left: auto;
+    margin-right: 12px;
     color: var(--dark-grey);
+    opacity: 0.5;
     cursor: pointer;
-    border: 1px solid var(--gray);
-    border-radius: 8px;
+    border-radius: var(--rounded-xl);
 
     input {
       display: none;
@@ -46,16 +41,11 @@ $button-size: 40px;
   }
 
   &__send-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: $button-size;
-    height: $button-size;
-    margin-left: 18px;
+    padding: 8px;
     color: var(--white);
     cursor: pointer;
     background-color: var(--accent);
-    border-radius: 8px;
+    border-radius: var(--rounded-xl);
     transition: background-color 0.2s;
 
     &:hover {

@@ -42,7 +42,7 @@
         class="file__basket"
         appIcon
         icon="basket"
-        appSquare="24"
+        appSquare="12"
         (click)="onDeleteFile(index)"
       ></i>
       }
@@ -51,7 +51,7 @@
   </ul>
   } @if (editingMessage) {
   <div class="message-input__action action">
-    <i class="action__icon" appIcon icon="edit-pen" appSquare="24"></i>
+    <i class="action__icon" appIcon icon="edit-pen" appSquare="12"></i>
     <div class="action__text">
       <div class="action__name text-body-12">
         {{ editingMessage.author.firstName }} {{ editingMessage.author.lastName }}
@@ -85,16 +85,16 @@
       [placeholder]="placeholder"
       rows="1"
       [value]="value.text"
-      class="message-input__field text-body-14"
+      class="message-input__field text-body-12"
     ></textarea>
-    <label class="message-input__attach-button text-bold-body-14">
+    <label class="message-input__attach-button text-bold-body-12">
       <input type="file" multiple accept="*/*" (input)="onUpload($event)" />
       <div class="message-input__attach-button-box">
-        <i appIcon icon="attach" appSquare="24"></i>
+        <i appIcon icon="attach" appSquare="25"></i>
       </div>
     </label>
     <button class="message-input__send-button" (click)="submit.emit()">
-      <i appIcon icon="send" appSquare="24"></i>
+      <i appIcon icon="send" appSquare="10"></i>
     </button>
   </div>
   @if (showDropModal) {
@@ -108,8 +108,8 @@
         width="105px"
         height="105px"
       />
-      <h3 class="drop-modal__title text-bold-body-16">Перетащите сюда файлы для отправки</h3>
-      <p class="drop-modal__comments text-body-14">
+      <h3 class="drop-modal__title text-body-12">Перетащите сюда файлы для отправки</h3>
+      <p class="drop-modal__comments text-body-10">
         Вы можете добавить к ним комментарий или отправить отдельно
       </p>
     </div>

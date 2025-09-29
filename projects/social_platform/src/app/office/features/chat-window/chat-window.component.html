@@ -18,9 +18,10 @@
       *cdkVirtualFor="let message of messages"
     ></app-chat-message>
   </cdk-virtual-scroll-viewport>
+
   <form class="chat__input" [formGroup]="messageForm">
     @if (typingPersons.length) {
-    <span class="chat__typing text-body-14">
+    <span class="chat__typing text-body-10">
       @for (person of typingPersons.slice(0, 3); let last = $last; track person.userId) {
       {{ person.firstName }} {{ person.lastName }} @if (!last) { , } } @if (typingPersons.length >
       3) { и еще {{ typingPersons.length - 3 }}
@@ -36,7 +37,7 @@
       (resize)="onInputResize()"
       (cancel)="onCancelInput()"
       (submit)="onSubmitMessage()"
-      placeholder="Введите сообщение"
+      placeholder="сегодня был хороший день"
       formControlName="messageControl"
     ></app-message-input>
   </form>

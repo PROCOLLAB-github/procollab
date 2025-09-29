@@ -72,6 +72,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   isTeamPage = false;
   isVacanciesPage = false;
+  isProjectChatPage = false;
 
   // Сторонние переменные для работы с роутингом или доп проверок
   backPath?: string;
@@ -115,21 +116,22 @@ export class DeatilComponent implements OnInit, OnDestroy {
       this.updatePageStates(url);
     });
 
+    this.initializeInfo();
+
     const profileInfoSub$ = this.authService.profile.subscribe({
       next: profile => {
-        this.isInProject = this.info?.collaborators
-          .map((person: Collaborator) => person.userId)
-          .includes(profile.id);
+        if (this.info) {
+          this.isInProject = this.info?.collaborators
+            .map((person: Collaborator) => person.userId)
+            .includes(profile.id);
+        }
+
         this.profile = profile;
       },
     });
 
-    this.initializeInfo();
-
     profileInfoSub$ && this.subscriptions.push(profileInfoSub$);
     listTypeSub$ && this.subscriptions.push(listTypeSub$);
-
-    console.log(this.info.id, this.profile?.id);
   }
 
   ngOnDestroy(): void {
@@ -301,10 +303,14 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
     this.isProjectsPage =
       currentUrl.includes("/projects") && !currentUrl.includes("/projects-rating");
+
     this.isMembersPage = currentUrl.includes("/members");
+
     this.isProjectsRatingPage = currentUrl.includes("/projects-rating");
+
     this.isTeamPage = currentUrl.includes("/team");
     this.isVacanciesPage = currentUrl.includes("/vacancies");
+    this.isProjectChatPage = currentUrl.includes("/chat");
   }
 
   private initializeInfo() {

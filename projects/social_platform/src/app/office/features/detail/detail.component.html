@@ -242,28 +242,35 @@
         </ng-template>
 
         <ng-template #projectTpl>
-          @if (info.presentationAddress) {
+          @if (!isInProject && profile?.userType !== 1) { @if (info.presentationAddress) {
           <a class="info__presentation" [href]="info.presentationAddress" target="_blank">
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
               <span>презентация</span>
               <i appIcon icon="arrow-down" appSquare="6"></i>
             </app-button>
           </a>
-          } @else {
+          } } @else {
           <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
             рабочая зона
           </app-button>
-          } @if (profile) { @if (profile.userType !== 1 && !(isInProject)) {
+          } @if (profile) { @if (!isInProject) {
           <app-button
+            [disabled]="true"
+            style="opacity: 0.5"
             appearance="outline"
             size="medium"
             customTypographyClass="text-body-12"
-            (click)="openSupport = true"
           >
             написать
           </app-button>
           } @else {
-          <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+          <app-button
+            [appearance]="isProjectChatPage ? 'inline' : 'outline'"
+            [routerLink]="'/office/projects/' + info.id + '/chat'"
+            appearance="outline"
+            size="medium"
+            customTypographyClass="text-body-12"
+          >
             чат проекта
           </app-button>
           } }
@@ -295,15 +302,6 @@
             customTypographyClass="text-body-12"
           >
             команда
-          </app-button>
-
-          <app-button
-            [routerLink]="'/office/projects/' + info.id + '/vacancies'"
-            [appearance]="isVacanciesPage ? 'inline' : 'outline'"
-            size="medium"
-            customTypographyClass="text-body-12"
-          >
-            вакансии
           </app-button>
 
           @if (isInProject) {
@@ -341,6 +339,15 @@
               </div>
             </div>
           </app-modal>
+          } @else {
+          <app-button
+            [routerLink]="'/office/projects/' + info.id + '/vacancies'"
+            [appearance]="isVacanciesPage ? 'inline' : 'outline'"
+            size="medium"
+            customTypographyClass="text-body-12"
+          >
+            вакансии
+          </app-button>
           }
         </ng-template>
 
