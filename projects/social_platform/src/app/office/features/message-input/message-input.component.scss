@@ -7,7 +7,7 @@ $button-size: 40px;
 
 .message-input {
   padding: 12px;
-  border: 1px solid var(--gray);
+  border: 0.5px solid var(--medium-grey-for-outline);
   border-radius: 8px;
 
   &__control {

@@ -45,6 +45,7 @@ $input-height: 66px + 18px;
 .main {
   display: flex;
   flex-direction: column;
+  background-color: var(--light-white);
 
   &__chat {
     display: none;

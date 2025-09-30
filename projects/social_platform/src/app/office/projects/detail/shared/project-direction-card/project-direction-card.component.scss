@@ -12,6 +12,11 @@
   background-color: var(--light-white);
   border: 0.5px solid var(--medium-grey-for-outline);
   border-radius: var(--rounded-xl);
+  transition: 0.2s box-shadow ease-in-out;
+
+  &:hover {
+    box-shadow: 1px 3px 5px var(--medium-grey-for-outline);
+  }
 
   &__icon {
     position: absolute;
@@ -27,7 +32,7 @@
 
   &__text {
     width: 130%;
-    color: var(--grey-button);
+    color: var(--grey-for-text);
   }
 }
 

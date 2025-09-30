@@ -394,7 +394,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
           next: () => {
             this.snackBarService.success("данные успешно сохранены");
             this.setProjFormIsSubmitting(false);
-            this.router.navigateByUrl(`/office/projects/my`);
+            this.router.navigateByUrl(`/office/projects/${projectId}`);
           },
         });
       },

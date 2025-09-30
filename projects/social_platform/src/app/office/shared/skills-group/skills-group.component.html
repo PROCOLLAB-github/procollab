@@ -11,7 +11,7 @@
     <i appIcon icon="arrow-no-body" appWidth="18" appHeight="9" appViewBox="0 0 18 9"></i>
   </div>
   @if (contentVisible()) {
-  <div class="content">
+  <div class="content" [class.content--open]="hasOpenGroups">
     @for (opt of options; track opt.id) {
     <div
       class="content__option"

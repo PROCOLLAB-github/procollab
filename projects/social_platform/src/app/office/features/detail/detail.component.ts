@@ -296,6 +296,25 @@ export class DeatilComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Перенаправляет на страницу с информацией в завивисимости от listType
+   */
+  redirectDetailInfo(): void {
+    switch (this.listType) {
+      case "profile":
+        this.router.navigateByUrl(`/office/profile/${this.info.id}`);
+        break;
+
+      case "project":
+        this.router.navigateByUrl(`/office/projects/${this.info.id}`);
+        break;
+
+      case "program":
+        this.router.navigateByUrl(`/office/program/${this.info.id}`);
+        break;
+    }
+  }
+
+  /**
    * Обновляет состояния страниц на основе URL
    */
   private updatePageStates(url?: string): void {

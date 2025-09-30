@@ -29,7 +29,7 @@ export class LoaderComponent implements OnInit {
   @Input() speed = "1s";
 
   /** Размер индикатора */
-  @Input() size = "30px";
+  @Input() size = "15px";
 
   /** Цвет индикатора */
   @Input() color = "white";

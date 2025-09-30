@@ -94,7 +94,7 @@
               id="salary"
               formControlName="salary"
               [error]="(salary | controlError) && vacancySubmitInitiated()"
-              placeholder="Заработная плата"
+              placeholder="заработная плата"
             ></app-input>
             @if ((salary | controlError: "required") && vacancySubmitInitiated()) {
             <div class="text-body-10 error">

@@ -53,6 +53,10 @@
     flex-direction: column;
     gap: 14px;
 
+     &--open {
+      width: 40%;
+     }
+
     &__option {
       display: flex;
       gap: 10px;
@@ -80,7 +84,7 @@
       justify-content: center;
       width: 20px;
       height: 20px;
-      border: 2px solid var(--gray);
+      border: 1px solid var(--gray);
       border-radius: var(--rounded-sm);
       transition: all 0.2s ease;
 
@@ -101,6 +105,7 @@
     }
 
     i {
+      transform: rotate(0deg) !important;
       color: var(--white);
     }
   }

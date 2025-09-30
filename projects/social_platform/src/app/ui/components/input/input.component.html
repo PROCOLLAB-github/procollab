@@ -26,10 +26,11 @@
     [name]="name"
     [dropSpecialCharacters]="true"
     class="field__input"
-    [class.field__input--small]="size === 'small'"
-    [class.field__input--big]="size === 'big'"
     [class.field__input--error]="error"
-    [class.field__input--with-tooltip]="size !== 'small'"
+    [class.field__input--small]="size === 'small'"
+    [class.field__input--small--error]="size === 'small' && error"
+    [class.field__input--big]="size === 'big'"
+    [class.field__input--with-tooltip]="size !== 'small' && haveHint"
     [class.field__input--border]="hasBorder"
   />
   } @if (error) {
@@ -39,7 +40,7 @@
     icon="error"
     appSquare="20"
     [ngStyle]="{
-      right: size === 'small' ? '10px' : '26px'
+      right: size === 'small' ? '6px' : '16px'
     }"
   ></i>
   } @else if (haveHint && tooltipText) {

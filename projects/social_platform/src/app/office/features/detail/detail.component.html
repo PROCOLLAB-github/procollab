@@ -19,7 +19,11 @@
           "
           alt="cover"
         />
-        <div class="info__avatar" [class.info__avatar--program]="listType === 'program'">
+        <div
+          class="info__avatar"
+          (click)="redirectDetailInfo()"
+          [class.info__avatar--program]="listType === 'program'"
+        >
           @if (chatService.userOnlineStatusCache | async; as cache) {
           <app-avatar
             [url]="listType === 'profile' ? info.avatar : info.imageAddress"
