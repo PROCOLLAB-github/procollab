@@ -275,25 +275,7 @@
           </app-button>
           } }
 
-          <a
-            class="info__edit"
-            [routerLink]="
-              isEditDisable ? ['/office/projects', info.id] : ['/office/projects', info.id, 'edit']
-            "
-            [queryParams]="isEditDisable ? {} : { editingStep: 'main' }"
-          >
-            @if (profile) { @if (profile.id === info.leader) {
-            <app-button
-              appearance="outline"
-              customTypographyClass="text-body-12"
-              (click)="onUnableEditingProject()"
-              [ngStyle]="{ opacity: isEditDisable ? '0.5' : '1' }"
-              [color]="isEditDisable ? 'grey' : 'primary'"
-            >
-              редактировать
-            </app-button>
-            } }
-          </a>
+          <div class="info__divider"></div>
 
           <app-button
             [routerLink]="'/office/projects/' + info.id + '/team'"
@@ -304,7 +286,26 @@
             команда
           </app-button>
 
-          @if (isInProject) {
+          @if (isInProject) { @if (profile) { @if (profile.id === info.leader) {
+          <a
+            class="info__edit"
+            [routerLink]="
+              isEditDisable ? ['/office/projects', info.id] : ['/office/projects', info.id, 'edit']
+            "
+            [queryParams]="isEditDisable ? {} : { editingStep: 'main' }"
+          >
+            <app-button
+              appearance="outline"
+              size="medium"
+              customTypographyClass="text-body-12"
+              (click)="onUnableEditingProject()"
+              [ngStyle]="{ opacity: isEditDisable ? '0.5' : '1' }"
+              [color]="isEditDisable ? 'grey' : 'primary'"
+            >
+              редактировать
+            </app-button>
+          </a>
+          }@else {
           <app-button
             appearance="outline"
             color="red"
@@ -314,6 +315,7 @@
           >
             выйти из проекта
           </app-button>
+          } }
 
           <app-modal [(open)]="isLeaveProjectModalOpen">
             <div class="unsubscribe-modal">

@@ -16,11 +16,11 @@
     <div class="card__info">
       <div class="card__info--vacancies">
         <p class="text-body-6">12</p>
-        <i appIcon icon="suitcase" appSquare="4"></i>
+        <i appIcon icon="suitcase" appSquare="6"></i>
       </div>
       <div class="card__info--collaborators">
         <p class="text-body-6">12</p>
-        <i appIcon icon="team" appSquare="4"></i>
+        <i appIcon icon="team" appSquare="6"></i>
       </div>
     </div>
     } @if (shouldShowSubscriptionBadge()) {
@@ -28,8 +28,8 @@
       <i
         appIcon
         [icon]="isSubscribed ? 'subscribe-badge' : 'unsubscribe-badge'"
-        appWidth="12"
-        appHeight="18"
+        appWidth="18"
+        appHeight="34"
         class="card__subscribe-badge"
         (click)="toggleSubscription($event)"
       ></i>
@@ -77,9 +77,11 @@
 </ng-template>
 
 <ng-template #regularCardHeader>
-  @if (type === 'projects') {
-  <p class="text-body-12 card__name">{{ info?.name }}</p>
-  @if (industryService.industries | async; as industries) {
+  @if (type === 'projects') { @if (info.name) { @if(info.name.length > 12) {
+  <p class="text-body-12 card__name">{{ info.name.slice(0, 12) }}...</p>
+  } @else {
+  <p class="text-body-12 card__name">{{ info.name }}</p>
+  } } @if (industryService.industries | async; as industries) {
   <p class="text-body-6 card__industry">
     @if (industryService.getIndustry(industries, info?.industry!); as industry) {
     <span>{{ industry?.name }}</span>
@@ -100,8 +102,7 @@
 <ng-template #cardDescription>
   <div
     class="card__description"
-    [style.max-height]="type === 'members' ? '50px' : '20px'"
-    [style.]
+    [style.max-height]="type === 'members' ? '50px' : '24px'"
     [class.invite-description]="type === 'invite'"
   >
     @if (type === 'invite') {
