@@ -53,9 +53,9 @@
     flex-direction: column;
     gap: 14px;
 
-     &--open {
+    &--open {
       width: 40%;
-     }
+    }
 
     &__option {
       display: flex;
@@ -105,8 +105,8 @@
     }
 
     i {
-      transform: rotate(0deg) !important;
       color: var(--white);
+      transform: rotate(0deg) !important;
     }
   }
 }
