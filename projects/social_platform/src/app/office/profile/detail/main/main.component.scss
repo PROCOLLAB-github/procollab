@@ -321,8 +321,8 @@
 
     &--line {
       display: flex;
-      gap: 10px;
       flex-flow: wrap;
+      gap: 10px;
     }
   }
 
@@ -364,10 +364,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 0.5px solid var(--medium-grey-for-outline);
     width: 45px;
     height: 45px;
     padding: 5px;
+    border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-xl);
   }
 
@@ -467,7 +467,7 @@
   }
 
   &__text {
-    color: var(--black);
     margin-bottom: 8px;
+    color: var(--black);
   }
 }
