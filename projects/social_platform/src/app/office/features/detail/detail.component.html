@@ -6,15 +6,15 @@
   </section>
 
   <div class="detail__body">
-    @if (info) {
+    @if (info()) {
     <div class="info detail__section detail__info">
       <div class="info__cover" [class.info__cover--program]="listType === 'program'">
         <img
           class="info__cover"
           [class.info__cover--program]="listType === 'program'"
           [src]="
-            info.coverImageAddress
-              ? info.coverImageAddress
+            info().coverImageAddress
+              ? info().coverImageAddress
               : '/assets/images/office/profile/detail/cover.png'
           "
           alt="cover"
@@ -26,19 +26,25 @@
         >
           @if (chatService.userOnlineStatusCache | async; as cache) {
           <app-avatar
-            [url]="listType === 'profile' ? info.avatar : info.imageAddress"
+            [url]="listType === 'profile' ? info().avatar : info().imageAddress"
             [hasBorder]="true"
             [borderColor]="listType === 'project' ? 'white' : 'dark-grey'"
-            [progress]="info.progress"
+            [progress]="info().progress"
             [onlineBadgeSize]="15"
             [onlineBadgeBorder]="0"
             [onlineBadgeOffset]="8"
             [size]="listType === 'project' || listType === 'profile' ? 110 : 123"
-            [isOnline]="cache[info.id] !== undefined ? cache[info.id] : info.isOnline"
+            [isOnline]="cache[info().id] !== undefined ? cache[info().id] : info().isOnline"
           ></app-avatar>
           @if (listType === 'project' || listType === 'profile') {
           <h1 class="info__title text-body-12">
-            {{ listType === "project" ? info.name : info.firstName + " " + info.lastName }}
+            {{
+              listType === "project"
+                ? info().name
+                : listType === "profile"
+                ? info().firstName + " " + info().lastName
+                : ""
+            }}
           </h1>
           } }
         </div>
@@ -55,14 +61,14 @@
 
         <ng-template #programTpl>
           @if (!isUserMember && !isUserManager && !registerDateExpired) { @if
-          (info.name.includes("Кейс-чемпионат MIR")) {
+          (info().name.includes("Кейс-чемпионат MIR")) {
           <a href="https://case-champ.ru/corporate#rec1176757836">
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
               зарегистрироваться
             </app-button>
           </a>
           } @else {
-          <a [routerLink]="['/office/program', info.id, 'register']">
+          <a [routerLink]="['/office/program', info().id, 'register']">
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
               зарегистрироваться
             </app-button>
@@ -77,7 +83,7 @@
             <i appIcon icon="plus" appSquare="10"></i>
           </app-button>
           } @else if (isUserManager) {
-          <a [routerLink]="'/office/program/' + info.id + '/projects-rating'">
+          <a [routerLink]="'/office/program/' + info().id + '/projects-rating'">
             <app-button
               [appearance]="isProjectsRatingPage ? 'inline' : 'outline'"
               size="medium"
@@ -90,7 +96,7 @@
 
           <a
             class="info__presentation"
-            [href]="info.presentationAddress"
+            [href]="info().presentationAddress"
             download=""
             target="_blank"
           >
@@ -102,7 +108,7 @@
               customTypographyClass="text-body-12"
             >
               <span>{{
-                info.name.includes("Технолидеры Будущего")
+                info().name.includes("Технолидеры Будущего")
                   ? "Каталог лучших стартапов 2022/23"
                   : isUserManager
                   ? "аналитика"
@@ -138,7 +144,7 @@
             </app-button>
           </a>
           } @else {
-          <a [routerLink]="'/office/program/' + info.id + '/projects'">
+          <a [routerLink]="'/office/program/' + info().id + '/projects'">
             <app-button
               [appearance]="isProjectsPage ? 'inline' : 'outline'"
               size="medium"
@@ -159,7 +165,7 @@
             </app-button>
           </a>
           } @else {
-          <a [routerLink]="'/office/program/' + info.id + '/members'">
+          <a [routerLink]="'/office/program/' + info().id + '/members'">
             <app-button
               [appearance]="isMembersPage ? 'inline' : 'outline'"
               size="medium"
@@ -246,8 +252,8 @@
         </ng-template>
 
         <ng-template #projectTpl>
-          @if (!isInProject && profile?.userType !== 1) { @if (info.presentationAddress) {
-          <a class="info__presentation" [href]="info.presentationAddress" target="_blank">
+          @if (!isInProject && profile?.userType !== 1) { @if (info().presentationAddress) {
+          <a class="info__presentation" [href]="info().presentationAddress" target="_blank">
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
               <span>презентация</span>
               <i appIcon icon="arrow-down" appSquare="6"></i>
@@ -270,7 +276,7 @@
           } @else {
           <app-button
             [appearance]="isProjectChatPage ? 'inline' : 'outline'"
-            [routerLink]="'/office/projects/' + info.id + '/chat'"
+            [routerLink]="'/office/projects/' + info().id + '/chat'"
             appearance="outline"
             size="medium"
             customTypographyClass="text-body-12"
@@ -282,7 +288,7 @@
           <div class="info__divider"></div>
 
           <app-button
-            [routerLink]="'/office/projects/' + info.id + '/team'"
+            [routerLink]="'/office/projects/' + info().id + '/team'"
             [appearance]="isTeamPage ? 'inline' : 'outline'"
             size="medium"
             customTypographyClass="text-body-12"
@@ -290,11 +296,13 @@
             команда
           </app-button>
 
-          @if (isInProject) { @if (profile) { @if (profile.id === info.leader) {
+          @if (isInProject) { @if (profile) { @if (profile.id === info().leader) {
           <a
             class="info__edit"
             [routerLink]="
-              isEditDisable ? ['/office/projects', info.id] : ['/office/projects', info.id, 'edit']
+              isEditDisable
+                ? ['/office/projects', info().id]
+                : ['/office/projects', info().id, 'edit']
             "
             [queryParams]="isEditDisable ? {} : { editingStep: 'main' }"
           >
@@ -347,7 +355,7 @@
           </app-modal>
           } @else {
           <app-button
-            [routerLink]="'/office/projects/' + info.id + '/vacancies'"
+            [routerLink]="'/office/projects/' + info().id + '/vacancies'"
             [appearance]="isVacanciesPage ? 'inline' : 'outline'"
             size="medium"
             customTypographyClass="text-body-12"
@@ -359,8 +367,7 @@
 
         <ng-template #profileTpl>
           @if (profile) {
-          <div class="profile__btns">
-            <a class="profile__cv">
+          <!-- <a class="profile__cv">
               @if(isSubscriptionActive()){
               <app-button
                 (click)="sendCVEmail()"
@@ -370,47 +377,74 @@
                 Скачать CV
               </app-button>
               }
-            </a>
+            </a> -->
 
-            @if (+profile.id !== +info.id) {
-            <a
-              class="info__send-message"
-              [routerLink]="['/office/chats', profile.id + '_' + info.id]"
+          <app-button
+            style="opacity: 0.5"
+            size="medium"
+            appearance="outline"
+            [disabled]="true"
+            customTypographyClass="text-body-12"
+            >подтвердить навыки</app-button
+          >
+
+          <app-button
+            style="opacity: 0.5"
+            size="medium"
+            appearance="outline"
+            [disabled]="true"
+            customTypographyClass="text-body-12"
+            >поделится профилем</app-button
+          >
+
+          <div class="info__divider"></div>
+
+          <app-button
+            style="opacity: 0.5"
+            size="medium"
+            appearance="outline"
+            [disabled]="true"
+            customTypographyClass="text-body-12"
+            >пригласить</app-button
+          >
+
+          @if (+profile.id !== +info().id) {
+          <a
+            class="info__send-message"
+            [routerLink]="['/office/chats', profile.id + '_' + info().id]"
+          >
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
+              >написать</app-button
             >
-              <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
-                >написать</app-button
+          </a>
+          } @else {
+          <a
+            class="profile__edit"
+            routerLink="/office/profile/edit"
+            [queryParams]="{ editingStep: 'main' }"
+          >
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+              {{
+                info().progress! === 100 ? "редактировать профиль" : "закончить заполнение резюме"
+              }}
+              @if (info().progress !== 100) {
+              <i
+                appIcon
+                icon="accent-error"
+                appSquare="16"
+                (mouseenter)="showTooltip()"
+                (mouseleave)="hideTooltip()"
+                style="color: var(--accent); margin-left: 5px"
+              ></i>
+              <span
+                class="profile__tooltip text-body-12"
+                [class.profile__tooltip--visible]="isTooltipVisible"
+                >{{ tooltipText }}</span
               >
-            </a>
-            } @else {
-            <a
-              class="profile__edit"
-              routerLink="/office/profile/edit"
-              [queryParams]="{ editingStep: 'main' }"
-            >
-              <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
-                {{
-                  info.progress! === 100 ? "редактировать профиль" : "закончить заполнение резюме"
-                }}
-                @if (info.progress !== 100) {
-                <i
-                  appIcon
-                  icon="accent-error"
-                  appSquare="16"
-                  (mouseenter)="showTooltip()"
-                  (mouseleave)="hideTooltip()"
-                  style="color: var(--accent); margin-left: 5px"
-                ></i>
-                <span
-                  class="profile__tooltip text-body-12"
-                  [class.profile__tooltip--visible]="isTooltipVisible"
-                  >{{ tooltipText }}</span
-                >
-                }
-              </app-button>
-            </a>
-            }
-          </div>
-          } @if (profile) { @if (profile.id === info.id) {
+              }
+            </app-button>
+          </a>
+          } } @if (profile) { @if (profile.id === info().id) {
           <app-modal [open]="isProfileFill" (openChange)="isProfileFill = !isProfileFill">
             <div class="cancel">
               <img

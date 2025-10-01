@@ -82,8 +82,15 @@ export class ProjectService {
   /**
    * Отправляем цель
    */
-  postGoals(projectId: number, params: GoalPostForm) {
-    return this.apiService.post<GoalPostForm>(`${this.PROJECTS_URL}/${projectId}/goals/`, params);
+  postGoals(projectId: number, params: GoalPostForm[]) {
+    return this.apiService.post<GoalPostForm[]>(`${this.PROJECTS_URL}/${projectId}/goals/`, params);
+  }
+
+  /**
+   * Редактирование цели
+   */
+  editGoal(projectId: number, goalId: number, params: GoalPostForm) {
+    return this.apiService.post(`${this.PROJECTS_URL}/${projectId}/goals/${goalId}`, params);
   }
 
   /**

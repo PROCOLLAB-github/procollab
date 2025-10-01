@@ -38,6 +38,8 @@ import { NewsFormComponent } from "@office/features/news-form/news-form.componen
 import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 import { ProfileDataService } from "../services/profile-date.service";
 import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
+import { ProjectDirectionCard } from "@office/projects/detail/shared/project-direction-card/project-direction-card.component";
+import { DirectionItem, directionItemBuilder } from "@utils/helpers/directionItemBuilder";
 
 /**
  * Главный компонент страницы профиля пользователя
@@ -83,6 +85,7 @@ import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component"
     NewsCardComponent,
     NewsFormComponent,
     SoonCardComponent,
+    ProjectDirectionCard,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -97,6 +100,8 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   user?: User;
   loggedUserId?: number;
 
+  directions: DirectionItem[] = [];
+
   subscriptions$: Subscription[] = [];
   /**
    * Инициализация компонента
@@ -108,6 +113,14 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(filter(user => !!user))
       .subscribe({
         next: user => {
+          if (user) {
+            this.directions = directionItemBuilder(
+              2,
+              ["навыки", "достижения"],
+              ["squiz", "medal"],
+              ["", ""]
+            )!;
+          }
           this.user = user as User;
         },
       });
@@ -176,6 +189,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   readAllModal = false;
 
   approveOwnSkillModal = false;
+  isShowModal = false;
 
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
@@ -339,5 +353,9 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onCloseModal(skillId: number) {
     this.openSkills[skillId] = false;
+  }
+
+  openWorkInfoModal(): void {
+    this.isShowModal = true;
   }
 }

@@ -55,7 +55,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   public readonly chatService = inject(ChatService);
 
   // Основные данные(типы данных, данные)
-  info?: any;
+  info = signal<any | undefined>(undefined);
   loggedUserId?: number;
   profile?: User;
   listType: "project" | "program" | "profile" = "project";
@@ -118,20 +118,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
     this.initializeInfo();
 
-    const profileInfoSub$ = this.authService.profile.subscribe({
-      next: profile => {
-        if (this.info) {
-          this.isInProject = this.info?.collaborators
-            .map((person: Collaborator) => person.userId)
-            .includes(profile.id);
-        }
-
-        this.profile = profile;
-      },
-    });
-
-    profileInfoSub$ && this.subscriptions.push(profileInfoSub$);
-    listTypeSub$ && this.subscriptions.push(listTypeSub$);
+    this.subscriptions.push(listTypeSub$);
   }
 
   ngOnDestroy(): void {
@@ -141,13 +128,13 @@ export class DeatilComponent implements OnInit, OnDestroy {
   // Геттеры для работы с отображением данных разного типа доступа
   get isUserManager() {
     if (this.listType === "program") {
-      return this.info.isUserManager;
+      return this.info().isUserManager;
     }
   }
 
   get isUserMember() {
     if (this.listType === "program") {
-      return this.info.isUserMember;
+      return this.info().isUserMember;
     }
   }
 
@@ -210,7 +197,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
    * Перенаправление её на редактирование "нового" проекта
    */
   assignProjectToProgram(project: Project): void {
-    if (this.info.id) {
+    if (this.info().id) {
       this.projectService
         .assignProjectToProgram(project.id, Number(this.route.snapshot.params["programId"]))
         .subscribe({
@@ -301,15 +288,15 @@ export class DeatilComponent implements OnInit, OnDestroy {
   redirectDetailInfo(): void {
     switch (this.listType) {
       case "profile":
-        this.router.navigateByUrl(`/office/profile/${this.info.id}`);
+        this.router.navigateByUrl(`/office/profile/${this.info().id}`);
         break;
 
       case "project":
-        this.router.navigateByUrl(`/office/projects/${this.info.id}`);
+        this.router.navigateByUrl(`/office/projects/${this.info().id}`);
         break;
 
       case "program":
-        this.router.navigateByUrl(`/office/program/${this.info.id}`);
+        this.router.navigateByUrl(`/office/program/${this.info().id}`);
         break;
     }
   }
@@ -334,18 +321,17 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   private initializeInfo() {
     if (this.listType === "project") {
-      // Подписка на данные проекта из резолвера
       const projectSub$ = this.projectDataService.project$
         .pipe(filter(project => !!project))
         .subscribe(project => {
-          this.info = project;
+          this.info.set(project);
 
           if (project?.partnerProgram) {
             this.isEditDisable = project.partnerProgram?.isSubmitted;
           }
         });
 
-      projectSub$ && this.subscriptions.push(projectSub$);
+      this.subscriptions.push(projectSub$);
     } else if (this.listType === "program") {
       const program$ = this.programDataService.program$
         .pipe(
@@ -353,7 +339,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
           tap(program => {
             if (program) {
-              this.info = program;
+              this.info.set(program);
               this.registerDateExpired = Date.now() > Date.parse(program.datetimeRegistrationEnds);
             }
           })
@@ -377,11 +363,23 @@ export class DeatilComponent implements OnInit, OnDestroy {
         )
         .subscribe({
           next: user => {
-            this.info = user as User;
+            this.info.set(user);
             this.isProfileFill =
               user.progress! < 100 ? (this.isProfileFill = true) : (this.isProfileFill = false);
           },
         });
+
+      const profileInfoSub$ = this.authService.profile.subscribe({
+        next: profile => {
+          this.profile = profile;
+
+          if (this.info()) {
+            this.isInProject = this.info()
+              ?.collaborators.map((person: Collaborator) => person.userId)
+              .includes(profile.id);
+          }
+        },
+      });
 
       const profileIdDataSub$ = this.profileDataService
         .getProfileId()
@@ -396,8 +394,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
         this.isSubscriptionActive.set(r.isSubscribed);
       });
 
-      profileDataSub$ && this.subscriptions.push(profileDataSub$);
-      profileIdDataSub$ && this.subscriptions.push(profileIdDataSub$);
+      this.subscriptions.push(profileDataSub$, profileIdDataSub$, profileInfoSub$);
     }
   }
 

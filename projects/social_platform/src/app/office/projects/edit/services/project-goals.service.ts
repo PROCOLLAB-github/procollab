@@ -298,50 +298,24 @@ export class ProjectGoalService {
   public saveGoals(projectId: number) {
     const goals = this.getGoalsData();
 
-    const newGoalsWithIndex = goals
-      .map((g: any, idx: number) => ({ g, idx }))
-      .filter(item => !item.g.id);
-
-    if (newGoalsWithIndex.length === 0) {
-      return of([]);
-    }
-
-    const requests = newGoalsWithIndex.map(item => {
-      const payload: GoalPostForm = {
-        title: item.g.title,
-        completionDate: item.g.completionDate,
-        responsible: item.g.responsible,
-        isDone: item.g.isDone,
-      };
-
-      return this.projectService.postGoals(projectId, payload).pipe(
-        map((res: any) => ({ res, idx: item.idx })),
-        catchError(err => of({ __error: true, err, original: item.g, idx: item.idx }))
-      );
-    });
-
-    return forkJoin(requests).pipe(
+    return this.projectService.postGoals(projectId, goals).pipe(
       tap(results => {
-        results.forEach((r: any) => {
-          if (r && r.__error) {
-            console.error("Failed to post goal", r.err, "original:", r.original);
-            return;
-          }
-
-          const created = r.res;
-          const idx = r.idx;
-
-          if (created && created.id !== undefined && created.id !== null) {
-            const formGroup = this.goals.at(idx);
-            if (formGroup) {
-              formGroup.get("id")?.setValue(created.id);
+        if (Array.isArray(results)) {
+          results.forEach((createdGoal: any, idx: number) => {
+            if (createdGoal && createdGoal.id !== undefined && createdGoal.id !== null) {
+              const formGroup = this.goals.at(idx);
+              if (formGroup) {
+                formGroup.get("id")?.setValue(createdGoal.id);
+              }
             }
-          } else {
-            console.warn("postGoal response has no id field:", r.res);
-          }
-        });
+          });
+        }
 
         this.syncGoalItems(this.goals);
+      }),
+      catchError(err => {
+        console.error("Error saving goals:", err);
+        return of({ __error: true, err, original: goals });
       })
     );
   }

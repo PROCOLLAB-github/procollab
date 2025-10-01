@@ -69,7 +69,7 @@
 
   &__section {
     padding: 24px;
-    margin-bottom: 14px;
+    margin-bottom: 20px;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
@@ -95,6 +95,14 @@
     @include responsive.apply-desktop {
       grid-row-start: unset;
     }
+  }
+
+  &__directions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 3fr;
+    grid-gap: 20px;
+    align-items: center;
+    margin-top: 14px;
   }
 }
 
@@ -309,7 +317,13 @@
   &__list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
+
+    &--line {
+      display: flex;
+      gap: 10px;
+      flex-flow: wrap;
+    }
   }
 
   &__icon {
@@ -319,6 +333,42 @@
   &__title {
     margin-bottom: 8px;
     color: var(--accent);
+  }
+
+  &__index {
+    color: var(--accent);
+  }
+
+  &__logo {
+    border-radius: var(--rounded-xxl);
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+
+    &--text {
+      color: var(--black) !important;
+    }
+
+    &--subtext {
+      color: var(--grey-for-text) !important;
+    }
+
+    &--more {
+      color: var(--accent) !important;
+    }
+  }
+
+  &__date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 0.5px solid var(--medium-grey-for-outline);
+    width: 45px;
+    height: 45px;
+    padding: 5px;
+    border-radius: var(--rounded-xl);
   }
 
   &__item {
@@ -348,6 +398,7 @@
       justify-content: center;
       width: 20px;
       height: 20px;
+      padding-top: 1px;
       background-color: var(--light-white);
       border: 0.5px solid var(--medium-grey-for-outline);
       border-radius: var(--rounded-xl);
@@ -385,5 +436,38 @@
 
   &:hover {
     color: var(--accent-dark);
+  }
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  height: 175px;
+  max-height: calc(100vh - 40px);
+  padding: 24px;
+  overflow-y: auto;
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 0.5px solid var(--accent);
+  }
+
+  &__title {
+    color: var(--accent);
+    text-align: center;
+  }
+
+  &__icon {
+    color: var(--accent);
+  }
+
+  &__text {
+    color: var(--black);
+    margin-bottom: 8px;
   }
 }
