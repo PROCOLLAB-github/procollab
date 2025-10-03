@@ -320,6 +320,50 @@ export class ProjectGoalService {
     );
   }
 
+  public editGoals(projectId: number) {
+    const goals = this.getGoalsData();
+
+    const requests = goals.map(item => {
+      const payload: GoalPostForm = {
+        id: item.id,
+        title: item.title,
+        completionDate: item.completionDate,
+        responsible: item.responsible,
+        isDone: item.isDone,
+      };
+
+      return this.projectService.editGoal(projectId, item.id, payload).pipe(
+        map((res: any) => ({ res, idx: item.idx })),
+        catchError(err => of({ __error: true, err, original: item.g, idx: item.idx }))
+      );
+    });
+
+    return forkJoin(requests).pipe(
+      tap(results => {
+        results.forEach((r: any) => {
+          if (r && r.__error) {
+            console.error("Failed to post goal", r.err, "original:", r.original);
+            return;
+          }
+
+          const created = r.res;
+          const idx = r.idx;
+
+          if (created && created.id !== undefined && created.id !== null) {
+            const formGroup = this.goals.at(idx);
+            if (formGroup) {
+              formGroup.get("id")?.setValue(created.id);
+            }
+          } else {
+            console.warn("postGoal response has no id field:", r.res);
+          }
+        });
+
+        this.syncGoalItems(this.goals);
+      })
+    );
+  }
+
   /**
    * Сбрасывает состояние сервиса
    * Полезно при смене проекта или очистке формы

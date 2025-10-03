@@ -18,6 +18,7 @@ class ResponsibleInfo {
 }
 
 export class GoalPostForm {
+  id?: number;
   title!: string;
   completionDate!: string;
   responsible!: number;

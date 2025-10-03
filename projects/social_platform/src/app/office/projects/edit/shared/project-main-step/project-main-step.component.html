@@ -399,7 +399,9 @@
       <span>добавить краткосрочную цель проекта</span>
       <i appIcon icon="plus" appSquare="12"></i>
     </app-button>
+  </div>
 
+  <div [formGroup]="projectForm">
     @if (hasLinks) {
     <ul formArrayName="links" class="project__links--wrapper">
       @for (control of links.controls; track i; let i = $index) {

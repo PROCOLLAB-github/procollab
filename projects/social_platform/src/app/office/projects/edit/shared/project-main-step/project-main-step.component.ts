@@ -165,9 +165,17 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
     return this.projectContactsService.links;
   }
 
+  get linksItems() {
+    return this.projectContactsService.linksItems;
+  }
+
   // Геттеры для работы с целями
   get goals(): FormArray {
     return this.projectGoalsService.goals;
+  }
+
+  get goalItems() {
+    return this.projectGoalsService.goalItems;
   }
 
   get goalName() {

@@ -8,7 +8,7 @@ import {
   OnInit,
   signal,
 } from "@angular/core";
-import { FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormArray, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ErrorMessage } from "@error/models/error-message";
 import { Invite } from "@models/invite.model";
@@ -31,6 +31,7 @@ import {
   distinctUntilChanged,
   finalize,
   map,
+  switchMap,
   tap,
 } from "rxjs";
 import { CommonModule, AsyncPipe } from "@angular/common";
@@ -103,6 +104,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly projectVacancyService: ProjectVacancyService,
     private readonly projectTeamService: ProjectTeamService,
     private readonly projectAchievementsService: ProjectAchievementsService,
+    private readonly projectGoalsService: ProjectGoalService,
     private readonly snackBarService: SnackbarService,
     private readonly skillsService: SkillsService,
     private readonly projectAdditionalService: ProjectAdditionalService,
@@ -163,6 +165,18 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Сигналы для работы с модальными окнами с текстом
   assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
+
+  // Геттеры для работы с целями
+  get goals(): FormArray {
+    return this.projectGoalsService.goals;
+  }
+
+  /**
+   * Проверяет, есть ли цели для отображения
+   */
+  get hasGoals(): boolean {
+    return this.goals.length > 0;
+  }
 
   ngOnInit(): void {
     this.navService.setNavTitle("Создание проекта");
@@ -388,21 +402,18 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.setProjFormIsSubmitting(true);
 
-    this.projectService.updateProject(projectId, payload).subscribe({
-      next: () => {
-        this.projectGoalService.saveGoals(projectId).subscribe({
-          next: () => {
-            this.snackBarService.success("данные успешно сохранены");
-            this.setProjFormIsSubmitting(false);
-            this.router.navigateByUrl(`/office/projects/${projectId}`);
-          },
-        });
-      },
-      error: () => {
-        this.setProjFormIsSubmitting(false);
-        this.snackBarService.error("ошибка при сохранении данных");
-      },
-    });
+    this.projectService
+      .updateProject(projectId, payload)
+      .pipe(switchMap(() => this.saveOrEditGoals(projectId)))
+      .subscribe({
+        next: () => {
+          this.completeSubmitedProjectForm(projectId);
+        },
+        error: () => {
+          this.setProjFormIsSubmitting(false);
+          this.snackBarService.error("ошибка при сохранении данных");
+        },
+      });
   }
 
   // Методы для работы с модальными окнами
@@ -421,6 +432,21 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   closeAssignProjectToProgramModal(): void {
     this.isAssignProjectToProgramModalOpen.set(false);
+  }
+
+  public saveOrEditGoals(projectId: number) {
+    const goals = this.goals.value;
+    const hasExistingGoals = goals.some((g: GoalPostForm) => g.id);
+
+    return hasExistingGoals
+      ? this.projectGoalService.editGoals(projectId)
+      : this.projectGoalService.saveGoals(projectId);
+  }
+
+  private completeSubmitedProjectForm(projectId: number) {
+    this.snackBarService.success("данные успешно сохранены");
+    this.setProjFormIsSubmitting(false);
+    this.router.navigateByUrl(`/office/projects/${projectId}`);
   }
 
   /**
