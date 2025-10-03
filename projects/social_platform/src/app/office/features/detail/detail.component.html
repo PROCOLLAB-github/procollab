@@ -23,6 +23,7 @@
           class="info__avatar"
           (click)="redirectDetailInfo()"
           [class.info__avatar--program]="listType === 'program'"
+          [style.width]="listType === 'project' || listType === 'profile' ? '110px' : '123px'"
         >
           @if (chatService.userOnlineStatusCache | async; as cache) {
           <app-avatar
@@ -37,7 +38,11 @@
             [isOnline]="cache[info().id] !== undefined ? cache[info().id] : info().isOnline"
           ></app-avatar>
           @if (listType === 'project' || listType === 'profile') {
-          <h1 class="info__title text-body-12">
+          <h1
+            class="info__title text-body-12"
+            [style.width]="listType === 'project' || listType === 'profile' ? '300px' : '100%'"
+            [class.info__title--project]="listType === 'project' || listType === 'profile'"
+          >
             {{
               listType === "project"
                 ? info().name
@@ -252,18 +257,18 @@
         </ng-template>
 
         <ng-template #projectTpl>
-          @if (!isInProject && profile?.userType !== 1) { @if (info().presentationAddress) {
+          @if (isInProject) {
+          <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+            рабочая зона
+          </app-button>
+          } @else {
           <a class="info__presentation" [href]="info().presentationAddress" target="_blank">
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
               <span>презентация</span>
               <i appIcon icon="arrow-down" appSquare="6"></i>
             </app-button>
           </a>
-          } } @else {
-          <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
-            рабочая зона
-          </app-button>
-          } @if (profile) { @if (!isInProject) {
+          } @if (!isInProject) {
           <app-button
             [disabled]="true"
             style="opacity: 0.5"
@@ -283,7 +288,7 @@
           >
             чат проекта
           </app-button>
-          } }
+          }
 
           <div class="info__divider"></div>
 

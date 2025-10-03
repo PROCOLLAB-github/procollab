@@ -101,6 +101,10 @@ $detail-bar-mb: 12px;
     color: var(--black);
     text-align: center;
     text-overflow: ellipsis;
+
+    &--project {
+      transform: translateX(-31%);
+    }
   }
 
   &__text {

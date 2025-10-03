@@ -331,12 +331,13 @@ export class DeatilComponent implements OnInit, OnDestroy {
           }
         });
 
+      this.isInProfileInfo();
+
       this.subscriptions.push(projectSub$);
     } else if (this.listType === "program") {
       const program$ = this.programDataService.program$
         .pipe(
           filter(program => !!program),
-
           tap(program => {
             if (program) {
               this.info.set(program);
@@ -369,17 +370,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
           },
         });
 
-      const profileInfoSub$ = this.authService.profile.subscribe({
-        next: profile => {
-          this.profile = profile;
-
-          if (this.info()) {
-            this.isInProject = this.info()
-              ?.collaborators.map((person: Collaborator) => person.userId)
-              .includes(profile.id);
-          }
-        },
-      });
+      this.isInProfileInfo();
 
       const profileIdDataSub$ = this.profileDataService
         .getProfileId()
@@ -394,8 +385,24 @@ export class DeatilComponent implements OnInit, OnDestroy {
         this.isSubscriptionActive.set(r.isSubscribed);
       });
 
-      this.subscriptions.push(profileDataSub$, profileIdDataSub$, profileInfoSub$);
+      this.subscriptions.push(profileDataSub$, profileIdDataSub$);
     }
+  }
+
+  private isInProfileInfo(): void {
+    const profileInfoSub$ = this.authService.profile.subscribe({
+      next: profile => {
+        this.profile = profile;
+
+        if (this.info()) {
+          this.isInProject = this.info()
+            ?.collaborators.map((person: Collaborator) => person.userId)
+            .includes(profile.id);
+        }
+      },
+    });
+
+    this.subscriptions.push(profileInfoSub$);
   }
 
   /**

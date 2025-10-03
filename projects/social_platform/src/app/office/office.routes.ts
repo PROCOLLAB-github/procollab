@@ -34,7 +34,7 @@ export const OFFICE_ROUTES: Routes = [
       {
         path: "",
         pathMatch: "full",
-        redirectTo: "projects",
+        redirectTo: "feed",
       },
       {
         path: "feed",

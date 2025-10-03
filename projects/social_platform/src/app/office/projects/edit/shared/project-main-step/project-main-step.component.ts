@@ -97,10 +97,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
     return this.projectGoalsService.getForm();
   }
 
-  ngOnInit(): void {
-    console.log(this.hasGoals || this.hasLinks);
-    console.log(this.hasGoals, this.hasLinks);
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
