@@ -14,7 +14,6 @@ import { ErrorMessage } from "@error/models/error-message";
 import { Invite } from "@models/invite.model";
 import { Project } from "@models/project.model";
 import { Skill } from "@office/models/skill";
-import { ProgramTag } from "@office/program/models/program.model";
 import { ProgramService } from "@office/program/services/program.service";
 import { SkillsService } from "@office/services/skills.service";
 import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";
@@ -24,24 +23,13 @@ import { ProjectService } from "@services/project.service";
 import { ButtonComponent, IconComponent, SelectComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ValidationService } from "projects/core";
-import {
-  Observable,
-  Subscription,
-  concatMap,
-  distinctUntilChanged,
-  finalize,
-  map,
-  switchMap,
-  tap,
-} from "rxjs";
+import { Subscription, distinctUntilChanged, map, switchMap } from "rxjs";
 import { CommonModule, AsyncPipe } from "@angular/common";
-import { HttpErrorResponse } from "@angular/common/http";
-import { ProjectAssign } from "../models/project-assign.model";
 import { ProjectNavigationComponent } from "./shared/project-navigation/project-navigation.component";
 import { EditStep, ProjectStepService } from "./services/project-step.service";
 import { ProjectMainStepComponent } from "./shared/project-main-step/project-main-step.component";
 import { ProjectFormService } from "./services/project-form.service";
-import { ProjectContactsStepComponent } from "./shared/project-contacts-step/project-contacts-step.component";
+import { ProjectPartnerResourcesStepComponent } from "./shared/project-partner-resources-step/project-partner-resources-step.component";
 import { ProjectAchievementStepComponent } from "./shared/project-achievement-step/project-achievement-step.component";
 import { ProjectVacancyStepComponent } from "./shared/project-vacancy-step/project-vacancy-step.component";
 import { ProjectVacancyService } from "./services/project-vacancy.service";
@@ -82,11 +70,11 @@ import { SnackbarService } from "@ui/services/snackbar.service";
     SkillsGroupComponent,
     ProjectNavigationComponent,
     ProjectMainStepComponent,
-    ProjectContactsStepComponent,
     ProjectAchievementStepComponent,
     ProjectVacancyStepComponent,
     ProjectTeamStepComponent,
     ProjectAdditionalStepComponent,
+    ProjectPartnerResourcesStepComponent,
   ],
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -98,7 +86,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly navService: NavService,
     private readonly validationService: ValidationService,
     private readonly cdRef: ChangeDetectorRef,
-    private readonly programService: ProgramService,
     private readonly projectStepService: ProjectStepService,
     private readonly projectFormService: ProjectFormService,
     private readonly projectVacancyService: ProjectVacancyService,

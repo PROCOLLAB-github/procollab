@@ -26,6 +26,19 @@
     flex-basis: 50%;
   }
 
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+
+    &--general {
+      display: grid;
+      grid-gap: 20px;
+      grid-template-columns: 3fr 2fr;
+    }
+  }
+
   &__no-items {
     position: absolute;
     bottom: 0%;
