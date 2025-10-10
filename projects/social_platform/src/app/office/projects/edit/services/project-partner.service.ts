@@ -2,6 +2,9 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Partner, PartnerPostForm } from "@office/models/partner.model";
+import { ProjectService } from "@office/services/project.service";
+import { catchError, forkJoin, map, Observable, of, tap } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -9,6 +12,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@ang
 export class ProjectPartnerService {
   private readonly fb = inject(FormBuilder);
   private partnerForm!: FormGroup;
+  private readonly projectService = inject(ProjectService);
   public readonly partnerItems = signal<any[]>([]);
 
   /** Флаг инициализации сервиса */
@@ -21,10 +25,10 @@ export class ProjectPartnerService {
   private initializePartnerForm(): void {
     this.partnerForm = this.fb.group({
       partners: this.fb.array([]),
-      partnerName: [null],
-      partnerINN: [null],
-      partnerMention: [null, Validators.maxLength(200)],
-      partnerProfileLink: [null],
+      name: [null],
+      inn: [null, [Validators.minLength(10), Validators.maxLength(10)]],
+      contribution: [null, Validators.maxLength(200)],
+      decisionMaker: [null],
     });
   }
 
@@ -56,7 +60,7 @@ export class ProjectPartnerService {
    * Инициализирует партнера из данных проекта
    * Заполняет FormArray целей данными из проекта
    */
-  public initializePartnerFromProject(partners: any[]): void {
+  public initializePartnerFromProject(partners: Partner[]): void {
     const partnerFormArray = this.partners;
 
     while (partnerFormArray.length !== 0) {
@@ -65,7 +69,17 @@ export class ProjectPartnerService {
 
     if (partners && Array.isArray(partners)) {
       partners.forEach(partner => {
-        const partnerGroup = this.fb.group({});
+        const partnerGroup = this.fb.group({
+          id: [partner.id],
+          name: [partner.company.name, Validators.required],
+          inn: [partner.company.inn, Validators.required],
+          contribution: [partner.contribution, Validators.required],
+          company: [partner.company],
+          decisionMaker: [
+            "https://app.procollab.ru/office/profile/" + partner.decisionMaker,
+            Validators.required,
+          ],
+        });
         partnerFormArray.push(partnerGroup);
       });
 
@@ -91,49 +105,49 @@ export class ProjectPartnerService {
   }
 
   public get partnerName(): FormControl {
-    return this.partnerForm.get("partnerName") as FormControl;
+    return this.partnerForm.get("name") as FormControl;
   }
 
   public get partnerINN(): FormControl {
-    return this.partnerForm.get("partnerINN") as FormControl;
+    return this.partnerForm.get("inn") as FormControl;
   }
 
   public get partnerMention(): FormControl {
-    return this.partnerForm.get("partnerMention") as FormControl;
+    return this.partnerForm.get("contribution") as FormControl;
   }
 
   public get partnerProfileLink(): FormControl {
-    return this.partnerForm.get("partnerProfileLink") as FormControl;
+    return this.partnerForm.get("decisionMaker") as FormControl;
   }
 
   /**
    * Добавляет нового партнера или сохраняет изменения существующей.
-   * @param partnerName - название партнера (опционально)
-   * @param partnerINN - инн (опционально)
-   * @param partnerMention - вклад партнера (опционально)
-   * @param partnerProfileLink - ссылка на профиль представителя компании (опционально)
+   * @param name - название партнера (опционально)
+   * @param inn - инн (опционально)
+   * @param contribution - вклад партнера (опционально)
+   * @param decisionMaker - ссылка на профиль представителя компании (опционально)
    */
   public addPartner(
-    partnerName?: string,
-    partnerINN?: string,
-    partnerMention?: string,
-    partnerProfileLink?: string
+    name?: string,
+    inn?: string,
+    contribution?: string,
+    decisionMaker?: string
   ): void {
     const partnerFormArray = this.partners;
 
     this.initializePartnerItems(partnerFormArray);
 
-    const name = partnerName || this.partnerForm.get("partnerName")?.value;
-    const INN = partnerINN || this.partnerForm.get("partnerINN")?.value;
-    const mention = partnerMention || this.partnerForm.get("partnerMention")?.value;
-    const profileLink = partnerProfileLink || this.partnerForm.get("partnerProfileLink")?.value;
+    const partnerName = name || this.partnerForm.get("name")?.value;
+    const INN = inn || this.partnerForm.get("inn")?.value;
+    const mention = contribution || this.partnerForm.get("contribution")?.value;
+    const profileLink = decisionMaker || this.partnerForm.get("decisionMaker")?.value;
 
     if (
-      !name ||
+      !partnerName ||
       !INN ||
       !mention ||
       !profileLink ||
-      name.trim().length === 0 ||
+      partnerName.trim().length === 0 ||
       mention.trim().length === 0 ||
       INN.trim().length === 0 ||
       profileLink.trim().length === 0
@@ -142,10 +156,11 @@ export class ProjectPartnerService {
     }
 
     const partnerItem = this.fb.group({
-      partnerName: [name.trim(), Validators.required],
-      partnerINN: [INN.trim(), Validators.required],
-      partnerMention: [mention, Validators.required],
-      partnerProfileLink: [profileLink, Validators.required],
+      id: [null],
+      name: [partnerName.trim(), Validators.required],
+      inn: [INN.trim(), Validators.required],
+      contribution: [mention, Validators.required],
+      decisionMaker: [profileLink, Validators.required],
     });
 
     this.partnerItems.update(items => [...items, partnerItem.value]);
@@ -176,5 +191,73 @@ export class ProjectPartnerService {
         });
       }
     });
+  }
+
+  /**
+   * Получает данные всех партнеров для отправки на сервер
+   * @returns массив объектов партнеров
+   */
+  public getPartnersData(): any[] {
+    return this.partners.value.map((partner: any) => ({
+      id: partner.id ?? null,
+      name: partner.name,
+      inn: partner.inn,
+      contribution: partner.contribution,
+      decisionMaker: partner.decisionMaker,
+    }));
+  }
+
+  /**
+   * Сохраняет только новых партнеров (у которых id === null) — отправляет POST.
+   * После ответов присваивает полученные id в соответствующие FormGroup.
+   * Возвращает Observable массива результатов (в порядке отправки).
+   */
+  public savePartners(projectId: number) {
+    const partners = this.getPartnersData();
+
+    if (partners.length === 0) {
+      return of([]);
+    }
+
+    const requests = partners.map(partner => {
+      const decisionMaker = Number(partner.decisionMaker.split("/").at(-1));
+
+      const payload: PartnerPostForm = {
+        name: partner.name,
+        inn: partner.inn,
+        contribution: partner.contribution,
+        decisionMaker,
+      };
+
+      return this.projectService.addPartner(projectId, payload).pipe(
+        map((res: any) => ({ res, idx: partner.id })),
+        catchError(err => of({ __error: true, err, original: partner }))
+      );
+    });
+
+    return forkJoin(requests).pipe(
+      tap(results => {
+        results.forEach((r: any) => {
+          if (r && r.__error) {
+            console.error("Failed to post partner", r.err, "original:", r.original);
+            return;
+          }
+
+          const created = r.res;
+          const idx = r.idx;
+
+          if (created && created.id !== undefined && created.id !== null) {
+            const formGroup = this.partners.at(idx);
+            if (formGroup) {
+              formGroup.get("id")?.setValue(created.id);
+            }
+          } else {
+            console.warn("addPartner response has no id field:", r.res);
+          }
+        });
+
+        this.syncPartnerItems(this.partners);
+      })
+    );
   }
 }

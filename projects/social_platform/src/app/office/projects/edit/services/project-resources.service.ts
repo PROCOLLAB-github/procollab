@@ -2,12 +2,16 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Resource, ResourcePostForm } from "@office/models/resource.model";
+import { ProjectService } from "@office/services/project.service";
+import { catchError, forkJoin, map, Observable, of, tap } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProjectResourceService {
   private readonly fb = inject(FormBuilder);
+  private readonly projectService = inject(ProjectService);
   private resourceForm!: FormGroup;
   public readonly resourceItems = signal<any[]>([]);
 
@@ -21,9 +25,9 @@ export class ProjectResourceService {
   private initializeResourceForm(): void {
     this.resourceForm = this.fb.group({
       resources: this.fb.array([]),
-      resoruceType: [null],
-      resoruceDescription: [null, Validators.maxLength(200)],
-      resourcePartner: [null],
+      type: [null],
+      description: [null, Validators.maxLength(200)],
+      partnerCompany: [null],
     });
   }
 
@@ -55,7 +59,7 @@ export class ProjectResourceService {
    * Инициализирует ресурсы из данных проекта
    * Заполняет FormArray целей данными из проекта
    */
-  public initializeResourcesFromProject(resources: any[]): void {
+  public initializeResourcesFromProject(resources: Resource[]): void {
     const resourcesFormArray = this.resources;
 
     while (resourcesFormArray.length !== 0) {
@@ -64,7 +68,12 @@ export class ProjectResourceService {
 
     if (resources && Array.isArray(resources)) {
       resources.forEach(resource => {
-        const partnerGroup = this.fb.group({});
+        const partnerGroup = this.fb.group({
+          id: [resource.id ?? null],
+          type: [resource.type, Validators.required],
+          description: [resource.description, Validators.required],
+          partnerCompany: [resource.partnerCompany, Validators.required],
+        });
         resourcesFormArray.push(partnerGroup);
       });
 
@@ -90,51 +99,48 @@ export class ProjectResourceService {
   }
 
   public get resoruceType(): FormControl {
-    return this.resourceForm.get("resoruceType") as FormControl;
+    return this.resourceForm.get("type") as FormControl;
   }
 
   public get resoruceDescription(): FormControl {
-    return this.resourceForm.get("resoruceDescription") as FormControl;
+    return this.resourceForm.get("description") as FormControl;
   }
 
   public get resourcePartner(): FormControl {
-    return this.resourceForm.get("resourcePartner") as FormControl;
+    return this.resourceForm.get("partnerCompany") as FormControl;
   }
 
   /**
    * Добавляет нового ресурса или сохраняет изменения существующей.
-   * @param resoruceType - тип ресурса (опционально)
-   * @param resoruceDescription - описание ресурса (опционально)
-   * @param resourcePartner - ссылка на партнера (опционально)
+   * @param type - тип ресурса (опционально)
+   * @param description - описание ресурса (опционально)
+   * @param partnerCompany - ссылка на партнера (опционально)
    */
-  public addPResource(
-    resoruceType?: string,
-    resoruceDescription?: string,
-    resourcePartner?: string
-  ): void {
+  public addResource(type?: string, description?: string, partnerCompany?: string): void {
     const resourcesFormArray = this.resources;
 
     this.initializePartnerItems(resourcesFormArray);
 
-    const type = resoruceType || this.resourceForm.get("resoruceType")?.value;
-    const description = resoruceDescription || this.resourceForm.get("resoruceDescription")?.value;
-    const partner = resourcePartner || this.resourceForm.get("resourcePartner")?.value;
+    const resourceType = type || this.resourceForm.get("type")?.value;
+    const resourceDescription = description || this.resourceForm.get("description")?.value;
+    const partner = partnerCompany || this.resourceForm.get("partnerCompany")?.value;
 
     if (
-      !type ||
-      !description ||
+      !resourceType ||
+      !resourceDescription ||
       !partner ||
-      type.trim().length === 0 ||
-      description.trim().length === 0 ||
+      resourceType.trim().length === 0 ||
+      resourceDescription.trim().length === 0 ||
       partner.trim().length === 0
     ) {
       return;
     }
 
     const resourceItem = this.fb.group({
-      resoruceType: [type.trim(), Validators.required],
-      resoruceDescription: [description.trim(), Validators.required],
-      resourcePartner: [partner, Validators.required],
+      id: [null],
+      type: [resourceType.trim(), Validators.required],
+      description: [resourceDescription.trim(), Validators.required],
+      partnerCompany: [partner, Validators.required],
     });
 
     this.resourceItems.update(items => [...items, resourceItem.value]);
@@ -165,5 +171,109 @@ export class ProjectResourceService {
         });
       }
     });
+  }
+
+  /**
+   * Получает данные все ресурсы для отправки на сервер
+   * @returns массив объектов ресурсов
+   */
+  public getResourcesData(): any[] {
+    return this.resources.value.map((resource: any) => ({
+      id: resource.id ?? null,
+      type: resource.type,
+      description: resource.description,
+      partnerCompany: resource.partnerCompany,
+    }));
+  }
+
+  /**
+   * Сохраняет только новых ресурсов (у которых id === null) — отправляет POST.
+   * После ответов присваивает полученные id в соответствующие FormGroup.
+   * Возвращает Observable массива результатов (в порядке отправки).
+   */
+  public saveResources(projectId: number) {
+    const resources = this.getResourcesData();
+
+    const requests = resources.map(resource => {
+      const payload: Omit<ResourcePostForm, "projectId"> = {
+        type: resource.type,
+        description: resource.description,
+        partnerCompany: resource.partnerCompany ?? "запрос к рынку",
+      };
+
+      return this.projectService.addResource(projectId, payload).pipe(
+        tap(() => console.log(payload)),
+        map((res: any) => ({ res, idx: resource.idx })),
+        catchError(err => of({ __error: true, err, original: resource }))
+      );
+    });
+
+    return forkJoin(requests).pipe(
+      tap(results => {
+        results.forEach((r: any) => {
+          if (r && r.__error) {
+            console.error("Failed to post resource", r.err, "original:", r.original);
+            return;
+          }
+
+          const created = r.res;
+          const idx = r.idx;
+
+          if (created && created.id !== undefined && created.id !== null) {
+            const formGroup = this.resources.at(idx);
+            if (formGroup) {
+              formGroup.get("id")?.setValue(created.id);
+            }
+          } else {
+            console.warn("addResource response has no id field:", r.res);
+          }
+        });
+
+        this.syncResourceItems(this.resources);
+      })
+    );
+  }
+
+  public editResources(projectId: number) {
+    const resources = this.getResourcesData();
+    console.log(resources);
+
+    const requests = resources.map(resource => {
+      const payload: Omit<ResourcePostForm, "projectId"> = {
+        type: resource.type,
+        description: resource.description,
+        partnerCompany: resource.partnerCompany ?? "запрос к рынку",
+      };
+
+      return this.projectService.editResource(projectId, resource.id, payload).pipe(
+        map((res: any) => ({ res })),
+        catchError(err => of({ __error: true, err, original: resource }))
+      );
+    });
+
+    return forkJoin(requests).pipe(
+      tap(results => {
+        results.forEach((r: any) => {
+          if (r && r.__error) {
+            console.error("Failed to add resource", r.err, "original:", r.original);
+            return;
+          }
+
+          const created = r.res;
+          const idx = r.idx;
+
+          if (created && created.id !== undefined && created.id !== null) {
+            const formGroup = this.resources.at(idx);
+            if (formGroup) {
+              formGroup.get("id")?.setValue(created.id);
+            }
+          } else {
+            console.warn("addResource response has no id field:", r.res);
+          }
+        });
+
+        this.syncResourceItems(this.resources);
+      })
+    );
   }
 }

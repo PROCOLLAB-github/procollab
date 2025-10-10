@@ -46,6 +46,7 @@ import { yearRangeValidators } from "@utils/yearRangeValidators";
 import { User } from "@auth/models/user.model";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
 import { generateOptionsList } from "@utils/generate-options-list";
+import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 
 dayjs.extend(cpf);
 
@@ -95,6 +96,7 @@ dayjs.extend(cpf);
     SelectComponent,
     RouterModule,
     SwitchComponent,
+    UploadFileComponent,
   ],
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -118,6 +120,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       city: ["", Validators.max(100)],
       phoneNumber: [""],
       additionalRole: [null],
+      coverImageAddress: [null],
 
       // education
       organizationName: ["", Validators.max(100)],
@@ -213,6 +216,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         userType: profile.userType ?? 1,
         birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
         city: profile.city ?? "",
+        coverImageAddress: profile.coverImageAddress ?? "",
         phoneNumber: profile.phoneNumber ?? "",
         additionalRole: profile.v2Speciality?.name ?? "",
         speciality: profile.speciality ?? "",
@@ -310,7 +314,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscription$.forEach($ => $.unsubscribe());
   }
 
-  editingStep: "main" | "education" | "experience" | "achievements" | "skills" = "main";
+  editingStep: "main" | "education" | "experience" | "achievements" | "skills" | "settings" =
+    "main";
 
   profileId?: number;
 
@@ -335,11 +340,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   isModalErrorSkillsChoose = signal(false);
   isModalErrorSkillChooseText = signal("");
 
+  isModalDeleteProfile = signal(false);
+
   editIndex = signal<number | null>(null);
 
   editEducationClick = false;
   editWorkClick = false;
   editLanguageClick = false;
+
+  showEducationFields = false;
+  showWorkFields = false;
 
   selectedEntryYearEducationId = signal<number | undefined>(undefined);
   selectedComplitionYearEducationId = signal<number | undefined>(undefined);
@@ -358,11 +368,17 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   /**
    * Навигация между шагами редактирования профиля
-   * @param step - название шага ('main' | 'education' | 'experience' | 'achievements' | 'skills')
+   * @param step - название шага ('main' | 'education' | 'experience' | 'achievements' | 'skills' | 'settings)
    */
   navigateStep(step: string) {
     this.router.navigate([], { queryParams: { editingStep: step } });
-    this.editingStep = step as "main" | "education" | "experience" | "achievements" | "skills";
+    this.editingStep = step as
+      | "main"
+      | "education"
+      | "experience"
+      | "achievements"
+      | "skills"
+      | "settings";
   }
 
   isStudentMosPolytech(): void {
@@ -482,6 +498,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
    * Валидирует форму и добавляет новую запись в массив образования
    */
   addEducation() {
+    if (!this.showEducationFields) {
+      this.showEducationFields = true;
+      return;
+    }
+
     ["organizationName", "educationStatus"].forEach(name =>
       this.profileForm.get(name)?.clearValidators()
     );
@@ -550,6 +571,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         this.profileForm.get(name)?.markAsPristine();
         this.profileForm.get(name)?.updateValueAndValidity();
       });
+      this.showEducationFields = false;
     }
     this.editEducationClick = false;
   }
@@ -560,6 +582,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   editEducation(index: number) {
     this.editEducationClick = true;
+    this.showEducationFields = true;
     const educationItem = this.education.value[index];
 
     this.yearListEducation.forEach(entryYearWork => {
@@ -615,6 +638,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
    * Валидирует форму и добавляет новую запись в массив опыта работы
    */
   addWork() {
+    if (!this.showWorkFields) {
+      this.showWorkFields = true;
+      return;
+    }
+
     ["organization", "jobPosition"].forEach(name => this.profileForm.get(name)?.clearValidators());
     ["organization", "jobPosition"].forEach(name =>
       this.profileForm.get(name)?.setValidators([Validators.required])
@@ -677,12 +705,14 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         this.profileForm.get(name)?.markAsPristine();
         this.profileForm.get(name)?.updateValueAndValidity();
       });
+      this.showWorkFields = false;
     }
     this.editWorkClick = false;
   }
 
   editWork(index: number) {
     this.editWorkClick = true;
+    this.showWorkFields = true;
     const workItem = this.workExperience.value[index];
 
     if (workItem) {

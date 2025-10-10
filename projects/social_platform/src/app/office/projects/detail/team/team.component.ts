@@ -4,7 +4,6 @@ import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { ProjectDataService } from "../services/project-data.service";
-import { Collaborator } from "@office/models/collaborator.model";
 import { InfoCardComponent } from "@office/features/info-card/info-card.component";
 import { Subscription } from "rxjs";
 import { Project } from "@office/models/project.model";

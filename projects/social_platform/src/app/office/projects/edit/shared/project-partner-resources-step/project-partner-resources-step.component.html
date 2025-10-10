@@ -8,31 +8,31 @@
       <li class="project__info">
         <div [formGroupName]="i" class="project__info">
           <div class="project__info--general">
-            @if (partners.at(i)?.get("partnerName"); as partnerName) {
+            @if (partners.at(i)?.get("name"); as name) {
             <fieldset>
               <label class="text-body-12 field-label">название компании</label>
               <app-input
                 size="big"
-                [error]="partnerName | controlError"
+                [error]="name | controlError"
                 placeholder="PROCOLLAB"
-                formControlName="partnerName"
+                formControlName="name"
               ></app-input>
-              @if (partnerName | controlError: "required") {
+              @if (name | controlError: "required") {
               <div class="text-body-10 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}
               </div>
               }
             </fieldset>
-            } @if (partners.at(i)?.get("partnerINN"); as partnerINN) {
+            } @if (partners.at(i)?.get("inn"); as inn) {
             <fieldset>
               <label class="text-body-12 field-label">инн компании</label>
               <app-input
                 size="big"
-                [error]="partnerINN | controlError"
+                [error]="inn | controlError"
                 placeholder="5055055055"
-                formControlName="partnerINN"
+                formControlName="inn"
               ></app-input>
-              @if (partnerINN | controlError: "required") {
+              @if (inn | controlError: "required") {
               <div class="text-body-10 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}
               </div>
@@ -41,33 +41,33 @@
             }
           </div>
 
-          @if (partners.at(i)?.get("partnerMention"); as partnerMention) {
+          @if (partners.at(i)?.get("contribution"); as contribution) {
           <fieldset>
             <label class="text-body-12 field-label">вклад в проект от партнера</label>
             <app-textarea
               size="big"
-              [error]="partnerMention | controlError"
+              [error]="contribution | controlError"
               placeholder="вклад в проект от партнера"
-              formControlName="partnerMention"
+              formControlName="contribution"
             ></app-textarea>
-            @if (partnerINN | controlError: "required") {
+            @if (contribution | controlError: "required") {
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
           </fieldset>
-          } @if (partners.at(i)?.get("partnerProfileLink"); as partnerProfileLink) {
+          } @if (partners.at(i)?.get("decisionMaker"); as decisionMaker) {
           <fieldset>
             <label class="text-body-12 field-label"
               >ссылка на профиль представителя компании партнера</label
             >
             <app-input
               size="big"
-              [error]="partnerProfileLink | controlError"
+              [error]="decisionMaker | controlError"
               placeholder="Isakovsanya56@yandex.ru"
-              formControlName="partnerProfileLink"
+              formControlName="decisionMaker"
             ></app-input>
-            @if (partnerProfileLink | controlError: "required") {
+            @if (decisionMaker | controlError: "required") {
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
@@ -107,46 +107,48 @@
       @for (control of resources.controls; track i; let i = $index) {
       <li class="project__info">
         <div [formGroupName]="i" class="project__info">
-          @if (resources.at(i)?.get("resoruceType"); as resoruceType) {
+          @if (resources.at(i)?.get("type"); as type) {
           <fieldset>
             <label class="text-body-12 field-label">тип ресурса</label>
             <app-select
-              [options]="[]"
+              id="type"
+              [options]="resourcesTypeOptions"
               size="big"
               placeholder="Выбери вариант"
-              formControlName="resoruceType"
+              formControlName="type"
             ></app-select>
-            @if (resoruceType | controlError: "required") {
+            @if (type | controlError: "required") {
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
           </fieldset>
-          } @if (resources.at(i)?.get("resoruceDescription"); as resoruceDescription) {
+          } @if (resources.at(i)?.get("description"); as description) {
           <fieldset>
             <label class="text-body-12 field-label">описание ресурса</label>
             <app-textarea
               size="big"
-              [error]="resoruceDescription | controlError"
+              [error]="description | controlError"
               placeholder="Дал нам денег и связей"
-              formControlName="resoruceDescription"
+              formControlName="description"
             ></app-textarea>
-            @if (resoruceDescription | controlError: "required") {
+            @if (description | controlError: "required") {
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>
             }
           </fieldset>
-          } @if (resources.at(i)?.get("resourcePartner"); as resourcePartner) {
+          } @if (resources.at(i)?.get("partnerCompany"); as partnerCompany) {
           <fieldset>
             <label class="text-body-12 field-label">партнер для запроса ресурса</label>
             <app-select
-              [options]="[]"
+              id="partnerCompany"
+              [options]="resourcesCompanyOptions"
               size="big"
               placeholder="Выбери вариант"
-              formControlName="resourcePartner"
+              formControlName="partnerCompany"
             ></app-select>
-            @if (resourcePartner | controlError: "required") {
+            @if (partnerCompany | controlError: "required") {
             <div class="text-body-10 error">
               {{ errorMessage.VALIDATION_REQUIRED }}
             </div>

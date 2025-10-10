@@ -258,7 +258,12 @@
 
         <ng-template #projectTpl>
           @if (isInProject) {
-          <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+          <app-button
+            [routerLink]="'/office/projects/' + info().id + '/work-section'"
+            appearance="outline"
+            size="medium"
+            customTypographyClass="text-body-12"
+          >
             рабочая зона
           </app-button>
           } @else {

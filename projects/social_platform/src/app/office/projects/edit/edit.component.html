@@ -33,6 +33,7 @@
       </app-button>
     </div>
   </div>
+
   <main class="project">
     <form [formGroup]="projectForm" class="project__form">
       <app-project-navigation
@@ -52,6 +53,7 @@
 
         } @else if (editingStep === "contacts") {
         <app-project-partner-resources-step
+          [projectId]="profileId"
           style="width: 100%"
         ></app-project-partner-resources-step>
         } @else if (editingStep === "achievements") {

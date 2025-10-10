@@ -298,7 +298,7 @@ export class ProjectGoalService {
   public saveGoals(projectId: number) {
     const goals = this.getGoalsData();
 
-    return this.projectService.postGoals(projectId, goals).pipe(
+    return this.projectService.addGoals(projectId, goals).pipe(
       tap(results => {
         if (Array.isArray(results)) {
           results.forEach((createdGoal: any, idx: number) => {

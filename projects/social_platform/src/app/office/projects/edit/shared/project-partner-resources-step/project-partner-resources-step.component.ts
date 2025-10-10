@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnDestroy } from "@angular/core";
+import { Component, inject, Input, OnDestroy } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
 import { IconComponent } from "@uilib";
@@ -11,6 +11,9 @@ import { ButtonComponent, InputComponent, SelectComponent } from "@ui/components
 import { Subscription } from "rxjs";
 import { ControlErrorPipe } from "@corelib";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
+import { ProjectService } from "@office/services/project.service";
+import { generateOptionsList, optionsListElement } from "@utils/generate-options-list";
+import { Partner } from "@office/models/partner.model";
 
 @Component({
   selector: "app-project-partner-resources-step",
@@ -29,8 +32,11 @@ import { TextareaComponent } from "@ui/components/textarea/textarea.component";
   ],
 })
 export class ProjectPartnerResourcesStepComponent implements OnDestroy {
+  @Input() projectId!: number;
+
   private readonly projectPartnerService = inject(ProjectPartnerService);
   private readonly projectResourceService = inject(ProjectResourceService);
+  private readonly projectService = inject(ProjectService);
   private readonly fb = inject(FormBuilder);
 
   readonly errorMessage = ErrorMessage;
@@ -54,15 +60,15 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
     return this.projectResourceService.resources;
   }
 
-  get resoruceType() {
+  get type() {
     return this.projectResourceService.resoruceType;
   }
 
-  get resoruceDescription() {
+  get description() {
     return this.projectResourceService.resoruceDescription;
   }
 
-  get resourcePartner() {
+  get partnerCompany() {
     return this.projectResourceService.resourcePartner;
   }
 
@@ -70,19 +76,19 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
     return this.projectPartnerService.partners;
   }
 
-  get partnerName() {
+  get name() {
     return this.projectPartnerService.partnerName;
   }
 
-  get partnerINN() {
+  get inn() {
     return this.projectPartnerService.partnerINN;
   }
 
-  get partnerMention() {
+  get contribution() {
     return this.projectPartnerService.partnerMention;
   }
 
-  get partnerProfileLink() {
+  get decisionMaker() {
     return this.projectPartnerService.partnerProfileLink;
   }
 
@@ -94,30 +100,66 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
     return this.resources.length > 0;
   }
 
+  get resourcesCompanyOptions(): optionsListElement[] {
+    const partners = this.partners.value || [];
+
+    const partnerOptions: optionsListElement[] = partners.map((partner: any, index: number) => ({
+      id: partner.company.id ?? index,
+      value: partner.id ?? null,
+      label: partner.name,
+    }));
+
+    partnerOptions.push({
+      id: -1,
+      value: "запрос к рынку",
+      label: "запрос к рынку",
+    });
+
+    return partnerOptions;
+  }
+
+  get resourcesTypeOptions(): optionsListElement[] {
+    const resourceOptions = [
+      {
+        id: 1,
+        value: "infrastructure",
+        label: "Инфраструктурный",
+      },
+      {
+        id: 2,
+        value: "staff",
+        label: "Кадровый",
+      },
+      {
+        id: 3,
+        value: "financial",
+        label: "Финансовый",
+      },
+      {
+        id: 4,
+        value: "information",
+        label: "Информационный",
+      },
+    ];
+
+    return resourceOptions;
+  }
+
   /**
    * Добавление партнера
    */
-  addPartner(
-    partnerName?: string,
-    partnerINN?: string,
-    partnerMention?: string,
-    partnerProfileLink?: string
-  ): void {
+  addPartner(name?: string, inn?: string, contribution?: string, decisionMaker?: string): void {
     this.partners.push(
       this.fb.group({
-        partnerName: [partnerName, [Validators.required]],
-        partnerINN: [partnerINN, [Validators.required]],
-        partnerMention: [partnerMention, [Validators.required]],
-        partnerProfileLink: [partnerProfileLink, Validators.required],
+        id: [null],
+        name: [name, [Validators.required]],
+        inn: [inn, [Validators.required]],
+        contribution: [contribution, [Validators.required]],
+        decisionMaker: [decisionMaker, Validators.required],
       })
     );
 
-    this.projectPartnerService.addPartner(
-      partnerName,
-      partnerINN,
-      partnerMention,
-      partnerProfileLink
-    );
+    this.projectPartnerService.addPartner(name, inn, contribution, decisionMaker);
   }
 
   /**
@@ -126,30 +168,30 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
    */
   removePartner(index: number, partnersId: number) {
     this.projectPartnerService.removePartner(index);
-    // TODO: ручка на удаление партнера
+    this.projectService.deletePartner(this.projectId, partnersId).subscribe();
   }
 
   /**
    * Добавление ресурса
    */
-  addResource(resoruceType?: string, resoruceDescription?: string, resourcePartner?: string): void {
+  addResource(type?: string, description?: string, partnerCompany?: string): void {
     this.resources.push(
       this.fb.group({
-        resoruceType: [resoruceType, [Validators.required]],
-        resoruceDescription: [resoruceDescription, [Validators.required]],
-        resourcePartner: [resourcePartner, [Validators.required]],
+        type: [type, [Validators.required]],
+        description: [description, [Validators.required]],
+        partnerCompany: [partnerCompany, [Validators.required]],
       })
     );
 
-    this.projectResourceService.addPResource(resoruceType, resoruceDescription, resourcePartner);
+    this.projectResourceService.addResource(type, description, partnerCompany);
   }
 
   /**
    * Удаление ресурса
    * @param index - индекс ресурса
    */
-  removeResource(index: number, resource: number) {
+  removeResource(index: number, resourceId: number) {
     this.projectResourceService.removeResource(index);
-    // TODO: ручка на удаление ресурса
+    this.projectService.deleteResource(this.projectId, resourceId).subscribe();
   }
 }

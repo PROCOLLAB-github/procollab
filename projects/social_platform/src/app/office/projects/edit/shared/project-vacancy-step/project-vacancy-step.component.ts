@@ -135,7 +135,7 @@ export class ProjectVacancyStepComponent implements OnInit {
   }
 
   /**
-   *
+   * Отображение блока вакансий
    */
   createVacancyBlock(): void {
     this.showFields = true;

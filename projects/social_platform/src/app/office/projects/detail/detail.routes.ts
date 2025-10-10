@@ -3,8 +3,7 @@
 import { Routes } from "@angular/router";
 import { ProjectInfoComponent } from "./info/info.component";
 import { ProjectInfoResolver } from "./info/info.resolver";
-import { ProjectResponsesComponent } from "./responses/responses.component";
-import { ProjectResponsesResolver } from "./responses/responses.resolver";
+import { ProjectResponsesResolver } from "./work-section/responses.resolver";
 import { ProjectChatComponent } from "./chat/chat.component";
 import { ProjectChatResolver } from "@office/projects/detail/chat/chat.resolver";
 import { ProjectDetailResolver } from "@office/projects/detail/detail.resolver";
@@ -13,6 +12,7 @@ import { NewsDetailResolver } from "@office/projects/detail/news-detail/news-det
 import { ProjectTeamComponent } from "./team/team.component";
 import { ProjectVacanciesComponent } from "./vacancies/vacancies.component";
 import { DeatilComponent } from "@office/features/detail/detail.component";
+import { ProjectWorkSectionComponent } from "./work-section/work-section.component";
 
 /**
  * Конфигурация маршрутов для детального просмотра проекта
@@ -60,8 +60,8 @@ export const PROJECT_DETAIL_ROUTES: Routes = [
         component: ProjectTeamComponent,
       },
       {
-        path: "responses",
-        component: ProjectResponsesComponent,
+        path: "work-section",
+        component: ProjectWorkSectionComponent,
         resolve: {
           data: ProjectResponsesResolver,
         },

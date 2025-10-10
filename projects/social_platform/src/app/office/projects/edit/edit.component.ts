@@ -8,7 +8,7 @@ import {
   OnInit,
   signal,
 } from "@angular/core";
-import { FormArray, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { Form, FormArray, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ErrorMessage } from "@error/models/error-message";
 import { Invite } from "@models/invite.model";
@@ -23,7 +23,7 @@ import { ProjectService } from "@services/project.service";
 import { ButtonComponent, IconComponent, SelectComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ValidationService } from "projects/core";
-import { Subscription, distinctUntilChanged, map, switchMap } from "rxjs";
+import { Subscription, distinctUntilChanged, forkJoin, map, switchMap } from "rxjs";
 import { CommonModule, AsyncPipe } from "@angular/common";
 import { ProjectNavigationComponent } from "./shared/project-navigation/project-navigation.component";
 import { EditStep, ProjectStepService } from "./services/project-step.service";
@@ -41,6 +41,12 @@ import { ProjectAchievementsService } from "./services/project-achievements.serv
 import { Goal, GoalPostForm } from "@office/models/goals.model";
 import { ProjectGoalService } from "./services/project-goals.service";
 import { SnackbarService } from "@ui/services/snackbar.service";
+import { Resource, ResourcePostForm } from "@office/models/resource.model";
+import { Partner } from "@office/models/partner.model";
+import { ProjectPartnerService } from "./services/project-partner.service";
+import { ProjectResourceService } from "./services/project-resources.service";
+import { HttpErrorResponse } from "@angular/common/http";
+import { ProjectAssign } from "../models/project-assign.model";
 
 /**
  * Компонент редактирования проекта
@@ -92,6 +98,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly projectTeamService: ProjectTeamService,
     private readonly projectAchievementsService: ProjectAchievementsService,
     private readonly projectGoalsService: ProjectGoalService,
+    private readonly projectPartnerService: ProjectPartnerService,
+    private readonly projectResourceService: ProjectResourceService,
     private readonly snackBarService: SnackbarService,
     private readonly skillsService: SkillsService,
     private readonly projectAdditionalService: ProjectAdditionalService,
@@ -158,11 +166,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.projectGoalsService.goals;
   }
 
-  /**
-   * Проверяет, есть ли цели для отображения
-   */
-  get hasGoals(): boolean {
-    return this.goals.length > 0;
+  get partners(): FormArray {
+    return this.projectPartnerService.partners;
+  }
+
+  get resources(): FormArray {
+    return this.projectResourceService.resources;
   }
 
   ngOnInit(): void {
@@ -388,10 +397,17 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.setProjFormIsSubmitting(true);
-
     this.projectService
       .updateProject(projectId, payload)
-      .pipe(switchMap(() => this.saveOrEditGoals(projectId)))
+      .pipe(
+        switchMap(() =>
+          forkJoin({
+            goals: this.saveOrEditGoals(projectId),
+            partners: this.projectPartnerService.savePartners(projectId),
+            resources: this.saveOrEditResources(projectId),
+          })
+        )
+      )
       .subscribe({
         next: () => {
           this.completeSubmitedProjectForm(projectId);
@@ -421,13 +437,22 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isAssignProjectToProgramModalOpen.set(false);
   }
 
-  public saveOrEditGoals(projectId: number) {
+  private saveOrEditGoals(projectId: number) {
     const goals = this.goals.value;
-    const hasExistingGoals = goals.some((g: GoalPostForm) => g.id);
+    const hasExistingGoals = goals.some((g: Partner) => g.id);
 
     return hasExistingGoals
       ? this.projectGoalService.editGoals(projectId)
       : this.projectGoalService.saveGoals(projectId);
+  }
+
+  private saveOrEditResources(projectId: number) {
+    const resources = this.resources.value;
+    const hasExistingResources = resources.some((r: any) => r.id != null);
+
+    return hasExistingResources
+      ? this.projectResourceService.editResources(projectId)
+      : this.projectResourceService.saveResources(projectId);
   }
 
   private completeSubmitedProjectForm(projectId: number) {
@@ -566,26 +591,36 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private loadProgramTagsAndProject(): void {
     this.route.data
       .pipe(map(d => d["data"]))
-      .subscribe(([project, goals, invites]: [Project, Goal[], Invite[]]) => {
-        // Используем сервис для инициализации данных проекта
-        this.projectFormService.initializeProjectData(project);
-        this.projectGoalService.initializeGoalsFromProject(goals);
-        this.projectTeamService.setInvites(invites);
-        this.projectTeamService.setCollaborators(project.collaborators);
+      .subscribe(
+        ([project, goals, partners, resources, invites]: [
+          Project,
+          Goal[],
+          Partner[],
+          Resource[],
+          Invite[]
+        ]) => {
+          // Используем сервис для инициализации данных проекта
+          this.projectFormService.initializeProjectData(project);
+          this.projectGoalService.initializeGoalsFromProject(goals);
+          this.projectPartnerService.initializePartnerFromProject(partners);
+          this.projectResourceService.initializeResourcesFromProject(resources);
+          this.projectTeamService.setInvites(invites);
+          this.projectTeamService.setCollaborators(project.collaborators);
 
-        if (project.partnerProgram) {
-          this.isCompetitive = project.partnerProgram.canSubmit;
+          if (project.partnerProgram) {
+            this.isCompetitive = project.partnerProgram.canSubmit;
 
-          this.projectAdditionalService.initializeAdditionalForm(
-            project.partnerProgram?.programFields,
-            project.partnerProgram?.programFieldValues
-          );
+            this.projectAdditionalService.initializeAdditionalForm(
+              project.partnerProgram?.programFields,
+              project.partnerProgram?.programFieldValues
+            );
+          }
+
+          this.projectVacancyService.setVacancies(project.vacancies);
+          this.projectTeamService.setInvites(invites);
+
+          this.cdRef.detectChanges();
         }
-
-        this.projectVacancyService.setVacancies(project.vacancies);
-        this.projectTeamService.setInvites(invites);
-
-        this.cdRef.detectChanges();
-      });
+      );
   }
 }
