@@ -103,9 +103,9 @@
   }
 
   &__file {
+    flex-grow: 1;
     min-width: 0;
     max-width: 333px;
-    flex-grow: 1;
   }
 
   &__slides-title {
@@ -141,7 +141,6 @@
     }
   }
 
-
   .error__phone-number {
     margin-bottom: 10px;
   }
@@ -160,14 +159,14 @@
 
   &__row {
     display: flex;
-    align-items: center;
     gap: 20px;
+    align-items: center;
   }
 
   &__column {
     display: flex;
-    gap: 12px;
     flex-direction: column;
+    gap: 12px;
 
     &--date {
       display: grid;
@@ -179,8 +178,8 @@
   &__action {
     &--icons {
       display: flex;
-      align-items: center;
       gap: 10px;
+      align-items: center;
     }
   }
 }
@@ -246,15 +245,17 @@
   }
 }
 
-.edit-icon, .basket-icon {
-  padding: 6px;
+.edit-icon,
+.basket-icon {
   width: 20px;
   height: 20px;
+  padding: 6px;
   border-radius: 50%;
 }
 
 .edit-icon {
   border: 0.5px solid var(--accent);
+
   i {
     color: var(--accent) !important;
   }
@@ -262,6 +263,7 @@
 
 .basket-icon {
   border: 0.5px solid var(--red);
+
   i {
     color: var(--red) !important;
   }
@@ -349,7 +351,7 @@
   &__delete-icon {
     display: flex;
     justify-content: center;
-    margin: 36px 0px;
+    margin: 36px 0;
   }
 
   &__title {
