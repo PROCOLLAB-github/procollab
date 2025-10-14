@@ -96,11 +96,16 @@ export class ProgramService {
 
   createProgramFilters(
     programId: number,
-    filters: { filters: { string: string[] } }
+    filters: Record<string, string[]>,
+    params?: HttpParams
   ): Observable<ApiPagination<Project>> {
-    return this.apiService.post(`${this.PROGRAMS_URL}/${programId}/projects/filter/`, {
-      filters,
-    });
+    let url = `${this.PROGRAMS_URL}/${programId}/projects/filter/`;
+
+    if (params) {
+      url += `?${params.toString()}`;
+    }
+
+    return this.apiService.post(url, { filters: filters });
   }
 
   submitCompettetiveProject(relationId: number): Observable<Project> {

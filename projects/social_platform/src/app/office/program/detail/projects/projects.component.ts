@@ -39,42 +39,6 @@ import { HttpParams } from "@angular/common/http";
 import { IconComponent } from "@uilib";
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
 
-/**
- * Компонент списка проектов программы
- *
- * Отображает все проекты, связанные с программой, с поддержкой:
- * - Бесконечной прокрутки (infinite scroll)
- * - Пагинации данных
- * - Модального окна для оценки проектов (для экспертов)
- *
- * Принимает:
- * @param {ActivatedRoute} route - Для получения данных из резолвера
- * @param {ProgramService} programService - Сервис для загрузки проектов
- * @param {AuthService} authService - Для проверки прав пользователя
- *
- * Данные:
- * @property {Project[]} projects - Массив проектов программы
- * @property {number} projectsTotalCount - Общее количество проектов
- * @property {Observable<Program>} program$ - Поток данных программы
- * @property {number} page - Текущая страница пагинации
- * @property {number} perPage - Количество проектов на странице
- * @property {boolean} isFilterOpen - состояние панели фильтров (мобильные)
- * ViewChild:
- * @ViewChild projectsRoot - Ссылка на DOM элемент списка проектов
- *
- * Функциональность:
- * - Загрузка начальных данных из резолвера
- * - Автоматическая подгрузка при прокрутке
- * - Отображение карточек проектов
- * - Интеграция с компонентом оценки проектов
- *
- * Методы:
- * @method onScroll() - Обработчик прокрутки для подгрузки данных
- * @method onFetch() - Загрузка следующей порции проектов
- *
- * Возвращает:
- * HTML шаблон со списком проектов и элементами управления
- */
 @Component({
   selector: "app-projects",
   templateUrl: "./projects.component.html",
@@ -125,6 +89,8 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
   private previousReqQuery: Record<string, any> = {};
   private availableFilters: PartnerProgramFields[] = [];
 
+  private currentFilters: Record<string, any> = {};
+
   ngOnInit(): void {
     const routeData$ = this.route.data
       .pipe(
@@ -170,18 +136,23 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
         if (JSON.stringify(reqQuery) !== JSON.stringify(this.previousReqQuery)) {
           this.previousReqQuery = reqQuery;
 
+          this.currentFilters = reqQuery["filters"] || {};
+          this.page = 1;
+
           const hasFilters =
             reqQuery && reqQuery["filters"] && Object.keys(reqQuery["filters"]).length > 0;
 
           const params = new HttpParams({ fromObject: { offset: 0, limit: 21 } });
 
           if (hasFilters) {
-            return this.programService.createProgramFilters(programId, reqQuery["filters"]).pipe(
-              catchError(err => {
-                console.error("createFilters failed, fallback to getAllProjects()", err);
-                return this.programService.getAllProjects(programId, params);
-              })
-            );
+            return this.programService
+              .createProgramFilters(programId, reqQuery["filters"], params)
+              .pipe(
+                catchError(err => {
+                  console.error("createFilters failed, fallback to getAllProjects()", err);
+                  return this.programService.getAllProjects(programId, params);
+                })
+              );
           }
 
           return this.programService.getAllProjects(programId, params).pipe(
@@ -202,6 +173,7 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
 
       this.projects = projects.results;
       this.searchedProjects = projects.results;
+      this.projectsTotalCount = projects.count;
 
       this.cdref.detectChanges();
     });
@@ -299,19 +271,37 @@ export class ProgramProjectsComponent implements OnInit, AfterViewInit, OnDestro
     const offset = this.page * this.perPage;
     const limit = this.perPage;
 
-    return this.programService
-      .getAllProjects(programId, new HttpParams({ fromObject: { offset, limit } }))
-      .pipe(
+    const hasFilters = this.currentFilters && Object.keys(this.currentFilters).length > 0;
+
+    if (hasFilters) {
+      const params = new HttpParams({ fromObject: { offset, limit } });
+
+      return this.programService.createProgramFilters(programId, this.currentFilters, params).pipe(
         tap(projects => {
           this.projectsTotalCount = projects.count;
           this.projects = [...this.projects, ...projects.results];
           this.searchedProjects = this.projects;
-
           this.page++;
-
           this.cdref.detectChanges();
+        }),
+        catchError(err => {
+          console.error("Pagination with filters failed", err);
+          return of({ results: [], count: 0 });
         })
       );
+    } else {
+      return this.programService
+        .getAllProjects(programId, new HttpParams({ fromObject: { offset, limit } }))
+        .pipe(
+          tap(projects => {
+            this.projectsTotalCount = projects.count;
+            this.projects = [...this.projects, ...projects.results];
+            this.searchedProjects = this.projects;
+            this.page++;
+            this.cdref.detectChanges();
+          })
+        );
+    }
   }
 
   private buildFilterQuery(q: Params): Record<string, any> {
