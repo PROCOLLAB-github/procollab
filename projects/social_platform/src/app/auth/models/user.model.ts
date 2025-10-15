@@ -58,6 +58,7 @@ export class User {
   birthday!: string;
   avatar!: string;
   links!: string[];
+  coverImageAddress?: string;
   keySkills!: string[];
   skills!: Skill[];
   skillsIds!: number[];

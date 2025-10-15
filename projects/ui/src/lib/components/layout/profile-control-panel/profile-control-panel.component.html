@@ -7,12 +7,12 @@
         @if (hasNotifications || hasInvites) {
         <div class="attention"></div>
         }
-        <i appIcon icon="bell" appWidth="20" appHeight="23" appViewBox="0 0 20 22"></i>
+        <i appIcon icon="bell" appWidth="15" appHeight="17" appViewBox="0 0 15 17"></i>
       </div>
     </div>
     @if (showNotifications) {
     <div class="control-panel__notifications notifications">
-      <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
+      <p class="text-body-12 notifications__title">Уведомления</p>
       <ul class="notifications__invites">
         @for (invite of invites; track invite.id) {
         <li class="notifications__invite">
@@ -26,17 +26,9 @@
       </ul>
     </div>
     }
-    <a class="control-panel__action" routerLink="/office/chats">
-      <div class="control-panel__bell">
-        @if (hasUnreads) {
-        <div class="attention"></div>
-        }
-        <i appIcon icon="chats" appSquare="24"></i>
-      </div>
-    </a>
     <a class="control-panel__action" (click)="logout.emit()">
       <div class="control-panel__bell">
-        <i appIcon icon="logout2" appSquare="24"></i>
+        <i appIcon icon="logout3" appWidth="15" appHeight="17"></i>
       </div>
     </a>
   </div>

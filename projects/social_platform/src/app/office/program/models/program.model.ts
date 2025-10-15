@@ -52,8 +52,8 @@ export class Program {
   viewsCount!: number;
   likesCount!: number;
   isUserLiked!: boolean;
-  isUserManager?: boolean;
-  isUserMember?: boolean;
+  isUserManager!: boolean;
+  isUserMember!: boolean;
 
   static default(): Program {
     return {

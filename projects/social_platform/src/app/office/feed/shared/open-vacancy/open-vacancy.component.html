@@ -1,10 +1,11 @@
 <!-- @format -->
 
+@if (feedItem) {
 <div class="card">
-  <a class="card__head head" [routerLink]="['/office/projects', feedItem.project.id]">
-    <img class="head__avatar" [src]="feedItem.project.imageAddress" alt="newsItem.name" />
+  <a class="card__head head" [routerLink]="['/office/projects', feedItem.project?.id]">
+    <img class="head__avatar" [src]="feedItem.project?.imageAddress" alt="newsItem.name" />
     <div>
-      <div class="head__name">{{ feedItem.project.name }}</div>
+      <div class="head__name">{{ feedItem.project?.name }}</div>
       <div class="head__date text-body-14">
         {{ feedItem.datetimeCreated | dayjs: "format":"DD MMMM YYYY, HH:mm" }}
       </div>
@@ -12,13 +13,13 @@
   </a>
   <h3 class="card__title">
     <span>Тебя ищут в проект</span>
-    <a [routerLink]="['/office/projects', feedItem.project.id]" class="card__project">{{
-      feedItem.project.name
+    <a [routerLink]="['/office/projects', feedItem.project?.id]" class="card__project">{{
+      feedItem.project?.name
     }}</a>
   </h3>
 
   <div class="card__skills skills">
-    @if (feedItem.requiredSkills.length; as skillsLength) {
+    @if (feedItem.requiredSkills?.length; as skillsLength) {
     <div class="skills__title">Необходимые навыки</div>
     @if (feedItem.requiredSkills; as requiredSkills) { @if (requiredSkills) {
     <ul class="skills__list">
@@ -69,3 +70,4 @@
     >
   </div>
 </div>
+}

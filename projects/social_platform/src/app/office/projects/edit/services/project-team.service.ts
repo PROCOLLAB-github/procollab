@@ -187,6 +187,14 @@ export class ProjectTeamService {
   }
 
   /**
+   * Удаляет участника по идентификатору.
+   * @param collaboratorId идентификатор приглашения
+   */
+  public removeCollaborator(collaboratorId: number): void {
+    this.collaborators.update(list => list.filter(i => i.userId !== collaboratorId));
+  }
+
+  /**
    * Проверяет валидность формы приглашения.
    * @returns boolean true если форма валидна
    */

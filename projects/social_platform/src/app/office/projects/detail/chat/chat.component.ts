@@ -9,13 +9,14 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { AuthService } from "@auth/services";
 import { ModalService } from "@ui/models/modal.service";
 import { ChatService } from "@services/chat.service";
-import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
-import { ChatWindowComponent } from "@office/shared/chat-window/chat-window.component";
+import { MessageInputComponent } from "@office/features/message-input/message-input.component";
+import { ChatWindowComponent } from "@office/features/chat-window/chat-window.component";
 import { PluralizePipe } from "projects/core";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ApiPagination } from "@models/api-pagination.model";
+import { ProjectDataService } from "../services/project-data.service";
 
 /**
  * Компонент чата проекта
@@ -58,7 +59,7 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     private readonly navService: NavService,
     private readonly route: ActivatedRoute,
     private readonly authService: AuthService,
-    private readonly modalService: ModalService,
+    private readonly projectDataService: ProjectDataService,
     private readonly chatService: ChatService
   ) {}
 
@@ -66,15 +67,22 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
     this.navService.setNavTitle("Чат проекта");
 
     // Получение ID текущего пользователя
-    const profile$ = this.authService.profile.subscribe(profile => {
-      this.currentUserId = profile.id;
+    const profile$ = this.authService.profile.subscribe({
+      next: profile => {
+        this.currentUserId = profile.id;
+      },
     });
+
     profile$ && this.subscriptions$.push(profile$);
 
     // Загрузка данных проекта
-    const projectSub$ = this.route.data.pipe(map(r => r["data"])).subscribe(project => {
-      this.project = project;
-    });
+    const projectSub$ = this.projectDataService.project$
+      .pipe(filter(project => !!project))
+      .subscribe({
+        next: project => {
+          this.project = project;
+        },
+      });
     projectSub$ && this.subscriptions$.push(projectSub$);
 
     console.debug("Chat websocket connected from ProjectChatComponent");

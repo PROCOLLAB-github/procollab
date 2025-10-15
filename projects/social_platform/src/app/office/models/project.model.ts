@@ -30,13 +30,12 @@ export class Project {
   id!: number;
   name!: string;
   description!: string;
-  track!: string;
-  direction!: string;
+  targetAudience!: string;
+  implementationDeadline!: string;
+  trl!: string;
   actuality!: string;
-  goal!: string;
   problem!: string;
   region!: string;
-  step!: number;
   shortDescription!: string;
   achievements!: { id: number; title: string; status: string }[];
   industry!: number;
@@ -51,22 +50,23 @@ export class Project {
   links!: string[];
   draft!: boolean;
   leader!: number;
+  leaderInfo?: { firstName: string; lastName: string };
   partnerProgramsTags?: string[];
   partnerProgramId!: number | null;
   partnerProgram!: PartnerProgramInfo | null;
   vacancies!: Vacancy[];
   isCompany!: boolean;
+  inviteId!: number;
 
   static default(): Project {
     return {
       id: 0,
       name: "string",
       region: "sdf",
-      step: 1,
-      track: "",
-      direction: "",
+      targetAudience: "",
+      implementationDeadline: "",
       actuality: "",
-      goal: "",
+      trl: "",
       problem: "",
       description: "string",
       shortDescription: "string",
@@ -86,6 +86,7 @@ export class Project {
       leader: 0,
       vacancies: [],
       isCompany: true,
+      inviteId: 0,
     };
   }
 }

@@ -3,27 +3,32 @@
 export const navItems = [
   {
     step: "main",
-    src: "/assets/images/profile/main.svg",
-    label: "Основные данные",
+    src: "main",
+    label: "основные данные",
   },
   {
     step: "education",
-    src: "/assets/images/profile/education.svg",
-    label: "Образование",
-  },
-  {
-    step: "experience",
-    src: "/assets/images/profile/experience.svg",
-    label: "Опыт",
+    src: "in-search",
+    label: "образование",
   },
   {
     step: "achievements",
-    src: "/assets/images/profile/achievements.svg",
-    label: "Достижения",
+    src: "medal",
+    label: "достижения",
+  },
+  {
+    step: "experience",
+    src: "suitcase",
+    label: "работа",
   },
   {
     step: "skills",
-    src: "/assets/images/profile/skills.svg",
-    label: "Навыки",
+    src: "squiz",
+    label: "навыки",
+  },
+  {
+    step: "settings",
+    src: "settings",
+    label: "действия",
   },
 ];

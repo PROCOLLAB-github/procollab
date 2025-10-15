@@ -6,6 +6,7 @@ import { Snack } from "@ui/models/snack.model";
 import { Subscription } from "rxjs";
 import { AnimationService } from "@ui/services/animation.service";
 import { CommonModule } from "@angular/common";
+import { IconComponent } from "@uilib";
 
 /**
  * Компонент для отображения всплывающих уведомлений (snackbar).
@@ -25,7 +26,7 @@ import { CommonModule } from "@angular/common";
   templateUrl: "./snackbar.component.html",
   styleUrl: "./snackbar.component.scss",
   animations: [AnimationService.slideInOut],
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   standalone: true,
 })
 export class SnackbarComponent implements OnInit, OnDestroy {

@@ -3,8 +3,7 @@
 <div class="filter">
   <div class="filter__body">
     <div class="filter__titles">
-      <h3 class="filter__title">Фильтр</h3>
-      <a class="text-body-12 filter__clear" (click)="clearFilters()">Сбросить фильтры</a>
+      <p class="text-body-14">фильтры</p>
     </div>
 
     <!-- Скрыть пока не появится программа для мос политеха -->
@@ -20,7 +19,7 @@
       </div>
     </div> -->
 
-    <div class="filter__block">
+    <!-- <div class="filter__block">
       <h4 class="text-body-12 filter__name">Проекты</h4>
       @for (tag of filterTags; track tag.id) {
       <div class="text-body-14 filter__checkbox" (click)="onFilterProjectType($event, tag.id)">
@@ -28,25 +27,16 @@
         {{ tag.label }}
       </div>
       }
-    </div>
-    <div class="filter__block">
-      <h4 class="text-body-12 filter__name">Этап проекта</h4>
-      @for (step of steps; track step.id) {
-      <div class="text-body-14 filter__checkbox" (click)="onFilterByStep($event, step.id)">
-        <app-checkbox [checked]="step.id === currentStep"></app-checkbox>
-        {{ step.name }}
-      </div>
-      }
-    </div>
-    <div class="filter__block">
+    </div> -->
+    <!-- <div class="filter__block">
       <h4 class="text-body-12 filter__name">Участники (кол-во)</h4>
       <app-num-slider
         [appNums]="membersCountOptions"
         [appValue]="currentMembersCount"
         (appValueChange)="onFilterByMembersCount($event)"
       ></app-num-slider>
-    </div>
-    <div class="filter__block">
+    </div> -->
+    <!-- <div class="filter__block">
       <div class="text-body-12 filter__name">Наличие вакансий</div>
       <div class="filter__switch">
         <span class="filter__yes-no text-body-14" [class.filter__yes-no--active]="!hasVacancies"
@@ -60,15 +50,16 @@
           >Да</span
         >
       </div>
-    </div>
+    </div> -->
     <div class="filter__block">
-      <h4 class="text-body-12 filter__name">Направление</h4>
-      @for (industry of industries; track industry.id) {
-      <div class="text-body-14 filter__checkbox" (click)="onFilterByIndustry($event, industry.id)">
-        <app-checkbox [checked]="industry.id === currentIndustry"></app-checkbox>
-        {{ industry.name }}
+      <div class="text-body-10 filter__select">
+        <app-select
+          [formControl]="industryControl"
+          size="big"
+          [options]="industries"
+          placeholder="сфера проекта"
+        ></app-select>
       </div>
-      }
     </div>
   </div>
 </div>

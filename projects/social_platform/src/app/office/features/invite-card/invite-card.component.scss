@@ -1,0 +1,103 @@
+/** @format */
+
+@use "styles/typography";
+
+.invite {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  justify-content: space-between;
+  padding: 15px 10px;
+  background-color: var(--light-gray);
+  border-radius: var(--rounded-md);
+
+  &__role {
+    color: var(--black);
+  }
+
+  &__requirements {
+    color: var(--dark-grey);
+  }
+
+  &__status {
+    color: var(--dark-grey);
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &__user {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  &__top {
+    display: flex;
+    gap: 15px;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid var(--dark-grey);
+  }
+
+  &__warning-modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 400px;
+    text-align: center;
+
+    p {
+      margin-bottom: 15px;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    :nth-child(2) {
+      margin-bottom: 220px;
+    }
+
+    ::ng-deep {
+      app-input {
+        input {
+          @include typography.body-12;
+        }
+      }
+
+      app-select {
+        .field__input,
+        ul,
+        li {
+          @include typography.body-12;
+        }
+      }
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  &__icons {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+
+  &__icon {
+    cursor: pointer;
+  }
+
+  &__edit {
+    color: var(--dark-grey);
+  }
+}

@@ -77,16 +77,6 @@
   &__buttons-group {
     display: flex;
     gap: 15px;
-    width: 100%;
-
-    app-button {
-      width: 100%;
-      border-radius: 15px;
-    }
-
-    @include responsive.apply-desktop {
-      width: 55%;
-    }
   }
 
   &__confirm {

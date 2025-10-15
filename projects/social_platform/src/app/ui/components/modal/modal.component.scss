@@ -29,7 +29,7 @@
     padding: 24px;
     overflow: hidden;
     background: var(--white);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
     transform: translate(-50%, -50%);
 
     @include responsive.apply-desktop {

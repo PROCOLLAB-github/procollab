@@ -1,0 +1,37 @@
+.chat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  cdk-virtual-scroll-viewport {
+    ::ng-deep .cdk-virtual-scroll-content-wrapper {
+      max-width: 100%;
+    }
+  }
+
+  &__messages {
+    flex-grow: 1;
+    max-width: 100%;
+    overflow-y: auto;
+    border-top: 0.5px solid var(--medium-grey-for-outline);
+    border-right: 0.5px solid var(--medium-grey-for-outline);
+    border-left: 0.5px solid var(--medium-grey-for-outline);
+    border-top-left-radius: var(--rounded-xl);
+    border-top-right-radius: var(--rounded-xl);
+  }
+
+  &__message {
+    display: block;
+    width: 100%;
+
+    &:last-child {
+      margin-bottom: 10px;
+    }
+  }
+
+  &__typing {
+    margin-bottom: 4px;
+    color: var(--dark-grey);
+  }
+}

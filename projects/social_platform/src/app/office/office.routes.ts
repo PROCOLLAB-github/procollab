@@ -7,8 +7,6 @@ import { MembersComponent } from "./members/members.component";
 import { MembersResolver } from "./members/members.resolver";
 import { VacancySendComponent } from "./vacancy/send/send.component";
 import { OfficeResolver } from "./office.resolver";
-import { MentorsComponent } from "./mentors/mentors.component";
-import { MentorsResolver } from "./mentors/mentors.resolver";
 
 /**
  * Конфигурация маршрутов для модуля офиса
@@ -67,13 +65,6 @@ export const OFFICE_ROUTES: Routes = [
         component: MembersComponent,
         resolve: {
           data: MembersResolver,
-        },
-      },
-      {
-        path: "mentors",
-        component: MentorsComponent,
-        resolve: {
-          data: MentorsResolver,
         },
       },
       {

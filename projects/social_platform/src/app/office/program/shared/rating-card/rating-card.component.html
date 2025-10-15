@@ -2,52 +2,47 @@
 
 @if (project) {
 <div class="card">
-  <div class="card__upper">
-    <div class="card__heading">
-      <app-avatar
-        class="card__avatar"
-        [url]="project.imageAddress"
-        [hasBorder]="true"
-        [size]="(desktopMode$ | async) ? 83 : 68"
-      ></app-avatar>
+  <div class="card__wrapper">
+    <div class="card__inner">
       <div class="card__info">
-        <a [routerLink]="['/office/projects/' + project.id]">
-          <h1 class="card__title">{{ project.name }}</h1>
-        </a>
-        <div class="card__row">
-          @if (industryService.industries | async; as industries) {
-          <p class="text-body-14">
-            @if (industryService.getIndustry(industries, project.industry); as industry) {
+        <app-avatar
+          class="card__avatar"
+          [url]="project.imageAddress"
+          [hasBorder]="true"
+          [size]="(desktopMode$ | async) ? 50 : 38"
+        ></app-avatar>
+
+        <div class="card__naming">
+          <a [routerLink]="['/office/projects/' + project.id]">
+            <p class="text-body-12 card__naming--text">{{ project.name }}</p>
+          </a>
+
+          @if (industryService.industries | async; as industries) { @if
+          (industryService.getIndustry(industries, project.industry); as industry) {
+          <app-tag class="card__industry" color="complete">
             {{ industry.name }}
-            }
-          </p>
-          } @if (project.region) {
-          <p class="card__geo text-body-14">
-            <i appIcon icon="geo-point" appWidth="7" appHeight="10" appViewBox="0 0 7 10"></i>
-            {{ project.region }}
-          </p>
-          }
+          </app-tag>
+          } }
         </div>
       </div>
-      <div class="card__info-buttons">
-        @if (project.presentationAddress) {
-        <a class="card__presentation" [href]="project.presentationAddress" target="_blank">
-          <app-button
-            class="card__presentation-button"
-            color="grey"
-            customTypographyClass="text-body-12"
-          >
-            Презентация проекта
-            <i appIcon icon="file_pdf" appSquare="16"></i>
-          </app-button>
-        </a>
-        }
-      </div>
+
+      @if (project.presentationAddress) {
+      <a class="card__presentation" [href]="project.presentationAddress" target="_blank">
+        <app-button size="medium" appearance="outline" customTypographyClass="text-body-12">
+          <span>презентация</span>
+          <i appIcon icon="arrow-down" appSquare="8"></i>
+        </app-button>
+      </a>
+      }
     </div>
+
     <div class="about">
-      <h3 class="text-bold-body-16 about__title">О проекте</h3>
+      <div class="about__top">
+        <p class="text-body-12 about__title">о проекте</p>
+        <i icon="folder" appIcon appSquare="12"></i>
+      </div>
       @if (project.description) {
-      <div class="text-body-14 about__text">
+      <div class="text-body-10 about__text">
         <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
         @if (descriptionExpandable()) {
         <div
@@ -61,62 +56,71 @@
       }
     </div>
   </div>
+
   <div class="card__lower">
-    @if (!projectRated()) {
-    <div>
+    <div class="card__wrapper" [style.overflow-y]="isProjectCriterias() > 4 ? 'auto' : 'none'">
+      <div class="card__lower--info">
+        <p class="text-body-12">оценка проекта</p>
+        <i appIcon icon="medal" appWidth="8" appHeight="12"></i>
+      </div>
       <app-project-rating [criteria]="project.criterias" [formControl]="form"></app-project-rating>
       @if (form | controlError: "required"; as error) {
-      <div class="text-body-12 error">
+      <div class="text-body-10 error">
         {{ error }}
       </div>
       }
     </div>
-    <div class="card__buttons">
-      <app-button
-        appearance="outline"
-        color="primary"
-        [hasBorder]="false"
-        (click)="toggleRate('prev')"
-        [disabled]="_currentIndex() === 0"
-        [ngStyle]="{
-        opacity: _currentIndex() !== 0 ? '1': '0.5',
-      }"
-      >
-        <i appIcon icon="arrowright" appSquare="20" style="transform: rotate(180deg)"></i>
-        <span class="card__last-btn">Предыдущий проект</span>
-      </app-button>
 
-      <app-button (click)="submitRating()" [loader]="submitLoading()">Оценить проект</app-button>
-
-      <app-button
-        appearance="outline"
-        color="primary"
-        [hasBorder]="false"
-        (click)="toggleRate('next')"
-        [disabled]="_projects().length - 1 === _currentIndex()"
-        [ngStyle]="{
-      opacity: _projects().length - 1 !== _currentIndex() ? '1': '0.5',
-    }"
-      >
-        <span class="card__next-btn">Следующий проект</span>
-        <i appIcon icon="arrowright" appSquare="20"></i>
-      </app-button>
-    </div>
-    } @else {
+    @if (showRatingForm || showRatedWithEdit || showConfirmedState) {
     <div class="card__rated">
-      <div class="card__lower-icons">
-        <i appIcon icon="check" appWidth="30" appHeight="20" class="card__rated-icon"></i>
-        <i
-          appIcon
-          icon="reload"
-          appSquare="30"
-          class="card__redo-rating-icon"
-          (click)="redoRating()"
-        ></i>
-      </div>
-      <div class="text-heading-4">Проект оценен</div>
+      <app-button
+        style="flex-grow: 1"
+        customTypographyClass="text-body-12"
+        size="big"
+        [loader]="submitLoading() || confirmLoading()"
+        [color]="showRatedWithEdit ? 'green' : 'primary'"
+        [disabled]="showConfirmedState"
+        [appearance]="showConfirmedState ? 'outline' : 'inline'"
+        [style.opacity]="showConfirmedState ? '0.5' : '1'"
+        (click)="showRatingForm ? confirmLoading() : null"
+      >
+        {{ showRatingForm ? "оценить проект" : "проект оценен" }}
+      </app-button>
+
+      @if (showRatedWithEdit) {
+      <app-button
+        appearance="outline"
+        size="small"
+        type="icon"
+        class="card__rated--icon"
+        (click)="redoRating()"
+      >
+        <i appIcon icon="edit-pen" appSquare="10" class="card__redo-rating-icon"></i>
+      </app-button>
+      }
     </div>
     }
+
+    <app-modal
+      [open]="showConfirmRateModal()"
+      (openChange)="showConfirmRateModal.set(!showConfirmRateModal())"
+    >
+      <div class="cancel">
+        <div class="cancel__top">
+          <p class="cancel__title text-body-14">подтвердите оценку</p>
+          <i appIcon icon="check" appSquare="60"></i>
+        </div>
+
+        <app-button
+          size="big"
+          class="cancel__button"
+          customTypographyClass="text-body-12"
+          (click)="confirmRateProject()"
+        >
+          подтверждаю
+        </app-button>
+      </div>
+    </app-modal>
   </div>
 </div>
 }

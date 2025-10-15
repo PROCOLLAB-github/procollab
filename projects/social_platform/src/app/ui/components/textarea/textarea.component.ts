@@ -2,7 +2,9 @@
 
 import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
+import { IconComponent } from "@uilib";
 import { AutosizeModule } from "ngx-autosize";
+import { TooltipComponent } from "../tooltip/tooltip.component";
 
 /**
  * Компонент многострочного поля ввода с автоматическим изменением размера.
@@ -34,7 +36,7 @@ import { AutosizeModule } from "ngx-autosize";
     },
   ],
   standalone: true,
-  imports: [AutosizeModule],
+  imports: [AutosizeModule, IconComponent, TooltipComponent],
 })
 export class TextareaComponent implements OnInit, ControlValueAccessor {
   /** Текст подсказки */
@@ -43,8 +45,22 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
   /** Тип поля (наследуется от базового компонента) */
   @Input() type: "text" | "password" | "email" = "text";
 
+  /** Наличие подсказки */
+  @Input() haveHint = false;
+
+  /** Текст для подсказки */
+  @Input() tooltipText?: string;
+
+  /** Позиция подсказки */
+  @Input() tooltipPosition: "left" | "right" = "right";
+
+  /** Ширина подсказки */
+  @Input() tooltipWidth = 250;
+
   /** Состояние ошибки */
   @Input() error = false;
+
+  @Input() size: "small" | "big" = "small";
 
   /** Маска (наследуется, но не используется) */
   @Input() mask = "";
@@ -79,6 +95,19 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
 
   /** Текущее значение поля */
   value = "";
+
+  /** Состояние видимости подсказки */
+  isTooltipVisible = false;
+
+  /** Показать подсказку */
+  showTooltip(): void {
+    this.isTooltipVisible = true;
+  }
+
+  /** Скрыть подсказку */
+  hideTooltip(): void {
+    this.isTooltipVisible = false;
+  }
 
   // Методы ControlValueAccessor
   writeValue(value: string): void {

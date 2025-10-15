@@ -9,32 +9,26 @@ import { EditStep } from "@office/projects/edit/services/project-step.service";
 export const navItems = [
   {
     step: "main" as EditStep, // Идентификатор шага
-    src: "/assets/images/projects/edit/main.svg", // Путь к иконке
-    label: "Основные данные", // Отображаемый текст
+    label: "основные данные", // Отображаемый текст
   },
   {
     step: "contacts" as EditStep,
-    src: "/assets/images/projects/edit/contacts.svg",
-    label: "Контакты и ссылки",
+    label: "партнеры и ресурсы",
   },
   {
     step: "achievements" as EditStep,
-    src: "/assets/images/projects/edit/achievements.svg",
-    label: "Достижения",
+    label: "достижения",
   },
   {
     step: "vacancies" as EditStep,
-    src: "/assets/images/projects/edit/vacancies.svg",
-    label: "Вакансии",
+    label: "вакансии",
   },
   {
     step: "team" as EditStep,
-    src: "/assets/images/projects/edit/team.svg",
-    label: "Команда",
+    label: "команда",
   },
   {
     step: "additional" as EditStep,
-    src: "/assets/images/projects/edit/additional.svg",
-    label: "Доп. сведения",
+    label: "данные для конкурсов",
   },
 ];

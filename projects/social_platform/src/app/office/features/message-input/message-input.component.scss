@@ -1,0 +1,239 @@
+/** @format */
+
+@use "styles/responsive";
+@use "styles/typography";
+
+$button-size: 40px;
+
+.message-input {
+  position: relative;
+  padding: 12px;
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: 8px;
+
+  &__control {
+    display: flex;
+    align-items: center;
+  }
+
+  &__field {
+    flex-grow: 1;
+    color: var(--dark);
+    resize: none;
+    background: transparent;
+    border: none;
+    outline: none;
+
+    &::placeholder {
+      color: var(--dark-grey);
+    }
+  }
+
+  &__attach-button {
+    margin-right: 12px;
+    color: var(--dark-grey);
+    cursor: pointer;
+    border-radius: var(--rounded-xl);
+    opacity: 0.5;
+
+    input {
+      display: none;
+    }
+  }
+
+  &__send-button {
+    padding: 8px;
+    color: var(--white);
+    cursor: pointer;
+    background-color: var(--accent);
+    border-radius: var(--rounded-xl);
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: var(--accent-dark);
+    }
+  }
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  padding-bottom: 12px;
+
+  &__icon {
+    min-width: 24px;
+    margin-right: 18px;
+    color: var(--accent);
+  }
+
+  &__text {
+    width: 100%;
+    padding-left: 18px;
+    border-left: 2px solid var(--accent);
+
+    @include responsive.apply-desktop {
+      width: 80%;
+    }
+  }
+
+  &__name {
+    color: var(--accent);
+  }
+
+  &__info {
+    width: 500px;
+    overflow: hidden;
+    color: var(--black);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__cross {
+    margin-left: auto;
+    color: var(--red);
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--red-dark);
+    }
+  }
+}
+
+.files-list {
+  position: absolute;
+  bottom: 77%;
+  left: 15px;
+  display: flex;
+  list-style-type: none;
+
+  &__item {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+    background-color: var(--light-white);
+    border-color: var(--medium-grey-for-outline);
+    border-style: solid;
+    border-width: 0.5px 0.5px 0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    box-shadow: 4px -4px 4px rgb(51 51 51 / 20%);
+
+    &:not(:last-child) {
+      margin-right: 18px;
+    }
+  }
+}
+
+.file {
+  &--loading {
+    .file__name {
+      color: var(--dark-grey);
+    }
+
+    .file__type {
+      filter: grayscale(1);
+      opacity: 0.3;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+    cursor: pointer;
+    border-radius: var(--rounded-xl);
+    transition: color 0.2s;
+
+    &--file {
+      color: var(--accent);
+      border: 0.5px solid var(--accent);
+
+      &:hover {
+        color: var(--accent-dark);
+      }
+    }
+
+    &--basket {
+      color: var(--red);
+      border: 0.5px solid var(--red);
+
+      &:hover {
+        color: var(--red-dark);
+      }
+    }
+  }
+
+  &__name {
+    color: var(--black);
+  }
+
+  &__meta {
+    color: var(--dark-grey);
+  }
+
+  &__loading {
+    color: var(--accent);
+  }
+}
+
+.drop-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--black);
+    opacity: 0.5;
+  }
+
+  &__body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px;
+    background-color: var(--white);
+    border: 2px dashed var(--accent);
+    border-radius: 5px;
+    transform: translate(-50%, -50%);
+  }
+
+  &__img {
+    margin-bottom: 12px;
+  }
+
+  &__title {
+    width: 245px;
+    margin-bottom: 12px;
+    color: var(--black);
+    text-align: center;
+  }
+
+  &__comments {
+    width: 325px;
+    color: var(--dark-grey);
+    text-align: center;
+  }
+}

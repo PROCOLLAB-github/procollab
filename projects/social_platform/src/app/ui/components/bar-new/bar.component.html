@@ -1,0 +1,25 @@
+<!-- @format -->
+
+<section class="bar">
+  <nav class="bar__nav">
+    <ul class="bar__tabs">
+      @for (link of links; track $index) {
+      <a
+        class="bar__link"
+        [routerLinkActiveOptions]="
+          link.isRouterLinkActiveOptions ? { exact: true } : { exact: false }
+        "
+        [routerLink]="[link.link]"
+        routerLinkActive="bar__link--active"
+      >
+        <li class="text-body-12 bar__item">
+          <i appIcon appSquare="10" [icon]="link.iconName"></i>
+          {{ link.linkText }}
+        </li>
+      </a>
+      }
+    </ul>
+
+    <ng-content></ng-content>
+  </nav>
+</section>

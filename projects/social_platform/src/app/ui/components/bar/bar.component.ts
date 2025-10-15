@@ -42,12 +42,12 @@ export class BarComponent {
     count?: number;
   }[];
 
+  /** Показывать индикатор в виде шарика */
+  @Input() ballHave?: boolean = false;
+
   /** Маршрут для кнопки "Назад" */
   @Input() backRoute?: string;
 
   /** Показывать кнопку "Назад" */
   @Input() backHave?: boolean;
-
-  /** Показывать индикатор в виде шарика */
-  @Input() ballHave?: boolean = false;
 }

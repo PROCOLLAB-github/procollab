@@ -17,6 +17,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AsyncPipe } from "@angular/common";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 import { noteList } from "projects/core/src/consts/note-list";
+import { BackComponent } from "@uilib";
 
 /**
  * Компонент для отправки отклика на вакансию
@@ -41,6 +42,7 @@ import { noteList } from "projects/core/src/consts/note-list";
     UserRolePipe,
     BarComponent,
     UploadFileComponent,
+    BackComponent,
   ],
 })
 export class VacancySendComponent implements OnInit {

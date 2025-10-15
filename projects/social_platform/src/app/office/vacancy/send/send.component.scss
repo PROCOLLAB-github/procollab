@@ -79,7 +79,7 @@
   margin-top: 15px;
   margin-bottom: 60px;
   border: 1px solid var(--gray);
-  border-radius: 15px;
+  border-radius: var(--rounded-xl);
 
   &__list {
     margin-top: 24px;

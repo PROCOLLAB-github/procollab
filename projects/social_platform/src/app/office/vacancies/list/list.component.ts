@@ -22,7 +22,7 @@ import { ApiPagination } from "@office/models/api-pagination.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { VacancyFilterComponent } from "../shared/filter/vacancy-filter.component";
 import { VacancyResponse } from "@office/models/vacancy-response.model";
-import { ResponseCardComponent } from "@office/shared/response-card/response-card.component";
+import { ResponseCardComponent } from "@office/features/response-card/response-card.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
 

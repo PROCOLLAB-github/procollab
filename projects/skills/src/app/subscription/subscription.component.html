@@ -13,7 +13,13 @@
         style="color: var(--white)"
       ></i>
       <p class="cancel__title">Ты действительно хочешь отменить подписку?</p>
-      <app-button (click)="onCancelSubscription()" style="color: var(--dark-grey)" [color]="'grey'">
+      <app-button
+        customTypographyClass="text-body-12"
+        size="big"
+        (click)="onCancelSubscription()"
+        style="color: var(--dark-grey)"
+        [color]="'grey'"
+      >
         Отменить
       </app-button>
       <img alt="stars" src="assets/images/subscription/stars.svg" class="cancel__stars" />
@@ -32,7 +38,13 @@
         style="color: var(--black)"
       ></i>
       <p class="cancel__title" style="color: var(--black)">Включим автопродление подписки?</p>
-      <app-button (click)="onConfirmAutoPlay(true)" [color]="'primary'">Включить</app-button>
+      <app-button
+        customTypographyClass="text-body-12"
+        size="big"
+        (click)="onConfirmAutoPlay(true)"
+        [color]="'primary'"
+        >Включить</app-button
+      >
       <img alt="wave" src="assets/images/subscription/wave.svg" class="cancel__wave" />
     </div>
   </app-modal>
@@ -90,6 +102,8 @@
         </div> -->
 
         <app-button
+          customTypographyClass="text-body-12"
+          size="big"
           [color]="subscription.id === 3 ? 'grey' : 'primary'"
           (click)="onBuyClick(subscription.id)"
           >Купить</app-button
@@ -100,7 +114,12 @@
   </div>
 
   @if(subscriptionData()?.lastSubscriptionType !== null) {
-  <app-button class="text-body-12" (click)="openCancelModal()" [color]="'grey'">
+  <app-button
+    size="big"
+    customTypographyClass="text-body-12"
+    (click)="openCancelModal()"
+    [color]="'grey'"
+  >
     Отменить подписку
   </app-button>
   }

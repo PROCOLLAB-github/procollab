@@ -7,7 +7,7 @@ import { ChatItem } from "@office/chat/models/chat-item.model";
 import { ChatService } from "@services/chat.service";
 import { ChatMessage } from "@models/chat-message.model";
 import { ChatDirectService } from "@office/chat/services/chat-direct.service";
-import { ChatWindowComponent } from "@office/shared/chat-window/chat-window.component";
+import { ChatWindowComponent } from "@office/features/chat-window/chat-window.component";
 import { AuthService } from "@auth/services";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ApiPagination } from "@models/api-pagination.model";

@@ -7,6 +7,9 @@ import { ProjectService } from "@services/project.service";
 import { Project } from "@models/project.model";
 import { InviteService } from "@services/invite.service";
 import { Invite } from "@models/invite.model";
+import { Goal } from "@office/models/goals.model";
+import { Partner } from "@office/models/partner.model";
+import { Resource } from "@office/models/resource.model";
 
 /**
  * Resolver для загрузки данных редактирования проекта
@@ -30,7 +33,7 @@ import { Invite } from "@models/invite.model";
  * Применяет forkJoin для параллельной загрузки данных проекта и приглашений,
  * что оптимизирует время загрузки страницы.
  */
-export const ProjectEditResolver: ResolveFn<[Project, Invite[]]> = (
+export const ProjectEditResolver: ResolveFn<[Project, Goal[], Partner[], Resource[], Invite[]]> = (
   route: ActivatedRouteSnapshot
 ) => {
   const projectService = inject(ProjectService);
@@ -38,8 +41,11 @@ export const ProjectEditResolver: ResolveFn<[Project, Invite[]]> = (
 
   const projectId = Number(route.paramMap.get("projectId"));
 
-  return forkJoin<[Project, Invite[]]>([
+  return forkJoin<[Project, Goal[], Partner[], Resource[], Invite[]]>([
     projectService.getOne(projectId),
+    projectService.getGoals(projectId),
+    projectService.getPartners(projectId),
+    projectService.getResources(projectId),
     inviteService.getByProject(projectId),
   ]);
 };

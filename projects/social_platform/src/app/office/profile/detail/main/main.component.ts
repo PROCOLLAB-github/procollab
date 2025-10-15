@@ -6,6 +6,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  inject,
   OnDestroy,
   OnInit,
   signal,
@@ -15,21 +16,30 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { expandElement } from "@utils/expand-element";
-import { concatMap, map, noop, Observable, of, Subscription, switchMap } from "rxjs";
+import { concatMap, filter, map, noop, Observable, of, Subscription, switchMap } from "rxjs";
 import { ProfileNewsService } from "../services/profile-news.service";
-import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ProfileNews } from "../models/profile-news.model";
-import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
-import { ParseBreaksPipe, ParseLinksPipe, PluralizePipe } from "projects/core";
+import {
+  ParseBreaksPipe,
+  ParseLinksPipe,
+  PluralizePipe,
+  YearsFromBirthdayPipe,
+} from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { IconComponent } from "@ui/components";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
+import { AsyncPipe, CommonModule, NgTemplateOutlet } from "@angular/common";
 import { ProfileService } from "@auth/services/profile.service";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
 import { Skill } from "@office/models/skill";
 import { HttpErrorResponse } from "@angular/common/http";
+import { NewsFormComponent } from "@office/features/news-form/news-form.component";
+import { NewsCardComponent } from "@office/features/news-card/news-card.component";
+import { ProfileDataService } from "../services/profile-date.service";
+import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
+import { ProjectDirectionCard } from "@office/projects/detail/shared/project-direction-card/project-direction-card.component";
+import { DirectionItem, directionItemBuilder } from "@utils/helpers/directionItemBuilder";
 
 /**
  * Главный компонент страницы профиля пользователя
@@ -59,9 +69,8 @@ import { HttpErrorResponse } from "@angular/common/http";
   styleUrl: "./main.component.scss",
   standalone: true,
   imports: [
+    CommonModule,
     TagComponent,
-    NewsFormComponent,
-    NewsCardComponent,
     IconComponent,
     ModalComponent,
     AvatarComponent,
@@ -70,31 +79,61 @@ import { HttpErrorResponse } from "@angular/common/http";
     UserLinksPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
-    AsyncPipe,
+    YearsFromBirthdayPipe,
     PluralizePipe,
     AvatarComponent,
+    NewsCardComponent,
+    NewsFormComponent,
+    SoonCardComponent,
+    ProjectDirectionCard,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly authService: AuthService,
-    private readonly profileNewsService: ProfileNewsService,
-    private readonly profileApproveSkillService: ProfileService,
-    private readonly cdRef: ChangeDetectorRef
-  ) {}
+  private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
+  private readonly profileNewsService = inject(ProfileNewsService);
+  private readonly profileDataService = inject(ProfileDataService);
+  private readonly profileApproveSkillService = inject(ProfileService);
+  private readonly cdRef = inject(ChangeDetectorRef);
+
+  user?: User;
+  loggedUserId?: number;
+
+  directions: DirectionItem[] = [];
 
   subscriptions$: Subscription[] = [];
-
-  user: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
-  loggedUserId: Observable<number> = this.authService.profile.pipe(map(user => user.id));
-
   /**
    * Инициализация компонента
    * Загружает новости пользователя и настраивает Intersection Observer для отслеживания просмотров
    */
   ngOnInit(): void {
+    const profileDataSub$ = this.profileDataService
+      .getProfile()
+      .pipe(filter(user => !!user))
+      .subscribe({
+        next: user => {
+          if (user) {
+            this.directions = directionItemBuilder(
+              2,
+              ["навыки", "достижения"],
+              ["squiz", "medal"],
+              ["", ""]
+            )!;
+          }
+          this.user = user as User;
+        },
+      });
+
+    const profileIdDataSub$ = this.profileDataService
+      .getProfileId()
+      .pipe(filter(userId => !!userId))
+      .subscribe({
+        next: profileId => {
+          this.loggedUserId = profileId;
+        },
+      });
+
     const route$ = this.route.params
       .pipe(
         map(r => r["id"]),
@@ -114,7 +153,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
           });
         });
       });
-    this.subscriptions$.push(route$);
+    this.subscriptions$.push(profileDataSub$, profileIdDataSub$, route$);
   }
 
   @ViewChild("descEl") descEl?: ElementRef;
@@ -150,6 +189,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   readAllModal = false;
 
   approveOwnSkillModal = false;
+  isShowModal = false;
 
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
@@ -313,5 +353,9 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onCloseModal(skillId: number) {
     this.openSkills[skillId] = false;
+  }
+
+  openWorkInfoModal(): void {
+    this.isShowModal = true;
   }
 }

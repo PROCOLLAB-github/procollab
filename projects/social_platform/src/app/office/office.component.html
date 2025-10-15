@@ -2,45 +2,54 @@
 
 <div class="office">
   @if (authService.profile | async; as user) {
-  <ui-sidebar
-    class="office__sidebar"
-    logoSrc="/assets/images/shared/logo.svg"
-    [navItems]="navItems"
-  >
-    @if (user !== undefined && invites !== undefined) {
-    <app-profile-control-panel
-      [invites]="invites()"
-      [hasNotifications]="false"
-      [hasUnreads]="!!(chatService.unread$ | async)"
-      [user]="user"
-      (acceptInvite)="onAcceptInvite($event)"
-      (rejectInvite)="onRejectInvite($event)"
-      (logout)="onLogout()"
-    ></app-profile-control-panel>
-    }
-    <div class="text-body-14 pro-item" (click)="openSkills()" afterNavItems>
-      <div class="pro-item__name">
-        <i appIcon icon="book" appSquare="24"></i> <span> Траектории </span>
-      </div>
-      <div class="pro-item__badge text-body-12">PRO</div>
-    </div>
-  </ui-sidebar>
-  }
   <div class="office__wrapper">
     <div class="office__top">
       <app-nav [invites]="invites()"></app-nav>
     </div>
+    <img
+      alt="background-image"
+      src="/assets/images/office/shared/backgorund-image-rocket-main.svg"
+      class="office__background-image"
+    />
     <div class="office__body">
       <div class="office__inner">
-        <router-outlet></router-outlet>
+        <div class="office__inner--wrapper">
+          <ui-sidebar
+            class="office__sidebar"
+            logoSrc="/assets/images/shared/logo.svg"
+            [navItems]="navItems"
+          >
+            <div class="office__sidebar--text">
+              <p class="text-body-6">Платформа создана компанией ООО «Молодежный форсайт»</p>
+              <p class="text-body-6">Политика обработки персональных данных</p>
+              <p class="text-body-6">2022</p>
+            </div>
+          </ui-sidebar>
+
+          <div class="office__inner--content">
+            @if (user !== undefined && invites !== undefined) {
+            <app-profile-control-panel
+              [invites]="invites()"
+              [hasNotifications]="false"
+              [hasUnreads]="!!(chatService.unread$ | async)"
+              [user]="user"
+              (acceptInvite)="onAcceptInvite($event)"
+              (rejectInvite)="onRejectInvite($event)"
+              (logout)="onLogout()"
+            ></app-profile-control-panel>
+            }
+            <router-outlet></router-outlet>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+  }
   <app-modal [open]="waitVerificationModal && !waitVerificationAccepted">
     <div class="message-modal">
       <img src="/assets/images/office/shared/wait.png" alt="wait" width="215px" />
-      <h3 class="message-modal__title text-bold-body-16">Ваш аккаунт проходит подтверждение</h3>
-      <p class="message-modal__text text-body-14">
+      <h3 class="message-modal__title text-body-14">Ваш аккаунт проходит подтверждение</h3>
+      <p class="message-modal__text text-body-12">
         Мы проверяем ваши данные и скоро сообщим о подтверждении аккаунта, а пока можете уже
         пользоваться платформой
       </p>
@@ -52,10 +61,8 @@
 
   <app-modal [open]="inviteErrorModal">
     <div class="message-modal">
-      <h3 class="message-modal__title text-bold-body-16">
-        Приглашение на текущий проект было удалено
-      </h3>
-      <p class="message-modal__text text-body-14">
+      <h3 class="message-modal__title text-body-14">Приглашение на текущий проект было удалено</h3>
+      <p class="message-modal__text text-body-12">
         Проверьте наличие вас в списке участников проекта или обратитесь к создателю проекта, чтобы
         вас заново пригласили!
       </p>

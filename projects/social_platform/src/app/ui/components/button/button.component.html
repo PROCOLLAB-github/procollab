@@ -1,8 +1,7 @@
 <!-- @format -->
-
 <button
-  [type]="type"
-  [class]="'button text-bold-body-16' + ' ' + customTypographyClass"
+  [type]="type === 'icon' ? 'button' : type"
+  [class]="'button text-body-12' + ' ' + customTypographyClass"
   [ngClass]="{
     'button--red': color === 'red',
     'button--inline': appearance === 'inline',
@@ -13,12 +12,19 @@
     'button--gold': color === 'gold',
     'button--gradient': color === 'gradient',
     'button--white': color === 'white',
+    'button--small': size === 'small',
+    'button--extra-small': size === 'extra-small',
+    'button--medium': size === 'medium',
+    'button--big': size === 'big',
+    'button--small--icon': size === 'small' && type === 'icon',
+    'button--medium--icon': size === 'medium' && type === 'icon',
+    'button--big--icon': size === 'big' && type === 'icon',
   }"
   [style.background-color]="backgroundColor"
   [disabled]="disabled"
 >
   @if (loader) {
-  <app-loader [color]="color === 'grey' ? 'black' : 'white'"></app-loader>
+  <app-loader [color]="appearance === 'inline' ? 'white' : 'gray'"></app-loader>
   } @else {
   <ng-container>
     <ng-content></ng-content>

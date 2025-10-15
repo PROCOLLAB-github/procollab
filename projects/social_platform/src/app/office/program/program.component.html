@@ -1,33 +1,12 @@
 <!-- @format -->
 
-<!-- {
-  link: '/office/program/my',
-  linkText: 'Мои программы',
-  isRouterLinkActiveOptions: true,
-
-}, -->
-
 <main class="page">
   <div class="page__bar">
-    <app-bar
-      [backHave]="true"
-      [links]="[
-            {
-              link: '/office/program/all',
-              linkText: 'Все программы',
-              isRouterLinkActiveOptions: false,
+    <app-back namespace="программы" path="/office/feed"></app-back>
 
-            },
-          ]"
-    >
-      <div class="bar__right">
-        <!-- @if (isAll) { -->
-        <form [formGroup]="searchForm">
-          <app-search formControlName="search"></app-search>
-        </form>
-        <!-- } -->
-      </div>
-    </app-bar>
+    <form class="page__search" [formGroup]="searchForm">
+      <app-search formControlName="search"></app-search>
+    </form>
   </div>
 
   <router-outlet></router-outlet>

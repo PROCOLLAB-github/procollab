@@ -1,0 +1,17 @@
+<!-- @format -->
+
+<div class="direction-card" (click)="isShowModal = true">
+  <i appIcon [icon]="icon" appSquare="11" class="direction-card__icon"></i>
+  <p class="text-body-10 direction-card__text">{{ direction }}</p>
+</div>
+
+<app-modal [open]="isShowModal" (openChange)="isShowModal = !isShowModal">
+  <div class="cancel">
+    <div class="cancel__top">
+      <p class="cancel__title text-body-12">{{ direction }}</p>
+      <i class="cancel__icon" appIcon [icon]="icon" appSquare="11"></i>
+    </div>
+
+    <p class="text-body-10 cancel__text">{{ about }}</p>
+  </div>
+</app-modal>
