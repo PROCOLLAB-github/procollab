@@ -100,6 +100,7 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private previousReqQuery: Record<string, any> = {};
   private availableFilters: PartnerProgramFields[] = [];
+  private currentFilters: Record<string, any> = {};
 
   searchForm: FormGroup;
   filterForm: FormGroup;
@@ -244,18 +245,21 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
           if (JSON.stringify(reqQuery) !== JSON.stringify(this.previousReqQuery)) {
             this.previousReqQuery = reqQuery;
+            this.currentFilters = reqQuery["filters"] || {};
 
             const hasFilters =
               reqQuery && reqQuery["filters"] && Object.keys(reqQuery["filters"]).length > 0;
             const params = new HttpParams({ fromObject: { offset: 0, limit: this.perPage } });
 
             if (hasFilters) {
-              return this.programService.createProgramFilters(programId, reqQuery["filters"]).pipe(
-                catchError(err => {
-                  console.error("createFilters failed, fallback to getAllProjects()", err);
-                  return this.programService.getAllProjects(programId, params);
-                })
-              );
+              return this.programService
+                .createProgramFilters(programId, reqQuery["filters"], params)
+                .pipe(
+                  catchError(err => {
+                    console.error("createFilters failed, fallback to getAllProjects()", err);
+                    return this.programService.getAllProjects(programId, params);
+                  })
+                );
             }
 
             return this.programService.getAllProjects(programId, params).pipe(
@@ -308,7 +312,6 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions$.push(queryParams$);
   }
 
-  // Методы фильтрации
   setValue(event: Event): void {
     event.stopPropagation();
     this.filterForm.get("filterTag")?.setValue(!this.filterForm.get("filterTag")?.value);
@@ -320,7 +323,6 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  // Универсальный метод скролла
   private onScroll() {
     if (this.listTotalCount && this.list.length >= this.listTotalCount) return of({});
 
@@ -330,11 +332,9 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
     let shouldFetch = false;
 
     if (this.listType === "rating") {
-      // Логика для rating
       const scrollBottom = target.scrollHeight - target.scrollTop - target.clientHeight;
       shouldFetch = scrollBottom <= 0;
     } else {
-      // Логика для projects и members
       const diff =
         target.scrollTop -
         this.listRoot!.nativeElement.getBoundingClientRect().height +
@@ -351,30 +351,47 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
     return of({});
   }
 
-  // Универсальный метод загрузки данных
   private onFetch() {
     const programId = this.route.parent?.snapshot.params["programId"];
     const offset = this.listPage * this.itemsPerPage;
+    const hasFilters = this.currentFilters && Object.keys(this.currentFilters).length > 0;
+    const params = new HttpParams({ fromObject: { offset, limit: this.itemsPerPage } });
 
     switch (this.listType) {
       case "projects":
-        return this.programService
-          .getAllProjects(
-            programId,
-            new HttpParams({ fromObject: { offset, limit: this.itemsPerPage } })
-          )
-          .pipe(
-            tap((projects: ApiPagination<Project>) => {
-              this.listTotalCount = projects.count;
-              if (this.listPage === 0) {
-                this.list = projects.results;
-              } else {
-                this.list = [...this.list, ...projects.results];
-              }
-              this.searchedList = this.list;
-              this.cdref.detectChanges();
-            })
-          );
+        if (hasFilters) {
+          return this.programService
+            .createProgramFilters(programId, this.currentFilters, params)
+            .pipe(
+              tap((projects: ApiPagination<Project>) => {
+                this.listTotalCount = projects.count;
+                if (this.listPage === 0) {
+                  this.list = projects.results;
+                } else {
+                  this.list = [...this.list, ...projects.results];
+                }
+                this.searchedList = this.list;
+                this.cdref.detectChanges();
+              }),
+              catchError(err => {
+                console.error("Pagination with filters failed", err);
+                return of({ results: [], count: 0 });
+              })
+            );
+        }
+
+        return this.programService.getAllProjects(programId, params).pipe(
+          tap((projects: ApiPagination<Project>) => {
+            this.listTotalCount = projects.count;
+            if (this.listPage === 0) {
+              this.list = projects.results;
+            } else {
+              this.list = [...this.list, ...projects.results];
+            }
+            this.searchedList = this.list;
+            this.cdref.detectChanges();
+          })
+        );
 
       case "members":
         return this.programService.getAllMembers(programId, offset, this.itemsPerPage).pipe(
@@ -411,7 +428,6 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  // Построение запроса для фильтров (только для проектов)
   private buildFilterQuery(q: any): Record<string, any> {
     if (this.listType !== "projects") return {};
 
@@ -439,7 +455,6 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.availableFilters = filters;
   }
 
-  // Swipe логика для мобильных устройств
   private swipeStartY = 0;
   private swipeThreshold = 50;
   private isSwiping = false;
