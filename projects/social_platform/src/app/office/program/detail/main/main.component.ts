@@ -10,7 +10,17 @@ import {
 } from "@angular/core";
 import { ProgramService } from "@office/program/services/program.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
+import {
+  concatMap,
+  fromEvent,
+  map,
+  noop,
+  Observable,
+  of,
+  Subscription,
+  tap,
+  throttleTime,
+} from "rxjs";
 import { Program } from "@office/program/models/program.model";
 import { ProgramNewsService } from "@office/program/services/program-news.service";
 import { FeedNews } from "@office/projects/models/project-news.model";
@@ -28,6 +38,7 @@ import { LoadingService } from "@office/services/loading.service";
 import { ProjectAdditionalService } from "@office/projects/edit/services/project-additional.service";
 import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
 import { NewsFormComponent } from "@office/features/news-form/news-form.component";
+import { AsyncPipe } from "@angular/common";
 
 @Component({
   selector: "app-main",

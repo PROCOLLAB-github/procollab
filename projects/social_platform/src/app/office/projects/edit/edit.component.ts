@@ -315,19 +315,13 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     // Очистка ошибок целей теперь входит в clearAllValidationErrors() ProjectFormService
   }
 
-  /**
-   * Удаление проекта с проверкой удаления у пользователя
-   */
-  deleteProject(): void {
-    if (!confirm("Вы точно хотите удалить проект?")) {
-      return;
+  onGroupToggled(isOpen: boolean, skillsGroupId: number): void {
+    this.openGroupIds.clear();
+    if (isOpen) {
+      this.openGroupIds.add(skillsGroupId);
     }
 
-    this.projectService.remove(Number(this.route.snapshot.paramMap.get("projectId"))).subscribe({
-      next: () => {
-        this.router.navigateByUrl(`/office/projects/my`);
-      },
-    });
+    this.cdRef.markForCheck();
   }
 
   /**
