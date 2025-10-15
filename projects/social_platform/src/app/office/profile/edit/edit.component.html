@@ -2,504 +2,245 @@
 
 @if (profileForm.get("userType"); as currentType) {
 <main class="profile">
-<div class="profile__top">
-  <div class="profile__back" [routerLink]="'/office/profile/' + profileId">
-    <i appIcon icon="left-arrow" appSquare="24"></i>
-    <h1 class="profile__title">редактирование профиля</h1>
-  </div>
-
-  <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
-    <app-button
-      size="medium"
-      [disabled]="
-        editEducationClick ||
-        editWorkClick ||
-        editLanguageClick ||
-        isEducationDirty ||
-        isWorkDirty ||
-        isLanguageDirty
-      "
-      [loader]="profileFormSubmitting"
-      [ngStyle]="{
-        opacity:
-          editEducationClick ||
-          editWorkClick ||
-          editLanguageClick ||
-          isEducationDirty ||
-          isWorkDirty ||
-          isLanguageDirty
-            ? '0.6'
-            : '1',
-        cursor:
-          editEducationClick ||
-          editWorkClick ||
-          editLanguageClick ||
-          isEducationDirty ||
-          isWorkDirty ||
-          isLanguageDirty
-            ? 'not-allowed'
-            : 'pointer'
-      }"
-      customTypographyClass="text-body-12"
-      (click)="saveProfile()"
-    >
-      cохранить</app-button
-    >
-  </div>
-</div>
-
-<main class="profile">
-  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
-    <div class="profile__navigation">
-      <ul class="profile__nav">
-        @for (item of navItems; track $index) {
-        <li
-          class="profile__item"
-          [class.profile__item--active]="editingStep === item.step"
-          (click)="navigateStep(item.step)"
-        >
-          <i
-            appIcon
-            [icon]="item.src"
-            class="profile__icon"
-            appSquare="14"
-            [class.profile__icon--active]="editingStep === item.step"
-            alt="project-icon"
-          ></i>
-          <p
-            class="profile__subtitle"
-            [class.profile__subtitle--active]="editingStep === item.step"
-          >
-            {{ item.label }}
-          </p>
-        </li>
-        }
-      </ul>
+  <div class="profile__top">
+    <div class="profile__back" [routerLink]="'/office/profile/' + profileId">
+      <i appIcon icon="left-arrow" appSquare="24"></i>
+      <h1 class="profile__title">редактирование профиля</h1>
     </div>
 
-    <div class="profile__wrapper">
-      @if(editingStep === 'main'){
-      <div class="profile__wrapper--main">
-        <div class="profile__row">
-          @if (profileForm.get("avatar"); as avatar) {
-          <fieldset class="profile__avatar">
-            <label for="avatar" class="field-label" style="text-align: center">фото</label>
-            <app-avatar-control
-              id="avatar"
-              formControlName="avatar"
-              type="profile"
-              [size]="68"
-              [error]="avatar | controlError"
-            ></app-avatar-control>
-            @if (avatar | controlError: "required") {
-            <div class="text-body-10 error">
-              {{ errorMessage.EMPTY_AVATAR }}
-            </div>
-            }
-          </fieldset>
-          } @if (profileForm.get("coverImageAddress"); as coverImageAddress) {
-          <fieldset class="profile__file">
-            <label
-              class="field-label text-body-12"
-              for="coverImageAddress"
-              style="text-align: center"
-              >обложка для профиля</label
-            >
-            <app-upload-file
-              formControlName="coverImageAddress"
-              accept=".jpg,.png,.jpeg"
-              [error]="coverImageAddress | controlError"
-            >
-              <ng-container emptyPlaceholder>
-                <i appIcon icon="file" appSquare="16"></i>
-                <p class="text-body-12 profile__slides-text">
-                  обложка формата
-                  <br />
-                  .JPG или .JPEG весом до 50МБ
-                </p>
-                @if (coverImageAddress | controlError: "required") {
-                <p class="profile__slides-error text-body-10">загрузите файл</p>
-                }
-              </ng-container>
-            </app-upload-file>
-          </fieldset>
-          }
-        </div>
+    <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
+      <app-button
+        size="medium"
+        [disabled]="
+          editEducationClick ||
+          editWorkClick ||
+          editLanguageClick ||
+          isEducationDirty ||
+          isWorkDirty ||
+          isLanguageDirty
+        "
+        [loader]="profileFormSubmitting"
+        [ngStyle]="{
+          opacity:
+            editEducationClick ||
+            editWorkClick ||
+            editLanguageClick ||
+            isEducationDirty ||
+            isWorkDirty ||
+            isLanguageDirty
+              ? '0.6'
+              : '1',
+          cursor:
+            editEducationClick ||
+            editWorkClick ||
+            editLanguageClick ||
+            isEducationDirty ||
+            isWorkDirty ||
+            isLanguageDirty
+              ? 'not-allowed'
+              : 'pointer'
+        }"
+        customTypographyClass="text-body-12"
+        (click)="saveProfile()"
+      >
+        cохранить</app-button
+      >
+    </div>
+  </div>
 
-        <div class="profile__main--grid">
-          <div class="profile__column">
-            @if (profileForm.get("firstName"); as firstName) {
-            <fieldset>
-              <label for="firstName" class="field-label">имя</label>
-              <app-input
-                size="big"
-                [error]="firstName | controlError"
-                id="firstName"
-                type="text"
-                formControlName="firstName"
-                placeholder="иван"
-              ></app-input>
-              @if (firstName | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            } @if (profileForm.get("lastName"); as lastName) {
-            <fieldset>
-              <label for="lastName" class="field-label">фамилия</label>
-              <app-input
-                size="big"
-                [error]="lastName | controlError"
-                id="lastName"
-                type="text"
-                formControlName="lastName"
-                placeholder="Иванов"
-              ></app-input>
-              @if (lastName | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </div>
-
-          <div class="profile__column">
-            @if (profileForm.get("city"); as city) {
-            <fieldset>
-              <label for="city" class="field-label">город</label>
-              <app-input
-                size="big"
-                id="city"
-                [error]="city | controlError"
-                type="text"
-                placeholder="Москва"
-                formControlName="city"
-              ></app-input>
-              @if (city | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            } @if (profileForm.get("birthday"); as birthday) {
-            <fieldset class="space">
-              <label for="birthday" class="field-label">дата рождения</label>
-              <app-input
-                size="big"
-                id="birthday"
-                [error]="birthday | controlError"
-                type="text"
-                mask="00.00.0000"
-                formControlName="birthday"
-              ></app-input>
-              @if (birthday | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </div>
-
-          <div class="profile__column">
-            @if (profileForm.get("userType"); as userType) { @if (userType.value !== 1) {
-            <fieldset>
-              <label for="userType" class="field-label">тип аккаунта</label>
-              @if (roles | async; as options) {
-              <app-select
-                size="big"
-                id="userType"
-                formControlName="userType"
-                placeholder="Эксперт"
-                [options]="options"
-              ></app-select>
-              } @if (userType | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            } } @if (profileForm.get("speciality"); as speciality) {
-            <fieldset>
-              <label for="speciality" class="field-label">специальность</label>
-              <div class="profile__vacancies">
-                <app-autocomplete-input
-                  class="profile__vacancies--input"
-                  searchIcon="box"
-                  [suggestions]="inlineSpecs()"
-                  fieldToDisplay="name"
-                  valueField="name"
-                  fieldToDisplay="name"
-                  [forceSelect]="true"
-                  [error]="speciality | controlError"
-                  (searchStart)="onSearchSpec($event)"
-                  placeholder="Java Developer"
-                  formControlName="speciality"
-                  (openSkillsFunc)="toggleSpecsGroupsModal()"
-                ></app-autocomplete-input>
-              </div>
-              @if (speciality | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </div>
-        </div>
-
-        <div class="profile__column">
-          @if (profileForm.get("aboutMe"); as aboutMe) {
-          <fieldset>
-            <label for="aboutMe" class="field-label">обо мне</label>
-            <app-textarea
-              size="big"
-              id="aboutMe"
-              [error]="aboutMe | controlError"
-              type="text"
-              placeholder="Я java developer, очень люблю котиков"
-              formControlName="aboutMe"
-            ></app-textarea>
-            @if (aboutMe | controlError: "required") {
-            <div class="text-body-10 error">
-              {{ errorMessage.VALIDATION_REQUIRED }}
-            </div>
-            }
-          </fieldset>
-          }
-        </div>
-      </div>
-      } @if (editingStep === 'education') {
-      <div class="profile__wrapper--education">
-        <div class="profile__column">
-          @if (showEducationFields) {
-          <div class="profile__column--date">
-            @if (profileForm.get("entryYear"); as entryYear) {
-            <fieldset>
-              <label for="entryYear" class="field-label">начало</label>
-              <app-select
-                size="big"
-                [selectedId]="selectedEntryYearEducationId()"
-                formControlName="entryYear"
-                placeholder="2023 год"
-                [options]="yearListEducation"
-              >
-                <i appIcon icon="arrow-no-body" appSquare="32"></i>
-              </app-select>
-
-              @if (entryYear | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            } @if (profileForm.get("completionYear"); as completionYear) {
-            <fieldset>
-              <label for="completionYear" class="field-label">конец</label>
-              <app-select
-                size="big"
-                [selectedId]="selectedComplitionYearEducationId()"
-                formControlName="completionYear"
-                placeholder="2023 год"
-                [options]="yearListEducation"
-              >
-                <i appIcon icon="arrow-no-body" appSquare="32"></i>
-              </app-select>
-              @if (completionYear | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </div>
-
-          <div class="profile__column">
-            @if (profileForm.get("organizationName"); as organizationName) {
-            <fieldset>
-              <label for="organizationName" class="field-label">название учереждения</label>
-              <app-input
-                size="big"
-                [error]="organizationName | controlError"
-                placeholder="Вуз / Колледж / Школа"
-                formControlName="organizationName"
-              ></app-input>
-              @if (organizationName | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </div>
-
-          <div class="profile__column">
-            @if (profileForm.get("description"); as description) {
-            <fieldset>
-              <label for="description" class="field-label">направление</label>
-              <app-input
-                size="big"
-                [error]="description | controlError"
-                placeholder="Бизнес информатика"
-                formControlName="description"
-              ></app-input>
-              @if (description | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </div>
-
-          <div class="profile__column">
-            @if (profileForm.get("educationLevel"); as educationLevel) {
-            <fieldset>
-              <label for="educationLevel" class="field-label">уровень образования</label>
-              <app-select
-                size="big"
-                [selectedId]="selectedEducationLevelId()"
-                formControlName="educationLevel"
-                placeholder="Высшее образование-магистратура"
-                [options]="educationLevelList"
-              >
-                <i appIcon icon="arrow-no-body" appSquare="32"></i>
-              </app-select>
-              @if (educationLevel | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </div>
-
-          <div class="profile__column">
-            @if (profileForm.get("educationStatus"); as educationStatus) {
-            <fieldset>
-              <label for="educationStatus" class="field-label">статус</label>
-              <app-select
-                size="big"
-                [selectedId]="selectedEducationStatusId()"
-                formControlName="educationStatus"
-                placeholder="Студент"
-                [options]="educationStatusList"
-              >
-                <i appIcon icon="arrow-no-body" appSquare="32"></i>
-              </app-select>
-              @if (educationStatus | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </div>
-          }
-
-          <app-button
-            customTypographyClass="text-body-12"
-            size="big"
-            appearance="outline"
-            [disabled]="showEducationFields && !isEducationDirty"
-            [ngStyle]="{
-              opacity: showEducationFields && !isEducationDirty ? '0.6' : '1',
-              cursor: showEducationFields && !isEducationDirty ? 'not-allowed' : 'pointer'
-            }"
-            class="profile__add-education"
-            (click)="addEducation()"
+  <main class="profile">
+    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
+      <div class="profile__navigation">
+        <ul class="profile__nav">
+          @for (item of navItems; track $index) {
+          <li
+            class="profile__item"
+            [class.profile__item--active]="editingStep === item.step"
+            (click)="navigateStep(item.step)"
           >
-            <span>добавить образование</span>
-            <i appIcon icon="plus" appSquare="12"></i>
-          </app-button>
-        </div>
-
-        <div class="profile__education--list">
-          @if(educationItems().length || education.length){ @for (educationItem of education.value;
-          track $index) {
-          <div class="profile__education--info">
-            <p class="text-body-12 education__title">
-              {{ educationItem.organizationName }}
+            <i
+              appIcon
+              [icon]="item.src"
+              class="profile__icon"
+              appSquare="14"
+              [class.profile__icon--active]="editingStep === item.step"
+              alt="project-icon"
+            ></i>
+            <p
+              class="profile__subtitle"
+              [class.profile__subtitle--active]="editingStep === item.step"
+            >
+              {{ item.label }}
             </p>
-
-            <p class="text-body-10">
-              @if(educationItem.entryYear && educationItem.completionYear) {
-              {{ educationItem.entryYear }} год • {{ educationItem.completionYear }} год } @else if
-              (educationItem.entryYear && !educationItem.completionYear) {
-              {{ educationItem.entryYear }} год } @else if (!educationItem.entryYear &&
-              educationItem.completionYear){ {{ educationItem.completionYear }} год }
-            </p>
-
-            <div class="profile__education--card">
-              <div class="profile__education--info">
-                <p class="text-body-10">
-                  {{ educationItem.description }}
-                </p>
-
-                <p class="text-body-10">
-                  {{ educationItem.educationLevel }}
-                </p>
-
-                <p class="text-body-10">
-                  {{ educationItem.educationStatus }}
-                </p>
-              </div>
-
-              <div class="profile__action--icons">
-                <div class="edit-icon">
-                  <i appIcon icon="edit-pen" appSquare="10" (click)="editEducation($index)"></i>
-                </div>
-
-                <div class="basket-icon">
-                  <i appIcon icon="basket" (click)="removeEducation($index)" appSquare="10"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-          } }
-        </div>
+          </li>
+          }
+        </ul>
       </div>
-      } @if (editingStep === 'experience') {
-      <div class="profile__wrapper--education">
-        <div class="profile__column">
-          @if (showWorkFields){
-          <div class="profile__column">
-            <div class="profile__column--date">
-              @if (profileForm.get("entryYearWork"); as entryYearWork) {
-              <fieldset>
-                <label for="entryYearWork" class="field-label">начало</label>
-                <app-select
-                  size="big"
-                  [selectedId]="selectedEntryYearWorkId()"
-                  formControlName="entryYearWork"
-                  placeholder="2023 год"
-                  [options]="yearListEducation"
-                >
-                  <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__entry"></i>
-                </app-select>
 
-                @if (entryYearWork | controlError: "required") {
+      <div class="profile__wrapper">
+        @if(editingStep === 'main'){
+        <div class="profile__wrapper--main">
+          <div class="profile__row">
+            @if (profileForm.get("avatar"); as avatar) {
+            <fieldset class="profile__avatar">
+              <label for="avatar" class="field-label" style="text-align: center">фото</label>
+              <app-avatar-control
+                id="avatar"
+                formControlName="avatar"
+                type="profile"
+                [size]="68"
+                [error]="avatar | controlError"
+              ></app-avatar-control>
+              @if (avatar | controlError: "required") {
+              <div class="text-body-10 error">
+                {{ errorMessage.EMPTY_AVATAR }}
+              </div>
+              }
+            </fieldset>
+            } @if (profileForm.get("coverImageAddress"); as coverImageAddress) {
+            <fieldset class="profile__file">
+              <label
+                class="field-label text-body-12"
+                for="coverImageAddress"
+                style="text-align: center"
+                >обложка для профиля</label
+              >
+              <app-upload-file
+                formControlName="coverImageAddress"
+                accept=".jpg,.png,.jpeg"
+                [error]="coverImageAddress | controlError"
+              >
+                <ng-container emptyPlaceholder>
+                  <i appIcon icon="file" appSquare="16"></i>
+                  <p class="text-body-12 profile__slides-text">
+                    обложка формата
+                    <br />
+                    .JPG или .JPEG весом до 50МБ
+                  </p>
+                  @if (coverImageAddress | controlError: "required") {
+                  <p class="profile__slides-error text-body-10">загрузите файл</p>
+                  }
+                </ng-container>
+              </app-upload-file>
+            </fieldset>
+            }
+          </div>
+
+          <div class="profile__main--grid">
+            <div class="profile__column">
+              @if (profileForm.get("firstName"); as firstName) {
+              <fieldset>
+                <label for="firstName" class="field-label">имя</label>
+                <app-input
+                  size="big"
+                  [error]="firstName | controlError"
+                  id="firstName"
+                  type="text"
+                  formControlName="firstName"
+                  placeholder="иван"
+                ></app-input>
+                @if (firstName | controlError: "required") {
                 <div class="text-body-10 error">
                   {{ errorMessage.VALIDATION_REQUIRED }}
                 </div>
                 }
               </fieldset>
-              } @if (profileForm.get("completionYearWork"); as completionYearWork) {
+              } @if (profileForm.get("lastName"); as lastName) {
               <fieldset>
-                <label for="completionYearWork" class="field-label">конец</label>
+                <label for="lastName" class="field-label">фамилия</label>
+                <app-input
+                  size="big"
+                  [error]="lastName | controlError"
+                  id="lastName"
+                  type="text"
+                  formControlName="lastName"
+                  placeholder="Иванов"
+                ></app-input>
+                @if (lastName | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              }
+            </div>
+
+            <div class="profile__column">
+              @if (profileForm.get("city"); as city) {
+              <fieldset>
+                <label for="city" class="field-label">город</label>
+                <app-input
+                  size="big"
+                  id="city"
+                  [error]="city | controlError"
+                  type="text"
+                  placeholder="Москва"
+                  formControlName="city"
+                ></app-input>
+                @if (city | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              } @if (profileForm.get("birthday"); as birthday) {
+              <fieldset class="space">
+                <label for="birthday" class="field-label">дата рождения</label>
+                <app-input
+                  size="big"
+                  id="birthday"
+                  [error]="birthday | controlError"
+                  type="text"
+                  mask="00.00.0000"
+                  formControlName="birthday"
+                ></app-input>
+                @if (birthday | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              }
+            </div>
+
+            <div class="profile__column">
+              @if (profileForm.get("userType"); as userType) { @if (userType.value !== 1) {
+              <fieldset>
+                <label for="userType" class="field-label">тип аккаунта</label>
+                @if (roles | async; as options) {
                 <app-select
                   size="big"
-                  [selectedId]="selectedComplitionYearWorkId()"
-                  formControlName="completionYearWork"
-                  placeholder="2023 год"
-                  [options]="yearListEducation"
-                >
-                  <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
-                </app-select>
-
-                @if (completionYearWork | controlError: "required") {
+                  id="userType"
+                  formControlName="userType"
+                  placeholder="Эксперт"
+                  [options]="options"
+                ></app-select>
+                } @if (userType | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              } } @if (profileForm.get("speciality"); as speciality) {
+              <fieldset>
+                <label for="speciality" class="field-label">специальность</label>
+                <div class="profile__vacancies">
+                  <app-autocomplete-input
+                    class="profile__vacancies--input"
+                    searchIcon="box"
+                    [suggestions]="inlineSpecs()"
+                    fieldToDisplay="name"
+                    valueField="name"
+                    fieldToDisplay="name"
+                    [forceSelect]="true"
+                    [error]="speciality | controlError"
+                    (searchStart)="onSearchSpec($event)"
+                    placeholder="Java Developer"
+                    formControlName="speciality"
+                    (openSkillsFunc)="toggleSpecsGroupsModal()"
+                  ></app-autocomplete-input>
+                </div>
+                @if (speciality | controlError: "required") {
                 <div class="text-body-10 error">
                   {{ errorMessage.VALIDATION_REQUIRED }}
                 </div>
@@ -510,60 +251,18 @@
           </div>
 
           <div class="profile__column">
-            @if (profileForm.get("organization"); as organization) {
+            @if (profileForm.get("aboutMe"); as aboutMe) {
             <fieldset>
-              <label for="organization" class="field-label">организация</label>
-              <app-input
-                size="big"
-                id="organization"
-                [error]="organization | controlError"
-                type="text"
-                placeholder="Проколлаб"
-                formControlName="organization"
-              ></app-input>
-              @if (organization | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </div>
-
-          <div class="profile__column">
-            @if (profileForm.get("jobPosition"); as jobPosition) {
-            <fieldset>
-              <label for="jobPosition" class="field-label">должность</label>
-              <app-input
-                size="big"
-                id="jobPosition"
-                [error]="jobPosition | controlError"
-                type="text"
-                placeholder="Дизайнер"
-                formControlName="jobPosition"
-              ></app-input>
-              @if (jobPosition | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </div>
-
-          <div class="profile__column">
-            @if (profileForm.get("descriptionWork"); as descriptionWork) {
-            <fieldset>
-              <label for="descriptionWork" class="field-label">обо мне</label>
+              <label for="aboutMe" class="field-label">обо мне</label>
               <app-textarea
                 size="big"
-                id="descriptionWork"
-                [error]="descriptionWork | controlError"
+                id="aboutMe"
+                [error]="aboutMe | controlError"
                 type="text"
-                placeholder="Проект начал свое существование с 2020 года"
-                formControlName="descriptionWork"
+                placeholder="Я java developer, очень люблю котиков"
+                formControlName="aboutMe"
               ></app-textarea>
-              @if (descriptionWork | controlError: "required") {
+              @if (aboutMe | controlError: "required") {
               <div class="text-body-10 error">
                 {{ errorMessage.VALIDATION_REQUIRED }}
               </div>
@@ -571,74 +270,375 @@
             </fieldset>
             }
           </div>
-          }
-
-          <app-button
-            customTypographyClass="text-body-12"
-            size="big"
-            appearance="outline"
-            [disabled]="showWorkFields && !isWorkDirty"
-            [ngStyle]="{
-              opacity: showWorkFields && !isWorkDirty ? '0.6' : '1',
-              cursor: showWorkFields && !isWorkDirty ? 'not-allowed' : 'pointer'
-            }"
-            class="profile__add-education"
-            (click)="addWork()"
-          >
-            <span>добавить работу</span>
-            <i appIcon icon="plus" appSquare="12"></i>
-          </app-button>
         </div>
+        } @if (editingStep === 'education') {
+        <div class="profile__wrapper--education">
+          <div class="profile__column">
+            @if (showEducationFields) {
+            <div class="profile__column--date">
+              @if (profileForm.get("entryYear"); as entryYear) {
+              <fieldset>
+                <label for="entryYear" class="field-label">начало</label>
+                <app-select
+                  size="big"
+                  [selectedId]="selectedEntryYearEducationId()"
+                  formControlName="entryYear"
+                  placeholder="2023 год"
+                  [options]="yearListEducation"
+                >
+                  <i appIcon icon="arrow-no-body" appSquare="32"></i>
+                </app-select>
 
-        <div class="profile__education--list">
-          @if(workItems().length || workExperience.length){ @for (workItem of workExperience.value;
-          track $index) {
-          <div class="profile__education--info">
-            <p class="text-body-12 education__text">
-              {{ workItem.organizationName }}
-            </p>
+                @if (entryYear | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              } @if (profileForm.get("completionYear"); as completionYear) {
+              <fieldset>
+                <label for="completionYear" class="field-label">конец</label>
+                <app-select
+                  size="big"
+                  [selectedId]="selectedComplitionYearEducationId()"
+                  formControlName="completionYear"
+                  placeholder="2023 год"
+                  [options]="yearListEducation"
+                >
+                  <i appIcon icon="arrow-no-body" appSquare="32"></i>
+                </app-select>
+                @if (completionYear | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              }
+            </div>
 
-            <p class="text-body-10">
-              @if(workItem.entryYear && workItem.completionYear) {
-              {{ workItem.entryYear }} год • {{ workItem.completionYear }} год } @else if
-              (workItem.entryYear && !workItem.completionYear) { {{ workItem.entryYear }} год }
-              @else if (!workItem.entryYear && workItem.completionYear){
-              {{ workItem.completionYear }} год }
-            </p>
+            <div class="profile__column">
+              @if (profileForm.get("organizationName"); as organizationName) {
+              <fieldset>
+                <label for="organizationName" class="field-label">название учереждения</label>
+                <app-input
+                  size="big"
+                  [error]="organizationName | controlError"
+                  placeholder="Вуз / Колледж / Школа"
+                  formControlName="organizationName"
+                ></app-input>
+                @if (organizationName | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              }
+            </div>
 
-            <div class="profile__education--card">
-              <div class="profile__education--info">
-                <p class="text-body-10">
-                  {{ workItem.description }}
-                </p>
+            <div class="profile__column">
+              @if (profileForm.get("description"); as description) {
+              <fieldset>
+                <label for="description" class="field-label">направление</label>
+                <app-input
+                  size="big"
+                  [error]="description | controlError"
+                  placeholder="Бизнес информатика"
+                  formControlName="description"
+                ></app-input>
+                @if (description | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              }
+            </div>
 
-                <p class="text-body-10">
-                  {{ workItem.jobPosition }}
-                </p>
-              </div>
+            <div class="profile__column">
+              @if (profileForm.get("educationLevel"); as educationLevel) {
+              <fieldset>
+                <label for="educationLevel" class="field-label">уровень образования</label>
+                <app-select
+                  size="big"
+                  [selectedId]="selectedEducationLevelId()"
+                  formControlName="educationLevel"
+                  placeholder="Высшее образование-магистратура"
+                  [options]="educationLevelList"
+                >
+                  <i appIcon icon="arrow-no-body" appSquare="32"></i>
+                </app-select>
+                @if (educationLevel | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              }
+            </div>
 
-              <div class="profile__action--icons">
-                <div class="edit-icon">
-                  <i
-                    class="edit"
-                    appIcon
-                    icon="edit-pen"
-                    appSquare="10"
-                    (click)="editWork($index)"
-                  ></i>
+            <div class="profile__column">
+              @if (profileForm.get("educationStatus"); as educationStatus) {
+              <fieldset>
+                <label for="educationStatus" class="field-label">статус</label>
+                <app-select
+                  size="big"
+                  [selectedId]="selectedEducationStatusId()"
+                  formControlName="educationStatus"
+                  placeholder="Студент"
+                  [options]="educationStatusList"
+                >
+                  <i appIcon icon="arrow-no-body" appSquare="32"></i>
+                </app-select>
+                @if (educationStatus | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              }
+            </div>
+            }
+
+            <app-button
+              customTypographyClass="text-body-12"
+              size="big"
+              appearance="outline"
+              [disabled]="showEducationFields && !isEducationDirty"
+              [ngStyle]="{
+                opacity: showEducationFields && !isEducationDirty ? '0.6' : '1',
+                cursor: showEducationFields && !isEducationDirty ? 'not-allowed' : 'pointer'
+              }"
+              class="profile__add-education"
+              (click)="addEducation()"
+            >
+              <span>добавить образование</span>
+              <i appIcon icon="plus" appSquare="12"></i>
+            </app-button>
+          </div>
+
+          <div class="profile__education--list">
+            @if(educationItems().length || education.length){ @for (educationItem of
+            education.value; track $index) {
+            <div class="profile__education--info">
+              <p class="text-body-12 education__title">
+                {{ educationItem.organizationName }}
+              </p>
+
+              <p class="text-body-10">
+                @if(educationItem.entryYear && educationItem.completionYear) {
+                {{ educationItem.entryYear }} год • {{ educationItem.completionYear }} год } @else
+                if (educationItem.entryYear && !educationItem.completionYear) {
+                {{ educationItem.entryYear }} год } @else if (!educationItem.entryYear &&
+                educationItem.completionYear){ {{ educationItem.completionYear }} год }
+              </p>
+
+              <div class="profile__education--card">
+                <div class="profile__education--info">
+                  <p class="text-body-10">
+                    {{ educationItem.description }}
+                  </p>
+
+                  <p class="text-body-10">
+                    {{ educationItem.educationLevel }}
+                  </p>
+
+                  <p class="text-body-10">
+                    {{ educationItem.educationStatus }}
+                  </p>
                 </div>
 
-                <div class="basket-icon">
-                  <i (click)="removeWork($index)" appIcon icon="basket" appSquare="10"></i>
+                <div class="profile__action--icons">
+                  <div class="edit-icon">
+                    <i appIcon icon="edit-pen" appSquare="10" (click)="editEducation($index)"></i>
+                  </div>
+
+                  <div class="basket-icon">
+                    <i appIcon icon="basket" (click)="removeEducation($index)" appSquare="10"></i>
+                  </div>
                 </div>
               </div>
             </div>
+            } }
           </div>
-          } }
         </div>
-      </div>
-      } @if(editingStep === 'achievements'){
-      <!-- <div class="profile__wrapper--education">
+        } @if (editingStep === 'experience') {
+        <div class="profile__wrapper--education">
+          <div class="profile__column">
+            @if (showWorkFields){
+            <div class="profile__column">
+              <div class="profile__column--date">
+                @if (profileForm.get("entryYearWork"); as entryYearWork) {
+                <fieldset>
+                  <label for="entryYearWork" class="field-label">начало</label>
+                  <app-select
+                    size="big"
+                    [selectedId]="selectedEntryYearWorkId()"
+                    formControlName="entryYearWork"
+                    placeholder="2023 год"
+                    [options]="yearListEducation"
+                  >
+                    <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__entry"></i>
+                  </app-select>
+
+                  @if (entryYearWork | controlError: "required") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_REQUIRED }}
+                  </div>
+                  }
+                </fieldset>
+                } @if (profileForm.get("completionYearWork"); as completionYearWork) {
+                <fieldset>
+                  <label for="completionYearWork" class="field-label">конец</label>
+                  <app-select
+                    size="big"
+                    [selectedId]="selectedComplitionYearWorkId()"
+                    formControlName="completionYearWork"
+                    placeholder="2023 год"
+                    [options]="yearListEducation"
+                  >
+                    <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+                  </app-select>
+
+                  @if (completionYearWork | controlError: "required") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_REQUIRED }}
+                  </div>
+                  }
+                </fieldset>
+                }
+              </div>
+            </div>
+
+            <div class="profile__column">
+              @if (profileForm.get("organization"); as organization) {
+              <fieldset>
+                <label for="organization" class="field-label">организация</label>
+                <app-input
+                  size="big"
+                  id="organization"
+                  [error]="organization | controlError"
+                  type="text"
+                  placeholder="Проколлаб"
+                  formControlName="organization"
+                ></app-input>
+                @if (organization | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              }
+            </div>
+
+            <div class="profile__column">
+              @if (profileForm.get("jobPosition"); as jobPosition) {
+              <fieldset>
+                <label for="jobPosition" class="field-label">должность</label>
+                <app-input
+                  size="big"
+                  id="jobPosition"
+                  [error]="jobPosition | controlError"
+                  type="text"
+                  placeholder="Дизайнер"
+                  formControlName="jobPosition"
+                ></app-input>
+                @if (jobPosition | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              }
+            </div>
+
+            <div class="profile__column">
+              @if (profileForm.get("descriptionWork"); as descriptionWork) {
+              <fieldset>
+                <label for="descriptionWork" class="field-label">обо мне</label>
+                <app-textarea
+                  size="big"
+                  id="descriptionWork"
+                  [error]="descriptionWork | controlError"
+                  type="text"
+                  placeholder="Проект начал свое существование с 2020 года"
+                  formControlName="descriptionWork"
+                ></app-textarea>
+                @if (descriptionWork | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              }
+            </div>
+            }
+
+            <app-button
+              customTypographyClass="text-body-12"
+              size="big"
+              appearance="outline"
+              [disabled]="showWorkFields && !isWorkDirty"
+              [ngStyle]="{
+                opacity: showWorkFields && !isWorkDirty ? '0.6' : '1',
+                cursor: showWorkFields && !isWorkDirty ? 'not-allowed' : 'pointer'
+              }"
+              class="profile__add-education"
+              (click)="addWork()"
+            >
+              <span>добавить работу</span>
+              <i appIcon icon="plus" appSquare="12"></i>
+            </app-button>
+          </div>
+
+          <div class="profile__education--list">
+            @if(workItems().length || workExperience.length){ @for (workItem of
+            workExperience.value; track $index) {
+            <div class="profile__education--info">
+              <p class="text-body-12 education__text">
+                {{ workItem.organizationName }}
+              </p>
+
+              <p class="text-body-10">
+                @if(workItem.entryYear && workItem.completionYear) {
+                {{ workItem.entryYear }} год • {{ workItem.completionYear }} год } @else if
+                (workItem.entryYear && !workItem.completionYear) { {{ workItem.entryYear }} год }
+                @else if (!workItem.entryYear && workItem.completionYear){
+                {{ workItem.completionYear }} год }
+              </p>
+
+              <div class="profile__education--card">
+                <div class="profile__education--info">
+                  <p class="text-body-10">
+                    {{ workItem.description }}
+                  </p>
+
+                  <p class="text-body-10">
+                    {{ workItem.jobPosition }}
+                  </p>
+                </div>
+
+                <div class="profile__action--icons">
+                  <div class="edit-icon">
+                    <i
+                      class="edit"
+                      appIcon
+                      icon="edit-pen"
+                      appSquare="10"
+                      (click)="editWork($index)"
+                    ></i>
+                  </div>
+
+                  <div class="basket-icon">
+                    <i (click)="removeWork($index)" appIcon icon="basket" appSquare="10"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            } }
+          </div>
+        </div>
+        } @if(editingStep === 'achievements'){
+        <!-- <div class="profile__wrapper--education">
         <div class="profile__column">
           <ng-container formArrayName="achievements">
             <ul class="profile__column">
@@ -742,234 +742,235 @@
           </app-button>
         </div>
       </div> -->
-      } @if (editingStep === 'skills') {
-      <div class="profile__wrapper--education">
-        <div class="profile__column">
-          <fieldset>
-            <label for="skills" class="field-label">навыки, которыми я обладаю</label>
-            <div class="skills-field">
-              <app-autocomplete-input
-                class="skills-field__input"
-                placeholder="Python"
-                searchIcon="box"
-                [suggestions]="inlineSkills()"
-                fieldToDisplay="name"
-                [forceSelect]="true"
-                [clearInputOnSelect]="true"
-                (searchStart)="onSearchSkill($event)"
-                (optionSelected)="onAddSkill($event)"
-                (openSkillsFunc)="toggleSkillsGroupsModal()"
-              ></app-autocomplete-input>
+        } @if (editingStep === 'skills') {
+        <div class="profile__wrapper--education">
+          <div class="profile__column">
+            <fieldset>
+              <label for="skills" class="field-label">навыки, которыми я обладаю</label>
+              <div class="skills-field">
+                <app-autocomplete-input
+                  class="skills-field__input"
+                  placeholder="Python"
+                  searchIcon="box"
+                  [suggestions]="inlineSkills()"
+                  fieldToDisplay="name"
+                  [forceSelect]="true"
+                  [clearInputOnSelect]="true"
+                  (searchStart)="onSearchSkill($event)"
+                  (optionSelected)="onAddSkill($event)"
+                  (openSkillsFunc)="toggleSkillsGroupsModal()"
+                ></app-autocomplete-input>
+              </div>
+            </fieldset>
+
+            <div class="profile__column">
+              @if (profileForm.get("skills"); as skills) {
+              <fieldset class="skills-basket">
+                <app-skills-basket
+                  formControlName="skills"
+                  [error]="skills | controlError"
+                ></app-skills-basket>
+              </fieldset>
+              }
             </div>
-          </fieldset>
+          </div>
 
           <div class="profile__column">
-            @if (profileForm.get("skills"); as skills) {
-            <fieldset class="skills-basket">
-              <app-skills-basket
-                formControlName="skills"
-                [error]="skills | controlError"
-              ></app-skills-basket>
-            </fieldset>
-            }
-          </div>
-        </div>
+            <div class="profile__column--date">
+              @if (profileForm.get("language"); as language) {
+              <fieldset>
+                <label for="languageName" class="field-label">язык</label>
+                <app-select
+                  size="big"
+                  [selectedId]="selectedLanguageId()"
+                  formControlName="language"
+                  placeholder="Английский"
+                  [options]="languageList"
+                >
+                  <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+                </app-select>
 
-        <div class="profile__column">
-          <div class="profile__column--date">
-            @if (profileForm.get("language"); as language) {
-            <fieldset>
-              <label for="languageName" class="field-label">язык</label>
-              <app-select
-                size="big"
-                [selectedId]="selectedLanguageId()"
-                formControlName="language"
-                placeholder="Английский"
-                [options]="languageList"
-              >
-                <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
-              </app-select>
+                @if (language | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              } @if (profileForm.get("languageLevel"); as languageLevel) {
+              <fieldset>
+                <label for="languagLevel" class="field-label">уровень</label>
+                <app-select
+                  size="big"
+                  [selectedId]="selectedLanguageLevelId()"
+                  formControlName="languageLevel"
+                  placeholder="B1"
+                  [options]="languageLevelList"
+                >
+                  <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+                </app-select>
 
-              @if (language | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
+                @if (languageLevel | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
               }
-            </fieldset>
-            } @if (profileForm.get("languageLevel"); as languageLevel) {
-            <fieldset>
-              <label for="languagLevel" class="field-label">уровень</label>
-              <app-select
-                size="big"
-                [selectedId]="selectedLanguageLevelId()"
-                formControlName="languageLevel"
-                placeholder="B1"
-                [options]="languageLevelList"
-              >
-                <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
-              </app-select>
+            </div>
 
-              @if (languageLevel | controlError: "required") {
-              <div class="text-body-10 error">
-                {{ errorMessage.VALIDATION_REQUIRED }}
-              </div>
-              }
-            </fieldset>
-            }
-          </div>
+            <span class="text-body-10">количество добавляемых языков не более 4-х</span>
 
-          <span class="text-body-10">количество добавляемых языков не более 4-х</span>
-
-          <app-button
-            customTypographyClass="text-body-12"
-            size="big"
-            appearance="outline"
-            [disabled]="
-              !isLanguageDirty || languageItems().length === 4 || userLanguages.length === 4
-            "
-            [ngStyle]="{
+            <app-button
+              customTypographyClass="text-body-12"
+              size="big"
+              appearance="outline"
+              [disabled]="
+                !isLanguageDirty || languageItems().length === 4 || userLanguages.length === 4
+              "
+              [ngStyle]="{
                 opacity: !isLanguageDirty ? '0.6' : '1',
                 cursor: !isLanguageDirty ? 'not-allowed' : 'pointer',
               }"
-            (click)="addLanguage()"
-          >
-            <span>добавить язык</span>
-            <i appIcon icon="plus" appSquare="12"></i>
-          </app-button>
+              (click)="addLanguage()"
+            >
+              <span>добавить язык</span>
+              <i appIcon icon="plus" appSquare="12"></i>
+            </app-button>
 
-          <div class="profile__language--list">
-            @if(languageItems().length || userLanguages.length){ @for (languageItem of
-            userLanguages.value; track $index) {
-            <div class="profile__education--info">
-              <div class="education__title">
-                <p class="text-body-12">
-                  {{ languageItem.language }}
-                </p>
+            <div class="profile__language--list">
+              @if(languageItems().length || userLanguages.length){ @for (languageItem of
+              userLanguages.value; track $index) {
+              <div class="profile__education--info">
+                <div class="education__title">
+                  <p class="text-body-12">
+                    {{ languageItem.language }}
+                  </p>
 
-                <div class="profile__action--icons">
-                  <div class="edit-icon">
-                    <i appIcon icon="edit-pen" appSquare="10" (click)="editLanguage($index)"></i>
-                  </div>
+                  <div class="profile__action--icons">
+                    <div class="edit-icon">
+                      <i appIcon icon="edit-pen" appSquare="10" (click)="editLanguage($index)"></i>
+                    </div>
 
-                  <div class="basket-icon">
-                    <i (click)="removeLanguage($index)" appIcon icon="basket" appSquare="10"></i>
+                    <div class="basket-icon">
+                      <i (click)="removeLanguage($index)" appIcon icon="basket" appSquare="10"></i>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <p class="text-body-10 education__text">{{ languageItem.languageLevel }}</p>
+                <p class="text-body-10 education__text">{{ languageItem.languageLevel }}</p>
+              </div>
+              } }
             </div>
-            } }
           </div>
         </div>
+        } @else if (editingStep === 'settings') {
+        <div class="profile__wrapper--settings">
+          <app-button
+            (click)="isModalDeleteProfile.set(true)"
+            customTypographyClass="text-body-12"
+            color="red"
+            size="big"
+            >удалить профиль</app-button
+          >
+        </div>
+        }
       </div>
-      } @else if (editingStep === 'settings') {
-      <div class="profile__wrapper--settings">
-        <app-button
-          (click)="isModalDeleteProfile.set(true)"
-          customTypographyClass="text-body-12"
-          color="red"
-          size="big"
-          >удалить профиль</app-button
-        >
+    </form>
+  </main>
+  }
+
+  <app-modal
+    [open]="isModalErrorSkillsChoose()"
+    (openChange)="isModalErrorSkillsChoose.set(!isModalErrorSkillsChoose())"
+  >
+    <div class="cancel">
+      <div class="cancel__top">
+        <i
+          (click)="isModalErrorSkillsChoose.set(false)"
+          appIcon
+          icon="cross"
+          class="cancel__cross"
+        ></i>
+        <p class="cancel__title text-bold-body-16">Произошла ошибка при редактировании!</p>
       </div>
+      @if (isModalErrorSkillChooseText()) {
+      <p class="text-body-14 cancel__text">{{ isModalErrorSkillChooseText() }}.</p>
+      } @else {
+      <p class="text-body-14 cancel__text">
+        для публикации профиля, нужно заполнить все <strong>обязательные поля</strong> (они будут
+        <strong>подсвечены&nbsp;<span>красным</span></strong
+        >).
+      </p>
       }
     </div>
-  </form>
+  </app-modal>
+
+  <app-modal
+    [open]="isModalDeleteProfile()"
+    (openChange)="isModalDeleteProfile.set(!isModalDeleteProfile())"
+  >
+    <div class="cancel">
+      <div class="cancel__top">
+        <p class="cancel__title text-body-14">подтвердите удаление аккаунта</p>
+        <i appIcon icon="sad-smile" appSquare="50" class="cancel__delete-icon"></i>
+      </div>
+
+      <app-button customTypographyClass="text-body-12" size="big" color="red"
+        >удалить аккаунт</app-button
+      >
+    </div>
+  </app-modal>
+
+  <app-modal
+    [open]="specsGroupsModalOpen()"
+    (openChange)="specsGroupsModalOpen.set(!specsGroupsModalOpen())"
+    class="modal"
+  >
+    <div class="modal__wrapper">
+      <h4 class="text-heading-4">более специальностей</h4>
+      <div class="modal__content">
+        <div class="modal__specs-groups">
+          <ul>
+            @for (specsGroup of nestedSpecs$ | async; track specsGroup.id) {
+            <li>
+              <app-specializations-group
+                [title]="specsGroup.name"
+                [options]="specsGroup.specializations"
+                (selectOption)="onSelectSpec($event)"
+              ></app-specializations-group>
+            </li>
+            }
+          </ul>
+        </div>
+      </div>
+      <app-button customTypographyClass="text-body-12" (click)="toggleSpecsGroupsModal()"
+        >Сохранить</app-button
+      >
+    </div>
+  </app-modal>
+
+  <app-modal [open]="skillsGroupsModalOpen()" class="modal">
+    <div class="modal__wrapper">
+      <h4 class="text-heading-4">Библиотека навыков</h4>
+      <div class="modal__content">
+        <div class="modal__skills-groups">
+          <ul>
+            @for (skillsGroup of nestedSkills$ | async; track skillsGroup.id) {
+            <li>
+              <app-skills-group
+                [title]="skillsGroup.name"
+                [options]="skillsGroup.skills"
+                [selected]="this.profileForm.getRawValue().skills"
+                (optionToggled)="onToggleSkill($event)"
+              ></app-skills-group>
+            </li>
+            }
+          </ul>
+        </div>
+      </div>
+      <app-button customTypographyClass="text-body-12" (click)="toggleSkillsGroupsModal()"
+        >Сохранить</app-button
+      >
+    </div>
+  </app-modal>
 </main>
-}
-
-<app-modal
-  [open]="isModalErrorSkillsChoose()"
-  (openChange)="isModalErrorSkillsChoose.set(!isModalErrorSkillsChoose())"
->
-  <div class="cancel">
-    <div class="cancel__top">
-      <i
-        (click)="isModalErrorSkillsChoose.set(false)"
-        appIcon
-        icon="cross"
-        class="cancel__cross"
-      ></i>
-      <p class="cancel__title text-bold-body-16">Произошла ошибка при редактировании!</p>
-    </div>
-    @if (isModalErrorSkillChooseText()) {
-    <p class="text-body-14 cancel__text">{{ isModalErrorSkillChooseText() }}.</p>
-    } @else {
-    <p class="text-body-14 cancel__text">
-      для публикации профиля, нужно заполнить все <strong>обязательные поля</strong> (они будут
-      <strong>подсвечены&nbsp;<span>красным</span></strong
-      >).
-    </p>
-    }
-  </div>
-</app-modal>
-
-<app-modal
-  [open]="isModalDeleteProfile()"
-  (openChange)="isModalDeleteProfile.set(!isModalDeleteProfile())"
->
-  <div class="cancel">
-    <div class="cancel__top">
-      <p class="cancel__title text-body-14">подтвердите удаление аккаунта</p>
-      <i appIcon icon="sad-smile" appSquare="50" class="cancel__delete-icon"></i>
-    </div>
-
-    <app-button customTypographyClass="text-body-12" size="big" color="red"
-      >удалить аккаунт</app-button
-    >
-  </div>
-</app-modal>
-
-<app-modal
-  [open]="specsGroupsModalOpen()"
-  (openChange)="specsGroupsModalOpen.set(!specsGroupsModalOpen())"
-  class="modal"
->
-  <div class="modal__wrapper">
-    <h4 class="text-heading-4">более специальностей</h4>
-    <div class="modal__content">
-      <div class="modal__specs-groups">
-        <ul>
-          @for (specsGroup of nestedSpecs$ | async; track specsGroup.id) {
-          <li>
-            <app-specializations-group
-              [title]="specsGroup.name"
-              [options]="specsGroup.specializations"
-              (selectOption)="onSelectSpec($event)"
-            ></app-specializations-group>
-          </li>
-          }
-        </ul>
-      </div>
-    </div>
-    <app-button customTypographyClass="text-body-12" (click)="toggleSpecsGroupsModal()"
-      >Сохранить</app-button
-    >
-  </div>
-</app-modal>
-
-<app-modal [open]="skillsGroupsModalOpen()" class="modal">
-  <div class="modal__wrapper">
-    <h4 class="text-heading-4">Библиотека навыков</h4>
-    <div class="modal__content">
-      <div class="modal__skills-groups">
-        <ul>
-          @for (skillsGroup of nestedSkills$ | async; track skillsGroup.id) {
-          <li>
-            <app-skills-group
-              [title]="skillsGroup.name"
-              [options]="skillsGroup.skills"
-              [selected]="this.profileForm.getRawValue().skills"
-              (optionToggled)="onToggleSkill($event)"
-            ></app-skills-group>
-          </li>
-          }
-        </ul>
-      </div>
-    </div>
-    <app-button customTypographyClass="text-body-12" (click)="toggleSkillsGroupsModal()"
-      >Сохранить</app-button
-    >
-  </div>
-</app-modal>
