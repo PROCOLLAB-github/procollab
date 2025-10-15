@@ -6,6 +6,7 @@
 $button-size: 40px;
 
 .message-input {
+  position: relative;
   padding: 12px;
   border: 0.5px solid var(--medium-grey-for-outline);
   border-radius: 8px;
@@ -100,11 +101,26 @@ $button-size: 40px;
 }
 
 .files-list {
+  position: absolute;
+  bottom: 77%;
+  left: 15px;
   display: flex;
-  padding: 0 0 12px;
   list-style-type: none;
 
   &__item {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+    background-color: var(--light-white);
+    border-color: var(--medium-grey-for-outline);
+    border-style: solid;
+    border-width: 0.5px 0.5px 0px 0.5px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    box-shadow: 4px -4px 4px rgb(51 51 51 / 20%);
+
     &:not(:last-child) {
       margin-right: 18px;
     }
@@ -112,11 +128,6 @@ $button-size: 40px;
 }
 
 .file {
-  min-width: 140px;
-  padding: 10px;
-  border: 1px solid var(--medium-grey-for-outline);
-  border-radius: 20px;
-
   &--loading {
     .file__name {
       color: var(--dark-grey);
@@ -128,36 +139,52 @@ $button-size: 40px;
     }
   }
 
-  &__type {
-    display: block;
-    margin-bottom: 12px;
+  &__info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+    cursor: pointer;
+    border-radius: var(--rounded-xl);
+    transition: color 0.2s;
+
+    &--file {
+      color: var(--accent);
+      border: 0.5px solid var(--accent);
+
+      &:hover {
+        color: var(--accent-dark);
+      }
+    }
+
+    &--basket {
+      color: var(--red);
+      border: 0.5px solid var(--red);
+
+      &:hover {
+        color: var(--red-dark);
+      }
+    }
   }
 
   &__name {
     color: var(--black);
-
-    @include typography.body-14;
   }
 
-  &__size {
-    margin-bottom: 12px;
+  &__meta {
     color: var(--dark-grey);
-
-    @include typography.body-12;
   }
 
   &__loading {
     color: var(--accent);
-  }
-
-  &__basket {
-    color: var(--red);
-    cursor: pointer;
-    transition: color 0.2s;
-
-    &:hover {
-      color: var(--red-dark);
-    }
   }
 }
 

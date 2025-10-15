@@ -10,7 +10,7 @@
   <div class="message__inner">
     <app-avatar
       class="message__avatar"
-      [size]="40"
+      [size]="30"
       [isOnline]="chatMessage.author.isOnline"
       [onlineBadgeBorder]="2"
       [onlineBadgeSize]="10"
@@ -18,19 +18,19 @@
     ></app-avatar>
     <div class="message__info">
       <div class="message__top">
-        <div class="message__name text-bold-body-16">
+        <div class="message__name text-body-10">
           {{ chatMessage.author.firstName }} {{ chatMessage.author.lastName }}
         </div>
-        <div class="message__time text-body-14">
+        <div class="message__time text-body-10">
           {{ chatMessage.createdAt | dayjs: "format":"HH:mm" }}
         </div>
       </div>
       @if (chatMessage.replyTo) {
       <div class="message__reply reply">
-        <div class="reply__name text-bold-body-16">
+        <div class="reply__name text-body-10">
           {{ chatMessage.replyTo.author.firstName }} {{ chatMessage.replyTo.author.lastName }}
         </div>
-        <p class="reply__message text-body-1">
+        <p class="reply__message text-body-10">
           {{ chatMessage.replyTo.text }}
         </p>
       </div>
@@ -47,7 +47,7 @@
         </li>
         }
       </ul>
-      <div class="message__content text-body-14">{{ chatMessage.text }}</div>
+      <div class="message__content text-body-10">{{ chatMessage.text }}</div>
     </div>
   </div>
   <div
@@ -55,7 +55,7 @@
     (click)="onOpenContextmenu($event)"
     (clickOutside)="onCloseContextmenu()"
   >
-    <i appIcon icon="dots" appWidth="4" appHeight="16" appViewBox="0 0 4 16"></i>
+    <i appIcon icon="dots" appWidth="4" appHeight="10" appViewBox="0 0 4 10"></i>
   </div>
 </div>
 @if (authService.profile | async; as profile) {
@@ -65,13 +65,13 @@
   [style.opacity]="isOpen ? 1 : 0"
   [style.pointer-events]="isOpen ? 'auto' : 'none'"
 >
-  <li class="contextmenu__item text-body-14" (click)="onCopyContent($event)">Скопировать</li>
-  <li class="contextmenu__item text-body-14" (click)="onReply($event)">Ответить</li>
+  <li class="contextmenu__item text-body-10" (click)="onCopyContent($event)">скопировать</li>
+  <li class="contextmenu__item text-body-10" (click)="onReply($event)">ответить</li>
   @if (profile.id === chatMessage.author.id) {
   <ng-container>
-    <li class="contextmenu__item text-body-14" (click)="onEdit($event)">Редактировать</li>
-    <li class="contextmenu__item contextmenu__item--red text-body-14" (click)="onDelete($event)">
-      Удалить
+    <li class="contextmenu__item text-body-10" (click)="onEdit($event)">редактировать</li>
+    <li class="contextmenu__item contextmenu__item--red text-body-10" (click)="onDelete($event)">
+      удалить
     </li>
   </ng-container>
   }

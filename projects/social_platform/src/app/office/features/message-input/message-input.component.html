@@ -5,11 +5,16 @@
   <ul class="message-input__action action files-list">
     @for (file of attachFiles; let index = $index; track index) {
     <li class="files-list__item file" [class.file--loading]="file.loading">
-      <i class="file__type" appIcon [icon]="'file_' + (file.type | fileType)" appSquare="24"></i>
-      <h3 class="file__name">{{ file.name }}</h3>
-      <div class="file__size">{{ +file.size | formatedFileSize }}</div>
-      <!--Use hardcoded svg here, because svg sprites
-      aren't capable of animation-->
+      <i class="file__icon file__icon--file" appIcon icon="file" appSquare="8"></i>
+      <div class="file__info">
+        <h3 class="file__name text-body-10">{{ file.name.split(".")[0] }}</h3>
+        @if (file.type) {
+        <div class="file__meta text-body-6">
+          {{ file.type.includes("/") ? (file.type | fileType) : (file.type | uppercase) }} •
+          {{ +file.size | formatedFileSize }}
+        </div>
+        }
+      </div>
       @if (file.loading) {
       <svg
         class="file__loading"
@@ -39,10 +44,10 @@
       </svg>
       } @else {
       <i
-        class="file__basket"
+        class="file__icon file__icon--basket"
         appIcon
         icon="basket"
-        appSquare="12"
+        appSquare="8"
         (click)="onDeleteFile(index)"
       ></i>
       }

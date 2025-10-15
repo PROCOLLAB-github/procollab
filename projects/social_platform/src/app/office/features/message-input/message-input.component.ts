@@ -18,6 +18,7 @@ import { AutosizeModule } from "ngx-autosize";
 import { NgxMaskModule } from "ngx-mask";
 import { IconComponent } from "@ui/components";
 import { FormatedFileSizePipe } from "@core/pipes/formatted-file-size.pipe";
+import { UpperCasePipe } from "@angular/common";
 
 /**
  * Компонент ввода сообщений для чата
@@ -43,7 +44,14 @@ import { FormatedFileSizePipe } from "@core/pipes/formatted-file-size.pipe";
     },
   ],
   standalone: true,
-  imports: [IconComponent, NgxMaskModule, AutosizeModule, FileTypePipe, FormatedFileSizePipe],
+  imports: [
+    IconComponent,
+    NgxMaskModule,
+    AutosizeModule,
+    FileTypePipe,
+    FormatedFileSizePipe,
+    UpperCasePipe,
+  ],
 })
 export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
   /**
