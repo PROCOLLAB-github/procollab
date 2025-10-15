@@ -68,6 +68,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
   @Input() leaderId = 0;
   @Input() projSubmitInitiated = false;
   @Input() projectId!: number;
+  @Input() isProjectBoundToProgram = false;
 
   private subscription = new Subscription();
 

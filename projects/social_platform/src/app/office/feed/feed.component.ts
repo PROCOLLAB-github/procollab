@@ -101,7 +101,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         tap(includes => {
           this.includes.set(includes);
         }),
-        skip(1), // Пропускаем первое значение (уже загружено резолвером)
+        skip(1),
         concatMap(includes => {
           this.totalItemsCount.set(0);
           this.feedPage.set(0);
@@ -112,7 +112,6 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(feed => {
         this.feedItems.set(feed);
 
-        // Плавная прокрутка к началу ленты после фильтрации
         setTimeout(() => {
           this.feedRoot?.nativeElement.children[0].scrollIntoView({ behavior: "smooth" });
         });
@@ -175,7 +174,6 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Определяем тип новости по структуре contentObject
     if ("email" in item.content.contentObject) {
-      // Новость профиля
       this.profileNewsService
         .toggleLike(
           item.content.contentObject.id as unknown as string,
@@ -195,7 +193,6 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
           });
         });
     } else if ("leader" in item.content.contentObject) {
-      // Новость проекта
       this.projectNewsService
         .toggleLike(
           item.content.contentObject.id as unknown as string,

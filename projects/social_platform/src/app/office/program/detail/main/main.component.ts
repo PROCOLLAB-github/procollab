@@ -39,12 +39,15 @@ import { NewsFormComponent } from "@office/features/news-form/news-form.componen
     ButtonComponent,
     ProgramNewsCardComponent,
     UserLinksPipe,
+    AsyncPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
     ModalComponent,
     MatProgressBarModule,
     SoonCardComponent,
     NewsFormComponent,
+    ModalComponent,
+    MatProgressBarModule,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
@@ -138,6 +141,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
           this.showProgramModalErrorMessage.set("Произошла ошибка при загрузке программы");
         },
       });
+
+    this.loadEvent = fromEvent(window, "load");
 
     this.subscriptions$().push(program$);
     this.subscriptions$().push(programIdSubscription$);
@@ -252,6 +257,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   clearAssignProjectToProgramError(): void {
     this.projectAdditionalService.clearAssignProjectToProgramError();
   }
+
+  private loadEvent?: Observable<Event>;
 
   program?: Program;
   registerDateExpired!: boolean;

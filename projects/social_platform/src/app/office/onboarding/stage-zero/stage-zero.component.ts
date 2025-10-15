@@ -4,7 +4,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from "@angula
 import { AuthService } from "@auth/services";
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "@error/models/error-message";
-import { ControlErrorPipe, ValidationService } from "projects/core";
+import { ControlErrorPipe, ValidationService, YearsFromBirthdayPipe } from "projects/core";
 import { concatMap, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { User } from "@auth/models/user.model";

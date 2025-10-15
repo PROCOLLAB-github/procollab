@@ -206,6 +206,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   // Маркер того является ли проект привязанный к конкурсной программе
   isCompetitive = false;
 
+  // Маркер что проект привязан
+  isProjectBoundToProgram = false;
+
   // Текущий шаг редактирования
   get editingStep(): EditStep {
     return this.projectStepService.getCurrentStep()();
@@ -310,6 +313,21 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectAchievementsService.clearAllAchievementsErrors(this.achievements);
 
     // Очистка ошибок целей теперь входит в clearAllValidationErrors() ProjectFormService
+  }
+
+  /**
+   * Удаление проекта с проверкой удаления у пользователя
+   */
+  deleteProject(): void {
+    if (!confirm("Вы точно хотите удалить проект?")) {
+      return;
+    }
+
+    this.projectService.remove(Number(this.route.snapshot.paramMap.get("projectId"))).subscribe({
+      next: () => {
+        this.router.navigateByUrl(`/office/projects/my`);
+      },
+    });
   }
 
   /**
