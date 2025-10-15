@@ -327,6 +327,16 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  onGroupToggled(isOpen: boolean, skillsGroupId: number): void {
+    if (isOpen) {
+      this.openGroupIds.add(skillsGroupId);
+    } else {
+      this.openGroupIds.delete(skillsGroupId);
+    }
+
+    this.cdRef.markForCheck();
+  }
+
   /**
    * Сохранение проекта как опубликованного с проверкой доп. полей
    */
