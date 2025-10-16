@@ -5,7 +5,8 @@ import { NavService } from "@services/nav.service";
 import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
 import { BarComponent } from "@ui/components";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { Subscription } from "rxjs";
+import { debounceTime, Observable, Subscription } from "rxjs";
+import { SearchComponent } from "@ui/components/search/search.component";
 
 /**
  * Компонент страницы оценки проектов программы
@@ -45,7 +46,7 @@ import { Subscription } from "rxjs";
   templateUrl: "./rate-projects.component.html",
   styleUrl: "./rate-projects.component.scss",
   standalone: true,
-  imports: [BarComponent, RouterOutlet, ReactiveFormsModule],
+  imports: [BarComponent, RouterOutlet, ReactiveFormsModule, SearchComponent],
 })
 export class RateProjectsComponent implements OnInit, OnDestroy {
   constructor(
@@ -91,7 +92,22 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
       this.searchForm.get("search")?.setValue(searchValue, { emitEvent: false });
     });
 
+    const searchValueChanges$ = this.searchForm
+      .get("search")
+      ?.valueChanges.pipe(debounceTime(500))
+      .subscribe(searchValue => {
+        this.router.navigate([], {
+          queryParams: { name__contains: searchValue || null },
+          relativeTo: this.route,
+          queryParamsHandling: "merge",
+        });
+      });
+
     this.subscriptions$.push(queryParams$);
+
+    if (searchValueChanges$) {
+      this.subscriptions$.push(searchValueChanges$);
+    }
   }
 
   ngOnDestroy(): void {
@@ -119,15 +135,15 @@ export class RateProjectsComponent implements OnInit, OnDestroy {
     this.isOpen = false;
   }
 
-  onSearchClick() {
-    const searchValue = this.searchForm.get("search")?.value;
+  // onSearchClick() {
+  //   const searchValue = this.searchForm.get("search")?.value;
 
-    this.router.navigate([], {
-      queryParams: { name__contains: searchValue },
-      relativeTo: this.route,
-      queryParamsHandling: "merge",
-    });
+  //   this.router.navigate([], {
+  //     queryParams: { name__contains: searchValue },
+  //     relativeTo: this.route,
+  //     queryParamsHandling: "merge",
+  //   });
 
-    this.searchForm.get("search")?.reset();
-  }
+  //   this.searchForm.get("search")?.reset();
+  // }
 }

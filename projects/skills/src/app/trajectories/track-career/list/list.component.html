@@ -1,7 +1,8 @@
 <!-- @format -->
 
 <div class="list">
-  @if (trajectoriesList().length) { @for(trajectory of trajectoriesList(); track $index){
+  @if (trajectoriesList().length) { @for(trajectory of trajectoriesList().slice(1, 3); track
+  $index){
   <app-trajectory [trajectory]="trajectory"></app-trajectory>
   } }
 </div>

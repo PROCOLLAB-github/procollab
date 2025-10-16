@@ -10,7 +10,7 @@
 
     @include responsive.apply-desktop {
       display: flex;
-      flex-wrap: nowrap;
+      flex-flow: column nowrap;
       gap: 10px;
     }
 
@@ -27,10 +27,6 @@
       background-color: var(--white);
       border: 1px solid var(--grey-button);
       border-radius: var(--rounded-lg);
-
-      @include responsive.apply-desktop {
-        width: 55%;
-      }
     }
 
     &__category {
@@ -47,9 +43,9 @@
       }
     }
 
-    &__form {
-      width: 55%;
-    }
+    // &__form {
+    //   width: 55%;
+    // }
 
     &__top {
       position: relative;
