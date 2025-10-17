@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <div class="list">
-  @if (hasItems()) { @if (type() === 'all') { @for (trajectory of trajectoriesList().slice(1, 3);
+  @if (hasItems()) { @if (type() === 'all') { @for (trajectory of trajectoriesList().slice(0, 2);
   track $index) {
   <app-trajectory [trajectory]="trajectory"></app-trajectory>
   } } @else if (type() === 'my') {
