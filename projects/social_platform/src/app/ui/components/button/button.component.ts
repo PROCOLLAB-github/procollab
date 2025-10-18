@@ -17,7 +17,6 @@ import { CommonModule } from "@angular/common";
  * - backgroundColor: кастомный цвет фона
  * - disabled: состояние блокировки кнопки
  * - customTypographyClass: кастомный CSS класс для типографики
- * - haveHint: наличие подсказки
  * - tooltipText: текст подсказки
  * - tooltipPosition: позиция подсказки
  * - tooltipWidth: ширина подсказки

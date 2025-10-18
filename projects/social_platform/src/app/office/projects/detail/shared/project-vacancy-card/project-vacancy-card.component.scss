@@ -9,6 +9,25 @@
     justify-content: space-between;
     padding-bottom: 8px;
     border-bottom: 0.5px solid var(--accent);
+
+    &--top {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      align-items: flex-end;
+    }
+  }
+
+  &__project {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    &--info {
+      p {
+        color: var(--black);
+      }
+    }
   }
 
   &__role {
@@ -28,8 +47,19 @@
 
   &__actions {
     display: flex;
+    gap: 20px;
     align-items: center;
     justify-content: space-between;
+
+    &--vacancies {
+      ::ng-deep {
+        app-button {
+          button {
+            width: 131px;
+          }
+        }
+      }
+    }
   }
 
   &__skills {

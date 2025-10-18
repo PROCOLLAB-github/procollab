@@ -2,38 +2,16 @@
 
 @if (response) {
 <section class="response">
-  <a class="response__profile profile" [routerLink]="['/office/profile', response.user.id]">
-    <app-avatar [size]="90" [url]="response.user.avatar"></app-avatar>
-    <div class="profile__body">
-      <p class="text-body-12 profile__status">{{ response.user.userType | userRole | async }}</p>
-      <h3 class="text-heading-4 profile__name">
-        {{ response.user.firstName }} {{ response.user.lastName }}
-      </h3>
-      <p class="text-body-12 profile__info">{{ response.user.speciality }}</p>
-      @if (response.user.skills) {
-      <ul class="profile__skills">
-        @if(response.user.skills.length > 5){ @for (skill of response.user.skills.slice(0, 5); track
-        skill.id) {
-        <li class="profile__skill">
-          <app-tag>{{ skill.name }}</app-tag>
-        </li>
-        }
-        <span class="text-body-14">...</span>
-        } @else { @for (skill of response.user.skills; track skill.id) {
-        <li class="profile__skill">
-          <app-tag>{{ skill.name }}</app-tag>
-        </li>
-        } }
-      </ul>
-      }
-      <a [routerLink]="'/office/profile/' + response.user.id" class="text-body-12"
-        >Смотреть профиль</a
-      >
+  <div class="response__section"></div>
+
+  <div class="response__section">
+    <div class="lists__section">
+      <p class="text-body-12 lists__title">сопроводительное письмо</p>
+      <i appIcon icon="folder" class="lists__icon" appSquare="12"></i>
     </div>
-  </a>
-  <div class="response__text text">
-    <h4 class="text-body-14 text__title">Мотивационное письмо</h4>
-    <p class="text-body-12 text__content">{{ response.whyMe }}</p>
+
+    <p class="text-body-10">{{ response.whyMe }}</p>
+
     @if(response.accompanyingFile){
     <app-file-item
       class="text__file"
@@ -49,7 +27,7 @@
           customTypographyClass="text-body-12"
           size="medium"
           class="actions__button--inactive"
-          >Связаться</app-button
+          >связаться</app-button
         >
       </a>
       <app-button
@@ -57,7 +35,7 @@
         size="medium"
         class="actions__button"
         (click)="onAccept(response.id)"
-        >Принять</app-button
+        >принять</app-button
       >
       <app-button
         customTypographyClass="text-body-12"
@@ -67,7 +45,7 @@
         appearance="outline"
         (click)="onReject(response.id)"
       >
-        Отклонить
+        отклонить
       </app-button>
     </div>
     }

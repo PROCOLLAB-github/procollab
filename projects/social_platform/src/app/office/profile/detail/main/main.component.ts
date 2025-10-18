@@ -70,31 +70,24 @@ import { DirectionItem, directionItemBuilder } from "@utils/helpers/directionIte
   standalone: true,
   imports: [
     CommonModule,
-    TagComponent,
     IconComponent,
     ModalComponent,
-    AvatarComponent,
     RouterLink,
     NgTemplateOutlet,
     UserLinksPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
     YearsFromBirthdayPipe,
-    PluralizePipe,
-    AvatarComponent,
     NewsCardComponent,
     NewsFormComponent,
-    SoonCardComponent,
     ProjectDirectionCard,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
-  private readonly authService = inject(AuthService);
   private readonly profileNewsService = inject(ProfileNewsService);
   private readonly profileDataService = inject(ProfileDataService);
-  private readonly profileApproveSkillService = inject(ProfileService);
   private readonly cdRef = inject(ChangeDetectorRef);
 
   user?: User;
@@ -186,9 +179,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   readAllEducation = false;
   readAllLanguages = false;
   readAllWorkExperience = false;
-  readAllModal = false;
 
-  approveOwnSkillModal = false;
   isShowModal = false;
 
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
@@ -271,88 +262,6 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
-  }
-
-  /**
-   * Подтверждение или отмена подтверждения навыка пользователя
-   * @param skillId - идентификатор навыка
-   * @param event - событие клика для предотвращения всплытия
-   * @param skill - объект навыка для обновления
-   */
-  onToggleApprove(skillId: number, event: Event, skill: Skill, profileId: number) {
-    event.stopPropagation();
-    const userId = this.route.snapshot.params["id"];
-
-    const isApprovedByCurrentUser = skill.approves.some(approve => {
-      return approve.confirmedBy.id === profileId;
-    });
-
-    if (isApprovedByCurrentUser) {
-      this.profileApproveSkillService.unApproveSkill(userId, skillId).subscribe(() => {
-        skill.approves = skill.approves.filter(approve => approve.confirmedBy.id !== profileId);
-        this.cdRef.markForCheck();
-      });
-    } else {
-      this.profileApproveSkillService
-        .approveSkill(userId, skillId)
-        .pipe(
-          switchMap(newApprove =>
-            newApprove.confirmedBy
-              ? of(newApprove)
-              : this.authService.profile.pipe(
-                  map(profile => ({
-                    ...newApprove,
-                    confirmedBy: profile,
-                  }))
-                )
-          )
-        )
-        .subscribe({
-          next: updatedApprove => {
-            skill.approves = [...skill.approves, updatedApprove];
-            this.cdRef.markForCheck();
-          },
-          error: err => {
-            if (err instanceof HttpErrorResponse) {
-              if (err.status === 400) {
-                this.approveOwnSkillModal = true;
-                this.cdRef.markForCheck();
-              }
-            }
-          },
-        });
-    }
-  }
-
-  isUserApproveSkill(skill: Skill, profileId: number): boolean {
-    return skill.approves.some(approve => approve.confirmedBy.id === profileId);
-  }
-
-  openSkills: any = {};
-
-  /**
-   * Открытие модального окна с информацией о подтверждениях навыка
-   * @param skillId - идентификатор навыка
-   */
-  onOpenSkill(skillId: number) {
-    this.openSkills[skillId] = !this.openSkills[skillId];
-  }
-
-  /**
-   * Обработчик изменения состояния модального окна навыка
-   * @param event - новое состояние модального окна
-   * @param skillId - идентификатор навыка
-   */
-  onOpenChange(event: boolean, skillId: number) {
-    if (this.openSkills[skillId] && !event) {
-      this.openSkills[skillId] = false;
-    } else {
-      this.openSkills[skillId] = event;
-    }
-  }
-
-  onCloseModal(skillId: number) {
-    this.openSkills[skillId] = false;
   }
 
   openWorkInfoModal(): void {

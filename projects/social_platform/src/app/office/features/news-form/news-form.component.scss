@@ -7,14 +7,23 @@
   &__row {
     display: flex;
     align-items: center;
-    border-bottom: 0.5px solid var(--medium-grey-for-outline);
 
     ::ng-deep app-input {
       input {
         width: 100%;
         padding: 12px 105px 6px 0;
         background-color: transparent;
+        border-bottom: 0.5px solid var(--medium-grey-for-outline);
       }
+    }
+
+    i {
+      width: 23px;
+      height: 23px;
+      padding: 6px;
+      color: var(--white);
+      background-color: var(--accent);
+      border-radius: var(--rounded-md);
     }
   }
 

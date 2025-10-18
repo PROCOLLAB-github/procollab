@@ -2,9 +2,14 @@
 
 <div class="desktop">
   <div class="desktop__header">
-    <h3>Фильтр</h3>
-    <a class="text-body-12" (click)="resetFilter()">Сбросить фильтр</a>
+    <p class="text-body-14">фильтры</p>
+    <a class="text-body-10" (click)="resetFilter()">сбросить</a>
   </div>
+
+  <a routerLink="/office/vacancies/my">
+    <app-button size="medium" customTypographyClass="text-body-12">мои отклики</app-button>
+  </a>
+
   <ng-container *ngTemplateOutlet="filter"></ng-container>
 </div>
 
@@ -15,7 +20,7 @@
       [class.select__input--open]="filterOpen()"
       (click)="filterOpen.set(!filterOpen())"
     >
-      Фильтр
+      фильтры
     </div>
     <i
       appIcon
@@ -27,7 +32,7 @@
     @if (filterOpen()) {
     <div class="select__dropdown" @dropdownAnimation>
       <ng-container *ngTemplateOutlet="filter"></ng-container>
-      <a class="text-body-12" (click)="resetFilter()">Сбросить фильтр</a>
+      <a class="text-body-12" (click)="resetFilter()">сбросить</a>
     </div>
     }
   </div>
@@ -36,11 +41,11 @@
 <ng-template #filter>
   <div class="filter">
     <div class="filter__experience">
-      <span class="text-body-12">Опыт</span>
+      <span class="text-body-12">опыт</span>
       <ul>
         @for (option of filterExperienceOptions; track $index) {
         <li
-          class="text-body-14 filter__checkbox"
+          class="text-body-12 filter__checkbox"
           (click)="setExperienceFilter($event, option.value)"
         >
           <app-checkbox [checked]="currentExperience() === option.value"></app-checkbox>
@@ -50,23 +55,8 @@
       </ul>
     </div>
 
-    <div class="filter__format">
-      <span class="text-body-12">Формат работы</span>
-      <ul>
-        @for (option of filterWorkFormatOptions; track $index) {
-        <li
-          class="text-body-14 filter__checkbox"
-          (click)="setWorkFormatFilter($event, option.value)"
-        >
-          <app-checkbox [checked]="currentWorkFormat() === option.value"></app-checkbox>
-          {{ option.label }}
-        </li>
-        }
-      </ul>
-    </div>
-
     <div class="filter__schedule">
-      <span class="text-body-12">График</span>
+      <span class="text-body-12">график</span>
       <ul>
         @for (option of filterWorkScheduleOptions; track $index) {
         <li
@@ -80,29 +70,27 @@
       </ul>
     </div>
 
+    <div class="filter__format">
+      <span class="text-body-12">формат работы</span>
+      <ul>
+        @for (option of filterWorkFormatOptions; track $index) {
+        <li
+          class="text-body-12 filter__checkbox"
+          (click)="setWorkFormatFilter($event, option.value)"
+        >
+          <app-checkbox [checked]="currentWorkFormat() === option.value"></app-checkbox>
+          {{ option.label }}
+        </li>
+        }
+      </ul>
+    </div>
+
     <div class="filter__salary">
-      <span class="text-body-12">Заработная плата</span>
-      <div class="filter__amounts">
-        <app-input
-          size="big"
-          type="text"
-          placeholder="от 50000"
-          [appValue]="salaryMinValue()"
-          (appValueChange)="onSalaryMinChange($event)"
-        >
-        </app-input>
-
-        <hr style="transform: rotate(90deg)" class="filter__salary-line" />
-
-        <app-input
-          size="big"
-          type="text"
-          placeholder="до 150000"
-          [appValue]="salaryMaxValue()"
-          (appValueChange)="onSalaryMaxChange($event)"
-        >
-        </app-input>
-      </div>
+      <span class="text-body-12">заработная плата</span>
+      <li class="text-body-12 filter__checkbox">
+        <app-checkbox [checked]="currentSalary() === 'with-salary'"></app-checkbox>
+        с зарплатой
+      </li>
     </div>
   </div>
 </ng-template>

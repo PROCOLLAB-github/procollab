@@ -10,6 +10,8 @@ import { RouterLink } from "@angular/router";
 import { AsyncPipe } from "@angular/common";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { AuthService } from "@auth/services";
+import { ProjectVacancyCardComponent } from "@office/projects/detail/shared/project-vacancy-card/project-vacancy-card.component";
+import { IconComponent } from "@uilib";
 
 /**
  * Компонент карточки отклика на вакансию
@@ -41,10 +43,12 @@ import { AuthService } from "@auth/services";
     RouterLink,
     AvatarComponent,
     TagComponent,
+    IconComponent,
     ButtonComponent,
     UserRolePipe,
     AsyncPipe,
     FileItemComponent,
+    ProjectVacancyCardComponent,
   ],
 })
 export class ResponseCardComponent implements OnInit {

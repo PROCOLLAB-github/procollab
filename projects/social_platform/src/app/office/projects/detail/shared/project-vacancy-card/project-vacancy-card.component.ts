@@ -8,6 +8,7 @@ import { ButtonComponent } from "@ui/components";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { expandElement } from "@utils/expand-element";
 import { TagComponent } from "@ui/components/tag/tag.component";
+import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 
 /**
  * КОМПОНЕНТ КАРТОЧКИ ВАКАНСИИ ПРОЕКТА
@@ -38,17 +39,26 @@ import { TagComponent } from "@ui/components/tag/tag.component";
     ParseLinksPipe,
     ParseBreaksPipe,
     TagComponent,
+    AvatarComponent,
   ],
   templateUrl: "./project-vacancy-card.component.html",
   styleUrl: "./project-vacancy-card.component.scss",
 })
 export class ProjectVacancyCardComponent implements OnInit {
   @Input({ required: true }) vacancy!: Vacancy; // Данные вакансии (обязательное поле)
+  @Input() type: "vacancies" | "project" = "project";
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.type === "project") {
+      this.endSliceOfSkills = 5;
+    } else {
+      this.endSliceOfSkills = 3;
+    }
+  }
 
   descriptionExpandable!: boolean; // Флаг необходимости кнопки "Читать полностью"
   readFullDescription = false; // Флаг показа всех вакансий
+  endSliceOfSkills = 0;
 
   /**
    * Раскрытие/сворачивание описания профиля

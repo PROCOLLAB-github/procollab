@@ -5,7 +5,6 @@ import { OfficeComponent } from "./office.component";
 import { ProfileEditComponent } from "./profile/edit/edit.component";
 import { MembersComponent } from "./members/members.component";
 import { MembersResolver } from "./members/members.resolver";
-import { VacancySendComponent } from "./vacancy/send/send.component";
 import { OfficeResolver } from "./office.resolver";
 
 /**
@@ -51,10 +50,6 @@ export const OFFICE_ROUTES: Routes = [
       {
         path: "program",
         loadChildren: () => import("./program/program.routes").then(c => c.PROGRAM_ROUTES),
-      },
-      {
-        path: "vacancy/:vacancyId",
-        component: VacancySendComponent,
       },
       {
         path: "chats",

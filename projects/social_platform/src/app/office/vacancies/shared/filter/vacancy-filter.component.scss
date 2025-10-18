@@ -8,13 +8,10 @@
 .desktop {
   display: none;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   align-items: center;
   width: 100%;
-  padding: 20px;
-  background-color: var(--white);
-  border: 1px solid var(--medium-grey-for-outline);
-  border-radius: var(--rounded-xl);
+  border: 0.5px solid var(--medium-grey-for-outline);
 
   @include responsive.apply-desktop {
     display: flex;
@@ -25,6 +22,10 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+
+    a {
+      color: var(--accent);
+    }
   }
 }
 
@@ -48,7 +49,6 @@
     align-items: center;
     width: 100%;
     height: 38px;
-    padding: 13px 80px 13px 20px;
     background-color: var(--white);
     border: 1px solid var(--gray);
     border-radius: var(--rounded-lg);
@@ -63,8 +63,6 @@
       cursor: pointer;
       border-color: var(--accent);
     }
-
-    @include typography.body-14;
   }
 
   &__dropdown {
@@ -108,7 +106,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 6px;
-    color: var(--black);
+    color: var(--grey-for-text);
     cursor: pointer;
 
     app-checkbox {

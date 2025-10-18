@@ -12,14 +12,14 @@ export const navItems = [
     label: "образование",
   },
   {
-    step: "achievements",
-    src: "medal",
-    label: "достижения",
-  },
-  {
     step: "experience",
     src: "suitcase",
     label: "работа",
+  },
+  {
+    step: "achievements",
+    src: "medal",
+    label: "достижения",
   },
   {
     step: "skills",

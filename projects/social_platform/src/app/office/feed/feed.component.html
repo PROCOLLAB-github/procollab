@@ -3,13 +3,8 @@
 <div class="page">
   <app-feed-filter class="page__filter"></app-feed-filter>
   <div #feedRoot class="page__feed">
-    @for (item of feedItems(); track $index) { @if (item.typeModel === "vacancy") {
-    <app-open-vacancy
-      class="page__item"
-      [attr.data-id]="item.content.id"
-      [feedItem]="item.content"
-    ></app-open-vacancy>
-    } @else if (item.typeModel === "project") {
+    @for (item of feedItems(); track $index) { @if (item.typeModel === "vacancy") { } @else if
+    (item.typeModel === "project") {
     <app-new-project
       class="page__item"
       [attr.data-id]="item.content.id"

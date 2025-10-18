@@ -103,7 +103,7 @@
     padding: 10px;
     color: var(--dark);
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: var(--rounded-xl);
     transition: background-color 0.2s;
 
     &--red {
@@ -129,7 +129,7 @@
     height: 100%;
     content: "";
     background-color: var(--accent);
-    border-radius: 10px;
+    border-radius: var(--rounded-xl);
   }
 
   &__name {

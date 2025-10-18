@@ -376,39 +376,53 @@
         </ng-template>
 
         <ng-template #profileTpl>
-          @if (profile) {
-          <!-- <a class="profile__cv">
-              @if(isSubscriptionActive()){
-              <app-button
-                (click)="sendCVEmail()"
-                customTypographyClass="text-body-12"
-                color="primary"
-              >
-                Скачать CV
-              </app-button>
-              }
-            </a> -->
-
+          @if (profile) { @if (+profile.id === +info().id) {
           <app-button
             style="opacity: 0.5"
             size="medium"
             appearance="outline"
             [disabled]="true"
             customTypographyClass="text-body-12"
+            >продвигать</app-button
+          >
+          } @else {
+          <app-button
+            size="medium"
+            appearance="outline"
+            customTypographyClass="text-body-12"
+            (click)="showApproveSkillModal = true"
             >подтвердить навыки</app-button
           >
-
+          } @if (+profile.id === +info().id) {
           <app-button
             style="opacity: 0.5"
             size="medium"
             appearance="outline"
             [disabled]="true"
             customTypographyClass="text-body-12"
-            >поделится профилем</app-button
+            >мои проекты</app-button
           >
+          } @else {
+          <app-button
+            size="medium"
+            appearance="outline"
+            customTypographyClass="text-body-12"
+            (click)="onCopyLink(info().id)"
+            >поделиться профилем</app-button
+          >
+          }
 
           <div class="info__divider"></div>
 
+          @if (+profile.id === +info().id) {
+          <app-button
+            (click)="sendCVEmail()"
+            size="medium"
+            appearance="outline"
+            customTypographyClass="text-body-12"
+            >cкачать CV</app-button
+          >
+          } @else {
           <app-button
             style="opacity: 0.5"
             size="medium"
@@ -417,8 +431,7 @@
             customTypographyClass="text-body-12"
             >пригласить</app-button
           >
-
-          @if (+profile.id !== +info().id) {
+          } @if (+profile.id !== +info().id) {
           <a
             class="info__send-message"
             [routerLink]="['/office/chats', profile.id + '_' + info().id]"
@@ -434,27 +447,95 @@
             [queryParams]="{ editingStep: 'main' }"
           >
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
-              {{
-                info().progress! === 100 ? "редактировать профиль" : "закончить заполнение резюме"
-              }}
-              @if (info().progress !== 100) {
-              <i
-                appIcon
-                icon="accent-error"
-                appSquare="16"
-                (mouseenter)="showTooltip()"
-                (mouseleave)="hideTooltip()"
-                style="color: var(--accent); margin-left: 5px"
-              ></i>
-              <span
-                class="profile__tooltip text-body-12"
-                [class.profile__tooltip--visible]="isTooltipVisible"
-                >{{ tooltipText }}</span
-              >
-              }
+              редактировать
             </app-button>
           </a>
-          } } @if (profile) { @if (profile.id === info().id) {
+          }
+
+          <app-modal
+            [open]="showApproveSkillModal"
+            (openChange)="showApproveSkillModal = !showApproveSkillModal"
+          >
+            @if (info().skills.length) {
+            <ul class="approve">
+              <div class="lists__section">
+                <h3 class="text-body-12 lists__title">подтвердить владение навыком</h3>
+                <i
+                  appIcon
+                  icon="squiz"
+                  class="lists__icon"
+                  style="margin-top: 1px"
+                  appSquare="12"
+                ></i>
+              </div>
+
+              @for (skill of info().skills; track skill.id) {
+              <li (click)="onOpenSkill(skill.id)">
+                <div class="approve__skill">
+                  <span class="text-body-12">{{ skill.name }}</span>
+                  <div class="approve__approves">
+                    @if (skill.approves.length > 0) {
+                    <div class="approve__approves--people">
+                      @if (skill.approves.length >= 3) { @for (approve of skill.approves.slice(0,
+                      3); track $index) {
+                      <app-avatar
+                        class="approve__avatar"
+                        [url]="approve.confirmedBy.avatar"
+                        [size]="15"
+                      ></app-avatar>
+                      } } @else { @for (approve of skill.approves; track $index) {
+                      <app-avatar
+                        class="approve__avatar"
+                        [url]="approve.confirmedBy.avatar"
+                        [size]="15"
+                      ></app-avatar>
+                      } } @if (skill.approves.length >= 3) {
+                      <p class="approve__text text-body-6">
+                        и ещё {{ skill.approves.length - 3 + "подтвердили" }}
+                      </p>
+                      } @else {
+                      <p class="approve__text text-body-6">
+                        {{
+                          skill.approves.length +
+                            " " +
+                            (skill.approves.length | pluralize: ["человек", "человека", "человек"])
+                        }}
+                      </p>
+                      }
+                    </div>
+
+                    }
+
+                    <app-button
+                      (click)="onToggleApprove(skill.id, $event, skill, loggedUserId!)"
+                      size="medium"
+                      appearance="outline"
+                      customTypographyClass="text-body-12"
+                      [color]="isUserApproveSkill(skill, loggedUserId!) ? 'red' : 'primary'"
+                      >{{
+                        isUserApproveSkill(skill, loggedUserId!) ? "убрать оценку" : "подтвердить"
+                      }}</app-button
+                    >
+                  </div>
+                </div>
+              </li>
+              }
+            </ul>
+            }
+          </app-modal>
+
+          <app-modal [open]="approveOwnSkillModal" (openChange)="approveOwnSkillModal = $event">
+            <div class="modal">
+              <div class="modal__body">
+                <p class="modal__title text-body-14">
+                  Ошибка при подитверждении навыка!
+                  <br />
+                  <span class="text-body-10">Вы не можете подтверждать навыки своего профиля</span>
+                </p>
+              </div>
+            </div>
+          </app-modal>
+          } @if (profile) { @if (profile.id === info().id) {
           <app-modal [open]="isProfileFill" (openChange)="isProfileFill = !isProfileFill">
             <div class="cancel">
               <img
@@ -463,16 +544,22 @@
                 src="/assets/images/profile/profile-unfill.png"
               />
               <div class="cancel__top">
-                <i (click)="isProfileFill = false" appIcon icon="cross" class="cancel__cross"></i>
-                <p class="cancel__title text-body-12">
+                <i
+                  (click)="isProfileFill = false"
+                  appIcon
+                  appSquare="12"
+                  icon="cross"
+                  class="cancel__cross"
+                ></i>
+                <p class="cancel__title text-body-14">
                   Заполни все поля, чтобы использовать Procollab на максимум
                 </p>
               </div>
-              <p class="text-body-12 cancel__text">Заполни все поля, чтобы иметь сильное резюме</p>
+              <p class="text-body-10 cancel__text">заполни все поля, чтобы иметь сильное резюме</p>
 
               <a routerLink="/office/profile/edit" [queryParams]="{ editingStep: 'main' }">
                 <app-button size="big" customTypographyClass="text-body-12"
-                  >Продолжить заполнение</app-button
+                  >продолжить заполнение</app-button
                 >
               </a>
             </div>

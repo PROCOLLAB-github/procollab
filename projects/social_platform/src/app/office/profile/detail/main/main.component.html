@@ -44,8 +44,44 @@
         </ul>
       </div>
 
-      <app-soon-card title="статистика" description="топ навыков, баллы в общем рейтинге">
-      </app-soon-card>
+      @if (user.programs.length; as programsLength) {
+      <div class="lists">
+        <ul class="lists__list--line">
+          @for (p of user.programs.slice(0, 3); track p.id) {
+          <li class="lists__item" [routerLink]="['/office/program', p.id]">
+            <ng-container *ngTemplateOutlet="programTemp; context: { $implicit: p }"></ng-container>
+          </li>
+          }
+        </ul>
+        <div class="lists__remaining" [class.lists__remaining--show]="readAllPrograms">
+          @if (user.programs) {
+          <ul>
+            @for (program of user.programs.slice(3); track program.id) {
+            <li>
+              <ng-container
+                *ngTemplateOutlet="programTemp; context: { $implicit: program }"
+              ></ng-container>
+            </li>
+            }
+          </ul>
+          }
+        </div>
+        <ng-template #programTemp let-program>
+          <div>
+            <div class="lists__info">
+              <a [routerLink]="['/office/program', program.id]" class="text-body-10 lists__title">
+                <img alt="program logo" [src]="program.imageAddress" width="40" height="40" />
+              </a>
+            </div>
+          </div>
+        </ng-template>
+        @if (programsLength > 3) {
+        <div class="read-more text-body-10" (click)="readAllPrograms = !readAllPrograms">
+          {{ readAllPrograms ? "Скрыть" : "Читать полностью" }}
+        </div>
+        }
+      </div>
+      }
     </div>
 
     @if (loggedUserId) {
@@ -69,95 +105,6 @@
           }
         </div>
         }
-
-        <!-- @if (user.skills.length) {
-        <ul class="about__skills">
-          @for (skill of user.skills; track skill.id) {
-          <li (click)="onOpenSkill(skill.id)" class="about__skill">
-            <app-modal [open]="openSkills[skill.id]" (openChange)="onOpenChange($event, skill.id)">
-              <div class="modal">
-                <div class="modal__body">
-                  <p class="modal__title text-body-14">
-                    Этот навык подтвердили:
-                    <span class="modal__text"
-                      >{{ skill.approves.length }}
-                      {{
-                        skill.approves.length | pluralize: ["человек", "человека", "человек"]
-                      }}</span
-                    >
-                  </p>
-                </div>
-
-                @if (skill.approves.length) {
-                <ul class="approves">
-                  @for (p of skill.approves.slice(0, 3); track p.confirmedBy.id) {
-                  <li class="project">
-                    <ng-container
-                      *ngTemplateOutlet="approveTemp; context: { $implicit: p }"
-                    ></ng-container>
-                  </li>
-                  }
-                </ul>
-
-                <div
-                  class="projects__remaining"
-                  [class.projects__remaining--show]="readAllProjects"
-                >
-                  @if (skill.approves) {
-                  <ul>
-                    @for (approve of skill.approves.slice(3); track approve.confirmedBy.id) {
-                    <li>
-                      <ng-container
-                        *ngTemplateOutlet="approveTemp; context: { $implicit: approve }"
-                      ></ng-container>
-                    </li>
-                    }
-                  </ul>
-                  }
-                </div>
-
-                <ng-template #approveTemp let-approve>
-                  <div class="approves__info">
-                    <div class="approves__left">
-                      <app-avatar [url]="approve.confirmedBy.avatar" [size]="50"></app-avatar>
-                      <div class="approves__credentials">
-                        <p class="text-body-14">
-                          {{ approve.confirmedBy.firstName }} {{ approve.confirmedBy.lastName }}
-                        </p>
-                        <p class="approves__speciality text-body-10">
-                          {{ approve.confirmedBy.v2Speciality?.name }}
-                        </p>
-                      </div>
-                    </div>
-                    <i appIcon icon="check" appSquare="12"></i>
-                  </div>
-                </ng-template>
-                @if (skill.approves.length > 3) {
-                <p class="modal__more text-body-10" (click)="readAllModal = !readAllModal">
-                  {{ readAllModal ? "Скрыть" : "Читать полностью" }}
-                </p>
-                } }
-              </div>
-            </app-modal>
-
-            <app-tag [color]="isUserApproveSkill(skill, loggedUserId) ? 'complete' : 'accent'">
-              <span>{{ skill.name }}</span>
-              <i
-                (click)="onToggleApprove(skill.id, $event, skill, loggedUserId)"
-                appIcon
-                [icon]="isUserApproveSkill(skill, loggedUserId) ? 'check' : 'plus'"
-                appSquare="6"
-              ></i>
-            </app-tag>
-          </li>
-          }
-        </ul>
-
-        <p class="approves__text text-body-10">
-          Нажимая на <strong>плюс</strong>, вы подтверждаете, что {{ user.firstName }} владеет этим
-          навыком
-        </p>
-        } -->
       </div>
 
       <div class="profile__directions">
@@ -168,7 +115,6 @@
           [about]="directionItem.about"
         ></app-project-direction-card>
         }
-        <app-soon-card title="" description="оперативная информация в доступе"></app-soon-card>
       </div>
 
       <div class="profile__news news">
@@ -270,7 +216,7 @@
                 {{ education.entryYear }}
               </p>
 
-              <p class="text-body-10">•</p>
+              <p class="text-body-10">—</p>
 
               <p class="text-body-10">{{ education.completionYear }}</p>
             </div>
@@ -324,7 +270,7 @@
             <div class="lists__date">
               <p class="text-body-10">{{ workExperience.entryYear }}</p>
 
-              <p class="text-body-10">•</p>
+              <p class="text-body-10">—</p>
 
               <p class="text-body-10">{{ workExperience.completionYear }}</p>
             </div>
@@ -404,7 +350,9 @@
                 height="30"
               />
               <div class="lists__info">
-                <p class="text-body-10 lists__item">{{ project.name }}</p>
+                <p class="text-body-10 lists__item" style="color: var(--black)">
+                  {{ project.name }}
+                </p>
                 <span class="text-body-6 lists__item">{{ project.collaborator?.role }}</span>
               </div>
             </div>
@@ -415,60 +363,9 @@
           </div>
           }
         </div>
-        } @if (user.programs.length; as programsLength) {
-        <div class="lists" style="padding: 0 12px">
-          <ul class="lists__list--line">
-            @for (p of user.programs.slice(0, 3); track p.id) {
-            <li class="lists__item" [routerLink]="['/office/program', p.id]">
-              <ng-container
-                *ngTemplateOutlet="programTemp; context: { $implicit: p }"
-              ></ng-container>
-            </li>
-            }
-          </ul>
-          <div class="lists__remaining" [class.lists__remaining--show]="readAllPrograms">
-            @if (user.programs) {
-            <ul>
-              @for (program of user.programs.slice(3); track program.id) {
-              <li>
-                <ng-container
-                  *ngTemplateOutlet="programTemp; context: { $implicit: program }"
-                ></ng-container>
-              </li>
-              }
-            </ul>
-            }
-          </div>
-          <ng-template #programTemp let-program>
-            <div>
-              <div class="lists__info">
-                <a [routerLink]="['/office/program', program.id]" class="text-body-10 lists__title">
-                  <img alt="program logo" [src]="program.imageAddress" width="40" height="40" />
-                </a>
-              </div>
-            </div>
-          </ng-template>
-          @if (programsLength > 3) {
-          <div class="read-more text-body-10" (click)="readAllPrograms = !readAllPrograms">
-            {{ readAllPrograms ? "Скрыть" : "Читать полностью" }}
-          </div>
-          }
-        </div>
         }
       </div>
     </div>
   </div>
 </section>
-
-<app-modal [open]="approveOwnSkillModal" (openChange)="approveOwnSkillModal = $event">
-  <div class="modal">
-    <div class="modal__body">
-      <p class="modal__title text-body-14">
-        Ошибка при подитверждении навыка!
-        <br />
-        <span class="text-body-10">Вы не можете подтверждать навыки своего профиля</span>
-      </p>
-    </div>
-  </div>
-</app-modal>
 }

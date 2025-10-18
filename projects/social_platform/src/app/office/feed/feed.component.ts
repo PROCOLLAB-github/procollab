@@ -12,7 +12,6 @@ import {
   ViewChild,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { OpenVacancyComponent } from "@office/feed/shared/open-vacancy/open-vacancy.component";
 import { NewProjectComponent } from "@office/feed/shared/new-project/new-project.component";
 import { ActivatedRoute } from "@angular/router";
 import { FeedItem, FeedItemType } from "@office/feed/models/feed-item.model";
@@ -46,13 +45,7 @@ import { NewsCardComponent } from "@office/features/news-card/news-card.componen
 @Component({
   selector: "app-feed",
   standalone: true,
-  imports: [
-    CommonModule,
-    OpenVacancyComponent,
-    NewProjectComponent,
-    FeedFilterComponent,
-    NewsCardComponent,
-  ],
+  imports: [CommonModule, NewProjectComponent, FeedFilterComponent, NewsCardComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./feed.component.html",
   styleUrl: "./feed.component.scss",

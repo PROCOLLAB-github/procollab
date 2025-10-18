@@ -140,6 +140,24 @@ $detail-bar-mb: 12px;
   }
 }
 
+.lists {
+  &__section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    border-bottom: 0.5px solid var(--accent);
+  }
+
+  &__icon {
+    color: var(--accent);
+  }
+
+  &__title {
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+}
+
 .project {
   &__list {
     display: flex;
@@ -171,6 +189,41 @@ $detail-bar-mb: 12px;
   }
 }
 
+.approve {
+  min-width: 420px;
+  padding: 24px;
+
+  &__skill {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-xl);
+  }
+
+  &__text {
+    color: var(--dark-grey);
+  }
+
+  &__approves {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &--people {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      margin-left: 12px;
+
+      app-avatar {
+        margin-left: -12px;
+      }
+    }
+  }
+}
+
 .cancel {
   display: flex;
   flex-direction: column;
@@ -193,12 +246,21 @@ $detail-bar-mb: 12px;
 
   &__text {
     width: 40%;
+    margin-bottom: 10px;
     color: var(--dark-grey);
     text-align: center;
   }
 
   &__button {
     margin-top: 20px;
+  }
+
+  &__cross {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 2;
+    cursor: pointer;
   }
 }
 
@@ -246,6 +308,13 @@ $detail-bar-mb: 12px;
     @include responsive.apply-desktop {
       max-width: 260px;
     }
+  }
+}
+
+.approves {
+  &__text {
+    color: var(--black);
+    white-space: nowrap;
   }
 }
 

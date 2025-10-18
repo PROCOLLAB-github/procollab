@@ -1,20 +1,35 @@
 <!-- @format -->
 
-<app-bar
-  style="width: 100%"
-  [backHave]="true"
-  [links]="[
-    {
-      link: '/office/vacancies/all',
-      linkText: 'Вакансии',
-      isRouterLinkActiveOptions: true
-    },
-    {
-      link: '/office/vacancies/my',
-      linkText: 'Мои отклики',
-      isRouterLinkActiveOptions: false
-    }
-  ]"
-></app-bar>
+<!-- vacancies.component.html -->
+<!-- @format -->
 
-<router-outlet></router-outlet>
+<main class="page">
+  <div class="page__bar">
+    <app-back
+      [namespace]="isAll ? 'вакансии' : 'мои отклики'"
+      [path]="isAll ? basePath + '/feed' : basePath + 'vacancies/all'"
+    ></app-back>
+
+    <div class="page__info">
+      <div class="page__outlet">
+        @if(isAll) {
+        <form [formGroup]="searchForm" (submit)="onSearchSubmit()">
+          <app-search formControlName="search"></app-search>
+        </form>
+        }
+
+        <router-outlet></router-outlet>
+      </div>
+
+      @if (isAll) {
+      <div class="page__left">
+        <app-vacancy-filter
+          (searchValueChange)="onSearhValueChanged($event)"
+          [searchValue]="this.searchForm.get('search')?.value"
+          class="page__filter"
+        ></app-vacancy-filter>
+      </div>
+      }
+    </div>
+  </div>
+</main>

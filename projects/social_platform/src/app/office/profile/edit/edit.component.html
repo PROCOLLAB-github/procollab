@@ -269,6 +269,65 @@
           </fieldset>
           }
         </div>
+
+        <div class="profile__wrapper--links">
+          <div class="profile__column">
+            <fieldset>
+              <label for="links" class="field-label">указать личные контакты</label>
+              <div class="profile__row" style="flex-grow: 1">
+                <ul formArrayName="links" class="profile__row">
+                  @for (control of links.controls; let i = $index; track i) {
+                  <li class="profile__row">
+                    <app-input
+                      style="flex-grow: 1"
+                      [formControlName]="i"
+                      placeholder="@eeeasycarrer"
+                      size="big"
+                      [error]="control | controlError"
+                    ></app-input>
+
+                    <app-button type="icon" color="red" (click)="removeLink(i)">
+                      <i appIcon icon="basket" appSquare="14"></i>
+                    </app-button>
+                  </li>
+                  }
+                </ul>
+              </div>
+            </fieldset>
+
+            <app-button
+              size="big"
+              customTypographyClass="text-body-12"
+              appearance="outline"
+              (click)="addLink()"
+            >
+              <span> добавить контакт </span>
+              <i appIcon icon="plus" appSquare="6"></i>
+            </app-button>
+          </div>
+
+          <div class="profile__column">
+            @if (profileForm.get("phoneNumber"); as phoneNumber) {
+            <fieldset>
+              <label for="links" class="field-label">телефон</label>
+              <app-input
+                size="big"
+                id="phoneNumber"
+                [error]="phoneNumber | controlError"
+                type="text"
+                placeholder="+79030195823"
+                formControlName="phoneNumber"
+                style="flex-grow: 1"
+              ></app-input>
+              @if (phoneNumber | controlError: "required") {
+              <div class="text-body-10 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            }
+          </div>
+        </div>
       </div>
       } @if (editingStep === 'education') {
       <div class="profile__wrapper--education">

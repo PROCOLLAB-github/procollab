@@ -161,6 +161,7 @@
     display: flex;
     gap: 20px;
     align-items: center;
+    width: 100%;
   }
 
   &__column {
@@ -194,6 +195,12 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.profile__wrapper--links {
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  grid-gap: 20px;
 }
 
 .profile__wrapper--education {

@@ -55,10 +55,10 @@
         @for (file of chatFiles; track $index) {
         <li class="info__item">
           <app-file-item
-            [name]="'123'"
-            [link]="'1231231231'"
-            [type]="'pdf'"
-            [size]="12"
+            [name]="file.name"
+            [link]="file.link"
+            [type]="file.extension"
+            [size]="file.size"
           ></app-file-item>
         </li>
         }
