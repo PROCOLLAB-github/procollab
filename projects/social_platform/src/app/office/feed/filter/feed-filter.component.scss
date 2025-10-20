@@ -75,26 +75,26 @@
 
 .filter {
   display: flex;
+  gap: 20px;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
 
   &__option {
-    cursor: pointer;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: var(--light-white);
-    border-radius: var(--rounded-xl);
-    border: 0.5px solid var(--medium-grey-for-outline);
-    padding: 40px 24px 12px 24px;
     height: 66px;
-    position: relative;
+    padding: 40px 24px 12px;
+    cursor: pointer;
+    background-color: var(--light-white);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-xl);
 
     &--disable {
-      opacity: 0.5;
       cursor: not-allowed;
+      opacity: 0.5;
     }
 
     &--active {
@@ -108,18 +108,18 @@
     }
 
     &--icon {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       width: 50px;
       height: 50px;
-      border-radius: 50%;
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translate(-50%, 50%);
       background-color: var(--light-white);
       border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: 50%;
+      transform: translate(-50%, 50%);
 
       i {
         color: var(--accent);
@@ -127,12 +127,10 @@
     }
 
     p {
-      text-align: center;
       color: var(--grey-for-text);
+      text-align: center;
     }
   }
-
-
 
   span {
     display: block;
