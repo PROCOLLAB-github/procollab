@@ -17,6 +17,7 @@ import { FeedService } from "@office/feed/services/feed.service";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { Subscription } from "rxjs";
+import { feedFilterlist } from "projects/core/src/consts/feed-filter-list";
 
 /**
  * КОМПОНЕНТ ФИЛЬТРАЦИИ ЛЕНТЫ
@@ -85,9 +86,9 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
     // Читаем активные фильтры из URL
     const routeSubscription = this.route.queryParams.subscribe(queries => {
       if (queries["includes"]) {
-        this.includedFilters.set(queries["includes"].split(this.feedService.FILTER_SPLIT_SYMBOL));
+        this.includedFilters.set(queries["includes"]);
       } else {
-        this.includedFilters.set([]);
+        this.includedFilters.set("");
       }
     });
 
@@ -108,14 +109,10 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
    * - label: отображаемое название на русском языке
    * - value: значение для API запроса
    */
-  filterOptions = [
-    { label: "Новости", value: "news" },
-    { label: "Вакансии", value: "vacancy" },
-    { label: "Новости проектов", value: "project" },
-  ];
+  filterOptions = feedFilterlist;
 
   // Массив активных фильтров
-  includedFilters = signal<string[]>([]);
+  includedFilters = signal<string>("");
 
   /**
    * ОБНОВЛЕНИЕ URL С ТЕКУЩИМИ ФИЛЬТРАМИ
@@ -124,10 +121,7 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
    * Вызывается автоматически при любом изменении фильтров.
    */
   private updateUrl(): void {
-    const includesParam =
-      this.includedFilters().length > 0
-        ? this.includedFilters().join(this.feedService.FILTER_SPLIT_SYMBOL)
-        : null;
+    const includesParam = this.includedFilters().length > 0 ? this.includedFilters() : null;
 
     this.router
       .navigate([], {
@@ -144,27 +138,42 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
    * ПЕРЕКЛЮЧЕНИЕ ФИЛЬТРА С МГНОВЕННЫМ ОБНОВЛЕНИЕМ URL
    *
    * ЧТО ПРИНИМАЕТ:
+   * @param id - id для фильтра
    * @param keyword - значение фильтра для переключения
    *
    * ЧТО ДЕЛАЕТ:
    * - Добавляет фильтр, если он не активен
    * - Удаляет фильтр, если он уже активен
+   * - Обрабатывает переключение между projects и projects/1
    * - Мгновенно обновляет URL параметры
    */
   setFilter(keyword: string): void {
     this.includedFilters.update(included => {
-      const newIncluded = [...included];
-
-      if (newIncluded.indexOf(keyword) !== -1) {
-        // Удаляем фильтр, если он уже активен
-        const idx = newIncluded.indexOf(keyword);
-        newIncluded.splice(idx, 1);
-      } else {
-        // Добавляем новый фильтр
-        newIncluded.push(keyword);
+      if (keyword.startsWith("projects/")) {
+        // Если уже активен этот же вложенный фильтр - сбрасываем к "projects"
+        if (included === keyword) {
+          return "projects";
+        }
+        return keyword;
       }
 
-      return newIncluded;
+      // Если кликнули на "projects"
+      if (keyword === "projects") {
+        if (included.startsWith("projects/")) {
+          return "projects";
+        }
+
+        if (included === "projects") {
+          return "";
+        }
+
+        return "projects";
+      }
+
+      if (included === keyword) {
+        return "";
+      }
+      return keyword;
     });
 
     // Мгновенно обновляем URL
@@ -180,7 +189,7 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
    * - Возвращает ленту к состоянию по умолчанию
    */
   resetFilter(): void {
-    this.includedFilters.set([]);
+    this.includedFilters.set("");
     this.updateUrl();
   }
 

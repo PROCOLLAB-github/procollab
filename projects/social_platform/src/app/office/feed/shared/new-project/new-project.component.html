@@ -1,25 +1,63 @@
 <!-- @format -->
 
 <div class="card">
-  <h3 class="card__title title">
-    <span>Добро пожаловать на платформу!</span>
-    <a class="card__link" [routerLink]="['/office/projects/', feedItem.id]">{{ feedItem.name }}</a>
-  </h3>
-  <app-avatar
-    class="card__avatar"
-    [size]="105"
-    [url]="feedItem.imageAddress"
-    [hasBorder]="true"
-  ></app-avatar>
-  <!-- <p class="card__text">
-    Команда {{ feedItem.name }} искренне поддерживает Вас в творческом начинании! Мы готовы оказать
-    всю необходимую помощь для успешного воплощения вашего проекта
-  </p>
-  <p class="card__description text-body-14">{{ feedItem.shortDescription }}</p> -->
-  <app-button
-    class="card__button"
-    customTypographyClass="text-body-12"
-    (click)="router.navigateByUrl('/office/projects/' + feedItem.id)"
-    >Посмотреть проект</app-button
-  >
+  <div class="card__project">
+    <app-avatar
+      class="card__avatar"
+      [size]="88"
+      [url]="feedItem.imageAddress"
+      [hasBorder]="true"
+    ></app-avatar>
+
+    <div class="card__info">
+      <div class="card__info--main">
+        <p class="text-body-12">{{ feedItem.name }}</p>
+        <!-- <p class="text-body-10">{{ feedItem.datetimeCreated | dayjs: "format":"DD MM YY" }}</p> -->
+      </div>
+
+      <div class="card__info--additional">
+        @if (industryService.industries | async; as industries) {
+        <p class="text-body-6 project__industry">
+          @if (industryService.getIndustry(industries, feedItem.industry); as industry) {
+          <app-tag class="card__industry" color="complete">
+            {{ industry.name }}
+          </app-tag>
+          }
+        </p>
+        }
+
+        <div class="card__score">
+          <!-- <p class="text-body-10">{{ feedItem.score }}</p> -->
+          <p class="text-body-10">{{ 25 }}</p>
+          <i appIcon icon="star" appSquare="10"></i>
+        </div>
+      </div>
+
+      <p class="card__description text-body-10">{{ feedItem.shortDescription }}</p>
+    </div>
+  </div>
+
+  <div class="card__actions">
+    <app-button
+      class="card__button"
+      appearance="outline"
+      color="white"
+      size="medium"
+      style="opacity: 0.5"
+      [disabled]="true"
+      customTypographyClass="text-body-12"
+      >поддержать проект</app-button
+    >
+
+    <app-button
+      class="card__button"
+      appearance="outline"
+      color="white"
+      size="big"
+      style="flex-grow: 1"
+      customTypographyClass="text-body-12"
+      [routerLink]="'/office/projects/' + feedItem.id"
+      >перейти в проект</app-button
+    >
+  </div>
 </div>

@@ -57,6 +57,7 @@
 
   &__title {
     display: flex;
+    align-items: center;
   }
 
   &__top {
@@ -76,6 +77,7 @@
   /* stylelint-disable value-no-vendor-prefix */
   &__text {
     white-space: break-spaces;
+    color: var(--grey-for-text);
 
     p {
       display: -webkit-box;
@@ -160,20 +162,13 @@
   &__left {
     display: flex;
     align-items: center;
+    gap: 10px;
   }
 
   &__item {
     display: flex;
     align-items: center;
     color: var(--dark-grey);
-
-    &:not(:last-child) {
-      margin-right: 5px;
-    }
-
-    i {
-      margin-right: 3px;
-    }
   }
 
   &__like {

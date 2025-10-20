@@ -1,46 +1,6 @@
 @use "styles/typography";
 @use "styles/responsive";
 
-:host {
-  width: 100%;
-}
-
-.desktop {
-  display: none;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  width: 100%;
-  padding: 20px;
-  margin-bottom: 20px;
-  background-color: var(--white);
-  border: 1px solid var(--medium-grey-for-outline);
-  border-radius: var(--rounded-xl);
-
-  @include responsive.apply-desktop {
-    display: flex;
-  }
-
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  &__actions {
-    align-self: flex-start;
-    width: 50%;
-
-    app-button {
-      &::ng-deep .button--inline {
-        min-height: 38px;
-        padding: 0;
-      }
-    }
-  }
-}
-
 .mobile {
   display: grid;
   grid-template-columns: 0.6fr 0.4fr;
@@ -114,7 +74,65 @@
 }
 
 .filter {
-  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  &__option {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--light-white);
+    border-radius: var(--rounded-xl);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    padding: 40px 24px 12px 24px;
+    height: 66px;
+    position: relative;
+
+    &--disable {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &--active {
+      i {
+        color: var(--light-white) !important;
+      }
+
+      .filter__option--icon {
+        background-color: var(--accent);
+      }
+    }
+
+    &--icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translate(-50%, 50%);
+      background-color: var(--light-white);
+      border: 0.5px solid var(--medium-grey-for-outline);
+
+      i {
+        color: var(--accent);
+      }
+    }
+
+    p {
+      text-align: center;
+      color: var(--grey-for-text);
+    }
+  }
+
+
 
   span {
     display: block;

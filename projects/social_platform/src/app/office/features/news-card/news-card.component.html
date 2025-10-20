@@ -7,9 +7,7 @@
         [src]="feedItem.imageAddress || placeholderUrl"
         [alt]="feedItem.name"
       />
-      <div>
-        <div class="card__name text-body-10">{{ feedItem.name }}</div>
-      </div>
+      <p class="card__name text-body-10">{{ feedItem.name }}</p>
     </a>
     @if (isOwner) {
     <div class="card__menu" (clickOutside)="onCloseMenu()">
@@ -92,16 +90,16 @@
         [class.footer__like--active]="feedItem.isUserLiked"
         (click)="like.emit(feedItem.id)"
       >
-        <i appIcon icon="like" appSquare="10"></i>
-        {{ feedItem.likesCount }}
+        <i appIcon icon="like" appSquare="12"></i>
+        {{ feedItem.likesCount > 0 ? feedItem.likesCount : "" }}
       </div>
 
       <div class="footer__share share">
-        <i class="share__icon" appIcon icon="message" appSquare="10"></i>
+        <i class="share__icon" appIcon icon="comment" appSquare="10"></i>
       </div>
 
       <div class="footer__share share" (click)="onCopyLink()">
-        <i class="share__icon" appIcon icon="share" appSquare="12"></i>
+        <i class="share__icon" appIcon icon="share" appSquare="10"></i>
       </div>
     </div>
 
@@ -119,10 +117,10 @@
     </label>
     <div class="editor-footer__actions">
       <app-button customTypographyClass="text-body-12" color="grey" (click)="editMode = false"
-        >Отмена</app-button
+        >отмена</app-button
       >
       <app-button customTypographyClass="text-body-12" (click)="onEditSubmit()"
-        >Сохранить</app-button
+        >сохранить</app-button
       >
     </div>
   </div>

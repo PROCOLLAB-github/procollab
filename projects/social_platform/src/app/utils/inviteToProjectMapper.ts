@@ -1,7 +1,6 @@
 /** @format */
 
 import { Invite } from "@office/models/invite.model";
-import { Project } from "@office/models/project.model";
 
 export const inviteToProjectMapper = (invites: Invite[] = []): any[] => {
   return (invites ?? []).map((invite: Invite) => ({

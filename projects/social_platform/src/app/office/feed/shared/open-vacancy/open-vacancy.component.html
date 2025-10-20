@@ -2,72 +2,109 @@
 
 @if (feedItem) {
 <div class="card">
-  <a class="card__head head" [routerLink]="['/office/projects', feedItem.project?.id]">
-    <img class="head__avatar" [src]="feedItem.project?.imageAddress" alt="newsItem.name" />
-    <div>
-      <div class="head__name">{{ feedItem.project?.name }}</div>
-      <div class="head__date text-body-14">
-        {{ feedItem.datetimeCreated | dayjs: "format":"DD MMMM YYYY, HH:mm" }}
-      </div>
-    </div>
-  </a>
-  <h3 class="card__title">
-    <span>Тебя ищут в проект</span>
-    <a [routerLink]="['/office/projects', feedItem.project?.id]" class="card__project">{{
-      feedItem.project?.name
-    }}</a>
-  </h3>
+  <div class="card__inner">
+    <img
+      class="card__background"
+      alt="vacancy-card-background"
+      src="/assets/images/office/feed/vacancy-card/vacancies-card-background.svg"
+    />
+    @if (feedItem.project; as project) {
+    <div class="card__project">
+      <app-avatar
+        [size]="65"
+        class="project__image"
+        [url]="project.imageAddress"
+        alt="newsItem.name"
+      ></app-avatar>
 
-  <div class="card__skills skills">
-    @if (feedItem.requiredSkills?.length; as skillsLength) {
-    <div class="skills__title">Необходимые навыки</div>
-    @if (feedItem.requiredSkills; as requiredSkills) { @if (requiredSkills) {
-    <ul class="skills__list">
-      @for (skill of requiredSkills.slice(0, 8); track $index) {
-      <app-tag>{{ skill.name }}</app-tag>
-      }
-    </ul>
-    }
-    <div class="skills__remaining" [class.skills__remaining--show]="readFullSkills">
-      @if (requiredSkills) {
-      <ul class="skills__list">
-        @for (skill of requiredSkills.slice(8); track $index) {
-        <app-tag>{{ skill.name }}</app-tag>
+      <p class="text-body-12">{{ project.name }}</p>
+
+      @if (industryService.industries | async; as industries) {
+      <p class="text-body-6 project__industry">
+        @if (industryService.getIndustry(industries, project.industry); as industry) {
+        <app-tag class="card__industry" color="complete">
+          {{ industry.name }}
+        </app-tag>
         }
-      </ul>
+      </p>
       }
     </div>
-    } @if (skillsLength > 8) {
-    <div class="read-more" (click)="readFullSkills = !readFullSkills">
-      {{ readFullSkills ? "Скрыть" : "Читать полностью" }}
-    </div>
-    } }
-  </div>
+    } @if (feedItem; as vacancy) {
+    <div class="card__vacancy">
+      <div class="lists__section">
+        <h3 class="text-body-10 lists__title">{{ vacancy.role }}</h3>
+        <p class="text-body-10">{{ vacancy.datetimeCreated | dayjs: "format":"DD MM YY" }}</p>
+      </div>
 
-  @if (feedItem.description) {
-  <div class="action card__action">
-    <div class="text-body-14 about__text">
-      <p
-        class="about__text text-body-14"
-        #descEl
-        [innerHTML]="feedItem.description | parseLinks | parseBreaks"
-      ></p>
-      @if (descriptionExpandable) {
-      <div class="read-more" (click)="onExpandDescription(descEl, 'expanded', readFullDescription)">
-        {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+      <div class="card__skills skills">
+        @if (vacancy.requiredSkills?.length; as skillsLength) { @if (vacancy.requiredSkills; as
+        requiredSkills) { @if (requiredSkills) {
+        <ul class="skills__list">
+          @for (skill of requiredSkills.slice(0, 3); track $index) {
+          <app-tag
+            [appearance]="skill.category.name.includes('Soft skills') ? 'outline' : 'inline'"
+            [color]="skill.category.name.includes('Soft skills') ? 'soft' : 'complete'"
+            >{{ skill.name }}</app-tag
+          >
+          }
+        </ul>
+        }
+        <div class="skills__remaining" [class.skills__remaining--show]="readFullSkills">
+          @if (requiredSkills) {
+          <ul class="skills__list">
+            @for (skill of requiredSkills.slice(8); track $index) {
+            <app-tag>{{ skill.name }}</app-tag>
+            }
+          </ul>
+          }
+        </div>
+        } @if (skillsLength > 8) {
+        <div class="read-more" (click)="readFullSkills = !readFullSkills">
+          {{ readFullSkills ? "Скрыть" : "Читать полностью" }}
+        </div>
+        } }
+      </div>
+
+      @if (feedItem.description) {
+      <div class="card__description">
+        <div class="text-body-6 about__text">
+          <p
+            class="about__text text-body-6"
+            #descEl
+            [innerHTML]="vacancy.description | parseLinks | parseBreaks"
+          ></p>
+          @if (descriptionExpandable) {
+          <div
+            class="read-more"
+            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+          >
+            {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+          </div>
+          }
+        </div>
       </div>
       }
     </div>
+    }
   </div>
-  }
-  <div class="action card__action">
-    <span class="action__job"> {{ feedItem.role }} </span>
+
+  @if (feedItem) {
+  <div class="card__actions">
     <app-button
-      class="action__button"
       customTypographyClass="text-body-12"
-      [routerLink]="['/office/vacancies/' + feedItem.id]"
-      >Откликнуться</app-button
+      [routerLink]="'/office/projects/' + feedItem.project?.id"
+      appearance="outline"
+      size="medium"
+      >перейти в проект</app-button
+    >
+    <app-button
+      customTypographyClass="text-body-12"
+      [routerLink]="'/office/vacancies/' + feedItem.id"
+      appearance="inline"
+      size="big"
+      >откликнуться на вакансию</app-button
     >
   </div>
+  }
 </div>
 }

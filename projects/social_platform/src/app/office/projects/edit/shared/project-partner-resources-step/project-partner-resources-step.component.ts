@@ -14,6 +14,7 @@ import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ProjectService } from "@office/services/project.service";
 import { generateOptionsList, optionsListElement } from "@utils/generate-options-list";
 import { Partner } from "@office/models/partner.model";
+import { resourceOptionsList } from "projects/core/src/consts/resource-options-list";
 
 @Component({
   selector: "app-project-partner-resources-step",
@@ -119,30 +120,7 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
   }
 
   get resourcesTypeOptions(): optionsListElement[] {
-    const resourceOptions = [
-      {
-        id: 1,
-        value: "infrastructure",
-        label: "Инфраструктурный",
-      },
-      {
-        id: 2,
-        value: "staff",
-        label: "Кадровый",
-      },
-      {
-        id: 3,
-        value: "financial",
-        label: "Финансовый",
-      },
-      {
-        id: 4,
-        value: "information",
-        label: "Информационный",
-      },
-    ];
-
-    return resourceOptions;
+    return resourceOptionsList;
   }
 
   /**

@@ -22,6 +22,7 @@ import { ProjectNewsService } from "@office/projects/detail/services/project-new
 import { ProfileNewsService } from "@office/profile/detail/services/profile-news.service";
 import { FeedFilterComponent } from "@office/feed/filter/feed-filter.component";
 import { NewsCardComponent } from "@office/features/news-card/news-card.component";
+import { OpenVacancyComponent } from "./shared/open-vacancy/open-vacancy.component";
 
 /**
  * ОСНОВНОЙ КОМПОНЕНТ ЛЕНТЫ НОВОСТЕЙ
@@ -45,7 +46,13 @@ import { NewsCardComponent } from "@office/features/news-card/news-card.componen
 @Component({
   selector: "app-feed",
   standalone: true,
-  imports: [CommonModule, NewProjectComponent, FeedFilterComponent, NewsCardComponent],
+  imports: [
+    CommonModule,
+    NewProjectComponent,
+    FeedFilterComponent,
+    NewsCardComponent,
+    OpenVacancyComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./feed.component.html",
   styleUrl: "./feed.component.scss",
@@ -99,7 +106,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
           this.totalItemsCount.set(0);
           this.feedPage.set(0);
 
-          return this.onFetch(0, this.perFetchTake(), includes ?? ["vacancy", "project", "news"]);
+          return this.onFetch(0, this.perFetchTake(), includes ?? ["vacancy", "projects", "news"]);
         })
       )
       .subscribe(feed => {

@@ -2,10 +2,13 @@
 
 import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ButtonComponent } from "@ui/components";
+import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { Router, RouterLink } from "@angular/router";
 import { FeedProject } from "@office/feed/models/feed-item.model";
+import { DayjsPipe } from "@corelib";
+import { IndustryService } from "@office/services/industry.service";
+import { TagComponent } from "@ui/components/tag/tag.component";
 
 /**
  * КОМПОНЕНТ НОВОГО ПРОЕКТА
@@ -35,36 +38,27 @@ import { FeedProject } from "@office/feed/models/feed-item.model";
 @Component({
   selector: "app-new-project",
   standalone: true,
-  imports: [CommonModule, ButtonComponent, AvatarComponent, RouterLink],
+  imports: [
+    CommonModule,
+    ButtonComponent,
+    AvatarComponent,
+    RouterLink,
+    DayjsPipe,
+    IconComponent,
+    TagComponent,
+  ],
   templateUrl: "./new-project.component.html",
   styleUrl: "./new-project.component.scss",
 })
 export class NewProjectComponent {
-  /**
-   * ВХОДНЫЕ ДАННЫЕ
-   *
-   * @Input feedItem - объект проекта для отображения
-   *
-   * СОДЕРЖИТ:
-   * - id: уникальный идентификатор проекта
-   * - name: название проекта
-   * - shortDescription: краткое описание проекта
-   * - industry: ID отрасли проекта
-   * - imageAddress: URL изображения проекта
-   * - viewsCount: количество просмотров проекта
-   * - leader: ID руководителя проекта
-   */
   @Input() feedItem!: FeedProject;
 
   /**
-   * КОНСТРУКТОР
    *
-   * ЧТО ПРИНИМАЕТ:
    * @param router - сервис маршрутизации Angular для программной навигации
    *
-   * НАЗНАЧЕНИЕ:
    * Инициализирует компонент с доступом к сервису маршрутизации
    * для возможной навигации к детальной странице проекта
    */
-  constructor(public readonly router: Router) {}
+  constructor(public readonly industryService: IndustryService) {}
 }
