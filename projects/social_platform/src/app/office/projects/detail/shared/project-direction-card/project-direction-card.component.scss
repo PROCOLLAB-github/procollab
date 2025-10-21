@@ -67,11 +67,10 @@
     color: var(--black);
   }
 
-   &__skill {
+  &__skill {
     display: flex;
     flex-direction: column;
     gap: 8px;
-
 
     &--block {
       display: grid;
