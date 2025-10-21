@@ -1,13 +1,13 @@
 .programs {
   display: grid;
   grid-template-columns: 8fr 2fr;
-  grid-gap: 20px;
+  grid-gap: 24px;
   justify-content: space-between;
 
   &__list {
     display: grid;
     grid-template-columns: 4fr 4fr;
-    grid-gap: 20px;
+    grid-gap: 24px;
   }
 
   &__filter {

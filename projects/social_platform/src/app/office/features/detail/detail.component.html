@@ -340,25 +340,30 @@
           } }
 
           <app-modal [(open)]="isLeaveProjectModalOpen">
-            <div class="unsubscribe-modal">
-              <h3>Выход из проекта</h3>
-              <img alt="leave image" src="/assets/images/projects/detail/leaveProject.svg" />
-              <p class="text-body-14" style="width: 55%; text-align: center; margin-bottom: 18px">
-                Ты уверен, что хочешь выйти из проекта? Это действие нельзя будет отменить.
-              </p>
-              <div class="unsubscribe-modal__buttons" style="justify-content: center">
+            <div class="cancel" style="padding: 14px 24px">
+              <div class="cancel__top">
+                <h3 class="text-body-14 cancel__title" style="flex-wrap: wrap; width: 90%">
+                  вы уверены, что хотите покинуть команду
+                </h3>
+                <i appIcon icon="sad-smile" appSquare="50" class="cancel__icon"></i>
+              </div>
+
+              <div class="cancel__buttons">
                 <app-button
-                  color="grey"
+                  color="red"
+                  size="medium"
                   customTypographyClass="unsubscribe-modal-btn__typography"
                   (click)="onLeave()"
                 >
-                  Да
+                  покинуть команду
                 </app-button>
+
                 <app-button
+                  size="medium"
                   customTypographyClass="unsubscribe-modal-btn__typography"
                   (click)="onCloseLeaveProjectModal()"
                 >
-                  Нет, хочу остаться
+                  остаться
                 </app-button>
               </div>
             </div>

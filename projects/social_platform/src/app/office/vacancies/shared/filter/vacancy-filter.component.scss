@@ -92,24 +92,24 @@
 .filter {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
   width: 100%;
 
   span {
     display: block;
-    margin-bottom: 6px;
-    color: var(--gray);
+    margin-bottom: 12px;
+    color: var(--black);
   }
 
   &__checkbox {
     display: flex;
     align-items: center;
-    margin-bottom: 6px;
+    margin-bottom: 12px;
     color: var(--grey-for-text);
     cursor: pointer;
 
     app-checkbox {
-      margin-right: 15px;
+      margin-right: 12px;
     }
   }
 
@@ -130,8 +130,6 @@
       app-input {
         input {
           padding: 12px;
-
-          @include typography.body-12;
         }
       }
     }

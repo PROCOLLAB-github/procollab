@@ -66,4 +66,32 @@
   &__text {
     color: var(--black);
   }
+
+   &__skill {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+
+    &--block {
+      display: grid;
+      grid-template-columns: 2fr 2fr;
+      grid-gap: 20px;
+    }
+  }
+}
+
+.skills {
+  &__info {
+    padding: 20px;
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-xl);
+  }
+
+  &__category {
+    app-tag {
+      display: inline-flex;
+      width: 70px;
+    }
+  }
 }

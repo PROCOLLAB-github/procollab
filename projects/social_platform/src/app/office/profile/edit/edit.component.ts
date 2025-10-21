@@ -350,6 +350,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   showEducationFields = false;
   showWorkFields = false;
+  showLanguageFields = false;
 
   selectedEntryYearEducationId = signal<number | undefined>(undefined);
   selectedComplitionYearEducationId = signal<number | undefined>(undefined);
@@ -479,11 +480,19 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   profileFormSubmitting = false;
   profileForm: FormGroup;
 
-  addAchievement(id?: number, title?: string, status?: string): void {
+  addAchievement(
+    id?: number,
+    title?: string,
+    status?: string,
+    year?: number,
+    files?: string[]
+  ): void {
     this.achievements.push(
       this.fb.group({
         title: [title ?? "", [Validators.required]],
         status: [status ?? "", [Validators.required]],
+        year: [year?.toString() ?? "", [Validators.required]],
+        files: [files ?? []],
         id: [id],
       })
     );
@@ -754,6 +763,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   addLanguage() {
+    if (!this.showLanguageFields) {
+      this.showLanguageFields = true;
+      return;
+    }
+
     const languageValue = this.profileForm.get("language")?.value;
     const languageLevelValue = this.profileForm.get("languageLevel")?.value;
 
@@ -805,13 +819,14 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         this.profileForm.get(name)?.markAsPristine();
         this.profileForm.get(name)?.updateValueAndValidity();
       });
-
-      this.editLanguageClick = false;
+      this.showLanguageFields = false;
     }
+    this.editLanguageClick = false;
   }
 
   editLanguage(index: number) {
     this.editLanguageClick = true;
+    this.showLanguageFields = true;
     const languageItem = this.userLanguages.value[index];
 
     this.languageList.forEach(language => {

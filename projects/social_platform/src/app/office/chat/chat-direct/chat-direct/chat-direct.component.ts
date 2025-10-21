@@ -12,6 +12,7 @@ import { AuthService } from "@auth/services";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ApiPagination } from "@models/api-pagination.model";
 import { BarComponent } from "@ui/components";
+import { BackComponent } from "@uilib";
 
 /**
  * Компонент для отображения конкретного прямого чата
@@ -32,7 +33,7 @@ import { BarComponent } from "@ui/components";
   templateUrl: "./chat-direct.component.html",
   styleUrl: "./chat-direct.component.scss",
   standalone: true,
-  imports: [RouterLink, AvatarComponent, ChatWindowComponent, BarComponent],
+  imports: [RouterLink, AvatarComponent, ChatWindowComponent, BarComponent, BackComponent],
 })
 export class ChatDirectComponent implements OnInit, OnDestroy {
   constructor(

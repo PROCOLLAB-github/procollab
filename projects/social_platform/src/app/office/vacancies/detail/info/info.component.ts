@@ -105,9 +105,7 @@ export class VacancyInfoComponent implements OnInit {
   constructor() {
     // Создание формы отклика с валидацией
     this.sendForm = this.fb.group({
-      // Мотивационное письмо: обязательное поле, минимум 20 символов, максимум 2000
       whyMe: ["", [Validators.required, Validators.minLength(20), Validators.maxLength(2000)]],
-      // Прикрепленный файл резюме: обязательное поле
       accompanyingFile: ["", Validators.required],
     });
   }

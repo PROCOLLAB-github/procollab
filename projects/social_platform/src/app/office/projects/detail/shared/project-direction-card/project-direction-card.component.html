@@ -12,6 +12,34 @@
       <i class="cancel__icon" appIcon [icon]="icon" appSquare="11"></i>
     </div>
 
+    @if (type === 'string') {
     <p class="text-body-10 cancel__text">{{ about }}</p>
+    } @else {
+    <div class="cancel__skills">
+      <ul class="cancel__skills--block">
+        @for (aboutItem of about; track $index) {
+        <li class="skills__info">
+          <p class="text-body-12">{{ aboutItem?.name }}</p>
+          <div class="skills__category">
+            <app-tag
+              class="text-body-10"
+              color="soft"
+              appearance="outline"
+              class="skills__category--text"
+              >{{ aboutItem?.category?.name?.includes("Soft skills") ? "soft" : "hard" }}</app-tag
+            >
+            <app-tag
+              class="text-body-10"
+              [color]="aboutItem?.category?.name?.includes('Soft skills') ? 'soft' : 'accent'"
+              appearance="outline"
+              class="skills__category--text"
+              >{{ aboutItem?.category?.name }}</app-tag
+            >
+          </div>
+        </li>
+        }
+      </ul>
+    </div>
+    }
   </div>
 </app-modal>

@@ -20,34 +20,6 @@
       [type]="response.accompanyingFile.mimeType"
       [size]="response.accompanyingFile.size"
     ></app-file-item>
-    } @if (!(profileId === response.user.id)) {
-    <div class="text__actions actions">
-      <a [routerLink]="['/office/chats', profileId + '_' + response.user.id]">
-        <app-button
-          customTypographyClass="text-body-12"
-          size="medium"
-          class="actions__button--inactive"
-          >связаться</app-button
-        >
-      </a>
-      <app-button
-        customTypographyClass="text-body-12"
-        size="medium"
-        class="actions__button"
-        (click)="onAccept(response.id)"
-        >принять</app-button
-      >
-      <app-button
-        customTypographyClass="text-body-12"
-        size="medium"
-        class="actions__button"
-        color="red"
-        appearance="outline"
-        (click)="onReject(response.id)"
-      >
-        отклонить
-      </app-button>
-    </div>
     }
   </div>
 </section>

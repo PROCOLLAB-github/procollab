@@ -241,6 +241,7 @@ $detail-bar-mb: 12px;
   }
 
   &__title {
+    display: flex;
     text-align: center;
   }
 
@@ -249,6 +250,13 @@ $detail-bar-mb: 12px;
     margin-bottom: 10px;
     color: var(--dark-grey);
     text-align: center;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 20px;
   }
 
   &__button {
@@ -315,27 +323,5 @@ $detail-bar-mb: 12px;
   &__text {
     color: var(--black);
     white-space: nowrap;
-  }
-}
-
-.unsubscribe-modal {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 24px;
-
-  h3 {
-    margin-bottom: 16px;
-    color: var(--black);
-  }
-
-  img {
-    margin-bottom: 16px;
-  }
-
-  &__buttons {
-    display: flex;
-    gap: 12px;
-    align-items: center;
   }
 }

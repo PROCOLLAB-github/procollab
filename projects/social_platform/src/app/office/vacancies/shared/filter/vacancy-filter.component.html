@@ -60,7 +60,7 @@
       <ul>
         @for (option of filterWorkScheduleOptions; track $index) {
         <li
-          class="text-body-14 filter__checkbox"
+          class="text-body-12 filter__checkbox"
           (click)="setWorkScheduleFilter($event, option.value)"
         >
           <app-checkbox [checked]="currentWorkSchedule() === option.value"></app-checkbox>

@@ -133,7 +133,8 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
                   this.project?.actuality,
                   "",
                   "",
-                ]
+                ],
+                ["string", "string", "string", "array", "array"]
               )!;
             }
 

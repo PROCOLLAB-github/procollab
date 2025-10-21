@@ -53,7 +53,7 @@ import { NgxMaskModule } from "ngx-mask";
   standalone: true,
   imports: [CommonModule, NgxMaskModule, IconComponent, TooltipComponent],
 })
-export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
+export class InputComponent implements ControlValueAccessor {
   constructor() {}
 
   /** Текст подсказки */
@@ -102,15 +102,6 @@ export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
     return this.value;
   }
 
-  /** Изначальный тип поля (для восстановления после blur) */
-  private originalType: "text" | "password" | "email" | "tel" | "date" | "radio" = "text";
-
-  /** Текущий активный тип поля */
-  currentType: "text" | "password" | "email" | "tel" | "date" | "radio" = "text";
-
-  /** Флаг для отслеживания фокуса на поле даты */
-  private isDateFieldFocused = false;
-
   /** Состояние видимости подсказки */
   isTooltipVisible = false;
 
@@ -123,16 +114,6 @@ export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
   /** Событие изменения состояния радио (для внешних обработчиков) */
   @Output() change = new EventEmitter<Event>();
 
-  ngOnInit(): void {
-    this.updateCurrentType();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes["type"]) {
-      this.updateCurrentType();
-    }
-  }
-
   /** Обработчик для радио */
   onRadioChange(event: Event): void {
     if (this.type === "radio") {
@@ -142,18 +123,6 @@ export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
       this.appValueChange.emit(this.value);
       this.change.emit(event); // Эмитим событие для внешних обработчиков
       this.onTouch();
-    }
-  }
-
-  /** Обновляет currentType на основе входящего type */
-  private updateCurrentType(): void {
-    this.originalType = this.type;
-
-    // Для поля даты показываем text, пока не в фокусе
-    if (this.type === "date" && !this.isDateFieldFocused) {
-      this.currentType = "text";
-    } else {
-      this.currentType = this.type;
     }
   }
 
@@ -176,19 +145,7 @@ export class InputComponent implements OnInit, OnChanges, ControlValueAccessor {
 
   /** Обработчик потери фокуса */
   onBlur(): void {
-    if (this.originalType === "date") {
-      this.isDateFieldFocused = false;
-      this.currentType = "text";
-    }
     this.onTouch();
-  }
-
-  /** Обработчик при фокусе */
-  onFocus(): void {
-    if (this.originalType === "date") {
-      this.isDateFieldFocused = true;
-      this.currentType = "date";
-    }
   }
 
   /** Текущее значение поля */

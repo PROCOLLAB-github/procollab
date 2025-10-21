@@ -23,7 +23,7 @@ import { ProjectService } from "@services/project.service";
 import { ButtonComponent, IconComponent, SelectComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ValidationService } from "projects/core";
-import { Subscription, distinctUntilChanged, forkJoin, map, switchMap } from "rxjs";
+import { Subscription, distinctUntilChanged, forkJoin, map, of, switchMap } from "rxjs";
 import { CommonModule, AsyncPipe } from "@angular/common";
 import { ProjectNavigationComponent } from "./shared/project-navigation/project-navigation.component";
 import { EditStep, ProjectStepService } from "./services/project-step.service";
@@ -412,13 +412,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectService
       .updateProject(projectId, payload)
       .pipe(
-        switchMap(() =>
-          forkJoin({
-            goals: this.saveOrEditGoals(projectId),
-            partners: this.projectPartnerService.savePartners(projectId),
-            resources: this.saveOrEditResources(projectId),
-          })
-        )
+        switchMap(() => this.saveOrEditGoals(projectId)),
+        switchMap(() => this.savePartners(projectId)),
+        switchMap(() => this.saveOrEditResources(projectId))
       )
       .subscribe({
         next: () => {
@@ -451,16 +447,30 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private saveOrEditGoals(projectId: number) {
     const goals = this.goals.value;
-    const hasExistingGoals = goals.some((g: Partner) => g.id);
+    const hasExistingGoals = goals.some((g: Goal) => g.id);
 
     return hasExistingGoals
       ? this.projectGoalService.editGoals(projectId)
       : this.projectGoalService.saveGoals(projectId);
   }
 
+  private savePartners(projectId: number) {
+    const partners = this.partners.value;
+
+    if (!partners.length) {
+      return of([]);
+    }
+
+    return this.projectPartnerService.savePartners(projectId);
+  }
+
   private saveOrEditResources(projectId: number) {
     const resources = this.resources.value;
-    const hasExistingResources = resources.some((r: any) => r.id != null);
+    const hasExistingResources = resources.some((r: Resource) => r.id != null);
+
+    if (!resources.length) {
+      return of([]);
+    }
 
     return hasExistingResources
       ? this.projectResourceService.editResources(projectId)

@@ -102,11 +102,20 @@ export class ProjectAchievementStepComponent {
    * Добавление достижения
    */
   addAchievement(id?: number, achievementsName?: string, achievementsDate?: string): void {
+    const currentYear = new Date().getFullYear();
     this.achievements.push(
       this.fb.group({
         id: [id],
         title: [achievementsName ?? "", [Validators.required]],
-        status: [achievementsDate ?? "", [Validators.required]],
+        status: [
+          achievementsDate ?? "",
+          [
+            Validators.required,
+            Validators.min(2000),
+            Validators.max(currentYear),
+            Validators.pattern(/^\d{4}$/),
+          ],
+        ],
       })
     );
 

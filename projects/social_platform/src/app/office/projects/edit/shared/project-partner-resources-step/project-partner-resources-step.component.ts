@@ -12,8 +12,7 @@ import { Subscription } from "rxjs";
 import { ControlErrorPipe } from "@corelib";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ProjectService } from "@office/services/project.service";
-import { generateOptionsList, optionsListElement } from "@utils/generate-options-list";
-import { Partner } from "@office/models/partner.model";
+import { optionsListElement } from "@utils/generate-options-list";
 import { resourceOptionsList } from "projects/core/src/consts/resource-options-list";
 
 @Component({

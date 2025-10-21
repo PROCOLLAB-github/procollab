@@ -140,6 +140,7 @@ export class ProjectFormService {
    */
   private populateAchievementsFormArray(achievements: any[]): void {
     const achievementsFormArray = this.projectForm.get("achievements") as FormArray;
+    const currentYear = new Date().getFullYear();
 
     while (achievementsFormArray.length !== 0) {
       achievementsFormArray.removeAt(0);
@@ -149,7 +150,15 @@ export class ProjectFormService {
       const achievementGroup = this.fb.group({
         id: achievement.id ?? index,
         title: [achievement.title || "", Validators.required],
-        status: [achievement.status || "", Validators.required],
+        status: [
+          achievement.status || "",
+          [
+            Validators.required,
+            Validators.min(2000),
+            Validators.max(currentYear),
+            Validators.pattern(/^\d{4}$/),
+          ],
+        ],
       });
       achievementsFormArray.push(achievementGroup);
     });

@@ -263,7 +263,9 @@
     class="project__options"
     [formGroup]="goalForm"
     [style.gap]="hasGoals || hasLinks ? '0px' : '35px'"
-    [style.margin-top]="hasGoals && hasLinks ? '20px' : hasGoals ? '20px' : '35px'"
+    [style.margin-top]="
+      hasGoals && hasLinks ? '20px' : hasGoals ? '20px' : hasLinks ? '20px' : '0px'
+    "
   >
     @if (hasGoals) {
     <ul formArrayName="goals" class="project__links--wrapper">
@@ -394,7 +396,7 @@
       size="big"
       appearance="outline"
       customTypographyClass="text-body-12"
-      [style.margin-bottom]="hasGoals && hasLinks ? '12px' : hasGoals ? '35px' : '0px'"
+      [style.margin-bottom]="hasGoals && hasLinks ? '12px' : hasGoals ? '35px' : '35px'"
     >
       <span>добавить краткосрочную цель проекта</span>
       <i appIcon icon="plus" appSquare="12"></i>

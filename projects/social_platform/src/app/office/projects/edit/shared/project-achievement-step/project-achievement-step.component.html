@@ -37,8 +37,9 @@
               [tooltipPosition]="'left'"
               [tooltipWidth]="300"
               [error]="achievementsDate | controlError"
-              type="date"
+              type="text"
               placeholder="2022"
+              mask="0000"
               formControlName="status"
             ></app-input>
             @if (achievementsDate | controlError: "required") {

@@ -482,7 +482,7 @@
               {{ educationItem.organizationName }}
             </p>
 
-            <p class="text-body-10">
+            <p class="text-body-10 education__text">
               @if(educationItem.entryYear && educationItem.completionYear) {
               {{ educationItem.entryYear }} год • {{ educationItem.completionYear }} год } @else if
               (educationItem.entryYear && !educationItem.completionYear) {
@@ -492,15 +492,15 @@
 
             <div class="profile__education--card">
               <div class="profile__education--info">
-                <p class="text-body-10">
+                <p class="text-body-10 education__text">
                   {{ educationItem.description }}
                 </p>
 
-                <p class="text-body-10">
+                <p class="text-body-10 education__text">
                   {{ educationItem.educationLevel }}
                 </p>
 
-                <p class="text-body-10">
+                <p class="text-body-10 education__text">
                   {{ educationItem.educationStatus }}
                 </p>
               </div>
@@ -656,7 +656,7 @@
               {{ workItem.organizationName }}
             </p>
 
-            <p class="text-body-10">
+            <p class="text-body-10 education__text">
               @if(workItem.entryYear && workItem.completionYear) {
               {{ workItem.entryYear }} год • {{ workItem.completionYear }} год } @else if
               (workItem.entryYear && !workItem.completionYear) { {{ workItem.entryYear }} год }
@@ -666,11 +666,11 @@
 
             <div class="profile__education--card">
               <div class="profile__education--info">
-                <p class="text-body-10">
+                <p class="text-body-10 education__text">
                   {{ workItem.description }}
                 </p>
 
-                <p class="text-body-10">
+                <p class="text-body-10 education__text">
                   {{ workItem.jobPosition }}
                 </p>
               </div>
@@ -696,7 +696,7 @@
         </div>
       </div>
       } @if(editingStep === 'achievements'){
-      <!-- <div class="profile__wrapper--education">
+      <div class="profile__wrapper--education">
         <div class="profile__column">
           <ng-container formArrayName="achievements">
             <ul class="profile__column">
@@ -706,11 +706,11 @@
                   <div class="profile__column">
                     @if (achievements.at(i)?.get("title"); as title) {
                     <fieldset>
-                      <label class="field-label">год достижения</label>
+                      <label class="field-label">название достижения</label>
                       <app-input
                         size="big"
                         [error]="title | controlError"
-                        placeholder="2022"
+                        placeholder="выиграли акселератор"
                         formControlName="title"
                       ></app-input>
                       @if (title | controlError: "required") {
@@ -719,14 +719,13 @@
                       </div>
                       }
                     </fieldset>
-                    }
-                    @if (achievements.at(i)?.get("status"); as status) {
+                    } @if (achievements.at(i)?.get("status"); as status) {
                     <fieldset>
-                      <label class="field-label">название достижения*</label>
+                      <label class="field-label">описание</label>
                       <app-input
                         size="big"
                         [error]="status | controlError"
-                        placeholder="выиграли акселератор"
+                        placeholder="разработали проект, сделали анализ рынка и вывели"
                         formControlName="status"
                       ></app-input>
                       @if (status | controlError: "required") {
@@ -735,45 +734,42 @@
                       </div>
                       }
                     </fieldset>
-                    }
-
-                    @if (achievements.at(i)?.get("description"); as description) {
+                    } @if (achievements.at(i)?.get("year"); as year) {
                     <fieldset>
-                      <label class="field-label">описание</label>
+                      <label class="field-label">год достижения</label>
                       <app-input
                         size="big"
-                        [error]="description | controlError"
-                        placeholder="разработали проект, сделали анализ рынка и вывели"
-                        formControlName="description"
+                        [error]="year | controlError"
+                        placeholder="2022"
+                        formControlName="year"
                       ></app-input>
-                      @if (description | controlError: "required") {
+                      @if (year | controlError: "required") {
                       <div class="text-body-10 error">
                         {{ errorMessage.VALIDATION_REQUIRED }}
                       </div>
                       }
                     </fieldset>
-                    }
-                    @if (achievements.at(i)?.get("coverImageAddress"); as coverImageAddress) {
+                    } @if (achievements.at(i)?.get("files"); as files) {
                     <fieldset class="profile__file">
                       <app-upload-file
                         formControlName="coverImageAddress"
                         accept=".jpg,.png,.jpeg"
-                        [error]="coverImageAddress | controlError"
+                        [error]="files | controlError"
                       >
                         <ng-container emptyPlaceholder>
                           <i appIcon icon="file" appSquare="16"></i>
                           <p class="text-body-12 profile__slides-text">
                             презентация формата .PDF
-                            <br/> или .PPTX весом до 50МБ
+                            <br />
+                            или .PPTX весом до 50МБ
                           </p>
-                          @if (coverImageAddress | controlError: "required") {
+                          @if (files | controlError: "required") {
                           <p class="profile__slides-error text-body-10">загрузите файл</p>
                           }
                         </ng-container>
                       </app-upload-file>
                     </fieldset>
                     }
-
 
                     <app-button
                       class="achievement__remove"
@@ -799,7 +795,7 @@
             <i appIcon icon="plus" appSquare="12"></i>
           </app-button>
         </div>
-      </div> -->
+      </div>
       } @if (editingStep === 'skills') {
       <div class="profile__wrapper--education">
         <div class="profile__column">
@@ -834,6 +830,7 @@
         </div>
 
         <div class="profile__column">
+          @if (showLanguageFields) {
           <div class="profile__column--date">
             @if (profileForm.get("language"); as language) {
             <fieldset>
@@ -877,17 +874,19 @@
           </div>
 
           <span class="text-body-10">количество добавляемых языков не более 4-х</span>
+          }
 
           <app-button
             customTypographyClass="text-body-12"
             size="big"
             appearance="outline"
             [disabled]="
-              !isLanguageDirty || languageItems().length === 4 || userLanguages.length === 4
+              (showLanguageFields && !isLanguageDirty) ||
+              languageItems().length === 4 || userLanguages.length === 4
             "
             [ngStyle]="{
-                opacity: !isLanguageDirty ? '0.6' : '1',
-                cursor: !isLanguageDirty ? 'not-allowed' : 'pointer',
+                opacity: showLanguageFields && !isLanguageDirty ? '0.6' : '1',
+                cursor: showLanguageFields && !isLanguageDirty ? 'not-allowed' : 'pointer',
               }"
             (click)="addLanguage()"
           >
@@ -904,7 +903,7 @@
                   {{ languageItem.language }}
                 </p>
 
-                <div class="profile__action--icons">
+                <div class="profile__action--icons" style="flex-direction: row">
                   <div class="edit-icon">
                     <i appIcon icon="edit-pen" appSquare="10" (click)="editLanguage($index)"></i>
                   </div>
@@ -915,7 +914,9 @@
                 </div>
               </div>
 
-              <p class="text-body-10 education__text">{{ languageItem.languageLevel }}</p>
+              <p class="text-body-10 education__text" style="margin-top: 5px">
+                {{ languageItem.languageLevel }}
+              </p>
             </div>
             } }
           </div>
