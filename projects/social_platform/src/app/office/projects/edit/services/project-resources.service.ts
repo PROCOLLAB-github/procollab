@@ -202,7 +202,6 @@ export class ProjectResourceService {
       };
 
       return this.projectService.addResource(projectId, payload).pipe(
-        tap(() => console.log(payload)),
         map((res: any) => ({ res, idx: resource.idx })),
         catchError(err => of({ __error: true, err, original: resource }))
       );
@@ -224,8 +223,6 @@ export class ProjectResourceService {
             if (formGroup) {
               formGroup.get("id")?.setValue(created.id);
             }
-          } else {
-            console.warn("addResource response has no id field:", r.res);
           }
         });
 

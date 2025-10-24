@@ -19,5 +19,7 @@ export class ProjectDirectionCard {
   @Input() about!: string | any[];
   @Input() type!: string;
 
+  @Input() profileInfoType?: "skills" | "achievements" = "skills";
+
   isShowModal = false;
 }

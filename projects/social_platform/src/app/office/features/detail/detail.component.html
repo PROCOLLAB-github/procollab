@@ -81,6 +81,8 @@
           } } @else if (isUserMember) {
           <app-button
             size="medium"
+            [style.opacity]="registerDateExpired ? '0.5' : '1'"
+            [disabled]="!!registerDateExpired"
             (click)="toggleSubmitProjectModal()"
             customTypographyClass="text-body-12 bar__add-project"
           >
@@ -338,6 +340,42 @@
             выйти из проекта
           </app-button>
           } }
+
+          <app-modal [(open)]="isEditDisableModal">
+            <div
+              class="unsubscribe-modal"
+              style="text-align: center; padding: 20px; position: relative"
+            >
+              <i
+                style="right: 0px; top: 0px"
+                class="support__cross"
+                appIcon
+                icon="cross"
+                appSquare="12"
+                (click)="isEditDisableModal = false"
+              ></i>
+              <img
+                src="assets/images/projects/shared/edit_disable.svg"
+                alt="idea"
+                sizes="120"
+                class="unsubscribe-modal__img"
+              />
+              <h4 class="support__title text-body-12">редактирование недоступно</h4>
+
+              <p class="support__text text-body-10">
+                Этот проект уже отправлен на конкурс. <br />Изменения будут доступны только после
+                окончания конкурса.
+              </p>
+
+              <app-button
+                appearance="outline"
+                size="medium"
+                customTypographyClass="text-body-12"
+                (click)="isEditDisableModal = false"
+                >хорошо</app-button
+              >
+            </div>
+          </app-modal>
 
           <app-modal [(open)]="isLeaveProjectModalOpen">
             <div class="cancel" style="padding: 14px 24px">

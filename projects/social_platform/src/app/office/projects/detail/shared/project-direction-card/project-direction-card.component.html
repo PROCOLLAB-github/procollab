@@ -14,7 +14,7 @@
 
     @if (type === 'string') {
     <p class="text-body-10 cancel__text">{{ about }}</p>
-    } @else {
+    } @else { @if (profileInfoType === "skills") {
     <div class="cancel__skills">
       <ul class="cancel__skills--block">
         @for (aboutItem of about; track $index) {
@@ -40,6 +40,6 @@
         }
       </ul>
     </div>
-    }
+    } @else { } }
   </div>
 </app-modal>

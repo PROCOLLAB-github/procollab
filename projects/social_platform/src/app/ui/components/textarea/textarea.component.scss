@@ -51,6 +51,11 @@
     align-items: center;
     justify-content: center;
     transform: translateY(-50%);
+    color: var(--red) !important;
+
+    i {
+      color: var(--red) !important;
+    }
   }
 
   &__tooltip-wrapper {

@@ -24,6 +24,8 @@ export class Achievement {
   id!: number;
   title!: string;
   status!: string;
+  year!: number;
+  files!: string[];
 }
 
 export class Education {

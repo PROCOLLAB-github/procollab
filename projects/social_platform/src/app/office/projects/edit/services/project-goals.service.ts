@@ -152,6 +152,7 @@ export class ProjectGoalService {
     }
 
     const goalItem = this.fb.group({
+      id: [null],
       title: [name.trim(), Validators.required],
       completionDate: [date.trim(), Validators.required],
       responsible: [leader, Validators.required],
@@ -160,17 +161,14 @@ export class ProjectGoalService {
 
     const editIdx = this.projectFormService.editIndex();
     if (editIdx !== null) {
-      this.goalItems.update(items => {
-        const updated = [...items];
-        updated[editIdx] = goalItem.value;
-        return updated;
-      });
       goalFormArray.at(editIdx).patchValue(goalItem.value);
       this.projectFormService.editIndex.set(null);
     } else {
       this.goalItems.update(items => [...items, goalItem.value]);
       goalFormArray.push(goalItem);
     }
+
+    this.syncGoalItems(goalFormArray);
   }
 
   /**
@@ -295,35 +293,25 @@ export class ProjectGoalService {
    * После ответов присваивает полученные id в соответствующие FormGroup.
    * Возвращает Observable массива результатов (в порядке отправки).
    */
-  public saveGoals(projectId: number) {
-    const goals = this.getGoalsData();
-
-    return this.projectService.addGoals(projectId, goals).pipe(
+  public saveGoals(projectId: number, newGoals: Goal[]) {
+    return this.projectService.addGoals(projectId, newGoals).pipe(
       tap(results => {
-        if (Array.isArray(results)) {
-          results.forEach((createdGoal: any, idx: number) => {
-            if (createdGoal && createdGoal.id !== undefined && createdGoal.id !== null) {
-              const formGroup = this.goals.at(idx);
-              if (formGroup) {
-                formGroup.get("id")?.setValue(createdGoal.id);
-              }
-            }
-          });
-        }
-
-        this.syncGoalItems(this.goals);
+        results.forEach((createdGoal: any, idx: number) => {
+          const formGroup = this.goals.at(idx);
+          if (formGroup && createdGoal?.id != null) {
+            formGroup.patchValue({ id: createdGoal.id });
+          }
+        });
       }),
       catchError(err => {
         console.error("Error saving goals:", err);
-        return of({ __error: true, err, original: goals });
+        return of({ __error: true, err, original: newGoals });
       })
     );
   }
 
-  public editGoals(projectId: number) {
-    const goals = this.getGoalsData();
-
-    const requests = goals.map(item => {
+  public editGoals(projectId: number, existingGoals: Goal[]) {
+    const requests = existingGoals.map((item, idx) => {
       const payload: GoalPostForm = {
         id: item.id,
         title: item.title,
@@ -333,35 +321,12 @@ export class ProjectGoalService {
       };
 
       return this.projectService.editGoal(projectId, item.id, payload).pipe(
-        map((res: any) => ({ res, idx: item.idx })),
-        catchError(err => of({ __error: true, err, original: item.g, idx: item.idx }))
+        map(res => ({ res, idx })),
+        catchError(err => of({ __error: true, err, original: item, idx }))
       );
     });
 
-    return forkJoin(requests).pipe(
-      tap(results => {
-        results.forEach((r: any) => {
-          if (r && r.__error) {
-            console.error("Failed to post goal", r.err, "original:", r.original);
-            return;
-          }
-
-          const created = r.res;
-          const idx = r.idx;
-
-          if (created && created.id !== undefined && created.id !== null) {
-            const formGroup = this.goals.at(idx);
-            if (formGroup) {
-              formGroup.get("id")?.setValue(created.id);
-            }
-          } else {
-            console.warn("postGoal response has no id field:", r.res);
-          }
-        });
-
-        this.syncGoalItems(this.goals);
-      })
-    );
+    return forkJoin(requests);
   }
 
   /**

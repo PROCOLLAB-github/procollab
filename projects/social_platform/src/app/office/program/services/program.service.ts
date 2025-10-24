@@ -45,9 +45,7 @@ import { PartnerProgramFields } from "@office/models/partner-program-fields.mode
 })
 export class ProgramService {
   private readonly PROGRAMS_URL = "/programs";
-  private readonly PROJECTS_URL = "/projects";
   private readonly AUTH_PUBLIC_USERS_URL = "/auth/public-users";
-  private readonly AUTH_USERS_CURRENT_URL = "/auth/users/current";
 
   constructor(private readonly apiService: ApiService) {}
 

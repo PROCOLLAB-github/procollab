@@ -16,7 +16,8 @@
         editLanguageClick ||
         isEducationDirty ||
         isWorkDirty ||
-        isLanguageDirty
+        isLanguageDirty ||
+        isAchievementsDirty
       "
       [loader]="profileFormSubmitting"
       [ngStyle]="{
@@ -26,7 +27,8 @@
           editLanguageClick ||
           isEducationDirty ||
           isWorkDirty ||
-          isLanguageDirty
+          isLanguageDirty ||
+          isAchievementsDirty
             ? '0.6'
             : '1',
         cursor:
@@ -35,7 +37,8 @@
           editLanguageClick ||
           isEducationDirty ||
           isWorkDirty ||
-          isLanguageDirty
+          isLanguageDirty ||
+          isAchievementsDirty
             ? 'not-allowed'
             : 'pointer'
       }"
@@ -652,7 +655,7 @@
           @if(workItems().length || workExperience.length){ @for (workItem of workExperience.value;
           track $index) {
           <div class="profile__education--info">
-            <p class="text-body-12 education__text">
+            <p class="text-body-12 education__title">
               {{ workItem.organizationName }}
             </p>
 
@@ -698,102 +701,143 @@
       } @if(editingStep === 'achievements'){
       <div class="profile__wrapper--education">
         <div class="profile__column">
-          <ng-container formArrayName="achievements">
-            <ul class="profile__column">
-              @for (control of achievements.controls; track control.value.id; let i = $index) {
-              <li class="profile__column">
-                <form [formGroupName]="i" class="achievement">
-                  <div class="profile__column">
-                    @if (achievements.at(i)?.get("title"); as title) {
-                    <fieldset>
-                      <label class="field-label">название достижения</label>
-                      <app-input
-                        size="big"
-                        [error]="title | controlError"
-                        placeholder="выиграли акселератор"
-                        formControlName="title"
-                      ></app-input>
-                      @if (title | controlError: "required") {
-                      <div class="text-body-10 error">
-                        {{ errorMessage.VALIDATION_REQUIRED }}
-                      </div>
-                      }
-                    </fieldset>
-                    } @if (achievements.at(i)?.get("status"); as status) {
-                    <fieldset>
-                      <label class="field-label">описание</label>
-                      <app-input
-                        size="big"
-                        [error]="status | controlError"
-                        placeholder="разработали проект, сделали анализ рынка и вывели"
-                        formControlName="status"
-                      ></app-input>
-                      @if (status | controlError: "required") {
-                      <div class="text-body-10 error">
-                        {{ errorMessage.VALIDATION_REQUIRED }}
-                      </div>
-                      }
-                    </fieldset>
-                    } @if (achievements.at(i)?.get("year"); as year) {
-                    <fieldset>
-                      <label class="field-label">год достижения</label>
-                      <app-input
-                        size="big"
-                        [error]="year | controlError"
-                        placeholder="2022"
-                        formControlName="year"
-                      ></app-input>
-                      @if (year | controlError: "required") {
-                      <div class="text-body-10 error">
-                        {{ errorMessage.VALIDATION_REQUIRED }}
-                      </div>
-                      }
-                    </fieldset>
-                    } @if (achievements.at(i)?.get("files"); as files) {
-                    <fieldset class="profile__file">
-                      <app-upload-file
-                        formControlName="coverImageAddress"
-                        accept=".jpg,.png,.jpeg"
-                        [error]="files | controlError"
-                      >
-                        <ng-container emptyPlaceholder>
-                          <i appIcon icon="file" appSquare="16"></i>
-                          <p class="text-body-12 profile__slides-text">
-                            презентация формата .PDF
-                            <br />
-                            или .PPTX весом до 50МБ
-                          </p>
-                          @if (files | controlError: "required") {
-                          <p class="profile__slides-error text-body-10">загрузите файл</p>
-                          }
-                        </ng-container>
-                      </app-upload-file>
-                    </fieldset>
-                    }
-
-                    <app-button
-                      class="achievement__remove"
-                      color="red"
-                      (click)="removeAchievement(i)"
-                    >
-                      <span>Удалить</span>
-                      <i appIcon icon="basket" appSquare="24"></i>
-                    </app-button>
-                  </div>
-                </form>
-              </li>
+          @if (showAchievementsFields) {
+          <div class="profile__column">
+            @if (profileForm.get("title"); as title) {
+            <fieldset>
+              <label class="field-label">название достижения</label>
+              <app-input
+                size="big"
+                [error]="title | controlError"
+                placeholder="выиграли акселератор"
+                formControlName="title"
+              ></app-input>
+              @if (title | controlError: "required") {
+              <div class="text-body-10 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
               }
-            </ul>
-          </ng-container>
+            </fieldset>
+            }
+          </div>
+
+          <div class="profile__column">
+            @if (profileForm.get("year"); as year) {
+            <fieldset>
+              <label class="field-label">год достижения</label>
+              <app-select
+                size="big"
+                [error]="year | controlError"
+                placeholder="2022"
+                formControlName="year"
+                [selectedId]="selectedAchievementsYearId()"
+                [options]="achievementsYearList"
+              ></app-select>
+              @if (year | controlError: "required") {
+              <div class="text-body-10 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            }
+          </div>
+
+          <div class="profile__column">
+            @if (profileForm.get("status"); as status) {
+            <fieldset>
+              <label class="field-label">описание</label>
+              <app-textarea
+                size="big"
+                [error]="status | controlError"
+                placeholder="разработали проект, сделали анализ рынка и вывели"
+                formControlName="status"
+              ></app-textarea>
+              @if (status | controlError: "required") {
+              <div class="text-body-10 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            }
+          </div>
+
+          <div class="profile__column">
+            @if (profileForm.get("files"); as files) {
+            <fieldset class="profile__file" style="max-width: 100%">
+              <app-upload-file
+                formControlName="files"
+                accept=".jpg,.png,.jpeg,.pdf"
+                [error]="files | controlError"
+              >
+                <ng-container emptyPlaceholder>
+                  <i appIcon icon="file" appSquare="16"></i>
+                  <p class="text-body-12 profile__slides-text">
+                    файл или изображение <br />
+                    с сертификатом подтверждающим <br />
+                    достижение весом до 50МБ
+                  </p>
+                  @if (files | controlError: "required") {
+                  <p class="profile__slides-error text-body-10">загрузите файл</p>
+                  }
+                </ng-container>
+              </app-upload-file>
+            </fieldset>
+            }
+          </div>
+          }
           <app-button
             customTypographyClass="text-body-12"
             size="big"
             appearance="outline"
+            [disabled]="showAchievementsFields && !isAchievementsDirty"
+            [ngStyle]="{
+              opacity: showAchievementsFields && !isAchievementsDirty ? '0.6' : '1',
+              cursor: showAchievementsFields && !isAchievementsDirty ? 'not-allowed' : 'pointer'
+            }"
             (click)="addAchievement()"
           >
-            <span>Добавить достижение</span>
+            <span>добавить достижение</span>
             <i appIcon icon="plus" appSquare="12"></i>
           </app-button>
+        </div>
+
+        <div class="profile__education--list">
+          @if(achievementItems().length || achievements.length){ @for (achievementItem of
+          achievements.value; track $index) {
+          <div class="profile__education--info">
+            <div class="profile__education--card" style="align-items: flex-end">
+              <div class="profile__education--info">
+                <p class="text-body-12 education__title">
+                  {{ achievementItem.title }}
+                </p>
+
+                <p class="text-body-10 education__text" style="color: var(--grey-for-text)">
+                  {{ achievementItem.year }}
+                </p>
+
+                <p class="text-body-10 education__text">
+                  {{ achievementItem.status }}
+                </p>
+              </div>
+
+              <div class="profile__action--icons">
+                <div class="edit-icon">
+                  <i
+                    class="edit"
+                    appIcon
+                    icon="edit-pen"
+                    appSquare="10"
+                    (click)="editAchievements($index)"
+                  ></i>
+                </div>
+
+                <div class="basket-icon">
+                  <i (click)="removeAchievement($index)" appIcon icon="basket" appSquare="10"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          } }
         </div>
       </div>
       } @if (editingStep === 'skills') {
@@ -882,7 +926,8 @@
             appearance="outline"
             [disabled]="
               (showLanguageFields && !isLanguageDirty) ||
-              languageItems().length === 4 || userLanguages.length === 4
+              languageItems().length === 4 ||
+              userLanguages.length === 4
             "
             [ngStyle]="{
                 opacity: showLanguageFields && !isLanguageDirty ? '0.6' : '1',

@@ -20,7 +20,7 @@ import {
 import { ErrorMessage } from "@error/models/error-message";
 import { ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
 import { ControlErrorPipe, ValidationService } from "projects/core";
-import { concatMap, first, map, noop, Observable, skip, Subscription } from "rxjs";
+import { concatMap, first, map, noop, Observable, skip, Subscription, switchMap } from "rxjs";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
@@ -43,10 +43,11 @@ import { educationUserLevel, educationUserType } from "projects/core/src/consts/
 import { languageLevelsList, languageNamesList } from "projects/core/src/consts/list-language";
 import { transformYearStringToNumber } from "@utils/transformYear";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
-import { User } from "@auth/models/user.model";
+import { Achievement, User } from "@auth/models/user.model";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
 import { generateOptionsList } from "@utils/generate-options-list";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
+import { ProfileService } from "@auth/services/profile.service";
 
 dayjs.extend(cpf);
 
@@ -103,6 +104,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private readonly cdref: ChangeDetectorRef,
     public readonly authService: AuthService,
+    private readonly profileService: ProfileService,
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly specsService: SpecializationsService,
@@ -136,10 +138,17 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       language: [null],
       languageLevel: [null],
 
+      // achievements
+      title: [null],
+      status: [null],
+      year: [null],
+      files: [""],
+
       education: this.fb.array([]),
       workExperience: this.fb.array([]),
       userLanguages: this.fb.array([]),
       links: this.fb.array([]),
+      achievements: this.fb.array([]),
 
       // work
       organization: ["", Validators.max(100)],
@@ -151,7 +160,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       // skills
       speciality: ["", [Validators.required]],
       skills: [[]],
-      achievements: this.fb.array([]),
       avatar: [""],
       aboutMe: [""],
       typeSpecific: this.fb.group({}),
@@ -182,20 +190,20 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
     userAvatar$ && this.subscription$.push(userAvatar$);
 
-    const isMospolytechStudentSub$ = this.profileForm
-      .get("isMospolytechStudent")
-      ?.valueChanges.subscribe(isStudent => {
-        const studyGroup = this.profileForm.get("studyGroup");
-        if (isStudent) {
-          studyGroup?.setValidators([Validators.required]);
-        } else {
-          studyGroup?.clearValidators();
-        }
+    // const isMospolytechStudentSub$ = this.profileForm
+    //   .get("isMospolytechStudent")
+    //   ?.valueChanges.subscribe(isStudent => {
+    //     const studyGroup = this.profileForm.get("studyGroup");
+    //     if (isStudent) {
+    //       studyGroup?.setValidators([Validators.required]);
+    //     } else {
+    //       studyGroup?.clearValidators();
+    //     }
 
-        studyGroup?.updateValueAndValidity();
-      });
+    //     studyGroup?.updateValueAndValidity();
+    //   });
 
-    isMospolytechStudentSub$ && this.subscription$.push(isMospolytechStudentSub$);
+    // isMospolytechStudentSub$ && this.subscription$.push(isMospolytechStudentSub$);
 
     this.editingStep = this.route.snapshot.queryParams["editingStep"];
   }
@@ -212,7 +220,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         firstName: profile.firstName ?? "",
         lastName: profile.lastName ?? "",
         email: profile.email ?? "",
-        status: profile.userType ?? "",
         userType: profile.userType ?? 1,
         birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
         city: profile.city ?? "",
@@ -276,10 +283,20 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.cdref.detectChanges();
 
-      profile.achievements.length &&
-        profile.achievements?.forEach(achievement =>
-          this.addAchievement(achievement.id, achievement.title, achievement.status)
+      this.achievements.clear();
+      profile.achievements.forEach(achievement => {
+        this.achievements.push(
+          this.fb.group({
+            title: achievement.title,
+            status: achievement.status,
+            year: achievement.year,
+            files:
+              Array.isArray(achievement.files) && achievement.files.length > 0
+                ? achievement.files[0]
+                : "",
+          })
         );
+      });
 
       profile.links.length && profile.links.forEach(l => this.addLink(l));
 
@@ -337,6 +354,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   languageItems = signal<any[]>([]);
 
+  achievementItems = signal<any[]>([]);
+
   isModalErrorSkillsChoose = signal(false);
   isModalErrorSkillChooseText = signal("");
 
@@ -347,10 +366,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   editEducationClick = false;
   editWorkClick = false;
   editLanguageClick = false;
+  editAchievementsClick = false;
 
   showEducationFields = false;
   showWorkFields = false;
   showLanguageFields = false;
+  showAchievementsFields = false;
 
   selectedEntryYearEducationId = signal<number | undefined>(undefined);
   selectedComplitionYearEducationId = signal<number | undefined>(undefined);
@@ -359,6 +380,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   selectedEntryYearWorkId = signal<number | undefined>(undefined);
   selectedComplitionYearWorkId = signal<number | undefined>(undefined);
+
+  selectedAchievementsYearId = signal<number | undefined>(undefined);
 
   selectedLanguageId = signal<number | undefined>(undefined);
   selectedLanguageLevelId = signal<number | undefined>(undefined);
@@ -382,11 +405,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       | "settings";
   }
 
-  isStudentMosPolytech(): void {
-    const ctl = this.profileForm.get("isMospolytechStudent");
-    ctl?.setValue(!ctl.value);
-  }
-
   readonly yearListEducation = generateOptionsList(55, "years");
 
   readonly educationStatusList = educationUserType;
@@ -396,6 +414,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   readonly languageList = languageNamesList;
 
   readonly languageLevelList = languageLevelsList;
+
+  readonly achievementsYearList = generateOptionsList(25, "years");
 
   get typeSpecific(): FormGroup {
     return this.profileForm.get("typeSpecific") as FormGroup;
@@ -471,6 +491,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     return ["language", "languageLevel"].some(name => f.get(name)?.dirty);
   }
 
+  get isAchievementsDirty(): boolean {
+    const f = this.profileForm;
+    return ["title", "status", "year", "files"].some(name => f.get(name)?.dirty);
+  }
+
   errorMessage = ErrorMessage;
 
   roles: Observable<SelectComponent["options"]> = this.authService.changeableRoles.pipe(
@@ -480,25 +505,101 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   profileFormSubmitting = false;
   profileForm: FormGroup;
 
-  addAchievement(
-    id?: number,
-    title?: string,
-    status?: string,
-    year?: number,
-    files?: string[]
-  ): void {
-    this.achievements.push(
-      this.fb.group({
-        title: [title ?? "", [Validators.required]],
-        status: [status ?? "", [Validators.required]],
-        year: [year?.toString() ?? "", [Validators.required]],
-        files: [files ?? []],
-        id: [id],
-      })
+  /**
+   * Добавление записи об достижении
+   * Валидирует форму и добавляет новую запись в массив достижений
+   */
+  addAchievement(): void {
+    if (!this.showAchievementsFields) {
+      this.showAchievementsFields = true;
+
+      this.profileForm.patchValue({
+        title: "",
+        status: "",
+        year: null,
+        files: "",
+      });
+
+      return;
+    }
+
+    ["title", "status", "year"].forEach(name => this.profileForm.get(name)?.clearValidators());
+    ["title", "status", "year"].forEach(name =>
+      this.profileForm.get(name)?.setValidators([Validators.required])
     );
+    ["title", "status", "year"].forEach(name =>
+      this.profileForm.get(name)?.updateValueAndValidity()
+    );
+    ["title", "status", "year"].forEach(name => this.profileForm.get(name)?.markAsTouched());
+
+    const achievementsYear =
+      typeof this.profileForm.get("year")?.value === "string"
+        ? +this.profileForm.get("year")?.value.slice(0, 5)
+        : this.profileForm.get("year")?.value;
+
+    const achievementsItem = this.fb.group({
+      title: this.profileForm.get("title")?.value,
+      status: this.profileForm.get("status")?.value,
+      year: achievementsYear,
+      files: this.profileForm.get("files")?.value || "",
+    });
+
+    if (this.editIndex() !== null) {
+      this.achievementItems.update(items => {
+        const updatedItems = [...items];
+        updatedItems[this.editIndex()!] = achievementsItem.value;
+
+        this.achievements.at(this.editIndex()!).patchValue(achievementsItem.value);
+        return updatedItems;
+      });
+      this.editIndex.set(null);
+    } else {
+      this.achievementItems.update(items => [...items, achievementsItem.value]);
+      this.achievements.push(achievementsItem);
+    }
+    ["title", "status", "year", "files"].forEach(name => {
+      this.profileForm.get(name)?.reset();
+      this.profileForm.get(name)?.setValue("");
+      this.profileForm.get(name)?.clearValidators();
+      this.profileForm.get(name)?.markAsPristine();
+      this.profileForm.get(name)?.markAsUntouched();
+      this.profileForm.get(name)?.updateValueAndValidity();
+    });
+
+    this.showAchievementsFields = false;
+    this.editAchievementsClick = false;
   }
 
+  /**
+   * Редактирование записи об достижений
+   * @param index - индекс записи в массиве достижений
+   */
+  editAchievements(index: number) {
+    this.editAchievementsClick = true;
+    this.showAchievementsFields = true;
+    const achievementItem = this.achievements.value[index];
+
+    this.achievementsYearList.forEach(achievementYear => {
+      if (transformYearStringToNumber(achievementYear.value as string) === achievementItem.year) {
+        this.selectedAchievementsYearId.set(achievementYear.id);
+      }
+    });
+
+    this.profileForm.patchValue({
+      title: achievementItem.title,
+      status: achievementItem.status,
+      year: achievementItem.year,
+      files: achievementItem.files,
+    });
+    this.editIndex.set(index);
+  }
+
+  /**
+   * Удаление записи об достижении
+   * @param i - индекс записи для удаления
+   */
   removeAchievement(i: number): void {
+    this.achievementItems.update(items => items.filter((_, index) => index !== i));
     this.achievements.removeAt(i);
   }
 
@@ -893,8 +994,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.profileFormSubmitting = true;
 
+    const achievements = this.achievements.value.map((achievement: any) => ({
+      title: achievement.title,
+      status: achievement.status,
+      year: achievement.year,
+      files: achievement.files && achievement.files.trim() !== "" ? [achievement.files] : [],
+    }));
+
     const newProfile = {
       ...this.profileForm.value,
+      achievements,
       [this.userTypeMap[this.profileForm.value.userType]]: this.typeSpecific.value,
       typeSpecific: undefined,
       birthday: this.profileForm.value.birthday
@@ -907,15 +1016,18 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
           : this.profileForm.value.phoneNumber,
     };
 
+    console.log(newProfile);
+
     this.authService
       .saveProfile(newProfile)
       .pipe(concatMap(() => this.authService.getProfile()))
       .subscribe({
-        next: () => {
+        next: res => {
           this.profileFormSubmitting = false;
-          this.router
-            .navigateByUrl(`/office/profile/${this.profileId}`)
-            .then(() => console.debug("Router Changed form ProfileEditComponent"));
+          console.log(res);
+          // this.router
+          //   .navigateByUrl(`/office/profile/${this.profileId}`)
+          //   .then(() => console.debug("Router Changed form ProfileEditComponent"));
         },
         error: error => {
           this.profileFormSubmitting = false;

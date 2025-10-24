@@ -74,5 +74,8 @@
 }
 
 .error {
+  i {
+    color: var(--red) !important;
+  }
   color: var(--red) !important;
 }

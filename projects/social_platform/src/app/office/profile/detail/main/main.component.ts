@@ -111,8 +111,8 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
               2,
               ["навыки", "достижения"],
               ["squiz", "medal"],
-              [user.skills, ""],
-              ["array", "string"]
+              [user.skills, user.achievements],
+              ["array", "array"]
             )!;
           }
           this.user = user as User;
