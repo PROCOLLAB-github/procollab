@@ -23,7 +23,16 @@ import { ProjectService } from "@services/project.service";
 import { ButtonComponent, IconComponent, SelectComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ValidationService } from "projects/core";
-import { Subscription, distinctUntilChanged, forkJoin, map, of, switchMap } from "rxjs";
+import {
+  Observable,
+  Subscription,
+  distinctUntilChanged,
+  forkJoin,
+  map,
+  of,
+  switchMap,
+  tap,
+} from "rxjs";
 import { CommonModule, AsyncPipe } from "@angular/common";
 import { ProjectNavigationComponent } from "./shared/project-navigation/project-navigation.component";
 import { EditStep, ProjectStepService } from "./services/project-step.service";
@@ -446,12 +455,30 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private saveOrEditGoals(projectId: number) {
-    const goals = this.goals.value;
-    const hasExistingGoals = goals.some((g: Goal) => g.id);
+    const goals = this.goals.value as Goal[];
 
-    return hasExistingGoals
-      ? this.projectGoalService.editGoals(projectId)
-      : this.projectGoalService.saveGoals(projectId);
+    const newGoals = goals.filter(g => !g.id);
+    const existingGoals = goals.filter(g => g.id);
+
+    const requests: Observable<any>[] = [];
+
+    if (newGoals.length > 0) {
+      requests.push(this.projectGoalService.saveGoals(projectId, newGoals));
+    }
+
+    if (existingGoals.length > 0) {
+      requests.push(this.projectGoalService.editGoals(projectId, existingGoals));
+    }
+
+    if (requests.length === 0) {
+      return of(null);
+    }
+
+    return forkJoin(requests).pipe(
+      tap(() => {
+        this.projectGoalService.syncGoalItems(this.projectGoalService.goals);
+      })
+    );
   }
 
   private savePartners(projectId: number) {
@@ -491,10 +518,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private validateAdditionalFields(): boolean {
     const partnerProgramFields = this.projectAdditionalService.getPartnerProgramFields();
 
+    // Если нет дополнительных полей - пропускаем валидацию
     if (!partnerProgramFields?.length) {
       return false;
     }
 
+    // Проверяем только обязательные поля
     const hasInvalid = this.projectAdditionalService.validateRequiredFields();
 
     if (hasInvalid) {
@@ -502,7 +531,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       return true;
     }
 
-    // Подготавливаем поля для отправки
+    // Подготавливаем поля для отправки (убираем валидаторы с заполненных полей)
     this.projectAdditionalService.prepareFieldsForSubmit();
     return false;
   }
