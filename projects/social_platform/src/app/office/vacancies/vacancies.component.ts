@@ -1,30 +1,83 @@
 /** @format */
 
-import { Component } from "@angular/core";
+// vacancies.component.ts
+/** @format */
+
+import { Component, inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { BarComponent } from "@ui/components";
-import { RouterOutlet } from "@angular/router";
+import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
+import { BackComponent } from "@uilib";
+import { SearchComponent } from "@ui/components/search/search.component";
+import { VacancyFilterComponent } from "./shared/filter/vacancy-filter.component";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { debounceTime, distinctUntilChanged, tap } from "rxjs";
 
-/**
- * Основной компонент модуля вакансий
- *
- * Функциональность:
- * - Отображает навигационную панель с двумя вкладками: "Вакансии" и "Мои отклики"
- * - Содержит router-outlet для отображения дочерних компонентов
- * - Служит контейнером для всех страниц модуля вакансий
- *
- * Используемые компоненты:
- * - BarComponent - навигационная панель с кнопкой "Назад" и ссылками
- * - RouterOutlet - для отображения дочерних маршрутов
- *
- * @selector app-vacancies
- * @standalone true - автономный компонент
- */
 @Component({
   selector: "app-vacancies",
   standalone: true,
-  imports: [CommonModule, BarComponent, RouterOutlet],
+  imports: [
+    CommonModule,
+    BarComponent,
+    RouterOutlet,
+    BackComponent,
+    SearchComponent,
+    VacancyFilterComponent,
+    ReactiveFormsModule,
+  ],
   templateUrl: "./vacancies.component.html",
   styleUrl: "./vacancies.component.scss",
 })
-export class VacanciesComponent {}
+export class VacanciesComponent implements OnInit {
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+  fb = inject(FormBuilder);
+
+  searchForm: FormGroup;
+
+  basePath = "/office/";
+
+  get isAll(): boolean {
+    return this.router.url.includes("/vacancies/all");
+  }
+
+  get isMy(): boolean {
+    return this.router.url.includes("/vacancies/my");
+  }
+
+  constructor() {
+    this.searchForm = this.fb.group({
+      search: [""],
+    });
+  }
+
+  ngOnInit() {
+    this.searchForm
+      .get("search")
+      ?.valueChanges.pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        tap(value => {
+          this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: { role_contains: value || null },
+            queryParamsHandling: "merge",
+          });
+        })
+      )
+      .subscribe();
+  }
+
+  onSearchSubmit() {
+    const value = this.searchForm.get("search")?.value;
+    this.router.navigate([], {
+      queryParams: { role_contains: value || null },
+      queryParamsHandling: "merge",
+      relativeTo: this.route,
+    });
+  }
+
+  onSearhValueChanged(event: string) {
+    this.searchForm.get("search")?.setValue(event);
+  }
+}

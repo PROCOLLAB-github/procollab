@@ -6,150 +6,46 @@
 .project {
   &__inner {
     width: 100%;
-    margin-bottom: 25px;
-
-    @include responsive.apply-desktop {
-      display: flex;
-      gap: 90px;
-      justify-content: space-between;
-      margin-bottom: 0;
-      margin-bottom: 20px;
-    }
   }
 
-  &__inner > fieldset:not(:last-child) {
+  &__grid {
+    display: grid;
+    grid-gap: 20px;
+    align-items: center;
     margin-bottom: 20px;
   }
 
-  &__left {
-    flex-basis: 50%;
-    margin-bottom: 20px;
-
-    form {
-      width: 280px;
-
-      @include responsive.apply-desktop {
-        width: 600px;
-      }
-    }
-  }
-
-  &__form {
+  &__options {
     display: flex;
     flex-direction: column;
-    padding: 15px;
-    color: var(--black);
-    background-color: var(--white);
-    border: 1px solid var(--grey-button);
-    border-radius: var(--rounded-md);
-
-    @include responsive.apply-desktop {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 24px;
-    }
+    width: 100%;
   }
 
   &__info {
     display: flex;
     flex-direction: column;
 
-    @include responsive.apply-desktop {
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  }
-
-  &__right {
-    flex-basis: 50%;
-
-    :first-child & :not(span, fieldset, label, h4, p, i) {
-      margin-top: 26px;
-      margin-bottom: 10px;
-    }
-
-    :last-child & :not(i, span) {
-      margin-top: 10px;
-    }
-  }
-
-  &__generals {
-    margin-bottom: 10px;
-
-    :first-child {
-      margin-bottom: 10px;
-    }
-  }
-
-  &__tags {
-    margin-bottom: 10px;
-  }
-
-  &__additional {
-    &-wrapper {
+    &--additional {
       display: flex;
-      flex-direction: column;
       gap: 20px;
-      width: 100%;
+      align-items: center;
 
-      ::ng-deep {
-        app-input {
-          input {
-            color: var(--black) !important;
-
-            @include typography.body-10;
-          }
-        }
-
-        app-textarea {
-          textarea {
-            color: var(--black) !important;
-
-            @include typography.body-10;
-          }
-        }
-
-        app-select {
-          .field__input {
-            color: var(--black) !important;
-
-            &--placeholder {
-              color: var(--grey-for-text) !important;
-            }
-
-            @include typography.body-10;
-          }
-        }
-      }
-
-      @include responsive.apply-desktop {
-        width: 60%;
-
-        ::ng-deep {
-          app-input {
-            input {
-              @include typography.body-14;
-            }
-          }
-
-          app-textarea {
-            textarea {
-              @include typography.body-14;
-            }
-          }
-
-          app-select {
-            .field__input {
-              @include typography.body-14;
-            }
-          }
-        }
+      fieldset {
+        flex-basis: 50%;
       }
     }
+  }
 
-    fieldset {
-      margin-bottom: 10px;
-    }
+  &__problem,
+  &__description {
+    margin-bottom: 12px;
+  }
+
+  &__form {
+    color: var(--black);
+    background-color: var(--white);
+    border: 1px solid var(--grey-button);
+    border-radius: var(--rounded-md);
   }
 
   &__image {
@@ -159,10 +55,6 @@
     .error {
       margin-top: 15px;
     }
-  }
-
-  &__avatar {
-    margin-bottom: 20px;
   }
 
   &__file {
@@ -179,8 +71,13 @@
   &__slides-text {
     max-width: 275px;
     margin-top: 12px;
-    color: var(--dark-grey);
+    color: var(--black);
     text-align: center;
+    opacity: 0.3;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   &__slides-error {
@@ -194,6 +91,125 @@
 
     &:hover {
       color: var(--accent-dark);
+    }
+  }
+
+  &__links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+
+    &--wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+
+      form {
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        fieldset {
+          width: 100%;
+          margin: 0;
+        }
+      }
+    }
+
+    &--remove {
+      margin-top: 15px;
+    }
+  }
+
+  &__invite {
+    margin-top: 40px;
+  }
+}
+
+.error {
+  i {
+    color: var(--red) !important;
+  }
+
+  color: var(--red) !important;
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 700px;
+  max-width: 100%;
+  max-height: calc(100vh - 40px);
+  padding: 40px 0 80px;
+  overflow-y: auto;
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    text-align: center;
+  }
+
+  &__text {
+    text-align: center;
+  }
+
+  &__button {
+    margin-top: 20px;
+  }
+}
+
+.invite {
+  &__item {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: space-between;
+    width: 300px;
+    margin-bottom: 12px;
+
+    &--info {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+  }
+
+  &__team {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    &--scrollable {
+      max-height: 180px;
+      overflow-y: auto;
     }
   }
 }

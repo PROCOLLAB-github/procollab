@@ -7,7 +7,7 @@ import { ProfileNewsService } from "../detail/services/profile-news.service";
 import { map, Subscription } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FeedNews } from "@office/projects/models/project-news.model";
-import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
+import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 
 /**
  * Компонент для отображения отдельной новости профиля в модальном окне

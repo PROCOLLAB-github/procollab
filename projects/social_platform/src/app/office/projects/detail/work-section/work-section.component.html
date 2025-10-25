@@ -1,0 +1,76 @@
+<!-- @format -->
+
+<div class="work-section">
+  <div class="work-section__wrapper">
+    <div class="work-section__section">
+      <div class="lists__section">
+        <h3 class="text-body-12 lists__title">мои задачи</h3>
+        <i appIcon icon="task" class="lists__icon" appSquare="12"></i>
+      </div>
+
+      <app-button size="big" customTypographyClass="text-body-12" appearance="outline"
+        >открыть доску задач</app-button
+      >
+    </div>
+
+    <div class="work-section__section">
+      <div class="lists__section">
+        <h3 class="text-body-12 lists__title">база знаний</h3>
+        <i appIcon icon="file" class="lists__icon" appSquare="12"></i>
+      </div>
+
+      <app-button size="big" customTypographyClass="text-body-12" appearance="outline"
+        >добавить файл</app-button
+      >
+    </div>
+
+    <div class="work-section__section">
+      <div class="lists__section">
+        <h3 class="text-body-12 lists__title">отклики на вакансии</h3>
+        <i appIcon icon="phone" class="lists__icon" appSquare="12"></i>
+      </div>
+
+      @if (vacancies.length) { @for (vacancy of vacancies; track vacancy.id) { } }
+    </div>
+  </div>
+
+  <div class="work-section__wrapper">
+    <div class="work-section__section">
+      <div class="lists__section">
+        <h3 class="text-body-12 lists__title">личная эффективность</h3>
+        <i appIcon icon="efficiency" class="lists__icon" appSquare="12"></i>
+      </div>
+    </div>
+
+    <div class="work-section__section">
+      <div class="lists__section">
+        <h3 class="text-body-12 lists__title">заметки</h3>
+        <i appIcon icon="pen" class="lists__icon" appSquare="12"></i>
+      </div>
+
+      <app-button size="big" customTypographyClass="text-body-12" appearance="outline"
+        >добавить заметку</app-button
+      >
+    </div>
+  </div>
+
+  <div class="work-section__wrapper">
+    <div class="work-section__section">
+      <div class="lists__section">
+        <h3 class="text-body-12 lists__title">пульс проекта</h3>
+        <i appIcon icon="graph" class="lists__icon" appSquare="12"></i>
+      </div>
+
+      <app-button size="big" customTypographyClass="text-body-12" appearance="outline"
+        >полный пульс команды</app-button
+      >
+    </div>
+
+    <div class="work-section__section">
+      <div class="lists__section">
+        <h3 class="text-body-12 lists__title">полезное</h3>
+        <i appIcon icon="in-search" class="lists__icon" appSquare="12"></i>
+      </div>
+    </div>
+  </div>
+</div>

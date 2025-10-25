@@ -46,7 +46,8 @@
 
   &--border {
     img {
-      border: 2px solid var(--white);
+      border-style: solid;
+      border-width: 0.5px;
     }
   }
 }

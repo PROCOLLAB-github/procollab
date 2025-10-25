@@ -1,0 +1,46 @@
+<!-- @format -->
+
+<form class="form" [formGroup]="messageForm" (ngSubmit)="onSubmit()">
+  <div class="form__row">
+    <app-input
+      size="big"
+      formControlName="text"
+      [hasBorder]="false"
+      class="form__input text-body-12"
+      autosize
+      placeholder="сегодня был хороший день"
+      (paste)="onPaste($event)"
+      (keydown.meta.enter)="onSubmit()"
+    ></app-input>
+    <i appIcon icon="send" appSquare="12" class="form__send" (click)="onSubmit()"></i>
+  </div>
+  <div class="form__images">
+    @for (i of imagesList; track i.id) {
+    <app-img-card
+      [loading]="i.loading"
+      [src]="i.src"
+      [error]="i.error"
+      (cancel)="onDeletePhoto(i.id)"
+      (retry)="onRetryUpload(i.id)"
+    ></app-img-card>
+    }
+  </div>
+  <div class="form__files">
+    @for (f of filesList; track f.id) {
+    <app-file-upload-item
+      [name]="f.tempFile.name"
+      [type]="f.tempFile.type"
+      [size]="f.tempFile.size"
+      [loading]="f.loading"
+      [error]="f.error"
+      (delete)="onDeleteFile(f.id)"
+    ></app-file-upload-item>
+    }
+  </div>
+  <div class="footer">
+    <label class="footer__attach">
+      <i appIcon icon="attach" appSquare="12"></i>
+      <input type="file" accept="*/*" multiple (change)="onInputFiles($event)" />
+    </label>
+  </div>
+</form>

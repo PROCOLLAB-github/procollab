@@ -3,7 +3,12 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit, inject, ChangeDetectorRef } from "@angular/core";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { InputComponent, CheckboxComponent, SelectComponent } from "@ui/components";
+import {
+  InputComponent,
+  CheckboxComponent,
+  SelectComponent,
+  ButtonComponent,
+} from "@ui/components";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
 import { ControlErrorPipe } from "@corelib";
@@ -11,6 +16,9 @@ import { ErrorMessage } from "@error/models/error-message";
 import { ToSelectOptionsPipe } from "projects/core/src/lib/pipes/options-transform.pipe";
 import { ProjectAdditionalService } from "../../services/project-additional.service";
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
+import { RouterLink } from "@angular/router";
+import { IconComponent } from "@uilib";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 
 @Component({
   selector: "app-project-additional-step",
@@ -21,17 +29,19 @@ import { PartnerProgramFields } from "@office/models/partner-program-fields.mode
     CommonModule,
     ReactiveFormsModule,
     InputComponent,
+    IconComponent,
     CheckboxComponent,
     SwitchComponent,
     SelectComponent,
     TextareaComponent,
     ControlErrorPipe,
     ToSelectOptionsPipe,
+    ButtonComponent,
+    RouterLink,
+    TooltipComponent,
   ],
 })
 export class ProjectAdditionalStepComponent implements OnInit {
-  @Input() programTagsOptions: any[] = [];
-
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   private readonly cdRef = inject(ChangeDetectorRef);
 
@@ -61,6 +71,28 @@ export class ProjectAdditionalStepComponent implements OnInit {
 
   get errorAssignProjectToProgramModalMessage() {
     return this.projectAdditionalService.getErrorAssignProjectToProgramModalMessage();
+  }
+
+  /** Наличие подсказки */
+  haveHint = false;
+
+  /** Текст для подсказки */
+  tooltipText?: string;
+
+  /** Позиция подсказки */
+  tooltipPosition: "left" | "right" = "right";
+
+  /** Состояние видимости подсказки */
+  isTooltipVisible = false;
+
+  /** Показать подсказку */
+  showTooltip(): void {
+    this.isTooltipVisible = true;
+  }
+
+  /** Скрыть подсказку */
+  hideTooltip(): void {
+    this.isTooltipVisible = false;
   }
 
   /**

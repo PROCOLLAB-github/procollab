@@ -8,11 +8,11 @@ import { Skill } from "@office/models/skill";
 import { Vacancy } from "@office/models/vacancy.model";
 import { VacancyService } from "@office/services/vacancy.service";
 import { stripNullish } from "@utils/stripNull";
-import { experienceList } from "projects/core/src/consts/list-experience";
-import { formatList } from "projects/core/src/consts/list-format";
-import { scheludeList } from "projects/core/src/consts/list-schelude";
-import { rolesMembersList } from "projects/core/src/consts/list-roles-members";
+import { rolesMembersList } from "projects/core/src/consts/lists/roles-members-list.const";
 import { ProjectFormService } from "./project-form.service";
+import { workExperienceList } from "projects/core/src/consts/lists/work-experience-list.const";
+import { workFormatList } from "projects/core/src/consts/lists/work-format-list.const";
+import { workScheludeList } from "projects/core/src/consts/lists/work-schelude-list.const";
 
 /**
  * Сервис для управления вакансиями проекта.
@@ -31,9 +31,9 @@ export class ProjectVacancyService {
   private readonly validationService = inject(ValidationService);
 
   /** Константы для выпадающих списков */
-  public readonly experienceList = experienceList;
-  public readonly formatList = formatList;
-  public readonly scheludeList = scheludeList;
+  public readonly workExperienceList = workExperienceList;
+  public readonly workFormatList = workFormatList;
+  public readonly workScheludeList = workScheludeList;
   public readonly rolesMembersList = rolesMembersList;
 
   /** Сигналы для выбранных значений селектов */
@@ -242,20 +242,24 @@ export class ProjectVacancyService {
   public editVacancy(index: number): void {
     const item = this.vacancies()[index];
     // Установка выбранных значений селектов по сопоставлению
-    this.experienceList.find(e => e.value === item.requiredExperience) &&
+    this.workExperienceList.find(e => e.value === item.requiredExperience) &&
       this.selectedRequiredExperienceId.set(
-        this.experienceList.find(e => e.value === item.requiredExperience)!.id
+        this.workExperienceList.find(e => e.value === item.requiredExperience)!.id
       );
-    this.formatList.find(f => f.value === item.workFormat) &&
-      this.selectedWorkFormatId.set(this.formatList.find(f => f.value === item.workFormat)!.id);
-    this.scheludeList.find(s => s.value === item.workSchedule) &&
+
+    this.workFormatList.find(f => f.value === item.workFormat) &&
+      this.selectedWorkFormatId.set(this.workFormatList.find(f => f.value === item.workFormat)!.id);
+
+    this.workScheludeList.find(s => s.value === item.workSchedule) &&
       this.selectedWorkScheduleId.set(
-        this.scheludeList.find(s => s.value === item.workSchedule)!.id
+        this.workScheludeList.find(s => s.value === item.workSchedule)!.id
       );
+
     this.rolesMembersList.find(r => r.value === item.specialization) &&
       this.selectedVacanciesSpecializationId.set(
         this.rolesMembersList.find(r => r.value === item.specialization)!.id
       );
+
     // Патчинг формы значениями вакансии
     this.vacancyForm.patchValue({
       role: item.role,

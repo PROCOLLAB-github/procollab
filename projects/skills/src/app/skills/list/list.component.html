@@ -12,7 +12,13 @@
         class="search__input text-body-14"
       />
     </div>
-    <app-button class="search__button" (click)="onSearchClick()">Найти</app-button>
+    <app-button
+      size="big"
+      customTypographyClass="text-body-14"
+      class="search__button"
+      (click)="onSearchClick()"
+      >Найти</app-button
+    >
   </form>
   @if (skills()) {
   <div class="list__items">
@@ -40,16 +46,16 @@
 
       <div class="cancel__buttons-group">
         <app-button
+          size="medium"
           customTypographyClass="text-body-12"
           [color]="'grey'"
-          style="width: 100%"
           (click)="nonConfirmerModalOpen.set(false)"
           >Назад</app-button
         >
 
         <app-button
+          size="medium"
           [routerLink]="isFromTrajectoryModal() ? '/trackCar' : '/subscription'"
-          style="width: 100%"
           customTypographyClass="text-body-12"
           [color]="'primary'"
           >{{ isFromTrajectoryModal() ? "К траекториям" : "Купить" }}</app-button

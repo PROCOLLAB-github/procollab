@@ -1,0 +1,67 @@
+/** @format */
+
+@use "styles/responsive";
+@use "styles/typography";
+
+.project {
+  position: relative;
+
+  &__inner {
+    width: 100%;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      gap: 90px;
+      justify-content: space-between;
+      margin-bottom: 0;
+      margin-bottom: 20px;
+    }
+  }
+
+  &__left {
+    flex-basis: 50%;
+  }
+
+  &__right {
+    flex-basis: 50%;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+
+    &--general {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      grid-gap: 20px;
+    }
+  }
+
+  &__no-items {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+  }
+}
+
+.invite {
+  &__item {
+    margin-bottom: 12px;
+  }
+}
+
+.vacancy {
+  &__submit {
+    display: block;
+  }
+}
+
+.error {
+  i {
+    color: var(--red) !important;
+  }
+
+  color: var(--red) !important;
+}

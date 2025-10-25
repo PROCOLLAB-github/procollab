@@ -3,11 +3,10 @@
 @use "styles/typography";
 
 .collaborator {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 15px 10px;
-  background-color: var(--light-gray);
+  min-height: 200px;
+  padding: 15px 24px;
+  background-color: white;
+  border: 1px solid var(--dark-grey);
   border-radius: var(--rounded-md);
 
   &__role {
@@ -21,7 +20,15 @@
   &__info {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+
+    &--text {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
   }
 
   &__skills {
@@ -29,5 +36,27 @@
     flex-direction: column;
     gap: 10px;
     margin: 10px 0;
+  }
+
+  &__icons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+
+    i {
+      color: var(--accent);
+      cursor: pointer;
+    }
+
+    &--delete {
+      color: var(--red) !important;
+    }
+
+    &--edit {
+      &--disabled {
+        opacity: 0.3;
+      }
+    }
   }
 }

@@ -7,18 +7,30 @@
   position: relative;
 
   &__input {
-    width: 100%;
-    padding: 12px 20px;
+    min-height: 162px;
+    padding: 12px 18px;
     color: var(--black);
     resize: none;
     background-color: var(--white);
-    border: 1px solid var(--gray);
-    border-radius: var(--rounded-lg);
+    border: 0.5px solid var(--gray);
+    border-radius: var(--rounded-xl);
     outline: none;
     transition: all 0.2s;
 
     &::placeholder {
       color: var(--dark-grey);
+    }
+
+    &--small {
+      min-width: 245px;
+    }
+
+    &--big {
+      width: 100%;
+    }
+
+    &--with-tooltip {
+      padding-right: 130px;
     }
 
     &--error {
@@ -29,21 +41,28 @@
       border-color: var(--accent);
       box-shadow: 0 0 6px rgb(109 40 255 / 30%);
     }
-
-    @include typography.body-14;
-
-    @include responsive.apply-desktop {
-      @include typography.body-16;
-    }
   }
 
   &__error-icon {
     position: absolute;
-    top: 50%;
-    right: 26px;
+    top: 15%;
+    right: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--red) !important;
+    transform: translateY(-50%);
+
+    i {
+      color: var(--red) !important;
+    }
+  }
+
+  &__tooltip-wrapper {
+    position: absolute;
+    top: 15%;
+    right: 15px;
+    z-index: 10;
     transform: translateY(-50%);
   }
 }

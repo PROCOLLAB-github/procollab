@@ -1,0 +1,31 @@
+<!-- @format -->
+
+<div class="approve__skill">
+  <span class="text-body-12">{{ skill.name }}</span>
+  <div class="approve__approves">
+    @if (skill.approves.length > 0) {
+    <app-approve-skill-people [approves]="skill.approves"></app-approve-skill-people>
+    }
+
+    <app-button
+      (click)="onToggleApprove(skill.id, $event, skill, loggedUserId!)"
+      size="medium"
+      appearance="outline"
+      customTypographyClass="text-body-12"
+      [color]="isUserApproveSkill(skill, loggedUserId!) ? 'red' : 'primary'"
+      >{{ isUserApproveSkill(skill, loggedUserId!) ? "убрать оценку" : "подтвердить" }}</app-button
+    >
+  </div>
+</div>
+
+<app-modal [open]="approveOwnSkillModal" (openChange)="approveOwnSkillModal = $event">
+  <div class="modal">
+    <div class="modal__body">
+      <p class="modal__title text-body-14">
+        ошибка при подитверждении навыка!
+        <br />
+        <span class="text-body-10">вы не можете подтверждать навыки своего профиля</span>
+      </p>
+    </div>
+  </div>
+</app-modal>

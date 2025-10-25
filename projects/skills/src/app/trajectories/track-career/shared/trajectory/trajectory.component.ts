@@ -21,10 +21,10 @@ import { expandElement } from "@utils/expand-element";
 import { IconComponent } from "@uilib";
 import { ParseBreaksPipe, ParseLinksPipe, PluralizePipe } from "@corelib";
 import { Trajectory } from "projects/skills/src/models/trajectory.model";
-import { trajectoryMore } from "projects/core/src/consts/trajectoryMore";
 import { HttpErrorResponse } from "@angular/common/http";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { map, Observable } from "rxjs";
+import { trajectoryMoreList } from "projects/core/src/consts/lists/trajectory-more-list.const";
 
 /**
  * Компонент отображения карточки траектории
@@ -53,7 +53,7 @@ import { map, Observable } from "rxjs";
 export class TrajectoryComponent implements AfterViewInit, OnInit {
   @Input() trajectory!: Trajectory;
   protected readonly dotsArray = Array;
-  protected readonly trajectoryMore = trajectoryMore;
+  protected readonly trajectoryMore = trajectoryMoreList;
 
   router = inject(Router);
   trajectoryService = inject(TrajectoriesService);

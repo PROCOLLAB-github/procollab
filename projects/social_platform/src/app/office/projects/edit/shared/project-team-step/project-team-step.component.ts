@@ -6,13 +6,15 @@ import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { InputComponent, ButtonComponent, SelectComponent } from "@ui/components";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@error/models/error-message";
-import { InviteCardComponent } from "@office/shared/invite-card/invite-card.component";
+import { InviteCardComponent } from "@office/features/invite-card/invite-card.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ProjectTeamService } from "../../services/project-team.service";
-import { rolesMembersList } from "projects/core/src/consts/list-roles-members";
+import { rolesMembersList } from "projects/core/src/consts/lists/roles-members-list.const";
 import { ActivatedRoute } from "@angular/router";
 import { IconComponent } from "@uilib";
 import { CollaboratorCardComponent } from "@office/shared/collaborator-card/collaborator-card.component";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
+import { Collaborator } from "@office/models/collaborator.model";
 
 @Component({
   selector: "app-project-team-step",
@@ -25,11 +27,10 @@ import { CollaboratorCardComponent } from "@office/shared/collaborator-card/coll
     InputComponent,
     ButtonComponent,
     IconComponent,
-    SelectComponent,
     ControlErrorPipe,
     InviteCardComponent,
-    ModalComponent,
     CollaboratorCardComponent,
+    TooltipComponent,
   ],
 })
 export class ProjectTeamStepComponent implements OnInit {
@@ -40,6 +41,8 @@ export class ProjectTeamStepComponent implements OnInit {
 
   // Константы для селектов
   readonly rolesMembersList = rolesMembersList;
+
+  showFields = false;
 
   ngOnInit(): void {
     this.projectTeamService.setInvites(this.invites);
@@ -95,6 +98,35 @@ export class ProjectTeamStepComponent implements OnInit {
     return this.projectTeamService.inviteFormIsSubmitting;
   }
 
+  /** Наличие подсказки */
+  haveHint = false;
+
+  /** Текст для подсказки */
+  tooltipText?: string;
+
+  /** Позиция подсказки */
+  tooltipPosition: "left" | "right" = "right";
+
+  /** Состояние видимости подсказки */
+  isTooltipVisible = false;
+
+  /** Показать подсказку */
+  showTooltip(): void {
+    this.isTooltipVisible = true;
+  }
+
+  /** Скрыть подсказку */
+  hideTooltip(): void {
+    this.isTooltipVisible = false;
+  }
+
+  /**
+   * Открытие блоков для создания приглашения
+   */
+  createInvitationBlock(): void {
+    this.showFields = true;
+  }
+
   /**
    * Открытие модального окна приглашения
    */
@@ -114,7 +146,14 @@ export class ProjectTeamStepComponent implements OnInit {
    */
   submitInvite(): void {
     const projectId = Number(this.route.snapshot.paramMap.get("projectId"));
-    this.projectTeamService.submitInvite(projectId);
+
+    if (this.link?.value.trim() || this.role?.value.trim()) {
+      this.projectTeamService.submitInvite(projectId);
+      this.showFields = false;
+      return;
+    }
+
+    this.showFields = false;
   }
 
   /**
@@ -138,5 +177,9 @@ export class ProjectTeamStepComponent implements OnInit {
     if (!open) {
       this.closeInviteModal();
     }
+  }
+
+  onCollaboratorRemove(collaboratorId: number): void {
+    this.projectTeamService.removeCollaborator(collaboratorId);
   }
 }

@@ -11,6 +11,7 @@ import { CommonModule } from "@angular/common";
 import { ImageCroppedEvent, ImageCropperComponent } from "ngx-image-cropper";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { ModalComponent } from "../modal/modal.component";
+import { TooltipComponent } from "../tooltip/tooltip.component";
 
 /**
  * Компонент для управления аватаром пользователя.
@@ -44,6 +45,7 @@ import { ModalComponent } from "../modal/modal.component";
     ImageCropperComponent,
     ModalComponent,
     ButtonComponent,
+    TooltipComponent,
   ],
 })
 export class AvatarControlComponent implements OnInit, ControlValueAccessor {
@@ -58,10 +60,25 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
   /** Тип аватара */
   @Input() type: "avatar" | "project" | "profile" = "avatar";
 
+  /** Наличие подсказки */
+  @Input() haveHint = false;
+
+  /** Текст для подсказки */
+  @Input() tooltipText?: string;
+
+  /** Позиция подсказки */
+  @Input() tooltipPosition: "left" | "right" = "right";
+
+  /** Ширина подсказки */
+  @Input() tooltipWidth = 250;
+
   ngOnInit(): void {}
 
   /** Уникальный ID для элемента input */
   controlId = nanoid(3);
+
+  /** Состояние видимости подсказки */
+  isTooltipVisible = false;
 
   /** Текущее значение URL изображения */
   value = "";
@@ -188,6 +205,16 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
     if (input) {
       input.value = "";
     }
+  }
+
+  /** Показать подсказку */
+  showTooltip(): void {
+    this.isTooltipVisible = true;
+  }
+
+  /** Скрыть подсказку */
+  hideTooltip(): void {
+    this.isTooltipVisible = false;
   }
 
   /**

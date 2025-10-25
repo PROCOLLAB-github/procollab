@@ -6,6 +6,7 @@ import { FileService } from "@core/services/file.service";
 import { nanoid } from "nanoid";
 import { IconComponent } from "@ui/components";
 import { SlicePipe } from "@angular/common";
+import { LoaderComponent } from "../loader/loader.component";
 
 /**
  * Компонент для загрузки файлов с предварительным просмотром.
@@ -37,7 +38,7 @@ import { SlicePipe } from "@angular/common";
     },
   ],
   standalone: true,
-  imports: [IconComponent, SlicePipe],
+  imports: [IconComponent, SlicePipe, LoaderComponent],
 })
 export class UploadFileComponent implements OnInit, ControlValueAccessor {
   constructor(private fileService: FileService) {}

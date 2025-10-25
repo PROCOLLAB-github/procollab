@@ -10,6 +10,8 @@ import { ChatService } from "@services/chat.service";
 import { ChatCardComponent } from "./shared/chat-card/chat-card.component";
 import { AsyncPipe } from "@angular/common";
 import { BarComponent } from "@ui/components";
+import { BarNewComponent } from "@ui/components/bar-new/bar.component";
+import { BackComponent } from "@uilib";
 
 /**
  * Компонент списка чатов - отображает все чаты пользователя
@@ -28,7 +30,7 @@ import { BarComponent } from "@ui/components";
   templateUrl: "./chat.component.html",
   styleUrl: "./chat.component.scss",
   standalone: true,
-  imports: [ChatCardComponent, AsyncPipe, BarComponent],
+  imports: [ChatCardComponent, AsyncPipe, BarComponent, BarNewComponent, BackComponent],
 })
 export class ChatComponent implements OnInit, OnDestroy {
   constructor(

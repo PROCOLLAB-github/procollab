@@ -13,7 +13,7 @@ import { SnackbarComponent } from "@ui/components/snackbar/snackbar.component";
 import { DeleteConfirmComponent } from "@ui/components/delete-confirm/delete-confirm.component";
 import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { NavComponent } from "./shared/nav/nav.component";
+import { NavComponent } from "./features/nav/nav.component";
 import { IconComponent, ProfileControlPanelComponent, SidebarComponent } from "@uilib";
 import { AsyncPipe } from "@angular/common";
 import { InviteService } from "@services/invite.service";
@@ -54,21 +54,42 @@ export class OfficeComponent implements OnInit, OnDestroy {
     private readonly industryService: IndustryService,
     private readonly route: ActivatedRoute,
     public readonly authService: AuthService,
-    private readonly projectService: ProjectService,
     private readonly inviteService: InviteService,
     private readonly router: Router,
     public readonly chatService: ChatService
   ) {}
 
+  invites: Signal<Invite[]> = toSignal(
+    this.route.data.pipe(
+      map(r => r["invites"]),
+      map(invites => invites.filter((invite: Invite) => invite.isAccepted === null))
+    )
+  );
+
+  profile?: User;
+
+  waitVerificationModal = false;
+  waitVerificationAccepted = false;
+
+  inviteErrorModal = false;
+
+  navItems: {
+    name: string;
+    icon: string;
+    link: string;
+    isExternal?: boolean;
+    isActive?: boolean;
+  }[] = [];
+
+  subscriptions$: Subscription[] = [];
+
   ngOnInit(): void {
-    const globalSubscription$ = forkJoin([
-      this.industryService.getAll(),
-      this.projectService.getProjectSteps(),
-    ]).subscribe(noop);
+    const globalSubscription$ = forkJoin([this.industryService.getAll()]).subscribe(noop);
     this.subscriptions$.push(globalSubscription$);
 
     const profileSub$ = this.authService.profile.subscribe(profile => {
       this.profile = profile;
+      this.buildNavItems(profile);
 
       if (!this.profile.doesCompleted()) {
         this.router
@@ -105,31 +126,6 @@ export class OfficeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
-
-  invites: Signal<Invite[]> = toSignal(
-    this.route.data.pipe(
-      map(r => r["invites"]),
-      map(invites => invites.filter((invite: Invite) => invite.isAccepted === null))
-    )
-  );
-
-  navItems = [
-    { name: "Новости", icon: "feed", link: "feed" },
-    { name: "Проекты", icon: "projects-filled", link: "projects" },
-    { name: "Программы", icon: "program", link: "program" },
-    { name: "Участники", icon: "people-bold", link: "members" },
-    { name: "Эксперты", icon: "two-people", link: "mentors" },
-    { name: "Вакансии", icon: "search-sidebar", link: "vacancies" },
-  ];
-
-  subscriptions$: Subscription[] = [];
-
-  waitVerificationModal = false;
-  waitVerificationAccepted = false;
-
-  inviteErrorModal = false;
-
-  profile?: User;
 
   onAcceptWaitVerification() {
     this.waitVerificationAccepted = true;
@@ -175,7 +171,22 @@ export class OfficeComponent implements OnInit, OnDestroy {
       );
   }
 
-  openSkills() {
-    location.href = "https://skills.procollab.ru";
+  private buildNavItems(profile: User) {
+    this.navItems = [
+      { name: "мой профиль", icon: "person", link: `profile/${profile.id}` },
+      { name: "новости", icon: "feed", link: "feed" },
+      { name: "проекты", icon: "projects", link: "projects" },
+      { name: "участники", icon: "people-bold", link: "members" },
+      { name: "программы", icon: "program", link: "program" },
+      { name: "вакансии", icon: "search-sidebar", link: "vacancies" },
+      {
+        name: "траектории",
+        icon: "trajectories",
+        link: "skills",
+        isExternal: true,
+        isActive: false,
+      },
+      { name: "чаты", icon: "message", link: "chats" },
+    ];
   }
 }

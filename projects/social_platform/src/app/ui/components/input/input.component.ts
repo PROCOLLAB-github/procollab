@@ -1,9 +1,19 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  Output,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 import { NgxMaskModule } from "ngx-mask";
 
 /**
@@ -16,6 +26,11 @@ import { NgxMaskModule } from "ngx-mask";
  * - error: состояние ошибки для стилизации
  * - mask: маска для форматирования ввода
  * - appValue: значение поля (двустороннее связывание)
+ * - haveHint: наличие подсказки
+ * - tooltipText: текст подсказки
+ * - tooltipPosition: позиция подсказки
+ * - checked: состояние для радио-кнопок
+ * - name: имя для радио-кнопок
  *
  * События:
  * - appValueChange: изменение значения поля
@@ -36,22 +51,46 @@ import { NgxMaskModule } from "ngx-mask";
     },
   ],
   standalone: true,
-  imports: [CommonModule, NgxMaskModule, IconComponent],
+  imports: [CommonModule, NgxMaskModule, IconComponent, TooltipComponent],
 })
-export class InputComponent implements OnInit, ControlValueAccessor {
+export class InputComponent implements ControlValueAccessor {
   constructor() {}
 
   /** Текст подсказки */
   @Input() placeholder = "";
 
   /** Тип поля ввода */
-  @Input() type: "text" | "password" | "email" | "tel" = "text";
+  @Input() type: "text" | "password" | "email" | "tel" | "date" | "radio" = "text";
+
+  /** Размер поля ввода */
+  @Input() size: "small" | "big" = "small";
+
+  /** Наличие обводки */
+  @Input() hasBorder = true;
+
+  /** Наличие подсказки */
+  @Input() haveHint = false;
+
+  /** Текст для подсказки */
+  @Input() tooltipText?: string;
+
+  /** Позиция подсказки */
+  @Input() tooltipPosition: "left" | "right" = "right";
+
+  /** Ширина подсказки */
+  @Input() tooltipWidth = 250;
 
   /** Состояние ошибки */
   @Input() error = false;
 
   /** Маска для форматирования */
   @Input() mask = "";
+
+  /** Имя для инпута типа radio */
+  @Input() name = "";
+
+  /** Состояние checked для радио-кнопок */
+  @Input() checked = false;
 
   /** Двустороннее связывание значения */
   @Input()
@@ -63,13 +102,39 @@ export class InputComponent implements OnInit, ControlValueAccessor {
     return this.value;
   }
 
+  /** Состояние видимости подсказки */
+  isTooltipVisible = false;
+
   /** Событие изменения значения */
   @Output() appValueChange = new EventEmitter<string>();
 
   /** Событие нажатия Enter */
   @Output() enter = new EventEmitter<void>();
 
-  ngOnInit(): void {}
+  /** Событие изменения состояния радио (для внешних обработчиков) */
+  @Output() change = new EventEmitter<Event>();
+
+  /** Обработчик для радио */
+  onRadioChange(event: Event): void {
+    if (this.type === "radio") {
+      const target = event.target as HTMLInputElement;
+      this.value = target.value;
+      this.onChange(this.value);
+      this.appValueChange.emit(this.value);
+      this.change.emit(event); // Эмитим событие для внешних обработчиков
+      this.onTouch();
+    }
+  }
+
+  /** Показать подсказку */
+  showTooltip(): void {
+    this.isTooltipVisible = true;
+  }
+
+  /** Скрыть подсказку */
+  hideTooltip(): void {
+    this.isTooltipVisible = false;
+  }
 
   /** Обработчик ввода текста */
   onInput(event: Event): void {

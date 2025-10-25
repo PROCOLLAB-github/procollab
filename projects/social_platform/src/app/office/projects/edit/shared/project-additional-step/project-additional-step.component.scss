@@ -4,6 +4,8 @@
 @use "styles/typography";
 
 .project {
+  position: relative;
+
   &__inner {
     width: 100%;
     margin-bottom: 25px;
@@ -84,7 +86,7 @@
             color: var(--black) !important;
 
             &--placeholder {
-              color: var(--grey-for-text) !important;
+              color: var(--dark-grey) !important;
             }
 
             @include typography.body-10;
@@ -98,19 +100,19 @@
         ::ng-deep {
           app-input {
             input {
-              @include typography.body-14;
+              @include typography.body-12;
             }
           }
 
           app-textarea {
             textarea {
-              @include typography.body-14;
+              @include typography.body-12;
             }
           }
 
           app-select {
             .field__input {
-              @include typography.body-14;
+              @include typography.body-12;
             }
           }
         }
@@ -120,6 +122,24 @@
     fieldset {
       margin-bottom: 10px;
     }
+
+    &--no-items {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 10px;
+
+      app-tooltip {
+        position: absolute;
+        right: -10%;
+        bottom: 70%;
+      }
+    }
+  }
+
+  &__no-items {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
   }
 }
 
@@ -139,4 +159,12 @@
   &__submit {
     display: block;
   }
+}
+
+.error {
+  i {
+    color: var(--red) !important;
+  }
+
+  color: var(--red) !important;
 }

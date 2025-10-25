@@ -1,0 +1,29 @@
+.programs {
+  display: grid;
+  grid-template-columns: 8fr 2fr;
+  grid-gap: 24px;
+  justify-content: space-between;
+
+  &__list {
+    display: grid;
+    grid-template-columns: 4fr 4fr;
+    grid-gap: 24px;
+  }
+
+  &__filter {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 14px;
+
+    &--block {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    &--text {
+      color: var(--dark-grey);
+    }
+  }
+}

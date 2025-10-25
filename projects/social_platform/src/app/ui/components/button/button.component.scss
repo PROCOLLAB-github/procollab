@@ -1,25 +1,28 @@
 /** @format */
 
+@use "styles/typography";
+
 .button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: var(--rounded-xxl);
+  transition: all 0.2s;
+
   &.button--inline {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-height: 52px;
-    padding: 11.5px 18px;
     font-weight: 400;
     color: var(--white);
-    text-align: center;
-    cursor: pointer;
     background: var(--accent);
-    border: 2px solid transparent;
-    border-radius: var(--rounded-lg);
+    border: 0.5px solid transparent;
     outline: none;
-    transition: background-color 0.2s;
 
     &:hover {
-      background-color: var(--accent-dark);
+      background-color: var(--accent-light);
+      box-shadow: -2px 3px 3px rgb(51 51 51 / 20%);
     }
 
     ::ng-deep *:not(.dot-wave) {
@@ -72,23 +75,14 @@
   }
 
   &.button--outline {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-height: 52px;
-    padding: 11.5px 18px;
     color: var(--accent);
-    text-align: center;
-    cursor: pointer;
     background-color: transparent;
-    border: 2px solid var(--accent);
-    border-radius: var(--rounded-lg);
-    transition: all 0.2s;
+    border: 0.5px solid var(--accent);
 
     &:hover {
-      color: var(--accent-dark);
-      border-color: var(--accent-dark);
+      color: var(--accent-light);
+      border-color: var(--accent-light);
+      box-shadow: -2px 3px 3px rgb(51 51 51 / 20%);
     }
 
     &.button--red {
@@ -101,8 +95,55 @@
       }
     }
 
+    &.button--white {
+      color: var(--white);
+      background: transparent;
+      border: 0.5px solid var(--white);
+    }
+
     &.button--no-border {
       border: none;
+    }
+
+    ::ng-deep *:not(.dot-wave) {
+      display: block;
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  &--extra-small {
+    width: 70px;
+    padding: 2px 10px;
+  }
+
+  &--small {
+    width: 70px;
+    padding: 4px 24px;
+
+    &--icon {
+      padding: 12px 24px;
+    }
+  }
+
+  &--medium {
+    width: 157px;
+    padding: 4px 0;
+
+    &--icon {
+      padding: 12px 60px;
+    }
+  }
+
+  &--big {
+    width: 100%;
+    padding: 4px 24px;
+
+    &--icon {
+      width: 100%;
+      padding: 12px 24px;
     }
   }
 }

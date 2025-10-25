@@ -32,5 +32,5 @@ export interface ProjectRate {
   viewsCount: number;
   industry: number;
   criterias: ProjectRatingCriterion[];
-  isScored: boolean;
+  scored: boolean;
 }

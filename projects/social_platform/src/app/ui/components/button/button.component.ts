@@ -5,8 +5,8 @@ import { LoaderComponent } from "../loader/loader.component";
 import { CommonModule } from "@angular/common";
 
 /**
- * Универсальный компонент кнопки с различными стилями и состояниями.
- * Поддерживает различные цветовые схемы, индикатор загрузки и настройки внешнего вида.
+ * Универсальный компонент кнопки с различными стилями, состояниями и встроенной подсказкой.
+ * Поддерживает различные цветовые схемы, индикатор загрузки, настройки внешнего вида и tooltip.
  *
  * Входящие параметры:
  * - color: цветовая схема кнопки ("primary" | "red" | "grey" | "green" | "gold" | "gradient" | "white")
@@ -17,10 +17,14 @@ import { CommonModule } from "@angular/common";
  * - backgroundColor: кастомный цвет фона
  * - disabled: состояние блокировки кнопки
  * - customTypographyClass: кастомный CSS класс для типографики
+ * - tooltipText: текст подсказки
+ * - tooltipPosition: позиция подсказки
+ * - tooltipWidth: ширина подсказки
  *
  * Использование:
  * - Вставлять контент кнопки через ng-content
  * - Автоматически показывает лоадер при loader=true
+ * - Показывает tooltip при наведении, если указан tooltipText
  */
 @Component({
   selector: "app-button",
@@ -38,11 +42,14 @@ export class ButtonComponent implements OnInit {
   /** Показывать индикатор загрузки */
   @Input() loader = false;
 
+  /** Размер кнопки */
+  @Input() size: "extra-small" | "small" | "medium" | "big" = "small";
+
   /** Отображать рамку */
   @Input() hasBorder = true;
 
   /** Тип HTML кнопки */
-  @Input() type: "submit" | "reset" | "button" = "button";
+  @Input() type: "submit" | "reset" | "button" | "icon" = "button";
 
   /** Стиль отображения */
   @Input() appearance: "inline" | "outline" = "inline";

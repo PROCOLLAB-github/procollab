@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
 import { BarComponent } from "@ui/components";
 import { ProgramService } from "./services/program.service";
+import { BackComponent } from "@uilib";
 
 /**
  * Основной компонент модуля "Программы"
@@ -35,7 +36,7 @@ import { ProgramService } from "./services/program.service";
   templateUrl: "./program.component.html",
   styleUrl: "./program.component.scss",
   standalone: true,
-  imports: [ReactiveFormsModule, SearchComponent, RouterOutlet, BarComponent],
+  imports: [ReactiveFormsModule, SearchComponent, RouterOutlet, BarComponent, BackComponent],
 })
 export class ProgramComponent implements OnInit, OnDestroy {
   constructor(
@@ -67,7 +68,6 @@ export class ProgramComponent implements OnInit, OnDestroy {
 
     const routeUrl$ = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.isMy = location.href.includes("/my");
         this.isAll = location.href.includes("/all");
       }
     });
@@ -81,6 +81,5 @@ export class ProgramComponent implements OnInit, OnDestroy {
   searchForm: FormGroup;
   subscriptions$: Subscription[] = [];
 
-  isMy = location.href.includes("/my");
   isAll = location.href.includes("/all");
 }

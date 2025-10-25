@@ -27,7 +27,6 @@ export const VACANCIES_ROUTES: Routes = [
       },
       {
         path: "my",
-        // Ленивая загрузка маршрутов для откликов пользователя
         loadChildren: () => import("./list/list.routes").then(c => c.VACANCY_LIST_ROUTES),
       },
       {
@@ -41,7 +40,6 @@ export const VACANCIES_ROUTES: Routes = [
   },
   {
     path: ":vacancyId",
-    // Ленивая загрузка маршрутов для детальной информации о вакансии
     loadChildren: () =>
       import("./detail/vacancies-detail.routes").then(c => c.VACANCIES_DETAIL_ROUTES),
   },

@@ -41,7 +41,9 @@
     {{ userData.points }} {{ userData.points | pluralize: ["балл", "балла", "баллов"] }}
   </div>
   <a href="https://app.procollab.ru/office" class="info__return">
-    <app-button>Вернуться на procollab.ru</app-button>
+    <app-button customTypographyClass="text-body-14" size="big"
+      >Вернуться на procollab.ru</app-button
+    >
   </a>
 </div>
 
@@ -54,7 +56,10 @@
     </div>
     <p class="cancel__title">Подписка оформлена</p>
     <p class="text-body-14 cancel__text">Погрузись в мир знаний прямо сейчас</p>
-    <app-button customTypographyClass="text-body-12" (click)="openSuscriptionBought = false"
+    <app-button
+      customTypographyClass="text-body-12"
+      size="big"
+      (click)="openSuscriptionBought = false"
       >Начать</app-button
     >
     <img alt="wave" src="assets/images/subscription/wave.svg" class="cancel__wave" />

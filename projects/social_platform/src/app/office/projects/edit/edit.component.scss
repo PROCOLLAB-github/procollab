@@ -5,18 +5,24 @@
 
 .project {
   position: relative;
-  height: 100%;
-  min-height: 800px;
-  padding: 24px;
+  padding: 30px 0;
   background-color: var(--white);
   border-radius: var(--rounded-md);
 
   &__top {
+    position: sticky;
+    top: -50%;
+    left: 6%;
+    z-index: 100;
     display: flex;
+    gap: 12%;
     align-items: center;
-    justify-content: space-between;
-    margin-top: 17px;
-    margin-bottom: 18px;
+    justify-content: space-evenly;
+    width: 100%;
+    padding: 4px 0;
+    margin-top: 20px;
+    background-color: var(--light-white);
+    border-radius: var(--rounded-xxl);
   }
 
   &__title {
@@ -30,23 +36,16 @@
   }
 
   &__back {
-    width: 20%;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    cursor: pointer;
   }
 
   &__form {
     display: flex;
     flex-direction: column;
-    padding: 15px;
     color: var(--black);
-    background-color: var(--white);
-    border: 1px solid var(--grey-button);
-    border-radius: var(--rounded-md);
-
-    @include responsive.apply-desktop {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 24px;
-    }
   }
 
   &__inner {
@@ -113,19 +112,9 @@
 
   &__save {
     @include responsive.apply-desktop {
-      position: absolute;
-      right: 48px;
-      bottom: 48px;
       display: flex;
       gap: 10px;
-      justify-content: flex-end;
-      order: unset;
-      width: 90%;
-
-      app-button {
-        align-self: flex-end;
-        width: 20%;
-      }
+      align-items: center;
     }
   }
 
@@ -135,10 +124,6 @@
     flex-direction: column;
     gap: 20px;
     align-items: center;
-
-    app-button {
-      width: 250px;
-    }
 
     span {
       color: var(--red);
@@ -165,11 +150,6 @@
     gap: 20px;
     align-items: center;
     width: 672px;
-
-    app-button {
-      width: 100%;
-      max-width: 366px;
-    }
   }
 
   &__content {
@@ -254,15 +234,6 @@
     gap: 10px;
     align-items: center;
     margin-top: 20px;
-
-    ::ng-deep {
-      app-button {
-        .button {
-          padding-right: 52px;
-          padding-left: 52px;
-        }
-      }
-    }
   }
 
   &__button {

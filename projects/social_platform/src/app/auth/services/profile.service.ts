@@ -29,6 +29,10 @@ export class ProfileService {
 
   constructor(private apiService: ApiService) {}
 
+  getAchievements(): Observable<Achievement[]> {
+    return this.apiService.get(`${this.AUTH_USERS_URL}/achievements/`);
+  }
+
   addAchievement(achievement: Omit<Achievement, "id">): Observable<Achievement> {
     return this.apiService
       .post(`${this.AUTH_USERS_URL}/achievements/`, achievement)

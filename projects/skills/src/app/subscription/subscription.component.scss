@@ -95,10 +95,6 @@
     flex-grow: 1;
   }
 
-  app-button {
-    margin-top: auto;
-  }
-
   &--primary {
     background-color: var(--accent);
 
@@ -203,13 +199,8 @@
 
   app-button {
     z-index: 100;
-    width: 200%;
 
     @include typography.body-12;
-
-    @include responsive.apply-desktop {
-      width: 40%;
-    }
   }
 
   &__stars {

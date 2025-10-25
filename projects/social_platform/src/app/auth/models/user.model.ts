@@ -24,6 +24,8 @@ export class Achievement {
   id!: number;
   title!: string;
   status!: string;
+  year!: number;
+  files!: string[];
 }
 
 export class Education {
@@ -58,6 +60,7 @@ export class User {
   birthday!: string;
   avatar!: string;
   links!: string[];
+  coverImageAddress?: string;
   keySkills!: string[];
   skills!: Skill[];
   skillsIds!: number[];

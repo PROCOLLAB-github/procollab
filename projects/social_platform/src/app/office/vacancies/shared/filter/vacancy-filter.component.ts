@@ -12,15 +12,15 @@ import {
   Output,
   signal,
 } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { ButtonComponent, CheckboxComponent, IconComponent, InputComponent } from "@ui/components";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { ButtonComponent, CheckboxComponent, IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
 import { FeedService } from "@office/feed/services/feed.service";
 import { VacancyService } from "@office/services/vacancy.service";
-import { debounceTime, map, Subject, Subscription, tap } from "rxjs";
-import { filterExperience } from "projects/core/src/consts/filter-experience";
-import { filterWorkFormat } from "projects/core/src/consts/filter-work-format";
-import { filterWorkSchedule } from "projects/core/src/consts/filter-work-schedule";
+import { map, Subscription, tap } from "rxjs";
+import { workFormatFilter } from "projects/core/src/consts/filters/work-format-filter.const";
+import { workScheduleFilter } from "projects/core/src/consts/filters/work-schedule-filter.const";
+import { workExperienceFilter } from "projects/core/src/consts/filters/work-experience-filter.const";
 
 /**
  * Компонент фильтра вакансий без использования реактивных форм
@@ -32,10 +32,10 @@ import { filterWorkSchedule } from "projects/core/src/consts/filter-work-schedul
   imports: [
     CommonModule,
     CheckboxComponent,
-    ButtonComponent,
     ClickOutsideModule,
     IconComponent,
-    InputComponent,
+    ButtonComponent,
+    RouterLink,
   ],
   templateUrl: "./vacancy-filter.component.html",
   styleUrl: "./vacancy-filter.component.scss",
@@ -100,81 +100,30 @@ export class VacancyFilterComponent implements OnInit {
   currentWorkFormat = signal<string | undefined>(undefined);
   /** Текущий фильтр по графику работы */
   currentWorkSchedule = signal<string | undefined>(undefined);
-  /** Текущая минимальная зарплата */
-  currentSalaryMin = signal<string | undefined>(undefined);
-  /** Текущая максимальная зарплата */
-  currentSalaryMax = signal<string | undefined>(undefined);
-
-  // Сигналы для значений полей зарплаты
-  /** Значение поля минимальной зарплаты */
-  salaryMinValue = signal<string>("");
-  /** Значение поля максимальной зарплаты */
-  salaryMaxValue = signal<string>("");
-
-  // Subject для debounce изменений зарплаты
-  private salaryChanges$ = new Subject<{ min: string; max: string }>();
+  /** Текущая зарплата */
+  currentSalary = signal<string | undefined>(undefined);
 
   /** Опции фильтра по опыту работы */
-  readonly filterExperienceOptions = filterExperience;
+  readonly workExperienceFilterOptions = workExperienceFilter;
 
   /** Опции фильтра по формату работы */
-  readonly filterWorkFormatOptions = filterWorkFormat;
+  readonly workFormatFilterOptions = workFormatFilter;
 
   /** Опции фильтра по графику работы */
-  filterWorkScheduleOptions = filterWorkSchedule;
+  readonly workScheduleFilterOptions = workScheduleFilter;
 
   /**
    * Инициализация компонента
    */
   ngOnInit() {
-    // Подписка на изменения зарплаты с debounce
-    this.salaryChanges$.pipe(debounceTime(300)).subscribe(({ min, max }) => {
-      this.router.navigate([], {
-        queryParams: {
-          role_contains: this.searchValue || null,
-          salary_min: min || null,
-          salary_max: max || null,
-        },
-        queryParamsHandling: "merge",
-        relativeTo: this.route,
-      });
-    });
-
     // Подписка на изменения параметров запроса
     this.queries$ = this.route.queryParams.subscribe(queries => {
       // Синхронизация текущих значений фильтров с URL
       this.currentExperience.set(queries["required_experience"]);
       this.currentWorkFormat.set(queries["work_format"]);
       this.currentWorkSchedule.set(queries["work_schedule"]);
-      this.currentSalaryMin.set(queries["salary_min"]);
-      this.currentSalaryMax.set(queries["salary_max"]);
+      this.currentSalary.set(queries["salary"]);
       this.searchValue = queries["role_contains"];
-
-      // Синхронизация полей зарплаты
-      this.salaryMinValue.set(queries["salary_min"] || "");
-      this.salaryMaxValue.set(queries["salary_max"] || "");
-    });
-  }
-
-  /**
-   * Обработчик изменения минимальной зарплаты
-   */
-  onSalaryMinChange(value: string): void {
-    this.salaryMinValue.set(value);
-    this.salaryChanges$.next({
-      min: value,
-      max: this.salaryMaxValue(),
-    });
-  }
-
-  /**
-   * Обработчик изменения максимальной зарплаты
-   */
-  onSalaryMaxChange(value: string): void {
-    this.salaryMaxValue.set(value);
-    this.salaryChanges$.next({
-      min: this.salaryMinValue(),
-      max: value,
     });
   }
 
@@ -248,12 +197,6 @@ export class VacancyFilterComponent implements OnInit {
     this.currentExperience.set(undefined);
     this.currentWorkFormat.set(undefined);
     this.currentWorkSchedule.set(undefined);
-    this.currentSalaryMax.set(undefined);
-    this.currentSalaryMin.set(undefined);
-
-    // Сбрасываем значения полей
-    this.salaryMinValue.set("");
-    this.salaryMaxValue.set("");
 
     this.onSearchValueChanged("");
 
@@ -263,8 +206,6 @@ export class VacancyFilterComponent implements OnInit {
           required_experience: null,
           work_format: null,
           work_schedule: null,
-          salary_min: null,
-          salary_max: null,
           role_contains: null,
         },
         relativeTo: this.route,
@@ -305,8 +246,6 @@ export class VacancyFilterComponent implements OnInit {
         this.currentExperience(),
         this.currentWorkFormat(),
         this.currentWorkSchedule(),
-        this.currentSalaryMin(),
-        this.currentSalaryMax(),
         this.searchValue
       )
       .pipe(
@@ -319,6 +258,5 @@ export class VacancyFilterComponent implements OnInit {
 
   ngOnDestroy() {
     this.queries$?.unsubscribe();
-    this.salaryChanges$.complete();
   }
 }

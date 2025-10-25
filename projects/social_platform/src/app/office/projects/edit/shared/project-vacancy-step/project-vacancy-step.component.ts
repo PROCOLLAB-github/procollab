@@ -8,11 +8,12 @@ import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@error/models/error-message";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
 import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-basket.component";
-import { VacancyCardComponent } from "@office/shared/vacancy-card/vacancy-card.component";
+import { VacancyCardComponent } from "@office/features/vacancy-card/vacancy-card.component";
 import { Skill } from "@office/models/skill";
 import { ProjectVacancyService } from "../../services/project-vacancy.service";
 import { ActivatedRoute } from "@angular/router";
 import { IconComponent } from "@uilib";
+import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 
 @Component({
   selector: "app-project-vacancy-step",
@@ -30,6 +31,7 @@ import { IconComponent } from "@uilib";
     AutoCompleteInputComponent,
     SkillsBasketComponent,
     VacancyCardComponent,
+    TextareaComponent,
   ],
 })
 export class ProjectVacancyStepComponent implements OnInit {
@@ -44,6 +46,7 @@ export class ProjectVacancyStepComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
 
   readonly errorMessage = ErrorMessage;
+  showFields = false;
 
   ngOnInit(): void {
     this.projectVacancyService.setVacancies(this.vacancies);
@@ -92,15 +95,15 @@ export class ProjectVacancyStepComponent implements OnInit {
   }
 
   get experienceList() {
-    return this.projectVacancyService.experienceList;
+    return this.projectVacancyService.workExperienceList;
   }
 
   get formatList() {
-    return this.projectVacancyService.formatList;
+    return this.projectVacancyService.workFormatList;
   }
 
   get scheludeList() {
-    return this.projectVacancyService.scheludeList;
+    return this.projectVacancyService.workScheludeList;
   }
 
   get rolesMembersList() {
@@ -129,6 +132,13 @@ export class ProjectVacancyStepComponent implements OnInit {
 
   get vacancyIsSubmitting() {
     return this.projectVacancyService.vacancyIsSubmitting;
+  }
+
+  /**
+   * Отображение блока вакансий
+   */
+  createVacancyBlock(): void {
+    this.showFields = true;
   }
 
   /**

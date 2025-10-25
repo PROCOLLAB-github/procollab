@@ -2,30 +2,13 @@
 
 <div class="filters">
   <div class="filters__titles">
-    <h3 class="filters__title">Фильтр</h3>
-    <a class="text-body-12 filters__clear" (click)="clearFilters()">Сбросить фильтры</a>
+    <p class="text-body-14 filters__title">фильтры</p>
+    <a class="text-body-10 filters__clear" (click)="clearFilters()">сбросить</a>
   </div>
 
   <div class="filters__controls">
     <form [formGroup]="filterForm">
-      <div class="filters__block" style="margin-top: 10px">
-        <h4 class="text-body-12 filter__name">Специальность</h4>
-        <app-autocomplete-input
-          class="filter__autocomplete"
-          [suggestions]="specsOptions()"
-          [slimVersion]="false"
-          [searchIcon]="'search'"
-          fieldToDisplay="name"
-          valueField="name"
-          formControlName="speciality"
-          placeholder="Поиск"
-          (searchStart)="onSearchSpec($event)"
-          (inputCleared)="onClearSpecField()"
-        ></app-autocomplete-input>
-      </div>
-
       <div class="filters__block">
-        <h4 class="text-body-12 filter__name">Навык</h4>
         <app-autocomplete-input
           class="filter__autocomplete"
           [suggestions]="skillsOptions()"
@@ -34,13 +17,28 @@
           fieldToDisplay="name"
           valueField="name"
           formControlName="keySkill"
-          placeholder="Поиск"
+          placeholder="навыки"
           (searchStart)="onSearchSkill($event)"
           (inputCleared)="onClearSkillField()"
         ></app-autocomplete-input>
       </div>
 
-      <div class="filters__block">
+      <div class="filters__block" style="margin-top: 10px">
+        <app-autocomplete-input
+          class="filter__autocomplete"
+          [suggestions]="specsOptions()"
+          [slimVersion]="false"
+          [searchIcon]="'search'"
+          fieldToDisplay="name"
+          valueField="name"
+          formControlName="speciality"
+          placeholder="специальность"
+          (searchStart)="onSearchSpec($event)"
+          (inputCleared)="onClearSpecField()"
+        ></app-autocomplete-input>
+      </div>
+
+      <!-- <div class="filters__block">
         <h4 class="text-body-12 filter__name">Возраст</h4>
         <div class="filters__age-wrapper">
           <div class="filters__age filter__item">
@@ -54,7 +52,7 @@
           <app-checkbox [checked]="filterForm.get('isMosPolytechStudent')?.value"> </app-checkbox>
           <span class="text-body-12 filter__name">Студент Московского Политеха</span>
         </label>
-      </div>
+      </div> -->
     </form>
   </div>
 </div>

@@ -14,7 +14,11 @@
   &__row {
     display: flex;
     align-items: center;
-    padding-bottom: 20px;
+
+    i {
+      cursor: pointer;
+      transform: rotate(180deg);
+    }
   }
 
   &__logout {

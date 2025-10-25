@@ -1,0 +1,14 @@
+.approve {
+  &__approves {
+    &--people {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      margin-left: 12px;
+
+      app-avatar {
+        margin-left: -12px;
+      }
+    }
+  }
+}

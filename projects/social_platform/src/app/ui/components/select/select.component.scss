@@ -13,14 +13,23 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-    padding: 12px 20px;
     color: var(--black);
     cursor: pointer;
     background-color: var(--white);
-    border: 1px solid var(--gray);
-    border-radius: var(--rounded-lg);
+    border: 0.5px solid var(--gray);
+    border-radius: var(--rounded-xxl);
     outline: none;
+
+    &--small {
+      max-width: 70px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    &--big {
+      width: 100%;
+      padding: 12px;
+    }
 
     &--placeholder {
       color: var(--dark-grey);
@@ -31,30 +40,33 @@
       box-shadow: 0 0 6px rgb(109 40 255 / 30%);
     }
 
-    @include typography.body-14;
-
-    @include responsive.apply-desktop {
-      @include typography.body-16;
+    &--error {
+      border-color: var(--red) !important;
     }
+
+    @include typography.body-12;
   }
 
   &__options {
     position: absolute;
     right: 0;
     bottom: -6px;
-    left: 0;
+    left: 5%;
     z-index: 11;
+    width: 90%;
     max-height: 200px;
-    padding: 10px;
     overflow-y: auto;
     background-color: var(--white);
-    border: 1px solid var(--gray);
+    border: 0.5px solid var(--gray);
     border-radius: var(--rounded-lg);
     transform: translateY(100%);
   }
 
   &__option {
-    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
     color: var(--dark-grey);
     cursor: pointer;
     border-radius: var(--rounded-lg);
@@ -65,14 +77,11 @@
     }
 
     &:hover {
-      color: var(--white);
-      background-color: var(--accent);
+      color: var(--accent);
     }
 
-    @include typography.body-14;
-
-    @include responsive.apply-desktop {
-      @include typography.body-16;
+    &--point {
+      color: var(--accent);
     }
   }
 

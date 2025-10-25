@@ -11,7 +11,7 @@ import { SelectComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
 import { FormBuilder, type FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { RatingService } from "../services/rating.service";
-import { ratingFiltersList } from "projects/core/src/consts/rating-filters";
+import { ratingFiltersList } from "projects/core/src/consts/filters/rating-filter.const";
 
 /**
  * Компонент общего рейтинга пользователей

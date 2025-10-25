@@ -1,5 +1,6 @@
 .contact-link {
   color: var(--accent);
+  cursor: pointer;
   transition: color 0.2s;
 
   &:hover {
@@ -9,6 +10,7 @@
   &__link {
     display: flex;
     align-items: center;
+    cursor: pointer;
   }
 
   &__icon {
@@ -16,10 +18,10 @@
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    width: 26px;
-    height: 26px;
-    margin-right: 12px;
-    border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 6px;
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-xxl);
   }
 }

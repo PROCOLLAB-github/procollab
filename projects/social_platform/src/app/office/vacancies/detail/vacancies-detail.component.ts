@@ -6,6 +6,7 @@ import { ActivatedRoute, RouterOutlet } from "@angular/router";
 import { Vacancy } from "@office/models/vacancy.model";
 import { BarComponent } from "@ui/components";
 import { map, Subscription } from "rxjs";
+import { BackComponent } from "@uilib";
 
 /**
  * Компонент детального просмотра вакансии
@@ -29,7 +30,7 @@ import { map, Subscription } from "rxjs";
 @Component({
   selector: "app-vacancies-detail",
   standalone: true,
-  imports: [CommonModule, BarComponent, RouterOutlet],
+  imports: [CommonModule, BarComponent, RouterOutlet, BackComponent],
   templateUrl: "./vacancies-detail.component.html",
   styleUrl: "./vacancies-detail.component.scss",
 })

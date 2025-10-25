@@ -1,0 +1,9 @@
+<!-- @format -->
+
+@if(team) { @if (team.length) {
+<div class="project__team">
+  @for (collaborator of team; track $index) {
+  <app-info-card [info]="collaborator" type="members"></app-info-card>
+  }
+</div>
+} }

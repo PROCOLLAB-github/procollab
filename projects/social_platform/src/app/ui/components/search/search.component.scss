@@ -5,18 +5,25 @@
   align-items: center;
   width: 100%;
   cursor: pointer;
+  border-bottom: 0.5px solid var(--dark-grey);
 
   &__other {
     flex-grow: 1;
   }
 
   &__icon {
-    margin-right: 14px;
-    color: var(--black);
+    margin-right: 4px;
+    margin-bottom: 2px;
+    color: var(--dark-grey);
+
+    &--open {
+      margin-top: 4px;
+      margin-bottom: 0;
+    }
   }
 
-  &__hidden {
-    height: 18px;
+  &__text {
+    color: var(--dark-grey);
   }
 
   &__input {
@@ -30,7 +37,6 @@
       width: 100%;
       background-color: transparent;
       border: none;
-      border-bottom: 1px solid var(--black);
       outline: none;
 
       &::placeholder {

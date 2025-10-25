@@ -8,7 +8,7 @@ import { ProgressBlockComponent } from "../shared/progress-block/progress-block.
 import { ActivatedRoute } from "@angular/router";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { map, type Subscription } from "rxjs";
-import { mockMonthsList } from "projects/core/src/consts/list-mock-months";
+import { mockMonthsList } from "projects/core/src/consts/lists/mock-months-list.const";
 import { ProfileService } from "../services/profile.service";
 import { TrajectoryBlockComponent } from "../shared/trajectory-block/trajectory-block.component";
 

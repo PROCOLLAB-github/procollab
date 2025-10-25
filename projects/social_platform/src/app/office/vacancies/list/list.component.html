@@ -1,34 +1,28 @@
 <!-- @format -->
 
-<div class="page">
+<div class="page" #vacancyRoot>
   @if(type() === 'all'){
-  <app-vacancy-filter
-    (searchValueChange)="onSearhValueChanged($event)"
-    [searchValue]="this.searchForm.get('search')?.value"
-    class="page__filter"
-  ></app-vacancy-filter>
-  }
-  <div #vacancyRoot class="page__feed">
-    <div class="filter">
-      @if(type() === 'all'){
-      <div class="filter__search">
-        <form [formGroup]="searchForm" (submit)="onSearchSubmit()">
-          <app-search formControlName="search"></app-search>
-        </form>
-      </div>
-      } @if(type() === 'all'){ @if(vacancyList().length){ @for (vacancy of vacancyList(); track
-      $index) {
-      <app-open-vacancy
-        class="page__item"
-        [attr.data-id]="vacancy.id"
-        [feedItem]="vacancy"
-      ></app-open-vacancy>
-      } } } @if (type() === 'my') { @if (responsesList().length) { @for (response of
-      responsesList(); track $index) {
-      <app-response-card [response]="response"></app-response-card>
-      } }@else {
-      <p class="page__title">Вы не откликнулись ни на одну вакансию!</p>
-      } }
-    </div>
+  <div class="page__vacancies">
+    @if(vacancyList().length){ @for (vacancy of vacancyList(); track $index) {
+    <app-project-vacancy-card type="vacancies" [vacancy]="vacancy" class="page__item">
+    </app-project-vacancy-card>
+    } }
   </div>
+  } @if (type() === 'my') { @if (responsesList().length) { @for (response of responsesList(); track
+  $index) {
+  <app-response-card [response]="response"></app-response-card>
+  }
+  <app-modal [open]="isMyModal()" (openChange)="isMyModal.set(!isMyModal())">
+    <div class="cancel">
+      <div class="cancel__top">
+        <i appIcon icon="straight-face" appSquare="50"></i>
+        <p class="cancel__title text-body-12">вы пока не отправили <br />ни одного отклика :|</p>
+      </div>
+
+      <a routerLink="/office/vacancies/all">
+        <app-button customTypographyClass="text-body-12" size="big">перейти к вакансиям</app-button>
+      </a>
+    </div>
+  </app-modal>
+  } @else { } }
 </div>

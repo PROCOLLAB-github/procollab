@@ -2,45 +2,15 @@
 @if (project) {
 <div class="chat-page">
   <div class="chat-page__main main">
-    <header class="main__header">
-      <div class="main__info">
-        <div class="main__project">
-          <app-avatar class="main__avatar" [url]="project.imageAddress" [size]="26"></app-avatar>
-          <div class="main__name text-heading-4">{{ project.name }}</div>
-        </div>
-        <div class="main__meta">
-          <ul
-            class="main__members-list"
-            [style.width]="project.collaborators.length * 10 + 10 + 'px'"
-          >
-            @for (member of project.collaborators; let index = $index; track member.userId) {
-            <li
-              class="main__member-avatar"
-              [style.left]="index * -10 + 'px'"
-              [style.z-index]="index"
-            >
-              <app-avatar [url]="member.avatar" [size]="20"></app-avatar>
-            </li>
-            }
-          </ul>
-          <div class="main__count">
-            {{ project.collaborators.length }}
-            {{ project.collaborators.length | pluralize: ["Участник", "Участника", "Участников"] }}
-          </div>
-        </div>
-      </div>
-      <div class="main__actions">
-        <div class="main__action" (click)="onToggleMobileAside()">
-          <i
-            appIcon
-            [icon]="isAsideMobileShown ? 'message' : 'people'"
-            appWidth="20"
-            appHeight="22"
-            appViewBox="0 0 20 22"
-          ></i>
-        </div>
-      </div>
-    </header>
+    @if (!messages.length) {
+    <div class="chat-page__placeholder">
+      <i appIcon icon="empty-chat" appSquare="37"></i>
+      <p class="text-body-12 chat-page__text">
+        начните обсуждать ваш план по заработку первого миллиона
+      </p>
+    </div>
+    }
+
     <app-chat-window
       class="main__chat"
       [class.main__chat-visible]="!isAsideMobileShown"
@@ -52,32 +22,38 @@
       (fetch)="onFetchMessages()"
     ></app-chat-window>
   </div>
+
   <aside class="chat-page__aside" [class.chat-page__aside-visible]="isAsideMobileShown">
-    <div class="chat-members">
-      <header class="chat-members__header">
-        <h2 class="chat-members__title text-bold-body-16">Участники</h2>
+    <div class="info">
+      <header class="info__header">
+        <h2 class="info__title text-body-12">участники</h2>
+        <i appIcon icon="team" appSquare="12"></i>
       </header>
-      <ul class="chat-members__list">
+      <ul class="info__list">
         @for (member of project.collaborators; track member.userId) {
-        <li class="chat-members__item">
+        <li class="info__item">
           <a class="member" [routerLink]="['/office/profile', member.userId]">
             <app-avatar class="member__avatar" [url]="member.avatar" [size]="30"></app-avatar>
-            <span class="member__name text-bold-body-14">
+            <span class="member__name text-body-10">
               {{ member.firstName }} {{ member.lastName }}
             </span>
             @if (currentUserId === member.userId) {
-            <span class="member__i text-body-14">(Вы)</span>
+            <span class="member__i text-body-10">(вы)</span>
             }
           </a>
         </li>
         }
       </ul>
     </div>
-    <div class="files">
-      <h2 class="files__title text-bold-body-16">Файлы</h2>
-      <ul class="files__list">
+
+    <div class="info">
+      <div class="info__header">
+        <h2 class="info__title text-body-12">файлы</h2>
+        <i appIcon icon="file" appSquare="12"></i>
+      </div>
+      <ul class="info__list">
         @for (file of chatFiles; track $index) {
-        <li class="files__item">
+        <li class="info__item">
           <app-file-item
             [name]="file.name"
             [link]="file.link"

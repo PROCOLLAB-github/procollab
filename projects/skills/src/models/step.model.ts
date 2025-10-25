@@ -30,6 +30,7 @@ export interface InfoSlide extends BaseStep {
   description: string; // Дополнительное описание или контекст
   files: string[]; // Массив URL файлов для отображения (изображения, документы)
   popups: Popup[]; // Всплывающие окна для отображения после просмотра
+  videoUrl?: string; // Ссылка для видео
 }
 
 /**

@@ -1,0 +1,20 @@
+<!-- @format -->
+
+<i
+  appIcon
+  icon="hint"
+  [appSquare]="iconSize"
+  class="tooltip__icon"
+  [class]="customClass"
+  (mouseenter)="show.emit()"
+  (mouseleave)="hide.emit()"
+></i>
+<span
+  class="tooltip__content text-body-10"
+  [class.tooltip__content--visible]="isVisible"
+  [class.tooltip__content--left]="position === 'left'"
+  [class.tooltip__content--right]="position === 'right'"
+  [style.width.px]="tooltipWidth"
+>
+  {{ text }}
+</span>

@@ -2,9 +2,12 @@
 
 <div class="field" (clickOutside)="onClickOutside()">
   <div
-    class="text-body-16 field__input"
+    class="text-body-12 field__input"
+    [class.field__input--error]="error"
     [class.field__input--placeholder]="!selectedId && selectedId !== 0"
     [class.field__input--open]="isOpen"
+    [class.field__input--small]="size === 'small'"
+    [class.field__input--big]="size === 'big'"
     (click)="isOpen = !isOpen; highlightedIndex = -1"
   >
     {{
@@ -14,24 +17,29 @@
         ? getLabel(selectedId) || placeholder
         : placeholder
     }}
+    @if (error) {
+    <i class="field__error-icon" appIcon icon="error" appSquare="20"></i>
+    } @else {
     <i
       class="field__arrow"
       [class.field__arrow--filpped]="isOpen"
       appIcon
       icon="arrow-no-body"
-      appWidth="18"
-      appHeight="9"
+      appWidth="10"
+      appHeight="8"
     ></i>
+    }
   </div>
   @if (isOpen) {
   <ul #dropdown class="field__options">
     @for (option of options; track option.id; let index = $index) {
     <li
-      class="text-body-16 field__option"
+      class="text-body-12 field__option"
       [class.field__option--highlighted]="index === highlightedIndex"
       (click)="onUpdate($event, option.id)"
     >
       {{ option.label }}
+      <span class="field__option--point text-body-16">•</span>
     </li>
     }
   </ul>

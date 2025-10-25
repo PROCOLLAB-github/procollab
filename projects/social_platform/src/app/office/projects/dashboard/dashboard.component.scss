@@ -1,0 +1,7 @@
+@use "styles/responsive";
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}

@@ -3,17 +3,11 @@
 @if (user) {
 <a class="user" [routerLink]="['/office/profile', user.id]">
   <div class="user__row">
-    <app-avatar class="user__avatar" [url]="user.avatar"></app-avatar>
-    <div class="text-bold-body-14 user__name">{{ user.firstName }} {{ user.lastName }}</div>
+    <app-avatar class="user__avatar" [size]="33" [url]="user.avatar"></app-avatar>
+    <i appIcon icon="arrow-no-body" appWidth="8" appHeight="4"></i>
   </div>
+
   <div class="user__row">
-    <!-- @if (user.verificationDate; as verificationDate) {
-    <div class="text-body-12 user__verified">
-      Подтвержден с {{ verificationDate | dayjs: "format":"DD.MM.YY" }}
-    </div>
-    } @else {
-    <div class="text-body-12 user__not-verified">Ожидает подтверждения</div>
-    } -->
     <button class="user__logout text-bold-body-14" (click)="logout.emit()">
       <span>Выход</span>
       <i appIcon icon="logout" appSquare="20"></i>

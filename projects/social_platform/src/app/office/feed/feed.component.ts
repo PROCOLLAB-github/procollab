@@ -12,17 +12,17 @@ import {
   ViewChild,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { OpenVacancyComponent } from "@office/feed/shared/open-vacancy/open-vacancy.component";
 import { NewProjectComponent } from "@office/feed/shared/new-project/new-project.component";
 import { ActivatedRoute } from "@angular/router";
 import { FeedItem, FeedItemType } from "@office/feed/models/feed-item.model";
 import { concatMap, fromEvent, map, noop, of, skip, Subscription, tap, throttleTime } from "rxjs";
-import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
 import { ApiPagination } from "@models/api-pagination.model";
 import { FeedService } from "@office/feed/services/feed.service";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
 import { ProfileNewsService } from "@office/profile/detail/services/profile-news.service";
 import { FeedFilterComponent } from "@office/feed/filter/feed-filter.component";
+import { NewsCardComponent } from "@office/features/news-card/news-card.component";
+import { OpenVacancyComponent } from "./shared/open-vacancy/open-vacancy.component";
 
 /**
  * ОСНОВНОЙ КОМПОНЕНТ ЛЕНТЫ НОВОСТЕЙ
@@ -48,10 +48,10 @@ import { FeedFilterComponent } from "@office/feed/filter/feed-filter.component";
   standalone: true,
   imports: [
     CommonModule,
-    OpenVacancyComponent,
     NewProjectComponent,
-    NewsCardComponent,
     FeedFilterComponent,
+    NewsCardComponent,
+    OpenVacancyComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./feed.component.html",
@@ -106,7 +106,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
           this.totalItemsCount.set(0);
           this.feedPage.set(0);
 
-          return this.onFetch(0, this.perFetchTake(), includes ?? ["vacancy", "project", "news"]);
+          return this.onFetch(0, this.perFetchTake(), includes ?? ["vacancy", "projects", "news"]);
         })
       )
       .subscribe(feed => {

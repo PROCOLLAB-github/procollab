@@ -11,36 +11,23 @@
   &__main {
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 8px;
-    align-items: start;
-
-    @include responsive.apply-desktop {
-      grid-template-columns: 2fr 1fr;
-      grid-gap: 16px;
-    }
   }
 
-  &__aside {
-    display: grid;
-    grid-row-start: 3;
-    gap: 20px;
-
-    @include responsive.apply-desktop {
-      grid-row-start: unset;
-    }
+  &__right {
+    display: flex;
+    flex-direction: column;
   }
 
   &__left {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    width: 157px;
   }
 
   &__section {
     padding: 24px;
-    background-color: var(--white);
-    border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
+    margin-bottom: 14px;
+    background-color: var(--light-white);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
   }
 
   &__info {
@@ -55,10 +42,6 @@
     @include responsive.apply-desktop {
       grid-row-start: unset;
     }
-  }
-
-  &__about {
-    padding: 0 24px;
   }
 
   &__news {
@@ -77,66 +60,33 @@
     }
   }
 
-  &__views-desktop {
-    display: none;
-    color: var(--dark-grey);
-
-    @include responsive.apply-desktop {
-      display: flex;
-      align-items: center;
-    }
-
-    i {
-      margin-right: 5px;
-    }
+  &__details {
+    display: grid;
+    grid-template-columns: 2fr 5fr 3fr;
+    grid-gap: 20px;
   }
-}
-
-.bar__add-project {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-
-  i {
-    display: block;
-    margin-left: 6px;
-  }
-}
-
-.bar__add-project-text {
-  display: inline;
 }
 
 .about {
+  padding: 24px;
+  background-color: var(--light-white);
+  border-radius: var(--rounded-lg);
+
   &__head {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 8px;
+    border-bottom: 0.5px solid var(--accent);
 
-    @include responsive.apply-desktop {
-      display: block;
+    &--icon {
+      color: var(--accent);
     }
   }
 
   &__title {
-    margin-bottom: 12px;
-    color: var(--black);
-  }
-
-  &__views {
-    display: flex;
-    align-items: center;
-    color: var(--gray);
-
-    @include typography.body-12;
-
-    @include responsive.apply-desktop {
-      display: none;
-    }
-
-    i {
-      margin-right: 5px;
-    }
+    margin-bottom: 8px;
+    color: var(--accent);
   }
 
   /* stylelint-disable value-no-vendor-prefix */
@@ -170,186 +120,14 @@
   /* stylelint-enable value-no-vendor-prefix */
 
   &__read-full {
-    margin-top: 2px;
+    margin-top: 8px;
     color: var(--accent);
     cursor: pointer;
   }
 }
 
-.info {
-  $body-slide: 15px;
-
-  padding: 0;
-  background-color: transparent;
-  border: none;
-  border-radius: $body-slide;
-
-  &__cover {
-    position: relative;
-    height: 230px;
-    border-radius: 15px 15px 0 0;
-
-    img {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: top;
-    }
-  }
-
-  &__body {
-    position: relative;
-    z-index: 2;
-    padding: 40px 24px 24px;
-    margin-top: -$body-slide;
-    border-radius: $body-slide;
-
-    @include responsive.apply-desktop {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      align-items: flex-end;
-      padding-top: 10px;
-      padding-left: 225px;
-      background-color: var(--white);
-      border: 1px solid var(--medium-grey-for-outline);
-    }
-  }
-
-  &__avatar {
-    position: absolute;
-    bottom: $body-slide;
-    left: 50%;
-    z-index: 3;
-    display: block;
-    background-color: var(--white);
-    border-radius: 50%;
-    transform: translateX(-50%) translateY(30px);
-
-    @include responsive.apply-desktop {
-      left: 35px;
-      transform: translateY(50%);
-    }
-  }
-
-  &__row {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    justify-content: center;
-    margin-top: 2px;
-
-    @include responsive.apply-desktop {
-      justify-content: unset;
-      margin-top: 0;
-    }
-  }
-
-  &__actions {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    gap: 20px;
-
-    @include responsive.apply-desktop {
-      flex-direction: row;
-      gap: 10px;
-      justify-content: flex-end;
-
-      & > a {
-        flex-grow: 1;
-        flex-shrink: 0;
-      }
-    }
-
-    app-button ::ng-deep .button--inline {
-      min-height: 38px;
-    }
-  }
-
-  &__tag {
-    padding: 4px 10px;
-    color: var(--white);
-    background-color: var(--accent);
-    border-radius: 5px;
-  }
-
-  &__location {
-    display: flex;
-    align-items: center;
-
-    i {
-      margin-right: 5px;
-    }
-  }
-
-  &__title {
-    margin-bottom: 10px;
-    color: var(--black);
-    text-align: center;
-
-    @include typography.heading-4;
-
-    @include responsive.apply-desktop {
-      text-align: unset;
-
-      @include typography.heading-2;
-    }
-  }
-
-  &__text {
-    flex-basis: 300px;
-    flex-grow: 9999;
-    color: var(--dark-grey);
-  }
-
-  &__industry {
-    margin-right: 20px;
-
-    @include responsive.apply-desktop {
-      margin-right: 40px;
-    }
-  }
-
-  &__geo {
-    display: flex;
-    align-items: center;
-
-    i {
-      margin-right: 5px;
-    }
-  }
-
-  &__presentation {
-    display: block;
-    margin-top: 35px;
-
-    @include responsive.apply-desktop {
-      margin-top: 0;
-      margin-left: auto;
-    }
-
-    i {
-      margin-left: 10px;
-    }
-  }
-
-  &__presentation-icon {
-    min-width: 16px;
-  }
-
-  &__edit {
-    display: block;
-  }
-}
-
 .read-more {
-  margin-top: 12px;
+  margin-top: 8px;
   color: var(--accent);
   cursor: pointer;
   transition: background-color 0.2s;
@@ -362,21 +140,31 @@
 .links {
   overflow: hidden;
 
+  &__section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    border-bottom: 0.5px solid var(--accent);
+  }
+
+  &__icon {
+    color: var(--accent);
+  }
+
   &__title {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+    color: var(--accent);
   }
 
   &__item {
-    &:not(:last-child) {
-      margin-bottom: 3px;
-
-      @include responsive.apply-desktop {
-        margin-bottom: 12px;
-      }
-    }
+    cursor: pointer;
   }
 
   ul {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     overflow: hidden;
 
     span {
@@ -399,36 +187,25 @@
 }
 
 .cancel {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 80%;
   max-height: calc(100vh - 40px);
-  padding: 40px 0 80px;
-  overflow-y: auto;
 
-  @include responsive.apply-desktop {
-    width: 50%;
-  }
-
-  &__cross {
+  i {
     position: absolute;
     top: 0;
     right: 0;
-    width: 32px;
-    height: 32px;
     cursor: pointer;
-
-    @include responsive.apply-desktop {
-      top: 8px;
-      right: 8px;
-    }
   }
 
   &__top {
     display: flex;
     flex-direction: column;
+    gap: 10px;
+    align-items: center;
     margin-bottom: 10px;
   }
 
@@ -437,6 +214,8 @@
   }
 
   &__text {
+    width: 40%;
+    color: var(--dark-grey);
     text-align: center;
   }
 

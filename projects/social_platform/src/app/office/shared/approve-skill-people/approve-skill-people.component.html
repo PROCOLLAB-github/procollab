@@ -1,0 +1,15 @@
+<!-- @format -->
+
+<div class="approve__approves--people">
+  @if (approves.length >= 3) { @for (approve of approves.slice(0, 3); track $index) {
+  <app-avatar class="approve__avatar" [url]="approve.confirmedBy.avatar" [size]="15"></app-avatar>
+  } } @else { @for (approve of approves; track $index) {
+  <app-avatar class="approve__avatar" [url]="approve.confirmedBy.avatar" [size]="15"></app-avatar>
+  } } @if (approves.length >= 3) {
+  <p class="approve__text text-body-6">и ещё {{ approves.length - 3 + "подтвердили" }}</p>
+  } @else {
+  <p class="approve__text text-body-6">
+    {{ approves.length + " " + (approves.length | pluralize: ["человек", "человека", "человек"]) }}
+  </p>
+  }
+</div>

@@ -1,0 +1,74 @@
+.form {
+  padding: 20px 12px 10px;
+  background-color: var(--light-white);
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-lg);
+
+  &__row {
+    display: flex;
+    align-items: center;
+
+    ::ng-deep app-input {
+      input {
+        width: 100%;
+        padding: 12px 105px 6px 0;
+        background-color: transparent;
+        border-bottom: 0.5px solid var(--medium-grey-for-outline);
+      }
+    }
+
+    i {
+      width: 23px;
+      height: 23px;
+      padding: 6px;
+      color: var(--white);
+      background-color: var(--accent);
+      border-radius: var(--rounded-md);
+    }
+  }
+
+  &__files {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &:not(:empty) {
+      margin-top: 20px;
+    }
+  }
+
+  &__send {
+    margin-left: 20px;
+    color: var(--accent);
+    cursor: pointer;
+  }
+
+  &__input {
+    flex-grow: 1;
+    resize: none;
+    background: transparent;
+    border: none;
+    outline: none;
+  }
+
+  &__images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+}
+
+.footer {
+  padding-top: 10px;
+
+  &__attach {
+    input {
+      display: none;
+    }
+
+    i {
+      color: var(--dark-grey);
+      cursor: pointer;
+    }
+  }
+}

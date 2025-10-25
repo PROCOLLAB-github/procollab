@@ -15,7 +15,6 @@ import { Project } from "@office/models/project.model";
 import { ProjectService } from "@office/services/project.service";
 import { stripNullish } from "@utils/stripNull";
 import { concatMap, filter } from "rxjs";
-
 /**
  * Сервис для управления основной формой проекта и формой дополнительных полей партнерской программы.
  * Обеспечивает создание, инициализацию, валидацию, автосохранение, сброс и получение данных форм.
@@ -43,22 +42,22 @@ export class ProjectFormService {
       imageAddress: [""],
       name: ["", [Validators.required]],
       region: ["", [Validators.required]],
-      step: [null, [Validators.required]],
-      track: [null],
-      direction: [null],
+      implementationDeadline: [null],
+      trl: [null],
       links: this.fb.array([]),
       link: ["", Validators.pattern(/^(https?:\/\/)/)],
       industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required]],
       presentationAddress: ["", [Validators.required]],
       coverImageAddress: ["", [Validators.required]],
-      actuality: ["", [Validators.max(1000)]],
-      goal: ["", [Validators.required, Validators.max(500)]],
-      problem: ["", [Validators.required, Validators.max(1000)]],
+      actuality: ["", [Validators.maxLength(1000)]],
+      targetAudience: ["", [Validators.required, Validators.maxLength(500)]],
+      problem: ["", [Validators.required, Validators.maxLength(1000)]],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
-      achievementsName: [""],
-      achievementsPrize: [""],
+      title: [""],
+      status: [""],
+
       draft: [null],
     });
 
@@ -99,13 +98,12 @@ export class ProjectFormService {
       imageAddress: project.imageAddress,
       name: project.name,
       region: project.region,
-      step: project.step,
       industryId: project.industry,
       description: project.description,
-      track: project.track ?? null,
-      direction: project.direction ?? null,
+      implementationDeadline: project.implementationDeadline ?? null,
+      targetAudience: project.targetAudience ?? null,
       actuality: project.actuality ?? "",
-      goal: project.goal ?? "",
+      trl: project.trl ?? "",
       problem: project.problem ?? "",
       presentationAddress: project.presentationAddress,
       coverImageAddress: project.coverImageAddress,
@@ -117,7 +115,6 @@ export class ProjectFormService {
     }
 
     this.populateLinksFormArray(project.links || []);
-
     this.populateAchievementsFormArray(project.achievements || []);
   }
 
@@ -128,14 +125,12 @@ export class ProjectFormService {
   private populateLinksFormArray(links: string[]): void {
     const linksFormArray = this.projectForm.get("links") as FormArray;
 
-    // Очищаем существующие контролы
     while (linksFormArray.length !== 0) {
       linksFormArray.removeAt(0);
     }
 
-    // Добавляем новые контролы
     links.forEach(link => {
-      linksFormArray.push(this.fb.control(link));
+      linksFormArray.push(this.fb.control(link, [Validators.required]));
     });
   }
 
@@ -145,18 +140,25 @@ export class ProjectFormService {
    */
   private populateAchievementsFormArray(achievements: any[]): void {
     const achievementsFormArray = this.projectForm.get("achievements") as FormArray;
+    const currentYear = new Date().getFullYear();
 
-    // Очищаем существующие контролы
     while (achievementsFormArray.length !== 0) {
       achievementsFormArray.removeAt(0);
     }
 
-    // Добавляем новые контролы
     achievements.forEach((achievement, index) => {
       const achievementGroup = this.fb.group({
         id: achievement.id ?? index,
-        title: achievement.title || "",
-        status: achievement.status || "",
+        title: [achievement.title || "", Validators.required],
+        status: [
+          achievement.status || "",
+          [
+            Validators.required,
+            Validators.min(2000),
+            Validators.max(currentYear),
+            Validators.pattern(/^\d{4}$/),
+          ],
+        ],
       });
       achievementsFormArray.push(achievementGroup);
     });
@@ -207,10 +209,6 @@ export class ProjectFormService {
     return this.projectForm.get("industryId");
   }
 
-  public get step() {
-    return this.projectForm.get("step");
-  }
-
   public get description() {
     return this.projectForm.get("description");
   }
@@ -219,20 +217,20 @@ export class ProjectFormService {
     return this.projectForm.get("actuality");
   }
 
-  public get goal() {
-    return this.projectForm.get("goal");
+  public get implementationDeadline() {
+    return this.projectForm.get("implementationDeadline");
   }
 
   public get problem() {
     return this.projectForm.get("problem");
   }
 
-  public get track() {
-    return this.projectForm.get("track");
+  public get targetAudience() {
+    return this.projectForm.get("targetAudience");
   }
 
-  public get direction() {
-    return this.projectForm.get("direction");
+  public get trl() {
+    return this.projectForm.get("trl");
   }
 
   public get presentationAddress() {
@@ -317,8 +315,6 @@ export class ProjectFormService {
   public resetForms(): void {
     this.projectForm.reset();
     this.additionalForm?.reset();
-
-    // Очищаем FormArray
     this.clearFormArrays();
   }
 
@@ -339,11 +335,14 @@ export class ProjectFormService {
   }
 
   /**
-   * Проверяет валидность обеих форм (основной и дополнительной).
-   * @returns true если обе формы валидны
+   * Проверяет валидность обеих форм (основной и дополнительной) включая цели.
+   * @returns true если все формы валидны
    */
   public validateAllForms(): boolean {
-    return this.validateForm() && this.validateAdditionalForm();
+    const mainFormValid = this.validateForm();
+    const additionalFormValid = this.validateAdditionalForm();
+
+    return mainFormValid && additionalFormValid;
   }
 
   /**

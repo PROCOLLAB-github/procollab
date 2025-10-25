@@ -15,7 +15,7 @@
     flex-grow: 1;
     overflow: hidden;
     border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
   }
 
   &__header {

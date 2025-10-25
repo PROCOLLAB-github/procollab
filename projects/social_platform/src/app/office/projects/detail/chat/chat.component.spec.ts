@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ProjectChatComponent } from "./chat.component";
 import { ReactiveFormsModule } from "@angular/forms";
-import { MessageInputComponent } from "@office/shared/message-input/message-input.component";
+import { MessageInputComponent } from "@office/features/message-input/message-input.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { AuthService } from "@auth/services";
 import { RouterTestingModule } from "@angular/router/testing";
