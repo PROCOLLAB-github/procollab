@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ProgramService } from "@office/program/services/program.service";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import {
   concatMap,
   fromEvent,
@@ -39,6 +39,7 @@ import { ProjectAdditionalService } from "@office/projects/edit/services/project
 import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
 import { NewsFormComponent } from "@office/features/news-form/news-form.component";
 import { AsyncPipe } from "@angular/common";
+import { AvatarComponent } from "@uilib";
 
 @Component({
   selector: "app-main",
@@ -59,6 +60,9 @@ import { AsyncPipe } from "@angular/common";
     NewsFormComponent,
     ModalComponent,
     MatProgressBarModule,
+    AvatarComponent,
+    TagComponent,
+    RouterModule,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {

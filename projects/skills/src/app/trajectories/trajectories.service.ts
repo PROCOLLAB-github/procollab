@@ -51,7 +51,7 @@ export class TrajectoriesService {
     return this.apiService.get<Trajectory[]>(this.TRAJECTORY_URL).pipe(
       map(track => {
         const choosedTrajctory = track.find(trajectory => trajectory.isActiveForUser === true);
-        return [choosedTrajctory];
+        return choosedTrajctory;
       })
     );
   }
