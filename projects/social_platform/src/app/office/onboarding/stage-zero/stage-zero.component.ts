@@ -12,8 +12,14 @@ import { OnboardingService } from "../services/onboarding.service";
 import { ButtonComponent, InputComponent, SelectComponent } from "@ui/components";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { CommonModule } from "@angular/common";
-import { educationUserLevel, educationUserType } from "projects/core/src/consts/list-education";
-import { languageLevelsList, languageNamesList } from "projects/core/src/consts/list-language";
+import {
+  educationUserLevel,
+  educationUserType,
+} from "projects/core/src/consts/lists/education-info-list.const";
+import {
+  languageLevelsList,
+  languageNamesList,
+} from "projects/core/src/consts/lists/language-info-list.const";
 import { IconComponent } from "@uilib";
 import { transformYearStringToNumber } from "@utils/transformYear";
 import { yearRangeValidators } from "@utils/yearRangeValidators";

@@ -13,14 +13,14 @@ import {
   signal,
 } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { ButtonComponent, CheckboxComponent, IconComponent, InputComponent } from "@ui/components";
+import { ButtonComponent, CheckboxComponent, IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
 import { FeedService } from "@office/feed/services/feed.service";
 import { VacancyService } from "@office/services/vacancy.service";
-import { debounceTime, map, Subject, Subscription, tap } from "rxjs";
-import { filterExperience } from "projects/core/src/consts/filter-experience";
-import { filterWorkFormat } from "projects/core/src/consts/filter-work-format";
-import { filterWorkSchedule } from "projects/core/src/consts/filter-work-schedule";
+import { map, Subscription, tap } from "rxjs";
+import { workFormatFilter } from "projects/core/src/consts/filters/work-format-filter.const";
+import { workScheduleFilter } from "projects/core/src/consts/filters/work-schedule-filter.const";
+import { workExperienceFilter } from "projects/core/src/consts/filters/work-experience-filter.const";
 
 /**
  * Компонент фильтра вакансий без использования реактивных форм
@@ -104,13 +104,13 @@ export class VacancyFilterComponent implements OnInit {
   currentSalary = signal<string | undefined>(undefined);
 
   /** Опции фильтра по опыту работы */
-  readonly filterExperienceOptions = filterExperience;
+  readonly workExperienceFilterOptions = workExperienceFilter;
 
   /** Опции фильтра по формату работы */
-  readonly filterWorkFormatOptions = filterWorkFormat;
+  readonly workFormatFilterOptions = workFormatFilter;
 
   /** Опции фильтра по графику работы */
-  filterWorkScheduleOptions = filterWorkSchedule;
+  readonly workScheduleFilterOptions = workScheduleFilter;
 
   /**
    * Инициализация компонента

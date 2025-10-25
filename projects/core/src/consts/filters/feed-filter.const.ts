@@ -1,6 +1,6 @@
 /** @format */
 
-export const feedFilterlist = [
+export const feedFilter = [
   {
     id: 1,
     name: "новости проектов",

@@ -5,7 +5,7 @@
  * Определяет какие поля являются массивами, а какие строками
  * Используется для валидации и обработки данных профиля
  */
-export const fieldsProfile = [
+export const profileFields = [
   // Поля-массивы (содержат несколько элементов)
   { key: "education", type: "array" }, // Образование
   { key: "workExperience", type: "array" }, // Опыт работы

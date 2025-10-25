@@ -9,7 +9,7 @@ import { ErrorMessage } from "@error/models/error-message";
 import { InviteCardComponent } from "@office/features/invite-card/invite-card.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ProjectTeamService } from "../../services/project-team.service";
-import { rolesMembersList } from "projects/core/src/consts/list-roles-members";
+import { rolesMembersList } from "projects/core/src/consts/lists/roles-members-list.const";
 import { ActivatedRoute } from "@angular/router";
 import { IconComponent } from "@uilib";
 import { CollaboratorCardComponent } from "@office/shared/collaborator-card/collaborator-card.component";

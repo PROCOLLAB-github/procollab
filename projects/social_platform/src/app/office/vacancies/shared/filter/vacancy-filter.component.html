@@ -43,7 +43,7 @@
     <div class="filter__experience">
       <span class="text-body-12">опыт</span>
       <ul>
-        @for (option of filterExperienceOptions; track $index) {
+        @for (option of workExperienceFilterOptions; track $index) {
         <li
           class="text-body-12 filter__checkbox"
           (click)="setExperienceFilter($event, option.value)"
@@ -58,7 +58,7 @@
     <div class="filter__schedule">
       <span class="text-body-12">график</span>
       <ul>
-        @for (option of filterWorkScheduleOptions; track $index) {
+        @for (option of workScheduleFilterOptions; track $index) {
         <li
           class="text-body-12 filter__checkbox"
           (click)="setWorkScheduleFilter($event, option.value)"
@@ -73,7 +73,7 @@
     <div class="filter__format">
       <span class="text-body-12">формат работы</span>
       <ul>
-        @for (option of filterWorkFormatOptions; track $index) {
+        @for (option of workFormatFilterOptions; track $index) {
         <li
           class="text-body-12 filter__checkbox"
           (click)="setWorkFormatFilter($event, option.value)"

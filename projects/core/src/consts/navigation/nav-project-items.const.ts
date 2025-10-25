@@ -6,7 +6,7 @@ import { EditStep } from "@office/projects/edit/services/project-step.service";
  * Элементы навигации для редактирования проекта
  * Используется в компоненте пошагового редактирования проекта
  */
-export const navItems = [
+export const navProjectItems = [
   {
     step: "main" as EditStep, // Идентификатор шага
     label: "основные данные", // Отображаемый текст

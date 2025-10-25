@@ -1,6 +1,6 @@
 /** @format */
 
-export const trajectoryMore = [
+export const trajectoryMoreList = [
   {
     label: "Работа с наставником",
   },

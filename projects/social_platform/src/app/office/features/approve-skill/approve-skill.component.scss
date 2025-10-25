@@ -1,0 +1,20 @@
+.approve {
+  &__skill {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-xl);
+  }
+
+  &__text {
+    color: var(--dark-grey);
+  }
+
+  &__approves {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

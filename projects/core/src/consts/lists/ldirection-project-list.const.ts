@@ -22,7 +22,7 @@ export const directionProjectList = [
   },
   {
     id: 3,
-    value: "им Био", // Возможно опечатка, должно быть "Хим Био"
+    value: "Хим Био",
     label: "Хим Био",
   },
   {

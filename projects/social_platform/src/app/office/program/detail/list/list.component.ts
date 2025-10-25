@@ -43,8 +43,8 @@ import { ApiPagination } from "@models/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
 import { CheckboxComponent } from "@ui/components";
-import { filterTags } from "projects/core/src/consts/filter-tags";
 import { InfoCardComponent } from "@office/features/info-card/info-card.component";
+import { tagsFilter } from "projects/core/src/consts/filters/tags-filter.const";
 
 @Component({
   selector: "app-list",
@@ -119,7 +119,7 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   listType: "projects" | "members" | "rating" = "projects";
 
-  readonly ratingOptionsList = filterTags;
+  readonly ratingOptionsList = tagsFilter;
   isFilterOpen = false;
 
   subscriptions$: Subscription[] = [];

@@ -1,7 +1,7 @@
 /** @format */
 
 import { User } from "@auth/models/user.model";
-import { fieldsProfile } from "projects/core/src/consts/fieldsProfile";
+import { profileFields } from "projects/core/src/consts/other/profile-fields.const";
 
 /**
  * @fileoverview Функция для расчета прогресса заполнения профиля пользователя
@@ -13,7 +13,7 @@ import { fieldsProfile } from "projects/core/src/consts/fieldsProfile";
  * @returns {number} - Процент заполнения профиля (от 0 до 100)
  *
  * Принцип работы:
- * 1. Проходит по всем полям профиля из константы fieldsProfile
+ * 1. Проходит по всем полям профиля из константы profileFields
  * 2. Проверяет заполнено ли каждое поле:
  *    - Для массивов: проверяет наличие хотя бы одного элемента
  *    - Для строк: проверяет, что строка не пустая
@@ -23,7 +23,7 @@ import { fieldsProfile } from "projects/core/src/consts/fieldsProfile";
 export const calculateProfileProgress = (user: User) => {
   let filledCount = 0;
 
-  fieldsProfile.forEach(({ key, type }) => {
+  profileFields.forEach(({ key, type }) => {
     const value = user[key as keyof User];
 
     if (type === "array") {
@@ -33,5 +33,5 @@ export const calculateProfileProgress = (user: User) => {
     }
   });
 
-  return Math.round((filledCount / fieldsProfile.length) * 100);
+  return Math.round((filledCount / profileFields.length) * 100);
 };

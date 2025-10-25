@@ -514,69 +514,11 @@
 
               @for (skill of info().skills; track skill.id) {
               <li (click)="onOpenSkill(skill.id)">
-                <div class="approve__skill">
-                  <span class="text-body-12">{{ skill.name }}</span>
-                  <div class="approve__approves">
-                    @if (skill.approves.length > 0) {
-                    <div class="approve__approves--people">
-                      @if (skill.approves.length >= 3) { @for (approve of skill.approves.slice(0,
-                      3); track $index) {
-                      <app-avatar
-                        class="approve__avatar"
-                        [url]="approve.confirmedBy.avatar"
-                        [size]="15"
-                      ></app-avatar>
-                      } } @else { @for (approve of skill.approves; track $index) {
-                      <app-avatar
-                        class="approve__avatar"
-                        [url]="approve.confirmedBy.avatar"
-                        [size]="15"
-                      ></app-avatar>
-                      } } @if (skill.approves.length >= 3) {
-                      <p class="approve__text text-body-6">
-                        и ещё {{ skill.approves.length - 3 + "подтвердили" }}
-                      </p>
-                      } @else {
-                      <p class="approve__text text-body-6">
-                        {{
-                          skill.approves.length +
-                            " " +
-                            (skill.approves.length | pluralize: ["человек", "человека", "человек"])
-                        }}
-                      </p>
-                      }
-                    </div>
-
-                    }
-
-                    <app-button
-                      (click)="onToggleApprove(skill.id, $event, skill, loggedUserId!)"
-                      size="medium"
-                      appearance="outline"
-                      customTypographyClass="text-body-12"
-                      [color]="isUserApproveSkill(skill, loggedUserId!) ? 'red' : 'primary'"
-                      >{{
-                        isUserApproveSkill(skill, loggedUserId!) ? "убрать оценку" : "подтвердить"
-                      }}</app-button
-                    >
-                  </div>
-                </div>
+                <app-approve-skill [skill]="skill"></app-approve-skill>
               </li>
               }
             </ul>
             }
-          </app-modal>
-
-          <app-modal [open]="approveOwnSkillModal" (openChange)="approveOwnSkillModal = $event">
-            <div class="modal">
-              <div class="modal__body">
-                <p class="modal__title text-body-14">
-                  Ошибка при подитверждении навыка!
-                  <br />
-                  <span class="text-body-10">Вы не можете подтверждать навыки своего профиля</span>
-                </p>
-              </div>
-            </div>
           </app-modal>
           } @if (profile) { @if (profile.id === info().id) {
           <app-modal [open]="isProfileFill" (openChange)="isProfileFill = !isProfileFill">

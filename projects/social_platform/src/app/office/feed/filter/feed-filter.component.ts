@@ -17,7 +17,7 @@ import { FeedService } from "@office/feed/services/feed.service";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { Subscription } from "rxjs";
-import { feedFilterlist } from "projects/core/src/consts/feed-filter-list";
+import { feedFilter } from "projects/core/src/consts/filters/feed-filter.const";
 
 /**
  * КОМПОНЕНТ ФИЛЬТРАЦИИ ЛЕНТЫ
@@ -109,7 +109,7 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
    * - label: отображаемое название на русском языке
    * - value: значение для API запроса
    */
-  filterOptions = feedFilterlist;
+  readonly feedFilterOptions = feedFilter;
 
   // Массив активных фильтров
   includedFilters = signal<string>("");

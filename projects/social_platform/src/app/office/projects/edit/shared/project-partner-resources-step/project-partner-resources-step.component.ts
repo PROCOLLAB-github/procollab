@@ -13,7 +13,7 @@ import { ControlErrorPipe } from "@corelib";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ProjectService } from "@office/services/project.service";
 import { optionsListElement } from "@utils/generate-options-list";
-import { resourceOptionsList } from "projects/core/src/consts/resource-options-list";
+import { resourceOptionsList } from "projects/core/src/consts/lists/resource-options-list.const";
 
 @Component({
   selector: "app-project-partner-resources-step",

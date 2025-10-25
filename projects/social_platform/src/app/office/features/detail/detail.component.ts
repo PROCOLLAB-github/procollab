@@ -9,7 +9,7 @@ import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { AuthService } from "@auth/services";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
-import { concatMap, filter, map, of, Subscription, switchMap, take, tap } from "rxjs";
+import { concatMap, filter, map, of, Subscription, tap } from "rxjs";
 import { User } from "@auth/models/user.model";
 import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectService } from "@office/services/project.service";
@@ -23,10 +23,9 @@ import { ChatService } from "@office/services/chat.service";
 import { calculateProfileProgress } from "@utils/calculateProgress";
 import { ProfileDataService } from "@office/profile/detail/services/profile-date.service";
 import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
-import { ProfileService as profileApproveSkillService } from "@auth/services/profile.service";
 import { SnackbarService } from "@ui/services/snackbar.service";
-import { Skill } from "@office/models/skill";
 import { PluralizePipe } from "@corelib";
+import { ApproveSkillComponent } from "../approve-skill/approve-skill.component";
 
 @Component({
   selector: "app-detail",
@@ -42,7 +41,7 @@ import { PluralizePipe } from "@corelib";
     AvatarComponent,
     TooltipComponent,
     InputComponent,
-    PluralizePipe,
+    ApproveSkillComponent,
   ],
   standalone: true,
 })
@@ -53,7 +52,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
   private readonly programDataService = inject(ProgramDataService);
   private readonly projectDataService = inject(ProjectDataService);
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
-  private readonly profileApproveSkillService = inject(profileApproveSkillService);
   private readonly snackbarService = inject(SnackbarService);
   private readonly router = inject(Router);
   private readonly location = inject(Location);
@@ -64,7 +62,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   // Основные данные(типы данных, данные)
   info = signal<any | undefined>(undefined);
-  loggedUserId?: number;
   profile?: User;
   listType: "project" | "program" | "profile" = "project";
 
@@ -113,7 +110,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
   // Переменные для работы с подтверждением навыков
   showApproveSkillModal = false;
   readAllModal = false;
-  approveOwnSkillModal = false;
 
   subscriptions: Subscription[] = [];
 
@@ -292,10 +288,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
     });
   }
 
-  isUserApproveSkill(skill: Skill, profileId: number): boolean {
-    return skill.approves.some(approve => approve.confirmedBy.id === profileId);
-  }
-
   openSkills: any = {};
 
   /**
@@ -308,58 +300,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   onCloseModal(skillId: number) {
     this.openSkills[skillId] = false;
-  }
-
-  /**
-   * Подтверждение или отмена подтверждения навыка пользователя
-   * @param skillId - идентификатор навыка
-   * @param event - событие клика для предотвращения всплытия
-   * @param skill - объект навыка для обновления
-   */
-  onToggleApprove(skillId: number, event: Event, skill: Skill, profileId: number) {
-    event.stopPropagation();
-    const userId = this.route.snapshot.params["id"];
-
-    const isApprovedByCurrentUser = skill.approves.some(approve => {
-      return approve.confirmedBy.id === profileId;
-    });
-
-    if (isApprovedByCurrentUser) {
-      this.profileApproveSkillService.unApproveSkill(userId, skillId).subscribe(() => {
-        skill.approves = skill.approves.filter(approve => approve.confirmedBy.id !== profileId);
-        this.cdRef.markForCheck();
-      });
-    } else {
-      this.profileApproveSkillService
-        .approveSkill(userId, skillId)
-        .pipe(
-          switchMap(newApprove =>
-            newApprove.confirmedBy
-              ? of(newApprove)
-              : this.authService.profile.pipe(
-                  map(profile => ({
-                    ...newApprove,
-                    confirmedBy: profile,
-                  }))
-                )
-          )
-        )
-        .subscribe({
-          next: updatedApprove => {
-            skill.approves = [...skill.approves, updatedApprove];
-            this.snackbarService.success("вы подтвердили навык");
-            this.cdRef.markForCheck();
-          },
-          error: err => {
-            if (err instanceof HttpErrorResponse) {
-              if (err.status === 400) {
-                this.approveOwnSkillModal = true;
-                this.cdRef.markForCheck();
-              }
-            }
-          },
-        });
-    }
   }
 
   /**
@@ -470,17 +410,11 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
       this.isInProfileInfo();
 
-      const profileIdDataSub$ = this.authService.profile.pipe().subscribe({
-        next: profile => {
-          this.loggedUserId = profile.id;
-        },
-      });
-
       this.skillsProfileService.getSubscriptionData().subscribe(r => {
         this.isSubscriptionActive.set(r.isSubscribed);
       });
 
-      this.subscriptions.push(profileDataSub$, profileIdDataSub$);
+      this.subscriptions.push(profileDataSub$);
     }
   }
 

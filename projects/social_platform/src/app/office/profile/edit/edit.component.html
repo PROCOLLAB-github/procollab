@@ -54,7 +54,7 @@
   <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
     <div class="profile__navigation">
       <ul class="profile__nav">
-        @for (item of navItems; track $index) {
+        @for (item of navProfileItems; track $index) {
         <li
           class="profile__item"
           [class.profile__item--active]="editingStep === item.step"

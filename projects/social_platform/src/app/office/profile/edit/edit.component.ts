@@ -38,16 +38,22 @@ import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-baske
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { Skill } from "@office/models/skill";
 import { SkillsService } from "@office/services/skills.service";
-import { navItems } from "projects/core/src/consts/navProfileItems";
-import { educationUserLevel, educationUserType } from "projects/core/src/consts/list-education";
-import { languageLevelsList, languageNamesList } from "projects/core/src/consts/list-language";
+import {
+  educationUserLevel,
+  educationUserType,
+} from "projects/core/src/consts/lists/education-info-list.const";
+import {
+  languageLevelsList,
+  languageNamesList,
+} from "projects/core/src/consts/lists/language-info-list.const";
 import { transformYearStringToNumber } from "@utils/transformYear";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
-import { Achievement, User } from "@auth/models/user.model";
+import { User } from "@auth/models/user.model";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
 import { generateOptionsList } from "@utils/generate-options-list";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 import { ProfileService } from "@auth/services/profile.service";
+import { navProfileItems } from "projects/core/src/consts/navigation/nav-profile-items.const";
 
 dayjs.extend(cpf);
 
@@ -388,7 +394,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   subscription$: Subscription[] = [];
 
-  readonly navItems = navItems;
+  readonly navProfileItems = navProfileItems;
 
   /**
    * Навигация между шагами редактирования профиля
@@ -1016,18 +1022,15 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
           : this.profileForm.value.phoneNumber,
     };
 
-    console.log(newProfile);
-
     this.authService
       .saveProfile(newProfile)
       .pipe(concatMap(() => this.authService.getProfile()))
       .subscribe({
-        next: res => {
+        next: () => {
           this.profileFormSubmitting = false;
-          console.log(res);
-          // this.router
-          //   .navigateByUrl(`/office/profile/${this.profileId}`)
-          //   .then(() => console.debug("Router Changed form ProfileEditComponent"));
+          this.router
+            .navigateByUrl(`/office/profile/${this.profileId}`)
+            .then(() => console.debug("Router Changed form ProfileEditComponent"));
         },
         error: error => {
           this.profileFormSubmitting = false;

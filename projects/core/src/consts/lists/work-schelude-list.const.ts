@@ -1,6 +1,6 @@
 /** @format */
 
-export const scheludeList = [
+export const workScheludeList = [
   {
     id: 0,
     value: "полный рабочий день",

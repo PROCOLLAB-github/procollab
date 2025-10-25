@@ -1,6 +1,6 @@
 /** @format */
 
-export const formatList = [
+export const workFormatList = [
   {
     id: 0,
     value: "удаленная работа",

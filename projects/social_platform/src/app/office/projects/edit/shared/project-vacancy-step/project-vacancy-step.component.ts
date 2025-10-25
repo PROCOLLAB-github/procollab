@@ -95,15 +95,15 @@ export class ProjectVacancyStepComponent implements OnInit {
   }
 
   get experienceList() {
-    return this.projectVacancyService.experienceList;
+    return this.projectVacancyService.workExperienceList;
   }
 
   get formatList() {
-    return this.projectVacancyService.formatList;
+    return this.projectVacancyService.workFormatList;
   }
 
   get scheludeList() {
-    return this.projectVacancyService.scheludeList;
+    return this.projectVacancyService.workScheludeList;
   }
 
   get rolesMembersList() {

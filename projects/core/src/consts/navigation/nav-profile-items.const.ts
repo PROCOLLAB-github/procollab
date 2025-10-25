@@ -1,6 +1,6 @@
 /** @format */
 
-export const navItems = [
+export const navProfileItems = [
   {
     step: "main",
     src: "main",

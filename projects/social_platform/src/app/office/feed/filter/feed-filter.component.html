@@ -31,7 +31,7 @@
 
 <ng-template #filter>
   <div class="filter">
-    @for (filterItem of filterOptions; track $index) {
+    @for (filterItem of feedFilterOptions; track $index) {
     <div
       class="filter__option"
       [class.filter__option--disable]="filterItem.id === 5"

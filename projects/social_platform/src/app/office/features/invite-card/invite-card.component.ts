@@ -7,7 +7,7 @@ import { ErrorMessage } from "@error/models/error-message";
 import { Invite } from "@models/invite.model";
 import { IconComponent, ButtonComponent, SelectComponent, InputComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { rolesMembersList } from "projects/core/src/consts/list-roles-members";
+import { rolesMembersList } from "projects/core/src/consts/lists/roles-members-list.const";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 
 /**

@@ -192,36 +192,6 @@ $detail-bar-mb: 12px;
 .approve {
   min-width: 420px;
   padding: 24px;
-
-  &__skill {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 12px;
-    border: 0.5px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-xl);
-  }
-
-  &__text {
-    color: var(--dark-grey);
-  }
-
-  &__approves {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    &--people {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-      margin-left: 12px;
-
-      app-avatar {
-        margin-left: -12px;
-      }
-    }
-  }
 }
 
 .cancel {

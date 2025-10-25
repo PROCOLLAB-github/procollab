@@ -1,6 +1,6 @@
 /** @format */
 
-export const experienceList = [
+export const workExperienceList = [
   {
     id: 0,
     value: "без опыта",

@@ -1,6 +1,6 @@
 /** @format */
 
-export const ratingFiltersList = [
+export const ratingFilters = [
   {
     label: "Месяц",
     id: 0,

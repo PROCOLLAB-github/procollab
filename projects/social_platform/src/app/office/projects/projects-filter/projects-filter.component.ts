@@ -3,16 +3,11 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map, Subscription } from "rxjs";
-import { ProjectStep } from "@models/project.model";
-import { Industry } from "@models/industry.model";
 import { IndustryService } from "@services/industry.service";
-import { ProjectService } from "@services/project.service";
-import { SwitchComponent } from "@ui/components/switch/switch.component";
-import { NumSliderComponent } from "@ui/components/num-slider/num-slider.component";
-import { CheckboxComponent, SelectComponent } from "@ui/components";
-import { filterTags } from "projects/core/src/consts/filter-tags";
-import { generateOptionsList, optionsListElement } from "@utils/generate-options-list";
+import { SelectComponent } from "@ui/components";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { tagsFilter } from "projects/core/src/consts/filters/tags-filter.const";
+import { optionsListElement } from "@utils/generate-options-list";
 
 /**
  * Компонент фильтрации проектов
@@ -45,24 +40,17 @@ import { FormControl, ReactiveFormsModule } from "@angular/forms";
   templateUrl: "./projects-filter.component.html",
   styleUrl: "./projects-filter.component.scss",
   standalone: true,
-  imports: [
-    CheckboxComponent,
-    NumSliderComponent,
-    SwitchComponent,
-    SelectComponent,
-    ReactiveFormsModule,
-  ],
+  imports: [SelectComponent, ReactiveFormsModule],
 })
 export class ProjectsFilterComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly industryService: IndustryService,
-    private readonly projectService: ProjectService
+    private readonly industryService: IndustryService
   ) {}
 
   // Константы для фильтрации по типу проекта
-  readonly filterTags = filterTags;
+  readonly tagsFilter = tagsFilter;
 
   ngOnInit(): void {
     // Подписка на данные об отраслях
