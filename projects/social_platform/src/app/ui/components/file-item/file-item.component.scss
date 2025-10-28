@@ -3,6 +3,7 @@
 .file {
   display: flex;
   align-items: center;
+  gap: 10px;
 
   &__name {
     overflow: hidden;
@@ -19,20 +20,24 @@
     color: var(--dark-grey);
   }
 
-  &__download {
+  &__icon {
     display: flex;
     align-items: center;
     align-self: center;
     justify-content: center;
     width: 20px;
     height: 20px;
-    margin-right: 6px;
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-xl);
-  }
 
-  i {
-    color: var(--accent);
-    cursor: pointer;
+    &--delete {
+      color: var(--red);
+      cursor: pointer;
+    }
+
+    &--download {
+      color: var(--accent);
+      cursor: pointer;
+    }
   }
 }

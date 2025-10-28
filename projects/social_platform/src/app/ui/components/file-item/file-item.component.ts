@@ -1,9 +1,10 @@
 /** @format */
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, inject, Input, OnInit } from "@angular/core";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { IconComponent } from "@ui/components";
 import { UpperCasePipe } from "@angular/common";
 import { FormatedFileSizePipe } from "@core/pipes/formatted-file-size.pipe";
+import { FileService } from "@core/services/file.service";
 
 /**
  * Компонент для отображения информации о файле.
@@ -28,7 +29,9 @@ import { FormatedFileSizePipe } from "@core/pipes/formatted-file-size.pipe";
   imports: [IconComponent, FileTypePipe, UpperCasePipe, FormatedFileSizePipe],
 })
 export class FileItemComponent implements OnInit {
-  constructor() {}
+  private readonly fileService = inject(FileService);
+
+  @Input() canDelete = false;
 
   /** MIME-тип файла */
   @Input() type = "file";
@@ -54,5 +57,18 @@ export class FileItemComponent implements OnInit {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  /**
+   * Удаление файла
+   * Удаляет файл с сервера и из списка прикрепленных файлов
+   */
+  onDeleteFile(): void {
+    if (!this.link) return;
+
+    this.fileService.deleteFile(this.link).subscribe(() => {
+      this.link = "";
+      this.name = "";
+    });
   }
 }

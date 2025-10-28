@@ -67,7 +67,7 @@
     color: var(--black);
   }
 
-  &__skill {
+  &__skill, &__achievements {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -76,6 +76,62 @@
       display: grid;
       grid-template-columns: 2fr 2fr;
       grid-gap: 20px;
+    }
+
+    &--year {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      width: 100%;
+      background-color: var(--white);
+      border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: var(--rounded-lg);
+      cursor: pointer;
+
+      p {
+        color: var(--black);
+      }
+
+      i, svg {
+        color: var(--grey-for-text);
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  &__achievement {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &--year {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      color: var(--grey-for-text);
+
+      i {
+        transform: rotate(-90deg);
+      }
+    }
+
+    &--title {
+      color: var(--black);
+    }
+
+    &--status {
+      color: var(--grey-for-text);
+    }
+
+    &--info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 12px;
+      border-radius: var(--rounded-lg);
+      border: 0.5px solid var(--medium-grey-for-outline);
     }
   }
 }

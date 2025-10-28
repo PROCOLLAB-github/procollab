@@ -14,7 +14,8 @@
 
     @if(response.accompanyingFile){
     <app-file-item
-      class="text__file"
+      class="response__file"
+      [canDelete]="true"
       [link]="response.accompanyingFile.link"
       [name]="response.accompanyingFile.name"
       [type]="response.accompanyingFile.mimeType"

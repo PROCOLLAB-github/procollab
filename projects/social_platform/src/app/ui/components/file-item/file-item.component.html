@@ -1,7 +1,14 @@
 <!-- @format -->
 
+@if (name && link) {
 <div class="file">
-  <i appIcon icon="download" appSquare="8" class="file__download" (click)="onDownloadFile()"></i>
+  <i
+    appIcon
+    icon="download"
+    appSquare="12"
+    class="file__icon file__icon--download"
+    (click)="onDownloadFile()"
+  ></i>
 
   <div class="file__info">
     <div class="file__name text-body-10">
@@ -15,4 +22,15 @@
     </div>
     }
   </div>
+
+  @if (canDelete) {
+  <i
+    appIcon
+    icon="basket"
+    appSquare="8"
+    class="file__icon file__icon--delete"
+    (click)="onDeleteFile()"
+  ></i>
+  }
 </div>
+}

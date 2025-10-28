@@ -1,6 +1,7 @@
 /** @format */
 
 import { Project } from "@models/project.model";
+import { FileModel } from "@office/models/file.model";
 import { Skill } from "@office/models/skill";
 import { Program } from "@office/program/models/program.model";
 
@@ -25,7 +26,7 @@ export class Achievement {
   title!: string;
   status!: string;
   year!: number;
-  files!: string[];
+  files!: string[] | FileModel[];
 }
 
 export class Education {

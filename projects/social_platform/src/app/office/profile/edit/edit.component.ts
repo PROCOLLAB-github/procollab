@@ -20,7 +20,7 @@ import {
 import { ErrorMessage } from "@error/models/error-message";
 import { ButtonComponent, IconComponent, InputComponent, SelectComponent } from "@ui/components";
 import { ControlErrorPipe, ValidationService } from "projects/core";
-import { concatMap, first, map, noop, Observable, skip, Subscription, switchMap } from "rxjs";
+import { concatMap, first, map, noop, Observable, skip, Subscription } from "rxjs";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
@@ -28,7 +28,7 @@ import { NavService } from "@services/nav.service";
 import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button.directive";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
-import { AsyncPipe, CommonModule, Location } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import { Specialization } from "@office/models/specialization";
 import { SpecializationsService } from "@office/services/specializations.service";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
@@ -48,12 +48,11 @@ import {
 } from "projects/core/src/consts/lists/language-info-list.const";
 import { transformYearStringToNumber } from "@utils/transformYear";
 import { yearRangeValidators } from "@utils/yearRangeValidators";
-import { User } from "@auth/models/user.model";
-import { SwitchComponent } from "@ui/components/switch/switch.component";
+import { Achievement, User } from "@auth/models/user.model";
 import { generateOptionsList } from "@utils/generate-options-list";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
-import { ProfileService } from "@auth/services/profile.service";
 import { navProfileItems } from "projects/core/src/consts/navigation/nav-profile-items.const";
+import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 
 dayjs.extend(cpf);
 
@@ -102,15 +101,14 @@ dayjs.extend(cpf);
     ModalComponent,
     SelectComponent,
     RouterModule,
-    SwitchComponent,
     UploadFileComponent,
+    FileItemComponent,
   ],
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private readonly cdref: ChangeDetectorRef,
     public readonly authService: AuthService,
-    private readonly profileService: ProfileService,
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly specsService: SpecializationsService,
@@ -293,16 +291,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       profile.achievements.forEach(achievement => {
         this.achievements.push(
           this.fb.group({
-            title: achievement.title,
-            status: achievement.status,
-            year: achievement.year,
-            files:
-              Array.isArray(achievement.files) && achievement.files.length > 0
-                ? achievement.files[0]
-                : "",
+            id: [achievement.id],
+            title: [achievement.title, Validators.required],
+            status: [achievement.status, Validators.required],
+            year: [achievement.year, Validators.required],
+            files: [achievement.files ?? []],
           })
         );
       });
+
+      this.cdref.detectChanges();
 
       profile.links.length && profile.links.forEach(l => this.addLink(l));
 
@@ -544,20 +542,29 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
         : this.profileForm.get("year")?.value;
 
     const achievementsItem = this.fb.group({
+      id: [null],
       title: this.profileForm.get("title")?.value,
       status: this.profileForm.get("status")?.value,
       year: achievementsYear,
-      files: this.profileForm.get("files")?.value || "",
+      files: Array.isArray(this.profileForm.get("files")?.value)
+        ? this.profileForm.get("files")?.value
+        : [this.profileForm.get("files")?.value].filter(Boolean),
     });
 
     if (this.editIndex() !== null) {
+      const existingId = this.achievements.at(this.editIndex()!).get("id")?.value;
+
+      this.achievements.at(this.editIndex()!).patchValue({
+        ...achievementsItem.value,
+        id: existingId,
+      });
+
       this.achievementItems.update(items => {
         const updatedItems = [...items];
-        updatedItems[this.editIndex()!] = achievementsItem.value;
-
-        this.achievements.at(this.editIndex()!).patchValue(achievementsItem.value);
+        updatedItems[this.editIndex()!] = { ...achievementsItem.value, id: existingId };
         return updatedItems;
       });
+
       this.editIndex.set(null);
     } else {
       this.achievementItems.update(items => [...items, achievementsItem.value]);
@@ -1000,11 +1007,19 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.profileFormSubmitting = true;
 
-    const achievements = this.achievements.value.map((achievement: any) => ({
+    const achievements = this.achievements.value.map((achievement: Achievement) => ({
+      ...(achievement.id && { id: achievement.id }),
       title: achievement.title,
       status: achievement.status,
       year: achievement.year,
-      files: achievement.files && achievement.files.trim() !== "" ? [achievement.files] : [],
+      fileLinks:
+        achievement.files && Array.isArray(achievement.files)
+          ? achievement.files
+              .map((file: any) => (typeof file === "string" ? file : file.link))
+              .filter(Boolean)
+          : achievement.files
+          ? [achievement.files]
+          : [],
     }));
 
     const newProfile = {

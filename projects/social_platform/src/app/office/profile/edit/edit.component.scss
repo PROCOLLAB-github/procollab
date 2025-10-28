@@ -247,6 +247,10 @@
   :first-child {
     color: var(--black);
   }
+
+  :last-child & app-file-item {
+    margin-top: 3px;
+  }
 }
 
 .edit-icon,

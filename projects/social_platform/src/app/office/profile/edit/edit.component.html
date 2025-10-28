@@ -818,6 +818,17 @@
                 <p class="text-body-10 education__text">
                   {{ achievementItem.status }}
                 </p>
+
+                @if (achievementItem.files?.length) { @for (file of achievementItem.files; track
+                $index) {
+                <app-file-item
+                  [type]="file.mimeType"
+                  [name]="file.name"
+                  [size]="file.size"
+                  [link]="file.link"
+                >
+                </app-file-item>
+                } }
               </div>
 
               <div class="profile__action--icons">

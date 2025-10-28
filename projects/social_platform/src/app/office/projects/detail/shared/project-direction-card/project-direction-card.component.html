@@ -40,6 +40,39 @@
         }
       </ul>
     </div>
-    } @else { } }
+    } @else {
+    <ul class="cancel__achievements">
+      @if (!isOpenInfo) { @for (aboutInfo of about; track $index) {
+      <li class="cancel__achievements--year" (click)="openInfo(aboutInfo.year)">
+        <p class="text-body-10">{{ aboutInfo.year }}</p>
+        <i appIcon icon="arrow-no-body" appSquare="8"></i>
+      </li>
+      } } @else {
+      <div class="cancel__achievement">
+        <div class="cancel__achievement--year" (click)="backToYears()">
+          <i appIcon icon="arrow-no-body" appSquare="8"></i>
+          <p class="text-body-10">{{ currentYear }}</p>
+        </div>
+
+        @if (achievementsInfo().length > 0) { @for (achievementInfo of achievementsInfo(); track
+        $index) {
+        <div class="cancel__achievement--info">
+          <p class="text-body-10 cancel__achievement--title">{{ achievementInfo.title }}</p>
+          <p class="text-body-10 cancel__achievement--status">{{ achievementInfo.status }}</p>
+
+          @if (files.length > 0) {
+          <app-file-item
+            [link]="files[$index].link"
+            [name]="files[$index].name"
+            [type]="files[$index].mimeType"
+            [size]="files[$index].size"
+          ></app-file-item>
+          }
+        </div>
+        } }
+      </div>
+      }
+    </ul>
+    } }
   </div>
 </app-modal>

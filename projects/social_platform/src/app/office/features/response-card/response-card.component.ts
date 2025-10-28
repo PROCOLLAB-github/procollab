@@ -39,17 +39,7 @@ import { IconComponent } from "@uilib";
   templateUrl: "./response-card.component.html",
   styleUrl: "./response-card.component.scss",
   standalone: true,
-  imports: [
-    RouterLink,
-    AvatarComponent,
-    TagComponent,
-    IconComponent,
-    ButtonComponent,
-    UserRolePipe,
-    AsyncPipe,
-    FileItemComponent,
-    ProjectVacancyCardComponent,
-  ],
+  imports: [IconComponent, FileItemComponent],
 })
 export class ResponseCardComponent implements OnInit {
   constructor(private readonly authService: AuthService) {}

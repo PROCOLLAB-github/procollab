@@ -3,6 +3,7 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   inject,
@@ -58,10 +59,12 @@ import { OpenVacancyComponent } from "./shared/open-vacancy/open-vacancy.compone
   styleUrl: "./feed.component.scss",
 })
 export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
-  route = inject(ActivatedRoute);
-  projectNewsService = inject(ProjectNewsService);
-  profileNewsService = inject(ProfileNewsService);
-  feedService = inject(FeedService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly projectNewsService = inject(ProjectNewsService);
+  private readonly profileNewsService = inject(ProfileNewsService);
+  private readonly feedService = inject(FeedService);
+  private readonly cdref = inject(ChangeDetectorRef);
+  private observer?: IntersectionObserver;
 
   /**
    * ИНИЦИАЛИЗАЦИЯ КОМПОНЕНТА
@@ -71,49 +74,36 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
    * - Настраивает наблюдение за изменениями фильтров
    * - Инициализирует отслеживание просмотров элементов
    */
+  /**
+   * ИНИЦИАЛИЗАЦИЯ КОМПОНЕНТА
+   */
   ngOnInit() {
-    // Получаем предзагруженные данные из резолвера
     const routeData$ = this.route.data
       .pipe(map(r => r["data"]))
       .subscribe((feed: ApiPagination<FeedItem>) => {
         this.feedItems.set(feed.results);
         this.totalItemsCount.set(feed.count);
 
-        // Настраиваем отслеживание просмотров элементов
-        setTimeout(() => {
-          const observer = new IntersectionObserver(this.onFeedItemView.bind(this), {
-            root: document.querySelector(".office__body"),
-            rootMargin: "0px 0px 0px 0px",
-            threshold: 0,
-          });
-
-          document.querySelectorAll(".page__item").forEach(e => {
-            observer.observe(e);
-          });
-        });
+        this.initObserver();
       });
     this.subscriptions$().push(routeData$);
 
-    // Отслеживаем изменения параметров фильтрации
     const queryParams$ = this.route.queryParams
       .pipe(
-        map(params => params["includes"]),
-        tap(includes => {
-          this.includes.set(includes);
-        }),
+        map(p => p["includes"]),
+        tap(includes => this.includes.set(includes)),
         skip(1),
         concatMap(includes => {
           this.totalItemsCount.set(0);
-          this.feedPage.set(0);
-
+          this.feedPage.set(1);
           return this.onFetch(0, this.perFetchTake(), includes ?? ["vacancy", "projects", "news"]);
         })
       )
       .subscribe(feed => {
         this.feedItems.set(feed);
-
         setTimeout(() => {
-          this.feedRoot?.nativeElement.children[0].scrollIntoView({ behavior: "smooth" });
+          this.feedRoot?.nativeElement.scrollTo({ top: 0 });
+          this.observeNewElements();
         });
       });
     this.subscriptions$().push(queryParams$);
@@ -132,7 +122,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       const scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
           concatMap(() => this.onScroll()),
-          throttleTime(500) // Ограничиваем частоту запросов
+          throttleTime(500)
         )
         .subscribe(noop);
 
@@ -141,7 +131,8 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions$().forEach($ => $.unsubscribe());
+    this.subscriptions$().forEach(s => s.unsubscribe());
+    this.observer?.disconnect();
   }
 
   @ViewChild("feedRoot") feedRoot?: ElementRef<HTMLElement>;
@@ -224,7 +215,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
    * - Отмечает новости как прочитанные при попадании в область видимости
    * - Различает новости проектов и профилей
    */
-  onFeedItemView(entries: IntersectionObserverEntry[]): void {
+  private onFeedItemView(entries: IntersectionObserverEntry[]): void {
     const items = entries
       .map(e => {
         return Number((e.target as HTMLElement).dataset["id"]);
@@ -266,33 +257,41 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
    * - Проверяет, достигнут ли конец списка
    * - Загружает следующую порцию элементов при необходимости
    */
-  onScroll() {
-    // Проверяем, загружены ли все элементы
-    if (this.totalItemsCount() && this.feedItems().length >= this.totalItemsCount()) return of({});
+  /**
+   * ОБРАБОТКА ПРОКРУТКИ ДЛЯ БЕСКОНЕЧНОЙ ЗАГРУЗКИ
+   */
+  private onScroll() {
+    const container = document.querySelector(".office__body") as HTMLElement;
+    if (!container) return of({});
 
-    const target = document.querySelector(".office__body");
-    if (!target || !this.feedRoot) return of({});
+    const isNearBottom =
+      container.scrollHeight - container.scrollTop - container.clientHeight < 100;
 
-    // Вычисляем, нужно ли загружать новые элементы
-    const diff =
-      target.scrollTop -
-      this.feedRoot.nativeElement.getBoundingClientRect().height +
-      window.innerHeight;
+    if (!isNearBottom) return of({});
 
-    if (diff > 0) {
-      return this.onFetch(
-        this.feedPage() * this.perFetchTake(),
-        this.perFetchTake(),
-        this.includes()
-      ).pipe(
-        tap((feedChunk: FeedItem[]) => {
-          this.feedPage.update(page => page + 1);
-          this.feedItems.update(items => [...items, ...feedChunk]);
-        })
-      );
+    // Предотвращаем множественные запросы
+    if (this.feedItems().length >= this.totalItemsCount()) {
+      return of([]);
     }
 
-    return of({});
+    return this.onFetch(
+      this.feedPage() * this.perFetchTake(),
+      this.perFetchTake(),
+      this.includes()
+    ).pipe(
+      tap((feedChunk: FeedItem[]) => {
+        if (feedChunk.length > 0) {
+          this.feedPage.update(p => p + 1);
+          this.feedItems.update(items => [...items, ...feedChunk]);
+
+          // ВАЖНО: обновляем observer после добавления новых элементов
+          setTimeout(() => {
+            this.observeNewElements();
+            this.cdref.detectChanges();
+          }, 0);
+        }
+      })
+    );
   }
 
   /**
@@ -306,7 +305,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
    * ЧТО ВОЗВРАЩАЕТ:
    * @returns Observable<FeedItem[]> - массив элементов ленты
    */
-  onFetch(
+  private onFetch(
     offset: number,
     limit: number,
     includes: FeedItemType[] = ["project", "vacancy", "news"]
@@ -317,5 +316,34 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       }),
       map(res => res.results)
     );
+  }
+
+  private initObserver() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+
+    this.observer = new IntersectionObserver(this.onFeedItemView.bind(this), {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.1,
+    });
+
+    this.observeNewElements();
+  }
+
+  /**
+   * ДОБАВЛЕНИЕ НОВЫХ ЭЛЕМЕНТОВ
+   */
+  private observeNewElements() {
+    // Небольшая задержка для рендеринга DOM
+    setTimeout(() => {
+      document.querySelectorAll(".page__item").forEach(element => {
+        if (element && !element.hasAttribute("data-observed")) {
+          this.observer?.observe(element);
+          element.setAttribute("data-observed", "true");
+        }
+      });
+    }, 0);
   }
 }
