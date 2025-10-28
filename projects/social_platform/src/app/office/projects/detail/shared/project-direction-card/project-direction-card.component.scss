@@ -67,7 +67,8 @@
     color: var(--black);
   }
 
-  &__skill, &__achievements {
+  &__skill,
+  &__achievements {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -82,18 +83,19 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px;
       width: 100%;
+      padding: 10px;
+      cursor: pointer;
       background-color: var(--white);
       border: 0.5px solid var(--medium-grey-for-outline);
       border-radius: var(--rounded-lg);
-      cursor: pointer;
 
       p {
         color: var(--black);
       }
 
-      i, svg {
+      i,
+      svg {
         color: var(--grey-for-text);
         transform: rotate(90deg);
       }
@@ -107,10 +109,10 @@
 
     &--year {
       display: flex;
-      align-items: center;
       gap: 10px;
-      cursor: pointer;
+      align-items: center;
       color: var(--grey-for-text);
+      cursor: pointer;
 
       i {
         transform: rotate(-90deg);
@@ -130,8 +132,8 @@
       flex-direction: column;
       gap: 2px;
       padding: 12px;
-      border-radius: var(--rounded-lg);
       border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: var(--rounded-lg);
     }
   }
 }
