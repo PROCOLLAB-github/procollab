@@ -25,10 +25,10 @@
       }
     }
 
-    &--disabled {
-      pointer-events: none;
-      cursor: not-allowed;
+   &--disabled {
       opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
     }
 
     &__top {
@@ -36,8 +36,10 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
+      transition: width 0.2s ease;
 
-      &--open {
+      .heading--open &,
+      &--has-open {
         width: 50%;
       }
 

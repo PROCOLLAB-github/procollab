@@ -136,6 +136,53 @@
       border-radius: var(--rounded-lg);
     }
   }
+
+  &__goal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.lists {
+   &__section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    border-bottom: 0.5px solid var(--accent);
+  }
+  
+  &__item {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+
+    &--status {
+      padding: 8px;
+      border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: var(--rounded-xl);
+    }
+
+    &--title {
+      color: var(--black) !important;
+
+      &--patner {
+        color: var(--green-dark);
+      }
+    }
+
+    p {
+      color: var(--accent);
+    }
+  }
+
+   &__title {
+    margin-bottom: 8px;
+
+    &--partner {
+      color: var(--green-dark);
+    }
+  }
 }
 
 .skills {

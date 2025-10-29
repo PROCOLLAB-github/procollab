@@ -88,6 +88,7 @@
               [icon]="directionItem.icon"
               [about]="directionItem.about"
               [type]="directionItem.type"
+              [projectInfoType]="directionItem.direction === 'цели' ? 'goals' : 'partners'"
             ></app-project-direction-card>
             }
           </div>
@@ -130,37 +131,39 @@
               }
             </ul>
           </div>
-          }
-
-          <!-- TODO: изменить link когда появится партнеры и ресурсы -->
-          @if (project.links.length) {
+          } @if (project.resources.length) {
           <div class="lists project__section">
             <div class="lists__section">
               <h3 class="text-body-12 lists__title">в поиске</h3>
               <i appIcon icon="in-search" class="lists__icon" appSquare="12"></i>
             </div>
 
+            @if (project.resources; as resources) {
             <ul class="lists__list">
-              <li class="lists__item text-body-10">
-                <i appIcon icon="contacts" class="lists__icon" appSquare="10"></i>
-                <p class="text-body-10">2 ляма</p>
-              </li>
-
-              <li class="lists__item text-body-10">
-                <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
-                <p class="text-body-10">расширение нннадо</p>
-              </li>
-
+              @for (resourceItem of resources; track $index) { @switch (resourceItem.type) { @case
+              ("infrastructure") {
               <li class="lists__item text-body-10">
                 <i appIcon icon="in-search" class="lists__icon" appSquare="10"></i>
-                <p class="text-body-10">аренда сервера</p>
+                <p class="text-body-10">{{ resourceItem.description }}</p>
               </li>
-
+              } @case ("staff") {
+              <li class="lists__item text-body-10">
+                <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
+                <p class="text-body-10">{{ resourceItem.description }}</p>
+              </li>
+              } @case ("financial") {
+              <li class="lists__item text-body-10">
+                <i appIcon icon="contacts" class="lists__icon" appSquare="10"></i>
+                <p class="text-body-10">{{ resourceItem.description }}</p>
+              </li>
+              } @case ("information") {
               <li class="lists__item text-body-10">
                 <i appIcon icon="feed" class="lists__icon" appSquare="10"></i>
-                <p class="text-body-10">публикация в СМИ</p>
+                <p class="text-body-10">{{ resourceItem.description }}</p>
               </li>
+              } } }
             </ul>
+            }
           </div>
           } @if (project.achievements.length) {
           <div class="lists project__section">

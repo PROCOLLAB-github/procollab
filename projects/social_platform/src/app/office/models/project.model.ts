@@ -1,7 +1,10 @@
 /** @format */
 
 import { Collaborator } from "./collaborator.model";
+import { Goal } from "./goals.model";
 import { PartnerProgramFields, PartnerProgramFieldsValues } from "./partner-program-fields.model";
+import { Partner } from "./partner.model";
+import { Resource } from "./resource.model";
 import { Vacancy } from "./vacancy.model";
 
 /**
@@ -38,6 +41,9 @@ export class Project {
   region!: string;
   shortDescription!: string;
   achievements!: { id: number; title: string; status: string }[];
+  partners!: Partner[];
+  resources!: Resource[];
+  goals!: Goal[];
   industry!: number;
   presentationAddress!: string;
   imageAddress!: string;
@@ -71,6 +77,9 @@ export class Project {
       description: "string",
       shortDescription: "string",
       achievements: [{ id: 3, title: "sdf", status: "dsaf" }],
+      partners: [],
+      resources: [],
+      goals: [],
       industry: 0,
       viewsCount: 0,
       links: [],

@@ -72,6 +72,7 @@ $detail-bar-mb: 12px;
     cursor: pointer;
     background-color: var(--white);
     border-radius: 50%;
+    z-index: 100;
 
     &--program {
       bottom: 15px;

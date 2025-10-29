@@ -442,8 +442,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
       this.backPath = "/office/projects/all";
     } else if (this.listType === "program") {
       this.backPath = "/office/program/all";
-    } else {
-      this.backPath = "/office/members";
     }
   }
 }

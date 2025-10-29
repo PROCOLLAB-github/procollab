@@ -5,7 +5,7 @@ import { RouterLink } from "@angular/router";
 import { Vacancy } from "@office/models/vacancy.model";
 import { IconComponent } from "@uilib";
 import { ButtonComponent } from "@ui/components";
-import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
+import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { expandElement } from "@utils/expand-element";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
@@ -40,6 +40,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
     ParseBreaksPipe,
     TagComponent,
     AvatarComponent,
+    DayjsPipe,
   ],
   templateUrl: "./project-vacancy-card.component.html",
   styleUrl: "./project-vacancy-card.component.scss",

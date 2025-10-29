@@ -14,7 +14,7 @@
 
     @if (type === 'string') {
     <p class="text-body-10 cancel__text">{{ about }}</p>
-    } @else { @if (profileInfoType === "skills") {
+    } @else { @if (listType === 'profile') { @if (profileInfoType === "skills") {
     <div class="cancel__skills">
       <ul class="cancel__skills--block">
         @for (aboutItem of about; track $index) {
@@ -73,6 +73,37 @@
       </div>
       }
     </ul>
-    } }
+    } } @else { @if (projectInfoType === 'goals') {
+    <div class="cancel__skill">
+      @if (this.about.length > 0) { @for (goalItem of about; track $index) {
+      <li class="cancel__goal lists__item text-body-10" style="gap: 10px">
+        <app-avatar [size]="30" [url]="goalItem.responsibleInfo.avatar"></app-avatar>
+        <p class="lists__item--title">{{ goalItem.title }}</p>
+        <p class="lists__item--status">
+          {{ goalItem.completionDate | dayjs: "format":"DD.MM.YY" }}
+        </p>
+      </li>
+      } }
+    </div>
+    } @else {
+    <div class="cancel__skill">
+      @if (this.about.length > 0) { @for (partnerItem of about; track $index) {
+      <li class="cancel__achievement--info">
+        <div class="lists__section">
+          <h3 class="text-body-10 lists__title--partner">{{ partnerItem.company.name }}</h3>
+          <p class="text-body-10">{{ partnerItem.company.inn }}</p>
+        </div>
+
+        <p class="text-body-6">
+          {{
+            partnerItem.contribution.length < 484
+              ? partnerItem.contribution
+              : partnerItem.contribution.slice(0, 480) + " " + "..."
+          }}
+        </p>
+      </li>
+      } }
+    </div>
+    } } }
   </div>
 </app-modal>

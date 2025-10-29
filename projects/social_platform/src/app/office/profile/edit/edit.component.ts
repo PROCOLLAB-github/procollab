@@ -352,6 +352,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   skillsGroupsModalOpen = signal(false);
 
+  openGroupIndex: number | null = null;
+
+  onGroupToggled(index: number, isOpen: boolean) {
+    this.openGroupIndex = isOpen ? index : null;
+  }
+
+  isGroupDisabled(index: number): boolean {
+    return this.openGroupIndex !== null && this.openGroupIndex !== index;
+  }
+
   educationItems = signal<any[]>([]);
 
   workItems = signal<any[]>([]);
@@ -1054,6 +1064,13 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isModalErrorSkillChooseText.set(error.error.phone_number[0]);
           } else if (error.error.language) {
             this.isModalErrorSkillChooseText.set(error.error.language);
+          } else if (error.error.achievements) {
+            this.isModalErrorSkillChooseText.set(error.error.achievements[0]);
+          } else if (error.error.work_experience[2]) {
+            const errorText = error.error.work_experience[2].entry_year
+              ? error.error.work_experience[2].entry_year
+              : error.error.work_experience[2].completion_year;
+            this.isModalErrorSkillChooseText.set(errorText);
           } else {
             this.isModalErrorSkillChooseText.set(error.error[0]);
           }
@@ -1147,5 +1164,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   toggleSpecsGroupsModal(): void {
     this.specsGroupsModalOpen.update(open => !open);
+  }
+
+  isStringFiles(files: any[]): boolean {
+    return typeof files === "string";
   }
 }

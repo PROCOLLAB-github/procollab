@@ -97,6 +97,7 @@ import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 })
 export class VacancyInfoComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly vacancyService = inject(VacancyService);
   private readonly validationService = inject(ValidationService);
   private readonly cdRef = inject(ChangeDetectorRef);
@@ -140,6 +141,14 @@ export class VacancyInfoComponent implements OnInit {
     this.route.data.pipe(map(r => r["data"])).subscribe((vacancy: Vacancy) => {
       this.vacancy = vacancy;
     });
+
+    this.route.queryParams.subscribe({
+      next: r => {
+        if (r["sendResponse"]) {
+          this.openModal.set(true);
+        }
+      },
+    });
   }
 
   ngAfterViewInit(): void {
@@ -154,6 +163,15 @@ export class VacancyInfoComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
+  }
+
+  closeSendResponseModal(): void {
+    this.openModal.set(false);
+
+    this.router.navigate([], {
+      queryParams: {},
+      replaceUrl: true,
+    });
   }
 
   /**

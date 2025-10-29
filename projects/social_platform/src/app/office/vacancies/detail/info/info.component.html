@@ -65,9 +65,11 @@
     <div class="vacancy__right">
       <div class="vacancy__right--project">
         <app-avatar
+          style="cursor: pointer"
           [size]="68"
           [url]="project.imageAddress"
           class="vacancy__right--project-image"
+          [routerLink]="'/office/projects/' + project.id"
         ></app-avatar>
         <p class="text-body-12 vacancy__right--title">{{ project.name }}</p>
 
@@ -132,34 +134,33 @@
         </ul>
       </div>
 
-      <!-- TODO: изменить когда в project поле появятся links -->
-      <!-- @if (project.links.length) {
-          <div class="lists project__section">
-            <div class="lists__section">
-              <h3 class="text-body-12 lists__title">контакты</h3>
-              <i appIcon icon="phone" class="lists__icon" appSquare="12"></i>
-            </div>
+      @if (project.links.length) {
+      <div class="lists project__section">
+        <div class="lists__section">
+          <h3 class="text-body-12 lists__title">контакты</h3>
+          <i appIcon icon="phone" class="lists__icon" appSquare="12"></i>
+        </div>
 
-            <ul class="lists__list">
-              @for (link of project.links; track $index) {
-                <li class="lists__item text-body-10">
-                  @if (link | userLinks; as l) {
-                    <a class="lists__item" target="_blank" [href]="link">
-                      <i class="lists__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
-                      <span>{{ l.tag }}</span>
-                    </a>
-                    }
-                  </li>
-                  }
-                </ul>
-              </div>
-              } -->
+        <ul class="lists__list">
+          @for (link of project.links; track $index) {
+          <li class="lists__item text-body-10">
+            @if (link | userLinks; as l) {
+            <a class="lists__item" target="_blank" [href]="link">
+              <i class="lists__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
+              <span>{{ l.tag }}</span>
+            </a>
+            }
+          </li>
+          }
+        </ul>
+      </div>
+      }
     </div>
     }
   </div>
 </div>
 
-<app-modal [open]="openModal()" (openChange)="openModal.set(!openModal())">
+<app-modal [open]="openModal()" (openChange)="closeSendResponseModal()">
   <div class="cancel">
     <div class="lists__section">
       <p class="text-body-12 lists__title">отклик на вакансию</p>

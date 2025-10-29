@@ -8,7 +8,7 @@ export const directionProjectList = [
   {
     id: 0,
     value: "Технология", // Значение для отправки на сервер
-    label: "Технология", // Отображаемый текст
+    label: "технология", // Отображаемый текст
   },
   {
     id: 1,
@@ -18,31 +18,31 @@ export const directionProjectList = [
   {
     id: 2,
     value: "Транспорт",
-    label: "Транспорт",
+    label: "транспорт",
   },
   {
     id: 3,
     value: "Хим Био",
-    label: "Хим Био",
+    label: "хим био",
   },
   {
     id: 4,
     value: "Дизайн",
-    label: "Дизайн",
+    label: "дизайн",
   },
   {
     id: 5,
     value: "Мультимедиа",
-    label: "Мультимедиа",
+    label: "мультимедиа",
   },
   {
     id: 6,
     value: "СоцТех",
-    label: "СоцТех",
+    label: "соцтех",
   },
   {
     id: 7,
     value: "Урбанистика",
-    label: "Урбанистика",
+    label: "урбанистика",
   },
 ];

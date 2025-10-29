@@ -11,8 +11,10 @@
         borderColor="accent"
       ></app-avatar>
       <div class="vacancy__project--info">
-        <p class="text-body-10">{{ vacancy.project.name }}</p>
-        <p class="text-body-10">19.08.25 20:15</p>
+        <p class="text-body-10" style="color: var(--black)">{{ vacancy.project.name }}</p>
+        <p class="text-body-10">
+          {{ vacancy.datetimeCreated | dayjs: "format":"DD.MM.YY • HH:MM" }}
+        </p>
       </div>
     </div>
     } @else {
@@ -24,7 +26,9 @@
       }
       <div class="vacancy__salary">
         <i appIcon icon="contacts" appWidth="5" appHeight="8"></i>
-        <p class="text-body-12">{{ vacancy.salary ?? "по договоренности" }}</p>
+        <p class="text-body-12">
+          {{ +vacancy.salary === 0 ? "по договоренности" : vacancy.salary }}
+        </p>
       </div>
     </div>
   </div>
@@ -59,7 +63,10 @@
     <app-button [routerLink]="'/office/vacancies/' + vacancy.id" appearance="outline" size="medium"
       >подробнее</app-button
     >
-    <app-button [routerLink]="'/office/vacancies/' + vacancy.id" size="medium"
+    <app-button
+      [routerLink]="'/office/vacancies/' + vacancy.id"
+      [queryParams]="{ sendResponse: true }"
+      size="medium"
       >откликнуться</app-button
     >
   </div>

@@ -156,7 +156,7 @@
                 id="lastName"
                 type="text"
                 formControlName="lastName"
-                placeholder="Иванов"
+                placeholder="иванов"
               ></app-input>
               @if (lastName | controlError: "required") {
               <div class="text-body-10 error">
@@ -176,7 +176,7 @@
                 id="city"
                 [error]="city | controlError"
                 type="text"
-                placeholder="Москва"
+                placeholder="москва"
                 formControlName="city"
               ></app-input>
               @if (city | controlError: "required") {
@@ -214,7 +214,7 @@
                 size="big"
                 id="userType"
                 formControlName="userType"
-                placeholder="Эксперт"
+                placeholder="эксперт"
                 [options]="options"
               ></app-select>
               } @if (userType | controlError: "required") {
@@ -237,7 +237,7 @@
                   [forceSelect]="true"
                   [error]="speciality | controlError"
                   (searchStart)="onSearchSpec($event)"
-                  placeholder="Java Developer"
+                  placeholder="java developer"
                   formControlName="speciality"
                   (openSkillsFunc)="toggleSpecsGroupsModal()"
                 ></app-autocomplete-input>
@@ -261,7 +261,7 @@
               id="aboutMe"
               [error]="aboutMe | controlError"
               type="text"
-              placeholder="Я java developer, очень люблю котиков"
+              placeholder="я java developer, очень люблю котиков"
               formControlName="aboutMe"
             ></app-textarea>
             @if (aboutMe | controlError: "required") {
@@ -278,7 +278,12 @@
             <fieldset>
               <label for="links" class="field-label">указать личные контакты</label>
               <div class="profile__row" style="flex-grow: 1">
-                <ul formArrayName="links" class="profile__row">
+                <ul
+                  formArrayName="links"
+                  style="width: 100%"
+                  [class.profile__row]="links.controls.length === 1"
+                  [class.profile__column]="links.controls.length > 1"
+                >
                   @for (control of links.controls; let i = $index; track i) {
                   <li class="profile__row">
                     <app-input
@@ -384,7 +389,7 @@
               <app-input
                 size="big"
                 [error]="organizationName | controlError"
-                placeholder="Вуз / Колледж / Школа"
+                placeholder="вуз / колледж / школа"
                 formControlName="organizationName"
               ></app-input>
               @if (organizationName | controlError: "required") {
@@ -403,7 +408,7 @@
               <app-input
                 size="big"
                 [error]="description | controlError"
-                placeholder="Бизнес информатика"
+                placeholder="бизнес информатика"
                 formControlName="description"
               ></app-input>
               @if (description | controlError: "required") {
@@ -423,7 +428,7 @@
                 size="big"
                 [selectedId]="selectedEducationLevelId()"
                 formControlName="educationLevel"
-                placeholder="Высшее образование-магистратура"
+                placeholder="высшее образование-магистратура"
                 [options]="educationLevelList"
               >
                 <i appIcon icon="arrow-no-body" appSquare="32"></i>
@@ -445,7 +450,7 @@
                 size="big"
                 [selectedId]="selectedEducationStatusId()"
                 formControlName="educationStatus"
-                placeholder="Студент"
+                placeholder="студент"
                 [options]="educationStatusList"
               >
                 <i appIcon icon="arrow-no-body" appSquare="32"></i>
@@ -472,8 +477,8 @@
             class="profile__add-education"
             (click)="addEducation()"
           >
-            <span>добавить образование</span>
-            <i appIcon icon="plus" appSquare="12"></i>
+            <span>{{ editEducationClick ? "сохранить изменения" : "добавить образование" }}</span>
+            <i appIcon icon="plus" appSquare="6"></i>
           </app-button>
         </div>
 
@@ -509,12 +514,12 @@
               </div>
 
               <div class="profile__action--icons">
-                <div class="edit-icon">
-                  <i appIcon icon="edit-pen" appSquare="10" (click)="editEducation($index)"></i>
+                <div class="edit-icon" (click)="editEducation($index)">
+                  <i appIcon icon="edit-pen" appSquare="10"></i>
                 </div>
 
-                <div class="basket-icon">
-                  <i appIcon icon="basket" (click)="removeEducation($index)" appSquare="10"></i>
+                <div class="basket-icon" (click)="removeEducation($index)">
+                  <i appIcon icon="basket" appSquare="10"></i>
                 </div>
               </div>
             </div>
@@ -579,7 +584,7 @@
                 id="organization"
                 [error]="organization | controlError"
                 type="text"
-                placeholder="Проколлаб"
+                placeholder="проколлаб"
                 formControlName="organization"
               ></app-input>
               @if (organization | controlError: "required") {
@@ -600,7 +605,7 @@
                 id="jobPosition"
                 [error]="jobPosition | controlError"
                 type="text"
-                placeholder="Дизайнер"
+                placeholder="дизайнер"
                 formControlName="jobPosition"
               ></app-input>
               @if (jobPosition | controlError: "required") {
@@ -621,7 +626,7 @@
                 id="descriptionWork"
                 [error]="descriptionWork | controlError"
                 type="text"
-                placeholder="Проект начал свое существование с 2020 года"
+                placeholder="проект начал свое существование с 2020 года"
                 formControlName="descriptionWork"
               ></app-textarea>
               @if (descriptionWork | controlError: "required") {
@@ -646,8 +651,8 @@
             class="profile__add-education"
             (click)="addWork()"
           >
-            <span>добавить работу</span>
-            <i appIcon icon="plus" appSquare="12"></i>
+            <span>{{ editWorkClick ? "сохранить изменения" : "добавить работу" }}</span>
+            <i appIcon icon="plus" appSquare="6"></i>
           </app-button>
         </div>
 
@@ -679,18 +684,12 @@
               </div>
 
               <div class="profile__action--icons">
-                <div class="edit-icon">
-                  <i
-                    class="edit"
-                    appIcon
-                    icon="edit-pen"
-                    appSquare="10"
-                    (click)="editWork($index)"
-                  ></i>
+                <div class="edit-icon" (click)="editWork($index)">
+                  <i class="edit" appIcon icon="edit-pen" appSquare="10"></i>
                 </div>
 
-                <div class="basket-icon">
-                  <i (click)="removeWork($index)" appIcon icon="basket" appSquare="10"></i>
+                <div class="basket-icon" (click)="removeWork($index)">
+                  <i appIcon icon="basket" appSquare="10"></i>
                 </div>
               </div>
             </div>
@@ -796,8 +795,8 @@
             }"
             (click)="addAchievement()"
           >
-            <span>добавить достижение</span>
-            <i appIcon icon="plus" appSquare="12"></i>
+            <span>{{ editAchievementsClick ? "сохранить изменения" : "добавить достижение" }}</span>
+            <i appIcon icon="plus" appSquare="6"></i>
           </app-button>
         </div>
 
@@ -819,8 +818,15 @@
                   {{ achievementItem.status }}
                 </p>
 
-                @if (achievementItem.files?.length) { @for (file of achievementItem.files; track
-                $index) {
+                @if (achievementItem.files?.length) { @if (isStringFiles(achievementItem.files)) {
+                <app-file-item
+                  type="file"
+                  name="ваш файл"
+                  [size]="0"
+                  [link]="achievementItem.files"
+                >
+                </app-file-item>
+                } @else { @for (file of achievementItem.files; track $index) {
                 <app-file-item
                   [type]="file.mimeType"
                   [name]="file.name"
@@ -828,22 +834,16 @@
                   [link]="file.link"
                 >
                 </app-file-item>
-                } }
+                } } }
               </div>
 
               <div class="profile__action--icons">
-                <div class="edit-icon">
-                  <i
-                    class="edit"
-                    appIcon
-                    icon="edit-pen"
-                    appSquare="10"
-                    (click)="editAchievements($index)"
-                  ></i>
+                <div class="edit-icon" (click)="editAchievements($index)">
+                  <i class="edit" appIcon icon="edit-pen" appSquare="10"></i>
                 </div>
 
-                <div class="basket-icon">
-                  <i (click)="removeAchievement($index)" appIcon icon="basket" appSquare="10"></i>
+                <div class="basket-icon" (click)="removeAchievement($index)">
+                  <i appIcon icon="basket" appSquare="10"></i>
                 </div>
               </div>
             </div>
@@ -855,11 +855,11 @@
       <div class="profile__wrapper--education">
         <div class="profile__column">
           <fieldset>
-            <label for="skills" class="field-label">навыки, которыми я обладаю</label>
+            <label for="skills" class="field-label">мои навыки</label>
             <div class="skills-field">
               <app-autocomplete-input
                 class="skills-field__input"
-                placeholder="Python"
+                placeholder="python"
                 searchIcon="box"
                 [suggestions]="inlineSkills()"
                 fieldToDisplay="name"
@@ -894,7 +894,7 @@
                 size="big"
                 [selectedId]="selectedLanguageId()"
                 formControlName="language"
-                placeholder="Английский"
+                placeholder="английский"
                 [options]="languageList"
               >
                 <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
@@ -927,18 +927,19 @@
             </fieldset>
             }
           </div>
-
-          <span class="text-body-10">количество добавляемых языков не более 4-х</span>
           }
 
+          <span class="text-body-10" style="color: var(--black)"
+            >количество добавляемых языков не более 4-х</span
+          >
           <app-button
             customTypographyClass="text-body-12"
             size="big"
             appearance="outline"
             [disabled]="
-              (showLanguageFields && !isLanguageDirty) ||
-              languageItems().length === 4 ||
-              userLanguages.length === 4
+              showLanguageFields &&
+              !isLanguageDirty &&
+              (languageItems().length === 4 || userLanguages.length === 4)
             "
             [ngStyle]="{
                 opacity: showLanguageFields && !isLanguageDirty ? '0.6' : '1',
@@ -946,8 +947,8 @@
               }"
             (click)="addLanguage()"
           >
-            <span>добавить язык</span>
-            <i appIcon icon="plus" appSquare="12"></i>
+            <span>{{ editLanguageClick ? "сохранить изменения" : "добавить язык" }}</span>
+            <i appIcon icon="plus" appSquare="6"></i>
           </app-button>
 
           <div class="profile__language--list">
@@ -960,12 +961,12 @@
                 </p>
 
                 <div class="profile__action--icons" style="flex-direction: row">
-                  <div class="edit-icon">
-                    <i appIcon icon="edit-pen" appSquare="10" (click)="editLanguage($index)"></i>
+                  <div class="edit-icon" (click)="editLanguage($index)">
+                    <i appIcon icon="edit-pen" appSquare="10"></i>
                   </div>
 
-                  <div class="basket-icon">
-                    <i (click)="removeLanguage($index)" appIcon icon="basket" appSquare="10"></i>
+                  <div class="basket-icon" (click)="removeLanguage($index)">
+                    <i appIcon icon="basket" appSquare="10"></i>
                   </div>
                 </div>
               </div>
@@ -1003,15 +1004,16 @@
       <i
         (click)="isModalErrorSkillsChoose.set(false)"
         appIcon
+        appSquare="10"
         icon="cross"
         class="cancel__cross"
       ></i>
-      <p class="cancel__title text-bold-body-16">Произошла ошибка при редактировании!</p>
+      <p class="cancel__title text-body-14">произошла ошибка при редактировании!</p>
     </div>
     @if (isModalErrorSkillChooseText()) {
-    <p class="text-body-14 cancel__text">{{ isModalErrorSkillChooseText() }}.</p>
+    <p class="text-body-12 cancel__text">{{ isModalErrorSkillChooseText() }}.</p>
     } @else {
-    <p class="text-body-14 cancel__text">
+    <p class="text-body-12 cancel__text">
       для публикации профиля, нужно заполнить все <strong>обязательные поля</strong> (они будут
       <strong>подсвечены&nbsp;<span>красным</span></strong
       >).
@@ -1058,15 +1060,18 @@
         </ul>
       </div>
     </div>
-    <app-button customTypographyClass="text-body-12" (click)="toggleSpecsGroupsModal()"
-      >Сохранить</app-button
+    <app-button
+      customTypographyClass="text-body-12"
+      size="medium"
+      (click)="toggleSpecsGroupsModal()"
+      >сохранить</app-button
     >
   </div>
 </app-modal>
 
 <app-modal [open]="skillsGroupsModalOpen()" class="modal">
   <div class="modal__wrapper">
-    <h4 class="text-heading-4">Библиотека навыков</h4>
+    <h4 class="text-heading-4">библиотека навыков</h4>
     <div class="modal__content">
       <div class="modal__skills-groups">
         <ul>
@@ -1076,14 +1081,20 @@
               [title]="skillsGroup.name"
               [options]="skillsGroup.skills"
               [selected]="this.profileForm.getRawValue().skills"
+              [disabled]="isGroupDisabled(skillsGroup.id)"
+              [hasOpenGroups]="openGroupIndex !== null"
               (optionToggled)="onToggleSkill($event)"
+              (groupToggled)="onGroupToggled(skillsGroup.id, $event)"
             ></app-skills-group>
           </li>
           }
         </ul>
       </div>
     </div>
-    <app-button customTypographyClass="text-body-12" (click)="toggleSkillsGroupsModal()"
+    <app-button
+      customTypographyClass="text-body-12"
+      size="medium"
+      (click)="toggleSkillsGroupsModal()"
       >Сохранить</app-button
     >
   </div>

@@ -114,7 +114,7 @@
               id="type"
               [options]="resourcesTypeOptions"
               size="big"
-              placeholder="Выбери вариант"
+              placeholder="выбери вариант"
               formControlName="type"
             ></app-select>
             @if (type | controlError: "required") {
@@ -129,7 +129,7 @@
             <app-textarea
               size="big"
               [error]="description | controlError"
-              placeholder="Дал нам денег и связей"
+              placeholder="дал нам денег и связей"
               formControlName="description"
             ></app-textarea>
             @if (description | controlError: "required") {
@@ -145,7 +145,7 @@
               id="partnerCompany"
               [options]="resourcesCompanyOptions"
               size="big"
-              placeholder="Выбери вариант"
+              placeholder="выбери вариант"
               formControlName="partnerCompany"
             ></app-select>
             @if (partnerCompany | controlError: "required") {

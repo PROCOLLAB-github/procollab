@@ -3,7 +3,7 @@
 export interface Resource {
   id: number;
   projectId: number;
-  type: string;
+  type: "infrastructure" | "staff" | "financial" | "information";
   description: string;
   partnerCompany: number;
 }

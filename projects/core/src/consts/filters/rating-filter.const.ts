@@ -2,22 +2,22 @@
 
 export const ratingFilters = [
   {
-    label: "Месяц",
+    label: "месяц",
     id: 0,
     value: "last_month",
   },
   {
-    label: "Год",
+    label: "год",
     id: 1,
     value: "last_year",
   },
   {
-    label: "День",
+    label: "день",
     id: 2,
     value: "last_day",
   },
   {
-    label: "Неделя",
+    label: "неделя",
     id: 3,
     value: "last_week",
   },

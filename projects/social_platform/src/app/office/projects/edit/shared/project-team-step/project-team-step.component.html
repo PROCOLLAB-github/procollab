@@ -60,7 +60,7 @@
             [tooltipWidth]="300"
             formControlName="role"
             [error]="(role | controlError) && inviteSubmitInitiated()"
-            placeholder="Напишите роль участника в команде"
+            placeholder="напишите роль участника в команде"
           ></app-input>
           @if ((role | controlError: "required") && inviteSubmitInitiated()) {
           <div class="text-body-10 error">

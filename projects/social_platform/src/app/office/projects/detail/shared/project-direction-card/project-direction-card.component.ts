@@ -11,11 +11,21 @@ import { map, Subscription, switchMap } from "rxjs";
 import { Achievement } from "@auth/models/user.model";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { FileModel } from "@office/models/file.model";
+import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { DayjsPipe } from "@corelib";
 @Component({
   selector: "app-project-direction-card",
   templateUrl: "./project-direction-card.component.html",
   styleUrl: "./project-direction-card.component.scss",
-  imports: [CommonModule, IconComponent, ModalComponent, TagComponent, FileItemComponent],
+  imports: [
+    CommonModule,
+    IconComponent,
+    ModalComponent,
+    TagComponent,
+    FileItemComponent,
+    AvatarComponent,
+    DayjsPipe,
+  ],
   standalone: true,
 })
 export class ProjectDirectionCard implements OnInit, OnDestroy {
@@ -24,7 +34,8 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
   @Input() about!: string | any[];
   @Input() type!: string;
 
-  @Input() profileInfoType?: "skills" | "achievements" = "skills";
+  @Input() profileInfoType?: "skills" | "achievements";
+  @Input() projectInfoType?: "goals" | "partners";
 
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -34,13 +45,19 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
 
   isShowModal = false;
   isOpenInfo = false;
+  listType?: "profile" | "project";
 
+  // Поля для работы с достижениями
   achievements: Pick<Achievement, "id" | "year">[] = [];
   files: FileModel[] = [];
   achievementsInfo = signal<Achievement[]>([]);
   currentYear = 0;
 
   ngOnInit(): void {
+    const listTypeSub$ = this.route.data.subscribe(data => {
+      this.listType = data["listType"];
+    });
+
     if (this.profileInfoType === "achievements") {
       if (Array.isArray(this.about)) {
         this.about = Array.from(
@@ -49,6 +66,8 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
       }
       this.getAchievementsByYear();
     }
+
+    this.subscriptions.push(listTypeSub$);
   }
 
   ngOnDestroy(): void {

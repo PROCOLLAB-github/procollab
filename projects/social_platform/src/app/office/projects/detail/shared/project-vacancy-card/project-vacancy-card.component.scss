@@ -10,6 +10,10 @@
     padding-bottom: 8px;
     border-bottom: 0.5px solid var(--accent);
 
+    p {
+      color: var(--grey-for-text);
+    }
+
     &--top {
       display: flex;
       flex-direction: column;
@@ -22,12 +26,6 @@
     display: flex;
     gap: 10px;
     align-items: center;
-
-    &--info {
-      p {
-        color: var(--black);
-      }
-    }
   }
 
   &__role {

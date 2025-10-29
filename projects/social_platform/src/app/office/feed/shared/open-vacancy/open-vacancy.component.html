@@ -19,15 +19,12 @@
 
       <p class="text-body-12">{{ project.name }}</p>
 
-      @if (industryService.industries | async; as industries) {
-      <p class="text-body-6 project__industry">
-        @if (industryService.getIndustry(industries, project.industry); as industry) {
-        <app-tag class="card__industry" color="complete">
-          {{ industry.name }}
-        </app-tag>
-        }
-      </p>
-      }
+      @if (industryService.industries | async; as industries) { @if
+      (industryService.getIndustry(industries, project.industry); as industry) {
+      <app-tag class="card__industry" color="complete">
+        {{ industry.name }}
+      </app-tag>
+      } }
     </div>
     } @if (feedItem; as vacancy) {
     <div class="card__vacancy">

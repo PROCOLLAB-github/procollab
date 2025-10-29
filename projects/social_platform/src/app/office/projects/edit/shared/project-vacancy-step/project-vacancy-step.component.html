@@ -12,7 +12,7 @@
           id="vacancy_role"
           formControlName="role"
           [error]="(role | controlError) && vacancySubmitInitiated()"
-          placeholder="Напишите роль, которую вы хотите закрыть в вашем проекте"
+          placeholder="напишите роль, которую вы хотите закрыть в вашем проекте"
         ></app-input>
         @if ((role | controlError: "required") && vacancySubmitInitiated()) {
         <div class="text-body-10 error">
@@ -129,7 +129,7 @@
         <div class="vacancies">
           <app-autocomplete-input
             class="vacancies__input"
-            placeholder="Введите навык"
+            placeholder="введите навык"
             searchIcon="box"
             (openSkillsFunc)="onToggleSkillsGroupsModal()"
             [suggestions]="inlineSkills"

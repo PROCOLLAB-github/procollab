@@ -98,7 +98,7 @@
           id="name"
           formControlName="name"
           [error]="(name | controlError) || projSubmitInitiated"
-          placeholder="Название"
+          placeholder="название"
         ></app-input>
         @if ((name | controlError: "required") || projSubmitInitiated) {
         <div class="text-body-10 error">
@@ -114,7 +114,7 @@
           id="region"
           formControlName="region"
           [error]="(region | controlError) || projSubmitInitiated"
-          placeholder="Введите регион"
+          placeholder="введите регион"
         ></app-input>
         @if ((region | controlError: "required") || projSubmitInitiated) {
         <div class="text-body-10 error">
@@ -130,7 +130,7 @@
           size="big"
           id="industry"
           formControlName="industryId"
-          placeholder="Выберите сферу к которой относится ваш проект"
+          placeholder="выберите сферу к которой относится ваш проект"
           [options]="industries"
         ></app-select>
         } @if (industry | controlError: "required") {
@@ -179,7 +179,7 @@
       id="problem"
       formControlName="problem"
       [error]="(problem | controlError) || projSubmitInitiated"
-      placeholder="Улучшить качество жизни студентов"
+      placeholder="улучшить качество жизни студентов"
     ></app-input>
     @if ((problem | controlError: "required") || projSubmitInitiated) {
     <div class="text-body-10 error">
@@ -201,7 +201,7 @@
       [tooltipWidth]="350"
       [error]="(description | controlError) || projSubmitInitiated"
       formControlName="description"
-      placeholder="Проект начал свое существование с 2020 года"
+      placeholder="проект начал свое существование с 2020 года"
     ></app-textarea>
     @if ((description | controlError: "required") || projSubmitInitiated) {
     <div class="text-body-10 error">
@@ -226,7 +226,7 @@
         [tooltipWidth]="350"
         formControlName="actuality"
         [error]="actuality | controlError"
-        placeholder="Указом президента от 03.07.2023 "
+        placeholder="указом президента от 03.07.2023 "
       ></app-textarea>
       @if ((actuality | controlError: "required")) {
       <div class="text-body-10 error">
@@ -278,7 +278,7 @@
             <app-input
               size="big"
               [error]="goalName | controlError"
-              placeholder="Заработать много денег"
+              placeholder="заработать много денег"
               formControlName="title"
             ></app-input>
             @if (goalName | controlError: "required") {

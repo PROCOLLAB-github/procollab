@@ -3,12 +3,14 @@
 <div class="heading" [class.heading--open]="contentVisible()" [class.heading--disabled]="disabled">
   <div
     class="heading__top"
-    [class.heading__top--open]="hasOpenGroups"
+    [class.heading__top--has-open]="hasOpenGroups"
     [class.heading__top--disabled]="disabled"
     (click)="toggleContentVisible()"
   >
     <span class="text-body-12">{{ title }}</span>
+    @if (!disabled) {
     <i appIcon icon="arrow-no-body" appWidth="18" appHeight="9" appViewBox="0 0 18 9"></i>
+    }
   </div>
   @if (contentVisible()) {
   <div class="content" [class.content--open]="hasOpenGroups">

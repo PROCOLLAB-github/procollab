@@ -1,7 +1,7 @@
 /** @format */
 
 export const workFormatFilter = [
-  { label: "Удаленная работа", value: "remote" },
-  { label: "Работа в офисе", value: "office" },
-  { label: "Смешанный формат", value: "hybrid" },
+  { label: "удаленная работа", value: "remote" },
+  { label: "работа в офисе", value: "office" },
+  { label: "смешанный формат", value: "hybrid" },
 ];

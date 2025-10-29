@@ -106,6 +106,13 @@
     flex-grow: 1;
     min-width: 0;
     max-width: 333px;
+
+    ::ng-deep {
+      app-upload-file {
+        height: 80px;
+        padding: 10px 30px;
+      }
+    }
   }
 
   &__slides-title {
