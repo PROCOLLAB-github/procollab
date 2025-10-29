@@ -145,13 +145,13 @@
 }
 
 .lists {
-   &__section {
+  &__section {
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
     border-bottom: 0.5px solid var(--accent);
   }
-  
+
   &__item {
     display: flex;
     gap: 6px;
@@ -176,7 +176,7 @@
     }
   }
 
-   &__title {
+  &__title {
     margin-bottom: 8px;
 
     &--partner {

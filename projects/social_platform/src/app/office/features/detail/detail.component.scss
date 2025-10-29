@@ -68,11 +68,11 @@ $detail-bar-mb: 12px;
     position: absolute;
     bottom: -10px;
     left: 50%;
+    z-index: 100;
     display: block;
     cursor: pointer;
     background-color: var(--white);
     border-radius: 50%;
-    z-index: 100;
 
     &--program {
       bottom: 15px;
