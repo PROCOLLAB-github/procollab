@@ -105,7 +105,7 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
 
     const partnerOptions: optionsListElement[] = partners.map((partner: any, index: number) => ({
       id: partner.company.id ?? index,
-      value: partner.id ?? null,
+      value: partner.company.id ?? null,
       label: partner.name,
     }));
 
