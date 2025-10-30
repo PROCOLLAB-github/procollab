@@ -195,7 +195,7 @@ export class ProjectService {
    * Редактирование цели
    */
   editGoal(projectId: number, goalId: number, params: GoalPostForm) {
-    return this.apiService.post(`${this.PROJECTS_URL}/${projectId}/goals/${goalId}`, params);
+    return this.apiService.put(`${this.PROJECTS_URL}/${projectId}/goals/${goalId}`, params);
   }
 
   /**

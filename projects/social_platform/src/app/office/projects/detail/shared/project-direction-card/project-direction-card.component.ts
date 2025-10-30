@@ -13,6 +13,10 @@ import { FileItemComponent } from "@ui/components/file-item/file-item.component"
 import { FileModel } from "@office/models/file.model";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { DayjsPipe } from "@corelib";
+import { ButtonComponent } from "@ui/components";
+import { ProjectService } from "@office/services/project.service";
+import { Goal } from "@office/models/goals.model";
+import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button.directive";
 @Component({
   selector: "app-project-direction-card",
   templateUrl: "./project-direction-card.component.html",
@@ -25,6 +29,8 @@ import { DayjsPipe } from "@corelib";
     FileItemComponent,
     AvatarComponent,
     DayjsPipe,
+    ButtonComponent,
+    EditorSubmitButtonDirective,
   ],
   standalone: true,
 })
@@ -33,6 +39,7 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
   @Input() icon!: string;
   @Input() about!: string | any[];
   @Input() type!: string;
+  @Input() isOwner!: boolean;
 
   @Input() profileInfoType?: "skills" | "achievements";
   @Input() projectInfoType?: "goals" | "partners";
@@ -40,11 +47,18 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly achievementsService = inject(ProfileService);
+  private readonly projectService = inject(ProjectService);
 
   private subscriptions: Subscription[] = [];
 
   isShowModal = false;
+  isShowsConfirmGoal = false;
+
   isOpenInfo = false;
+
+  goalCompleteHoverId: null | number = null;
+  selectedGoal: Goal | null = null;
+
   listType?: "profile" | "project";
 
   // Поля для работы с достижениями
@@ -52,6 +66,20 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
   files: FileModel[] = [];
   achievementsInfo = signal<Achievement[]>([]);
   currentYear = 0;
+
+  mouseHover(goalId: number): void {
+    if (this.isOwner) {
+      if (goalId) {
+        this.goalCompleteHoverId = goalId;
+      }
+    }
+  }
+
+  mouseLeave(): void {
+    if (this.isOwner) {
+      this.goalCompleteHoverId = null;
+    }
+  }
 
   ngOnInit(): void {
     const listTypeSub$ = this.route.data.subscribe(data => {
@@ -72,6 +100,55 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach($ => $.unsubscribe());
+  }
+
+  openConfirmModal(goal: Goal): void {
+    this.selectedGoal = goal;
+    this.isShowsConfirmGoal = true;
+    this.router.navigate([], {
+      queryParams: { goalId: goal.id },
+      relativeTo: this.route,
+      queryParamsHandling: "merge",
+    });
+  }
+
+  confirmCompleteGoal(): void {
+    const projectId = this.route.snapshot.params["projectId"];
+    const goalId = +this.route.snapshot.queryParams["goalId"];
+
+    if (!goalId || !Array.isArray(this.about)) return;
+
+    const goal = this.about.find((g: Goal) => g.id === goalId);
+
+    if (!goal) return;
+
+    const completedGoal = {
+      ...goal,
+      isDone: true,
+    };
+
+    this.projectService.editGoal(projectId, goal.id, completedGoal).subscribe({
+      next: response => {
+        if (Array.isArray(this.about)) {
+          const index = this.about.findIndex((g: Goal) => g.id === goalId);
+          if (index !== -1) {
+            this.about[index] = response;
+          }
+        }
+
+        this.isShowsConfirmGoal = false;
+        this.goalCompleteHoverId = null;
+        this.selectedGoal = null;
+
+        this.router.navigate([], {
+          queryParams: {},
+          replaceUrl: true,
+        });
+      },
+      error: error => {
+        console.error("Ошибка при обновлении цели:", error);
+      },
+    });
   }
 
   openInfo(achievementYear: string): void {

@@ -343,6 +343,10 @@
     &--more {
       color: var(--accent) !important;
     }
+
+    img {
+      border-radius: var(--rounded-xxl);
+    }
   }
 
   &__date {
@@ -430,7 +434,6 @@
   width: 350px;
   height: 175px;
   max-height: calc(100vh - 40px);
-  padding: 24px;
   overflow-y: auto;
 
   &__top {

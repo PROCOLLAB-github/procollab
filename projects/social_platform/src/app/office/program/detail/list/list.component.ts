@@ -142,6 +142,8 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.listType = data["listType"];
     });
 
+    console.log(this.listType);
+
     const routeData$ = this.route.data.pipe(map(r => r["data"])).subscribe(data => {
       this.listTotalCount = data.count;
       this.list = data.results;

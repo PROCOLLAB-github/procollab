@@ -138,7 +138,7 @@
     bottom: 0;
     left: 0;
     z-index: 10;
-    max-height: 72vh;
+    min-height: 72vh;
     overflow-y: auto;
     background-color: var(--white);
     border-radius: var(--rounded-lg);

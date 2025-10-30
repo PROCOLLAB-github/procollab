@@ -1,6 +1,10 @@
 <!-- @format -->
 
-<div class="page" #listRoots>
+<div
+  class="page"
+  #listRoots
+  [style.grid-template-columns]="listType === 'members' ? '10fr' : '8fr 2fr'"
+>
   <div class="page__outlet">
     <div class="page__search">
       <form [formGroup]="searchForm">
@@ -33,6 +37,7 @@
     </ul>
   </div>
 
+  @if (listType !== 'members') {
   <div class="page__create">
     <div class="page__left">
       @if (listType === 'projects') {
@@ -61,4 +66,5 @@
       }
     </div>
   </div>
+  }
 </div>

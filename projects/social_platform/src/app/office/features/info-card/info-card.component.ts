@@ -1,7 +1,6 @@
 /** @format */
 
 import { Component, EventEmitter, inject, Input, OnInit, Output } from "@angular/core";
-import { Project } from "@models/project.model";
 import { IndustryService } from "@services/industry.service";
 import { IconComponent, ButtonComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
@@ -10,11 +9,9 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { SubscriptionService } from "@office/services/subscription.service";
 import { InviteService } from "@office/services/invite.service";
 import { ClickOutsideModule } from "ng-click-outside";
-import { Router } from "@angular/router";
-import { User } from "@auth/models/user.model";
+import { Router, RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { YearsFromBirthdayPipe } from "@corelib";
-import { Invite } from "@office/models/invite.model";
 
 /**
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
@@ -34,6 +31,7 @@ import { Invite } from "@office/models/invite.model";
     ClickOutsideModule,
     TagComponent,
     YearsFromBirthdayPipe,
+    RouterLink,
   ],
 })
 export class InfoCardComponent implements OnInit {
@@ -59,9 +57,7 @@ export class InfoCardComponent implements OnInit {
   inviteErrorModal = false;
   haveBadge = this.calculateHaveBadge();
 
-  ngOnInit(): void {
-    this.validateInputs();
-  }
+  ngOnInit(): void {}
 
   /**
    * Определяет, нужно ли показывать информацию о проекте
@@ -240,14 +236,5 @@ export class InfoCardComponent implements OnInit {
       location.href.includes("/all") ||
       location.href.includes("/projects")
     );
-  }
-
-  /**
-   * Валидация входных параметров
-   */
-  private validateInputs(): void {
-    if (this.appereance !== "empty" && !this.info) {
-      console.warn('ProjectCardComponent: project is required when appearance is not "empty"');
-    }
   }
 }

@@ -128,11 +128,21 @@
 <ng-template #cardActions>
   <div class="card__info">
     @if (type === 'projects') {
-    <app-button customTypographyClass="text-body-6" size="extra-small" class="card__info--text">
+    <app-button
+      [routerLink]="'/office/projects/' + info?.id"
+      customTypographyClass="text-body-6"
+      size="extra-small"
+      class="card__info--text"
+    >
       проект
     </app-button>
     } @else if (type === 'members') {
-    <app-button customTypographyClass="text-body-6" size="extra-small" class="card__info--text">
+    <app-button
+      [routerLink]="'/office/profile/' + info?.userId"
+      customTypographyClass="text-body-6"
+      size="extra-small"
+      class="card__info--text"
+    >
       профиль
     </app-button>
     } @else {

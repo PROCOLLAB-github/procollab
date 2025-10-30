@@ -3,7 +3,6 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   inject,
@@ -25,25 +24,6 @@ import { FeedFilterComponent } from "@office/feed/filter/feed-filter.component";
 import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 import { OpenVacancyComponent } from "./shared/open-vacancy/open-vacancy.component";
 
-/**
- * ОСНОВНОЙ КОМПОНЕНТ ЛЕНТЫ НОВОСТЕЙ
- *
- * Главный компонент для отображения ленты новостей, вакансий и проектов.
- * Поддерживает бесконечную прокрутку, фильтрацию и отслеживание просмотров.
- *
- * ОСНОВНЫЕ ФУНКЦИИ:
- * - Отображение элементов ленты (новости, вакансии, проекты)
- * - Бесконечная прокрутка для подгрузки новых элементов
- * - Фильтрация по типам контента
- * - Отслеживание просмотров элементов
- * - Лайки новостей
- *
- * ИСПОЛЬЗУЕМЫЕ СИГНАЛЫ:
- * - totalItemsCount: общее количество элементов
- * - feedItems: массив элементов ленты
- * - feedPage: текущая страница для пагинации
- * - includes: активные фильтры
- */
 @Component({
   selector: "app-feed",
   standalone: true,
@@ -59,63 +39,58 @@ import { OpenVacancyComponent } from "./shared/open-vacancy/open-vacancy.compone
   styleUrl: "./feed.component.scss",
 })
 export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
-  private readonly route = inject(ActivatedRoute);
-  private readonly projectNewsService = inject(ProjectNewsService);
-  private readonly profileNewsService = inject(ProfileNewsService);
-  private readonly feedService = inject(FeedService);
-  private readonly cdref = inject(ChangeDetectorRef);
-  private observer?: IntersectionObserver;
+  route = inject(ActivatedRoute);
+  projectNewsService = inject(ProjectNewsService);
+  profileNewsService = inject(ProfileNewsService);
+  feedService = inject(FeedService);
 
-  /**
-   * ИНИЦИАЛИЗАЦИЯ КОМПОНЕНТА
-   *
-   * ЧТО ДЕЛАЕТ:
-   * - Загружает начальные данные из резолвера
-   * - Настраивает наблюдение за изменениями фильтров
-   * - Инициализирует отслеживание просмотров элементов
-   */
-  /**
-   * ИНИЦИАЛИЗАЦИЯ КОМПОНЕНТА
-   */
   ngOnInit() {
     const routeData$ = this.route.data
       .pipe(map(r => r["data"]))
       .subscribe((feed: ApiPagination<FeedItem>) => {
         this.feedItems.set(feed.results);
         this.totalItemsCount.set(feed.count);
+        this.feedPage.set(feed.results.length);
 
-        this.initObserver();
+        setTimeout(() => {
+          const observer = new IntersectionObserver(this.onFeedItemView.bind(this), {
+            root: document.querySelector(".office__body"),
+            rootMargin: "0px 0px 0px 0px",
+            threshold: 0,
+          });
+
+          document.querySelectorAll(".page__item").forEach(e => {
+            observer.observe(e);
+          });
+        });
       });
     this.subscriptions$().push(routeData$);
 
     const queryParams$ = this.route.queryParams
       .pipe(
-        map(p => p["includes"]),
-        tap(includes => this.includes.set(includes)),
+        map(params => params["includes"]),
+        tap(includes => {
+          this.includes.set(includes);
+        }),
         skip(1),
         concatMap(includes => {
           this.totalItemsCount.set(0);
-          this.feedPage.set(1);
+          this.feedPage.set(0);
+
           return this.onFetch(0, this.perFetchTake(), includes ?? ["vacancy", "projects", "news"]);
         })
       )
       .subscribe(feed => {
         this.feedItems.set(feed);
+        this.feedPage.set(feed.length);
+
         setTimeout(() => {
-          this.feedRoot?.nativeElement.scrollTo({ top: 0 });
-          this.observeNewElements();
+          this.feedRoot?.nativeElement.children[0].scrollIntoView({ behavior: "smooth" });
         });
       });
     this.subscriptions$().push(queryParams$);
   }
 
-  /**
-   * НАСТРОЙКА БЕСКОНЕЧНОЙ ПРОКРУТКИ
-   *
-   * ЧТО ДЕЛАЕТ:
-   * - Подписывается на события прокрутки
-   * - Загружает новые элементы при достижении конца списка
-   */
   ngAfterViewInit() {
     const target = document.querySelector(".office__body");
     if (target) {
@@ -131,39 +106,25 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscriptions$().forEach(s => s.unsubscribe());
-    this.observer?.disconnect();
+    this.subscriptions$().forEach($ => $.unsubscribe());
   }
 
   @ViewChild("feedRoot") feedRoot?: ElementRef<HTMLElement>;
 
-  // Сигналы состояния компонента
-  totalItemsCount = signal(0); // Общее количество элементов
-  feedItems = signal<FeedItem[]>([]); // Массив элементов ленты
-  feedPage = signal(1); // Текущая страница
-  perFetchTake = signal(20); // Количество элементов за запрос
-  includes = signal<FeedItemType[]>([]); // Активные фильтры
+  totalItemsCount = signal(0);
+  feedItems = signal<FeedItem[]>([]);
+  feedPage = signal(0);
+  perFetchTake = signal(20);
+  includes = signal<FeedItemType[]>([]);
 
   subscriptions$ = signal<Subscription[]>([]);
 
-  /**
-   * ОБРАБОТКА ЛАЙКОВ НОВОСТЕЙ
-   *
-   * ЧТО ПРИНИМАЕТ:
-   * @param newsId - ID новости для лайка/дизлайка
-   *
-   * ЧТО ДЕЛАЕТ:
-   * - Переключает состояние лайка
-   * - Обновляет счетчик лайков
-   * - Различает новости проектов и профилей
-   */
   onLike(newsId: number) {
     const itemIdx = this.feedItems().findIndex(n => n.content.id === newsId);
 
     const item = this.feedItems()[itemIdx];
     if (!item || item.typeModel !== "news") return;
 
-    // Определяем тип новости по структуре contentObject
     if ("email" in item.content.contentObject) {
       this.profileNewsService
         .toggleLike(
@@ -205,17 +166,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * ОТСЛЕЖИВАНИЕ ПРОСМОТРОВ ЭЛЕМЕНТОВ
-   *
-   * ЧТО ПРИНИМАЕТ:
-   * @param entries - массив элементов, попавших в область видимости
-   *
-   * ЧТО ДЕЛАЕТ:
-   * - Отмечает новости как прочитанные при попадании в область видимости
-   * - Различает новости проектов и профилей
-   */
-  private onFeedItemView(entries: IntersectionObserverEntry[]): void {
+  onFeedItemView(entries: IntersectionObserverEntry[]): void {
     const items = entries
       .map(e => {
         return Number((e.target as HTMLElement).dataset["id"]);
@@ -230,7 +181,6 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       item => item.typeModel === "news" && "email" in item.content.contentObject
     );
 
-    // Отмечаем новости проектов как прочитанные
     projectNews.forEach(news => {
       if (news.typeModel !== "news") return;
       this.projectNewsService
@@ -238,7 +188,6 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
         .subscribe(noop);
     });
 
-    // Отмечаем новости профилей как прочитанные
     profileNews.forEach(news => {
       if (news.typeModel !== "news") return;
       this.profileNewsService
@@ -247,65 +196,37 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  /**
-   * ОБРАБОТКА ПРОКРУТКИ ДЛЯ БЕСКОНЕЧНОЙ ЗАГРУЗКИ
-   *
-   * ЧТО ВОЗВРАЩАЕТ:
-   * @returns Observable с новыми элементами или пустой объект
-   *
-   * ЧТО ДЕЛАЕТ:
-   * - Проверяет, достигнут ли конец списка
-   * - Загружает следующую порцию элементов при необходимости
-   */
-  /**
-   * ОБРАБОТКА ПРОКРУТКИ ДЛЯ БЕСКОНЕЧНОЙ ЗАГРУЗКИ
-   */
-  private onScroll() {
-    const container = document.querySelector(".office__body") as HTMLElement;
-    if (!container) return of({});
+  onScroll() {
+    if (this.totalItemsCount() && this.feedItems().length >= this.totalItemsCount()) return of({});
 
-    const isNearBottom =
-      container.scrollHeight - container.scrollTop - container.clientHeight < 100;
+    const target = document.querySelector(".office__body");
+    if (!target || !this.feedRoot) return of({});
 
-    if (!isNearBottom) return of({});
+    const diff =
+      target.scrollTop -
+      this.feedRoot.nativeElement.getBoundingClientRect().height +
+      window.innerHeight;
 
-    // Предотвращаем множественные запросы
-    if (this.feedItems().length >= this.totalItemsCount()) {
-      return of([]);
+    if (diff > 0) {
+      const currentOffset = this.feedItems().length;
+
+      return this.onFetch(currentOffset, this.perFetchTake(), this.includes()).pipe(
+        tap((feedChunk: FeedItem[]) => {
+          const existingIds = new Set(this.feedItems().map(item => item.content.id));
+          const uniqueNewItems = feedChunk.filter(item => !existingIds.has(item.content.id));
+
+          if (uniqueNewItems.length > 0) {
+            this.feedPage.update(page => page + uniqueNewItems.length);
+            this.feedItems.update(items => [...items, ...uniqueNewItems]);
+          }
+        })
+      );
     }
 
-    return this.onFetch(
-      this.feedPage() * this.perFetchTake(),
-      this.perFetchTake(),
-      this.includes()
-    ).pipe(
-      tap((feedChunk: FeedItem[]) => {
-        if (feedChunk.length > 0) {
-          this.feedPage.update(p => p + 1);
-          this.feedItems.update(items => [...items, ...feedChunk]);
-
-          // ВАЖНО: обновляем observer после добавления новых элементов
-          setTimeout(() => {
-            this.observeNewElements();
-            this.cdref.detectChanges();
-          }, 0);
-        }
-      })
-    );
+    return of({});
   }
 
-  /**
-   * ЗАГРУЗКА ЭЛЕМЕНТОВ ЛЕНТЫ
-   *
-   * ЧТО ПРИНИМАЕТ:
-   * @param offset - смещение для пагинации
-   * @param limit - количество элементов для загрузки
-   * @param includes - типы элементов для включения в результат
-   *
-   * ЧТО ВОЗВРАЩАЕТ:
-   * @returns Observable<FeedItem[]> - массив элементов ленты
-   */
-  private onFetch(
+  onFetch(
     offset: number,
     limit: number,
     includes: FeedItemType[] = ["project", "vacancy", "news"]
@@ -316,34 +237,5 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
       }),
       map(res => res.results)
     );
-  }
-
-  private initObserver() {
-    if (this.observer) {
-      this.observer.disconnect();
-    }
-
-    this.observer = new IntersectionObserver(this.onFeedItemView.bind(this), {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.1,
-    });
-
-    this.observeNewElements();
-  }
-
-  /**
-   * ДОБАВЛЕНИЕ НОВЫХ ЭЛЕМЕНТОВ
-   */
-  private observeNewElements() {
-    // Небольшая задержка для рендеринга DOM
-    setTimeout(() => {
-      document.querySelectorAll(".page__item").forEach(element => {
-        if (element && !element.hasAttribute("data-observed")) {
-          this.observer?.observe(element);
-          element.setAttribute("data-observed", "true");
-        }
-      });
-    }, 0);
   }
 }

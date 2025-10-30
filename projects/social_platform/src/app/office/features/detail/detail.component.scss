@@ -12,10 +12,7 @@ $detail-bar-mb: 12px;
   height: 100%;
   max-height: 100%;
   overflow-y: scroll;
-
-  &__bar {
-    margin-bottom: 20px;
-  }
+  padding-top: 20px;
 
   &__body {
     flex-grow: 1;

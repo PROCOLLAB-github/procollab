@@ -42,7 +42,7 @@
           }
         </div>
         <div class="news">
-          @if (program.isUserManager) {
+          @if (program.isUserManager && !program.isUserMember) {
           <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
           } @for (n of news(); track n.id) {
           <app-program-news-card

@@ -289,10 +289,13 @@
           </fieldset>
           } @if (goals.at(i)?.get("completionDate"); as goalDate) {
           <fieldset>
-            <label class="text-body-12 field-label" style="text-align: center">дата</label>
+            <label class="text-body-12 field-label" style="text-align: center; margin-right: 12px"
+              >дата</label
+            >
             <app-input
               size="small"
               type="date"
+              [mask]="'d0.M0.yy'"
               [error]="goalDate | controlError"
               placeholder="21.05.25"
               formControlName="completionDate"
@@ -305,7 +308,11 @@
           </fieldset>
           } @if (goals.at(i)?.get("responsible"); as goalLeader) {
           <fieldset>
-            <label class="text-body-12 field-label" style="text-align: center">лидер</label>
+            <label
+              class="text-body-12 field-label"
+              style="text-align: center; margin-right: 12px; margin-left: 0px"
+              >лидер</label
+            >
 
             @if (getSelectedLeaderForGoal(i); as selectedLeader) {
             <div class="selected-leader">

@@ -17,9 +17,9 @@
       @if (menuOpen) {
       <ul class="card__options">
         @if (!editMode) {
-        <li class="card__option text-body-10" (click)="editMode = true">Редактировать</li>
+        <li class="card__option text-body-10" (click)="editMode = true">редактировать</li>
         }
-        <li class="card__option text-body-10" (click)="delete.emit(feedItem.id)">Удалить</li>
+        <li class="card__option text-body-10" (click)="delete.emit(feedItem.id)">удалить</li>
       </ul>
       }
     </div>

@@ -4,11 +4,11 @@
   display: flex;
   align-items: center;
   margin-bottom: 45px;
+  cursor: pointer;
 
   &__icon {
     flex-shrink: 0;
     color: var(--grey-for-text);
-    cursor: pointer;
   }
 
   span {

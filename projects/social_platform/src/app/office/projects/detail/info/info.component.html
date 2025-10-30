@@ -88,6 +88,7 @@
               [icon]="directionItem.icon"
               [about]="directionItem.about"
               [type]="directionItem.type"
+              [isOwner]="profile.id === project.leader"
               [projectInfoType]="directionItem.direction === 'цели' ? 'goals' : 'partners'"
             ></app-project-direction-card>
             }

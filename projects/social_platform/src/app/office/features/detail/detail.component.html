@@ -1,13 +1,6 @@
 <!-- @format -->
 
-<div class="detail" [style.padding-top]="listType === 'profile' ? '20px' : '0px'">
-  @if ((listType !== 'profile' || !isProjectChatPage) && !(listType === 'project' &&
-  isProjectChatPage)) {
-  <section class="detail__bar">
-    <app-back [path]="backPath"></app-back>
-  </section>
-  }
-
+<div class="detail">
   <div class="detail__body">
     @if (info()) {
     <div class="info detail__section detail__info">
@@ -81,7 +74,7 @@
               зарегистрироваться
             </app-button>
           </a>
-          } } @else if (isUserMember) {
+          } } @else if (isUserMember && isUserManager) {
           <app-button
             size="medium"
             [style.opacity]="registerDateExpired ? '0.5' : '1'"
@@ -92,7 +85,7 @@
             <span>подать проект</span>
             <i appIcon icon="plus" appSquare="10"></i>
           </app-button>
-          } @else if (isUserManager) {
+          } @else if (isUserManager && !isUserMember) {
           <a [routerLink]="'/office/program/' + info().id + '/projects-rating'">
             <app-button
               [appearance]="isProjectsRatingPage ? 'inline' : 'outline'"

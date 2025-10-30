@@ -2,7 +2,10 @@
 
 <main class="page">
   <div class="page__bar">
-    <app-back namespace="проекты" path="/office/feed"></app-back>
+    <app-back
+      namespace="проекты"
+      [path]="isDashboard ? '/office/feed' : '/office/projects/dashboard'"
+    ></app-back>
 
     <div class="page__info">
       <div class="page__outlet" [style.gap]="isDashboard ? '8px' : '20px'">
