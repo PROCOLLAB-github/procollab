@@ -11,8 +11,8 @@ $detail-bar-mb: 12px;
   flex-direction: column;
   height: 100%;
   max-height: 100%;
-  overflow-y: scroll;
   padding-top: 20px;
+  overflow-y: scroll;
 
   &__body {
     flex-grow: 1;

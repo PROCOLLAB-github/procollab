@@ -55,10 +55,10 @@
 
   &__confirm {
     display: flex;
-    align-items: center;
     flex-direction: column;
-    justify-content: center;
     gap: 36px;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 16px;
 
     p {
@@ -178,16 +178,17 @@
     align-items: center;
 
     &--status {
-      padding: 5px;
-      text-align: center;
       width: 45px;
+      padding: 5px;
+      color: var(--accent);
+      text-align: center;
+      cursor: pointer;
       border: 0.5px solid var(--medium-grey-for-outline);
       border-radius: var(--rounded-xl);
-      color: var(--accent);
-      cursor: pointer;
 
       &--complete {
         border: 0.5px solid var(--green);
+
         i {
           color: var(--green);
         }
