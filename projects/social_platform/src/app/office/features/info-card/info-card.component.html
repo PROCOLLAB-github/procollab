@@ -128,14 +128,31 @@
 <ng-template #cardActions>
   <div class="card__info">
     @if (type === 'projects') {
-    <app-button
-      [routerLink]="'/office/projects/' + info?.id"
-      customTypographyClass="text-body-6"
-      size="extra-small"
-      class="card__info--text"
-    >
-      проект
-    </app-button>
+    <div class="card__info--program">
+      <app-button
+        [routerLink]="'/office/projects/' + info?.id"
+        customTypographyClass="text-body-6"
+        size="extra-small"
+        class="card__info--text"
+      >
+        проект
+      </app-button>
+
+      @if (info.partnerProgramId) {
+      <div
+        class="card__info--program-icon"
+        (mouseenter)="programProjectHovered = true"
+        (mouseleave)="programProjectHovered = false"
+      >
+        <i appIcon icon="program" appSquare="8"></i>
+      </div>
+
+      @if (programProjectHovered) {
+      <div class="card__info--project-partner">
+        <p class="text-body-6">проект привязан к программе</p>
+      </div>
+      } }
+    </div>
     } @else if (type === 'members') {
     <app-button
       [routerLink]="'/office/profile/' + info?.userId"

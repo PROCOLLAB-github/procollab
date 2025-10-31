@@ -130,6 +130,33 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
     type === "auth" ? (this.isHintAuthVisible = false) : (this.isHintLibVisible = false);
   }
 
+  // Для управления открытыми группами специализаций
+  openSpecializationGroup: string | null = null;
+
+  /**
+   * Проверяет, есть ли открытые группы специализаций
+   */
+  hasOpenSpecializationsGroups(): boolean {
+    return this.openSpecializationGroup !== null;
+  }
+
+  /**
+   * Обработчик переключения группы специализаций
+   * @param isOpen - флаг открытия/закрытия группы
+   * @param groupName - название группы
+   */
+  onSpecializationsGroupToggled(isOpen: boolean, groupName: string): void {
+    this.openSpecializationGroup = isOpen ? groupName : null;
+  }
+
+  /**
+   * Проверяет, должна ли группа специализаций быть отключена
+   * @param groupName - название группы для проверки
+   */
+  isSpecializationGroupDisabled(groupName: string): boolean {
+    return this.openSpecializationGroup !== null && this.openSpecializationGroup !== groupName;
+  }
+
   onSkipRegistration(): void {
     if (!this.validationService.getFormValidation(this.stageForm)) {
       return;

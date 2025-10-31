@@ -745,17 +745,14 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
     };
 
     this.skipSubmitting.set(true);
-    this.authService
-      .saveProfile(onboardingSkipInfo)
-      .pipe(concatMap(() => this.authService.setOnboardingStage(3)))
-      .subscribe({
-        next: () => this.completeRegistration(3),
-        error: error => {
-          this.skipSubmitting.set(false);
-          this.isModalErrorYear.set(true);
-          this.isModalErrorYearText.set(error.error?.message || "Ошибка сохранения");
-        },
-      });
+    this.authService.saveProfile(onboardingSkipInfo).subscribe({
+      next: () => this.completeRegistration(3),
+      error: error => {
+        this.skipSubmitting.set(false);
+        this.isModalErrorYear.set(true);
+        this.isModalErrorYearText.set(error.error?.message || "Ошибка сохранения");
+      },
+    });
   }
 
   onSubmit(): void {

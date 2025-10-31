@@ -61,20 +61,43 @@
         </div>
 
         <ng-template #programTpl>
-          @if (!isUserMember && !isUserManager && !registerDateExpired) { @if
-          (info().name.includes("Кейс-чемпионат MIR")) {
+          @if (!isUserMember && !isUserManager) { @if (info().name.includes("Кейс-чемпионат MIR")) {
           <a href="https://case-champ.ru/corporate#rec1176757836">
-            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+            <app-button
+              [disabled]="!!registerDateExpired"
+              [style.opacity]="registerDateExpired ? '0.5' : '1'"
+              appearance="outline"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
+              зарегистрироваться
+            </app-button>
+          </a>
+          } @else if (info().registrationLink) {
+          <a [href]="info().registrationLink">
+            <app-button
+              [disabled]="!!registerDateExpired"
+              [style.opacity]="registerDateExpired ? '0.5' : '1'"
+              appearance="outline"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
               зарегистрироваться
             </app-button>
           </a>
           } @else {
           <a [routerLink]="['/office/program', info().id, 'register']">
-            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+            <app-button
+              [disabled]="!!registerDateExpired"
+              [style.opacity]="registerDateExpired ? '0.5' : '1'"
+              appearance="outline"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
               зарегистрироваться
             </app-button>
           </a>
-          } } @else if (isUserMember && isUserManager) {
+          } } @else if (isUserMember && !isUserManager && isUserExpert) {
           <app-button
             size="medium"
             [style.opacity]="registerDateExpired ? '0.5' : '1'"
@@ -85,7 +108,7 @@
             <span>подать проект</span>
             <i appIcon icon="plus" appSquare="10"></i>
           </app-button>
-          } @else if (isUserManager && !isUserMember) {
+          } @else if (isUserManager) { @if (isUserMember) {
           <a [routerLink]="'/office/program/' + info().id + '/projects-rating'">
             <app-button
               [appearance]="isProjectsRatingPage ? 'inline' : 'outline'"
@@ -95,7 +118,7 @@
               оценка проектов
             </app-button>
           </a>
-          }
+          } }
 
           <a
             class="info__presentation"
@@ -140,6 +163,7 @@
             <app-button
               appearance="outline"
               [disabled]="true"
+              style="opacity: 0.5"
               size="medium"
               customTypographyClass="text-body-12"
             >
@@ -151,6 +175,8 @@
             <app-button
               [appearance]="isProjectsPage ? 'inline' : 'outline'"
               size="medium"
+              [disabled]="isUserMember ? true : isUserManager ? false : false"
+              [style.opacity]="isUserMember ? '0.5' : isUserManager ? '1' : '0.5'"
               customTypographyClass="text-body-12"
             >
               проекты-участники
@@ -172,6 +198,8 @@
             <app-button
               [appearance]="isMembersPage ? 'inline' : 'outline'"
               size="medium"
+              [disabled]="isUserMember || isUserExpert ? true : isUserManager ? false : true"
+              [style.opacity]="isUserMember || isUserExpert ? '0.5' : isUserManager ? '1' : '1'"
               customTypographyClass="text-body-12"
             >
               участники
@@ -182,10 +210,17 @@
           <app-modal [open]="showSubmitProjectModal()" (openChange)="toggleSubmitProjectModal()">
             <div class="cancel">
               <div class="cancel__top">
-                <p class="cancel__title text-body-14">выберите проект для подачи</p>
+                <p class="cancel__title text-body-14">
+                  {{
+                    memberProjects.length > 0 ? "выберите проект для подачи" : "создай свой проект!"
+                  }}
+                </p>
                 <p class="cancel__text text-body-10">
-                  после выбора проекта будет создан дубликат данного проекта для заполнения под
-                  конкретный конкурс
+                  {{
+                    memberProjects.length > 0
+                      ? "после выбора проекта будет создан дубликат данного проекта для заполнения под конкретный конкурс"
+                      : "создай проект и не забудь вернуться в программу для его подачи"
+                  }}
                 </p>
 
                 <div class="project">
@@ -213,15 +248,29 @@
                 </div>
               </div>
 
-              <app-button
-                size="medium"
-                class="cancel__button"
-                customTypographyClass="text-body-12"
-                [disabled]="!selectedProjectId"
-                (click)="addProjectModal()"
-              >
-                выбрать проект
-              </app-button>
+              <div class="cancel__buttons" style="margin: 0">
+                @if (memberProjects.length > 0) {
+                <app-button
+                  size="medium"
+                  class="cancel__button"
+                  customTypographyClass="text-body-12"
+                  [disabled]="!selectedProjectId"
+                  (click)="addProjectModal()"
+                >
+                  выбрать проект
+                </app-button>
+
+                <p class="text-body-12">или</p>
+                }
+
+                <app-button
+                  size="medium"
+                  class="cancel__button"
+                  (click)="addNewProject()"
+                  customTypographyClass="text-body-12"
+                  >создать новый проект</app-button
+                >
+              </div>
             </div>
           </app-modal>
 

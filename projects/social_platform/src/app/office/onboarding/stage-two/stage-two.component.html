@@ -16,6 +16,24 @@
         (hide)="hideTooltip('auth')"
       ></app-tooltip>
     </div>
+    <div class="content__actions">
+      <app-button
+        size="big"
+        (click)="onSkipRegistration()"
+        customTypographyClass="text-body-12"
+        color="grey"
+        [loader]="skipSubmitting()"
+        >закончить регистрацию позже</app-button
+      >
+      <app-button
+        size="big"
+        type="submit"
+        customTypographyClass="text-body-12"
+        [loader]="stageSubmitting()"
+        (click)="onSubmit()"
+        >продолжить</app-button
+      >
+    </div>
     <!-- <p class="auth__info">
       Для того, чтобы участники понимали с кем общаются и платформа могла рекомендовать тебя на
       самые подходящие вакансии
@@ -24,7 +42,7 @@
   <div class="content" [formGroup]="stageForm">
     <section class="content__section content__left">
       <div class="content__search">
-        <h4 class="text-heading-4 content__section-heading">Поиск по библиотеке</h4>
+        <h4 class="text-heading-4 content__section-heading">поиск по библиотеке</h4>
         <app-autocomplete-input
           [suggestions]="searchedSkills()"
           fieldToDisplay="name"
@@ -36,7 +54,7 @@
         ></app-autocomplete-input>
       </div>
       <div class="content__skills">
-        <h4 class="text-heading-4">Выбранные навыки</h4>
+        <h4 class="text-heading-4">выбранные навыки</h4>
         <app-skills-basket
           class="content__skills-basket"
           formControlName="skills"
@@ -47,7 +65,7 @@
     <section class="content__section content__right">
       <div class="auth__greeting content__right-heading">
         <div class="tooltip">
-          <h4 class="text-heading-4">Библиотека</h4>
+          <h4 class="text-heading-4">библиотека</h4>
           <app-tooltip
             [text]="
               'База с навыками, которая может пополняться благодаря тебе! Если не найдешь свой навык, смело пиши на @procollab_support и мы добавим твой уникальный навык'
@@ -69,6 +87,8 @@
               [title]="skillGroup.name"
               [options]="skillGroup.skills"
               [selected]="stageForm.getRawValue().skills"
+              [disabled]="isSkillGroupDisabled(skillGroup.name)"
+              (groupToggled)="onSkillGroupToggled($event, skillGroup.name)"
               (optionToggled)="onOptionToggled($event)"
             ></app-skills-group>
           </li>
@@ -76,24 +96,6 @@
         </ul>
       </div>
     </section>
-    <div class="content__actions">
-      <app-button
-        size="big"
-        (click)="onSkipRegistration()"
-        customTypographyClass="text-body-12"
-        color="grey"
-        [loader]="skipSubmitting()"
-        >Закончить регистрацию позже</app-button
-      >
-      <app-button
-        size="big"
-        type="submit"
-        customTypographyClass="text-body-12"
-        [loader]="stageSubmitting()"
-        (click)="onSubmit()"
-        >Продолжить</app-button
-      >
-    </div>
   </div>
 
   <app-modal [open]="isChooseSkill()" (openChange)="isChooseSkill.set(!isChooseSkill())">

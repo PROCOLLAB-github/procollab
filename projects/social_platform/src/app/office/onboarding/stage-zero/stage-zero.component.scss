@@ -1,6 +1,7 @@
 @use "styles/responsive";
 
 .page {
+  position: relative;
   margin-bottom: 50px;
 
   &__form {
@@ -58,6 +59,17 @@
     &--attention {
       color: var(--dark-grey);
     }
+  }
+
+  &__buttons {
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    bottom: 3%;
+    right: 100%;
+    width: 100%;
+    margin-left: 280%;
   }
 }
 
@@ -178,5 +190,14 @@ i {
 
   &__text {
     text-align: center;
+  }
+}
+
+
+.error {
+  color: var(--red) !important;
+
+  i {
+    color:  var(--red) !important;
   }
 }

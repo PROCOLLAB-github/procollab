@@ -35,7 +35,7 @@ export enum ErrorMessage {
   VALIDATION_LANGUAGE = "Используйте символы кириллического алфавита",
   VALIDATION_EMAIL = "Введенное значение не соответствует формату email",
   VALIDATION_PASSWORD_UNMATCH = "Пароли не совпадают",
-  EMPTY_AVATAR = "*Выберите фото для профиля",
+  EMPTY_AVATAR = "Выберите фото для профиля",
   VALIDATION_PATTERN = "Введите корректную ссылку, начинающуюся с http:// или https://",
 
   // Ошибки приглашений в проект

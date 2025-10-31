@@ -11,7 +11,7 @@
       @if (stageForm.get("avatar"); as avatar) {
       <fieldset class="page__field">
         <div class="content">
-          <p class="text-bold-body-14">Фотография профиля</p>
+          <p class="text-bold-body-14">Фотография профиля*</p>
           <app-tooltip
             [text]="
               'Идеальная фотография для резюме: свежая, с твоим лицом, хорошо различимым на нейтральном фоне (котиков мы конечно любим, но их не в этот раз)'
@@ -38,7 +38,7 @@
       </fieldset>
       } @if (stageForm.get("city"); as city) {
       <fieldset class="page__field">
-        <label for="city" class="field-label">Город</label>
+        <label for="city" class="field-label">Город*</label>
         <app-input
           size="big"
           id="city"
@@ -595,14 +595,14 @@
       </div>
     </div>
 
-    <div class="page__first-row">
+    <div class="page__buttons">
       <app-button
         customTypographyClass="text-body-12"
         size="big"
         (click)="onSkipRegistration()"
         color="grey"
         [loader]="skipSubmitting()"
-        >Закончить регистрацию позже</app-button
+        >закончить регистрацию позже</app-button
       >
       <app-button
         size="big"
@@ -634,11 +634,10 @@
         type="submit"
         customTypographyClass="text-body-12"
         [loader]="stageSubmitting()"
-        >Продолжить</app-button
+        >продолжить</app-button
       >
     </div>
   </form>
-
   <app-modal [open]="isModalErrorYear()" (openChange)="isModalErrorYear.set(!isModalErrorYear())">
     <div class="cancel">
       <div class="cancel__top">

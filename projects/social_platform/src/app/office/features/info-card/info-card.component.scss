@@ -11,7 +11,7 @@
     height: 170px;
     padding: 15px 0 12px;
     background-color: var(--light-white);
-    border: 0.5px solid var(--medium-for-outline);
+    border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-xl);
 
     &--empty {
@@ -33,6 +33,41 @@
       gap: 4px;
       align-items: center;
       color: var(--grey-for-text);
+    }
+
+    &--program {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      justify-content: center;
+
+      &-icon {
+        width: 16px;
+        height: 12px;
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--rounded-lg);
+        border: 0.5px solid var(--medium-grey-for-outline);
+
+        i {
+          color: var(--accent);
+        }
+      }
+    }
+
+    &--project-partner {
+      position: absolute;
+      left: 30%;
+      top: 67%;
+      padding: 3px 5px;
+      border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: var(--rounded-lg);
+
+      p {
+        color: var(--black);
+      }
     }
   }
 
@@ -66,6 +101,7 @@
     padding-top: 40px;
     overflow: hidden;
     text-align: center;
+    position: relative;
 
     &--empty {
       padding-top: 60px;

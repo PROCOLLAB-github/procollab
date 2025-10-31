@@ -16,6 +16,25 @@
         (hide)="hideTooltip('auth')"
       ></app-tooltip>
     </div>
+
+    <div class="content__actions">
+      <app-button
+        size="big"
+        (click)="onSkipRegistration()"
+        customTypographyClass="text-body-12"
+        color="grey"
+        [loader]="skipSubmitting()"
+        >закончить регистрацию позже</app-button
+      >
+      <app-button
+        size="big"
+        type="submit"
+        customTypographyClass="text-body-12"
+        [loader]="stageSubmitting()"
+        (click)="onSubmit()"
+        >продолжить</app-button
+      >
+    </div>
     <!-- <p class="auth__info">
       Для того, чтобы участники понимали с кем общаются и платформа могла рекомендовать тебя на
       самые подходящие вакансии
@@ -23,7 +42,7 @@
   </div>
   <div class="content" [formGroup]="stageForm">
     <section class="content__section content__left">
-      <h4 class="text-heading-4 content__section-heading">Поиск по библиотеке</h4>
+      <h4 class="text-heading-4 content__section-heading">поиск по библиотеке</h4>
       <app-autocomplete-input
         [suggestions]="inlineSpecializations()"
         fieldToDisplay="name"
@@ -44,7 +63,7 @@
     <section class="content__section content__right">
       <div class="auth__greeting content__right-heading">
         <div class="tooltip">
-          <h4 class="text-heading-4">Библиотека</h4>
+          <h4 class="text-heading-4">библиотека</h4>
           <app-tooltip
             [text]="
               'Это наша база со всеми специальностями. Если не найдешь свою пиши в @procollab_support и мы обязательно добавим твою профессию и ты получишь +респект'
@@ -65,6 +84,9 @@
             <app-specializations-group
               [title]="spec.name"
               [options]="spec.specializations"
+              [hasOpenGroups]="hasOpenSpecializationsGroups()"
+              [disabled]="isSpecializationGroupDisabled(spec.name)"
+              (groupToggled)="onSpecializationsGroupToggled($event, spec.name)"
               (selectOption)="onSelectSpec($event)"
             ></app-specializations-group>
           </li>
@@ -72,23 +94,5 @@
         </ul>
       </div>
     </section>
-    <div class="content__actions">
-      <app-button
-        size="big"
-        (click)="onSkipRegistration()"
-        customTypographyClass="text-body-12"
-        color="grey"
-        [loader]="skipSubmitting()"
-        >Закончить регистрацию позже</app-button
-      >
-      <app-button
-        size="big"
-        type="submit"
-        customTypographyClass="text-body-12"
-        [loader]="stageSubmitting()"
-        (click)="onSubmit()"
-        >Продолжить</app-button
-      >
-    </div>
   </div>
 </div>

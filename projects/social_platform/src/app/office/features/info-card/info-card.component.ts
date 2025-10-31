@@ -57,6 +57,8 @@ export class InfoCardComponent implements OnInit {
   inviteErrorModal = false;
   haveBadge = this.calculateHaveBadge();
 
+  programProjectHovered = false;
+
   ngOnInit(): void {}
 
   /**

@@ -84,13 +84,14 @@
 
     @include responsive.apply-desktop {
       flex-direction: row;
+      width: 60%;
 
       :first-child {
         width: 100%;
       }
 
       :last-child {
-        width: 60%;
+        width: 100%;
       }
     }
   }

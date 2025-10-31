@@ -24,8 +24,8 @@ import { calculateProfileProgress } from "@utils/calculateProgress";
 import { ProfileDataService } from "@office/profile/detail/services/profile-date.service";
 import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
 import { SnackbarService } from "@ui/services/snackbar.service";
-import { PluralizePipe } from "@corelib";
 import { ApproveSkillComponent } from "../approve-skill/approve-skill.component";
+import { ProjectsService } from "@office/projects/services/projects.service";
 
 @Component({
   selector: "app-detail",
@@ -57,6 +57,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   private readonly location = inject(Location);
   private readonly profileDataService = inject(ProfileDataService);
   public readonly skillsProfileService = inject(ProfileService);
+  private readonly projectsService = inject(ProjectsService);
   public readonly chatService = inject(ChatService);
   private readonly cdRef = inject(ChangeDetectorRef);
 
@@ -92,6 +93,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
   selectedProjectId = 0;
   dubplicatedProjectId = 0;
   memberProjects: Project[] = [];
+
+  userType = 0;
 
   // Сигналы для работы с модальными окнами с текстом
   assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
@@ -147,6 +150,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
     }
   }
 
+  get isUserExpert() {
+    return this.userType !== 1;
+  }
+
   // Методы для управления состоянием ошибок через сервис
   setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
     this.projectAdditionalService.setAssignProjectToProgramError(error);
@@ -198,6 +205,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
     );
 
     this.assignProjectToProgram(selectedProject!);
+  }
+
+  addNewProject(): void {
+    this.projectsService.addProject();
   }
 
   /** Эмитим логику для привязки проекта к программе */
@@ -385,6 +396,17 @@ export class DeatilComponent implements OnInit, OnDestroy {
         )
         .subscribe();
 
+      const profileDataSub$ = this.profileDataService
+        .getProfile()
+        .pipe(filter(user => !!user))
+        .subscribe({
+          next: user => {
+            if (user) {
+              this.userType = user.userType;
+            }
+          },
+        });
+
       const memeberProjects$ = this.projectService.getMy().subscribe({
         next: projects => {
           this.memberProjects = projects.results.filter(project => !project.draft);
@@ -393,6 +415,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
       this.subscriptions.push(program$);
       this.subscriptions.push(memeberProjects$);
+      this.subscriptions.push(profileDataSub$);
     } else {
       const profileDataSub$ = this.profileDataService
         .getProfile()
