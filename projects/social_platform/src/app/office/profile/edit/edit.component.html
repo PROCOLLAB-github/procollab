@@ -1048,11 +1048,14 @@
     <div class="modal__content">
       <div class="modal__specs-groups">
         <ul>
-          @for (specsGroup of nestedSpecs$ | async; track specsGroup.id) {
+          @for (specsGroup of (nestedSpecs$ | async)?.slice(0, 7); track specsGroup.id) {
           <li>
             <app-specializations-group
               [title]="specsGroup.name"
               [options]="specsGroup.specializations"
+              [hasOpenGroups]="hasOpenSpecializationsGroups()"
+              [disabled]="isSpecializationGroupDisabled(specsGroup.name)"
+              (groupToggled)="onSpecializationsGroupToggled($event, specsGroup.name)"
               (selectOption)="onSelectSpec($event)"
             ></app-specializations-group>
           </li>

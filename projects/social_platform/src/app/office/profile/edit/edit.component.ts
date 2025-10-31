@@ -519,6 +519,33 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   profileFormSubmitting = false;
   profileForm: FormGroup;
 
+  // Для управления открытыми группами специализаций
+  openSpecializationGroup: string | null = null;
+
+  /**
+   * Проверяет, есть ли открытые группы специализаций
+   */
+  hasOpenSpecializationsGroups(): boolean {
+    return this.openSpecializationGroup !== null;
+  }
+
+  /**
+   * Проверяет, должна ли группа специализаций быть отключена
+   * @param groupName - название группы для проверки
+   */
+  isSpecializationGroupDisabled(groupName: string): boolean {
+    return this.openSpecializationGroup !== null && this.openSpecializationGroup !== groupName;
+  }
+
+  /**
+   * Обработчик переключения группы специализаций
+   * @param isOpen - флаг открытия/закрытия группы
+   * @param groupName - название группы
+   */
+  onSpecializationsGroupToggled(isOpen: boolean, groupName: string): void {
+    this.openSpecializationGroup = isOpen ? groupName : null;
+  }
+
   /**
    * Добавление записи об достижении
    * Валидирует форму и добавляет новую запись в массив достижений

@@ -255,22 +255,6 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private previousReqQuery: Record<string, any> = {};
 
-  // deleteProject(projectId: number): void {
-  //   if (!confirm("Вы точно хотите удалить проект?")) {
-  //     return;
-  //   }
-
-  //   this.projectService.remove(projectId).subscribe(() => {
-  //     this.projectService.projectsCount.next({
-  //       ...this.projectService.projectsCount.getValue(),
-  //       my: this.projectService.projectsCount.getValue().my - 1,
-  //     });
-
-  //     const index = this.projects.findIndex(project => project.id === projectId);
-  //     this.projects.splice(index, 1);
-  //   });
-  // }
-
   onAcceptInvite(event: number): void {
     this.sliceInvitesArray(event);
   }

@@ -62,14 +62,13 @@
   }
 
   &__buttons {
-    position: sticky;
-    right: 100%;
+    position: fixed;
+    right: 5%;
     bottom: 3%;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 100%;
-    margin-left: 280%;
+    width: 30%;
   }
 }
 

@@ -97,7 +97,7 @@
               зарегистрироваться
             </app-button>
           </a>
-          } } @else if (isUserMember && !isUserManager && isUserExpert) {
+          } } @else if (isUserMember && !isUserManager && !isUserExpert) {
           <app-button
             size="medium"
             [style.opacity]="registerDateExpired ? '0.5' : '1'"
@@ -108,7 +108,7 @@
             <span>подать проект</span>
             <i appIcon icon="plus" appSquare="10"></i>
           </app-button>
-          } @else if (isUserManager) { @if (isUserMember) {
+          } @else if (isUserManager || isUserExpert) { @if (isUserMember) {
           <a [routerLink]="'/office/program/' + info().id + '/projects-rating'">
             <app-button
               [appearance]="isProjectsRatingPage ? 'inline' : 'outline'"
