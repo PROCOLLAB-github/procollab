@@ -187,6 +187,7 @@
             <app-button
               appearance="outline"
               [disabled]="true"
+              style="opacity: 0.5"
               size="medium"
               customTypographyClass="text-body-12"
             >
@@ -248,13 +249,14 @@
                 </div>
               </div>
 
-              <div class="cancel__buttons" style="margin: 0">
+              <div class="cancel__buttons" style="margin: 0; flex-direction: column">
                 @if (memberProjects.length > 0) {
                 <app-button
                   size="medium"
                   class="cancel__button"
                   customTypographyClass="text-body-12"
                   [disabled]="!selectedProjectId"
+                  [style.opacity]="!selectedProjectId ? '0.5' : '1'"
                   (click)="addProjectModal()"
                 >
                   выбрать проект
@@ -264,6 +266,7 @@
                 }
 
                 <app-button
+                  style="margin: 0"
                   size="medium"
                   class="cancel__button"
                   (click)="addNewProject()"
