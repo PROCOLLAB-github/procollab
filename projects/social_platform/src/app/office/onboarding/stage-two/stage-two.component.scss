@@ -105,8 +105,8 @@
     grid-column: 1/2;
     gap: 20px;
     order: 3;
-    margin-top: auto;
     width: 60%;
+    margin-top: auto;
 
     @include responsive.apply-desktop {
       flex-direction: row;

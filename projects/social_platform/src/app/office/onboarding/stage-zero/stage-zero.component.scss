@@ -63,11 +63,11 @@
 
   &__buttons {
     position: sticky;
+    right: 100%;
+    bottom: 3%;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    bottom: 3%;
-    right: 100%;
     width: 100%;
     margin-left: 280%;
   }
@@ -193,11 +193,10 @@ i {
   }
 }
 
-
 .error {
   color: var(--red) !important;
 
   i {
-    color:  var(--red) !important;
+    color: var(--red) !important;
   }
 }

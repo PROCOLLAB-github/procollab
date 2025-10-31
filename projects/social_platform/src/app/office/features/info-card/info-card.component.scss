@@ -37,19 +37,19 @@
 
     &--program {
       display: flex;
-      align-items: center;
       gap: 5px;
+      align-items: center;
       justify-content: center;
 
       &-icon {
-        width: 16px;
-        height: 12px;
-        margin-top: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: var(--rounded-lg);
+        width: 16px;
+        height: 12px;
+        margin-top: 6px;
         border: 0.5px solid var(--medium-grey-for-outline);
+        border-radius: var(--rounded-lg);
 
         i {
           color: var(--accent);
@@ -59,8 +59,8 @@
 
     &--project-partner {
       position: absolute;
-      left: 30%;
       top: 67%;
+      left: 30%;
       padding: 3px 5px;
       border: 0.5px solid var(--medium-grey-for-outline);
       border-radius: var(--rounded-lg);
@@ -93,6 +93,7 @@
   }
 
   &__content {
+    position: relative;
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -101,7 +102,6 @@
     padding-top: 40px;
     overflow: hidden;
     text-align: center;
-    position: relative;
 
     &--empty {
       padding-top: 60px;
