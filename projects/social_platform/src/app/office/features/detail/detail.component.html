@@ -61,7 +61,8 @@
         </div>
 
         <ng-template #programTpl>
-          @if (!isUserMember && !isUserManager) { @if (info().name.includes("Кейс-чемпионат MIR")) {
+          @if (userType() !== undefined) { @if (!isUserMember && !isUserManager) { @if
+          (info().name.includes("Кейс-чемпионат MIR")) {
           <a href="https://case-champ.ru/corporate#rec1176757836">
             <app-button
               [disabled]="!!registerDateExpired"
@@ -97,7 +98,7 @@
               зарегистрироваться
             </app-button>
           </a>
-          } } @else if (isUserMember && !isUserManager && !isUserExpert) {
+          } } @if (isUserMember && !isUserManager && !isUserExpert) {
           <app-button
             size="medium"
             [style.opacity]="registerDateExpired ? '0.5' : '1'"
@@ -108,7 +109,7 @@
             <span>подать проект</span>
             <i appIcon icon="plus" appSquare="10"></i>
           </app-button>
-          } @else if (isUserManager || isUserExpert) { @if (isUserMember) {
+          } @if ((isUserManager || isUserExpert) && isUserMember) {
           <a [routerLink]="'/office/program/' + info().id + '/projects-rating'">
             <app-button
               [appearance]="isProjectsRatingPage ? 'inline' : 'outline'"
@@ -118,7 +119,7 @@
               оценка проектов
             </app-button>
           </a>
-          } }
+          }
 
           <a
             class="info__presentation"
@@ -158,7 +159,19 @@
 
           <div class="info__divider"></div>
 
-          @if (!isUserManager) {
+          @if (isUserManager || isUserExpert) {
+          <a [routerLink]="'/office/program/' + info().id + '/projects'">
+            <app-button
+              [appearance]="isProjectsPage ? 'inline' : 'outline'"
+              size="medium"
+              [disabled]="isUserExpert && !isUserManager"
+              [style.opacity]="isUserExpert && !isUserManager ? '0.5' : '1'"
+              customTypographyClass="text-body-12"
+            >
+              проекты-участники
+            </app-button>
+          </a>
+          } @else {
           <a class="info__more">
             <app-button
               appearance="outline"
@@ -170,19 +183,19 @@
               узнать подробнее
             </app-button>
           </a>
-          } @else {
-          <a [routerLink]="'/office/program/' + info().id + '/projects'">
+          } @if (isUserManager || isUserExpert) {
+          <a [routerLink]="'/office/program/' + info().id + '/members'">
             <app-button
-              [appearance]="isProjectsPage ? 'inline' : 'outline'"
+              [appearance]="isMembersPage ? 'inline' : 'outline'"
               size="medium"
-              [disabled]="isUserMember ? true : isUserManager ? false : false"
-              [style.opacity]="isUserMember ? '0.5' : isUserManager ? '1' : '0.5'"
+              [disabled]="isUserExpert && !isUserManager"
+              [style.opacity]="isUserExpert && !isUserManager ? '0.5' : '1'"
               customTypographyClass="text-body-12"
             >
-              проекты-участники
+              участники
             </app-button>
           </a>
-          } @if (!isUserManager) {
+          } @else {
           <a class="info__contacts">
             <app-button
               appearance="outline"
@@ -194,19 +207,7 @@
               информация с ссылок
             </app-button>
           </a>
-          } @else {
-          <a [routerLink]="'/office/program/' + info().id + '/members'">
-            <app-button
-              [appearance]="isMembersPage ? 'inline' : 'outline'"
-              size="medium"
-              [disabled]="isUserMember || isUserExpert ? true : isUserManager ? false : true"
-              [style.opacity]="isUserMember || isUserExpert ? '0.5' : isUserManager ? '1' : '1'"
-              customTypographyClass="text-body-12"
-            >
-              участники
-            </app-button>
-          </a>
-          }
+          } }
 
           <app-modal [open]="showSubmitProjectModal()" (openChange)="toggleSubmitProjectModal()">
             <div class="cancel">

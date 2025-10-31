@@ -94,7 +94,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   dubplicatedProjectId = 0;
   memberProjects: Project[] = [];
 
-  userType = 0;
+  userType = signal<number | undefined>(undefined);
 
   // Сигналы для работы с модальными окнами с текстом
   assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
@@ -151,7 +151,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
   }
 
   get isUserExpert() {
-    return this.userType !== 1;
+    const type = this.userType();
+    return type !== undefined && type !== 1;
   }
 
   // Методы для управления состоянием ошибок через сервис
@@ -396,16 +397,12 @@ export class DeatilComponent implements OnInit, OnDestroy {
         )
         .subscribe();
 
-      const profileDataSub$ = this.profileDataService
-        .getProfile()
-        .pipe(filter(user => !!user))
-        .subscribe({
-          next: user => {
-            if (user) {
-              this.userType = user.userType;
-            }
-          },
-        });
+      const profileDataSub$ = this.authService.profile.pipe(filter(user => !!user)).subscribe({
+        next: user => {
+          this.userType.set(user!.userType);
+          this.cdRef.detectChanges();
+        },
+      });
 
       const memeberProjects$ = this.projectService.getMy().subscribe({
         next: projects => {
