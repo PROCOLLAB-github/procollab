@@ -4,25 +4,85 @@
   display: flex;
   align-items: center;
   max-width: 300px;
-  padding: 5px 10px;
+  padding: 3px 20px;
   overflow: hidden;
+  color: var(--accent);
   text-overflow: ellipsis;
   white-space: nowrap;
-  border-radius: var(--rounded-md);
+  border-radius: var(--rounded-xxl);
 
-  &--primary {
-    color: var(--dark-grey);
-    background-color: var(--light-gray);
+  &--inline {
+    color: var(--white);
+    border: 0.5px solid transparent;
+
+    &.tag--primary {
+      color: var(--white);
+      background-color: var(--accent);
+    }
+
+    &.tag--secondary {
+      background: var(--dark-grey);
+      border: 0.5px solid var(--grey-for-text);
+    }
+
+    &.tag--accent {
+      color: var(--white);
+      background-color: var(--accent);
+    }
+
+    &.tag--complete {
+      color: var(--white);
+      background-color: var(--green);
+    }
+
+    &.tag--soft {
+      color: var(--gold);
+      background: var(--gold);
+      border: transparent;
+    }
+
+    &:not(:last-child) {
+      margin-right: 5px;
+    }
   }
 
-  &--accent {
-    color: var(--white);
-    background-color: var(--accent);
-  }
+  &--outline {
+    color: var(--accent);
+    background: transparent;
+    border: 0.5px solid var(--accent);
 
-  &--complete {
-    color: var(--white);
-    background-color: var(--green);
+    &.tag--primary {
+      color: var(--accent);
+      border: 0.5px solid var(--accent);
+    }
+
+    &.tag--secondary {
+      color: var(--grey-for-text);
+      background: transparent;
+      border: 0.5px solid var(--dark-grey);
+    }
+
+    &.tag--accent {
+      color: var(--accent);
+      background: transparent;
+      border: 0.5px solid var(--accent);
+    }
+
+    &.tag--complete {
+      color: var(--green);
+      background: transparent;
+      border: 0.5px solid var(--green);
+    }
+
+    &.tag--soft {
+      color: var(--gold);
+      background: transparent;
+      border: 0.5px solid var(--gold);
+    }
+
+    &:not(:last-child) {
+      margin-right: 5px;
+    }
   }
 
   ::ng-deep {

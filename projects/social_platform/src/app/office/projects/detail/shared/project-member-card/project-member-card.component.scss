@@ -40,7 +40,7 @@
   padding: 20px 14px;
   background-color: var(--white);
   border: 1px solid var(--grey-button);
-  border-radius: 15px;
+  border-radius: var(--rounded-xl);
   transform: translateX(-50%);
 
   &__item {

@@ -1,18 +1,28 @@
 <!-- @format -->
-<div
-  class="heading"
-  [class.heading--open]="contentVisible"
-  (click)="contentVisible = !contentVisible"
->
-  <span class="text-body-16">{{ title }}</span>
-  <i appIcon icon="arrow-no-body" appWidth="18" appHeight="9" appViewBox="0 0 18 9"></i>
-</div>
-@if (contentVisible) {
-<div class="content">
-  @for (opt of options; track opt.id) {
-  <div class="content__option" (click)="onSelectOption(opt)">
-    <span class="text-body-14">{{ opt.name }}</span>
+
+<div class="heading" [class.heading--open]="contentVisible()" [class.heading--disabled]="disabled">
+  <div
+    class="heading__top"
+    [class.heading__top--has-open]="hasOpenGroups"
+    [class.heading__top--disabled]="disabled"
+    (click)="toggleContentVisible()"
+  >
+    <span class="text-body-12">{{ title }}</span>
+    @if (!disabled) {
+    <i appIcon icon="arrow-no-body" appWidth="18" appHeight="9" appViewBox="0 0 18 9"></i>
+    }
+  </div>
+  @if (contentVisible()) {
+  <div class="content" [class.content--open]="hasOpenGroups">
+    @for (opt of options; track opt.id) {
+    <div
+      class="content__option"
+      [class.content__option--disabled]="disabled"
+      (click)="onSelectOption(opt)"
+    >
+      <label class="text-body-12">{{ opt.name }}</label>
+    </div>
+    }
   </div>
   }
 </div>
-}

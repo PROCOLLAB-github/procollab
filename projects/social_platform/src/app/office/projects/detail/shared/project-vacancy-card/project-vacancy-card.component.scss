@@ -1,0 +1,127 @@
+.vacancy {
+  padding: 24px;
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-xl);
+
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 8px;
+    border-bottom: 0.5px solid var(--accent);
+
+    p {
+      color: var(--grey-for-text);
+    }
+
+    &--top {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      align-items: flex-end;
+    }
+  }
+
+  &__project {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  &__role {
+    color: var(--accent);
+  }
+
+  &__salary {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    color: var(--grey-for-text);
+  }
+
+  &__description {
+    margin: 8px 0;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+
+    &--vacancies {
+      ::ng-deep {
+        app-button {
+          button {
+            width: 131px;
+          }
+        }
+      }
+    }
+  }
+
+  &__skills {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+    margin-top: 8px;
+  }
+
+  &__skill {
+    display: inline-flex;
+
+    &--more {
+      color: var(--accent);
+    }
+  }
+}
+
+.about {
+  /* stylelint-disable value-no-vendor-prefix */
+  &__text {
+    p {
+      display: -webkit-box;
+      overflow: hidden;
+      color: var(--black);
+      text-overflow: ellipsis;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+      transition: all 0.7s ease-in-out;
+
+      &.expanded {
+        -webkit-line-clamp: unset;
+      }
+    }
+
+    ::ng-deep a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
+
+      &:hover {
+        text-decoration-color: var(--accent);
+      }
+    }
+  }
+
+  /* stylelint-enable value-no-vendor-prefix */
+
+  &__read-full {
+    margin-top: 2px;
+    color: var(--accent);
+    cursor: pointer;
+  }
+}
+
+.read-more {
+  margin-top: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--accent-dark);
+  }
+}

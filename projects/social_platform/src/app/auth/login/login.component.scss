@@ -16,7 +16,6 @@
 
   &__forget {
     display: block;
-    margin-top: 12px;
     text-align: center;
 
     @include typography.body-12;
@@ -26,6 +25,13 @@
 
       @include typography.body-14;
     }
+  }
+
+  &__password {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
   }
 }
 

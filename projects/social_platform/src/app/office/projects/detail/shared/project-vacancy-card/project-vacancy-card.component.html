@@ -1,0 +1,73 @@
+<!-- @format -->
+
+<div class="vacancy">
+  <div class="vacancy__info">
+    @if (type === 'vacancies') {
+    <div class="vacancy__project">
+      <app-avatar
+        [url]="vacancy.project.imageAddress"
+        [size]="40"
+        [hasBorder]="true"
+        borderColor="accent"
+      ></app-avatar>
+      <div class="vacancy__project--info">
+        <p class="text-body-10" style="color: var(--black)">{{ vacancy.project.name }}</p>
+        <p class="text-body-10">
+          {{ vacancy.datetimeCreated | dayjs: "format":"DD.MM.YY • HH:MM" }}
+        </p>
+      </div>
+    </div>
+    } @else {
+    <p class="text-body-12 vacancy__role">{{ vacancy.role }}</p>
+    }
+    <div class="vacancy__info--top">
+      @if (type === 'vacancies') {
+      <p class="text-body-12 vacancy__role">{{ vacancy.role }}</p>
+      }
+      <div class="vacancy__salary">
+        <i appIcon icon="contacts" appWidth="5" appHeight="8"></i>
+        <p class="text-body-12">
+          {{ +vacancy.salary === 0 ? "по договоренности" : vacancy.salary }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="vacancy__skills">
+    @for (skill of vacancy.requiredSkills.slice(0, endSliceOfSkills); track $index) {
+    <app-tag
+      [appearance]="skill.category.name.includes('Soft skills') ? 'outline' : 'inline'"
+      [color]="skill.category.name.includes('Soft skills') ? 'soft' : 'complete'"
+      class="text-body-6 vacancy__skill"
+      >{{ skill.name }}</app-tag
+    >
+    } @if (vacancy.requiredSkills.length > 5) {
+    <p class="vacancy__skill--more">+ {{ vacancy.requiredSkills.length - 5 }}</p>
+    }
+  </div>
+
+  <div class="vacancy__description">
+    @if (vacancy.description) {
+    <div class="text-body-10 about__text">
+      <p #descEl [innerHTML]="vacancy.description | parseLinks | parseBreaks"></p>
+      @if (descriptionExpandable) {
+      <div class="read-more" (click)="onExpandDescription(descEl, 'expanded', readFullDescription)">
+        {{ readFullDescription ? "Скрыть" : "Подробнее" }}
+      </div>
+      }
+    </div>
+    }
+  </div>
+
+  <div class="vacancy__actions" [class.vacancy__actions--vacancies]="type === 'vacancies'">
+    <app-button [routerLink]="'/office/vacancies/' + vacancy.id" appearance="outline" size="medium"
+      >подробнее</app-button
+    >
+    <app-button
+      [routerLink]="'/office/vacancies/' + vacancy.id"
+      [queryParams]="{ sendResponse: true }"
+      size="medium"
+      >откликнуться</app-button
+    >
+  </div>
+</div>

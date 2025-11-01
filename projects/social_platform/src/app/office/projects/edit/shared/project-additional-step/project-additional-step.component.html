@@ -3,8 +3,8 @@
 <div class="project__inner">
   <div [formGroup]="additionalForm" class="project__team">
     <div class="project__additional-wrapper">
-      <label class="text-heading-4 field-label">Дополнительные сведения</label>
       @if (partnerProgramFields.length) { @for (field of partnerProgramFields; track field.id) {
+      <label class="text-heading-4 field-label">дополнительные сведения</label>
       <fieldset>
         @switch (field.fieldType) { @case ("text") { @if (additionalForm.get(field.name); as
         control) {
@@ -16,6 +16,7 @@
           >{{ field.label }}</label
         >
         <app-input
+          size="big"
           [id]="field.name"
           formControlName="{{ field.name }}"
           [error]="control | controlError: 'required'"
@@ -31,6 +32,7 @@
         >
         @if (additionalForm.get(field.name); as control) {
         <app-textarea
+          size="big"
           [id]="field.name"
           formControlName="{{ field.name }}"
           [error]="control | controlError"
@@ -77,6 +79,7 @@
           >{{ field.label }}</label
         >
         <app-select
+          size="big"
           [id]="field.name"
           formControlName="{{ field.name }}"
           [placeholder]="field.helpText || field.label"
@@ -84,12 +87,32 @@
         ></app-select>
         } } @if (additionalForm.get(field.name); as control) { @if (control | controlError:
         "required") {
-        <div class="text-body-14 error">
+        <div class="text-body-10 error">
           {{ errorMessage.VALIDATION_REQUIRED }}
         </div>
         } }
       </fieldset>
-      } }
+      } } @else {
+      <div class="project__additional--no-items">
+        <p class="text-body-12">пока ты не участвуешь ни в одной программе</p>
+        <a routerLink="/office/program/all">
+          <app-button size="medium" appearance="outline" customTypographyClass="text-body-12">
+            <span>программы</span>
+            <app-tooltip
+              [text]="'Перейди по ссылке и ознакомься с тем, где можно сейчас поучаствовать'"
+              [isVisible]="isTooltipVisible"
+              [position]="'right'"
+              [tooltipWidth]="300"
+              customClass="content__hint"
+              (show)="showTooltip()"
+              (hide)="hideTooltip()"
+            ></app-tooltip>
+          </app-button>
+        </a>
+
+        <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
+      </div>
+      }
     </div>
   </div>
 </div>

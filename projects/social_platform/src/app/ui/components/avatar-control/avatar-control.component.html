@@ -2,7 +2,7 @@
 
 <div
   [ngStyle]="{
-    border: (type === 'project' || type === 'profile') ? '3px solid var(--accent)' : 'none',
+    border: (type === 'project' || type === 'profile') ? '0.5px solid var(--accent)' : 'none',
   }"
   class="control"
   [style.width]="size + 'px'"
@@ -19,7 +19,7 @@
   <label [for]="controlId" class="control__label" [class.control__label--error]="error">
     @if (loading) {
     <div class="control__loader">
-      <app-loader></app-loader>
+      <app-loader type="circle" color="accent" size="20px"></app-loader>
     </div>
     } @if (value) {
     <img [src]="value" alt="avatar" class="control__img" />
@@ -33,9 +33,23 @@
     <div class="control__img placeholder"></div>
     }
     <div class="control__overlay">
-      <i appIcon icon="edit-pen" appSquare="32"></i>
+      <i appIcon icon="edit-pen-old" appSquare="18"></i>
     </div>
   </label>
+
+  @if (haveHint && tooltipText) {
+  <div class="control__tooltip-wrapper">
+    <app-tooltip
+      [text]="tooltipText"
+      [isVisible]="isTooltipVisible"
+      [position]="tooltipPosition"
+      [tooltipWidth]="tooltipWidth"
+      customClass="control__tooltip-icon"
+      (show)="showTooltip()"
+      (hide)="hideTooltip()"
+    ></app-tooltip>
+  </div>
+  }
 </div>
 
 <app-modal [open]="showCropperModal" (openChange)="showCropperModal = !showCropperModal">

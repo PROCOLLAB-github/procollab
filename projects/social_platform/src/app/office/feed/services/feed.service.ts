@@ -70,7 +70,7 @@ export class FeedService {
     // Обработка различных форматов параметра type
     if (type.length === 0) {
       // Если фильтры не выбраны, загружаем все типы по умолчанию
-      reqType = ["vacancy", "news", "project"].join(this.FILTER_SPLIT_SYMBOL);
+      reqType = ["vacancy", "news", "projects"].join(this.FILTER_SPLIT_SYMBOL);
     } else if (Array.isArray(type)) {
       // Если передан массив типов, объединяем их через разделитель
       reqType = type.join(this.FILTER_SPLIT_SYMBOL);

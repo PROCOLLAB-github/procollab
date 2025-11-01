@@ -10,6 +10,9 @@ import { ApiPagination } from "@models/api-pagination.model";
 import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectAssign } from "@office/projects/models/project-assign.model";
 import { projectNewAdditionalProgramVields } from "@office/models/partner-program-fields.model";
+import { Goal, GoalPostForm } from "@office/models/goals.model";
+import { Partner, PartnerPostForm } from "@office/models/partner.model";
+import { Resource, ResourcePostForm } from "@office/models/resource.model";
 
 /**
  * Сервис для управления проектами
@@ -35,27 +38,6 @@ export class ProjectService {
    * Используется для кеширования и реактивного обновления данных об этапах
    */
   readonly steps$ = new BehaviorSubject<ProjectStep[]>([]);
-
-  /**
-   * Observable для подписки на изменения этапов проектов
-   * @returns Observable<ProjectStep[]> - поток данных с этапами проектов
-   */
-  steps = this.steps$.asObservable();
-
-  /**
-   * Получает список всех этапов проектов с сервера
-   * Преобразует данные из формата [number, string][] в объекты ProjectStep
-   * Обновляет локальный кеш этапов
-   *
-   * @returns Observable<ProjectStep[]> - массив этапов проектов с полями id и name
-   */
-  getProjectSteps(): Observable<ProjectStep[]> {
-    return this.apiService.get<[number, string][]>(`${this.PROJECTS_URL}/steps/`).pipe(
-      map(steps => steps.map(step => ({ id: step[0], name: step[1] }))),
-      map(steps => plainToInstance(ProjectStep, steps)),
-      tap(steps => this.steps$.next(steps))
-    );
-  }
 
   /**
    * Получает список всех проектов с пагинацией
@@ -88,6 +70,141 @@ export class ProjectService {
    */
   getMy(params?: HttpParams): Observable<ApiPagination<Project>> {
     return this.apiService.get<ApiPagination<Project>>(`${this.AUTH_USERS_URL}/projects/`, params);
+  }
+
+  /**
+   *
+   * @param projectId
+   * @param params
+   * @returns Создать или привязать компанию к проекту.
+   * Если компания с таким ИНН уже существует — создаёт или обновляет связь ProjectCompany.
+   * Если компании нет — создаёт новую и тут же привязывает.
+   */
+  addPartner(projectId: number, params: PartnerPostForm) {
+    return this.apiService.post(`${this.PROJECTS_URL}/${projectId}/companies/`, params);
+  }
+
+  /**
+   * Получить список всех компаний-партнёров (связей ProjectCompany) конкретного проекта.
+   *
+   * @param projectId
+   *
+   * @returns данные компании
+   * @returns вклад
+   * @returns ответственного
+   */
+  getPartners(projectId: number): Observable<Partner[]> {
+    return this.apiService.get(`${this.PROJECTS_URL}/${projectId}/companies/list/`);
+  }
+
+  /**
+   * @param projectId
+   * @param companyId
+   *
+   * @returns Обновить информацию о связи проекта с компанией.
+   * Можно изменить вклад (contribution) и/или ответственное лицо (decision_maker).
+   * Компания остаётся без изменений.
+   */
+  editParter(
+    projectId: number,
+    companyId: number,
+    params: Pick<PartnerPostForm, "contribution" | "decisionMaker">
+  ) {
+    return this.apiService.patch(
+      `${this.PROJECTS_URL}/${projectId}/companies/${companyId}/`,
+      params
+    );
+  }
+
+  /**
+   * @param projectId
+   * @param companyId
+   *
+   * @returns Удалить связь проекта с компанией. Компания в базе остаётся, удаляется только запись ProjectCompany.
+   */
+  deletePartner(projectId: number, companyId: number) {
+    return this.apiService.delete(`${this.PROJECTS_URL}/${projectId}/companies/${companyId}/`);
+  }
+
+  /**
+   *
+   * @param projectId
+   * @param params
+   * @returns Создать новый ресурс в проекте.
+   * Если partner_company указана, проверяется, что она действительно является партнёром данного проекта.
+   */
+  addResource(projectId: number, params: Omit<ResourcePostForm, "projectId">) {
+    return this.apiService.post(`${this.PROJECTS_URL}/${projectId}/resources/`, {
+      project_id: projectId,
+      ...params,
+    });
+  }
+
+  /**
+   *
+   * @param projectId
+   * @returns Получить список всех ресурсов проекта.
+   * Каждый ресурс содержит тип, описание и партнёра (если назначен)
+   */
+  getResources(projectId: number): Observable<Resource[]> {
+    return this.apiService.get(`${this.PROJECTS_URL}/${projectId}/resources/`);
+  }
+
+  /**
+   * @param projectId
+   * @param resourceId
+   *
+   * @returns Полностью обновить данные ресурса.
+   * Используется, если нужно заменить все поля сразу.
+   */
+  editResource(projectId: number, resourceId: number, params: Omit<ResourcePostForm, "projectId">) {
+    return this.apiService.patch(`${this.PROJECTS_URL}/${projectId}/resources/${resourceId}/`, {
+      project_id: projectId,
+      ...params,
+    });
+  }
+
+  /**
+   * @param projectId
+   * @param resourceId
+   *
+   * @returns Удалить ресурс проекта.
+   * Удаляется только сам ресурс, проект и компании не затрагиваются.
+   */
+  deleteResource(projectId: number, resourceId: number) {
+    return this.apiService.delete(`${this.PROJECTS_URL}/${projectId}/resources/${resourceId}/`);
+  }
+
+  /**
+   * Получает список целей проекта
+   *
+   * @returns Observable<Goal> - объект с массивом целей проекта
+   */
+  getGoals(projectId: number): Observable<Goal[]> {
+    return this.apiService.get<Goal[]>(`${this.PROJECTS_URL}/${projectId}/goals/`);
+  }
+
+  /**
+   * Отправляем цель
+   */
+  addGoals(projectId: number, params: GoalPostForm[]) {
+    return this.apiService.post<GoalPostForm[]>(`${this.PROJECTS_URL}/${projectId}/goals/`, params);
+  }
+
+  /**
+   * Редактирование цели
+   */
+  editGoal(projectId: number, goalId: number, params: GoalPostForm) {
+    return this.apiService.put(`${this.PROJECTS_URL}/${projectId}/goals/${goalId}`, params);
+  }
+
+  /**
+   * Удаляем цель
+   */
+  deleteGoals(projectId: number, goalId: number) {
+    return this.apiService.delete<GoalPostForm>(
+      `${this.PROJECTS_URL}/${projectId}/goals/${goalId}`
+    );
   }
 
   /**

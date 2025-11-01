@@ -1,0 +1,645 @@
+<!-- @format -->
+
+<div class="detail">
+  <div class="detail__body">
+    @if (info()) {
+    <div class="info detail__section detail__info">
+      <div class="info__cover" [class.info__cover--program]="listType === 'program'">
+        <img
+          class="info__cover"
+          [class.info__cover--program]="listType === 'program'"
+          [src]="
+            info().coverImageAddress
+              ? info().coverImageAddress
+              : '/assets/images/office/profile/detail/cover.png'
+          "
+          alt="cover"
+        />
+        <div
+          class="info__avatar"
+          (click)="redirectDetailInfo()"
+          [class.info__avatar--program]="listType === 'program'"
+          [style.width]="listType === 'project' || listType === 'profile' ? '110px' : '123px'"
+        >
+          @if (chatService.userOnlineStatusCache | async; as cache) {
+          <app-avatar
+            [url]="listType === 'profile' ? info().avatar : info().imageAddress"
+            [hasBorder]="true"
+            [borderColor]="listType === 'project' ? 'white' : 'dark-grey'"
+            [progress]="info().progress"
+            [onlineBadgeSize]="15"
+            [onlineBadgeBorder]="0"
+            [onlineBadgeOffset]="8"
+            [size]="listType === 'project' || listType === 'profile' ? 110 : 123"
+            [isOnline]="cache[info().id] !== undefined ? cache[info().id] : info().isOnline"
+          ></app-avatar>
+          @if (listType === 'project' || listType === 'profile') {
+          <h1
+            class="info__title text-body-12"
+            [style.width]="listType === 'project' || listType === 'profile' ? '300px' : '100%'"
+            [class.info__title--project]="listType === 'project' || listType === 'profile'"
+          >
+            {{
+              listType === "project"
+                ? info().name
+                : listType === "profile"
+                ? info().firstName + " " + info().lastName
+                : ""
+            }}
+          </h1>
+          } }
+        </div>
+      </div>
+
+      <div class="info__body">
+        <div class="info__actions">
+          <ng-container
+            *ngTemplateOutlet="
+              listType === 'program' ? programTpl : listType === 'profile' ? profileTpl : projectTpl
+            "
+          ></ng-container>
+        </div>
+
+        <ng-template #programTpl>
+          @if (userType() !== undefined) { @if (!isUserMember && !isUserManager) { @if
+          (info().name.includes("Кейс-чемпионат MIR")) {
+          <a href="https://case-champ.ru/corporate#rec1176757836">
+            <app-button
+              [disabled]="!!registerDateExpired"
+              [style.opacity]="registerDateExpired ? '0.5' : '1'"
+              appearance="outline"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
+              зарегистрироваться
+            </app-button>
+          </a>
+          } @else if (info().registrationLink) {
+          <a [href]="info().registrationLink">
+            <app-button
+              [disabled]="!!registerDateExpired"
+              [style.opacity]="registerDateExpired ? '0.5' : '1'"
+              appearance="outline"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
+              зарегистрироваться
+            </app-button>
+          </a>
+          } @else {
+          <a [routerLink]="['/office/program', info().id, 'register']">
+            <app-button
+              [disabled]="!!registerDateExpired"
+              [style.opacity]="registerDateExpired ? '0.5' : '1'"
+              appearance="outline"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
+              зарегистрироваться
+            </app-button>
+          </a>
+          } } @if (isUserMember && !isUserManager && !isUserExpert) {
+          <app-button
+            size="medium"
+            [style.opacity]="registerDateExpired ? '0.5' : '1'"
+            [disabled]="!!registerDateExpired"
+            (click)="toggleSubmitProjectModal()"
+            customTypographyClass="text-body-12 bar__add-project"
+          >
+            <span>подать проект</span>
+            <i appIcon icon="plus" appSquare="10"></i>
+          </app-button>
+          } @if ((isUserManager || isUserExpert) && isUserMember) {
+          <a [routerLink]="'/office/program/' + info().id + '/projects-rating'">
+            <app-button
+              [appearance]="isProjectsRatingPage ? 'inline' : 'outline'"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
+              оценка проектов
+            </app-button>
+          </a>
+          }
+
+          <a
+            class="info__presentation"
+            [href]="info().presentationAddress"
+            download=""
+            target="_blank"
+          >
+            <app-button
+              [disabled]="isUserManager"
+              [style.opacity]="isUserManager ? '0.3' : '1'"
+              appearance="outline"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
+              <span>{{
+                info().name.includes("Технолидеры Будущего")
+                  ? "Каталог лучших стартапов 2022/23"
+                  : isUserManager
+                  ? "аналитика"
+                  : "положение"
+              }}</span>
+              @if (isUserManager) {
+              <app-tooltip
+                [text]="'Скоро здесь будет аналитика по включенности участников и проектов'"
+                [isVisible]="isTooltipVisible"
+                [position]="'right'"
+                [tooltipWidth]="180"
+                customClass="content__hint"
+                (show)="showTooltip()"
+                (hide)="hideTooltip()"
+              ></app-tooltip>
+              } @else {
+              <i appIcon class="info__presentation-icon" icon="arrow-down" appSquare="6"></i>
+              }
+            </app-button>
+          </a>
+
+          <div class="info__divider"></div>
+
+          @if (isUserManager || isUserExpert) {
+          <a [routerLink]="'/office/program/' + info().id + '/projects'">
+            <app-button
+              [appearance]="isProjectsPage ? 'inline' : 'outline'"
+              size="medium"
+              [disabled]="isUserExpert && !isUserManager"
+              [style.opacity]="isUserExpert && !isUserManager ? '0.5' : '1'"
+              customTypographyClass="text-body-12"
+            >
+              проекты-участники
+            </app-button>
+          </a>
+          } @else {
+          <a class="info__more">
+            <app-button
+              appearance="outline"
+              [disabled]="true"
+              style="opacity: 0.5"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
+              узнать подробнее
+            </app-button>
+          </a>
+          } @if (isUserManager || isUserExpert) {
+          <a [routerLink]="'/office/program/' + info().id + '/members'">
+            <app-button
+              [appearance]="isMembersPage ? 'inline' : 'outline'"
+              size="medium"
+              [disabled]="isUserExpert && !isUserManager"
+              [style.opacity]="isUserExpert && !isUserManager ? '0.5' : '1'"
+              customTypographyClass="text-body-12"
+            >
+              участники
+            </app-button>
+          </a>
+          } @else {
+          <a class="info__contacts">
+            <app-button
+              appearance="outline"
+              [disabled]="true"
+              style="opacity: 0.5"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
+              информация с ссылок
+            </app-button>
+          </a>
+          } }
+
+          <app-modal [open]="showSubmitProjectModal()" (openChange)="toggleSubmitProjectModal()">
+            <div class="cancel">
+              <div class="cancel__top">
+                <p class="cancel__title text-body-14">
+                  {{
+                    memberProjects.length > 0 ? "выберите проект для подачи" : "создай свой проект!"
+                  }}
+                </p>
+                <p class="cancel__text text-body-10">
+                  {{
+                    memberProjects.length > 0
+                      ? "после выбора проекта будет создан дубликат данного проекта для заполнения под конкретный конкурс"
+                      : "создай проект и не забудь вернуться в программу для его подачи"
+                  }}
+                </p>
+
+                <div class="project">
+                  <ul
+                    class="project__list"
+                    [class.project__list--scrollable]="memberProjects.length > 3"
+                  >
+                    @for (project of memberProjects; track project.id) {
+                    <li class="project__item">
+                      <div class="project__item--info">
+                        <app-avatar [url]="project.imageAddress" [size]="40"></app-avatar>
+                        <p class="text-body-12">
+                          {{ project.name }}
+                        </p>
+                      </div>
+                      <app-input
+                        type="radio"
+                        [appValue]="project.id.toLocaleString()"
+                        [checked]="selectedProjectId === project.id"
+                        (change)="onProjectRadioChange($event)"
+                      ></app-input>
+                    </li>
+                    }
+                  </ul>
+                </div>
+              </div>
+
+              <div class="cancel__buttons" style="margin: 0; flex-direction: column">
+                @if (memberProjects.length > 0) {
+                <app-button
+                  size="medium"
+                  class="cancel__button"
+                  customTypographyClass="text-body-12"
+                  [disabled]="!selectedProjectId"
+                  [style.opacity]="!selectedProjectId ? '0.5' : '1'"
+                  (click)="addProjectModal()"
+                >
+                  выбрать проект
+                </app-button>
+
+                <p class="text-body-12">или</p>
+                }
+
+                <app-button
+                  style="margin: 0"
+                  size="medium"
+                  class="cancel__button"
+                  (click)="addNewProject()"
+                  customTypographyClass="text-body-12"
+                  >создать новый проект</app-button
+                >
+              </div>
+            </div>
+          </app-modal>
+
+          <app-modal
+            [open]="isAssignProjectToProgramModalOpen()"
+            (openChange)="isAssignProjectToProgramModalOpen.set(!isAssignProjectToProgramModalOpen)"
+          >
+            <div class="cancel" style="padding: 24px">
+              <div class="cancel__top">
+                <p class="cancel__title text-body-14">поздравляем!</p>
+              </div>
+
+              <p class="text-body-10 cancel__text">
+                мы создали дубликат проекта, который вы привязали к выбранной программе
+                <span
+                  ><strong>{{ assignProjectToProgramModalMessage()?.partnerProgram }}</strong></span
+                >
+                , теперь его можно отредактировать!
+              </p>
+
+              <app-button
+                size="medium"
+                class="cancel__button"
+                customTypographyClass="text-body-12"
+                (click)="closeAssignProjectToProgramModal()"
+              >
+                вперед
+              </app-button>
+            </div>
+          </app-modal>
+        </ng-template>
+
+        <ng-template #projectTpl>
+          @if (isInProject) {
+          <app-button
+            [routerLink]="'/office/projects/' + info().id + '/work-section'"
+            appearance="outline"
+            size="medium"
+            customTypographyClass="text-body-12"
+          >
+            рабочая зона
+          </app-button>
+          } @else {
+          <a class="info__presentation" [href]="info().presentationAddress" target="_blank">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+              <span>презентация</span>
+              <i appIcon icon="arrow-down" appSquare="6"></i>
+            </app-button>
+          </a>
+          } @if (!isInProject) {
+          <app-button
+            [disabled]="true"
+            style="opacity: 0.5"
+            appearance="outline"
+            size="medium"
+            customTypographyClass="text-body-12"
+          >
+            написать
+          </app-button>
+          } @else {
+          <app-button
+            [appearance]="isProjectChatPage ? 'inline' : 'outline'"
+            [routerLink]="'/office/projects/' + info().id + '/chat'"
+            appearance="outline"
+            size="medium"
+            customTypographyClass="text-body-12"
+          >
+            чат проекта
+          </app-button>
+          }
+
+          <div class="info__divider"></div>
+
+          <app-button
+            [routerLink]="'/office/projects/' + info().id + '/team'"
+            [appearance]="isTeamPage ? 'inline' : 'outline'"
+            size="medium"
+            customTypographyClass="text-body-12"
+          >
+            команда
+          </app-button>
+
+          @if (isInProject) { @if (profile) { @if (profile.id === info().leader) {
+          <a
+            class="info__edit"
+            [routerLink]="
+              isEditDisable
+                ? ['/office/projects', info().id]
+                : ['/office/projects', info().id, 'edit']
+            "
+            [queryParams]="isEditDisable ? {} : { editingStep: 'main' }"
+          >
+            <app-button
+              appearance="outline"
+              size="medium"
+              customTypographyClass="text-body-12"
+              (click)="onUnableEditingProject()"
+              [ngStyle]="{ opacity: isEditDisable ? '0.5' : '1' }"
+              [color]="isEditDisable ? 'grey' : 'primary'"
+            >
+              редактировать
+            </app-button>
+          </a>
+          }@else {
+          <app-button
+            appearance="outline"
+            color="red"
+            size="medium"
+            customTypographyClass="text-body-12"
+            (click)="this.isLeaveProjectModalOpen = true"
+          >
+            выйти из проекта
+          </app-button>
+          } }
+
+          <app-modal [(open)]="isEditDisableModal">
+            <div
+              class="unsubscribe-modal"
+              style="text-align: center; padding: 20px; position: relative"
+            >
+              <i
+                style="right: 0px; top: 0px"
+                class="support__cross"
+                appIcon
+                icon="cross"
+                appSquare="12"
+                (click)="isEditDisableModal = false"
+              ></i>
+              <img
+                src="assets/images/projects/shared/edit_disable.svg"
+                alt="idea"
+                sizes="120"
+                class="unsubscribe-modal__img"
+              />
+              <h4 class="support__title text-body-12">редактирование недоступно</h4>
+
+              <p class="support__text text-body-10">
+                Этот проект уже отправлен на конкурс. <br />Изменения будут доступны только после
+                окончания конкурса.
+              </p>
+
+              <app-button
+                appearance="outline"
+                size="medium"
+                customTypographyClass="text-body-12"
+                (click)="isEditDisableModal = false"
+                >хорошо</app-button
+              >
+            </div>
+          </app-modal>
+
+          <app-modal [(open)]="isLeaveProjectModalOpen">
+            <div class="cancel" style="padding: 14px 24px">
+              <div class="cancel__top">
+                <h3 class="text-body-14 cancel__title" style="flex-wrap: wrap; width: 90%">
+                  вы уверены, что хотите покинуть команду
+                </h3>
+                <i appIcon icon="sad-smile" appSquare="50" class="cancel__icon"></i>
+              </div>
+
+              <div class="cancel__buttons">
+                <app-button
+                  color="red"
+                  size="medium"
+                  customTypographyClass="unsubscribe-modal-btn__typography"
+                  (click)="onLeave()"
+                >
+                  покинуть команду
+                </app-button>
+
+                <app-button
+                  size="medium"
+                  customTypographyClass="unsubscribe-modal-btn__typography"
+                  (click)="onCloseLeaveProjectModal()"
+                >
+                  остаться
+                </app-button>
+              </div>
+            </div>
+          </app-modal>
+          } @else {
+          <app-button
+            [routerLink]="'/office/projects/' + info().id + '/vacancies'"
+            [appearance]="isVacanciesPage ? 'inline' : 'outline'"
+            size="medium"
+            customTypographyClass="text-body-12"
+          >
+            вакансии
+          </app-button>
+          }
+        </ng-template>
+
+        <ng-template #profileTpl>
+          @if (profile) { @if (+profile.id === +info().id) {
+          <app-button
+            style="opacity: 0.5"
+            size="medium"
+            appearance="outline"
+            [disabled]="true"
+            customTypographyClass="text-body-12"
+            >продвигать</app-button
+          >
+          } @else {
+          <app-button
+            size="medium"
+            appearance="outline"
+            customTypographyClass="text-body-12"
+            (click)="showApproveSkillModal = true"
+            >подтвердить навыки</app-button
+          >
+          } @if (+profile.id === +info().id) {
+          <app-button
+            style="opacity: 0.5"
+            size="medium"
+            appearance="outline"
+            [disabled]="true"
+            customTypographyClass="text-body-12"
+            >мои проекты</app-button
+          >
+          } @else {
+          <app-button
+            size="medium"
+            appearance="outline"
+            customTypographyClass="text-body-12"
+            (click)="onCopyLink(info().id)"
+            >поделиться профилем</app-button
+          >
+          }
+
+          <div class="info__divider"></div>
+
+          @if (+profile.id === +info().id) {
+          <app-button
+            (click)="sendCVEmail()"
+            size="medium"
+            appearance="outline"
+            customTypographyClass="text-body-12"
+            >cкачать CV</app-button
+          >
+          } @else {
+          <app-button
+            style="opacity: 0.5"
+            size="medium"
+            appearance="outline"
+            [disabled]="true"
+            customTypographyClass="text-body-12"
+            >пригласить</app-button
+          >
+          } @if (+profile.id !== +info().id) {
+          <a
+            class="info__send-message"
+            [routerLink]="['/office/chats', profile.id + '_' + info().id]"
+          >
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
+              >написать</app-button
+            >
+          </a>
+          } @else {
+          <a
+            class="profile__edit"
+            routerLink="/office/profile/edit"
+            [queryParams]="{ editingStep: 'main' }"
+          >
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+              редактировать
+            </app-button>
+          </a>
+          }
+
+          <app-modal
+            [open]="showApproveSkillModal"
+            (openChange)="showApproveSkillModal = !showApproveSkillModal"
+          >
+            @if (info().skills.length) {
+            <ul class="approve">
+              <div class="lists__section">
+                <h3 class="text-body-12 lists__title">подтвердить владение навыком</h3>
+                <i
+                  appIcon
+                  icon="squiz"
+                  class="lists__icon"
+                  style="margin-top: 1px"
+                  appSquare="12"
+                ></i>
+              </div>
+
+              @for (skill of info().skills; track skill.id) {
+              <li (click)="onOpenSkill(skill.id)">
+                <app-approve-skill [skill]="skill"></app-approve-skill>
+              </li>
+              }
+            </ul>
+            }
+          </app-modal>
+          } @if (profile) { @if (profile.id === info().id) {
+          <app-modal [open]="isProfileFill" (openChange)="isProfileFill = !isProfileFill">
+            <div class="cancel">
+              <img
+                alt="profile unfill image"
+                class="cancel__image"
+                src="/assets/images/profile/profile-unfill.png"
+              />
+              <div class="cancel__top">
+                <i
+                  (click)="isProfileFill = false"
+                  appIcon
+                  appSquare="12"
+                  icon="cross"
+                  class="cancel__cross"
+                ></i>
+                <p class="cancel__title text-body-14">
+                  Заполни все поля, чтобы использовать Procollab на максимум
+                </p>
+              </div>
+              <p class="text-body-10 cancel__text">заполни все поля, чтобы иметь сильное резюме</p>
+
+              <a routerLink="/office/profile/edit" [queryParams]="{ editingStep: 'main' }">
+                <app-button size="big" customTypographyClass="text-body-12"
+                  >продолжить заполнение</app-button
+                >
+              </a>
+            </div>
+          </app-modal>
+          } }
+
+          <app-modal [open]="isDelayModalOpen" (openChange)="isDelayModalOpen = !isDelayModalOpen">
+            <div class="cancel">
+              <div class="cancel__top">
+                <i
+                  (click)="isDelayModalOpen = false"
+                  appIcon
+                  icon="cross"
+                  class="cancel__cross"
+                ></i>
+                <p class="cancel__title text-bold-body-16">Повторите загрузку позже</p>
+              </div>
+              <p class="text-body-14 cancel__text">
+                Скачивание будет доступно через {{ errorMessageModal() }} секунд.
+              </p>
+            </div>
+          </app-modal>
+
+          <app-modal [open]="isSended" (openChange)="isSended = !isSended">
+            <div class="cancel">
+              <div class="cancel__top">
+                <i
+                  (click)="isSended = false"
+                  appIcon
+                  appSquare="10"
+                  icon="cross"
+                  class="cancel__cross"
+                ></i>
+                <p class="cancel__title text-body-14">твое CV уже ждет тебя на почте :)</p>
+              </div>
+              <p class="text-body-10 cancel__text">
+                кстати, оно часто залетает в папку «Спам» — обязательно проверь и там тоже.<br />
+                Технические сложности? Мы всегда на связи в Telegram — {{ "@procollab_support" }}
+              </p>
+            </div>
+          </app-modal>
+        </ng-template>
+
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+    }
+  </div>
+</div>

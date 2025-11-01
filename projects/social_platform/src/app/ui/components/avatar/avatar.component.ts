@@ -37,6 +37,8 @@ export class AvatarComponent implements OnInit {
   /** Отображать рамку */
   @Input() hasBorder = false;
 
+  @Input() borderColor: "dark-grey" | "white" | "black" | "accent" = "white";
+
   /** Показывать индикатор онлайн статуса */
   @Input() isOnline = false;
 

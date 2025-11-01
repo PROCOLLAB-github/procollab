@@ -70,9 +70,10 @@ button {
 label.field-label {
   display: block;
   margin-bottom: 6px;
+  margin-left: 12px;
   color: var(--black);
 
-  @include body-14;
+  @include body-12;
 }
 
 .error {

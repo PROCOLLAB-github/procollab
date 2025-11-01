@@ -1,0 +1,70 @@
+<!-- @format -->
+
+<div
+  class="page"
+  #listRoots
+  [style.grid-template-columns]="listType === 'members' ? '10fr' : '8fr 2fr'"
+>
+  <div class="page__outlet">
+    <div class="page__search">
+      <form [formGroup]="searchForm">
+        <app-search formControlName="search"></app-search>
+      </form>
+    </div>
+
+    <div class="filter-toggle page__filter-toggle" (click)="isFilterOpen = !isFilterOpen">
+      <span>Фильтр</span>
+      <i appIcon icon="filter" appSquare="34"></i>
+    </div>
+
+    <ul class="page__list" [class.page__list--rating]="listType === 'rating'">
+      @for (listItem of searchedList; track listItem.id) {
+      <li class="page__item">
+        @if (listType === 'projects' || listType === 'members') {
+        <a [routerLink]="[routerLink]">
+          <app-info-card
+            [type]="listType"
+            [profileId]="listItem.id"
+            [isSubscribed]="profileProjSubsIds?.includes(listItem.id)"
+            [info]="listItem"
+          ></app-info-card>
+        </a>
+        } @else {
+        <app-rating-card [project]="listItem"></app-rating-card>
+        }
+      </li>
+      }
+    </ul>
+  </div>
+
+  @if (listType !== 'members') {
+  <div class="page__create">
+    <div class="page__left">
+      @if (listType === 'projects') {
+      <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
+        <div class="filter__overlay" (click)="isFilterOpen = false"></div>
+        <div class="filter__body" #filterBody>
+          <div
+            class="filter__bar"
+            (touchstart)="onSwipeStart($event)"
+            (touchmove)="onSwipeMove($event)"
+            (touchend)="onSwipeEnd($event)"
+          ></div>
+          <app-projects-filter (closeFilter)="closeFilter()"></app-projects-filter>
+        </div>
+      </div>
+      } @else {
+      <form class="filter__form" [formGroup]="filterForm">
+        <p class="text-body-12">фильтр</p>
+        <div class="filter__controls">
+          <label class="filter__tags" (click)="setValue($event)">
+            <app-checkbox [checked]="this.filterForm.get('filterTag')?.value"></app-checkbox>
+            <p class="text-body-12">проекты без оценки</p>
+          </label>
+        </div>
+      </form>
+      }
+    </div>
+  </div>
+  }
+</div>

@@ -8,13 +8,12 @@ import {
   OnInit,
   signal,
 } from "@angular/core";
-import { FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { Form, FormArray, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ErrorMessage } from "@error/models/error-message";
 import { Invite } from "@models/invite.model";
 import { Project } from "@models/project.model";
 import { Skill } from "@office/models/skill";
-import { ProgramTag } from "@office/program/models/program.model";
 import { ProgramService } from "@office/program/services/program.service";
 import { SkillsService } from "@office/services/skills.service";
 import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";
@@ -27,20 +26,19 @@ import { ValidationService } from "projects/core";
 import {
   Observable,
   Subscription,
-  concatMap,
   distinctUntilChanged,
-  finalize,
+  forkJoin,
   map,
+  of,
+  switchMap,
   tap,
 } from "rxjs";
 import { CommonModule, AsyncPipe } from "@angular/common";
-import { HttpErrorResponse } from "@angular/common/http";
-import { ProjectAssign } from "../models/project-assign.model";
 import { ProjectNavigationComponent } from "./shared/project-navigation/project-navigation.component";
 import { EditStep, ProjectStepService } from "./services/project-step.service";
 import { ProjectMainStepComponent } from "./shared/project-main-step/project-main-step.component";
 import { ProjectFormService } from "./services/project-form.service";
-import { ProjectContactsStepComponent } from "./shared/project-contacts-step/project-contacts-step.component";
+import { ProjectPartnerResourcesStepComponent } from "./shared/project-partner-resources-step/project-partner-resources-step.component";
 import { ProjectAchievementStepComponent } from "./shared/project-achievement-step/project-achievement-step.component";
 import { ProjectVacancyStepComponent } from "./shared/project-vacancy-step/project-vacancy-step.component";
 import { ProjectVacancyService } from "./services/project-vacancy.service";
@@ -49,6 +47,15 @@ import { ProjectTeamService } from "./services/project-team.service";
 import { ProjectAdditionalStepComponent } from "./shared/project-additional-step/project-additional-step.component";
 import { ProjectAdditionalService } from "./services/project-additional.service";
 import { ProjectAchievementsService } from "./services/project-achievements.service";
+import { Goal, GoalPostForm } from "@office/models/goals.model";
+import { ProjectGoalService } from "./services/project-goals.service";
+import { SnackbarService } from "@ui/services/snackbar.service";
+import { Resource, ResourcePostForm } from "@office/models/resource.model";
+import { Partner } from "@office/models/partner.model";
+import { ProjectPartnerService } from "./services/project-partner.service";
+import { ProjectResourceService } from "./services/project-resources.service";
+import { HttpErrorResponse } from "@angular/common/http";
+import { ProjectAssign } from "../models/project-assign.model";
 
 /**
  * Компонент редактирования проекта
@@ -59,24 +66,8 @@ import { ProjectAchievementsService } from "./services/project-achievements.serv
  * - Загрузка файлов (презентация, обложка, аватар)
  * - Создание и редактирование вакансий с навыками
  * - Приглашение участников в команду
- * - Управление достижениями и ссылками проекта
+ * - Управление достижениями, ссылками и целями проекта
  * - Сохранение как черновик или публикация
- *
- * Принимает:
- * - ID проекта из URL параметров
- * - Данные проекта и приглашений через resolver
- * - Query параметр editingStep для определения активного шага
- *
- * Возвращает:
- * - Интерфейс редактирования с навигацией по шагам
- * - Формы для ввода данных проекта
- * - Модальные окна для управления навыками и приглашениями
- *
- * Особенности:
- * - Реактивные формы с валидацией
- * - Динамическое управление массивами (достижения, ссылки)
- * - Интеграция с внешними сервисами (навыки, программы)
- * - Поддержка автокомплита для навыков
  */
 @Component({
   selector: "app-edit",
@@ -94,11 +85,11 @@ import { ProjectAchievementsService } from "./services/project-achievements.serv
     SkillsGroupComponent,
     ProjectNavigationComponent,
     ProjectMainStepComponent,
-    ProjectContactsStepComponent,
     ProjectAchievementStepComponent,
     ProjectVacancyStepComponent,
     ProjectTeamStepComponent,
     ProjectAdditionalStepComponent,
+    ProjectPartnerResourcesStepComponent,
   ],
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -110,14 +101,18 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly navService: NavService,
     private readonly validationService: ValidationService,
     private readonly cdRef: ChangeDetectorRef,
-    private readonly programService: ProgramService,
     private readonly projectStepService: ProjectStepService,
     private readonly projectFormService: ProjectFormService,
     private readonly projectVacancyService: ProjectVacancyService,
     private readonly projectTeamService: ProjectTeamService,
     private readonly projectAchievementsService: ProjectAchievementsService,
+    private readonly projectGoalsService: ProjectGoalService,
+    private readonly projectPartnerService: ProjectPartnerService,
+    private readonly projectResourceService: ProjectResourceService,
+    private readonly snackBarService: SnackbarService,
     private readonly skillsService: SkillsService,
-    private readonly projectAdditionalService: ProjectAdditionalService
+    private readonly projectAdditionalService: ProjectAdditionalService,
+    private readonly projectGoalService: ProjectGoalService
   ) {}
 
   // Получаем форму проекта из сервиса
@@ -130,7 +125,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.projectVacancyService.getVacancyForm();
   }
 
-  // Получаем форму вакансии из сервиса
+  // Получаем форму дополнительных полей из сервиса
   get additionalForm(): FormGroup {
     return this.projectAdditionalService.getAdditionalForm();
   }
@@ -140,7 +135,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.projectFormService.achievements;
   }
 
-  // Id редатируемой части проекта
+  // Id редактируемой части проекта
   get editIndex() {
     return this.projectFormService.editIndex;
   }
@@ -172,6 +167,22 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectAdditionalService.clearAssignProjectToProgramError();
   }
 
+  // Сигналы для работы с модальными окнами с текстом
+  assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
+
+  // Геттеры для работы с целями
+  get goals(): FormArray {
+    return this.projectGoalsService.goals;
+  }
+
+  get partners(): FormArray {
+    return this.projectPartnerService.partners;
+  }
+
+  get resources(): FormArray {
+    return this.projectResourceService.resources;
+  }
+
   ngOnInit(): void {
     this.navService.setNavTitle("Создание проекта");
 
@@ -190,11 +201,13 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.profile$?.unsubscribe();
     this.subscriptions.forEach($ => $?.unsubscribe());
+
+    // Сброс состояния ProjectGoalService при уничтожении компонента
+    this.projectGoalService.reset();
   }
 
   // Опции для программных тегов
   programTagsOptions: SelectComponent["options"] = [];
-  programTags: ProgramTag[] = [];
 
   // Id Лидера проекта
   leaderId = 0;
@@ -208,6 +221,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   // Текущий шаг редактирования
   get editingStep(): EditStep {
     return this.projectStepService.getCurrentStep()();
+  }
+
+  get hasOpenSkillsGroups(): boolean {
+    return this.openGroupIds.size > 0;
   }
 
   // Состояние компонента
@@ -227,9 +244,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   onEditClicked = signal(false);
   warningModalSeen = false;
 
-  // Сигналы для работы с модальными окнами с текстом
-  assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
-
   // Observables для данных
   industries$ = this.industryService.industries.pipe(
     map(industries =>
@@ -237,13 +251,9 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     )
   );
 
-  projectSteps$: Observable<SelectComponent["options"]> = this.projectService.steps.pipe(
-    map(steps => steps.map(step => ({ id: step.id, label: step.name, value: step.id })))
-  );
-
   subscriptions: (Subscription | undefined)[] = [];
 
-  profileId: number = this.route.snapshot.params["projectId"];
+  profileId: number = +this.route.snapshot.params["projectId"];
 
   // Сигналы для управления состоянием
   inlineSkills = signal<Skill[]>([]);
@@ -255,6 +265,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   projSubmitInitiated = false;
   projFormIsSubmittingAsPublished = false;
   projFormIsSubmittingAsDraft = false;
+  openGroupIds = new Set<number>();
 
   /**
    * Навигация между шагами редактирования
@@ -309,6 +320,17 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     // Очистка основной формы
     this.projectFormService.clearAllValidationErrors();
     this.projectAchievementsService.clearAllAchievementsErrors(this.achievements);
+
+    // Очистка ошибок целей теперь входит в clearAllValidationErrors() ProjectFormService
+  }
+
+  onGroupToggled(isOpen: boolean, skillsGroupId: number): void {
+    this.openGroupIds.clear();
+    if (isOpen) {
+      this.openGroupIds.add(skillsGroupId);
+    }
+
+    this.cdRef.markForCheck();
   }
 
   /**
@@ -396,15 +418,22 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.setProjFormIsSubmitting(true);
-    this.projectService.updateProject(projectId, payload).subscribe({
-      next: () => {
-        this.setProjFormIsSubmitting(false);
-        this.router.navigateByUrl(`/office/projects/my`);
-      },
-      error: () => {
-        this.setProjFormIsSubmitting(false);
-      },
-    });
+    this.projectService
+      .updateProject(projectId, payload)
+      .pipe(
+        switchMap(() => this.saveOrEditGoals(projectId)),
+        switchMap(() => this.savePartners(projectId)),
+        switchMap(() => this.saveOrEditResources(projectId))
+      )
+      .subscribe({
+        next: () => {
+          this.completeSubmitedProjectForm(projectId);
+        },
+        error: () => {
+          this.setProjFormIsSubmitting(false);
+          this.snackBarService.error("ошибка при сохранении данных");
+        },
+      });
   }
 
   // Методы для работы с модальными окнами
@@ -425,6 +454,62 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isAssignProjectToProgramModalOpen.set(false);
   }
 
+  private saveOrEditGoals(projectId: number) {
+    const goals = this.goals.value as Goal[];
+
+    const newGoals = goals.filter(g => !g.id);
+    const existingGoals = goals.filter(g => g.id);
+
+    const requests: Observable<any>[] = [];
+
+    if (newGoals.length > 0) {
+      requests.push(this.projectGoalService.saveGoals(projectId, newGoals));
+    }
+
+    if (existingGoals.length > 0) {
+      requests.push(this.projectGoalService.editGoals(projectId, existingGoals));
+    }
+
+    if (requests.length === 0) {
+      return of(null);
+    }
+
+    return forkJoin(requests).pipe(
+      tap(() => {
+        this.projectGoalService.syncGoalItems(this.projectGoalService.goals);
+      })
+    );
+  }
+
+  private savePartners(projectId: number) {
+    const partners = this.partners.value;
+
+    if (!partners.length) {
+      return of([]);
+    }
+
+    return this.projectPartnerService.savePartners(projectId);
+  }
+
+  private saveOrEditResources(projectId: number) {
+    const resources = this.resources.value;
+    const hasExistingResources = resources.some((r: Resource) => r.id != null);
+
+    if (!resources.length) {
+      return of([]);
+    }
+
+    return hasExistingResources
+      ? this.projectResourceService.editResources(projectId)
+      : this.projectResourceService.saveResources(projectId);
+  }
+
+  private completeSubmitedProjectForm(projectId: number) {
+    this.snackBarService.success("данные успешно сохранены");
+    this.setProjFormIsSubmitting(false);
+    this.router.navigateByUrl(`/office/projects/${projectId}`);
+  }
+
   /**
    * Валидация дополнительных полей для публикации
    * Делегирует валидацию сервису
@@ -433,10 +518,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private validateAdditionalFields(): boolean {
     const partnerProgramFields = this.projectAdditionalService.getPartnerProgramFields();
 
+    // Если нет дополнительных полей - пропускаем валидацию
     if (!partnerProgramFields?.length) {
       return false;
     }
 
+    // Проверяем только обязательные поля
     const hasInvalid = this.projectAdditionalService.validateRequiredFields();
 
     if (hasInvalid) {
@@ -444,7 +531,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       return true;
     }
 
-    // Подготавливаем поля для отправки
+    // Подготавливаем поля для отправки (убираем валидаторы с заполненных полей)
     this.projectAdditionalService.prepareFieldsForSubmit();
     return false;
   }
@@ -553,43 +640,38 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private loadProgramTagsAndProject(): void {
-    this.programService
-      .programTags()
-      .pipe(
-        tap(tags => {
-          this.programTags = tags;
-        }),
-        map(tags => [
-          { label: "Без тега", value: 0, id: 0 },
-          ...tags.map(t => ({ label: t.name, value: t.id, id: t.id })),
-        ]),
-        tap(tags => {
-          this.programTagsOptions = tags;
-        }),
-        concatMap(() => this.route.data),
-        map(d => d["data"])
-      )
-      .subscribe(([project, invites]: [Project, Invite[]]) => {
-        // Используем сервис для инициализации данных проекта
-        this.projectFormService.initializeProjectData(project);
-        this.projectTeamService.setInvites(invites);
-        this.projectTeamService.setCollaborators(project.collaborators);
+    this.route.data
+      .pipe(map(d => d["data"]))
+      .subscribe(
+        ([project, goals, partners, resources, invites]: [
+          Project,
+          Goal[],
+          Partner[],
+          Resource[],
+          Invite[]
+        ]) => {
+          // Используем сервис для инициализации данных проекта
+          this.projectFormService.initializeProjectData(project);
+          this.projectGoalService.initializeGoalsFromProject(goals);
+          this.projectPartnerService.initializePartnerFromProject(partners);
+          this.projectResourceService.initializeResourcesFromProject(resources);
+          this.projectTeamService.setInvites(invites);
+          this.projectTeamService.setCollaborators(project.collaborators);
 
-        // Инициализируем дополнительные поля через сервис
-        if (project.partnerProgram) {
-          this.isCompetitive = project.partnerProgram.canSubmit;
-          this.isProjectBoundToProgram = !!project.partnerProgram.programId;
+          if (project.partnerProgram) {
+            this.isCompetitive = project.partnerProgram.canSubmit;
 
-          this.projectAdditionalService.initializeAdditionalForm(
-            project.partnerProgram?.programFields,
-            project.partnerProgram?.programFieldValues
-          );
+            this.projectAdditionalService.initializeAdditionalForm(
+              project.partnerProgram?.programFields,
+              project.partnerProgram?.programFieldValues
+            );
+          }
+
+          this.projectVacancyService.setVacancies(project.vacancies);
+          this.projectTeamService.setInvites(invites);
+
+          this.cdRef.detectChanges();
         }
-
-        this.projectVacancyService.setVacancies(project.vacancies);
-        this.projectTeamService.setInvites(invites);
-
-        this.cdRef.detectChanges();
-      });
+      );
   }
 }

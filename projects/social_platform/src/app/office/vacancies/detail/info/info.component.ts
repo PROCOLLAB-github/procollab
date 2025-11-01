@@ -12,10 +12,12 @@ import {
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { AuthService } from "@auth/services";
 import {
+  ControlErrorPipe,
   ParseBreaksPipe,
   ParseLinksPipe,
   SubscriptionPlan,
   SubscriptionPlansService,
+  ValidationService,
 } from "@corelib";
 import { Project } from "@office/models/project.model";
 import { Vacancy } from "@office/models/vacancy.model";
@@ -28,6 +30,13 @@ import { expandElement } from "@utils/expand-element";
 import { SalaryTransformPipe } from "projects/core/src/lib/pipes/salary-transform.pipe";
 import { map, Subscription } from "rxjs";
 import { CapitalizePipe } from "projects/core/src/lib/pipes/capitalize.pipe";
+import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { UserLinksPipe } from "@core/pipes/user-links.pipe";
+import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { ErrorMessage } from "@error/models/error-message";
+import { VacancyService } from "@office/services/vacancy.service";
+import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 
 /**
  * Компонент отображения детальной информации о вакансии
@@ -72,47 +81,74 @@ import { CapitalizePipe } from "projects/core/src/lib/pipes/capitalize.pipe";
     ButtonComponent,
     ModalComponent,
     RouterModule,
+    ReactiveFormsModule,
     ParseBreaksPipe,
     ParseLinksPipe,
     SalaryTransformPipe,
     CapitalizePipe,
+    UserLinksPipe,
+    ControlErrorPipe,
+    AvatarComponent,
+    UploadFileComponent,
+    TextareaComponent,
   ],
   templateUrl: "./info.component.html",
   styleUrl: "./info.component.scss",
 })
 export class VacancyInfoComponent implements OnInit {
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-  projectService = inject(ProjectService);
-  authService = inject(AuthService);
-  subscriptionPlansService = inject(SubscriptionPlansService);
-  cdRef = inject(ChangeDetectorRef);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly vacancyService = inject(VacancyService);
+  private readonly validationService = inject(ValidationService);
+  private readonly cdRef = inject(ChangeDetectorRef);
+  private readonly fb = inject(FormBuilder);
+
+  constructor() {
+    // Создание формы отклика с валидацией
+    this.sendForm = this.fb.group({
+      whyMe: ["", [Validators.required, Validators.minLength(20), Validators.maxLength(2000)]],
+      accompanyingFile: ["", Validators.required],
+    });
+  }
 
   vacancy!: Vacancy;
-  project!: Project;
+
+  /** Объект с сообщениями об ошибках */
+  errorMessage = ErrorMessage;
+
+  descriptionExpandable!: boolean;
+  skillsExpandable!: boolean;
+
+  /** Форма отправки отклика */
+  sendForm: FormGroup;
+
+  /** Флаг состояния отправки формы */
+  sendFormIsSubmitting = false;
+
+  /** Флаг отображения модального окна с результатом */
+  resultModal = false;
+
+  openModal = signal<boolean>(false);
+  readFullDescription = false;
+  readFullSkills = false;
+
+  private subscriptions$: Subscription[] = [];
+
+  @ViewChild("skillsEl") skillsEl?: ElementRef;
+  @ViewChild("descEl") descEl?: ElementRef;
 
   ngOnInit(): void {
     this.route.data.pipe(map(r => r["data"])).subscribe((vacancy: Vacancy) => {
       this.vacancy = vacancy;
-
-      this.projectService.getOne(vacancy.project.id).subscribe((project: Project) => {
-        this.project = project;
-      });
     });
 
-    const subscriptionsSub$ = this.subscriptionPlansService
-      .getSubscriptions()
-      .pipe(
-        map(subscription => {
-          if (Array.isArray(subscription)) {
-            return subscription;
-          } else return [subscription];
-        })
-      )
-      .subscribe(subscriptions => {
-        this.subscriptions.set(subscriptions);
-      });
-    this.subscriptions$.push(subscriptionsSub$);
+    this.route.queryParams.subscribe({
+      next: r => {
+        if (r["sendResponse"]) {
+          this.openModal.set(true);
+        }
+      },
+    });
   }
 
   ngAfterViewInit(): void {
@@ -129,18 +165,44 @@ export class VacancyInfoComponent implements OnInit {
     this.subscriptions$.forEach($ => $.unsubscribe());
   }
 
-  @ViewChild("skillsEl") skillsEl?: ElementRef;
-  @ViewChild("descEl") descEl?: ElementRef;
+  closeSendResponseModal(): void {
+    this.openModal.set(false);
 
-  subscriptions$: Subscription[] = [];
+    this.router.navigate([], {
+      queryParams: {},
+      replaceUrl: true,
+    });
+  }
 
-  openModal = signal<boolean>(false);
+  /**
+   * Обработчик отправки формы
+   * Валидирует форму и отправляет отклик на сервер
+   */
+  onSubmit(): void {
+    // Проверка валидности формы
+    if (!this.validationService.getFormValidation(this.sendForm)) {
+      return;
+    }
 
-  descriptionExpandable!: boolean;
-  skillsExpandable!: boolean;
+    // Установка флага загрузки
+    this.sendFormIsSubmitting = true;
 
-  readFullDescription = false;
-  readFullSkills = false;
+    // Отправка отклика на сервер
+    this.vacancyService
+      .sendResponse(Number(this.route.snapshot.paramMap.get("vacancyId")), this.sendForm.value)
+      .subscribe({
+        next: () => {
+          // Успешная отправка - показываем модальное окно
+          this.sendFormIsSubmitting = false;
+          this.resultModal = true;
+          this.openModal.set(false);
+        },
+        error: () => {
+          // Ошибка отправки - снимаем флаг загрузки
+          this.sendFormIsSubmitting = false;
+        },
+      });
+  }
 
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
@@ -151,9 +213,6 @@ export class VacancyInfoComponent implements OnInit {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullSkills = !isExpanded;
   }
-
-  openSubscription = signal(false);
-  subscriptions = signal<SubscriptionPlan[]>([]);
 
   openSkills() {
     location.href = "https://skills.procollab.ru";

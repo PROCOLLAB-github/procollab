@@ -217,18 +217,10 @@
       border: 1px solid var(--grey-button);
       border-radius: 15px;
 
-      app-button {
-        width: 100%;
-      }
-
       @include responsive.apply-desktop {
         flex-direction: row;
         gap: 12px;
         align-items: center;
-
-        app-button {
-          width: inherit;
-        }
       }
     }
 

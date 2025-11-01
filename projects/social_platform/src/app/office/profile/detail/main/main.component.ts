@@ -6,6 +6,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  inject,
   OnDestroy,
   OnInit,
   signal,
@@ -15,21 +16,30 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { expandElement } from "@utils/expand-element";
-import { concatMap, map, noop, Observable, of, Subscription, switchMap } from "rxjs";
+import { concatMap, filter, map, noop, Observable, of, Subscription, switchMap } from "rxjs";
 import { ProfileNewsService } from "../services/profile-news.service";
-import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
 import { ProfileNews } from "../models/profile-news.model";
-import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
-import { ParseBreaksPipe, ParseLinksPipe, PluralizePipe } from "projects/core";
+import {
+  ParseBreaksPipe,
+  ParseLinksPipe,
+  PluralizePipe,
+  YearsFromBirthdayPipe,
+} from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { IconComponent } from "@ui/components";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { AsyncPipe, NgTemplateOutlet } from "@angular/common";
+import { AsyncPipe, CommonModule, NgTemplateOutlet } from "@angular/common";
 import { ProfileService } from "@auth/services/profile.service";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
 import { Skill } from "@office/models/skill";
 import { HttpErrorResponse } from "@angular/common/http";
+import { NewsFormComponent } from "@office/features/news-form/news-form.component";
+import { NewsCardComponent } from "@office/features/news-card/news-card.component";
+import { ProfileDataService } from "../services/profile-date.service";
+import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
+import { ProjectDirectionCard } from "@office/projects/detail/shared/project-direction-card/project-direction-card.component";
+import { DirectionItem, directionItemBuilder } from "@utils/helpers/directionItemBuilder";
 
 /**
  * Главный компонент страницы профиля пользователя
@@ -59,42 +69,65 @@ import { HttpErrorResponse } from "@angular/common/http";
   styleUrl: "./main.component.scss",
   standalone: true,
   imports: [
-    TagComponent,
-    NewsFormComponent,
-    NewsCardComponent,
+    CommonModule,
     IconComponent,
     ModalComponent,
-    AvatarComponent,
     RouterLink,
     NgTemplateOutlet,
     UserLinksPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
-    AsyncPipe,
-    PluralizePipe,
-    AvatarComponent,
+    YearsFromBirthdayPipe,
+    NewsCardComponent,
+    NewsFormComponent,
+    ProjectDirectionCard,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly authService: AuthService,
-    private readonly profileNewsService: ProfileNewsService,
-    private readonly profileApproveSkillService: ProfileService,
-    private readonly cdRef: ChangeDetectorRef
-  ) {}
+  private readonly route = inject(ActivatedRoute);
+  private readonly profileNewsService = inject(ProfileNewsService);
+  private readonly profileDataService = inject(ProfileDataService);
+  private readonly cdRef = inject(ChangeDetectorRef);
+
+  user?: User;
+  loggedUserId?: number;
+
+  directions: DirectionItem[] = [];
 
   subscriptions$: Subscription[] = [];
-
-  user: Observable<User> = this.route.data.pipe(map(r => r["data"][0]));
-  loggedUserId: Observable<number> = this.authService.profile.pipe(map(user => user.id));
-
   /**
    * Инициализация компонента
    * Загружает новости пользователя и настраивает Intersection Observer для отслеживания просмотров
    */
   ngOnInit(): void {
+    const profileDataSub$ = this.profileDataService
+      .getProfile()
+      .pipe(filter(user => !!user))
+      .subscribe({
+        next: user => {
+          if (user) {
+            this.directions = directionItemBuilder(
+              2,
+              ["навыки", "достижения"],
+              ["squiz", "medal"],
+              [user.skills, user.achievements],
+              ["array", "array"]
+            )!;
+          }
+          this.user = user as User;
+        },
+      });
+
+    const profileIdDataSub$ = this.profileDataService
+      .getProfileId()
+      .pipe(filter(userId => !!userId))
+      .subscribe({
+        next: profileId => {
+          this.loggedUserId = profileId;
+        },
+      });
+
     const route$ = this.route.params
       .pipe(
         map(r => r["id"]),
@@ -114,7 +147,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
           });
         });
       });
-    this.subscriptions$.push(route$);
+    this.subscriptions$.push(profileDataSub$, profileIdDataSub$, route$);
   }
 
   @ViewChild("descEl") descEl?: ElementRef;
@@ -147,9 +180,8 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   readAllEducation = false;
   readAllLanguages = false;
   readAllWorkExperience = false;
-  readAllModal = false;
 
-  approveOwnSkillModal = false;
+  isShowModal = false;
 
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
@@ -233,85 +265,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
     this.readFullDescription = !isExpanded;
   }
 
-  /**
-   * Подтверждение или отмена подтверждения навыка пользователя
-   * @param skillId - идентификатор навыка
-   * @param event - событие клика для предотвращения всплытия
-   * @param skill - объект навыка для обновления
-   */
-  onToggleApprove(skillId: number, event: Event, skill: Skill, profileId: number) {
-    event.stopPropagation();
-    const userId = this.route.snapshot.params["id"];
-
-    const isApprovedByCurrentUser = skill.approves.some(approve => {
-      return approve.confirmedBy.id === profileId;
-    });
-
-    if (isApprovedByCurrentUser) {
-      this.profileApproveSkillService.unApproveSkill(userId, skillId).subscribe(() => {
-        skill.approves = skill.approves.filter(approve => approve.confirmedBy.id !== profileId);
-        this.cdRef.markForCheck();
-      });
-    } else {
-      this.profileApproveSkillService
-        .approveSkill(userId, skillId)
-        .pipe(
-          switchMap(newApprove =>
-            newApprove.confirmedBy
-              ? of(newApprove)
-              : this.authService.profile.pipe(
-                  map(profile => ({
-                    ...newApprove,
-                    confirmedBy: profile,
-                  }))
-                )
-          )
-        )
-        .subscribe({
-          next: updatedApprove => {
-            skill.approves = [...skill.approves, updatedApprove];
-            this.cdRef.markForCheck();
-          },
-          error: err => {
-            if (err instanceof HttpErrorResponse) {
-              if (err.status === 400) {
-                this.approveOwnSkillModal = true;
-                this.cdRef.markForCheck();
-              }
-            }
-          },
-        });
-    }
-  }
-
-  isUserApproveSkill(skill: Skill, profileId: number): boolean {
-    return skill.approves.some(approve => approve.confirmedBy.id === profileId);
-  }
-
-  openSkills: any = {};
-
-  /**
-   * Открытие модального окна с информацией о подтверждениях навыка
-   * @param skillId - идентификатор навыка
-   */
-  onOpenSkill(skillId: number) {
-    this.openSkills[skillId] = !this.openSkills[skillId];
-  }
-
-  /**
-   * Обработчик изменения состояния модального окна навыка
-   * @param event - новое состояние модального окна
-   * @param skillId - идентификатор навыка
-   */
-  onOpenChange(event: boolean, skillId: number) {
-    if (this.openSkills[skillId] && !event) {
-      this.openSkills[skillId] = false;
-    } else {
-      this.openSkills[skillId] = event;
-    }
-  }
-
-  onCloseModal(skillId: number) {
-    this.openSkills[skillId] = false;
+  openWorkInfoModal(): void {
+    this.isShowModal = true;
   }
 }

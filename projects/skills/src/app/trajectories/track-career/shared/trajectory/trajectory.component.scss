@@ -261,17 +261,6 @@
     gap: 5px;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    margin-top: 10px;
-
-    app-button {
-      width: 100%;
-      border-radius: 15px;
-    }
-
-    @include responsive.apply-desktop {
-      width: 40%;
-    }
   }
 
   &__inner {
@@ -396,16 +385,6 @@
   &__buttons-group {
     display: flex;
     gap: 15px;
-    width: 100%;
-
-    app-button {
-      width: 100%;
-      border-radius: 15px;
-    }
-
-    @include responsive.apply-desktop {
-      width: 55%;
-    }
   }
 
   &__confirm {

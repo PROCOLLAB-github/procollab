@@ -216,14 +216,6 @@
     color: var(--grey-for-text);
   }
 
-  app-button {
-    width: 70%;
-
-    @include responsive.apply-desktop {
-      width: 40%;
-    }
-  }
-
   &__wave {
     position: absolute;
     bottom: -10%;

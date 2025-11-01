@@ -1,15 +1,14 @@
 /** @format */
 
 import { Routes } from "@angular/router";
-import { ProgramDetailComponent } from "@office/program/detail/detail/detail.component";
-import { ProgramDetailResolver } from "@office/program/detail/detail/detail.resolver";
 import { ProgramDetailMainComponent } from "@office/program/detail/main/main.component";
 import { ProgramRegisterComponent } from "@office/program/detail/register/register.component";
 import { ProgramRegisterResolver } from "@office/program/detail/register/register.resolver";
-import { ProgramProjectsComponent } from "@office/program/detail/projects/projects.component";
-import { ProgramProjectsResolver } from "@office/program/detail/projects/projects.resolver";
-import { ProgramMembersComponent } from "@office/program/detail/members/members.component";
-import { ProgramMembersResolver } from "@office/program/detail/members/members.resolver";
+import { ProgramProjectsResolver } from "@office/program/detail/list/projects.resolver";
+import { ProgramMembersResolver } from "@office/program/detail/list/members.resolver";
+import { ProgramListComponent } from "./list/list.component";
+import { ProgramDetailResolver } from "./detail.resolver";
+import { DeatilComponent } from "@office/features/detail/detail.component";
 
 /**
  * Маршруты для детальной страницы программы
@@ -27,10 +26,11 @@ import { ProgramMembersResolver } from "@office/program/detail/members/members.r
 export const PROGRAM_DETAIL_ROUTES: Routes = [
   {
     path: "",
-    component: ProgramDetailComponent,
+    component: DeatilComponent,
     resolve: {
       data: ProgramDetailResolver,
     },
+    data: { listType: "program" },
     children: [
       {
         path: "",
@@ -38,17 +38,24 @@ export const PROGRAM_DETAIL_ROUTES: Routes = [
       },
       {
         path: "projects",
-        component: ProgramProjectsComponent,
+        component: ProgramListComponent,
         resolve: {
           data: ProgramProjectsResolver,
         },
+        data: { listType: "projects" },
       },
       {
         path: "members",
-        component: ProgramMembersComponent,
+        component: ProgramListComponent,
         resolve: {
           data: ProgramMembersResolver,
         },
+        data: { listType: "members" },
+      },
+      {
+        path: "projects-rating",
+        component: ProgramListComponent,
+        data: { listType: "rating" },
       },
     ],
   },

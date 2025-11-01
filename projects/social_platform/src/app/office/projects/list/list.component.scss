@@ -6,6 +6,7 @@
   @include responsive.apply-desktop {
     display: flex;
     align-items: flex-start;
+    margin-top: 16px;
   }
 
   &__filter {
@@ -29,11 +30,12 @@
     display: grid;
     flex-grow: 1;
     grid-template-columns: 1fr;
-    grid-gap: 16px;
+    row-gap: 50px;
+    column-gap: 20px;
     align-items: flex-start;
 
     @include responsive.apply-desktop {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 2fr);
     }
   }
 }
@@ -117,7 +119,7 @@
   cursor: pointer;
   background-color: var(--white);
   border: 1px solid var(--medium-medium-grey-for-outline);
-  border-radius: 15px;
+  border-radius: var(--rounded-xl);
 
   @include responsive.apply-desktop {
     display: none;

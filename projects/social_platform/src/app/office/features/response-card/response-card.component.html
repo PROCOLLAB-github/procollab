@@ -1,0 +1,27 @@
+<!-- @format -->
+
+@if (response) {
+<section class="response">
+  <div class="response__section"></div>
+
+  <div class="response__section">
+    <div class="lists__section">
+      <p class="text-body-12 lists__title">сопроводительное письмо</p>
+      <i appIcon icon="folder" class="lists__icon" appSquare="12"></i>
+    </div>
+
+    <p class="text-body-10">{{ response.whyMe }}</p>
+
+    @if(response.accompanyingFile){
+    <app-file-item
+      class="response__file"
+      [canDelete]="true"
+      [link]="response.accompanyingFile.link"
+      [name]="response.accompanyingFile.name"
+      [type]="response.accompanyingFile.mimeType"
+      [size]="response.accompanyingFile.size"
+    ></app-file-item>
+    }
+  </div>
+</section>
+}

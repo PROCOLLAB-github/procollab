@@ -1,449 +1,212 @@
 <!-- @format -->
 
-@if (project$ | async; as project) {
+@if (project) {
 <main class="project">
   <section class="project__main">
-    <div class="info project__section project__info">
-      <div class="info__cover">
-        <img
-          class="info__cover"
-          [src]="
-            project.coverImageAddress
-              ? project.coverImageAddress
-              : '/assets/images/office/profile/detail/cover.png'
-          "
-          alt="cover"
-        />
-        <app-avatar
-          class="info__avatar"
-          [url]="project.imageAddress"
-          [hasBorder]="true"
-          [size]="140"
-        ></app-avatar>
-        <div class="info__subscribe">
-          <app-button
-            (click)="onSubscribe(project.id)"
-            customTypographyClass="text-body-12"
-            color="white"
-          >
-            <p [style]="{ color: isUserSubscribed ? 'var(--green)' : 'var(--accent)' }">
-              {{ isUserSubscribed ? "Вы подписаны" : "Подписаться" }}
-            </p>
-            @if (isUserSubscribed) {
-            <i
-              appIcon
-              appSquare="24"
-              [style]="{ color: isUserSubscribed ? 'var(--green)' : '' }"
-              [icon]="isUserSubscribed ? 'check' : ''"
-            ></i>
-            }
-          </app-button>
-        </div>
-        <app-modal [(open)]="isUnsubscribeModalOpen">
-          <div class="unsubscribe-modal">
-            <h3>Вы действительно хотите отписаться от проекта?</h3>
-            <app-avatar [url]="project.imageAddress" [size]="130"></app-avatar>
-            <div class="unsubscribe-modal__buttons">
-              <app-button
-                color="red"
-                customTypographyClass="unsubscribe-modal-btn__typography"
-                (click)="onUnsubscribe(project.id)"
-              >
-                Отписаться
-              </app-button>
-              <app-button
-                customTypographyClass="unsubscribe-modal-btn__typography"
-                (click)="onCloseUnsubscribeModal()"
-              >
-                Отменить
-              </app-button>
-            </div>
-          </div>
-        </app-modal>
-      </div>
-      @if (authService.profile | async; as profile) {
-      <div class="info__body">
-        <div class="info__text">
-          <h1 class="info__title">{{ project.name }}</h1>
-          <div class="info__row">
-            @if (industryService.industries | async; as industries) {
-            <p class="text-body-14 info__industry">
-              @if (industryService.getIndustry(industries, project.industry); as industry) {
-              {{ industry.name }}
-              }
-            </p>
-            } @if (project.region) {
-            <p class="info__geo text-body-14">
-              <i appIcon icon="geo-point" appWidth="7" appHeight="10" appViewBox="0 0 7 10"></i>
-              {{ project.region }}
-            </p>
-            }
-          </div>
-        </div>
-        <div class="info__right">
-          @if (project.presentationAddress) {
-          <a class="info__presentation" [href]="project.presentationAddress" target="_blank">
-            <app-button
-              class="info__presentation-button"
-              color="grey"
-              customTypographyClass="text-body-12"
-            >
-              Презентация проекта
-              <i appIcon icon="file_pdf" appSquare="16"></i>
-            </app-button>
-          </a>
-          } @if (profile.userType !== 1 && !(isInProject | async)) {
-          <app-button
-            color="grey"
-            customTypographyClass="text-body-12"
-            (click)="openSupport = true"
-          >
-            Поддержать проект
-          </app-button>
-          }
-          <a
-            class="info__edit"
-            [routerLink]="
-              isEditDisable
-                ? ['/office/projects', project.id]
-                : ['/office/projects', project.id, 'edit']
-            "
-            [queryParams]="isEditDisable ? {} : { editingStep: 'main' }"
-          >
-            @if (profile.id === project.leader) {
-            <app-button
-              customTypographyClass="text-body-12"
-              (click)="onUnableEditingProject()"
-              [ngStyle]="{
-                opacity: isEditDisable ? '0.5' : '1',
-              }"
-              [color]="isEditDisable ? 'grey' : 'primary'"
-            >
-              Редактировать
-            </app-button>
-            }
-          </a>
-          @if (isInProject | async) {
-          <div class="info__exit" (click)="this.isLeaveProjectModalOpen = true">
-            <i appIcon icon="logout" appSquare="32"></i>
+    <div class="project__details">
+      <div class="project__left">
+        <div class="lists project__section">
+          <div class="lists__section">
+            <h3 class="text-body-12 lists__title">метаданные</h3>
+            <i appIcon icon="anchor" class="lists__icon" appSquare="12"></i>
           </div>
 
-          <app-modal [(open)]="isLeaveProjectModalOpen">
-            <div class="unsubscribe-modal">
-              <h3>Выход из проекта</h3>
-              <img alt="leave image" src="/assets/images/projects/detail/leaveProject.svg" />
-              <p class="text-body-14" style="width: 55%; text-align: center; margin-bottom: 18px">
-                Ты уверен, что хочешь выйти из проекта? Это действие нельзя будет отменить.
+          <ul class="lists__list">
+            <li class="lists__item">
+              <i appIcon icon="label" class="lists__icon" appSquare="10"></i>
+              @if (industryService.industries | async; as industries) {
+              <p class="text-body-10 card__industry">
+                @if (industryService.getIndustry(industries, project.industry); as industry) {
+                <span>{{ industry?.name }}</span>
+                }
               </p>
-              <div class="unsubscribe-modal__buttons" style="justify-content: center">
-                <app-button
-                  color="grey"
-                  customTypographyClass="unsubscribe-modal-btn__typography"
-                  (click)="onLeave()"
-                >
-                  Да
-                </app-button>
-                <app-button
-                  customTypographyClass="unsubscribe-modal-btn__typography"
-                  (click)="onCloseLeaveProjectModal()"
-                >
-                  Нет, хочу остаться
-                </app-button>
-              </div>
-            </div>
-          </app-modal>
-          }
-        </div>
-      </div>
-      }
-    </div>
-    <div #contentEl class="project__content">
-      <div class="about project__about">
-        <div class="about__head">
-          <h3 class="text-bold-body-16 about__title">О проекте</h3>
-          <div class="about__views">
-            <i appIcon icon="eye" appSquare="22"></i>
-            {{ project.viewsCount }}
-          </div>
-        </div>
-        @if (project.description) {
-        <div class="text-body-14 about__text">
-          <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
-          @if (descriptionExpandable) {
-          <div
-            class="read-more"
-            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
-          >
-            {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
-          </div>
-          }
-        </div>
-        }
-      </div>
-    </div>
-    @if (authService.profile | async; as profile) {
-    <div #newsEl class="project__news news">
-      @if (project.leader === profile.id) {
-      <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
-      } @for (n of news; track n.id) {
-      <app-news-card
-        class="news__item"
-        [resourceLink]="['/office/projects', n.id]"
-        [attr.data-id]="n.id"
-        [feedItem]="n"
-        [isOwner]="profile.id === project.leader"
-        (delete)="onDeleteNews($event)"
-        (like)="onLike($event)"
-        (edited)="onEditNews($event, n.id)"
-      ></app-news-card>
-      }
-    </div>
-    }
-    <aside class="project__aside">
-      <div class="team project__section project__team">
-        <h3 class="text-bold-body-16 team__title">Команда</h3>
-        @if (project.collaborators) {
-        <ul>
-          @for (member of project.collaborators.slice(0, 3); track member.userId) {
-          <app-project-member-card
-            [member]="member"
-            [isLeader]="project.leader === member.userId"
-            [manageRights]="project.leader == profileId"
-            (transferOwnership)="onTransferOwnership($event)"
-            (remove)="onRemoveMember($event)"
-          ></app-project-member-card>
-          }
-        </ul>
-        }
-        <div class="team__remaining" [class.team__remaining--show]="readAllMembers">
-          @if (project.collaborators) {
-          <ul>
-            @for (member of project.collaborators.slice(3); track member.userId) {
-            <app-project-member-card
-              [member]="member"
-              [isLeader]="project.leader === member.userId"
-              [manageRights]="project.leader == profileId"
-              (transferOwnership)="onTransferOwnership($event)"
-              (remove)="onRemoveMember($event)"
-            ></app-project-member-card>
-            }
-          </ul>
-          }
-        </div>
-        @if (project.collaborators.length > 3) {
-        <div class="read-more" (click)="readAllMembers = !readAllMembers">
-          {{ readAllMembers ? "Скрыть" : "Читать полностью" }}
-        </div>
-        }
-      </div>
-
-      @if (project.vacancies.length; as vacanciesLength) {
-      <div class="vacancies project__section project__vacancy">
-        <h3 class="text-bold-body-16 team__title">Вакансии</h3>
-        @if (project.vacancies; as vacancies) { @if (vacancies) {
-        <ul class="vacancies__list">
-          @for (vacancy of vacancies.slice(0, 3); track vacancy.id) {
-          <ng-container
-            *ngTemplateOutlet="vacanciesTemp; context: { $implicit: vacancy }"
-          ></ng-container>
-          }
-        </ul>
-        }
-        <div class="vacancies__remaining" [class.vacancies__remaining--show]="readAllVacancies">
-          @if (vacancies) {
-          <ul class="vacancies__list">
-            @for (vacancy of vacancies.slice(3); track vacancy.id) {
-            <ng-container
-              *ngTemplateOutlet="vacanciesTemp; context: { $implicit: vacancy }"
-            ></ng-container>
-            }
-          </ul>
-          }
-        </div>
-        }
-        <ng-template #vacanciesTemp let-vacancy>
-          <li class="vacancy">
-            <div class="vacancy__info">
-              <a
-                [routerLink]="['/office/vacancies/', vacancy.id]"
-                class="text-bold-body-14 vacancy__title"
-                [class.vacancy__title--disabled]="profileId === project.leader"
-              >
-                {{ vacancy.role }}
-              </a>
-            </div>
-            <p class="text-body-12 vacancy__requirements">
-              {{ getSkillsNames(vacancy) }}
-            </p>
-          </li>
-        </ng-template>
-        @if (vacanciesLength > 3) {
-        <div class="read-more" (click)="readAllVacancies = !readAllVacancies">
-          {{ readAllVacancies ? "Скрыть" : "Читать полностью" }}
-        </div>
-        }
-      </div>
-      } @if(profileId === project.leader){
-      <a
-        [routerLink]="['/office/projects/', project.id, 'edit']"
-        [queryParams]="{ editingStep: 'vacancies' }"
-      >
-        <app-button>
-          <span>Добавить вакансию</span>
-          <i appIcon icon="plus" appSquare="20"></i>
-        </app-button>
-      </a>
-      } @if (project.achievements.length) {
-      <div class="achievements project__section project__achievements">
-        <h3 class="text-bold-body-16 achievements__title">Достижения</h3>
-        @if (project.achievements; as achievements) { @if (achievements) {
-        <ul class="achievements__list">
-          @for (a of achievements.slice(0, 3); track a.id) {
-          <li class="text-bold-body-14 achievements__item achievement">
-            <p class="text-bold-body-14 achievement__place">{{ a.status }}</p>
-            <p class="text-body-12 achievement__title">{{ a.title }}</p>
-          </li>
-          }
-        </ul>
-        }
-        <div
-          class="achievements__remaining"
-          [class.achievements__remaining--show]="readAllAchievements"
-        >
-          @if (achievements) {
-          <ul class="achievements__list">
-            @for (a of achievements.slice(3); track a.id) {
-            <li class="text-bold-body-14 achievements__item achievement">
-              <p class="text-bold-body-14 achievement__place">{{ a.status }}</p>
-              <p class="text-body-12 achievement__title">{{ a.title }}</p>
+              }
             </li>
-            }
+
+            <li class="lists__item">
+              <i
+                appIcon
+                icon="geo-point"
+                class="lists__icon"
+                style="opacity: 0.6"
+                appSquare="10"
+              ></i>
+              <p class="text-body-10">{{ project.region ?? "не указан" }}</p>
+            </li>
+
+            <li class="lists__item">
+              <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
+              <p class="text-body-10">{{ project.trl ?? "0" }}</p>
+            </li>
+
+            <li class="lists__item">
+              <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
+              <p class="text-body-10">{{ project.implementationDeadline ?? "не указана" }}</p>
+            </li>
+
+            <li class="lists__item">
+              <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
+              <p class="text-body-10">
+                {{ project.leaderInfo?.lastName }} {{ project.leaderInfo?.firstName }}
+              </p>
+            </li>
           </ul>
-          }
         </div>
-        } @if (project.achievements.length > 3) {
-        <div class="read-more" (click)="readAllAchievements = !readAllAchievements">
-          {{ readAllAchievements ? "Скрыть" : "Читать полностью" }}
-        </div>
-        }
       </div>
-      } @if (project.links.length) {
-      <div class="links project__section">
-        <h3 class="links__title text-bold-body-16">Контакты</h3>
-        <ul>
-          @for (link of project.links; track $index) {
-          <li class="contact-link links__item text-body-12">
-            @if (link | userLinks; as l) {
-            <a class="contact-link__link" target="_blank" [href]="link">
-              <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
-              <span>{{ l.tag }}</span>
-            </a>
+
+      <div #contentEl class="project__content">
+        <div class="about project__about">
+          <div class="about__head">
+            <h3 class="text-body-12 about__title">о проекте</h3>
+            <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
+          </div>
+          @if (project.description) {
+          <div class="text-body-10 about__text">
+            <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
+            @if (descriptionExpandable) {
+            <div
+              class="read-more"
+              (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+            >
+              {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+            </div>
             }
-          </li>
+          </div>
           }
-        </ul>
-      </div>
-      }
-    </aside>
-  </section>
-  <app-modal [(open)]="openSupport">
-    <div class="support">
-      <i
-        class="support__cross"
-        appIcon
-        icon="cross"
-        appSquare="20"
-        (click)="openSupport = false"
-      ></i>
-      <img src="assets/images/projects/shared/idea.svg" alt="idea" class="support__img" />
-      <h3 class="support__title">Поддержать проект</h3>
-      <p class="support__text">Напишите лидеру проекта, чтобы обсудить оказание поддержки</p>
-      <ul>
-        @for (link of project.links; track $index) {
-        <li class="contact-link links__item text-body-12">
-          @if (link | userLinks; as l) {
-          <a class="contact-link__link" target="_blank" [href]="link">
-            <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="16"></i>
-            {{ l.tag }}
-          </a>
+        </div>
+
+        @if (authService.profile | async; as profile) {
+        <div #newsEl class="project__news news">
+          @if (project.leader === profile.id) {
+          <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
           }
-        </li>
+
+          <div class="project__directions">
+            @for (directionItem of directions; track $index) {
+            <app-project-direction-card
+              [direction]="directionItem.direction"
+              [icon]="directionItem.icon"
+              [about]="directionItem.about"
+              [type]="directionItem.type"
+              [isOwner]="profile.id === project.leader"
+              [projectInfoType]="directionItem.direction === 'цели' ? 'goals' : 'partners'"
+            ></app-project-direction-card>
+            }
+          </div>
+
+          @for (n of news; track n.id) {
+          <app-news-card
+            class="news__item"
+            [resourceLink]="['/office/projects', n.id]"
+            [attr.data-id]="n.id"
+            [feedItem]="n"
+            [isOwner]="profile.id === project.leader"
+            (delete)="onDeleteNews($event)"
+            (like)="onLike($event)"
+            (edited)="onEditNews($event, n.id)"
+          ></app-news-card>
+          }
+        </div>
         }
-      </ul>
-    </div>
-  </app-modal>
+      </div>
 
-  <app-modal [open]="leaderLeaveModal">
-    <div class="unsubscribe-modal">
-      <h3>Прежде чем выйти из проекта смените основателя!</h3>
-      <app-avatar [url]="project.imageAddress" [size]="130"></app-avatar>
-      <div class="unsubscribe-modal__buttons--additional">
-        <app-button
-          customTypographyClass="unsubscribe-modal-btn__typography"
-          (click)="onCloseLeaderLeaveModal()"
-        >
-          Хорошо
-        </app-button>
+      <div class="project__right">
+        <aside class="project__aside">
+          @if (project.links.length) {
+          <div class="lists project__section">
+            <div class="lists__section">
+              <h3 class="text-body-12 lists__title">контакты</h3>
+              <i appIcon icon="phone" class="lists__icon" appSquare="12"></i>
+            </div>
+
+            <ul class="lists__list">
+              @for (link of project.links; track $index) {
+              <li class="lists__item text-body-10">
+                @if (link | userLinks; as l) {
+                <a class="lists__item" target="_blank" [href]="link">
+                  <i class="lists__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
+                  <span>{{ l.tag }}</span>
+                </a>
+                }
+              </li>
+              }
+            </ul>
+          </div>
+          } @if (project.resources.length) {
+          <div class="lists project__section">
+            <div class="lists__section">
+              <h3 class="text-body-12 lists__title">в поиске</h3>
+              <i appIcon icon="in-search" class="lists__icon" appSquare="12"></i>
+            </div>
+
+            @if (project.resources; as resources) {
+            <ul class="lists__list">
+              @for (resourceItem of resources; track $index) { @switch (resourceItem.type) { @case
+              ("infrastructure") {
+              <li class="lists__item text-body-10">
+                <i appIcon icon="in-search" class="lists__icon" appSquare="10"></i>
+                <p class="text-body-10">{{ resourceItem.description }}</p>
+              </li>
+              } @case ("staff") {
+              <li class="lists__item text-body-10">
+                <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
+                <p class="text-body-10">{{ resourceItem.description }}</p>
+              </li>
+              } @case ("financial") {
+              <li class="lists__item text-body-10">
+                <i appIcon icon="contacts" class="lists__icon" appSquare="10"></i>
+                <p class="text-body-10">{{ resourceItem.description }}</p>
+              </li>
+              } @case ("information") {
+              <li class="lists__item text-body-10">
+                <i appIcon icon="feed" class="lists__icon" appSquare="10"></i>
+                <p class="text-body-10">{{ resourceItem.description }}</p>
+              </li>
+              } } }
+            </ul>
+            }
+          </div>
+          } @if (project.achievements.length) {
+          <div class="lists project__section">
+            <div class="lists__section">
+              <h3 class="text-body-12 lists__title">достижения</h3>
+              <i appIcon icon="medal" class="lists__icon" appSquare="12"></i>
+            </div>
+
+            @if (project.achievements; as achievements) { @if (achievements) {
+            <ul class="lists__list">
+              @for (a of achievements.slice(0, 3); track a.id) {
+              <li class="lists__item text-body-10" style="gap: 10px">
+                <p class="lists__item--status">{{ a.status }}</p>
+                <p class="lists__item--title">{{ a.title }}</p>
+              </li>
+              }
+            </ul>
+            }
+            <div class="lists__remaining" [class.lists__remaining--show]="readAllAchievements">
+              @if (achievements) {
+              <ul class="lists__list">
+                @for (a of achievements.slice(3); track a.id) {
+                <li class="lists__item text-body-10">
+                  <p class="lists__item--status">{{ a.status }}</p>
+                  <p class="lists__item--title">{{ a.title }}</p>
+                </li>
+                }
+              </ul>
+              }
+            </div>
+            } @if (project.achievements.length > 3) {
+            <div class="read-more" (click)="readAllAchievements = !readAllAchievements">
+              {{ readAllAchievements ? "Скрыть" : "Читать полностью" }}
+            </div>
+            }
+          </div>
+          }
+        </aside>
       </div>
     </div>
-  </app-modal>
+  </section>
 
-  <app-modal [(open)]="isEditDisableModal">
-    <div
-      class="unsubscribe-modal"
-      style="text-align: center; padding: 20px 80px 20px; position: relative"
-    >
-      <i
-        style="right: 0px; top: 0px"
-        class="support__cross"
-        appIcon
-        icon="cross"
-        appSquare="24"
-        (click)="isEditDisableModal = false"
-      ></i>
-      <img
-        src="assets/images/projects/shared/edit_disable.svg"
-        alt="idea"
-        class="unsubscribe-modal__img"
-      />
-      <h4 class="support__title">Редактирование недоступно</h4>
-
-      <p class="support__text text-body-12" style="max-width: 100%">
-        Этот проект уже отправлен на конкурс. <br />Изменения будут доступны только после окончания
-        конкурса.
-      </p>
-
-      <app-button
-        color="grey"
-        style="width: 50%"
-        customTypographyClass="text-body-12"
-        (click)="isEditDisableModal = false"
-        >Отмена</app-button
-      >
-    </div>
-  </app-modal>
-
-  <app-modal [(open)]="isUnsubscribeModalOpen">
-    <div class="unsubscribe-modal">
-      <h3>Вы действительно хотите отписаться от проекта?</h3>
-      <app-avatar [url]="project.imageAddress" [size]="130"></app-avatar>
-      <div class="unsubscribe-modal__buttons">
-        <app-button
-          color="red"
-          customTypographyClass="unsubscribe-modal-btn__typography"
-          (click)="onUnsubscribe(project.id)"
-        >
-          Отписаться
-        </app-button>
-        <app-button
-          customTypographyClass="unsubscribe-modal-btn__typography"
-          (click)="onCloseUnsubscribeModal()"
-        >
-          Отменить
-        </app-button>
-      </div>
-    </div>
-  </app-modal>
   <router-outlet></router-outlet>
 </main>
 }

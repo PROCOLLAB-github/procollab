@@ -16,6 +16,7 @@ import { SkillsGroup } from "@office/models/skills-group";
 import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";
 import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-basket.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 
 /**
  * КОМПОНЕНТ ВТОРОГО ЭТАПА ОНБОРДИНГА
@@ -70,6 +71,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
     AutoCompleteInputComponent,
     SkillsGroupComponent,
     SkillsBasketComponent,
+    TooltipComponent,
   ],
 })
 export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
@@ -92,12 +94,6 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
 
   searchedSkills = signal<Skill[]>([]);
 
-  tooltipAuthText =
-    "Постарайся вспомнить все, чему тебя учили и то, что ты делал (читать, считать, программировать) Постарайся не врать, но и не будь сильно критичным к себе.";
-
-  tooltipLibText =
-    "База с навыками, которая может пополняться благодаря тебе! Если не найдешь свой навык, смело пиши на @procollab_support и мы добавим твой уникальный навык";
-
   isHintAuthVisible = false;
   isHintLibVisible = false;
 
@@ -108,6 +104,33 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
   isChooseSkillText = signal("");
 
   subscriptions$ = signal<Subscription[]>([]);
+
+  // Для управления открытыми группами навыков
+  openSkillGroup: string | null = null;
+
+  /**
+   * Проверяет, есть ли открытые группы навыков
+   */
+  hasOpenSkillsGroups(): boolean {
+    return this.openSkillGroup !== null;
+  }
+
+  /**
+   * Обработчик переключения группы навыков
+   * @param skillName - название навыка
+   * @param isOpen - флаг открытия/закрытия группы
+   */
+  onSkillGroupToggled(isOpen: boolean, skillName: string): void {
+    this.openSkillGroup = isOpen ? skillName : null;
+  }
+
+  /**
+   * Проверяет, должна ли группа навыков быть отключена
+   * @param skillName - название навыка
+   */
+  isSkillGroupDisabled(skillName: string): boolean {
+    return this.openSkillGroup !== null && this.openSkillGroup !== skillName;
+  }
 
   ngOnInit(): void {
     const fv$ = this.onboardingService.formValue$

@@ -2,63 +2,15 @@
 
 @if (vacancy) {
 <div class="vacancy">
-  <div class="vacancy__cover">
-    <img
-      class="vacancy__cover"
-      [src]="
-        project.coverImageAddress
-          ? project.coverImageAddress
-          : '/assets/images/office/profile/detail/cover.png'
-      "
-      alt="cover"
-    />
-  </div>
-  <h3 class="text-heading-3">{{ vacancy.role }}</h3>
-
   <div class="vacancy__split">
     <div class="vacancy__left">
-      <div class="vacancy__info">
-        <div class="info__top">
-          <div class="vacancy__info-element vacancy__region">
-            @if (project.region) {
-            <i appIcon icon="geo" appWidth="11" appHeight="14"></i>
-            <span>{{ project.region | capitalize }}</span>
-            } @else {
-            <span>Не указано</span>
-            }
-          </div>
-          <div class="vacancy__info-element">
-            {{ vacancy.workFormat ? (vacancy.workFormat | capitalize) : "Формат работы не указан" }}
-          </div>
-          <div class="vacancy__info-element">
-            {{ vacancy.workSchedule ? (vacancy.workSchedule | capitalize) : "График не указан" }}
-          </div>
-        </div>
-
-        <div class="info__bottom">
-          <div class="vacancy__info-element">
-            {{
-              vacancy.salary
-                ? (vacancy.salary | salaryTransform | capitalize) + " " + "рублей"
-                : "Зарплата  не указана"
-            }}
-          </div>
-          <div class="vacancy__info-element">
-            {{
-              vacancy.requiredExperience
-                ? (vacancy.requiredExperience.toLowerCase().includes("без опыта")
-                    ? ""
-                    : "Опыт" + " ") + (vacancy.requiredExperience | capitalize)
-                : "Опыт не указан"
-            }}
-          </div>
-        </div>
-      </div>
-
       @if (vacancy.description) {
       <div class="vacancy__content">
-        <p class="text-body-16 vacancy__title">Описание вакансии</p>
-        <div class="text-body-14 about__text">
+        <div class="lists__section">
+          <p class="text-body-12 lists__title">описание вакансии</p>
+          <i appIcon icon="folder" class="lists__icon" appSquare="12"></i>
+        </div>
+        <div class="text-body-10 about__text">
           <p #descEl [innerHTML]="vacancy.description | parseLinks | parseBreaks"></p>
           @if (descriptionExpandable) {
           <div
@@ -75,18 +27,25 @@
       <div #contentEl class="vacancy__content">
         @if (vacancy.requiredSkills.length; as skillsLength) {
         <div class="card__skills skills">
-          <div class="skills__title text-body-16">Необходимые навыки</div>
+          <div class="lists__section">
+            <p class="text-body-12 lists__title">навыки</p>
+            <i appIcon icon="box" class="lists__icon" appSquare="12"></i>
+          </div>
           @if (vacancy.requiredSkills; as requiredSkills) { @if (requiredSkills) {
           <ul class="skills__list">
             @for (skill of requiredSkills.slice(0, 8); track $index) {
-            <app-tag>{{ skill.name }}</app-tag>
+            <app-tag
+              [color]="skill.category.name.includes('Soft') ? 'accent' : 'complete'"
+              [appearance]="skill.category.name.includes('Soft') ? 'inline' : 'outline'"
+              >{{ skill.name }}</app-tag
+            >
             }
           </ul>
           }
           <div class="skills__remaining" [class.skills__remaining--show]="readFullSkills">
             @if (requiredSkills) {
             <ul class="skills__list">
-              @for (skill of requiredSkills.slice(8); track $index) {
+              @for (skill of requiredSkills.slice(0, 8); track $index) {
               <app-tag>{{ skill.name }}</app-tag>
               }
             </ul>
@@ -102,45 +61,197 @@
       </div>
     </div>
 
+    @if (vacancy.project; as project) {
     <div class="vacancy__right">
-      <app-button
-        customTypographyClass="text-body-14"
-        [routerLink]="['/office/vacancy/', vacancy.id]"
-        >Откликнуться</app-button
-      >
-      <app-button
-        customTypographyClass="text-body-14"
-        color="green"
-        (click)="this.openModal.set(true)"
-        >Прокачать себя</app-button
-      >
+      <div class="vacancy__right--project">
+        <app-avatar
+          style="cursor: pointer"
+          [size]="68"
+          [url]="project.imageAddress"
+          class="vacancy__right--project-image"
+          [routerLink]="'/office/projects/' + project.id"
+        ></app-avatar>
+        <p class="text-body-12 vacancy__right--title">{{ project.name }}</p>
 
-      <div class="vacancy__project" [routerLink]="['/office/projects/' + vacancy.project.id]">
-        <img [src]="project.imageAddress" class="vacancy__project-image" />
-        <p class="text-bold-body-16">{{ vacancy.project.name }}</p>
+        <app-button size="big" customTypographyClass="text-body-12" (click)="openModal.set(true)"
+          >откликнуться</app-button
+        >
       </div>
+
+      <div class="lists vacancy__content">
+        <div class="lists__section">
+          <h3 class="text-body-12 lists__title">метаданные</h3>
+          <i appIcon icon="anchor" class="lists__icon" appSquare="12"></i>
+        </div>
+
+        <ul class="lists__list">
+          <li class="lists__item">
+            <i appIcon icon="geo-point" style="opacity: 0.6" class="lists__icon" appSquare="10"></i>
+            <p class="text-body-10">
+              {{ project.region ? (project.region | capitalize) : "не указан" }}
+            </p>
+          </li>
+
+          <li class="lists__item">
+            <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
+            <p class="text-body-10">
+              {{
+                vacancy.workFormat ? (vacancy.workFormat | capitalize) : "формат работы не указан"
+              }}
+            </p>
+          </li>
+
+          <li class="lists__item">
+            <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
+            <p class="text-body-10">
+              {{
+                vacancy.requiredExperience
+                  ? (vacancy.requiredExperience.toLowerCase().includes("без опыта")
+                      ? ""
+                      : "опыт" + " ") + (vacancy.requiredExperience | capitalize)
+                  : "опыт не указан"
+              }}
+            </p>
+          </li>
+
+          <li class="lists__item">
+            <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
+            <p class="text-body-10">
+              {{ vacancy.workSchedule ? (vacancy.workSchedule | capitalize) : "график не указан" }}
+            </p>
+          </li>
+
+          <li class="lists__item">
+            <i appIcon icon="contacts" class="lists__icon" appSquare="10"></i>
+            <p class="text-body-10">
+              {{
+                vacancy.salary
+                  ? (vacancy.salary | salaryTransform | capitalize) + " " + "рублей"
+                  : "по договоренности"
+              }}
+            </p>
+          </li>
+        </ul>
+      </div>
+
+      @if (project.links.length) {
+      <div class="lists project__section">
+        <div class="lists__section">
+          <h3 class="text-body-12 lists__title">контакты</h3>
+          <i appIcon icon="phone" class="lists__icon" appSquare="12"></i>
+        </div>
+
+        <ul class="lists__list">
+          @for (link of project.links; track $index) {
+          <li class="lists__item text-body-10">
+            @if (link | userLinks; as l) {
+            <a class="lists__item" target="_blank" [href]="link">
+              <i class="lists__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
+              <span>{{ l.tag }}</span>
+            </a>
+            }
+          </li>
+          }
+        </ul>
+      </div>
+      }
     </div>
+    }
   </div>
 </div>
 
-<app-modal [open]="openModal()" (openChange)="openModal.set(!openModal())">
+<app-modal [open]="openModal()" (openChange)="closeSendResponseModal()">
   <div class="cancel">
-    <div class="cancel__top">
-      <i (click)="openModal.set(false)" appIcon icon="cross" class="cancel__cross"></i>
-      <img class="cancel__image" alt="success" src="/assets/images/vacancies/detail/success.png" />
-      <p class="cancel__title text-bold-body-16">
-        Сделай первый шаг в карьере, в бизнесе, в жизни вместе с подпиской
-      </p>
+    <div class="lists__section">
+      <p class="text-body-12 lists__title">отклик на вакансию</p>
+      <i appIcon icon="squiz" class="lists__icon" appSquare="12"></i>
     </div>
-    <app-button customTypographyClass="text-body-12" style="width: 35%" (click)="openSkills()"
-      >Узнать подробнее</app-button
-    >
+
+    <form class="vacancy__form" [formGroup]="sendForm" (ngSubmit)="onSubmit()">
+      @if (sendForm.get("whyMe"); as whyMe) {
+      <fieldset>
+        <label for="whyMe" class="field-label text-body-10">сопроводительное письмо</label>
+        <app-textarea
+          size="big"
+          id="whyMe"
+          formControlName="whyMe"
+          [error]="whyMe | controlError"
+          placeholder="Проект начал свое существование с 2020 года"
+        ></app-textarea>
+        @if (whyMe | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        } @if (whyMe | controlError: "maxlength") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_TOO_LONG }}
+          @if (whyMe.errors) {
+          {{ whyMe.errors["maxlength"]["requiredLength"] }}
+          }
+        </div>
+        } @if (whyMe | controlError: "minlength") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_TOO_SHORT }}
+          @if (whyMe.errors) {
+          {{ whyMe.errors["minlength"]["requiredLength"] }}
+          }
+        </div>
+        }
+      </fieldset>
+      }
+
+      <app-button
+        [disabled]="true"
+        style="opacity: 0.5"
+        size="big"
+        class="text-body-12"
+        appearance="outline"
+        >прикрепить резюме PROCOLLAB</app-button
+      >
+
+      <p class="vacancy__form--or text-body-12">или</p>
+
+      @if (sendForm.get("accompanyingFile"); as accompanyingFile) {
+
+      <div
+        class="vacancy__form--cv"
+        [class.vacancy__form-error]="accompanyingFile | controlError: 'required'"
+      >
+        <app-upload-file
+          [error]="accompanyingFile | controlError"
+          id="accompanyingFile"
+          formControlName="accompanyingFile"
+          accept=".pdf, .docx"
+        >
+          <ng-container emptyPlaceholder>
+            <div class="vacancy__form--cv-empty">
+              <i appIcon icon="file" appSquare="10"></i>
+              <p class="text-body-12 vacancy__form--cv-text">
+                файл резюме в формате <br />.pdf, .word весом до 50МБ
+              </p>
+            </div>
+            @if (accompanyingFile | controlError: "required") {
+            <p class="error text-body-10">загрузите файл</p>
+            }
+          </ng-container>
+        </app-upload-file>
+      </div>
+      }
+
+      <app-button size="big" (click)="onSubmit()" [loader]="sendFormIsSubmitting" type="submit"
+        >отправить отклик</app-button
+      >
+    </form>
   </div>
 </app-modal>
 
-<!-- <app-subscription-plans
-  [subscriptionPlans]="subscriptions()"
-  [open]="openSubscription()"
-  (openChange)="openSubscription.set($event)"
-></app-subscription-plans> -->
+<app-modal [(open)]="resultModal">
+  <div class="succeed">
+    <i class="succeed__check" appIcon icon="check" appWidth="60" appHeight="42"></i>
+    <p class="text-body-12 succeed__text">отклик отправлен</p>
+    <app-button routerLink="/office/vacancies/all" size="big" customTypographyClass="text-body-12"
+      >перейти к вакансиям</app-button
+    >
+  </div>
+</app-modal>
 }

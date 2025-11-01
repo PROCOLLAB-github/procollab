@@ -44,6 +44,7 @@ export class Program {
   tag!: string;
   year!: number;
   links!: string[];
+  registrationLink!: string | null;
   materials!: { title: string; url: string }[];
   shortDescription!: string;
   datetimeRegistrationEnds!: string;
@@ -52,8 +53,8 @@ export class Program {
   viewsCount!: number;
   likesCount!: number;
   isUserLiked!: boolean;
-  isUserManager?: boolean;
-  isUserMember?: boolean;
+  isUserManager!: boolean;
+  isUserMember!: boolean;
 
   static default(): Program {
     return {
@@ -65,6 +66,7 @@ export class Program {
       presentationAddress: "",
       links: [],
       materials: [],
+      registrationLink: null,
       coverImageAddress: "",
       advertisementImageAddress: "",
       shortDescription: "",

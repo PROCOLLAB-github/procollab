@@ -1,0 +1,231 @@
+<!-- @format -->
+
+<div
+  class="card"
+  [class.card__empty]="appereance === 'empty'"
+  (click)="
+    appereance === 'empty' && section === 'projects'
+      ? onCreateProject($event)
+      : appereance === 'empty' && section === 'subscriptions'
+      ? redirectToProjects()
+      : null
+  "
+>
+  <div class="card__body" [class.card__body--empty]="appereance === 'empty'">
+    @if (shouldShowProjectInfo()) {
+    <div class="card__info">
+      <div class="card__info--vacancies">
+        <p class="text-body-6">12</p>
+        <i appIcon icon="suitcase" appSquare="6"></i>
+      </div>
+      <div class="card__info--collaborators">
+        <p class="text-body-6">12</p>
+        <i appIcon icon="team" appSquare="6"></i>
+      </div>
+    </div>
+    } @if (shouldShowSubscriptionBadge()) {
+    <div class="card__badge">
+      <i
+        appIcon
+        [icon]="isSubscribed ? 'subscribe-badge' : 'unsubscribe-badge'"
+        appWidth="18"
+        appHeight="34"
+        class="card__subscribe-badge"
+        (click)="toggleSubscription($event)"
+      ></i>
+    </div>
+    }
+
+    <app-avatar class="card__photo" [url]="getAvatarUrl()" [size]="70"></app-avatar>
+
+    <div class="card__content" [class.card__content--empty]="appereance === 'empty'">
+      <div class="card__head">
+        <div>
+          @if (appereance === 'empty') {
+          <ng-container *ngTemplateOutlet="emptyCardContent"></ng-container>
+          } @else {
+          <ng-container *ngTemplateOutlet="regularCardHeader"></ng-container>
+          }
+        </div>
+      </div>
+
+      @if (appereance !== 'empty') {
+      <ng-container *ngTemplateOutlet="cardDescription"></ng-container>
+      }
+
+      <div class="card__footer">
+        @if (appereance === 'empty') { @if (section === 'projects') {
+        <i appIcon icon="main" appSquare="22" class="card__empty--icon"></i>
+        } } @else {
+        <ng-container *ngTemplateOutlet="cardActions"></ng-container>
+        }
+      </div>
+    </div>
+
+    <ng-container *ngTemplateOutlet="modals"></ng-container>
+  </div>
+</div>
+
+<ng-template #emptyCardContent>
+  <p class="text-body-12 card__name">{{ info?.name }}</p>
+  <img src="/assets/images/projects/shared/arrow.svg" class="card__empty--image" alt="arrow" />
+  @if (section === 'subscriptions') {
+  <p class="card__empty--name text-body-10" style="margin-left: 5px">перейти к проектам</p>
+  } @else {
+  <p class="card__empty--name text-body-10">создай первый проект</p>
+  }
+</ng-template>
+
+<ng-template #regularCardHeader>
+  @if (type === 'projects') { @if (info.name) { @if(info.name.length > 12) {
+  <p class="text-body-12 card__name">{{ info.name.slice(0, 12) }}...</p>
+  } @else {
+  <p class="text-body-12 card__name">{{ info.name }}</p>
+  } } @if (industryService.industries | async; as industries) {
+  <p class="text-body-6 card__industry">
+    @if (industryService.getIndustry(industries, info?.industry!); as industry) {
+    <span>{{ industry?.name }}</span>
+    }
+  </p>
+  } } @else {
+  <p class="text-body-12 card__name">{{ info?.firstName }}</p>
+  <p class="text-body-12 card__name">{{ info?.lastName }}</p>
+  @if (info?.speciality) {
+  <p class="text-body-6 card__additional-info">
+    {{ info?.speciality }}
+    @if (info?.speciality && info?.birthday) { • } @if (info?.birthday) {
+    {{ info?.birthday! | yearsFromBirthday }}
+    }
+  </p>
+  } }
+</ng-template>
+
+<ng-template #cardDescription>
+  <div
+    class="card__description"
+    [style.max-height]="type === 'members' ? '50px' : '24px'"
+    [class.invite-description]="type === 'invite'"
+  >
+    @if (type === 'invite') {
+    <p class="text-body-6 card__user">вас приглашает</p>
+    <p class="text-body-10 card__user--invite">{{ info?.shortDescription }}</p>
+    } @else if (type === 'projects') {
+    <p class="text-body-6">{{ info?.shortDescription }}</p>
+    } @else { @if (info?.skills && info?.skills?.length) {
+    <ul class="card__skills">
+      @for ( skill of info?.skills?.slice(0, 3); track skill.id ) {
+      <li class="card__skill">
+        <app-tag [color]="skill.category.name.includes('Soft skills') ? 'soft' : 'complete'">{{
+          skill.name.length > 10 ? skill.name.slice(0, 10) + " " + "..." : skill.name
+        }}</app-tag>
+      </li>
+      }
+    </ul>
+    } }
+  </div>
+</ng-template>
+
+<ng-template #cardActions>
+  <div class="card__info">
+    @if (type === 'projects') {
+    <div class="card__info--program">
+      <app-button
+        [routerLink]="'/office/projects/' + info?.id"
+        customTypographyClass="text-body-6"
+        size="extra-small"
+        class="card__info--text"
+      >
+        проект
+      </app-button>
+
+      @if (info.partnerProgramId) {
+      <div
+        class="card__info--program-icon"
+        (mouseenter)="programProjectHovered = true"
+        (mouseleave)="programProjectHovered = false"
+      >
+        <i appIcon icon="program" appSquare="8"></i>
+      </div>
+
+      @if (programProjectHovered) {
+      <div class="card__info--project-partner">
+        <p class="text-body-6">проект привязан к программе</p>
+      </div>
+      } }
+    </div>
+    } @else if (type === 'members') {
+    <app-button
+      [routerLink]="'/office/profile/' + info?.userId"
+      customTypographyClass="text-body-6"
+      size="extra-small"
+      class="card__info--text"
+    >
+      профиль
+    </app-button>
+    } @else {
+    <div class="card__invite-actions">
+      <app-button
+        (click)="onAcceptInvite($event, info?.inviteId!)"
+        customTypographyClass="text-body-6"
+        size="extra-small"
+        appearance="inline"
+        [disabled]="!info?.inviteId"
+      >
+        принять
+      </app-button>
+      <app-button
+        (click)="onRejectInvite($event, info?.inviteId!)"
+        customTypographyClass="text-body-6"
+        size="extra-small"
+        appearance="outline"
+        [disabled]="!info?.inviteId"
+      >
+        отклонить
+      </app-button>
+    </div>
+    }
+  </div>
+</ng-template>
+
+<ng-template #modals>
+  <app-modal [(open)]="isUnsubscribeModalOpen">
+    <div class="unsubscribe-modal">
+      <h3>Вы действительно хотите отписаться от проекта?</h3>
+      <app-avatar [url]="info?.imageAddress" [size]="70"></app-avatar>
+      <div class="unsubscribe-modal__buttons">
+        <app-button
+          color="red"
+          customTypographyClass="unsubscribe-modal-btn__typography"
+          (click)="onUnsubscribe($event, info?.id!)"
+          [disabled]="!info?.id"
+        >
+          Отписаться
+        </app-button>
+        <app-button
+          customTypographyClass="unsubscribe-modal-btn__typography"
+          (click)="onCloseUnsubscribeModal()"
+        >
+          Отменить
+        </app-button>
+      </div>
+    </div>
+  </app-modal>
+
+  <app-modal [open]="inviteErrorModal">
+    <div class="message-modal">
+      <h3 class="message-modal__title text-body-14">Приглашение на текущий проект было удалено</h3>
+      <p class="message-modal__text text-body-10">
+        Проверьте наличие вас в списке участников проекта или обратитесь к создателю проекта, чтобы
+        вас заново пригласили!
+      </p>
+      <app-button
+        customTypographyClass="text-body-12"
+        size="medium"
+        class="message-modal__button"
+        (click)="inviteErrorModal = false"
+      >
+        Хорошо
+      </app-button>
+    </div>
+  </app-modal>
+</ng-template>

@@ -1,10 +1,6 @@
 <!-- @format -->
 
 <div class="desktop">
-  <div class="desktop__header">
-    <h3>Фильтр</h3>
-    <a class="text-body-12" (click)="resetFilter()">Сбросить фильтр</a>
-  </div>
   <ng-container *ngTemplateOutlet="filter"></ng-container>
 </div>
 
@@ -27,24 +23,26 @@
     @if (filterOpen()) {
     <div class="select__dropdown" @dropdownAnimation>
       <ng-container *ngTemplateOutlet="filter"></ng-container>
-      <a class="text-body-12" (click)="resetFilter()">Сбросить фильтр</a>
+      <a class="text-body-12" (click)="resetFilter()">сбросить</a>
     </div>
     }
   </div>
 </div>
 
-<app-button [routerLink]="'/office/profile/' + profile()?.id">Написать новость</app-button>
-
 <ng-template #filter>
   <div class="filter">
-    <span class="text-body-12">Виды новостей</span>
-    <ul>
-      @for (option of filterOptions; track $index) {
-      <li class="text-body-14 filter__checkbox" (click)="setFilter(option.value)">
-        <app-checkbox [checked]="includedFilters().indexOf(option.value) !== -1"></app-checkbox>
-        {{ option.label }}
-      </li>
-      }
-    </ul>
+    @for (filterItem of feedFilterOptions; track $index) {
+    <div
+      class="filter__option"
+      [class.filter__option--disable]="filterItem.id === 5"
+      [class.filter__option--active]="filterItem.value === includedFilters()"
+      (click)="setFilter(filterItem.value)"
+    >
+      <div class="filter__option--icon">
+        <i appIcon [icon]="filterItem.icon" appSquare="18"></i>
+      </div>
+      <p class="text-body-12">{{ filterItem.name }}</p>
+    </div>
+    }
   </div>
 </ng-template>

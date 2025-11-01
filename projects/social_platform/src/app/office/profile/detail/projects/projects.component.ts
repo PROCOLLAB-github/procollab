@@ -1,13 +1,14 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
-import { map, Observable } from "rxjs";
-import { ProjectCardComponent } from "@office/shared/project-card/project-card.component";
+import { filter, Subscription, take } from "rxjs";
 import { AsyncPipe } from "@angular/common";
 import { Project } from "@office/models/project.model";
+import { InfoCardComponent } from "@office/features/info-card/info-card.component";
+import { ProfileDataService } from "../services/profile-date.service";
 
 /**
  * Компонент для отображения проектов пользователя
@@ -29,14 +30,62 @@ import { Project } from "@office/models/project.model";
   templateUrl: "./projects.component.html",
   styleUrl: "./projects.component.scss",
   standalone: true,
-  imports: [RouterLink, ProjectCardComponent, AsyncPipe],
+  imports: [RouterLink, AsyncPipe, InfoCardComponent],
 })
-export class ProfileProjectsComponent implements OnInit {
-  constructor(private readonly route: ActivatedRoute, public readonly authService: AuthService) {}
+export class ProfileProjectsComponent implements OnInit, OnDestroy {
+  private readonly route = inject(ActivatedRoute);
+  private readonly profileDataService = inject(ProfileDataService);
+  public readonly authService = inject(AuthService);
 
-  user?: Observable<User> = this.route.parent?.data.pipe(map(r => r["data"][0]));
-  subs?: Observable<Project[]> = this.route.parent?.data.pipe(map(r => r["data"][1]));
-  loggedUserId: Observable<number> = this.authService.profile.pipe(map(user => user.id));
+  ngOnInit(): void {
+    const profileDataSub$ = this.profileDataService
+      .getProfile()
+      .pipe(
+        filter(user => !!user),
+        take(1)
+      )
+      .subscribe({
+        next: user => {
+          this.user = user;
+        },
+      });
 
-  ngOnInit(): void {}
+    const profileIdDataSub$ = this.profileDataService
+      .getProfileId()
+      .pipe(
+        filter(profileId => !!profileId),
+        take(1)
+      )
+      .subscribe({
+        next: profileId => {
+          this.loggedUserId = profileId;
+        },
+      });
+
+    const profileSubsDataSub$ = this.profileDataService
+      .getProfileSubs()
+      .pipe(
+        filter(subs => !!subs),
+        take(1)
+      )
+      .subscribe({
+        next: subs => {
+          this.subs = subs;
+        },
+      });
+
+    profileDataSub$ && this.subscriptions.push(profileDataSub$);
+    profileIdDataSub$ && this.subscriptions.push(profileIdDataSub$);
+    profileSubsDataSub$ && this.subscriptions.push(profileSubsDataSub$);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach($ => $.unsubscribe());
+  }
+
+  user?: User;
+  loggedUserId?: number;
+  subs?: Project[];
+
+  subscriptions: Subscription[] = [];
 }

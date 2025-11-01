@@ -1,0 +1,45 @@
+@use "styles/typography";
+@use "styles/responsive";
+
+:host {
+  width: 100%;
+}
+
+.rating {
+  width: 100%;
+
+  &__columns {
+    display: flex;
+    align-items: center;
+  }
+
+  &__field {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    label {
+      margin-top: 5px;
+      color: var(--grey-for-text);
+    }
+  }
+
+  &__input {
+    grid-column: 2/3;
+  }
+
+  &__comment {
+    margin-top: 25px;
+
+    app-textarea {
+      ::ng-deep .field__input {
+        min-height: 66px !important;
+        color: var(--dark-grey);
+        background-color: transparent;
+        border-color: var(--grey-button);
+
+        @include typography.body-10;
+      }
+    }
+  }
+}

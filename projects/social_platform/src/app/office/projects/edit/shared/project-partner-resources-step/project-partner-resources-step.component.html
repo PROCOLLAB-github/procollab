@@ -1,0 +1,188 @@
+<!-- @format -->
+
+<div class="project__inner">
+  <div [formGroup]="partnerForm" class="project__left">
+    @if (hasPartners) {
+    <ul formArrayName="partners" class="project__info--wrapper">
+      @for (control of partners.controls; track i; let i = $index) {
+      <li class="project__info">
+        <div [formGroupName]="i" class="project__info">
+          <div class="project__info--general">
+            @if (partners.at(i)?.get("name"); as name) {
+            <fieldset>
+              <label class="text-body-12 field-label">название компании</label>
+              <app-input
+                size="big"
+                [error]="name | controlError"
+                placeholder="PROCOLLAB"
+                formControlName="name"
+              ></app-input>
+              @if (name | controlError: "required") {
+              <div class="text-body-10 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            } @if (partners.at(i)?.get("inn"); as inn) {
+            <fieldset>
+              <label class="text-body-12 field-label">инн компании</label>
+              <app-input
+                size="big"
+                [error]="inn | controlError"
+                placeholder="5055055055"
+                formControlName="inn"
+              ></app-input>
+              @if (inn | controlError: "required") {
+              <div class="text-body-10 error">
+                {{ errorMessage.VALIDATION_REQUIRED }}
+              </div>
+              }
+            </fieldset>
+            }
+          </div>
+
+          @if (partners.at(i)?.get("contribution"); as contribution) {
+          <fieldset>
+            <label class="text-body-12 field-label">вклад в проект от партнера</label>
+            <app-textarea
+              size="big"
+              [error]="contribution | controlError"
+              placeholder="вклад в проект от партнера"
+              formControlName="contribution"
+            ></app-textarea>
+            @if (contribution | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (partners.at(i)?.get("decisionMaker"); as decisionMaker) {
+          <fieldset>
+            <label class="text-body-12 field-label"
+              >ссылка на профиль представителя компании партнера</label
+            >
+            <app-input
+              size="big"
+              [error]="decisionMaker | controlError"
+              placeholder="Isakovsanya56@yandex.ru"
+              formControlName="decisionMaker"
+            ></app-input>
+            @if (decisionMaker | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
+        <app-button
+          size="big"
+          type="icon"
+          class="project__info--remove"
+          color="red"
+          (click)="removePartner(i, partners.value[i].company.id)"
+        >
+          <i appIcon icon="basket" appSquare="14"></i>
+        </app-button>
+      </li>
+      }
+    </ul>
+    }
+
+    <app-button
+      (click)="addPartner()"
+      size="big"
+      appearance="outline"
+      customTypographyClass="text-body-12"
+      class="vacancy__submit"
+    >
+      <span>добавить партнера</span>
+      <i appIcon icon="plus" appSquare="12"></i>
+    </app-button>
+  </div>
+
+  <div [formGroup]="resourceForm" class="project__right">
+    @if (hasResources) {
+    <ul formArrayName="resources" class="project__info--wrapper">
+      @for (control of resources.controls; track i; let i = $index) {
+      <li class="project__info">
+        <div [formGroupName]="i" class="project__info">
+          @if (resources.at(i)?.get("type"); as type) {
+          <fieldset>
+            <label class="text-body-12 field-label">тип ресурса</label>
+            <app-select
+              id="type"
+              [options]="resourcesTypeOptions"
+              size="big"
+              placeholder="выбери вариант"
+              formControlName="type"
+            ></app-select>
+            @if (type | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (resources.at(i)?.get("description"); as description) {
+          <fieldset>
+            <label class="text-body-12 field-label">описание ресурса</label>
+            <app-textarea
+              size="big"
+              [error]="description | controlError"
+              placeholder="дал нам денег и связей"
+              formControlName="description"
+            ></app-textarea>
+            @if (description | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (resources.at(i)?.get("partnerCompany"); as partnerCompany) {
+          <fieldset>
+            <label class="text-body-12 field-label">партнер для запроса ресурса</label>
+            <app-select
+              id="partnerCompany"
+              [options]="resourcesCompanyOptions"
+              size="big"
+              placeholder="выбери вариант"
+              formControlName="partnerCompany"
+            ></app-select>
+            @if (partnerCompany | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
+        <app-button
+          size="big"
+          class="project__info--remove"
+          color="red"
+          (click)="removeResource(i, resources.value[i].id)"
+          type="icon"
+        >
+          <i appIcon icon="basket" appSquare="14"></i>
+        </app-button>
+      </li>
+      }
+    </ul>
+    }
+
+    <app-button
+      (click)="addResource()"
+      size="big"
+      appearance="outline"
+      customTypographyClass="text-body-12"
+      class="vacancy__submit"
+    >
+      <span>добавить ресурс</span>
+      <i appIcon icon="plus" appSquare="12"></i>
+    </app-button>
+  </div>
+
+  @if (!partners.length && !resources.length) {
+  <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
+  }
+</div>

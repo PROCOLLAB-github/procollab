@@ -8,6 +8,7 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
+  OnInit,
   Output,
   signal,
   ViewChild,
@@ -21,10 +22,12 @@ import { expandElement } from "@utils/expand-element";
 import { debounceTime, finalize, fromEvent, map, Observable, Subscription } from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { IndustryService } from "@office/services/industry.service";
-import { ProjectRatingComponent } from "@office/shared/project-rating/project-rating.component";
+import { ProjectRatingComponent } from "@office/features/project-rating/project-rating.component";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { ProjectRatingService } from "@office/program/services/project-rating.service";
 import { RouterLink } from "@angular/router";
+import { TagComponent } from "@ui/components/tag/tag.component";
+import { ModalComponent } from "@ui/components/modal/modal.component";
 
 /**
  * Компонент карточки оценки проекта
@@ -60,7 +63,9 @@ import { RouterLink } from "@angular/router";
  * @property {Signal<boolean>} submitLoading - Состояние загрузки при отправке
  * @property {Signal<boolean>} readFullDescription - Развернуто ли описание
  * @property {Signal<boolean>} descriptionExpandable - Можно ли развернуть описание
- * @property {Signal<boolean>} projectRated - Оценен ли проект
+ * @property {Signal<boolean>} projectRated - Оценен ли проект (временно)
+ * @property {Signal<boolean>} projectConfirmed - Подтверждена ли оценка окончательно
+ * @property {Signal<boolean>} confirmLoading - Состояние загрузки при подтверждении
  */
 @Component({
   selector: "app-rating-card",
@@ -79,9 +84,11 @@ import { RouterLink } from "@angular/router";
     ProjectRatingComponent,
     ControlErrorPipe,
     RouterLink,
+    TagComponent,
+    ModalComponent,
   ],
 })
-export class RatingCardComponent implements AfterViewInit, OnDestroy {
+export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public industryService: IndustryService,
     private projectRatingService: ProjectRatingService,
@@ -92,33 +99,11 @@ export class RatingCardComponent implements AfterViewInit, OnDestroy {
   @Input({ required: true }) set project(proj: ProjectRate | null) {
     if (!proj) return;
     this._project.set(proj);
-    this.projectRated.set(proj.isScored);
   }
 
   get project(): ProjectRate | null {
     return this._project();
   }
-
-  @Input({ required: true }) set projects(proj: ProjectRate[] | null) {
-    if (!proj) return;
-    this._projects.set(proj);
-  }
-
-  get projects(): ProjectRate[] | null {
-    return this._projects();
-  }
-
-  @Input({ required: true }) set currentIndex(curIndx: number) {
-    if (!curIndx) return;
-    this._currentIndex.set(curIndx);
-  }
-
-  get currentIndex(): number {
-    return this._currentIndex();
-  }
-
-  @Output() onNext: EventEmitter<void> = new EventEmitter();
-  @Output() onPrev: EventEmitter<void> = new EventEmitter();
 
   @ViewChild("descEl") descEl?: ElementRef;
 
@@ -129,6 +114,7 @@ export class RatingCardComponent implements AfterViewInit, OnDestroy {
   form = new FormControl();
 
   submitLoading = signal(false);
+  confirmLoading = signal(false);
 
   readFullDescription = signal(false);
 
@@ -136,13 +122,33 @@ export class RatingCardComponent implements AfterViewInit, OnDestroy {
 
   projectRated = signal(false);
 
+  projectConfirmed = signal(false);
+
+  showConfirmRateModal = signal(false);
+
+  isProjectCriterias = signal(0);
+
   desktopMode$: Observable<boolean> = this.breakpointObserver
     .observe("(min-width: 920px)")
     .pipe(map(result => result.matches));
 
   subscriptions$ = signal<Subscription[]>([]);
 
+  ngOnInit(): void {
+    if (this.project) {
+      const isScored = this.project?.scored || false;
+      this.projectConfirmed.set(isScored);
+      this.projectRated.set(isScored);
+    }
+  }
+
   ngAfterViewInit(): void {
+    if (this.project) {
+      this.isProjectCriterias.set(
+        this.project?.criterias.filter(criteria => !(criteria.type === "str")).length
+      );
+    }
+
     const descElement = this.descEl?.nativeElement;
     this.descriptionExpandable.set(descElement?.clientHeight < descElement?.scrollHeight);
     this.cdRef.detectChanges();
@@ -165,34 +171,51 @@ export class RatingCardComponent implements AfterViewInit, OnDestroy {
     this.readFullDescription.set(!isExpanded);
   }
 
-  submitRating(): void {
+  confirmRateProject(): void {
     this.form.markAsTouched();
-
     if (this.form.invalid) return;
 
     const fv = this.form.getRawValue();
-
     const project = this.project as ProjectRate;
-
-    const sumbittedVal = this.projectRatingService.formValuesToDTO(project.criterias, fv);
+    const submittedVal = this.projectRatingService.formValuesToDTO(project.criterias, fv);
 
     this.submitLoading.set(true);
 
     this.projectRatingService
-      .rate(project.id, sumbittedVal)
+      .rate(project.id, submittedVal)
       .pipe(finalize(() => this.submitLoading.set(false)))
-      .subscribe(() => this.projectRated.set(true));
+      .subscribe({
+        next: () => {
+          if (this.showConfirmRateModal()) {
+            this.projectConfirmed.set(true);
+            this.showConfirmRateModal.set(false);
+          } else {
+            this.projectRated.set(true);
+            this.showConfirmRateModal.set(true);
+          }
+        },
+      });
   }
 
   redoRating(): void {
-    this.projectRated.set(false);
+    if (!this.projectConfirmed()) {
+      this.projectRated.set(false);
+    }
   }
 
-  toggleRate(type: "next" | "prev"): void {
-    if (type === "next") {
-      this.onNext.emit();
-    } else {
-      this.onPrev.emit();
-    }
+  get canEdit(): boolean {
+    return !this.projectConfirmed();
+  }
+
+  get showRatingForm(): boolean {
+    return !this.projectRated() && this.canEdit;
+  }
+
+  get showRatedWithEdit(): boolean {
+    return this.projectRated() && !this.projectConfirmed();
+  }
+
+  get showConfirmedState(): boolean {
+    return this.projectConfirmed();
   }
 }

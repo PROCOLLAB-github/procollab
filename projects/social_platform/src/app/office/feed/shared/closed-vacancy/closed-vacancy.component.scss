@@ -5,7 +5,7 @@
   padding: 20px;
   background-color: var(--white);
   border: 1px solid var(--medium-grey-for-outline);
-  border-radius: 15px;
+  border-radius: var(--rounded-xl);
 
   &__head {
     margin-bottom: 10px;
@@ -68,7 +68,7 @@
     justify-content: space-between;
     padding: 10px 20px;
     border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
   }
 
   &__job {
@@ -77,7 +77,7 @@
     margin-bottom: 15px;
     text-align: center;
     border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
 
     @include typography.bold-body-14;
 

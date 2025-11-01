@@ -2,32 +2,10 @@
 @use "styles/typography";
 
 .page {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-
-  @include responsive.apply-desktop {
-    flex-direction: row-reverse;
-    align-items: flex-start;
-  }
-
-  &__filter {
-    @include responsive.apply-desktop {
-      position: sticky;
-      top: 0;
-      flex-grow: 0.3;
-      max-width: 400px;
-    }
-  }
-
-  &__feed {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 0.7;
-    grid-column: unset;
-    gap: 20px;
-    align-items: center;
-    width: 100%;
+  &__vacancies {
+    display: grid;
+    grid-template-columns: 333px 333px;
+    grid-gap: 20px;
   }
 
   &__item {
@@ -38,26 +16,39 @@
   &__title {
     margin-top: 40px;
     color: var(--black);
-
-    @include typography.heading-4;
-
-    @include responsive.apply-desktop {
-      @include typography.heading-3;
-    }
   }
 }
 
-.filter {
+.cancel {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: 100%;
+  justify-content: center;
+  width: 350px;
+  height: 175px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
 
-  &__search {
-    padding: 10px;
+  &__top {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+
+  &__title {
+    color: var(--grey-for-text);
+    text-align: center;
+  }
+
+  &__icon {
+    color: var(--accent);
+  }
+
+  &__text {
+    margin-bottom: 8px;
     color: var(--black);
-    background-color: var(--white);
-    border: 1px solid var(--grey-button);
-    border-radius: var(--rounded-lg);
   }
 }

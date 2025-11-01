@@ -90,3 +90,11 @@
   color: var(--dark-grey);
   cursor: pointer;
 }
+
+.error {
+  color: var(--red) !important;
+
+  i {
+    color: var(--red) !important;
+  }
+}

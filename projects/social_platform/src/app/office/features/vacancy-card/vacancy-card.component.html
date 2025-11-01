@@ -1,0 +1,38 @@
+<!-- @format -->
+
+@if (vacancy) {
+<div class="vacancy">
+  <div class="vacancy__info">
+    <div class="vacancy__info--text">
+      <h3 class="text-body-12 vacancy__role">{{ vacancy.role }}</h3>
+    </div>
+    <div class="vacancy__skills">
+      @if (vacancy.requiredSkills.length) { @for (skill of vacancy.requiredSkills.slice(0, 5); track
+      $index) {
+      <app-tag [appearance]="skill.category.name.includes('Soft') ? 'inline' : 'outline'">{{
+        skill.name
+      }}</app-tag>
+
+      @if (vacancy.specialization) {
+      <app-tag [appearance]="skill.category.name.includes('Soft') ? 'inline' : 'outline'">{{
+        vacancy.specialization ? vacancy.specialization : ""
+      }}</app-tag>
+      } } @if (vacancy.requiredSkills.length > 5) {
+      <p class="text-body-12 vacancy__requirements--more">
+        + {{ vacancy.requiredSkills.length - 5 }}
+      </p>
+      } }
+    </div>
+  </div>
+
+  <div class="vacancy__icons">
+    <app-button size="big" appearance="outline" (click)="onEdit($event)">
+      <i class="vacancy__edit" appIcon icon="edit-pen" appSquare="10"></i>
+    </app-button>
+
+    <app-button size="big" color="red" (click)="onRemove($event)">
+      <i class="vacancy__basket" appIcon icon="basket" appSquare="10"></i>
+    </app-button>
+  </div>
+</div>
+}

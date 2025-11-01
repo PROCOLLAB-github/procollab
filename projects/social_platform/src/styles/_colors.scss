@@ -4,29 +4,31 @@
 
 :root {
   // ACCENT
-  --gradient: linear-gradient(90deg, #242424 0%, #6c27ff 50%);
-  --gradient-mild: linear-gradient(90deg, #501d53 0.3%, #3b1f72 22%, #6326e6 100%);
-  --accent: #6c27ff;
-  --accent-dark: #{color.adjust(#6c27ff, $blackness: 20%)};
+  --gradient: linear-gradient(90deg, #242424 0%, #8a63e6 50%);
+  --gradient-mild: linear-gradient(90deg, #501d53 0.3%, #3b1f72 22%, #8a63e6 100%);
+  --accent: #8a63e6;
+  --accent-dark: #{color.adjust(#8a63e6, $blackness: 20%)};
   --accent-mild: #{color.adjust(#6c27ff, $alpha: -0.4)};
-  --accent-light: #f7f3ff;
+  --accent-light: #9a80e6;
 
   // GOLD
-  --gold: #f6ff8b;
-  --gold-dark: #f7cf4d;
+  --gold: #e5b25d;
+  --gold-dark: #c69849;
 
   // GRAY
-  --white: #fff;
-  --black: #332e2d;
-  --dark-grey: #8c888a;
+  --light-white: #fff;
+  --white: #fafafa;
+  --black: #333;
+  --dark-grey: #a59fb9;
   --gray: #d3d3d3;
   --light-gray: #f9f9f9;
   --grey-button: #e5e5e5e5;
   --medium-grey-for-outline: #eee;
-  --grey-for-text: #a59fb9;
+  --grey-for-text: #827e80;
 
   // FUNCTIONAL
-  --green: #73c66e;
-  --red: #ff5151;
-  --red-dark: #{color.adjust(#ff5151, $blackness: 10%)};
+  --green: #88c9a1;
+  --green-dark: #297373;
+  --red: #d48a9e;
+  --red-dark: #{color.adjust(#d48a9e, $blackness: 10%)};
 }

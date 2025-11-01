@@ -2,48 +2,60 @@
 @use "styles/responsive";
 
 .card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  background-color: var(--white);
-  border: 1px solid var(--medium-grey-for-outline);
-  border-radius: 15px;
+  padding: 37px 24px 24px;
+  color: var(--light-white);
+  background-color: var(--accent);
+  border-radius: var(--rounded-xl);
 
-  &__title {
+  &__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  &__project {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    grid-gap: 40px;
+    margin-bottom: 20px;
+  }
+
+  &__info {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    align-items: center;
-    text-align: center;
 
-    @include typography.bold-body-14;
-
-    @include responsive.apply-desktop {
-      @include typography.heading-3;
+    &:first-child {
+      margin-bottom: 4px;
     }
+
+    &--main,
+    &--additional {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  &__industry {
+    display: inline-flex;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__score {
+    display: flex;
+    gap: 3px;
+    align-items: center;
   }
 
   &__description {
-    margin-bottom: 10px;
-    color: var(--grey-for-text);
-  }
-
-  &__avatar {
-    margin: 15px 0;
-  }
-
-  &__text {
-    margin-bottom: 20px;
-    color: var(--black);
-
-    @include typography.body-12;
-
-    @include responsive.apply-desktop {
-      max-width: 580px;
-      margin-bottom: 5px;
-
-      @include typography.body-14;
-    }
+    margin-top: 7px;
+    color: var(--white);
   }
 }

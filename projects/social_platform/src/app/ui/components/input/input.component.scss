@@ -7,12 +7,9 @@
   position: relative;
 
   &__input {
-    width: 100%;
-    padding: 13px 20px;
-    color: var(--black);
+    color: var(--black) !important;
     background-color: var(--white);
-    border: 1px solid var(--gray);
-    border-radius: var(--rounded-lg);
+    border: none;
     outline: none;
     transition: all 0.2s;
 
@@ -20,19 +17,91 @@
       color: var(--dark-grey);
     }
 
+    &--small {
+      max-width: 70px;
+      padding: 12px 0;
+      text-align: center;
+
+      &--error {
+        text-align: start;
+      }
+    }
+
+    &--big {
+      width: 100%;
+      padding: 12px;
+    }
+
+    &--with-tooltip {
+      padding-right: 130px;
+    }
+
+    &--border {
+      border: 0.5px solid var(--gray);
+      border-radius: var(--rounded-xxl);
+
+      &:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 6px rgb(109 40 255 / 30%);
+      }
+    }
+
     &--error {
       border-color: var(--red);
     }
 
-    &:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 6px rgb(109 40 255 / 30%);
-    }
-
-    @include typography.body-14;
+    @include typography.body-10;
 
     @include responsive.apply-desktop {
-      @include typography.body-16;
+      @include typography.body-12;
+    }
+  }
+
+  &__input[type="date"]::-webkit-inner-spin-button,
+  &__input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    appearance: none;
+  }
+
+  &__input[type="radio"] {
+    position: relative;
+    width: 10px;
+    height: 10px;
+    padding: 4px;
+    cursor: pointer;
+    border: 0.5px solid var(--dark-grey);
+    border-radius: 50%;
+    transition: border-color 0.2s, background-color 0.2s;
+    appearance: none;
+
+    &:hover::after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 4px;
+      height: 4px;
+      content: "";
+      background-color: var(--accent);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &:checked {
+      z-index: 1;
+      background-color: var(--accent);
+      border-color: var(--accent);
+
+      &::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 4px;
+        height: 4px;
+        content: "";
+        background-color: var(--light-gray);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
     }
   }
 
@@ -43,6 +112,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--red) !important;
     transform: translateY(-50%);
   }
 
@@ -52,5 +122,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  &__tooltip-wrapper {
+    position: absolute;
+    top: 55%;
+    right: 20px;
+    z-index: 10;
+    transform: translateY(-50%);
+
+    &--small {
+      top: 15%;
+      right: -3px;
+    }
   }
 }

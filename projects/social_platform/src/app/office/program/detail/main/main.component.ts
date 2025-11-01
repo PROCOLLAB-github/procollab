@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ProgramService } from "@office/program/services/program.service";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import {
   concatMap,
   fromEvent,
@@ -29,15 +29,17 @@ import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
 import { ProgramNewsCardComponent } from "../shared/news-card/news-card.component";
 import { ButtonComponent, IconComponent } from "@ui/components";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ApiPagination } from "@models/api-pagination.model";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { NewsFormComponent } from "@office/shared/news-form/news-form.component";
-import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ProjectService } from "@office/services/project.service";
+import { ModalComponent } from "@ui/components/modal/modal.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
-import { AsyncPipe } from "@angular/common";
 import { LoadingService } from "@office/services/loading.service";
+import { ProjectAdditionalService } from "@office/projects/edit/services/project-additional.service";
+import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
+import { NewsFormComponent } from "@office/features/news-form/news-form.component";
+import { AsyncPipe } from "@angular/common";
+import { AvatarComponent } from "@uilib";
 
 @Component({
   selector: "app-main",
@@ -45,19 +47,22 @@ import { LoadingService } from "@office/services/loading.service";
   styleUrl: "./main.component.scss",
   standalone: true,
   imports: [
-    AvatarComponent,
     IconComponent,
     ButtonComponent,
-    RouterLink,
     ProgramNewsCardComponent,
-    TagComponent,
     UserLinksPipe,
     AsyncPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
+    ModalComponent,
+    MatProgressBarModule,
+    SoonCardComponent,
     NewsFormComponent,
     ModalComponent,
     MatProgressBarModule,
+    AvatarComponent,
+    TagComponent,
+    RouterModule,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
@@ -65,17 +70,27 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     private readonly programService: ProgramService,
     private readonly programNewsService: ProgramNewsService,
     private readonly projectService: ProjectService,
+    private readonly projectAdditionalService: ProjectAdditionalService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly cdRef: ChangeDetectorRef,
     private readonly loadingService: LoadingService
   ) {}
 
+  get isAssignProjectToProgramError() {
+    return this.projectAdditionalService.getIsAssignProjectToProgramError()();
+  }
+
+  get errorAssignProjectToProgramModalMessage() {
+    return this.projectAdditionalService.getErrorAssignProjectToProgramModalMessage();
+  }
+
   news = signal<FeedNews[]>([]);
   totalNewsCount = signal(0);
   fetchLimit = signal(10);
   fetchPage = signal(0);
 
+  // Сигналы для работы с модальными окнами с текстом
   showProgramModal = signal(false);
   showProgramModalErrorMessage = signal<string | null>(null);
 
@@ -254,26 +269,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     this.loadingService.hide();
   }
 
-  addProject(): void {
-    this.loadingService.show();
-
-    this.projectService.create().subscribe({
-      next: project => {
-        this.projectService.projectsCount.next({
-          ...this.projectService.projectsCount.getValue(),
-          my: this.projectService.projectsCount.getValue().my + 1,
-        });
-        this.router
-          .navigateByUrl(`/office/projects/${project.id}/edit?editingStep=main`)
-          .then(() => {
-            console.debug("Route change from ProjectsComponent");
-          });
-      },
-      error: error => {
-        this.loadingService.hide();
-        console.error("Project creation error:", error);
-      },
-    });
+  clearAssignProjectToProgramError(): void {
+    this.projectAdditionalService.clearAssignProjectToProgramError();
   }
 
   private loadEvent?: Observable<Event>;

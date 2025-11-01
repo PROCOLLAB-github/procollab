@@ -1,0 +1,50 @@
+/** @format */
+
+@use "styles/responsive";
+
+.response {
+  display: grid;
+  grid-template-columns: 4fr 6fr;
+  grid-gap: 20px;
+
+  &__section {
+    padding: 24px;
+    margin-bottom: 20px;
+    background-color: var(--light-white);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
+  }
+
+  &__file {
+    margin-top: 4px;
+  }
+}
+
+.lists {
+  &__section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    border-bottom: 0.5px solid var(--accent);
+  }
+
+  &__icon {
+    color: var(--accent);
+  }
+
+  &__title {
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+
+  &__button {
+    &--inactive {
+      opacity: 0.7;
+    }
+  }
+}

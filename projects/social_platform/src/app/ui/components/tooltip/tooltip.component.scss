@@ -1,0 +1,100 @@
+/** @format */
+
+@use "styles/typography";
+@use "styles/responsive";
+
+.tooltip {
+  &__icon {
+    position: relative;
+    z-index: 10;
+    display: inline-block;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.3s ease-in-out;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    @include responsive.apply-desktop {
+      opacity: 0.5;
+    }
+  }
+
+  &__content {
+    position: absolute;
+    z-index: 100;
+    display: none;
+    padding: 12px;
+    color: var(--dark-grey);
+    background-color: var(--white);
+    border: 0.5px solid var(--dark-grey);
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+
+    &--visible {
+      display: block;
+      opacity: 1;
+    }
+
+    &--left {
+      top: 50%;
+      right: calc(100% + 8px);
+      border-radius: 15px 15px 15px 0;
+      transform: translateY(-50%);
+
+      &::after {
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        content: "";
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left: 8px solid var(--white);
+        transform: translateY(-50%);
+      }
+
+      &::before {
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 1px);
+        content: "";
+        border-top: 9px solid transparent;
+        border-bottom: 9px solid transparent;
+        border-left: 9px solid var(--dark-grey);
+        transform: translateY(-50%);
+      }
+    }
+
+    &--right {
+      top: 50%;
+      left: calc(100% + 8px);
+      border-radius: 15px 15px 0;
+      transform: translateY(-50%);
+
+      &::after {
+        position: absolute;
+        top: 50%;
+        right: 100%;
+        content: "";
+        border-top: 8px solid transparent;
+        border-right: 8px solid var(--white);
+        border-bottom: 8px solid transparent;
+        transform: translateY(-50%);
+      }
+
+      &::before {
+        position: absolute;
+        top: 50%;
+        right: calc(100% + 1px);
+        content: "";
+        border-top: 9px solid transparent;
+        border-right: 9px solid var(--dark-grey);
+        border-bottom: 9px solid transparent;
+        transform: translateY(-50%);
+      }
+    }
+  }
+}

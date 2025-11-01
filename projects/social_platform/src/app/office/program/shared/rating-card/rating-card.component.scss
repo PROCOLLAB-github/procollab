@@ -3,73 +3,43 @@
 @use "styles/responsive";
 @use "styles/typography";
 
-:host {
-  min-width: 0;
-}
-
 .card {
-  border-radius: 15px;
+  display: grid;
+  grid-template-columns: 5fr 3fr;
+  gap: 20px;
 
-  &__upper {
-    padding: 14px;
-    background-color: var(--white);
-    border: 1px solid var(--accent);
-    border-radius: 15px;
-
-    @include responsive.apply-desktop {
-      min-height: 550px;
-    }
+  &__wrapper {
+    padding: 24px;
+    background-color: var(--light-white);
+    border: 0.5px solid var(--grey-button);
+    border-radius: var(--rounded-lg);
   }
 
-  &__heading {
-    position: relative;
-    z-index: 2;
+  &__inner {
     display: flex;
-    flex-direction: column;
-    gap: 20px;
-    border-radius: 15px;
-
-    app-button ::ng-deep .button--inline {
-      min-height: 38px;
-    }
-
-    @include responsive.apply-desktop {
-      flex-flow: row wrap;
-      gap: 10px;
-      align-items: flex-end;
-      justify-content: space-between;
-      padding: 47px 14px 47px 140px;
-    }
-  }
-
-  &__avatar {
-    position: absolute;
-    left: 50%;
-    z-index: 3;
-    display: block;
-    transform: translateX(-50%) translateY(15px);
-
-    @include responsive.apply-desktop {
-      top: 50%;
-      left: 10px;
-      transform: translateY(-50%);
-    }
+    align-items: center;
+    justify-content: space-between;
   }
 
   &__info {
     display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  &__naming {
+    display: flex;
     flex-direction: column;
     gap: 5px;
-    margin-top: 90px;
-    color: var(--dark-grey);
+    width: 60%;
 
-    @include responsive.apply-desktop {
-      flex-basis: 300px;
-      flex-flow: row wrap;
-      flex-grow: 9999;
-      gap: 30px;
-      margin-top: 0;
+    &--text {
+      color: var(--black);
     }
+  }
+
+  &__industry {
+    display: inline-flex;
   }
 
   &__title {
@@ -77,128 +47,87 @@
     color: var(--black);
     text-align: center;
     text-overflow: ellipsis;
-
-    @include typography.heading-4;
-
-    @include responsive.apply-desktop {
-      text-align: unset;
-
-      @include typography.heading-2;
-    }
   }
 
-  &__row {
+  &__rated {
     display: flex;
-    gap: 20px;
+    gap: 4px;
     align-items: center;
-    justify-content: center;
-    margin-top: 2px;
+    margin-top: 14px;
 
-    @include responsive.apply-desktop {
-      justify-content: unset;
-      margin-top: 0;
+    &--icon {
+      ::ng-deep {
+        button {
+          width: 50px;
+          padding: 8px !important;
+        }
+      }
     }
-  }
-
-  &__industry {
-    margin-right: 20px;
-
-    @include responsive.apply-desktop {
-      margin-right: 40px;
-    }
-  }
-
-  &__geo {
-    display: flex;
-    align-items: center;
-
-    i {
-      margin-right: 5px;
-    }
-  }
-
-  &__info-buttons {
-    flex-grow: 1;
   }
 
   &__presentation {
-    display: block;
-
-    i {
-      margin-left: 10px;
+    ::ng-deep {
+      app-button {
+        button {
+          padding-top: 4px;
+          padding-bottom: 4px;
+        }
+      }
     }
   }
 
   &__lower {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    padding: 14px;
-    margin-top: 25px;
 
-    @include responsive.apply-desktop {
-      gap: 24px;
+    &--info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+      border-bottom: 0.5px solid var(--dark-grey);
 
-      app-button {
-        width: 50%;
-        max-width: 345px;
+      p,
+      i {
+        color: var(--accent);
       }
     }
-  }
 
-  &__rated {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    align-items: center;
-    justify-content: center;
-    padding-top: 15px;
-    padding-bottom: 10px;
-    color: var(--accent);
-  }
-
-  &__lower-icons {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-
-  &__rated-icon {
-    color: var(--green);
-  }
-
-  &__redo-rating-icon {
-    color: var(--dark-grey);
-    cursor: pointer;
-  }
-
-  &__buttons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &__next-btn,
-  &__last-btn {
-    margin: 0 10px;
+    ::ng-deep {
+      app-button {
+        button {
+          padding-top: 4px;
+          padding-bottom: 4px;
+        }
+      }
+    }
   }
 }
 
 .about {
-  margin-top: 35px;
-
-  @include responsive.apply-desktop {
-    padding: 0 10px 24px;
-    margin-top: unset;
-  }
+  /* stylelint-disable value-no-vendor-prefix */
+  margin-top: 10px;
 
   &__title {
-    margin-bottom: 12px;
-    color: var(--black);
+    color: var(--accent);
   }
 
-  /* stylelint-disable value-no-vendor-prefix */
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 0.5px solid var(--dark-grey);
+
+    i {
+      color: var(--accent);
+    }
+  }
+
   &__text {
+    margin-top: 10px;
+
     p {
       display: -webkit-box;
       overflow: hidden;
@@ -232,5 +161,34 @@
     margin-top: 2px;
     color: var(--accent);
     cursor: pointer;
+  }
+}
+
+.cancel {
+  position: relative;
+  display: block;
+  width: 350px;
+  max-height: calc(100vh - 40px);
+
+  i {
+    padding: 36px 0;
+    color: var(--green);
+  }
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    text-align: center;
+  }
+
+  &__text {
+    width: 40%;
+    color: var(--dark-grey);
+    text-align: center;
   }
 }

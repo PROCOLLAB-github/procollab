@@ -5,10 +5,7 @@ import { OfficeComponent } from "./office.component";
 import { ProfileEditComponent } from "./profile/edit/edit.component";
 import { MembersComponent } from "./members/members.component";
 import { MembersResolver } from "./members/members.resolver";
-import { VacancySendComponent } from "./vacancy/send/send.component";
 import { OfficeResolver } from "./office.resolver";
-import { MentorsComponent } from "./mentors/mentors.component";
-import { MentorsResolver } from "./mentors/mentors.resolver";
 
 /**
  * Конфигурация маршрутов для модуля офиса
@@ -55,10 +52,6 @@ export const OFFICE_ROUTES: Routes = [
         loadChildren: () => import("./program/program.routes").then(c => c.PROGRAM_ROUTES),
       },
       {
-        path: "vacancy/:vacancyId",
-        component: VacancySendComponent,
-      },
-      {
         path: "chats",
         loadChildren: () => import("./chat/chat.routes").then(c => c.CHAT_ROUTES),
       },
@@ -67,13 +60,6 @@ export const OFFICE_ROUTES: Routes = [
         component: MembersComponent,
         resolve: {
           data: MembersResolver,
-        },
-      },
-      {
-        path: "mentors",
-        component: MentorsComponent,
-        resolve: {
-          data: MentorsResolver,
         },
       },
       {

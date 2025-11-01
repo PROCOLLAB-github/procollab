@@ -2,20 +2,39 @@
 
 <div class="page">
   <div class="auth__greeting">
-    <h3 class="auth__title">Кем хочешь работать?</h3>
-    <i
-      appIcon
-      icon="hint"
-      appSquare="24"
-      class="content__hint"
-      (mouseenter)="showTooltip('auth')"
-      (mouseleave)="hideTooltip('auth')"
-    ></i>
-    <span
-      class="content__tooltip text-body-12"
-      [class.content__tooltip--visible]="isHintAuthVisible"
-      >{{ tooltipAuthText }}</span
-    >
+    <div class="tooltip">
+      <h3 class="text-heading-3">Кем хочешь работать?</h3>
+      <app-tooltip
+        [text]="
+          'Дизайнер, веб-разработчик, инженер? Определяйся и пиши тем, кем хотел бы стать или уже стал P.S. Дальше можно будет изменить выбор'
+        "
+        [isVisible]="isHintAuthVisible"
+        [position]="'right'"
+        [tooltipWidth]="300"
+        customClass="tooltip__hint"
+        (show)="showTooltip('auth')"
+        (hide)="hideTooltip('auth')"
+      ></app-tooltip>
+    </div>
+
+    <div class="content__actions">
+      <app-button
+        size="big"
+        (click)="onSkipRegistration()"
+        customTypographyClass="text-body-12"
+        color="grey"
+        [loader]="skipSubmitting()"
+        >закончить регистрацию позже</app-button
+      >
+      <app-button
+        size="big"
+        type="submit"
+        customTypographyClass="text-body-12"
+        [loader]="stageSubmitting()"
+        (click)="onSubmit()"
+        >продолжить</app-button
+      >
+    </div>
     <!-- <p class="auth__info">
       Для того, чтобы участники понимали с кем общаются и платформа могла рекомендовать тебя на
       самые подходящие вакансии
@@ -23,7 +42,7 @@
   </div>
   <div class="content" [formGroup]="stageForm">
     <section class="content__section content__left">
-      <h4 class="text-heading-4 content__section-heading">Поиск по библиотеке</h4>
+      <h4 class="text-heading-4 content__section-heading">поиск по библиотеке</h4>
       <app-autocomplete-input
         [suggestions]="inlineSpecializations()"
         fieldToDisplay="name"
@@ -36,28 +55,27 @@
         formControlName="speciality"
       ></app-autocomplete-input>
       @if (stageForm.controls["speciality"] | controlError) {
-      <div class="text-body-14 error">
+      <div class="text-body-10 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
       }
     </section>
     <section class="content__section content__right">
       <div class="auth__greeting content__right-heading">
-        <h4 class="text-heading-4">Библиотека</h4>
-        <i
-          appIcon
-          icon="hint"
-          appSquare="24"
-          class="content__hint"
-          (mouseenter)="showTooltip('lib')"
-          (mouseleave)="hideTooltip('lib')"
-        ></i>
-        <span
-          class="content__tooltip text-body-12"
-          style="width: 280px; left: 30%; top: 80%"
-          [class.content__tooltip--visible]="isHintLibVisible"
-          [innerHTML]="tooltipLibText"
-        ></span>
+        <div class="tooltip">
+          <h4 class="text-heading-4">библиотека</h4>
+          <app-tooltip
+            [text]="
+              'Это наша база со всеми специальностями. Если не найдешь свою пиши в @procollab_support и мы обязательно добавим твою профессию и ты получишь +респект'
+            "
+            [isVisible]="isHintLibVisible"
+            [position]="'right'"
+            [tooltipWidth]="300"
+            customClass="tooltip__hint"
+            (show)="showTooltip('lib')"
+            (hide)="hideTooltip('lib')"
+          ></app-tooltip>
+        </div>
       </div>
       <div class="content__specs-groups">
         <ul class="content__specs-groups-list">
@@ -66,6 +84,9 @@
             <app-specializations-group
               [title]="spec.name"
               [options]="spec.specializations"
+              [hasOpenGroups]="hasOpenSpecializationsGroups()"
+              [disabled]="isSpecializationGroupDisabled(spec.name)"
+              (groupToggled)="onSpecializationsGroupToggled($event, spec.name)"
               (selectOption)="onSelectSpec($event)"
             ></app-specializations-group>
           </li>
@@ -73,13 +94,5 @@
         </ul>
       </div>
     </section>
-    <div class="content__actions">
-      <app-button (click)="onSkipRegistration()" color="grey" [loader]="skipSubmitting()"
-        >Закончить регистрацию позже</app-button
-      >
-      <app-button type="submit" [loader]="stageSubmitting()" (click)="onSubmit()"
-        >Продолжить</app-button
-      >
-    </div>
   </div>
 </div>

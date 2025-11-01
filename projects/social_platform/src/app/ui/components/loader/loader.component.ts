@@ -29,13 +29,13 @@ export class LoaderComponent implements OnInit {
   @Input() speed = "1s";
 
   /** Размер индикатора */
-  @Input() size = "47px";
+  @Input() size = "15px";
 
   /** Цвет индикатора */
   @Input() color = "white";
 
   /** Тип анимации */
-  @Input() type: "wave" | "circle" = "wave";
+  @Input() type: "wave" | "circle" = "circle";
 
   ngOnInit(): void {}
 }

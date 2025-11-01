@@ -1,0 +1,49 @@
+@use "styles/responsive";
+
+.dashboard {
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 0.5px solid var(--accent);
+
+    i,
+    p {
+      color: var(--accent);
+    }
+  }
+
+  &__list {
+    display: grid;
+    flex-grow: 1;
+    grid-template-columns: 1fr;
+    column-gap: 20px;
+    align-items: flex-start;
+    margin-top: 50px;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: repeat(4, 2fr);
+    }
+  }
+
+  &__link {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    color: var(--grey-for-text) !important;
+    opacity: 1;
+
+    &--icon {
+      margin-bottom: 2.5px;
+      color: var(--grey-for-text) !important;
+    }
+
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+}

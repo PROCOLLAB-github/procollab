@@ -1,0 +1,50 @@
+/** @format */
+
+.vacancy {
+  &__requirements {
+    padding: 5px 40px;
+    color: var(--accent);
+    background: transparent;
+    border: 1px solid var(--accent);
+    border-radius: var(--rounded-xxl);
+
+    &--soft {
+      color: var(--white);
+      background-color: var(--accent);
+      border: none;
+    }
+
+    &--more {
+      color: var(--accent);
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+
+    &--text {
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--dark-grey);
+    }
+  }
+
+  &__skills {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  &__icons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 10px;
+
+    app-button {
+      flex-grow: 1;
+    }
+  }
+}

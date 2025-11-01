@@ -8,6 +8,7 @@
     <fieldset class="auth__field">
       <label for="email" class="field-label">Электронная почта</label>
       <app-input
+        size="big"
         [error]="email | controlError"
         id="email"
         type="email"
@@ -15,19 +16,23 @@
         placeholder="Введите почту"
       ></app-input>
       @if (email | controlError: "email") {
-      <div class="text-body-14 error">
+      <div class="text-body-10 error">
         {{ errorMessage.VALIDATION_EMAIL }}
       </div>
       } @if (email | controlError: "required") {
-      <div class="text-body-14 error">
+      <div class="text-body-10 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
       }
     </fieldset>
     } @if (loginForm.get("password"); as password) {
     <fieldset class="auth__field">
-      <label for="password" class="field-label">Пароль</label>
+      <div class="login__password">
+        <label class="field-label" for="password">Пароль</label>
+        <a routerLink="/auth/reset_password/send_email" class="login__forget"> Забыли пароль? </a>
+      </div>
       <app-input
+        size="big"
         [error]="password | controlError"
         id="password"
         [type]="showPassword ? 'text' : 'password'"
@@ -59,17 +64,18 @@
         }
       </app-input>
       @if (password | controlError: "required") {
-      <div class="text-body-14 error">
+      <div class="text-body-10 error">
         {{ errorMessage.VALIDATION_REQUIRED }}
       </div>
       }
     </fieldset>
     } @if (errorWrongAuth) {
-    <div class="text-body-14 error">
+    <div class="text-body-10 error">
       {{ errorMessage.AUTH_WRONG_AUTH }}
     </div>
     }
     <app-button
+      size="big"
       [loader]="loginIsSubmitting"
       class="auth__button"
       customTypographyClass="auth__button-typography"
@@ -85,6 +91,5 @@
         appViewBox="0 0 18 9"
       ></i>
     </app-button>
-    <a routerLink="/auth/reset_password/send_email" class="login__forget"> Забыли пароль? </a>
   </div>
 </form>

@@ -41,9 +41,14 @@ export class UserLinksPipe implements PipeTransform {
       value.includes("api.selcdn.ru/v1")
     ) {
       const valueTrimed = value.replace(/^https?:\/\//, "");
+      const iconName =
+        value.includes("procollab_media") || value.includes("api.selcdn.ru/v1")
+          ? "file"
+          : value.includes("@")
+          ? "mail"
+          : "link";
       return {
-        iconName:
-          value.includes("procollab_media") || value.includes("api.selcdn.ru/v1") ? "file" : "link",
+        iconName,
         tag: valueTrimed,
       };
     }

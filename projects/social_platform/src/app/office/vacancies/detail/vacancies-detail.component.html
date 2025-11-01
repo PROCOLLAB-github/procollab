@@ -2,7 +2,7 @@
 
 @if (vacancy) {
 <div class="detail">
-  <app-bar class="bar" [backHave]="true" [links]="[]"></app-bar>
+  <app-back [namespace]="vacancy.role" path="/office/vacancies/all"></app-back>
 </div>
 
 <div class="detail__body">

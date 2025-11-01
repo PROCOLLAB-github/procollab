@@ -4,13 +4,15 @@
 @use "styles/typography";
 
 .project {
+  position: relative;
+
   &__inner {
     width: 100%;
     margin-bottom: 25px;
 
     @include responsive.apply-desktop {
       display: flex;
-      gap: 90px;
+      gap: 20px;
       justify-content: space-between;
       margin-bottom: 0;
       margin-bottom: 20px;
@@ -22,20 +24,12 @@
   }
 
   &__left {
-    flex-basis: 50%;
+    flex-basis: 60%;
     margin-bottom: 20px;
-
-    form {
-      width: 280px;
-
-      @include responsive.apply-desktop {
-        width: 600px;
-      }
-    }
   }
 
   &__right {
-    flex-basis: 50%;
+    flex-basis: 30%;
 
     :first-child & :not(span, fieldset, label, h4, p, i) {
       margin-top: 26px;
@@ -45,6 +39,12 @@
     :last-child & :not(i, span) {
       margin-top: 10px;
     }
+  }
+
+  &__no-items {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
   }
 }
 
@@ -60,7 +60,7 @@
   }
 
   fieldset {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   &__form-list {
@@ -91,16 +91,14 @@
   &__submit {
     display: block;
   }
+}
 
-  &__description {
-    ::ng-deep {
-      app-input {
-        .field__input {
-          padding: 40px 20px;
-        }
-      }
-    }
+.error {
+  i {
+    color: var(--red) !important;
   }
+
+  color: var(--red) !important;
 }
 
 .vacancies {
@@ -109,22 +107,5 @@
   &__input {
     flex-grow: 1;
     margin-right: 6px;
-  }
-
-  ::ng-deep {
-    app-autocomplete-input {
-      .field__input {
-        padding: 12px 20px;
-
-        @include typography.body-16;
-      }
-    }
-
-    app-button {
-      .button {
-        width: 52px;
-        height: 52px;
-      }
-    }
   }
 }

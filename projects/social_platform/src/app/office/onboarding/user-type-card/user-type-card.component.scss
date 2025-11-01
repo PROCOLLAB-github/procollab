@@ -5,7 +5,7 @@
   padding: 12px;
   cursor: pointer;
   border: 1px solid var(--medium-grey-for-outline);
-  border-radius: 15px;
+  border-radius: var(--rounded-xl);
 
   @include responsive.apply-desktop {
     padding: 20px;

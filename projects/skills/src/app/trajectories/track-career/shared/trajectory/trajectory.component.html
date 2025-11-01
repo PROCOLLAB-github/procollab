@@ -81,6 +81,7 @@
         <div class="trajectory__buttons-group">
           @if (type() === "my") {
           <app-button
+            size="medium"
             (click)="navigateOnTrajectory()"
             customTypographyClass="text-body-12"
             class="button__more"
@@ -96,6 +97,7 @@
             >Подробнее</app-button
           > -->
           <app-button
+            size="medium"
             (click)="onOpenConfirmClick()"
             customTypographyClass="text-body-12"
             [backgroundColor]="trajectory.selectButtonColor"
@@ -138,6 +140,7 @@
     </div>
 
     <app-button
+      size="medium"
       class="cancel__button"
       customTypographyClass="text-body-12"
       [color]="'grey'"
@@ -158,17 +161,17 @@
 
       <div class="cancel__buttons-group">
         <app-button
+          size="medium"
           customTypographyClass="text-body-12"
           [color]="'grey'"
-          style="width: 100%"
           (click)="confirmModalOpen.set(false)"
           >Назад</app-button
         >
 
         <app-button
+          size="medium"
           customTypographyClass="text-body-12"
           [color]="'green'"
-          style="width: 100%"
           (click)="onConfirmClick()"
           >Поехали</app-button
         >
@@ -188,16 +191,16 @@
 
       <div class="cancel__buttons-group">
         <app-button
+          size="big"
           customTypographyClass="text-body-12"
           [color]="'grey'"
-          style="width: 100%"
           (click)="nonConfirmerModalOpen.set(false)"
           >Назад</app-button
         >
 
         <app-button
+          size="big"
           routerLink="/subscription"
-          style="width: 100%"
           customTypographyClass="text-body-12"
           [color]="'primary'"
           >Купить</app-button
@@ -215,9 +218,9 @@
 
       <div class="cancel__buttons-group">
         <app-button
+          size="medium"
           customTypographyClass="text-body-12"
           [color]="'grey'"
-          style="width: 100%"
           (click)="onCloseModalActiveTrajectory(trajectory.isActiveForUser ? trajectory.id : 'my')"
           >Перейти</app-button
         >

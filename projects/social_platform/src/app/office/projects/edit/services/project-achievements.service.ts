@@ -55,24 +55,19 @@ export class ProjectAchievementsService {
     this.initializeAchievementsItems(achievementsFormArray);
 
     // Считываем вводимые данные
-    const achievementsName = projectForm.get("achievementsName")?.value;
-    const achievementsPrize = projectForm.get("achievementsPrize")?.value;
+    const title = projectForm.get("title")?.value;
+    const status = projectForm.get("status")?.value;
 
     // Проверяем, что поля не пустые
-    if (
-      !achievementsName ||
-      !achievementsPrize ||
-      achievementsName.trim().length === 0 ||
-      achievementsPrize.trim().length === 0
-    ) {
+    if (!title || !status || title.trim().length === 0 || status.trim().length === 0) {
       return; // Выходим из функции, если поля пустые
     }
 
     // Создаем FormGroup для нового достижения
     const achievementItem = this.fb.group({
       id: achievementsFormArray.length,
-      title: achievementsName.trim(),
-      status: achievementsPrize.trim(),
+      title: title.trim(),
+      status: status.trim(),
     });
 
     // Проверяем, редактируется ли существующее достижение
@@ -94,11 +89,11 @@ export class ProjectAchievementsService {
     }
 
     // Очищаем поля ввода формы проекта
-    projectForm.get("achievementsName")?.reset();
-    projectForm.get("achievementsName")?.setValue("");
+    projectForm.get("title")?.reset();
+    projectForm.get("title")?.setValue("");
 
-    projectForm.get("achievementsPrize")?.reset();
-    projectForm.get("achievementsPrize")?.setValue("");
+    projectForm.get("status")?.reset();
+    projectForm.get("status")?.setValue("");
   }
 
   /**
@@ -120,8 +115,8 @@ export class ProjectAchievementsService {
 
     // Заполняем поля формы проекта для редактирования
     projectForm.patchValue({
-      achievementsName: source?.title || "",
-      achievementsPrize: source?.status || "",
+      achievementsName: source?.achievementsName || "",
+      achievementsDate: source?.achievementsDate || "",
     });
     // Устанавливаем текущий индекс редактирования в сервисе
     this.projectFormService.editIndex.set(index);

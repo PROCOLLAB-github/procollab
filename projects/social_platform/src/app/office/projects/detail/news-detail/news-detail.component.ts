@@ -4,9 +4,9 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map, Observable } from "rxjs";
 import { FeedNews } from "@office/projects/models/project-news.model";
-import { NewsCardComponent } from "@office/shared/news-card/news-card.component";
 import { AsyncPipe } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
+import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 
 /**
  * КОМПОНЕНТ ДЕТАЛЬНОЙ НОВОСТИ
@@ -37,7 +37,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
   templateUrl: "./news-detail.component.html",
   styleUrl: "./news-detail.component.scss",
   standalone: true,
-  imports: [ModalComponent, NewsCardComponent, AsyncPipe],
+  imports: [ModalComponent, AsyncPipe, NewsCardComponent],
 })
 export class NewsDetailComponent implements OnInit {
   constructor(

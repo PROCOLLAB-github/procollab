@@ -4,6 +4,8 @@
 @use "styles/typography";
 
 .project {
+  position: relative;
+
   &__inner {
     width: 100%;
     margin-bottom: 25px;
@@ -63,6 +65,12 @@
       }
     }
   }
+
+  &__no-items {
+    position: absolute;
+    bottom: 0%;
+    left: 50%;
+  }
 }
 
 .invite {
@@ -74,16 +82,12 @@
     margin-bottom: 12px;
   }
 
-  &__link {
-    margin-bottom: 12px;
-  }
-
   &__item {
+    flex-grow: 1;
     margin-bottom: 12px;
   }
 
   &__list {
-    width: 557px;
     width: 100%;
     margin-top: 10px;
   }
@@ -91,12 +95,45 @@
   &__team {
     grid-template-columns: repeat(1, 270px);
     grid-gap: 20px;
-    margin-top: 10px;
+    margin: 15px 0;
 
     @include responsive.apply-desktop {
-      grid-template-columns: repeat(3, 350px);
+      grid-template-columns: repeat(5, 150px);
     }
   }
+
+  &__link {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 12px;
+
+    app-button {
+      flex-basis: 59%;
+    }
+
+    &--wrapper {
+      flex-basis: 40%;
+      flex-direction: column-reverse;
+    }
+  }
+
+  &__submit {
+    position: relative;
+
+    app-tooltip {
+      position: absolute;
+      right: -2%;
+      bottom: 30%;
+    }
+  }
+}
+
+.error {
+  i {
+    color: var(--red) !important;
+  }
+
+  color: var(--red) !important;
 }
 
 .vacancy {

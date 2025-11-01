@@ -1,0 +1,41 @@
+<!-- @format -->
+
+<div class="dashboard__block">
+  <div class="dashboard__top">
+    <p class="text-body-12">{{ title }}</p>
+    <i appIcon appSquare="12" [icon]="iconName"></i>
+  </div>
+
+  @if (arrayItems.length) {
+  <ul class="dashboard__list">
+    @for (project of arrayItems; track project.id) {
+    <a [routerLink]="'/office/projects/' + project.id">
+      <app-info-card
+        [isSubscribed]="profileProjSubsIds?.includes(project.id)"
+        [appereance]="appereance"
+        [info]="project"
+      ></app-info-card>
+    </a>
+    }
+  </ul>
+  } @else {
+  <div>
+    <app-info-card
+      (onCreate)="addProject()"
+      [section]="
+        sectionName === 'my'
+          ? 'projects'
+          : sectionName === 'subscriptions'
+          ? 'subscriptions'
+          : 'other'
+      "
+      appereance="empty"
+    ></app-info-card>
+  </div>
+  }
+
+  <a class="dashboard__link" [routerLink]="'/office/projects/' + sectionName">
+    <span class="text-body-10">показать раздел</span>
+    <i appIcon icon="plus" appSquare="8"></i>
+  </a>
+</div>

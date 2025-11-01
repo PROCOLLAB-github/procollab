@@ -64,7 +64,11 @@
       Тебе предстоит выбрать 5 навыков, развитию которых будет посвящен месяц твоей подписки. Не
       торопись с выбором. Отменить или поменять его будет нельзя!
     </p>
-    <app-button customTypographyClass="text-body-12" style="width: 100%" (click)="nextStepModal()"
+    <app-button
+      size="big"
+      customTypographyClass="text-body-12"
+      style="width: 100%"
+      (click)="nextStepModal()"
       >Выбрать навыки месяца</app-button
     >
     <img alt="wave" src="assets/images/subscription/wave.svg" class="cancel__wave" />
@@ -82,6 +86,7 @@
 
       <div class="cancel__buttons-group">
         <app-button
+          size="medium"
           customTypographyClass="text-body-12"
           [color]="'grey'"
           style="width: 100%"
@@ -90,6 +95,7 @@
         >
 
         <app-button
+          size="medium"
           routerLink="/subscription"
           style="width: 100%"
           customTypographyClass="text-body-12"

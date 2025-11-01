@@ -2,70 +2,81 @@
 
 <div [formGroup]="projectForm" class="project__inner">
   <div class="project__left">
-    <div class="achievement__first-row">
-      @if(achievementsName; as achievementsName){
-      <fieldset>
-        <label class="field-label" for="achievementsName">Достижения</label>
-        <app-input
-          [error]="
-            !!(
-              (achievementsName | controlError) &&
-              achievementsName?.touched &&
-              projSubmitInitiated
-            )
-          "
-          placeholder="Напишите название мероприятия, конкурса и т.д."
-          formControlName="achievementsName"
-        ></app-input>
-        @if ( !!( (achievementsName | controlError: "required") &&
-        projectForm.get('achievementsName')?.touched && projSubmitInitiated ) ) {
-        <div class="text-body-14 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
-        }
-      </fieldset>
+    <ul formArrayName="achievements" class="project__achievements">
+      @for (control of achievements.controls; track control.value.id; let i = $index) {
+      <li class="profile__achievement">
+        <form [formGroupName]="i" class="achievement">
+          @if (achievements.at(i)?.get("title"); as achievementsName) {
+          <fieldset style="flex-grow: 1">
+            <label class="text-body-12 field-label">описание достижения</label>
+            <app-input
+              size="big"
+              [haveHint]="true"
+              [tooltipText]="
+                'Расскажи какие достижения ты сделал в своем проекте. Про что они были, их история'
+              "
+              [tooltipPosition]="'left'"
+              [tooltipWidth]="350"
+              [error]="achievementsName | controlError"
+              placeholder="выиграли акселератор"
+              formControlName="title"
+            ></app-input>
+            @if (achievementsName | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (achievements.at(i).get("status"); as achievementsDate) {
+          <fieldset>
+            <label class="text-body-12 field-label" style="text-align: center">дата</label>
+            <app-input
+              size="small"
+              [haveHint]="true"
+              [tooltipText]="'Расскажи, в каком году было получено достижениe.'"
+              [tooltipPosition]="'left'"
+              [tooltipWidth]="300"
+              [error]="achievementsDate | controlError"
+              type="text"
+              placeholder="2022"
+              mask="0000"
+              formControlName="status"
+            ></app-input>
+            @if (achievementsDate | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+          <app-button
+            class="achievement__remove"
+            type="icon"
+            color="red"
+            (click)="removeAchievement(i)"
+          >
+            <i appIcon icon="basket" appSquare="14"></i>
+          </app-button>
+        </form>
+      </li>
       }
-    </div>
-    @if (achievementsPrize; as achievementsPrize) {
-    <fieldset>
-      <app-input
-        [error]="
-          !!(
-            (achievementsPrize | controlError) &&
-            achievementsPrize?.touched &&
-            projSubmitInitiated
-          )
-        "
-        placeholder="Опишите достижение (победитель, призер или другое)"
-        formControlName="achievementsPrize"
-      ></app-input>
-      @if ( !!( (achievementsPrize | controlError: "required") && achievementsPrize?.touched &&
-      projSubmitInitiated ) ) {
-      <div class="text-body-14 error">
-        {{ errorMessage.VALIDATION_REQUIRED }}
-      </div>
-      }
-    </fieldset>
-    }
+    </ul>
   </div>
-  <div class="project__right">
-    <app-button class="vacancy__submit" (click)="addAchievement()">
-      <span>Добавить достижение</span>
-      <i appIcon icon="plus" appSquare="14"></i>
+
+  <div class="project__right" [style.margin-top]="achievements.length ? '15px' : '0px'">
+    <app-button
+      size="big"
+      customTypographyClass="text-body-12"
+      appearance="outline"
+      class="vacancy__submit"
+      (click)="addAchievement()"
+    >
+      <span class="vacancy__submit--text">добавить достижение</span>
+      <i appIcon icon="plus" appSquare="12"></i>
     </app-button>
 
-    <ul class="invite__list">
-      @if(achievementsItems().length || achievements.length){ @for (achievementItem of
-      achievements.value; track $index) {
-      <li class="invite__item">
-        <app-link-card
-          [type]="'achievement'"
-          (remove)="removeAchievement($index)"
-          (edit)="editAchievement($index)"
-          [data]="achievementItem"
-        ></app-link-card>
-      </li>
-      } }
-    </ul>
+    @if (!achievements.length) {
+    <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
+    }
   </div>
 </div>

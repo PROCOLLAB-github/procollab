@@ -1,11 +1,11 @@
-@use "styles/typography";
 @use "styles/responsive";
+@use "styles/typography";
 
 .card {
-  padding: 20px;
-  background-color: var(--white);
-  border: 1px solid var(--medium-grey-for-outline);
-  border-radius: 15px;
+  padding: 24px 12px;
+  background-color: var(--light-white);
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-lg);
 
   &__head {
     display: flex;
@@ -24,7 +24,7 @@
     justify-content: center;
     width: 16px;
     height: 16px;
-    color: var(--dark-grey);
+    color: var(--black);
     cursor: pointer;
   }
 
@@ -34,7 +34,7 @@
     padding: 20px 0;
     background-color: var(--white);
     border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
   }
 
   &__option {
@@ -56,6 +56,7 @@
 
   &__title {
     display: flex;
+    align-items: center;
   }
 
   &__top {
@@ -66,12 +67,6 @@
 
   &__name {
     color: var(--black);
-
-    @include typography.bold-body-14;
-
-    @include responsive.apply-desktop {
-      @include typography.bold-body-16;
-    }
   }
 
   &__date {
@@ -81,6 +76,8 @@
   /* stylelint-disable value-no-vendor-prefix */
   &__text {
     white-space: break-spaces;
+
+    @include typography.body-10;
 
     p {
       display: -webkit-box;
@@ -94,12 +91,6 @@
       &.expanded {
         -webkit-line-clamp: unset;
       }
-    }
-
-    @include typography.body-12;
-
-    @include responsive.apply-desktop {
-      @include typography.body-16;
     }
   }
 
@@ -150,7 +141,7 @@
     height: 75px;
     color: var(--accent);
     background-color: var(--white);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
     transition: transform 0.1s ease-in-out;
     transform: translate(-50%, -50%) scale(0);
 
@@ -175,6 +166,7 @@
 
   &__left {
     display: flex;
+    gap: 5px;
     align-items: center;
   }
 

@@ -1,11 +1,39 @@
 <!-- @format -->
 <div>
   <div class="project__top">
-    <p class="project__title">Редактировать проект</p>
-    <a class="project__back" [routerLink]="'/office/projects/' + profileId">
-      <app-button [color]="'grey'" customTypographyClass="text-body-12">Назад</app-button>
-    </a>
+    <div class="project__back" [routerLink]="'/office/projects/' + profileId">
+      <i appIcon icon="left-arrow" appSquare="24"></i>
+      <h1 class="project__title">редактировать проект</h1>
+    </div>
+    <div class="project__save">
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        color="red"
+        (click)="deleteProject()"
+      >
+        удалить проект
+      </app-button>
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        appearance="outline"
+        [loader]="projFormIsSubmittingAsDraft"
+        (click)="saveProjectAsDraft()"
+      >
+        сохранить черновик
+      </app-button>
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        [loader]="projFormIsSubmittingAsPublished"
+        (click)="saveProjectAsPublished()"
+      >
+        {{ isCompetitive ? "отправить заявку" : "сохранить" }}
+      </app-button>
+    </div>
   </div>
+
   <main class="project">
     <form [formGroup]="projectForm" class="project__form">
       <app-project-navigation
@@ -18,16 +46,16 @@
         <app-project-main-step
           style="width: 100%"
           [industries$]="industries$"
-          [projectSteps$]="projectSteps$"
-          [programTagsOptions]="programTagsOptions"
           [leaderId]="leaderId"
           [projSubmitInitiated]="projSubmitInitiated"
-          [isProjectBoundToProgram]="isProjectBoundToProgram"
-          (assignToProgram)="assignProjectToProgram()"
+          [projectId]="profileId"
         ></app-project-main-step>
 
         } @else if (editingStep === "contacts") {
-        <app-project-contacts-step style="width: 100%"></app-project-contacts-step>
+        <app-project-partner-resources-step
+          [projectId]="profileId"
+          style="width: 100%"
+        ></app-project-partner-resources-step>
         } @else if (editingStep === "achievements") {
         <app-project-achievement-step
           style="width: 100%"
@@ -48,29 +76,8 @@
         <app-project-additional-step
           #additionalStepComponent
           style="width: 100%"
-          [programTagsOptions]="programTagsOptions"
         ></app-project-additional-step>
         }
-      </div>
-      <div class="project__save">
-        <app-button customTypographyClass="text-body-12" color="red" (click)="deleteProject()">
-          Удалить проект
-        </app-button>
-        <app-button
-          customTypographyClass="text-body-12"
-          color="grey"
-          [loader]="projFormIsSubmittingAsDraft"
-          (click)="saveProjectAsDraft()"
-        >
-          Сохранить черновик
-        </app-button>
-        <app-button
-          customTypographyClass="text-body-12"
-          [loader]="projFormIsSubmittingAsPublished"
-          (click)="saveProjectAsPublished()"
-        >
-          {{ isCompetitive ? "Отправить заявку" : "Сохранить" }}
-        </app-button>
       </div>
     </form>
     <app-modal
@@ -79,77 +86,24 @@
       "
     >
       <div class="project__warning-modal">
-        <h3 class="text-bold-body-16">📢 Внимание!</h3>
+        <h3 class="text-bold-body-16">📢 внимание!</h3>
         <p class="text-body-14">
-          Для публикации проекта, нужно заполнить все <strong>обязательные поля</strong> (они будут
+          для публикации проекта, нужно заполнить все <strong>обязательные поля</strong> (они будут
           <strong>подсвечены&nbsp;<span>красным</span></strong
           >). Если вы пока не знаете что написать, можно сохранить черновик проекта и заполнить поля
           позже :&#41;
         </p>
-        <app-button (click)="closeWarningModal()">Понятно</app-button>
+        <app-button
+          size="medium"
+          customTypographyClass="text-body-12"
+          appearance="outline"
+          (click)="closeWarningModal()"
+          >понятно</app-button
+        >
       </div>
     </app-modal>
   </main>
 </div>
-
-<app-modal
-  [open]="isAssignProjectToProgramError"
-  (openChange)="isAssignProjectToProgramError ? clearAssignProjectToProgramError() : null"
->
-  <div class="cancel" style="width: 80%; padding: 40px 0px 40px">
-    <div class="cancel__top">
-      <i
-        (click)="clearAssignProjectToProgramError()"
-        appIcon
-        icon="cross"
-        class="cancel__cross"
-      ></i>
-      <p class="cancel__title text-bold-body-16">Ошибка привязки проекта к программе!</p>
-    </div>
-
-    <p class="text-body-14 cancel__text">
-      {{ (errorAssignProjectToProgramModalMessage()?.non_field_errors)![0] }}
-    </p>
-
-    <app-button
-      class="cancel__button"
-      customTypographyClass="text-body-12"
-      (click)="clearAssignProjectToProgramError()"
-      >Понятно</app-button
-    >
-  </div>
-</app-modal>
-
-<app-modal
-  [open]="isAssignProjectToProgramModalOpen()"
-  (openChange)="isAssignProjectToProgramModalOpen.set(!isAssignProjectToProgramModalOpen)"
->
-  <div class="cancel" style="width: 80%; padding: 40px 0px 40px">
-    <div class="cancel__top">
-      <i
-        (click)="closeAssignProjectToProgramModal()"
-        appIcon
-        icon="cross"
-        class="cancel__cross"
-      ></i>
-      <p class="cancel__title text-bold-body-16">Поздравляем!</p>
-    </div>
-
-    <p class="text-body-14 cancel__text">
-      Мы создали дубликат проекта, который вы привязали к выбранной программе
-      <span
-        ><strong>{{ assignProjectToProgramModalMessage()?.partnerProgram }}</strong></span
-      >, теперь его можно отредактировать!
-    </p>
-
-    <app-button
-      class="cancel__button"
-      customTypographyClass="text-body-12"
-      (click)="closeAssignProjectToProgramModal()"
-      >Понятно</app-button
-    >
-  </div>
-</app-modal>
 
 <app-modal [open]="isCompleted" (openChange)="isCompleted = !isCompleted">
   <div class="cancel">
@@ -169,7 +123,7 @@
 
 <app-modal [open]="skillsGroupsModalOpen()" class="modal">
   <div class="modal__wrapper">
-    <h4 class="text-heading-4">Библиотека навыков</h4>
+    <p class="text-body-14">библиотека навыков</p>
     <div class="modal__content">
       <div class="modal__skills-groups">
         <ul>
@@ -179,14 +133,17 @@
               [title]="skillsGroup.name"
               [options]="skillsGroup.skills"
               [selected]="this.vacancyForm.getRawValue().skills"
+              [hasOpenGroups]="hasOpenSkillsGroups"
+              [disabled]="hasOpenSkillsGroups && !openGroupIds.has(skillsGroup.id)"
               (optionToggled)="onToggleSkill($event)"
+              (groupToggled)="onGroupToggled($event, skillsGroup.id)"
             ></app-skills-group>
           </li>
           }
         </ul>
       </div>
     </div>
-    <app-button (click)="toggleSkillsGroupsModal()">Сохранить</app-button>
+    <app-button size="big" (click)="toggleSkillsGroupsModal()">Сохранить</app-button>
   </div>
 </app-modal>
 
@@ -213,12 +170,16 @@
 
     <div class="cancel__buttons">
       <app-button
+        size="medium"
         customTypographyClass="text-body-12"
         color="grey"
         (click)="isSendDescisionToPartnerProgramProject = false"
         >Отмена</app-button
       >
-      <app-button customTypographyClass="text-body-12" (click)="closeSendingDescisionModal()"
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        (click)="closeSendingDescisionModal()"
         >Отправить</app-button
       >
     </div>

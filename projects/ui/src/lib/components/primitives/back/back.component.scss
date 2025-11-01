@@ -3,12 +3,12 @@
 .back {
   display: flex;
   align-items: center;
-  padding: 9px 18px;
-  color: var(--black);
+  margin-bottom: 45px;
   cursor: pointer;
 
   &__icon {
     flex-shrink: 0;
+    color: var(--grey-for-text);
   }
 
   span {

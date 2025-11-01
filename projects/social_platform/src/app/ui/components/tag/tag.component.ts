@@ -25,7 +25,10 @@ export class TagComponent implements OnInit {
   constructor() {}
 
   /** Цветовая схема тега */
-  @Input() color: "primary" | "accent" | "complete" = "primary";
+  @Input() color: "primary" | "secondary" | "accent" | "complete" | "soft" = "primary";
+
+  /** Стиль отображения */
+  @Input() appearance: "inline" | "outline" = "inline";
 
   ngOnInit(): void {}
 }

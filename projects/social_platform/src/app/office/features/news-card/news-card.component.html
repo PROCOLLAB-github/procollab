@@ -1,0 +1,128 @@
+<!-- @format -->
+<div class="card" [id]="feedItem.id">
+  <div class="card__head">
+    <a class="card__title" [routerLink]="resourceLink">
+      <img
+        class="card__avatar"
+        [src]="feedItem.imageAddress || placeholderUrl"
+        [alt]="feedItem.name"
+      />
+      <p class="card__name text-body-10">{{ feedItem.name }}</p>
+    </a>
+    @if (isOwner) {
+    <div class="card__menu" (clickOutside)="onCloseMenu()">
+      <div class="card__dots" (click)="menuOpen = true">
+        <i appIcon icon="dots" appWidth="4" appHeight="10" appViewBox="0 0 4 10"></i>
+      </div>
+      @if (menuOpen) {
+      <ul class="card__options">
+        @if (!editMode) {
+        <li class="card__option text-body-10" (click)="editMode = true">редактировать</li>
+        }
+        <li class="card__option text-body-10" (click)="delete.emit(feedItem.id)">удалить</li>
+      </ul>
+      }
+    </div>
+    }
+  </div>
+  @if (feedItem.text) {
+  <div class="card__text text-body-10">
+    @if (!editMode) {
+    <p class="text-body-10" #newsTextEl [innerHTML]="feedItem.text | parseLinks"></p>
+    } @else { @if (editForm.get("text"); as text) {
+    <app-textarea size="big" [formControl]="text | formControl"></app-textarea>
+    } }
+  </div>
+  } @if (editMode) {
+  <ul>
+    @for (f of imagesEditList; track f.id) {
+    <app-img-card
+      [loading]="f.loading"
+      [src]="f.src"
+      [error]="f.error"
+      (cancel)="onDeletePhoto(f.id)"
+      (retry)="onRetryUpload(f.id)"
+    ></app-img-card>
+    }
+  </ul>
+  <ul class="card__edit-files">
+    @for (f of filesEditList; track f.id) {
+    <app-file-upload-item
+      [link]="f.src"
+      [type]="f.tempFile?.type ?? f.type"
+      [size]="f.tempFile?.size ?? f.size"
+      [name]="f.tempFile?.name ?? f.name"
+      [error]="f.error"
+      [loading]="f.loading"
+      (delete)="onDeleteFile(f.id)"
+    ></app-file-upload-item>
+    }
+  </ul>
+  } @if (newsTextExpandable && !editMode) {
+  <div
+    class="read-more"
+    (click)="onExpandNewsText(newsTextEl?.nativeElement, 'expanded', readMore)"
+  >
+    {{ readMore ? "Скрыть" : "Читать полностью" }}
+  </div>
+  } @if (!editMode) {
+
+  <div class="card__gallery">
+    <app-carousel [images]="imagesViewList" (like)="handleLike($event)"></app-carousel>
+  </div>
+
+  } @if (!editMode && filesViewList.length) {
+  <div class="card__files">
+    @for (f of filesViewList; track $index) {
+    <app-file-item
+      [name]="f.name"
+      [size]="f.size"
+      [type]="f.mimeType"
+      [link]="f.link"
+    ></app-file-item>
+    }
+  </div>
+  } @if (!editMode) {
+  <div class="card__footer footer">
+    <div class="footer__left">
+      <div
+        class="footer__item footer__like text-body-10"
+        [class.footer__like--active]="feedItem.isUserLiked"
+        (click)="like.emit(feedItem.id)"
+      >
+        <i appIcon icon="like" appSquare="12"></i>
+        {{ feedItem.likesCount > 0 ? feedItem.likesCount : "" }}
+      </div>
+
+      <div class="footer__share share">
+        <i class="share__icon" appIcon icon="comment" appSquare="10"></i>
+      </div>
+
+      <div class="footer__share share" (click)="onCopyLink()">
+        <i class="share__icon" appIcon icon="share" appSquare="10"></i>
+      </div>
+    </div>
+
+    <div class="footer__right">
+      <div class="card__date text-body-10">
+        {{ feedItem.datetimeCreated | dayjs: "format":"DD.MM.YY" }}
+      </div>
+    </div>
+  </div>
+  } @else {
+  <div class="editor-footer">
+    <label class="editor-footer__attach">
+      <i appIcon icon="attach" appSquare="22"></i>
+      <input type="file" accept="*/*" multiple (change)="onUploadFile($event)" />
+    </label>
+    <div class="editor-footer__actions">
+      <app-button customTypographyClass="text-body-12" color="grey" (click)="editMode = false"
+        >отмена</app-button
+      >
+      <app-button customTypographyClass="text-body-12" (click)="onEditSubmit()"
+        >сохранить</app-button
+      >
+    </div>
+  </div>
+  }
+</div>

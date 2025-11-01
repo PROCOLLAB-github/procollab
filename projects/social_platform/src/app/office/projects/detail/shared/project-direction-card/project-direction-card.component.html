@@ -1,0 +1,135 @@
+<!-- @format -->
+
+<div class="direction-card" (click)="isShowModal = true">
+  <i appIcon [icon]="icon" appSquare="11" class="direction-card__icon"></i>
+  <p class="text-body-10 direction-card__text">{{ direction }}</p>
+</div>
+
+<app-modal [open]="isShowModal" (openChange)="isShowModal = !isShowModal">
+  <div class="cancel">
+    <div class="cancel__top">
+      <p class="cancel__title text-body-12">{{ direction }}</p>
+      <i class="cancel__icon" appIcon [icon]="icon" appSquare="11"></i>
+    </div>
+
+    @if (type === 'string') {
+    <p class="text-body-10 cancel__text">{{ about }}</p>
+    } @else { @if (listType === 'profile') { @if (profileInfoType === "skills") {
+    <div class="cancel__skills">
+      <ul class="cancel__skills--block">
+        @for (aboutItem of about; track $index) {
+        <li class="skills__info">
+          <p class="text-body-12">{{ aboutItem?.name }}</p>
+          <div class="skills__category">
+            <app-tag
+              class="text-body-10"
+              color="soft"
+              appearance="outline"
+              class="skills__category--text"
+              >{{ aboutItem?.category?.name?.includes("Soft skills") ? "soft" : "hard" }}</app-tag
+            >
+            <app-tag
+              class="text-body-10"
+              [color]="aboutItem?.category?.name?.includes('Soft skills') ? 'soft' : 'accent'"
+              appearance="outline"
+              class="skills__category--text"
+              >{{ aboutItem?.category?.name }}</app-tag
+            >
+          </div>
+        </li>
+        }
+      </ul>
+    </div>
+    } @else {
+    <ul class="cancel__achievements">
+      @if (!isOpenInfo) { @for (aboutInfo of about; track $index) {
+      <li class="cancel__achievements--year" (click)="openInfo(aboutInfo.year)">
+        <p class="text-body-10">{{ aboutInfo.year }}</p>
+        <i appIcon icon="arrow-no-body" appSquare="8"></i>
+      </li>
+      } } @else {
+      <div class="cancel__achievement">
+        <div class="cancel__achievement--year" (click)="backToYears()">
+          <i appIcon icon="arrow-no-body" appSquare="8"></i>
+          <p class="text-body-10">{{ currentYear }}</p>
+        </div>
+
+        @if (achievementsInfo().length > 0) { @for (achievementInfo of achievementsInfo(); track
+        $index) {
+        <div class="cancel__achievement--info">
+          <p class="text-body-10 cancel__achievement--title">{{ achievementInfo.title }}</p>
+          <p class="text-body-10 cancel__achievement--status">{{ achievementInfo.status }}</p>
+
+          @if (files.length > 0) {
+          <app-file-item
+            [link]="files[$index].link"
+            [name]="files[$index].name"
+            [type]="files[$index].mimeType"
+            [size]="files[$index].size"
+          ></app-file-item>
+          }
+        </div>
+        } }
+      </div>
+      }
+    </ul>
+    } } @else { @if (projectInfoType === 'goals') {
+    <div class="cancel__skill">
+      @if (!isShowsConfirmGoal) { @if (about.length > 0) { @for (goalItem of about; track $index) {
+      <li class="cancel__goal lists__item text-body-10" style="gap: 10px">
+        <app-avatar [size]="30" [url]="goalItem.responsibleInfo.avatar"></app-avatar>
+        <p class="lists__item--title">{{ goalItem.title }}</p>
+        <div class="lists__item--status" [class.lists__item--status--complete]="goalItem.isDone">
+          @if (!goalItem.isDone) {
+          <div (mouseenter)="mouseHover(goalItem.id)" (mouseleave)="mouseLeave()">
+            @if (goalCompleteHoverId === goalItem.id) {
+            <i (click)="openConfirmModal(goalItem)" appIcon icon="check" appSquare="10"></i>
+            } @else {
+            <p class="text-body-10">
+              {{ goalItem.completionDate | dayjs: "format":"DD.MM.YY" }}
+            </p>
+            }
+          </div>
+          } @else {
+          <i class="cancel__goal--complete" appIcon icon="check" appSquare="10"></i>
+          }
+        </div>
+      </li>
+      } } } @else { @if (selectedGoal) {
+      <div class="cancel__confirm">
+        <p class="cancel__title text-body-14">подтвердить выполнение цели</p>
+        <i appIcon icon="check" appSquare="60"></i>
+      </div>
+
+      <app-button
+        size="big"
+        class="cancel__button"
+        customTypographyClass="text-body-12"
+        (click)="confirmCompleteGoal()"
+      >
+        подтверждаю
+      </app-button>
+      } }
+    </div>
+    } @else {
+    <div class="cancel__skill">
+      @if (this.about.length > 0) { @for (partnerItem of about; track $index) {
+      <li class="cancel__achievement--info">
+        <div class="lists__section">
+          <h3 class="text-body-10 lists__title--partner">{{ partnerItem.company.name }}</h3>
+          <p class="text-body-10">{{ partnerItem.company.inn }}</p>
+        </div>
+
+        <p class="text-body-6">
+          {{
+            partnerItem.contribution.length < 484
+              ? partnerItem.contribution
+              : partnerItem.contribution.slice(0, 480) + " " + "..."
+          }}
+        </p>
+      </li>
+      } }
+    </div>
+    } } }
+  </div>
+</app-modal>

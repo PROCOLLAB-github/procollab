@@ -1,6 +1,7 @@
 @use "styles/responsive";
 
 .page {
+  position: relative;
   margin-bottom: 50px;
 
   &__form {
@@ -59,51 +60,23 @@
       color: var(--dark-grey);
     }
   }
+
+  &__buttons {
+    position: fixed;
+    right: 5%;
+    bottom: 3%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 30%;
+  }
 }
 
 .content {
   position: relative;
-  display: flex;
+  display: inline-flex;
   gap: 10px;
   align-items: center;
-
-  &__hint {
-    z-index: 10;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-
-    &:hover {
-      opacity: 1;
-    }
-
-    @include responsive.apply-desktop {
-      margin-bottom: 6px;
-      opacity: 0.5;
-    }
-  }
-
-  &__tooltip {
-    position: absolute;
-    top: 65%;
-    left: 38%;
-    z-index: 10;
-    display: none;
-    width: 250px;
-    padding: 12px;
-    color: var(--dark-grey);
-    background-color: var(--white);
-    border: 1px solid var(--dark-grey);
-    border-radius: 0 15px 15px;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-
-    &--visible {
-      display: block;
-      opacity: 1;
-    }
-  }
 }
 
 .education {
@@ -135,7 +108,7 @@
     padding: 12px;
     overflow: hidden;
     border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
+    border-radius: var(--rounded-xl);
   }
 
   &__text {
@@ -216,5 +189,13 @@ i {
 
   &__text {
     text-align: center;
+  }
+}
+
+.error {
+  color: var(--red) !important;
+
+  i {
+    color: var(--red) !important;
   }
 }

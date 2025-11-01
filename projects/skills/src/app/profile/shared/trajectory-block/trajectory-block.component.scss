@@ -94,12 +94,4 @@
     margin-bottom: 24px;
     color: var(--grey-for-text);
   }
-
-  app-button {
-    width: 70%;
-
-    @include responsive.apply-desktop {
-      width: 40%;
-    }
-  }
 }

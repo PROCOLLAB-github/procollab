@@ -2,50 +2,108 @@
 
 <main class="page">
   <div class="page__bar">
-    @if (projectService.projectsCount$ | async; as count) {
-    <app-bar
-      [backHave]="false"
-      [ballHave]="true"
-      [links]="[
-          {
-            link: '/office/projects/my',
-            linkText: 'Мои проекты',
-            isRouterLinkActiveOptions: false,
-            count: count.my,
-          },
+    <app-back
+      namespace="проекты"
+      [path]="isDashboard ? '/office/feed' : '/office/projects/dashboard'"
+    ></app-back>
 
-          {
-            link: '/office/projects/subscriptions',
-            linkText: 'Мои подписки',
-            isRouterLinkActiveOptions: false,
-            count: count.subs,
-          },
-
-          {
-            link: '/office/projects/all',
-            linkText: 'Все проекты',
-            isRouterLinkActiveOptions: false,
-            count: count.all,
-          },
-        ]"
-    >
-    </app-bar>
-    <div class="bar__right">
-      @if (isMy) {
-      <app-button (click)="addProject()" customTypographyClass="ext-body-14 bar__add-project">
-        <span class="bar__add-project-text">Добавить проект</span>
-        <i appIcon icon="plus" appSquare="18"></i>
-      </app-button>
-      } @else if (isAll) {
-      <div class="bar__bottom">
+    <div class="page__info">
+      <div class="page__outlet" [style.gap]="isDashboard ? '8px' : '20px'">
         <form [formGroup]="searchForm">
           <app-search formControlName="search"></app-search>
         </form>
-      </div>
-      }
-    </div>
-    }
-  </div>
 
-  <router-outlet></router-outlet>
+        @if(!isDashboard) {
+        <app-bar-new
+          [links]="[
+              {
+                link: '/office/projects/my',
+                linkText: 'мои проекты',
+                iconName: 'main',
+                isRouterLinkActiveOptions: false,
+              },
+
+              {
+                link: '/office/projects/subscriptions',
+                linkText: 'мои подписки',
+                iconName: 'favourites',
+                isRouterLinkActiveOptions: false,
+              },
+
+              {
+                link: '/office/projects/invites',
+                linkText: 'мои приглашения',
+                iconName: 'send',
+                isRouterLinkActiveOptions: false,
+              },
+
+              {
+                link: '/office/projects/all',
+                linkText: 'все проекты',
+                iconName: 'folders',
+                isRouterLinkActiveOptions: false,
+              },
+            ]"
+        >
+        </app-bar-new>
+        }
+
+        <router-outlet></router-outlet>
+      </div>
+
+      <div class="page__create">
+        <app-button
+          size="medium"
+          (click)="addProject()"
+          class="bar__add-project"
+          customTypographyClass="text-body-12"
+        >
+          <span class="bar__add-project-text text-body-12">создать проект</span>
+          <i appIcon icon="plus" appSquare="10"></i>
+        </app-button>
+
+        <div class="page__left">
+          @if (isDashboard) {
+          <div class="page__invites">
+            <div class="page__invites--wrapper">
+              <p class="text-body-12">мои приглашения</p>
+              <i appIcon icon="send" appSquare="12"></i>
+            </div>
+
+            @if (myInvites.length) {
+            <ul class="page__invites--list">
+              @for (invite of myInvites; track invite.id) {
+              <app-info-card type="invite" [info]="invite"></app-info-card>
+              }
+            </ul>
+            } @else {
+            <div class="page__invites--no-items">
+              <p class="text-body-12">пока нет приглашений</p>
+            </div>
+            }
+          </div>
+          } @if (isMy || isDashboard) {
+          <app-soon-card
+            title="статистика"
+            description="количество проектов, команды, эффективность"
+          >
+          </app-soon-card>
+          } @if (isAll) {
+          <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
+            <div class="filter__overlay" (click)="isFilterOpen = false"></div>
+            <div class="filter__body" #filterBody>
+              <div
+                class="filter__bar"
+                (touchstart)="onSwipeStart($event)"
+                (touchmove)="onSwipeMove($event)"
+                (touchend)="onSwipeEnd($event)"
+              ></div>
+              <app-projects-filter (closeFilter)="closeFilter()"></app-projects-filter>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
 </main>

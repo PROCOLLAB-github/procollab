@@ -1,21 +1,36 @@
 <!-- @format -->
 
+@if (name && link) {
 <div class="file">
-  <div class="file__icon" (click)="onDownloadFile()">
-    @if (type) {
-    <i appIcon [icon]="'file_' + (type | fileType)" appSquare="32"></i>
-    }
-  </div>
+  <i
+    appIcon
+    icon="download"
+    appSquare="12"
+    class="file__icon file__icon--download"
+    (click)="onDownloadFile()"
+  ></i>
+
   <div class="file__info">
-    <div class="file__name text-bold-body-14">
+    <div class="file__name text-body-10">
       <span (click)="onDownloadFile()">{{ name }}</span>
     </div>
+
     @if (type) {
-    <div class="file__meta text-body-14">
+    <div class="file__meta text-body-6">
       {{ type.includes("/") ? (type | fileType) : (type | uppercase) }}
       {{ size | formatedFileSize }}
     </div>
     }
   </div>
-  <i appIcon icon="download" appSquare="24" class="file__download" (click)="onDownloadFile()"></i>
+
+  @if (canDelete) {
+  <i
+    appIcon
+    icon="basket"
+    appSquare="8"
+    class="file__icon file__icon--delete"
+    (click)="onDeleteFile()"
+  ></i>
+  }
 </div>
+}

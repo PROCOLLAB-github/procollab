@@ -30,23 +30,30 @@
 }
 
 .card {
-  padding: 20px;
-  background-color: var(--white);
-  border: 1px solid var(--medium-grey-for-outline);
-  border-radius: 15px;
+  position: relative;
+  z-index: 100;
+  padding: 27px 24px 24px;
+  overflow-y: hidden;
+  background-color: var(--light-white);
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-xl);
 
-  &__head {
-    margin-bottom: 10px;
+  &__inner {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 10px;
+    align-items: flex-start;
   }
 
-  &__title {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    align-items: center;
-    margin-bottom: 10px;
+  &__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
 
-    @include typography.bold-body-16;
+  &__industry {
+    display: inline-flex;
   }
 
   &__description {
@@ -54,8 +61,59 @@
     white-space: pre-wrap;
   }
 
-  &__action {
-    margin-top: 20px;
+  &__project {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    text-align: center;
+  }
+
+  &__vacancy {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 15px;
+
+    &:last-child {
+      ::ng-deep {
+        app-button {
+          .button--big {
+            padding: 4px 16px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.lists {
+  &__section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    border-bottom: 0.5px solid var(--accent);
+  }
+
+  &__icon {
+    color: var(--accent);
+  }
+
+  &__title {
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+
+  &__item {
+    display: flex;
+    gap: 6px;
+    align-items: center;
   }
 }
 
@@ -108,51 +166,12 @@
   &:hover {
     color: var(--accent-dark);
   }
-
-  @include typography.body-14;
-}
-
-.head {
-  display: flex;
-  align-items: center;
-
-  &__avatar {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  &__name {
-    max-width: 200px;
-    overflow: hidden;
-    color: var(--black);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    @include typography.bold-body-14;
-
-    @include responsive.apply-desktop {
-      @include typography.bold-body-16;
-    }
-  }
-
-  &__date {
-    color: var(--dark-grey);
-  }
 }
 
 .skills {
   &__title {
     margin-bottom: 5px;
     color: var(--dark-grey);
-
-    @include typography.body-14;
-
-    @include responsive.apply-desktop {
-      margin-bottom: 10px;
-    }
   }
 
   &__list {
@@ -168,37 +187,4 @@
   }
 
   @include expandable-list;
-}
-
-.action {
-  @include responsive.apply-desktop {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
-    border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
-  }
-
-  &__job {
-    display: block;
-    padding: 20px 0;
-    margin-bottom: 15px;
-    text-align: center;
-    cursor: pointer;
-    border: 1px solid var(--medium-grey-for-outline);
-    border-radius: 15px;
-
-    @include typography.bold-body-14;
-
-    @include responsive.apply-desktop {
-      padding: 0;
-      margin-bottom: 0;
-      border: none;
-    }
-  }
-
-  &__button {
-    width: 150px;
-  }
 }

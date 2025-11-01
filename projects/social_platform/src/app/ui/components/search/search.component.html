@@ -1,15 +1,21 @@
 <!-- @format -->
 
 <div class="search" (click)="onSwitchSearch(true)" (clickOutside)="onClickOutside($event)">
-  <i class="search__icon" appIcon icon="search" appSquare="32"></i>
+  <i
+    class="search__icon"
+    [class.search__icon--open]="open"
+    appIcon
+    icon="search"
+    appSquare="18"
+  ></i>
   <div class="search__other" (click)="stopPropagation($event)">
     @if (!open) {
-    <p class="text-body-14 search__hidden" (click)="onSwitchSearch(true)">Поиск</p>
+    <p class="text-body-12 search__text" (click)="onSwitchSearch(true)">Поиск</p>
     } @else {
     <div class="search__input">
       <input
         #inputEl
-        class="text-body-14"
+        class="text-body-12"
         type="text"
         [placeholder]="placeholder"
         (input)="onInput($event)"

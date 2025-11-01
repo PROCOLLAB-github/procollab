@@ -15,6 +15,7 @@ import { SpecializationsGroupComponent } from "@office/shared/specializations-gr
 import { Specialization } from "@office/models/specialization";
 import { SpecializationsService } from "@office/services/specializations.service";
 import { ErrorMessage } from "@error/models/error-message";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 
 /**
  * КОМПОНЕНТ ПЕРВОГО ЭТАПА ОНБОРДИНГА
@@ -58,6 +59,7 @@ import { ErrorMessage } from "@error/models/error-message";
     AutoCompleteInputComponent,
     SpecializationsGroupComponent,
     CommonModule,
+    TooltipComponent,
   ],
 })
 export class OnboardingStageOneComponent implements OnInit, OnDestroy {
@@ -79,12 +81,6 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
   nestedSpecializations$: Observable<SpecializationsGroup[]> = this.route.data.pipe(
     map(r => r["data"])
   );
-
-  tooltipAuthText =
-    "Дизайнер, веб-разработчик, инженер? Определяйся и пиши тем, кем хотел бы стать или уже стал P.S. Дальше можно будет изменить выбор";
-
-  tooltipLibText =
-    "Это наша база со всеми специальностями. Если не найдешь свою пиши в @procollab_support и мы обязательно добавим твою профессию и ты получишь +респект";
 
   isHintAuthVisible = false;
   isHintLibVisible = false;
@@ -132,6 +128,33 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
 
   hideTooltip(type: "auth" | "lib"): void {
     type === "auth" ? (this.isHintAuthVisible = false) : (this.isHintLibVisible = false);
+  }
+
+  // Для управления открытыми группами специализаций
+  openSpecializationGroup: string | null = null;
+
+  /**
+   * Проверяет, есть ли открытые группы специализаций
+   */
+  hasOpenSpecializationsGroups(): boolean {
+    return this.openSpecializationGroup !== null;
+  }
+
+  /**
+   * Обработчик переключения группы специализаций
+   * @param isOpen - флаг открытия/закрытия группы
+   * @param groupName - название группы
+   */
+  onSpecializationsGroupToggled(isOpen: boolean, groupName: string): void {
+    this.openSpecializationGroup = isOpen ? groupName : null;
+  }
+
+  /**
+   * Проверяет, должна ли группа специализаций быть отключена
+   * @param groupName - название группы для проверки
+   */
+  isSpecializationGroupDisabled(groupName: string): boolean {
+    return this.openSpecializationGroup !== null && this.openSpecializationGroup !== groupName;
   }
 
   onSkipRegistration(): void {
