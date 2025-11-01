@@ -37,10 +37,12 @@
 
   &__top {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 15px;
     padding-bottom: 5px;
     margin-bottom: 15px;
-    border-bottom: 1px solid var(--dark-grey);
+    border-bottom: 0.5px solid var(--dark-grey);
   }
 
   &__warning-modal {

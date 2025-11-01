@@ -73,7 +73,12 @@
             @if (myInvites.length) {
             <ul class="page__invites--list">
               @for (invite of myInvites; track invite.id) {
-              <app-info-card type="invite" [info]="invite"></app-info-card>
+              <app-info-card
+                (onRejectingInvite)="acceptOrRejectInvite()"
+                (onAcceptingInvite)="acceptOrRejectInvite()"
+                type="invite"
+                [info]="invite"
+              ></app-info-card>
               }
             </ul>
             } @else {

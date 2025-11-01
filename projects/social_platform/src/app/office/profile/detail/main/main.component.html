@@ -23,7 +23,13 @@
 
           <li class="lists__item">
             <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
-            <p class="text-body-10">{{ user.speciality ?? "не указана" }}</p>
+            <p class="text-body-10">
+              {{
+                (user.speciality.length > 13
+                  ? user.speciality.slice(0, 10) + "..."
+                  : user.speciality) ?? "не указана"
+              }}
+            </p>
           </li>
         </ul>
       </div>
@@ -151,7 +157,7 @@
             <h3 class="text-body-12 lists__title">контакты</h3>
             <i class="lists__icon" icon="phone" appIcon appSquare="12"></i>
           </div>
-          <ul>
+          <ul class="lists__list">
             @for (link of user.links.slice(0, 3); track $index) {
             <li class="lists__item text-body-10">
               <ng-container

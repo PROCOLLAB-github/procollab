@@ -151,6 +151,10 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.renderer.setStyle(this.filterBody.nativeElement, "transform", "translateY(0)");
   }
 
+  acceptOrRejectInvite(): void {
+    this.myInvites = [];
+  }
+
   closeFilter(): void {
     this.isFilterOpen = false;
   }
