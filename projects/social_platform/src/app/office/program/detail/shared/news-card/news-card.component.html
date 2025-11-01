@@ -56,10 +56,10 @@
   </ul>
   } @if (newsTextExpandable && !editMode) {
   <div
-    class="read-more"
+    class="read-more text-body-10"
     (click)="onExpandNewsText(newsTextEl?.nativeElement, 'expanded', readMore)"
   >
-    {{ readMore ? "Скрыть" : "Читать полностью" }}
+    {{ readMore ? "скрыть" : "читать полностью" }}
   </div>
   } @if (!editMode) {
   <div class="card__gallery">

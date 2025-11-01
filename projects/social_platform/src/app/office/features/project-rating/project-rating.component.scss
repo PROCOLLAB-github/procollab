@@ -11,6 +11,7 @@
   &__columns {
     display: flex;
     align-items: center;
+    flex-direction: column;
   }
 
   &__field {

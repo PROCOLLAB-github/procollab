@@ -41,6 +41,9 @@
 
     @include responsive.apply-desktop {
       grid-row-start: unset;
+      min-width: 0;
+      overflow: hidden;
+      word-break: break-word;
     }
   }
 
