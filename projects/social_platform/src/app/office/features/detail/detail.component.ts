@@ -205,6 +205,11 @@ export class DeatilComponent implements OnInit, OnDestroy {
       project => project.id === this.selectedProjectId
     );
 
+    if (!selectedProject) {
+      this.snackbarService.error("Проект не найден. Попробуйте выбрать другой проект.");
+      return;
+    }
+
     this.assignProjectToProgram(selectedProject!);
   }
 
@@ -222,6 +227,11 @@ export class DeatilComponent implements OnInit, OnDestroy {
    * Перенаправление её на редактирование "нового" проекта
    */
   assignProjectToProgram(project: Project): void {
+    if (!project || !project.id) {
+      this.snackbarService.error("Ошибка при выборе проекта");
+      return;
+    }
+
     if (this.info().id) {
       this.projectService
         .assignProjectToProgram(project.id, Number(this.route.snapshot.params["programId"]))
@@ -231,7 +241,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
             this.assignProjectToProgramModalMessage.set(r);
             this.isAssignProjectToProgramModalOpen.set(true);
             this.toggleSubmitProjectModal();
-            this.selectedProjectId = 0;
+            this.selectedProjectId = null;
           },
 
           error: err => {

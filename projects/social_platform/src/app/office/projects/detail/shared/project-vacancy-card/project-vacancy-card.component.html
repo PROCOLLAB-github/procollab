@@ -42,7 +42,7 @@
       >{{ skill.name }}</app-tag
     >
     } @if (vacancy.requiredSkills.length > 5) {
-    <p class="vacancy__skill--more">+ {{ vacancy.requiredSkills.length - 5 }}</p>
+    <p class="vacancy__skill--more text-body-10">+ {{ vacancy.requiredSkills.length - 5 }}</p>
     }
   </div>
 
@@ -51,8 +51,11 @@
     <div class="text-body-10 about__text">
       <p #descEl [innerHTML]="vacancy.description | parseLinks | parseBreaks"></p>
       @if (descriptionExpandable) {
-      <div class="read-more" (click)="onExpandDescription(descEl, 'expanded', readFullDescription)">
-        {{ readFullDescription ? "Скрыть" : "Подробнее" }}
+      <div
+        class="read-more text-body-10"
+        (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+      >
+        {{ readFullDescription ? "cкрыть" : "подробнее" }}
       </div>
       }
     </div>

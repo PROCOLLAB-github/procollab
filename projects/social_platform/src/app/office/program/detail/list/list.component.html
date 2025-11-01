@@ -21,7 +21,7 @@
       @for (listItem of searchedList; track listItem.id) {
       <li class="page__item">
         @if (listType === 'projects' || listType === 'members') {
-        <a [routerLink]="[routerLink]">
+        <a [routerLink]="routerLink(listItem.id)">
           <app-info-card
             [type]="listType"
             [profileId]="listItem.id"
@@ -59,7 +59,7 @@
         <div class="filter__controls">
           <label class="filter__tags" (click)="setValue($event)">
             <app-checkbox [checked]="this.filterForm.get('filterTag')?.value"></app-checkbox>
-            <p class="text-body-12">проекты без оценки</p>
+            <p class="text-body-12">проекты с оценкой</p>
           </label>
         </div>
       </form>
