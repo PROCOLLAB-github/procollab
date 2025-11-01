@@ -8,6 +8,7 @@
     [class.field__input--open]="isOpen"
     [class.field__input--small]="size === 'small'"
     [class.field__input--big]="size === 'big'"
+    [class.field__input--disabled]="disabled"
     (click)="isOpen = !isOpen; highlightedIndex = -1"
   >
     {{
@@ -30,7 +31,7 @@
     ></i>
     }
   </div>
-  @if (isOpen) {
+  @if (!isDisabled) { @if (isOpen) {
   <ul #dropdown class="field__options">
     @for (option of options; track option.id; let index = $index) {
     <li
@@ -43,5 +44,5 @@
     </li>
     }
   </ul>
-  }
+  } }
 </div>

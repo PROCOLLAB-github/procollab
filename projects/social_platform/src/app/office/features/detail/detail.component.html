@@ -256,8 +256,8 @@
                   size="medium"
                   class="cancel__button"
                   customTypographyClass="text-body-12"
-                  [disabled]="!selectedProjectId"
-                  [style.opacity]="!selectedProjectId ? '0.5' : '1'"
+                  [disabled]="!isProjectSelected"
+                  [class.cancel__button--disabled]="!isProjectSelected"
                   (click)="addProjectModal()"
                 >
                   выбрать проект

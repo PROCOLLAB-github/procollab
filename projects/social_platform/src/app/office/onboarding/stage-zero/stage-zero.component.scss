@@ -3,6 +3,7 @@
 .page {
   position: relative;
   margin-bottom: 50px;
+  padding-bottom: 130px;
 
   &__form {
     @include responsive.apply-desktop {

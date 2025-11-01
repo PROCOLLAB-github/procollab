@@ -229,6 +229,11 @@ $detail-bar-mb: 12px;
 
   &__button {
     margin-top: 20px;
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   }
 
   &__cross {

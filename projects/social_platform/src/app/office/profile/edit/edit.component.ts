@@ -1037,7 +1037,39 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
    * Валидирует всю форму и отправляет данные на сервер
    */
   saveProfile(): void {
-    if (!this.validationService.getFormValidation(this.profileForm) || this.profileFormSubmitting) {
+    const tempFields = [
+      "organizationName",
+      "entryYear",
+      "completionYear",
+      "description",
+      "educationLevel",
+      "educationStatus",
+      "organization",
+      "entryYearWork",
+      "completionYearWork",
+      "descriptionWork",
+      "jobPosition",
+      "language",
+      "languageLevel",
+      "title",
+      "status",
+      "year",
+      "files",
+    ];
+
+    tempFields.forEach(name => {
+      const control = this.profileForm.get(name);
+      if (control) {
+        control.clearValidators();
+        control.updateValueAndValidity();
+      }
+    });
+
+    const mainFieldsValid = ["firstName", "lastName", "birthday", "speciality"].every(
+      name => this.profileForm.get(name)?.valid
+    );
+
+    if (!mainFieldsValid || this.profileFormSubmitting) {
       this.isModalErrorSkillsChoose.set(true);
       return;
     }

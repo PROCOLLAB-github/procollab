@@ -1,12 +1,12 @@
 <!-- @format -->
+<div class="filter__titles">
+  <p class="text-body-14">фильтры</p>
+  <!-- <a class="text-body-12 filter__clear" (click)="clearFilters()">Сбросить фильтры</a> -->
+</div>
+
 @if (filters()?.length) {
 <div class="filter">
   <div class="filter__body" [formGroup]="filterForm">
-    <div class="filter__titles">
-      <p class="text-body-14">фильтры</p>
-      <!-- <a class="text-body-12 filter__clear" (click)="clearFilters()">Сбросить фильтры</a> -->
-    </div>
-
     @if (filters()?.length && filterForm.controls) { @for (field of filters(); track field.id) { @if
     (filterForm.get(field.name)) {
     <div class="filter__block">

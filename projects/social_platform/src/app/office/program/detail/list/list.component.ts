@@ -27,7 +27,7 @@ import {
   tap,
   throttleTime,
 } from "rxjs";
-import { ProjectsFilterComponent } from "@office/projects/projects-filter/projects-filter.component";
+import { ProjectsFilterComponent } from "@office/program/detail/list/projects-filter/projects-filter.component";
 import Fuse from "fuse.js";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";

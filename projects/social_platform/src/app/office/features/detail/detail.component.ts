@@ -90,7 +90,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   isProfileFill = false;
 
   // Переменные для работы с модалкой подачи проекта
-  selectedProjectId = 0;
+  selectedProjectId: number | null = null;
   dubplicatedProjectId = 0;
   memberProjects: Project[] = [];
 
@@ -167,7 +167,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.showSubmitProjectModal.set(!this.showSubmitProjectModal());
 
     if (!this.showSubmitProjectModal()) {
-      this.selectedProjectId = 0;
+      this.selectedProjectId = null;
     }
   }
 
@@ -197,7 +197,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
    * Добавление проекта на программу
    */
   addProjectModal(): void {
-    if (!this.selectedProjectId) {
+    if (this.selectedProjectId === null) {
       return;
     }
 
@@ -206,6 +206,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
     );
 
     this.assignProjectToProgram(selectedProject!);
+  }
+
+  get isProjectSelected(): boolean {
+    return this.selectedProjectId !== null;
   }
 
   addNewProject(): void {

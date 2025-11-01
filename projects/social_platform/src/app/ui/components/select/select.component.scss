@@ -44,6 +44,11 @@
       border-color: var(--red) !important;
     }
 
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     @include typography.body-12;
   }
 

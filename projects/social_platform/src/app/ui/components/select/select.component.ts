@@ -65,6 +65,14 @@ export class SelectComponent implements ControlValueAccessor {
 
   @Input() error = false;
 
+  @Input() set isDisabled(value: boolean) {
+    this.setDisabledState(value);
+  }
+
+  get isDisabled(): boolean {
+    return this.disabled;
+  }
+
   /** Состояние открытия выпадающего списка */
   isOpen = false;
 
