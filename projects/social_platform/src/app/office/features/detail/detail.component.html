@@ -240,7 +240,7 @@
                       </div>
                       <app-input
                         type="radio"
-                        [appValue]="project.id.toLocaleString()"
+                        [appValue]="project.id.toString()"
                         [checked]="selectedProjectId === project.id"
                         (change)="onProjectRadioChange($event)"
                       ></app-input>
