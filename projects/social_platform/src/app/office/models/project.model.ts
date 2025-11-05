@@ -58,7 +58,6 @@ export class Project {
   leader!: number;
   leaderInfo?: { firstName: string; lastName: string };
   partnerProgramsTags?: string[];
-  partnerProgramId!: number | null;
   partnerProgram!: PartnerProgramInfo | null;
   vacancies!: Vacancy[];
   isCompany!: boolean;
@@ -83,7 +82,6 @@ export class Project {
       industry: 0,
       viewsCount: 0,
       links: [],
-      partnerProgramId: null,
       partnerProgram: null,
       cover: null,
       coverImageAddress: null,

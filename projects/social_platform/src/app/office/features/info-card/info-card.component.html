@@ -77,7 +77,7 @@
 </ng-template>
 
 <ng-template #regularCardHeader>
-  @if (type === 'projects') { @if (info.name) { @if(info.name.length > 12) {
+  @if (type === 'projects' || type === 'invite') { @if (info.name) { @if(info.name.length > 12) {
   <p class="text-body-12 card__name">{{ info.name.slice(0, 12) }}...</p>
   } @else {
   <p class="text-body-12 card__name">{{ info.name }}</p>
@@ -138,7 +138,7 @@
         проект
       </app-button>
 
-      @if (info.partnerProgramId) {
+      @if (info.partnerProgram) {
       <div
         class="card__info--program-icon"
         (mouseenter)="programProjectHovered = true"
@@ -149,7 +149,7 @@
 
       @if (programProjectHovered) {
       <div class="card__info--project-partner">
-        <p class="text-body-6">проект привязан к программе</p>
+        <p class="text-body-6">проект привязан к программе {{ info.partnerProgram.name }}</p>
       </div>
       } }
     </div>

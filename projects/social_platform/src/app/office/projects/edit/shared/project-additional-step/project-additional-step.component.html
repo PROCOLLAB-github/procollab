@@ -4,7 +4,7 @@
   <div [formGroup]="additionalForm" class="project__team">
     <div class="project__additional-wrapper">
       @if (partnerProgramFields.length) { @for (field of partnerProgramFields; track field.id) {
-      <label class="text-heading-4 field-label">дополнительные сведения</label>
+      <label class="text-bold-body-14 field-label">дополнительные сведения</label>
       <fieldset>
         @switch (field.fieldType) { @case ("text") { @if (additionalForm.get(field.name); as
         control) {

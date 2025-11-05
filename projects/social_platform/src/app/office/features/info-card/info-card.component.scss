@@ -59,7 +59,7 @@
 
     &--project-partner {
       position: absolute;
-      top: 67%;
+      top: 63%;
       left: 30%;
       padding: 3px 5px;
       border: 0.5px solid var(--medium-grey-for-outline);
@@ -150,6 +150,14 @@
     &.invite-description {
       justify-content: center;
     }
+  }
+
+  &__invite-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-items: center;
+    justify-content: center;
   }
 
   &__user {
