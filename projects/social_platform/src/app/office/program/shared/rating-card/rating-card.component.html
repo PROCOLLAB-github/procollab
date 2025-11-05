@@ -46,10 +46,10 @@
         <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
         @if (descriptionExpandable()) {
         <div
-          class="about__read-full"
+          class="about__read-full text-body-10"
           (click)="expandDescription(descEl, 'expanded', readFullDescription())"
         >
-          {{ readFullDescription() ? "Скрыть" : "Читать полностью" }}
+          {{ readFullDescription() ? "скрыть" : "подробнее" }}
         </div>
         }
       </div>
@@ -82,7 +82,7 @@
         [disabled]="showConfirmedState"
         [appearance]="showConfirmedState ? 'outline' : 'inline'"
         [style.opacity]="showConfirmedState ? '0.5' : '1'"
-        (click)="showRatingForm ? confirmLoading() : null"
+        (click)="showRatingForm ? confirmRateProject() : null"
       >
         {{ showRatingForm ? "оценить проект" : "проект оценен" }}
       </app-button>

@@ -84,21 +84,23 @@
       <div class="profile__wrapper--main">
         <div class="profile__row">
           @if (profileForm.get("avatar"); as avatar) {
-          <fieldset class="profile__avatar">
+          <div>
             <label for="avatar" class="field-label" style="text-align: center">фото</label>
-            <app-avatar-control
-              id="avatar"
-              formControlName="avatar"
-              type="profile"
-              [size]="68"
-              [error]="avatar | controlError"
-            ></app-avatar-control>
-            @if (avatar | controlError: "required") {
-            <div class="text-body-10 error">
-              {{ errorMessage.EMPTY_AVATAR }}
-            </div>
-            }
-          </fieldset>
+            <fieldset class="profile__avatar">
+              <app-avatar-control
+                id="avatar"
+                formControlName="avatar"
+                type="profile"
+                [size]="68"
+                [error]="avatar | controlError"
+              ></app-avatar-control>
+              @if (avatar | controlError: "required") {
+              <div class="text-body-10 error">
+                {{ errorMessage.EMPTY_AVATAR }}
+              </div>
+              }
+            </fieldset>
+          </div>
           } @if (profileForm.get("coverImageAddress"); as coverImageAddress) {
           <fieldset class="profile__file">
             <label

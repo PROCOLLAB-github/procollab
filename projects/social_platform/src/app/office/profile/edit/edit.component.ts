@@ -1125,11 +1125,15 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isModalErrorSkillChooseText.set(error.error.language);
           } else if (error.error.achievements) {
             this.isModalErrorSkillChooseText.set(error.error.achievements[0]);
-          } else if (error.error.work_experience[2]) {
+          } else if (error.error.work_experience?.[2]) {
             const errorText = error.error.work_experience[2].entry_year
               ? error.error.work_experience[2].entry_year
               : error.error.work_experience[2].completion_year;
             this.isModalErrorSkillChooseText.set(errorText);
+          } else if (error.error.first_name?.[0]) {
+            this.isModalErrorSkillChooseText.set(error.error.first_name?.[0]);
+          } else if (error.error.last_name?.[0]) {
+            this.isModalErrorSkillChooseText.set(error.error.last_name?.[0]);
           } else {
             this.isModalErrorSkillChooseText.set(error.error[0]);
           }

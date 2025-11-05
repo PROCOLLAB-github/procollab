@@ -26,7 +26,7 @@ import {
   YearsFromBirthdayPipe,
 } from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
-import { IconComponent } from "@ui/components";
+import { IconComponent, ButtonComponent } from "@ui/components";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { AsyncPipe, CommonModule, NgTemplateOutlet } from "@angular/common";
 import { ProfileService } from "@auth/services/profile.service";
@@ -81,17 +81,20 @@ import { DirectionItem, directionItemBuilder } from "@utils/helpers/directionIte
     NewsCardComponent,
     NewsFormComponent,
     ProjectDirectionCard,
+    ButtonComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
   private readonly profileNewsService = inject(ProfileNewsService);
   private readonly profileDataService = inject(ProfileDataService);
   private readonly cdRef = inject(ChangeDetectorRef);
 
   user?: User;
   loggedUserId?: number;
+  isProfileEmpty?: boolean;
 
   directions: DirectionItem[] = [];
 
@@ -119,14 +122,19 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
         },
       });
 
-    const profileIdDataSub$ = this.profileDataService
-      .getProfileId()
-      .pipe(filter(userId => !!userId))
-      .subscribe({
-        next: profileId => {
-          this.loggedUserId = profileId;
-        },
-      });
+    const profileIdDataSub$ = this.authService.profile.subscribe({
+      next: user => {
+        this.loggedUserId = user?.id;
+      },
+    });
+
+    this.isProfileEmpty = !(
+      this.user?.firstName &&
+      this.user?.lastName &&
+      this.user?.email &&
+      this.user?.avatar &&
+      this.user?.birthday
+    );
 
     const route$ = this.route.params
       .pipe(
