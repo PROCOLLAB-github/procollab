@@ -120,11 +120,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
     this.profileForm = this.fb.group({
       firstName: ["", [Validators.required]],
       lastName: ["", [Validators.required]],
-      email: ["", [Validators.email, Validators.max(50)]],
+      email: ["", [Validators.email, Validators.maxLength(50)]],
       userType: [0],
       birthday: ["", [Validators.required]],
-      city: ["", Validators.max(100)],
-      phoneNumber: [""],
+      city: ["", [Validators.required, Validators.maxLength(100)]],
+      phoneNumber: ["", Validators.maxLength(12)],
       additionalRole: [null],
       coverImageAddress: [null],
 
@@ -1037,6 +1037,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
    * Валидирует всю форму и отправляет данные на сервер
    */
   saveProfile(): void {
+    this.profileForm.markAllAsTouched();
+    this.profileForm.updateValueAndValidity();
+
     const tempFields = [
       "organizationName",
       "entryYear",
@@ -1055,6 +1058,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       "status",
       "year",
       "files",
+      "phoneNumber",
     ];
 
     tempFields.forEach(name => {
@@ -1065,7 +1069,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
 
-    const mainFieldsValid = ["firstName", "lastName", "birthday", "speciality"].every(
+    const mainFieldsValid = ["firstName", "lastName", "birthday", "speciality", "city"].every(
       name => this.profileForm.get(name)?.valid
     );
 

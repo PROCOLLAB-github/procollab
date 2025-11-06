@@ -99,16 +99,9 @@ export class InviteService {
    * @returns Observable<Invite[]> - массив приглашений, адресованных текущему пользователю
    */
   getMy(): Observable<Invite[]> {
-    return this.authService.profile.pipe(
-      take(1),
-      concatMap(profile =>
-        this.apiService.get<Invite[]>(
-          `${this.INVITES_URL}/`,
-          new HttpParams({ fromObject: { user_id: profile.id } })
-        )
-      ),
-      map(invites => plainToInstance(Invite, invites))
-    );
+    return this.apiService
+      .get<Invite[]>(`${this.INVITES_URL}/`)
+      .pipe(map(invites => plainToInstance(Invite, invites)));
   }
 
   /**
