@@ -92,7 +92,14 @@
         </div>
         } }
       </fieldset>
-      } } @else {
+      } } @else { @if (isProjectAssignToProgram) {
+      <div class="project__additional--no-items">
+        <p class="text-body-12">
+          проект привязан к программе, но дополнительных полей для заполнения нет
+        </p>
+        <i appIcon icon="info" appSquare="20" class="project__no-items"></i>
+      </div>
+      } @else {
       <div class="project__additional--no-items">
         <p class="text-body-12">пока ты не участвуешь ни в одной программе</p>
         <a routerLink="/office/program/all">
@@ -112,7 +119,7 @@
 
         <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
       </div>
-      }
+      } }
     </div>
   </div>
 </div>

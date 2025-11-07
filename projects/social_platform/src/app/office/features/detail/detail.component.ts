@@ -152,7 +152,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   get isUserExpert() {
     const type = this.userType();
-    return type !== undefined && type !== 1;
+    return type !== undefined && type === 3;
   }
 
   // Методы для управления состоянием ошибок через сервис

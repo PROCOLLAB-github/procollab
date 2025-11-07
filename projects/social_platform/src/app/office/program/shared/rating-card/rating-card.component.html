@@ -79,15 +79,21 @@
         size="big"
         [loader]="submitLoading() || confirmLoading()"
         [color]="showRatedWithEdit ? 'green' : 'primary'"
-        [disabled]="showConfirmedState"
-        [appearance]="showConfirmedState ? 'outline' : 'inline'"
+        [disabled]="programDateFinished()"
+        [appearance]="programDateFinished() ? 'outline' : 'inline'"
         [style.opacity]="showConfirmedState ? '0.5' : '1'"
         (click)="showRatingForm ? confirmRateProject() : null"
       >
-        {{ showRatingForm ? "оценить проект" : "проект оценен" }}
+        {{
+          programDateFinished()
+            ? "проект оценен"
+            : showRatingForm
+            ? "оценить проект"
+            : "проект оценен"
+        }}
       </app-button>
 
-      @if (showRatedWithEdit) {
+      @if (showRatedWithEdit && !programDateFinished()) {
       <app-button
         appearance="outline"
         size="small"
@@ -111,14 +117,27 @@
           <i appIcon icon="check" appSquare="60"></i>
         </div>
 
-        <app-button
-          size="big"
-          class="cancel__button"
-          customTypographyClass="text-body-12"
-          (click)="confirmRateProject()"
-        >
-          подтверждаю
-        </app-button>
+        <div class="cancel__buttons">
+          <app-button
+            size="big"
+            class="cancel__button"
+            customTypographyClass="text-body-12"
+            (click)="confirmRateProject()"
+            style="width: 100%"
+          >
+            подтверждаю
+          </app-button>
+
+          <app-button
+            size="big"
+            class="cancel__button"
+            customTypographyClass="text-body-12"
+            (click)="showConfirmRateModal.set(false)"
+            style="width: 100%"
+          >
+            исправить оценку
+          </app-button>
+        </div>
       </div>
     </app-modal>
   </div>

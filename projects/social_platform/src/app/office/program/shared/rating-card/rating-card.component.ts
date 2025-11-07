@@ -19,7 +19,16 @@ import { CommonModule } from "@angular/common";
 import { ProjectRate } from "@office/program/models/project-rate";
 import { ControlErrorPipe, ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { expandElement } from "@utils/expand-element";
-import { debounceTime, finalize, fromEvent, map, Observable, Subscription } from "rxjs";
+import {
+  debounceTime,
+  filter,
+  finalize,
+  fromEvent,
+  map,
+  Observable,
+  Subscription,
+  tap,
+} from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { IndustryService } from "@office/services/industry.service";
 import { ProjectRatingComponent } from "@office/features/project-rating/project-rating.component";
@@ -28,6 +37,7 @@ import { ProjectRatingService } from "@office/program/services/project-rating.se
 import { RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
+import { ProgramDataService } from "@office/program/services/program-data.service";
 
 /**
  * Компонент карточки оценки проекта
@@ -92,6 +102,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public industryService: IndustryService,
     private projectRatingService: ProjectRatingService,
+    private readonly programDataService: ProgramDataService,
     private breakpointObserver: BreakpointObserver,
     private cdRef: ChangeDetectorRef
   ) {}
@@ -128,6 +139,8 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isProjectCriterias = signal(0);
 
+  programDateFinished = signal(false);
+
   desktopMode$: Observable<boolean> = this.breakpointObserver
     .observe("(min-width: 920px)")
     .pipe(map(result => result.matches));
@@ -140,6 +153,19 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectConfirmed.set(isScored);
       this.projectRated.set(isScored);
     }
+
+    const program$ = this.programDataService.program$
+      .pipe(
+        filter(program => !!program),
+        tap(program => {
+          if (program && program.datetimeFinished) {
+            this.programDateFinished.set(Date.now() > Date.parse(program.datetimeFinished));
+          }
+        })
+      )
+      .subscribe();
+
+    this.subscriptions$().push(program$);
   }
 
   ngAfterViewInit(): void {
@@ -198,13 +224,12 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   redoRating(): void {
-    if (!this.projectConfirmed()) {
-      this.projectRated.set(false);
-    }
+    this.projectRated.set(false);
+    this.projectConfirmed.set(false);
   }
 
   get canEdit(): boolean {
-    return !this.projectConfirmed();
+    return !this.programDateFinished();
   }
 
   get showRatingForm(): boolean {
@@ -212,10 +237,10 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get showRatedWithEdit(): boolean {
-    return this.projectRated() && !this.projectConfirmed();
+    return (this.projectRated() || this.projectConfirmed()) && this.canEdit;
   }
 
   get showConfirmedState(): boolean {
-    return this.projectConfirmed();
+    return this.projectConfirmed() && !this.canEdit;
   }
 }

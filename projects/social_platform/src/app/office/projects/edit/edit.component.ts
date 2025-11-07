@@ -214,6 +214,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Маркер того является ли проект привязанный к конкурсной программе
   isCompetitive = false;
+  isProjectAssignToProgram = false;
 
   // Маркер что проект привязан
   isProjectBoundToProgram = false;
@@ -660,6 +661,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
           if (project.partnerProgram) {
             this.isCompetitive = project.partnerProgram.canSubmit;
+            this.isProjectAssignToProgram = !!project.partnerProgram.programId;
 
             this.projectAdditionalService.initializeAdditionalForm(
               project.partnerProgram?.programFields,
