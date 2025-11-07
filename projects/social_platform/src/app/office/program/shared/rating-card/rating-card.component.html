@@ -63,7 +63,11 @@
         <p class="text-body-12">оценка проекта</p>
         <i appIcon icon="medal" appWidth="8" appHeight="12"></i>
       </div>
-      <app-project-rating [criteria]="project.criterias" [formControl]="form"></app-project-rating>
+      <app-project-rating
+        [criteria]="project.criterias"
+        [formControl]="form"
+        [disabled]="(projectRated() || projectConfirmed()) && !programDateFinished()"
+      ></app-project-rating>
       @if (form | controlError: "required"; as error) {
       <div class="text-body-10 error">
         {{ error }}
@@ -114,7 +118,19 @@
       <div class="cancel">
         <div class="cancel__top">
           <p class="cancel__title text-body-14">подтвердите оценку</p>
-          <i appIcon icon="check" appSquare="60"></i>
+
+          <div class="cancel__project">
+            <app-avatar [size]="50" [url]="project.imageAddress"></app-avatar>
+            <p class="text-body-12">{{ project.name }}</p>
+          </div>
+        </div>
+
+        <div class="cancel__criterias">
+          <app-project-rating
+            [criteria]="project.criterias"
+            [formControl]="form"
+            [disabled]="(projectRated() || projectConfirmed()) && !programDateFinished()"
+          ></app-project-rating>
         </div>
 
         <div class="cancel__buttons">
@@ -123,7 +139,6 @@
             class="cancel__button"
             customTypographyClass="text-body-12"
             (click)="confirmRateProject()"
-            style="width: 100%"
           >
             подтверждаю
           </app-button>
@@ -131,11 +146,11 @@
           <app-button
             size="big"
             class="cancel__button"
+            appearance="outline"
             customTypographyClass="text-body-12"
             (click)="showConfirmRateModal.set(false)"
-            style="width: 100%"
           >
-            исправить оценку
+            изменить оценку
           </app-button>
         </div>
       </div>
