@@ -58,6 +58,8 @@ export class InfoCardComponent implements OnInit {
   haveBadge = this.calculateHaveBadge();
 
   programProjectHovered = false;
+  iconHovered = false;
+  draftProjectHovered = false;
 
   ngOnInit(): void {}
 

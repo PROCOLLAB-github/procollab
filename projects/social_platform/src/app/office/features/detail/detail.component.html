@@ -101,12 +101,13 @@
           } } @if (isUserMember && !isUserManager && !isUserExpert) {
           <app-button
             size="medium"
-            [style.opacity]="registerDateExpired ? '0.5' : '1'"
-            [disabled]="!!registerDateExpired"
+            [style.opacity]="registerDateExpired || isProjectAssigned ? '0.5' : '1'"
+            [disabled]="!!registerDateExpired || isProjectAssigned"
+            [appearance]="isProjectAssigned ? 'outline' : 'inline'"
             (click)="toggleSubmitProjectModal()"
             customTypographyClass="text-body-12 bar__add-project"
           >
-            <span>подать проект</span>
+            <span>{{ isProjectAssigned ? "вы подали проект" : "подать проект" }}</span>
             <i appIcon icon="plus" appSquare="10"></i>
           </app-button>
           } @if ((isUserManager || isUserExpert) && isUserMember) {
@@ -235,7 +236,11 @@
                       <div class="project__item--info">
                         <app-avatar [url]="project.imageAddress" [size]="40"></app-avatar>
                         <p class="text-body-12">
-                          {{ project.name }}
+                          {{
+                            project.name.length > 20
+                              ? project.name.slice(0, 16) + "..."
+                              : project.name
+                          }}
                         </p>
                       </div>
                       <app-input
