@@ -38,6 +38,8 @@ import { RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ProgramDataService } from "@office/program/services/program-data.service";
+import { AuthService } from "@auth/services";
+import { User } from "@auth/models/user.model";
 
 /**
  * Компонент карточки оценки проекта
@@ -103,6 +105,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
     public industryService: IndustryService,
     private projectRatingService: ProjectRatingService,
     private readonly programDataService: ProgramDataService,
+    private readonly authService: AuthService,
     private breakpointObserver: BreakpointObserver,
     private cdRef: ChangeDetectorRef
   ) {}
@@ -121,6 +124,8 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   _project = signal<ProjectRate | null>(null);
   _currentIndex = signal<number>(0);
   _projects = signal<ProjectRate[]>([]);
+
+  profile = signal<User | null>(null);
 
   form = new FormControl();
 
@@ -166,6 +171,14 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe();
 
     this.subscriptions$().push(program$);
+
+    const profileId$ = this.authService.profile.subscribe({
+      next: profile => {
+        this.profile.set(profile);
+      },
+    });
+
+    this.subscriptions$().push(profileId$);
   }
 
   ngAfterViewInit(): void {
@@ -232,12 +245,23 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
     return !this.programDateFinished();
   }
 
+  get isCurrentUserExpert(): boolean {
+    const currentProfile = this.profile();
+    const project = this.project;
+
+    if (!currentProfile || !project) return false;
+
+    return project.scored && project.scoredExpertId === currentProfile.id;
+  }
+
   get showRatingForm(): boolean {
     return !this.projectRated() && this.canEdit;
   }
 
   get showRatedWithEdit(): boolean {
-    return (this.projectRated() || this.projectConfirmed()) && this.canEdit;
+    return (
+      (this.projectRated() || this.projectConfirmed()) && this.canEdit && this.isCurrentUserExpert
+    );
   }
 
   get showConfirmedState(): boolean {
