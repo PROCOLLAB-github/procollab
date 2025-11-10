@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, EventEmitter, inject, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from "@angular/core";
 import { IndustryService } from "@services/industry.service";
 import { IconComponent, ButtonComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
@@ -34,7 +34,7 @@ import { YearsFromBirthdayPipe } from "@corelib";
     RouterLink,
   ],
 })
-export class InfoCardComponent implements OnInit {
+export class InfoCardComponent {
   private readonly inviteService = inject(InviteService);
   private readonly subscriptionService = inject(SubscriptionService);
   public readonly industryService = inject(IndustryService);
@@ -47,10 +47,13 @@ export class InfoCardComponent implements OnInit {
   @Input() canDelete?: boolean | null = false;
   @Input() isSubscribed?: boolean | null = false;
   @Input() profileId?: number;
+  @Input() leaderId?: number;
+  @Input() loggedUserId?: number;
 
   @Output() onAcceptingInvite = new EventEmitter<number>();
   @Output() onRejectingInvite = new EventEmitter<number>();
   @Output() onCreate = new EventEmitter<void>();
+  @Output() onRemoveCollaborator = new EventEmitter<number>();
 
   // Состояние компонента
   isUnsubscribeModalOpen = false;
@@ -61,7 +64,9 @@ export class InfoCardComponent implements OnInit {
   iconHovered = false;
   draftProjectHovered = false;
 
-  ngOnInit(): void {}
+  removeCollaboratorFromProject(userId: number): void {
+    this.onRemoveCollaborator.emit(userId);
+  }
 
   /**
    * Определяет, нужно ли показывать информацию о проекте

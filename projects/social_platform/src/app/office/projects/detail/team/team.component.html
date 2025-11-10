@@ -3,7 +3,13 @@
 @if(team) { @if (team.length) {
 <div class="project__team">
   @for (collaborator of team; track $index) {
-  <app-info-card [info]="collaborator" type="members"></app-info-card>
+  <app-info-card
+    [leaderId]="leaderId()"
+    [loggedUserId]="loggedUserId()"
+    [info]="collaborator"
+    type="members"
+    (onRemoveCollaborator)="removeCollaboratorFromProject($event)"
+  ></app-info-card>
   }
 </div>
 } }

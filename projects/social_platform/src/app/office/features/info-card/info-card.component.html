@@ -171,7 +171,25 @@
       </div>
       } }
     </div>
-    } @else if (type === 'members') {
+    } @else if (type === 'members') { @if (leaderId !== info?.userId) {
+    <div class="card__info--program">
+      <app-button
+        customTypographyClass="text-body-6"
+        size="extra-small"
+        [disabled]="true"
+        style="opacity: 0.5"
+        >выдать роль</app-button
+      >
+      <app-button
+        customTypographyClass="text-body-6"
+        size="extra-small"
+        color="red"
+        appearance="outline"
+        (click)="removeCollaboratorFromProject(info?.userId)"
+        >удалить</app-button
+      >
+    </div>
+    } @else {
     <app-button
       [routerLink]="'/office/profile/' + info?.userId"
       customTypographyClass="text-body-6"
@@ -180,7 +198,7 @@
     >
       профиль
     </app-button>
-    } @else {
+    } } @else {
     <div class="card__invite-actions">
       <app-button
         (click)="onAcceptInvite($event, info?.inviteId!)"
