@@ -142,6 +142,8 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   showConfirmRateModal = signal(false);
 
+  locallyRatedByCurrentUser = signal(false);
+
   isProjectCriterias = signal(0);
 
   programDateFinished = signal(false);
@@ -225,13 +227,10 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(finalize(() => this.submitLoading.set(false)))
       .subscribe({
         next: () => {
-          if (this.showConfirmRateModal()) {
-            this.projectConfirmed.set(true);
-            this.showConfirmRateModal.set(false);
-          } else {
-            this.projectRated.set(true);
-            this.showConfirmRateModal.set(true);
-          }
+          this.locallyRatedByCurrentUser.set(true);
+          this.projectRated.set(true);
+          this.projectConfirmed.set(true);
+          this.showConfirmRateModal.set(false);
         },
       });
   }
@@ -239,6 +238,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   redoRating(): void {
     this.projectRated.set(false);
     this.projectConfirmed.set(false);
+    this.locallyRatedByCurrentUser.set(false);
   }
 
   get canEdit(): boolean {
@@ -251,17 +251,24 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (!currentProfile || !project) return false;
 
-    return project.scored && project.scoredExpertId === currentProfile.id;
+    const isExpertFromBackend =
+      !!project.scoredExpertId && project.scoredExpertId === currentProfile.id;
+
+    const isExpertLocally = this.locallyRatedByCurrentUser();
+
+    return isExpertFromBackend || isExpertLocally;
   }
 
   get showRatingForm(): boolean {
     return !this.projectRated() && this.canEdit;
   }
 
-  get showRatedWithEdit(): boolean {
-    return (
-      (this.projectRated() || this.projectConfirmed()) && this.canEdit && this.isCurrentUserExpert
-    );
+  get showRatedStatus(): boolean {
+    return this.projectRated() || this.projectConfirmed();
+  }
+
+  get showEditButton(): boolean {
+    return this.showRatedStatus && this.canEdit && this.isCurrentUserExpert;
   }
 
   get showConfirmedState(): boolean {

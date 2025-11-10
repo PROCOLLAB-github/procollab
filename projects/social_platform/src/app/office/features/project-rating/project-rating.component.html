@@ -29,39 +29,6 @@
         placeholder="Небольшой комментарий, если необходимо"
       ></app-textarea>
     </div>
-    } }<!-- @format -->
-    <form [formGroup]="form" class="rating">
-      <section class="rating__columns">
-        @for (criterion of criteria; track $index) { @if (criterion.type === "int") {
-        <div class="rating__field">
-          <app-range-criterion-input
-            class="rating__input"
-            [max]="criterion.maxValue!"
-            [formControlName]="criterion.id"
-          ></app-range-criterion-input>
-          <label class="text-body-10">{{ criterion.name }}</label>
-        </div>
-        } @if (criterion.type === "bool") {
-        <div class="rating__field">
-          <app-boolean-criterion
-            class="rating__input"
-            [formControlName]="criterion.id"
-          ></app-boolean-criterion>
-          <label class="text-body-10">{{ criterion.name }}</label>
-        </div>
-        } }
-      </section>
-      <section>
-        @for (criterion of criteria; track $index) { @if (criterion.type === "str") {
-        <div class="rating__comment">
-          <app-textarea
-            size="big"
-            [formControlName]="criterion.id"
-            placeholder="Небольшой комментарий, если необходимо"
-          ></app-textarea>
-        </div>
-        } }
-      </section>
-    </form>
+    } }
   </section>
 </form>
