@@ -1,13 +1,13 @@
 .kanban {
   &__sidebar {
     &--item {
-      border-radius: var(--rounded-xxl);
-      padding: 12px;
       display: flex;
+      align-items: center;
       align-self: center;
       justify-content: center;
-      align-items: center;
+      padding: 12px;
       cursor: pointer;
+      border-radius: var(--rounded-xxl);
     }
 
     &--add-project {

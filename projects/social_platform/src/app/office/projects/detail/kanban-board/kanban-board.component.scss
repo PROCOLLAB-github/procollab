@@ -6,15 +6,16 @@
   }
 
   &__column {
-    i, p {
+    i,
+    p {
       color: var(--accent);
       cursor: pointer;
     }
 
     &--locked {
       display: flex;
-      align-items: center;
       gap: 5px;
+      align-items: center;
     }
 
     &--header {
@@ -22,15 +23,15 @@
       align-items: center;
       justify-content: space-between;
       padding: 5px 12px;
-      border-radius: var(--rounded-xl);
       border: 0.5px solid var(--accent);
+      border-radius: var(--rounded-xl);
     }
 
     &--add-task {
       display: flex;
-      justify-content: center;
       align-items: center;
       align-self: center;
+      justify-content: center;
       margin-top: 20px;
     }
   }
@@ -38,19 +39,19 @@
   &__tasks {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 20px;
+    align-items: center;
     margin-top: 20px;
   }
 
   &__task {
     display: flex;
     gap: 10px;
-    padding: 12px;
     width: 100%;
     max-width: 245px;
-    border-radius: var(--rounded-lg);
+    padding: 12px;
     border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
 
     &--left {
       display: flex;
@@ -62,14 +63,14 @@
     &--right {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
     }
 
     &--mid {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       width: 100%;
     }
 
@@ -79,10 +80,11 @@
       border-radius: var(--rounded-xxl);
     }
 
-    &--deadline, &--bottom {
+    &--deadline,
+    &--bottom {
       display: flex;
-      align-items: center;
       gap: 2px;
+      align-items: center;
 
       p {
         color: var(--accent) !important;
@@ -99,15 +101,17 @@
 
     &--people {
       display: flex;
-      align-items: center;
       gap: 3px;
+      align-items: center;
       align-items: flex-start;
     }
 
-    &--responsible, &--performers, &--deadline {
+    &--responsible,
+    &--performers,
+    &--deadline {
       display: flex;
-      align-items: center;
       gap: 2px;
+      align-items: center;
 
       i {
         min-width: 6px;
@@ -116,8 +120,8 @@
 
     &--icons {
       display: flex;
-      align-items: center;
       gap: 5px;
+      align-items: center;
     }
 
     span {
