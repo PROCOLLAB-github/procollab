@@ -6,6 +6,20 @@
     display: grid;
     grid-template-columns: 333px 333px;
     grid-gap: 20px;
+
+    &--no-items {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 70px;
+      text-align: center;
+
+      i, p {
+        color: var(--grey-for-text);
+      }
+    }
   }
 
   &__item {

@@ -103,6 +103,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   // Переменные для работы с модалками
   isAssignProjectToProgramModalOpen = signal(false);
   showSubmitProjectModal = signal(false);
+  isProgramEndedModalOpen = signal(false);
   isLeaveProjectModalOpen = false; // Флаг модального окна выхода
   isEditDisable = false; // Флаг недоступности редактирования
   isEditDisableModal = false; // Флаг недоступности редактирования для модалки
@@ -366,6 +367,22 @@ export class DeatilComponent implements OnInit, OnDestroy {
       case "program":
         this.router.navigateByUrl(`/office/program/${this.info().id}`);
         break;
+    }
+  }
+
+  /**
+   * Проверка завершения программы перед регистрацией
+   */
+  checkPrograRegistrationEnded(event: Event): void {
+    const program = this.info();
+
+    if (
+      program?.datetimeRegistrationEnds &&
+      Date.now() > Date.parse(program.datetimeRegistrationEnds)
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.isProgramEndedModalOpen.set(true);
     }
   }
 
