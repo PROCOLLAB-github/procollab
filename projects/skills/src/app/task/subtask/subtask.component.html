@@ -38,7 +38,7 @@
       } }
 
       <app-button size="big" (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
-        >Продолжить</app-button
+        >продолжить</app-button
       >
       <img alt="wave" src="assets/images/task/wave_cropped.svg" class="cancel__wave" />
     </div>
@@ -75,7 +75,7 @@
       } }
 
       <app-button size="big" (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
-        >Продолжить</app-button
+        >продолжить</app-button
       >
       <img alt="wave" src="assets/images/task/wave_cropped.svg" class="cancel__wave" />
     </div>
@@ -122,7 +122,7 @@
       } }
 
       <app-button size="big" (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
-        >Продолжить</app-button
+        >продолжить</app-button
       >
       <img alt="wave" src="assets/images/task/wave_cropped.svg" class="cancel__wave" />
     </div>
@@ -169,7 +169,7 @@
       } }
 
       <app-button size="big" (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
-        >Продолжить</app-button
+        >продолжить</app-button
       >
       <img alt="wave" src="assets/images/task/wave_cropped.svg" class="cancel__wave" />
     </div>
@@ -216,7 +216,7 @@
       } }
 
       <app-button size="big" (click)="onCloseModal()" [color]="'primary'" style="width: 100%"
-        >Продолжить</app-button
+        >продолжить</app-button
       >
       <img alt="wave" src="assets/images/task/wave_cropped.svg" class="cancel__wave" />
     </div>
@@ -226,13 +226,15 @@
   }
 
   <div class="action">
+    <app-button size="big" class="action__button" (click)="onNext()">продолжить</app-button>
+
     <div class="action__error action__badge" [class.action__badge--open]="anyError()">
-      Вышла неточность...
+      <p class="text-body-12">вышла неточность...</p>
     </div>
+
     <div class="action__success action__badge" [class.action__badge--open]="success()">
-      Всё верно! Так держать
+      <p class="text-body-12">всё верно! так держать</p>
     </div>
-    <app-button size="big" class="action__button" (click)="onNext()">Продолжить</app-button>
   </div>
 </div>
 }

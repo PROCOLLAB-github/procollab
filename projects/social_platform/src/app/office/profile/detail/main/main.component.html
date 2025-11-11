@@ -16,11 +16,12 @@
             <p class="text-body-10">{{ (user.birthday | yearsFromBirthday) ?? "не указан" }}</p>
           </li>
 
+          @if (user.city) {
           <li class="lists__item">
             <i appIcon icon="geo-point" class="lists__icon" style="opacity: 0.6" appSquare="10"></i>
             <p class="text-body-10">{{ user.city ?? "не указан" }}</p>
           </li>
-
+          } @if (user.speciality) {
           <li class="lists__item">
             <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
             <p class="text-body-10">
@@ -31,9 +32,11 @@
               }}
             </p>
           </li>
+          }
         </ul>
       </div>
 
+      @if (user.userLanguages.length > 0) {
       <div class="lists profile__section">
         <div class="lists__section">
           <h3 class="text-body-12 lists__title">языки</h3>
@@ -49,8 +52,7 @@
           }
         </ul>
       </div>
-
-      @if (user.programs.length; as programsLength) {
+      } @if (user.programs.length; as programsLength) {
       <div class="lists">
         <ul class="lists__list--line">
           @for (p of user.programs.slice(0, 3); track p.id) {
@@ -83,7 +85,7 @@
         </ng-template>
         @if (programsLength > 3) {
         <div class="read-more text-body-10" (click)="readAllPrograms = !readAllPrograms">
-          {{ readAllPrograms ? "Скрыть" : "Читать полностью" }}
+          {{ readAllPrograms ? "скрыть" : "подробнее" }}
         </div>
         }
       </div>
@@ -92,13 +94,13 @@
 
     @if (loggedUserId) {
     <div class="profile__content">
+      @if (user.aboutMe; as about) {
       <div class="about profile__about">
         <div class="about__head">
           <h3 class="text-body-12 about__title">обо мне</h3>
           <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
         </div>
 
-        @if (user.aboutMe; as about) {
         <div class="text-body-10 about__text">
           <p #descEl [innerHTML]="about | parseLinks | parseBreaks"></p>
           @if (descriptionExpandable) {
@@ -106,13 +108,12 @@
             class="read-more text-body-10"
             (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
           >
-            {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+            {{ readFullDescription ? "скрыть" : "подробнее" }}
           </div>
           }
         </div>
-        }
       </div>
-
+      } @if (user.skills.length || user.achievements.length) {
       <div class="profile__directions">
         @for (directionItem of directions; track $index) {
         <app-project-direction-card
@@ -124,7 +125,21 @@
         ></app-project-direction-card>
         }
       </div>
-
+      } @if (isProfileEmpty) { @if (loggedUserId === user.id) {
+      <div class="profile__empty">
+        <i appIcon icon="empty-chat" appSquare="44"></i>
+        <p class="profile__empty--text text-body-12">
+          заполните профиль и начните пользоваться PROCOLLAB
+        </p>
+        <app-button
+          size="medium"
+          customTypographyClass="text-body-12"
+          routerLink="/office/profile/edit"
+          [queryParams]="{ editingStep: 'main' }"
+          >заполнить</app-button
+        >
+      </div>
+      } } @else {
       <div class="profile__news news">
         @if (loggedUserId === user.id) {
         <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
@@ -146,6 +161,7 @@
           }
         </ul>
       </div>
+      }
     </div>
     }
 
@@ -186,7 +202,7 @@
           </ng-template>
           @if (linksLength > 3) {
           <div class="read-more text-body-10" (click)="readAllLinks = !readAllLinks">
-            {{ readAllLinks ? "Скрыть" : "Читать полностью" }}
+            {{ readAllLinks ? "скрыть" : "подробнее" }}
           </div>
           }
         </div>
@@ -242,7 +258,7 @@
           </ng-template>
           @if (educationLength > 3) {
           <div class="read-more text-body-10" (click)="readAllEducation = !readAllEducation">
-            {{ readAllEducation ? "Скрыть" : "Читать полностью" }}
+            {{ readAllEducation ? "скрыть" : "подробнее" }}
           </div>
           }
         </div>
@@ -316,7 +332,7 @@
             class="read-more text-body-10"
             (click)="readAllWorkExperience = !readAllWorkExperience"
           >
-            {{ readAllWorkExperience ? "Скрыть" : "Читать полностью" }}
+            {{ readAllWorkExperience ? "скрыть" : "подробнее" }}
           </div>
           }
         </div>
@@ -367,7 +383,7 @@
           </ng-template>
           @if (projectsLength > 3) {
           <div class="read-more text-body-10" (click)="readAllProjects = !readAllProjects">
-            {{ readAllProjects ? "Скрыть" : "Читать полностью" }}
+            {{ readAllProjects ? "скрыть" : "подробнее" }}
           </div>
           }
         </div>

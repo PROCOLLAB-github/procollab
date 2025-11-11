@@ -170,16 +170,22 @@
   width: 350px;
   max-height: calc(100vh - 40px);
 
-  i {
-    padding: 36px 0;
-    color: var(--green);
-  }
-
   &__top {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 10px;
+  }
+
+  &__project {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 20px 0;
+  }
+
+  &__criterias {
+    margin-bottom: 20px;
   }
 
   &__title {
@@ -190,5 +196,12 @@
     width: 40%;
     color: var(--dark-grey);
     text-align: center;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
   }
 }

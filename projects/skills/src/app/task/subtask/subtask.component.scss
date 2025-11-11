@@ -16,6 +16,7 @@
 
 .action {
   position: relative;
+  margin-top: 20px;
 
   &__button {
     position: relative;
@@ -29,13 +30,16 @@
     bottom: 0;
     left: 0;
     display: flex;
+    display: none;
     justify-content: center;
-    padding: 15px 10px 0;
+    padding: 12px 12px 35px;
+    text-align: center;
     border-radius: var(--rounded-xl);
     transition: all 0.2s;
     transform: translateY(0%);
 
     &--open {
+      display: block;
       transform: translateY(-80%);
     }
   }

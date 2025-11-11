@@ -47,6 +47,8 @@ export class ProjectAdditionalStepComponent implements OnInit {
 
   readonly errorMessage = ErrorMessage;
 
+  @Input() isProjectAssignToProgram?: boolean;
+
   ngOnInit(): void {
     // Инициализация уже должна быть выполнена в родительском компоненте
     this.cdRef.detectChanges();

@@ -152,7 +152,11 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   get isUserExpert() {
     const type = this.userType();
-    return type !== undefined && type !== 1;
+    return type !== undefined && type === 3;
+  }
+
+  get isProjectAssigned() {
+    return !!this.memberProjects.find(project => project.leader === this.profile?.id);
   }
 
   // Методы для управления состоянием ошибок через сервис
@@ -414,6 +418,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
       const profileDataSub$ = this.authService.profile.pipe(filter(user => !!user)).subscribe({
         next: user => {
           this.userType.set(user!.userType);
+          this.profile = user;
           this.cdRef.detectChanges();
         },
       });
@@ -443,10 +448,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
         });
 
       this.isInProfileInfo();
-
-      this.skillsProfileService.getSubscriptionData().subscribe(r => {
-        this.isSubscriptionActive.set(r.isSubscribed);
-      });
 
       this.subscriptions.push(profileDataSub$);
     }

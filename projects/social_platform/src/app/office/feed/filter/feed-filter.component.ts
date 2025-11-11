@@ -149,25 +149,25 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
    */
   setFilter(keyword: string): void {
     this.includedFilters.update(included => {
-      if (keyword.startsWith("projects/")) {
+      if (keyword.startsWith("project/")) {
         // Если уже активен этот же вложенный фильтр - сбрасываем к "projects"
         if (included === keyword) {
-          return "projects";
+          return "project";
         }
         return keyword;
       }
 
       // Если кликнули на "projects"
-      if (keyword === "projects") {
-        if (included.startsWith("projects/")) {
-          return "projects";
+      if (keyword === "project") {
+        if (included.startsWith("project/")) {
+          return "project";
         }
 
-        if (included === "projects") {
+        if (included === "project") {
           return "";
         }
 
-        return "projects";
+        return "project";
       }
 
       if (included === keyword) {

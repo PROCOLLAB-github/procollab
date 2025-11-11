@@ -77,7 +77,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
           this.totalItemsCount.set(0);
           this.feedPage.set(0);
 
-          return this.onFetch(0, this.perFetchTake(), includes ?? ["vacancy", "projects", "news"]);
+          return this.onFetch(0, this.perFetchTake(), includes ?? ["vacancy", "project", "news"]);
         })
       )
       .subscribe(feed => {
