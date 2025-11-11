@@ -28,7 +28,12 @@
 
       @if (project.presentationAddress) {
       <a class="card__presentation" [href]="project.presentationAddress" target="_blank">
-        <app-button size="medium" appearance="outline" customTypographyClass="text-body-12">
+        <app-button
+          size="medium"
+          appearance="outline"
+          customTypographyClass="text-body-12"
+          (click)="openPresentation(project.presentationAddress)"
+        >
           <span>презентация</span>
           <i appIcon icon="arrow-down" appSquare="8"></i>
         </app-button>

@@ -241,6 +241,12 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
     this.locallyRatedByCurrentUser.set(false);
   }
 
+  openPresentation(url: string) {
+    if (url) {
+      window.open(url, "_blank");
+    }
+  }
+
   get canEdit(): boolean {
     return !this.programDateFinished();
   }
