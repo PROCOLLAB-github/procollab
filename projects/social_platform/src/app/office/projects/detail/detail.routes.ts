@@ -13,6 +13,9 @@ import { ProjectTeamComponent } from "./team/team.component";
 import { ProjectVacanciesComponent } from "./vacancies/vacancies.component";
 import { DeatilComponent } from "@office/features/detail/detail.component";
 import { ProjectWorkSectionComponent } from "./work-section/work-section.component";
+import { KanbanBoardResolver } from "./kanban-board/kanban-board.resolver";
+import { KanbanBoardComponent } from "./kanban-board/kanban-board.component";
+import { KanbanBoardGuard } from "./kanban-board/kanban-board.guard";
 
 /**
  * Конфигурация маршрутов для детального просмотра проекта
@@ -64,6 +67,14 @@ export const PROJECT_DETAIL_ROUTES: Routes = [
         component: ProjectWorkSectionComponent,
         resolve: {
           data: ProjectResponsesResolver,
+        },
+      },
+      {
+        path: "kanban-board",
+        canActivate: [KanbanBoardGuard],
+        component: KanbanBoardComponent,
+        resolve: {
+          data: KanbanBoardResolver,
         },
       },
       {

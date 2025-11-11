@@ -1,0 +1,45 @@
+.kanban {
+  &__sidebar {
+    &--item {
+      border-radius: var(--rounded-xxl);
+      padding: 12px;
+      display: flex;
+      align-self: center;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    &--add-project {
+      background-color: var(--light-white);
+      border: 0.5px solid var(--accent);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+}
+
+.actions {
+  &__person {
+    background-color: var(--accent-light);
+    border: 0.5px solid var(--accent);
+
+    i {
+      color: var(--accent);
+    }
+  }
+
+  &__priority {
+    background-color: var(--green-light);
+    border: 0.5px solid var(--green);
+
+    i {
+      color: var(--green);
+    }
+  }
+}

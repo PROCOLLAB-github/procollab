@@ -5,7 +5,7 @@ import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ButtonComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
 import { map, Subscription } from "rxjs";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { VacancyResponse } from "@office/models/vacancy-response.model";
 import { VacancyService } from "@office/services/vacancy.service";
 
@@ -13,15 +13,16 @@ import { VacancyService } from "@office/services/vacancy.service";
   selector: "app-work-section",
   templateUrl: "./work-section.component.html",
   styleUrl: "./work-section.component.scss",
-  imports: [CommonModule, IconComponent, ButtonComponent],
+  imports: [CommonModule, IconComponent, ButtonComponent, RouterLink],
   standalone: true,
 })
 export class ProjectWorkSectionComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly vacancyService = inject(VacancyService);
-  private subscriptions: Subscription[] = [];
+  private readonly subscriptions: Subscription[] = [];
 
   vacancies: VacancyResponse[] = [];
+  projectId?: number;
 
   ngOnInit(): void {
     const vacanciesSub$ = this.route.data.pipe(map(r => r["data"])).subscribe({
@@ -33,6 +34,8 @@ export class ProjectWorkSectionComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(vacanciesSub$);
+
+    this.projectId = this.route.parent?.snapshot.params["projectId"];
   }
 
   ngOnDestroy(): void {

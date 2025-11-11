@@ -1,0 +1,15 @@
+.kanban {
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 60vh;
+    max-height: 373px;
+    gap: 15px;
+    padding: 15px;
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
+    background-color: var(--light-white);
+  }
+}

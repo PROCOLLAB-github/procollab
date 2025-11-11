@@ -1,0 +1,11 @@
+<!-- @format -->
+
+<div class="kanban__sidebar">
+  @if (projectBoardInfo) {
+  <div class="kanban__sidebar--project">
+    <app-avatar [size]="32" [url]="projectBoardInfo.imageAddress"></app-avatar>
+  </div>
+  }
+
+  <app-kanban-board-actions></app-kanban-board-actions>
+</div>

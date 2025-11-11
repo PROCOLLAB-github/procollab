@@ -54,7 +54,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   private readonly snackbarService = inject(SnackbarService);
   private readonly router = inject(Router);
-  private readonly location = inject(Location);
+  protected readonly location = inject(Location);
   private readonly profileDataService = inject(ProfileDataService);
   public readonly skillsProfileService = inject(ProfileService);
   private readonly projectsService = inject(ProjectsService);
@@ -79,6 +79,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
   isTeamPage = false;
   isVacanciesPage = false;
   isProjectChatPage = false;
+  isProjectWorkSectionPage = false;
+
+  isKanbanBoardPage = false;
+  isGantDiagramPage = false;
 
   // Сторонние переменные для работы с роутингом или доп проверок
   backPath?: string;
@@ -381,6 +385,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.isTeamPage = currentUrl.includes("/team");
     this.isVacanciesPage = currentUrl.includes("/vacancies");
     this.isProjectChatPage = currentUrl.includes("/chat");
+    this.isProjectWorkSectionPage = currentUrl.includes("/work-section");
+
+    this.isGantDiagramPage = currentUrl.includes("/gant-diagram");
+    this.isKanbanBoardPage = currentUrl.includes("/kanban-board");
   }
 
   private initializeInfo() {
