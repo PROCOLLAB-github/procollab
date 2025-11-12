@@ -9,10 +9,10 @@
     width: 100%;
     max-width: 245px;
     padding: 12px;
+    cursor: pointer;
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
     transition: opacity 0.2s ease-in;
-    cursor: pointer;
 
     &:hover {
       opacity: 0.7;
@@ -21,8 +21,8 @@
     &-left {
       display: flex;
       flex-direction: column;
-      gap: 5px;
       flex-grow: 1;
+      gap: 5px;
       align-items: flex-start;
     }
 

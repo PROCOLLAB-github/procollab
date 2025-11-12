@@ -1,9 +1,9 @@
 .kanban {
   &__wrapper {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr 3fr 3fr 3fr;
     grid-gap: 20px;
-    position: relative;
   }
 
   &__column {
@@ -47,15 +47,14 @@
 
   &__detail {
     position: absolute;
-    right: 0%;
     top: 0%;
+    right: 0%;
     width: 100%;
     max-width: 422px;
     padding: 24px;
-    border-radius: var(--rounded-lg);
-    border: 0.5px solid var(--medium-grey-for-outline);
     background-color: var(--light-white);
-
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
 
     &-top {
       display: flex;
@@ -65,16 +64,16 @@
 
       &-menu {
         display: flex;
-        align-items: center;
         gap: 10px;
+        align-items: center;
       }
     }
 
     &-priority {
       width: 15px;
       height: 15px;
-      border-radius: var(--rounded-xxl);
       background-color: var(--green-dark);
+      border-radius: var(--rounded-xxl);
     }
 
     &-general {
@@ -82,33 +81,34 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 10px;
-      border-bottom: 0.5px solid var(--accent);
       margin-bottom: 5px;
+      border-bottom: 0.5px solid var(--accent);
 
       p {
         color: var(--accent) !important;
       }
     }
 
-    p {color: var(--grey-for-text);}
+    p { color: var(--grey-for-text); }
 
     &-info {
       display: flex;
-      align-items: flex-start;
       gap: 10px;
+      align-items: flex-start;
       margin-top: 15px;
 
       &-name {
         display: flex;
-        align-items: center;
         gap: 3px;
+        align-items: center;
 
         &--date {
           display: flex;
-          align-items: center;
           gap: 3px;
+          align-items: center;
 
-          p, i {
+          p,
+          i {
             color: var(--green-dark) !important;
           }
         }
