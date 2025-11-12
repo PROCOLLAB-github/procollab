@@ -57,7 +57,7 @@ export class ProjectVacancyCardComponent implements OnInit {
     }
   }
 
-  descriptionExpandable!: boolean; // Флаг необходимости кнопки "Читать полностью"
+  descriptionExpandable!: boolean; // Флаг необходимости кнопки "подробнее"
   readFullDescription = false; // Флаг показа всех вакансий
   endSliceOfSkills = 0;
 

@@ -1,0 +1,53 @@
+<!-- @format -->
+
+<div class="kanban__task" [ngStyle]="getPriorityType(task.priority, 'background')">
+  <div class="kanban__task-left">
+    <span class="text-body-10">{{ task.title }}</span>
+    @if (task.description) {
+    <p class="text-body-6">{{ task.description }}</p>
+    } @if (task?.responsible || task?.performers?.length || task?.files?.length || task.action) {
+    <div class="kanban__task-mid">
+      <div class="kanban__task-people">
+        @if (task?.responsible) {
+        <div class="kanban__task-responsible">
+          <i appIcon icon="person" appSquare="6"></i>
+          <app-avatar [size]="12" [url]=""></app-avatar>
+        </div>
+        } @if (task?.performers?.length) {
+        <div class="kanban__task-performers">
+          <i appIcon icon="people-bold" appSquare="6"></i>
+          <app-avatar [size]="12" [url]=""></app-avatar>
+        </div>
+        }
+      </div>
+
+      @if (task?.files?.length || task?.action) {
+      <div class="kanban__task-icons">
+        <i appIcon icon="attach" appSquare="8" style="color: var(--grey-for-text)"></i>
+        <i appIcon icon="phone" appSquare="6"></i>
+      </div>
+      }
+    </div>
+    } @if (task?.deadline || task?.tag || task?.goal) {
+    <div class="kanban__task-bottom">
+      @if (task.deadline) {
+      <div class="kanban__task-deadline">
+        <i appIcon icon="calendar" appSquare="6"></i>
+        <p class="text-body-6" [style.margin-top]="task.description ? '1px' : '2px'">04.04.2026</p>
+      </div>
+      } @if (task.tag) {
+      <app-tag>#аналитика</app-tag>
+      } @if (task.goal) {
+      <app-tag color="soft">выход на рынок для чего</app-tag>
+      }
+    </div>
+    }
+  </div>
+
+  <div class="kanban__task-right">
+    @if (task.priority) {
+    <div class="kanban__task-priority" [ngStyle]="getPriorityType(task.priority, 'color')"></div>
+    }
+    <i appIcon icon="arrow-wide" appSquare="8"></i>
+  </div>
+</div>

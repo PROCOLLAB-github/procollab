@@ -1,6 +1,6 @@
 .kanban {
   &__sidebar {
-    &--item {
+    &-item {
       display: flex;
       align-items: center;
       align-self: center;
@@ -13,6 +13,10 @@
     &--add-project {
       background-color: var(--light-white);
       border: 0.5px solid var(--accent);
+
+      i {
+        color: var(--accent);
+      }
     }
   }
 

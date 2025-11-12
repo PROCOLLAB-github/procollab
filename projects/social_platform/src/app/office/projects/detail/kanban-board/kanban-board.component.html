@@ -1,14 +1,14 @@
 <!-- @format -->
 
 <div class="kanban">
-  <div class="kanban__wrapper">
+  <div class="kanban__wrapper" (clickOutside)="closeDetailTask()">
     @if (projectBoardInfo(); as projectBoardInfo) {
     <app-kanban-board-sidebar [projectBoardInfo]="projectBoardInfo"></app-kanban-board-sidebar>
     } @for (boardColumn of boardColumns(); track $index) {
     <div class="kanban__column">
-      <div class="kanban__column--header">
+      <div class="kanban__column-header">
         <p class="text-body-12">{{ boardColumn.tasks.length }}</p>
-        <div class="kanban__column--locked">
+        <div class="kanban__column-locked">
           @if (boardColumn.locked) {
           <i appIcon icon="lock" appSquare="8"></i>
           }
@@ -19,57 +19,185 @@
 
       <div class="kanban__tasks">
         @for (task of boardColumn.tasks; track task.id) {
-        <div
-          class="kanban__task"
-          [style.background-color]="task.backgroundColor ?? 'var(--light-white)'"
-        >
-          <div class="kanban__task--left">
-            <span class="text-body-10">{{ task.title }}</span>
-            <p class="text-body-6">{{ task.description ?? "" }}</p>
-            <div class="kanban__task--mid">
-              <div class="kanban__task--people">
-                <div class="kanban__task--responsible">
-                  <i appIcon icon="person" appSquare="6"></i>
-                  <app-avatar [size]="12" [url]=""></app-avatar>
-                </div>
-
-                <div class="kanban__task--performers">
-                  <i appIcon icon="people-bold" appSquare="6"></i>
-                  <app-avatar [size]="12" [url]=""></app-avatar>
-                </div>
-              </div>
-
-              <div class="kanban__task--icons">
-                <i appIcon icon="attach" appSquare="8" style="color: var(--grey-for-text)"></i>
-                <i appIcon icon="phone" appSquare="6"></i>
-              </div>
-            </div>
-
-            <div class="kanban__task--bottom">
-              <div class="kanban__task--deadline">
-                <i appIcon icon="calendar" appSquare="6"></i>
-                <p class="text-body-6" [style.margin-top]="task.description ? '1px' : '2px'">
-                  04.04.2026
-                </p>
-              </div>
-
-              <app-tag>#аналитика</app-tag>
-              <app-tag color="soft">выход на рынок для чего</app-tag>
-            </div>
-          </div>
-
-          <div class="kanban__task--right">
-            <div
-              class="kanban__task--priority"
-              [style.background-color]="task?.priority?.background ?? 'var(--red)'"
-            ></div>
-            <i appIcon icon="arrow-wide" appSquare="8"></i>
-          </div>
-        </div>
+        <app-kanban-task (click)="openDetailTask(task.id)" [task]="task"></app-kanban-task>
         }
       </div>
 
       <i class="kanban__column--add-task" appIcon icon="plus" appSquare="10"></i>
+    </div>
+    } @if (isTaskDetailOpen()) {
+    <div class="kanban__detail">
+      <div class="kanban__detail-top">
+        <app-button size="medium" customTypographyClass="text-body-12"
+          >прикрепить результат</app-button
+        >
+        <div class="kanban__detail-top-menu">
+          <i appIcon icon="phone" appSquare="15"></i>
+          <div class="kanban__detail-priority"></div>
+        </div>
+      </div>
+
+      <div class="kanban__detail-general">
+        <p class="text-body-14">Настроить процессы</p>
+        <!-- TODO: после баллов добавить сюда баллы -->
+      </div>
+
+      <div class="kanban__detail-info" style="justify-content: flex-end">
+        <div class="kanban__detail-info-name" style="align-items: center">
+          <app-avatar [size]="10" [url]=""></app-avatar>
+          <p class="text-body-6">Федор Е</p>
+        </div>
+
+        <p class="text-body-6">12.10.2025 21:00</p>
+      </div>
+
+      <div class="kanban__detail-info">
+        <div class="kanban__detail-info-wrapper">
+          <div class="kanban__detail-info-name">
+            <i appIcon icon="person" appSquare="10"></i>
+            <h6 class="text-body-10">ответственный</h6>
+          </div>
+
+          <div class="kanban__detail-info-name">
+            <app-avatar [size]="20" [url]=""></app-avatar>
+            <p class="text-body-10">Екатерина Ш</p>
+          </div>
+        </div>
+
+        <div class="kanban__detail-info-wrapper">
+          <div class="kanban__detail-info-name">
+            <i appIcon icon="people-bold" appSquare="10"></i>
+            <h6 class="text-body-10">исполнители</h6>
+          </div>
+
+          <div class="kanban__detail-info-name">
+            <app-avatar [size]="20" [url]=""></app-avatar>
+          </div>
+        </div>
+
+        <div class="kanban__detail-info-wrapper">
+          <div class="kanban__detail-info-name--date">
+            <i appIcon icon="calendar" appSquare="10"></i>
+            <p class="text-body-10">начало</p>
+          </div>
+
+          <div class="kanban__detail-info-name">
+            <p class="text-body-10">20.10.25</p>
+
+            <div class="badge">
+              <p class="text-body-6">началась</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="kanban__detail-info-wrapper">
+          <div class="kanban__detail-info-name--date">
+            <i appIcon icon="calendar" appSquare="10"></i>
+            <p class="text-body-10">дедлайн</p>
+          </div>
+
+          <div class="kanban__detail-info-name">
+            <p class="text-body-10">25.10.25</p>
+
+            <div class="badge">
+              <p class="text-body-6">10 дней</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kanban__detail-info">
+        <div class="kanban__detail-info-wrapper">
+          <div class="kanban__detail-info-name">
+            <i appIcon icon="hastag" appSquare="10"></i>
+            <p class="text-body-10">тег</p>
+          </div>
+
+          <app-tag color="soft">#аналитика</app-tag>
+        </div>
+
+        <div class="kanban__detail-info-wrapper">
+          <div class="kanban__detail-info-name">
+            <i appIcon icon="goal" appSquare="10"></i>
+            <p class="text-body-10">цель</p>
+          </div>
+
+          <app-tag color="soft">выход на рынок для...</app-tag>
+        </div>
+
+        <div class="kanban__detail-info-wrapper" style="flex-grow: 1">
+          <div class="kanban__detail-info-name">
+            <i appIcon icon="squiz" appSquare="10"></i>
+            <p class="text-body-10">навыки</p>
+          </div>
+
+          <app-tag color="complete">word</app-tag>
+        </div>
+      </div>
+
+      <div class="kanban__detail-description">
+        <!-- @if (taskDetail.description) { -->
+        <div class="text-body-10 about__text">
+          <p
+            #descEl
+            [innerHTML]="
+              'Разобраться с настройками nginx.conf. Выяснилось, что мы просто бесполезно гоняем трафик из одного сервиса в другой без какой-либо реальной выгоды. Надо настроить базовый nginx.conf на сервере, который бы отвечал за сервис без его дублирующей реализации в контейнере Логика частична описана в задаче Пользователь должен сперва зарегистрироваться в программе и только потом сможет добавлять проект...'
+                | parseLinks
+                | parseBreaks
+            "
+          ></p>
+          @if (descriptionExpandable) {
+          <div
+            class="read-more text-body-10"
+            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+          >
+            {{ readFullDescription ? "cкрыть" : "подробнее" }}
+          </div>
+          }
+        </div>
+        <!-- } -->
+      </div>
+
+      <div class="kanban__detail-files">
+        <app-file-item [name]="''" [link]="''" [type]="''" [size]="12"></app-file-item>
+      </div>
+
+      <div class="kanban__detail-comments">
+        <form class="form">
+          <!-- [formGroup]="messageForm" (ngSubmit)="onSubmit()" -->
+          <app-input
+            size="big"
+            formControlName="text"
+            [hasBorder]="false"
+            class="form__input text-body-12"
+            autosize
+            placeholder="сегодня был хороший день"
+          ></app-input>
+          <!-- (paste)="onPaste($event)" -->
+          <!-- (keydown.meta.enter)="onSubmit()" -->
+          <i appIcon icon="send" appSquare="12" class="form__send"></i>
+
+          <div class="form__files">
+            @for (f of filesList; track f.id) {
+            <app-file-upload-item
+              [name]="f.tempFile.name"
+              [type]="f.tempFile.type"
+              [size]="f.tempFile.size"
+              [loading]="f.loading"
+              [error]="f.error"
+            ></app-file-upload-item>
+            <!-- (delete)="onDeleteFile(f.id)" -->
+            }
+          </div>
+          <div class="footer">
+            <label class="footer__attach">
+              <i appIcon icon="attach" appSquare="12"></i>
+              <input type="file" accept="*/*" multiple />
+              <!-- (change)="onInputFiles($event)"  -->
+            </label>
+          </div>
+        </form>
+      </div>
     </div>
     }
   </div>
