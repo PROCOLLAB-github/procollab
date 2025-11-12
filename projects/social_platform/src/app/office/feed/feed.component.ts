@@ -23,16 +23,19 @@ import { ProfileNewsService } from "@office/profile/detail/services/profile-news
 import { FeedFilterComponent } from "@office/feed/filter/feed-filter.component";
 import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 import { OpenVacancyComponent } from "./shared/open-vacancy/open-vacancy.component";
+import { IconComponent } from "@ui/components";
 
 @Component({
   selector: "app-feed",
   standalone: true,
   imports: [
     CommonModule,
+    IconComponent,
     NewProjectComponent,
     FeedFilterComponent,
     NewsCardComponent,
     OpenVacancyComponent,
+    IconComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./feed.component.html",

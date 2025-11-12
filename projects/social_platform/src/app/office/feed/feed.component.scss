@@ -9,6 +9,20 @@
   &__feed {
     column-count: 2;
     column-gap: 20px;
+
+    &--no-items {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 70px;
+
+      i,
+      p {
+        color: var(--grey-for-text);
+      }
+    }
   }
 
   &__item {
