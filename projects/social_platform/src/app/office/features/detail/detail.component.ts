@@ -383,6 +383,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
       event.preventDefault();
       event.stopPropagation();
       this.isProgramEndedModalOpen.set(true);
+    } else {
+      this.router.navigateByUrl("/office/program/" + this.info().id + "/register");
     }
   }
 

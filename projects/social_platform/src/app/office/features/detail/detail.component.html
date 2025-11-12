@@ -78,10 +78,7 @@
             </app-button>
           </a>
           } @else {
-          <a
-            (click)="checkPrograRegistrationEnded($event)"
-            [routerLink]="['/office/program', info().id, 'register']"
-          >
+          <a (click)="checkPrograRegistrationEnded($event)">
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
               зарегистрироваться
             </app-button>
