@@ -134,10 +134,10 @@
     }
 
     &-add-responsible {
-      cursor: pointer;
       padding: 8px;
-      border-radius: var(--rounded-xxl);
+      cursor: pointer;
       border: 0.5px dashed var(--accent);
+      border-radius: var(--rounded-xxl);
     }
 
     &-performers {
@@ -152,13 +152,13 @@
     }
 
     &-add-object {
-      cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: center;
       align-self: center;
+      justify-content: center;
       width: 100%;
       padding: 2px 48px;
+      cursor: pointer;
       border: 0.5px solid var(--accent);
       border-radius: var(--rounded-xl);
     }
@@ -167,16 +167,16 @@
       ::ng-deep {
         app-textarea {
           .field__input {
+            min-height: 45px;
+            padding: 12px 12px 0;
+            margin-left: -10px;
             background-color: transparent;
             border: none;
             border-radius: 0;
-            margin-left: -10px;
-            min-height: 45px;
-            padding: 12px 12px 0px 12px;
 
             &:focus {
-              box-shadow: none;
               border-color: none;
+              box-shadow: none;
             }
           }
         }
@@ -185,8 +185,8 @@
 
     &-files {
       display: flex;
-      align-items: center;
       gap: 10px;
+      align-items: center;
       margin-bottom: 40px;
     }
 
@@ -195,8 +195,8 @@
 
       &--empty {
         display: flex;
-        align-items: center;
         gap: 5px;
+        align-items: center;
       }
     }
 
@@ -206,8 +206,8 @@
   }
 
   &__divider {
-    margin-top: 5px;
     width: 100%;
+    margin-top: 5px;
   }
 }
 
@@ -262,17 +262,17 @@
 }
 
 .form {
-  padding: 10px 24px;
-  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 422px;
+  height: 28px;
+  padding: 10px 24px;
   margin-bottom: -25px;
   margin-left: -25px;
   background-color: var(--light-white);
   border: 0.5px solid var(--medium-grey-for-outline);
   border-radius: var(--rounded-lg);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 
   &__row {
     display: flex;
@@ -281,14 +281,14 @@
 
     ::ng-deep {
       app-input {
-      .field__input {
-        width: 100%;
-        background-color: transparent;
-        color: var(--grey-for-text) !important;
+        .field__input {
+          width: 100%;
+          color: var(--grey-for-text) !important;
+          background-color: transparent;
 
-        @include typography.body-10;
+          @include typography.body-10;
+        }
       }
-    }
     }
   }
 
@@ -304,8 +304,8 @@
 
   &__actions {
     display: flex;
-    align-items: center;
     gap: 5px;
+    align-items: center;
 
     i {
       color: var(--light-white);
@@ -323,13 +323,13 @@
   }
 
   &__send {
-    background-color: var(--accent);
     width: 15px;
     height: 15px;
-    border-radius: 3px;
     padding: 4px;
     color: var(--accent);
     cursor: pointer;
+    background-color: var(--accent);
+    border-radius: 3px;
   }
 
   &__input {
