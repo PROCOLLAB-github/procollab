@@ -14,6 +14,7 @@
 
   // GOLD
   --gold: #e5b25d;
+  --gold-light: #FDF8F0;
   --gold-dark: #c69849;
 
   // GRAY
@@ -32,6 +33,7 @@
   --green-light: #e3f0e8;
   --green-dark: #297373;
   --red: #d48a9e;
+  --red-light: #F4E2E7;
   --red-dark: #{color.adjust(#d48a9e, $blackness: 10%)};
   --blue-dark: #2f36aa;
   --purple: #9a80e6;

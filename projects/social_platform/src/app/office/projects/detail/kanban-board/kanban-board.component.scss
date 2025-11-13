@@ -1,3 +1,5 @@
+@use "styles/typography";
+
 .kanban {
   &__wrapper {
     position: relative;
@@ -72,7 +74,7 @@
     &-priority {
       width: 15px;
       height: 15px;
-      background-color: var(--green-dark);
+      background-color: var(--green);
       border-radius: var(--rounded-xxl);
     }
 
@@ -117,6 +119,12 @@
           color: var(--accent);
         }
       }
+
+      &-list {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
     }
 
     &-info-wrapper {
@@ -125,9 +133,81 @@
       gap: 5px;
     }
 
+    &-add-responsible {
+      cursor: pointer;
+      padding: 8px;
+      border-radius: var(--rounded-xxl);
+      border: 0.5px dashed var(--accent);
+    }
+
+    &-performers {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      margin-left: 12px;
+
+      app-avatar {
+        margin-left: -12px;
+      }
+    }
+
+    &-add-object {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: center;
+      width: 100%;
+      padding: 2px 48px;
+      border: 0.5px solid var(--accent);
+      border-radius: var(--rounded-xl);
+    }
+
+    &-description {
+      ::ng-deep {
+        app-textarea {
+          .field__input {
+            background-color: transparent;
+            border: none;
+            border-radius: 0;
+            margin-left: -10px;
+            min-height: 45px;
+            padding: 12px 12px 0px 12px;
+
+            &:focus {
+              box-shadow: none;
+              border-color: none;
+            }
+          }
+        }
+      }
+    }
+
+    &-files {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    &-file {
+      width: 116px;
+
+      &--empty {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+    }
+
     i {
       color: var(--accent);
     }
+  }
+
+  &__divider {
+    margin-top: 5px;
+    width: 100%;
   }
 }
 
@@ -137,7 +217,7 @@
     p {
       display: -webkit-box;
       overflow: hidden;
-      color: var(--black);
+      color: var(--grey-for-text);
       text-overflow: ellipsis;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 5;
@@ -178,5 +258,85 @@
 
   &:hover {
     color: var(--accent-dark);
+  }
+}
+
+.form {
+  padding: 10px 24px;
+  height: 28px;
+  width: 422px;
+  margin-bottom: -25px;
+  margin-left: -25px;
+  background-color: var(--light-white);
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    ::ng-deep {
+      app-input {
+      .field__input {
+        width: 100%;
+        background-color: transparent;
+        color: var(--grey-for-text) !important;
+
+        @include typography.body-10;
+      }
+    }
+    }
+  }
+
+  &__files {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &:not(:empty) {
+      margin-top: 20px;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    i {
+      color: var(--light-white);
+    }
+
+    input {
+      display: none;
+    }
+  }
+
+  &__attach {
+    i {
+      color: var(--dark-grey);
+    }
+  }
+
+  &__send {
+    background-color: var(--accent);
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    padding: 4px;
+    color: var(--accent);
+    cursor: pointer;
+  }
+
+  &__input {
+    flex-grow: 1;
+    resize: none;
+    background: transparent;
+    border: none;
+    outline: none;
   }
 }

@@ -73,11 +73,14 @@
     }
 
     &-responsible,
-    &-performers,
     &-deadline {
       display: flex;
       gap: 2px;
       align-items: center;
+
+      app-avatar {
+        margin-left: -2px;
+      }
 
       i {
         min-width: 6px;

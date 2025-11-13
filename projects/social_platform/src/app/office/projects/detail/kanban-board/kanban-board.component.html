@@ -26,7 +26,7 @@
       <i class="kanban__column--add-task" appIcon icon="plus" appSquare="10"></i>
     </div>
     } @if (isTaskDetailOpen()) {
-    <div class="kanban__detail">
+    <div class="kanban__detail" [formGroup]="taskDetailForm">
       <div class="kanban__detail-top">
         <app-button size="medium" customTypographyClass="text-body-12"
           >прикрепить результат</app-button
@@ -51,7 +51,12 @@
         <p class="text-body-6">12.10.2025 21:00</p>
       </div>
 
+      <div class="kanban__divider">
+        <img alt="divider image" src="assets/images/projects/shared/divider.png" />
+      </div>
+
       <div class="kanban__detail-info">
+        @if (taskDetailForm.get("responsible"); as responsible) {
         <div class="kanban__detail-info-wrapper">
           <div class="kanban__detail-info-name">
             <i appIcon icon="person" appSquare="10"></i>
@@ -59,11 +64,17 @@
           </div>
 
           <div class="kanban__detail-info-name">
-            <app-avatar [size]="20" [url]=""></app-avatar>
-            <p class="text-body-10">Екатерина Ш</p>
+            @if (responsible.value) {
+            <app-avatar [size]="20" [url]="responsible.value.avatar"></app-avatar>
+            <p class="text-body-10">{{ responsible.value.name }}</p>
+            } @else {
+            <div class="kanban__detail-add-responsible">
+              <i appIcon icon="plus" appSquare="5"></i>
+            </div>
+            }
           </div>
         </div>
-
+        } @if (taskDetailForm.get("performers"); as performers) {
         <div class="kanban__detail-info-wrapper">
           <div class="kanban__detail-info-name">
             <i appIcon icon="people-bold" appSquare="10"></i>
@@ -71,10 +82,20 @@
           </div>
 
           <div class="kanban__detail-info-name">
-            <app-avatar [size]="20" [url]=""></app-avatar>
+            @if (performers.value.length > 0) {
+            <div class="kanban__detail-performers">
+              @for (performer of performers.value; track $index) {
+              <app-avatar [size]="20" [url]="performer.avatar"></app-avatar>
+              }
+            </div>
+            } @else {
+            <div class="kanban__detail-add-responsible">
+              <i appIcon icon="plus" appSquare="5"></i>
+            </div>
+            }
           </div>
         </div>
-
+        } @if (taskDetailForm.get("startDate"); as startDate) {
         <div class="kanban__detail-info-wrapper">
           <div class="kanban__detail-info-name--date">
             <i appIcon icon="calendar" appSquare="10"></i>
@@ -82,14 +103,12 @@
           </div>
 
           <div class="kanban__detail-info-name">
-            <p class="text-body-10">20.10.25</p>
+            <p class="text-body-10">{{ startDate.value || todayDate | date: "dd.MM.yy" }}</p>
 
-            <div class="badge">
-              <p class="text-body-6">началась</p>
-            </div>
+            <app-badge color="red" type="start">закончена</app-badge>
           </div>
         </div>
-
+        } @if (taskDetailForm.get("deadline"); as deadline) {
         <div class="kanban__detail-info-wrapper">
           <div class="kanban__detail-info-name--date">
             <i appIcon icon="calendar" appSquare="10"></i>
@@ -97,55 +116,82 @@
           </div>
 
           <div class="kanban__detail-info-name">
-            <p class="text-body-10">25.10.25</p>
+            <p class="text-body-10">{{ deadline.value || tommorowDate | date: "dd.MM.yy" }}</p>
 
-            <div class="badge">
-              <p class="text-body-6">10 дней</p>
-            </div>
+            <app-badge color="green" type="deadline">10 дней</app-badge>
           </div>
         </div>
+        }
       </div>
 
       <div class="kanban__detail-info">
+        @if (taskDetailForm.get("tags"); as tags) {
         <div class="kanban__detail-info-wrapper">
           <div class="kanban__detail-info-name">
-            <i appIcon icon="hastag" appSquare="10"></i>
+            <i appIcon icon="hashtag" appSquare="10"></i>
             <p class="text-body-10">тег</p>
           </div>
 
-          <app-tag color="soft">#аналитика</app-tag>
+          @if (tags.value.length > 0) {
+          <div class="kanban__detail-info-list">
+            @for (tag of tags.value; track $index) {
+            <app-tag color="soft">{{ "#" + tag.name }}</app-tag>
+            }
+          </div>
+          } @else {
+          <div class="kanban__detail-add-object">
+            <i appIcon icon="plus" appSquare="5"></i>
+          </div>
+          }
         </div>
-
+        } @if (taskDetailForm.get("goal"); as goal) {
         <div class="kanban__detail-info-wrapper">
           <div class="kanban__detail-info-name">
             <i appIcon icon="goal" appSquare="10"></i>
             <p class="text-body-10">цель</p>
           </div>
 
-          <app-tag color="soft">выход на рынок для...</app-tag>
+          @if (goal.value) {
+          <app-tag color="soft">{{
+            goal.value.name.length > 20 ? goal.value.name.slice(0, 15) + "..." : goal.value.name
+          }}</app-tag>
+          } @else {
+          <div class="kanban__detail-add-object">
+            <i appIcon icon="plus" appSquare="5"></i>
+          </div>
+          }
         </div>
-
+        } @if (taskDetailForm.get("skills"); as skills) {
         <div class="kanban__detail-info-wrapper" style="flex-grow: 1">
           <div class="kanban__detail-info-name">
             <i appIcon icon="squiz" appSquare="10"></i>
             <p class="text-body-10">навыки</p>
           </div>
 
-          <app-tag color="complete">word</app-tag>
+          @if (skills.value.length > 0) {
+          <div class="kanban__detail-info-list">
+            @for (skill of skills.value; track $index) {
+            <app-tag color="complete">{{ skill.name }}</app-tag>
+            }
+          </div>
+          } @else {
+          <div class="kanban__detail-add-object">
+            <i appIcon icon="plus" appSquare="5"></i>
+          </div>
+          }
         </div>
+        }
       </div>
 
+      <div class="kanban__divider">
+        <img alt="divider image" src="assets/images/projects/shared/divider.png" />
+      </div>
+
+      @if (taskDetailForm.get("description"); as description) {
       <div class="kanban__detail-description">
-        <!-- @if (taskDetail.description) { -->
-        <div class="text-body-10 about__text">
-          <p
-            #descEl
-            [innerHTML]="
-              'Разобраться с настройками nginx.conf. Выяснилось, что мы просто бесполезно гоняем трафик из одного сервиса в другой без какой-либо реальной выгоды. Надо настроить базовый nginx.conf на сервере, который бы отвечал за сервис без его дублирующей реализации в контейнере Логика частична описана в задаче Пользователь должен сперва зарегистрироваться в программе и только потом сможет добавлять проект...'
-                | parseLinks
-                | parseBreaks
-            "
-          ></p>
+        <div (click)="onChangeText($event)" class="text-body-10 about__text">
+          @if (isChangeDescriptionText() && description.value) {
+          <p #descEl [innerHTML]="description.value | parseLinks | parseBreaks"></p>
           @if (descriptionExpandable) {
           <div
             class="read-more text-body-10"
@@ -153,30 +199,65 @@
           >
             {{ readFullDescription ? "cкрыть" : "подробнее" }}
           </div>
+          } } @else {
+          <app-textarea
+            (keydown.enter)="isChangeDescriptionText.set(true)"
+            (clickOutside)="isChangeDescriptionText.set(true)"
+            (click)="$event.stopPropagation()"
+            size="big"
+            formControlName="description"
+            placeholder="добавить описание"
+          ></app-textarea>
           }
         </div>
-        <!-- } -->
       </div>
+      }
 
       <div class="kanban__detail-files">
-        <app-file-item [name]="''" [link]="''" [type]="''" [size]="12"></app-file-item>
+        @if (taskDetailForm.get("files"); as files) { @if (files.value.length >= 0 &&
+        files.value.length <= 3) { @for (file of files.value; track $index) {
+        <app-file-item
+          class="kanban__detail-file"
+          [name]="''"
+          [link]="''"
+          [type]="''"
+          [size]="12"
+        ></app-file-item>
+        } @if (!(files.value.length === 3)) {
+        <div class="kanban__detail-file--empty">
+          <div class="kanban__detail-add-responsible">
+            <i appIcon icon="plus" appSquare="5"></i>
+          </div>
+
+          <p class="text-body-10">файл</p>
+        </div>
+        } } }
       </div>
 
       <div class="kanban__detail-comments">
+        <!-- [formGroup]="messageForm" (ngSubmit)="onSubmit()" -->
         <form class="form">
-          <!-- [formGroup]="messageForm" (ngSubmit)="onSubmit()" -->
-          <app-input
-            size="big"
-            formControlName="text"
-            [hasBorder]="false"
-            class="form__input text-body-12"
-            autosize
-            placeholder="сегодня был хороший день"
-          ></app-input>
-          <!-- (paste)="onPaste($event)" -->
-          <!-- (keydown.meta.enter)="onSubmit()" -->
-          <i appIcon icon="send" appSquare="12" class="form__send"></i>
-
+          <div class="form__row">
+            <app-input
+              size="big"
+              formControlName="text"
+              [hasBorder]="false"
+              class="form__input text-body-12"
+              autosize
+              placeholder="добавить комментарий"
+            ></app-input>
+            <!-- (paste)="onPaste($event)"
+              (keydown.meta.enter)="onSubmit()" -->
+            <div class="form__actions">
+              <label class="form__attach">
+                <i appIcon icon="attach" appSquare="20"></i>
+                <!-- (change)="onInputFiles($event)" -->
+                <input type="file" accept="*/*" multiple />
+              </label>
+              <i appIcon icon="send" appSquare="7" class="form__send"></i>
+            </div>
+            <!-- (click)="onSubmit()" -->
+          </div>
           <div class="form__files">
             @for (f of filesList; track f.id) {
             <app-file-upload-item
@@ -186,15 +267,8 @@
               [loading]="f.loading"
               [error]="f.error"
             ></app-file-upload-item>
-            <!-- (delete)="onDeleteFile(f.id)" -->
             }
-          </div>
-          <div class="footer">
-            <label class="footer__attach">
-              <i appIcon icon="attach" appSquare="12"></i>
-              <input type="file" accept="*/*" multiple />
-              <!-- (change)="onInputFiles($event)"  -->
-            </label>
+            <!-- (delete)="onDeleteFile(f.id)" -->
           </div>
         </form>
       </div>

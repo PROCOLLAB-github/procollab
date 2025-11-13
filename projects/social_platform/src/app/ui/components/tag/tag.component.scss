@@ -3,6 +3,9 @@
 .tag {
   display: flex;
   align-items: center;
+  align-self: center;
+  justify-content: center;
+  text-align: center;
   max-width: 300px;
   padding: 2px 20px;
   overflow: hidden;

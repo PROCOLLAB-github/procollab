@@ -1,0 +1,24 @@
+.badge {
+  padding: 4px;
+  border-width: 0.5px;
+  border-style: solid;
+  border-radius: var(--rounded-xl);
+
+  &--green {
+    color: var(--green);
+    border-color: var(--green);
+    background-color: var(--green-light);
+  }
+
+  &--red {
+    color: var(--red);
+    background-color: var(--red-light);
+    border-color: var(--red);
+  }
+
+  &--gold {
+    color: var(--gold);
+    background-color: var(--gold-light);
+    border-color: var(--gold);
+  }
+}

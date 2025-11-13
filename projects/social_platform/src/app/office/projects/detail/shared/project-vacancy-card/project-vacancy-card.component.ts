@@ -1,6 +1,14 @@
 /** @format */
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { Vacancy } from "@office/models/vacancy.model";
 import { IconComponent } from "@uilib";
@@ -49,12 +57,26 @@ export class ProjectVacancyCardComponent implements OnInit {
   @Input({ required: true }) vacancy!: Vacancy; // Данные вакансии (обязательное поле)
   @Input() type: "vacancies" | "project" = "project";
 
+  @ViewChild("descEl") descEl?: ElementRef;
+
+  private readonly cdRef = inject(ChangeDetectorRef);
+
   ngOnInit(): void {
     if (this.type === "project") {
       this.endSliceOfSkills = 5;
     } else {
       this.endSliceOfSkills = 3;
     }
+  }
+
+  /**
+   * Проверка возможности расширения описания после инициализации представления
+   */
+  ngAfterViewInit(): void {
+    const descElement = this.descEl?.nativeElement;
+    this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
+
+    this.cdRef.detectChanges();
   }
 
   descriptionExpandable!: boolean; // Флаг необходимости кнопки "подробнее"

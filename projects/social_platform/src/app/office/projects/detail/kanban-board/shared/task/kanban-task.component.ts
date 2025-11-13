@@ -7,12 +7,13 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { hexToRgba } from "@utils/helpers/hexToRgba";
 import { priorityInfoList } from "projects/core/src/consts/lists/priority-info-list.const";
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: "app-kanban-task",
   templateUrl: "./kanban-task.component.html",
   styleUrl: "./kanban-task.component.scss",
-  imports: [CommonModule, IconComponent, AvatarComponent, TagComponent],
+  imports: [CommonModule, IconComponent, AvatarComponent, TagComponent, RouterLink],
   standalone: true,
 })
 export class KanbanTaskComponent {
