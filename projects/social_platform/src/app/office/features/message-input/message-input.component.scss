@@ -216,7 +216,7 @@ $button-size: 40px;
     padding: 36px;
     background-color: var(--white);
     border: 2px dashed var(--accent);
-    border-radius: 5px;
+    border-radius: var(--rounded-md);
     transform: translate(-50%, -50%);
   }
 

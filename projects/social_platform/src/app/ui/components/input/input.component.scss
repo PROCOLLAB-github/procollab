@@ -47,7 +47,7 @@
     }
 
     &--error {
-      border-color: var(--red);
+      border: 0.5px solid var(--red);
     }
 
     @include typography.body-10;

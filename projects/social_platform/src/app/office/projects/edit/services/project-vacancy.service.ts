@@ -7,7 +7,7 @@ import { ValidationService } from "@corelib";
 import { Skill } from "@office/models/skill";
 import { Vacancy } from "@office/models/vacancy.model";
 import { VacancyService } from "@office/services/vacancy.service";
-import { stripNullish } from "@utils/stripNull";
+import { stripNullish } from "@utils/helpers/stripNull";
 import { rolesMembersList } from "projects/core/src/consts/lists/roles-members-list.const";
 import { ProjectFormService } from "./project-form.service";
 import { workExperienceList } from "projects/core/src/consts/lists/work-experience-list.const";

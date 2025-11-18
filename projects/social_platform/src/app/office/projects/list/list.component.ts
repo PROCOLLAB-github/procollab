@@ -34,7 +34,7 @@ import { ApiPagination } from "@models/api-pagination.model";
 import { InfoCardComponent } from "../../features/info-card/info-card.component";
 import { IconComponent } from "@ui/components";
 import { SubscriptionService } from "@office/services/subscription.service";
-import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
+import { inviteToProjectMapper } from "@utils/helpers/inviteToProjectMapper";
 
 /**
  * КОМПОНЕНТ СПИСКА ПРОЕКТОВ

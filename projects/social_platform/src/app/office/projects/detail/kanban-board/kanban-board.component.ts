@@ -1,33 +1,16 @@
 /** @format */
 
-import { CommonModule, DatePipe } from "@angular/common";
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-  ViewChild,
-} from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
 import { Subscription } from "rxjs";
 import { ProjectDataService } from "../services/project-data.service";
 import { Project } from "@office/models/project.model";
 import { KanbanBoardSidebarComponent } from "./shared/sidebar/kanban-board-sidebar.component";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IconComponent, ButtonComponent, InputComponent } from "@ui/components";
+import { IconComponent } from "@ui/components";
 import { KanbanTaskComponent } from "./shared/task/kanban-task.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { TagComponent } from "@ui/components/tag/tag.component";
-import { expandElement } from "@utils/expand-element";
-import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { FileItemComponent } from "@ui/components/file-item/file-item.component";
-import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { TextareaComponent } from "@ui/components/textarea/textarea.component";
-import { BadgeComponent } from "@ui/components/badge/badge.component";
+import { TaskDetailComponent } from "./shared/task/detail/task-detail.component";
 
 @Component({
   selector: "app-kanban-board",
@@ -39,59 +22,19 @@ import { BadgeComponent } from "@ui/components/badge/badge.component";
     IconComponent,
     KanbanTaskComponent,
     ClickOutsideModule,
-    ButtonComponent,
-    AvatarComponent,
-    TagComponent,
-    ParseBreaksPipe,
-    ParseLinksPipe,
-    FileItemComponent,
-    InputComponent,
-    FileUploadItemComponent,
-    ReactiveFormsModule,
-    DatePipe,
-    TextareaComponent,
-    BadgeComponent,
+    TaskDetailComponent,
   ],
   standalone: true,
 })
 export class KanbanBoardComponent implements OnInit, OnDestroy {
-  @ViewChild("descEl") descEl?: ElementRef;
-
   private readonly projectDataService = inject(ProjectDataService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly cdRef = inject(ChangeDetectorRef);
   private subscriptions: Subscription[] = [];
-
-  constructor(private readonly fb: FormBuilder) {
-    this.taskDetailForm = this.fb.group({
-      title: ["", Validators.required],
-      responsible: [null],
-      performers: this.fb.array([]),
-      startDate: [null],
-      deadline: [null],
-      tags: this.fb.array([]),
-      goal: [null],
-      skills: this.fb.array([]),
-      description: [null],
-      files: this.fb.array([]),
-    });
-  }
 
   projectBoardInfo = signal<Project | null>(null);
   boardColumns = signal<any[]>([]);
   isTaskDetailOpen = signal<boolean>(false);
-  isChangeDescriptionText = signal<boolean>(false);
-
-  descriptionExpandable!: boolean; // Флаг необходимости кнопки "Читать полностью"
-  readFullDescription = false; // Флаг показа всех вакансий
-
-  filesList: any[] = [];
-
-  todayDate = new Date();
-  tommorowDate = new Date().setDate(this.todayDate.getDate() + 1);
-
-  taskDetailForm: FormGroup;
 
   ngOnInit(): void {
     const detailInfoUrl$ = this.route.queryParams.subscribe({
@@ -153,13 +96,6 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
     this.boardColumns.set(mockColumns);
   }
 
-  /**
-   * Проверка возможности расширения описания после инициализации представления
-   */
-  ngAfterViewInit(): void {
-    this.checkDescriptionHeigth();
-  }
-
   ngOnDestroy(): void {
     this.subscriptions.forEach($ => $.unsubscribe());
   }
@@ -181,30 +117,5 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
       replaceUrl: true,
     });
     this.isTaskDetailOpen.set(false);
-  }
-
-  onChangeText(event: MouseEvent): void {
-    event.stopPropagation();
-    this.isChangeDescriptionText.set(!this.isChangeDescriptionText());
-
-    setTimeout(() => this.checkDescriptionHeigth(), 0);
-  }
-
-  /**
-   * Раскрытие/сворачивание описания профиля
-   * @param elem - DOM элемент описания
-   * @param expandedClass - CSS класс для раскрытого состояния
-   * @param isExpanded - текущее состояние (раскрыто/свернуто)
-   */
-  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    expandElement(elem, expandedClass, isExpanded);
-    this.readFullDescription = !isExpanded;
-  }
-
-  private checkDescriptionHeigth(): void {
-    const descElement = this.descEl?.nativeElement;
-    this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
-
-    this.cdRef.detectChanges();
   }
 }

@@ -2,6 +2,8 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
+import { TaskDetail } from "./models/task.model";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -18,7 +20,7 @@ export class KanbanBoardService {
     return this.apiService.get(`${this.KANBAN_BOARD_URL}/`);
   }
 
-  getTaskById(taskId: number) {
-    return this.apiService.get(`${this.KANBAN_BOARD_URL}/`);
+  getTaskById(taskId: number): Observable<TaskDetail> {
+    return this.apiService.get<TaskDetail>(`${this.KANBAN_BOARD_URL}/`);
   }
 }

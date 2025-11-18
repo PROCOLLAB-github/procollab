@@ -1,7 +1,7 @@
 <!-- @format -->
 <ng-template #modalTemplate>
   <div class="modal">
-    <div class="modal__overlay" (click)="openChange.emit(false)"></div>
+    <div class="modal__overlay" (click)="$event.stopPropagation(); openChange.emit(false)"></div>
     <div
       class="modal__body"
       [ngClass]="{

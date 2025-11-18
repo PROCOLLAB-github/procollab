@@ -1,0 +1,74 @@
+.field {
+  &__options {
+    width: 100%;
+    max-height: 200px;
+    padding: 12px;
+    overflow-y: auto;
+    background-color: var(--light-white);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    gap: 5px;
+    transition: color 0.2s ease-in-out;
+
+     &--add-object {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      padding: 3px;
+      cursor: pointer;
+      border: 0.5px solid var(--accent);
+      border-radius: var(--rounded-xl);
+
+      i {
+        color: var(--accent);
+      }
+    }
+
+    &:hover {
+      p {
+        color: var(--accent);
+      }
+    }
+
+    &--additional {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      i {
+        color: var(--accent);
+      }
+
+      app-tag {
+        width: 80px;
+      }
+    }
+
+    &-priority {
+      width: 15px;
+      height: 15px;
+      border-radius: var(--rounded-xxl);
+    }
+
+    &--highlighted {
+      background-color: var(--light-gray);
+    }
+
+    &--point {
+      color: var(--accent);
+    }
+  }
+}

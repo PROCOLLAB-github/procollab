@@ -5,7 +5,7 @@ import { map, Observable } from "rxjs";
 import { RefreshResponse } from "@auth/models/http.model";
 import { plainToInstance } from "class-transformer";
 import { Tokens } from "@auth/models/tokens.model";
-import Cookies from "js-cookie";
+import Cookies, { CookieAttributes } from "js-cookie";
 import { ApiService, PRODUCTION } from "@corelib";
 
 /**
@@ -66,11 +66,13 @@ export class TokenService {
    * - Используются дефолтные настройки браузера
    * - Cookies привязаны к текущему домену
    */
-  getCookieOptions() {
+  getCookieOptions(): CookieAttributes {
     if (this.production) {
       return {
         domain: ".procollab.ru", // Домен для production окружения
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 дней
+        secure: true,
+        sameSite: "None",
       };
     }
 

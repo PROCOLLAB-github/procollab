@@ -10,37 +10,37 @@
 export const priorityInfoList = [
   {
     id: 0,
-    name: "бэклог",
+    label: "бэклог",
     color: "#322299",
     priorityType: 0,
   },
   {
     id: 1,
-    name: "в ближайшие часы",
+    label: "в ближайшие часы",
     color: "#A63838",
     priorityType: 1,
   },
   {
     id: 2,
-    name: "высокий",
+    label: "высокий",
     color: "#D48A9E",
     priorityType: 2,
   },
   {
     id: 3,
-    name: "средний",
+    label: "средний",
     color: "#E5B25D",
     priorityType: 3,
   },
   {
     id: 4,
-    name: "низкий",
+    label: "низкий",
     color: "#297373",
     priorityType: 4,
   },
   {
     id: 5,
-    name: "улучшение",
+    label: "улучшение",
     color: "#88C9A1",
     priorityType: 5,
   },

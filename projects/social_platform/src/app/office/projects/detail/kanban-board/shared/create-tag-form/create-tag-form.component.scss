@@ -1,0 +1,71 @@
+.create-tag {
+  &__form {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__pick-color {
+    border-radius: var(--rounded-sm);
+    height: 9px;
+    width: 9px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  &__input {
+    padding: 3px 2px 2px 10px;
+    outline: none;
+    transition: all 0.2s;
+
+    &::placeholder {
+      color: var(--dark-grey);
+    }
+
+    &:focus {
+      border-color: var(--accent);
+    }
+  }
+
+  &__colors {
+    position: absolute;
+    bottom: -25%;
+    right: -12%;
+    padding: 7px;
+    background-color: var(--light-white);
+    border-radius: var(--rounded-md);
+    border: 0.5px solid var(--medium-grey-for-outline);
+
+    &-wrapper {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 3px;
+    }
+  }
+}
+
+.field {
+  &__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    gap: 5px;
+    transition: color 0.2s ease-in-out;
+
+     &--add-object {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      cursor: pointer;
+      border: 0.5px solid var(--accent);
+      border-radius: var(--rounded-xl);
+
+      i {
+        color: var(--accent);
+      }
+    }
+  }
+}

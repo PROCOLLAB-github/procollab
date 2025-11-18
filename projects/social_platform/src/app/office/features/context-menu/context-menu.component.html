@@ -1,0 +1,24 @@
+<!-- @format -->
+
+<ul
+  #contextMenu
+  class="context-menu"
+  [class]="customClass"
+  [style.opacity]="isOpen ? 1 : 0"
+  [style.pointer-events]="isOpen ? 'auto' : 'none'"
+  [style.min-width.px]="minWidth"
+  (clickOutside)="onClickOutside()"
+  tabindex="-1"
+>
+  @for (item of visibleItems; track item.id) {
+  <li
+    class="context-menu__item text-body-10"
+    [class]="item.className"
+    (click)="onItemClick($event, item.id)"
+  >
+    {{ item.label }}
+  </li>
+  @if (item.divider && !$last) {
+  <li class="context-menu__divider"></li>
+  } }
+</ul>

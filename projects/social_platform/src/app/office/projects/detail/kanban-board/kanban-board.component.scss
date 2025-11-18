@@ -1,18 +1,21 @@
-@use "styles/typography";
+
 
 .kanban {
   &__wrapper {
     position: relative;
     display: grid;
-    grid-template-columns: 1fr 3fr 3fr 3fr;
+    grid-template-columns: 1fr 9fr;
     grid-gap: 20px;
   }
 
   &__column {
-    i,
-    p {
-      color: var(--accent);
-      cursor: pointer;
+    flex: 0 0 calc(33.333% - 14px);
+    min-width: calc(33.333% - 14px);
+
+    &-wrapper {
+      display: flex;
+      gap: 20px;
+      overflow-y: hidden;
     }
 
     &-locked {
@@ -28,6 +31,11 @@
       padding: 5px 12px;
       border: 0.5px solid var(--accent);
       border-radius: var(--rounded-xl);
+
+      &--empty {
+        cursor: pointer;
+        justify-content: center;
+      }
     }
 
     &--add-task {
@@ -37,6 +45,11 @@
       justify-content: center;
       margin-top: 20px;
     }
+
+     i, p {
+      color: var(--accent);
+      cursor: pointer;
+    }
   }
 
   &__tasks {
@@ -45,298 +58,6 @@
     gap: 20px;
     align-items: center;
     margin-top: 20px;
-  }
-
-  &__detail {
-    position: absolute;
-    top: 0%;
-    right: 0%;
-    width: 100%;
-    max-width: 422px;
-    padding: 24px;
-    background-color: var(--light-white);
-    border: 0.5px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-lg);
-
-    &-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-
-      &-menu {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-      }
-    }
-
-    &-priority {
-      width: 15px;
-      height: 15px;
-      background-color: var(--green);
-      border-radius: var(--rounded-xxl);
-    }
-
-    &-general {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-      margin-bottom: 5px;
-      border-bottom: 0.5px solid var(--accent);
-
-      p {
-        color: var(--accent) !important;
-      }
-    }
-
-    p { color: var(--grey-for-text); }
-
-    &-info {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      margin-top: 15px;
-
-      &-name {
-        display: flex;
-        gap: 3px;
-        align-items: center;
-
-        &--date {
-          display: flex;
-          gap: 3px;
-          align-items: center;
-
-          p,
-          i {
-            color: var(--green-dark) !important;
-          }
-        }
-
-        h6 {
-          color: var(--accent);
-        }
-      }
-
-      &-list {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
-    }
-
-    &-info-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    &-add-responsible {
-      padding: 8px;
-      cursor: pointer;
-      border: 0.5px dashed var(--accent);
-      border-radius: var(--rounded-xxl);
-    }
-
-    &-performers {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-      margin-left: 12px;
-
-      app-avatar {
-        margin-left: -12px;
-      }
-    }
-
-    &-add-object {
-      display: flex;
-      align-items: center;
-      align-self: center;
-      justify-content: center;
-      width: 100%;
-      padding: 2px 48px;
-      cursor: pointer;
-      border: 0.5px solid var(--accent);
-      border-radius: var(--rounded-xl);
-    }
-
-    &-description {
-      ::ng-deep {
-        app-textarea {
-          .field__input {
-            min-height: 45px;
-            padding: 12px 12px 0;
-            margin-left: -10px;
-            background-color: transparent;
-            border: none;
-            border-radius: 0;
-
-            &:focus {
-              border-color: none;
-              box-shadow: none;
-            }
-          }
-        }
-      }
-    }
-
-    &-files {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 40px;
-    }
-
-    &-file {
-      width: 116px;
-
-      &--empty {
-        display: flex;
-        gap: 5px;
-        align-items: center;
-      }
-    }
-
-    i {
-      color: var(--accent);
-    }
-  }
-
-  &__divider {
-    width: 100%;
-    margin-top: 5px;
-  }
-}
-
-.about {
-  /* stylelint-disable value-no-vendor-prefix */
-  &__text {
-    p {
-      display: -webkit-box;
-      overflow: hidden;
-      color: var(--grey-for-text);
-      text-overflow: ellipsis;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 5;
-      transition: all 0.7s ease-in-out;
-
-      &.expanded {
-        -webkit-line-clamp: unset;
-      }
-    }
-
-    ::ng-deep a {
-      color: var(--accent);
-      text-decoration: underline;
-      text-decoration-color: transparent;
-      text-underline-offset: 3px;
-      transition: text-decoration-color 0.2s;
-
-      &:hover {
-        text-decoration-color: var(--accent);
-      }
-    }
-  }
-
-  /* stylelint-enable value-no-vendor-prefix */
-
-  &__read-full {
-    margin-top: 2px;
-    color: var(--accent);
-    cursor: pointer;
-  }
-}
-
-.read-more {
-  margin-top: 12px;
-  color: var(--accent);
-  cursor: pointer;
-  transition: color 0.2s;
-
-  &:hover {
-    color: var(--accent-dark);
-  }
-}
-
-.form {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 422px;
-  height: 28px;
-  padding: 10px 24px;
-  margin-bottom: -25px;
-  margin-left: -25px;
-  background-color: var(--light-white);
-  border: 0.5px solid var(--medium-grey-for-outline);
-  border-radius: var(--rounded-lg);
-
-  &__row {
-    display: flex;
-    align-items: center;
-    width: 100%;
-
-    ::ng-deep {
-      app-input {
-        .field__input {
-          width: 100%;
-          color: var(--grey-for-text) !important;
-          background-color: transparent;
-
-          @include typography.body-10;
-        }
-      }
-    }
-  }
-
-  &__files {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    &:not(:empty) {
-      margin-top: 20px;
-    }
-  }
-
-  &__actions {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-
-    i {
-      color: var(--light-white);
-    }
-
-    input {
-      display: none;
-    }
-  }
-
-  &__attach {
-    i {
-      color: var(--dark-grey);
-    }
-  }
-
-  &__send {
-    width: 15px;
-    height: 15px;
-    padding: 4px;
-    color: var(--accent);
-    cursor: pointer;
-    background-color: var(--accent);
-    border-radius: 3px;
-  }
-
-  &__input {
-    flex-grow: 1;
-    resize: none;
-    background: transparent;
-    border: none;
-    outline: none;
+    overflow-y: scroll;
   }
 }

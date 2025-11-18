@@ -1,0 +1,61 @@
+/** @format */
+
+.context-menu {
+  position: fixed;
+  z-index: 9999;
+
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+
+  padding: 8px 0;
+  margin: 0;
+  list-style: none;
+
+  transition: opacity 0.15s ease;
+  outline: none;
+
+  &__item {
+    padding: 10px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    &:active {
+      background-color: rgba(0, 0, 0, 0.08);
+    }
+
+    &--red {
+      color: #f44336;
+
+      &:hover {
+        background-color: rgba(244, 67, 54, 0.08);
+      }
+
+      &:active {
+        background-color: rgba(244, 67, 54, 0.16);
+      }
+    }
+
+    &--primary {
+      color: #2196f3;
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    margin: 8px 0;
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+}

@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <div
-  class="text-body-6 tag"
+  class="tag"
   [class.tag--inline]="appearance === 'inline'"
   [class.tag--outline]="appearance === 'outline'"
   [class.tag--primary]="color === 'primary'"
@@ -10,5 +10,13 @@
   [class.tag--complete]="color === 'complete'"
   [class.tag--soft]="color === 'soft'"
 >
-  <ng-content></ng-content>
+  <p class="text-body-6"><ng-content></ng-content></p>
+
+  <div class="tag__icons">
+    @if (canEdit) {
+    <i appIcon icon="edit-pen" appSquare="5" (click)="onEdit($event)"></i>
+    } @if (canDelete) {
+    <i appIcon icon="basket" appSquare="5" (click)="onDelete($event)"></i>
+    }
+  </div>
 </div>

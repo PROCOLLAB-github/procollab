@@ -13,6 +13,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
+import { DropdownComponent } from "../dropdown/dropdown.component";
 
 /**
  * Компонент выпадающего списка для выбора значения из предустановленных опций.
@@ -45,7 +46,7 @@ import { ClickOutsideModule } from "ng-click-outside";
     },
   ],
   standalone: true,
-  imports: [ClickOutsideModule, IconComponent, CommonModule],
+  imports: [ClickOutsideModule, IconComponent, CommonModule, DropdownComponent],
 })
 export class SelectComponent implements ControlValueAccessor {
   /** Текст подсказки */
@@ -106,7 +107,7 @@ export class SelectComponent implements ControlValueAccessor {
     }
     if (event.code === "Enter") {
       if (i >= 0) {
-        this.onUpdate(event, this.options[this.highlightedIndex].id);
+        this.onUpdate(this.options[this.highlightedIndex].id);
       }
     }
     if (event.code === "Escape") {
@@ -169,11 +170,8 @@ export class SelectComponent implements ControlValueAccessor {
   }
 
   /** Обработчик выбора опции */
-  onUpdate(event: Event, id: number): void {
-    event.stopPropagation();
-    if (this.disabled) {
-      return;
-    }
+  onUpdate(id: number): void {
+    if (this.disabled) return;
 
     this.selectedId = id;
     this.onChange(this.getValue(id) ?? this.options[0].value);

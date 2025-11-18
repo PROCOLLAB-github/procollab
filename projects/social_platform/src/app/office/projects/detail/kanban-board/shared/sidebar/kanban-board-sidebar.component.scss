@@ -1,5 +1,6 @@
 .kanban {
   &__sidebar {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 15px;

@@ -10,14 +10,14 @@ import { Column } from "./column.model";
 export interface TaskPreview {
   id: number;
   columnId: Column["id"];
-  name: string;
+  title: string;
   priority: number;
   description: string;
   deadlineDate: string;
-  tag: Tag;
-  Goal: Goal;
+  tags: Tag[];
+  goal: Goal;
   type: string;
-  file: FileModel;
+  files: FileModel;
   responsible: {
     id: User["id"];
     avatar: User["avatar"];
@@ -39,7 +39,10 @@ export interface TaskDetail extends TaskPreview {
   datetimeCreated: string;
   dateTaskStart: string;
   requiredSkills: Skill[];
-  projectGoal: Goal["title"];
+  projectGoal: {
+    id: Goal["id"];
+    title: Goal["title"];
+  };
 }
 
 export interface TaskResult {

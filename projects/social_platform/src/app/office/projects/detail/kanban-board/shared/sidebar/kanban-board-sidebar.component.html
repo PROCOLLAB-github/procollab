@@ -1,9 +1,23 @@
 <!-- @format -->
 
-<div class="kanban__sidebar">
+<div class="kanban__sidebar" (clickOutside)="isContextMenuOpen.set(false)">
   @if (projectBoardInfo) {
   <div class="kanban__sidebar-project">
-    <app-avatar [size]="32" [url]="projectBoardInfo.imageAddress"></app-avatar>
+    <div (click)="isContextMenuOpen.set(!isContextMenuOpen())">
+      <app-avatar
+        (mousedown)="onMouseDown($event, projectBoardInfo)"
+        (contextmenu)="$event.preventDefault()"
+        [size]="32"
+        [url]="projectBoardInfo.imageAddress"
+      ></app-avatar>
+    </div>
+
+    <app-dropdown
+      type="text"
+      [isOpen]="isContextMenuOpen()"
+      [options]="contextMenuOptions"
+      (outside)="isContextMenuOpen.set(false)"
+    ></app-dropdown>
   </div>
   }
 

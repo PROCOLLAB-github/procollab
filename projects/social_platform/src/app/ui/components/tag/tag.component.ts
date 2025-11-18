@@ -1,6 +1,7 @@
 /** @format */
 
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { IconComponent } from "../icon/icon.component";
 
 /**
  * Компонент тега для отображения статусов, категорий или меток.
@@ -20,6 +21,7 @@ import { Component, Input, OnInit } from "@angular/core";
   templateUrl: "./tag.component.html",
   styleUrl: "./tag.component.scss",
   standalone: true,
+  imports: [IconComponent],
 })
 export class TagComponent implements OnInit {
   constructor() {}
@@ -30,5 +32,31 @@ export class TagComponent implements OnInit {
   /** Стиль отображения */
   @Input() appearance: "inline" | "outline" = "inline";
 
+  /** Возможность редактирования */
+  @Input() canEdit?: boolean;
+
+  /** Возможность удаления */
+  @Input() canDelete?: boolean;
+
+  /** Событие для возможности удаления */
+  @Output() delete = new EventEmitter<void>();
+
+  /** Событие для возможности редактирования */
+  @Output() edit = new EventEmitter<void>();
+
   ngOnInit(): void {}
+
+  /** Метод для вызова удаления элемента */
+  onDelete(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.delete.emit();
+  }
+
+  /** Метод для вызова редактирования элемента */
+  onEdit(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.edit.emit();
+  }
 }
