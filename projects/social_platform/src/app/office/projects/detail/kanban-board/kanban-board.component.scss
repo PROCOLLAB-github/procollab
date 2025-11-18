@@ -1,5 +1,3 @@
-
-
 .kanban {
   &__wrapper {
     position: relative;
@@ -33,8 +31,8 @@
       border-radius: var(--rounded-xl);
 
       &--empty {
-        cursor: pointer;
         justify-content: center;
+        cursor: pointer;
       }
     }
 
@@ -46,7 +44,8 @@
       margin-top: 20px;
     }
 
-     i, p {
+    i,
+    p {
       color: var(--accent);
       cursor: pointer;
     }

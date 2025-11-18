@@ -1,6 +1,7 @@
 /** @format */
 
 .tag {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,10 +12,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   border-radius: var(--rounded-xxl);
-  position: relative;
 
   p {
-    margin: 0px 10px;
+    margin: 0 10px;
   }
 
   &--inline {
@@ -96,13 +96,13 @@
     top: 30%;
     right: 5%;
     display: flex;
-    align-items: center;
     flex-shrink: 0;
     gap: 3px;
+    align-items: center;
 
     i {
-      opacity: 1;
       cursor: pointer;
+      opacity: 1;
 
       &:hover {
         opacity: 0.7;

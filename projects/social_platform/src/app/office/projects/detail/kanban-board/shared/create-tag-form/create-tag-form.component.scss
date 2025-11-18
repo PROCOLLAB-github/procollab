@@ -1,16 +1,16 @@
 .create-tag {
   &__form {
     display: flex;
-    align-items: center;
     gap: 5px;
+    align-items: center;
   }
 
   &__pick-color {
-    border-radius: var(--rounded-sm);
-    height: 9px;
-    width: 9px;
     position: relative;
+    width: 9px;
+    height: 9px;
     cursor: pointer;
+    border-radius: var(--rounded-sm);
   }
 
   &__input {
@@ -29,17 +29,17 @@
 
   &__colors {
     position: absolute;
-    bottom: -25%;
     right: -12%;
+    bottom: -25%;
     padding: 7px;
     background-color: var(--light-white);
-    border-radius: var(--rounded-md);
     border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-md);
 
     &-wrapper {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
       grid-template-rows: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 3px;
     }
   }
@@ -48,13 +48,13 @@
 .field {
   &__option {
     display: flex;
+    gap: 5px;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-    gap: 5px;
     transition: color 0.2s ease-in-out;
 
-     &--add-object {
+    &--add-object {
       display: flex;
       align-items: center;
       justify-content: center;

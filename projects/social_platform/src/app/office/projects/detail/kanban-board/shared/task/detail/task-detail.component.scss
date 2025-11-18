@@ -1,7 +1,7 @@
 @use "styles/typography";
 
 .kanban {
-   &__detail {
+  &__detail {
     position: absolute;
     top: 0%;
     right: 0%;
@@ -25,7 +25,9 @@
       }
     }
 
-    &-type,  &-priority-wrapper, &-delete-wrapper {
+    &-type,
+    &-priority-wrapper,
+    &-delete-wrapper {
       cursor: pointer;
     }
 
@@ -34,7 +36,6 @@
       height: 15px;
       background-color: var(--green);
       border-radius: var(--rounded-xxl);
-
     }
 
     &-general {
@@ -65,18 +66,17 @@
 
         ::ng-deep {
           app-input {
-
             .field {
               width: 44px !important;
               height: 23px !important;
             }
 
             .field__input {
-              border: 0;
-              background: transparent;
-              border-radius: 0;
-              padding: 0;
               max-width: 44px;
+              padding: 0;
+              background: transparent;
+              border: 0;
+              border-radius: 0;
 
               &:focus {
                 border-color: 0;
@@ -136,8 +136,8 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
         color: var(--light-white) !important;
+        transform: translate(-50%, -50%);
       }
     }
 
@@ -173,7 +173,7 @@
     }
 
     &-description {
-      margin: 12px 0px;
+      margin: 12px 0;
 
       ::ng-deep {
         app-textarea {
@@ -338,7 +338,7 @@
     color: var(--accent);
     cursor: pointer;
     background-color: var(--accent);
-    border-radius: var(--rounded-sm)
+    border-radius: var(--rounded-sm);
   }
 
   &__input {

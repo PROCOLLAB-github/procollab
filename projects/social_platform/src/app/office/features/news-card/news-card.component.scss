@@ -40,11 +40,11 @@
   }
 
   &__option {
-    padding: 5px 20px;
-    cursor: pointer;
     width: 120px;
-    transition: background-color 0.2s;
+    padding: 5px 20px;
     color: var(--grey-for-text);
+    cursor: pointer;
+    transition: background-color 0.2s;
 
     &:hover {
       color: var(--accent);
