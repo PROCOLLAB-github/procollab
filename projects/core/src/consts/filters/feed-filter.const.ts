@@ -4,7 +4,7 @@ export const feedFilter = [
   {
     id: 1,
     name: "новости проектов",
-    value: "projects",
+    value: "project",
     icon: "projects",
   },
   {

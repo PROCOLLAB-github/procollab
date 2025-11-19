@@ -8,8 +8,8 @@
     </app-project-vacancy-card>
     } }
   </div>
-  } @if (type() === 'my') { @if (responsesList().length) { @for (response of responsesList(); track
-  $index) {
+  } @if (type() === 'my') { @if (responsesList().length > 0) { @for (response of responsesList();
+  track $index) {
   <app-response-card [response]="response"></app-response-card>
   }
   <app-modal [open]="isMyModal()" (openChange)="isMyModal.set(!isMyModal())">
@@ -24,5 +24,13 @@
       </a>
     </div>
   </app-modal>
-  } @else { } }
+  } @else {
+  <div class="page__vacancies--no-items">
+    <i appIcon icon="empty-chat" appSquare="38"></i>
+    <p class="text-body-12">
+      в данном разделе пока нет ваших откликов : - ( <br />
+      давайте это <a routerLink="/office/vacancies/all/" style="color: var(--accent)">исправим</a>
+    </p>
+  </div>
+  } }
 </div>

@@ -28,4 +28,12 @@ export class ProjectDataService {
       filter(vacancies => !!vacancies)
     );
   }
+
+  getProjectLeaderId() {
+    return this.project$.pipe(map(project => project?.leader));
+  }
+
+  getProjectId() {
+    return this.project$.pipe(map(project => project?.id));
+  }
 }

@@ -28,7 +28,12 @@
 
       @if (project.presentationAddress) {
       <a class="card__presentation" [href]="project.presentationAddress" target="_blank">
-        <app-button size="medium" appearance="outline" customTypographyClass="text-body-12">
+        <app-button
+          size="medium"
+          appearance="outline"
+          customTypographyClass="text-body-12"
+          (click)="openPresentation(project.presentationAddress)"
+        >
           <span>презентация</span>
           <i appIcon icon="arrow-down" appSquare="8"></i>
         </app-button>
@@ -46,10 +51,10 @@
         <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
         @if (descriptionExpandable()) {
         <div
-          class="about__read-full"
+          class="about__read-full text-body-10"
           (click)="expandDescription(descEl, 'expanded', readFullDescription())"
         >
-          {{ readFullDescription() ? "Скрыть" : "Читать полностью" }}
+          {{ readFullDescription() ? "скрыть" : "подробнее" }}
         </div>
         }
       </div>
@@ -63,7 +68,11 @@
         <p class="text-body-12">оценка проекта</p>
         <i appIcon icon="medal" appWidth="8" appHeight="12"></i>
       </div>
-      <app-project-rating [criteria]="project.criterias" [formControl]="form"></app-project-rating>
+      <app-project-rating
+        [criteria]="project.criterias"
+        [formControl]="form"
+        [disabled]="(projectRated() || projectConfirmed()) && !programDateFinished()"
+      ></app-project-rating>
       @if (form | controlError: "required"; as error) {
       <div class="text-body-10 error">
         {{ error }}
@@ -71,23 +80,29 @@
       }
     </div>
 
-    @if (showRatingForm || showRatedWithEdit || showConfirmedState) {
+    @if (showRatingForm || showRatedStatus || showConfirmedState) {
     <div class="card__rated">
       <app-button
         style="flex-grow: 1"
         customTypographyClass="text-body-12"
         size="big"
         [loader]="submitLoading() || confirmLoading()"
-        [color]="showRatedWithEdit ? 'green' : 'primary'"
-        [disabled]="showConfirmedState"
-        [appearance]="showConfirmedState ? 'outline' : 'inline'"
+        [color]="showRatedStatus ? 'green' : 'primary'"
+        [disabled]="programDateFinished()"
+        [appearance]="programDateFinished() ? 'outline' : 'inline'"
         [style.opacity]="showConfirmedState ? '0.5' : '1'"
-        (click)="showRatingForm ? confirmLoading() : null"
+        (click)="showRatingForm ? showConfirmRateModal.set(true) : null"
       >
-        {{ showRatingForm ? "оценить проект" : "проект оценен" }}
+        {{
+          programDateFinished()
+            ? "проект оценен"
+            : showRatingForm
+            ? "оценить проект"
+            : "проект оценен"
+        }}
       </app-button>
 
-      @if (showRatedWithEdit) {
+      @if (showEditButton) {
       <app-button
         appearance="outline"
         size="small"
@@ -108,17 +123,43 @@
       <div class="cancel">
         <div class="cancel__top">
           <p class="cancel__title text-body-14">подтвердите оценку</p>
-          <i appIcon icon="check" appSquare="60"></i>
+
+          <div class="cancel__project">
+            <app-avatar [size]="50" [url]="project.imageAddress"></app-avatar>
+            <p class="text-body-12">{{ project.name }}</p>
+          </div>
         </div>
 
-        <app-button
-          size="big"
-          class="cancel__button"
-          customTypographyClass="text-body-12"
-          (click)="confirmRateProject()"
-        >
-          подтверждаю
-        </app-button>
+        <div class="cancel__criterias">
+          @if (showConfirmRateModal()) {
+          <app-project-rating
+            [criteria]="project.criterias"
+            [formControl]="form"
+            [disabled]="(projectRated() || projectConfirmed()) && !programDateFinished()"
+          ></app-project-rating>
+          }
+        </div>
+
+        <div class="cancel__buttons">
+          <app-button
+            size="big"
+            class="cancel__button"
+            customTypographyClass="text-body-12"
+            (click)="confirmRateProject()"
+          >
+            подтверждаю
+          </app-button>
+
+          <app-button
+            size="big"
+            class="cancel__button"
+            appearance="outline"
+            customTypographyClass="text-body-12"
+            (click)="showConfirmRateModal.set(false)"
+          >
+            изменить оценку
+          </app-button>
+        </div>
       </div>
     </app-modal>
   </div>

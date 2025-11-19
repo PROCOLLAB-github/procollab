@@ -35,7 +35,7 @@
     app-textarea {
       ::ng-deep .field__input {
         min-height: 66px !important;
-        color: var(--dark-grey);
+        color: var(--grey-for-text) !important;
         background-color: transparent;
         border-color: var(--grey-button);
 

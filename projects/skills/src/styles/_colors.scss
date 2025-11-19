@@ -17,6 +17,7 @@
 
   // GRAY
   --white: #fafafa;
+  --light-white: #fff;
   --black: #333;
   --dark-grey: #e7e7e7;
   --gray: #d3d3d3;
@@ -27,9 +28,9 @@
   --grey-for-text: #a59fb9;
 
   // FUNCTIONAL
-  --green: #88c9a1;
-  --light-green: #97ecb8;
-  --red: #d48a9e;
+  --green: #92e3a9;
+  --light-green: #e3f8e9;
+  --red: rgb(242 66 72 / 50%);
+  --light-red: #ffd2d2;
   --red-dark: #{color.adjust(#d48a9e, $blackness: 10%)};
-  --light-red: #e8a5b7;
 }

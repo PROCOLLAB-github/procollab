@@ -20,6 +20,7 @@ import { ProjectRatingCriterion } from "./project-rating-criterion"; // Assuming
  * @param {number} industry - ID отрасли проекта
  * @param {ProjectRatingCriterion[]} criterias - Массив критериев для оценки
  * @param {boolean} isScored - Флаг, указывающий, оценен ли проект текущим пользователем
+ * @private {number | null} scoredExpertId - Флаг, что оценил
  */
 export interface ProjectRate {
   id: number;
@@ -33,4 +34,5 @@ export interface ProjectRate {
   industry: number;
   criterias: ProjectRatingCriterion[];
   scored: boolean;
+  scoredExpertId: number | null;
 }

@@ -2,6 +2,7 @@
 
 import { FeedNews } from "@office/projects/models/project-news.model";
 import { Vacancy } from "@models/vacancy.model";
+import { Program } from "@office/program/models/program.model";
 
 /**
  * МОДЕЛИ ДАННЫХ ДЛЯ ЭЛЕМЕНТОВ ЛЕНТЫ
@@ -36,6 +37,10 @@ export interface FeedProject {
   imageAddress: string;
   viewsCount: number;
   leader: number;
+  partnerProgram: {
+    id: Program["id"];
+    name: Program["name"];
+  } | null;
 }
 
 /**

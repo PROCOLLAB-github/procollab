@@ -67,6 +67,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
     this.route.data.pipe(map(r => r["data"])).subscribe({
       next: invites => {
+        this.allInvites = inviteToProjectMapper(invites);
         this.myInvites = inviteToProjectMapper(invites.slice(0, 1));
       },
     });
@@ -102,8 +103,7 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   searchForm: FormGroup;
 
   myInvites: Project[] = [];
-
-  subscriptions$: Subscription[] = [];
+  private allInvites: Project[] = [];
 
   isMy = location.href.includes("/my");
   isAll = location.href.includes("/all");
@@ -112,6 +112,8 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   isDashboard = location.href.includes("/dashboard");
 
   isFilterOpen = false;
+
+  subscriptions$: Subscription[] = [];
 
   private swipeStartY = 0;
   private swipeThreshold = 50;
@@ -151,8 +153,10 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     this.renderer.setStyle(this.filterBody.nativeElement, "transform", "translateY(0)");
   }
 
-  acceptOrRejectInvite(): void {
-    this.myInvites = [];
+  acceptOrRejectInvite(inviteId: number): void {
+    this.allInvites = this.allInvites.filter(invite => invite.inviteId !== inviteId);
+
+    this.myInvites = this.allInvites.slice(0, 1);
   }
 
   closeFilter(): void {

@@ -19,7 +19,16 @@ import { CommonModule } from "@angular/common";
 import { ProjectRate } from "@office/program/models/project-rate";
 import { ControlErrorPipe, ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { expandElement } from "@utils/expand-element";
-import { debounceTime, finalize, fromEvent, map, Observable, Subscription } from "rxjs";
+import {
+  debounceTime,
+  filter,
+  finalize,
+  fromEvent,
+  map,
+  Observable,
+  Subscription,
+  tap,
+} from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { IndustryService } from "@office/services/industry.service";
 import { ProjectRatingComponent } from "@office/features/project-rating/project-rating.component";
@@ -28,6 +37,9 @@ import { ProjectRatingService } from "@office/program/services/project-rating.se
 import { RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
+import { ProgramDataService } from "@office/program/services/program-data.service";
+import { AuthService } from "@auth/services";
+import { User } from "@auth/models/user.model";
 
 /**
  * Компонент карточки оценки проекта
@@ -92,6 +104,8 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public industryService: IndustryService,
     private projectRatingService: ProjectRatingService,
+    private readonly programDataService: ProgramDataService,
+    private readonly authService: AuthService,
     private breakpointObserver: BreakpointObserver,
     private cdRef: ChangeDetectorRef
   ) {}
@@ -111,6 +125,8 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   _currentIndex = signal<number>(0);
   _projects = signal<ProjectRate[]>([]);
 
+  profile = signal<User | null>(null);
+
   form = new FormControl();
 
   submitLoading = signal(false);
@@ -126,7 +142,11 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   showConfirmRateModal = signal(false);
 
+  locallyRatedByCurrentUser = signal(false);
+
   isProjectCriterias = signal(0);
+
+  programDateFinished = signal(false);
 
   desktopMode$: Observable<boolean> = this.breakpointObserver
     .observe("(min-width: 920px)")
@@ -140,6 +160,27 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectConfirmed.set(isScored);
       this.projectRated.set(isScored);
     }
+
+    const program$ = this.programDataService.program$
+      .pipe(
+        filter(program => !!program),
+        tap(program => {
+          if (program && program.datetimeFinished) {
+            this.programDateFinished.set(Date.now() > Date.parse(program.datetimeFinished));
+          }
+        })
+      )
+      .subscribe();
+
+    this.subscriptions$().push(program$);
+
+    const profileId$ = this.authService.profile.subscribe({
+      next: profile => {
+        this.profile.set(profile);
+      },
+    });
+
+    this.subscriptions$().push(profileId$);
   }
 
   ngAfterViewInit(): void {
@@ -186,36 +227,57 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(finalize(() => this.submitLoading.set(false)))
       .subscribe({
         next: () => {
-          if (this.showConfirmRateModal()) {
-            this.projectConfirmed.set(true);
-            this.showConfirmRateModal.set(false);
-          } else {
-            this.projectRated.set(true);
-            this.showConfirmRateModal.set(true);
-          }
+          this.locallyRatedByCurrentUser.set(true);
+          this.projectRated.set(true);
+          this.projectConfirmed.set(true);
+          this.showConfirmRateModal.set(false);
         },
       });
   }
 
   redoRating(): void {
-    if (!this.projectConfirmed()) {
-      this.projectRated.set(false);
+    this.projectRated.set(false);
+    this.projectConfirmed.set(false);
+    this.locallyRatedByCurrentUser.set(false);
+  }
+
+  openPresentation(url: string) {
+    if (url) {
+      window.open(url, "_blank");
     }
   }
 
   get canEdit(): boolean {
-    return !this.projectConfirmed();
+    return !this.programDateFinished();
+  }
+
+  get isCurrentUserExpert(): boolean {
+    const currentProfile = this.profile();
+    const project = this.project;
+
+    if (!currentProfile || !project) return false;
+
+    const isExpertFromBackend =
+      !!project.scoredExpertId && project.scoredExpertId === currentProfile.id;
+
+    const isExpertLocally = this.locallyRatedByCurrentUser();
+
+    return isExpertFromBackend || isExpertLocally;
   }
 
   get showRatingForm(): boolean {
     return !this.projectRated() && this.canEdit;
   }
 
-  get showRatedWithEdit(): boolean {
-    return this.projectRated() && !this.projectConfirmed();
+  get showRatedStatus(): boolean {
+    return this.projectRated() || this.projectConfirmed();
+  }
+
+  get showEditButton(): boolean {
+    return this.showRatedStatus && this.canEdit && this.isCurrentUserExpert;
   }
 
   get showConfirmedState(): boolean {
-    return this.projectConfirmed();
+    return this.projectConfirmed() && !this.canEdit;
   }
 }

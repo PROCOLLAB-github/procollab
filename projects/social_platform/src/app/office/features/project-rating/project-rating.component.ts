@@ -88,6 +88,20 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
     return this._criteria();
   }
 
+  @Input()
+  set disabled(value: boolean) {
+    this._disabled = value;
+    if (this.form) {
+      value ? this.form.disable() : this.form.enable();
+    }
+  }
+
+  get disabled(): boolean {
+    return this._disabled;
+  }
+
+  private _disabled = false;
+
   /** Сигнал для хранения критериев оценки */
   _criteria = signal<ProjectRatingCriterion[]>([]);
 
@@ -183,6 +197,10 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
     });
 
     this.form = new FormGroup(formGroupControls);
+
+    if (this.disabled) {
+      this.form.disable();
+    }
   }
 
   /**

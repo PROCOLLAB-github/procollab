@@ -12,10 +12,10 @@
         ></p>
         @if (descriptionExpandable) {
         <div
-          class="read-more"
+          class="read-more text-body-10"
           (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
         >
-          {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+          {{ readFullDescription ? "скрыть" : "подробнее" }}
         </div>
         }
       </div>

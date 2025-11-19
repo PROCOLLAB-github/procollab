@@ -107,6 +107,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   // Переменные для работы с модалками
   isAssignProjectToProgramModalOpen = signal(false);
   showSubmitProjectModal = signal(false);
+  isProgramEndedModalOpen = signal(false);
   isLeaveProjectModalOpen = false; // Флаг модального окна выхода
   isEditDisable = false; // Флаг недоступности редактирования
   isEditDisableModal = false; // Флаг недоступности редактирования для модалки
@@ -156,7 +157,11 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   get isUserExpert() {
     const type = this.userType();
-    return type !== undefined && type !== 1;
+    return type !== undefined && type === 3;
+  }
+
+  get isProjectAssigned() {
+    return !!this.memberProjects.find(project => project.leader === this.profile?.id);
   }
 
   // Методы для управления состоянием ошибок через сервис
@@ -370,6 +375,24 @@ export class DeatilComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Проверка завершения программы перед регистрацией
+   */
+  checkPrograRegistrationEnded(event: Event): void {
+    const program = this.info();
+
+    if (
+      program?.datetimeRegistrationEnds &&
+      Date.now() > Date.parse(program.datetimeRegistrationEnds)
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.isProgramEndedModalOpen.set(true);
+    } else {
+      this.router.navigateByUrl("/office/program/" + this.info().id + "/register");
+    }
+  }
+
+  /**
    * Обновляет состояния страниц на основе URL
    */
   private updatePageStates(url?: string): void {
@@ -422,6 +445,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
       const profileDataSub$ = this.authService.profile.pipe(filter(user => !!user)).subscribe({
         next: user => {
           this.userType.set(user!.userType);
+          this.profile = user;
           this.cdRef.detectChanges();
         },
       });
@@ -451,10 +475,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
         });
 
       this.isInProfileInfo();
-
-      this.skillsProfileService.getSubscriptionData().subscribe(r => {
-        this.isSubscriptionActive.set(r.isSubscribed);
-      });
 
       this.subscriptions.push(profileDataSub$);
     }

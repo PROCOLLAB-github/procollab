@@ -2,10 +2,10 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService } from "projects/core";
-import { BehaviorSubject, map, Observable, tap } from "rxjs";
+import { map, Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { ProgramCreate } from "@office/program/models/program-create.model";
-import { Program, ProgramDataSchema, ProgramTag } from "@office/program/models/program.model";
+import { Program, ProgramDataSchema } from "@office/program/models/program.model";
 import { Project } from "@models/project.model";
 import { ApiPagination } from "@models/api-pagination.model";
 import { User } from "@auth/models/user.model";
@@ -49,11 +49,22 @@ export class ProgramService {
 
   constructor(private readonly apiService: ApiService) {}
 
-  getAll(skip: number, take: number): Observable<ApiPagination<Program>> {
-    return this.apiService.get(
-      `${this.PROGRAMS_URL}/`,
-      new HttpParams({ fromObject: { limit: take, offset: skip } })
-    );
+  getAll(skip: number, take: number, params?: HttpParams): Observable<ApiPagination<Program>> {
+    let httpParams = new HttpParams();
+
+    httpParams.set("limit", take);
+    httpParams.set("offset", skip);
+
+    if (params) {
+      params.keys().forEach(key => {
+        const value = params.get(key);
+        if (value !== null) {
+          httpParams = httpParams.set(key, value);
+        }
+      });
+    }
+
+    return this.apiService.get(`${this.PROGRAMS_URL}/`, httpParams);
   }
 
   getOne(programId: number): Observable<Program> {

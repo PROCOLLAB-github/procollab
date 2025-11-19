@@ -7,6 +7,7 @@ import { InfoBlockComponent } from "./shared/info-block/info-block.component";
 import { toSignal } from "@angular/core/rxjs-interop";
 import { map } from "rxjs";
 import { BarComponent } from "@ui/components";
+import { BarNewComponent } from "@ui/components/bar-new/bar.component";
 
 /**
  * Основной компонент профиля пользователя
@@ -20,7 +21,7 @@ import { BarComponent } from "@ui/components";
 @Component({
   selector: "app-profile",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, InfoBlockComponent, BarComponent],
+  imports: [CommonModule, RouterOutlet, InfoBlockComponent, BarComponent, BarNewComponent],
   templateUrl: "./profile.component.html",
   styleUrl: "./profile.component.scss",
 })

@@ -104,6 +104,21 @@
     align-items: center;
     margin-top: 14px;
   }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+
+    &--text {
+      color: var(--grey-for-text);
+    }
+
+    i {
+      color: var(--grey-for-text);
+    }
+  }
 }
 
 .info {

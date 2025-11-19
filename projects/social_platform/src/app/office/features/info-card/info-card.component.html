@@ -77,7 +77,7 @@
 </ng-template>
 
 <ng-template #regularCardHeader>
-  @if (type === 'projects') { @if (info.name) { @if(info.name.length > 12) {
+  @if (type === 'projects' || type === 'invite') { @if (info.name) { @if(info.name.length > 12) {
   <p class="text-body-12 card__name">{{ info.name.slice(0, 12) }}...</p>
   } @else {
   <p class="text-body-12 card__name">{{ info.name }}</p>
@@ -129,16 +129,7 @@
   <div class="card__info">
     @if (type === 'projects') {
     <div class="card__info--program">
-      <app-button
-        [routerLink]="'/office/projects/' + info?.id"
-        customTypographyClass="text-body-6"
-        size="extra-small"
-        class="card__info--text"
-      >
-        проект
-      </app-button>
-
-      @if (info.partnerProgramId) {
+      @if (info.partnerProgram || info.draft) { @if (info.partnerProgram && info.draft) {
       <div
         class="card__info--program-icon"
         (mouseenter)="programProjectHovered = true"
@@ -149,11 +140,57 @@
 
       @if (programProjectHovered) {
       <div class="card__info--project-partner">
-        <p class="text-body-6">проект привязан к программе</p>
+        <p class="text-body-6">проект привязан к программе {{ info.partnerProgram.name }}</p>
+      </div>
+      } }
+
+      <app-button
+        [routerLink]="'/office/projects/' + info?.id"
+        customTypographyClass="text-body-6"
+        size="extra-small"
+        class="card__info--text"
+      >
+        проект
+      </app-button>
+
+      <div
+        class="card__info--program-icon"
+        (mouseenter)="iconHovered = true"
+        (mouseleave)="iconHovered = false"
+      >
+        <i appIcon [icon]="info.draft ? 'box' : 'program'" appSquare="8"></i>
+      </div>
+
+      @if (iconHovered) {
+      <div class="card__info--project-partner">
+        <p class="text-body-6">
+          @if (info.draft) { проект пока еще не опубликовали. } @else { проект привязан к программе
+          {{ info.partnerProgram.name }}
+          }
+        </p>
       </div>
       } }
     </div>
-    } @else if (type === 'members') {
+    } @else if (type === 'members') { @if (leaderId === loggedUserId && loggedUserId !==
+    info?.userId) {
+    <div class="card__info--program">
+      <app-button
+        customTypographyClass="text-body-6"
+        size="extra-small"
+        [disabled]="true"
+        style="opacity: 0.5"
+        >выдать роль</app-button
+      >
+      <app-button
+        customTypographyClass="text-body-6"
+        size="extra-small"
+        color="red"
+        appearance="outline"
+        (click)="removeCollaboratorFromProject(info?.userId)"
+        >удалить</app-button
+      >
+    </div>
+    } @else {
     <app-button
       [routerLink]="'/office/profile/' + info?.userId"
       customTypographyClass="text-body-6"
@@ -162,7 +199,7 @@
     >
       профиль
     </app-button>
-    } @else {
+    } } @else {
     <div class="card__invite-actions">
       <app-button
         (click)="onAcceptInvite($event, info?.inviteId!)"

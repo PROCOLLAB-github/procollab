@@ -23,16 +23,19 @@ import { ProfileNewsService } from "@office/profile/detail/services/profile-news
 import { FeedFilterComponent } from "@office/feed/filter/feed-filter.component";
 import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 import { OpenVacancyComponent } from "./shared/open-vacancy/open-vacancy.component";
+import { IconComponent } from "@ui/components";
 
 @Component({
   selector: "app-feed",
   standalone: true,
   imports: [
     CommonModule,
+    IconComponent,
     NewProjectComponent,
     FeedFilterComponent,
     NewsCardComponent,
     OpenVacancyComponent,
+    IconComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: "./feed.component.html",
@@ -77,7 +80,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
           this.totalItemsCount.set(0);
           this.feedPage.set(0);
 
-          return this.onFetch(0, this.perFetchTake(), includes ?? ["vacancy", "projects", "news"]);
+          return this.onFetch(0, this.perFetchTake(), includes ?? ["vacancy", "project", "news"]);
         })
       )
       .subscribe(feed => {

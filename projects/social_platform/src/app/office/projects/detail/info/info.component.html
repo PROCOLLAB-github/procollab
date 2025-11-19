@@ -65,10 +65,10 @@
             <p #descEl [innerHTML]="project.description | parseLinks | parseBreaks"></p>
             @if (descriptionExpandable) {
             <div
-              class="read-more"
+              class="read-more text-body-10"
               (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
             >
-              {{ readFullDescription ? "Скрыть" : "Читать полностью" }}
+              {{ readFullDescription ? "скрыть" : "подробнее" }}
             </div>
             }
           </div>
@@ -196,8 +196,11 @@
               }
             </div>
             } @if (project.achievements.length > 3) {
-            <div class="read-more" (click)="readAllAchievements = !readAllAchievements">
-              {{ readAllAchievements ? "Скрыть" : "Читать полностью" }}
+            <div
+              class="read-more text-body-10"
+              (click)="readAllAchievements = !readAllAchievements"
+            >
+              {{ readAllAchievements ? "скрыть" : "подробнее" }}
             </div>
             }
           </div>
