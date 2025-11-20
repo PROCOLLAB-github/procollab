@@ -56,9 +56,9 @@
 
   &__description {
     margin-top: 7px;
-    white-space: wrap;
-    overflow-wrap: anywhere;
-    word-break: break-word;
     color: var(--white);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: wrap;
   }
 }

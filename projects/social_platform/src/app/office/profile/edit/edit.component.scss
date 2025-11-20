@@ -296,9 +296,9 @@
 
   &__text {
     color: var(--grey-for-text);
-    white-space: wrap;
-    overflow-wrap: anywhere;
     word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: wrap;
   }
 }
 
