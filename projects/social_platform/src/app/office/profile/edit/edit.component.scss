@@ -296,6 +296,9 @@
 
   &__text {
     color: var(--grey-for-text);
+    white-space: wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 }
 
@@ -377,8 +380,4 @@
   &__text {
     text-align: center;
   }
-}
-
-.error {
-  color: var(--red) !important;
 }
