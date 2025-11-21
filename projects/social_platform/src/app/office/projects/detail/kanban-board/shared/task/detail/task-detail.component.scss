@@ -48,8 +48,8 @@
 
       &-score {
         display: flex;
-        align-items: center;
         gap: 3px;
+        align-items: center;
       }
 
       p {
@@ -397,7 +397,7 @@
       @for $i from 1 through 8 {
         > li:nth-child(#{$i}) {
           ::ng-deep app-skills-group .content--open {
-            top: 0px;
+            top: 0;
             margin-top: -#{($i - 1) * 50}px;
           }
         }

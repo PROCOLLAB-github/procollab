@@ -97,13 +97,13 @@
     &.tag--accent-medium {
       color: var(--white);
       background: transparent;
-       border: 0.5px solid var(--accent-medium);
+      border: 0.5px solid var(--accent-medium);
     }
 
     &.tag--blue-dark {
       color: var(--white);
       background: transparent;
-       border: 0.5px solid var(--blue-dark);
+      border: 0.5px solid var(--blue-dark);
     }
 
     &.tag--complete {
@@ -112,7 +112,7 @@
       border: 0.5px solid var(--green);
     }
 
-     &.tag--complete-dark {
+    &.tag--complete-dark {
       color: var(--white);
       background: transparent;
       border: 0.5px solid var(--green-dark);
@@ -121,7 +121,7 @@
     &.tag--red {
       color: var(--white);
       background: transparent;
-       border: 0.5px solid var(--red);
+      border: 0.5px solid var(--red);
     }
 
     &.tag--cyan {

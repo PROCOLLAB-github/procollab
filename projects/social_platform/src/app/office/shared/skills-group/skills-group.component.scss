@@ -6,6 +6,7 @@
   min-height: 32px;
 
   .heading {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -13,7 +14,6 @@
     height: 32px;
     cursor: pointer;
     transition: opacity 0.2s ease;
-    position: relative;
 
     i {
       transition: transform 0.2s ease;
@@ -57,10 +57,10 @@
     gap: 14px;
 
     &--open {
-      width: 40%;
       position: absolute;
       top: 0%;
       right: 0%;
+      width: 40%;
     }
 
     &__option {
