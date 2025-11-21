@@ -57,7 +57,7 @@ export class ChatService {
     const tokens = this.tokenService.getTokens();
     if (!tokens) throw new Error("No token provided");
 
-    return this.websocketService.connect(`/chat/?token=${tokens.access}`);
+    return this.websocketService.connect(`/chat/`);
   }
 
   /**

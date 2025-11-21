@@ -46,8 +46,8 @@ import {
   languageLevelsList,
   languageNamesList,
 } from "projects/core/src/consts/lists/language-info-list.const";
-import { transformYearStringToNumber } from "@utils/transformYear";
-import { yearRangeValidators } from "@utils/yearRangeValidators";
+import { transformYearStringToNumber } from "@utils/helpers/transformYear";
+import { yearRangeValidators } from "@utils/helpers/yearRangeValidators";
 import { Achievement, User } from "@auth/models/user.model";
 import { generateOptionsList } from "@utils/generate-options-list";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
@@ -164,7 +164,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       // skills
       speciality: ["", [Validators.required]],
       skills: [[]],
-      avatar: [""],
+      avatar: ["", Validators.required],
       aboutMe: [""],
       typeSpecific: this.fb.group({}),
     });

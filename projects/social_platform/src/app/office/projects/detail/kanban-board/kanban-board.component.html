@@ -1,0 +1,63 @@
+<!-- @format -->
+
+<div class="kanban">
+  <div class="kanban__wrapper" (clickOutside)="closeDetailTask()">
+    @if (projectBoardInfo(); as projectBoardInfo) {
+    <app-kanban-board-sidebar [projectBoardInfo]="projectBoardInfo"></app-kanban-board-sidebar>
+    }
+    <div
+      class="kanban__column-wrapper"
+      [style.overflow-y]="boardColumns().length > 3 ? 'auto' : 'none'"
+    >
+      @for (boardColumn of boardColumns(); track $index) {
+      <div class="kanban__column">
+        <div class="kanban__column-header">
+          <p class="text-body-12">{{ boardColumn.tasks.length }}</p>
+          <div class="kanban__column-locked">
+            @if (boardColumn.locked) {
+            <i appIcon icon="lock" appSquare="8"></i>
+            }
+            <p class="text-body-12">{{ boardColumn.name }}</p>
+          </div>
+
+          <div class="">
+            <i appIcon icon="dots" appSquare="8" (click)="toggleDropDown(boardColumn.id)"></i>
+
+            @if (isColumnInfoOpen && (selectedColumnId === boardColumn.order)) {
+            <app-dropdown
+              [isOpen]="isColumnInfoOpen"
+              type="text"
+              colorText="grey"
+              (select)="onTypeSelect($event, false, boardColumn.id)"
+              (outside)="isColumnInfoOpen = false"
+              [options]="columnInfoOptions"
+            ></app-dropdown>
+            }
+          </div>
+        </div>
+
+        <div class="kanban__tasks">
+          @for (task of boardColumn.tasks; track task.id) {
+          <app-kanban-task (click)="openDetailTask(task.id)" [task]="task"></app-kanban-task>
+          }
+        </div>
+
+        <i class="kanban__column--add-task" appIcon icon="plus" appSquare="10"></i>
+      </div>
+      }
+
+      <div class="kanban__column">
+        <div class="kanban__column-header kanban__column-header--empty">
+          <i appIcon icon="plus" appSquare="10"></i>
+        </div>
+      </div>
+    </div>
+
+    @if (isTaskDetailOpen()) {
+    <app-task-detail
+      [goals]="projectBoardInfo()?.goals"
+      [collaborators]="projectBoardInfo()?.collaborators"
+    ></app-task-detail>
+    }
+  </div>
+</div>

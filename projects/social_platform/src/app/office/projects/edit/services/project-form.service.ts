@@ -13,7 +13,7 @@ import { ActivatedRoute } from "@angular/router";
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
 import { Project } from "@office/models/project.model";
 import { ProjectService } from "@office/services/project.service";
-import { stripNullish } from "@utils/stripNull";
+import { stripNullish } from "@utils/helpers/stripNull";
 import { concatMap, filter } from "rxjs";
 /**
  * Сервис для управления основной формой проекта и формой дополнительных полей партнерской программы.

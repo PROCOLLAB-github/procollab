@@ -21,7 +21,7 @@
     outline: none;
 
     &:hover {
-      background-color: var(--accent-light);
+      background-color: var(--accent-medium);
       box-shadow: -2px 3px 3px rgb(51 51 51 / 20%);
     }
 
@@ -80,8 +80,8 @@
     border: 0.5px solid var(--accent);
 
     &:hover {
-      color: var(--accent-light);
-      border-color: var(--accent-light);
+      color: var(--accent-medium);
+      border-color: var(--accent-medium);
       box-shadow: -2px 3px 3px rgb(51 51 51 / 20%);
     }
 

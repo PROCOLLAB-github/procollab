@@ -1,9 +1,10 @@
 /** @format */
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { filter, map, Observable, Observer, retry, Subject } from "rxjs";
 import { environment } from "@environment";
 import * as snakecaseKeys from "snakecase-keys";
 import camelcaseKeys from "camelcase-keys";
+import { TokenService } from "@corelib";
 
 /**
  * Сервис для работы с WebSocket соединениями
@@ -19,6 +20,8 @@ export class WebsocketService {
   private socket: WebSocket | null = null;
   /** Subject для обработки входящих сообщений */
   private messages$ = new Subject<MessageEvent>();
+
+  private readonly tokenService = inject(TokenService);
 
   /** Флаг состояния соединения */
   public isConnected = false;
@@ -36,7 +39,11 @@ export class WebsocketService {
    */
   public connect(path: string): Observable<void> {
     return new Observable((observer: Observer<void>) => {
-      this.socket = new WebSocket(environment.websocketUrl + path);
+      const tokens = this.tokenService.getTokens();
+
+      const tokenAccess = tokens?.access ? tokens.access : "";
+
+      this.socket = new WebSocket(environment.websocketUrl + path, ["Bearer", tokenAccess]);
 
       this.socket.onopen = () => {
         this.isConnected = true;

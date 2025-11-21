@@ -233,7 +233,6 @@ export class ProjectResourceService {
 
   public editResources(projectId: number) {
     const resources = this.getResourcesData();
-    console.log(resources);
 
     const requests = resources.map(resource => {
       const payload: Omit<ResourcePostForm, "projectId"> = {

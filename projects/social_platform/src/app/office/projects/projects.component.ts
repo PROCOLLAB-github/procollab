@@ -12,7 +12,7 @@ import { BackComponent } from "@uilib";
 import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
 import { ProjectsFilterComponent } from "./projects-filter/projects-filter.component";
 import { Project } from "@office/models/project.model";
-import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
+import { inviteToProjectMapper } from "@utils/helpers/inviteToProjectMapper";
 import { ProjectsService } from "./services/projects.service";
 import { InfoCardComponent } from "@office/features/info-card/info-card.component";
 

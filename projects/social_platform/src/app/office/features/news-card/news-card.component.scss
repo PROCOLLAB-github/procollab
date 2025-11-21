@@ -30,6 +30,8 @@
 
   &__options {
     position: absolute;
+    top: 0%;
+    right: 0%;
     z-index: 2;
     padding: 20px 0;
     background-color: var(--white);
@@ -38,12 +40,14 @@
   }
 
   &__option {
+    width: 120px;
     padding: 5px 20px;
+    color: var(--grey-for-text);
     cursor: pointer;
     transition: background-color 0.2s;
 
     &:hover {
-      background-color: var(--light-gray);
+      color: var(--accent);
     }
   }
 

@@ -27,7 +27,6 @@ import { FeedNews } from "@office/projects/models/project-news.model";
 import { expandElement } from "@utils/expand-element";
 import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
-import { ProgramNewsCardComponent } from "../shared/news-card/news-card.component";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { ApiPagination } from "@models/api-pagination.model";
 import { TagComponent } from "@ui/components/tag/tag.component";
@@ -40,6 +39,7 @@ import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component"
 import { NewsFormComponent } from "@office/features/news-form/news-form.component";
 import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "@uilib";
+import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 
 @Component({
   selector: "app-main",
@@ -49,7 +49,6 @@ import { AvatarComponent } from "@uilib";
   imports: [
     IconComponent,
     ButtonComponent,
-    ProgramNewsCardComponent,
     UserLinksPipe,
     AsyncPipe,
     ParseBreaksPipe,
@@ -63,6 +62,7 @@ import { AvatarComponent } from "@uilib";
     AvatarComponent,
     TagComponent,
     RouterModule,
+    NewsCardComponent,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
