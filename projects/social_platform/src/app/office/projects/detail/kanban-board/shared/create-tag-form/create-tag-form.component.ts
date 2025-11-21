@@ -1,9 +1,30 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, inject, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from "@angular/core";
 import { tagColorsList } from "projects/core/src/consts/lists/tag-colots.list.const";
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
+
+export interface TagData {
+  id?: number;
+  name: string;
+  color: string;
+}
 
 @Component({
   selector: "app-create-tag-form",
@@ -12,15 +33,17 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from "@angul
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
   standalone: true,
 })
-export class CreateTagFormComponent {
-  @Output() createTag = new EventEmitter<{ name: string; color: string }>();
+export class CreateTagFormComponent implements OnInit, OnChanges {
+  @Input() editingTag: TagData | null = null;
+  @Output() createTag = new EventEmitter<TagData>();
+  @Output() updateTag = new EventEmitter<TagData>();
 
   private readonly fb = inject(FormBuilder);
 
   constructor() {
     this.tagForm = this.fb.group({
-      tagName: [""],
-      tagColor: [tagColorsList[0].color],
+      tagName: ["", [Validators.required, Validators.maxLength(30)]],
+      tagColor: [tagColorsList[0].name, [Validators.required]],
     });
   }
 
@@ -32,11 +55,27 @@ export class CreateTagFormComponent {
   }
 
   get selectedColor(): string {
-    return this.tagForm.get("tagColor")?.value || tagColorsList[0].color;
+    const colorName = this.tagForm.get("tagColor")?.value;
+    const found = tagColorsList.find(c => c.name === colorName);
+    return found ? found.color : tagColorsList[0].color;
   }
 
-  selectTagColor(color: string) {
-    this.tagForm.patchValue({ tagColor: color });
+  get isEditMode(): boolean {
+    return !!this.editingTag;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["editingTag"]) {
+      this.initFormFromEditingTag();
+    }
+  }
+
+  ngOnInit(): void {
+    this.initFormFromEditingTag();
+  }
+
+  selectTagColor(colorName: string) {
+    this.tagForm.patchValue({ tagColor: colorName });
     this.openPickColors = false;
   }
 
@@ -45,17 +84,36 @@ export class CreateTagFormComponent {
     event.preventDefault();
 
     const { tagName, tagColor } = this.tagForm.value;
+    const tagData: TagData = {
+      name: tagName,
+      color: tagColor,
+    };
 
     if (!tagName?.trim() || !tagColor) return;
 
-    this.createTag.emit({
-      name: tagName,
-      color: tagColor,
-    });
+    if (this.isEditMode && this.editingTag?.id) {
+      this.updateTag.emit({ ...tagData, id: this.editingTag.id });
+    } else {
+      this.createTag.emit(tagData);
+    }
+    this.resetForm();
+  }
 
+  private resetForm(): void {
     this.tagForm.reset({
       tagName: "",
-      tagColor: tagColorsList[0].color,
+      tagColor: tagColorsList[0].name,
     });
+  }
+
+  private initFormFromEditingTag() {
+    if (this.editingTag) {
+      this.tagForm.patchValue({
+        tagName: this.editingTag.name,
+        tagColor: this.editingTag.color,
+      });
+    } else {
+      this.resetForm();
+    }
   }
 }

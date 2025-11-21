@@ -5,7 +5,6 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  computed,
   ElementRef,
   inject,
   Input,
@@ -38,6 +37,11 @@ import { Subscription } from "rxjs";
 import { TaskDetail } from "../../../models/task.model";
 import { daysUntil } from "@utils/days-untit";
 import { KanbanBoardService } from "../../../kanban-board.service";
+import { getPriorityType } from "@utils/helpers/getPriorityType";
+import { getActionType } from "@utils/helpers/getActionType";
+import { ActivatedRoute } from "@angular/router";
+import { TagData } from "../../create-tag-form/create-tag-form.component";
+import { FileService } from "@core/services/file.service";
 
 @Component({
   selector: "app-task-detail",
@@ -73,30 +77,37 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
 
   @ViewChild("descEl") descEl?: ElementRef;
 
-  private readonly kanbanBoardService = inject(KanbanBoardService);
   private readonly skillsService = inject(SkillsService);
+  private readonly kanbanBoardService = inject(KanbanBoardService);
+  private readonly fileService = inject(FileService);
+  private readonly route = inject(ActivatedRoute);
   private readonly cdRef = inject(ChangeDetectorRef);
 
   constructor(private readonly fb: FormBuilder) {
     this.taskDetailForm = this.fb.group({
       title: ["", Validators.required],
       responsible: [],
-      performers: this.fb.array([]),
+      performers: [],
       startDate: [null],
       deadline: [null],
-      tags: this.fb.array([]),
+      tags: [[]],
       goal: [null],
-      skills: this.fb.array([]),
+      skills: [[]],
       description: [null],
-      files: this.fb.array([]),
+      files: [[]],
       priority: [null],
+      status: [null],
       action: [null],
+      score: [null],
+      tagsLib: [[]],
     });
   }
 
   isChangeDescriptionText = signal<boolean>(false);
 
   remainingDaysDeadline = signal<number>(0);
+
+  editingTag: TagData | null = null;
 
   /** Уникальный ID для элемента input */
   controlId = nanoid(3);
@@ -112,17 +123,25 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   isGoalPickOpen = false;
   isTagsPickOpen = false;
 
+  creatingTag = false;
+  loadingFile = false;
+
   showEditAvatarIcon = false;
   showEditDeadlineDatePicker = false;
   showEditStartDatePicker = false;
+  showChangeGoalModal = false;
 
   skillsGroupsModalOpen = signal(false);
   nestedSkills$ = this.skillsService.getSkillsNested();
   openGroupIds = new Set<number>();
+  openGroupIndex: number | null = null;
 
   filesList: any[] = [];
 
   taskDetailForm: FormGroup;
+
+  getPriorityType = getPriorityType;
+  getActionType = getActionType;
 
   subscriptions: Subscription[] = [];
 
@@ -154,8 +173,8 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
 
   get goalPickOptions() {
     return this.goals
-      ? this.goals.map((goal, index) => ({
-          id: index,
+      ? this.goals.map(goal => ({
+          id: goal.id,
           label: goal.title,
           value: goal.id,
           additionalInfo: goal.title,
@@ -164,20 +183,8 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   }
 
   get tagsPickOptions() {
-    return [
-      {
-        id: 1,
-        label: "аналитика",
-        value: "аналитика",
-        additionalInfo: "primary",
-      },
-      {
-        id: 2,
-        label: "продажи",
-        value: "продажи",
-        additionalInfo: "complete",
-      },
-    ];
+    const tagsLib = this.taskDetailForm.get("tagsLib")?.value || [];
+    return [...tagsLib];
   }
 
   get priorityDeleteOptions() {
@@ -191,7 +198,11 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   }
 
   get hasOpenSkillsGroups(): boolean {
-    return this.openGroupIds.size > 0;
+    return this.openGroupIndex !== null;
+  }
+
+  get selectedSkills(): Skill[] {
+    return this.taskDetailForm.getRawValue().skills || [];
   }
 
   get statusOfTask() {
@@ -216,7 +227,13 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     };
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.taskDetailForm.valueChanges.subscribe({
+      next: value => {
+        console.log(value);
+      },
+    });
+  }
 
   /**
    * Проверка возможности расширения описания после инициализации представления
@@ -230,44 +247,169 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     this.checkDescriptionHeigth();
   }
 
-  onDeleteTaskGoal(): void {}
-
-  onDeleteTaskTag(): void {}
-
-  onEditTaskTag(): void {}
-
-  getCreatedTagInfo(createdTagInfo: { name: string; color: string }): void {
-    console.log(createdTagInfo);
+  onDeleteTaskGoal(): void {
+    this.taskDetailForm.patchValue({ goal: null });
+    this.isGoalPickOpen = false;
   }
 
-  toggleDropdown(
+  onDeleteTaskTag(tagId: number): void {
+    const tags = this.taskDetailForm.get("tags")?.value || [];
+
+    const remainingTags = tags.filter((tag: any) => tag.id !== tagId);
+    this.taskDetailForm.patchValue({ tags: remainingTags });
+
+    this.isTagsPickOpen = false;
+  }
+
+  onEditTaskTag(tagId: number): void {
+    this.isTagsPickOpen = !this.isTagsPickOpen;
+    this.creatingTag = true;
+
+    const tags = this.taskDetailForm.get("tags")?.value || [];
+    const tag = tags.find((t: any) => t.id === tagId);
+
+    if (tag) {
+      this.editingTag = {
+        id: tag.id,
+        name: tag.title,
+        color: tag.color,
+      };
+    }
+  }
+
+  onUpdateTag({ id, name, color }: TagData): void {
+    const tagsLib = [...(this.taskDetailForm.get("tagsLib")?.value || [])];
+    const libIndex = tagsLib.findIndex((t: any) => t.id === id);
+
+    if (libIndex !== -1) {
+      tagsLib[libIndex] = {
+        ...tagsLib[libIndex],
+        label: name,
+        value: name,
+        additionalInfo: color,
+      };
+
+      this.taskDetailForm.patchValue({ tagsLib: [...tagsLib] });
+    }
+
+    const tags = [...(this.taskDetailForm.get("tags")?.value || [])];
+    const tagIndex = tags.findIndex((t: any) => t.id === id);
+
+    if (tagIndex !== -1) {
+      tags[tagIndex] = {
+        ...tags[tagIndex],
+        title: name,
+        color,
+      };
+      this.taskDetailForm.patchValue({ tags: [...tags] });
+    }
+
+    this.editingTag = null;
+    this.creatingTag = false;
+  }
+
+  createTag({ name, color }: { name: string; color: string }): void {
+    const { tagsLib } = this.taskDetailForm.value;
+    const tagInfo = { id: tagsLib.length + 1, label: name, value: name, additionalInfo: color };
+    tagsLib.push(tagInfo);
+  }
+
+  onTypeSelect(
     type: "action" | "priority" | "responsible" | "performers" | "goal" | "tags" | "delete",
-    state: boolean
+    state: boolean,
+    typeId?: number
   ) {
     switch (type) {
       case "action":
         this.isActionTypeOpen = state;
+        this.taskDetailForm.patchValue({ action: typeId });
         break;
 
       case "priority":
         this.isPriorityTypeOpen = state;
+        this.taskDetailForm.patchValue({ priority: typeId });
         break;
 
-      case "responsible":
+      case "responsible": {
         this.isResponsiblePickOpen = state;
-        break;
 
-      case "performers":
+        if (typeId !== undefined) {
+          if (!this.collaborators) return;
+
+          const responsible = this.collaborators.find(
+            collaborator => collaborator.userId === typeId
+          );
+          this.taskDetailForm.patchValue({
+            responsible: {
+              id: responsible?.userId,
+              avatar: responsible?.avatar,
+              name: responsible?.firstName + " " + responsible?.lastName[0],
+            },
+          });
+        }
+        break;
+      }
+
+      case "performers": {
         this.isPerformersPickOpen = state;
-        break;
 
-      case "goal":
+        if (typeId !== undefined) {
+          if (!this.collaborators) return;
+
+          const collaborator = this.collaborators.find(
+            collaborator => collaborator.userId === typeId
+          );
+          const currentPerformers = this.taskDetailForm.get("performers")?.value || [];
+          const payload = {
+            id: collaborator?.userId,
+            avatar: collaborator?.avatar,
+            name: collaborator?.firstName + " " + collaborator?.lastName[0],
+          };
+
+          if (currentPerformers.some((performer: any) => performer.id === payload.id)) return;
+
+          this.taskDetailForm.patchValue({
+            performers: [...currentPerformers, payload],
+          });
+        }
+        break;
+      }
+
+      case "goal": {
         this.isGoalPickOpen = state;
-        break;
 
-      case "tags":
-        this.isTagsPickOpen = state;
+        if (typeId !== undefined) {
+          if (!this.goals) return;
+
+          const goal = this.goals.find(goal => goal.id === typeId);
+          if (goal) this.taskDetailForm.patchValue({ goal: { id: goal.id, title: goal.title } });
+        }
+
         break;
+      }
+
+      case "tags": {
+        this.isTagsPickOpen = state;
+
+        if (!state) {
+          this.editingTag = null;
+          this.creatingTag = false;
+        }
+
+        if (typeId !== undefined) {
+          const tag = this.tagsPickOptions.find((tag: any) => tag.id === typeId);
+          const payload = { id: tag?.id, title: tag?.label, color: tag?.additionalInfo };
+
+          const currentTags = this.taskDetailForm.get("tags")?.value || [];
+          if (currentTags.some((tag: any) => tag.id === payload.id)) return;
+          this.taskDetailForm.patchValue({ tags: [...currentTags, payload] });
+        } else {
+          this.editingTag = null;
+          this.creatingTag = false;
+        }
+
+        break;
+      }
 
       case "delete":
         this.isDeleteTypeOpen = state;
@@ -278,17 +420,9 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onTypeSelect(
-    typeId: number,
-    type: "action" | "priority" | "responsible" | "performers" | "goal" | "tags" | "delete"
-  ): void {
-    this.toggleDropdown(type, false);
-    console.log(typeId);
-  }
-
   onChangeText(event: MouseEvent): void {
     event.stopPropagation();
-    this.isChangeDescriptionText.set(!this.isChangeDescriptionText());
+    this.isChangeDescriptionText.set(false);
 
     setTimeout(() => this.checkDescriptionHeigth(), 0);
   }
@@ -306,21 +440,29 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
 
   /** Обработчик загрузки файла */
   onUpdate(event: Event): void {
-    const files = (event.currentTarget as HTMLInputElement).files;
-    if (!files?.length) {
+    const input = event.currentTarget as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) {
       return;
     }
 
-    console.log("123");
+    this.loadingFile = true;
 
-    // this.loading = true;
+    this.fileService.uploadFile(file).subscribe(url => {
+      const currentFiles = this.taskDetailForm.get("files")?.value || [];
 
-    // this.fileService.uploadFile(files[0]).subscribe(res => {
-    //   this.loading = false;
+      const newFile = {
+        name: file.name.split,
+        link: url,
+        extension: file.type,
+        size: file.size,
+      };
 
-    //   this.value = res.url;
-    //   this.onChange(res.url);
-    // });
+      this.taskDetailForm.get("files")?.setValue([...currentFiles, newFile]);
+      input.value = "";
+
+      this.loadingFile = false;
+    });
   }
 
   /**
@@ -334,17 +476,19 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     if (isPresent) {
       this.onRemoveSkill(toggledSkill);
     } else {
-      this.onAddSkill(toggledSkill);
+      if (skills.length < 3) {
+        this.onAddSkill(toggledSkill);
+      }
     }
   }
 
   onGroupToggled(isOpen: boolean, skillsGroupId: number): void {
-    this.openGroupIds.clear();
-    if (isOpen) {
-      this.openGroupIds.add(skillsGroupId);
-    }
-
+    this.openGroupIndex = isOpen ? skillsGroupId : null;
     this.cdRef.markForCheck();
+  }
+
+  isGroupDisabled(skillsGroupId: number): boolean {
+    return this.openGroupIndex !== null && this.openGroupIndex !== skillsGroupId;
   }
 
   /**
@@ -365,6 +509,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     if (isPresent) return;
 
     this.taskDetailForm.patchValue({ skills: [newSkill, ...skills] });
+    this.cdRef.markForCheck();
   }
 
   /**
@@ -377,6 +522,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     this.taskDetailForm.patchValue({
       skills: skills.filter(skill => skill.id !== oddSkill.id),
     });
+    this.cdRef.markForCheck();
   }
 
   private checkDescriptionHeigth(): void {
@@ -387,10 +533,11 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   }
 
   private initializeTaskDetailInfo(todayDate: Date, tommorowDate: Date): void {
-    const taskDetailInfo$ = this.kanbanBoardService.getTaskById(123).subscribe({
+    const taskId = this.route.snapshot.queryParams["taskId"];
+    const taskDetailInfo$ = this.kanbanBoardService.getTaskById(taskId).subscribe({
       next: (taskDetailInfo: TaskDetail) => {
         this.taskDetailForm.patchValue({
-          title: taskDetailInfo.title ?? "Настроить процессы",
+          title: taskDetailInfo.title ?? "",
           responsible: taskDetailInfo.responsible ?? null,
           performers: taskDetailInfo.performers ?? [],
           startDate: taskDetailInfo.dateTaskStart ?? todayDate,

@@ -20,7 +20,7 @@ import {
 } from "@angular/forms";
 import { AuthService } from "@auth/services";
 import { ErrorMessage } from "@error/models/error-message";
-import { directionProjectList } from "projects/core/src/consts/lists/ldirection-project-list.const";
+import { directionProjectList } from "projects/core/src/consts/lists/direction-project-list.const";
 import { trackProjectList } from "projects/core/src/consts/lists/track-project-list.const";
 import { Observable, Subscription } from "rxjs";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";

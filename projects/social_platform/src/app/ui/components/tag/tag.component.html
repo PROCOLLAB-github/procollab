@@ -7,8 +7,14 @@
   [class.tag--primary]="color === 'primary'"
   [class.tag--secondary]="color === 'secondary'"
   [class.tag--accent]="color === 'accent'"
+  [class.tag--accent-medium]="color === 'accent-medium'"
+  [class.tag--blue-dark]="color === 'blue-dark'"
   [class.tag--complete]="color === 'complete'"
+  [class.tag--complete-dark]="color === 'complete-dark'"
   [class.tag--soft]="color === 'soft'"
+  [class.tag--cyan]="color === 'cyan'"
+  [class.tag--red]="color === 'red'"
+  [ngStyle]="additionalTagColor ? { 'background-color': additionalTagColor } : {}"
 >
   <p class="text-body-6"><ng-content></ng-content></p>
 

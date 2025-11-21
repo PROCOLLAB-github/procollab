@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<div #dropdown (click)="isOpen = !isOpen">
+<div cdkOverlayOrigin #dropdown="cdkOverlayOrigin" (click)="isOpen = !isOpen">
   <ng-content></ng-content>
 </div>
 
@@ -55,7 +55,11 @@
       <i appIcon icon="plus" appSquare="5"></i>
     </li>
     } @else {
-    <app-create-tag-form (createTag)="onConfirmCreateTag($event)"></app-create-tag-form>
+    <app-create-tag-form
+      [editingTag]="editingTag"
+      (createTag)="onConfirmCreateTag($event)"
+      (updateTag)="onConfirmUpdateTag($event)"
+    ></app-create-tag-form>
     } }
   </ul>
 </ng-template>

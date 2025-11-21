@@ -21,7 +21,7 @@
       @for (colorItem of tagColors; track $index) {
       <div
         class="create-tag__pick-color"
-        (click)="selectTagColor(colorItem.color)"
+        (click)="selectTagColor(colorItem.name)"
         [style.backgroundColor]="colorItem.color"
       ></div>
       }

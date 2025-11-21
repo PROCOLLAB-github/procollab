@@ -9,39 +9,39 @@
 
 export const priorityInfoList = [
   {
-    id: 0,
+    id: 1,
     label: "бэклог",
     color: "#322299",
-    priorityType: 0,
-  },
-  {
-    id: 1,
-    label: "в ближайшие часы",
-    color: "#A63838",
     priorityType: 1,
   },
   {
     id: 2,
-    label: "высокий",
-    color: "#D48A9E",
+    label: "в ближайшие часы",
+    color: "#A63838",
     priorityType: 2,
   },
   {
     id: 3,
-    label: "средний",
-    color: "#E5B25D",
+    label: "высокий",
+    color: "#D48A9E",
     priorityType: 3,
   },
   {
     id: 4,
-    label: "низкий",
-    color: "#297373",
+    label: "средний",
+    color: "#E5B25D",
     priorityType: 4,
   },
   {
     id: 5,
+    label: "низкий",
+    color: "#297373",
+    priorityType: 5,
+  },
+  {
+    id: 6,
     label: "улучшение",
     color: "#88C9A1",
-    priorityType: 5,
+    priorityType: 6,
   },
 ];

@@ -8,7 +8,10 @@ import { IconComponent } from "@uilib";
 import { getPriorityType } from "@utils/helpers/getPriorityType";
 import { TagComponent } from "../tag/tag.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { CreateTagFormComponent } from "@office/projects/detail/kanban-board/shared/create-tag-form/create-tag-form.component";
+import {
+  CreateTagFormComponent,
+  TagData,
+} from "@office/projects/detail/kanban-board/shared/create-tag-form/create-tag-form.component";
 
 @Component({
   selector: "app-dropdown",
@@ -34,10 +37,17 @@ export class DropdownComponent {
   /** Состояние для открытия списка выпадающего */
   @Input() isOpen = false;
 
+  /** режим создания тега */
+  @Input() creatingTag = false;
+
   /** Состояние для выделения элемента списка выпадающего */
   @Input() highlightedIndex = -1;
 
-  @Input() colorText: "grey" | "black" | "red" = "grey";
+  @Input() colorText: "grey" | "red" = "grey";
+
+  @Input() editingTag: TagData | null = null;
+
+  @Output() updateTag = new EventEmitter<TagData>();
 
   /** Событие для выбора элемента */
   @Output() select = new EventEmitter<number>();
@@ -48,9 +58,6 @@ export class DropdownComponent {
   @Output() tagInfo = new EventEmitter<{ name: string; color: string }>();
 
   @ViewChild("dropdown", { static: true }) dropdown!: ElementRef;
-
-  /** режим создания тега */
-  creatingTag = false;
 
   getPriorityType = getPriorityType;
 
@@ -87,19 +94,20 @@ export class DropdownComponent {
     this.creatingTag = true;
   }
 
+  onConfirmUpdateTag(tagData: TagData): void {
+    this.updateTag.emit(tagData);
+    this.creatingTag = false;
+  }
+
   onConfirmCreateTag(tagInfo: { name: string; color: string }): void {
     this.tagInfo.emit(tagInfo);
     this.creatingTag = false;
-    this.isOpen = false;
   }
 
-  getTextColor(colorText: "grey" | "black" | "red") {
+  getTextColor(colorText: "grey" | "red") {
     switch (colorText) {
       case "red":
         return "color: var(--red)";
-
-      case "black":
-        return "color: var(--black)";
 
       case "grey":
         return "color: var(--grey-for-text)";

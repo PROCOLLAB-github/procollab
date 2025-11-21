@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectorRef, Component, inject, Input, signal } from "@angular/core";
+import { Component, Input, signal } from "@angular/core";
 import { Project } from "@office/models/project.model";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { KanbanBoardActionsComponent } from "../actions/kanban-board-actions.component";

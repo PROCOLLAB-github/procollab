@@ -19,7 +19,21 @@
             }
             <p class="text-body-12">{{ boardColumn.name }}</p>
           </div>
-          <i appIcon icon="dots" appSquare="8"></i>
+
+          <div class="">
+            <i appIcon icon="dots" appSquare="8" (click)="toggleDropDown(boardColumn.id)"></i>
+
+            @if (isColumnInfoOpen && (selectedColumnId === boardColumn.order)) {
+            <app-dropdown
+              [isOpen]="isColumnInfoOpen"
+              type="text"
+              colorText="grey"
+              (select)="onTypeSelect($event, false, boardColumn.id)"
+              (outside)="isColumnInfoOpen = false"
+              [options]="columnInfoOptions"
+            ></app-dropdown>
+            }
+          </div>
         </div>
 
         <div class="kanban__tasks">

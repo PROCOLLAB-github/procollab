@@ -11,6 +11,8 @@ import { IconComponent } from "@ui/components";
 import { KanbanTaskComponent } from "./shared/task/kanban-task.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { TaskDetailComponent } from "./shared/task/detail/task-detail.component";
+import { DropdownComponent } from "@ui/components/dropdown/dropdown.component";
+import { kanbanColumnInfo } from "projects/core/src/consts/other/kanban-column-info.const";
 
 @Component({
   selector: "app-kanban-board",
@@ -23,6 +25,7 @@ import { TaskDetailComponent } from "./shared/task/detail/task-detail.component"
     KanbanTaskComponent,
     ClickOutsideModule,
     TaskDetailComponent,
+    DropdownComponent,
   ],
   standalone: true,
 })
@@ -35,6 +38,13 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
   projectBoardInfo = signal<Project | null>(null);
   boardColumns = signal<any[]>([]);
   isTaskDetailOpen = signal<boolean>(false);
+
+  isColumnInfoOpen = false;
+  selectedColumnId = 0;
+
+  get columnInfoOptions() {
+    return kanbanColumnInfo;
+  }
 
   ngOnInit(): void {
     const detailInfoUrl$ = this.route.queryParams.subscribe({
@@ -61,6 +71,7 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
       {
         id: 0,
         name: "бэклог",
+        order: 0,
         locked: true,
         tasks: [
           {
@@ -76,6 +87,7 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
       {
         id: 1,
         locked: false,
+        order: 1,
         name: "в работе",
         tasks: [
           { id: 3, title: "настроить API" },
@@ -85,6 +97,7 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
       {
         id: 2,
         locked: false,
+        order: 2,
         name: "Готово",
         tasks: [
           { id: 5, title: "верстка страницы входа" },
@@ -98,6 +111,34 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach($ => $.unsubscribe());
+  }
+
+  toggleDropDown(columnId: number): void {
+    if (this.selectedColumnId === columnId) {
+      this.isColumnInfoOpen = !this.isColumnInfoOpen;
+    } else {
+      this.selectedColumnId = columnId;
+      this.isColumnInfoOpen = true;
+    }
+  }
+
+  onTypeSelect(option: any, state: boolean, columnId?: number): void {
+    if (!option) {
+      this.isColumnInfoOpen = state;
+      return;
+    }
+
+    switch (option) {
+      case 1:
+        console.log("EDIT in column:", columnId);
+        break;
+
+      case 2:
+        console.log("DELETE in column:", columnId);
+        break;
+    }
+
+    this.isColumnInfoOpen = state;
   }
 
   openDetailTask(taskId: number): void {

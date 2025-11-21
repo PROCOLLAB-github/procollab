@@ -1,7 +1,17 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from "@angular/core";
 import { IconComponent } from "../icon/icon.component";
+import { tagColorsList } from "projects/core/src/consts/lists/tag-colots.list.const";
+import { NgStyle } from "@angular/common";
 
 /**
  * Компонент тега для отображения статусов, категорий или меток.
@@ -21,13 +31,23 @@ import { IconComponent } from "../icon/icon.component";
   templateUrl: "./tag.component.html",
   styleUrl: "./tag.component.scss",
   standalone: true,
-  imports: [IconComponent],
+  imports: [IconComponent, NgStyle],
 })
-export class TagComponent implements OnInit {
+export class TagComponent implements OnInit, OnChanges {
   constructor() {}
 
   /** Цветовая схема тега */
-  @Input() color: "primary" | "secondary" | "accent" | "complete" | "soft" = "primary";
+  @Input() color:
+    | "primary"
+    | "secondary"
+    | "accent"
+    | "accent-medium"
+    | "blue-dark"
+    | "cyan"
+    | "red"
+    | "complete"
+    | "complete-dark"
+    | "soft" = "primary";
 
   /** Стиль отображения */
   @Input() appearance: "inline" | "outline" = "inline";
@@ -44,7 +64,21 @@ export class TagComponent implements OnInit {
   /** Событие для возможности редактирования */
   @Output() edit = new EventEmitter<void>();
 
-  ngOnInit(): void {}
+  get tagColorsList() {
+    return tagColorsList;
+  }
+
+  additionalTagColor = "";
+
+  ngOnInit(): void {
+    this.mappingAdditionalTagColors();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes["color"]) {
+      this.mappingAdditionalTagColors();
+    }
+  }
 
   /** Метод для вызова удаления элемента */
   onDelete(event: MouseEvent): void {
@@ -58,5 +92,12 @@ export class TagComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     this.edit.emit();
+  }
+
+  private mappingAdditionalTagColors(): void {
+    const found = tagColorsList.find(tagColor => tagColor.name === this.color);
+    if (found) {
+      this.additionalTagColor = found.color;
+    }
   }
 }
