@@ -7,7 +7,9 @@
         [src]="feedItem.imageAddress || placeholderUrl"
         [alt]="feedItem.name"
       />
-      <p class="card__name text-body-10">{{ feedItem.name }}</p>
+      <p class="card__name text-body-10">
+        {{ feedItem.name.length > 30 ? feedItem.name.slice(0, 26) + "..." : feedItem.name }}
+      </p>
     </a>
     @if (isOwner) {
     <div class="card__menu" (clickOutside)="onCloseMenu()">
@@ -28,7 +30,7 @@
   @if (feedItem.text) {
   <div class="card__text text-body-10">
     @if (!editMode) {
-    <p class="text-body-10" #newsTextEl [innerHTML]="feedItem.text | parseLinks"></p>
+    <p class="text-body-10" #newsTextEl [innerHTML]="feedItem.text | parseLinks | parseBreaks"></p>
     } @else { @if (editForm.get("text"); as text) {
     <app-textarea size="big" [formControl]="text | formControl"></app-textarea>
     } }
