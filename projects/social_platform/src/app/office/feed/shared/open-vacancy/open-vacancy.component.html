@@ -17,7 +17,9 @@
         alt="newsItem.name"
       ></app-avatar>
 
-      <p class="text-body-12">{{ project.name }}</p>
+      <p class="text-body-12">
+        {{ project.name.length > 30 ? project.name.slice(0, 26) + "..." : project.name }}
+      </p>
 
       @if (industryService.industries | async; as industries) { @if
       (industryService.getIndustry(industries, project.industry); as industry) {
@@ -29,7 +31,9 @@
     } @if (feedItem; as vacancy) {
     <div class="card__vacancy">
       <div class="lists__section">
-        <h3 class="text-body-10 lists__title">{{ vacancy.role }}</h3>
+        <h3 class="text-body-10 lists__title">
+          {{ vacancy.role.length > 30 ? vacancy.role.slice(0, 26) + "..." : vacancy.role }}
+        </h3>
         <p class="text-body-10">{{ vacancy.datetimeCreated | dayjs: "format":"DD MM YY" }}</p>
       </div>
 
@@ -57,7 +61,7 @@
         </div>
         } @if (skillsLength > 8) {
         <div class="read-more text-body-10" (click)="readFullSkills = !readFullSkills">
-          {{ readFullSkills ? "cкрыть" : "xитать полностью" }}
+          {{ readFullSkills ? "cкрыть" : "подробнее" }}
         </div>
         } }
       </div>

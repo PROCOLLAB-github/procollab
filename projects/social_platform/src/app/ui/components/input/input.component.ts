@@ -81,11 +81,11 @@ export class InputComponent implements ControlValueAccessor {
   onDateChange(event: any): void {
     if (this.type === "date" && event.value) {
       const date = event.value as Date;
-      // Форматируем дату в нужный формат (например, DD.MM.YY)
-      const day = String(date.getDate()).padStart(2, "0");
+
+      const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
-      const year = String(date.getFullYear()).slice(-2);
-      const formattedDate = `${day}.${month}.${year}`;
+      const day = String(date.getDate()).padStart(2, "0");
+      const formattedDate = `${year}-${month}-${day}`;
 
       this.value = formattedDate;
       this.onChange(formattedDate);
@@ -118,12 +118,11 @@ export class InputComponent implements ControlValueAccessor {
   get dateValue(): Date | null {
     if (!this.value || this.type !== "date") return null;
 
-    // Парсим дату из формата DD.MM.YY и преобразуем дату
-    const parts = this.value.split(".");
+    const parts = this.value.split("-");
     if (parts.length === 3) {
-      const day = parseInt(parts[0], 10);
+      const year = parseInt(parts[0], 10);
       const month = parseInt(parts[1], 10) - 1;
-      const year = parseInt(parts[2], 10) + 2000;
+      const day = parseInt(parts[2], 10);
       return new Date(year, month, day);
     }
 

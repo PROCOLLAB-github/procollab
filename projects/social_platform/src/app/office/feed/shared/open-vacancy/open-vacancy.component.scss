@@ -57,8 +57,9 @@
   }
 
   &__description {
-    overflow-wrap: break-word;
-    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: wrap;
   }
 
   &__project {
