@@ -1,15 +1,6 @@
 /** @format */
 
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  inject,
-  OnInit,
-  OnDestroy,
-  signal,
-} from "@angular/core";
+import { Component, Input, inject, OnInit, OnDestroy, signal } from "@angular/core";
 import {
   FormArray,
   FormBuilder,

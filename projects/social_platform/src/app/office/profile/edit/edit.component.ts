@@ -132,7 +132,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       organizationName: ["", Validators.max(100)],
       entryYear: [null],
       completionYear: [null],
-      description: [null, Validators.max(1000)],
+      description: [null, Validators.max(400)],
       educationLevel: [null],
       educationStatus: [""],
       isMospolytechStudent: [false],
@@ -155,17 +155,17 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       achievements: this.fb.array([]),
 
       // work
-      organization: ["", Validators.max(100)],
+      organization: ["", Validators.maxLength(50)],
       entryYearWork: [null],
       completionYearWork: [null],
-      descriptionWork: [null, Validators.max(1000)],
+      descriptionWork: [null, Validators.maxLength(400)],
       jobPosition: [""],
 
       // skills
       speciality: ["", [Validators.required]],
       skills: [[]],
-      avatar: ["", Validators.required],
-      aboutMe: [""],
+      avatar: [""],
+      aboutMe: ["", Validators.maxLength(300)],
       typeSpecific: this.fb.group({}),
     });
   }
@@ -419,7 +419,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       | "settings";
   }
 
-  readonly yearListEducation = generateOptionsList(55, "years");
+  readonly yearListEducation = generateOptionsList(55, "years").reverse();
 
   readonly educationStatusList = educationUserType;
 

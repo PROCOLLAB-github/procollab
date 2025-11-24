@@ -27,7 +27,7 @@ export class DashboardProjectsComponent implements OnInit, OnDestroy {
     this.route.data.subscribe({
       next: ({ data: { all, my, subs } }) => {
         const allProjects = all.results.slice(0, 4);
-        const myProjects = my.results.filter((project: Project) => !project.draft).slice(0, 4);
+        const myProjects = my.results.slice(0, 4);
         const mySubs = subs.results.slice(0, 4);
         this.profileProjSubsIds = subs.results.map((project: Project) => project.id);
 
