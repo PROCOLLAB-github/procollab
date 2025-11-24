@@ -19,17 +19,13 @@
           @if (user.city) {
           <li class="lists__item">
             <i appIcon icon="geo-point" class="lists__icon" style="opacity: 0.6" appSquare="10"></i>
-            <p class="text-body-10">{{ user.city ?? "не указан" }}</p>
+            <p class="text-body-10">{{ (user.city | truncate: 12) ?? "не указан" }}</p>
           </li>
           } @if (user.speciality) {
           <li class="lists__item">
             <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
             <p class="text-body-10">
-              {{
-                (user.speciality.length > 13
-                  ? user.speciality.slice(0, 10) + "..."
-                  : user.speciality) ?? "не указана"
-              }}
+              {{ (user.speciality | truncate: 13) ?? "не указана" }}
             </p>
           </li>
           }
@@ -196,7 +192,7 @@
             @if (link | userLinks; as l) {
             <a class="lists__item" style="color: var(--black)" target="_blank" [href]="link">
               <i class="lists__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
-              <span>{{ l.tag }}</span>
+              <span>{{ l.tag | truncate: 30 }}</span>
             </a>
             }
           </ng-template>
@@ -247,11 +243,11 @@
 
             <div class="lists__info">
               <p class="text-body-10 lists__info--text" style="margin: 0">
-                {{ education.organizationName }}
+                {{ education.organizationName | truncate: 30 }}
               </p>
 
               <span class="text-body-6 lists__info--subtext"
-                >{{ education.description }} <br />
+                >{{ education.description | truncate: 30 }} <br />
                 {{ education.educationLevel }} • {{ education.educationStatus }}</span
               >
             </div>
@@ -301,7 +297,7 @@
 
             <div class="lists__info">
               <p class="text-body-10 lists__info--text" style="margin: 0">
-                {{ workExperience.organizationName }}
+                {{ workExperience.organizationName | truncate: 30 }}
               </p>
 
               <span class="text-body-6 lists__info--subtext">{{ workExperience.jobPosition }}</span>
@@ -375,7 +371,7 @@
               />
               <div class="lists__info">
                 <p class="text-body-10 lists__item" style="color: var(--black)">
-                  {{ project.name }}
+                  {{ project.name | truncate: 30 }}
                 </p>
                 <span class="text-body-6 lists__item">{{ project.collaborator?.role }}</span>
               </div>

@@ -71,7 +71,7 @@
           class="vacancy__right--project-image"
           [routerLink]="'/office/projects/' + project.id"
         ></app-avatar>
-        <p class="text-body-12 vacancy__right--title">{{ project.name }}</p>
+        <p class="text-body-12 vacancy__right--title">{{ project.name | truncate: 20 }}</p>
 
         <app-button size="big" customTypographyClass="text-body-12" (click)="openModal.set(true)"
           >откликнуться</app-button
@@ -88,7 +88,7 @@
           <li class="lists__item">
             <i appIcon icon="geo-point" style="opacity: 0.6" class="lists__icon" appSquare="10"></i>
             <p class="text-body-10">
-              {{ project.region ? (project.region | capitalize) : "не указан" }}
+              {{ project.region ? (project.region | capitalize | truncate: 20) : "не указан" }}
             </p>
           </li>
 
@@ -147,7 +147,7 @@
             @if (link | userLinks; as l) {
             <a class="lists__item" target="_blank" [href]="link">
               <i class="lists__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
-              <span>{{ l.tag }}</span>
+              <span>{{ l.tag | truncate: 30 }}</span>
             </a>
             }
           </li>

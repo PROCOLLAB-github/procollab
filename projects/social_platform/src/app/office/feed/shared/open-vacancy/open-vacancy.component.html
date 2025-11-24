@@ -18,7 +18,7 @@
       ></app-avatar>
 
       <p class="text-body-12">
-        {{ project.name.length > 30 ? project.name.slice(0, 26) + "..." : project.name }}
+        {{ project.name | truncate: 30 }}
       </p>
 
       @if (industryService.industries | async; as industries) { @if
@@ -32,7 +32,7 @@
     <div class="card__vacancy">
       <div class="lists__section">
         <h3 class="text-body-10 lists__title">
-          {{ vacancy.role.length > 30 ? vacancy.role.slice(0, 26) + "..." : vacancy.role }}
+          {{ vacancy.role | truncate: 30 }}
         </h3>
         <p class="text-body-10">{{ vacancy.datetimeCreated | dayjs: "format":"DD MM YY" }}</p>
       </div>

@@ -221,11 +221,7 @@
                       <div class="project__item--info">
                         <app-avatar [url]="project.imageAddress" [size]="40"></app-avatar>
                         <p class="text-body-12">
-                          {{
-                            project.name.length > 20
-                              ? project.name.slice(0, 16) + "..."
-                              : project.name
-                          }}
+                          {{ project.name | truncate: 20 }}
                         </p>
                       </div>
                       <app-input

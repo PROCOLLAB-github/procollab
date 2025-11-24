@@ -83,6 +83,7 @@
 
   &__content {
     grid-row-start: 2;
+    min-width: 0;
 
     @include responsive.apply-desktop {
       grid-row-start: unset;
@@ -290,8 +291,11 @@
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 5;
       transition: all 0.7s ease-in-out;
+      line-height: 1.5;
+      word-break: break-word;
 
       &.expanded {
+        display: block;
         -webkit-line-clamp: unset;
       }
     }

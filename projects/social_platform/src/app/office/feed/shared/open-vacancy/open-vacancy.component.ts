@@ -18,6 +18,7 @@ import { expandElement } from "@utils/expand-element";
 import { IndustryService } from "@office/services/industry.service";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { AdvertCardComponent } from "@office/shared/advert-card/advert-card.component";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  *
@@ -49,6 +50,7 @@ import { AdvertCardComponent } from "@office/shared/advert-card/advert-card.comp
     DayjsPipe,
     ParseLinksPipe,
     ParseBreaksPipe,
+    TruncatePipe,
     AvatarComponent,
     AdvertCardComponent,
   ],

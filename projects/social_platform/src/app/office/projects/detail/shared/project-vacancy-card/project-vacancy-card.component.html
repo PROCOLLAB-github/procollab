@@ -12,11 +12,7 @@
       ></app-avatar>
       <div class="vacancy__project--info">
         <p class="text-body-10" style="color: var(--black)">
-          {{
-            vacancy.project.name.length > 20
-              ? vacancy.project.name.slice(0, 13) + "..."
-              : vacancy.project.name
-          }}
+          {{ vacancy.project.name | truncate: 12 }}
         </p>
         <p class="text-body-10">
           {{ vacancy.datetimeCreated | dayjs: "format":"DD.MM.YY • HH:MM" }}
@@ -25,13 +21,13 @@
     </div>
     } @else {
     <p class="text-body-12 vacancy__role">
-      {{ vacancy.role.length > 20 ? vacancy.role.slice(0, 17) + "..." : vacancy.role }}
+      {{ vacancy.role | truncate: 12 }}
     </p>
     }
     <div class="vacancy__info--top">
       @if (type === 'vacancies') {
       <p class="text-body-12 vacancy__role">
-        {{ vacancy.role.length > 20 ? vacancy.role.slice(0, 17) + "..." : vacancy.role }}
+        {{ vacancy.role | truncate: 12 }}
       </p>
       }
       <div class="vacancy__salary">

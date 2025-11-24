@@ -41,6 +41,8 @@
 
   &__description {
     margin: 8px 0;
+    min-width: 0;
+
   }
 
   &__actions {
@@ -86,6 +88,7 @@
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 5;
       transition: all 0.7s ease-in-out;
+       word-break: break-word;
 
       &.expanded {
         -webkit-line-clamp: unset;

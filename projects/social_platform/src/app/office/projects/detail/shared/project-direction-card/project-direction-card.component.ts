@@ -17,6 +17,7 @@ import { ButtonComponent } from "@ui/components";
 import { ProjectService } from "@office/services/project.service";
 import { Goal } from "@office/models/goals.model";
 import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button.directive";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 @Component({
   selector: "app-project-direction-card",
   templateUrl: "./project-direction-card.component.html",
@@ -29,6 +30,7 @@ import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button
     FileItemComponent,
     AvatarComponent,
     DayjsPipe,
+    TruncatePipe,
     ButtonComponent,
     EditorSubmitButtonDirective,
   ],

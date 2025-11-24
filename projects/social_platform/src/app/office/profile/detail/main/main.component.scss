@@ -83,6 +83,8 @@
 
   &__content {
     grid-row-start: 2;
+    min-width: 0;
+    word-break: break-word;
 
     @include responsive.apply-desktop {
       grid-row-start: unset;
@@ -278,6 +280,7 @@
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 5;
       transition: all 0.7s ease-in-out;
+      word-break: break-word;
 
       &.expanded {
         -webkit-line-clamp: unset;

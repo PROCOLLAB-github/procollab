@@ -12,6 +12,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { Router, RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { YearsFromBirthdayPipe } from "@corelib";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
@@ -31,6 +32,7 @@ import { YearsFromBirthdayPipe } from "@corelib";
     ClickOutsideModule,
     TagComponent,
     YearsFromBirthdayPipe,
+    TruncatePipe,
     RouterLink,
   ],
 })

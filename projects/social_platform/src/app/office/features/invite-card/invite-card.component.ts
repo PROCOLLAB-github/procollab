@@ -9,6 +9,7 @@ import { IconComponent, ButtonComponent, SelectComponent, InputComponent } from 
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { rolesMembersList } from "projects/core/src/consts/lists/roles-members-list.const";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компонент карточки приглашения в команду или проект
@@ -38,6 +39,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
     ModalComponent,
     SelectComponent,
     ControlErrorPipe,
+    TruncatePipe,
     ReactiveFormsModule,
     InputComponent,
     AvatarComponent,

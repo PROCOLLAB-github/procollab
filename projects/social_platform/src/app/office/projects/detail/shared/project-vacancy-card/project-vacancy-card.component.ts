@@ -1,6 +1,15 @@
 /** @format */
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { Vacancy } from "@office/models/vacancy.model";
 import { IconComponent } from "@uilib";
@@ -9,6 +18,7 @@ import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { expandElement } from "@utils/expand-element";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * КОМПОНЕНТ КАРТОЧКИ ВАКАНСИИ ПРОЕКТА
@@ -38,6 +48,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
     ButtonComponent,
     ParseLinksPipe,
     ParseBreaksPipe,
+    TruncatePipe,
     TagComponent,
     AvatarComponent,
     DayjsPipe,
@@ -45,9 +56,13 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
   templateUrl: "./project-vacancy-card.component.html",
   styleUrl: "./project-vacancy-card.component.scss",
 })
-export class ProjectVacancyCardComponent implements OnInit {
+export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) vacancy!: Vacancy; // Данные вакансии (обязательное поле)
   @Input() type: "vacancies" | "project" = "project";
+
+  @ViewChild("descEl") descEl?: ElementRef;
+
+  private readonly cdRef = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     if (this.type === "project") {
@@ -60,6 +75,13 @@ export class ProjectVacancyCardComponent implements OnInit {
   descriptionExpandable!: boolean; // Флаг необходимости кнопки "Читать полностью"
   readFullDescription = false; // Флаг показа всех вакансий
   endSliceOfSkills = 0;
+
+  ngAfterViewInit(): void {
+    const descElement = this.descEl?.nativeElement;
+    this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
+
+    this.cdRef.detectChanges();
+  }
 
   /**
    * Раскрытие/сворачивание описания профиля

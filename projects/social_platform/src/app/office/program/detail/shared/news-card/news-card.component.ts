@@ -24,6 +24,7 @@ import { IconComponent } from "@ui/components";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
 import { FeedNews } from "@office/projects/models/project-news.model";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компонент карточки новости программы
@@ -92,6 +93,7 @@ import { FeedNews } from "@office/projects/models/project-news.model";
     IconComponent,
     FileItemComponent,
     DayjsPipe,
+    TruncatePipe,
     ParseLinksPipe,
   ],
 })

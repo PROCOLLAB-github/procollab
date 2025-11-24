@@ -77,19 +77,17 @@
 </ng-template>
 
 <ng-template #regularCardHeader>
-  @if (type === 'projects' || type === 'invite') { @if (info.name) { @if(info.name.length > 12) {
-  <p class="text-body-12 card__name">{{ info.name.slice(0, 12) }}...</p>
-  } @else {
-  <p class="text-body-12 card__name">{{ info.name }}</p>
-  } } @if (industryService.industries | async; as industries) {
+  @if (type === 'projects' || type === 'invite') { @if (info.name) {
+  <p class="text-body-12 card__name">{{ info.name | truncate: 12 }}</p>
+  } @if (industryService.industries | async; as industries) {
   <p class="text-body-6 card__industry">
     @if (industryService.getIndustry(industries, info?.industry!); as industry) {
     <span>{{ industry?.name }}</span>
     }
   </p>
   } } @else {
-  <p class="text-body-12 card__name">{{ info?.firstName }}</p>
-  <p class="text-body-12 card__name">{{ info?.lastName }}</p>
+  <p class="text-body-12 card__name">{{ info?.firstName | truncate: 10 }}</p>
+  <p class="text-body-12 card__name">{{ info?.lastName | truncate: 10 }}</p>
   @if (info?.speciality) {
   <p class="text-body-6 card__additional-info">
     {{ info?.speciality }}
@@ -116,7 +114,7 @@
       @for ( skill of info?.skills?.slice(0, 3); track skill.id ) {
       <li class="card__skill">
         <app-tag [color]="skill.category.name.includes('Soft skills') ? 'soft' : 'complete'">{{
-          skill.name.length > 10 ? skill.name.slice(0, 10) + " " + "..." : skill.name
+          skill.name | truncate: 10
         }}</app-tag>
       </li>
       }

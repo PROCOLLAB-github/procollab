@@ -40,6 +40,7 @@ import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component"
 import { NewsFormComponent } from "@office/features/news-form/news-form.component";
 import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "@uilib";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 @Component({
   selector: "app-main",
@@ -62,6 +63,7 @@ import { AvatarComponent } from "@uilib";
     MatProgressBarModule,
     AvatarComponent,
     TagComponent,
+    TruncatePipe,
     RouterModule,
   ],
 })
@@ -157,6 +159,11 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         },
       });
 
+    setTimeout(() => {
+      this.checkDescriptionExpandable();
+      this.cdRef.detectChanges();
+    }, 100);
+
     this.loadEvent = fromEvent(window, "load");
 
     this.subscriptions$().push(program$);
@@ -165,9 +172,11 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    const descElement = this.descEl?.nativeElement;
-    this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
-    this.cdRef.detectChanges();
+    setTimeout(() => {
+      this.checkDescriptionExpandable();
+      this.cdRef.detectChanges();
+    }, 150);
+
     const target = document.querySelector(".office__body");
     if (target) {
       const scrollEvents$ = fromEvent(target, "scroll")
@@ -274,6 +283,17 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   private loadEvent?: Observable<Event>;
+
+  private checkDescriptionExpandable(): void {
+    const descElement = this.descEl?.nativeElement;
+
+    if (!descElement || !this.program?.description) {
+      this.descriptionExpandable = false;
+      return;
+    }
+
+    this.descriptionExpandable = descElement.scrollHeight > descElement.clientHeight;
+  }
 
   program?: Program;
   registerDateExpired!: boolean;

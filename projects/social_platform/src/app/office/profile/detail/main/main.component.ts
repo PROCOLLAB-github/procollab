@@ -40,6 +40,7 @@ import { ProfileDataService } from "../services/profile-date.service";
 import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
 import { ProjectDirectionCard } from "@office/projects/detail/shared/project-direction-card/project-direction-card.component";
 import { DirectionItem, directionItemBuilder } from "@utils/helpers/directionItemBuilder";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Главный компонент страницы профиля пользователя
@@ -77,6 +78,7 @@ import { DirectionItem, directionItemBuilder } from "@utils/helpers/directionIte
     UserLinksPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
+    TruncatePipe,
     YearsFromBirthdayPipe,
     NewsCardComponent,
     NewsFormComponent,
@@ -154,6 +156,11 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
             observer.observe(e);
           });
         });
+
+        setTimeout(() => {
+          this.checkDescriptionExpandable();
+          this.cdRef.detectChanges();
+        }, 200);
       });
     this.subscriptions$.push(profileDataSub$, profileIdDataSub$, route$);
   }
@@ -164,10 +171,10 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
    * Проверяет необходимость отображения кнопки "Читать полностью" для описания профиля
    */
   ngAfterViewInit(): void {
-    const descElement = this.descEl?.nativeElement;
-    this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
-
-    this.cdRef.detectChanges();
+    setTimeout(() => {
+      this.checkDescriptionExpandable();
+      this.cdRef.detectChanges();
+    }, 150);
   }
 
   /**
@@ -275,5 +282,16 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   openWorkInfoModal(): void {
     this.isShowModal = true;
+  }
+
+  private checkDescriptionExpandable(): void {
+    const descElement = this.descEl?.nativeElement;
+
+    if (!descElement || !this.user?.aboutMe) {
+      this.descriptionExpandable = false;
+      return;
+    }
+
+    this.descriptionExpandable = descElement.scrollHeight > descElement.clientHeight;
   }
 }

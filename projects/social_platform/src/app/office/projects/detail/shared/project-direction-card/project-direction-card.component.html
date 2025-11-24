@@ -116,16 +116,14 @@
       @if (this.about.length > 0) { @for (partnerItem of about; track $index) {
       <li class="cancel__achievement--info">
         <div class="lists__section">
-          <h3 class="text-body-10 lists__title--partner">{{ partnerItem.company.name }}</h3>
+          <h3 class="text-body-10 lists__title--partner">
+            {{ partnerItem.company.name | truncate: 40 }}
+          </h3>
           <p class="text-body-10">{{ partnerItem.company.inn }}</p>
         </div>
 
         <p class="text-body-6">
-          {{
-            partnerItem.contribution.length < 484
-              ? partnerItem.contribution
-              : partnerItem.contribution.slice(0, 480) + " " + "..."
-          }}
+          {{ partnerItem.contribution | truncate: 400 }}
         </p>
       </li>
       } }

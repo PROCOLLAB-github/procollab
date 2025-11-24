@@ -5,7 +5,7 @@
       <img class="card__avatar" [src]="newsItem.imageAddress" [alt]="newsItem.name" />
       <div>
         <div class="card__top">
-          <div class="card__name text-body-10">{{ newsItem.name }}</div>
+          <div class="card__name text-body-10">{{ newsItem.name | truncate: 30 }}</div>
           @if (newsItem.pin) {
           <i appIcon icon="pin" appSquare="12"></i>
           }
