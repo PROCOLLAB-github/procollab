@@ -4,7 +4,6 @@ import { CommonModule } from "@angular/common";
 import { Component, inject, Input } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { InputComponent, ButtonComponent } from "@ui/components";
-import { LinkCardComponent } from "@office/shared/link-card/link-card.component";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@error/models/error-message";
 import { ProjectFormService } from "../../services/project-form.service";
@@ -22,7 +21,6 @@ import { IconComponent } from "@uilib";
     InputComponent,
     ButtonComponent,
     IconComponent,
-    LinkCardComponent,
     ControlErrorPipe,
   ],
 })

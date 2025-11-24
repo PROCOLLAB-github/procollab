@@ -57,5 +57,8 @@
   &__description {
     margin-top: 7px;
     color: var(--white);
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: wrap;
   }
 }

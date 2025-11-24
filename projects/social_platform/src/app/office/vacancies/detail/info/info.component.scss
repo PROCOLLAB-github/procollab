@@ -151,8 +151,6 @@
     &:hover {
       color: var(--accent-dark);
     }
-
-    @include typography.body-14;
   }
 
   .about {
@@ -306,13 +304,5 @@ $succeed-modal-width: 310px;
 
   &__link {
     width: $succeed-modal-width;
-  }
-}
-
-.error {
-  color: var(--red);
-
-  i {
-    color: var(--red);
   }
 }

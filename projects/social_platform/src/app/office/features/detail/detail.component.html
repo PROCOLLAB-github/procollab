@@ -63,38 +63,23 @@
         <ng-template #programTpl>
           @if (userType() !== undefined) { @if (!isUserMember && !isUserManager) { @if
           (info().name.includes("Кейс-чемпионат MIR")) {
-          <a href="https://case-champ.ru/corporate#rec1176757836">
-            <app-button
-              [disabled]="!!registerDateExpired"
-              [style.opacity]="registerDateExpired ? '0.5' : '1'"
-              appearance="outline"
-              size="medium"
-              customTypographyClass="text-body-12"
-            >
+          <a
+            (click)="checkPrograRegistrationEnded($event)"
+            href="https://case-champ.ru/corporate#rec1176757836"
+          >
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
               зарегистрироваться
             </app-button>
           </a>
           } @else if (info().registrationLink) {
-          <a [href]="info().registrationLink">
-            <app-button
-              [disabled]="!!registerDateExpired"
-              [style.opacity]="registerDateExpired ? '0.5' : '1'"
-              appearance="outline"
-              size="medium"
-              customTypographyClass="text-body-12"
-            >
+          <a (click)="checkPrograRegistrationEnded($event)" [href]="info().registrationLink">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
               зарегистрироваться
             </app-button>
           </a>
           } @else {
-          <a [routerLink]="['/office/program', info().id, 'register']">
-            <app-button
-              [disabled]="!!registerDateExpired"
-              [style.opacity]="registerDateExpired ? '0.5' : '1'"
-              appearance="outline"
-              size="medium"
-              customTypographyClass="text-body-12"
-            >
+          <a (click)="checkPrograRegistrationEnded($event)">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
               зарегистрироваться
             </app-button>
           </a>
@@ -308,6 +293,19 @@
               >
                 вперед
               </app-button>
+            </div>
+          </app-modal>
+
+          <app-modal
+            [open]="isProgramEndedModalOpen()"
+            (openChange)="isProgramEndedModalOpen.set(!isProgramEndedModalOpen())"
+          >
+            <div class="cancel" style="padding: 24px">
+              <div class="cancel__top">
+                <p class="cancel__title text-body-14">к сожалению, программа уже завершена!</p>
+              </div>
+
+              <i appIcon icon="sad-smile" appSquare="50" style="margin-top: 36px"></i>
             </div>
           </app-modal>
         </ng-template>

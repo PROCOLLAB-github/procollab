@@ -14,7 +14,13 @@ import { FeedNews } from "@office/projects/models/project-news.model";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { DayjsPipe, FormControlPipe, ParseLinksPipe, ValidationService } from "projects/core";
+import {
+  DayjsPipe,
+  FormControlPipe,
+  ParseBreaksPipe,
+  ParseLinksPipe,
+  ValidationService,
+} from "projects/core";
 import { FileService } from "@core/services/file.service";
 import { nanoid } from "nanoid";
 import { expandElement } from "@utils/expand-element";
@@ -50,6 +56,7 @@ import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
     DayjsPipe,
     FormControlPipe,
     ParseLinksPipe,
+    ParseBreaksPipe,
     CarouselComponent,
     ImgCardComponent,
   ],

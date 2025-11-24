@@ -1,44 +1,16 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import {
-  Component,
-  EventEmitter,
-  forwardRef,
-  Input,
-  OnInit,
-  OnChanges,
-  SimpleChanges,
-  Output,
-} from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 import { NgxMaskModule } from "ngx-mask";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatInputModule } from "@angular/material/input";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatFormFieldModule } from "@angular/material/form-field";
 
-/**
- * Компонент поля ввода с поддержкой масок и различных типов.
- * Реализует ControlValueAccessor для интеграции с Angular Forms.
- *
- * Входящие параметры:
- * - placeholder: текст подсказки в поле
- * - type: тип поля ввода ("text" | "password" | "email" | "tel")
- * - error: состояние ошибки для стилизации
- * - mask: маска для форматирования ввода
- * - appValue: значение поля (двустороннее связывание)
- * - haveHint: наличие подсказки
- * - tooltipText: текст подсказки
- * - tooltipPosition: позиция подсказки
- * - checked: состояние для радио-кнопок
- * - name: имя для радио-кнопок
- *
- * События:
- * - appValueChange: изменение значения поля
- * - enter: нажатие клавиши Enter
- *
- * Возвращает:
- * - Введенное значение через ControlValueAccessor
- */
 @Component({
   selector: "app-input",
   templateUrl: "./input.component.html",
@@ -51,48 +23,33 @@ import { NgxMaskModule } from "ngx-mask";
     },
   ],
   standalone: true,
-  imports: [CommonModule, NgxMaskModule, IconComponent, TooltipComponent],
+  imports: [
+    CommonModule,
+    NgxMaskModule,
+    IconComponent,
+    TooltipComponent,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+  ],
 })
 export class InputComponent implements ControlValueAccessor {
   constructor() {}
 
-  /** Текст подсказки */
   @Input() placeholder = "";
-
-  /** Тип поля ввода */
   @Input() type: "text" | "password" | "email" | "tel" | "date" | "radio" = "text";
-
-  /** Размер поля ввода */
   @Input() size: "small" | "big" = "small";
-
-  /** Наличие обводки */
   @Input() hasBorder = true;
-
-  /** Наличие подсказки */
   @Input() haveHint = false;
-
-  /** Текст для подсказки */
   @Input() tooltipText?: string;
-
-  /** Позиция подсказки */
   @Input() tooltipPosition: "left" | "right" = "right";
-
-  /** Ширина подсказки */
   @Input() tooltipWidth = 250;
-
-  /** Состояние ошибки */
   @Input() error = false;
-
-  /** Маска для форматирования */
   @Input() mask = "";
-
-  /** Имя для инпута типа radio */
   @Input() name = "";
-
-  /** Состояние checked для радио-кнопок */
   @Input() checked = false;
 
-  /** Двустороннее связывание значения */
   @Input()
   set appValue(value: string) {
     this.value = value;
@@ -102,56 +59,76 @@ export class InputComponent implements ControlValueAccessor {
     return this.value;
   }
 
-  /** Состояние видимости подсказки */
   isTooltipVisible = false;
 
-  /** Событие изменения значения */
   @Output() appValueChange = new EventEmitter<string>();
-
-  /** Событие нажатия Enter */
   @Output() enter = new EventEmitter<void>();
-
-  /** Событие изменения состояния радио (для внешних обработчиков) */
   @Output() change = new EventEmitter<Event>();
 
-  /** Обработчик для радио */
+  /** Обработчик для radвариант io */
   onRadioChange(event: Event): void {
     if (this.type === "radio") {
       const target = event.target as HTMLInputElement;
       this.value = target.value;
       this.onChange(this.value);
       this.appValueChange.emit(this.value);
-      this.change.emit(event); // Эмитим событие для внешних обработчиков
+      this.change.emit(event);
       this.onTouch();
     }
   }
 
-  /** Показать подсказку */
+  /** Обработчик изменения даты в datepicker */
+  onDateChange(event: any): void {
+    if (this.type === "date" && event.value) {
+      const date = event.value as Date;
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const formattedDate = `${year}-${month}-${day}`;
+
+      this.value = formattedDate;
+      this.onChange(formattedDate);
+      this.appValueChange.emit(formattedDate);
+      this.onTouch();
+    }
+  }
+
   showTooltip(): void {
     this.isTooltipVisible = true;
   }
 
-  /** Скрыть подсказку */
   hideTooltip(): void {
     this.isTooltipVisible = false;
   }
 
-  /** Обработчик ввода текста */
   onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.onChange(value);
     this.appValueChange.emit(value);
   }
 
-  /** Обработчик потери фокуса */
   onBlur(): void {
     this.onTouch();
   }
 
-  /** Текущее значение поля */
   value = "";
 
-  // Методы ControlValueAccessor
+  // Геттер для преобразования строковой даты в объект Date для datepicker
+  get dateValue(): Date | null {
+    if (!this.value || this.type !== "date") return null;
+
+    const parts = this.value.split("-");
+    if (parts.length === 3) {
+      const year = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const day = parseInt(parts[2], 10);
+      return new Date(year, month, day);
+    }
+
+    return null;
+  }
+
   writeValue(value: string): void {
     setTimeout(() => {
       this.value = value;
@@ -170,14 +147,12 @@ export class InputComponent implements ControlValueAccessor {
     this.onTouch = fn;
   }
 
-  /** Состояние блокировки */
   disabled = false;
 
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
   }
 
-  /** Обработчик нажатия Enter */
   onEnter(event: Event) {
     event.preventDefault();
     this.enter.emit();

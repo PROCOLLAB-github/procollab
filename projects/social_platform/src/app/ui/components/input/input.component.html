@@ -4,6 +4,7 @@
   <div class="field__left-icon">
     <ng-content select="left-icon"></ng-content>
   </div>
+
   @if (type === 'radio') {
   <input
     type="radio"
@@ -13,6 +14,24 @@
     (change)="onRadioChange($event)"
     class="field__input"
   />
+  } @else if (type === 'date') {
+  <input
+    matInput
+    [matDatepicker]="picker"
+    [value]="dateValue"
+    (dateChange)="onDateChange($event)"
+    (click)="picker.open()"
+    [placeholder]="placeholder"
+    class="field__input"
+    [class.field__input--error]="error"
+    [class.field__input--small]="size === 'small'"
+    [class.field__input--small--error]="size === 'small' && error"
+    [class.field__input--big]="size === 'big'"
+    [class.field__input--with-tooltip]="size !== 'small' && haveHint"
+    [class.field__input--border]="hasBorder"
+    readonly
+  />
+  <mat-datepicker #picker></mat-datepicker>
   } @else {
   <input
     [value]="value"
@@ -55,6 +74,7 @@
     ></app-tooltip>
   </div>
   }
+
   <div
     class="field__right-icon"
     [ngStyle]="{
