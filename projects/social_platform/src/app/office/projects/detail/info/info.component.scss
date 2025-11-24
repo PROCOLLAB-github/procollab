@@ -286,13 +286,13 @@
     p {
       display: -webkit-box;
       overflow: hidden;
+      line-height: 1.5;
       color: var(--black);
       text-overflow: ellipsis;
+      word-break: break-word;
+      transition: all 0.7s ease-in-out;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 5;
-      transition: all 0.7s ease-in-out;
-      line-height: 1.5;
-      word-break: break-word;
 
       &.expanded {
         display: block;
