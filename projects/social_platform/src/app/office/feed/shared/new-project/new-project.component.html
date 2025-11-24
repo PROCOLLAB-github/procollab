@@ -11,7 +11,9 @@
 
     <div class="card__info">
       <div class="card__info--main">
-        <p class="text-body-12">{{ feedItem.name }}</p>
+        <p class="text-body-12">
+          {{ feedItem.name.length > 30 ? feedItem.name.slice(0, 26) + "..." : feedItem.name }}
+        </p>
         <!-- <p class="text-body-10">{{ feedItem.datetimeCreated | dayjs: "format":"DD MM YY" }}</p> -->
       </div>
 

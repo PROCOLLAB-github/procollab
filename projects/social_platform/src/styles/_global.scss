@@ -80,7 +80,11 @@ label.field-label {
   display: block;
   gap: 10px;
   margin-top: 6px;
-  color: var(--red);
+  color: var(--red) !important;
+
+  i {
+    color: var(--red) !important;
+  }
 
   p {
     &:not(:last-child) {
