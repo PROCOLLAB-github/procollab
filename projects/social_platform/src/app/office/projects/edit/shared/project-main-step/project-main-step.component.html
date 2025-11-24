@@ -191,7 +191,7 @@
   <fieldset class="project__description">
     <label for="description" class="field-label text-body-12">информация</label>
     <app-textarea
-      [style.overflow-y]="description.value.length > 400 ? 'auto' : 'none'"
+      [style.overflow-y]="(description.value && description.value.length) > 400 ? 'auto' : 'none'"
       size="big"
       id="description"
       [haveHint]="true"

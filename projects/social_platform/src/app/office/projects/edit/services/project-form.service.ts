@@ -47,7 +47,7 @@ export class ProjectFormService {
       links: this.fb.array([]),
       link: ["", Validators.pattern(/^(https?:\/\/)/)],
       industryId: [undefined, [Validators.required]],
-      description: ["", [Validators.required, Validators.maxLength(800)]],
+      description: ["", [Validators.required, Validators.minLength(0), Validators.maxLength(800)]],
       presentationAddress: ["", [Validators.required]],
       coverImageAddress: ["", [Validators.required]],
       actuality: ["", [Validators.maxLength(400)]],

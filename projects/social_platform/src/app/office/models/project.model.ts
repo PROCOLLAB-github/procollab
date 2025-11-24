@@ -21,6 +21,7 @@ import { Vacancy } from "./vacancy.model";
  */
 
 export class PartnerProgramInfo {
+  id!: number;
   programLinkId!: number;
   programId!: number;
   isSubmitted!: boolean;

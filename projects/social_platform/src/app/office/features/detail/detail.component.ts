@@ -157,8 +157,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
   }
 
   get isProjectAssigned() {
-    return !!this.memberProjects.find(
-      project => project.leader === this.profile?.id && project.partnerProgram
+    const programId = this.info()?.id;
+
+    return this.memberProjects.some(
+      project => project.leader === this.profile?.id && project.partnerProgram?.id === programId
     );
   }
 
