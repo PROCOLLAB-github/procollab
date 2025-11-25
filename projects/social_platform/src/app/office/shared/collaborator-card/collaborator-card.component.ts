@@ -9,6 +9,7 @@ import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectService } from "@office/services/project.service";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { IconComponent } from "@uilib";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компонент карточки участника команды или проект
@@ -24,7 +25,7 @@ import { IconComponent } from "@uilib";
   templateUrl: "./collaborator-card.component.html",
   styleUrl: "./collaborator-card.component.scss",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AvatarComponent, IconComponent],
+  imports: [CommonModule, ReactiveFormsModule, AvatarComponent, IconComponent, TruncatePipe],
 })
 export class CollaboratorCardComponent implements OnInit {
   private readonly projectService = inject(ProjectService);

@@ -48,7 +48,7 @@ export class ProjectFormService {
       link: ["", Validators.pattern(/^(https?:\/\/)/)],
       industryId: [undefined, [Validators.required]],
       description: ["", [Validators.required, Validators.minLength(0), Validators.maxLength(800)]],
-      presentationAddress: ["", [Validators.required]],
+      presentationAddress: [""],
       coverImageAddress: ["", [Validators.required]],
       actuality: ["", [Validators.maxLength(400)]],
       targetAudience: ["", [Validators.required, Validators.maxLength(400)]],
