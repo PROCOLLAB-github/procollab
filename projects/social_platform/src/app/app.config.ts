@@ -8,7 +8,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { GlobalErrorHandlerService } from "@error/services/global-error-handler.service";
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
-import { provideRouter } from "@angular/router";
+import { provideRouter, withRouterConfig } from "@angular/router";
 import { APP_ROUTES } from "./app.routes";
 import {
   API_URL,
@@ -56,7 +56,12 @@ export const APP_CONFIG: ApplicationConfig = {
       useClass: GlobalErrorHandlerService,
     },
     provideHttpClient(withInterceptorsFromDi()),
-    provideRouter(APP_ROUTES),
+    provideRouter(
+      APP_ROUTES,
+      withRouterConfig({
+        onSameUrlNavigation: "reload",
+      })
+    ),
     provideAnimations(),
   ],
 };

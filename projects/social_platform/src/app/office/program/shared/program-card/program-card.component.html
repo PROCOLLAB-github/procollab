@@ -21,7 +21,7 @@
         !registerDateExpired && (!program.isUserMember || !program.isUserManager)
           ? "Регистрация до:" + " " + (program.datetimeRegistrationEnds | date: "dd MMMM")
           : registerDateExpired
-          ? "программа завершена"
+          ? "регистрация завершена"
           : "ты уже участвуешь!"
       }}
     </p>

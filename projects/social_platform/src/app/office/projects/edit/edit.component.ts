@@ -212,6 +212,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   // Id Лидера проекта
   leaderId = 0;
 
+  fromProgram = "";
+
   // Маркер того является ли проект привязанный к конкурсной программе
   isCompetitive = false;
   isProjectAssignToProgram = false;
@@ -621,6 +623,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const editingStepSub$ = this.route.queryParams.subscribe(params => {
       const step = params["editingStep"] as EditStep;
+      this.fromProgram = params["fromProgram"];
       if (step && step !== this.editingStep) {
         this.projectStepService.setStepFromRoute(step);
       }

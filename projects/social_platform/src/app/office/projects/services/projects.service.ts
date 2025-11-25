@@ -19,7 +19,9 @@ export class ProjectsService {
       });
 
       this.router
-        .navigateByUrl(`/office/projects/${project.id}/edit?editingStep=main`)
+        .navigate([`/office/projects/${project.id}/edit`], {
+          queryParams: { editingStep: "main", fromProgram: true },
+        })
         .then(() => console.debug("Route change from ProjectsComponent"));
     });
   }
