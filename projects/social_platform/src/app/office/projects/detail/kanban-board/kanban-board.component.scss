@@ -14,8 +14,8 @@
       app-input {
         .field__input {
           text-align: center;
-          
         }
+
         .field__input--border {
           border: 0.5px solid var(--accent);
         }
@@ -28,8 +28,8 @@
           text-align: center;
         }
 
-         .field__input::placeholder::-webkit-input-placeholder {
-            text-align: center;
+        .field__input::placeholder::input-placeholder {
+          text-align: center;
         }
       }
     }
