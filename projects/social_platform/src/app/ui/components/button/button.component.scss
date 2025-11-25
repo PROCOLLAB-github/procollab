@@ -76,7 +76,7 @@
 
   &.button--outline {
     color: var(--accent);
-    background-color: transparent;
+    background: transparent;
     border: 0.5px solid var(--accent);
 
     &:hover {
@@ -95,9 +95,13 @@
       }
     }
 
+    &.button--gold {
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+
     &.button--white {
       color: var(--white);
-      background: transparent;
       border: 0.5px solid var(--white);
     }
 

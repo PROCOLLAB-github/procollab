@@ -8,6 +8,7 @@ import {
   ElementRef,
   inject,
   Input,
+  OnDestroy,
   OnInit,
   signal,
   ViewChild,
@@ -20,7 +21,13 @@ import { TagComponent } from "@ui/components/tag/tag.component";
 import { BadgeComponent } from "@ui/components/badge/badge.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ControlErrorPipe, ParseBreaksPipe, ParseLinksPipe, PluralizePipe } from "@corelib";
+import {
+  ControlErrorPipe,
+  ParseBreaksPipe,
+  ParseLinksPipe,
+  PluralizePipe,
+  ValidationService,
+} from "@corelib";
 import { expandElement } from "@utils/expand-element";
 import { IconComponent } from "@uilib";
 import { nanoid } from "nanoid";
@@ -33,7 +40,7 @@ import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.c
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { SkillsService } from "@office/services/skills.service";
 import { Skill } from "@office/models/skill";
-import { Subscription } from "rxjs";
+import { filter, Subscription, take } from "rxjs";
 import { TaskDetail } from "../../../models/task.model";
 import { daysUntil } from "@utils/days-untit";
 import { KanbanBoardService } from "../../../kanban-board.service";
@@ -42,6 +49,19 @@ import { getActionType } from "@utils/helpers/getActionType";
 import { ActivatedRoute } from "@angular/router";
 import { TagData } from "../../create-tag-form/create-tag-form.component";
 import { FileService } from "@core/services/file.service";
+import { ProfileDataService } from "@office/profile/detail/services/profile-date.service";
+import { AuthService } from "@auth/services";
+import { User } from "@auth/models/user.model";
+import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
+import { ErrorMessage } from "@error/models/error-message";
+import { SnackbarService } from "@ui/services/snackbar.service";
+import { ChatMessage } from "@office/models/chat-message.model";
+import {
+  CdkFixedSizeVirtualScroll,
+  CdkVirtualForOf,
+  CdkVirtualScrollViewport,
+} from "@angular/cdk/scrolling";
+import { ChatMessageComponent } from "@ui/components/chat-message/chat-message.component";
 
 @Component({
   selector: "app-task-detail",
@@ -68,10 +88,15 @@ import { FileService } from "@core/services/file.service";
     ModalComponent,
     ControlErrorPipe,
     PluralizePipe,
+    UploadFileComponent,
+    CdkFixedSizeVirtualScroll,
+    CdkVirtualScrollViewport,
+    CdkVirtualForOf,
+    ChatMessageComponent,
   ],
   standalone: true,
 })
-export class TaskDetailComponent implements OnInit, AfterViewInit {
+export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() collaborators?: Project["collaborators"];
   @Input() goals?: Project["goals"];
 
@@ -79,7 +104,10 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
 
   private readonly skillsService = inject(SkillsService);
   private readonly kanbanBoardService = inject(KanbanBoardService);
+  private readonly authService = inject(AuthService);
   private readonly fileService = inject(FileService);
+  private readonly snackbarService = inject(SnackbarService);
+  private readonly validationService = inject(ValidationService);
   private readonly route = inject(ActivatedRoute);
   private readonly cdRef = inject(ChangeDetectorRef);
 
@@ -101,7 +129,20 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
       score: [null],
       tagsLib: [[]],
     });
+
+    this.sendResultForm = this.fb.group({
+      description: ["", Validators.required, Validators.maxLength(200)],
+      accompanyingFile: ["", Validators.required],
+    });
+
+    this.messageForm = this.fb.group({
+      text: [""],
+      files: [[]],
+    });
   }
+
+  taskDetailInfo = signal<TaskDetail | null>(null);
+  currentUser = signal<User | null>(null);
 
   isChangeDescriptionText = signal<boolean>(false);
 
@@ -111,6 +152,9 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
 
   /** Уникальный ID для элемента input */
   controlId = nanoid(3);
+
+  /** Объект с сообщениями об ошибках */
+  errorMessage = ErrorMessage;
 
   descriptionExpandable!: boolean; // Флаг необходимости кнопки "подробнее"
   readFullDescription = false; // Флаг показа всех вакансий
@@ -123,13 +167,23 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   isGoalPickOpen = false;
   isTagsPickOpen = false;
 
+  isCommentedClick = false;
+
   creatingTag = false;
   loadingFile = false;
+  sendFormIsSubmitting = false;
 
   showEditAvatarIcon = false;
   showEditDeadlineDatePicker = false;
   showEditStartDatePicker = false;
   showChangeGoalModal = false;
+
+  showAttachResultModal = false;
+  showResultModal = false;
+  showAcceptResultModal = false;
+  showUnAcceptResultModal = false;
+  showDeleteResultModal = false;
+  showLeaderCommentedResultModal = false;
 
   skillsGroupsModalOpen = signal(false);
   nestedSkills$ = this.skillsService.getSkillsNested();
@@ -139,6 +193,14 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   filesList: any[] = [];
 
   taskDetailForm: FormGroup;
+
+  messageForm: FormGroup;
+  /** Сообщение, на которое отвечаем */
+  replyMessage?: ChatMessage;
+  messages: any = [];
+
+  /** Форма отправки результата */
+  sendResultForm: FormGroup;
 
   getPriorityType = getPriorityType;
   getActionType = getActionType;
@@ -227,12 +289,88 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     };
   }
 
+  get isPerformer() {
+    const user = this.currentUser();
+    const taskDetail = this.taskDetailInfo();
+
+    if (!user || !taskDetail) return false;
+
+    return taskDetail.performers.some(performer => performer.id === user.id);
+  }
+
+  get isResponsible() {
+    const user = this.currentUser();
+    const taskDetail = this.taskDetailInfo();
+
+    if (!user || !taskDetail) return false;
+
+    return taskDetail.responsible.id === user.id;
+  }
+
+  get isLeader() {
+    const taskDetail = this.taskDetailInfo();
+    const user = this.currentUser();
+
+    if (!user || !taskDetail) return false;
+
+    return taskDetail.creator.id === user.id;
+  }
+
+  get isExternal() {
+    return !this.isLeader;
+  }
+
+  get isLeaderOrResponsibleOrPerformer() {
+    return this.isLeader && (this.isResponsible || this.isPerformer);
+  }
+
+  get isTaskResult() {
+    return this.taskDetailInfo()?.result;
+  }
+
+  get isLeaderAcceptResult() {
+    const taskDetail = this.taskDetailInfo();
+
+    if (!taskDetail || !this.isTaskResult) return false;
+
+    return this.isTaskResult.whoVerified.id === taskDetail.creator.id;
+  }
+
+  get isCommented() {
+    const comments = this.taskDetailForm.get("comments")?.value;
+
+    if (!comments) return false;
+
+    return !!comments.length;
+  }
+
+  get isCommentedByLeader() {
+    const comments = this.taskDetailForm.get("comments")?.value;
+    const taskDetail = this.taskDetailInfo();
+
+    if (!comments || !taskDetail) return false;
+
+    return (
+      !this.isCommented && comments.some((comment: any) => comment.id === taskDetail.creator.id)
+    );
+  }
+
   ngOnInit(): void {
-    this.taskDetailForm.valueChanges.subscribe({
-      next: value => {
-        console.log(value);
+    // this.taskDetailForm.valueChanges.subscribe({
+    //   next: value => {
+    //     console.log(value);
+    //   },
+    // });
+
+    const profileSub$ = this.authService.profile.pipe(filter(profile => !!profile)).subscribe({
+      next: profile => {
+        if (profile) {
+          this.currentUser.set(profile);
+        }
       },
     });
+
+    this.subscriptions.push(profileSub$);
   }
 
   /**
@@ -245,6 +383,10 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
 
     this.initializeTaskDetailInfo(todayDate, tomorrowDate);
     this.checkDescriptionHeigth();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach($ => $.unsubscribe());
   }
 
   onDeleteTaskGoal(): void {
@@ -311,7 +453,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   createTag({ name, color }: { name: string; color: string }): void {
     const { tagsLib } = this.taskDetailForm.value;
     const tagInfo = { id: tagsLib.length + 1, label: name, value: name, additionalInfo: color };
-    tagsLib.push(tagInfo);
+    tagsLib.setValue([...tagsLib, tagInfo]);
   }
 
   onTypeSelect(
@@ -499,6 +641,47 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Обработчик отправки формы
+   * Валидирует форму и отправляет результат на сервер
+   */
+  onSubmit(): void {
+    // Проверка валидности формы
+    if (!this.validationService.getFormValidation(this.sendResultForm)) {
+      return;
+    }
+
+    // Установка флага загрузки
+    this.sendFormIsSubmitting = true;
+
+    // TODO: Отправка отклика на сервер
+    // this.snackbarService.success("результат работы успешно прикреплен");w
+  }
+
+  /**
+   * Обработчик отправки сообщения
+   * Различает между редактированием существующего сообщения и отправкой нового
+   */
+  onSubmitMessage(event: Event) {
+    if (event) event.preventDefault();
+
+    const text = this.messageForm.get("text")?.value?.trim();
+    if (!text) return;
+
+    // Отправка нового сообщения
+    const message = {
+      id: nanoid(),
+      replyTo: this.replyMessage?.id ?? null,
+      text,
+      files: this.messageForm.get("files")?.value || [],
+    };
+
+    this.messages = [...this.messages, message];
+
+    this.replyMessage = undefined;
+    this.messageForm.reset({ text: "", files: [] });
+  }
+
+  /**
    * Добавление навыка
    * @param newSkill - новый навык
    */
@@ -536,6 +719,8 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
     const taskId = this.route.snapshot.queryParams["taskId"];
     const taskDetailInfo$ = this.kanbanBoardService.getTaskById(taskId).subscribe({
       next: (taskDetailInfo: TaskDetail) => {
+        this.taskDetailInfo.set(taskDetailInfo);
+
         this.taskDetailForm.patchValue({
           title: taskDetailInfo.title ?? "",
           responsible: taskDetailInfo.responsible ?? null,
@@ -550,6 +735,14 @@ export class TaskDetailComponent implements OnInit, AfterViewInit {
           description: taskDetailInfo.description ?? null,
           files: taskDetailInfo.files ?? [],
         });
+
+        if (taskDetailInfo.result) {
+          this.sendResultForm.patchValue({
+            description: taskDetailInfo.result.description,
+            accompanyingFile: taskDetailInfo.result.accompanyingFile,
+          });
+        }
+
         this.remainingDaysDeadline.set(
           daysUntil(
             taskDetailInfo.deadlineDate

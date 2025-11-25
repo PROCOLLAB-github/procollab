@@ -7,12 +7,15 @@ import { ProjectDataService } from "../services/project-data.service";
 import { Project } from "@office/models/project.model";
 import { KanbanBoardSidebarComponent } from "./shared/sidebar/kanban-board-sidebar.component";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IconComponent } from "@ui/components";
+import { IconComponent, InputComponent } from "@ui/components";
 import { KanbanTaskComponent } from "./shared/task/kanban-task.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { TaskDetailComponent } from "./shared/task/detail/task-detail.component";
 import { DropdownComponent } from "@ui/components/dropdown/dropdown.component";
 import { kanbanColumnInfo } from "projects/core/src/consts/other/kanban-column-info.const";
+import { Column } from "./models/column.model";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { ControlErrorPipe } from "@corelib";
 
 @Component({
   selector: "app-kanban-board",
@@ -24,8 +27,11 @@ import { kanbanColumnInfo } from "projects/core/src/consts/other/kanban-column-i
     IconComponent,
     KanbanTaskComponent,
     ClickOutsideModule,
+    ReactiveFormsModule,
     TaskDetailComponent,
     DropdownComponent,
+    InputComponent,
+    ControlErrorPipe,
   ],
   standalone: true,
 })
@@ -33,14 +39,27 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
   private readonly projectDataService = inject(ProjectDataService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly fb = inject(FormBuilder);
   private subscriptions: Subscription[] = [];
+
+  constructor() {
+    this.taskForm = this.fb.group({
+      columnTitle: ["", Validators.required],
+    });
+  }
 
   projectBoardInfo = signal<Project | null>(null);
   boardColumns = signal<any[]>([]);
   isTaskDetailOpen = signal<boolean>(false);
 
   isColumnInfoOpen = false;
-  selectedColumnId = 0;
+  selectedColumnId: number | null = null;
+
+  editColumn = false;
+
+  addingTaskColumnId: number | null = null;
+
+  taskForm: FormGroup;
 
   get columnInfoOptions() {
     return kanbanColumnInfo;
@@ -66,6 +85,14 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(projectInfo$);
+
+    const boardInfo$ = this.route.data.subscribe({
+      next: columns => {
+        this.boardColumns.set(columns as Column[]);
+      },
+    });
+
+    this.subscriptions.push(boardInfo$);
 
     const mockColumns = [
       {
@@ -105,7 +132,6 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
         ],
       },
     ];
-
     this.boardColumns.set(mockColumns);
   }
 
@@ -130,7 +156,8 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
 
     switch (option) {
       case 1:
-        console.log("EDIT in column:", columnId);
+        this.selectedColumnId = columnId!;
+        this.editColumn = true;
         break;
 
       case 2:
@@ -158,5 +185,20 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
       replaceUrl: true,
     });
     this.isTaskDetailOpen.set(false);
+  }
+
+  confirmRenameColumn(id: number) {
+    const title = this.taskForm.get("columnTitle")?.value;
+
+    if (!title) return;
+
+    this.boardColumns.update(columns =>
+      columns.map(column => (column.id === id ? { ...column, name: title } : column))
+    );
+
+    this.selectedColumnId = null;
+    this.editColumn = false;
+
+    this.taskForm.reset();
   }
 }

@@ -4,7 +4,9 @@ import { TaskPreview } from "./task.model";
 
 export interface Column {
   id: number;
-  tasks: TaskPreview[];
+  name: string;
   order: number;
-  // TODO: добавить даты создания и удаления
+  tasks: TaskPreview[];
+  datetimeCreated: Date;
+  datetimeUpdated: Date;
 }

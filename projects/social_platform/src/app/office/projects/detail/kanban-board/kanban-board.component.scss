@@ -10,6 +10,30 @@
     flex: 0 0 calc(33.333% - 14px);
     min-width: calc(33.333% - 14px);
 
+    ::ng-deep {
+      app-input {
+        .field__input {
+          text-align: center;
+          
+        }
+        .field__input--border {
+          border: 0.5px solid var(--accent);
+        }
+
+        .field__input--big {
+          padding: 5px 12px;
+        }
+
+        .field__input::placeholder {
+          text-align: center;
+        }
+
+         .field__input::placeholder::-webkit-input-placeholder {
+            text-align: center;
+        }
+      }
+    }
+
     &-wrapper {
       display: flex;
       gap: 20px;

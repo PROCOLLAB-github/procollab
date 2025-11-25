@@ -7,23 +7,38 @@
     }
     <div
       class="kanban__column-wrapper"
+      [formGroup]="taskForm"
       [style.overflow-y]="boardColumns().length > 3 ? 'auto' : 'none'"
     >
       @for (boardColumn of boardColumns(); track $index) {
       <div class="kanban__column">
+        @if (selectedColumnId === boardColumn.id && editColumn) { @if (taskForm.get("columnTitle");
+        as columnTitle) {
+        <app-input
+          formControlName="columnTitle"
+          [error]="columnTitle | controlError"
+          size="big"
+          placeholder="название столбика"
+          type="text"
+          (keydown.enter)="confirmRenameColumn(boardColumn.id)"
+          (clickOutside)="confirmRenameColumn(boardColumn.id)"
+        >
+        </app-input>
+        } } @else {
         <div class="kanban__column-header">
           <p class="text-body-12">{{ boardColumn.tasks.length }}</p>
           <div class="kanban__column-locked">
             @if (boardColumn.locked) {
             <i appIcon icon="lock" appSquare="8"></i>
-            }
+            } @if (!(selectedColumnId === boardColumn.id && editColumn)) {
             <p class="text-body-12">{{ boardColumn.name }}</p>
+            }
           </div>
 
           <div class="">
             <i appIcon icon="dots" appSquare="8" (click)="toggleDropDown(boardColumn.id)"></i>
 
-            @if (isColumnInfoOpen && (selectedColumnId === boardColumn.order)) {
+            @if (isColumnInfoOpen && (selectedColumnId === boardColumn.id)) {
             <app-dropdown
               [isOpen]="isColumnInfoOpen"
               type="text"
@@ -35,11 +50,21 @@
             }
           </div>
         </div>
+        }
 
         <div class="kanban__tasks">
           @for (task of boardColumn.tasks; track task.id) {
           <app-kanban-task (click)="openDetailTask(task.id)" [task]="task"></app-kanban-task>
-          }
+          } @if (addingTaskColumnId === boardColumn.id) { @if (taskForm.get("taskTitle"); as
+          taskTitle) {
+          <app-input
+            formControlName="taskTitle"
+            size="big"
+            placeholder="название задачи"
+            type="text"
+            autofocus
+          ></app-input>
+          } }
         </div>
 
         <i class="kanban__column--add-task" appIcon icon="plus" appSquare="10"></i>
