@@ -112,10 +112,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--red) !important;
-    transform: translateY(-50%);
-    background: var(--ligth-white);
     padding: 0 4px;
+    color: var(--red) !important;
+    background: var(--ligth-white);
+    transform: translateY(-50%);
   }
 
   &__right-icon {
