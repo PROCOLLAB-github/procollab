@@ -1,4 +1,9 @@
 <!-- @format -->
 
-<mat-progress-bar *ngIf="isLoading$ | async" class="loader" mode="query"></mat-progress-bar>
+<mat-progress-bar
+  [style.display]="(isLoading$ | async) ? 'block' : 'none'"
+  class="loader"
+  mode="query"
+>
+</mat-progress-bar>
 <router-outlet></router-outlet>

@@ -91,6 +91,14 @@ import { ProjectAssign } from "../models/project-assign.model";
     ProjectAdditionalStepComponent,
     ProjectPartnerResourcesStepComponent,
   ],
+  providers: [
+    ProjectFormService,
+    ProjectVacancyService,
+    ProjectAdditionalService,
+    ProjectGoalService,
+    ProjectPartnerService,
+    ProjectResourceService,
+  ],
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
@@ -401,6 +409,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    * Отправка формы проекта
    */
   submitProjectForm(): void {
+    const isDraft = this.projectForm.get("draft")?.value === true;
+
     this.projectFormService.achievements.controls.forEach(achievementForm => {
       achievementForm.markAllAsTouched();
     });
@@ -412,12 +422,21 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectVacancyService.submitVacancy(projectId);
     }
 
-    if (
-      !this.validationService.getFormValidation(this.projectForm) ||
-      !this.validationService.getFormValidation(this.additionalForm) ||
-      !this.validationService.getFormValidation(this.vacancyForm)
-    ) {
-      return;
+    if (isDraft) {
+      if (
+        !this.validationService.getFormValidation(this.projectForm) ||
+        !this.validationService.getFormValidation(this.vacancyForm)
+      ) {
+        return;
+      }
+    } else {
+      if (
+        !this.validationService.getFormValidation(this.projectForm) ||
+        !this.validationService.getFormValidation(this.additionalForm) ||
+        !this.validationService.getFormValidation(this.vacancyForm)
+      ) {
+        return;
+      }
     }
 
     this.setProjFormIsSubmitting(true);
