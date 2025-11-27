@@ -9,6 +9,7 @@ import { FeedProject } from "@office/feed/models/feed-item.model";
 import { DayjsPipe } from "@corelib";
 import { IndustryService } from "@office/services/industry.service";
 import { TagComponent } from "@ui/components/tag/tag.component";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * КОМПОНЕНТ НОВОГО ПРОЕКТА
@@ -44,6 +45,7 @@ import { TagComponent } from "@ui/components/tag/tag.component";
     AvatarComponent,
     RouterLink,
     DayjsPipe,
+    TruncatePipe,
     IconComponent,
     TagComponent,
   ],

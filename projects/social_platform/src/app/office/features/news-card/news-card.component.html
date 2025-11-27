@@ -8,7 +8,7 @@
         [alt]="feedItem.name"
       />
       <p class="card__name text-body-10">
-        {{ feedItem.name.length > 30 ? feedItem.name.slice(0, 26) + "..." : feedItem.name }}
+        {{ feedItem.name | truncate: 30 }}
       </p>
     </a>
     @if (isOwner) {

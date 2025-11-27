@@ -91,6 +91,14 @@ import { ProjectAssign } from "../models/project-assign.model";
     ProjectAdditionalStepComponent,
     ProjectPartnerResourcesStepComponent,
   ],
+  providers: [
+    ProjectFormService,
+    ProjectVacancyService,
+    ProjectAdditionalService,
+    ProjectGoalService,
+    ProjectPartnerService,
+    ProjectResourceService,
+  ],
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
@@ -211,6 +219,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Id Лидера проекта
   leaderId = 0;
+
+  fromProgram = "";
 
   // Маркер того является ли проект привязанный к конкурсной программе
   isCompetitive = false;
@@ -399,6 +409,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    * Отправка формы проекта
    */
   submitProjectForm(): void {
+    const isDraft = this.projectForm.get("draft")?.value === true;
+
     this.projectFormService.achievements.controls.forEach(achievementForm => {
       achievementForm.markAllAsTouched();
     });
@@ -410,12 +422,21 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectVacancyService.submitVacancy(projectId);
     }
 
-    if (
-      !this.validationService.getFormValidation(this.projectForm) ||
-      !this.validationService.getFormValidation(this.additionalForm) ||
-      !this.validationService.getFormValidation(this.vacancyForm)
-    ) {
-      return;
+    if (isDraft) {
+      if (
+        !this.validationService.getFormValidation(this.projectForm) ||
+        !this.validationService.getFormValidation(this.vacancyForm)
+      ) {
+        return;
+      }
+    } else {
+      if (
+        !this.validationService.getFormValidation(this.projectForm) ||
+        !this.validationService.getFormValidation(this.additionalForm) ||
+        !this.validationService.getFormValidation(this.vacancyForm)
+      ) {
+        return;
+      }
     }
 
     this.setProjFormIsSubmitting(true);
@@ -621,6 +642,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const editingStepSub$ = this.route.queryParams.subscribe(params => {
       const step = params["editingStep"] as EditStep;
+      this.fromProgram = params["fromProgram"];
       if (step && step !== this.editingStep) {
         this.projectStepService.setStepFromRoute(step);
       }

@@ -40,6 +40,7 @@
   }
 
   &__description {
+    min-width: 0;
     margin: 8px 0;
   }
 
@@ -83,9 +84,10 @@
       overflow: hidden;
       color: var(--black);
       text-overflow: ellipsis;
+      word-break: break-word;
+      transition: all 0.7s ease-in-out;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 5;
-      transition: all 0.7s ease-in-out;
 
       &.expanded {
         -webkit-line-clamp: unset;

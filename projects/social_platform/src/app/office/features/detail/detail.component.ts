@@ -26,6 +26,7 @@ import { ProfileService } from "projects/skills/src/app/profile/services/profile
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ApproveSkillComponent } from "../approve-skill/approve-skill.component";
 import { ProjectsService } from "@office/projects/services/projects.service";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 @Component({
   selector: "app-detail",
@@ -42,6 +43,7 @@ import { ProjectsService } from "@office/projects/services/projects.service";
     TooltipComponent,
     InputComponent,
     ApproveSkillComponent,
+    TruncatePipe,
   ],
   standalone: true,
 })
@@ -161,8 +163,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
   }
 
   get isProjectAssigned() {
-    return !!this.memberProjects.find(
-      project => project.leader === this.profile?.id && project.partnerProgram
+    const programId = this.info()?.id;
+
+    return this.memberProjects.some(
+      project => project.leader === this.profile?.id && project.partnerProgram?.id === programId
     );
   }
 

@@ -6,6 +6,7 @@ import { DayjsPipe } from "projects/core";
 import { ButtonComponent } from "@ui/components";
 import { RouterLink } from "@angular/router";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компонент карточки управления приглашением
@@ -30,7 +31,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
   templateUrl: "./invite-manage-card.component.html",
   styleUrl: "./invite-manage-card.component.scss",
   standalone: true,
-  imports: [AvatarComponent, RouterLink, ButtonComponent, DayjsPipe],
+  imports: [AvatarComponent, RouterLink, ButtonComponent, DayjsPipe, TruncatePipe],
 })
 export class InviteManageCardComponent implements OnInit {
   constructor() {}

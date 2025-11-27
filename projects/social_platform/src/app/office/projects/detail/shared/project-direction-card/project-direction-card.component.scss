@@ -40,6 +40,7 @@
   display: flex;
   flex-direction: column;
   width: 350px;
+  max-width: 500px;
   height: 200px;
   max-height: calc(100vh - 40px);
   overflow-y: auto;
@@ -71,8 +72,11 @@
   }
 
   &__title {
+    hyphens: auto;
     color: var(--accent);
     text-align: center;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   &__icon {
@@ -81,6 +85,9 @@
 
   &__text {
     color: var(--black);
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
   }
 
   &__skill,
@@ -88,6 +95,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    width: 100%;
 
     &--block {
       display: grid;
@@ -148,6 +156,9 @@
       flex-direction: column;
       gap: 2px;
       padding: 12px;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
       border: 0.5px solid var(--medium-grey-for-outline);
       border-radius: var(--rounded-lg);
     }

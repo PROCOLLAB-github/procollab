@@ -10,7 +10,7 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { ActivatedRoute, RouterOutlet } from "@angular/router";
+import { ActivatedRoute, RouterOutlet, RouterLink } from "@angular/router";
 import { User } from "@auth/models/user.model";
 import { AuthService } from "@auth/services";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
@@ -30,6 +30,7 @@ import { ProjectDirectionCard } from "../shared/project-direction-card/project-d
 import { IconComponent } from "@uilib";
 import { NewsFormComponent } from "@office/features/news-form/news-form.component";
 import { NewsCardComponent } from "@office/features/news-card/news-card.component";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * КОМПОНЕНТ ДЕТАЛЬНОЙ ИНФОРМАЦИИ О ПРОЕКТЕ
@@ -69,10 +70,12 @@ import { NewsCardComponent } from "@office/features/news-card/news-card.componen
     UserLinksPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
+    TruncatePipe,
     CommonModule,
     ProjectDirectionCard,
     NewsCardComponent,
     NewsFormComponent,
+    RouterLink,
   ],
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -137,11 +140,10 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
                 ["string", "string", "string", "array", "array"]
               )!;
             }
-
             setTimeout(() => {
               this.checkDescriptionExpandable();
               this.cdRef.detectChanges();
-            }, 0);
+            }, 100);
           },
         }) ?? Subscription.EMPTY;
 
@@ -182,9 +184,10 @@ export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
    * Перемещает новости в контентную область на десктопе, проверяет необходимость кнопки "Читать полностью"
    */
   ngAfterViewInit(): void {
-    if (containerSm < window.innerWidth) {
-      this.contentEl?.nativeElement.append(this.newsEl?.nativeElement);
-    }
+    setTimeout(() => {
+      this.checkDescriptionExpandable();
+      this.cdRef.detectChanges();
+    }, 150);
   }
 
   /**

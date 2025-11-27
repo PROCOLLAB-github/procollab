@@ -1,6 +1,7 @@
 /** @format */
 import { CommonModule } from "@angular/common";
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -17,6 +18,7 @@ import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { expandElement } from "@utils/expand-element";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * КОМПОНЕНТ КАРТОЧКИ ВАКАНСИИ ПРОЕКТА
@@ -46,6 +48,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
     ButtonComponent,
     ParseLinksPipe,
     ParseBreaksPipe,
+    TruncatePipe,
     TagComponent,
     AvatarComponent,
     DayjsPipe,
@@ -53,7 +56,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
   templateUrl: "./project-vacancy-card.component.html",
   styleUrl: "./project-vacancy-card.component.scss",
 })
-export class ProjectVacancyCardComponent implements OnInit {
+export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) vacancy!: Vacancy; // Данные вакансии (обязательное поле)
   @Input() type: "vacancies" | "project" = "project";
 

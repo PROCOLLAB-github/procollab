@@ -33,6 +33,7 @@ import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { CarouselComponent } from "@office/shared/carousel/carousel.component";
 import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компонент карточки новости
@@ -55,6 +56,7 @@ import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
     ButtonComponent,
     DayjsPipe,
     FormControlPipe,
+    TruncatePipe,
     ParseLinksPipe,
     ParseBreaksPipe,
     CarouselComponent,

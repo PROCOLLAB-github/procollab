@@ -37,6 +37,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { ErrorMessage } from "@error/models/error-message";
 import { VacancyService } from "@office/services/vacancy.service";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компонент отображения детальной информации о вакансии
@@ -84,6 +85,7 @@ import { TextareaComponent } from "@ui/components/textarea/textarea.component";
     ReactiveFormsModule,
     ParseBreaksPipe,
     ParseLinksPipe,
+    TruncatePipe,
     SalaryTransformPipe,
     CapitalizePipe,
     UserLinksPipe,
@@ -204,6 +206,12 @@ export class VacancyInfoComponent implements OnInit {
       });
   }
 
+  /**
+   * Раскрытие/сворачивание описания профиля
+   * @param elem - DOM элемент описания
+   * @param expandedClass - CSS класс для раскрытого состояния
+   * @param isExpanded - текущее состояние (раскрыто/свернуто)
+   */
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;

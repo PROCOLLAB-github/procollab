@@ -6,9 +6,9 @@
     <app-avatar [url]="collaborator.avatar" [size]="68"></app-avatar>
     <div class="collaborator__info--text">
       <h3 class="text-body-12 collaborator__role">
-        {{ collaborator.firstName }} {{ collaborator.lastName }}
+        {{ collaborator.firstName | truncate: 12 }} {{ collaborator.lastName | truncate: 12 }}
       </h3>
-      <h3 class="text-body-10 collaborator__role">{{ collaborator.role }}</h3>
+      <h3 class="text-body-10 collaborator__role">{{ collaborator.role | truncate: 12 }}</h3>
     </div>
 
     <div class="collaborator__icons">

@@ -83,6 +83,7 @@
 
   &__content {
     grid-row-start: 2;
+    min-width: 0;
 
     @include responsive.apply-desktop {
       grid-row-start: unset;
@@ -285,13 +286,16 @@
     p {
       display: -webkit-box;
       overflow: hidden;
+      line-height: 1.5;
       color: var(--black);
       text-overflow: ellipsis;
+      word-break: break-word;
+      transition: all 0.7s ease-in-out;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 5;
-      transition: all 0.7s ease-in-out;
 
       &.expanded {
+        display: block;
         -webkit-line-clamp: unset;
       }
     }

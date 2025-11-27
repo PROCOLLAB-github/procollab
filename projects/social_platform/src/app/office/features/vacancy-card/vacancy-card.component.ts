@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { Vacancy } from "@models/vacancy.model";
 import { IconComponent, ButtonComponent } from "@ui/components";
 import { TagComponent } from "@ui/components/tag/tag.component";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компонент карточки вакансии
@@ -30,7 +31,7 @@ import { TagComponent } from "@ui/components/tag/tag.component";
   templateUrl: "./vacancy-card.component.html",
   styleUrl: "./vacancy-card.component.scss",
   standalone: true,
-  imports: [IconComponent, ButtonComponent, TagComponent],
+  imports: [IconComponent, ButtonComponent, TagComponent, TruncatePipe],
 })
 export class VacancyCardComponent implements OnInit {
   constructor() {}

@@ -76,7 +76,7 @@
                   [href]="link.includes('@') ? 'mailto:' + link : link"
                 >
                   <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
-                  <span>{{ l.tag }}</span>
+                  <span>{{ l.tag | truncate: 30 }}</span>
                 </a>
                 }
               </li>
@@ -103,7 +103,7 @@
                   [href]="material.url.includes('@') ? 'mailto:' + material.url : material.url"
                 >
                   <i class="contact-link__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
-                  <span>{{ material.title }}</span>
+                  <span>{{ material.title | truncate: 30 }}</span>
                 </a>
                 }
               </li>
