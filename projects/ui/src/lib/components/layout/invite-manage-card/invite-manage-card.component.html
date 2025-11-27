@@ -5,14 +5,15 @@
   <div class="invite__main">
     <div class="invite__avatars">
       <app-avatar [size]="52" [url]="invite.user.avatar"></app-avatar>
-      <app-avatar [size]="52" [url]="invite.project.imageAddress"></app-avatar>
     </div>
     <div class="invite__info">
       <div class="text-body-12 invite__text">
         <a [routerLink]="['/office/profile', invite.user.id]"
           >{{ invite.user.firstName }} {{ invite.user.lastName }}</a
-        >, вас пригласили в проект
-        <a [routerLink]="['/office/projects', invite.project.id]">"{{ invite.project.name }}"</a>
+        ><br />приглашает вас в проект <br />
+        <a [routerLink]="['/office/projects', invite.project.id]"
+          >"{{ invite.project.name | truncate: 20 }}"</a
+        >
       </div>
       <div class="text-body-12 invite__time">
         {{ invite.datetimeCreated | dayjs: "fromX" }} назад в
@@ -26,10 +27,10 @@
       size="medium"
       appearance="outline"
       (click)="reject.emit(invite.id)"
-      >Отклонить</app-button
+      >отклонить</app-button
     >
     <app-button customTypographyClass="text-body-12" size="medium" (click)="accept.emit(invite.id)"
-      >Принять</app-button
+      >принять</app-button
     >
   </div>
 </div>

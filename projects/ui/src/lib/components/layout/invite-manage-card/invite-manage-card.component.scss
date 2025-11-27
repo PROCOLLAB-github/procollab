@@ -1,7 +1,18 @@
 .invite {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 30px;
+  background-color: var(--light-white);
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-xl);
+  width: 100%;
+  padding: 24px;
+
   &__main {
     display: flex;
     align-items: flex-start;
+    gap: 15px;
   }
 
   &__avatars {
@@ -42,6 +53,7 @@
 
   &__actions {
     display: flex;
+
     gap: 12px;
     margin-top: 16px;
   }
