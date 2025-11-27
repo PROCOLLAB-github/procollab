@@ -6,10 +6,12 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   inject,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   signal,
   ViewChild,
 } from "@angular/core";
@@ -40,16 +42,14 @@ import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.c
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { SkillsService } from "@office/services/skills.service";
 import { Skill } from "@office/models/skill";
-import { filter, Subscription, take } from "rxjs";
+import { filter, map, Subscription, take } from "rxjs";
 import { TaskDetail } from "../../../models/task.model";
 import { daysUntil } from "@utils/days-untit";
 import { KanbanBoardService } from "../../../kanban-board.service";
 import { getPriorityType } from "@utils/helpers/getPriorityType";
 import { getActionType } from "@utils/helpers/getActionType";
 import { ActivatedRoute } from "@angular/router";
-import { TagData } from "../../create-tag-form/create-tag-form.component";
 import { FileService } from "@core/services/file.service";
-import { ProfileDataService } from "@office/profile/detail/services/profile-date.service";
 import { AuthService } from "@auth/services";
 import { User } from "@auth/models/user.model";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
@@ -62,6 +62,9 @@ import {
   CdkVirtualScrollViewport,
 } from "@angular/cdk/scrolling";
 import { ChatMessageComponent } from "@ui/components/chat-message/chat-message.component";
+import { CommentDto } from "../../../models/dto/comment.model.dto";
+import { TagDto } from "../../../models/dto/tag.model.dto";
+import { PerformerDto } from "../../../models/dto/performer.model.dto";
 
 @Component({
   selector: "app-task-detail",
@@ -100,7 +103,11 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() collaborators?: Project["collaborators"];
   @Input() goals?: Project["goals"];
 
+  @Output() delete = new EventEmitter<void>();
+
   @ViewChild("descEl") descEl?: ElementRef;
+  /** Ссылка на viewport для автопрокрутки */
+  @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
 
   private readonly skillsService = inject(SkillsService);
   private readonly kanbanBoardService = inject(KanbanBoardService);
@@ -148,7 +155,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   remainingDaysDeadline = signal<number>(0);
 
-  editingTag: TagData | null = null;
+  editingTag: TagDto | null = null;
 
   /** Уникальный ID для элемента input */
   controlId = nanoid(3);
@@ -190,14 +197,21 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   openGroupIds = new Set<number>();
   openGroupIndex: number | null = null;
 
-  filesList: any[] = [];
-
   taskDetailForm: FormGroup;
 
   messageForm: FormGroup;
   /** Сообщение, на которое отвечаем */
   replyMessage?: ChatMessage;
-  messages: any = [];
+  messages = signal<any[]>([]);
+
+  /** Массив прикрепленных файлов с метаданными */
+  attachFiles: {
+    name: string;
+    size: string;
+    type: string;
+    link?: string;
+    loading: boolean;
+  }[] = [];
 
   /** Форма отправки результата */
   sendResultForm: FormGroup;
@@ -351,7 +365,8 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!comments || !taskDetail) return false;
 
     return (
-      !this.isCommented && comments.some((comment: any) => comment.id === taskDetail.creator.id)
+      !this.isCommented &&
+      comments.some((comment: CommentDto) => comment.id === taskDetail.creator.id)
     );
   }
 
@@ -397,7 +412,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   onDeleteTaskTag(tagId: number): void {
     const tags = this.taskDetailForm.get("tags")?.value || [];
 
-    const remainingTags = tags.filter((tag: any) => tag.id !== tagId);
+    const remainingTags = tags.filter((tag: TagDto) => tag.id !== tagId);
     this.taskDetailForm.patchValue({ tags: remainingTags });
 
     this.isTagsPickOpen = false;
@@ -407,21 +422,21 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isTagsPickOpen = !this.isTagsPickOpen;
     this.creatingTag = true;
 
-    const tags = this.taskDetailForm.get("tags")?.value || [];
-    const tag = tags.find((t: any) => t.id === tagId);
+    const tags: TagDto[] = this.taskDetailForm.get("tags")?.value || [];
+    const tag = tags.find((tag: TagDto) => tag.id === tagId);
 
     if (tag) {
       this.editingTag = {
         id: tag.id,
-        name: tag.title,
+        name: tag.name,
         color: tag.color,
       };
     }
   }
 
-  onUpdateTag({ id, name, color }: TagData): void {
+  onUpdateTag({ id, name, color }: TagDto): void {
     const tagsLib = [...(this.taskDetailForm.get("tagsLib")?.value || [])];
-    const libIndex = tagsLib.findIndex((t: any) => t.id === id);
+    const libIndex = tagsLib.findIndex((tag: TagDto) => tag.id === id);
 
     if (libIndex !== -1) {
       tagsLib[libIndex] = {
@@ -434,13 +449,13 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       this.taskDetailForm.patchValue({ tagsLib: [...tagsLib] });
     }
 
-    const tags = [...(this.taskDetailForm.get("tags")?.value || [])];
-    const tagIndex = tags.findIndex((t: any) => t.id === id);
+    const tags: TagDto[] = [...(this.taskDetailForm.get("tags")?.value || [])];
+    const tagIndex = tags.findIndex((tag: TagDto) => tag.id === id);
 
     if (tagIndex !== -1) {
       tags[tagIndex] = {
         ...tags[tagIndex],
-        title: name,
+        name,
         color,
       };
       this.taskDetailForm.patchValue({ tags: [...tags] });
@@ -501,14 +516,16 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
           const collaborator = this.collaborators.find(
             collaborator => collaborator.userId === typeId
           );
-          const currentPerformers = this.taskDetailForm.get("performers")?.value || [];
+          const currentPerformers: PerformerDto[] =
+            this.taskDetailForm.get("performers")?.value || [];
           const payload = {
             id: collaborator?.userId,
             avatar: collaborator?.avatar,
             name: collaborator?.firstName + " " + collaborator?.lastName[0],
           };
 
-          if (currentPerformers.some((performer: any) => performer.id === payload.id)) return;
+          if (currentPerformers.some((performer: PerformerDto) => performer.id === payload.id))
+            return;
 
           this.taskDetailForm.patchValue({
             performers: [...currentPerformers, payload],
@@ -539,11 +556,11 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
         if (typeId !== undefined) {
-          const tag = this.tagsPickOptions.find((tag: any) => tag.id === typeId);
+          const tag = this.tagsPickOptions.find((tag: TagDto) => tag.id === typeId);
           const payload = { id: tag?.id, title: tag?.label, color: tag?.additionalInfo };
 
           const currentTags = this.taskDetailForm.get("tags")?.value || [];
-          if (currentTags.some((tag: any) => tag.id === payload.id)) return;
+          if (currentTags.some((tag: TagDto) => tag.id === payload.id)) return;
           this.taskDetailForm.patchValue({ tags: [...currentTags, payload] });
         } else {
           this.editingTag = null;
@@ -554,6 +571,9 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       case "delete":
+        if (typeId !== undefined) {
+          this.delete.emit();
+        }
         this.isDeleteTypeOpen = state;
         break;
 
@@ -608,6 +628,59 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
+   * Обработчик загрузки файлов через input
+   * @param evt - событие выбора файлов
+   */
+  onUpload(evt: Event) {
+    const files = (evt.currentTarget as HTMLInputElement).files;
+
+    if (!files?.length) {
+      return;
+    }
+
+    this.addFiles(files);
+  }
+
+  /**
+   * Добавление файлов для загрузки
+   * Создает записи в массиве attachFiles и запускает загрузку на сервер
+   * @param files - список файлов для загрузки
+   */
+  private addFiles(files: FileList): void {
+    // Создание записей для каждого файла
+    for (let i = 0; i < files.length; i++) {
+      this.attachFiles.push({
+        name: files[i].name,
+        size: files[i].size.toString(),
+        type: files[i].type,
+        loading: true,
+      });
+    }
+
+    // Загрузка каждого файла на сервер
+    for (let i = 0; i < files.length; i++) {
+      this.fileService
+        .uploadFile(files[i])
+        .pipe(map(r => r.url))
+        .subscribe({
+          next: url => {
+            console.log(url);
+
+            setTimeout(() => {
+              this.attachFiles[i].loading = false;
+              this.attachFiles[i].link = url;
+            });
+          },
+          complete: () => {
+            setTimeout(() => {
+              this.attachFiles[i].loading = false;
+            });
+          },
+        });
+    }
+  }
+
+  /**
    * Переключение навыка в списке выбранных
    * @param toggledSkill - навык для переключения
    */
@@ -654,31 +727,59 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.sendFormIsSubmitting = true;
 
     // TODO: Отправка отклика на сервер
-    // this.snackbarService.success("результат работы успешно прикреплен");w
+    // this.snackbarService.success("результат работы успешно прикреплен");
   }
 
   /**
-   * Обработчик отправки сообщения
-   * Различает между редактированием существующего сообщения и отправкой нового
+   * Отправка сообщения
    */
-  onSubmitMessage(event: Event) {
-    if (event) event.preventDefault();
-
+  onSubmitMessage(): void {
     const text = this.messageForm.get("text")?.value?.trim();
+
     if (!text) return;
 
-    // Отправка нового сообщения
-    const message = {
-      id: nanoid(),
-      replyTo: this.replyMessage?.id ?? null,
+    const newMessage = {
+      id: Date.now(),
       text,
+      author: this.currentUser(),
+      createdAt: new Date().toISOString(),
+      isRead: false,
+      replyTo: this.replyMessage?.id ?? null,
       files: this.messageForm.get("files")?.value || [],
     };
 
-    this.messages = [...this.messages, message];
+    this.messages.update(messages => [...messages, newMessage]);
+
+    this.messageForm.reset({
+      text: "",
+      files: [],
+    });
 
     this.replyMessage = undefined;
-    this.messageForm.reset({ text: "", files: [] });
+    this.scrollToBottom();
+  }
+
+  onEnterKeyDown(event: Event): void {
+    const keyboardEvent = event as KeyboardEvent;
+
+    if (keyboardEvent.key === "Enter" && !keyboardEvent.shiftKey) {
+      event.preventDefault();
+      this.onSubmitMessage();
+    }
+  }
+
+  /**
+   * Установка сообщения для ответа (заготовка)
+   */
+  onReplyMessage(messageId: number): void {
+    this.replyMessage = this.messages().find(message => message.id === messageId);
+  }
+
+  /**
+   * Отмена ответа
+   */
+  onCancelReply(): void {
+    this.replyMessage = undefined;
   }
 
   /**
@@ -693,6 +794,19 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.taskDetailForm.patchValue({ skills: [newSkill, ...skills] });
     this.cdRef.markForCheck();
+  }
+
+  /**
+   * Прокрутка к низу списка сообщений
+   */
+  private scrollToBottom(): void {
+    setTimeout(() => {
+      this.viewport?.scrollTo({ bottom: 0 });
+
+      setTimeout(() => {
+        this.viewport?.scrollTo({ bottom: 0 });
+      }, 50);
+    });
   }
 
   /**

@@ -208,7 +208,7 @@
       display: flex;
       gap: 10px;
       align-items: center;
-      margin-bottom: 40px;
+      margin-bottom: 10px;
     }
 
     &-file {
@@ -221,6 +221,12 @@
       }
     }
 
+    &-comments {
+      display: flex;
+      flex-direction: column;
+      margin-top: 20px;
+    }
+
     i {
       color: var(--accent);
     }
@@ -229,6 +235,49 @@
   &__divider {
     width: 100%;
     margin-top: 5px;
+  }
+}
+
+.messages {
+  &__wrapper {
+    margin-bottom: 12px;
+  }
+
+  &__date {
+    color: var(--grey-for-text);
+    text-align: center;
+  }
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+    gap: 5px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__author {
+    color: var(--accent) !important;
+  }
+
+  &__time {
+    color: var(--grey-for-text) !important;
+  }
+
+  p {
+    color: var(--black);
   }
 }
 
@@ -325,6 +374,7 @@
     display: flex;
     gap: 5px;
     align-items: center;
+    cursor: pointer;
 
     i {
       color: var(--light-white);
@@ -338,6 +388,7 @@
   &__attach {
     i {
       color: var(--dark-grey);
+      opacity: 0.5;
     }
   }
 
@@ -349,6 +400,10 @@
     cursor: pointer;
     background-color: var(--accent);
     border-radius: var(--rounded-sm);
+
+    i {
+      color: var(--white);
+    }
   }
 
   &__input {

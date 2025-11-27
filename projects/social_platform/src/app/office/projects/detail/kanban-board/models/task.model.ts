@@ -11,11 +11,7 @@ export interface TaskResult {
   description: string;
   accompanyingFile: FileModel;
   isVerified: boolean;
-  whoVerified: {
-    id: User["id"];
-    firstName: User["firstName"];
-    lastName: User["lastName"];
-  };
+  whoVerified: Pick<User, "id" | "firstName" | "lastName">;
 }
 
 export interface TaskPreview {
@@ -23,36 +19,23 @@ export interface TaskPreview {
   columnId: Column["id"];
   title: string;
   priority: number;
+  action: number;
   description: string;
   deadlineDate: string;
   tags: Tag[];
   goal: Goal;
   type: string;
   files: FileModel;
-  responsible: {
-    id: User["id"];
-    avatar: User["avatar"];
-  };
-  performers: {
-    id: User["id"];
-    avatar: User["avatar"];
-  }[];
+  responsible: Pick<User, "id" | "avatar">;
+  performers: Pick<User, "id" | "avatar">[];
 }
 
 export interface TaskDetail extends TaskPreview {
   score: number;
-  creator: {
-    id: User["id"];
-    firstName: User["firstName"];
-    lastName: User["lastName"];
-    avatar: User["avatar"];
-  };
+  creator: Pick<User, "id" | "avatar" | "firstName" | "lastName">;
   datetimeCreated: string;
   dateTaskStart: string;
   requiredSkills: Skill[];
-  projectGoal: {
-    id: Goal["id"];
-    title: Goal["title"];
-  };
+  projectGoal: Pick<Goal, "id" | "title">;
   result: TaskResult;
 }

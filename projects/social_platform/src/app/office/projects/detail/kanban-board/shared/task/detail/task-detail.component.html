@@ -527,25 +527,39 @@
     } }
   </div>
 
-  <div class="kanban__detail-comments">
+  <div class="kanban__divider">
+    <img alt="divider image" src="assets/images/projects/shared/divider.png" />
+  </div>
+
+  <div class="kanban__detail-comments" [style.min-height]="messages().length ? '150px' : '0px'">
     <cdk-virtual-scroll-viewport
-      class="chat__messages"
-      [itemSize]="50"
+      class="messages"
+      [itemSize]="44"
       minBufferPx="400"
       maxBufferPx="800"
+      [style.min-height]="messages().length ? '150px' : '0px'"
     >
-      <ng-container *cdkVirtualFor="let message of messages">
-        <p>{{ message.text }}</p>
-        <!-- <app-chat-message
-          class="chat__message"
-          [id]="message.id"
-          [chatMessage]="message"
-          [attr.data-been-read]="message.isRead ? '1' : '0'"
-        ></app-chat-message> -->
-      </ng-container>
+      <div class="messages__wrapper" *cdkVirtualFor="let message of messages()">
+        <p class="text-body-10 messages__date">{{ message.createdAt | date: "dd MMMM yyyy" }}</p>
+        <div class="message">
+          <app-avatar [size]="30" [url]="message.author?.avatar"></app-avatar>
+          <div class="message__wrapper">
+            <div class="message__header">
+              <span class="message__author text-body-10">
+                {{ message.author?.firstName }} {{ message.author?.lastName }}
+              </span>
+              <span class="message__time text-body-10">{{
+                message.createdAt | date: "HH:MM"
+              }}</span>
+            </div>
+
+            <p class="message__text text-body-10">{{ message.text }}</p>
+          </div>
+        </div>
+      </div>
     </cdk-virtual-scroll-viewport>
 
-    <form class="form" [formGroup]="messageForm" (ngSubmit)="onSubmitMessage($event)">
+    <form class="form" [formGroup]="messageForm" (submit)="onSubmitMessage()">
       @if (messageForm.get("text"); as text) {
       <div class="form__row">
         <app-input
@@ -554,32 +568,22 @@
           [hasBorder]="false"
           [error]="text | controlError"
           class="form__input text-body-12"
-          autosize
-          [autofocus]="isCommentedClick"
           placeholder="добавить комментарий"
-          (keydown.enter)="onSubmitMessage($event)"
+          [appValue]="messageForm.get('text')?.value"
+          (keydown.enter)="onEnterKeyDown($event)"
         ></app-input>
-        <!-- (paste)="onPaste($event)" -->
-        <!-- <div class="form__actions">
-            <label class="form__attach">
-              <i appIcon (change)="onInputFiles($event)" icon="attach" appSquare="20"></i>
-              <input type="file" accept="*/*" multiple />
-            </label>
-            <i (click)="onSubmit()" appIcon icon="send" appSquare="7" class="form__send"></i>
-          </div> -->
+
+        <div class="form__actions">
+          <label class="form__attach">
+            <input type="file" multiple accept="*/*" (input)="onUpload($event)" />
+            <i appIcon icon="attach" appSquare="20"></i>
+          </label>
+
+          <button class="form__send" type="submit">
+            <i appIcon icon="send" appSquare="7"></i>
+          </button>
+        </div>
       </div>
-      <!-- <div class="form__files">
-          @for (f of filesList; track f.id) {
-            <app-file-upload-item
-            [name]="f.tempFile.name"
-            [type]="f.tempFile.type"
-            [size]="f.tempFile.size"
-            [loading]="f.loading"
-            [error]="f.error"
-            (delete)="onDeleteFile(f.id)"
-            ></app-file-upload-item>
-            }
-          </div> -->
       }
     </form>
   </div>

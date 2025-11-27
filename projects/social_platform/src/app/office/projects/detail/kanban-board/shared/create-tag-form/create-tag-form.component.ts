@@ -19,12 +19,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-
-export interface TagData {
-  id?: number;
-  name: string;
-  color: string;
-}
+import { TagDto } from "../../models/dto/tag.model.dto";
 
 @Component({
   selector: "app-create-tag-form",
@@ -34,9 +29,9 @@ export interface TagData {
   standalone: true,
 })
 export class CreateTagFormComponent implements OnInit, OnChanges {
-  @Input() editingTag: TagData | null = null;
-  @Output() createTag = new EventEmitter<TagData>();
-  @Output() updateTag = new EventEmitter<TagData>();
+  @Input() editingTag: TagDto | null = null;
+  @Output() createTag = new EventEmitter<TagDto>();
+  @Output() updateTag = new EventEmitter<TagDto>();
 
   private readonly fb = inject(FormBuilder);
 
@@ -84,7 +79,7 @@ export class CreateTagFormComponent implements OnInit, OnChanges {
     event.preventDefault();
 
     const { tagName, tagColor } = this.tagForm.value;
-    const tagData: TagData = {
+    const tagData: TagDto = {
       name: tagName,
       color: tagColor,
     };

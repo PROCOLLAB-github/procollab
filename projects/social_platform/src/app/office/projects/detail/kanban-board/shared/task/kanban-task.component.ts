@@ -7,6 +7,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { RouterModule } from "@angular/router";
 import { getPriorityType } from "@utils/helpers/getPriorityType";
+import { TaskPreview } from "../../models/task.model";
 
 @Component({
   selector: "app-kanban-task",
@@ -16,7 +17,7 @@ import { getPriorityType } from "@utils/helpers/getPriorityType";
   standalone: true,
 })
 export class KanbanTaskComponent {
-  @Input({ required: true }) task: any;
+  @Input({ required: true }) task!: TaskPreview;
 
   getPriorityType = getPriorityType;
 }

@@ -8,10 +8,8 @@ import { IconComponent } from "@uilib";
 import { getPriorityType } from "@utils/helpers/getPriorityType";
 import { TagComponent } from "../tag/tag.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import {
-  CreateTagFormComponent,
-  TagData,
-} from "@office/projects/detail/kanban-board/shared/create-tag-form/create-tag-form.component";
+import { CreateTagFormComponent } from "@office/projects/detail/kanban-board/shared/create-tag-form/create-tag-form.component";
+import { TagDto } from "@office/projects/detail/kanban-board/models/dto/tag.model.dto";
 
 @Component({
   selector: "app-dropdown",
@@ -45,9 +43,9 @@ export class DropdownComponent {
 
   @Input() colorText: "grey" | "red" = "grey";
 
-  @Input() editingTag: TagData | null = null;
+  @Input() editingTag: TagDto | null = null;
 
-  @Output() updateTag = new EventEmitter<TagData>();
+  @Output() updateTag = new EventEmitter<TagDto>();
 
   /** Событие для выбора элемента */
   @Output() select = new EventEmitter<number>();
@@ -94,7 +92,7 @@ export class DropdownComponent {
     this.creatingTag = true;
   }
 
-  onConfirmUpdateTag(tagData: TagData): void {
+  onConfirmUpdateTag(tagData: TagDto): void {
     this.updateTag.emit(tagData);
     this.creatingTag = false;
   }

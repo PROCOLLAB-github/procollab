@@ -7,21 +7,32 @@
     }
     <div
       class="kanban__column-wrapper"
+      cdkDropList
+      [cdkDropListData]="boardColumns()"
       [formGroup]="taskForm"
-      [style.overflow-y]="boardColumns().length > 3 ? 'auto' : 'none'"
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="onDropColumn($event)"
+      [cdkDropListSortPredicate]="columnDropPredicate"
+      [style.overflow-x]="boardColumns().length > 3 ? 'auto' : 'none'"
     >
       @for (boardColumn of boardColumns(); track $index) {
-      <div class="kanban__column">
+      <div
+        class="kanban__column"
+        cdkDrag
+        [cdkDragDisabled]="boardColumn.locked || boardColumn.id === 0"
+      >
         @if (selectedColumnId === boardColumn.id && editColumn) { @if (taskForm.get("columnTitle");
         as columnTitle) {
         <app-input
+          class="kanban__column-input"
           formControlName="columnTitle"
           [error]="columnTitle | controlError"
           size="big"
           placeholder="название столбика"
           type="text"
-          (keydown.enter)="confirmRenameColumn(boardColumn.id)"
-          (clickOutside)="confirmRenameColumn(boardColumn.id)"
+          autofocus
+          (keydown.escape)="cancelRenamColumn()"
+          (keydown.enter)="confirmRenameColumn()"
         >
         </app-input>
         } } @else {
@@ -35,7 +46,7 @@
             }
           </div>
 
-          <div class="">
+          <div>
             <i appIcon icon="dots" appSquare="8" (click)="toggleDropDown(boardColumn.id)"></i>
 
             @if (isColumnInfoOpen && (selectedColumnId === boardColumn.id)) {
@@ -45,34 +56,55 @@
               colorText="grey"
               (select)="onTypeSelect($event, false, boardColumn.id)"
               (outside)="isColumnInfoOpen = false"
-              [options]="columnInfoOptions"
+              [options]="boardColumn.id === 0 ? columnInfoOptions.slice(0, 1) : columnInfoOptions"
             ></app-dropdown>
             }
           </div>
         </div>
         }
 
-        <div class="kanban__tasks">
+        <div
+          class="kanban__tasks"
+          cdkDropList
+          [cdkDropListData]="boardColumn.tasks"
+          [cdkDropListConnectedTo]="connectedLists()"
+          [id]="'tasks-column-' + boardColumn.id"
+          (cdkDropListDropped)="onDropTask($event)"
+        >
           @for (task of boardColumn.tasks; track task.id) {
-          <app-kanban-task (click)="openDetailTask(task.id)" [task]="task"></app-kanban-task>
-          } @if (addingTaskColumnId === boardColumn.id) { @if (taskForm.get("taskTitle"); as
-          taskTitle) {
-          <app-input
-            formControlName="taskTitle"
-            size="big"
-            placeholder="название задачи"
-            type="text"
-            autofocus
-          ></app-input>
-          } }
+          <app-kanban-task
+            cdkDrag
+            (click)="openDetailTask(task.id)"
+            [task]="task"
+          ></app-kanban-task>
+          } @if (addTaskClick) { @if (selectedColumnId === boardColumn.id) { @if
+          (taskForm.get("taskTitle"); as taskTitle) {
+          <div class="kanban__task">
+            <app-input
+              formControlName="taskTitle"
+              size="big"
+              placeholder="введите название задачи"
+              type="text"
+              autofocus
+              (keydown.escape)="cancelAddingTask()"
+              (keydown.enter)="confirmAddTask()"
+            ></app-input>
+          </div>
+          } } }
         </div>
 
-        <i class="kanban__column--add-task" appIcon icon="plus" appSquare="10"></i>
+        <i
+          class="kanban__column--add-task"
+          (click)="startAddingTask(boardColumn.id)"
+          appIcon
+          icon="plus"
+          appSquare="10"
+        ></i>
       </div>
       }
 
       <div class="kanban__column">
-        <div class="kanban__column-header kanban__column-header--empty">
+        <div class="kanban__column-header kanban__column-header--empty" (click)="addColumn()">
           <i appIcon icon="plus" appSquare="10"></i>
         </div>
       </div>
@@ -82,6 +114,7 @@
     <app-task-detail
       [goals]="projectBoardInfo()?.goals"
       [collaborators]="projectBoardInfo()?.collaborators"
+      (delete)="onDeleteTask()"
     ></app-task-detail>
     }
   </div>
