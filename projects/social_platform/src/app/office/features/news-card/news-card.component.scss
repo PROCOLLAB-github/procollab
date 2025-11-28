@@ -38,9 +38,9 @@
   }
 
   &__option {
+    width: 120px;
     padding: 5px 20px;
     cursor: pointer;
-    width: 120px;
     transition: background-color 0.2s;
 
     &:hover {
