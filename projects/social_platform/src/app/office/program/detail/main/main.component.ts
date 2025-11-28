@@ -41,6 +41,7 @@ import { NewsFormComponent } from "@office/features/news-form/news-form.componen
 import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "@uilib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
+import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 
 @Component({
   selector: "app-main",
@@ -65,6 +66,7 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
     TagComponent,
     TruncatePipe,
     RouterModule,
+    NewsCardComponent,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
@@ -226,6 +228,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
+  @ViewChild(ProgramNewsCardComponent) ProgramNewsCardComponent?: ProgramNewsCardComponent;
   @ViewChild("descEl") descEl?: ElementRef;
 
   onNewsInVew(entries: IntersectionObserverEntry[]): void {
@@ -265,6 +268,18 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         item.likesCount = item.isUserLiked ? item.likesCount - 1 : item.likesCount + 1;
         item.isUserLiked = !item.isUserLiked;
+      });
+  }
+
+  onEdit(news: FeedNews, newsId: number) {
+    this.programNewsService
+      .editNews(this.route.snapshot.params["programId"], newsId, news)
+      .subscribe({
+        next: (resNews: any) => {
+          const newsIdx = this.news().findIndex(n => n.id === resNews.id);
+          this.news()[newsIdx] = resNews;
+          this.ProgramNewsCardComponent?.onCloseEditMode();
+        },
       });
   }
 

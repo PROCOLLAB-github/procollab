@@ -11,6 +11,7 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ActivatedRoute } from "@angular/router";
 import { expandElement } from "@utils/expand-element";
@@ -18,69 +19,20 @@ import { FileModel } from "@office/models/file.model";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
 import { forkJoin, noop, Observable, tap } from "rxjs";
-import { DayjsPipe, ParseLinksPipe } from "projects/core";
+import { DayjsPipe, FormControlPipe, ParseLinksPipe, ValidationService } from "projects/core";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
-import { IconComponent } from "@ui/components";
+import { ButtonComponent, IconComponent } from "@ui/components";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
 import { FeedNews } from "@office/projects/models/project-news.model";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
+import { ClickOutsideModule } from "ng-click-outside";
+import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 
 /**
  * Компонент карточки новости программы
- *
- * Отображает отдельную новость в ленте программы с полным функционалом:
- * - Просмотр текста новости с возможностью развернуть/свернуть
- * - Отображение прикрепленных файлов (изображения и документы)
- * - Режим редактирования новости (для владельца)
- * - Взаимодействие с новостью (лайки, копирование ссылки)
- * - Загрузка и удаление файлов в режиме редактирования
- *
- * Принимает:
- * @Input newsItem: FeedNews - Объект новости для отображения
- * @Input isOwner: boolean - Является ли пользователь владельцем новости
- *
- * Генерирует события:
- * @Output delete: EventEmitter<number> - Удаление новости
- * @Output like: EventEmitter<number> - Лайк/дизлайк новости
- * @Output edited: EventEmitter<FeedNews> - Редактирование новости
- *
- * Зависимости:
- * @param {SnackbarService} snackbarService - Для уведомлений
- * @param {FileService} fileService - Для работы с файлами
- * @param {ActivatedRoute} route - Для получения ID программы
- * @param {ChangeDetectorRef} cdRef - Для обновления представления
- *
- * Состояние:
- * @property {boolean} newsTextExpandable - Можно ли развернуть текст
- * @property {boolean} readMore - Развернут ли текст новости
- * @property {boolean} editMode - Активен ли режим редактирования
- * @property {boolean[]} showLikes - Массив состояний показа лайков для изображений
- *
- * Файлы:
- * @property {FileModel[]} imagesViewList - Изображения для просмотра
- * @property {FileModel[]} filesViewList - Файлы для просмотра
- * @property {Array} imagesEditList - Изображения в режиме редактирования
- * @property {Array} filesEditList - Файлы в режиме редактирования
- *
- * Методы:
- * @method onCopyLink() - Копирует ссылку на новость в буфер обмена
- * @method onUploadFile(event) - Загружает новые файлы
- * @method onDeletePhoto(fId) - Удаляет изображение
- * @method onDeleteFile(fId) - Удаляет файл
- * @method onRetryUpload(id) - Повторяет загрузку файла при ошибке
- * @method onTouchImg(event, imgIdx) - Обработчик двойного тапа для лайка
- * @method onExpandNewsText() - Разворачивает/сворачивает текст новости
- *
- * Особенности:
- * - Разделение файлов на изображения и документы
- * - Поддержка drag&drop для загрузки файлов
- * - Обработка ошибок загрузки с возможностью повтора
- * - Двойной тап на изображениях для лайка (мобильные устройства)
- * - Автоматическое определение высоты текста для кнопки "Читать далее"
- *
- * Возвращает:
- * HTML шаблон карточки новости со всем функционалом
+ * Отображает новость с возможностью редактирования, лайков, просмотра файлов
+ * Поддерживает загрузку и удаление файлов, расширение текста, копирование ссылки
  */
 @Component({
   selector: "app-program-news-card",
@@ -92,9 +44,14 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
     FileUploadItemComponent,
     IconComponent,
     FileItemComponent,
+    ButtonComponent,
+    TextareaComponent,
+    ReactiveFormsModule,
     DayjsPipe,
+    FormControlPipe,
     TruncatePipe,
     ParseLinksPipe,
+    ClickOutsideModule,
   ],
 })
 export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
@@ -102,8 +59,15 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
     private readonly snackbarService: SnackbarService,
     private readonly fileService: FileService,
     private readonly route: ActivatedRoute,
+    private readonly fb: FormBuilder,
+    private readonly validationService: ValidationService,
     private readonly cdRef: ChangeDetectorRef
-  ) {}
+  ) {
+    // Создание формы редактирования новости
+    this.editForm = this.fb.group({
+      text: ["", [Validators.required]], // Текст новости - обязательное поле
+    });
+  }
 
   @Input({ required: true }) newsItem!: FeedNews;
   @Input() isOwner!: boolean;
@@ -114,6 +78,7 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
   newsTextExpandable!: boolean;
   readMore = false;
   editMode = false;
+  editForm: FormGroup;
 
   /** Состояние меню действий */
   menuOpen = false;
@@ -125,9 +90,41 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
     this.menuOpen = false;
   }
 
+  // Оригинальные списки (не изменяются во время редактирования)
+  imagesViewList: FileModel[] = [];
+  filesViewList: FileModel[] = [];
+
+  // Списки для редактирования
+  imagesEditList: {
+    id: string;
+    src: string;
+    loading: boolean;
+    error: boolean;
+    tempFile: File | null;
+  }[] = [];
+
+  filesEditList: {
+    id: string;
+    src: string;
+    loading: boolean;
+    error: string;
+    name: string;
+    size: number;
+    type: string;
+    tempFile: File | null;
+  }[] = [];
+
+  @ViewChild("newsTextEl") newsTextEl?: ElementRef;
+
   ngOnInit(): void {
+    // Установка текущего текста в форму редактирования
+    this.editForm.setValue({
+      text: this.newsItem.text,
+    });
+
     this.showLikes = this.newsItem.files.map(() => false);
 
+    // Инициализация оригинальных списков
     this.imagesViewList = this.newsItem.files.filter(
       f => f.mimeType.split("/")[0] === "image" || f.mimeType.split("/")[1] === "x-empty"
     );
@@ -135,6 +132,14 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
       f => f.mimeType.split("/")[0] !== "image" && f.mimeType.split("/")[1] !== "x-empty"
     );
 
+    // Инициализация списков редактирования из оригинальных данных
+    this.initEditLists();
+  }
+
+  /**
+   * Инициализация списков редактирования из текущих данных
+   */
+  private initEditLists(): void {
     this.imagesEditList = this.imagesViewList.map(file => ({
       src: file.link,
       id: nanoid(),
@@ -155,11 +160,6 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
     }));
   }
 
-  imagesViewList: FileModel[] = [];
-  filesViewList: FileModel[] = [];
-
-  @ViewChild("newsTextEl") newsTextEl?: ElementRef;
-
   ngAfterViewInit(): void {
     const newsTextElem = this.newsTextEl?.nativeElement;
     this.newsTextExpandable = newsTextElem?.clientHeight < newsTextElem?.scrollHeight;
@@ -177,30 +177,76 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
       });
   }
 
-  imagesEditList: {
-    id: string;
-    src: string;
-    loading: boolean;
-    error: boolean;
-    tempFile: File | null;
-  }[] = [];
+  /**
+   * Отправка отредактированной новости
+   */
+  onEditSubmit(): void {
+    if (!this.validationService.getFormValidation(this.editForm)) return;
 
-  filesEditList: {
-    id: string;
-    src: string;
-    loading: boolean;
-    error: string;
-    name: string;
-    size: number;
-    type: string;
-    tempFile: File | null;
-  }[] = [];
+    // Собираем только успешно загруженные файлы
+    const uploadedImages = this.imagesEditList
+      .filter(f => f.src && !f.loading && !f.error)
+      .map(f => f.src);
+
+    // Обновляем оригинальные списки на основе успешно загруженных файлов
+    this.imagesViewList = this.imagesEditList
+      .filter(f => f.src && !f.loading && !f.error)
+      .map(f => ({
+        link: f.src,
+        name: "Image",
+        mimeType: "image/jpeg",
+        size: 0,
+        datetimeUploaded: "",
+        extension: "",
+        user: 0,
+      }));
+
+    this.filesViewList = this.filesEditList
+      .filter(f => f.src && !f.loading && !f.error)
+      .map(f => ({
+        link: f.src,
+        name: f.name,
+        size: f.size,
+        mimeType: f.type,
+        datetimeUploaded: "",
+        extension: "",
+        user: 0,
+      }));
+
+    // Обновляем текст в newsItem для отображения
+    this.newsItem.text = this.editForm.value.text;
+
+    // Обновляем файлы в newsItem
+    this.newsItem.files = [...this.imagesViewList, ...this.filesViewList];
+
+    this.edited.emit({
+      ...this.editForm.value,
+      files: uploadedImages,
+    });
+
+    this.onCloseEditMode();
+    this.cdRef.detectChanges();
+  }
+
+  /**
+   * Закрытие режима редактирования
+   */
+  onCloseEditMode() {
+    this.editMode = false;
+    // Восстанавливаем списки редактирования из оригинальных данных
+    this.initEditLists();
+    // Сбрасываем форму к исходному значению
+    this.editForm.setValue({
+      text: this.newsItem.text,
+    });
+  }
 
   onUploadFile(event: Event) {
     const files = (event.currentTarget as HTMLInputElement).files;
     if (!files) return;
 
     const observableArray: Observable<any>[] = [];
+
     for (let i = 0; i < files.length; i++) {
       const fileType = files[i].type.split("/")[0];
 
@@ -210,7 +256,7 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
           src: "",
           loading: true,
           error: false,
-          tempFile: files[0],
+          tempFile: files[i],
         };
         this.imagesEditList.push(fileObj);
 
@@ -219,19 +265,6 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
             tap(file => {
               fileObj.src = file.url;
               fileObj.loading = false;
-
-              if (fileObj.tempFile) {
-                this.imagesViewList.push({
-                  name: fileObj.tempFile.name,
-                  size: fileObj.tempFile.size,
-                  mimeType: fileObj.tempFile.type,
-                  link: fileObj.src,
-                  datetimeUploaded: "",
-                  extension: "",
-                  user: 0,
-                });
-              }
-
               fileObj.tempFile = null;
             })
           )
@@ -242,10 +275,10 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
           loading: true,
           error: "",
           src: "",
-          tempFile: files[0],
-          name: "",
-          size: 0,
-          type: "",
+          tempFile: files[i],
+          name: files[i].name,
+          size: files[i].size,
+          type: files[i].type,
         };
         this.filesEditList.push(fileObj);
 
@@ -254,18 +287,7 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
             tap(file => {
               fileObj.loading = false;
               fileObj.src = file.url;
-
-              if (fileObj.tempFile) {
-                this.filesViewList.push({
-                  name: fileObj.tempFile.name,
-                  size: fileObj.tempFile.size,
-                  mimeType: fileObj.tempFile.type,
-                  link: fileObj.src,
-                  datetimeUploaded: "",
-                  extension: "",
-                  user: 0,
-                });
-              }
+              fileObj.tempFile = null;
             })
           )
         );
@@ -273,30 +295,14 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
     }
 
     forkJoin(observableArray).subscribe(noop);
-    // const fileObj: NewsCardComponent["imagesEditList"][0] = {
-    //   id: nanoid(2),
-    //   src: "",
-    //   loading: true,
-    //   error: false,
-    //   tempFile: files[0],
-    // };
-    // this.imagesEditList.push(fileObj);
-    // this.fileService.uploadFile(files[0]).subscribe({
-    //   next: file => {
-    //     fileObj.src = file.url;
-    //     fileObj.loading = false;
-    //
-    //     fileObj.tempFile = null;
-    //   },
-    //   error: () => {
-    //     fileObj.error = true;
-    //     fileObj.loading = false;
-    //   },
-    // });
+
+    // Сбрасываем input для возможности повторной загрузки того же файла
+    (event.currentTarget as HTMLInputElement).value = "";
   }
 
   onDeletePhoto(fId: string) {
     const fileIdx = this.imagesEditList.findIndex(f => f.id === fId);
+    if (fileIdx === -1) return;
 
     if (this.imagesEditList[fileIdx].src) {
       this.imagesEditList[fileIdx].loading = true;
@@ -310,6 +316,7 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
 
   onDeleteFile(fId: string) {
     const fileIdx = this.filesEditList.findIndex(f => f.id === fId);
+    if (fileIdx === -1) return;
 
     if (this.filesEditList[fileIdx].src) {
       this.filesEditList[fileIdx].loading = true;
@@ -332,7 +339,6 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
       next: file => {
         fileObj.src = file.url;
         fileObj.loading = false;
-
         fileObj.tempFile = null;
       },
       error: () => {
@@ -343,8 +349,8 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
   }
 
   showLikes: boolean[] = [];
-
   lastTouch = 0;
+
   onTouchImg(_event: TouchEvent, imgIdx: number) {
     if (Date.now() - this.lastTouch < 300) {
       this.like.emit(this.newsItem.id);

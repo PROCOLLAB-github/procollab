@@ -14,11 +14,16 @@
     </div>
     @if(isOwner) {
     <div class="card__menu" (clickOutside)="onCloseMenu()">
-      <div class="card__dots" (click)="menuOpen = true">
+      <div class="card__dots" (click)="menuOpen = !menuOpen">
         <i appIcon icon="dots" appWidth="4" appHeight="10" appViewBox="0 0 4 10"></i>
       </div>
       @if (menuOpen) {
       <ul class="card__options">
+        @if (!editMode) {
+        <li class="card__option text-body-10" (click)="editMode = true; menuOpen = false">
+          редактировать
+        </li>
+        }
         <li class="card__option text-body-10" (click)="delete.emit(newsItem.id)">Удалить</li>
       </ul>
       }
@@ -27,7 +32,11 @@
   </div>
   @if (newsItem.text) {
   <div class="card__text text-body-10">
+    @if (!editMode) {
     <p #newsTextEl [innerHTML]="newsItem.text | parseLinks"></p>
+    } @else { @if (editForm.get("text"); as text) {
+    <app-textarea size="big" [formControl]="text | formControl"></app-textarea>
+    } }
   </div>
   } @if (editMode) {
   <ul>
@@ -107,6 +116,25 @@
       <div class="card__date text-body-10">
         {{ newsItem.datetimeCreated | dayjs: "format":"DD.MM.YY" }}
       </div>
+    </div>
+  </div>
+  } @else {
+  <div class="editor-footer">
+    <label class="editor-footer__attach">
+      <i appIcon icon="attach" appSquare="22"></i>
+      <input type="file" accept="*/*" multiple (change)="onUploadFile($event)" />
+    </label>
+    <div class="editor-footer__actions">
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        color="grey"
+        (click)="onCloseEditMode()"
+        >отмена</app-button
+      >
+      <app-button size="medium" customTypographyClass="text-body-12" (click)="onEditSubmit()"
+        >сохранить</app-button
+      >
     </div>
   </div>
   }

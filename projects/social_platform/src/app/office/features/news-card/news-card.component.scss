@@ -33,13 +33,14 @@
     z-index: 2;
     padding: 20px 0;
     background-color: var(--white);
-    border: 1px solid var(--medium-grey-for-outline);
+    border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-xl);
   }
 
   &__option {
     padding: 5px 20px;
     cursor: pointer;
+    width: 120px;
     transition: background-color 0.2s;
 
     &:hover {
@@ -209,6 +210,7 @@
   &__actions {
     display: flex;
     gap: 10px;
+    align-items: center;
   }
 
   &__attach {

@@ -64,6 +64,10 @@ export class ProgramNewsService {
       .pipe(map(r => plainToInstance(FeedNews, r)));
   }
 
+  editNews(programId: number, newsId: number, newsItem: Partial<FeedNews>) {
+    return this.apiService.patch(`${this.PROGRAMS_URL}/${programId}/news/${newsId}`, newsItem);
+  }
+
   deleteNews(programId: number, newsId: number) {
     return this.apiService.delete(`${this.PROGRAMS_URL}/${programId}/news/${newsId}`);
   }

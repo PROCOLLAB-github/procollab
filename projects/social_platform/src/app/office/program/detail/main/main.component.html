@@ -51,6 +51,7 @@
             [newsItem]="n"
             [isOwner]="program.isUserMember"
             (like)="onLike($event)"
+            (edited)="onEdit($event, n.id)"
             (delete)="onDelete($event)"
           ></app-program-news-card>
           }

@@ -118,10 +118,14 @@
       <input type="file" accept="*/*" multiple (change)="onUploadFile($event)" />
     </label>
     <div class="editor-footer__actions">
-      <app-button customTypographyClass="text-body-12" color="grey" (click)="editMode = false"
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        color="grey"
+        (click)="editMode = false"
         >отмена</app-button
       >
-      <app-button customTypographyClass="text-body-12" (click)="onEditSubmit()"
+      <app-button size="medium" customTypographyClass="text-body-12" (click)="onEditSubmit()"
         >сохранить</app-button
       >
     </div>

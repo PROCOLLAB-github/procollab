@@ -30,14 +30,17 @@
 
   &__options {
     position: absolute;
+    right: 0%;
+    top: 120%;
     z-index: 2;
     padding: 20px 0;
     background-color: var(--white);
-    border: 1px solid var(--medium-grey-for-outline);
+    border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-xl);
   }
 
   &__option {
+    width: 120px;
     padding: 5px 20px;
     cursor: pointer;
     transition: background-color 0.2s;
