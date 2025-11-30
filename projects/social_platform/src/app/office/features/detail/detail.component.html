@@ -86,8 +86,8 @@
           } } @if (isUserMember && !isUserManager && !isUserExpert) {
           <app-button
             size="medium"
-            [style.opacity]="registerDateExpired || isProjectAssigned ? '0.5' : '1'"
-            [disabled]="!!registerDateExpired || isProjectAssigned"
+            [style.opacity]="registerDateExpired() || isProjectAssigned ? '0.5' : '1'"
+            [disabled]="registerDateExpired() || isProjectAssigned"
             [appearance]="isProjectAssigned ? 'outline' : 'inline'"
             (click)="toggleSubmitProjectModal()"
             customTypographyClass="text-body-12 bar__add-project"
@@ -307,10 +307,18 @@
         </ng-template>
 
         <ng-template #projectTpl>
-          @if (isInProject) {
+          @if (isKanbanBoardPage && isInProject) {
+          <app-button
+            (click)="location.back()"
+            [appearance]="isKanbanBoardPage ? 'inline' : 'outline'"
+            size="medium"
+            customTypographyClass="text-body-12"
+            >вернуться</app-button
+          >
+          } @else if (isInProject && !isKanbanBoardPage) {
           <app-button
             [routerLink]="'/office/projects/' + info().id + '/work-section'"
-            appearance="outline"
+            [appearance]="isProjectWorkSectionPage ? 'inline' : 'outline'"
             size="medium"
             customTypographyClass="text-body-12"
           >
@@ -333,6 +341,15 @@
           >
             написать
           </app-button>
+          } @else if (isKanbanBoardPage) {
+          <app-button
+            [appearance]="isGantDiagramPage ? 'inline' : 'outline'"
+            appearance="outline"
+            size="medium"
+            customTypographyClass="text-body-12"
+          >
+            диаграмма ганта
+          </app-button>
           } @else {
           <app-button
             [appearance]="isProjectChatPage ? 'inline' : 'outline'"
@@ -347,6 +364,11 @@
 
           <div class="info__divider"></div>
 
+          @if (isKanbanBoardPage) {
+          <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+            контрольные точки
+          </app-button>
+          } @else {
           <app-button
             [routerLink]="'/office/projects/' + info().id + '/team'"
             [appearance]="isTeamPage ? 'inline' : 'outline'"
@@ -355,8 +377,11 @@
           >
             команда
           </app-button>
-
-          @if (isInProject) { @if (profile) { @if (profile.id === info().leader) {
+          } @if (isInProject) { @if (isKanbanBoardPage) {
+          <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+            статистика
+          </app-button>
+          } @else { @if (profile) { @if (profile.id === info().leader) {
           <a
             class="info__edit"
             [routerLink]="
@@ -377,7 +402,7 @@
               редактировать
             </app-button>
           </a>
-          }@else {
+          } @else {
           <app-button
             appearance="outline"
             color="red"
@@ -387,7 +412,7 @@
           >
             выйти из проекта
           </app-button>
-          } }
+          } } }
 
           <app-modal [(open)]="isEditDisableModal">
             <div

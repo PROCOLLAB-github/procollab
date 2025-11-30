@@ -8,9 +8,11 @@
         <i appIcon icon="task" class="lists__icon" appSquare="12"></i>
       </div>
 
-      <app-button size="big" customTypographyClass="text-body-12" appearance="outline"
-        >открыть доску задач</app-button
-      >
+      <a [routerLink]="'/office/projects/' + projectId + '/kanban-board'">
+        <app-button size="big" customTypographyClass="text-body-12" appearance="outline"
+          >открыть доску задач</app-button
+        >
+      </a>
     </div>
 
     <div class="work-section__section">

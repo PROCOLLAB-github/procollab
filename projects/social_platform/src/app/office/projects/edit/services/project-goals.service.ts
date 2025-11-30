@@ -3,7 +3,7 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ProjectFormService } from "./project-form.service";
-import { Goal, GoalPostForm } from "@office/models/goals.model";
+import { Goal, GoalDto } from "@office/models/goals.model";
 import { catchError, forkJoin, map, of, tap } from "rxjs";
 import { ProjectService } from "@office/services/project.service";
 
@@ -312,7 +312,7 @@ export class ProjectGoalService {
 
   public editGoals(projectId: number, existingGoals: Goal[]) {
     const requests = existingGoals.map((item, idx) => {
-      const payload: GoalPostForm = {
+      const payload: GoalDto = {
         id: item.id,
         title: item.title,
         completionDate: item.completionDate,

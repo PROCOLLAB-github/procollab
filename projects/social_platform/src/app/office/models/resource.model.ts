@@ -8,7 +8,7 @@ export interface Resource {
   partnerCompany: number;
 }
 
-export interface ResourcePostForm {
+export interface ResourceDto {
   projectId: number;
   type: string;
   description: string;

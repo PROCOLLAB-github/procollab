@@ -9,10 +9,12 @@
   --accent: #8a63e6;
   --accent-dark: #{color.adjust(#8a63e6, $blackness: 20%)};
   --accent-mild: #{color.adjust(#6c27ff, $alpha: -0.4)};
-  --accent-light: #9a80e6;
+  --accent-light: #e8e0fa;
+  --accent-medium: #9764ba;
 
   // GOLD
   --gold: #e5b25d;
+  --gold-light: #fdf8f0;
   --gold-dark: #c69849;
 
   // GRAY
@@ -28,7 +30,12 @@
 
   // FUNCTIONAL
   --green: #88c9a1;
+  --green-light: #e3f0e8;
   --green-dark: #297373;
   --red: #d48a9e;
+  --red-light: #f4e2e7;
   --red-dark: #{color.adjust(#d48a9e, $blackness: 10%)};
+  --blue-dark: #2f36aa;
+  --purple: #9a80e6;
+  --cyan: #4cd9f1;
 }

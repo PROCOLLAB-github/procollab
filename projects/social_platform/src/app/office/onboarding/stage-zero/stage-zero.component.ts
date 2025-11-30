@@ -21,8 +21,8 @@ import {
   languageNamesList,
 } from "projects/core/src/consts/lists/language-info-list.const";
 import { IconComponent } from "@uilib";
-import { transformYearStringToNumber } from "@utils/transformYear";
-import { yearRangeValidators } from "@utils/yearRangeValidators";
+import { transformYearStringToNumber } from "@utils/helpers/transformYear";
+import { yearRangeValidators } from "@utils/helpers/yearRangeValidators";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 import { generateOptionsList } from "@utils/generate-options-list";

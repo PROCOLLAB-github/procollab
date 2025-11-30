@@ -2,7 +2,7 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { Partner, PartnerPostForm } from "@office/models/partner.model";
+import { Partner, PartnerDto } from "@office/models/partner.model";
 import { ProjectService } from "@office/services/project.service";
 import { catchError, forkJoin, map, Observable, of, tap } from "rxjs";
 
@@ -222,7 +222,7 @@ export class ProjectPartnerService {
     const requests = partners.map(partner => {
       const decisionMaker = Number(partner.decisionMaker.split("/").at(-1));
 
-      const payload: PartnerPostForm = {
+      const payload: PartnerDto = {
         name: partner.name,
         inn: partner.inn,
         contribution: partner.contribution,

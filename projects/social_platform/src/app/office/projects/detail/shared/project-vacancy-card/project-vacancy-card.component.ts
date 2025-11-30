@@ -72,16 +72,19 @@ export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  descriptionExpandable!: boolean; // Флаг необходимости кнопки "Читать полностью"
-  readFullDescription = false; // Флаг показа всех вакансий
-  endSliceOfSkills = 0;
-
+  /**
+   * Проверка возможности расширения описания после инициализации представления
+   */
   ngAfterViewInit(): void {
     const descElement = this.descEl?.nativeElement;
     this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
 
     this.cdRef.detectChanges();
   }
+
+  descriptionExpandable!: boolean; // Флаг необходимости кнопки "подробнее"
+  readFullDescription = false; // Флаг показа всех вакансий
+  endSliceOfSkills = 0;
 
   /**
    * Раскрытие/сворачивание описания профиля

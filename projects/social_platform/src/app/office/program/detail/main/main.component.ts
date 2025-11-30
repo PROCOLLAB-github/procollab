@@ -27,7 +27,6 @@ import { FeedNews } from "@office/projects/models/project-news.model";
 import { expandElement } from "@utils/expand-element";
 import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { UserLinksPipe } from "@core/pipes/user-links.pipe";
-import { ProgramNewsCardComponent } from "../shared/news-card/news-card.component";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { ApiPagination } from "@models/api-pagination.model";
 import { TagComponent } from "@ui/components/tag/tag.component";
@@ -40,8 +39,8 @@ import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component"
 import { NewsFormComponent } from "@office/features/news-form/news-form.component";
 import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "@uilib";
-import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 import { NewsCardComponent } from "@office/features/news-card/news-card.component";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 @Component({
   selector: "app-main",
@@ -51,7 +50,6 @@ import { NewsCardComponent } from "@office/features/news-card/news-card.componen
   imports: [
     IconComponent,
     ButtonComponent,
-    ProgramNewsCardComponent,
     UserLinksPipe,
     AsyncPipe,
     ParseBreaksPipe,
@@ -228,7 +226,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
-  @ViewChild(ProgramNewsCardComponent) ProgramNewsCardComponent?: ProgramNewsCardComponent;
+  @ViewChild(NewsCardComponent) ProgramNewsCardComponent?: NewsCardComponent;
   @ViewChild("descEl") descEl?: ElementRef;
 
   onNewsInVew(entries: IntersectionObserverEntry[]): void {

@@ -1,8 +1,8 @@
 <!-- @format -->
 
-@if(team) { @if (team.length) {
+@if(collaborators()) { @if (collaborators()?.length) {
 <div class="project__team">
-  @for (collaborator of team; track $index) {
+  @for (collaborator of collaborators(); track $index) {
   <app-info-card
     [leaderId]="leaderId()"
     [loggedUserId]="loggedUserId()"
