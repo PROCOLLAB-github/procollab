@@ -28,9 +28,9 @@
       &--accept {
         width: 23px;
         height: 23px;
+        cursor: pointer;
         border: 0.5px solid var(--accent);
         border-radius: var(--rounded-md);
-        cursor: pointer;
       }
     }
 
