@@ -1,7 +1,7 @@
 /** @format */
 
-export interface Tag {
-  id: number;
-  name: string;
-  color: string;
+export class Tag {
+  id!: number;
+  name!: string;
+  color!: string;
 }

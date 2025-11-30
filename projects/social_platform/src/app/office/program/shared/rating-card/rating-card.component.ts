@@ -146,7 +146,8 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isProjectCriterias = signal(0);
 
-  programDateFinished = signal(false);
+  readonly programDateFinished = this.programDataService.programDateFinished;
+  readonly program = this.programDataService.program;
 
   desktopMode$: Observable<boolean> = this.breakpointObserver
     .observe("(min-width: 920px)")
@@ -160,19 +161,6 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
       this.projectConfirmed.set(isScored);
       this.projectRated.set(isScored);
     }
-
-    const program$ = this.programDataService.program$
-      .pipe(
-        filter(program => !!program),
-        tap(program => {
-          if (program && program.datetimeFinished) {
-            this.programDateFinished.set(Date.now() > Date.parse(program.datetimeFinished));
-          }
-        })
-      )
-      .subscribe();
-
-    this.subscriptions$().push(program$);
 
     const profileId$ = this.authService.profile.subscribe({
       next: profile => {

@@ -41,7 +41,6 @@ import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "@uilib";
 import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
-import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 
 @Component({
   selector: "app-main",
@@ -227,7 +226,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
-  @ViewChild(ProgramNewsCardComponent) ProgramNewsCardComponent?: ProgramNewsCardComponent;
+  @ViewChild(NewsCardComponent) ProgramNewsCardComponent?: NewsCardComponent;
   @ViewChild("descEl") descEl?: ElementRef;
 
   onNewsInVew(entries: IntersectionObserverEntry[]): void {

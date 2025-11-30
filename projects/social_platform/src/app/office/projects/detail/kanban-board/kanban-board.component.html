@@ -2,9 +2,7 @@
 
 <div class="kanban">
   <div class="kanban__wrapper" (clickOutside)="closeDetailTask()">
-    @if (projectBoardInfo(); as projectBoardInfo) {
-    <app-kanban-board-sidebar [projectBoardInfo]="projectBoardInfo"></app-kanban-board-sidebar>
-    }
+    <app-kanban-board-sidebar></app-kanban-board-sidebar>
     <div
       class="kanban__column-wrapper"
       cdkDropList
@@ -93,6 +91,7 @@
           } } }
         </div>
 
+        @if (isLeader || isExternal) {
         <i
           class="kanban__column--add-task"
           (click)="startAddingTask(boardColumn.id)"
@@ -100,6 +99,7 @@
           icon="plus"
           appSquare="10"
         ></i>
+        }
       </div>
       }
 
@@ -111,11 +111,7 @@
     </div>
 
     @if (isTaskDetailOpen()) {
-    <app-task-detail
-      [goals]="projectBoardInfo()?.goals"
-      [collaborators]="projectBoardInfo()?.collaborators"
-      (delete)="onDeleteTask()"
-    ></app-task-detail>
+    <app-task-detail (delete)="onDeleteTask()"></app-task-detail>
     }
   </div>
 </div>

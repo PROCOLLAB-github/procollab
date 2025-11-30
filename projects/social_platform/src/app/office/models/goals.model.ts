@@ -17,7 +17,7 @@ class ResponsibleInfo {
   avatar!: string | null;
 }
 
-export class GoalPostForm {
+export class GoalDto {
   id?: number;
   title!: string;
   completionDate!: string;

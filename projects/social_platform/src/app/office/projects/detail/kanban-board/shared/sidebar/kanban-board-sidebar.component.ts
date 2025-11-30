@@ -1,12 +1,13 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, Input, signal } from "@angular/core";
+import { Component, inject, Input, signal } from "@angular/core";
 import { Project } from "@office/models/project.model";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { KanbanBoardActionsComponent } from "../actions/kanban-board-actions.component";
 import { DropdownComponent } from "@ui/components/dropdown/dropdown.component";
 import { ClickOutsideModule } from "ng-click-outside";
+import { ProjectDataService } from "@office/projects/detail/services/project-data.service";
 
 @Component({
   selector: "app-kanban-board-sidebar",
@@ -22,9 +23,11 @@ import { ClickOutsideModule } from "ng-click-outside";
   standalone: true,
 })
 export class KanbanBoardSidebarComponent {
-  @Input({ required: true }) projectBoardInfo!: Project;
+  private readonly projectDataService = inject(ProjectDataService);
 
   isContextMenuOpen = signal<boolean>(false);
+
+  projectBoardInfo = this.projectDataService.project();
 
   onMouseDown(event: MouseEvent, projectBoardInfo: Project): void {
     event.stopPropagation();

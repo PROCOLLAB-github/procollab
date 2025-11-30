@@ -23,20 +23,12 @@ export class ProjectVacanciesComponent implements OnInit, OnDestroy {
   private readonly projectDataService = inject(ProjectDataService);
 
   // массив пользователей в команде
-  vacancies?: Project["vacancies"];
+  vacancies = this.projectDataService.vacancies;
 
   // массив подписок
   subscriptions: Subscription[] = [];
 
-  ngOnInit(): void {
-    const vacanciesSub$ = this.projectDataService.getVacancies().subscribe({
-      next: vacancies => {
-        this.vacancies = vacancies;
-      },
-    });
-
-    vacanciesSub$ && this.subscriptions.push(vacanciesSub$);
-  }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this.subscriptions.forEach($ => $.unsubscribe());

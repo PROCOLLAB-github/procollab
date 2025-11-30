@@ -2,9 +2,9 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { Resource, ResourcePostForm } from "@office/models/resource.model";
+import { Resource, ResourceDto } from "@office/models/resource.model";
 import { ProjectService } from "@office/services/project.service";
-import { catchError, forkJoin, map, Observable, of, tap } from "rxjs";
+import { catchError, forkJoin, map, of, tap } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -195,7 +195,7 @@ export class ProjectResourceService {
     const resources = this.getResourcesData();
 
     const requests = resources.map(resource => {
-      const payload: Omit<ResourcePostForm, "projectId"> = {
+      const payload: Omit<ResourceDto, "projectId"> = {
         type: resource.type,
         description: resource.description,
         partnerCompany: resource.partnerCompany ?? "запрос к рынку",
@@ -235,7 +235,7 @@ export class ProjectResourceService {
     const resources = this.getResourcesData();
 
     const requests = resources.map(resource => {
-      const payload: Omit<ResourcePostForm, "projectId"> = {
+      const payload: Omit<ResourceDto, "projectId"> = {
         type: resource.type,
         description: resource.description,
         partnerCompany: resource.partnerCompany ?? "запрос к рынку",

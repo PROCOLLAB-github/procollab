@@ -11,7 +11,9 @@
     </div>
   </div>
 
+  @if (isLeader()) {
   <div class="kanban__sidebar-item kanban__sidebar--add-project">
     <i appIcon icon="plus" appSquare="8"></i>
   </div>
+  }
 </ng-container>

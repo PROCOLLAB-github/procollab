@@ -1,17 +1,27 @@
 /** @format */
 
-import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
+import { computed, Injectable, signal } from "@angular/core";
 import { Program } from "../models/program.model";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProgramDataService {
-  private programSubject$ = new BehaviorSubject<Program | undefined>(undefined);
-  program$ = this.programSubject$.asObservable();
+  program = signal<Program | undefined>(undefined);
 
   setProgram(program: Program): void {
-    return this.programSubject$.next(program);
+    return this.program.set(program);
   }
+
+  programDateFinished = computed(() => {
+    const program = this.program();
+    return program?.datetimeFinished ? Date.now() > Date.parse(program.datetimeFinished) : false;
+  });
+
+  registerDateExpired = computed(() => {
+    const program = this.program();
+    return program?.datetimeRegistrationEnds
+      ? Date.now() > Date.parse(program.datetimeRegistrationEnds)
+      : false;
+  });
 }

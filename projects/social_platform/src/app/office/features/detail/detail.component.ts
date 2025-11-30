@@ -1,7 +1,15 @@
 /** @format */
 
 import { CommonModule, Location } from "@angular/common";
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { ButtonComponent, InputComponent } from "@ui/components";
 import { BackComponent, IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/components/modal/modal.component";
@@ -64,6 +72,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
   private readonly cdRef = inject(ChangeDetectorRef);
 
   // Основные данные(типы данных, данные)
+  readonly registerDateExpired = this.programDataService.registerDateExpired;
+
   info = signal<any | undefined>(undefined);
   profile?: User;
   listType: "project" | "program" | "profile" = "project";
@@ -88,7 +98,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   // Сторонние переменные для работы с роутингом или доп проверок
   backPath?: string;
-  registerDateExpired?: boolean;
   isInProject?: boolean;
 
   isSended = false;
@@ -422,31 +431,15 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   private initializeInfo() {
     if (this.listType === "project") {
-      const projectSub$ = this.projectDataService.project$
-        .pipe(filter(project => !!project))
-        .subscribe(project => {
-          this.info.set(project);
+      const project = this.projectDataService.project;
+      this.info = project;
 
-          if (project?.partnerProgram) {
-            this.isEditDisable = project.partnerProgram?.isSubmitted;
-          }
-        });
+      this.isEditDisable = this.info()?.partnerProgram?.isSubmitted ?? false;
 
       this.isInProfileInfo();
-
-      this.subscriptions.push(projectSub$);
     } else if (this.listType === "program") {
-      const program$ = this.programDataService.program$
-        .pipe(
-          filter(program => !!program),
-          tap(program => {
-            if (program) {
-              this.info.set(program);
-              this.registerDateExpired = Date.now() > Date.parse(program.datetimeRegistrationEnds);
-            }
-          })
-        )
-        .subscribe();
+      const program = this.programDataService.program;
+      this.info = program;
 
       const profileDataSub$ = this.authService.profile.pipe(filter(user => !!user)).subscribe({
         next: user => {
@@ -462,7 +455,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
         },
       });
 
-      this.subscriptions.push(program$);
       this.subscriptions.push(memeberProjects$);
       this.subscriptions.push(profileDataSub$);
     } else {

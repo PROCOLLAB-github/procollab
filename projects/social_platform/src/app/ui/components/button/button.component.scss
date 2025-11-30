@@ -105,6 +105,11 @@
       border: 0.5px solid var(--white);
     }
 
+    &.button--green {
+      color: var(--green);
+      border: 0.5px solid var(--green);
+    }
+
     &.button--no-border {
       border: none;
     }

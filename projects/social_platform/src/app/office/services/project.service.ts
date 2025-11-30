@@ -10,9 +10,9 @@ import { ApiPagination } from "@models/api-pagination.model";
 import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectAssign } from "@office/projects/models/project-assign.model";
 import { projectNewAdditionalProgramVields } from "@office/models/partner-program-fields.model";
-import { Goal, GoalPostForm } from "@office/models/goals.model";
-import { Partner, PartnerPostForm } from "@office/models/partner.model";
-import { Resource, ResourcePostForm } from "@office/models/resource.model";
+import { Goal, GoalDto } from "@office/models/goals.model";
+import { Partner, PartnerDto } from "@office/models/partner.model";
+import { Resource, ResourceDto } from "@office/models/resource.model";
 
 /**
  * Сервис для управления проектами
@@ -80,7 +80,7 @@ export class ProjectService {
    * Если компания с таким ИНН уже существует — создаёт или обновляет связь ProjectCompany.
    * Если компании нет — создаёт новую и тут же привязывает.
    */
-  addPartner(projectId: number, params: PartnerPostForm) {
+  addPartner(projectId: number, params: PartnerDto) {
     return this.apiService.post(`${this.PROJECTS_URL}/${projectId}/companies/`, params);
   }
 
@@ -108,7 +108,7 @@ export class ProjectService {
   editParter(
     projectId: number,
     companyId: number,
-    params: Pick<PartnerPostForm, "contribution" | "decisionMaker">
+    params: Pick<PartnerDto, "contribution" | "decisionMaker">
   ) {
     return this.apiService.patch(
       `${this.PROJECTS_URL}/${projectId}/companies/${companyId}/`,
@@ -133,7 +133,7 @@ export class ProjectService {
    * @returns Создать новый ресурс в проекте.
    * Если partner_company указана, проверяется, что она действительно является партнёром данного проекта.
    */
-  addResource(projectId: number, params: Omit<ResourcePostForm, "projectId">) {
+  addResource(projectId: number, params: Omit<ResourceDto, "projectId">) {
     return this.apiService.post(`${this.PROJECTS_URL}/${projectId}/resources/`, {
       project_id: projectId,
       ...params,
@@ -157,7 +157,7 @@ export class ProjectService {
    * @returns Полностью обновить данные ресурса.
    * Используется, если нужно заменить все поля сразу.
    */
-  editResource(projectId: number, resourceId: number, params: Omit<ResourcePostForm, "projectId">) {
+  editResource(projectId: number, resourceId: number, params: Omit<ResourceDto, "projectId">) {
     return this.apiService.patch(`${this.PROJECTS_URL}/${projectId}/resources/${resourceId}/`, {
       project_id: projectId,
       ...params,
@@ -187,14 +187,14 @@ export class ProjectService {
   /**
    * Отправляем цель
    */
-  addGoals(projectId: number, params: GoalPostForm[]) {
-    return this.apiService.post<GoalPostForm[]>(`${this.PROJECTS_URL}/${projectId}/goals/`, params);
+  addGoals(projectId: number, params: GoalDto[]) {
+    return this.apiService.post<GoalDto[]>(`${this.PROJECTS_URL}/${projectId}/goals/`, params);
   }
 
   /**
    * Редактирование цели
    */
-  editGoal(projectId: number, goalId: number, params: GoalPostForm) {
+  editGoal(projectId: number, goalId: number, params: GoalDto) {
     return this.apiService.put(`${this.PROJECTS_URL}/${projectId}/goals/${goalId}`, params);
   }
 
@@ -202,9 +202,7 @@ export class ProjectService {
    * Удаляем цель
    */
   deleteGoals(projectId: number, goalId: number) {
-    return this.apiService.delete<GoalPostForm>(
-      `${this.PROJECTS_URL}/${projectId}/goals/${goalId}`
-    );
+    return this.apiService.delete<GoalDto>(`${this.PROJECTS_URL}/${projectId}/goals/${goalId}`);
   }
 
   /**

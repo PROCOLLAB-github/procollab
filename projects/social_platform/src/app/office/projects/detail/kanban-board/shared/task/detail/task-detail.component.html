@@ -2,90 +2,88 @@
 
 <div class="kanban__detail" [formGroup]="taskDetailForm">
   <div class="kanban__detail-top">
-    @if (isLeaderOrResponsibleOrPerformer) { @if (isTaskResult) { @if (isTaskResult.isVerified) {
-    <div
-      class="kanban__detail-top--accept"
-      style="border: 0.5px solid var(--accent); background-color: var(--light-white)"
-    ></div>
-    <app-button
-      size="medium"
-      customTypographyClass="text-body-12"
-      appearance="outline"
-      color="green"
-      (click)="showUnAcceptResultModal = true"
-      >вы приняли работу</app-button
-    >
-    } @if (isLeaderAcceptResult) {
-    <app-button
-      size="medium"
-      customTypographyClass="text-body-12"
-      appearance="outline"
-      color="green"
-      (click)="showUnAcceptResultModal = true"
-      >результат принят</app-button
-    >
-    } @if (isCommented) {
-    <app-button appearance="outline" size="medium" color="gold" customTypographyClass="text-body-12"
-      >вы прокомментировали</app-button
-    >
-    } @else {
-    <app-button
-      size="medium"
-      customTypographyClass="text-body-12"
-      (click)="showAcceptResultModal = true"
-      >приемка</app-button
-    >
-    }
+    <div class="kanban__detail-buttons">
+      @if (!isTaskResult()) { @if (isExternal() || ((isLeader() || isCreator()) && !isPerformer() &&
+      !isResponsible())) {
+      <app-button
+        appearance="outline"
+        size="medium"
+        color="gold"
+        customTypographyClass="text-body-12"
+        >ожидание результата</app-button
+      >
+      } @else if (isResponsible() || isPerformer()) {
+      <app-button
+        size="medium"
+        appearance="inline"
+        color="primary"
+        customTypographyClass="text-body-12"
+        (click)="showAttachResultModal = true"
+        >прикрепить результа</app-button
+      >
+      } } @else { @if (isCommented) {
+      <app-button
+        [appearance]="isCommentedByLeader && !isLeader() ? 'inline' : 'outline'"
+        size="medium"
+        [color]="isCommentedByLeader && !isLeader() ? 'red' : 'gold'"
+        customTypographyClass="text-body-12"
+        (click)="isCommentedByLeader && !isLeader() && (showLeaderCommentedResultModal = true)"
+        >{{
+          isCommentedByLeader && !isLeader() ? "комментарий лидера" : "вы прокомментировали"
+        }}</app-button
+      >
+      } @if (isLeaderAcceptResult()) { @if (!(isExternal())) {
+      <div class="kanban__detail-top--accept" (click)="isCompletedTask = true"></div>
+      }
 
-    <app-button
-      size="medium"
-      (click)="showResultModal = true"
-      customTypographyClass="text-body-12"
-      appearance="outline"
-      >результат задачи</app-button
-    >
-    }
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        appearance="outline"
+        color="green"
+        (click)="isLeader() && (showUnAcceptResultModal = true)"
+        >{{ isLeader() ? "вы приняли работу" : "результат принят" }}</app-button
+      >
+      } @else { @if (isLeader() && !isLeaderLeaveComment()) {
+      <app-button
+        size="big"
+        customTypographyClass="text-body-12"
+        (click)="showAcceptResultModal = true"
+        >приемка</app-button
+      >
+      } @if (!isCommentedByLeader) { @if (isResponsible() || isPerformer()) {
+      <app-button
+        appearance="outline"
+        size="medium"
+        color="gold"
+        customTypographyClass="text-body-12"
+        >ожидание проверки</app-button
+      >
+      } } }
 
-    <app-button appearance="outline" size="medium" color="gold" customTypographyClass="text-body-12"
-      >ожидание результата</app-button
-    >
-    } @if (isPerformer || isResponsible) { @if (isTaskResult) { @if (isCommentedByLeader) {
-    <app-button
-      customTypographyClass="text-body-12"
-      color="red"
-      size="medium"
-      (click)="showLeaderCommentedResultModal = true"
-      >комментарий лидера</app-button
-    >
-    }
-    <app-button appearance="outline" size="medium" color="gold" customTypographyClass="text-body-12"
-      >ожидание проверки</app-button
-    >
-    }
-
-    <app-button
-      size="medium"
-      [appearance]="isTaskResult ? 'outline' : 'inline'"
-      color="primary"
-      customTypographyClass="text-body-12"
-      (click)="isTaskResult ? (showResultModal = true) : (showAttachResultModal = true)"
-      >{{ isTaskResult ? "результат задачи" : "прикрепить результат" }}</app-button
-    >
-    }
+      <app-button
+        size="medium"
+        (click)="showResultModal = true"
+        customTypographyClass="text-body-12"
+        appearance="outline"
+        >результат задачи</app-button
+      >
+      }
+    </div>
 
     <div class="kanban__detail-top-menu">
-      @if (taskDetailForm.get("action"); as action) {
+      @if (taskDetailForm.get("type"); as type) {
       <div
         class="kanban__detail-type"
-        (clickOutside)="onTypeSelect('action', isActionTypeOpen, action.value)"
-        (click)="onTypeSelect('action', !isActionTypeOpen, action.value)"
+        (clickOutside)="onTypeSelect('type', isActionTypeOpen, type.value)"
+        (click)="onTypeSelect('type', !isActionTypeOpen, type.value)"
       >
-        <i appIcon [icon]="getActionType(action.value)" appSquare="15"></i>
+        <i appIcon [icon]="getActionType(type.value)" appSquare="15"></i>
         <app-dropdown
           [isOpen]="isActionTypeOpen"
           type="icons"
-          (select)="onTypeSelect('action', false, $event)"
-          (outside)="onTypeSelect('action', false)"
+          (select)="onTypeSelect('type', false, $event)"
+          (outside)="onTypeSelect('type', false)"
           [options]="actionTypeOptions"
         ></app-dropdown>
       </div>
@@ -107,8 +105,7 @@
           [options]="priorityTypeOptions"
         ></app-dropdown>
       </div>
-      }
-
+      } @if (isCreator() || isLeader()) {
       <div
         class="kanban__detail-delete-wrapper"
         (clickOutside)="onTypeSelect('delete', isDeleteTypeOpen)"
@@ -124,6 +121,7 @@
           [options]="priorityDeleteOptions"
         ></app-dropdown>
       </div>
+      }
     </div>
   </div>
 
@@ -427,7 +425,10 @@
         }
       </div>
       } @if (skills.value.length < 3) {
-      <div class="kanban__detail-add-object" (click)="skillsGroupsModalOpen.set(true)">
+      <div
+        class="kanban__detail-add-object"
+        (click)="(isCreator() || isLeader()) && skillsGroupsModalOpen.set(true)"
+      >
         <i appIcon icon="plus" appSquare="5"></i>
       </div>
       }
@@ -516,6 +517,7 @@
         <input
           [id]="controlId"
           hidden
+          [disabled]="!(isLeader() || isCreator())"
           type="file"
           accept=".pdf, .docx, .doc, .pptx, .jpeg, .jpg, .png, .webp"
           (change)="onUpdate($event)"
@@ -566,6 +568,7 @@
           size="big"
           formControlName="text"
           [hasBorder]="false"
+          [autofocus]="isCommentedClick"
           [error]="text | controlError"
           class="form__input text-body-12"
           placeholder="добавить комментарий"
@@ -590,11 +593,7 @@
 </div>
 
 <app-modal [open]="showAttachResultModal" (openChange)="showAttachResultModal = false">
-  <div
-    class="cancel"
-    style="padding: 24px; width: 500px; align-items: stretch"
-    (click)="$event.stopPropagation()"
-  >
+  <div class="cancel" style="width: 500px; align-items: stretch" (click)="$event.stopPropagation()">
     <div class="lists__section">
       <p class="text-body-12 lists__title">результат выполнения задачи</p>
       <i appIcon icon="task" class="lists__icon" appSquare="12"></i>
@@ -665,16 +664,23 @@
 </app-modal>
 
 <app-modal [open]="showResultModal" (openChange)="showResultModal = false">
-  <div class="cancel" (click)="$event.stopPropagation()">
+  <div
+    class="cancel"
+    (click)="$event.stopPropagation()"
+    style="width: 500px; align-items: flex-start; justify-content: flex-start"
+  >
     <div class="lists__section">
       <p class="text-body-12 lists__title">результат выполнения задачи</p>
       <i appIcon icon="task" class="lists__icon" appSquare="12"></i>
     </div>
 
     @if (taskDetailInfo()?.result; as result) {
-    <p class="cancel__text">{{ result.description }}</p>
+    <p class="cancel__text text-body-10">{{ result.description }}</p>
 
-    <div class="cancel__footer">
+    <div
+      class="cancel__footer"
+      [style.justify-content]="result.accompanyingFile ? 'space-beetwen' : 'flex-end'"
+    >
       @if (result.accompanyingFile; as file) {
       <app-file-item
         [name]="file.name"
@@ -682,13 +688,12 @@
         [type]="file.extension"
         [size]="file.size"
       ></app-file-item>
-      } @if (isLeaderOrResponsibleOrPerformer) {
+      } @if (isPerformer() || isResponsible()) {
       <div class="cancel__footer-actions">
         <app-button
           customTypographyClass="text-body-12"
-          type="icon"
           color="red"
-          (click)="showAttachResultModal = true"
+          (click)="showDeleteResultModal = true"
         >
           <i appIcon icon="basket" appSquare="12"></i>
         </app-button>
@@ -696,7 +701,8 @@
         <app-button
           customTypographyClass="text-body-12"
           color="primary"
-          (click)="showDeleteResultModal = true"
+          appearance="outline"
+          (click)="showAttachResultModal = true"
         >
           <i appIcon icon="edit-pen" appSquare="12" appearance="outline"></i>
         </app-button>
@@ -711,13 +717,18 @@
   <div class="cancel" (click)="$event.stopPropagation()">
     <p class="text-body-12 cancel__title">принять выполнение задачи</p>
 
-    <i appIcon icon="check" appSquare="60"></i>
+    <i appIcon icon="check" appSquare="60" class="cancel__icon" style="color: var(--green)"></i>
 
     <div class="cancel__buttons">
-      <app-button customTypographyClass="text-body-12" size="medium">принять</app-button>
+      <app-button
+        customTypographyClass="text-body-12"
+        size="medium"
+        (click)="showAcceptResultModal = false"
+        >принять</app-button
+      >
 
       <app-button
-        (click)="isCommentedClick = true"
+        (click)="showAcceptResultModal = false; isCommentedClick = true"
         customTypographyClass="text-body-12"
         color="gold"
         size="medium"
@@ -731,7 +742,7 @@
   <div class="cancel" (click)="$event.stopPropagation()">
     <p class="text-body-12 cancel__title">вы уверены, что хотите снять приемку работы?</p>
 
-    <i appIcon icon="sad-smile" appSquare="50"></i>
+    <i appIcon icon="sad-smile" appSquare="50" class="cancel__icon"></i>
 
     <app-button customTypographyClass="text-body-12" size="big" color="red"
       >удалить результат</app-button
@@ -745,7 +756,7 @@
       вы уверены, что хотите удалить текущий результат работы
     </p>
 
-    <i appIcon icon="sad-smile" appSquare="50"></i>
+    <i appIcon icon="sad-smile" appSquare="50" class="cancel__icon"></i>
 
     <app-button customTypographyClass="text-body-12" size="big" color="red"
       >отменить приемку работы</app-button
@@ -757,13 +768,18 @@
   [open]="showLeaderCommentedResultModal"
   (openChange)="showLeaderCommentedResultModal = false"
 >
-  <div class="cancel" (click)="$event.stopPropagation()">
-    <p class="text-body-12 cancel__title">
+  <div class="cancel" (click)="$event.stopPropagation()" style="width: 350px; padding: 24px">
+    <p class="text-body-14 cancel__title">
       вы уверены, что исправили результат по комментариям от лидера?
     </p>
 
-    <i appIcon icon="check" appSquare="60"></i>
+    <i appIcon icon="check" appSquare="60" class="cancel__icon" style="color: var(--green)"></i>
 
-    <app-button customTypographyClass="text-body-12" size="medium">комментарии решены</app-button>
+    <app-button
+      customTypographyClass="text-body-12"
+      size="big"
+      (click)="showLeaderCommentedResultModal = false"
+      >комментарии решены</app-button
+    >
   </div>
 </app-modal>

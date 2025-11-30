@@ -6,15 +6,15 @@ interface Company {
   inn: string;
 }
 
-export interface Partner {
-  id: number;
-  projecId: number;
-  company: Company;
-  contribution: string;
-  decisionMaker: number;
+export class Partner {
+  id!: number;
+  projecId!: number;
+  company!: Company;
+  contribution!: string;
+  decisionMaker!: number;
 }
 
-export interface PartnerPostForm {
+export interface PartnerDto {
   name: string;
   inn: string;
   contribution: string;

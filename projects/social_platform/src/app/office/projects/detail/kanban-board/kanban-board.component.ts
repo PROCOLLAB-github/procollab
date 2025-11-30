@@ -31,7 +31,8 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from "@angular/cdk/drag-drop";
-import { TaskDetail, TaskPreview } from "./models/task.model";
+import { TaskPreview } from "./models/task.model";
+import { KanbanBoardInfoService } from "./services/kanban-board-info.service";
 
 @Component({
   selector: "app-kanban-board",
@@ -54,7 +55,7 @@ import { TaskDetail, TaskPreview } from "./models/task.model";
   standalone: true,
 })
 export class KanbanBoardComponent implements OnInit, OnDestroy {
-  private readonly projectDataService = inject(ProjectDataService);
+  private readonly kanbanBoardInfoService = inject(KanbanBoardInfoService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
@@ -68,7 +69,6 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
     });
   }
 
-  projectBoardInfo = signal<Project | null>(null);
   boardColumns = signal<any[]>([]);
 
   connectedLists = computed(() => this.boardColumns().map(c => "tasks-column-" + c.id));
@@ -89,6 +89,9 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
     return kanbanColumnInfo;
   }
 
+  readonly isLeader = this.kanbanBoardInfoService.isLeader();
+  readonly isExternal = this.kanbanBoardInfoService.isExternal();
+
   ngOnInit(): void {
     const detailInfoUrl$ = this.route.queryParams.subscribe({
       next: params => {
@@ -99,16 +102,6 @@ export class KanbanBoardComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(detailInfoUrl$);
-
-    const projectInfo$ = this.projectDataService.project$.subscribe({
-      next: project => {
-        if (project) {
-          this.projectBoardInfo.set(project);
-        }
-      },
-    });
-
-    this.subscriptions.push(projectInfo$);
 
     const boardInfo$ = this.route.data.subscribe({
       next: columns => {

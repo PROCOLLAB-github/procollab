@@ -86,8 +86,8 @@
           } } @if (isUserMember && !isUserManager && !isUserExpert) {
           <app-button
             size="medium"
-            [style.opacity]="registerDateExpired || isProjectAssigned ? '0.5' : '1'"
-            [disabled]="!!registerDateExpired || isProjectAssigned"
+            [style.opacity]="registerDateExpired() || isProjectAssigned ? '0.5' : '1'"
+            [disabled]="registerDateExpired() || isProjectAssigned"
             [appearance]="isProjectAssigned ? 'outline' : 'inline'"
             (click)="toggleSubmitProjectModal()"
             customTypographyClass="text-body-12 bar__add-project"

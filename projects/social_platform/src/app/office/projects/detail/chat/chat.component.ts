@@ -3,11 +3,9 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ChatFile, ChatMessage } from "@models/chat-message.model";
 import { filter, map, noop, Observable, Subscription, tap } from "rxjs";
-import { Project } from "@models/project.model";
 import { NavService } from "@services/nav.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { AuthService } from "@auth/services";
-import { ModalService } from "@ui/models/modal.service";
 import { ChatService } from "@services/chat.service";
 import { MessageInputComponent } from "@office/features/message-input/message-input.component";
 import { ChatWindowComponent } from "@office/features/chat-window/chat-window.component";
@@ -75,16 +73,6 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
 
     profile$ && this.subscriptions$.push(profile$);
 
-    // Загрузка данных проекта
-    const projectSub$ = this.projectDataService.project$
-      .pipe(filter(project => !!project))
-      .subscribe({
-        next: project => {
-          this.project = project;
-        },
-      });
-    projectSub$ && this.subscriptions$.push(projectSub$);
-
     console.debug("Chat websocket connected from ProjectChatComponent");
 
     // Инициализация WebSocket событий
@@ -125,7 +113,7 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
   subscriptions$: Subscription[] = [];
 
   /** Данные проекта */
-  project?: Project;
+  readonly project = this.projectDataService.project;
 
   /** Все файлы, загруженные в чат */
   chatFiles?: ChatFile[];
@@ -163,7 +151,7 @@ export class ProjectChatComponent implements OnInit, OnDestroy {
       .onTyping()
       .pipe(
         map(typingEvent =>
-          this.project?.collaborators.find(
+          this.project()?.collaborators.find(
             collaborator => collaborator.userId === typingEvent.userId
           )
         ),

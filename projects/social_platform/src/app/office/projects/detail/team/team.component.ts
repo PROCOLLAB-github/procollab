@@ -5,8 +5,7 @@ import { Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { ProjectDataService } from "../services/project-data.service";
 import { InfoCardComponent } from "@office/features/info-card/info-card.component";
-import { Subscription } from "rxjs";
-import { Project } from "@office/models/project.model";
+import { filter, map, Subscription } from "rxjs";
 import { ProjectService } from "@office/services/project.service";
 import { AuthService } from "@auth/services";
 
@@ -26,53 +25,31 @@ export class ProjectTeamComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
 
   // массив пользователей в команде
-  team?: Project["collaborators"];
-  projectId = signal<number>(0);
+  readonly collaborators = this.projectDataService.collaborators;
+  readonly projectId = this.projectDataService.projectId;
   loggedUserId = signal<number>(0);
-  leaderId = signal<number>(0);
+  readonly leaderId = this.projectDataService.leaderId;
 
   // массив подписок
   subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
-    // получение данных из сервиса как потока данных и подписка на них
-    const teamSub$ = this.projectDataService.getTeam().subscribe({
-      next: team => {
-        this.team = team;
-      },
-    });
-
-    teamSub$ && this.subscriptions.push(teamSub$);
-
-    const projectId$ = this.projectDataService.getProjectId().subscribe({
-      next: projectId => {
-        if (projectId) {
-          this.projectId.set(projectId);
-        }
-      },
-    });
-
     if (location.href.includes("/team")) {
-      const leaderId$ = this.projectDataService.getProjectLeaderId().subscribe({
-        next: leaderId => {
-          if (leaderId) {
-            this.leaderId.set(leaderId);
-          }
-        },
-      });
+      const currentProfileId$ = this.authService.profile
+        .pipe(
+          filter(profile => !!profile),
+          map(profile => profile.id)
+        )
+        .subscribe({
+          next: profileId => {
+            if (profileId) {
+              this.loggedUserId.set(profileId);
+            }
+          },
+        });
 
-      const currentProfileId$ = this.authService.profile.subscribe({
-        next: profile => {
-          if (profile) {
-            this.loggedUserId.set(profile.id);
-          }
-        },
-      });
-
-      this.subscriptions.push(leaderId$, currentProfileId$);
+      this.subscriptions.push(currentProfileId$);
     }
-
-    this.subscriptions.push(projectId$);
   }
 
   ngOnDestroy(): void {
@@ -80,11 +57,16 @@ export class ProjectTeamComponent implements OnInit, OnDestroy {
   }
 
   removeCollaboratorFromProject(userId: number): void {
-    const index = this.team?.findIndex(p => p.userId === userId);
-    if (index !== -1) {
-      this.team?.splice(index!, 1);
-    }
+    if (!this.collaborators()) return;
 
-    this.projectService.removeColloborator(this.projectId(), userId).subscribe();
+    this.projectService.removeColloborator(this.projectId()!, userId).subscribe({
+      next: () => {
+        const updatedProject = {
+          ...this.projectDataService.project()!,
+          collaborators: this.collaborators()?.filter(c => c.userId !== userId) ?? [],
+        };
+        this.projectDataService.setProject(updatedProject);
+      },
+    });
   }
 }

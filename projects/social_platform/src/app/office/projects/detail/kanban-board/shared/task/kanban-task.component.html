@@ -6,7 +6,7 @@
     @if (task.description) {
     <p class="text-body-6">{{ task.description }}</p>
     } @if (task.responsible || (task.performers && task.performers.length > 0) || task.files ||
-    task.action) {
+    task.type) {
     <div class="kanban__task-mid">
       <div class="kanban__task-people">
         @if (task.responsible; as responsible) {
@@ -23,7 +23,7 @@
         } } }
       </div>
 
-      @if (task.files || task.action) {
+      @if (task.files || task.type) {
       <div class="kanban__task-icons">
         <i appIcon icon="attach" appSquare="8" style="color: var(--grey-for-text)"></i>
         <i appIcon icon="phone" appSquare="6"></i>

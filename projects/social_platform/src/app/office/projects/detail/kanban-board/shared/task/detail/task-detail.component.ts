@@ -8,14 +8,12 @@ import {
   ElementRef,
   EventEmitter,
   inject,
-  Input,
   OnDestroy,
   OnInit,
   Output,
   signal,
   ViewChild,
 } from "@angular/core";
-import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { InputComponent, ButtonComponent } from "@ui/components";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
@@ -37,21 +35,18 @@ import { DropdownComponent } from "@ui/components/dropdown/dropdown.component";
 import { priorityInfoList } from "projects/core/src/consts/lists/priority-info-list.const";
 import { ClickOutsideModule } from "ng-click-outside";
 import { actionTypeList } from "projects/core/src/consts/lists/actiion-type-list.const";
-import { Project } from "@office/models/project.model";
 import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { SkillsService } from "@office/services/skills.service";
 import { Skill } from "@office/models/skill";
-import { filter, map, Subscription, take } from "rxjs";
+import { map, Subscription } from "rxjs";
 import { TaskDetail } from "../../../models/task.model";
 import { daysUntil } from "@utils/days-untit";
-import { KanbanBoardService } from "../../../kanban-board.service";
+import { KanbanBoardService } from "../../../services/kanban-board.service";
 import { getPriorityType } from "@utils/helpers/getPriorityType";
 import { getActionType } from "@utils/helpers/getActionType";
 import { ActivatedRoute } from "@angular/router";
 import { FileService } from "@core/services/file.service";
-import { AuthService } from "@auth/services";
-import { User } from "@auth/models/user.model";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 import { ErrorMessage } from "@error/models/error-message";
 import { SnackbarService } from "@ui/services/snackbar.service";
@@ -61,10 +56,10 @@ import {
   CdkVirtualForOf,
   CdkVirtualScrollViewport,
 } from "@angular/cdk/scrolling";
-import { ChatMessageComponent } from "@ui/components/chat-message/chat-message.component";
-import { CommentDto } from "../../../models/dto/comment.model.dto";
 import { TagDto } from "../../../models/dto/tag.model.dto";
 import { PerformerDto } from "../../../models/dto/performer.model.dto";
+import { KanbanBoardInfoService } from "../../../services/kanban-board-info.service";
+import { ProjectDataService } from "@office/projects/detail/services/project-data.service";
 
 @Component({
   selector: "app-task-detail",
@@ -73,7 +68,6 @@ import { PerformerDto } from "../../../models/dto/performer.model.dto";
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    FileUploadItemComponent,
     InputComponent,
     IconComponent,
     FileItemComponent,
@@ -95,14 +89,10 @@ import { PerformerDto } from "../../../models/dto/performer.model.dto";
     CdkFixedSizeVirtualScroll,
     CdkVirtualScrollViewport,
     CdkVirtualForOf,
-    ChatMessageComponent,
   ],
   standalone: true,
 })
 export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() collaborators?: Project["collaborators"];
-  @Input() goals?: Project["goals"];
-
   @Output() delete = new EventEmitter<void>();
 
   @ViewChild("descEl") descEl?: ElementRef;
@@ -111,7 +101,8 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private readonly skillsService = inject(SkillsService);
   private readonly kanbanBoardService = inject(KanbanBoardService);
-  private readonly authService = inject(AuthService);
+  private readonly kanbanBoardInfoService = inject(KanbanBoardInfoService);
+  private readonly projectDataService = inject(ProjectDataService);
   private readonly fileService = inject(FileService);
   private readonly snackbarService = inject(SnackbarService);
   private readonly validationService = inject(ValidationService);
@@ -132,7 +123,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
       files: [[]],
       priority: [null],
       status: [null],
-      action: [null],
+      type: [null],
       score: [null],
       tagsLib: [[]],
     });
@@ -148,8 +139,27 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  taskDetailInfo = signal<TaskDetail | null>(null);
-  currentUser = signal<User | null>(null);
+  taskDetailForm: FormGroup;
+
+  messageForm: FormGroup;
+  /** Сообщение, на которое отвечаем */
+  replyMessage?: ChatMessage;
+  messages = signal<any[]>([
+    // {
+    //   id: 1,
+    //   text: "123",
+    //   author: {
+    //     id: 11,
+    //     avatar: "https://api.selcdn.ru/v1/SEL_228194/procollab_media/5388035211510428528/2458680223122098610_2202079899633949339.webp",
+    //     firstName: "Егоg",
+    //     lastName: "Токареg",
+    //   },
+    //   createdAt: new Date().toISOString(),
+    //   isRead: false,
+    //   replyTo: this.replyMessage?.id ?? null,
+    //   files: [],
+    // }
+  ]);
 
   isChangeDescriptionText = signal<boolean>(false);
 
@@ -164,7 +174,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   errorMessage = ErrorMessage;
 
   descriptionExpandable!: boolean; // Флаг необходимости кнопки "подробнее"
-  readFullDescription = false; // Флаг показа всех вакансий
+  readFullDescription = false; // Флаг показа описания
 
   isActionTypeOpen = false;
   isPriorityTypeOpen = false;
@@ -175,6 +185,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   isTagsPickOpen = false;
 
   isCommentedClick = false;
+  isCompletedTask = false;
 
   creatingTag = false;
   loadingFile = false;
@@ -197,13 +208,6 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   openGroupIds = new Set<number>();
   openGroupIndex: number | null = null;
 
-  taskDetailForm: FormGroup;
-
-  messageForm: FormGroup;
-  /** Сообщение, на которое отвечаем */
-  replyMessage?: ChatMessage;
-  messages = signal<any[]>([]);
-
   /** Массив прикрепленных файлов с метаданными */
   attachFiles: {
     name: string;
@@ -221,6 +225,19 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   subscriptions: Subscription[] = [];
 
+  readonly taskDetailInfo = this.kanbanBoardInfoService.taskDetail;
+  readonly leaderId = this.kanbanBoardInfoService.leaderId;
+  readonly collaborators = this.projectDataService.collaborators;
+  readonly goals = this.projectDataService.goals;
+  readonly isLeaderLeaveComment = this.kanbanBoardInfoService.isLeaderLeaveComment;
+  readonly isLeader = this.kanbanBoardInfoService.isLeader;
+  readonly isPerformer = this.kanbanBoardInfoService.isPerformer;
+  readonly isResponsible = this.kanbanBoardInfoService.isResponsible;
+  readonly isCreator = this.kanbanBoardInfoService.isCreator;
+  readonly isExternal = this.kanbanBoardInfoService.isExternal;
+  readonly isTaskResult = this.kanbanBoardInfoService.isTaskResult;
+  readonly isLeaderAcceptResult = this.kanbanBoardInfoService.isLeaderAcceptResult;
+
   get actionTypeOptions() {
     return actionTypeList;
   }
@@ -237,8 +254,8 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get responsiblePickOpenOptions() {
-    return this.collaborators
-      ? this.collaborators.map(collaborator => ({
+    return this.collaborators()?.length
+      ? this.collaborators()!.map(collaborator => ({
           id: collaborator.userId,
           label: collaborator.firstName + " " + collaborator.lastName[0],
           value: collaborator.userId,
@@ -248,8 +265,8 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get goalPickOptions() {
-    return this.goals
-      ? this.goals.map(goal => ({
+    return this.goals()?.length
+      ? this.goals()!.map(goal => ({
           id: goal.id,
           label: goal.title,
           value: goal.id,
@@ -303,89 +320,19 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     };
   }
 
-  get isPerformer() {
-    const user = this.currentUser();
-    const taskDetail = this.taskDetailInfo();
-
-    if (!user || !taskDetail) return false;
-
-    return taskDetail.performers.some(performer => performer.id === user.id);
-  }
-
-  get isResponsible() {
-    const user = this.currentUser();
-    const taskDetail = this.taskDetailInfo();
-
-    if (!user || !taskDetail) return false;
-
-    return taskDetail.responsible.id === user.id;
-  }
-
-  get isLeader() {
-    const taskDetail = this.taskDetailInfo();
-    const user = this.currentUser();
-
-    if (!user || !taskDetail) return false;
-
-    return taskDetail.creator.id === user.id;
-  }
-
-  get isExternal() {
-    return !this.isLeader;
-  }
-
-  get isLeaderOrResponsibleOrPerformer() {
-    return this.isLeader && (this.isResponsible || this.isPerformer);
-  }
-
-  get isTaskResult() {
-    return this.taskDetailInfo()?.result;
-  }
-
-  get isLeaderAcceptResult() {
-    const taskDetail = this.taskDetailInfo();
-
-    if (!taskDetail || !this.isTaskResult) return false;
-
-    return this.isTaskResult.whoVerified.id === taskDetail.creator.id;
-  }
-
   get isCommented() {
-    const comments = this.taskDetailForm.get("comments")?.value;
-
-    if (!comments) return false;
-
-    return !!comments.length;
+    return this.messages().length > 0 && this.isLeaderLeaveComment();
   }
 
   get isCommentedByLeader() {
-    const comments = this.taskDetailForm.get("comments")?.value;
-    const taskDetail = this.taskDetailInfo();
-
-    if (!comments || !taskDetail) return false;
-
     return (
-      !this.isCommented &&
-      comments.some((comment: CommentDto) => comment.id === taskDetail.creator.id)
+      this.messages().some((comments: ChatMessage) => comments.author.id === this.leaderId()) &&
+      this.isLeaderLeaveComment()
     );
   }
 
   ngOnInit(): void {
-    // this.taskDetailForm.valueChanges.subscribe({
-    //   next: value => {
-    //     console.log(value);
-    //   },
-    // });
-
-    const profileSub$ = this.authService.profile.pipe(filter(profile => !!profile)).subscribe({
-      next: profile => {
-        if (profile) {
-          this.currentUser.set(profile);
-        }
-      },
-    });
-
-    this.subscriptions.push(profileSub$);
+    this.updateDescriptionState();
   }
 
   /**
@@ -393,10 +340,8 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   ngAfterViewInit(): void {
     const todayDate = new Date();
-    const tomorrowDate = new Date(todayDate);
-    tomorrowDate.setDate(todayDate.getDate() + 1);
 
-    this.initializeTaskDetailInfo(todayDate, tomorrowDate);
+    this.initializeTaskDetailInfo(todayDate);
     this.checkDescriptionHeigth();
   }
 
@@ -472,99 +417,113 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTypeSelect(
-    type: "action" | "priority" | "responsible" | "performers" | "goal" | "tags" | "delete",
+    type: "type" | "priority" | "responsible" | "performers" | "goal" | "tags" | "delete",
     state: boolean,
     typeId?: number
   ) {
     switch (type) {
-      case "action":
-        this.isActionTypeOpen = state;
-        this.taskDetailForm.patchValue({ action: typeId });
+      case "type":
+        if (this.isLeader() || this.isCreator()) {
+          this.isActionTypeOpen = state;
+          this.taskDetailForm.patchValue({ action: typeId });
+        }
+
         break;
 
       case "priority":
-        this.isPriorityTypeOpen = state;
-        this.taskDetailForm.patchValue({ priority: typeId });
+        if (this.isLeader() || this.isCreator()) {
+          this.isPriorityTypeOpen = state;
+          this.taskDetailForm.patchValue({ priority: typeId });
+        }
+
         break;
 
       case "responsible": {
-        this.isResponsiblePickOpen = state;
+        if (this.isLeader() || this.isCreator()) {
+          this.isResponsiblePickOpen = state;
 
-        if (typeId !== undefined) {
-          if (!this.collaborators) return;
+          if (typeId !== undefined) {
+            if (!this.collaborators()) return;
 
-          const responsible = this.collaborators.find(
-            collaborator => collaborator.userId === typeId
-          );
-          this.taskDetailForm.patchValue({
-            responsible: {
-              id: responsible?.userId,
-              avatar: responsible?.avatar,
-              name: responsible?.firstName + " " + responsible?.lastName[0],
-            },
-          });
+            const responsible = this.collaborators()?.find(
+              collaborator => collaborator.userId === typeId
+            );
+            this.taskDetailForm.patchValue({
+              responsible: {
+                id: responsible?.userId,
+                avatar: responsible?.avatar,
+                name: responsible?.firstName + " " + responsible?.lastName[0],
+              },
+            });
+          }
         }
         break;
       }
 
       case "performers": {
-        this.isPerformersPickOpen = state;
+        if (this.isResponsible() || this.isLeader() || this.isCreator()) {
+          this.isPerformersPickOpen = state;
 
-        if (typeId !== undefined) {
-          if (!this.collaborators) return;
+          if (typeId !== undefined) {
+            if (!this.collaborators()) return;
 
-          const collaborator = this.collaborators.find(
-            collaborator => collaborator.userId === typeId
-          );
-          const currentPerformers: PerformerDto[] =
-            this.taskDetailForm.get("performers")?.value || [];
-          const payload = {
-            id: collaborator?.userId,
-            avatar: collaborator?.avatar,
-            name: collaborator?.firstName + " " + collaborator?.lastName[0],
-          };
+            const collaborator = this.collaborators()?.find(
+              collaborator => collaborator.userId === typeId
+            );
+            const currentPerformers: PerformerDto[] =
+              this.taskDetailForm.get("performers")?.value || [];
+            const payload = {
+              id: collaborator?.userId,
+              avatar: collaborator?.avatar,
+              name: collaborator?.firstName + " " + collaborator?.lastName[0],
+            };
 
-          if (currentPerformers.some((performer: PerformerDto) => performer.id === payload.id))
-            return;
+            if (currentPerformers.some((performer: PerformerDto) => performer.id === payload.id))
+              return;
 
-          this.taskDetailForm.patchValue({
-            performers: [...currentPerformers, payload],
-          });
+            this.taskDetailForm.patchValue({
+              performers: [...currentPerformers, payload],
+            });
+          }
         }
         break;
       }
 
       case "goal": {
-        this.isGoalPickOpen = state;
+        if (this.isLeader() || this.isCreator()) {
+          this.isGoalPickOpen = state;
 
-        if (typeId !== undefined) {
-          if (!this.goals) return;
+          if (typeId !== undefined) {
+            if (!this.goals()) return;
 
-          const goal = this.goals.find(goal => goal.id === typeId);
-          if (goal) this.taskDetailForm.patchValue({ goal: { id: goal.id, title: goal.title } });
+            const goal = this.goals()?.find(goal => goal.id === typeId);
+            if (goal) this.taskDetailForm.patchValue({ goal: { id: goal.id, title: goal.title } });
+          }
         }
 
         break;
       }
 
       case "tags": {
-        this.isTagsPickOpen = state;
+        if (this.isLeader() || this.isCreator()) {
+          this.isTagsPickOpen = state;
 
-        if (!state) {
-          this.editingTag = null;
-          this.creatingTag = false;
-        }
+          if (!state) {
+            this.editingTag = null;
+            this.creatingTag = false;
+          }
 
-        if (typeId !== undefined) {
-          const tag = this.tagsPickOptions.find((tag: TagDto) => tag.id === typeId);
-          const payload = { id: tag?.id, title: tag?.label, color: tag?.additionalInfo };
+          if (typeId !== undefined) {
+            const tag = this.tagsPickOptions.find((tag: TagDto) => tag.id === typeId);
+            const payload = { id: tag?.id, title: tag?.label, color: tag?.additionalInfo };
 
-          const currentTags = this.taskDetailForm.get("tags")?.value || [];
-          if (currentTags.some((tag: TagDto) => tag.id === payload.id)) return;
-          this.taskDetailForm.patchValue({ tags: [...currentTags, payload] });
-        } else {
-          this.editingTag = null;
-          this.creatingTag = false;
+            const currentTags = this.taskDetailForm.get("tags")?.value || [];
+            if (currentTags.some((tag: TagDto) => tag.id === payload.id)) return;
+            this.taskDetailForm.patchValue({ tags: [...currentTags, payload] });
+          } else {
+            this.editingTag = null;
+            this.creatingTag = false;
+          }
         }
 
         break;
@@ -572,9 +531,13 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
       case "delete":
         if (typeId !== undefined) {
-          this.delete.emit();
+          this.isDeleteTypeOpen = state;
+
+          if (this.isCreator() || this.isLeader()) {
+            this.delete.emit();
+          }
         }
-        this.isDeleteTypeOpen = state;
+
         break;
 
       default:
@@ -728,6 +691,9 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // TODO: Отправка отклика на сервер
     // this.snackbarService.success("результат работы успешно прикреплен");
+
+    this.showAttachResultModal = false;
+    this.showResultModal = false;
   }
 
   /**
@@ -741,7 +707,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     const newMessage = {
       id: Date.now(),
       text,
-      author: this.currentUser(),
+      author: this.kanbanBoardInfoService.currentUser(),
       createdAt: new Date().toISOString(),
       isRead: false,
       replyTo: this.replyMessage?.id ?? null,
@@ -780,6 +746,16 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   onCancelReply(): void {
     this.replyMessage = undefined;
+  }
+
+  private updateDescriptionState() {
+    const descriptionControl = this.taskDetailForm.get("description");
+
+    if (!(this.isLeader() || this.isCreator())) {
+      descriptionControl?.disable();
+    } else {
+      descriptionControl?.enable();
+    }
   }
 
   /**
@@ -829,25 +805,37 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cdRef.detectChanges();
   }
 
-  private initializeTaskDetailInfo(todayDate: Date, tommorowDate: Date): void {
+  private initializeTaskDetailInfo(todayDate: Date): void {
+    const startDateDefault = new Date(todayDate);
+    startDateDefault.setDate(todayDate.getDate() + 1);
+
+    const deadlineDefault = new Date(todayDate);
+    deadlineDefault.setDate(todayDate.getDate() + 2);
+
     const taskId = this.route.snapshot.queryParams["taskId"];
+
     const taskDetailInfo$ = this.kanbanBoardService.getTaskById(taskId).subscribe({
       next: (taskDetailInfo: TaskDetail) => {
-        this.taskDetailInfo.set(taskDetailInfo);
+        this.kanbanBoardInfoService.setTaskDetailInfo(taskDetailInfo);
 
         this.taskDetailForm.patchValue({
           title: taskDetailInfo.title ?? "",
+          type: taskDetailInfo.type ?? 1,
+          priority: taskDetailInfo.priority ?? 1,
           responsible: taskDetailInfo.responsible ?? null,
           performers: taskDetailInfo.performers ?? [],
-          startDate: taskDetailInfo.dateTaskStart ?? todayDate,
+          startDate: taskDetailInfo.datetimeTaskStart ?? startDateDefault,
           deadline: taskDetailInfo.deadlineDate
             ? new Date(taskDetailInfo.deadlineDate)
-            : tommorowDate,
+            : deadlineDefault,
           tags: taskDetailInfo.tags ?? [],
           goal: taskDetailInfo.goal ?? null,
           skills: taskDetailInfo.requiredSkills ?? [],
           description: taskDetailInfo.description ?? null,
           files: taskDetailInfo.files ?? [],
+          score: taskDetailInfo.score ?? 1,
+          creator: taskDetailInfo.creator ?? this.kanbanBoardInfoService.currentUser(),
+          createdAt: taskDetailInfo.datetimeCreated ?? new Date(),
         });
 
         if (taskDetailInfo.result) {
@@ -859,9 +847,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.remainingDaysDeadline.set(
           daysUntil(
-            taskDetailInfo.deadlineDate
-              ? new Date(taskDetailInfo.deadlineDate)
-              : new Date(tommorowDate)
+            taskDetailInfo.deadlineDate ? new Date(taskDetailInfo.deadlineDate) : deadlineDefault
           )
         );
       },

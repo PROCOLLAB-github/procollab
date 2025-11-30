@@ -1,5 +1,5 @@
 <!-- @format -->
-@if (project) {
+@if (project()) {
 <div class="chat-page">
   <div class="chat-page__main main">
     @if (!messages.length) {
@@ -30,7 +30,7 @@
         <i appIcon icon="team" appSquare="12"></i>
       </header>
       <ul class="info__list">
-        @for (member of project.collaborators; track member.userId) {
+        @for (member of project()?.collaborators; track member.userId) {
         <li class="info__item">
           <a class="member" [routerLink]="['/office/profile', member.userId]">
             <app-avatar class="member__avatar" [url]="member.avatar" [size]="30"></app-avatar>
