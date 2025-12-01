@@ -149,6 +149,10 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
           if (news.results?.length) {
             this.news.set(news.results);
             this.totalNewsCount.set(news.count);
+
+            setTimeout(() => {
+              this.setupNewsObserver();
+            }, 100);
           }
 
           this.loadingService.hide();
@@ -205,6 +209,10 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
           } else {
             this.fetchPage.update(p => p + 1);
           }
+
+          setTimeout(() => {
+            this.setupNewsObserver();
+          }, 100);
         })
       );
     }
@@ -308,6 +316,18 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     }
 
     this.descriptionExpandable = descElement.scrollHeight > descElement.clientHeight;
+  }
+
+  private setupNewsObserver(): void {
+    const observer = new IntersectionObserver(this.onNewsInVew.bind(this), {
+      root: document.querySelector(".office__body"),
+      rootMargin: "0px 0px 0px 0px",
+      threshold: 0,
+    });
+
+    document.querySelectorAll(".news__item").forEach(element => {
+      observer.observe(element);
+    });
   }
 
   program?: Program;

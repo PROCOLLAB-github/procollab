@@ -17,9 +17,10 @@
         'card__registration--ended': registerDateExpired,
       }"
     >
+      <!-- ? "Регистрация до:" + " " + (program.datetimeRegistrationEnds | date: "dd MMMM") -->
       {{
         !registerDateExpired && (!program.isUserMember || !program.isUserManager)
-          ? "Регистрация до:" + " " + (program.datetimeRegistrationEnds | date: "dd MMMM")
+          ? "Подача проектов до:" + " " + (program.datetimeRegistrationEnds | date: "dd MMMM")
           : registerDateExpired
           ? "регистрация завершена"
           : "ты уже участвуешь!"
