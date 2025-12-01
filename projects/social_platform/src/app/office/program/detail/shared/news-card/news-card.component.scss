@@ -76,6 +76,17 @@
     color: var(--dark-grey);
   }
 
+  &__views {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--dark-grey);
+
+    i {
+      margin-bottom: 1px;
+    }
+  }
+
   /* stylelint-disable value-no-vendor-prefix */
   &__text {
     white-space: break-spaces;
@@ -171,6 +182,12 @@
     display: flex;
     gap: 5px;
     align-items: center;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
 
   &__item {

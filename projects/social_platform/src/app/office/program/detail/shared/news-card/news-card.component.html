@@ -5,7 +5,12 @@
       <img class="card__avatar" [src]="newsItem.imageAddress" [alt]="newsItem.name" />
       <div>
         <div class="card__top">
-          <div class="card__name text-body-10">{{ newsItem.name | truncate: 30 }}</div>
+          <div class="card__info" style="display: flex; flex-direction: column">
+            <div class="card__name text-body-10">{{ newsItem.name | truncate: 30 }}</div>
+            <div class="card__date text-body-10">
+              {{ newsItem.datetimeCreated | dayjs: "format":"DD.MM.YY" }}
+            </div>
+          </div>
           @if (newsItem.pin) {
           <i appIcon icon="pin" appSquare="12"></i>
           }
@@ -113,8 +118,9 @@
       </div>
     </div>
     <div class="footer__right">
-      <div class="card__date text-body-10">
-        {{ newsItem.datetimeCreated | dayjs: "format":"DD.MM.YY" }}
+      <div class="card__views text-body-10">
+        <i appIcon icon="eye" appSquare="12"></i>
+        {{ newsItem.viewsCount }}
       </div>
     </div>
   </div>
