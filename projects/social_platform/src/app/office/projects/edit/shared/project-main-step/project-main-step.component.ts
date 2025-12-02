@@ -194,7 +194,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
    * Проверяет, есть ли ссылки для отображения
    */
   get hasLinks(): boolean {
-    return this.links.length > 0;
+    return this.linksArray.length > 0;
   }
 
   /**
@@ -204,12 +204,15 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
     return this.goals.length > 0;
   }
 
+  get linksArray(): FormArray {
+    return this.projectForm.get("links") as FormArray;
+  }
+
   /**
    * Добавление ссылки
    */
-  addLink(link?: string): void {
-    this.links.push(this.fb.control(link ?? "", [Validators.required]));
-    this.projectContactsService.addLink(this.links, this.projectForm);
+  addLink(): void {
+    this.linksArray.push(this.fb.control("", Validators.required));
   }
 
   /**
@@ -225,7 +228,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
    * @param index - индекс ссылки
    */
   removeLink(index: number): void {
-    this.projectContactsService.removeLink(index, this.links);
+    this.linksArray.removeAt(index);
   }
 
   /**
@@ -308,5 +311,9 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
       this.activeGoalIndex.set(null);
       this.selectedLeaderId = "";
     }
+  }
+
+  trackByIndex(index: number): number {
+    return index;
   }
 }

@@ -71,45 +71,10 @@ export class ProjectContactsService {
    * @param linksFormArray FormArray, содержащий формы ссылок
    * @param projectForm основная форма проекта (FormGroup)
    */
-  public addLink(linksFormArray: FormArray, projectForm: FormGroup): void {
-    // Инициализируем сигнал при первом вызове
+  public addLink(linksFormArray: FormArray): void {
     this.initializeLinksItems(linksFormArray);
-
-    // Считываем вводимые данные
-    const linkValue = projectForm.get("link")?.value;
-
-    // Проверяем, что поле не пустое и содержит валидный URL
-    if (
-      !linkValue ||
-      !linkValue.trim() ||
-      (!linkValue.includes("https://") && !linkValue.includes("http://"))
-    ) {
-      return; // Выходим из функции, если поле пустое или невалидное
-    }
-
-    const trimmedLink = linkValue.trim();
-
-    // Проверяем, редактируется ли существующая ссылка
-    const editIdx = this.projectFormService.editIndex();
-    if (editIdx !== null) {
-      // Обновляем массив сигналов и соответствующий контрол в FormArray
-      this.linksItems.update(items => {
-        const updated = [...items];
-        updated[editIdx] = trimmedLink.value;
-        return updated;
-      });
-      linksFormArray.at(editIdx).patchValue(trimmedLink.value);
-      // Сбрасываем индекс редактирования
-      this.projectFormService.editIndex.set(null);
-    } else {
-      // Добавляем новую ссылку в сигнал и FormArray
-      this.linksItems.update(items => [...items, trimmedLink.value]);
-      linksFormArray.push(this.fb.control(trimmedLink, Validators.required));
-    }
-
-    // Очищаем поле ввода формы проекта
-    projectForm.get("link")?.reset();
-    projectForm.get("link")?.setValue("");
+    linksFormArray.push(this.fb.control("", Validators.required));
+    this.linksItems.update(items => [...items, ""]);
   }
 
   /**

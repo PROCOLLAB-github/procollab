@@ -40,6 +40,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ProgramDataService } from "@office/program/services/program-data.service";
 import { AuthService } from "@auth/services";
 import { User } from "@auth/models/user.model";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компонент карточки оценки проекта
@@ -98,6 +99,7 @@ import { User } from "@auth/models/user.model";
     RouterLink,
     TagComponent,
     ModalComponent,
+    TruncatePipe,
   ],
 })
 export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {

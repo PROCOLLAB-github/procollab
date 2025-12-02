@@ -412,32 +412,41 @@
   </div>
 
   <div [formGroup]="projectForm">
-    @if (hasLinks) {
-    <ul formArrayName="links" class="project__links--wrapper">
-      @for (control of links.controls; track i; let i = $index) {
-      <li class="project__links">
-        <fieldset style="flex-grow: 1">
-          <label class="text-body-12 field-label">ссылка на контакты и сообщества</label>
-          <app-input
-            size="big"
-            [error]="links.at(i) | controlError"
-            placeholder="@eeeasycarrer"
-            [formControlName]="i"
-          ></app-input>
-          @if (links.at(i) | controlError: "required") {
-          <div class="text-body-10 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          }
-        </fieldset>
-        <app-button class="project__links--remove" color="red" (click)="removeLink(i)" type="icon">
-          <i appIcon icon="basket" appSquare="14"></i>
-        </app-button>
-      </li>
-      }
-    </ul>
-    }
+    <div formArrayName="links">
+      @if (hasLinks) {
+      <ul class="project__links--wrapper">
+        @for (control of linksArray.controls; track trackByIndex($index)) {
+        <li class="project__links">
+          <fieldset style="flex-grow: 1">
+            <label class="text-body-12 field-label">ссылка на контакты и сообщества</label>
+            <app-input
+              size="big"
+              [formControlName]="$index"
+              placeholder="@eeeasycarrer"
+            ></app-input>
+            @if (control.invalid && (control.touched || projSubmitInitiated)) {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
 
+          <app-button
+            class="project__links--remove"
+            color="red"
+            (click)="removeLink($index)"
+            type="icon"
+          >
+            <i appIcon icon="basket" appSquare="14"></i>
+          </app-button>
+        </li>
+        }
+      </ul>
+      }
+    </div>
+    <!-- ↑↑↑ formArrayName="links" закрывается здесь -->
+
+    <!-- Кнопка добавления -->
     <app-button
       (click)="addLink()"
       size="big"

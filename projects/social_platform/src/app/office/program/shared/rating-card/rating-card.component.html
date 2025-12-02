@@ -14,7 +14,7 @@
 
         <div class="card__naming">
           <a [routerLink]="['/office/projects/' + project.id]">
-            <p class="text-body-12 card__naming--text">{{ project.name }}</p>
+            <p class="text-body-12 card__naming--text">{{ project.name | truncate: 15 }}</p>
           </a>
 
           @if (industryService.industries | async; as industries) { @if
