@@ -426,7 +426,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.isProjectWorkSectionPage = currentUrl.includes("/work-section");
 
     this.isGantDiagramPage = currentUrl.includes("/gant-diagram");
-    this.isKanbanBoardPage = currentUrl.includes("/kanban-board");
+    this.isKanbanBoardPage = currentUrl.includes("/kanban");
   }
 
   private initializeInfo() {

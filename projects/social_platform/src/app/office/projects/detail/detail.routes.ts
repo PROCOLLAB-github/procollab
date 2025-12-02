@@ -13,9 +13,9 @@ import { ProjectTeamComponent } from "./team/team.component";
 import { ProjectVacanciesComponent } from "./vacancies/vacancies.component";
 import { DeatilComponent } from "@office/features/detail/detail.component";
 import { ProjectWorkSectionComponent } from "./work-section/work-section.component";
-import { KanbanBoardResolver } from "./kanban-board/kanban-board.resolver";
-import { KanbanBoardComponent } from "./kanban-board/kanban-board.component";
-import { KanbanBoardGuard } from "./kanban-board/kanban-board.guard";
+import { KanbanBoardResolver } from "./kanban/kanban.resolver";
+import { KanbanBoardGuard } from "./kanban/kanban.guard";
+import { KanbanComponent } from "./kanban/kanban.component";
 
 /**
  * Конфигурация маршрутов для детального просмотра проекта
@@ -70,12 +70,13 @@ export const PROJECT_DETAIL_ROUTES: Routes = [
         },
       },
       {
-        path: "kanban-board",
+        path: "kanban",
         canActivate: [KanbanBoardGuard],
-        component: KanbanBoardComponent,
+        component: KanbanComponent,
         resolve: {
           data: KanbanBoardResolver,
         },
+        loadChildren: () => import("./kanban/kanban.routes").then(c => c.KANBAN_ROUTES),
       },
       {
         path: "chat",

@@ -10,7 +10,7 @@ import {
   SimpleChanges,
 } from "@angular/core";
 import { IconComponent } from "../icon/icon.component";
-import { tagColorsList } from "projects/core/src/consts/lists/tag-colots.list.const";
+import { tagColors } from "projects/core/src/consts/other/tag-colors.const";
 import { NgStyle } from "@angular/common";
 
 /**
@@ -49,6 +49,8 @@ export class TagComponent implements OnInit, OnChanges {
     | "complete-dark"
     | "soft" = "primary";
 
+  @Input() type?: "days" | "overdue" | "answer";
+
   /** Стиль отображения */
   @Input() appearance: "inline" | "outline" = "inline";
 
@@ -64,8 +66,8 @@ export class TagComponent implements OnInit, OnChanges {
   /** Событие для возможности редактирования */
   @Output() edit = new EventEmitter<void>();
 
-  get tagColorsList() {
-    return tagColorsList;
+  get tagColors() {
+    return tagColors;
   }
 
   additionalTagColor = "";
@@ -95,7 +97,7 @@ export class TagComponent implements OnInit, OnChanges {
   }
 
   private mappingAdditionalTagColors(): void {
-    const found = tagColorsList.find(tagColor => tagColor.name === this.color);
+    const found = tagColors.find(tagColor => tagColor.name === this.color);
     if (found) {
       this.additionalTagColor = found.color;
     }

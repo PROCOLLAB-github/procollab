@@ -8,8 +8,8 @@ import { IconComponent } from "@uilib";
 import { getPriorityType } from "@utils/helpers/getPriorityType";
 import { TagComponent } from "../tag/tag.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { CreateTagFormComponent } from "@office/projects/detail/kanban-board/shared/create-tag-form/create-tag-form.component";
-import { TagDto } from "@office/projects/detail/kanban-board/models/dto/tag.model.dto";
+import { CreateTagFormComponent } from "@office/projects/detail/kanban/shared/create-tag-form/create-tag-form.component";
+import { TagDto } from "@office/projects/detail/kanban/models/dto/tag.model.dto";
 
 @Component({
   selector: "app-dropdown",

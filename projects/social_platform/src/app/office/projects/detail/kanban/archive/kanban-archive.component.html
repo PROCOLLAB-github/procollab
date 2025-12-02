@@ -1,0 +1,15 @@
+<!-- @format -->
+
+<div class="kanban">
+  <div class="kanban__search">
+    <form [formGroup]="searchForm">
+      <app-search></app-search>
+    </form>
+  </div>
+
+  <div class="kanban__tasks">
+    @for(task of completedTasks(); track task.id) {
+    <app-kanban-task (click)="openDetailTask(task.id)" [task]="task"></app-kanban-task>
+    }
+  </div>
+</div>

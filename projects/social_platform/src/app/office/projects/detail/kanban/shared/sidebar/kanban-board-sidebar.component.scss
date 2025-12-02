@@ -1,0 +1,54 @@
+.kanban {
+  &__sidebar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    justify-content: flex-start;
+    width: 68px;
+    height: 60vh;
+    max-height: 373px;
+    padding: 15px;
+    background-color: var(--light-white);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
+
+    &-info {
+      position: absolute;
+      top: 0%;
+      left: 110%;
+      width: 245px;
+      padding: 24px;
+      background-color: var(--light-white);
+      border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: var(--rounded-lg);
+
+      p {
+        line-break: anywhere;
+        white-space: pre-wrap;
+      }
+    }
+  }
+
+  &__create-board {
+    position: absolute;
+    bottom: 0%;
+    left: 110%;
+  }
+}
+
+.lists {
+  &__section {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 8px;
+    border-bottom: 0.5px solid var(--accent);
+  }
+
+  &__title {
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+}

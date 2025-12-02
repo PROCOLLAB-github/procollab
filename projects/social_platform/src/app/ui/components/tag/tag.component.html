@@ -14,6 +14,9 @@
   [class.tag--soft]="color === 'soft'"
   [class.tag--cyan]="color === 'cyan'"
   [class.tag--red]="color === 'red'"
+  [class.tag--days]="type === 'days'"
+  [class.tag--overdue]="type === 'overdue'"
+  [class.tag--answer]="type === 'answer'"
   [ngStyle]="additionalTagColor ? { 'background-color': additionalTagColor } : {}"
 >
   <p class="text-body-6"><ng-content></ng-content></p>

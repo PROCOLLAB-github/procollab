@@ -24,7 +24,7 @@ import { Trajectory } from "projects/skills/src/models/trajectory.model";
 import { HttpErrorResponse } from "@angular/common/http";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { map, Observable } from "rxjs";
-import { trajectoryMoreList } from "projects/core/src/consts/lists/trajectory-more-list.const";
+import { trajectoryMoreList } from "projects/core/src/consts/other/trajectory-more.const";
 
 /**
  * Компонент отображения карточки траектории

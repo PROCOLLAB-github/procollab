@@ -3,5 +3,15 @@
 export class Tag {
   id!: number;
   name!: string;
-  color!: string;
+  color!:
+    | "primary"
+    | "secondary"
+    | "accent"
+    | "accent-medium"
+    | "blue-dark"
+    | "cyan"
+    | "red"
+    | "complete"
+    | "complete-dark"
+    | "soft";
 }
