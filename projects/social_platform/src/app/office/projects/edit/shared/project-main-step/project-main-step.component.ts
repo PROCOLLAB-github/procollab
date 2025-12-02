@@ -291,7 +291,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
 
     // Устанавливаем выбранного лидера в форму
     const goalFormGroup = this.goals.at(goalIndex);
-    goalFormGroup?.get("responsible")?.setValue(this.selectedLeaderId);
+    goalFormGroup?.get("responsible")?.setValue(Number(this.selectedLeaderId));
 
     this.toggleGoalLeaderModal();
     this.selectedLeaderId = "";

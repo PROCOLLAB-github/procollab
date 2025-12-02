@@ -376,7 +376,7 @@
                 <app-input
                   type="radio"
                   name="goalLeaderSelection"
-                  [appValue]="collaborator.userId.toLocaleString()"
+                  [appValue]="collaborator.userId.toString()"
                   [checked]="selectedLeaderId === collaborator.userId.toString()"
                   (change)="onLeaderRadioChange($event)"
                 ></app-input>
