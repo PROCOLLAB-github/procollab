@@ -87,23 +87,6 @@
     }
   }
 
-  &__controls {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 18px;
-  }
-
-  &__tags {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-
-    p {
-      color: var(--grey-for-text);
-    }
-  }
-
   &__bar {
     position: fixed;
     display: flex;

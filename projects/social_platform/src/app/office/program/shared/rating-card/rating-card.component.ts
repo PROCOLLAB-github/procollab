@@ -41,6 +41,7 @@ import { ProgramDataService } from "@office/program/services/program-data.servic
 import { AuthService } from "@auth/services";
 import { User } from "@auth/models/user.model";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
+import { HttpResponse } from "@angular/common/http";
 
 /**
  * Компонент карточки оценки проекта
@@ -233,6 +234,14 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
           this.projectRated.set(true);
           this.projectConfirmed.set(true);
           this.showConfirmRateModal.set(false);
+        },
+        error: err => {
+          if (err instanceof HttpResponse) {
+            if (err.status === 400) {
+              console.log("error of max rated");
+              console.error("error of max rated");
+            }
+          }
         },
       });
   }

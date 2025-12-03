@@ -43,24 +43,8 @@ export class ProjectRatingService {
 
   constructor(private readonly apiService: ApiService) {}
 
-  getAll(
-    id: number,
-    skip: number,
-    take: number,
-    isRatedByExpert?: boolean,
-    nameContains?: string
-  ): Observable<ApiPagination<ProjectRate>> {
-    return this.apiService.get(
-      `${this.RATE_PROJECT_URL}/${id}`,
-      new HttpParams({
-        fromObject: {
-          ...(nameContains !== undefined && { name__contains: nameContains }),
-          ...(isRatedByExpert !== undefined && { is_rated_by_expert: isRatedByExpert }),
-          limit: take,
-          offset: skip,
-        },
-      })
-    );
+  getAll(programId: number, params?: HttpParams): Observable<ApiPagination<ProjectRate>> {
+    return this.apiService.get(`${this.RATE_PROJECT_URL}/${programId}`, params);
   }
 
   rate(projectId: number, scores: ProjectRatingCriterionOutput[]): Observable<void> {
