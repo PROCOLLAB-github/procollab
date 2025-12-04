@@ -57,7 +57,7 @@ export class SubscriptionService {
    * @returns Observable<ApiPagination<Project>> - объект с массивом проектов и метаданными пагинации
    */
   getSubscriptions(userId: number, params?: HttpParams): Observable<ApiPagination<Project>> {
-    return this.apiService.get(`${this.AUTH_USERS_URL}/${userId}/subscribed_projects`, params);
+    return this.apiService.get(`${this.AUTH_USERS_URL}/${userId}/subscribed_projects/`, params);
   }
 
   /**
