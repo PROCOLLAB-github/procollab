@@ -76,7 +76,12 @@
       <app-project-rating
         [criteria]="project.criterias"
         [formControl]="form"
-        [disabled]="(projectRated() || projectConfirmed()) && !programDateFinished()"
+        [currentUserId]="profile().id"
+        [disabled]="
+          (projectRated() || projectConfirmed()) &&
+          project.ratedExperts.includes(profile().id) &&
+          !programDateFinished()
+        "
       ></app-project-rating>
       @if (form | controlError: "required"; as error) {
       <div class="text-body-10 error">
@@ -95,7 +100,8 @@
         [disabled]="isButtonDisabled"
         [style.opacity]="buttonOpacity"
         [color]="buttonColor"
-        (click)="canRate ? showConfirmRateModal.set(true) : null"
+        [title]="buttonTooltip"
+        (click)="handleRateButtonClick()"
       >
         {{ rateButtonText }}
       </app-button>
@@ -133,7 +139,7 @@
           <app-project-rating
             [criteria]="project.criterias"
             [formControl]="form"
-            [disabled]="(projectRated() || projectConfirmed()) && !programDateFinished()"
+            [disabled]="true"
           ></app-project-rating>
           }
         </div>

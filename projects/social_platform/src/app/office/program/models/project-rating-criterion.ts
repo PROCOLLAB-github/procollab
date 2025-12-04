@@ -25,4 +25,5 @@ export interface ProjectRatingCriterion {
   minValue: number | null;
   maxValue: number | null;
   value: string | number;
+  expertId: number;
 }
