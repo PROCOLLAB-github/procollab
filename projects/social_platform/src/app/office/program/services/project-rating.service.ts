@@ -47,6 +47,20 @@ export class ProjectRatingService {
     return this.apiService.get(`${this.RATE_PROJECT_URL}/${programId}`, params);
   }
 
+  postFilters(
+    programId: number,
+    filters: Record<string, string[]>,
+    params?: HttpParams
+  ): Observable<ApiPagination<ProjectRate>> {
+    let url = `${this.RATE_PROJECT_URL}/${programId}`;
+
+    if (params) {
+      url += `?${params.toString()}`;
+    }
+
+    return this.apiService.post(url, { filters: filters });
+  }
+
   rate(projectId: number, scores: ProjectRatingCriterionOutput[]): Observable<void> {
     return this.apiService.post(`${this.RATE_PROJECT_URL}/rate/${projectId}`, scores);
   }

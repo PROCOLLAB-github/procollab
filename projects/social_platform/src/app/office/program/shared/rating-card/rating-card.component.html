@@ -62,7 +62,7 @@
     </div>
 
     <div class="card__experts">
-      <p class="text-body-12">{{ project.ratedCount }} / {{ project.maxRates }}</p>
+      <p class="text-body-12">{{ ratedCount() }} / {{ project.maxRates }}</p>
       <i appIcon icon="person" appSquare="10"></i>
     </div>
   </div>
@@ -92,19 +92,12 @@
         customTypographyClass="text-body-12"
         size="big"
         [loader]="submitLoading() || confirmLoading()"
-        [color]="showRatedStatus ? 'green' : 'primary'"
-        [disabled]="programDateFinished()"
-        [appearance]="programDateFinished() ? 'outline' : 'inline'"
-        [style.opacity]="showConfirmedState ? '0.5' : '1'"
-        (click)="showRatingForm ? showConfirmRateModal.set(true) : null"
+        [disabled]="isButtonDisabled"
+        [style.opacity]="buttonOpacity"
+        [color]="buttonColor"
+        (click)="canRate ? showConfirmRateModal.set(true) : null"
       >
-        {{
-          programDateFinished()
-            ? "проект оценен"
-            : showRatingForm
-            ? "оценить проект"
-            : "проект оценен"
-        }}
+        {{ rateButtonText }}
       </app-button>
 
       @if (showEditButton) {
@@ -115,7 +108,7 @@
         class="card__rated--icon"
         (click)="redoRating()"
       >
-        <i appIcon icon="edit-pen" appSquare="10" class="card__redo-rating-icon"></i>
+        <i appIcon icon="edit-pen" appSquare="10"></i>
       </app-button>
       }
     </div>

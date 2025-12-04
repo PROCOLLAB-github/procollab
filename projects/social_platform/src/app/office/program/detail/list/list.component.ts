@@ -220,74 +220,48 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     const filtersObservable$ = this.route.queryParams
       .pipe(
-        distinctUntilChanged(),
         concatMap(q => {
-          const reqQuery = this.buildFilterQuery(q);
+          const { filters, extraParams } = this.buildFilterQuery(q);
           const programId = this.route.parent?.snapshot.params["programId"];
 
-          if (JSON.stringify(reqQuery) !== JSON.stringify(this.previousReqQuery)) {
-            this.previousReqQuery = reqQuery;
+          const filtersChanged =
+            JSON.stringify(filters) !== JSON.stringify(this.previousReqQuery["filters"]);
+          const extraParamsChanged =
+            JSON.stringify(extraParams) !== JSON.stringify(this.previousReqQuery["filters"]);
 
-            const hasFilters =
-              reqQuery && reqQuery["filters"] && Object.keys(reqQuery["filters"]).length > 0;
-            const params = new HttpParams({ fromObject: { offset: 0, limit: this.perPage } });
+          this.previousReqQuery = { filters, extraParams };
 
-            if (hasFilters) {
-              if (this.listType === "projects") {
-                return this.programService
-                  .createProgramFilters(programId, reqQuery["filters"])
-                  .pipe(
-                    catchError(err => {
-                      console.error("createFilters failed, fallback to getAllProjects()", err);
-                      return this.programService.getAllProjects(programId, params);
-                    })
-                  );
-              } else if (this.listType === "rating") {
-                const filterParams = new HttpParams({
-                  fromObject: {
-                    offset: 0,
-                    limit: this.perPage,
-                    ...this.flattenFilters(reqQuery["filters"]),
-                  },
-                });
+          const params = new HttpParams({
+            fromObject: {
+              offset: 0,
+              limit: this.itemsPerPage,
+              ...extraParams,
+            },
+          });
 
-                return this.projectRatingService.getAll(programId, filterParams).pipe(
-                  catchError(err => {
-                    console.error("getAllRatingProjects failed", err);
-                    return this.projectRatingService.getAll(programId, params);
-                  })
-                );
-              }
+          if (this.listType === "rating") {
+            if (Object.keys(filters).length > 0) {
+              return this.projectRatingService.postFilters(programId, filters, params);
             }
 
-            if (this.listType === "projects") {
-              return this.programService.getAllProjects(programId, params).pipe(
-                catchError(err => {
-                  console.error("getAllProjects failed", err);
-                  return this.programService.getAllProjects(programId, params);
-                })
-              );
-            } else if (this.listType === "rating") {
-              return this.projectRatingService.getAll(programId, params).pipe(
-                catchError(err => {
-                  console.error("getAllRatingProjects failed", err);
-                  return this.projectRatingService.getAll(programId, params);
-                })
-              );
-            }
+            return this.projectRatingService.getAll(programId, params);
           }
 
-          return of(null);
+          if (Object.keys(filters).length > 0) {
+            return this.programService.createProgramFilters(programId, filters);
+          }
+
+          return this.programService.getAllProjects(programId, params);
         })
       )
       .subscribe(result => {
-        if (result && typeof result !== "number") {
-          this.list = result.results;
-          this.searchedList = result.results;
-          this.listTotalCount = result.count;
-          this.listPage = 0;
-          this.cdref.detectChanges();
-        }
+        if (!result) return;
+
+        this.list = result.results;
+        this.searchedList = result.results;
+        this.listTotalCount = result.count;
+        this.listPage = 0;
+        this.cdref.detectChanges();
       });
 
     this.subscriptions$.push(filtersObservable$);
@@ -389,23 +363,34 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.listType === "members") return {};
 
     const filters: Record<string, any[]> = {};
+    const extraParams: Record<string, any> = {};
 
-    if (this.availableFilters.length === 0) {
-      Object.keys(q).forEach(key => {
-        if (key !== "search" && key !== "name__contains" && q[key] !== undefined && q[key] !== "") {
-          filters[key] = Array.isArray(q[key]) ? q[key] : [q[key]];
-        }
-      });
-    } else {
-      this.availableFilters.forEach((filter: PartnerProgramFields) => {
-        const value = q[filter.name];
-        if (value !== undefined && value !== "") {
-          filters[filter.name] = Array.isArray(value) ? value : [value];
-        }
-      });
-    }
+    Object.keys(q).forEach(key => {
+      const value = q[key];
+      if (value === undefined || value === "") return;
 
-    return { filters };
+      // ⭐ Для rating search → name__contains
+      if (this.listType === "rating" && key === "search") {
+        extraParams["name__contains"] = value;
+        return;
+      }
+
+      // ⭐ Эти два ключа должны идти ТОЛЬКО как GET-параметры
+      if (this.listType === "rating" && key === "name__contains") {
+        extraParams["name__contains"] = value;
+        return;
+      }
+
+      if (this.listType === "rating" && key === "is_rated_by_expert") {
+        extraParams["is_rated_by_expert"] = value;
+        return;
+      }
+
+      // ⭐ Для других ключей: обычные filters
+      filters[key] = Array.isArray(value) ? value : [value];
+    });
+
+    return { filters, extraParams };
   }
 
   onFiltersLoaded(filters: PartnerProgramFields[]): void {

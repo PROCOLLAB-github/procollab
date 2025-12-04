@@ -128,7 +128,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   _currentIndex = signal<number>(0);
   _projects = signal<ProjectRate[]>([]);
 
-  profile = signal<User | null>(null);
+  profile = signal<any | null>(null);
 
   form = new FormControl();
 
@@ -148,6 +148,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   locallyRatedByCurrentUser = signal(false);
 
   isProjectCriterias = signal(0);
+  ratedCount = signal(0);
 
   programDateFinished = signal(false);
 
@@ -162,6 +163,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
       const isScored = this.project?.scored || false;
       this.projectConfirmed.set(isScored);
       this.projectRated.set(isScored);
+      this.ratedCount.set(this.project.ratedCount);
     }
 
     const program$ = this.programDataService.program$
@@ -230,9 +232,31 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(finalize(() => this.submitLoading.set(false)))
       .subscribe({
         next: () => {
+          const profile = this.profile();
+          const project = this.project as ProjectRate;
+
           this.locallyRatedByCurrentUser.set(true);
           this.projectRated.set(true);
           this.projectConfirmed.set(true);
+
+          let isFirstTimeRating = false;
+
+          if (profile) {
+            if (!Array.isArray(project.ratedExperts)) {
+              project.ratedExperts = [];
+            }
+
+            if (!project.ratedExperts.includes(profile.id)) {
+              project.ratedExperts = [...project.ratedExperts, profile.id];
+              isFirstTimeRating = true;
+            }
+          }
+
+          if (isFirstTimeRating) {
+            this.ratedCount.update(count => count + 1);
+          }
+          this._project.set({ ...project });
+
           this.showConfirmRateModal.set(false);
         },
         error: err => {
@@ -276,6 +300,21 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
     return isExpertFromBackend || isExpertLocally;
   }
 
+  get canRate(): boolean {
+    if (this.programDateFinished()) return false;
+
+    if (this.isLimitReached && !this.userRatedThisProject) return false;
+
+    return true;
+  }
+
+  get rateButtonText(): string {
+    if (this.projectConfirmed()) return "проект оценен";
+    if (this.isLimitReached) return "проект оценен";
+
+    return "оценить проект";
+  }
+
   get showRatingForm(): boolean {
     return !this.projectRated() && this.canEdit;
   }
@@ -285,10 +324,43 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get showEditButton(): boolean {
-    return this.showRatedStatus && this.canEdit && this.isCurrentUserExpert;
+    return this.projectConfirmed() && !this.programDateFinished() && this.userRatedThisProject;
+  }
+
+  get userRatedThisProject(): boolean {
+    const profile = this.profile();
+    const project = this.project;
+
+    if (!profile || !project) return false;
+
+    return (
+      this.locallyRatedByCurrentUser() ||
+      (Array.isArray(project.ratedExperts) && project.ratedExperts.includes(profile.id))
+    );
+  }
+
+  get isButtonDisabled(): boolean {
+    if (this.isLimitReached && !this.userRatedThisProject) return true;
+
+    if (!this.canRate) return true;
+
+    return false;
+  }
+
+  get buttonColor(): "green" | "primary" {
+    if (this.userRatedThisProject) return "green";
+    return "primary";
+  }
+
+  get buttonOpacity(): string {
+    return this.isButtonDisabled ? "0.5" : "1";
+  }
+
+  get isLimitReached(): boolean {
+    return !!this.project && this.project.ratedCount >= this.project.maxRates;
   }
 
   get showConfirmedState(): boolean {
-    return this.projectConfirmed() && !this.canEdit;
+    return (this.projectConfirmed() && !this.canEdit) || this.isLimitReached;
   }
 }
