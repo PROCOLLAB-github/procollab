@@ -13,7 +13,7 @@
     </div>
 
     <div class="filter-toggle page__filter-toggle" (click)="isFilterOpen = !isFilterOpen">
-      <span>Фильтр</span>
+      <span>Фильтры</span>
       <i appIcon icon="filter" appSquare="34"></i>
     </div>
 
@@ -40,7 +40,7 @@
   @if (listType !== 'members') {
   <div class="page__create">
     <div class="page__left">
-      @if (listType === 'projects') {
+      @if (listType === 'projects' || listType === 'rating') {
       <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
         <div class="filter__overlay" (click)="isFilterOpen = false"></div>
         <div class="filter__body" #filterBody>
@@ -50,19 +50,13 @@
             (touchmove)="onSwipeMove($event)"
             (touchend)="onSwipeEnd($event)"
           ></div>
-          <app-projects-filter (closeFilter)="closeFilter()"></app-projects-filter>
+          <app-projects-filter
+            [listType]="listType"
+            (closeFilter)="closeFilter()"
+            (clear)="onClearFilters()"
+          ></app-projects-filter>
         </div>
       </div>
-      } @else {
-      <form class="filter__form" [formGroup]="filterForm">
-        <p class="text-body-12">фильтр</p>
-        <div class="filter__controls">
-          <label class="filter__tags" (click)="setValue($event)">
-            <app-checkbox [checked]="this.filterForm.get('filterTag')?.value"></app-checkbox>
-            <p class="text-body-12">проекты с оценкой</p>
-          </label>
-        </div>
-      </form>
       }
     </div>
   </div>

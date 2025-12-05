@@ -102,6 +102,8 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
 
   private _disabled = false;
 
+  @Input() currentUserId!: number;
+
   /** Сигнал для хранения критериев оценки */
   _criteria = signal<ProjectRatingCriterion[]>([]);
 

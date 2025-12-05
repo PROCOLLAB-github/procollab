@@ -77,6 +77,16 @@
     }
   }
 
+  &__experts {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+    p {
+      color: var(--grey-for-text);
+    }
+  }
+
   &__lower {
     display: flex;
     flex-direction: column;

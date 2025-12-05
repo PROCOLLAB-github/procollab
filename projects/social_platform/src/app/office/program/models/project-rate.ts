@@ -1,5 +1,6 @@
 /** @format */
 
+import { User } from "projects/ui/src/lib/models/user.model";
 import { ProjectRatingCriterion } from "./project-rating-criterion"; // Assuming this is where ProjectRatingCriterion is declared
 
 /**
@@ -32,7 +33,10 @@ export interface ProjectRate {
   region: string;
   viewsCount: number;
   industry: number;
-  criterias: ProjectRatingCriterion[];
   scored: boolean;
   scoredExpertId: number | null;
+  ratedExperts: User[];
+  ratedCount: number;
+  maxRates: number;
+  criterias: ProjectRatingCriterion[];
 }

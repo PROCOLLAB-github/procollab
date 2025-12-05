@@ -239,17 +239,19 @@
       <div class="unsubscribe-modal__buttons">
         <app-button
           color="red"
+          size="big"
           customTypographyClass="unsubscribe-modal-btn__typography"
           (click)="onUnsubscribe($event, info?.id!)"
           [disabled]="!info?.id"
         >
-          Отписаться
+          отписаться
         </app-button>
         <app-button
+          size="big"
           customTypographyClass="unsubscribe-modal-btn__typography"
           (click)="onCloseUnsubscribeModal()"
         >
-          Отменить
+          отменить
         </app-button>
       </div>
     </div>

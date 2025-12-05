@@ -7,6 +7,7 @@
         class="rating__input"
         [max]="criterion.maxValue!"
         [formControlName]="criterion.id"
+        [disabled]="disabled"
       ></app-range-criterion-input>
       <label class="text-body-10">{{ criterion.name }}</label>
     </div>
@@ -15,6 +16,7 @@
       <app-boolean-criterion
         class="rating__input"
         [formControlName]="criterion.id"
+        [disabled]="disabled"
       ></app-boolean-criterion>
       <label class="text-body-10">{{ criterion.name }}</label>
     </div>
