@@ -239,10 +239,10 @@ export class ProjectAdditionalService {
 
     switch (field.fieldType) {
       case "text":
-        control.addValidators([Validators.maxLength(50)]);
+        control.addValidators([Validators.maxLength(500)]);
         break;
       case "textarea":
-        control.addValidators([Validators.maxLength(100)]);
+        control.addValidators([Validators.maxLength(300)]);
         break;
     }
   }
