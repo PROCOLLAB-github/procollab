@@ -1,7 +1,7 @@
 <!-- @format -->
 <div class="filter__titles">
   <p class="text-body-14">фильтры</p>
-  <!-- <a class="text-body-12 filter__clear" (click)="clearFilters()">Сбросить фильтры</a> -->
+  <a class="text-body-12 filter__clear" (click)="clearFilters()">cбросить</a>
 </div>
 
 @if (filters()?.length) {
@@ -52,7 +52,12 @@
       </div>
       } }
     </div>
-    } } }
+    } } } @if (listType === 'rating') {
+    <label class="filter__tags" (click)="setValue($event)">
+      <app-checkbox [checked]="this.filterForm.get('is_rated_by_expert')?.value"></app-checkbox>
+      <p class="text-body-12">проекты с оценкой</p>
+    </label>
+    }
   </div>
 </div>
 }

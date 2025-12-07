@@ -31,7 +31,6 @@
 
   &__list {
     display: grid;
-    flex-grow: 1;
     grid-template-columns: 1fr;
     row-gap: 50px;
     column-gap: 20px;
@@ -85,23 +84,6 @@
 
     @include responsive.apply-desktop {
       display: none;
-    }
-  }
-
-  &__controls {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 18px;
-  }
-
-  &__tags {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-
-    p {
-      color: var(--grey-for-text);
     }
   }
 

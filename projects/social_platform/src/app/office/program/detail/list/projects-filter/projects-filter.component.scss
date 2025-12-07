@@ -34,6 +34,16 @@
     flex-direction: column;
   }
 
+  &__tags {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    p {
+      color: var(--grey-for-text);
+    }
+  }
+
   &__titles {
     display: flex;
     align-items: center;

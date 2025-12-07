@@ -25,6 +25,7 @@
     display: flex;
     gap: 20px;
     align-items: center;
+    width: 100%;
   }
 
   &__naming {
@@ -73,6 +74,16 @@
           padding-bottom: 4px;
         }
       }
+    }
+  }
+
+  &__experts {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+    p {
+      color: var(--grey-for-text);
     }
   }
 

@@ -402,6 +402,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.setProjFormIsSubmitting = this.setIsSubmittingAsDraft;
     const partnerProgramId = this.projectForm.get("partnerProgramId")?.value;
     this.projectForm.patchValue({ partnerProgramId });
+    this.closeSendingDescisionModal();
     this.submitProjectForm();
   }
 
@@ -564,11 +565,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param relationId - ID связи проекта и конкурсной программы
    */
   private sendAdditionalFields(projectId: number, relationId: number): void {
+    const isDraft = this.projectForm.get("draft")?.value === true;
+
     this.projectAdditionalService.sendAdditionalFieldsValues(projectId).subscribe({
       next: () => {
-        this.projectAdditionalService.submitCompettetiveProject(relationId).subscribe(_ => {
-          this.submitProjectForm();
-        });
+        if (!isDraft) {
+          this.projectAdditionalService.submitCompettetiveProject(relationId).subscribe(_ => {
+            this.submitProjectForm();
+          });
+        }
       },
       error: error => {
         console.error("Error sending additional fields:", error);

@@ -1,8 +1,8 @@
 /** @format */
 
-import { Component, EventEmitter, OnInit, Output, signal } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { debounceTime, distinctUntilChanged, map, Subscription } from "rxjs";
+import { debounceTime, distinctUntilChanged, filter, map, Subscription } from "rxjs";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
 import { CheckboxComponent, SelectComponent } from "@ui/components";
 import { ProgramService } from "@office/program/services/program.service";
@@ -67,6 +67,8 @@ export class ProjectsFilterComponent implements OnInit {
     this.filterForm = this.fb.group({});
   }
 
+  @Input() listType?: "projects" | "members" | "rating";
+  @Output() clear = new EventEmitter<void>();
   @Output() filtersLoaded = new EventEmitter<PartnerProgramFields[]>();
 
   // Константы для фильтрации по типу проекта
@@ -75,18 +77,20 @@ export class ProjectsFilterComponent implements OnInit {
   ngOnInit(): void {
     this.programId = this.route.parent?.snapshot.params["programId"];
 
-    this.programService.getProgramFilters(this.programId).subscribe({
-      next: filter => {
-        this.filters.set(filter);
-        this.initializeFilterForm();
-        this.restoreFiltersFromUrl();
-        this.subscribeToFormChanges();
-        this.filtersLoaded.emit(filter);
-      },
-      error(err) {
-        console.log(err);
-      },
-    });
+    if (this.listType === "projects" || this.listType === "rating") {
+      this.programService.getProgramFilters(this.programId).subscribe({
+        next: filter => {
+          this.filters.set(filter);
+          this.initializeFilterForm();
+          this.restoreFiltersFromUrl();
+          this.subscribeToFormChanges();
+          this.filtersLoaded.emit(filter);
+        },
+        error(err) {
+          console.log(err);
+        },
+      });
+    }
   }
 
   ngOnDestroy(): void {
@@ -119,6 +123,14 @@ export class ProjectsFilterComponent implements OnInit {
     }
   }
 
+  // Методы фильтрации
+  setValue(event: Event): void {
+    event.stopPropagation();
+    this.filterForm
+      .get("is_rated_by_expert")
+      ?.setValue(!this.filterForm.get("is_rated_by_expert")?.value);
+  }
+
   /**
    * Сброс всех активных фильтров
    * Очищает все query параметры и возвращает к состоянию по умолчанию
@@ -129,12 +141,14 @@ export class ProjectsFilterComponent implements OnInit {
     this.router
       .navigate([], {
         queryParams: {
-          search: undefined,
+          is_rated_by_expert: undefined,
         },
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
       .then(() => console.log("Query change from ProjectsComponent"));
+
+    this.clear.emit();
   }
 
   private initializeFilterForm(): void {
@@ -146,6 +160,17 @@ export class ProjectsFilterComponent implements OnInit {
         field.fieldType === "checkbox" || field.fieldType === "radio" ? false : "";
       formControls[field.name] = new FormControl(initialValue, validators);
     });
+
+    if (this.listType === "rating") {
+      const isRatedByExpert =
+        this.route.snapshot.queryParams["is_rated_by_expert"] === "true"
+          ? true
+          : this.route.snapshot.queryParams["is_rated_by_expert"] === "false"
+          ? false
+          : null;
+
+      formControls["is_rated_by_expert"] = new FormControl(isRatedByExpert);
+    }
 
     this.filterForm = this.fb.group(formControls);
   }
@@ -179,8 +204,8 @@ export class ProjectsFilterComponent implements OnInit {
 
     Object.keys(formValue).forEach(fieldName => {
       const value = formValue[fieldName];
-      const field = this.filters()?.find(f => f.name === fieldName);
 
+      const field = this.filters()?.find(f => f.name === fieldName);
       if (this.shouldAddToQueryParams(value, field?.fieldType)) {
         currentParams[fieldName] = value;
       } else {

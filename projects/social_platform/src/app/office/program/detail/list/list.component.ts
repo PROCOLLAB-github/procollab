@@ -57,20 +57,12 @@ import { tagsFilter } from "projects/core/src/consts/filters/tags-filter.const";
     ProjectsFilterComponent,
     SearchComponent,
     RatingCardComponent,
-    CheckboxComponent,
     InfoCardComponent,
   ],
   standalone: true,
 })
 export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor() {
-    const isRatedByExpert =
-      this.route.snapshot.queryParams["is_rated_by_expert"] === "true"
-        ? true
-        : this.route.snapshot.queryParams["is_rated_by_expert"] === "false"
-        ? false
-        : null;
-
     const searchValue =
       this.route.snapshot.queryParams["search"] ||
       this.route.snapshot.queryParams["name__contains"];
@@ -78,10 +70,6 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.searchForm = this.fb.group({
       search: [decodedSearchValue],
-    });
-
-    this.filterForm = this.fb.group({
-      filterTag: [isRatedByExpert, Validators.required],
     });
   }
 
@@ -102,7 +90,6 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   private availableFilters: PartnerProgramFields[] = [];
 
   searchForm: FormGroup;
-  filterForm: FormGroup;
 
   listTotalCount?: number;
   listPage = 0;
@@ -157,10 +144,6 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.setupFilters();
-
-    if (this.listType === "rating") {
-      this.setupRatingQueryParams();
-    }
   }
 
   ngAfterViewInit(): void {
@@ -169,12 +152,17 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
       const scrollEvent$ = fromEvent(target, "scroll")
         .pipe(
           debounceTime(this.listType === "rating" ? 200 : 500),
-          concatMap(() => this.onScroll()),
-          throttleTime(this.listType === "rating" ? 2000 : 500)
+          switchMap(() => this.onScroll()),
+          catchError(err => {
+            console.error("Scroll error:", err);
+            return of({});
+          })
         )
         .subscribe(noop);
 
       this.subscriptions$.push(scrollEvent$);
+    } else {
+      console.error(".office__body element not found");
     }
   }
 
@@ -233,117 +221,87 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private setupFilters(): void {
-    if (this.listType !== "projects") return;
+    if (this.listType === "members") return;
 
     const filtersObservable$ = this.route.queryParams
       .pipe(
-        distinctUntilChanged(),
+        distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
         concatMap(q => {
-          const reqQuery = this.buildFilterQuery(q);
+          const { filters, extraParams } = this.buildFilterQuery(q);
           const programId = this.route.parent?.snapshot.params["programId"];
 
-          if (JSON.stringify(reqQuery) !== JSON.stringify(this.previousReqQuery)) {
-            this.previousReqQuery = reqQuery;
+          this.listPage = 0;
 
-            const hasFilters =
-              reqQuery && reqQuery["filters"] && Object.keys(reqQuery["filters"]).length > 0;
-            const params = new HttpParams({ fromObject: { offset: 0, limit: this.perPage } });
+          const params = new HttpParams({
+            fromObject: {
+              offset: "0",
+              limit: this.itemsPerPage.toString(),
+              ...extraParams,
+            },
+          });
 
-            if (hasFilters) {
-              return this.programService.createProgramFilters(programId, reqQuery["filters"]).pipe(
-                catchError(err => {
-                  console.error("createFilters failed, fallback to getAllProjects()", err);
-                  return this.programService.getAllProjects(programId, params);
-                })
-              );
+          if (this.listType === "rating") {
+            if (Object.keys(filters).length > 0) {
+              return this.projectRatingService.postFilters(programId, filters, params);
             }
-
-            return this.programService.getAllProjects(programId, params).pipe(
-              catchError(err => {
-                console.error("getAllProjects failed", err);
-                return this.programService.getAllProjects(programId, params);
-              })
-            );
+            return this.projectRatingService.getAll(programId, params);
           }
 
-          return of(null);
+          if (Object.keys(filters).length > 0) {
+            return this.programService.createProgramFilters(programId, filters, params);
+          }
+          return this.programService.getAllProjects(programId, params);
+        }),
+        catchError(err => {
+          console.error("Error in setupFilters:", err);
+          return of({ count: 0, results: [] });
         })
       )
       .subscribe(result => {
-        if (result && typeof result !== "number") {
-          this.list = result.results;
-          this.searchedList = result.results;
-          this.listTotalCount = result.count;
-          this.listPage = 0;
-          this.cdref.detectChanges();
-        }
+        if (!result) return;
+
+        this.list = result.results || [];
+        this.searchedList = result.results || [];
+        this.listTotalCount = result.count;
+        this.listPage = 0;
+        this.cdref.detectChanges();
       });
 
     this.subscriptions$.push(filtersObservable$);
   }
 
-  private setupRatingQueryParams(): void {
-    const queryParams$ = this.route.queryParams
-      .pipe(
-        debounceTime(200),
-        tap(params => {
-          const isRatedByExpert =
-            params["is_rated_by_expert"] === "true"
-              ? true
-              : params["is_rated_by_expert"] === "false"
-              ? false
-              : undefined;
-          const searchValue = params["name__contains"] || "";
-
-          this.isRatedByExpert.set(isRatedByExpert);
-          this.searchValue.set(searchValue);
-        }),
-        switchMap(() => {
-          this.listPage = 0;
-          return this.onFetch();
-        })
-      )
-      .subscribe();
-
-    this.subscriptions$.push(queryParams$);
-  }
-
-  // Методы фильтрации
-  setValue(event: Event): void {
-    event.stopPropagation();
-    this.filterForm.get("filterTag")?.setValue(!this.filterForm.get("filterTag")?.value);
-
-    this.router.navigate([], {
-      queryParams: { is_rated_by_expert: this.filterForm.get("filterTag")?.value },
-      relativeTo: this.route,
-      queryParamsHandling: "merge",
-    });
-  }
-
   // Универсальный метод скролла
   private onScroll() {
-    if (this.listTotalCount && this.list.length >= this.listTotalCount) return of({});
+    if (this.listTotalCount && this.list.length >= this.listTotalCount) {
+      console.log("All items loaded");
+      return of({});
+    }
 
     const target = document.querySelector(".office__body");
-    if (!target || (this.listType !== "rating" && !this.listRoot)) return of({});
+    if (!target) {
+      console.log("Target not found");
+      return of({});
+    }
 
     let shouldFetch = false;
 
     if (this.listType === "rating") {
-      // Логика для rating
       const scrollBottom = target.scrollHeight - target.scrollTop - target.clientHeight;
-      shouldFetch = scrollBottom <= 0;
+      shouldFetch = scrollBottom <= 200;
+      console.log("Rating scroll check:", { scrollBottom, shouldFetch });
     } else {
-      // Логика для projects и members
+      if (!this.listRoot) return of({});
       const diff =
         target.scrollTop -
-        this.listRoot!.nativeElement.getBoundingClientRect().height +
+        this.listRoot.nativeElement.getBoundingClientRect().height +
         window.innerHeight;
       const threshold = this.listType === "projects" ? -200 : 0;
       shouldFetch = diff > threshold;
+      console.log("Projects/Members scroll check:", { diff, threshold, shouldFetch });
     }
 
     if (shouldFetch) {
+      console.log("Fetching next page:", this.listPage + 1);
       this.listPage++;
       return this.onFetch();
     }
@@ -352,87 +310,180 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   // Универсальный метод загрузки данных
+  // Универсальный метод загрузки данных
   private onFetch() {
     const programId = this.route.parent?.snapshot.params["programId"];
     const offset = this.listPage * this.itemsPerPage;
 
-    switch (this.listType) {
-      case "projects":
-        return this.programService
-          .getAllProjects(
-            programId,
-            new HttpParams({ fromObject: { offset, limit: this.itemsPerPage } })
-          )
-          .pipe(
-            tap((projects: ApiPagination<Project>) => {
-              this.listTotalCount = projects.count;
-              if (this.listPage === 0) {
-                this.list = projects.results;
-              } else {
-                this.list = [...this.list, ...projects.results];
-              }
-              this.searchedList = this.list;
-              this.cdref.detectChanges();
-            })
-          );
+    console.log("onFetch called:", {
+      listType: this.listType,
+      programId,
+      offset,
+      itemsPerPage: this.itemsPerPage,
+      currentPage: this.listPage,
+      currentListLength: this.list.length,
+    });
 
-      case "members":
+    // Получаем текущие query параметры для фильтров
+    const currentQuery = this.route.snapshot.queryParams;
+    const { filters, extraParams } = this.buildFilterQuery(currentQuery);
+
+    const params = new HttpParams({
+      fromObject: {
+        offset: offset.toString(),
+        limit: this.itemsPerPage.toString(),
+        ...extraParams,
+      },
+    });
+
+    console.log("Request params:", { filters, extraParams, paramsKeys: params.keys() });
+
+    switch (this.listType) {
+      case "rating": {
+        const ratingRequest$ =
+          Object.keys(filters).length > 0
+            ? this.projectRatingService.postFilters(programId, filters, params)
+            : this.projectRatingService.getAll(programId, params);
+
+        return ratingRequest$.pipe(
+          tap(({ count, results }) => {
+            console.log("Rating response:", {
+              count,
+              resultsLength: results.length,
+              currentListLength: this.list.length,
+              offset,
+              expectedNewLength: this.list.length + results.length,
+            });
+
+            this.listTotalCount = count;
+
+            if (this.listPage === 0) {
+              this.list = results;
+            } else {
+              const newResults = results.filter(
+                newItem => !this.list.some(existingItem => existingItem.id === newItem.id)
+              );
+              console.log("New unique items to add:", newResults.length);
+              this.list = [...this.list, ...newResults];
+            }
+
+            this.searchedList = this.list;
+            this.cdref.detectChanges();
+          }),
+          catchError(err => {
+            console.error("Error fetching ratings:", err);
+            this.listPage--;
+            return of({ count: this.listTotalCount || 0, results: [] });
+          })
+        );
+      }
+
+      case "projects": {
+        const projectsRequest$ =
+          Object.keys(filters).length > 0
+            ? this.programService.createProgramFilters(programId, filters, params)
+            : this.programService.getAllProjects(programId, params);
+
+        return projectsRequest$.pipe(
+          tap((projects: ApiPagination<Project>) => {
+            console.log("Projects response:", {
+              count: projects.count,
+              resultsLength: projects.results.length,
+              currentListLength: this.list.length,
+              offset,
+            });
+
+            this.listTotalCount = projects.count;
+
+            if (this.listPage === 0) {
+              this.list = projects.results;
+            } else {
+              const newResults = projects.results.filter(
+                newItem => !this.list.some(existingItem => existingItem.id === newItem.id)
+              );
+              console.log("New unique projects to add:", newResults.length);
+              this.list = [...this.list, ...newResults];
+            }
+
+            this.searchedList = this.list;
+            this.cdref.detectChanges();
+          }),
+          catchError(err => {
+            console.error("Error fetching projects:", err);
+            this.listPage--;
+            return of({ count: this.listTotalCount || 0, results: [] });
+          })
+        );
+      }
+
+      case "members": {
         return this.programService.getAllMembers(programId, offset, this.itemsPerPage).pipe(
           tap((members: ApiPagination<User>) => {
+            console.log("Members response:", {
+              count: members.count,
+              resultsLength: members.results.length,
+              currentListLength: this.list.length,
+              offset,
+            });
+
             this.listTotalCount = members.count;
+
             if (this.listPage === 0) {
               this.list = members.results;
             } else {
-              this.list = [...this.list, ...members.results];
+              const newResults = members.results.filter(
+                newItem => !this.list.some(existingItem => existingItem.id === newItem.id)
+              );
+              console.log("New unique members to add:", newResults.length);
+              this.list = [...this.list, ...newResults];
             }
+
             this.searchedList = this.list;
             this.cdref.detectChanges();
+          }),
+          catchError(err => {
+            console.error("Error fetching members:", err);
+            this.listPage--;
+            return of({ count: this.listTotalCount || 0, results: [] });
           })
         );
-
-      case "rating":
-        return this.projectRatingService
-          .getAll(programId, offset, this.itemsPerPage, this.isRatedByExpert(), this.searchValue())
-          .pipe(
-            tap(({ count, results }) => {
-              this.listTotalCount = count;
-              if (this.listPage === 0) {
-                this.list = results;
-              } else {
-                this.list = [...this.list, ...results];
-              }
-              this.searchedList = this.list;
-              this.cdref.detectChanges();
-            })
-          );
+      }
 
       default:
-        return of({});
+        return of({ count: 0, results: [] });
     }
   }
 
-  // Построение запроса для фильтров (только для проектов)
-  private buildFilterQuery(q: any): Record<string, any> {
-    if (this.listType !== "projects") return {};
+  // Построение запроса для фильтров (кроме участников)
+  private buildFilterQuery(q: any): {
+    filters: Record<string, any>;
+    extraParams: Record<string, any>;
+  } {
+    if (this.listType === "members") return { filters: {}, extraParams: {} };
 
-    const filters: Record<string, any[]> = {};
+    const filters: Record<string, any> = {};
+    const extraParams: Record<string, any> = {};
 
-    if (this.availableFilters.length === 0) {
-      Object.keys(q).forEach(key => {
-        if (key !== "search" && q[key] !== undefined && q[key] !== "") {
-          filters[key] = Array.isArray(q[key]) ? q[key] : [q[key]];
-        }
-      });
-    } else {
-      this.availableFilters.forEach((filter: PartnerProgramFields) => {
-        const value = q[filter.name];
-        if (value !== undefined && value !== "") {
-          filters[filter.name] = Array.isArray(value) ? value : [value];
-        }
-      });
-    }
+    console.log("buildFilterQuery input:", q);
 
-    return { filters };
+    Object.keys(q).forEach(key => {
+      const value = q[key];
+      if (value === undefined || value === "" || value === null) return;
+
+      if (this.listType === "rating" && (key === "search" || key === "name__contains")) {
+        extraParams["name__contains"] = value;
+        return;
+      }
+
+      if (this.listType === "rating" && key === "is_rated_by_expert") {
+        extraParams["is_rated_by_expert"] = value;
+        return;
+      }
+
+      filters[key] = Array.isArray(value) ? value : [value];
+    });
+
+    return { filters, extraParams };
   }
 
   onFiltersLoaded(filters: PartnerProgramFields[]): void {
@@ -482,9 +533,27 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isFilterOpen = false;
   }
 
+  /**
+   * Сброс всех активных фильтров
+   * Очищает все query параметры и возвращает к состоянию по умолчанию
+   */
+  onClearFilters(): void {
+    this.searchForm.reset();
+
+    this.router
+      .navigate([], {
+        queryParams: {
+          search: undefined,
+        },
+        relativeTo: this.route,
+        queryParamsHandling: "merge",
+      })
+      .then(() => console.log("Query change from ProjectsComponent"));
+  }
+
   private get itemsPerPage(): number {
     return this.listType === "rating"
-      ? 8
+      ? 10
       : this.listType === "projects"
       ? this.perPage
       : this.listTake;
@@ -492,5 +561,20 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private get searchParamName(): string {
     return this.listType === "rating" ? "name__contains" : "search";
+  }
+
+  private flattenFilters(filters: Record<string, any[]>): Record<string, string> {
+    const flattened: Record<string, string> = {};
+
+    Object.keys(filters).forEach(key => {
+      const value = filters[key];
+      if (Array.isArray(value) && value.length > 0) {
+        flattened[key] = Array.isArray(value[0]) ? value.join(",") : value.toString();
+      } else if (value !== undefined && value !== null) {
+        flattened[key] = value.toString();
+      }
+    });
+
+    return flattened;
   }
 }
