@@ -10,7 +10,7 @@
   padding: 0 15px;
 
   @include responsive.apply-desktop {
-    padding: 0px 200px;
+    padding: 0 200px;
   }
 
   &__header {

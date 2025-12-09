@@ -27,12 +27,12 @@
   }
 
   &__img {
-    min-width: 500px;
     position: fixed;
     top: 8%;
     right: 0%;
-    left: -33%;
     bottom: 0%;
+    left: -33%;
+    min-width: 500px;
 
     @include responsive.apply-desktop {
       bottom: 0%;
