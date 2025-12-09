@@ -78,6 +78,23 @@
     color: var(--dark-grey);
   }
 
+  &__views {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--dark-grey);
+
+    i {
+      margin-bottom: 1px;
+    }
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
   /* stylelint-disable value-no-vendor-prefix */
   &__text {
     color: var(--grey-for-text);

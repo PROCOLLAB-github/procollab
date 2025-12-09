@@ -24,7 +24,7 @@ import { Trajectory } from "projects/skills/src/models/trajectory.model";
 import { HttpErrorResponse } from "@angular/common/http";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { map, Observable } from "rxjs";
-import { trajectoryMoreList } from "projects/core/src/consts/other/trajectory-more.const";
+import { trajectoryMore } from "projects/core/src/consts/other/trajectory-more.const";
 
 /**
  * Компонент отображения карточки траектории
@@ -53,7 +53,7 @@ import { trajectoryMoreList } from "projects/core/src/consts/other/trajectory-mo
 export class TrajectoryComponent implements AfterViewInit, OnInit {
   @Input() trajectory!: Trajectory;
   protected readonly dotsArray = Array;
-  protected readonly trajectoryMore = trajectoryMoreList;
+  protected readonly trajectoryMore = trajectoryMore;
 
   router = inject(Router);
   trajectoryService = inject(TrajectoriesService);

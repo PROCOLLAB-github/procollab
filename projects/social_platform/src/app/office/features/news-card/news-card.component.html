@@ -7,9 +7,12 @@
         [src]="feedItem.imageAddress || placeholderUrl"
         [alt]="feedItem.name"
       />
-      <p class="card__name text-body-10">
-        {{ feedItem.name | truncate: 30 }}
-      </p>
+      <div class="card__info" style="display: flex; flex-direction: column">
+        <div class="card__name text-body-10">{{ feedItem.name | truncate: 30 }}</div>
+        <div class="card__date text-body-10">
+          {{ feedItem.datetimeCreated | dayjs: "format":"DD.MM.YY" }}
+        </div>
+      </div>
     </a>
     @if (isOwner) {
     <div class="card__menu" (clickOutside)="onCloseMenu()">
@@ -106,8 +109,9 @@
     </div>
 
     <div class="footer__right">
-      <div class="card__date text-body-10">
-        {{ feedItem.datetimeCreated | dayjs: "format":"DD.MM.YY" }}
+      <div class="card__views text-body-10">
+        <i appIcon icon="eye" appSquare="12"></i>
+        {{ feedItem.viewsCount }}
       </div>
     </div>
   </div>

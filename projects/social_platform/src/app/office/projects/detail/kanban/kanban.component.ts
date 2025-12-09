@@ -2,7 +2,7 @@
 
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit, signal } from "@angular/core";
-import { RouterOutlet } from "@angular/router";
+import { RouterOutlet, ActivatedRoute } from "@angular/router";
 import { KanbanBoardSidebarComponent } from "./shared/sidebar/kanban-board-sidebar.component";
 import { TaskDetailComponent } from "./shared/task/detail/task-detail.component";
 import { KanbanBoardDetailInfoService } from "./services/kanban-board-detail-info.service";

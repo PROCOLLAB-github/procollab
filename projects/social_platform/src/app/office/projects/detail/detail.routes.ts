@@ -73,10 +73,9 @@ export const PROJECT_DETAIL_ROUTES: Routes = [
         path: "kanban",
         canActivate: [KanbanBoardGuard],
         component: KanbanComponent,
-        resolve: {
-          data: KanbanBoardResolver,
-        },
+        resolve: { data: KanbanBoardResolver },
         loadChildren: () => import("./kanban/kanban.routes").then(c => c.KANBAN_ROUTES),
+        runGuardsAndResolvers: "always",
       },
       {
         path: "chat",
