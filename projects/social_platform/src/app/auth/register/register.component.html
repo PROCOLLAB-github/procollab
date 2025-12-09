@@ -104,18 +104,24 @@
         <app-input
           size="big"
           id="phoneNumber"
+          [error]="phoneNumber | controlError"
           mask="0-000-000-00-00"
-          [error]="!!(phoneNumber | controlError)"
           type="text"
           placeholder="+79999999999"
           formControlName="phoneNumber"
           style="flex-grow: 1"
         ></app-input>
 
-        @if ((phoneNumber | controlError) && registerIsSubmitting) {
-        <div class="text-body-10 error">
-          {{ errorMessage.VALIDATION_REQUIRED }}
-        </div>
+        @if (phoneNumber | controlError) {
+        <ng-container>
+          @if (phoneNumber | controlError: "required") {
+          <div class="text-body-10 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          } @if (phoneNumber | controlError: "pattern") {
+          <div class="text-body-10 error">Неверный формат телефона</div>
+          }
+        </ng-container>
         }
       </fieldset>
       } @if (registerForm.get("email"); as email) {
