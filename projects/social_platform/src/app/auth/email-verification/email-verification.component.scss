@@ -23,17 +23,21 @@
 
     @include responsive.apply-desktop {
       flex-direction: row;
-      justify-content: space-between;
     }
   }
 
   &__img {
-    width: 335px;
-    margin-top: 55px;
+    min-width: 500px;
+    position: fixed;
+    top: 8%;
+    right: 0%;
+    left: -33%;
+    bottom: 0%;
 
     @include responsive.apply-desktop {
-      width: 470px;
-      margin-top: 0;
+      bottom: 0%;
+      left: 20%;
+      min-width: 852px;
     }
   }
 

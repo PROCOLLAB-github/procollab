@@ -4,21 +4,24 @@
 @use "styles/typography";
 
 .auth {
+  padding: 100px 0px;
+
   &__logo {
+    display: block;
     position: fixed;
-    top: 85px;
+    top: 45px;
     left: 15px;
-    display: none;
+    width: 117px;
 
     @include responsive.apply-desktop {
-      top: 50px;
-      left: 100px;
-      display: block;
+      top: 120px;
+      left: 200px;
+      width: 157px;
     }
   }
 
   &__greeting {
-    max-width: 915px;
+    max-width: 510px;
     margin-bottom: 20px;
 
     @include responsive.apply-desktop {
@@ -28,7 +31,7 @@
 
   &__wrapper {
     @include responsive.apply-desktop {
-      max-width: 415px;
+      max-width: 333px;
     }
   }
 
@@ -40,7 +43,7 @@
       @include typography.heading-4;
     }
 
-    @include typography.heading-2;
+    @include typography.heading-1;
 
     @include responsive.apply-desktop {
       &--register {
@@ -50,11 +53,7 @@
   }
 
   &__info {
-    @include typography.body-12;
-
-    @include responsive.apply-desktop {
-      @include typography.body-14;
-    }
+    @include typography.heading-2;
   }
 
   &__field {
@@ -125,17 +124,9 @@
   }
 
   &__toggle {
-    @include typography.body-14;
+    @include typography.body-12;
 
-    margin-top: 8vh;
-    text-align: center;
-
-    @include responsive.apply-desktop {
-      @include typography.body-16;
-
-      margin-top: 20px;
-      text-align: left;
-    }
+    margin-top: 4vh;
   }
 
   a {

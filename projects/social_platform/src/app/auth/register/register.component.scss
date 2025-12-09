@@ -4,6 +4,8 @@
 @use "styles/responsive";
 
 .register {
+  height: 100vh;
+
   &__agreement {
     display: flex;
     align-items: center;
@@ -14,8 +16,6 @@
 
     @include responsive.apply-desktop {
       margin-top: 20px;
-
-      @include typography.body-14;
     }
 
     app-checkbox {
@@ -24,7 +24,7 @@
   }
 
   &__greeting {
-    max-width: 825px;
+    max-width: 333px;
     margin-bottom: 20px;
 
     @include responsive.apply-desktop {

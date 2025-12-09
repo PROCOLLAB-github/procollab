@@ -27,6 +27,7 @@ import { noop, Subscription } from "rxjs";
 import { BooleanCriterionComponent } from "./components/boolean-criterion/boolean-criterion.component";
 import { RangeCriterionInputComponent } from "./components/range-criterion-input/range-criterion-input.component";
 import { ErrorMessage } from "@error/models/error-message";
+import { ControlErrorPipe } from "@corelib";
 
 /**
  * Компонент рейтинга проекта
@@ -48,6 +49,7 @@ import { ErrorMessage } from "@error/models/error-message";
     RangeCriterionInputComponent,
     BooleanCriterionComponent,
     ReactiveFormsModule,
+    ControlErrorPipe,
   ],
   templateUrl: "./project-rating.component.html",
   styleUrl: "./project-rating.component.scss",
@@ -110,6 +112,8 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
   /** Форма для управления всеми критериями оценки */
   form!: FormGroup;
 
+  errorMessage = ErrorMessage;
+
   /**
    * Объект с функциями-создателями FormControl для разных типов критериев
    * Каждый тип критерия имеет свою логику создания контрола и валидации
@@ -120,7 +124,7 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
     // Булевый критерий - преобразование строки в boolean
     bool: val => new FormControl<boolean>(val ? JSON.parse((val as string).toLowerCase()) : false),
     // Строковый критерий - без валидации (комментарии опциональны)
-    str: val => new FormControl<string>(<string>val),
+    str: val => new FormControl<string>(<string>val, Validators.maxLength(50)),
   };
 
   /** Сигнал для хранения подписок */

@@ -2,185 +2,23 @@
 
 <div class="auth register">
   <div class="auth__greeting">
-    <h3 class="auth__title auth__title--register">
-      @if (step === "credentials") {
-      <ng-container>
-        Приветствуем на Procollab!&nbsp;👋<br />
-        Строй свою карьеру уже сегодня&nbsp;🚀
-      </ng-container>
-      } @else if (step === "info") {
-      <ng-container>
-        PROCOLLAB — твой путь к первой работе, давай начнем создавать твое первое резюме прямо
-        сейчас
-      </ng-container>
-      }
-    </h3>
-    <p class="auth__info">
-      @if (step === "credentials") {
-      <ng-container> Для регистрации введите данные </ng-container>
-      } @else if (step === "info") {
-      <ng-container>
-        <!-- Начни заполнять данные, которые в дальнейшем станут основой твоего резюме -->
-      </ng-container>
-      }
-    </p>
+    <img class="register__logo" src="/assets/images/shared/logo.svg" alt="logo" />
   </div>
-  <form class="auth__wrapper" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    @if (step === "credentials") {
-    <ng-container>
-      @if (registerForm.get("email"); as email) {
-      <fieldset class="auth__field">
-        <label for="email" class="field-label">Почта</label>
-        <app-input
-          size="big"
-          [error]="(email | controlError) && credsSubmitInitiated"
-          id="email"
-          type="email"
-          formControlName="email"
-          placeholder="mail@example.ru"
-        ></app-input>
-        @if (credsSubmitInitiated) {
-        <ng-container>
-          @if (email | controlError: "required") {
-          <div class="text-body-10 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          } @if (email | controlError: "email") {
-          <div class="text-body-10 error">
-            {{ errorMessage.VALIDATION_EMAIL }}
-          </div>
-          }
-        </ng-container>
-        }
-      </fieldset>
-      } @if (registerForm.get("password"); as password) {
-      <fieldset class="auth__field">
-        <label for="passowrd" class="field-label">Пароль</label>
-        <app-input
-          size="big"
-          [error]="(password | controlError) && credsSubmitInitiated"
-          id="passowrd"
-          [type]="showPassword ? 'text' : 'password'"
-          formControlName="password"
-          placeholder="Придумайте пароль"
-        >
-          @if(showPassword) {
-          <i
-            appIcon
-            icon="eye"
-            appSquare="24"
-            appWidth="24"
-            appHeight="24"
-            appViewBox="0 0 24 24"
-            class="icon"
-            (click)="toggleShowPassword('first')"
-          ></i>
-          } @else {
-          <i
-            appIcon
-            icon="eye-off"
-            appSquare="24"
-            appWidth="24"
-            appHeight="24"
-            appViewBox="0 0 24 24"
-            class="icon"
-            (click)="toggleShowPassword('first')"
-          ></i>
-          }
-        </app-input>
-        <app-input
-          size="big"
-          class="register__repeated-password"
-          [error]="(password | controlError) && credsSubmitInitiated"
-          id="repeatedPassword"
-          [type]="showPasswordRepeat ? 'text' : 'password'"
-          formControlName="repeatedPassword"
-          placeholder="Повторите пароль"
-        >
-          @if(showPasswordRepeat) {
-          <i
-            appIcon
-            icon="eye"
-            appSquare="24"
-            appWidth="24"
-            appHeight="24"
-            appViewBox="0 0 24 24"
-            class="icon"
-            (click)="toggleShowPassword('repeat')"
-          ></i>
-          } @else {
-          <i
-            appIcon
-            icon="eye-off"
-            appSquare="24"
-            appWidth="24"
-            appHeight="24"
-            appViewBox="0 0 24 24"
-            class="icon"
-            (click)="toggleShowPassword('repeat')"
-          ></i>
-          }
-        </app-input>
-        @if (credsSubmitInitiated) {
-        <ng-container>
-          @if (password | controlError: "required") {
-          <div class="text-body-10 error">
-            {{ errorMessage.VALIDATION_REQUIRED }}
-          </div>
-          } @if (password | controlError: "passwordTooShort") {
-          <div class="text-body-10 error">
-            @if (password.errors) { Пароль должен содержать минимум
-            {{ password.errors["passwordTooShort"]["requiredLength"] }} символов }
-          </div>
-          } @if (password | controlError: "passwordNoUppercase") {
-          <div class="text-body-10 error">
-            Пароль должен содержать минимум одну заглавную букву (A-Z)
-          </div>
-          } @if (password | controlError: "passwordNoLowercase") {
-          <div class="text-body-10 error">
-            Пароль должен содержать минимум одну строчную букву (a-z)
-          </div>
-          } @if (password | controlError: "passwordNoNumber") {
-          <div class="text-body-10 error">Пароль должен содержать минимум одну цифру (0-9)</div>
-          } @if (password | controlError: "passwordNoSpecialChar") {
-          <div class="text-body-10 error">
-            Пароль должен содержать минимум один специальный символ
-          </div>
-          } @if (password | controlError: "passwordHasSpaces") {
-          <div class="text-body-10 error">Пароль не должен содержать пробелы</div>
-          } @if (password | controlError: "passwordHasSequence") {
-          <div class="text-body-10 error">
-            Пароль не должен содержать последовательности символов (123456, abcdef и т.д.)
-          </div>
-          } @if (password | controlError: "passwordHasRepeating") {
-          <div class="text-body-10 error">
-            Пароль не должен содержать более 2 одинаковых символов подряд
-          </div>
-          } @if (password | controlError: "unMatch") {
-          <div class="text-body-10 error">
-            {{ errorMessage.VALIDATION_PASSWORD_UNMATCH }}
-          </div>
-          }
-        </ng-container>
-        }
-      </fieldset>
-      }
-    </ng-container>
-    } @else if (step === "info") {
+  <form class="auth__wrapper" [formGroup]="registerForm" (ngSubmit)="onSendForm()">
     <ng-container>
       <div class="auth__row">
         @if (registerForm.get("firstName"); as name) {
         <fieldset class="auth__field">
-          <label for="name" class="field-label">Имя</label>
+          <label for="name" class="field-label">имя</label>
           <app-input
             size="big"
-            [error]="(name | controlError) && infoSubmitInitiated"
+            [error]="!!(name | controlError)"
             id="name"
             type="text"
             formControlName="firstName"
             placeholder="Иван"
           ></app-input>
-          @if (infoSubmitInitiated) {
+          @if ((name | controlError) && registerIsSubmitting) {
           <ng-container>
             @if (name | controlError: "required") {
             <div class="text-body-10 error">
@@ -196,16 +34,16 @@
         </fieldset>
         } @if (registerForm.get("lastName"); as surname) {
         <fieldset class="auth__field">
-          <label for="surname" class="field-label">Фамилия</label>
+          <label for="surname" class="field-label">фамилия</label>
           <app-input
             size="big"
-            [error]="(surname | controlError) && infoSubmitInitiated"
+            [error]="!!(surname | controlError)"
             id="surname"
             type="text"
             formControlName="lastName"
             placeholder="Иванов"
           ></app-input>
-          @if (infoSubmitInitiated) {
+          @if ((surname | controlError) && registerIsSubmitting) {
           <ng-container>
             @if (surname | controlError: "required") {
             <div class="text-body-10 error">
@@ -221,19 +59,20 @@
         </fieldset>
         }
       </div>
+
       @if (registerForm.get("birthday"); as birthday) {
       <fieldset class="auth__field">
-        <label for="birthday" class="field-label">Дата рождения</label>
+        <label for="birthday" class="field-label">дата рождения</label>
         <app-input
           size="big"
           id="birthday"
-          [error]="(birthday | controlError) && infoSubmitInitiated"
+          [error]="!!(birthday | controlError)"
           type="text"
           mask="00.00.0000"
-          placeholder="ДД.ММ.ГГГГ"
+          placeholder="25.02.2005"
           formControlName="birthday"
         ></app-input>
-        @if (infoSubmitInitiated) {
+        @if ((birthday | controlError) && registerIsSubmitting) {
         <ng-container>
           @if (birthday | controlError: "required") {
           <div class="text-body-10 error">
@@ -259,56 +98,198 @@
         </ng-container>
         }
       </fieldset>
-      }
+      } @if (registerForm.get("phoneNumber"); as phoneNumber) {
+      <fieldset class="auth__field">
+        <label for="links" class="field-label">телефон</label>
+        <app-input
+          size="big"
+          id="phoneNumber"
+          mask="0-000-000-00-00"
+          [error]="!!(phoneNumber | controlError)"
+          type="text"
+          placeholder="+79999999999"
+          formControlName="phoneNumber"
+          style="flex-grow: 1"
+        ></app-input>
+
+        @if ((phoneNumber | controlError) && registerIsSubmitting) {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (registerForm.get("email"); as email) {
+      <fieldset class="auth__field">
+        <label for="email" class="field-label">почта</label>
+        <app-input
+          size="big"
+          [error]="!!(email | controlError)"
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="example@example.com"
+        ></app-input>
+        @if ((email | controlError) && registerIsSubmitting) {
+        <ng-container>
+          @if (email | controlError: "required") {
+          <div class="text-body-10 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          } @if (email | controlError: "email") {
+          <div class="text-body-10 error">
+            {{ errorMessage.VALIDATION_EMAIL }}
+          </div>
+          }
+        </ng-container>
+        }
+      </fieldset>
+      } @if (registerForm.get("password"); as password) {
+      <fieldset class="auth__field">
+        <label for="passowrd" class="field-label">пароль</label>
+        <app-input
+          size="big"
+          [error]="!!(password | controlError)"
+          id="passowrd"
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="GJiwoeuhbn120="
+        >
+          @if(showPassword) {
+          <i
+            appIcon
+            icon="eye"
+            appSquare="20"
+            class="icon"
+            (click)="toggleShowPassword('first')"
+          ></i>
+          } @else {
+          <i
+            appIcon
+            icon="eye-off"
+            appSquare="18"
+            class="icon"
+            (click)="toggleShowPassword('first')"
+          ></i>
+          }
+        </app-input>
+      </fieldset>
+
+      <fieldset class="auth__field">
+        <label for="repeatedPassword" class="field-label">повторите пароль</label>
+        <app-input
+          size="big"
+          class="register__repeated-password"
+          [error]="!!(password | controlError)"
+          id="repeatedPassword"
+          [type]="showPasswordRepeat ? 'text' : 'password'"
+          formControlName="repeatedPassword"
+          placeholder="GJiwoeuhbn120="
+        >
+          @if(showPasswordRepeat) {
+          <i
+            appIcon
+            icon="eye"
+            appSquare="20"
+            class="icon"
+            (click)="toggleShowPassword('repeat')"
+          ></i>
+          } @else {
+          <i
+            appIcon
+            icon="eye-off"
+            appSquare="18"
+            class="icon"
+            (click)="toggleShowPassword('repeat')"
+          ></i>
+          }
+        </app-input>
+      </fieldset>
+
+      @if ((password | controlError)) {
+      <ng-container>
+        @if (password | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        } @if (password | controlError: "passwordTooShort") {
+        <div class="text-body-10 error">
+          @if (password.errors) { Пароль должен содержать минимум
+          {{ password.errors["passwordTooShort"]["requiredLength"] }} символов }
+        </div>
+        } @if (password | controlError: "passwordNoUppercase") {
+        <div class="text-body-10 error">
+          Пароль должен содержать минимум одну заглавную букву (A-Z)
+        </div>
+        } @if (password | controlError: "passwordNoLowercase") {
+        <div class="text-body-10 error">
+          Пароль должен содержать минимум одну строчную букву (a-z)
+        </div>
+        } @if (password | controlError: "passwordNoNumber") {
+        <div class="text-body-10 error">Пароль должен содержать минимум одну цифру (0-9)</div>
+        } @if (password | controlError: "passwordNoSpecialChar") {
+        <div class="text-body-10 error">
+          Пароль должен содержать минимум один специальный символ
+        </div>
+        } @if (password | controlError: "passwordHasSpaces") {
+        <div class="text-body-10 error">Пароль не должен содержать пробелы</div>
+        } @if (password | controlError: "passwordHasSequence") {
+        <div class="text-body-10 error">
+          Пароль не должен содержать последовательности символов (123456, abcdef и т.д.)
+        </div>
+        } @if (password | controlError: "passwordHasRepeating") {
+        <div class="text-body-10 error">
+          Пароль не должен содержать более 2 одинаковых символов подряд
+        </div>
+        } @if (password | controlError: "unMatch") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_PASSWORD_UNMATCH }}
+        </div>
+        }
+      </ng-container>
+      } }
     </ng-container>
-    } @if (serverErrors) {
+
+    @if (serverErrors) {
     <div class="text-body-10 error">
       @for (e of serverErrors; track $index) {
       <p>{{ e }}</p>
       }
     </div>
-    } @if (step === "credentials") {
+    }
+
     <div class="register__agreement">
       <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
       <span (click)="registerAgreement = !registerAgreement">
-        Я прочитал
-        <a href="/assets/downloads/auth/shared/Политика_обработки_перс_данных_2022.docx" download>
-          соглашение
-        </a>
-        и даю согласие на&nbsp;обработку персональных&nbsp;данных
+        я прочитал соглашение и даю согласие на
+        <a href="/assets/downloads/auth/shared/Политика_обработки_перс_данных_2022.docx" download
+          >обработку персональных данных</a
+        >
       </span>
     </div>
 
     <div class="register__agreement">
       <app-checkbox [(checked)]="ageAgreement"></app-checkbox>
       <span (click)="ageAgreement = !ageAgreement"
-        >Нажимая на кнопку подтверждаете, что вам больше 14 лет</span
+        >нажимая на кнопку подтверждаете, что вам больше 14 лет</span
       >
     </div>
+
     <app-button
       size="big"
-      type="submit"
-      class="auth__button"
-      [disabled]="!(ageAgreement && registerAgreement)"
+      [loader]="registerIsSubmitting"
       [ngStyle]="{
         opacity: !(ageAgreement && registerAgreement) ? '0.6' : '1',
         cursor: !(ageAgreement && registerAgreement) ? 'not-allowed' : 'pointer'
       }"
-    >
-      Далее
-    </app-button>
-    } @else if (step === "info") {
-    <app-button
-      size="big"
-      [loader]="registerIsSubmitting"
+      [disabled]="!(ageAgreement && registerAgreement)"
       type="submit"
       customTypographyClass="text-body-12"
       class="auth__button"
     >
-      Создать аккаунт
+      зарегистрироваться
     </app-button>
-    }
-    <p class="auth__toggle">Есть аккаунт? <a routerLink="/auth/login">Войдите</a></p>
+
+    <p class="auth__toggle">если есть аккаунт? - <a routerLink="/auth/login">войдите</a></p>
 
     <app-modal
       [open]="isUserCreationModalError"
