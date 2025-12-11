@@ -3,8 +3,8 @@ import { Component, inject, Input, OnInit } from "@angular/core";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { IconComponent } from "@ui/components";
 import { UpperCasePipe } from "@angular/common";
-import { FormatedFileSizePipe } from "@core/pipes/formatted-file-size.pipe";
-import { FileService } from "@core/services/file.service";
+import { FileService } from "projects/core/src/lib/services/file/file.service";
+import { FormatedFileSizePipe } from "projects/core/src/lib/pipes/transformers/formatted-file-size.pipe";
 
 /**
  * Компонент для отображения информации о файле.

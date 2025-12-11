@@ -1,6 +1,6 @@
 /** @format */
 
-import { Invite } from "@office/models/invite.model";
+import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 
 export const inviteToProjectMapper = (invites: Invite[] = []): any[] => {
   return (invites ?? []).map((invite: Invite) => ({

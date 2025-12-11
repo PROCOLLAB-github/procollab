@@ -1,12 +1,12 @@
 /** @format */
 
 import { Component, EventEmitter, Input, type OnInit, Output } from "@angular/core";
-import type { Invite } from "@models/invite.model";
+import type { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { DayjsPipe } from "projects/core";
 import { ButtonComponent } from "@ui/components";
 import { RouterLink } from "@angular/router";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
+import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 
 /**
  * Компонент карточки управления приглашением

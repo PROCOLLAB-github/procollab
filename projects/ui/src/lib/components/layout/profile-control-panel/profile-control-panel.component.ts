@@ -4,7 +4,7 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from "@angular/core";
 import { InviteManageCardComponent, ProfileInfoComponent, IconComponent } from "@uilib";
 import { ClickOutsideModule } from "ng-click-outside";
-import type { Invite } from "@office/models/invite.model";
+import type { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { RouterLink } from "@angular/router";
 import type { User } from "../../../models/user.model";
 

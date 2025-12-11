@@ -6,7 +6,7 @@ import { provideAnimations } from "@angular/platform-browser/animations";
 import { NgxMaskModule } from "ngx-mask";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
-import { GlobalErrorHandlerService } from "@error/services/global-error-handler.service";
+import { GlobalErrorHandlerService } from "projects/core/src/lib/services/error/global-error-handler.service";
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { provideRouter, withRouterConfig } from "@angular/router";
 import { APP_ROUTES } from "./app.routes";

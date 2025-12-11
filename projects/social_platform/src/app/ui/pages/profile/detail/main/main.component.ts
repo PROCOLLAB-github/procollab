@@ -1,0 +1,286 @@
+/** @format */
+
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+  ViewChild,
+} from "@angular/core";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import { expandElement } from "@utils/expand-element";
+import { concatMap, filter, map, noop, Subscription } from "rxjs";
+import { ProfileNewsService } from "../../../../../api/profile/profile-news.service";
+import { ProfileNews } from "../../../../../domain/profile/profile-news.model";
+import { ParseBreaksPipe, ParseLinksPipe, YearsFromBirthdayPipe } from "projects/core";
+import { IconComponent, ButtonComponent } from "@ui/components";
+import { CommonModule, NgTemplateOutlet } from "@angular/common";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { NewsFormComponent } from "@ui/components/news-form/news-form.component";
+import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
+import { ProfileDataService } from "../../../../../api/profile/profile-date.service";
+import { DirectionItem, directionItemBuilder } from "@utils/helpers/directionItemBuilder";
+import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
+import { UserLinksPipe } from "projects/core/src/lib/pipes/user/user-links.pipe";
+import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { ProjectDirectionCard } from "@ui/shared/project-direction-card/project-direction-card.component";
+
+/**
+ * Главный компонент страницы профиля пользователя
+ *
+ * Отображает основную информацию профиля пользователя, включая:
+ * - Раздел "Обо мне" с описанием и навыками пользователя
+ * - Ленту новостей пользователя с возможностью добавления, редактирования и удаления
+ * - Боковую панель с информацией о проектах, образовании, работе, достижениях и контактах
+ * - Систему подтверждения навыков другими пользователями
+ * - Модальные окна для детального просмотра подтверждений навыков
+ *
+ * Функциональность:
+ * - Управление новостями (CRUD операции)
+ * - Система лайков для новостей
+ * - Отслеживание просмотров новостей через Intersection Observer
+ * - Подтверждение/отмена подтверждения навыков пользователя
+ * - Раскрывающиеся списки для длинных списков (проекты, достижения и т.д.)
+ * - Адаптивное отображение контента
+ *
+ * @implements OnInit - для инициализации и загрузки новостей
+ * @implements AfterViewInit - для работы с DOM элементами
+ * @implements OnDestroy - для очистки подписок и observers
+ */
+@Component({
+  selector: "app-profile-main",
+  templateUrl: "./main.component.html",
+  styleUrl: "./main.component.scss",
+  standalone: true,
+  imports: [
+    CommonModule,
+    IconComponent,
+    ModalComponent,
+    RouterLink,
+    NgTemplateOutlet,
+    UserLinksPipe,
+    ParseBreaksPipe,
+    ParseLinksPipe,
+    TruncatePipe,
+    YearsFromBirthdayPipe,
+    NewsCardComponent,
+    NewsFormComponent,
+    ProjectDirectionCard,
+    ButtonComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly route = inject(ActivatedRoute);
+  private readonly authService = inject(AuthService);
+  private readonly profileNewsService = inject(ProfileNewsService);
+  private readonly profileDataService = inject(ProfileDataService);
+  private readonly cdRef = inject(ChangeDetectorRef);
+
+  user?: User;
+  loggedUserId?: number;
+  isProfileEmpty?: boolean;
+
+  directions: DirectionItem[] = [];
+
+  subscriptions$: Subscription[] = [];
+  /**
+   * Инициализация компонента
+   * Загружает новости пользователя и настраивает Intersection Observer для отслеживания просмотров
+   */
+  ngOnInit(): void {
+    const profileDataSub$ = this.profileDataService
+      .getProfile()
+      .pipe(filter(user => !!user))
+      .subscribe({
+        next: user => {
+          if (user) {
+            this.directions = directionItemBuilder(
+              2,
+              ["навыки", "достижения"],
+              ["squiz", "medal"],
+              [user.skills, user.achievements],
+              ["array", "array"]
+            )!;
+          }
+          this.user = user as User;
+        },
+      });
+
+    const profileIdDataSub$ = this.authService.profile.subscribe({
+      next: user => {
+        this.loggedUserId = user?.id;
+      },
+    });
+
+    this.isProfileEmpty = !(
+      this.user?.firstName &&
+      this.user?.lastName &&
+      this.user?.email &&
+      this.user?.avatar &&
+      this.user?.birthday
+    );
+
+    const route$ = this.route.params
+      .pipe(
+        map(r => r["id"]),
+        concatMap(userId => this.profileNewsService.fetchNews(userId))
+      )
+      .subscribe(news => {
+        this.news.set(news.results);
+
+        setTimeout(() => {
+          const observer = new IntersectionObserver(this.onNewsInView.bind(this), {
+            root: document.querySelector(".office__body"),
+            rootMargin: "0px 0px 0px 0px",
+            threshold: 0,
+          });
+          document.querySelectorAll(".news__item").forEach(e => {
+            observer.observe(e);
+          });
+        });
+
+        setTimeout(() => {
+          this.checkDescriptionExpandable();
+          this.cdRef.detectChanges();
+        }, 200);
+      });
+    this.subscriptions$.push(profileDataSub$, profileIdDataSub$, route$);
+  }
+
+  @ViewChild("descEl") descEl?: ElementRef;
+  /**
+   * Инициализация после создания представления
+   * Проверяет необходимость отображения кнопки "Читать полностью" для описания профиля
+   */
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.checkDescriptionExpandable();
+      this.cdRef.detectChanges();
+    }, 150);
+  }
+
+  /**
+   * Очистка ресурсов при уничтожении компонента
+   * Отписывается от всех активных подписок
+   */
+  ngOnDestroy(): void {
+    this.subscriptions$.forEach($ => $.unsubscribe());
+  }
+
+  descriptionExpandable = false;
+  readFullDescription = false;
+
+  readAllProjects = false;
+  readAllPrograms = false;
+  readAllAchievements = false;
+  readAllLinks = false;
+  readAllEducation = false;
+  readAllLanguages = false;
+  readAllWorkExperience = false;
+
+  isShowModal = false;
+
+  @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
+  @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
+
+  news = signal<ProfileNews[]>([]);
+
+  /**
+   * Добавление новой новости в профиль
+   * @param news - объект с текстом и файлами новости
+   */
+  onAddNews(news: { text: string; files: string[] }): void {
+    this.profileNewsService.addNews(this.route.snapshot.params["id"], news).subscribe(newsRes => {
+      this.newsFormComponent?.onResetForm();
+      this.news.update(news => [newsRes, ...news]);
+    });
+  }
+
+  /**
+   * Удаление новости из профиля
+   * @param newsId - идентификатор удаляемой новости
+   */
+  onDeleteNews(newsId: number): void {
+    const newsIdx = this.news().findIndex(n => n.id === newsId);
+    this.news().splice(newsIdx, 1);
+
+    this.profileNewsService.delete(this.route.snapshot.params["id"], newsId).subscribe(() => {});
+  }
+
+  /**
+   * Переключение лайка новости
+   * @param newsId - идентификатор новости для лайка/дизлайка
+   */
+  onLike(newsId: number) {
+    const item = this.news().find(n => n.id === newsId);
+    if (!item) return;
+
+    this.profileNewsService
+      .toggleLike(this.route.snapshot.params["id"], newsId, !item.isUserLiked)
+      .subscribe(() => {
+        item.likesCount = item.isUserLiked ? item.likesCount - 1 : item.likesCount + 1;
+        item.isUserLiked = !item.isUserLiked;
+      });
+  }
+
+  /**
+   * Редактирование существующей новости
+   * @param news - обновленные данные новости
+   * @param newsItemId - идентификатор редактируемой новости
+   */
+  onEditNews(news: ProfileNews, newsItemId: number) {
+    this.profileNewsService
+      .editNews(this.route.snapshot.params["id"], newsItemId, news)
+      .subscribe(resNews => {
+        const newsIdx = this.news().findIndex(n => n.id === resNews.id);
+        this.news()[newsIdx] = resNews;
+        this.newsCardComponent?.onCloseEditMode();
+      });
+  }
+
+  /**
+   * Обработчик появления новостей в области видимости
+   * Отмечает новости как просмотренные при скролле
+   * @param entries - массив элементов, попавших в область видимости
+   */
+  onNewsInView(entries: IntersectionObserverEntry[]): void {
+    const ids = entries.map(e => {
+      return Number((e.target as HTMLElement).dataset["id"]);
+    });
+
+    this.profileNewsService.readNews(Number(this.route.snapshot.params["id"]), ids).subscribe(noop);
+  }
+
+  /**
+   * Раскрытие/сворачивание описания профиля
+   * @param elem - DOM элемент описания
+   * @param expandedClass - CSS класс для раскрытого состояния
+   * @param isExpanded - текущее состояние (раскрыто/свернуто)
+   */
+  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
+    expandElement(elem, expandedClass, isExpanded);
+    this.readFullDescription = !isExpanded;
+  }
+
+  openWorkInfoModal(): void {
+    this.isShowModal = true;
+  }
+
+  private checkDescriptionExpandable(): void {
+    const descElement = this.descEl?.nativeElement;
+
+    if (!descElement || !this.user?.aboutMe) {
+      this.descriptionExpandable = false;
+      return;
+    }
+
+    this.descriptionExpandable = descElement.scrollHeight > descElement.clientHeight;
+  }
+}

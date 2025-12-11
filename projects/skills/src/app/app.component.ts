@@ -7,7 +7,7 @@ import { IconComponent, SidebarComponent } from "@uilib";
 import { SidebarProfileComponent } from "./shared/sidebar-profile/sidebar-profile.component";
 import { ProfileService } from "./profile/services/profile.service";
 import type { UserData } from "../models/profile.model";
-import { AuthService } from "@auth/services";
+import { AuthService } from "projects/social_platform/src/app/api/auth";
 
 /**
  * Корневой компонент приложения, который служит основным контейнером макета
