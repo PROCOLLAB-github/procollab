@@ -1,0 +1,15 @@
+<!-- @format -->
+
+<div class="kanban">
+  <div class="kanban__wrapper" (clickOutside)="closeDetailTask()">
+    <app-kanban-board-sidebar></app-kanban-board-sidebar>
+
+    <div class="kanban__main">
+      <router-outlet></router-outlet>
+    </div>
+
+    @if (isTaskDetailOpen()) {
+    <app-task-detail></app-task-detail>
+    }
+  </div>
+</div>

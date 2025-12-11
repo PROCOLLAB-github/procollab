@@ -1,0 +1,15 @@
+<!-- @format -->
+
+@if(collaborators()) { @if (collaborators()?.length) {
+<div class="project__team">
+  @for (collaborator of collaborators(); track $index) {
+  <app-info-card
+    [leaderId]="leaderId()"
+    [loggedUserId]="loggedUserId()"
+    [info]="collaborator"
+    type="members"
+    (onRemoveCollaborator)="removeCollaboratorFromProject($event)"
+  ></app-info-card>
+  }
+</div>
+} }

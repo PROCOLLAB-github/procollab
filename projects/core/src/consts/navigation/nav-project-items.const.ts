@@ -1,6 +1,6 @@
 /** @format */
 
-import { EditStep } from "@office/projects/edit/services/project-step.service";
+import { EditStep } from "projects/social_platform/src/app/api/project/project-step.service";
 
 /**
  * Элементы навигации для редактирования проекта

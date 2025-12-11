@@ -1,8 +1,9 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { SkillsApiService, SubscriptionData } from "@corelib";
 import { Profile, UserData } from "../../../models/profile.model";
+import { SkillsApiService } from "projects/core/src/lib/services/api/skillsApi.service";
+import { SubscriptionData } from "@corelib";
 
 /**
  * Служба профилей

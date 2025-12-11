@@ -1,0 +1,14 @@
+<!-- @format -->
+
+<div
+  class="badge text-body-6"
+  [ngClass]="{
+    'badge--green': color === 'green',
+    'badge--red': color === 'red',
+    'badge--gold': color === 'gold',
+  }"
+>
+  <ng-container>
+    <ng-content></ng-content>
+  </ng-container>
+</div>

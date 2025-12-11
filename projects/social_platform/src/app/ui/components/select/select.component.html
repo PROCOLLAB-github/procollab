@@ -31,18 +31,13 @@
     ></i>
     }
   </div>
-  @if (!isDisabled) { @if (isOpen) {
-  <ul #dropdown class="field__options">
-    @for (option of options; track option.id; let index = $index) {
-    <li
-      class="text-body-12 field__option"
-      [class.field__option--highlighted]="index === highlightedIndex"
-      (click)="onUpdate($event, option.id)"
-    >
-      {{ option.label }}
-      <span class="field__option--point text-body-16">•</span>
-    </li>
-    }
-  </ul>
-  } }
+  @if (!isDisabled) {
+  <app-dropdown
+    [isOpen]="isOpen"
+    [options]="options"
+    [highlightedIndex]="highlightedIndex"
+    (select)="onUpdate($event)"
+    (outside)="hideDropdown()"
+  ></app-dropdown>
+  }
 </div>
