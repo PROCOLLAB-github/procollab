@@ -3,7 +3,7 @@
 import { Component, OnDestroy, OnInit, Signal } from "@angular/core";
 import { IndustryService } from "@services/industry.service";
 import { forkJoin, map, noop, Subscription } from "rxjs";
-import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
+import { ActivatedRoute, Router, RouterOutlet, RouterLink } from "@angular/router";
 import { Invite } from "@models/invite.model";
 import { AuthService } from "@auth/services";
 import { ProjectService } from "@services/project.service";
@@ -15,9 +15,11 @@ import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { NavComponent } from "./features/nav/nav.component";
 import { IconComponent, ProfileControlPanelComponent, SidebarComponent } from "@uilib";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, DatePipe } from "@angular/common";
 import { InviteService } from "@services/invite.service";
 import { toSignal } from "@angular/core/rxjs-interop";
+import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Главный компонент офиса - корневой компонент рабочего пространства
@@ -45,8 +47,12 @@ import { toSignal } from "@angular/core/rxjs-interop";
     DeleteConfirmComponent,
     SnackbarComponent,
     AsyncPipe,
+    DatePipe,
+    TruncatePipe,
     ProfileControlPanelComponent,
     IconComponent,
+    AvatarComponent,
+    RouterLink,
   ],
 })
 export class OfficeComponent implements OnInit, OnDestroy {

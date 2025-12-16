@@ -20,7 +20,7 @@
       <!-- ? "Регистрация до:" + " " + (program.datetimeRegistrationEnds | date: "dd MMMM") -->
       {{
         !registerDateExpired && (!program.isUserMember || !program.isUserManager)
-          ? "Подача проектов до:" + " " + (program.datetimeRegistrationEnds | date: "dd MMMM")
+          ? "Регистрация до:" + " " + (program.datetimeRegistrationEnds | date: "dd MMMM")
           : registerDateExpired
           ? "регистрация завершена"
           : "ты уже участвуешь!"
