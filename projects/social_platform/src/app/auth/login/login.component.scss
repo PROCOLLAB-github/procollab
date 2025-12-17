@@ -8,19 +8,19 @@
 
   &__image {
     position: absolute;
-    right: 0%;
     top: 0%;
+    right: 0%;
     display: none;
 
     @include responsive.apply-desktop {
       display: block;
-      margin-left: 135px;
       width: inherit;
       height: 100%;
+      margin-left: 135px;
     }
   }
 
-   &__logo {
+  &__logo {
     position: sticky;
     display: block;
     width: 95px;
@@ -57,8 +57,8 @@
   }
 
   &__external {
-    color: var(--grey-for-text);
     width: 80%;
+    color: var(--grey-for-text);
 
     @include responsive.apply-desktop {
       width: 100%;
@@ -90,11 +90,11 @@
 
   &__wrapper {
     width: 260px;
-    margin-bottom: 140px;
-    border: 0.5px solid var(--grey-for-text);
-    border-radius: var(--rounded-lg) var(--rounded-lg) var(--rounded-lg) 0px;
-    background-color: var(--white);
     padding: 18px 10px 10px 16px;
+    margin-bottom: 140px;
+    background-color: var(--white);
+    border: 0.5px solid var(--grey-for-text);
+    border-radius: var(--rounded-lg) var(--rounded-lg) var(--rounded-lg) 0;
   }
 
   &__text {
