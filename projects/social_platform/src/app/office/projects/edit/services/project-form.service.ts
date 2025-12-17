@@ -13,6 +13,7 @@ import { ActivatedRoute } from "@angular/router";
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
 import { Project } from "@office/models/project.model";
 import { ProjectService } from "@office/services/project.service";
+import { optionalUrlOrMentionValidator } from "@utils/optionalUrl.validator";
 import { stripNullish } from "@utils/stripNull";
 import { concatMap, filter } from "rxjs";
 /**
@@ -45,7 +46,7 @@ export class ProjectFormService {
       implementationDeadline: [null],
       trl: [null],
       links: this.fb.array([]),
-      link: ["", Validators.pattern(/^(https?:\/\/)/)],
+      link: ["", optionalUrlOrMentionValidator],
       industryId: [undefined],
       description: ["", [Validators.maxLength(800)]],
       presentationAddress: [""],
@@ -130,7 +131,7 @@ export class ProjectFormService {
     }
 
     links.forEach(link => {
-      linksFormArray.push(this.fb.control(link, [Validators.required]));
+      linksFormArray.push(this.fb.control(link, optionalUrlOrMentionValidator));
     });
   }
 
@@ -193,7 +194,13 @@ export class ProjectFormService {
    * @returns объект значений формы без nullish
    */
   public getFormValue(): any {
-    return stripNullish(this.projectForm.value);
+    const value = stripNullish(this.projectForm.value);
+
+    if (Array.isArray(value["links"])) {
+      value["links"] = value["links"].map((v: string) => v?.trim()).filter((v: string) => !!v);
+    }
+
+    return value;
   }
 
   // Геттеры для быстрого доступа к контролам основной формы
