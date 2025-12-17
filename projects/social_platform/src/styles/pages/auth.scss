@@ -9,14 +9,15 @@
   &__logo {
     position: fixed;
     top: 45px;
-    left: 15px;
+    left: 18px;
     display: block;
-    width: 117px;
+    width: 95px;
 
     @include responsive.apply-desktop {
       top: 120px;
       left: 200px;
       width: 157px;
+      height: 30px;
     }
   }
 

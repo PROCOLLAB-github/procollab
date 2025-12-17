@@ -45,6 +45,9 @@ export class TooltipComponent {
   /** Дополнительные CSS классы */
   @Input() customClass = "";
 
+  /** Цвет иконки */
+  @Input() color: "accent" | "grey" = "accent";
+
   /** Событие показа подсказки */
   @Output() show = new EventEmitter<void>();
 

@@ -4,14 +4,36 @@
 @use "styles/typography";
 
 .login {
-  &__reg {
-    margin-bottom: 30px;
+  height: 100vh;
 
-    @include typography.body-14;
+  &__image {
+    position: absolute;
+    right: 0%;
+    top: 0%;
+    display: none;
 
     @include responsive.apply-desktop {
-      @include typography.body-16;
+      display: block;
+      margin-left: 135px;
+      width: inherit;
+      height: 100%;
     }
+  }
+
+   &__logo {
+    position: sticky;
+    display: block;
+    width: 95px;
+    margin-bottom: 20px;
+
+    @include responsive.apply-desktop {
+      width: 157px;
+      height: 30px;
+    }
+  }
+
+  &__reg {
+    margin-top: 8px;
   }
 
   &__forget {
@@ -33,9 +55,53 @@
     justify-content: space-between;
     margin-top: 12px;
   }
+
+  &__external {
+    color: var(--grey-for-text);
+    width: 80%;
+
+    @include responsive.apply-desktop {
+      width: 100%;
+    }
+  }
+
+  &__additional {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-left: 18px;
+  }
 }
 
 .icon {
   color: var(--dark-grey);
   cursor: pointer;
+}
+
+.tooltip {
+  display: flex;
+  align-items: center;
+  height: 135px;
+  margin-top: 18px;
+
+  @include responsive.apply-desktop {
+    margin-top: 30px;
+  }
+
+  &__wrapper {
+    width: 260px;
+    margin-bottom: 140px;
+    border: 0.5px solid var(--grey-for-text);
+    border-radius: var(--rounded-lg) var(--rounded-lg) var(--rounded-lg) 0px;
+    background-color: var(--white);
+    padding: 18px 10px 10px 16px;
+  }
+
+  &__text {
+    color: var(--grey-for-text);
+
+    span {
+      color: var(--accent);
+    }
+  }
 }
