@@ -6,6 +6,10 @@
 .login {
   height: 100vh;
 
+  &__left {
+    padding-top: 180px;
+  }
+
   &__image {
     position: absolute;
     top: 0%;
@@ -16,6 +20,7 @@
       display: block;
       width: inherit;
       height: 100%;
+      max-height: 100vh;
       margin-left: 135px;
     }
   }
