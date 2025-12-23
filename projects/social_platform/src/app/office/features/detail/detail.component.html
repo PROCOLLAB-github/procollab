@@ -86,10 +86,10 @@
           } } @if (isUserMember && !isUserManager && !isUserExpert) {
           <app-button
             size="medium"
-            [style.opacity]="registerDateExpired || isProjectAssigned ? '0.5' : '1'"
-            [disabled]="!!registerDateExpired || isProjectAssigned"
+            [style.opacity]="submissionProjectDateExpired || isProjectAssigned ? '0.5' : '1'"
+            [disabled]="!!submissionProjectDateExpired || isProjectAssigned"
             [appearance]="isProjectAssigned ? 'outline' : 'inline'"
-            (click)="toggleSubmitProjectModal()"
+            (click)="isProjectAssigned ? null : addNewProject()"
             customTypographyClass="text-body-12 bar__add-project"
           >
             <span>{{ isProjectAssigned ? "вы подали проект" : "подать проект" }}</span>
@@ -195,7 +195,7 @@
           </a>
           } }
 
-          <app-modal [open]="showSubmitProjectModal()" (openChange)="toggleSubmitProjectModal()">
+          <!-- <app-modal [open]="showSubmitProjectModal()" (openChange)="toggleSubmitProjectModal()">
             <div class="cancel">
               <div class="cancel__top">
                 <p class="cancel__title text-body-14">
@@ -262,9 +262,9 @@
                 >
               </div>
             </div>
-          </app-modal>
+          </app-modal> -->
 
-          <app-modal
+          <!-- <app-modal
             [open]="isAssignProjectToProgramModalOpen()"
             (openChange)="isAssignProjectToProgramModalOpen.set(!isAssignProjectToProgramModalOpen)"
           >
@@ -290,6 +290,27 @@
                 вперед
               </app-button>
             </div>
+          </app-modal> -->
+
+          <app-modal
+            [open]="isAssignProjectToProgramModalOpen()"
+            (openChange)="
+              isAssignProjectToProgramModalOpen.set(!isAssignProjectToProgramModalOpen())
+            "
+          >
+            <div class="cancel" style="width: 100%">
+              <div class="cancel__top">
+                <i
+                  (click)="isAssignProjectToProgramModalOpen.set(false)"
+                  appIcon
+                  appSquare="10"
+                  icon="cross"
+                  class="cancel__cross"
+                ></i>
+                <p class="cancel__title text-body-14">произошла ошибка при редактировании!</p>
+              </div>
+              <p class="text-body-12 cancel__text">{{ assignProjectToProgramModalMessage() }}.</p>
+            </div>
           </app-modal>
 
           <app-modal
@@ -299,6 +320,23 @@
             <div class="cancel" style="padding: 24px">
               <div class="cancel__top">
                 <p class="cancel__title text-body-14">к сожалению, программа уже завершена!</p>
+              </div>
+
+              <i appIcon icon="sad-smile" appSquare="50" style="margin-top: 36px"></i>
+            </div>
+          </app-modal>
+
+          <app-modal
+            [open]="isProgramSubmissionProjectsEndedModalOpen()"
+            (openChange)="
+              isProgramSubmissionProjectsEndedModalOpen.set(
+                !isProgramSubmissionProjectsEndedModalOpen()
+              )
+            "
+          >
+            <div class="cancel" style="padding: 24px">
+              <div class="cancel__top">
+                <p class="cancel__title text-body-14">к сожалению, подача проекта уже завершена!</p>
               </div>
 
               <i appIcon icon="sad-smile" appSquare="50" style="margin-top: 36px"></i>

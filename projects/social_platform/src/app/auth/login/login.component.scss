@@ -88,9 +88,14 @@
   align-items: center;
   height: 135px;
   margin-top: 18px;
+  position: fixed;
+  bottom: 0%;
+  left: 5%;
 
   @include responsive.apply-desktop {
     margin-top: 30px;
+    bottom: 0%;
+    left: 12%;
   }
 
   &__wrapper {

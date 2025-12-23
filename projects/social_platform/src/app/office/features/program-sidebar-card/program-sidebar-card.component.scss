@@ -1,0 +1,31 @@
+.program {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+  cursor: pointer;
+  background-color: var(--light-white);
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-lg);
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: var(--white);
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__info {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+
+  &__title {
+    color: var(--black);
+  }
+}

@@ -47,15 +47,13 @@ import { ProjectTeamService } from "./services/project-team.service";
 import { ProjectAdditionalStepComponent } from "./shared/project-additional-step/project-additional-step.component";
 import { ProjectAdditionalService } from "./services/project-additional.service";
 import { ProjectAchievementsService } from "./services/project-achievements.service";
-import { Goal, GoalPostForm } from "@office/models/goals.model";
+import { Goal } from "@office/models/goals.model";
 import { ProjectGoalService } from "./services/project-goals.service";
 import { SnackbarService } from "@ui/services/snackbar.service";
-import { Resource, ResourcePostForm } from "@office/models/resource.model";
+import { Resource } from "@office/models/resource.model";
 import { Partner } from "@office/models/partner.model";
 import { ProjectPartnerService } from "./services/project-partner.service";
 import { ProjectResourceService } from "./services/project-resources.service";
-import { HttpErrorResponse } from "@angular/common/http";
-import { ProjectAssign } from "../models/project-assign.model";
 
 /**
  * Компонент редактирования проекта
@@ -120,6 +118,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly snackBarService: SnackbarService,
     private readonly skillsService: SkillsService,
     private readonly projectAdditionalService: ProjectAdditionalService,
+    private readonly programService: ProgramService,
     private readonly projectGoalService: ProjectGoalService
   ) {}
 
@@ -174,9 +173,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   clearAssignProjectToProgramError(): void {
     this.projectAdditionalService.clearAssignProjectToProgramError();
   }
-
-  // Сигналы для работы с модальными окнами с текстом
-  assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
 
   // Геттеры для работы с целями
   get goals(): FormArray {
@@ -286,32 +282,32 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectStepService.navigateToStep(step);
   }
 
-  /**
-   * Привязка проекта к программе выбранной
-   * Перенаправление её на редактирование "нового" проекта
-   */
-  assignProjectToProgram(): void {
-    this.projectService
-      .assignProjectToProgram(
-        Number(this.route.snapshot.paramMap.get("projectId")),
-        this.projectForm.get("partnerProgramId")?.value
-      )
-      .subscribe({
-        next: r => {
-          this.assignProjectToProgramModalMessage.set(r);
-          this.isAssignProjectToProgramModalOpen.set(true);
-          this.router.navigateByUrl(`/office/projects/${r.newProjectId}/edit?editingStep=main`);
-        },
+  // /**
+  //  * Привязка проекта к программе выбранной
+  //  * Перенаправление её на редактирование "нового" проекта
+  //  */
+  // assignProjectToProgram(): void {
+  //   this.projectService
+  //     .assignProjectToProgram(
+  //       Number(this.route.snapshot.paramMap.get("projectId")),
+  //       this.projectForm.get("partnerProgramId")?.value
+  //     )
+  //     .subscribe({
+  //       next: r => {
+  //         this.assignProjectToProgramModalMessage.set(r);
+  //         this.isAssignProjectToProgramModalOpen.set(true);
+  //         this.router.navigateByUrl(`/office/projects/${r.newProjectId}/edit?editingStep=main`);
+  //       },
 
-        error: err => {
-          if (err instanceof HttpErrorResponse) {
-            if (err.status === 400) {
-              this.setAssignProjectToProgramError(err.error);
-            }
-          }
-        },
-      });
-  }
+  //       error: err => {
+  //         if (err instanceof HttpErrorResponse) {
+  //           if (err.status === 400) {
+  //             this.setAssignProjectToProgramError(err.error);
+  //           }
+  //         }
+  //       },
+  //     });
+  // }
 
   // Методы для управления состоянием отправки форм
   setIsSubmittingAsPublished(status: boolean): void {
@@ -352,9 +348,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
+    const programId = this.projectForm.get("partnerProgramId")?.value;
+
     this.projectService.remove(Number(this.route.snapshot.paramMap.get("projectId"))).subscribe({
       next: () => {
-        this.router.navigateByUrl(`/office/projects/my`);
+        if (this.fromProgram) {
+          this.router.navigateByUrl(`/office/program/${programId}`);
+        } else {
+          this.router.navigateByUrl(`/office/projects/my`);
+        }
       },
     });
   }
@@ -566,7 +568,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private sendAdditionalFields(projectId: number, relationId: number): void {
     const isDraft = this.projectForm.get("draft")?.value === true;
-
     this.projectAdditionalService.sendAdditionalFieldsValues(projectId).subscribe({
       next: () => {
         if (!isDraft) {

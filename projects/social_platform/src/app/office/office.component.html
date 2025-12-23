@@ -27,26 +27,12 @@
             </div>
 
             <div class="office__programs">
-              <div class="office__program" [routerLink]="'/office/programs/' + 1">
-                <div class="program__top">
-                  <div class="program__info">
-                    <app-avatar [size]="30" [url]=""></app-avatar>
-                    <p class="text-body-10">до {{ "" | date: "dd.MM.yy" }}</p>
-                  </div>
-
-                  <i
-                    appIcon
-                    [icon]="!(1 === 1) ? 'program' : 'person'"
-                    appSquare="10"
-                    class="program__icon"
-                    [style.color]="!(1 === 1) ? 'var(--grey-for-text)' : 'var(--green)'"
-                  ></i>
-                </div>
-
-                <p class="text-body-10 program__title">
-                  {{ "VI Кейс-чемпионат MIR" | truncate: 30 }}
-                </p>
-              </div>
+              @if (programs().length) { @for (program of programs(); track program.id) {
+              <app-program-sidebar-card
+                [routerLink]="'/office/program/' + program.id"
+                [program]="program"
+              ></app-program-sidebar-card>
+              } }
             </div>
           </ui-sidebar>
 

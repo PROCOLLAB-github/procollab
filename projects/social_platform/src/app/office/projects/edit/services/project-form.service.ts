@@ -34,6 +34,29 @@ export class ProjectFormService {
     this.initializeForm();
   }
 
+  formModel = (this.projectForm = this.fb.group({
+    imageAddress: [""],
+    name: ["", [Validators.required, Validators.maxLength(256)]],
+    region: ["", [Validators.required, Validators.maxLength(256)]],
+    implementationDeadline: [null],
+    trl: [null],
+    links: this.fb.array([]),
+    link: ["", optionalUrlOrMentionValidator],
+    industryId: [undefined],
+    description: ["", [Validators.maxLength(800)]],
+    presentationAddress: [""],
+    coverImageAddress: [""],
+    actuality: ["", [Validators.maxLength(1000)]],
+    targetAudience: ["", [Validators.maxLength(500)]],
+    problem: ["", [Validators.maxLength(1000)]],
+    partnerProgramId: [null],
+    achievements: this.fb.array([]),
+    title: [""],
+    status: [""],
+
+    draft: [null],
+  }));
+
   /**
    * Создает и настраивает основную форму проекта с набором контролов и валидаторов.
    * Подписывается на изменения полей 'presentationAddress' и 'coverImageAddress' для автосохранения при очищении.

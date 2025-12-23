@@ -65,6 +65,7 @@
       background-color: var(--light-white);
       border: 0.5px solid var(--medium-grey-for-outline);
       border-radius: var(--rounded-lg);
+      z-index: 10000;
 
       p {
         color: var(--black);

@@ -10,6 +10,7 @@ import { Project } from "@models/project.model";
 import { ApiPagination } from "@models/api-pagination.model";
 import { User } from "@auth/models/user.model";
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
+import { ProjectAdditionalFields } from "@office/projects/models/project-additional-fields.model";
 
 /**
  * Сервис для работы с программами
@@ -67,6 +68,10 @@ export class ProgramService {
     return this.apiService.get(`${this.PROGRAMS_URL}/`, httpParams);
   }
 
+  getActualPrograms(): Observable<ApiPagination<Program>> {
+    return this.apiService.get(`${this.PROGRAMS_URL}/`);
+  }
+
   getOne(programId: number): Observable<Program> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/`);
   }
@@ -101,6 +106,15 @@ export class ProgramService {
 
   getProgramFilters(programId: number): Observable<PartnerProgramFields[]> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/filters/`);
+  }
+
+  getProgramProjectAdditionalFields(programId: number): Observable<ProjectAdditionalFields> {
+    return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/projects/apply/`);
+  }
+
+  // body - это форма проекта который подается + programFieldValues
+  applyProjectToProgram(programId: number, body: any): Observable<any> {
+    return this.apiService.post(`${this.PROGRAMS_URL}/${programId}/projects/apply/`, body);
   }
 
   createProgramFilters(

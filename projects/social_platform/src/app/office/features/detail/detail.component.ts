@@ -14,8 +14,6 @@ import { User } from "@auth/models/user.model";
 import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectService } from "@office/services/project.service";
 import { Project } from "@office/models/project.model";
-import { HttpErrorResponse } from "@angular/common/http";
-import { ProjectAssign } from "@office/projects/models/project-assign.model";
 import { ProjectAdditionalService } from "@office/projects/edit/services/project-additional.service";
 import { ProjectDataService } from "@office/projects/detail/services/project-data.service";
 import { ProgramDataService } from "@office/program/services/program-data.service";
@@ -27,6 +25,13 @@ import { SnackbarService } from "@ui/services/snackbar.service";
 import { ApproveSkillComponent } from "../approve-skill/approve-skill.component";
 import { ProjectsService } from "@office/projects/services/projects.service";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
+import { ProgramService } from "@office/program/services/program.service";
+import { ProjectFormService } from "@office/projects/edit/services/project-form.service";
+import {
+  PartnerProgramFields,
+  projectNewAdditionalProgramVields,
+} from "@office/models/partner-program-fields.model";
+import { HttpRequest, HttpResponse } from "@angular/common/http";
 
 @Component({
   selector: "app-detail",
@@ -62,6 +67,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
   private readonly projectsService = inject(ProjectsService);
   public readonly chatService = inject(ChatService);
   private readonly cdRef = inject(ChangeDetectorRef);
+  private readonly programService = inject(ProgramService);
+  private readonly projectFormService = inject(ProjectFormService);
 
   // Основные данные(типы данных, данные)
   info = signal<any | undefined>(undefined);
@@ -85,6 +92,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   // Сторонние переменные для работы с роутингом или доп проверок
   backPath?: string;
   registerDateExpired?: boolean;
+  submissionProjectDateExpired?: boolean;
   isInProject?: boolean;
 
   isSended = false;
@@ -92,20 +100,23 @@ export class DeatilComponent implements OnInit, OnDestroy {
   isProfileFill = false;
 
   // Переменные для работы с модалкой подачи проекта
-  selectedProjectId: number | null = null;
-  dubplicatedProjectId = 0;
+  // selectedProjectId: number | null = null;
+  // dubplicatedProjectId = 0;
   memberProjects: Project[] = [];
 
   userType = signal<number | undefined>(undefined);
 
   // Сигналы для работы с модальными окнами с текстом
-  assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
+  // assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
   errorMessageModal = signal("");
+
+  additionalFields = signal<PartnerProgramFields[]>([]);
 
   // Переменные для работы с модалками
   isAssignProjectToProgramModalOpen = signal(false);
   showSubmitProjectModal = signal(false);
   isProgramEndedModalOpen = signal(false);
+  isProgramSubmissionProjectsEndedModalOpen = signal<boolean>(false);
   isLeaveProjectModalOpen = false; // Флаг модального окна выхода
   isEditDisable = false; // Флаг недоступности редактирования
   isEditDisableModal = false; // Флаг недоступности редактирования для модалки
@@ -117,7 +128,14 @@ export class DeatilComponent implements OnInit, OnDestroy {
   showApproveSkillModal = false;
   readAllModal = false;
 
+  // Сигналы для работы с модальными окнами с текстом
+  assignProjectToProgramModalMessage = signal<string | null>(null);
+
   subscriptions: Subscription[] = [];
+
+  get projectForm() {
+    return this.projectFormService.formModel;
+  }
 
   ngOnInit(): void {
     const listTypeSub$ = this.route.data.subscribe(data => {
@@ -174,13 +192,13 @@ export class DeatilComponent implements OnInit, OnDestroy {
   /**
    * Переключатель для модалки выбора проекта
    */
-  toggleSubmitProjectModal(): void {
-    this.showSubmitProjectModal.set(!this.showSubmitProjectModal());
+  // toggleSubmitProjectModal(): void {
+  //   this.showSubmitProjectModal.set(!this.showSubmitProjectModal());
 
-    if (!this.showSubmitProjectModal()) {
-      this.selectedProjectId = null;
-    }
-  }
+  //   if (!this.showSubmitProjectModal()) {
+  //     this.selectedProjectId = null;
+  //   }
+  // }
 
   /** Показать подсказку */
   showTooltip(): void {
@@ -195,41 +213,68 @@ export class DeatilComponent implements OnInit, OnDestroy {
   /**
    * Обработчик изменения радио-кнопки для выбора проекта
    */
-  onProjectRadioChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.selectedProjectId = +target.value;
+  // onProjectRadioChange(event: Event): void {
+  //   const target = event.target as HTMLInputElement;
+  //   this.selectedProjectId = +target.value;
 
-    if (this.selectedProjectId) {
-      this.memberProjects.find(project => project.id === this.selectedProjectId);
-    }
-  }
+  //   if (this.selectedProjectId) {
+  //     this.memberProjects.find(project => project.id === this.selectedProjectId);
+  //   }
+  // }
 
   /**
    * Добавление проекта на программу
    */
-  addProjectModal(): void {
-    if (this.selectedProjectId === null) {
-      return;
-    }
+  // addProjectModal(): void {
+  //   if (this.selectedProjectId === null) {
+  //     return;
+  //   }
 
-    const selectedProject = this.memberProjects.find(
-      project => project.id === this.selectedProjectId
-    );
+  //   const selectedProject = this.memberProjects.find(
+  //     project => project.id === this.selectedProjectId
+  //   );
 
-    if (!selectedProject) {
-      this.snackbarService.error("Проект не найден. Попробуйте выбрать другой проект.");
-      return;
-    }
+  //   if (!selectedProject) {
+  //     this.snackbarService.error("Проект не найден. Попробуйте выбрать другой проект.");
+  //     return;
+  //   }
 
-    this.assignProjectToProgram(selectedProject!);
-  }
+  //   this.assignProjectToProgram(selectedProject!);
+  // }
 
-  get isProjectSelected(): boolean {
-    return this.selectedProjectId !== null;
-  }
+  // get isProjectSelected(): boolean {
+  //   return this.selectedProjectId !== null;
+  // }
 
   addNewProject(): void {
-    this.projectsService.addProject();
+    const newFieldsFormValues: projectNewAdditionalProgramVields[] = [];
+
+    this.additionalFields().forEach((field: PartnerProgramFields) => {
+      newFieldsFormValues.push({
+        field_id: field.id,
+        value_text: field.options.length ? field.options[0] : "'",
+      });
+    });
+
+    const body = { project: this.projectForm.value, program_field_values: newFieldsFormValues };
+
+    this.programService.applyProjectToProgram(this.info().id, body).subscribe({
+      next: r => {
+        this.router
+          .navigate([`/office/projects/${r.projectId}/edit`], {
+            queryParams: { editingStep: "main", fromProgram: true },
+          })
+          .then(() => console.debug("Route change from ProjectsComponent"));
+      },
+      error: err => {
+        if (err) {
+          if (err.status === 400) {
+            this.isAssignProjectToProgramModalOpen.set(true);
+            this.assignProjectToProgramModalMessage.set(err.error.detail);
+          }
+        }
+      },
+    });
   }
 
   /** Эмитим логику для привязки проекта к программе */
@@ -237,41 +282,41 @@ export class DeatilComponent implements OnInit, OnDestroy {
    * Привязка проекта к программе выбранной
    * Перенаправление её на редактирование "нового" проекта
    */
-  assignProjectToProgram(project: Project): void {
-    if (!project || !project.id) {
-      this.snackbarService.error("Ошибка при выборе проекта");
-      return;
-    }
+  // assignProjectToProgram(project: Project): void {
+  //   if (!project || !project.id) {
+  //     this.snackbarService.error("Ошибка при выборе проекта");
+  //     return;
+  //   }
 
-    if (this.info().id) {
-      this.projectService
-        .assignProjectToProgram(project.id, Number(this.route.snapshot.params["programId"]))
-        .subscribe({
-          next: r => {
-            this.dubplicatedProjectId = r.newProjectId;
-            this.assignProjectToProgramModalMessage.set(r);
-            this.isAssignProjectToProgramModalOpen.set(true);
-            this.toggleSubmitProjectModal();
-            this.selectedProjectId = null;
-          },
+  //   if (this.info().id) {
+  //     this.projectService
+  //       .assignProjectToProgram(project.id, Number(this.route.snapshot.params["programId"]))
+  //       .subscribe({
+  //         next: r => {
+  // this.dubplicatedProjectId = r.newProjectId;
+  // this.assignProjectToProgramModalMessage.set(r);
+  // this.isAssignProjectToProgramModalOpen.set(true);
+  // this.toggleSubmitProjectModal();
+  // this.selectedProjectId = null;
+  // },
+  //
+  //         error: err => {
+  //           if (err instanceof HttpErrorResponse) {
+  //             if (err.status === 400) {
+  //               this.setAssignProjectToProgramError(err.error);
+  //             }
+  //           }
+  //         },
+  //       });
+  //   }
+  // }
 
-          error: err => {
-            if (err instanceof HttpErrorResponse) {
-              if (err.status === 400) {
-                this.setAssignProjectToProgramError(err.error);
-              }
-            }
-          },
-        });
-    }
-  }
-
-  closeAssignProjectToProgramModal(): void {
-    this.isAssignProjectToProgramModalOpen.set(false);
-    this.router.navigateByUrl(
-      `/office/projects/${this.dubplicatedProjectId}/edit?editingStep=main`
-    );
-  }
+  // closeAssignProjectToProgramModal(): void {
+  //   this.isAssignProjectToProgramModalOpen.set(false);
+  //   this.router.navigateByUrl(
+  //     `/office/projects/${this.dubplicatedProjectId}/edit?editingStep=main`
+  //   );
+  // }
 
   /**
    * Закрытие модального окна выхода из проекта
@@ -389,6 +434,13 @@ export class DeatilComponent implements OnInit, OnDestroy {
       event.preventDefault();
       event.stopPropagation();
       this.isProgramEndedModalOpen.set(true);
+    } else if (
+      program?.datetimeProjectSubmissionEnds &&
+      Date.now() > Date.parse(program?.datetimeProjectSubmissionEnds)
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.isProgramSubmissionProjectsEndedModalOpen.set(true);
     } else {
       this.router.navigateByUrl("/office/program/" + this.info().id + "/register");
     }
@@ -434,7 +486,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
           tap(program => {
             if (program) {
               this.info.set(program);
+              this.loadAdditionalFields(program.id);
               this.registerDateExpired = Date.now() > Date.parse(program.datetimeRegistrationEnds);
+              this.submissionProjectDateExpired =
+                Date.now() > Date.parse(program.datetimeProjectSubmissionEnds);
             }
           })
         )
@@ -503,5 +558,19 @@ export class DeatilComponent implements OnInit, OnDestroy {
     } else if (this.listType === "program") {
       this.backPath = "/office/program/all";
     }
+  }
+
+  private loadAdditionalFields(programId: number): void {
+    const additionalFieldsSub$ = this.programService
+      .getProgramProjectAdditionalFields(programId)
+      .subscribe({
+        next: ({ programFields }) => {
+          if (programFields) {
+            this.additionalFields.set(programFields);
+          }
+        },
+      });
+
+    this.subscriptions.push(additionalFieldsSub$);
   }
 }

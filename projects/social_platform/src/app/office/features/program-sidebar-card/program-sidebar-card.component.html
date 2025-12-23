@@ -1,0 +1,22 @@
+<!-- @format -->
+
+<div class="program">
+  <div class="program__top">
+    <div class="program__info">
+      <app-avatar [size]="30" [url]="program.imageAddress"></app-avatar>
+      <p class="text-body-10">до {{ program.datetimeRegistrationEnds | date: "dd.MM.yy" }}</p>
+    </div>
+
+    <i
+      appIcon
+      [icon]="!program.isUserMember ? 'program' : 'person'"
+      appSquare="10"
+      class="program__icon"
+      [style.color]="!program.isUserMember ? 'var(--grey-for-text)' : 'var(--green)'"
+    ></i>
+  </div>
+
+  <p class="text-body-10 program__title">
+    {{ program.name | truncate: 30 }}
+  </p>
+</div>
