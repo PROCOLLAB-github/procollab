@@ -415,7 +415,7 @@
     <div formArrayName="links">
       @if (hasLinks) {
       <ul class="project__links--wrapper">
-        @for (control of linksArray.controls; track trackByIndex($index)) {
+        @for (control of links.controls; track trackByIndex($index)) {
         <li class="project__links">
           <fieldset style="flex-grow: 1">
             <label class="text-body-12 field-label">ссылка на контакты и сообщества</label>

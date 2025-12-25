@@ -1,12 +1,11 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit, Signal } from "@angular/core";
+import { Component, OnDestroy, OnInit, signal, Signal } from "@angular/core";
 import { IndustryService } from "@services/industry.service";
 import { forkJoin, map, noop, Subscription } from "rxjs";
-import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
+import { ActivatedRoute, Router, RouterOutlet, RouterLink } from "@angular/router";
 import { Invite } from "@models/invite.model";
 import { AuthService } from "@auth/services";
-import { ProjectService } from "@services/project.service";
 import { User } from "@auth/models/user.model";
 import { ChatService } from "@services/chat.service";
 import { SnackbarComponent } from "@ui/components/snackbar/snackbar.component";
@@ -14,10 +13,13 @@ import { DeleteConfirmComponent } from "@ui/components/delete-confirm/delete-con
 import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { NavComponent } from "./features/nav/nav.component";
-import { IconComponent, ProfileControlPanelComponent, SidebarComponent } from "@uilib";
+import { ProfileControlPanelComponent, SidebarComponent } from "@uilib";
 import { AsyncPipe } from "@angular/common";
 import { InviteService } from "@services/invite.service";
 import { toSignal } from "@angular/core/rxjs-interop";
+import { ProgramSidebarCardComponent } from "./features/program-sidebar-card/program-sidebar-card.component";
+import { ProgramService } from "./program/services/program.service";
+import { Program } from "./program/models/program.model";
 
 /**
  * Главный компонент офиса - корневой компонент рабочего пространства
@@ -45,8 +47,9 @@ import { toSignal } from "@angular/core/rxjs-interop";
     DeleteConfirmComponent,
     SnackbarComponent,
     AsyncPipe,
+    RouterLink,
     ProfileControlPanelComponent,
-    IconComponent,
+    ProgramSidebarCardComponent,
   ],
 })
 export class OfficeComponent implements OnInit, OnDestroy {
@@ -56,7 +59,8 @@ export class OfficeComponent implements OnInit, OnDestroy {
     public readonly authService: AuthService,
     private readonly inviteService: InviteService,
     private readonly router: Router,
-    public readonly chatService: ChatService
+    public readonly chatService: ChatService,
+    private readonly programService: ProgramService
   ) {}
 
   invites: Signal<Invite[]> = toSignal(
@@ -72,6 +76,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   waitVerificationAccepted = false;
 
   inviteErrorModal = false;
+  protected readonly programs = signal<Program[]>([]);
 
   navItems: {
     name: string;
@@ -121,6 +126,17 @@ export class OfficeComponent implements OnInit, OnDestroy {
     if (localStorage.getItem("waitVerificationAccepted") === "true") {
       this.waitVerificationAccepted = true;
     }
+
+    const programsSub$ = this.programService.getActualPrograms().subscribe({
+      next: ({ results: programs }) => {
+        const resultPrograms = programs.filter(
+          (program: Program) => Date.now() < Date.parse(program.datetimeRegistrationEnds)
+        );
+        this.programs.set(resultPrograms.slice(0, 3));
+      },
+    });
+
+    this.subscriptions$.push(programsSub$);
   }
 
   ngOnDestroy(): void {

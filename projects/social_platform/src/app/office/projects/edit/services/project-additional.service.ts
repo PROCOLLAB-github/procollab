@@ -242,7 +242,7 @@ export class ProjectAdditionalService {
         control.addValidators([Validators.maxLength(500)]);
         break;
       case "textarea":
-        control.addValidators([Validators.maxLength(300)]);
+        control.addValidators([Validators.maxLength(500)]);
         break;
     }
   }

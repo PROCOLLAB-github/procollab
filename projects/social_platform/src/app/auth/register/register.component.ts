@@ -75,6 +75,7 @@ export class RegisterComponent implements OnInit {
         ],
         password: ["", [Validators.required, this.validationService.usePasswordValidator(8)]],
         repeatedPassword: ["", [Validators.required]],
+        phoneNumber: ["", [Validators.maxLength(15)]],
       },
       { validators: [validationService.useMatchValidator("password", "repeatedPassword")] }
     );
@@ -88,8 +89,6 @@ export class RegisterComponent implements OnInit {
   registerAgreement = false;
   ageAgreement = false;
   registerIsSubmitting = false;
-  credsSubmitInitiated = false;
-  infoSubmitInitiated = false;
 
   showPassword = false;
   showPasswordRepeat = false;
@@ -97,8 +96,6 @@ export class RegisterComponent implements OnInit {
   isUserCreationModalError = false;
 
   serverErrors: string[] = [];
-
-  step: "credentials" | "info" = "credentials";
 
   errorMessage = ErrorMessage;
 
@@ -110,46 +107,34 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  onInfoStep() {
-    const fields = [
-      this.registerForm.get("email"),
-      this.registerForm.get("password"),
-      this.registerForm.get("repeatedPassword"),
-    ];
-
-    const errors = fields.map(field => {
-      field?.markAsTouched();
-      return !!field?.valid;
-    });
-
-    if (errors.every(Boolean) && this.registerAgreement && this.ageAgreement) {
-      this.step = "info";
-    }
-  }
-
   onSendForm(): void {
     if (!this.validationService.getFormValidation(this.registerForm)) {
       return;
     }
 
-    const form = {
+    const payload = {
       ...this.registerForm.value,
       birthday: this.registerForm.value.birthday
         ? dayjs(this.registerForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD")
         : undefined,
+      phoneNumber:
+        typeof this.registerForm.value.phoneNumber === "string"
+          ? this.registerForm.value.phoneNumber.replace(/^([87])/, "+7")
+          : this.registerForm.value.phoneNumber,
     };
-    delete form.repeatedPassword;
+
+    delete payload.repeatedPassword;
 
     this.registerIsSubmitting = true;
 
-    this.authService.register(form).subscribe({
+    this.authService.register(payload).subscribe({
       next: () => {
         this.registerIsSubmitting = false;
 
         this.cdref.detectChanges();
 
         this.router
-          .navigateByUrl("/auth/verification/email?adress=" + form.email)
+          .navigateByUrl("/auth/verification/email?adress=" + payload.email)
           .then(() => console.debug("Route changed from RegisterComponent"));
       },
       error: error => {
@@ -157,7 +142,6 @@ export class RegisterComponent implements OnInit {
           error.status === 400 &&
           error.error.email.some((msg: string) => msg.includes("email"))
         ) {
-          // console.log(error);
           this.serverErrors = Object.values(error.error).flat() as string[];
           console.log(this.serverErrors);
         } else if (error.status === 500) {
@@ -168,15 +152,5 @@ export class RegisterComponent implements OnInit {
         this.cdref.detectChanges();
       },
     });
-  }
-
-  onSubmit() {
-    if (this.step === "credentials") {
-      this.credsSubmitInitiated = true;
-      this.onInfoStep();
-    } else if (this.step === "info") {
-      this.infoSubmitInitiated = true;
-      this.onSendForm();
-    }
   }
 }

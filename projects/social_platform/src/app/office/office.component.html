@@ -25,6 +25,15 @@
               <p class="text-body-6">Политика обработки персональных данных</p>
               <p class="text-body-6">2022</p>
             </div>
+
+            <div class="office__programs">
+              @if (programs().length) { @for (program of programs(); track program.id) {
+              <app-program-sidebar-card
+                [routerLink]="'/office/program/' + program.id"
+                [program]="program"
+              ></app-program-sidebar-card>
+              } }
+            </div>
           </ui-sidebar>
 
           <div class="office__inner--content">

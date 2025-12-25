@@ -1,5 +1,6 @@
 /** @format */
 
+import { HttpParams } from "@angular/common/http";
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn, Router } from "@angular/router";
 import { ApiPagination } from "@office/models/api-pagination.model";
@@ -48,17 +49,22 @@ export const ListAllResolver: ResolveFn<ApiPagination<ProjectRate>> = (
   const projectRatingService = inject(ProjectRatingService);
   const router = inject(Router);
 
-  return projectRatingService.getAll(route.parent?.params["programId"], 0, 8).pipe(
-    catchError(error => {
-      if (error.status === 403) {
-        router.navigate([], {
-          queryParams: { access: "accessDenied" },
-          queryParamsHandling: "merge",
-          replaceUrl: true,
-        });
-      }
+  return projectRatingService
+    .getAll(
+      route.parent?.params["programId"],
+      new HttpParams({ fromObject: { offset: 0, limit: 8 } })
+    )
+    .pipe(
+      catchError(error => {
+        if (error.status === 403) {
+          router.navigate([], {
+            queryParams: { access: "accessDenied" },
+            queryParamsHandling: "merge",
+            replaceUrl: true,
+          });
+        }
 
-      return EMPTY;
-    })
-  );
+        return EMPTY;
+      })
+    );
 };

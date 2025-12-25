@@ -80,7 +80,9 @@
           type="icon"
           class="project__info--remove"
           color="red"
-          (click)="removePartner(i, partners.value[i].company.id)"
+          (click)="
+            removePartner(i, partners.value[i]?.company?.id ?? partners.value[i]?.id ?? null)
+          "
         >
           <i appIcon icon="basket" appSquare="14"></i>
         </app-button>
