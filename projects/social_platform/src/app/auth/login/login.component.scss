@@ -4,53 +4,56 @@
 @use "styles/typography";
 
 .login {
-  height: 100vh;
+  display: flex;
+  min-width: 95vw;
+  min-height: 100vh;
 
   &__left {
-    padding-top: 180px;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding-left: 10px;
   }
 
-  &__image {
-    position: absolute;
-    top: 0%;
-    right: 0%;
+  &__left-content {
+    display: flex;
+    flex: 1;
+    align-items: center;
+  }
+
+  &__left-footer {
+    padding-bottom: 24px;
+  }
+
+  &__right {
     display: none;
 
     @include responsive.apply-desktop {
       display: block;
-      width: inherit;
-      height: 100%;
-      max-height: 100vh;
-      margin-left: 135px;
+      width: 50%;
     }
   }
 
-  &__logo {
-    position: sticky;
-    display: block;
-    width: 95px;
-    margin-bottom: 20px;
-
-    @include responsive.apply-desktop {
-      width: 157px;
-      height: 30px;
-    }
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
-  &__reg {
-    margin-top: 8px;
+  &__additional {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 7px;
+    margin-left: 18px;
   }
 
-  &__forget {
-    display: block;
-    text-align: center;
-
-    @include typography.body-12;
+  &_external {
+    width: 80%;
+    color: var(--grey-for-text);
 
     @include responsive.apply-desktop {
-      text-align: left;
-
-      @include typography.body-14;
+      width: 100%;
     }
   }
 
@@ -61,47 +64,41 @@
     margin-top: 12px;
   }
 
-  &__external {
-    width: 80%;
-    color: var(--grey-for-text);
+  &__forget {
+    @include typography.body-12;
+  }
 
-    @include responsive.apply-desktop {
-      width: 100%;
+  .auth {
+    padding: 0;
+
+    &__wrapper {
+      max-width: 333px;
     }
   }
 
-  &__additional {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-left: 18px;
-  }
-}
+  &__logo {
+    display: block;
+    width: 95px;
+    margin-bottom: 20px;
 
-.icon {
-  color: var(--dark-grey);
-  cursor: pointer;
+    @include responsive.apply-desktop {
+      width: 157px;
+      height: 30px;
+    }
+  }
 }
 
 .tooltip {
-  position: fixed;
-  bottom: 0%;
-  left: 5%;
+  position: relative;
   display: flex;
   align-items: center;
-  height: 135px;
-  margin-top: 18px;
-
-  @include responsive.apply-desktop {
-    bottom: 0%;
-    left: 12%;
-    margin-top: 30px;
-  }
 
   &__wrapper {
+    position: absolute;
+    bottom: 22px;
+    left: 38px;
     width: 260px;
     padding: 18px 10px 10px 16px;
-    margin-bottom: 140px;
     background-color: var(--white);
     border: 0.5px solid var(--grey-for-text);
     border-radius: var(--rounded-lg) var(--rounded-lg) var(--rounded-lg) 0;
@@ -110,8 +107,13 @@
   &__text {
     color: var(--grey-for-text);
 
-    span {
+    a {
       color: var(--accent);
     }
   }
+}
+
+.icon {
+  color: var(--dark-grey);
+  cursor: pointer;
 }
