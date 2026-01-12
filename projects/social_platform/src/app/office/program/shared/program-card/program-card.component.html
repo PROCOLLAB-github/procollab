@@ -12,18 +12,19 @@
     <p
       class="text-body-10 card__description card__registration"
       [ngClass]="{
-        'card__registration--actual': (!registerDateExpired && (!program.isUserMember || !program.isUserManager)),
-        'card__registration--participating': program.isUserMember,
         'card__registration--ended': registerDateExpired,
+        'card__registration--participating': !registerDateExpired && program.isUserMember,
+        'card__registration--actual':
+          !registerDateExpired && (!program.isUserMember || !program.isUserManager)
       }"
     >
       <!-- ? "Регистрация до:" + " " + (program.datetimeRegistrationEnds | date: "dd MMMM") -->
       {{
-        !registerDateExpired && (!program.isUserMember || !program.isUserManager)
-          ? "Регистрация до:" + " " + (program.datetimeRegistrationEnds | date: "dd MMMM")
-          : registerDateExpired
+        registerDateExpired
           ? "регистрация завершена"
-          : "ты уже участвуешь!"
+          : program.isUserMember
+          ? "ты уже участвуешь!"
+          : "Регистрация до " + (program.datetimeRegistrationEnds | date: "dd MMMM")
       }}
     </p>
 
