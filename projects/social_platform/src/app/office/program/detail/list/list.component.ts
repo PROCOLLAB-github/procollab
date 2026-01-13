@@ -506,7 +506,7 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.exportFileService.exportAllProjects(programId).subscribe({
       next: blob => {
-        saveFile(this.programDataService.getProgramName(), blob, "all");
+        saveFile(blob, "all", this.programDataService.getProgramName());
         this.loadingExportProjects.set(false);
       },
       error: err => {
@@ -522,7 +522,7 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.exportFileService.exportSubmittedProjects(programId).subscribe({
       next: blob => {
-        saveFile(this.programDataService.getProgramName(), blob, "submitted");
+        saveFile(blob, "submitted", this.programDataService.getProgramName());
         this.loadingExportSubmittedProjects.set(false);
       },
       error: () => {
@@ -537,7 +537,7 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.exportFileService.exportProgramRates(programId).subscribe({
       next: blob => {
-        saveFile(this.programDataService.getProgramName(), blob, "rates");
+        saveFile(blob, "rates", this.programDataService.getProgramName());
         this.loadingExportRates.set(false);
       },
       error: () => {

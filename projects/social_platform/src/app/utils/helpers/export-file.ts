@@ -8,13 +8,16 @@
 import { saveAs } from "file-saver";
 
 export const saveFile = (
-  programName: string,
   blob: Blob,
-  type: "all" | "submitted" | "rates"
+  type: "all" | "submitted" | "rates" | "cv",
+  name?: string
 ): void => {
   const prefixFileName =
     type === "all" ? "projects" : type === "rates" ? "scores" : "projects_review";
   const todayDate = new Date().toLocaleDateString("ru-RU");
-  const fullName = prefixFileName + "-" + programName + "-" + todayDate + ".xlsx";
+  const fullName =
+    (type !== "cv" ? prefixFileName + "-" : "") +
+    name +
+    (type !== "cv" ? "-" + todayDate + ".xlsx" : ".pdf");
   saveAs(blob, fullName);
 };
