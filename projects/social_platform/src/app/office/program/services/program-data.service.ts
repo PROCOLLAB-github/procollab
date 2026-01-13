@@ -14,4 +14,10 @@ export class ProgramDataService {
   setProgram(program: Program): void {
     return this.programSubject$.next(program);
   }
+
+  getProgramName(): string {
+    const program = this.programSubject$.value;
+    if (!program?.name) return "";
+    return program.name;
+  }
 }

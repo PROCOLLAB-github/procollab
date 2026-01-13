@@ -25,12 +25,11 @@ import {
   Subscription,
   switchMap,
   tap,
-  throttleTime,
 } from "rxjs";
 import { ProjectsFilterComponent } from "@office/program/detail/list/projects-filter/projects-filter.component";
 import Fuse from "fuse.js";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
 import { User } from "@auth/models/user.model";
 import { Project } from "@office/models/project.model";
@@ -42,9 +41,12 @@ import { SubscriptionService } from "@office/services/subscription.service";
 import { ApiPagination } from "@models/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
 import { PartnerProgramFields } from "@office/models/partner-program-fields.model";
-import { CheckboxComponent } from "@ui/components";
+import { CheckboxComponent, ButtonComponent, IconComponent } from "@ui/components";
 import { InfoCardComponent } from "@office/features/info-card/info-card.component";
 import { tagsFilter } from "projects/core/src/consts/filters/tags-filter.const";
+import { ExportFileService } from "@office/services/export-file.service";
+import { saveFile } from "@utils/helpers/export-file";
+import { ProgramDataService } from "@office/program/services/program-data.service";
 
 @Component({
   selector: "app-list",
@@ -58,6 +60,8 @@ import { tagsFilter } from "projects/core/src/consts/filters/tags-filter.const";
     SearchComponent,
     RatingCardComponent,
     InfoCardComponent,
+    ButtonComponent,
+    IconComponent,
   ],
   standalone: true,
 })
@@ -82,12 +86,13 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly router = inject(Router);
   private readonly cdref = inject(ChangeDetectorRef);
   private readonly programService = inject(ProgramService);
+  private readonly programDataService = inject(ProgramDataService);
   private readonly projectRatingService = inject(ProjectRatingService);
   private readonly authService = inject(AuthService);
   private readonly subscriptionService = inject(SubscriptionService);
+  private readonly exportFileService = inject(ExportFileService);
 
-  private previousReqQuery: Record<string, any> = {};
-  private availableFilters: PartnerProgramFields[] = [];
+  protected availableFilters: PartnerProgramFields[] = [];
 
   searchForm: FormGroup;
 
@@ -108,6 +113,11 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   readonly ratingOptionsList = tagsFilter;
   isFilterOpen = false;
+
+  protected readonly loadingExportProjects = signal<boolean>(false);
+  protected readonly loadingExportSubmittedProjects = signal<boolean>(false);
+  protected readonly loadingExportRates = signal<boolean>(false);
+  protected readonly loadingExportCalculations = signal<boolean>(false);
 
   subscriptions$: Subscription[] = [];
 
@@ -490,6 +500,54 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.availableFilters = filters;
   }
 
+  downloadProjects(): void {
+    const programId = this.route.parent?.snapshot.params["programId"];
+    this.loadingExportProjects.set(true);
+
+    this.exportFileService.exportAllProjects(programId).subscribe({
+      next: blob => {
+        saveFile(this.programDataService.getProgramName(), blob, "all");
+        this.loadingExportProjects.set(false);
+      },
+      error: err => {
+        console.error(err);
+        this.loadingExportProjects.set(false);
+      },
+    });
+  }
+
+  downloadSubmittedProjects(): void {
+    const programId = this.route.parent?.snapshot.params["programId"];
+    this.loadingExportSubmittedProjects.set(true);
+
+    this.exportFileService.exportSubmittedProjects(programId).subscribe({
+      next: blob => {
+        saveFile(this.programDataService.getProgramName(), blob, "submitted");
+        this.loadingExportSubmittedProjects.set(false);
+      },
+      error: () => {
+        this.loadingExportSubmittedProjects.set(false);
+      },
+    });
+  }
+
+  downloadRates(): void {
+    const programId = this.route.parent?.snapshot.params["programId"];
+    this.loadingExportRates.set(true);
+
+    this.exportFileService.exportProgramRates(programId).subscribe({
+      next: blob => {
+        saveFile(this.programDataService.getProgramName(), blob, "rates");
+        this.loadingExportRates.set(false);
+      },
+      error: () => {
+        this.loadingExportRates.set(false);
+      },
+    });
+  }
+
+  downloadCalculations(): void {}
+
   // Swipe логика для мобильных устройств
   private swipeStartY = 0;
   private swipeThreshold = 50;
@@ -561,20 +619,5 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private get searchParamName(): string {
     return this.listType === "rating" ? "name__contains" : "search";
-  }
-
-  private flattenFilters(filters: Record<string, any[]>): Record<string, string> {
-    const flattened: Record<string, string> = {};
-
-    Object.keys(filters).forEach(key => {
-      const value = filters[key];
-      if (Array.isArray(value) && value.length > 0) {
-        flattened[key] = Array.isArray(value[0]) ? value.join(",") : value.toString();
-      } else if (value !== undefined && value !== null) {
-        flattened[key] = value.toString();
-      }
-    });
-
-    return flattened;
   }
 }

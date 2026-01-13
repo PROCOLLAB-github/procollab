@@ -44,6 +44,15 @@ export class ApiService {
     return this.http.get(this.apiUrl + path, { params, ...options }).pipe(first()) as Observable<T>;
   }
 
+  getFile(path: string, params?: HttpParams): Observable<Blob> {
+    return this.http
+      .get(this.apiUrl + path, {
+        params,
+        responseType: "blob",
+      })
+      .pipe(first()) as Observable<Blob>;
+  }
+
   /**
    * Выполняет PUT запрос к API (полное обновление ресурса)
    * @param path - Относительный путь к ресурсу
