@@ -46,9 +46,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
    */
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     // Базовые заголовки для всех запросов
-    const headers: Record<string, string> = {
-      Accept: "application/json",
-    };
+    const headers: Record<string, string> = {};
 
     const tokens = this.tokenService.getTokens();
 
@@ -57,14 +55,24 @@ export class BearerTokenInterceptor implements HttpInterceptor {
       headers["Authorization"] = `Bearer ${tokens.access}`;
     }
 
+    // Для blob запросов (файлы) не устанавливаем Accept, чтобы не парсить blob как JSON
+    const isBlobRequest =
+      request.url.includes("/export") ||
+      request.url.includes("/download") ||
+      (request.headers.has("X-Request-Type") && request.headers.get("X-Request-Type") === "blob");
+
+    const hasAcceptHeader = request.headers.has("Accept");
+
+    if (!isBlobRequest && !hasAcceptHeader) {
+      headers["Accept"] = "application/json";
+    }
+
     const req = request.clone({ setHeaders: headers });
 
-    // Если токены есть, обрабатываем запрос с возможностью обновления токенов
     if (tokens !== null) {
       return this.handleRequestWithTokens(req, next);
     } else {
-      // Если токенов нет, просто выполняем запрос
-      return next.handle(request);
+      return next.handle(req);
     }
   }
 
@@ -107,10 +115,9 @@ export class BearerTokenInterceptor implements HttpInterceptor {
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
-    // Если токен еще не обновляется, начинаем процесс обновления
     if (!this.isRefreshing) {
       this.isRefreshing = true;
-      this.refreshTokenSubject.next(null); // Сбрасываем subject
+      this.refreshTokenSubject.next(null);
 
       return this.tokenService.refreshTokens().pipe(
         catchError(err => {
@@ -119,22 +126,29 @@ export class BearerTokenInterceptor implements HttpInterceptor {
         }),
         switchMap(res => {
           this.isRefreshing = false;
-          this.refreshTokenSubject.next(res.access); // Уведомляем о новом токене
+          this.refreshTokenSubject.next(res.access);
 
-          // Сохраняем новые токены в хранилище
           this.tokenService.memTokens(res);
 
-          // Подготавливаем заголовки с новым токеном
-          const headers: Record<string, string> = {
-            Accept: "application/json",
-          };
+          const headers: Record<string, string> = {};
 
           const tokens = this.tokenService.getTokens();
           if (tokens) {
             headers["Authorization"] = `Bearer ${tokens.access}`;
           }
 
-          // Повторяем исходный запрос с новым токеном
+          const isBlobRequest =
+            request.url.includes("/export") ||
+            request.url.includes("/download") ||
+            (request.headers.has("X-Request-Type") &&
+              request.headers.get("X-Request-Type") === "blob");
+
+          const hasAcceptHeader = request.headers.has("Accept");
+
+          if (!isBlobRequest && !hasAcceptHeader) {
+            headers["Accept"] = "application/json";
+          }
+
           return next.handle(
             request.clone({
               setHeaders: headers,
@@ -144,17 +158,32 @@ export class BearerTokenInterceptor implements HttpInterceptor {
       );
     }
 
-    // Если токен уже обновляется, ждем завершения процесса
     return this.refreshTokenSubject.pipe(
-      filter(token => token !== null), // Ждем получения нового токена
-      take(1), // Берем только первое значение
-      switchMap(token =>
-        next.handle(
+      filter(token => token !== null),
+      take(1),
+      switchMap(token => {
+        const headers: Record<string, string> = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        const isBlobRequest =
+          request.url.includes("/export") ||
+          request.url.includes("/download") ||
+          (request.headers.has("X-Request-Type") &&
+            request.headers.get("X-Request-Type") === "blob");
+
+        const hasAcceptHeader = request.headers.has("Accept");
+
+        if (!isBlobRequest && !hasAcceptHeader) {
+          headers["Accept"] = "application/json";
+        }
+
+        return next.handle(
           request.clone({
-            setHeaders: { Authorization: `Bearer ${token}` },
+            setHeaders: headers,
           })
-        )
-      )
+        );
+      })
     );
   }
 }

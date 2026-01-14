@@ -2,8 +2,8 @@
 
 import { CommonModule, Location } from "@angular/common";
 import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
-import { ButtonComponent, InputComponent } from "@ui/components";
-import { BackComponent, IconComponent } from "@uilib";
+import { ButtonComponent } from "@ui/components";
+import { IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { AuthService } from "@auth/services";
@@ -23,15 +23,13 @@ import { ProfileDataService } from "@office/profile/detail/services/profile-date
 import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ApproveSkillComponent } from "../approve-skill/approve-skill.component";
-import { ProjectsService } from "@office/projects/services/projects.service";
-import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 import { ProgramService } from "@office/program/services/program.service";
 import { ProjectFormService } from "@office/projects/edit/services/project-form.service";
 import {
   PartnerProgramFields,
   projectNewAdditionalProgramVields,
 } from "@office/models/partner-program-fields.model";
-import { HttpRequest, HttpResponse } from "@angular/common/http";
+import { saveFile } from "@utils/helpers/export-file";
 
 @Component({
   selector: "app-detail",
@@ -42,13 +40,10 @@ import { HttpRequest, HttpResponse } from "@angular/common/http";
     RouterModule,
     IconComponent,
     ButtonComponent,
-    BackComponent,
     ModalComponent,
     AvatarComponent,
     TooltipComponent,
-    InputComponent,
     ApproveSkillComponent,
-    TruncatePipe,
   ],
   standalone: true,
 })
@@ -64,7 +59,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
   private readonly location = inject(Location);
   private readonly profileDataService = inject(ProfileDataService);
   public readonly skillsProfileService = inject(ProfileService);
-  private readonly projectsService = inject(ProjectsService);
   public readonly chatService = inject(ChatService);
   private readonly cdRef = inject(ChangeDetectorRef);
   private readonly programService = inject(ProgramService);
@@ -388,15 +382,17 @@ export class DeatilComponent implements OnInit, OnDestroy {
    * Отправка CV пользователя на email
    * Проверяет ограничения по времени и отправляет CV на почту пользователя
    */
-  sendCVEmail() {
-    this.authService.sendCV().subscribe({
-      next: () => {
-        this.isSended = true;
+  downloadCV() {
+    this.isSended = true;
+    this.authService.downloadCV().subscribe({
+      next: blob => {
+        saveFile(blob, "cv", this.profile?.firstName + " " + this.profile?.lastName);
+        this.isSended = false;
       },
       error: err => {
+        this.isSended = false;
         if (err.status === 400) {
           this.isDelayModalOpen = true;
-          this.errorMessageModal.set(err.error.seconds_after_retry);
         }
       },
     });
