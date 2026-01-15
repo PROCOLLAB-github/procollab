@@ -161,13 +161,16 @@ $detail-bar-mb: 12px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    align-items: center;
     max-height: none;
 
     &--scrollable {
-      max-height: 180px;
+      max-height: 250px;
       overflow-y: auto;
     }
+  }
+
+  &__invites {
+    max-height: 250px;
   }
 
   &__item {
@@ -175,9 +178,7 @@ $detail-bar-mb: 12px;
     flex-grow: 1;
     align-items: center;
     justify-content: space-between;
-    width: 300px;
-    margin-bottom: 12px;
-    margin-left: 40px;
+    margin-top: 8px;
 
     &--info {
       display: flex;
@@ -242,6 +243,11 @@ $detail-bar-mb: 12px;
     right: 15px;
     z-index: 2;
     cursor: pointer;
+  }
+
+  &__success {
+    margin-top: 10px;
+    color: var(--green);
   }
 }
 
