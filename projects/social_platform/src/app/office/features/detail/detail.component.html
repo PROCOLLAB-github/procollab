@@ -195,103 +195,6 @@
           </a>
           } }
 
-          <!-- <app-modal [open]="showSubmitProjectModal()" (openChange)="toggleSubmitProjectModal()">
-            <div class="cancel">
-              <div class="cancel__top">
-                <p class="cancel__title text-body-14">
-                  {{
-                    memberProjects.length > 0 ? "выберите проект для подачи" : "создай свой проект!"
-                  }}
-                </p>
-                <p class="cancel__text text-body-10">
-                  {{
-                    memberProjects.length > 0
-                      ? "после выбора проекта будет создан дубликат данного проекта для заполнения под конкретный конкурс"
-                      : "создай проект и не забудь вернуться в программу для его подачи"
-                  }}
-                </p>
-
-                <div class="project">
-                  <ul
-                    class="project__list"
-                    [class.project__list--scrollable]="memberProjects.length > 3"
-                  >
-                    @for (project of memberProjects; track project.id) {
-                    <li class="project__item">
-                      <div class="project__item--info">
-                        <app-avatar [url]="project.imageAddress" [size]="40"></app-avatar>
-                        <p class="text-body-12">
-                          {{ project.name | truncate: 20 }}
-                        </p>
-                      </div>
-                      <app-input
-                        type="radio"
-                        [appValue]="project.id.toString()"
-                        [checked]="selectedProjectId === project.id"
-                        (change)="onProjectRadioChange($event)"
-                      ></app-input>
-                    </li>
-                    }
-                  </ul>
-                </div>
-              </div>
-
-              <div class="cancel__buttons" style="margin: 0; flex-direction: column">
-                @if (memberProjects.length > 0) {
-                <app-button
-                  size="medium"
-                  class="cancel__button"
-                  customTypographyClass="text-body-12"
-                  [disabled]="!isProjectSelected"
-                  [class.cancel__button--disabled]="!isProjectSelected"
-                  (click)="addProjectModal()"
-                >
-                  выбрать проект
-                </app-button>
-
-                <p class="text-body-12">или</p>
-                }
-
-                <app-button
-                  style="margin: 0"
-                  size="medium"
-                  class="cancel__button"
-                  (click)="addNewProject()"
-                  customTypographyClass="text-body-12"
-                  >создать новый проект</app-button
-                >
-              </div>
-            </div>
-          </app-modal> -->
-
-          <!-- <app-modal
-            [open]="isAssignProjectToProgramModalOpen()"
-            (openChange)="isAssignProjectToProgramModalOpen.set(!isAssignProjectToProgramModalOpen)"
-          >
-            <div class="cancel" style="padding: 24px">
-              <div class="cancel__top">
-                <p class="cancel__title text-body-14">поздравляем!</p>
-              </div>
-
-              <p class="text-body-10 cancel__text">
-                мы создали дубликат проекта, который вы привязали к выбранной программе
-                <span
-                  ><strong>{{ assignProjectToProgramModalMessage()?.partnerProgram }}</strong></span
-                >
-                , теперь его можно отредактировать!
-              </p>
-
-              <app-button
-                size="medium"
-                class="cancel__button"
-                customTypographyClass="text-body-12"
-                (click)="closeAssignProjectToProgramModal()"
-              >
-                вперед
-              </app-button>
-            </div>
-          </app-modal> -->
-
           <app-modal
             [open]="isAssignProjectToProgramModalOpen()"
             (openChange)="
@@ -554,11 +457,10 @@
           >
           } @else {
           <app-button
-            style="opacity: 0.5"
             size="medium"
             appearance="outline"
-            [disabled]="true"
             customTypographyClass="text-body-12"
+            (click)="inviteUser()"
             >пригласить</app-button
           >
           } @if (+profile.id !== +info().id) {
@@ -607,6 +509,169 @@
             </ul>
             }
           </app-modal>
+
+          @if (!showNoProjectsModal && showSendInviteModal) {
+          <app-modal
+            [open]="showSendInviteModal"
+            (openChange)="showSendInviteModal = !showSendInviteModal"
+          >
+            <form class="project__invites" [formGroup]="inviteForm">
+              @if (profileProjects().length) {
+              <ul
+                class="approve project__list"
+                style="padding: 0"
+                [class.project__list--scrollable]="profileProjects().length > 3"
+              >
+                <div class="lists__section">
+                  <h3 class="text-body-12 lists__title">выберите проект и роль для приглашения.</h3>
+                  <i
+                    appIcon
+                    icon="medal"
+                    class="lists__icon"
+                    style="margin-top: 1px"
+                    appSquare="12"
+                  ></i>
+                </div>
+
+                @for (project of profileProjects(); track project.id) {
+                <li class="project__item">
+                  <div class="project__item--info">
+                    <app-avatar [url]="project.imageAddress" [size]="40"></app-avatar>
+                    <p class="text-body-12">
+                      {{ project.name ?? "Проект без названия" | truncate: 20 }}
+                    </p>
+                  </div>
+                  <app-input
+                    type="radio"
+                    [appValue]="project.id.toString()"
+                    [checked]="selectedProjectId === project.id"
+                    (change)="onProjectRadioChange($event)"
+                  ></app-input>
+                </li>
+                } @if (inviteForm.get("role"); as role) {
+                <fieldset class="invite__role">
+                  <app-input
+                    size="big"
+                    id="invite_role"
+                    formControlName="role"
+                    [error]="role | controlError"
+                    placeholder="укажите роль в проекте"
+                  ></app-input>
+                  @if ((role | controlError: "required")) {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_REQUIRED }}
+                  </div>
+                  }
+                </fieldset>
+                }
+
+                <app-button
+                  (click)="sendInvite()"
+                  customTypographyClass="text-body-12"
+                  appearance="outline"
+                  size="big"
+                >
+                  <span>отправить приглашение</span>
+                  <i appIcon icon="plus" appSquare="8"></i>
+                </app-button>
+              </ul>
+              }
+            </form>
+          </app-modal>
+          }
+
+          <app-modal
+            [open]="showNoProjectsModal"
+            (openChange)="showNoProjectsModal = !showNoProjectsModal"
+          >
+            <div class="cancel" style="padding: 0px">
+              <div class="cancel__top">
+                <p class="cancel__title text-body-14">вы не являетесь лидером ни в одном проекте</p>
+              </div>
+
+              <i appIcon icon="sad-smile" appSquare="50" style="margin: 36px 0px"></i>
+
+              <app-button
+                style="width: 100%"
+                customTypographyClass="text-body-12"
+                size="big"
+                (click)="routingToMyProjects()"
+                >перейти в проекты</app-button
+              >
+            </div>
+          </app-modal>
+
+          <app-modal
+            [open]="showActiveInviteModal"
+            (openChange)="showActiveInviteModal = !showActiveInviteModal"
+          >
+            <div class="cancel" style="padding: 0px; width: 300px">
+              <div class="cancel__top">
+                <p class="cancel__title text-body-14">
+                  У данного участника уже есть активное приглашение в проект
+                </p>
+              </div>
+
+              <i appIcon icon="straight-face" appSquare="50" style="margin: 36px 0px"></i>
+
+              <app-button
+                style="width: 100%"
+                customTypographyClass="text-body-12"
+                size="big"
+                (click)="routingToMyProjects()"
+                >перейти в проекты</app-button
+              >
+            </div>
+          </app-modal>
+
+          <app-modal
+            [open]="showNoInProgramModal"
+            (openChange)="showNoInProgramModal = !showNoInProgramModal"
+          >
+            <div class="cancel" style="padding: 0px; width: 300px">
+              <div class="cancel__top">
+                <p class="cancel__title text-body-14">
+                  Пользователь не зарегистрирован в программе, поэтому нельзя отправить приглашение
+                  в данный проект
+                </p>
+              </div>
+
+              <i appIcon icon="sad-smile" appSquare="50" style="margin: 36px 0px"></i>
+
+              <app-button
+                style="width: 100%"
+                customTypographyClass="text-body-12"
+                size="big"
+                (click)="routingToMyProjects()"
+                >перейти в проекты</app-button
+              >
+            </div>
+          </app-modal>
+
+          <app-modal
+            [open]="showSuccessInviteModal"
+            (openChange)="showSuccessInviteModal = !showSuccessInviteModal"
+          >
+            <div class="cancel" style="padding: 0px; width: 350px">
+              <i appIcon icon="check" class="cancel__success" appSquare="60"></i>
+
+              <p
+                class="cancel__title text-body-12"
+                style="color: var(--grey-for-text); margin: 17px 0px"
+              >
+                приглашение отправлено
+              </p>
+
+              <app-button
+                style="width: 100%"
+                customTypographyClass="text-body-12"
+                size="big"
+                (click)="routingToMyProjects()"
+                >перейти в проекты</app-button
+              >
+            </div>
+          </app-modal>
+
           } @if (profile) { @if (profile.id === info().id) {
           <app-modal [open]="isProfileFill" (openChange)="isProfileFill = !isProfileFill">
             <div class="cancel">
@@ -655,25 +720,6 @@
               </p>
             </div>
           </app-modal>
-
-          <!-- <app-modal [open]="isSended" (openChange)="isSended = !isSended">
-            <div class="cancel">
-              <div class="cancel__top">
-                <i
-                  (click)="isSended = false"
-                  appIcon
-                  appSquare="10"
-                  icon="cross"
-                  class="cancel__cross"
-                ></i>
-                <p class="cancel__title text-body-14">твое CV уже ждет тебя на почте :)</p>
-              </div>
-              <p class="text-body-10 cancel__text">
-                кстати, оно часто залетает в папку «Спам» — обязательно проверь и там тоже.<br />
-                Технические сложности? Мы всегда на связи в Telegram — {{ "@procollab_support" }}
-              </p>
-            </div>
-          </app-modal> -->
         </ng-template>
 
         <router-outlet></router-outlet>

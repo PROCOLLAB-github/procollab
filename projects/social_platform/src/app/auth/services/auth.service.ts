@@ -11,6 +11,8 @@ import {
   RegisterResponse,
 } from "../models/http.model";
 import { User, UserRole } from "../models/user.model";
+import { Project } from "@office/models/project.model";
+import { ApiPagination } from "@office/models/api-pagination.model";
 
 /**
  * Сервис аутентификации и управления пользователями
@@ -121,6 +123,14 @@ export class AuthService {
       map(roles => plainToInstance(UserRole, roles)),
       tap(roles => this.roles$.next(roles))
     );
+  }
+
+  /**
+   * Получить проекты где пользователь leader
+   * @returns Observable проектов внутри профиля
+   */
+  getLeaderProjects(): Observable<ApiPagination<Project>> {
+    return this.apiService.get(`${this.AUTH_USERS_URL}/projects/leader/`);
   }
 
   /**
