@@ -538,7 +538,7 @@
                   <div class="project__item--info">
                     <app-avatar [url]="project.imageAddress" [size]="40"></app-avatar>
                     <p class="text-body-12">
-                      {{ project.name | truncate: 20 }}
+                      {{ project.name ?? "Проект без названия" | truncate: 20 }}
                     </p>
                   </div>
                   <app-input
@@ -587,6 +587,53 @@
             <div class="cancel" style="padding: 0px">
               <div class="cancel__top">
                 <p class="cancel__title text-body-14">вы не являетесь лидером ни в одном проекте</p>
+              </div>
+
+              <i appIcon icon="sad-smile" appSquare="50" style="margin: 36px 0px"></i>
+
+              <app-button
+                style="width: 100%"
+                customTypographyClass="text-body-12"
+                size="big"
+                (click)="routingToMyProjects()"
+                >перейти в проекты</app-button
+              >
+            </div>
+          </app-modal>
+
+          <app-modal
+            [open]="showActiveInviteModal"
+            (openChange)="showActiveInviteModal = !showActiveInviteModal"
+          >
+            <div class="cancel" style="padding: 0px; width: 300px">
+              <div class="cancel__top">
+                <p class="cancel__title text-body-14">
+                  У данного участника уже есть активное приглашение в проект
+                </p>
+              </div>
+
+              <i appIcon icon="straight-face" appSquare="50" style="margin: 36px 0px"></i>
+
+              <app-button
+                style="width: 100%"
+                customTypographyClass="text-body-12"
+                size="big"
+                (click)="routingToMyProjects()"
+                >перейти в проекты</app-button
+              >
+            </div>
+          </app-modal>
+
+          <app-modal
+            [open]="showNoInProgramModal"
+            (openChange)="showNoInProgramModal = !showNoInProgramModal"
+          >
+            <div class="cancel" style="padding: 0px; width: 300px">
+              <div class="cancel__top">
+                <p class="cancel__title text-body-14">
+                  Пользователь не зарегистрирован в программе, поэтому нельзя отправить приглашение
+                  в данный проект
+                </p>
               </div>
 
               <i appIcon icon="sad-smile" appSquare="50" style="margin: 36px 0px"></i>

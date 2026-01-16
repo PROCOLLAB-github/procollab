@@ -9,7 +9,7 @@ import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { AuthService } from "@auth/services";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
-import { concatMap, filter, map, of, Subscription, tap } from "rxjs";
+import { concatMap, EMPTY, filter, map, Observable, of, Subscription, tap } from "rxjs";
 import { User } from "@auth/models/user.model";
 import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectService } from "@office/services/project.service";
@@ -35,6 +35,7 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 import { ControlErrorPipe, ValidationService } from "@corelib";
 import { ErrorMessage } from "@error/models/error-message";
 import { InviteService } from "@office/services/invite.service";
+import { ApiPagination } from "@office/models/api-pagination.model";
 
 @Component({
   selector: "app-detail",
@@ -134,6 +135,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
   showApproveSkillModal = false;
   showSendInviteModal = false;
   showNoProjectsModal = false;
+  showActiveInviteModal = false;
+  showNoInProgramModal = false;
   showSuccessInviteModal = false;
   readAllModal = false;
 
@@ -400,8 +403,16 @@ export class DeatilComponent implements OnInit, OnDestroy {
       next: () => {
         this.showSendInviteModal = false;
         this.showSuccessInviteModal = true;
+
         this.inviteForm.reset();
         this.selectedProjectId = null;
+      },
+      error: err => {
+        if (err.error.user[0].includes("проект относится к программе")) {
+          this.showNoInProgramModal = true;
+        } else if (err.error.user[0].includes("активное приглашение")) {
+          this.showActiveInviteModal = true;
+        }
       },
     });
   }
@@ -537,7 +548,13 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
       this.isInProfileInfo();
 
-      this.subscriptions.push(profileDataSub$);
+      const profileLeaderProjectsSub$ = this.authService.getLeaderProjects().subscribe({
+        next: (projects: ApiPagination<Project>) => {
+          this.profileProjects.set(projects.results);
+        },
+      });
+
+      this.subscriptions.push(profileDataSub$, profileLeaderProjectsSub$);
     }
   }
 
@@ -545,9 +562,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
     const profileInfoSub$ = this.authService.profile.subscribe({
       next: profile => {
         this.profile = profile;
-        this.profileProjects.set(
-          this.profile?.projects.filter(project => project.leader === this.profile?.id)
-        );
 
         if (this.info() && this.listType === "project") {
           this.isInProject = this.info()
