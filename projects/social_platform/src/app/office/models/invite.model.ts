@@ -24,4 +24,6 @@ export class Invite {
   specialization?: string;
 
   user!: User;
+
+  sender!: User;
 }
