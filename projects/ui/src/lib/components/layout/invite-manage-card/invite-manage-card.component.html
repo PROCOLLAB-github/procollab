@@ -4,12 +4,12 @@
 <div class="invite">
   <div class="invite__main">
     <div class="invite__avatars">
-      <app-avatar [size]="52" [url]="invite.user.avatar"></app-avatar>
+      <app-avatar [size]="52" [url]="invite.sender.avatar"></app-avatar>
     </div>
     <div class="invite__info">
       <div class="text-body-12 invite__text">
-        <a [routerLink]="['/office/profile', invite.user.id]"
-          >{{ invite.user.firstName }} {{ invite.user.lastName }}</a
+        <a [routerLink]="['/office/profile', invite.sender.id]"
+          >{{ invite.sender.firstName }} {{ invite.sender.lastName }}</a
         ><br />приглашает вас в проект <br />
         <a [routerLink]="['/office/projects', invite.project.id]"
           >"{{ invite.project.name | truncate: 20 }}"</a

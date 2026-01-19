@@ -2,14 +2,14 @@
 
 import { CommonModule, Location } from "@angular/common";
 import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
-import { ButtonComponent } from "@ui/components";
+import { ButtonComponent, InputComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { AuthService } from "@auth/services";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
-import { concatMap, filter, map, of, Subscription, tap } from "rxjs";
+import { concatMap, EMPTY, filter, map, Observable, of, Subscription, tap } from "rxjs";
 import { User } from "@auth/models/user.model";
 import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectService } from "@office/services/project.service";
@@ -30,6 +30,12 @@ import {
   projectNewAdditionalProgramVields,
 } from "@office/models/partner-program-fields.model";
 import { saveFile } from "@utils/helpers/export-file";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
+import { ControlErrorPipe, ValidationService } from "@corelib";
+import { ErrorMessage } from "@error/models/error-message";
+import { InviteService } from "@office/services/invite.service";
+import { ApiPagination } from "@office/models/api-pagination.model";
 
 @Component({
   selector: "app-detail",
@@ -38,17 +44,22 @@ import { saveFile } from "@utils/helpers/export-file";
   imports: [
     CommonModule,
     RouterModule,
+    ReactiveFormsModule,
     IconComponent,
     ButtonComponent,
     ModalComponent,
     AvatarComponent,
     TooltipComponent,
     ApproveSkillComponent,
+    InputComponent,
+    TruncatePipe,
+    ControlErrorPipe,
   ],
   standalone: true,
 })
 export class DeatilComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
+  private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly projectService = inject(ProjectService);
   private readonly programDataService = inject(ProgramDataService);
@@ -62,11 +73,14 @@ export class DeatilComponent implements OnInit, OnDestroy {
   public readonly chatService = inject(ChatService);
   private readonly cdRef = inject(ChangeDetectorRef);
   private readonly programService = inject(ProgramService);
+  private readonly inviteService = inject(InviteService);
+  private readonly validationService = inject(ValidationService);
   private readonly projectFormService = inject(ProjectFormService);
 
   // Основные данные(типы данных, данные)
   info = signal<any | undefined>(undefined);
   profile?: User;
+  profileProjects = signal<User["projects"]>([]);
   listType: "project" | "program" | "profile" = "project";
 
   // Переменная для подсказок
@@ -94,8 +108,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   isProfileFill = false;
 
   // Переменные для работы с модалкой подачи проекта
-  // selectedProjectId: number | null = null;
-  // dubplicatedProjectId = 0;
+  selectedProjectId: number | null = null;
   memberProjects: Project[] = [];
 
   userType = signal<number | undefined>(undefined);
@@ -120,6 +133,11 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   // Переменные для работы с подтверждением навыков
   showApproveSkillModal = false;
+  showSendInviteModal = false;
+  showNoProjectsModal = false;
+  showActiveInviteModal = false;
+  showNoInProgramModal = false;
+  showSuccessInviteModal = false;
   readAllModal = false;
 
   // Сигналы для работы с модальными окнами с текстом
@@ -130,6 +148,12 @@ export class DeatilComponent implements OnInit, OnDestroy {
   get projectForm() {
     return this.projectFormService.formModel;
   }
+
+  readonly inviteForm = this.fb.group({
+    role: ["", Validators.required],
+  });
+
+  protected readonly errorMessage = ErrorMessage;
 
   ngOnInit(): void {
     const listTypeSub$ = this.route.data.subscribe(data => {
@@ -207,19 +231,19 @@ export class DeatilComponent implements OnInit, OnDestroy {
   /**
    * Обработчик изменения радио-кнопки для выбора проекта
    */
-  // onProjectRadioChange(event: Event): void {
-  //   const target = event.target as HTMLInputElement;
-  //   this.selectedProjectId = +target.value;
+  onProjectRadioChange(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.selectedProjectId = +target.value;
 
-  //   if (this.selectedProjectId) {
-  //     this.memberProjects.find(project => project.id === this.selectedProjectId);
-  //   }
-  // }
+    if (this.selectedProjectId) {
+      this.memberProjects.find(project => project.id === this.selectedProjectId);
+    }
+  }
 
   /**
    * Добавление проекта на программу
    */
-  // addProjectModal(): void {
+  // selectProject(): void {
   //   if (this.selectedProjectId === null) {
   //     return;
   //   }
@@ -228,12 +252,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   //     project => project.id === this.selectedProjectId
   //   );
 
-  //   if (!selectedProject) {
-  //     this.snackbarService.error("Проект не найден. Попробуйте выбрать другой проект.");
-  //     return;
-  //   }
-
-  //   this.assignProjectToProgram(selectedProject!);
+  //   console.log(selectedProject);
   // }
 
   // get isProjectSelected(): boolean {
@@ -270,47 +289,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
       },
     });
   }
-
-  /** Эмитим логику для привязки проекта к программе */
-  /**
-   * Привязка проекта к программе выбранной
-   * Перенаправление её на редактирование "нового" проекта
-   */
-  // assignProjectToProgram(project: Project): void {
-  //   if (!project || !project.id) {
-  //     this.snackbarService.error("Ошибка при выборе проекта");
-  //     return;
-  //   }
-
-  //   if (this.info().id) {
-  //     this.projectService
-  //       .assignProjectToProgram(project.id, Number(this.route.snapshot.params["programId"]))
-  //       .subscribe({
-  //         next: r => {
-  // this.dubplicatedProjectId = r.newProjectId;
-  // this.assignProjectToProgramModalMessage.set(r);
-  // this.isAssignProjectToProgramModalOpen.set(true);
-  // this.toggleSubmitProjectModal();
-  // this.selectedProjectId = null;
-  // },
-  //
-  //         error: err => {
-  //           if (err instanceof HttpErrorResponse) {
-  //             if (err.status === 400) {
-  //               this.setAssignProjectToProgramError(err.error);
-  //             }
-  //           }
-  //         },
-  //       });
-  //   }
-  // }
-
-  // closeAssignProjectToProgramModal(): void {
-  //   this.isAssignProjectToProgramModalOpen.set(false);
-  //   this.router.navigateByUrl(
-  //     `/office/projects/${this.dubplicatedProjectId}/edit?editingStep=main`
-  //   );
-  // }
 
   /**
    * Закрытие модального окна выхода из проекта
@@ -399,6 +377,47 @@ export class DeatilComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Открывает модалку для отправки приглашения пользователю
+   * Проверяет какие отрендерить проекты где profile.id === leader
+   */
+  inviteUser(): void {
+    if (!this.profileProjects().length) {
+      this.showNoProjectsModal = true;
+    } else {
+      this.showSendInviteModal = true;
+    }
+  }
+
+  sendInvite(): void {
+    const role = this.inviteForm.get("role")?.value;
+    const userId = this.route.snapshot.params["id"];
+
+    if (
+      !this.validationService.getFormValidation(this.inviteForm) ||
+      this.selectedProjectId === null
+    ) {
+      return;
+    }
+
+    this.inviteService.sendForUser(userId, this.selectedProjectId, role!).subscribe({
+      next: () => {
+        this.showSendInviteModal = false;
+        this.showSuccessInviteModal = true;
+
+        this.inviteForm.reset();
+        this.selectedProjectId = null;
+      },
+      error: err => {
+        if (err.error.user[0].includes("проект относится к программе")) {
+          this.showNoInProgramModal = true;
+        } else if (err.error.user[0].includes("активное приглашение")) {
+          this.showActiveInviteModal = true;
+        }
+      },
+    });
+  }
+
+  /**
    * Перенаправляет на страницу с информацией в завивисимости от listType
    */
   redirectDetailInfo(): void {
@@ -415,6 +434,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl(`/office/program/${this.info().id}`);
         break;
     }
+  }
+
+  routingToMyProjects(): void {
+    this.router.navigateByUrl(`/office/projects/my`);
   }
 
   /**
@@ -525,7 +548,13 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
       this.isInProfileInfo();
 
-      this.subscriptions.push(profileDataSub$);
+      const profileLeaderProjectsSub$ = this.authService.getLeaderProjects().subscribe({
+        next: (projects: ApiPagination<Project>) => {
+          this.profileProjects.set(projects.results);
+        },
+      });
+
+      this.subscriptions.push(profileDataSub$, profileLeaderProjectsSub$);
     }
   }
 
@@ -534,9 +563,9 @@ export class DeatilComponent implements OnInit, OnDestroy {
       next: profile => {
         this.profile = profile;
 
-        if (this.info()) {
+        if (this.info() && this.listType === "project") {
           this.isInProject = this.info()
-            ?.collaborators.map((person: Collaborator) => person.userId)
+            ?.collaborators?.map((person: Collaborator) => person.userId)
             .includes(profile.id);
         }
       },
