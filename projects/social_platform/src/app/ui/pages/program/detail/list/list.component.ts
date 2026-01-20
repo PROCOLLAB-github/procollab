@@ -25,25 +25,29 @@ import {
   Subscription,
   switchMap,
   tap,
-  throttleTime,
 } from "rxjs";
 import Fuse from "fuse.js";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { SubscriptionService } from "projects/social_platform/src/app/api/subsriptions/subscription.service";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
-import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
-import { InfoCardComponent } from "@ui/components/info-card/info-card.component";
-import { tagsFilter } from "projects/core/src/consts/filters/tags-filter.const";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { ProgramProjectsFilterComponent } from "@ui/components/program-projects-filter/program-projects-filter.component";
 import { RatingCardComponent } from "@ui/shared/rating-card/rating-card.component";
-import { ProjectRatingService } from "projects/social_platform/src/app/api/project/project-rating.service";
+import { InfoCardComponent } from "@ui/components/info-card/info-card.component";
+import { ButtonComponent } from "@ui/components";
+import { IconComponent } from "@uilib";
 import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
+import { ProgramDataService } from "@office/program/services/program-data.service";
+import { ProjectRatingService } from "projects/social_platform/src/app/api/project/project-rating.service";
+import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { ExportFileService } from "@office/services/export-file.service";
+import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
+import { tagsFilter } from "projects/core/src/consts/filters/tags-filter.const";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
+import { saveFile } from "@utils/helpers/export-file";
 
 @Component({
   selector: "app-list",
@@ -57,6 +61,8 @@ import { Project } from "projects/social_platform/src/app/domain/project/project
     SearchComponent,
     RatingCardComponent,
     InfoCardComponent,
+    ButtonComponent,
+    IconComponent,
   ],
   standalone: true,
 })
@@ -81,12 +87,13 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly router = inject(Router);
   private readonly cdref = inject(ChangeDetectorRef);
   private readonly programService = inject(ProgramService);
+  private readonly programDataService = inject(ProgramDataService);
   private readonly projectRatingService = inject(ProjectRatingService);
   private readonly authService = inject(AuthService);
   private readonly subscriptionService = inject(SubscriptionService);
+  private readonly exportFileService = inject(ExportFileService);
 
-  private previousReqQuery: Record<string, any> = {};
-  private availableFilters: PartnerProgramFields[] = [];
+  protected availableFilters: PartnerProgramFields[] = [];
 
   searchForm: FormGroup;
 
@@ -107,6 +114,11 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   readonly ratingOptionsList = tagsFilter;
   isFilterOpen = false;
+
+  protected readonly loadingExportProjects = signal<boolean>(false);
+  protected readonly loadingExportSubmittedProjects = signal<boolean>(false);
+  protected readonly loadingExportRates = signal<boolean>(false);
+  protected readonly loadingExportCalculations = signal<boolean>(false);
 
   subscriptions$: Subscription[] = [];
 
@@ -489,6 +501,54 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
     this.availableFilters = filters;
   }
 
+  downloadProjects(): void {
+    const programId = this.route.parent?.snapshot.params["programId"];
+    this.loadingExportProjects.set(true);
+
+    this.exportFileService.exportAllProjects(programId).subscribe({
+      next: blob => {
+        saveFile(blob, "all", this.programDataService.getProgramName());
+        this.loadingExportProjects.set(false);
+      },
+      error: err => {
+        console.error(err);
+        this.loadingExportProjects.set(false);
+      },
+    });
+  }
+
+  downloadSubmittedProjects(): void {
+    const programId = this.route.parent?.snapshot.params["programId"];
+    this.loadingExportSubmittedProjects.set(true);
+
+    this.exportFileService.exportSubmittedProjects(programId).subscribe({
+      next: blob => {
+        saveFile(blob, "submitted", this.programDataService.getProgramName());
+        this.loadingExportSubmittedProjects.set(false);
+      },
+      error: () => {
+        this.loadingExportSubmittedProjects.set(false);
+      },
+    });
+  }
+
+  downloadRates(): void {
+    const programId = this.route.parent?.snapshot.params["programId"];
+    this.loadingExportRates.set(true);
+
+    this.exportFileService.exportProgramRates(programId).subscribe({
+      next: blob => {
+        saveFile(blob, "rates", this.programDataService.getProgramName());
+        this.loadingExportRates.set(false);
+      },
+      error: () => {
+        this.loadingExportRates.set(false);
+      },
+    });
+  }
+
+  downloadCalculations(): void {}
+
   // Swipe логика для мобильных устройств
   private swipeStartY = 0;
   private swipeThreshold = 50;
@@ -560,20 +620,5 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private get searchParamName(): string {
     return this.listType === "rating" ? "name__contains" : "search";
-  }
-
-  private flattenFilters(filters: Record<string, any[]>): Record<string, string> {
-    const flattened: Record<string, string> = {};
-
-    Object.keys(filters).forEach(key => {
-      const value = filters[key];
-      if (Array.isArray(value) && value.length > 0) {
-        flattened[key] = Array.isArray(value[0]) ? value.join(",") : value.toString();
-      } else if (value !== undefined && value !== null) {
-        flattened[key] = value.toString();
-      }
-    });
-
-    return flattened;
   }
 }

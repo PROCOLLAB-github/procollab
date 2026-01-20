@@ -11,7 +11,7 @@ import { SelectComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
 import { FormBuilder, type FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { RatingService } from "../services/rating.service";
-import { ratingFiltersList } from "projects/core/src/consts/filters/rating-filter.const";
+import { ratingFilters } from "projects/core/src/consts/filters/rating-filter.const";
 
 /**
  * Компонент общего рейтинга пользователей
@@ -66,7 +66,7 @@ export class RatingGeneralComponent implements OnInit {
   ratingForm: FormGroup;
 
   // Константы фильтров из конфигурации
-  readonly filterParams = ratingFiltersList;
+  readonly filterParams = ratingFilters;
 
   /**
    * Инициализация компонента

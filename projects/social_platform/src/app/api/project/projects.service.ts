@@ -20,7 +20,7 @@ export class ProjectsService {
 
       this.router
         .navigate([`/office/projects/${project.id}/edit`], {
-          queryParams: { editingStep: "main", fromProgram: true },
+          queryParams: { editingStep: "main" },
         })
         .then(() => console.debug("Route change from ProjectsComponent"));
     });

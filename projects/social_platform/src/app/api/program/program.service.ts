@@ -10,6 +10,7 @@ import { PartnerProgramFields } from "projects/social_platform/src/app/domain/pr
 import { Program, ProgramDataSchema } from "../../domain/program/program.model";
 import { ProgramCreate } from "../../domain/program/program-create.model";
 import { Project } from "../../domain/project/project.model";
+import { ProjectAdditionalFields } from "../../domain/project/project-additional-fields.model";
 
 /**
  * Сервис для работы с программами
@@ -67,6 +68,10 @@ export class ProgramService {
     return this.apiService.get(`${this.PROGRAMS_URL}/`, httpParams);
   }
 
+  getActualPrograms(): Observable<ApiPagination<Program>> {
+    return this.apiService.get(`${this.PROGRAMS_URL}/`);
+  }
+
   getOne(programId: number): Observable<Program> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/`);
   }
@@ -101,6 +106,15 @@ export class ProgramService {
 
   getProgramFilters(programId: number): Observable<PartnerProgramFields[]> {
     return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/filters/`);
+  }
+
+  getProgramProjectAdditionalFields(programId: number): Observable<ProjectAdditionalFields> {
+    return this.apiService.get(`${this.PROGRAMS_URL}/${programId}/projects/apply/`);
+  }
+
+  // body - это форма проекта который подается + programFieldValues
+  applyProjectToProgram(programId: number, body: any): Observable<any> {
+    return this.apiService.post(`${this.PROGRAMS_URL}/${programId}/projects/apply/`, body);
   }
 
   createProgramFilters(

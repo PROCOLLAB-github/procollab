@@ -11,30 +11,39 @@ import {
   signal,
 } from "@angular/core";
 import { ButtonComponent, InputComponent } from "@ui/components";
-import { BackComponent, IconComponent } from "@uilib";
+import { IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
-import { concatMap, filter, map, of, Subscription, tap } from "rxjs";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
-import { HttpErrorResponse } from "@angular/common/http";
-import { ChatService } from "projects/social_platform/src/app/api/chat/chat.service";
-import { calculateProfileProgress } from "@utils/calculateProgress";
-import { ProfileDataService } from "projects/social_platform/src/app/api/profile/profile-date.service";
-import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
-import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { concatMap, EMPTY, filter, map, Observable, of, Subscription, tap } from "rxjs";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ApproveSkillComponent } from "../approve-skill/approve-skill.component";
+import { ControlErrorPipe, ValidationService } from "@corelib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { AuthService } from "../../../api/auth";
-import { ProgramDataService } from "../../../api/program/program-data.service";
+import { ProjectService } from "../../../api/project/project.service";
+import { ProgramDataService } from "@office/program/services/program-data.service";
 import { ProjectDataService } from "../../../api/project/project-data.service";
 import { ProjectAdditionalService } from "../../../api/project/project-additional.service";
-import { ProjectsService } from "../../../api/project/projects.service";
+import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { ProfileDataService } from "../../../api/profile/profile-date.service";
+import { ProfileService } from "../../../api/auth/profile.service";
+import { ChatService } from "../../../api/chat/chat.service";
+import { ProgramService } from "../../../api/program/program.service";
+import { InviteService } from "../../../api/invite/invite.service";
+import { ProjectFormService } from "../../../api/project/project-form.service";
+import { User } from "../../../domain/auth/user.model";
 import { Project } from "../../../domain/project/project.model";
-import { ProjectAssign } from "../../../domain/project/project-assign.model";
+import {
+  PartnerProgramFields,
+  projectNewAdditionalProgramVields,
+} from "../../../domain/program/partner-program-fields.model";
+import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { saveFile } from "@utils/helpers/export-file";
+import { calculateProfileProgress } from "@utils/calculateProgress";
+import { ApiPagination } from "../../../domain/other/api-pagination.model";
+import { Collaborator } from "../../../domain/project/collaborator.model";
 
 @Component({
   selector: "app-detail",
@@ -43,20 +52,22 @@ import { ProjectAssign } from "../../../domain/project/project-assign.model";
   imports: [
     CommonModule,
     RouterModule,
+    ReactiveFormsModule,
     IconComponent,
     ButtonComponent,
-    BackComponent,
     ModalComponent,
     AvatarComponent,
     TooltipComponent,
-    InputComponent,
     ApproveSkillComponent,
+    InputComponent,
     TruncatePipe,
+    ControlErrorPipe,
   ],
   standalone: true,
 })
 export class DeatilComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
+  private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly projectService = inject(ProjectService);
   private readonly programDataService = inject(ProgramDataService);
@@ -67,15 +78,16 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly location = inject(Location);
   private readonly profileDataService = inject(ProfileDataService);
   public readonly skillsProfileService = inject(ProfileService);
-  private readonly projectsService = inject(ProjectsService);
   public readonly chatService = inject(ChatService);
   private readonly cdRef = inject(ChangeDetectorRef);
-
-  // Основные данные(типы данных, данные)
-  readonly registerDateExpired = this.programDataService.registerDateExpired;
+  private readonly programService = inject(ProgramService);
+  private readonly inviteService = inject(InviteService);
+  private readonly validationService = inject(ValidationService);
+  private readonly projectFormService = inject(ProjectFormService);
 
   info = signal<any | undefined>(undefined);
   profile?: User;
+  profileProjects = signal<User["projects"]>([]);
   listType: "project" | "program" | "profile" = "project";
 
   // Переменная для подсказок
@@ -98,6 +110,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   // Сторонние переменные для работы с роутингом или доп проверок
   backPath?: string;
+  registerDateExpired?: boolean;
+  submissionProjectDateExpired?: boolean;
   isInProject?: boolean;
 
   isSended = false;
@@ -106,19 +120,21 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   // Переменные для работы с модалкой подачи проекта
   selectedProjectId: number | null = null;
-  dubplicatedProjectId = 0;
   memberProjects: Project[] = [];
 
   userType = signal<number | undefined>(undefined);
 
   // Сигналы для работы с модальными окнами с текстом
-  assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
+  // assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
   errorMessageModal = signal("");
+
+  additionalFields = signal<PartnerProgramFields[]>([]);
 
   // Переменные для работы с модалками
   isAssignProjectToProgramModalOpen = signal(false);
   showSubmitProjectModal = signal(false);
   isProgramEndedModalOpen = signal(false);
+  isProgramSubmissionProjectsEndedModalOpen = signal<boolean>(false);
   isLeaveProjectModalOpen = false; // Флаг модального окна выхода
   isEditDisable = false; // Флаг недоступности редактирования
   isEditDisableModal = false; // Флаг недоступности редактирования для модалки
@@ -128,9 +144,27 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   // Переменные для работы с подтверждением навыков
   showApproveSkillModal = false;
+  showSendInviteModal = false;
+  showNoProjectsModal = false;
+  showActiveInviteModal = false;
+  showNoInProgramModal = false;
+  showSuccessInviteModal = false;
   readAllModal = false;
 
+  // Сигналы для работы с модальными окнами с текстом
+  assignProjectToProgramModalMessage = signal<string | null>(null);
+
   subscriptions: Subscription[] = [];
+
+  get projectForm() {
+    return this.projectFormService.formModel;
+  }
+
+  readonly inviteForm = this.fb.group({
+    role: ["", Validators.required],
+  });
+
+  protected readonly errorMessage = ErrorMessage;
 
   ngOnInit(): void {
     const listTypeSub$ = this.route.data.subscribe(data => {
@@ -187,13 +221,13 @@ export class DeatilComponent implements OnInit, OnDestroy {
   /**
    * Переключатель для модалки выбора проекта
    */
-  toggleSubmitProjectModal(): void {
-    this.showSubmitProjectModal.set(!this.showSubmitProjectModal());
+  // toggleSubmitProjectModal(): void {
+  //   this.showSubmitProjectModal.set(!this.showSubmitProjectModal());
 
-    if (!this.showSubmitProjectModal()) {
-      this.selectedProjectId = null;
-    }
-  }
+  //   if (!this.showSubmitProjectModal()) {
+  //     this.selectedProjectId = null;
+  //   }
+  // }
 
   /** Показать подсказку */
   showTooltip(): void {
@@ -220,70 +254,51 @@ export class DeatilComponent implements OnInit, OnDestroy {
   /**
    * Добавление проекта на программу
    */
-  addProjectModal(): void {
-    if (this.selectedProjectId === null) {
-      return;
-    }
+  // selectProject(): void {
+  //   if (this.selectedProjectId === null) {
+  //     return;
+  //   }
 
-    const selectedProject = this.memberProjects.find(
-      project => project.id === this.selectedProjectId
-    );
+  //   const selectedProject = this.memberProjects.find(
+  //     project => project.id === this.selectedProjectId
+  //   );
 
-    if (!selectedProject) {
-      this.snackbarService.error("Проект не найден. Попробуйте выбрать другой проект.");
-      return;
-    }
+  //   console.log(selectedProject);
+  // }
 
-    this.assignProjectToProgram(selectedProject!);
-  }
-
-  get isProjectSelected(): boolean {
-    return this.selectedProjectId !== null;
-  }
+  // get isProjectSelected(): boolean {
+  //   return this.selectedProjectId !== null;
+  // }
 
   addNewProject(): void {
-    this.projectsService.addProject();
-  }
+    const newFieldsFormValues: projectNewAdditionalProgramVields[] = [];
 
-  /** Эмитим логику для привязки проекта к программе */
-  /**
-   * Привязка проекта к программе выбранной
-   * Перенаправление её на редактирование "нового" проекта
-   */
-  assignProjectToProgram(project: Project): void {
-    if (!project || !project.id) {
-      this.snackbarService.error("Ошибка при выборе проекта");
-      return;
-    }
+    this.additionalFields().forEach((field: PartnerProgramFields) => {
+      newFieldsFormValues.push({
+        field_id: field.id,
+        value_text: field.options.length ? field.options[0] : "'",
+      });
+    });
 
-    if (this.info().id) {
-      this.projectService
-        .assignProjectToProgram(project.id, Number(this.route.snapshot.params["programId"]))
-        .subscribe({
-          next: r => {
-            this.dubplicatedProjectId = r.newProjectId;
-            this.assignProjectToProgramModalMessage.set(r);
+    const body = { project: this.projectForm.value, program_field_values: newFieldsFormValues };
+
+    this.programService.applyProjectToProgram(this.info().id, body).subscribe({
+      next: r => {
+        this.router
+          .navigate([`/office/projects/${r.projectId}/edit`], {
+            queryParams: { editingStep: "main", fromProgram: true },
+          })
+          .then(() => console.debug("Route change from ProjectsComponent"));
+      },
+      error: err => {
+        if (err) {
+          if (err.status === 400) {
             this.isAssignProjectToProgramModalOpen.set(true);
-            this.toggleSubmitProjectModal();
-            this.selectedProjectId = null;
-          },
-
-          error: err => {
-            if (err instanceof HttpErrorResponse) {
-              if (err.status === 400) {
-                this.setAssignProjectToProgramError(err.error);
-              }
-            }
-          },
-        });
-    }
-  }
-
-  closeAssignProjectToProgramModal(): void {
-    this.isAssignProjectToProgramModalOpen.set(false);
-    this.router.navigateByUrl(
-      `/office/projects/${this.dubplicatedProjectId}/edit?editingStep=main`
-    );
+            this.assignProjectToProgramModalMessage.set(err.error.detail);
+          }
+        }
+      },
+    });
   }
 
   /**
@@ -356,15 +371,58 @@ export class DeatilComponent implements OnInit, OnDestroy {
    * Отправка CV пользователя на email
    * Проверяет ограничения по времени и отправляет CV на почту пользователя
    */
-  sendCVEmail() {
-    this.authService.sendCV().subscribe({
-      next: () => {
-        this.isSended = true;
+  downloadCV() {
+    this.isSended = true;
+    this.authService.downloadCV().subscribe({
+      next: blob => {
+        saveFile(blob, "cv", this.profile?.firstName + " " + this.profile?.lastName);
+        this.isSended = false;
       },
       error: err => {
+        this.isSended = false;
         if (err.status === 400) {
           this.isDelayModalOpen = true;
-          this.errorMessageModal.set(err.error.seconds_after_retry);
+        }
+      },
+    });
+  }
+
+  /**
+   * Открывает модалку для отправки приглашения пользователю
+   * Проверяет какие отрендерить проекты где profile.id === leader
+   */
+  inviteUser(): void {
+    if (!this.profileProjects().length) {
+      this.showNoProjectsModal = true;
+    } else {
+      this.showSendInviteModal = true;
+    }
+  }
+
+  sendInvite(): void {
+    const role = this.inviteForm.get("role")?.value;
+    const userId = this.route.snapshot.params["id"];
+
+    if (
+      !this.validationService.getFormValidation(this.inviteForm) ||
+      this.selectedProjectId === null
+    ) {
+      return;
+    }
+
+    this.inviteService.sendForUser(userId, this.selectedProjectId, role!).subscribe({
+      next: () => {
+        this.showSendInviteModal = false;
+        this.showSuccessInviteModal = true;
+
+        this.inviteForm.reset();
+        this.selectedProjectId = null;
+      },
+      error: err => {
+        if (err.error.user[0].includes("проект относится к программе")) {
+          this.showNoInProgramModal = true;
+        } else if (err.error.user[0].includes("активное приглашение")) {
+          this.showActiveInviteModal = true;
         }
       },
     });
@@ -389,6 +447,10 @@ export class DeatilComponent implements OnInit, OnDestroy {
     }
   }
 
+  routingToMyProjects(): void {
+    this.router.navigateByUrl(`/office/projects/my`);
+  }
+
   /**
    * Проверка завершения программы перед регистрацией
    */
@@ -402,6 +464,13 @@ export class DeatilComponent implements OnInit, OnDestroy {
       event.preventDefault();
       event.stopPropagation();
       this.isProgramEndedModalOpen.set(true);
+    } else if (
+      program?.datetimeProjectSubmissionEnds &&
+      Date.now() > Date.parse(program?.datetimeProjectSubmissionEnds)
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.isProgramSubmissionProjectsEndedModalOpen.set(true);
     } else {
       this.router.navigateByUrl("/office/program/" + this.info().id + "/register");
     }
@@ -438,8 +507,20 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
       this.isInProfileInfo();
     } else if (this.listType === "program") {
-      const program = this.programDataService.program;
-      this.info = program;
+      const program$ = this.programDataService.program$
+        .pipe(
+          filter(program => !!program),
+          tap(program => {
+            if (program) {
+              this.info.set(program);
+              this.loadAdditionalFields(program.id);
+              this.registerDateExpired = Date.now() > Date.parse(program.datetimeRegistrationEnds);
+              this.submissionProjectDateExpired =
+                Date.now() > Date.parse(program.datetimeProjectSubmissionEnds);
+            }
+          })
+        )
+        .subscribe();
 
       const profileDataSub$ = this.authService.profile.pipe(filter(user => !!user)).subscribe({
         next: user => {
@@ -474,7 +555,13 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
       this.isInProfileInfo();
 
-      this.subscriptions.push(profileDataSub$);
+      const profileLeaderProjectsSub$ = this.authService.getLeaderProjects().subscribe({
+        next: (projects: ApiPagination<Project>) => {
+          this.profileProjects.set(projects.results);
+        },
+      });
+
+      this.subscriptions.push(profileDataSub$, profileLeaderProjectsSub$);
     }
   }
 
@@ -483,9 +570,9 @@ export class DeatilComponent implements OnInit, OnDestroy {
       next: profile => {
         this.profile = profile;
 
-        if (this.info()) {
+        if (this.info() && this.listType === "project") {
           this.isInProject = this.info()
-            ?.collaborators.map((person: Collaborator) => person.userId)
+            ?.collaborators?.map((person: Collaborator) => person.userId)
             .includes(profile.id);
         }
       },
@@ -503,5 +590,19 @@ export class DeatilComponent implements OnInit, OnDestroy {
     } else if (this.listType === "program") {
       this.backPath = "/office/program/all";
     }
+  }
+
+  private loadAdditionalFields(programId: number): void {
+    const additionalFieldsSub$ = this.programService
+      .getProgramProjectAdditionalFields(programId)
+      .subscribe({
+        next: ({ programFields }) => {
+          if (programFields) {
+            this.additionalFields.set(programFields);
+          }
+        },
+      });
+
+    this.subscriptions.push(additionalFieldsSub$);
   }
 }

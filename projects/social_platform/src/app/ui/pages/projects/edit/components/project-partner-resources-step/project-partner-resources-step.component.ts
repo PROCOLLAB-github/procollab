@@ -103,11 +103,17 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
   get resourcesCompanyOptions(): optionsListElement[] {
     const partners = this.partners.value || [];
 
-    const partnerOptions: optionsListElement[] = partners.map((partner: any, index: number) => ({
-      id: partner.company.id ?? index,
-      value: partner.company.id ?? null,
-      label: partner.name,
-    }));
+    const partnerOptions: optionsListElement[] = partners.map((partner: any, index: number) => {
+      const id = partner?.company?.id ?? partner?.id ?? index;
+      const value = partner?.company?.id ?? partner?.id ?? null;
+      const label = partner?.name;
+
+      return {
+        id,
+        value,
+        label,
+      } as optionsListElement;
+    });
 
     partnerOptions.push({
       id: -1,
@@ -128,7 +134,6 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
   addPartner(name?: string, inn?: string, contribution?: string, decisionMaker?: string): void {
     this.partners.push(
       this.fb.group({
-        id: [null],
         name: [name, [Validators.required]],
         inn: [inn, [Validators.required]],
         contribution: [contribution, [Validators.required]],

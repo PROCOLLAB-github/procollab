@@ -54,24 +54,34 @@ export class CamelcaseInterceptor implements HttpInterceptor {
         }),
       });
     } else {
-      // Если тела нет, просто клонируем запрос
       req = request.clone();
     }
 
     // Выполняем запрос и обрабатываем ответ
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => {
-        // Обрабатываем только HTTP ответы (не события загрузки и т.д.)
         if (event instanceof HttpResponse) {
+          if (event.body instanceof Blob) {
+            return event;
+          }
+
+          if (typeof event.body !== "object" || event.body === null) {
+            return event;
+          }
+
           // Клонируем ответ с преобразованным телом (snake_case → camelCase)
-          return event.clone({
-            body: camelcaseKeys(event.body, {
-              deep: true, // Рекурсивное преобразование вложенных объектов
-            }),
-          });
+          try {
+            return event.clone({
+              body: camelcaseKeys(event.body, {
+                deep: true, // Рекурсивное преобразование вложенных объектов
+              }),
+            });
+          } catch (error) {
+            console.warn("CamelcaseInterceptor: Failed to transform response body", error);
+            return event;
+          }
         }
 
-        // Для других типов событий возвращаем как есть
         return event;
       })
     );

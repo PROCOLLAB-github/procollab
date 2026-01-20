@@ -1,3 +1,5 @@
+/** @format */
+
 import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "projects/social_platform/src/app/api/auth";
@@ -23,7 +25,7 @@ export class ApproveskillInfoService {
   init(): void {
     this.authService.profile.pipe(takeUntil(this.destroy$)).subscribe({
       next: profile => {
-        this.projectsDetailUIInfoService.applySetLoggedUserId('logged', profile.id);
+        this.projectsDetailUIInfoService.applySetLoggedUserId("logged", profile.id);
       },
     });
   }
@@ -40,41 +42,43 @@ export class ApproveskillInfoService {
 
   unApproveSkill(userId: number, skillId: number, skill: Skill): void {
     this.profileApproveSkillService.unApproveSkill(userId, skillId).subscribe(() => {
-      skill.approves = skill.approves.filter(approve => approve.confirmedBy.id !== this.loggedUserId());
+      skill.approves = skill.approves.filter(
+        approve => approve.confirmedBy.id !== this.loggedUserId()
+      );
     });
   }
 
   approveSkill(userId: number, skillId: number, skill: Skill): void {
     this.profileApproveSkillService
-    .approveSkill(userId, skillId)
-    .pipe(
-      switchMap(newApprove =>
-        newApprove.confirmedBy
-          ? of(newApprove)
-          : this.authService.profile.pipe(
-              map(profile => ({
-                ...newApprove,
-                confirmedBy: profile,
-              }))
-            )
-      ),
-      takeUntil(this.destroy$)
-    )
-    .subscribe({
-      next: updatedApprove => {
-        this.approveSkillUIInfoService.applyApprovedSkills(skill, updatedApprove);
-      },
-      error: err => {
-        if (err instanceof HttpErrorResponse) {
-          if (err.status === 400) {
-            this.approveSkillUIInfoService.applyOpenErrorModal();
+      .approveSkill(userId, skillId)
+      .pipe(
+        switchMap(newApprove =>
+          newApprove.confirmedBy
+            ? of(newApprove)
+            : this.authService.profile.pipe(
+                map(profile => ({
+                  ...newApprove,
+                  confirmedBy: profile,
+                }))
+              )
+        ),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: updatedApprove => {
+          this.approveSkillUIInfoService.applyApprovedSkills(skill, updatedApprove);
+        },
+        error: err => {
+          if (err instanceof HttpErrorResponse) {
+            if (err.status === 400) {
+              this.approveSkillUIInfoService.applyOpenErrorModal();
+            }
           }
-        }
-      },
-    });
+        },
+      });
   }
 
-   /**
+  /**
    * Подтверждение или отмена подтверждения навыка пользователя
    * @param skillId - идентификатор навыка
    * @param event - событие клика для предотвращения всплытия

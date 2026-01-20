@@ -11,6 +11,8 @@ import {
   RegisterResponse,
 } from "../../domain/auth/http.model";
 import { User, UserRole } from "../../domain/auth/user.model";
+import { Project } from "../../domain/project/project.model";
+import { ApiPagination } from "../../domain/other/api-pagination.model";
 
 /**
  * Сервис аутентификации и управления пользователями
@@ -76,12 +78,8 @@ export class AuthService {
       .pipe(map(json => plainToInstance(RegisterResponse, json)));
   }
 
-  /**
-   * Отправить резюме по email
-   * @returns Observable завершения операции
-   */
-  sendCV(): Observable<any> {
-    return this.apiService.get(`${this.AUTH_USERS_URL}/send_mail_cv/`);
+  downloadCV() {
+    return this.apiService.getFile(`${this.AUTH_USERS_URL}/download_cv/`);
   }
 
   /** Поток данных профиля пользователя */
@@ -125,6 +123,14 @@ export class AuthService {
       map(roles => plainToInstance(UserRole, roles)),
       tap(roles => this.roles$.next(roles))
     );
+  }
+
+  /**
+   * Получить проекты где пользователь leader
+   * @returns Observable проектов внутри профиля
+   */
+  getLeaderProjects(): Observable<ApiPagination<Project>> {
+    return this.apiService.get(`${this.AUTH_USERS_URL}/projects/leader/`);
   }
 
   /**

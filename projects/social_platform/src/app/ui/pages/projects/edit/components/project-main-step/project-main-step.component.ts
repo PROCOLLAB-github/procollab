@@ -30,6 +30,7 @@ import { ProjectService } from "projects/social_platform/src/app/api/project/pro
 import { RouterLink } from "@angular/router";
 import { generateOptionsList } from "@utils/generate-options-list";
 import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { optionalUrlOrMentionValidator } from "@utils/optionalUrl.validator";
 
 @Component({
   selector: "app-project-main-step",
@@ -154,11 +155,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
   }
 
   get links(): FormArray {
-    return this.projectContactsService.links;
-  }
-
-  get linksItems() {
-    return this.projectContactsService.linksItems;
+    return this.projectForm.get("links") as FormArray;
   }
 
   // Геттеры для работы с целями
@@ -194,7 +191,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
    * Проверяет, есть ли ссылки для отображения
    */
   get hasLinks(): boolean {
-    return this.linksArray.length > 0;
+    return this.links.length > 0;
   }
 
   /**
@@ -204,15 +201,11 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
     return this.goals.length > 0;
   }
 
-  get linksArray(): FormArray {
-    return this.projectForm.get("links") as FormArray;
-  }
-
   /**
    * Добавление ссылки
    */
   addLink(): void {
-    this.linksArray.push(this.fb.control("", Validators.required));
+    this.links.push(this.fb.control("", optionalUrlOrMentionValidator));
   }
 
   /**
@@ -228,7 +221,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
    * @param index - индекс ссылки
    */
   removeLink(index: number): void {
-    this.linksArray.removeAt(index);
+    this.links.removeAt(index);
   }
 
   /**

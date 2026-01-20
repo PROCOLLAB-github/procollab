@@ -25,8 +25,9 @@ import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { noop, Subscription } from "rxjs";
 import { BooleanCriterionComponent } from "./components/boolean-criterion/boolean-criterion.component";
 import { RangeCriterionInputComponent } from "./components/range-criterion-input/range-criterion-input.component";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ControlErrorPipe } from "@corelib";
 import { ProjectRatingCriterion } from "../../../domain/project/project-rating-criterion";
+import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 
 /**
  * Компонент рейтинга проекта
@@ -48,6 +49,7 @@ import { ProjectRatingCriterion } from "../../../domain/project/project-rating-c
     RangeCriterionInputComponent,
     BooleanCriterionComponent,
     ReactiveFormsModule,
+    ControlErrorPipe,
   ],
   templateUrl: "./project-rating.component.html",
   styleUrl: "./project-rating.component.scss",
@@ -110,6 +112,8 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
   /** Форма для управления всеми критериями оценки */
   form!: FormGroup;
 
+  errorMessage = ErrorMessage;
+
   /**
    * Объект с функциями-создателями FormControl для разных типов критериев
    * Каждый тип критерия имеет свою логику создания контрола и валидации
@@ -120,7 +124,7 @@ export class ProjectRatingComponent implements OnDestroy, ControlValueAccessor, 
     // Булевый критерий - преобразование строки в boolean
     bool: val => new FormControl<boolean>(val ? JSON.parse((val as string).toLowerCase()) : false),
     // Строковый критерий - без валидации (комментарии опциональны)
-    str: val => new FormControl<string>(<string>val),
+    str: val => new FormControl<string>(<string>val, Validators.maxLength(50)),
   };
 
   /** Сигнал для хранения подписок */

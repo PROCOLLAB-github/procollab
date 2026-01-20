@@ -55,6 +55,54 @@
             (closeFilter)="closeFilter()"
             (clear)="onClearFilters()"
           ></app-program-projects-filter>
+
+          @if (listType === 'projects') {
+          <div class="page__export" style="margin-top: 0">
+            <app-button
+              [loader]="loadingExportProjects()"
+              customTypographyClass="text-body-12"
+              size="medium"
+              (click)="downloadProjects()"
+            >
+              <span class="text-body-12">выгрузка проектов</span>
+              <i appIcon icon="download" appSquare="18"></i>
+            </app-button>
+
+            <app-button
+              [loader]="loadingExportSubmittedProjects()"
+              customTypographyClass="text-body-12"
+              size="medium"
+              (click)="downloadSubmittedProjects()"
+            >
+              <span class="text-body-12">сданные решения</span>
+              <i appIcon icon="download" appSquare="18"></i>
+            </app-button>
+          </div>
+          } @else {
+          <div class="page__export">
+            <app-button
+              [loader]="loadingExportRates()"
+              customTypographyClass="text-body-12"
+              size="medium"
+              (click)="downloadRates()"
+            >
+              <span class="text-body-12">выгрузка оценок</span>
+              <i appIcon icon="download" appSquare="18"></i>
+            </app-button>
+
+            <app-button
+              [disabled]="true"
+              style="opacity: 0.5"
+              [loader]="loadingExportCalculations()"
+              customTypographyClass="text-body-12"
+              size="medium"
+              (click)="downloadCalculations()"
+            >
+              <span class="text-body-12">итоговые расчеты</span>
+              <i appIcon icon="download" appSquare="18"></i>
+            </app-button>
+          </div>
+          }
         </div>
       </div>
       }

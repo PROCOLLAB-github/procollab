@@ -30,6 +30,14 @@
         [formControlName]="criterion.id"
         placeholder="Небольшой комментарий, если необходимо"
       ></app-textarea>
+
+      @if (form.get(criterion.id.toString())?.errors?.['maxlength']) {
+      <div class="text-body-10 error">
+        {{ errorMessage.VALIDATION_TOO_LONG }}
+        максимум
+        {{ form.get(criterion.id.toString())?.errors?.['maxlength']?.['requiredLength'] }} символов
+      </div>
+      }
     </div>
     } }
   </section>

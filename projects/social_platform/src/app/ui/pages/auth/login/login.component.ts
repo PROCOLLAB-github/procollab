@@ -1,12 +1,20 @@
 /** @format */
 
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { ControlErrorPipe, TokenService, ValidationService } from "projects/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
 import { CommonModule } from "@angular/common";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
+import { ClickOutsideModule } from "ng-click-outside";
 import { AuthService } from "projects/social_platform/src/app/api/auth";
 
 /**
@@ -40,6 +48,8 @@ import { AuthService } from "projects/social_platform/src/app/api/auth";
     ButtonComponent,
     IconComponent,
     ControlErrorPipe,
+    TooltipComponent,
+    ClickOutsideModule,
   ],
 })
 export class LoginComponent implements OnInit {
@@ -66,9 +76,14 @@ export class LoginComponent implements OnInit {
   errorMessage = ErrorMessage;
 
   showPassword = false;
+  readonly isHintLoginVisible = signal<boolean>(false);
 
   ngOnInit(): void {
     this.tokenService.clearTokens();
+  }
+
+  toggleTooltip(): void {
+    this.isHintLoginVisible.set(!this.isHintLoginVisible());
   }
 
   toggleShowPassword() {

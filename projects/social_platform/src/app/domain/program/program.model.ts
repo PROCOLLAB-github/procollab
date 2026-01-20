@@ -50,11 +50,14 @@ export class Program {
   datetimeRegistrationEnds!: string;
   datetimeStarted!: string;
   datetimeFinished!: string;
+  datetimeProjectSubmissionEnds!: string;
+  datetimeEvaluationEnds!: string;
   viewsCount!: number;
   likesCount!: number;
   isUserLiked!: boolean;
   isUserManager!: boolean;
   isUserMember!: boolean;
+  publishProjectsAfterFinish!: boolean;
 
   static default(): Program {
     return {
@@ -73,6 +76,8 @@ export class Program {
       datetimeRegistrationEnds: "",
       datetimeStarted: "",
       datetimeFinished: "",
+      datetimeProjectSubmissionEnds: "",
+      datetimeEvaluationEnds: "",
       viewsCount: 1,
       tag: "",
       likesCount: 1,
@@ -80,6 +85,7 @@ export class Program {
       isUserLiked: false,
       isUserMember: false,
       isUserManager: false,
+      publishProjectsAfterFinish: false,
     };
   }
 }

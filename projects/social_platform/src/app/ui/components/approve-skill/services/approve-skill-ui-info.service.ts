@@ -1,3 +1,5 @@
+/** @format */
+
 import { inject, Injectable, signal } from "@angular/core";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { Approve, Skill } from "projects/social_platform/src/app/domain/skills/skill";

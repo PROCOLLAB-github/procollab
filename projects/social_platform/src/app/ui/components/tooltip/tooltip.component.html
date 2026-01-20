@@ -8,6 +8,7 @@
   [class]="customClass"
   (mouseenter)="show.emit()"
   (mouseleave)="hide.emit()"
+  [style.color]="color === 'accent' ? 'var(--accent)' : 'var(--grey-for-text)'"
 ></i>
 <span
   class="tooltip__content text-body-10"

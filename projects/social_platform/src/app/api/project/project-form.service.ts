@@ -15,6 +15,7 @@ import { ProjectService } from "projects/social_platform/src/app/api/project/pro
 import { stripNullish } from "@utils/helpers/stripNull";
 import { concatMap, filter } from "rxjs";
 import { Project } from "../../domain/project/project.model";
+import { optionalUrlOrMentionValidator } from "@utils/optionalUrl.validator";
 /**
  * Сервис для управления основной формой проекта и формой дополнительных полей партнерской программы.
  * Обеспечивает создание, инициализацию, валидацию, автосохранение, сброс и получение данных форм.
@@ -33,6 +34,29 @@ export class ProjectFormService {
     this.initializeForm();
   }
 
+  formModel = (this.projectForm = this.fb.group({
+    imageAddress: [""],
+    name: ["", [Validators.required, Validators.maxLength(256)]],
+    region: ["", [Validators.required, Validators.maxLength(256)]],
+    implementationDeadline: [null],
+    trl: [null],
+    links: this.fb.array([]),
+    link: ["", optionalUrlOrMentionValidator],
+    industryId: [undefined],
+    description: ["", [Validators.maxLength(800)]],
+    presentationAddress: [""],
+    coverImageAddress: [""],
+    actuality: ["", [Validators.maxLength(1000)]],
+    targetAudience: ["", [Validators.maxLength(500)]],
+    problem: ["", [Validators.maxLength(1000)]],
+    partnerProgramId: [null],
+    achievements: this.fb.array([]),
+    title: [""],
+    status: [""],
+
+    draft: [null],
+  }));
+
   /**
    * Создает и настраивает основную форму проекта с набором контролов и валидаторов.
    * Подписывается на изменения полей 'presentationAddress' и 'coverImageAddress' для автосохранения при очищении.
@@ -40,19 +64,19 @@ export class ProjectFormService {
   private initializeForm(): void {
     this.projectForm = this.fb.group({
       imageAddress: [""],
-      name: ["", [Validators.required]],
-      region: ["", [Validators.required]],
+      name: ["", [Validators.required, Validators.maxLength(256)]],
+      region: ["", [Validators.required, Validators.maxLength(256)]],
       implementationDeadline: [null],
       trl: [null],
       links: this.fb.array([]),
-      link: ["", Validators.pattern(/^(https?:\/\/)/)],
-      industryId: [undefined, [Validators.required]],
-      description: ["", [Validators.required, Validators.minLength(0), Validators.maxLength(800)]],
+      link: ["", optionalUrlOrMentionValidator],
+      industryId: [undefined],
+      description: ["", [Validators.maxLength(800)]],
       presentationAddress: [""],
-      coverImageAddress: ["", [Validators.required]],
-      actuality: ["", [Validators.maxLength(400)]],
-      targetAudience: ["", [Validators.required, Validators.maxLength(400)]],
-      problem: ["", [Validators.required, Validators.maxLength(400)]],
+      coverImageAddress: [""],
+      actuality: ["", [Validators.maxLength(1000)]],
+      targetAudience: ["", [Validators.maxLength(500)]],
+      problem: ["", [Validators.maxLength(1000)]],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
       title: [""],
@@ -130,7 +154,7 @@ export class ProjectFormService {
     }
 
     links.forEach(link => {
-      linksFormArray.push(this.fb.control(link, [Validators.required]));
+      linksFormArray.push(this.fb.control(link, optionalUrlOrMentionValidator));
     });
   }
 
@@ -193,7 +217,13 @@ export class ProjectFormService {
    * @returns объект значений формы без nullish
    */
   public getFormValue(): any {
-    return stripNullish(this.projectForm.value);
+    const value = stripNullish(this.projectForm.value);
+
+    if (Array.isArray(value["links"])) {
+      value["links"] = value["links"].map((v: string) => v?.trim()).filter((v: string) => !!v);
+    }
+
+    return value;
   }
 
   // Геттеры для быстрого доступа к контролам основной формы

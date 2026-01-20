@@ -55,6 +55,7 @@ import { Goal } from "projects/social_platform/src/app/domain/project/goals.mode
 import { Resource } from "projects/social_platform/src/app/domain/project/resource.model";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { Partner } from "projects/social_platform/src/app/domain/project/partner.model";
+import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
 
 /**
  * Компонент редактирования проекта
@@ -119,6 +120,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly snackBarService: SnackbarService,
     private readonly skillsService: SkillsService,
     private readonly projectAdditionalService: ProjectAdditionalService,
+    private readonly programService: ProgramService,
     private readonly projectGoalService: ProjectGoalService
   ) {}
 
@@ -173,9 +175,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   clearAssignProjectToProgramError(): void {
     this.projectAdditionalService.clearAssignProjectToProgramError();
   }
-
-  // Сигналы для работы с модальными окнами с текстом
-  assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
 
   // Геттеры для работы с целями
   get goals(): FormArray {
@@ -285,32 +284,32 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.projectStepService.navigateToStep(step);
   }
 
-  /**
-   * Привязка проекта к программе выбранной
-   * Перенаправление её на редактирование "нового" проекта
-   */
-  assignProjectToProgram(): void {
-    this.projectService
-      .assignProjectToProgram(
-        Number(this.route.snapshot.paramMap.get("projectId")),
-        this.projectForm.get("partnerProgramId")?.value
-      )
-      .subscribe({
-        next: r => {
-          this.assignProjectToProgramModalMessage.set(r);
-          this.isAssignProjectToProgramModalOpen.set(true);
-          this.router.navigateByUrl(`/office/projects/${r.newProjectId}/edit?editingStep=main`);
-        },
+  // /**
+  //  * Привязка проекта к программе выбранной
+  //  * Перенаправление её на редактирование "нового" проекта
+  //  */
+  // assignProjectToProgram(): void {
+  //   this.projectService
+  //     .assignProjectToProgram(
+  //       Number(this.route.snapshot.paramMap.get("projectId")),
+  //       this.projectForm.get("partnerProgramId")?.value
+  //     )
+  //     .subscribe({
+  //       next: r => {
+  //         this.assignProjectToProgramModalMessage.set(r);
+  //         this.isAssignProjectToProgramModalOpen.set(true);
+  //         this.router.navigateByUrl(`/office/projects/${r.newProjectId}/edit?editingStep=main`);
+  //       },
 
-        error: err => {
-          if (err instanceof HttpErrorResponse) {
-            if (err.status === 400) {
-              this.setAssignProjectToProgramError(err.error);
-            }
-          }
-        },
-      });
-  }
+  //       error: err => {
+  //         if (err instanceof HttpErrorResponse) {
+  //           if (err.status === 400) {
+  //             this.setAssignProjectToProgramError(err.error);
+  //           }
+  //         }
+  //       },
+  //     });
+  // }
 
   // Методы для управления состоянием отправки форм
   setIsSubmittingAsPublished(status: boolean): void {
@@ -351,9 +350,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
+    const programId = this.projectForm.get("partnerProgramId")?.value;
+
     this.projectService.remove(Number(this.route.snapshot.paramMap.get("projectId"))).subscribe({
       next: () => {
-        this.router.navigateByUrl(`/office/projects/my`);
+        if (this.fromProgram) {
+          this.router.navigateByUrl(`/office/program/${programId}`);
+        } else {
+          this.router.navigateByUrl(`/office/projects/my`);
+        }
       },
     });
   }
@@ -565,7 +570,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   private sendAdditionalFields(projectId: number, relationId: number): void {
     const isDraft = this.projectForm.get("draft")?.value === true;
-
     this.projectAdditionalService.sendAdditionalFieldsValues(projectId).subscribe({
       next: () => {
         if (!isDraft) {

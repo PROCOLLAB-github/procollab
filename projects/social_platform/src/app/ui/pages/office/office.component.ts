@@ -1,23 +1,25 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit, Signal } from "@angular/core";
-import { IndustryService } from "projects/social_platform/src/app/api/industry/industry.service";
-import { forkJoin, map, noop, Subscription } from "rxjs";
-import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
-import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { ChatService } from "projects/social_platform/src/app/api/chat/chat.service";
-import { SnackbarComponent } from "@ui/components/snackbar/snackbar.component";
-import { DeleteConfirmComponent } from "@ui/components/delete-confirm/delete-confirm.component";
-import { ButtonComponent } from "@ui/components";
-import { ModalComponent } from "@ui/components/modal/modal.component";
-import { NavComponent } from "../../components/nav/nav.component";
-import { IconComponent, ProfileControlPanelComponent, SidebarComponent } from "@uilib";
 import { AsyncPipe } from "@angular/common";
-import { InviteService } from "projects/social_platform/src/app/api/invite/invite.service";
-import { toSignal } from "@angular/core/rxjs-interop";
+import { Component, OnDestroy, OnInit, signal, Signal } from "@angular/core";
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from "@angular/router";
+import { ProgramSidebarCardComponent } from "@office/features/program-sidebar-card/program-sidebar-card.component";
+import { ButtonComponent } from "@ui/components";
+import { DeleteConfirmComponent } from "@ui/components/delete-confirm/delete-confirm.component";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { NavComponent } from "@ui/components/nav/nav.component";
+import { SnackbarComponent } from "@ui/components/snackbar/snackbar.component";
+import { ProfileControlPanelComponent, SidebarComponent } from "@uilib";
+import { IndustryService } from "../../../api/industry/industry.service";
 import { AuthService } from "../../../api/auth";
+import { InviteService } from "../../../api/invite/invite.service";
+import { ChatService } from "../../../api/chat/chat.service";
+import { ProgramService } from "../../../api/program/program.service";
+import { Invite } from "../../../domain/invite/invite.model";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { forkJoin, map, noop, Subscription } from "rxjs";
+import { User } from "../../../domain/auth/user.model";
+import { Program } from "../../../domain/program/program.model";
 
 /**
  * Главный компонент офиса - корневой компонент рабочего пространства
@@ -45,8 +47,9 @@ import { AuthService } from "../../../api/auth";
     DeleteConfirmComponent,
     SnackbarComponent,
     AsyncPipe,
+    RouterLink,
     ProfileControlPanelComponent,
-    IconComponent,
+    ProgramSidebarCardComponent,
   ],
 })
 export class OfficeComponent implements OnInit, OnDestroy {
@@ -56,7 +59,8 @@ export class OfficeComponent implements OnInit, OnDestroy {
     public readonly authService: AuthService,
     private readonly inviteService: InviteService,
     private readonly router: Router,
-    public readonly chatService: ChatService
+    public readonly chatService: ChatService,
+    private readonly programService: ProgramService
   ) {}
 
   invites: Signal<Invite[]> = toSignal(
@@ -72,6 +76,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   waitVerificationAccepted = false;
 
   inviteErrorModal = false;
+  protected readonly programs = signal<Program[]>([]);
 
   navItems: {
     name: string;
@@ -121,6 +126,17 @@ export class OfficeComponent implements OnInit, OnDestroy {
     if (localStorage.getItem("waitVerificationAccepted") === "true") {
       this.waitVerificationAccepted = true;
     }
+
+    const programsSub$ = this.programService.getActualPrograms().subscribe({
+      next: ({ results: programs }) => {
+        const resultPrograms = programs.filter(
+          (program: Program) => Date.now() < Date.parse(program.datetimeRegistrationEnds)
+        );
+        this.programs.set(resultPrograms.slice(0, 3));
+      },
+    });
+
+    this.subscriptions$.push(programsSub$);
   }
 
   ngOnDestroy(): void {
