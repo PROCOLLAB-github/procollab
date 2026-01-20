@@ -18,6 +18,7 @@ export class OfficeUIInfoService {
   applyVerificationModal(): void {
     // Не показываем модалку, если пользователь уже принял подтверждение
     if (localStorage.getItem("waitVerificationAccepted") === "true") {
+      // eslint-disable-next-line no-useless-return
       return;
     }
   }
