@@ -1,0 +1,97 @@
+.profile__wrapper--main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile__main--grid {
+  display: grid;
+  grid-template-columns: 3fr 3fr 4fr;
+  grid-gap: 20px;
+}
+
+.profile__wrapper--links {
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  grid-gap: 20px;
+}
+
+.profile {
+  &__row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__file {
+    flex-grow: 1;
+    min-width: 0;
+    max-width: 333px;
+
+    ::ng-deep {
+      app-upload-file {
+        height: 80px;
+        padding: 10px 30px;
+      }
+    }
+  }
+
+  &__slides-title {
+    max-width: 320px;
+    margin-top: 12px;
+    color: var(--black);
+    text-align: center;
+  }
+
+  &__slides-text {
+    max-width: 275px;
+    margin-top: 12px;
+    color: var(--black);
+    text-align: center;
+    opacity: 0.3;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &__slides-error {
+    margin-top: 12px;
+    color: var(--red);
+  }
+
+  &__slides-open-file {
+    color: var(--accent);
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--accent-dark);
+    }
+  }
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    &--date {
+      display: grid;
+      grid-template-columns: repeat(2, 3fr);
+      grid-gap: 20px;
+    }
+  }
+
+  &__action {
+    &--icons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+  }
+}
+
+.error__phone-number {
+  margin-bottom: 10px;
+}
