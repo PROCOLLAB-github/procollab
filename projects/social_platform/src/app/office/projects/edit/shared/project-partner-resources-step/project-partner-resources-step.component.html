@@ -31,6 +31,7 @@
                 [error]="inn | controlError"
                 placeholder="5055055055"
                 formControlName="inn"
+                [maxLength]="10"
               ></app-input>
               @if (inn | controlError: "required") {
               <div class="text-body-10 error">
@@ -49,6 +50,7 @@
               [error]="contribution | controlError"
               placeholder="вклад в проект от партнера"
               formControlName="contribution"
+              [maxLength]="200"
             ></app-textarea>
             @if (contribution | controlError: "required") {
             <div class="text-body-10 error">
@@ -133,6 +135,7 @@
               [error]="description | controlError"
               placeholder="дал нам денег и связей"
               formControlName="description"
+              [maxlength]="200"
             ></app-textarea>
             @if (description | controlError: "required") {
             <div class="text-body-10 error">

@@ -33,8 +33,13 @@
       padding-right: 130px;
     }
 
-    &--error {
-      border-color: var(--red);
+    &--error, &--overflow {
+      border: 0.5px solid var(--red);
+
+      &:focus {
+        border-color: var(--red) !important;
+        box-shadow: 0 0 6px rgba(255, 40, 40, 0.308) !important;
+      }
     }
 
     &:focus {
@@ -64,5 +69,19 @@
     right: 15px;
     z-index: 10;
     transform: translateY(-50%);
+  }
+
+  &__counter {
+    position: absolute;
+    right: 18px;
+    bottom: 4px;
+
+    p {
+      color: var(--dark-grey);
+    }
+
+    &--overflow {
+      color: var(--red) !important;
+    }
   }
 }

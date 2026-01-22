@@ -60,7 +60,7 @@ export class ProjectVacancyService {
     this.vacancyForm = this.fb.group({
       role: [null],
       skills: [[]],
-      description: [""],
+      description: ["", [Validators.maxLength(3500)]],
       requiredExperience: [null],
       workFormat: [null],
       salary: [""],

@@ -177,6 +177,7 @@
           formControlName="whyMe"
           [error]="whyMe | controlError"
           placeholder="Проект начал свое существование с 2020 года"
+          [maxLength]="2000"
         ></app-textarea>
         @if (whyMe | controlError: "required") {
         <div class="text-body-10 error">

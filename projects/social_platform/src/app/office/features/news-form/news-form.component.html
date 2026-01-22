@@ -11,6 +11,7 @@
       placeholder="сегодня был хороший день"
       (paste)="onPaste($event)"
       (keydown.meta.enter)="onSubmit()"
+      [maxLength]="15940"
     ></app-input>
     <i appIcon icon="send" appSquare="12" class="form__send" (click)="onSubmit()"></i>
   </div>

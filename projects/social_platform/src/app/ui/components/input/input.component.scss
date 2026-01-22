@@ -46,8 +46,13 @@
       }
     }
 
-    &--error {
+    &--error, &--overflow {
       border: 0.5px solid var(--red);
+
+      &:focus {
+        border-color: var(--red);
+        box-shadow: 0 0 6px rgba(255, 40, 40, 0.308);
+      }
     }
 
     @include typography.body-10;
@@ -136,6 +141,20 @@
     &--small {
       top: 15%;
       right: -3px;
+    }
+  }
+
+  &__counter {
+    position: absolute;
+    right: 18px;
+    bottom: 0px;
+
+    p {
+      color: var(--dark-grey);
+    }
+
+    &--overflow {
+      color: var(--red) !important;
     }
   }
 }

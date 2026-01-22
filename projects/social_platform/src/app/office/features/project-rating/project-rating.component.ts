@@ -49,7 +49,6 @@ import { ControlErrorPipe } from "@corelib";
     RangeCriterionInputComponent,
     BooleanCriterionComponent,
     ReactiveFormsModule,
-    ControlErrorPipe,
   ],
   templateUrl: "./project-rating.component.html",
   styleUrl: "./project-rating.component.scss",

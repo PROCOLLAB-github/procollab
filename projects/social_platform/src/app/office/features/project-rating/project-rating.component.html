@@ -29,6 +29,7 @@
         size="big"
         [formControlName]="criterion.id"
         placeholder="Небольшой комментарий, если необходимо"
+        [maxLength]="50"
       ></app-textarea>
 
       @if (form.get(criterion.id.toString())?.errors?.['maxlength']) {

@@ -49,6 +49,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() mask = "";
   @Input() name = "";
   @Input() checked = false;
+  @Input() maxLength?: number;
 
   @Input()
   set appValue(value: string) {
@@ -60,6 +61,7 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   isTooltipVisible = false;
+  isLengthOverflow = false;
 
   @Output() appValueChange = new EventEmitter<string>();
   @Output() enter = new EventEmitter<void>();
@@ -103,9 +105,17 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   onInput(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.onChange(value);
-    this.appValueChange.emit(value);
+    const nextValue = (event.target as HTMLInputElement).value;
+
+    if (this.maxLength && nextValue.length > this.maxLength) {
+      this.isLengthOverflow = true;
+    } else {
+      this.isLengthOverflow = false;
+    }
+
+    this.value = nextValue;
+    this.onChange(nextValue);
+    this.appValueChange.emit(nextValue);
   }
 
   onBlur(): void {
@@ -127,6 +137,14 @@ export class InputComponent implements ControlValueAccessor {
     }
 
     return null;
+  }
+
+  get showErrorIcon(): boolean {
+    if (this.error && !this.maxLength) {
+      return true;
+    }
+
+    return false;
   }
 
   writeValue(value: string): void {
