@@ -75,7 +75,13 @@ export class OfficeComponent implements OnInit, OnDestroy {
   waitVerificationModal = false;
   waitVerificationAccepted = false;
 
+  showRegisteredProgramModal = signal<boolean>(false);
+
+  registeredProgramToShow?: Program | null = null;
+  private pendingRegisteredModalCheck = false;
+
   inviteErrorModal = false;
+
   protected readonly programs = signal<Program[]>([]);
 
   navItems: {
@@ -107,7 +113,6 @@ export class OfficeComponent implements OnInit, OnDestroy {
     this.subscriptions$.push(profileSub$);
 
     this.chatService.connect().subscribe(() => {
-      // Change users online status
       this.chatService.onSetOffline().subscribe(evt => {
         this.chatService.setOnlineStatus(evt.userId, false);
       });
@@ -133,6 +138,9 @@ export class OfficeComponent implements OnInit, OnDestroy {
           (program: Program) => Date.now() < Date.parse(program.datetimeRegistrationEnds)
         );
         this.programs.set(resultPrograms.slice(0, 3));
+
+        console.log(this.programs().find(prog => prog.isUserMember));
+        this.tryShowRegisteredProgramModal();
       },
     });
 
@@ -146,6 +154,8 @@ export class OfficeComponent implements OnInit, OnDestroy {
   onAcceptWaitVerification() {
     this.waitVerificationAccepted = true;
     localStorage.setItem("waitVerificationAccepted", "true");
+    this.pendingRegisteredModalCheck = true;
+    this.tryShowRegisteredProgramModal();
   }
 
   onRejectInvite(inviteId: number): void {
@@ -185,6 +195,47 @@ export class OfficeComponent implements OnInit, OnDestroy {
           .navigateByUrl("/auth")
           .then(() => console.debug("Route changed from OfficeComponent"))
       );
+  }
+
+  private tryShowRegisteredProgramModal(): void {
+    if (!this.pendingRegisteredModalCheck) return;
+
+    const programs = this.programs();
+    if (!programs || programs.length === 0) return;
+
+    const memberProgram = programs.find(p => p.isUserMember);
+    if (!memberProgram) {
+      this.pendingRegisteredModalCheck = false;
+      return;
+    }
+
+    if (!this.hasSeenRegisteredProgramModal(memberProgram.id)) {
+      this.registeredProgramToShow = memberProgram;
+      this.showRegisteredProgramModal.set(true);
+      this.markSeenRegisteredProgramModal(memberProgram.id);
+    }
+
+    this.pendingRegisteredModalCheck = false;
+  }
+
+  private getRegisteredProgramSeenKey(programId: number): string {
+    return `program_registered_modal_seen_${programId}`;
+  }
+
+  private hasSeenRegisteredProgramModal(programId: number): boolean {
+    try {
+      return !!localStorage.getItem(this.getRegisteredProgramSeenKey(programId));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  private markSeenRegisteredProgramModal(programId: number): void {
+    try {
+      localStorage.setItem(this.getRegisteredProgramSeenKey(programId), "1");
+    } catch (e) {
+      // ignore storage errors
+    }
   }
 
   private buildNavItems(profile: User) {
