@@ -98,6 +98,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   showProgramModal = signal(false);
   showProgramModalErrorMessage = signal<string | null>(null);
 
+  registeredProgramModal = signal<boolean>(false);
+
   programId?: number;
 
   subscriptions$ = signal<Subscription[]>([]);
@@ -135,6 +137,13 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         tap(program => {
           this.program = program;
           this.registerDateExpired = Date.now() > Date.parse(program.datetimeRegistrationEnds);
+          if (program.isUserMember) {
+            const seen = this.hasSeenRegisteredProgramModal(program.id);
+            if (!seen) {
+              this.registeredProgramModal.set(true);
+              this.markSeenRegisteredProgramModal(program.id);
+            }
+          }
         }),
         concatMap(program => {
           if (program.isUserMember) {
@@ -316,6 +325,24 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
     }
 
     this.descriptionExpandable = descElement.scrollHeight > descElement.clientHeight;
+  }
+
+  private getRegisteredProgramSeenKey(programId: number): string {
+    return `program_registered_modal_seen_${programId}`;
+  }
+
+  private hasSeenRegisteredProgramModal(programId: number): boolean {
+    try {
+      return !!localStorage.getItem(this.getRegisteredProgramSeenKey(programId));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  private markSeenRegisteredProgramModal(programId: number): void {
+    try {
+      localStorage.setItem(this.getRegisteredProgramSeenKey(programId), "1");
+    } catch (e) {}
   }
 
   private setupNewsObserver(): void {

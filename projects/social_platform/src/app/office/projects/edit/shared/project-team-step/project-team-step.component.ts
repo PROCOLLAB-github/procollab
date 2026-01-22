@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { InputComponent, ButtonComponent, SelectComponent } from "@ui/components";
 import { ControlErrorPipe } from "@corelib";
@@ -31,6 +31,7 @@ import { Collaborator } from "@office/models/collaborator.model";
     InviteCardComponent,
     CollaboratorCardComponent,
     TooltipComponent,
+    ModalComponent,
   ],
 })
 export class ProjectTeamStepComponent implements OnInit {
@@ -43,6 +44,8 @@ export class ProjectTeamStepComponent implements OnInit {
   readonly rolesMembersList = rolesMembersList;
 
   showFields = false;
+  readonly isHintTeamVisible = signal<boolean>(false);
+  readonly isHintTeamModal = signal<boolean>(false);
 
   ngOnInit(): void {
     this.projectTeamService.setInvites(this.invites);
@@ -181,5 +184,11 @@ export class ProjectTeamStepComponent implements OnInit {
 
   onCollaboratorRemove(collaboratorId: number): void {
     this.projectTeamService.removeCollaborator(collaboratorId);
+  }
+
+  openHintModal(event: Event): void {
+    event.preventDefault();
+    this.isHintTeamVisible.set(false);
+    this.isHintTeamModal.set(true);
   }
 }

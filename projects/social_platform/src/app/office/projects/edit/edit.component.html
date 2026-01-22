@@ -128,6 +128,45 @@
   </div>
 </app-modal>
 
+<app-modal [open]="fromProgramOpen()" (openChange)="fromProgramOpen.set(false)">
+  <div class="cancel" style="width: 605px; padding: 0px 24px">
+    <div class="cancel__top">
+      <p class="cancel__title text-body-14">Начнем создавать историю!</p>
+    </div>
+
+    <div class="cancel__text-block">
+      <p class="text-body-12">
+        Вы находитесь в проектной мастерской – здесь мы с нуля создаем и редактируем проектные идеи
+      </p>
+
+      <p class="text-body-12">
+        Есть несколько вкладок – заполнив каждую, вы полностью опишите свой проект.<br />
+        Обязательные поля отмечены красным, обязательно не забудь про вкладку «данные для конкурсов»
+      </p>
+
+      <p class="text-body-12">
+        Будьте внимательны: проект единожды создается лидером, команда приглашается в уже созданный
+        проект
+      </p>
+
+      <p class="text-body-12">
+        Если вы понимаете, что заполнить каждую графу пока нет времени (или не хватает информации!),
+        нажмите «сохранить черновик» – так вы сохраните проект, но не опубликуете его для
+        пользователей всей платформы
+      </p>
+
+      <p class="text-body-12">Расскажите миру о вашем проекте!</p>
+    </div>
+
+    <app-button
+      customTypographyClass="text-body-12"
+      size="medium"
+      (click)="fromProgramOpen.set(false)"
+      >вперед</app-button
+    >
+  </div>
+</app-modal>
+
 <app-modal [open]="skillsGroupsModalOpen()" class="modal">
   <div class="modal__wrapper">
     <p class="text-body-14">библиотека навыков</p>
