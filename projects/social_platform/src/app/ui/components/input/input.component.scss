@@ -46,12 +46,13 @@
       }
     }
 
-    &--error, &--overflow {
+    &--error,
+    &--overflow {
       border: 0.5px solid var(--red);
 
       &:focus {
         border-color: var(--red);
-        box-shadow: 0 0 6px rgba(255, 40, 40, 0.308);
+        box-shadow: 0 0 6px rgb(255 40 40 / 30.8%);
       }
     }
 
@@ -147,7 +148,7 @@
   &__counter {
     position: absolute;
     right: 18px;
-    bottom: 0px;
+    bottom: 0;
 
     p {
       color: var(--dark-grey);

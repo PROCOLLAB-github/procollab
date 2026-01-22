@@ -33,12 +33,13 @@
       padding-right: 130px;
     }
 
-    &--error, &--overflow {
+    &--error,
+    &--overflow {
       border: 0.5px solid var(--red);
 
       &:focus {
         border-color: var(--red) !important;
-        box-shadow: 0 0 6px rgba(255, 40, 40, 0.308) !important;
+        box-shadow: 0 0 6px rgb(255 40 40 / 30.8%) !important;
       }
     }
 
