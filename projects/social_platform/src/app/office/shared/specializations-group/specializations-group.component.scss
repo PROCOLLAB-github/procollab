@@ -21,6 +21,7 @@
 
     &--open {
       z-index: 1000;
+
       i {
         transform: rotate(90deg);
       }
@@ -57,8 +58,8 @@
     gap: 5px;
 
     &--open {
-      width: 40%;
       z-index: 1000;
+      width: 40%;
     }
 
     &__option {
