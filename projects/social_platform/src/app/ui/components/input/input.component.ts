@@ -52,8 +52,8 @@ export class InputComponent implements ControlValueAccessor {
   @Input() maxLength?: number;
 
   @Input()
-  set appValue(value: string) {
-    this.value = value;
+  set appValue(value: string | null) {
+    this.value = value ?? "";
   }
 
   get appValue(): string {
@@ -105,13 +105,9 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   onInput(event: Event): void {
-    const nextValue = (event.target as HTMLInputElement).value;
+    const nextValue = (event.target as HTMLInputElement).value ?? "";
 
-    if (this.maxLength && nextValue.length > this.maxLength) {
-      this.isLengthOverflow = true;
-    } else {
-      this.isLengthOverflow = false;
-    }
+    this.isLengthOverflow = !!this.maxLength && nextValue.length > this.maxLength;
 
     this.value = nextValue;
     this.onChange(nextValue);
@@ -147,10 +143,8 @@ export class InputComponent implements ControlValueAccessor {
     return false;
   }
 
-  writeValue(value: string): void {
-    setTimeout(() => {
-      this.value = value;
-    });
+  writeValue(value: string | null): void {
+    this.value = value ?? "";
   }
 
   onChange: (value: string) => void = () => {};

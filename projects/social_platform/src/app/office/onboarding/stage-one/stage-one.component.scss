@@ -2,11 +2,18 @@
 @use "styles/typography";
 
 .auth {
-  &__greeting {
+ &__greeting {
     position: relative;
     display: flex;
+    flex-direction: column;
     gap: 10px;
-    align-items: center;
+    max-width: 100%;
+
+    @include responsive.apply-desktop {
+      max-width: 60%;
+      flex-direction: row;
+      align-items: center;
+    }
   }
 }
 

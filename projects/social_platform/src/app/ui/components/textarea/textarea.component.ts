@@ -70,7 +70,7 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
 
   /** Двустороннее связывание текста */
   @Input() set text(value: string) {
-    this.value = value;
+    this.value = value ?? "";
   }
 
   get text(): string {
@@ -86,7 +86,7 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
 
   /** Обработчик ввода текста */
   onInput(event: Event): void {
-    const nextValue = (event.target as HTMLInputElement).value;
+    const nextValue = (event.target as HTMLInputElement).value ?? "";
 
     if (this.maxLength && nextValue.length > this.maxLength) {
       this.isLengthOverflow = true;
@@ -123,7 +123,7 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
 
   // Методы ControlValueAccessor
   writeValue(value: string): void {
-    this.value = value;
+    this.value = value ?? "";
   }
 
   onChange: (value: string) => void = () => {};
