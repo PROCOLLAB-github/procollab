@@ -195,8 +195,6 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Получение Id лидера проекта
     this.setupLeaderIdSubscription();
-
-    console.log(this.fromProgramOpen());
   }
 
   ngAfterViewInit(): void {
@@ -239,6 +237,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Состояние компонента
   isCompleted = false;
+  isSendDescisionLate = false;
   isSendDescisionToPartnerProgramProject = false;
 
   profile$?: Subscription;
@@ -457,9 +456,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         next: () => {
           this.completeSubmitedProjectForm(projectId);
         },
-        error: () => {
+        error: err => {
           this.setProjFormIsSubmitting(false);
           this.snackBarService.error("ошибка при сохранении данных");
+          if (err.error["error"].includes("Срок подачи проектов в программу завершён.")) {
+            this.isSendDescisionLate = true;
+          }
         },
       });
   }
