@@ -13,8 +13,6 @@ export class MembersUIInfoService {
   readonly membersTake = signal<number>(20); // Количество участников на странице
   private readonly membersPage = signal<number>(1); // Текущая страница для пагинации
 
-  readonly profileId = signal<number | undefined>(undefined);
-
   readonly members = signal<User[]>([]); // Массив участников для отображения
 
   // Форма поиска с обязательным полем для ввода имени
@@ -29,10 +27,6 @@ export class MembersUIInfoService {
     age: [[null, null]], // Диапазон возраста [от, до]
     isMosPolytechStudent: [false], // Является ли студентом МосПолитеха
   });
-
-  applyProfileId(user: User): void {
-    this.profileId.set(user.id);
-  }
 
   applyMembersPagination(members: ApiPagination<User>) {
     this.membersTotalCount.set(members.count);

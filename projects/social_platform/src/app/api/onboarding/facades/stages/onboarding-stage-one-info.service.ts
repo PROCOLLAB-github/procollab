@@ -2,14 +2,15 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { Specialization } from "projects/social_platform/src/app/domain/specializations/specialization";
-import { concatMap, Subject, take, takeUntil } from "rxjs";
+import { concatMap, map, Observable, Subject, take, takeUntil } from "rxjs";
 import { AuthService } from "../../../auth";
 import { OnboardingService } from "../../onboarding.service";
 import { ValidationService } from "@corelib";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { SearchesService } from "../../../searches/searches.service";
 import { OnboardingStageOneUIInfoService } from "./ui/onboarding-stage-one-ui-info.service";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
+import { SpecializationsGroup } from "projects/social_platform/src/app/domain/specializations/specializations-group";
 
 @Injectable()
 export class OnboardingStageOneInfoService {
@@ -18,6 +19,7 @@ export class OnboardingStageOneInfoService {
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly validationService = inject(ValidationService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly onboardingStageOneUIInfoService = inject(OnboardingStageOneUIInfoService);
   private readonly searchesService = inject(SearchesService);
 
@@ -29,6 +31,10 @@ export class OnboardingStageOneInfoService {
   private readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting;
 
   readonly inlineSpecializations = this.searchesService.inlineSpecs;
+
+  readonly nestedSpecializations$: Observable<SpecializationsGroup[]> = this.route.data.pipe(
+    map(r => r["data"])
+  );
 
   destroy(): void {
     this.destroy$.next();

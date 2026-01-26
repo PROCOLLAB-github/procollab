@@ -1,10 +1,9 @@
 /** @format */
 
-import { Component, inject, Output, EventEmitter } from "@angular/core";
+import { Component, inject, Output, EventEmitter, Input } from "@angular/core";
 import { EditStep, ProjectStepService } from "../../../../../../api/project/project-step.service";
 import { IconComponent } from "@uilib";
 import { CommonModule } from "@angular/common";
-import { navProjectItems } from "projects/core/src/consts/navigation/nav-project-items.const";
 
 @Component({
   selector: "app-project-navigation",
@@ -14,12 +13,12 @@ import { navProjectItems } from "projects/core/src/consts/navigation/nav-project
   imports: [IconComponent, CommonModule],
 })
 export class ProjectNavigationComponent {
+  @Input() navItems: any;
   @Output() stepChange = new EventEmitter<EditStep>();
 
-  readonly navProjectItems = navProjectItems;
   private stepService = inject(ProjectStepService);
 
-  currentStep = this.stepService.getCurrentStep();
+  protected readonly currentStep = this.stepService.currentStep;
 
   onStepClick(step: EditStep): void {
     this.stepChange.emit(step);

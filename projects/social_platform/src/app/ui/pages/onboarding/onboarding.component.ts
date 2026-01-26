@@ -1,9 +1,11 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
 import { Subscription } from "rxjs";
 import { OnboardingService } from "../../../api/onboarding/onboarding.service";
+import { OnboardingInfoService } from "../../../api/onboarding/facades/onboarding-info.service";
+import { OnboardingUIInfoService } from "../../../api/onboarding/facades/stages/ui/onboarding-ui-info.service";
 
 /**
  * ОСНОВНОЙ КОМПОНЕНТ ОНБОРДИНГА
@@ -46,60 +48,29 @@ import { OnboardingService } from "../../../api/onboarding/onboarding.service";
   templateUrl: "./onboarding.component.html",
   styleUrl: "./onboarding.component.scss",
   standalone: true,
+  providers: [OnboardingInfoService, OnboardingUIInfoService],
   imports: [RouterOutlet],
 })
 export class OnboardingComponent implements OnInit, OnDestroy {
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly onboardingService: OnboardingService,
-    private readonly router: Router
-  ) {}
+  private readonly onboardingInfoService = inject(OnboardingInfoService);
+  private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
+
+  protected readonly stage = this.onboardingInfoService.stage;
+  protected readonly activeStage = this.onboardingInfoService.activeStage;
 
   ngOnInit(): void {
-    const stage$ = this.onboardingService.currentStage$.subscribe(s => {
-      if (s === null) {
-        this.router
-          .navigateByUrl("/office")
-          .then(() => console.debug("Route changed from OnboardingComponent"));
-        return;
-      }
-
-      if (this.router.url.includes("stage")) {
-        this.stage = Number.parseInt(this.router.url.split("-")[1]);
-      } else {
-        this.stage = s;
-      }
-
-      this.router
-        .navigate([`stage-${this.stage}`], { relativeTo: this.route })
-        .then(() => console.debug("Route changed from OnboardingComponent"));
-    });
-
-    this.updateStage();
-    const events$ = this.router.events.subscribe(this.updateStage.bind(this));
-
-    this.subscriptions$.push(stage$, events$);
+    this.onboardingInfoService.initializationOnboarding();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
+    this.onboardingInfoService.destroy();
   }
 
-  stage = 0;
-  activeStage = 0;
-
-  subscriptions$: Subscription[] = [];
-
   updateStage(): void {
-    this.activeStage = Number.parseInt(this.router.url.split("-")[1]);
-    this.stage = Number.parseInt(this.router.url.split("-")[1]);
+    this.onboardingInfoService.updateStage();
   }
 
   goToStep(stage: number): void {
-    if (this.stage < stage) return;
-
-    this.router
-      .navigate([`stage-${stage}`], { relativeTo: this.route })
-      .then(() => console.debug("Route changed from OnboardingComponent"));
+    this.onboardingInfoService.goToStep(stage);
   }
 }

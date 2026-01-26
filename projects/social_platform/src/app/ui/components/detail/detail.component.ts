@@ -23,8 +23,6 @@ import { ControlErrorPipe, ValidationService } from "@corelib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { AuthService } from "../../../api/auth";
 import { ProjectService } from "../../../api/project/project.service";
-import { ProgramDataService } from "@office/program/services/program-data.service";
-import { ProjectDataService } from "../../../api/project/project-data.service";
 import { ProjectAdditionalService } from "../../../api/project/project-additional.service";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { ProfileDataService } from "../../../api/profile/profile-date.service";
@@ -44,6 +42,8 @@ import { saveFile } from "@utils/helpers/export-file";
 import { calculateProfileProgress } from "@utils/calculateProgress";
 import { ApiPagination } from "../../../domain/other/api-pagination.model";
 import { Collaborator } from "../../../domain/project/collaborator.model";
+import { ProjectsDetailUIInfoService } from "../../../api/project/facades/detail/ui/projects-detail-ui.service";
+import { ProgramDetailMainUIInfoService } from "../../../api/program/facades/detail/ui/program-detail-main-ui-info.service";
 
 @Component({
   selector: "app-detail",
@@ -70,8 +70,8 @@ export class DeatilComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
   private readonly projectService = inject(ProjectService);
-  private readonly programDataService = inject(ProgramDataService);
-  private readonly projectDataService = inject(ProjectDataService);
+  private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
+  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   private readonly snackbarService = inject(SnackbarService);
   private readonly router = inject(Router);
@@ -110,7 +110,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   // Сторонние переменные для работы с роутингом или доп проверок
   backPath?: string;
-  registerDateExpired?: boolean;
+  registerDateExpired = this.programDetailMainUIInfoService.registerDateExpired;
   submissionProjectDateExpired?: boolean;
   isInProject?: boolean;
 
@@ -169,16 +169,14 @@ export class DeatilComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const listTypeSub$ = this.route.data.subscribe(data => {
       this.listType = data["listType"];
+      this.initializeBackPath();
+      this.initializeInfo();
     });
-
-    this.initializeBackPath();
 
     this.updatePageStates();
     this.location.onUrlChange(url => {
       this.updatePageStates(url);
     });
-
-    this.initializeInfo();
 
     this.subscriptions.push(listTypeSub$);
   }
@@ -500,27 +498,14 @@ export class DeatilComponent implements OnInit, OnDestroy {
 
   private initializeInfo() {
     if (this.listType === "project") {
-      const project = this.projectDataService.project;
+      const project = this.projectsDetailUIInfoService.project;
       this.info = project;
 
       this.isEditDisable = this.info()?.partnerProgram?.isSubmitted ?? false;
 
       this.isInProfileInfo();
     } else if (this.listType === "program") {
-      const program$ = this.programDataService.program$
-        .pipe(
-          filter(program => !!program),
-          tap(program => {
-            if (program) {
-              this.info.set(program);
-              this.loadAdditionalFields(program.id);
-              this.registerDateExpired = Date.now() > Date.parse(program.datetimeRegistrationEnds);
-              this.submissionProjectDateExpired =
-                Date.now() > Date.parse(program.datetimeProjectSubmissionEnds);
-            }
-          })
-        )
-        .subscribe();
+      this.info = this.programDetailMainUIInfoService.program;
 
       const profileDataSub$ = this.authService.profile.pipe(filter(user => !!user)).subscribe({
         next: user => {

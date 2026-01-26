@@ -15,7 +15,7 @@
         </form>
 
         <ul class="page__list">
-          @for (member of members; track member.id) {
+          @for (member of members(); track member.id) {
           <a [routerLink]="['/office/profile', member.id]">
             <li>
               <app-info-card type="members" [info]="member"></app-info-card>

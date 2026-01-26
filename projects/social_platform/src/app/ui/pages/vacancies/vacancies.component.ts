@@ -5,79 +5,51 @@
 
 import { Component, inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { BarComponent } from "@ui/components";
-import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
+import { Router, RouterOutlet } from "@angular/router";
 import { BackComponent } from "@uilib";
 import { SearchComponent } from "@ui/components/search/search.component";
-import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { debounceTime, distinctUntilChanged, tap } from "rxjs";
+import { ReactiveFormsModule } from "@angular/forms";
 import { VacancyFilterComponent } from "@ui/components/vacancy-filter/vacancy-filter.component";
+import { VacancyInfoService } from "../../../api/vacancy/facades/vacancy-info.service";
+import { VacancyUIInfoService } from "../../../api/vacancy/facades/ui/vacancy-ui-info.service";
 
 @Component({
   selector: "app-vacancies",
-  standalone: true,
+  templateUrl: "./vacancies.component.html",
+  styleUrl: "./vacancies.component.scss",
   imports: [
     CommonModule,
-    BarComponent,
     RouterOutlet,
     BackComponent,
     SearchComponent,
     VacancyFilterComponent,
     ReactiveFormsModule,
   ],
-  templateUrl: "./vacancies.component.html",
-  styleUrl: "./vacancies.component.scss",
+  providers: [VacancyInfoService, VacancyUIInfoService],
+  standalone: true,
 })
 export class VacanciesComponent implements OnInit {
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-  fb = inject(FormBuilder);
+  private readonly vacancyInfoService = inject(VacancyInfoService);
+  private readonly vacancyUIInfoService = inject(VacancyUIInfoService);
 
-  searchForm: FormGroup;
-
-  basePath = "/office/";
-
-  get isAll(): boolean {
-    return this.router.url.includes("/vacancies/all");
-  }
-
-  get isMy(): boolean {
-    return this.router.url.includes("/vacancies/my");
-  }
-
-  constructor() {
-    this.searchForm = this.fb.group({
-      search: [""],
-    });
-  }
+  protected readonly searchForm = this.vacancyUIInfoService.searchForm;
+  protected readonly isAll = this.vacancyUIInfoService.listType;
+  protected readonly basePath = "/office/";
 
   ngOnInit() {
-    this.searchForm
-      .get("search")
-      ?.valueChanges.pipe(
-        debounceTime(300),
-        distinctUntilChanged(),
-        tap(value => {
-          this.router.navigate([], {
-            relativeTo: this.route,
-            queryParams: { role_contains: value || null },
-            queryParamsHandling: "merge",
-          });
-        })
-      )
-      .subscribe();
+    this.vacancyInfoService.initializationSearchValueForm();
+    this.vacancyInfoService.init();
+  }
+
+  ngOnDestroy(): void {
+    this.vacancyInfoService.destroy();
   }
 
   onSearchSubmit() {
-    const value = this.searchForm.get("search")?.value;
-    this.router.navigate([], {
-      queryParams: { role_contains: value || null },
-      queryParamsHandling: "merge",
-      relativeTo: this.route,
-    });
+    this.vacancyInfoService.onSearchSubmit();
   }
 
   onSearhValueChanged(event: string) {
-    this.searchForm.get("search")?.setValue(event);
+    this.vacancyUIInfoService.applySearhValueChanged(event);
   }
 }

@@ -1,8 +1,8 @@
 <!-- @format -->
 
-@if (vacancy) {
+@if (vacancy()) {
 <div class="detail">
-  <app-back [namespace]="vacancy.role" path="/office/vacancies/all"></app-back>
+  <app-back [namespace]="vacancy()!.role" path="/office/vacancies/all"></app-back>
 </div>
 
 <div class="detail__body">

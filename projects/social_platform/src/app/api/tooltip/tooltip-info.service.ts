@@ -17,6 +17,7 @@ export class TooltipInfoService {
   readonly isHintLanguageVisible = signal<boolean>(false);
   readonly isHintAuthVisible = signal<boolean>(false);
   readonly isHintLibVisible = signal<boolean>(false);
+  readonly isHintLoginVisible = signal<boolean>(false);
 
   /** Показать подсказку */
   showTooltip(
@@ -32,7 +33,8 @@ export class TooltipInfoService {
       | "achievements"
       | "language"
       | "auth"
-      | "lib" = "base"
+      | "lib"
+      | "login" = "base"
   ): void {
     switch (type) {
       case "photo":
@@ -89,7 +91,8 @@ export class TooltipInfoService {
       | "achievements"
       | "language"
       | "auth"
-      | "lib" = "base"
+      | "lib"
+      | "login" = "base"
   ): void {
     switch (type) {
       case "photo":
@@ -130,5 +133,9 @@ export class TooltipInfoService {
         this.isTooltipVisible.set(false);
         break;
     }
+  }
+
+  toggleTooltip(): void {
+    this.isHintLoginVisible.set(!this.isHintLoginVisible());
   }
 }

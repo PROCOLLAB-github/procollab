@@ -37,6 +37,7 @@
   <main class="project">
     <form [formGroup]="projectForm" class="project__form">
       <app-project-navigation
+        [navItems]="navProjectItems"
         style="width: 100%"
         (stepChange)="navigateStep($event)"
       ></app-project-navigation>

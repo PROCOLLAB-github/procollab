@@ -9,8 +9,8 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { Router } from "@angular/router";
 import { KanbanBoardInfoService } from "../../../../../../../api/kanban/kanban-board-info.service";
 import { CreateBoardFormComponent } from "../create-board-form/create-board-form.component";
-import { ProjectDataService } from "projects/social_platform/src/app/api/project/project-data.service";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
+import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
 
 @Component({
   selector: "app-kanban-board-sidebar",
@@ -27,13 +27,13 @@ import { Project } from "projects/social_platform/src/app/domain/project/project
   standalone: true,
 })
 export class KanbanBoardSidebarComponent {
-  private readonly projectDataService = inject(ProjectDataService);
+  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly kanbanBoardInfoService = inject(KanbanBoardInfoService);
   private readonly router = inject(Router);
 
   readonly boardInfo = this.kanbanBoardInfoService.boardInfo;
   readonly isFirstBoard = this.kanbanBoardInfoService.isFirstBoard;
-  readonly projectBoardInfo = this.projectDataService.project;
+  readonly projectBoardInfo = this.projectsDetailUIInfoService.project;
 
   isContextMenuOpen = signal<boolean>(false);
   isBoardInfoOpen = signal<boolean>(false);

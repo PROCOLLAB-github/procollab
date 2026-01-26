@@ -1,20 +1,20 @@
 <!-- @format -->
 
 <section class="page">
-  @if (isAll) {
-  <div class="filter-toggle page__filter-toggle" (click)="isFilterOpen = !isFilterOpen">
+  @if (isAll()) {
+  <div class="filter-toggle page__filter-toggle" (click)="isFilterOpen.set(!isFilterOpen())">
     <span>Фильтр</span>
     <i appIcon icon="filter" appSquare="34"></i>
   </div>
   }
   <ul class="page__list" #listRoot>
-    @for (project of projects; track project.id) {
+    @for (project of projects(); track project.id) {
     <a [routerLink]="['/office/projects', project.id]">
       <li>
         <app-info-card
           [info]="project"
-          [type]="isInvites ? 'invite' : 'projects'"
-          [isSubscribed]="profileProjSubsIds?.includes(project.id)"
+          [type]="isInvites() ? 'invite' : 'projects'"
+          [isSubscribed]="profileProjSubsIds()!.includes(project.id)"
           [profileId]="project.id"
           (onAcceptingInvite)="onAcceptInvite($event)"
           (onRejectingInvite)="onRejectInvite($event)"

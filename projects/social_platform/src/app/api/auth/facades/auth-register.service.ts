@@ -1,13 +1,11 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 import { AuthService } from "../auth.service";
-import { ValidationService } from "@corelib";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
-import dayjs from "dayjs";
+import { ValidationService } from "@corelib";
 
 @Injectable()
 export class AuthRegisterService {
@@ -15,6 +13,8 @@ export class AuthRegisterService {
   private readonly router = inject(Router);
   private readonly validationService = inject(ValidationService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
+
+  private readonly registerForm = this.authUIInfoService.registerForm;
 
   readonly registerAgreement = this.authUIInfoService.registerAgreement;
   readonly ageAgreement = this.authUIInfoService.ageAgreement;
@@ -38,8 +38,12 @@ export class AuthRegisterService {
     this.destroy$.complete();
   }
 
-  onSendForm(registerForm: FormGroup): void {
-    const form = this.authUIInfoService.prepareFormValues(registerForm);
+  onSendForm(): void {
+    if (!this.validationService.getFormValidation(this.registerForm)) {
+      return;
+    }
+
+    const form = this.authUIInfoService.prepareFormValues(this.registerForm);
 
     this.registerIsSubmitting.set(true);
 

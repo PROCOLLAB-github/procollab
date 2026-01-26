@@ -1,8 +1,8 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { TokenService } from "@corelib";
+import { CommonModule } from "@angular/common";
+import { Component, inject, OnInit } from "@angular/core";
+import { AuthEmailService } from "projects/social_platform/src/app/api/auth/facades/auth-email.service";
 
 /**
  * Компонент подтверждения email адреса
@@ -21,25 +21,14 @@ import { TokenService } from "@corelib";
   selector: "app-confirm-email",
   templateUrl: "./confirm-email.component.html",
   styleUrl: "./confirm-email.component.scss",
+  providers: [AuthEmailService],
+  imports: [CommonModule],
   standalone: true,
 })
 export class ConfirmEmailComponent implements OnInit {
-  constructor(
-    private tokenService: TokenService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  private readonly authEmailService = inject(AuthEmailService);
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(queries => {
-      const { access_token: accessToken, refresh_token: refreshToken } = queries;
-      this.tokenService.memTokens({ access: accessToken, refresh: refreshToken });
-
-      if (this.tokenService.getTokens() !== null) {
-        this.router
-          .navigateByUrl("/office")
-          .then(() => console.debug("Route changed from ConfirmEmailComponent"));
-      }
-    });
+    this.authEmailService.initializationTokens();
   }
 }

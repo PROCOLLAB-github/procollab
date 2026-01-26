@@ -8,38 +8,34 @@ import { map, Subscription } from "rxjs";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
 import { VacancyService } from "projects/social_platform/src/app/api/vacancy/vacancy.service";
+import { ProjectsDetailWorkSectionInfoService } from "projects/social_platform/src/app/api/project/facades/detail/work-section/projects-detail-work-section-info.service";
+import { ProjectsDetailWorkSectionUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/work-section/ui/projects-detail-work-section-ui-info.service";
 
 @Component({
   selector: "app-work-section",
   templateUrl: "./work-section.component.html",
   styleUrl: "./work-section.component.scss",
   imports: [CommonModule, IconComponent, ButtonComponent, RouterLink],
+  providers: [ProjectsDetailWorkSectionInfoService, ProjectsDetailWorkSectionUIInfoService],
   standalone: true,
 })
 export class ProjectWorkSectionComponent implements OnInit, OnDestroy {
-  private readonly route = inject(ActivatedRoute);
-  private readonly vacancyService = inject(VacancyService);
-  private readonly subscriptions: Subscription[] = [];
+  private readonly projectsDetailWorkSectionInfoService = inject(
+    ProjectsDetailWorkSectionInfoService
+  );
+  private readonly projectsDetailWorkSectionUIInfoService = inject(
+    ProjectsDetailWorkSectionUIInfoService
+  );
 
-  vacancies: VacancyResponse[] = [];
-  projectId?: number;
+  protected readonly vacancies = this.projectsDetailWorkSectionUIInfoService.vacancies;
+  protected readonly projectId = this.projectsDetailWorkSectionInfoService.projectId;
 
   ngOnInit(): void {
-    const vacanciesSub$ = this.route.data.pipe(map(r => r["data"])).subscribe({
-      next: (responses: VacancyResponse[]) => {
-        this.vacancies = responses.filter(
-          (response: VacancyResponse) => response.isApproved === null
-        );
-      },
-    });
-
-    this.subscriptions.push(vacanciesSub$);
-
-    this.projectId = this.route.parent?.snapshot.params["projectId"];
+    this.projectsDetailWorkSectionInfoService.initializationWorkSection();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach($ => $.unsubscribe());
+    this.projectsDetailWorkSectionInfoService.destroy();
   }
 
   /**
@@ -47,10 +43,7 @@ export class ProjectWorkSectionComponent implements OnInit, OnDestroy {
    * @param responseId - ID отклика для принятия
    */
   acceptResponse(responseId: number) {
-    this.vacancyService.acceptResponse(responseId).subscribe(() => {
-      const index = this.vacancies.findIndex(el => el.id === responseId);
-      this.vacancies.splice(index, 1);
-    });
+    this.projectsDetailWorkSectionInfoService.acceptResponse(responseId);
   }
 
   /**
@@ -58,9 +51,6 @@ export class ProjectWorkSectionComponent implements OnInit, OnDestroy {
    * @param responseId - ID отклика для отклонения
    */
   rejectResponse(responseId: number) {
-    this.vacancyService.rejectResponse(responseId).subscribe(() => {
-      const index = this.vacancies.findIndex(el => el.id === responseId);
-      this.vacancies.splice(index, 1);
-    });
+    this.projectsDetailWorkSectionInfoService.rejectResponse(responseId);
   }
 }

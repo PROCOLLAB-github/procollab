@@ -1,11 +1,10 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, Output, EventEmitter } from "@angular/core";
+import { Component, inject, Input } from "@angular/core";
 import { SelectComponent, InputComponent, ButtonComponent } from "@ui/components";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
-import { ProfileEditComponent } from "../../edit.component";
 import { ProfileFormService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-form.service";
 import { ControlErrorPipe } from "@corelib";
 import { ReactiveFormsModule } from "@angular/forms";

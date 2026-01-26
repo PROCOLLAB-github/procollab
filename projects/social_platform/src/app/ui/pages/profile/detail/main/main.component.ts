@@ -30,6 +30,10 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pi
 import { UserLinksPipe } from "projects/core/src/lib/pipes/user/user-links.pipe";
 import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { ProjectDirectionCard } from "@ui/shared/project-direction-card/project-direction-card.component";
+import { ProfileDetailInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/profile-detail-info.service";
+import { ProfileDetailUIInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
+import { NewsInfoService } from "projects/social_platform/src/app/api/news/news-info.service";
 
 /**
  * Главный компонент страницы профиля пользователя
@@ -57,7 +61,6 @@ import { ProjectDirectionCard } from "@ui/shared/project-direction-card/project-
   selector: "app-profile-main",
   templateUrl: "./main.component.html",
   styleUrl: "./main.component.scss",
-  standalone: true,
   imports: [
     CommonModule,
     IconComponent,
@@ -74,96 +77,54 @@ import { ProjectDirectionCard } from "@ui/shared/project-direction-card/project-
     ProjectDirectionCard,
     ButtonComponent,
   ],
+  providers: [ProfileDetailInfoService, ProfileDetailUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
-  private readonly route = inject(ActivatedRoute);
-  private readonly authService = inject(AuthService);
-  private readonly profileNewsService = inject(ProfileNewsService);
-  private readonly profileDataService = inject(ProfileDataService);
-  private readonly cdRef = inject(ChangeDetectorRef);
+  @ViewChild("descEl") descEl?: ElementRef;
+  @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
+  @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
 
-  user?: User;
-  loggedUserId?: number;
-  isProfileEmpty?: boolean;
+  private readonly profileDetailInfoService = inject(ProfileDetailInfoService);
+  private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
+  private readonly expandService = inject(ExpandService);
+  private readonly newsInfoService = inject(NewsInfoService);
 
-  directions: DirectionItem[] = [];
+  protected readonly user = this.profileDetailUIInfoService.user;
+  protected readonly loggedUserId = this.profileDetailUIInfoService.loggedUserId;
+  protected readonly isProfileEmpty = this.profileDetailUIInfoService.isProfileEmpty;
 
-  subscriptions$: Subscription[] = [];
+  protected readonly directions = this.profileDetailUIInfoService.directions;
+  protected readonly news = this.newsInfoService.news;
+
+  protected readonly descriptionExpandable = this.expandService.descriptionExpandable;
+  protected readonly readFullDescription = this.expandService.readFullDescription;
+
+  protected readonly readAllProjects = this.expandService.readAllProjects;
+  protected readonly readAllPrograms = this.expandService.readAllPrograms;
+  protected readonly readAllAchievements = this.expandService.readAllAchievements;
+  protected readonly readAllLinks = this.expandService.readAllLinks;
+  protected readonly readAllEducation = this.expandService.readAllEducation;
+  protected readonly readAllLanguages = this.expandService.readAllLanguages;
+  protected readonly readAllWorkExperience = this.expandService.readAllWorkExperience;
+
+  protected readonly isShowModal = this.profileDetailUIInfoService.isShowModal;
+
   /**
    * Инициализация компонента
    * Загружает новости пользователя и настраивает Intersection Observer для отслеживания просмотров
    */
   ngOnInit(): void {
-    const profileDataSub$ = this.profileDataService
-      .getProfile()
-      .pipe(filter(user => !!user))
-      .subscribe({
-        next: user => {
-          if (user) {
-            this.directions = directionItemBuilder(
-              2,
-              ["навыки", "достижения"],
-              ["squiz", "medal"],
-              [user.skills, user.achievements],
-              ["array", "array"]
-            )!;
-          }
-          this.user = user as User;
-        },
-      });
-
-    const profileIdDataSub$ = this.authService.profile.subscribe({
-      next: user => {
-        this.loggedUserId = user?.id;
-      },
-    });
-
-    this.isProfileEmpty = !(
-      this.user?.firstName &&
-      this.user?.lastName &&
-      this.user?.email &&
-      this.user?.avatar &&
-      this.user?.birthday
-    );
-
-    const route$ = this.route.params
-      .pipe(
-        map(r => r["id"]),
-        concatMap(userId => this.profileNewsService.fetchNews(userId))
-      )
-      .subscribe(news => {
-        this.news.set(news.results);
-
-        setTimeout(() => {
-          const observer = new IntersectionObserver(this.onNewsInView.bind(this), {
-            root: document.querySelector(".office__body"),
-            rootMargin: "0px 0px 0px 0px",
-            threshold: 0,
-          });
-          document.querySelectorAll(".news__item").forEach(e => {
-            observer.observe(e);
-          });
-        });
-
-        setTimeout(() => {
-          this.checkDescriptionExpandable();
-          this.cdRef.detectChanges();
-        }, 200);
-      });
-    this.subscriptions$.push(profileDataSub$, profileIdDataSub$, route$);
+    this.profileDetailInfoService.initializationProfile();
   }
 
-  @ViewChild("descEl") descEl?: ElementRef;
   /**
    * Инициализация после создания представления
    * Проверяет необходимость отображения кнопки "Читать полностью" для описания профиля
    */
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.checkDescriptionExpandable();
-      this.cdRef.detectChanges();
-    }, 150);
+    this.profileDetailInfoService.initCheckDescription(this.descEl);
   }
 
   /**
@@ -171,35 +132,16 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
    * Отписывается от всех активных подписок
    */
   ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
+    this.profileDetailInfoService.destroy();
   }
-
-  descriptionExpandable = false;
-  readFullDescription = false;
-
-  readAllProjects = false;
-  readAllPrograms = false;
-  readAllAchievements = false;
-  readAllLinks = false;
-  readAllEducation = false;
-  readAllLanguages = false;
-  readAllWorkExperience = false;
-
-  isShowModal = false;
-
-  @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
-  @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
-
-  news = signal<ProfileNews[]>([]);
 
   /**
    * Добавление новой новости в профиль
    * @param news - объект с текстом и файлами новости
    */
   onAddNews(news: { text: string; files: string[] }): void {
-    this.profileNewsService.addNews(this.route.snapshot.params["id"], news).subscribe(newsRes => {
-      this.newsFormComponent?.onResetForm();
-      this.news.update(news => [newsRes, ...news]);
+    this.profileDetailInfoService.onAddNews(news).subscribe({
+      next: () => this.newsFormComponent?.onResetForm(),
     });
   }
 
@@ -208,10 +150,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param newsId - идентификатор удаляемой новости
    */
   onDeleteNews(newsId: number): void {
-    const newsIdx = this.news().findIndex(n => n.id === newsId);
-    this.news().splice(newsIdx, 1);
-
-    this.profileNewsService.delete(this.route.snapshot.params["id"], newsId).subscribe(() => {});
+    this.profileDetailInfoService.onDeleteNews(newsId);
   }
 
   /**
@@ -219,15 +158,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param newsId - идентификатор новости для лайка/дизлайка
    */
   onLike(newsId: number) {
-    const item = this.news().find(n => n.id === newsId);
-    if (!item) return;
-
-    this.profileNewsService
-      .toggleLike(this.route.snapshot.params["id"], newsId, !item.isUserLiked)
-      .subscribe(() => {
-        item.likesCount = item.isUserLiked ? item.likesCount - 1 : item.likesCount + 1;
-        item.isUserLiked = !item.isUserLiked;
-      });
+    this.profileDetailInfoService.onLike(newsId);
   }
 
   /**
@@ -236,13 +167,9 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param newsItemId - идентификатор редактируемой новости
    */
   onEditNews(news: ProfileNews, newsItemId: number) {
-    this.profileNewsService
-      .editNews(this.route.snapshot.params["id"], newsItemId, news)
-      .subscribe(resNews => {
-        const newsIdx = this.news().findIndex(n => n.id === resNews.id);
-        this.news()[newsIdx] = resNews;
-        this.newsCardComponent?.onCloseEditMode();
-      });
+    this.profileDetailInfoService.onEditNews(news, newsItemId).subscribe({
+      next: () => this.newsCardComponent?.onCloseEditMode(),
+    });
   }
 
   /**
@@ -251,11 +178,7 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param entries - массив элементов, попавших в область видимости
    */
   onNewsInView(entries: IntersectionObserverEntry[]): void {
-    const ids = entries.map(e => {
-      return Number((e.target as HTMLElement).dataset["id"]);
-    });
-
-    this.profileNewsService.readNews(Number(this.route.snapshot.params["id"]), ids).subscribe(noop);
+    this.profileDetailInfoService.onNewsInView(entries);
   }
 
   /**
@@ -265,22 +188,10 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
    * @param isExpanded - текущее состояние (раскрыто/свернуто)
    */
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    expandElement(elem, expandedClass, isExpanded);
-    this.readFullDescription = !isExpanded;
+    this.expandService.onExpand("description", elem, expandedClass, isExpanded);
   }
 
   openWorkInfoModal(): void {
-    this.isShowModal = true;
-  }
-
-  private checkDescriptionExpandable(): void {
-    const descElement = this.descEl?.nativeElement;
-
-    if (!descElement || !this.user?.aboutMe) {
-      this.descriptionExpandable = false;
-      return;
-    }
-
-    this.descriptionExpandable = descElement.scrollHeight > descElement.clientHeight;
+    this.profileDetailUIInfoService.applyOpenWorkInfoModal();
   }
 }

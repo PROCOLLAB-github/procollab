@@ -36,6 +36,8 @@ export class ChatDirectUIInfoService {
   /** Флаг процесса загрузки сообщений */
   readonly fetching = signal<boolean>(false);
 
+  readonly isAsideMobileShown = signal<boolean>(false);
+
   /**
    * Количество сообщений, загружаемых за один запрос
    */
@@ -95,5 +97,10 @@ export class ChatDirectUIInfoService {
   clearTypingTimeouts(): void {
     this.typingTimeouts.forEach(id => clearTimeout(id));
     this.typingTimeouts.clear();
+  }
+
+  /** Переключение боковой панели на мобильных устройствах */
+  onToggleMobileAside(): void {
+    this.isAsideMobileShown.set(!this.isAsideMobileShown());
   }
 }

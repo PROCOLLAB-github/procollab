@@ -7,6 +7,7 @@ import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy
 import { plainToInstance } from "class-transformer";
 import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
 import { HttpParams } from "@angular/common/http";
+import { CreateVacancyDto } from "../project/dto/create-vacancy.model";
 
 /**
  * Сервис для управления вакансиями и откликами на них
@@ -125,7 +126,7 @@ export class VacancyService {
    * @param vacancy - объект вакансии с описанием, требованиями и условиями
    * @returns Observable<Vacancy> - созданная вакансия со всеми полями
    */
-  postVacancy(projectId: number, vacancy: Vacancy): Observable<Vacancy> {
+  postVacancy(projectId: number, vacancy: CreateVacancyDto): Observable<Vacancy> {
     return this.apiService
       .post(`${this.VACANCIES_URL}/`, {
         ...vacancy,

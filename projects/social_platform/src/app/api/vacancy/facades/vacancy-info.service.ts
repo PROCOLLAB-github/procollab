@@ -1,13 +1,13 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
-import { FormGroup } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import { inject, Injectable } from "@angular/core";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import {
   concatMap,
   debounceTime,
   distinctUntilChanged,
   EMPTY,
+  filter,
   fromEvent,
   map,
   Observable,
@@ -66,7 +66,44 @@ export class VacancyInfoService {
   // --------------
 
   init(): void {
-    this.initializeListType();
+    this.setupRouteListener();
+    this.initializationSearchValueForm();
+  }
+
+  destroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  // ListType Section
+  // ----------------
+
+  updateListType(): void {
+    const segment = this.router.url.split("/").pop()?.split("?")[0];
+    const newListType = segment as "all" | "my";
+
+    if (this.listType() !== newListType) {
+      this.listType.set(newListType);
+
+      // Загружаем данные для нового типа
+      this.loadDataForCurrentType();
+    }
+  }
+
+  private setupRouteListener(): void {
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => {
+        this.updateListType();
+      });
+
+    this.updateListType();
+  }
+
+  private loadDataForCurrentType(): void {
     this.initializeListData();
 
     if (this.listType() === "all") {
@@ -79,19 +116,6 @@ export class VacancyInfoService {
     }
 
     this.vacancyUIInfoService.myModalSetup();
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  // ListType Section
-  // ----------------
-
-  initializeListType(): void {
-    const segment = this.router.url.split("/").pop()?.split("?")[0];
-    this.listType.set(segment as "all" | "my");
   }
 
   // ListItems Section

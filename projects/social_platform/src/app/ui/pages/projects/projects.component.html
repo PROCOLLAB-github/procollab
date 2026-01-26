@@ -4,16 +4,16 @@
   <div class="page__bar">
     <app-back
       namespace="проекты"
-      [path]="isDashboard ? '/office/feed' : '/office/projects/dashboard'"
+      [path]="isDashboard() ? '/office/feed' : '/office/projects/dashboard'"
     ></app-back>
 
     <div class="page__info">
-      <div class="page__outlet" [style.gap]="isDashboard ? '8px' : '20px'">
+      <div class="page__outlet" [style.gap]="isDashboard() ? '8px' : '20px'">
         <form [formGroup]="searchForm">
           <app-search formControlName="search"></app-search>
         </form>
 
-        @if(!isDashboard) {
+        @if(!isDashboard()) {
         <app-bar-new
           [links]="[
               {
@@ -63,16 +63,16 @@
         </app-button>
 
         <div class="page__left">
-          @if (isDashboard) {
+          @if (isDashboard()) {
           <div class="page__invites">
             <div class="page__invites--wrapper">
               <p class="text-body-12">мои приглашения</p>
               <i appIcon icon="send" appSquare="12"></i>
             </div>
 
-            @if (myInvites.length) {
+            @if (myInvites().length) {
             <ul class="page__invites--list">
-              @for (invite of myInvites; track invite.id) {
+              @for (invite of myInvites(); track invite.id) {
               <app-info-card
                 (onRejectingInvite)="acceptOrRejectInvite($event)"
                 (onAcceptingInvite)="acceptOrRejectInvite($event)"
@@ -87,15 +87,15 @@
             </div>
             }
           </div>
-          } @if (isMy || isDashboard) {
+          } @if (isMy() || isDashboard()) {
           <app-soon-card
             title="статистика"
             description="количество проектов, команды, эффективность"
           >
           </app-soon-card>
-          } @if (isAll) {
+          } @if (isAll()) {
           <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
-            <div class="filter__overlay" (click)="isFilterOpen = false"></div>
+            <div class="filter__overlay" (click)="isFilterOpen.set(false)"></div>
             <div class="filter__body" #filterBody>
               <div
                 class="filter__bar"

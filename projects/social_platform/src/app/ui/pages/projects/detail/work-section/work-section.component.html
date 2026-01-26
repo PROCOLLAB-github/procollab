@@ -32,7 +32,7 @@
         <i appIcon icon="phone" class="lists__icon" appSquare="12"></i>
       </div>
 
-      @if (vacancies.length) { @for (vacancy of vacancies; track vacancy.id) { } }
+      @if (vacancies().length) { @for (vacancy of vacancies(); track vacancy.id) { } }
     </div>
   </div>
 

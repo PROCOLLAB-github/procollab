@@ -20,7 +20,6 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ProjectRatingService } from "../../../project/project-rating.service";
 import { AuthService } from "../../../auth";
 import { SubscriptionService } from "../../../subsriptions/subscription.service";
-import { FormGroup } from "@angular/forms";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
@@ -63,7 +62,7 @@ export class ProgramDetailListInfoService {
         this.programDetailListUIInfoService.applyInitializationProgramListData(data);
       });
 
-    this.setupSearch(this.searchForm);
+    this.setupSearch();
 
     if (this.listType() === "projects") this.setupProfile();
 
@@ -105,8 +104,8 @@ export class ProgramDetailListInfoService {
       .then(() => console.log("Query change from ProjectsComponent"));
   }
 
-  private setupSearch(searchForm: FormGroup): void {
-    searchForm
+  private setupSearch(): void {
+    this.searchForm
       .get("search")
       ?.valueChanges.pipe(throttleTime(200), takeUntil(this.destroy$))
       .subscribe(search => {

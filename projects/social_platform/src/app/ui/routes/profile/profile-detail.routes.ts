@@ -3,7 +3,6 @@
 import { Routes } from "@angular/router";
 import { ProfileDetailResolver } from "../../pages/profile/detail/profile-detail.resolver";
 import { ProfileMainComponent } from "../../pages/profile/detail/main/main.component";
-import { ProfileProjectsComponent } from "../../pages/profile/detail/projects/projects.component";
 import { ProfileMainResolver } from "../../pages/profile/detail/main/main.resolver";
 import { ProfileNewsComponent } from "../../shared/profile-news/profile-news.component";
 import { DeatilComponent } from "@ui/components/detail/detail.component";
@@ -41,10 +40,6 @@ export const PROFILE_DETAIL_ROUTES: Routes = [
         resolve: {
           data: ProfileMainResolver,
         },
-      },
-      {
-        path: "projects",
-        component: ProfileProjectsComponent,
       },
     ],
   },

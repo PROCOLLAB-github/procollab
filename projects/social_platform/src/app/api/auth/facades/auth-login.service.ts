@@ -14,9 +14,12 @@ export class AuthLoginService {
   private readonly authService = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly validationService = inject(ValidationService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
 
   private readonly destroy$ = new Subject<void>();
+
+  private readonly loginForm = this.authUIInfoService.loginForm;
 
   // Login Component
   readonly showPassword = this.authUIInfoService.showPassword;
@@ -28,13 +31,17 @@ export class AuthLoginService {
     this.destroy$.complete();
   }
 
-  onSubmit(loginForm: LoginRequest) {
+  onSubmit() {
     const redirectType = this.route.snapshot.queryParams["redirect"];
+
+    if (!this.validationService.getFormValidation(this.loginForm) || this.loginIsSubmitting()) {
+      return;
+    }
 
     this.loginIsSubmitting.set(true);
 
     this.authService
-      .login(loginForm)
+      .login(this.loginForm.value as LoginRequest)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: res => {

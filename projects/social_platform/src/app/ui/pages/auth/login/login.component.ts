@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  inject,
   OnInit,
   signal,
 } from "@angular/core";
@@ -16,6 +17,9 @@ import { CommonModule } from "@angular/common";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { AuthUIInfoService } from "projects/social_platform/src/app/api/auth/facades/ui/auth-ui-info.service";
+import { AuthLoginService } from "projects/social_platform/src/app/api/auth/facades/auth-login.service";
+import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
 
 /**
  * Компонент входа в систему
@@ -39,7 +43,6 @@ import { AuthService } from "projects/social_platform/src/app/api/auth";
   templateUrl: "./login.component.html",
   styleUrl: "./login.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -51,78 +54,42 @@ import { AuthService } from "projects/social_platform/src/app/api/auth";
     TooltipComponent,
     ClickOutsideModule,
   ],
+  providers: [AuthLoginService, AuthUIInfoService, TooltipInfoService],
+  standalone: true,
 })
 export class LoginComponent implements OnInit {
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly authService: AuthService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly tokenService: TokenService,
-    private readonly validationService: ValidationService,
-    private readonly cdref: ChangeDetectorRef
-  ) {
-    this.loginForm = this.fb.group({
-      email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required]],
-    });
-  }
+  private readonly authLoginService = inject(AuthLoginService);
+  private readonly authUIInfoService = inject(AuthUIInfoService);
+  private readonly tokenService = inject(TokenService);
+  private readonly tooltipInfoService = inject(TooltipInfoService);
 
-  loginForm: FormGroup;
-  loginIsSubmitting = false;
+  protected readonly loginForm = this.authUIInfoService.loginForm;
+  protected readonly loginIsSubmitting = this.authUIInfoService.loginIsSubmitting;
 
-  errorWrongAuth = false;
+  protected readonly errorWrongAuth = this.authUIInfoService.errorWrongAuth;
 
-  errorMessage = ErrorMessage;
+  protected readonly errorMessage = ErrorMessage;
 
-  showPassword = false;
-  readonly isHintLoginVisible = signal<boolean>(false);
+  protected readonly showPassword = this.authUIInfoService.showPassword;
+  protected readonly isHintLoginVisible = this.tooltipInfoService.isHintLoginVisible;
 
   ngOnInit(): void {
     this.tokenService.clearTokens();
   }
 
+  ngOnDestroy(): void {
+    this.authLoginService.destroy();
+  }
+
   toggleTooltip(): void {
-    this.isHintLoginVisible.set(!this.isHintLoginVisible());
+    this.tooltipInfoService.toggleTooltip();
   }
 
   toggleShowPassword() {
-    this.showPassword = !this.showPassword;
+    this.authUIInfoService.toggleShowPassword("login");
   }
 
   onSubmit() {
-    const redirectType = this.route.snapshot.queryParams["redirect"];
-
-    if (!this.validationService.getFormValidation(this.loginForm) || this.loginIsSubmitting) {
-      return;
-    }
-
-    this.loginIsSubmitting = true;
-
-    this.authService.login(this.loginForm.value).subscribe({
-      next: res => {
-        this.tokenService.memTokens(res);
-        this.loginIsSubmitting = false;
-
-        this.cdref.detectChanges();
-
-        if (!redirectType)
-          this.router
-            .navigateByUrl("/office")
-            .then(() => console.debug("Route changed from LoginComponent"));
-        else if (redirectType === "program")
-          this.router
-            .navigateByUrl("/office/program/list")
-            .then(() => console.debug("Route changed from LoginComponent"));
-      },
-      error: error => {
-        if (error.status === 401) {
-          this.errorWrongAuth = true;
-        }
-
-        this.loginIsSubmitting = false;
-        this.cdref.detectChanges();
-      },
-    });
+    this.authLoginService.onSubmit();
   }
 }

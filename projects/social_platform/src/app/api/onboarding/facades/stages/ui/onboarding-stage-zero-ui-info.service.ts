@@ -14,12 +14,10 @@ import {
   languageNamesList,
 } from "projects/core/src/consts/lists/language-info-list.const";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { OnboardingUIInfoService } from "./onboarding-ui-info.service";
 
 @Injectable()
 export class OnboardingStageZeroUIInfoService {
   private readonly fb = inject(FormBuilder);
-  private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
 
   readonly profile = signal<User | undefined>(undefined);
 

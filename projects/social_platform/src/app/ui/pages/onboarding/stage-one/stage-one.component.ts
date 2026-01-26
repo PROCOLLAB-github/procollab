@@ -1,21 +1,19 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from "@angular/core";
-import { NonNullableFormBuilder, ReactiveFormsModule } from "@angular/forms";
-import { concatMap, map, Observable, Subscription, take } from "rxjs";
-import { ControlErrorPipe, ValidationService } from "@corelib";
-import { ActivatedRoute, Router } from "@angular/router";
-import { OnboardingService } from "../../../../api/onboarding/onboarding.service";
-import { ButtonComponent, IconComponent } from "@ui/components";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
+import { ControlErrorPipe } from "@corelib";
+import { ButtonComponent } from "@ui/components";
 import { CommonModule } from "@angular/common";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
-import { SpecializationsGroup } from "projects/social_platform/src/app/domain/specializations/specializations-group";
 import { SpecializationsGroupComponent } from "@ui/shared/specializations-group/specializations-group.component";
 import { Specialization } from "projects/social_platform/src/app/domain/specializations/specialization";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
-import { SpecializationsService } from "projects/social_platform/src/app/api/specializations/specializations.service";
+import { OnboardingStageOneUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-one-ui-info.service";
+import { OnboardingStageOneInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/onboarding-stage-one-info.service";
+import { OnboardingUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-ui-info.service";
+import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
 
 /**
  * КОМПОНЕНТ ПЕРВОГО ЭТАПА ОНБОРДИНГА
@@ -50,10 +48,8 @@ import { SpecializationsService } from "projects/social_platform/src/app/api/spe
   selector: "app-stage-one",
   templateUrl: "./stage-one.component.html",
   styleUrl: "./stage-one.component.scss",
-  standalone: true,
   imports: [
     ReactiveFormsModule,
-    IconComponent,
     ButtonComponent,
     ControlErrorPipe,
     AutoCompleteInputComponent,
@@ -61,84 +57,63 @@ import { SpecializationsService } from "projects/social_platform/src/app/api/spe
     CommonModule,
     TooltipComponent,
   ],
+  providers: [
+    OnboardingStageOneInfoService,
+    OnboardingStageOneUIInfoService,
+    OnboardingUIInfoService,
+    TooltipInfoService,
+  ],
+  standalone: true,
 })
 export class OnboardingStageOneComponent implements OnInit, OnDestroy {
-  constructor(
-    private readonly nnFb: NonNullableFormBuilder,
-    private readonly authService: AuthService,
-    private readonly onboardingService: OnboardingService,
-    private readonly validationService: ValidationService,
-    private readonly specsService: SpecializationsService,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
-    private readonly cdref: ChangeDetectorRef
-  ) {}
+  private readonly onboardingStageOneInfoService = inject(OnboardingStageOneInfoService);
+  private readonly onboardingStageOneUIInfoService = inject(OnboardingStageOneUIInfoService);
+  private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
+  private readonly tooltipInfoService = inject(TooltipInfoService);
 
-  stageForm = this.nnFb.group({
-    speciality: [""],
-  });
+  protected readonly stageForm = this.onboardingStageOneUIInfoService.stageForm;
 
-  nestedSpecializations$: Observable<SpecializationsGroup[]> = this.route.data.pipe(
-    map(r => r["data"])
-  );
+  protected readonly isHintAuthVisible = this.tooltipInfoService.isHintAuthVisible;
+  protected readonly isHintLibVisible = this.tooltipInfoService.isHintLibVisible;
 
-  isHintAuthVisible = false;
-  isHintLibVisible = false;
+  protected readonly inlineSpecializations =
+    this.onboardingStageOneInfoService.inlineSpecializations;
 
-  inlineSpecializations = signal<Specialization[]>([]);
+  protected readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting;
+  protected readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting;
 
-  stageSubmitting = signal(false);
-  skipSubmitting = signal(false);
+  // Для управления открытыми группами специализаций
+  protected readonly openSpecializationGroup =
+    this.onboardingStageOneUIInfoService.openSpecializationGroup;
 
-  errorMessage = ErrorMessage;
+  protected readonly nestedSpecializations$ =
+    this.onboardingStageOneInfoService.nestedSpecializations$;
 
-  subscriptions$ = signal<Subscription[]>([]);
+  protected readonly errorMessage = ErrorMessage;
 
   ngOnInit(): void {
-    const formValueState$ = this.onboardingService.formValue$.pipe(take(1)).subscribe(fv => {
-      this.stageForm.patchValue({
-        speciality: fv.speciality,
-      });
-    });
-
-    const formValueChange$ = this.stageForm.valueChanges.subscribe(value => {
-      this.onboardingService.setFormValue(value);
-    });
-
-    this.subscriptions$().push(formValueState$, formValueChange$);
+    this.onboardingStageOneInfoService.initializationFormValues();
   }
 
   ngAfterViewInit(): void {
-    const specialityProfile$ = this.onboardingService.formValue$.subscribe(fv => {
-      this.stageForm.patchValue({ speciality: fv.speciality });
-    });
-
-    this.cdref.detectChanges();
-
-    specialityProfile$ && this.subscriptions$().push(specialityProfile$);
+    this.onboardingStageOneInfoService.initializationSpeciality();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$().forEach($ => $.unsubscribe());
+    this.onboardingStageOneInfoService.destroy();
   }
 
-  showTooltip(type: "auth" | "lib"): void {
-    type === "auth" ? (this.isHintAuthVisible = true) : (this.isHintLibVisible = true);
+  toggleTooltip(option: "show" | "hide", type: "auth" | "lib"): void {
+    option === "show"
+      ? this.tooltipInfoService.showTooltip(type)
+      : this.tooltipInfoService.hideTooltip(type);
   }
-
-  hideTooltip(type: "auth" | "lib"): void {
-    type === "auth" ? (this.isHintAuthVisible = false) : (this.isHintLibVisible = false);
-  }
-
-  // Для управления открытыми группами специализаций
-  openSpecializationGroup: string | null = null;
 
   /**
    * Проверяет, есть ли открытые группы специализаций
    */
-  hasOpenSpecializationsGroups(): boolean {
-    return this.openSpecializationGroup !== null;
-  }
+  protected readonly hasOpenSpecializationsGroups =
+    this.onboardingStageOneUIInfoService.hasOpenSpecializationsGroups;
 
   /**
    * Обработчик переключения группы специализаций
@@ -146,7 +121,7 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
    * @param groupName - название группы
    */
   onSpecializationsGroupToggled(isOpen: boolean, groupName: string): void {
-    this.openSpecializationGroup = isOpen ? groupName : null;
+    this.onboardingStageOneUIInfoService.onSpecializationsGroupToggled(isOpen, groupName);
   }
 
   /**
@@ -154,52 +129,22 @@ export class OnboardingStageOneComponent implements OnInit, OnDestroy {
    * @param groupName - название группы для проверки
    */
   isSpecializationGroupDisabled(groupName: string): boolean {
-    return this.openSpecializationGroup !== null && this.openSpecializationGroup !== groupName;
+    return this.onboardingStageOneUIInfoService.isSpecializationGroupDisabled(groupName);
   }
 
   onSkipRegistration(): void {
-    if (!this.validationService.getFormValidation(this.stageForm)) {
-      return;
-    }
-
-    this.completeRegistration(3);
+    this.onboardingStageOneInfoService.onSkipRegistration();
   }
 
   onSubmit(): void {
-    if (!this.validationService.getFormValidation(this.stageForm)) {
-      return;
-    }
-
-    this.stageSubmitting.set(true);
-
-    this.authService
-      .saveProfile(this.stageForm.value)
-      .pipe(concatMap(() => this.authService.setOnboardingStage(2)))
-      .subscribe({
-        next: () => this.completeRegistration(2),
-        error: () => this.stageSubmitting.set(false),
-      });
+    this.onboardingStageOneInfoService.onSubmit();
   }
 
   onSelectSpec(speciality: Specialization): void {
-    this.stageForm.patchValue({ speciality: speciality.name });
+    this.onboardingStageOneInfoService.onSelectSpec(speciality);
   }
 
   onSearchSpec(query: string): void {
-    this.specsService
-      .getSpecializationsInline(query, 1000, 0)
-      .pipe(take(1))
-      .subscribe(({ results }) => {
-        this.inlineSpecializations.set(results);
-      });
-  }
-
-  private completeRegistration(stage: number): void {
-    this.skipSubmitting.set(true);
-    this.onboardingService.setFormValue(this.stageForm.value);
-    this.router.navigateByUrl(
-      stage === 2 ? "/office/onboarding/stage-2" : "/office/onboarding/stage-3"
-    );
-    this.skipSubmitting.set(false);
+    this.onboardingStageOneInfoService.onSearchSpec(query);
   }
 }

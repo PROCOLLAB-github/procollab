@@ -28,7 +28,7 @@ export class ProjectAdditionalService {
 
   private isSendingDecision = signal(false);
   private isAssignProjectToProgramError = signal(false);
-  private errorAssignProjectToProgramModalMessage = signal<{ non_field_errors: string[] } | null>(
+  readonly errorAssignProjectToProgramModalMessage = signal<{ non_field_errors: string[] } | null>(
     null
   );
 
@@ -70,13 +70,6 @@ export class ProjectAdditionalService {
    */
   public getIsAssignProjectToProgramError() {
     return this.isAssignProjectToProgramError;
-  }
-
-  /**
-   * Возвращает сообщение об ошибке привязки к программе.
-   */
-  public getErrorAssignProjectToProgramModalMessage() {
-    return this.errorAssignProjectToProgramModalMessage;
   }
 
   /**

@@ -8,12 +8,18 @@ import dayjs from "dayjs";
 import { AuthService } from "../../../auth";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { NavigationService } from "../../../paths/navigation.service";
+import { EditStep, ProjectStepService } from "../../../project/project-step.service";
+import { NavService } from "@ui/services/nav/nav.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Injectable()
 export class ProfileEditInfoService {
   private readonly profileFormService = inject(ProfileFormService);
   private readonly authService = inject(AuthService);
+  private readonly route = inject(ActivatedRoute);
   private readonly navigationService = inject(NavigationService);
+  private readonly navService = inject(NavService);
+  private readonly projectStepService = inject(ProjectStepService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -23,12 +29,14 @@ export class ProfileEditInfoService {
 
   readonly profileFormSubmitting = signal<boolean>(false);
 
+  readonly openGroupIndex = signal<number | null>(null);
+
   readonly isModalErrorSkillsChoose = signal<boolean>(false);
   readonly isModalErrorSkillChooseText = signal<string>("");
 
   private readonly typeSpecific = this.profileFormService.typeSpecific;
   private readonly achievements = this.profileFormService.achievements;
-  private readonly profileId = this.profileFormService.profileId;
+  readonly profileId = this.profileFormService.profileId;
 
   private userTypeMap: { [type: number]: string } = {
     1: "member",
@@ -40,6 +48,28 @@ export class ProfileEditInfoService {
   destroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  initializationEditInfo(): void {
+    this.navService.setNavTitle("Редактирование профиля");
+
+    // Получение текущего шага редактирования из query параметров
+    this.setupEditingStep();
+  }
+
+  private setupEditingStep(): void {
+    const stepFromUrl = this.route.snapshot.queryParams["editingStep"] as EditStep;
+    if (stepFromUrl) {
+      this.projectStepService.setStepFromRoute(stepFromUrl);
+    }
+  }
+
+  onGroupToggled(index: number, isOpen: boolean): void {
+    this.openGroupIndex.set(isOpen ? index : null);
+  }
+
+  isGroupDisabled(index: number): boolean {
+    return this.openGroupIndex() !== null && this.openGroupIndex() !== index;
   }
 
   /**

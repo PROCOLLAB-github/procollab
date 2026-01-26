@@ -2,7 +2,7 @@
 @if (project()) {
 <div class="chat-page">
   <div class="chat-page__main main">
-    @if (!messages.length) {
+    @if (!messages().length) {
     <div class="chat-page__placeholder">
       <i appIcon icon="empty-chat" appSquare="37"></i>
       <p class="text-body-12 chat-page__text">
@@ -13,9 +13,9 @@
 
     <app-chat-window
       class="main__chat"
-      [class.main__chat-visible]="!isAsideMobileShown"
-      [messages]="messages"
-      [typingPersons]="typingPersons"
+      [class.main__chat-visible]="!isAsideMobileShown()"
+      [messages]="messages()"
+      [typingPersons]="typingPersons()"
       (submit)="onSubmitMessage($event)"
       (edit)="onEditMessage($event)"
       (delete)="onDeleteMessage($event)"
@@ -23,7 +23,7 @@
     ></app-chat-window>
   </div>
 
-  <aside class="chat-page__aside" [class.chat-page__aside-visible]="isAsideMobileShown">
+  <aside class="chat-page__aside" [class.chat-page__aside-visible]="isAsideMobileShown()">
     <div class="info">
       <header class="info__header">
         <h2 class="info__title text-body-12">участники</h2>
@@ -37,7 +37,7 @@
             <span class="member__name text-body-10">
               {{ member.firstName }} {{ member.lastName }}
             </span>
-            @if (currentUserId === member.userId) {
+            @if (currentUserId() === member.userId) {
             <span class="member__i text-body-10">(вы)</span>
             }
           </a>
@@ -52,7 +52,7 @@
         <i appIcon icon="file" appSquare="12"></i>
       </div>
       <ul class="info__list">
-        @for (file of chatFiles; track $index) {
+        @for (file of chatFiles(); track $index) {
         <li class="info__item">
           <app-file-item
             [name]="file.name"

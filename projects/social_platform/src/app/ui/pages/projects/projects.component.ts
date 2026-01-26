@@ -1,20 +1,18 @@
 /** @format */
 
-import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from "@angular/core";
-import { NavService } from "@ui/services/nav/nav.service";
-import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
-import { map, Subscription } from "rxjs";
-import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { RouterOutlet } from "@angular/router";
+import { ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { BarNewComponent } from "@ui/components/bar-new/bar.component";
 import { BackComponent } from "@uilib";
 import { SoonCardComponent } from "@ui/shared/soon-card/soon-card.component";
 import { ProjectsFilterComponent } from "../../components/projects-filter/projects-filter.component";
-import { inviteToProjectMapper } from "@utils/helpers/inviteToProjectMapper";
-import { ProjectsService } from "../../../api/project/projects.service";
 import { InfoCardComponent } from "@ui/components/info-card/info-card.component";
-import { Project } from "../../../domain/project/project.model";
+import { ProjectsUIInfoService } from "../../../api/project/facades/ui/projects-ui-info.service";
+import { ProjectsInfoService } from "../../../api/project/facades/projects-info.service";
+import { SwipeService } from "../../../api/swipe/swipe.service";
 
 /**
  * Главный компонент модуля проектов
@@ -32,7 +30,6 @@ import { Project } from "../../../domain/project/project.model";
   selector: "app-projects",
   templateUrl: "./projects.component.html",
   styleUrl: "./projects.component.scss",
-  standalone: true,
   imports: [
     IconComponent,
     ReactiveFormsModule,
@@ -45,125 +42,57 @@ import { Project } from "../../../domain/project/project.model";
     ProjectsFilterComponent,
     InfoCardComponent,
   ],
+  providers: [ProjectsInfoService, ProjectsUIInfoService, SwipeService],
+  standalone: true,
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
-  constructor(
-    private readonly navService: NavService,
-    private readonly route: ActivatedRoute,
-    private readonly projectsService: ProjectsService,
-    private readonly router: Router,
-    private readonly renderer: Renderer2,
-    private readonly fb: FormBuilder
-  ) {
-    this.searchForm = this.fb.group({
-      search: [""],
-    });
-  }
-
   @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;
 
+  private readonly projectsInfoService = inject(ProjectsInfoService);
+  private readonly projectsUIInfoService = inject(ProjectsUIInfoService);
+  private readonly swipeService = inject(SwipeService);
+
   ngOnInit(): void {
-    this.navService.setNavTitle("Проекты");
-
-    this.route.data.pipe(map(r => r["data"])).subscribe({
-      next: invites => {
-        this.allInvites = inviteToProjectMapper(invites);
-        this.myInvites = inviteToProjectMapper(invites.slice(0, 1));
-      },
-    });
-
-    const searchFormSearch$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
-      this.router
-        .navigate([], {
-          queryParams: { name__contains: search },
-          relativeTo: this.route,
-          queryParamsHandling: "merge",
-        })
-        .then(() => console.debug("QueryParams changed from ProjectsComponent"));
-    });
-
-    searchFormSearch$ && this.subscriptions$.push(searchFormSearch$);
-
-    const routeUrl$ = this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.isMy = location.href.includes("/my");
-        this.isAll = location.href.includes("/all");
-        this.isSubs = location.href.includes("/subscriptions");
-        this.isInvites = location.href.includes("/invites");
-        this.isDashboard = location.href.includes("/dashboard");
-      }
-    });
-    routeUrl$ && this.subscriptions$.push(routeUrl$);
+    this.projectsInfoService.initializationProjects();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $?.unsubscribe());
+    this.projectsInfoService.destroy();
   }
 
-  searchForm: FormGroup;
+  protected readonly searchForm = this.projectsUIInfoService.searchForm;
 
-  myInvites: Project[] = [];
-  private allInvites: Project[] = [];
+  protected readonly myInvites = this.projectsUIInfoService.myInvites;
 
-  isMy = location.href.includes("/my");
-  isAll = location.href.includes("/all");
-  isSubs = location.href.includes("/subscriptions");
-  isInvites = location.href.includes("/invites");
-  isDashboard = location.href.includes("/dashboard");
+  protected readonly isMy = this.projectsInfoService.isMy;
+  protected readonly isAll = this.projectsInfoService.isAll;
+  protected readonly isSubs = this.projectsInfoService.isSubs;
+  protected readonly isInvites = this.projectsInfoService.isInvites;
+  protected readonly isDashboard = this.projectsInfoService.isDashboard;
 
-  isFilterOpen = false;
-
-  subscriptions$: Subscription[] = [];
-
-  private swipeStartY = 0;
-  private swipeThreshold = 50;
-  private isSwiping = false;
+  protected readonly isFilterOpen = this.swipeService.isFilterOpen;
 
   onSwipeStart(event: TouchEvent): void {
-    this.swipeStartY = event.touches[0].clientY;
-    this.isSwiping = true;
+    this.swipeService.onSwipeStart(event);
   }
 
   onSwipeMove(event: TouchEvent): void {
-    if (!this.isSwiping) return;
-
-    const currentY = event.touches[0].clientY;
-    const deltaY = currentY - this.swipeStartY;
-
-    const progress = Math.min(deltaY / this.swipeThreshold, 1);
-    this.renderer.setStyle(
-      this.filterBody.nativeElement,
-      "transform",
-      `translateY(${progress * 100}px)`
-    );
+    this.swipeService.onSwipeMove(event, this.filterBody);
   }
 
   onSwipeEnd(event: TouchEvent): void {
-    if (!this.isSwiping) return;
-
-    const endY = event.changedTouches[0].clientY;
-    const deltaY = endY - this.swipeStartY;
-
-    if (deltaY > this.swipeThreshold) {
-      this.closeFilter();
-    }
-
-    this.isSwiping = false;
-
-    this.renderer.setStyle(this.filterBody.nativeElement, "transform", "translateY(0)");
+    this.swipeService.onSwipeEnd(event, this.filterBody);
   }
 
   acceptOrRejectInvite(inviteId: number): void {
-    this.allInvites = this.allInvites.filter(invite => invite.inviteId !== inviteId);
-
-    this.myInvites = this.allInvites.slice(0, 1);
+    this.projectsUIInfoService.applyAcceptOrRejectInvite(inviteId);
   }
 
   closeFilter(): void {
-    this.isFilterOpen = false;
+    this.swipeService.closeFilter();
   }
 
   addProject(): void {
-    this.projectsService.addProject();
+    this.projectsInfoService.addProject();
   }
 }

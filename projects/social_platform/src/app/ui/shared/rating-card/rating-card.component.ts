@@ -37,8 +37,8 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pi
 import { HttpResponse } from "@angular/common/http";
 import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { ProjectRatingService } from "../../../api/project/project-rating.service";
-import { ProgramDataService } from "../../../api/program/program-data.service";
 import { ProjectRate } from "../../../domain/project/project-rate";
+import { ProgramDetailMainUIInfoService } from "../../../api/program/facades/detail/ui/program-detail-main-ui-info.service";
 
 /**
  * Компонент карточки оценки проекта
@@ -88,13 +88,14 @@ import { ProjectRate } from "../../../domain/project/project-rate";
     ModalComponent,
     TruncatePipe,
   ],
+  providers: [ProgramDetailMainUIInfoService],
 })
 export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public industryService: IndustryService,
     private projectRatingService: ProjectRatingService,
-    private readonly programDataService: ProgramDataService,
     private readonly authService: AuthService,
+    private readonly programDetailMainUIInfoService: ProgramDetailMainUIInfoService,
     private breakpointObserver: BreakpointObserver,
     private cdRef: ChangeDetectorRef
   ) {}
@@ -136,8 +137,8 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   isProjectCriterias = signal(0);
   ratedCount = signal(0);
 
-  readonly programDateFinished = this.programDataService.programDateFinished;
-  readonly program = this.programDataService.program;
+  readonly programDateFinished = this.programDetailMainUIInfoService.registerDateExpired;
+  readonly program = this.programDetailMainUIInfoService.program;
 
   desktopMode$: Observable<boolean> = this.breakpointObserver
     .observe("(min-width: 920px)")

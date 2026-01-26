@@ -1,10 +1,9 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { filter, interval, map, noop, Observable, Subscription } from "rxjs";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { IconComponent } from "@ui/components";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { AuthEmailService } from "projects/social_platform/src/app/api/auth/facades/auth-email.service";
+import { CommonModule } from "@angular/common";
 
 /**
  * Компонент подтверждения email адреса
@@ -23,38 +22,26 @@ import { AuthService } from "projects/social_platform/src/app/api/auth";
   selector: "app-email-verification",
   templateUrl: "./email-verification.component.html",
   styleUrl: "./email-verification.component.scss",
+  providers: [AuthEmailService],
+  imports: [CommonModule, IconComponent],
   standalone: true,
-  imports: [IconComponent],
 })
 export class EmailVerificationComponent implements OnInit, OnDestroy {
-  constructor(private route: ActivatedRoute, private readonly authService: AuthService) {}
+  private readonly authEmailService = inject(AuthEmailService);
+
+  protected readonly counter = this.authEmailService.counter;
 
   ngOnInit(): void {
-    const emailSub$ = this.route.queryParams.pipe(map(r => r["adress"])).subscribe(r => {
-      this.userEmail = r;
-    });
-    this.subscriptions$.push(emailSub$);
+    this.authEmailService.initializationEmail();
 
-    const timerSub$ = this.timer$.subscribe(noop);
-    this.subscriptions$.push(timerSub$);
+    this.authEmailService.initializationTimer();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
+    this.authEmailService.destroy();
   }
 
-  subscriptions$: Subscription[] = [];
-  userEmail?: string;
-  counter = 0;
-  timer$: Observable<number> = interval(1000).pipe(
-    filter(() => this.counter > 0),
-    map(() => this.counter--)
-  );
-
   onResend(): void {
-    if (!this.userEmail) return;
-    this.authService.resendEmail(this.userEmail).subscribe(() => {
-      this.counter = 60;
-    });
+    this.authEmailService.onResend();
   }
 }

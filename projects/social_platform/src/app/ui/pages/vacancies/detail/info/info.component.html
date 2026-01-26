@@ -1,23 +1,23 @@
 <!-- @format -->
 
-@if (vacancy) {
+@if (vacancy()) {
 <div class="vacancy">
   <div class="vacancy__split">
     <div class="vacancy__left">
-      @if (vacancy.description) {
+      @if (vacancy()!.description) {
       <div class="vacancy__content">
         <div class="lists__section">
           <p class="text-body-12 lists__title">описание вакансии</p>
           <i appIcon icon="folder" class="lists__icon" appSquare="12"></i>
         </div>
         <div class="text-body-10 about__text">
-          <p #descEl [innerHTML]="vacancy.description | parseLinks | parseBreaks"></p>
-          @if (descriptionExpandable) {
+          <p #descEl [innerHTML]="vacancy()!.description | parseLinks | parseBreaks"></p>
+          @if (descriptionExpandable()) {
           <div
             class="read-more text-body-10"
-            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+            (click)="onExpandDescription(descEl, 'expanded', readFullDescription())"
           >
-            {{ readFullDescription ? "скрыть" : "подробнее" }}
+            {{ readFullDescription() ? "скрыть" : "подробнее" }}
           </div>
           }
         </div>
@@ -25,13 +25,13 @@
       }
 
       <div #contentEl class="vacancy__content">
-        @if (vacancy.requiredSkills.length; as skillsLength) {
+        @if (vacancy()!.requiredSkills.length; as skillsLength) {
         <div class="card__skills skills">
           <div class="lists__section">
             <p class="text-body-12 lists__title">навыки</p>
             <i appIcon icon="box" class="lists__icon" appSquare="12"></i>
           </div>
-          @if (vacancy.requiredSkills; as requiredSkills) { @if (requiredSkills) {
+          @if (vacancy()!.requiredSkills; as requiredSkills) { @if (requiredSkills) {
           <ul class="skills__list">
             @for (skill of requiredSkills.slice(0, 8); track $index) {
             <app-tag
@@ -52,8 +52,8 @@
             }
           </div>
           } @if (skillsLength > 8) {
-          <div class="read-more text-body-10" (click)="readFullSkills = !readFullSkills">
-            {{ readFullSkills ? "скрыть" : "подробнее" }}
+          <div class="read-more text-body-10" (click)="readFullSkills.set(!readFullSkills())">
+            {{ readFullSkills() ? "скрыть" : "подробнее" }}
           </div>
           }
         </div>
@@ -61,7 +61,7 @@
       </div>
     </div>
 
-    @if (vacancy.project; as project) {
+    @if (vacancy()!.project; as project) {
     <div class="vacancy__right">
       <div class="vacancy__right--project">
         <app-avatar
@@ -96,7 +96,9 @@
             <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
             <p class="text-body-10">
               {{
-                vacancy.workFormat ? (vacancy.workFormat | capitalize) : "формат работы не указан"
+                vacancy()!.workFormat
+                  ? (vacancy()!.workFormat | capitalize)
+                  : "формат работы не указан"
               }}
             </p>
           </li>
@@ -105,10 +107,10 @@
             <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
             <p class="text-body-10">
               {{
-                vacancy.requiredExperience
-                  ? (vacancy.requiredExperience.toLowerCase().includes("без опыта")
+                vacancy()!.requiredExperience
+                  ? (vacancy()!.requiredExperience.toLowerCase().includes("без опыта")
                       ? ""
-                      : "опыт" + " ") + (vacancy.requiredExperience | capitalize)
+                      : "опыт" + " ") + (vacancy()!.requiredExperience | capitalize)
                   : "опыт не указан"
               }}
             </p>
@@ -117,7 +119,11 @@
           <li class="lists__item">
             <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
             <p class="text-body-10">
-              {{ vacancy.workSchedule ? (vacancy.workSchedule | capitalize) : "график не указан" }}
+              {{
+                vacancy()!.workSchedule
+                  ? (vacancy()!.workSchedule | capitalize)
+                  : "график не указан"
+              }}
             </p>
           </li>
 
@@ -125,8 +131,8 @@
             <i appIcon icon="contacts" class="lists__icon" appSquare="10"></i>
             <p class="text-body-10">
               {{
-                vacancy.salary
-                  ? (vacancy.salary | salaryTransform | capitalize) + " " + "рублей"
+                vacancy()!.salary
+                  ? (vacancy()!.salary | salaryTransform | capitalize) + " " + "рублей"
                   : "по договоренности"
               }}
             </p>
@@ -135,7 +141,7 @@
       </div>
 
       @if (project.links.length) {
-      <div class="lists project__section">
+      <div class="lists vacancy__content">
         <div class="lists__section">
           <h3 class="text-body-12 lists__title">контакты</h3>
           <i appIcon icon="phone" class="lists__icon" appSquare="12"></i>
@@ -238,7 +244,7 @@
       </div>
       }
 
-      <app-button size="big" (click)="onSubmit()" [loader]="sendFormIsSubmitting" type="submit"
+      <app-button size="big" (click)="onSubmit()" [loader]="sendFormIsSubmitting()" type="submit"
         >отправить отклик</app-button
       >
     </form>

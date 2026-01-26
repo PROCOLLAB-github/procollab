@@ -70,32 +70,12 @@ export class ChatDirectInfoService {
    *
    */
   initializationChatFiles(): void {
-    if (this.chatType === "project") {
-      // Загрузка файлов чата проекта
-      this.chatService
-        .loadProjectFiles(Number(this.route.parent?.snapshot.paramMap.get("projectId")))
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(files => {
-          this.chatFiles.set(files);
-        });
-    } else if (this.chatType === "direct") {
-      // Загрузка файлов прямого чата
-      const chatId = this.chat()?.id;
-      if (chatId) {
-        this.chatService
-          .loadDirectChatFiles(chatId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(
-            files => {
-              this.chatFiles.set(files);
-            },
-            error => {
-              // Если метод не поддерживается на сервере, логируем ошибку
-              console.warn("Failed to load direct chat files:", error);
-            }
-          );
-      }
-    }
+    this.chatService
+      .loadProjectFiles(Number(this.route.parent?.snapshot.paramMap.get("projectId")))
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(files => {
+        this.chatFiles.set(files);
+      });
   }
 
   private initializationProfile(): void {
@@ -138,7 +118,7 @@ export class ChatDirectInfoService {
           )
       : this.chatService
           .loadMessages(
-            this.getChatId(),
+            +this.getChatId(),
             this.messages().length > 0 ? this.messages().length : 0,
             this.chatDirectUIInfoService.messagesPerFetch
           )

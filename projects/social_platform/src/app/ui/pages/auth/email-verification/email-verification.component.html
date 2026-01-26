@@ -11,7 +11,7 @@
           отправили тебе письмо со ссылкой подтверждения
         </p>
       </div>
-      @if (counter > 0) {
+      @if (counter() > 0) {
       <div class="verification__text">Письмо отправлено, отправить еще раз через {{ counter }}</div>
       } @else {
       <div class="verification__action">

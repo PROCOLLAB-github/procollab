@@ -3,7 +3,7 @@
 <div
   class="page"
   #listRoot
-  [style.grid-template-columns]="listType === 'members' ? '10fr' : '8fr 2fr'"
+  [style.grid-template-columns]="listType() === 'members' ? '10fr' : '8fr 2fr'"
 >
   <div class="page__outlet">
     <div class="page__search">
@@ -12,20 +12,20 @@
       </form>
     </div>
 
-    <div class="filter-toggle page__filter-toggle" (click)="isFilterOpen = !isFilterOpen">
+    <div class="filter-toggle page__filter-toggle" (click)="isFilterOpen.set(!isFilterOpen())">
       <span>Фильтры</span>
       <i appIcon icon="filter" appSquare="34"></i>
     </div>
 
-    <ul class="page__list" [class.page__list--rating]="listType === 'rating'">
-      @for (listItem of searchedList; track listItem.id) {
+    <ul class="page__list" [class.page__list--rating]="listType() === 'rating'">
+      @for (listItem of searchedList(); track listItem.id) {
       <li class="page__item">
-        @if (listType === 'projects' || listType === 'members') {
+        @if (listType() === 'projects' || listType() === 'members') {
         <a [routerLink]="routerLink(listItem.id)">
           <app-info-card
-            [type]="listType"
+            [type]="listType()"
             [profileId]="listItem.id"
-            [isSubscribed]="profileProjSubsIds?.includes(listItem.id)"
+            [isSubscribed]="profileProjSubsIds()?.includes(listItem.id)"
             [info]="listItem"
           ></app-info-card>
         </a>
@@ -37,12 +37,12 @@
     </ul>
   </div>
 
-  @if (listType !== 'members') {
+  @if (listType() !== 'members') {
   <div class="page__create">
     <div class="page__left">
-      @if (listType === 'projects' || listType === 'rating') {
-      <div class="filter page__filter" [class.page__filter--open]="isFilterOpen">
-        <div class="filter__overlay" (click)="isFilterOpen = false"></div>
+      @if (listType() === 'projects' || listType() === 'rating') {
+      <div class="filter page__filter" [class.page__filter--open]="isFilterOpen()">
+        <div class="filter__overlay" (click)="isFilterOpen.set(false)"></div>
         <div class="filter__body" #filterBody>
           <div
             class="filter__bar"
@@ -51,12 +51,12 @@
             (touchend)="onSwipeEnd($event)"
           ></div>
           <app-program-projects-filter
-            [listType]="listType"
+            [listType]="listType()"
             (closeFilter)="closeFilter()"
             (clear)="onClearFilters()"
           ></app-program-projects-filter>
 
-          @if (listType === 'projects') {
+          @if (listType() === 'projects') {
           <div class="page__export" style="margin-top: 0">
             <app-button
               [loader]="loadingExportProjects()"

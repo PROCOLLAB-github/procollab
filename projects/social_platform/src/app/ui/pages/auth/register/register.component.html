@@ -18,7 +18,7 @@
             formControlName="firstName"
             placeholder="Иван"
           ></app-input>
-          @if ((name | controlError) && registerIsSubmitting) {
+          @if ((name | controlError) && registerIsSubmitting()) {
           <ng-container>
             @if (name | controlError: "required") {
             <div class="text-body-10 error">
@@ -43,7 +43,7 @@
             formControlName="lastName"
             placeholder="Иванов"
           ></app-input>
-          @if ((surname | controlError) && registerIsSubmitting) {
+          @if ((surname | controlError) && registerIsSubmitting()) {
           <ng-container>
             @if (surname | controlError: "required") {
             <div class="text-body-10 error">
@@ -72,7 +72,7 @@
           placeholder="25.02.2005"
           formControlName="birthday"
         ></app-input>
-        @if ((birthday | controlError) && registerIsSubmitting) {
+        @if ((birthday | controlError) && registerIsSubmitting()) {
         <ng-container>
           @if (birthday | controlError: "required") {
           <div class="text-body-10 error">
@@ -135,7 +135,7 @@
           formControlName="email"
           placeholder="example@example.com"
         ></app-input>
-        @if ((email | controlError) && registerIsSubmitting) {
+        @if ((email | controlError) && registerIsSubmitting()) {
         <ng-container>
           @if (email | controlError: "required") {
           <div class="text-body-10 error">
@@ -156,11 +156,11 @@
           size="big"
           [error]="!!(password | controlError)"
           id="passowrd"
-          [type]="showPassword ? 'text' : 'password'"
+          [type]="showPassword() ? 'text' : 'password'"
           formControlName="password"
           placeholder="GJiwoeuhbn120="
         >
-          @if(showPassword) {
+          @if(showPassword()) {
           <i
             appIcon
             icon="eye"
@@ -187,11 +187,11 @@
           class="register__repeated-password"
           [error]="!!(password | controlError)"
           id="repeatedPassword"
-          [type]="showPasswordRepeat ? 'text' : 'password'"
+          [type]="showPasswordRepeat() ? 'text' : 'password'"
           formControlName="repeatedPassword"
           placeholder="GJiwoeuhbn120="
         >
-          @if(showPasswordRepeat) {
+          @if(showPasswordRepeat()) {
           <i
             appIcon
             icon="eye"
@@ -255,9 +255,9 @@
       } }
     </ng-container>
 
-    @if (serverErrors) {
+    @if (serverErrors()) {
     <div class="text-body-10 error">
-      @for (e of serverErrors; track $index) {
+      @for (e of serverErrors(); track $index) {
       <p>{{ e }}</p>
       }
     </div>
@@ -265,7 +265,7 @@
 
     <div class="register__agreement">
       <app-checkbox [(checked)]="registerAgreement"></app-checkbox>
-      <span (click)="registerAgreement = !registerAgreement">
+      <span (click)="registerAgreement.set(!registerAgreement())">
         я прочитал соглашение и даю согласие на
         <a href="/assets/downloads/auth/shared/Политика_обработки_перс_данных_2022.docx" download
           >обработку персональных данных</a
@@ -275,19 +275,19 @@
 
     <div class="register__agreement">
       <app-checkbox [(checked)]="ageAgreement"></app-checkbox>
-      <span (click)="ageAgreement = !ageAgreement"
+      <span (click)="ageAgreement.set(!ageAgreement())"
         >нажимая на кнопку подтверждаете, что вам больше 14 лет</span
       >
     </div>
 
     <app-button
       size="big"
-      [loader]="registerIsSubmitting"
+      [loader]="registerIsSubmitting()"
       [ngStyle]="{
-        opacity: !(ageAgreement && registerAgreement) ? '0.6' : '1',
-        cursor: !(ageAgreement && registerAgreement) ? 'not-allowed' : 'pointer'
+        opacity: !(ageAgreement() && registerAgreement) ? '0.6' : '1',
+        cursor: !(ageAgreement() && registerAgreement) ? 'not-allowed' : 'pointer'
       }"
-      [disabled]="!(ageAgreement && registerAgreement)"
+      [disabled]="!(ageAgreement() && registerAgreement)"
       type="submit"
       customTypographyClass="text-body-12"
       class="auth__button"
@@ -298,12 +298,12 @@
     <p class="auth__toggle">если есть аккаунт? - <a routerLink="/auth/login">войдите</a></p>
 
     <app-modal
-      [open]="isUserCreationModalError"
-      (openChange)="isUserCreationModalError = !isUserCreationModalError"
+      [open]="isUserCreationModalError()"
+      (openChange)="isUserCreationModalError.set(!isUserCreationModalError())"
     >
       <div class="cancel">
         <i
-          (click)="isUserCreationModalError = !isUserCreationModalError"
+          (click)="isUserCreationModalError.set(!isUserCreationModalError())"
           appIcon
           icon="cross"
           class="register__cross"

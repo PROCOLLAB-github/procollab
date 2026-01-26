@@ -1,12 +1,12 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ControlErrorPipe, ValidationService } from "projects/core";
+import { Component, inject, OnInit } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
+import { ControlErrorPipe } from "projects/core";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
-import { ActivatedRoute, Router } from "@angular/router";
 import { ButtonComponent, InputComponent } from "@ui/components";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { AuthPasswordService } from "projects/social_platform/src/app/api/auth/facades/auth-password.service";
+import { AuthUIInfoService } from "projects/social_platform/src/app/api/auth/facades/ui/auth-ui-info.service";
 
 /**
  * Компонент установки нового пароля
@@ -29,59 +29,36 @@ import { AuthService } from "projects/social_platform/src/app/api/auth";
   templateUrl: "./set-password.component.html",
   styleUrl: "./set-password.component.scss",
   standalone: true,
+  providers: [AuthPasswordService, AuthUIInfoService],
   imports: [ReactiveFormsModule, InputComponent, ButtonComponent, ControlErrorPipe],
 })
 export class SetPasswordComponent implements OnInit {
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly validationService: ValidationService,
-    private readonly route: ActivatedRoute,
-    private readonly authService: AuthService,
-    private readonly router: Router
-  ) {
-    this.passwordForm = this.fb.group(
-      {
-        password: ["", [Validators.required, this.validationService.usePasswordValidator(8)]],
-        passwordRepeated: ["", [Validators.required]],
-      },
-      { validators: [validationService.useMatchValidator("password", "passwordRepeated")] }
-    );
-  }
+  private readonly authPasswordService = inject(AuthPasswordService);
+  private readonly authUIInfoService = inject(AuthUIInfoService);
 
-  passwordForm: FormGroup;
-  isSubmitting = false;
-  errorMessage = ErrorMessage;
-  errorRequest = false;
-  credsSubmitInitiated = false;
+  protected readonly passwordForm = this.authUIInfoService.passwordForm;
 
-  showPassword = false;
+  protected readonly isSubmitting = this.authUIInfoService.isSubmitting;
+  protected readonly errorRequest = this.authUIInfoService.errorRequest;
+  protected readonly credsSubmitInitiated = this.authUIInfoService.credsSubmitInitiated;
+
+  protected readonly errorMessage = ErrorMessage;
+
+  protected readonly showPassword = this.authUIInfoService.showPassword;
 
   ngOnInit(): void {
-    const token = this.route.snapshot.queryParamMap.get("token");
-    if (!token) {
-      // Handle the case where token is not present
-      console.error("Token is missing");
-    }
+    this.authPasswordService.init();
+  }
+
+  ngOnDestroy(): void {
+    this.authPasswordService.destroy();
   }
 
   toggleShowPassword() {
-    this.showPassword = !this.showPassword;
+    this.authUIInfoService.toggleShowPassword("login");
   }
 
   onSubmit() {
-    this.credsSubmitInitiated = true;
-    const token = this.route.snapshot.queryParamMap.get("token");
-
-    if (!token || !this.validationService.getFormValidation(this.passwordForm)) return;
-
-    this.authService.setPassword(this.passwordForm.value.password, token).subscribe({
-      next: () => {
-        this.router.navigateByUrl("/auth/login").then(() => console.debug("SetPasswordComponent"));
-      },
-      error: error => {
-        console.error("Error setting password:", error);
-        this.errorRequest = true;
-      },
-    });
+    this.authPasswordService.onSubmitSetPassword();
   }
 }

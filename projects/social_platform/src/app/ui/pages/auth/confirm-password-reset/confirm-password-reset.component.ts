@@ -1,9 +1,8 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { map } from "rxjs";
+import { Component, inject, OnInit } from "@angular/core";
 import { AsyncPipe } from "@angular/common";
+import { AuthPasswordService } from "projects/social_platform/src/app/api/auth/facades/auth-password.service";
 
 /**
  * Компонент подтверждения сброса пароля
@@ -21,13 +20,18 @@ import { AsyncPipe } from "@angular/common";
   selector: "app-confirm-password-reset",
   templateUrl: "./confirm-password-reset.component.html",
   styleUrl: "./confirm-password-reset.component.scss",
-  standalone: true,
+  providers: [AuthPasswordService],
   imports: [AsyncPipe],
+  standalone: true,
 })
 export class ConfirmPasswordResetComponent implements OnInit {
-  constructor(private readonly route: ActivatedRoute) {}
+  private readonly authPasswordService = inject(AuthPasswordService);
+
+  protected readonly email = this.authPasswordService.email;
 
   ngOnInit(): void {}
 
-  email = this.route.queryParams.pipe(map(r => r["email"]));
+  ngOnDestroy(): void {
+    this.authPasswordService.destroy();
+  }
 }

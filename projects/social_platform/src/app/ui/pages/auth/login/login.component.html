@@ -43,11 +43,11 @@
               size="big"
               [error]="password | controlError"
               id="password"
-              [type]="showPassword ? 'text' : 'password'"
+              [type]="showPassword() ? 'text' : 'password'"
               formControlName="password"
               placeholder="GJiwoeuhbn120="
             >
-              @if (showPassword) {
+              @if (showPassword()) {
               <i appIcon icon="eye" appSquare="18" class="icon" (click)="toggleShowPassword()"></i>
               } @else {
               <i
@@ -66,7 +66,7 @@
             </div>
             }
           </fieldset>
-          } @if (errorWrongAuth) {
+          } @if (errorWrongAuth()) {
           <div class="text-body-10 error">
             {{ errorMessage.AUTH_WRONG_AUTH }}
           </div>
@@ -74,7 +74,7 @@
 
           <app-button
             size="big"
-            [loader]="loginIsSubmitting"
+            [loader]="loginIsSubmitting()"
             class="auth__button"
             customTypographyClass="auth__button-typography"
             type="submit"

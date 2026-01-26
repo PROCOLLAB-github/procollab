@@ -1,31 +1,20 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
-import { ControlErrorPipe, ValidationService } from "projects/core";
-import { concatMap, Subscription } from "rxjs";
-import { Router } from "@angular/router";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { OnboardingService } from "../../../../api/onboarding/onboarding.service";
+import { ControlErrorPipe } from "projects/core";
 import { ButtonComponent, InputComponent, SelectComponent } from "@ui/components";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { CommonModule } from "@angular/common";
-import {
-  educationUserLevel,
-  educationUserType,
-} from "projects/core/src/consts/lists/education-info-list.const";
-import {
-  languageLevelsList,
-  languageNamesList,
-} from "projects/core/src/consts/lists/language-info-list.const";
 import { IconComponent } from "@uilib";
-import { transformYearStringToNumber } from "@utils/helpers/transformYear";
-import { yearRangeValidators } from "@utils/helpers/yearRangeValidators";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 import { generateOptionsList } from "@utils/generate-options-list";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { OnboardingStageZeroInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/onboarding-stage-zero-info.service";
+import { OnboardingStageZeroUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-zero-ui-info.service";
+import { OnboardingUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-ui-info.service";
+import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
 
 /**
  * КОМПОНЕНТ НУЛЕВОГО ЭТАПА ОНБОРДИНГА
@@ -90,200 +79,85 @@ import { AuthService } from "projects/social_platform/src/app/api/auth";
     CommonModule,
     TooltipComponent,
   ],
+  providers: [
+    OnboardingStageZeroInfoService,
+    OnboardingStageZeroUIInfoService,
+    OnboardingUIInfoService,
+    TooltipInfoService,
+  ],
 })
 export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
-  constructor(
-    public readonly authService: AuthService,
-    private readonly onboardingService: OnboardingService,
-    private readonly fb: FormBuilder,
-    private readonly validationService: ValidationService,
-    private readonly router: Router,
-    private readonly cdref: ChangeDetectorRef
-  ) {
-    this.stageForm = this.fb.group({
-      avatar: ["", [Validators.required]],
-      city: ["", [Validators.required]],
+  private readonly onboardingStageZeroInfoService = inject(OnboardingStageZeroInfoService);
+  private readonly onboardingStageZeroUIInfoService = inject(OnboardingStageZeroUIInfoService);
+  private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
+  private readonly tooltipInfoService = inject(TooltipInfoService);
 
-      education: this.fb.array([]),
-      workExperience: this.fb.array([]),
-      userLanguages: this.fb.array([]),
-      achievements: this.fb.array([]),
+  protected readonly isHintPhotoVisible = this.tooltipInfoService.isHintPhotoVisible;
+  protected readonly isHintCityVisible = this.tooltipInfoService.isHintCityVisible;
+  protected readonly isHintEducationVisible = this.tooltipInfoService.isHintEducationVisible;
+  protected readonly isHintEducationDescriptionVisible =
+    this.tooltipInfoService.isHintEducationDescriptionVisible;
+  protected readonly isHintWorkVisible = this.tooltipInfoService.isHintWorkVisible;
+  protected readonly isHintWorkNameVisible = this.tooltipInfoService.isHintWorkNameVisible;
+  protected readonly isHintWorkDescriptionVisible =
+    this.tooltipInfoService.isHintWorkDescriptionVisible;
+  protected readonly isHintAchievementsVisible = this.tooltipInfoService.isHintAchievementsVisible;
+  protected readonly isHintLanguageVisible = this.tooltipInfoService.isHintLanguageVisible;
 
-      // education
-      organizationName: [""],
-      entryYear: [null],
-      completionYear: [null],
-      description: [null],
-      educationStatus: [null],
-      educationLevel: [null],
+  protected readonly yearListEducation = generateOptionsList(55, "years");
 
-      // work
-      organizationNameWork: [""],
-      entryYearWork: [null],
-      completionYearWork: [null],
-      descriptionWork: [null],
-      jobPosition: [null],
+  protected readonly educationStatusList =
+    this.onboardingStageZeroUIInfoService.educationStatusList;
+  protected readonly educationLevelList = this.onboardingStageZeroUIInfoService.educationStatusList;
 
-      // language
-      language: [null],
-      languageLevel: [null],
-    });
-  }
+  protected readonly languageList = this.onboardingStageZeroUIInfoService.languageList;
+  protected readonly languageLevelList = this.onboardingStageZeroUIInfoService.languageLevelList;
 
-  ngOnInit(): void {
-    const profile$ = this.authService.profile.subscribe(p => {
-      this.profile = p;
-    });
+  protected readonly stageForm = this.onboardingStageZeroUIInfoService.stageForm;
+  protected readonly profile = this.onboardingStageZeroUIInfoService.profile;
+  protected readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting;
+  protected readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting;
 
-    const formValueState$ = this.onboardingService.formValue$.subscribe(fv => {
-      this.stageForm.patchValue({
-        avatar: fv.avatar,
-        city: fv.city,
-        education: fv.education,
-        workExperience: fv.workExperience,
-      });
-    });
+  protected readonly educationItems = this.onboardingStageZeroUIInfoService.educationItems;
 
-    this.subscriptions$.push(profile$, formValueState$);
-  }
+  protected readonly workItems = this.onboardingStageZeroUIInfoService.workItems;
 
-  ngAfterViewInit() {
-    const onboardingProfile$ = this.onboardingService.formValue$.subscribe(formValues => {
-      this.stageForm.patchValue({
-        avatar: formValues.avatar ?? "",
-        city: formValues.city ?? "",
-      });
+  protected readonly languageItems = this.onboardingStageZeroUIInfoService.languageItems;
 
-      this.workExperience.clear();
-      formValues.workExperience?.forEach(work => {
-        this.workExperience.push(
-          this.fb.group(
-            {
-              organizationName: work.organizationName,
-              entryYear: work.entryYear,
-              completionYear: work.completionYear,
-              description: work.description,
-              jobPosition: work.jobPosition,
-            },
-            {
-              validators: yearRangeValidators("entryYear", "completionYear"),
-            }
-          )
-        );
-      });
+  protected readonly isModalErrorYear = this.onboardingStageZeroUIInfoService.isModalErrorYear;
+  protected readonly isModalErrorYearText =
+    this.onboardingStageZeroUIInfoService.isModalErrorYearText;
 
-      this.education.clear();
-      formValues?.education?.forEach(edu => {
-        this.education.push(
-          this.fb.group(
-            {
-              organizationName: edu.organizationName,
-              entryYear: edu.entryYear,
-              completionYear: edu.completionYear,
-              description: edu.description,
-              educationStatus: edu.educationStatus,
-              educationLevel: edu.educationLevel,
-            },
-            {
-              validators: yearRangeValidators("entryYear", "completionYear"),
-            }
-          )
-        );
-      });
+  protected readonly editIndex = this.onboardingStageZeroUIInfoService.editIndex;
 
-      this.userLanguages.clear();
-      formValues.userLanguages?.forEach(lang => {
-        this.userLanguages.push(
-          this.fb.group({
-            language: lang.language,
-            languageLevel: lang.languageLevel,
-          })
-        );
-      });
+  protected readonly editEducationClick = this.onboardingStageZeroUIInfoService.editEducationClick;
+  protected readonly editWorkClick = this.onboardingStageZeroUIInfoService.editWorkClick;
+  protected readonly editLanguageClick = this.onboardingStageZeroUIInfoService.editLanguageClick;
 
-      this.cdref.detectChanges();
+  protected readonly selectedEntryYearEducationId =
+    this.onboardingStageZeroUIInfoService.selectedEntryYearEducationId;
+  protected readonly selectedComplitionYearEducationId =
+    this.onboardingStageZeroUIInfoService.selectedComplitionYearEducationId;
+  protected readonly selectedEducationStatusId =
+    this.onboardingStageZeroUIInfoService.selectedEducationStatusId;
+  protected readonly selectedEducationLevelId =
+    this.onboardingStageZeroUIInfoService.selectedEducationLevelId;
 
-      formValues.achievements?.length &&
-        formValues.achievements?.forEach(achievement =>
-          this.addAchievement(achievement.id, achievement.title, achievement.status)
-        );
-    });
-    onboardingProfile$ && this.subscriptions$.push(onboardingProfile$);
-  }
+  protected readonly selectedEntryYearWorkId =
+    this.onboardingStageZeroUIInfoService.selectedEntryYearWorkId;
+  protected readonly selectedComplitionYearWorkId =
+    this.onboardingStageZeroUIInfoService.selectedComplitionYearWorkId;
 
-  ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
-  }
+  protected readonly selectedLanguageId = this.onboardingStageZeroUIInfoService.selectedLanguageId;
+  protected readonly selectedLanguageLevelId =
+    this.onboardingStageZeroUIInfoService.selectedLanguageLevelId;
 
-  isHintPhotoVisible = false;
-  isHintCityVisible = false;
-  isHintEducationVisible = false;
-  isHintEducationDescriptionVisible = false;
-  isHintWorkVisible = false;
-  isHintWorkNameVisible = false;
-  isHintWorkDescriptionVisible = false;
-  isHintAchievementsVisible = false;
-  isHintLanguageVisible = false;
+  protected readonly errorMessage = ErrorMessage;
 
-  readonly yearListEducation = generateOptionsList(55, "years");
-
-  readonly educationStatusList = educationUserType;
-
-  readonly educationLevelList = educationUserLevel;
-
-  readonly languageList = languageNamesList;
-
-  readonly languageLevelList = languageLevelsList;
-
-  stageForm: FormGroup;
-  errorMessage = ErrorMessage;
-  profile?: User;
-  stageSubmitting = signal(false);
-  skipSubmitting = signal(false);
-
-  educationItems = signal<any[]>([]);
-
-  workItems = signal<any[]>([]);
-
-  languageItems = signal<any[]>([]);
-
-  isModalErrorYear = signal(false);
-  isModalErrorYearText = signal("");
-
-  editIndex = signal<number | null>(null);
-
-  editEducationClick = false;
-  editWorkClick = false;
-  editLanguageClick = false;
-
-  selectedEntryYearEducationId = signal<number | undefined>(undefined);
-  selectedComplitionYearEducationId = signal<number | undefined>(undefined);
-  selectedEducationStatusId = signal<number | undefined>(undefined);
-  selectedEducationLevelId = signal<number | undefined>(undefined);
-
-  selectedEntryYearWorkId = signal<number | undefined>(undefined);
-  selectedComplitionYearWorkId = signal<number | undefined>(undefined);
-
-  selectedLanguageId = signal<number | undefined>(undefined);
-  selectedLanguageLevelId = signal<number | undefined>(undefined);
-
-  subscriptions$: Subscription[] = [];
-
-  get achievements(): FormArray {
-    return this.stageForm.get("achievements") as FormArray;
-  }
-
-  get education(): FormArray {
-    return this.stageForm.get("education") as FormArray;
-  }
-
-  get workExperience(): FormArray {
-    return this.stageForm.get("workExperience") as FormArray;
-  }
-
-  get userLanguages(): FormArray {
-    return this.stageForm.get("userLanguages") as FormArray;
-  }
+  protected readonly achievements = this.onboardingStageZeroUIInfoService.achievements;
+  protected readonly education = this.onboardingStageZeroUIInfoService.education;
+  protected readonly workExperience = this.onboardingStageZeroUIInfoService.workExperience;
+  protected readonly userLanguages = this.onboardingStageZeroUIInfoService.userLanguages;
 
   get isEducationDirty(): boolean {
     const f = this.stageForm;
@@ -313,50 +187,20 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
     return ["language", "languageLevel"].some(name => f.get(name)?.dirty);
   }
 
-  showTooltip(
-    type:
-      | "photo"
-      | "city"
-      | "education"
-      | "educationDescription"
-      | "work"
-      | "workName"
-      | "workDescription"
-      | "achievements"
-      | "language"
-  ): void {
-    switch (type) {
-      case "photo":
-        this.isHintPhotoVisible = true;
-        break;
-      case "city":
-        this.isHintCityVisible = true;
-        break;
-      case "education":
-        this.isHintEducationVisible = true;
-        break;
-      case "educationDescription":
-        this.isHintEducationDescriptionVisible = true;
-        break;
-      case "work":
-        this.isHintWorkVisible = true;
-        break;
-      case "workName":
-        this.isHintWorkNameVisible = true;
-        break;
-      case "workDescription":
-        this.isHintWorkDescriptionVisible = true;
-        break;
-      case "achievements":
-        this.isHintAchievementsVisible = true;
-        break;
-      case "language":
-        this.isHintLanguageVisible = true;
-        break;
-    }
+  ngOnInit(): void {
+    this.onboardingStageZeroInfoService.initializationStageZero();
   }
 
-  hideTooltip(
+  ngAfterViewInit() {
+    this.onboardingStageZeroInfoService.initializationFormValues();
+  }
+
+  ngOnDestroy(): void {
+    this.onboardingStageZeroInfoService.destroy();
+  }
+
+  toggleTooltip(
+    option: "show" | "hide",
     type:
       | "photo"
       | "city"
@@ -368,430 +212,60 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
       | "achievements"
       | "language"
   ): void {
-    switch (type) {
-      case "photo":
-        this.isHintPhotoVisible = false;
-        break;
-      case "city":
-        this.isHintCityVisible = false;
-        break;
-      case "education":
-        this.isHintEducationVisible = false;
-        break;
-      case "educationDescription":
-        this.isHintEducationDescriptionVisible = false;
-        break;
-      case "work":
-        this.isHintWorkVisible = false;
-        break;
-      case "workName":
-        this.isHintWorkNameVisible = false;
-        break;
-      case "workDescription":
-        this.isHintWorkDescriptionVisible = false;
-        break;
-      case "achievements":
-        this.isHintAchievementsVisible = false;
-        break;
-      case "language":
-        this.isHintLanguageVisible = false;
-        break;
-    }
+    option === "show"
+      ? this.tooltipInfoService.showTooltip(type)
+      : this.tooltipInfoService.hideTooltip(type);
   }
 
   addEducation() {
-    ["organizationName", "educationStatus"].forEach(name =>
-      this.stageForm.get(name)?.clearValidators()
-    );
-    ["organizationName", "educationStatus"].forEach(name =>
-      this.stageForm.get(name)?.setValidators([Validators.required])
-    );
-    ["organizationName", "educationStatus"].forEach(name =>
-      this.stageForm.get(name)?.updateValueAndValidity()
-    );
-    ["organizationName", "educationStatus"].forEach(name =>
-      this.stageForm.get(name)?.markAsTouched()
-    );
-
-    const entryYear =
-      typeof this.stageForm.get("entryYear")?.value === "string"
-        ? +this.stageForm.get("entryYear")?.value.slice(0, 5)
-        : this.stageForm.get("entryYear")?.value;
-    const completionYear =
-      typeof this.stageForm.get("completionYear")?.value === "string"
-        ? +this.stageForm.get("completionYear")?.value.slice(0, 5)
-        : this.stageForm.get("completionYear")?.value;
-
-    if (entryYear !== null && completionYear !== null && entryYear > completionYear) {
-      this.isModalErrorYear.set(true);
-      this.isModalErrorYearText.set("Год начала обучения должен быть меньше года окончания");
-      return;
-    }
-
-    const educationItem = this.fb.group({
-      organizationName: this.stageForm.get("organizationName")?.value,
-      entryYear,
-      completionYear,
-      description: this.stageForm.get("description")?.value,
-      educationStatus: this.stageForm.get("educationStatus")?.value,
-      educationLevel: this.stageForm.get("educationLevel")?.value,
-    });
-
-    const isOrganizationValid = this.stageForm.get("organizationName")?.valid;
-    const isStatusValid = this.stageForm.get("educationStatus")?.valid;
-
-    if (isOrganizationValid && isStatusValid) {
-      if (this.editIndex() !== null) {
-        this.educationItems.update(items => {
-          const updatedItems = [...items];
-          updatedItems[this.editIndex()!] = educationItem.value;
-
-          this.education.at(this.editIndex()!).patchValue(educationItem.value);
-          return updatedItems;
-        });
-        this.editIndex.set(null);
-      } else {
-        this.educationItems.update(items => [...items, educationItem.value]);
-        this.education.push(educationItem);
-      }
-      [
-        "organizationName",
-        "entryYear",
-        "completionYear",
-        "description",
-        "educationStatus",
-        "educationLevel",
-      ].forEach(name => {
-        this.stageForm.get(name)?.reset();
-        this.stageForm.get(name)?.setValue("");
-        this.stageForm.get(name)?.clearValidators();
-        this.stageForm.get(name)?.markAsPristine();
-        this.stageForm.get(name)?.updateValueAndValidity();
-      });
-    }
-    this.editEducationClick = false;
+    this.onboardingStageZeroUIInfoService.addEducation();
   }
 
   editEducation(index: number) {
-    this.editEducationClick = true;
-    const educationItem = this.education.value[index];
-
-    this.yearListEducation.forEach(entryYearWork => {
-      if (transformYearStringToNumber(entryYearWork.value as string) === educationItem.entryYear) {
-        this.selectedEntryYearEducationId.set(entryYearWork.id);
-      }
-    });
-
-    this.yearListEducation.forEach(completionYearWork => {
-      if (
-        transformYearStringToNumber(completionYearWork.value as string) ===
-        educationItem.completionYear
-      ) {
-        this.selectedComplitionYearEducationId.set(completionYearWork.id);
-      }
-    });
-
-    this.educationLevelList.forEach(educationLevel => {
-      if (educationLevel.value === educationItem.educationLevel) {
-        this.selectedEducationLevelId.set(educationLevel.id);
-      }
-    });
-
-    this.educationStatusList.forEach(educationStatus => {
-      if (educationStatus.value === educationItem.educationStatus) {
-        this.selectedEducationStatusId.set(educationStatus.id);
-      }
-    });
-
-    this.stageForm.patchValue({
-      organizationName: educationItem.organizationName,
-      entryYear: educationItem.entryYear,
-      completionYear: educationItem.completionYear,
-      description: educationItem.description,
-      educationStatus: educationItem.educationStatus,
-      educationLevel: educationItem.educationLevel,
-    });
-    this.editIndex.set(index);
+    this.onboardingStageZeroUIInfoService.editEducation(index);
   }
 
   removeEducation(i: number) {
-    this.educationItems.update(items => items.filter((_, index) => index !== i));
-
-    this.education.removeAt(i);
+    this.onboardingStageZeroUIInfoService.removeEducation(i);
   }
 
   addWork() {
-    ["organizationNameWork", "jobPosition"].forEach(name =>
-      this.stageForm.get(name)?.clearValidators()
-    );
-    ["organizationNameWork", "jobPosition"].forEach(name =>
-      this.stageForm.get(name)?.setValidators([Validators.required])
-    );
-    ["organizationNameWork", "jobPosition"].forEach(name =>
-      this.stageForm.get(name)?.updateValueAndValidity()
-    );
-    ["organizationNameWork", "jobPosition"].forEach(name =>
-      this.stageForm.get(name)?.markAsTouched()
-    );
-
-    const entryYear =
-      typeof this.stageForm.get("entryYearWork")?.value === "string"
-        ? +this.stageForm.get("entryYearWork")?.value.slice(0, 5)
-        : this.stageForm.get("entryYearWork")?.value;
-    const completionYear =
-      typeof this.stageForm.get("completionYearWork")?.value === "string"
-        ? +this.stageForm.get("completionYearWork")?.value.slice(0, 5)
-        : this.stageForm.get("completionYearWork")?.value;
-
-    if (entryYear !== null && completionYear !== null && entryYear > completionYear) {
-      this.isModalErrorYear.set(true);
-      this.isModalErrorYearText.set("Год начала работы должен быть меньше года окончания");
-      return;
-    }
-
-    const workItem = this.fb.group({
-      organizationName: this.stageForm.get("organizationNameWork")?.value,
-      entryYear,
-      completionYear,
-      description: this.stageForm.get("descriptionWork")?.value,
-      jobPosition: this.stageForm.get("jobPosition")?.value,
-    });
-
-    const isOrganizationValid = this.stageForm.get("organizationNameWork")?.valid;
-    const isPositionValid = this.stageForm.get("jobPosition")?.valid;
-
-    if (isOrganizationValid && isPositionValid) {
-      if (this.editIndex() !== null) {
-        this.workItems.update(items => {
-          const updatedItems = [...items];
-          updatedItems[this.editIndex()!] = workItem.value;
-
-          this.workExperience.at(this.editIndex()!).patchValue(workItem.value);
-          return updatedItems;
-        });
-        this.editIndex.set(null);
-      } else {
-        this.workItems.update(items => [...items, workItem.value]);
-        this.workExperience.push(workItem);
-      }
-      [
-        "organizationNameWork",
-        "entryYearWork",
-        "completionYearWork",
-        "descriptionWork",
-        "jobPosition",
-      ].forEach(name => {
-        this.stageForm.get(name)?.reset();
-        this.stageForm.get(name)?.setValue("");
-        this.stageForm.get(name)?.clearValidators();
-        this.stageForm.get(name)?.markAsPristine();
-        this.stageForm.get(name)?.updateValueAndValidity();
-      });
-    }
-    this.editWorkClick = false;
+    this.onboardingStageZeroUIInfoService.addWork();
   }
 
   editWork(index: number) {
-    this.editWorkClick = true;
-    const workItem = this.workExperience.value[index];
-
-    if (workItem) {
-      this.yearListEducation.forEach(entryYearWork => {
-        if (
-          transformYearStringToNumber(entryYearWork.value as string) === workItem.entryYearWork ||
-          transformYearStringToNumber(entryYearWork.value as string) === workItem.entryYear
-        ) {
-          this.selectedEntryYearWorkId.set(entryYearWork.id);
-        }
-      });
-
-      this.yearListEducation.forEach(complitionYearWork => {
-        if (
-          transformYearStringToNumber(complitionYearWork.value as string) ===
-            workItem.completionYearWork ||
-          transformYearStringToNumber(complitionYearWork.value as string) ===
-            workItem.completionYear
-        ) {
-          this.selectedComplitionYearWorkId.set(complitionYearWork.id);
-        }
-      });
-
-      this.stageForm.patchValue({
-        organizationNameWork: workItem.organization || workItem.organizationName,
-        entryYearWork: workItem.entryYearWork || workItem.entryYear,
-        completionYearWork: workItem.completionYearWork || workItem.completionYear,
-        descriptionWork: workItem.descriptionWork || workItem.description,
-        jobPosition: workItem.jobPosition,
-      });
-      this.editIndex.set(index);
-    }
+    this.onboardingStageZeroUIInfoService.editWork(index);
   }
 
   removeWork(i: number) {
-    this.workItems.update(items => items.filter((_, index) => index !== i));
-
-    this.workExperience.removeAt(i);
+    this.onboardingStageZeroUIInfoService.removeWork(i);
   }
 
   addLanguage() {
-    const languageValue = this.stageForm.get("language")?.value;
-    const languageLevelValue = this.stageForm.get("languageLevel")?.value;
-
-    ["language", "languageLevel"].forEach(name => {
-      this.stageForm.get(name)?.clearValidators();
-    });
-
-    if ((languageValue && !languageLevelValue) || (!languageValue && languageLevelValue)) {
-      ["language", "languageLevel"].forEach(name => {
-        this.stageForm.get(name)?.setValidators([Validators.required]);
-      });
-    }
-
-    ["language", "languageLevel"].forEach(name => {
-      this.stageForm.get(name)?.updateValueAndValidity();
-      this.stageForm.get(name)?.markAsTouched();
-    });
-
-    const isLanguageValid = this.stageForm.get("language")?.valid;
-    const isLanguageLevelValid = this.stageForm.get("languageLevel")?.valid;
-
-    if (!isLanguageValid || !isLanguageLevelValid) {
-      return;
-    }
-
-    const languageItem = this.fb.group({
-      language: languageValue,
-      languageLevel: languageLevelValue,
-    });
-
-    if (languageValue && languageLevelValue) {
-      if (this.editIndex() !== null) {
-        this.languageItems.update(items => {
-          const updatedItems = [...items];
-          updatedItems[this.editIndex()!] = languageItem.value;
-
-          this.userLanguages.at(this.editIndex()!).patchValue(languageItem.value);
-          return updatedItems;
-        });
-        this.editIndex.set(null);
-      } else {
-        this.languageItems.update(items => [...items, languageItem.value]);
-        this.userLanguages.push(languageItem);
-      }
-      ["language", "languageLevel"].forEach(name => {
-        this.stageForm.get(name)?.reset();
-        this.stageForm.get(name)?.setValue(null);
-        this.stageForm.get(name)?.clearValidators();
-        this.stageForm.get(name)?.markAsPristine();
-        this.stageForm.get(name)?.updateValueAndValidity();
-      });
-
-      this.editLanguageClick = false;
-    }
+    this.onboardingStageZeroUIInfoService.addLanguage();
   }
 
   editLanguage(index: number) {
-    this.editLanguageClick = true;
-    const languageItem = this.userLanguages.value[index];
-
-    this.languageList.forEach(language => {
-      if (language.value === languageItem.language) {
-        this.selectedLanguageId.set(language.id);
-      }
-    });
-
-    this.languageLevelList.forEach(languageLevel => {
-      if (languageLevel.value === languageItem.languageLevel) {
-        this.selectedLanguageLevelId.set(languageLevel.id);
-      }
-    });
-
-    this.stageForm.patchValue({
-      language: languageItem.language,
-      languageLevel: languageItem.languageLevel,
-    });
-
-    this.editIndex.set(index);
+    this.onboardingStageZeroUIInfoService.editLanguage(index);
   }
 
   removeLanguage(i: number) {
-    this.languageItems.update(items => items.filter((_, index) => index !== i));
-
-    this.userLanguages.removeAt(i);
+    this.onboardingStageZeroUIInfoService.removeLanguage(i);
   }
 
   addAchievement(id?: number, title?: string, status?: string): void {
-    this.achievements.push(
-      this.fb.group({
-        title: [title ?? "", [Validators.required]],
-        status: [status ?? "", [Validators.required]],
-        id: [id],
-      })
-    );
+    this.onboardingStageZeroUIInfoService.addAchievement(id, title, status);
   }
 
   removeAchievement(i: number): void {
-    this.achievements.removeAt(i);
+    this.onboardingStageZeroUIInfoService.removeAchievement(i);
   }
 
   onSkipRegistration(): void {
-    if (!this.validationService.getFormValidation(this.stageForm)) {
-      return;
-    }
-
-    const onboardingSkipInfo = {
-      avatar: this.stageForm.get("avatar")?.value,
-      city: this.stageForm.get("city")?.value,
-    };
-
-    this.skipSubmitting.set(true);
-    this.authService.saveProfile(onboardingSkipInfo).subscribe({
-      next: () => this.completeRegistration(3),
-      error: error => {
-        this.skipSubmitting.set(false);
-        this.isModalErrorYear.set(true);
-        this.isModalErrorYearText.set(error.error?.message || "Ошибка сохранения");
-      },
-    });
+    this.onboardingStageZeroInfoService.onSkipRegistration();
   }
 
   onSubmit(): void {
-    if (!this.validationService.getFormValidation(this.stageForm)) {
-      this.achievements.markAllAsTouched();
-      return;
-    }
-
-    const newStageForm = {
-      avatar: this.stageForm.get("avatar")?.value,
-      city: this.stageForm.get("city")?.value,
-      education: this.education.value,
-      workExperience: this.workExperience.value,
-      userLanguages: this.userLanguages.value,
-      achievements: this.achievements.value,
-    };
-
-    this.stageSubmitting.set(true);
-    this.authService
-      .saveProfile(newStageForm)
-      .pipe(concatMap(() => this.authService.setOnboardingStage(1)))
-      .subscribe({
-        next: () => this.completeRegistration(1),
-        error: error => {
-          this.stageSubmitting.set(false);
-          this.isModalErrorYear.set(true);
-          if (error.error.language) {
-            this.isModalErrorYearText.set(error.error.language);
-          }
-        },
-      });
-  }
-
-  private completeRegistration(stage: number): void {
-    this.skipSubmitting.set(true);
-    this.onboardingService.setFormValue(this.stageForm.value);
-    this.router.navigateByUrl(
-      stage === 1 ? "/office/onboarding/stage-1" : "/office/onboarding/stage-3"
-    );
-    this.skipSubmitting.set(false);
+    this.onboardingStageZeroInfoService.onSubmit();
   }
 }

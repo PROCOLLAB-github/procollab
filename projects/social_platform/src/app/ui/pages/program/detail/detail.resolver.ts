@@ -2,7 +2,7 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { ProgramDataService } from "projects/social_platform/src/app/api/program/program-data.service";
+import { ProgramDetailMainUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
 import { Program } from "projects/social_platform/src/app/domain/program/program.model";
 import { tap } from "rxjs";
@@ -39,9 +39,9 @@ import { tap } from "rxjs";
  */
 export const ProgramDetailResolver: ResolveFn<Program> = (route: ActivatedRouteSnapshot) => {
   const programService = inject(ProgramService);
-  const programDataService = inject(ProgramDataService);
+  const programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
 
   return programService
     .getOne(route.params["programId"])
-    .pipe(tap(program => programDataService.setProgram(program)));
+    .pipe(tap(program => programDetailMainUIInfoService.applyFormatingProgramData(program)));
 };

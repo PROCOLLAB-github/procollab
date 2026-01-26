@@ -1,12 +1,11 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { concatMap, Subscription, take } from "rxjs";
-import { Router } from "@angular/router";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ButtonComponent } from "@ui/components";
 import { UserTypeCardComponent } from "@ui/shared/user-type-card/user-type-card.component";
-import { OnboardingService } from "projects/social_platform/src/app/api/onboarding/onboarding.service";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { OnboardingStageThreeUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-three-ui-info.service";
+import { OnboardingStageThreeInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/onboarding-stage-three-info.service";
+import { OnboardingUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-ui-info.service";
 
 /**
  * КОМПОНЕНТ ТРЕТЬЕГО ЭТАПА ОНБОРДИНГА
@@ -37,53 +36,36 @@ import { AuthService } from "projects/social_platform/src/app/api/auth";
   selector: "app-stage-three",
   templateUrl: "./stage-three.component.html",
   styleUrl: "./stage-three.component.scss",
-  standalone: true,
   imports: [UserTypeCardComponent, ButtonComponent],
+  providers: [
+    OnboardingStageThreeInfoService,
+    OnboardingStageThreeUIInfoService,
+    OnboardingUIInfoService,
+  ],
+  standalone: true,
 })
 export class OnboardingStageThreeComponent implements OnInit, OnDestroy {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly onboardingService: OnboardingService,
-    private readonly router: Router
-  ) {}
+  private readonly onboardingStageThreeInfoService = inject(OnboardingStageThreeInfoService);
+  private readonly onboardingStageThreeUIInfoService = inject(OnboardingStageThreeUIInfoService);
+  private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
+
+  protected readonly userRole = this.onboardingStageThreeUIInfoService.userRole;
+  protected readonly stageTouched = this.onboardingUIInfoService.stageTouched;
+  protected readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting;
 
   ngOnInit(): void {
-    const formValue$ = this.onboardingService.formValue$.pipe(take(1)).subscribe(fv => {
-      this.userRole = fv.userType ? fv.userType : -1;
-    });
-
-    this.subscriptions$.push(formValue$);
+    this.onboardingStageThreeInfoService.initializationFormValues();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
+    this.onboardingStageThreeInfoService.destroy();
   }
 
-  userRole!: number;
-  stageTouched = false;
-  stageSubmitting = false;
-  subscriptions$: Subscription[] = [];
-
   onSetRole(role: number) {
-    this.userRole = role;
-    this.onboardingService.setFormValue({ userType: role });
+    this.onboardingStageThreeUIInfoService.applySetRole(role);
   }
 
   onSubmit() {
-    if (this.userRole === -1) {
-      this.stageTouched = true;
-      return;
-    }
-
-    this.stageSubmitting = true;
-
-    this.authService
-      .saveProfile({ userType: this.userRole })
-      .pipe(concatMap(() => this.authService.setOnboardingStage(null)))
-      .subscribe(() => {
-        this.router
-          .navigateByUrl("/office")
-          .then(() => console.debug("Route changed from OnboardingStageTwo"));
-      });
+    this.onboardingStageThreeInfoService.onSubmit();
   }
 }

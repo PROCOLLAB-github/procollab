@@ -43,7 +43,7 @@ export class InfoCardComponent {
   private readonly router = inject(Router);
 
   @Input() info?: any;
-  @Input() type: "invite" | "projects" | "members" = "projects";
+  @Input() type: "invite" | "projects" | "members" | "rating" = "projects";
   @Input() appereance: "my" | "subs" | "base" | "empty" = "base";
   @Input() section: "projects" | "subscriptions" | "other" = "projects";
   @Input() canDelete?: boolean | null = false;

@@ -4,9 +4,9 @@ import { computed, inject, Injectable, signal } from "@angular/core";
 import { TaskDetail } from "../../domain/kanban/task.model";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { filter, Observable, of, Subject } from "rxjs";
-import { ProjectDataService } from "../project/project-data.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { ProjectsDetailUIInfoService } from "../project/facades/detail/ui/projects-detail-ui.service";
 
 @Injectable({
   providedIn: "root",
@@ -58,7 +58,7 @@ export class KanbanBoardDetailInfoService {
   readonly currentUser = signal<User | null>(null);
 
   private readonly authService = inject(AuthService);
-  private readonly projectDataService = inject(ProjectDataService);
+  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly router = inject(Router);
   readonly route = inject(ActivatedRoute);
 
@@ -74,8 +74,8 @@ export class KanbanBoardDetailInfoService {
     this.taskDetail.set(detail);
   }
 
-  leaderId = this.projectDataService.leaderId;
-  collaborators = this.projectDataService.collaborators;
+  leaderId = this.projectsDetailUIInfoService.leaderId;
+  collaborators = this.projectsDetailUIInfoService.collaborators;
 
   isLeader = computed(() => {
     const user = this.currentUser();

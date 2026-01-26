@@ -58,8 +58,8 @@ import { TagDto } from "../../../../../../../../api/kanban/dto/tag.model.dto";
 import { PerformerDto } from "../../../../../../../../api/kanban/dto/performer.model.dto";
 import { KanbanBoardDetailInfoService } from "../../../../../../../../api/kanban/kanban-board-detail-info.service";
 import { SkillsService } from "projects/social_platform/src/app/api/skills/skills.service";
-import { ProjectDataService } from "projects/social_platform/src/app/api/project/project-data.service";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
+import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
 
 @Component({
   selector: "app-task-detail",
@@ -102,7 +102,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly skillsService = inject(SkillsService);
   private readonly kanbanBoardService = inject(KanbanBoardService);
   private readonly kanbanBoardDetailInfoService = inject(KanbanBoardDetailInfoService);
-  private readonly projectDataService = inject(ProjectDataService);
+  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly fileService = inject(FileService);
   private readonly snackbarService = inject(SnackbarService);
   private readonly validationService = inject(ValidationService);
@@ -227,8 +227,8 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly taskDetailInfo = this.kanbanBoardDetailInfoService.taskDetail;
   readonly leaderId = this.kanbanBoardDetailInfoService.leaderId;
-  readonly collaborators = this.projectDataService.collaborators;
-  readonly goals = this.projectDataService.goals;
+  readonly collaborators = this.projectsDetailUIInfoService.collaborators;
+  readonly goals = this.projectsDetailUIInfoService.goals;
   readonly isLeaderLeaveComment = this.kanbanBoardDetailInfoService.isLeaderLeaveComment;
   readonly isLeader = this.kanbanBoardDetailInfoService.isLeader;
   readonly isPerformer = this.kanbanBoardDetailInfoService.isPerformer;

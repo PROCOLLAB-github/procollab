@@ -1,12 +1,12 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Component, inject, OnInit } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
-import { ControlErrorPipe, ValidationService } from "projects/core";
-import { Router } from "@angular/router";
+import { ControlErrorPipe } from "projects/core";
 import { ButtonComponent, InputComponent } from "@ui/components";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { AuthUIInfoService } from "projects/social_platform/src/app/api/auth/facades/ui/auth-ui-info.service";
+import { AuthPasswordService } from "projects/social_platform/src/app/api/auth/facades/auth-password.service";
 
 /**
  * Компонент запроса сброса пароля
@@ -27,51 +27,26 @@ import { AuthService } from "projects/social_platform/src/app/api/auth";
   templateUrl: "./reset-password.component.html",
   styleUrl: "./reset-password.component.scss",
   standalone: true,
+  providers: [AuthPasswordService, AuthUIInfoService],
   imports: [ReactiveFormsModule, InputComponent, ButtonComponent, ControlErrorPipe],
 })
 export class ResetPasswordComponent implements OnInit {
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly authService: AuthService,
-    private readonly validationService: ValidationService,
-    private readonly router: Router
-  ) {
-    this.resetForm = this.fb.group({
-      email: ["", [Validators.required, Validators.email]],
-    });
-  }
+  private readonly authUIInfoService = inject(AuthUIInfoService);
+  private readonly authPasswordService = inject(AuthPasswordService);
 
   ngOnInit(): void {}
 
-  resetForm: FormGroup;
-  isSubmitting = false;
+  ngOnDestroy(): void {
+    this.authPasswordService.destroy();
+  }
 
-  errorMessage = ErrorMessage;
-  errorServer = false;
+  protected readonly resetForm = this.authUIInfoService.resetForm;
+  protected readonly isSubmitting = this.authUIInfoService.isSubmitting;
+  protected readonly errorServer = this.authUIInfoService.errorServer;
+
+  protected readonly errorMessage = ErrorMessage;
 
   onSubmit(): void {
-    if (!this.validationService.getFormValidation(this.resetForm)) return;
-
-    this.errorServer = false;
-    this.isSubmitting = true;
-
-    this.authService.resetPassword(this.resetForm.value.email).subscribe({
-      next: () => {
-        this.router
-          .navigate(["/auth/reset_password/confirm"], {
-            queryParams: { email: this.resetForm.value.email },
-          })
-          .then(() => console.debug("ResetPasswordComponent"));
-      },
-      error: () => {
-        this.errorServer = true;
-        this.isSubmitting = false;
-
-        this.resetForm.reset();
-      },
-      complete: () => {
-        this.isSubmitting = false;
-      },
-    });
+    this.authPasswordService.onSubmitResetPassword();
   }
 }

@@ -71,9 +71,8 @@ export class ProjectAdditionalStepComponent implements OnInit {
     return this.projectAdditionalService.getIsAssignProjectToProgramError();
   }
 
-  get errorAssignProjectToProgramModalMessage() {
-    return this.projectAdditionalService.getErrorAssignProjectToProgramModalMessage();
-  }
+  protected readonly errorAssignProjectToProgramModalMessage =
+    this.projectAdditionalService.errorAssignProjectToProgramModalMessage;
 
   /** Наличие подсказки */
   haveHint = false;

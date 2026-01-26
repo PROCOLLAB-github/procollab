@@ -4,24 +4,27 @@ import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
 import { Subject, takeUntil } from "rxjs";
-import { FormGroup } from "@angular/forms";
+import { ProgramMainUIInfoService } from "./ui/program-main-ui-info.service";
 
 @Injectable()
 export class ProgramInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly navService = inject(NavService);
   private readonly router = inject(Router);
+  private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
 
   private readonly destroy$ = new Subject<void>();
 
-  initializationPrograms(searchForm: FormGroup): void {
+  private readonly searchForm = this.programMainUIInfoService.searchForm;
+
+  initializationPrograms(): void {
     this.navService.setNavTitle("Программы");
 
-    this.initilizationSearchValue(searchForm);
+    this.initilizationSearchValue();
   }
 
-  private initilizationSearchValue(searchForm: FormGroup): void {
-    searchForm
+  private initilizationSearchValue(): void {
+    this.searchForm
       .get("search")
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(search => {

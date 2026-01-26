@@ -56,6 +56,7 @@ import { Resource } from "projects/social_platform/src/app/domain/project/resour
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { Partner } from "projects/social_platform/src/app/domain/project/partner.model";
 import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
+import { navProjectItems } from "projects/core/src/consts/navigation/nav-project-items.const";
 
 /**
  * Компонент редактирования проекта
@@ -124,6 +125,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     private readonly projectGoalService: ProjectGoalService
   ) {}
 
+  protected readonly navProjectItems = navProjectItems;
+
   // Получаем форму проекта из сервиса
   get projectForm(): FormGroup {
     return this.projectFormService.getForm();
@@ -163,9 +166,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.projectAdditionalService.getIsAssignProjectToProgramError()();
   }
 
-  get errorAssignProjectToProgramModalMessage() {
-    return this.projectAdditionalService.getErrorAssignProjectToProgramModalMessage();
-  }
+  protected readonly errorAssignProjectToProgramModalMessage =
+    this.projectAdditionalService.errorAssignProjectToProgramModalMessage;
 
   // Методы для управления состоянием ошибок через сервис
   setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
@@ -229,7 +231,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Текущий шаг редактирования
   get editingStep(): EditStep {
-    return this.projectStepService.getCurrentStep()();
+    return this.projectStepService.currentStep();
   }
 
   get hasOpenSkillsGroups(): boolean {

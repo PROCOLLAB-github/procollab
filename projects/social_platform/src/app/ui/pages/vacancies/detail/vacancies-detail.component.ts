@@ -7,6 +7,8 @@ import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy
 import { BarComponent } from "@ui/components";
 import { map, Subscription } from "rxjs";
 import { BackComponent } from "@uilib";
+import { VacancyDetailInfoService } from "projects/social_platform/src/app/api/vacancy/facades/vacancy-detail-info.service";
+import { VacancyDetailUIInfoService } from "projects/social_platform/src/app/api/vacancy/facades/ui/vacancy-detail-ui-info.service";
 
 /**
  * Компонент детального просмотра вакансии
@@ -29,27 +31,23 @@ import { BackComponent } from "@uilib";
  */
 @Component({
   selector: "app-vacancies-detail",
-  standalone: true,
-  imports: [CommonModule, BarComponent, RouterOutlet, BackComponent],
   templateUrl: "./vacancies-detail.component.html",
   styleUrl: "./vacancies-detail.component.scss",
+  imports: [CommonModule, BarComponent, RouterOutlet, BackComponent],
+  providers: [VacancyDetailInfoService, VacancyDetailUIInfoService],
+  standalone: true,
 })
 export class VacanciesDetailComponent implements OnInit, OnDestroy {
-  route = inject(ActivatedRoute);
+  private readonly vacancyDetailInfoService = inject(VacancyDetailInfoService);
+  private readonly vacancyDetailUIInfoService = inject(VacancyDetailUIInfoService);
 
-  subscriptions$: Subscription[] = [];
-
-  vacancy?: Vacancy;
+  protected readonly vacancy = this.vacancyDetailUIInfoService.vacancy;
 
   ngOnInit(): void {
-    const vacancySub$ = this.route.data.pipe(map(r => r["data"])).subscribe(vacancy => {
-      this.vacancy = vacancy;
-    });
-
-    vacancySub$ && this.subscriptions$.push(vacancySub$);
+    this.vacancyDetailInfoService.initializeDetailInfo();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
+    this.vacancyDetailInfoService.destroy();
   }
 }

@@ -1,11 +1,8 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, signal } from "@angular/core";
-import { NonNullableFormBuilder, ReactiveFormsModule } from "@angular/forms";
-import { concatMap, map, Observable, Subscription, take } from "rxjs";
-import { ControlErrorPipe, ValidationService } from "@corelib";
-import { ActivatedRoute, Router } from "@angular/router";
-import { OnboardingService } from "../../../../api/onboarding/onboarding.service";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
+import { ControlErrorPipe } from "@corelib";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { CommonModule } from "@angular/common";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
@@ -14,9 +11,11 @@ import { SkillsBasketComponent } from "@ui/shared/skills-basket/skills-basket.co
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 import { SkillsService } from "projects/social_platform/src/app/api/skills/skills.service";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
-import { SkillsGroup } from "projects/social_platform/src/app/domain/skills/skills-group";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
+import { OnboardingUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-ui-info.service";
+import { OnboardingStageTwoUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-two-ui-info.service";
+import { OnboardingStageTwoInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/onboarding-stage-two-info.service";
+import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
 
 /**
  * КОМПОНЕНТ ВТОРОГО ЭТАПА ОНБОРДИНГА
@@ -60,7 +59,6 @@ import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
   selector: "app-stage-two",
   templateUrl: "./stage-two.component.html",
   styleUrl: "./stage-two.component.scss",
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -73,47 +71,43 @@ import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
     SkillsBasketComponent,
     TooltipComponent,
   ],
+  providers: [
+    OnboardingStageTwoInfoService,
+    OnboardingStageTwoUIInfoService,
+    OnboardingUIInfoService,
+    TooltipInfoService,
+  ],
+  standalone: true,
 })
 export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
-  constructor(
-    private readonly nnFb: NonNullableFormBuilder,
-    private readonly authService: AuthService,
-    private readonly onboardingService: OnboardingService,
-    private readonly validationService: ValidationService,
-    private readonly skillsService: SkillsService,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
-    private readonly cdref: ChangeDetectorRef
-  ) {}
+  private readonly onboardingStageTwoInfoService = inject(OnboardingStageTwoInfoService);
+  private readonly onboardingStageTwoUIInfoService = inject(OnboardingStageTwoUIInfoService);
+  private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
+  private readonly tooltipInfoService = inject(TooltipInfoService);
+  private readonly skillsService = inject(SkillsService);
 
-  stageForm = this.nnFb.group({
-    skills: this.nnFb.control<Skill[]>([]),
-  });
+  protected readonly stageForm = this.onboardingStageTwoUIInfoService.stageForm;
 
-  nestedSkills$: Observable<SkillsGroup[]> = this.route.data.pipe(map(r => r["data"]));
+  protected readonly nestedSkills$ = this.skillsService.getSkillsNested();
 
-  searchedSkills = signal<Skill[]>([]);
-
-  isHintAuthVisible = false;
-  isHintLibVisible = false;
-
-  stageSubmitting = signal(false);
-  skipSubmitting = signal(false);
-
-  isChooseSkill = signal(false);
-  isChooseSkillText = signal("");
-
-  subscriptions$ = signal<Subscription[]>([]);
+  protected readonly searchedSkills = this.onboardingStageTwoUIInfoService.searchedSkills;
 
   // Для управления открытыми группами навыков
-  openSkillGroup: string | null = null;
+  protected readonly openSkillGroup = this.onboardingStageTwoUIInfoService.openSkillGroup;
+
+  protected readonly isHintAuthVisible = this.tooltipInfoService.isHintAuthVisible;
+  protected readonly isHintLibVisible = this.tooltipInfoService.isHintLibVisible;
+
+  protected readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting;
+  protected readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting;
+
+  protected readonly isChooseSkill = this.onboardingStageTwoUIInfoService.isChooseSkill;
+  protected readonly isChooseSkillText = this.onboardingStageTwoUIInfoService.isChooseSkillText;
 
   /**
    * Проверяет, есть ли открытые группы навыков
    */
-  hasOpenSkillsGroups(): boolean {
-    return this.openSkillGroup !== null;
-  }
+  protected readonly hasOpenSkillsGroups = this.onboardingStageTwoUIInfoService.hasOpenSkillsGroups;
 
   /**
    * Обработчик переключения группы навыков
@@ -121,7 +115,7 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
    * @param isOpen - флаг открытия/закрытия группы
    */
   onSkillGroupToggled(isOpen: boolean, skillName: string): void {
-    this.openSkillGroup = isOpen ? skillName : null;
+    this.onboardingStageTwoUIInfoService.onSkillGroupToggled(isOpen, skillName);
   }
 
   /**
@@ -129,113 +123,48 @@ export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
    * @param skillName - название навыка
    */
   isSkillGroupDisabled(skillName: string): boolean {
-    return this.openSkillGroup !== null && this.openSkillGroup !== skillName;
+    return this.onboardingStageTwoUIInfoService.isSkillGroupDisabled(skillName);
   }
 
   ngOnInit(): void {
-    const fv$ = this.onboardingService.formValue$
-      .pipe(take(1))
-      .subscribe(({ skills }) => this.stageForm.patchValue({ skills }));
-
-    const formValueChange$ = this.stageForm.valueChanges.subscribe(value => {
-      this.onboardingService.setFormValue(value);
-    });
-
-    this.subscriptions$().push(fv$, formValueChange$);
+    this.onboardingStageTwoInfoService.initializationFormValues();
   }
 
   ngAfterViewInit(): void {
-    const skillsProfile$ = this.onboardingService.formValue$.subscribe(fv => {
-      this.stageForm.patchValue({ skills: fv.skills });
-    });
-
-    this.cdref.detectChanges();
-
-    skillsProfile$ && this.subscriptions$().push(skillsProfile$);
+    this.onboardingStageTwoInfoService.initializationSkills();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$().forEach($ => $.unsubscribe());
+    this.onboardingStageTwoInfoService.destroy();
   }
 
-  showTooltip(type: "auth" | "lib"): void {
-    type === "auth" ? (this.isHintAuthVisible = true) : (this.isHintLibVisible = true);
-  }
-
-  hideTooltip(type: "auth" | "lib"): void {
-    type === "auth" ? (this.isHintAuthVisible = false) : (this.isHintLibVisible = false);
+  toggleTooltip(option: "show" | "hide", type: "auth" | "lib"): void {
+    option === "show"
+      ? this.tooltipInfoService.showTooltip(type)
+      : this.tooltipInfoService.hideTooltip(type);
   }
 
   onSkipRegistration(): void {
-    if (!this.validationService.getFormValidation(this.stageForm)) {
-      return;
-    }
-
-    this.completeRegistration(3);
+    this.onboardingStageTwoInfoService.onSkipRegistration();
   }
 
   onSubmit(): void {
-    if (!this.validationService.getFormValidation(this.stageForm)) {
-      return;
-    }
-
-    this.stageSubmitting.set(true);
-
-    const { skills } = this.stageForm.getRawValue();
-
-    this.authService
-      .saveProfile({ skillsIds: skills.map(skill => skill.id) })
-      .pipe(concatMap(() => this.authService.setOnboardingStage(2)))
-      .subscribe({
-        next: () => this.completeRegistration(3),
-        error: err => {
-          this.stageSubmitting.set(false);
-          if (err.status === 400) {
-            this.isChooseSkill.set(true);
-            this.isChooseSkillText.set(err.error[0]);
-          }
-        },
-      });
+    this.onboardingStageTwoInfoService.onSubmit();
   }
 
   onAddSkill(newSkill: Skill): void {
-    const { skills } = this.stageForm.getRawValue();
-
-    const isPresent = skills.some(s => s.id === newSkill.id);
-
-    if (isPresent) return;
-
-    this.stageForm.patchValue({ skills: [newSkill, ...skills] });
+    this.onboardingStageTwoInfoService.onAddSkill(newSkill);
   }
 
   onRemoveSkill(oddSkill: Skill): void {
-    const { skills } = this.stageForm.getRawValue();
-
-    this.stageForm.patchValue({ skills: skills.filter(skill => skill.id !== oddSkill.id) });
+    this.onboardingStageTwoInfoService.onRemoveSkill(oddSkill);
   }
 
   onOptionToggled(toggledSkill: Skill): void {
-    const { skills } = this.stageForm.getRawValue();
-
-    const isPresent = skills.some(skill => skill.id === toggledSkill.id);
-
-    if (isPresent) {
-      this.onRemoveSkill(toggledSkill);
-    } else {
-      this.onAddSkill(toggledSkill);
-    }
+    this.onboardingStageTwoInfoService.onOptionToggled(toggledSkill);
   }
 
   onSearchSkill(query: string): void {
-    this.skillsService
-      .getSkillsInline(query, 1000, 0)
-      .subscribe(({ results }) => this.searchedSkills.set(results));
-  }
-
-  private completeRegistration(stage: number): void {
-    this.skipSubmitting.set(true);
-    this.onboardingService.setFormValue(this.stageForm.value);
-    stage === 3 && this.router.navigateByUrl("/office/onboarding/stage-3");
-    this.skipSubmitting.set(false);
+    this.onboardingStageTwoInfoService.onSearchSkill(query);
   }
 }

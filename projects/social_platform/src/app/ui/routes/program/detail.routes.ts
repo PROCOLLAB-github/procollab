@@ -9,6 +9,7 @@ import { ProgramProjectsResolver } from "@ui/pages/program/detail/list/projects.
 import { ProgramMembersResolver } from "@ui/pages/program/detail/list/members.resolver";
 import { ProgramRegisterComponent } from "@ui/pages/program/detail/register/register.component";
 import { ProgramRegisterResolver } from "@ui/pages/program/detail/register/register.resolver";
+import { ProgramDetailMainUIInfoService } from "../../../api/program/facades/detail/ui/program-detail-main-ui-info.service";
 
 /**
  * Маршруты для детальной страницы программы
@@ -30,6 +31,7 @@ export const PROGRAM_DETAIL_ROUTES: Routes = [
     resolve: {
       data: ProgramDetailResolver,
     },
+    providers: [ProgramDetailMainUIInfoService],
     data: { listType: "program" },
     children: [
       {

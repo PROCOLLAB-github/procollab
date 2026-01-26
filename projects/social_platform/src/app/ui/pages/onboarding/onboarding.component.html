@@ -8,38 +8,38 @@
         <li
           (click)="goToStep(0)"
           class="header__step step"
-          [class.step--passed]="stage > 0"
-          [class.step--active]="activeStage === 0"
+          [class.step--passed]="stage() > 0"
+          [class.step--active]="activeStage() === 0"
         >
           <div class="step__number">1</div>
           <span class="step__text text-bold-body-14">Основные данные</span>
         </li>
-        <div class="header__separator" [class.header__separator--passed]="stage > 0"></div>
+        <div class="header__separator" [class.header__separator--passed]="stage() > 0"></div>
         <li
           (click)="goToStep(1)"
           class="header__step step"
-          [class.step--passed]="stage > 1"
-          [class.step--active]="activeStage === 1"
+          [class.step--passed]="stage() > 1"
+          [class.step--active]="activeStage() === 1"
         >
           <div class="step__number">2</div>
           <span class="step__text text-bold-body-14">Специальность</span>
         </li>
-        <div class="header__separator" [class.header__separator--passed]="stage > 1"></div>
+        <div class="header__separator" [class.header__separator--passed]="stage() > 1"></div>
         <li
           (click)="goToStep(2)"
           class="header__step step"
-          [class.step--passed]="stage > 2"
-          [class.step--active]="activeStage === 2"
+          [class.step--passed]="stage() > 2"
+          [class.step--active]="activeStage() === 2"
         >
           <div class="step__number">3</div>
           <span class="step__text text-bold-body-14">Навыки</span>
         </li>
-        <div class="header__separator" [class.header__separator--passed]="stage > 2"></div>
+        <div class="header__separator" [class.header__separator--passed]="stage() > 2"></div>
         <li
           (click)="goToStep(3)"
           class="header__step step"
-          [class.step--passed]="stage > 3"
-          [class.step--active]="activeStage === 3"
+          [class.step--passed]="stage() > 3"
+          [class.step--active]="activeStage() === 3"
         >
           <div class="step__number">4</div>
           <span class="step__text text-bold-body-14">Тип аккаунта</span>

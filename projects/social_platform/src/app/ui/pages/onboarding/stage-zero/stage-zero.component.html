@@ -1,9 +1,9 @@
 <!-- @format -->
 
-@if (profile) {
+@if (profile()) {
 <div class="page">
   <div class="auth__greeting">
-    <h3 class="auth__title">Привет, {{ profile.firstName }} {{ profile.lastName }}! ✌️</h3>
+    <h3 class="auth__title">Привет, {{ profile()!.firstName }} {{ profile()!.lastName }}! ✌️</h3>
     <p class="auth__info">Расскажи о себе, чтобы твое резюме было сильным и отражало твой опыт.</p>
   </div>
   <form [formGroup]="stageForm" class="page__form" (submit)="onSubmit()">
@@ -16,12 +16,12 @@
             [text]="
               'Идеальная фотография для резюме: свежая, с твоим лицом, хорошо различимым на нейтральном фоне (котиков мы конечно любим, но их не в этот раз)'
             "
-            [isVisible]="isHintPhotoVisible"
+            [isVisible]="isHintPhotoVisible()"
             [position]="'right'"
             [tooltipWidth]="300"
             customClass="content__hint"
-            (show)="showTooltip('photo')"
-            (hide)="hideTooltip('photo')"
+            (show)="toggleTooltip('show', 'photo')"
+            (hide)="toggleTooltip('hide', 'photo')"
           ></app-tooltip>
         </div>
         <app-avatar-control
@@ -69,12 +69,12 @@
             [text]="
               'Заполни информацию о том, что ты изучал. Даже если это трехнедельный интенсив по созданию роликов — для резюме важна каждая деталь'
             "
-            [isVisible]="isHintEducationVisible"
+            [isVisible]="isHintEducationVisible()"
             [position]="'right'"
             [tooltipWidth]="300"
             customClass="content__hint"
-            (show)="showTooltip('education')"
-            (hide)="hideTooltip('education')"
+            (show)="toggleTooltip('show', 'education')"
+            (hide)="toggleTooltip('hide', 'education')"
           ></app-tooltip>
         </div>
       </div>
@@ -211,7 +211,7 @@
           class="page__add-education"
           (click)="addEducation()"
         >
-          <span>{{ editEducationClick ? "Созранить изменения" : "Добавить образование" }}</span>
+          <span>{{ editEducationClick() ? "Созранить изменения" : "Добавить образование" }}</span>
           <i appIcon icon="plus" appSquare="12"></i>
         </app-button>
 
@@ -255,12 +255,12 @@
             [text]="
               'Укажи свой опыт. Разработка бота для школы, дизайн сайта для родительского бизнеса — любой опыт, которая оценила какая-либо организация — твой ключ к первой работе.'
             "
-            [isVisible]="isHintWorkVisible"
+            [isVisible]="isHintWorkVisible()"
             [position]="'right'"
             [tooltipWidth]="350"
             customClass="work-section__hint"
-            (show)="showTooltip('work')"
-            (hide)="hideTooltip('work')"
+            (show)="toggleTooltip('show', 'work')"
+            (hide)="toggleTooltip('hide', 'work')"
           ></app-tooltip>
         </div>
       </div>
@@ -388,7 +388,7 @@
           class="page__add-education"
           (click)="addWork()"
         >
-          <span>{{ editWorkClick ? "Сохранить изменения" : "Добавить место работы" }}</span>
+          <span>{{ editWorkClick() ? "Сохранить изменения" : "Добавить место работы" }}</span>
           <i appIcon icon="plus" appSquare="12"></i>
         </app-button>
 
@@ -431,12 +431,12 @@
                       [text]="
                         'Кенгуру, медвежонок, а может победа во всероссийском акселераторе технологических проектов? Твоему будущему работодателю надо видеть, что ты самый активный!'
                       "
-                      [isVisible]="isHintAchievementsVisible"
+                      [isVisible]="isHintAchievementsVisible()"
                       [position]="'right'"
                       [tooltipWidth]="300"
                       customClass="content__hint"
-                      (show)="showTooltip('achievements')"
-                      (hide)="hideTooltip('achievements')"
+                      (show)="toggleTooltip('show', 'achievements')"
+                      (hide)="toggleTooltip('hide', 'achievements')"
                     ></app-tooltip>
                   </div>
                   <app-input
@@ -501,12 +501,12 @@
             [text]="
               'Вот и понадобились те самые много лет школьной программы английского, французского, китайского, а может и японского — рассказывай все!'
             "
-            [isVisible]="isHintLanguageVisible"
+            [isVisible]="isHintLanguageVisible()"
             [position]="'right'"
             [tooltipWidth]="300"
             customClass="content__hint"
-            (show)="showTooltip('language')"
-            (hide)="hideTooltip('language')"
+            (show)="toggleTooltip('show', 'language')"
+            (hide)="toggleTooltip('hide', 'language')"
           ></app-tooltip>
         </div>
       </div>
@@ -567,7 +567,7 @@
         class="page__add-education"
         (click)="addLanguage()"
       >
-        <span>{{ editLanguageClick ? "Сохранить изменения" : "Добавить язык" }}</span>
+        <span>{{ editLanguageClick() ? "Сохранить изменения" : "Добавить язык" }}</span>
         <i appIcon icon="plus" appSquare="12"></i>
       </app-button>
 
@@ -607,25 +607,25 @@
       <app-button
         size="big"
         [disabled]="
-          editEducationClick ||
-          editWorkClick ||
-          editLanguageClick ||
+          editEducationClick() ||
+          editWorkClick() ||
+          editLanguageClick() ||
           isEducationDirty ||
           isWorkDirty
         "
         [ngStyle]="{
           opacity:
-            editEducationClick ||
-            editWorkClick ||
-            editLanguageClick ||
+            editEducationClick() ||
+            editWorkClick() ||
+            editLanguageClick() ||
             isEducationDirty ||
             isWorkDirty
               ? '0.6'
               : '1',
           cursor:
-            editEducationClick ||
-            editWorkClick ||
-            editLanguageClick ||
+            editEducationClick() ||
+            editWorkClick() ||
+            editLanguageClick() ||
             isEducationDirty ||
             isWorkDirty
               ? 'not-allowed'

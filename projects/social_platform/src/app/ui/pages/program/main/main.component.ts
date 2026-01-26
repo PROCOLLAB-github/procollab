@@ -2,15 +2,7 @@
 
 import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, Params, Router, RouterLink } from "@angular/router";
-import {
-  combineLatest,
-  concatMap,
-  distinctUntilChanged,
-  map,
-  of,
-  Subscription,
-  switchMap,
-} from "rxjs";
+import { combineLatest, distinctUntilChanged, map, Subscription, switchMap } from "rxjs";
 import { NavService } from "@ui/services/nav/nav.service";
 import Fuse from "fuse.js";
 import { CheckboxComponent, SelectComponent } from "@ui/components";
@@ -20,6 +12,8 @@ import { ProgramCardComponent } from "../../../shared/program-card/program-card.
 import { HttpParams } from "@angular/common/http";
 import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
 import { Program } from "projects/social_platform/src/app/domain/program/program.model";
+import { ProgramMainUIInfoService } from "projects/social_platform/src/app/api/program/facades/ui/program-main-ui-info.service";
+import { ProgramMainInfoService } from "projects/social_platform/src/app/api/program/facades/program-main-info.service";
 
 /**
  * Главный компонент списка программ
@@ -59,7 +53,6 @@ import { Program } from "projects/social_platform/src/app/domain/program/program
   selector: "app-main",
   templateUrl: "./main.component.html",
   styleUrl: "./main.component.scss",
-  standalone: true,
   imports: [
     RouterLink,
     ProgramCardComponent,
@@ -67,93 +60,29 @@ import { Program } from "projects/social_platform/src/app/domain/program/program
     SelectComponent,
     ClickOutsideModule,
   ],
+  providers: [ProgramMainInfoService, ProgramMainUIInfoService],
+  standalone: true,
 })
 export class ProgramMainComponent implements OnInit, OnDestroy {
-  private readonly navService = inject(NavService);
-  private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
-  private readonly programService = inject(ProgramService);
-  private readonly cdref = inject(ChangeDetectorRef);
+  private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
+  private readonly programMainInfoService = inject(ProgramMainInfoService);
 
-  programCount = 0;
-
-  programs: Program[] = [];
-  searchedPrograms: Program[] = [];
-  subscriptions$: Subscription[] = [];
-  isPparticipating = signal<boolean>(false);
-
-  readonly programOptionsFilter = generateOptionsList(4, "strings", [
-    "все",
-    "актуальные",
-    "архив",
-    "учавстсвовал",
-  ]);
+  protected readonly programs = this.programMainUIInfoService.programs;
+  protected readonly isPparticipating = this.programMainUIInfoService.isPparticipating;
+  protected readonly programOptionsFilter = this.programMainUIInfoService.programOptionsFilter;
 
   ngOnInit(): void {
-    this.navService.setNavTitle("Программы");
-
-    const combined$ = combineLatest([
-      this.route.queryParams.pipe(
-        map(q => ({ filter: this.buildFilterQuery(q), search: q["search"] || "" })),
-        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
-      ),
-    ])
-      .pipe(
-        switchMap(([{ filter, search }]) => {
-          this.isPparticipating.set(filter["participating"] === "true");
-
-          return this.programService
-            .getAll(0, 20, new HttpParams({ fromObject: filter }))
-            .pipe(map(response => ({ response, search })));
-        })
-      )
-      .subscribe(({ response, search }) => {
-        this.programCount = response.count;
-        this.programs = response.results ?? [];
-
-        if (search) {
-          const fuse = new Fuse(this.programs, {
-            keys: ["name"],
-            threshold: 0.3,
-          });
-          this.searchedPrograms = fuse.search(search).map(el => el.item);
-        } else {
-          this.searchedPrograms = this.programs;
-        }
-
-        this.cdref.detectChanges();
-      });
-
-    this.subscriptions$.push(combined$);
-  }
-
-  private buildFilterQuery(q: Params): Record<string, any> {
-    const reqQuery: Record<string, any> = {};
-
-    if (q["participating"]) {
-      reqQuery["participating"] = q["participating"];
-    }
-
-    return reqQuery;
+    this.programMainInfoService.initializationMainPrograms();
   }
 
   /**
    * Переключает состояние чекбокса "участвую"
    */
   onTogglePparticipating(): void {
-    const newValue = !this.isPparticipating();
-    this.isPparticipating.set(newValue);
-
-    this.router.navigate([], {
-      queryParams: {
-        participating: newValue ? "true" : null,
-      },
-      relativeTo: this.route,
-      queryParamsHandling: "merge",
-    });
+    this.programMainInfoService.onTogglePparticipating();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $?.unsubscribe());
+    this.programMainInfoService.destroy();
   }
 }

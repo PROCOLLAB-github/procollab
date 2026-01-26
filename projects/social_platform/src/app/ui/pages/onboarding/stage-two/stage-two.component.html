@@ -8,12 +8,12 @@
         [text]="
           'Постарайся вспомнить все, чему тебя учили и то, что ты делал (читать, считать, программировать) Постарайся не врать, но и не будь сильно критичным к себе.'
         "
-        [isVisible]="isHintAuthVisible"
+        [isVisible]="isHintAuthVisible()"
         [position]="'right'"
         [tooltipWidth]="300"
         customClass="tooltip__hint"
-        (show)="showTooltip('auth')"
-        (hide)="hideTooltip('auth')"
+        (show)="toggleTooltip('show', 'auth')"
+        (hide)="toggleTooltip('hide', 'auth')"
       ></app-tooltip>
     </div>
     <div class="content__actions">
@@ -70,12 +70,12 @@
             [text]="
               'База с навыками, которая может пополняться благодаря тебе! Если не найдешь свой навык, смело пиши на @procollab_support и мы добавим твой уникальный навык'
             "
-            [isVisible]="isHintLibVisible"
+            [isVisible]="isHintLibVisible()"
             [position]="'right'"
             [tooltipWidth]="300"
             customClass="tooltip__hint"
-            (show)="showTooltip('lib')"
-            (hide)="hideTooltip('lib')"
+            (show)="toggleTooltip('show', 'lib')"
+            (hide)="toggleTooltip('show', 'lib')"
           ></app-tooltip>
         </div>
       </div>

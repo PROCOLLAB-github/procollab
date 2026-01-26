@@ -17,7 +17,7 @@
   [class.tag--days]="type === 'days'"
   [class.tag--overdue]="type === 'overdue'"
   [class.tag--answer]="type === 'answer'"
-  [ngStyle]="additionalTagColor ? { 'background-color': additionalTagColor } : {}"
+  [ngStyle]="additionalTagColor ? { 'background-color': additionalTagColor } : null"
 >
   <p class="text-body-6"><ng-content></ng-content></p>
 

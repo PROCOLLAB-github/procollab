@@ -10,24 +10,26 @@ import { inject, Injectable, Signal, signal } from "@angular/core";
 import { Router } from "@angular/router";
 
 /** Тип шага редактирования проекта */
-export type EditStep = "main" | "contacts" | "achievements" | "vacancies" | "team" | "additional";
+export type EditStep =
+  | "main"
+  | "contacts"
+  | "achievements"
+  | "vacancies"
+  | "team"
+  | "additional"
+  | "education"
+  | "experience"
+  | "skills"
+  | "settings";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProjectStepService {
   /** Сигнал, содержащий текущий шаг редактирования */
-  private currentStep = signal<EditStep>("main");
+  readonly currentStep = signal<EditStep>("main");
   /** Ссылка на Router для изменения URL */
   private readonly router = inject(Router);
-
-  /**
-   * Возвращает readonly-сигнал текущего шага.
-   * @returns Signal<EditStep> readonly-сигнал
-   */
-  public getCurrentStep(): Signal<EditStep> {
-    return this.currentStep.asReadonly();
-  }
 
   /**
    * Устанавливает новый шаг и синхронизирует его с query-параметрами URL.
@@ -54,6 +56,10 @@ export class ProjectStepService {
       "vacancies",
       "team",
       "additional",
+      "education",
+      "experience",
+      "skills",
+      "settings",
     ];
 
     if (step && validSteps.includes(step as EditStep)) {

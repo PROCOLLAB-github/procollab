@@ -1,6 +1,6 @@
 <!-- @format -->
 
-@if (user) {
+@if (user()) {
 <section class="profile">
   <div class="profile__details">
     <div class="profile__left">
@@ -13,26 +13,26 @@
         <ul class="lists__list">
           <li class="lists__item">
             <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
-            <p class="text-body-10">{{ (user.birthday | yearsFromBirthday) ?? "не указан" }}</p>
+            <p class="text-body-10">{{ (user()!.birthday | yearsFromBirthday) ?? "не указан" }}</p>
           </li>
 
-          @if (user.city) {
+          @if (user()!.city) {
           <li class="lists__item">
             <i appIcon icon="geo-point" class="lists__icon" style="opacity: 0.6" appSquare="10"></i>
-            <p class="text-body-10">{{ (user.city | truncate: 12) ?? "не указан" }}</p>
+            <p class="text-body-10">{{ (user()!.city | truncate: 12) ?? "не указан" }}</p>
           </li>
-          } @if (user.speciality) {
+          } @if (user()!.speciality) {
           <li class="lists__item">
             <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
             <p class="text-body-10">
-              {{ (user.speciality | truncate: 13) ?? "не указана" }}
+              {{ (user()!.speciality | truncate: 13) ?? "не указана" }}
             </p>
           </li>
           }
         </ul>
       </div>
 
-      @if (user.userLanguages.length > 0) {
+      @if (user()!.userLanguages.length > 0) {
       <div class="lists profile__section">
         <div class="lists__section">
           <h3 class="text-body-12 lists__title">языки</h3>
@@ -40,7 +40,7 @@
         </div>
 
         <ul class="lists__list">
-          @for (language of user.userLanguages; track $index) {
+          @for (language of user()!.userLanguages; track $index) {
           <li class="lists__item">
             <div class="lists__index text-body-10">{{ language.languageLevel }}</div>
             <p class="text-body-10">{{ language.language }}</p>
@@ -48,19 +48,19 @@
           }
         </ul>
       </div>
-      } @if (user.programs.length; as programsLength) {
+      } @if (user()!.programs.length; as programsLength) {
       <div class="lists">
         <ul class="lists__list--line">
-          @for (p of user.programs.slice(0, 3); track p.id) {
+          @for (p of user()!.programs.slice(0, 3); track p.id) {
           <li class="lists__item" [routerLink]="['/office/program', p.id]">
             <ng-container *ngTemplateOutlet="programTemp; context: { $implicit: p }"></ng-container>
           </li>
           }
         </ul>
-        <div class="lists__remaining" [class.lists__remaining--show]="readAllPrograms">
-          @if (user.programs) {
+        <div class="lists__remaining" [class.lists__remaining--show]="readAllPrograms()">
+          @if (user()!.programs) {
           <ul>
-            @for (program of user.programs.slice(3); track program.id) {
+            @for (program of user()!.programs.slice(3); track program.id) {
             <li>
               <ng-container
                 *ngTemplateOutlet="programTemp; context: { $implicit: program }"
@@ -80,17 +80,17 @@
           </div>
         </ng-template>
         @if (programsLength > 3) {
-        <div class="read-more text-body-10" (click)="readAllPrograms = !readAllPrograms">
-          {{ readAllPrograms ? "скрыть" : "подробнее" }}
+        <div class="read-more text-body-10" (click)="readAllPrograms.set(!readAllPrograms())">
+          {{ readAllPrograms() ? "скрыть" : "подробнее" }}
         </div>
         }
       </div>
       }
     </div>
 
-    @if (loggedUserId) {
+    @if (loggedUserId()) {
     <div class="profile__content">
-      @if (user.aboutMe; as about) {
+      @if (user()!.aboutMe; as about) {
       <div class="about profile__about">
         <div class="about__head">
           <h3 class="text-body-12 about__title">обо мне</h3>
@@ -99,19 +99,19 @@
 
         <div class="text-body-10 about__text">
           <p #descEl [innerHTML]="about | parseLinks | parseBreaks"></p>
-          @if (descriptionExpandable) {
+          @if (descriptionExpandable()) {
           <div
             class="read-more text-body-10"
-            (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+            (click)="onExpandDescription(descEl, 'expanded', readFullDescription())"
           >
-            {{ readFullDescription ? "скрыть" : "подробнее" }}
+            {{ readFullDescription() ? "скрыть" : "подробнее" }}
           </div>
           }
         </div>
       </div>
-      } @if (user.skills.length || user.achievements.length) {
+      } @if (user()!.skills.length || user()!.achievements.length) {
       <div class="profile__directions">
-        @for (directionItem of directions; track $index) {
+        @for (directionItem of directions(); track $index) {
         <app-project-direction-card
           [direction]="directionItem.direction"
           [icon]="directionItem.icon"
@@ -121,7 +121,7 @@
         ></app-project-direction-card>
         }
       </div>
-      } @if (isProfileEmpty) { @if (loggedUserId === user.id) {
+      } @if (isProfileEmpty()) { @if (loggedUserId() === user()!.id) {
       <div class="profile__empty">
         <i appIcon icon="empty-chat" appSquare="44"></i>
         <p class="profile__empty--text text-body-12">
@@ -137,7 +137,7 @@
       </div>
       } } @else {
       <div class="profile__news news">
-        @if (loggedUserId === user.id) {
+        @if (loggedUserId() === user()!.id) {
         <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
         }
         <ul>
@@ -148,7 +148,7 @@
               [resourceLink]="['/office/profile', n.id]"
               [attr.data-id]="n.id"
               [feedItem]="n"
-              [isOwner]="loggedUserId === user.id"
+              [isOwner]="loggedUserId() === user()!.id"
               (delete)="onDeleteNews($event)"
               (like)="onLike($event)"
               (edited)="onEditNews($event, n.id)"
@@ -163,14 +163,14 @@
 
     <div class="profile__right">
       <div class="profile__aside">
-        @if (user.links.length; as linksLength) {
+        @if (user()!.links.length; as linksLength) {
         <div class="profile__section lists">
           <div class="lists__section">
             <h3 class="text-body-12 lists__title">контакты</h3>
             <i class="lists__icon" icon="phone" appIcon appSquare="12"></i>
           </div>
           <ul class="lists__list">
-            @for (link of user.links.slice(0, 3); track $index) {
+            @for (link of user()!.links.slice(0, 3); track $index) {
             <li class="lists__item text-body-10">
               <ng-container
                 *ngTemplateOutlet="linkTemp; context: { $implicit: link }"
@@ -178,9 +178,9 @@
             </li>
             }
           </ul>
-          <div class="lists__remaining" [class.links__remaining--show]="readAllLinks">
+          <div class="lists__remaining" [class.links__remaining--show]="readAllLinks()">
             <ul class="lists__list">
-              @for (link of user.links.slice(3); track $index) {
+              @for (link of user()!.links.slice(3); track $index) {
               <li class="lists__item text-body-12" style="color: var(--black)">
                 <ng-container *ngTemplateOutlet="linkTemp; context: { $implicit: link }">
                 </ng-container>
@@ -197,19 +197,19 @@
             }
           </ng-template>
           @if (linksLength > 3) {
-          <div class="read-more text-body-10" (click)="readAllLinks = !readAllLinks">
-            {{ readAllLinks ? "скрыть" : "подробнее" }}
+          <div class="read-more text-body-10" (click)="readAllLinks.set(!readAllLinks())">
+            {{ readAllLinks() ? "скрыть" : "подробнее" }}
           </div>
           }
         </div>
-        } @if (user.education.length; as educationLength) {
+        } @if (user()!.education.length; as educationLength) {
         <div class="lists profile__section">
           <div class="lists__section">
             <h3 class="text-body-12 lists__title">образование</h3>
             <i class="lists__icon" icon="in-search" appIcon appSquare="12"></i>
           </div>
           <ul class="lists__list">
-            @for (p of user.education.slice(0, 3); track $index) {
+            @for (p of user()!.education.slice(0, 3); track $index) {
             <li class="lists__item">
               <ng-container
                 *ngTemplateOutlet="educationTemp; context: { $implicit: p }"
@@ -217,10 +217,10 @@
             </li>
             }
           </ul>
-          <div class="lists__remaining" [class.lists__remaining--show]="readAllEducation">
-            @if (user.education) {
+          <div class="lists__remaining" [class.lists__remaining--show]="readAllEducation()">
+            @if (user()!.education) {
             <ul>
-              @for (educationItem of user.education.slice(3); track $index) {
+              @for (educationItem of user()!.education.slice(3); track $index) {
               <li>
                 <ng-container
                   *ngTemplateOutlet="educationTemp; context: { $implicit: educationItem }"
@@ -253,19 +253,19 @@
             </div>
           </ng-template>
           @if (educationLength > 3) {
-          <div class="read-more text-body-10" (click)="readAllEducation = !readAllEducation">
-            {{ readAllEducation ? "скрыть" : "подробнее" }}
+          <div class="read-more text-body-10" (click)="readAllEducation.set(!readAllEducation())">
+            {{ readAllEducation() ? "скрыть" : "подробнее" }}
           </div>
           }
         </div>
-        } @if (user.workExperience.length; as workExperienceLength) {
+        } @if (user()!.workExperience.length; as workExperienceLength) {
         <div class="lists profile__section">
           <div class="lists__section">
             <h3 class="text-body-12 lists__title">работа</h3>
             <i class="lists__icon" icon="suitcase" appIcon appSquare="12"></i>
           </div>
           <ul class="lists__list">
-            @for (p of user.workExperience.slice(0, 3); track $index) {
+            @for (p of user()!.workExperience.slice(0, 3); track $index) {
             <li class="lists__item">
               <ng-container
                 *ngTemplateOutlet="workExperienceTemp; context: { $implicit: p }"
@@ -273,10 +273,10 @@
             </li>
             }
           </ul>
-          <div class="lists__remaining" [class.lists__remaining--show]="readAllWorkExperience">
-            @if (user.workExperience) {
+          <div class="lists__remaining" [class.lists__remaining--show]="readAllWorkExperience()">
+            @if (user()!.workExperience) {
             <ul>
-              @for (workExperienceItem of user.workExperience.slice(3); track $index) {
+              @for (workExperienceItem of user()!.workExperience.slice(3); track $index) {
               <li>
                 <ng-container
                   *ngTemplateOutlet="workExperienceTemp; context: { $implicit: workExperienceItem }"
@@ -307,7 +307,7 @@
               >
             </div>
 
-            <app-modal [open]="isShowModal" (openChange)="isShowModal = !isShowModal">
+            <app-modal [open]="isShowModal()" (openChange)="isShowModal.set(!isShowModal())">
               <div class="cancel">
                 <div class="cancel__top">
                   <p class="cancel__title text-body-12">{{ workExperience.organizationName }}</p>
@@ -326,20 +326,20 @@
           @if (workExperienceLength > 3) {
           <div
             class="read-more text-body-10"
-            (click)="readAllWorkExperience = !readAllWorkExperience"
+            (click)="readAllWorkExperience.set(!readAllWorkExperience())"
           >
-            {{ readAllWorkExperience ? "скрыть" : "подробнее" }}
+            {{ readAllWorkExperience() ? "скрыть" : "подробнее" }}
           </div>
           }
         </div>
-        } @if (user.projects.length; as projectsLength) {
+        } @if (user()!.projects.length; as projectsLength) {
         <div class="lists profile__section">
           <div class="lists__section">
             <h3 class="text-body-12 lists__title">проекты</h3>
             <i class="lists__icon" icon="projects" appIcon appSquare="12"></i>
           </div>
           <ul class="lists__list">
-            @for (p of user.projects.slice(0, 3); track p.id) {
+            @for (p of user()!.projects.slice(0, 3); track p.id) {
             <li class="lists__item" [routerLink]="['/office/projects', p.id]">
               <ng-container
                 *ngTemplateOutlet="projectTemp; context: { $implicit: p }"
@@ -347,10 +347,10 @@
             </li>
             }
           </ul>
-          <div class="lists__remaining" [class.lists__remaining--show]="readAllProjects">
-            @if (user.projects) {
+          <div class="lists__remaining" [class.lists__remaining--show]="readAllProjects()">
+            @if (user()!.projects) {
             <ul>
-              @for (project of user.projects.slice(3); track project.id) {
+              @for (project of user()!.projects.slice(3); track project.id) {
               <li>
                 <ng-container
                   *ngTemplateOutlet="projectTemp; context: { $implicit: project }"
@@ -378,8 +378,8 @@
             </div>
           </ng-template>
           @if (projectsLength > 3) {
-          <div class="read-more text-body-10" (click)="readAllProjects = !readAllProjects">
-            {{ readAllProjects ? "скрыть" : "подробнее" }}
+          <div class="read-more text-body-10" (click)="readAllProjects.set(!readAllProjects())">
+            {{ readAllProjects() ? "скрыть" : "подробнее" }}
           </div>
           }
         </div>

@@ -60,6 +60,8 @@ export class TagComponent implements OnInit, OnChanges {
   /** Возможность удаления */
   @Input() canDelete?: boolean;
 
+  @Input() isKanbanTag = false;
+
   /** Событие для возможности удаления */
   @Output() delete = new EventEmitter<void>();
 
@@ -97,6 +99,11 @@ export class TagComponent implements OnInit, OnChanges {
   }
 
   private mappingAdditionalTagColors(): void {
+    if (!this.isKanbanTag) {
+      this.additionalTagColor = "";
+      return;
+    }
+
     const found = tagColors.find(tagColor => tagColor.name === this.color);
     if (found) {
       this.additionalTagColor = found.color;

@@ -12,6 +12,7 @@ import { Collaborator } from "projects/social_platform/src/app/domain/project/co
 import { ExpandService } from "../../../expand/expand.service";
 import { ProjectsDetailUIInfoService } from "./ui/projects-detail-ui.service";
 import { NewsInfoService } from "../../../news/news-info.service";
+import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 
 @Injectable({ providedIn: "root" })
 export class ProjectsDetailService {
@@ -31,6 +32,10 @@ export class ProjectsDetailService {
   private readonly projectId = this.projectsDetailUIService.projectId;
 
   private readonly news = this.newsInfoService.news;
+
+  readonly projSubscribers$?: Observable<User[]> = this.route.parent?.data.pipe(
+    map(r => r["data"][1])
+  );
 
   destroy(): void {
     this.observer?.disconnect();

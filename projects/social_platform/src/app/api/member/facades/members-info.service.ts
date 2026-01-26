@@ -22,16 +22,18 @@ import {
 import { MemberService } from "../member.service";
 import { AuthService } from "../../auth";
 import { User } from "../../../domain/auth/user.model";
-import { AbstractControl, FormGroup } from "@angular/forms";
+import { AbstractControl } from "@angular/forms";
 import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
 import { MembersUIInfoService } from "./ui/members-ui-info.service";
 import { NavigationService } from "../../paths/navigation.service";
+import { ProjectsDetailUIInfoService } from "../../project/facades/detail/ui/projects-detail-ui.service";
 
 @Injectable()
 export class MembersInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly navService = inject(NavService);
+  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly memberService = inject(MemberService);
   private readonly membersUIInfoService = inject(MembersUIInfoService);
   private readonly authService = inject(AuthService);
@@ -40,8 +42,8 @@ export class MembersInfoService {
   private readonly searchParams = signal<Record<string, string>>({}); // Signal для параметров поиска
 
   private readonly membersTake = this.membersUIInfoService.membersTake; // Количество участников на странице
-  readonly members = this.membersUIInfoService.members; // Массив участников для отображения
-  private readonly profileId = this.membersUIInfoService.profileId;
+  private readonly members = this.membersUIInfoService.members; // Массив участников для отображения
+  private readonly profileId = this.projectsDetailUIInfoService.profileId;
 
   private readonly searchForm = this.membersUIInfoService.searchForm;
   private readonly filterForm = this.membersUIInfoService.filterForm;
@@ -80,7 +82,7 @@ export class MembersInfoService {
       )
       .subscribe({
         next: user => {
-          this.membersUIInfoService.applyProfileId(user);
+          this.projectsDetailUIInfoService.applySetLoggedUserId("profile", user.id);
         },
       });
   }
@@ -214,12 +216,7 @@ export class MembersInfoService {
    * @returns Observable<User[]> - Массив участников
    */
   private onFetch(skip: number, take: number, params?: Record<string, string | number | boolean>) {
-    return this.memberService.getMembers(skip, take, params).pipe(
-      takeUntil(this.destroy$),
-      tap(members => {
-        this.membersUIInfoService.applyMembersPagination(members);
-      })
-    );
+    return this.memberService.getMembers(skip, take, params).pipe(takeUntil(this.destroy$));
   }
 
   redirectToProfile(): void {

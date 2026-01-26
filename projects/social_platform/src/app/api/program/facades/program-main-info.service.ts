@@ -1,6 +1,6 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
 import { combineLatest, distinctUntilChanged, map, Subject, switchMap, takeUntil } from "rxjs";

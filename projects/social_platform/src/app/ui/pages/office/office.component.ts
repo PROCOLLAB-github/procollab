@@ -3,7 +3,7 @@
 import { AsyncPipe } from "@angular/common";
 import { Component, OnDestroy, OnInit, signal, Signal } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from "@angular/router";
-import { ProgramSidebarCardComponent } from "@office/features/program-sidebar-card/program-sidebar-card.component";
+import { ProgramSidebarCardComponent } from "@ui/shared/program-sidebar-card/program-sidebar-card.component";
 import { ButtonComponent } from "@ui/components";
 import { DeleteConfirmComponent } from "@ui/components/delete-confirm/delete-confirm.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";

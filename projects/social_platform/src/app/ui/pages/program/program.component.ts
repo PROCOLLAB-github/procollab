@@ -1,14 +1,12 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { NavService } from "@ui/services/nav/nav.service";
-import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
-import { Subscription } from "rxjs";
-import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { RouterOutlet } from "@angular/router";
+import { ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
-import { BarComponent } from "@ui/components";
 import { BackComponent } from "@uilib";
-import { ProgramService } from "../../../api/program/program.service";
+import { ProgramInfoService } from "../../../api/program/facades/program-info.service";
+import { ProgramMainUIInfoService } from "../../../api/program/facades/ui/program-main-ui-info.service";
 
 /**
  * Основной компонент модуля "Программы"
@@ -35,51 +33,21 @@ import { ProgramService } from "../../../api/program/program.service";
   selector: "app-program",
   templateUrl: "./program.component.html",
   styleUrl: "./program.component.scss",
+  imports: [ReactiveFormsModule, SearchComponent, RouterOutlet, BackComponent],
+  providers: [ProgramInfoService, ProgramMainUIInfoService],
   standalone: true,
-  imports: [ReactiveFormsModule, SearchComponent, RouterOutlet, BarComponent, BackComponent],
 })
 export class ProgramComponent implements OnInit, OnDestroy {
-  constructor(
-    private readonly navService: NavService,
-    private readonly route: ActivatedRoute,
-    public readonly programService: ProgramService,
-    private readonly router: Router,
-    private readonly fb: FormBuilder
-  ) {
-    this.searchForm = this.fb.group({
-      search: [""],
-    });
-  }
+  private readonly programInfoService = inject(ProgramInfoService);
+  private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
+
+  protected readonly searchForm = this.programMainUIInfoService.searchForm;
 
   ngOnInit(): void {
-    this.navService.setNavTitle("Программы");
-
-    const searchFormSearch$ = this.searchForm.get("search")?.valueChanges.subscribe(search => {
-      this.router
-        .navigate([], {
-          queryParams: { search },
-          relativeTo: this.route,
-          queryParamsHandling: "merge",
-        })
-        .then(() => console.debug("QueryParams changed from ProjectsComponent"));
-    });
-
-    searchFormSearch$ && this.subscriptions$.push(searchFormSearch$);
-
-    const routeUrl$ = this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.isAll = location.href.includes("/all");
-      }
-    });
-    routeUrl$ && this.subscriptions$.push(routeUrl$);
+    this.programInfoService.initializationPrograms();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $?.unsubscribe());
+    this.programInfoService.destroy();
   }
-
-  searchForm: FormGroup;
-  subscriptions$: Subscription[] = [];
-
-  isAll = location.href.includes("/all");
 }

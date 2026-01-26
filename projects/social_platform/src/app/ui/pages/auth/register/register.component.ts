@@ -1,17 +1,18 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ControlErrorPipe, TokenService, ValidationService } from "projects/core";
+import { Component, inject, OnInit } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
+import { ControlErrorPipe, TokenService } from "projects/core";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
-import { Router, RouterLink } from "@angular/router";
+import { RouterLink } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
 import { ButtonComponent, CheckboxComponent, InputComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { IconComponent } from "@uilib";
 import { CommonModule } from "@angular/common";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { AuthRegisterService } from "projects/social_platform/src/app/api/auth/facades/auth-register.service";
+import { AuthUIInfoService } from "projects/social_platform/src/app/api/auth/facades/ui/auth-ui-info.service";
 
 dayjs.extend(cpf);
 
@@ -35,7 +36,6 @@ dayjs.extend(cpf);
   selector: "app-login",
   templateUrl: "./register.component.html",
   styleUrl: "./register.component.scss",
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -47,110 +47,42 @@ dayjs.extend(cpf);
     IconComponent,
     ControlErrorPipe,
   ],
+  providers: [AuthRegisterService, AuthUIInfoService],
+  standalone: true,
 })
 export class RegisterComponent implements OnInit {
-  constructor(
-    private fb: FormBuilder,
-    private tokenService: TokenService,
-    private authService: AuthService,
-    private router: Router,
-    private validationService: ValidationService,
-    private cdref: ChangeDetectorRef
-  ) {
-    this.registerForm = this.fb.group(
-      {
-        firstName: ["", [Validators.required, this.validationService.useLanguageValidator()]],
-        lastName: ["", [Validators.required, this.validationService.useLanguageValidator()]],
-        birthday: [
-          "",
-          [
-            Validators.required,
-            this.validationService.useDateFormatValidator,
-            this.validationService.useAgeValidator(),
-          ],
-        ],
-        email: [
-          "",
-          [Validators.required, Validators.email, this.validationService.useEmailValidator()],
-        ],
-        password: ["", [Validators.required, this.validationService.usePasswordValidator(8)]],
-        repeatedPassword: ["", [Validators.required]],
-        phoneNumber: ["", [Validators.maxLength(15)]],
-      },
-      { validators: [validationService.useMatchValidator("password", "repeatedPassword")] }
-    );
-  }
+  private readonly authRegisterService = inject(AuthRegisterService);
+  private readonly authUIInfoService = inject(AuthUIInfoService);
+  private readonly tokenService = inject(TokenService);
 
   ngOnInit(): void {
     this.tokenService.clearTokens();
   }
 
-  registerForm: FormGroup;
-  registerAgreement = false;
-  ageAgreement = false;
-  registerIsSubmitting = false;
+  ngOnDestroy(): void {
+    this.authRegisterService.destroy();
+  }
 
-  showPassword = false;
-  showPasswordRepeat = false;
+  protected readonly registerForm = this.authUIInfoService.registerForm;
+  protected readonly registerIsSubmitting = this.authUIInfoService.registerIsSubmitting;
 
-  isUserCreationModalError = false;
+  protected readonly registerAgreement = this.authUIInfoService.registerAgreement;
+  protected readonly ageAgreement = this.authUIInfoService.ageAgreement;
 
-  serverErrors: string[] = [];
+  protected readonly showPassword = this.authUIInfoService.showPassword;
+  protected readonly showPasswordRepeat = this.authUIInfoService.showPasswordRepeat;
 
-  errorMessage = ErrorMessage;
+  protected readonly isUserCreationModalError = this.authUIInfoService.isUserCreationModalError;
+
+  protected readonly serverErrors = this.authRegisterService.serverErrors;
+
+  protected readonly errorMessage = ErrorMessage;
 
   toggleShowPassword(type: "repeat" | "first") {
-    if (type === "repeat") {
-      this.showPasswordRepeat = !this.showPasswordRepeat;
-    } else {
-      this.showPassword = !this.showPassword;
-    }
+    this.authUIInfoService.toggleShowPassword("register", type);
   }
 
   onSendForm(): void {
-    if (!this.validationService.getFormValidation(this.registerForm)) {
-      return;
-    }
-
-    const payload = {
-      ...this.registerForm.value,
-      birthday: this.registerForm.value.birthday
-        ? dayjs(this.registerForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD")
-        : undefined,
-      phoneNumber:
-        typeof this.registerForm.value.phoneNumber === "string"
-          ? this.registerForm.value.phoneNumber.replace(/^([87])/, "+7")
-          : this.registerForm.value.phoneNumber,
-    };
-
-    delete payload.repeatedPassword;
-
-    this.registerIsSubmitting = true;
-
-    this.authService.register(payload).subscribe({
-      next: () => {
-        this.registerIsSubmitting = false;
-
-        this.cdref.detectChanges();
-
-        this.router
-          .navigateByUrl("/auth/verification/email?adress=" + payload.email)
-          .then(() => console.debug("Route changed from RegisterComponent"));
-      },
-      error: error => {
-        if (
-          error.status === 400 &&
-          error.error.email.some((msg: string) => msg.includes("email"))
-        ) {
-          this.serverErrors = Object.values(error.error).flat() as string[];
-          console.log(this.serverErrors);
-        } else if (error.status === 500) {
-          this.isUserCreationModalError = true;
-        }
-
-        this.registerIsSubmitting = false;
-        this.cdref.detectChanges();
-      },
-    });
+    this.authRegisterService.onSendForm();
   }
 }

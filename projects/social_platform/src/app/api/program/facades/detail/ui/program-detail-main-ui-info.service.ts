@@ -35,7 +35,7 @@ export class ProgramDetailMainUIInfoService {
     }
   }
 
-  applyFormatingProgramData(program: any): void {
+  applyFormatingProgramData(program: Program): void {
     this.program.set(program);
     this.registerDateExpired.set(Date.now() > Date.parse(program.datetimeRegistrationEnds));
   }

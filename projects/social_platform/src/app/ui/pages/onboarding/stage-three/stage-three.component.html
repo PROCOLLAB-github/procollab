@@ -6,7 +6,7 @@
     <p class="auth__info">Выбери, кто ты?</p>
   </div>
   <div class="page__list">
-    <app-user-type-card [isActive]="userRole === 1" (click)="onSetRole(1)">
+    <app-user-type-card [isActive]="userRole() === 1" (click)="onSetRole(1)">
       <ng-container title>Участник</ng-container>
       <ng-container description>
         Участник на платформе - это школьник или студент, который может зарегистрировать свой проект
@@ -14,7 +14,7 @@
         читать новости
       </ng-container>
     </app-user-type-card>
-    <app-user-type-card [isActive]="userRole === 2" (click)="onSetRole(2)">
+    <app-user-type-card [isActive]="userRole() === 2" (click)="onSetRole(2)">
       <ng-container title>Инвестор</ng-container>
       <ng-container description>
         На платформе инвестор - человек, который владеет финансами и может как профинансировать
@@ -22,7 +22,7 @@
         проекты.
       </ng-container>
     </app-user-type-card>
-    <app-user-type-card [isActive]="userRole === 3" (click)="onSetRole(3)">
+    <app-user-type-card [isActive]="userRole() === 3" (click)="onSetRole(3)">
       <ng-container title>Ментор</ng-container>
       <ng-container description>
         На платформе ментор - человек, который открыт дать помощь инновационной молодежи, к ментору
@@ -30,7 +30,7 @@
         поддержать его.
       </ng-container>
     </app-user-type-card>
-    <app-user-type-card [isActive]="userRole === 4" (click)="onSetRole(4)">
+    <app-user-type-card [isActive]="userRole() === 4" (click)="onSetRole(4)">
       <ng-container title>Эксперт</ng-container>
       <ng-container description>
         На платформе эксперт - человек, который открыт дать экспертизу из какой-либо сферы. К
@@ -39,10 +39,10 @@
       </ng-container>
     </app-user-type-card>
   </div>
-  <app-button size="big" class="page__button" [loader]="stageSubmitting" (click)="onSubmit()"
+  <app-button size="big" class="page__button" [loader]="stageSubmitting()" (click)="onSubmit()"
     >Продолжить</app-button
   >
-  @if (stageTouched && userRole === -1) {
+  @if (stageTouched() && userRole() === -1) {
   <p class="error page__error">
     Вы ничего не выбрали, выберите подходящий пункт и нажмите “продолжить”
   </p>

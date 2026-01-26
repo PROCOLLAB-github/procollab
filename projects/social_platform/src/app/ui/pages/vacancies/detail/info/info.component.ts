@@ -28,6 +28,9 @@ import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { UserLinksPipe } from "projects/core/src/lib/pipes/user/user-links.pipe";
 import { VacancyService } from "projects/social_platform/src/app/api/vacancy/vacancy.service";
+import { VacancyDetailInfoService } from "projects/social_platform/src/app/api/vacancy/facades/vacancy-detail-info.service";
+import { VacancyDetailUIInfoService } from "projects/social_platform/src/app/api/vacancy/facades/ui/vacancy-detail-ui-info.service";
+import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
 
 /**
  * Компонент отображения детальной информации о вакансии
@@ -65,7 +68,8 @@ import { VacancyService } from "projects/social_platform/src/app/api/vacancy/vac
  */
 @Component({
   selector: "app-detail",
-  standalone: true,
+  templateUrl: "./info.component.html",
+  styleUrl: "./info.component.scss",
   imports: [
     IconComponent,
     TagComponent,
@@ -84,86 +88,55 @@ import { VacancyService } from "projects/social_platform/src/app/api/vacancy/vac
     UploadFileComponent,
     TextareaComponent,
   ],
-  templateUrl: "./info.component.html",
-  styleUrl: "./info.component.scss",
+  providers: [VacancyDetailInfoService, VacancyDetailUIInfoService],
+  standalone: true,
 })
 export class VacancyInfoComponent implements OnInit {
-  private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
-  private readonly vacancyService = inject(VacancyService);
-  private readonly validationService = inject(ValidationService);
-  private readonly cdRef = inject(ChangeDetectorRef);
-  private readonly fb = inject(FormBuilder);
-
-  constructor() {
-    // Создание формы отклика с валидацией
-    this.sendForm = this.fb.group({
-      whyMe: ["", [Validators.required, Validators.minLength(20), Validators.maxLength(2000)]],
-      accompanyingFile: ["", Validators.required],
-    });
-  }
-
-  vacancy!: Vacancy;
-
-  /** Объект с сообщениями об ошибках */
-  errorMessage = ErrorMessage;
-
-  descriptionExpandable!: boolean;
-  skillsExpandable!: boolean;
-
-  /** Форма отправки отклика */
-  sendForm: FormGroup;
-
-  /** Флаг состояния отправки формы */
-  sendFormIsSubmitting = false;
-
-  /** Флаг отображения модального окна с результатом */
-  resultModal = false;
-
-  openModal = signal<boolean>(false);
-  readFullDescription = false;
-  readFullSkills = false;
-
-  private subscriptions$: Subscription[] = [];
-
   @ViewChild("skillsEl") skillsEl?: ElementRef;
   @ViewChild("descEl") descEl?: ElementRef;
 
-  ngOnInit(): void {
-    this.route.data.pipe(map(r => r["data"])).subscribe((vacancy: Vacancy) => {
-      this.vacancy = vacancy;
-    });
+  private readonly vacancyDetailInfoService = inject(VacancyDetailInfoService);
+  private readonly vacancyDetailUIInfoService = inject(VacancyDetailUIInfoService);
+  private readonly expandService = inject(ExpandService);
 
-    this.route.queryParams.subscribe({
-      next: r => {
-        if (r["sendResponse"]) {
-          this.openModal.set(true);
-        }
-      },
-    });
+  protected readonly vacancy = this.vacancyDetailUIInfoService.vacancy;
+
+  /** Форма отправки отклика */
+  protected readonly sendForm = this.vacancyDetailUIInfoService.sendForm;
+  protected readonly sendFormIsSubmitting = this.vacancyDetailUIInfoService.sendFormIsSubmitting;
+
+  protected readonly descriptionExpandable = this.expandService.descriptionExpandable;
+  protected readonly skillsExpandable = this.expandService.skillsExpandable;
+
+  protected readonly readFullDescription = this.expandService.readFullDescription;
+  protected readonly readFullSkills = this.expandService.readFullSkills;
+
+  /** Флаг отображения модального окна с результатом */
+  protected readonly resultModal = this.vacancyDetailUIInfoService.resultModal;
+  protected readonly openModal = this.vacancyDetailUIInfoService.openModal;
+
+  /** Объект с сообщениями об ошибках */
+  protected readonly errorMessage = ErrorMessage;
+
+  ngOnInit(): void {
+    this.vacancyDetailInfoService.initializeDetailInfo();
+    this.vacancyDetailInfoService.initializeDetailInfoQueryParams();
   }
 
   ngAfterViewInit(): void {
     const descElement = this.descEl?.nativeElement;
-    this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
+    this.vacancyDetailInfoService.initCheckDescription(descElement);
 
     const skillsElement = this.skillsEl?.nativeElement;
-    this.skillsExpandable = skillsElement?.clientHeight < skillsElement?.scrollHeight;
-
-    this.cdRef.detectChanges();
+    this.vacancyDetailInfoService.initCheckSkills(skillsElement);
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
+    this.vacancyDetailInfoService.destroy();
   }
 
   closeSendResponseModal(): void {
-    this.openModal.set(false);
-
-    this.router.navigate([], {
-      queryParams: {},
-      replaceUrl: true,
-    });
+    this.vacancyDetailInfoService.closeSendResponseModal();
   }
 
   /**
@@ -171,29 +144,7 @@ export class VacancyInfoComponent implements OnInit {
    * Валидирует форму и отправляет отклик на сервер
    */
   onSubmit(): void {
-    // Проверка валидности формы
-    if (!this.validationService.getFormValidation(this.sendForm)) {
-      return;
-    }
-
-    // Установка флага загрузки
-    this.sendFormIsSubmitting = true;
-
-    // Отправка отклика на сервер
-    this.vacancyService
-      .sendResponse(Number(this.route.snapshot.paramMap.get("vacancyId")), this.sendForm.value)
-      .subscribe({
-        next: () => {
-          // Успешная отправка - показываем модальное окно
-          this.sendFormIsSubmitting = false;
-          this.resultModal = true;
-          this.openModal.set(false);
-        },
-        error: () => {
-          // Ошибка отправки - снимаем флаг загрузки
-          this.sendFormIsSubmitting = false;
-        },
-      });
+    this.vacancyDetailInfoService.submitVacancyResponse();
   }
 
   /**
@@ -203,16 +154,14 @@ export class VacancyInfoComponent implements OnInit {
    * @param isExpanded - текущее состояние (раскрыто/свернуто)
    */
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    expandElement(elem, expandedClass, isExpanded);
-    this.readFullDescription = !isExpanded;
+    this.expandService.onExpand("description", elem, expandedClass, isExpanded);
   }
 
   onExpandSkills(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    expandElement(elem, expandedClass, isExpanded);
-    this.readFullSkills = !isExpanded;
+    this.expandService.onExpand("skills", elem, expandedClass, isExpanded);
   }
 
-  openSkills() {
+  protected openSkills() {
     location.href = "https://skills.procollab.ru";
   }
 }

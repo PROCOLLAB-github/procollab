@@ -1,18 +1,18 @@
 <!-- @format -->
 
-@if (program) {
+@if (program()) {
 <main class="project">
   <section class="program__main">
     <!-- advertisementImageAddress поле только для тех кто не участник программы поэтому нельзя сделать toggle и давать появляться или нет полю -->
-    @if (!program.isUserMember && !program.isUserManager) {
+    @if (!program()!.isUserMember && !program()!.isUserManager) {
     <div class="program__advertisement">
-      <img [src]="program.advertisementImageAddress" [alt]="program.name" />
+      <img [src]="program()!.advertisementImageAddress" [alt]="program()!.name" />
     </div>
     } @else {
     <div class="program__details">
       <div class="program__left">
         <aside class="program__aside">
-          @if (program.isUserMember) {
+          @if (program()!.isUserMember) {
           <app-soon-card
             title="аналитика"
             description="уровень включённости студентов, статистика достижения целей в проектах"
@@ -27,30 +27,30 @@
             <h3 class="text-body-12 about__title">о программе</h3>
             <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
           </div>
-          @if (program.description) {
+          @if (program()!.description) {
           <div class="text-body-10 about__text">
-            <p #descEl [innerHTML]="program.description | parseLinks | parseBreaks"></p>
-            @if (descriptionExpandable) {
+            <p #descEl [innerHTML]="program()!.description | parseLinks | parseBreaks"></p>
+            @if (descriptionExpandable()) {
             <div
               class="read-more"
-              (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+              (click)="onExpandDescription(descEl, 'expanded', readFullDescription())"
             >
-              {{ readFullDescription ? "cкрыть" : "подробнее" }}
+              {{ readFullDescription() ? "cкрыть" : "подробнее" }}
             </div>
             }
           </div>
           }
         </div>
         <div class="news">
-          @if (program.isUserManager) {
+          @if (program()!.isUserManager) {
           <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
           } @for (n of news(); track n.id) {
           <app-news-card
             class="news__item"
             [attr.data-id]="n.id"
-            [resourceLink]="['/office/program', program.id]"
+            [resourceLink]="['/office/program', program()!.id]"
             [feedItem]="n"
-            [isOwner]="program.isUserMember"
+            [isOwner]="program()!.isUserMember"
             (like)="onLike($event)"
             (edited)="onEdit($event, n.id)"
             (delete)="onDelete($event)"
@@ -61,14 +61,14 @@
 
       <div class="program__right">
         <aside class="program__aside">
-          @if (program.isUserMember && (program.links?.length && program.links)) {
+          @if (program()!.isUserMember && (program()!.links?.length && program()!.links)) {
           <div class="links program__section">
             <div class="links__section">
               <h3 class="links__title text-body-12">контакты</h3>
               <i appIcon icon="phone" class="links__icon" appSquare="12"></i>
             </div>
             <ul>
-              @for (link of program.links; track $index) {
+              @for (link of program()!.links; track $index) {
               <li class="contact-link links__item text-body-10">
                 @if (link | userLinks; as l) {
                 <a
@@ -88,14 +88,14 @@
         </aside>
 
         <aside class="program__aside">
-          @if (program.isUserMember && (program.materials?.length && program.materials)) {
+          @if (program()!.isUserMember && (program()!.materials?.length && program()!.materials)) {
           <div class="links program__section">
             <div class="links__section">
               <h3 class="links__title text-body-12">материалы</h3>
               <i appIcon icon="book" appSquare="12" class="links__icon"></i>
             </div>
             <ul>
-              @for (material of program.materials; track $index) {
+              @for (material of program()!.materials; track $index) {
               <li class="contact-link links__item text-body-10">
                 @if (material.url | userLinks; as l) {
                 <a
@@ -119,7 +119,7 @@
   </section>
 </main>
 
-<app-modal [open]="showProgramModal()" (openChange)="showProgramModal.set(!showProgramModal)">
+<app-modal [open]="showProgramModal()" (openChange)="showProgramModal.set(!showProgramModal())">
   <div class="cancel">
     <div class="cancel__top">
       <i appIcon icon="cross" class="cancel__cross" appSquare="12" (click)="closeModal()"></i>
@@ -145,8 +145,8 @@
 </app-modal>
 
 <app-modal
-  [open]="isAssignProjectToProgramError"
-  (openChange)="isAssignProjectToProgramError ? clearAssignProjectToProgramError() : null"
+  [open]="isAssignProjectToProgramError()"
+  (openChange)="isAssignProjectToProgramError() ? clearAssignProjectToProgramError() : null"
 >
   <div class="cancel" style="padding: 24px">
     <div class="cancel__top">

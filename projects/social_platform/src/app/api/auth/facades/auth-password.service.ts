@@ -1,7 +1,6 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ValidationService } from "@corelib";
 import { map, Subject, takeUntil } from "rxjs";
@@ -15,6 +14,9 @@ export class AuthPasswordService {
   private readonly router = inject(Router);
   private readonly validationService = inject(ValidationService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
+
+  private readonly passwordForm = this.authUIInfoService.passwordForm;
+  private readonly resetForm = this.authUIInfoService.resetForm;
 
   private readonly destroy$ = new Subject<void>();
 
@@ -30,18 +32,26 @@ export class AuthPasswordService {
   readonly credsSubmitInitiated = this.authUIInfoService.credsSubmitInitiated;
   private readonly errorServer = this.authUIInfoService.errorServer;
 
+  init(): void {
+    const token = this.route.snapshot.queryParamMap.get("token");
+    if (!token) {
+      // Handle the case where token is not present
+      console.error("Token is missing");
+    }
+  }
+
   // ResetPassword Component
-  onSubmitResetPassword(resetForm: FormGroup): void {
-    if (!this.validationService.getFormValidation(resetForm)) return;
+  onSubmitResetPassword(): void {
+    if (!this.validationService.getFormValidation(this.resetForm)) return;
 
     this.errorServer.set(false);
     this.isSubmitting.set(true);
 
-    this.authService.resetPassword(resetForm.value.email).subscribe({
+    this.authService.resetPassword(this.resetForm.value.email!).subscribe({
       next: () => {
         this.router
           .navigate(["/auth/reset_password/confirm"], {
-            queryParams: { email: resetForm.value.email },
+            queryParams: { email: this.resetForm.value.email },
           })
           .then(() => console.debug("ResetPasswordComponent"));
       },
@@ -49,7 +59,7 @@ export class AuthPasswordService {
         this.errorServer.set(true);
         this.isSubmitting.set(false);
 
-        resetForm.reset();
+        this.resetForm.reset();
       },
       complete: () => {
         this.isSubmitting.set(false);
@@ -58,13 +68,13 @@ export class AuthPasswordService {
   }
 
   // SetPassword Component
-  onSubmitSetPassword(passwordForm: FormGroup): void {
+  onSubmitSetPassword(): void {
     this.credsSubmitInitiated.set(true);
     const token = this.route.snapshot.queryParamMap.get("token");
 
-    if (!token || !this.validationService.getFormValidation(passwordForm)) return;
+    if (!token || !this.validationService.getFormValidation(this.passwordForm)) return;
 
-    this.authService.setPassword(passwordForm.value.password, token).subscribe({
+    this.authService.setPassword(this.passwordForm.value.password!, token).subscribe({
       next: () => {
         this.router.navigateByUrl("/auth/login").then(() => console.debug("SetPasswordComponent"));
       },

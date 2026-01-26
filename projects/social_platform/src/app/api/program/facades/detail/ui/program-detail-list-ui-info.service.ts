@@ -4,6 +4,7 @@ import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
+import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
 import { ProjectRate } from "projects/social_platform/src/app/domain/project/project-rate";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 
@@ -23,6 +24,8 @@ export class ProgramDetailListUIInfoService {
 
   readonly profileSubscriptions = signal<Project[]>([]);
   readonly profileProjSubsIds = computed(() => this.profileSubscriptions().map(sub => sub.id));
+
+  readonly availableFilters = signal<PartnerProgramFields[]>([]);
 
   itemsPerPage = computed(() => {
     return this.listType() === "rating"
@@ -55,6 +58,10 @@ export class ProgramDetailListUIInfoService {
 
   applyInitializationSearchForm(value: string): void {
     this.searchForm.setValue({ search: value });
+  }
+
+  applySetAvailableFilters(filters: PartnerProgramFields[]): void {
+    this.availableFilters.set(filters);
   }
 
   applyInitializationProgramListData(data: any): void {
