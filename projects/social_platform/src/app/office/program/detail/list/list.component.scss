@@ -6,6 +6,8 @@
   grid-template-columns: 8fr 2fr;
   gap: 10px;
   padding-bottom: 100px;
+  max-width: 1280px;
+  margin: 0 auto;
 
   &__outlet {
     display: flex;
@@ -58,6 +60,7 @@
 
   &__left {
     width: 100%;
+    position: relative;
   }
 
   &__export {
@@ -78,8 +81,12 @@
 
   &__tooltip {
     position: fixed;
-    right: 320px;
-    bottom: 30px;
+    bottom: 24px;
+    right: calc(
+      (100vw - 1080px) / 2
+    );
+
+    z-index: 30;
   }
 }
 

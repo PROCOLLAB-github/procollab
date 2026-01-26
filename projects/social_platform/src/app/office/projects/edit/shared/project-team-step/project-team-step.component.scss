@@ -68,15 +68,19 @@
 
   &__no-items {
     position: absolute;
-    bottom: 0%;
+    bottom: -50%;
     left: 50%;
+    transform: translateY(-50%);
   }
 
   &__team {
+    position: relative;
+
     &-tooltip {
-      position: fixed;
-      right: 320px;
-      bottom: 30px;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      transform: translateY(calc(var(--app-height) * 0.47));
     }
   }
 }

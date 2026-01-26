@@ -138,8 +138,6 @@ export class OfficeComponent implements OnInit, OnDestroy {
           (program: Program) => Date.now() < Date.parse(program.datetimeRegistrationEnds)
         );
         this.programs.set(resultPrograms.slice(0, 3));
-
-        console.log(this.programs().find(prog => prog.isUserMember));
         this.tryShowRegisteredProgramModal();
       },
     });
