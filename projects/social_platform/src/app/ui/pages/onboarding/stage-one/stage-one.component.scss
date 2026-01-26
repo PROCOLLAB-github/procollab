@@ -10,9 +10,9 @@
     max-width: 100%;
 
     @include responsive.apply-desktop {
-      max-width: 60%;
       flex-direction: row;
       align-items: center;
+      max-width: 60%;
     }
   }
 }

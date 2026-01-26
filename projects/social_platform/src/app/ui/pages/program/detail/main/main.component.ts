@@ -53,6 +53,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   protected readonly isAssignProjectToProgramError =
     this.projectAdditionalService.getIsAssignProjectToProgramError();
+
   protected readonly errorAssignProjectToProgramModalMessage =
     this.projectAdditionalService.errorAssignProjectToProgramModalMessage;
 

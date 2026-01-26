@@ -97,10 +97,12 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   protected readonly isHintEducationVisible = this.tooltipInfoService.isHintEducationVisible;
   protected readonly isHintEducationDescriptionVisible =
     this.tooltipInfoService.isHintEducationDescriptionVisible;
+
   protected readonly isHintWorkVisible = this.tooltipInfoService.isHintWorkVisible;
   protected readonly isHintWorkNameVisible = this.tooltipInfoService.isHintWorkNameVisible;
   protected readonly isHintWorkDescriptionVisible =
     this.tooltipInfoService.isHintWorkDescriptionVisible;
+
   protected readonly isHintAchievementsVisible = this.tooltipInfoService.isHintAchievementsVisible;
   protected readonly isHintLanguageVisible = this.tooltipInfoService.isHintLanguageVisible;
 
@@ -108,6 +110,7 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
 
   protected readonly educationStatusList =
     this.onboardingStageZeroUIInfoService.educationStatusList;
+
   protected readonly educationLevelList = this.onboardingStageZeroUIInfoService.educationStatusList;
 
   protected readonly languageList = this.onboardingStageZeroUIInfoService.languageList;
@@ -136,15 +139,19 @@ export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
 
   protected readonly selectedEntryYearEducationId =
     this.onboardingStageZeroUIInfoService.selectedEntryYearEducationId;
+
   protected readonly selectedComplitionYearEducationId =
     this.onboardingStageZeroUIInfoService.selectedComplitionYearEducationId;
+
   protected readonly selectedEducationStatusId =
     this.onboardingStageZeroUIInfoService.selectedEducationStatusId;
+
   protected readonly selectedEducationLevelId =
     this.onboardingStageZeroUIInfoService.selectedEducationLevelId;
 
   protected readonly selectedEntryYearWorkId =
     this.onboardingStageZeroUIInfoService.selectedEntryYearWorkId;
+
   protected readonly selectedComplitionYearWorkId =
     this.onboardingStageZeroUIInfoService.selectedComplitionYearWorkId;
 

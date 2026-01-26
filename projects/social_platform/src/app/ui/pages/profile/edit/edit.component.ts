@@ -178,6 +178,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected readonly isModalErrorSkillsChoose =
     this.profileEditInfoService.isModalErrorSkillsChoose;
+
   protected readonly isModalErrorSkillChooseText =
     this.profileEditInfoService.isModalErrorSkillChooseText;
 

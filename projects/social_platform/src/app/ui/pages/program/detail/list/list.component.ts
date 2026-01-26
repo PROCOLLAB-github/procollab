@@ -70,6 +70,7 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   protected readonly loadingExportProjects = this.exportFileInfoService.loadingExportProjects;
   protected readonly loadingExportSubmittedProjects =
     this.exportFileInfoService.loadingExportSubmittedProjects;
+
   protected readonly loadingExportRates = this.exportFileInfoService.loadingExportRates;
   protected readonly loadingExportCalculations =
     this.exportFileInfoService.loadingExportCalculations;

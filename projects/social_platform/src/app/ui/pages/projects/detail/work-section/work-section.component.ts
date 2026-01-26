@@ -4,10 +4,7 @@ import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ButtonComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
-import { map, Subscription } from "rxjs";
-import { ActivatedRoute, RouterLink } from "@angular/router";
-import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
-import { VacancyService } from "projects/social_platform/src/app/api/vacancy/vacancy.service";
+import { RouterLink } from "@angular/router";
 import { ProjectsDetailWorkSectionInfoService } from "projects/social_platform/src/app/api/project/facades/detail/work-section/projects-detail-work-section-info.service";
 import { ProjectsDetailWorkSectionUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/work-section/ui/projects-detail-work-section-ui-info.service";
 
@@ -23,6 +20,7 @@ export class ProjectWorkSectionComponent implements OnInit, OnDestroy {
   private readonly projectsDetailWorkSectionInfoService = inject(
     ProjectsDetailWorkSectionInfoService
   );
+
   private readonly projectsDetailWorkSectionUIInfoService = inject(
     ProjectsDetailWorkSectionUIInfoService
   );
