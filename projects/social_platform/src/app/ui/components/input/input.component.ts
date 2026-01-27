@@ -35,8 +35,6 @@ import { MatFormFieldModule } from "@angular/material/form-field";
   ],
 })
 export class InputComponent implements ControlValueAccessor {
-  constructor() {}
-
   @Input() placeholder = "";
   @Input() type: "text" | "password" | "email" | "tel" | "date" | "radio" = "text";
   @Input() size: "small" | "big" = "small";
@@ -144,7 +142,9 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   writeValue(value: string | null): void {
-    this.value = value ?? "";
+    setTimeout(() => {
+      this.value = value ?? "";
+    });
   }
 
   onChange: (value: string) => void = () => {};
