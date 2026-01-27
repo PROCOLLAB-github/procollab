@@ -1,0 +1,123 @@
+.kanban {
+  &__column {
+    flex: 0 0 240px;
+    min-width: 240px;
+    max-width: 240px;
+
+    ::ng-deep {
+      app-input {
+        .field__input {
+          text-align: center;
+        }
+
+        .field__input--border {
+          border: 0.5px solid var(--accent);
+
+          &:focus {
+            border-color: none;
+            box-shadow: none;
+          }
+        }
+
+        .field__input--big {
+          padding: 5px 12px;
+        }
+
+        .field__input::placeholder {
+          text-align: center;
+        }
+
+        .field__input::placeholder::input-placeholder {
+          text-align: center;
+        }
+      }
+    }
+
+    &-wrapper {
+      display: flex;
+      gap: 20px;
+      overflow-y: hidden;
+    }
+
+    &-locked {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    &-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 12px;
+      border: 0.5px solid var(--accent);
+      border-radius: var(--rounded-xl);
+
+      &--empty {
+        justify-content: center;
+        cursor: pointer;
+      }
+    }
+
+    &--add-task {
+      display: flex;
+      align-items: center;
+      align-self: center;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    i,
+    p {
+      color: var(--accent);
+      cursor: pointer;
+    }
+  }
+
+  &__tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    min-height: 20px;
+    margin-top: 20px;
+    overflow-y: scroll;
+  }
+
+  &__task {
+    width: 100%;
+    max-width: 245px;
+    padding: 6px;
+    cursor: pointer;
+    background-color: var(--white);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
+
+    ::ng-deep {
+      app-input {
+        .field__input {
+          padding-left: 5px;
+          text-align: start;
+          background: transparent;
+        }
+
+        .field__input--border {
+          border: none;
+
+          &:focus {
+            border-color: none;
+            box-shadow: none;
+          }
+        }
+
+        .field__input::placeholder {
+          text-align: inherit;
+        }
+
+        .field__input::placeholder::input-placeholder {
+          text-align: inherit;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,150 @@
+<!-- @format -->
+
+<div class="profile__wrapper--education" [formGroup]="profileForm">
+  <div class="profile__column">
+    @if (showAchievementsFields()) {
+    <div class="profile__column">
+      @if (profileForm.get("title"); as title) {
+      <fieldset>
+        <label class="field-label">название достижения</label>
+        <app-input
+          size="big"
+          [error]="title | controlError"
+          placeholder="выиграли акселератор"
+          formControlName="title"
+        ></app-input>
+        @if (title | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+
+    <div class="profile__column">
+      @if (profileForm.get("year"); as year) {
+      <fieldset>
+        <label class="field-label">год достижения</label>
+        <app-select
+          size="big"
+          [error]="year | controlError"
+          placeholder="2022"
+          formControlName="year"
+          [selectedId]="selectedAchievementsYearId()"
+          [options]="achievementsYearList"
+        ></app-select>
+        @if (year | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+
+    <div class="profile__column">
+      @if (profileForm.get("status"); as status) {
+      <fieldset>
+        <label class="field-label">описание</label>
+        <app-textarea
+          size="big"
+          [error]="status | controlError"
+          placeholder="разработали проект, сделали анализ рынка и вывели"
+          formControlName="status"
+        ></app-textarea>
+        @if (status | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+
+    <div class="profile__column">
+      @if (profileForm.get("files"); as files) {
+      <fieldset class="profile__file" style="max-width: 100%">
+        <app-upload-file
+          formControlName="files"
+          accept=".jpg,.png,.jpeg,.pdf"
+          [error]="files | controlError"
+        >
+          <ng-container emptyPlaceholder>
+            <i appIcon icon="file" appSquare="16"></i>
+            <p class="text-body-12 profile__slides-text">
+              файл или изображение <br />
+              с сертификатом подтверждающим <br />
+              достижение весом до 50МБ
+            </p>
+            @if (files | controlError: "required") {
+            <p class="profile__slides-error text-body-10">загрузите файл</p>
+            }
+          </ng-container>
+        </app-upload-file>
+      </fieldset>
+      }
+    </div>
+    }
+    <app-button
+      customTypographyClass="text-body-12"
+      size="big"
+      appearance="outline"
+      [disabled]="showAchievementsFields() && !isAchievementsDirty"
+      [ngStyle]="{
+        opacity: showAchievementsFields() && !isAchievementsDirty ? '0.6' : '1',
+        cursor: showAchievementsFields() && !isAchievementsDirty ? 'not-allowed' : 'pointer'
+      }"
+      (click)="addAchievement()"
+    >
+      <span>{{ editAchievementsClick() ? "сохранить изменения" : "добавить достижение" }}</span>
+      <i appIcon icon="plus" appSquare="6"></i>
+    </app-button>
+  </div>
+
+  <div class="profile__education--list">
+    @if(achievementItems().length || achievements.length){ @for (achievementItem of
+    achievements.value; track $index) {
+    <div class="profile__education--info">
+      <div class="profile__education--card" style="align-items: flex-end">
+        <div class="profile__education--info">
+          <p class="text-body-12 education__title">
+            {{ achievementItem.title }}
+          </p>
+
+          <p class="text-body-10 education__text" style="color: var(--grey-for-text)">
+            {{ achievementItem.year }}
+          </p>
+
+          <p class="text-body-10 education__text">
+            {{ achievementItem.status }}
+          </p>
+
+          @if (achievementItem.files?.length) { @if (isStringFiles(achievementItem.files)) {
+          <app-file-item type="file" name="ваш файл" [size]="0" [link]="achievementItem.files">
+          </app-file-item>
+          } @else { @for (file of achievementItem.files; track $index) {
+          <app-file-item
+            [type]="file.mimeType"
+            [name]="file.name"
+            [size]="file.size"
+            [link]="file.link"
+          >
+          </app-file-item>
+          } } }
+        </div>
+
+        <div class="profile__action--icons">
+          <div class="edit-icon" (click)="editAchievements($index)">
+            <i class="edit" appIcon icon="edit-pen" appSquare="10"></i>
+          </div>
+
+          <div class="basket-icon" (click)="removeAchievement($index)">
+            <i appIcon icon="basket" appSquare="10"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    } }
+  </div>
+</div>

@@ -2,7 +2,7 @@
 
 import { Component, forwardRef, Input, OnInit } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { FileService } from "@core/services/file.service";
+import { FileService } from "projects/core/src/lib/services/file/file.service";
 import { nanoid } from "nanoid";
 import { IconComponent } from "@ui/components";
 import { SlicePipe } from "@angular/common";

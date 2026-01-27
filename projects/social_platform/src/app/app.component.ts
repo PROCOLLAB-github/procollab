@@ -2,7 +2,6 @@
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ResolveEnd, ResolveStart, Router, RouterOutlet } from "@angular/router";
-import { AuthService } from "@auth/services";
 import {
   debounceTime,
   filter,
@@ -18,7 +17,8 @@ import {
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { TokenService } from "@corelib";
-import { LoadingService } from "@office/services/loading.service";
+import { LoadingService } from "@ui/services/loading/loading.service";
+import { AuthService } from "./api/auth";
 
 /**
  * Корневой компонент приложения

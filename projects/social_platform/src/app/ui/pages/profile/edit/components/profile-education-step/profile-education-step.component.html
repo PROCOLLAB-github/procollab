@@ -1,0 +1,191 @@
+<!-- @format -->
+
+<div class="profile__wrapper--education" [formGroup]="profileForm">
+  <div class="profile__column">
+    @if (showEducationFields()) {
+    <div class="profile__column--date">
+      @if (profileForm.get("entryYear"); as entryYear) {
+      <fieldset>
+        <label for="entryYear" class="field-label">начало</label>
+        <app-select
+          size="big"
+          [selectedId]="selectedEntryYearEducationId()"
+          formControlName="entryYear"
+          placeholder="2023 год"
+          [options]="yearListEducation"
+        >
+          <i appIcon icon="arrow-no-body" appSquare="32"></i>
+        </app-select>
+
+        @if (entryYear | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (profileForm.get("completionYear"); as completionYear) {
+      <fieldset>
+        <label for="completionYear" class="field-label">конец</label>
+        <app-select
+          size="big"
+          [selectedId]="selectedComplitionYearEducationId()"
+          formControlName="completionYear"
+          placeholder="2023 год"
+          [options]="yearListEducation"
+        >
+          <i appIcon icon="arrow-no-body" appSquare="32"></i>
+        </app-select>
+        @if (completionYear | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+
+    <div class="profile__column">
+      @if (profileForm.get("organizationName"); as organizationName) {
+      <fieldset>
+        <label for="organizationName" class="field-label">название учереждения</label>
+        <app-input
+          size="big"
+          [error]="organizationName | controlError"
+          placeholder="вуз / колледж / школа"
+          formControlName="organizationName"
+        ></app-input>
+        @if (organizationName | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+
+    <div class="profile__column">
+      @if (profileForm.get("description"); as description) {
+      <fieldset>
+        <label for="description" class="field-label">направление</label>
+        <app-input
+          size="big"
+          [error]="description | controlError"
+          placeholder="бизнес информатика"
+          formControlName="description"
+        ></app-input>
+        @if (description | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+
+    <div class="profile__column">
+      @if (profileForm.get("educationLevel"); as educationLevel) {
+      <fieldset>
+        <label for="educationLevel" class="field-label">уровень образования</label>
+        <app-select
+          size="big"
+          [selectedId]="selectedEducationLevelId()"
+          formControlName="educationLevel"
+          placeholder="высшее образование-магистратура"
+          [options]="educationLevelList"
+        >
+          <i appIcon icon="arrow-no-body" appSquare="32"></i>
+        </app-select>
+        @if (educationLevel | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+
+    <div class="profile__column">
+      @if (profileForm.get("educationStatus"); as educationStatus) {
+      <fieldset>
+        <label for="educationStatus" class="field-label">статус</label>
+        <app-select
+          size="big"
+          [selectedId]="selectedEducationStatusId()"
+          formControlName="educationStatus"
+          placeholder="студент"
+          [options]="educationStatusList"
+        >
+          <i appIcon icon="arrow-no-body" appSquare="32"></i>
+        </app-select>
+        @if (educationStatus | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+    }
+
+    <app-button
+      customTypographyClass="text-body-12"
+      size="big"
+      appearance="outline"
+      [disabled]="showEducationFields() && !isEducationDirty"
+      [ngStyle]="{
+        opacity: showEducationFields() && !isEducationDirty ? '0.6' : '1',
+        cursor: showEducationFields() && !isEducationDirty ? 'not-allowed' : 'pointer'
+      }"
+      class="profile__add-education"
+      (click)="addEducation()"
+    >
+      <span>{{ editEducationClick() ? "сохранить изменения" : "добавить образование" }}</span>
+      <i appIcon icon="plus" appSquare="6"></i>
+    </app-button>
+  </div>
+
+  <div class="profile__education--list">
+    @if(educationItems().length || education.length){ @for (educationItem of education.value; track
+    $index) {
+    <div class="profile__education--info">
+      <p class="text-body-12 education__title">
+        {{ educationItem.organizationName }}
+      </p>
+
+      <p class="text-body-10 education__text">
+        @if(educationItem.entryYear && educationItem.completionYear) {
+        {{ educationItem.entryYear }} год • {{ educationItem.completionYear }} год } @else if
+        (educationItem.entryYear && !educationItem.completionYear) {
+        {{ educationItem.entryYear }} год } @else if (!educationItem.entryYear &&
+        educationItem.completionYear){ {{ educationItem.completionYear }} год }
+      </p>
+
+      <div class="profile__education--card">
+        <div class="profile__education--info">
+          <p class="text-body-10 education__text">
+            {{ educationItem.description }}
+          </p>
+
+          <p class="text-body-10 education__text">
+            {{ educationItem.educationLevel }}
+          </p>
+
+          <p class="text-body-10 education__text">
+            {{ educationItem.educationStatus }}
+          </p>
+        </div>
+
+        <div class="profile__action--icons">
+          <div class="edit-icon" (click)="editEducation($index)">
+            <i appIcon icon="edit-pen" appSquare="10"></i>
+          </div>
+
+          <div class="basket-icon" (click)="removeEducation($index)">
+            <i appIcon icon="basket" appSquare="10"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    } }
+  </div>
+</div>

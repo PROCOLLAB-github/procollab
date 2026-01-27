@@ -1,0 +1,86 @@
+<!-- @format -->
+
+<div class="kanban__task" [ngStyle]="getPriorityType(task.priority, 'background')">
+  <div class="kanban__task-left">
+    <span class="text-body-10">{{ task.title }}</span>
+    @if (task.description) {
+    <p class="text-body-6">{{ task.description }}</p>
+    } @if (task.responsible || (task.performers && task.performers.length > 0) || task.files ||
+    task.type) {
+    <div class="kanban__task-mid">
+      <div class="kanban__task-people">
+        @if (task.responsible; as responsible) {
+        <div class="kanban__task-responsible" [routerLink]="'/office/profile/' + responsible.id">
+          <i appIcon icon="person" appSquare="6"></i>
+          <app-avatar [size]="12" [url]="responsible.avatar"></app-avatar>
+        </div>
+        }
+        <div class="kanban__task-performers">
+          <i appIcon icon="people-bold" appSquare="8"></i>
+          @if (task.performers; as performers) { @if (performers.length > 0) { @for (performer of
+          performers; track $index) {
+          <app-avatar [size]="12" [url]="performer.avatar"></app-avatar>
+          } } }
+        </div>
+      </div>
+
+      @if (task.files || task.type) {
+      <div class="kanban__task-icons">
+        <i appIcon icon="attach" appSquare="8" style="color: var(--grey-for-text)"></i>
+        <i appIcon icon="phone" appSquare="6"></i>
+      </div>
+      }
+    </div>
+    } @if (task.deadlineDate || task.tags || task.goal) {
+    <div class="kanban__task-bottom" [class.kanban__task-bottom--completed]="isArchivePage()">
+      <div class="kanban__task-bottom--start">
+        @if (task.deadlineDate) { @if (!isArchivePage()) {
+        <div class="kanban__task-deadline">
+          <i appIcon icon="calendar" appSquare="6"></i>
+          <p class="text-body-6" [style.margin-top]="task.description ? '1px' : '2px'">
+            {{ task.deadlineDate }}
+          </p>
+        </div>
+        } @else if (diffDays() || task.deadlineDate || task.startDate) {
+        <app-tag appearance="inline" type="days">{{
+          diffDays() + " " + (diffDays()! | pluralize: ["день", "дня", "дней"])
+        }}</app-tag>
+        } } @if (isArchivePage() && isOverdue()) {
+        <app-tag appearance="inline" type="overdue">просрочено</app-tag>
+        } @if (task.tags[0]; as tag) {
+        <app-tag [color]="tag.color">{{ "#" + tag.name }}</app-tag>
+        } @if (!isArchivePage()) { @if (task.goal; as goal) {
+        <app-tag color="soft">{{ goal.title }}</app-tag>
+        } }
+      </div>
+
+      @if (isLeader()) {
+      <app-tag
+        class="kanban__task-cancel"
+        color="red"
+        (click)="$event.stopPropagation(); onToggleCancelTaskForm()"
+        >отменить</app-tag
+      >
+      }
+    </div>
+    }
+  </div>
+
+  <div class="kanban__task-right">
+    @if (task.priority) {
+    <div class="kanban__task-priority" [ngStyle]="getPriorityType(task.priority, 'color')"></div>
+    }
+    <i appIcon icon="arrow-wide" appSquare="8"></i>
+  </div>
+</div>
+
+<app-modal [open]="isCancelFormOpen" (openChange)="isCancelFormOpen = !isCancelFormOpen">
+  <div class="cancel" (click)="$event.stopPropagation()">
+    <div class="lists__section">
+      <p class="text-body-12 lists__title">отмена выполнения задачи</p>
+      <i appIcon icon="task" class="lists__icon" appSquare="12"></i>
+    </div>
+
+    <app-cancel-task-form (submit)="onToggleCancelTaskForm()"></app-cancel-task-form>
+  </div>
+</app-modal>

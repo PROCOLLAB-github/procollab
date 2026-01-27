@@ -1,0 +1,19 @@
+<!-- @format -->
+
+<ng-container>
+  <div class="kanban__actions">
+    <div class="kanban__sidebar-item actions__person">
+      <i appIcon icon="person" appSquare="8"></i>
+    </div>
+
+    <div class="kanban__sidebar-item actions__priority">
+      <i appIcon icon="calendar" appSquare="8"></i>
+    </div>
+  </div>
+
+  @if (isLeader()) {
+  <div class="kanban__sidebar-item kanban__sidebar--add-project" (click)="addBoard($event)">
+    <i appIcon icon="plus" appSquare="8"></i>
+  </div>
+  }
+</ng-container>

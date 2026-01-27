@@ -1,0 +1,81 @@
+/** @format */
+
+@use "styles/responsive";
+@use "styles/typography";
+
+.project {
+  &__navigation {
+    padding: 22px 0;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--grey-button);
+  }
+
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    padding: 2px 10px;
+    background-color: var(--medium-grey-for-outline);
+    border-radius: var(--rounded-xxl);
+
+    @include responsive.apply-desktop {
+      gap: 0;
+      justify-content: space-between;
+    }
+  }
+
+  &__item {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    cursor: pointer;
+
+    &--active {
+      padding: 0 8px;
+      margin-right: -8px;
+      margin-left: -8px;
+      background-color: var(--white);
+      border-radius: var(--rounded-xxl);
+    }
+  }
+
+  &__subtitle {
+    color: var(--dark-grey);
+
+    @include typography.body-12;
+
+    &--active {
+      color: var(--black);
+    }
+  }
+
+  &__icon {
+    opacity: 0.1;
+
+    &--active {
+      color: var(--accent);
+      opacity: 1;
+    }
+  }
+
+  &__nav-item {
+    color: var(--dark-grey);
+    cursor: pointer;
+
+    @include typography.heading-4;
+
+    @include responsive.apply-desktop {
+      @include typography.heading-3;
+    }
+
+    &:not(:last-child) {
+      margin-right: 24px;
+    }
+
+    &--active {
+      color: var(--black);
+    }
+  }
+}

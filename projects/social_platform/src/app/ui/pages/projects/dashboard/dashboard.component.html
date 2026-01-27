@@ -1,0 +1,13 @@
+<!-- @format -->
+
+<div class="dashboard">
+  @for (dashboardItem of dashboardItems(); track $index) {
+  <app-dashboard-item
+    [sectionName]="dashboardItem.sectionName"
+    [title]="dashboardItem.title"
+    [iconName]="dashboardItem.iconName"
+    [arrayItems]="dashboardItem.arrayItems"
+    [profileProjSubsIds]="dashboardItem.sectionName === 'all' ? profileProjSubsIds() : []"
+  ></app-dashboard-item>
+  }
+</div>

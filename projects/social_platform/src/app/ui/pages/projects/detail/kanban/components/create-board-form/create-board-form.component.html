@@ -1,0 +1,60 @@
+<!-- @format -->
+
+<div class="create-board">
+  <form class="create-board__form" [formGroup]="createBoardForm">
+    <div class="create-board__title">
+      @if (createBoardForm.get("title"); as title) {
+      <input formControlName="title" class="text-body-6" placeholder="название доски" />
+      @if (title | controlError: "required") {
+      <div class="text-body-10 error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+      } }
+    </div>
+
+    <div class="create-board__colors">
+      @if (createBoardForm.get("color"); as color) { @for (colorItem of tagColors; track $index) {
+      <div
+        class="create-board__pick-color"
+        (click)="pickOption('color', colorItem.name)"
+        [style.backgroundColor]="colorItem.color"
+      ></div>
+      } }
+    </div>
+
+    <div class="create-board__description">
+      @if (createBoardForm.get("description"); as description) {
+      <textarea
+        formControlName="description"
+        class="text-body-6"
+        placeholder="краткое описание"
+      ></textarea>
+      @if (description | controlError: "required") {
+      <div class="text-body-10 error">
+        {{ errorMessage.VALIDATION_REQUIRED }}
+      </div>
+      } @if (description | controlError: "maxlength") {
+      <div class="text-body-10 error">
+        {{ errorMessage.VALIDATION_TOO_LONG }}
+        @if (description.errors) {
+        {{ description.errors["maxlength"]["requiredLength"] }}
+        }
+      </div>
+      } @if (description | controlError: "minlength") {
+      <div class="text-body-10 error">
+        {{ errorMessage.VALIDATION_TOO_SHORT }}
+        @if (description.errors) {
+        {{ description.errors["minlength"]["requiredLength"] }}
+        }
+      </div>
+      } }
+    </div>
+
+    <div class="create-board__icons">
+      @if (createBoardForm.get("icon"); as icon) { @for (icon of kanbanIcons.slice(0, 13); track
+      $index) {
+      <i appIcon [icon]="icon.name" appSquare="6" (click)="pickOption('icon', icon.value)"></i>
+      } }
+    </div>
+  </form>
+</div>

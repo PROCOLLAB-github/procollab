@@ -1,0 +1,785 @@
+<!-- @format -->
+
+<div class="kanban__detail" [formGroup]="taskDetailForm">
+  <div class="kanban__detail-top">
+    <div class="kanban__detail-buttons">
+      @if (!isTaskResult()) { @if (isExternal() || ((isLeader() || isCreator()) && !isPerformer() &&
+      !isResponsible())) {
+      <app-button
+        appearance="outline"
+        size="medium"
+        color="gold"
+        customTypographyClass="text-body-12"
+        >ожидание результата</app-button
+      >
+      } @else if (isResponsible() || isPerformer()) {
+      <app-button
+        size="medium"
+        appearance="inline"
+        color="primary"
+        customTypographyClass="text-body-12"
+        (click)="showAttachResultModal = true"
+        >прикрепить результа</app-button
+      >
+      } } @else { @if (isCommented) {
+      <app-button
+        [appearance]="isCommentedByLeader && !isLeader() ? 'inline' : 'outline'"
+        size="medium"
+        [color]="isCommentedByLeader && !isLeader() ? 'red' : 'gold'"
+        customTypographyClass="text-body-12"
+        (click)="isCommentedByLeader && !isLeader() && (showLeaderCommentedResultModal = true)"
+        >{{
+          isCommentedByLeader && !isLeader() ? "комментарий лидера" : "вы прокомментировали"
+        }}</app-button
+      >
+      } @if (isLeaderAcceptResult()) { @if (!(isExternal())) {
+      <div class="kanban__detail-top--accept" (click)="isCompletedTask = true"></div>
+      }
+
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        appearance="outline"
+        color="green"
+        (click)="isLeader() && (showUnAcceptResultModal = true)"
+        >{{ isLeader() ? "вы приняли работу" : "результат принят" }}</app-button
+      >
+      } @else { @if (isLeader() && !isLeaderLeaveComment()) {
+      <app-button
+        size="big"
+        customTypographyClass="text-body-12"
+        (click)="showAcceptResultModal = true"
+        >приемка</app-button
+      >
+      } @if (!isCommentedByLeader) { @if (isResponsible() || isPerformer()) {
+      <app-button
+        appearance="outline"
+        size="medium"
+        color="gold"
+        customTypographyClass="text-body-12"
+        >ожидание проверки</app-button
+      >
+      } } }
+
+      <app-button
+        size="medium"
+        (click)="showResultModal = true"
+        customTypographyClass="text-body-12"
+        appearance="outline"
+        >результат задачи</app-button
+      >
+      }
+    </div>
+
+    <div class="kanban__detail-top-menu">
+      @if (taskDetailForm.get("type"); as type) {
+      <div
+        class="kanban__detail-type"
+        (clickOutside)="onTypeSelect('type', isActionTypeOpen, type.value)"
+        (click)="onTypeSelect('type', !isActionTypeOpen, type.value)"
+      >
+        <i appIcon [icon]="getActionType(type.value)" appSquare="15"></i>
+        <app-dropdown
+          [isOpen]="isActionTypeOpen"
+          type="icons"
+          (select)="onTypeSelect('type', false, $event)"
+          (outside)="onTypeSelect('type', false)"
+          [options]="actionTypeOptions"
+        ></app-dropdown>
+      </div>
+      } @if (taskDetailForm.get("priority"); as priority) {
+      <div
+        class="kanban__detail-priority-wrapper"
+        (clickOutside)="onTypeSelect('priority', isPriorityTypeOpen, priority.value)"
+        (click)="onTypeSelect('priority', !isPriorityTypeOpen, priority.value)"
+      >
+        <div
+          class="kanban__detail-priority"
+          [ngStyle]="getPriorityType(priority.value, 'color')"
+        ></div>
+        <app-dropdown
+          [isOpen]="isPriorityTypeOpen"
+          type="shapes"
+          (select)="onTypeSelect('priority', false, $event)"
+          (outside)="onTypeSelect('priority', false)"
+          [options]="priorityTypeOptions"
+        ></app-dropdown>
+      </div>
+      } @if (isCreator() || isLeader()) {
+      <div
+        class="kanban__detail-delete-wrapper"
+        (clickOutside)="onTypeSelect('delete', isDeleteTypeOpen)"
+        (click)="onTypeSelect('delete', !isDeleteTypeOpen)"
+      >
+        <i class="kanban__detail-delete" appIcon icon="dots" appSquare="10"></i>
+        <app-dropdown
+          [isOpen]="isDeleteTypeOpen"
+          type="text"
+          colorText="red"
+          (select)="onTypeSelect('delete', false, $event)"
+          (outside)="onTypeSelect('delete', false)"
+          [options]="priorityDeleteOptions"
+        ></app-dropdown>
+      </div>
+      }
+    </div>
+  </div>
+
+  <div class="kanban__detail-general">
+    @if (taskDetailForm.get("title")?.value; as title) {
+    <p class="text-body-14" formControlName="title">{{ title }}</p>
+    } @if (taskDetailForm.get("score")?.value; as score) {
+    <div class="kanban__detail-general-score">
+      <i appIcon icon="star" appSquare="10"></i>
+      <p class="text-body-12" style="color: var(--grey-for-text)">{{ score }}</p>
+    </div>
+    }
+  </div>
+
+  <div class="kanban__detail-info" style="justify-content: flex-end; align-items: center">
+    @if (taskDetailInfo()?.creator; as creator) {
+    <div class="kanban__detail-info-name" style="align-items: center">
+      <app-avatar [size]="10" [url]="creator.avatar"></app-avatar>
+      <p class="text-body-6" style="color: var(--grey-for-text)">
+        {{ creator.firstName + " " + creator.lastName[0] }}
+      </p>
+    </div>
+    }
+
+    <p class="text-body-6">{{ taskDetailInfo()?.datetimeCreated | date: "dd.MM.yyyy HH:mm" }}</p>
+  </div>
+
+  <div class="kanban__divider">
+    <img alt="divider image" src="assets/images/projects/shared/divider.png" />
+  </div>
+
+  <div class="kanban__detail-info" style="align-items: flex-start">
+    @if (taskDetailForm.get("responsible"); as responsible) {
+    <div class="kanban__detail-info-wrapper">
+      <div class="kanban__detail-info-name">
+        <i appIcon icon="person" appSquare="10"></i>
+        <h6 class="text-body-10">ответственный</h6>
+      </div>
+
+      <div class="kanban__detail-info-name">
+        @if (responsible.value) {
+        <div
+          class="kanban__detail-avatar"
+          (mouseenter)="showEditAvatarIcon = true"
+          (mouseleave)="showEditAvatarIcon = false"
+        >
+          <app-avatar
+            [style.opacity]="showEditAvatarIcon ? '0.7' : '1'"
+            [size]="20"
+            [url]="responsible.value.avatar"
+          ></app-avatar>
+
+          @if (showEditAvatarIcon) {
+          <i
+            appIcon
+            icon="edit-pen"
+            appSquare="8"
+            (click)="onTypeSelect('responsible', !isResponsiblePickOpen)"
+          ></i>
+          }
+
+          <app-dropdown
+            [isOpen]="isResponsiblePickOpen"
+            type="avatars"
+            [options]="responsiblePickOpenOptions"
+            (select)="onTypeSelect('responsible', false, $event)"
+            (outside)="isResponsiblePickOpen = false"
+          ></app-dropdown>
+        </div>
+
+        <p class="text-body-10" style="color: var(--grey-for-text)">{{ responsible.value.name }}</p>
+        } @else {
+        <div
+          class="kanban__detail-add-responsible"
+          (clickOutside)="onTypeSelect('responsible', isResponsiblePickOpen)"
+          (click)="onTypeSelect('responsible', !isResponsiblePickOpen)"
+        >
+          <i appIcon icon="plus" appSquare="5"></i>
+          <app-dropdown
+            [isOpen]="isResponsiblePickOpen"
+            type="avatars"
+            (select)="onTypeSelect('responsible', false, $event)"
+            (outside)="onTypeSelect('responsible', false)"
+            [options]="responsiblePickOpenOptions"
+          ></app-dropdown>
+        </div>
+        }
+      </div>
+    </div>
+    } @if (taskDetailForm.get("performers"); as performers) {
+    <div class="kanban__detail-info-wrapper">
+      <div class="kanban__detail-info-name">
+        <i appIcon icon="people-bold" appSquare="10"></i>
+        <h6 class="text-body-10">исполнители</h6>
+      </div>
+
+      <div class="kanban__detail-info-name">
+        @if (performers.value && performers.value.length >= 0 && performers.value.length <= 7) {
+        <div class="kanban__detail-performers">
+          @for (performer of performers.value; track $index) {
+          <app-avatar [size]="20" [url]="performer.avatar"></app-avatar>
+          }
+        </div>
+        } @if (!(performers.value && performers.value.length === 7)) {
+        <div
+          class="kanban__detail-add-responsible"
+          (clickOutside)="onTypeSelect('performers', isPerformersPickOpen)"
+          (click)="onTypeSelect('performers', !isPerformersPickOpen)"
+        >
+          <i appIcon icon="plus" appSquare="5"></i>
+          <app-dropdown
+            [isOpen]="isPerformersPickOpen"
+            type="avatars"
+            (select)="onTypeSelect('performers', false, $event)"
+            (outside)="onTypeSelect('performers', false)"
+            [options]="responsiblePickOpenOptions"
+          ></app-dropdown>
+        </div>
+        }
+      </div>
+    </div>
+    } @if (taskDetailForm.get("startDate"); as startDate) {
+    <div class="kanban__detail-info-wrapper">
+      <div class="kanban__detail-info-name--date">
+        <i appIcon icon="calendar" appSquare="10"></i>
+        <p class="text-body-10">начало</p>
+      </div>
+
+      <div class="kanban__detail-info-name">
+        @if (!showEditStartDatePicker) {
+        <p
+          (click)="showEditStartDatePicker = true"
+          class="text-body-10"
+          style="color: var(--grey-for-text)"
+        >
+          {{ startDate.value | date: "dd.MM.yy" }}
+        </p>
+        } @else {
+        <app-input
+          type="date"
+          size="small"
+          [mask]="'d0.M0.yy'"
+          placeholder="21.05.25"
+          formControlName="startDate"
+          [error]="startDate | controlError"
+        ></app-input>
+        }
+
+        <app-badge [color]="statusOfTask.color" type="start">{{ statusOfTask.text }}</app-badge>
+      </div>
+    </div>
+    } @if (taskDetailForm.get("deadline"); as deadline) {
+    <div class="kanban__detail-info-wrapper">
+      <div class="kanban__detail-info-name--date">
+        <i appIcon icon="calendar" appSquare="10"></i>
+        <p class="text-body-10">дедлайн</p>
+      </div>
+
+      <div class="kanban__detail-info-name">
+        @if (!showEditDeadlineDatePicker) {
+        <p
+          (click)="showEditDeadlineDatePicker = true"
+          class="text-body-10"
+          style="color: var(--grey-for-text)"
+        >
+          {{ deadline.value | date: "dd.MM.yy" }}
+        </p>
+        } @else {
+        <app-input
+          type="date"
+          size="small"
+          [mask]="'d0.M0.yy'"
+          placeholder="21.05.25"
+          formControlName="deadline"
+          [error]="deadline | controlError"
+        ></app-input>
+        }
+
+        <app-badge [color]="statusOfTask.color" type="deadline">{{
+          remainingDaysDeadline() +
+            " " +
+            (remainingDaysDeadline() | pluralize: ["день", "дня", "дней"])
+        }}</app-badge>
+      </div>
+    </div>
+    }
+  </div>
+
+  <div class="kanban__detail-info">
+    @if (taskDetailForm.get("tags"); as tags) {
+    <div class="kanban__detail-info-wrapper">
+      <div class="kanban__detail-info-name">
+        <i appIcon icon="hashtag" appSquare="10"></i>
+        <p class="text-body-10">тег</p>
+      </div>
+
+      @if (tags.value.length > 0) {
+      <div class="kanban__detail-info-list">
+        @for (tag of tags.value; track tag.id) {
+        <app-tag
+          [canEdit]="true"
+          [canDelete]="true"
+          (delete)="onDeleteTaskTag(tag.id)"
+          (edit)="onEditTaskTag(tag.id)"
+          [color]="tag.color"
+          >{{ "#" + tag.title }}</app-tag
+        >
+        }
+      </div>
+      } @if (tags.value.length < 3) {
+      <div class="kanban__detail-add-object" (click)="onTypeSelect('tags', !isTagsPickOpen)">
+        <i appIcon icon="plus" appSquare="5"></i>
+        <app-dropdown
+          [isOpen]="isTagsPickOpen"
+          type="tags"
+          [creatingTag]="creatingTag"
+          [editingTag]="editingTag"
+          (tagInfo)="createTag($event)"
+          (updateTag)="onUpdateTag($event)"
+          (select)="onTypeSelect('tags', false, $event)"
+          (outside)="onTypeSelect('tags', false)"
+          [options]="tagsPickOptions"
+        ></app-dropdown>
+      </div>
+      }
+    </div>
+    } @if (taskDetailForm.get("goal"); as goal) {
+    <div class="kanban__detail-info-wrapper">
+      <div class="kanban__detail-info-name">
+        <i appIcon icon="goal" appSquare="10"></i>
+        <p class="text-body-10">цель</p>
+      </div>
+
+      @if (goal.value) {
+      <app-tag
+        color="soft"
+        [canDelete]="true"
+        (delete)="onDeleteTaskGoal()"
+        (click)="
+          $event.stopPropagation();
+          showChangeGoalModal = true;
+          onTypeSelect('goal', !isGoalPickOpen)
+        "
+        >{{
+          goal.value.title.length > 20 ? goal.value.title.slice(0, 15) + "..." : goal.value.title
+        }}</app-tag
+      >
+
+      <app-modal [open]="showChangeGoalModal" (openChange)="showChangeGoalModal = false">
+        <div class="cancel" (click)="$event.stopPropagation()">
+          <p class="text-body-12 cancel__title">вы хотите изменить цель задачи?</p>
+
+          <div class="cancel__buttons">
+            <app-button
+              size="medium"
+              customTypographyClass="text-body-12"
+              color="grey"
+              (click)="showChangeGoalModal = false"
+              >отмена</app-button
+            >
+            <app-button
+              size="medium"
+              customTypographyClass="text-body-12"
+              (click)="showChangeGoalModal = false"
+              >изменить</app-button
+            >
+          </div>
+        </div>
+      </app-modal>
+
+      } @else {
+      <div class="kanban__detail-add-object" (click)="onTypeSelect('goal', !isGoalPickOpen)">
+        <i appIcon icon="plus" appSquare="5"></i>
+      </div>
+      }
+      <app-dropdown
+        [isOpen]="isGoalPickOpen"
+        type="goals"
+        (select)="onTypeSelect('goal', false, $event)"
+        (outside)="onTypeSelect('goal', false)"
+        [options]="goalPickOptions"
+      ></app-dropdown>
+    </div>
+    } @if (taskDetailForm.get("skills"); as skills) {
+    <div class="kanban__detail-info-wrapper" style="flex-grow: 1">
+      <div class="kanban__detail-info-name">
+        <i appIcon icon="squiz" appSquare="10"></i>
+        <p class="text-body-10">навыки</p>
+      </div>
+
+      @if (skills.value.length > 0) {
+      <div class="kanban__detail-info-list">
+        @for (skill of skills.value; track skill.id) {
+        <app-tag
+          [appearance]="skill.category.name.includes('Soft skills') ? 'outline' : 'inline'"
+          [color]="skill.category.name.includes('Soft skills') ? 'soft' : 'complete'"
+          [canDelete]="true"
+          (click)="skillsGroupsModalOpen.set(true)"
+          >{{ skill.name.length > 20 ? skill.name.slice(0, 17) + "..." : skill.name }}</app-tag
+        >
+        }
+      </div>
+      } @if (skills.value.length < 3) {
+      <div
+        class="kanban__detail-add-object"
+        (click)="(isCreator() || isLeader()) && skillsGroupsModalOpen.set(true)"
+      >
+        <i appIcon icon="plus" appSquare="5"></i>
+      </div>
+      }
+    </div>
+    }
+  </div>
+
+  <app-modal
+    [open]="skillsGroupsModalOpen()"
+    (openChange)="skillsGroupsModalOpen.set(false)"
+    class="modal"
+  >
+    <div class="modal__wrapper" (click)="$event.stopPropagation()">
+      <p class="text-body-14">библиотека навыков</p>
+      <div class="modal__content">
+        <div class="modal__skills-groups">
+          <ul>
+            @for (skillsGroup of nestedSkills$ | async; track skillsGroup.id) {
+            <li>
+              <app-skills-group
+                [title]="skillsGroup.name"
+                [options]="skillsGroup.skills"
+                [selected]="selectedSkills"
+                [hasOpenGroups]="hasOpenSkillsGroups"
+                [disabled]="isGroupDisabled(skillsGroup.id)"
+                (optionToggled)="onToggleSkill($event)"
+                (groupToggled)="onGroupToggled($event, skillsGroup.id)"
+              ></app-skills-group>
+            </li>
+            }
+          </ul>
+        </div>
+      </div>
+      <app-button size="big" (click)="toggleSkillsGroupsModal()">cохранить</app-button>
+    </div>
+  </app-modal>
+
+  <div class="kanban__divider">
+    <img alt="divider image" src="assets/images/projects/shared/divider.png" />
+  </div>
+
+  @if (taskDetailForm.get("description"); as description) {
+  <div class="kanban__detail-description">
+    <div (click)="onChangeText($event)" class="text-body-12 about__text">
+      @if (isChangeDescriptionText()) {
+      <p #descEl [innerHTML]="description.value | parseLinks | parseBreaks"></p>
+      @if (descriptionExpandable) {
+      <div
+        class="read-more text-body-10"
+        (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+      >
+        {{ readFullDescription ? "cкрыть" : "подробнее" }}
+      </div>
+      } } @else {
+      <app-textarea
+        (keydown.enter)="
+          description.value ? isChangeDescriptionText.set(true) : isChangeDescriptionText.set(false)
+        "
+        (clickOutside)="
+          description.value ? isChangeDescriptionText.set(true) : isChangeDescriptionText.set(false)
+        "
+        (click)="$event.stopPropagation()"
+        size="big"
+        formControlName="description"
+        placeholder="добавить описание"
+      ></app-textarea>
+      }
+    </div>
+  </div>
+  }
+
+  <div class="kanban__detail-files">
+    @if (taskDetailForm.get("files")?.value; as files) { @if (files.length > 0) { @for (file of
+    files; track $index) {
+    <app-file-item
+      class="kanban__detail-file"
+      [name]="file.name.length > 14 ? file.name.slice(0, 13) : file.name"
+      [link]="file.link"
+      [type]="file.extension"
+      [size]="file.size"
+    ></app-file-item>
+    } } @if (files.length < 3) {
+    <div class="kanban__detail-file--empty">
+      <label class="kanban__detail-add-responsible" [for]="controlId">
+        <i appIcon icon="plus" appSquare="5"></i>
+        <input
+          [id]="controlId"
+          hidden
+          [disabled]="!(isLeader() || isCreator())"
+          type="file"
+          accept=".pdf, .docx, .doc, .pptx, .jpeg, .jpg, .png, .webp"
+          (change)="onUpdate($event)"
+        />
+      </label>
+
+      <p class="text-body-10">файл</p>
+    </div>
+    } }
+  </div>
+
+  <div class="kanban__divider">
+    <img alt="divider image" src="assets/images/projects/shared/divider.png" />
+  </div>
+
+  <div class="kanban__detail-comments" [style.min-height]="messages().length ? '150px' : '0px'">
+    <cdk-virtual-scroll-viewport
+      class="messages"
+      [itemSize]="44"
+      minBufferPx="400"
+      maxBufferPx="800"
+      [style.min-height]="messages().length ? '150px' : '0px'"
+    >
+      <div class="messages__wrapper" *cdkVirtualFor="let message of messages()">
+        <p class="text-body-10 messages__date">{{ message.createdAt | date: "dd MMMM yyyy" }}</p>
+        <div class="message">
+          <app-avatar [size]="30" [url]="message.author?.avatar"></app-avatar>
+          <div class="message__wrapper">
+            <div class="message__header">
+              <span class="message__author text-body-10">
+                {{ message.author?.firstName }} {{ message.author?.lastName }}
+              </span>
+              <span class="message__time text-body-10">{{
+                message.createdAt | date: "HH:MM"
+              }}</span>
+            </div>
+
+            <p class="message__text text-body-10">{{ message.text }}</p>
+          </div>
+        </div>
+      </div>
+    </cdk-virtual-scroll-viewport>
+
+    <form class="form" [formGroup]="messageForm" (submit)="onSubmitMessage()">
+      @if (messageForm.get("text"); as text) {
+      <div class="form__row">
+        <app-input
+          size="big"
+          formControlName="text"
+          [hasBorder]="false"
+          [autofocus]="isCommentedClick"
+          [error]="text | controlError"
+          class="form__input text-body-12"
+          placeholder="добавить комментарий"
+          [appValue]="messageForm.get('text')?.value"
+          (keydown.enter)="onEnterKeyDown($event)"
+        ></app-input>
+
+        <div class="form__actions">
+          <label class="form__attach">
+            <input type="file" multiple accept="*/*" (input)="onUpload($event)" />
+            <i appIcon icon="attach" appSquare="20"></i>
+          </label>
+
+          <button class="form__send" type="submit">
+            <i appIcon icon="send" appSquare="7"></i>
+          </button>
+        </div>
+      </div>
+      }
+    </form>
+  </div>
+</div>
+
+<app-modal [open]="showAttachResultModal" (openChange)="showAttachResultModal = false">
+  <div class="cancel" style="width: 500px; align-items: stretch" (click)="$event.stopPropagation()">
+    <div class="lists__section">
+      <p class="text-body-12 lists__title">результат выполнения задачи</p>
+      <i appIcon icon="task" class="lists__icon" appSquare="12"></i>
+    </div>
+
+    <form class="result__form" [formGroup]="sendResultForm" (ngSubmit)="onSubmit()">
+      @if (sendResultForm.get("description"); as description) {
+      <fieldset>
+        <app-textarea
+          size="big"
+          id="description"
+          formControlName="description"
+          [error]="description | controlError"
+          placeholder="Сделаны три таблицы, две из которых надо посмотреть..."
+        ></app-textarea>
+        @if (description | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        } @if (description | controlError: "maxlength") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_TOO_LONG }}
+          @if (description.errors) {
+          {{ description.errors["maxlength"]["requiredLength"] }}
+          }
+        </div>
+        } @if (description | controlError: "minlength") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_TOO_SHORT }}
+          @if (description.errors) {
+          {{ description.errors["minlength"]["requiredLength"] }}
+          }
+        </div>
+        }
+      </fieldset>
+      } @if (sendResultForm.get("accompanyingFile"); as accompanyingFile) {
+
+      <div
+        class="result__form--cv"
+        [class.result__form-error]="accompanyingFile | controlError: 'required'"
+      >
+        <app-upload-file
+          [error]="accompanyingFile | controlError"
+          id="accompanyingFile"
+          formControlName="accompanyingFile"
+          accept=".pdf, .docx, .doc, .word, .png, .jpg, .jpeg"
+        >
+          <ng-container emptyPlaceholder>
+            <div class="result__form--cv-empty">
+              <i appIcon icon="file" appSquare="10"></i>
+              <p class="text-body-12 result__form--cv-text">
+                файл в любом формате <br />весом до 100МБ
+              </p>
+            </div>
+            @if (accompanyingFile | controlError: "required") {
+            <p class="error text-body-10">загрузите файл</p>
+            }
+          </ng-container>
+        </app-upload-file>
+      </div>
+      }
+
+      <app-button size="big" (click)="onSubmit()" [loader]="sendFormIsSubmitting" type="submit">{{
+        taskDetailInfo()?.result ? "сохранить изменения в результате работы" : "завершить задачу"
+      }}</app-button>
+    </form>
+  </div>
+</app-modal>
+
+<app-modal [open]="showResultModal" (openChange)="showResultModal = false">
+  <div
+    class="cancel"
+    (click)="$event.stopPropagation()"
+    style="width: 500px; align-items: flex-start; justify-content: flex-start"
+  >
+    <div class="lists__section">
+      <p class="text-body-12 lists__title">результат выполнения задачи</p>
+      <i appIcon icon="task" class="lists__icon" appSquare="12"></i>
+    </div>
+
+    @if (taskDetailInfo()?.result; as result) {
+    <p class="cancel__text text-body-10">{{ result.description }}</p>
+
+    <div
+      class="cancel__footer"
+      [style.justify-content]="result.accompanyingFile ? 'space-beetwen' : 'flex-end'"
+    >
+      @if (result.accompanyingFile; as file) {
+      <app-file-item
+        [name]="file.name"
+        [link]="file.link"
+        [type]="file.extension"
+        [size]="file.size"
+      ></app-file-item>
+      } @if (isPerformer() || isResponsible()) {
+      <div class="cancel__footer-actions">
+        <app-button
+          customTypographyClass="text-body-12"
+          color="red"
+          (click)="showDeleteResultModal = true"
+        >
+          <i appIcon icon="basket" appSquare="12"></i>
+        </app-button>
+
+        <app-button
+          customTypographyClass="text-body-12"
+          color="primary"
+          appearance="outline"
+          (click)="showAttachResultModal = true"
+        >
+          <i appIcon icon="edit-pen" appSquare="12" appearance="outline"></i>
+        </app-button>
+      </div>
+      }
+    </div>
+    }
+  </div>
+</app-modal>
+
+<app-modal [open]="showAcceptResultModal" (openChange)="showAcceptResultModal = false">
+  <div class="cancel" (click)="$event.stopPropagation()">
+    <p class="text-body-12 cancel__title">принять выполнение задачи</p>
+
+    <i appIcon icon="check" appSquare="60" class="cancel__icon" style="color: var(--green)"></i>
+
+    <div class="cancel__buttons">
+      <app-button
+        customTypographyClass="text-body-12"
+        size="medium"
+        (click)="showAcceptResultModal = false"
+        >принять</app-button
+      >
+
+      <app-button
+        (click)="showAcceptResultModal = false; isCommentedClick = true"
+        customTypographyClass="text-body-12"
+        color="gold"
+        size="medium"
+        >комментировать</app-button
+      >
+    </div>
+  </div>
+</app-modal>
+
+<app-modal [open]="showUnAcceptResultModal" (openChange)="showUnAcceptResultModal = false">
+  <div class="cancel" (click)="$event.stopPropagation()">
+    <p class="text-body-12 cancel__title">вы уверены, что хотите снять приемку работы?</p>
+
+    <i appIcon icon="sad-smile" appSquare="50" class="cancel__icon"></i>
+
+    <app-button customTypographyClass="text-body-12" size="big" color="red"
+      >удалить результат</app-button
+    >
+  </div>
+</app-modal>
+
+<app-modal [open]="showDeleteResultModal" (openChange)="showDeleteResultModal = false">
+  <div class="cancel" (click)="$event.stopPropagation()">
+    <p class="text-body-12 cancel__title">
+      вы уверены, что хотите удалить текущий результат работы
+    </p>
+
+    <i appIcon icon="sad-smile" appSquare="50" class="cancel__icon"></i>
+
+    <app-button customTypographyClass="text-body-12" size="big" color="red"
+      >отменить приемку работы</app-button
+    >
+  </div>
+</app-modal>
+
+<app-modal
+  [open]="showLeaderCommentedResultModal"
+  (openChange)="showLeaderCommentedResultModal = false"
+>
+  <div class="cancel" (click)="$event.stopPropagation()" style="width: 350px; padding: 24px">
+    <p class="text-body-14 cancel__title">
+      вы уверены, что исправили результат по комментариям от лидера?
+    </p>
+
+    <i appIcon icon="check" appSquare="60" class="cancel__icon" style="color: var(--green)"></i>
+
+    <app-button
+      customTypographyClass="text-body-12"
+      size="big"
+      (click)="showLeaderCommentedResultModal = false"
+      >комментарии решены</app-button
+    >
+  </div>
+</app-modal>

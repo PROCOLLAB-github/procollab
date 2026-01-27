@@ -3,7 +3,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ChatMessageComponent } from "./chat-message.component";
-import { ChatMessage } from "@models/chat-message.model";
+import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
 import { AuthService } from "@auth/services";
 import { of } from "rxjs";
 import { RouterTestingModule } from "@angular/router/testing";
