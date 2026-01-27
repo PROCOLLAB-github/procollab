@@ -5,6 +5,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@uilib";
 import { AutosizeModule } from "ngx-autosize";
 import { TooltipComponent } from "../tooltip/tooltip.component";
+import { NgStyle } from "@angular/common";
 
 /**
  * Компонент многострочного поля ввода с автоматическим изменением размера.
@@ -36,7 +37,7 @@ import { TooltipComponent } from "../tooltip/tooltip.component";
     },
   ],
   standalone: true,
-  imports: [AutosizeModule, IconComponent, TooltipComponent],
+  imports: [AutosizeModule, IconComponent, TooltipComponent, NgStyle],
 })
 export class TextareaComponent implements OnInit, ControlValueAccessor {
   /** Текст подсказки */
@@ -57,6 +58,8 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
   /** Ширина подсказки */
   @Input() tooltipWidth = 250;
 
+  @Input() maxLength?: number;
+
   /** Состояние ошибки */
   @Input() error = false;
 
@@ -67,7 +70,7 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
 
   /** Двустороннее связывание текста */
   @Input() set text(value: string) {
-    this.value = value;
+    this.value = value ?? "";
   }
 
   get text(): string {
@@ -83,9 +86,17 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
 
   /** Обработчик ввода текста */
   onInput(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.onChange(value);
-    this.textChange.emit(value);
+    const nextValue = (event.target as HTMLInputElement).value ?? "";
+
+    if (this.maxLength && nextValue.length > this.maxLength) {
+      this.isLengthOverflow = true;
+    } else {
+      this.isLengthOverflow = false;
+    }
+
+    this.value = nextValue;
+    this.onChange(nextValue);
+    this.textChange.emit(nextValue);
   }
 
   /** Обработчик потери фокуса */
@@ -98,6 +109,7 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
 
   /** Состояние видимости подсказки */
   isTooltipVisible = false;
+  isLengthOverflow = false;
 
   /** Показать подсказку */
   showTooltip(): void {
@@ -111,7 +123,7 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
 
   // Методы ControlValueAccessor
   writeValue(value: string): void {
-    this.value = value;
+    this.value = value ?? "";
   }
 
   onChange: (value: string) => void = () => {};

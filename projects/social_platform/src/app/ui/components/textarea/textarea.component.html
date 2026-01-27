@@ -15,9 +15,19 @@
     [class.field__input--small]="size === 'small'"
     [class.field__input--big]="size === 'big'"
     [class.field__input--error]="error"
+    [class.field__input--overflow]="isLengthOverflow"
     >{{ value }}</textarea
   >
-  @if (error) {
+  @if (maxLength) {
+  <div class="field__counter">
+    <p class="text-body-10" [class.field__counter--overflow]="isLengthOverflow">
+      <span [ngStyle]="{ color: isLengthOverflow ? 'var(--red)' : '#8d8d8d' }">{{
+        value.length
+      }}</span>
+      / {{ maxLength }}
+    </p>
+  </div>
+  } @if (error) {
   <i class="field__error-icon" appIcon icon="error" appSquare="20"></i>
   } @else if (haveHint && tooltipText) {
   <div class="field__tooltip-wrapper">

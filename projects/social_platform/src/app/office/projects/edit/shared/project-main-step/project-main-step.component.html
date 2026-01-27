@@ -99,6 +99,7 @@
           formControlName="name"
           [error]="(name | controlError) || projSubmitInitiated"
           placeholder="название"
+          [maxLength]="256"
         ></app-input>
         @if ((name | controlError: "required") || projSubmitInitiated) {
         <div class="text-body-10 error">
@@ -115,6 +116,7 @@
           formControlName="region"
           [error]="(region | controlError) || projSubmitInitiated"
           placeholder="введите регион"
+          [maxLength]="256"
         ></app-input>
         @if ((region | controlError: "required") || projSubmitInitiated) {
         <div class="text-body-10 error">
@@ -180,6 +182,7 @@
       formControlName="problem"
       [error]="(problem | controlError) || projSubmitInitiated"
       placeholder="улучшить качество жизни студентов"
+      [maxLength]="1000"
     ></app-input>
     @if ((problem | controlError: "required") || projSubmitInitiated) {
     <div class="text-body-10 error">
@@ -203,6 +206,7 @@
       [error]="(description | controlError) || projSubmitInitiated"
       formControlName="description"
       placeholder="проект начал свое существование с 2020 года"
+      [maxLength]="800"
     ></app-textarea>
     @if ((description | controlError: "required") || projSubmitInitiated) {
     <div class="text-body-10 error">
@@ -228,6 +232,7 @@
         formControlName="actuality"
         [error]="actuality | controlError"
         placeholder="указом президента от 03.07.2023 "
+        [maxLength]="1000"
       ></app-textarea>
       @if ((actuality | controlError: "required")) {
       <div class="text-body-10 error">
@@ -250,6 +255,7 @@
         [error]="(targetAudience | controlError) || projSubmitInitiated"
         formControlName="targetAudience"
         placeholder="30% потери времени студентов во время работы"
+        [maxLength]="500"
       ></app-textarea>
       @if ((targetAudience | controlError: "required") || projSubmitInitiated) {
       <div class="text-body-10 error">

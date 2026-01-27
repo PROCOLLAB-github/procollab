@@ -5,8 +5,15 @@
   &__greeting {
     position: relative;
     display: flex;
+    flex-direction: column;
     gap: 10px;
-    align-items: center;
+    max-width: 100%;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+      align-items: center;
+      max-width: 60%;
+    }
   }
 }
 

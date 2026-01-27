@@ -21,6 +21,7 @@
           formControlName="{{ field.name }}"
           [error]="control | controlError: 'required'"
           [placeholder]="field.helpText"
+          [maxLength]="500"
         ></app-input>
         } } @case ("textarea") {
         <label
@@ -37,6 +38,7 @@
           formControlName="{{ field.name }}"
           [error]="control | controlError"
           [placeholder]="field.helpText"
+          [maxLength]="500"
         ></app-textarea>
         } } @case ("checkbox") {
         <div

@@ -180,6 +180,7 @@
                 type="text"
                 placeholder="москва"
                 formControlName="city"
+                [maxLength]="100"
               ></app-input>
               @if (city | controlError: "required") {
               <div class="text-body-10 error">
@@ -265,6 +266,7 @@
               type="text"
               placeholder="я java developer, очень люблю котиков"
               formControlName="aboutMe"
+              [maxLength]="300"
             ></app-textarea>
             @if (aboutMe | controlError: "required") {
             <div class="text-body-10 error">
@@ -394,6 +396,7 @@
                 [error]="organizationName | controlError"
                 placeholder="вуз / колледж / школа"
                 formControlName="organizationName"
+                [maxLength]="100"
               ></app-input>
               @if (organizationName | controlError: "required") {
               <div class="text-body-10 error">
@@ -413,6 +416,7 @@
                 [error]="description | controlError"
                 placeholder="бизнес информатика"
                 formControlName="description"
+                [maxLength]="400"
               ></app-input>
               @if (description | controlError: "required") {
               <div class="text-body-10 error">
@@ -589,6 +593,7 @@
                 type="text"
                 placeholder="проколлаб"
                 formControlName="organization"
+                [maxLength]="50"
               ></app-input>
               @if (organization | controlError: "required") {
               <div class="text-body-10 error">
@@ -631,6 +636,7 @@
                 type="text"
                 placeholder="проект начал свое существование с 2020 года"
                 formControlName="descriptionWork"
+                [maxLength]="400"
               ></app-textarea>
               @if (descriptionWork | controlError: "required") {
               <div class="text-body-10 error">
