@@ -132,7 +132,7 @@
           size="big"
           id="industry"
           formControlName="industryId"
-          placeholder="Выберите сферу проекта"
+          placeholder="выберите сферу проекта"
           [options]="industries"
         ></app-select>
         } @if (industry | controlError: "required") {
@@ -254,7 +254,7 @@
         [tooltipWidth]="350"
         [error]="(targetAudience | controlError) || projSubmitInitiated"
         formControlName="targetAudience"
-        placeholder="Студенты 2–4 курсов IT и бизнес-направлений"
+        placeholder="студенты 2–4 курсов IT и бизнес-направлений"
         [maxLength]="500"
       ></app-textarea>
       @if ((targetAudience | controlError: "required") || projSubmitInitiated) {
