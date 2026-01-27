@@ -628,13 +628,13 @@
           <div class="profile__column">
             @if (profileForm.get("descriptionWork"); as descriptionWork) {
             <fieldset>
-              <label for="descriptionWork" class="field-label">обо мне</label>
+              <label for="descriptionWork" class="field-label">Краткое описание</label>
               <app-textarea
                 size="big"
                 id="descriptionWork"
                 [error]="descriptionWork | controlError"
                 type="text"
-                placeholder="проект начал свое существование с 2020 года"
+                placeholder="Работал с данными, разрабатывал интерфейсы"
                 formControlName="descriptionWork"
                 [maxLength]="400"
               ></app-textarea>
@@ -757,7 +757,7 @@
               <app-textarea
                 size="big"
                 [error]="status | controlError"
-                placeholder="разработали проект, сделали анализ рынка и вывели"
+                placeholder="Разработал прототип приложения для менторов в Московской области"
                 formControlName="status"
               ></app-textarea>
               @if (status | controlError: "required") {
