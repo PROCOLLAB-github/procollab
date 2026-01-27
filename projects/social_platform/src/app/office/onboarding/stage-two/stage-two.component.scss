@@ -5,8 +5,15 @@
   &__greeting {
     position: relative;
     display: flex;
+    flex-direction: column;
     gap: 10px;
-    align-items: center;
+    max-width: 100%;
+
+    @include responsive.apply-desktop {
+      flex-direction: row;
+      align-items: center;
+      max-width: 60%;
+    }
   }
 }
 
@@ -15,6 +22,14 @@
   display: inline-flex;
   gap: 10px;
   align-items: center;
+
+  ::ng-deep {
+    app-tooltip {
+      .tooltip__content--right {
+        top: 110%;
+      }
+    }
+  }
 }
 
 .content {

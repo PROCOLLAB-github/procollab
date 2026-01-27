@@ -8,7 +8,7 @@ import {
   OnInit,
   signal,
 } from "@angular/core";
-import { Form, FormArray, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { FormArray, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ErrorMessage } from "@error/models/error-message";
 import { Invite } from "@models/invite.model";
@@ -216,7 +216,8 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   // Id Лидера проекта
   leaderId = 0;
 
-  fromProgram = "";
+  fromProgram: string | null = "";
+  fromProgramOpen = signal<boolean>(false);
 
   // Маркер того является ли проект привязанный к конкурсной программе
   isCompetitive = false;
@@ -236,6 +237,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Состояние компонента
   isCompleted = false;
+  isSendDescisionLate = false;
   isSendDescisionToPartnerProgramProject = false;
 
   profile$?: Subscription;
@@ -454,9 +456,12 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
         next: () => {
           this.completeSubmitedProjectForm(projectId);
         },
-        error: () => {
+        error: err => {
           this.setProjFormIsSubmitting(false);
           this.snackBarService.error("ошибка при сохранении данных");
+          if (err.error["error"].includes("Срок подачи проектов в программу завершён.")) {
+            this.isSendDescisionLate = true;
+          }
         },
       });
   }
@@ -477,6 +482,29 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   closeAssignProjectToProgramModal(): void {
     this.isAssignProjectToProgramModalOpen.set(false);
+  }
+
+  private getFromProgramSeenKey(): string {
+    return `project_fromProgram_modal_seen_${this.profileId}`;
+  }
+
+  private hasSeenFromProgramModal(): boolean {
+    try {
+      return !!localStorage.getItem(this.getFromProgramSeenKey());
+    } catch (e) {
+      return false;
+    }
+  }
+
+  private markSeenFromProgramModal(): void {
+    try {
+      localStorage.setItem(this.getFromProgramSeenKey(), "1");
+    } catch (e) {}
+  }
+
+  closeFromProgramModal(): void {
+    this.fromProgramOpen.set(false);
+    this.markSeenFromProgramModal();
   }
 
   private saveOrEditGoals(projectId: number) {
@@ -649,6 +677,15 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     const editingStepSub$ = this.route.queryParams.subscribe(params => {
       const step = params["editingStep"] as EditStep;
       this.fromProgram = params["fromProgram"];
+
+      const seen = this.hasSeenFromProgramModal();
+      if (this.fromProgram && !seen) {
+        this.fromProgramOpen.set(true);
+        this.markSeenFromProgramModal();
+      } else {
+        this.fromProgramOpen.set(false);
+      }
+
       if (step && step !== this.editingStep) {
         this.projectStepService.setStepFromRoute(step);
       }

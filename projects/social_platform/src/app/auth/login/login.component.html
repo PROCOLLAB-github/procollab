@@ -2,7 +2,6 @@
 
 <div class="login">
   <div class="login__left">
-    <!-- Центр -->
     <div class="login__left-content">
       <form class="auth" [formGroup]="loginForm" (ngSubmit)="onSubmit()" (keyup.enter)="onSubmit()">
         <div class="auth__wrapper">
@@ -107,7 +106,6 @@
       </form>
     </div>
 
-    <!-- Низ -->
     <div class="login__left-footer">
       <div class="tooltip">
         <app-tooltip
@@ -119,15 +117,24 @@
         @if (isHintLoginVisible()) {
         <div class="tooltip__wrapper" (clickOutside)="toggleTooltip()">
           <p class="tooltip__text text-body-10">
-            Если у тебя есть вопросы, напиши в наш телеграм-бот поддержки
+            Возникли технические сложности или остались вопросы?
+          </p>
+          <p class="tooltip__text text-body-10">
+            Все ответы в нашем боте поддержки
             <a href="https://t.me/procollab_bot">{{ "@procollab_bot" }}</a>
           </p>
 
           <br />
 
           <p class="tooltip__text text-body-10">
-            Если не нашел ответ в боте, напиши в техподдержку —
+            Для уникальных кейсов или нерешаемых сложностей на связи наша техническая поддержка –
             <a href="https://t.me/procollab_support">{{ "@procollab_support" }}</a>
+          </p>
+
+          <br />
+
+          <p class="tooltip__text text-body-10">
+            Время работы оператора:  пн-пт, 10:00-19:00 по московскому времени
           </p>
         </div>
         }

@@ -68,8 +68,20 @@
 
   &__no-items {
     position: absolute;
-    bottom: 0%;
+    bottom: -50%;
     left: 50%;
+    transform: translateY(-50%);
+  }
+
+  &__team {
+    position: relative;
+
+    &-tooltip {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      transform: translateY(calc(var(--app-height) * 0.47));
+    }
   }
 }
 
@@ -131,5 +143,87 @@
 .vacancy {
   &__submit {
     display: block;
+  }
+}
+
+.tooltip {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &__wrapper {
+    position: absolute;
+    right: 100%;
+    bottom: 22px;
+    left: auto;
+    width: 310px;
+    padding: 18px 10px 10px 16px;
+    background-color: var(--white);
+    border: 0.5px solid var(--grey-for-text);
+    border-radius: var(--rounded-lg) var(--rounded-lg) 0 var(--rounded-lg);
+
+    :last-child {
+      color: var(--black);
+      cursor: pointer;
+    }
+  }
+
+  &__text {
+    color: var(--grey-for-text);
+
+    a {
+      color: var(--accent);
+    }
+  }
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  max-height: calc(100vh - 40px);
+  padding: 0 24px;
+  overflow-y: auto;
+
+  @include responsive.apply-desktop {
+    width: 605px;
+    max-width: 100%;
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    text-align: center;
+  }
+
+  &__text {
+    text-align: center;
+
+    &-block {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 30px 0;
+    }
   }
 }

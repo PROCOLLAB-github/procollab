@@ -33,7 +33,7 @@
     }
 
     &--with-tooltip {
-      padding-right: 130px;
+      padding-right: 60px;
     }
 
     &--border {
@@ -46,8 +46,14 @@
       }
     }
 
-    &--error {
+    &--error,
+    &--overflow {
       border: 0.5px solid var(--red);
+
+      &:focus {
+        border-color: var(--red);
+        box-shadow: 0 0 6px rgb(255 40 40 / 30.8%);
+      }
     }
 
     @include typography.body-10;
@@ -114,7 +120,7 @@
     justify-content: center;
     padding: 0 4px;
     color: var(--red) !important;
-    background: var(--white);
+    background: var(--light-white);
     transform: translateY(-50%);
   }
 
@@ -131,11 +137,28 @@
     top: 55%;
     right: 20px;
     z-index: 10;
+    padding: 2px;
+    background-color: var(--light-gray);
+    border-radius: 100%;
     transform: translateY(-50%);
 
     &--small {
       top: 15%;
       right: -3px;
+    }
+  }
+
+  &__counter {
+    position: absolute;
+    right: 18px;
+    bottom: 0;
+
+    p {
+      color: var(--dark-grey);
+    }
+
+    &--overflow {
+      color: var(--red) !important;
     }
   }
 }

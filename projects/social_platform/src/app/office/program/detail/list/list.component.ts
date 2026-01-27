@@ -47,6 +47,8 @@ import { tagsFilter } from "projects/core/src/consts/filters/tags-filter.const";
 import { ExportFileService } from "@office/services/export-file.service";
 import { saveFile } from "@utils/helpers/export-file";
 import { ProgramDataService } from "@office/program/services/program-data.service";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
+import { ModalComponent } from "@ui/components/modal/modal.component";
 
 @Component({
   selector: "app-list",
@@ -62,6 +64,8 @@ import { ProgramDataService } from "@office/program/services/program-data.servic
     InfoCardComponent,
     ButtonComponent,
     IconComponent,
+    TooltipComponent,
+    ModalComponent,
   ],
   standalone: true,
 })
@@ -113,6 +117,9 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   readonly ratingOptionsList = tagsFilter;
   isFilterOpen = false;
+
+  readonly isHintExpertsVisible = signal<boolean>(false);
+  readonly isHintExpertsModal = signal<boolean>(false);
 
   protected readonly loadingExportProjects = signal<boolean>(false);
   protected readonly loadingExportSubmittedProjects = signal<boolean>(false);
@@ -607,6 +614,12 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
         queryParamsHandling: "merge",
       })
       .then(() => console.log("Query change from ProjectsComponent"));
+  }
+
+  openHintModal(event: Event): void {
+    event.preventDefault();
+    this.isHintExpertsVisible.set(false);
+    this.isHintExpertsModal.set(true);
   }
 
   private get itemsPerPage(): number {
