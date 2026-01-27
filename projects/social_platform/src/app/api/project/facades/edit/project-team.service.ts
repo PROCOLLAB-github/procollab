@@ -73,7 +73,7 @@ export class ProjectTeamService {
     this.inviteService
       .updateInvite(inviteId, role, specialization)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {});
+      .subscribe(() => this.projectTeamUIService.applyEditInvitation(params));
   }
 
   /**
@@ -84,7 +84,7 @@ export class ProjectTeamService {
     this.inviteService
       .revokeInvite(invitationId)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {});
+      .subscribe(() => this.projectTeamUIService.applyRemoveInvitation(invitationId));
   }
 
   /**

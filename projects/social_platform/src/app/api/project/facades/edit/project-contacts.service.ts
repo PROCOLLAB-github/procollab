@@ -40,9 +40,12 @@ export class ProjectContactsService {
    * Полезно вызывать после загрузки данных с сервера
    */
   public syncLinksItems(linksFormArray: FormArray): void {
-    if (linksFormArray) {
+    if (linksFormArray && linksFormArray.length > 0) {
       this.linksItems.set(linksFormArray.value);
+    } else {
+      this.linksItems.set([]);
     }
+    this.initialized = true;
   }
 
   readonly hasLinks = computed(() => this.linksItems().length > 0);
@@ -76,7 +79,7 @@ export class ProjectContactsService {
   public addLink(linksFormArray: FormArray): void {
     this.initializeLinksItems(linksFormArray);
     linksFormArray.push(this.fb.control("", Validators.required));
-    this.linksItems.update(items => [...items, ""]);
+    this.syncLinksItems(linksFormArray);
   }
 
   /**
@@ -107,8 +110,8 @@ export class ProjectContactsService {
    */
   public removeLink(index: number, linksFormArray: FormArray): void {
     // Удаляем из сигнала и из FormArray
-    this.linksItems.update(items => items.filter((_, i) => i !== index));
     linksFormArray.removeAt(index);
+    this.syncLinksItems(linksFormArray);
   }
 
   /**

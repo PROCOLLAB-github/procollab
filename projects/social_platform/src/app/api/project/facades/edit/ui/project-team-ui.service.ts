@@ -1,7 +1,7 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { computed, inject, Injectable, signal } from "@angular/core";
+import { FormBuilder, Validators } from "@angular/forms";
 import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
 
@@ -17,6 +17,8 @@ export class ProjectTeamUIService {
   // Состояние отправки формы
   readonly inviteSubmitInitiated = signal(false);
   readonly inviteFormIsSubmitting = signal(false);
+
+  readonly invitesFill = computed(() => this.invites().some(inv => inv.isAccepted === null));
 
   /**
    * Создает форму приглашения с контролами role, link и specialization, устанавливая валидаторы.

@@ -6,7 +6,7 @@
  * @format
  */
 
-import { inject, Injectable, Signal, signal } from "@angular/core";
+import { inject, Injectable, signal } from "@angular/core";
 import { Router } from "@angular/router";
 
 /** Тип шага редактирования проекта */

@@ -2,7 +2,6 @@
 
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { NavService } from "@ui/services/nav/nav.service";
-import { ProjectAssign } from "projects/social_platform/src/app/domain/project/project-assign.model";
 import {
   distinctUntilChanged,
   forkJoin,
@@ -20,7 +19,6 @@ import { Goal } from "projects/social_platform/src/app/domain/project/goals.mode
 import { Partner } from "projects/social_platform/src/app/domain/project/partner.model";
 import { Resource } from "projects/social_platform/src/app/domain/project/resource.model";
 import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
-import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ValidationService } from "@corelib";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
@@ -30,7 +28,6 @@ import { IndustryService } from "../../../industry/industry.service";
 import { SkillsService } from "../../../skills/skills.service";
 import { ProjectFormService } from "./project-form.service";
 import { ProjectGoalService } from "./project-goals.service";
-import { ProjectVacancyService } from "./project-vacancy.service";
 import { ProjectPartnerService } from "./project-partner.service";
 import { ProjectResourceService } from "./project-resources.service";
 import { ProjectAchievementsService } from "./project-achievements.service";
@@ -39,6 +36,8 @@ import { SkillsInfoService } from "../../../skills/facades/skills-info.service";
 import { ProjectsEditUIInfoService } from "./ui/projects-edit-ui-info.service";
 import { ProjectVacancyUIService } from "./ui/project-vacancy-ui.service";
 import { ProjectTeamUIService } from "./ui/project-team-ui.service";
+import { ProjectContactsService } from "./project-contacts.service";
+import { ProjectVacancyService } from "./project-vacancy.service";
 
 @Injectable()
 export class ProjectsEditInfoService {
@@ -69,6 +68,8 @@ export class ProjectsEditInfoService {
 
   private readonly projectAchievementsService = inject(ProjectAchievementsService);
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
+
+  private readonly projectContactsService = inject(ProjectContactsService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -116,11 +117,19 @@ export class ProjectsEditInfoService {
   readonly nestedSkills$ = this.skillsService.getSkillsNested();
 
   // Состояние отправки форм
-  readonly projSubmitInitiated = signal<boolean>(false);
   readonly submitMode = signal<"draft" | "published" | null>(null);
+
+  readonly projSubmitInitiated = signal<boolean>(false);
   readonly projFormIsSubmittingAsPublished = signal<boolean>(false);
   readonly projFormIsSubmittingAsDraft = signal<boolean>(false);
+
   readonly openGroupIds = signal<Set<number>>(new Set());
+  readonly openSkillGroup = signal<string | null>(null);
+
+  /**
+   * Проверяет, есть ли открытые группы навыков
+   */
+  readonly hasOpenSkillsGroups = this.openSkillGroup() !== null;
 
   initializationEditInfo(): void {
     this.navService.setNavTitle("Создание проекта");
@@ -195,12 +204,18 @@ export class ProjectsEditInfoService {
    * Удаление проекта с проверкой удаления у пользователя
    */
   deleteProject(): void {
+    const programId = this.projectForm.get("partnerProgramId")?.value;
+
     this.projectService
       .remove(Number(this.route.snapshot.paramMap.get("projectId")))
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.router.navigateByUrl(`/office/projects/my`);
+          if (this.fromProgram()) {
+            this.router.navigateByUrl(`/office/program/${programId}`);
+          } else {
+            this.router.navigateByUrl(`/office/projects/my`);
+          }
         },
       });
   }
@@ -348,6 +363,9 @@ export class ProjectsEditInfoService {
           this.projectTeamUIService.applySetInvites(invites);
           this.projectTeamUIService.applySetCollaborators(project.collaborators);
 
+          // Синхронизируем ссылки после инициализации данных проекта
+          this.projectContactsService.syncLinksItems(this.projectFormService.links);
+
           if (project.partnerProgram) {
             this.isCompetitive.set(
               !!project.partnerProgram.programId && project.partnerProgram.canSubmit
@@ -361,7 +379,6 @@ export class ProjectsEditInfoService {
           }
 
           this.projectVacancyUIService.applySetVacancies(project.vacancies);
-          this.projectTeamUIService.applySetInvites(invites);
         }
       );
   }

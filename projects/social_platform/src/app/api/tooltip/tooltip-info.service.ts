@@ -5,6 +5,10 @@ import { Injectable, signal } from "@angular/core";
 @Injectable()
 export class TooltipInfoService {
   readonly isTooltipVisible = signal<boolean>(false);
+  /** Позиция подсказки */
+  readonly tooltipPosition: "left" | "right" = "right";
+
+  readonly haveHint = signal<boolean>(false);
 
   readonly isHintPhotoVisible = signal<boolean>(false);
   readonly isHintCityVisible = signal<boolean>(false);

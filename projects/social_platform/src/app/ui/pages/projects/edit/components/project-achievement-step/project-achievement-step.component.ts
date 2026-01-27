@@ -2,13 +2,14 @@
 
 import { CommonModule } from "@angular/common";
 import { Component, inject, Input } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { InputComponent, ButtonComponent } from "@ui/components";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { ProjectFormService } from "../../../../../../api/project/project-form.service";
-import { ProjectAchievementsService } from "../../../../../../api/project/project-achievements.service";
 import { IconComponent } from "@uilib";
+import { ProjectAchievementsService } from "projects/social_platform/src/app/api/project/facades/edit/project-achievements.service";
+import { ToggleFieldsInfoService } from "projects/social_platform/src/app/api/toggle-fields/toggle-fields-info.service";
 
 @Component({
   selector: "app-project-achievement-step",
@@ -28,73 +29,31 @@ export class ProjectAchievementStepComponent {
   @Input() projSubmitInitiated = false;
 
   private readonly projectAchievementService = inject(ProjectAchievementsService);
+  private readonly toggleFieldsInfoService = inject(ToggleFieldsInfoService);
   private readonly projectFormService = inject(ProjectFormService);
   private readonly fb = inject(FormBuilder);
 
-  readonly errorMessage = ErrorMessage;
+  // Получаем форму из сервиса
+  protected readonly projectForm = this.projectFormService.getForm();
 
   // Состояние для показа полей ввода
-  public showInputFields = false;
-
-  // Получаем форму из сервиса
-  get projectForm(): FormGroup {
-    return this.projectFormService.getForm();
-  }
+  protected readonly showInputFields = this.toggleFieldsInfoService.showInputFields;
 
   // Геттеры для FormArray и полей
-  get achievements(): FormArray {
-    return this.projectFormService.achievements;
-  }
+  protected readonly achievements = this.projectFormService.achievements;
 
-  get achievementsName() {
-    return this.projectForm.get("achievementsName");
-  }
+  protected readonly achievementsName = this.projectFormService.achievementsName;
+  protected readonly achievementsDate = this.projectFormService.achievementsDate;
+  protected readonly achievementsItems = this.projectAchievementService.achievementsItems;
 
-  get achievementsDate() {
-    return this.projectForm.get("achievementsDate");
-  }
-
-  get achievementsItems() {
-    return this.projectAchievementService.achievementsItems;
-  }
-
-  get editIndex() {
-    return this.projectFormService.editIndex;
-  }
+  protected readonly editIndex = this.projectFormService.editIndex;
 
   /**
    * Проверяет, есть ли достижения для отображения
    */
-  get hasAchievements(): boolean {
-    return this.achievementsItems().length > 0 || this.achievements.length > 0;
-  }
+  protected readonly hasAchievements = this.projectAchievementService.hasAchievements;
 
-  /**
-   * Показывает поля для ввода достижения
-   */
-  showFields(): void {
-    this.showInputFields = true;
-  }
-
-  /**
-   * Скрывает поля ввода и очищает их
-   */
-  hideFields(): void {
-    this.showInputFields = false;
-    this.clearInputFields();
-  }
-
-  /**
-   * Очищает поля ввода
-   */
-  private clearInputFields(): void {
-    this.projectForm.get("achievementsName")?.reset();
-    this.projectForm.get("achievementsName")?.setValue("");
-
-    if (this.editIndex() !== null) {
-      this.projectFormService.editIndex.set(null);
-    }
-  }
+  protected readonly errorMessage = ErrorMessage;
 
   /**
    * Добавление достижения
@@ -117,7 +76,7 @@ export class ProjectAchievementStepComponent {
       })
     );
 
-    this.projectAchievementService.addAchievement(this.achievements, this.projectForm);
+    this.projectAchievementService.addAchievement(this.achievements);
   }
 
   /**
@@ -125,8 +84,8 @@ export class ProjectAchievementStepComponent {
    * @param index - индекс достижения
    */
   editAchievement(index: number): void {
-    this.showInputFields = true;
-    this.projectAchievementService.editAchievement(index, this.achievements, this.projectForm);
+    this.toggleFieldsInfoService.showFields();
+    this.projectAchievementService.editAchievement(index, this.achievements);
   }
 
   /**

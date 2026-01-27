@@ -2,7 +2,7 @@
 
 import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit, inject, ChangeDetectorRef } from "@angular/core";
-import { FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import {
   InputComponent,
   CheckboxComponent,
@@ -14,11 +14,11 @@ import { SwitchComponent } from "@ui/components/switch/switch.component";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { ToSelectOptionsPipe } from "projects/core/src/lib/pipes/transformers/options-transform.pipe";
-import { ProjectAdditionalService } from "../../../../../../api/project/project-additional.service";
-import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
 import { RouterLink } from "@angular/router";
 import { IconComponent } from "@uilib";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
+import { ProjectAdditionalService } from "projects/social_platform/src/app/api/project/facades/edit/project-additional.service";
+import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
 
 @Component({
   selector: "app-project-additional-step",
@@ -43,9 +43,9 @@ import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 })
 export class ProjectAdditionalStepComponent implements OnInit {
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
-  private readonly cdRef = inject(ChangeDetectorRef);
+  private readonly tooltipInfoService = inject(TooltipInfoService);
 
-  readonly errorMessage = ErrorMessage;
+  private readonly cdRef = inject(ChangeDetectorRef);
 
   @Input() isProjectAssignToProgram?: boolean;
 
@@ -55,45 +55,33 @@ export class ProjectAdditionalStepComponent implements OnInit {
   }
 
   // Геттеры для получения данных из сервиса
-  get additionalForm(): FormGroup {
-    return this.projectAdditionalService.getAdditionalForm();
-  }
+  protected readonly additionalForm = this.projectAdditionalService.getAdditionalForm();
 
-  get partnerProgramFields(): PartnerProgramFields[] {
-    return this.projectAdditionalService.getPartnerProgramFields();
-  }
+  protected readonly partnerProgramFields = this.projectAdditionalService.partnerProgramFields;
+  protected readonly isSendingDecision = this.projectAdditionalService.isSendingDecision;
 
-  get isSendingDecision() {
-    return this.projectAdditionalService.getIsSendingDecision();
-  }
-
-  get isAssignProjectToProgramError() {
-    return this.projectAdditionalService.getIsAssignProjectToProgramError();
-  }
+  protected readonly isAssignProjectToProgramError =
+    this.projectAdditionalService.isAssignProjectToProgramError;
 
   protected readonly errorAssignProjectToProgramModalMessage =
     this.projectAdditionalService.errorAssignProjectToProgramModalMessage;
 
   /** Наличие подсказки */
-  haveHint = false;
-
-  /** Текст для подсказки */
-  tooltipText?: string;
+  protected readonly haveHint = this.tooltipInfoService.haveHint;
 
   /** Позиция подсказки */
-  tooltipPosition: "left" | "right" = "right";
+  protected readonly tooltipPosition = this.tooltipInfoService.tooltipPosition;
 
   /** Состояние видимости подсказки */
-  isTooltipVisible = false;
+  protected readonly isTooltipVisible = this.tooltipInfoService.isTooltipVisible;
+
+  protected readonly errorMessage = ErrorMessage;
 
   /** Показать подсказку */
-  showTooltip(): void {
-    this.isTooltipVisible = true;
-  }
-
-  /** Скрыть подсказку */
-  hideTooltip(): void {
-    this.isTooltipVisible = false;
+  toggleTooltip(option: "show" | "hide"): void {
+    option === "show"
+      ? this.tooltipInfoService.showTooltip()
+      : this.tooltipInfoService.hideTooltip();
   }
 
   /**

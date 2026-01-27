@@ -2,7 +2,7 @@
 
 <div class="project__inner">
   <div class="vacancy project__left">
-    @if (showFields) {
+    @if (showInputFields()) {
     <form [formGroup]="vacancyForm">
       @if (role; as role) {
       <fieldset class="vacancy__role">
@@ -132,7 +132,7 @@
             placeholder="введите навык"
             searchIcon="box"
             (openSkillsFunc)="onToggleSkillsGroupsModal()"
-            [suggestions]="inlineSkills"
+            [suggestions]="inlineSkills()"
             fieldToDisplay="name"
             [forceSelect]="true"
             [clearInputOnSelect]="true"
@@ -164,20 +164,20 @@
       customTypographyClass="text-body-12"
       class="vacancy__submit"
       [loader]="vacancyIsSubmitting()"
-      (click)="showFields ? submitVacancy() : createVacancyBlock()"
+      (click)="showInputFields() ? submitVacancy() : createVacancyBlock()"
     >
-      <span>{{ showFields ? "добавить вакансию" : "создать вакансию" }}</span>
+      <span>{{ showInputFields() ? "добавить вакансию" : "создать вакансию" }}</span>
       <i appIcon icon="plus" appSquare="10"></i>
     </app-button>
   </div>
 
   <div class="project__right">
     <ul class="vacancy__list">
-      @for (vacancy of vacancies; track vacancy.id) {
+      @for (vacancy of vacancies(); track vacancy.id) {
       <li class="vacancy__item">
         <app-vacancy-card
           [vacancy]="vacancy"
-          (edit)="editVacancy(vacancies.indexOf(vacancy))"
+          (edit)="editVacancy(vacancies().indexOf(vacancy))"
           (remove)="removeVacancy($event)"
         ></app-vacancy-card>
       </li>
@@ -185,7 +185,33 @@
     </ul>
   </div>
 
-  @if (!vacancies.length) {
+  @if (!vacancies().length) {
   <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
   }
 </div>
+
+<app-modal [open]="skillsGroupsModalOpen()" class="modal">
+  <div class="modal__wrapper">
+    <p class="text-body-14">библиотека навыков</p>
+    <div class="modal__content">
+      <div class="modal__skills-groups">
+        <ul>
+          @for (skillsGroup of nestedSkills$ | async; track skillsGroup.id) {
+          <li>
+            <app-skills-group
+              [title]="skillsGroup.name"
+              [options]="skillsGroup.skills"
+              [selected]="this.vacancyForm.getRawValue().skills!"
+              [hasOpenGroups]="hasOpenSkillsGroups"
+              [disabled]="hasOpenSkillsGroups && !openGroupIds().has(skillsGroup.id)"
+              (optionToggled)="onToggleSkill($event)"
+              (groupToggled)="onGroupToggled($event, skillsGroup.id)"
+            ></app-skills-group>
+          </li>
+          }
+        </ul>
+      </div>
+    </div>
+    <app-button size="big" (click)="onToggleSkillsGroupsModal()">Сохранить</app-button>
+  </div>
+</app-modal>

@@ -1,19 +1,18 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, OnDestroy } from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { Component, inject, OnDestroy } from "@angular/core";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { IconComponent } from "@uilib";
-import { ProjectPartnerService } from "../../../../../../api/project/project-partner.service";
-import { ProjectResourceService } from "../../../../../../api/project/project-resources.service";
 import { ButtonComponent, InputComponent, SelectComponent } from "@ui/components";
-import { Subscription } from "rxjs";
 import { ControlErrorPipe } from "@corelib";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { optionsListElement } from "@utils/generate-options-list";
 import { resourceOptionsList } from "projects/core/src/consts/lists/resource-options-list.const";
+import { ProjectsEditInfoService } from "projects/social_platform/src/app/api/project/facades/edit/projects-edit-info.service";
+import { ProjectPartnerService } from "projects/social_platform/src/app/api/project/facades/edit/project-partner.service";
+import { ProjectResourceService } from "projects/social_platform/src/app/api/project/facades/edit/project-resources.service";
 
 @Component({
   selector: "app-project-partner-resources-step",
@@ -32,73 +31,35 @@ import { resourceOptionsList } from "projects/core/src/consts/lists/resource-opt
   ],
 })
 export class ProjectPartnerResourcesStepComponent implements OnDestroy {
-  @Input() projectId!: number;
+  private readonly fb = inject(FormBuilder);
 
   private readonly projectPartnerService = inject(ProjectPartnerService);
   private readonly projectResourceService = inject(ProjectResourceService);
-  private readonly projectService = inject(ProjectService);
-  private readonly fb = inject(FormBuilder);
+  private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
 
-  readonly errorMessage = ErrorMessage;
-  private subscription = new Subscription();
+  protected readonly projectId = this.projectsEditInfoService.profileId;
 
   // Получаем форму из сервиса
-  get partnerForm(): FormGroup {
-    return this.projectPartnerService.getForm();
-  }
-
-  get resourceForm(): FormGroup {
-    return this.projectResourceService.getForm();
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
+  protected readonly partnerForm = this.projectPartnerService.getForm();
+  protected readonly resourceForm = this.projectResourceService.getForm();
 
   // Геттеры для удобного доступа к контролам формы
-  get resources() {
-    return this.projectResourceService.resources;
-  }
+  protected readonly resources = this.projectResourceService.resources;
+  protected readonly type = this.projectResourceService.resoruceType;
+  protected readonly description = this.projectResourceService.resoruceDescription;
+  protected readonly partnerCompany = this.projectResourceService.resourcePartner;
+  protected readonly partners = this.projectPartnerService.partners;
 
-  get type() {
-    return this.projectResourceService.resoruceType;
-  }
+  protected readonly name = this.projectPartnerService.partnerName;
+  protected readonly inn = this.projectPartnerService.partnerINN;
+  protected readonly contribution = this.projectPartnerService.partnerMention;
+  protected readonly decisionMaker = this.projectPartnerService.partnerProfileLink;
 
-  get description() {
-    return this.projectResourceService.resoruceDescription;
-  }
+  protected readonly hasPartners = this.projectPartnerService.hasPartners;
+  protected readonly hasResources = this.projectResourceService.hasResources;
 
-  get partnerCompany() {
-    return this.projectResourceService.resourcePartner;
-  }
-
-  get partners() {
-    return this.projectPartnerService.partners;
-  }
-
-  get name() {
-    return this.projectPartnerService.partnerName;
-  }
-
-  get inn() {
-    return this.projectPartnerService.partnerINN;
-  }
-
-  get contribution() {
-    return this.projectPartnerService.partnerMention;
-  }
-
-  get decisionMaker() {
-    return this.projectPartnerService.partnerProfileLink;
-  }
-
-  get hasPartners() {
-    return this.partners.length > 0;
-  }
-
-  get hasResources() {
-    return this.resources.length > 0;
-  }
+  protected readonly resourcesTypeOptions = resourceOptionsList;
+  protected readonly errorMessage = ErrorMessage;
 
   get resourcesCompanyOptions(): optionsListElement[] {
     const partners = this.partners.value || [];
@@ -124,8 +85,9 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
     return partnerOptions;
   }
 
-  get resourcesTypeOptions(): optionsListElement[] {
-    return resourceOptionsList;
+  ngOnDestroy(): void {
+    this.projectPartnerService.destroy();
+    this.projectResourceService.destroy();
   }
 
   /**
@@ -149,8 +111,7 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
    * @param index - индекс партнера
    */
   removePartner(index: number, partnersId: number) {
-    this.projectPartnerService.removePartner(index);
-    this.projectService.deletePartner(this.projectId, partnersId).subscribe();
+    this.projectPartnerService.removePartner(index, partnersId, this.projectId());
   }
 
   /**
@@ -173,7 +134,6 @@ export class ProjectPartnerResourcesStepComponent implements OnDestroy {
    * @param index - индекс ресурса
    */
   removeResource(index: number, resourceId: number) {
-    this.projectResourceService.removeResource(index);
-    this.projectService.deleteResource(this.projectId, resourceId).subscribe();
+    this.projectResourceService.removeResource(index, resourceId, this.projectId());
   }
 }

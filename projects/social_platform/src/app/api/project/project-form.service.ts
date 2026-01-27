@@ -283,6 +283,14 @@ export class ProjectFormService {
     return this.projectForm.get("achievements") as FormArray;
   }
 
+  public get achievementsName(): FormArray {
+    return this.projectForm.get("achievementsName") as FormArray;
+  }
+
+  public get achievementsDate(): FormArray {
+    return this.projectForm.get("achievementsDate") as FormArray;
+  }
+
   public get links(): FormArray {
     return this.projectForm.get("links") as FormArray;
   }

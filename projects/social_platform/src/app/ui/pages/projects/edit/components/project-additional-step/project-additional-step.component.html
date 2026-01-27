@@ -3,7 +3,7 @@
 <div class="project__inner">
   <div [formGroup]="additionalForm" class="project__team">
     <div class="project__additional-wrapper">
-      @if (partnerProgramFields.length) { @for (field of partnerProgramFields; track field.id) {
+      @if (partnerProgramFields().length) { @for (field of partnerProgramFields(); track field.id) {
       <label class="text-bold-body-14 field-label">дополнительные сведения</label>
       <fieldset>
         @switch (field.fieldType) { @case ("text") { @if (additionalForm.get(field.name); as
@@ -107,12 +107,12 @@
             <span>программы</span>
             <app-tooltip
               [text]="'Перейди по ссылке и ознакомься с тем, где можно сейчас поучаствовать'"
-              [isVisible]="isTooltipVisible"
+              [isVisible]="isTooltipVisible()"
               [position]="'right'"
               [tooltipWidth]="300"
               customClass="content__hint"
-              (show)="showTooltip()"
-              (hide)="hideTooltip()"
+              (show)="toggleTooltip('show')"
+              (hide)="toggleTooltip('hide')"
             ></app-tooltip>
           </app-button>
         </a>

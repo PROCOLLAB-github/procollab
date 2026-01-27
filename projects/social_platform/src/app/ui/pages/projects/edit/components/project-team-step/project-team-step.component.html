@@ -4,10 +4,10 @@
   <div class="project__invite">
     <ul
       class="invite__team"
-      [style.overflow-x]="collaborators.length > 8 ? 'auto' : 'none'"
-      [style.display]="collaborators.length ? 'grid' : 'none'"
+      [style.overflow-x]="collaborators().length > 8 ? 'auto' : 'none'"
+      [style.display]="collaborators().length ? 'grid' : 'none'"
     >
-      @for (collaborator of collaborators; track collaborator.userId) {
+      @for (collaborator of collaborators(); track collaborator.userId) {
       <li class="invite__item">
         <app-collaborator-card
           (collaboratorRemoved)="onCollaboratorRemove($event)"
@@ -18,7 +18,7 @@
     </ul>
   </div>
 
-  @if (showFields) {
+  @if (showInputFields()) {
   <div class="">
     <div class="" style="display: flex; flex-direction: column; width: 59%">
       <form [formGroup]="inviteForm">
@@ -102,13 +102,13 @@
   </div>
   }
 
-  <div class="invite__link" [style.flex-direction]="!invites.length ? 'row' : 'row-reverse'">
+  <div class="invite__link" [style.flex-direction]="!invites().length ? 'row' : 'row-reverse'">
     <ul
       class="invite__link--wrapper"
-      [style.overflow-x]="invites.length > 8 ? 'auto' : 'none'"
-      [style.display]="invitesFill ? 'flex' : 'none'"
+      [style.overflow-x]="invites().length > 8 ? 'auto' : 'none'"
+      [style.display]="invitesFill() ? 'flex' : 'none'"
     >
-      @for (user of invites; track user.id) { @if (user.isAccepted === null) {
+      @for (user of invites(); track user.id) { @if (user.isAccepted === null) {
       <li class="invite__item">
         <app-invite-card
           [invite]="user"
@@ -121,29 +121,29 @@
     <app-button
       size="big"
       appearance="outline"
-      (click)="showFields ? submitInvite() : createInvitationBlock()"
+      (click)="showInputFields() ? submitInvite() : createInvitationBlock()"
       class="invite__submit"
       customTypographyClass="text-body-12"
     >
-      <span>{{ showFields ? "отправить приглашение" : "создать приглашение" }}</span>
+      <span>{{ showInputFields() ? "отправить приглашение" : "создать приглашение" }}</span>
       <i appIcon icon="plus" appSquare="10"></i>
 
-      @if (!showFields) {
+      @if (!showInputFields()) {
       <app-tooltip
         [text]="
           'Пару советов на старте: Оптимальный размер команды 2–5 человек. Это обеспечивает гибкость и эффективность коммуникации. Стремитесь к разнообразию навыков среди участников. Четко распределите роли и зоны ответственности на старте.'
         "
-        [isVisible]="isTooltipVisible"
+        [isVisible]="isTooltipVisible()"
         [position]="'right'"
         [tooltipWidth]="400"
         customClass="content__hint"
-        (show)="showTooltip()"
-        (hide)="hideTooltip()"
+        (show)="toggleTooltip('show')"
+        (hide)="toggleTooltip('hide')"
       ></app-tooltip>
       }
     </app-button>
 
-    @if (!invites.length || !collaborators.length) {
+    @if (!invites().length || !collaborators().length) {
     <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
     }
   </div>

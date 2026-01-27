@@ -3,7 +3,6 @@
 import { inject, Injectable } from "@angular/core";
 import { Validators } from "@angular/forms";
 import { ValidationService } from "@corelib";
-import { Skill } from "../../../../domain/skills/skill";
 import { VacancyService } from "../../../vacancy/vacancy.service";
 import { Subject, takeUntil } from "rxjs";
 import { ProjectVacancyUIService } from "./ui/project-vacancy-ui.service";

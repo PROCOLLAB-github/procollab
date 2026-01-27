@@ -1,7 +1,7 @@
 <!-- @format -->
 <div>
   <div class="project__top">
-    <div class="project__back" [routerLink]="'/office/projects/' + profileId">
+    <div class="project__back" [routerLink]="'/office/projects/' + profileId()">
       <i appIcon icon="left-arrow" appSquare="24"></i>
       <h1 class="project__title">редактировать проект</h1>
     </div>
@@ -18,7 +18,7 @@
         size="medium"
         customTypographyClass="text-body-12"
         appearance="outline"
-        [loader]="projFormIsSubmittingAsDraft"
+        [loader]="projFormIsSubmittingAsDraft()"
         (click)="saveProjectAsDraft()"
       >
         сохранить черновик
@@ -26,10 +26,10 @@
       <app-button
         size="medium"
         customTypographyClass="text-body-12"
-        [loader]="projFormIsSubmittingAsPublished"
+        [loader]="projFormIsSubmittingAsPublished()"
         (click)="saveProjectAsPublished()"
       >
-        {{ isCompetitive ? "отправить заявку" : "сохранить" }}
+        {{ isCompetitive() ? "отправить заявку" : "сохранить" }}
       </app-button>
     </div>
   </div>
@@ -43,48 +43,37 @@
       ></app-project-navigation>
 
       <div class="project__inner">
-        @if (editingStep === "main") {
+        @if (editingStep() === "main") {
         <app-project-main-step
           style="width: 100%"
-          [industries$]="industries$"
-          [leaderId]="leaderId"
-          [projSubmitInitiated]="projSubmitInitiated"
-          [projectId]="profileId"
+          [projSubmitInitiated]="projSubmitInitiated()"
         ></app-project-main-step>
-
-        } @else if (editingStep === "contacts") {
+        } @else if (editingStep() === "contacts") {
         <app-project-partner-resources-step
-          [projectId]="profileId"
           style="width: 100%"
         ></app-project-partner-resources-step>
-        } @else if (editingStep === "achievements") {
+        } @else if (editingStep() === "achievements") {
         <app-project-achievement-step
           style="width: 100%"
-          [projSubmitInitiated]="projSubmitInitiated"
+          [projSubmitInitiated]="projSubmitInitiated()"
         ></app-project-achievement-step>
-        } @else if (editingStep === "vacancies"){
-        <app-project-vacancy-step
-          style="width: 100%"
-          [inlineSkills]="inlineSkills()"
-          (searchSkill)="onSearchSkill($event)"
-          (addSkill)="onAddSkill($event)"
-          (removeSkill)="onRemoveSkill($event)"
-          (toggleSkillsGroupsModal)="toggleSkillsGroupsModal()"
-        ></app-project-vacancy-step>
-        } @else if (editingStep === "team") {
+        } @else if (editingStep() === "vacancies"){
+        <app-project-vacancy-step style="width: 100%"></app-project-vacancy-step>
+        } @else if (editingStep() === "team") {
         <app-project-team-step style="width: 100%"></app-project-team-step>
-        } @else if (editingStep === "additional") {
+        } @else if (editingStep() === "additional") {
         <app-project-additional-step
           #additionalStepComponent
           style="width: 100%"
-          [isProjectAssignToProgram]="isProjectAssignToProgram"
         ></app-project-additional-step>
         }
       </div>
     </form>
     <app-modal
       [open]="
-        (projectForm.invalid || additionalForm.invalid) && projSubmitInitiated && !warningModalSeen
+        (projectForm.invalid || additionalForm.invalid) &&
+        projSubmitInitiated() &&
+        !warningModalSeen()
       "
     >
       <div class="project__warning-modal">
@@ -96,7 +85,7 @@
           позже :&#41;
 
           {{
-            fromProgram || isProjectAssignToProgram
+            fromProgram() || isProjectAssignToProgram()
               ? 'также проверь вкладку "данные для конкурсов"'
               : ""
           }}
@@ -113,10 +102,10 @@
   </main>
 </div>
 
-<app-modal [open]="isCompleted" (openChange)="isCompleted = !isCompleted">
+<app-modal [open]="isCompleted()" (openChange)="isCompleted.set(!isCompleted())">
   <div class="cancel">
     <div class="cancel__top">
-      <i (click)="isCompleted = false" appIcon icon="cross" class="cancel__cross"></i>
+      <i (click)="isCompleted.set(false)" appIcon icon="cross" class="cancel__cross"></i>
       <p class="cancel__title text-bold-body-16">Проект завершен!</p>
     </div>
 
@@ -129,40 +118,16 @@
   </div>
 </app-modal>
 
-<app-modal [open]="skillsGroupsModalOpen()" class="modal">
-  <div class="modal__wrapper">
-    <p class="text-body-14">библиотека навыков</p>
-    <div class="modal__content">
-      <div class="modal__skills-groups">
-        <ul>
-          @for (skillsGroup of nestedSkills$ | async; track skillsGroup.id) {
-          <li>
-            <app-skills-group
-              [title]="skillsGroup.name"
-              [options]="skillsGroup.skills"
-              [selected]="this.vacancyForm.getRawValue().skills"
-              [hasOpenGroups]="hasOpenSkillsGroups"
-              [disabled]="hasOpenSkillsGroups && !openGroupIds.has(skillsGroup.id)"
-              (optionToggled)="onToggleSkill($event)"
-              (groupToggled)="onGroupToggled($event, skillsGroup.id)"
-            ></app-skills-group>
-          </li>
-          }
-        </ul>
-      </div>
-    </div>
-    <app-button size="big" (click)="toggleSkillsGroupsModal()">Сохранить</app-button>
-  </div>
-</app-modal>
-
 <app-modal
-  [open]="isSendDescisionToPartnerProgramProject"
-  (openChange)="isSendDescisionToPartnerProgramProject = !isSendDescisionToPartnerProgramProject"
+  [open]="isSendDescisionToPartnerProgramProject()"
+  (openChange)="
+    isSendDescisionToPartnerProgramProject.set(!isSendDescisionToPartnerProgramProject())
+  "
 >
   <div class="cancel" style="width: 100%; padding: 40px 20px 20px">
     <div class="cancel__top">
       <i
-        (click)="isSendDescisionToPartnerProgramProject = false"
+        (click)="isSendDescisionToPartnerProgramProject.set(false)"
         appIcon
         icon="cross"
         class="cancel__cross"
@@ -181,7 +146,7 @@
         size="medium"
         customTypographyClass="text-body-12"
         color="grey"
-        (click)="isSendDescisionToPartnerProgramProject = false"
+        (click)="isSendDescisionToPartnerProgramProject.set(false)"
         >Отмена</app-button
       >
       <app-button

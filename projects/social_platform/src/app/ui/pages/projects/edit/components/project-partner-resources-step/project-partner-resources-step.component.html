@@ -2,7 +2,7 @@
 
 <div class="project__inner">
   <div [formGroup]="partnerForm" class="project__left">
-    @if (hasPartners) {
+    @if (hasPartners()) {
     <ul formArrayName="partners" class="project__info--wrapper">
       @for (control of partners.controls; track i; let i = $index) {
       <li class="project__info">
@@ -104,7 +104,7 @@
   </div>
 
   <div [formGroup]="resourceForm" class="project__right">
-    @if (hasResources) {
+    @if (hasResources()) {
     <ul formArrayName="resources" class="project__info--wrapper">
       @for (control of resources.controls; track i; let i = $index) {
       <li class="project__info">

@@ -46,22 +46,24 @@ export class ProjectAchievementsService {
   }
 
   private readonly achievements = this.projectFormService.achievements;
+
   readonly hasAchievements = computed(
     () => this.achievementsItems().length > 0 || this.achievements.length > 0
   );
 
+  private readonly projectForm = this.projectFormService.getForm();
+
   /**
    * Добавляет новое достижение или сохраняет изменения существующего.
    * @param achievementsFormArray FormArray, содержащий формы достижений
-   * @param projectForm основная форма проекта (FormGroup)
    */
-  public addAchievement(achievementsFormArray: FormArray, projectForm: FormGroup): void {
+  public addAchievement(achievementsFormArray: FormArray): void {
     // Инициализируем сигнал при первом вызове
     this.initializeAchievementsItems(achievementsFormArray);
 
     // Считываем вводимые данные
-    const title = projectForm.get("title")?.value;
-    const status = projectForm.get("status")?.value;
+    const title = this.projectForm.get("title")?.value;
+    const status = this.projectForm.get("status")?.value;
 
     // Проверяем, что поля не пустые
     if (!title || !status || title.trim().length === 0 || status.trim().length === 0) {
@@ -94,24 +96,19 @@ export class ProjectAchievementsService {
     }
 
     // Очищаем поля ввода формы проекта
-    projectForm.get("title")?.reset();
-    projectForm.get("title")?.setValue("");
+    this.projectForm.get("title")?.reset();
+    this.projectForm.get("title")?.setValue("");
 
-    projectForm.get("status")?.reset();
-    projectForm.get("status")?.setValue("");
+    this.projectForm.get("status")?.reset();
+    this.projectForm.get("status")?.setValue("");
   }
 
   /**
    * Инициализирует редактирование существующего достижения.
    * @param index индекс достижения в списке
    * @param achievementsFormArray FormArray достижений
-   * @param projectForm основная форма проекта
    */
-  public editAchievement(
-    index: number,
-    achievementsFormArray: FormArray,
-    projectForm: FormGroup
-  ): void {
+  public editAchievement(index: number, achievementsFormArray: FormArray): void {
     // Инициализируем сигнал при необходимости
     this.initializeAchievementsItems(achievementsFormArray);
 
@@ -119,7 +116,7 @@ export class ProjectAchievementsService {
     const source = achievementsFormArray.value[index];
 
     // Заполняем поля формы проекта для редактирования
-    projectForm.patchValue({
+    this.projectForm.patchValue({
       achievementsName: source?.achievementsName || "",
       achievementsDate: source?.achievementsDate || "",
     });

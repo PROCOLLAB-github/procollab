@@ -1,18 +1,10 @@
 /** @format */
 
-import { Component, Input, inject, OnInit, OnDestroy, signal } from "@angular/core";
-import {
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
+import { Component, Input, inject, OnInit, OnDestroy } from "@angular/core";
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { directionProjectList } from "projects/core/src/consts/lists/direction-project-list.const";
 import { trackProjectList } from "projects/core/src/consts/lists/track-project-list.const";
-import { Observable, Subscription } from "rxjs";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { InputComponent, SelectComponent, ButtonComponent } from "@ui/components";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
@@ -21,22 +13,21 @@ import { AsyncPipe, CommonModule } from "@angular/common";
 import { ControlErrorPipe } from "@corelib";
 import { ProjectFormService } from "../../../../../../api/project/project-form.service";
 import { IconComponent } from "@uilib";
-import { ProjectContactsService } from "../../../../../../api/project/project-contacts.service";
-import { ProjectGoalService } from "../../../../../../api/project/project-goals.service";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { ProjectTeamService } from "../../../../../../api/project/project-team.service";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { RouterLink } from "@angular/router";
 import { generateOptionsList } from "@utils/generate-options-list";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
-import { optionalUrlOrMentionValidator } from "@utils/optionalUrl.validator";
+import { ProjectsEditInfoService } from "projects/social_platform/src/app/api/project/facades/edit/projects-edit-info.service";
+import { ProjectsEditUIInfoService } from "projects/social_platform/src/app/api/project/facades/edit/ui/projects-edit-ui-info.service";
+import { ProjectGoalsUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-goals-ui.service";
+import { ProjectGoalService } from "projects/social_platform/src/app/api/project/facades/edit/project-goals.service";
+import { ProjectContactsService } from "projects/social_platform/src/app/api/project/facades/edit/project-contacts.service";
+import { ProjectTeamUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-team-ui.service";
 
 @Component({
   selector: "app-project-main-step",
   templateUrl: "./project-main-step.component.html",
   styleUrl: "./project-main-step.component.scss",
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -54,158 +45,97 @@ import { optionalUrlOrMentionValidator } from "@utils/optionalUrl.validator";
     FormsModule,
     RouterLink,
   ],
+  standalone: true,
 })
 export class ProjectMainStepComponent implements OnInit, OnDestroy {
-  @Input() industries$!: Observable<any[]>;
-  @Input() leaderId = 0;
   @Input() projSubmitInitiated = false;
-  @Input() projectId!: number;
-  @Input() isProjectBoundToProgram = false;
 
-  private subscription = new Subscription();
-
-  readonly authService = inject(AuthService);
-  private readonly projectService = inject(ProjectService);
-  private readonly projectFormService = inject(ProjectFormService);
-  private readonly projectContactsService = inject(ProjectContactsService);
-  private readonly projectGoalsService = inject(ProjectGoalService);
-  private readonly projectTeamService = inject(ProjectTeamService);
   private readonly fb = inject(FormBuilder);
+  private readonly projectFormService = inject(ProjectFormService);
+  private readonly projectTeamUIService = inject(ProjectTeamUIService);
 
-  readonly errorMessage = ErrorMessage;
-  readonly trackList = trackProjectList;
-  readonly directionList = directionProjectList;
-  readonly trlList = generateOptionsList(9, "numbers");
+  private readonly projectsEditInfoService = inject(ProjectsEditInfoService);
+  private readonly projectsEditUIInfoService = inject(ProjectsEditUIInfoService);
 
-  goalLeaderShowModal = false;
-  activeGoalIndex = signal<number | null>(null);
-  selectedLeaderId = "";
+  private readonly projectGoalService = inject(ProjectGoalService);
+  private readonly projectGoalsUIService = inject(ProjectGoalsUIService);
+
+  private readonly projectContactsService = inject(ProjectContactsService);
+
+  protected readonly projectId = this.projectsEditInfoService.profileId;
 
   // Получаем форму из сервиса
-  get projectForm(): FormGroup {
-    return this.projectFormService.getForm();
-  }
+  protected readonly projectForm = this.projectsEditInfoService.projectForm;
+  protected readonly goalForm = this.projectGoalService.getForm();
 
-  get goalForm(): FormGroup {
-    return this.projectGoalsService.getForm();
-  }
+  // Id Лидера проекта
+  protected readonly leaderId = this.projectsEditUIInfoService.leaderId;
+  protected readonly industries$ = this.projectsEditInfoService.industries$;
 
-  ngOnInit(): void {}
+  protected readonly goalLeaderShowModal = this.projectGoalsUIService.goalLeaderShowModal;
+  protected readonly activeGoalIndex = this.projectGoalsUIService.activeGoalIndex;
+  protected readonly selectedLeaderId = this.projectGoalsUIService.selectedLeaderId;
 
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
+  protected readonly errorMessage = ErrorMessage;
+  protected readonly trackList = trackProjectList;
+  protected readonly directionList = directionProjectList;
+  protected readonly trlList = generateOptionsList(9, "numbers");
 
   // Геттеры для удобного доступа к контролам формы
-  get name() {
-    return this.projectFormService.name;
-  }
+  protected readonly name = this.projectFormService.name;
+  protected readonly region = this.projectFormService.region;
 
-  get region() {
-    return this.projectFormService.region;
-  }
+  protected readonly industry = this.projectFormService.industry;
+  protected readonly description = this.projectFormService.description;
 
-  get industry() {
-    return this.projectFormService.industry;
-  }
+  protected readonly actuality = this.projectFormService.actuality;
+  protected readonly implementationDeadline = this.projectFormService.implementationDeadline;
 
-  get description() {
-    return this.projectFormService.description;
-  }
+  protected readonly problem = this.projectFormService.problem;
+  protected readonly targetAudience = this.projectFormService.targetAudience;
+  protected readonly trl = this.projectFormService.trl;
 
-  get actuality() {
-    return this.projectFormService.actuality;
-  }
+  protected readonly partnerProgramId = this.projectFormService.partnerProgramId;
+  protected readonly presentationAddress = this.projectFormService.presentationAddress;
 
-  get implementationDeadline() {
-    return this.projectFormService.implementationDeadline;
-  }
-
-  get problem() {
-    return this.projectFormService.problem;
-  }
-
-  get targetAudience() {
-    return this.projectFormService.targetAudience;
-  }
-
-  get trl() {
-    return this.projectFormService.trl;
-  }
-
-  get presentationAddress() {
-    return this.projectFormService.presentationAddress;
-  }
-
-  get coverImageAddress() {
-    return this.projectFormService.coverImageAddress;
-  }
-
-  get imageAddress() {
-    return this.projectFormService.imageAddress;
-  }
-
-  get partnerProgramId() {
-    return this.projectFormService.partnerProgramId;
-  }
+  protected readonly coverImageAddress = this.projectFormService.coverImageAddress;
+  protected readonly imageAddress = this.projectFormService.imageAddress;
 
   // Геттеры для работы со ссылками
-  get link() {
-    return this.projectContactsService.link;
-  }
-
-  get links(): FormArray {
-    return this.projectForm.get("links") as FormArray;
-  }
+  protected readonly link = this.projectContactsService.link;
+  protected readonly links = this.projectContactsService.links;
 
   // Геттеры для работы с целями
-  get goals(): FormArray {
-    return this.projectGoalsService.goals;
-  }
-
-  get goalItems() {
-    return this.projectGoalsService.goalItems;
-  }
-
-  get goalName() {
-    return this.projectGoalsService.goalName;
-  }
-
-  get goalDate() {
-    return this.projectGoalsService.goalDate;
-  }
-
-  get goalLeader() {
-    return this.projectGoalsService.goalLeader;
-  }
-
-  get editIndex() {
-    return this.projectFormService.editIndex;
-  }
-
-  get collaborators() {
-    return this.projectTeamService.getCollaborators();
-  }
+  protected readonly goals = this.projectGoalService.goals;
+  protected readonly goalItems = this.projectGoalsUIService.goalItems;
+  protected readonly goalName = this.projectGoalService.goalName;
+  protected readonly goalDate = this.projectGoalService.goalDate;
+  protected readonly goalLeader = this.projectGoalService.goalLeader;
+  protected readonly editIndex = this.projectFormService.editIndex;
+  protected readonly collaborators = this.projectTeamUIService.collaborators;
 
   /**
    * Проверяет, есть ли ссылки для отображения
    */
-  get hasLinks(): boolean {
-    return this.links.length > 0;
-  }
+  protected readonly hasLinks = this.projectContactsService.hasLinks;
 
   /**
    * Проверяет, есть ли цели для отображения
    */
-  get hasGoals(): boolean {
-    return this.goals.length > 0;
+  protected readonly hasGoals = this.projectGoalsUIService.hasGoals;
+
+  ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    this.projectsEditInfoService.destroy();
+    this.projectGoalService.destroy();
   }
 
   /**
    * Добавление ссылки
    */
   addLink(): void {
-    this.links.push(this.fb.control("", optionalUrlOrMentionValidator));
+    this.projectContactsService.addLink(this.links);
   }
 
   /**
@@ -221,7 +151,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
    * @param index - индекс ссылки
    */
   removeLink(index: number): void {
-    this.links.removeAt(index);
+    this.projectContactsService.removeLink(index, this.links);
   }
 
   /**
@@ -236,7 +166,7 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.projectGoalsService.addGoal(goalName, goalDate, goalLeader);
+    this.projectGoalService.addGoal(goalName, goalDate, goalLeader);
   }
 
   /**
@@ -244,69 +174,38 @@ export class ProjectMainStepComponent implements OnInit, OnDestroy {
    * @param index - индекс цели
    */
   removeGoal(index: number, goalId: number): void {
-    this.projectGoalsService.removeGoal(index);
-    this.projectService.deleteGoals(this.projectId, goalId).subscribe();
+    this.projectGoalService.removeGoal(index, goalId, this.projectId());
   }
 
   /**
    * Получить выбранного лидера для конкретной цели
    */
   getSelectedLeaderForGoal(goalIndex: number) {
-    const goalFormGroup = this.goals.at(goalIndex);
-    const leaderId = goalFormGroup?.get("responsible")?.value;
-
-    if (!leaderId) return null;
-
-    return this.collaborators.find(collab => collab.userId.toString() === leaderId.toString());
+    return this.projectGoalService.getSelectedLeaderForGoal(goalIndex, this.collaborators());
   }
 
   /**
    * Обработчик изменения радио-кнопки для выбора лидера
    */
   onLeaderRadioChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.selectedLeaderId = target.value;
+    this.projectGoalsUIService.applyOnLeaderRadioChange(event);
   }
 
   /**
    * Добавление лидера на определенную цель
    */
   addLeader(): void {
-    const goalIndex = this.activeGoalIndex();
-
-    if (goalIndex === null) {
-      return;
-    }
-
-    if (!this.selectedLeaderId) {
-      return;
-    }
-
-    // Устанавливаем выбранного лидера в форму
-    const goalFormGroup = this.goals.at(goalIndex);
-    goalFormGroup?.get("responsible")?.setValue(Number(this.selectedLeaderId));
-
-    this.toggleGoalLeaderModal();
-    this.selectedLeaderId = "";
+    this.projectGoalsUIService.applyAddLeaderToGoal(this.goals);
   }
 
   /**
    * Переключатель для модалки выбора лидера
    */
   toggleGoalLeaderModal(index?: number): void {
-    this.goalLeaderShowModal = !this.goalLeaderShowModal;
-
-    if (index !== undefined) {
-      this.activeGoalIndex.set(index);
-      const currentLeader = this.goals.at(index)?.get("responsible")?.value;
-      this.selectedLeaderId = currentLeader || "";
-    } else {
-      this.activeGoalIndex.set(null);
-      this.selectedLeaderId = "";
-    }
+    this.projectGoalsUIService.applyToggleGoalLeaderModal(this.goals, index);
   }
 
-  trackByIndex(index: number): number {
+  protected trackByIndex(index: number): number {
     return index;
   }
 }

@@ -10,12 +10,12 @@ import { NewsFormComponent } from "@ui/components/news-form/news-form.component"
 import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { UserLinksPipe } from "projects/core/src/lib/pipes/user/user-links.pipe";
-import { ProjectAdditionalService } from "projects/social_platform/src/app/api/project/project-additional.service";
 import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
 import { ProgramDetailMainUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProgramDetailMainService } from "projects/social_platform/src/app/api/program/facades/detail/program-detail-main-info.service";
 import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
 import { NewsInfoService } from "projects/social_platform/src/app/api/news/news-info.service";
+import { ProjectAdditionalService } from "projects/social_platform/src/app/api/project/facades/edit/project-additional.service";
 
 @Component({
   selector: "app-main",
@@ -52,7 +52,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   private readonly expandService = inject(ExpandService);
 
   protected readonly isAssignProjectToProgramError =
-    this.projectAdditionalService.getIsAssignProjectToProgramError();
+    this.projectAdditionalService.isAssignProjectToProgramError;
 
   protected readonly errorAssignProjectToProgramModalMessage =
     this.projectAdditionalService.errorAssignProjectToProgramModalMessage;

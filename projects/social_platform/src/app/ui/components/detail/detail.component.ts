@@ -23,7 +23,6 @@ import { ControlErrorPipe, ValidationService } from "@corelib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { AuthService } from "../../../api/auth";
 import { ProjectService } from "../../../api/project/project.service";
-import { ProjectAdditionalService } from "../../../api/project/project-additional.service";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { ProfileDataService } from "../../../api/profile/profile-date.service";
 import { ProfileService } from "../../../api/auth/profile.service";
@@ -44,6 +43,7 @@ import { ApiPagination } from "../../../domain/other/api-pagination.model";
 import { Collaborator } from "../../../domain/project/collaborator.model";
 import { ProjectsDetailUIInfoService } from "../../../api/project/facades/detail/ui/projects-detail-ui.service";
 import { ProgramDetailMainUIInfoService } from "../../../api/program/facades/detail/ui/program-detail-main-ui-info.service";
+import { ProjectAdditionalService } from "../../../api/project/facades/edit/project-additional.service";
 
 @Component({
   selector: "app-detail",
@@ -63,6 +63,7 @@ import { ProgramDetailMainUIInfoService } from "../../../api/program/facades/det
     TruncatePipe,
     ControlErrorPipe,
   ],
+  providers: [ProgramDetailMainUIInfoService, ProjectAdditionalService],
   standalone: true,
 })
 export class DeatilComponent implements OnInit, OnDestroy {
