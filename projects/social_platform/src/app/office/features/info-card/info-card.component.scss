@@ -218,10 +218,10 @@
   &__skills {
     display: flex;
     flex-flow: wrap;
+    flex-grow: 1;
     gap: 2px;
     justify-content: center;
     margin-bottom: 9px;
-    flex-grow: 1;
   }
 
   &__skill {
