@@ -1,49 +1,29 @@
 /** @format */
 
 import { CommonModule, Location } from "@angular/common";
-import {
-  ChangeDetectorRef,
-  Component,
-  computed,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ButtonComponent, InputComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { ActivatedRoute, Router, RouterModule } from "@angular/router";
+import { RouterModule } from "@angular/router";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
-import { concatMap, EMPTY, filter, map, Observable, of, Subscription, tap } from "rxjs";
-import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { ApproveSkillComponent } from "../approve-skill/approve-skill.component";
-import { ControlErrorPipe, ValidationService } from "@corelib";
+import { ControlErrorPipe } from "@corelib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
-import { AuthService } from "../../../api/auth";
-import { ProjectService } from "../../../api/project/project.service";
-import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
-import { ProfileDataService } from "../../../api/profile/profile-date.service";
 import { ProfileService } from "../../../api/auth/profile.service";
 import { ChatService } from "../../../api/chat/chat.service";
-import { ProgramService } from "../../../api/program/program.service";
-import { InviteService } from "../../../api/invite/invite.service";
 import { ProjectFormService } from "../../../api/project/project-form.service";
-import { User } from "../../../domain/auth/user.model";
-import { Project } from "../../../domain/project/project.model";
-import {
-  PartnerProgramFields,
-  projectNewAdditionalProgramVields,
-} from "../../../domain/program/partner-program-fields.model";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
-import { saveFile } from "@utils/helpers/export-file";
-import { calculateProfileProgress } from "@utils/calculateProgress";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { Collaborator } from "../../../domain/project/collaborator.model";
-import { ProjectsDetailUIInfoService } from "../../../api/project/facades/detail/ui/projects-detail-ui.service";
-import { ProgramDetailMainUIInfoService } from "../../../api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProjectAdditionalService } from "../../../api/project/facades/edit/project-additional.service";
+import { TooltipInfoService } from "../../../api/tooltip/tooltip-info.service";
+import { DetailInfoService } from "./services/detail-info.service";
+import { DetailProfileInfoService } from "./services/profile/detail-profile-info.service";
+import { DetailProgramInfoService } from "./services/program/detail-program-info.service";
+import { DetailProjectInfoService } from "./services/project/detail-project-info.service";
+import { Program } from "../../../domain/program/program.model";
+import { ProfileDetailUIInfoService } from "../../../api/profile/facades/detail/ui/profile-detail-ui-info.service";
 
 @Component({
   selector: "app-detail",
@@ -63,153 +43,123 @@ import { ProjectAdditionalService } from "../../../api/project/facades/edit/proj
     TruncatePipe,
     ControlErrorPipe,
   ],
-  providers: [ProgramDetailMainUIInfoService, ProjectAdditionalService],
+  providers: [
+    ProfileDetailUIInfoService,
+    DetailInfoService,
+    DetailProfileInfoService,
+    DetailProjectInfoService,
+    DetailProgramInfoService,
+    ProjectAdditionalService,
+    TooltipInfoService,
+  ],
   standalone: true,
 })
 export class DeatilComponent implements OnInit, OnDestroy {
-  private readonly authService = inject(AuthService);
-  private readonly fb = inject(FormBuilder);
-  private readonly route = inject(ActivatedRoute);
-  private readonly projectService = inject(ProjectService);
-  private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
-  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
-  private readonly snackbarService = inject(SnackbarService);
-  private readonly router = inject(Router);
   protected readonly location = inject(Location);
-  private readonly profileDataService = inject(ProfileDataService);
   public readonly skillsProfileService = inject(ProfileService);
   public readonly chatService = inject(ChatService);
-  private readonly cdRef = inject(ChangeDetectorRef);
-  private readonly programService = inject(ProgramService);
-  private readonly inviteService = inject(InviteService);
-  private readonly validationService = inject(ValidationService);
   private readonly projectFormService = inject(ProjectFormService);
+  private readonly tooltipInfoService = inject(TooltipInfoService);
 
-  info = signal<any | undefined>(undefined);
-  profile?: User;
-  profileProjects = signal<User["projects"]>([]);
-  listType: "project" | "program" | "profile" = "project";
+  private readonly detailInfoService = inject(DetailInfoService);
+  private readonly detailProfileInfoService = inject(DetailProfileInfoService);
+  private readonly detailProgramInfoService = inject(DetailProgramInfoService);
+  private readonly detailProjectInfoService = inject(DetailProjectInfoService);
+
+  protected readonly info = this.detailInfoService.info;
+  protected readonly profile = this.detailProfileInfoService.profile;
+  protected readonly profileProjects = this.detailProfileInfoService.profileProjects;
+  protected readonly listType = this.detailInfoService.listType;
 
   // Переменная для подсказок
-  isTooltipVisible = false;
-
-  tooltipText = "Заполни до конца — и открой весь функционал платформы!";
+  protected readonly isTooltipVisible = this.tooltipInfoService.isTooltipVisible;
 
   // Переменные для отображения данных в зависимости от url
-  isProjectsPage = false;
-  isMembersPage = false;
-  isProjectsRatingPage = false;
+  protected readonly isProjectsPage = this.detailProgramInfoService.isProjectsPage;
+  protected readonly isMembersPage = this.detailProgramInfoService.isMembersPage;
+  protected readonly isProjectsRatingPage = this.detailProgramInfoService.isProjectsRatingPage;
 
-  isTeamPage = false;
-  isVacanciesPage = false;
-  isProjectChatPage = false;
-  isProjectWorkSectionPage = false;
+  protected readonly isTeamPage = this.detailProjectInfoService.isTeamPage;
+  protected readonly isVacanciesPage = this.detailProjectInfoService.isVacanciesPage;
+  protected readonly isProjectChatPage = this.detailProjectInfoService.isProjectChatPage;
+  protected readonly isProjectWorkSectionPage =
+    this.detailProjectInfoService.isProjectWorkSectionPage;
 
-  isKanbanBoardPage = false;
-  isGantDiagramPage = false;
+  protected readonly isKanbanBoardPage = this.detailProjectInfoService.isKanbanBoardPage;
+  protected readonly isGantDiagramPage = this.detailProjectInfoService.isGantDiagramPage;
 
   // Сторонние переменные для работы с роутингом или доп проверок
-  backPath?: string;
-  registerDateExpired = this.programDetailMainUIInfoService.registerDateExpired;
-  submissionProjectDateExpired?: boolean;
-  isInProject?: boolean;
+  protected readonly backPath = this.detailInfoService.backPath;
+  protected readonly registerDateExpired = this.detailProgramInfoService.registerDateExpired;
+  protected readonly submissionProjectDateExpired =
+    this.detailProjectInfoService.submissionProjectDateExpired;
+  protected readonly isInProject = this.detailInfoService.isInProject;
 
-  isSended = false;
-  isSubscriptionActive = signal(false);
-  isProfileFill = false;
+  protected readonly isSended = this.detailProfileInfoService.isSended;
+  protected readonly isProfileFill = this.detailProfileInfoService.isProfileFill;
 
   // Переменные для работы с модалкой подачи проекта
-  selectedProjectId: number | null = null;
-  memberProjects: Project[] = [];
+  protected readonly selectedProjectId = this.detailProfileInfoService.selectedProjectId;
+  protected readonly memberProjects = this.detailProfileInfoService.memberProjects;
 
-  userType = signal<number | undefined>(undefined);
+  protected readonly userType = this.detailInfoService.userType;
 
   // Сигналы для работы с модальными окнами с текстом
-  // assignProjectToProgramModalMessage = signal<ProjectAssign | null>(null);
-  errorMessageModal = signal("");
+  protected readonly errorMessageModal = this.detailInfoService.errorMessageModal;
 
-  additionalFields = signal<PartnerProgramFields[]>([]);
+  protected readonly additionalFields = this.detailProgramInfoService.additionalFields;
 
   // Переменные для работы с модалками
-  isAssignProjectToProgramModalOpen = signal(false);
-  showSubmitProjectModal = signal(false);
-  isProgramEndedModalOpen = signal(false);
-  isProgramSubmissionProjectsEndedModalOpen = signal<boolean>(false);
-  isLeaveProjectModalOpen = false; // Флаг модального окна выхода
-  isEditDisable = false; // Флаг недоступности редактирования
-  isEditDisableModal = false; // Флаг недоступности редактирования для модалки
-  openSupport = false; // Флаг модального окна поддержки
-  leaderLeaveModal = false; // Флаг модального окна предупреждения лидера
-  isDelayModalOpen = false;
+  protected readonly isAssignProjectToProgramModalOpen =
+    this.detailProgramInfoService.isAssignProjectToProgramModalOpen;
+  protected readonly isProgramEndedModalOpen =
+    this.detailProgramInfoService.isProgramEndedModalOpen;
+  protected readonly isProgramSubmissionProjectsEndedModalOpen =
+    this.detailProgramInfoService.isProgramSubmissionProjectsEndedModalOpen;
+  protected readonly isLeaveProjectModalOpen =
+    this.detailProjectInfoService.isLeaveProjectModalOpen; // Флаг модального окна выхода
+  protected readonly isEditDisable = this.detailProjectInfoService.isEditDisable; // Флаг недоступности редактирования
+  protected readonly isEditDisableModal = this.detailProjectInfoService.isEditDisableModal; // Флаг недоступности редактирования для модалки
+  protected readonly openSupport = this.detailProjectInfoService.openSupport; // Флаг модального окна поддержки
+  protected readonly leaderLeaveModal = this.detailProjectInfoService.leaderLeaveModal; // Флаг модального окна предупреждения лидера
+  protected readonly isDelayModalOpen = this.detailProfileInfoService.isDelayModalOpen;
 
   // Переменные для работы с подтверждением навыков
-  showApproveSkillModal = false;
-  showSendInviteModal = false;
-  showNoProjectsModal = false;
-  showActiveInviteModal = false;
-  showNoInProgramModal = false;
-  showSuccessInviteModal = false;
-  readAllModal = false;
+  protected readonly showApproveSkillModal = this.detailProfileInfoService.showApproveSkillModal;
+  protected readonly showSendInviteModal = this.detailProfileInfoService.showSendInviteModal;
+  protected readonly showNoProjectsModal = this.detailProfileInfoService.showNoProjectsModal;
+  protected readonly showActiveInviteModal = this.detailProfileInfoService.showActiveInviteModal;
+  protected readonly showNoInProgramModal = this.detailProfileInfoService.showNoInProgramModal;
+  protected readonly showSuccessInviteModal = this.detailProfileInfoService.showSuccessInviteModal;
+
+  protected readonly openSkills = this.detailProfileInfoService.openSkills;
+
+  // Геттеры для работы с отображением данных разного типа доступа
+  protected readonly isUserManager = this.detailInfoService.isUserManager;
+  protected readonly isUserMember = this.detailInfoService.isUserMember;
+  protected readonly isUserExpert = this.detailInfoService.isUserExpert;
+  protected readonly isProjectAssigned = this.detailInfoService.isProjectAssigned;
 
   // Сигналы для работы с модальными окнами с текстом
-  assignProjectToProgramModalMessage = signal<string | null>(null);
+  protected readonly assignProjectToProgramModalMessage =
+    this.detailProgramInfoService.assignProjectToProgramModalMessage;
 
-  subscriptions: Subscription[] = [];
+  protected readonly projectForm = this.projectFormService.getForm();
 
-  get projectForm() {
-    return this.projectFormService.formModel;
-  }
-
-  readonly inviteForm = this.fb.group({
-    role: ["", Validators.required],
-  });
+  protected readonly inviteForm = this.detailProfileInfoService.inviteForm;
 
   protected readonly errorMessage = ErrorMessage;
 
   ngOnInit(): void {
-    const listTypeSub$ = this.route.data.subscribe(data => {
-      this.listType = data["listType"];
-      this.initializeBackPath();
-      this.initializeInfo();
-    });
-
-    this.updatePageStates();
-    this.location.onUrlChange(url => {
-      this.updatePageStates(url);
-    });
-
-    this.subscriptions.push(listTypeSub$);
+    this.detailInfoService.initializationDetail();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach($ => $.unsubscribe());
-  }
-
-  // Геттеры для работы с отображением данных разного типа доступа
-  get isUserManager() {
-    if (this.listType === "program") {
-      return this.info().isUserManager;
-    }
-  }
-
-  get isUserMember() {
-    if (this.listType === "program") {
-      return this.info().isUserMember;
-    }
-  }
-
-  get isUserExpert() {
-    const type = this.userType();
-    return type !== undefined && type === 3;
-  }
-
-  get isProjectAssigned() {
-    const programId = this.info()?.id;
-
-    return this.memberProjects.some(
-      project => project.leader === this.profile?.id && project.partnerProgram?.id === programId
-    );
+    this.detailInfoService.destroy();
+    this.detailProfileInfoService.destroy();
+    this.detailProgramInfoService.destroy();
+    this.detailProjectInfoService.destroy();
   }
 
   // Методы для управления состоянием ошибок через сервис
@@ -217,142 +167,50 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.projectAdditionalService.setAssignProjectToProgramError(error);
   }
 
-  /**
-   * Переключатель для модалки выбора проекта
-   */
-  // toggleSubmitProjectModal(): void {
-  //   this.showSubmitProjectModal.set(!this.showSubmitProjectModal());
-
-  //   if (!this.showSubmitProjectModal()) {
-  //     this.selectedProjectId = null;
-  //   }
-  // }
-
-  /** Показать подсказку */
-  showTooltip(): void {
-    this.isTooltipVisible = true;
-  }
-
-  /** Скрыть подсказку */
-  hideTooltip(): void {
-    this.isTooltipVisible = false;
+  toggleTooltip(option: "show" | "hide"): void {
+    option === "show"
+      ? this.tooltipInfoService.showTooltip()
+      : this.tooltipInfoService.hideTooltip();
   }
 
   /**
    * Обработчик изменения радио-кнопки для выбора проекта
    */
   onProjectRadioChange(event: Event): void {
-    const target = event.target as HTMLInputElement;
-    this.selectedProjectId = +target.value;
-
-    if (this.selectedProjectId) {
-      this.memberProjects.find(project => project.id === this.selectedProjectId);
-    }
+    this.detailProfileInfoService.onProjectRadioChange(event);
   }
 
-  /**
-   * Добавление проекта на программу
-   */
-  // selectProject(): void {
-  //   if (this.selectedProjectId === null) {
-  //     return;
-  //   }
-
-  //   const selectedProject = this.memberProjects.find(
-  //     project => project.id === this.selectedProjectId
-  //   );
-
-  //   console.log(selectedProject);
-  // }
-
-  // get isProjectSelected(): boolean {
-  //   return this.selectedProjectId !== null;
-  // }
-
-  addNewProject(): void {
-    const newFieldsFormValues: projectNewAdditionalProgramVields[] = [];
-
-    this.additionalFields().forEach((field: PartnerProgramFields) => {
-      newFieldsFormValues.push({
-        field_id: field.id,
-        value_text: field.options.length ? field.options[0] : "'",
-      });
-    });
-
-    const body = { project: this.projectForm.value, program_field_values: newFieldsFormValues };
-
-    this.programService.applyProjectToProgram(this.info().id, body).subscribe({
-      next: r => {
-        this.router
-          .navigate([`/office/projects/${r.projectId}/edit`], {
-            queryParams: { editingStep: "main", fromProgram: true },
-          })
-          .then(() => console.debug("Route change from ProjectsComponent"));
-      },
-      error: err => {
-        if (err) {
-          if (err.status === 400) {
-            this.isAssignProjectToProgramModalOpen.set(true);
-            this.assignProjectToProgramModalMessage.set(err.error.detail);
-          }
-        }
-      },
-    });
+  addNewProject(programId: number): void {
+    this.detailProgramInfoService.addNewProject(programId);
   }
 
   /**
    * Закрытие модального окна выхода из проекта
    */
   onCloseLeaveProjectModal(): void {
-    this.isLeaveProjectModalOpen = false;
+    this.detailProjectInfoService.onCloseLeaveProjectModal();
   }
 
   /**
    * Закрытие модального окна для невозможности редактировать проект
    */
   onUnableEditingProject(): void {
-    if (this.isEditDisable) {
-      this.isEditDisableModal = true;
-    } else {
-      this.isEditDisableModal = false;
-    }
+    this.detailProjectInfoService.onUnableEditingProject();
   }
 
   /**
    * Выход из проекта
    */
   onLeave() {
-    this.route.data
-      .pipe(map(r => r["data"][0]))
-      .pipe(concatMap(p => this.projectService.leave(p.id)))
-      .subscribe(
-        () => {
-          this.router
-            .navigateByUrl("/office/projects/my")
-            .then(() => console.debug("Route changed from ProjectInfoComponent"));
-        },
-        () => {
-          this.leaderLeaveModal = true; // Показываем предупреждение для лидера
-        }
-      );
+    this.detailProjectInfoService.onLeave();
   }
 
   /**
    * Копирование ссылки на профиль в буфер обмена
    */
   onCopyLink(profileId: number): void {
-    let fullUrl = "";
-
-    // Формирование URL в зависимости от типа ресурса
-    fullUrl = `${location.origin}/office/profile/${profileId}/`;
-
-    // Копирование в буфер обмена
-    navigator.clipboard.writeText(fullUrl).then(() => {
-      this.snackbarService.success("скопирован URL");
-    });
+    this.detailProfileInfoService.onCopyLink(profileId);
   }
-
-  openSkills: any = {};
 
   /**
    * Открытие модального окна с информацией о подтверждениях навыка
@@ -371,19 +229,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
    * Проверяет ограничения по времени и отправляет CV на почту пользователя
    */
   downloadCV() {
-    this.isSended = true;
-    this.authService.downloadCV().subscribe({
-      next: blob => {
-        saveFile(blob, "cv", this.profile?.firstName + " " + this.profile?.lastName);
-        this.isSended = false;
-      },
-      error: err => {
-        this.isSended = false;
-        if (err.status === 400) {
-          this.isDelayModalOpen = true;
-        }
-      },
-    });
+    this.detailProfileInfoService.downloadCV();
   }
 
   /**
@@ -391,204 +237,28 @@ export class DeatilComponent implements OnInit, OnDestroy {
    * Проверяет какие отрендерить проекты где profile.id === leader
    */
   inviteUser(): void {
-    if (!this.profileProjects().length) {
-      this.showNoProjectsModal = true;
-    } else {
-      this.showSendInviteModal = true;
-    }
+    this.detailProfileInfoService.inviteUser();
   }
 
   sendInvite(): void {
-    const role = this.inviteForm.get("role")?.value;
-    const userId = this.route.snapshot.params["id"];
-
-    if (
-      !this.validationService.getFormValidation(this.inviteForm) ||
-      this.selectedProjectId === null
-    ) {
-      return;
-    }
-
-    this.inviteService.sendForUser(userId, this.selectedProjectId, role!).subscribe({
-      next: () => {
-        this.showSendInviteModal = false;
-        this.showSuccessInviteModal = true;
-
-        this.inviteForm.reset();
-        this.selectedProjectId = null;
-      },
-      error: err => {
-        if (err.error.user[0].includes("проект относится к программе")) {
-          this.showNoInProgramModal = true;
-        } else if (err.error.user[0].includes("активное приглашение")) {
-          this.showActiveInviteModal = true;
-        }
-      },
-    });
+    this.detailProfileInfoService.sendInvite();
   }
 
   /**
    * Перенаправляет на страницу с информацией в завивисимости от listType
    */
   redirectDetailInfo(): void {
-    switch (this.listType) {
-      case "profile":
-        this.router.navigateByUrl(`/office/profile/${this.info().id}`);
-        break;
-
-      case "project":
-        this.router.navigateByUrl(`/office/projects/${this.info().id}`);
-        break;
-
-      case "program":
-        this.router.navigateByUrl(`/office/program/${this.info().id}`);
-        break;
-    }
+    this.detailInfoService.redirectDetailInfo();
   }
 
   routingToMyProjects(): void {
-    this.router.navigateByUrl(`/office/projects/my`);
+    this.detailProjectInfoService.routingToMyProjects();
   }
 
   /**
    * Проверка завершения программы перед регистрацией
    */
-  checkPrograRegistrationEnded(event: Event): void {
-    const program = this.info();
-
-    if (
-      program?.datetimeRegistrationEnds &&
-      Date.now() > Date.parse(program.datetimeRegistrationEnds)
-    ) {
-      event.preventDefault();
-      event.stopPropagation();
-      this.isProgramEndedModalOpen.set(true);
-    } else if (
-      program?.datetimeProjectSubmissionEnds &&
-      Date.now() > Date.parse(program?.datetimeProjectSubmissionEnds)
-    ) {
-      event.preventDefault();
-      event.stopPropagation();
-      this.isProgramSubmissionProjectsEndedModalOpen.set(true);
-    } else {
-      this.router.navigateByUrl("/office/program/" + this.info().id + "/register");
-    }
-  }
-
-  /**
-   * Обновляет состояния страниц на основе URL
-   */
-  private updatePageStates(url?: string): void {
-    const currentUrl = url || this.router.url;
-
-    this.isProjectsPage =
-      currentUrl.includes("/projects") && !currentUrl.includes("/projects-rating");
-
-    this.isMembersPage = currentUrl.includes("/members");
-
-    this.isProjectsRatingPage = currentUrl.includes("/projects-rating");
-
-    this.isTeamPage = currentUrl.includes("/team");
-    this.isVacanciesPage = currentUrl.includes("/vacancies");
-    this.isProjectChatPage = currentUrl.includes("/chat");
-    this.isProjectWorkSectionPage = currentUrl.includes("/work-section");
-
-    this.isGantDiagramPage = currentUrl.includes("/gant-diagram");
-    this.isKanbanBoardPage = currentUrl.includes("/kanban");
-  }
-
-  private initializeInfo() {
-    if (this.listType === "project") {
-      const project = this.projectsDetailUIInfoService.project;
-      this.info = project;
-
-      this.isEditDisable = this.info()?.partnerProgram?.isSubmitted ?? false;
-
-      this.isInProfileInfo();
-    } else if (this.listType === "program") {
-      this.info = this.programDetailMainUIInfoService.program;
-
-      const profileDataSub$ = this.authService.profile.pipe(filter(user => !!user)).subscribe({
-        next: user => {
-          this.userType.set(user!.userType);
-          this.profile = user;
-          this.cdRef.detectChanges();
-        },
-      });
-
-      const memeberProjects$ = this.projectService.getMy().subscribe({
-        next: projects => {
-          this.memberProjects = projects.results.filter(project => !project.draft);
-        },
-      });
-
-      this.subscriptions.push(memeberProjects$);
-      this.subscriptions.push(profileDataSub$);
-    } else {
-      const profileDataSub$ = this.profileDataService
-        .getProfile()
-        .pipe(
-          map(user => ({ ...user, progress: calculateProfileProgress(user!) })),
-          filter(user => !!user)
-        )
-        .subscribe({
-          next: user => {
-            this.info.set(user);
-            this.isProfileFill =
-              user.progress! < 100 ? (this.isProfileFill = true) : (this.isProfileFill = false);
-          },
-        });
-
-      this.isInProfileInfo();
-
-      const profileLeaderProjectsSub$ = this.authService.getLeaderProjects().subscribe({
-        next: (projects: ApiPagination<Project>) => {
-          this.profileProjects.set(projects.results);
-        },
-      });
-
-      this.subscriptions.push(profileDataSub$, profileLeaderProjectsSub$);
-    }
-  }
-
-  private isInProfileInfo(): void {
-    const profileInfoSub$ = this.authService.profile.subscribe({
-      next: profile => {
-        this.profile = profile;
-
-        if (this.info() && this.listType === "project") {
-          this.isInProject = this.info()
-            ?.collaborators?.map((person: Collaborator) => person.userId)
-            .includes(profile.id);
-        }
-      },
-    });
-
-    this.subscriptions.push(profileInfoSub$);
-  }
-
-  /**
-   * Инициализация строки для back компонента в зависимости от типа данных
-   */
-  private initializeBackPath(): void {
-    if (this.listType === "project") {
-      this.backPath = "/office/projects/all";
-    } else if (this.listType === "program") {
-      this.backPath = "/office/program/all";
-    }
-  }
-
-  private loadAdditionalFields(programId: number): void {
-    const additionalFieldsSub$ = this.programService
-      .getProgramProjectAdditionalFields(programId)
-      .subscribe({
-        next: ({ programFields }) => {
-          if (programFields) {
-            this.additionalFields.set(programFields);
-          }
-        },
-      });
-
-    this.subscriptions.push(additionalFieldsSub$);
+  checkPrograRegistrationEnded(event: Event, program: Program): void {
+    this.detailProgramInfoService.checkPrograRegistrationEnded(event, program);
   }
 }

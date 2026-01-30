@@ -37,7 +37,7 @@ import { ProjectAdditionalService } from "projects/social_platform/src/app/api/p
     RouterModule,
     NewsCardComponent,
   ],
-  providers: [ProgramDetailMainService, ProgramDetailMainUIInfoService],
+  providers: [ProgramDetailMainService],
   standalone: true,
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {

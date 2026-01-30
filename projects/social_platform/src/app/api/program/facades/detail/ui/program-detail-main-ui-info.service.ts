@@ -5,7 +5,7 @@ import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
 import { Program } from "projects/social_platform/src/app/domain/program/program.model";
 import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
 
-@Injectable()
+@Injectable({ providedIn: "root" })
 export class ProgramDetailMainUIInfoService {
   readonly program = signal<Program | undefined>(undefined);
   readonly programId = signal<number | undefined>(undefined);

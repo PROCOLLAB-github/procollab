@@ -24,6 +24,7 @@ import { ProgramDetailListUIInfoService } from "projects/social_platform/src/app
 import { ProgramDetailListInfoService } from "projects/social_platform/src/app/api/program/facades/detail/program-detail-list-info.service";
 import { ExportFileInfoService } from "projects/social_platform/src/app/api/export-file/facades/export-file-info.service";
 import { SwipeService } from "projects/social_platform/src/app/api/swipe/swipe.service";
+import { ProgramProjectsFilterInfoService } from "@ui/components/program-projects-filter/service/program-projects-filter-info.service";
 
 @Component({
   selector: "app-list",
@@ -43,6 +44,7 @@ import { SwipeService } from "projects/social_platform/src/app/api/swipe/swipe.s
   providers: [
     ProgramDetailListInfoService,
     ProgramDetailListUIInfoService,
+    ProgramProjectsFilterInfoService,
     ExportFileInfoService,
     SwipeService,
   ],

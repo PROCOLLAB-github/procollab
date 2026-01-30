@@ -21,6 +21,7 @@ import { workScheduleFilter } from "projects/core/src/consts/filters/work-schedu
 import { workExperienceFilter } from "projects/core/src/consts/filters/work-experience-filter.const";
 import { FeedService } from "../../../api/feed/feed.service";
 import { VacancyService } from "../../../api/vacancy/vacancy.service";
+import { VacancyFilterInfoService } from "./service/vacancy-filter-info.service";
 
 /**
  * Компонент фильтра вакансий без использования реактивных форм
@@ -49,82 +50,58 @@ import { VacancyService } from "../../../api/vacancy/vacancy.service";
       transition(":leave", [animate(".1s linear", style({ opacity: 0 }))]),
     ]),
   ],
+  providers: [VacancyFilterInfoService],
 })
 export class VacancyFilterComponent implements OnInit {
-  /** Сервис роутера для навигации */
-  router = inject(Router);
-  /** Сервис текущего маршрута */
-  route = inject(ActivatedRoute);
-  /** Сервис ленты новостей */
-  feedService = inject(FeedService);
-  /** Сервис для работы с вакансиями */
-  vacancyService = inject(VacancyService);
-
-  constructor() {}
-
-  /** Приватное поле для хранения значения поиска */
-  private _searchValue: string | undefined;
+  private readonly vacancyFilterInfoService = inject(VacancyFilterInfoService);
 
   /**
    * Сеттер для значения поиска
    * @param value - новое значение поиска
    */
   @Input() set searchValue(value: string | undefined) {
-    this._searchValue = value;
+    this.vacancyFilterInfoService.applyInitSearchValue(value);
   }
 
   /**
    * Геттер для получения значения поиска
    * @returns текущее значение поиска
    */
-  get searchValue(): string | undefined {
-    return this._searchValue;
+  get searchValue() {
+    return this.vacancyFilterInfoService.searchValue();
   }
 
   /** Событие изменения значения поиска */
   @Output() searchValueChange = new EventEmitter<string>();
 
-  /** Подписка на параметры запроса */
-  queries$?: Subscription;
-
   /** Состояние открытия фильтра (для мобильной версии) */
-  filterOpen = signal(false);
-
-  /** Общее количество элементов */
-  totalItemsCount = signal(0);
+  protected readonly filterOpen = this.vacancyFilterInfoService.filterOpen;
 
   // Сигналы для текущих значений фильтров
   /** Текущий фильтр по опыту */
-  currentExperience = signal<string | undefined>(undefined);
+  protected readonly currentExperience = this.vacancyFilterInfoService.currentExperience;
   /** Текущий фильтр по формату работы */
-  currentWorkFormat = signal<string | undefined>(undefined);
+  protected readonly currentWorkFormat = this.vacancyFilterInfoService.currentWorkFormat;
   /** Текущий фильтр по графику работы */
-  currentWorkSchedule = signal<string | undefined>(undefined);
+  protected readonly currentWorkSchedule = this.vacancyFilterInfoService.currentWorkSchedule;
   /** Текущая зарплата */
-  currentSalary = signal<string | undefined>(undefined);
+  protected readonly currentSalary = this.vacancyFilterInfoService.currentSalary;
 
   /** Опции фильтра по опыту работы */
-  readonly workExperienceFilterOptions = workExperienceFilter;
+  protected readonly workExperienceFilterOptions = workExperienceFilter;
 
   /** Опции фильтра по формату работы */
-  readonly workFormatFilterOptions = workFormatFilter;
+  protected readonly workFormatFilterOptions = workFormatFilter;
 
   /** Опции фильтра по графику работы */
-  readonly workScheduleFilterOptions = workScheduleFilter;
+  protected readonly workScheduleFilterOptions = workScheduleFilter;
 
   /**
    * Инициализация компонента
    */
   ngOnInit() {
     // Подписка на изменения параметров запроса
-    this.queries$ = this.route.queryParams.subscribe(queries => {
-      // Синхронизация текущих значений фильтров с URL
-      this.currentExperience.set(queries["required_experience"]);
-      this.currentWorkFormat.set(queries["work_format"]);
-      this.currentWorkSchedule.set(queries["work_schedule"]);
-      this.currentSalary.set(queries["salary"]);
-      this.searchValue = queries["role_contains"];
-    });
+    this.vacancyFilterInfoService.initializationVacancyFilters();
   }
 
   /**
@@ -133,20 +110,7 @@ export class VacancyFilterComponent implements OnInit {
    * @param experienceId - идентификатор выбранного опыта
    */
   setExperienceFilter(event: Event, experienceId: string): void {
-    event.stopPropagation();
-    // Переключение фильтра (снятие если уже выбран)
-    this.currentExperience.set(
-      experienceId === this.currentExperience() ? undefined : experienceId
-    );
-
-    // Обновление URL с новым параметром
-    this.router
-      .navigate([], {
-        queryParams: { required_experience: this.currentExperience() },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.debug("Query change from ProjectsComponent"));
+    this.vacancyFilterInfoService.setExperienceFilter(event, experienceId);
   }
 
   /**
@@ -155,16 +119,7 @@ export class VacancyFilterComponent implements OnInit {
    * @param formatId - идентификатор выбранного формата
    */
   setWorkFormatFilter(event: Event, formatId: string): void {
-    event.stopPropagation();
-    this.currentWorkFormat.set(formatId === this.currentWorkFormat() ? undefined : formatId);
-
-    this.router
-      .navigate([], {
-        queryParams: { work_format: this.currentWorkFormat() },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.debug("Query change from ProjectsComponent"));
+    this.vacancyFilterInfoService.setWorkFormatFilter(event, formatId);
   }
 
   /**
@@ -173,20 +128,7 @@ export class VacancyFilterComponent implements OnInit {
    * @param scheduleId - идентификатор выбранного графика
    */
   setWorkScheduleFilter(event: Event, scheduleId: string): void {
-    event.stopPropagation();
-    this.currentWorkSchedule.set(
-      scheduleId === this.currentWorkSchedule() ? undefined : scheduleId
-    );
-
-    this.router
-      .navigate([], {
-        queryParams: {
-          work_schedule: this.currentWorkSchedule(),
-        },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.debug("Query change from ProjectsComponent"));
+    this.vacancyFilterInfoService.setWorkScheduleFilter(event, scheduleId);
   }
 
   /**
@@ -194,24 +136,11 @@ export class VacancyFilterComponent implements OnInit {
    * Очищает все параметры фильтрации и обновляет URL
    */
   resetFilter(): void {
-    this.currentExperience.set(undefined);
-    this.currentWorkFormat.set(undefined);
-    this.currentWorkSchedule.set(undefined);
+    this.vacancyFilterInfoService.applyResetCurrentFilters();
 
     this.onSearchValueChanged("");
 
-    this.router
-      .navigate([], {
-        queryParams: {
-          required_experience: null,
-          work_format: null,
-          work_schedule: null,
-          role_contains: null,
-        },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.debug("Filters reset from VacancyFilterComponent"));
+    this.vacancyFilterInfoService.resetFilter();
   }
 
   /**
@@ -227,36 +156,10 @@ export class VacancyFilterComponent implements OnInit {
    * Закрывает мобильное меню фильтров
    */
   onClickOutside(): void {
-    this.filterOpen.set(false);
-  }
-
-  /**
-   * Загрузка данных с применением текущих фильтров
-   * @param offset - смещение для пагинации
-   * @param limit - количество элементов для загрузки
-   * @param projectId - идентификатор проекта (опционально)
-   * @returns Observable с отфильтрованными данными
-   */
-  onFetch(offset: number, limit: number, projectId?: number) {
-    return this.vacancyService
-      .getForProject(
-        limit,
-        offset,
-        projectId,
-        this.currentExperience(),
-        this.currentWorkFormat(),
-        this.currentWorkSchedule(),
-        this.searchValue
-      )
-      .pipe(
-        tap((res: any) => {
-          this.totalItemsCount.set(res.length);
-        }),
-        map(res => res)
-      );
+    this.vacancyFilterInfoService.onClickOutside();
   }
 
   ngOnDestroy() {
-    this.queries$?.unsubscribe();
+    this.vacancyFilterInfoService.destroy();
   }
 }

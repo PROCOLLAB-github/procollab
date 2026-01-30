@@ -4,10 +4,10 @@
   <div class="detail__body">
     @if (info()) {
     <div class="info detail__section detail__info">
-      <div class="info__cover" [class.info__cover--program]="listType === 'program'">
+      <div class="info__cover" [class.info__cover--program]="listType() === 'program'">
         <img
           class="info__cover"
-          [class.info__cover--program]="listType === 'program'"
+          [class.info__cover--program]="listType() === 'program'"
           [src]="
             info().coverImageAddress
               ? info().coverImageAddress
@@ -18,31 +18,31 @@
         <div
           class="info__avatar"
           (click)="redirectDetailInfo()"
-          [class.info__avatar--program]="listType === 'program'"
-          [style.width]="listType === 'project' || listType === 'profile' ? '110px' : '123px'"
+          [class.info__avatar--program]="listType() === 'program'"
+          [style.width]="listType() === 'project' || listType() === 'profile' ? '110px' : '123px'"
         >
           @if (chatService.userOnlineStatusCache | async; as cache) {
           <app-avatar
-            [url]="listType === 'profile' ? info().avatar : info().imageAddress"
+            [url]="listType() === 'profile' ? info().avatar : info().imageAddress"
             [hasBorder]="true"
-            [borderColor]="listType === 'project' ? 'white' : 'dark-grey'"
+            [borderColor]="listType() === 'project' ? 'white' : 'dark-grey'"
             [progress]="info().progress"
             [onlineBadgeSize]="15"
             [onlineBadgeBorder]="0"
             [onlineBadgeOffset]="8"
-            [size]="listType === 'project' || listType === 'profile' ? 110 : 123"
+            [size]="listType() === 'project' || listType() === 'profile' ? 110 : 123"
             [isOnline]="cache[info().id] !== undefined ? cache[info().id] : info().isOnline"
           ></app-avatar>
-          @if (listType === 'project' || listType === 'profile') {
+          @if (listType() === 'project' || listType() === 'profile') {
           <h1
             class="info__title text-body-12"
-            [style.width]="listType === 'project' || listType === 'profile' ? '300px' : '100%'"
-            [class.info__title--project]="listType === 'project' || listType === 'profile'"
+            [style.width]="listType() === 'project' || listType() === 'profile' ? '300px' : '100%'"
+            [class.info__title--project]="listType() === 'project' || listType() === 'profile'"
           >
             {{
-              listType === "project"
+              listType() === "project"
                 ? info().name
-                : listType === "profile"
+                : listType() === "profile"
                 ? info().firstName + " " + info().lastName
                 : ""
             }}
@@ -55,7 +55,11 @@
         <div class="info__actions">
           <ng-container
             *ngTemplateOutlet="
-              listType === 'program' ? programTpl : listType === 'profile' ? profileTpl : projectTpl
+              listType() === 'program'
+                ? programTpl
+                : listType() === 'profile'
+                ? profileTpl
+                : projectTpl
             "
           ></ng-container>
         </div>
@@ -64,7 +68,7 @@
           @if (userType() !== undefined) { @if (!isUserMember && !isUserManager) { @if
           (info().name.includes("Кейс-чемпионат MIR")) {
           <a
-            (click)="checkPrograRegistrationEnded($event)"
+            (click)="checkPrograRegistrationEnded($event, info())"
             href="https://case-champ.ru/corporate#rec1176757836"
           >
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
@@ -72,33 +76,36 @@
             </app-button>
           </a>
           } @else if (info().registrationLink) {
-          <a (click)="checkPrograRegistrationEnded($event)" [href]="info().registrationLink">
+          <a
+            (click)="checkPrograRegistrationEnded($event, info())"
+            [href]="info().registrationLink"
+          >
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
               зарегистрироваться
             </app-button>
           </a>
           } @else {
-          <a (click)="checkPrograRegistrationEnded($event)">
+          <a (click)="checkPrograRegistrationEnded($event, info())">
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
               зарегистрироваться
             </app-button>
           </a>
-          } } @if (isUserMember && !isUserManager && !isUserExpert) {
+          } } @if (isUserMember() && !isUserManager && !isUserExpert) {
           <app-button
             size="medium"
-            [style.opacity]="submissionProjectDateExpired || isProjectAssigned ? '0.5' : '1'"
-            [disabled]="!!submissionProjectDateExpired || isProjectAssigned"
-            [appearance]="isProjectAssigned ? 'outline' : 'inline'"
-            (click)="isProjectAssigned ? null : addNewProject()"
+            [style.opacity]="submissionProjectDateExpired || isProjectAssigned() ? '0.5' : '1'"
+            [disabled]="!!submissionProjectDateExpired || isProjectAssigned()"
+            [appearance]="isProjectAssigned() ? 'outline' : 'inline'"
+            (click)="isProjectAssigned() ? null : addNewProject(info().id)"
             customTypographyClass="text-body-12 bar__add-project"
           >
-            <span>{{ isProjectAssigned ? "вы подали проект" : "подать проект" }}</span>
+            <span>{{ isProjectAssigned() ? "вы подали проект" : "подать проект" }}</span>
             <i appIcon icon="plus" appSquare="10"></i>
           </app-button>
-          } @if ((isUserManager || isUserExpert) && isUserMember) {
+          } @if ((isUserManager() || isUserExpert()) && isUserMember()) {
           <a [routerLink]="'/office/program/' + info().id + '/projects-rating'">
             <app-button
-              [appearance]="isProjectsRatingPage ? 'inline' : 'outline'"
+              [appearance]="isProjectsRatingPage() ? 'inline' : 'outline'"
               size="medium"
               customTypographyClass="text-body-12"
             >
@@ -114,8 +121,8 @@
             target="_blank"
           >
             <app-button
-              [disabled]="isUserManager"
-              [style.opacity]="isUserManager ? '0.3' : '1'"
+              [disabled]="isUserManager()"
+              [style.opacity]="isUserManager() ? '0.3' : '1'"
               appearance="outline"
               size="medium"
               customTypographyClass="text-body-12"
@@ -123,19 +130,19 @@
               <span>{{
                 info().name.includes("Технолидеры Будущего")
                   ? "Каталог лучших стартапов 2022/23"
-                  : isUserManager
+                  : isUserManager()
                   ? "аналитика"
                   : "положение"
               }}</span>
-              @if (isUserManager) {
+              @if (isUserManager()) {
               <app-tooltip
                 [text]="'Скоро здесь будет аналитика по включенности участников и проектов'"
-                [isVisible]="isTooltipVisible"
+                [isVisible]="isTooltipVisible()"
                 [position]="'right'"
                 [tooltipWidth]="180"
                 customClass="content__hint"
-                (show)="showTooltip()"
-                (hide)="hideTooltip()"
+                (show)="toggleTooltip('show')"
+                (hide)="toggleTooltip('hide')"
               ></app-tooltip>
               } @else {
               <i appIcon class="info__presentation-icon" icon="arrow-down" appSquare="6"></i>
@@ -145,13 +152,13 @@
 
           <div class="info__divider"></div>
 
-          @if (isUserManager || isUserExpert) {
+          @if (isUserManager() || isUserExpert()) {
           <a [routerLink]="'/office/program/' + info().id + '/projects'">
             <app-button
-              [appearance]="isProjectsPage ? 'inline' : 'outline'"
+              [appearance]="isProjectsPage() ? 'inline' : 'outline'"
               size="medium"
-              [disabled]="isUserExpert && !isUserManager"
-              [style.opacity]="isUserExpert && !isUserManager ? '0.5' : '1'"
+              [disabled]="isUserExpert() && !isUserManager()"
+              [style.opacity]="isUserExpert() && !isUserManager() ? '0.5' : '1'"
               customTypographyClass="text-body-12"
             >
               проекты-участники
@@ -169,13 +176,13 @@
               узнать подробнее
             </app-button>
           </a>
-          } @if (isUserManager || isUserExpert) {
+          } @if (isUserManager() || isUserExpert()) {
           <a [routerLink]="'/office/program/' + info().id + '/members'">
             <app-button
-              [appearance]="isMembersPage ? 'inline' : 'outline'"
+              [appearance]="isMembersPage() ? 'inline' : 'outline'"
               size="medium"
-              [disabled]="isUserExpert && !isUserManager"
-              [style.opacity]="isUserExpert && !isUserManager ? '0.5' : '1'"
+              [disabled]="isUserExpert() && !isUserManager()"
+              [style.opacity]="isUserExpert() && !isUserManager() ? '0.5' : '1'"
               customTypographyClass="text-body-12"
             >
               участники
@@ -248,18 +255,18 @@
         </ng-template>
 
         <ng-template #projectTpl>
-          @if (isKanbanBoardPage && isInProject) {
+          @if (isKanbanBoardPage() && isInProject()) {
           <app-button
             (click)="location.back()"
-            [appearance]="isKanbanBoardPage ? 'inline' : 'outline'"
+            [appearance]="isKanbanBoardPage() ? 'inline' : 'outline'"
             size="medium"
             customTypographyClass="text-body-12"
             >вернуться</app-button
           >
-          } @else if (isInProject && !isKanbanBoardPage) {
+          } @else if (isInProject() && !isKanbanBoardPage) {
           <app-button
             [routerLink]="'/office/projects/' + info().id + '/work-section'"
-            [appearance]="isProjectWorkSectionPage ? 'inline' : 'outline'"
+            [appearance]="isProjectWorkSectionPage() ? 'inline' : 'outline'"
             size="medium"
             customTypographyClass="text-body-12"
           >
@@ -282,9 +289,9 @@
           >
             написать
           </app-button>
-          } @else if (isKanbanBoardPage) {
+          } @else if (isKanbanBoardPage()) {
           <app-button
-            [appearance]="isGantDiagramPage ? 'inline' : 'outline'"
+            [appearance]="isGantDiagramPage() ? 'inline' : 'outline'"
             appearance="outline"
             size="medium"
             customTypographyClass="text-body-12"
@@ -293,7 +300,7 @@
           </app-button>
           } @else {
           <app-button
-            [appearance]="isProjectChatPage ? 'inline' : 'outline'"
+            [appearance]="isProjectChatPage() ? 'inline' : 'outline'"
             [routerLink]="'/office/projects/' + info().id + '/chat'"
             appearance="outline"
             size="medium"
@@ -305,40 +312,40 @@
 
           <div class="info__divider"></div>
 
-          @if (isKanbanBoardPage) {
+          @if (isKanbanBoardPage()) {
           <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
             контрольные точки
           </app-button>
           } @else {
           <app-button
             [routerLink]="'/office/projects/' + info().id + '/team'"
-            [appearance]="isTeamPage ? 'inline' : 'outline'"
+            [appearance]="isTeamPage() ? 'inline' : 'outline'"
             size="medium"
             customTypographyClass="text-body-12"
           >
             команда
           </app-button>
-          } @if (isInProject) { @if (isKanbanBoardPage) {
+          } @if (isInProject()) { @if (isKanbanBoardPage()) {
           <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
             статистика
           </app-button>
-          } @else { @if (profile) { @if (profile.id === info().leader) {
+          } @else { @if (profile()) { @if (profile()!.id === info().leader) {
           <a
             class="info__edit"
             [routerLink]="
-              isEditDisable
+              isEditDisable()
                 ? ['/office/projects', info().id]
                 : ['/office/projects', info().id, 'edit']
             "
-            [queryParams]="isEditDisable ? {} : { editingStep: 'main' }"
+            [queryParams]="isEditDisable() ? {} : { editingStep: 'main' }"
           >
             <app-button
               appearance="outline"
               size="medium"
               customTypographyClass="text-body-12"
               (click)="onUnableEditingProject()"
-              [ngStyle]="{ opacity: isEditDisable ? '0.5' : '1' }"
-              [color]="isEditDisable ? 'grey' : 'primary'"
+              [ngStyle]="{ opacity: isEditDisable() ? '0.5' : '1' }"
+              [color]="isEditDisable() ? 'grey' : 'primary'"
             >
               редактировать
             </app-button>
@@ -349,7 +356,7 @@
             color="red"
             size="medium"
             customTypographyClass="text-body-12"
-            (click)="this.isLeaveProjectModalOpen = true"
+            (click)="this.isLeaveProjectModalOpen.set(true)"
           >
             выйти из проекта
           </app-button>
@@ -366,7 +373,7 @@
                 appIcon
                 icon="cross"
                 appSquare="12"
-                (click)="isEditDisableModal = false"
+                (click)="isEditDisableModal.set(false)"
               ></i>
               <img
                 src="assets/images/projects/shared/edit_disable.svg"
@@ -385,7 +392,7 @@
                 appearance="outline"
                 size="medium"
                 customTypographyClass="text-body-12"
-                (click)="isEditDisableModal = false"
+                (click)="isEditDisableModal.set(false)"
                 >хорошо</app-button
               >
             </div>
@@ -423,7 +430,7 @@
           } @else {
           <app-button
             [routerLink]="'/office/projects/' + info().id + '/vacancies'"
-            [appearance]="isVacanciesPage ? 'inline' : 'outline'"
+            [appearance]="isVacanciesPage() ? 'inline' : 'outline'"
             size="medium"
             customTypographyClass="text-body-12"
           >
@@ -433,7 +440,7 @@
         </ng-template>
 
         <ng-template #profileTpl>
-          @if (profile) { @if (+profile.id === +info().id) {
+          @if (profile()) { @if (+profile()!.id === +info().id) {
           <app-button
             style="opacity: 0.5"
             size="medium"
@@ -447,10 +454,10 @@
             size="medium"
             appearance="outline"
             customTypographyClass="text-body-12"
-            (click)="showApproveSkillModal = true"
+            (click)="showApproveSkillModal.set(true)"
             >подтвердить навыки</app-button
           >
-          } @if (+profile.id === +info().id) {
+          } @if (+profile()!.id === +info().id) {
           <app-button
             style="opacity: 0.5"
             size="medium"
@@ -471,11 +478,11 @@
 
           <div class="info__divider"></div>
 
-          @if (+profile.id === +info().id) {
+          @if (+profile()!.id === +info().id) {
           <app-button
             (click)="downloadCV()"
             size="medium"
-            [loader]="isSended"
+            [loader]="isSended()"
             appearance="outline"
             customTypographyClass="text-body-12"
             >cкачать CV</app-button
@@ -488,10 +495,10 @@
             (click)="inviteUser()"
             >пригласить</app-button
           >
-          } @if (+profile.id !== +info().id) {
+          } @if (+profile()!.id !== +info().id) {
           <a
             class="info__send-message"
-            [routerLink]="['/office/chats', profile.id + '_' + info().id]"
+            [routerLink]="['/office/chats', profile()!.id + '_' + info().id]"
           >
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12"
               >написать</app-button
@@ -510,8 +517,8 @@
           }
 
           <app-modal
-            [open]="showApproveSkillModal"
-            (openChange)="showApproveSkillModal = !showApproveSkillModal"
+            [open]="showApproveSkillModal()"
+            (openChange)="showApproveSkillModal.set(!showApproveSkillModal())"
           >
             @if (info().skills.length) {
             <ul class="approve">
@@ -535,10 +542,10 @@
             }
           </app-modal>
 
-          @if (!showNoProjectsModal && showSendInviteModal) {
+          @if (!showNoProjectsModal() && showSendInviteModal()) {
           <app-modal
-            [open]="showSendInviteModal"
-            (openChange)="showSendInviteModal = !showSendInviteModal"
+            [open]="showSendInviteModal()"
+            (openChange)="showSendInviteModal.set(!showSendInviteModal())"
           >
             <form class="project__invites" [formGroup]="inviteForm">
               @if (profileProjects().length) {
@@ -569,7 +576,7 @@
                   <app-input
                     type="radio"
                     [appValue]="project.id.toString()"
-                    [checked]="selectedProjectId === project.id"
+                    [checked]="selectedProjectId() === project.id"
                     (change)="onProjectRadioChange($event)"
                   ></app-input>
                 </li>
@@ -606,8 +613,8 @@
           }
 
           <app-modal
-            [open]="showNoProjectsModal"
-            (openChange)="showNoProjectsModal = !showNoProjectsModal"
+            [open]="showNoProjectsModal()"
+            (openChange)="showNoProjectsModal.set(!showNoProjectsModal())"
           >
             <div class="cancel" style="padding: 0px">
               <div class="cancel__top">
@@ -627,8 +634,8 @@
           </app-modal>
 
           <app-modal
-            [open]="showActiveInviteModal"
-            (openChange)="showActiveInviteModal = !showActiveInviteModal"
+            [open]="showActiveInviteModal()"
+            (openChange)="showActiveInviteModal.set(!showActiveInviteModal())"
           >
             <div class="cancel" style="padding: 0px; width: 300px">
               <div class="cancel__top">
@@ -650,8 +657,8 @@
           </app-modal>
 
           <app-modal
-            [open]="showNoInProgramModal"
-            (openChange)="showNoInProgramModal = !showNoInProgramModal"
+            [open]="showNoInProgramModal()"
+            (openChange)="showNoInProgramModal.set(!showNoInProgramModal())"
           >
             <div class="cancel" style="padding: 0px; width: 300px">
               <div class="cancel__top">
@@ -674,8 +681,8 @@
           </app-modal>
 
           <app-modal
-            [open]="showSuccessInviteModal"
-            (openChange)="showSuccessInviteModal = !showSuccessInviteModal"
+            [open]="showSuccessInviteModal()"
+            (openChange)="showSuccessInviteModal.set(!showSuccessInviteModal())"
           >
             <div class="cancel" style="padding: 0px; width: 350px">
               <i appIcon icon="check" class="cancel__success" appSquare="60"></i>
@@ -697,8 +704,8 @@
             </div>
           </app-modal>
 
-          } @if (profile) { @if (profile.id === info().id) {
-          <app-modal [open]="isProfileFill" (openChange)="isProfileFill = !isProfileFill">
+          } @if (profile()) { @if (profile()!.id === info().id) {
+          <app-modal [open]="isProfileFill()" (openChange)="isProfileFill.set(!isProfileFill())">
             <div class="cancel">
               <img
                 alt="profile unfill image"
@@ -707,7 +714,7 @@
               />
               <div class="cancel__top">
                 <i
-                  (click)="isProfileFill = false"
+                  (click)="isProfileFill.set(false)"
                   appIcon
                   appSquare="12"
                   icon="cross"
@@ -728,11 +735,14 @@
           </app-modal>
           } }
 
-          <app-modal [open]="isDelayModalOpen" (openChange)="isDelayModalOpen = !isDelayModalOpen">
+          <app-modal
+            [open]="isDelayModalOpen()"
+            (openChange)="isDelayModalOpen.set(!isDelayModalOpen())"
+          >
             <div class="cancel">
               <div class="cancel__top">
                 <i
-                  (click)="isDelayModalOpen = false"
+                  (click)="isDelayModalOpen.set(false)"
                   appIcon
                   appSquare="8"
                   icon="cross"

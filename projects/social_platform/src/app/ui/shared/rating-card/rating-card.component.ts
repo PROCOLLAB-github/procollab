@@ -88,16 +88,15 @@ import { ProgramDetailMainUIInfoService } from "../../../api/program/facades/det
     ModalComponent,
     TruncatePipe,
   ],
-  providers: [ProgramDetailMainUIInfoService],
 })
 export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public industryService: IndustryService,
-    private projectRatingService: ProjectRatingService,
+    private readonly projectRatingService: ProjectRatingService,
     private readonly authService: AuthService,
     private readonly programDetailMainUIInfoService: ProgramDetailMainUIInfoService,
-    private breakpointObserver: BreakpointObserver,
-    private cdRef: ChangeDetectorRef
+    private readonly breakpointObserver: BreakpointObserver,
+    private readonly cdRef: ChangeDetectorRef
   ) {}
 
   @Input({ required: true }) set project(proj: ProjectRate | null) {

@@ -3,20 +3,14 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   inject,
   OnDestroy,
   OnInit,
-  signal,
   ViewChild,
 } from "@angular/core";
-import { ActivatedRoute, RouterLink } from "@angular/router";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { expandElement } from "@utils/expand-element";
-import { concatMap, filter, map, noop, Subscription } from "rxjs";
-import { ProfileNewsService } from "../../../../../api/profile/profile-news.service";
+import { RouterLink } from "@angular/router";
 import { ProfileNews } from "../../../../../domain/profile/profile-news.model";
 import { ParseBreaksPipe, ParseLinksPipe, YearsFromBirthdayPipe } from "projects/core";
 import { IconComponent, ButtonComponent } from "@ui/components";
@@ -24,11 +18,8 @@ import { CommonModule, NgTemplateOutlet } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { NewsFormComponent } from "@ui/components/news-form/news-form.component";
 import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
-import { ProfileDataService } from "../../../../../api/profile/profile-date.service";
-import { DirectionItem, directionItemBuilder } from "@utils/helpers/directionItemBuilder";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { UserLinksPipe } from "projects/core/src/lib/pipes/user/user-links.pipe";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { ProjectDirectionCard } from "@ui/shared/project-direction-card/project-direction-card.component";
 import { ProfileDetailInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/profile-detail-info.service";
 import { ProfileDetailUIInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/ui/profile-detail-ui-info.service";

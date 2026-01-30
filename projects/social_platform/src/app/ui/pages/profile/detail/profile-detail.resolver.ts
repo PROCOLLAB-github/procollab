@@ -3,11 +3,9 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { SubscriptionService } from "projects/social_platform/src/app/api/subsriptions/subscription.service";
 import { forkJoin, map, tap } from "rxjs";
-import { ProfileDataService } from "../../../../api/profile/profile-date.service";
 import { AuthService } from "../../../../api/auth";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
+import { calculateProfileProgress } from "@utils/calculateProgress";
 
 /**
  * Резолвер для загрузки данных профиля пользователя
@@ -27,21 +25,16 @@ import { Project } from "projects/social_platform/src/app/domain/project/project
  * - SubscriptionService для получения подписок пользователя
  * - forkJoin для параллельного выполнения запросов
  */
-export const ProfileDetailResolver: ResolveFn<{ user: User; subs: Project[] }> = (
-  route: ActivatedRouteSnapshot
-) => {
+export const ProfileDetailResolver: ResolveFn<{ user: User }> = (route: ActivatedRouteSnapshot) => {
   const authService = inject(AuthService);
-  const subscriptionService = inject(SubscriptionService);
-  const profileDataService = inject(ProfileDataService);
 
   return forkJoin({
-    user: authService
-      .getUser(Number(route.paramMap.get("id")))
-      .pipe(tap(profile => profileDataService.setProfile(profile))),
-
-    subs: subscriptionService.getSubscriptions(Number(route.paramMap.get("id"))).pipe(
-      map(subs => subs.results),
-      tap(subs => profileDataService.setProfileSubs(subs))
+    user: authService.getUser(Number(route.paramMap.get("id"))).pipe(
+      map(user => {
+        const result = Object.assign(new User(), user);
+        result.progress = calculateProfileProgress(result);
+        return result;
+      })
     ),
   });
 };

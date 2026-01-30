@@ -2,22 +2,13 @@
 
 import { animate, style, transition, trigger } from "@angular/animations";
 import { CommonModule } from "@angular/common";
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-  signal,
-} from "@angular/core";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { ButtonComponent, CheckboxComponent, IconComponent } from "@ui/components";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { Subscription } from "rxjs";
 import { feedFilter } from "projects/core/src/consts/filters/feed-filter.const";
-import { AuthService } from "../../../api/auth";
-import { FeedService } from "../../../api/feed/feed.service";
+import { FeedFilterInfoService } from "./service/feed-filter-info.service";
+import { DetailProfileInfoService } from "../detail/services/profile/detail-profile-info.service";
+import { ProfileDetailUIInfoService } from "../../../api/profile/facades/detail/ui/profile-detail-ui-info.service";
 
 /**
  * КОМПОНЕНТ ФИЛЬТРАЦИИ ЛЕНТЫ
@@ -40,14 +31,7 @@ import { FeedService } from "../../../api/feed/feed.service";
 @Component({
   selector: "app-feed-filter",
   standalone: true,
-  imports: [
-    CommonModule,
-    CheckboxComponent,
-    ButtonComponent,
-    ClickOutsideModule,
-    IconComponent,
-    RouterLink,
-  ],
+  imports: [CommonModule, ClickOutsideModule, IconComponent],
   templateUrl: "./feed-filter.component.html",
   styleUrl: "./feed-filter.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -60,15 +44,25 @@ import { FeedService } from "../../../api/feed/feed.service";
       transition(":leave", [animate(".1s linear", style({ opacity: 0 }))]),
     ]),
   ],
+  providers: [FeedFilterInfoService, ProfileDetailUIInfoService, DetailProfileInfoService],
 })
 export class FeedFilterComponent implements OnInit, OnDestroy {
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-  authService = inject(AuthService);
-  feedService = inject(FeedService);
+  private readonly feedFilterInfoService = inject(FeedFilterInfoService);
 
-  profile = signal<User | null>(null);
-  subscriptions: Subscription[] = [];
+  // Состояние выпадающего меню фильтров
+  protected readonly filterOpen = this.feedFilterInfoService.filterOpen;
+
+  // Массив активных фильтров
+  protected readonly includedFilters = this.feedFilterInfoService.includedFilters;
+
+  /**
+   * ОПЦИИ ФИЛЬТРАЦИИ
+   *
+   * Массив доступных опций для фильтрации ленты:
+   * - label: отображаемое название на русском языке
+   * - value: значение для API запроса
+   */
+  protected readonly feedFilterOptions = feedFilter;
 
   /**
    * ИНИЦИАЛИЗАЦИЯ КОМПОНЕНТА
@@ -79,59 +73,11 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
    * - Инициализирует состояние фильтров
    */
   ngOnInit() {
-    const profileSubscription = this.authService.profile.subscribe(profile => {
-      this.profile.set(profile);
-    });
-
-    // Читаем активные фильтры из URL
-    const routeSubscription = this.route.queryParams.subscribe(queries => {
-      if (queries["includes"]) {
-        this.includedFilters.set(queries["includes"]);
-      } else {
-        this.includedFilters.set("");
-      }
-    });
-
-    this.subscriptions.push(profileSubscription, routeSubscription);
+    this.feedFilterInfoService.initializationFeedFilter();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach($ => $.unsubscribe());
-  }
-
-  // Состояние выпадающего меню фильтров
-  filterOpen = signal(false);
-
-  /**
-   * ОПЦИИ ФИЛЬТРАЦИИ
-   *
-   * Массив доступных опций для фильтрации ленты:
-   * - label: отображаемое название на русском языке
-   * - value: значение для API запроса
-   */
-  readonly feedFilterOptions = feedFilter;
-
-  // Массив активных фильтров
-  includedFilters = signal<string>("");
-
-  /**
-   * ОБНОВЛЕНИЕ URL С ТЕКУЩИМИ ФИЛЬТРАМИ
-   *
-   * Приватный метод для обновления URL параметров.
-   * Вызывается автоматически при любом изменении фильтров.
-   */
-  private updateUrl(): void {
-    const includesParam = this.includedFilters().length > 0 ? this.includedFilters() : null;
-
-    this.router
-      .navigate([], {
-        queryParams: {
-          includes: includesParam,
-        },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.debug("Query change from FeedFilterComponent"));
+    this.feedFilterInfoService.destroy();
   }
 
   /**
@@ -148,36 +94,7 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
    * - Мгновенно обновляет URL параметры
    */
   setFilter(keyword: string): void {
-    this.includedFilters.update(included => {
-      if (keyword.startsWith("project/")) {
-        // Если уже активен этот же вложенный фильтр - сбрасываем к "projects"
-        if (included === keyword) {
-          return "project";
-        }
-        return keyword;
-      }
-
-      // Если кликнули на "projects"
-      if (keyword === "project") {
-        if (included.startsWith("project/")) {
-          return "project";
-        }
-
-        if (included === "project") {
-          return "";
-        }
-
-        return "project";
-      }
-
-      if (included === keyword) {
-        return "";
-      }
-      return keyword;
-    });
-
-    // Мгновенно обновляем URL
-    this.updateUrl();
+    this.feedFilterInfoService.setFilter(keyword);
   }
 
   /**
@@ -189,8 +106,7 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
    * - Возвращает ленту к состоянию по умолчанию
    */
   resetFilter(): void {
-    this.includedFilters.set("");
-    this.updateUrl();
+    this.feedFilterInfoService.resetFilter();
   }
 
   /**
@@ -201,6 +117,6 @@ export class FeedFilterComponent implements OnInit, OnDestroy {
    * - Используется директивой ClickOutside
    */
   onClickOutside(): void {
-    this.filterOpen.set(false);
+    this.feedFilterInfoService.onClickOutside();
   }
 }

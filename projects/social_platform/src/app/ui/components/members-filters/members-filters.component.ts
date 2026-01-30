@@ -5,20 +5,18 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  inject,
   Input,
   Output,
-  signal,
 } from "@angular/core";
-import { RangeInputComponent } from "@ui/components/range-input/range-input.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
 import { Specialization } from "projects/social_platform/src/app/domain/specializations/specialization";
 import { ActivatedRoute, Router } from "@angular/router";
-import { CheckboxComponent } from "../checkbox/checkbox.component";
 import { MembersComponent } from "@ui/pages/members/members.component";
 import { Skill } from "../../../domain/skills/skill";
-import { SkillsService } from "../../../api/skills/skills.service";
-import { SpecializationsService } from "../../../api/specializations/specializations.service";
+import { SearchesService } from "../../../api/searches/searches.service";
+import { SkillsInfoService } from "../../../api/skills/facades/skills-info.service";
 
 /**
  * Компонент фильтров для списка участников
@@ -36,24 +34,12 @@ import { SpecializationsService } from "../../../api/specializations/specializat
 @Component({
   selector: "app-members-filters",
   standalone: true,
-  imports: [
-    CommonModule,
-    RangeInputComponent,
-    ReactiveFormsModule,
-    AutoCompleteInputComponent,
-    CheckboxComponent,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, AutoCompleteInputComponent],
   templateUrl: "./members-filters.component.html",
   styleUrl: "./members-filters.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MembersFiltersComponent {
-  /**
-   * Событие, генерируемое при изменении фильтров
-   * (В данный момент не используется, но может быть полезно для будущих расширений)
-   */
-  @Output() filtersChanged = new EventEmitter();
-
   /**
    * Форма фильтрации, передаваемая из родительского компонента
    * Содержит поля: keySkill, speciality, age, isMosPolytechStudent
@@ -61,16 +47,10 @@ export class MembersFiltersComponent {
   @Input({ required: true }) filterForm!: MembersComponent["filterForm"];
 
   /**
-   * Сигнал с опциями специальностей для автодополнения
-   * Обновляется при поиске специальностей
+   * Событие, генерируемое при изменении фильтров
+   * (В данный момент не используется, но может быть полезно для будущих расширений)
    */
-  specsOptions = signal<Specialization[]>([]);
-
-  /**
-   * Сигнал с опциями навыков для автодополнения
-   * Обновляется при поиске навыков
-   */
-  skillsOptions = signal<Skill[]>([]);
+  @Output() filtersChanged = new EventEmitter();
 
   /**
    * Конструктор компонента
@@ -80,12 +60,22 @@ export class MembersFiltersComponent {
    * @param specsService - Сервис для получения списка специальностей
    * @param skillsService - Сервис для получения списка навыков
    */
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly specsService: SpecializationsService,
-    private readonly skillsService: SkillsService
-  ) {}
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly skillsInfoService = inject(SkillsInfoService);
+  private readonly searchesService = inject(SearchesService);
+
+  /**
+   * Сигнал с опциями специальностей для автодополнения
+   * Обновляется при поиске специальностей
+   */
+  protected readonly specsOptions = this.searchesService.inlineSpecs;
+
+  /**
+   * Сигнал с опциями навыков для автодополнения
+   * Обновляется при поиске навыков
+   */
+  protected readonly skillsOptions = this.skillsInfoService.inlineSkills;
 
   /**
    * Обработчик выбора специальности из списка автодополнения
@@ -109,9 +99,7 @@ export class MembersFiltersComponent {
    * @param query - Поисковый запрос
    */
   onSearchSpec(query: string): void {
-    this.specsService.getSpecializationsInline(query, 1000, 0).subscribe(({ results }) => {
-      this.specsOptions.set(results);
-    });
+    this.searchesService.onSearchSpec(query);
   }
 
   /**
@@ -136,9 +124,7 @@ export class MembersFiltersComponent {
    * @param query - Поисковый запрос
    */
   onSearchSkill(query: string): void {
-    this.skillsService.getSkillsInline(query, 1000, 0).subscribe(({ results }) => {
-      this.skillsOptions.set(results);
-    });
+    this.skillsInfoService.onSearchSkill(query);
   }
 
   /**

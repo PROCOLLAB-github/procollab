@@ -39,6 +39,10 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 14px;
+
+    a {
+      color: var(--accent) !important;
+    }
   }
 
   &__clear {

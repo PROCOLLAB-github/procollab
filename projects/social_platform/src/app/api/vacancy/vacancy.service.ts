@@ -50,8 +50,7 @@ export class VacancyService {
     requiredExperience?: string,
     workFormat?: string,
     workSchedule?: string,
-    salaryMin?: string,
-    salaryMax?: string,
+    salary?: string,
     searchValue?: string
   ): any {
     let params = new HttpParams().set("limit", limit.toString()).set("offset", offset.toString());
@@ -72,12 +71,8 @@ export class VacancyService {
       params = params.set("work_schedule", workSchedule);
     }
 
-    if (salaryMin) {
-      params = params.set("salary_min", salaryMin);
-    }
-
-    if (salaryMax) {
-      params = params.set("salary_max", salaryMax);
+    if (salary) {
+      params = params.set("salary", salary);
     }
 
     if (searchValue) {

@@ -4,6 +4,7 @@
   <div class="filter__body">
     <div class="filter__titles">
       <p class="text-body-14">фильтры</p>
+      <a class="text-body-10" (click)="clearFilters()">сбросить</a>
     </div>
 
     <!-- Скрыть пока не появится программа для мос политеха -->
@@ -56,7 +57,7 @@
         <app-select
           [formControl]="industryControl"
           size="big"
-          [options]="industries"
+          [options]="industries()"
           placeholder="сфера проекта"
         ></app-select>
       </div>

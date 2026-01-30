@@ -8,17 +8,17 @@
     }
 
     <app-button
-      (click)="onToggleApprove(skill.id, $event, skill, loggedUserId!)"
+      (click)="onToggleApprove(skill.id, $event, skill)"
       size="medium"
       appearance="outline"
       customTypographyClass="text-body-12"
-      [color]="isUserApproveSkill(skill, loggedUserId!) ? 'red' : 'primary'"
-      >{{ isUserApproveSkill(skill, loggedUserId!) ? "убрать оценку" : "подтвердить" }}</app-button
+      [color]="isUserApproveSkill(skill) ? 'red' : 'primary'"
+      >{{ isUserApproveSkill(skill) ? "убрать оценку" : "подтвердить" }}</app-button
     >
   </div>
 </div>
 
-<app-modal [open]="approveOwnSkillModal" (openChange)="approveOwnSkillModal = $event">
+<app-modal [open]="approveOwnSkillModal()" (openChange)="approveOwnSkillModal.set($event)">
   <div class="modal">
     <div class="modal__body">
       <p class="modal__title text-body-14">

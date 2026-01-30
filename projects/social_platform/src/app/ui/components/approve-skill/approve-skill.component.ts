@@ -14,6 +14,8 @@ import { ApproveSkillPeopleComponent } from "@ui/shared/approve-skill-people/app
 import { AuthService } from "../../../api/auth";
 import { ProfileService as ProfileApproveSkillService } from "../../../api/auth/profile.service";
 import { Skill } from "../../../domain/skills/skill";
+import { ApproveskillInfoService } from "./services/approve-skill-info.service";
+import { ApproveSkillUIInfoService } from "./services/approve-skill-ui-info.service";
 
 /**
  * @params skill - информация о навыке (обязательно)
@@ -27,50 +29,30 @@ import { Skill } from "../../../domain/skills/skill";
   styleUrl: "./approve-skill.component.scss",
   templateUrl: "./approve-skill.component.html",
   standalone: true,
-  imports: [
-    CommonModule,
-    AvatarComponent,
-    PluralizePipe,
-    ButtonComponent,
-    ModalComponent,
-    ApproveSkillPeopleComponent,
-  ],
+  imports: [CommonModule, ButtonComponent, ModalComponent, ApproveSkillPeopleComponent],
+  providers: [ApproveskillInfoService, ApproveSkillUIInfoService],
 })
 export class ApproveSkillComponent implements OnInit, OnDestroy {
-  private readonly authService = inject(AuthService);
-  private readonly route = inject(ActivatedRoute);
-  private readonly profileApproveSkillService = inject(ProfileApproveSkillService);
-  private readonly snackbarService = inject(SnackbarService);
-  private readonly cdRef = inject(ChangeDetectorRef);
+  private readonly approveskillInfoService = inject(ApproveskillInfoService);
+  private readonly approveSkillUIInfoService = inject(ApproveSkillUIInfoService);
 
   // Указатель на то что пользватель подтвердил навык
-  isUserApproveSkill(skill: Skill, profileId: number): boolean {
-    return skill.approves.some(approve => approve.confirmedBy.id === profileId);
+  isUserApproveSkill(skill: Skill): boolean {
+    return this.approveskillInfoService.isUserApproveSkill(skill);
   }
 
-  // id пользователя за которого мы зарегистрировались
-  loggedUserId?: number;
-
   // переменные для работы с модальным окном для вывода ошибки с подтверждением своего навыка
-  approveOwnSkillModal = false;
-
-  subscriptions: Subscription[] = [];
+  protected readonly approveOwnSkillModal = this.approveSkillUIInfoService.approveOwnSkillModal;
 
   // Получение данных о конкретном навыке
   @Input({ required: true }) skill!: Skill;
 
   ngOnInit(): void {
-    const profileIdDataSub$ = this.authService.profile.pipe().subscribe({
-      next: profile => {
-        this.loggedUserId = profile.id;
-      },
-    });
-
-    this.subscriptions.push(profileIdDataSub$);
+    this.approveskillInfoService.init();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach($ => $.unsubscribe());
+    this.approveskillInfoService.destroy();
   }
 
   /**
@@ -79,49 +61,7 @@ export class ApproveSkillComponent implements OnInit, OnDestroy {
    * @param event - событие клика для предотвращения всплытия
    * @param skill - объект навыка для обновления
    */
-  onToggleApprove(skillId: number, event: Event, skill: Skill, profileId: number) {
-    event.stopPropagation();
-    const userId = this.route.snapshot.params["id"];
-
-    const isApprovedByCurrentUser = skill.approves.some(approve => {
-      return approve.confirmedBy.id === profileId;
-    });
-
-    if (isApprovedByCurrentUser) {
-      this.profileApproveSkillService.unApproveSkill(userId, skillId).subscribe(() => {
-        skill.approves = skill.approves.filter(approve => approve.confirmedBy.id !== profileId);
-        this.cdRef.markForCheck();
-      });
-    } else {
-      this.profileApproveSkillService
-        .approveSkill(userId, skillId)
-        .pipe(
-          switchMap(newApprove =>
-            newApprove.confirmedBy
-              ? of(newApprove)
-              : this.authService.profile.pipe(
-                  map(profile => ({
-                    ...newApprove,
-                    confirmedBy: profile,
-                  }))
-                )
-          )
-        )
-        .subscribe({
-          next: updatedApprove => {
-            skill.approves = [...skill.approves, updatedApprove];
-            this.snackbarService.success("вы подтвердили навык");
-            this.cdRef.markForCheck();
-          },
-          error: err => {
-            if (err instanceof HttpErrorResponse) {
-              if (err.status === 400) {
-                this.approveOwnSkillModal = true;
-                this.cdRef.markForCheck();
-              }
-            }
-          },
-        });
-    }
+  onToggleApprove(skillId: number, event: Event, skill: Skill) {
+    this.approveskillInfoService.onToggleApprove(skillId, event, skill);
   }
 }

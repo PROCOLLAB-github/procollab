@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, EventEmitter, inject, Input, OnInit, Output, signal } from "@angular/core";
+import { Component, EventEmitter, inject, Input, Output } from "@angular/core";
 import { IndustryService } from "projects/social_platform/src/app/api/industry/industry.service";
 import { IconComponent, ButtonComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";

@@ -1,21 +1,13 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output, signal } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { debounceTime, distinctUntilChanged, filter, map, Subscription } from "rxjs";
+import { Component, EventEmitter, inject, OnInit, Output } from "@angular/core";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
 import { CheckboxComponent, SelectComponent } from "@ui/components";
-import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
 import { ToSelectOptionsPipe } from "projects/core/src/lib/pipes/transformers/options-transform.pipe";
 import { CommonModule } from "@angular/common";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
-import { ProgramService } from "../../../api/program/program.service";
+import { ReactiveFormsModule } from "@angular/forms";
+import { ProgramDetailListUIInfoService } from "../../../api/program/facades/detail/ui/program-detail-list-ui-info.service";
+import { ProgramProjectsFilterInfoService } from "./service/program-projects-filter-info.service";
 
 /**
  * Компонент фильтрации проектов
@@ -58,53 +50,26 @@ import { ProgramService } from "../../../api/program/program.service";
   ],
 })
 export class ProgramProjectsFilterComponent implements OnInit {
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly fb: FormBuilder,
-    private readonly programService: ProgramService
-  ) {
-    this.filterForm = this.fb.group({});
-  }
-
-  @Input() listType?: "projects" | "members" | "rating";
   @Output() clear = new EventEmitter<void>();
-  @Output() filtersLoaded = new EventEmitter<PartnerProgramFields[]>();
 
-  // Константы для фильтрации по типу проекта
-  private programId = 0;
+  private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
+  private readonly programProjectsFilterInfoService = inject(ProgramProjectsFilterInfoService);
+
+  protected readonly listType = this.programDetailListUIInfoService.listType;
+
+  // Инициализация формы для фильтра
+  protected readonly filterForm = this.programProjectsFilterInfoService.filterForm;
+
+  // Массив фильтров по дополнительным полям привязанным к конкретной программе
+  protected readonly filters = this.programProjectsFilterInfoService.filters;
 
   ngOnInit(): void {
-    this.programId = this.route.parent?.snapshot.params["programId"];
-
-    if (this.listType === "projects" || this.listType === "rating") {
-      this.programService.getProgramFilters(this.programId).subscribe({
-        next: filter => {
-          this.filters.set(filter);
-          this.initializeFilterForm();
-          this.restoreFiltersFromUrl();
-          this.subscribeToFormChanges();
-          this.filtersLoaded.emit(filter);
-        },
-        error(err) {
-          console.log(err);
-        },
-      });
-    }
+    this.programProjectsFilterInfoService.initializationProgramProjectsFilter();
   }
 
   ngOnDestroy(): void {
-    this.queries$?.unsubscribe();
+    this.programProjectsFilterInfoService.destroy();
   }
-
-  // Инициализация формы для фильтра
-  filterForm: FormGroup;
-
-  // Подписки для управления жизненным циклом
-  queries$?: Subscription;
-
-  // Массив фильтров по дополнительным полям привязанным к конкретной программе
-  filters = signal<PartnerProgramFields[] | null>(null);
 
   /**
    * Переключение значения для checkbox и radio полей
@@ -115,20 +80,12 @@ export class ProgramProjectsFilterComponent implements OnInit {
     fieldType: "text" | "textarea" | "checkbox" | "select" | "radio" | "file",
     fieldName: string
   ): void {
-    if (fieldType === "checkbox" || fieldType === "radio") {
-      const control = this.filterForm.get(fieldName);
-      if (control) {
-        control.setValue(!control.value);
-      }
-    }
+    this.programProjectsFilterInfoService.toggleAdditionalFormValues(fieldType, fieldName);
   }
 
   // Методы фильтрации
   setValue(event: Event): void {
-    event.stopPropagation();
-    this.filterForm
-      .get("is_rated_by_expert")
-      ?.setValue(!this.filterForm.get("is_rated_by_expert")?.value);
+    this.programProjectsFilterInfoService.setValue(event);
   }
 
   /**
@@ -136,105 +93,8 @@ export class ProgramProjectsFilterComponent implements OnInit {
    * Очищает все query параметры и возвращает к состоянию по умолчанию
    */
   clearFilters(): void {
-    this.filterForm.reset();
-
-    this.router
-      .navigate([], {
-        queryParams: {
-          is_rated_by_expert: undefined,
-        },
-        relativeTo: this.route,
-        queryParamsHandling: "merge",
-      })
-      .then(() => console.log("Query change from ProjectsComponent"));
+    this.programProjectsFilterInfoService.clearFilters();
 
     this.clear.emit();
-  }
-
-  private initializeFilterForm(): void {
-    const formControls: { [key: string]: FormControl } = {};
-
-    this.filters()?.forEach(field => {
-      const validators = field.isRequired ? [Validators.required] : [];
-      const initialValue =
-        field.fieldType === "checkbox" || field.fieldType === "radio" ? false : "";
-      formControls[field.name] = new FormControl(initialValue, validators);
-    });
-
-    if (this.listType === "rating") {
-      const isRatedByExpert =
-        this.route.snapshot.queryParams["is_rated_by_expert"] === "true"
-          ? true
-          : this.route.snapshot.queryParams["is_rated_by_expert"] === "false"
-          ? false
-          : null;
-
-      formControls["is_rated_by_expert"] = new FormControl(isRatedByExpert);
-    }
-
-    this.filterForm = this.fb.group(formControls);
-  }
-
-  private restoreFiltersFromUrl(): void {
-    this.queries$ = this.route.queryParams.subscribe(queries => {
-      Object.keys(queries).forEach(key => {
-        const control = this.filterForm.get(key);
-        if (control && queries[key] !== undefined) {
-          const field = this.filters()?.find(f => f.name === key);
-          if (field && (field.fieldType === "checkbox" || field.fieldType === "radio")) {
-            control.setValue(queries[key] === "true", { emitEvent: false });
-          } else {
-            control.setValue(queries[key], { emitEvent: false });
-          }
-        }
-      });
-    });
-  }
-
-  private subscribeToFormChanges(): void {
-    this.filterForm.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe(formValue => {
-        this.updateQueryParams(formValue);
-      });
-  }
-
-  private updateQueryParams(formValue: any): void {
-    const currentParams = { ...this.route.snapshot.queryParams };
-
-    Object.keys(formValue).forEach(fieldName => {
-      const value = formValue[fieldName];
-
-      const field = this.filters()?.find(f => f.name === fieldName);
-      if (this.shouldAddToQueryParams(value, field?.fieldType)) {
-        currentParams[fieldName] = value;
-      } else {
-        delete currentParams[fieldName];
-      }
-    });
-
-    this.router
-      .navigate([], {
-        queryParams: currentParams,
-        relativeTo: this.route,
-      })
-      .then(() => {
-        console.log("Query params updated:", currentParams);
-      });
-  }
-
-  private shouldAddToQueryParams(
-    value: any,
-    fieldType?: "text" | "textarea" | "checkbox" | "select" | "radio" | "file"
-  ): boolean {
-    if (fieldType === "checkbox" || fieldType === "radio") {
-      return value === true;
-    }
-
-    if (fieldType === "select" || fieldType === "text" || fieldType === "textarea") {
-      return value !== null && value !== undefined && value !== "";
-    }
-
-    return !!value;
   }
 }

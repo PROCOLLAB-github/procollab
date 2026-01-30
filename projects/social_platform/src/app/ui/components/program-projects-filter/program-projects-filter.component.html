@@ -52,9 +52,9 @@
       </div>
       } }
     </div>
-    } } } @if (listType === 'rating') {
+    } } } @if (listType() === 'rating') {
     <label class="filter__tags" (click)="setValue($event)">
-      <app-checkbox [checked]="this.filterForm.get('is_rated_by_expert')?.value"></app-checkbox>
+      <app-checkbox [checked]="this.filterForm.get('is_rated_by_expert')?.value!"></app-checkbox>
       <p class="text-body-12">проекты с оценкой</p>
     </label>
     }
