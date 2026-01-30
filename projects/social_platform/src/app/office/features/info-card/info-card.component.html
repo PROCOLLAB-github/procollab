@@ -90,7 +90,7 @@
   <p class="text-body-12 card__name">{{ info?.lastName | truncate: 10 }}</p>
   @if (info?.speciality) {
   <p class="text-body-6 card__additional-info">
-    {{ info?.speciality }}
+    {{ info?.speciality | truncate: 20 }}
     @if (info?.speciality && info?.birthday) { • } @if (info?.birthday) {
     {{ info?.birthday! | yearsFromBirthday }}
     }
