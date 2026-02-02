@@ -78,7 +78,6 @@ export class OfficeComponent implements OnInit, OnDestroy {
   showRegisteredProgramModal = signal<boolean>(false);
 
   registeredProgramToShow?: Program | null = null;
-  private pendingRegisteredModalCheck = false;
 
   inviteErrorModal = false;
 
@@ -152,8 +151,6 @@ export class OfficeComponent implements OnInit, OnDestroy {
   onAcceptWaitVerification() {
     this.waitVerificationAccepted = true;
     localStorage.setItem("waitVerificationAccepted", "true");
-    this.pendingRegisteredModalCheck = true;
-    this.tryShowRegisteredProgramModal();
   }
 
   onRejectInvite(inviteId: number): void {
@@ -196,24 +193,17 @@ export class OfficeComponent implements OnInit, OnDestroy {
   }
 
   private tryShowRegisteredProgramModal(): void {
-    if (!this.pendingRegisteredModalCheck) return;
-
     const programs = this.programs();
     if (!programs || programs.length === 0) return;
 
     const memberProgram = programs.find(p => p.isUserMember);
-    if (!memberProgram) {
-      this.pendingRegisteredModalCheck = false;
-      return;
-    }
+    if (!memberProgram) return;
 
-    if (!this.hasSeenRegisteredProgramModal(memberProgram.id)) {
-      this.registeredProgramToShow = memberProgram;
-      this.showRegisteredProgramModal.set(true);
-      this.markSeenRegisteredProgramModal(memberProgram.id);
-    }
+    if (this.hasSeenRegisteredProgramModal(memberProgram.id)) return;
 
-    this.pendingRegisteredModalCheck = false;
+    this.registeredProgramToShow = memberProgram;
+    this.showRegisteredProgramModal.set(true);
+    this.markSeenRegisteredProgramModal(memberProgram.id);
   }
 
   private getRegisteredProgramSeenKey(programId: number): string {
