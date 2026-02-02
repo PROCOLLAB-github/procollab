@@ -2,17 +2,16 @@
 
 <form class="form" [formGroup]="messageForm" (ngSubmit)="onSubmit()">
   <div class="form__row">
-    <app-input
+    <app-textarea
       size="big"
       formControlName="text"
-      [hasBorder]="false"
       class="form__input text-body-12"
       autosize
       placeholder="сегодня был хороший день"
       (paste)="onPaste($event)"
       (keydown.meta.enter)="onSubmit()"
       [maxLength]="15940"
-    ></app-input>
+    ></app-textarea>
     <i appIcon icon="send" appSquare="12" class="form__send" (click)="onSubmit()"></i>
   </div>
   <div class="form__images">

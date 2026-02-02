@@ -8,11 +8,18 @@
     display: flex;
     align-items: center;
 
-    ::ng-deep app-input {
-      input {
+    ::ng-deep app-textarea {
+      textarea {
         width: 100%;
-        background-color: transparent;
-        border-bottom: 0.5px solid var(--medium-grey-for-outline);
+        background: transparent;
+        border: none;
+        min-height: 50px;
+        padding: 0px 0px 10px 8px;
+
+        &:focus {
+          box-shadow: none;
+          border: none;
+        }
       }
     }
 
