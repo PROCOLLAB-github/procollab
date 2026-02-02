@@ -31,4 +31,18 @@
     z-index: 20;
     margin-top: 10px;
   }
+
+  &__bell {
+    position: relative;
+
+    &--hasInvites {
+      position: absolute;
+      top: -5%;
+      left: 0%;
+      width: 6px;
+      height: 6px;
+      background-color: var(--red);
+      border-radius: 100%;
+    }
+  }
 }

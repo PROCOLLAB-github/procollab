@@ -10,6 +10,7 @@ import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-up
 import { IconComponent, InputComponent } from "@ui/components";
 import { AutosizeModule } from "ngx-autosize";
 import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
+import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 
 /**
  * Компонент формы создания новости
@@ -42,6 +43,7 @@ import { ImgCardComponent } from "@office/shared/img-card/img-card.component";
     FileUploadItemComponent,
     InputComponent,
     ImgCardComponent,
+    TextareaComponent,
   ],
 })
 export class NewsFormComponent implements OnInit {
