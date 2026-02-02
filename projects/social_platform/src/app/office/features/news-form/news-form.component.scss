@@ -11,14 +11,14 @@
     ::ng-deep app-textarea {
       textarea {
         width: 100%;
+        min-height: 50px;
+        padding: 0 0 10px 8px;
         background: transparent;
         border: none;
-        min-height: 50px;
-        padding: 0px 0px 10px 8px;
 
         &:focus {
-          box-shadow: none;
           border: none;
+          box-shadow: none;
         }
       }
     }
