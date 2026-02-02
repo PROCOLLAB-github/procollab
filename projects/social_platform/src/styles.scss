@@ -25,7 +25,11 @@
 @import "styles/pages/project-detail.scss";
 
 :root {
-  --app-height: 100%;
+  --app-height: 100vh;
+}
+
+html {
+  scrollbar-gutter: stable;
 }
 
 html,

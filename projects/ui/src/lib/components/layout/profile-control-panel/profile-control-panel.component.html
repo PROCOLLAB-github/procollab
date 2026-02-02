@@ -8,6 +8,9 @@
         <div class="attention"></div>
         }
         <i appIcon icon="bell" appWidth="15" appHeight="17" appViewBox="0 0 15 17"></i>
+        @if (invites.length) {
+        <div class="control-panel__bell--hasInvites"></div>
+        }
       </div>
     </div>
     @if (showNotifications) {
