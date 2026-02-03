@@ -72,7 +72,7 @@
   @if (section === 'subscriptions') {
   <p class="card__empty--name text-body-10" style="margin-left: 5px">перейти к проектам</p>
   } @else {
-  <p class="card__empty--name text-body-10">создай первый проект</p>
+  <p class="card__empty--name text-body-10">Создайте первый проект</p>
   }
 </ng-template>
 
@@ -90,7 +90,7 @@
   <p class="text-body-12 card__name">{{ info?.lastName | truncate: 10 }}</p>
   @if (info?.speciality) {
   <p class="text-body-6 card__additional-info">
-    {{ info?.speciality }}
+    {{ info?.speciality | truncate: 20 }}
     @if (info?.speciality && info?.birthday) { • } @if (info?.birthday) {
     {{ info?.birthday! | yearsFromBirthday }}
     }

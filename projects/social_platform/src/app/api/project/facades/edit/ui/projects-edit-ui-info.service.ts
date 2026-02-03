@@ -1,13 +1,18 @@
 /** @format */
 
-import { Injectable, signal } from "@angular/core";
+import { inject, Injectable, signal } from "@angular/core";
 import { ProjectAssign } from "projects/social_platform/src/app/domain/project/project-assign.model";
+import { ProjectsDetailUIInfoService } from "../../detail/ui/projects-detail-ui.service";
 
 @Injectable()
 export class ProjectsEditUIInfoService {
+  private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
+
   // Id Лидера проекта
   readonly leaderId = signal<number>(0);
   readonly fromProgram = signal<string>("");
+  readonly fromProgramOpen = signal<boolean>(false);
+  readonly projectId = this.projectsDetailUIInfoService.projectId;
 
   // Маркер того является ли проект привязанный к конкурсной программе
   readonly isCompetitive = signal<boolean>(false);
@@ -15,6 +20,7 @@ export class ProjectsEditUIInfoService {
 
   // Состояние компонента
   readonly isCompleted = signal<boolean>(false);
+  readonly isSendDescisionLate = signal<boolean>(false);
   readonly isSendDescisionToPartnerProgramProject = signal<boolean>(false);
   readonly isAssignProjectToProgramModalOpen = signal<boolean>(false);
 
@@ -54,5 +60,32 @@ export class ProjectsEditUIInfoService {
 
   closeAssignProjectToProgramModal(): void {
     this.isAssignProjectToProgramModalOpen.set(false);
+  }
+
+  private getFromProgramSeenKey(): string {
+    return `project_fromProgram_modal_seen_${this.projectId()}`;
+  }
+
+  hasSeenFromProgramModal(): boolean {
+    try {
+      return !!localStorage.getItem(this.getFromProgramSeenKey());
+    } catch (e) {
+      return false;
+    }
+  }
+
+  markSeenFromProgramModal(): void {
+    try {
+      localStorage.setItem(this.getFromProgramSeenKey(), "1");
+    } catch (e) {}
+  }
+
+  closeFromProgramModal(): void {
+    this.fromProgramOpen.set(false);
+    this.markSeenFromProgramModal();
+  }
+
+  applyOpenSendDescisionLateModal(): void {
+    this.isSendDescisionLate.set(true);
   }
 }

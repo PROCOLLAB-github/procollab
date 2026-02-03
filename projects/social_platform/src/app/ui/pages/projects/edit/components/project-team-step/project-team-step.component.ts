@@ -16,6 +16,7 @@ import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip
 import { ProjectTeamService } from "projects/social_platform/src/app/api/project/facades/edit/project-team.service";
 import { ProjectTeamUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-team-ui.service";
 import { ProjectsEditInfoService } from "projects/social_platform/src/app/api/project/facades/edit/projects-edit-info.service";
+import { ModalComponent } from "@ui/components/modal/modal.component";
 
 @Component({
   selector: "app-project-team-step",
@@ -32,6 +33,7 @@ import { ProjectsEditInfoService } from "projects/social_platform/src/app/api/pr
     InviteCardComponent,
     CollaboratorCardComponent,
     TooltipComponent,
+    ModalComponent,
   ],
 })
 export class ProjectTeamStepComponent implements OnInit {
@@ -66,6 +68,9 @@ export class ProjectTeamStepComponent implements OnInit {
 
   /** Наличие подсказки */
   protected readonly haveHint = this.tooltipInfoService.haveHint;
+
+  protected readonly isHintTeamVisible = this.tooltipInfoService.isHintTeamVisible;
+  protected readonly isHintTeamModal = this.projectTeamUIService.isHintTeamModal;
 
   /** Позиция подсказки */
   protected readonly tooltipPosition = this.tooltipInfoService.tooltipPosition;
@@ -146,5 +151,11 @@ export class ProjectTeamStepComponent implements OnInit {
 
   onCollaboratorRemove(collaboratorId: number): void {
     this.projectTeamUIService.applyRemoveCollaborator(collaboratorId);
+  }
+
+  openHintModal(event: Event): void {
+    event.preventDefault();
+    this.tooltipInfoService.hideTooltip("team");
+    this.projectTeamUIService.applyOpenHintModal();
   }
 }

@@ -94,6 +94,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   protected readonly additionalForm = this.projectsEditInfoService.additionalForm;
 
   protected readonly fromProgram = this.projectsEditUIInfoService.fromProgram;
+  protected readonly fromProgramOpen = this.projectsEditUIInfoService.fromProgramOpen;
 
   // Маркер того является ли проект привязанный к конкурсной программе
   protected readonly isCompetitive = this.projectsEditUIInfoService.isCompetitive;
@@ -109,6 +110,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // Состояние компонента
   protected readonly isCompleted = this.projectsEditUIInfoService.isCompleted;
+  protected readonly isSendDescisionLate = this.projectsEditUIInfoService.isSendDescisionLate;
   protected readonly isSendDescisionToPartnerProgramProject =
     this.projectsEditUIInfoService.isSendDescisionToPartnerProgramProject;
 

@@ -25,6 +25,9 @@ import { ProgramDetailListInfoService } from "projects/social_platform/src/app/a
 import { ExportFileInfoService } from "projects/social_platform/src/app/api/export-file/facades/export-file-info.service";
 import { SwipeService } from "projects/social_platform/src/app/api/swipe/swipe.service";
 import { ProgramProjectsFilterInfoService } from "@ui/components/program-projects-filter/service/program-projects-filter-info.service";
+import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
 
 @Component({
   selector: "app-list",
@@ -40,6 +43,8 @@ import { ProgramProjectsFilterInfoService } from "@ui/components/program-project
     InfoCardComponent,
     ButtonComponent,
     IconComponent,
+    TooltipComponent,
+    ModalComponent,
   ],
   providers: [
     ProgramDetailListInfoService,
@@ -61,6 +66,7 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly programDetailListInfoService = inject(ProgramDetailListInfoService);
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
   private readonly exportFileInfoService = inject(ExportFileInfoService);
+  private readonly tooltipInfoService = inject(TooltipInfoService);
   private readonly swipeService = inject(SwipeService);
 
   protected readonly searchForm = this.programDetailListUIInfoService.searchForm;
@@ -79,6 +85,9 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected readonly isFilterOpen = this.swipeService.isFilterOpen;
   protected readonly ratingOptionsList = tagsFilter;
+
+  protected readonly isHintExpertsVisible = this.tooltipInfoService.isHintExpertsVisible;
+  protected readonly isHintExpertsModal = this.programDetailListUIInfoService.isHintExpertsModal;
 
   ngOnInit(): void {
     this.programDetailListInfoService.initializationListData();
@@ -133,6 +142,12 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   closeFilter(): void {
     this.swipeService.closeFilter();
+  }
+
+  openHintModal(event: Event): void {
+    event.preventDefault();
+    this.tooltipInfoService.hideTooltip("experts");
+    this.programDetailListUIInfoService.applyHintModalOpen();
   }
 
   /**

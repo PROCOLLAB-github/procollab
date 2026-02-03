@@ -95,6 +95,7 @@
           [error]="city | controlError"
           type="text"
           placeholder="москва"
+          [maxLength]="100"
           formControlName="city"
         ></app-input>
         @if (city | controlError: "required") {
@@ -181,6 +182,7 @@
         type="text"
         placeholder="я java developer, очень люблю котиков"
         formControlName="aboutMe"
+        [maxLength]="300"
       ></app-textarea>
       @if (aboutMe | controlError: "required") {
       <div class="text-body-10 error">

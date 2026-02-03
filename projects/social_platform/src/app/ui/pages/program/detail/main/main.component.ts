@@ -66,6 +66,8 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   protected readonly showProgramModal = this.programDetailMainUIInfoService.showProgramModal;
   protected readonly showProgramModalErrorMessage =
     this.programDetailMainUIInfoService.showProgramModalErrorMessage;
+  protected readonly registeredProgramModal =
+    this.programDetailMainUIInfoService.registeredProgramModal;
 
   ngOnInit(): void {
     this.programDetailMainService.initializationProgramDetailMain(this.descEl);

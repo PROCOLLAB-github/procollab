@@ -9,6 +9,7 @@ import { forkJoin, noop, Observable, tap } from "rxjs";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { IconComponent, InputComponent } from "@ui/components";
 import { AutosizeModule } from "ngx-autosize";
+import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ImgCardComponent } from "@ui/shared/img-card/img-card.component";
 
 /**
@@ -42,6 +43,7 @@ import { ImgCardComponent } from "@ui/shared/img-card/img-card.component";
     FileUploadItemComponent,
     InputComponent,
     ImgCardComponent,
+    TextareaComponent,
   ],
 })
 export class NewsFormComponent implements OnInit {

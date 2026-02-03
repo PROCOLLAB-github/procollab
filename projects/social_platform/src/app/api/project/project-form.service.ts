@@ -76,7 +76,7 @@ export class ProjectFormService {
       coverImageAddress: [""],
       actuality: ["", [Validators.maxLength(1000)]],
       targetAudience: ["", [Validators.maxLength(500)]],
-      problem: ["", [Validators.maxLength(1000)]],
+      problem: ["", [Validators.maxLength(400)]],
       partnerProgramId: [null],
       achievements: this.fb.array([]),
       title: [""],
@@ -314,8 +314,8 @@ export class ProjectFormService {
     partnerProgramFields.forEach(field => {
       const validators: ValidatorFn[] = [];
       if (field.isRequired) validators.push(Validators.required);
-      if (field.fieldType === "text") validators.push(Validators.maxLength(50));
-      if (field.fieldType === "textarea") validators.push(Validators.maxLength(100));
+      if (field.fieldType === "text") validators.push(Validators.maxLength(500));
+      if (field.fieldType === "textarea") validators.push(Validators.maxLength(500));
       const initialValue = field.fieldType === "checkbox" ? false : "";
       const fieldCtrl = new FormControl(initialValue, validators);
       this.additionalForm.addControl(field.name, fieldCtrl);

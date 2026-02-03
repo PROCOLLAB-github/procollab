@@ -28,13 +28,14 @@
           id="vacancy_description"
           [haveHint]="true"
           [tooltipText]="
-            'Расскажи, кого ты ищешь для своего проекта? Опиши подробно, чтобы привлечь именно тех людей, которые тебе нужны.'
+            'Расскажите, кого вы ищете для своего проекта? Опишите подробно, чтобы привлечь именно тех людей, которые вам нужны'
           "
           [tooltipPosition]="'right'"
           [tooltipWidth]="350"
           formControlName="description"
           [error]="(description | controlError) && vacancySubmitInitiated()"
           placeholder="опишите вакансию"
+          [maxLength]="3500"
         ></app-textarea>
         @if ((description | controlError: "required") && vacancySubmitInitiated()) {
         <div class="text-body-10 error">

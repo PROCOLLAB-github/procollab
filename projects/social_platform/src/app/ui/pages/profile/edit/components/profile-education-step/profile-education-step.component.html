@@ -53,6 +53,7 @@
           [error]="organizationName | controlError"
           placeholder="вуз / колледж / школа"
           formControlName="organizationName"
+          [maxLength]="100"
         ></app-input>
         @if (organizationName | controlError: "required") {
         <div class="text-body-10 error">
@@ -72,6 +73,7 @@
           [error]="description | controlError"
           placeholder="бизнес информатика"
           formControlName="description"
+          [maxLength]="400"
         ></app-input>
         @if (description | controlError: "required") {
         <div class="text-body-10 error">

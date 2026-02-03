@@ -88,6 +88,7 @@ export class ProjectsEditInfoService {
     this.projectsEditUIInfoService.isProjectAssignToProgram;
 
   private readonly fromProgram = this.projectsEditUIInfoService.fromProgram;
+  private readonly fromProgramOpen = this.projectsEditUIInfoService.fromProgramOpen;
 
   // Получаем форму проекта из сервиса
   readonly projectForm = this.projectFormService.getForm();
@@ -318,11 +319,14 @@ export class ProjectsEditInfoService {
         next: () => {
           this.completeSubmitedProjectForm(projectId);
         },
-        error: () => {
+        error: err => {
           this.submitMode.set(null);
           this.projFormIsSubmittingAsPublished.set(false);
           this.projFormIsSubmittingAsDraft.set(false);
           this.snackBarService.error("ошибка при сохранении данных");
+          if (err.error["error"].includes("Срок подачи проектов в программу завершён.")) {
+            this.projectsEditUIInfoService.applyOpenSendDescisionLateModal();
+          }
         },
       });
   }
@@ -400,6 +404,15 @@ export class ProjectsEditInfoService {
     this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
       const step = params["editingStep"] as EditStep;
       this.fromProgram.set(params["fromProgram"]);
+
+      const seen = this.projectsEditUIInfoService.hasSeenFromProgramModal();
+      if (this.fromProgram() && !seen) {
+        this.fromProgramOpen.set(true);
+        this.projectsEditUIInfoService.markSeenFromProgramModal();
+      } else {
+        this.fromProgramOpen.set(false);
+      }
+
       if (step && step !== this.editingStep()) {
         this.projectStepService.setStepFromRoute(step);
       }

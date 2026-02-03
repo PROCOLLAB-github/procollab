@@ -35,8 +35,6 @@ import { MatFormFieldModule } from "@angular/material/form-field";
   ],
 })
 export class InputComponent implements ControlValueAccessor {
-  constructor() {}
-
   @Input() placeholder = "";
   @Input() type: "text" | "password" | "email" | "tel" | "date" | "radio" = "text";
   @Input() size: "small" | "big" = "small";
@@ -49,10 +47,11 @@ export class InputComponent implements ControlValueAccessor {
   @Input() mask = "";
   @Input() name = "";
   @Input() checked = false;
+  @Input() maxLength?: number;
 
   @Input()
-  set appValue(value: string) {
-    this.value = value;
+  set appValue(value: string | null) {
+    this.value = value ?? "";
   }
 
   get appValue(): string {
@@ -60,6 +59,7 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   isTooltipVisible = false;
+  isLengthOverflow = false;
 
   @Output() appValueChange = new EventEmitter<string>();
   @Output() enter = new EventEmitter<void>();
@@ -103,9 +103,13 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   onInput(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.onChange(value);
-    this.appValueChange.emit(value);
+    const nextValue = (event.target as HTMLInputElement).value ?? "";
+
+    this.isLengthOverflow = !!this.maxLength && nextValue.length > this.maxLength;
+
+    this.value = nextValue;
+    this.onChange(nextValue);
+    this.appValueChange.emit(nextValue);
   }
 
   onBlur(): void {
@@ -129,9 +133,17 @@ export class InputComponent implements ControlValueAccessor {
     return null;
   }
 
-  writeValue(value: string): void {
+  get showErrorIcon(): boolean {
+    if (this.error && !this.maxLength) {
+      return true;
+    }
+
+    return false;
+  }
+
+  writeValue(value: string | null): void {
     setTimeout(() => {
-      this.value = value;
+      this.value = value ?? "";
     });
   }
 

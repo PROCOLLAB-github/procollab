@@ -43,6 +43,8 @@ export class ProgramDetailListUIInfoService {
     search: [""],
   });
 
+  readonly isHintExpertsModal = signal<boolean>(false);
+
   routerLink(linkId: number): string {
     switch (this.listType()) {
       case "projects":
@@ -89,5 +91,9 @@ export class ProgramDetailListUIInfoService {
     }
 
     this.searchedList.set(this.list());
+  }
+
+  applyHintModalOpen(): void {
+    this.isHintExpertsModal.set(true);
   }
 }

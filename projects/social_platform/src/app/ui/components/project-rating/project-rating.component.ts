@@ -49,7 +49,6 @@ import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
     RangeCriterionInputComponent,
     BooleanCriterionComponent,
     ReactiveFormsModule,
-    ControlErrorPipe,
   ],
   templateUrl: "./project-rating.component.html",
   styleUrl: "./project-rating.component.scss",

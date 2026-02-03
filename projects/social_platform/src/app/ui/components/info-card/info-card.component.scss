@@ -8,7 +8,7 @@
     display: flex;
     flex-direction: column;
     width: 156px;
-    height: 170px;
+    height: 180px;
     padding: 15px 0 12px;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
@@ -101,7 +101,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding-top: 40px;
+    padding-top: 30px;
     overflow: hidden;
     text-align: center;
 
@@ -142,7 +142,7 @@
     flex: 1;
     flex-direction: column;
     align-items: center;
-    width: 120px;
+    width: 100px;
     overflow: hidden;
     color: var(--dark-grey);
     text-align: center;
@@ -218,9 +218,14 @@
   &__skills {
     display: flex;
     flex-flow: wrap;
+    flex-grow: 1;
     gap: 2px;
     justify-content: center;
     margin-bottom: 9px;
+  }
+
+  &__skill {
+    width: 100px;
   }
 }
 

@@ -58,6 +58,7 @@
           type="text"
           placeholder="проколлаб"
           formControlName="organization"
+          [maxLength]="50"
         ></app-input>
         @if (organization | controlError: "required") {
         <div class="text-body-10 error">
@@ -92,14 +93,15 @@
     <div class="profile__column">
       @if (profileForm.get("descriptionWork"); as descriptionWork) {
       <fieldset>
-        <label for="descriptionWork" class="field-label">обо мне</label>
+        <label for="descriptionWork" class="field-label">краткое описание</label>
         <app-textarea
           size="big"
           id="descriptionWork"
           [error]="descriptionWork | controlError"
           type="text"
-          placeholder="проект начал свое существование с 2020 года"
+          placeholder="работал с данными, разрабатывал интерфейсы."
           formControlName="descriptionWork"
+          [maxLength]="400"
         ></app-textarea>
         @if (descriptionWork | controlError: "required") {
         <div class="text-body-10 error">

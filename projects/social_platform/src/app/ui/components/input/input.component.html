@@ -45,13 +45,23 @@
     [dropSpecialCharacters]="true"
     class="field__input"
     [class.field__input--error]="error"
+    [class.field__input--overflow]="isLengthOverflow"
     [class.field__input--small]="size === 'small'"
     [class.field__input--small--error]="size === 'small' && error"
     [class.field__input--big]="size === 'big'"
     [class.field__input--with-tooltip]="size !== 'small' && haveHint"
     [class.field__input--border]="hasBorder"
   />
-  } @if (error) {
+  @if (maxLength) {
+  <div class="field__counter">
+    <p class="text-body-10" [class.field__counter--overflow]="isLengthOverflow">
+      <span [ngStyle]="{ color: isLengthOverflow ? 'var(--red)' : '#8d8d8d' }">{{
+        value.length
+      }}</span>
+      / {{ maxLength }}
+    </p>
+  </div>
+  } } @if (showErrorIcon) {
   <i
     class="field__error-icon"
     appIcon

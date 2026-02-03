@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, Validators } from "@angular/forms";
 import { rolesMembersList } from "projects/core/src/consts/lists/roles-members-list.const";
 import { workExperienceList } from "projects/core/src/consts/lists/work-experience-list.const";
 import { workFormatList } from "projects/core/src/consts/lists/work-format-list.const";
@@ -43,7 +43,7 @@ export class ProjectVacancyUIService {
   readonly vacancyForm = this.fb.group({
     role: this.fb.control<string | null>(null),
     skills: this.fb.control<Skill[]>([]),
-    description: this.fb.control<string | null>(""),
+    description: [this.fb.control<string | null>(""), Validators.maxLength(3500)],
     requiredExperience: this.fb.control<string | null>(null),
     workFormat: this.fb.control<string | null>(null),
     salary: this.fb.control<string | null>(""),

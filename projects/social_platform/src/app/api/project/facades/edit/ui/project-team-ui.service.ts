@@ -18,6 +18,8 @@ export class ProjectTeamUIService {
   readonly inviteSubmitInitiated = signal(false);
   readonly inviteFormIsSubmitting = signal(false);
 
+  readonly isHintTeamModal = signal<boolean>(false);
+
   readonly invitesFill = computed(() => this.invites().some(inv => inv.isAccepted === null));
 
   /**
@@ -78,6 +80,10 @@ export class ProjectTeamUIService {
    */
   applyOpenInviteModal(): void {
     this.isInviteModalOpen.set(true);
+  }
+
+  applyOpenHintModal(): void {
+    this.isHintTeamModal.set(true);
   }
 
   /**

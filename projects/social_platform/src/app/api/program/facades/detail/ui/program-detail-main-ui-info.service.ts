@@ -15,6 +15,7 @@ export class ProgramDetailMainUIInfoService {
   // Сигналы для работы с модальными окнами с текстом
   readonly showProgramModal = signal(false);
   readonly showProgramModalErrorMessage = signal<string | null>(null);
+  readonly registeredProgramModal = signal<boolean>(false);
 
   readonly registerDateExpired = signal<boolean>(false);
 
@@ -38,6 +39,13 @@ export class ProgramDetailMainUIInfoService {
   applyFormatingProgramData(program: Program): void {
     this.program.set(program);
     this.registerDateExpired.set(Date.now() > Date.parse(program.datetimeRegistrationEnds));
+    if (program.isUserMember) {
+      const seen = this.hasSeenRegisteredProgramModal(program.id);
+      if (!seen) {
+        this.registeredProgramModal.set(true);
+        this.markSeenRegisteredProgramModal(program.id);
+      }
+    }
   }
 
   applyProgramOpenModal(type: "access" | "error"): void {
@@ -52,5 +60,23 @@ export class ProgramDetailMainUIInfoService {
 
   applyProgramCloseModal(): void {
     this.showProgramModal.set(false);
+  }
+
+  private getRegisteredProgramSeenKey(programId: number): string {
+    return `program_registered_modal_seen_${programId}`;
+  }
+
+  private hasSeenRegisteredProgramModal(programId: number): boolean {
+    try {
+      return !!localStorage.getItem(this.getRegisteredProgramSeenKey(programId));
+    } catch (e) {
+      return false;
+    }
+  }
+
+  private markSeenRegisteredProgramModal(programId: number): void {
+    try {
+      localStorage.setItem(this.getRegisteredProgramSeenKey(programId), "1");
+    } catch (e) {}
   }
 }

@@ -5,7 +5,9 @@
   display: grid;
   grid-template-columns: 8fr 2fr;
   gap: 10px;
+  max-width: 1280px;
   padding-bottom: 100px;
+  margin: 0 auto;
 
   &__outlet {
     display: flex;
@@ -57,6 +59,7 @@
   }
 
   &__left {
+    position: relative;
     width: 100%;
   }
 
@@ -74,6 +77,16 @@
         }
       }
     }
+  }
+
+  &__tooltip {
+    position: fixed;
+    right:
+      calc(
+        (100vw - 1080px) / 2
+      );
+    bottom: 24px;
+    z-index: 30;
   }
 }
 
@@ -159,5 +172,87 @@
 
   @include responsive.apply-desktop {
     display: none;
+  }
+}
+
+.tooltip {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &__wrapper {
+    position: absolute;
+    right: 100%;
+    bottom: 22px;
+    left: auto;
+    width: 310px;
+    padding: 18px 10px 10px 16px;
+    background-color: var(--white);
+    border: 0.5px solid var(--grey-for-text);
+    border-radius: var(--rounded-lg) var(--rounded-lg) 0 var(--rounded-lg);
+
+    :last-child {
+      color: var(--black);
+      cursor: pointer;
+    }
+  }
+
+  &__text {
+    color: var(--grey-for-text);
+
+    a {
+      color: var(--accent);
+    }
+  }
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  max-height: calc(100vh - 40px);
+  padding: 0 24px;
+  overflow-y: auto;
+
+  @include responsive.apply-desktop {
+    width: 605px;
+    max-width: 100%;
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+
+  &__title {
+    text-align: center;
+  }
+
+  &__text {
+    text-align: center;
+
+    &-block {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 30px 0;
+    }
   }
 }

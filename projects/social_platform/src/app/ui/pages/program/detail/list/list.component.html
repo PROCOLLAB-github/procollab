@@ -107,5 +107,59 @@
       }
     </div>
   </div>
+  } @if (listType() !== 'members' && listType() !== 'projects') {
+  <div class="page__tooltip">
+    <div class="tooltip">
+      <app-tooltip color="grey" iconSize="40" (show)="isHintExpertsVisible.set(true)"></app-tooltip>
+
+      @if (isHintExpertsVisible()) {
+      <div class="tooltip__wrapper" (mouseleave)="isHintExpertsVisible.set(false)">
+        <p class="tooltip__text text-body-10">
+          Нажмите, чтобы открыть подсказку и узнать больше о процессе оценивания проектов
+        </p>
+        <p class="tooltip__text text-body-10" (click)="openHintModal($event)">подробнее</p>
+      </div>
+      }
+    </div>
+  </div>
+
+  <app-modal [open]="isHintExpertsModal()" (openChange)="isHintExpertsModal.set(false)">
+    <div class="cancel">
+      <div class="cancel__top">
+        <p class="cancel__title text-body-14">Как выставить оценки проекту</p>
+      </div>
+
+      <div class="cancel__text-block">
+        <p class="text-body-12">
+          Перед стартом оценки, <br />
+          настройте фильтрацию справа – выберите регион или конкретный кейс, а также работы, которые
+          ранее не были оценены другими экспертами
+        </p>
+
+        <p class="text-body-12">
+          После изучения материалов участников (описания и презентации проекта), проставьте оценки
+          по критериям. При необходимости оставьте небольшой комментарий
+        </p>
+
+        <p class="text-body-12">
+          Для завершения оценивания, нажмите «оценить проект» – ваша оценка сохранилась в системе
+        </p>
+
+        <p class="text-body-12">
+          Вы можете исправить свою оценку или комментарий – для этого нажмите на иконку карандаша
+          справа от кнопки «проект оценен». Этот функционал появится после сохранения оценки
+        </p>
+
+        <p class="text-body-12">Благодарим за вашу работу!</p>
+      </div>
+
+      <app-button
+        customTypographyClass="text-body-12"
+        size="medium"
+        (click)="isHintExpertsModal.set(false)"
+        >спасибо, понятно</app-button
+      >
+    </div>
+  </app-modal>
   }
 </div>

@@ -55,7 +55,7 @@
             size="big"
             id="invite_role"
             [haveHint]="true"
-            [tooltipText]="'Расскажи, кем будет человек, которого ты приглашаешь'"
+            [tooltipText]="'Расскажите, кем будет человек, которого вы приглашаете'"
             [tooltipPosition]="'right'"
             [tooltipWidth]="300"
             formControlName="role"
@@ -147,4 +147,51 @@
     <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
     }
   </div>
+
+  <div class="project__team-tooltip">
+    <div class="tooltip">
+      <app-tooltip color="grey" iconSize="40" (show)="isHintTeamVisible.set(true)"></app-tooltip>
+
+      @if (isHintTeamVisible()) {
+      <div class="tooltip__wrapper" (mouseleave)="isHintTeamVisible.set(false)">
+        <p class="tooltip__text text-body-10">
+          Напишите зону ответственности участника, приглашаемого в команду
+        </p>
+        <p class="tooltip__text text-body-10" (click)="openHintModal($event)">подробнее</p>
+      </div>
+      }
+    </div>
+  </div>
+
+  <app-modal [open]="isHintTeamModal()" (openChange)="isHintTeamModal.set(false)">
+    <div class="cancel">
+      <div class="cancel__top">
+        <p class="cancel__title text-body-14">Уверены, большие дела не делаются в одиночку!</p>
+      </div>
+
+      <div class="cancel__text-block">
+        <p class="text-body-12">
+          После создания проекта пригласите в команду тех, кто вместе с вами будет причастен к его
+          реализации
+        </p>
+
+        <p class="text-body-12">
+          Вставьте ссылку на профиль участника на платформе, а также кратко напишите зону
+          ответственности или (при наличии) конкретную роль в команде
+        </p>
+
+        <p class="text-body-12">
+          Участник получит приглашение стать частью команды – это приглашение необходимо принять.
+          Ваш со-командник получит уведомление или может найти приглашение во вкладке «проект»
+        </p>
+      </div>
+
+      <app-button
+        customTypographyClass="text-body-12"
+        size="medium"
+        (click)="isHintTeamModal.set(false)"
+        >спасибо, понятно</app-button
+      >
+    </div>
+  </app-modal>
 </div>

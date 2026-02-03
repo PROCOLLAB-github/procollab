@@ -22,6 +22,8 @@ export class TooltipInfoService {
   readonly isHintAuthVisible = signal<boolean>(false);
   readonly isHintLibVisible = signal<boolean>(false);
   readonly isHintLoginVisible = signal<boolean>(false);
+  readonly isHintTeamVisible = signal<boolean>(false);
+  readonly isHintExpertsVisible = signal<boolean>(false);
 
   /** Показать подсказку */
   showTooltip(
@@ -96,7 +98,9 @@ export class TooltipInfoService {
       | "language"
       | "auth"
       | "lib"
-      | "login" = "base"
+      | "login"
+      | "team"
+      | "experts" = "base"
   ): void {
     switch (type) {
       case "photo":
@@ -131,6 +135,12 @@ export class TooltipInfoService {
         break;
       case "lib":
         this.isHintLibVisible.set(false);
+        break;
+      case "team":
+        this.isHintTeamVisible.set(false);
+        break;
+      case "experts":
+        this.isHintExpertsVisible.set(false);
         break;
 
       default:
