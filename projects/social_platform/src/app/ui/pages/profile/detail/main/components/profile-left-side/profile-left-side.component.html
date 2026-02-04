@@ -1,0 +1,86 @@
+<!-- @format -->
+
+<div class="profile__left">
+  <div class="lists profile__section">
+    <div class="lists__section">
+      <h3 class="text-body-12 lists__title">метаданные</h3>
+      <i appIcon icon="anchor" class="lists__icon" appSquare="12"></i>
+    </div>
+
+    <ul class="lists__list">
+      <li class="lists__item">
+        <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
+        <p class="text-body-10">{{ (user()!.birthday | yearsFromBirthday) ?? "не указан" }}</p>
+      </li>
+
+      @if (user()!.city) {
+      <li class="lists__item">
+        <i appIcon icon="geo-point" class="lists__icon" style="opacity: 0.6" appSquare="10"></i>
+        <p class="text-body-10">{{ (user()!.city | truncate: 12) ?? "не указан" }}</p>
+      </li>
+      } @if (user()!.speciality) {
+      <li class="lists__item">
+        <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
+        <p class="text-body-10">
+          {{ (user()!.speciality | truncate: 13) ?? "не указана" }}
+        </p>
+      </li>
+      }
+    </ul>
+  </div>
+
+  @if (user()!.userLanguages.length > 0) {
+  <div class="lists profile__section">
+    <div class="lists__section">
+      <h3 class="text-body-12 lists__title">языки</h3>
+      <i appIcon icon="world-wide" class="lists__icon" appSquare="12"></i>
+    </div>
+
+    <ul class="lists__list">
+      @for (language of user()!.userLanguages; track $index) {
+      <li class="lists__item">
+        <div class="lists__index text-body-10">{{ language.languageLevel }}</div>
+        <p class="text-body-10">{{ language.language }}</p>
+      </li>
+      }
+    </ul>
+  </div>
+  } @if (user()!.programs.length; as programsLength) {
+  <div class="lists">
+    <ul class="lists__list--line">
+      @for (p of user()!.programs.slice(0, 3); track p.id) {
+      <li class="lists__item" [routerLink]="['/office/program', p.id]">
+        <ng-container *ngTemplateOutlet="programTemp; context: { $implicit: p }"></ng-container>
+      </li>
+      }
+    </ul>
+    <div class="lists__remaining" [class.lists__remaining--show]="readAllPrograms()">
+      @if (user()!.programs) {
+      <ul>
+        @for (program of user()!.programs.slice(3); track program.id) {
+        <li>
+          <ng-container
+            *ngTemplateOutlet="programTemp; context: { $implicit: program }"
+          ></ng-container>
+        </li>
+        }
+      </ul>
+      }
+    </div>
+    <ng-template #programTemp let-program>
+      <div>
+        <div class="lists__info">
+          <a [routerLink]="['/office/program', program.id]" class="text-body-10 lists__title">
+            <img alt="program logo" [src]="program.logo" width="40" height="40" />
+          </a>
+        </div>
+      </div>
+    </ng-template>
+    @if (programsLength > 3) {
+    <div class="read-more text-body-10" (click)="readAllPrograms.set(!readAllPrograms())">
+      {{ readAllPrograms() ? "скрыть" : "подробнее" }}
+    </div>
+    }
+  </div>
+  }
+</div>

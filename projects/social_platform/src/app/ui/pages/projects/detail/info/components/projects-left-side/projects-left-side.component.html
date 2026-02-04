@@ -1,0 +1,50 @@
+<!-- @format -->
+
+<div class="project__left">
+  <div class="lists project__section">
+    <div class="lists__section">
+      <h3 class="text-body-12 lists__title">метаданные</h3>
+      <i appIcon icon="anchor" class="lists__icon" appSquare="12"></i>
+    </div>
+
+    <ul class="lists__list">
+      <li class="lists__item">
+        <i appIcon icon="label" class="lists__icon" appSquare="10"></i>
+        @if (industryService.industries | async; as industries) {
+        <p class="text-body-10 card__industry">
+          @if (industryService.getIndustry(industries, project()!.industry); as industry) {
+          <span>{{ industry?.name }}</span>
+          }
+        </p>
+        }
+      </li>
+
+      <li class="lists__item">
+        <i appIcon icon="geo-point" class="lists__icon" style="opacity: 0.6" appSquare="10"></i>
+        <p class="text-body-10">{{ project()!.region ?? "не указан" | truncate: 10 }}</p>
+      </li>
+
+      <li class="lists__item">
+        <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
+        <p class="text-body-10">{{ project()!.trl ?? "0" }}</p>
+      </li>
+
+      <li class="lists__item">
+        <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
+        <p class="text-body-10">{{ project()!.implementationDeadline ?? "не указана" }}</p>
+      </li>
+
+      <li class="lists__item">
+        <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
+        <p
+          class="text-body-10"
+          [routerLink]="'/office/profile/' + project()!.leader"
+          style="cursor: pointer"
+        >
+          {{ project()!.leaderInfo?.lastName | truncate: 10 }}
+          {{ project()!.leaderInfo?.firstName | truncate: 10 }}
+        </p>
+      </li>
+    </ul>
+  </div>
+</div>

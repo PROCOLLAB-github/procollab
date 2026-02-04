@@ -10,21 +10,12 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { RouterLink } from "@angular/router";
-import { ProfileNews } from "../../../../../domain/profile/profile-news.model";
-import { ParseBreaksPipe, ParseLinksPipe, YearsFromBirthdayPipe } from "projects/core";
-import { IconComponent, ButtonComponent } from "@ui/components";
-import { CommonModule, NgTemplateOutlet } from "@angular/common";
-import { ModalComponent } from "@ui/components/modal/modal.component";
-import { NewsFormComponent } from "@ui/components/news-form/news-form.component";
-import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
-import { UserLinksPipe } from "projects/core/src/lib/pipes/user/user-links.pipe";
-import { ProjectDirectionCard } from "@ui/shared/project-direction-card/project-direction-card.component";
+import { CommonModule } from "@angular/common";
 import { ProfileDetailInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/profile-detail-info.service";
 import { ProfileDetailUIInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/ui/profile-detail-ui-info.service";
-import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
-import { NewsInfoService } from "projects/social_platform/src/app/api/news/news-info.service";
+import { ProfileLeftSideComponent } from "./components/profile-left-side/profile-left-side.component";
+import { ProfileRightSideComponent } from "./components/profile-right-side/profile-right-side.component";
+import { ProfileMidSideComponent } from "./components/profile-mid-side/profile-mid-side.component";
 
 /**
  * Главный компонент страницы профиля пользователя
@@ -54,19 +45,9 @@ import { NewsInfoService } from "projects/social_platform/src/app/api/news/news-
   styleUrl: "./main.component.scss",
   imports: [
     CommonModule,
-    IconComponent,
-    ModalComponent,
-    RouterLink,
-    NgTemplateOutlet,
-    UserLinksPipe,
-    ParseBreaksPipe,
-    ParseLinksPipe,
-    TruncatePipe,
-    YearsFromBirthdayPipe,
-    NewsCardComponent,
-    NewsFormComponent,
-    ProjectDirectionCard,
-    ButtonComponent,
+    ProfileLeftSideComponent,
+    ProfileRightSideComponent,
+    ProfileMidSideComponent,
   ],
   providers: [ProfileDetailInfoService, ProfileDetailUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -74,33 +55,11 @@ import { NewsInfoService } from "projects/social_platform/src/app/api/news/news-
 })
 export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("descEl") descEl?: ElementRef;
-  @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
-  @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
 
   private readonly profileDetailInfoService = inject(ProfileDetailInfoService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
-  private readonly expandService = inject(ExpandService);
-  private readonly newsInfoService = inject(NewsInfoService);
 
   protected readonly user = this.profileDetailUIInfoService.user;
-  protected readonly loggedUserId = this.profileDetailUIInfoService.loggedUserId;
-  protected readonly isProfileEmpty = this.profileDetailUIInfoService.isProfileEmpty;
-
-  protected readonly directions = this.profileDetailUIInfoService.directions;
-  protected readonly news = this.newsInfoService.news;
-
-  protected readonly descriptionExpandable = this.expandService.descriptionExpandable;
-  protected readonly readFullDescription = this.expandService.readFullDescription;
-
-  protected readonly readAllProjects = this.expandService.readAllProjects;
-  protected readonly readAllPrograms = this.expandService.readAllPrograms;
-  protected readonly readAllAchievements = this.expandService.readAllAchievements;
-  protected readonly readAllLinks = this.expandService.readAllLinks;
-  protected readonly readAllEducation = this.expandService.readAllEducation;
-  protected readonly readAllLanguages = this.expandService.readAllLanguages;
-  protected readonly readAllWorkExperience = this.expandService.readAllWorkExperience;
-
-  protected readonly isShowModal = this.profileDetailUIInfoService.isShowModal;
 
   /**
    * Инициализация компонента
@@ -124,65 +83,5 @@ export class ProfileMainComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.profileDetailInfoService.destroy();
-  }
-
-  /**
-   * Добавление новой новости в профиль
-   * @param news - объект с текстом и файлами новости
-   */
-  onAddNews(news: { text: string; files: string[] }): void {
-    this.profileDetailInfoService.onAddNews(news).subscribe({
-      next: () => this.newsFormComponent?.onResetForm(),
-    });
-  }
-
-  /**
-   * Удаление новости из профиля
-   * @param newsId - идентификатор удаляемой новости
-   */
-  onDeleteNews(newsId: number): void {
-    this.profileDetailInfoService.onDeleteNews(newsId);
-  }
-
-  /**
-   * Переключение лайка новости
-   * @param newsId - идентификатор новости для лайка/дизлайка
-   */
-  onLike(newsId: number) {
-    this.profileDetailInfoService.onLike(newsId);
-  }
-
-  /**
-   * Редактирование существующей новости
-   * @param news - обновленные данные новости
-   * @param newsItemId - идентификатор редактируемой новости
-   */
-  onEditNews(news: ProfileNews, newsItemId: number) {
-    this.profileDetailInfoService.onEditNews(news, newsItemId).subscribe({
-      next: () => this.newsCardComponent?.onCloseEditMode(),
-    });
-  }
-
-  /**
-   * Обработчик появления новостей в области видимости
-   * Отмечает новости как просмотренные при скролле
-   * @param entries - массив элементов, попавших в область видимости
-   */
-  onNewsInView(entries: IntersectionObserverEntry[]): void {
-    this.profileDetailInfoService.onNewsInView(entries);
-  }
-
-  /**
-   * Раскрытие/сворачивание описания профиля
-   * @param elem - DOM элемент описания
-   * @param expandedClass - CSS класс для раскрытого состояния
-   * @param isExpanded - текущее состояние (раскрыто/свернуто)
-   */
-  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    this.expandService.onExpand("description", elem, expandedClass, isExpanded);
-  }
-
-  openWorkInfoModal(): void {
-    this.profileDetailUIInfoService.applyOpenWorkInfoModal();
   }
 }

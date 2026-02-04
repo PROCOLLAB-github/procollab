@@ -1,0 +1,186 @@
+<!-- @format -->
+
+@if (vacancy()!.project; as project) {
+<div class="vacancy__right">
+  <div class="vacancy__right--project">
+    <app-avatar
+      style="cursor: pointer"
+      [size]="68"
+      [url]="project.imageAddress"
+      class="vacancy__right--project-image"
+      [routerLink]="'/office/projects/' + project.id"
+    ></app-avatar>
+    <p class="text-body-12 vacancy__right--title">{{ project.name | truncate: 20 }}</p>
+
+    <app-button size="big" customTypographyClass="text-body-12" (click)="openModal.set(true)"
+      >откликнуться</app-button
+    >
+  </div>
+
+  <div class="lists vacancy__content">
+    <div class="lists__section">
+      <h3 class="text-body-12 lists__title">метаданные</h3>
+      <i appIcon icon="anchor" class="lists__icon" appSquare="12"></i>
+    </div>
+
+    <ul class="lists__list">
+      <li class="lists__item">
+        <i appIcon icon="geo-point" style="opacity: 0.6" class="lists__icon" appSquare="10"></i>
+        <p class="text-body-10">
+          {{ project.region ? (project.region | capitalize | truncate: 20) : "не указан" }}
+        </p>
+      </li>
+
+      <li class="lists__item">
+        <i appIcon icon="deadline" class="lists__icon" appSquare="10"></i>
+        <p class="text-body-10">
+          {{
+            vacancy()!.workFormat ? (vacancy()!.workFormat | capitalize) : "формат работы не указан"
+          }}
+        </p>
+      </li>
+
+      <li class="lists__item">
+        <i appIcon icon="person" class="lists__icon" appSquare="10"></i>
+        <p class="text-body-10">
+          {{
+            vacancy()!.requiredExperience
+              ? (vacancy()!.requiredExperience.toLowerCase().includes("без опыта")
+                  ? ""
+                  : "опыт" + " ") + (vacancy()!.requiredExperience | capitalize)
+              : "опыт не указан"
+          }}
+        </p>
+      </li>
+
+      <li class="lists__item">
+        <i appIcon icon="goal" class="lists__icon" appSquare="10"></i>
+        <p class="text-body-10">
+          {{
+            vacancy()!.workSchedule ? (vacancy()!.workSchedule | capitalize) : "график не указан"
+          }}
+        </p>
+      </li>
+
+      <li class="lists__item">
+        <i appIcon icon="contacts" class="lists__icon" appSquare="10"></i>
+        <p class="text-body-10">
+          {{
+            vacancy()!.salary
+              ? (vacancy()!.salary | salaryTransform | capitalize) + " " + "рублей"
+              : "по договоренности"
+          }}
+        </p>
+      </li>
+    </ul>
+  </div>
+
+  @if (project.links.length) {
+  <div class="lists vacancy__content">
+    <div class="lists__section">
+      <h3 class="text-body-12 lists__title">контакты</h3>
+      <i appIcon icon="phone" class="lists__icon" appSquare="12"></i>
+    </div>
+
+    <ul class="lists__list">
+      @for (link of project.links; track $index) {
+      <li class="lists__item text-body-10">
+        @if (link | userLinks; as l) {
+        <a class="lists__item" target="_blank" [href]="link">
+          <i class="lists__icon" appIcon [icon]="l.iconName" appSquare="10"></i>
+          <span>{{ l.tag | truncate: 30 }}</span>
+        </a>
+        }
+      </li>
+      }
+    </ul>
+  </div>
+  }
+</div>
+}
+
+<app-modal [open]="openModal()" (openChange)="closeSendResponseModal()">
+  <div class="cancel">
+    <div class="lists__section">
+      <p class="text-body-12 lists__title">отклик на вакансию</p>
+      <i appIcon icon="squiz" class="lists__icon" appSquare="12"></i>
+    </div>
+
+    <form class="vacancy__form" [formGroup]="sendForm" (ngSubmit)="onSubmit()">
+      @if (sendForm.get("whyMe"); as whyMe) {
+      <fieldset>
+        <label for="whyMe" class="field-label text-body-10">сопроводительное письмо</label>
+        <app-textarea
+          size="big"
+          id="whyMe"
+          formControlName="whyMe"
+          [error]="whyMe | controlError"
+          placeholder="Проект начал свое существование с 2020 года"
+          [maxLength]="2000"
+        ></app-textarea>
+        @if (whyMe | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        } @if (whyMe | controlError: "maxlength") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_TOO_LONG }}
+          @if (whyMe.errors) {
+          {{ whyMe.errors["maxlength"]["requiredLength"] }}
+          }
+        </div>
+        } @if (whyMe | controlError: "minlength") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_TOO_SHORT }}
+          @if (whyMe.errors) {
+          {{ whyMe.errors["minlength"]["requiredLength"] }}
+          }
+        </div>
+        }
+      </fieldset>
+      }
+
+      <app-button
+        [disabled]="true"
+        style="opacity: 0.5"
+        size="big"
+        class="text-body-12"
+        appearance="outline"
+        >прикрепить резюме PROCOLLAB</app-button
+      >
+
+      <p class="vacancy__form--or text-body-12">или</p>
+
+      @if (sendForm.get("accompanyingFile"); as accompanyingFile) {
+
+      <div
+        class="vacancy__form--cv"
+        [class.vacancy__form-error]="accompanyingFile | controlError: 'required'"
+      >
+        <app-upload-file
+          [error]="accompanyingFile | controlError"
+          id="accompanyingFile"
+          formControlName="accompanyingFile"
+          accept=".pdf, .docx"
+        >
+          <ng-container emptyPlaceholder>
+            <div class="vacancy__form--cv-empty">
+              <i appIcon icon="file" appSquare="10"></i>
+              <p class="text-body-12 vacancy__form--cv-text">
+                файл резюме в формате <br />.pdf, .word весом до 50МБ
+              </p>
+            </div>
+            @if (accompanyingFile | controlError: "required") {
+            <p class="error text-body-10">загрузите файл</p>
+            }
+          </ng-container>
+        </app-upload-file>
+      </div>
+      }
+
+      <app-button size="big" (click)="onSubmit()" [loader]="sendFormIsSubmitting()" type="submit"
+        >отправить отклик</app-button
+      >
+    </form>
+  </div>
+</app-modal>

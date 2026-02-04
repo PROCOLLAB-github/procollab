@@ -5,7 +5,6 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { ControlErrorPipe } from "projects/core";
 import { ButtonComponent, InputComponent, SelectComponent } from "@ui/components";
-import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/components/modal/modal.component";
@@ -15,6 +14,7 @@ import { OnboardingStageZeroInfoService } from "projects/social_platform/src/app
 import { OnboardingStageZeroUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-zero-ui-info.service";
 import { OnboardingUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-ui-info.service";
 import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
+import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 
 /**
  * КОМПОНЕНТ НУЛЕВОГО ЭТАПА ОНБОРДИНГА
@@ -69,7 +69,6 @@ import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    AvatarControlComponent,
     InputComponent,
     ButtonComponent,
     IconComponent,
@@ -78,6 +77,7 @@ import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip
     ModalComponent,
     CommonModule,
     TooltipComponent,
+    AvatarControlComponent,
   ],
   providers: [
     OnboardingStageZeroInfoService,
