@@ -10,6 +10,10 @@ import { VacancyDetailInfoService } from "projects/social_platform/src/app/api/v
 import { VacancyDetailUIInfoService } from "projects/social_platform/src/app/api/vacancy/facades/ui/vacancy-detail-ui-info.service";
 import { VacanciesRightSideComponent } from "./components/vacancies-right-side/vacancies-right-side.component";
 import { VacanciesLeftSideComponent } from "./components/vacancies-left-side/vacancies-left-side.component";
+import { TextareaComponent } from "@ui/components/textarea/textarea.component";
+import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ControlErrorPipe } from "@corelib";
+import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 
 /**
  * Компонент отображения детальной информации о вакансии
@@ -57,6 +61,9 @@ import { VacanciesLeftSideComponent } from "./components/vacancies-left-side/vac
     ReactiveFormsModule,
     VacanciesRightSideComponent,
     VacanciesLeftSideComponent,
+    TextareaComponent,
+    ControlErrorPipe,
+    UploadFileComponent,
   ],
   providers: [VacancyDetailInfoService, VacancyDetailUIInfoService],
   standalone: true,
@@ -69,6 +76,14 @@ export class VacancyInfoComponent implements OnInit {
 
   /** Флаг отображения модального окна с результатом */
   protected readonly resultModal = this.vacancyDetailUIInfoService.resultModal;
+  protected readonly openModal = this.vacancyDetailUIInfoService.openModal;
+
+  /** Форма отправки отклика */
+  protected readonly sendForm = this.vacancyDetailUIInfoService.sendForm;
+  protected readonly sendFormIsSubmitting = this.vacancyDetailUIInfoService.sendFormIsSubmitting;
+
+  /** Объект с сообщениями об ошибках */
+  protected readonly errorMessage = ErrorMessage;
 
   ngOnInit(): void {
     this.vacancyDetailInfoService.initializeDetailInfo();
@@ -77,6 +92,22 @@ export class VacancyInfoComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.vacancyDetailInfoService.destroy();
+  }
+
+  onOpenResponseModal(): void {
+    this.vacancyDetailUIInfoService.applyResponseModalOpen();
+  }
+
+  /**
+   * Обработчик отправки формы
+   * Валидирует форму и отправляет отклик на сервер
+   */
+  onSubmit(): void {
+    this.vacancyDetailInfoService.submitVacancyResponse();
+  }
+
+  closeSendResponseModal(): void {
+    this.vacancyDetailInfoService.closeSendResponseModal();
   }
 
   protected openSkills() {

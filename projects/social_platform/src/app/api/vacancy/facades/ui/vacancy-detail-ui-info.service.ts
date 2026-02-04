@@ -27,8 +27,12 @@ export class VacancyDetailUIInfoService {
 
   applyNoResponseOpenModal(data: Params): void {
     if (data["sendResponse"]) {
-      this.openModal.set(true);
+      this.applyResponseModalOpen();
     }
+  }
+
+  applyResponseModalOpen(): void {
+    this.openModal.set(true);
   }
 
   applySubmitVacancyResponse(): void {

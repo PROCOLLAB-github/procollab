@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, WritableSignal } from "@angular/core";
+import { Component, EventEmitter, inject, Input, Output, WritableSignal } from "@angular/core";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { UserLinksPipe } from "projects/core/src/lib/pipes/user/user-links.pipe";
@@ -34,37 +34,14 @@ import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
     CapitalizePipe,
     IconComponent,
     SalaryTransformPipe,
-    TextareaComponent,
-    UploadFileComponent,
-    ControlErrorPipe,
-    ModalComponent,
   ],
   standalone: true,
 })
 export class VacanciesRightSideComponent {
   @Input() vacancy!: WritableSignal<Vacancy | undefined>;
+  @Output() sendResponse = new EventEmitter<void>();
 
-  private readonly vacancyDetailUIInfoService = inject(VacancyDetailUIInfoService);
-  private readonly vacancyDetailInfoService = inject(VacancyDetailInfoService);
-
-  protected readonly openModal = this.vacancyDetailUIInfoService.openModal;
-
-  /** Форма отправки отклика */
-  protected readonly sendForm = this.vacancyDetailUIInfoService.sendForm;
-  protected readonly sendFormIsSubmitting = this.vacancyDetailUIInfoService.sendFormIsSubmitting;
-
-  /** Объект с сообщениями об ошибках */
-  protected readonly errorMessage = ErrorMessage;
-
-  /**
-   * Обработчик отправки формы
-   * Валидирует форму и отправляет отклик на сервер
-   */
-  onSubmit(): void {
-    this.vacancyDetailInfoService.submitVacancyResponse();
-  }
-
-  closeSendResponseModal(): void {
-    this.vacancyDetailInfoService.closeSendResponseModal();
+  onSendResponseClick(): void {
+    this.sendResponse.emit();
   }
 }

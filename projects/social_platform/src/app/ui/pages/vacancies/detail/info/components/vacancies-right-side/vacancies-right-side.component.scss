@@ -35,44 +35,6 @@
       }
     }
   }
-
-  &__form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    label {
-      color: var(--black);
-    }
-
-    &--or {
-      color: var(--grey-for-text);
-      text-align: center;
-    }
-
-    &-error {
-      border: 0.5px solid var(--red);
-    }
-
-    &--cv {
-      ::ng-deep {
-        app-upload-file {
-          .control {
-            height: 80px;
-            border-radius: var(--rounded-xl);
-          }
-        }
-      }
-
-      &-empty {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        align-items: center;
-        color: var(--grey-for-text);
-      }
-    }
-  }
 }
 
 .cancel {
