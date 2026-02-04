@@ -33,7 +33,7 @@ export const OFFICE_ROUTES: Routes = [
       {
         path: "",
         pathMatch: "full",
-        redirectTo: "feed",
+        redirectTo: "program",
       },
       {
         path: "feed",
