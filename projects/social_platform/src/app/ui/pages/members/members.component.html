@@ -1,0 +1,41 @@
+<!-- @format -->
+
+<section class="page" #membersRoot>
+  <app-back namespace="участники" path="/office/feed"></app-back>
+
+  <div class="page__bar">
+    <div class="page__info">
+      <div class="page__outlet">
+        <form [formGroup]="searchForm">
+          <app-search
+            formControlName="search"
+            placeholder="введите имя участника"
+            [openable]="containerSm < appWidth"
+          ></app-search>
+        </form>
+
+        <ul class="page__list">
+          @for (member of members(); track member.id) {
+          <a [routerLink]="['/office/profile', member.id]">
+            <li>
+              <app-info-card type="members" [info]="member"></app-info-card>
+            </li>
+          </a>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="page__create">
+      <app-button size="medium" (click)="redirectToProfile()" customTypographyClass="text-body-12">
+        перейти в профиль
+      </app-button>
+
+      <div class="page__left">
+        <app-members-filters class="page__filter" [filterForm]="filterForm"></app-members-filters>
+        <app-soon-card title="статистика" description="количество проектов, команды, эффективность">
+        </app-soon-card>
+      </div>
+    </div>
+  </div>
+</section>

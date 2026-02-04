@@ -1,0 +1,172 @@
+<!-- @format -->
+
+<div class="profile__wrapper--education" [formGroup]="profileForm">
+  <div class="profile__column">
+    @if (showWorkFields()){
+    <div class="profile__column">
+      <div class="profile__column--date">
+        @if (profileForm.get("entryYearWork"); as entryYearWork) {
+        <fieldset>
+          <label for="entryYearWork" class="field-label">начало</label>
+          <app-select
+            size="big"
+            [selectedId]="selectedEntryYearWorkId()"
+            formControlName="entryYearWork"
+            placeholder="2023 год"
+            [options]="yearListEducation"
+          >
+            <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__entry"></i>
+          </app-select>
+
+          @if (entryYearWork | controlError: "required") {
+          <div class="text-body-10 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (profileForm.get("completionYearWork"); as completionYearWork) {
+        <fieldset>
+          <label for="completionYearWork" class="field-label">конец</label>
+          <app-select
+            size="big"
+            [selectedId]="selectedComplitionYearWorkId()"
+            formControlName="completionYearWork"
+            placeholder="2023 год"
+            [options]="yearListEducation"
+          >
+            <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+          </app-select>
+
+          @if (completionYearWork | controlError: "required") {
+          <div class="text-body-10 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        }
+      </div>
+    </div>
+
+    <div class="profile__column">
+      @if (profileForm.get("organization"); as organization) {
+      <fieldset>
+        <label for="organization" class="field-label">организация</label>
+        <app-input
+          size="big"
+          id="organization"
+          [error]="organization | controlError"
+          type="text"
+          placeholder="проколлаб"
+          formControlName="organization"
+          [maxLength]="50"
+        ></app-input>
+        @if (organization | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+
+    <div class="profile__column">
+      @if (profileForm.get("jobPosition"); as jobPosition) {
+      <fieldset>
+        <label for="jobPosition" class="field-label">должность</label>
+        <app-input
+          size="big"
+          id="jobPosition"
+          [error]="jobPosition | controlError"
+          type="text"
+          placeholder="дизайнер"
+          formControlName="jobPosition"
+        ></app-input>
+        @if (jobPosition | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+
+    <div class="profile__column">
+      @if (profileForm.get("descriptionWork"); as descriptionWork) {
+      <fieldset>
+        <label for="descriptionWork" class="field-label">краткое описание</label>
+        <app-textarea
+          size="big"
+          id="descriptionWork"
+          [error]="descriptionWork | controlError"
+          type="text"
+          placeholder="работал с данными, разрабатывал интерфейсы."
+          formControlName="descriptionWork"
+          [maxLength]="400"
+        ></app-textarea>
+        @if (descriptionWork | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+    }
+
+    <app-button
+      customTypographyClass="text-body-12"
+      size="big"
+      appearance="outline"
+      [disabled]="showWorkFields() && !isWorkDirty"
+      [ngStyle]="{
+        opacity: showWorkFields() && !isWorkDirty ? '0.6' : '1',
+        cursor: showWorkFields() && !isWorkDirty ? 'not-allowed' : 'pointer'
+      }"
+      class="profile__add-education"
+      (click)="addWork()"
+    >
+      <span>{{ editWorkClick() ? "сохранить изменения" : "добавить работу" }}</span>
+      <i appIcon icon="plus" appSquare="6"></i>
+    </app-button>
+  </div>
+
+  <div class="profile__education--list">
+    @if(workItems().length || workExperience.length){ @for (workItem of workExperience.value; track
+    $index) {
+    <div class="profile__education--info">
+      <p class="text-body-12 education__title">
+        {{ workItem.organizationName }}
+      </p>
+
+      <p class="text-body-10 education__text">
+        @if(workItem.entryYear && workItem.completionYear) {
+        {{ workItem.entryYear }} год • {{ workItem.completionYear }} год } @else if
+        (workItem.entryYear && !workItem.completionYear) { {{ workItem.entryYear }} год } @else if
+        (!workItem.entryYear && workItem.completionYear){ {{ workItem.completionYear }} год }
+      </p>
+
+      <div class="profile__education--card">
+        <div class="profile__education--info">
+          <p class="text-body-10 education__text">
+            {{ workItem.description }}
+          </p>
+
+          <p class="text-body-10 education__text">
+            {{ workItem.jobPosition }}
+          </p>
+        </div>
+
+        <div class="profile__action--icons">
+          <div class="edit-icon" (click)="editWork($index)">
+            <i class="edit" appIcon icon="edit-pen" appSquare="10"></i>
+          </div>
+
+          <div class="basket-icon" (click)="removeWork($index)">
+            <i appIcon icon="basket" appSquare="10"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    } }
+  </div>
+</div>

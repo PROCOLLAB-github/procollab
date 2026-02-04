@@ -1,0 +1,100 @@
+/** @format */
+
+import { Injectable } from "@angular/core";
+import { ApiService } from "projects/core";
+import { Observable } from "rxjs";
+import { HttpParams } from "@angular/common/http";
+import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
+import { ProjectRate } from "../../domain/project/project-rate";
+import { ProjectRatingCriterionOutput } from "../../domain/project/project-rating-criterion-output";
+import { ProjectRatingCriterion } from "../../domain/project/project-rating-criterion";
+
+/**
+ * Сервис для оценки проектов в рамках программы
+ *
+ * Предоставляет функциональность для экспертной оценки проектов:
+ * - Получение списка проектов для оценки с фильтрацией
+ * - Отправка оценок проектов
+ * - Преобразование данных форм в формат API
+ *
+ * Принимает:
+ * @param {ApiService} apiService - Сервис для HTTP запросов
+ *
+ * Методы:
+ * @method getAll(id, skip, take, isRatedByExpert?, nameContains?) - Получает проекты для оценки
+ *   @param {number} id - ID программы
+ *   @param {number} skip - Количество пропускаемых записей
+ *   @param {number} take - Количество загружаемых записей
+ *   @param {boolean} isRatedByExpert - Фильтр по статусу оценки экспертом
+ *   @param {string} nameContains - Фильтр по названию проекта
+ *
+ * @method rate(projectId: number, scores: ProjectRatingCriterionOutput[]) - Отправляет оценку проекта
+ *
+ * @method formValuesToDTO(criteria, outputVals) - Преобразует данные формы в DTO
+ *   Конвертирует объект вида {1: 'value', 2: '5', 3: true} в массив
+ *   [{criterionId: 1, value: 'value'}, {criterionId: 2, value: 5}, ...]
+ *   Обрабатывает типы данных согласно типу критерия (bool -> string, int -> number)
+ */
+@Injectable({
+  providedIn: "root",
+})
+export class ProjectRatingService {
+  private readonly RATE_PROJECT_URL = "/rate-project";
+
+  constructor(private readonly apiService: ApiService) {}
+
+  getAll(programId: number, params?: HttpParams): Observable<ApiPagination<ProjectRate>> {
+    return this.apiService.get(`${this.RATE_PROJECT_URL}/${programId}`, params);
+  }
+
+  postFilters(
+    programId: number,
+    filters: Record<string, string[]>,
+    params?: HttpParams
+  ): Observable<ApiPagination<ProjectRate>> {
+    let url = `${this.RATE_PROJECT_URL}/${programId}`;
+
+    if (params) {
+      url += `?${params.toString()}`;
+    }
+
+    return this.apiService.post(url, { filters: filters });
+  }
+
+  rate(projectId: number, scores: ProjectRatingCriterionOutput[]): Observable<void> {
+    return this.apiService.post(`${this.RATE_PROJECT_URL}/rate/${projectId}`, scores);
+  }
+
+  /*
+    функция преобразует данные из формы вида { 1: 'value', 2: '5', 3: true },
+    где ключом (key) является id критерия оценки, а значение является непосредственно значением оценки,
+    к виду [{ criterionId: 1, value: 'value' }, { criterionId: 2, value: 5 }, { criterionId: 3, value: 'true' }],
+  */
+  formValuesToDTO(
+    criteria: ProjectRatingCriterion[],
+    outputVals: Record<string, string | number>
+  ): ProjectRatingCriterionOutput[] {
+    const output: ProjectRatingCriterionOutput[] = [];
+
+    outputVals = Object.assign({}, outputVals);
+
+    for (const key in outputVals) {
+      // оценки с boolean значением переводятся в "string-boolean" (true => "true")
+      if (typeof outputVals[key] === "boolean") {
+        const boolString = String(outputVals[key]);
+        outputVals[key] = boolString.charAt(0).toUpperCase() + boolString.slice(1);
+      }
+      // оценки с числовым значением поступают в виде string (из инпута), и их требуется привести к типу number
+      // поскольку типом string могут обладать не только оценки с числовым значением, но и "комментарий",
+      // нужно явно убедиться, что критерий именно числовой, для чего осуществляется поиск критерия по id
+      // в списке критериев оценки проекта и проверка его принадлежности типу "int"
+      if (criteria.find(c => c.id === Number(key))?.type === "int") {
+        outputVals[key] = Number(outputVals[key]);
+      }
+
+      output.push({ criterionId: Number(key), value: outputVals[key] });
+    }
+
+    return output;
+  }
+}

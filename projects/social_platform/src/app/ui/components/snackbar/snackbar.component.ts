@@ -1,10 +1,10 @@
 /** @format */
 
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { SnackbarService } from "@ui/services/snackbar.service";
+import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { Snack } from "@ui/models/snack.model";
 import { Subscription } from "rxjs";
-import { AnimationService } from "@ui/services/animation.service";
+import { AnimationService } from "@ui/services/animation/animation.service";
 import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
 

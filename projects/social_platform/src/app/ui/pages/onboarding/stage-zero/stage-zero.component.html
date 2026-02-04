@@ -1,0 +1,651 @@
+<!-- @format -->
+
+@if (profile()) {
+<div class="page">
+  <div class="auth__greeting">
+    <h3 class="auth__title">Привет, {{ profile()!.firstName }} {{ profile()!.lastName }}! ✌️</h3>
+    <p class="auth__info">Расскажите о себе, чтобы ваше резюме было сильным и отражало опыт</p>
+  </div>
+  <form [formGroup]="stageForm" class="page__form" (submit)="onSubmit()">
+    <div class="page__first-row">
+      @if (stageForm.get("avatar"); as avatar) {
+      <fieldset class="page__field">
+        <div class="content">
+          <p class="text-bold-body-14">Фотография профиля*</p>
+          <app-tooltip
+            [text]="
+              'Идеальная фотография для резюме: свежая, с вашим лицом, хорошо различимым на нейтральном фоне (котиков мы конечно любим, но их не в этот раз)'
+            "
+            [isVisible]="isHintPhotoVisible()"
+            [position]="'right'"
+            [tooltipWidth]="300"
+            customClass="content__hint"
+            (show)="toggleTooltip('show', 'photo')"
+            (hide)="toggleTooltip('hide', 'photo')"
+          ></app-tooltip>
+        </div>
+        <app-avatar-control
+          type="project"
+          id="avatar"
+          formControlName="avatar"
+          [error]="avatar | controlError"
+        ></app-avatar-control>
+        @if (avatar | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.EMPTY_AVATAR }}
+        </div>
+        }
+      </fieldset>
+      } @if (stageForm.get("city"); as city) {
+      <fieldset class="page__field">
+        <label for="city" class="field-label">Город*</label>
+        <app-input
+          size="big"
+          id="city"
+          [haveHint]="true"
+          [tooltipText]="'Напишите город, в которым вы сейчас живете'"
+          [tooltipPosition]="'right'"
+          [tooltipWidth]="220"
+          [error]="city | controlError"
+          type="text"
+          placeholder="Где вы живете?"
+          formControlName="city"
+        >
+        </app-input>
+        @if (city | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </div>
+
+    <div class="page__first-row">
+      <div class="content">
+        <div class="content">
+          <p class="text-bold-body-14">Образование</p>
+          <app-tooltip
+            [text]="
+              'Заполните информацию о том, что вы изучали. Даже если это трехнедельный интенсив по созданию роликов – для резюме важна каждая деталь'
+            "
+            [isVisible]="isHintEducationVisible()"
+            [position]="'right'"
+            [tooltipWidth]="300"
+            customClass="content__hint"
+            (show)="toggleTooltip('show', 'education')"
+            (hide)="toggleTooltip('hide', 'education')"
+          ></app-tooltip>
+        </div>
+      </div>
+
+      @if (stageForm.get("educationLevel"); as educationLevel) {
+      <fieldset>
+        <label for="educationLevel" class="field-label">Уровень образования</label>
+        <app-select
+          size="big"
+          [selectedId]="selectedEducationLevelId()"
+          formControlName="educationLevel"
+          placeholder="Высшее образование-магистратура"
+          [options]="educationLevelList"
+        >
+          <i appIcon icon="arrow-no-body" appSquare="32"></i>
+        </app-select>
+        @if (educationLevel | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+
+      <div class="page__years">
+        @if (stageForm.get("entryYear"); as entryYear) {
+        <fieldset class="years__left">
+          <label for="entryYear" class="field-label">Дата начала</label>
+          <app-select
+            size="big"
+            formControlName="entryYear"
+            placeholder="2023 год"
+            [options]="yearListEducation"
+          >
+            <i appIcon icon="arrow-no-body" appSquare="32"></i>
+          </app-select>
+
+          @if (entryYear | controlError: "required") {
+          <div class="text-body-10 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (stageForm.get("completionYear"); as completionYear) {
+        <fieldset class="years__right">
+          <label for="completionYear" class="field-label">Дата окончания</label>
+          <app-select
+            size="big"
+            formControlName="completionYear"
+            placeholder="2023 год"
+            [options]="yearListEducation"
+          >
+            <i appIcon icon="arrow-no-body" appSquare="32"></i>
+          </app-select>
+          @if (completionYear | controlError: "required") {
+          <div class="text-body-10 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        }
+      </div>
+
+      @if (stageForm.get("organizationName"); as organizationName) {
+      <fieldset class="page__field">
+        <label for="organizationName" class="field-label">Название учреждения</label>
+        <app-input
+          size="big"
+          id="organizationName"
+          [error]="organizationName | controlError"
+          type="text"
+          placeholder="вуз / колледж / школа"
+          formControlName="organizationName"
+        ></app-input>
+        @if (organizationName | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (stageForm.get("educationStatus"); as educationStatus) {
+      <fieldset>
+        <label for="educationStatus" class="field-label">Статус</label>
+        <app-select
+          size="big"
+          [selectedId]="selectedEducationStatusId()"
+          formControlName="educationStatus"
+          placeholder="Студент"
+          [options]="educationStatusList"
+        >
+          <i appIcon icon="arrow-no-body" appSquare="32"></i>
+        </app-select>
+        @if (educationStatus | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (stageForm.get("description"); as description) {
+      <fieldset class="page__field">
+        <label for="description" class="field-label">Профиль обучения</label>
+        <app-input
+          size="big"
+          id="description"
+          [haveHint]="true"
+          [tooltipText]="
+            'Мат. вертикаль, прикладная информатика, биотехнологии – комментарии излишни, просто пишите!'
+          "
+          [tooltipPosition]="'right'"
+          [tooltipWidth]="280"
+          [error]="description | controlError"
+          type="text"
+          placeholder="Бизнес информатика"
+          formControlName="description"
+        >
+        </app-input>
+        @if (description | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+
+      <div class="profile__row education__block">
+        <app-button
+          size="big"
+          customTypographyClass="text-body-12"
+          [disabled]="!isEducationDirty"
+          [ngStyle]="{
+            opacity: !isEducationDirty ? '0.6' : '1',
+            cursor: !isEducationDirty ? 'not-allowed' : 'pointer'
+          }"
+          class="page__add-education"
+          (click)="addEducation()"
+        >
+          <span>{{ editEducationClick() ? "Созранить изменения" : "Добавить образование" }}</span>
+          <i appIcon icon="plus" appSquare="12"></i>
+        </app-button>
+
+        @if(educationItems().length || education.length){ @for (educationItem of education.value;
+        track $index) {
+        <div class="education__remove">
+          <div class="education__info">
+            <p class="text-body-12 education__text">
+              {{ educationItem.organizationName }}
+
+              @if(educationItem.entryYear && educationItem.completionYear) {
+              {{ educationItem.entryYear }} год - {{ educationItem.completionYear }} год } @else if
+              (educationItem.entryYear && !educationItem.completionYear) {
+              {{ educationItem.entryYear }} год } @else if (!educationItem.entryYear &&
+              educationItem.completionYear){ {{ educationItem.completionYear }} год }
+
+              {{ educationItem.description }} {{ educationItem.educationStatus }}
+              {{ educationItem.educationLevel }}
+            </p>
+            <i
+              class="edit"
+              appIcon
+              icon="edit-pen"
+              appSquare="16"
+              (click)="editEducation($index)"
+            ></i>
+          </div>
+          <app-button class="basket" color="red" (click)="removeEducation($index)">
+            <i appIcon icon="basket" appSquare="24"></i>
+          </app-button>
+        </div>
+        } }
+      </div>
+    </div>
+
+    <div class="page__first-row">
+      <div class="content">
+        <div class="content">
+          <p class="text-bold-body-14">Место работы</p>
+          <app-tooltip
+            [text]="
+              'Укажите свой опыт. Разработка бота для школы, дизайн сайта для родительского бизнеса – любой опыт, который оценила какая-либо организация – ваш ключ к первой работе.'
+            "
+            [isVisible]="isHintWorkVisible()"
+            [position]="'right'"
+            [tooltipWidth]="350"
+            customClass="work-section__hint"
+            (show)="toggleTooltip('show', 'work')"
+            (hide)="toggleTooltip('hide', 'work')"
+          ></app-tooltip>
+        </div>
+      </div>
+
+      @if (stageForm.get("organizationNameWork"); as organizationNameWork) {
+      <fieldset>
+        <label for="organizationNameWork" class="field-label">Название</label>
+        <app-input
+          size="big"
+          id="organizationNameWork"
+          [haveHint]="true"
+          [tooltipText]="
+            'Укажите название организации, которая оценивала/принимала вашу работу (ту самую школу, для которой вы делали бота)'
+          "
+          [tooltipPosition]="'right'"
+          [tooltipWidth]="300"
+          [error]="organizationNameWork | controlError"
+          type="text"
+          placeholder="Проколлаб"
+          formControlName="organizationNameWork"
+        >
+        </app-input>
+        @if (organizationNameWork | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+
+      <div class="page__years">
+        @if (stageForm.get("entryYearWork"); as entryYearWork) {
+        <fieldset class="years__left">
+          <label for="entryYearWork" class="field-label">Дата начала</label>
+          <app-select
+            size="big"
+            [selectedId]="selectedEntryYearWorkId()"
+            formControlName="entryYearWork"
+            placeholder="2023 год"
+            [options]="yearListEducation"
+          >
+            <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__entry"></i>
+          </app-select>
+
+          @if (entryYearWork | controlError: "required") {
+          <div class="text-body-10 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        } @if (stageForm.get("completionYearWork"); as completionYearWork) {
+        <fieldset class="years__right">
+          <label for="completionYearWork" class="field-label">Дата окончания</label>
+          <app-select
+            size="big"
+            [selectedId]="selectedComplitionYearWorkId()"
+            formControlName="completionYearWork"
+            placeholder="2023 год"
+            [options]="yearListEducation"
+          >
+            <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+          </app-select>
+
+          @if (completionYearWork | controlError: "required") {
+          <div class="text-body-10 error">
+            {{ errorMessage.VALIDATION_REQUIRED }}
+          </div>
+          }
+        </fieldset>
+        }
+      </div>
+
+      @if (stageForm.get("jobPosition"); as jobPosition) {
+      <fieldset>
+        <label for="jobPosition" class="field-label">Должность</label>
+        <app-input
+          size="big"
+          id="jobPosition"
+          [error]="jobPosition | controlError"
+          type="text"
+          placeholder="Дизайнер"
+          formControlName="jobPosition"
+        ></app-input>
+        @if (jobPosition | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (stageForm.get("descriptionWork"); as descriptionWork) {
+      <fieldset>
+        <label for="descriptionWork" class="field-label">Краткое описание</label>
+        <app-input
+          size="big"
+          id="descriptionWork"
+          [haveHint]="true"
+          [tooltipText]="
+            'В свободной форме расскажите, чем занимались в рамках рабочего опыта (смотрели рилсы, двигали пиксели, зарабатывали деньги) P.S. Шутка'
+          "
+          [tooltipPosition]="'right'"
+          [tooltipWidth]="300"
+          [error]="descriptionWork | controlError"
+          type="text"
+          placeholder="Образовательная платформа"
+          formControlName="descriptionWork"
+        >
+        </app-input>
+        @if (descriptionWork | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+
+      <div class="page__row education__block">
+        <app-button
+          customTypographyClass="text-body-12"
+          size="big"
+          [disabled]="!isWorkDirty"
+          [ngStyle]="{
+            opacity: !isWorkDirty ? '0.6' : '1',
+            cursor: !isWorkDirty ? 'not-allowed' : 'pointer'
+          }"
+          class="page__add-education"
+          (click)="addWork()"
+        >
+          <span>{{ editWorkClick() ? "Сохранить изменения" : "Добавить место работы" }}</span>
+          <i appIcon icon="plus" appSquare="12"></i>
+        </app-button>
+
+        @if(workItems().length || workExperience.length){ @for (workItem of workExperience.value;
+        track $index) {
+        <div class="education__remove">
+          <div class="education__info">
+            <p class="text-body-16 education__text">
+              {{ workItem.organizationName }}
+              @if(workItem.entryYear && workItem.completionYear) {
+              {{ workItem.entryYear }} год - {{ workItem.completionYear }} год } @else if
+              (workItem.entryYear && !workItem.completionYear) { {{ workItem.entryYear }} год }
+              @else if (!workItem.entryYear && workItem.completionYear){
+              {{ workItem.completionYear }} год }
+              {{ workItem.description }}
+              {{ workItem.jobPosition }}
+            </p>
+            <i class="edit" appIcon icon="edit-pen" appSquare="20" (click)="editWork($index)"></i>
+          </div>
+          <app-button class="basket" color="red" (click)="removeWork($index)">
+            <i appIcon icon="basket" appSquare="24"></i>
+          </app-button>
+        </div>
+        } }
+      </div>
+    </div>
+
+    <div class="page__first-row">
+      <ng-container formArrayName="achievements">
+        <ul>
+          @for (control of achievements.controls; track control.value.id; let i = $index) {
+          <li class="page__achievement">
+            <form [formGroupName]="i" class="achievement">
+              <div class="achievement__first-row">
+                @if (achievements.at(i)?.get("title"); as title) {
+                <fieldset>
+                  <div class="content">
+                    <p class="text-bold-body-14">Достижения</p>
+                    <app-tooltip
+                      [text]="
+                        'Кенгуру, медвежонок, а может победа во всероссийском акселераторе технологических проектов? Твоему будущему работодателю надо видеть, что ты самый активный!'
+                      "
+                      [isVisible]="isHintAchievementsVisible()"
+                      [position]="'right'"
+                      [tooltipWidth]="300"
+                      customClass="content__hint"
+                      (show)="toggleTooltip('show', 'achievements')"
+                      (hide)="toggleTooltip('hide', 'achievements')"
+                    ></app-tooltip>
+                  </div>
+                  <app-input
+                    size="big"
+                    [error]="title | controlError"
+                    placeholder="Название конкурса"
+                    formControlName="title"
+                  ></app-input>
+                  @if (title | controlError: "required") {
+                  <div class="text-body-10 error">
+                    {{ errorMessage.VALIDATION_REQUIRED }}
+                  </div>
+                  }
+                </fieldset>
+                }
+                <app-button
+                  size="big"
+                  class="achievement__remove"
+                  color="red"
+                  (click)="removeAchievement(i)"
+                >
+                  <span>Удалить</span>
+                  <i appIcon icon="basket" appSquare="24"></i>
+                </app-button>
+              </div>
+              @if (achievements.at(i).get("status"); as status) {
+              <fieldset>
+                <app-input
+                  size="big"
+                  [error]="status | controlError"
+                  placeholder="Занятое место"
+                  formControlName="status"
+                ></app-input>
+                @if (status | controlError: "required") {
+                <div class="text-body-10 error">
+                  {{ errorMessage.VALIDATION_REQUIRED }}
+                </div>
+                }
+              </fieldset>
+              }
+            </form>
+          </li>
+          }
+        </ul>
+      </ng-container>
+      <app-button
+        size="big"
+        customTypographyClass="text-body-12"
+        class="page__add-achievement"
+        (click)="addAchievement()"
+      >
+        <span>Добавить достижение</span>
+        <i appIcon icon="plus" appSquare="12"></i>
+      </app-button>
+    </div>
+
+    <div class="page__first-row">
+      <div class="content">
+        <div class="content">
+          <p class="text-bold-body-14">Язык</p>
+          <app-tooltip
+            [text]="
+              'Вот и понадобились те самые много лет школьной программы английского, французского, китайского, а может и японского – рассказывайте все!'
+            "
+            [isVisible]="isHintLanguageVisible()"
+            [position]="'right'"
+            [tooltipWidth]="300"
+            customClass="content__hint"
+            (show)="toggleTooltip('show', 'language')"
+            (hide)="toggleTooltip('hide', 'language')"
+          ></app-tooltip>
+        </div>
+      </div>
+      <div class="page__years--wrapper">
+        <div class="page__years">
+          @if (stageForm.get("language"); as language) {
+          <fieldset class="years__left">
+            <label for="language" class="field-label">Уровень</label>
+            <app-select
+              size="big"
+              [selectedId]="selectedLanguageId()"
+              formControlName="language"
+              placeholder="Английский"
+              [options]="languageList"
+            >
+              <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+            </app-select>
+
+            @if (language | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (stageForm.get("languageLevel"); as languageLevel) {
+          <fieldset class="years__right" style="margin-top: 26px">
+            <app-select
+              size="big"
+              [selectedId]="selectedLanguageLevelId()"
+              formControlName="languageLevel"
+              placeholder="B1"
+              [options]="languageLevelList"
+            >
+              <i appIcon icon="arrow-no-body" appSquare="32" class="arrow-list__end"></i>
+            </app-select>
+
+            @if (languageLevel | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
+        <span class="text-body-12 page__years--attention"
+          >Количество добавляемых языков не более 4-х</span
+        >
+      </div>
+
+      <app-button
+        size="big"
+        customTypographyClass="text-body-12"
+        [disabled]="!isLanguageDirty || languageItems().length === 4 || userLanguages.length === 4"
+        [ngStyle]="{
+          opacity: !isLanguageDirty ? '0.6' : '1',
+          cursor: !isLanguageDirty ? 'not-allowed' : 'pointer'
+        }"
+        class="page__add-education"
+        (click)="addLanguage()"
+      >
+        <span>{{ editLanguageClick() ? "Сохранить изменения" : "Добавить язык" }}</span>
+        <i appIcon icon="plus" appSquare="12"></i>
+      </app-button>
+
+      <div class="page__row education__block">
+        @if(languageItems().length || userLanguages.length){ @for (languageItem of
+        userLanguages.value; track $index) {
+        <div class="education__remove">
+          <div class="education__info">
+            <p class="text-body-16 education__text">
+              {{ languageItem.language }} {{ languageItem.languageLevel }}
+            </p>
+            <i
+              class="edit"
+              appIcon
+              icon="edit-pen"
+              appSquare="20"
+              (click)="editLanguage($index)"
+            ></i>
+          </div>
+          <app-button class="basket" color="red" (click)="removeLanguage($index)">
+            <i appIcon icon="basket" appSquare="24"></i>
+          </app-button>
+        </div>
+        } }
+      </div>
+    </div>
+
+    <div class="page__buttons">
+      <app-button
+        customTypographyClass="text-body-12"
+        size="big"
+        (click)="onSkipRegistration()"
+        color="grey"
+        [loader]="skipSubmitting()"
+        >закончить регистрацию позже</app-button
+      >
+      <app-button
+        size="big"
+        [disabled]="
+          editEducationClick() ||
+          editWorkClick() ||
+          editLanguageClick() ||
+          isEducationDirty ||
+          isWorkDirty
+        "
+        [ngStyle]="{
+          opacity:
+            editEducationClick() ||
+            editWorkClick() ||
+            editLanguageClick() ||
+            isEducationDirty ||
+            isWorkDirty
+              ? '0.6'
+              : '1',
+          cursor:
+            editEducationClick() ||
+            editWorkClick() ||
+            editLanguageClick() ||
+            isEducationDirty ||
+            isWorkDirty
+              ? 'not-allowed'
+              : 'pointer'
+        }"
+        type="submit"
+        customTypographyClass="text-body-12"
+        [loader]="stageSubmitting()"
+        >продолжить</app-button
+      >
+    </div>
+  </form>
+  <app-modal [open]="isModalErrorYear()" (openChange)="isModalErrorYear.set(!isModalErrorYear())">
+    <div class="cancel">
+      <div class="cancel__top">
+        <i (click)="isModalErrorYear.set(false)" appIcon icon="cross" class="cancel__cross"></i>
+        <p class="cancel__title text-bold-body-14">Произошла ошибка при отправке данных!</p>
+      </div>
+      <p class="text-body-10 cancel__text">{{ isModalErrorYearText() }}.</p>
+    </div>
+  </app-modal>
+</div>
+}

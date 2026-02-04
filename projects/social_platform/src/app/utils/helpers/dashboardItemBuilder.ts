@@ -1,6 +1,6 @@
 /** @format */
 
-import { Project } from "@office/models/project.model";
+import { Project } from "../../domain/project/project.model";
 
 export interface DashboardItem {
   sectionName: string;

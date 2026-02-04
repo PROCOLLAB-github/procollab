@@ -3,7 +3,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
 import { UploadFileComponent } from "./upload-file.component";
-import { FileService } from "@core/services/file.service";
+import { FileService } from "projects/core/src/lib/services/file/file.service";
 import { of } from "rxjs";
 
 describe("UploadFileComponent", () => {

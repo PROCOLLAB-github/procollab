@@ -1,0 +1,165 @@
+<!-- @format -->
+
+<div
+  class="page"
+  #listRoot
+  [style.grid-template-columns]="listType() === 'members' ? '10fr' : '8fr 2fr'"
+>
+  <div class="page__outlet">
+    <div class="page__search">
+      <form [formGroup]="searchForm">
+        <app-search formControlName="search"></app-search>
+      </form>
+    </div>
+
+    <div class="filter-toggle page__filter-toggle" (click)="isFilterOpen.set(!isFilterOpen())">
+      <span>Фильтры</span>
+      <i appIcon icon="filter" appSquare="34"></i>
+    </div>
+
+    <ul class="page__list" [class.page__list--rating]="listType() === 'rating'">
+      @for (listItem of searchedList(); track listItem.id) {
+      <li class="page__item">
+        @if (listType() === 'projects' || listType() === 'members') {
+        <a [routerLink]="routerLink(listItem.id)">
+          <app-info-card
+            [type]="listType()"
+            [profileId]="listItem.id"
+            [isSubscribed]="profileProjSubsIds()?.includes(listItem.id)"
+            [info]="listItem"
+          ></app-info-card>
+        </a>
+        } @else {
+        <app-rating-card [project]="listItem"></app-rating-card>
+        }
+      </li>
+      }
+    </ul>
+  </div>
+
+  @if (listType() !== 'members') {
+  <div class="page__create">
+    <div class="page__left">
+      @if (listType() === 'projects' || listType() === 'rating') {
+      <div class="filter page__filter" [class.page__filter--open]="isFilterOpen()">
+        <div class="filter__overlay" (click)="isFilterOpen.set(false)"></div>
+        <div class="filter__body" #filterBody>
+          <div
+            class="filter__bar"
+            (touchstart)="onSwipeStart($event)"
+            (touchmove)="onSwipeMove($event)"
+            (touchend)="onSwipeEnd($event)"
+          ></div>
+          <app-program-projects-filter
+            (closeFilter)="closeFilter()"
+            (clear)="onClearFilters()"
+          ></app-program-projects-filter>
+
+          @if (listType() === 'projects') {
+          <div class="page__export" style="margin-top: 0">
+            <app-button
+              [loader]="loadingExportProjects()"
+              customTypographyClass="text-body-12"
+              size="medium"
+              (click)="downloadProjects()"
+            >
+              <span class="text-body-12">выгрузка проектов</span>
+              <i appIcon icon="download" appSquare="18"></i>
+            </app-button>
+
+            <app-button
+              [loader]="loadingExportSubmittedProjects()"
+              customTypographyClass="text-body-12"
+              size="medium"
+              (click)="downloadSubmittedProjects()"
+            >
+              <span class="text-body-12">сданные решения</span>
+              <i appIcon icon="download" appSquare="18"></i>
+            </app-button>
+          </div>
+          } @else {
+          <div class="page__export">
+            <app-button
+              [loader]="loadingExportRates()"
+              customTypographyClass="text-body-12"
+              size="medium"
+              (click)="downloadRates()"
+            >
+              <span class="text-body-12">выгрузка оценок</span>
+              <i appIcon icon="download" appSquare="18"></i>
+            </app-button>
+
+            <app-button
+              [disabled]="true"
+              style="opacity: 0.5"
+              [loader]="loadingExportCalculations()"
+              customTypographyClass="text-body-12"
+              size="medium"
+              (click)="downloadCalculations()"
+            >
+              <span class="text-body-12">итоговые расчеты</span>
+              <i appIcon icon="download" appSquare="18"></i>
+            </app-button>
+          </div>
+          }
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+  } @if (listType() !== 'members' && listType() !== 'projects') {
+  <div class="page__tooltip">
+    <div class="tooltip">
+      <app-tooltip color="grey" iconSize="40" (show)="isHintExpertsVisible.set(true)"></app-tooltip>
+
+      @if (isHintExpertsVisible()) {
+      <div class="tooltip__wrapper" (mouseleave)="isHintExpertsVisible.set(false)">
+        <p class="tooltip__text text-body-10">
+          Нажмите, чтобы открыть подсказку и узнать больше о процессе оценивания проектов
+        </p>
+        <p class="tooltip__text text-body-10" (click)="openHintModal($event)">подробнее</p>
+      </div>
+      }
+    </div>
+  </div>
+
+  <app-modal [open]="isHintExpertsModal()" (openChange)="isHintExpertsModal.set(false)">
+    <div class="cancel">
+      <div class="cancel__top">
+        <p class="cancel__title text-body-14">Как выставить оценки проекту</p>
+      </div>
+
+      <div class="cancel__text-block">
+        <p class="text-body-12">
+          Перед стартом оценки, <br />
+          настройте фильтрацию справа – выберите регион или конкретный кейс, а также работы, которые
+          ранее не были оценены другими экспертами
+        </p>
+
+        <p class="text-body-12">
+          После изучения материалов участников (описания и презентации проекта), проставьте оценки
+          по критериям. При необходимости оставьте небольшой комментарий
+        </p>
+
+        <p class="text-body-12">
+          Для завершения оценивания, нажмите «оценить проект» – ваша оценка сохранилась в системе
+        </p>
+
+        <p class="text-body-12">
+          Вы можете исправить свою оценку или комментарий – для этого нажмите на иконку карандаша
+          справа от кнопки «проект оценен». Этот функционал появится после сохранения оценки
+        </p>
+
+        <p class="text-body-12">Благодарим за вашу работу!</p>
+      </div>
+
+      <app-button
+        customTypographyClass="text-body-12"
+        size="medium"
+        (click)="isHintExpertsModal.set(false)"
+        >спасибо, понятно</app-button
+      >
+    </div>
+  </app-modal>
+  }
+</div>

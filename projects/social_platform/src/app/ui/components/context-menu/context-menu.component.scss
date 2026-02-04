@@ -1,0 +1,58 @@
+/** @format */
+
+.context-menu {
+  position: fixed;
+  z-index: 9999;
+  padding: 8px 0;
+  margin: 0;
+  list-style: none;
+  background-color: white;
+  border-radius: 8px;
+  outline: none;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 12%);
+  transition: opacity 0.15s ease;
+
+  &__item {
+    padding: 10px 16px;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: rgb(0 0 0 / 4%);
+    }
+
+    &:active {
+      background-color: rgb(0 0 0 / 8%);
+    }
+
+    &--red {
+      color: #f44336;
+
+      &:hover {
+        background-color: rgb(244 67 54 / 8%);
+      }
+
+      &:active {
+        background-color: rgb(244 67 54 / 16%);
+      }
+    }
+
+    &--primary {
+      color: #2196f3;
+    }
+
+    &--disabled {
+      pointer-events: none;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+
+  &__divider {
+    height: 1px;
+    margin: 8px 0;
+    background-color: rgb(0 0 0 / 8%);
+  }
+}

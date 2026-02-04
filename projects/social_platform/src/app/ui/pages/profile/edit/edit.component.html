@@ -1,0 +1,203 @@
+<!-- @format -->
+
+@if (profileForm.get("userType"); as currentType) {
+<div class="profile__top">
+  <div class="profile__back" [routerLink]="'/office/profile/' + profileId()">
+    <i appIcon icon="left-arrow" appSquare="24"></i>
+    <h1 class="profile__title">редактирование профиля</h1>
+  </div>
+
+  <div appEditorSubmitButton containerSelector=".profile" class="profile__save">
+    <app-button
+      size="medium"
+      [disabled]="
+        editEducationClick() ||
+        editWorkClick() ||
+        editLanguageClick() ||
+        isEducationDirty ||
+        isWorkDirty ||
+        isLanguageDirty ||
+        isAchievementsDirty
+      "
+      [loader]="profileFormSubmitting()"
+      [ngStyle]="{
+        opacity:
+          editEducationClick() ||
+          editWorkClick() ||
+          editLanguageClick() ||
+          isEducationDirty ||
+          isWorkDirty ||
+          isLanguageDirty ||
+          isAchievementsDirty
+            ? '0.6'
+            : '1',
+        cursor:
+          editEducationClick() ||
+          editWorkClick() ||
+          editLanguageClick() ||
+          isEducationDirty ||
+          isWorkDirty ||
+          isLanguageDirty ||
+          isAchievementsDirty
+            ? 'not-allowed'
+            : 'pointer'
+      }"
+      customTypographyClass="text-body-12"
+      (click)="saveProfile()"
+    >
+      cохранить</app-button
+    >
+  </div>
+</div>
+
+<main class="profile">
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile__form">
+    <app-project-navigation
+      (stepChange)="navigateStep($event)"
+      [navItems]="navProfileItems"
+      style="width: 100%"
+    ></app-project-navigation>
+
+    <div class="profile__wrapper">
+      @if(editingStep() === 'main'){
+      <app-profile-main-step
+        (openSpecsGroupsModal)="openSpecializationGroup()"
+      ></app-profile-main-step>
+      } @if (editingStep() === 'education') {
+      <app-profile-education-step
+        [isEducationDirty]="isEducationDirty"
+      ></app-profile-education-step>
+      } @if (editingStep() === 'experience') {
+      <app-profile-experience-step [isWorkDirty]="isWorkDirty"></app-profile-experience-step>
+      } @if(editingStep() === 'achievements'){
+      <app-profile-achievements-step
+        [isAchievementsDirty]="isAchievementsDirty"
+      ></app-profile-achievements-step>
+      } @if (editingStep() === 'skills') {
+      <app-profile-skills-step
+        [isLanguageDirty]="isLanguageDirty"
+        (openSkillsGroupsModal)="toggleSkillsGroupsModal()"
+      ></app-profile-skills-step>
+      } @else if (editingStep() === 'settings') {
+      <div class="profile__wrapper--settings">
+        <app-button
+          (click)="isModalDeleteProfile.set(true)"
+          customTypographyClass="text-body-12"
+          color="red"
+          size="big"
+          >удалить профиль</app-button
+        >
+      </div>
+      }
+    </div>
+  </form>
+</main>
+}
+
+<app-modal
+  [open]="isModalErrorSkillsChoose()"
+  (openChange)="isModalErrorSkillsChoose.set(!isModalErrorSkillsChoose())"
+>
+  <div class="cancel">
+    <div class="cancel__top">
+      <i
+        (click)="isModalErrorSkillsChoose.set(false)"
+        appIcon
+        appSquare="10"
+        icon="cross"
+        class="cancel__cross"
+      ></i>
+      <p class="cancel__title text-body-14">произошла ошибка при редактировании!</p>
+    </div>
+    @if (isModalErrorSkillChooseText()) {
+    <p class="text-body-12 cancel__text">{{ isModalErrorSkillChooseText() }}.</p>
+    } @else {
+    <p class="text-body-12 cancel__text">
+      для публикации профиля, нужно заполнить все <strong>обязательные поля</strong> (они будут
+      <strong>подсвечены&nbsp;<span>красным</span></strong
+      >).
+    </p>
+    }
+  </div>
+</app-modal>
+
+<app-modal
+  [open]="isModalDeleteProfile()"
+  (openChange)="isModalDeleteProfile.set(!isModalDeleteProfile())"
+>
+  <div class="cancel">
+    <div class="cancel__top">
+      <p class="cancel__title text-body-14">подтвердите удаление аккаунта</p>
+      <i appIcon icon="sad-smile" appSquare="50" class="cancel__delete-icon"></i>
+    </div>
+
+    <app-button customTypographyClass="text-body-12" size="big" color="red"
+      >удалить аккаунт</app-button
+    >
+  </div>
+</app-modal>
+
+<app-modal
+  [open]="specsGroupsModalOpen()"
+  (openChange)="specsGroupsModalOpen.set(!specsGroupsModalOpen())"
+  class="modal"
+>
+  <div class="modal__wrapper">
+    <h4 class="text-heading-4">более специальностей</h4>
+    <div class="modal__content">
+      <div class="modal__specs-groups">
+        <ul>
+          @for (specsGroup of (nestedSpecs$ | async)?.slice(0, 7); track specsGroup.id) {
+          <li>
+            <app-specializations-group
+              [title]="specsGroup.name"
+              [options]="specsGroup.specializations"
+              [hasOpenGroups]="hasOpenSpecializationsGroups()"
+              [disabled]="isSpecializationGroupDisabled(specsGroup.name)"
+              (groupToggled)="onSpecializationsGroupToggled($event, specsGroup.name)"
+              (selectOption)="onSelectSpec($event)"
+            ></app-specializations-group>
+          </li>
+          }
+        </ul>
+      </div>
+    </div>
+    <app-button
+      customTypographyClass="text-body-12"
+      size="medium"
+      (click)="toggleSpecsGroupsModal()"
+      >сохранить</app-button
+    >
+  </div>
+</app-modal>
+
+<app-modal [open]="skillsGroupsModalOpen()" class="modal">
+  <div class="modal__wrapper">
+    <h4 class="text-heading-4">библиотека навыков</h4>
+    <div class="modal__content">
+      <div class="modal__skills-groups">
+        <ul>
+          @for (skillsGroup of nestedSkills$ | async; track skillsGroup.id) {
+          <li>
+            <app-skills-group
+              [title]="skillsGroup.name"
+              [options]="skillsGroup.skills"
+              [selected]="this.profileForm.getRawValue().skills"
+              [disabled]="isGroupDisabled(skillsGroup.id)"
+              [hasOpenGroups]="openGroupIndex !== null"
+              (optionToggled)="onToggleSkill($event)"
+              (groupToggled)="onGroupToggled(skillsGroup.id, $event)"
+            ></app-skills-group>
+          </li>
+          }
+        </ul>
+      </div>
+    </div>
+    <app-button
+      customTypographyClass="text-body-12"
+      size="medium"
+      (click)="toggleSkillsGroupsModal()"
+      >Сохранить</app-button
+    >
+  </div>
+</app-modal>

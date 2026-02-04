@@ -11,17 +11,17 @@ import {
   Output,
   ViewChild,
 } from "@angular/core";
-import { ChatMessage } from "@models/chat-message.model";
-import { SnackbarService } from "@ui/services/snackbar.service";
+import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
+import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { DomPortal } from "@angular/cdk/portal";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
-import { AuthService } from "@auth/services";
 import { DayjsPipe } from "projects/core";
 import { IconComponent } from "@ui/components";
 import { FileItemComponent } from "../file-item/file-item.component";
 import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "../avatar/avatar.component";
 import { ClickOutsideModule } from "ng-click-outside";
+import { AuthService } from "../../../api/auth";
 
 /**
  * Компонент сообщения в чате с контекстным меню и файловыми вложениями.

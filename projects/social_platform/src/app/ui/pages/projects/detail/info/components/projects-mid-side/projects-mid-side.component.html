@@ -1,0 +1,57 @@
+<!-- @format -->
+
+<div #contentEl class="project__content">
+  <div class="about project__about">
+    <div class="about__head">
+      <h3 class="text-body-12 about__title">о проекте</h3>
+      <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
+    </div>
+    @if (project()!.description) {
+    <div class="text-body-10 about__text">
+      <p #descEl [innerHTML]="project()!.description | parseLinks | parseBreaks"></p>
+      @if (descriptionExpandable()) {
+      <div
+        class="read-more text-body-10"
+        (click)="onExpandDescription(descEl, 'expanded', readFullDescription())"
+      >
+        {{ readFullDescription() ? "скрыть" : "подробнее" }}
+      </div>
+      }
+    </div>
+    }
+  </div>
+
+  @if (authService.profile | async; as profile) {
+  <div #newsEl class="project__news news">
+    @if (project()!.leader === profile.id) {
+    <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>
+    }
+
+    <div class="project__directions">
+      @for (directionItem of directions(); track $index) {
+      <app-project-direction-card
+        [direction]="directionItem.direction"
+        [icon]="directionItem.icon"
+        [about]="directionItem.about"
+        [type]="directionItem.type"
+        [isOwner]="profile.id === project()!.leader"
+        [projectInfoType]="directionItem.direction === 'цели' ? 'goals' : 'partners'"
+      ></app-project-direction-card>
+      }
+    </div>
+
+    @for (n of news(); track n.id) {
+    <app-news-card
+      class="news__item"
+      [resourceLink]="['/office/projects', n.id]"
+      [attr.data-id]="n.id"
+      [feedItem]="n"
+      [isOwner]="profile.id === project()!.leader"
+      (delete)="onDeleteNews($event)"
+      (like)="onLike($event)"
+      (edited)="onEditNews($event, n.id)"
+    ></app-news-card>
+    }
+  </div>
+  }
+</div>

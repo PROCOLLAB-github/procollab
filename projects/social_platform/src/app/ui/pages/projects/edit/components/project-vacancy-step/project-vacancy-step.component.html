@@ -1,0 +1,218 @@
+<!-- @format -->
+
+<div class="project__inner">
+  <div class="vacancy project__left">
+    @if (showInputFields()) {
+    <form [formGroup]="vacancyForm">
+      @if (role; as role) {
+      <fieldset class="vacancy__role">
+        <label class="field-label">название вакансии</label>
+        <app-input
+          size="big"
+          id="vacancy_role"
+          formControlName="role"
+          [error]="(role | controlError) && vacancySubmitInitiated()"
+          placeholder="напишите роль, которую вы хотите закрыть в вашем проекте"
+        ></app-input>
+        @if ((role | controlError: "required") && vacancySubmitInitiated()) {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      } @if (description; as description) {
+      <fieldset class="vacancy__description">
+        <label class="field-label">описание вакансии</label>
+        <app-textarea
+          size="big"
+          id="vacancy_description"
+          [haveHint]="true"
+          [tooltipText]="
+            'Расскажите, кого вы ищете для своего проекта? Опишите подробно, чтобы привлечь именно тех людей, которые вам нужны'
+          "
+          [tooltipPosition]="'right'"
+          [tooltipWidth]="350"
+          formControlName="description"
+          [error]="(description | controlError) && vacancySubmitInitiated()"
+          placeholder="опишите вакансию"
+          [maxLength]="3500"
+        ></app-textarea>
+        @if ((description | controlError: "required") && vacancySubmitInitiated()) {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+
+      <div class="vacancy__work">
+        <div class="vacancy__info">
+          @if (requiredExperience; as requiredExperience) {
+          <fieldset>
+            <label class="field-label">опыт</label>
+            <app-select
+              size="big"
+              id="requiredExperience"
+              formControlName="requiredExperience"
+              placeholder="опыт"
+              [error]="(requiredExperience | controlError) && vacancySubmitInitiated()"
+              [selectedId]="selectedRequiredExperienceId()"
+              [options]="experienceList"
+            ></app-select>
+            @if (requiredExperience | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (workFormat; as workFormat) {
+          <fieldset>
+            <label class="field-label">формат</label>
+            <app-select
+              size="big"
+              id="workFormat"
+              formControlName="workFormat"
+              [error]="(workFormat | controlError) && vacancySubmitInitiated()"
+              placeholder="формат"
+              [selectedId]="selectedWorkFormatId()"
+              [options]="formatList"
+            ></app-select>
+            @if (workFormat | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
+
+        <div class="vacancy__additional">
+          @if (salary; as salary) {
+          <fieldset>
+            <label class="field-label">заработная плата</label>
+            <app-input
+              size="big"
+              id="salary"
+              formControlName="salary"
+              [error]="(salary | controlError) && vacancySubmitInitiated()"
+              placeholder="заработная плата"
+            ></app-input>
+            @if ((salary | controlError: "required") && vacancySubmitInitiated()) {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          } @if (workSchedule; as workSchedule) {
+          <fieldset>
+            <label class="field-label">график</label>
+            <app-select
+              size="big"
+              id="workSchedule"
+              formControlName="workSchedule"
+              [error]="(workSchedule | controlError) && vacancySubmitInitiated()"
+              placeholder="график"
+              [selectedId]="selectedWorkScheduleId()"
+              [options]="scheludeList"
+            ></app-select>
+            @if (workSchedule | controlError: "required") {
+            <div class="text-body-10 error">
+              {{ errorMessage.VALIDATION_REQUIRED }}
+            </div>
+            }
+          </fieldset>
+          }
+        </div>
+      </div>
+
+      <fieldset class="vacancy__search">
+        <label class="field-label">навыки необходимые для кандидата</label>
+        <div class="vacancies">
+          <app-autocomplete-input
+            class="vacancies__input"
+            placeholder="введите навык"
+            searchIcon="box"
+            (openSkillsFunc)="onToggleSkillsGroupsModal()"
+            [suggestions]="inlineSkills()"
+            fieldToDisplay="name"
+            [forceSelect]="true"
+            [clearInputOnSelect]="true"
+            (searchStart)="onSearchSkill($event)"
+            (optionSelected)="onAddSkill($event)"
+          >
+          </app-autocomplete-input>
+        </div>
+      </fieldset>
+
+      @if (skills; as skills) {
+      <fieldset class="skills-basket">
+        <app-skills-basket
+          formControlName="skills"
+          [error]="skills | controlError"
+        ></app-skills-basket>
+        @if (skills | controlError: "required") {
+        <div class="text-body-10 error">
+          {{ errorMessage.VALIDATION_REQUIRED }}
+        </div>
+        }
+      </fieldset>
+      }
+    </form>
+    }
+    <app-button
+      size="big"
+      appearance="outline"
+      customTypographyClass="text-body-12"
+      class="vacancy__submit"
+      [loader]="vacancyIsSubmitting()"
+      (click)="showInputFields() ? submitVacancy() : createVacancyBlock()"
+    >
+      <span>{{ showInputFields() ? "добавить вакансию" : "создать вакансию" }}</span>
+      <i appIcon icon="plus" appSquare="10"></i>
+    </app-button>
+  </div>
+
+  <div class="project__right">
+    <ul class="vacancy__list">
+      @for (vacancy of vacancies(); track vacancy.id) {
+      <li class="vacancy__item">
+        <app-vacancy-card
+          [vacancy]="vacancy"
+          (edit)="editVacancy(vacancies().indexOf(vacancy))"
+          (remove)="removeVacancy($event)"
+        ></app-vacancy-card>
+      </li>
+      }
+    </ul>
+  </div>
+
+  @if (!vacancies().length) {
+  <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
+  }
+</div>
+
+<app-modal [open]="skillsGroupsModalOpen()" class="modal">
+  <div class="modal__wrapper">
+    <p class="text-body-14">библиотека навыков</p>
+    <div class="modal__content">
+      <div class="modal__skills-groups">
+        <ul>
+          @for (skillsGroup of nestedSkills$ | async; track skillsGroup.id) {
+          <li>
+            <app-skills-group
+              [title]="skillsGroup.name"
+              [options]="skillsGroup.skills"
+              [selected]="this.vacancyForm.getRawValue().skills!"
+              [hasOpenGroups]="hasOpenSkillsGroups"
+              [disabled]="hasOpenSkillsGroups && !openGroupIds().has(skillsGroup.id)"
+              (optionToggled)="onToggleSkill($event)"
+              (groupToggled)="onGroupToggled($event, skillsGroup.id)"
+            ></app-skills-group>
+          </li>
+          }
+        </ul>
+      </div>
+    </div>
+    <app-button size="big" (click)="onToggleSkillsGroupsModal()">Сохранить</app-button>
+  </div>
+</app-modal>

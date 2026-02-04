@@ -1,0 +1,17 @@
+/** @format */
+
+@use "styles/responsive";
+
+.profile {
+  padding-bottom: 100px;
+
+  @include responsive.apply-desktop {
+    padding-bottom: 0;
+  }
+
+  &__details {
+    display: grid;
+    grid-template-columns: 2fr 5fr 3fr;
+    grid-gap: 20px;
+  }
+}

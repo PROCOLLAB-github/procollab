@@ -1,0 +1,213 @@
+<!-- @format -->
+<div>
+  <div class="project__top">
+    <div class="project__back" [routerLink]="'/office/projects/' + profileId()">
+      <i appIcon icon="left-arrow" appSquare="24"></i>
+      <h1 class="project__title">редактировать проект</h1>
+    </div>
+    <div class="project__save">
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        color="red"
+        (click)="deleteProject()"
+      >
+        удалить проект
+      </app-button>
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        appearance="outline"
+        [loader]="projFormIsSubmittingAsDraft()"
+        (click)="saveProjectAsDraft()"
+      >
+        сохранить черновик
+      </app-button>
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        [loader]="projFormIsSubmittingAsPublished()"
+        (click)="saveProjectAsPublished()"
+      >
+        {{ isCompetitive() ? "отправить заявку" : "сохранить" }}
+      </app-button>
+    </div>
+  </div>
+
+  <main class="project">
+    <form [formGroup]="projectForm" class="project__form">
+      <app-project-navigation
+        [navItems]="navProjectItems"
+        style="width: 100%"
+        (stepChange)="navigateStep($event)"
+      ></app-project-navigation>
+
+      <div class="project__inner">
+        @if (editingStep() === "main") {
+        <app-project-main-step
+          style="width: 100%"
+          [projSubmitInitiated]="projSubmitInitiated()"
+        ></app-project-main-step>
+        } @else if (editingStep() === "contacts") {
+        <app-project-partner-resources-step
+          style="width: 100%"
+        ></app-project-partner-resources-step>
+        } @else if (editingStep() === "achievements") {
+        <app-project-achievement-step
+          style="width: 100%"
+          [projSubmitInitiated]="projSubmitInitiated()"
+        ></app-project-achievement-step>
+        } @else if (editingStep() === "vacancies"){
+        <app-project-vacancy-step style="width: 100%"></app-project-vacancy-step>
+        } @else if (editingStep() === "team") {
+        <app-project-team-step style="width: 100%"></app-project-team-step>
+        } @else if (editingStep() === "additional") {
+        <app-project-additional-step
+          #additionalStepComponent
+          style="width: 100%"
+        ></app-project-additional-step>
+        }
+      </div>
+    </form>
+    <app-modal
+      [open]="
+        (projectForm.invalid || additionalForm.invalid) &&
+        projSubmitInitiated() &&
+        !warningModalSeen()
+      "
+    >
+      <div class="project__warning-modal">
+        <h3 class="text-bold-body-16">📢 внимание!</h3>
+        <p class="text-body-14">
+          для публикации проекта, нужно заполнить все <strong>обязательные поля</strong> (они будут
+          <strong>подсвечены&nbsp;<span>красным</span></strong
+          >). Если вы пока не знаете что написать, можно сохранить черновик проекта и заполнить поля
+          позже :&#41;
+
+          {{
+            fromProgram() || isProjectAssignToProgram()
+              ? 'также проверь вкладку "данные для конкурсов"'
+              : ""
+          }}
+        </p>
+        <app-button
+          size="medium"
+          customTypographyClass="text-body-12"
+          appearance="outline"
+          (click)="closeWarningModal()"
+          >понятно</app-button
+        >
+      </div>
+    </app-modal>
+  </main>
+</div>
+
+<app-modal [open]="isCompleted()" (openChange)="isCompleted.set(!isCompleted())">
+  <div class="cancel">
+    <div class="cancel__top">
+      <i (click)="isCompleted.set(false)" appIcon icon="cross" class="cancel__cross"></i>
+      <p class="cancel__title text-bold-body-16">Проект завершен!</p>
+    </div>
+
+    <img alt="end" src="assets/images/projects/detail/end.svg" class="cancel__img" />
+
+    <p class="text-body-14 cancel__text">
+      Этот проект был успешно завершён в рамках программы {{ errorModalMessage()?.program_name }}.
+      Редактирование или удаление проекта больше недоступно.
+    </p>
+  </div>
+</app-modal>
+
+<app-modal
+  [open]="isSendDescisionLate()"
+  (openChange)="isSendDescisionLate.set(!isSendDescisionLate())"
+>
+  <div class="cancel" style="width: 605px; padding: 0px 24px">
+    <div class="cancel__top">
+      <i (click)="isSendDescisionLate.set(false)" appIcon icon="cross" class="cancel__cross"></i>
+      <p class="cancel__title text-body-14">Подача проектов завершена!</p>
+    </div>
+
+    <p class="text-body-12">Срок подачи проектов в программу завершён</p>
+  </div>
+</app-modal>
+
+<app-modal [open]="fromProgramOpen()" (openChange)="fromProgramOpen.set(false)">
+  <div class="cancel" style="width: 605px; padding: 0px 24px">
+    <div class="cancel__top">
+      <p class="cancel__title text-body-14">Начнем создавать историю!</p>
+    </div>
+
+    <div class="cancel__text-block">
+      <p class="text-body-12">
+        Вы находитесь в проектной мастерской – здесь мы с нуля создаем и редактируем проектные идеи
+      </p>
+
+      <p class="text-body-12">
+        Есть несколько вкладок – заполнив каждую, вы полностью опишите свой проект.<br />
+        Обязательные поля отмечены красным, обязательно не забудь про вкладку «данные для конкурсов»
+      </p>
+
+      <p class="text-body-12">
+        Будьте внимательны: проект единожды создается лидером, команда приглашается в уже созданный
+        проект
+      </p>
+
+      <p class="text-body-12">
+        Если вы понимаете, что заполнить каждую графу пока нет времени (или не хватает информации!),
+        нажмите «сохранить черновик» – так вы сохраните проект, но не опубликуете его для
+        пользователей всей платформы
+      </p>
+
+      <p class="text-body-12">Расскажите миру о вашем проекте!</p>
+    </div>
+
+    <app-button
+      customTypographyClass="text-body-12"
+      size="medium"
+      (click)="fromProgramOpen.set(false)"
+      >вперед</app-button
+    >
+  </div>
+</app-modal>
+
+<app-modal
+  [open]="isSendDescisionToPartnerProgramProject()"
+  (openChange)="
+    isSendDescisionToPartnerProgramProject.set(!isSendDescisionToPartnerProgramProject())
+  "
+>
+  <div class="cancel" style="width: 100%; padding: 40px 20px 20px">
+    <div class="cancel__top">
+      <i
+        (click)="isSendDescisionToPartnerProgramProject.set(false)"
+        appIcon
+        icon="cross"
+        class="cancel__cross"
+      ></i>
+      <img alt="end" src="assets/images/projects/detail/bid.svg" class="cancel__img" />
+      <h4 class="cancel__title text-heading-4">Отправить заявку?</h4>
+    </div>
+
+    <p class="text-body-12 cancel__text">
+      После отправки заявку нельзя будет редактировать до окончания конкурса.
+      <br />Вы уверены, что хотите отправить заявку сейчас?
+    </p>
+
+    <div class="cancel__buttons">
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        color="grey"
+        (click)="isSendDescisionToPartnerProgramProject.set(false)"
+        >Отмена</app-button
+      >
+      <app-button
+        size="medium"
+        customTypographyClass="text-body-12"
+        (click)="closeSendingDescisionModal()"
+        >Отправить</app-button
+      >
+    </div>
+  </div>
+</app-modal>

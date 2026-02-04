@@ -1,14 +1,31 @@
 <!-- @format -->
 
 <div
-  class="text-body-6 tag"
+  class="tag"
   [class.tag--inline]="appearance === 'inline'"
   [class.tag--outline]="appearance === 'outline'"
   [class.tag--primary]="color === 'primary'"
   [class.tag--secondary]="color === 'secondary'"
   [class.tag--accent]="color === 'accent'"
+  [class.tag--accent-medium]="color === 'accent-medium'"
+  [class.tag--blue-dark]="color === 'blue-dark'"
   [class.tag--complete]="color === 'complete'"
+  [class.tag--complete-dark]="color === 'complete-dark'"
   [class.tag--soft]="color === 'soft'"
+  [class.tag--cyan]="color === 'cyan'"
+  [class.tag--red]="color === 'red'"
+  [class.tag--days]="type === 'days'"
+  [class.tag--overdue]="type === 'overdue'"
+  [class.tag--answer]="type === 'answer'"
+  [ngStyle]="additionalTagColor ? { 'background-color': additionalTagColor } : null"
 >
-  <ng-content></ng-content>
+  <p class="text-body-6"><ng-content></ng-content></p>
+
+  <div class="tag__icons">
+    @if (canEdit) {
+    <i appIcon icon="edit-pen" appSquare="5" (click)="onEdit($event)"></i>
+    } @if (canDelete) {
+    <i appIcon icon="basket" appSquare="5" (click)="onDelete($event)"></i>
+    }
+  </div>
 </div>

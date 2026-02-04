@@ -1,0 +1,13 @@
+<!-- @format -->
+
+@if (user()) {
+<section class="profile">
+  <div class="profile__details">
+    <app-profile-left-side [user]="user"></app-profile-left-side>
+
+    <app-profile-mid-side [user]="user"></app-profile-mid-side>
+
+    <app-profile-right-side [user]="user"></app-profile-right-side>
+  </div>
+</section>
+}

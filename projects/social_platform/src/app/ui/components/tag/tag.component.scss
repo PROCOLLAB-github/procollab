@@ -1,11 +1,12 @@
 /** @format */
 
 .tag {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 300px;
+  max-width: 120px;
   padding: 2px 20px;
   overflow: hidden;
   color: var(--accent);
@@ -13,14 +14,13 @@
   white-space: nowrap;
   border-radius: var(--rounded-xxl);
 
+  p {
+    margin: 0 10px;
+  }
+
   &--inline {
     color: var(--white);
     border: 0.5px solid transparent;
-
-    &.tag--primary {
-      color: var(--white);
-      background-color: var(--accent);
-    }
 
     &.tag--secondary {
       background: var(--dark-grey);
@@ -32,15 +32,52 @@
       background-color: var(--accent);
     }
 
+    &.tag--accent-medium {
+      color: var(--white);
+      background-color: var(--accent-medium);
+    }
+
+    &.tag--blue-dark {
+      color: var(--white);
+      background-color: var(--blue-dark);
+    }
+
     &.tag--complete {
       color: var(--white);
       background-color: var(--green);
+    }
+
+    &.tag--complete-dark {
+      color: var(--white);
+      background-color: var(--green-dark);
+    }
+
+    &.tag--red {
+      color: var(--white);
+      background-color: var(--red);
+    }
+
+    &.tag--cyan {
+      color: var(--white);
+      background-color: var(--cyan);
     }
 
     &.tag--soft {
       color: var(--light-white);
       background: var(--gold);
       border: transparent;
+    }
+
+    &.tag--days {
+      color: var(--accent);
+      background-color: var(--light-white);
+      border: 0.5px solid var(--accent);
+    }
+
+    &.tag--overdue {
+      color: var(--red);
+      background-color: var(--light-white);
+      border: 0.5px solid var(--red);
     }
 
     &:not(:last-child) {
@@ -70,10 +107,40 @@
       border: 0.5px solid var(--accent);
     }
 
+    &.tag--accent-medium {
+      color: var(--white);
+      background: transparent;
+      border: 0.5px solid var(--accent-medium);
+    }
+
+    &.tag--blue-dark {
+      color: var(--white);
+      background: transparent;
+      border: 0.5px solid var(--blue-dark);
+    }
+
     &.tag--complete {
       color: var(--green);
       background: transparent;
       border: 0.5px solid var(--green);
+    }
+
+    &.tag--complete-dark {
+      color: var(--white);
+      background: transparent;
+      border: 0.5px solid var(--green-dark);
+    }
+
+    &.tag--red {
+      color: var(--white);
+      background: transparent;
+      border: 0.5px solid var(--red);
+    }
+
+    &.tag--cyan {
+      color: var(--white);
+      background: transparent;
+      border: 0.5px solid var(--cyan);
     }
 
     &.tag--soft {
@@ -82,15 +149,32 @@
       border: 0.5px solid var(--gold);
     }
 
+    &.tag--answer {
+      color: var(--grey-for-text);
+      background: transparent;
+      border: 0.5px solid var(--grey-for-text);
+    }
+
     &:not(:last-child) {
       margin-right: 5px;
     }
   }
 
-  ::ng-deep {
-    >* {
-      &:not(:last-child) {
-        margin-right: 10px;
+  &__icons {
+    position: absolute;
+    top: 30%;
+    right: 5%;
+    display: flex;
+    flex-shrink: 0;
+    gap: 3px;
+    align-items: center;
+
+    i {
+      cursor: pointer;
+      opacity: 1;
+
+      &:hover {
+        opacity: 0.7;
       }
     }
   }
