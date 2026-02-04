@@ -2,29 +2,29 @@
 
 .vacancy {
   &__content {
-  padding: 24px;
-  margin-bottom: 20px;
-  background-color: var(--light-white);
-  border: 0.5px solid var(--medium-grey-for-outline);
-  border-radius: var(--rounded-lg);
-}
-
-&__right {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  text-align: center;
-
-  &--title {
-    margin: 12px 0;
-  }
-
-  &--project {
-    position: relative;
-    padding: 48px 24px 24px;
+    padding: 24px;
+    margin-bottom: 20px;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+
+    &--title {
+      margin: 12px 0;
+    }
+
+    &--project {
+      position: relative;
+      padding: 48px 24px 24px;
+      background-color: var(--light-white);
+      border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: var(--rounded-lg);
 
       &-image {
         position: absolute;
@@ -36,7 +36,7 @@
     }
   }
 
-   &__form {
+  &__form {
     display: flex;
     flex-direction: column;
     gap: 10px;
