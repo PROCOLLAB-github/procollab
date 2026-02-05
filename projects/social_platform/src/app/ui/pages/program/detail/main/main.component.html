@@ -6,7 +6,12 @@
     <!-- advertisementImageAddress поле только для тех кто не участник программы поэтому нельзя сделать toggle и давать появляться или нет полю -->
     @if (!program()!.isUserMember && !program()!.isUserManager) {
     <div class="program__advertisement">
-      <img [src]="program()!.advertisementImageAddress" [alt]="program()!.name" />
+      <img
+        [src]="program()!.advertisementImageAddress"
+        [alt]="program()!.name"
+        loading="lazy"
+        decoding="async"
+      />
     </div>
     } @else {
     <div class="program__details">

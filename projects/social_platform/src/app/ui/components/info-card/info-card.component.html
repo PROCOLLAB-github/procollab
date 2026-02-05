@@ -68,7 +68,13 @@
 
 <ng-template #emptyCardContent>
   <p class="text-body-12 card__name">{{ info?.name }}</p>
-  <img src="/assets/images/projects/shared/arrow.svg" class="card__empty--image" alt="arrow" />
+  <img
+    src="/assets/images/projects/shared/arrow.svg"
+    class="card__empty--image"
+    alt="arrow"
+    loading="lazy"
+    decoding="async"
+  />
   @if (section === 'subscriptions') {
   <p class="card__empty--name text-body-10" style="margin-left: 5px">перейти к проектам</p>
   } @else {

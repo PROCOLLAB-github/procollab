@@ -22,7 +22,7 @@
       <app-loader type="circle" color="accent" size="20px"></app-loader>
     </div>
     } @if (value) {
-    <img [src]="value" alt="avatar" class="control__img" />
+    <img [src]="value" alt="avatar" class="control__img" loading="lazy" decoding="async" />
     } @if(type === 'avatar') {
     <img
       src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfRvoKyPWxl-0EExOVhrqc56QcPcWK-Tloew&usqp=CAU"

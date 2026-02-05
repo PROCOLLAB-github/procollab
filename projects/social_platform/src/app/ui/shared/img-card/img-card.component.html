@@ -2,7 +2,7 @@
 
 <div class="file" [class.file--loading]="loading" [class.file--error]="error">
   @if (src && !loading && !error) {
-  <img [src]="src" alt="user-generated content" class="file__img" />
+  <img [src]="src" alt="user-generated content" class="file__img" loading="lazy" decoding="async" />
   } @if (error) {
   <div class="file__error loading-error">
     <div class="loading-error__message text-body-12">

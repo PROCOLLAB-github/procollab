@@ -57,7 +57,13 @@
   }
   <app-modal [open]="waitVerificationModal && !waitVerificationAccepted">
     <div class="message-modal">
-      <img src="/assets/images/office/shared/wait.png" alt="wait" width="215px" />
+      <img
+        src="/assets/images/office/shared/wait.png"
+        alt="wait"
+        width="215px"
+        loading="lazy"
+        decoding="async"
+      />
       <h3 class="message-modal__title text-body-14">Ваш аккаунт проходит подтверждение</h3>
       <p class="message-modal__text text-body-12">
         Мы проверяем ваши данные и скоро сообщим о подтверждении аккаунта, а пока можете уже

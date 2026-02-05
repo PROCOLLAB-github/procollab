@@ -3,7 +3,7 @@
 @if (advert) {
 <div class="card" [class.card--vertical]="layout === 'vertical'">
   <div class="card__cover">
-    <img [src]="advert.coverUrl" [alt]="advert.title" />
+    <img [src]="advert.coverUrl" [alt]="advert.title" loading="lazy" decoding="async" />
     <div class="text-heading-4 card__overlay">Смотреть</div>
   </div>
   <div class="card__body">

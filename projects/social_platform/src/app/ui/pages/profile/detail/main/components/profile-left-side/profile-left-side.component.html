@@ -71,7 +71,14 @@
       <div>
         <div class="lists__info">
           <a [routerLink]="['/office/program', program.id]" class="text-body-10 lists__title">
-            <img alt="program logo" [src]="program.logo" width="40" height="40" />
+            <img
+              alt="program logo"
+              [src]="program.logo"
+              width="40"
+              height="40"
+              loading="lazy"
+              decoding="async"
+            />
           </a>
         </div>
       </div>

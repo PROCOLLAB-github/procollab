@@ -15,7 +15,12 @@
   </button>
   }
   <div class="carousel__image-wrapper" (touchend)="onTouchImg($event)">
-    <img [src]="getImageUrl(images[currentIndex])" [alt]="getImageName(images[currentIndex])" />
+    <img
+      [src]="getImageUrl(images[currentIndex])"
+      [alt]="getImageName(images[currentIndex])"
+      loading="lazy"
+      decoding="async"
+    />
     <div class="carousel__img-like" [class.carousel__img-like--show]="showLike">
       <i appIcon icon="like" appSquare="40"></i>
     </div>

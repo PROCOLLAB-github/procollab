@@ -5,7 +5,13 @@
     <div class="login__left-content">
       <form class="auth" [formGroup]="loginForm" (ngSubmit)="onSubmit()" (keyup.enter)="onSubmit()">
         <div class="auth__wrapper">
-          <img class="login__logo" src="/assets/images/shared/logo.svg" alt="logo" />
+          <img
+            class="login__logo"
+            src="/assets/images/shared/logo.svg"
+            alt="logo"
+            loading="lazy"
+            decoding="async"
+          />
 
           @if (loginForm.get("email"); as email) {
           <fieldset class="auth__field">
@@ -143,6 +149,12 @@
   </div>
 
   <div class="login__right">
-    <img class="login__image" src="/assets/images/auth/login-img.png" alt="" />
+    <img
+      class="login__image"
+      src="/assets/images/auth/login-img.png"
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
   </div>
 </div>

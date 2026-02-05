@@ -2,7 +2,13 @@
 
 <div class="auth register">
   <div class="auth__greeting">
-    <img class="register__logo" src="/assets/images/shared/logo.svg" alt="logo" />
+    <img
+      class="register__logo"
+      src="/assets/images/shared/logo.svg"
+      alt="logo"
+      loading="lazy"
+      decoding="async"
+    />
   </div>
   <form class="auth__wrapper" [formGroup]="registerForm" (ngSubmit)="onSendForm()">
     <ng-container>
