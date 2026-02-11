@@ -484,13 +484,18 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isAssignProjectToProgramModalOpen.set(false);
   }
 
-  private getFromProgramSeenKey(): string {
-    return `project_fromProgram_modal_seen_${this.profileId}`;
+  private getFromProgramSeenKey(type: "program" | "project"): string {
+    if (type === "program") {
+      return `project_fromProgram_modal_seen_${this.profileId}`;
+    } else return `project_modal_seen_${this.profileId}`;
   }
 
   private hasSeenFromProgramModal(): boolean {
     try {
-      return !!localStorage.getItem(this.getFromProgramSeenKey());
+      if (this.fromProgram) {
+        return !!localStorage.getItem(this.getFromProgramSeenKey("program"));
+      }
+      return !!localStorage.getItem(this.getFromProgramSeenKey("project"));
     } catch (e) {
       return false;
     }
@@ -498,7 +503,10 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private markSeenFromProgramModal(): void {
     try {
-      localStorage.setItem(this.getFromProgramSeenKey(), "1");
+      if (this.fromProgram) {
+        localStorage.setItem(this.getFromProgramSeenKey("program"), "1");
+      }
+      localStorage.setItem(this.getFromProgramSeenKey("project"), "1");
     } catch (e) {}
   }
 
@@ -679,7 +687,7 @@ export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
       this.fromProgram = params["fromProgram"];
 
       const seen = this.hasSeenFromProgramModal();
-      if (this.fromProgram && !seen) {
+      if (!seen) {
         this.fromProgramOpen.set(true);
         this.markSeenFromProgramModal();
       } else {
