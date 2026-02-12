@@ -33,7 +33,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
           NETLIFY_PREVIEW_APP: true # or perhaps like this
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NETLIFY_PR_ID: ${{ github.pr_id }}-social
+          NETLIFY_PR_ID: ${{ github.event.pull_request.number }}-social
       - name: Publish preview skills
         uses: netlify/actions/cli@master
         id: publish_preview_skills
@@ -44,7 +44,7 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_ACCESS_TOKEN }}
           NETLIFY_PREVIEW_APP: true # or perhaps like this
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NETLIFY_PR_ID: ${{ github.pr_id }}-skills
+          NETLIFY_PR_ID: ${{ github.event.pull_request.number }}-skills
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
