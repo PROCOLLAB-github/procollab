@@ -42,6 +42,7 @@ import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "@uilib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 import { NewsCardComponent } from "@office/features/news-card/news-card.component";
+import { AuthService } from "@auth/services";
 
 @Component({
   selector: "app-main",
@@ -62,19 +63,15 @@ import { NewsCardComponent } from "@office/features/news-card/news-card.componen
     NewsFormComponent,
     ModalComponent,
     MatProgressBarModule,
-    AvatarComponent,
-    TagComponent,
     TruncatePipe,
     RouterModule,
-    NewsCardComponent,
   ],
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   constructor(
-    private readonly programService: ProgramService,
     private readonly programNewsService: ProgramNewsService,
-    private readonly projectService: ProjectService,
     private readonly projectAdditionalService: ProjectAdditionalService,
+    private readonly authService: AuthService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly cdRef: ChangeDetectorRef,
@@ -101,6 +98,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   registeredProgramModal = signal<boolean>(false);
 
   programId?: number;
+  profileId = signal<number | undefined>(undefined);
 
   subscriptions$ = signal<Subscription[]>([]);
 
@@ -130,6 +128,14 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
         });
       }
     });
+
+    const profileIdSub$ = this.authService.profile.subscribe({
+      next: profile => {
+        this.profileId.set(profile.id);
+      },
+    });
+
+    this.subscriptions$().push(profileIdSub$);
 
     const program$ = this.route.data
       .pipe(
@@ -328,7 +334,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   private getRegisteredProgramSeenKey(programId: number): string {
-    return `program_registered_modal_seen_${programId}`;
+    return `program_${this.profileId()}_modal_seen_${programId}`;
   }
 
   private hasSeenRegisteredProgramModal(programId: number): boolean {

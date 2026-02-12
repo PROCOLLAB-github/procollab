@@ -207,7 +207,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   }
 
   private getRegisteredProgramSeenKey(programId: number): string {
-    return `program_registered_modal_seen_${programId}`;
+    return `program_${this.profile?.id}_registered_modal_seen_${programId}`;
   }
 
   private hasSeenRegisteredProgramModal(programId: number): boolean {
