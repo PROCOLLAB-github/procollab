@@ -7,6 +7,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 import type { Invite } from "@office/models/invite.model";
 import { RouterLink } from "@angular/router";
 import type { User } from "../../../models/user.model";
+import { EmptyManageCardComponent } from "../empty-manage-card/empty-manage-card.component";
 
 /**
  * Компонент панели управления профилем
@@ -38,6 +39,7 @@ import type { User } from "../../../models/user.model";
     ClickOutsideModule,
     IconComponent,
     RouterLink,
+    EmptyManageCardComponent,
   ],
   templateUrl: "./profile-control-panel.component.html",
   styleUrl: "./profile-control-panel.component.scss",
