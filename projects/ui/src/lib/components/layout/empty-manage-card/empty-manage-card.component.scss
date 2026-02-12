@@ -1,0 +1,37 @@
+.card {
+  position: relative;
+  width: 100%;
+  max-width: 286px;
+  padding: 24px;
+  background-color: var(--light-white);
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-xl);
+
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+
+  &__text {
+    width: 60%;
+    color: var(--dark-grey);
+  }
+
+  &__cross {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  i {
+    color: var(--dark-grey);
+    cursor: pointer;
+  }
+}

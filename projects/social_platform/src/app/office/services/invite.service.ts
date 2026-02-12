@@ -24,7 +24,7 @@ import { AuthService } from "@auth/services";
 export class InviteService {
   private readonly INVITES_URL = "/invites";
 
-  constructor(private readonly apiService: ApiService, private readonly authService: AuthService) {}
+  constructor(private readonly apiService: ApiService) {}
 
   /**
    * Отправляет приглашение пользователю для участия в проекте
