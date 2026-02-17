@@ -2,28 +2,28 @@
 @use "styles/typography";
 
 .trajectory {
+  position: relative;
   width: 100%;
   max-width: 333px;
-  border-radius: var(--rounded-lg);
+  overflow: hidden;
   cursor: pointer;
   background-color: var(--light-white);
   border: 0.5px solid var(--medium-grey-for-outline);
-  position: relative;
-  overflow: hidden;
+  border-radius: var(--rounded-lg);
 
   &__cover {
     padding: 35px 24px;
-    border-radius: var(--rounded-lg);
     background: linear-gradient(var(--accent), var(--lime));
+    border-radius: var(--rounded-lg);
 
     app-button {
       ::ng-deep {
         .button {
-          width: 166px;
-          padding: 0;
           position: absolute;
           top: 15px;
           right: 24px;
+          width: 166px;
+          padding: 0;
         }
       }
     }
@@ -32,7 +32,7 @@
       ::ng-deep {
         .avatar {
           img {
-            box-shadow: 0px 0px 8px rgba($color: #333, $alpha: .3);
+            box-shadow: 0 0 8px rgba($color: #333, $alpha: 30%);
           }
         }
       }
@@ -40,10 +40,10 @@
   }
 
   &__info {
-    padding: 12px 24px;
     display: flex;
     flex-direction: column;
     gap: 2px;
+    padding: 12px 24px;
 
     &--date {
       color: var(--grey-for-text) !important;
@@ -52,8 +52,8 @@
 
   &__action {
     position: absolute;
-    bottom: 16px;
     right: 14px;
+    bottom: 16px;
 
     &--started {
       color: var(--green) !important;
@@ -61,11 +61,11 @@
   }
 
   &__rocket {
-    width: 175px;
     position: absolute;
     top: -46%;
     right: -13%;
     z-index: 0;
+    width: 175px;
     transform: rotate(-53deg);
   }
 

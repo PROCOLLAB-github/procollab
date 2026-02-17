@@ -31,8 +31,8 @@ $detail-bar-mb: 12px;
   &__cover {
     position: relative;
     height: 136px;
-    border-radius: 15px 15px 0 0;
     background: linear-gradient(var(--accent), var(--lime));
+    border-radius: 15px 15px 0 0;
   }
 
   &__body {
@@ -96,8 +96,8 @@ $detail-bar-mb: 12px;
     padding: 24px 0 30px;
 
     &--disabled {
-      opacity: 0.5;
       cursor: not-allowed;
+      opacity: 0.5;
     }
   }
 }
