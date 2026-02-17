@@ -1,9 +1,12 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { BarComponent } from "@ui/components";
+import { BackComponent } from "@uilib";
+import { SearchComponent } from "@ui/components/search/search.component";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
 
 /**
  * Главный компонент модуля отслеживания карьерных траекторий
@@ -13,8 +16,25 @@ import { BarComponent } from "@ui/components";
 @Component({
   selector: "app-track-career",
   standalone: true,
-  imports: [CommonModule, BarComponent, RouterModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    BackComponent,
+    SearchComponent,
+    ReactiveFormsModule,
+    SoonCardComponent,
+  ],
   templateUrl: "./track-career.component.html",
   styleUrl: "./track-career.component.scss",
 })
-export class TrackCareerComponent {}
+export class TrackCareerComponent {
+  private readonly fb = inject(FormBuilder);
+
+  constructor() {
+    this.searchForm = this.fb.group({
+      search: [""],
+    });
+  }
+
+  searchForm: FormGroup;
+}

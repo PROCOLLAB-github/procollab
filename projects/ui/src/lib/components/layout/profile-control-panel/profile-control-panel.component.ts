@@ -8,6 +8,7 @@ import type { Invite } from "@office/models/invite.model";
 import { RouterLink } from "@angular/router";
 import type { User } from "../../../models/user.model";
 import { EmptyManageCardComponent } from "../empty-manage-card/empty-manage-card.component";
+import { UserData } from "projects/skills/src/models/profile.model";
 
 /**
  * Компонент панели управления профилем
@@ -47,7 +48,7 @@ import { EmptyManageCardComponent } from "../empty-manage-card/empty-manage-card
 })
 export class ProfileControlPanelComponent {
   /** Данные текущего пользователя */
-  @Input({ required: true }) user!: User | null;
+  @Input({ required: true }) user!: User | UserData | null;
 
   /** Массив приглашений пользователя */
   @Input({ required: true }) invites!: Invite[];

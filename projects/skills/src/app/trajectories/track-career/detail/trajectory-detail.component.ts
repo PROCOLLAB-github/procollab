@@ -1,11 +1,12 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, type OnDestroy, type OnInit } from "@angular/core";
-import { ActivatedRoute, RouterOutlet } from "@angular/router";
-import { BarComponent } from "@ui/components";
+import { Component, inject, signal, type OnDestroy, type OnInit } from "@angular/core";
+import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
 import type { Trajectory } from "projects/skills/src/models/trajectory.model";
-import { map, type Subscription } from "rxjs";
+import { filter, map, type Subscription } from "rxjs";
+import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { ButtonComponent } from "@ui/components";
 
 /**
  * Компонент детального просмотра траектории
@@ -15,33 +16,34 @@ import { map, type Subscription } from "rxjs";
 @Component({
   selector: "app-trajectory-detail",
   standalone: true,
-  imports: [CommonModule, BarComponent, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, AvatarComponent, ButtonComponent],
   templateUrl: "./trajectory-detail.component.html",
   styleUrl: "./trajectory-detail.component.scss",
 })
 export class TrajectoryDetailComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
+  router = inject(Router);
 
   subscriptions$: Subscription[] = [];
 
-  trajectory?: Trajectory;
-  trackId?: string;
+  trajectory = signal<Trajectory | undefined>(undefined);
+  isDisabled = signal<boolean>(false);
 
   /**
    * Инициализация компонента
    * Подписывается на параметры маршрута и данные траектории
    */
   ngOnInit(): void {
-    const trackIdSub = this.route.params.subscribe(params => {
-      this.trackId = params["trackId"];
-    });
-
-    const trajectorySub$ = this.route.data.pipe(map(r => r["data"])).subscribe(trajectory => {
-      this.trajectory = trajectory;
-    });
-
-    trajectorySub$ && this.subscriptions$.push(trajectorySub$);
-    trackIdSub && this.subscriptions$.push(trackIdSub);
+    this.route.data
+      .pipe(
+        map(data => data["data"]),
+        filter(trajectory => !!trajectory)
+      )
+      .subscribe({
+        next: trajectory => {
+          this.trajectory.set(trajectory[0]);
+        },
+      });
   }
 
   /**
@@ -50,5 +52,14 @@ export class TrajectoryDetailComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
+  }
+
+  /**
+   * Перенаправляет на страницу с информацией в завивисимости от listType
+   */
+  redirectDetailInfo(): void {
+    if (this.trajectory()) {
+      this.router.navigateByUrl(`/trackCar/all`);
+    }
   }
 }

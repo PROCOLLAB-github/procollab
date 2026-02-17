@@ -3,7 +3,7 @@
 import { Component, inject, type OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router, RouterLink, RouterOutlet } from "@angular/router";
-import { IconComponent, SidebarComponent } from "@uilib";
+import { IconComponent, ProfileControlPanelComponent, SidebarComponent } from "@uilib";
 import { SidebarProfileComponent } from "./shared/sidebar-profile/sidebar-profile.component";
 import { ProfileService } from "./profile/services/profile.service";
 import type { UserData } from "../models/profile.model";
@@ -32,6 +32,7 @@ import { AuthService } from "@auth/services";
     SidebarComponent,
     SidebarProfileComponent,
     IconComponent,
+    ProfileControlPanelComponent,
   ],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
@@ -54,12 +55,9 @@ export class AppComponent implements OnInit {
    * Каждый элемент представляет основной раздел приложения
    */
   navItems = [
-    // { name: "Навыки", icon: "lib", link: "skills" }, // Временно отключено
-    { name: "Детский Форсайт", icon: "trackcar", link: "trackCar" },
-    // { name: "Траектории", icon: "receipt", link: "subscription" },
-    // { name: "Рейтинг", icon: "growth", link: "rating" },
-    // { name: "Траектория бизнеса", icon: "trackbuss", link: "trackBuss" }, // Временно отключено
-    // { name: "Вебинары", icon: "webinars", link: "webinars" }, // Временно отключено
+    { name: "Мой профиль", icon: "person", link: "profile" },
+    { name: "Рейтинг", icon: "growth", link: "rating" },
+    { name: "Траектории", icon: "receipt", link: "trackCar" },
   ];
 
   // Реактивное состояние с использованием Angular signals
@@ -88,6 +86,14 @@ export class AppComponent implements OnInit {
       },
       error: () => {
         // Перенаправление на основное приложение для входа при ошибке синхронизации профиля
+        location.href = "https://app.procollab.ru/auth/login";
+      },
+    });
+  }
+
+  onLogout() {
+    this.authService.logout().subscribe({
+      next: () => {
         location.href = "https://app.procollab.ru/auth/login";
       },
     });

@@ -43,20 +43,6 @@ export class TrajectoriesService {
   }
 
   /**
-   * Получает траекторию, в которой текущий пользователь активно зарегистрирован
-   *
-   * @returns Observable<Trajectory[]> - Массив, содержащий активную траекторию пользователя (если есть)
-   */
-  getMyTrajectory() {
-    return this.apiService.get<Trajectory[]>(this.TRAJECTORY_URL).pipe(
-      map(track => {
-        const choosedTrajctory = track.find(trajectory => trajectory.isActiveForUser === true);
-        return choosedTrajctory;
-      })
-    );
-  }
-
-  /**
    * Получает подробную информацию о конкретной траектории
    *
    * @param id - Уникальный идентификатор траектории

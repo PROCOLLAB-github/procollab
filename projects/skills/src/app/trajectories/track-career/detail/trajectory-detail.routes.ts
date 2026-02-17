@@ -10,14 +10,13 @@ export const TRAJECTORY_DETAIL_ROUTES = [
     path: "",
     component: TrajectoryDetailComponent,
     canActivate: [TrajectoryInfoRequiredGuard],
-
+    resolve: {
+      data: TrajectoryDetailResolver,
+    },
     children: [
       {
         path: "",
         component: TrajectoryInfoComponent,
-        resolve: {
-          data: TrajectoryDetailResolver,
-        },
       },
     ],
   },

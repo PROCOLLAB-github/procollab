@@ -4,7 +4,6 @@ import {
   type AfterViewInit,
   ChangeDetectorRef,
   Component,
-  computed,
   inject,
   type OnDestroy,
   type OnInit,
@@ -38,11 +37,8 @@ export class TrajectoriesListComponent implements OnInit, AfterViewInit, OnDestr
 
   totalItemsCount = signal(0);
   trajectoriesList = signal<Trajectory[]>([]);
-  userTrajectory = signal<Trajectory | undefined>(undefined);
   trajectoriesPage = signal(1);
   perFetchTake = signal(20);
-
-  type = signal<"all" | "my" | null>(null);
 
   subscriptions$ = signal<Subscription[]>([]);
 
@@ -51,16 +47,9 @@ export class TrajectoriesListComponent implements OnInit, AfterViewInit, OnDestr
    * Определяет тип списка (all/my) и загружает начальные данные
    */
   ngOnInit(): void {
-    const currentType = this.router.url.split("/").pop() as "all" | "my";
-    this.type.set(currentType);
-
     this.route.data.pipe(map(r => r["data"])).subscribe(data => {
-      if (currentType === "all") {
-        this.trajectoriesList.set(data as Trajectory[]);
-        this.totalItemsCount.set((data as Trajectory[]).length);
-      } else {
-        this.userTrajectory.set(data as Trajectory);
-      }
+      this.trajectoriesList.set(data as Trajectory[]);
+      this.totalItemsCount.set((data as Trajectory[]).length);
     });
   }
 
@@ -129,8 +118,4 @@ export class TrajectoriesListComponent implements OnInit, AfterViewInit, OnDestr
       map(res => res)
     );
   }
-
-  hasItems = computed(() => {
-    return this.type() === "all" ? this.trajectoriesList().length > 0 : !!this.userTrajectory();
-  });
 }
