@@ -61,11 +61,27 @@
       background-color: var(--accent);
       border-radius: var(--rounded-lg);
       opacity: 0.15;
+
+      &--complete {
+        background-color: var(--green-dark);
+      }
     }
 
     &--percent {
       color: var(--green-dark);
+
     }
+
+    &--complete {
+      color: var(--black);
+    }
+  }
+
+  &__skills {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 18px;
   }
 }
 

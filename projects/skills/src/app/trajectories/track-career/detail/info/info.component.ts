@@ -17,15 +17,14 @@ import { ButtonComponent } from "@ui/components";
 import { AvatarComponent, IconComponent } from "@uilib";
 import { expandElement } from "@utils/expand-element";
 import { map, type Observable, type Subscription } from "rxjs";
-import { SkillCardComponent } from "../../../../skills/shared/skill-card/skill-card.component";
 import { CommonModule } from "@angular/common";
 import type { Trajectory, UserTrajectory } from "projects/skills/src/models/trajectory.model";
 import { TrajectoriesService } from "../../../trajectories.service";
-import type { Month, UserData } from "projects/skills/src/models/profile.model";
 import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
 import { SkillService } from "projects/skills/src/app/skills/services/skill.service";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
+import { SkillCardComponent } from "projects/skills/src/app/shared/skill-card/skill-card.component";
 
 /**
  * Компонент детальной информации о траектории
@@ -42,14 +41,12 @@ import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component"
   standalone: true,
   imports: [
     IconComponent,
-    ButtonComponent,
     RouterModule,
     ParseBreaksPipe,
     ParseLinksPipe,
-    SkillCardComponent,
-    AvatarComponent,
     CommonModule,
     SoonCardComponent,
+    SkillCardComponent,
   ],
   templateUrl: "./info.component.html",
   styleUrl: "./info.component.scss",
@@ -86,8 +83,9 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
     this.route.parent?.data.pipe(map(r => r["data"])).subscribe(r => {
       this.trajectory = r[0];
       this.userTrajectory.set({ ...r[1], individualSkills: r[2] });
-      console.log(this.userTrajectory());
     });
+
+    console.log(this.userTrajectory()?.availableSkills);
   }
 
   descriptionExpandable?: boolean;

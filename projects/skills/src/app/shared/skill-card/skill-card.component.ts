@@ -3,8 +3,10 @@
 import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { AvatarComponent } from "@uilib";
-import { Skill } from "../../../../models/skill.model";
 import { PluralizePipe } from "@corelib";
+import { Skill } from "projects/skills/src/models/skill.model";
+import { CircleProgressBarComponent } from "../circle-progress-bar/circle-progress-bar.component";
+import { IconComponent } from "@ui/components";
 
 /**
  * Компонент карточки навыка
@@ -19,15 +21,41 @@ import { PluralizePipe } from "@corelib";
  * - Поддержка двух визуальных стилей
  * - Индикация статуса навыка (подписка, просрочка, выполнение)
  * - Плюрализация для количества уровней
+ * - Раскрывающийся список тем и действий
  */
 @Component({
   selector: "app-skill-card",
   standalone: true,
-  imports: [CommonModule, AvatarComponent, PluralizePipe],
+  imports: [
+    CommonModule,
+    AvatarComponent,
+    PluralizePipe,
+    CircleProgressBarComponent,
+    IconComponent,
+  ],
   templateUrl: "./skill-card.component.html",
   styleUrl: "./skill-card.component.scss",
 })
 export class SkillCardComponent {
   @Input({ required: true }) skill!: Skill;
   @Input() type: "personal" | "base" = "base";
+
+  isExpanded = false;
+
+  toggleExpand(): void {
+    this.isExpanded = !this.isExpanded;
+  }
+
+  getTopics(): any[] {
+    const mockTopics: any[] = [
+      { name: "Основы программирования", levels: 5 },
+      { name: "Структуры данных", levels: 5 },
+      { name: "Алгоритмы и оптимизация", levels: 5 },
+      { name: "Работа с базами данных", levels: 5 },
+      { name: "Веб-разработка", levels: 5 },
+      { name: "Тестирование и отладка", levels: 5 },
+    ];
+
+    return mockTopics;
+  }
 }

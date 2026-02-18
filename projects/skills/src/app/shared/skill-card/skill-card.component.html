@@ -1,0 +1,69 @@
+<!-- @format -->
+
+<div class="skill-card--wrapper">
+  <div class="skill-card">
+    <div class="skill-card__inner">
+      <app-avatar [size]="50" [url]="skill.fileLink"></app-avatar>
+
+      <div class="skill-card__info">
+        <p class="skill-card__title text-body-12">{{ skill.name }}</p>
+
+        <p class="skill-card__text text-body-12">
+          {{ skill.description }}
+        </p>
+
+        <div class="skill-card__text-block">
+          <p class="skill-card__level text-body-10">
+            {{ skill.quantityOfLevels }}
+            {{ skill.quantityOfLevels | pluralize: ["уровень", "уровня", "уровней"] }}
+          </p>
+
+          <p class="skill-card__level text-body-10">| доступен с 16.03.2026</p>
+        </div>
+      </div>
+    </div>
+
+    <app-circle-progress-bar
+      style="width: 40px; height: 40px"
+      [progress]="100"
+      mode="progress"
+    ></app-circle-progress-bar>
+  </div>
+
+  <div class="skill-card__expand" (click)="toggleExpand()">
+    @if (isExpanded) {
+    <i appIcon icon="arrow-no-body" class="skill-card__expanded" appSquare="8"></i>
+    } @else {
+    <i appIcon icon="arrow-no-body" appSquare="8"></i>
+    }
+  </div>
+</div>
+
+<div class="expandable" [class.expandable--expanded]="isExpanded">
+  <div class="expandable__content">
+    <ul class="expandable__list">
+      @for (topic of getTopics(); track $index) {
+      <li class="expandable__item">
+        <div class="expandable__item--inner">
+          <span class="topic__number text-body-10"
+            >Урок {{ $index + 1 }}.
+            <span class="topic__name text-body-10">{{ topic.name }}</span></span
+          >
+          <p class="topic__levels text-body-10">
+            {{ topic.levels }} {{ topic.levels | pluralize: ["уровень", "уровня", "уровней"] }} |
+            доступен с 16.03.2026
+          </p>
+        </div>
+
+        <app-circle-progress-bar
+          style="width: 30px; height: 30px"
+          [progress]="0"
+          appereance="closed"
+          mode="button"
+          [haveDate]="true"
+        ></app-circle-progress-bar>
+      </li>
+      }
+    </ul>
+  </div>
+</div>

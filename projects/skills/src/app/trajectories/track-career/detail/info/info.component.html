@@ -19,12 +19,20 @@
           <p class="text-body-12 trajectory__progress--percent">55%</p>
           <div class="trajectory__progress--cover" style="width: 55%"></div>
         </div>
+
+        @if (userTrajectory()?.availableSkills; as availableSkills) {
+        <div class="trajectory__skills">
+          @for (skill of availableSkills; track skill.id) {
+          <app-skill-card [skill]="skill"></app-skill-card>
+          }
+        </div>
+        }
       </section>
 
       <div class="trajectory__right">
         <div class="about trajectory__about">
           <div class="about__head">
-            <h3 class="text-body-12 about__title">о траектории</h3>
+            <h3 class="text-body-12 about__title">о курсе</h3>
             <i appIcon icon="folder" appSquare="12" class="about__head--icon"></i>
           </div>
           @if (trajectory.description) {

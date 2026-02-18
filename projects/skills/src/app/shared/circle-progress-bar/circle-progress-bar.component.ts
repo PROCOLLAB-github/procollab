@@ -2,6 +2,7 @@
 
 import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { IconComponent } from "@ui/components";
 
 /**
  * Компонент круглого прогресс-бара
@@ -15,7 +16,7 @@ import { CommonModule } from "@angular/common";
 @Component({
   selector: "app-circle-progress-bar",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconComponent],
   templateUrl: "./circle-progress-bar.component.html",
   styleUrl: "./circle-progress-bar.component.scss",
 })
@@ -26,6 +27,12 @@ export class CircleProgressBarComponent {
    * @default 0
    */
   @Input() progress = 0;
+
+  @Input() mode: "button" | "progress" = "progress";
+
+  @Input() appereance?: "open" | "closed";
+
+  @Input() haveDate?: boolean;
 
   /**
    * Радиус круга прогресс-бара в пикселях

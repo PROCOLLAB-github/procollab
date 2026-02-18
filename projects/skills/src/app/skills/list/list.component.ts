@@ -5,7 +5,6 @@ import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
 import { ActivatedRoute, Router, RouterLink, RouterModule } from "@angular/router";
 import { BarComponent, ButtonComponent } from "@ui/components";
-import { SkillCardComponent } from "../shared/skill-card/skill-card.component";
 import { map, Subscription } from "rxjs";
 import { Skill } from "../../../models/skill.model";
 import { SkillService } from "../services/skill.service";
@@ -13,6 +12,7 @@ import { ProfileService } from "../../profile/services/profile.service";
 import { SubscriptionData } from "@corelib";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ModalComponent } from "@ui/components/modal/modal.component";
+import { SkillCardComponent } from "../../shared/skill-card/skill-card.component";
 
 /**
  * Компонент списка навыков

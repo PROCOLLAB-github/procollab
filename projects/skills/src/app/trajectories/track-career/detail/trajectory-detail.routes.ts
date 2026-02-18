@@ -18,6 +18,10 @@ export const TRAJECTORY_DETAIL_ROUTES = [
         path: "",
         component: TrajectoryInfoComponent,
       },
+      {
+        path: "task/:taskId",
+        loadChildren: () => import("../../../task/task.routes").then(m => m.TASK_ROUTES),
+      },
     ],
   },
 ];
