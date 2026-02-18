@@ -8,8 +8,8 @@
     position: absolute;
     top: 49%;
     left: 49%;
-    transform: translate(-49%, -49%);
     color: var(--dark-grey);
+    transform: translate(-49%, -49%);
 
     &--icon {
       top: 45%;
@@ -26,8 +26,8 @@
 
   &__date {
     position: absolute;
-    left: 5%;
     bottom: -15%;
+    left: 5%;
   }
 }
 
@@ -38,12 +38,12 @@
 }
 
 .track {
-  stroke: var(--accent-light);
   opacity: 0.2;
+  stroke: var(--accent-light);
 
   &--closed {
-    stroke: var(--red);
     opacity: 1;
+    stroke: var(--red);
   }
 }
 
