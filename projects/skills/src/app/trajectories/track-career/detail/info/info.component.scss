@@ -160,7 +160,7 @@
   align-items: center;
   justify-content: center;
   max-height: calc(100vh - 40px);
-  padding: 0px 200px;
+  padding: 0 200px;
 
   &__text {
     color: var(--dark-grey);
@@ -168,6 +168,6 @@
   }
 
   &__img {
-    margin: 30px 0px;
+    margin: 30px 0;
   }
 }

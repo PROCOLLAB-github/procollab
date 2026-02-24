@@ -14,10 +14,10 @@
 }
 
 .action {
-  margin-top: 20px;
   display: grid;
   grid-template-columns: 6.2fr 4fr;
   grid-gap: 20px;
+  margin-top: 20px;
 
   :last-child {
     width: 333px;

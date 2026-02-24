@@ -6,11 +6,11 @@
   flex-direction: column-reverse;
   gap: 20px;
   align-items: center;
+  min-height: 336px;
   padding: 24px;
   background-color: var(--light-white);
   border: 0.5px solid var(--medium-grey-for-outline);
   border-radius: var(--rounded-lg);
-  min-height: 336px;
 
   @include responsive.apply-desktop {
     flex-direction: row-reverse;
@@ -25,19 +25,18 @@
   &--hasImage {
     @include responsive.apply-desktop {
       flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
       gap: 114px;
+      align-items: center;
+      justify-content: space-between;
       padding: 24px 90px 24px 24px;
     }
   }
 
-
   &__img {
-    max-width: 200px;
-    max-height: 200px;
-    height: 100%;
     width: 100%;
+    max-width: 200px;
+    height: 100%;
+    max-height: 200px;
     object-fit: contain;
   }
 
@@ -59,7 +58,7 @@
       &--hasVideo {
         align-self: center;
         justify-content: center;
-       border-radius: var(--rounded-lg);
+        border-radius: var(--rounded-lg);
       }
     }
   }
@@ -91,7 +90,7 @@
   }
 
   &__text-content {
-    display: flex;;
+    display: flex;
     flex-direction: column;
     gap: 24px;
   }

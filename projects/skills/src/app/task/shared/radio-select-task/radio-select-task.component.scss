@@ -17,7 +17,7 @@
   }
 
   &__title {
-    margin: 23px 0px;
+    margin: 23px 0;
   }
 
   &__list {
@@ -27,12 +27,12 @@
   }
 
   &__img {
-    max-width: 150px;
-    max-height: 207px;
-    height: 100%;
     width: 100%;
-    object-fit: contain;
+    max-width: 150px;
+    height: 100%;
+    max-height: 207px;
     margin: calc(75px - 24px) calc(92px - 24px);
+    object-fit: contain;
 
     &-text {
       text-align: center;
@@ -41,8 +41,8 @@
 
   &__item {
     display: flex;
-    align-items: center;
     gap: 14px;
+    align-items: center;
     cursor: pointer;
 
     label {
@@ -50,16 +50,16 @@
     }
 
     input[type="radio"] {
-      appearance: none;
-      -webkit-appearance: none;
+      position: relative;
       min-width: 18px;
       min-height: 18px;
-      border-radius: 50%;
-      border: 0.5px solid var(--medium-grey-for-outline);
-      outline: none;
-      background: transparent;
-      position: relative;
       cursor: pointer;
+      background: transparent;
+      border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: 50%;
+      outline: none;
+      appearance: none;
+      appearance: none;
     }
 
     input[type="radio"]:checked {
@@ -67,14 +67,14 @@
     }
 
     input[type="radio"]:checked::after {
-      content: "";
       position: absolute;
       top: 50%;
       left: 50%;
       width: 8px;
       height: 8px;
-      border-radius: 50%;
+      content: "";
       background-color: var(--light-white);
+      border-radius: 50%;
       transform: translate(-50%, -50%);
     }
 
@@ -91,13 +91,14 @@
     }
   }
 
-  &__body, &__content {
+  &__body,
+  &__content {
+    flex-grow: 1;
+    min-height: 358px;
     padding: 24px;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
-    flex-grow: 1;
-    min-height: 358px;
   }
 
   &__body {
@@ -109,7 +110,6 @@
   &__content {
     min-width: 333px;
   }
-
 
   :host ::ng-deep &__hint p {
     margin-top: 20px;
