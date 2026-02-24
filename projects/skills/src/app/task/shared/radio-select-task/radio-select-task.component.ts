@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 import type { SingleQuestion, SingleQuestionError } from "../../../../models/step.model";
 import { DomSanitizer, type SafeResourceUrl } from "@angular/platform-browser";
 import { ParseBreaksPipe, YtExtractService } from "@corelib";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компонент задачи с выбором одного варианта (радио-кнопки)
@@ -28,7 +29,7 @@ import { ParseBreaksPipe, YtExtractService } from "@corelib";
 @Component({
   selector: "app-radio-select-task",
   standalone: true,
-  imports: [CommonModule, ParseBreaksPipe],
+  imports: [CommonModule, ParseBreaksPipe, TruncatePipe],
   templateUrl: "./radio-select-task.component.html",
   styleUrl: "./radio-select-task.component.scss",
 })
@@ -42,9 +43,13 @@ export class RadioSelectTaskComponent {
   set error(value: SingleQuestionError | null) {
     this._error.set(value);
 
-    if (value !== null) {
-      this.result.set({ answerId: null }); // Сбрасываем выбранный ответ при ошибке
-    }
+    setTimeout(() => {
+      if (value !== null) {
+        this.result.set({ answerId: null }); // Сбрасываем выбранный ответ при ошибке
+      }
+
+      this._error.set(null);
+    }, 1000);
   }
 
   get error() {
@@ -60,24 +65,46 @@ export class RadioSelectTaskComponent {
   sanitizer = inject(DomSanitizer); // Сервис для безопасной работы с HTML
   ytExtractService = inject(YtExtractService); // Сервис для извлечения YouTube ссылок
 
-  videoUrl?: SafeResourceUrl; // Безопасная ссылка на видео
   description: any; // Обработанное описание
-  sanitizedFileUrl?: SafeResourceUrl; // Безопасная ссылка на файл
+  sourceType: "embed" | "img" | null = null;
+  mediaUrl?: SafeResourceUrl | string;
 
   ngOnInit(): void {
-    // Извлекаем YouTube ссылку из описания
-    const res = this.ytExtractService.transform(this.data.description);
-
-    if (res.extractedLink)
-      this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(res.extractedLink);
-
-    // Обрабатываем файлы, если они есть
     if (this.data.files.length) {
-      this.sanitizedFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.data.files[0]);
+      this.data.files[0].includes(".webp") ? (this.sourceType = "img") : (this.sourceType = null);
     }
 
-    // Безопасно обрабатываем HTML в описании
-    this.description = this.sanitizer.bypassSecurityTrustHtml(this.data.description);
+    if (!this.data.videoUrl) return;
+
+    const url = this.data.videoUrl;
+    const lower = url.toLowerCase();
+
+    // RuTube
+    if (lower.includes("rutube.ru")) {
+      const match = url.match(/video\/([^/?]+)/);
+      if (match) {
+        this.mediaUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+          `https://rutube.ru/play/embed/${match[1]}`
+        );
+        this.sourceType = "embed";
+        return;
+      }
+    }
+
+    // Прямой mp4
+    if (lower.includes("drive.google.com")) {
+      const match = url.match(/file\/d\/([^/]+)/);
+      if (match) {
+        const embedUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
+
+        this.mediaUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+
+        this.sourceType = "embed";
+        return;
+      }
+    }
+
+    this.sourceType = null;
   }
 
   /**

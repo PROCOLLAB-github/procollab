@@ -30,6 +30,7 @@ export class TaskService {
   // Реактивное управление состоянием с использованием Angular signals
   currentSteps = signal<TaskStepsResponse["stepData"]>([]);
   currentTaskDone = signal(false);
+  completedStepIds = signal<Set<number>>(new Set());
 
   /**
    * Сопоставление типов шагов с соответствующими конечными точками API
@@ -42,6 +43,14 @@ export class TaskService {
     question_single_answer: "single-correct",
     question_write: "write",
   };
+
+  markStepDone(stepId: number) {
+    this.completedStepIds.update(prev => new Set([...prev, stepId]));
+  }
+
+  clearCompletedSteps() {
+    this.completedStepIds.set(new Set());
+  }
 
   /**
    * Получает конкретный шаг по его ID из массива текущих шагов

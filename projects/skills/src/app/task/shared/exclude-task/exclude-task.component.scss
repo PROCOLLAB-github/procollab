@@ -3,85 +3,77 @@
 
 .exclude {
   display: flex;
-  flex-direction: column;
-  padding: 22px 14px;
-  background-color: var(--white);
-  border: 1px solid var(--grey-button);
-  border-radius: 15px;
+  flex-direction: row;
+  gap: 20px;
 
-  @include responsive.apply-desktop {
-    &--hasVideo {
-      flex-direction: row;
-    }
-
-    justify-content: space-evenly;
-    padding: 26px;
-  }
-
-  &__title {
-    margin-bottom: 20px;
-    color: var(--black);
-
-    @include typography.heading-4;
-
-    @include responsive.apply-desktop {
-      margin-bottom: 26px;
-
-      @include typography.heading-3;
-    }
+  &__answer {
+    color: var(--grey-for-text);
   }
 
   &__text {
-    width: 100%;
-    height: 100%;
-
-    // max-height: 285px;
-    margin-bottom: 20px;
-    white-space: pre-line;
+    margin: 23px 0px;
 
     &--hasVideo {
-      max-width: 435px;
-    }
-
-    @include responsive.apply-desktop {
       display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: center;
+
+      iframe {
+        border-radius: var(--rounded-lg);
+      }
     }
   }
 
   &__list {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 10px;
-
-    @include responsive.apply-desktop {
-      gap: 18px;
-    }
   }
 
   &__item {
-    padding: 10px;
-    cursor: pointer;
-    border: 1px solid var(--accent);
-    border-radius: 15px;
-
-    @include typography.body-12;
-
-    @include responsive.apply-desktop {
-      padding: 10px 14px;
-
-      @include typography.body-14;
-    }
-
-    &--active {
-      border-color: var(--black);
-      opacity: 0.5;
-    }
+    display: flex;
+    align-items: center;
+    gap: 14px;
 
     &--success {
-      color: var(--green);
-      background-color: var(--light-green);
-      border-color: var(--green);
+      ::ng-deep {
+        app-checkbox {
+          .field--checked {
+            background-color: var(--green) !important;
+            border-color: var(--green) !important;
+          }
+        }
+      }
     }
+
+    &--error {
+      ::ng-deep {
+        app-checkbox {
+          .field--checked {
+            background-color: var(--red) !important;
+            border-color: var(--red) !important;
+          }
+        }
+      }
+    }
+
+    label {
+      cursor: pointer;
+    }
+  }
+
+  &__body, &__content {
+    padding: 24px;
+    background-color: var(--light-white);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
+    flex-grow: 1;
+    min-height: 358px;
+  }
+
+  &__content {
+    min-width: 333px;
   }
 
   :host ::ng-deep &__hint p {

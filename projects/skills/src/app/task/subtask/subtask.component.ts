@@ -3,6 +3,7 @@
 import {
   ChangeDetectorRef,
   Component,
+  computed,
   inject,
   type OnInit,
   signal,
@@ -36,6 +37,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { IconComponent } from "@uilib";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { SkillService } from "../../skills/services/skill.service";
+import { SnackbarService } from "@ui/services/snackbar.service";
 
 /**
  * Компонент подзадания
@@ -70,7 +72,6 @@ import { SkillService } from "../../skills/services/skill.service";
     RelationsTaskComponent,
     ButtonComponent,
     ExcludeTaskComponent,
-    RouterLink,
     LoaderComponent,
     WriteTaskComponent,
     ModalComponent,
@@ -89,10 +90,13 @@ export class SubtaskComponent implements OnInit {
   cdref = inject(ChangeDetectorRef);
   taskService = inject(TaskService);
   skillService = inject(SkillService);
+  snackbarService = inject(SnackbarService);
 
   // Состояние UI
   loading = signal(false);
   hint = signal("");
+
+  isAddInfo = signal<boolean>(false);
 
   // Получение ID подзадания из параметров маршрута
   subTaskId = toSignal(
@@ -116,7 +120,7 @@ export class SubtaskComponent implements OnInit {
   connectQuestionError = signal<ConnectQuestionResponse | null>(null);
   singleQuestionError = signal<SingleQuestionError | null>(null);
   excludeQuestionError = signal<ExcludeQuestionResponse | null>(null);
-  anyError = signal(false);
+  loader = signal<boolean>(false);
   success = signal(false);
 
   // Текущий открытый тип вопроса для модального окна
@@ -155,6 +159,14 @@ export class SubtaskComponent implements OnInit {
       )
       .subscribe({
         next: step => {
+          const subTaskId = this.subTaskId();
+
+          const stepMetadata = subTaskId ? this.taskService.getStep(subTaskId) : null;
+          if (stepMetadata?.isDone) {
+            this.router.navigate(["../results"], { relativeTo: this.route });
+            return;
+          }
+
           this.setStepData(step);
           setTimeout(() => this.loading.set(false), 500);
         },
@@ -226,28 +238,19 @@ export class SubtaskComponent implements OnInit {
 
     setTimeout(() => {
       this.success.set(false);
-
       const nextStep = this.taskService.getNextStep(id);
-      const taskId = this.route.parent?.snapshot.params["taskId"];
-      if (!taskId) return;
-
       if (!nextStep) {
-        this.router.navigate(["/task", taskId, "results"]).then(() => {
-          console.debug("Маршрут изменен из SubtaskComponent");
-          location.reload();
-        });
+        this.router.navigate(["../results"], { relativeTo: this.route }).then(() => {});
         this.taskService.currentTaskDone.set(true);
         return;
       }
 
       this.router
-        .navigate(["/task", taskId, nextStep.id], {
+        .navigate(["../", nextStep.id], {
+          relativeTo: this.route,
           queryParams: { type: nextStep.type },
         })
-        .then(() => {
-          console.debug("Маршрут изменен из SubtaskComponent");
-          location.reload();
-        });
+        .then(() => {});
     }, 1000);
   }
 
@@ -256,6 +259,8 @@ export class SubtaskComponent implements OnInit {
    * Отправляет ответ пользователя и обрабатывает результат
    */
   onNext() {
+    this.loader.set(true);
+
     const id = this.subTaskId();
     if (!id) return;
 
@@ -265,8 +270,11 @@ export class SubtaskComponent implements OnInit {
     this.taskService.checkStep(id, type, this.body()).subscribe({
       next: _res => {
         this.success.set(true);
-
         // Проверка наличия всплывающих окон для отображения
+
+        this.taskService.markStepDone(id);
+        this.snackbarService.success("правильный ответ, продолжайте дальше");
+
         if (
           (type === "info_slide" && !this.infoSlide()?.popups.length) ||
           (type === "exclude_question" && !this.excludeQuestion()?.popups.length) ||
@@ -277,42 +285,34 @@ export class SubtaskComponent implements OnInit {
           // Автоматический переход к следующему шагу, если нет всплывающих окон
           setTimeout(() => {
             this.success.set(false);
-
             const nextStep = this.taskService.getNextStep(id);
-            const taskId = this.route.parent?.snapshot.params["taskId"];
-            if (!taskId) return;
 
             if (!nextStep) {
-              this.router.navigate(["/task", taskId, "results"]).then(() => {
-                console.debug("Маршрут изменен из SubtaskComponent");
-                location.reload();
-              });
+              this.router.navigate(["../results"], { relativeTo: this.route }).then(() => {});
               this.taskService.currentTaskDone.set(true);
               return;
             }
 
+            this.loader.set(false);
             this.router
-              .navigate(["/task", taskId, nextStep.id], {
+              .navigate(["../", nextStep.id], {
+                relativeTo: this.route,
                 queryParams: { type: nextStep.type },
               })
-              .then(() => {
-                console.debug("Маршрут изменен из SubtaskComponent");
-                location.reload();
-              });
+              .then(() => {});
           }, 1000);
         }
       },
       error: err => {
+        this.loader.set(false);
+
         // Обработка ошибок и отображение подсказок
-        this.anyError.set(true);
+        this.snackbarService.error("упс, вышла неточность! попробуйте еще раз");
+
         if (err.error.hint) {
           this.hint.set(err.error.hint);
           this.cdref.detectChanges();
         }
-        console.error(err.error.hint);
-        setTimeout(() => {
-          this.anyError.set(false);
-        }, 2000);
 
         // Установка специфичных ошибок для разных типов вопросов
         if (type === "question_connect") {

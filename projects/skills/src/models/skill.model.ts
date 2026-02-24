@@ -154,6 +154,8 @@ export interface TaskStepsResponse extends TaskDetail {
 
   /** Массив шагов задачи */
   stepData: TaskStep[];
+
+  tasks: Task[];
 }
 
 /**

@@ -4,7 +4,8 @@ import { Component, inject, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import type { InfoSlide } from "../../../../models/step.model";
 import { DomSanitizer, type SafeResourceUrl } from "@angular/platform-browser";
-import { ParseBreaksPipe, ParseLinksPipe, YtExtractService } from "@corelib";
+import { YtExtractService } from "@corelib";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компонент информационного слайда с видео/изображением
@@ -23,7 +24,7 @@ import { ParseBreaksPipe, ParseLinksPipe, YtExtractService } from "@corelib";
 @Component({
   selector: "app-info-task",
   standalone: true,
-  imports: [CommonModule, ParseLinksPipe, ParseBreaksPipe],
+  imports: [CommonModule, TruncatePipe],
   templateUrl: "./info-task.component.html",
   styleUrl: "./info-task.component.scss",
 })
@@ -33,29 +34,44 @@ export class InfoTaskComponent {
   sanitizer = inject(DomSanitizer); // Сервис для безопасной работы с HTML
   ytExtractService = inject(YtExtractService); // Сервис для извлечения YouTube ссылок
 
-  videoUrl?: SafeResourceUrl; // Безопасная ссылка на видео
-  description: any; // Обработанное описание
-  sanitizedFileUrl?: SafeResourceUrl; // Безопасная ссылка на файл
-  contentType: "gif" | "webp" | "mp4" | string = ""; // Тип медиа-контента
+  sourceType: "embed" | "img" | null = null;
+  mediaUrl?: SafeResourceUrl | string;
 
   ngOnInit(): void {
-    // Извлекаем YouTube ссылку из текста
-    const res = this.ytExtractService.transform(this.data.text);
-
-    // Определяем тип контента по расширению файла
     if (this.data.files.length) {
-      this.contentType = this.data.files[0].slice(-3).toLocaleLowerCase();
+      this.data.files[0].includes(".webp") ? (this.sourceType = "img") : (this.sourceType = null);
     }
 
-    if (res.extractedLink)
-      this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(res.extractedLink);
+    if (!this.data.videoUrl) return;
 
-    // Обрабатываем файлы, если они есть
-    if (this.data.files.length) {
-      this.sanitizedFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.data.files[0]);
+    const url = this.data.videoUrl;
+    const lower = url.toLowerCase();
+
+    // RuTube
+    if (lower.includes("rutube.ru")) {
+      const match = url.match(/video\/([^/?]+)/);
+      if (match) {
+        this.mediaUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
+          `https://rutube.ru/play/embed/${match[1]}`
+        );
+        this.sourceType = "embed";
+        return;
+      }
     }
 
-    // Безопасно обрабатываем HTML в описании
-    this.description = this.sanitizer.bypassSecurityTrustHtml(this.data.description);
+    // Прямой mp4
+    if (lower.includes("drive.google.com")) {
+      const match = url.match(/file\/d\/([^/]+)/);
+      if (match) {
+        const embedUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
+
+        this.mediaUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
+
+        this.sourceType = "embed";
+        return;
+      }
+    }
+
+    this.sourceType = null;
   }
 }

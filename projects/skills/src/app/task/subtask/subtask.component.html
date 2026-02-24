@@ -2,7 +2,7 @@
 
 @if (loading()) {
 <div class="loading">
-  <app-loader color="accent"></app-loader>
+  <app-loader size="125px" color="accent"></app-loader>
 </div>
 } @else {
 <div class="subtask">
@@ -83,8 +83,8 @@
   }
   <app-radio-select-task
     [data]="sq"
-    [error]="singleQuestionError()"
     [success]="success()"
+    [error]="singleQuestionError()"
     (update)="body.set($event)"
     [hint]="hint()"
   ></app-radio-select-task>
@@ -222,19 +222,31 @@
     </div>
   </app-modal>
   }
-  <app-write-task [data]="wq" [success]="success()" (update)="body.set($event)"></app-write-task>
+  <app-write-task [data]="wq" (update)="body.set($event)"></app-write-task>
   }
 
   <div class="action">
-    <app-button size="big" class="action__button" (click)="onNext()">продолжить</app-button>
-
-    <div class="action__error action__badge" [class.action__badge--open]="anyError()">
-      <p class="text-body-12">вышла неточность...</p>
-    </div>
-
-    <div class="action__success action__badge" [class.action__badge--open]="success()">
-      <p class="text-body-12">всё верно! так держать</p>
-    </div>
+    @if (isAddInfo()) {
+    <app-button
+      [loader]="loader()"
+      size="big"
+      customTypographyClass="text-body-12"
+      class="action__button"
+      appearance="outline"
+      >дополнительная информация</app-button
+    >
+    } @else {
+    <div></div>
+    }
+    <app-button
+      [loader]="loader()"
+      size="big"
+      customTypographyClass="text-body-12"
+      class="action__button"
+      (click)="onNext()"
+      >следующее задание</app-button
+    >
   </div>
 </div>
 }
+<!-- [disabled]="!!writeQuestion()" [style.opacity]="!!writeQuestion() ? '0.5' : '1'" -->

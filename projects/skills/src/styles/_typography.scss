@@ -192,7 +192,7 @@
   line-height: 150%;
 }
 
-.text-bold-body-14 {
+.text-body-bold-14 {
   @include bold-body-14;
 }
 
@@ -220,7 +220,7 @@
   @include body-12;
 }
 
-@mixin body-12-bold {
+@mixin body-bold-12 {
   font-family: Mont, sans-serif;
   font-size: 12px;
   font-style: normal;
@@ -228,8 +228,8 @@
   line-height: 130%;
 }
 
-.text-body-12-bold {
-  @include body-12-bold;
+.text-body-bold-12 {
+  @include body-bold-12;
 }
 
 @mixin body-10 {

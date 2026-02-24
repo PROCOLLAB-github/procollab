@@ -5,9 +5,9 @@ import { CommonModule } from "@angular/common";
 import { Router, RouterLink, RouterOutlet } from "@angular/router";
 import { IconComponent, ProfileControlPanelComponent, SidebarComponent } from "@uilib";
 import { SidebarProfileComponent } from "./shared/sidebar-profile/sidebar-profile.component";
-import { ProfileService } from "./profile/services/profile.service";
 import type { UserData } from "../models/profile.model";
 import { AuthService } from "@auth/services";
+import { SnackbarComponent } from "@ui/components/snackbar/snackbar.component";
 
 /**
  * Корневой компонент приложения, который служит основным контейнером макета
@@ -33,13 +33,13 @@ import { AuthService } from "@auth/services";
     SidebarProfileComponent,
     IconComponent,
     ProfileControlPanelComponent,
+    SnackbarComponent,
   ],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
 })
 export class AppComponent implements OnInit {
   // Внедренные сервисы для управления профилем и аутентификацией
-  profileService = inject(ProfileService);
   authService = inject(AuthService);
   router = inject(Router);
 
@@ -69,27 +69,7 @@ export class AppComponent implements OnInit {
    * Получает данные пользователя и синхронизирует профиль при запуске
    * Перенаправляет на страницу входа при ошибке аутентификации
    */
-  ngOnInit(): void {
-    // Получение текущих данных пользователя
-    this.profileService.getUserData().subscribe({
-      next: data => this.userData.set(data as UserData),
-      error: () => {
-        // Перенаправление на основное приложение для входа при ошибке получения данных пользователя
-        location.href = "https://app.procollab.ru/auth/login";
-      },
-    });
-
-    // Синхронизация данных профиля с бэкендом
-    this.profileService.syncProfile().subscribe({
-      next: () => {
-        // Синхронизация профиля успешна - никаких действий не требуется
-      },
-      error: () => {
-        // Перенаправление на основное приложение для входа при ошибке синхронизации профиля
-        location.href = "https://app.procollab.ru/auth/login";
-      },
-    });
-  }
+  ngOnInit(): void {}
 
   onLogout() {
     this.authService.logout().subscribe({

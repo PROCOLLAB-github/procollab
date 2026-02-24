@@ -1,37 +1,39 @@
 <!-- @format -->
 
 <div class="exclude" [class.exclude--hasVideo]="!!sanitizedFileUrl">
-  @if (!sanitizedFileUrl) {
-  <h2 class="exclude__title">{{ data.text }}</h2>
-  }
-  <div class="exclude__text text-body-14" [class.exclude__text--hasVideo]="!!sanitizedFileUrl">
-    @if (sanitizedFileUrl) {
-    <iframe
-      [src]="sanitizedFileUrl"
-      width="100%"
-      height="285px"
-      frameborder="0"
-      allowfullscreen
-      allowtransparency="true"
-    ></iframe>
+  <div class="exclude__body">
+    @if (!sanitizedFileUrl) {
+    <h2 class="exclude__title text-body-bold-12">{{ data.text }}</h2>
     }
+    <div class="exclude__text text-body-12" [class.exclude__text--hasVideo]="!!sanitizedFileUrl">
+      @if (sanitizedFileUrl) {
+      <iframe
+        [src]="sanitizedFileUrl"
+        width="397px"
+        height="223px"
+        frameborder="0"
+        allowfullscreen
+        allowtransparency="true"
+      ></iframe>
+      }
 
-    <div [innerHTML]="description"></div>
+      <div [innerHTML]="description"></div>
+    </div>
   </div>
 
-  <div>
-    @if (sanitizedFileUrl) {
-    <h2 class="exclude__title">{{ data.text }}</h2>
-    }
+  <div class="exclude__content">
+    <p class="exclude__answer text-body-12">ответ</p>
     <ul class="exclude__list">
+      <p class="exclude__text text-body-12">{{ data.text }}</p>
       @for (op of data.answers; track op.id) {
       <li
         class="exclude__item"
-        [class.exclude__item--active]="result().includes(op.id)"
         [class.exclude__item--success]="success && result().includes(op.id)"
+        [class.exclude__item--error]="error"
         (click)="onSelect(op.id)"
       >
-        {{ op.text }}
+        <app-checkbox size="18" [checked]="result().includes(op.id)"></app-checkbox>
+        <label class="text-body-12">{{ op.text }}</label>
       </li>
       }
     </ul>

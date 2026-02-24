@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 import type { ExcludeQuestion, ExcludeQuestionResponse } from "../../../../models/step.model";
 import { DomSanitizer, type SafeResourceUrl } from "@angular/platform-browser";
 import { ParseBreaksPipe, YtExtractService } from "@corelib";
+import { CheckboxComponent } from "@ui/components";
 
 /**
  * Компо��ент задачи на исключение лишнего
@@ -29,7 +30,7 @@ import { ParseBreaksPipe, YtExtractService } from "@corelib";
 @Component({
   selector: "app-exclude-task",
   standalone: true,
-  imports: [CommonModule, ParseBreaksPipe],
+  imports: [CommonModule, ParseBreaksPipe, CheckboxComponent],
   templateUrl: "./exclude-task.component.html",
   styleUrl: "./exclude-task.component.scss",
 })
@@ -45,7 +46,10 @@ export class ExcludeTaskComponent implements OnInit {
   set error(value: ExcludeQuestionResponse | null) {
     this._error.set(value);
 
-    value !== null && this.result.set([]); // Сбрасываем выбранные ответы при ошибке
+    setTimeout(() => {
+      value !== null && this.result.set([]); // Сбрасываем выбранные ответы при ошибке
+      this._error.set(null);
+    }, 1000);
   }
 
   get error() {

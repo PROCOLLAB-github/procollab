@@ -2,14 +2,11 @@
 
 import { CommonModule } from "@angular/common";
 import { ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from "@angular/core";
-import { PluralizePipe } from "@corelib";
 import { Skill } from "@office/models/skill";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ButtonComponent } from "@ui/components";
 import { map, of, Subscription, switchMap } from "rxjs";
 import { AuthService } from "@auth/services";
 import { ActivatedRoute } from "@angular/router";
-import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
 import { ProfileService as profileApproveSkillService } from "@auth/services/profile.service";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { HttpErrorResponse } from "@angular/common/http";
@@ -28,14 +25,7 @@ import { ApproveSkillPeopleComponent } from "@office/shared/approve-skill-people
   styleUrl: "./approve-skill.component.scss",
   templateUrl: "./approve-skill.component.html",
   standalone: true,
-  imports: [
-    CommonModule,
-    AvatarComponent,
-    PluralizePipe,
-    ButtonComponent,
-    ModalComponent,
-    ApproveSkillPeopleComponent,
-  ],
+  imports: [CommonModule, ButtonComponent, ModalComponent, ApproveSkillPeopleComponent],
 })
 export class ApproveSkillComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);

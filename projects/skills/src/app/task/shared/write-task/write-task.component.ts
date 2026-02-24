@@ -1,10 +1,11 @@
 /** @format */
 
 import { Component, EventEmitter, Input, type OnInit, Output, inject } from "@angular/core";
-import { CommonModule, JsonPipe } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import type { WriteQuestion } from "../../../../models/step.model";
-import { ParseBreaksPipe, YtExtractService } from "@corelib";
+import { YtExtractService } from "@corelib";
 import { DomSanitizer, type SafeResourceUrl } from "@angular/platform-browser";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компонент задачи с текстовым вводом
@@ -26,7 +27,7 @@ import { DomSanitizer, type SafeResourceUrl } from "@angular/platform-browser";
 @Component({
   selector: "app-write-task",
   standalone: true,
-  imports: [CommonModule, JsonPipe, ParseBreaksPipe],
+  imports: [CommonModule, TruncatePipe],
   templateUrl: "./write-task.component.html",
   styleUrl: "./write-task.component.scss",
 })

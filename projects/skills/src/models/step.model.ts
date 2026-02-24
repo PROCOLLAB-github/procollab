@@ -78,6 +78,7 @@ export interface SingleQuestion extends BaseStep {
   isAnswered: boolean; // Был ли вопрос уже отвечен
   text: string; // Основной текст вопроса
   popups: Popup[]; // Всплывающие окна для отображения после ответа
+  videoUrl: string;
 }
 
 /**

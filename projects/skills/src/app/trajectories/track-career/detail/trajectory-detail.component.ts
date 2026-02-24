@@ -7,6 +7,7 @@ import type { Trajectory } from "projects/skills/src/models/trajectory.model";
 import { filter, map, type Subscription } from "rxjs";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ButtonComponent } from "@ui/components";
+import { ModalComponent } from "@ui/components/modal/modal.component";
 
 /**
  * Компонент детального просмотра траектории
@@ -16,7 +17,7 @@ import { ButtonComponent } from "@ui/components";
 @Component({
   selector: "app-trajectory-detail",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, AvatarComponent, ButtonComponent],
+  imports: [CommonModule, RouterOutlet, AvatarComponent, ButtonComponent, ModalComponent],
   templateUrl: "./trajectory-detail.component.html",
   styleUrl: "./trajectory-detail.component.scss",
 })
@@ -28,6 +29,7 @@ export class TrajectoryDetailComponent implements OnInit, OnDestroy {
 
   trajectory = signal<Trajectory | undefined>(undefined);
   isDisabled = signal<boolean>(false);
+  isTaskDetail = signal<boolean>(false);
 
   /**
    * Инициализация компонента
@@ -44,6 +46,8 @@ export class TrajectoryDetailComponent implements OnInit, OnDestroy {
           this.trajectory.set(trajectory[0]);
         },
       });
+
+    this.isTaskDetail.set(this.router.url.includes("task"));
   }
 
   /**
@@ -57,9 +61,11 @@ export class TrajectoryDetailComponent implements OnInit, OnDestroy {
   /**
    * Перенаправляет на страницу с информацией в завивисимости от listType
    */
-  redirectDetailInfo(): void {
+  redirectDetailInfo(trackId?: number): void {
     if (this.trajectory()) {
-      this.router.navigateByUrl(`/trackCar/all`);
+      this.router.navigateByUrl(`/trackCar/${trackId}`);
+    } else {
+      this.router.navigateByUrl("/trackCar/all");
     }
   }
 }

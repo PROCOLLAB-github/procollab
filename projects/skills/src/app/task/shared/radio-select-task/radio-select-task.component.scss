@@ -2,76 +2,114 @@
 @use "styles/responsive";
 
 .radio {
-  padding: 26px;
-  background-color: var(--white);
-  border: 1px solid var(--grey-button);
-  border-radius: 15px;
-
   @include responsive.apply-desktop {
     display: flex;
-    gap: 60px;
-  }
+    flex-direction: row;
+    gap: 20px;
 
-  &__description {
-    width: 100%;
-    max-width: 440px;
-    height: 100%;
-    max-height: 285px;
-  }
-
-  &__body {
-    flex-grow: 1;
-  }
-
-  &__img {
-    width: 385px;
-    height: 315px;
-    object-fit: cover;
-    border-radius: 15px;
-  }
-
-  &__title {
-    margin-bottom: 15px;
-
-    @include typography.body-bold-18;
-
-    @include responsive.apply-desktop {
-      margin-bottom: 24px;
-
-      @include typography.heading-4;
+    &--hasImage {
+      flex-direction: row-reverse;
     }
   }
 
-  &__text {
-    margin-bottom: 20px;
+  &__answer {
+    color: var(--grey-for-text);
+  }
+
+  &__title {
+    margin: 23px 0px;
   }
 
   &__list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 17px;
+  }
 
-    @include responsive.apply-desktop {
-      gap: 18px;
+  &__img {
+    max-width: 150px;
+    max-height: 207px;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    margin: calc(75px - 24px) calc(92px - 24px);
+
+    &-text {
+      text-align: center;
     }
   }
 
-  &__option {
-    padding: 24px 20px;
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
     cursor: pointer;
-    border: 1px solid var(--grey-button);
-    border-radius: 15px;
 
-    &--active {
-      border-color: var(--accent);
+    label {
+      cursor: pointer;
+    }
+
+    input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      min-width: 18px;
+      min-height: 18px;
+      border-radius: 50%;
+      border: 0.5px solid var(--medium-grey-for-outline);
+      outline: none;
+      background: transparent;
+      position: relative;
+      cursor: pointer;
+    }
+
+    input[type="radio"]:checked {
+      background-color: var(--accent);
+    }
+
+    input[type="radio"]:checked::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--light-white);
+      transform: translate(-50%, -50%);
     }
 
     &--success {
-      color: var(--green);
-      background-color: var(--light-green);
-      border-color: var(--green);
+      input[type="radio"]:checked {
+        background-color: var(--green);
+      }
+    }
+
+    &--error {
+      input[type="radio"]:checked {
+        background-color: var(--red);
+      }
     }
   }
+
+  &__body, &__content {
+    padding: 24px;
+    background-color: var(--light-white);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
+    flex-grow: 1;
+    min-height: 358px;
+  }
+
+  &__body {
+    &--hasImage {
+      min-width: 333px;
+    }
+  }
+
+  &__content {
+    min-width: 333px;
+  }
+
 
   :host ::ng-deep &__hint p {
     margin-top: 20px;

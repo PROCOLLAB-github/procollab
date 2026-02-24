@@ -7,20 +7,26 @@
       <div class="info__cover"></div>
 
       <div class="info__avatar">
-        <app-avatar [url]="trajectory()?.avatar!" [size]="106"></app-avatar>
+        <app-avatar
+          [url]="trajectory()?.avatar!"
+          [size]="106"
+          (click)="redirectDetailInfo(trajectory()!.id)"
+        ></app-avatar>
+        @if (!isTaskDetail()) {
         <h1 class="info__title text-body-12">{{ trajectory()?.name }}</h1>
+        }
       </div>
     </div>
 
     <div class="info__body">
       <div class="info__actions">
         <app-button
-          (click)="redirectDetailInfo()"
+          (click)="redirectDetailInfo(isTaskDetail() ? trajectory()?.id : undefined)"
           [disabled]="false"
           size="big"
           customTypographyClass="text-body-12"
           appearance="outline"
-          >назад</app-button
+          >{{ isTaskDetail() ? "назад к модулю?" : "назад" }}</app-button
         >
 
         <app-button

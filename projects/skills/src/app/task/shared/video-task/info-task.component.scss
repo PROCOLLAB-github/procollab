@@ -4,23 +4,41 @@
 .video {
   display: flex;
   flex-direction: column-reverse;
-  gap: 30px;
-  align-items: flex-start;
-  padding: 26px;
-  background-color: var(--white);
-  border: 1px solid var(--grey-button);
-  border-radius: 15px;
+  gap: 20px;
+  align-items: center;
+  padding: 24px;
+  background-color: var(--light-white);
+  border: 0.5px solid var(--medium-grey-for-outline);
+  border-radius: var(--rounded-lg);
+  min-height: 336px;
 
   @include responsive.apply-desktop {
-    flex-direction: row;
+    flex-direction: row-reverse;
   }
 
   &--hasVideo {
-    // flex-direction: column;
-
     @include responsive.apply-desktop {
       align-items: center;
     }
+  }
+
+  &--hasImage {
+    @include responsive.apply-desktop {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 114px;
+      padding: 24px 90px 24px 24px;
+    }
+  }
+
+
+  &__img {
+    max-width: 200px;
+    max-height: 200px;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
   }
 
   &__wrapper {
@@ -31,9 +49,7 @@
     &--hasVideo {
       align-self: center;
       justify-content: center;
-
-      // border: 1px solid var(--grey-for-text);
-      border-radius: 15px;
+      border-radius: var(--rounded-lg);
     }
 
     @include responsive.apply-desktop {
@@ -43,18 +59,9 @@
       &--hasVideo {
         align-self: center;
         justify-content: center;
-
-        // border: 1px solid var(--grey-for-text);
-        border-radius: 15px;
+       border-radius: var(--rounded-lg);
       }
     }
-  }
-
-  img {
-    width: 100%;
-    max-width: 440px;
-    height: 100%;
-    border-radius: 15px;
   }
 
   &__frame {
@@ -63,7 +70,6 @@
     &--hasVideo {
       align-self: center;
       width: 100%;
-      max-width: 670px;
       height: 100%;
     }
 
@@ -74,30 +80,23 @@
       &--hasVideo {
         align-self: center;
         width: 100%;
-        max-width: 670px;
         height: 100%;
         margin-left: 0;
       }
     }
+
+    iframe {
+      border-radius: var(--rounded-lg);
+    }
   }
 
   &__text-content {
-    display: flex;
-    flex-basis: 140%;
+    display: flex;;
     flex-direction: column;
+    gap: 24px;
   }
 
   &__text {
     white-space: pre-line;
-
-    @include typography.body-12;
-
-    @include responsive.apply-desktop {
-      @include typography.body-14;
-    }
-  }
-
-  &__title {
-    @include typography.heading-3;
   }
 }

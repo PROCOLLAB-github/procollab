@@ -15,7 +15,7 @@
         <div class="skill-card__text-block">
           <p class="skill-card__level text-body-10">
             {{ skill.quantityOfLevels }}
-            {{ skill.quantityOfLevels | pluralize: ["уровень", "уровня", "уровней"] }}
+            {{ skill.quantityOfLevels | pluralize: ["урок", "урока", "уроков"] }}
           </p>
 
           <p class="skill-card__level text-body-10">| доступен с 16.03.2026</p>
@@ -50,7 +50,7 @@
             <span class="topic__name text-body-10">{{ topic.name }}</span></span
           >
           <p class="topic__levels text-body-10">
-            {{ topic.levels }} {{ topic.levels | pluralize: ["уровень", "уровня", "уровней"] }} |
+            {{ topic.levels }} {{ topic.levels | pluralize: ["задание", "задания", "заданий"] }} |
             доступен с 16.03.2026
           </p>
         </div>

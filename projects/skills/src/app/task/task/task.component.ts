@@ -9,13 +9,11 @@ import {
   type OnInit,
   signal,
   ViewChild,
-  ViewChildren,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ActivatedRoute, Router, RouterLink, RouterOutlet } from "@angular/router";
+import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
 import { map } from "rxjs";
 import type { TaskStepsResponse } from "../../../models/skill.model";
-import { ButtonComponent } from "@ui/components";
 import { TaskService } from "../services/task.service";
 
 /**
@@ -36,14 +34,11 @@ import { TaskService } from "../services/task.service";
 @Component({
   selector: "app-task",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, ButtonComponent, RouterLink],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: "./task.component.html",
   styleUrl: "./task.component.scss",
 })
 export class TaskComponent implements OnInit {
-  // ViewChild ссылки для манипуляций с DOM
-  @ViewChildren("pointEls") pointEls?: ElementRef<HTMLAnchorElement>[];
-  @ViewChild("progressBarEl") progressBarEl?: ElementRef<HTMLElement>;
   @ViewChild("progressDone") progressDone?: ElementRef<HTMLElement>;
 
   // Внедренные сервисы
@@ -55,32 +50,6 @@ export class TaskComponent implements OnInit {
   skillStepsResponse = signal<TaskStepsResponse | null>(null);
 
   constructor() {
-    /**
-     * Эффект для обновления визуальной позиции полосы прогресса
-     * Вычисляет позицию индикатора прогресса на основе текущего шага
-     */
-    effect(
-      () => {
-        const targetEl = !this.taskService.currentTaskDone()
-          ? this.pointEls?.find(el => {
-              const subTaskPointId = el.nativeElement.dataset["id"];
-              if (!subTaskPointId) return false;
-
-              return Number(subTaskPointId) === this.currentSubTaskId();
-            })
-          : this.progressDone;
-
-        if (targetEl && this.progressBarEl) {
-          const { left: leftParent } = this.progressBarEl.nativeElement.getBoundingClientRect();
-          const { left: leftChild } = targetEl.nativeElement.getBoundingClientRect();
-
-          const left = leftChild - leftParent;
-          this.progressDoneWidth.set(left);
-        }
-      },
-      { allowSignalWrites: true }
-    );
-
     /**
      * Эффект для определения текущего активного шага
      * Устанавливает текущий шаг на основе статуса завершения и порядка шагов
@@ -116,25 +85,25 @@ export class TaskComponent implements OnInit {
      */
     effect(() => {
       const subTaskId = this.currentSubTaskId();
-      if (!subTaskId) return;
+      if (!subTaskId || isNaN(subTaskId)) return;
 
-      this.router
-        .navigate(["/task", this.route.snapshot.params["taskId"], subTaskId], {
-          queryParams: { type: this.currentSubTask()?.type ?? "" },
-        })
-        .then(() => console.debug("Маршрут изменен из TaskComponent"));
+      this.router.navigate([subTaskId], {
+        relativeTo: this.route,
+        queryParams: { type: this.currentSubTask()?.type ?? "" },
+      });
     });
   }
 
   ngOnInit() {
     // Загрузка данных шагов задания из резолвера маршрута
     this.route.data.pipe(map(r => r["data"])).subscribe((res: TaskStepsResponse) => {
+      this.taskService.clearCompletedSteps();
       this.skillStepsResponse.set(res);
 
       // Проверка, завершены ли все шаги, и перенаправление к результатам
       if (res.stepData.filter(s => s.isDone).length === res.stepData.length) {
         this.taskService.currentTaskDone.set(true);
-        this.router.navigate(["/task", this.route.snapshot.params["taskId"], "results"]);
+        this.router.navigate(["results"], { relativeTo: this.route });
       }
     });
 
@@ -145,15 +114,14 @@ export class TaskComponent implements OnInit {
         map(Number)
       )
       .subscribe(s => {
-        this.currentSubTaskId.set(s);
+        if (!isNaN(s)) {
+          this.currentSubTaskId.set(s);
+        }
       });
 
     // Отладочное логирование для изменений маршрута
-    this.route.firstChild?.url.subscribe(console.log);
+    this.route.firstChild?.url.subscribe(_ => {});
   }
-
-  // Вычисляемые свойства и сигналы
-  progressDoneWidth = signal(0);
 
   /**
    * Вычисляемый массив всех ID шагов задания
@@ -183,9 +151,13 @@ export class TaskComponent implements OnInit {
    * Вычисляемый массив завершенных ID заданий для визуализации прогресса
    */
   doneTasks = computed(() => {
-    const subTaskId = this.currentSubTaskId();
-    if (!subTaskId) return [];
+    const stepsResponse = this.skillStepsResponse();
+    if (!stepsResponse) return [];
 
-    return this.taskIds()?.filter(t => t <= subTaskId);
+    const serverDone = stepsResponse.stepData.filter(step => step.isDone).map(step => step.id);
+
+    const localDone = [...this.taskService.completedStepIds()];
+
+    return [...new Set([...serverDone, ...localDone])];
   });
 }

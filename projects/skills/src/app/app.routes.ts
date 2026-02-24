@@ -26,29 +26,8 @@ export const routes: Routes = [
     redirectTo: "trackCar", // Маршрут по умолчанию перенаправляет на профиль пользователя
   },
   {
-    path: "profile",
-    loadChildren: () => import("./profile/profile.routes").then(c => c.PROFILE_ROUTES),
-  },
-  {
-    path: "skills",
-    loadChildren: () => import("./skills/skills.routes").then(c => c.SKILLS_ROUTES),
-  },
-  {
-    path: "rating",
-    loadChildren: () => import("./rating/rating.routes").then(c => c.RATING_ROUTES),
-  },
-  {
-    path: "task",
-    loadChildren: () => import("./task/task.routes").then(c => c.TASK_ROUTES),
-  },
-  {
     path: "trackCar",
     loadChildren: () =>
       import("./trajectories/track-career/track-career.routes").then(c => c.TRACK_CAREER_ROUTES),
-  },
-  {
-    path: "subscription",
-    loadChildren: () =>
-      import("./subscription/subscription.routes").then(c => c.SUBSCRIPTION_ROUTES),
   },
 ];

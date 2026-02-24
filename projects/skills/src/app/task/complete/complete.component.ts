@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject } from "@angular/core";
+import { Component, inject, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { CircleProgressBarComponent } from "../../shared/circle-progress-bar/circle-progress-bar.component";
 import { IconComponent } from "@uilib";
@@ -26,10 +26,20 @@ import type { TaskResults } from "../../../models/skill.model";
   templateUrl: "./complete.component.html",
   styleUrl: "./complete.component.scss",
 })
-export class TaskCompleteComponent {
+export class TaskCompleteComponent implements OnInit {
   route = inject(ActivatedRoute); // Сервис для работы с активным маршрутом
   router = inject(Router); // Сервис для навигации
+  trajectoryId = signal<number | null>(null);
 
   // Получаем результаты задачи из данных маршрута
   results = this.route.data.pipe(map(r => r["data"])) as Observable<TaskResults>;
+
+  ngOnInit(): void {
+    const trajectoryId = +this.router.url.split("/")[2];
+    this.trajectoryId.set(trajectoryId);
+  }
+
+  routeToCourses(): void {
+    this.router.navigateByUrl("trackCar/" + this.trajectoryId());
+  }
 }
