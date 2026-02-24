@@ -1,13 +1,14 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, signal, type OnDestroy, type OnInit } from "@angular/core";
-import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
+import { Component, DestroyRef, inject, signal, type OnDestroy, type OnInit } from "@angular/core";
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
 import type { Trajectory } from "projects/skills/src/models/trajectory.model";
 import { filter, map, type Subscription } from "rxjs";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент детального просмотра траектории
@@ -24,6 +25,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 export class TrajectoryDetailComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
   router = inject(Router);
+  destroyRef = inject(DestroyRef);
 
   subscriptions$: Subscription[] = [];
 
@@ -47,7 +49,14 @@ export class TrajectoryDetailComponent implements OnInit, OnDestroy {
         },
       });
 
-    this.isTaskDetail.set(this.router.url.includes("task"));
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.isTaskDetail.set(this.router.url.includes("task"));
+      });
   }
 
   /**

@@ -29,6 +29,16 @@
     flex-direction: column;
     gap: 12px;
   }
+
+  &__main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__complete {
+    display: block;
+  }
 }
 
 .progress {

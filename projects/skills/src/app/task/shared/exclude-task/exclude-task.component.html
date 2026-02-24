@@ -3,7 +3,7 @@
 <div class="exclude" [class.exclude--hasVideo]="!!sanitizedFileUrl">
   <div class="exclude__body">
     @if (!sanitizedFileUrl) {
-    <h2 class="exclude__title text-body-bold-12">{{ data.text }}</h2>
+    <h2 class="exclude__title text-body-bold-12">{{ data.text | truncate: 110 }}</h2>
     }
     <div class="exclude__text text-body-12" [class.exclude__text--hasVideo]="!!sanitizedFileUrl">
       @if (sanitizedFileUrl) {
@@ -17,14 +17,14 @@
       ></iframe>
       }
 
-      <div [innerHTML]="description"></div>
+      <div [innerHTML]="description | truncate: 700"></div>
     </div>
   </div>
 
   <div class="exclude__content">
     <p class="exclude__answer text-body-12">ответ</p>
     <ul class="exclude__list">
-      <p class="exclude__text text-body-12">{{ data.text }}</p>
+      <p class="exclude__text text-body-12">{{ data.text | truncate: 110 }}</p>
       @for (op of data.answers; track op.id) {
       <li
         class="exclude__item"

@@ -6,6 +6,8 @@ import type { ExcludeQuestion, ExcludeQuestionResponse } from "../../../../model
 import { DomSanitizer, type SafeResourceUrl } from "@angular/platform-browser";
 import { ParseBreaksPipe, YtExtractService } from "@corelib";
 import { CheckboxComponent } from "@ui/components";
+import { TruncateHtmlPipe } from "projects/core/src/lib/pipes/truncate-html.pipe";
+import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
  * Компо��ент задачи на исключение лишнего
@@ -30,7 +32,7 @@ import { CheckboxComponent } from "@ui/components";
 @Component({
   selector: "app-exclude-task",
   standalone: true,
-  imports: [CommonModule, ParseBreaksPipe, CheckboxComponent],
+  imports: [CommonModule, ParseBreaksPipe, TruncateHtmlPipe, TruncatePipe, CheckboxComponent],
   templateUrl: "./exclude-task.component.html",
   styleUrl: "./exclude-task.component.scss",
 })

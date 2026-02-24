@@ -1,6 +1,6 @@
 <!-- @format -->
 
-<div class="skill-card--wrapper">
+<div class="skill-card--wrapper" (click)="toggleExpand($event)">
   <div class="skill-card">
     <div class="skill-card__inner">
       <app-avatar [size]="50" [url]="skill.fileLink"></app-avatar>
@@ -30,7 +30,7 @@
     ></app-circle-progress-bar>
   </div>
 
-  <div class="skill-card__expand" (click)="toggleExpand()">
+  <div class="skill-card__expand" (click)="toggleExpand($event)">
     @if (isExpanded) {
     <i appIcon icon="arrow-no-body" class="skill-card__expanded" appSquare="8"></i>
     } @else {

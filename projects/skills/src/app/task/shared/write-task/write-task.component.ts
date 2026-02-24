@@ -6,6 +6,7 @@ import type { WriteQuestion } from "../../../../models/step.model";
 import { YtExtractService } from "@corelib";
 import { DomSanitizer, type SafeResourceUrl } from "@angular/platform-browser";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
+import { TruncateHtmlPipe } from "projects/core/src/lib/pipes/truncate-html.pipe";
 
 /**
  * Компонент задачи с текстовым вводом
@@ -27,7 +28,7 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 @Component({
   selector: "app-write-task",
   standalone: true,
-  imports: [CommonModule, TruncatePipe],
+  imports: [CommonModule, TruncatePipe, TruncateHtmlPipe],
   templateUrl: "./write-task.component.html",
   styleUrl: "./write-task.component.scss",
 })

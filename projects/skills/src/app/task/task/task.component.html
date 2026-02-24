@@ -24,7 +24,7 @@
     </div>
   </div>
 
-  <div class="task__main" [class.task__main--]="">
+  <div class="task__main" [class.task__complete]="isComplete()">
     <router-outlet></router-outlet>
   </div>
 </div>

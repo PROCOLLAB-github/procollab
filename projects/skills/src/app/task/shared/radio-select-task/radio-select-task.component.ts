@@ -6,6 +6,7 @@ import type { SingleQuestion, SingleQuestionError } from "../../../../models/ste
 import { DomSanitizer, type SafeResourceUrl } from "@angular/platform-browser";
 import { ParseBreaksPipe, YtExtractService } from "@corelib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
+import { TruncateHtmlPipe } from "projects/core/src/lib/pipes/truncate-html.pipe";
 
 /**
  * Компонент задачи с выбором одного варианта (радио-кнопки)
@@ -29,7 +30,7 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 @Component({
   selector: "app-radio-select-task",
   standalone: true,
-  imports: [CommonModule, ParseBreaksPipe, TruncatePipe],
+  imports: [CommonModule, ParseBreaksPipe, TruncatePipe, TruncateHtmlPipe],
   templateUrl: "./radio-select-task.component.html",
   styleUrl: "./radio-select-task.component.scss",
 })
@@ -65,7 +66,6 @@ export class RadioSelectTaskComponent {
   sanitizer = inject(DomSanitizer); // Сервис для безопасной работы с HTML
   ytExtractService = inject(YtExtractService); // Сервис для извлечения YouTube ссылок
 
-  description: any; // Обработанное описание
   sourceType: "embed" | "img" | null = null;
   mediaUrl?: SafeResourceUrl | string;
 

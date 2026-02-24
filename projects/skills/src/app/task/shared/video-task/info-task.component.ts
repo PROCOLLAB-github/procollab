@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 import type { InfoSlide } from "../../../../models/step.model";
 import { DomSanitizer, type SafeResourceUrl } from "@angular/platform-browser";
 import { YtExtractService } from "@corelib";
+import { TruncateHtmlPipe } from "projects/core/src/lib/pipes/truncate-html.pipe";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 
 /**
@@ -24,7 +25,7 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 @Component({
   selector: "app-info-task",
   standalone: true,
-  imports: [CommonModule, TruncatePipe],
+  imports: [CommonModule, TruncateHtmlPipe, TruncatePipe],
   templateUrl: "./info-task.component.html",
   styleUrl: "./info-task.component.scss",
 })

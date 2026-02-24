@@ -12,7 +12,7 @@
     <p
       class="video__text text-body-12"
       [innerHTML]="
-        data.description | truncate: (data.videoUrl ? 627 : sourceType === 'img' ? 500 : 1000)
+        data.description | truncateHtml: (data.videoUrl ? 627 : sourceType === 'img' ? 500 : 1000)
       "
     ></p>
   </div>

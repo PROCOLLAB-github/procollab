@@ -3,6 +3,7 @@
 import {
   Component,
   computed,
+  DestroyRef,
   effect,
   type ElementRef,
   inject,
@@ -11,8 +12,9 @@ import {
   ViewChild,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
-import { map } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
+import { filter, map } from "rxjs";
 import type { TaskStepsResponse } from "../../../models/skill.model";
 import { TaskService } from "../services/task.service";
 
@@ -45,9 +47,11 @@ export class TaskComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
   taskService = inject(TaskService);
+  destroyRef = inject(DestroyRef);
 
   // Реактивное состояние
   skillStepsResponse = signal<TaskStepsResponse | null>(null);
+  isComplete = signal<boolean>(false);
 
   constructor() {
     /**
@@ -59,7 +63,6 @@ export class TaskComponent implements OnInit {
         const skillsResponse = this.skillStepsResponse();
         if (!skillsResponse) return;
 
-        // Сортировка шагов по ID (TODO: изменить на ordinalNumber, когда бэкенд добавит это)
         const sortedSteps = skillsResponse.stepData.sort((prev, next) => prev.id - next.id);
 
         const doneSteps = sortedSteps.filter(step => step.isDone);
@@ -119,8 +122,16 @@ export class TaskComponent implements OnInit {
         }
       });
 
-    // Отладочное логирование для изменений маршрута
-    this.route.firstChild?.url.subscribe(_ => {});
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.isComplete.set(this.router.url.includes("results"));
+      });
+
+    this.isComplete.set(this.router.url.includes("results"));
   }
 
   /**

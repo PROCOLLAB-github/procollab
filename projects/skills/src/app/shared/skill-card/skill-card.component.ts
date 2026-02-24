@@ -42,7 +42,8 @@ export class SkillCardComponent {
 
   isExpanded = false;
 
-  toggleExpand(): void {
+  toggleExpand(event: Event): void {
+    event.stopPropagation();
     this.isExpanded = !this.isExpanded;
   }
 

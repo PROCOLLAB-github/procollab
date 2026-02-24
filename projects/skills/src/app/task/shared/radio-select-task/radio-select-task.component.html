@@ -12,7 +12,7 @@
     </p>
     }
 
-    <p class="radio__text text-body-12" [innerHTML]="description"></p>
+    <p class="radio__text text-body-12" [innerHTML]="data.description | truncateHtml: 700"></p>
 
     @if (data.videoUrl) {
     <iframe
