@@ -1,0 +1,9 @@
+.courses {
+  margin-top: 20px;
+
+  &__list {
+    display: grid;
+    grid-template-columns: 4fr 4fr;
+    grid-gap: 20px;
+  }
+}

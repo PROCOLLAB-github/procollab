@@ -1,0 +1,78 @@
+/** @format */
+
+import { CommonModule } from "@angular/common";
+import { Component, DestroyRef, inject, signal, type OnDestroy, type OnInit } from "@angular/core";
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
+import { filter, map, type Subscription } from "rxjs";
+import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { ButtonComponent } from "@ui/components";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+
+/**
+ * Компонент детального просмотра траектории
+ * Отображает навигационную панель и служит контейнером для дочерних компонентов
+ * Управляет состоянием выбранной траектории и ID траектории из URL
+ */
+@Component({
+  selector: "app-trajectory-detail",
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, AvatarComponent, ButtonComponent],
+  templateUrl: "./trajectory-detail.component.html",
+  styleUrl: "./trajectory-detail.component.scss",
+})
+export class TrajectoryDetailComponent implements OnInit, OnDestroy {
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+  destroyRef = inject(DestroyRef);
+
+  subscriptions$: Subscription[] = [];
+
+  trajectory = signal<any | undefined>(undefined);
+  isDisabled = signal<boolean>(false);
+  isTaskDetail = signal<boolean>(false);
+
+  /**
+   * Инициализация компонента
+   * Подписывается на параметры маршрута и данные траектории
+   */
+  ngOnInit(): void {
+    this.route.data
+      .pipe(
+        map(data => data["data"]),
+        filter(trajectory => !!trajectory)
+      )
+      .subscribe({
+        next: trajectory => {
+          this.trajectory.set(trajectory[0]);
+        },
+      });
+
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.isTaskDetail.set(this.router.url.includes("task"));
+      });
+  }
+
+  /**
+   * Очистка ресурсов при уничтожении компонента
+   * Отписывается от всех активных подписок
+   */
+  ngOnDestroy(): void {
+    this.subscriptions$.forEach($ => $.unsubscribe());
+  }
+
+  /**
+   * Перенаправляет на страницу с информацией в завивисимости от listType
+   */
+  redirectDetailInfo(courseId?: number): void {
+    if (this.trajectory()) {
+      this.router.navigateByUrl(`/office/courses/${courseId}`);
+    } else {
+      this.router.navigateByUrl("/office/courses/all");
+    }
+  }
+}

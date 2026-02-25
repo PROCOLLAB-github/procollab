@@ -1,38 +1,40 @@
 /** @format */
 
 import { Routes } from "@angular/router";
+import { CoursesListComponent } from "./list/list.component";
+import { CoursesComponent } from "./courses.component";
+import { CoursesResolver } from "./courses.resolver";
 
 /**
  * Конфигурация маршрутов для модуля карьерных траекторий
  * Определяет структуру навигации:
  * - "" - редирект на "all"
  * - "all" - список всех доступных траекторий
- * - "my" - пользовательская траектория
- * - ":trackId" - детальная информация о конкретной траектории
+ * - ":courseId" - детальная информация о конкретном курсе
  */
 
 export const COURSES_ROUTES: Routes = [
-  // {
-  //   path: "",
-  //   component: TrackCareerComponent,
-  //   children: [
-  //     {
-  //       path: "",
-  //       redirectTo: "all",
-  //       pathMatch: "full",
-  //     },
-  //     {
-  //       path: "all",
-  //       component: TrajectoriesListComponent,
-  //       resolve: {
-  //         data: TrajectoriesResolver,
-  //       },
-  //     },
-  //   ],
-  // },
-  // {
-  //   path: ":trackId",
-  //   loadChildren: () =>
-  //     import("./detail/trajectory-detail.routes").then(c => c.TRAJECTORY_DETAIL_ROUTES),
-  // },
+  {
+    path: "",
+    component: CoursesComponent,
+    children: [
+      {
+        path: "",
+        redirectTo: "all",
+        pathMatch: "full",
+      },
+      {
+        path: "all",
+        component: CoursesListComponent,
+        resolve: {
+          data: CoursesResolver,
+        },
+      },
+    ],
+  },
+  {
+    path: ":courseId",
+    loadChildren: () =>
+      import("./detail/trajectory-detail.routes").then(c => c.TRAJECTORY_DETAIL_ROUTES),
+  },
 ];

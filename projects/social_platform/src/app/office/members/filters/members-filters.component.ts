@@ -13,10 +13,10 @@ import { RangeInputComponent } from "@ui/components/range-input/range-input.comp
 import { MembersComponent } from "@office/members/members.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
-import { Specialization } from "@office/models/specialization";
+import { Specialization } from "@office/models/specialization.model";
 import { SpecializationsService } from "@office/services/specializations.service";
 import { SkillsService } from "@office/services/skills.service";
-import { Skill } from "@office/models/skill";
+import { Skill } from "@office/models/skill.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { CheckboxComponent } from "../../../ui/components/checkbox/checkbox.component";
 

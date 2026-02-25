@@ -3,7 +3,10 @@
 import { inject, Injectable } from "@angular/core";
 import { SkillsApiService } from "@corelib";
 import { ApiPagination } from "../../../models/api-pagination.model";
-import { Skill, TasksResponse } from "../../../models/skill.model";
+import {
+  Skill,
+  TasksResponse,
+} from "../../../../../social_platform/src/app/office/models/skill.model";
 import { HttpParams } from "@angular/common/http";
 
 /**

@@ -2,7 +2,7 @@
 
 import { CommonModule } from "@angular/common";
 import { ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from "@angular/core";
-import { Skill } from "@office/models/skill";
+import { Skill } from "@office/models/skill.model";
 import { ButtonComponent } from "@ui/components";
 import { map, of, Subscription, switchMap } from "rxjs";
 import { AuthService } from "@auth/services";

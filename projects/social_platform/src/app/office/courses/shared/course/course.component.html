@@ -1,0 +1,49 @@
+<!-- @format -->
+
+@if(course) {
+<div class="course">
+  <div class="course__cover">
+    <app-avatar [size]="68" [url]="course.avatar!"></app-avatar>
+    <img src="assets\icons\svg\rocket.svg" class="course__rocket" />
+    <app-button
+      customTypographyClass="text-body-10"
+      [color]="isMember() ? 'primary' : isSubs() ? 'red' : 'green'"
+      size="big"
+    >
+      {{
+        isMember()
+          ? "для участников программы"
+          : isSubs()
+          ? "доступно по подписке"
+          : "доступно всем пользователям"
+      }}
+    </app-button>
+  </div>
+
+  <div class="course__info">
+    <p class="text-body-12">{{ course.name | truncate: 50 }}</p>
+    <p class="text-body-10 course__info--date">
+      {{
+        isDates()
+          ? "16.02.2026 - 16.04.2026"
+          : isDate()
+          ? "16.02.2026"
+          : isEnded()
+          ? "курс завершен"
+          : "доступен до 16.04.2026"
+      }}
+    </p>
+  </div>
+
+  <div class="course__action">
+    @if (!isStarted()) {
+    <i appIcon icon="lock" appSquare="10"></i>
+    } @else {
+    <p class="text-body-10 course__action--started">
+      {{ isStarted() ? "начать" : "продолжить обучение" }}
+    </p>
+    <i appIcon icon="triangle" appSquare="10"></i>
+    }
+  </div>
+</div>
+}

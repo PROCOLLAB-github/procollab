@@ -5,7 +5,7 @@ import { ApiService } from "projects/core";
 import { Achievement } from "../models/user.model";
 import { map, Observable } from "rxjs";
 import { plainToInstance } from "class-transformer";
-import { Approve } from "@office/models/skill";
+import { Approve } from "@office/models/skill.model";
 
 /**
  * Сервис управления профилем пользователя

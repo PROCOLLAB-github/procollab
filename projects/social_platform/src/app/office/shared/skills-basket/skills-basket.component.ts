@@ -2,7 +2,7 @@
 
 import { CommonModule } from "@angular/common";
 import { Component, forwardRef, Input, signal } from "@angular/core";
-import { Skill } from "@office/models/skill";
+import { Skill } from "@office/models/skill.model";
 import { IconComponent } from "@ui/components";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { noop } from "rxjs";
