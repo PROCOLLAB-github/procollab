@@ -10,7 +10,7 @@
     "build:skills:prod": "ng build skills --configuration=production",
     "build:skills:dev": "ng build skills --configuration=development",
     "build:prod": "npm run build:social:prod && npm run build:skills:prod",
-    "build:pr": "npm run build:social:dev && npm run build:skills:dev",
+    "build:pr": "npm run build:social:dev",
     "watch": "ng build --watch social_platform --configuration=development",
     "build:sprite-social": "svg-sprite -s --dest=projects/social_platform/src/assets/icons 'projects/social_platform/src/assets/icons/svg/**/*.svg'",
     "build:sprite-skills": "svg-sprite -s --dest=projects/skills/src/assets/icons 'projects/skills/src/assets/icons/svg/**/*.svg'",
