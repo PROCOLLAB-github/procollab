@@ -2,7 +2,15 @@
 
 import { ConnectedPosition, OverlayModule } from "@angular/cdk/overlay";
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { AvatarComponent } from "../avatar/avatar.component";
 import { IconComponent } from "@uilib";
 import { getPriorityType } from "@utils/helpers/getPriorityType";
@@ -25,6 +33,7 @@ import { CreateTagFormComponent } from "@ui/pages/projects/detail/kanban/compone
   ],
   templateUrl: "./dropdown.component.html",
   styleUrl: "./dropdown.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DropdownComponent {
   /** Состояние для определения списка элементов */

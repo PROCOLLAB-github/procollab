@@ -2,6 +2,7 @@
 
 import { CommonModule } from "@angular/common";
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   forwardRef,
@@ -38,6 +39,7 @@ import { DropdownComponent } from "../dropdown/dropdown.component";
   selector: "app-select",
   templateUrl: "./select.component.html",
   styleUrl: "./select.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

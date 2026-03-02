@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
 
 /**
@@ -24,6 +24,7 @@ import { RouterLink, RouterOutlet } from "@angular/router";
   styleUrl: "./error.component.scss",
   standalone: true,
   imports: [RouterLink, RouterOutlet],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorComponent implements OnInit {
   constructor() {}

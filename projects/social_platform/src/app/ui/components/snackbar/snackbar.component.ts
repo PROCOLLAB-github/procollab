@@ -1,9 +1,16 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  OnDestroy,
+  OnInit,
+  inject,
+} from "@angular/core";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { Snack } from "@ui/models/snack.model";
-import { Subscription } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AnimationService } from "@ui/services/animation/animation.service";
 import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
@@ -28,15 +35,15 @@ import { IconComponent } from "@uilib";
   animations: [AnimationService.slideInOut],
   imports: [CommonModule, IconComponent],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SnackbarComponent implements OnInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
+
   constructor(private readonly snackbarService: SnackbarService) {}
 
   /** Массив активных уведомлений */
   snacks: Snack[] = [];
-
-  /** Подписка на сервис уведомлений */
-  snackbar$?: Subscription;
 
   /** Добавление нового уведомления */
   private addNotification(snack: Snack): void {
@@ -49,13 +56,13 @@ export class SnackbarComponent implements OnInit, OnDestroy {
 
   /** Подписка на уведомления при инициализации */
   ngOnInit(): void {
-    this.snackbar$ = this.snackbarService.snacks.subscribe(snack => this.addNotification(snack));
+    this.snackbarService.snacks
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(snack => this.addNotification(snack));
   }
 
   /** Отписка от уведомлений при уничтожении */
-  ngOnDestroy(): void {
-    this.snackbar$?.unsubscribe();
-  }
+  ngOnDestroy(): void {}
 
   /** Закрытие конкретного уведомления */
   onClose(snack: Snack): void {

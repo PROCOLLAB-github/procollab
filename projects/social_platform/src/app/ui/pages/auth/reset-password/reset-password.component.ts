@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { ControlErrorPipe } from "projects/core";
@@ -29,6 +29,7 @@ import { AuthPasswordService } from "projects/social_platform/src/app/api/auth/f
   standalone: true,
   providers: [AuthPasswordService, AuthUIInfoService],
   imports: [ReactiveFormsModule, InputComponent, ButtonComponent, ControlErrorPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResetPasswordComponent implements OnInit {
   private readonly authUIInfoService = inject(AuthUIInfoService);

@@ -7,6 +7,7 @@ import { ProgramDetailListUIInfoService } from "projects/social_platform/src/app
 import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
 import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class ProgramProjectsFilterInfoService {
@@ -15,6 +16,7 @@ export class ProgramProjectsFilterInfoService {
   private readonly fb = inject(FormBuilder);
   private readonly programService = inject(ProgramService);
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
+  private readonly logger = inject(LoggerService);
 
   filterForm: FormGroup = this.fb.group({});
 
@@ -39,8 +41,8 @@ export class ProgramProjectsFilterInfoService {
             this.restoreFiltersFromUrl();
             this.subscribeToFormChanges();
           },
-          error(err) {
-            console.error("Error loading program filters:", err);
+          error: err => {
+            this.logger.error("Error loading program filters:", err);
           },
         });
     }
@@ -92,7 +94,7 @@ export class ProgramProjectsFilterInfoService {
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
-      .then(() => console.log("Query change from ProjectsComponent"));
+      .then(() => this.logger.info("Query change from ProjectsComponent"));
   }
 
   private initializeFilterForm(): void {
@@ -168,7 +170,7 @@ export class ProgramProjectsFilterInfoService {
         relativeTo: this.route,
       })
       .then(() => {
-        console.log("Query params updated:", currentParams);
+        this.logger.info("Query params updated:", currentParams);
       });
   }
 

@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { map, noop, Observable, Subscription, tap } from "rxjs";
 import { ChatService } from "projects/social_platform/src/app/api/chat/chat.service";
@@ -37,6 +37,7 @@ import { ChatDirectUIInfoService } from "projects/social_platform/src/app/api/ch
   imports: [RouterLink, AvatarComponent, ChatWindowComponent, BackComponent],
   providers: [ChatDirectInfoService, ChatDirectUIInfoService],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatDirectComponent implements OnInit, OnDestroy {
   private readonly ChatDirectInfoService = inject(ChatDirectInfoService);

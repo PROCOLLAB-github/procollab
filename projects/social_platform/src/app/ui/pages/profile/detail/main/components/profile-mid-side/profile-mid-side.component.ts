@@ -1,7 +1,16 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, ViewChild, WritableSignal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  Input,
+  ViewChild,
+  WritableSignal,
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterModule } from "@angular/router";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { IconComponent, ButtonComponent } from "@ui/components";
@@ -31,6 +40,7 @@ import { ProfileNews } from "projects/social_platform/src/app/domain/profile/pro
     ParseBreaksPipe,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMidSideComponent {
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
@@ -52,14 +62,19 @@ export class ProfileMidSideComponent {
   protected readonly descriptionExpandable = this.expandService.descriptionExpandable;
   protected readonly readFullDescription = this.expandService.readFullDescription;
 
+  private readonly destroyRef$ = inject(DestroyRef);
+
   /**
    * Добавление новой новости в профиль
    * @param news - объект с текстом и файлами новости
    */
   onAddNews(news: { text: string; files: string[] }): void {
-    this.profileDetailInfoService.onAddNews(news).subscribe({
-      next: () => this.newsFormComponent?.onResetForm(),
-    });
+    this.profileDetailInfoService
+      .onAddNews(news)
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: () => this.newsFormComponent?.onResetForm(),
+      });
   }
 
   /**
@@ -84,9 +99,12 @@ export class ProfileMidSideComponent {
    * @param newsItemId - идентификатор редактируемой новости
    */
   onEditNews(news: ProfileNews, newsItemId: number) {
-    this.profileDetailInfoService.onEditNews(news, newsItemId).subscribe({
-      next: () => this.newsCardComponent?.onCloseEditMode(),
-    });
+    this.profileDetailInfoService
+      .onEditNews(news, newsItemId)
+      .pipe(takeUntilDestroyed())
+      .subscribe({
+        next: () => this.newsCardComponent?.onCloseEditMode(),
+      });
   }
 
   /**

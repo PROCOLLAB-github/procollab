@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, WritableSignal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { IconComponent } from "@ui/components";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
@@ -14,6 +14,7 @@ import { Project } from "projects/social_platform/src/app/domain/project/project
   styleUrl: "./projects-left-side.component.scss",
   imports: [CommonModule, RouterModule, IconComponent, TruncatePipe],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsLeftSideComponent {
   @Input() project!: WritableSignal<Project | undefined>;

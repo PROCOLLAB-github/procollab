@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
 import { DayjsPipe } from "projects/core";
@@ -35,6 +35,7 @@ import { Router, RouterLink } from "@angular/router";
   imports: [CommonModule, ButtonComponent, DayjsPipe, RouterLink],
   templateUrl: "./closed-vacancy.component.html",
   styleUrl: "./closed-vacancy.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClosedVacancyComponent {
   /**

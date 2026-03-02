@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { ControlErrorPipe } from "projects/core";
@@ -85,6 +85,7 @@ import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-con
     OnboardingUIInfoService,
     TooltipInfoService,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OnboardingStageZeroComponent implements OnInit, OnDestroy {
   private readonly onboardingStageZeroInfoService = inject(OnboardingStageZeroInfoService);

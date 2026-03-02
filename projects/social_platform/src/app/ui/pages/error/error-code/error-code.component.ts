@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { map } from "rxjs";
 import { AsyncPipe } from "@angular/common";
@@ -31,6 +31,7 @@ import { AsyncPipe } from "@angular/common";
   styleUrl: "./error-code.component.scss",
   standalone: true,
   imports: [RouterLink, AsyncPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorCodeComponent implements OnInit {
   // Observable с кодом ошибки, извлеченным из URL параметра 'code'

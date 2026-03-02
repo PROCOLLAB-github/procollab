@@ -1,6 +1,13 @@
 /** @format */
 
-import { AfterViewInit, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
@@ -75,6 +82,7 @@ import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip
     ProjectsEditUIInfoService,
     TooltipInfoService,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectEditComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);

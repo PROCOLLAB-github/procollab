@@ -1,6 +1,14 @@
 /** @format */
 
-import { Component, EventEmitter, inject, OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  OnInit,
+  OnDestroy,
+  Output,
+} from "@angular/core";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
 import { CheckboxComponent, SelectComponent } from "@ui/components";
 import { ToSelectOptionsPipe } from "projects/core/src/lib/pipes/transformers/options-transform.pipe";
@@ -48,8 +56,9 @@ import { ProgramProjectsFilterInfoService } from "./service/program-projects-fil
     SelectComponent,
     ToSelectOptionsPipe,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProgramProjectsFilterComponent implements OnInit {
+export class ProgramProjectsFilterComponent implements OnInit, OnDestroy {
   @Output() clear = new EventEmitter<void>();
 
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);

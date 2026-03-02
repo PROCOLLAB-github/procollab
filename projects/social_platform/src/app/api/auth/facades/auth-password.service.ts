@@ -6,6 +6,7 @@ import { ValidationService } from "@corelib";
 import { map, Subject, takeUntil } from "rxjs";
 import { AuthService } from "../auth.service";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class AuthPasswordService {
@@ -14,6 +15,7 @@ export class AuthPasswordService {
   private readonly router = inject(Router);
   private readonly validationService = inject(ValidationService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
+  private readonly logger = inject(LoggerService);
 
   private readonly passwordForm = this.authUIInfoService.passwordForm;
   private readonly resetForm = this.authUIInfoService.resetForm;
@@ -36,7 +38,7 @@ export class AuthPasswordService {
     const token = this.route.snapshot.queryParamMap.get("token");
     if (!token) {
       // Handle the case where token is not present
-      console.error("Token is missing");
+      this.logger.error("Token is missing");
     }
   }
 
@@ -53,7 +55,7 @@ export class AuthPasswordService {
           .navigate(["/auth/reset_password/confirm"], {
             queryParams: { email: this.resetForm.value.email },
           })
-          .then(() => console.debug("ResetPasswordComponent"));
+          .then(() => this.logger.debug("ResetPasswordComponent"));
       },
       error: () => {
         this.errorServer.set(true);
@@ -76,10 +78,12 @@ export class AuthPasswordService {
 
     this.authService.setPassword(this.passwordForm.value.password!, token).subscribe({
       next: () => {
-        this.router.navigateByUrl("/auth/login").then(() => console.debug("SetPasswordComponent"));
+        this.router
+          .navigateByUrl("/auth/login")
+          .then(() => this.logger.debug("SetPasswordComponent"));
       },
       error: error => {
-        console.error("Error setting password:", error);
+        this.logger.error("Error setting password:", error);
         this.errorRequest.set(true);
       },
     });

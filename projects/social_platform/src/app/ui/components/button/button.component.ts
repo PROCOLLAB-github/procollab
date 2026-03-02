@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, type OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, type OnInit } from "@angular/core";
 import { LoaderComponent } from "../loader/loader.component";
 import { CommonModule } from "@angular/common";
 
@@ -32,6 +32,7 @@ import { CommonModule } from "@angular/common";
   styleUrl: "./button.component.scss",
   standalone: true,
   imports: [CommonModule, LoaderComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonComponent implements OnInit {
   constructor() {}

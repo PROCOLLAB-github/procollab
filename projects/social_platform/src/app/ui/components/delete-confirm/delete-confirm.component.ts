@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { ModalService } from "@ui/models/modal.service";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { AsyncPipe } from "@angular/common";
@@ -24,6 +24,7 @@ import { ModalComponent } from "../modal/modal.component";
   styleUrl: "./delete-confirm.component.scss",
   standalone: true,
   imports: [ModalComponent, IconComponent, ButtonComponent, AsyncPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteConfirmComponent implements OnInit {
   constructor(public readonly modalService: ModalService) {}

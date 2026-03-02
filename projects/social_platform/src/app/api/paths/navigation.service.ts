@@ -1,17 +1,19 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { Router } from "@angular/router";
 
 @Injectable({ providedIn: "root" })
 export class NavigationService {
   private readonly router = inject(Router);
+  private readonly logger = inject(LoggerService);
 
   profileRedirect(profileId?: number): void {
     if (!profileId) return;
 
     this.router
       .navigateByUrl(`/office/profile/${profileId}`)
-      .then(() => console.debug("Router Changed form ProfileEditComponent"));
+      .then(() => this.logger.debug("Router Changed form ProfileEditComponent"));
   }
 }

@@ -4,12 +4,14 @@ import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { concatMap, map, Subject, takeUntil } from "rxjs";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class DetailProjectInfoService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly projectService = inject(ProjectService);
+  private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -67,7 +69,7 @@ export class DetailProjectInfoService {
         () => {
           this.router
             .navigateByUrl("/office/projects/my")
-            .then(() => console.debug("Route changed from ProjectInfoComponent"));
+            .then(() => this.logger.debug("Route changed from ProjectInfoComponent"));
         },
         () => {
           this.leaderLeaveModal.set(true); // Показываем предупреждение для лидера

@@ -1,9 +1,10 @@
 /** @format */
 
-import { Component, inject, Input, type OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, Input, type OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Location } from "@angular/common";
 import { IconComponent } from "@ui/components";
+import { LoggerService } from "@corelib";
 
 /**
  * Компонент кнопки "Назад"
@@ -27,10 +28,12 @@ import { IconComponent } from "@ui/components";
   styleUrl: "./back.component.scss",
   standalone: true,
   imports: [IconComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BackComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly location = inject(Location);
+  private readonly loggerService = inject(LoggerService);
 
   /** Путь для перехода (если не указан, используется history.back()) */
   @Input() path?: string;
@@ -49,7 +52,7 @@ export class BackComponent implements OnInit {
     if (this.path) {
       this.router
         .navigateByUrl(this.path)
-        .then(() => console.debug("Route changed from BackComponent"));
+        .then(() => this.loggerService.debug("Route changed from BackComponent"));
     } else {
       this.location.back();
     }

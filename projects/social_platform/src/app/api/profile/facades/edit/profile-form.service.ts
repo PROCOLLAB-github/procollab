@@ -2,7 +2,7 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { concatMap, first, map, Observable, skip, Subject, takeUntil } from "rxjs";
+import { catchError, concatMap, first, map, Observable, skip, Subject, takeUntil } from "rxjs";
 import { AuthService } from "../../../auth";
 import dayjs from "dayjs";
 import { yearRangeValidators } from "@utils/helpers/yearRangeValidators";
@@ -18,6 +18,7 @@ import {
   languageLevelsList,
   languageNamesList,
 } from "projects/core/src/consts/lists/language-info-list.const";
+import { error } from "console";
 
 @Injectable({ providedIn: "root" })
 export class ProfileFormService {

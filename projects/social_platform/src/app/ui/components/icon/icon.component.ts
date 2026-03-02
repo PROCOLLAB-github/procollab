@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 
 /**
  * Компонент для отображения SVG иконок с настраиваемыми параметрами.
@@ -25,6 +25,7 @@ import { Component, Input, OnInit } from "@angular/core";
   templateUrl: "./icon.component.html",
   styleUrl: "./icon.component.scss",
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IconComponent implements OnInit {
   /** Размер квадратной иконки */

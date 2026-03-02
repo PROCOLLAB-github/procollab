@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { InputComponent, ButtonComponent, SelectComponent } from "@ui/components";
 import { ControlErrorPipe } from "@corelib";
@@ -41,6 +41,7 @@ import { ProjectVacancyService } from "projects/social_platform/src/app/api/proj
     SkillsGroupComponent,
   ],
   providers: [ProjectsEditInfoService, ProjectVacancyService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectVacancyStepComponent implements OnInit {
   private readonly projectVacancyInfoService = inject(ProjectVacancyService);

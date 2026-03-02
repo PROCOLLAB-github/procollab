@@ -1,12 +1,21 @@
 /** @format */
 
-import { Component, forwardRef, Input, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  forwardRef,
+  inject,
+  Input,
+  OnInit,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { FileService } from "projects/core/src/lib/services/file/file.service";
 import { nanoid } from "nanoid";
 import { IconComponent } from "@ui/components";
 import { SlicePipe } from "@angular/common";
 import { LoaderComponent } from "../loader/loader.component";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент для загрузки файлов с предварительным просмотром.
@@ -30,6 +39,7 @@ import { LoaderComponent } from "../loader/loader.component";
   selector: "app-upload-file",
   templateUrl: "./upload-file.component.html",
   styleUrl: "./upload-file.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -41,7 +51,8 @@ import { LoaderComponent } from "../loader/loader.component";
   imports: [IconComponent, SlicePipe, LoaderComponent],
 })
 export class UploadFileComponent implements OnInit, ControlValueAccessor {
-  constructor(private fileService: FileService) {}
+  private readonly fileService = inject(FileService);
+  private readonly destroyRef = inject(DestroyRef);
 
   /** Ограничения по типу файлов */
   @Input() accept = "";
@@ -86,29 +97,35 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
 
     this.loading = true;
 
-    this.fileService.uploadFile(files[0]).subscribe(res => {
-      this.loading = false;
+    this.fileService
+      .uploadFile(files[0])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(res => {
+        this.loading = false;
 
-      this.value = res.url;
-      this.onChange(res.url);
-    });
+        this.value = res.url;
+        this.onChange(res.url);
+      });
   }
 
   /** Обработчик удаления файла */
   onRemove(): void {
-    this.fileService.deleteFile(this.value).subscribe({
-      next: () => {
-        this.value = "";
+    this.fileService
+      .deleteFile(this.value)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.value = "";
 
-        this.onTouch();
-        this.onChange("");
-      },
-      error: () => {
-        this.value = "";
+          this.onTouch();
+          this.onChange("");
+        },
+        error: () => {
+          this.value = "";
 
-        this.onTouch();
-        this.onChange("");
-      },
-    });
+          this.onTouch();
+          this.onChange("");
+        },
+      });
   }
 }

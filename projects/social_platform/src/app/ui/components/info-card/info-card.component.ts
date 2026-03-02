@@ -1,6 +1,14 @@
 /** @format */
 
-import { Component, EventEmitter, inject, Input, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+} from "@angular/core";
 import { IndustryService } from "projects/social_platform/src/app/api/industry/industry.service";
 import { IconComponent, ButtonComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
@@ -13,6 +21,8 @@ import { Router, RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { YearsFromBirthdayPipe } from "@corelib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
@@ -35,12 +45,15 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pi
     TruncatePipe,
     RouterLink,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InfoCardComponent {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly inviteService = inject(InviteService);
   private readonly subscriptionService = inject(SubscriptionService);
   public readonly industryService = inject(IndustryService);
   private readonly router = inject(Router);
+  private readonly logger = inject(LoggerService);
 
   @Input() info?: any;
   @Input() type: "invite" | "projects" | "members" | "rating" = "projects";
@@ -119,21 +132,24 @@ export class InfoCardComponent {
    */
   onRejectInvite(event: Event, inviteId: number): void {
     if (!this.info || !inviteId) {
-      console.warn("Cannot reject invite: missing project or inviteId");
+      this.logger.warn("Cannot reject invite: missing project or inviteId");
       return;
     }
 
     this.stopEventPropagation(event);
 
-    this.inviteService.rejectInvite(inviteId).subscribe({
-      next: () => {
-        this.onRejectingInvite.emit(inviteId || this.info!.inviteId);
-      },
-      error: error => {
-        console.error("Error rejecting invite:", error);
-        this.inviteErrorModal = true;
-      },
-    });
+    this.inviteService
+      .rejectInvite(inviteId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.onRejectingInvite.emit(inviteId || this.info!.inviteId);
+        },
+        error: error => {
+          this.logger.error("Error rejecting invite:", error);
+          this.inviteErrorModal = true;
+        },
+      });
   }
 
   /**
@@ -141,21 +157,24 @@ export class InfoCardComponent {
    */
   onAcceptInvite(event: Event, inviteId: number): void {
     if (!this.info || !inviteId) {
-      console.warn("Cannot accept invite: missing project or inviteId");
+      this.logger.warn("Cannot accept invite: missing project or inviteId");
       return;
     }
 
     this.stopEventPropagation(event);
 
-    this.inviteService.acceptInvite(inviteId).subscribe({
-      next: () => {
-        this.onAcceptingInvite.emit(inviteId || this.info!.inviteId);
-      },
-      error: error => {
-        console.error("Error accepting invite:", error);
-        this.inviteErrorModal = true;
-      },
-    });
+    this.inviteService
+      .acceptInvite(inviteId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.onAcceptingInvite.emit(inviteId || this.info!.inviteId);
+        },
+        error: error => {
+          this.logger.error("Error accepting invite:", error);
+          this.inviteErrorModal = true;
+        },
+      });
   }
 
   /**
@@ -163,7 +182,7 @@ export class InfoCardComponent {
    */
   onSubscribe(event: Event, projectId: number): void {
     if (!projectId) {
-      console.warn("Cannot subscribe: missing projectId");
+      this.logger.warn("Cannot subscribe: missing projectId");
       return;
     }
 
@@ -174,14 +193,17 @@ export class InfoCardComponent {
       return;
     }
 
-    this.subscriptionService.addSubscription(projectId).subscribe({
-      next: () => {
-        this.isSubscribed = true;
-      },
-      error: error => {
-        console.error("Error subscribing to project:", error);
-      },
-    });
+    this.subscriptionService
+      .addSubscription(projectId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isSubscribed = true;
+        },
+        error: error => {
+          this.logger.error("Error subscribing to project:", error);
+        },
+      });
   }
 
   /**
@@ -189,21 +211,24 @@ export class InfoCardComponent {
    */
   onUnsubscribe(event: Event, projectId: number): void {
     if (!projectId) {
-      console.warn("Cannot unsubscribe: missing projectId");
+      this.logger.warn("Cannot unsubscribe: missing projectId");
       return;
     }
 
     this.stopEventPropagation(event);
 
-    this.subscriptionService.deleteSubscription(projectId).subscribe({
-      next: () => {
-        this.isSubscribed = false;
-        this.isUnsubscribeModalOpen = false;
-      },
-      error: error => {
-        console.error("Error unsubscribing from project:", error);
-      },
-    });
+    this.subscriptionService
+      .deleteSubscription(projectId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.isSubscribed = false;
+          this.isUnsubscribeModalOpen = false;
+        },
+        error: error => {
+          this.logger.error("Error unsubscribing from project:", error);
+        },
+      });
   }
 
   /**
@@ -235,7 +260,7 @@ export class InfoCardComponent {
   redirectToProjects(): void {
     this.router
       .navigateByUrl(`/office/projects/all`)
-      .then(() => console.debug("Route change from ProjectsComponent"));
+      .then(() => this.logger.debug("Route change from ProjectsComponent"));
   }
 
   /**

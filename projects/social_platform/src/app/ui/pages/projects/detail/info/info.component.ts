@@ -1,7 +1,14 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, inject, OnDestroy, OnInit } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+} from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
 import { ProjectsDetailService } from "projects/social_platform/src/app/api/project/facades/detail/projects-detail.service";
@@ -47,6 +54,7 @@ import { ProjectsMidSideComponent } from "./components/projects-mid-side/project
     ProjectsRightSideComponent,
     ProjectsMidSideComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectInfoComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly projectsDetailService = inject(ProjectsDetailService);

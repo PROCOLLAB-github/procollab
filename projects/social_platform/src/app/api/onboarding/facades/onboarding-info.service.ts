@@ -4,12 +4,14 @@ import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 import { OnboardingService } from "../onboarding.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class OnboardingInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly onboardingService = inject(OnboardingService);
+  private readonly logger = inject(LoggerService);
 
   readonly stage = signal<number>(0);
   readonly activeStage = signal<number>(0);
@@ -21,7 +23,7 @@ export class OnboardingInfoService {
       if (s === null) {
         this.router
           .navigateByUrl("/office")
-          .then(() => console.debug("Route changed from OnboardingComponent"));
+          .then(() => this.logger.debug("Route changed from OnboardingComponent"));
         return;
       }
 
@@ -33,7 +35,7 @@ export class OnboardingInfoService {
 
       this.router
         .navigate([`stage-${this.stage()}`], { relativeTo: this.route })
-        .then(() => console.debug("Route changed from OnboardingComponent"));
+        .then(() => this.logger.debug("Route changed from OnboardingComponent"));
     });
 
     this.updateStage();
@@ -56,6 +58,6 @@ export class OnboardingInfoService {
 
     this.router
       .navigate([`stage-${stage}`], { relativeTo: this.route })
-      .then(() => console.debug("Route changed from OnboardingComponent"));
+      .then(() => this.logger.debug("Route changed from OnboardingComponent"));
   }
 }

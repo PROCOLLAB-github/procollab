@@ -11,6 +11,7 @@ import {
 import { map, type Observable } from "rxjs";
 import * as snakecaseKeys from "snakecase-keys";
 import camelcaseKeys from "camelcase-keys";
+import { LoggerService } from "@corelib";
 
 /**
  * HTTP интерцептор для автоматического преобразования стиля именования ключей объектов
@@ -31,7 +32,7 @@ import camelcaseKeys from "camelcase-keys";
  */
 @Injectable()
 export class CamelcaseInterceptor implements HttpInterceptor {
-  constructor() {}
+  constructor(private readonly loggerService: LoggerService) {}
 
   /**
    * Основной метод интерцептора
@@ -77,7 +78,10 @@ export class CamelcaseInterceptor implements HttpInterceptor {
               }),
             });
           } catch (error) {
-            console.warn("CamelcaseInterceptor: Failed to transform response body", error);
+            this.loggerService.warn(
+              "CamelcaseInterceptor: Failed to transform response body",
+              error
+            );
             return event;
           }
         }

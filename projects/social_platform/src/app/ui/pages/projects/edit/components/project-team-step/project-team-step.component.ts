@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { InputComponent, ButtonComponent } from "@ui/components";
 import { ControlErrorPipe } from "@corelib";
@@ -35,6 +35,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
     TooltipComponent,
     ModalComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectTeamStepComponent implements OnInit {
   private readonly projectsEditInfoService = inject(ProjectsEditInfoService);

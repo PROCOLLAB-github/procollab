@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 import { IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { DatePipe, NgClass } from "@angular/common";
@@ -37,6 +37,7 @@ import { Program } from "../../../domain/program/program.model";
   styleUrl: "./program-card.component.scss",
   standalone: true,
   imports: [AvatarComponent, IconComponent, DatePipe, NgClass],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramCardComponent implements OnInit {
   constructor() {}

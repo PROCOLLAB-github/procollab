@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { ButtonComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
 
@@ -11,6 +11,7 @@ import { IconComponent } from "@uilib";
   styleUrl: "./soon-card.component.scss",
   imports: [CommonModule, IconComponent, ButtonComponent],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SoonCardComponent {
   @Input({ required: true }) title!: string;

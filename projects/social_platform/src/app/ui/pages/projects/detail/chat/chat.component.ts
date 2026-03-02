@@ -1,6 +1,14 @@
 /** @format */
 
-import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import {
   ChatFile,
   ChatMessage,
@@ -49,6 +57,7 @@ import { ChatDirectUIInfoService } from "projects/social_platform/src/app/api/ch
   standalone: true,
   imports: [AvatarComponent, IconComponent, ChatWindowComponent, RouterLink, FileItemComponent],
   providers: [ChatDirectInfoService, ChatDirectUIInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectChatComponent implements OnInit, OnDestroy {
   /** Ссылка на компонент ввода сообщений */

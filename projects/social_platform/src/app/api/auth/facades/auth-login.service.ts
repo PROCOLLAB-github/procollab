@@ -7,6 +7,7 @@ import { Subject, takeUntil } from "rxjs";
 import { AuthService } from "../auth.service";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { LoginRequest } from "../../../domain/auth/http.model";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class AuthLoginService {
@@ -16,6 +17,7 @@ export class AuthLoginService {
   private readonly router = inject(Router);
   private readonly validationService = inject(ValidationService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
+  private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -51,11 +53,11 @@ export class AuthLoginService {
           if (!redirectType)
             this.router
               .navigateByUrl("/office")
-              .then(() => console.debug("Route changed from LoginComponent"));
+              .then(() => this.logger.debug("Route changed from LoginComponent"));
           else if (redirectType === "program")
             this.router
               .navigateByUrl("/office/program/list")
-              .then(() => console.debug("Route changed from LoginComponent"));
+              .then(() => this.logger.debug("Route changed from LoginComponent"));
         },
         error: error => {
           if (error.status === 401) {

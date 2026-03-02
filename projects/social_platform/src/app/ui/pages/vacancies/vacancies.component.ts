@@ -3,7 +3,7 @@
 // vacancies.component.ts
 /** @format */
 
-import { Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router, RouterOutlet } from "@angular/router";
 import { BackComponent } from "@uilib";
@@ -27,6 +27,7 @@ import { VacancyUIInfoService } from "../../../api/vacancy/facades/ui/vacancy-ui
   ],
   providers: [VacancyInfoService, VacancyUIInfoService],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacanciesComponent implements OnInit {
   private readonly vacancyInfoService = inject(VacancyInfoService);

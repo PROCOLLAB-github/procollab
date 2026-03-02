@@ -1,13 +1,23 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ProfileNewsService } from "../../../api/profile/profile-news.service";
-import { map, Subscription } from "rxjs";
+import { map } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
 import { FeedNews } from "../../../domain/project/project-news.model";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 /**
  * Компонент для отображения отдельной новости профиля в модальном окне
@@ -43,11 +53,13 @@ import { FeedNews } from "../../../domain/project/project-news.model";
   imports: [CommonModule, ModalComponent, NewsCardComponent],
   templateUrl: "./profile-news.component.html",
   styleUrl: "./profile-news.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileNewsComponent implements OnInit, OnDestroy {
-  private readonly profileService: ProfileNewsService = inject(ProfileNewsService);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly router: Router = inject(Router);
+  private readonly loggerService = inject(LoggerService);
 
   /** ID пользователя, извлеченный из родительского маршрута профиля */
   userId = this.route.parent?.parent?.snapshot.params["id"];
@@ -55,35 +67,33 @@ export class ProfileNewsComponent implements OnInit, OnDestroy {
   /** Сигнал с данными отображаемой новости */
   newsItem = signal<FeedNews | null>(null);
 
-  /** Массив активных подписок для очистки при уничтожении компонента */
-  subscriptions$: Subscription[] = [];
-
   /**
    * Инициализация компонента
    * Загружает данные новости из резолвера маршрута и устанавливает их в сигнал
    */
   ngOnInit(): void {
-    const profileNewsSub$ = this.route.data.pipe(map(r => r["data"])).subscribe({
-      next: (r: FeedNews) => {
-        this.newsItem.set(r);
-      },
-      error: err => {
-        console.log(err);
-      },
-    });
+    this.route.data
+      .pipe(
+        map(r => r["data"]),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (r: FeedNews) => {
+          this.newsItem.set(r);
+        },
+        error: err => {
+          this.loggerService.info(err);
+        },
+      });
 
-    console.log(this.newsItem());
-
-    this.subscriptions$.push(profileNewsSub$);
+    this.loggerService.info("", this.newsItem());
   }
 
   /**
    * Очистка ресурсов при уничтожении компонента
    * Отписывается от всех активных подписок для предотвращения утечек памяти
    */
-  ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
-  }
+  ngOnDestroy(): void {}
 
   /**
    * Обработчик изменения состояния модального окна
@@ -96,7 +106,7 @@ export class ProfileNewsComponent implements OnInit, OnDestroy {
     if (!value) {
       this.router
         .navigateByUrl(`/office/profile/${this.userId}`)
-        .then(() => console.debug("Route changed from ProfileNewsComponent"));
+        .then(() => this.loggerService.debug("Route changed from ProfileNewsComponent"));
     }
   }
 }

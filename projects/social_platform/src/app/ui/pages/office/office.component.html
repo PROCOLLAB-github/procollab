@@ -17,7 +17,7 @@
           <ui-sidebar
             class="office__sidebar"
             logoSrc="/assets/images/shared/logo.svg"
-            [navItems]="navItems"
+            [navItems]="navItems()"
             style="align-self: flex-start"
           >
             <div class="office__sidebar--text">
@@ -55,7 +55,7 @@
     </div>
   </div>
   }
-  <app-modal [open]="waitVerificationModal && !waitVerificationAccepted">
+  <app-modal [open]="waitVerificationModal() && !waitVerificationAccepted()">
     <div class="message-modal">
       <img
         src="/assets/images/office/shared/wait.png"
@@ -115,14 +115,14 @@
     </div>
   </app-modal>
 
-  <app-modal [open]="inviteErrorModal">
+  <app-modal [open]="inviteErrorModal()">
     <div class="message-modal">
       <h3 class="message-modal__title text-body-14">Приглашение на текущий проект было удалено</h3>
       <p class="message-modal__text text-body-12">
         Проверьте наличие вас в списке участников проекта или обратитесь к создателю проекта, чтобы
         вас заново пригласили!
       </p>
-      <app-button class="message-modal__button" (click)="inviteErrorModal = false">
+      <app-button class="message-modal__button" (click)="inviteErrorModal.set(false)">
         Хорошо
       </app-button>
     </div>

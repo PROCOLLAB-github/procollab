@@ -5,9 +5,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   ElementRef,
   EventEmitter,
   forwardRef,
+  inject,
   Input,
   Output,
   signal,
@@ -16,7 +18,8 @@ import {
 import { IconComponent } from "@uilib";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ClickOutsideModule } from "ng-click-outside";
-import { debounce, distinctUntilChanged, fromEvent, map, of, Subscription, timer } from "rxjs";
+import { debounce, distinctUntilChanged, fromEvent, map, of, timer } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { animate, style, transition, trigger } from "@angular/animations";
 import { LoaderComponent } from "@ui/components/loader/loader.component";
 
@@ -146,22 +149,21 @@ export class AutoCompleteInputComponent<T> {
   /** Состояние блокировки */
   disabled = signal(false);
 
-  /** Массив подписок */
-  subscriptions$ = signal<Subscription[]>([]);
+  private readonly cdRef = inject(ChangeDetectorRef);
+  private readonly destroyRef = inject(DestroyRef);
 
-  constructor(private readonly cdRef: ChangeDetectorRef) {}
+  constructor() {}
 
   /** Инициализация отслеживания ввода после загрузки представления */
   ngAfterViewInit(): void {
-    const input$ = fromEvent<Event>(this.inputElem.nativeElement, "input")
+    fromEvent<Event>(this.inputElem.nativeElement, "input")
       .pipe(
         map(e => (e.target as HTMLInputElement).value.trim()),
         debounce(val => (val ? timer(this.delay) : of({}))),
-        distinctUntilChanged()
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(val => this.handleSearch(val));
-
-    this.subscriptions$().push(input$);
   }
 
   ngOnInit(): void {}
@@ -300,10 +302,5 @@ export class AutoCompleteInputComponent<T> {
     return suggestions.find(
       s => String(s[this.fieldToDisplay]).toLowerCase() === this.inputValue().toLocaleLowerCase()
     );
-  }
-
-  /** Очистка подписок при уничтожении компонента */
-  ngOnDestroy(): void {
-    this.subscriptions$().forEach($ => $.unsubscribe());
   }
 }

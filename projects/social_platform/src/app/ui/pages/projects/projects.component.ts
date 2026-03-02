@@ -1,6 +1,14 @@
 /** @format */
 
-import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
@@ -44,6 +52,7 @@ import { SwipeService } from "../../../api/swipe/swipe.service";
   ],
   providers: [ProjectsInfoService, ProjectsUIInfoService, SwipeService],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
   @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;

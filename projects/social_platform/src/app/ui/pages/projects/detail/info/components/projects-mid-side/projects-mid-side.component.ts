@@ -1,7 +1,15 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, inject, Input, ViewChild, WritableSignal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  ViewChild,
+  WritableSignal,
+} from "@angular/core";
 import { NewsFormComponent } from "@ui/components/news-form/news-form.component";
 import { ProjectDirectionCard } from "@ui/shared/project-direction-card/project-direction-card.component";
 import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
@@ -14,6 +22,7 @@ import { ProjectsDetailService } from "projects/social_platform/src/app/api/proj
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
 import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-projects-mid-side",
@@ -28,6 +37,7 @@ import { Collaborator } from "projects/social_platform/src/app/domain/project/co
     ParseBreaksPipe,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsMidSideComponent {
   @Input() project!: WritableSignal<Project | undefined>;
@@ -68,9 +78,12 @@ export class ProjectsMidSideComponent {
    * @param news - объект с текстом и файлами новости
    */
   onAddNews(news: { text: string; files: string[] }): void {
-    this.projectsDetailService.onAddNews(news).subscribe({
-      next: () => this.newsFormComponent?.onResetForm(),
-    });
+    this.projectsDetailService
+      .onAddNews(news)
+      .pipe(takeUntilDestroyed())
+      .subscribe({
+        next: () => this.newsFormComponent?.onResetForm(),
+      });
   }
 
   /**
@@ -95,9 +108,12 @@ export class ProjectsMidSideComponent {
    * @param newsItemId - ID редактируемой новости
    */
   onEditNews(news: FeedNews, newsItemId: number) {
-    this.projectsDetailService.onEditNews(news, newsItemId).subscribe({
-      next: () => this.newsCardComponent?.onCloseEditMode(),
-    });
+    this.projectsDetailService
+      .onEditNews(news, newsItemId)
+      .pipe(takeUntilDestroyed())
+      .subscribe({
+        next: () => this.newsCardComponent?.onCloseEditMode(),
+      });
   }
 
   /**

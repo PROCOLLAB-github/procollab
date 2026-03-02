@@ -7,6 +7,7 @@ import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
 import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { Goal, GoalDto } from "../../../../domain/project/goals.model";
 import { ProjectGoalsUIService } from "./ui/project-goals-ui.service";
+import { LoggerService } from "@corelib";
 
 /**
  * Сервис для управления целями проекта
@@ -24,6 +25,7 @@ export class ProjectGoalService {
   private readonly projectFormService = inject(ProjectFormService);
   private readonly projectService = inject(ProjectService);
   private readonly projectGoalsUIService = inject(ProjectGoalsUIService);
+  private readonly loggerService = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -251,7 +253,7 @@ export class ProjectGoalService {
         });
       }),
       catchError(err => {
-        console.error("Error saving goals:", err);
+        this.loggerService.error("Error saving goals:", err);
         return of({ __error: true, err, original: newGoals });
       })
     );

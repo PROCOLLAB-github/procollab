@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { DetailProfileInfoService } from "@ui/components/detail/services/profile/detail-profile-info.service";
 import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { Subject, takeUntil } from "rxjs";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class FeedFilterInfoService {
@@ -12,6 +13,7 @@ export class FeedFilterInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly authService = inject(AuthService);
   private readonly detailProfileInfoService = inject(DetailProfileInfoService);
+  private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -127,6 +129,6 @@ export class FeedFilterInfoService {
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
-      .then(() => console.debug("Query change from FeedFilterComponent"));
+      .then(() => this.logger.debug("Query change from FeedFilterComponent"));
   }
 }

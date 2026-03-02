@@ -1,6 +1,14 @@
 /** @format */
 
-import { AfterViewInit, Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { ButtonComponent, IconComponent } from "@ui/components";
@@ -90,6 +98,7 @@ dayjs.extend(cpf);
     ProfileEditExperienceInfoService,
     ProfileEditSkillsInfoService,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly profileFormService = inject(ProfileFormService);

@@ -6,12 +6,14 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { optionsListElement } from "@utils/generate-options-list";
 import { IndustryService } from "projects/social_platform/src/app/api/industry/industry.service";
 import { map, Subject, takeUntil } from "rxjs";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class ProjectsFilterInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly industryService = inject(IndustryService);
+  private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -98,7 +100,7 @@ export class ProjectsFilterInfoService {
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
-      .then(() => console.debug("Query change from ProjectsComponent"));
+      .then(() => this.logger.debug("Query change from ProjectsComponent"));
   }
 
   /**
@@ -114,7 +116,7 @@ export class ProjectsFilterInfoService {
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
-      .then(() => console.debug("Query change from ProjectsComponent"));
+      .then(() => this.logger.debug("Query change from ProjectsComponent"));
   }
 
   /**
@@ -130,7 +132,7 @@ export class ProjectsFilterInfoService {
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
-      .then(() => console.debug("Query change from ProjectsComponent"));
+      .then(() => this.logger.debug("Query change from ProjectsComponent"));
   }
 
   /**
@@ -147,7 +149,7 @@ export class ProjectsFilterInfoService {
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
-      .then(() => console.debug("Query change from ProjectsComponent"));
+      .then(() => this.logger.debug("Query change from ProjectsComponent"));
   }
 
   /**
@@ -187,6 +189,6 @@ export class ProjectsFilterInfoService {
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
-      .then(() => console.log("Query change from ProjectsComponent"));
+      .then(() => this.logger.info("Query change from ProjectsComponent"));
   }
 }

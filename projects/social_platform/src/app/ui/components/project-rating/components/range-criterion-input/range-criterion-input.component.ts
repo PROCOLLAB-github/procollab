@@ -1,6 +1,12 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, forwardRef, Input } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  forwardRef,
+  Input,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 /**
@@ -32,6 +38,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
   selector: "app-range-criterion-input",
   templateUrl: "./range-criterion-input.component.html",
   styleUrl: "./range-criterion-input.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

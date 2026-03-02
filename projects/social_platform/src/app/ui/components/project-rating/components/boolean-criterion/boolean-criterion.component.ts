@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, forwardRef, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, forwardRef, Input } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
 import { noop } from "rxjs";
@@ -39,6 +39,7 @@ import { noop } from "rxjs";
   styleUrl: "./boolean-criterion.component.scss",
   standalone: true,
   imports: [IconComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

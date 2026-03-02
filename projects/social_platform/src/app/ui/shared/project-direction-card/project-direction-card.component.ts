@@ -1,7 +1,15 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, OnDestroy, OnInit, signal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { IconComponent } from "@uilib";
 import { TagComponent } from "@ui/components/tag/tag.component";
@@ -18,6 +26,7 @@ import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { Goal } from "../../../domain/project/goals.model";
 import { ProfileService } from "../../../api/auth/profile.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 @Component({
   selector: "app-project-direction-card",
   templateUrl: "./project-direction-card.component.html",
@@ -35,6 +44,7 @@ import { ProfileService } from "../../../api/auth/profile.service";
     EditorSubmitButtonDirective,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectDirectionCard implements OnInit, OnDestroy {
   @Input() direction!: string;
@@ -50,6 +60,7 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly achievementsService = inject(ProfileService);
   private readonly projectService = inject(ProjectService);
+  private readonly logger = inject(LoggerService);
 
   private subscriptions: Subscription[] = [];
 
@@ -148,7 +159,7 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
         });
       },
       error: error => {
-        console.error("Ошибка при обновлении цели:", error);
+        this.logger.error("Ошибка при обновлении цели:", error);
       },
     });
   }

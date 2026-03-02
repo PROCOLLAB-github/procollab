@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { ButtonComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
@@ -67,6 +67,7 @@ import { UploadFileComponent } from "@ui/components/upload-file/upload-file.comp
   ],
   providers: [VacancyDetailInfoService, VacancyDetailUIInfoService],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacancyInfoComponent implements OnInit {
   private readonly vacancyDetailInfoService = inject(VacancyDetailInfoService);

@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, WritableSignal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { YearsFromBirthdayPipe } from "@corelib";
 import { IconComponent } from "@ui/components";
@@ -15,6 +15,7 @@ import { User } from "projects/social_platform/src/app/domain/auth/user.model";
   styleUrl: "./profile-left-side.component.scss",
   imports: [CommonModule, RouterModule, IconComponent, YearsFromBirthdayPipe, TruncatePipe],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileLeftSideComponent {
   @Input() user!: WritableSignal<User | undefined>;

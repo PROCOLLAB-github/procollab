@@ -1,6 +1,13 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { LoaderComponent } from "../loader/loader.component";
 import { IconComponent } from "@ui/components";
@@ -29,6 +36,7 @@ import { FormatedFileSizePipe } from "projects/core/src/lib/pipes/transformers/f
   styleUrl: "./file-upload-item.component.scss",
   standalone: true,
   imports: [IconComponent, LoaderComponent, UpperCasePipe, FileTypePipe, FormatedFileSizePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileUploadItemComponent implements OnInit {
   constructor() {}

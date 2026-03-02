@@ -5,6 +5,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@ang
 import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
 import { Resource, ResourceDto } from "../../../../domain/project/resource.model";
+import { LoggerService } from "@corelib";
 
 @Injectable({
   providedIn: "root",
@@ -12,6 +13,8 @@ import { Resource, ResourceDto } from "../../../../domain/project/resource.model
 export class ProjectResourceService {
   private readonly fb = inject(FormBuilder);
   private readonly projectService = inject(ProjectService);
+  private readonly loggerService = inject(LoggerService);
+
   private resourceForm!: FormGroup;
   public readonly resourceItems = signal<
     Partial<{ id: null; type: string; description: string; partnerCompany: string }>[]
@@ -227,7 +230,7 @@ export class ProjectResourceService {
       tap(results => {
         results.forEach((r: any) => {
           if (r && r.__error) {
-            console.error("Failed to post resource", r.err, "original:", r.original);
+            this.loggerService.error("Failed to post resource", r.err);
             return;
           }
 
@@ -267,7 +270,7 @@ export class ProjectResourceService {
       tap(results => {
         results.forEach((r: any) => {
           if (r && r.__error) {
-            console.error("Failed to add resource", r.err, "original:", r.original);
+            this.loggerService.error("Failed to add resource", r.err);
             return;
           }
 
@@ -280,7 +283,7 @@ export class ProjectResourceService {
               formGroup.get("id")?.setValue(created.id);
             }
           } else {
-            console.warn("addResource response has no id field:", r.res);
+            this.loggerService.warn("addResource response has no id field:", r.res);
           }
         });
 

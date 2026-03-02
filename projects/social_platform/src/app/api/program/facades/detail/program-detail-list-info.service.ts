@@ -27,6 +27,7 @@ import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import Fuse from "fuse.js";
 import { ProgramDetailListUIInfoService } from "./ui/program-detail-list-ui-info.service";
 import { ProjectRate } from "projects/social_platform/src/app/domain/project/project-rate";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class ProgramDetailListInfoService {
@@ -37,6 +38,7 @@ export class ProgramDetailListInfoService {
   private readonly authService = inject(AuthService);
   private readonly subscriptionService = inject(SubscriptionService);
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
+  private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -75,7 +77,7 @@ export class ProgramDetailListInfoService {
         throttleTime(200),
         switchMap(() => this.onScroll(target, listRoot)),
         catchError(err => {
-          console.error("Scroll error:", err);
+          this.logger.error("Scroll error:", err);
           return of({});
         }),
         takeUntil(this.destroy$)
@@ -101,7 +103,7 @@ export class ProgramDetailListInfoService {
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
-      .then(() => console.log("Query change from ProjectsComponent"));
+      .then(() => this.logger.info("Query change from ProjectsComponent"));
   }
 
   private setupSearch(): void {
@@ -115,7 +117,7 @@ export class ProgramDetailListInfoService {
             relativeTo: this.route,
             queryParamsHandling: "merge",
           })
-          .then(() => console.debug("QueryParams changed from ProgramListComponent"));
+          .then(() => this.logger.debug("QueryParams changed from ProgramListComponent"));
       });
 
     this.route.queryParams
@@ -176,7 +178,7 @@ export class ProgramDetailListInfoService {
           return this.programService.getAllProjects(programId, params);
         }),
         catchError(err => {
-          console.error("Error in setupFilters:", err);
+          this.logger.error("Error in setupFilters:", err);
           return of({ count: 0, results: [] });
         }),
         takeUntil(this.destroy$)
@@ -235,7 +237,6 @@ export class ProgramDetailListInfoService {
   }
 
   // Универсальный метод загрузки данных
-  // Универсальный метод загрузки данных
   private onFetch() {
     const programId = this.route.parent?.snapshot.params["programId"];
     const offset = this.listPage() * this.itemsPerPage();
@@ -264,7 +265,7 @@ export class ProgramDetailListInfoService {
             this.programDetailListUIInfoService.applyFetchProgramData(rating);
           }),
           catchError(err => {
-            console.error("Error fetching ratings:", err);
+            this.logger.error("Error fetching ratings:", err);
             this.listPage.update(p => p - 1);
             return of({ count: this.listTotalCount || 0, results: [] });
           }),
@@ -283,7 +284,7 @@ export class ProgramDetailListInfoService {
             this.programDetailListUIInfoService.applyFetchProgramData(projects);
           }),
           catchError(err => {
-            console.error("Error fetching projects:", err);
+            this.logger.error("Error fetching projects:", err);
             this.listPage.update(p => p - 1);
             return of({ count: this.listTotalCount || 0, results: [] });
           }),
@@ -297,7 +298,7 @@ export class ProgramDetailListInfoService {
             this.programDetailListUIInfoService.applyFetchProgramData(members);
           }),
           catchError(err => {
-            console.error("Error fetching members:", err);
+            this.logger.error("Error fetching members:", err);
             this.listPage.update(p => p - 1);
             return of({ count: this.listTotalCount || 0, results: [] });
           }),

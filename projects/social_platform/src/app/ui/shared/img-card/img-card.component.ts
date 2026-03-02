@@ -1,6 +1,13 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { IconComponent } from "@ui/components";
 
 /**
@@ -26,6 +33,7 @@ import { IconComponent } from "@ui/components";
   styleUrl: "./img-card.component.scss",
   standalone: true,
   imports: [IconComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImgCardComponent implements OnInit {
   constructor() {}

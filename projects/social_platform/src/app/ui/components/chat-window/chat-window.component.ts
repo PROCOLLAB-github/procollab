@@ -2,9 +2,12 @@
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
   EventEmitter,
+  inject,
   Input,
   OnDestroy,
   OnInit,
@@ -19,12 +22,13 @@ import {
 import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
 import { MessageInputComponent } from "@ui/components/message-input/message-input.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { filter, fromEvent, noop, skip, Subscription, tap, throttleTime } from "rxjs";
+import { filter, fromEvent, noop, skip, tap, throttleTime } from "rxjs";
 import { ModalService } from "@ui/models/modal.service";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { PluralizePipe } from "projects/core";
 import { ChatMessageComponent } from "@ui/components/chat-message/chat-message.component";
 import { AuthService } from "../../../api/auth";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент окна чата
@@ -45,8 +49,11 @@ import { AuthService } from "../../../api/auth";
     MessageInputComponent,
     PluralizePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
+
   /**
    * Конструктор компонента
    * @param fb - FormBuilder для создания формы сообщения
@@ -131,10 +138,9 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   ngOnInit(): void {
     // Подписка на профиль текущего пользователя
-    const profile$ = this.authService.profile.subscribe(p => {
+    this.authService.profile.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(p => {
       this.profile = p;
     });
-    this.subscriptions$.push(profile$);
 
     // Инициализация отслеживания печатания
     this.initTypingSend();
@@ -148,19 +154,18 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     if (this.viewport) {
       // Подписка на события прокрутки для загрузки истории
-      const viewPortScroll$ = fromEvent(this.viewport?.elementRef.nativeElement, "scroll")
+      fromEvent(this.viewport?.elementRef.nativeElement, "scroll")
         .pipe(
           skip(1), // Пропуск первого события прокрутки
           filter(() => {
             const offsetTop = this.viewport?.measureScrollOffset("top");
             return offsetTop ? offsetTop <= 200 : false; // Загрузка при приближении к верху
-          })
+          }),
+          takeUntilDestroyed(this.destroyRef)
         )
         .subscribe(() => {
           this.fetch.emit(); // Запрос дополнительных сообщений
         });
-
-      viewPortScroll$ && this.subscriptions$.push(viewPortScroll$);
 
       // Создание наблюдателя пересечений для отметок о прочтении
       this.observer = new IntersectionObserver(this.onReadMessage.bind(this), {
@@ -175,7 +180,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
    * Очистка ресурсов при уничтожении компонента
    */
   ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
+    this.observer?.disconnect();
   }
 
   /** Наблюдатель пересечений для отметок о прочтении */
@@ -208,25 +213,21 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   @ViewChild(MessageInputComponent, { read: ElementRef }) messageInputComponent?: ElementRef;
 
-  /** Массив подписок для очистки */
-  subscriptions$: Subscription[] = [];
-
   /**
    * Инициализация отслеживания печатания
    * Отправляет событие печатания при изменении текста с задержкой
    */
   private initTypingSend(): void {
-    const messageControlSub$ = this.messageForm
+    this.messageForm
       .get("messageControl")
       ?.valueChanges.pipe(
         throttleTime(2000), // Ограничение частоты отправки событий
         tap(() => {
           this.type.emit(); // Отправка события печатания
-        })
+        }),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(noop);
-
-    messageControlSub$ && this.subscriptions$.push(messageControlSub$);
   }
 
   /**
@@ -333,7 +334,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.modalService
       .confirmDelete("Вы уверены что хотите удалить сообщение?", `"${deletedMessage?.text}"`)
-      .pipe(filter(Boolean))
+      .pipe(filter(Boolean), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.delete.emit(messageId);
       });

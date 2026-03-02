@@ -3,6 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable({
   providedIn: "root",
@@ -10,6 +11,7 @@ import { ProjectService } from "projects/social_platform/src/app/api/project/pro
 export class ProjectsService {
   private readonly projectService = inject(ProjectService);
   private readonly router = inject(Router);
+  private readonly logger = inject(LoggerService);
 
   addProject(): void {
     this.projectService.create().subscribe(project => {
@@ -22,7 +24,7 @@ export class ProjectsService {
         .navigate([`/office/projects/${project.id}/edit`], {
           queryParams: { editingStep: "main" },
         })
-        .then(() => console.debug("Route change from ProjectsComponent"));
+        .then(() => this.logger.debug("Route change from ProjectsComponent"));
     });
   }
 }

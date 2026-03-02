@@ -1,6 +1,7 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
 import { Subject, takeUntil } from "rxjs";
@@ -12,6 +13,7 @@ export class ProgramInfoService {
   private readonly navService = inject(NavService);
   private readonly router = inject(Router);
   private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
+  private readonly loggerService = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -34,7 +36,7 @@ export class ProgramInfoService {
             relativeTo: this.route,
             queryParamsHandling: "merge",
           })
-          .then(() => console.debug("QueryParams changed from ProjectsComponent"));
+          .then(() => this.loggerService.debug("QueryParams changed from ProjectsComponent"));
       });
   }
 

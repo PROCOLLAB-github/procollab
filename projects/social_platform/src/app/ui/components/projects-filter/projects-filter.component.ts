@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map, Subscription } from "rxjs";
 import { IndustryService } from "projects/social_platform/src/app/api/industry/industry.service";
@@ -43,6 +43,7 @@ import { ProjectsFilterInfoService } from "./service/projects-filter-info.servic
   standalone: true,
   imports: [SelectComponent, ReactiveFormsModule],
   providers: [ProjectsFilterInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsFilterComponent implements OnInit {
   private readonly projectsFilterInfoService = inject(ProjectsFilterInfoService);

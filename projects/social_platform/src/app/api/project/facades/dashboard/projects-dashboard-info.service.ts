@@ -6,6 +6,7 @@ import { ActivatedRoute } from "@angular/router";
 import { AuthService } from "../../../auth";
 import { SubscriptionService } from "../../../subsriptions/subscription.service";
 import { ProjectsDashboardUIInfoService } from "./ui/projects-dashboard-ui-info.service";
+import { ProjectsService } from "../../projects.service";
 
 @Injectable()
 export class ProjectsDashboardInfoService {
@@ -13,6 +14,7 @@ export class ProjectsDashboardInfoService {
   private readonly authService = inject(AuthService);
   private readonly subscriptionService = inject(SubscriptionService);
   private readonly projectsDashboardUIInfoService = inject(ProjectsDashboardUIInfoService);
+  private readonly projectsService = inject(ProjectsService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -33,6 +35,10 @@ export class ProjectsDashboardInfoService {
           this.projectsDashboardUIInfoService.applySetDashboardItems(all, my, subs);
         },
       });
+  }
+
+  addProject(): void {
+    this.projectsService.addProject();
   }
 
   destroy(): void {

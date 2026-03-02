@@ -40,6 +40,8 @@ export interface ChatListItem {
   imageAddress: string;
   /** Собеседник (для прямых чатов) */
   opponent?: User;
+  /** Флаг непрочитанного последнего сообщения (вычисляется в фасаде) */
+  isUnread?: boolean;
 }
 
 /**

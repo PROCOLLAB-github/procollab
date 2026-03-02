@@ -4,6 +4,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { VacancyService } from "projects/social_platform/src/app/api/vacancy/vacancy.service";
 import { map, Subject, takeUntil, tap } from "rxjs";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class VacancyFilterInfoService {
@@ -13,6 +14,8 @@ export class VacancyFilterInfoService {
   private readonly route = inject(ActivatedRoute);
   /** Сервис для работы с вакансиями */
   private readonly vacancyService = inject(VacancyService);
+  /** Сервис логирования */
+  private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -78,7 +81,7 @@ export class VacancyFilterInfoService {
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
-      .then(() => console.debug("Query change from ProjectsComponent"));
+      .then(() => this.logger.debug("Query change from ProjectsComponent"));
   }
 
   /**
@@ -96,7 +99,7 @@ export class VacancyFilterInfoService {
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
-      .then(() => console.debug("Query change from ProjectsComponent"));
+      .then(() => this.logger.debug("Query change from ProjectsComponent"));
   }
 
   /**
@@ -118,7 +121,7 @@ export class VacancyFilterInfoService {
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
-      .then(() => console.debug("Query change from ProjectsComponent"));
+      .then(() => this.logger.debug("Query change from ProjectsComponent"));
   }
 
   /**
@@ -137,7 +140,7 @@ export class VacancyFilterInfoService {
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
-      .then(() => console.debug("Filters reset from VacancyFilterComponent"));
+      .then(() => this.logger.debug("Filters reset from VacancyFilterComponent"));
   }
 
   applyResetCurrentFilters(): void {

@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { AsyncPipe } from "@angular/common";
 import { AuthPasswordService } from "projects/social_platform/src/app/api/auth/facades/auth-password.service";
 
@@ -23,6 +23,7 @@ import { AuthPasswordService } from "projects/social_platform/src/app/api/auth/f
   providers: [AuthPasswordService],
   imports: [AsyncPipe],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmPasswordResetComponent implements OnInit {
   private readonly authPasswordService = inject(AuthPasswordService);

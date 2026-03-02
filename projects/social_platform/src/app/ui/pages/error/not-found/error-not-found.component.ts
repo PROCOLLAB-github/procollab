@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 
 /**
  * Компонент для отображения ошибки 404 "Страница не найдена"
@@ -22,6 +22,7 @@ import { Component, OnInit } from "@angular/core";
   templateUrl: "./error-not-found.component.html",
   styleUrl: "./error-not-found.component.scss",
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorNotFoundComponent implements OnInit {
   constructor() {}

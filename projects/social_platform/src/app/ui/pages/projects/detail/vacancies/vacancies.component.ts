@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ProjectVacancyCardComponent } from "../../../../shared/project-vacancy-card/project-vacancy-card.component";
 import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
 import { ProjectsDetailService } from "projects/social_platform/src/app/api/project/facades/detail/projects-detail.service";
@@ -15,6 +15,7 @@ import { ProjectsDetailService } from "projects/social_platform/src/app/api/proj
   styleUrl: "./vacancies.component.scss",
   imports: [CommonModule, ProjectVacancyCardComponent],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectVacanciesComponent implements OnInit, OnDestroy {
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);

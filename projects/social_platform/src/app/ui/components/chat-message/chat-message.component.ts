@@ -2,6 +2,7 @@
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -10,6 +11,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  inject,
 } from "@angular/core";
 import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
@@ -22,6 +24,7 @@ import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "../avatar/avatar.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { AuthService } from "../../../api/auth";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 /**
  * Компонент сообщения в чате с контекстным меню и файловыми вложениями.
@@ -59,8 +62,11 @@ import { AuthService } from "../../../api/auth";
     AsyncPipe,
     DayjsPipe,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly logger = inject(LoggerService);
+
   constructor(
     private readonly snackbarService: SnackbarService,
     private readonly overlay: Overlay,
@@ -147,7 +153,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
     navigator.clipboard.writeText(this.chatMessage.text).then(() => {
       this.snackbarService.success("Сообщение скопированно");
-      console.debug("Text copied in ChatMessageComponent");
+      this.logger.debug("Text copied in ChatMessageComponent");
     });
   }
 

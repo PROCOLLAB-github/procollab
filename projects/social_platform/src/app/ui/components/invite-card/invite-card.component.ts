@@ -1,6 +1,14 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output, signal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  signal,
+} from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
@@ -44,6 +52,7 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pi
     InputComponent,
     AvatarComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InviteCardComponent implements OnInit {
   constructor(private readonly fb: FormBuilder) {

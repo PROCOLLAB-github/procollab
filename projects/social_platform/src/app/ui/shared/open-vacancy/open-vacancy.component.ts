@@ -2,6 +2,7 @@
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -56,6 +57,7 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pi
   ],
   templateUrl: "./open-vacancy.component.html",
   styleUrl: "./open-vacancy.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpenVacancyComponent implements AfterViewInit {
   @Input() feedItem!: Vacancy;

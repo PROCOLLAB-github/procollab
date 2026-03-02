@@ -1,14 +1,16 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit, inject, DestroyRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { map, Subscription } from "rxjs";
+import { map } from "rxjs";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ControlErrorPipe, ValidationService } from "projects/core";
 import { BarComponent, ButtonComponent, InputComponent } from "@ui/components";
 import { KeyValuePipe } from "@angular/common";
 import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
 import { ProgramDataSchema } from "projects/social_platform/src/app/domain/program/program.model";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент регистрации в программе
@@ -55,8 +57,12 @@ import { ProgramDataSchema } from "projects/social_platform/src/app/domain/progr
     ControlErrorPipe,
     BarComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProgramRegisterComponent implements OnInit, OnDestroy {
+export class ProgramRegisterComponent implements OnInit {
+  private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
+
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
@@ -65,29 +71,27 @@ export class ProgramRegisterComponent implements OnInit, OnDestroy {
     private readonly programService: ProgramService
   ) {}
 
-  ngOnInit(): void {
-    const route$ = this.route.data.pipe(map(r => r["data"])).subscribe(schema => {
-      this.schema = schema;
-
-      const group: Record<string, any> = {};
-      for (const cKey in schema) {
-        group[cKey] = ["", [Validators.required]];
-      }
-
-      this.registerForm = this.fb.group(group);
-    });
-    this.subscriptions$.push(route$);
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
-  }
-
-  subscriptions$: Subscription[] = [];
-
   registerForm?: FormGroup;
 
   schema?: ProgramDataSchema;
+
+  ngOnInit(): void {
+    this.route.data
+      .pipe(
+        map(r => r["data"]),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(schema => {
+        this.schema = schema;
+
+        const group: Record<string, any> = {};
+        for (const cKey in schema) {
+          group[cKey] = ["", [Validators.required]];
+        }
+
+        this.registerForm = this.fb.group(group);
+      });
+  }
 
   onSubmit(): void {
     if (this.registerForm && !this.validationService.getFormValidation(this.registerForm)) {
@@ -96,10 +100,11 @@ export class ProgramRegisterComponent implements OnInit, OnDestroy {
 
     this.programService
       .register(this.route.snapshot.params["programId"], this.registerForm?.value)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.router
           .navigateByUrl(`/office/program/${this.route.snapshot.params["programId"]}`)
-          .then(() => console.debug("Route changed from ProgramRegisterComponent"));
+          .then(() => this.logger.debug("Route changed from ProgramRegisterComponent"));
       });
   }
 }

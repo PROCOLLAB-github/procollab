@@ -7,6 +7,7 @@ import { AuthService } from "../../../auth";
 import { Router } from "@angular/router";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { OnboardingStageThreeUIInfoService } from "./ui/onboarding-stage-three-ui-info.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class OnboardingStageThreeInfoService {
@@ -15,6 +16,7 @@ export class OnboardingStageThreeInfoService {
   private readonly onboardingStageThreeUIInfoService = inject(OnboardingStageThreeUIInfoService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -51,7 +53,7 @@ export class OnboardingStageThreeInfoService {
       .subscribe(() => {
         this.router
           .navigateByUrl("/office")
-          .then(() => console.debug("Route changed from OnboardingStageTwo"));
+          .then(() => this.logger.debug("Route changed from OnboardingStageTwo"));
       });
   }
 }

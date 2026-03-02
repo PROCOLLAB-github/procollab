@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ChatCardComponent } from "../../shared/chat-card/chat-card.component";
 import { AsyncPipe } from "@angular/common";
 import { BarComponent } from "@ui/components";
@@ -27,6 +27,7 @@ import { ChatUIInfoService } from "../../../api/chat/facedes/ui/chat-ui-info.ser
   imports: [ChatCardComponent, AsyncPipe, BarComponent, BackComponent],
   providers: [ChatInfoService, ChatUIInfoService],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatComponent implements OnInit, OnDestroy {
   private readonly chatInfoService = inject(ChatInfoService);

@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, WritableSignal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { UserLinksPipe } from "projects/core/src/lib/pipes/user/user-links.pipe";
@@ -14,6 +14,7 @@ import { Project } from "projects/social_platform/src/app/domain/project/project
   styleUrl: "./projects-right-side.component.scss",
   imports: [CommonModule, IconComponent, UserLinksPipe, TruncatePipe],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsRightSideComponent {
   @Input() project!: WritableSignal<Project | undefined>;

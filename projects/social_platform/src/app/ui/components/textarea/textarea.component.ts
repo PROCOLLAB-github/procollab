@@ -1,6 +1,14 @@
 /** @format */
 
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@uilib";
 import { AutosizeModule } from "ngx-autosize";
@@ -29,6 +37,7 @@ import { NgStyle } from "@angular/common";
   selector: "app-textarea",
   templateUrl: "./textarea.component.html",
   styleUrl: "./textarea.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

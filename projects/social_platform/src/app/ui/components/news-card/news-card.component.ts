@@ -1,10 +1,13 @@
 /** @format */
 
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   ElementRef,
   EventEmitter,
+  inject,
   Input,
   OnInit,
   Output,
@@ -17,6 +20,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import {
   DayjsPipe,
   FormControlPipe,
+  LoggerService,
   ParseBreaksPipe,
   ParseLinksPipe,
   ValidationService,
@@ -25,7 +29,8 @@ import { FileService } from "projects/core/src/lib/services/file/file.service";
 import { nanoid } from "nanoid";
 import { expandElement } from "@utils/expand-element";
 import { FileModel } from "projects/social_platform/src/app/domain/file/file.model";
-import { forkJoin, noop, Observable, Subscription, take, tap } from "rxjs";
+import { forkJoin, noop, Observable, take, tap } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
@@ -58,15 +63,19 @@ import { FeedNews } from "../../../domain/project/project-news.model";
     CarouselComponent,
     ImgCardComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewsCardComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   constructor(
     private readonly snackbarService: SnackbarService,
     private readonly route: ActivatedRoute,
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
     private readonly fileService: FileService,
-    private readonly cdRef: ChangeDetectorRef
+    private readonly cdRef: ChangeDetectorRef,
+    private readonly loggerService: LoggerService
   ) {
     this.editForm = this.fb.group({
       text: ["", [Validators.required]],
@@ -94,8 +103,6 @@ export class NewsCardComponent implements OnInit {
   // Оригинальные списки (не изменяются во время редактирования)
   imagesViewList: FileModel[] = [];
   filesViewList: FileModel[] = [];
-
-  private readonly subscription: Subscription[] = [];
 
   // Списки для редактирования
   imagesEditList: {
@@ -151,20 +158,16 @@ export class NewsCardComponent implements OnInit {
       return type !== "image" && f.mimeType !== "x-empty";
     });
 
-    const profileIdParams$ = this.route.params.pipe(take(1)).subscribe({
+    this.route.params.pipe(take(1), takeUntilDestroyed(this.destroyRef)).subscribe({
       next: q => {
         this.profileId.set(q["id"]);
       },
     });
 
-    this.subscription.push(profileIdParams$);
-
     this.initEditLists();
   }
 
-  ngOnDestroy(): void {
-    this.subscription.forEach($ => $.unsubscribe());
-  }
+  ngOnDestroy(): void {}
 
   /**
    * Инициализация списков редактирования из текущих данных
@@ -338,9 +341,12 @@ export class NewsCardComponent implements OnInit {
 
     if (this.imagesEditList[fileIdx].src) {
       this.imagesEditList[fileIdx].loading = true;
-      this.fileService.deleteFile(this.imagesEditList[fileIdx].src).subscribe(() => {
-        this.imagesEditList.splice(fileIdx, 1);
-      });
+      this.fileService
+        .deleteFile(this.imagesEditList[fileIdx].src)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
+          this.imagesEditList.splice(fileIdx, 1);
+        });
     } else {
       this.imagesEditList.splice(fileIdx, 1);
     }
@@ -352,9 +358,12 @@ export class NewsCardComponent implements OnInit {
 
     if (this.filesEditList[fileIdx].src) {
       this.filesEditList[fileIdx].loading = true;
-      this.fileService.deleteFile(this.filesEditList[fileIdx].src).subscribe(() => {
-        this.filesEditList.splice(fileIdx, 1);
-      });
+      this.fileService
+        .deleteFile(this.filesEditList[fileIdx].src)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
+          this.filesEditList.splice(fileIdx, 1);
+        });
     } else {
       this.filesEditList.splice(fileIdx, 1);
     }
@@ -367,17 +376,20 @@ export class NewsCardComponent implements OnInit {
     fileObj.loading = true;
     fileObj.error = false;
 
-    this.fileService.uploadFile(fileObj.tempFile).subscribe({
-      next: file => {
-        fileObj.src = file.url;
-        fileObj.loading = false;
-        fileObj.tempFile = null;
-      },
-      error: () => {
-        fileObj.error = true;
-        fileObj.loading = false;
-      },
-    });
+    this.fileService
+      .uploadFile(fileObj.tempFile)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: file => {
+          fileObj.src = file.url;
+          fileObj.loading = false;
+          fileObj.tempFile = null;
+        },
+        error: () => {
+          fileObj.error = true;
+          fileObj.loading = false;
+        },
+      });
   }
 
   showLikes: boolean[] = [];
@@ -397,7 +409,7 @@ export class NewsCardComponent implements OnInit {
   }
 
   handleLike(index: number): void {
-    console.log("Лайк на изображении с индексом: ", index);
+    this.loggerService.info("Лайк на изображении с индексом: ", index);
   }
 
   onExpandNewsText(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {

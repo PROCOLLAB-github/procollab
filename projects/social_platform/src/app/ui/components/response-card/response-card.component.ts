@@ -1,10 +1,20 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { IconComponent } from "@uilib";
 import { AuthService } from "../../../api/auth";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент карточки отклика на вакансию
@@ -33,9 +43,11 @@ import { AuthService } from "../../../api/auth";
   styleUrl: "./response-card.component.scss",
   standalone: true,
   imports: [IconComponent, FileItemComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResponseCardComponent implements OnInit {
-  constructor(private readonly authService: AuthService) {}
+  private readonly authService = inject(AuthService);
+  private readonly destroyRef = inject(DestroyRef);
 
   @Input({ required: true }) response!: VacancyResponse;
   @Output() reject = new EventEmitter<number>();
@@ -44,11 +56,14 @@ export class ResponseCardComponent implements OnInit {
   profileId!: number;
 
   ngOnInit(): void {
-    this.authService.getProfile().subscribe({
-      next: profile => {
-        this.profileId = profile.id;
-      },
-    });
+    this.authService
+      .getProfile()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: profile => {
+          this.profileId = profile.id;
+        },
+      });
   }
 
   /**

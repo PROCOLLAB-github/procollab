@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, Input } from "@angular/core";
 import { InputComponent, SelectComponent, ButtonComponent } from "@ui/components";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
@@ -31,6 +31,7 @@ import { IconComponent } from "@uilib";
   ],
   providers: [ProfileEditAchievementsInfoService],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileAchievementsStepComponent {
   @Input() isAchievementsDirty: any;

@@ -8,6 +8,7 @@
     [iconName]="dashboardItem.iconName"
     [arrayItems]="dashboardItem.arrayItems"
     [profileProjSubsIds]="dashboardItem.sectionName === 'all' ? profileProjSubsIds() : []"
+    (addProjectClick)="onAddProject()"
   ></app-dashboard-item>
   }
 </div>

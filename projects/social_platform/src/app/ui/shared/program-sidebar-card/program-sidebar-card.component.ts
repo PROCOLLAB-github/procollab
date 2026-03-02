@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { IconComponent } from "@uilib";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
@@ -13,6 +13,7 @@ import { Program } from "../../../domain/program/program.model";
   styleUrl: "./program-sidebar-card.component.scss",
   imports: [CommonModule, IconComponent, AvatarComponent, TruncatePipe],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramSidebarCardComponent {
   @Input() program!: Program;

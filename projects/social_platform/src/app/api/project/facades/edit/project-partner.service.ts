@@ -5,6 +5,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@ang
 import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
 import { Partner, PartnerDto } from "../../../../domain/project/partner.model";
+import { LoggerService } from "@corelib";
 
 @Injectable({
   providedIn: "root",
@@ -13,6 +14,8 @@ export class ProjectPartnerService {
   private readonly fb = inject(FormBuilder);
   private partnerForm!: FormGroup;
   private readonly projectService = inject(ProjectService);
+  private readonly loggerService = inject(LoggerService);
+
   public readonly partnerItems = signal<
     Partial<{ id: null; name: string; inn: string; contribution: string; decisionMaker: string }>[]
   >([]);
@@ -255,7 +258,7 @@ export class ProjectPartnerService {
       tap(results => {
         results.forEach((r: any) => {
           if (r && r.__error) {
-            console.error("Failed to post partner", r.err, "original:", r.original);
+            this.loggerService.error("Failed to post partner", r.err);
             return;
           }
 
@@ -268,7 +271,7 @@ export class ProjectPartnerService {
               formGroup.get("id")?.setValue(created.id);
             }
           } else {
-            console.warn("addPartner response has no id field:", r.res);
+            this.loggerService.warn("addPartner response has no id field:", r.res);
           }
         });
 

@@ -1,7 +1,15 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectorRef, Component, inject, Input, OnDestroy, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+} from "@angular/core";
 import { PluralizePipe } from "@corelib";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ButtonComponent } from "@ui/components";
@@ -31,6 +39,7 @@ import { ApproveSkillUIInfoService } from "./services/approve-skill-ui-info.serv
   standalone: true,
   imports: [CommonModule, ButtonComponent, ModalComponent, ApproveSkillPeopleComponent],
   providers: [ApproveskillInfoService, ApproveSkillUIInfoService],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApproveSkillComponent implements OnInit, OnDestroy {
   private readonly approveskillInfoService = inject(ApproveskillInfoService);

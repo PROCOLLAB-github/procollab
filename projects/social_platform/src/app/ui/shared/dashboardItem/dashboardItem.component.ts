@@ -1,12 +1,18 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { IconComponent } from "@uilib";
 import { RouterLink } from "@angular/router";
 import { InfoCardComponent } from "@ui/components/info-card/info-card.component";
 import { Project } from "../../../domain/project/project.model";
-import { ProjectsService } from "../../../api/project/projects.service";
 
 @Component({
   selector: "app-dashboard-item",
@@ -14,6 +20,7 @@ import { ProjectsService } from "../../../api/project/projects.service";
   styleUrl: "./dashboardItem.component.scss",
   standalone: true,
   imports: [CommonModule, IconComponent, RouterLink, InfoCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardItemComponent implements OnInit {
   @Input() title!: string;
@@ -22,15 +29,14 @@ export class DashboardItemComponent implements OnInit {
   @Input() sectionName!: string;
   @Input() profileProjSubsIds?: number[];
 
-  appereance: "base" | "subs" | "my" = "base";
+  @Output() addProjectClick = new EventEmitter<void>();
 
-  private readonly projectsService = inject(ProjectsService);
+  appereance: "base" | "subs" | "my" = "base";
 
   ngOnInit(): void {
     switch (this.iconName) {
       case "favourities":
         this.appereance = "subs";
-
         break;
 
       case "main":
@@ -40,9 +46,5 @@ export class DashboardItemComponent implements OnInit {
       default:
         break;
     }
-  }
-
-  addProject(): void {
-    this.projectsService.addProject();
   }
 }

@@ -11,6 +11,7 @@ import { Subject, takeUntil } from "rxjs";
 import { Router } from "@angular/router";
 import { ProjectFormService } from "projects/social_platform/src/app/api/project/project-form.service";
 import { Program } from "projects/social_platform/src/app/domain/program/program.model";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class DetailProgramInfoService {
@@ -18,6 +19,7 @@ export class DetailProgramInfoService {
   private readonly programService = inject(ProgramService);
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
   private readonly projectFormService = inject(ProjectFormService);
+  private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -54,7 +56,7 @@ export class DetailProgramInfoService {
             .navigate([`/office/projects/${r.projectId}/edit`], {
               queryParams: { editingStep: "main", fromProgram: true },
             })
-            .then(() => console.debug("Route change from ProjectsComponent"));
+            .then(() => this.logger.debug("Route change from ProjectsComponent"));
         },
         error: err => {
           if (err) {

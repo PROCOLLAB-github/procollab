@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, Input } from "@angular/core";
 import { SelectComponent, InputComponent, ButtonComponent } from "@ui/components";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
@@ -26,6 +26,7 @@ import { IconComponent } from "@uilib";
     ReactiveFormsModule,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileExperienceStepComponent {
   @Input() isWorkDirty: any;

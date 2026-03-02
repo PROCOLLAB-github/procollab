@@ -17,6 +17,7 @@ import { MembersComponent } from "@ui/pages/members/members.component";
 import { Skill } from "../../../domain/skills/skill";
 import { SearchesService } from "../../../api/searches/searches.service";
 import { SkillsInfoService } from "../../../api/skills/facades/skills-info.service";
+import { LoggerService } from "@corelib";
 
 /**
  * Компонент фильтров для списка участников
@@ -64,6 +65,7 @@ export class MembersFiltersComponent {
   private readonly router = inject(Router);
   private readonly skillsInfoService = inject(SkillsInfoService);
   private readonly searchesService = inject(SearchesService);
+  private readonly loggerService = inject(LoggerService);
 
   /**
    * Сигнал с опциями специальностей для автодополнения
@@ -153,7 +155,7 @@ export class MembersFiltersComponent {
         relativeTo: this.route,
         queryParamsHandling: "merge",
       })
-      .then(() => console.log("Query change from ProjectsComponent"));
+      .then(() => this.loggerService.info("Query change from ProjectsComponent"));
 
     this.filterForm.reset();
   }

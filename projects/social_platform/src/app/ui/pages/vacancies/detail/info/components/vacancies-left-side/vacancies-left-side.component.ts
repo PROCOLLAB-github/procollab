@@ -1,7 +1,15 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, ElementRef, inject, Input, ViewChild, WritableSignal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  ViewChild,
+  WritableSignal,
+} from "@angular/core";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
@@ -14,6 +22,7 @@ import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy
   styleUrl: "./vacancies-left-side.component.scss",
   imports: [CommonModule, ParseBreaksPipe, ParseLinksPipe, TagComponent],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacanciesLeftSideComponent {
   @Input() vacancy!: WritableSignal<Vacancy | undefined>;

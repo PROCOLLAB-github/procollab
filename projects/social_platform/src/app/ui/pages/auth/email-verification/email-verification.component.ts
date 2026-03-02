@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { IconComponent } from "@ui/components";
 import { AuthEmailService } from "projects/social_platform/src/app/api/auth/facades/auth-email.service";
 import { CommonModule } from "@angular/common";
@@ -25,6 +25,7 @@ import { CommonModule } from "@angular/common";
   providers: [AuthEmailService],
   imports: [CommonModule, IconComponent],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmailVerificationComponent implements OnInit, OnDestroy {
   private readonly authEmailService = inject(AuthEmailService);

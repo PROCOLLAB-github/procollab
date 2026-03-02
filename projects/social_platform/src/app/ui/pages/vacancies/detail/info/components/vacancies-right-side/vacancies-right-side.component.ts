@@ -1,7 +1,15 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, inject, Input, Output, WritableSignal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  WritableSignal,
+} from "@angular/core";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { UserLinksPipe } from "projects/core/src/lib/pipes/user/user-links.pipe";
@@ -36,6 +44,7 @@ import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
     SalaryTransformPipe,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacanciesRightSideComponent {
   @Input() vacancy!: WritableSignal<Vacancy | undefined>;

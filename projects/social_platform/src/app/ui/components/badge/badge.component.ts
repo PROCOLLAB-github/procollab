@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 
 @Component({
   selector: "app-badge",
@@ -9,6 +9,7 @@ import { Component, Input } from "@angular/core";
   styleUrl: "./badge.component.scss",
   imports: [CommonModule],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BadgeComponent {
   @Input() color: "green" | "red" | "gold" = "red";

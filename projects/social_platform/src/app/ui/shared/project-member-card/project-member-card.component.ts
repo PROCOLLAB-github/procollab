@@ -2,7 +2,7 @@
 
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from "@angular/cdk/menu";
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { RouterLink } from "@angular/router";
 import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
 import { AvatarComponent, IconComponent } from "@uilib";
@@ -51,6 +51,7 @@ import { AvatarComponent, IconComponent } from "@uilib";
   ],
   templateUrl: "./project-member-card.component.html",
   styleUrl: "./project-member-card.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectMemberCardComponent {
   @Input({ required: true }) member!: Collaborator; // Данные участника (обязательное поле)

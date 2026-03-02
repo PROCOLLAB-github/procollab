@@ -1,5 +1,14 @@
 /** @format */
-import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { ButtonComponent, IconComponent } from "@ui/components";
@@ -16,6 +25,7 @@ import { ProgramDetailMainService } from "projects/social_platform/src/app/api/p
 import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
 import { NewsInfoService } from "projects/social_platform/src/app/api/news/news-info.service";
 import { ProjectAdditionalService } from "projects/social_platform/src/app/api/project/facades/edit/project-additional.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({
   selector: "app-main",
@@ -39,6 +49,7 @@ import { ProjectAdditionalService } from "projects/social_platform/src/app/api/p
   ],
   providers: [ProgramDetailMainService],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
@@ -50,6 +61,7 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
   private readonly newsInfoService = inject(NewsInfoService);
   private readonly expandService = inject(ExpandService);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly isAssignProjectToProgramError =
     this.projectAdditionalService.isAssignProjectToProgramError;
@@ -86,9 +98,12 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   onAddNews(news: { text: string; files: string[] }): void {
-    this.programDetailMainService.onAddNews(news).subscribe({
-      next: () => this.newsFormComponent?.onResetForm(),
-    });
+    this.programDetailMainService
+      .onAddNews(news)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => this.newsFormComponent?.onResetForm(),
+      });
   }
 
   onDelete(newsId: number) {
@@ -100,9 +115,12 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   }
 
   onEdit(news: FeedNews, newsId: number) {
-    this.programDetailMainService.onEdit(news, newsId).subscribe({
-      next: () => this.ProgramNewsCardComponent?.onCloseEditMode(),
-    });
+    this.programDetailMainService
+      .onEdit(news, newsId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => this.ProgramNewsCardComponent?.onCloseEditMode(),
+      });
   }
 
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {

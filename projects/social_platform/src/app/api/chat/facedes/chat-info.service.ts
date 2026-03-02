@@ -9,6 +9,7 @@ import { ChatListItem } from "../../../domain/chat/chat-item.model";
 import { combineLatest, map, Observable, Subject, takeUntil } from "rxjs";
 import { toObservable } from "@angular/core/rxjs-interop";
 import { ChatUIInfoService } from "./ui/chat-ui-info.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class ChatInfoService {
@@ -18,6 +19,7 @@ export class ChatInfoService {
   private readonly authService = inject(AuthService);
   private readonly chatService = inject(ChatService);
   private readonly chatUIInfoService = inject(ChatUIInfoService);
+  private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -30,11 +32,10 @@ export class ChatInfoService {
     map(([profile, chats]) =>
       chats.map(chat => ({
         ...chat,
-        unread: profile.id !== chat.lastMessage.author.id && !chat.lastMessage.isRead,
+        isUnread: profile.id !== chat.lastMessage.author.id && !chat.lastMessage.isRead,
       }))
     ),
-    map(chats => chats.sort((a, b) => Number(b.unread) - Number(a.unread))),
-    map(chats => chats.map(({ unread, ...chat }) => chat)),
+    map(chats => chats.sort((a, b) => Number(b.isUnread) - Number(a.isUnread))),
     takeUntil(this.destroy$)
   );
 
@@ -79,6 +80,6 @@ export class ChatInfoService {
 
     this.router
       .navigateByUrl(redirectUrl)
-      .then(() => console.debug("Route changed from ChatComponent"));
+      .then(() => this.logger.debug("Route changed from ChatComponent"));
   }
 }

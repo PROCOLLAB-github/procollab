@@ -3,6 +3,7 @@
 import { CommonModule } from "@angular/common";
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   inject,
@@ -28,6 +29,7 @@ import { ProgramProjectsFilterInfoService } from "@ui/components/program-project
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Component({
   selector: "app-list",
@@ -54,6 +56,7 @@ import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip
     SwipeService,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild("listRoot") listRoot?: ElementRef<HTMLUListElement>;
@@ -68,6 +71,7 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly exportFileInfoService = inject(ExportFileInfoService);
   private readonly tooltipInfoService = inject(TooltipInfoService);
   private readonly swipeService = inject(SwipeService);
+  private readonly logger = inject(LoggerService);
 
   protected readonly searchForm = this.programDetailListUIInfoService.searchForm;
 
@@ -98,7 +102,7 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
     if (target || this.listRoot) {
       this.programDetailListInfoService.initScroll(target, this.listRoot!);
     } else {
-      console.error(".office__body element not found");
+      this.logger.error(".office__body element not found");
     }
   }
 

@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { DashboardItemComponent } from "../../../shared/dashboardItem/dashboardItem.component";
 import { ProjectsDashboardInfoService } from "projects/social_platform/src/app/api/project/facades/dashboard/projects-dashboard-info.service";
 import { ProjectsDashboardUIInfoService } from "projects/social_platform/src/app/api/project/facades/dashboard/ui/projects-dashboard-ui-info.service";
@@ -18,6 +18,7 @@ import { ProgramDetailListUIInfoService } from "projects/social_platform/src/app
     ProgramDetailListUIInfoService,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardProjectsComponent implements OnInit, OnDestroy {
   private readonly projectsDashboardInfoService = inject(ProjectsDashboardInfoService);
@@ -29,6 +30,10 @@ export class DashboardProjectsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.projectsDashboardInfoService.initializationDashboardItems();
+  }
+
+  onAddProject(): void {
+    this.projectsDashboardInfoService.addProject();
   }
 
   ngOnDestroy(): void {

@@ -3,6 +3,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { ErrorCode } from "../../models/error/error-code";
+import { LoggerService } from "@corelib";
 
 /**
  * Сервис для обработки и навигации к страницам ошибок
@@ -30,7 +31,7 @@ import { ErrorCode } from "../../models/error/error-code";
   providedIn: "root",
 })
 export class ErrorService {
-  constructor(private readonly router: Router) {}
+  constructor(private readonly router: Router, private readonly loggerService: LoggerService) {}
 
   /**
    * Навигация на страницу ошибки 404
@@ -54,6 +55,8 @@ export class ErrorService {
    * @returns Promise<void> - промис завершения навигации с логированием
    */
   private throwError(type: ErrorCode): Promise<void> {
-    return this.router.navigateByUrl(`/error/${type}`).then(() => console.debug("Route Changed"));
+    return this.router
+      .navigateByUrl(`/error/${type}`)
+      .then(() => this.loggerService.debug("Route Changed"));
   }
 }

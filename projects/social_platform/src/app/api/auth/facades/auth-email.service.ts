@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { TokenService } from "@corelib";
 import { filter, interval, map, Subject, takeUntil } from "rxjs";
 import { AuthService } from "../auth.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class AuthEmailService {
@@ -12,6 +13,7 @@ export class AuthEmailService {
   private readonly route = inject(ActivatedRoute);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -32,7 +34,7 @@ export class AuthEmailService {
       if (this.tokenService.getTokens() !== null) {
         this.router
           .navigateByUrl("/office")
-          .then(() => console.debug("Route changed from ConfirmEmailComponent"));
+          .then(() => this.logger.debug("Route changed from ConfirmEmailComponent"));
       }
     });
   }

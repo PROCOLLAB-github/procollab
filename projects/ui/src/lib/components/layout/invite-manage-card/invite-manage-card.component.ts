@@ -1,6 +1,13 @@
 /** @format */
 
-import { Component, EventEmitter, Input, type OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  type OnInit,
+  Output,
+} from "@angular/core";
 import type { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { DayjsPipe } from "projects/core";
 import { ButtonComponent } from "@ui/components";
@@ -32,6 +39,7 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pi
   styleUrl: "./invite-manage-card.component.scss",
   standalone: true,
   imports: [AvatarComponent, RouterLink, ButtonComponent, DayjsPipe, TruncatePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InviteManageCardComponent implements OnInit {
   constructor() {}

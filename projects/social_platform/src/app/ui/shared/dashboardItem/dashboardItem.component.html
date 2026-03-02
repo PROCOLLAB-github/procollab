@@ -21,7 +21,7 @@
   } @else {
   <div>
     <app-info-card
-      (onCreate)="addProject()"
+      (onCreate)="addProjectClick.emit()"
       [section]="
         sectionName === 'my'
           ? 'projects'

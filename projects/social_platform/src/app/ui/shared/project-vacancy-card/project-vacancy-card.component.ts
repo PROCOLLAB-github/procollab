@@ -2,6 +2,7 @@
 import { CommonModule } from "@angular/common";
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -55,6 +56,7 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pi
   ],
   templateUrl: "./project-vacancy-card.component.html",
   styleUrl: "./project-vacancy-card.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectVacancyCardComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) vacancy!: Vacancy; // Данные вакансии (обязательное поле)

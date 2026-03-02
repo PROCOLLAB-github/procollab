@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
@@ -51,6 +51,7 @@ import { FeedProject } from "../../../domain/feed/feed-item.model";
   ],
   templateUrl: "./new-project.component.html",
   styleUrl: "./new-project.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewProjectComponent {
   @Input() feedItem!: FeedProject;

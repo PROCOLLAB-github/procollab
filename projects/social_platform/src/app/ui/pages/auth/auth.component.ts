@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 
 /**
@@ -20,6 +20,7 @@ import { RouterOutlet } from "@angular/router";
   styleUrl: "./auth.component.scss",
   standalone: true,
   imports: [RouterOutlet],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthComponent implements OnInit {
   constructor() {}

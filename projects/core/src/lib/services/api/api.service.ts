@@ -2,8 +2,9 @@
 
 import { Inject, Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { first, Observable } from "rxjs";
+import { first, Observable, retry, throwError, timer } from "rxjs";
 import { API_URL } from "../../providers";
+import { exponentialBackoff } from "@utils/exponentialBackoff";
 
 /**
  * Базовый сервис для работы с REST API
@@ -30,6 +31,8 @@ export class ApiService {
     @Inject(API_URL) private readonly apiUrl: string
   ) {}
 
+  private RETRY_COUNT = 3;
+
   /**
    * Выполняет GET запрос к API
    * @param path - Относительный путь к ресурсу (будет добавлен к базовому URL)
@@ -41,7 +44,9 @@ export class ApiService {
    * apiService.get<User[]>('/users', new HttpParams().set('page', '1'))
    */
   get<T>(path: string, params?: HttpParams, options?: object): Observable<T> {
-    return this.http.get(this.apiUrl + path, { params, ...options }).pipe(first()) as Observable<T>;
+    return this.http
+      .get(this.apiUrl + path, { params, ...options })
+      .pipe(retry(exponentialBackoff(this.RETRY_COUNT)), first()) as Observable<T>;
   }
 
   getFile(path: string, params?: HttpParams): Observable<Blob> {
@@ -50,7 +55,7 @@ export class ApiService {
         params,
         responseType: "blob",
       })
-      .pipe(first()) as Observable<Blob>;
+      .pipe(retry(exponentialBackoff(this.RETRY_COUNT)), first()) as Observable<Blob>;
   }
 
   /**
@@ -63,7 +68,9 @@ export class ApiService {
    * apiService.put<User>('/users/1', { name: 'John', email: 'john@example.com' })
    */
   put<T>(path: string, body: object): Observable<T> {
-    return this.http.put<T>(this.apiUrl + path, body).pipe(first()) as Observable<T>;
+    return this.http
+      .put<T>(this.apiUrl + path, body)
+      .pipe(retry(exponentialBackoff(this.RETRY_COUNT)), first()) as Observable<T>;
   }
 
   /**
@@ -76,7 +83,9 @@ export class ApiService {
    * apiService.patch<User>('/users/1', { name: 'John' }) // обновляет только имя
    */
   patch<T>(path: string, body: object): Observable<T> {
-    return this.http.patch(this.apiUrl + path, body).pipe(first()) as Observable<T>;
+    return this.http
+      .patch(this.apiUrl + path, body)
+      .pipe(retry(exponentialBackoff(this.RETRY_COUNT)), first()) as Observable<T>;
   }
 
   /**
@@ -89,7 +98,9 @@ export class ApiService {
    * apiService.post<User>('/users', { name: 'John', email: 'john@example.com' })
    */
   post<T>(path: string, body: object): Observable<T> {
-    return this.http.post<T>(this.apiUrl + path, body).pipe(first()) as Observable<T>;
+    return this.http
+      .post<T>(this.apiUrl + path, body)
+      .pipe(retry(exponentialBackoff(this.RETRY_COUNT)), first()) as Observable<T>;
   }
 
   /**
@@ -103,6 +114,8 @@ export class ApiService {
    * apiService.delete<DeleteResponse>('/users', new HttpParams().set('ids', '1,2,3'))
    */
   delete<T>(path: string, params?: HttpParams): Observable<T> {
-    return this.http.delete<T>(this.apiUrl + path, { params }).pipe(first()) as Observable<T>;
+    return this.http
+      .delete<T>(this.apiUrl + path, { params })
+      .pipe(retry(exponentialBackoff(this.RETRY_COUNT)), first()) as Observable<T>;
   }
 }

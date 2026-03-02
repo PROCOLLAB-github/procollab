@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 
 /**
  * КОМПОНЕНТ КАРТОЧКИ ТИПА ПОЛЬЗОВАТЕЛЯ
@@ -30,6 +30,7 @@ import { Component, Input, OnInit } from "@angular/core";
   templateUrl: "./user-type-card.component.html",
   styleUrl: "./user-type-card.component.scss",
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserTypeCardComponent implements OnInit {
   @Input() isActive = false;

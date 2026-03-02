@@ -1,6 +1,13 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
 import { IconComponent, ButtonComponent } from "@ui/components";
 import { TagComponent } from "@ui/components/tag/tag.component";
@@ -32,6 +39,7 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pi
   styleUrl: "./vacancy-card.component.scss",
   standalone: true,
   imports: [IconComponent, ButtonComponent, TagComponent, TruncatePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacancyCardComponent implements OnInit {
   constructor() {}

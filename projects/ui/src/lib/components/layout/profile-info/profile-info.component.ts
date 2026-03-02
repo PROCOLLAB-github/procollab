@@ -1,6 +1,13 @@
 /** @format */
 
-import { Component, EventEmitter, Input, type OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  type OnInit,
+  Output,
+} from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 import { DayjsPipe } from "projects/core";
 import { AvatarComponent, IconComponent } from "@uilib";
@@ -26,6 +33,7 @@ import type { User } from "../../../models/user.model";
   styleUrl: "./profile-info.component.scss",
   standalone: true,
   imports: [RouterLink, AvatarComponent, IconComponent, DayjsPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileInfoComponent implements OnInit {
   constructor(readonly router: Router) {}

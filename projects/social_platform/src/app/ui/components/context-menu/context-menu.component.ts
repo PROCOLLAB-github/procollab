@@ -2,6 +2,7 @@
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -38,6 +39,7 @@ import { CommonModule } from "@angular/common";
   styleUrl: "./context-menu.component.scss",
   standalone: true,
   imports: [CommonModule, ClickOutsideModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContextMenuComponent implements AfterViewInit, OnDestroy {
   constructor(private readonly overlay: Overlay) {}

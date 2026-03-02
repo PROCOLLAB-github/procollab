@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ButtonComponent } from "@ui/components";
 import { UserTypeCardComponent } from "@ui/shared/user-type-card/user-type-card.component";
 import { OnboardingStageThreeUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-three-ui-info.service";
@@ -43,6 +43,7 @@ import { OnboardingUIInfoService } from "projects/social_platform/src/app/api/on
     OnboardingUIInfoService,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OnboardingStageThreeComponent implements OnInit, OnDestroy {
   private readonly onboardingStageThreeInfoService = inject(OnboardingStageThreeInfoService);

@@ -1,7 +1,14 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit, inject, ChangeDetectorRef } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnInit,
+  inject,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import {
   InputComponent,
@@ -40,6 +47,7 @@ import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip
     RouterLink,
     TooltipComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectAdditionalStepComponent implements OnInit {
   private readonly projectAdditionalService = inject(ProjectAdditionalService);

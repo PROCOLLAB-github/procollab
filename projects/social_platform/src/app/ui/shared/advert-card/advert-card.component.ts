@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 import { New } from "projects/social_platform/src/app/domain/news/article.model";
 
 /**
@@ -25,6 +25,7 @@ import { New } from "projects/social_platform/src/app/domain/news/article.model"
   styleUrl: "./advert-card.component.scss",
   standalone: true,
   imports: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdvertCardComponent implements OnInit {
   constructor() {}

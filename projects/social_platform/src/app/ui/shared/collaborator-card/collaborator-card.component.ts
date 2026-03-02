@@ -1,7 +1,16 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, inject, Input, OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
@@ -10,6 +19,7 @@ import { ProjectService } from "projects/social_platform/src/app/api/project/pro
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { IconComponent } from "@uilib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент карточки участника команды или проект
@@ -26,11 +36,13 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pi
   styleUrl: "./collaborator-card.component.scss",
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, AvatarComponent, IconComponent, TruncatePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollaboratorCardComponent implements OnInit {
   private readonly projectService = inject(ProjectService);
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
     this.inviteForm = this.fb.group({
@@ -59,10 +71,13 @@ export class CollaboratorCardComponent implements OnInit {
 
     if (!confirm("Вы точно хотите удалить участника проекта?")) return;
 
-    this.projectService.removeColloborator(+projectId, collaboratorId).subscribe({
-      next: () => {
-        this.collaboratorRemoved.emit(collaboratorId);
-      },
-    });
+    this.projectService
+      .removeColloborator(+projectId, collaboratorId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.collaboratorRemoved.emit(collaboratorId);
+        },
+      });
   }
 }

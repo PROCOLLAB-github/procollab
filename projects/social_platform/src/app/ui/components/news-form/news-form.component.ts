@@ -1,11 +1,20 @@
 /** @format */
 
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ValidationService } from "projects/core";
 import { nanoid } from "nanoid";
 import { FileService } from "projects/core/src/lib/services/file/file.service";
 import { forkJoin, noop, Observable, tap } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { IconComponent, InputComponent } from "@ui/components";
 import { AutosizeModule } from "ngx-autosize";
@@ -41,12 +50,14 @@ import { ImgCardComponent } from "@ui/shared/img-card/img-card.component";
     AutosizeModule,
     IconComponent,
     FileUploadItemComponent,
-    InputComponent,
     ImgCardComponent,
     TextareaComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewsFormComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly validationService: ValidationService,
@@ -183,9 +194,12 @@ export class NewsFormComponent implements OnInit {
 
     if (this.imagesList[fileIdx].src) {
       this.imagesList[fileIdx].loading = true;
-      this.fileService.deleteFile(this.imagesList[fileIdx].src).subscribe(() => {
-        this.imagesList.splice(fileIdx, 1);
-      });
+      this.fileService
+        .deleteFile(this.imagesList[fileIdx].src)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
+          this.imagesList.splice(fileIdx, 1);
+        });
     } else {
       this.imagesList.splice(fileIdx, 1);
     }
@@ -200,9 +214,12 @@ export class NewsFormComponent implements OnInit {
 
     if (this.filesList[fileIdx].src) {
       this.filesList[fileIdx].loading = true;
-      this.fileService.deleteFile(this.imagesList[fileIdx].src).subscribe(() => {
-        this.filesList.splice(fileIdx, 1);
-      });
+      this.fileService
+        .deleteFile(this.imagesList[fileIdx].src)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
+          this.filesList.splice(fileIdx, 1);
+        });
     } else {
       this.filesList.splice(fileIdx, 1);
     }
@@ -218,16 +235,19 @@ export class NewsFormComponent implements OnInit {
 
     fileObj.loading = true;
     fileObj.error = false;
-    this.fileService.uploadFile(fileObj.tempFile).subscribe({
-      next: file => {
-        fileObj.src = file.url;
-        fileObj.loading = false;
-        fileObj.tempFile = null;
-      },
-      error: () => {
-        fileObj.error = true;
-        fileObj.loading = false;
-      },
-    });
+    this.fileService
+      .uploadFile(fileObj.tempFile)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: file => {
+          fileObj.src = file.url;
+          fileObj.loading = false;
+          fileObj.tempFile = null;
+        },
+        error: () => {
+          fileObj.error = true;
+          fileObj.loading = false;
+        },
+      });
   }
 }

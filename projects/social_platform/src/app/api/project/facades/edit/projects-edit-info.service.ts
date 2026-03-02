@@ -38,6 +38,7 @@ import { ProjectVacancyUIService } from "./ui/project-vacancy-ui.service";
 import { ProjectTeamUIService } from "./ui/project-team-ui.service";
 import { ProjectContactsService } from "./project-contacts.service";
 import { ProjectVacancyService } from "./project-vacancy.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class ProjectsEditInfoService {
@@ -57,6 +58,7 @@ export class ProjectsEditInfoService {
   private readonly navService = inject(NavService);
   private readonly validationService = inject(ValidationService);
   private readonly snackBarService = inject(SnackbarService);
+  private readonly logger = inject(LoggerService);
 
   private readonly projectFormService = inject(ProjectFormService);
 
@@ -547,7 +549,7 @@ export class ProjectsEditInfoService {
           }
         },
         error: error => {
-          console.error("Error sending additional fields:", error);
+          this.logger.error("Error sending additional fields:", error);
           this.submitMode.set("draft");
         },
       });

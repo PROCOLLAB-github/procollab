@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, type OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, type OnInit } from "@angular/core";
 
 /**
  * Компонент для отображения SVG иконок из спрайта
@@ -29,6 +29,7 @@ import { Component, Input, type OnInit } from "@angular/core";
   templateUrl: "./icon.component.html",
   styleUrl: "./icon.component.scss",
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IconComponent implements OnInit {
   /**

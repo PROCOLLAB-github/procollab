@@ -1,6 +1,13 @@
 /** @format */
 
-import { Component, Input, inject, OnInit, OnDestroy } from "@angular/core";
+import {
+  Component,
+  Input,
+  inject,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { directionProjectList } from "projects/core/src/consts/lists/direction-project-list.const";
@@ -46,6 +53,7 @@ import { ProjectTeamUIService } from "projects/social_platform/src/app/api/proje
     RouterLink,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectMainStepComponent implements OnInit, OnDestroy {
   @Input() projSubmitInitiated = false;

@@ -1,7 +1,7 @@
 /** @format */
 
 import { UpperCasePipe } from "@angular/common";
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { IconComponent } from "@ui/components";
 import { LinkTransformPipe } from "projects/core/src/lib/pipes/transformers/link-transform.pipe";
 
@@ -29,6 +29,7 @@ import { LinkTransformPipe } from "projects/core/src/lib/pipes/transformers/link
   styleUrl: "./link-card.component.scss",
   standalone: true,
   imports: [IconComponent, LinkTransformPipe, UpperCasePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LinkCardComponent {
   constructor() {}

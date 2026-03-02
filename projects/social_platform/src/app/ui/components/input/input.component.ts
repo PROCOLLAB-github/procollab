@@ -1,7 +1,14 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, forwardRef, Input, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  Output,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
@@ -33,6 +40,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
     MatNativeDateModule,
     MatFormFieldModule,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent implements ControlValueAccessor {
   @Input() placeholder = "";

@@ -1,7 +1,14 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, Output, EventEmitter } from "@angular/core";
+import {
+  Component,
+  inject,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
 import { SkillsBasketComponent } from "@ui/shared/skills-basket/skills-basket.component";
 import { SelectComponent, ButtonComponent } from "@ui/components";
@@ -29,6 +36,7 @@ import { IconComponent } from "@uilib";
     IconComponent,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileSkillsStepComponent {
   @Input() isLanguageDirty: any;

@@ -1,6 +1,13 @@
 /** @format */
 
-import { Component, inject, Output, EventEmitter, Input } from "@angular/core";
+import {
+  Component,
+  inject,
+  Output,
+  EventEmitter,
+  Input,
+  ChangeDetectionStrategy,
+} from "@angular/core";
 import { IconComponent } from "@uilib";
 import { CommonModule } from "@angular/common";
 import { EditStep, ProjectStepService } from "../../../api/project/project-step.service";
@@ -11,6 +18,7 @@ import { EditStep, ProjectStepService } from "../../../api/project/project-step.
   styleUrl: "project-navigation.component.scss",
   imports: [IconComponent, CommonModule],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectNavigationComponent {
   @Input() navItems!: any[];

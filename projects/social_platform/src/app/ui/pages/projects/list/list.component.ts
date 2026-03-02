@@ -2,6 +2,7 @@
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -104,6 +105,7 @@ import { OfficeUIInfoService } from "projects/social_platform/src/app/api/office
     SwipeService,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild("filterBody") filterBody!: ElementRef<HTMLElement>;

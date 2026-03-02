@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, forwardRef, Input, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, forwardRef, Input, signal } from "@angular/core";
 import { IconComponent } from "@ui/components";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { noop } from "rxjs";
@@ -21,6 +21,7 @@ import { Skill } from "../../../domain/skills/skill";
   styleUrl: "./skills-basket.component.scss",
   imports: [CommonModule, IconComponent],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       // Регистрация как ControlValueAccessor для работы с формами

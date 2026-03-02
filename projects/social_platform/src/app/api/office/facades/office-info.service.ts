@@ -9,6 +9,7 @@ import { InviteService } from "../../invite/invite.service";
 import { ChatService } from "../../chat/chat.service";
 import { Invite } from "../../../domain/invite/invite.model";
 import { OfficeUIInfoService } from "./ui/office-ui-info.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class OfficeInfoService {
@@ -19,6 +20,7 @@ export class OfficeInfoService {
   private readonly router = inject(Router);
   private readonly chatService = inject(ChatService);
   private readonly officeUIInfoService = inject(OfficeUIInfoService);
+  private readonly logger = inject(LoggerService);
 
   readonly invites = this.officeUIInfoService.invites;
 
@@ -52,7 +54,7 @@ export class OfficeInfoService {
       if (!profile?.doesCompleted()) {
         this.router
           .navigateByUrl("/office/onboarding")
-          .then(() => console.debug("Route changed from OfficeComponent"));
+          .then(() => this.logger.debug("Route changed from OfficeComponent"));
       } else if (
         profile?.verificationDate === null &&
         localStorage.getItem("waitVerificationAccepted") !== "true"
@@ -124,7 +126,7 @@ export class OfficeInfoService {
 
           this.router
             .navigateByUrl(`/office/projects/${invite.project.id}`)
-            .then(() => console.debug("Route changed from SidebarComponent"));
+            .then(() => this.logger.debug("Route changed from SidebarComponent"));
         },
         error: () => {
           this.officeUIInfoService.applyOpenInviteErrorModal();
@@ -139,7 +141,7 @@ export class OfficeInfoService {
       .subscribe(() =>
         this.router
           .navigateByUrl("/auth")
-          .then(() => console.debug("Route changed from OfficeComponent"))
+          .then(() => this.logger.debug("Route changed from OfficeComponent"))
       );
   }
 }

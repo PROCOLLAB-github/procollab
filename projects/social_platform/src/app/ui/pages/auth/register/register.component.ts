@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe, TokenService } from "projects/core";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
@@ -49,6 +49,7 @@ dayjs.extend(cpf);
   ],
   providers: [AuthRegisterService, AuthUIInfoService],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent implements OnInit {
   private readonly authRegisterService = inject(AuthRegisterService);

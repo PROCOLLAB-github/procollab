@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Output, EventEmitter } from "@angular/core";
+import { Component, inject, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { InputComponent, ButtonComponent, SelectComponent } from "@ui/components";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { AutosizeModule } from "ngx-autosize";
@@ -34,6 +34,7 @@ import { IconComponent } from "@uilib";
     ReactiveFormsModule,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMainStepComponent {
   @Output() openSpecsGroupsModal = new EventEmitter<void>();

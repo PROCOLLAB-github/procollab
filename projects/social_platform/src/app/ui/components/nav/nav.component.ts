@@ -1,9 +1,18 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+} from "@angular/core";
 import { NavService } from "@ui/services/nav/nav.service";
 import { NavigationStart, Router, RouterLink, RouterLinkActive } from "@angular/router";
-import { noop, Subscription } from "rxjs";
+import { noop } from "rxjs";
 import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { InviteService } from "projects/social_platform/src/app/api/invite/invite.service";
 import { AsyncPipe } from "@angular/common";
@@ -11,6 +20,8 @@ import { IconComponent } from "@ui/components";
 import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
 import { AuthService } from "../../../api/auth";
 import { NotificationService } from "@ui/services/notification/notification.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент навигационного меню
@@ -54,8 +65,12 @@ import { NotificationService } from "@ui/services/notification/notification.serv
     ProfileInfoComponent,
     AsyncPipe,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavComponent implements OnInit, OnDestroy {
+  private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
+
   constructor(
     public readonly navService: NavService,
     private readonly router: Router,
@@ -67,29 +82,23 @@ export class NavComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Подписка на события роутера для закрытия мобильного меню
-    const routerEvents$ = this.router.events.subscribe(event => {
+    this.router.events.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(event => {
       if (event instanceof NavigationStart) {
         this.mobileMenuOpen = false;
       }
     });
-    routerEvents$ && this.subscriptions$.push(routerEvents$);
 
     // Подписка на изменения заголовка страницы
-    const title$ = this.navService.navTitle.subscribe(title => {
+    this.navService.navTitle.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(title => {
       this.title = title;
       this.cdref.detectChanges();
     });
-
-    title$ && this.subscriptions$.push(title$);
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
-  }
+  ngOnDestroy(): void {}
 
   @Input() invites: Invite[] = [];
 
-  subscriptions$: Subscription[] = [];
   mobileMenuOpen = false;
   notificationsOpen = false;
   title = "";
@@ -107,13 +116,16 @@ export class NavComponent implements OnInit, OnDestroy {
    * Отправляет запрос на отклонение и удаляет приглашение из списка
    */
   onRejectInvite(inviteId: number): void {
-    this.inviteService.rejectInvite(inviteId).subscribe(() => {
-      const index = this.invites.findIndex(invite => invite.id === inviteId);
-      this.invites.splice(index, 1);
+    this.inviteService
+      .rejectInvite(inviteId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        const index = this.invites.findIndex(invite => invite.id === inviteId);
+        this.invites.splice(index, 1);
 
-      this.notificationsOpen = false;
-      this.mobileMenuOpen = false;
-    });
+        this.notificationsOpen = false;
+        this.mobileMenuOpen = false;
+      });
   }
 
   /**
@@ -122,18 +134,21 @@ export class NavComponent implements OnInit, OnDestroy {
    * и перенаправляет пользователя на страницу проекта
    */
   onAcceptInvite(inviteId: number): void {
-    this.inviteService.acceptInvite(inviteId).subscribe(() => {
-      const index = this.invites.findIndex(invite => invite.id === inviteId);
-      const invite = JSON.parse(JSON.stringify(this.invites[index]));
-      this.invites.splice(index, 1);
+    this.inviteService
+      .acceptInvite(inviteId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        const index = this.invites.findIndex(invite => invite.id === inviteId);
+        const invite = JSON.parse(JSON.stringify(this.invites[index]));
+        this.invites.splice(index, 1);
 
-      this.notificationsOpen = false;
-      this.mobileMenuOpen = false;
+        this.notificationsOpen = false;
+        this.mobileMenuOpen = false;
 
-      this.router
-        .navigateByUrl(`/office/projects/${invite.project.id}`)
-        .then(() => console.debug("Route changed from HeaderComponent"));
-    });
+        this.router
+          .navigateByUrl(`/office/projects/${invite.project.id}`)
+          .then(() => this.logger.debug("Route changed from HeaderComponent"));
+      });
   }
 
   /**

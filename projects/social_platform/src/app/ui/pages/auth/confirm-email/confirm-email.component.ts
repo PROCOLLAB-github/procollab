@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { AuthEmailService } from "projects/social_platform/src/app/api/auth/facades/auth-email.service";
 
 /**
@@ -24,6 +24,7 @@ import { AuthEmailService } from "projects/social_platform/src/app/api/auth/faca
   providers: [AuthEmailService],
   imports: [CommonModule],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmEmailComponent implements OnInit {
   private readonly authEmailService = inject(AuthEmailService);

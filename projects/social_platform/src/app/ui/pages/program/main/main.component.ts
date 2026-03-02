@@ -1,6 +1,14 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { ActivatedRoute, Params, Router, RouterLink } from "@angular/router";
 import { combineLatest, distinctUntilChanged, map, Subscription, switchMap } from "rxjs";
 import { NavService } from "@ui/services/nav/nav.service";
@@ -62,6 +70,7 @@ import { ProgramMainInfoService } from "projects/social_platform/src/app/api/pro
   ],
   providers: [ProgramMainInfoService, ProgramMainUIInfoService],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgramMainComponent implements OnInit, OnDestroy {
   private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);

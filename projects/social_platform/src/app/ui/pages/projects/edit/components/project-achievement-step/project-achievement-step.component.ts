@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, Input } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { InputComponent, ButtonComponent } from "@ui/components";
 import { ControlErrorPipe } from "@corelib";
@@ -24,6 +24,7 @@ import { ToggleFieldsInfoService } from "projects/social_platform/src/app/api/to
     IconComponent,
     ControlErrorPipe,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectAchievementStepComponent {
   @Input() projSubmitInitiated = false;

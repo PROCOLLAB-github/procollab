@@ -1,6 +1,13 @@
 /** @format */
 
-import { Component, EventEmitter, Input, type OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  type OnInit,
+  Output,
+} from "@angular/core";
 import { FileModel } from "projects/social_platform/src/app/domain/file/file.model";
 import { IconComponent } from "@uilib";
 
@@ -32,6 +39,7 @@ import { IconComponent } from "@uilib";
   templateUrl: "./carousel.component.html",
   styleUrls: ["./carousel.component.scss"],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarouselComponent implements OnInit {
   @Input() images: Array<FileModel | string> = [];

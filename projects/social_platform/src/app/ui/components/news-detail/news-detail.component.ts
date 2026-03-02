@@ -1,12 +1,13 @@
 /** @format */
 
-import { Component, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnInit, inject } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { map, Observable } from "rxjs";
 import { AsyncPipe } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
 import { FeedNews } from "../../../domain/project/project-news.model";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 /**
  * КОМПОНЕНТ ДЕТАЛЬНОЙ НОВОСТИ
@@ -38,8 +39,11 @@ import { FeedNews } from "../../../domain/project/project-news.model";
   styleUrl: "./news-detail.component.scss",
   standalone: true,
   imports: [ModalComponent, AsyncPipe, NewsCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewsDetailComponent implements OnInit {
+  private readonly logger = inject(LoggerService);
+
   constructor(
     private readonly route: ActivatedRoute, // Сервис для работы с активным маршрутом
     private readonly router: Router // Сервис для навигации
@@ -62,7 +66,7 @@ export class NewsDetailComponent implements OnInit {
       // Навигируем обратно к странице проекта
       this.router
         .navigateByUrl(`/office/projects/${projectId}`)
-        .then(() => console.debug("Route changed from NewsDetailComponent"));
+        .then(() => this.logger.debug("Route changed from NewsDetailComponent"));
     }
   }
 }

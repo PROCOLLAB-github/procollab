@@ -10,6 +10,8 @@ import {
   OnInit,
   signal,
   ViewChild,
+  inject,
+  ChangeDetectionStrategy,
 } from "@angular/core";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
@@ -39,6 +41,7 @@ import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { ProjectRatingService } from "../../../api/project/project-rating.service";
 import { ProjectRate } from "../../../domain/project/project-rate";
 import { ProgramDetailMainUIInfoService } from "../../../api/program/facades/detail/ui/program-detail-main-ui-info.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 /**
  * Компонент карточки оценки проекта
@@ -88,8 +91,11 @@ import { ProgramDetailMainUIInfoService } from "../../../api/program/facades/det
     ModalComponent,
     TruncatePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly logger = inject(LoggerService);
+
   constructor(
     public industryService: IndustryService,
     private readonly projectRatingService: ProjectRatingService,
@@ -241,7 +247,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
         error: err => {
           if (err instanceof HttpResponse) {
             if (err.status === 400) {
-              console.error("Ошибка: достигнут максимальный лимит оценок");
+              this.logger.error("Ошибка: достигнут максимальный лимит оценок");
             }
           }
         },

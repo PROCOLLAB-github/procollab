@@ -5,11 +5,13 @@ import { ExportFileService } from "../export-file.service";
 import { saveFile } from "@utils/helpers/export-file";
 import { ProgramDetailMainUIInfoService } from "../../program/facades/detail/ui/program-detail-main-ui-info.service";
 import { Subject, takeUntil } from "rxjs";
+import { LoggerService } from "@corelib";
 
 @Injectable()
 export class ExportFileInfoService {
   private readonly exportFileService = inject(ExportFileService);
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
+  private readonly loggerService = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -37,7 +39,7 @@ export class ExportFileInfoService {
           this.loadingExportProjects.set(false);
         },
         error: err => {
-          console.error(err);
+          this.loggerService.error(err);
           this.loadingExportProjects.set(false);
         },
       });

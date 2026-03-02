@@ -5,6 +5,7 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
 import { debounceTime, distinctUntilChanged, filter, map, Subject, takeUntil } from "rxjs";
 import { ProjectService } from "../project.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { ProjectsUIInfoService } from "./ui/projects-ui-info.service";
 
 @Injectable()
@@ -16,6 +17,7 @@ export class ProjectsInfoService {
   private readonly router = inject(Router);
 
   private readonly destroy$ = new Subject<void>();
+  private readonly logger = inject(LoggerService);
 
   private readonly url = signal(this.router.url);
   private readonly searchForm = this.projectsUIInfoService.searchForm;
@@ -48,7 +50,7 @@ export class ProjectsInfoService {
             relativeTo: this.route,
             queryParamsHandling: "merge",
           })
-          .then(() => console.debug("QueryParams changed from ProjectsComponent"));
+          .then(() => this.logger.debug("QueryParams changed from ProjectsComponent"));
       });
 
     this.initializationRouterEvents();
@@ -85,7 +87,7 @@ export class ProjectsInfoService {
           .navigate([`/office/projects/${project.id}/edit`], {
             queryParams: { editingStep: "main", fromProgram },
           })
-          .then(() => console.debug("Route change from ProjectsComponent"));
+          .then(() => this.logger.debug("Route change from ProjectsComponent"));
       });
   }
 }

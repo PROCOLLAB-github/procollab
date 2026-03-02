@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
 import { ButtonComponent, IconComponent } from "@ui/components";
@@ -78,6 +78,7 @@ import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip
     TooltipInfoService,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OnboardingStageTwoComponent implements OnInit, OnDestroy {
   private readonly onboardingStageTwoInfoService = inject(OnboardingStageTwoInfoService);

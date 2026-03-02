@@ -27,6 +27,7 @@ import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
 import { MembersUIInfoService } from "./ui/members-ui-info.service";
 import { NavigationService } from "../../paths/navigation.service";
 import { ProjectsDetailUIInfoService } from "../../project/facades/detail/ui/projects-detail-ui.service";
+import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 
 @Injectable()
 export class MembersInfoService {
@@ -38,6 +39,7 @@ export class MembersInfoService {
   private readonly membersUIInfoService = inject(MembersUIInfoService);
   private readonly authService = inject(AuthService);
   private readonly navigationService = inject(NavigationService);
+  private readonly logger = inject(LoggerService);
 
   private readonly searchParams = signal<Record<string, string>>({}); // Signal для параметров поиска
 
@@ -203,7 +205,7 @@ export class MembersInfoService {
             relativeTo: this.route,
             queryParamsHandling: "merge",
           })
-          .then(() => console.debug("QueryParams changed from MembersComponent"));
+          .then(() => this.logger.debug("QueryParams changed from MembersComponent"));
       });
   }
 

@@ -1,11 +1,8 @@
 /** @format */
 
-import { Component, Input, OnInit } from "@angular/core";
-import { map } from "rxjs";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { DayjsPipe } from "projects/core";
-import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { AuthService } from "../../../api/auth";
 import { ChatListItem } from "../../../domain/chat/chat-item.model";
 
 /**
@@ -27,26 +24,16 @@ import { ChatListItem } from "../../../domain/chat/chat-item.model";
   templateUrl: "./chat-card.component.html",
   styleUrl: "./chat-card.component.scss",
   standalone: true,
-  imports: [AvatarComponent, AsyncPipe, DayjsPipe],
+  imports: [AvatarComponent, DayjsPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChatCardComponent implements OnInit {
-  constructor(private readonly authService: AuthService) {}
-
+export class ChatCardComponent {
   /** Данные чата для отображения */
   @Input({ required: true }) chat!: ChatListItem;
 
   /** Флаг последнего элемента в списке (для стилизации) */
   @Input() isLast = false;
 
-  /**
-   * Observable для определения непрочитанного сообщения
-   * Сообщение считается непрочитанным если:
-   * - Автор не текущий пользователь
-   * - Сообщение помечено как непрочитанное
-   */
-  public unread = this.authService.profile.pipe(
-    map(p => p.id !== this.chat.lastMessage.author.id && !this.chat.lastMessage.isRead)
-  );
-
-  ngOnInit(): void {}
+  /** Флаг непрочитанного сообщения — передаётся из фасада через родительский компонент */
+  @Input() isUnread = false;
 }

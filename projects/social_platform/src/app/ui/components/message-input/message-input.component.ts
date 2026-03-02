@@ -1,9 +1,12 @@
 /** @format */
 
 import {
+  ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   EventEmitter,
   forwardRef,
+  inject,
   Input,
   OnDestroy,
   OnInit,
@@ -11,7 +14,7 @@ import {
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
-import { fromEvent, map, Subscription } from "rxjs";
+import { fromEvent, map } from "rxjs";
 import { FileService } from "projects/core/src/lib/services/file/file.service";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { AutosizeModule } from "ngx-autosize";
@@ -19,6 +22,7 @@ import { NgxMaskModule } from "ngx-mask";
 import { IconComponent } from "@ui/components";
 import { UpperCasePipe } from "@angular/common";
 import { FormatedFileSizePipe } from "projects/core/src/lib/pipes/transformers/formatted-file-size.pipe";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент ввода сообщений для чата
@@ -52,8 +56,11 @@ import { FormatedFileSizePipe } from "projects/core/src/lib/pipes/transformers/f
     FormatedFileSizePipe,
     UpperCasePipe,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAccessor {
+  private readonly destroyRef = inject(DestroyRef);
+
   /**
    * Конструктор компонента
    * @param fileService - сервис для работы с файлами (загрузка, удаление)
@@ -128,22 +135,20 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
    */
   ngOnInit(): void {
     // Обработчик события dragover для всего документа
-    const dragOver$ = fromEvent<DragEvent>(document, "dragover")
-      .pipe()
+    fromEvent<DragEvent>(document, "dragover")
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(this.handleDragOver.bind(this));
-    dragOver$ && this.subscriptions$.push(dragOver$);
 
     // Обработчик события drop для всего документа
-    const drop$ = fromEvent<DragEvent>(document, "drop").subscribe(this.handleDrop.bind(this));
-    drop$ && this.subscriptions$.push(drop$);
+    fromEvent<DragEvent>(document, "drop")
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(this.handleDrop.bind(this));
   }
 
   /**
    * Очистка ресурсов при уничтожении компонента
    */
-  ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
-  }
+  ngOnDestroy(): void {}
 
   /**
    * Обработчик события dragover
@@ -174,8 +179,6 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
 
   /** Флаг отображения модального окна для drag&drop */
   showDropModal = false;
-  /** Массив подписок для очистки */
-  subscriptions$: Subscription[] = [];
 
   /** Значение компонента: текст и массив URL файлов */
   value: { text: string; filesUrl: string[] } = { text: "", filesUrl: [] };
@@ -312,7 +315,10 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     for (let i = 0; i < files.length; i++) {
       this.fileService
         .uploadFile(files[i])
-        .pipe(map(r => r.url))
+        .pipe(
+          map(r => r.url),
+          takeUntilDestroyed(this.destroyRef)
+        )
         .subscribe({
           next: url => {
             // Обновление значения компонента с новым URL файла
@@ -347,13 +353,16 @@ export class MessageInputComponent implements OnInit, OnDestroy, ControlValueAcc
     const file = this.attachFiles[idx];
     if (!file || !file.link) return;
 
-    this.fileService.deleteFile(file.link).subscribe(() => {
-      // Удаление из массива прикрепленных файлов
-      this.attachFiles.splice(idx, 1);
-      // Удаление URL из значения компонента
-      this.value.filesUrl.splice(idx, 1);
-      this.onChange(this.value);
-    });
+    this.fileService
+      .deleteFile(file.link)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        // Удаление из массива прикрепленных файлов
+        this.attachFiles.splice(idx, 1);
+        // Удаление URL из значения компонента
+        this.value.filesUrl.splice(idx, 1);
+        this.onChange(this.value);
+      });
   }
 
   /** Ссылка на модуль для совместимости */

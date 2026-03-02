@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule, Location } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ButtonComponent, InputComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/components/modal/modal.component";
@@ -53,6 +53,7 @@ import { ProfileDetailUIInfoService } from "../../../api/profile/facades/detail/
     TooltipInfoService,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeatilComponent implements OnInit, OnDestroy {
   private readonly projectAdditionalService = inject(ProjectAdditionalService);

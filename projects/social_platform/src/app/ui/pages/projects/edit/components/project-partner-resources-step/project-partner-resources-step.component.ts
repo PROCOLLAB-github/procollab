@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnDestroy } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { IconComponent } from "@uilib";
@@ -29,6 +29,7 @@ import { ProjectResourceService } from "projects/social_platform/src/app/api/pro
     TextareaComponent,
     SelectComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectPartnerResourcesStepComponent implements OnDestroy {
   private readonly fb = inject(FormBuilder);

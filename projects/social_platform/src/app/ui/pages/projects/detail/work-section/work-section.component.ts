@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ButtonComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
 import { RouterLink } from "@angular/router";
@@ -15,6 +15,7 @@ import { ProjectsDetailWorkSectionUIInfoService } from "projects/social_platform
   imports: [CommonModule, IconComponent, ButtonComponent, RouterLink],
   providers: [ProjectsDetailWorkSectionInfoService, ProjectsDetailWorkSectionUIInfoService],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectWorkSectionComponent implements OnInit, OnDestroy {
   private readonly projectsDetailWorkSectionInfoService = inject(

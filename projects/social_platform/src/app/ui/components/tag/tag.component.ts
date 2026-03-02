@@ -1,6 +1,7 @@
 /** @format */
 
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -32,6 +33,7 @@ import { NgStyle } from "@angular/common";
   styleUrl: "./tag.component.scss",
   standalone: true,
   imports: [IconComponent, NgStyle],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TagComponent implements OnInit, OnChanges {
   constructor() {}

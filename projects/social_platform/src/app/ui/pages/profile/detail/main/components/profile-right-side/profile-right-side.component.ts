@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule, NgTemplateOutlet } from "@angular/common";
-import { Component, inject, Input, WritableSignal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
 import { IconComponent } from "@ui/components";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { UserLinksPipe } from "projects/core/src/lib/pipes/user/user-links.pipe";
@@ -25,6 +25,7 @@ import { RouterModule } from "@angular/router";
     ModalComponent,
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileRightSideComponent {
   @Input() user!: WritableSignal<User | undefined>;

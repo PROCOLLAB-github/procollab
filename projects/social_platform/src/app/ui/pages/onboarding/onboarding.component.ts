@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
 import { Subscription } from "rxjs";
 import { OnboardingService } from "../../../api/onboarding/onboarding.service";
@@ -50,6 +50,7 @@ import { OnboardingUIInfoService } from "../../../api/onboarding/facades/stages/
   standalone: true,
   providers: [OnboardingInfoService, OnboardingUIInfoService],
   imports: [RouterOutlet],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OnboardingComponent implements OnInit, OnDestroy {
   private readonly onboardingInfoService = inject(OnboardingInfoService);

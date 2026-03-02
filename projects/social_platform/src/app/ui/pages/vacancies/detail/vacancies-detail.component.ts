@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterOutlet } from "@angular/router";
 import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
 import { BarComponent } from "@ui/components";
@@ -36,6 +36,7 @@ import { VacancyDetailUIInfoService } from "projects/social_platform/src/app/api
   imports: [CommonModule, BarComponent, RouterOutlet, BackComponent],
   providers: [VacancyDetailInfoService, VacancyDetailUIInfoService],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VacanciesDetailComponent implements OnInit, OnDestroy {
   private readonly vacancyDetailInfoService = inject(VacancyDetailInfoService);
