@@ -3,7 +3,7 @@
 <div class="write-task" [class.write-task--hasVideo]="!!sanitizedFileUrl">
   <div class="write-task__header">
     @if (!sanitizedFileUrl) {
-    <p class="write-task__text text-body-bold-12">{{ data.text | truncate: 80 }}</p>
+    <p class="write-task__text text-body-12-bold">{{ data.text | truncate: 80 }}</p>
     }
     <div
       class="write-task__description text-body-12"

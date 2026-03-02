@@ -6,7 +6,7 @@
   [class.video--hasImage]="sourceType === 'img'"
 >
   <div class="video__text-content" [class.video__text-content--hasVideo]="!!mediaUrl">
-    <p class="video__title text-body-bold-12">
+    <p class="video__title text-body-12-bold">
       {{ data.text | truncate: (data.videoUrl ? 80 : sourceType === "img" ? 100 : 200) }}
     </p>
     <p

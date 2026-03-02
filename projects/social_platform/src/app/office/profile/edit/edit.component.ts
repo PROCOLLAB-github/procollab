@@ -1110,6 +1110,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
           : this.profileForm.value.phoneNumber,
     };
 
+    console.log(newProfile);
+
     this.authService
       .saveProfile(newProfile)
       .pipe(concatMap(() => this.authService.getProfile()))

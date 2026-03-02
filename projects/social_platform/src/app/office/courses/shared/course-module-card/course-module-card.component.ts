@@ -7,6 +7,7 @@ import { PluralizePipe } from "@corelib";
 import { IconComponent } from "@ui/components";
 import { CircleProgressBarComponent } from "../circle-progress-bar/circle-progress-bar.component";
 import { CourseModule } from "@office/models/courses.model";
+import { RouterLink } from "@angular/router";
 
 /**
  * Компонент карточки навыка
@@ -32,6 +33,7 @@ import { CourseModule } from "@office/models/courses.model";
     PluralizePipe,
     CircleProgressBarComponent,
     IconComponent,
+    RouterLink,
   ],
   templateUrl: "./course-module-card.component.html",
   styleUrl: "./course-module-card.component.scss",

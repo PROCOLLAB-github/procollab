@@ -43,7 +43,7 @@
   <div class="expandable__content">
     <ul class="expandable__list">
       @for (topic of getTopics(); track $index) {
-      <li class="expandable__item">
+      <li class="expandable__item" [routerLink]="'/office/courses/2/task/29'">
         <div class="expandable__item--inner">
           <span class="topic__number text-body-10"
             >Урок {{ $index + 1 }}.

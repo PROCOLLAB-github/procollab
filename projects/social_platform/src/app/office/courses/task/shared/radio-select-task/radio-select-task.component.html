@@ -7,7 +7,7 @@
 >
   <div class="radio__body" [class.radio__body--hasImage]="sourceType === 'img'">
     @if (sourceType !== 'img') {
-    <p class="radio__title text-body-bold-12">
+    <p class="radio__title text-body-12-bold">
       {{ data.text }}
     </p>
     }
@@ -25,7 +25,7 @@
     ></iframe>
     } @if (data.files.length) {
     <img class="radio__img" [src]="data.files[0]" />
-    <p class="text-body-bold-12 radio__img-text">{{ data.text | truncate: 60 }}</p>
+    <p class="text-body-12-bold radio__img-text">{{ data.text | truncate: 60 }}</p>
     } @if (hint.length) {
     <div class="radio__hint" [innerHTML]="hint"></div>
     }

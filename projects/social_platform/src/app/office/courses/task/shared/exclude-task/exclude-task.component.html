@@ -3,7 +3,7 @@
 <div class="exclude" [class.exclude--hasVideo]="!!sanitizedFileUrl">
   <div class="exclude__body">
     @if (!sanitizedFileUrl) {
-    <h2 class="exclude__title text-body-bold-12">{{ data.text | truncate: 110 }}</h2>
+    <h2 class="exclude__title text-body-12-bold">{{ data.text | truncate: 110 }}</h2>
     }
     <div class="exclude__text text-body-12" [class.exclude__text--hasVideo]="!!sanitizedFileUrl">
       @if (sanitizedFileUrl) {
@@ -32,7 +32,7 @@
         [class.exclude__item--error]="error"
         (click)="onSelect(op.id)"
       >
-        <app-checkbox size="18" [checked]="result().includes(op.id)"></app-checkbox>
+        <app-checkbox size="10" [checked]="result().includes(op.id)"></app-checkbox>
         <label class="text-body-12">{{ op.text }}</label>
       </li>
       }
