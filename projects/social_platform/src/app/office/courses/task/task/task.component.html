@@ -15,7 +15,7 @@
         [attr.data-id]="id"
         [ngClass]="{
           'progress__task--done': doneTasks().includes(id) || taskService.currentTaskDone(),
-          'progress__task--current': currentSubTaskId() === id
+          'progress__task--current': isCurrent(id)
         }"
       >
         <p class="text-body-12">{{ $index + 1 }}</p>

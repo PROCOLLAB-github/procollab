@@ -171,4 +171,8 @@ export class TaskComponent implements OnInit {
 
     return [...new Set([...serverDone, ...localDone])];
   });
+
+  isCurrent(subTaskId: number) {
+    return this.currentSubTaskId() === subTaskId;
+  }
 }
