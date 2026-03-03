@@ -639,7 +639,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
       title: achievementItem.title,
       status: achievementItem.status,
       year: achievementItem.year,
-      files: achievementItem.files,
     });
     this.editIndex.set(index);
   }

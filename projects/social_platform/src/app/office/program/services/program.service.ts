@@ -128,7 +128,7 @@ export class ProgramService {
       url += `?${params.toString()}`;
     }
 
-    return this.apiService.post(url, { filters: filters });
+    return this.apiService.post(url, { filters });
   }
 
   submitCompettetiveProject(relationId: number): Observable<Project> {
