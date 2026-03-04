@@ -35,6 +35,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
     TooltipComponent,
     ModalComponent,
   ],
+  providers: [ToggleFieldsInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectTeamStepComponent implements OnInit {

@@ -2,6 +2,7 @@
 
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   DestroyRef,
   forwardRef,
@@ -65,7 +66,8 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
   constructor(
     private fileService: FileService,
     private sanitizer: DomSanitizer,
-    private readonly loggerService: LoggerService
+    private readonly loggerService: LoggerService,
+    private readonly cdr: ChangeDetectorRef
   ) {}
 
   /** Размер аватара в пикселях */
@@ -118,6 +120,7 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
   /** Записывает значение URL изображения */
   writeValue(address: string) {
     this.value = address;
+    this.cdr.markForCheck();
   }
 
   onTouch: () => void = () => {};
@@ -175,6 +178,7 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
   loadImageFailed() {
     this.loggerService.error("Не удалось загрузить изображение");
     this.showCropperModalErrorMessage = "Не удалось загрузить изображение. Попробуйте ещё раз!";
+    this.cdr.markForCheck();
   }
 
   /**
@@ -187,6 +191,7 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
 
     this.loading = true;
     this.showCropperModal = false;
+    this.cdr.markForCheck();
 
     // Создаем файл из blob
     const file = new File([this.croppedBlob], "cropped-avatar.jpg", {
@@ -220,6 +225,7 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
     this.imageChangedEvent = null;
     this.croppedImage = "";
     this.croppedBlob = null;
+    this.cdr.markForCheck();
 
     // Сбрасываем значение input
     const input = document.getElementById(this.controlId) as HTMLInputElement;
@@ -249,5 +255,6 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
     this.value = url;
 
     this.onTouch();
+    this.cdr.markForCheck();
   }
 }

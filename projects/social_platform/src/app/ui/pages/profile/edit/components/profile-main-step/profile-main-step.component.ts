@@ -34,7 +34,6 @@ import { IconComponent } from "@uilib";
     ReactiveFormsModule,
   ],
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileMainStepComponent {
   @Output() openSpecsGroupsModal = new EventEmitter<void>();

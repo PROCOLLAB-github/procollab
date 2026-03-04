@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { FormBuilder, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { rolesMembersList } from "projects/core/src/consts/lists/roles-members-list.const";
 import { workExperienceList } from "projects/core/src/consts/lists/work-experience-list.const";
 import { workFormatList } from "projects/core/src/consts/lists/work-format-list.const";
@@ -11,12 +11,16 @@ import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy
 import { ProjectFormService } from "../project-form.service";
 import { ValidationService } from "@corelib";
 import { stripNullish } from "@utils/helpers/stripNull";
+import { ProjectsEditUIInfoService } from "./projects-edit-ui-info.service";
+import { ToggleFieldsInfoService } from "../../../../toggle-fields/toggle-fields-info.service";
 
 @Injectable({ providedIn: "root" })
 export class ProjectVacancyUIService {
   private readonly fb = inject(FormBuilder);
   private readonly projectFormService = inject(ProjectFormService);
   private readonly validationService = inject(ValidationService);
+  private readonly projectsEditUIInfoService = inject(ProjectsEditUIInfoService);
+  private readonly toggleFieldsInfoService = inject(ToggleFieldsInfoService);
 
   /** Константы для выпадающих списков */
   public readonly workExperienceList = workExperienceList;
@@ -38,12 +42,12 @@ export class ProjectVacancyUIService {
   readonly vacancyIsSubmitting = signal(false);
 
   readonly vacancies = signal<Vacancy[]>([]);
-  readonly onEditClicked = signal<boolean>(false);
+  readonly onEditClicked = this.projectsEditUIInfoService.onEditClicked;
 
   readonly vacancyForm = this.fb.group({
     role: this.fb.control<string | null>(null),
     skills: this.fb.control<Skill[]>([]),
-    description: [this.fb.control<string | null>(""), Validators.maxLength(3500)],
+    description: this.fb.control<string | null>("", [Validators.maxLength(3500)]),
     requiredExperience: this.fb.control<string | null>(null),
     workFormat: this.fb.control<string | null>(null),
     salary: this.fb.control<string | null>(""),
@@ -172,6 +176,7 @@ export class ProjectVacancyUIService {
     });
     this.projectFormService.editIndex.set(index);
     this.onEditClicked.set(true);
+    this.toggleFieldsInfoService.showFields();
   }
 
   /**

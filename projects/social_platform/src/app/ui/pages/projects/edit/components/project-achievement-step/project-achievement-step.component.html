@@ -2,6 +2,7 @@
 
 <div [formGroup]="projectForm" class="project__inner">
   <div class="project__left">
+    @if (hasAchievements()) {
     <ul formArrayName="achievements" class="project__achievements">
       @for (control of achievements.controls; track control.value.id; let i = $index) {
       <li class="profile__achievement">
@@ -61,9 +62,10 @@
       </li>
       }
     </ul>
+    }
   </div>
 
-  <div class="project__right" [style.margin-top]="achievements.length ? '15px' : '0px'">
+  <div class="project__right" [style.margin-top]="hasAchievements() ? '15px' : '0px'">
     <app-button
       size="big"
       customTypographyClass="text-body-12"
@@ -75,7 +77,7 @@
       <i appIcon icon="plus" appSquare="12"></i>
     </app-button>
 
-    @if (!achievements.length) {
+    @if (!hasAchievements()) {
     <i appIcon icon="sad-smile" appSquare="20" class="project__no-items"></i>
     }
   </div>

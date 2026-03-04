@@ -26,7 +26,6 @@ import { ProfileDetailUIInfoService } from "projects/social_platform/src/app/api
   ],
   providers: [ProfileDetailUIInfoService],
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileEducationStepComponent {
   @Input() isEducationDirty: any;

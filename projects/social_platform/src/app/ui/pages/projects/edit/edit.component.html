@@ -28,6 +28,8 @@
         customTypographyClass="text-body-12"
         [loader]="projFormIsSubmittingAsPublished()"
         (click)="saveProjectAsPublished()"
+        [disabled]="onEditClicked()"
+        [style.opacity]="onEditClicked() ? '0.5' : '1'"
       >
         {{ isCompetitive() ? "отправить заявку" : "сохранить" }}
       </app-button>

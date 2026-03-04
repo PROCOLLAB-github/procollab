@@ -17,7 +17,7 @@ import { CommonModule } from "@angular/common";
 import { ProjectNavigationComponent } from "./components/project-navigation/project-navigation.component";
 import { EditStep, ProjectStepService } from "../../../../api/project/project-step.service";
 import { ProjectMainStepComponent } from "./components/project-main-step/project-main-step.component";
-import { ProjectFormService } from "../../../../api/project/project-form.service";
+import { ProjectFormService } from "../../../../api/project/facades/edit/project-form.service";
 import { ProjectPartnerResourcesStepComponent } from "./components/project-partner-resources-step/project-partner-resources-step.component";
 import { ProjectAchievementStepComponent } from "./components/project-achievement-step/project-achievement-step.component";
 import { ProjectVacancyStepComponent } from "./components/project-vacancy-step/project-vacancy-step.component";
@@ -31,10 +31,12 @@ import { ProjectAdditionalService } from "projects/social_platform/src/app/api/p
 import { ProjectGoalService } from "projects/social_platform/src/app/api/project/facades/edit/project-goals.service";
 import { ProjectPartnerService } from "projects/social_platform/src/app/api/project/facades/edit/project-partner.service";
 import { ProjectResourceService } from "projects/social_platform/src/app/api/project/facades/edit/project-resources.service";
+import { ProjectAchievementsService } from "projects/social_platform/src/app/api/project/facades/edit/project-achievements.service";
 import { ProjectVacancyService } from "projects/social_platform/src/app/api/project/facades/edit/project-vacancy.service";
 import { ProjectTeamUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-team-ui.service";
 import { ProjectTeamService } from "projects/social_platform/src/app/api/project/facades/edit/project-team.service";
 import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
+import { ToggleFieldsInfoService } from "projects/social_platform/src/app/api/toggle-fields/toggle-fields-info.service";
 
 /**
  * Компонент редактирования проекта
@@ -76,11 +78,13 @@ import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip
     ProjectTeamUIService,
     ProjectAdditionalService,
     ProjectGoalService,
+    ProjectAchievementsService,
     ProjectPartnerService,
     ProjectResourceService,
     ProjectsEditInfoService,
     ProjectsEditUIInfoService,
     TooltipInfoService,
+    ToggleFieldsInfoService,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

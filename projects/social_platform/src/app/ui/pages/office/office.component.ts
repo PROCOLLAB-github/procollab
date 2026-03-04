@@ -56,6 +56,7 @@ import { OfficeUIInfoService } from "../../../api/office/facades/ui/office-ui-in
     ProfileControlPanelComponent,
     ProgramSidebarCardComponent,
   ],
+  providers: [OfficeInfoService, OfficeUIInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OfficeComponent implements OnInit, OnDestroy {

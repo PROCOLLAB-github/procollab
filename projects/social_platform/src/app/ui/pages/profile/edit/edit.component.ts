@@ -26,7 +26,10 @@ import { SpecializationsService } from "projects/social_platform/src/app/api/spe
 import { SkillsService } from "projects/social_platform/src/app/api/skills/skills.service";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { ProfileFormService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-form.service";
-import { ProjectStepService } from "projects/social_platform/src/app/api/project/project-step.service";
+import {
+  EditStep,
+  ProjectStepService,
+} from "projects/social_platform/src/app/api/project/project-step.service";
 import { ProfileEditInfoService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-edit-info.service";
 import { SkillsInfoService } from "projects/social_platform/src/app/api/skills/facades/skills-info.service";
 import { OnboardingStageOneUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-one-ui-info.service";
@@ -122,21 +125,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
    */
   ngOnInit(): void {
     this.profileEditInfoService.initializationEditInfo();
-
-    // const isMospolytechStudentSub$ = this.profileForm
-    //   .get("isMospolytechStudent")
-    //   ?.valueChanges.subscribe(isStudent => {
-    //     const studyGroup = this.profileForm.get("studyGroup");
-    //     if (isStudent) {
-    //       studyGroup?.setValidators([Validators.required]);
-    //     } else {
-    //       studyGroup?.clearValidators();
-    //     }
-
-    //     studyGroup?.updateValueAndValidity();
-    //   });
-
-    // isMospolytechStudentSub$ && this.subscription$.push(isMospolytechStudentSub$);
   }
 
   /**
@@ -201,8 +189,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
    * Навигация между шагами редактирования профиля
    * @param step - название шага ('main' | 'education' | 'experience' | 'achievements' | 'skills' | 'settings)
    */
-  navigateStep(step: string) {
-    this.projectStepService.setStepFromRoute(step);
+  navigateStep(step: EditStep) {
+    this.projectStepService.navigateToStep(step);
   }
 
   protected readonly typeSpecific = this.profileFormService.typeSpecific;

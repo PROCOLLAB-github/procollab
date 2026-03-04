@@ -36,7 +36,6 @@ import { IconComponent } from "@uilib";
     IconComponent,
   ],
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileSkillsStepComponent {
   @Input() isLanguageDirty: any;

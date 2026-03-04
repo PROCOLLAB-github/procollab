@@ -31,7 +31,6 @@ import { IconComponent } from "@uilib";
   ],
   providers: [ProfileEditAchievementsInfoService],
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileAchievementsStepComponent {
   @Input() isAchievementsDirty: any;

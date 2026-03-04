@@ -363,6 +363,9 @@ export class ProjectsEditInfoService {
         ]) => {
           // Используем сервис для инициализации данных проекта
           this.projectFormService.initializeProjectData(project);
+          this.projectAchievementsService.syncAchievementsItems(
+            this.projectFormService.achievements
+          );
           this.projectGoalsService.initializeGoalsFromProject(goals);
           this.projectPartnerService.initializePartnerFromProject(partners);
           this.projectResourceService.initializeResourcesFromProject(resources);

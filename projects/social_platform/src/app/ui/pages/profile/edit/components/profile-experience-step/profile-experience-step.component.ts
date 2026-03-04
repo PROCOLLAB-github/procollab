@@ -26,7 +26,6 @@ import { IconComponent } from "@uilib";
     ReactiveFormsModule,
   ],
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileExperienceStepComponent {
   @Input() isWorkDirty: any;

@@ -18,7 +18,7 @@ import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { ControlErrorPipe } from "@corelib";
-import { ProjectFormService } from "../../../../../../api/project/project-form.service";
+import { ProjectFormService } from "../../../../../../api/project/facades/edit/project-form.service";
 import { IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";

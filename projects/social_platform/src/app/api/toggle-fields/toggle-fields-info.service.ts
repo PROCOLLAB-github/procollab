@@ -2,9 +2,7 @@
 
 import { Injectable, signal } from "@angular/core";
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable()
 export class ToggleFieldsInfoService {
   readonly showInputFields = signal<boolean>(false);
 

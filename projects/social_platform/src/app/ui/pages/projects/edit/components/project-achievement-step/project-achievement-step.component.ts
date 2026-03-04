@@ -1,12 +1,19 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, inject, Input } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  Input,
+  OnInit,
+} from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { InputComponent, ButtonComponent } from "@ui/components";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
-import { ProjectFormService } from "../../../../../../api/project/project-form.service";
+import { ProjectFormService } from "../../../../../../api/project/facades/edit/project-form.service";
 import { IconComponent } from "@uilib";
 import { ProjectAchievementsService } from "projects/social_platform/src/app/api/project/facades/edit/project-achievements.service";
 import { ToggleFieldsInfoService } from "projects/social_platform/src/app/api/toggle-fields/toggle-fields-info.service";
@@ -24,15 +31,17 @@ import { ToggleFieldsInfoService } from "projects/social_platform/src/app/api/to
     IconComponent,
     ControlErrorPipe,
   ],
+  providers: [ToggleFieldsInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectAchievementStepComponent {
+export class ProjectAchievementStepComponent implements OnInit {
   @Input() projSubmitInitiated = false;
 
   private readonly projectAchievementService = inject(ProjectAchievementsService);
   private readonly toggleFieldsInfoService = inject(ToggleFieldsInfoService);
   private readonly projectFormService = inject(ProjectFormService);
   private readonly fb = inject(FormBuilder);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   // Получаем форму из сервиса
   protected readonly projectForm = this.projectFormService.getForm();
@@ -42,9 +51,6 @@ export class ProjectAchievementStepComponent {
 
   // Геттеры для FormArray и полей
   protected readonly achievements = this.projectFormService.achievements;
-
-  protected readonly achievementsName = this.projectFormService.achievementsName;
-  protected readonly achievementsDate = this.projectFormService.achievementsDate;
   protected readonly achievementsItems = this.projectAchievementService.achievementsItems;
 
   protected readonly editIndex = this.projectFormService.editIndex;
@@ -55,6 +61,10 @@ export class ProjectAchievementStepComponent {
   protected readonly hasAchievements = this.projectAchievementService.hasAchievements;
 
   protected readonly errorMessage = ErrorMessage;
+
+  ngOnInit(): void {
+    this.projectAchievementService.syncAchievementsItems(this.achievements);
+  }
 
   /**
    * Добавление достижения

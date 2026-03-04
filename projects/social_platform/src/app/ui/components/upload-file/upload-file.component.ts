@@ -2,6 +2,7 @@
 
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   DestroyRef,
   forwardRef,
@@ -53,6 +54,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 export class UploadFileComponent implements OnInit, ControlValueAccessor {
   private readonly fileService = inject(FileService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   /** Ограничения по типу файлов */
   @Input() accept = "";
@@ -71,6 +73,7 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
   // Методы ControlValueAccessor
   writeValue(url: string) {
     this.value = url;
+    this.cdr.markForCheck();
   }
 
   onTouch: () => void = () => {};
@@ -96,6 +99,7 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
     }
 
     this.loading = true;
+    this.cdr.markForCheck();
 
     this.fileService
       .uploadFile(files[0])
@@ -105,6 +109,7 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
 
         this.value = res.url;
         this.onChange(res.url);
+        this.cdr.markForCheck();
       });
   }
 
@@ -119,12 +124,14 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
 
           this.onTouch();
           this.onChange("");
+          this.cdr.markForCheck();
         },
         error: () => {
           this.value = "";
 
           this.onTouch();
           this.onChange("");
+          this.cdr.markForCheck();
         },
       });
   }

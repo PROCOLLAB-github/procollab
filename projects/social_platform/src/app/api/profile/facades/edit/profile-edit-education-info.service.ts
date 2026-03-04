@@ -43,6 +43,29 @@ export class ProfileEditEducationInfoService {
     this.destroy$.complete();
   }
 
+  private normalizeYear(value: unknown): number | null {
+    if (value === null || value === undefined || value === "") {
+      return null;
+    }
+
+    if (typeof value === "number") {
+      return value;
+    }
+
+    if (typeof value === "string") {
+      return transformYearStringToNumber(value);
+    }
+
+    return null;
+  }
+
+  private resetSelectedIds(): void {
+    this.selectedEntryYearEducationId.set(undefined);
+    this.selectedComplitionYearEducationId.set(undefined);
+    this.selectedEducationStatusId.set(undefined);
+    this.selectedEducationLevelId.set(undefined);
+  }
+
   /**
    * Добавление записи об образовании
    * Валидирует форму и добавляет новую запись в массив образования
@@ -50,6 +73,7 @@ export class ProfileEditEducationInfoService {
   addEducation() {
     if (!this.showEducationFields()) {
       this.showEducationFields.set(true);
+      this.resetSelectedIds();
       return;
     }
 
@@ -66,14 +90,8 @@ export class ProfileEditEducationInfoService {
       this.profileForm.get(name)?.markAsTouched()
     );
 
-    const entryYear =
-      typeof this.profileForm.get("entryYear")?.value === "string"
-        ? +this.profileForm.get("entryYear")?.value.slice(0, 5)
-        : this.profileForm.get("entryYear")?.value;
-    const completionYear =
-      typeof this.profileForm.get("completionYear")?.value === "string"
-        ? +this.profileForm.get("completionYear")?.value.slice(0, 5)
-        : this.profileForm.get("completionYear")?.value;
+    const entryYear = this.normalizeYear(this.profileForm.get("entryYear")?.value);
+    const completionYear = this.normalizeYear(this.profileForm.get("completionYear")?.value);
 
     if (entryYear !== null && completionYear !== null && entryYear > completionYear) {
       this.isModalErrorSkillsChoose.set(true);
@@ -122,6 +140,7 @@ export class ProfileEditEducationInfoService {
         this.profileForm.get(name)?.updateValueAndValidity();
       });
       this.showEducationFields.set(false);
+      this.resetSelectedIds();
     }
     this.editEducationClick.set(false);
   }
@@ -133,19 +152,20 @@ export class ProfileEditEducationInfoService {
   editEducation(index: number) {
     this.editEducationClick.set(true);
     this.showEducationFields.set(true);
+    this.resetSelectedIds();
+
     const educationItem = this.education.value[index];
+    const entryYear = this.normalizeYear(educationItem.entryYear);
+    const completionYear = this.normalizeYear(educationItem.completionYear);
 
     this.yearListEducation.forEach(entryYearWork => {
-      if (transformYearStringToNumber(entryYearWork.value as string) === educationItem.entryYear) {
+      if (transformYearStringToNumber(entryYearWork.value as string) === entryYear) {
         this.selectedEntryYearEducationId.set(entryYearWork.id);
       }
     });
 
     this.yearListEducation.forEach(completionYearWork => {
-      if (
-        transformYearStringToNumber(completionYearWork.value as string) ===
-        educationItem.completionYear
-      ) {
+      if (transformYearStringToNumber(completionYearWork.value as string) === completionYear) {
         this.selectedComplitionYearEducationId.set(completionYearWork.id);
       }
     });
@@ -164,8 +184,8 @@ export class ProfileEditEducationInfoService {
 
     this.profileForm.patchValue({
       organizationName: educationItem.organizationName,
-      entryYear: educationItem.entryYear,
-      completionYear: educationItem.completionYear,
+      entryYear,
+      completionYear,
       description: educationItem.description,
       educationStatus: educationItem.educationStatus,
       educationLevel: educationItem.educationLevel,

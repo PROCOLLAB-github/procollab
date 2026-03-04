@@ -38,6 +38,27 @@ export class ProfileEditExperienceInfoService {
     this.destroy$.complete();
   }
 
+  private normalizeYear(value: unknown): number | null {
+    if (value === null || value === undefined || value === "") {
+      return null;
+    }
+
+    if (typeof value === "number") {
+      return value;
+    }
+
+    if (typeof value === "string") {
+      return transformYearStringToNumber(value);
+    }
+
+    return null;
+  }
+
+  private resetSelectedIds(): void {
+    this.selectedEntryYearWorkId.set(undefined);
+    this.selectedComplitionYearWorkId.set(undefined);
+  }
+
   /**
    * Добавление записи об опыте работы
    * Валидирует форму и добавляет новую запись в массив опыта работы
@@ -45,6 +66,7 @@ export class ProfileEditExperienceInfoService {
   addWork() {
     if (!this.showWorkFields()) {
       this.showWorkFields.set(true);
+      this.resetSelectedIds();
       return;
     }
 
@@ -57,14 +79,8 @@ export class ProfileEditExperienceInfoService {
     );
     ["organization", "jobPosition"].forEach(name => this.profileForm.get(name)?.markAsTouched());
 
-    const entryYear =
-      typeof this.profileForm.get("entryYearWork")?.value === "string"
-        ? this.profileForm.get("entryYearWork")?.value.slice(0, 5)
-        : this.profileForm.get("entryYearWork")?.value;
-    const completionYear =
-      typeof this.profileForm.get("completionYearWork")?.value === "string"
-        ? this.profileForm.get("completionYearWork")?.value.slice(0, 5)
-        : this.profileForm.get("completionYearWork")?.value;
+    const entryYear = this.normalizeYear(this.profileForm.get("entryYearWork")?.value);
+    const completionYear = this.normalizeYear(this.profileForm.get("completionYearWork")?.value);
 
     if (entryYear !== null && completionYear !== null && entryYear > completionYear) {
       this.isModalErrorSkillsChoose.set(true);
@@ -111,6 +127,7 @@ export class ProfileEditExperienceInfoService {
         this.profileForm.get(name)?.updateValueAndValidity();
       });
       this.showWorkFields.set(false);
+      this.resetSelectedIds();
     }
     this.editWorkClick.set(false);
   }
@@ -118,33 +135,31 @@ export class ProfileEditExperienceInfoService {
   editWork(index: number) {
     this.editWorkClick.set(true);
     this.showWorkFields.set(true);
+    this.resetSelectedIds();
     const workItem = this.workExperience.value[index];
 
     if (workItem) {
+      const entryYear = this.normalizeYear(workItem.entryYearWork ?? workItem.entryYear);
+      const completionYear = this.normalizeYear(
+        workItem.completionYearWork ?? workItem.completionYear
+      );
+
       this.yearListEducation.forEach(entryYearWork => {
-        if (
-          transformYearStringToNumber(entryYearWork.value as string) === workItem.entryYearWork ||
-          transformYearStringToNumber(entryYearWork.value as string) === workItem.entryYear
-        ) {
+        if (transformYearStringToNumber(entryYearWork.value as string) === entryYear) {
           this.selectedEntryYearWorkId.set(entryYearWork.id);
         }
       });
 
       this.yearListEducation.forEach(complitionYearWork => {
-        if (
-          transformYearStringToNumber(complitionYearWork.value as string) ===
-            workItem.completionYearWork ||
-          transformYearStringToNumber(complitionYearWork.value as string) ===
-            workItem.completionYear
-        ) {
+        if (transformYearStringToNumber(complitionYearWork.value as string) === completionYear) {
           this.selectedComplitionYearWorkId.set(complitionYearWork.id);
         }
       });
 
       this.profileForm.patchValue({
         organization: workItem.organization || workItem.organizationName,
-        entryYearWork: workItem.entryYearWork || workItem.entryYear,
-        completionYearWork: workItem.completionYearWork || workItem.completionYear,
+        entryYearWork: entryYear,
+        completionYearWork: completionYear,
         descriptionWork: workItem.descriptionWork || workItem.description,
         jobPosition: workItem.jobPosition,
       });
