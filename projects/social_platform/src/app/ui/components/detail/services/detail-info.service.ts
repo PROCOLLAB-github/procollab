@@ -10,7 +10,7 @@ import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/ap
 import { ProjectFormService } from "projects/social_platform/src/app/api/project/project-form.service";
 import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
-import { filter, Subject } from "rxjs";
+import { filter, Subject, takeUntil } from "rxjs";
 import { DetailProfileInfoService } from "./profile/detail-profile-info.service";
 import { DetailProjectInfoService } from "./project/detail-project-info.service";
 import { DetailProgramInfoService } from "./program/detail-program-info.service";
@@ -31,6 +31,7 @@ export class DetailInfoService {
   private readonly detailProgramInfoService = inject(DetailProgramInfoService);
 
   private readonly destroy$ = new Subject<void>();
+  private unsubscribeUrlChange?: () => void;
 
   readonly info = signal<any | undefined>(undefined);
   readonly listType = signal<"project" | "program" | "profile">("project");
@@ -75,14 +76,14 @@ export class DetailInfoService {
   });
 
   initializationDetail(): void {
-    this.route.data.subscribe(data => {
+    this.route.data.pipe(takeUntil(this.destroy$)).subscribe(data => {
       this.listType.set(data["listType"]);
       this.initializeBackPath();
       this.initializeInfo();
     });
 
     this.updatePageStates();
-    this.location.onUrlChange(url => {
+    this.unsubscribeUrlChange = this.location.onUrlChange(url => {
       this.updatePageStates(url);
     });
   }
@@ -151,19 +152,24 @@ export class DetailInfoService {
   }
 
   private isInProfileInfo(): void {
-    this.authService.profile.pipe(filter(profile => !!profile)).subscribe({
-      next: profile => {
-        this.detailProfileInfoService.applySetProfile(profile);
+    this.authService.profile
+      .pipe(
+        filter(profile => !!profile),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: profile => {
+          this.detailProfileInfoService.applySetProfile(profile);
 
-        if (this.info() && this.listType() === "project") {
-          this.isInProject.set(
-            this.info()
-              ?.collaborators?.map((person: Collaborator) => person.userId)
-              .includes(profile.id)
-          );
-        }
-      },
-    });
+          if (this.info() && this.listType() === "project") {
+            this.isInProject.set(
+              this.info()
+                ?.collaborators?.map((person: Collaborator) => person.userId)
+                .includes(profile.id)
+            );
+          }
+        },
+      });
   }
 
   private initializeInfo() {
@@ -178,18 +184,26 @@ export class DetailInfoService {
       const program = this.programDetailMainUIInfoService.program;
       this.info.set(program());
 
-      this.authService.profile.pipe(filter(user => !!user)).subscribe({
-        next: user => {
-          this.userType.set(user!.userType);
-          this.profile.set(user);
-        },
-      });
+      this.authService.profile
+        .pipe(
+          filter(user => !!user),
+          takeUntil(this.destroy$)
+        )
+        .subscribe({
+          next: user => {
+            this.userType.set(user!.userType);
+            this.profile.set(user);
+          },
+        });
 
-      this.projectService.getMy().subscribe({
-        next: projects => {
-          this.memberProjects.set(projects.results.filter(project => !project.draft));
-        },
-      });
+      this.projectService
+        .getMy()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: projects => {
+            this.memberProjects.set(projects.results.filter(project => !project.draft));
+          },
+        });
     } else {
       this.detailProfileInfoService.initializationProfile();
       const user = this.profileDetailUIInfoService.user();
@@ -203,6 +217,7 @@ export class DetailInfoService {
   }
 
   destroy(): void {
+    this.unsubscribeUrlChange?.();
     this.destroy$.next();
     this.destroy$.complete();
   }

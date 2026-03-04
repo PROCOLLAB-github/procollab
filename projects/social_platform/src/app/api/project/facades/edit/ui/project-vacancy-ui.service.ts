@@ -137,6 +137,11 @@ export class ProjectVacancyUIService {
     this.applyResetVacancyForm();
   }
 
+  applyUpdateVacancy(vacancy: Vacancy): void {
+    this.vacancies.update(list => list.map(item => (item.id === vacancy.id ? vacancy : item)));
+    this.applyResetVacancyForm();
+  }
+
   /**
    * Инициализирует редактирование вакансии по индексу в массиве:
    * заполняет форму, выставляет сигналы и переключает режим редактирования.
@@ -144,6 +149,9 @@ export class ProjectVacancyUIService {
    */
   applyEditVacancy(index: number): void {
     const item = this.vacancies()[index];
+    if (!item) {
+      return;
+    }
     // Установка выбранных значений селектов по сопоставлению
     this.workExperienceList.find(e => e.value === item.requiredExperience) &&
       this.selectedRequiredExperienceId.set(
@@ -197,6 +205,8 @@ export class ProjectVacancyUIService {
     this.selectedWorkFormatId.set(undefined);
     this.selectedWorkScheduleId.set(undefined);
     this.selectedVacanciesSpecializationId.set(undefined);
+    this.projectFormService.editIndex.set(null);
+    this.onEditClicked.set(false);
     this.vacancyIsSubmitting.set(false);
   }
 }

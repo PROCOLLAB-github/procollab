@@ -171,6 +171,10 @@ export class ProjectResourceService {
     this.resourceItems.update(items => items.filter((_, i) => i !== index));
     resourceFormArray.removeAt(index);
 
+    if (resourceId === null || resourceId === undefined) {
+      return;
+    }
+
     this.projectService
       .deleteResource(projectId, resourceId)
       .pipe(takeUntil(this.destroy$))
@@ -213,18 +217,26 @@ export class ProjectResourceService {
   public saveResources(projectId: number) {
     const resources = this.getResourcesData();
 
-    const requests = resources.map(resource => {
-      const payload: Omit<ResourceDto, "projectId"> = {
-        type: resource.type,
-        description: resource.description,
-        partnerCompany: resource.partnerCompany ?? "запрос к рынку",
-      };
+    const requests = resources
+      .map((resource, idx) => ({ resource, idx }))
+      .filter(({ resource }) => resource.id === null)
+      .filter(({ resource }) => !!resource.type && !!resource.description)
+      .map(({ resource, idx }) => {
+        const payload: Omit<ResourceDto, "projectId"> = {
+          type: resource.type,
+          description: resource.description,
+          partnerCompany: resource.partnerCompany ?? "запрос к рынку",
+        };
 
-      return this.projectService.addResource(projectId, payload).pipe(
-        map((res: any) => ({ res, idx: resource.idx })),
-        catchError(err => of({ __error: true, err, original: resource }))
-      );
-    });
+        return this.projectService.addResource(projectId, payload).pipe(
+          map((res: any) => ({ res, idx })),
+          catchError(err => of({ __error: true, err, original: resource, idx }))
+        );
+      });
+
+    if (!requests.length) {
+      return of([]);
+    }
 
     return forkJoin(requests).pipe(
       tap(results => {
@@ -253,18 +265,26 @@ export class ProjectResourceService {
   public editResources(projectId: number) {
     const resources = this.getResourcesData();
 
-    const requests = resources.map(resource => {
-      const payload: Omit<ResourceDto, "projectId"> = {
-        type: resource.type,
-        description: resource.description,
-        partnerCompany: resource.partnerCompany ?? "запрос к рынку",
-      };
+    const requests = resources
+      .map((resource, idx) => ({ resource, idx }))
+      .filter(({ resource }) => resource.id !== null && resource.id !== undefined)
+      .filter(({ resource }) => !!resource.type && !!resource.description)
+      .map(({ resource, idx }) => {
+        const payload: Omit<ResourceDto, "projectId"> = {
+          type: resource.type,
+          description: resource.description,
+          partnerCompany: resource.partnerCompany ?? "запрос к рынку",
+        };
 
-      return this.projectService.editResource(projectId, resource.id, payload).pipe(
-        map((res: any) => ({ res })),
-        catchError(err => of({ __error: true, err, original: resource }))
-      );
-    });
+        return this.projectService.editResource(projectId, resource.id, payload).pipe(
+          map((res: any) => ({ res, idx })),
+          catchError(err => of({ __error: true, err, original: resource, idx }))
+        );
+      });
+
+    if (!requests.length) {
+      return of([]);
+    }
 
     return forkJoin(requests).pipe(
       tap(results => {

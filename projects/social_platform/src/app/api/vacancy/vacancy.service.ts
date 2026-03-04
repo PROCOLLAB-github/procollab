@@ -137,8 +137,13 @@ export class VacancyService {
    * @param vacancy - объект с обновленными данными вакансии
    * @returns Observable<Vacancy> - обновленная вакансия
    */
-  updateVacancy(vacancyId: number, vacancy: Vacancy) {
-    return this.apiService.patch(`${this.VACANCIES_URL}/${vacancyId}`, { ...vacancy });
+  updateVacancy(
+    vacancyId: number,
+    vacancy: Partial<Vacancy> | CreateVacancyDto
+  ): Observable<Vacancy> {
+    return this.apiService
+      .patch(`${this.VACANCIES_URL}/${vacancyId}`, { ...vacancy })
+      .pipe(map(updated => plainToInstance(Vacancy, updated)));
   }
 
   /**

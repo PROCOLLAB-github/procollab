@@ -7,6 +7,7 @@ import { VacancyService } from "../../../vacancy/vacancy.service";
 import { Subject, takeUntil } from "rxjs";
 import { ProjectVacancyUIService } from "./ui/project-vacancy-ui.service";
 import { CreateVacancyDto } from "../../dto/create-vacancy.model";
+import { ProjectFormService } from "./project-form.service";
 
 /**
  * Сервис для управления вакансиями проекта.
@@ -19,6 +20,7 @@ export class ProjectVacancyService {
   private readonly vacancyService = inject(VacancyService);
   private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
   private readonly validationService = inject(ValidationService);
+  private readonly projectFormService = inject(ProjectFormService);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -87,6 +89,28 @@ export class ProjectVacancyService {
       specialization: form.specialization ?? undefined,
       salary: typeof form.salary === "string" ? +form.salary : null,
     };
+
+    const editIdx = this.projectFormService.editIndex();
+    if (editIdx !== null) {
+      const editedVacancy = this.projectVacancyUIService.vacancies()[editIdx];
+      if (!editedVacancy?.id) {
+        this.vacancyIsSubmitting.set(false);
+        return;
+      }
+
+      this.vacancyService
+        .updateVacancy(editedVacancy.id, payload)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: vacancy => {
+            this.projectVacancyUIService.applyUpdateVacancy(vacancy);
+          },
+          error: () => {
+            this.vacancyIsSubmitting.set(false);
+          },
+        });
+      return;
+    }
 
     // Вызов API для создания вакансии
     this.vacancyService

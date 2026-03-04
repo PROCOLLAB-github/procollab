@@ -73,7 +73,7 @@ export class ProjectsFilterInfoService {
   }
 
   private initializationCurrentParams(): void {
-    this.route.queryParams.subscribe(queries => {
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(queries => {
       this.currentIndustry.set(parseInt(queries["industry"]));
       this.currentMembersCount.set(parseInt(queries["membersCount"]));
       this.hasVacancies.set(queries["anyVacancies"] === "true");

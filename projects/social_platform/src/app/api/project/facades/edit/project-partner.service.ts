@@ -46,7 +46,7 @@ export class ProjectPartnerService {
   public initializePartnerItems(partnerFormArray: FormArray): void {
     if (this.initialized) return;
 
-    if (partnerFormArray && this.partnerItems().length > 0) {
+    if (partnerFormArray && partnerFormArray.length > 0) {
       this.partnerItems.set(partnerFormArray.value);
     }
 
@@ -191,6 +191,10 @@ export class ProjectPartnerService {
     this.partnerItems.update(items => items.filter((_, i) => i !== index));
     partnerFormArray.removeAt(index);
 
+    if (partnersId === null || partnersId === undefined) {
+      return;
+    }
+
     this.projectService
       .deletePartner(projectId, partnersId)
       .pipe(takeUntil(this.destroy$))
@@ -238,21 +242,42 @@ export class ProjectPartnerService {
       return of([]);
     }
 
-    const requests = partners.map(partner => {
-      const decisionMaker = Number(partner.decisionMaker.split("/").at(-1));
+    const requests = partners
+      .map((partner, idx) => ({ partner, idx }))
+      .filter(({ partner }) => partner.id === null)
+      .filter(
+        ({ partner }) =>
+          !!partner.name && !!partner.inn && !!partner.contribution && !!partner.decisionMaker
+      )
+      .map(({ partner, idx }) => {
+        const decisionMakerPath = String(partner.decisionMaker).split("/");
+        const decisionMaker = Number(decisionMakerPath[decisionMakerPath.length - 1]);
 
-      const payload: PartnerDto = {
-        name: partner.name,
-        inn: partner.inn,
-        contribution: partner.contribution,
-        decisionMaker,
-      };
+        if (!Number.isFinite(decisionMaker) || decisionMaker <= 0) {
+          return of({
+            __error: true,
+            err: new Error("Invalid decisionMaker id"),
+            original: partner,
+            idx,
+          });
+        }
 
-      return this.projectService.addPartner(projectId, payload).pipe(
-        map((res: any) => ({ res, idx: partner.id })),
-        catchError(err => of({ __error: true, err, original: partner }))
-      );
-    });
+        const payload: PartnerDto = {
+          name: partner.name,
+          inn: partner.inn,
+          contribution: partner.contribution,
+          decisionMaker,
+        };
+
+        return this.projectService.addPartner(projectId, payload).pipe(
+          map((res: any) => ({ res, idx })),
+          catchError(err => of({ __error: true, err, original: partner, idx }))
+        );
+      });
+
+    if (!requests.length) {
+      return of([]);
+    }
 
     return forkJoin(requests).pipe(
       tap(results => {

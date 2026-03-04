@@ -1,13 +1,9 @@
 /** @format */
 
-import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
-import { map, Subscription } from "rxjs";
-import { IndustryService } from "projects/social_platform/src/app/api/industry/industry.service";
+import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { SelectComponent } from "@ui/components";
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
 import { tagsFilter } from "projects/core/src/consts/filters/tags-filter.const";
-import { optionsListElement } from "@utils/generate-options-list";
 import { ProjectsFilterInfoService } from "./service/projects-filter-info.service";
 
 /**
@@ -45,7 +41,7 @@ import { ProjectsFilterInfoService } from "./service/projects-filter-info.servic
   providers: [ProjectsFilterInfoService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProjectsFilterComponent implements OnInit {
+export class ProjectsFilterComponent implements OnInit, OnDestroy {
   private readonly projectsFilterInfoService = inject(ProjectsFilterInfoService);
 
   // Константы для фильтрации по типу проекта
@@ -71,6 +67,10 @@ export class ProjectsFilterComponent implements OnInit {
   ngOnInit(): void {
     // Подписка на данные об отраслях
     this.projectsFilterInfoService.initializationProjectsFilter();
+  }
+
+  ngOnDestroy(): void {
+    this.projectsFilterInfoService.destroy();
   }
 
   /**

@@ -28,7 +28,7 @@ export class FeedFilterInfoService {
       this.detailProfileInfoService.applySetProfile(profile);
     });
 
-    this.route.queryParams.subscribe(queries => {
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(queries => {
       if (queries["includes"]) {
         this.includedFilters.set(queries["includes"]);
       } else {
