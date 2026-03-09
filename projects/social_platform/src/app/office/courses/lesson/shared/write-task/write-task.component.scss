@@ -28,11 +28,11 @@
 
   &__description,
   &__text {
-    margin-top: 23px;
-    white-space: pre-line;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-top: 23px;
+    white-space: pre-line;
 
     &--hasVideo {
       display: flex;

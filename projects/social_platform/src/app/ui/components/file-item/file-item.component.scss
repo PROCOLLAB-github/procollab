@@ -19,8 +19,8 @@
 
   &__left {
     display: flex;
-    align-items: center;
     gap: 5px;
+    align-items: center;
   }
 
   &__meta {
@@ -34,9 +34,9 @@
     justify-content: center;
     width: 35px;
     height: 35px;
+    cursor: pointer;
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-xxl);
-    cursor: pointer;
 
     &--delete {
       color: var(--red);
@@ -49,8 +49,8 @@
     }
 
     &--file {
-      cursor: pointer;
       color: var(--accent);
+      cursor: pointer;
     }
   }
 }

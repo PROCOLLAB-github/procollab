@@ -48,11 +48,11 @@
     position: relative;
     height: 48px;
     padding: 10px;
+    margin-bottom: 18px;
     text-align: center;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
-    margin-bottom: 18px;
 
     &--cover {
       position: absolute;
