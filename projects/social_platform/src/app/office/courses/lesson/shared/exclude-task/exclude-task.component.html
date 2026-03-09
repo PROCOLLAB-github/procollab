@@ -1,0 +1,45 @@
+<!-- @format -->
+
+<div class="exclude" [class.exclude--hasContent]="!!data.videoUrl || !!data.imageUrl">
+  <div class="exclude__body">
+    @if (!data.videoUrl && !data.imageUrl) {
+    <h2 class="exclude__title text-body-12-bold">{{ data.title | truncate: 110 }}</h2>
+    }
+    <div
+      class="exclude__text text-body-12"
+      [class.exclude__text--hasContent]="!!data.videoUrl || !!data.imageUrl"
+    >
+      @if (data.videoUrl) {
+      <iframe
+        [src]="getSafeVideoUrl()"
+        width="397px"
+        height="223px"
+        frameborder="0"
+        allowfullscreen
+        allowtransparency="true"
+      ></iframe>
+      } @else {
+      <img alt="exclude-image" [src]="data.imageUrl" class="exclude__image" />
+      <div [innerHTML]="data.bodyText | truncate: 700"></div>
+      }
+    </div>
+  </div>
+
+  <div class="exclude__content">
+    <p class="exclude__answer text-body-12">ответ</p>
+    <ul class="exclude__list">
+      <p class="exclude__text text-body-12">{{ data.title | truncate: 110 }}</p>
+      @for (op of data.options; track op.id) {
+      <li
+        class="exclude__item"
+        [class.exclude__item--success]="success && result().includes(op.id)"
+        [class.exclude__item--error]="error"
+        (click)="onSelect(op.id)"
+      >
+        <app-checkbox size="10" [checked]="result().includes(op.id)"></app-checkbox>
+        <label class="text-body-12">{{ op.text }}</label>
+      </li>
+      }
+    </ul>
+  </div>
+</div>

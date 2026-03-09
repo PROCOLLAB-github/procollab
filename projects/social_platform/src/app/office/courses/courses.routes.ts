@@ -34,7 +34,6 @@ export const COURSES_ROUTES: Routes = [
   },
   {
     path: ":courseId",
-    loadChildren: () =>
-      import("./detail/trajectory-detail.routes").then(c => c.TRAJECTORY_DETAIL_ROUTES),
+    loadChildren: () => import("./detail/course-detail.routes").then(c => c.COURSE_DETAIL_ROUTES),
   },
 ];

@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { TrajectoriesService } from "./trajectories.service";
+import { CoursesService } from "./courses.service";
 
 /**
  * Резолвер для загрузки списка всех доступных траекторий
@@ -14,7 +14,7 @@ import { TrajectoriesService } from "./trajectories.service";
  * @returns Promise/Observable с данными траекторий
  */
 export const CoursesResolver = () => {
-  const trajectoriesService = inject(TrajectoriesService);
+  const coursesService = inject(CoursesService);
 
-  return trajectoriesService.getTrajectories(20, 0);
+  return coursesService.getCourses();
 };

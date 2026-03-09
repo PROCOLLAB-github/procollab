@@ -3,7 +3,7 @@
 @if(course) {
 <div class="course">
   <div class="course__cover">
-    <app-avatar [size]="68" [url]="course.avatar!"></app-avatar>
+    <app-avatar [size]="68" [url]="course.avatarUrl"></app-avatar>
     <img src="assets\icons\svg\rocket.svg" class="course__rocket" />
     <app-button
       customTypographyClass="text-body-10"
@@ -18,31 +18,25 @@
           : "доступно всем пользователям"
       }}
     </app-button>
+
+    <img alt="course-cover" [src]="course.cardCoverUrl" class="course__image" />
   </div>
 
   <div class="course__info">
-    <p class="text-body-12">{{ course.name | truncate: 50 }}</p>
+    <p class="text-body-12">{{ course.title | truncate: 50 }}</p>
     <p class="text-body-10 course__info--date">
-      {{
-        isDates()
-          ? "16.02.2026 - 16.04.2026"
-          : isDate()
-          ? "16.02.2026"
-          : isEnded()
-          ? "курс завершен"
-          : "доступен до 16.04.2026"
-      }}
+      {{ course.dateLabel }}
     </p>
   </div>
 
   <div class="course__action">
-    @if (!isStarted()) {
+    @if (isLock()) {
     <i appIcon icon="lock" appSquare="10"></i>
     } @else {
     <p class="text-body-10 course__action--started">
-      {{ isStarted() ? "начать" : "продолжить обучение" }}
+      {{ course.progressStatus === "not_started" ? "начать" : "продолжить обучение" }}
     </p>
-    <i appIcon icon="triangle" appSquare="10"></i>
+    <i appIcon icon="triangle" appSquare="10" class="course__action-icon"></i>
     }
   </div>
 </div>

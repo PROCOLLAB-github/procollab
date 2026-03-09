@@ -12,8 +12,6 @@
   border-radius: var(--rounded-lg);
 
   &__cover {
-    padding: 35px 24px;
-    background: linear-gradient(var(--accent), var(--lime));
     border-radius: var(--rounded-lg);
 
     app-button {
@@ -32,11 +30,22 @@
       ::ng-deep {
         .avatar {
           img {
+            position: absolute;
+            top: 35px;
+            left: 24px;
             box-shadow: 0 0 8px rgba($color: #333, $alpha: 30%);
           }
         }
       }
     }
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    max-width: 333px;
+    max-height: 137px;
+    border-radius: var(--rounded-lg);
   }
 
   &__info {
@@ -51,11 +60,15 @@
   }
 
   &__action {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
     position: absolute;
     right: 14px;
     bottom: 16px;
 
-    &--started {
+    &--started, &-icon {
       color: var(--green) !important;
     }
   }

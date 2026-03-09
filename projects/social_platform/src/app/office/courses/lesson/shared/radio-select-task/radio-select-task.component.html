@@ -1,0 +1,45 @@
+<!-- @format -->
+
+<div class="radio" [class.radio--hasContent]="!!data.videoUrl || !!data.imageUrl">
+  <div class="radio__body" [class.radio__body--hasContent]="!!data.imageUrl || !!data.videoUrl">
+    @if (data.videoUrl) {
+    <iframe
+      [src]="getSafeVideoUrl()"
+      width="283px"
+      height="183px"
+      frameborder="0"
+      allowfullscreen
+      allowtransparency="true"
+    ></iframe>
+    } @if (data.imageUrl) {
+    <img class="radio__img" [src]="data.imageUrl" />
+    }
+
+    <p class="text-body-12-bold radio__img-text">{{ data.title | truncate: 60 }}</p>
+    @if (hint.length) {
+    <div class="radio__hint" [innerHTML]="hint"></div>
+    }
+  </div>
+
+  <div class="radio__content">
+    @if (!data.imageUrl) {
+    <p class="radio__answer text-body-12">задание {{ data.id }}</p>
+    }
+    <ul class="radio__list">
+      <p class="radio__title text-body-12">{{ data.bodyText | truncate: 110 }}</p>
+      @for (op of data.options; track op.id) {
+      <li
+        class="radio__item"
+        [class.radio__item--success]="success && result().answerId === op.id"
+        [class.radio__item--error]="error && result().answerId === op.id"
+        (click)="onSelect(op.id)"
+      >
+        <input type="radio" [id]="op.id" name="radio-group" />
+        <label class="text-body-12" [for]="op.id">
+          {{ op.text }}
+        </label>
+      </li>
+      }
+    </ul>
+  </div>
+</div>

@@ -6,7 +6,7 @@ import { AvatarComponent } from "@uilib";
 import { PluralizePipe } from "@corelib";
 import { IconComponent } from "@ui/components";
 import { CircleProgressBarComponent } from "../circle-progress-bar/circle-progress-bar.component";
-import { CourseModule } from "@office/models/courses.model";
+import { CourseDetail, CourseModule } from "@office/models/courses.model";
 import { RouterLink } from "@angular/router";
 
 /**
@@ -27,14 +27,7 @@ import { RouterLink } from "@angular/router";
 @Component({
   selector: "app-course-module-card",
   standalone: true,
-  imports: [
-    CommonModule,
-    AvatarComponent,
-    PluralizePipe,
-    CircleProgressBarComponent,
-    IconComponent,
-    RouterLink,
-  ],
+  imports: [CommonModule, CircleProgressBarComponent, IconComponent, RouterLink, PluralizePipe],
   templateUrl: "./course-module-card.component.html",
   styleUrl: "./course-module-card.component.scss",
 })
@@ -45,20 +38,9 @@ export class CourseModuleCardComponent {
   isExpanded = false;
 
   toggleExpand(event: Event): void {
-    event.stopPropagation();
-    this.isExpanded = !this.isExpanded;
-  }
-
-  getTopics(): any[] {
-    const mockTopics: any[] = [
-      { name: "Основы программирования", levels: 5 },
-      { name: "Структуры данных", levels: 5 },
-      { name: "Алгоритмы и оптимизация", levels: 5 },
-      { name: "Работа с базами данных", levels: 5 },
-      { name: "Веб-разработка", levels: 5 },
-      { name: "Тестирование и отладка", levels: 5 },
-    ];
-
-    return mockTopics;
+    if (this.courseModule.lessons.length) {
+      event.stopPropagation();
+      this.isExpanded = !this.isExpanded;
+    }
   }
 }

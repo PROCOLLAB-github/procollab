@@ -1,0 +1,101 @@
+<!-- @format -->
+
+@if (lessonInfo()) {
+<div class="task">
+  <div class="task__wrapper">
+    <div class="task__tasks">
+      <p class="task__name text-bold-body-14">модуль {{ lessonInfo()?.moduleId }}</p>
+    </div>
+
+    <div class="task__progress">
+      @for (task of tasks(); track task.id) {
+      <div
+        class="progress__task"
+        [ngClass]="{
+          'progress__task--done': isDone(task),
+          'progress__task--current': isCurrent(task.id)
+        }"
+        (click)="selectTask(task)"
+      >
+        <p class="text-body-12">{{ task.order }}</p>
+      </div>
+      }
+    </div>
+  </div>
+
+  @if (loading()) {
+  <div class="loading">
+    <app-loader size="125px" color="accent"></app-loader>
+  </div>
+  } @else {
+  <div class="task__main" [class.task__complete]="isComplete()">
+    @if (currentTask(); as task) {
+    <div class="task__content">
+      <!-- informationalType === "text" или "video_text" и answerType === null → info-task -->
+      @if (task.answerType === null && (task.informationalType === 'text' || task.informationalType
+      === 'video_text')) {
+      <app-info-task [data]="$any(task)"></app-info-task>
+      }
+
+      <!-- answerType === "text" или "text_and_files" → write-task -->
+      @if (task.answerType === 'text' || task.answerType === 'text_and_files') {
+      <app-write-task
+        [data]="task"
+        [type]="task.answerType === 'text_and_files' ? 'text-file' : 'text'"
+        (update)="onAnswerChange($event)"
+      ></app-write-task>
+      }
+
+      <!-- answerType === "multiple_choice" → exclude-task -->
+      @if (task.answerType === 'multiple_choice') {
+      <app-exclude-task
+        [data]="task"
+        [success]="success()"
+        [error]="hasError()"
+        (update)="onAnswerChange($event)"
+      ></app-exclude-task>
+      }
+
+      <!-- answerType === "single_choice" → radio-select-task -->
+      @if (task.answerType === 'single_choice') {
+      <app-radio-select-task
+        [data]="$any(task)"
+        [success]="success()"
+        [error]="hasError()"
+        (update)="onAnswerChange([$event.answerId])"
+      ></app-radio-select-task>
+      }
+
+      <!-- answerType === "files" → file-task -->
+      @if (task.answerType === 'files') {
+      <app-file-task
+        [data]="task"
+        [success]="success()"
+        [error]="hasError()"
+        (update)="onAnswerChange($event)"
+      ></app-file-task>
+      }
+
+      <div class="task__actions">
+        <div></div>
+
+        <app-button
+          [loader]="loader()"
+          [disabled]="isSubmitDisabled()"
+          [style.opacity]="isSubmitDisabled() ? 0.5 : 1"
+          size="big"
+          customTypographyClass="text-body-12"
+          class="action__button"
+          (click)="onSubmitAnswer()"
+        >
+          следующее задание
+        </app-button>
+      </div>
+    </div>
+    }
+
+    <router-outlet></router-outlet>
+  </div>
+  }
+</div>
+}

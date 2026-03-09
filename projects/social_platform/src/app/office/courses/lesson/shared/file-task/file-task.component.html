@@ -1,0 +1,65 @@
+<!-- @format -->
+
+<div class="file-task" [class.file-task--hasVideo]="!!data.videoUrl">
+  <div class="file-task__header">
+    <p class="text-body-12 file-task__task">задание {{ data.order }}</p>
+    @if (!data.videoUrl && !data.imageUrl) {
+    <p class="file-task__text text-body-12-bold">{{ data.title | truncate: 80 }}</p>
+    }
+    <div
+      class="file-task__description text-body-12"
+      [class.file-task__description--hasVideo]="!!data.videoUrl"
+    >
+      @if (data.videoUrl) {
+      <iframe
+        [src]="getSafeVideoUrl()"
+        width="397px"
+        height="223px"
+        frameborder="0"
+        allowfullscreen
+        allowtransparency="true"
+      ></iframe>
+      } @if (data.imageUrl) {
+      <img class="file-task__image" [src]="data.imageUrl" />
+      }
+      <div class="file-task__image-text">
+        <p class="file-task__text text-body-12-bold">{{ data.title | truncate: 80 }}</p>
+        <div [innerHTML]="data.bodyText | truncateHtml: 700"></div>
+      </div>
+    </div>
+
+    @if (hint.length) {
+    <div class="file-task__hint" [innerHTML]="hint"></div>
+    }
+  </div>
+
+  <div
+    class="file-task__content"
+    [class.file-task__content--success]="success"
+    [class.file-task__content--error]="error"
+  >
+    <p class="file-task__label text-body-12">ответ</p>
+    <p class="file-task__title text-body-12-bold">{{ data.title | truncate: 80 }}</p>
+
+    <div class="file-task__files">
+      <app-upload-file [resetAfterUpload]="true" (uploaded)="onFileUploaded($event)">
+        <div emptyPlaceholder class="file-task__upload">
+          <i appIcon icon="file" appSquare="10"></i>
+          <p class="text-body-12">загрузите файл до 100 MB</p>
+        </div>
+      </app-upload-file>
+
+      @for (file of uploadedFiles(); track $index) {
+      <app-file-item
+        mode="preview"
+        [type]="file.mimeType"
+        [name]="file.name"
+        [size]="file.size"
+        [link]="file.link"
+        [canDelete]="true"
+        (deleted)="onFileRemoved($index)"
+      ></app-file-item>
+      }
+    </div>
+  </div>
+</div>

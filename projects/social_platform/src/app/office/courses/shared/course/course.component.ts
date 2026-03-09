@@ -1,11 +1,12 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, Input, signal } from "@angular/core";
-import { Router, RouterModule } from "@angular/router";
+import { Component, Input, OnInit, signal } from "@angular/core";
+import { RouterModule } from "@angular/router";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 import { IconComponent, ButtonComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { CourseCard } from "@office/models/courses.model";
 
 /**
  * Компонент отображения карточки траектории
@@ -30,16 +31,39 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
   templateUrl: "./course.component.html",
   styleUrl: "./course.component.scss",
 })
-export class CourseComponent {
-  @Input() course!: any;
+export class CourseComponent implements OnInit {
+  @Input() course!: CourseCard;
 
-  router = inject(Router);
+  ngOnInit(): void {
+    this.accessType();
+    this.actions();
+    console.log(this.course);
+  }
 
-  protected readonly isStarted = signal<boolean>(false);
-  protected readonly isDates = signal<boolean>(false);
-  protected readonly isDate = signal<boolean>(false);
-  protected readonly isEnded = signal<boolean>(false);
+  protected readonly isLock = signal<boolean>(false);
 
   protected readonly isMember = signal<boolean>(false);
   protected readonly isSubs = signal<boolean>(false);
+
+  private accessType() {
+    switch (this.course.accessType) {
+      case "program_members": {
+        this.isMember.set(true);
+        break;
+      }
+
+      case "subscription_stub":
+        this.isSubs.set(true);
+        break;
+    }
+  }
+
+  private actions() {
+    switch (this.course.actionState) {
+      case "lock": {
+        this.isLock.set(true);
+        break;
+      }
+    }
+  }
 }

@@ -32,7 +32,7 @@ export class CircleProgressBarComponent {
 
   @Input() appereance?: "open" | "closed";
 
-  @Input() haveDate?: boolean;
+  @Input() haveDate?: boolean = false;
 
   /**
    * Радиус круга прогресс-бара в пикселях

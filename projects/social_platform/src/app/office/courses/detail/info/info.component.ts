@@ -1,27 +1,28 @@
 /** @format */
 
 import {
-  type AfterViewInit,
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
-  type ElementRef,
+  DestroyRef,
+  ElementRef,
   inject,
-  type OnInit,
+  OnInit,
   signal,
   ViewChild,
 } from "@angular/core";
-import { ActivatedRoute, Router, RouterModule } from "@angular/router";
+import { ActivatedRoute, RouterModule } from "@angular/router";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { IconComponent } from "@uilib";
 import { expandElement } from "@utils/expand-element";
-import { map, type Observable, type Subscription } from "rxjs";
+import { map } from "rxjs";
 import { CommonModule } from "@angular/common";
-import { TrajectoriesService } from "../../trajectories.service";
-import { BreakpointObserver } from "@angular/cdk/layout";
 import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ButtonComponent } from "@ui/components";
 import { CourseModuleCardComponent } from "@office/courses/shared/course-module-card/course-module-card.component";
+import { CourseDetail, CourseStructure } from "@office/models/courses.model";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент детальной информации о траектории
@@ -51,45 +52,39 @@ import { CourseModuleCardComponent } from "@office/courses/shared/course-module-
   styleUrl: "./info.component.scss",
 })
 export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-
-  cdRef = inject(ChangeDetectorRef);
-
-  trajectoryService = inject(TrajectoriesService);
-  breakpointObserver = inject(BreakpointObserver);
-
-  subscriptions$: Subscription[] = [];
-
-  trajectory!: any;
-  userTrajectory = signal<any | null>(null);
-
-  isCompleteModule = signal<boolean>(false);
-
   @ViewChild("descEl") descEl?: ElementRef;
 
-  desktopMode$: Observable<boolean> = this.breakpointObserver
-    .observe("(min-width: 920px)")
-    .pipe(map(result => result.matches));
+  private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly cdRef = inject(ChangeDetectorRef);
+
+  protected readonly courseStructure = signal<CourseStructure | undefined>(undefined);
+  protected readonly courseDetail = signal<CourseDetail | undefined>(undefined);
+  protected readonly isCompleteModule = signal<boolean>(false);
 
   /**
    * Инициализация компонента
    * Загружает данные траектории, пользовательскую информацию и настраивает навыки
    */
   ngOnInit(): void {
-    this.desktopMode$.subscribe(_ => {});
+    this.route.parent?.data
+      .pipe(
+        map(r => r["data"]),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(([courseDetail, courseStructure]: [CourseDetail, CourseStructure]) => {
+        this.courseStructure.set(courseStructure);
+        this.courseDetail.set(courseDetail);
 
-    this.route.parent?.data.pipe(map(r => r["data"])).subscribe(r => {
-      this.trajectory = r[0];
-      this.userTrajectory.set({ ...r[1], individualSkills: r[2] });
-      this.isCompleteModule.set(
-        this.userTrajectory()!.completedSkills.some((skill: any) => skill.isDone)
-      );
-    });
+        if (courseStructure.percent === 100) {
+          this.isCompleteModule.set(true);
+        }
+      });
   }
 
-  descriptionExpandable?: boolean;
-  readFullDescription!: boolean;
+  protected descriptionExpandable?: boolean;
+  protected readFullDescription!: boolean;
 
   /**
    * Проверка возможности расширения описания после инициализации представления
@@ -102,13 +97,6 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Очистка ресурсов при уничтожении компонента
-   */
-  ngOnDestroy(): void {
-    this.subscriptions$.forEach($ => $.unsubscribe());
-  }
-
-  /**
    * Переключение развернутого/свернутого состояния описания
    * @param elem - HTML элемент описания
    * @param expandedClass - CSS класс для развернутого состояния
@@ -117,14 +105,5 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
   onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
     expandElement(elem, expandedClass, isExpanded);
     this.readFullDescription = !isExpanded;
-  }
-
-  /**
-   * Обработчик клика по навыку
-   * Устанавливает ID навыка в сервисе и переходит к странице навыка
-   * @param skillId - ID выбранного навыка
-   */
-  onSkillClick(skillId: number) {
-    this.router.navigate(["skills", skillId]);
   }
 }

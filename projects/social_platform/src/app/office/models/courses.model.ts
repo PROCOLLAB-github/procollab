@@ -1,4 +1,6 @@
 /**
+ * Как в базе
+ *
  * id — ID курса (создается автоматически).
  *   title — название курса (до 45 символов).
  *   description — описание курса (до 600 символов, можно оставить пустым).
@@ -18,27 +20,42 @@
  * @format
  */
 
-import { Program } from "@office/program/models/program.model";
+export interface CourseCard {
+  id: number;
+  title: string;
+  accessType: "all_users" | "program_members" | "subscription_stub";
+  status: "draft" | "published" | "ended";
+  avatarUrl: string;
+  cardCoverUrl: string;
+  startDate: Date;
+  endDate: Date;
+  dateLabel: string;
+  isAvailable: boolean;
+  progressStatus: "not_started" | "in_progress" | "completed" | "blocked";
+  percent: number;
+  actionState: "start" | "continue" | "lock";
+}
 
-export interface Course {
+export interface CourseDetail {
   id: number;
   title: string;
   description: string;
-  accessType: "all" | "participating" | "subs";
-  partnerProgram: Program;
-  avatarFile: string;
-  cardCoverFile: string;
-  headerCoveFile: string;
+  accessType: "all_users" | "program_members" | "subscription_stub";
+  status: "draft" | "published" | "ended";
+  avatarUrl: string;
+  headerCoverUrl: string;
   startDate: Date;
   endDate: Date;
-  status: "draft" | "published" | "ended";
-  isCompleted: boolean;
-  completedAt: Date;
-  datetimeCreated: Date;
-  datetimeUpdated: Date;
+  dateLabel: string;
+  isAvailable: boolean;
+  progressStatus: "not_started" | "in_progress" | "completed" | "blocked";
+  percent: number;
+  analyticsStub: any;
 }
 
 /**
+ * Как в базе
+ *
   id — уникальный идентификатор модуля.
   course — курс, к которому относится модуль (обязательная связь).
   title — название модуля, максимум 40 символов.
@@ -51,19 +68,41 @@ export interface Course {
  *
  */
 
+export interface CourseLessons {
+  id: number;
+  moduleId: number;
+  title: string;
+  order: number;
+  status: string;
+  isAvailable: boolean;
+  progressStatus: "not_started" | "in_progress" | "completed" | "blocked";
+  percent: number;
+  currentTaskId: number;
+}
+
 export interface CourseModule {
   id: number;
-  course: Course;
+  courseId: number;
   title: string;
-  avatarFile: string;
-  startDate: Date;
-  status: "draft" | "published";
   order: number;
-  datetimeCreated: Date;
-  datetimeUpdated: Date;
+  startDate: Date;
+  status: string;
+  isAvailable: boolean;
+  progressStatus: "not_started" | "in_progress" | "completed" | "blocked";
+  percent: number;
+  lessons: CourseLessons[];
+}
+
+export interface CourseStructure {
+  courseId: number;
+  progressStatus: "not_started" | "in_progress" | "completed" | "blocked";
+  percent: number;
+  modules: CourseModule[];
 }
 
 /**
+ * Как в базе
+ *
   id — уникальный идентификатор урока.
   module — модуль, к которому относится урок (обязательная связь).
   title — название урока, максимум 45 символов.
@@ -73,12 +112,47 @@ export interface CourseModule {
   datetime_updated — дата/время последнего обновления.
  */
 
+export interface Option {
+  id: number;
+  order: number;
+  text: string;
+}
+
+export interface Task {
+  id: number;
+  order: number;
+  title: string;
+  status: string;
+  taskKind: "question" | "informational";
+  checkType: string | null;
+  informationalType: string | null;
+  questionType: string | null;
+  answerType: string | null;
+  bodyText: string;
+  videoUrl: string | null;
+  imageUrl: string | null;
+  attachmentUrl: string | null;
+  isAvailable: boolean;
+  isCompleted: boolean;
+  options: Option[];
+}
+
 export interface CourseLesson {
   id: number;
-  module: CourseModule;
+  moduleId: number;
+  courseId: number;
   title: string;
-  status: "draft" | "published";
-  order: number;
-  datetimeCreated: Date;
-  datetimeUpdated: Date;
+  progressStatus: "not_started" | "in_progress" | "completed" | "blocked";
+  percent: number;
+  currentTaskId: number;
+  tasks: Task[];
+}
+
+export interface TaskAnswerResponse {
+  answerId: number;
+  status: "submitted" | "pending_review";
+  isCorrect: boolean;
+  canContinue: boolean;
+  nextTaskId: number | null;
+  submittedAt: Date;
 }
