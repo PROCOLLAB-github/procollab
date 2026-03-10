@@ -1,7 +1,7 @@
 /** @format */
 
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { ProfileNewsService } from "../../../../../api/profile/profile-news.service";
+import { ProfileNewsRepository as ProfileNewsService } from "projects/social_platform/src/app/infrastructure/repository/profile/profile-news.repository";
 import { inject } from "@angular/core";
 
 /**

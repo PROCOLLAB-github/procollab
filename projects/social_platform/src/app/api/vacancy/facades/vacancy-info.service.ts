@@ -20,7 +20,7 @@ import {
 import { VacancyResponse } from "../../../domain/vacancy/vacancy-response.model";
 import { Vacancy } from "../../../domain/vacancy/vacancy.model";
 import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { VacancyService } from "../vacancy.service";
+import { VacancyRepository as VacancyService } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
 import { VacancyUIInfoService } from "./ui/vacancy-ui-info.service";
 
 @Injectable()

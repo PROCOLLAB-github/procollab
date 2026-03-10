@@ -23,9 +23,8 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { ValidationService } from "@corelib";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { EditStep, ProjectStepService } from "../../project-step.service";
-import { ProjectService } from "../../project.service";
-import { IndustryService } from "../../../industry/industry.service";
-import { SkillsService } from "../../../skills/skills.service";
+import { toObservable } from "@angular/core/rxjs-interop";
+import { SkillsRepository as SkillsService } from "projects/social_platform/src/app/infrastructure/repository/skills/skills.repository";
 import { ProjectFormService } from "./project-form.service";
 import { ProjectGoalService } from "./project-goals.service";
 import { ProjectPartnerService } from "./project-partner.service";
@@ -39,6 +38,9 @@ import { ProjectTeamUIService } from "./ui/project-team-ui.service";
 import { ProjectContactsService } from "./project-contacts.service";
 import { ProjectVacancyService } from "./project-vacancy.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
+import { ProjectProgramRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-program.repository";
+import { IndustryRepository } from "projects/social_platform/src/app/infrastructure/repository/industry/industry.repository";
 
 @Injectable()
 export class ProjectsEditInfoService {
@@ -47,13 +49,14 @@ export class ProjectsEditInfoService {
   private readonly skillsInfoService = inject(SkillsInfoService);
 
   private readonly projectStepService = inject(ProjectStepService);
-  private readonly projectService = inject(ProjectService);
+  private readonly projectRepository = inject(ProjectRepository);
+  private readonly projectProgramRepository = inject(ProjectProgramRepository);
 
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
   private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
   private readonly projectsEditUIInfoService = inject(ProjectsEditUIInfoService);
 
-  private readonly industryService = inject(IndustryService);
+  private readonly industryRepository = inject(IndustryRepository);
   private readonly skillsService = inject(SkillsService);
   private readonly navService = inject(NavService);
   private readonly validationService = inject(ValidationService);
@@ -106,7 +109,7 @@ export class ProjectsEditInfoService {
   readonly resources = computed(() => this.projectResourceService.resources);
 
   // Observables для данных
-  readonly industries$ = this.industryService.industries.pipe(
+  readonly industries$ = toObservable(this.industryRepository.industries).pipe(
     map(industries =>
       industries.map(industry => ({ value: industry.id, id: industry.id, label: industry.name }))
     ),
@@ -163,7 +166,7 @@ export class ProjectsEditInfoService {
    * Перенаправление её на редактирование "нового" проекта
    */
   assignProjectToProgram(): void {
-    this.projectService
+    this.projectProgramRepository
       .assignProjectToProgram(
         Number(this.route.snapshot.paramMap.get("projectId")),
         this.projectForm.get("partnerProgramId")?.value
@@ -209,8 +212,8 @@ export class ProjectsEditInfoService {
   deleteProject(): void {
     const programId = this.projectForm.get("partnerProgramId")?.value;
 
-    this.projectService
-      .remove(Number(this.route.snapshot.paramMap.get("projectId")))
+    this.projectRepository
+      .deleteOne(Number(this.route.snapshot.paramMap.get("projectId")))
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
@@ -310,8 +313,8 @@ export class ProjectsEditInfoService {
     }
 
     this.submitMode.set(null);
-    this.projectService
-      .updateProject(projectId, payload)
+    this.projectRepository
+      .update(projectId, payload)
       .pipe(
         switchMap(() => this.saveOrEditGoals(projectId)),
         switchMap(() => this.savePartners(projectId)),

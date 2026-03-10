@@ -6,8 +6,8 @@ import { ProjectInfoComponent } from "./info.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { of } from "rxjs";
-import { AuthService } from "@auth/services";
-import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { ProjectNewsRepository as ProjectNewsService } from "projects/social_platform/src/app/infrastructure/repository/project/project-news.repository";
 import { ReactiveFormsModule } from "@angular/forms";
 
 describe("ProjectInfoComponent", () => {
@@ -28,7 +28,7 @@ describe("ProjectInfoComponent", () => {
         ProjectInfoComponent,
       ],
       providers: [
-        { provide: AuthService, useValue: authSpy },
+        { provide: AuthRepository, useValue: authSpy },
         { provide: ProjectNewsService, useValue: projectNewsServiceSpy },
       ],
     }).compileComponents();

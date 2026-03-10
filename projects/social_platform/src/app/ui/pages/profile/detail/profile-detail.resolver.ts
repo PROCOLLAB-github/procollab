@@ -4,8 +4,8 @@ import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { forkJoin, map, tap } from "rxjs";
-import { AuthService } from "../../../../api/auth";
 import { calculateProfileProgress } from "@utils/calculateProgress";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 /**
  * Резолвер для загрузки данных профиля пользователя
@@ -26,10 +26,10 @@ import { calculateProfileProgress } from "@utils/calculateProgress";
  * - forkJoin для параллельного выполнения запросов
  */
 export const ProfileDetailResolver: ResolveFn<{ user: User }> = (route: ActivatedRouteSnapshot) => {
-  const authService = inject(AuthService);
+  const authRepository = inject(AuthRepository);
 
   return forkJoin({
-    user: authService.getUser(Number(route.paramMap.get("id"))).pipe(
+    user: authRepository.fetchUser(Number(route.paramMap.get("id"))).pipe(
       map(user => {
         const result = Object.assign(new User(), user);
         result.progress = calculateProfileProgress(result);

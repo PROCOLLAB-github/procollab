@@ -2,13 +2,13 @@
 
 import { inject } from "@angular/core";
 import { forkJoin, switchMap } from "rxjs";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { ResolveFn } from "@angular/router";
-import { SubscriptionService } from "projects/social_platform/src/app/api/subsriptions/subscription.service";
+import { SubscriptionHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/subscription/subscription-http.adapter";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { Project } from "../../../domain/project/project.model";
-import { AuthService } from "../../../api/auth";
+import { ProjectRepository } from "../../../infrastructure/repository/project/project.repository";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 
 /**
  * Resolver для загрузки данных о количестве проектов
@@ -38,15 +38,15 @@ export interface DashboardProjectsData {
 }
 
 export const ProjectsResolver: ResolveFn<DashboardProjectsData> = () => {
-  const projectService = inject(ProjectService);
-  const authService = inject(AuthService);
-  const subscriptionService = inject(SubscriptionService);
+  const projectRepository = inject(ProjectRepository);
+  const authRepository = inject(AuthRepository);
+  const subscriptionService = inject(SubscriptionHttpAdapter);
 
-  return authService.profile.pipe(
+  return authRepository.profile.pipe(
     switchMap(user =>
       forkJoin({
-        all: projectService.getAll(new HttpParams({ fromObject: { limit: 16 } })),
-        my: projectService.getMy(new HttpParams({ fromObject: { limit: 16 } })),
+        all: projectRepository.getAll(new HttpParams({ fromObject: { limit: 16 } })),
+        my: projectRepository.getMy(new HttpParams({ fromObject: { limit: 16 } })),
         subs: subscriptionService.getSubscriptions(user.id),
       })
     )

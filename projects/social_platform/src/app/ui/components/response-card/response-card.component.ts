@@ -13,8 +13,8 @@ import {
 import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { IconComponent } from "@uilib";
-import { AuthService } from "../../../api/auth";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 
 /**
  * Компонент карточки отклика на вакансию
@@ -46,7 +46,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResponseCardComponent implements OnInit {
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly destroyRef = inject(DestroyRef);
 
   @Input({ required: true }) response!: VacancyResponse;
@@ -56,8 +56,8 @@ export class ResponseCardComponent implements OnInit {
   profileId!: number;
 
   ngOnInit(): void {
-    this.authService
-      .getProfile()
+    this.authRepository
+      .fetchProfile()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: profile => {

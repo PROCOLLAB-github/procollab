@@ -6,7 +6,7 @@ import { ProjectChatComponent } from "./chat.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MessageInputComponent } from "@ui/components/message-input/message-input.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { AuthService } from "@auth/services";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
 
@@ -20,7 +20,7 @@ describe("ChatComponent", () => {
     };
 
     await TestBed.configureTestingModule({
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
       imports: [
         ReactiveFormsModule,
         HttpClientTestingModule,

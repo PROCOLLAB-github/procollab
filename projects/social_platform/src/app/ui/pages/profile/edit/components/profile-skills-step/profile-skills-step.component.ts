@@ -38,7 +38,7 @@ import { IconComponent } from "@uilib";
   standalone: true,
 })
 export class ProfileSkillsStepComponent {
-  @Input() isLanguageDirty: any;
+  @Input() isLanguageDirty!: boolean;
 
   @Output() openSkillsGroupsModal = new EventEmitter<void>();
 

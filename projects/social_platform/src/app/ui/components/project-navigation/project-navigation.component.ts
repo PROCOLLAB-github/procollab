@@ -11,6 +11,7 @@ import {
 import { IconComponent } from "@uilib";
 import { CommonModule } from "@angular/common";
 import { EditStep, ProjectStepService } from "../../../api/project/project-step.service";
+import { Navigation } from "../../../domain/other/navigation.model";
 
 @Component({
   selector: "app-project-navigation",
@@ -21,7 +22,7 @@ import { EditStep, ProjectStepService } from "../../../api/project/project-step.
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectNavigationComponent {
-  @Input() navItems!: any[];
+  @Input() navItems!: Navigation[];
   @Output() stepChange = new EventEmitter<EditStep>();
 
   private readonly projectStepService = inject(ProjectStepService);

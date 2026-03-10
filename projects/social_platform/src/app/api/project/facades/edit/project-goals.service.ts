@@ -4,10 +4,11 @@ import { inject, Injectable } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ProjectFormService } from "./project-form.service";
 import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
-import { Goal, GoalDto } from "../../../../domain/project/goals.model";
+import { Goal } from "../../../../domain/project/goals.model";
 import { ProjectGoalsUIService } from "./ui/project-goals-ui.service";
 import { LoggerService } from "@corelib";
+import { ProjectGoalsRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-goals.repository";
+import { GoalFormData } from "projects/social_platform/src/app/infrastructure/adapters/project/dto/project-goal.dto";
 
 /**
  * Сервис для управления целями проекта
@@ -23,7 +24,7 @@ export class ProjectGoalService {
   private readonly fb = inject(FormBuilder);
   private goalForm!: FormGroup;
   private readonly projectFormService = inject(ProjectFormService);
-  private readonly projectService = inject(ProjectService);
+  private readonly projectGoalsRepository = inject(ProjectGoalsRepository);
   private readonly projectGoalsUIService = inject(ProjectGoalsUIService);
   private readonly loggerService = inject(LoggerService);
 
@@ -188,7 +189,10 @@ export class ProjectGoalService {
     this.goalItems.update(items => items.filter((_, i) => i !== index));
     goalFormArray.removeAt(index);
 
-    this.projectService.deleteGoals(projectId, goalId).pipe(takeUntil(this.destroy$)).subscribe();
+    this.projectGoalsRepository
+      .deleteGoal(projectId, goalId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe();
   }
 
   /**
@@ -243,7 +247,7 @@ export class ProjectGoalService {
    * Возвращает Observable массива результатов (в порядке отправки).
    */
   public saveGoals(projectId: number, newGoals: Goal[]) {
-    return this.projectService.addGoals(projectId, newGoals).pipe(
+    return this.projectGoalsRepository.createGoal(projectId, newGoals).pipe(
       tap(results => {
         results.forEach((createdGoal: any, idx: number) => {
           const formGroup = this.goals.at(idx);
@@ -261,7 +265,7 @@ export class ProjectGoalService {
 
   public editGoals(projectId: number, existingGoals: Goal[]) {
     const requests = existingGoals.map((item, idx) => {
-      const payload: GoalDto = {
+      const payload: GoalFormData = {
         id: item.id,
         title: item.title,
         completionDate: item.completionDate,
@@ -269,7 +273,7 @@ export class ProjectGoalService {
         isDone: item.isDone,
       };
 
-      return this.projectService.editGoal(projectId, item.id, payload).pipe(
+      return this.projectGoalsRepository.editGoal(projectId, item.id, payload).pipe(
         map(res => ({ res, idx })),
         catchError(err => of({ __error: true, err, original: item, idx }))
       );

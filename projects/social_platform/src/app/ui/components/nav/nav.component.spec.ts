@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { NavComponent } from "./nav.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
-import { AuthService } from "@auth/services";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 import { InviteService } from "projects/social_platform/src/app/api/invite/invite.service";
 
 describe("NavComponent", () => {
@@ -22,7 +22,7 @@ describe("NavComponent", () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, NavComponent],
       providers: [
-        { provide: AuthService, useValue: authSpy },
+        { provide: AuthRepository, useValue: authSpy },
         { provide: InviteService, useValue: inviteSpy },
       ],
     }).compileComponents();

@@ -2,7 +2,7 @@
 
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
-import { SpecializationsService } from "projects/social_platform/src/app/api/specializations/specializations.service";
+import { SpecializationsRepository as SpecializationsService } from "projects/social_platform/src/app/infrastructure/repository/specializations/specializations.repository";
 import { SpecializationsGroup } from "projects/social_platform/src/app/domain/specializations/specializations-group";
 
 /**

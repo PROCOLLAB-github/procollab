@@ -4,15 +4,15 @@ import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TokenService, ValidationService } from "@corelib";
 import { Subject, takeUntil } from "rxjs";
-import { AuthService } from "../auth.service";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { LoginRequest } from "../../../domain/auth/http.model";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 
 @Injectable()
 export class AuthLoginService {
   private readonly tokenService = inject(TokenService);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly validationService = inject(ValidationService);
@@ -42,7 +42,7 @@ export class AuthLoginService {
 
     this.loginIsSubmitting.set(true);
 
-    this.authService
+    this.authRepository
       .login(this.loginForm.value as LoginRequest)
       .pipe(takeUntil(this.destroy$))
       .subscribe({

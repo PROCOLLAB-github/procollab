@@ -4,7 +4,7 @@ import { TestBed } from "@angular/core/testing";
 
 import { of } from "rxjs";
 import { OnboardingService } from "./onboarding.service";
-import { AuthService } from "../auth";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 describe("OnboardingService", () => {
   let service: OnboardingService;
@@ -13,7 +13,7 @@ describe("OnboardingService", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     });
     service = TestBed.inject(OnboardingService);
   });

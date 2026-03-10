@@ -3,26 +3,26 @@
 import { Location } from "@angular/common";
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { ProfileDetailUIInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ProgramDetailMainUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
 import { ProjectFormService } from "projects/social_platform/src/app/api/project/project-form.service";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
 import { filter, Subject, takeUntil } from "rxjs";
 import { DetailProfileInfoService } from "./profile/detail-profile-info.service";
 import { DetailProjectInfoService } from "./project/detail-project-info.service";
 import { DetailProgramInfoService } from "./program/detail-program-info.service";
+import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 @Injectable()
 export class DetailInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly projectService = inject(ProjectService);
+  private readonly projectRepository = inject(ProjectRepository);
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
   private readonly projectFormService = inject(ProjectFormService);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   private readonly location = inject(Location);
@@ -152,7 +152,7 @@ export class DetailInfoService {
   }
 
   private isInProfileInfo(): void {
-    this.authService.profile
+    this.authRepository.profile
       .pipe(
         filter(profile => !!profile),
         takeUntil(this.destroy$)
@@ -184,7 +184,7 @@ export class DetailInfoService {
       const program = this.programDetailMainUIInfoService.program;
       this.info.set(program());
 
-      this.authService.profile
+      this.authRepository.profile
         .pipe(
           filter(user => !!user),
           takeUntil(this.destroy$)
@@ -196,7 +196,7 @@ export class DetailInfoService {
           },
         });
 
-      this.projectService
+      this.projectRepository
         .getMy()
         .pipe(takeUntil(this.destroy$))
         .subscribe({

@@ -3,7 +3,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ConfirmEmailComponent } from "./confirm-email.component";
-import { AuthService } from "../../../../auth/services";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 import { RouterTestingModule } from "@angular/router/testing";
 
 describe("ConfirmEmailComponent", () => {
@@ -15,7 +15,7 @@ describe("ConfirmEmailComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, ConfirmEmailComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     }).compileComponents();
   });
 

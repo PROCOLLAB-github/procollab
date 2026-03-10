@@ -13,7 +13,6 @@ import {
 import { NewsFormComponent } from "@ui/components/news-form/news-form.component";
 import { ProjectDirectionCard } from "@ui/shared/project-direction-card/project-direction-card.component";
 import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { NewsInfoService } from "projects/social_platform/src/app/api/news/news-info.service";
 import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
 import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
@@ -23,6 +22,7 @@ import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
 import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 @Component({
   selector: "app-projects-mid-side",
@@ -51,7 +51,7 @@ export class ProjectsMidSideComponent {
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
 
-  protected readonly authService = inject(AuthService);
+  protected readonly authRepository = inject(AuthRepository);
   private readonly projectsDetailService = inject(ProjectsDetailService);
   private readonly newsInfoService = inject(NewsInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);

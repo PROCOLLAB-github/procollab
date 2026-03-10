@@ -57,9 +57,9 @@ import {
 import { TagDto } from "../../../../../../../../api/kanban/dto/tag.model.dto";
 import { PerformerDto } from "../../../../../../../../api/kanban/dto/performer.model.dto";
 import { KanbanBoardDetailInfoService } from "../../../../../../../../api/kanban/kanban-board-detail-info.service";
-import { SkillsService } from "projects/social_platform/src/app/api/skills/skills.service";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
+import { SkillsRepository } from "projects/social_platform/src/app/infrastructure/repository/skills/skills.repository";
 
 @Component({
   selector: "app-task-detail",
@@ -99,7 +99,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Ссылка на viewport для автопрокрутки */
   @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
 
-  private readonly skillsService = inject(SkillsService);
+  private readonly skillsRepository = inject(SkillsRepository);
   private readonly kanbanBoardService = inject(KanbanBoardService);
   private readonly kanbanBoardDetailInfoService = inject(KanbanBoardDetailInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
@@ -204,7 +204,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   showLeaderCommentedResultModal = false;
 
   skillsGroupsModalOpen = signal(false);
-  nestedSkills$ = this.skillsService.getSkillsNested();
+  nestedSkills$ = this.skillsRepository.getSkillsNested();
   openGroupIds = new Set<number>();
   openGroupIndex: number | null = null;
 

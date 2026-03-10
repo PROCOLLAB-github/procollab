@@ -2,9 +2,9 @@
 
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
-import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { Program } from "projects/social_platform/src/app/domain/program/program.model";
+import { ProgramRepository } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
 
 /**
  * Резолвер для предзагрузки списка программ
@@ -38,7 +38,7 @@ import { Program } from "projects/social_platform/src/app/domain/program/program
  * Главном маршруте списка программ (path: "all")
  */
 export const ProgramMainResolver: ResolveFn<ApiPagination<Program>> = () => {
-  const programService = inject(ProgramService);
+  const programRepository = inject(ProgramRepository);
 
-  return programService.getAll(0, 20);
+  return programRepository.getAll(0, 20);
 };

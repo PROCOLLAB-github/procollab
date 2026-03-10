@@ -4,7 +4,7 @@ import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { FeedItem } from "../../../domain/feed/feed-item.model";
-import { FeedService } from "../../../api/feed/feed.service";
+import { FeedHttpAdapter } from "../../../infrastructure/adapters/feed/feed-http.adapter";
 
 /**
  * резолвер ленты новостей
@@ -22,11 +22,11 @@ import { FeedService } from "../../../api/feed/feed.service";
  * @returns Observable<ApiPagination<FeedItem>> - пагинированный список элементов ленты
  */
 export const FeedResolver: ResolveFn<ApiPagination<FeedItem>> = route => {
-  const feedService = inject(FeedService);
+  const feedAdapter = inject(FeedHttpAdapter);
 
   // Загружаем первую страницу ленты (offset: 0, limit: 20)
   // По умолчанию включаем вакансии, новости и проекты
-  return feedService.getFeed(
+  return feedAdapter.fetchFeed(
     0,
     20,
     route.queryParams["includes"] ?? ["vacancy", "news", "project"]

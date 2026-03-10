@@ -2,7 +2,7 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot } from "@angular/router";
-import { VacancyService } from "projects/social_platform/src/app/api/vacancy/vacancy.service";
+import { VacancyRepository } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
 
 /**
  * Резолвер для загрузки детальной информации о конкретной вакансии
@@ -20,8 +20,8 @@ import { VacancyService } from "projects/social_platform/src/app/api/vacancy/vac
  * - vacancyId - ID вакансии из URL параметров (например: /vacancies/123)
  */
 export const VacanciesDetailResolver = (route: ActivatedRouteSnapshot) => {
-  const vacancyService = inject(VacancyService);
+  const vacanciesRepository = inject(VacancyRepository);
   const vacancyId = route.params["vacancyId"];
 
-  return vacancyService.getOne(vacancyId);
+  return vacanciesRepository.getOne(vacancyId);
 };

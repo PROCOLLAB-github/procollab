@@ -2,18 +2,18 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { VacanciesDetailComponent } from "./trajectory-detail.component";
+import { TrajectoryDetailComponent } from "./trajectory-detail.component";
 
-describe("VacanciesDetailComponent", () => {
-  let component: VacanciesDetailComponent;
-  let fixture: ComponentFixture<VacanciesDetailComponent>;
+describe("TrajectoryDetailComponent", () => {
+  let component: TrajectoryDetailComponent;
+  let fixture: ComponentFixture<TrajectoryDetailComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VacanciesDetailComponent],
+      imports: [TrajectoryDetailComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(VacanciesDetailComponent);
+    fixture = TestBed.createComponent(TrajectoryDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

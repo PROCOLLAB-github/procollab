@@ -9,21 +9,13 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import {
-  ChatFile,
-  ChatMessage,
-} from "projects/social_platform/src/app/domain/chat/chat-message.model";
-import { filter, map, noop, Observable, tap } from "rxjs";
 import { NavService } from "@ui/services/nav/nav.service";
-import { ActivatedRoute, RouterLink } from "@angular/router";
-import { ChatService } from "projects/social_platform/src/app/api/chat/chat.service";
+import { RouterLink } from "@angular/router";
 import { MessageInputComponent } from "@ui/components/message-input/message-input.component";
 import { ChatWindowComponent } from "@ui/components/chat-window/chat-window.component";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
 import { ChatDirectInfoService } from "projects/social_platform/src/app/api/chat/facedes/chat-direct-info.service";
 import { ChatDirectUIInfoService } from "projects/social_platform/src/app/api/chat/facedes/ui/chat-direct-ui-info.service";

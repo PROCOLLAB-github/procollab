@@ -109,7 +109,7 @@
         }
       </ul>
     </div>
-    } @if (authService.profile | async; as user) {
+    } @if (authRepository.profile | async; as user) {
     <app-profile-info class="nav-bar__profile" [user]="user"></app-profile-info>
     }
   </div>

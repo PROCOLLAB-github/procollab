@@ -2,21 +2,21 @@
 
 import { inject, Injectable } from "@angular/core";
 import { map, Subject, takeUntil } from "rxjs";
-import { IndustryService } from "../../industry/industry.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthService } from "../../auth";
-import { InviteService } from "../../invite/invite.service";
+import { InviteRepository } from "../../../infrastructure/repository/invite/invite.repository";
 import { ChatService } from "../../chat/chat.service";
 import { Invite } from "../../../domain/invite/invite.model";
 import { OfficeUIInfoService } from "./ui/office-ui-info.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { IndustryRepository } from "../../../infrastructure/repository/industry/industry.repository";
 
 @Injectable()
 export class OfficeInfoService {
-  private readonly industryService = inject(IndustryService);
+  private readonly industryRepository = inject(IndustryRepository);
   private readonly route = inject(ActivatedRoute);
-  private readonly authService = inject(AuthService);
-  private readonly inviteService = inject(InviteService);
+  private readonly authRepository = inject(AuthRepository);
+  private readonly inviteService = inject(InviteRepository);
   private readonly router = inject(Router);
   private readonly chatService = inject(ChatService);
   private readonly officeUIInfoService = inject(OfficeUIInfoService);
@@ -27,7 +27,7 @@ export class OfficeInfoService {
   private readonly destroy$ = new Subject<void>();
 
   initializationOffice(): void {
-    this.industryService.getAll().pipe(takeUntil(this.destroy$)).subscribe();
+    this.industryRepository.getAll().pipe(takeUntil(this.destroy$)).subscribe();
 
     this.initializationNavItems();
 
@@ -48,7 +48,7 @@ export class OfficeInfoService {
   }
 
   private initializationNavItems(): void {
-    this.authService.profile.pipe(takeUntil(this.destroy$)).subscribe(profile => {
+    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe(profile => {
       this.officeUIInfoService.applyCreateNavItems(profile.id);
 
       if (!profile?.doesCompleted()) {
@@ -135,7 +135,7 @@ export class OfficeInfoService {
   }
 
   onLogout() {
-    this.authService
+    this.authRepository
       .logout()
       .pipe(takeUntil(this.destroy$))
       .subscribe(() =>

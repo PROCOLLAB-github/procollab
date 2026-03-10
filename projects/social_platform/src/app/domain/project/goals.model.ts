@@ -17,14 +17,6 @@ class ResponsibleInfo {
   avatar!: string | null;
 }
 
-export class GoalDto {
-  id?: number;
-  title!: string;
-  completionDate!: string;
-  responsible!: number;
-  isDone!: boolean;
-}
-
 export class Goal {
   id!: number;
   project!: number;

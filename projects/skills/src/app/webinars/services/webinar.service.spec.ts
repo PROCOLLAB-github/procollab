@@ -2,7 +2,7 @@
 
 import { TestBed } from "@angular/core/testing";
 
-import { WebinarService } from "../../../../webinar.service";
+import { WebinarService } from "./webinar.service";
 
 describe("WebinarService", () => {
   let service: WebinarService;

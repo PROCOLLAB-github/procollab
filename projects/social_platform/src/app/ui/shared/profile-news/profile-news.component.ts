@@ -11,7 +11,6 @@ import {
   signal,
 } from "@angular/core";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { ProfileNewsService } from "../../../api/profile/profile-news.service";
 import { map } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";

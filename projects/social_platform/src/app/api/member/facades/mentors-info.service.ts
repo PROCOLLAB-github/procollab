@@ -14,7 +14,7 @@ import {
   tap,
   throttleTime,
 } from "rxjs";
-import { MemberService } from "../member.service";
+import { MemberHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/member/member-http.adapter";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { User } from "../../../domain/auth/user.model";
 import { MentorsUIInfoService } from "./ui/mentors-ui-info.service";
@@ -23,7 +23,7 @@ import { MentorsUIInfoService } from "./ui/mentors-ui-info.service";
 export class MentorsInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly navService = inject(NavService);
-  private readonly memberService = inject(MemberService);
+  private readonly memberService = inject(MemberHttpAdapter);
   private readonly mentorsUIInfoService = inject(MentorsUIInfoService);
 
   private readonly destroy$ = new Subject<void>();

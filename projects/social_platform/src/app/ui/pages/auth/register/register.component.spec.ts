@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { RegisterComponent } from "./register.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { AuthService } from "../../../../auth/services";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 import { InputComponent } from "@ui/components";
 import { NgxMaskModule } from "ngx-mask";
 import { RouterTestingModule } from "@angular/router/testing";
@@ -14,7 +14,7 @@ describe("RegisterComponent", () => {
   let fixture: ComponentFixture<RegisterComponent>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj("AuthService", ["login", "memTokens", "clearTokens"]);
+    const authSpy = jasmine.createSpyObj("AuthRepository", ["login", "memTokens", "clearTokens"]);
 
     return await TestBed.configureTestingModule({
       imports: [
@@ -25,7 +25,7 @@ describe("RegisterComponent", () => {
         RegisterComponent,
         InputComponent,
       ],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     }).compileComponents();
   });
 

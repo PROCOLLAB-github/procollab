@@ -4,15 +4,15 @@ import { computed, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
 import { debounceTime, distinctUntilChanged, filter, map, Subject, takeUntil } from "rxjs";
-import { ProjectService } from "../project.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { ProjectsUIInfoService } from "./ui/projects-ui-info.service";
+import { ProjectRepository } from "../../../infrastructure/repository/project/project.repository";
 
 @Injectable()
 export class ProjectsInfoService {
   private readonly navService = inject(NavService);
   private readonly route = inject(ActivatedRoute);
-  private readonly projectService = inject(ProjectService);
+  private readonly projectRepository = inject(ProjectRepository);
   private readonly projectsUIInfoService = inject(ProjectsUIInfoService);
   private readonly router = inject(Router);
 
@@ -74,13 +74,13 @@ export class ProjectsInfoService {
     const fromProgram =
       this.route.snapshot.parent?.routeConfig?.path === "programs" ? { fromProgram: true } : null;
 
-    this.projectService
-      .create()
+    this.projectRepository
+      .postOne()
       .pipe(takeUntil(this.destroy$))
       .subscribe(project => {
-        this.projectService.projectsCount.next({
-          ...this.projectService.projectsCount.getValue(),
-          my: this.projectService.projectsCount.getValue().my + 1,
+        this.projectRepository.count$.next({
+          ...this.projectRepository.count$.getValue(),
+          my: this.projectRepository.count$.getValue().my + 1,
         });
 
         this.router

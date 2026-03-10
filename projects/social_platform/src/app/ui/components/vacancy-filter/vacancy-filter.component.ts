@@ -10,17 +10,13 @@ import {
   Input,
   OnInit,
   Output,
-  signal,
 } from "@angular/core";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { RouterLink } from "@angular/router";
 import { ButtonComponent, CheckboxComponent, IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
-import { map, Subscription, tap } from "rxjs";
 import { workFormatFilter } from "projects/core/src/consts/filters/work-format-filter.const";
 import { workScheduleFilter } from "projects/core/src/consts/filters/work-schedule-filter.const";
 import { workExperienceFilter } from "projects/core/src/consts/filters/work-experience-filter.const";
-import { FeedService } from "../../../api/feed/feed.service";
-import { VacancyService } from "../../../api/vacancy/vacancy.service";
 import { VacancyFilterInfoService } from "./service/vacancy-filter-info.service";
 
 /**

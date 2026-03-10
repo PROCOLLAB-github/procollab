@@ -33,7 +33,7 @@ import { IconComponent } from "@uilib";
   standalone: true,
 })
 export class ProfileAchievementsStepComponent {
-  @Input() isAchievementsDirty: any;
+  @Input() isAchievementsDirty!: boolean;
   protected readonly errorMessage = ErrorMessage;
 
   private readonly profileFormService = inject(ProfileFormService);

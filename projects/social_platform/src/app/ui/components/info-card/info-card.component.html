@@ -85,13 +85,13 @@
 <ng-template #regularCardHeader>
   @if (type === 'projects' || type === 'invite') { @if (info.name) {
   <p class="text-body-12 card__name">{{ info.name | truncate: 12 }}</p>
-  } @if (industryService.industries | async; as industries) {
+  }
   <p class="text-body-6 card__industry">
-    @if (industryService.getIndustry(industries, info?.industry!); as industry) {
+    @if (industryRepository.getOne(info?.industry!); as industry) {
     <span>{{ industry?.name }}</span>
     }
   </p>
-  } } @else {
+  } @else {
   <p class="text-body-12 card__name">{{ info?.firstName | truncate: 10 }}</p>
   <p class="text-body-12 card__name">{{ info?.lastName | truncate: 10 }}</p>
   @if (info?.speciality) {

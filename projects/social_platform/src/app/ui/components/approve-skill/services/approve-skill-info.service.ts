@@ -2,17 +2,17 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
 import { ProfileService as ProfileApproveSkillService } from "../../../../api/auth/profile.service";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { map, of, Subject, switchMap, takeUntil } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ApproveSkillUIInfoService } from "./approve-skill-ui-info.service";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 @Injectable()
 export class ApproveskillInfoService {
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly route = inject(ActivatedRoute);
   private readonly profileApproveSkillService = inject(ProfileApproveSkillService);
@@ -23,7 +23,7 @@ export class ApproveskillInfoService {
   private readonly loggedUserId = this.projectsDetailUIInfoService.loggedUserId;
 
   init(): void {
-    this.authService.profile.pipe(takeUntil(this.destroy$)).subscribe({
+    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe({
       next: profile => {
         this.projectsDetailUIInfoService.applySetLoggedUserId("logged", profile.id);
       },
@@ -55,7 +55,7 @@ export class ApproveskillInfoService {
         switchMap(newApprove =>
           newApprove.confirmedBy
             ? of(newApprove)
-            : this.authService.profile.pipe(
+            : this.authRepository.profile.pipe(
                 map(profile => ({
                   ...newApprove,
                   confirmedBy: profile,

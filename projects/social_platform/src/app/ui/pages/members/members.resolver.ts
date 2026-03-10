@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { MemberService } from "projects/social_platform/src/app/api/member/member.service";
+import { MemberHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/member/member-http.adapter";
 import { ResolveFn } from "@angular/router";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
@@ -22,7 +22,7 @@ import { User } from "projects/social_platform/src/app/domain/auth/user.model";
  * @returns Observable<ApiPagination<User>> - Наблюдаемый объект с данными участников
  */
 export const MembersResolver: ResolveFn<ApiPagination<User>> = () => {
-  const memberService = inject(MemberService);
+  const memberService = inject(MemberHttpAdapter);
 
   // Загружаем первые 20 участников (skip: 0, take: 20)
   return memberService.getMembers(0, 20);

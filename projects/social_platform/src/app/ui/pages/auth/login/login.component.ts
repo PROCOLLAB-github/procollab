@@ -1,22 +1,14 @@
 /** @format */
 
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  inject,
-  OnInit,
-  signal,
-} from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
-import { ControlErrorPipe, TokenService, ValidationService } from "projects/core";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { ControlErrorPipe, TokenService } from "projects/core";
+import { RouterLink } from "@angular/router";
 import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
 import { CommonModule } from "@angular/common";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { AuthUIInfoService } from "projects/social_platform/src/app/api/auth/facades/ui/auth-ui-info.service";
 import { AuthLoginService } from "projects/social_platform/src/app/api/auth/facades/auth-login.service";
 import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";

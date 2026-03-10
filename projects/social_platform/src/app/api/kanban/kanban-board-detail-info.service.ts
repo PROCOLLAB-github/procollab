@@ -5,8 +5,8 @@ import { TaskDetail } from "../../domain/kanban/task.model";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { filter, Observable, of, Subject } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { ProjectsDetailUIInfoService } from "../project/facades/detail/ui/projects-detail-ui.service";
+import { AuthRepository } from "../../infrastructure/repository/auth/auth.repository";
 
 @Injectable({
   providedIn: "root",
@@ -57,7 +57,7 @@ export class KanbanBoardDetailInfoService {
 
   readonly currentUser = signal<User | null>(null);
 
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly router = inject(Router);
   readonly route = inject(ActivatedRoute);
@@ -65,7 +65,7 @@ export class KanbanBoardDetailInfoService {
   private deleteTaskSubject = new Subject<number>();
 
   constructor() {
-    this.authService.profile
+    this.authRepository.profile
       .pipe(filter(Boolean))
       .subscribe(profile => this.currentUser.set(profile));
   }

@@ -21,7 +21,7 @@
     }
   </div>
 
-  @if (authService.profile | async; as profile) {
+  @if (authRepository.profile | async; as profile) {
   <div #newsEl class="project__news news">
     @if (project()!.leader === profile.id) {
     <app-news-form class="news__form" (addNews)="onAddNews($event)"></app-news-form>

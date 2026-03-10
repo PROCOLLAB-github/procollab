@@ -2,18 +2,18 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { CompleteComponent } from "./complete.component";
+import { TaskCompleteComponent } from "./complete.component";
 
-describe("CompleteComponent", () => {
-  let component: CompleteComponent;
-  let fixture: ComponentFixture<CompleteComponent>;
+describe("TaskCompleteComponent", () => {
+  let component: TaskCompleteComponent;
+  let fixture: ComponentFixture<TaskCompleteComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CompleteComponent],
+      imports: [TaskCompleteComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CompleteComponent);
+    fixture = TestBed.createComponent(TaskCompleteComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -4,7 +4,7 @@ import { inject } from "@angular/core";
 import { CanActivateFn, Router } from "@angular/router";
 import { catchError, map } from "rxjs";
 import { TokenService } from "@corelib";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 /**
  * Guard для проверки аутентификации пользователя
@@ -22,14 +22,14 @@ import { AuthService } from "projects/social_platform/src/app/api/auth";
  */
 export const AuthRequiredGuard: CanActivateFn = () => {
   const tokenService = inject(TokenService);
-  const authService = inject(AuthService);
+  const authRepository = inject(AuthRepository);
   const router = inject(Router);
 
   if (tokenService.getTokens() === null) {
     return router.createUrlTree(["/auth/login"]);
   }
 
-  return authService.getProfile().pipe(
+  return authRepository.fetchProfile().pipe(
     map(profile => !!profile),
     catchError(() => {
       return router.navigateByUrl("/auth/login");

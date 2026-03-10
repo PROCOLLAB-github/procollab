@@ -15,7 +15,6 @@ import {
   throttleTime,
 } from "rxjs";
 import { NavService } from "@ui/services/nav/nav.service";
-import { ProjectService } from "../../project.service";
 import { ProjectsInfoService } from "../projects-info.service";
 import { ProgramDetailListInfoService } from "../../../program/facades/detail/program-detail-list-info.service";
 import { inviteToProjectMapper } from "@utils/helpers/inviteToProjectMapper";
@@ -23,12 +22,13 @@ import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
 
 @Injectable()
 export class ProjectsListInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly navService = inject(NavService);
-  private readonly projectService = inject(ProjectService);
+  private readonly projectRepository = inject(ProjectRepository);
   private readonly projectsInfoService = inject(ProjectsInfoService);
   private readonly programDetailListInfoService = inject(ProgramDetailListInfoService);
   private readonly logger = inject(LoggerService);
@@ -79,11 +79,11 @@ export class ProjectsListInfoService {
           if (JSON.stringify(reqQuery) !== JSON.stringify(this.previousReqQuery())) {
             try {
               this.previousReqQuery.set(reqQuery);
-              return this.projectService.getAll(new HttpParams({ fromObject: reqQuery }));
+              return this.projectRepository.getAll(new HttpParams({ fromObject: reqQuery }));
             } catch (e) {
               this.logger.error("Error building filter query:", e);
               this.previousReqQuery.set(reqQuery);
-              return this.projectService.getAll();
+              return this.projectRepository.getAll();
             }
           }
 
@@ -198,13 +198,13 @@ export class ProjectsListInfoService {
         ...this.buildFilterQuery(queries),
       };
 
-      return this.projectService.getAll(new HttpParams({ fromObject: queryParams })).pipe(
+      return this.projectRepository.getAll(new HttpParams({ fromObject: queryParams })).pipe(
         map((projects: ApiPagination<Project>) => {
           return projects.results;
         })
       );
     } else {
-      return this.projectService.getMy().pipe(
+      return this.projectRepository.getMy().pipe(
         map((projects: ApiPagination<Project>) => {
           this.projectsCount.set(projects.count);
           return projects.results;

@@ -5,26 +5,10 @@
 
 import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import {
-  concatMap,
-  debounceTime,
-  fromEvent,
-  map,
-  noop,
-  of,
-  Subscription,
-  switchMap,
-  tap,
-  throttleTime,
-} from "rxjs";
-import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ProjectVacancyCardComponent } from "@ui/shared/project-vacancy-card/project-vacancy-card.component";
-import { VacancyService } from "projects/social_platform/src/app/api/vacancy/vacancy.service";
 import { ResponseCardComponent } from "@ui/components/response-card/response-card.component";
 import { VacancyUIInfoService } from "projects/social_platform/src/app/api/vacancy/facades/ui/vacancy-ui-info.service";
 import { VacancyInfoService } from "projects/social_platform/src/app/api/vacancy/facades/vacancy-info.service";

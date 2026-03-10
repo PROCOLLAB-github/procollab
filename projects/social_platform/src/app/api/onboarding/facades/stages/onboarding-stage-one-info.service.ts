@@ -3,7 +3,6 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { Specialization } from "projects/social_platform/src/app/domain/specializations/specialization";
 import { concatMap, map, Observable, Subject, take, takeUntil } from "rxjs";
-import { AuthService } from "../../../auth";
 import { OnboardingService } from "../../onboarding.service";
 import { ValidationService } from "@corelib";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -11,10 +10,11 @@ import { SearchesService } from "../../../searches/searches.service";
 import { OnboardingStageOneUIInfoService } from "./ui/onboarding-stage-one-ui-info.service";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { SpecializationsGroup } from "projects/social_platform/src/app/domain/specializations/specializations-group";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 @Injectable()
 export class OnboardingStageOneInfoService {
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly validationService = inject(ValidationService);
@@ -72,10 +72,10 @@ export class OnboardingStageOneInfoService {
 
     this.stageSubmitting.set(true);
 
-    this.authService
-      .saveProfile(this.stageForm.value)
+    this.authRepository
+      .updateProfile(this.stageForm.value)
       .pipe(
-        concatMap(() => this.authService.setOnboardingStage(2)),
+        concatMap(() => this.authRepository.updateOnboardingStage(2)),
         takeUntil(this.destroy$)
       )
       .subscribe({

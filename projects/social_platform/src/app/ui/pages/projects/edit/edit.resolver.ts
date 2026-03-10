@@ -3,13 +3,16 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { forkJoin } from "rxjs";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
-import { InviteService } from "projects/social_platform/src/app/api/invite/invite.service";
 import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { Goal } from "projects/social_platform/src/app/domain/project/goals.model";
 import { Partner } from "projects/social_platform/src/app/domain/project/partner.model";
 import { Resource } from "projects/social_platform/src/app/domain/project/resource.model";
+import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
+import { ProjectGoalsRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-goals.repository";
+import { ProjectPartnerRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-partner.repository";
+import { ProjectResourceRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-resource.repository";
+import { InviteRepository } from "projects/social_platform/src/app/infrastructure/repository/invite/invite.repository";
 
 /**
  * Resolver для загрузки данных редактирования проекта
@@ -36,16 +39,19 @@ import { Resource } from "projects/social_platform/src/app/domain/project/resour
 export const ProjectEditResolver: ResolveFn<[Project, Goal[], Partner[], Resource[], Invite[]]> = (
   route: ActivatedRouteSnapshot
 ) => {
-  const projectService = inject(ProjectService);
-  const inviteService = inject(InviteService);
+  const projectRepository = inject(ProjectRepository);
+  const projectGoalsRepository = inject(ProjectGoalsRepository);
+  const projectPartnersRepository = inject(ProjectPartnerRepository);
+  const projectResourceRepository = inject(ProjectResourceRepository);
+  const inviteService = inject(InviteRepository);
 
   const projectId = Number(route.paramMap.get("projectId"));
 
   return forkJoin<[Project, Goal[], Partner[], Resource[], Invite[]]>([
-    projectService.getOne(projectId),
-    projectService.getGoals(projectId),
-    projectService.getPartners(projectId),
-    projectService.getResources(projectId),
+    projectRepository.getOne(projectId),
+    projectGoalsRepository.fetchAll(projectId),
+    projectPartnersRepository.fetchAll(projectId),
+    projectResourceRepository.fetchAll(projectId),
     inviteService.getByProject(projectId),
   ]);
 };

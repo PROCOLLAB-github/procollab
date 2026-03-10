@@ -2,10 +2,10 @@
 
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
 import { Partner, PartnerDto } from "../../../../domain/project/partner.model";
 import { LoggerService } from "@corelib";
+import { ProjectPartnerRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-partner.repository";
 
 @Injectable({
   providedIn: "root",
@@ -13,7 +13,7 @@ import { LoggerService } from "@corelib";
 export class ProjectPartnerService {
   private readonly fb = inject(FormBuilder);
   private partnerForm!: FormGroup;
-  private readonly projectService = inject(ProjectService);
+  private readonly projectPartnerRepository = inject(ProjectPartnerRepository);
   private readonly loggerService = inject(LoggerService);
 
   public readonly partnerItems = signal<
@@ -195,7 +195,7 @@ export class ProjectPartnerService {
       return;
     }
 
-    this.projectService
+    this.projectPartnerRepository
       .deletePartner(projectId, partnersId)
       .pipe(takeUntil(this.destroy$))
       .subscribe();
@@ -269,7 +269,7 @@ export class ProjectPartnerService {
           decisionMaker,
         };
 
-        return this.projectService.addPartner(projectId, payload).pipe(
+        return this.projectPartnerRepository.createPartner(projectId, payload).pipe(
           map((res: any) => ({ res, idx })),
           catchError(err => of({ __error: true, err, original: partner, idx }))
         );

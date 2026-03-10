@@ -6,11 +6,11 @@ import { NewsCardComponent } from "./news-card.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
-import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
-import { AuthService } from "@auth/services";
+import { ProjectNewsRepository as ProjectNewsService } from "projects/social_platform/src/app/infrastructure/repository/project/project-news.repository";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { DayjsPipe } from "projects/core";
-import { FeedNews } from "@office/projects/models/project-news.model";
+import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
 
 describe("NewsCardComponent", () => {
   let component: NewsCardComponent;
@@ -32,7 +32,7 @@ describe("NewsCardComponent", () => {
       ],
       providers: [
         { provide: ProjectNewsService, useValue: projectNewsServiceSpy },
-        { provide: AuthService, useValue: authSpy },
+        { provide: AuthRepository, useValue: authSpy },
       ],
     }).compileComponents();
   });

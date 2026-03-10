@@ -22,8 +22,8 @@ import { SkillsGroupComponent } from "@ui/shared/skills-group/skills-group.compo
 import { SpecializationsGroupComponent } from "@ui/shared/specializations-group/specializations-group.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { navProfileItems } from "projects/core/src/consts/navigation/nav-profile-items.const";
-import { SpecializationsService } from "projects/social_platform/src/app/api/specializations/specializations.service";
-import { SkillsService } from "projects/social_platform/src/app/api/skills/skills.service";
+import { SpecializationsRepository as SpecializationsService } from "projects/social_platform/src/app/infrastructure/repository/specializations/specializations.repository";
+import { SkillsRepository as SkillsService } from "projects/social_platform/src/app/infrastructure/repository/skills/skills.repository";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { ProfileFormService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-form.service";
 import {

@@ -3,13 +3,13 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
-import { AuthService } from "../auth.service";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { ValidationService } from "@corelib";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 
 @Injectable()
 export class AuthRegisterService {
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly router = inject(Router);
   private readonly validationService = inject(ValidationService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
@@ -47,7 +47,7 @@ export class AuthRegisterService {
 
     this.registerIsSubmitting.set(true);
 
-    this.authService
+    this.authRepository
       .register(form)
       .pipe(takeUntil(this.destroy$))
       .subscribe({

@@ -3,7 +3,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { of } from "rxjs";
-import { IndustryService } from "projects/social_platform/src/app/api/industry/industry.service";
+import { IndustryRepository } from "projects/social_platform/src/app/infrastructure/repository/industry/industry.repository";
 import { InfoCardComponent } from "./info-card.component";
 
 describe("ProjectCardComponent", () => {
@@ -15,7 +15,7 @@ describe("ProjectCardComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [InfoCardComponent],
-      providers: [{ provide: IndustryService, useValue: industrySpy }],
+      providers: [{ provide: IndustryRepository, useValue: industrySpy }],
     }).compileComponents();
   });
 

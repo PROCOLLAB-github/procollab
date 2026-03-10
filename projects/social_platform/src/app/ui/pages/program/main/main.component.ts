@@ -18,7 +18,7 @@ import { generateOptionsList } from "@utils/generate-options-list";
 import { ClickOutsideModule } from "ng-click-outside";
 import { ProgramCardComponent } from "../../../shared/program-card/program-card.component";
 import { HttpParams } from "@angular/common/http";
-import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
+import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
 import { Program } from "projects/social_platform/src/app/domain/program/program.model";
 import { ProgramMainUIInfoService } from "projects/social_platform/src/app/api/program/facades/ui/program-main-ui-info.service";
 import { ProgramMainInfoService } from "projects/social_platform/src/app/api/program/facades/program-main-info.service";

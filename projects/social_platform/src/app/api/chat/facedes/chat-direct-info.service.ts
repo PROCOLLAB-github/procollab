@@ -2,18 +2,18 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { AuthService } from "../../auth";
 import { ChatService } from "../chat.service";
 import { ChatDirectService } from "../chat-direct/chat-direct.service";
 import { ChatMessage } from "../../../domain/chat/chat-message.model";
 import { map, Observable, Subject, switchMap, takeUntil, tap } from "rxjs";
 import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
 import { ChatDirectUIInfoService } from "./ui/chat-direct-ui-info.service";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 
 @Injectable()
 export class ChatDirectInfoService {
   private readonly route = inject(ActivatedRoute);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly chatService = inject(ChatService);
   private readonly chatDirectService = inject(ChatDirectService);
   private readonly chatDirectUIInfoService = inject(ChatDirectUIInfoService);
@@ -79,7 +79,7 @@ export class ChatDirectInfoService {
   }
 
   private initializationProfile(): void {
-    this.authService.profile.pipe(takeUntil(this.destroy$)).subscribe(u => {
+    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe(u => {
       this.currentUserId.set(u.id);
     });
   }

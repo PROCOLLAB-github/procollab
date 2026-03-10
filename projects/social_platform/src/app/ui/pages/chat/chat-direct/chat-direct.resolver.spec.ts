@@ -2,7 +2,7 @@
 
 import { TestBed } from "@angular/core/testing";
 
-import { ChatDirectResolver } from "./chat-direct/chat-direct.resolver";
+import { ChatDirectResolver } from "./chat-direct.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 

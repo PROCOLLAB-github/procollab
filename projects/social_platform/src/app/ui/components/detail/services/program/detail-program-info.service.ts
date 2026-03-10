@@ -2,10 +2,10 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { ProgramDetailMainUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-main-ui-info.service";
-import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
+import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
 import {
   PartnerProgramFields,
-  projectNewAdditionalProgramVields,
+  ProjectNewAdditionalProgramFields,
 } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
 import { Subject, takeUntil } from "rxjs";
 import { Router } from "@angular/router";
@@ -36,7 +36,7 @@ export class DetailProgramInfoService {
   private readonly projectForm = this.projectFormService.getForm();
 
   addNewProject(programId: number): void {
-    const newFieldsFormValues: projectNewAdditionalProgramVields[] = [];
+    const newFieldsFormValues: ProjectNewAdditionalProgramFields[] = [];
 
     this.additionalFields().forEach((field: PartnerProgramFields) => {
       newFieldsFormValues.push({

@@ -23,8 +23,8 @@ import { FileItemComponent } from "../file-item/file-item.component";
 import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "../avatar/avatar.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { AuthService } from "../../../api/auth";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 
 /**
  * Компонент сообщения в чате с контекстным меню и файловыми вложениями.
@@ -70,7 +70,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly snackbarService: SnackbarService,
     private readonly overlay: Overlay,
-    public readonly authService: AuthService
+    public readonly authRepository: AuthRepository
   ) {}
 
   /** Объект сообщения чата */

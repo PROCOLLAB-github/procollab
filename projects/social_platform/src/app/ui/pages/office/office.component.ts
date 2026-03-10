@@ -19,12 +19,12 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { NavComponent } from "@ui/components/nav/nav.component";
 import { SnackbarComponent } from "@ui/components/snackbar/snackbar.component";
 import { ProfileControlPanelComponent, SidebarComponent } from "@uilib";
-import { AuthService } from "../../../api/auth";
 import { ChatService } from "../../../api/chat/chat.service";
-import { ProgramService } from "../../../api/program/program.service";
+import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
 import { Program } from "../../../domain/program/program.model";
 import { OfficeInfoService } from "../../../api/office/facades/office-info.service";
 import { OfficeUIInfoService } from "../../../api/office/facades/ui/office-ui-info.service";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 
 /**
  * Главный компонент офиса - корневой компонент рабочего пространства
@@ -65,7 +65,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
 
   constructor(
-    public readonly authService: AuthService,
+    public readonly authRepository: AuthRepository,
     public readonly chatService: ChatService,
     private readonly programService: ProgramService
   ) {}

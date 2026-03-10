@@ -27,8 +27,8 @@ import { ModalService } from "@ui/models/modal.service";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { PluralizePipe } from "projects/core";
 import { ChatMessageComponent } from "@ui/components/chat-message/chat-message.component";
-import { AuthService } from "../../../api/auth";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 
 /**
  * Компонент окна чата
@@ -63,7 +63,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly fb: FormBuilder,
     private readonly modalService: ModalService,
-    private readonly authService: AuthService
+    private readonly authRepository: AuthRepository
   ) {
     // Создание формы для ввода сообщения
     this.messageForm = this.fb.group({
@@ -138,7 +138,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
    */
   ngOnInit(): void {
     // Подписка на профиль текущего пользователя
-    this.authService.profile.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(p => {
+    this.authRepository.profile.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(p => {
       this.profile = p;
     });
 

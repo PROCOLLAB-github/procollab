@@ -3,7 +3,7 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { ProgramDetailMainUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-main-ui-info.service";
-import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
+import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
 import { Program } from "projects/social_platform/src/app/domain/program/program.model";
 import { tap } from "rxjs";
 

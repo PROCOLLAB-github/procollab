@@ -28,7 +28,7 @@ import { IconComponent } from "@uilib";
   standalone: true,
 })
 export class ProfileExperienceStepComponent {
-  @Input() isWorkDirty: any;
+  @Input() isWorkDirty!: boolean;
 
   private readonly profileFormService = inject(ProfileFormService);
   private readonly profileEditExperienceInfoService = inject(ProfileEditExperienceInfoService);

@@ -28,7 +28,7 @@ import { ProfileDetailUIInfoService } from "projects/social_platform/src/app/api
   standalone: true,
 })
 export class ProfileEducationStepComponent {
-  @Input() isEducationDirty: any;
+  @Input() isEducationDirty!: boolean;
 
   protected readonly errorMessage = ErrorMessage;
 

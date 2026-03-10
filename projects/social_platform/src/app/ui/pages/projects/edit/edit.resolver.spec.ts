@@ -4,7 +4,7 @@ import { TestBed } from "@angular/core/testing";
 import { ProjectEditResolver } from "./edit.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { of } from "rxjs";
-import { AuthService } from "@auth/services";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 import { ActivatedRouteSnapshot, convertToParamMap, RouterStateSnapshot } from "@angular/router";
 
 describe("ProjectEditResolver", () => {
@@ -19,7 +19,7 @@ describe("ProjectEditResolver", () => {
 
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     });
   });
 

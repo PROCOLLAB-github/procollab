@@ -18,15 +18,13 @@
       </div>
 
       <div class="card__info--additional">
-        @if (industryService.industries | async; as industries) {
         <p class="text-body-6 project__industry">
-          @if (industryService.getIndustry(industries, feedItem.industry); as industry) {
+          @if (industryRepository.getOne(feedItem.industry); as industry) {
           <app-tag class="card__industry" color="complete">
             {{ industry.name }}
           </app-tag>
           }
         </p>
-        }
 
         <!-- <div class="card__score">
           <p class="text-body-10">{{ feedItem.score }}</p>

@@ -3,7 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { Validators } from "@angular/forms";
 import { ValidationService } from "@corelib";
-import { VacancyService } from "../../../vacancy/vacancy.service";
+import { VacancyRepository as VacancyService } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
 import { Subject, takeUntil } from "rxjs";
 import { ProjectVacancyUIService } from "./ui/project-vacancy-ui.service";
 import { CreateVacancyDto } from "../../dto/create-vacancy.model";

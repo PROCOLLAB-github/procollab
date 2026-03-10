@@ -9,13 +9,11 @@ import {
   Input,
   Output,
 } from "@angular/core";
-import { IndustryService } from "projects/social_platform/src/app/api/industry/industry.service";
 import { IconComponent, ButtonComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { SubscriptionService } from "projects/social_platform/src/app/api/subsriptions/subscription.service";
-import { InviteService } from "projects/social_platform/src/app/api/invite/invite.service";
+import { SubscriptionHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/subscription/subscription-http.adapter";
 import { ClickOutsideModule } from "ng-click-outside";
 import { Router, RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/components/tag/tag.component";
@@ -23,6 +21,8 @@ import { YearsFromBirthdayPipe } from "@corelib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { InviteRepository } from "projects/social_platform/src/app/infrastructure/repository/invite/invite.repository";
+import { IndustryRepository } from "../../../infrastructure/repository/industry/industry.repository";
 
 /**
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
@@ -49,9 +49,9 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 })
 export class InfoCardComponent {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly inviteService = inject(InviteService);
-  private readonly subscriptionService = inject(SubscriptionService);
-  public readonly industryService = inject(IndustryService);
+  private readonly inviteService = inject(InviteRepository);
+  private readonly subscriptionService = inject(SubscriptionHttpAdapter);
+  public readonly industryRepository = inject(IndustryRepository);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
 

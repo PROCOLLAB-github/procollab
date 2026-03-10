@@ -1,7 +1,7 @@
 <!-- @format -->
 
 <div class="office">
-  @if (authService.profile | async; as user) {
+  @if (authRepository.profile | async; as user) {
   <div class="office__wrapper">
     <div class="office__top">
       <app-nav [invites]="invites()"></app-nav>

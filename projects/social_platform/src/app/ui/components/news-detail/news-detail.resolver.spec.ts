@@ -3,7 +3,7 @@
 import { TestBed } from "@angular/core/testing";
 import { NewsDetailResolver } from "./news-detail.resolver";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { ProjectNewsService } from "../../../../../api/project-news.service";
+import { ProjectNewsRepository as ProjectNewsService } from "projects/social_platform/src/app/infrastructure/repository/project/project-news.repository";
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { of } from "rxjs";
 

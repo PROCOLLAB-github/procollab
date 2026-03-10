@@ -5,11 +5,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
 import {
   PartnerProgramFields,
   PartnerProgramFieldsValues,
-  projectNewAdditionalProgramVields,
+  ProjectNewAdditionalProgramFields,
 } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { Observable } from "rxjs";
-import { ProgramService } from "../../../program/program.service";
+import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
+import { ProjectProgramRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-program.repository";
 
 /**
  * Сервис для управления дополнительными полями проекта в партнерской программе.
@@ -23,7 +23,7 @@ export class ProjectAdditionalService {
   private partnerProgramFieldsValues: PartnerProgramFieldsValues[] = [];
 
   private readonly fb = inject(FormBuilder);
-  private readonly projectService = inject(ProjectService);
+  private readonly projectProgramRepository = inject(ProjectProgramRepository);
   private readonly programService = inject(ProgramService);
 
   readonly isSendingDecision = signal<boolean>(false);
@@ -136,7 +136,7 @@ export class ProjectAdditionalService {
    */
   public sendAdditionalFieldsValues(projectId: number): Observable<any> {
     this.isSendingDecision.set(true);
-    const newFieldsFormValues: projectNewAdditionalProgramVields[] = [];
+    const newFieldsFormValues: ProjectNewAdditionalProgramFields[] = [];
 
     this.partnerProgramFields().forEach((field: PartnerProgramFields) => {
       const fieldValue = this.additionalForm.get(field.name)?.value;
@@ -146,7 +146,7 @@ export class ProjectAdditionalService {
       });
     });
 
-    return this.projectService.sendNewProjectFieldsValues(projectId, newFieldsFormValues);
+    return this.projectProgramRepository.sendNewProjectFieldsValues(projectId, newFieldsFormValues);
   }
 
   /**

@@ -19,8 +19,7 @@ import {
   tap,
   throttleTime,
 } from "rxjs";
-import { MemberService } from "../member.service";
-import { AuthService } from "../../auth";
+import { MemberHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/member/member-http.adapter";
 import { User } from "../../../domain/auth/user.model";
 import { AbstractControl } from "@angular/forms";
 import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
@@ -28,6 +27,7 @@ import { MembersUIInfoService } from "./ui/members-ui-info.service";
 import { NavigationService } from "../../paths/navigation.service";
 import { ProjectsDetailUIInfoService } from "../../project/facades/detail/ui/projects-detail-ui.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 
 @Injectable()
 export class MembersInfoService {
@@ -35,9 +35,9 @@ export class MembersInfoService {
   private readonly router = inject(Router);
   private readonly navService = inject(NavService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
-  private readonly memberService = inject(MemberService);
+  private readonly memberService = inject(MemberHttpAdapter);
   private readonly membersUIInfoService = inject(MembersUIInfoService);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly navigationService = inject(NavigationService);
   private readonly logger = inject(LoggerService);
 
@@ -77,7 +77,7 @@ export class MembersInfoService {
   }
 
   private initializationProfile(): void {
-    this.authService.profile
+    this.authRepository.profile
       .pipe(
         filter(user => !!user),
         takeUntil(this.destroy$)

@@ -17,9 +17,9 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { TokenService } from "@corelib";
 import { LoadingService } from "@ui/services/loading/loading.service";
-import { AuthService } from "./api/auth";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { AuthRepository } from "./infrastructure/repository/auth/auth.repository";
 
 /**
  * Корневой компонент приложения
@@ -40,14 +40,14 @@ export class AppComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   constructor(
-    private authService: AuthService,
+    private authRepository: AuthRepository,
     private tokenService: TokenService,
     private router: Router,
     private loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
-    forkJoin([this.authService.getUserRoles(), this.authService.getChangeableRoles()])
+    forkJoin([this.authRepository.fetchUserRoles(), this.authRepository.fetchChangeableRoles()])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(noop);
 

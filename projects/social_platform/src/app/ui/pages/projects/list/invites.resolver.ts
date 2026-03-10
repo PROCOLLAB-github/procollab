@@ -3,7 +3,7 @@
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
 import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
-import { InviteService } from "projects/social_platform/src/app/api/invite/invite.service";
+import { InviteRepository } from "projects/social_platform/src/app/infrastructure/repository/invite/invite.repository";
 
 /**
  * Резолвер для предзагрузки приглашений пользователя
@@ -16,7 +16,7 @@ import { InviteService } from "projects/social_platform/src/app/api/invite/invit
  * - Observable<Invite[]> - массив приглашений пользователя
  */
 export const ProjectsInvitesResolver: ResolveFn<Invite[]> = () => {
-  const inviteService = inject(InviteService);
+  const inviteService = inject(InviteRepository);
 
   return inviteService.getMy();
 };

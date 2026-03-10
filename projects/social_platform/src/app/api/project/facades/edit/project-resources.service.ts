@@ -2,17 +2,17 @@
 
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
 import { Resource, ResourceDto } from "../../../../domain/project/resource.model";
 import { LoggerService } from "@corelib";
+import { ProjectResourceRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-resource.repository";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProjectResourceService {
   private readonly fb = inject(FormBuilder);
-  private readonly projectService = inject(ProjectService);
+  private readonly projectResourceRepository = inject(ProjectResourceRepository);
   private readonly loggerService = inject(LoggerService);
 
   private resourceForm!: FormGroup;
@@ -175,7 +175,7 @@ export class ProjectResourceService {
       return;
     }
 
-    this.projectService
+    this.projectResourceRepository
       .deleteResource(projectId, resourceId)
       .pipe(takeUntil(this.destroy$))
       .subscribe();
@@ -228,7 +228,7 @@ export class ProjectResourceService {
           partnerCompany: resource.partnerCompany ?? "запрос к рынку",
         };
 
-        return this.projectService.addResource(projectId, payload).pipe(
+        return this.projectResourceRepository.createResource(projectId, payload).pipe(
           map((res: any) => ({ res, idx })),
           catchError(err => of({ __error: true, err, original: resource, idx }))
         );
@@ -276,7 +276,7 @@ export class ProjectResourceService {
           partnerCompany: resource.partnerCompany ?? "запрос к рынку",
         };
 
-        return this.projectService.editResource(projectId, resource.id, payload).pipe(
+        return this.projectResourceRepository.updateResource(projectId, resource.id, payload).pipe(
           map((res: any) => ({ res, idx })),
           catchError(err => of({ __error: true, err, original: resource, idx }))
         );

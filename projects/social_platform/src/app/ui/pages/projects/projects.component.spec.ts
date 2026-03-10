@@ -7,8 +7,8 @@
 // import { HttpClientTestingModule } from "@angular/common/http/testing";
 // import { ReactiveFormsModule } from "@angular/forms";
 // import { of } from "rxjs";
-// import { AuthService } from "../../auth/services";
-// import { ProjectService } from "../services/project.service";
+// import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+// import { ProjectRepository } from "../services/project.service";
 // import { User } from "../../auth/models/user.model";
 // import { Project } from "../models/project.model";
 //
@@ -27,8 +27,8 @@
 //     await TestBed.configureTestingModule({
 //       imports: [RouterTestingModule, HttpClientTestingModule, ReactiveFormsModule],
 //       providers: [
-//         { providers: ProjectService, useValue: projectSpy },
-//         { providers: AuthService, useValue: authSpy },
+//         { providers: ProjectRepository, useValue: projectSpy },
+//         { providers: AuthRepository, useValue: authSpy },
 //       ],
 //       declarations: [ProjectsComponent],
 //     }).compileComponents();

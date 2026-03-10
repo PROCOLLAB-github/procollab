@@ -2,23 +2,23 @@
 
 import { inject, Injectable } from "@angular/core";
 import { filter, map, Observable, Subject, takeUntil, tap } from "rxjs";
-import { ProjectService } from "../../project.service";
-import { AuthService } from "../../../auth";
 import { NavService } from "@ui/services/nav/nav.service";
 import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
 import { ActivatedRoute } from "@angular/router";
-import { ProjectNewsService } from "../../project-news.service";
+import { ProjectNewsRepository as ProjectNewsService } from "projects/social_platform/src/app/infrastructure/repository/project/project-news.repository";
 import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
 import { ExpandService } from "../../../expand/expand.service";
 import { ProjectsDetailUIInfoService } from "./ui/projects-detail-ui.service";
 import { NewsInfoService } from "../../../news/news-info.service";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import { ProjectCollaboratorsHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/project/project-collaborators-http.adapter";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 @Injectable({ providedIn: "root" })
 export class ProjectsDetailService {
-  private readonly projectService = inject(ProjectService);
+  private readonly projectCollaboratorsAdapter = inject(ProjectCollaboratorsHttpAdapter);
   private readonly projectsDetailUIService = inject(ProjectsDetailUIInfoService);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly navService = inject(NavService);
   private readonly route = inject(ActivatedRoute); // Сервис для работы с активным маршрутом
   private readonly projectNewsService = inject(ProjectNewsService); // Сервис новостей проекта
@@ -45,7 +45,7 @@ export class ProjectsDetailService {
   }
 
   initializationTeam(): void {
-    this.authService.profile
+    this.authRepository.profile
       .pipe(
         filter(profile => !!profile),
         map(profile => profile.id),
@@ -96,7 +96,7 @@ export class ProjectsDetailService {
   }
 
   initializationProfile(): void {
-    this.authService.profile.pipe(takeUntil(this.destroy$)).subscribe(profile => {
+    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe(profile => {
       this.projectsDetailUIService.applySetLoggedUserId("profile", profile.id);
     });
   }
@@ -111,8 +111,8 @@ export class ProjectsDetailService {
     const projectId = this.projectId();
     if (!projectId) return;
 
-    this.projectService
-      .removeColloborator(this.projectId()!, userId)
+    this.projectCollaboratorsAdapter
+      .deleteCollaborator(this.projectId()!, userId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
@@ -196,8 +196,8 @@ export class ProjectsDetailService {
    * @param id - ID удаляемого участника
    */
   onRemoveMember(id: Collaborator["userId"]) {
-    this.projectService
-      .removeColloborator(this.projectId()!, id)
+    this.projectCollaboratorsAdapter
+      .deleteCollaborator(this.projectId()!, id)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.projectsDetailUIService.applyMembersManipulation(id);
@@ -209,8 +209,8 @@ export class ProjectsDetailService {
    * @param id - ID нового лидера
    */
   onTransferOwnership(id: Collaborator["userId"]) {
-    this.projectService
-      .switchLeader(this.projectId()!, id)
+    this.projectCollaboratorsAdapter
+      .patchSwitchLeader(this.projectId()!, id)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.projectsDetailUIService.applyMembersManipulation(id);

@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } fro
 import { RouterModule } from "@angular/router";
 import { IconComponent } from "@ui/components";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
-import { IndustryService } from "projects/social_platform/src/app/api/industry/industry.service";
+import { IndustryRepository } from "projects/social_platform/src/app/infrastructure/repository/industry/industry.repository";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 
 @Component({
@@ -19,5 +19,5 @@ import { Project } from "projects/social_platform/src/app/domain/project/project
 export class ProjectsLeftSideComponent {
   @Input() project!: WritableSignal<Project | undefined>;
 
-  protected readonly industryService = inject(IndustryService);
+  protected readonly industryRepository = inject(IndustryRepository);
 }

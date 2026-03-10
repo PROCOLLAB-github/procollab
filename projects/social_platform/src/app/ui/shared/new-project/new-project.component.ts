@@ -6,10 +6,10 @@ import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { Router, RouterLink } from "@angular/router";
 import { DayjsPipe } from "@corelib";
-import { IndustryService } from "projects/social_platform/src/app/api/industry/industry.service";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { FeedProject } from "../../../domain/feed/feed-item.model";
+import { IndustryRepository } from "../../../infrastructure/repository/industry/industry.repository";
 
 /**
  * КОМПОНЕНТ НОВОГО ПРОЕКТА
@@ -63,5 +63,5 @@ export class NewProjectComponent {
    * Инициализирует компонент с доступом к сервису маршрутизации
    * для возможной навигации к детальной странице проекта
    */
-  constructor(public readonly industryService: IndustryService) {}
+  constructor(public readonly industryRepository: IndustryRepository) {}
 }

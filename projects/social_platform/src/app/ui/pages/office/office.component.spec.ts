@@ -2,12 +2,12 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { IndustryService } from "projects/social_platform/src/app/api/industry/industry.service";
+import { IndustryRepository } from "projects/social_platform/src/app/infrastructure/repository/industry/industry.repository";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { of } from "rxjs";
 import { OfficeComponent } from "./office.component";
-import { AuthService } from "../../../api/auth";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 describe("OfficeComponent", () => {
   let component: OfficeComponent;
@@ -18,7 +18,7 @@ describe("OfficeComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule, OfficeComponent],
-      providers: [IndustryService, { provide: AuthService, useValue: authSpy }],
+      providers: [IndustryRepository, { provide: AuthRepository, useValue: authSpy }],
     }).compileComponents();
   });
 

@@ -3,7 +3,7 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { FeedNews } from "../../../domain/project/project-news.model";
-import { ProjectNewsService } from "../../../api/project/project-news.service";
+import { ProjectNewsRepository as ProjectNewsService } from "projects/social_platform/src/app/infrastructure/repository/project/project-news.repository";
 
 /**
  * РЕЗОЛВЕР ДЛЯ ЗАГРУЗКИ ДЕТАЛЬНОЙ ИНФОРМАЦИИ О НОВОСТИ

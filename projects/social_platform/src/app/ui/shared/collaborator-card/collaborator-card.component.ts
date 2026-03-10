@@ -15,11 +15,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { IconComponent } from "@uilib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ProjectCollaboratorsHttpAdapter } from "../../../infrastructure/adapters/project/project-collaborators-http.adapter";
 
 /**
  * Компонент карточки участника команды или проект
@@ -39,7 +39,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollaboratorCardComponent implements OnInit {
-  private readonly projectService = inject(ProjectService);
+  private readonly projectCollaboratorsAdapter = inject(ProjectCollaboratorsHttpAdapter);
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
@@ -71,8 +71,8 @@ export class CollaboratorCardComponent implements OnInit {
 
     if (!confirm("Вы точно хотите удалить участника проекта?")) return;
 
-    this.projectService
-      .removeColloborator(+projectId, collaboratorId)
+    this.projectCollaboratorsAdapter
+      .deleteCollaborator(+projectId, collaboratorId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {

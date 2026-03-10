@@ -1,18 +1,10 @@
 /** @format */
 
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute, RouterLink } from "@angular/router";
-import { map, noop, Observable, Subscription, tap } from "rxjs";
-import { ChatService } from "projects/social_platform/src/app/api/chat/chat.service";
-import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
+import { RouterLink } from "@angular/router";
 import { ChatWindowComponent } from "@ui/components/chat-window/chat-window.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
-import { BarComponent } from "@ui/components";
 import { BackComponent } from "@uilib";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
-import { ChatDirectService } from "projects/social_platform/src/app/api/chat/chat-direct/chat-direct.service";
-import { ChatItem } from "projects/social_platform/src/app/domain/chat/chat-item.model";
 import { ChatDirectInfoService } from "projects/social_platform/src/app/api/chat/facedes/chat-direct-info.service";
 import { ChatDirectUIInfoService } from "projects/social_platform/src/app/api/chat/facedes/ui/chat-direct-ui-info.service";
 

@@ -2,8 +2,8 @@
 
 import { TestBed } from "@angular/core/testing";
 
-import { ChatDirectService } from "../ui/pages/chat/services/chat-direct.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
+import { ChatDirectService } from "./chat-direct.service";
 
 describe("ChatDirectService", () => {
   let service: ChatDirectService;

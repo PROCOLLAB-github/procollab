@@ -2,15 +2,15 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { concatMap, map, Subject, takeUntil } from "rxjs";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { ProjectCollaboratorsHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/project/project-collaborators-http.adapter";
 
 @Injectable()
 export class DetailProjectInfoService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly projectService = inject(ProjectService);
+  private readonly projectCollaboratorAdapter = inject(ProjectCollaboratorsHttpAdapter);
   private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
@@ -62,7 +62,7 @@ export class DetailProjectInfoService {
     this.route.data
       .pipe(
         map(r => r["data"][0]),
-        concatMap(p => this.projectService.leave(p.id)),
+        concatMap(p => this.projectCollaboratorAdapter.deleteLeave(p.id)),
         takeUntil(this.destroy$)
       )
       .subscribe(

@@ -2,7 +2,7 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { VacancyService } from "projects/social_platform/src/app/api/vacancy/vacancy.service";
+import { VacancyRepository as VacancyService } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
 import { map, Subject, takeUntil, tap } from "rxjs";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 

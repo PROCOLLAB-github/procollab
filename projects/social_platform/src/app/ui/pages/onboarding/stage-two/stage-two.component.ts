@@ -10,7 +10,7 @@ import { SkillsGroupComponent } from "@ui/shared/skills-group/skills-group.compo
 import { SkillsBasketComponent } from "@ui/shared/skills-basket/skills-basket.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
-import { SkillsService } from "projects/social_platform/src/app/api/skills/skills.service";
+import { SkillsRepository as SkillsService } from "projects/social_platform/src/app/infrastructure/repository/skills/skills.repository";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { OnboardingUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-ui-info.service";
 import { OnboardingStageTwoUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-two-ui-info.service";

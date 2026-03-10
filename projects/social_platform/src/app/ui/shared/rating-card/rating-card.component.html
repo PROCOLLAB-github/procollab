@@ -17,12 +17,11 @@
             <p class="text-body-12 card__naming--text">{{ project.name | truncate: 15 }}</p>
           </a>
 
-          @if (industryService.industries | async; as industries) { @if
-          (industryService.getIndustry(industries, project.industry); as industry) {
+          @if (industryRepository.getOne(project.industry); as industry) {
           <app-tag class="card__industry" color="complete">
             {{ industry.name }}
           </app-tag>
-          } }
+          }
         </div>
       </div>
 

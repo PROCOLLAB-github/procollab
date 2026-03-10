@@ -4,7 +4,7 @@ import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
 import { combineLatest, distinctUntilChanged, map, Subject, switchMap, takeUntil } from "rxjs";
-import { ProgramService } from "../program.service";
+import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
 import { Program } from "../../../domain/program/program.model";
 import { HttpParams } from "@angular/common/http";
 import { ProgramMainUIInfoService } from "./ui/program-main-ui-info.service";

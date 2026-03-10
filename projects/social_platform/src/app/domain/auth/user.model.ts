@@ -38,7 +38,7 @@ export class Education {
   educationLevel!: string;
 }
 
-export class workExperience {
+export class WorkExperience {
   organizationName!: string;
   entryYear!: number;
   completionYear!: number;
@@ -46,7 +46,7 @@ export class workExperience {
   jobPosition!: string;
 }
 
-export class userLanguages {
+export class UserLanguages {
   language!: string;
   languageLevel!: string;
 }
@@ -100,8 +100,8 @@ export class User {
   phoneNumber!: number;
   region!: string;
   education!: Education[];
-  userLanguages!: userLanguages[];
-  workExperience!: workExperience[];
+  userLanguages!: UserLanguages[];
+  workExperience!: WorkExperience[];
   achievements!: Achievement[];
   programs!: Program[];
   projects!: Project[];

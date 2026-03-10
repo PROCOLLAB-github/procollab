@@ -3,7 +3,7 @@
 import { TestBed } from "@angular/core/testing";
 
 import { ProjectChatResolver } from "./chat.resolver";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
+import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
 import { ActivatedRouteSnapshot, convertToParamMap, RouterStateSnapshot } from "@angular/router";
 import { of } from "rxjs";
 
@@ -15,7 +15,7 @@ describe("ProjectChatResolver", () => {
     const projectSpy = jasmine.createSpyObj({ getOne: of({}) });
 
     TestBed.configureTestingModule({
-      providers: [{ provide: ProjectService, useValue: projectSpy }],
+      providers: [{ provide: ProjectRepository, useValue: projectSpy }],
     });
   });
 

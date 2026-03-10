@@ -2,8 +2,8 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { VacancyService } from "projects/social_platform/src/app/api/vacancy/vacancy.service";
 import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
+import { VacancyRepository } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
 
 /**
  * Резолвер для загрузки откликов на вакансии проекта
@@ -20,7 +20,7 @@ import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy
 export const ProjectResponsesResolver: ResolveFn<VacancyResponse[]> = (
   route: ActivatedRouteSnapshot
 ) => {
-  const vacancyService = inject(VacancyService);
+  const vacanciesRepository = inject(VacancyRepository);
 
-  return vacancyService.responsesByProject(Number(route.parent?.paramMap.get("projectId")));
+  return vacanciesRepository.responsesByProject(Number(route.parent?.paramMap.get("projectId")));
 };

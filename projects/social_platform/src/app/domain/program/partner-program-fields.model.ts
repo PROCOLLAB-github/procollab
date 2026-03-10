@@ -27,7 +27,7 @@ export class PartnerProgramFieldsValues {
   value!: string;
 }
 
-export class projectNewAdditionalProgramVields {
+export class ProjectNewAdditionalProgramFields {
   field_id!: number;
   value_text!: string | boolean;
 }

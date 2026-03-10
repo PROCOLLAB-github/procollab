@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 export interface UnifiedOption {
   id: string | number;
   label: string;
-  value?: any;
+  value?: string | number | boolean;
 }
 
 export interface FilterFieldConfig {

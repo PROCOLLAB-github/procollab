@@ -5,18 +5,18 @@ import { of } from "rxjs";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ProfileMainComponent } from "./main.component";
-import { AuthService } from "@auth/services";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 describe("MainComponent", () => {
   let component: ProfileMainComponent;
   let fixture: ComponentFixture<ProfileMainComponent>;
 
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj("AuthService", {}, { profile: of({}) });
+    const authSpy = jasmine.createSpyObj("AuthRepository", {}, { profile: of({}) });
 
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule, ProfileMainComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     }).compileComponents();
   });
 

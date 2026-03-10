@@ -6,12 +6,13 @@ import { ValidationService } from "@corelib";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { saveFile } from "@utils/helpers/export-file";
 import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
-import { InviteService } from "projects/social_platform/src/app/api/invite/invite.service";
 import { ProfileDetailUIInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ProjectTeamUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-team-ui.service";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
+import { AuthHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/auth/auth-http.adapter";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { InviteRepository } from "projects/social_platform/src/app/infrastructure/repository/invite/invite.repository";
 import { Subject, takeUntil } from "rxjs";
 
 @Injectable()
@@ -19,9 +20,10 @@ export class DetailProfileInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly snackbarService = inject(SnackbarService);
   private readonly validationService = inject(ValidationService);
-  private readonly inviteService = inject(InviteService);
+  private readonly inviteService = inject(InviteRepository);
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
+  private readonly authAdapter = inject(AuthHttpAdapter);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
 
   private readonly destroy$ = new Subject<void>();
@@ -56,8 +58,8 @@ export class DetailProfileInfoService {
   }
 
   initializationLeaderProjects(): void {
-    this.authService
-      .getLeaderProjects()
+    this.authRepository
+      .fetchLeaderProjects()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (projects: ApiPagination<Project>) => {
@@ -142,7 +144,7 @@ export class DetailProfileInfoService {
       });
   }
 
-  openSkills: any = {};
+  openSkills: Record<number, boolean> = {};
 
   /**
    * Открытие модального окна с информацией о подтверждениях навыка
@@ -162,7 +164,7 @@ export class DetailProfileInfoService {
    */
   downloadCV() {
     this.isSended.set(true);
-    this.authService
+    this.authAdapter
       .downloadCV()
       .pipe(takeUntil(this.destroy$))
       .subscribe({

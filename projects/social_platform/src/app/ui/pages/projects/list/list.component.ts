@@ -3,39 +3,16 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   inject,
   OnDestroy,
   OnInit,
-  Renderer2,
   ViewChild,
 } from "@angular/core";
-import { ActivatedRoute, NavigationEnd, Params, Router, RouterLink } from "@angular/router";
-import {
-  concatMap,
-  distinctUntilChanged,
-  fromEvent,
-  map,
-  noop,
-  of,
-  Subscription,
-  switchMap,
-  tap,
-  throttleTime,
-} from "rxjs";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { NavService } from "@ui/services/nav/nav.service";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
-import { HttpParams } from "@angular/common/http";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
+import { RouterLink } from "@angular/router";
 import { IconComponent } from "@ui/components";
-import { SubscriptionService } from "projects/social_platform/src/app/api/subsriptions/subscription.service";
-import { inviteToProjectMapper } from "@utils/helpers/inviteToProjectMapper";
 import { InfoCardComponent } from "@ui/components/info-card/info-card.component";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { ProjectsListInfoService } from "projects/social_platform/src/app/api/project/facades/list/projects-list-info.service";
 import { SwipeService } from "projects/social_platform/src/app/api/swipe/swipe.service";
 import { ProjectsInfoService } from "projects/social_platform/src/app/api/project/facades/projects-info.service";

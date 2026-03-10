@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MembersComponent } from "./members.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
-import { AuthService } from "@auth/services";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
@@ -23,7 +23,7 @@ describe("MembersComponent", () => {
         HttpClientTestingModule,
         MembersComponent,
       ],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     }).compileComponents();
   });
 

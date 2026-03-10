@@ -4,7 +4,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProgramDetailListUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-list-ui-info.service";
-import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
+import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
 import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";

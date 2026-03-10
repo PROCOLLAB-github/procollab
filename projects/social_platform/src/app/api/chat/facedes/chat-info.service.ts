@@ -3,20 +3,20 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
-import { AuthService } from "../../auth";
 import { ChatService } from "../chat.service";
 import { ChatListItem } from "../../../domain/chat/chat-item.model";
 import { combineLatest, map, Observable, Subject, takeUntil } from "rxjs";
 import { toObservable } from "@angular/core/rxjs-interop";
 import { ChatUIInfoService } from "./ui/chat-ui-info.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 
 @Injectable()
 export class ChatInfoService {
   private readonly navService = inject(NavService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly chatService = inject(ChatService);
   private readonly chatUIInfoService = inject(ChatUIInfoService);
   private readonly logger = inject(LoggerService);
@@ -26,7 +26,7 @@ export class ChatInfoService {
   private readonly chatsData = this.chatUIInfoService.chatsData;
 
   readonly chats: Observable<ChatListItem[]> = combineLatest([
-    this.authService.profile,
+    this.authRepository.profile,
     toObservable(this.chatsData),
   ]).pipe(
     map(([profile, chats]) =>

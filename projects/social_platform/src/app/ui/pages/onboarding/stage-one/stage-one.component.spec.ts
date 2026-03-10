@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { OnboardingStageOneComponent } from "./stage-one.component";
 import { of } from "rxjs";
 import { ReactiveFormsModule } from "@angular/forms";
-import { AuthService } from "@auth/services";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 
@@ -27,7 +27,7 @@ describe("StageOneComponent", () => {
         HttpClientTestingModule,
         OnboardingStageOneComponent,
       ],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     }).compileComponents();
   });
 

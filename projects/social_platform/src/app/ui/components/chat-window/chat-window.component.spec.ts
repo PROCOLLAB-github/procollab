@@ -5,10 +5,10 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ChatWindowComponent } from "./chat-window.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
-import { AuthService } from "@auth/services";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { NgxMaskModule } from "ngx-mask";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 describe("ChatWindowComponent", () => {
   let component: ChatWindowComponent;
@@ -27,7 +27,7 @@ describe("ChatWindowComponent", () => {
         NgxMaskModule.forRoot(),
         ChatWindowComponent,
       ],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     }).compileComponents();
   });
 

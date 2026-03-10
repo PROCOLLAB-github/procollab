@@ -3,18 +3,18 @@
 import { inject, Injectable } from "@angular/core";
 import { concatMap, Subject, take, takeUntil } from "rxjs";
 import { OnboardingService } from "../../onboarding.service";
-import { AuthService } from "../../../auth";
 import { Router } from "@angular/router";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { OnboardingStageThreeUIInfoService } from "./ui/onboarding-stage-three-ui-info.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 @Injectable()
 export class OnboardingStageThreeInfoService {
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageThreeUIInfoService = inject(OnboardingStageThreeUIInfoService);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
 
@@ -44,10 +44,10 @@ export class OnboardingStageThreeInfoService {
 
     this.stageSubmitting.set(true);
 
-    this.authService
-      .saveProfile({ userType: this.userRole() })
+    this.authRepository
+      .updateProfile({ userType: this.userRole() })
       .pipe(
-        concatMap(() => this.authService.setOnboardingStage(null)),
+        concatMap(() => this.authRepository.updateOnboardingStage(null)),
         takeUntil(this.destroy$)
       )
       .subscribe(() => {

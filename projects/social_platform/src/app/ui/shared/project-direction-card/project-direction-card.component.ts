@@ -21,12 +21,11 @@ import { FileModel } from "projects/social_platform/src/app/domain/file/file.mod
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { DayjsPipe } from "@corelib";
 import { ButtonComponent } from "@ui/components";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
-import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button.directive";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { Goal } from "../../../domain/project/goals.model";
 import { ProfileService } from "../../../api/auth/profile.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { ProjectGoalsRepository } from "../../../infrastructure/repository/project/project-goals.repository";
 @Component({
   selector: "app-project-direction-card",
   templateUrl: "./project-direction-card.component.html",
@@ -41,7 +40,6 @@ import { LoggerService } from "projects/core/src/lib/services/logger/logger.serv
     DayjsPipe,
     TruncatePipe,
     ButtonComponent,
-    EditorSubmitButtonDirective,
   ],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -59,7 +57,7 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly achievementsService = inject(ProfileService);
-  private readonly projectService = inject(ProjectService);
+  private readonly projectGoalsRepository = inject(ProjectGoalsRepository);
   private readonly logger = inject(LoggerService);
 
   private subscriptions: Subscription[] = [];
@@ -140,7 +138,7 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
       isDone: true,
     };
 
-    this.projectService.editGoal(projectId, goal.id, completedGoal).subscribe({
+    this.projectGoalsRepository.editGoal(projectId, goal.id, completedGoal).subscribe({
       next: response => {
         if (Array.isArray(this.about)) {
           const index = this.about.findIndex((g: Goal) => g.id === goalId);

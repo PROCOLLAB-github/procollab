@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { EmailVerificationComponent } from "./email-verification.component";
 import { RouterTestingModule } from "@angular/router/testing";
-import { AuthService } from "../../../../auth/services";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 describe("EmailVerificationComponent", () => {
   let component: EmailVerificationComponent;
@@ -15,7 +15,7 @@ describe("EmailVerificationComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, EmailVerificationComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     }).compileComponents();
   });
 

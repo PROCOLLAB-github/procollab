@@ -3,15 +3,15 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DetailProfileInfoService } from "@ui/components/detail/services/profile/detail-profile-info.service";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
 import { Subject, takeUntil } from "rxjs";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 @Injectable()
 export class FeedFilterInfoService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly detailProfileInfoService = inject(DetailProfileInfoService);
   private readonly logger = inject(LoggerService);
 
@@ -24,7 +24,7 @@ export class FeedFilterInfoService {
   readonly includedFilters = signal<string>("");
 
   initializationFeedFilter(): void {
-    this.authService.profile.pipe(takeUntil(this.destroy$)).subscribe(profile => {
+    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe(profile => {
       this.detailProfileInfoService.applySetProfile(profile);
     });
 

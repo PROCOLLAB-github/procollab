@@ -4,7 +4,7 @@ import { ElementRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { filter, map, Subject, takeUntil } from "rxjs";
 import { ValidationService } from "@corelib";
-import { VacancyService } from "../vacancy.service";
+import { VacancyRepository as VacancyService } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
 import { VacancyDetailUIInfoService } from "./ui/vacancy-detail-ui-info.service";
 import { ExpandService } from "../../expand/expand.service";
 

@@ -4,14 +4,14 @@ import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TokenService } from "@corelib";
 import { filter, interval, map, Subject, takeUntil } from "rxjs";
-import { AuthService } from "../auth.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 
 @Injectable()
 export class AuthEmailService {
   private readonly tokenService = inject(TokenService);
   private readonly route = inject(ActivatedRoute);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
 
@@ -60,7 +60,7 @@ export class AuthEmailService {
   onResend(): void {
     if (!this.userEmail()) return;
 
-    this.authService
+    this.authRepository
       .resendEmail(this.userEmail()!)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {

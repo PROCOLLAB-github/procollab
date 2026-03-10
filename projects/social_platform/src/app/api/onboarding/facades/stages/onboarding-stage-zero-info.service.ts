@@ -5,10 +5,10 @@ import { concatMap, Subject, takeUntil } from "rxjs";
 import { OnboardingService } from "../../onboarding.service";
 import { ValidationService } from "@corelib";
 import { Router } from "@angular/router";
-import { AuthService } from "../../../auth";
 import { OnboardingStageZeroUIInfoService } from "./ui/onboarding-stage-zero-ui-info.service";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 @Injectable()
 export class OnboardingStageZeroInfoService {
@@ -16,7 +16,7 @@ export class OnboardingStageZeroInfoService {
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageZeroUIInfoService = inject(OnboardingStageZeroUIInfoService);
   private readonly validationService = inject(ValidationService);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly router = inject(Router);
 
   private readonly destroy$ = new Subject<void>();
@@ -31,7 +31,7 @@ export class OnboardingStageZeroInfoService {
   private readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting;
 
   initializationStageZero(): void {
-    this.authService.profile.pipe(takeUntil(this.destroy$)).subscribe(p => {
+    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe(p => {
       this.onboardingStageZeroUIInfoService.applySetProfile(p);
     });
 
@@ -67,8 +67,8 @@ export class OnboardingStageZeroInfoService {
     };
 
     this.skipSubmitting.set(true);
-    this.authService
-      .saveProfile(onboardingSkipInfo as Partial<User>)
+    this.authRepository
+      .updateProfile(onboardingSkipInfo as Partial<User>)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => this.completeRegistration(3),
@@ -95,10 +95,10 @@ export class OnboardingStageZeroInfoService {
     };
 
     this.stageSubmitting.set(true);
-    this.authService
-      .saveProfile(newStageForm as Partial<User>)
+    this.authRepository
+      .updateProfile(newStageForm as Partial<User>)
       .pipe(
-        concatMap(() => this.authService.setOnboardingStage(1)),
+        concatMap(() => this.authRepository.updateOnboardingStage(1)),
         takeUntil(this.destroy$)
       )
       .subscribe({

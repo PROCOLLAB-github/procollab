@@ -11,11 +11,11 @@ import {
 } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
 import { stripNullish } from "@utils/helpers/stripNull";
 import { concatMap, filter } from "rxjs";
 import { Project } from "../../domain/project/project.model";
 import { optionalUrlOrMentionValidator } from "@utils/optionalUrl.validator";
+import { ProjectRepository } from "../../infrastructure/repository/project/project.repository";
 /**
  * Сервис для управления основной формой проекта и формой дополнительных полей партнерской программы.
  * Обеспечивает создание, инициализацию, валидацию, автосохранение, сброс и получение данных форм.
@@ -26,7 +26,7 @@ export class ProjectFormService {
   private additionalForm!: FormGroup;
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
-  private readonly projectService = inject(ProjectService);
+  private readonly projectRepository = inject(ProjectRepository);
   public editIndex = signal<number | null>(null);
   public relationId = signal<number>(0);
 
@@ -90,7 +90,7 @@ export class ProjectFormService {
       .pipe(
         filter(value => !value),
         concatMap(() =>
-          this.projectService.updateProject(Number(this.route.snapshot.params["projectId"]), {
+          this.projectRepository.update(Number(this.route.snapshot.params["projectId"]), {
             presentationAddress: "",
             draft: true,
           })
@@ -103,7 +103,7 @@ export class ProjectFormService {
       .pipe(
         filter(value => !value),
         concatMap(() =>
-          this.projectService.updateProject(Number(this.route.snapshot.params["projectId"]), {
+          this.projectRepository.update(Number(this.route.snapshot.params["projectId"]), {
             coverImageAddress: "",
             draft: true,
           })

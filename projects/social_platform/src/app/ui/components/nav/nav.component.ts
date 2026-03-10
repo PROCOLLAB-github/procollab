@@ -14,14 +14,14 @@ import { NavService } from "@ui/services/nav/nav.service";
 import { NavigationStart, Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { noop } from "rxjs";
 import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
-import { InviteService } from "projects/social_platform/src/app/api/invite/invite.service";
 import { AsyncPipe } from "@angular/common";
 import { IconComponent } from "@ui/components";
 import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
-import { AuthService } from "../../../api/auth";
 import { NotificationService } from "@ui/services/notification/notification.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { InviteRepository } from "../../../infrastructure/repository/invite/invite.repository";
 
 /**
  * Компонент навигационного меню
@@ -75,8 +75,8 @@ export class NavComponent implements OnInit, OnDestroy {
     public readonly navService: NavService,
     private readonly router: Router,
     public readonly notificationService: NotificationService,
-    private readonly inviteService: InviteService,
-    public readonly authService: AuthService,
+    private readonly inviteService: InviteRepository,
+    public readonly authRepository: AuthRepository,
     private readonly cdref: ChangeDetectorRef
   ) {}
 

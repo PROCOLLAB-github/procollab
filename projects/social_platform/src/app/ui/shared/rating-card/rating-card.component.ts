@@ -29,7 +29,6 @@ import {
   tap,
 } from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { IndustryService } from "projects/social_platform/src/app/api/industry/industry.service";
 import { ProjectRatingComponent } from "@ui/components/project-rating/project-rating.component";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
@@ -37,11 +36,12 @@ import { TagComponent } from "@ui/components/tag/tag.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { HttpResponse } from "@angular/common/http";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
-import { ProjectRatingService } from "../../../api/project/project-rating.service";
 import { ProjectRate } from "../../../domain/project/project-rate";
 import { ProgramDetailMainUIInfoService } from "../../../api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { ProjectRatingRepository } from "../../../infrastructure/repository/project/project-rating.repository";
+import { IndustryRepository } from "../../../infrastructure/repository/industry/industry.repository";
 
 /**
  * Компонент карточки оценки проекта
@@ -97,9 +97,9 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly logger = inject(LoggerService);
 
   constructor(
-    public industryService: IndustryService,
-    private readonly projectRatingService: ProjectRatingService,
-    private readonly authService: AuthService,
+    public industryRepository: IndustryRepository,
+    private readonly projectRatingRepository: ProjectRatingRepository,
+    private readonly authRepository: AuthRepository,
     private readonly programDetailMainUIInfoService: ProgramDetailMainUIInfoService,
     private readonly breakpointObserver: BreakpointObserver,
     private readonly cdRef: ChangeDetectorRef
@@ -159,7 +159,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
       this.ratedCount.set(this.project.ratedCount);
     }
 
-    const profileId$ = this.authService.profile.subscribe({
+    const profileId$ = this.authRepository.profile.subscribe({
       next: profile => {
         this.profile.set(profile);
       },
@@ -206,11 +206,11 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const fv = this.form.getRawValue();
     const project = this.project as ProjectRate;
-    const submittedVal = this.projectRatingService.formValuesToDTO(project.criterias, fv);
+    const submittedVal = this.projectRatingRepository.formValuesToDTO(project.criterias, fv);
 
     this.submitLoading.set(true);
 
-    this.projectRatingService
+    this.projectRatingRepository
       .rate(project.id, submittedVal)
       .pipe(finalize(() => this.submitLoading.set(false)))
       .subscribe({

@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { VacancyCardComponent } from "./vacancy-card.component";
 import { of } from "rxjs";
-import { AuthService } from "@auth/services";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 describe("VacancyCardComponent", () => {
   let component: VacancyCardComponent;
@@ -17,7 +17,7 @@ describe("VacancyCardComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [VacancyCardComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     }).compileComponents();
   });
 

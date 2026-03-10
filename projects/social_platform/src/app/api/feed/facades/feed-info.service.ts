@@ -14,19 +14,22 @@ import {
   tap,
   throttleTime,
 } from "rxjs";
-import { ProjectNewsService } from "../../project/project-news.service";
-import { ProfileNewsService } from "../../profile/profile-news.service";
-import { FeedService } from "../feed.service";
 import { FeedItem, FeedItemType } from "../../../domain/feed/feed-item.model";
 import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
 import { FeedUIInfoService } from "./ui/feed-ui-info.service";
+import { FeedHttpAdapter } from "../../../infrastructure/adapters/feed/feed-http.adapter";
+import { ProjectNewsRepository } from "../../../infrastructure/repository/project/project-news.repository";
+import { ProfileNewsRepository } from "../../../infrastructure/repository/profile/profile-news.repository";
+
+const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news"];
+const FILTER_SPLIT_SYMBOL = "|";
 
 @Injectable()
 export class FeedInfoService {
   private readonly route = inject(ActivatedRoute);
-  private readonly projectNewsService = inject(ProjectNewsService);
-  private readonly profileNewsService = inject(ProfileNewsService);
-  private readonly feedService = inject(FeedService);
+  private readonly projectNewsRepository = inject(ProjectNewsRepository);
+  private readonly profileNewsRepository = inject(ProfileNewsRepository);
+  private readonly feedHttpAdapter = inject(FeedHttpAdapter);
   private readonly feedUIInfoService = inject(FeedUIInfoService);
 
   private observer?: IntersectionObserver;
@@ -67,7 +70,7 @@ export class FeedInfoService {
           return this.onFetch(
             0,
             this.feedUIInfoService.perFetchTake(),
-            includes ?? ["vacancy", "project", "news"]
+            includes ?? DEFAULT_FEED_TYPES
           );
         }),
         takeUntil(this.destroy$)
@@ -138,12 +141,13 @@ export class FeedInfoService {
     }
   }
 
-  private onFetch(
-    offset: number,
-    limit: number,
-    includes: FeedItemType[] = ["project", "vacancy", "news"]
-  ) {
-    return this.feedService.getFeed(offset, limit, includes).pipe(
+  private onFetch(offset: number, limit: number, includes: FeedItemType[] = DEFAULT_FEED_TYPES) {
+    const type =
+      includes.length === 0
+        ? DEFAULT_FEED_TYPES.join(FILTER_SPLIT_SYMBOL)
+        : includes.join(FILTER_SPLIT_SYMBOL);
+
+    return this.feedHttpAdapter.fetchFeed(offset, limit, type).pipe(
       tap(res => {
         this.feedUIInfoService.totalItemsCount.set(res.count);
       }),
@@ -168,7 +172,7 @@ export class FeedInfoService {
 
     projectNews.forEach(news => {
       if (news.typeModel !== "news") return;
-      this.projectNewsService
+      this.projectNewsRepository
         .readNews(news.content.contentObject.id, [news.content.id])
         .pipe(takeUntil(this.destroy$))
         .subscribe();
@@ -176,7 +180,7 @@ export class FeedInfoService {
 
     profileNews.forEach(news => {
       if (news.typeModel !== "news") return;
-      this.profileNewsService
+      this.projectNewsRepository
         .readNews(news.content.contentObject.id, [news.content.id])
         .pipe(takeUntil(this.destroy$))
         .subscribe();
@@ -190,7 +194,7 @@ export class FeedInfoService {
     if (!item || item.typeModel !== "news") return;
 
     if ("email" in item.content.contentObject) {
-      this.profileNewsService
+      this.profileNewsRepository
         .toggleLike(
           item.content.contentObject.id as unknown as string,
           newsId,
@@ -201,7 +205,7 @@ export class FeedInfoService {
           this.feedUIInfoService.applyLikeNews(itemIdx);
         });
     } else if ("leader" in item.content.contentObject) {
-      this.projectNewsService
+      this.projectNewsRepository
         .toggleLike(
           item.content.contentObject.id as unknown as string,
           newsId,

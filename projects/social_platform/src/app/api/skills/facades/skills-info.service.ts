@@ -4,7 +4,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import { Subject } from "rxjs";
 import { Skill } from "../../../domain/skills/skill";
 import { FormGroup } from "@angular/forms";
-import { SkillsService } from "../skills.service";
+import { SkillsRepository as SkillsService } from "projects/social_platform/src/app/infrastructure/repository/skills/skills.repository";
 
 @Injectable({ providedIn: "root" })
 export class SkillsInfoService {

@@ -6,7 +6,7 @@ import { ApiPagination } from "projects/social_platform/src/app/domain/other/api
 import { HttpParams } from "@angular/common/http";
 import { catchError, EMPTY } from "rxjs";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
+import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
 
 /**
  * Резолвер для предзагрузки проектов программы

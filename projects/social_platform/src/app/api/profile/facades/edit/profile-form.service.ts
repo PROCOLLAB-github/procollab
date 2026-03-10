@@ -3,7 +3,6 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { catchError, concatMap, first, map, Observable, skip, Subject, takeUntil } from "rxjs";
-import { AuthService } from "../../../auth";
 import dayjs from "dayjs";
 import { yearRangeValidators } from "@utils/helpers/yearRangeValidators";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
@@ -19,11 +18,12 @@ import {
   languageNamesList,
 } from "projects/core/src/consts/lists/language-info-list.const";
 import { error } from "console";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 @Injectable({ providedIn: "root" })
 export class ProfileFormService {
   private readonly fb = inject(FormBuilder);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -53,7 +53,7 @@ export class ProfileFormService {
   constructor() {
     this.initializeProfileForm();
 
-    this.authService.changeableRoles
+    this.authRepository.changeableRoles
       .pipe(
         map(roles => roles.map(role => ({ id: role.id, value: role.id, label: role.name }))),
         takeUntil(this.destroy$)
@@ -131,111 +131,113 @@ export class ProfileFormService {
       .get("avatar")
       ?.valueChanges.pipe(
         skip(1),
-        concatMap(url => this.authService.saveAvatar(url)),
+        concatMap(url => this.authRepository.updateAvatar(url)),
         takeUntil(this.destroy$)
       )
       .subscribe();
   }
 
   public initializeProfileData(): void {
-    this.authService.profile.pipe(first(), takeUntil(this.destroy$)).subscribe((profile: User) => {
-      this.profileId.set(profile.id);
+    this.authRepository.profile
+      .pipe(first(), takeUntil(this.destroy$))
+      .subscribe((profile: User) => {
+        this.profileId.set(profile.id);
 
-      this.profileForm.patchValue({
-        firstName: profile.firstName ?? "",
-        lastName: profile.lastName ?? "",
-        email: profile.email ?? "",
-        userType: profile.userType ?? 1,
-        birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
-        city: profile.city ?? "",
-        coverImageAddress: profile.coverImageAddress ?? "",
-        phoneNumber: profile.phoneNumber ?? "",
-        additionalRole: profile.v2Speciality?.name ?? "",
-        speciality: profile.speciality ?? "",
-        skills: profile.skills ?? [],
-        avatar: profile.avatar ?? "",
-        aboutMe: profile.aboutMe ?? "",
-        isMospolytechStudent: profile.isMospolytechStudent ?? false,
-        studyGroup: profile.studyGroup ?? "",
+        this.profileForm.patchValue({
+          firstName: profile.firstName ?? "",
+          lastName: profile.lastName ?? "",
+          email: profile.email ?? "",
+          userType: profile.userType ?? 1,
+          birthday: profile.birthday ? dayjs(profile.birthday).format("DD.MM.YYYY") : "",
+          city: profile.city ?? "",
+          coverImageAddress: profile.coverImageAddress ?? "",
+          phoneNumber: profile.phoneNumber ?? "",
+          additionalRole: profile.v2Speciality?.name ?? "",
+          speciality: profile.speciality ?? "",
+          skills: profile.skills ?? [],
+          avatar: profile.avatar ?? "",
+          aboutMe: profile.aboutMe ?? "",
+          isMospolytechStudent: profile.isMospolytechStudent ?? false,
+          studyGroup: profile.studyGroup ?? "",
+        });
+
+        this.workExperience.clear();
+        profile.workExperience.forEach(work => {
+          this.workExperience.push(
+            this.fb.group(
+              {
+                organizationName: work.organizationName,
+                entryYear: work.entryYear,
+                completionYear: work.completionYear,
+                description: work.description,
+                jobPosition: work.jobPosition,
+              },
+              {
+                validators: yearRangeValidators("entryYear", "completionYear"),
+              }
+            )
+          );
+        });
+
+        this.education.clear();
+        profile.education.forEach(edu => {
+          this.education.push(
+            this.fb.group(
+              {
+                organizationName: edu.organizationName,
+                entryYear: edu.entryYear,
+                completionYear: edu.completionYear,
+                description: edu.description,
+                educationStatus: edu.educationStatus,
+                educationLevel: edu.educationLevel,
+              },
+              {
+                validators: yearRangeValidators("entryYear", "completionYear"),
+              }
+            )
+          );
+        });
+
+        this.userLanguages.clear();
+        profile.userLanguages.forEach(lang => {
+          this.userLanguages.push(
+            this.fb.group({
+              language: lang.language,
+              languageLevel: lang.languageLevel,
+            })
+          );
+        });
+
+        this.achievements.clear();
+        profile.achievements.forEach(achievement => {
+          this.achievements.push(
+            this.fb.group({
+              id: [achievement.id],
+              title: [achievement.title, Validators.required],
+              status: [achievement.status, Validators.required],
+              year: [achievement.year, Validators.required],
+              files: [achievement.files ?? []],
+            })
+          );
+        });
+
+        profile.links.length && profile.links.forEach(l => this.addLink(l));
+
+        if ([2, 3, 4].includes(profile.userType)) {
+          this.typeSpecific?.addControl("preferredIndustries", this.fb.array([]));
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          profile[this.userTypeMap[profile.userType]].preferredIndustries.forEach(
+            (industry: string) => this.addPreferredIndustry(industry)
+          );
+        }
+
+        if ([1, 3, 4].includes(profile.userType)) {
+          const userTypeData = profile.member ?? profile.mentor ?? profile.expert;
+          this.typeSpecific.addControl("usefulToProject", this.fb.control(""));
+          this.typeSpecific.get("usefulToProject")?.patchValue(userTypeData?.usefulToProject);
+        }
       });
-
-      this.workExperience.clear();
-      profile.workExperience.forEach(work => {
-        this.workExperience.push(
-          this.fb.group(
-            {
-              organizationName: work.organizationName,
-              entryYear: work.entryYear,
-              completionYear: work.completionYear,
-              description: work.description,
-              jobPosition: work.jobPosition,
-            },
-            {
-              validators: yearRangeValidators("entryYear", "completionYear"),
-            }
-          )
-        );
-      });
-
-      this.education.clear();
-      profile.education.forEach(edu => {
-        this.education.push(
-          this.fb.group(
-            {
-              organizationName: edu.organizationName,
-              entryYear: edu.entryYear,
-              completionYear: edu.completionYear,
-              description: edu.description,
-              educationStatus: edu.educationStatus,
-              educationLevel: edu.educationLevel,
-            },
-            {
-              validators: yearRangeValidators("entryYear", "completionYear"),
-            }
-          )
-        );
-      });
-
-      this.userLanguages.clear();
-      profile.userLanguages.forEach(lang => {
-        this.userLanguages.push(
-          this.fb.group({
-            language: lang.language,
-            languageLevel: lang.languageLevel,
-          })
-        );
-      });
-
-      this.achievements.clear();
-      profile.achievements.forEach(achievement => {
-        this.achievements.push(
-          this.fb.group({
-            id: [achievement.id],
-            title: [achievement.title, Validators.required],
-            status: [achievement.status, Validators.required],
-            year: [achievement.year, Validators.required],
-            files: [achievement.files ?? []],
-          })
-        );
-      });
-
-      profile.links.length && profile.links.forEach(l => this.addLink(l));
-
-      if ([2, 3, 4].includes(profile.userType)) {
-        this.typeSpecific?.addControl("preferredIndustries", this.fb.array([]));
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        profile[this.userTypeMap[profile.userType]].preferredIndustries.forEach(
-          (industry: string) => this.addPreferredIndustry(industry)
-        );
-      }
-
-      if ([1, 3, 4].includes(profile.userType)) {
-        const userTypeData = profile.member ?? profile.mentor ?? profile.expert;
-        this.typeSpecific.addControl("usefulToProject", this.fb.control(""));
-        this.typeSpecific.get("usefulToProject")?.patchValue(userTypeData?.usefulToProject);
-      }
-    });
   }
 
   /**
@@ -355,8 +357,8 @@ export class ProfileFormService {
    * @returns Observable<void> - результат операции изменения типа
    */
   changeUserType(typeId: number): Observable<void> {
-    return this.authService
-      .saveProfile({
+    return this.authRepository
+      .updateProfile({
         email: this.profileForm.value.email,
         firstName: this.profileForm.value.firstName,
         lastName: this.profileForm.value.lastName,

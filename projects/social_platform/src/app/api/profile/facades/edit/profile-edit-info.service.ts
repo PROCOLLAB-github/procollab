@@ -5,17 +5,17 @@ import { concatMap, Subject, takeUntil } from "rxjs";
 import { ProfileFormService } from "./profile-form.service";
 import { Achievement } from "projects/social_platform/src/app/domain/auth/user.model";
 import dayjs from "dayjs";
-import { AuthService } from "../../../auth";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { NavigationService } from "../../../paths/navigation.service";
 import { EditStep, ProjectStepService } from "../../../project/project-step.service";
 import { NavService } from "@ui/services/nav/nav.service";
 import { ActivatedRoute } from "@angular/router";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 @Injectable()
 export class ProfileEditInfoService {
   private readonly profileFormService = inject(ProfileFormService);
-  private readonly authService = inject(AuthService);
+  private readonly authRepository = inject(AuthRepository);
   private readonly route = inject(ActivatedRoute);
   private readonly navigationService = inject(NavigationService);
   private readonly navService = inject(NavService);
@@ -150,10 +150,10 @@ export class ProfileEditInfoService {
           : this.profileForm.value.phoneNumber,
     };
 
-    this.authService
-      .saveProfile(newProfile)
+    this.authRepository
+      .updateProfile(newProfile)
       .pipe(
-        concatMap(() => this.authService.getProfile()),
+        concatMap(() => this.authRepository.fetchProfile()),
         takeUntil(this.destroy$)
       )
       .subscribe({

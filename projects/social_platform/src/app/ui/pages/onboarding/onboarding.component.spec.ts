@@ -2,10 +2,10 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { OnboardingComponent } from "./onboarding/onboarding.component";
+import { OnboardingComponent } from "./onboarding.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
-import { AuthService } from "@auth/services";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 describe("OnboardingComponent", () => {
   let component: OnboardingComponent;
@@ -18,7 +18,7 @@ describe("OnboardingComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, OnboardingComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     }).compileComponents();
   });
 

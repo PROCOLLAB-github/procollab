@@ -4,7 +4,7 @@ import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
+import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
 
 /**
  * Резолвер для предзагрузки участников программы

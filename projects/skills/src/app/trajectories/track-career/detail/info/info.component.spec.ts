@@ -2,18 +2,18 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { InfoComponent } from "./info.component";
+import { TrajectoryInfoComponent } from "./info.component";
 
-describe("InfoComponent", () => {
-  let component: InfoComponent;
-  let fixture: ComponentFixture<InfoComponent>;
+describe("TrajectoryInfoComponent", () => {
+  let component: TrajectoryInfoComponent;
+  let fixture: ComponentFixture<TrajectoryInfoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [InfoComponent],
+      imports: [TrajectoryInfoComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(InfoComponent);
+    fixture = TestBed.createComponent(TrajectoryInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

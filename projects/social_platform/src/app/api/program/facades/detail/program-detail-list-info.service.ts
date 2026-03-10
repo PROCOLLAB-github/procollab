@@ -15,11 +15,8 @@ import {
   tap,
   throttleTime,
 } from "rxjs";
-import { ProgramService } from "../../program.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ProjectRatingService } from "../../../project/project-rating.service";
-import { AuthService } from "../../../auth";
-import { SubscriptionService } from "../../../subsriptions/subscription.service";
+import { SubscriptionHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/subscription/subscription-http.adapter";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
@@ -28,15 +25,18 @@ import Fuse from "fuse.js";
 import { ProgramDetailListUIInfoService } from "./ui/program-detail-list-ui-info.service";
 import { ProjectRate } from "projects/social_platform/src/app/domain/project/project-rate";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { ProgramRepository } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
+import { ProjectRatingRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-rating.repository";
 
 @Injectable()
 export class ProgramDetailListInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly programService = inject(ProgramService);
-  private readonly projectRatingService = inject(ProjectRatingService);
-  private readonly authService = inject(AuthService);
-  private readonly subscriptionService = inject(SubscriptionService);
+  private readonly programRepository = inject(ProgramRepository);
+  private readonly projectRatingRepository = inject(ProjectRatingRepository);
+  private readonly authRepository = inject(AuthRepository);
+  private readonly subscriptionService = inject(SubscriptionHttpAdapter);
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
   private readonly logger = inject(LoggerService);
 
@@ -131,7 +131,7 @@ export class ProgramDetailListInfoService {
   }
 
   setupProfile(): void {
-    this.authService.profile
+    this.authRepository.profile
       .pipe(
         switchMap(p => {
           return this.subscriptionService.getSubscriptions(p.id);
@@ -167,15 +167,15 @@ export class ProgramDetailListInfoService {
 
           if (this.listType() === "rating") {
             if (Object.keys(filters).length > 0) {
-              return this.projectRatingService.postFilters(programId, filters, params);
+              return this.projectRatingRepository.postFilters(programId, filters, params);
             }
-            return this.projectRatingService.getAll(programId, params);
+            return this.projectRatingRepository.getAll(programId, params);
           }
 
           if (Object.keys(filters).length > 0) {
-            return this.programService.createProgramFilters(programId, filters, params);
+            return this.programRepository.createProgramFilters(programId, filters, params);
           }
-          return this.programService.getAllProjects(programId, params);
+          return this.programRepository.getAllProjects(programId, params);
         }),
         catchError(err => {
           this.logger.error("Error in setupFilters:", err);
@@ -257,8 +257,8 @@ export class ProgramDetailListInfoService {
       case "rating": {
         const ratingRequest$ =
           Object.keys(filters).length > 0
-            ? this.projectRatingService.postFilters(programId, filters, params)
-            : this.projectRatingService.getAll(programId, params);
+            ? this.projectRatingRepository.postFilters(programId, filters, params)
+            : this.projectRatingRepository.getAll(programId, params);
 
         return ratingRequest$.pipe(
           tap((rating: ApiPagination<ProjectRate>) => {
@@ -276,8 +276,8 @@ export class ProgramDetailListInfoService {
       case "projects": {
         const projectsRequest$ =
           Object.keys(filters).length > 0
-            ? this.programService.createProgramFilters(programId, filters, params)
-            : this.programService.getAllProjects(programId, params);
+            ? this.programRepository.createProgramFilters(programId, filters, params)
+            : this.programRepository.getAllProjects(programId, params);
 
         return projectsRequest$.pipe(
           tap((projects: ApiPagination<Project>) => {
@@ -293,7 +293,7 @@ export class ProgramDetailListInfoService {
       }
 
       case "members": {
-        return this.programService.getAllMembers(programId, offset, this.itemsPerPage()).pipe(
+        return this.programRepository.getAllMembers(programId, offset, this.itemsPerPage()).pipe(
           tap((members: ApiPagination<User>) => {
             this.programDetailListUIInfoService.applyFetchProgramData(members);
           }),

@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { ResetPasswordComponent } from "./reset-password.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { of } from "rxjs";
-import { AuthService } from "@auth/services";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 import { RouterTestingModule } from "@angular/router/testing";
 import { NgxMaskModule } from "ngx-mask";
 
@@ -23,7 +23,7 @@ describe("ResetPasswordComponent", () => {
         NgxMaskModule.forRoot(),
         ResetPasswordComponent,
       ],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     }).compileComponents();
   });
 

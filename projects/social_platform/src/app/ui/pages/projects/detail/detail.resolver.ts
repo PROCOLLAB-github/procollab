@@ -3,11 +3,11 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { forkJoin, of, switchMap, tap } from "rxjs";
-import { ProjectService } from "projects/social_platform/src/app/api/project/project.service";
-import { SubscriptionService } from "projects/social_platform/src/app/api/subsriptions/subscription.service";
+import { SubscriptionHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/subscription/subscription-http.adapter";
 import { ProjectSubscriber } from "projects/social_platform/src/app/domain/project/project-subscriber.model";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
+import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
 
 /**
  * Резолвер для загрузки данных проекта и его подписчиков
@@ -25,11 +25,11 @@ import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/ap
 export const ProjectDetailResolver: ResolveFn<[Project, ProjectSubscriber[]]> = (
   route: ActivatedRouteSnapshot
 ) => {
-  const projectService = inject(ProjectService);
-  const subscriptionService = inject(SubscriptionService);
+  const projectRepository = inject(ProjectRepository);
+  const subscriptionService = inject(SubscriptionHttpAdapter);
   const projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
 
-  return projectService.getOne(Number(route.paramMap.get("projectId"))).pipe(
+  return projectRepository.getOne(Number(route.paramMap.get("projectId"))).pipe(
     tap(project => projectsDetailUIInfoService.applySetProject(project)),
     switchMap(project => {
       return forkJoin([of(project), subscriptionService.getSubscribers(project.id)]);

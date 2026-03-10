@@ -4,19 +4,19 @@ import { ElementRef, inject, Injectable } from "@angular/core";
 import { concatMap, filter, map, Subject, takeUntil, tap } from "rxjs";
 import { ProfileNews } from "../../../../domain/profile/profile-news.model";
 import { ActivatedRoute } from "@angular/router";
-import { AuthService } from "../../../auth";
-import { ProfileNewsService } from "../../profile-news.service";
 import { ExpandService } from "../../../expand/expand.service";
 import { calculateProfileProgress } from "@utils/calculateProgress";
 import { ProfileDetailUIInfoService } from "./ui/profile-detail-ui-info.service";
 import { NewsInfoService } from "../../../news/news-info.service";
 import { ProjectsDetailUIInfoService } from "../../../project/facades/detail/ui/projects-detail-ui.service";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { ProfileNewsRepository } from "projects/social_platform/src/app/infrastructure/repository/profile/profile-news.repository";
 
 @Injectable()
 export class ProfileDetailInfoService {
   private readonly route = inject(ActivatedRoute);
-  private readonly authService = inject(AuthService);
-  private readonly profileNewsService = inject(ProfileNewsService);
+  private readonly authRepository = inject(AuthRepository);
+  private readonly profileNewsRepository = inject(ProfileNewsRepository);
   private readonly expandService = inject(ExpandService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
@@ -74,7 +74,7 @@ export class ProfileDetailInfoService {
    * @param news - объект с текстом и файлами новости
    */
   onAddNews(news: { text: string; files: string[] }) {
-    return this.profileNewsService.addNews(this.route.snapshot.params["id"], news).pipe(
+    return this.profileNewsRepository.addNews(this.route.snapshot.params["id"], news).pipe(
       tap(newsRes => {
         this.newsInfoService.applyAddNews(newsRes);
       }),
@@ -89,7 +89,7 @@ export class ProfileDetailInfoService {
   onDeleteNews(newsId: number): void {
     this.newsInfoService.applyDeleteNews(newsId);
 
-    this.profileNewsService
+    this.profileNewsRepository
       .delete(this.route.snapshot.params["id"], newsId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({ next: () => {} });
@@ -103,7 +103,7 @@ export class ProfileDetailInfoService {
     const item = this.news().find(n => n.id === newsId);
     if (!item) return;
 
-    this.profileNewsService
+    this.profileNewsRepository
       .toggleLike(this.route.snapshot.params["id"], newsId, !item.isUserLiked)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
@@ -117,7 +117,7 @@ export class ProfileDetailInfoService {
    * @param newsItemId - идентификатор редактируемой новости
    */
   onEditNews(news: ProfileNews, newsItemId: number) {
-    return this.profileNewsService
+    return this.profileNewsRepository
       .editNews(this.route.snapshot.params["id"], newsItemId, news)
       .pipe(
         tap(resNews => {
@@ -136,14 +136,14 @@ export class ProfileDetailInfoService {
       return Number((e.target as HTMLElement).dataset["id"]);
     });
 
-    this.profileNewsService
+    this.profileNewsRepository
       .readNews(Number(this.route.snapshot.params["id"]), ids)
       .pipe(takeUntil(this.destroy$))
       .subscribe();
   }
 
   private initializationProfileVields(): void {
-    this.authService.profile.pipe(takeUntil(this.destroy$)).subscribe({
+    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe({
       next: user => {
         this.projectsDetailUIInfoService.applySetLoggedUserId("logged", user.id);
       },
@@ -156,7 +156,7 @@ export class ProfileDetailInfoService {
     this.route.params
       .pipe(
         map(r => r["id"]),
-        concatMap(userId => this.profileNewsService.fetchNews(userId)),
+        concatMap(userId => this.profileNewsRepository.fetchNews(userId)),
         takeUntil(this.destroy$)
       )
       .subscribe(news => {

@@ -2,7 +2,7 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ValidationService } from "@corelib";
-import { InviteService } from "projects/social_platform/src/app/api/invite/invite.service";
+import { InviteRepository } from "projects/social_platform/src/app/infrastructure/repository/invite/invite.repository";
 import { Subject, takeUntil } from "rxjs";
 import { ProjectTeamUIService } from "./ui/project-team-ui.service";
 
@@ -13,7 +13,7 @@ import { ProjectTeamUIService } from "./ui/project-team-ui.service";
  */
 @Injectable()
 export class ProjectTeamService {
-  private readonly inviteService = inject(InviteService);
+  private readonly inviteService = inject(InviteRepository);
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
   private readonly validationService = inject(ValidationService);
 

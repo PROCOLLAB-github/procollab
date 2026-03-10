@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { VacancyService } from "../../../api/vacancy/vacancy.service";
+import { VacancyRepository } from "../../../infrastructure/repository/vacancy/vacancy.repository";
 
 /**
  * Резолвер для предзагрузки списка вакансий
@@ -11,8 +11,8 @@ import { VacancyService } from "../../../api/vacancy/vacancy.service";
  * @returns Observable с данными вакансий (первые 20 элементов)
  */
 export const VacanciesResolver = () => {
-  const vacanciesService = inject(VacancyService);
+  const vacanciesRepository = inject(VacancyRepository);
 
   // Загрузка первых 20 вакансий с нулевым смещением
-  return vacanciesService.getForProject(20, 0);
+  return vacanciesRepository.getForProject(20, 0);
 };

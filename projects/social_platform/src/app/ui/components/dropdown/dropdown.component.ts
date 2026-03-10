@@ -37,7 +37,12 @@ import { CreateTagFormComponent } from "@ui/pages/projects/detail/kanban/compone
 })
 export class DropdownComponent {
   /** Состояние для определения списка элементов */
-  @Input() options: { id: number; label: string; value: any; additionalInfo?: any }[] = [];
+  @Input() options: {
+    id: number;
+    label: string;
+    value: string | number | boolean | null;
+    additionalInfo?: any;
+  }[] = [];
 
   @Input() type: "icons" | "avatars" | "shapes" | "tags" | "goals" | "text" = "text";
 

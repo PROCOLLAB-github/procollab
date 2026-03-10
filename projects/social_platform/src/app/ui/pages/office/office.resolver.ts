@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { InviteService } from "projects/social_platform/src/app/api/invite/invite.service";
+import { InviteRepository } from "projects/social_platform/src/app/infrastructure/repository/invite/invite.repository";
 import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { ResolveFn } from "@angular/router";
 
@@ -16,7 +16,7 @@ import { ResolveFn } from "@angular/router";
  * - Observable<Invite[]> - массив приглашений пользователя
  */
 export const OfficeResolver: ResolveFn<Invite[]> = () => {
-  const inviteService = inject(InviteService);
+  const inviteService = inject(InviteRepository);
 
   return inviteService.getMy();
 };

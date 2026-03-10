@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { ControlErrorPipe, ValidationService } from "projects/core";
 import { BarComponent, ButtonComponent, InputComponent } from "@ui/components";
 import { KeyValuePipe } from "@angular/common";
-import { ProgramService } from "projects/social_platform/src/app/api/program/program.service";
+import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
 import { ProgramDataSchema } from "projects/social_platform/src/app/domain/program/program.model";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";

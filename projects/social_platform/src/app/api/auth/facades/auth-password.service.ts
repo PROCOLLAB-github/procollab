@@ -4,14 +4,14 @@ import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ValidationService } from "@corelib";
 import { map, Subject, takeUntil } from "rxjs";
-import { AuthService } from "../auth.service";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { AuthHttpAdapter } from "../../../infrastructure/adapters/auth/auth-http.adapter";
 
 @Injectable()
 export class AuthPasswordService {
   private readonly route = inject(ActivatedRoute);
-  private readonly authService = inject(AuthService);
+  private readonly authAdapter = inject(AuthHttpAdapter);
   private readonly router = inject(Router);
   private readonly validationService = inject(ValidationService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
@@ -49,7 +49,7 @@ export class AuthPasswordService {
     this.errorServer.set(false);
     this.isSubmitting.set(true);
 
-    this.authService.resetPassword(this.resetForm.value.email!).subscribe({
+    this.authAdapter.resetPassword(this.resetForm.value.email!).subscribe({
       next: () => {
         this.router
           .navigate(["/auth/reset_password/confirm"], {
@@ -76,7 +76,7 @@ export class AuthPasswordService {
 
     if (!token || !this.validationService.getFormValidation(this.passwordForm)) return;
 
-    this.authService.setPassword(this.passwordForm.value.password!, token).subscribe({
+    this.authAdapter.setPassword(this.passwordForm.value.password!, token).subscribe({
       next: () => {
         this.router
           .navigateByUrl("/auth/login")

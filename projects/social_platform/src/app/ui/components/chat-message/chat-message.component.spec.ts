@@ -4,9 +4,9 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ChatMessageComponent } from "./chat-message.component";
 import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
-import { AuthService } from "@auth/services";
 import { of } from "rxjs";
 import { RouterTestingModule } from "@angular/router/testing";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 describe("ChatMessageComponent", () => {
   let component: ChatMessageComponent;
@@ -19,7 +19,7 @@ describe("ChatMessageComponent", () => {
 
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, ChatMessageComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     }).compileComponents();
   });
 
