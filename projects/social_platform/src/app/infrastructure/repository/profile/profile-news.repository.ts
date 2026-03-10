@@ -13,9 +13,9 @@ export class ProfileNewsRepository {
   private readonly profileNewsAdapter = inject(ProfileNewsHttpAdapter);
   private readonly storageService = inject(StorageService);
 
-  fetchNews(userId: string): Observable<ApiPagination<ProfileNews>> {
+  fetchNews(id: string): Observable<ApiPagination<ProfileNews>> {
     return this.profileNewsAdapter
-      .fetchNews(userId)
+      .fetchNews(id)
       .pipe(map(page => ({ ...page, results: plainToInstance(ProfileNews, page.results) })));
   }
 

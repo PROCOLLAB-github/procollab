@@ -20,6 +20,22 @@ import {
 import { environment } from "@environment";
 import { registerLocaleData } from "@angular/common";
 import localeRu from "@angular/common/locales/ru";
+import { AUTH_PROVIDERS } from "./infrastructure/di/auth.providers";
+import { INDUSTRY_PROVIDERS } from "./infrastructure/di/industry.providers";
+import { INVITE_PROVIDERS } from "./infrastructure/di/invite.providets";
+import { PROFILE_NEWS_PROVIDERS } from "./infrastructure/di/profile-news.providers";
+import { PROGRAM_PROVIDERS } from "./infrastructure/di/program/program.providers";
+import { PROGRAM_NEWS_PROVIDERS } from "./infrastructure/di/program/program-news.providers";
+import { PROJECT_PROVIDERS } from "./infrastructure/di/project/project.providers";
+import { PROJECT_GOALS_PROVIDERS } from "./infrastructure/di/project/project-goals.providers";
+import { PROJECT_NEWS_PROVIDERS } from "./infrastructure/di/project/project-news.providers";
+import { PROJECT_PROGRAM_PROVIDERS } from "./infrastructure/di/project/project-program.providers";
+import { PROJECT_PARTNER_PROVIDERS } from "./infrastructure/di/project/project-partner.providers";
+import { PROJECT_RATING_PROVIDERS } from "./infrastructure/di/project/project-rating.providers";
+import { PROJECT_RESOURCES_PROVIDERS } from "./infrastructure/di/project/project-resources.providers";
+import { SKILLS_PROVIDERS } from "./infrastructure/di/skills.providers";
+import { SPECIALIZATIONS_PROVIDERS } from "./infrastructure/di/specializations.providers";
+import { VACANCY_PROVIDERS } from "./infrastructure/di/vacancy.providers";
 
 registerLocaleData(localeRu, "ru-RU");
 
@@ -63,5 +79,21 @@ export const APP_CONFIG: ApplicationConfig = {
       })
     ),
     provideAnimations(),
+    ...AUTH_PROVIDERS,
+    ...INDUSTRY_PROVIDERS,
+    ...INVITE_PROVIDERS,
+    ...PROFILE_NEWS_PROVIDERS,
+    ...PROGRAM_PROVIDERS,
+    ...PROGRAM_NEWS_PROVIDERS,
+    ...PROJECT_PROVIDERS,
+    ...PROJECT_GOALS_PROVIDERS,
+    ...PROJECT_NEWS_PROVIDERS,
+    ...PROJECT_PARTNER_PROVIDERS,
+    ...PROJECT_PROGRAM_PROVIDERS,
+    ...PROJECT_RATING_PROVIDERS,
+    ...PROJECT_RESOURCES_PROVIDERS,
+    ...SKILLS_PROVIDERS,
+    ...SPECIALIZATIONS_PROVIDERS,
+    ...VACANCY_PROVIDERS,
   ],
 };

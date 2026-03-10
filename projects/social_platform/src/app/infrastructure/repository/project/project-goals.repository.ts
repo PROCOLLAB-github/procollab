@@ -6,9 +6,10 @@ import { ProjectGoalsHttpAdapter } from "../../adapters/project/project-goals-ht
 import { plainToInstance } from "class-transformer";
 import { Goal } from "../../../domain/project/goals.model";
 import { GoalFormData } from "../../adapters/project/dto/project-goal.dto";
+import { ProjectGoalsRepositoryPort } from "../../../domain/project/ports/project-goals.repository.port";
 
 @Injectable({ providedIn: "root" })
-export class ProjectGoalsRepository {
+export class ProjectGoalsRepository implements ProjectGoalsRepositoryPort {
   private readonly projectGoalsHttpAdapter = inject(ProjectGoalsHttpAdapter);
 
   fetchAll(id: number): Observable<Goal[]> {

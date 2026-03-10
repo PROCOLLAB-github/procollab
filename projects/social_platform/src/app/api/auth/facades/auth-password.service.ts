@@ -6,12 +6,14 @@ import { ValidationService } from "@corelib";
 import { map, Subject, takeUntil } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { AuthHttpAdapter } from "../../../infrastructure/adapters/auth/auth-http.adapter";
+import { ResetPasswordUseCase } from "../use-cases/reset-password.use-case";
+import { SetPasswordUseCase } from "../use-cases/set-password.use-case";
 
 @Injectable()
 export class AuthPasswordService {
   private readonly route = inject(ActivatedRoute);
-  private readonly authAdapter = inject(AuthHttpAdapter);
+  private readonly resetPasswordUseCase = inject(ResetPasswordUseCase);
+  private readonly setPasswordUseCase = inject(SetPasswordUseCase);
   private readonly router = inject(Router);
   private readonly validationService = inject(ValidationService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
@@ -49,24 +51,27 @@ export class AuthPasswordService {
     this.errorServer.set(false);
     this.isSubmitting.set(true);
 
-    this.authAdapter.resetPassword(this.resetForm.value.email!).subscribe({
-      next: () => {
-        this.router
-          .navigate(["/auth/reset_password/confirm"], {
-            queryParams: { email: this.resetForm.value.email },
-          })
-          .then(() => this.logger.debug("ResetPasswordComponent"));
-      },
-      error: () => {
-        this.errorServer.set(true);
-        this.isSubmitting.set(false);
+    this.resetPasswordUseCase
+      .execute(this.resetForm.value.email!)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: result => {
+          if (!result.ok) {
+            this.errorServer.set(true);
+            this.resetForm.reset();
+            return;
+          }
 
-        this.resetForm.reset();
-      },
-      complete: () => {
-        this.isSubmitting.set(false);
-      },
-    });
+          this.router
+            .navigate(["/auth/reset_password/confirm"], {
+              queryParams: { email: this.resetForm.value.email },
+            })
+            .then(() => this.logger.debug("ResetPasswordComponent"));
+        },
+        complete: () => {
+          this.isSubmitting.set(false);
+        },
+      });
   }
 
   // SetPassword Component
@@ -76,17 +81,22 @@ export class AuthPasswordService {
 
     if (!token || !this.validationService.getFormValidation(this.passwordForm)) return;
 
-    this.authAdapter.setPassword(this.passwordForm.value.password!, token).subscribe({
-      next: () => {
-        this.router
-          .navigateByUrl("/auth/login")
-          .then(() => this.logger.debug("SetPasswordComponent"));
-      },
-      error: error => {
-        this.logger.error("Error setting password:", error);
-        this.errorRequest.set(true);
-      },
-    });
+    this.setPasswordUseCase
+      .execute(this.passwordForm.value.password!, token)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: result => {
+          if (!result.ok) {
+            this.logger.error("Error setting password:", result.error.cause);
+            this.errorRequest.set(true);
+            return;
+          }
+
+          this.router
+            .navigateByUrl("/auth/login")
+            .then(() => this.logger.debug("SetPasswordComponent"));
+        },
+      });
   }
 
   destroy(): void {

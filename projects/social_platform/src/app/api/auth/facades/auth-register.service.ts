@@ -5,11 +5,11 @@ import { Router } from "@angular/router";
 import { Subject, takeUntil } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { ValidationService } from "@corelib";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { RegisterUseCase } from "../use-cases/register.use-case";
 
 @Injectable()
 export class AuthRegisterService {
-  private readonly authRepository = inject(AuthRepository);
+  private readonly registerUseCase = inject(RegisterUseCase);
   private readonly router = inject(Router);
   private readonly validationService = inject(ValidationService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
@@ -45,26 +45,29 @@ export class AuthRegisterService {
 
     const form = this.authUIInfoService.prepareFormValues(this.registerForm);
 
+    this.serverErrors.set([]);
+    this.isUserCreationModalError.set(false);
     this.registerIsSubmitting.set(true);
 
-    this.authRepository
-      .register(form)
+    this.registerUseCase
+      .execute(form)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
-          this.registerIsSubmitting.set(false);
-          this.router.navigateByUrl("/auth/verification/email?adress=" + form.email);
-        },
-        error: error => {
-          const emailErrors = error?.error?.email;
+        next: result => {
+          if (!result.ok) {
+            if (result.error.kind === "validation_error") {
+              this.serverErrors.set(Object.values(result.error.errors).flat());
+            } else if (result.error.kind === "server_error") {
+              this.isUserCreationModalError.set(true);
+            }
 
-          if (error.status === 400 && Array.isArray(emailErrors)) {
-            this.serverErrors.set(Object.values(error.error).flat() as string[]);
-          } else if (error.status === 500) {
-            this.isUserCreationModalError.set(true);
+            this.registerIsSubmitting.set(false);
+
+            return;
           }
 
           this.registerIsSubmitting.set(false);
+          this.router.navigateByUrl("/auth/verification/email?adress=" + form.email);
         },
       });
   }

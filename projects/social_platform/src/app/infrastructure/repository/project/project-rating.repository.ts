@@ -8,9 +8,10 @@ import { ProjectRate } from "../../../domain/project/project-rate";
 import { ProjectRatingCriterion } from "../../../domain/project/project-rating-criterion";
 import { ProjectRatingCriterionOutput } from "../../../domain/project/project-rating-criterion-output";
 import { ProjectRatingHttpAdapter } from "../../adapters/project/project-rating-http.adapter";
+import { ProjectRatingRepositoryPort } from "../../../domain/project/ports/project-rating.repository.port";
 
 @Injectable({ providedIn: "root" })
-export class ProjectRatingRepository {
+export class ProjectRatingRepository implements ProjectRatingRepositoryPort {
   private readonly projectRatingAdapter = inject(ProjectRatingHttpAdapter);
 
   getAll(programId: number, params?: HttpParams): Observable<ApiPagination<ProjectRate>> {

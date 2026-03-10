@@ -3,15 +3,12 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService, TokenService } from "@corelib";
 import { Observable } from "rxjs";
-import {
-  LoginRequest,
-  LoginResponse,
-  RegisterRequest,
-  RegisterResponse,
-} from "../../../domain/auth/http.model";
+import { LoginResponse, RegisterResponse } from "../../../domain/auth/http.model";
 import { User } from "../../../domain/auth/user.model";
 import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
 import { ProjectDto } from "../project/dto/project.dto";
+import { LoginCommand } from "../../../domain/auth/commands/login.command";
+import { RegisterCommand } from "../../../domain/auth/commands/register.command";
 
 @Injectable({ providedIn: "root" })
 export class AuthHttpAdapter {
@@ -27,7 +24,7 @@ export class AuthHttpAdapter {
    * @param credentials Данные для входа (email и пароль)
    * @returns Observable с ответом сервера, содержащим токены
    */
-  login({ email, password }: LoginRequest): Observable<LoginResponse> {
+  login({ email, password }: LoginCommand): Observable<LoginResponse> {
     return this.apiService.post(`${this.API_TOKEN_URL}/`, { email, password });
   }
 
@@ -47,7 +44,7 @@ export class AuthHttpAdapter {
    * @param data Данные для регистрации (email, пароль, имя и т.д.)
    * @returns Observable с данными зарегистрированного пользователя
    */
-  register(data: RegisterRequest): Observable<RegisterResponse> {
+  register(data: RegisterCommand): Observable<RegisterResponse> {
     return this.apiService.post(`${this.AUTH_USERS_URL}/`, data);
   }
 

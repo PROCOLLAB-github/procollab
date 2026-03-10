@@ -6,9 +6,10 @@ import { forkJoin, map, Observable } from "rxjs";
 import { ApiPagination } from "../../../domain/other/api-pagination.model";
 import { FeedNews } from "../../../domain/project/project-news.model";
 import { ProgramNewsHttpAdapter } from "../../adapters/program/program-news-http.adapter";
+import { ProgramNewsRepositoryPort } from "../../../domain/program/ports/program-news.repository.port";
 
 @Injectable({ providedIn: "root" })
-export class ProgramNewsRepository {
+export class ProgramNewsRepository implements ProgramNewsRepositoryPort {
   private readonly programNewsAdapter = inject(ProgramNewsHttpAdapter);
 
   fetchNews(limit: number, offset: number, programId: number): Observable<ApiPagination<FeedNews>> {

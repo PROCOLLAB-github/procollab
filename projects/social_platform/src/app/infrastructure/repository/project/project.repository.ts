@@ -8,9 +8,10 @@ import { ApiPagination } from "../../../domain/other/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
 import { plainToInstance } from "class-transformer";
 import { ProjectDto } from "../../adapters/project/dto/project.dto";
+import { ProjectRepositoryPort } from "../../../domain/project/ports/project.repository.port";
 
 @Injectable({ providedIn: "root" })
-export class ProjectRepository {
+export class ProjectRepository implements ProjectRepositoryPort {
   private readonly cache = new Map<number, Observable<Project>>();
   readonly count$ = new BehaviorSubject<ProjectCount>({ my: 0, all: 0, subs: 0 });
 

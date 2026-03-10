@@ -2,12 +2,13 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { IndustryHttpAdapter } from "../../adapters/industry/industry-http.adapter";
-import { catchError, map, Observable, tap, throwError } from "rxjs";
+import { map, Observable, tap } from "rxjs";
 import { Industry } from "../../../domain/industry/industry.model";
 import { plainToInstance } from "class-transformer";
+import { IndustryRepositoryPort } from "../../../domain/industry/ports/industry.repository.port";
 
 @Injectable({ providedIn: "root" })
-export class IndustryRepository {
+export class IndustryRepository implements IndustryRepositoryPort {
   private readonly industryAdapter = inject(IndustryHttpAdapter);
 
   readonly industries = signal<Industry[]>([]);

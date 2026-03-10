@@ -7,9 +7,10 @@ import { ProjectAssign } from "../../../domain/project/project-assign.model";
 import { plainToInstance } from "class-transformer";
 import { Project } from "../../../domain/project/project.model";
 import { ProjectNewAdditionalProgramFields } from "../../../domain/program/partner-program-fields.model";
+import { ProjectProgramRepositoryPort } from "../../../domain/project/ports/project-program.repository.port";
 
 @Injectable({ providedIn: "root" })
-export class ProjectProgramRepository {
+export class ProjectProgramRepository implements ProjectProgramRepositoryPort {
   private readonly projectProgramAdapter = inject(ProjectProgramHttpAdapter);
 
   assignProjectToProgram(projectId: number, partnerProgramId: number): Observable<ProjectAssign> {

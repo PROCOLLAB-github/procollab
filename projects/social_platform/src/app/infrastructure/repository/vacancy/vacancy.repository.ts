@@ -7,9 +7,10 @@ import { CreateVacancyDto } from "../../../api/project/dto/create-vacancy.model"
 import { VacancyResponse } from "../../../domain/vacancy/vacancy-response.model";
 import { Vacancy } from "../../../domain/vacancy/vacancy.model";
 import { VacancyHttpAdapter } from "../../adapters/vacancy/vacancy-http.adapter";
+import { VacancyRepositoryPort } from "../../../domain/vacancy/ports/vacancy.repository.port";
 
 @Injectable({ providedIn: "root" })
-export class VacancyRepository {
+export class VacancyRepository implements VacancyRepositoryPort {
   private readonly vacancyAdapter = inject(VacancyHttpAdapter);
 
   /**

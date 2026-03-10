@@ -11,9 +11,10 @@ import { Program, ProgramDataSchema } from "../../../domain/program/program.mode
 import { ProjectAdditionalFields } from "../../../domain/project/project-additional-fields.model";
 import { Project } from "../../../domain/project/project.model";
 import { ProgramHttpAdapter } from "../../adapters/program/program-http.adapter";
+import { ProgramRepositoryPort } from "../../../domain/program/ports/program.repository.port";
 
 @Injectable({ providedIn: "root" })
-export class ProgramRepository {
+export class ProgramRepository implements ProgramRepositoryPort {
   private readonly programAdapter = inject(ProgramHttpAdapter);
 
   getAll(skip: number, take: number, params?: HttpParams): Observable<ApiPagination<Program>> {

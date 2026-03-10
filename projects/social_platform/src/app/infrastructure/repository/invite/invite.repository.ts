@@ -5,9 +5,10 @@ import { plainToInstance } from "class-transformer";
 import { map, Observable } from "rxjs";
 import { Invite } from "../../../domain/invite/invite.model";
 import { InviteHttpAdapter } from "../../adapters/invite/invite-http.adapter";
+import { InviteRepositoryPort } from "../../../domain/invite/ports/invite.repository.port";
 
 @Injectable({ providedIn: "root" })
-export class InviteRepository {
+export class InviteRepository implements InviteRepositoryPort {
   private readonly inviteAdapter = inject(InviteHttpAdapter);
 
   /**

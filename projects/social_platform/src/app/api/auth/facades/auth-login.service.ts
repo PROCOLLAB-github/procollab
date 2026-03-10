@@ -5,9 +5,9 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { TokenService, ValidationService } from "@corelib";
 import { Subject, takeUntil } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
-import { LoginRequest } from "../../../domain/auth/http.model";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { LoginUseCase } from "../use-cases/login.use-case";
 
 @Injectable()
 export class AuthLoginService {
@@ -17,6 +17,7 @@ export class AuthLoginService {
   private readonly router = inject(Router);
   private readonly validationService = inject(ValidationService);
   private readonly authUIInfoService = inject(AuthUIInfoService);
+  private readonly loginUseCase = inject(LoginUseCase);
   private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
@@ -41,30 +42,28 @@ export class AuthLoginService {
     }
 
     this.loginIsSubmitting.set(true);
+    this.errorWrongAuth.set(false);
 
-    this.authRepository
-      .login(this.loginForm.value as LoginRequest)
+    this.loginUseCase
+      .execute(this.loginForm.getRawValue())
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: res => {
-          this.tokenService.memTokens(res);
+        next: result => {
           this.loginIsSubmitting.set(false);
 
-          if (!redirectType)
-            this.router
-              .navigateByUrl("/office")
-              .then(() => this.logger.debug("Route changed from LoginComponent"));
-          else if (redirectType === "program")
-            this.router
-              .navigateByUrl("/office/program/list")
-              .then(() => this.logger.debug("Route changed from LoginComponent"));
-        },
-        error: error => {
-          if (error.status === 401) {
-            this.errorWrongAuth.set(true);
+          if (!result.ok) {
+            if (result.error.kind === "wrong_credentials") {
+              this.errorWrongAuth.set(true);
+            }
+            return;
           }
 
-          this.loginIsSubmitting.set(false);
+          this.tokenService.memTokens(result.value.tokens);
+
+          const url = redirectType === "program" ? "/office/program/list" : "/office";
+          this.router
+            .navigateByUrl(url)
+            .then(() => this.logger.debug("Route changed from LoginComponent"));
         },
       });
   }

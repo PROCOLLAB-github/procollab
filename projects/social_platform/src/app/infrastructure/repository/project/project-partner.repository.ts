@@ -5,9 +5,10 @@ import { ProjectPartnerHttpAdapter } from "../../adapters/project/project-partne
 import { map, Observable } from "rxjs";
 import { Partner, PartnerDto } from "../../../domain/project/partner.model";
 import { plainToInstance } from "class-transformer";
+import { ProjectPartnerRepositoryPort } from "../../../domain/project/ports/project-partner.repository.port";
 
 @Injectable({ providedIn: "root" })
-export class ProjectPartnerRepository {
+export class ProjectPartnerRepository implements ProjectPartnerRepositoryPort {
   private readonly projectPartnerAdapter = inject(ProjectPartnerHttpAdapter);
 
   createPartner(id: number, params: PartnerDto): Observable<Partner> {

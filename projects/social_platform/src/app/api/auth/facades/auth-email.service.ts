@@ -6,12 +6,13 @@ import { TokenService } from "@corelib";
 import { filter, interval, map, Subject, takeUntil } from "rxjs";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { ResendEmailUseCase } from "../use-cases/resend-email.use-case";
 
 @Injectable()
 export class AuthEmailService {
   private readonly tokenService = inject(TokenService);
   private readonly route = inject(ActivatedRoute);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly resendEmailUseCase = inject(ResendEmailUseCase);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
 
@@ -60,10 +61,12 @@ export class AuthEmailService {
   onResend(): void {
     if (!this.userEmail()) return;
 
-    this.authRepository
-      .resendEmail(this.userEmail()!)
+    this.resendEmailUseCase
+      .execute(this.userEmail()!)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
+      .subscribe(result => {
+        if (!result.ok) return;
+
         this.counter.set(60);
       });
   }
