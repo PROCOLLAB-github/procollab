@@ -78,6 +78,7 @@ export interface CourseLessons {
   progressStatus: "not_started" | "in_progress" | "completed" | "blocked";
   percent: number;
   currentTaskId: number;
+  taskCount: number;
 }
 
 export interface CourseModule {
@@ -85,6 +86,7 @@ export interface CourseModule {
   courseId: number;
   title: string;
   order: number;
+  avatarUrl: string;
   startDate: Date;
   status: string;
   isAvailable: boolean;

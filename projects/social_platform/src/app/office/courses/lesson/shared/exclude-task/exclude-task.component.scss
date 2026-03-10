@@ -26,6 +26,12 @@
       justify-content: center;
 
       iframe {
+        display: block;
+        width: 100%;
+        max-width: 400px;
+        aspect-ratio: 16 / 9;
+        height: auto;
+        border: 0;
         border-radius: var(--rounded-lg);
       }
     }

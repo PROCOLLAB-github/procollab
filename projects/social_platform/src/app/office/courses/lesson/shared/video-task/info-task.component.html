@@ -7,27 +7,22 @@
 >
   <div class="video__text-content" [class.video__text-content--hasVideo]="!!mediaUrl">
     <p class="video__title text-body-12-bold">
-      {{ data.text | truncate: (data.videoUrl ? 80 : sourceType === "img" ? 100 : 200) }}
+      {{ data.text | truncate: (sourceType === "embed" ? 80 : sourceType === "img" ? 100 : 200) }}
     </p>
     <p
       class="video__text text-body-12"
       [innerHTML]="
-        data.description | truncateHtml: (data.videoUrl ? 627 : sourceType === 'img' ? 500 : 1000)
+        data.description
+          | truncateHtml: (sourceType === 'embed' ? 627 : sourceType === 'img' ? 500 : 1000)
       "
     ></p>
   </div>
 
-  @if (data.videoUrl) {
+  @if (sourceType === 'embed') {
   <div class="video__wrapper" [class.video__wrapper--hasVideo]="sourceType === 'embed'">
-    <div
-      class="video__frame"
-      [class.video__frame--hasVideo]="sourceType === 'embed'"
-      [class.video__wrapper--hasImage]="sourceType === 'img'"
-    >
-      @if (sourceType === 'embed') {
+    <div class="video__frame" [class.video__frame--hasVideo]="sourceType === 'embed'">
       <iframe [src]="mediaUrl" width="395px" height="223px" frameborder="0" allowfullscreen>
       </iframe>
-      }
     </div>
   </div>
   } @if (data.files.length) {

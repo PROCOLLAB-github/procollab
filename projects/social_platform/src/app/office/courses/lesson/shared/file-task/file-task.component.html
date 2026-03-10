@@ -1,18 +1,18 @@
 <!-- @format -->
 
-<div class="file-task" [class.file-task--hasVideo]="!!data.videoUrl">
+<div class="file-task" [class.file-task--hasVideo]="hasVideoUrl()">
   <div class="file-task__header">
     <p class="text-body-12 file-task__task">задание {{ data.order }}</p>
-    @if (!data.videoUrl && !data.imageUrl) {
+    @if (!hasVideoUrl() && !data.imageUrl) {
     <p class="file-task__text text-body-12-bold">{{ data.title | truncate: 80 }}</p>
     }
     <div
       class="file-task__description text-body-12"
-      [class.file-task__description--hasVideo]="!!data.videoUrl"
+      [class.file-task__description--hasVideo]="hasVideoUrl()"
     >
-      @if (data.videoUrl) {
+      @if (getSafeVideoUrl(); as videoUrl) {
       <iframe
-        [src]="getSafeVideoUrl()"
+        [src]="videoUrl"
         width="397px"
         height="223px"
         frameborder="0"

@@ -3,7 +3,7 @@
 <div class="skill-card--wrapper" (click)="toggleExpand($event)">
   <div class="skill-card">
     <div class="skill-card__inner">
-      <!-- <app-avatar [size]="50" [url]="courseModule.avatarUrl"></app-avatar> -->
+      <app-avatar [size]="50" [url]="courseModule.avatarUrl"></app-avatar>
 
       <div class="skill-card__info">
         <p class="skill-card__title text-body-12">Модуль {{ courseModule.id }}</p>
@@ -53,7 +53,8 @@
             <span class="topic__name text-body-10">{{ lesson.title }}</span></span
           >
           <p class="topic__levels text-body-10">
-            <!-- {{ lesson. }} {{ topic.levels | pluralize: ["задание", "задания", "заданий"] }} -->
+            {{ lesson.taskCount }}
+            {{ lesson.taskCount | pluralize: ["задание", "задания", "заданий"] }}
           </p>
         </div>
 

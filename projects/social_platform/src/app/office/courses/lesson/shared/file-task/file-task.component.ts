@@ -11,6 +11,7 @@ import { FileItemComponent } from "@ui/components/file-item/file-item.component"
 import { FileService } from "@core/services/file.service";
 import { Task } from "@office/models/courses.model";
 import { FileModel } from "@office/models/file.model";
+import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
 
 @Component({
   selector: "app-file-task",
@@ -57,10 +58,16 @@ export class FileTaskComponent {
   uploadedFiles = signal<FileModel[]>([]);
 
   getSafeVideoUrl(): SafeResourceUrl | null {
-    if (!this.data?.videoUrl) {
+    const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
+    if (!iframeUrl) {
       return null;
     }
-    return this.sanitizer.bypassSecurityTrustResourceUrl(this.data.videoUrl);
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl);
+  }
+
+  hasVideoUrl(): boolean {
+    return !!resolveVideoUrlForIframe(this.data?.videoUrl);
   }
 
   onFileUploaded(event: { url: string; name: string; size: number; mimeType: string }) {

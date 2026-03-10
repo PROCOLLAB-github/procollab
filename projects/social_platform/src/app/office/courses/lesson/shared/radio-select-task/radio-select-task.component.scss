@@ -109,6 +109,16 @@
       justify-content: center;
       max-width: 333px;
       text-align: center;
+
+      iframe {
+        display: block;
+        width: 100%;
+        max-width: 288px;
+        aspect-ratio: 16 / 9;
+        height: auto;
+        border: 0;
+        border-radius: var(--rounded-lg);
+      }
     }
   }
 

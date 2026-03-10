@@ -1,10 +1,10 @@
 <!-- @format -->
 
-<div class="radio" [class.radio--hasContent]="!!data.videoUrl || !!data.imageUrl">
-  <div class="radio__body" [class.radio__body--hasContent]="!!data.imageUrl || !!data.videoUrl">
-    @if (data.videoUrl) {
+<div class="radio" [class.radio--hasContent]="hasVideoUrl() || !!data.imageUrl">
+  <div class="radio__body" [class.radio__body--hasContent]="!!data.imageUrl || hasVideoUrl()">
+    @if (getSafeVideoUrl(); as videoUrl) {
     <iframe
-      [src]="getSafeVideoUrl()"
+      [src]="videoUrl"
       width="283px"
       height="183px"
       frameborder="0"

@@ -3,10 +3,9 @@
 import { Component, EventEmitter, Input, Output, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { ParseBreaksPipe } from "@corelib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
-import { TruncateHtmlPipe } from "projects/core/src/lib/pipes/truncate-html.pipe";
 import { Task } from "@office/models/courses.model";
+import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
 
 @Component({
   selector: "app-radio-select-task",
@@ -44,10 +43,16 @@ export class RadioSelectTaskComponent {
   constructor(private sanitizer: DomSanitizer) {}
 
   getSafeVideoUrl(): SafeResourceUrl | null {
-    if (!this.data?.videoUrl) {
+    const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
+    if (!iframeUrl) {
       return null;
     }
-    return this.sanitizer.bypassSecurityTrustResourceUrl(this.data.videoUrl);
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl);
+  }
+
+  hasVideoUrl(): boolean {
+    return !!resolveVideoUrlForIframe(this.data?.videoUrl);
   }
 
   onSelect(id: number) {

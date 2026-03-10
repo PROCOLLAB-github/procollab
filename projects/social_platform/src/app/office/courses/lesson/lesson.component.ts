@@ -143,14 +143,6 @@ export class LessonComponent implements OnInit {
     return task.isCompleted || this.completedTaskIds().has(task.id);
   }
 
-  selectTask(task: Task) {
-    if (!task.isAvailable) return;
-    this.currentTaskId.set(task.id);
-    this.success.set(false);
-    this.hasError.set(false);
-    this.answerBody.set("");
-  }
-
   onSubmitAnswer() {
     const task = this.currentTask();
     if (!task) return;

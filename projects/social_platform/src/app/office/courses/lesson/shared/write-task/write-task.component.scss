@@ -40,6 +40,16 @@
       align-self: center;
       justify-content: center;
     }
+
+    iframe {
+      display: block;
+      width: 100%;
+      max-width: 400px;
+      aspect-ratio: 16 / 9;
+      height: auto;
+      border: 0;
+      border-radius: var(--rounded-lg);
+    }
   }
 
   &__input {
@@ -60,6 +70,14 @@
 
   &__task {
     color: var(--grey-for-text);
+  }
+
+  &__image {
+    width: 100%;
+    max-width: 397px;
+    max-height: 223px;
+    object-fit: contain;
+    border-radius: var(--rounded-lg);
   }
 
   &__files {

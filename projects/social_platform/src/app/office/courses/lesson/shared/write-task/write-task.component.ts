@@ -4,13 +4,13 @@ import { Component, EventEmitter, inject, Input, Output, signal } from "@angular
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
-import { TruncateHtmlPipe } from "projects/core/src/lib/pipes/truncate-html.pipe";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 import { IconComponent } from "@ui/components";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { FileService } from "@core/services/file.service";
 import { Task } from "@models/courses.model";
 import { FileModel } from "@office/models/file.model";
+import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
 
 @Component({
   selector: "app-write-task",
@@ -33,11 +33,16 @@ export class WriteTaskComponent {
   private currentText = "";
 
   getSafeVideoUrl(): SafeResourceUrl | null {
-    const url = this.data?.videoUrl || this.data?.imageUrl;
-    if (!url) {
+    const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
+    if (!iframeUrl) {
       return null;
     }
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl);
+  }
+
+  hasVideoUrl(): boolean {
+    return !!resolveVideoUrlForIframe(this.data?.videoUrl);
   }
 
   onKeyUp(event: Event) {

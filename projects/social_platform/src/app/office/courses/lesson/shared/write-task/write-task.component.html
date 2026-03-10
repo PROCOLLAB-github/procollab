@@ -1,24 +1,26 @@
 <!-- @format -->
 
-<div class="write-task" [class.write-task--hasVideo]="data.videoUrl">
+<div class="write-task" [class.write-task--hasVideo]="hasVideoUrl()">
   <div class="write-task__header">
     <p class="text-body-12 write-task__task">задание {{ data.id }}</p>
-    @if (!data.videoUrl && !data.imageUrl) {
+    @if (!hasVideoUrl() && !data.imageUrl) {
     <p class="write-task__text text-body-12-bold">{{ data.title | truncate: 80 }}</p>
     }
     <div
       class="write-task__description text-body-12"
-      [class.write-task__description--hasVideo]="data.videoUrl"
+      [class.write-task__description--hasVideo]="hasVideoUrl()"
     >
-      @if (data.videoUrl || data.imageUrl) {
+      @if (getSafeVideoUrl(); as videoUrl) {
       <iframe
-        [src]="getSafeVideoUrl()"
+        [src]="videoUrl"
         width="397px"
         height="223px"
         frameborder="0"
         allowfullscreen
         allowtransparency="true"
       ></iframe>
+      } @else if (data.imageUrl) {
+      <img class="write-task__image" [src]="data.imageUrl" />
       }
       <div [innerHTML]="data.bodyText | truncate: (type === 'text-file' ? 650 : 700)"></div>
 

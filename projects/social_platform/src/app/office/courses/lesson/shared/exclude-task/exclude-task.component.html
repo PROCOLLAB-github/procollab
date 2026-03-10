@@ -1,23 +1,16 @@
 <!-- @format -->
 
-<div class="exclude" [class.exclude--hasContent]="!!data.videoUrl || !!data.imageUrl">
+<div class="exclude" [class.exclude--hasContent]="hasVideoUrl() || !!data.imageUrl">
   <div class="exclude__body">
-    @if (!data.videoUrl && !data.imageUrl) {
+    @if (!hasVideoUrl() && !data.imageUrl) {
     <h2 class="exclude__title text-body-12-bold">{{ data.title | truncate: 110 }}</h2>
     }
     <div
       class="exclude__text text-body-12"
-      [class.exclude__text--hasContent]="!!data.videoUrl || !!data.imageUrl"
+      [class.exclude__text--hasContent]="hasVideoUrl() || !!data.imageUrl"
     >
-      @if (data.videoUrl) {
-      <iframe
-        [src]="getSafeVideoUrl()"
-        width="397px"
-        height="223px"
-        frameborder="0"
-        allowfullscreen
-        allowtransparency="true"
-      ></iframe>
+      @if (getSafeVideoUrl(); as videoUrl) {
+      <iframe [src]="videoUrl" frameborder="0" allowfullscreen allowtransparency="true"></iframe>
       } @else {
       <img alt="exclude-image" [src]="data.imageUrl" class="exclude__image" />
       <div [innerHTML]="data.bodyText | truncate: 700"></div>

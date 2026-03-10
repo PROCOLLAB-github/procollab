@@ -3,11 +3,10 @@
 import { Component, EventEmitter, inject, Input, type OnInit, Output, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { ParseBreaksPipe } from "@corelib";
 import { CheckboxComponent } from "@ui/components";
-import { TruncateHtmlPipe } from "projects/core/src/lib/pipes/truncate-html.pipe";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 import { Task } from "@office/models/courses.model";
+import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
 
 /**
  * Компо��ент задачи на исключение лишнего
@@ -65,10 +64,16 @@ export class ExcludeTaskComponent implements OnInit {
   _error = signal<boolean>(false);
 
   getSafeVideoUrl(): SafeResourceUrl | null {
-    if (!this.data?.videoUrl) {
+    const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
+    if (!iframeUrl) {
       return null;
     }
-    return this.sanitizer.bypassSecurityTrustResourceUrl(this.data.videoUrl);
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl);
+  }
+
+  hasVideoUrl(): boolean {
+    return !!resolveVideoUrlForIframe(this.data?.videoUrl);
   }
 
   /**

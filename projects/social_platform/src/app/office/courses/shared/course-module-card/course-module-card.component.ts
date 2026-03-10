@@ -27,7 +27,14 @@ import { RouterLink } from "@angular/router";
 @Component({
   selector: "app-course-module-card",
   standalone: true,
-  imports: [CommonModule, CircleProgressBarComponent, IconComponent, RouterLink, PluralizePipe],
+  imports: [
+    CommonModule,
+    CircleProgressBarComponent,
+    IconComponent,
+    RouterLink,
+    PluralizePipe,
+    AvatarComponent,
+  ],
   templateUrl: "./course-module-card.component.html",
   styleUrl: "./course-module-card.component.scss",
 })
