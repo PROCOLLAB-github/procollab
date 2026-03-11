@@ -37,7 +37,6 @@ export class CourseComponent implements OnInit {
   ngOnInit(): void {
     this.accessType();
     this.actions();
-    console.log(this.course);
   }
 
   protected readonly isLock = signal<boolean>(false);

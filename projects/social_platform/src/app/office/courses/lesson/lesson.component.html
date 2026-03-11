@@ -28,7 +28,9 @@
   </div>
   } @else {
   <div class="task__main" [class.task__complete]="isComplete()">
-    @if (currentTask(); as task) {
+    <router-outlet></router-outlet>
+
+    @if (!isComplete() && currentTask(); as task) {
     <div class="task__content">
       <!-- informationalType === "text" или "video_text" и answerType === null → info-task -->
       @if (task.answerType === null && (task.informationalType === 'text' || task.informationalType
@@ -92,8 +94,6 @@
       </div>
     </div>
     }
-
-    <router-outlet></router-outlet>
   </div>
   }
 </div>

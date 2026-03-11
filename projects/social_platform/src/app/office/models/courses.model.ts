@@ -48,6 +48,7 @@ export interface CourseDetail {
   endDate: Date;
   dateLabel: string;
   isAvailable: boolean;
+  partnerProgramId: number;
   progressStatus: "not_started" | "in_progress" | "completed" | "blocked";
   percent: number;
   analyticsStub: any;

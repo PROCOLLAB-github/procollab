@@ -107,7 +107,17 @@ export class LessonComponent implements OnInit {
             lessonInfo.tasks.find(t => t.isAvailable && !t.isCompleted)?.id ??
             null;
 
-          if (nextTaskId === null) {
+          const allCompleted = lessonInfo.tasks.every(t => t.isCompleted);
+          const onResultsPage = this.router.url.includes("results");
+
+          if (onResultsPage && !allCompleted) {
+            // Находимся на results, но не все задания выполнены — редирект обратно
+            this.currentTaskId.set(nextTaskId);
+            setTimeout(() => {
+              this.loading.set(false);
+              this.router.navigate(["./"], { relativeTo: this.route });
+            }, 500);
+          } else if (nextTaskId === null && allCompleted) {
             // Все задания выполнены, редирект на results
             setTimeout(() => {
               this.loading.set(false);

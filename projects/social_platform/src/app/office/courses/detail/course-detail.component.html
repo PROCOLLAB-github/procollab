@@ -30,11 +30,12 @@
         >
 
         <app-button
-          [disabled]="true"
+          [disabled]="isDisabled()"
           [class.info__actions--disabled]="isDisabled()"
           size="big"
           customTypographyClass="text-body-12"
           appearance="outline"
+          (click)="redirectToProgram()"
           >вернуться в программу</app-button
         >
       </div>

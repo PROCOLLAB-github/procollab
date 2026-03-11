@@ -47,7 +47,7 @@ export class CourseDetailComponent implements OnInit {
         next: ([course, _]: [CourseDetail, CourseStructure]) => {
           this.course.set(course);
 
-          if (course.accessType !== "program_members") {
+          if (!course.partnerProgramId) {
             this.isDisabled.set(true);
           }
         },
@@ -69,10 +69,14 @@ export class CourseDetailComponent implements OnInit {
    * Перенаправляет на страницу с информацией в завивисимости от listType
    */
   redirectDetailInfo(courseId?: number): void {
-    if (this.course()) {
+    if (courseId != null) {
       this.router.navigateByUrl(`/office/courses/${courseId}`);
     } else {
       this.router.navigateByUrl("/office/courses/all");
     }
+  }
+
+  redirectToProgram(): void {
+    this.router.navigateByUrl(`/office/program/${this.course()?.partnerProgramId}`);
   }
 }

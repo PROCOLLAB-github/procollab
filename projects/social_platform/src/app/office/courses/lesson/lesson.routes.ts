@@ -22,7 +22,7 @@ export const LESSON_ROUTES: Routes = [
     },
     children: [
       {
-        path: "results", // Маршрут для отображения результатов
+        path: "results",
         component: TaskCompleteComponent,
       },
     ],
