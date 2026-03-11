@@ -49,6 +49,7 @@
     height: 48px;
     padding: 10px;
     margin-bottom: 18px;
+    overflow: hidden;
     text-align: center;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
@@ -62,18 +63,24 @@
       background-color: var(--accent);
       border-radius: var(--rounded-lg);
       opacity: 0.15;
-
-      &--complete {
-        background-color: var(--green-dark);
-      }
     }
 
     &--percent {
+      position: relative;
+      z-index: 1;
       color: var(--green-dark);
     }
 
     &--complete {
-      color: var(--black);
+      background-color: var(--green-light);
+
+      .course__progress--percent {
+        color: var(--black);
+      }
+
+      .course__progress--cover {
+        background-color: var(--green-dark);
+      }
     }
   }
 

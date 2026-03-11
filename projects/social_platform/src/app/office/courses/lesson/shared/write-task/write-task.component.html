@@ -2,7 +2,7 @@
 
 <div class="write-task" [class.write-task--hasVideo]="hasVideoUrl()">
   <div class="write-task__header">
-    <p class="text-body-12 write-task__task">задание {{ data.id }}</p>
+    <p class="text-body-12 write-task__task">задание {{ data.order }}</p>
     @if (!hasVideoUrl() && !data.imageUrl) {
     <p class="write-task__text text-body-12-bold">{{ data.title | truncate: 80 }}</p>
     }

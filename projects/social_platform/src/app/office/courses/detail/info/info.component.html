@@ -14,10 +14,13 @@
       </div>
 
       <section class="course__content">
-        <div class="course__progress">
+        <div
+          class="course__progress"
+          [class.course__progress--complete]="courseStructure()!.percent === 100"
+        >
           <p class="text-body-12">прогресс по курсу</p>
           <p class="text-body-12 course__progress--percent">{{ courseStructure()!.percent }}%</p>
-          <div class="course__progress--cover" [style.width]="courseStructure()!.percent"></div>
+          <div class="course__progress--cover" [style.width.%]="courseStructure()!.percent"></div>
         </div>
 
         <div class="course__modules">
