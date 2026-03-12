@@ -137,20 +137,20 @@
   }
 
   &__desc {
-    overflow: hidden;
     max-height: 12em;
+    overflow: hidden;
     text-align: justify;
     transition: max-height 0.5s ease-in-out;
 
     &:not(&--expanded) {
-      display: -webkit-box;
+      display: box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 8;
     }
 
     &--expanded {
-      overflow-y: auto;
       max-height: 210px;
+      overflow-y: auto;
     }
   }
 
