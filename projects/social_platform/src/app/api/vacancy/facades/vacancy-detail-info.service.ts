@@ -4,15 +4,15 @@ import { ElementRef, inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { filter, map, Subject, takeUntil } from "rxjs";
 import { ValidationService } from "@corelib";
-import { VacancyRepository as VacancyService } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
 import { VacancyDetailUIInfoService } from "./ui/vacancy-detail-ui-info.service";
 import { ExpandService } from "../../expand/expand.service";
+import { SendVacancyResponseUseCase } from "../use-cases/send-vacancy-response.use-case";
 
 @Injectable()
 export class VacancyDetailInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly vacancyService = inject(VacancyService);
+  private readonly sendVacancyResponseUseCase = inject(SendVacancyResponseUseCase);
   private readonly vacancyDetailUIInfoService = inject(VacancyDetailUIInfoService);
   private readonly validationService = inject(ValidationService);
   private readonly expandService = inject(ExpandService);
@@ -67,17 +67,16 @@ export class VacancyDetailInfoService {
 
     this.sendFormIsSubmitting.set(true);
 
-    this.vacancyService
-      .sendResponse(
-        Number(this.route.snapshot.paramMap.get("vacancyId")),
-        this.sendForm.value as any
-      )
+    this.sendVacancyResponseUseCase
+      .execute(Number(this.route.snapshot.paramMap.get("vacancyId")), this.sendForm.value as any)
       .subscribe({
-        next: () => {
+        next: result => {
+          if (!result.ok) {
+            this.vacancyDetailUIInfoService.applyErrorFormSubmit();
+            return;
+          }
+
           this.vacancyDetailUIInfoService.applySubmitVacancyResponse();
-        },
-        error: () => {
-          this.vacancyDetailUIInfoService.applyErrorFormSubmit();
         },
       });
   }

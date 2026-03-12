@@ -27,7 +27,7 @@ export class ProgramDetailMainUIInfoService {
     news:
       | ApiPagination<FeedNews>
       | {
-          results: never[];
+          results: unknown[];
           count: number;
         }
   ): void {

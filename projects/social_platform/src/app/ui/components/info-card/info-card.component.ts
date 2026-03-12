@@ -21,8 +21,9 @@ import { YearsFromBirthdayPipe } from "@corelib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { InviteRepository } from "projects/social_platform/src/app/infrastructure/repository/invite/invite.repository";
 import { IndustryRepository } from "../../../infrastructure/repository/industry/industry.repository";
+import { AcceptInviteUseCase } from "../../../api/invite/use-cases/accept-invite.use-case";
+import { RejectInviteUseCase } from "../../../api/invite/use-cases/reject-invite.use-case";
 
 /**
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
@@ -49,7 +50,8 @@ import { IndustryRepository } from "../../../infrastructure/repository/industry/
 })
 export class InfoCardComponent {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly inviteService = inject(InviteRepository);
+  private readonly acceptInviteUseCase = inject(AcceptInviteUseCase);
+  private readonly rejectInviteUseCase = inject(RejectInviteUseCase);
   private readonly subscriptionService = inject(SubscriptionHttpAdapter);
   public readonly industryRepository = inject(IndustryRepository);
   private readonly router = inject(Router);
@@ -138,16 +140,18 @@ export class InfoCardComponent {
 
     this.stopEventPropagation(event);
 
-    this.inviteService
-      .rejectInvite(inviteId)
+    this.rejectInviteUseCase
+      .execute(inviteId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
+        next: result => {
+          if (!result.ok) {
+            this.logger.error("Error rejecting invite:", result.error);
+            this.inviteErrorModal = true;
+            return;
+          }
+
           this.onRejectingInvite.emit(inviteId || this.info!.inviteId);
-        },
-        error: error => {
-          this.logger.error("Error rejecting invite:", error);
-          this.inviteErrorModal = true;
         },
       });
   }
@@ -163,16 +167,18 @@ export class InfoCardComponent {
 
     this.stopEventPropagation(event);
 
-    this.inviteService
-      .acceptInvite(inviteId)
+    this.acceptInviteUseCase
+      .execute(inviteId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
+        next: result => {
+          if (!result.ok) {
+            this.logger.error("Error accepting invite:", result.error);
+            this.inviteErrorModal = true;
+            return;
+          }
+
           this.onAcceptingInvite.emit(inviteId || this.info!.inviteId);
-        },
-        error: error => {
-          this.logger.error("Error accepting invite:", error);
-          this.inviteErrorModal = true;
         },
       });
   }

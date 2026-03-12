@@ -2,7 +2,7 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { forkJoin } from "rxjs";
+import { forkJoin, map } from "rxjs";
 import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { Goal } from "projects/social_platform/src/app/domain/project/goals.model";
@@ -12,7 +12,7 @@ import { ProjectRepository } from "projects/social_platform/src/app/infrastructu
 import { ProjectGoalsRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-goals.repository";
 import { ProjectPartnerRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-partner.repository";
 import { ProjectResourceRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-resource.repository";
-import { InviteRepository } from "projects/social_platform/src/app/infrastructure/repository/invite/invite.repository";
+import { GetProjectInvitesUseCase } from "projects/social_platform/src/app/api/invite/use-cases/get-project-invites.use-case";
 
 /**
  * Resolver для загрузки данных редактирования проекта
@@ -43,7 +43,7 @@ export const ProjectEditResolver: ResolveFn<[Project, Goal[], Partner[], Resourc
   const projectGoalsRepository = inject(ProjectGoalsRepository);
   const projectPartnersRepository = inject(ProjectPartnerRepository);
   const projectResourceRepository = inject(ProjectResourceRepository);
-  const inviteService = inject(InviteRepository);
+  const getProjectInvitesUseCase = inject(GetProjectInvitesUseCase);
 
   const projectId = Number(route.paramMap.get("projectId"));
 
@@ -52,6 +52,8 @@ export const ProjectEditResolver: ResolveFn<[Project, Goal[], Partner[], Resourc
     projectGoalsRepository.fetchAll(projectId),
     projectPartnersRepository.fetchAll(projectId),
     projectResourceRepository.fetchAll(projectId),
-    inviteService.getByProject(projectId),
+    getProjectInvitesUseCase
+      .execute(projectId)
+      .pipe(map(result => (result.ok ? result.value : []))),
   ]);
 };

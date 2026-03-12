@@ -4,19 +4,19 @@ import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
 import { combineLatest, distinctUntilChanged, map, Subject, switchMap, takeUntil } from "rxjs";
-import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
 import { Program } from "../../../domain/program/program.model";
 import { HttpParams } from "@angular/common/http";
 import { ProgramMainUIInfoService } from "./ui/program-main-ui-info.service";
-import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
+import { ApiPagination } from "../../../domain/other/api-pagination.model";
 import Fuse from "fuse.js";
+import { ParticipatingProgramUseCase } from "../use-cases/participating-program.use-case";
 
 @Injectable()
 export class ProgramMainInfoService {
   private readonly navService = inject(NavService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly programService = inject(ProgramService);
+  private readonly participatingProgramUseCase = inject(ParticipatingProgramUseCase);
   private readonly programMainUIInfoService = inject(ProgramMainUIInfoService);
 
   private readonly destroy$ = new Subject<void>();
@@ -38,16 +38,20 @@ export class ProgramMainInfoService {
         switchMap(([{ filter, search }]) => {
           this.isPparticipating.set(filter["participating"] === "true");
 
-          return this.programService
-            .getAll(0, 20, new HttpParams({ fromObject: filter }))
-            .pipe(map(response => ({ response, search })));
+          return this.participatingProgramUseCase
+            .execute(new HttpParams({ fromObject: filter }))
+            .pipe(map(result => ({ result, search })));
         }),
         takeUntil(this.destroy$)
       )
-      .subscribe(({ response, search }) => {
-        const programs = this.applySearch(response, search);
+      .subscribe(({ result, search }) => {
+        if (!result.ok) {
+          return;
+        }
 
-        this.programMainUIInfoService.applyPrograms(programs, response.count);
+        const programs = this.applySearch(result.value, search);
+
+        this.programMainUIInfoService.applyPrograms(programs, result.value.count);
       });
   }
 

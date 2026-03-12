@@ -3,21 +3,32 @@
 import { ElementRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { concatMap, fromEvent, map, of, Subject, takeUntil, tap, throttleTime } from "rxjs";
-import { ProgramNewsRepository as ProgramNewsService } from "projects/social_platform/src/app/infrastructure/repository/program/program-news.repository";
 import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
 import { LoadingService } from "@ui/services/loading/loading.service";
 import { ExpandService } from "../../../expand/expand.service";
 import { ProgramDetailMainUIInfoService } from "./ui/program-detail-main-ui-info.service";
 import { NewsInfoService } from "../../../news/news-info.service";
+import { FetchNewsUseCase } from "../../use-cases/fetch-news.use-case";
+import { ReadNewsUseCase } from "../../use-cases/read-news.use-case";
+import { ok } from "projects/social_platform/src/app/domain/shared/result.type";
+import { AddNewsUseCase } from "../../use-cases/add-news.use-case";
+import { DeleteNewsUseCase } from "../../use-cases/delete-news.use-case";
+import { ToggleLikeUseCase } from "../../use-cases/toggle-like.use-case";
+import { EditNewsUseCase } from "../../use-cases/edit-news.use-case";
 
 @Injectable()
 export class ProgramDetailMainService {
-  private readonly programNewsService = inject(ProgramNewsService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly loadingService = inject(LoadingService);
   private readonly expandService = inject(ExpandService);
   private readonly newsInfoService = inject(NewsInfoService);
+  private readonly fetchNewsUseCase = inject(FetchNewsUseCase);
+  private readonly readNewsUseCase = inject(ReadNewsUseCase);
+  private readonly addNewsUseCase = inject(AddNewsUseCase);
+  private readonly deleteNewsUseCase = inject(DeleteNewsUseCase);
+  private readonly toggleLikeUseCase = inject(ToggleLikeUseCase);
+  private readonly editNewsUseCase = inject(EditNewsUseCase);
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
 
   private observer?: IntersectionObserver;
@@ -76,23 +87,36 @@ export class ProgramDetailMainService {
           if (program.isUserMember) {
             return this.fetchNews(0, this.fetchLimit());
           } else {
-            return of({ results: [], count: 0 });
+            return of(
+              ok({
+                results: [],
+                count: 0,
+              })
+            );
           }
         }),
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: news => {
-          if (news.results?.length) {
+        next: result => {
+          if (!result.ok) {
+            this.loadingService.hide();
+            this.programDetailMainUIInfoService.applyProgramOpenModal("error");
+            return;
+          }
+
+          const news = result.value;
+
+          if (news.results.length) {
             this.newsInfoService.applySetNews(news);
             this.programDetailMainUIInfoService.applyInitProgram(news);
 
             setTimeout(() => {
               this.setupNewsObserver();
             }, 100);
-
-            this.loadingService.hide();
           }
+
+          this.loadingService.hide();
         },
         error: () => {
           this.loadingService.hide();
@@ -134,9 +158,11 @@ export class ProgramDetailMainService {
     this.fetchPage.set(nextPage);
 
     return this.fetchNews(offset, this.fetchLimit()).pipe(
-      tap(({ count, results }) => {
-        this.totalNewsCount.set(count);
-        this.newsInfoService.applyUpdateNews(results);
+      tap(result => {
+        if (!result.ok) return;
+
+        this.totalNewsCount.set(result.value.count);
+        this.newsInfoService.applyUpdateNews(result.value.results);
 
         setTimeout(() => {
           this.setupNewsObserver();
@@ -147,7 +173,7 @@ export class ProgramDetailMainService {
 
   private fetchNews(offset: number, limit: number) {
     const programId = this.route.snapshot.params["programId"];
-    return this.programNewsService.fetchNews(limit, offset, programId);
+    return this.fetchNewsUseCase.execute(limit, offset, programId);
   }
 
   private onNewsInVew(entries: IntersectionObserverEntry[]): void {
@@ -156,16 +182,17 @@ export class ProgramDetailMainService {
       // @ts-ignore
       return e.target.dataset.id;
     });
-    this.programNewsService
-      .readNews(this.route.snapshot.params["programId"], ids)
+    this.readNewsUseCase
+      .execute(this.route.snapshot.params["programId"], ids)
       .pipe(takeUntil(this.destroy$))
       .subscribe();
   }
 
   onAddNews(news: { text: string; files: string[] }) {
-    return this.programNewsService.addNews(this.route.snapshot.params["programId"], news).pipe(
-      tap(newsRes => {
-        this.newsInfoService.applyAddNews(newsRes);
+    return this.addNewsUseCase.execute(this.route.snapshot.params["programId"], news).pipe(
+      tap(result => {
+        if (!result.ok) return;
+        this.newsInfoService.applyAddNews(result.value);
       })
     );
   }
@@ -173,12 +200,15 @@ export class ProgramDetailMainService {
   onDelete(newsId: number) {
     const item = this.news().find((n: any) => n.id === newsId);
     if (!item) return;
-    this.programNewsService
-      .deleteNews(this.route.snapshot.params["programId"], newsId)
+
+    this.deleteNewsUseCase
+      .execute(this.route.snapshot.params["programId"], newsId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
-          this.newsInfoService.applyDeleteNews(newsId);
+        next: result => {
+          if (!result.ok) return;
+
+          this.newsInfoService.applyDeleteNews(result.value);
         },
       });
   }
@@ -187,22 +217,24 @@ export class ProgramDetailMainService {
     const item = this.news().find((n: any) => n.id === newsId);
     if (!item) return;
 
-    this.programNewsService
-      .toggleLike(this.route.snapshot.params["programId"], newsId, !item.isUserLiked)
+    this.toggleLikeUseCase
+      .execute(this.route.snapshot.params["programId"], newsId, !item.isUserLiked)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.newsInfoService.applyLikeNews(newsId);
+      .subscribe(result => {
+        if (!result.ok) return;
+
+        this.newsInfoService.applyLikeNews(result.value);
       });
   }
 
   onEdit(news: FeedNews, newsId: number) {
-    return this.programNewsService
-      .editNews(this.route.snapshot.params["programId"], newsId, news)
-      .pipe(
-        tap((newsRes: any) => {
-          this.newsInfoService.applyEditNews(newsRes);
-        })
-      );
+    return this.editNewsUseCase.execute(this.route.snapshot.params["programId"], newsId, news).pipe(
+      tap(newsRes => {
+        if (!newsRes.ok) return;
+
+        this.newsInfoService.applyEditNews(newsRes.value);
+      })
+    );
   }
 
   closeModal(): void {

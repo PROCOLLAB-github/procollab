@@ -3,20 +3,24 @@
 import { inject, Injectable } from "@angular/core";
 import { map, Subject, takeUntil } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
-import { InviteRepository } from "../../../infrastructure/repository/invite/invite.repository";
 import { ChatService } from "../../chat/chat.service";
 import { Invite } from "../../../domain/invite/invite.model";
 import { OfficeUIInfoService } from "./ui/office-ui-info.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 import { IndustryRepository } from "../../../infrastructure/repository/industry/industry.repository";
+import { RejectInviteUseCase } from "../../invite/use-cases/reject-invite.use-case";
+import { AcceptInviteUseCase } from "../../invite/use-cases/accept-invite.use-case";
 
 @Injectable()
 export class OfficeInfoService {
   private readonly industryRepository = inject(IndustryRepository);
   private readonly route = inject(ActivatedRoute);
   private readonly authRepository = inject(AuthRepository);
-  private readonly inviteService = inject(InviteRepository);
+
+  private readonly rejectInviteUseCase = inject(RejectInviteUseCase);
+  private readonly acceptInviteUseCase = inject(AcceptInviteUseCase);
+
   private readonly router = inject(Router);
   private readonly chatService = inject(ChatService);
   private readonly officeUIInfoService = inject(OfficeUIInfoService);
@@ -100,15 +104,17 @@ export class OfficeInfoService {
   }
 
   onRejectInvite(inviteId: number): void {
-    this.inviteService
-      .rejectInvite(inviteId)
+    this.rejectInviteUseCase
+      .execute(inviteId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: result => {
+          if (!result.ok) {
+            this.officeUIInfoService.applyOpenInviteErrorModal();
+            return;
+          }
+
           this.invites.update(invites => invites.filter(invite => invite.id !== inviteId));
-        },
-        error: () => {
-          this.officeUIInfoService.applyOpenInviteErrorModal();
         },
       });
   }
@@ -117,19 +123,21 @@ export class OfficeInfoService {
     const invite = this.invites().find(i => i.id === inviteId);
     if (!invite) return;
 
-    this.inviteService
-      .acceptInvite(inviteId)
+    this.acceptInviteUseCase
+      .execute(inviteId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: result => {
+          if (!result.ok) {
+            this.officeUIInfoService.applyOpenInviteErrorModal();
+            return;
+          }
+
           this.invites.update(invites => invites.filter(invite => invite.id !== inviteId));
 
           this.router
             .navigateByUrl(`/office/projects/${invite.project.id}`)
             .then(() => this.logger.debug("Route changed from SidebarComponent"));
-        },
-        error: () => {
-          this.officeUIInfoService.applyOpenInviteErrorModal();
         },
       });
   }

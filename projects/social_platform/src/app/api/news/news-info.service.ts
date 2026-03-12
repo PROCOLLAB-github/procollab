@@ -31,7 +31,7 @@ export class NewsInfoService {
     this.news.update(news => news.filter(n => n.id !== newsId));
   }
 
-  applyEditNews(resNews: any): void {
+  applyEditNews(resNews: FeedNews): void {
     this.news.update(news => news.map(n => (n.id === resNews.id ? resNews : n)));
   }
 

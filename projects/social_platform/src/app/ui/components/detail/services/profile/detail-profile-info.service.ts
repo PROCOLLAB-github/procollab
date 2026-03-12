@@ -6,13 +6,13 @@ import { ValidationService } from "@corelib";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { saveFile } from "@utils/helpers/export-file";
 import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
+import { SendForUserUseCase } from "projects/social_platform/src/app/api/invite/use-cases/send-for-user.use-case";
 import { ProfileDetailUIInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ProjectTeamUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-team-ui.service";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { AuthHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/auth/auth-http.adapter";
 import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
-import { InviteRepository } from "projects/social_platform/src/app/infrastructure/repository/invite/invite.repository";
 import { Subject, takeUntil } from "rxjs";
 
 @Injectable()
@@ -20,7 +20,7 @@ export class DetailProfileInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly snackbarService = inject(SnackbarService);
   private readonly validationService = inject(ValidationService);
-  private readonly inviteService = inject(InviteRepository);
+  private readonly sendForUserUseCase = inject(SendForUserUseCase);
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
   private readonly authRepository = inject(AuthRepository);
   private readonly authAdapter = inject(AuthHttpAdapter);
@@ -123,23 +123,32 @@ export class DetailProfileInfoService {
       return;
     }
 
-    this.inviteService
-      .sendForUser(userId, this.selectedProjectId()!, role!)
+    this.sendForUserUseCase
+      .execute({
+        userId,
+        projectId: this.selectedProjectId()!,
+        role: role!,
+      })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: result => {
+          if (!result.ok) {
+            const error = result.error.cause as { error?: { user?: string[] } } | undefined;
+            const userErrors = error?.error?.user ?? [];
+
+            if (userErrors[0]?.includes("проект относится к программе")) {
+              this.showNoInProgramModal.set(true);
+            } else if (userErrors[0]?.includes("активное приглашение")) {
+              this.showActiveInviteModal.set(true);
+            }
+            return;
+          }
+
           this.showSendInviteModal.set(false);
           this.showSuccessInviteModal.set(true);
 
           this.inviteForm.reset();
           this.selectedProjectId.set(null);
-        },
-        error: err => {
-          if (err.error.user[0].includes("проект относится к программе")) {
-            this.showNoInProgramModal.set(true);
-          } else if (err.error.user[0].includes("активное приглашение")) {
-            this.showActiveInviteModal.set(true);
-          }
         },
       });
   }

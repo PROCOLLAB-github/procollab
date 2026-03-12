@@ -3,7 +3,8 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
-import { VacancyRepository } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
+import { map } from "rxjs";
+import { GetVacanciesUseCase } from "projects/social_platform/src/app/api/vacancy/use-cases/get-vacancies.use-case";
 
 /**
  * РЕЗОЛВЕР ДЛЯ ЗАГРУЗКИ ВАКАНСИЙ ПРОЕКТА
@@ -31,9 +32,11 @@ import { VacancyRepository } from "projects/social_platform/src/app/infrastructu
  * - projectId - ID проекта для фильтрации
  */
 export const ProjectInfoResolver: ResolveFn<Vacancy[]> = (route: ActivatedRouteSnapshot) => {
-  const vacanciesRepository = inject(VacancyRepository); // Инъекция сервиса вакансий
+  const getVacanciesUseCase = inject(GetVacanciesUseCase);
   const projectId = Number(route.paramMap.get("projectId")); // Извлечение ID проекта из параметров
 
   // Возвращаем Observable с вакансиями проекта
-  return vacanciesRepository.getForProject(0, 20, projectId);
+  return getVacanciesUseCase
+    .execute({ limit: 20, offset: 0, projectId })
+    .pipe(map(result => (result.ok ? result.value : [])));
 };

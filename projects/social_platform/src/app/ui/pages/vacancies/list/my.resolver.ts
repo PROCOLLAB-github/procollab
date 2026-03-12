@@ -3,7 +3,8 @@
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
 import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
-import { VacancyRepository } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
+import { map } from "rxjs";
+import { GetMyVacanciesUseCase } from "projects/social_platform/src/app/api/vacancy/use-cases/get-my-vacancies.use-case";
 
 /**
  * Резолвер для загрузки откликов пользователя на вакансии
@@ -25,7 +26,7 @@ import { VacancyRepository } from "projects/social_platform/src/app/infrastructu
  * - offset: 0 - смещение для пагинации
  */
 export const VacanciesMyResolver: ResolveFn<VacancyResponse[]> = () => {
-  const vacanciesRepository = inject(VacancyRepository);
+  const getMyVacanciesUseCase = inject(GetMyVacanciesUseCase);
 
-  return vacanciesRepository.getMyVacancies(20, 0);
+  return getMyVacanciesUseCase.execute(20, 0).pipe(map(result => (result.ok ? result.value : [])));
 };

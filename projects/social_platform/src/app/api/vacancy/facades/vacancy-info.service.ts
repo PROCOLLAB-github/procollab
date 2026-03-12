@@ -19,15 +19,14 @@ import {
 } from "rxjs";
 import { VacancyResponse } from "../../../domain/vacancy/vacancy-response.model";
 import { Vacancy } from "../../../domain/vacancy/vacancy.model";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { VacancyRepository as VacancyService } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
 import { VacancyUIInfoService } from "./ui/vacancy-ui-info.service";
+import { GetVacanciesUseCase } from "../use-cases/get-vacancies.use-case";
 
 @Injectable()
 export class VacancyInfoService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly vacancyService = inject(VacancyService);
+  private readonly getVacanciesUseCase = inject(GetVacanciesUseCase);
   private readonly vacancyUIInfoService = inject(VacancyUIInfoService);
 
   private readonly destroy$ = new Subject<void>();
@@ -129,7 +128,7 @@ export class VacancyInfoService {
 
     routeData$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((vacancy: ApiPagination<Vacancy> | ApiPagination<VacancyResponse>) => {
+      .subscribe((vacancy: Vacancy[] | VacancyResponse[]) => {
         if (vacancy) {
           this.vacancyUIInfoService.applyVacancyListData(vacancy);
           this.vacancyUIInfoService.applySetTotalItems(vacancy);
@@ -165,7 +164,7 @@ export class VacancyInfoService {
         }),
         switchMap(() => this.onFetch(0, 20))
       )
-      .subscribe((result: any) => {
+      .subscribe((result: Vacancy[]) => {
         this.vacancyUIInfoService.applyVacancyListData(result);
         this.vacancyUIInfoService.applyQueryParams(result);
       });
@@ -174,7 +173,7 @@ export class VacancyInfoService {
   // onScroll Section
   // -------------------
 
-  onScroll(target: HTMLElement): Observable<void> {
+  onScroll(target: HTMLElement): Observable<Vacancy[]> {
     if (
       this.vacancyUIInfoService.totalItemsCount() &&
       this.vacancyList().length >= this.vacancyUIInfoService.totalItemsCount()
@@ -190,7 +189,7 @@ export class VacancyInfoService {
         this.vacancyUIInfoService.vacancyPage() * this.vacancyUIInfoService.perFetchTake(),
         this.vacancyUIInfoService.perFetchTake()
       ).pipe(
-        tap((result: any) => {
+        tap((result: Vacancy[]) => {
           this.vacancyUIInfoService.applyUpdateListOnScroll(result);
         })
       );
@@ -218,18 +217,17 @@ export class VacancyInfoService {
   // -------------------
 
   onFetch(offset: number, limit: number) {
-    return this.vacancyService
-      .getForProject(
+    return this.getVacanciesUseCase
+      .execute({
         limit,
         offset,
-        undefined,
-        this.requiredExperience(),
-        this.workFormat(),
-        this.workSchedule(),
-        this.salary(),
-        this.roleContains()
-      )
-      .pipe(map(res => res));
+        requiredExperience: this.requiredExperience(),
+        workFormat: this.workFormat(),
+        workSchedule: this.workSchedule(),
+        salary: this.salary(),
+        searchValue: this.roleContains(),
+      })
+      .pipe(map(result => (result.ok ? result.value : [])));
   }
 
   // other methods Section

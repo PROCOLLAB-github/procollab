@@ -3,11 +3,13 @@
 import { inject, Injectable } from "@angular/core";
 import { Validators } from "@angular/forms";
 import { ValidationService } from "@corelib";
-import { VacancyRepository as VacancyService } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
 import { Subject, takeUntil } from "rxjs";
 import { ProjectVacancyUIService } from "./ui/project-vacancy-ui.service";
 import { CreateVacancyDto } from "../../dto/create-vacancy.model";
 import { ProjectFormService } from "./project-form.service";
+import { UpdateVacancyUseCase } from "../../../vacancy/use-cases/update-vacancy.use-case";
+import { PostVacancyUseCase } from "../../../vacancy/use-cases/post-vacancy.use-case";
+import { DeleteVacancyUseCase } from "../../../vacancy/use-cases/delete-vacancy.use-case";
 
 /**
  * Сервис для управления вакансиями проекта.
@@ -17,10 +19,12 @@ import { ProjectFormService } from "./project-form.service";
  */
 @Injectable()
 export class ProjectVacancyService {
-  private readonly vacancyService = inject(VacancyService);
   private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
   private readonly validationService = inject(ValidationService);
   private readonly projectFormService = inject(ProjectFormService);
+  private readonly updateVacancyUseCase = inject(UpdateVacancyUseCase);
+  private readonly postVacancyUseCase = inject(PostVacancyUseCase);
+  private readonly deleteVacancyUseCase = inject(DeleteVacancyUseCase);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -98,30 +102,34 @@ export class ProjectVacancyService {
         return;
       }
 
-      this.vacancyService
-        .updateVacancy(editedVacancy.id, payload)
+      this.updateVacancyUseCase
+        .execute(editedVacancy.id, payload)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: vacancy => {
-            this.projectVacancyUIService.applyUpdateVacancy(vacancy);
-          },
-          error: () => {
-            this.vacancyIsSubmitting.set(false);
+          next: result => {
+            if (!result.ok) {
+              this.vacancyIsSubmitting.set(false);
+              return;
+            }
+
+            this.projectVacancyUIService.applyUpdateVacancy(result.value);
           },
         });
       return;
     }
 
     // Вызов API для создания вакансии
-    this.vacancyService
-      .postVacancy(projectId, payload)
+    this.postVacancyUseCase
+      .execute(projectId, payload)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: vacancy => {
-          this.projectVacancyUIService.applySubmitVacancy(vacancy);
-        },
-        error: () => {
-          this.vacancyIsSubmitting.set(false);
+        next: result => {
+          if (!result.ok) {
+            this.vacancyIsSubmitting.set(false);
+            return;
+          }
+
+          this.projectVacancyUIService.applySubmitVacancy(result.value);
         },
       });
   }
@@ -132,10 +140,12 @@ export class ProjectVacancyService {
    */
   public removeVacancy(vacancyId: number): void {
     if (!confirm("Вы точно хотите удалить вакансию?")) return;
-    this.vacancyService
-      .deleteVacancy(vacancyId)
+    this.deleteVacancyUseCase
+      .execute(vacancyId)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
+      .subscribe(result => {
+        if (!result.ok) return;
+
         this.projectVacancyUIService.applyRemoveVacancy(vacancyId);
       });
   }

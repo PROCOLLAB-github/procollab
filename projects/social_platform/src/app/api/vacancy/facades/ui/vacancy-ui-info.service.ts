@@ -2,7 +2,6 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
 import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
 
@@ -37,35 +36,35 @@ export class VacancyUIInfoService {
     search: [""],
   });
 
-  applyQueryParams(result: ApiPagination<Vacancy> | ApiPagination<VacancyResponse>): void {
+  applyQueryParams(result: Vacancy[]): void {
     this.applySetTotalItems(result);
     this.vacancyPage.set(1);
   }
 
-  applyVacancyListData(result: ApiPagination<Vacancy> | ApiPagination<VacancyResponse>): void {
-    if (!result || !Array.isArray(result.results)) {
+  applyVacancyListData(result: Vacancy[] | VacancyResponse[]): void {
+    if (!Array.isArray(result)) {
       return;
     }
 
     if (this.listType() === "all") {
-      this.vacancyList.set(result.results as Vacancy[]);
+      this.vacancyList.set(result as Vacancy[]);
     } else if (this.listType() === "my") {
-      this.responsesList.set(result.results as VacancyResponse[]);
+      this.responsesList.set(result as VacancyResponse[]);
     }
   }
 
-  applySetTotalItems(vacancy: ApiPagination<Vacancy> | ApiPagination<VacancyResponse>): void {
-    if (!vacancy || typeof vacancy.count !== "number") {
+  applySetTotalItems(vacancy: Vacancy[] | VacancyResponse[]): void {
+    if (!Array.isArray(vacancy)) {
       this.totalItemsCount.set(0);
       return;
     }
 
-    this.totalItemsCount.set(vacancy.count);
+    this.totalItemsCount.set(vacancy.length);
   }
 
-  applyUpdateListOnScroll(result: any): void {
+  applyUpdateListOnScroll(result: Vacancy[]): void {
     this.vacancyPage.update(page => page + 1);
-    this.vacancyList.update(items => [...items, ...result.results]);
+    this.vacancyList.update(items => [...items, ...result]);
   }
 
   applySearhValueChanged(searchValue: string) {

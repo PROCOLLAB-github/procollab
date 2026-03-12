@@ -18,25 +18,32 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { SubscriptionHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/subscription/subscription-http.adapter";
 import { HttpParams } from "@angular/common/http";
-import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import Fuse from "fuse.js";
+import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { ProgramDetailListUIInfoService } from "./ui/program-detail-list-ui-info.service";
 import { ProjectRate } from "projects/social_platform/src/app/domain/project/project-rate";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
-import { ProgramRepository } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
 import { ProjectRatingRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-rating.repository";
+import { CreateProgramFiltersUseCase } from "../../use-cases/create-program-filters.use-case";
+import { GetAllProjectsUseCase } from "../../use-cases/get-all-projects.use-case";
+import { GetAllMembersUseCase } from "../../use-cases/get-all-members.use-case";
+import Fuse from "fuse.js";
+import { Project } from "projects/social_platform/src/app/domain/project/project.model";
+import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 
 @Injectable()
 export class ProgramDetailListInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly programRepository = inject(ProgramRepository);
+
+  private readonly createProgramFiltersUseCase = inject(CreateProgramFiltersUseCase);
+  private readonly getAllProjectsUseCase = inject(GetAllProjectsUseCase);
+  private readonly getAllMembersUseCase = inject(GetAllMembersUseCase);
+
   private readonly projectRatingRepository = inject(ProjectRatingRepository);
   private readonly authRepository = inject(AuthRepository);
   private readonly subscriptionService = inject(SubscriptionHttpAdapter);
+
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
   private readonly logger = inject(LoggerService);
 
@@ -173,13 +180,31 @@ export class ProgramDetailListInfoService {
           }
 
           if (Object.keys(filters).length > 0) {
-            return this.programRepository.createProgramFilters(programId, filters, params);
+            return this.createProgramFiltersUseCase.execute(programId, filters, params).pipe(
+              map(result => {
+                if (!result.ok) {
+                  this.logger.error("Error creating program filters:", result.error);
+                  return this.emptyPage<Project>();
+                }
+
+                return result.value;
+              })
+            );
           }
-          return this.programRepository.getAllProjects(programId, params);
+          return this.getAllProjectsUseCase.execute(programId, params).pipe(
+            map(result => {
+              if (!result.ok) {
+                this.logger.error("Error fetching initial projects:", result.error);
+                return this.emptyPage<Project>();
+              }
+
+              return result.value;
+            })
+          );
         }),
         catchError(err => {
           this.logger.error("Error in setupFilters:", err);
-          return of({ count: 0, results: [] });
+          return of(this.emptyPage<ProjectRate | Project>());
         }),
         takeUntil(this.destroy$)
       )
@@ -267,7 +292,7 @@ export class ProgramDetailListInfoService {
           catchError(err => {
             this.logger.error("Error fetching ratings:", err);
             this.listPage.update(p => p - 1);
-            return of({ count: this.listTotalCount || 0, results: [] });
+            return of(this.emptyPage<ProjectRate>());
           }),
           takeUntil(this.destroy$)
         );
@@ -276,38 +301,50 @@ export class ProgramDetailListInfoService {
       case "projects": {
         const projectsRequest$ =
           Object.keys(filters).length > 0
-            ? this.programRepository.createProgramFilters(programId, filters, params)
-            : this.programRepository.getAllProjects(programId, params);
+            ? this.createProgramFiltersUseCase.execute(programId, filters, params)
+            : this.getAllProjectsUseCase.execute(programId, params);
 
         return projectsRequest$.pipe(
-          tap((projects: ApiPagination<Project>) => {
-            this.programDetailListUIInfoService.applyFetchProgramData(projects);
+          tap(result => {
+            if (!result.ok) {
+              this.logger.error("Error fetching projects:", result.error);
+              this.listPage.update(p => p - 1);
+              return;
+            }
+
+            this.programDetailListUIInfoService.applyFetchProgramData(result.value);
           }),
           catchError(err => {
             this.logger.error("Error fetching projects:", err);
             this.listPage.update(p => p - 1);
-            return of({ count: this.listTotalCount || 0, results: [] });
+            return of(this.emptyPage<Project>());
           }),
           takeUntil(this.destroy$)
         );
       }
 
       case "members": {
-        return this.programRepository.getAllMembers(programId, offset, this.itemsPerPage()).pipe(
-          tap((members: ApiPagination<User>) => {
-            this.programDetailListUIInfoService.applyFetchProgramData(members);
+        return this.getAllMembersUseCase.execute(programId, offset, this.itemsPerPage()).pipe(
+          tap(result => {
+            if (!result.ok) {
+              this.logger.error("Error fetching members:", result.error);
+              this.listPage.update(p => p - 1);
+              return;
+            }
+
+            this.programDetailListUIInfoService.applyFetchProgramData(result.value);
           }),
           catchError(err => {
             this.logger.error("Error fetching members:", err);
             this.listPage.update(p => p - 1);
-            return of({ count: this.listTotalCount || 0, results: [] });
+            return of(this.emptyPage<User>());
           }),
           takeUntil(this.destroy$)
         );
       }
 
       default:
-        return of({ count: 0, results: [] });
+        return of(this.emptyPage());
     }
   }
 
@@ -353,5 +390,14 @@ export class ProgramDetailListInfoService {
       keys: searchKeys,
     });
     return fuse.search(search).map(r => r.item);
+  }
+
+  private emptyPage<T>(): ApiPagination<T> {
+    return {
+      count: 0,
+      results: [],
+      next: "",
+      previous: "",
+    };
   }
 }

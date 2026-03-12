@@ -2,9 +2,11 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ValidationService } from "@corelib";
-import { InviteRepository } from "projects/social_platform/src/app/infrastructure/repository/invite/invite.repository";
 import { Subject, takeUntil } from "rxjs";
 import { ProjectTeamUIService } from "./ui/project-team-ui.service";
+import { SendForUserUseCase } from "../../../invite/use-cases/send-for-user.use-case";
+import { UpdateInviteUseCase } from "../../../invite/use-cases/update-invite.use-case";
+import { RevokeInviteUseCase } from "../../../invite/use-cases/revoke-invite.use-case";
 
 /**
  * Сервис для управления приглашениями участников команды проекта.
@@ -13,11 +15,14 @@ import { ProjectTeamUIService } from "./ui/project-team-ui.service";
  */
 @Injectable()
 export class ProjectTeamService {
-  private readonly inviteService = inject(InviteRepository);
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
   private readonly validationService = inject(ValidationService);
 
   private readonly destroy$ = new Subject<void>();
+
+  private readonly sendForUserUseCase = inject(SendForUserUseCase);
+  private readonly updateInviteUseCase = inject(UpdateInviteUseCase);
+  private readonly revokeInviteUseCase = inject(RevokeInviteUseCase);
 
   private readonly inviteForm = this.projectTeamUIService.inviteForm;
   private readonly inviteSubmitInitiated = this.projectTeamUIService.inviteSubmitInitiated;
@@ -46,20 +51,22 @@ export class ProjectTeamService {
     const pathSegments = linkUrl.pathname.split("/");
     const profileId = Number(pathSegments[pathSegments.length - 1]);
 
-    this.inviteService
-      .sendForUser(
-        profileId,
+    this.sendForUserUseCase
+      .execute({
+        userId: profileId,
         projectId,
-        this.inviteForm.get("role")?.value ?? "",
-        this.inviteForm.get("specialization")?.value ?? ""
-      )
+        role: this.inviteForm.get("role")?.value ?? "",
+        specialization: this.inviteForm.get("specialization")?.value ?? "",
+      })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: invite => {
-          this.projectTeamUIService.applySubmitInvite(invite);
-        },
-        error: err => {
-          this.projectTeamUIService.applyErrorSubmitInvite(err);
+        next: result => {
+          if (!result.ok) {
+            this.projectTeamUIService.applyErrorSubmitInvite(result.error.cause);
+            return;
+          }
+
+          this.projectTeamUIService.applySubmitInvite(result.value);
         },
       });
   }
@@ -70,10 +77,16 @@ export class ProjectTeamService {
    */
   public editInvitation(params: { inviteId: number; role: string; specialization: string }): void {
     const { inviteId, role, specialization } = params;
-    this.inviteService
-      .updateInvite(inviteId, role, specialization)
+    this.updateInviteUseCase
+      .execute({ inviteId, role, specialization })
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.projectTeamUIService.applyEditInvitation(params));
+      .subscribe({
+        next: result => {
+          if (!result.ok) return;
+
+          this.projectTeamUIService.applyEditInvitation(params);
+        },
+      });
   }
 
   /**
@@ -81,10 +94,14 @@ export class ProjectTeamService {
    * @param invitationId идентификатор приглашения
    */
   public removeInvitation(invitationId: number): void {
-    this.inviteService
-      .revokeInvite(invitationId)
+    this.revokeInviteUseCase
+      .execute(invitationId)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.projectTeamUIService.applyRemoveInvitation(invitationId));
+      .subscribe(result => {
+        if (!result.ok) return;
+
+        this.projectTeamUIService.applyRemoveInvitation(invitationId);
+      });
   }
 
   /**

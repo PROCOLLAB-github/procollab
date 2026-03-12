@@ -2,9 +2,9 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
-import { VacancyRepository as VacancyService } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
 import { map, Subject, takeUntil, tap } from "rxjs";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { GetVacanciesUseCase } from "projects/social_platform/src/app/api/vacancy/use-cases/get-vacancies.use-case";
 
 @Injectable()
 export class VacancyFilterInfoService {
@@ -13,7 +13,7 @@ export class VacancyFilterInfoService {
   /** Сервис текущего маршрута */
   private readonly route = inject(ActivatedRoute);
   /** Сервис для работы с вакансиями */
-  private readonly vacancyService = inject(VacancyService);
+  private readonly getVacanciesUseCase = inject(GetVacanciesUseCase);
   /** Сервис логирования */
   private readonly logger = inject(LoggerService);
 
@@ -165,22 +165,22 @@ export class VacancyFilterInfoService {
    * @returns Observable с отфильтрованными данными
    */
   onFetch(offset: number, limit: number, projectId?: number) {
-    return this.vacancyService
-      .getForProject(
+    return this.getVacanciesUseCase
+      .execute({
         limit,
         offset,
         projectId,
-        this.currentExperience(),
-        this.currentWorkFormat(),
-        this.currentWorkSchedule(),
-        this.currentSalary(),
-        this.searchValue()
-      )
+        requiredExperience: this.currentExperience(),
+        workFormat: this.currentWorkFormat(),
+        workSchedule: this.currentWorkSchedule(),
+        salary: this.currentSalary(),
+        searchValue: this.searchValue(),
+      })
       .pipe(
-        tap((res: any) => {
-          this.totalItemsCount.set(res.length);
+        tap(result => {
+          this.totalItemsCount.set(result.ok ? result.value.length : 0);
         }),
-        map(res => res)
+        map(result => (result.ok ? result.value : []))
       );
   }
 }

@@ -2,7 +2,8 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot } from "@angular/router";
-import { VacancyRepository } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
+import { map } from "rxjs";
+import { GetVacancyDetailUseCase } from "projects/social_platform/src/app/api/vacancy/use-cases/get-vacancy-detail.use-case";
 
 /**
  * Резолвер для загрузки детальной информации о конкретной вакансии
@@ -20,8 +21,10 @@ import { VacancyRepository } from "projects/social_platform/src/app/infrastructu
  * - vacancyId - ID вакансии из URL параметров (например: /vacancies/123)
  */
 export const VacanciesDetailResolver = (route: ActivatedRouteSnapshot) => {
-  const vacanciesRepository = inject(VacancyRepository);
+  const getVacancyDetailUseCase = inject(GetVacancyDetailUseCase);
   const vacancyId = route.params["vacancyId"];
 
-  return vacanciesRepository.getOne(vacancyId);
+  return getVacancyDetailUseCase
+    .execute(vacancyId)
+    .pipe(map(result => (result.ok ? result.value : null)));
 };

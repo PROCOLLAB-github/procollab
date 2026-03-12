@@ -1,9 +1,10 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { InviteRepository } from "projects/social_platform/src/app/infrastructure/repository/invite/invite.repository";
 import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { ResolveFn } from "@angular/router";
+import { GetMyInvitesUseCase } from "../../../api/invite/use-cases/get-my-invites.use-case";
+import { map } from "rxjs";
 
 /**
  * Резолвер для предзагрузки приглашений пользователя
@@ -16,7 +17,7 @@ import { ResolveFn } from "@angular/router";
  * - Observable<Invite[]> - массив приглашений пользователя
  */
 export const OfficeResolver: ResolveFn<Invite[]> = () => {
-  const inviteService = inject(InviteRepository);
+  const getMyInvitesUseCase = inject(GetMyInvitesUseCase);
 
-  return inviteService.getMy();
+  return getMyInvitesUseCase.execute().pipe(map(result => (result.ok ? result.value : [])));
 };

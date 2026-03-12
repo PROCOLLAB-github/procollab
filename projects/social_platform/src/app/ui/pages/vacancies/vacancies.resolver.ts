@@ -1,7 +1,8 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { VacancyRepository } from "../../../infrastructure/repository/vacancy/vacancy.repository";
+import { map } from "rxjs";
+import { GetVacanciesUseCase } from "../../../api/vacancy/use-cases/get-vacancies.use-case";
 
 /**
  * Резолвер для предзагрузки списка вакансий
@@ -11,8 +12,10 @@ import { VacancyRepository } from "../../../infrastructure/repository/vacancy/va
  * @returns Observable с данными вакансий (первые 20 элементов)
  */
 export const VacanciesResolver = () => {
-  const vacanciesRepository = inject(VacancyRepository);
+  const getVacanciesUseCase = inject(GetVacanciesUseCase);
 
   // Загрузка первых 20 вакансий с нулевым смещением
-  return vacanciesRepository.getForProject(20, 0);
+  return getVacanciesUseCase
+    .execute({ limit: 20, offset: 0 })
+    .pipe(map(result => (result.ok ? result.value : [])));
 };

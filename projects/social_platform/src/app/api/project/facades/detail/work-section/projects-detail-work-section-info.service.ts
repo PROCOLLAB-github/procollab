@@ -2,15 +2,17 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { map, Subject, takeUntil } from "rxjs";
-import { VacancyRepository as VacancyService } from "projects/social_platform/src/app/infrastructure/repository/vacancy/vacancy.repository";
 import { ActivatedRoute } from "@angular/router";
 import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
 import { ProjectsDetailWorkSectionUIInfoService } from "./ui/projects-detail-work-section-ui-info.service";
+import { AcceptResponseUseCase } from "../../../../vacancy/use-cases/accept-response.use-case";
+import { RejectResponseUseCase } from "../../../../vacancy/use-cases/reject-response.use-case";
 
 @Injectable()
 export class ProjectsDetailWorkSectionInfoService {
   private readonly route = inject(ActivatedRoute);
-  private readonly vacancyService = inject(VacancyService);
+  private readonly acceptResponseUseCase = inject(AcceptResponseUseCase);
+  private readonly rejectResponseUseCase = inject(RejectResponseUseCase);
   private readonly projectsDetailWorkSectionUIInfoService = inject(
     ProjectsDetailWorkSectionUIInfoService
   );
@@ -44,10 +46,12 @@ export class ProjectsDetailWorkSectionInfoService {
    * @param responseId - ID отклика для принятия
    */
   acceptResponse(responseId: number) {
-    this.vacancyService
-      .acceptResponse(responseId)
+    this.acceptResponseUseCase
+      .execute(responseId)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
+      .subscribe(result => {
+        if (!result.ok) return;
+
         this.projectsDetailWorkSectionUIInfoService.applyFilterVacacnies(responseId);
       });
   }
@@ -57,10 +61,12 @@ export class ProjectsDetailWorkSectionInfoService {
    * @param responseId - ID отклика для отклонения
    */
   rejectResponse(responseId: number) {
-    this.vacancyService
-      .rejectResponse(responseId)
+    this.rejectResponseUseCase
+      .execute(responseId)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
+      .subscribe(result => {
+        if (!result.ok) return;
+
         this.projectsDetailWorkSectionUIInfoService.applyFilterVacacnies(responseId);
       });
   }

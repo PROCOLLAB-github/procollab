@@ -21,7 +21,8 @@ import { NotificationService } from "@ui/services/notification/notification.serv
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
-import { InviteRepository } from "../../../infrastructure/repository/invite/invite.repository";
+import { AcceptInviteUseCase } from "../../../api/invite/use-cases/accept-invite.use-case";
+import { RejectInviteUseCase } from "../../../api/invite/use-cases/reject-invite.use-case";
 
 /**
  * Компонент навигационного меню
@@ -70,12 +71,13 @@ import { InviteRepository } from "../../../infrastructure/repository/invite/invi
 export class NavComponent implements OnInit, OnDestroy {
   private readonly logger = inject(LoggerService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly acceptInviteUseCase = inject(AcceptInviteUseCase);
+  private readonly rejectInviteUseCase = inject(RejectInviteUseCase);
 
   constructor(
     public readonly navService: NavService,
     private readonly router: Router,
     public readonly notificationService: NotificationService,
-    private readonly inviteService: InviteRepository,
     public readonly authRepository: AuthRepository,
     private readonly cdref: ChangeDetectorRef
   ) {}
@@ -116,10 +118,14 @@ export class NavComponent implements OnInit, OnDestroy {
    * Отправляет запрос на отклонение и удаляет приглашение из списка
    */
   onRejectInvite(inviteId: number): void {
-    this.inviteService
-      .rejectInvite(inviteId)
+    this.rejectInviteUseCase
+      .execute(inviteId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
+      .subscribe(result => {
+        if (!result.ok) {
+          return;
+        }
+
         const index = this.invites.findIndex(invite => invite.id === inviteId);
         this.invites.splice(index, 1);
 
@@ -134,10 +140,14 @@ export class NavComponent implements OnInit, OnDestroy {
    * и перенаправляет пользователя на страницу проекта
    */
   onAcceptInvite(inviteId: number): void {
-    this.inviteService
-      .acceptInvite(inviteId)
+    this.acceptInviteUseCase
+      .execute(inviteId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
+      .subscribe(result => {
+        if (!result.ok) {
+          return;
+        }
+
         const index = this.invites.findIndex(invite => invite.id === inviteId);
         const invite = JSON.parse(JSON.stringify(this.invites[index]));
         this.invites.splice(index, 1);
