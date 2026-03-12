@@ -1,6 +1,17 @@
 /** @format */
 
-import { Component, EventEmitter, inject, Input, Output, signal } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  signal,
+  ViewChild,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
@@ -12,6 +23,7 @@ import { FileService } from "@core/services/file.service";
 import { Task } from "@office/models/courses.model";
 import { FileModel } from "@office/models/file.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
+import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 
 @Component({
   selector: "app-file-task",
@@ -23,13 +35,17 @@ import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
     UploadFileComponent,
     IconComponent,
     FileItemComponent,
+    ImagePreviewDirective,
   ],
   templateUrl: "./file-task.component.html",
   styleUrl: "./file-task.component.scss",
 })
-export class FileTaskComponent {
+export class FileTaskComponent implements AfterViewInit {
   private readonly fileService = inject(FileService);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly cdRef = inject(ChangeDetectorRef);
+
+  @ViewChild("descEl") descEl?: ElementRef<HTMLElement>;
 
   @Input({ required: true }) data!: Task;
   @Input() success = false;
@@ -56,6 +72,20 @@ export class FileTaskComponent {
 
   _error = signal<boolean>(false);
   uploadedFiles = signal<FileModel[]>([]);
+  descriptionExpandable = false;
+  readFullDescription = false;
+
+  ngAfterViewInit(): void {
+    const el = this.descEl?.nativeElement;
+    if (el) {
+      this.descriptionExpandable = el.scrollHeight > el.clientHeight;
+      this.cdRef.detectChanges();
+    }
+  }
+
+  onToggleDescription(): void {
+    this.readFullDescription = !this.readFullDescription;
+  }
 
   getSafeVideoUrl(): SafeResourceUrl | null {
     const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);

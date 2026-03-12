@@ -6,11 +6,13 @@ import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 import { Task } from "@office/models/courses.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
+import { FileItemComponent } from "@ui/components/file-item/file-item.component";
+import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 
 @Component({
   selector: "app-radio-select-task",
   standalone: true,
-  imports: [CommonModule, TruncatePipe],
+  imports: [CommonModule, TruncatePipe, FileItemComponent, ImagePreviewDirective],
   templateUrl: "./radio-select-task.component.html",
   styleUrl: "./radio-select-task.component.scss",
 })

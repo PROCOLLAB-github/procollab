@@ -55,8 +55,6 @@ export class FileItemComponent implements OnInit {
 
   /** Функция скачивания файла через создание временной ссылки */
   onDownloadFile(): void {
-    if (this.mode === "preview") return;
-
     const link = document.createElement("a");
 
     link.setAttribute("href", this.link);

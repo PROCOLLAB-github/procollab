@@ -11,11 +11,19 @@ import { FileService } from "@core/services/file.service";
 import { Task } from "@models/courses.model";
 import { FileModel } from "@office/models/file.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
+import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 
 @Component({
   selector: "app-write-task",
   standalone: true,
-  imports: [CommonModule, TruncatePipe, UploadFileComponent, IconComponent, FileItemComponent],
+  imports: [
+    CommonModule,
+    TruncatePipe,
+    UploadFileComponent,
+    IconComponent,
+    FileItemComponent,
+    ImagePreviewDirective,
+  ],
   templateUrl: "./write-task.component.html",
   styleUrl: "./write-task.component.scss",
 })

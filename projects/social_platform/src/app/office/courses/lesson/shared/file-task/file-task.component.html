@@ -3,7 +3,7 @@
 <div class="file-task" [class.file-task--hasVideo]="hasVideoUrl()">
   <div class="file-task__header">
     <p class="text-body-12 file-task__task">задание {{ data.order }}</p>
-    @if (!hasVideoUrl() && !data.imageUrl) {
+    @if ((!data.videoUrl && !data.imageUrl) && data.attachmentUrl) {
     <p class="file-task__text text-body-12-bold">{{ data.title | truncate: 80 }}</p>
     }
     <div
@@ -20,12 +20,35 @@
         allowtransparency="true"
       ></iframe>
       } @if (data.imageUrl) {
-      <img class="file-task__image" [src]="data.imageUrl" />
+      <img appImagePreview class="file-task__image" [src]="data.imageUrl" />
       }
-      <div class="file-task__image-text">
+      <div class="file-task__file-text" [class.file-task__image-text]="data.imageUrl">
+        @if (data.imageUrl) {
         <p class="file-task__text text-body-12-bold">{{ data.title | truncate: 80 }}</p>
-        <div [innerHTML]="data.bodyText | truncateHtml: 700"></div>
+        }
+        <div
+          #descEl
+          class="file-task__desc text-body-12"
+          [class.file-task__desc--expanded]="readFullDescription"
+          [innerHTML]="data.bodyText | truncate: 700"
+        ></div>
+
+        @if (descriptionExpandable) {
+        <div class="read-more text-body-10" (click)="onToggleDescription()">
+          {{ readFullDescription ? "скрыть" : "подробнее" }}
+        </div>
+        }
       </div>
+
+      @if (data.attachmentUrl) {
+      <app-file-item
+        mode="preview"
+        [type]="'file'"
+        name="файл с заданием"
+        [size]="0"
+        [link]="data.attachmentUrl"
+      ></app-file-item>
+      }
     </div>
 
     @if (hint.length) {
@@ -39,7 +62,7 @@
     [class.file-task__content--error]="error"
   >
     <p class="file-task__label text-body-12">ответ</p>
-    <p class="file-task__title text-body-12-bold">{{ data.title | truncate: 80 }}</p>
+    <!-- <p class="file-task__title text-body-12-bold">{{ data.title | truncate: 80 }}</p> -->
 
     <div class="file-task__files">
       <app-upload-file [resetAfterUpload]="true" (uploaded)="onFileUploaded($event)">

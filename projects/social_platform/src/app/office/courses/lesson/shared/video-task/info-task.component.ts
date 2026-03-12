@@ -7,6 +7,7 @@ import { TruncateHtmlPipe } from "projects/core/src/lib/pipes/truncate-html.pipe
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 import { InfoSlide } from "projects/skills/src/models/step.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
+import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 
 /**
  * Компонент информационного слайда с видео/изображением
@@ -24,7 +25,7 @@ import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
 @Component({
   selector: "app-info-task",
   standalone: true,
-  imports: [CommonModule, TruncateHtmlPipe, TruncatePipe],
+  imports: [CommonModule, TruncateHtmlPipe, TruncatePipe, ImagePreviewDirective],
   templateUrl: "./info-task.component.html",
   styleUrl: "./info-task.component.scss",
 })

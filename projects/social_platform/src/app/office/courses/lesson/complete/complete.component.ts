@@ -34,6 +34,6 @@ export class TaskCompleteComponent implements OnInit {
 
   routeToCourses(): void {
     const id = this.courseId();
-    this.router.navigateByUrl(id ? `/office/courses/${id}` : "/office/courses/all");
+    this.router.navigate(id ? ["/office/courses", id] : ["/office/courses/all"]);
   }
 }

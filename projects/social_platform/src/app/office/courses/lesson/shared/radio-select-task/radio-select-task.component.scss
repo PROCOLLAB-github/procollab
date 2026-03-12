@@ -28,11 +28,12 @@
 
   &__img {
     width: 100%;
-    max-width: 150px;
+    max-width: 300px;
     height: 100%;
-    max-height: 207px;
-    margin: calc(75px - 24px) calc(92px - 24px);
-    object-fit: contain;
+    max-height: 150px;
+    margin: calc(75px - 24px) 0 26px 0;
+    object-fit: cover;
+    border-radius: var(--rounded-lg);
 
     &-text {
       text-align: center;
@@ -120,10 +121,17 @@
         border-radius: var(--rounded-lg);
       }
     }
+
   }
 
   &__content {
-    min-width: 333px;
+    &--hasContent {
+      min-width: 333px;
+    }
+
+    &:not(&--hasContent) {
+      max-width: 333px;
+    }
   }
 
   :host ::ng-deep &__hint p {

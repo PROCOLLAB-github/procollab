@@ -161,7 +161,7 @@ export class LessonComponent implements OnInit {
 
     const body = this.answerBody();
     const isTextFile = task.answerType === "text_and_files";
-    const answerText = task.answerType === "text" ? body : isTextFile ? body?.text : undefined;
+    const answerText = task.answerType === "text" || isTextFile ? body?.text : undefined;
     const optionIds =
       task.answerType === "single_choice" || task.answerType === "multiple_choice"
         ? body
@@ -183,7 +183,7 @@ export class LessonComponent implements OnInit {
           } else {
             this.hasError.set(true);
             this.success.set(false);
-            this.snackbarService.info("находится на проверке, ожидайте!");
+            this.snackbarService.error("неверный ответ, попробуйте еще раз!");
             setTimeout(() => this.hasError.set(false), 1000);
             return;
           }
@@ -205,7 +205,7 @@ export class LessonComponent implements OnInit {
         error: () => {
           this.loader.set(false);
           this.hasError.set(true);
-          this.snackbarService.error("упс, вышла неточность! попробуйте еще раз");
+          this.snackbarService.error("неверный ответ, попробуйте еще раз!");
         },
       });
   }

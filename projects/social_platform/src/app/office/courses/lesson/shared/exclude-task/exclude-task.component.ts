@@ -7,6 +7,7 @@ import { CheckboxComponent } from "@ui/components";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 import { Task } from "@office/models/courses.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
+import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 
 /**
  * Компо��ент задачи на исключение лишнего
@@ -31,7 +32,7 @@ import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
 @Component({
   selector: "app-exclude-task",
   standalone: true,
-  imports: [CommonModule, TruncatePipe, CheckboxComponent],
+  imports: [CommonModule, TruncatePipe, CheckboxComponent, ImagePreviewDirective],
   templateUrl: "./exclude-task.component.html",
   styleUrl: "./exclude-task.component.scss",
 })

@@ -1,13 +1,15 @@
 /** @format */
 
+import type { Routes } from "@angular/router";
 import { TrajectoryInfoComponent } from "./info/info.component";
 import { CourseDetailComponent } from "./course-detail.component";
 import { CoursesDetailResolver } from "./course-detail.resolver";
 
-export const COURSE_DETAIL_ROUTES = [
+export const COURSE_DETAIL_ROUTES: Routes = [
   {
     path: "",
     component: CourseDetailComponent,
+    runGuardsAndResolvers: "always",
     resolve: {
       data: CoursesDetailResolver,
     },

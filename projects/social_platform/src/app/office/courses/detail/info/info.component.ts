@@ -77,8 +77,21 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
         this.courseStructure.set(courseStructure);
         this.courseDetail.set(courseDetail);
 
-        if (courseStructure.percent === 100) {
+        const completedModuleIds = courseStructure.modules
+          .filter(m => m.progressStatus === "completed")
+          .map(m => m.id);
+
+        const unseenModule = completedModuleIds.find(
+          id =>
+            !localStorage.getItem(`course_${courseStructure.courseId}_module_${id}_complete_seen`)
+        );
+
+        if (unseenModule) {
           this.isCompleteModule.set(true);
+          localStorage.setItem(
+            `course_${courseStructure.courseId}_module_${unseenModule}_complete_seen`,
+            "true"
+          );
         }
       });
   }
