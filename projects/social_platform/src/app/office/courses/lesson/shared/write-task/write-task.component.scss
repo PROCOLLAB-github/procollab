@@ -53,9 +53,9 @@
   }
 
   &__input {
+    position: relative;
     margin-top: 12px;
     color: var(--grey-for-text);
-    position: relative;
   }
 
   &__textarea {
@@ -92,9 +92,9 @@
 
   &__counter {
     position: absolute;
-    bottom: 2%;
     right: 2%;
-    
+    bottom: 2%;
+
     p {
       color: var(--grey) !important;
     }
