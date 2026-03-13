@@ -74,11 +74,11 @@
 
   &__block {
     display: flex;
+    flex-direction: column;
+    gap: 5px;
     align-items: center;
     align-self: center;
     text-align: center;
-    flex-direction: column;
-    gap: 5px;
   }
 
   &__image {
