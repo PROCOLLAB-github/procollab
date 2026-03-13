@@ -62,7 +62,7 @@
     [class.file-task__content--error]="error"
   >
     <p class="file-task__label text-body-12">ответ</p>
-    <!-- <p class="file-task__title text-body-12-bold">{{ data.title | truncate: 80 }}</p> -->
+    <p class="file-task__title text-body-12-bold">{{ data.answerTitle | truncate: 80 }}</p>
 
     <div class="file-task__files">
       <app-upload-file [resetAfterUpload]="true" (uploaded)="onFileUploaded($event)">

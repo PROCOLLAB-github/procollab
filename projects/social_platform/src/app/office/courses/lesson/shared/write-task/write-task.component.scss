@@ -22,7 +22,7 @@
   }
 
   &__content {
-    max-width: 333px;
+    min-width: 333px;
     padding: 12px 24px;
   }
 
@@ -72,11 +72,20 @@
     color: var(--grey-for-text);
   }
 
+  &__block {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    text-align: center;
+    flex-direction: column;
+    gap: 5px;
+  }
+
   &__image {
     width: 100%;
-    max-width: 397px;
-    max-height: 223px;
-    object-fit: contain;
+    max-width: 300px;
+    max-height: 150px;
+    object-fit: cover;
     border-radius: var(--rounded-lg);
   }
 

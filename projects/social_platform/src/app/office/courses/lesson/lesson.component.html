@@ -4,7 +4,7 @@
 <div class="task">
   <div class="task__wrapper">
     <div class="task__tasks">
-      <p class="task__name text-bold-body-14">модуль {{ lessonInfo()?.moduleId }}</p>
+      <p class="task__name text-bold-body-14">модуль {{ lessonInfo()?.moduleOrder }}</p>
     </div>
 
     <div class="task__progress">
@@ -34,8 +34,8 @@
     <div class="task__content">
       <!-- informationalType === "text" или "video_text" и answerType === null → info-task -->
       @if (task.answerType === null && (task.informationalType === 'text' || task.informationalType
-      === 'video_text')) {
-      <app-info-task [data]="$any(task)"></app-info-task>
+      === 'video_text' || task.informationalType === 'text_image')) {
+      <app-info-task [data]="task"></app-info-task>
       }
 
       <!-- answerType === "text" или "text_and_files" → write-task -->
@@ -60,7 +60,7 @@
       <!-- answerType === "single_choice" → radio-select-task -->
       @if (task.answerType === 'single_choice') {
       <app-radio-select-task
-        [data]="$any(task)"
+        [data]="task"
         [success]="success()"
         [error]="hasError()"
         (update)="onAnswerChange([$event.answerId])"

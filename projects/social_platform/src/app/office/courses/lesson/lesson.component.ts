@@ -7,7 +7,6 @@ import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/ro
 import { filter, map, tap } from "rxjs";
 import { CourseLesson, Task } from "@office/models/courses.model";
 import { CoursesService } from "../courses.service";
-import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { ButtonComponent } from "@ui/components";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { InfoTaskComponent } from "./shared/video-task/info-task.component";

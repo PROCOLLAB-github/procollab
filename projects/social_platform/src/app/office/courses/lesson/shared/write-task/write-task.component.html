@@ -20,7 +20,10 @@
         allowtransparency="true"
       ></iframe>
       } @else if (data.imageUrl) {
-      <img appImagePreview class="write-task__image" [src]="data.imageUrl" />
+      <div class="write-task__block">
+        <img appImagePreview class="write-task__image" [src]="data.imageUrl" />
+        <p class="text-body-12-bold">{{ data.title | truncate: 50 }}</p>
+      </div>
       }
       <div [innerHTML]="data.bodyText | truncate: (type === 'text-file' ? 650 : 700)"></div>
 

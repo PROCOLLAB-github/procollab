@@ -1,20 +1,21 @@
 /** @format */
 
-import { Component, inject, Input, type OnChanges } from "@angular/core";
+import { Component, inject, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, type SafeResourceUrl } from "@angular/platform-browser";
 import { TruncateHtmlPipe } from "projects/core/src/lib/pipes/truncate-html.pipe";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
-import { InfoSlide } from "projects/skills/src/models/step.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
+import { Task } from "@office/models/courses.model";
+import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 
 /**
  * Компонент информационного слайда с видео/изображением
  * Отображает информационный контент с поддержкой различных медиа-форматов
  *
  * Входные параметры:
- * @Input data - данные информационного слайда типа InfoSlide
+ * @Input data - данные информационной задачи типа Task
  *
  * Функциональность:
  * - Отображает текст и описание слайда
@@ -25,31 +26,33 @@ import { ImagePreviewDirective } from "../image-preview/image-preview.directive"
 @Component({
   selector: "app-info-task",
   standalone: true,
-  imports: [CommonModule, TruncateHtmlPipe, TruncatePipe, ImagePreviewDirective],
+  imports: [CommonModule, TruncateHtmlPipe, TruncatePipe, ImagePreviewDirective, FileItemComponent],
   templateUrl: "./info-task.component.html",
   styleUrl: "./info-task.component.scss",
 })
-export class InfoTaskComponent implements OnChanges {
-  @Input({ required: true }) data!: InfoSlide; // Данные информационного слайда
+export class InfoTaskComponent {
+  @Input({ required: true }) data!: Task; // Данные информационной задачи
 
-  sanitizer = inject(DomSanitizer); // Сервис для безопасной работы с HTML
+  private readonly sanitizer = inject(DomSanitizer); // Сервис для безопасной работы с HTML
 
-  sourceType: "embed" | "img" | null = null;
-  mediaUrl?: SafeResourceUrl | string;
+  private getVideoUrl(): string | null {
+    return resolveVideoUrlForIframe(this.data?.videoUrl);
+  }
 
-  ngOnChanges(): void {
-    this.mediaUrl = undefined;
-    this.sourceType = null;
-
-    const firstFile = this.data.files[0]?.toLowerCase();
-    if (firstFile && /\.(webp|png|jpe?g|gif|svg)(?:$|[?#])/i.test(firstFile)) {
-      this.sourceType = "img";
+  getSafeVideoUrl(): SafeResourceUrl | null {
+    const iframeUrl = this.getVideoUrl();
+    if (!iframeUrl) {
+      return null;
     }
 
-    const iframeUrl = resolveVideoUrlForIframe(this.data.videoUrl);
-    if (iframeUrl) {
-      this.mediaUrl = this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl);
-      this.sourceType = "embed";
-    }
+    return this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl);
+  }
+
+  hasVideoUrl(): boolean {
+    return !!this.getVideoUrl();
+  }
+
+  hasContent(): boolean {
+    return this.hasVideoUrl() || !!this.data?.imageUrl;
   }
 }

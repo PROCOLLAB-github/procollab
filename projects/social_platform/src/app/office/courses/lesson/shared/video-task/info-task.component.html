@@ -1,31 +1,59 @@
 <!-- @format -->
 
-<div
-  class="video"
-  [class.video--hasVideo]="sourceType === 'embed'"
-  [class.video--hasImage]="sourceType === 'img'"
->
-  <div class="video__text-content" [class.video__text-content--hasVideo]="!!mediaUrl">
-    <p class="video__title text-body-12-bold">
-      {{ data.text | truncate: (sourceType === "embed" ? 80 : sourceType === "img" ? 100 : 200) }}
-    </p>
-    <p
-      class="video__text text-body-12"
-      [innerHTML]="
-        data.description
-          | truncateHtml: (sourceType === 'embed' ? 627 : sourceType === 'img' ? 500 : 1000)
-      "
-    ></p>
-  </div>
+<div class="video">
+  <div
+    class="video__body"
+    [class.video__body--hasVideo]="data.videoUrl"
+    [class.video__body--hasImage]="data.imageUrl"
+  >
+    @if ((data.videoUrl || data.attachmentUrl) && !data.imageUrl) {
+    <p class="video__task text-body-12">задание {{ data.order }}</p>
+    }
 
-  @if (sourceType === 'embed') {
-  <div class="video__wrapper" [class.video__wrapper--hasVideo]="sourceType === 'embed'">
-    <div class="video__frame" [class.video__frame--hasVideo]="sourceType === 'embed'">
-      <iframe [src]="mediaUrl" width="395px" height="223px" frameborder="0" allowfullscreen>
+    <div
+      class="video__wrapper"
+      [class.video__wrapper--hasVideo]="data.videoUrl"
+      [class.video__wrapper--hasImage]="data.imageUrl"
+    >
+      @if (data.videoUrl) { @if (getSafeVideoUrl(); as videoUrl) {
+      <iframe
+        [src]="videoUrl"
+        width="395px"
+        height="222px"
+        frameborder="0"
+        allowfullscreen
+        allowtransparency="true"
+      >
       </iframe>
+      } } @if (data.imageUrl) {
+      <img appImagePreview class="video__img" [src]="data.imageUrl" />
+      }
+
+      <div class="video__text-content">
+        @if (!data.videoUrl) {
+        <p class="video__task text-body-12">задание {{ data.order }}</p>
+        }
+
+        <p class="video__title text-body-12-bold">
+          {{ data.title | truncate: (hasVideoUrl() ? 80 : data.imageUrl ? 100 : 200) }}
+        </p>
+        <div
+          class="video__text text-body-12"
+          [innerHTML]="
+            data.bodyText | truncateHtml: (hasVideoUrl() ? 627 : data.imageUrl ? 500 : 1000)
+          "
+        ></div>
+
+        @if (data.attachmentUrl) {
+        <app-file-item
+          mode="preview"
+          [type]="'file'"
+          name="файл с заданием"
+          [size]="0"
+          [link]="data.attachmentUrl"
+        ></app-file-item>
+        }
+      </div>
     </div>
   </div>
-  } @if (data.files.length) {
-  <img appImagePreview class="video__img" [src]="data.files[0]" />
-  }
 </div>

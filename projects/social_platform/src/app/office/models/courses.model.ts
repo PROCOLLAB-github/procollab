@@ -125,6 +125,7 @@ export interface Task {
   id: number;
   order: number;
   title: string;
+  answerTitle: string;
   status: string;
   taskKind: "question" | "informational";
   checkType: string | null;
@@ -148,6 +149,7 @@ export interface CourseLesson {
   progressStatus: "not_started" | "in_progress" | "completed" | "blocked";
   percent: number;
   currentTaskId: number;
+  moduleOrder: number;
   tasks: Task[];
 }
 
