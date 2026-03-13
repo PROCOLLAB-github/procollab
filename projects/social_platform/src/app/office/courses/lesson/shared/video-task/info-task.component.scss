@@ -35,12 +35,15 @@
   &__wrapper {
     display: flex;
     gap: 24px;
+    width: 100%;
 
     &--hasVideo {
+      flex-grow: 1;
       flex-direction: row;
     }
 
     &--hasImage {
+      flex-grow: 1;
       flex-direction: row-reverse;
     }
   }

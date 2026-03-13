@@ -58,7 +58,9 @@
 
   <app-modal [open]="isCompleteModule()" (openChange)="isCompleteModule.set(false)">
     <div class="cancel">
-      <p class="cancel__title text-body-14">ты прошел модуль!</p>
+      <p class="cancel__title text-body-14">
+        {{ isCourseCompleted() ? "ты прошел курс!" : "ты прошел модуль!" }}
+      </p>
 
       <img
         alt="complete module image"

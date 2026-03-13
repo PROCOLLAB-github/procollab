@@ -59,6 +59,11 @@ export class LessonComponent implements OnInit {
     return this.tasks().find(t => t.id === id) ?? null;
   });
 
+  protected readonly isLastTask = computed(() => {
+    const allTasksLength = this.tasks().length;
+    return allTasksLength === this.currentTask()?.order;
+  });
+
   protected readonly isSubmitDisabled = computed(() => {
     const task = this.currentTask();
     const body = this.answerBody();

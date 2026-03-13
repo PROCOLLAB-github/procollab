@@ -62,6 +62,7 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
   protected readonly courseStructure = signal<CourseStructure | undefined>(undefined);
   protected readonly courseDetail = signal<CourseDetail | undefined>(undefined);
   protected readonly isCompleteModule = signal<boolean>(false);
+  protected readonly isCourseCompleted = signal<boolean>(false);
 
   /**
    * Инициализация компонента
@@ -87,6 +88,10 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
         );
 
         if (unseenModule) {
+          const allModulesCompleted = courseStructure.modules.every(
+            m => m.progressStatus === "completed"
+          );
+          this.isCourseCompleted.set(allModulesCompleted);
           this.isCompleteModule.set(true);
           localStorage.setItem(
             `course_${courseStructure.courseId}_module_${unseenModule}_complete_seen`,

@@ -37,7 +37,10 @@ export class WriteTaskComponent {
 
   @Output() update = new EventEmitter<{ text: string; fileUrls?: string[] }>();
 
+  readonly maxLength = 1000;
+
   uploadedFiles = signal<FileModel[]>([]);
+  currentLength = signal(0);
   private currentText = "";
 
   getSafeVideoUrl(): SafeResourceUrl | null {
@@ -60,6 +63,7 @@ export class WriteTaskComponent {
     target.style.height = target.scrollHeight + "px";
 
     this.currentText = target.value;
+    this.currentLength.set(target.value.length);
     this.emitUpdate();
   }
 

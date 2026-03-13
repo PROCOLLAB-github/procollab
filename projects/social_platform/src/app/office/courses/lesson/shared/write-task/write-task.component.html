@@ -41,14 +41,20 @@
 
   <div class="write-task__content">
     <p class="write-task__input text-body-12">ответ</p>
-    <div class="write-task__input">
+    <div class="write-task__input write-task__input--textarea">
       <textarea
         [style.minHeight]="type === 'text-file' ? '125px' : '341px'"
         class="write-task__textarea text-body-12"
         rows="2"
+        attr.maxlength="{{ maxLength }}"
         (input)="onKeyUp($event)"
         placeholder="ваш ответ"
       ></textarea>
+      <div class="write-task__counter">
+        <p class="text-body-10">
+          <span>{{ currentLength() }}</span> / {{ maxLength }}
+        </p>
+      </div>
     </div>
 
     @if (type === 'text-file') {

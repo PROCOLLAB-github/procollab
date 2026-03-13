@@ -2,9 +2,7 @@
 
 <div class="exclude" [class.exclude--hasContent]="hasVideoUrl() || !!data.imageUrl">
   <div class="exclude__body" [class.exclude__body--hasContent]="hasVideoUrl() || !!data.imageUrl">
-    @if (!hasVideoUrl() && !data.imageUrl) {
-    <h2 class="exclude__title text-body-12-bold">{{ data.title | truncate: 110 }}</h2>
-    }
+    <p class="text-body-12 exclude__answer">задание {{ data.order }}</p>
     <div
       class="exclude__text text-body-12"
       [class.exclude__text--hasContent]="hasVideoUrl() || !!data.imageUrl"
@@ -13,8 +11,9 @@
       <iframe [src]="videoUrl" frameborder="0" allowfullscreen allowtransparency="true"></iframe>
       } @else if (data.imageUrl) {
       <img appImagePreview alt="exclude-image" [src]="data.imageUrl" class="exclude__image" />
+      <p class="text-body-12-bold">{{ data.title | truncate: 50 }}</p>
       }
-      <div [innerHTML]="data.bodyText | truncate: 700"></div>
+      <p class="text-body-12 exclude__description">{{ data.bodyText | truncate: 700 }}</p>
     </div>
   </div>
 
@@ -24,7 +23,7 @@
   >
     <p class="exclude__answer text-body-12">ответ</p>
     <ul class="exclude__list">
-      <p class="exclude__text text-body-12">{{ data.title | truncate: 110 }}</p>
+      <p class="exclude__text text-body-12-bold">{{ data.answerTitle | truncate: 110 }}</p>
       @for (op of data.options; track op.id) {
       <li
         class="exclude__item"

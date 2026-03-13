@@ -55,6 +55,7 @@
   &__input {
     margin-top: 12px;
     color: var(--grey-for-text);
+    position: relative;
   }
 
   &__textarea {
@@ -87,6 +88,16 @@
     max-height: 150px;
     object-fit: cover;
     border-radius: var(--rounded-lg);
+  }
+
+  &__counter {
+    position: absolute;
+    bottom: 2%;
+    right: 2%;
+    
+    p {
+      color: var(--grey) !important;
+    }
   }
 
   &__files {

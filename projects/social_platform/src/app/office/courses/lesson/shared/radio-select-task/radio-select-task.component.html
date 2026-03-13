@@ -2,28 +2,18 @@
 
 <div class="radio" [class.radio--hasContent]="hasVideoUrl() || !!data.imageUrl">
   <div class="radio__body" [class.radio__body--hasContent]="!!data.imageUrl || hasVideoUrl()">
-    @if ((!data.videoUrl && !data.imageUrl) || data.attachmentUrl) {
     <p class="text-body-12 radio__answer">задание {{ data.order }}</p>
-    } @if (getSafeVideoUrl(); as videoUrl) {
-    <iframe
-      [src]="videoUrl"
-      width="283px"
-      height="183px"
-      frameborder="0"
-      allowfullscreen
-      allowtransparency="true"
-    ></iframe>
+    @if (getSafeVideoUrl(); as videoUrl) {
+    <iframe [src]="videoUrl" frameborder="0" allowfullscreen allowtransparency="true"></iframe>
     } @if (data.imageUrl) {
-    <img appImagePreview class="radio__img" [src]="data.imageUrl" />
+    <div class="radio__block">
+      <img appImagePreview class="radio__img" [src]="data.imageUrl" />
+      <p class="text-body-12-bold">{{ data.title | truncate: 50 }}</p>
+    </div>
     }
 
-    <p class="text-body-12-bold radio__title" [class.radio__img-text]="data.imageUrl">
-      {{ data.title | truncate: 60 }}
-    </p>
-
-    @if (!(data.videoUrl || data.imageUrl)) {
     <p class="text-body-12 radio__description">{{ data.bodyText | truncate: 700 }}</p>
-    } @if (data.attachmentUrl) {
+    @if (data.attachmentUrl) {
     <app-file-item
       mode="preview"
       [type]="'file'"
@@ -37,12 +27,9 @@
   </div>
 
   <div class="radio__content" [class.radio__content--hasContent]="!!data.imageUrl || hasVideoUrl()">
-    @if (data.videoUrl || data.imageUrl) {
-    <p class="text-body-12 radio__answer">задание {{ data.order }}</p>
-    }
-
+    <p class="radio__answer text-body-12">ответ</p>
     <ul class="radio__list">
-      <p class="radio__title text-body-12-bold">{{ data.bodyText | truncate: 110 }}</p>
+      <p class="radio__title text-body-12-bold">{{ data.answerTitle | truncate: 110 }}</p>
       @for (op of data.options; track op.id) {
       <li
         class="radio__item"

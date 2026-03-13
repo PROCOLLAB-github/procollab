@@ -6,10 +6,10 @@
   flex-direction: row;
   gap: 20px;
 
-  &--hasContent {
-    display: flex;
-    flex-direction: row-reverse;
-  }
+  // &--hasContent {
+  //   display: flex;
+  //   flex-direction: row-reverse;
+  // }
 
   &__answer {
     color: var(--grey-for-text);
@@ -75,12 +75,16 @@
     }
   }
 
+  &__description {
+    text-align: justify;
+  }
+
   &__image {
     width: 100%;
     max-width: 300px;
     height: 100%;
     max-height: 150px;
-    margin: calc(75px - 24px) 0 26px 0;
+    margin: 22px 0px 22px 0px;
     object-fit: cover;
     border-radius: var(--rounded-lg);
   }
@@ -95,11 +99,11 @@
     border-radius: var(--rounded-lg);
   }
 
-  &__body {
-    &--hasContent {
-      max-width: 333px;
-    }
-  }
+  // &__body {
+  //   &--hasContent {
+  //     max-width: 333px;
+  //   }
+  // }
 
   &__content {
     &--hasContent {
