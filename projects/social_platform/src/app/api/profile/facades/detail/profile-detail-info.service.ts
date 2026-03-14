@@ -10,13 +10,23 @@ import { ProfileDetailUIInfoService } from "./ui/profile-detail-ui-info.service"
 import { NewsInfoService } from "../../../news/news-info.service";
 import { ProjectsDetailUIInfoService } from "../../../project/facades/detail/ui/projects-detail-ui.service";
 import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
-import { ProfileNewsRepository } from "projects/social_platform/src/app/infrastructure/repository/profile/profile-news.repository";
+import { AddProfileNewsUseCase } from "../../use-cases/add-profile-news.use-case";
+import { DeleteProfileNewsUseCase } from "../../use-cases/delete-profile-news.use-case";
+import { EditProfileNewsUseCase } from "../../use-cases/edit-profile-news.use-case";
+import { FetchProfileNewsUseCase } from "../../use-cases/fetch-profile-news.use-case";
+import { ReadProfileNewsUseCase } from "../../use-cases/read-profile-news.use-case";
+import { ToggleProfileNewsLikeUseCase } from "../../use-cases/toggle-profile-news-like.use-case";
 
 @Injectable()
 export class ProfileDetailInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly authRepository = inject(AuthRepository);
-  private readonly profileNewsRepository = inject(ProfileNewsRepository);
+  private readonly addProfileNewsUseCase = inject(AddProfileNewsUseCase);
+  private readonly deleteProfileNewsUseCase = inject(DeleteProfileNewsUseCase);
+  private readonly editProfileNewsUseCase = inject(EditProfileNewsUseCase);
+  private readonly fetchProfileNewsUseCase = inject(FetchProfileNewsUseCase);
+  private readonly readProfileNewsUseCase = inject(ReadProfileNewsUseCase);
+  private readonly toggleProfileNewsLikeUseCase = inject(ToggleProfileNewsLikeUseCase);
   private readonly expandService = inject(ExpandService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
@@ -74,9 +84,11 @@ export class ProfileDetailInfoService {
    * @param news - объект с текстом и файлами новости
    */
   onAddNews(news: { text: string; files: string[] }) {
-    return this.profileNewsRepository.addNews(this.route.snapshot.params["id"], news).pipe(
-      tap(newsRes => {
-        this.newsInfoService.applyAddNews(newsRes);
+    return this.addProfileNewsUseCase.execute(this.route.snapshot.params["id"], news).pipe(
+      tap(result => {
+        if (!result.ok) return;
+
+        this.newsInfoService.applyAddNews(result.value);
       }),
       takeUntil(this.destroy$)
     );
@@ -89,8 +101,8 @@ export class ProfileDetailInfoService {
   onDeleteNews(newsId: number): void {
     this.newsInfoService.applyDeleteNews(newsId);
 
-    this.profileNewsRepository
-      .delete(this.route.snapshot.params["id"], newsId)
+    this.deleteProfileNewsUseCase
+      .execute(this.route.snapshot.params["id"], newsId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({ next: () => {} });
   }
@@ -103,10 +115,12 @@ export class ProfileDetailInfoService {
     const item = this.news().find(n => n.id === newsId);
     if (!item) return;
 
-    this.profileNewsRepository
-      .toggleLike(this.route.snapshot.params["id"], newsId, !item.isUserLiked)
+    this.toggleProfileNewsLikeUseCase
+      .execute(this.route.snapshot.params["id"], newsId, !item.isUserLiked)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
+      .subscribe(result => {
+        if (!result.ok) return;
+
         this.newsInfoService.applyLikeNews(newsId);
       });
   }
@@ -117,11 +131,13 @@ export class ProfileDetailInfoService {
    * @param newsItemId - идентификатор редактируемой новости
    */
   onEditNews(news: ProfileNews, newsItemId: number) {
-    return this.profileNewsRepository
-      .editNews(this.route.snapshot.params["id"], newsItemId, news)
+    return this.editProfileNewsUseCase
+      .execute(this.route.snapshot.params["id"], newsItemId, news)
       .pipe(
-        tap(resNews => {
-          this.newsInfoService.applyEditNews(resNews);
+        tap(result => {
+          if (!result.ok) return;
+
+          this.newsInfoService.applyEditNews(result.value);
         })
       );
   }
@@ -136,8 +152,8 @@ export class ProfileDetailInfoService {
       return Number((e.target as HTMLElement).dataset["id"]);
     });
 
-    this.profileNewsRepository
-      .readNews(Number(this.route.snapshot.params["id"]), ids)
+    this.readProfileNewsUseCase
+      .execute(Number(this.route.snapshot.params["id"]), ids)
       .pipe(takeUntil(this.destroy$))
       .subscribe();
   }
@@ -156,11 +172,13 @@ export class ProfileDetailInfoService {
     this.route.params
       .pipe(
         map(r => r["id"]),
-        concatMap(userId => this.profileNewsRepository.fetchNews(userId)),
+        concatMap(userId => this.fetchProfileNewsUseCase.execute(Number(userId))),
         takeUntil(this.destroy$)
       )
-      .subscribe(news => {
-        this.newsInfoService.applySetNews(news);
+      .subscribe(result => {
+        if (!result.ok) return;
+
+        this.newsInfoService.applySetNews(result.value);
 
         setTimeout(() => {
           this.setupNewsObserver();

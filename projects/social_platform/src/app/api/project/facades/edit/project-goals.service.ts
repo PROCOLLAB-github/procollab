@@ -7,8 +7,10 @@ import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
 import { Goal } from "../../../../domain/project/goals.model";
 import { ProjectGoalsUIService } from "./ui/project-goals-ui.service";
 import { LoggerService } from "@corelib";
-import { ProjectGoalsRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-goals.repository";
 import { GoalFormData } from "projects/social_platform/src/app/infrastructure/adapters/project/dto/project-goal.dto";
+import { CreateGoalsUseCase } from "../../use-case/create-goals.use-case";
+import { UpdateGoalUseCase } from "../../use-case/update-goal.use-case";
+import { DeleteGoalUseCase } from "../../use-case/delete-goal.use-case";
 
 /**
  * Сервис для управления целями проекта
@@ -24,9 +26,11 @@ export class ProjectGoalService {
   private readonly fb = inject(FormBuilder);
   private goalForm!: FormGroup;
   private readonly projectFormService = inject(ProjectFormService);
-  private readonly projectGoalsRepository = inject(ProjectGoalsRepository);
   private readonly projectGoalsUIService = inject(ProjectGoalsUIService);
   private readonly loggerService = inject(LoggerService);
+  private readonly createGoalsUseCase = inject(CreateGoalsUseCase);
+  private readonly updateGoalUseCase = inject(UpdateGoalUseCase);
+  private readonly deleteGoalUseCase = inject(DeleteGoalUseCase);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -189,10 +193,14 @@ export class ProjectGoalService {
     this.goalItems.update(items => items.filter((_, i) => i !== index));
     goalFormArray.removeAt(index);
 
-    this.projectGoalsRepository
-      .deleteGoal(projectId, goalId)
+    this.deleteGoalUseCase
+      .execute(projectId, goalId)
       .pipe(takeUntil(this.destroy$))
-      .subscribe();
+      .subscribe(result => {
+        if (!result.ok) {
+          this.loggerService.error("Error deleting goal:", result.error.cause);
+        }
+      });
   }
 
   /**
@@ -247,19 +255,36 @@ export class ProjectGoalService {
    * Возвращает Observable массива результатов (в порядке отправки).
    */
   public saveGoals(projectId: number, newGoals: Goal[]) {
-    return this.projectGoalsRepository.createGoal(projectId, newGoals).pipe(
-      tap(results => {
-        results.forEach((createdGoal: any, idx: number) => {
-          const formGroup = this.goals.at(idx);
+    const goalIndexes = this.goals.controls
+      .map((_, idx) => idx)
+      .filter(idx => !this.goals.at(idx)?.get("id")?.value);
+
+    const payload: GoalFormData[] = newGoals.map(goal => ({
+      id: goal.id ?? null,
+      title: goal.title,
+      completionDate: goal.completionDate,
+      responsible: goal.responsible,
+      isDone: goal.isDone,
+    }));
+
+    return this.createGoalsUseCase.execute(projectId, payload).pipe(
+      tap(result => {
+        if (!result.ok) {
+          this.loggerService.error("Error saving goals:", result.error.cause);
+          return;
+        }
+
+        result.value.forEach((createdGoal: Goal, idx: number) => {
+          const formGroup = this.goals.at(goalIndexes[idx]);
           if (formGroup && createdGoal?.id != null) {
             formGroup.patchValue({ id: createdGoal.id });
           }
         });
       }),
-      catchError(err => {
-        this.loggerService.error("Error saving goals:", err);
-        return of({ __error: true, err, original: newGoals });
-      })
+      map(result =>
+        result.ok ? result.value : { __error: true, err: result.error.cause, original: newGoals }
+      ),
+      catchError(err => of({ __error: true, err, original: newGoals }))
     );
   }
 
@@ -273,8 +298,12 @@ export class ProjectGoalService {
         isDone: item.isDone,
       };
 
-      return this.projectGoalsRepository.editGoal(projectId, item.id, payload).pipe(
-        map(res => ({ res, idx })),
+      return this.updateGoalUseCase.execute(projectId, item.id, payload).pipe(
+        map(result =>
+          result.ok
+            ? { res: result.value, idx }
+            : { __error: true, err: result.error.cause, original: item, idx }
+        ),
         catchError(err => of({ __error: true, err, original: item, idx }))
       );
     });

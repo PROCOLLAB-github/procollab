@@ -3,10 +3,10 @@
 import { HttpParams } from "@angular/common/http";
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn, Router } from "@angular/router";
-import { ProjectRatingService } from "projects/social_platform/src/app/api/project/project-rating.service";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { ProjectRate } from "projects/social_platform/src/app/domain/project/project-rate";
-import { catchError, EMPTY } from "rxjs";
+import { catchError, EMPTY, map } from "rxjs";
+import { GetProjectRatingsUseCase } from "projects/social_platform/src/app/api/program/use-cases/get-project-ratings.use-case";
 
 /**
  * Резолвер для предзагрузки проектов для оценки
@@ -46,13 +46,16 @@ import { catchError, EMPTY } from "rxjs";
 export const ListAllResolver: ResolveFn<ApiPagination<ProjectRate>> = (
   route: ActivatedRouteSnapshot
 ) => {
-  const projectRatingService = inject(ProjectRatingService);
+  const getProjectRatingsUseCase = inject(GetProjectRatingsUseCase);
   const router = inject(Router);
 
-  return projectRatingService
-    .getAll(
+  return getProjectRatingsUseCase
+    .execute(
       route.parent?.params["programId"],
       new HttpParams({ fromObject: { offset: 0, limit: 8 } })
+    )
+    .pipe(
+      map(result => (result.ok ? result.value : { count: 0, results: [], next: "", previous: "" }))
     )
     .pipe(
       catchError(error => {

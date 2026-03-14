@@ -2,7 +2,7 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { ProgramDetailMainUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-main-ui-info.service";
-import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
+import { ApplyProjectToProgramUseCase } from "projects/social_platform/src/app/api/program/use-cases/apply-project-to-program.use-case";
 import {
   PartnerProgramFields,
   ProjectNewAdditionalProgramFields,
@@ -16,7 +16,7 @@ import { LoggerService } from "projects/core/src/lib/services/logger/logger.serv
 @Injectable()
 export class DetailProgramInfoService {
   private readonly router = inject(Router);
-  private readonly programService = inject(ProgramService);
+  private readonly applyProjectToProgramUseCase = inject(ApplyProjectToProgramUseCase);
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
   private readonly projectFormService = inject(ProjectFormService);
   private readonly logger = inject(LoggerService);
@@ -47,24 +47,29 @@ export class DetailProgramInfoService {
 
     const body = { project: this.projectForm.value, program_field_values: newFieldsFormValues };
 
-    this.programService
-      .applyProjectToProgram(programId, body)
+    this.applyProjectToProgramUseCase
+      .execute(programId, body)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: r => {
+        next: result => {
+          if (!result.ok) {
+            const error = result.error.cause as
+              | { status?: number; error?: { detail?: string } }
+              | undefined;
+            if (error?.status === 400) {
+              this.isAssignProjectToProgramModalOpen.set(true);
+              this.assignProjectToProgramModalMessage.set(error.error?.detail ?? null);
+            }
+            return;
+          }
+
+          const response = result.value;
+
           this.router
-            .navigate([`/office/projects/${r.projectId}/edit`], {
+            .navigate([`/office/projects/${response.projectId}/edit`], {
               queryParams: { editingStep: "main", fromProgram: true },
             })
             .then(() => this.logger.debug("Route change from ProjectsComponent"));
-        },
-        error: err => {
-          if (err) {
-            if (err.status === 400) {
-              this.isAssignProjectToProgramModalOpen.set(true);
-              this.assignProjectToProgramModalMessage.set(err.error.detail);
-            }
-          }
         },
       });
   }

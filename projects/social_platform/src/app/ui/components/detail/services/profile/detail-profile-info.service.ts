@@ -5,15 +5,15 @@ import { ActivatedRoute } from "@angular/router";
 import { ValidationService } from "@corelib";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { saveFile } from "@utils/helpers/export-file";
-import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
+import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { SendForUserUseCase } from "projects/social_platform/src/app/api/invite/use-cases/send-for-user.use-case";
 import { ProfileDetailUIInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ProjectTeamUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-team-ui.service";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import { AuthHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/auth/auth-http.adapter";
 import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 import { Subject, takeUntil } from "rxjs";
+import { DownloadCvUseCase } from "projects/social_platform/src/app/api/auth/use-cases/download-cv.use-case";
 
 @Injectable()
 export class DetailProfileInfoService {
@@ -21,9 +21,9 @@ export class DetailProfileInfoService {
   private readonly snackbarService = inject(SnackbarService);
   private readonly validationService = inject(ValidationService);
   private readonly sendForUserUseCase = inject(SendForUserUseCase);
+  private readonly downloadCvUseCase = inject(DownloadCvUseCase);
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
   private readonly authRepository = inject(AuthRepository);
-  private readonly authAdapter = inject(AuthHttpAdapter);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
 
   private readonly destroy$ = new Subject<void>();
@@ -173,17 +173,26 @@ export class DetailProfileInfoService {
    */
   downloadCV() {
     this.isSended.set(true);
-    this.authAdapter
-      .downloadCV()
+    this.downloadCvUseCase
+      .execute()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: blob => {
-          saveFile(blob, "cv", this.profile()?.firstName + " " + this.profile()?.lastName);
+        next: result => {
           this.isSended.set(false);
+
+          if (!result.ok) {
+            const error = result.error.cause as { status?: number } | undefined;
+            if (error?.status === 400) {
+              this.isDelayModalOpen.set(true);
+            }
+            return;
+          }
+
+          saveFile(result.value, "cv", this.profile()?.firstName + " " + this.profile()?.lastName);
         },
         error: err => {
           this.isSended.set(false);
-          if (err.status === 400) {
+          if (err?.status === 400) {
             this.isDelayModalOpen.set(true);
           }
         },

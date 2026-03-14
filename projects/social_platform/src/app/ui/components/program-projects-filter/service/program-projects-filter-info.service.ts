@@ -4,7 +4,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProgramDetailListUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-list-ui-info.service";
-import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
+import { GetProgramFiltersUseCase } from "projects/social_platform/src/app/api/program/use-cases/get-program-filters.use-case";
 import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
@@ -14,7 +14,7 @@ export class ProgramProjectsFilterInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly fb = inject(FormBuilder);
-  private readonly programService = inject(ProgramService);
+  private readonly getProgramFiltersUseCase = inject(GetProgramFiltersUseCase);
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
   private readonly logger = inject(LoggerService);
 
@@ -31,18 +31,20 @@ export class ProgramProjectsFilterInfoService {
     const programId = this.route.parent?.snapshot.params["programId"];
 
     if (this.listType() === "projects" || this.listType() === "rating") {
-      this.programService
-        .getProgramFilters(programId)
+      this.getProgramFiltersUseCase
+        .execute(Number(programId))
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: filter => {
-            this.filters.set(filter);
+          next: result => {
+            if (!result.ok) {
+              this.logger.error("Error loading program filters:", result.error.cause);
+              return;
+            }
+
+            this.filters.set(result.value);
             this.initializeFilterForm();
             this.restoreFiltersFromUrl();
             this.subscribeToFormChanges();
-          },
-          error: err => {
-            this.logger.error("Error loading program filters:", err);
           },
         });
     }

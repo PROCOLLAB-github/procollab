@@ -4,13 +4,13 @@ import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { concatMap, map, Subject, takeUntil } from "rxjs";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { ProjectCollaboratorsHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/project/project-collaborators-http.adapter";
+import { LeaveProjectUseCase } from "projects/social_platform/src/app/api/project/use-case/leave-project.use-case";
 
 @Injectable()
 export class DetailProjectInfoService {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly projectCollaboratorAdapter = inject(ProjectCollaboratorsHttpAdapter);
+  private readonly leaveProjectUseCase = inject(LeaveProjectUseCase);
   private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();
@@ -62,19 +62,19 @@ export class DetailProjectInfoService {
     this.route.data
       .pipe(
         map(r => r["data"][0]),
-        concatMap(p => this.projectCollaboratorAdapter.deleteLeave(p.id)),
+        concatMap(p => this.leaveProjectUseCase.execute(p.id)),
         takeUntil(this.destroy$)
       )
-      .subscribe(
-        () => {
-          this.router
-            .navigateByUrl("/office/projects/my")
-            .then(() => this.logger.debug("Route changed from ProjectInfoComponent"));
-        },
-        () => {
-          this.leaderLeaveModal.set(true); // Показываем предупреждение для лидера
+      .subscribe(result => {
+        if (!result.ok) {
+          this.leaderLeaveModal.set(true);
+          return;
         }
-      );
+
+        this.router
+          .navigateByUrl("/office/projects/my")
+          .then(() => this.logger.debug("Route changed from ProjectInfoComponent"));
+      });
   }
 
   routingToMyProjects(): void {

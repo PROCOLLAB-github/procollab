@@ -19,7 +19,7 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { IconComponent } from "@uilib";
 import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { ProjectCollaboratorsHttpAdapter } from "../../../infrastructure/adapters/project/project-collaborators-http.adapter";
+import { RemoveProjectCollaboratorUseCase } from "../../../api/project/use-case/remove-project-collaborator.use-case";
 
 /**
  * Компонент карточки участника команды или проект
@@ -39,7 +39,7 @@ import { ProjectCollaboratorsHttpAdapter } from "../../../infrastructure/adapter
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollaboratorCardComponent implements OnInit {
-  private readonly projectCollaboratorsAdapter = inject(ProjectCollaboratorsHttpAdapter);
+  private readonly removeProjectCollaboratorUseCase = inject(RemoveProjectCollaboratorUseCase);
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
@@ -71,12 +71,16 @@ export class CollaboratorCardComponent implements OnInit {
 
     if (!confirm("Вы точно хотите удалить участника проекта?")) return;
 
-    this.projectCollaboratorsAdapter
-      .deleteCollaborator(+projectId, collaboratorId)
+    this.removeProjectCollaboratorUseCase
+      .execute(+projectId, collaboratorId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
-          this.collaboratorRemoved.emit(collaboratorId);
+        next: result => {
+          if (!result.ok) {
+            return;
+          }
+
+          this.collaboratorRemoved.emit(result.value);
         },
       });
   }

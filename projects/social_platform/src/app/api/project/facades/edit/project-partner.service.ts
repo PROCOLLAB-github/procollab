@@ -5,7 +5,8 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@ang
 import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
 import { Partner, PartnerDto } from "../../../../domain/project/partner.model";
 import { LoggerService } from "@corelib";
-import { ProjectPartnerRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-partner.repository";
+import { CreatePartnerUseCase } from "../../use-case/create-partner.use-case";
+import { DeletePartnerUseCase } from "../../use-case/delete-partner.use-case";
 
 @Injectable({
   providedIn: "root",
@@ -13,8 +14,9 @@ import { ProjectPartnerRepository } from "projects/social_platform/src/app/infra
 export class ProjectPartnerService {
   private readonly fb = inject(FormBuilder);
   private partnerForm!: FormGroup;
-  private readonly projectPartnerRepository = inject(ProjectPartnerRepository);
   private readonly loggerService = inject(LoggerService);
+  private readonly createPartnerUseCase = inject(CreatePartnerUseCase);
+  private readonly deletePartnerUseCase = inject(DeletePartnerUseCase);
 
   public readonly partnerItems = signal<
     Partial<{ id: null; name: string; inn: string; contribution: string; decisionMaker: string }>[]
@@ -195,10 +197,14 @@ export class ProjectPartnerService {
       return;
     }
 
-    this.projectPartnerRepository
-      .deletePartner(projectId, partnersId)
+    this.deletePartnerUseCase
+      .execute(projectId, partnersId)
       .pipe(takeUntil(this.destroy$))
-      .subscribe();
+      .subscribe(result => {
+        if (!result.ok) {
+          this.loggerService.error("Failed to delete partner", result.error.cause);
+        }
+      });
   }
 
   /**
@@ -269,8 +275,12 @@ export class ProjectPartnerService {
           decisionMaker,
         };
 
-        return this.projectPartnerRepository.createPartner(projectId, payload).pipe(
-          map((res: any) => ({ res, idx })),
+        return this.createPartnerUseCase.execute(projectId, payload).pipe(
+          map(result =>
+            result.ok
+              ? { res: result.value, idx }
+              : { __error: true, err: result.error.cause, original: partner, idx }
+          ),
           catchError(err => of({ __error: true, err, original: partner, idx }))
         );
       });

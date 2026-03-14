@@ -14,7 +14,7 @@ import { PartnerProgramFields } from "projects/social_platform/src/app/domain/pr
 import { stripNullish } from "@utils/helpers/stripNull";
 import { concatMap, filter, Subject, takeUntil } from "rxjs";
 import { Project } from "../../../../domain/project/project.model";
-import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
+import { UpdateFormUseCase } from "../../use-case/update-form.use-case";
 /**
  * Сервис для управления основной формой проекта и формой дополнительных полей партнерской программы.
  * Обеспечивает создание, инициализацию, валидацию, автосохранение, сброс и получение данных форм.
@@ -25,7 +25,7 @@ export class ProjectFormService {
   private additionalForm!: FormGroup;
   private readonly fb = inject(FormBuilder);
   private readonly route = inject(ActivatedRoute);
-  private readonly projectRepository = inject(ProjectRepository);
+  private readonly updateFormUseCase = inject(UpdateFormUseCase);
   public editIndex = signal<number | null>(null);
   public relationId = signal<number>(0);
 
@@ -68,11 +68,15 @@ export class ProjectFormService {
       .pipe(
         filter(value => !value),
         concatMap(() =>
-          this.projectRepository.update(Number(this.route.snapshot.params["projectId"]), {
-            presentationAddress: "",
-            draft: true,
+          this.updateFormUseCase.execute({
+            id: Number(this.route.snapshot.params["projectId"]),
+            data: {
+              presentationAddress: "",
+              draft: true,
+            },
           })
         ),
+        filter(result => result.ok),
         takeUntil(this.destroy$)
       )
       .subscribe();
@@ -82,11 +86,15 @@ export class ProjectFormService {
       .pipe(
         filter(value => !value),
         concatMap(() =>
-          this.projectRepository.update(Number(this.route.snapshot.params["projectId"]), {
-            coverImageAddress: "",
-            draft: true,
+          this.updateFormUseCase.execute({
+            id: Number(this.route.snapshot.params["projectId"]),
+            data: {
+              coverImageAddress: "",
+              draft: true,
+            },
           })
         ),
+        filter(result => result.ok),
         takeUntil(this.destroy$)
       )
       .subscribe();

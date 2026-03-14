@@ -6,16 +6,17 @@ import { forkJoin, map, Observable, of, tap } from "rxjs";
 import { StorageService } from "../../../api/storage/storage.service";
 import { ApiPagination } from "../../../domain/other/api-pagination.model";
 import { ProfileNews } from "../../../domain/profile/profile-news.model";
+import { ProfileNewsRepositoryPort } from "../../../domain/profile/ports/profile-news.repository.port";
 import { ProfileNewsHttpAdapter } from "../../adapters/profile/profile-news-http.adapter";
 
 @Injectable({ providedIn: "root" })
-export class ProfileNewsRepository {
+export class ProfileNewsRepository implements ProfileNewsRepositoryPort {
   private readonly profileNewsAdapter = inject(ProfileNewsHttpAdapter);
   private readonly storageService = inject(StorageService);
 
-  fetchNews(id: string): Observable<ApiPagination<ProfileNews>> {
+  fetchNews(id: number): Observable<ApiPagination<ProfileNews>> {
     return this.profileNewsAdapter
-      .fetchNews(id)
+      .fetchNews(String(id))
       .pipe(map(page => ({ ...page, results: plainToInstance(ProfileNews, page.results) })));
   }
 

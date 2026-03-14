@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable, signal } from "@angular/core";
-import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
+import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { FeedItem } from "projects/social_platform/src/app/domain/feed/feed-item.model";
 
 @Injectable()

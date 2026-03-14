@@ -5,15 +5,19 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@ang
 import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
 import { Resource, ResourceDto } from "../../../../domain/project/resource.model";
 import { LoggerService } from "@corelib";
-import { ProjectResourceRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-resource.repository";
+import { DeleteResourceUseCase } from "../../use-case/delete-resource.use-case";
+import { CreateResourceUseCase } from "../../use-case/create-resource.use-case";
+import { UpdateResourceUseCase } from "../../use-case/update-resource.use-case";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProjectResourceService {
   private readonly fb = inject(FormBuilder);
-  private readonly projectResourceRepository = inject(ProjectResourceRepository);
   private readonly loggerService = inject(LoggerService);
+  private readonly deleteResourceUseCase = inject(DeleteResourceUseCase);
+  private readonly createResourceUseCase = inject(CreateResourceUseCase);
+  private readonly updateResourceUseCase = inject(UpdateResourceUseCase);
 
   private resourceForm!: FormGroup;
   public readonly resourceItems = signal<
@@ -175,8 +179,8 @@ export class ProjectResourceService {
       return;
     }
 
-    this.projectResourceRepository
-      .deleteResource(projectId, resourceId)
+    this.deleteResourceUseCase
+      .execute(projectId, resourceId)
       .pipe(takeUntil(this.destroy$))
       .subscribe();
   }
@@ -228,8 +232,12 @@ export class ProjectResourceService {
           partnerCompany: resource.partnerCompany ?? "запрос к рынку",
         };
 
-        return this.projectResourceRepository.createResource(projectId, payload).pipe(
-          map((res: any) => ({ res, idx })),
+        return this.createResourceUseCase.execute(projectId, payload).pipe(
+          map(result =>
+            result.ok
+              ? { res: result.value, idx }
+              : { __error: true, err: result.error.cause, original: resource, idx }
+          ),
           catchError(err => of({ __error: true, err, original: resource, idx }))
         );
       });
@@ -276,8 +284,12 @@ export class ProjectResourceService {
           partnerCompany: resource.partnerCompany ?? "запрос к рынку",
         };
 
-        return this.projectResourceRepository.updateResource(projectId, resource.id, payload).pipe(
-          map((res: any) => ({ res, idx })),
+        return this.updateResourceUseCase.execute(projectId, resource.id, payload).pipe(
+          map(result =>
+            result.ok
+              ? { res: result.value, idx }
+              : { __error: true, err: result.error.cause, original: resource, idx }
+          ),
           catchError(err => of({ __error: true, err, original: resource, idx }))
         );
       });

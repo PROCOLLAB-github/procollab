@@ -2,10 +2,10 @@
 
 import { ResolveFn } from "@angular/router";
 import { inject } from "@angular/core";
-import { switchMap } from "rxjs";
-import { SubscriptionHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/subscription/subscription-http.adapter";
+import { map, switchMap } from "rxjs";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { GetProjectSubscriptionsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project-subscriptions.use-case";
 
 /**
  * РЕЗОЛВЕР ДЛЯ ПОЛУЧЕНИЯ ПОДПИСОК ПОЛЬЗОВАТЕЛЯ
@@ -43,7 +43,10 @@ import { AuthRepository } from "projects/social_platform/src/app/infrastructure/
  */
 export const ProjectsSubscriptionsResolver: ResolveFn<{ results: Project[] }> = () => {
   const authRepository = inject(AuthRepository);
-  const subscriptionService = inject(SubscriptionHttpAdapter);
+  const getProjectSubscriptionsUseCase = inject(GetProjectSubscriptionsUseCase);
 
-  return authRepository.profile.pipe(switchMap(p => subscriptionService.getSubscriptions(p.id)));
+  return authRepository.profile.pipe(
+    switchMap(p => getProjectSubscriptionsUseCase.execute(p.id)),
+    map(result => (result.ok ? result.value : { count: 0, results: [], next: "", previous: "" }))
+  );
 };

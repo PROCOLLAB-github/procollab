@@ -16,17 +16,18 @@ import {
   throttleTime,
 } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
-import { SubscriptionHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/subscription/subscription-http.adapter";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { ProgramDetailListUIInfoService } from "./ui/program-detail-list-ui-info.service";
 import { ProjectRate } from "projects/social_platform/src/app/domain/project/project-rate";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
-import { ProjectRatingRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-rating.repository";
 import { CreateProgramFiltersUseCase } from "../../use-cases/create-program-filters.use-case";
 import { GetAllProjectsUseCase } from "../../use-cases/get-all-projects.use-case";
 import { GetAllMembersUseCase } from "../../use-cases/get-all-members.use-case";
+import { GetProjectSubscriptionsUseCase } from "../../../project/use-case/get-project-subscriptions.use-case";
+import { FilterProjectRatingsUseCase } from "../../use-cases/filter-project-ratings.use-case";
+import { GetProjectRatingsUseCase } from "../../use-cases/get-project-ratings.use-case";
 import Fuse from "fuse.js";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
@@ -39,10 +40,11 @@ export class ProgramDetailListInfoService {
   private readonly createProgramFiltersUseCase = inject(CreateProgramFiltersUseCase);
   private readonly getAllProjectsUseCase = inject(GetAllProjectsUseCase);
   private readonly getAllMembersUseCase = inject(GetAllMembersUseCase);
+  private readonly getProjectSubscriptionsUseCase = inject(GetProjectSubscriptionsUseCase);
+  private readonly filterProjectRatingsUseCase = inject(FilterProjectRatingsUseCase);
+  private readonly getProjectRatingsUseCase = inject(GetProjectRatingsUseCase);
 
-  private readonly projectRatingRepository = inject(ProjectRatingRepository);
   private readonly authRepository = inject(AuthRepository);
-  private readonly subscriptionService = inject(SubscriptionHttpAdapter);
 
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
   private readonly logger = inject(LoggerService);
@@ -140,14 +142,17 @@ export class ProgramDetailListInfoService {
   setupProfile(): void {
     this.authRepository.profile
       .pipe(
-        switchMap(p => {
-          return this.subscriptionService.getSubscriptions(p.id);
-        }),
+        switchMap(p => this.getProjectSubscriptionsUseCase.execute(p.id)),
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: subs => {
-          this.programDetailListUIInfoService.applySetupProfile(subs);
+        next: result => {
+          if (!result.ok) {
+            this.logger.error("Error loading profile subscriptions:", result.error);
+            return;
+          }
+
+          this.programDetailListUIInfoService.applySetupProfile(result.value);
         },
       });
   }
@@ -174,9 +179,27 @@ export class ProgramDetailListInfoService {
 
           if (this.listType() === "rating") {
             if (Object.keys(filters).length > 0) {
-              return this.projectRatingRepository.postFilters(programId, filters, params);
+              return this.filterProjectRatingsUseCase.execute(programId, filters, params).pipe(
+                map(result => {
+                  if (!result.ok) {
+                    this.logger.error("Error filtering rating projects:", result.error);
+                    return this.emptyPage<ProjectRate>();
+                  }
+
+                  return result.value;
+                })
+              );
             }
-            return this.projectRatingRepository.getAll(programId, params);
+            return this.getProjectRatingsUseCase.execute(programId, params).pipe(
+              map(result => {
+                if (!result.ok) {
+                  this.logger.error("Error fetching rating projects:", result.error);
+                  return this.emptyPage<ProjectRate>();
+                }
+
+                return result.value;
+              })
+            );
           }
 
           if (Object.keys(filters).length > 0) {
@@ -280,14 +303,35 @@ export class ProgramDetailListInfoService {
 
     switch (this.listType()) {
       case "rating": {
-        const ratingRequest$ =
-          Object.keys(filters).length > 0
-            ? this.projectRatingRepository.postFilters(programId, filters, params)
-            : this.projectRatingRepository.getAll(programId, params);
+        if (Object.keys(filters).length > 0) {
+          return this.filterProjectRatingsUseCase.execute(programId, filters, params).pipe(
+            tap(result => {
+              if (!result.ok) {
+                this.logger.error("Error fetching ratings:", result.error);
+                this.listPage.update(p => p - 1);
+                return;
+              }
 
-        return ratingRequest$.pipe(
-          tap((rating: ApiPagination<ProjectRate>) => {
-            this.programDetailListUIInfoService.applyFetchProgramData(rating);
+              this.programDetailListUIInfoService.applyFetchProgramData(result.value);
+            }),
+            catchError(err => {
+              this.logger.error("Error fetching ratings:", err);
+              this.listPage.update(p => p - 1);
+              return of(this.emptyPage<ProjectRate>());
+            }),
+            takeUntil(this.destroy$)
+          );
+        }
+
+        return this.getProjectRatingsUseCase.execute(programId, params).pipe(
+          tap(result => {
+            if (!result.ok) {
+              this.logger.error("Error fetching ratings:", result.error);
+              this.listPage.update(p => p - 1);
+              return;
+            }
+
+            this.programDetailListUIInfoService.applyFetchProgramData(result.value);
           }),
           catchError(err => {
             this.logger.error("Error fetching ratings:", err);

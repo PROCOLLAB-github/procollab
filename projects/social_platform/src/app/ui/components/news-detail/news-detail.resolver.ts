@@ -2,8 +2,9 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
+import { of, switchMap } from "rxjs";
 import { FeedNews } from "../../../domain/project/project-news.model";
-import { ProjectNewsRepository as ProjectNewsService } from "projects/social_platform/src/app/infrastructure/repository/project/project-news.repository";
+import { GetProjectNewsDetailUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project-news-detail.use-case";
 
 /**
  * РЕЗОЛВЕР ДЛЯ ЗАГРУЗКИ ДЕТАЛЬНОЙ ИНФОРМАЦИИ О НОВОСТИ
@@ -31,7 +32,7 @@ import { ProjectNewsRepository as ProjectNewsService } from "projects/social_pla
  * - Извлекает параметры из разных уровней маршрутизации
  */
 export const NewsDetailResolver: ResolveFn<FeedNews> = (route: ActivatedRouteSnapshot) => {
-  const projectNewsService = inject(ProjectNewsService); // Инъекция сервиса новостей проекта
+  const getProjectNewsDetailUseCase = inject(GetProjectNewsDetailUseCase);
 
   // Извлекаем ID проекта из родительского маршрута
   const projectId = route.parent?.params["projectId"];
@@ -39,5 +40,7 @@ export const NewsDetailResolver: ResolveFn<FeedNews> = (route: ActivatedRouteSna
   const newsId = route.params["newsId"];
 
   // Возвращаем Observable с детальной информацией о новости
-  return projectNewsService.fetchNewsDetail(projectId, newsId);
+  return getProjectNewsDetailUseCase
+    .execute(projectId, newsId)
+    .pipe(switchMap(result => of(result.ok ? result.value : new FeedNews())));
 };

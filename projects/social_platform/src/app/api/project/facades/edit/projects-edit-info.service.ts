@@ -3,6 +3,7 @@
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { NavService } from "@ui/services/nav/nav.service";
 import {
+  EMPTY,
   distinctUntilChanged,
   forkJoin,
   map,
@@ -38,9 +39,10 @@ import { ProjectTeamUIService } from "./ui/project-team-ui.service";
 import { ProjectContactsService } from "./project-contacts.service";
 import { ProjectVacancyService } from "./project-vacancy.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
-import { ProjectProgramRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-program.repository";
 import { IndustryRepository } from "projects/social_platform/src/app/infrastructure/repository/industry/industry.repository";
+import { AssignProjectProgramUseCase } from "../../../program/use-cases/assign-project-program";
+import { DeleteProjectUseCase } from "../../use-case/delete-project.use-case";
+import { UpdateFormUseCase } from "../../use-case/update-form.use-case";
 
 @Injectable()
 export class ProjectsEditInfoService {
@@ -49,8 +51,9 @@ export class ProjectsEditInfoService {
   private readonly skillsInfoService = inject(SkillsInfoService);
 
   private readonly projectStepService = inject(ProjectStepService);
-  private readonly projectRepository = inject(ProjectRepository);
-  private readonly projectProgramRepository = inject(ProjectProgramRepository);
+  private readonly assignProjectProgramUseCase = inject(AssignProjectProgramUseCase);
+  private readonly deleteProjectUseCase = inject(DeleteProjectUseCase);
+  private readonly updateFormUseCase = inject(UpdateFormUseCase);
 
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
   private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
@@ -166,24 +169,27 @@ export class ProjectsEditInfoService {
    * Перенаправление её на редактирование "нового" проекта
    */
   assignProjectToProgram(): void {
-    this.projectProgramRepository
-      .assignProjectToProgram(
+    this.assignProjectProgramUseCase
+      .execute(
         Number(this.route.snapshot.paramMap.get("projectId")),
         this.projectForm.get("partnerProgramId")?.value
       )
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: r => {
-          this.projectsEditUIInfoService.applyOpenAssignProjectModal(r);
-          this.router.navigateByUrl(`/office/projects/${r.newProjectId}/edit?editingStep=main`);
-        },
-
-        error: err => {
-          if (err instanceof HttpErrorResponse) {
-            if (err.status === 400) {
-              this.setAssignProjectToProgramError(err.error);
+          if (!r.ok) {
+            if (r.error.cause instanceof HttpErrorResponse) {
+              if (r.error.cause.status === 400) {
+                this.setAssignProjectToProgramError(r.error.cause.error);
+              }
             }
+            return;
           }
+
+          this.projectsEditUIInfoService.applyOpenAssignProjectModal(r.value);
+          this.router.navigateByUrl(
+            `/office/projects/${r.value.newProjectId}/edit?editingStep=main`
+          );
         },
       });
   }
@@ -212,11 +218,15 @@ export class ProjectsEditInfoService {
   deleteProject(): void {
     const programId = this.projectForm.get("partnerProgramId")?.value;
 
-    this.projectRepository
-      .deleteOne(Number(this.route.snapshot.paramMap.get("projectId")))
+    this.deleteProjectUseCase
+      .execute(Number(this.route.snapshot.paramMap.get("projectId")))
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: result => {
+          if (!result.ok) {
+            return;
+          }
+
           if (this.fromProgram()) {
             this.router.navigateByUrl(`/office/program/${programId}`);
           } else {
@@ -313,10 +323,17 @@ export class ProjectsEditInfoService {
     }
 
     this.submitMode.set(null);
-    this.projectRepository
-      .update(projectId, payload)
+    this.updateFormUseCase
+      .execute({ id: projectId, data: payload })
       .pipe(
-        switchMap(() => this.saveOrEditGoals(projectId)),
+        switchMap(result => {
+          if (!result.ok) {
+            this.handleProjectSubmitError(result.error.cause);
+            return EMPTY;
+          }
+
+          return this.saveOrEditGoals(projectId);
+        }),
         switchMap(() => this.savePartners(projectId)),
         switchMap(() => this.saveOrEditResources(projectId))
       )
@@ -533,6 +550,21 @@ export class ProjectsEditInfoService {
     this.router.navigateByUrl(`/office/projects/${projectId}`);
   }
 
+  private handleProjectSubmitError(error?: unknown): void {
+    this.submitMode.set(null);
+    this.projFormIsSubmittingAsPublished.set(false);
+    this.projFormIsSubmittingAsDraft.set(false);
+    this.snackBarService.error("ошибка при сохранении данных");
+
+    if (
+      error instanceof HttpErrorResponse &&
+      Array.isArray(error.error?.error) &&
+      error.error.error.includes("Срок подачи проектов в программу завершён.")
+    ) {
+      this.projectsEditUIInfoService.applyOpenSendDescisionLateModal();
+    }
+  }
+
   /**
    * Отправка дополнительных полей через сервис
    * @param projectId - ID проекта
@@ -545,17 +577,40 @@ export class ProjectsEditInfoService {
       .sendAdditionalFieldsValues(projectId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: result => {
+          if (!result.ok) {
+            this.logger.error("Error sending additional fields:", result.error.cause);
+            this.projectAdditionalService.resetSendingState();
+            this.submitMode.set("draft");
+            return;
+          }
+
           if (!isDraft) {
-            this.projectAdditionalService.submitCompettetiveProject(relationId).subscribe(_ => {
-              this.submitProjectForm();
-            });
+            this.projectAdditionalService
+              .submitCompettetiveProject(relationId)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe(submitResult => {
+                if (!submitResult.ok) {
+                  this.logger.error(
+                    "Error submitting competitive project:",
+                    submitResult.error.cause
+                  );
+                  this.projectAdditionalService.resetSendingState();
+                  this.submitMode.set("draft");
+                  return;
+                }
+
+                this.projectAdditionalService.resetSendingState();
+                this.submitProjectForm();
+              });
           } else {
+            this.projectAdditionalService.resetSendingState();
             this.submitProjectForm();
           }
         },
         error: error => {
           this.logger.error("Error sending additional fields:", error);
+          this.projectAdditionalService.resetSendingState();
           this.submitMode.set("draft");
         },
       });

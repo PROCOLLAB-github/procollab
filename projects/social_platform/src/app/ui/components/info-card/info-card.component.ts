@@ -13,7 +13,6 @@ import { IconComponent, ButtonComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { SubscriptionHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/subscription/subscription-http.adapter";
 import { ClickOutsideModule } from "ng-click-outside";
 import { Router, RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/components/tag/tag.component";
@@ -24,6 +23,8 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { IndustryRepository } from "../../../infrastructure/repository/industry/industry.repository";
 import { AcceptInviteUseCase } from "../../../api/invite/use-cases/accept-invite.use-case";
 import { RejectInviteUseCase } from "../../../api/invite/use-cases/reject-invite.use-case";
+import { AddProjectSubscriptionUseCase } from "../../../api/project/use-case/add-project-subscription.use-case";
+import { DeleteProjectSubscriptionUseCase } from "../../../api/project/use-case/delete-project-subscription.use-case";
 
 /**
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
@@ -52,7 +53,8 @@ export class InfoCardComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly acceptInviteUseCase = inject(AcceptInviteUseCase);
   private readonly rejectInviteUseCase = inject(RejectInviteUseCase);
-  private readonly subscriptionService = inject(SubscriptionHttpAdapter);
+  private readonly addProjectSubscriptionUseCase = inject(AddProjectSubscriptionUseCase);
+  private readonly deleteProjectSubscriptionUseCase = inject(DeleteProjectSubscriptionUseCase);
   public readonly industryRepository = inject(IndustryRepository);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
@@ -199,15 +201,17 @@ export class InfoCardComponent {
       return;
     }
 
-    this.subscriptionService
-      .addSubscription(projectId)
+    this.addProjectSubscriptionUseCase
+      .execute(projectId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
+        next: result => {
+          if (!result.ok) {
+            this.logger.error("Error subscribing to project:", result.error);
+            return;
+          }
+
           this.isSubscribed = true;
-        },
-        error: error => {
-          this.logger.error("Error subscribing to project:", error);
         },
       });
   }
@@ -223,16 +227,18 @@ export class InfoCardComponent {
 
     this.stopEventPropagation(event);
 
-    this.subscriptionService
-      .deleteSubscription(projectId)
+    this.deleteProjectSubscriptionUseCase
+      .execute(projectId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => {
+        next: result => {
+          if (!result.ok) {
+            this.logger.error("Error unsubscribing from project:", result.error);
+            return;
+          }
+
           this.isSubscribed = false;
           this.isUnsubscribeModalOpen = false;
-        },
-        error: error => {
-          this.logger.error("Error unsubscribing from project:", error);
         },
       });
   }

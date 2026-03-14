@@ -20,7 +20,7 @@ import { NavComponent } from "@ui/components/nav/nav.component";
 import { SnackbarComponent } from "@ui/components/snackbar/snackbar.component";
 import { ProfileControlPanelComponent, SidebarComponent } from "@uilib";
 import { ChatService } from "../../../api/chat/chat.service";
-import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
+import { GetActualProgramsUseCase } from "../../../api/program/use-cases/get-actual-programs.use-case";
 import { Program } from "../../../domain/program/program.model";
 import { OfficeInfoService } from "../../../api/office/facades/office-info.service";
 import { OfficeUIInfoService } from "../../../api/office/facades/ui/office-ui-info.service";
@@ -63,11 +63,11 @@ export class OfficeComponent implements OnInit, OnDestroy {
   private readonly officeInfoService = inject(OfficeInfoService);
   private readonly officeUIInfoService = inject(OfficeUIInfoService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly getActualProgramsUseCase = inject(GetActualProgramsUseCase);
 
   constructor(
     public readonly authRepository: AuthRepository,
-    public readonly chatService: ChatService,
-    private readonly programService: ProgramService
+    public readonly chatService: ChatService
   ) {}
 
   readonly invites = this.officeInfoService.invites;
@@ -92,11 +92,16 @@ export class OfficeComponent implements OnInit, OnDestroy {
       this.waitVerificationAccepted.set(true);
     }
 
-    this.programService
-      .getActualPrograms()
+    this.getActualProgramsUseCase
+      .execute()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: ({ results: programs }) => {
+        next: result => {
+          if (!result.ok) {
+            return;
+          }
+
+          const programs = result.value.results;
           const resultPrograms = programs.filter(
             (program: Program) => Date.now() < Date.parse(program.datetimeRegistrationEnds)
           );

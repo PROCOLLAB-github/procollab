@@ -4,8 +4,9 @@ import { inject } from "@angular/core";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
 import { ResolveFn } from "@angular/router";
+import { map } from "rxjs";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
+import { GetAllProjectsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-all-projects.use-case";
 
 /**
  * РЕЗОЛВЕР ДЛЯ ПОЛУЧЕНИЯ ВСЕХ ПРОЕКТОВ
@@ -36,7 +37,18 @@ import { ProjectRepository } from "projects/social_platform/src/app/infrastructu
  * - Дополнительные проекты загружаются по мере прокрутки (infinite scroll)
  */
 export const ProjectsAllResolver: ResolveFn<ApiPagination<Project>> = () => {
-  const projectRepository = inject(ProjectRepository);
+  const getAllProjectsUseCase = inject(GetAllProjectsUseCase);
 
-  return projectRepository.getAll(new HttpParams({ fromObject: { limit: 16 } }));
+  return getAllProjectsUseCase.execute(new HttpParams({ fromObject: { limit: 16 } })).pipe(
+    map(result =>
+      result.ok
+        ? result.value
+        : {
+            count: 0,
+            results: [],
+            next: "",
+            previous: "",
+          }
+    )
+  );
 };

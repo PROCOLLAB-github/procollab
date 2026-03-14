@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { ControlErrorPipe, ValidationService } from "projects/core";
 import { BarComponent, ButtonComponent, InputComponent } from "@ui/components";
 import { KeyValuePipe } from "@angular/common";
-import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
+import { RegisterProgramUseCase } from "projects/social_platform/src/app/api/program/use-cases/register-program.use-case";
 import { ProgramDataSchema } from "projects/social_platform/src/app/domain/program/program.model";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
@@ -62,13 +62,13 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 export class ProgramRegisterComponent implements OnInit {
   private readonly logger = inject(LoggerService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly registerProgramUseCase = inject(RegisterProgramUseCase);
 
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly fb: FormBuilder,
-    private readonly validationService: ValidationService,
-    private readonly programService: ProgramService
+    private readonly validationService: ValidationService
   ) {}
 
   registerForm?: FormGroup;
@@ -98,10 +98,14 @@ export class ProgramRegisterComponent implements OnInit {
       return;
     }
 
-    this.programService
-      .register(this.route.snapshot.params["programId"], this.registerForm?.value)
+    this.registerProgramUseCase
+      .execute(Number(this.route.snapshot.params["programId"]), this.registerForm?.value ?? {})
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
+      .subscribe(result => {
+        if (!result.ok) {
+          return;
+        }
+
         this.router
           .navigateByUrl(`/office/program/${this.route.snapshot.params["programId"]}`)
           .then(() => this.logger.debug("Route changed from ProgramRegisterComponent"));

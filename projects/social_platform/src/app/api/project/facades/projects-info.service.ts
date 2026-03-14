@@ -6,15 +6,15 @@ import { NavService } from "@ui/services/nav/nav.service";
 import { debounceTime, distinctUntilChanged, filter, map, Subject, takeUntil } from "rxjs";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { ProjectsUIInfoService } from "./ui/projects-ui-info.service";
-import { ProjectRepository } from "../../../infrastructure/repository/project/project.repository";
+import { CreateProjectUseCase } from "../use-case/create-project.use-case";
 
 @Injectable()
 export class ProjectsInfoService {
   private readonly navService = inject(NavService);
   private readonly route = inject(ActivatedRoute);
-  private readonly projectRepository = inject(ProjectRepository);
-  private readonly projectsUIInfoService = inject(ProjectsUIInfoService);
   private readonly router = inject(Router);
+  private readonly projectsUIInfoService = inject(ProjectsUIInfoService);
+  private readonly createProjectUseCase = inject(CreateProjectUseCase);
 
   private readonly destroy$ = new Subject<void>();
   private readonly logger = inject(LoggerService);
@@ -74,20 +74,21 @@ export class ProjectsInfoService {
     const fromProgram =
       this.route.snapshot.parent?.routeConfig?.path === "programs" ? { fromProgram: true } : null;
 
-    this.projectRepository
-      .postOne()
+    this.createProjectUseCase
+      .execute()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(project => {
-        this.projectRepository.count$.next({
-          ...this.projectRepository.count$.getValue(),
-          my: this.projectRepository.count$.getValue().my + 1,
-        });
+      .subscribe({
+        next: result => {
+          if (!result.ok) return;
 
-        this.router
-          .navigate([`/office/projects/${project.id}/edit`], {
-            queryParams: { editingStep: "main", fromProgram },
-          })
-          .then(() => this.logger.debug("Route change from ProjectsComponent"));
+          this.createProjectUseCase.compile();
+
+          this.router
+            .navigate([`/office/projects/${result.value.id}/edit`], {
+              queryParams: { editingStep: "main", fromProgram },
+            })
+            .then(() => this.logger.debug("Route change from ProjectsComponent"));
+        },
       });
   }
 }

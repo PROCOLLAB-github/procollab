@@ -2,12 +2,12 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { forkJoin, of, switchMap, tap } from "rxjs";
-import { SubscriptionHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/subscription/subscription-http.adapter";
+import { map, of, switchMap } from "rxjs";
 import { ProjectSubscriber } from "projects/social_platform/src/app/domain/project/project-subscriber.model";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
-import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
+import { GetProjectUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project.use-case";
+import { GetProjectSubscribersUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project-subscribers.use-case";
 
 /**
  * Резолвер для загрузки данных проекта и его подписчиков
@@ -25,14 +25,30 @@ import { ProjectRepository } from "projects/social_platform/src/app/infrastructu
 export const ProjectDetailResolver: ResolveFn<[Project, ProjectSubscriber[]]> = (
   route: ActivatedRouteSnapshot
 ) => {
-  const projectRepository = inject(ProjectRepository);
-  const subscriptionService = inject(SubscriptionHttpAdapter);
+  const getProjectUseCase = inject(GetProjectUseCase);
+  const getProjectSubscribersUseCase = inject(GetProjectSubscribersUseCase);
   const projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
 
-  return projectRepository.getOne(Number(route.paramMap.get("projectId"))).pipe(
-    tap(project => projectsDetailUIInfoService.applySetProject(project)),
-    switchMap(project => {
-      return forkJoin([of(project), subscriptionService.getSubscribers(project.id)]);
+  return getProjectUseCase.execute(Number(route.paramMap.get("projectId"))).pipe(
+    switchMap(result => {
+      if (!result.ok) {
+        return of([new Project(), []] as [Project, ProjectSubscriber[]]);
+      }
+
+      const project = result.value;
+      projectsDetailUIInfoService.applySetProject(project);
+
+      return getProjectSubscribersUseCase
+        .execute(project.id)
+        .pipe(
+          map(
+            subscribersResult =>
+              [project, subscribersResult.ok ? subscribersResult.value : []] as [
+                Project,
+                ProjectSubscriber[]
+              ]
+          )
+        );
     })
   );
 };

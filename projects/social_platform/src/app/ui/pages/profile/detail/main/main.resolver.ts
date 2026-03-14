@@ -1,8 +1,10 @@
 /** @format */
 
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { ProfileNewsRepository as ProfileNewsService } from "projects/social_platform/src/app/infrastructure/repository/profile/profile-news.repository";
 import { inject } from "@angular/core";
+import { map } from "rxjs";
+import { ProfileNews } from "projects/social_platform/src/app/domain/profile/profile-news.model";
+import { GetProfileNewsDetailUseCase } from "projects/social_platform/src/app/api/profile/use-cases/get-profile-news-detail.use-case";
 
 /**
  * Резолвер для загрузки детальной информации о новости профиля
@@ -20,8 +22,8 @@ import { inject } from "@angular/core";
  *
  * Использует ProfileNewsService для выполнения HTTP запроса к API
  */
-export const ProfileMainResolver: ResolveFn<any> = (route: ActivatedRouteSnapshot) => {
-  const profileNewsService = inject(ProfileNewsService);
+export const ProfileMainResolver: ResolveFn<ProfileNews> = (route: ActivatedRouteSnapshot) => {
+  const getProfileNewsDetailUseCase = inject(GetProfileNewsDetailUseCase);
 
   const userId = route.parent?.paramMap.get("id");
   const newsId = route.paramMap.get("newsId");
@@ -30,5 +32,7 @@ export const ProfileMainResolver: ResolveFn<any> = (route: ActivatedRouteSnapsho
     throw new Error("Required parameters are missing");
   }
 
-  return profileNewsService.fetchNewsDetail(userId, newsId);
+  return getProfileNewsDetailUseCase
+    .execute(userId, newsId)
+    .pipe(map(result => (result.ok ? result.value : new ProfileNews())));
 };

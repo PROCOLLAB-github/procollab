@@ -4,7 +4,8 @@ import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { Program } from "projects/social_platform/src/app/domain/program/program.model";
-import { ProgramRepository } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
+import { map } from "rxjs";
+import { GetProgramsUseCase } from "projects/social_platform/src/app/api/program/use-cases/get-programs.use-case";
 
 /**
  * Резолвер для предзагрузки списка программ
@@ -38,7 +39,11 @@ import { ProgramRepository } from "projects/social_platform/src/app/infrastructu
  * Главном маршруте списка программ (path: "all")
  */
 export const ProgramMainResolver: ResolveFn<ApiPagination<Program>> = () => {
-  const programRepository = inject(ProgramRepository);
+  const getProgramsUseCase = inject(GetProgramsUseCase);
 
-  return programRepository.getAll(0, 20);
+  return getProgramsUseCase
+    .execute(0, 20)
+    .pipe(
+      map(result => (result.ok ? result.value : { count: 0, results: [], next: "", previous: "" }))
+    );
 };

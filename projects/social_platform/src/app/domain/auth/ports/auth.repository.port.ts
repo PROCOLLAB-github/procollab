@@ -33,6 +33,7 @@ export abstract class AuthRepositoryPort {
   abstract fetchLeaderProjects(): Observable<ApiPagination<Project>>;
   abstract fetchUserRoles(): Observable<UserRole[]>;
   abstract fetchChangeableRoles(): Observable<UserRole[]>;
+  abstract downloadCV(): Observable<Blob>;
   abstract resetPassword(email: string): Observable<void>;
   abstract setPassword(password: string, token: string): Observable<void>;
 }

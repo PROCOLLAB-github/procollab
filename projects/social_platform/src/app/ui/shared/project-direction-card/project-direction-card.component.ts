@@ -25,7 +25,7 @@ import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pi
 import { Goal } from "../../../domain/project/goals.model";
 import { ProfileService } from "../../../api/auth/profile.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { ProjectGoalsRepository } from "../../../infrastructure/repository/project/project-goals.repository";
+import { UpdateGoalUseCase } from "../../../api/project/use-case/update-goal.use-case";
 @Component({
   selector: "app-project-direction-card",
   templateUrl: "./project-direction-card.component.html",
@@ -57,7 +57,7 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly achievementsService = inject(ProfileService);
-  private readonly projectGoalsRepository = inject(ProjectGoalsRepository);
+  private readonly updateGoalUseCase = inject(UpdateGoalUseCase);
   private readonly logger = inject(LoggerService);
 
   private subscriptions: Subscription[] = [];
@@ -134,12 +134,21 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
     if (!goal) return;
 
     const completedGoal = {
-      ...goal,
+      id: goal.id,
+      title: goal.title,
+      completionDate: goal.completionDate,
+      responsible: goal.responsible,
       isDone: true,
     };
 
-    this.projectGoalsRepository.editGoal(projectId, goal.id, completedGoal).subscribe({
-      next: response => {
+    this.updateGoalUseCase.execute(Number(projectId), goal.id, completedGoal).subscribe({
+      next: result => {
+        if (!result.ok) {
+          this.logger.error("Ошибка при обновлении цели:", result.error.cause);
+          return;
+        }
+
+        const response = result.value;
         if (Array.isArray(this.about)) {
           const index = this.about.findIndex((g: Goal) => g.id === goalId);
           if (index !== -1) {
@@ -155,9 +164,6 @@ export class ProjectDirectionCard implements OnInit, OnDestroy {
           queryParams: {},
           replaceUrl: true,
         });
-      },
-      error: error => {
-        this.logger.error("Ошибка при обновлении цели:", error);
       },
     });
   }

@@ -15,11 +15,11 @@ import {
   throttleTime,
 } from "rxjs";
 import { FeedItem, FeedItemType } from "../../../domain/feed/feed-item.model";
-import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
+import { ApiPagination } from "../../../domain/other/api-pagination.model";
 import { FeedUIInfoService } from "./ui/feed-ui-info.service";
-import { FeedHttpAdapter } from "../../../infrastructure/adapters/feed/feed-http.adapter";
-import { ProjectNewsRepository } from "../../../infrastructure/repository/project/project-news.repository";
-import { ProfileNewsRepository } from "../../../infrastructure/repository/profile/profile-news.repository";
+import { FetchFeedUseCase } from "../use-cases/fetch-feed.use-case";
+import { ReadFeedNewsUseCase } from "../use-cases/read-feed-news.use-case";
+import { ToggleFeedLikeUseCase } from "../use-cases/toggle-feed-like.use-case";
 
 const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news"];
 const FILTER_SPLIT_SYMBOL = "|";
@@ -27,9 +27,9 @@ const FILTER_SPLIT_SYMBOL = "|";
 @Injectable()
 export class FeedInfoService {
   private readonly route = inject(ActivatedRoute);
-  private readonly projectNewsRepository = inject(ProjectNewsRepository);
-  private readonly profileNewsRepository = inject(ProfileNewsRepository);
-  private readonly feedHttpAdapter = inject(FeedHttpAdapter);
+  private readonly fetchFeedUseCase = inject(FetchFeedUseCase);
+  private readonly readFeedNewsUseCase = inject(ReadFeedNewsUseCase);
+  private readonly toggleFeedLikeUseCase = inject(ToggleFeedLikeUseCase);
   private readonly feedUIInfoService = inject(FeedUIInfoService);
 
   private observer?: IntersectionObserver;
@@ -147,11 +147,11 @@ export class FeedInfoService {
         ? DEFAULT_FEED_TYPES.join(FILTER_SPLIT_SYMBOL)
         : includes.join(FILTER_SPLIT_SYMBOL);
 
-    return this.feedHttpAdapter.fetchFeed(offset, limit, type).pipe(
-      tap(res => {
-        this.feedUIInfoService.totalItemsCount.set(res.count);
+    return this.fetchFeedUseCase.execute(offset, limit, type).pipe(
+      tap(result => {
+        this.feedUIInfoService.totalItemsCount.set(result.ok ? result.value.count : 0);
       }),
-      map(res => res.results)
+      map(result => (result.ok ? result.value.results : []))
     );
   }
 
@@ -172,16 +172,16 @@ export class FeedInfoService {
 
     projectNews.forEach(news => {
       if (news.typeModel !== "news") return;
-      this.projectNewsRepository
-        .readNews(news.content.contentObject.id, [news.content.id])
+      this.readFeedNewsUseCase
+        .execute("project", news.content.contentObject.id, [news.content.id])
         .pipe(takeUntil(this.destroy$))
         .subscribe();
     });
 
     profileNews.forEach(news => {
       if (news.typeModel !== "news") return;
-      this.projectNewsRepository
-        .readNews(news.content.contentObject.id, [news.content.id])
+      this.readFeedNewsUseCase
+        .execute("profile", news.content.contentObject.id, [news.content.id])
         .pipe(takeUntil(this.destroy$))
         .subscribe();
     });
@@ -194,25 +194,31 @@ export class FeedInfoService {
     if (!item || item.typeModel !== "news") return;
 
     if ("email" in item.content.contentObject) {
-      this.profileNewsRepository
-        .toggleLike(
+      this.toggleFeedLikeUseCase
+        .execute(
+          "profile",
           item.content.contentObject.id as unknown as string,
           newsId,
           !item.content.isUserLiked
         )
         .pipe(takeUntil(this.destroy$))
-        .subscribe(() => {
+        .subscribe(result => {
+          if (!result.ok) return;
+
           this.feedUIInfoService.applyLikeNews(itemIdx);
         });
     } else if ("leader" in item.content.contentObject) {
-      this.projectNewsRepository
-        .toggleLike(
+      this.toggleFeedLikeUseCase
+        .execute(
+          "project",
           item.content.contentObject.id as unknown as string,
           newsId,
           !item.content.isUserLiked
         )
         .pipe(takeUntil(this.destroy$))
-        .subscribe(() => {
+        .subscribe(result => {
+          if (!result.ok) return;
+
           this.feedUIInfoService.applyLikeNews(itemIdx);
         });
     }

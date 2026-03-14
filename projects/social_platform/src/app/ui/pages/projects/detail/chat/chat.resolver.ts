@@ -2,10 +2,10 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { tap } from "rxjs";
+import { of, switchMap } from "rxjs";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
-import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
+import { GetProjectUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project.use-case";
 
 /**
  * Резолвер для загрузки данных проекта для чата
@@ -20,11 +20,19 @@ import { ProjectRepository } from "projects/social_platform/src/app/infrastructu
  * - ProjectService для получения данных проекта по ID
  */
 export const ProjectChatResolver: ResolveFn<Project> = (route: ActivatedRouteSnapshot) => {
-  const projectRepository = inject(ProjectRepository);
+  const getProjectUseCase = inject(GetProjectUseCase);
   const projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   const id = Number(route.parent?.paramMap.get("projectId"));
 
-  return projectRepository
-    .getOne(id)
-    .pipe(tap(profile => projectsDetailUIInfoService.applySetProject(profile)));
+  return getProjectUseCase.execute(id).pipe(
+    switchMap(result => {
+      if (!result.ok) {
+        return of(new Project());
+      }
+
+      const project = result.value;
+      projectsDetailUIInfoService.applySetProject(project);
+      return of(project);
+    })
+  );
 };

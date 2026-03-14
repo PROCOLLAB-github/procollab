@@ -1,14 +1,15 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { forkJoin, switchMap } from "rxjs";
+import { forkJoin, map, switchMap } from "rxjs";
 import { ResolveFn } from "@angular/router";
-import { SubscriptionHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/subscription/subscription-http.adapter";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { Project } from "../../../domain/project/project.model";
-import { ProjectRepository } from "../../../infrastructure/repository/project/project.repository";
 import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { GetAllProjectsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-all-projects.use-case";
+import { GetMyProjectsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-my-projects.use-case";
+import { GetProjectSubscriptionsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project-subscriptions.use-case";
 
 /**
  * Resolver для загрузки данных о количестве проектов
@@ -38,16 +39,29 @@ export interface DashboardProjectsData {
 }
 
 export const ProjectsResolver: ResolveFn<DashboardProjectsData> = () => {
-  const projectRepository = inject(ProjectRepository);
   const authRepository = inject(AuthRepository);
-  const subscriptionService = inject(SubscriptionHttpAdapter);
+  const getAllProjectsUseCase = inject(GetAllProjectsUseCase);
+  const getMyProjectsUseCase = inject(GetMyProjectsUseCase);
+  const getProjectSubscriptionsUseCase = inject(GetProjectSubscriptionsUseCase);
+  const emptyProjectsPage = (): ApiPagination<Project> => ({
+    count: 0,
+    next: "",
+    previous: "",
+    results: [],
+  });
 
   return authRepository.profile.pipe(
     switchMap(user =>
       forkJoin({
-        all: projectRepository.getAll(new HttpParams({ fromObject: { limit: 16 } })),
-        my: projectRepository.getMy(new HttpParams({ fromObject: { limit: 16 } })),
-        subs: subscriptionService.getSubscriptions(user.id),
+        all: getAllProjectsUseCase
+          .execute(new HttpParams({ fromObject: { limit: 16 } }))
+          .pipe(map(result => (result.ok ? result.value : emptyProjectsPage()))),
+        my: getMyProjectsUseCase
+          .execute(new HttpParams({ fromObject: { limit: 16 } }))
+          .pipe(map(result => (result.ok ? result.value : emptyProjectsPage()))),
+        subs: getProjectSubscriptionsUseCase
+          .execute(user.id)
+          .pipe(map(result => (result.ok ? result.value : emptyProjectsPage()))),
       })
     )
   );

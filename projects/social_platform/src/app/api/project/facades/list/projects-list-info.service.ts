@@ -19,17 +19,21 @@ import { ProjectsInfoService } from "../projects-info.service";
 import { ProgramDetailListInfoService } from "../../../program/facades/detail/program-detail-list-info.service";
 import { inviteToProjectMapper } from "@utils/helpers/inviteToProjectMapper";
 import { HttpParams } from "@angular/common/http";
-import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
+import { ApiPagination } from "../../../../domain/other/api-pagination.model";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
+import { GetAllProjectsUseCase } from "../../use-case/get-all-projects.use-case";
+import { GetMyProjectsUseCase } from "../../use-case/get-my-projects.use-case";
 
 @Injectable()
 export class ProjectsListInfoService {
+  private static readonly PROJECTS_PAGE_SIZE = 16;
+
   private readonly route = inject(ActivatedRoute);
   private readonly navService = inject(NavService);
-  private readonly projectRepository = inject(ProjectRepository);
   private readonly projectsInfoService = inject(ProjectsInfoService);
+  private readonly getAllProjectsUseCase = inject(GetAllProjectsUseCase);
+  private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
   private readonly programDetailListInfoService = inject(ProgramDetailListInfoService);
   private readonly logger = inject(LoggerService);
 
@@ -37,10 +41,10 @@ export class ProjectsListInfoService {
 
   private readonly projectsCount = signal<number>(0);
   private readonly currentPage = signal<number>(1);
-  private readonly projectsPerFetch = signal<number>(15);
+  private readonly projectsPerFetch = signal<number>(ProjectsListInfoService.PROJECTS_PAGE_SIZE);
 
   private readonly currentSearchQuery = signal<string | undefined>(undefined);
-  private previousReqQuery = signal<Record<string, any>>({});
+  private previousReqQuery = signal<Record<string, string> | null>(null);
 
   readonly projects = signal<Project[]>([]);
 
@@ -70,35 +74,31 @@ export class ProjectsListInfoService {
         }
       });
 
-    if (location.href.includes("/all")) {
-      const observable = this.route.queryParams.pipe(
-        distinctUntilChanged(),
-        concatMap(q => {
-          const reqQuery = this.buildFilterQuery(q);
+    if (this.isAll()) {
+      this.route.queryParams
+        .pipe(
+          distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
+          concatMap(q => {
+            const reqQuery = this.buildFilterQuery(q);
 
-          if (JSON.stringify(reqQuery) !== JSON.stringify(this.previousReqQuery())) {
-            try {
-              this.previousReqQuery.set(reqQuery);
-              return this.projectRepository.getAll(new HttpParams({ fromObject: reqQuery }));
-            } catch (e) {
-              this.logger.error("Error building filter query:", e);
-              this.previousReqQuery.set(reqQuery);
-              return this.projectRepository.getAll();
+            if (
+              this.previousReqQuery() !== null &&
+              JSON.stringify(reqQuery) === JSON.stringify(this.previousReqQuery())
+            ) {
+              return EMPTY;
             }
-          }
 
-          this.previousReqQuery.set(reqQuery);
+            this.previousReqQuery.set(reqQuery);
+            this.currentPage.set(1);
 
-          return of(0);
-        }),
-        takeUntil(this.destroy$)
-      );
-
-      observable.pipe(takeUntil(this.destroy$)).subscribe(projects => {
-        if (typeof projects === "number") return;
-
-        this.projects.set(projects.results);
-      });
+            return this.fetchAllProjects(reqQuery);
+          }),
+          takeUntil(this.destroy$)
+        )
+        .subscribe(projects => {
+          this.projects.set(projects.results);
+          this.projectsCount.set(projects.count);
+        });
     }
 
     this.route.data
@@ -107,13 +107,14 @@ export class ProjectsListInfoService {
         takeUntil(this.destroy$)
       )
       .subscribe(projects => {
-        this.projectsCount.set(projects.count);
-
         if (this.isInvites()) {
           this.projects.set(inviteToProjectMapper(projects ?? []));
-        } else {
-          this.projects.set(projects.results ?? []);
+          this.projectsCount.set(projects?.length ?? 0);
+          return;
         }
+
+        this.projectsCount.set(projects.count);
+        this.projects.set(projects.results ?? []);
       });
   }
 
@@ -133,7 +134,7 @@ export class ProjectsListInfoService {
   }
 
   private buildFilterQuery(q: Params): Record<string, string> {
-    const reqQuery: Record<string, any> = {};
+    const reqQuery: Record<string, string> = {};
 
     if (q["name__contains"]) {
       reqQuery["name__contains"] = q["name__contains"];
@@ -180,7 +181,7 @@ export class ProjectsListInfoService {
       ).pipe(
         tap(chunk => {
           this.currentPage.update(p => p + 1);
-          this.projects.update(() => [...this.projects(), ...chunk]);
+          this.projects.update(projects => [...projects, ...chunk]);
         })
       );
     }
@@ -189,28 +190,61 @@ export class ProjectsListInfoService {
   }
 
   private onFetch(skip: number, take: number) {
+    const queryParams = {
+      offset: skip,
+      limit: take,
+      ...this.buildFilterQuery(this.route.snapshot.queryParams),
+    };
+
     if (this.isAll()) {
-      const queries = this.route.snapshot.queryParams;
-
-      const queryParams = {
-        offset: skip,
-        limit: take,
-        ...this.buildFilterQuery(queries),
-      };
-
-      return this.projectRepository.getAll(new HttpParams({ fromObject: queryParams })).pipe(
-        map((projects: ApiPagination<Project>) => {
-          return projects.results;
-        })
-      );
-    } else {
-      return this.projectRepository.getMy().pipe(
-        map((projects: ApiPagination<Project>) => {
-          this.projectsCount.set(projects.count);
-          return projects.results;
-        })
-      );
+      return this.fetchAllProjects(queryParams).pipe(map(projects => projects.results));
     }
+
+    return this.fetchMyProjects({ offset: skip, limit: take }).pipe(
+      tap(projects => {
+        this.projectsCount.set(projects.count);
+      }),
+      map(projects => projects.results)
+    );
+  }
+
+  private fetchAllProjects(queryParams?: Record<string, string | number>) {
+    const params = queryParams ? new HttpParams({ fromObject: queryParams }) : undefined;
+
+    return this.getAllProjectsUseCase.execute(params).pipe(
+      map(result => {
+        if (!result.ok) {
+          this.logger.error("Error fetching all projects:", result.error);
+          return this.emptyProjectsPage();
+        }
+
+        return result.value;
+      })
+    );
+  }
+
+  private fetchMyProjects(queryParams?: Record<string, string | number>) {
+    const params = queryParams ? new HttpParams({ fromObject: queryParams }) : undefined;
+
+    return this.getMyProjectsUseCase.execute(params).pipe(
+      map(result => {
+        if (!result.ok) {
+          this.logger.error("Error fetching my projects:", result.error);
+          return this.emptyProjectsPage();
+        }
+
+        return result.value;
+      })
+    );
+  }
+
+  private emptyProjectsPage(): ApiPagination<Project> {
+    return {
+      count: 0,
+      results: [],
+      next: "",
+      previous: "",
+    };
   }
 
   sliceInvitesArray(inviteId: number): void {

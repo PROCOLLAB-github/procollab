@@ -12,14 +12,14 @@ import { filter, Subject, takeUntil } from "rxjs";
 import { DetailProfileInfoService } from "./profile/detail-profile-info.service";
 import { DetailProjectInfoService } from "./project/detail-project-info.service";
 import { DetailProgramInfoService } from "./program/detail-program-info.service";
-import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
 import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { GetMyProjectsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-my-projects.use-case";
 
 @Injectable()
 export class DetailInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly projectRepository = inject(ProjectRepository);
+  private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
   private readonly projectFormService = inject(ProjectFormService);
   private readonly authRepository = inject(AuthRepository);
@@ -196,12 +196,17 @@ export class DetailInfoService {
           },
         });
 
-      this.projectRepository
-        .getMy()
+      this.getMyProjectsUseCase
+        .execute()
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: projects => {
-            this.memberProjects.set(projects.results.filter(project => !project.draft));
+          next: result => {
+            if (!result.ok) {
+              this.memberProjects.set([]);
+              return;
+            }
+
+            this.memberProjects.set(result.value.results.filter(project => !project.draft));
           },
         });
     } else {

@@ -87,6 +87,10 @@ export class AuthRepository implements AuthRepositoryPort {
       .pipe(map(page => ({ ...page, results: plainToInstance(Project, page.results) })));
   }
 
+  downloadCV(): Observable<Blob> {
+    return this.authAdapter.downloadCV();
+  }
+
   fetchUserRoles(): Observable<UserRole[]> {
     return this.authAdapter.getUserRoles().pipe(
       map(roles => roles.map(role => ({ id: role[0], name: role[1] }))),

@@ -4,9 +4,9 @@ import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn, Router } from "@angular/router";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
-import { catchError, EMPTY } from "rxjs";
+import { catchError, EMPTY, map } from "rxjs";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
+import { GetAllProjectsUseCase } from "projects/social_platform/src/app/api/program/use-cases/get-all-projects.use-case";
 
 /**
  * Резолвер для предзагрузки проектов программы
@@ -33,16 +33,19 @@ import { ProgramRepository as ProgramService } from "projects/social_platform/sr
 export const ProgramProjectsResolver: ResolveFn<ApiPagination<Project>> = (
   route: ActivatedRouteSnapshot
 ) => {
-  const programService = inject(ProgramService);
+  const getAllProjectsUseCase = inject(GetAllProjectsUseCase);
   const programId = route.parent?.params["programId"];
   const router = inject(Router);
 
-  return programService
-    .getAllProjects(
+  return getAllProjectsUseCase
+    .execute(
       programId,
       new HttpParams({
         fromObject: { offset: 0, limit: 21 },
       })
+    )
+    .pipe(
+      map(result => (result.ok ? result.value : { count: 0, results: [], next: "", previous: "" }))
     )
     .pipe(
       catchError(error => {

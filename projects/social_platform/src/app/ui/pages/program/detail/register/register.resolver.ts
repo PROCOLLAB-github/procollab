@@ -3,7 +3,8 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { ProgramDataSchema } from "projects/social_platform/src/app/domain/program/program.model";
-import { ProgramRepository } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
+import { map } from "rxjs";
+import { GetProgramDataSchemaUseCase } from "projects/social_platform/src/app/api/program/use-cases/get-program-data-schema.use-case";
 
 /**
  * Резолвер для получения схемы данных регистрации в программе
@@ -37,7 +38,9 @@ import { ProgramRepository } from "projects/social_platform/src/app/infrastructu
 export const ProgramRegisterResolver: ResolveFn<ProgramDataSchema> = (
   route: ActivatedRouteSnapshot
 ) => {
-  const programRepository = inject(ProgramRepository);
+  const getProgramDataSchemaUseCase = inject(GetProgramDataSchemaUseCase);
 
-  return programRepository.getDataSchema(route.params["programId"]);
+  return getProgramDataSchemaUseCase
+    .execute(route.params["programId"])
+    .pipe(map(result => (result.ok ? result.value : new ProgramDataSchema())));
 };

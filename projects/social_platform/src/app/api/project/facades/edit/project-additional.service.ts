@@ -8,8 +8,8 @@ import {
   ProjectNewAdditionalProgramFields,
 } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
 import { Observable } from "rxjs";
-import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
-import { ProjectProgramRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-program.repository";
+import { SendProjectAdditionalFieldsUseCase } from "../../use-case/send-project-additional-fields.use-case";
+import { SubmitCompetitiveProjectUseCase } from "../../use-case/submit-competitive-project.use-case";
 
 /**
  * Сервис для управления дополнительными полями проекта в партнерской программе.
@@ -23,8 +23,8 @@ export class ProjectAdditionalService {
   private partnerProgramFieldsValues: PartnerProgramFieldsValues[] = [];
 
   private readonly fb = inject(FormBuilder);
-  private readonly projectProgramRepository = inject(ProjectProgramRepository);
-  private readonly programService = inject(ProgramService);
+  private readonly sendProjectAdditionalFieldsUseCase = inject(SendProjectAdditionalFieldsUseCase);
+  private readonly submitCompetitiveProjectUseCase = inject(SubmitCompetitiveProjectUseCase);
 
   readonly isSendingDecision = signal<boolean>(false);
   readonly isAssignProjectToProgramError = signal<boolean>(false);
@@ -146,7 +146,7 @@ export class ProjectAdditionalService {
       });
     });
 
-    return this.projectProgramRepository.sendNewProjectFieldsValues(projectId, newFieldsFormValues);
+    return this.sendProjectAdditionalFieldsUseCase.execute(projectId, newFieldsFormValues);
   }
 
   /**
@@ -155,7 +155,7 @@ export class ProjectAdditionalService {
    * @returns Observable<any> результат запроса
    */
   public submitCompettetiveProject(relationId: number): Observable<any> {
-    return this.programService.submitCompettetiveProject(relationId);
+    return this.submitCompetitiveProjectUseCase.execute(relationId);
   }
 
   /**

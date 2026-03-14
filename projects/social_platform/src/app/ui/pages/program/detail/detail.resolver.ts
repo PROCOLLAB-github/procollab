@@ -3,9 +3,9 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { ProgramDetailMainUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-main-ui-info.service";
-import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
 import { Program } from "projects/social_platform/src/app/domain/program/program.model";
-import { tap } from "rxjs";
+import { map, tap } from "rxjs";
+import { GetProgramUseCase } from "projects/social_platform/src/app/api/program/use-cases/get-program.use-case";
 
 /**
  * Резолвер для получения детальной информации о программе
@@ -38,10 +38,11 @@ import { tap } from "rxjs";
  * Родительском маршруте детальной страницы программы
  */
 export const ProgramDetailResolver: ResolveFn<Program> = (route: ActivatedRouteSnapshot) => {
-  const programService = inject(ProgramService);
+  const getProgramUseCase = inject(GetProgramUseCase);
   const programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
 
-  return programService
-    .getOne(route.params["programId"])
-    .pipe(tap(program => programDetailMainUIInfoService.applyFormatingProgramData(program)));
+  return getProgramUseCase.execute(route.params["programId"]).pipe(
+    map(result => (result.ok ? result.value : new Program())),
+    tap(program => programDetailMainUIInfoService.applyFormatingProgramData(program))
+  );
 };

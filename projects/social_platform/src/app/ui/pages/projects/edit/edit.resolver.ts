@@ -8,11 +8,11 @@ import { Project } from "projects/social_platform/src/app/domain/project/project
 import { Goal } from "projects/social_platform/src/app/domain/project/goals.model";
 import { Partner } from "projects/social_platform/src/app/domain/project/partner.model";
 import { Resource } from "projects/social_platform/src/app/domain/project/resource.model";
-import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
-import { ProjectGoalsRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-goals.repository";
-import { ProjectPartnerRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-partner.repository";
-import { ProjectResourceRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project-resource.repository";
 import { GetProjectInvitesUseCase } from "projects/social_platform/src/app/api/invite/use-cases/get-project-invites.use-case";
+import { GetProjectUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project.use-case";
+import { GetProjectGoalsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project-goals.use-case";
+import { GetProjectPartnersUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project-partners.use-case";
+import { GetProjectResourcesUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project-resources.use-case";
 
 /**
  * Resolver для загрузки данных редактирования проекта
@@ -39,19 +39,25 @@ import { GetProjectInvitesUseCase } from "projects/social_platform/src/app/api/i
 export const ProjectEditResolver: ResolveFn<[Project, Goal[], Partner[], Resource[], Invite[]]> = (
   route: ActivatedRouteSnapshot
 ) => {
-  const projectRepository = inject(ProjectRepository);
-  const projectGoalsRepository = inject(ProjectGoalsRepository);
-  const projectPartnersRepository = inject(ProjectPartnerRepository);
-  const projectResourceRepository = inject(ProjectResourceRepository);
+  const getProjectUseCase = inject(GetProjectUseCase);
+  const getProjectGoalsUseCase = inject(GetProjectGoalsUseCase);
+  const getProjectPartnersUseCase = inject(GetProjectPartnersUseCase);
+  const getProjectResourcesUseCase = inject(GetProjectResourcesUseCase);
   const getProjectInvitesUseCase = inject(GetProjectInvitesUseCase);
 
   const projectId = Number(route.paramMap.get("projectId"));
 
   return forkJoin<[Project, Goal[], Partner[], Resource[], Invite[]]>([
-    projectRepository.getOne(projectId),
-    projectGoalsRepository.fetchAll(projectId),
-    projectPartnersRepository.fetchAll(projectId),
-    projectResourceRepository.fetchAll(projectId),
+    getProjectUseCase
+      .execute(projectId)
+      .pipe(map(result => (result.ok ? result.value : new Project()))),
+    getProjectGoalsUseCase.execute(projectId).pipe(map(result => (result.ok ? result.value : []))),
+    getProjectPartnersUseCase
+      .execute(projectId)
+      .pipe(map(result => (result.ok ? result.value : []))),
+    getProjectResourcesUseCase
+      .execute(projectId)
+      .pipe(map(result => (result.ok ? result.value : []))),
     getProjectInvitesUseCase
       .execute(projectId)
       .pipe(map(result => (result.ok ? result.value : []))),

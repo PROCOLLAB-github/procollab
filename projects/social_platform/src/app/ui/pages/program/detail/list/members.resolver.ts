@@ -4,7 +4,8 @@ import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { ProgramRepository as ProgramService } from "projects/social_platform/src/app/infrastructure/repository/program/program.repository";
+import { map } from "rxjs";
+import { GetAllMembersUseCase } from "projects/social_platform/src/app/api/program/use-cases/get-all-members.use-case";
 
 /**
  * Резолвер для предзагрузки участников программы
@@ -41,7 +42,11 @@ import { ProgramRepository as ProgramService } from "projects/social_platform/sr
 export const ProgramMembersResolver: ResolveFn<ApiPagination<User>> = (
   route: ActivatedRouteSnapshot
 ) => {
-  const programService = inject(ProgramService);
+  const getAllMembersUseCase = inject(GetAllMembersUseCase);
 
-  return programService.getAllMembers(route.parent?.params["programId"], 0, 20);
+  return getAllMembersUseCase
+    .execute(route.parent?.params["programId"], 0, 20)
+    .pipe(
+      map(result => (result.ok ? result.value : { count: 0, results: [], next: "", previous: "" }))
+    );
 };

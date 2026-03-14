@@ -40,8 +40,8 @@ import { ProjectRate } from "../../../domain/project/project-rate";
 import { ProgramDetailMainUIInfoService } from "../../../api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
-import { ProjectRatingRepository } from "../../../infrastructure/repository/project/project-rating.repository";
 import { IndustryRepository } from "../../../infrastructure/repository/industry/industry.repository";
+import { RateProjectUseCase } from "../../../api/program/use-cases/rate-project.use-case";
 
 /**
  * Компонент карточки оценки проекта
@@ -98,7 +98,7 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     public industryRepository: IndustryRepository,
-    private readonly projectRatingRepository: ProjectRatingRepository,
+    private readonly rateProjectUseCase: RateProjectUseCase,
     private readonly authRepository: AuthRepository,
     private readonly programDetailMainUIInfoService: ProgramDetailMainUIInfoService,
     private readonly breakpointObserver: BreakpointObserver,
@@ -206,15 +206,23 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const fv = this.form.getRawValue();
     const project = this.project as ProjectRate;
-    const submittedVal = this.projectRatingRepository.formValuesToDTO(project.criterias, fv);
 
     this.submitLoading.set(true);
 
-    this.projectRatingRepository
-      .rate(project.id, submittedVal)
+    this.rateProjectUseCase
+      .execute(project.id, project.criterias, fv)
       .pipe(finalize(() => this.submitLoading.set(false)))
       .subscribe({
-        next: () => {
+        next: result => {
+          if (!result.ok) {
+            if (result.error.cause instanceof HttpResponse) {
+              if (result.error.cause.status === 400) {
+                this.logger.error("Ошибка: достигнут максимальный лимит оценок");
+              }
+            }
+            return;
+          }
+
           const profile = this.profile();
           const project = this.project as ProjectRate;
 
@@ -243,13 +251,6 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
 
           this._project.set({ ...project });
           this.showConfirmRateModal.set(false);
-        },
-        error: err => {
-          if (err instanceof HttpResponse) {
-            if (err.status === 400) {
-              this.logger.error("Ошибка: достигнут максимальный лимит оценок");
-            }
-          }
         },
       });
   }

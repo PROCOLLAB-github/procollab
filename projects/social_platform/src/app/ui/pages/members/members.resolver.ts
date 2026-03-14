@@ -1,8 +1,9 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { MemberHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/member/member-http.adapter";
 import { ResolveFn } from "@angular/router";
+import { map } from "rxjs";
+import { GetMembersUseCase } from "projects/social_platform/src/app/api/member/use-case/get-members.use-case";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 
@@ -22,8 +23,19 @@ import { User } from "projects/social_platform/src/app/domain/auth/user.model";
  * @returns Observable<ApiPagination<User>> - Наблюдаемый объект с данными участников
  */
 export const MembersResolver: ResolveFn<ApiPagination<User>> = () => {
-  const memberService = inject(MemberHttpAdapter);
+  const getMembersUseCase = inject(GetMembersUseCase);
 
   // Загружаем первые 20 участников (skip: 0, take: 20)
-  return memberService.getMembers(0, 20);
+  return getMembersUseCase.execute(0, 20).pipe(
+    map(result =>
+      result.ok
+        ? result.value
+        : {
+            count: 0,
+            results: [],
+            next: "",
+            previous: "",
+          }
+    )
+  );
 };

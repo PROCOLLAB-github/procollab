@@ -19,15 +19,15 @@ import {
   tap,
   throttleTime,
 } from "rxjs";
-import { MemberHttpAdapter } from "projects/social_platform/src/app/infrastructure/adapters/member/member-http.adapter";
 import { User } from "../../../domain/auth/user.model";
 import { AbstractControl } from "@angular/forms";
-import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
+import { ApiPagination } from "../../../domain/other/api-pagination.model";
 import { MembersUIInfoService } from "./ui/members-ui-info.service";
 import { NavigationService } from "../../paths/navigation.service";
 import { ProjectsDetailUIInfoService } from "../../project/facades/detail/ui/projects-detail-ui.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { GetMembersUseCase } from "../use-case/get-members.use-case";
 
 @Injectable()
 export class MembersInfoService {
@@ -35,11 +35,11 @@ export class MembersInfoService {
   private readonly router = inject(Router);
   private readonly navService = inject(NavService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
-  private readonly memberService = inject(MemberHttpAdapter);
   private readonly membersUIInfoService = inject(MembersUIInfoService);
   private readonly authRepository = inject(AuthRepository);
   private readonly navigationService = inject(NavigationService);
   private readonly logger = inject(LoggerService);
+  private readonly getMembersUseCase = inject(GetMembersUseCase);
 
   private readonly searchParams = signal<Record<string, string>>({}); // Signal для параметров поиска
 
@@ -218,10 +218,22 @@ export class MembersInfoService {
    * @returns Observable<User[]> - Массив участников
    */
   private onFetch(skip: number, take: number, params?: Record<string, string | number | boolean>) {
-    return this.memberService.getMembers(skip, take, params).pipe(takeUntil(this.destroy$));
+    return this.getMembersUseCase.execute(skip, take, params).pipe(
+      map(result => (result.ok ? result.value : this.emptyMembersPagination())),
+      takeUntil(this.destroy$)
+    );
   }
 
   redirectToProfile(): void {
     this.navigationService.profileRedirect(this.profileId());
+  }
+
+  private emptyMembersPagination(): ApiPagination<User> {
+    return {
+      count: 0,
+      results: [],
+      next: "",
+      previous: "",
+    };
   }
 }
