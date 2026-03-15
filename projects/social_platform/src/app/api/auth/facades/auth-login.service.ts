@@ -3,16 +3,19 @@
 import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TokenService, ValidationService } from "@corelib";
-import { Subject, takeUntil } from "rxjs";
+import { Subject, takeUntil, tap } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 import { LoginUseCase } from "../use-cases/login.use-case";
+import { toAsyncState } from "projects/social_platform/src/app/domain/shared/to-async-state";
+import {
+  LoginResult,
+  LoginError,
+} from "projects/social_platform/src/app/domain/auth/results/login.result";
 
 @Injectable()
 export class AuthLoginService {
   private readonly tokenService = inject(TokenService);
-  private readonly authRepository = inject(AuthRepository);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly validationService = inject(ValidationService);
@@ -26,8 +29,7 @@ export class AuthLoginService {
 
   // Login Component
   readonly showPassword = this.authUIInfoService.showPassword;
-  readonly loginIsSubmitting = this.authUIInfoService.loginIsSubmitting;
-  readonly errorWrongAuth = this.authUIInfoService.errorWrongAuth;
+  readonly login$ = this.authUIInfoService.login$;
 
   destroy(): void {
     this.destroy$.next();
@@ -37,34 +39,28 @@ export class AuthLoginService {
   onSubmit() {
     const redirectType = this.route.snapshot.queryParams["redirect"];
 
-    if (!this.validationService.getFormValidation(this.loginForm) || this.loginIsSubmitting()) {
+    if (
+      !this.validationService.getFormValidation(this.loginForm) ||
+      this.login$().status === "loading"
+    ) {
       return;
     }
 
-    this.loginIsSubmitting.set(true);
-    this.errorWrongAuth.set(false);
-
     this.loginUseCase
       .execute(this.loginForm.getRawValue())
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: result => {
-          this.loginIsSubmitting.set(false);
-
-          if (!result.ok) {
-            if (result.error.kind === "wrong_credentials") {
-              this.errorWrongAuth.set(true);
-            }
-            return;
+      .pipe(
+        tap(result => {
+          if (result.ok) {
+            this.tokenService.memTokens(result.value.tokens);
+            const url = redirectType === "program" ? "/office/program/list" : "/office";
+            this.router
+              .navigateByUrl(url)
+              .then(() => this.logger.debug("Route changed from LoginComponent"));
           }
-
-          this.tokenService.memTokens(result.value.tokens);
-
-          const url = redirectType === "program" ? "/office/program/list" : "/office";
-          this.router
-            .navigateByUrl(url)
-            .then(() => this.logger.debug("Route changed from LoginComponent"));
-        },
-      });
+        }),
+        toAsyncState<LoginResult, LoginError>(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(state => this.login$.set(state));
   }
 }

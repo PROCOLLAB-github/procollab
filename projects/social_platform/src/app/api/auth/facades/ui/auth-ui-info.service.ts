@@ -4,6 +4,13 @@ import { inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ValidationService } from "@corelib";
 import dayjs from "dayjs";
+import {
+  LoginError,
+  LoginResult,
+} from "projects/social_platform/src/app/domain/auth/results/login.result";
+import { PasswordError } from "projects/social_platform/src/app/domain/auth/results/password.result";
+import { RegisterError } from "projects/social_platform/src/app/domain/auth/results/register.result";
+import { AsyncState, initial } from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
 export class AuthUIInfoService {
@@ -14,24 +21,18 @@ export class AuthUIInfoService {
   readonly showPasswordRepeat = signal<boolean>(false);
   readonly showPassword = signal<boolean>(false);
 
-  readonly loginIsSubmitting = signal<boolean>(false);
-  readonly errorWrongAuth = signal<boolean>(false);
+  readonly login$ = signal<AsyncState<LoginResult, LoginError>>(initial());
 
   // password
-  readonly isSubmitting = signal<boolean>(false);
   readonly credsSubmitInitiated = signal<boolean>(false);
-
-  readonly errorServer = signal<boolean>(false);
-  readonly errorRequest = signal<boolean>(false);
+  readonly password$ = signal<AsyncState<void, PasswordError>>(initial());
 
   // register
   readonly registerAgreement = signal<boolean>(false);
   readonly ageAgreement = signal<boolean>(false);
-
-  readonly registerIsSubmitting = signal<boolean>(false);
   readonly infoSubmitInitiated = signal<boolean>(false);
 
-  readonly isUserCreationModalError = signal<boolean>(false);
+  readonly register$ = signal<AsyncState<void, RegisterError>>(initial());
   readonly step = signal<"credentials" | "info">("credentials");
 
   // login

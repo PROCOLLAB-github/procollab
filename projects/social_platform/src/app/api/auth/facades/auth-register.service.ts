@@ -1,11 +1,14 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { computed, inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { Subject, takeUntil } from "rxjs";
+import { Subject, takeUntil, tap } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { ValidationService } from "@corelib";
 import { RegisterUseCase } from "../use-cases/register.use-case";
+import { toAsyncState } from "../../../domain/shared/to-async-state";
+import { RegisterError } from "../../../domain/auth/results/register.result";
+import { isFailure } from "../../../domain/shared/async-state";
 
 @Injectable()
 export class AuthRegisterService {
@@ -18,18 +21,24 @@ export class AuthRegisterService {
 
   readonly registerAgreement = this.authUIInfoService.registerAgreement;
   readonly ageAgreement = this.authUIInfoService.ageAgreement;
-  readonly registerIsSubmitting = this.authUIInfoService.registerIsSubmitting;
   readonly credsSubmitInitiated = this.authUIInfoService.credsSubmitInitiated;
   readonly infoSubmitInitiated = this.authUIInfoService.infoSubmitInitiated;
 
   readonly showPassword = this.authUIInfoService.showPassword;
   readonly showPasswordRepeat = this.authUIInfoService.showPasswordRepeat;
 
-  readonly isUserCreationModalError = this.authUIInfoService.isUserCreationModalError;
+  readonly register$ = this.authUIInfoService.register$;
 
   readonly step = this.authUIInfoService.step;
 
-  readonly serverErrors = signal<string[]>([]);
+  // Вычисляемое из AsyncState — автоматически обновляется при смене состояния
+  readonly serverErrors = computed(() => {
+    const state = this.register$();
+    if (isFailure(state) && state.error.kind === "validation_error") {
+      return Object.values(state.error.errors).flat();
+    }
+    return [];
+  });
 
   private readonly destroy$ = new Subject<void>();
 
@@ -39,36 +48,26 @@ export class AuthRegisterService {
   }
 
   onSendForm(): void {
-    if (!this.validationService.getFormValidation(this.registerForm)) {
+    if (
+      !this.validationService.getFormValidation(this.registerForm) ||
+      this.register$().status === "loading"
+    ) {
       return;
     }
 
     const form = this.authUIInfoService.prepareFormValues(this.registerForm);
 
-    this.serverErrors.set([]);
-    this.isUserCreationModalError.set(false);
-    this.registerIsSubmitting.set(true);
-
     this.registerUseCase
       .execute(form)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: result => {
-          if (!result.ok) {
-            if (result.error.kind === "validation_error") {
-              this.serverErrors.set(Object.values(result.error.errors).flat());
-            } else if (result.error.kind === "server_error") {
-              this.isUserCreationModalError.set(true);
-            }
-
-            this.registerIsSubmitting.set(false);
-
-            return;
+      .pipe(
+        tap(result => {
+          if (result.ok) {
+            this.router.navigateByUrl("/auth/verification/email?adress=" + form.email);
           }
-
-          this.registerIsSubmitting.set(false);
-          this.router.navigateByUrl("/auth/verification/email?adress=" + form.email);
-        },
-      });
+        }),
+        toAsyncState<void, RegisterError>(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(state => this.register$.set(state));
   }
 }

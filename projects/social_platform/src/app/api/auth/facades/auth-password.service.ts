@@ -3,11 +3,13 @@
 import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ValidationService } from "@corelib";
-import { map, Subject, takeUntil } from "rxjs";
+import { map, Subject, takeUntil, tap } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { ResetPasswordUseCase } from "../use-cases/reset-password.use-case";
 import { SetPasswordUseCase } from "../use-cases/set-password.use-case";
+import { toAsyncState } from "../../../domain/shared/to-async-state";
+import { PasswordError } from "../../../domain/auth/results/password.result";
 
 @Injectable()
 export class AuthPasswordService {
@@ -31,10 +33,9 @@ export class AuthPasswordService {
   );
 
   // ResetPassword Component
-  readonly isSubmitting = this.authUIInfoService.isSubmitting;
-  readonly errorRequest = this.authUIInfoService.errorRequest;
+  readonly password$ = this.authUIInfoService.password$;
+
   readonly credsSubmitInitiated = this.authUIInfoService.credsSubmitInitiated;
-  private readonly errorServer = this.authUIInfoService.errorServer;
 
   init(): void {
     const token = this.route.snapshot.queryParamMap.get("token");
@@ -46,32 +47,30 @@ export class AuthPasswordService {
 
   // ResetPassword Component
   onSubmitResetPassword(): void {
-    if (!this.validationService.getFormValidation(this.resetForm)) return;
-
-    this.errorServer.set(false);
-    this.isSubmitting.set(true);
+    if (
+      !this.validationService.getFormValidation(this.resetForm) ||
+      this.password$().status === "loading"
+    )
+      return;
 
     this.resetPasswordUseCase
       .execute(this.resetForm.value.email!)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: result => {
-          if (!result.ok) {
-            this.errorServer.set(true);
+      .pipe(
+        tap(result => {
+          if (result.ok) {
+            this.router
+              .navigate(["/auth/reset_password/confirm"], {
+                queryParams: { email: this.resetForm.value.email },
+              })
+              .then(() => this.logger.debug("ResetPasswordComponent"));
+          } else {
             this.resetForm.reset();
-            return;
           }
-
-          this.router
-            .navigate(["/auth/reset_password/confirm"], {
-              queryParams: { email: this.resetForm.value.email },
-            })
-            .then(() => this.logger.debug("ResetPasswordComponent"));
-        },
-        complete: () => {
-          this.isSubmitting.set(false);
-        },
-      });
+        }),
+        toAsyncState<void, PasswordError>(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({ next: result => this.password$.set(result) });
   }
 
   // SetPassword Component
@@ -79,24 +78,29 @@ export class AuthPasswordService {
     this.credsSubmitInitiated.set(true);
     const token = this.route.snapshot.queryParamMap.get("token");
 
-    if (!token || !this.validationService.getFormValidation(this.passwordForm)) return;
+    if (
+      !token ||
+      !this.validationService.getFormValidation(this.passwordForm) ||
+      this.password$().status === "loading"
+    )
+      return;
 
     this.setPasswordUseCase
       .execute(this.passwordForm.value.password!, token)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: result => {
-          if (!result.ok) {
-            this.logger.error("Error setting password:", result.error.cause);
-            this.errorRequest.set(true);
-            return;
+      .pipe(
+        tap(result => {
+          if (result.ok) {
+            this.router
+              .navigateByUrl("/auth/login")
+              .then(() => this.logger.debug("SetPasswordComponent"));
+          } else {
+            this.logger.error("Error setting password:", result.error);
           }
-
-          this.router
-            .navigateByUrl("/auth/login")
-            .then(() => this.logger.debug("SetPasswordComponent"));
-        },
-      });
+        }),
+        toAsyncState<void, PasswordError>(),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({ next: result => this.password$.set(result) });
   }
 
   destroy(): void {
