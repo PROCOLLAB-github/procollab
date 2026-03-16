@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
   navItems = [
     { name: "Мой профиль", icon: "person", link: "profile" },
     { name: "Рейтинг", icon: "growth", link: "rating" },
-    { name: "Траектории", icon: "receipt", link: "trackCar" },
+    // { name: "Траектории", icon: "receipt", link: "trackCar" },
   ];
 
   // Реактивное состояние с использованием Angular signals

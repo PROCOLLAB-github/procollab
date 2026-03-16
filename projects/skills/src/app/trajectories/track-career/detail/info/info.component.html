@@ -23,7 +23,7 @@
         @if (userTrajectory()?.availableSkills; as availableSkills) {
         <div class="trajectory__skills">
           @for (skill of availableSkills; track skill.id) {
-          <app-skill-card [skill]="skill"></app-skill-card>
+          <!-- <app-skill-card [skill]="skill"></app-skill-card> -->
           }
         </div>
         }

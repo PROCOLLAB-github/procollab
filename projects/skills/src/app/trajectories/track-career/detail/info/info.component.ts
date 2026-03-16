@@ -20,7 +20,7 @@ import type { Trajectory, UserTrajectory } from "projects/skills/src/models/traj
 import { TrajectoriesService } from "../../../trajectories.service";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
-import { SkillCardComponent } from "projects/skills/src/app/shared/skill-card/skill-card.component";
+// import { SkillCardComponent } from "projects/skills/src/app/shared/skill-card/skill-card.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ButtonComponent } from "@ui/components";
 
@@ -44,7 +44,7 @@ import { ButtonComponent } from "@ui/components";
     ParseLinksPipe,
     CommonModule,
     SoonCardComponent,
-    SkillCardComponent,
+    // SkillCardComponent,
     ModalComponent,
     ButtonComponent,
   ],
@@ -83,7 +83,7 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
     this.route.parent?.data.pipe(map(r => r["data"])).subscribe(r => {
       this.trajectory = r[0];
       this.userTrajectory.set({ ...r[1], individualSkills: r[2] });
-      this.isCompleteModule.set(this.userTrajectory()!.completedSkills.some(skill => skill.isDone));
+      // this.isCompleteModule.set(this.userTrajectory()!.completedSkills.some(skill => skill.isDone));
     });
   }
 
