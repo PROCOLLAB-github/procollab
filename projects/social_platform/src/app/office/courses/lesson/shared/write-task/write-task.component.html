@@ -1,18 +1,18 @@
 <!-- @format -->
 
-<div class="write-task" [class.write-task--hasVideo]="hasVideoUrl()">
+<div class="write-task" [class.write-task--hasVideo]="cachedVideoUrl">
   <div class="write-task__header">
     <p class="text-body-12 write-task__task">задание {{ data.order }}</p>
-    @if (!hasVideoUrl() && !data.imageUrl) {
+    @if (!cachedVideoUrl && !data.imageUrl) {
     <p class="write-task__text text-body-12-bold">{{ data.title | truncate: 80 }}</p>
     }
     <div
       class="write-task__description text-body-12"
-      [class.write-task__description--hasVideo]="hasVideoUrl()"
+      [class.write-task__description--hasVideo]="cachedVideoUrl"
     >
-      @if (getSafeVideoUrl(); as videoUrl) {
+      @if (cachedVideoUrl) {
       <iframe
-        [src]="videoUrl"
+        [src]="cachedVideoUrl"
         width="397px"
         height="223px"
         frameborder="0"
@@ -25,9 +25,19 @@
         <p class="text-body-12-bold">{{ data.title | truncate: 50 }}</p>
       </div>
       }
-      <div [innerHTML]="data.bodyText | truncate: (type === 'text-file' ? 650 : 700)"></div>
-
-      @if (type === 'text-file' && data.attachmentUrl) {
+      <div
+        #descEl
+        class="write-task__desc"
+        [innerHTML]="data.bodyText | truncate: (type === 'text-file' ? 650 : 700)"
+      ></div>
+      @if (descriptionExpandable) {
+      <div
+        class="read-more text-body-10"
+        (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+      >
+        {{ readFullDescription ? "скрыть" : "подробнее" }}
+      </div>
+      } @if (type === 'text-file' && data.attachmentUrl) {
       <app-file-item
         mode="preview"
         [type]="'file'"

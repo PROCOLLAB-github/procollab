@@ -76,7 +76,30 @@
   }
 
   &__description {
+    display: -webkit-box;
+    overflow: hidden;
     text-align: justify;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
+    transition: all 0.7s ease-in-out;
+
+    &.expanded {
+      display: block;
+      max-height: 200px;
+      overflow-y: auto;
+      -webkit-line-clamp: unset;
+    }
+  }
+
+  .read-more {
+    margin-top: 12px;
+    color: var(--accent);
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--accent-dark);
+    }
   }
 
   &__image {

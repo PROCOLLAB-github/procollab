@@ -1,6 +1,18 @@
 /** @format */
 
-import { Component, EventEmitter, inject, Input, Output, signal } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+  signal,
+  ViewChild,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
@@ -11,6 +23,7 @@ import { FileService } from "@core/services/file.service";
 import { Task } from "@models/courses.model";
 import { FileModel } from "@office/models/file.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
+import { expandElement } from "@utils/expand-element";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 
 @Component({
@@ -27,9 +40,12 @@ import { ImagePreviewDirective } from "../image-preview/image-preview.directive"
   templateUrl: "./write-task.component.html",
   styleUrl: "./write-task.component.scss",
 })
-export class WriteTaskComponent {
+export class WriteTaskComponent implements OnInit, AfterViewInit {
   private readonly fileService = inject(FileService);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly cdRef = inject(ChangeDetectorRef);
+
+  @ViewChild("descEl") descEl?: ElementRef<HTMLElement>;
 
   @Input({ required: true }) data!: Task;
   @Input() type: "text" | "text-file" = "text";
@@ -41,19 +57,29 @@ export class WriteTaskComponent {
 
   uploadedFiles = signal<FileModel[]>([]);
   currentLength = signal(0);
+  descriptionExpandable = false;
+  readFullDescription = false;
+  cachedVideoUrl: SafeResourceUrl | null = null;
   private currentText = "";
 
-  getSafeVideoUrl(): SafeResourceUrl | null {
+  ngOnInit(): void {
     const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
-    if (!iframeUrl) {
-      return null;
-    }
-
-    return this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl);
+    this.cachedVideoUrl = iframeUrl
+      ? this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl)
+      : null;
   }
 
-  hasVideoUrl(): boolean {
-    return !!resolveVideoUrlForIframe(this.data?.videoUrl);
+  ngAfterViewInit(): void {
+    const el = this.descEl?.nativeElement;
+    if (el) {
+      this.descriptionExpandable = el.scrollHeight > el.clientHeight;
+      this.cdRef.detectChanges();
+    }
+  }
+
+  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
+    expandElement(elem, expandedClass, isExpanded);
+    this.readFullDescription = !isExpanded;
   }
 
   onKeyUp(event: Event) {

@@ -15,9 +15,9 @@
       [class.video__wrapper--hasVideo]="data.videoUrl"
       [class.video__wrapper--hasImage]="data.imageUrl"
     >
-      @if (data.videoUrl) { @if (getSafeVideoUrl(); as videoUrl) {
+      @if (cachedVideoUrl) {
       <iframe
-        [src]="videoUrl"
+        [src]="cachedVideoUrl"
         width="395px"
         height="222px"
         frameborder="0"
@@ -25,7 +25,7 @@
         allowtransparency="true"
       >
       </iframe>
-      } } @if (data.imageUrl) {
+      } @if (data.imageUrl) {
       <img appImagePreview class="video__img" [src]="data.imageUrl" />
       }
 
@@ -35,16 +35,23 @@
         }
 
         <p class="video__title text-body-12-bold">
-          {{ data.title | truncate: (hasVideoUrl() ? 80 : data.imageUrl ? 100 : 200) }}
+          {{ data.title | truncate: (cachedVideoUrl ? 80 : data.imageUrl ? 100 : 200) }}
         </p>
         <div
+          #descEl
           class="video__text text-body-12"
           [innerHTML]="
-            data.bodyText | truncateHtml: (hasVideoUrl() ? 627 : data.imageUrl ? 500 : 1000)
+            data.bodyText | truncateHtml: (cachedVideoUrl ? 627 : data.imageUrl ? 500 : 1000)
           "
         ></div>
-
-        @if (data.attachmentUrl) {
+        @if (descriptionExpandable) {
+        <div
+          class="read-more text-body-10"
+          (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
+        >
+          {{ readFullDescription ? "скрыть" : "подробнее" }}
+        </div>
+        } @if (data.attachmentUrl) {
         <app-file-item
           mode="preview"
           [type]="'file'"

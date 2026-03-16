@@ -1,11 +1,21 @@
 /** @format */
 
-import { Component, inject, Input } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { DomSanitizer, type SafeResourceUrl } from "@angular/platform-browser";
+import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { TruncateHtmlPipe } from "projects/core/src/lib/pipes/truncate-html.pipe";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
+import { expandElement } from "@utils/expand-element";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 import { Task } from "@office/models/courses.model";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
@@ -30,29 +40,35 @@ import { FileItemComponent } from "@ui/components/file-item/file-item.component"
   templateUrl: "./info-task.component.html",
   styleUrl: "./info-task.component.scss",
 })
-export class InfoTaskComponent {
+export class InfoTaskComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) data!: Task; // Данные информационной задачи
 
   private readonly sanitizer = inject(DomSanitizer); // Сервис для безопасной работы с HTML
+  private readonly cdRef = inject(ChangeDetectorRef);
 
-  private getVideoUrl(): string | null {
-    return resolveVideoUrlForIframe(this.data?.videoUrl);
+  @ViewChild("descEl") descEl?: ElementRef<HTMLElement>;
+
+  descriptionExpandable = false;
+  readFullDescription = false;
+  cachedVideoUrl: SafeResourceUrl | null = null;
+
+  ngOnInit(): void {
+    const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
+    this.cachedVideoUrl = iframeUrl
+      ? this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl)
+      : null;
   }
 
-  getSafeVideoUrl(): SafeResourceUrl | null {
-    const iframeUrl = this.getVideoUrl();
-    if (!iframeUrl) {
-      return null;
+  ngAfterViewInit(): void {
+    const el = this.descEl?.nativeElement;
+    if (el) {
+      this.descriptionExpandable = el.scrollHeight > el.clientHeight;
+      this.cdRef.detectChanges();
     }
-
-    return this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl);
   }
 
-  hasVideoUrl(): boolean {
-    return !!this.getVideoUrl();
-  }
-
-  hasContent(): boolean {
-    return this.hasVideoUrl() || !!this.data?.imageUrl;
+  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
+    expandElement(elem, expandedClass, isExpanded);
+    this.readFullDescription = !isExpanded;
   }
 }

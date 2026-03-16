@@ -8,6 +8,7 @@ import {
   EventEmitter,
   inject,
   Input,
+  OnInit,
   Output,
   signal,
   ViewChild,
@@ -23,6 +24,7 @@ import { FileService } from "@core/services/file.service";
 import { Task } from "@office/models/courses.model";
 import { FileModel } from "@office/models/file.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
+import { expandElement } from "@utils/expand-element";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 
 @Component({
@@ -40,7 +42,7 @@ import { ImagePreviewDirective } from "../image-preview/image-preview.directive"
   templateUrl: "./file-task.component.html",
   styleUrl: "./file-task.component.scss",
 })
-export class FileTaskComponent implements AfterViewInit {
+export class FileTaskComponent implements OnInit, AfterViewInit {
   private readonly fileService = inject(FileService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly cdRef = inject(ChangeDetectorRef);
@@ -74,6 +76,14 @@ export class FileTaskComponent implements AfterViewInit {
   uploadedFiles = signal<FileModel[]>([]);
   descriptionExpandable = false;
   readFullDescription = false;
+  cachedVideoUrl: SafeResourceUrl | null = null;
+
+  ngOnInit(): void {
+    const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
+    this.cachedVideoUrl = iframeUrl
+      ? this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl)
+      : null;
+  }
 
   ngAfterViewInit(): void {
     const el = this.descEl?.nativeElement;
@@ -83,21 +93,9 @@ export class FileTaskComponent implements AfterViewInit {
     }
   }
 
-  onToggleDescription(): void {
-    this.readFullDescription = !this.readFullDescription;
-  }
-
-  getSafeVideoUrl(): SafeResourceUrl | null {
-    const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
-    if (!iframeUrl) {
-      return null;
-    }
-
-    return this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl);
-  }
-
-  hasVideoUrl(): boolean {
-    return !!resolveVideoUrlForIframe(this.data?.videoUrl);
+  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
+    expandElement(elem, expandedClass, isExpanded);
+    this.readFullDescription = !isExpanded;
   }
 
   onFileUploaded(event: { url: string; name: string; size: number; mimeType: string }) {

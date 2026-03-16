@@ -16,7 +16,6 @@
   &__content {
     flex-grow: 1;
     min-height: 358px;
-    max-height: 393px;
     padding: 24px;
     background: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
@@ -123,6 +122,7 @@
     max-width: 300px;
     height: 100%;
     max-height: 150px;
+    object-fit: cover;
     border-radius: var(--rounded-lg);
 
     &-text {
@@ -137,20 +137,18 @@
   }
 
   &__desc {
-    max-height: 12em;
+    display: -webkit-box;
     overflow: hidden;
     text-align: justify;
-    transition: max-height 0.5s ease-in-out;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
+    transition: all 0.7s ease-in-out;
 
-    &:not(&--expanded) {
-      display: box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 8;
-    }
-
-    &--expanded {
-      max-height: 210px;
+    &.expanded {
+      display: block;
+      max-height: 200px;
       overflow-y: auto;
+      -webkit-line-clamp: unset;
     }
   }
 

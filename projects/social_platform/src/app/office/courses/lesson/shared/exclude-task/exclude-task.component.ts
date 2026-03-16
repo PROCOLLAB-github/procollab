@@ -1,12 +1,25 @@
 /** @format */
 
-import { Component, EventEmitter, inject, Input, type OnInit, Output, signal } from "@angular/core";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  type OnInit,
+  Output,
+  signal,
+  ViewChild,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { CheckboxComponent } from "@ui/components";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 import { Task } from "@office/models/courses.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
+import { expandElement } from "@utils/expand-element";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 
 /**
@@ -36,8 +49,11 @@ import { ImagePreviewDirective } from "../image-preview/image-preview.directive"
   templateUrl: "./exclude-task.component.html",
   styleUrl: "./exclude-task.component.scss",
 })
-export class ExcludeTaskComponent implements OnInit {
+export class ExcludeTaskComponent implements OnInit, AfterViewInit {
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly cdRef = inject(ChangeDetectorRef);
+
+  @ViewChild("descEl") descEl?: ElementRef<HTMLElement>;
 
   @Input({ required: true }) data!: Task; // Данные вопроса
   @Input() hint!: string; // Текст подсказки
@@ -63,18 +79,28 @@ export class ExcludeTaskComponent implements OnInit {
 
   result = signal<number[]>([]);
   _error = signal<boolean>(false);
+  descriptionExpandable = false;
+  readFullDescription = false;
+  cachedVideoUrl: SafeResourceUrl | null = null;
 
-  getSafeVideoUrl(): SafeResourceUrl | null {
+  ngOnInit(): void {
     const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
-    if (!iframeUrl) {
-      return null;
-    }
-
-    return this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl);
+    this.cachedVideoUrl = iframeUrl
+      ? this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl)
+      : null;
   }
 
-  hasVideoUrl(): boolean {
-    return !!resolveVideoUrlForIframe(this.data?.videoUrl);
+  ngAfterViewInit(): void {
+    const el = this.descEl?.nativeElement;
+    if (el) {
+      this.descriptionExpandable = el.scrollHeight > el.clientHeight;
+      this.cdRef.detectChanges();
+    }
+  }
+
+  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
+    expandElement(elem, expandedClass, isExpanded);
+    this.readFullDescription = !isExpanded;
   }
 
   /**
@@ -93,6 +119,4 @@ export class ExcludeTaskComponent implements OnInit {
 
     this.update.emit(this.result());
   }
-
-  ngOnInit(): void {}
 }
