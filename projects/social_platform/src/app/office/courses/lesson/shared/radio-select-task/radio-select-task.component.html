@@ -10,6 +10,8 @@
       <img appImagePreview class="radio__img" [src]="data.imageUrl" />
       <p class="text-body-12-bold">{{ data.title | truncate: 50 }}</p>
     </div>
+    } @if (!data.imageUrl) {
+    <p class="radio__title text-body-12-bold">{{ data.title | truncate: 110 }}</p>
     }
 
     <p class="text-body-12 radio__description">{{ data.bodyText | truncate: 700 }}</p>

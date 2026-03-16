@@ -99,11 +99,12 @@
     border-radius: var(--rounded-lg);
   }
 
-  // &__body {
-  //   &--hasContent {
-  //     max-width: 333px;
-  //   }
-  // }
+  &__body {
+    max-width: 422px;
+    &--hasContent {
+      max-width: 333px;
+    }
+  }
 
   &__content {
     &--hasContent {

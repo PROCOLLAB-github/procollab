@@ -12,7 +12,10 @@
       } @else if (data.imageUrl) {
       <img appImagePreview alt="exclude-image" [src]="data.imageUrl" class="exclude__image" />
       <p class="text-body-12-bold">{{ data.title | truncate: 50 }}</p>
+      } @if (!data.imageUrl) {
+      <p class="exclude__text text-body-12-bold">{{ data.answerTitle | truncate: 110 }}</p>
       }
+
       <p class="text-body-12 exclude__description">{{ data.bodyText | truncate: 700 }}</p>
     </div>
   </div>
