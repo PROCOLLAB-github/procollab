@@ -1,10 +1,10 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { SpecializationsGroup } from "../models/specializations-group";
+import { SpecializationsGroup } from "../models/specializations-group.model";
 import { Observable } from "rxjs";
 import { ApiService } from "@corelib";
-import { Specialization } from "../models/specialization";
+import { Specialization } from "../models/specialization.model";
 import { ApiPagination } from "@office/models/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
 

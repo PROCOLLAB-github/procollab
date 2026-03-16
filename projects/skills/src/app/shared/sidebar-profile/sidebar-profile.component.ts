@@ -6,7 +6,6 @@ import { AvatarComponent, IconComponent } from "@uilib";
 import { DayjsPipe } from "@corelib";
 import { RouterLink } from "@angular/router";
 import type { UserData } from "projects/skills/src/models/profile.model";
-import { ProfileService } from "../../profile/services/profile.service";
 
 /**
  * Компонент профиля пользователя в боковой панели
@@ -38,12 +37,6 @@ export class SidebarProfileComponent implements OnInit {
   user = signal<UserData | null>(null);
 
   /**
-   * Сервис для работы с профилем пользователя
-   * Инжектируется автоматически через DI контейнер Angular
-   */
-  profileService = inject(ProfileService);
-
-  /**
    * Инициализация компонента
    *
    * Загружает данные пользователя при создании компонента.
@@ -51,13 +44,5 @@ export class SidebarProfileComponent implements OnInit {
    *
    * @returns void
    */
-  ngOnInit(): void {
-    this.profileService.getUserData().subscribe({
-      next: data => this.user.set(data as UserData),
-      error: () => {
-        // Перенаправление на страницу авторизации при ошибке загрузки данных
-        location.href = "https://app.procollab.ru/auth/login";
-      },
-    });
-  }
+  ngOnInit(): void {}
 }

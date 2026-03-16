@@ -1,11 +1,14 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, inject, type OnDestroy, type OnInit } from "@angular/core";
-import { ActivatedRoute, RouterOutlet } from "@angular/router";
-import { BarComponent } from "@ui/components";
+import { Component, DestroyRef, inject, signal, type OnDestroy, type OnInit } from "@angular/core";
+import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
 import type { Trajectory } from "projects/skills/src/models/trajectory.model";
-import { map, type Subscription } from "rxjs";
+import { filter, map, type Subscription } from "rxjs";
+import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { ButtonComponent } from "@ui/components";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент детального просмотра траектории
@@ -15,33 +18,45 @@ import { map, type Subscription } from "rxjs";
 @Component({
   selector: "app-trajectory-detail",
   standalone: true,
-  imports: [CommonModule, BarComponent, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, AvatarComponent, ButtonComponent, ModalComponent],
   templateUrl: "./trajectory-detail.component.html",
   styleUrl: "./trajectory-detail.component.scss",
 })
 export class TrajectoryDetailComponent implements OnInit, OnDestroy {
   route = inject(ActivatedRoute);
+  router = inject(Router);
+  destroyRef = inject(DestroyRef);
 
   subscriptions$: Subscription[] = [];
 
-  trajectory?: Trajectory;
-  trackId?: string;
+  trajectory = signal<Trajectory | undefined>(undefined);
+  isDisabled = signal<boolean>(false);
+  isTaskDetail = signal<boolean>(false);
 
   /**
    * Инициализация компонента
    * Подписывается на параметры маршрута и данные траектории
    */
   ngOnInit(): void {
-    const trackIdSub = this.route.params.subscribe(params => {
-      this.trackId = params["trackId"];
-    });
+    this.route.data
+      .pipe(
+        map(data => data["data"]),
+        filter(trajectory => !!trajectory)
+      )
+      .subscribe({
+        next: trajectory => {
+          this.trajectory.set(trajectory[0]);
+        },
+      });
 
-    const trajectorySub$ = this.route.data.pipe(map(r => r["data"])).subscribe(trajectory => {
-      this.trajectory = trajectory;
-    });
-
-    trajectorySub$ && this.subscriptions$.push(trajectorySub$);
-    trackIdSub && this.subscriptions$.push(trackIdSub);
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.isTaskDetail.set(this.router.url.includes("task"));
+      });
   }
 
   /**
@@ -50,5 +65,16 @@ export class TrajectoryDetailComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.subscriptions$.forEach($ => $.unsubscribe());
+  }
+
+  /**
+   * Перенаправляет на страницу с информацией в завивисимости от listType
+   */
+  redirectDetailInfo(trackId?: number): void {
+    if (this.trajectory()) {
+      this.router.navigateByUrl(`/trackCar/${trackId}`);
+    } else {
+      this.router.navigateByUrl("/trackCar/all");
+    }
   }
 }

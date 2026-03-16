@@ -1,22 +1,18 @@
 <!-- @format -->
 
 <div class="profile">
-  <div class="profile__bar">
-    <app-bar
-      class="bar"
-      [backHave]="true"
-      backRoute="/profile"
-      [links]="[
-        { link: '/trackCar/all', linkText: 'Траектории', isRouterLinkActiveOptions: true },
-        { link: '/trackCar/my', linkText: 'Моя траектория', isRouterLinkActiveOptions: false }
-      ]"
-    ></app-bar>
+  <app-back namespace="курсы" path="/"></app-back>
+
+  <div class="profile__info">
+    <form class="page__search" [formGroup]="searchForm">
+      <app-search formControlName="search"></app-search>
+    </form>
+
+    <router-outlet></router-outlet>
+
+    <app-soon-card
+      title="аналитика"
+      description="уровень включённости студентов, статистика достижения целей в проектах"
+    ></app-soon-card>
   </div>
-
-  <!-- <div class="profile__overlay">
-    <img src="assets/images/profile/soon.svg" alt="soon" class="profile__overlay__image" />
-    <p class="profile__overlay__text">Скоро...</p>
-  </div> -->
-
-  <router-outlet></router-outlet>
 </div>

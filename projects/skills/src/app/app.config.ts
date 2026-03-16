@@ -2,6 +2,7 @@
 
 import { ApplicationConfig } from "@angular/core";
 import { provideRouter } from "@angular/router";
+import { provideAnimations } from "@angular/platform-browser/animations";
 import { routes } from "./app.routes";
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import {
@@ -22,5 +23,6 @@ export const appConfig: ApplicationConfig = {
     { provide: SKILLS_API_URL, useValue: environment.skillsApiUrl },
     { provide: PRODUCTION, useValue: environment.production },
     provideHttpClient(withInterceptorsFromDi()),
+    provideAnimations(),
   ],
 };

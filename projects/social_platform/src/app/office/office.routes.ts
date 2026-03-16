@@ -36,24 +36,21 @@ export const OFFICE_ROUTES: Routes = [
         redirectTo: "program",
       },
       {
+        path: "profile/edit",
+        component: ProfileEditComponent,
+      },
+      {
+        path: "profile/:id",
+        loadChildren: () =>
+          import("./profile/detail/profile-detail.routes").then(c => c.PROFILE_DETAIL_ROUTES),
+      },
+      {
         path: "feed",
         loadChildren: () => import("./feed/feed.routes").then(c => c.FEED_ROUTES),
       },
       {
-        path: "vacancies",
-        loadChildren: () => import("./vacancies/vacancies.routes").then(c => c.VACANCIES_ROUTES),
-      },
-      {
         path: "projects",
         loadChildren: () => import("./projects/projects.routes").then(c => c.PROJECTS_ROUTES),
-      },
-      {
-        path: "program",
-        loadChildren: () => import("./program/program.routes").then(c => c.PROGRAM_ROUTES),
-      },
-      {
-        path: "chats",
-        loadChildren: () => import("./chat/chat.routes").then(c => c.CHAT_ROUTES),
       },
       {
         path: "members",
@@ -63,13 +60,20 @@ export const OFFICE_ROUTES: Routes = [
         },
       },
       {
-        path: "profile/edit",
-        component: ProfileEditComponent,
+        path: "program",
+        loadChildren: () => import("./program/program.routes").then(c => c.PROGRAM_ROUTES),
       },
       {
-        path: "profile/:id",
-        loadChildren: () =>
-          import("./profile/detail/profile-detail.routes").then(c => c.PROFILE_DETAIL_ROUTES),
+        path: "courses",
+        loadChildren: () => import("./courses/courses.routes").then(c => c.COURSES_ROUTES),
+      },
+      {
+        path: "vacancies",
+        loadChildren: () => import("./vacancies/vacancies.routes").then(c => c.VACANCIES_ROUTES),
+      },
+      {
+        path: "chats",
+        loadChildren: () => import("./chat/chat.routes").then(c => c.CHAT_ROUTES),
       },
       {
         path: "**",

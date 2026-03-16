@@ -3,7 +3,7 @@
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
 import { SpecializationsService } from "@office/services/specializations.service";
-import { SpecializationsGroup } from "@office/models/specializations-group";
+import { SpecializationsGroup } from "@office/models/specializations-group.model";
 
 /**
  * РЕЗОЛВЕР ПЕРВОГО ЭТАПА ОНБОРДИНГА

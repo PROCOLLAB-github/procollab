@@ -9,7 +9,7 @@ import {
   signal,
 } from "@angular/core";
 import { IconComponent } from "@ui/components";
-import { Skill } from "@office/models/skill";
+import { Skill } from "@office/models/skill.model";
 
 /**
  * Компонент группы навыков с возможностью множественного выбора

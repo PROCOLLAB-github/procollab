@@ -29,14 +29,14 @@ import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { AsyncPipe, CommonModule } from "@angular/common";
-import { Specialization } from "@office/models/specialization";
+import { Specialization } from "@office/models/specialization.model";
 import { SpecializationsService } from "@office/services/specializations.service";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
 import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";
 import { SpecializationsGroupComponent } from "@office/shared/specializations-group/specializations-group.component";
 import { SkillsBasketComponent } from "@office/shared/skills-basket/skills-basket.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { Skill } from "@office/models/skill";
+import { Skill } from "@office/models/skill.model";
 import { SkillsService } from "@office/services/skills.service";
 import {
   educationUserLevel,
@@ -1109,6 +1109,8 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
           ? this.profileForm.value.phoneNumber.replace(/^([87])/, "+7")
           : this.profileForm.value.phoneNumber,
     };
+
+    console.log(newProfile);
 
     this.authService
       .saveProfile(newProfile)

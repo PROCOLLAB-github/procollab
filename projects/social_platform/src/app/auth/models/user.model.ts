@@ -2,7 +2,7 @@
 
 import { Project } from "@models/project.model";
 import { FileModel } from "@office/models/file.model";
-import { Skill } from "@office/models/skill";
+import { Skill } from "@office/models/skill.model";
 import { Program } from "@office/program/models/program.model";
 
 /**

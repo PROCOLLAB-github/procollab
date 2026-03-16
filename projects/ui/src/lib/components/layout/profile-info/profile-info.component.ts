@@ -5,6 +5,7 @@ import { Router, RouterLink } from "@angular/router";
 import { DayjsPipe } from "projects/core";
 import { AvatarComponent, IconComponent } from "@uilib";
 import type { User } from "../../../models/user.model";
+import { UserData } from "projects/skills/src/models/profile.model";
 
 /**
  * Компонент отображения информации о профиле пользователя
@@ -25,7 +26,7 @@ import type { User } from "../../../models/user.model";
   templateUrl: "./profile-info.component.html",
   styleUrl: "./profile-info.component.scss",
   standalone: true,
-  imports: [RouterLink, AvatarComponent, IconComponent, DayjsPipe],
+  imports: [RouterLink, AvatarComponent, IconComponent],
 })
 export class ProfileInfoComponent implements OnInit {
   constructor(readonly router: Router) {}
@@ -33,7 +34,7 @@ export class ProfileInfoComponent implements OnInit {
   ngOnInit(): void {}
 
   /** Данные пользователя для отображения */
-  @Input({ required: true }) user!: User;
+  @Input({ required: true }) user!: User | UserData;
 
   /** Событие выхода из системы */
   @Output() logout = new EventEmitter<void>();

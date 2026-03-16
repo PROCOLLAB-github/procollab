@@ -1,7 +1,7 @@
 /** @format */
 
 import type { UserData } from "./profile.model";
-import type { Skill } from "./skill.model";
+import type { Skill } from "../../../social_platform/src/app/office/models/skill.model";
 
 /**
  * Информация о навыке в контексте траектории

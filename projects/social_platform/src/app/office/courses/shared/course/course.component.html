@@ -1,0 +1,43 @@
+<!-- @format -->
+
+@if(course) {
+<div class="course">
+  <div class="course__cover">
+    <app-avatar [size]="68" [url]="course.avatarUrl"></app-avatar>
+    <img src="assets\icons\svg\rocket.svg" class="course__rocket" />
+    <app-button
+      customTypographyClass="text-body-10"
+      [color]="isMember() ? 'primary' : isSubs() ? 'red' : 'green'"
+      size="big"
+    >
+      {{
+        isMember()
+          ? "для участников программы"
+          : isSubs()
+          ? "доступно по подписке"
+          : "доступно всем пользователям"
+      }}
+    </app-button>
+
+    <img alt="course-cover" [src]="course.cardCoverUrl" class="course__image" />
+  </div>
+
+  <div class="course__info">
+    <p class="text-body-12">{{ course.title | truncate: 50 }}</p>
+    <p class="text-body-10 course__info--date">
+      {{ course.dateLabel }}
+    </p>
+  </div>
+
+  <div class="course__action">
+    @if (isLock()) {
+    <i appIcon icon="lock" appSquare="10"></i>
+    } @else {
+    <p class="text-body-10 course__action--started">
+      {{ course.progressStatus === "not_started" ? "начать" : "продолжить обучение" }}
+    </p>
+    <i appIcon icon="triangle" appSquare="10" class="course__action-icon"></i>
+    }
+  </div>
+</div>
+}

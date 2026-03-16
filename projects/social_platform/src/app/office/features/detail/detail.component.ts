@@ -9,7 +9,7 @@ import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { AuthService } from "@auth/services";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
-import { concatMap, EMPTY, filter, map, Observable, of, Subscription, tap } from "rxjs";
+import { concatMap, filter, map, Subscription, tap } from "rxjs";
 import { User } from "@auth/models/user.model";
 import { Collaborator } from "@office/models/collaborator.model";
 import { ProjectService } from "@office/services/project.service";
@@ -20,7 +20,6 @@ import { ProgramDataService } from "@office/program/services/program-data.servic
 import { ChatService } from "@office/services/chat.service";
 import { calculateProfileProgress } from "@utils/calculateProgress";
 import { ProfileDataService } from "@office/profile/detail/services/profile-date.service";
-import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
 import { SnackbarService } from "@ui/services/snackbar.service";
 import { ApproveSkillComponent } from "../approve-skill/approve-skill.component";
 import { ProgramService } from "@office/program/services/program.service";
@@ -30,7 +29,7 @@ import {
   projectNewAdditionalProgramVields,
 } from "@office/models/partner-program-fields.model";
 import { saveFile } from "@utils/helpers/export-file";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 import { ControlErrorPipe, ValidationService } from "@corelib";
 import { ErrorMessage } from "@error/models/error-message";
@@ -69,7 +68,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly location = inject(Location);
   private readonly profileDataService = inject(ProfileDataService);
-  public readonly skillsProfileService = inject(ProfileService);
   public readonly chatService = inject(ChatService);
   private readonly cdRef = inject(ChangeDetectorRef);
   private readonly programService = inject(ProgramService);
@@ -207,17 +205,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
     this.projectAdditionalService.setAssignProjectToProgramError(error);
   }
 
-  /**
-   * Переключатель для модалки выбора проекта
-   */
-  // toggleSubmitProjectModal(): void {
-  //   this.showSubmitProjectModal.set(!this.showSubmitProjectModal());
-
-  //   if (!this.showSubmitProjectModal()) {
-  //     this.selectedProjectId = null;
-  //   }
-  // }
-
   /** Показать подсказку */
   showTooltip(): void {
     this.isTooltipVisible = true;
@@ -239,25 +226,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
       this.memberProjects.find(project => project.id === this.selectedProjectId);
     }
   }
-
-  /**
-   * Добавление проекта на программу
-   */
-  // selectProject(): void {
-  //   if (this.selectedProjectId === null) {
-  //     return;
-  //   }
-
-  //   const selectedProject = this.memberProjects.find(
-  //     project => project.id === this.selectedProjectId
-  //   );
-
-  //   console.log(selectedProject);
-  // }
-
-  // get isProjectSelected(): boolean {
-  //   return this.selectedProjectId !== null;
-  // }
 
   addNewProject(): void {
     const newFieldsFormValues: projectNewAdditionalProgramVields[] = [];

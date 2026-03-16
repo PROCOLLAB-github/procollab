@@ -10,10 +10,10 @@
   margin: 0;
 }
 
-html,
-body {
-  overflow-y: hidden;
-}
+// html,
+// body {
+//   overflow-y: hidden;
+// }
 
 ul,
 li,
@@ -29,10 +29,6 @@ fieldset {
 img {
   display: block;
   max-width: 100%;
-}
-
-iframe {
-  border-radius: 15px;
 }
 
 a,
@@ -74,16 +70,21 @@ button {
 label.field-label {
   display: block;
   margin-bottom: 6px;
+  margin-left: 12px;
   color: var(--black);
 
-  @include body-14;
+  @include body-12;
 }
 
 .error {
   display: block;
   gap: 10px;
   margin-top: 6px;
-  color: var(--red);
+  color: var(--red) !important;
+
+  i {
+    color: var(--red) !important;
+  }
 
   p {
     &:not(:last-child) {

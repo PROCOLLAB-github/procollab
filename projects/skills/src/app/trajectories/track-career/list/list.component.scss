@@ -1,6 +1,9 @@
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+.trajectories {
+  margin-top: 20px;
+
+  &__list {
+    display: grid;
+    grid-template-columns: 4fr 4fr;
+    grid-gap: 20px;
+  }
 }
