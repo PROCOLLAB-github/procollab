@@ -31,6 +31,11 @@ import { GetProjectRatingsUseCase } from "../../use-cases/get-project-ratings.us
 import Fuse from "fuse.js";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import {
+  isSuccess,
+  loading,
+  success,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
 export class ProgramDetailListInfoService {
@@ -53,8 +58,6 @@ export class ProgramDetailListInfoService {
 
   private readonly listType = this.programDetailListUIInfoService.listType;
   private readonly searchParamName = this.programDetailListUIInfoService.searchParamName;
-  private readonly list = this.programDetailListUIInfoService.list;
-  private readonly searchedList = this.programDetailListUIInfoService.searchedList;
 
   private readonly listPage = this.programDetailListUIInfoService.listPage;
   private readonly itemsPerPage = this.programDetailListUIInfoService.itemsPerPage;
@@ -70,7 +73,7 @@ export class ProgramDetailListInfoService {
         takeUntil(this.destroy$)
       )
       .subscribe(data => {
-        this.programDetailListUIInfoService.applyInitializationProgramListData(data);
+        this.programDetailListUIInfoService.list$.set(success(data.results));
       });
 
     this.setupSearch();
@@ -135,7 +138,7 @@ export class ProgramDetailListInfoService {
         takeUntil(this.destroy$)
       )
       .subscribe(search => {
-        this.searchedList.set(this.applySearch(search));
+        this.programDetailListUIInfoService.searchedList.set(this.applySearch(search));
       });
   }
 
@@ -164,6 +167,9 @@ export class ProgramDetailListInfoService {
       .pipe(
         distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
         concatMap(q => {
+          const prev = this.programDetailListUIInfoService.list();
+          this.programDetailListUIInfoService.list$.set(loading(prev));
+
           const { filters, extraParams } = this.buildFilterQuery(q);
           const programId = this.route.parent?.snapshot.params["programId"];
 
@@ -234,7 +240,7 @@ export class ProgramDetailListInfoService {
       .subscribe(result => {
         if (!result) return;
 
-        this.programDetailListUIInfoService.applyInitializationProgramListData(result);
+        this.programDetailListUIInfoService.list$.set(success(result.results));
         this.listPage.set(0);
       });
   }
@@ -254,7 +260,7 @@ export class ProgramDetailListInfoService {
   private onScroll(target: HTMLElement, listRoot: ElementRef<HTMLUListElement>) {
     const total = this.listTotalCount();
 
-    if (total && this.list().length >= total) {
+    if (total && this.programDetailListUIInfoService.list().length >= total) {
       return EMPTY;
     }
 
@@ -277,6 +283,7 @@ export class ProgramDetailListInfoService {
     }
 
     if (shouldFetch) {
+      this.programDetailListUIInfoService.loadingMore.set(true);
       this.listPage.update(p => p + 1);
       return this.onFetch();
     }
@@ -312,7 +319,12 @@ export class ProgramDetailListInfoService {
                 return;
               }
 
-              this.programDetailListUIInfoService.applyFetchProgramData(result.value);
+              this.programDetailListUIInfoService.list$.update(state =>
+                isSuccess(state)
+                  ? success([...state.data, ...result.value.results])
+                  : success(result.value.results)
+              );
+              this.programDetailListUIInfoService.loadingMore.set(false);
             }),
             catchError(err => {
               this.logger.error("Error fetching ratings:", err);
@@ -331,7 +343,12 @@ export class ProgramDetailListInfoService {
               return;
             }
 
-            this.programDetailListUIInfoService.applyFetchProgramData(result.value);
+            this.programDetailListUIInfoService.list$.update(state =>
+              isSuccess(state)
+                ? success([...state.data, ...result.value.results])
+                : success(result.value.results)
+            );
+            this.programDetailListUIInfoService.loadingMore.set(false);
           }),
           catchError(err => {
             this.logger.error("Error fetching ratings:", err);
@@ -356,7 +373,12 @@ export class ProgramDetailListInfoService {
               return;
             }
 
-            this.programDetailListUIInfoService.applyFetchProgramData(result.value);
+            this.programDetailListUIInfoService.list$.update(state =>
+              isSuccess(state)
+                ? success([...state.data, ...result.value.results])
+                : success(result.value.results)
+            );
+            this.programDetailListUIInfoService.loadingMore.set(false);
           }),
           catchError(err => {
             this.logger.error("Error fetching projects:", err);
@@ -376,7 +398,12 @@ export class ProgramDetailListInfoService {
               return;
             }
 
-            this.programDetailListUIInfoService.applyFetchProgramData(result.value);
+            this.programDetailListUIInfoService.list$.update(state =>
+              isSuccess(state)
+                ? success([...state.data, ...result.value.results])
+                : success(result.value.results)
+            );
+            this.programDetailListUIInfoService.loadingMore.set(false);
           }),
           catchError(err => {
             this.logger.error("Error fetching members:", err);
@@ -423,14 +450,14 @@ export class ProgramDetailListInfoService {
   }
 
   private applySearch(search: string) {
-    if (!search) return this.list();
+    if (!search) return this.programDetailListUIInfoService.list();
 
     const searchKeys =
       this.listType() === "projects" || this.listType() === "rating"
         ? ["name"]
         : ["firstName", "lastName"];
 
-    const fuse = new Fuse(this.list(), {
+    const fuse = new Fuse(this.programDetailListUIInfoService.list(), {
       keys: searchKeys,
     });
     return fuse.search(search).map(r => r.item);

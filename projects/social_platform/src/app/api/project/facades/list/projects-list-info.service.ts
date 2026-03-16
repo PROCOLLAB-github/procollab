@@ -1,6 +1,6 @@
 /** @format */
 
-import { ElementRef, inject, Injectable, signal } from "@angular/core";
+import { computed, ElementRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Params } from "@angular/router";
 import {
   concatMap,
@@ -24,6 +24,15 @@ import { Project } from "projects/social_platform/src/app/domain/project/project
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { GetAllProjectsUseCase } from "../../use-case/get-all-projects.use-case";
 import { GetMyProjectsUseCase } from "../../use-case/get-my-projects.use-case";
+import {
+  AsyncState,
+  initial,
+  isFailure,
+  isLoading,
+  isSuccess,
+  loading,
+  success,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
 export class ProjectsListInfoService {
@@ -46,7 +55,14 @@ export class ProjectsListInfoService {
   private readonly currentSearchQuery = signal<string | undefined>(undefined);
   private previousReqQuery = signal<Record<string, string> | null>(null);
 
-  readonly projects = signal<Project[]>([]);
+  readonly projects$ = signal<AsyncState<Project[]>>(initial());
+
+  readonly projects = computed(() => {
+    const state = this.projects$();
+    if (isSuccess(state)) return state.data;
+    if (isLoading(state)) return state.previous ?? [];
+    return [];
+  });
 
   private readonly isAll = this.projectsInfoService.isAll;
   private readonly isSubs = this.projectsInfoService.isSubs;
@@ -79,6 +95,9 @@ export class ProjectsListInfoService {
         .pipe(
           distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
           concatMap(q => {
+            const prev = this.projects();
+            this.projects$.set(loading(prev));
+
             const reqQuery = this.buildFilterQuery(q);
 
             if (
@@ -96,7 +115,7 @@ export class ProjectsListInfoService {
           takeUntil(this.destroy$)
         )
         .subscribe(projects => {
-          this.projects.set(projects.results);
+          this.projects$.set(success(projects.results));
           this.projectsCount.set(projects.count);
         });
     }
@@ -108,13 +127,13 @@ export class ProjectsListInfoService {
       )
       .subscribe(projects => {
         if (this.isInvites()) {
-          this.projects.set(inviteToProjectMapper(projects ?? []));
+          this.projects$.set(success(inviteToProjectMapper(projects ?? [])));
           this.projectsCount.set(projects?.length ?? 0);
           return;
         }
 
         this.projectsCount.set(projects.count);
-        this.projects.set(projects.results ?? []);
+        this.projects$.set(success(projects.results ?? []));
       });
   }
 
@@ -181,7 +200,9 @@ export class ProjectsListInfoService {
       ).pipe(
         tap(chunk => {
           this.currentPage.update(p => p + 1);
-          this.projects.update(projects => [...projects, ...chunk]);
+          this.projects$.update(state =>
+            isSuccess(state) ? success([...state.data, ...chunk]) : success(chunk)
+          );
         })
       );
     }
@@ -248,7 +269,9 @@ export class ProjectsListInfoService {
   }
 
   sliceInvitesArray(inviteId: number): void {
-    this.projects.update(projects => projects.filter(p => p.inviteId !== inviteId));
+    this.projects$.update(state =>
+      isSuccess(state) ? success(state.data.filter(p => p.inviteId !== inviteId)) : state
+    );
     this.projectsCount.update(() => Math.max(0, this.projectsCount() - 1));
   }
 }

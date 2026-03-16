@@ -4,6 +4,11 @@ import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
+import {
+  AsyncState,
+  failure,
+  initial,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable({ providedIn: "root" })
 export class ProjectTeamUIService {
@@ -16,7 +21,7 @@ export class ProjectTeamUIService {
 
   // Состояние отправки формы
   readonly inviteSubmitInitiated = signal(false);
-  readonly inviteFormIsSubmitting = signal(false);
+  readonly inviteFormIsSubmitting = signal<AsyncState<void>>(initial());
 
   readonly isHintTeamModal = signal<boolean>(false);
 
@@ -101,7 +106,7 @@ export class ProjectTeamUIService {
 
   applyErrorSubmitInvite(err: any): void {
     this.inviteNotExistingError.set(err);
-    this.inviteFormIsSubmitting.set(false);
+    this.inviteFormIsSubmitting.set(failure("invite_error"));
   }
 
   applyEditInvitation(params: { inviteId: number; role: string; specialization: string }): void {
@@ -151,6 +156,6 @@ export class ProjectTeamUIService {
       ctrl?.updateValueAndValidity();
     });
     this.inviteNotExistingError.set(null);
-    this.inviteFormIsSubmitting.set(false);
+    this.inviteFormIsSubmitting.set(initial());
   }
 }

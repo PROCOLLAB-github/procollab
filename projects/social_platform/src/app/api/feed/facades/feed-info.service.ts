@@ -20,6 +20,7 @@ import { FeedUIInfoService } from "./ui/feed-ui-info.service";
 import { FetchFeedUseCase } from "../use-cases/fetch-feed.use-case";
 import { ReadFeedNewsUseCase } from "../use-cases/read-feed-news.use-case";
 import { ToggleFeedLikeUseCase } from "../use-cases/toggle-feed-like.use-case";
+import { isSuccess, loading, success } from "../../../domain/shared/async-state";
 
 const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news"];
 const FILTER_SPLIT_SYMBOL = "|";
@@ -67,6 +68,9 @@ export class FeedInfoService {
           this.feedUIInfoService.totalItemsCount.set(0);
           this.feedUIInfoService.feedPage.set(0);
 
+          const prev = this.feedUIInfoService.feedItems();
+          this.feedUIInfoService.feedItems$.set(loading(prev));
+
           return this.onFetch(
             0,
             this.feedUIInfoService.perFetchTake(),
@@ -113,11 +117,12 @@ export class FeedInfoService {
 
           if (uniqueNewItems.length > 0) {
             this.feedUIInfoService.feedPage.update(page => page + uniqueNewItems.length);
-            this.feedItems.update(items => {
-              const next = [...items, ...uniqueNewItems];
-              queueMicrotask(() => this.observeFeedItems());
-              return next;
-            });
+            this.feedUIInfoService.feedItems$.update(state =>
+              isSuccess(state)
+                ? success([...state.data, ...uniqueNewItems])
+                : success(uniqueNewItems)
+            );
+            queueMicrotask(() => this.observeFeedItems());
           }
         })
       );

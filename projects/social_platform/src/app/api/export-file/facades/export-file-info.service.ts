@@ -6,6 +6,7 @@ import { saveFile } from "@utils/helpers/export-file";
 import { ProgramDetailMainUIInfoService } from "../../program/facades/detail/ui/program-detail-main-ui-info.service";
 import { Subject, takeUntil } from "rxjs";
 import { LoggerService } from "@corelib";
+import { AsyncState, failure, initial, loading, success } from "../../../domain/shared/async-state";
 
 @Injectable()
 export class ExportFileInfoService {
@@ -17,10 +18,7 @@ export class ExportFileInfoService {
 
   private readonly program = this.programDetailMainUIInfoService.program;
 
-  readonly loadingExportProjects = signal<boolean>(false);
-  readonly loadingExportSubmittedProjects = signal<boolean>(false);
-  readonly loadingExportRates = signal<boolean>(false);
-  readonly loadingExportCalculations = signal<boolean>(false);
+  readonly loadingExports$ = signal<AsyncState<void>>(initial());
 
   destroy(): void {
     this.destroy$.next();
@@ -28,7 +26,7 @@ export class ExportFileInfoService {
   }
 
   downloadProjects(): void {
-    this.loadingExportProjects.set(true);
+    this.loadingExports$.set(loading());
 
     this.exportFileService
       .exportAllProjects(this.program()!.id)
@@ -36,17 +34,17 @@ export class ExportFileInfoService {
       .subscribe({
         next: blob => {
           saveFile(blob, "all", this.program()?.name);
-          this.loadingExportProjects.set(false);
+          this.loadingExports$.set(success(undefined));
         },
         error: err => {
           this.loggerService.error(err);
-          this.loadingExportProjects.set(false);
+          this.loadingExports$.set(failure(`export_file_${err}`));
         },
       });
   }
 
   downloadSubmittedProjects(): void {
-    this.loadingExportSubmittedProjects.set(true);
+    this.loadingExports$.set(loading());
 
     this.exportFileService
       .exportSubmittedProjects(this.program()!.id)
@@ -54,16 +52,16 @@ export class ExportFileInfoService {
       .subscribe({
         next: blob => {
           saveFile(blob, "submitted", this.program()?.name);
-          this.loadingExportSubmittedProjects.set(false);
+          this.loadingExports$.set(success(undefined));
         },
-        error: () => {
-          this.loadingExportSubmittedProjects.set(false);
+        error: err => {
+          this.loadingExports$.set(failure(`export_file_${err}`));
         },
       });
   }
 
   downloadRates(): void {
-    this.loadingExportRates.set(true);
+    this.loadingExports$.set(loading());
 
     this.exportFileService
       .exportProgramRates(this.program()!.id)
@@ -71,10 +69,10 @@ export class ExportFileInfoService {
       .subscribe({
         next: blob => {
           saveFile(blob, "rates", this.program()?.name);
-          this.loadingExportRates.set(false);
+          this.loadingExports$.set(success(undefined));
         },
-        error: () => {
-          this.loadingExportRates.set(false);
+        error: err => {
+          this.loadingExports$.set(failure(`export_file_${err}`));
         },
       });
   }

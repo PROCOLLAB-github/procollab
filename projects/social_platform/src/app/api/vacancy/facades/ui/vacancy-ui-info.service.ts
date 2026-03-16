@@ -1,7 +1,13 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
+import {
+  AsyncState,
+  initial,
+  isLoading,
+  isSuccess,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
 import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
 
@@ -29,7 +35,16 @@ export class VacancyUIInfoService {
 
   // Переменные для списка вакансий и пагинации
 
-  readonly vacancyList = signal<Vacancy[]>([]);
+  readonly vacancies$ = signal<AsyncState<Vacancy[]>>(initial());
+  readonly loadingMore = signal(false);
+
+  readonly vacancyList = computed(() => {
+    const state = this.vacancies$();
+    if (isSuccess(state)) return state.data;
+    if (isLoading(state)) return state.previous ?? [];
+    return [];
+  });
+
   readonly responsesList = signal<VacancyResponse[]>([]);
 
   readonly searchForm = this.fb.group({
@@ -41,18 +56,6 @@ export class VacancyUIInfoService {
     this.vacancyPage.set(1);
   }
 
-  applyVacancyListData(result: Vacancy[] | VacancyResponse[]): void {
-    if (!Array.isArray(result)) {
-      return;
-    }
-
-    if (this.listType() === "all") {
-      this.vacancyList.set(result as Vacancy[]);
-    } else if (this.listType() === "my") {
-      this.responsesList.set(result as VacancyResponse[]);
-    }
-  }
-
   applySetTotalItems(vacancy: Vacancy[] | VacancyResponse[]): void {
     if (!Array.isArray(vacancy)) {
       this.totalItemsCount.set(0);
@@ -60,11 +63,6 @@ export class VacancyUIInfoService {
     }
 
     this.totalItemsCount.set(vacancy.length);
-  }
-
-  applyUpdateListOnScroll(result: Vacancy[]): void {
-    this.vacancyPage.update(page => page + 1);
-    this.vacancyList.update(items => [...items, ...result]);
   }
 
   applySearhValueChanged(searchValue: string) {

@@ -7,6 +7,7 @@ import { ProjectTeamUIService } from "./ui/project-team-ui.service";
 import { SendForUserUseCase } from "../../../invite/use-cases/send-for-user.use-case";
 import { UpdateInviteUseCase } from "../../../invite/use-cases/update-invite.use-case";
 import { RevokeInviteUseCase } from "../../../invite/use-cases/revoke-invite.use-case";
+import { loading } from "projects/social_platform/src/app/domain/shared/async-state";
 
 /**
  * Сервис для управления приглашениями участников команды проекта.
@@ -44,7 +45,7 @@ export class ProjectTeamService {
       return;
     }
 
-    this.inviteFormIsSubmitting.set(true);
+    this.inviteFormIsSubmitting.set(loading());
 
     // Извлечение profileId из URL ссылки
     const linkUrl = new URL(this.inviteForm.get("link")?.value ?? "");

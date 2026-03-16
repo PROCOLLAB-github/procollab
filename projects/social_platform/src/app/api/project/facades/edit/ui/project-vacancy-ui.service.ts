@@ -8,6 +8,7 @@ import { workFormatList } from "projects/core/src/consts/lists/work-format-list.
 import { workScheludeList } from "projects/core/src/consts/lists/work-schelude-list.const";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
+import { AsyncState, initial } from "projects/social_platform/src/app/domain/shared/async-state";
 import { ProjectFormService } from "../project-form.service";
 import { ValidationService } from "@corelib";
 import { stripNullish } from "@utils/helpers/stripNull";
@@ -39,7 +40,7 @@ export class ProjectVacancyUIService {
 
   // Состояние отправки формы
   readonly vacancySubmitInitiated = signal(false);
-  readonly vacancyIsSubmitting = signal(false);
+  readonly vacancyIsSubmitting = signal<AsyncState<void>>(initial());
 
   readonly vacancies = signal<Vacancy[]>([]);
   readonly onEditClicked = this.projectsEditUIInfoService.onEditClicked;
@@ -207,6 +208,6 @@ export class ProjectVacancyUIService {
     this.selectedVacanciesSpecializationId.set(undefined);
     this.projectFormService.editIndex.set(null);
     this.onEditClicked.set(false);
-    this.vacancyIsSubmitting.set(false);
+    this.vacancyIsSubmitting.set(initial());
   }
 }

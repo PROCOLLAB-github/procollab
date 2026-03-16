@@ -1,9 +1,16 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import {
+  AsyncState,
+  initial,
+  isLoading,
+  isSuccess,
+  success,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
 export class MembersUIInfoService {
@@ -13,7 +20,14 @@ export class MembersUIInfoService {
   readonly membersTake = signal<number>(20); // Количество участников на странице
   private readonly membersPage = signal<number>(1); // Текущая страница для пагинации
 
-  readonly members = signal<User[]>([]); // Массив участников для отображения
+  readonly members$ = signal<AsyncState<User[]>>(initial()); // Массив участников для отображения
+
+  readonly members = computed(() => {
+    const state = this.members$();
+    if (isSuccess(state)) return state.data;
+    if (isLoading(state)) return state.previous ?? [];
+    return [];
+  });
 
   // Форма поиска с обязательным полем для ввода имени
   readonly searchForm = this.fb.group({
@@ -30,18 +44,6 @@ export class MembersUIInfoService {
 
   applyMembersPagination(members: ApiPagination<User>) {
     this.membersTotalCount.set(members.count);
-    this.members.set(members.results);
-  }
-
-  applyQueryParams(members: ApiPagination<User>): void {
-    this.members.set(members.results || []);
-    this.membersTotalCount.set(members.count);
-    this.membersPage.set(1);
-  }
-
-  applyMembersChunk(membersChunk: ApiPagination<User>): void {
-    this.membersPage.update(page => page + 1);
-    this.members.update(list => [...list, ...(membersChunk.results || [])]);
-    this.membersTotalCount.set(membersChunk.count);
+    this.members$.set(success(members.results));
   }
 }

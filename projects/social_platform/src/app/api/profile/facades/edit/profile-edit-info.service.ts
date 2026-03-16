@@ -11,6 +11,13 @@ import { EditStep, ProjectStepService } from "../../../project/project-step.serv
 import { NavService } from "@ui/services/nav/nav.service";
 import { ActivatedRoute } from "@angular/router";
 import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import {
+  AsyncState,
+  failure,
+  initial,
+  loading,
+  success,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
 export class ProfileEditInfoService {
@@ -27,7 +34,7 @@ export class ProfileEditInfoService {
 
   readonly editIndex = signal<number | null>(null);
 
-  readonly profileFormSubmitting = signal<boolean>(false);
+  readonly profileFormSubmitting$ = signal<AsyncState<void>>(initial());
 
   readonly openGroupIndex = signal<number | null>(null);
 
@@ -113,12 +120,12 @@ export class ProfileEditInfoService {
       name => this.profileForm.get(name)?.valid
     );
 
-    if (!mainFieldsValid || this.profileFormSubmitting()) {
+    if (!mainFieldsValid || this.profileFormSubmitting$().status === "loading") {
       this.isModalErrorSkillsChoose.set(true);
       return;
     }
 
-    this.profileFormSubmitting.set(true);
+    this.profileFormSubmitting$.set(loading());
 
     const achievements = this.achievements.value.map((achievement: Achievement) => ({
       ...(achievement.id && { id: achievement.id }),
@@ -158,11 +165,11 @@ export class ProfileEditInfoService {
       )
       .subscribe({
         next: () => {
-          this.profileFormSubmitting.set(false);
+          this.profileFormSubmitting$.set(success(undefined));
           this.navigationService.profileRedirect(this.profileId());
         },
         error: error => {
-          this.profileFormSubmitting.set(false);
+          this.profileFormSubmitting$.set(failure("profile_edit_error"));
           this.isModalErrorSkillsChoose.set(true);
           if (error.error.phone_number) {
             this.isModalErrorSkillChooseText.set(error.error.phone_number[0]);

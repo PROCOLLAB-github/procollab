@@ -8,6 +8,7 @@ import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { OnboardingStageThreeUIInfoService } from "./ui/onboarding-stage-three-ui-info.service";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { loading } from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
 export class OnboardingStageThreeInfoService {
@@ -42,7 +43,7 @@ export class OnboardingStageThreeInfoService {
       return;
     }
 
-    this.stageSubmitting.set(true);
+    this.stageSubmitting.set(loading());
 
     this.authRepository
       .updateProfile({ userType: this.userRole() })

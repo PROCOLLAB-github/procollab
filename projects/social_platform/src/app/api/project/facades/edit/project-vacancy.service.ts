@@ -10,6 +10,11 @@ import { ProjectFormService } from "./project-form.service";
 import { UpdateVacancyUseCase } from "../../../vacancy/use-cases/update-vacancy.use-case";
 import { PostVacancyUseCase } from "../../../vacancy/use-cases/post-vacancy.use-case";
 import { DeleteVacancyUseCase } from "../../../vacancy/use-cases/delete-vacancy.use-case";
+import {
+  failure,
+  initial,
+  loading,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 
 /**
  * Сервис для управления вакансиями проекта.
@@ -79,7 +84,7 @@ export class ProjectVacancyService {
     }
 
     // Подготовка payload для API
-    this.vacancyIsSubmitting.set(true);
+    this.vacancyIsSubmitting.set(loading());
 
     const form = this.vacancyForm.value;
 
@@ -98,7 +103,7 @@ export class ProjectVacancyService {
     if (editIdx !== null) {
       const editedVacancy = this.projectVacancyUIService.vacancies()[editIdx];
       if (!editedVacancy?.id) {
-        this.vacancyIsSubmitting.set(false);
+        this.vacancyIsSubmitting.set(initial());
         return;
       }
 
@@ -108,7 +113,7 @@ export class ProjectVacancyService {
         .subscribe({
           next: result => {
             if (!result.ok) {
-              this.vacancyIsSubmitting.set(false);
+              this.vacancyIsSubmitting.set(failure("vacancy_error"));
               return;
             }
 
@@ -125,7 +130,7 @@ export class ProjectVacancyService {
       .subscribe({
         next: result => {
           if (!result.ok) {
-            this.vacancyIsSubmitting.set(false);
+            this.vacancyIsSubmitting.set(failure("vacancy_error"));
             return;
           }
 

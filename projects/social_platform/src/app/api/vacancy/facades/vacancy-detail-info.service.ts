@@ -7,6 +7,7 @@ import { ValidationService } from "@corelib";
 import { VacancyDetailUIInfoService } from "./ui/vacancy-detail-ui-info.service";
 import { ExpandService } from "../../expand/expand.service";
 import { SendVacancyResponseUseCase } from "../use-cases/send-vacancy-response.use-case";
+import { loading } from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
 export class VacancyDetailInfoService {
@@ -21,7 +22,7 @@ export class VacancyDetailInfoService {
 
   private readonly vacancy = this.vacancyDetailUIInfoService.vacancy;
   private readonly sendForm = this.vacancyDetailUIInfoService.sendForm;
-  private readonly sendFormIsSubmitting = this.vacancyDetailUIInfoService.sendFormIsSubmitting;
+  private readonly sendFormIsSubmitting$ = this.vacancyDetailUIInfoService.sendFormIsSubmitting$;
 
   initializeDetailInfo(): void {
     this.route.data
@@ -65,7 +66,7 @@ export class VacancyDetailInfoService {
       return;
     }
 
-    this.sendFormIsSubmitting.set(true);
+    this.sendFormIsSubmitting$.set(loading());
 
     this.sendVacancyResponseUseCase
       .execute(Number(this.route.snapshot.paramMap.get("vacancyId")), this.sendForm.value as any)

@@ -7,6 +7,12 @@ import { ApiPagination } from "projects/social_platform/src/app/domain/other/api
 import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
 import { ProjectRate } from "projects/social_platform/src/app/domain/project/project-rate";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
+import {
+  AsyncState,
+  initial,
+  isLoading,
+  isSuccess,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
 export class ProgramDetailListUIInfoService {
@@ -19,8 +25,16 @@ export class ProgramDetailListUIInfoService {
   readonly listTake = signal<number>(20);
   readonly perPage = signal<number>(21);
 
-  readonly list = signal<any[]>([]);
+  readonly list$ = signal<AsyncState<any[]>>(initial());
+  readonly loadingMore = signal(false);
   readonly searchedList = signal<any[]>([]);
+
+  readonly list = computed(() => {
+    const state = this.list$();
+    if (isSuccess(state)) return state.data;
+    if (isLoading(state)) return state.previous ?? [];
+    return [];
+  });
 
   readonly profileSubscriptions = signal<Project[]>([]);
   readonly profileProjSubsIds = computed(() => this.profileSubscriptions().map(sub => sub.id));
@@ -66,31 +80,8 @@ export class ProgramDetailListUIInfoService {
     this.availableFilters.set(filters);
   }
 
-  applyInitializationProgramListData(data: any): void {
-    this.list.set(data.results);
-    this.searchedList.set(data.results);
-    this.listTotalCount.set(data.count);
-  }
-
   applySetupProfile(subs: ApiPagination<Project>): void {
     this.profileSubscriptions.set(subs.results);
-  }
-
-  applyFetchProgramData(
-    data: ApiPagination<Project> | ApiPagination<User> | ApiPagination<ProjectRate>
-  ): void {
-    this.listTotalCount.set(data.count);
-
-    if (this.listPage() === 0) {
-      this.list.set(data.results);
-    } else {
-      const newResults = data.results.filter(
-        newItem => !this.list().some(existingItem => existingItem.id === newItem.id)
-      );
-      this.list.update(() => [...this.list(), ...newResults]);
-    }
-
-    this.searchedList.set(this.list());
   }
 
   applyHintModalOpen(): void {

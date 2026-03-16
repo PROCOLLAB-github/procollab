@@ -9,6 +9,11 @@ import { OnboardingStageZeroUIInfoService } from "./ui/onboarding-stage-zero-ui-
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import {
+  failure,
+  initial,
+  loading,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
 export class OnboardingStageZeroInfoService {
@@ -66,14 +71,14 @@ export class OnboardingStageZeroInfoService {
       city: this.stageForm.get("city")?.value,
     };
 
-    this.skipSubmitting.set(true);
+    this.skipSubmitting.set(loading());
     this.authRepository
       .updateProfile(onboardingSkipInfo as Partial<User>)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => this.completeRegistration(3),
         error: error => {
-          this.skipSubmitting.set(false);
+          this.skipSubmitting.set(failure("skip_error"));
           this.onboardingStageZeroUIInfoService.applySkipRegistrationModalError(error);
         },
       });
@@ -94,7 +99,7 @@ export class OnboardingStageZeroInfoService {
       achievements: this.achievements.value,
     };
 
-    this.stageSubmitting.set(true);
+    this.stageSubmitting.set(loading());
     this.authRepository
       .updateProfile(newStageForm as Partial<User>)
       .pipe(
@@ -104,18 +109,18 @@ export class OnboardingStageZeroInfoService {
       .subscribe({
         next: () => this.completeRegistration(1),
         error: error => {
-          this.stageSubmitting.set(false);
+          this.stageSubmitting.set(failure("submit_error"));
           this.onboardingStageZeroUIInfoService.applySubmitModalError(error);
         },
       });
   }
 
   private completeRegistration(stage: number): void {
-    this.skipSubmitting.set(true);
+    this.skipSubmitting.set(loading());
     this.onboardingService.setFormValue(this.stageForm.value as Partial<User>);
     this.router.navigateByUrl(
       stage === 1 ? "/office/onboarding/stage-1" : "/office/onboarding/stage-3"
     );
-    this.skipSubmitting.set(false);
+    this.skipSubmitting.set(initial());
   }
 }

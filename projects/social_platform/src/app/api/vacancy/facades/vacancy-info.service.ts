@@ -21,6 +21,7 @@ import { VacancyResponse } from "../../../domain/vacancy/vacancy-response.model"
 import { Vacancy } from "../../../domain/vacancy/vacancy.model";
 import { VacancyUIInfoService } from "./ui/vacancy-ui-info.service";
 import { GetVacanciesUseCase } from "../use-cases/get-vacancies.use-case";
+import { failure, isSuccess, loading, success } from "../../../domain/shared/async-state";
 
 @Injectable()
 export class VacancyInfoService {
@@ -32,8 +33,6 @@ export class VacancyInfoService {
   private readonly destroy$ = new Subject<void>();
 
   readonly listType = this.vacancyUIInfoService.listType;
-  readonly vacancyList = this.vacancyUIInfoService.vacancyList;
-  readonly responsesList = this.vacancyUIInfoService.responsesList;
 
   // Переменные для работы с фильтрами
 
@@ -126,14 +125,10 @@ export class VacancyInfoService {
         ? this.route.data.pipe(map(r => r["data"]))
         : this.route.data.pipe(map(r => r["data"]));
 
-    routeData$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((vacancy: Vacancy[] | VacancyResponse[]) => {
-        if (vacancy) {
-          this.vacancyUIInfoService.applyVacancyListData(vacancy);
-          this.vacancyUIInfoService.applySetTotalItems(vacancy);
-        }
-      });
+    routeData$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: result => this.vacancyUIInfoService.vacancies$.set(success(result)),
+      error: () => this.vacancyUIInfoService.vacancies$.set(failure("fetch_error")),
+    });
   }
 
   // QueryParams Section
@@ -162,11 +157,15 @@ export class VacancyInfoService {
             salary
           );
         }),
-        switchMap(() => this.onFetch(0, 20))
+        switchMap(() => {
+          const prev = this.vacancyUIInfoService.vacancyList();
+          this.vacancyUIInfoService.vacancies$.set(loading(prev));
+          return this.onFetch(0, 20);
+        })
       )
-      .subscribe((result: Vacancy[]) => {
-        this.vacancyUIInfoService.applyVacancyListData(result);
-        this.vacancyUIInfoService.applyQueryParams(result);
+      .subscribe({
+        next: result => this.vacancyUIInfoService.vacancies$.set(success(result)),
+        error: () => this.vacancyUIInfoService.vacancies$.set(failure("fetch_error")),
       });
   }
 
@@ -176,7 +175,7 @@ export class VacancyInfoService {
   onScroll(target: HTMLElement): Observable<Vacancy[]> {
     if (
       this.vacancyUIInfoService.totalItemsCount() &&
-      this.vacancyList().length >= this.vacancyUIInfoService.totalItemsCount()
+      this.vacancyUIInfoService.vacancyList().length >= this.vacancyUIInfoService.totalItemsCount()
     )
       return EMPTY;
 
@@ -185,12 +184,16 @@ export class VacancyInfoService {
     const diff = target.scrollTop - target.scrollHeight + target.clientHeight;
 
     if (diff > 0) {
+      this.vacancyUIInfoService.loadingMore.set(true);
       return this.onFetch(
         this.vacancyUIInfoService.vacancyPage() * this.vacancyUIInfoService.perFetchTake(),
         this.vacancyUIInfoService.perFetchTake()
       ).pipe(
         tap((result: Vacancy[]) => {
-          this.vacancyUIInfoService.applyUpdateListOnScroll(result);
+          this.vacancyUIInfoService.vacancies$.update(state =>
+            isSuccess(state) ? success([...state.data, ...result]) : success(result)
+          );
+          this.vacancyUIInfoService.loadingMore.set(false);
         })
       );
     }

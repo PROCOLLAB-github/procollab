@@ -10,6 +10,11 @@ import { SkillsInfoService } from "../../../skills/facades/skills-info.service";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { OnboardingStageTwoUIInfoService } from "./ui/onboarding-stage-two-ui-info.service";
 import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import {
+  failure,
+  initial,
+  loading,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
 export class OnboardingStageTwoInfoService {
@@ -62,7 +67,7 @@ export class OnboardingStageTwoInfoService {
       return;
     }
 
-    this.stageSubmitting.set(true);
+    this.stageSubmitting.set(loading());
 
     const { skills } = this.stageForm.getRawValue();
 
@@ -75,7 +80,7 @@ export class OnboardingStageTwoInfoService {
       .subscribe({
         next: () => this.completeRegistration(3),
         error: err => {
-          this.stageSubmitting.set(false);
+          this.stageSubmitting.set(failure("submit_error"));
           this.onboardingStageTwoUIInfoService.applySubmitErrorModal(err);
         },
       });
@@ -106,9 +111,9 @@ export class OnboardingStageTwoInfoService {
   }
 
   private completeRegistration(stage: number): void {
-    this.skipSubmitting.set(true);
+    this.skipSubmitting.set(loading());
     this.onboardingService.setFormValue(this.stageForm.value);
     this.router.navigateByUrl(`/office/onboarding/stage-${stage}`);
-    this.skipSubmitting.set(false);
+    this.skipSubmitting.set(initial());
   }
 }

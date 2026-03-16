@@ -11,6 +11,11 @@ import { OnboardingStageOneUIInfoService } from "./ui/onboarding-stage-one-ui-in
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { SpecializationsGroup } from "projects/social_platform/src/app/domain/specializations/specializations-group";
 import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import {
+  failure,
+  initial,
+  loading,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
 export class OnboardingStageOneInfoService {
@@ -70,7 +75,7 @@ export class OnboardingStageOneInfoService {
       return;
     }
 
-    this.stageSubmitting.set(true);
+    this.stageSubmitting.set(loading());
 
     this.authRepository
       .updateProfile(this.stageForm.value)
@@ -80,7 +85,7 @@ export class OnboardingStageOneInfoService {
       )
       .subscribe({
         next: () => this.completeRegistration(2),
-        error: () => this.stageSubmitting.set(false),
+        error: () => this.stageSubmitting.set(failure("submit_error")),
       });
   }
 
@@ -93,11 +98,11 @@ export class OnboardingStageOneInfoService {
   }
 
   private completeRegistration(stage: number): void {
-    this.skipSubmitting.set(true);
+    this.skipSubmitting.set(loading());
     this.onboardingService.setFormValue(this.stageForm.value);
     this.router.navigateByUrl(
       stage === 2 ? `/office/onboarding/stage-${stage}` : "/office/onboarding/stage-3"
     );
-    this.skipSubmitting.set(false);
+    this.skipSubmitting.set(initial());
   }
 }

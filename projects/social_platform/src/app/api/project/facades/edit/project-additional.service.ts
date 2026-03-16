@@ -10,6 +10,13 @@ import {
 import { Observable } from "rxjs";
 import { SendProjectAdditionalFieldsUseCase } from "../../use-case/send-project-additional-fields.use-case";
 import { SubmitCompetitiveProjectUseCase } from "../../use-case/submit-competitive-project.use-case";
+import {
+  AsyncState,
+  failure,
+  initial,
+  loading,
+  success,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 
 /**
  * Сервис для управления дополнительными полями проекта в партнерской программе.
@@ -26,8 +33,8 @@ export class ProjectAdditionalService {
   private readonly sendProjectAdditionalFieldsUseCase = inject(SendProjectAdditionalFieldsUseCase);
   private readonly submitCompetitiveProjectUseCase = inject(SubmitCompetitiveProjectUseCase);
 
-  readonly isSendingDecision = signal<boolean>(false);
-  readonly isAssignProjectToProgramError = signal<boolean>(false);
+  readonly isSend$ = signal<AsyncState<void>>(initial());
+
   readonly errorAssignProjectToProgramModalMessage = signal<{ non_field_errors: string[] } | null>(
     null
   );
@@ -135,7 +142,7 @@ export class ProjectAdditionalService {
    * @returns Observable<any> результат запроса
    */
   public sendAdditionalFieldsValues(projectId: number): Observable<any> {
-    this.isSendingDecision.set(true);
+    this.isSend$.set(loading());
     const newFieldsFormValues: ProjectNewAdditionalProgramFields[] = [];
 
     this.partnerProgramFields().forEach((field: PartnerProgramFields) => {
@@ -162,7 +169,7 @@ export class ProjectAdditionalService {
    * Сбрасывает флаг процесса отправки.
    */
   public resetSendingState(): void {
-    this.isSendingDecision.set(false);
+    this.isSend$.set(initial());
   }
 
   /**
@@ -171,7 +178,7 @@ export class ProjectAdditionalService {
    */
   public setAssignProjectToProgramError(error: { non_field_errors: string[] }): void {
     this.errorAssignProjectToProgramModalMessage.set(error);
-    this.isAssignProjectToProgramError.set(true);
+    this.isSend$.set(failure("assign_error"));
   }
 
   /**
@@ -179,7 +186,7 @@ export class ProjectAdditionalService {
    */
   public clearAssignProjectToProgramError(): void {
     this.errorAssignProjectToProgramModalMessage.set(null);
-    this.isAssignProjectToProgramError.set(false);
+    this.isSend$.set(initial());
   }
 
   /**

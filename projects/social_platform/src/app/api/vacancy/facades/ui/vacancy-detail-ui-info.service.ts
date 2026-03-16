@@ -3,6 +3,12 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { Params } from "@angular/router";
+import {
+  AsyncState,
+  failure,
+  initial,
+  success,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
 
 @Injectable()
@@ -13,7 +19,7 @@ export class VacancyDetailUIInfoService {
 
   readonly openModal = signal<boolean>(false);
   readonly resultModal = signal<boolean>(false);
-  readonly sendFormIsSubmitting = signal<boolean>(false);
+  readonly sendFormIsSubmitting$ = signal<AsyncState<void>>(initial());
 
   // Создание формы отклика с валидацией
   readonly sendForm = this.fb.group({
@@ -36,13 +42,13 @@ export class VacancyDetailUIInfoService {
   }
 
   applySubmitVacancyResponse(): void {
-    this.sendFormIsSubmitting.set(false);
+    this.sendFormIsSubmitting$.set(success(undefined));
     this.resultModal.set(true);
     this.applyNoResponseCloseModal();
   }
 
   applyErrorFormSubmit(): void {
-    this.sendFormIsSubmitting.set(false);
+    this.sendFormIsSubmitting$.set(failure("vacancy_form_error"));
   }
 
   applyNoResponseCloseModal(): void {

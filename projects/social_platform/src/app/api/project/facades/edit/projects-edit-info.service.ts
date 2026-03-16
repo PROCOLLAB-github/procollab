@@ -43,6 +43,13 @@ import { IndustryRepository } from "projects/social_platform/src/app/infrastruct
 import { AssignProjectProgramUseCase } from "../../../program/use-cases/assign-project-program";
 import { DeleteProjectUseCase } from "../../use-case/delete-project.use-case";
 import { UpdateFormUseCase } from "../../use-case/update-form.use-case";
+import {
+  AsyncState,
+  failure,
+  initial,
+  loading,
+  success,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
 export class ProjectsEditInfoService {
@@ -129,8 +136,7 @@ export class ProjectsEditInfoService {
   readonly submitMode = signal<"draft" | "published" | null>(null);
 
   readonly projSubmitInitiated = signal<boolean>(false);
-  readonly projFormIsSubmittingAsPublished = signal<boolean>(false);
-  readonly projFormIsSubmittingAsDraft = signal<boolean>(false);
+  readonly projFormIsSubmitting$ = signal<AsyncState<void>>(initial());
 
   readonly openGroupIds = signal<Set<number>>(new Set());
   readonly openSkillGroup = signal<string | null>(null);
@@ -194,15 +200,6 @@ export class ProjectsEditInfoService {
       });
   }
 
-  // Методы для управления состоянием отправки форм
-  setIsSubmittingAsPublished(status: boolean): void {
-    this.projFormIsSubmittingAsPublished.set(status);
-  }
-
-  setIsSubmittingAsDraft(status: boolean): void {
-    this.projFormIsSubmittingAsDraft.set(status);
-  }
-
   onGroupToggled(isOpen: boolean, skillsGroupId: number): void {
     this.openGroupIds.update(set => {
       const next = new Set(set);
@@ -244,7 +241,7 @@ export class ProjectsEditInfoService {
     this.submitMode.set("published");
 
     if (!this.isCompetitive()) {
-      this.projFormIsSubmittingAsPublished.set(true);
+      this.projFormIsSubmitting$.set(loading());
       this.submitProjectForm();
       return;
     }
@@ -277,7 +274,7 @@ export class ProjectsEditInfoService {
     this.submitMode.set("draft");
     const partnerProgramId = this.projectForm.get("partnerProgramId")?.value;
     this.projectForm.patchValue({ partnerProgramId });
-    this.projFormIsSubmittingAsDraft.set(true);
+    this.projFormIsSubmitting$.set(loading());
 
     if (this.isCompetitive()) {
       const projectId = Number(this.route.snapshot.params["projectId"]);
@@ -343,8 +340,7 @@ export class ProjectsEditInfoService {
         },
         error: err => {
           this.submitMode.set(null);
-          this.projFormIsSubmittingAsPublished.set(false);
-          this.projFormIsSubmittingAsDraft.set(false);
+          this.projFormIsSubmitting$.set(failure("ошибка при сохранении данных"));
           this.snackBarService.error("ошибка при сохранении данных");
           if (err.error["error"].includes("Срок подачи проектов в программу завершён.")) {
             this.projectsEditUIInfoService.applyOpenSendDescisionLateModal();
@@ -359,7 +355,7 @@ export class ProjectsEditInfoService {
     const projectId = Number(this.route.snapshot.params["projectId"]);
     const relationId = this.relationId();
 
-    this.projFormIsSubmittingAsPublished.set(true);
+    this.projFormIsSubmitting$.set(loading());
     this.sendAdditionalFields(projectId, relationId());
   }
 
@@ -545,15 +541,13 @@ export class ProjectsEditInfoService {
   private completeSubmitedProjectForm(projectId: number) {
     this.snackBarService.success("данные успешно сохранены");
     this.submitMode.set(null);
-    this.projFormIsSubmittingAsPublished.set(false);
-    this.projFormIsSubmittingAsDraft.set(false);
+    this.projFormIsSubmitting$.set(success(undefined));
     this.router.navigateByUrl(`/office/projects/${projectId}`);
   }
 
   private handleProjectSubmitError(error?: unknown): void {
     this.submitMode.set(null);
-    this.projFormIsSubmittingAsPublished.set(false);
-    this.projFormIsSubmittingAsDraft.set(false);
+    this.projFormIsSubmitting$.set(failure("ошибка при сохранении данных"));
     this.snackBarService.error("ошибка при сохранении данных");
 
     if (

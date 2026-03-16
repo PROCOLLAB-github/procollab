@@ -28,6 +28,7 @@ import { ProjectsDetailUIInfoService } from "../../project/facades/detail/ui/pro
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 import { GetMembersUseCase } from "../use-case/get-members.use-case";
+import { isSuccess, loading, success } from "../../../domain/shared/async-state";
 
 @Injectable()
 export class MembersInfoService {
@@ -44,8 +45,9 @@ export class MembersInfoService {
   private readonly searchParams = signal<Record<string, string>>({}); // Signal для параметров поиска
 
   private readonly membersTake = this.membersUIInfoService.membersTake; // Количество участников на странице
-  private readonly members = this.membersUIInfoService.members; // Массив участников для отображения
   private readonly profileId = this.projectsDetailUIInfoService.profileId;
+
+  private readonly members = this.membersUIInfoService.members; // Массив участников для отображения
 
   private readonly searchForm = this.membersUIInfoService.searchForm;
   private readonly filterForm = this.membersUIInfoService.filterForm;
@@ -131,11 +133,15 @@ export class MembersInfoService {
           if (params["age"] && /\d+,\d+/.test(params["age"])) fetchParams["age"] = params["age"];
 
           this.searchParams.set(fetchParams);
+
+          const prev = this.membersUIInfoService.members();
+          this.membersUIInfoService.members$.set(loading(prev));
+
           return this.onFetch(0, 20, fetchParams);
         })
       )
       .subscribe(members => {
-        this.membersUIInfoService.applyQueryParams(members);
+        this.membersUIInfoService.members$.set(success(members.results));
       });
   }
 
@@ -167,9 +173,17 @@ export class MembersInfoService {
 
     if (diff > 0) {
       // Загружаем следующую порцию участников
-      return this.onFetch(this.members().length, this.membersTake(), this.searchParams()).pipe(
+      return this.onFetch(
+        this.membersUIInfoService.members().length,
+        this.membersTake(),
+        this.searchParams()
+      ).pipe(
         tap(membersChunk => {
-          this.membersUIInfoService.applyMembersChunk(membersChunk);
+          this.membersUIInfoService.members$.update(state =>
+            isSuccess(state)
+              ? success([...state.data, ...membersChunk.results])
+              : success(membersChunk.results)
+          );
         })
       );
     }
