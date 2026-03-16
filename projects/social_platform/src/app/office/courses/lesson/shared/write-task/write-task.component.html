@@ -25,16 +25,15 @@
         <p class="text-body-12-bold">{{ data.title | truncate: 50 }}</p>
       </div>
       }
-      <div
+      <p
         #descEl
         class="write-task__desc"
-        [innerHTML]="data.bodyText | truncate: (type === 'text-file' ? 650 : 700)"
-      ></div>
+        [innerHTML]="
+          readFullDescription ? data.bodyText : (data.bodyText | truncateHtml: truncateLimit)
+        "
+      ></p>
       @if (descriptionExpandable) {
-      <div
-        class="read-more text-body-10"
-        (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
-      >
+      <div class="read-more text-body-10" (click)="onToggleDescription(descEl)">
         {{ readFullDescription ? "скрыть" : "подробнее" }}
       </div>
       } @if (type === 'text-file' && data.attachmentUrl) {

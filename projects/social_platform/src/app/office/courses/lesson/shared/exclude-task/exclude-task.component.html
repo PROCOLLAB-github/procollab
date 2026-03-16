@@ -21,12 +21,15 @@
       <p class="exclude__text text-body-12-bold">{{ data.answerTitle | truncate: 110 }}</p>
       }
 
-      <p #descEl class="text-body-12 exclude__description">{{ data.bodyText | truncate: 700 }}</p>
+      <p
+        #descEl
+        class="text-body-12 exclude__description"
+        [innerHTML]="
+          readFullDescription ? data.bodyText : (data.bodyText | truncateHtml: truncateLimit)
+        "
+      ></p>
       @if (descriptionExpandable) {
-      <div
-        class="read-more text-body-10"
-        (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
-      >
+      <div class="read-more text-body-10" (click)="onToggleDescription(descEl)">
         {{ readFullDescription ? "скрыть" : "подробнее" }}
       </div>
       }

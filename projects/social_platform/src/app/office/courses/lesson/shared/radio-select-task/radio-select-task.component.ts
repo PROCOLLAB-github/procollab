@@ -1,22 +1,36 @@
 /** @format */
 
-import { Component, EventEmitter, Input, Output, signal } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+  signal,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
+import { TruncateHtmlPipe } from "projects/core/src/lib/pipes/truncate-html.pipe";
 import { Task } from "@office/models/courses.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
+import { animateContentHeight } from "@utils/animate-content-height";
+import { isHtmlTextTruncated } from "@utils/is-html-text-truncated";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 
 @Component({
   selector: "app-radio-select-task",
   standalone: true,
-  imports: [CommonModule, TruncatePipe, FileItemComponent, ImagePreviewDirective],
+  imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, FileItemComponent, ImagePreviewDirective],
   templateUrl: "./radio-select-task.component.html",
   styleUrl: "./radio-select-task.component.scss",
 })
-export class RadioSelectTaskComponent {
+export class RadioSelectTaskComponent implements OnInit {
+  private readonly cdRef = inject(ChangeDetectorRef);
+
   @Input({ required: true }) data!: Task;
   @Input() success = false;
   @Input() hint = "";
@@ -41,20 +55,28 @@ export class RadioSelectTaskComponent {
 
   result = signal<{ answerId: number | null }>({ answerId: null });
   _error = signal<boolean>(false);
+  readFullDescription = false;
+  cachedVideoUrl: SafeResourceUrl | null = null;
+  readonly truncateLimit = 700;
+
+  get descriptionExpandable(): boolean {
+    return isHtmlTextTruncated(this.data?.bodyText, this.truncateLimit);
+  }
 
   constructor(private sanitizer: DomSanitizer) {}
 
-  getSafeVideoUrl(): SafeResourceUrl | null {
+  ngOnInit(): void {
     const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
-    if (!iframeUrl) {
-      return null;
-    }
-
-    return this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl);
+    this.cachedVideoUrl = iframeUrl
+      ? this.sanitizer.bypassSecurityTrustResourceUrl(iframeUrl)
+      : null;
   }
 
-  hasVideoUrl(): boolean {
-    return !!resolveVideoUrlForIframe(this.data?.videoUrl);
+  onToggleDescription(elem: HTMLElement): void {
+    animateContentHeight(elem, () => {
+      this.readFullDescription = !this.readFullDescription;
+      this.cdRef.detectChanges();
+    });
   }
 
   onSelect(id: number) {

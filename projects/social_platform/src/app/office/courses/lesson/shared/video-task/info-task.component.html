@@ -41,14 +41,11 @@
           #descEl
           class="video__text text-body-12"
           [innerHTML]="
-            data.bodyText | truncateHtml: (cachedVideoUrl ? 627 : data.imageUrl ? 500 : 1000)
+            readFullDescription ? data.bodyText : (data.bodyText | truncateHtml: truncateLimit)
           "
         ></div>
         @if (descriptionExpandable) {
-        <div
-          class="read-more text-body-10"
-          (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
-        >
+        <div class="read-more text-body-10" (click)="onToggleDescription(descEl)">
           {{ readFullDescription ? "скрыть" : "подробнее" }}
         </div>
         } @if (data.attachmentUrl) {

@@ -1,21 +1,19 @@
 /** @format */
 
 import {
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   inject,
   Input,
   OnInit,
   Output,
   signal,
-  ViewChild,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
+import { TruncateHtmlPipe } from "projects/core/src/lib/pipes/truncate-html.pipe";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 import { IconComponent } from "@ui/components";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
@@ -23,7 +21,8 @@ import { FileService } from "@core/services/file.service";
 import { Task } from "@models/courses.model";
 import { FileModel } from "@office/models/file.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
-import { expandElement } from "@utils/expand-element";
+import { animateContentHeight } from "@utils/animate-content-height";
+import { isHtmlTextTruncated } from "@utils/is-html-text-truncated";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 
 @Component({
@@ -32,6 +31,7 @@ import { ImagePreviewDirective } from "../image-preview/image-preview.directive"
   imports: [
     CommonModule,
     TruncatePipe,
+    TruncateHtmlPipe,
     UploadFileComponent,
     IconComponent,
     FileItemComponent,
@@ -40,12 +40,10 @@ import { ImagePreviewDirective } from "../image-preview/image-preview.directive"
   templateUrl: "./write-task.component.html",
   styleUrl: "./write-task.component.scss",
 })
-export class WriteTaskComponent implements OnInit, AfterViewInit {
+export class WriteTaskComponent implements OnInit {
   private readonly fileService = inject(FileService);
   private readonly sanitizer = inject(DomSanitizer);
   private readonly cdRef = inject(ChangeDetectorRef);
-
-  @ViewChild("descEl") descEl?: ElementRef<HTMLElement>;
 
   @Input({ required: true }) data!: Task;
   @Input() type: "text" | "text-file" = "text";
@@ -57,10 +55,17 @@ export class WriteTaskComponent implements OnInit, AfterViewInit {
 
   uploadedFiles = signal<FileModel[]>([]);
   currentLength = signal(0);
-  descriptionExpandable = false;
   readFullDescription = false;
   cachedVideoUrl: SafeResourceUrl | null = null;
   private currentText = "";
+
+  get truncateLimit(): number {
+    return this.type === "text-file" ? 650 : 700;
+  }
+
+  get descriptionExpandable(): boolean {
+    return isHtmlTextTruncated(this.data?.bodyText, this.truncateLimit);
+  }
 
   ngOnInit(): void {
     const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
@@ -69,17 +74,11 @@ export class WriteTaskComponent implements OnInit, AfterViewInit {
       : null;
   }
 
-  ngAfterViewInit(): void {
-    const el = this.descEl?.nativeElement;
-    if (el) {
-      this.descriptionExpandable = el.scrollHeight > el.clientHeight;
+  onToggleDescription(elem: HTMLElement): void {
+    animateContentHeight(elem, () => {
+      this.readFullDescription = !this.readFullDescription;
       this.cdRef.detectChanges();
-    }
-  }
-
-  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    expandElement(elem, expandedClass, isExpanded);
-    this.readFullDescription = !isExpanded;
+    });
   }
 
   onKeyUp(event: Event) {

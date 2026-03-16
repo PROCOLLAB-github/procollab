@@ -29,14 +29,13 @@
         <div
           #descEl
           class="file-task__desc text-body-12"
-          [innerHTML]="data.bodyText | truncate: 700"
+          [innerHTML]="
+            readFullDescription ? data.bodyText : (data.bodyText | truncateHtml: truncateLimit)
+          "
         ></div>
 
         @if (descriptionExpandable) {
-        <div
-          class="read-more text-body-10"
-          (click)="onExpandDescription(descEl, 'expanded', readFullDescription)"
-        >
+        <div class="read-more text-body-10" (click)="onToggleDescription(descEl)">
           {{ readFullDescription ? "скрыть" : "подробнее" }}
         </div>
         }

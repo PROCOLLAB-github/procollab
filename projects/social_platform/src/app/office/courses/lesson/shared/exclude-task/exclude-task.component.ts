@@ -1,25 +1,24 @@
 /** @format */
 
 import {
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   inject,
   Input,
   type OnInit,
   Output,
   signal,
-  ViewChild,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { CheckboxComponent } from "@ui/components";
 import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
+import { TruncateHtmlPipe } from "projects/core/src/lib/pipes/truncate-html.pipe";
 import { Task } from "@office/models/courses.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
-import { expandElement } from "@utils/expand-element";
+import { animateContentHeight } from "@utils/animate-content-height";
+import { isHtmlTextTruncated } from "@utils/is-html-text-truncated";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 
 /**
@@ -45,15 +44,13 @@ import { ImagePreviewDirective } from "../image-preview/image-preview.directive"
 @Component({
   selector: "app-exclude-task",
   standalone: true,
-  imports: [CommonModule, TruncatePipe, CheckboxComponent, ImagePreviewDirective],
+  imports: [CommonModule, TruncatePipe, TruncateHtmlPipe, CheckboxComponent, ImagePreviewDirective],
   templateUrl: "./exclude-task.component.html",
   styleUrl: "./exclude-task.component.scss",
 })
-export class ExcludeTaskComponent implements OnInit, AfterViewInit {
+export class ExcludeTaskComponent implements OnInit {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly cdRef = inject(ChangeDetectorRef);
-
-  @ViewChild("descEl") descEl?: ElementRef<HTMLElement>;
 
   @Input({ required: true }) data!: Task; // Данные вопроса
   @Input() hint!: string; // Текст подсказки
@@ -79,9 +76,13 @@ export class ExcludeTaskComponent implements OnInit, AfterViewInit {
 
   result = signal<number[]>([]);
   _error = signal<boolean>(false);
-  descriptionExpandable = false;
   readFullDescription = false;
   cachedVideoUrl: SafeResourceUrl | null = null;
+  readonly truncateLimit = 700;
+
+  get descriptionExpandable(): boolean {
+    return isHtmlTextTruncated(this.data?.bodyText, this.truncateLimit);
+  }
 
   ngOnInit(): void {
     const iframeUrl = resolveVideoUrlForIframe(this.data?.videoUrl);
@@ -90,17 +91,11 @@ export class ExcludeTaskComponent implements OnInit, AfterViewInit {
       : null;
   }
 
-  ngAfterViewInit(): void {
-    const el = this.descEl?.nativeElement;
-    if (el) {
-      this.descriptionExpandable = el.scrollHeight > el.clientHeight;
+  onToggleDescription(elem: HTMLElement): void {
+    animateContentHeight(elem, () => {
+      this.readFullDescription = !this.readFullDescription;
       this.cdRef.detectChanges();
-    }
-  }
-
-  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    expandElement(elem, expandedClass, isExpanded);
-    this.readFullDescription = !isExpanded;
+    });
   }
 
   /**

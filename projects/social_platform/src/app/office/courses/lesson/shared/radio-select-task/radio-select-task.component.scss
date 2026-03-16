@@ -29,6 +29,18 @@
 
   &__description {
     text-align: justify;
+    white-space: pre-line;
+  }
+
+  .read-more {
+    margin-top: 12px;
+    color: var(--accent);
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: var(--accent-dark);
+    }
   }
 
   &__img {
@@ -119,9 +131,10 @@
 
       iframe {
         display: block;
+        align-self: center;
         width: 100%;
-        max-width: 288px;
-        height: auto;
+        max-width: 295px;
+        height: 223px;
         aspect-ratio: 16 / 9;
         border: 0;
         border-radius: var(--rounded-lg);
