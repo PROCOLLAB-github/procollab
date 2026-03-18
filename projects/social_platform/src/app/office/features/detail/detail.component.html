@@ -181,6 +181,12 @@
               участники
             </app-button>
           </a>
+          } @else { @if (info().courseId) {
+          <a class="info__contacts" [routerLink]="'/office/courses/' + info().courseId">
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+              перейти в курс
+            </app-button>
+          </a>
           } @else {
           <a class="info__contacts">
             <app-button
@@ -193,7 +199,7 @@
               информация с ссылок
             </app-button>
           </a>
-          } }
+          } } }
 
           <app-modal
             [open]="isAssignProjectToProgramModalOpen()"

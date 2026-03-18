@@ -89,7 +89,13 @@
           class="action__button"
           (click)="onSubmitAnswer()"
         >
-          {{ isLastTask() ? "завершить тест" : "следующее задание" }}
+          {{
+            isLastTask()
+              ? "завершить урок"
+              : currentTask()?.answerType === null
+              ? "отправить задание"
+              : "отправить ответ"
+          }}
         </app-button>
       </div>
     </div>
