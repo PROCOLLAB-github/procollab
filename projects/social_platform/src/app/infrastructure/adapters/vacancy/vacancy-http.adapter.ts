@@ -87,10 +87,13 @@ export class VacancyHttpAdapter {
   }
 
   /**
-   * Отправляет отклик на вакансию.
+   * Отправляет отклик на вакансию и возвращает данные созданного отклика.
    */
-  sendResponse(vacancyId: number, body: { whyMe: string }): Observable<void> {
-    return this.apiService.post(`${this.VACANCIES_URL}/${vacancyId}/responses/`, body);
+  sendResponse(vacancyId: number, body: { whyMe: string }): Observable<VacancyResponse> {
+    return this.apiService.post<VacancyResponse>(
+      `${this.VACANCIES_URL}/${vacancyId}/responses/`,
+      body
+    );
   }
 
   /**
@@ -102,16 +105,22 @@ export class VacancyHttpAdapter {
   }
 
   /**
-   * Принимает отклик.
+   * Принимает отклик и возвращает обновленные данные отклика.
    */
-  acceptResponse(responseId: number): Observable<void> {
-    return this.apiService.post(`${this.VACANCIES_URL}/responses/${responseId}/accept/`, {});
+  acceptResponse(responseId: number): Observable<VacancyResponse> {
+    return this.apiService.post<VacancyResponse>(
+      `${this.VACANCIES_URL}/responses/${responseId}/accept/`,
+      {}
+    );
   }
 
   /**
-   * Отклоняет отклик.
+   * Отклоняет отклик и возвращает обновленные данные отклика.
    */
-  rejectResponse(responseId: number): Observable<void> {
-    return this.apiService.post(`${this.VACANCIES_URL}/responses/${responseId}/decline/`, {});
+  rejectResponse(responseId: number): Observable<VacancyResponse> {
+    return this.apiService.post<VacancyResponse>(
+      `${this.VACANCIES_URL}/responses/${responseId}/decline/`,
+      {}
+    );
   }
 }

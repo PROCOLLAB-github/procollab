@@ -32,8 +32,8 @@ export class OnboardingStageZeroInfoService {
   private readonly workExperience = this.onboardingStageZeroUIInfoService.workExperience;
   private readonly userLanguages = this.onboardingStageZeroUIInfoService.userLanguages;
 
-  private readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting;
-  private readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting;
+  private readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting$;
+  private readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting$;
 
   initializationStageZero(): void {
     this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe(p => {

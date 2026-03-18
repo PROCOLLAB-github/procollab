@@ -61,19 +61,24 @@ export class ProgramDetailMainService {
   }
 
   private initializationProgramQueryParams(): void {
-    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(param => {
-      if (param["access"] === "accessDenied") {
-        this.loadingService.hide();
-        this.programDetailMainUIInfoService.applyInitProgramQueryParams();
+    this.route.queryParams
+      .pipe(
+        tap(param => {
+          if (param["access"] === "accessDenied") {
+            this.loadingService.hide();
+            this.programDetailMainUIInfoService.applyInitProgramQueryParams();
 
-        this.router.navigate([], {
-          relativeTo: this.route,
-          queryParams: { access: null },
-          queryParamsHandling: "merge",
-          replaceUrl: true,
-        });
-      }
-    });
+            this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: { access: null },
+              queryParamsHandling: "merge",
+              replaceUrl: true,
+            });
+          }
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   private initializationProgram(descEl: ElementRef | undefined): void {

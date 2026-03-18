@@ -3,7 +3,7 @@
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
-import { debounceTime, distinctUntilChanged, filter, map, Subject, takeUntil } from "rxjs";
+import { debounceTime, distinctUntilChanged, filter, map, Subject, takeUntil, tap } from "rxjs";
 import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
 import { ProjectsUIInfoService } from "./ui/projects-ui-info.service";
 import { CreateProjectUseCase } from "../use-case/create-project.use-case";
@@ -76,19 +76,18 @@ export class ProjectsInfoService {
 
     this.createProjectUseCase
       .execute()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: result => {
+      .pipe(
+        tap(result => {
           if (!result.ok) return;
-
-          this.createProjectUseCase.compile();
 
           this.router
             .navigate([`/office/projects/${result.value.id}/edit`], {
               queryParams: { editingStep: "main", fromProgram },
             })
             .then(() => this.logger.debug("Route change from ProjectsComponent"));
-        },
-      });
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 }

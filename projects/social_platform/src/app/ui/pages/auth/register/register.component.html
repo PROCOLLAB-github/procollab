@@ -303,17 +303,9 @@
 
     <p class="auth__toggle">если есть аккаунт? - <a routerLink="/auth/login">войдите</a></p>
 
-    <app-modal
-      [open]="isUserCreationModalError()"
-      (openChange)="isUserCreationModalError.set(!isUserCreationModalError())"
-    >
+    <app-modal [open]="isUserCreationModalError()" (openChange)="dismissCreationError()">
       <div class="cancel">
-        <i
-          (click)="isUserCreationModalError.set(!isUserCreationModalError())"
-          appIcon
-          icon="cross"
-          class="register__cross"
-        ></i>
+        <i (click)="dismissCreationError()" appIcon icon="cross" class="register__cross"></i>
 
         <p class="register__title">Привет!</p>
 

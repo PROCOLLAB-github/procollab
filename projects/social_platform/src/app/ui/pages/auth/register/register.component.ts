@@ -1,6 +1,7 @@
 /** @format */
 
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
+import { initial } from "projects/social_platform/src/app/domain/shared/async-state";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe, TokenService } from "projects/core";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
@@ -85,5 +86,9 @@ export class RegisterComponent implements OnInit {
 
   onSendForm(): void {
     this.authRegisterService.onSendForm();
+  }
+
+  dismissCreationError(): void {
+    this.authUIInfoService.register$.set(initial());
   }
 }

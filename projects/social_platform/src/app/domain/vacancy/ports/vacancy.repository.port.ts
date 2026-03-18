@@ -28,8 +28,8 @@ export abstract class VacancyRepositoryPort {
     vacancy: Partial<Vacancy> | CreateVacancyDto
   ): Observable<Vacancy>;
   abstract deleteVacancy(vacancyId: number): Observable<void>;
-  abstract sendResponse(vacancyId: number, body: { whyMe: string }): Observable<void>;
+  abstract sendResponse(vacancyId: number, body: { whyMe: string }): Observable<VacancyResponse>;
   abstract responsesByProject(projectId: number): Observable<VacancyResponse[]>;
-  abstract acceptResponse(responseId: number): Observable<void>;
-  abstract rejectResponse(responseId: number): Observable<void>;
+  abstract acceptResponse(responseId: number): Observable<VacancyResponse>;
+  abstract rejectResponse(responseId: number): Observable<VacancyResponse>;
 }

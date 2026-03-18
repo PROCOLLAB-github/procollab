@@ -2,6 +2,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   DestroyRef,
   ElementRef,
   inject,
@@ -9,6 +10,7 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
+import { isFailure } from "projects/social_platform/src/app/domain/shared/async-state";
 import { RouterModule } from "@angular/router";
 import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
 import { ButtonComponent, IconComponent } from "@ui/components";
@@ -63,8 +65,9 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   private readonly expandService = inject(ExpandService);
   private readonly destroyRef = inject(DestroyRef);
 
-  protected readonly isAssignProjectToProgramError =
-    this.projectAdditionalService.isAssignProjectToProgramError;
+  protected readonly isAssignProjectToProgramError = computed(() =>
+    isFailure(this.projectAdditionalService.isSend$())
+  );
 
   protected readonly errorAssignProjectToProgramModalMessage =
     this.projectAdditionalService.errorAssignProjectToProgramModalMessage;

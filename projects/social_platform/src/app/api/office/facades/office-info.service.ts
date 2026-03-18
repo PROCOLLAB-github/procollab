@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { map, Subject, takeUntil } from "rxjs";
+import { map, Subject, takeUntil, tap } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ChatService } from "../../chat/chat.service";
 import { Invite } from "../../../domain/invite/invite.model";
@@ -52,20 +52,25 @@ export class OfficeInfoService {
   }
 
   private initializationNavItems(): void {
-    this.authRepository.profile.pipe(takeUntil(this.destroy$)).subscribe(profile => {
-      this.officeUIInfoService.applyCreateNavItems(profile.id);
+    this.authRepository.profile
+      .pipe(
+        tap(profile => {
+          this.officeUIInfoService.applyCreateNavItems(profile.id);
 
-      if (!profile?.doesCompleted()) {
-        this.router
-          .navigateByUrl("/office/onboarding")
-          .then(() => this.logger.debug("Route changed from OfficeComponent"));
-      } else if (
-        profile?.verificationDate === null &&
-        localStorage.getItem("waitVerificationAccepted") !== "true"
-      ) {
-        this.officeUIInfoService.applyOpenVerificationModal();
-      }
-    });
+          if (!profile?.doesCompleted()) {
+            this.router
+              .navigateByUrl("/office/onboarding")
+              .then(() => this.logger.debug("Route changed from OfficeComponent"));
+          } else if (
+            profile?.verificationDate === null &&
+            localStorage.getItem("waitVerificationAccepted") !== "true"
+          ) {
+            this.officeUIInfoService.applyOpenVerificationModal();
+          }
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   private initializationStatus(): void {
@@ -125,9 +130,8 @@ export class OfficeInfoService {
 
     this.acceptInviteUseCase
       .execute(inviteId)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: result => {
+      .pipe(
+        tap(result => {
           if (!result.ok) {
             this.officeUIInfoService.applyOpenInviteErrorModal();
             return;
@@ -138,18 +142,23 @@ export class OfficeInfoService {
           this.router
             .navigateByUrl(`/office/projects/${invite.project.id}`)
             .then(() => this.logger.debug("Route changed from SidebarComponent"));
-        },
-      });
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   onLogout() {
     this.authRepository
       .logout()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() =>
-        this.router
-          .navigateByUrl("/auth")
-          .then(() => this.logger.debug("Route changed from OfficeComponent"))
-      );
+      .pipe(
+        tap(() => {
+          this.router
+            .navigateByUrl("/auth")
+            .then(() => this.logger.debug("Route changed from OfficeComponent"));
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 }

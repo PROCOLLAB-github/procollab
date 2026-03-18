@@ -3,12 +3,14 @@
 import { CommonModule } from "@angular/common";
 import {
   Component,
+  computed,
   Input,
   OnInit,
   inject,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
 } from "@angular/core";
+import { isFailure, isLoading } from "projects/social_platform/src/app/domain/shared/async-state";
 import { ReactiveFormsModule } from "@angular/forms";
 import {
   InputComponent,
@@ -66,10 +68,13 @@ export class ProjectAdditionalStepComponent implements OnInit {
   protected readonly additionalForm = this.projectAdditionalService.getAdditionalForm();
 
   protected readonly partnerProgramFields = this.projectAdditionalService.partnerProgramFields;
-  protected readonly isSendingDecision = this.projectAdditionalService.isSendingDecision;
+  protected readonly isSendingDecision = computed(() =>
+    isLoading(this.projectAdditionalService.isSend$())
+  );
 
-  protected readonly isAssignProjectToProgramError =
-    this.projectAdditionalService.isAssignProjectToProgramError;
+  protected readonly isAssignProjectToProgramError = computed(() =>
+    isFailure(this.projectAdditionalService.isSend$())
+  );
 
   protected readonly errorAssignProjectToProgramModalMessage =
     this.projectAdditionalService.errorAssignProjectToProgramModalMessage;

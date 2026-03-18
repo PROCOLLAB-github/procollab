@@ -1,6 +1,6 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
 import { rolesMembersList } from "projects/core/src/consts/lists/roles-members-list.const";
 import { workExperienceList } from "projects/core/src/consts/lists/work-experience-list.const";
@@ -8,7 +8,11 @@ import { workFormatList } from "projects/core/src/consts/lists/work-format-list.
 import { workScheludeList } from "projects/core/src/consts/lists/work-schelude-list.const";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
-import { AsyncState, initial } from "projects/social_platform/src/app/domain/shared/async-state";
+import {
+  AsyncState,
+  initial,
+  isLoading,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 import { ProjectFormService } from "../project-form.service";
 import { ValidationService } from "@corelib";
 import { stripNullish } from "@utils/helpers/stripNull";
@@ -41,6 +45,7 @@ export class ProjectVacancyUIService {
   // Состояние отправки формы
   readonly vacancySubmitInitiated = signal(false);
   readonly vacancyIsSubmitting = signal<AsyncState<void>>(initial());
+  readonly vacancyIsSubmittingFlag = computed(() => isLoading(this.vacancyIsSubmitting()));
 
   readonly vacancies = signal<Vacancy[]>([]);
   readonly onEditClicked = this.projectsEditUIInfoService.onEditClicked;

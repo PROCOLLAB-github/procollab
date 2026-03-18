@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { concatMap, Subject, take, takeUntil } from "rxjs";
+import { concatMap, Subject, take, takeUntil, tap } from "rxjs";
 import { OnboardingService } from "../../onboarding.service";
 import { Router } from "@angular/router";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
@@ -24,7 +24,7 @@ export class OnboardingStageThreeInfoService {
   private readonly userRole = this.onboardingStageThreeUIInfoService.userRole;
 
   private readonly stageTouched = this.onboardingUIInfoService.stageTouched;
-  private readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting;
+  private readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting$;
 
   destroy(): void {
     this.destroy$.next();
@@ -49,12 +49,13 @@ export class OnboardingStageThreeInfoService {
       .updateProfile({ userType: this.userRole() })
       .pipe(
         concatMap(() => this.authRepository.updateOnboardingStage(null)),
+        tap(() => {
+          this.router
+            .navigateByUrl("/office")
+            .then(() => this.logger.debug("Route changed from OnboardingStageTwo"));
+        }),
         takeUntil(this.destroy$)
       )
-      .subscribe(() => {
-        this.router
-          .navigateByUrl("/office")
-          .then(() => this.logger.debug("Route changed from OnboardingStageTwo"));
-      });
+      .subscribe();
   }
 }

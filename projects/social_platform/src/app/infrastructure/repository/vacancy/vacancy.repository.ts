@@ -83,8 +83,10 @@ export class VacancyRepository implements VacancyRepositoryPort {
     return this.vacancyAdapter.deleteVacancy(vacancyId);
   }
 
-  sendResponse(vacancyId: number, body: { whyMe: string }): Observable<void> {
-    return this.vacancyAdapter.sendResponse(vacancyId, body);
+  sendResponse(vacancyId: number, body: { whyMe: string }): Observable<VacancyResponse> {
+    return this.vacancyAdapter
+      .sendResponse(vacancyId, body)
+      .pipe(map(response => plainToInstance(VacancyResponse, response)));
   }
 
   /**
@@ -96,11 +98,15 @@ export class VacancyRepository implements VacancyRepositoryPort {
       .pipe(map(responses => plainToInstance(VacancyResponse, responses)));
   }
 
-  acceptResponse(responseId: number): Observable<void> {
-    return this.vacancyAdapter.acceptResponse(responseId);
+  acceptResponse(responseId: number): Observable<VacancyResponse> {
+    return this.vacancyAdapter
+      .acceptResponse(responseId)
+      .pipe(map(response => plainToInstance(VacancyResponse, response)));
   }
 
-  rejectResponse(responseId: number): Observable<void> {
-    return this.vacancyAdapter.rejectResponse(responseId);
+  rejectResponse(responseId: number): Observable<VacancyResponse> {
+    return this.vacancyAdapter
+      .rejectResponse(responseId)
+      .pipe(map(response => plainToInstance(VacancyResponse, response)));
   }
 }

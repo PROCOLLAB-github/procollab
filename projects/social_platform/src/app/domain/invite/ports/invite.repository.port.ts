@@ -14,7 +14,7 @@ export abstract class InviteRepositoryPort {
     role: string,
     specialization?: string
   ): Observable<Invite>;
-  abstract revokeInvite(invitationId: number): Observable<void>;
+  abstract revokeInvite(invitationId: number): Observable<Invite>;
   abstract acceptInvite(inviteId: number): Observable<Invite>;
   abstract rejectInvite(inviteId: number): Observable<Invite>;
   abstract updateInvite(

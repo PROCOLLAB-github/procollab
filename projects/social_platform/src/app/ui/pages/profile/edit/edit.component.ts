@@ -4,11 +4,13 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   OnDestroy,
   OnInit,
   signal,
 } from "@angular/core";
+import { isLoading } from "projects/social_platform/src/app/domain/shared/async-state";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
 import { ButtonComponent, IconComponent } from "@ui/components";
@@ -246,7 +248,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
 
   protected readonly roles = this.profileFormService.roles;
 
-  protected readonly profileFormSubmitting = this.profileEditInfoService.profileFormSubmitting;
+  protected readonly profileFormSubmitting = computed(() =>
+    isLoading(this.profileEditInfoService.profileFormSubmitting$())
+  );
 
   // Для управления открытыми группами специализаций
   protected readonly openSpecializationGroup =

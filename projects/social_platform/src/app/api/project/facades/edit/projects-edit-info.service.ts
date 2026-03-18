@@ -47,6 +47,7 @@ import {
   AsyncState,
   failure,
   initial,
+  isLoading,
   loading,
   success,
 } from "projects/social_platform/src/app/domain/shared/async-state";
@@ -137,6 +138,13 @@ export class ProjectsEditInfoService {
 
   readonly projSubmitInitiated = signal<boolean>(false);
   readonly projFormIsSubmitting$ = signal<AsyncState<void>>(initial());
+
+  readonly projFormIsSubmittingAsDraft = computed(
+    () => this.submitMode() === "draft" && isLoading(this.projFormIsSubmitting$())
+  );
+  readonly projFormIsSubmittingAsPublished = computed(
+    () => this.submitMode() === "published" && isLoading(this.projFormIsSubmitting$())
+  );
 
   readonly openGroupIds = signal<Set<number>>(new Set());
   readonly openSkillGroup = signal<string | null>(null);

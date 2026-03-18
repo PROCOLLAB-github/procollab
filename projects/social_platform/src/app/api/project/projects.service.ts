@@ -18,8 +18,6 @@ export class ProjectsService {
       next: result => {
         if (!result.ok) return;
 
-        this.createProjectUseCase.compile();
-
         this.router
           .navigate([`/office/projects/${result.value.id}/edit`], {
             queryParams: { editingStep: "main" },

@@ -83,7 +83,7 @@ export class ProjectVacancyStepComponent implements OnInit {
     this.projectVacancyUIService.selectedVacanciesSpecializationId;
 
   protected readonly vacancySubmitInitiated = this.projectVacancyUIService.vacancySubmitInitiated;
-  protected readonly vacancyIsSubmitting = this.projectVacancyUIService.vacancyIsSubmitting;
+  protected readonly vacancyIsSubmitting = this.projectVacancyUIService.vacancyIsSubmittingFlag;
 
   protected readonly inlineSkills = this.projectsEditInfoService.inlineSkills;
   protected readonly projectId = this.projectsEditInfoService.profileId;

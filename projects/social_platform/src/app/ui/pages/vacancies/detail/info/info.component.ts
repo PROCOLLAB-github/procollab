@@ -81,7 +81,8 @@ export class VacancyInfoComponent implements OnInit {
 
   /** Форма отправки отклика */
   protected readonly sendForm = this.vacancyDetailUIInfoService.sendForm;
-  protected readonly sendFormIsSubmitting = this.vacancyDetailUIInfoService.sendFormIsSubmitting;
+  protected readonly sendFormIsSubmitting =
+    this.vacancyDetailUIInfoService.sendFormIsSubmittingFlag;
 
   /** Объект с сообщениями об ошибках */
   protected readonly errorMessage = ErrorMessage;

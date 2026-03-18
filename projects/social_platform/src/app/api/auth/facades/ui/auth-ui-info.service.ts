@@ -1,6 +1,6 @@
 /** @format */
 
-import { inject, Injectable, signal } from "@angular/core";
+import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ValidationService } from "@corelib";
 import dayjs from "dayjs";
@@ -10,7 +10,12 @@ import {
 } from "projects/social_platform/src/app/domain/auth/results/login.result";
 import { PasswordError } from "projects/social_platform/src/app/domain/auth/results/password.result";
 import { RegisterError } from "projects/social_platform/src/app/domain/auth/results/register.result";
-import { AsyncState, initial } from "projects/social_platform/src/app/domain/shared/async-state";
+import {
+  AsyncState,
+  initial,
+  isFailure,
+  isLoading,
+} from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
 export class AuthUIInfoService {
@@ -22,10 +27,18 @@ export class AuthUIInfoService {
   readonly showPassword = signal<boolean>(false);
 
   readonly login$ = signal<AsyncState<LoginResult, LoginError>>(initial());
+  readonly loginIsSubmitting = computed(() => isLoading(this.login$()));
+  readonly errorWrongAuth = computed(() => isFailure(this.login$()));
 
   // password
   readonly credsSubmitInitiated = signal<boolean>(false);
   readonly password$ = signal<AsyncState<void, PasswordError>>(initial());
+  readonly isSubmitting = computed(() => isLoading(this.password$()));
+  readonly errorServer = computed(() => {
+    const s = this.password$();
+    return isFailure(s) && s.error.kind === "server_error";
+  });
+  readonly errorRequest = computed(() => isFailure(this.password$()));
 
   // register
   readonly registerAgreement = signal<boolean>(false);
@@ -33,6 +46,8 @@ export class AuthUIInfoService {
   readonly infoSubmitInitiated = signal<boolean>(false);
 
   readonly register$ = signal<AsyncState<void, RegisterError>>(initial());
+  readonly registerIsSubmitting = computed(() => isLoading(this.register$()));
+  readonly isUserCreationModalError = computed(() => isFailure(this.register$()));
   readonly step = signal<"credentials" | "info">("credentials");
 
   // login

@@ -32,8 +32,8 @@ export class OnboardingStageOneInfoService {
 
   private stageForm = this.onboardingStageOneUIInfoService.stageForm;
 
-  private readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting;
-  private readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting;
+  private readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting$;
+  private readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting$;
 
   readonly inlineSpecializations = this.searchesService.inlineSpecs;
 

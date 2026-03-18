@@ -5,12 +5,14 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
   inject,
   OnDestroy,
   OnInit,
   ViewChild,
 } from "@angular/core";
+import { isLoading } from "projects/social_platform/src/app/domain/shared/async-state";
 import { RouterModule } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/components/search/search.component";
@@ -79,13 +81,9 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
   protected readonly searchedList = this.programDetailListUIInfoService.searchedList;
   protected readonly profileProjSubsIds = this.programDetailListUIInfoService.profileProjSubsIds;
 
-  protected readonly loadingExportProjects = this.exportFileInfoService.loadingExportProjects;
-  protected readonly loadingExportSubmittedProjects =
-    this.exportFileInfoService.loadingExportSubmittedProjects;
-
-  protected readonly loadingExportRates = this.exportFileInfoService.loadingExportRates;
-  protected readonly loadingExportCalculations =
-    this.exportFileInfoService.loadingExportCalculations;
+  protected readonly loadingExports = computed(() =>
+    isLoading(this.exportFileInfoService.loadingExports$())
+  );
 
   protected readonly isFilterOpen = this.swipeService.isFilterOpen;
   protected readonly ratingOptionsList = tagsFilter;

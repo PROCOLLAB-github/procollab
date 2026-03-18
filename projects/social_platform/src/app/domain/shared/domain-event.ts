@@ -8,7 +8,7 @@
  * export interface ProjectPublished extends DomainEvent {
  *   readonly type: 'ProjectPublished';
  *   readonly payload: { projectId: number };
- * }
+ * }w
  */
 export interface DomainEvent {
   /** Уникальный тип события (используется для маршрутизации) */

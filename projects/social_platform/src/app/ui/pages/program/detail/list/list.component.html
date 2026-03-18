@@ -58,7 +58,7 @@
           @if (listType() === 'projects') {
           <div class="page__export" style="margin-top: 0">
             <app-button
-              [loader]="loadingExportProjects()"
+              [loader]="loadingExports()"
               customTypographyClass="text-body-12"
               size="medium"
               (click)="downloadProjects()"
@@ -68,7 +68,7 @@
             </app-button>
 
             <app-button
-              [loader]="loadingExportSubmittedProjects()"
+              [loader]="loadingExports()"
               customTypographyClass="text-body-12"
               size="medium"
               (click)="downloadSubmittedProjects()"
@@ -80,7 +80,7 @@
           } @else {
           <div class="page__export">
             <app-button
-              [loader]="loadingExportRates()"
+              [loader]="loadingExports()"
               customTypographyClass="text-body-12"
               size="medium"
               (click)="downloadRates()"
@@ -92,7 +92,7 @@
             <app-button
               [disabled]="true"
               style="opacity: 0.5"
-              [loader]="loadingExportCalculations()"
+              [loader]="loadingExports()"
               customTypographyClass="text-body-12"
               size="medium"
               (click)="downloadCalculations()"

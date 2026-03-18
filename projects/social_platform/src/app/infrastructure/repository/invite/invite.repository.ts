@@ -2,14 +2,44 @@
 
 import { inject, Injectable } from "@angular/core";
 import { plainToInstance } from "class-transformer";
-import { map, Observable } from "rxjs";
+import { BehaviorSubject, map, Observable } from "rxjs";
 import { Invite } from "../../../domain/invite/invite.model";
 import { InviteHttpAdapter } from "../../adapters/invite/invite-http.adapter";
 import { InviteRepositoryPort } from "../../../domain/invite/ports/invite.repository.port";
+import { EventBus } from "../../../domain/shared/event-bus";
+import { AcceptInvite } from "../../../domain/invite/events/accept-invite.event";
+import { RejectInvite } from "../../../domain/invite/events/reject-invite.event";
 
 @Injectable({ providedIn: "root" })
 export class InviteRepository implements InviteRepositoryPort {
   private readonly inviteAdapter = inject(InviteHttpAdapter);
+  private readonly eventBus = inject(EventBus);
+
+  readonly myInvitesCount$ = new BehaviorSubject<number>(0);
+
+  constructor() {
+    this.initializeEventListeners();
+  }
+
+  private initializeEventListeners(): void {
+    // Слушание события принятия приглашения
+    this.eventBus.on<AcceptInvite>("AcceptInvite").subscribe({
+      next: () => {
+        // Уменьшить счетчик приглашений текущего пользователя
+        const currentCount = this.myInvitesCount$.getValue();
+        this.myInvitesCount$.next(Math.max(0, currentCount - 1));
+      },
+    });
+
+    // Слушание события отклонения приглашения
+    this.eventBus.on<RejectInvite>("RejectInvite").subscribe({
+      next: () => {
+        // Уменьшить счетчик приглашений текущего пользователя
+        const currentCount = this.myInvitesCount$.getValue();
+        this.myInvitesCount$.next(Math.max(0, currentCount - 1));
+      },
+    });
+  }
 
   /**
    * Отправляет приглашение и маппит ответ в доменную модель `Invite`.
@@ -25,8 +55,10 @@ export class InviteRepository implements InviteRepositoryPort {
       .pipe(map(invite => plainToInstance(Invite, invite)));
   }
 
-  revokeInvite(invitationId: number): Observable<void> {
-    return this.inviteAdapter.revokeInvite(invitationId);
+  revokeInvite(invitationId: number): Observable<Invite> {
+    return this.inviteAdapter
+      .revokeInvite(invitationId)
+      .pipe(map(invite => plainToInstance(Invite, invite)));
   }
 
   /**

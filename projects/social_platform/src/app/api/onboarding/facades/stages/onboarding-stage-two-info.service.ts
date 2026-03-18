@@ -30,8 +30,8 @@ export class OnboardingStageTwoInfoService {
 
   private readonly stageForm = this.onboardingStageTwoUIInfoService.stageForm;
 
-  private readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting;
-  private readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting;
+  private readonly stageSubmitting = this.onboardingUIInfoService.stageSubmitting$;
+  private readonly skipSubmitting = this.onboardingUIInfoService.skipSubmitting$;
 
   destroy(): void {
     this.destroy$.next();
