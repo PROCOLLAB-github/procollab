@@ -14,6 +14,7 @@ import {
   API_URL,
   BearerTokenInterceptor,
   CamelcaseInterceptor,
+  LoggingInterceptor,
   PRODUCTION,
   SKILLS_API_URL,
 } from "@corelib";
@@ -60,6 +61,11 @@ export const APP_CONFIG: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: BearerTokenInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoggingInterceptor,
       multi: true,
     },
     {

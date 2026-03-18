@@ -1,7 +1,8 @@
 /** @format */
 
-import { ErrorHandler, Injectable, NgZone } from "@angular/core";
+import { ErrorHandler, inject, Injectable, NgZone } from "@angular/core";
 import { ErrorService } from "./error.service";
+import { LoggerService } from "../logger/logger.service";
 
 /**
  * Глобальный обработчик ошибок приложения
@@ -31,29 +32,17 @@ import { ErrorService } from "./error.service";
  */
 @Injectable()
 export class GlobalErrorHandlerService implements ErrorHandler {
+  private readonly logger = inject(LoggerService);
+
   constructor(private readonly errorService: ErrorService, private readonly zone: NgZone) {}
 
-  /**
-   * Обрабатывает глобальные ошибки приложения
-   * @param err - ошибка или Promise rejection
-   */
   handleError(err: any): void {
-    // Извлекаем фактическую ошибку из Promise rejection или используем как есть
     const error = err.rejection ? err.rejection : err;
 
-    // Закомментированный код для обработки HTTP ошибок:
-    // if(error instanceof HttpErrorResponse) {
-    //   switch(error.status) {
-    //     case 404: {
-    //       this.zone.run(() => this.errorService.throwNotFount())
-    //       break;
-    //     }
-    //   }
-    // }
-
-    // Логируем ошибки типа Error в консоль
     if (error instanceof Error) {
-      console.error(error);
+      this.logger.error(`[GlobalError] ${error.name}: ${error.message}`, error.stack);
+    } else {
+      this.logger.error("[GlobalError] Unknown error", error);
     }
   }
 }
