@@ -104,7 +104,6 @@
 
   &__body,
   &__content {
-    flex-grow: 1;
     min-height: 358px;
     padding: 24px;
     background-color: var(--light-white);
@@ -113,7 +112,7 @@
   }
 
   &__body {
-    max-width: 422px;
+    flex: 1;
 
     &--hasContent {
       max-width: 333px;
@@ -121,6 +120,8 @@
   }
 
   &__content {
+    max-width: 350px;
+
     &--hasContent {
       min-width: 333px;
     }

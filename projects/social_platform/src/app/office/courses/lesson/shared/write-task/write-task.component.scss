@@ -13,7 +13,6 @@
 
   &__header,
   &__content {
-    flex-grow: 1;
     min-height: 358px;
     padding: 24px;
     background: var(--light-white);
@@ -21,7 +20,12 @@
     border-radius: var(--rounded-lg);
   }
 
+  &__header {
+    flex: 1;
+  }
+
   &__content {
+    max-width: 350px;
     min-width: 333px;
     padding: 12px 24px;
   }
