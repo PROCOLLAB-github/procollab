@@ -8,10 +8,31 @@ import { VacancyResponse } from "../../../domain/vacancy/vacancy-response.model"
 import { Vacancy } from "../../../domain/vacancy/vacancy.model";
 import { VacancyHttpAdapter } from "../../adapters/vacancy/vacancy-http.adapter";
 import { VacancyRepositoryPort } from "../../../domain/vacancy/ports/vacancy.repository.port";
+import { EntityCache } from "../../../domain/shared/entity-cache";
+import { EventBus } from "../../../domain/shared/event-bus";
+import { VacancyCreated } from "../../../domain/vacancy/events/vacancy-created.event";
+import { VacancyUpdated } from "../../../domain/vacancy/events/vacancy-updated.event";
+import { VacancyDelete } from "../../../domain/vacancy/events/vacancy-deleted.event";
 
 @Injectable({ providedIn: "root" })
 export class VacancyRepository implements VacancyRepositoryPort {
   private readonly vacancyAdapter = inject(VacancyHttpAdapter);
+  private readonly eventBus = inject(EventBus);
+  private readonly entityCache = new EntityCache<Vacancy>();
+
+  constructor() {
+    this.eventBus.on<VacancyCreated>("VacancyCreated").subscribe(event => {
+      this.invalidate(event.payload.projectId);
+    });
+
+    this.eventBus.on<VacancyUpdated>("VacancyUpdated").subscribe(event => {
+      this.invalidate(event.payload.vacancyId);
+    });
+
+    this.eventBus.on<VacancyDelete>("VacancyDelete").subscribe(event => {
+      this.invalidate(event.payload.vacancyId);
+    });
+  }
 
   /**
    * Получает вакансии и маппит сырой HTTP-ответ в доменную модель `Vacancy`.
@@ -53,9 +74,9 @@ export class VacancyRepository implements VacancyRepositoryPort {
    * Получает одну вакансию и маппит ее в доменную модель `Vacancy`.
    */
   getOne(vacancyId: number): Observable<Vacancy> {
-    return this.vacancyAdapter
-      .getOne(vacancyId)
-      .pipe(map(vacancy => plainToInstance(Vacancy, vacancy)));
+    return this.entityCache.getOrFetch(vacancyId, () =>
+      this.vacancyAdapter.getOne(vacancyId).pipe(map(vacancy => plainToInstance(Vacancy, vacancy)))
+    );
   }
 
   /**
@@ -80,6 +101,7 @@ export class VacancyRepository implements VacancyRepositoryPort {
   }
 
   deleteVacancy(vacancyId: number): Observable<void> {
+    this.invalidate(vacancyId);
     return this.vacancyAdapter.deleteVacancy(vacancyId);
   }
 
@@ -108,5 +130,9 @@ export class VacancyRepository implements VacancyRepositoryPort {
     return this.vacancyAdapter
       .rejectResponse(responseId)
       .pipe(map(response => plainToInstance(VacancyResponse, response)));
+  }
+
+  invalidate(vacancyId: number): void {
+    this.entityCache.invalidate(vacancyId);
   }
 }

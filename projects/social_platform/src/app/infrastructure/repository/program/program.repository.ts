@@ -12,10 +12,12 @@ import { ProjectAdditionalFields } from "../../../domain/project/project-additio
 import { Project } from "../../../domain/project/project.model";
 import { ProgramHttpAdapter } from "../../adapters/program/program-http.adapter";
 import { ProgramRepositoryPort } from "../../../domain/program/ports/program.repository.port";
+import { EntityCache } from "../../../domain/shared/entity-cache";
 
 @Injectable({ providedIn: "root" })
 export class ProgramRepository implements ProgramRepositoryPort {
   private readonly programAdapter = inject(ProgramHttpAdapter);
+  private readonly entityCache = new EntityCache<Program>();
 
   getAll(skip: number, take: number, params?: HttpParams): Observable<ApiPagination<Program>> {
     return this.programAdapter.getAll(skip, take, params);
@@ -26,7 +28,7 @@ export class ProgramRepository implements ProgramRepositoryPort {
   }
 
   getOne(programId: number): Observable<Program> {
-    return this.programAdapter.getOne(programId);
+    return this.entityCache.getOrFetch(programId, () => this.programAdapter.getOne(programId));
   }
 
   create(program: ProgramCreate): Observable<Program> {

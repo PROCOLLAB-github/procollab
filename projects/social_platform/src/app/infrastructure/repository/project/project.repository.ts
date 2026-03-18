@@ -1,8 +1,7 @@
 /** @format */
 
-import { inject, Injectable, OnDestroy } from "@angular/core";
-import { BehaviorSubject, map, Observable, shareReplay, tap, Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { inject, Injectable } from "@angular/core";
+import { BehaviorSubject, map, Observable, tap } from "rxjs";
 import { Project, ProjectCount } from "../../../domain/project/project.model";
 import { ProjectHttpAdapter } from "../../adapters/project/project-http.adapter";
 import { ApiPagination } from "../../../domain/other/api-pagination.model";
@@ -19,10 +18,11 @@ import { RemoveProjectCollaborator } from "../../../domain/project/events/remove
 import { SendVacancyResponse } from "../../../domain/vacancy/events/send-vacancy-response.event";
 import { AcceptVacancyResponse } from "../../../domain/vacancy/events/accept-vacancy-response.event";
 import { RejectVacancyResponse } from "../../../domain/vacancy/events/reject-vacancy-response.event";
+import { EntityCache } from "../../../domain/shared/entity-cache";
 
 @Injectable({ providedIn: "root" })
 export class ProjectRepository implements ProjectRepositoryPort {
-  private readonly cache = new Map<number, Observable<Project>>();
+  private readonly entityCache = new EntityCache<Project>();
   readonly count$ = new BehaviorSubject<ProjectCount>({ my: 0, all: 0, subs: 0 });
 
   private readonly projectAdapter = inject(ProjectHttpAdapter);
@@ -100,14 +100,9 @@ export class ProjectRepository implements ProjectRepositoryPort {
   }
 
   getOne(id: number): Observable<Project> {
-    if (!this.cache.has(id)) {
-      const project$ = this.projectAdapter.fetchOne(id).pipe(
-        map(dto => plainToInstance(Project, dto)),
-        shareReplay(1)
-      );
-      this.cache.set(id, project$);
-    }
-    return this.cache.get(id)!;
+    return this.entityCache.getOrFetch(id, () =>
+      this.projectAdapter.fetchOne(id).pipe(map(dto => plainToInstance(Project, dto)))
+    );
   }
 
   refreshCount(): Observable<ProjectCount> {
@@ -139,6 +134,6 @@ export class ProjectRepository implements ProjectRepositoryPort {
   }
 
   invalidate(id: number): void {
-    this.cache.delete(id);
+    this.entityCache.invalidate(id);
   }
 }
