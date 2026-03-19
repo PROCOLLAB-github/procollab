@@ -181,8 +181,11 @@
               участники
             </app-button>
           </a>
-          } @else { @if (info().courseId) {
-          <a class="info__contacts" [routerLink]="'/office/courses/' + info().courseId">
+          } @else { @if (info().courseId || queryCourseId()) {
+          <a
+            class="info__contacts"
+            [routerLink]="'/office/courses/' + (info().courseId || queryCourseId())"
+          >
             <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
               перейти в курс
             </app-button>
