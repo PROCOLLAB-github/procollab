@@ -4,7 +4,6 @@
 <div class="course">
   <div class="course__cover">
     <app-avatar [size]="68" [url]="course.avatarUrl"></app-avatar>
-    <img src="assets\icons\svg\rocket.svg" class="course__rocket" />
     <app-button
       customTypographyClass="text-body-10"
       [color]="isMember() ? 'primary' : isSubs() ? 'red' : 'green'"
