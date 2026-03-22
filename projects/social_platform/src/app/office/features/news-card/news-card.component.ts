@@ -25,7 +25,7 @@ import { FileService } from "@core/services/file.service";
 import { nanoid } from "nanoid";
 import { expandElement } from "@utils/expand-element";
 import { FileModel } from "@models/file.model";
-import { forkJoin, noop, Observable, tap } from "rxjs";
+import { catchError, forkJoin, noop, Observable, of, tap } from "rxjs";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
@@ -279,6 +279,11 @@ export class NewsCardComponent implements OnInit {
               fileObj.src = file.url;
               fileObj.loading = false;
               fileObj.tempFile = null;
+            }),
+            catchError(() => {
+              fileObj.loading = false;
+              fileObj.error = true;
+              return of(null);
             })
           )
         );
@@ -301,6 +306,11 @@ export class NewsCardComponent implements OnInit {
               fileObj.loading = false;
               fileObj.src = file.url;
               fileObj.tempFile = null;
+            }),
+            catchError(() => {
+              fileObj.loading = false;
+              fileObj.error = "Ошибка загрузки";
+              return of(null);
             })
           )
         );

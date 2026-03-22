@@ -11,14 +11,23 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ActivatedRoute, RouterLink } from "@angular/router";
-import { concatMap, fromEvent, map, noop, of, Subscription, tap, throttleTime } from "rxjs";
+import {
+  catchError,
+  concatMap,
+  fromEvent,
+  map,
+  noop,
+  of,
+  Subscription,
+  tap,
+  throttleTime,
+} from "rxjs";
 import { AuthService } from "@auth/services";
 import { User } from "@auth/models/user.model";
 import { NavService } from "@services/nav.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { MemberService } from "@services/member.service";
-import { MemberCardComponent } from "../shared/member-card/member-card.component";
 import { ApiPagination } from "@models/api-pagination.model";
 
 /**
@@ -99,7 +108,7 @@ export class MentorsComponent implements OnInit, OnDestroy, AfterViewInit {
     if (target)
       fromEvent(target, "scroll")
         .pipe(
-          concatMap(() => this.onScroll()),
+          concatMap(() => this.onScroll().pipe(catchError(() => of({})))),
           throttleTime(500)
         )
         .subscribe(noop);

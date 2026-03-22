@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { ValidationService } from "projects/core";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
-import { forkJoin, noop, Observable, tap } from "rxjs";
+import { catchError, forkJoin, noop, Observable, of, tap } from "rxjs";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";
 import { IconComponent, InputComponent } from "@ui/components";
 import { AutosizeModule } from "ngx-autosize";
@@ -76,6 +76,8 @@ export class NewsFormComponent implements OnInit {
       ...this.messageForm.value,
       files: [...this.imagesList.map(f => f.src), ...this.filesList.map(f => f.src)],
     });
+
+    this.onResetForm();
   }
 
   /**
@@ -83,6 +85,7 @@ export class NewsFormComponent implements OnInit {
    */
   onResetForm() {
     this.imagesList = [];
+    this.filesList = [];
     this.messageForm.reset();
   }
 
@@ -128,6 +131,11 @@ export class NewsFormComponent implements OnInit {
               fileObj.src = file.url;
               fileObj.loading = false;
               fileObj.tempFile = null;
+            }),
+            catchError(() => {
+              fileObj.loading = false;
+              fileObj.error = true;
+              return of(null);
             })
           )
         );
@@ -145,6 +153,11 @@ export class NewsFormComponent implements OnInit {
             tap(file => {
               fileObj.loading = false;
               fileObj.src = file.url;
+            }),
+            catchError(() => {
+              fileObj.loading = false;
+              fileObj.error = "Ошибка загрузки";
+              return of(null);
             })
           )
         );

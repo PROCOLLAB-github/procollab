@@ -18,7 +18,7 @@ import { expandElement } from "@utils/expand-element";
 import { FileModel } from "@office/models/file.model";
 import { nanoid } from "nanoid";
 import { FileService } from "@core/services/file.service";
-import { forkJoin, noop, Observable, tap } from "rxjs";
+import { catchError, forkJoin, noop, Observable, of, tap } from "rxjs";
 import { DayjsPipe, FormControlPipe, ParseLinksPipe, ValidationService } from "projects/core";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { ButtonComponent, IconComponent } from "@ui/components";
@@ -266,6 +266,11 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
               fileObj.src = file.url;
               fileObj.loading = false;
               fileObj.tempFile = null;
+            }),
+            catchError(() => {
+              fileObj.loading = false;
+              fileObj.error = true;
+              return of(null);
             })
           )
         );
@@ -288,6 +293,11 @@ export class ProgramNewsCardComponent implements OnInit, AfterViewInit {
               fileObj.loading = false;
               fileObj.src = file.url;
               fileObj.tempFile = null;
+            }),
+            catchError(() => {
+              fileObj.loading = false;
+              fileObj.error = "Ошибка загрузки";
+              return of(null);
             })
           )
         );

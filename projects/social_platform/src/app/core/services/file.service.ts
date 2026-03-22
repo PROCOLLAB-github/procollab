@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService, TokenService } from "@corelib";
-import { Observable } from "rxjs";
+import { firstValueFrom, Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { environment } from "@environment";
 
@@ -32,17 +32,36 @@ export class FileService {
     const formData = new FormData();
     formData.append("file", file);
 
-    return new Observable<{ url: string }>(observer => {
+    const doFetch = (token: string) =>
       fetch(`${environment.apiUrl}${this.FILES_URL}/`, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${this.tokenService.getTokens()?.access}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
         body: formData,
-      })
-        .then(res => res.json())
-        .then(res => {
-          observer.next(res);
+      });
+
+    return new Observable<{ url: string }>(observer => {
+      const execute = async () => {
+        const token = this.tokenService.getTokens()?.access;
+        if (!token) throw new Error("No access token");
+
+        let res = await doFetch(token);
+
+        if (res.status === 401) {
+          const refreshRes = await firstValueFrom(this.tokenService.refreshTokens());
+          this.tokenService.memTokens(refreshRes);
+          res = await doFetch(refreshRes.access);
+        }
+
+        if (!res.ok) {
+          throw new Error(`Upload failed: ${res.status}`);
+        }
+
+        return res.json();
+      };
+
+      execute()
+        .then(data => {
+          observer.next(data);
           observer.complete();
         })
         .catch(err => observer.error(err));
