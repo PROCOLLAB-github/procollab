@@ -193,6 +193,12 @@
   }
 }
 
+.profile__main-text--grid {
+  display: grid;
+  grid-template-columns: 0.1fr 2fr 1fr 1fr;
+  grid-gap: 20px;
+}
+
 .profile__main--grid {
   display: grid;
   grid-template-columns: 3fr 3fr 4fr;

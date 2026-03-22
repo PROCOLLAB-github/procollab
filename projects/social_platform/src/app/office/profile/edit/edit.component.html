@@ -82,10 +82,17 @@
     <div class="profile__wrapper">
       @if(editingStep === 'main'){
       <div class="profile__wrapper--main">
+        <div class="profile__main-text--grid">
+          <label for="avatar" class="field-label" style="text-align: center">фото</label>
+
+          <label class="field-label text-body-12" for="coverImageAddress" style="text-align: center"
+            >обложка для профиля</label
+          >
+        </div>
+
         <div class="profile__row">
           @if (profileForm.get("avatar"); as avatar) {
           <div>
-            <label for="avatar" class="field-label" style="text-align: center">фото</label>
             <fieldset class="profile__avatar">
               <app-avatar-control
                 id="avatar"
@@ -103,12 +110,6 @@
           </div>
           } @if (profileForm.get("coverImageAddress"); as coverImageAddress) {
           <fieldset class="profile__file">
-            <label
-              class="field-label text-body-12"
-              for="coverImageAddress"
-              style="text-align: center"
-              >обложка для профиля</label
-            >
             <app-upload-file
               formControlName="coverImageAddress"
               accept=".jpg,.png,.jpeg"
