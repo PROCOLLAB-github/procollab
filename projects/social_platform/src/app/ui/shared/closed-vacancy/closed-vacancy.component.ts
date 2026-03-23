@@ -3,7 +3,7 @@
 import { ChangeDetectionStrategy, Component } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
-import { DayjsPipe } from "projects/core";
+import { DayjsPipe } from "@corelib";
 import { Router, RouterLink } from "@angular/router";
 
 /**

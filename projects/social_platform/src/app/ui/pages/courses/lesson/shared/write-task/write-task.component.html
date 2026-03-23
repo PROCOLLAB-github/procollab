@@ -1,0 +1,92 @@
+<!-- @format -->
+
+<div class="write-task" [class.write-task--hasVideo]="cachedVideoUrl">
+  <div class="write-task__header">
+    <p class="text-body-12 write-task__task">задание {{ data.order }}</p>
+    @if (!cachedVideoUrl && !data.imageUrl) {
+    <p class="write-task__text text-body-12-bold">{{ data.title | truncate: 80 }}</p>
+    }
+    <div
+      class="write-task__description text-body-12"
+      [class.write-task__description--hasVideo]="cachedVideoUrl"
+    >
+      @if (cachedVideoUrl) {
+      <iframe
+        [src]="cachedVideoUrl"
+        width="397px"
+        height="223px"
+        frameborder="0"
+        allowfullscreen
+        allowtransparency="true"
+      ></iframe>
+      } @else if (data.imageUrl) {
+      <div class="write-task__block">
+        <img appImagePreview class="write-task__image" [src]="data.imageUrl" />
+        <p class="text-body-12-bold">{{ data.title | truncate: 50 }}</p>
+      </div>
+      }
+      <p
+        #descEl
+        class="write-task__desc"
+        [innerHTML]="
+          readFullDescription ? data.bodyText : (data.bodyText | truncateHtml: truncateLimit)
+        "
+      ></p>
+      @if (descriptionExpandable) {
+      <div class="read-more text-body-10" (click)="onToggleDescription(descEl)">
+        {{ readFullDescription ? "скрыть" : "подробнее" }}
+      </div>
+      } @if (type === 'text-file' && data.attachmentUrl) {
+      <app-file-item
+        mode="preview"
+        [type]="'file'"
+        name="файл с заданием"
+        [size]="0"
+        [link]="data.attachmentUrl"
+      ></app-file-item>
+      }
+    </div>
+  </div>
+
+  <div class="write-task__content">
+    <p class="write-task__input text-body-12">ответ</p>
+    <div class="write-task__input write-task__input--textarea">
+      <textarea
+        [style.minHeight]="type === 'text-file' ? '125px' : '341px'"
+        class="write-task__textarea text-body-12"
+        rows="2"
+        attr.maxlength="{{ maxLength }}"
+        (input)="onKeyUp($event)"
+        placeholder="ваш ответ"
+      ></textarea>
+      <div class="write-task__counter">
+        <p class="text-body-10">
+          <span>{{ currentLength() }}</span> / {{ maxLength }}
+        </p>
+      </div>
+    </div>
+
+    @if (type === 'text-file') {
+    <div class="write-task__files">
+      <app-upload-file [resetAfterUpload]="true" (uploaded)="onFileUploaded($event)">
+        <div emptyPlaceholder class="write-task__upload">
+          <i appIcon icon="file" appSquare="10"></i>
+          <p class="text-body-12">загрузите файл до 100 MB</p>
+        </div>
+      </app-upload-file>
+
+      @for (file of uploadedFiles(); track $index) {
+      <app-file-item
+        mode="preview"
+        [type]="file.mimeType"
+        [name]="file.name"
+        [size]="file.size"
+        [link]="file.link"
+        [canDelete]="true"
+        (deleted)="onFileRemoved($index)"
+      ></app-file-item>
+      }
+    </div>
+    }
+  </div>
+</div>

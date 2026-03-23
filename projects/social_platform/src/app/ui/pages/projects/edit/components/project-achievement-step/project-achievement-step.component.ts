@@ -12,7 +12,7 @@ import {
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { InputComponent, ButtonComponent } from "@ui/components";
 import { ControlErrorPipe } from "@corelib";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProjectFormService } from "../../../../../../api/project/facades/edit/project-form.service";
 import { IconComponent } from "@uilib";
 import { ProjectAchievementsService } from "projects/social_platform/src/app/api/project/facades/edit/project-achievements.service";

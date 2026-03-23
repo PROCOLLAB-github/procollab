@@ -4,9 +4,9 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { IconComponent } from "@ui/components";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
-import { IndustryRepository } from "projects/social_platform/src/app/infrastructure/repository/industry/industry.repository";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
+import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 
 @Component({
   selector: "app-projects-left-side",
@@ -19,5 +19,5 @@ import { Project } from "projects/social_platform/src/app/domain/project/project
 export class ProjectsLeftSideComponent {
   @Input() project!: WritableSignal<Project | undefined>;
 
-  protected readonly industryRepository = inject(IndustryRepository);
+  protected readonly industryRepository = inject(IndustryInfoService);
 }

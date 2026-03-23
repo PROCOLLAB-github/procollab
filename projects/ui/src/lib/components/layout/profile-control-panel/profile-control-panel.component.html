@@ -24,6 +24,8 @@
             (reject)="rejectInvite.emit($event)"
           ></app-invite-manage-card>
         </li>
+        } @empty {
+        <app-empty-manage-card></app-empty-manage-card>
         }
       </ul>
     </div>

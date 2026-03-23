@@ -3,7 +3,7 @@
 import { Injectable } from "@angular/core";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { BehaviorSubject, take } from "rxjs";
-import { AuthRepository } from "../../infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
 /**
  * СЕРВИС УПРАВЛЕНИЯ СОСТОЯНИЕМ ОНБОРДИНГА
@@ -42,7 +42,7 @@ import { AuthRepository } from "../../infrastructure/repository/auth/auth.reposi
   providedIn: "root",
 })
 export class OnboardingService {
-  constructor(private authRepository: AuthRepository) {
+  constructor(private authRepository: AuthRepositoryPort) {
     this.authRepository.profile.pipe(take(1)).subscribe(p => {
       this._formValue$.next({
         avatar: p.avatar,

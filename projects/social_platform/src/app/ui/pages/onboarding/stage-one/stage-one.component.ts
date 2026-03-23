@@ -8,7 +8,7 @@ import { CommonModule } from "@angular/common";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
 import { SpecializationsGroupComponent } from "@ui/shared/specializations-group/specializations-group.component";
 import { Specialization } from "projects/social_platform/src/app/domain/specializations/specialization";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 import { OnboardingStageOneUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-one-ui-info.service";
 import { OnboardingStageOneInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/onboarding-stage-one-info.service";

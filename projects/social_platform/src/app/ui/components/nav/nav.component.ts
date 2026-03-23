@@ -18,11 +18,11 @@ import { AsyncPipe } from "@angular/common";
 import { IconComponent } from "@ui/components";
 import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
 import { NotificationService } from "@ui/services/notification/notification.service";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 import { AcceptInviteUseCase } from "../../../api/invite/use-cases/accept-invite.use-case";
 import { RejectInviteUseCase } from "../../../api/invite/use-cases/reject-invite.use-case";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /**
  * Компонент навигационного меню
@@ -78,7 +78,7 @@ export class NavComponent implements OnInit, OnDestroy {
     public readonly navService: NavService,
     private readonly router: Router,
     public readonly notificationService: NotificationService,
-    public readonly authRepository: AuthRepository,
+    public readonly authRepository: AuthInfoService,
     private readonly cdref: ChangeDetectorRef
   ) {}
 

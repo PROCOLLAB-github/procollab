@@ -7,7 +7,7 @@ import { ProgramDetailListUIInfoService } from "projects/social_platform/src/app
 import { GetProgramFiltersUseCase } from "projects/social_platform/src/app/api/program/use-cases/get-program-filters.use-case";
 import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 
 @Injectable()
 export class ProgramProjectsFilterInfoService {

@@ -33,7 +33,7 @@ export const OFFICE_ROUTES: Routes = [
       {
         path: "",
         pathMatch: "full",
-        redirectTo: "feed",
+        redirectTo: "program",
       },
       {
         path: "feed",
@@ -54,6 +54,11 @@ export const OFFICE_ROUTES: Routes = [
       {
         path: "chats",
         loadChildren: () => import("../chat/chat.routes").then(c => c.CHAT_ROUTES),
+      },
+      {
+        path: "courses",
+        loadChildren: () =>
+          import("../../pages/courses/courses.routes").then(c => c.COURSES_ROUTES),
       },
       {
         path: "members",

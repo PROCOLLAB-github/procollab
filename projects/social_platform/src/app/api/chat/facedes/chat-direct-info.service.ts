@@ -6,14 +6,14 @@ import { ChatService } from "../chat.service";
 import { ChatDirectService } from "../chat-direct/chat-direct.service";
 import { ChatMessage } from "../../../domain/chat/chat-message.model";
 import { map, Observable, Subject, switchMap, takeUntil, tap } from "rxjs";
-import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
 import { ChatDirectUIInfoService } from "./ui/chat-direct-ui-info.service";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 
 @Injectable()
 export class ChatDirectInfoService {
   private readonly route = inject(ActivatedRoute);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly chatService = inject(ChatService);
   private readonly chatDirectService = inject(ChatDirectService);
   private readonly chatDirectUIInfoService = inject(ChatDirectUIInfoService);

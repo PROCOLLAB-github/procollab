@@ -10,7 +10,7 @@ import { ExpandService } from "../../../expand/expand.service";
 import { ProjectsDetailUIInfoService } from "./ui/projects-detail-ui.service";
 import { NewsInfoService } from "../../../news/news-info.service";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { RemoveProjectCollaboratorUseCase } from "../../use-case/remove-project-collaborator.use-case";
 import { TransferProjectOwnershipUseCase } from "../../use-case/transfer-project-ownership.use-case";
 import { FetchProjectNewsUseCase } from "../../use-case/fetch-project-news.use-case";
@@ -31,7 +31,7 @@ export class ProjectsDetailService {
   private readonly toggleProjectNewsLikeUseCase = inject(ToggleProjectNewsLikeUseCase);
   private readonly editProjectNewsUseCase = inject(EditProjectNewsUseCase);
   private readonly projectsDetailUIService = inject(ProjectsDetailUIInfoService);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly navService = inject(NavService);
   private readonly route = inject(ActivatedRoute); // Сервис для работы с активным маршрутом
   private readonly expandService = inject(ExpandService);

@@ -3,7 +3,7 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { map, Subject, takeUntil, tap } from "rxjs";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { GetVacanciesUseCase } from "projects/social_platform/src/app/api/vacancy/use-cases/get-vacancies.use-case";
 
 @Injectable()

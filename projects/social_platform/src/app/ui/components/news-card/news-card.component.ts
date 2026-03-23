@@ -24,8 +24,8 @@ import {
   ParseBreaksPipe,
   ParseLinksPipe,
   ValidationService,
-} from "projects/core";
-import { FileService } from "projects/core/src/lib/services/file/file.service";
+} from "@corelib";
+import { FileService } from "@core/lib/services/file/file.service";
 import { nanoid } from "nanoid";
 import { expandElement } from "@utils/expand-element";
 import { FileModel } from "projects/social_platform/src/app/domain/file/file.model";
@@ -38,7 +38,7 @@ import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { CarouselComponent } from "@ui/shared/carousel/carousel.component";
 import { ImgCardComponent } from "@ui/shared/img-card/img-card.component";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { FeedNews } from "../../../domain/project/project-news.model";
 
 @Component({

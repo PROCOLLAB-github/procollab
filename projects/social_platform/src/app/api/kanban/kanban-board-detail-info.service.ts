@@ -6,7 +6,7 @@ import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { filter, Observable, of, Subject } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProjectsDetailUIInfoService } from "../project/facades/detail/ui/projects-detail-ui.service";
-import { AuthRepository } from "../../infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
 @Injectable({
   providedIn: "root",
@@ -57,7 +57,7 @@ export class KanbanBoardDetailInfoService {
 
   readonly currentUser = signal<User | null>(null);
 
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly router = inject(Router);
   readonly route = inject(ActivatedRoute);

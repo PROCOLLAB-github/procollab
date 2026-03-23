@@ -4,7 +4,7 @@ import { computed, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
 import { debounceTime, distinctUntilChanged, filter, map, Subject, takeUntil, tap } from "rxjs";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { ProjectsUIInfoService } from "./ui/projects-ui-info.service";
 import { CreateProjectUseCase } from "../use-case/create-project.use-case";
 

@@ -5,9 +5,9 @@ import { Component, EventEmitter, inject, Output } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ControlErrorPipe, ValidationService } from "@corelib";
 import { ButtonComponent } from "@ui/components";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
-import { QuickAnswers } from "projects/core/src/consts/other/quick-answers.const";
+import { QuickAnswers } from "@core/consts/other/quick-answers.const";
 import { TagComponent } from "@ui/components/tag/tag.component";
 
 @Component({

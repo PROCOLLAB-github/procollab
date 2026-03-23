@@ -10,7 +10,7 @@ import { NavigationService } from "../../../paths/navigation.service";
 import { EditStep, ProjectStepService } from "../../../project/project-step.service";
 import { NavService } from "@ui/services/nav/nav.service";
 import { ActivatedRoute } from "@angular/router";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import {
   AsyncState,
   failure,
@@ -22,7 +22,7 @@ import {
 @Injectable()
 export class ProfileEditInfoService {
   private readonly profileFormService = inject(ProfileFormService);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly route = inject(ActivatedRoute);
   private readonly navigationService = inject(NavigationService);
   private readonly navService = inject(NavService);

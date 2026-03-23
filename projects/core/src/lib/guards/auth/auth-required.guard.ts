@@ -3,8 +3,8 @@
 import { inject } from "@angular/core";
 import { CanActivateFn, Router } from "@angular/router";
 import { catchError, map } from "rxjs";
-import { TokenService } from "@corelib";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { TokenService } from "../../services/tokens/token.service";
 
 /**
  * Guard для проверки аутентификации пользователя
@@ -22,7 +22,7 @@ import { AuthRepository } from "projects/social_platform/src/app/infrastructure/
  */
 export const AuthRequiredGuard: CanActivateFn = () => {
   const tokenService = inject(TokenService);
-  const authRepository = inject(AuthRepository);
+  const authRepository = inject(AuthRepositoryPort);
   const router = inject(Router);
 
   if (tokenService.getTokens() === null) {

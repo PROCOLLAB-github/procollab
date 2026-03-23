@@ -11,9 +11,9 @@ import { ProfileDetailUIInfoService } from "projects/social_platform/src/app/api
 import { ProjectTeamUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-team-ui.service";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 import { Subject, takeUntil } from "rxjs";
 import { DownloadCvUseCase } from "projects/social_platform/src/app/api/auth/use-cases/download-cv.use-case";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 @Injectable()
 export class DetailProfileInfoService {
@@ -23,7 +23,7 @@ export class DetailProfileInfoService {
   private readonly sendForUserUseCase = inject(SendForUserUseCase);
   private readonly downloadCvUseCase = inject(DownloadCvUseCase);
   private readonly projectTeamUIService = inject(ProjectTeamUIService);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthInfoService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
 
   private readonly destroy$ = new Subject<void>();

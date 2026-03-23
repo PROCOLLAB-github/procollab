@@ -3,7 +3,7 @@
 import { UpperCasePipe } from "@angular/common";
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
 import { IconComponent } from "@ui/components";
-import { LinkTransformPipe } from "projects/core/src/lib/pipes/transformers/link-transform.pipe";
+import { LinkTransformPipe } from "@core/lib/pipes/transformers/link-transform.pipe";
 
 /**
  * Компонент карточки ссылки или достижения

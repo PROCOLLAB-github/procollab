@@ -2,8 +2,8 @@
 
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
-import { SpecializationsRepository as SpecializationsService } from "projects/social_platform/src/app/infrastructure/repository/specializations/specializations.repository";
-import { SpecializationsGroup } from "projects/social_platform/src/app/domain/specializations/specializations-group";
+import { SpecializationsGroup } from "projects/social_platform/src/app/domain/project/specializations-group.model";
+import { SpecializationsInfoService } from "@api/specializations/facades/specializations-info.service";
 
 /**
  * РЕЗОЛВЕР ПЕРВОГО ЭТАПА ОНБОРДИНГА
@@ -29,7 +29,7 @@ import { SpecializationsGroup } from "projects/social_platform/src/app/domain/sp
  * - Централизованная обработка ошибок загрузки
  */
 export const StageOneResolver: ResolveFn<SpecializationsGroup[]> = () => {
-  const specializationsService = inject(SpecializationsService);
+  const specializationsService = inject(SpecializationsInfoService);
 
   return specializationsService.getSpecializationsNested();
 };

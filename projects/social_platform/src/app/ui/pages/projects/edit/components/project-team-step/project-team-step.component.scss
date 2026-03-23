@@ -4,7 +4,7 @@
 @use "styles/typography";
 
 .project {
-  position: relative;
+  max-width: 1280px;
 
   &__inner {
     width: 100%;
@@ -73,15 +73,14 @@
     transform: translateY(-50%);
   }
 
-  &__team {
-    position: relative;
-
-    &-tooltip {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      transform: translateY(calc(var(--app-height) * 0.47));
-    }
+  &__tooltip {
+    position: fixed;
+    right:
+      calc(
+        (100vw - 1080px) / 2
+      );
+    bottom: 24px;
+    z-index: 30;
   }
 }
 

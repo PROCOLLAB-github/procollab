@@ -11,7 +11,7 @@ import { Subject, takeUntil } from "rxjs";
 import { Router } from "@angular/router";
 import { ProjectFormService } from "projects/social_platform/src/app/api/project/project-form.service";
 import { Program } from "projects/social_platform/src/app/domain/program/program.model";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 
 @Injectable()
 export class DetailProgramInfoService {

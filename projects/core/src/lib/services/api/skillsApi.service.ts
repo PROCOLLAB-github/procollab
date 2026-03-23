@@ -2,7 +2,8 @@
 
 import { Inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { ApiService, SKILLS_API_URL } from "@corelib";
+import { SKILLS_API_URL } from "../../providers/api-url.provide";
+import { ApiService } from "./api.service";
 
 /**
  * Специализированный API сервис для работы с Skills API

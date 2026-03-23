@@ -7,7 +7,7 @@ import { AsyncPipe } from "@angular/common";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
 import { FeedNews } from "../../../domain/project/project-news.model";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 
 /**
  * КОМПОНЕНТ ДЕТАЛЬНОЙ НОВОСТИ

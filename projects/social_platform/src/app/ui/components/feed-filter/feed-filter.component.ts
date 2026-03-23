@@ -5,7 +5,7 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
-import { feedFilter } from "projects/core/src/consts/filters/feed-filter.const";
+import { feedFilter } from "@core/consts/filters/feed-filter.const";
 import { FeedFilterInfoService } from "./service/feed-filter-info.service";
 import { DetailProfileInfoService } from "../detail/services/profile/detail-profile-info.service";
 import { ProfileDetailUIInfoService } from "../../../api/profile/facades/detail/ui/profile-detail-ui-info.service";

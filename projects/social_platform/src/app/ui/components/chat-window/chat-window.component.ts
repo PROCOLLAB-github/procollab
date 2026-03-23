@@ -25,10 +25,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { filter, fromEvent, noop, skip, tap, throttleTime } from "rxjs";
 import { ModalService } from "@ui/models/modal.service";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { PluralizePipe } from "projects/core";
+import { PluralizePipe } from "@corelib";
 import { ChatMessageComponent } from "@ui/components/chat-message/chat-message.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /**
  * Компонент окна чата
@@ -63,7 +63,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly fb: FormBuilder,
     private readonly modalService: ModalService,
-    private readonly authRepository: AuthRepository
+    private readonly authRepository: AuthInfoService
   ) {
     // Создание формы для ввода сообщения
     this.messageForm = this.fb.group({

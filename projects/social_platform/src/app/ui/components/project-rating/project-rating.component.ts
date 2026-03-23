@@ -27,7 +27,7 @@ import { BooleanCriterionComponent } from "./components/boolean-criterion/boolea
 import { RangeCriterionInputComponent } from "./components/range-criterion-input/range-criterion-input.component";
 import { ControlErrorPipe } from "@corelib";
 import { ProjectRatingCriterion } from "../../../domain/project/project-rating-criterion";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 
 /**
  * Компонент рейтинга проекта

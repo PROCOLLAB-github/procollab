@@ -48,13 +48,7 @@ export class OfficeUIInfoService {
       { name: "участники", icon: "people-bold", link: "members" },
       { name: "программы", icon: "program", link: "program" },
       { name: "вакансии", icon: "search-sidebar", link: "vacancies" },
-      {
-        name: "траектории",
-        icon: "trajectories",
-        link: "skills",
-        isExternal: true,
-        isActive: false,
-      },
+      { name: "курсы", icon: "trajectories", link: "courses" },
       { name: "чаты", icon: "message", link: "chats" },
     ]);
   }

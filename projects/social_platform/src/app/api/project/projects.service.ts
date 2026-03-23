@@ -2,7 +2,7 @@
 
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { CreateProjectUseCase } from "./use-case/create-project.use-case";
 
 @Injectable({

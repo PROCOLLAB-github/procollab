@@ -12,18 +12,15 @@ import { generateOptionsList } from "@utils/generate-options-list";
 import {
   educationUserLevel,
   educationUserType,
-} from "projects/core/src/consts/lists/education-info-list.const";
-import {
-  languageLevelsList,
-  languageNamesList,
-} from "projects/core/src/consts/lists/language-info-list.const";
+} from "@core/consts/lists/education-info-list.const";
+import { languageLevelsList, languageNamesList } from "@core/consts/lists/language-info-list.const";
 import { error } from "console";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class ProfileFormService {
   private readonly fb = inject(FormBuilder);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
 
   private readonly destroy$ = new Subject<void>();
 

@@ -6,8 +6,8 @@ import { OnboardingService } from "../../onboarding.service";
 import { Router } from "@angular/router";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { OnboardingStageThreeUIInfoService } from "./ui/onboarding-stage-three-ui-info.service";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { loading } from "projects/social_platform/src/app/domain/shared/async-state";
 
 @Injectable()
@@ -15,7 +15,7 @@ export class OnboardingStageThreeInfoService {
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageThreeUIInfoService = inject(OnboardingStageThreeUIInfoService);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
 

@@ -3,8 +3,8 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
 import { IconComponent } from "@uilib";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
-import { UserLinksPipe } from "projects/core/src/lib/pipes/user/user-links.pipe";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { UserLinksPipe } from "@core/lib/pipes/user/user-links.pipe";
 import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
 import { Project } from "projects/social_platform/src/app/domain/project/project.model";
 

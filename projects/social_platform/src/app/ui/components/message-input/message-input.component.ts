@@ -15,13 +15,13 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
 import { fromEvent, map } from "rxjs";
-import { FileService } from "projects/core/src/lib/services/file/file.service";
+import { FileService } from "@core/lib/services/file/file.service";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { AutosizeModule } from "ngx-autosize";
 import { NgxMaskModule } from "ngx-mask";
 import { IconComponent } from "@ui/components";
 import { UpperCasePipe } from "@angular/common";
-import { FormatedFileSizePipe } from "projects/core/src/lib/pipes/transformers/formatted-file-size.pipe";
+import { FormatedFileSizePipe } from "@core/lib/pipes/transformers/formatted-file-size.pipe";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**

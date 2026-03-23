@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ValidationService } from "@corelib";
 import { map, Subject, takeUntil, tap } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { ResetPasswordUseCase } from "../use-cases/reset-password.use-case";
 import { SetPasswordUseCase } from "../use-cases/set-password.use-case";
 import { toAsyncState } from "../../../domain/shared/to-async-state";

@@ -2,8 +2,8 @@
 
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
-import { ControlErrorPipe } from "projects/core";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
+import { ControlErrorPipe } from "@corelib";
 import { ButtonComponent, InputComponent } from "@ui/components";
 import { AuthUIInfoService } from "projects/social_platform/src/app/api/auth/facades/ui/auth-ui-info.service";
 import { AuthPasswordService } from "projects/social_platform/src/app/api/auth/facades/auth-password.service";

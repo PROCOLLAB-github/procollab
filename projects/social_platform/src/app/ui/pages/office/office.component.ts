@@ -11,7 +11,7 @@ import {
   DestroyRef,
 } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
 import { ProgramSidebarCardComponent } from "@ui/shared/program-sidebar-card/program-sidebar-card.component";
 import { ButtonComponent } from "@ui/components";
 import { DeleteConfirmComponent } from "@ui/components/delete-confirm/delete-confirm.component";
@@ -24,7 +24,7 @@ import { GetActualProgramsUseCase } from "../../../api/program/use-cases/get-act
 import { Program } from "../../../domain/program/program.model";
 import { OfficeInfoService } from "../../../api/office/facades/office-info.service";
 import { OfficeUIInfoService } from "../../../api/office/facades/ui/office-ui-info.service";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /**
  * Главный компонент офиса - корневой компонент рабочего пространства
@@ -64,11 +64,9 @@ export class OfficeComponent implements OnInit, OnDestroy {
   private readonly officeUIInfoService = inject(OfficeUIInfoService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly getActualProgramsUseCase = inject(GetActualProgramsUseCase);
-
-  constructor(
-    public readonly authRepository: AuthRepository,
-    public readonly chatService: ChatService
-  ) {}
+  public readonly authRepository = inject(AuthInfoService);
+  public readonly chatService = inject(ChatService);
+  private readonly profile = toSignal(this.authRepository.profile, { initialValue: null });
 
   readonly invites = this.officeInfoService.invites;
 
@@ -146,7 +144,7 @@ export class OfficeComponent implements OnInit, OnDestroy {
   }
 
   private getRegisteredProgramSeenKey(programId: number): string {
-    return `program_registered_modal_seen_${programId}`;
+    return `program_${this.profile()?.id}_registered_modal_seen_${programId}`;
   }
 
   private hasSeenRegisteredProgramModal(programId: number): boolean {

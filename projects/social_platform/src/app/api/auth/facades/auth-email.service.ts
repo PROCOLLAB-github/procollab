@@ -4,8 +4,8 @@ import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { TokenService } from "@corelib";
 import { filter, interval, map, Subject, takeUntil } from "rxjs";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { ResendEmailUseCase } from "../use-cases/resend-email.use-case";
 
 @Injectable()

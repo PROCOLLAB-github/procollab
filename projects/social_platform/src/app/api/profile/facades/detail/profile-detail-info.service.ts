@@ -9,7 +9,7 @@ import { calculateProfileProgress } from "@utils/calculateProgress";
 import { ProfileDetailUIInfoService } from "./ui/profile-detail-ui-info.service";
 import { NewsInfoService } from "../../../news/news-info.service";
 import { ProjectsDetailUIInfoService } from "../../../project/facades/detail/ui/projects-detail-ui.service";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { AddProfileNewsUseCase } from "../../use-cases/add-profile-news.use-case";
 import { DeleteProfileNewsUseCase } from "../../use-cases/delete-profile-news.use-case";
 import { EditProfileNewsUseCase } from "../../use-cases/edit-profile-news.use-case";
@@ -20,7 +20,7 @@ import { ToggleProfileNewsLikeUseCase } from "../../use-cases/toggle-profile-new
 @Injectable()
 export class ProfileDetailInfoService {
   private readonly route = inject(ActivatedRoute);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly addProfileNewsUseCase = inject(AddProfileNewsUseCase);
   private readonly deleteProfileNewsUseCase = inject(DeleteProfileNewsUseCase);
   private readonly editProfileNewsUseCase = inject(EditProfileNewsUseCase);

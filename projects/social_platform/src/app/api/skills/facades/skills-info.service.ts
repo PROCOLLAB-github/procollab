@@ -1,14 +1,15 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { Skill } from "../../../domain/skills/skill";
 import { FormGroup } from "@angular/forms";
-import { SkillsRepository as SkillsService } from "projects/social_platform/src/app/infrastructure/repository/skills/skills.repository";
+import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
+import { SkillsGroup } from "@domain/skills/skills-group";
 
 @Injectable({ providedIn: "root" })
 export class SkillsInfoService {
-  private readonly skillsService = inject(SkillsService);
+  private readonly skillsRepository = inject(SkillsRepositoryPort);
 
   private readonly destroy$ = new Subject<void>();
 
@@ -17,6 +18,10 @@ export class SkillsInfoService {
   destroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  getSkillsNested(): Observable<SkillsGroup[]> {
+    return this.skillsRepository.getSkillsNested();
   }
 
   /**
@@ -60,7 +65,7 @@ export class SkillsInfoService {
   }
 
   onSearchSkill(query: string): void {
-    this.skillsService.getSkillsInline(query, 1000, 0).subscribe(({ results }) => {
+    this.skillsRepository.getSkillsInline(query, 1000, 0).subscribe(({ results }) => {
       this.inlineSkills.set(results);
     });
   }

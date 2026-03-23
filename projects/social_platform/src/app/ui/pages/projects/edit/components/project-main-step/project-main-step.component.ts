@@ -9,9 +9,9 @@ import {
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
-import { directionProjectList } from "projects/core/src/consts/lists/direction-project-list.const";
-import { trackProjectList } from "projects/core/src/consts/lists/track-project-list.const";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
+import { directionProjectList } from "@core/consts/lists/direction-project-list.const";
+import { trackProjectList } from "@core/consts/lists/track-project-list.const";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { InputComponent, SelectComponent, ButtonComponent } from "@ui/components";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";

@@ -13,8 +13,8 @@ import { IconComponent } from "@ui/components";
 import { AsyncPipe } from "@angular/common";
 import { ClickOutsideModule } from "ng-click-outside";
 import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 import { NotificationService } from "@ui/services/notification/notification.service";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /**
  * Компонент заголовка приложения
@@ -50,7 +50,7 @@ import { NotificationService } from "@ui/services/notification/notification.serv
 })
 export class HeaderComponent {
   private readonly notificationService = inject(NotificationService);
-  public readonly authService = inject(AuthRepository);
+  public readonly authService = inject(AuthInfoService);
 
   @Input() invites: Invite[] = [];
 

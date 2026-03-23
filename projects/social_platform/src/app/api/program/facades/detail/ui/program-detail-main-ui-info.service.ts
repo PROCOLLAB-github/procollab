@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable, signal } from "@angular/core";
-import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 import { Program } from "projects/social_platform/src/app/domain/program/program.model";
 import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
 

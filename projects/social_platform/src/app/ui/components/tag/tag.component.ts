@@ -11,7 +11,7 @@ import {
   SimpleChanges,
 } from "@angular/core";
 import { IconComponent } from "../icon/icon.component";
-import { tagColors } from "projects/core/src/consts/other/tag-colors.const";
+import { tagColors } from "@core/consts/other/tag-colors.const";
 import { NgStyle } from "@angular/common";
 
 /**

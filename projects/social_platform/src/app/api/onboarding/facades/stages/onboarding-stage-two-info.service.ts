@@ -9,7 +9,7 @@ import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { SkillsInfoService } from "../../../skills/facades/skills-info.service";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { OnboardingStageTwoUIInfoService } from "./ui/onboarding-stage-two-ui-info.service";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import {
   failure,
   initial,
@@ -18,7 +18,7 @@ import {
 
 @Injectable()
 export class OnboardingStageTwoInfoService {
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageTwoUIInfoService = inject(OnboardingStageTwoUIInfoService);

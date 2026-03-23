@@ -1,6 +1,6 @@
 /** @format */
 
-import { Specialization } from "./specialization";
+import type { Specialization } from "./specialization";
 
 /**
  * Модель группы специализаций

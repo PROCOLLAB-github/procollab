@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { Router } from "@angular/router";
 
 @Injectable({ providedIn: "root" })

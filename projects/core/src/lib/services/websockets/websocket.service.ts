@@ -4,7 +4,7 @@ import { filter, map, Observable, Observer, retry, Subject } from "rxjs";
 import { environment } from "@environment";
 import * as snakecaseKeys from "snakecase-keys";
 import camelcaseKeys from "camelcase-keys";
-import { TokenService } from "@corelib";
+import { TokenService } from "../tokens/token.service";
 
 /**
  * Сервис для работы с WebSocket соединениями

@@ -12,15 +12,15 @@ import {
 } from "@angular/core";
 import { isFailure } from "projects/social_platform/src/app/domain/shared/async-state";
 import { RouterModule } from "@angular/router";
-import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
+import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { SoonCardComponent } from "@ui/shared/soon-card/soon-card.component";
 import { NewsFormComponent } from "@ui/components/news-form/news-form.component";
 import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
-import { UserLinksPipe } from "projects/core/src/lib/pipes/user/user-links.pipe";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { UserLinksPipe } from "@core/lib/pipes/user/user-links.pipe";
 import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
 import { ProgramDetailMainUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-main-ui-info.service";
 import { ProgramDetailMainService } from "projects/social_platform/src/app/api/program/facades/detail/program-detail-main-info.service";

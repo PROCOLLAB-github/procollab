@@ -8,15 +8,15 @@ import { ChatListItem } from "../../../domain/chat/chat-item.model";
 import { combineLatest, map, Observable, Subject, takeUntil } from "rxjs";
 import { toObservable } from "@angular/core/rxjs-interop";
 import { ChatUIInfoService } from "./ui/chat-ui-info.service";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
 @Injectable()
 export class ChatInfoService {
   private readonly navService = inject(NavService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly chatService = inject(ChatService);
   private readonly chatUIInfoService = inject(ChatUIInfoService);
   private readonly logger = inject(LoggerService);

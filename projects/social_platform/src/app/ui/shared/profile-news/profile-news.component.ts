@@ -16,7 +16,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
 import { FeedNews } from "../../../domain/project/project-news.model";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 
 /**
  * Компонент для отображения отдельной новости профиля в модальном окне

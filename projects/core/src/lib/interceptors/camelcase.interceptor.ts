@@ -11,7 +11,7 @@ import {
 import { map, type Observable } from "rxjs";
 import * as snakecaseKeys from "snakecase-keys";
 import camelcaseKeys from "camelcase-keys";
-import { LoggerService } from "@corelib";
+import { LoggerService } from "../services/logger/logger.service";
 
 /**
  * HTTP интерцептор для автоматического преобразования стиля именования ключей объектов

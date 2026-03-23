@@ -19,7 +19,7 @@ import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { expandElement } from "@utils/expand-element";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 
 /**
  * КОМПОНЕНТ КАРТОЧКИ ВАКАНСИИ ПРОЕКТА

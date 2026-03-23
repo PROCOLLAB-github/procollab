@@ -1,6 +1,6 @@
 /** @format */
 
-import { Skill } from "./skill"; // Assuming Skill is defined in a separate file
+import type { Skill } from "./skill";
 
 /**
  * Интерфейс для группы навыков

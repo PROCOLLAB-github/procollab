@@ -5,9 +5,9 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/cor
 import { ReactiveFormsModule } from "@angular/forms";
 import { InputComponent, ButtonComponent } from "@ui/components";
 import { ControlErrorPipe } from "@corelib";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { InviteCardComponent } from "@ui/components/invite-card/invite-card.component";
-import { rolesMembersList } from "projects/core/src/consts/lists/roles-members-list.const";
+import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
 import { IconComponent } from "@uilib";
 import { CollaboratorCardComponent } from "@ui/shared/collaborator-card/collaborator-card.component";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";

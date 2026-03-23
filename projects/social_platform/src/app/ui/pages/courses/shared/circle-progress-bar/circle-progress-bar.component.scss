@@ -1,0 +1,57 @@
+@use "styles/typography";
+@use "styles/responsive";
+
+.progress-bar {
+  position: relative;
+
+  &__text {
+    position: absolute;
+    top: 49%;
+    left: 49%;
+    color: var(--dark-grey);
+    transform: translate(-49%, -49%);
+
+    &--icon {
+      top: 45%;
+      left: 55%;
+      color: var(--accent-light);
+    }
+
+    &--closed {
+      top: 43%;
+      left: 50%;
+      color: var(--red);
+    }
+  }
+
+  &__date {
+    position: absolute;
+    bottom: -15%;
+    left: 5%;
+  }
+}
+
+.track,
+.filled {
+  fill: none;
+  stroke-width: 7;
+}
+
+.track {
+  opacity: 0.2;
+  stroke: var(--accent-light);
+
+  &--closed {
+    opacity: 1;
+    stroke: var(--red);
+  }
+}
+
+.filled {
+  stroke: var(--accent);
+  transition: all 0.2s;
+
+  &--complete {
+    stroke: var(--green);
+  }
+}

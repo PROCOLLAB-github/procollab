@@ -4,6 +4,7 @@
   display: flex;
   gap: 10px;
   align-items: center;
+  justify-content: space-between;
 
   &__name {
     overflow: hidden;
@@ -16,6 +17,12 @@
     }
   }
 
+  &__left {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+
   &__meta {
     color: var(--dark-grey);
   }
@@ -25,10 +32,11 @@
     align-items: center;
     align-self: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
     border: 0.5px solid var(--medium-grey-for-outline);
-    border-radius: var(--rounded-xl);
+    border-radius: var(--rounded-xxl);
 
     &--delete {
       color: var(--red);
@@ -36,6 +44,11 @@
     }
 
     &--download {
+      color: var(--accent);
+      cursor: pointer;
+    }
+
+    &--file {
       color: var(--accent);
       cursor: pointer;
     }

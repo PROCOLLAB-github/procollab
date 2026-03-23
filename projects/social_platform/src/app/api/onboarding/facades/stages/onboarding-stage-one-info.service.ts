@@ -10,7 +10,7 @@ import { SearchesService } from "../../../searches/searches.service";
 import { OnboardingStageOneUIInfoService } from "./ui/onboarding-stage-one-ui-info.service";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { SpecializationsGroup } from "projects/social_platform/src/app/domain/specializations/specializations-group";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import {
   failure,
   initial,
@@ -19,7 +19,7 @@ import {
 
 @Injectable()
 export class OnboardingStageOneInfoService {
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly onboardingService = inject(OnboardingService);
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly validationService = inject(ValidationService);

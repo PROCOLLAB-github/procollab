@@ -12,7 +12,7 @@ import {
 } from "@angular/core";
 import { isLoading } from "projects/social_platform/src/app/domain/shared/async-state";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { RouterModule } from "@angular/router";
 import * as dayjs from "dayjs";
@@ -23,9 +23,7 @@ import { Specialization } from "projects/social_platform/src/app/domain/speciali
 import { SkillsGroupComponent } from "@ui/shared/skills-group/skills-group.component";
 import { SpecializationsGroupComponent } from "@ui/shared/specializations-group/specializations-group.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { navProfileItems } from "projects/core/src/consts/navigation/nav-profile-items.const";
-import { SpecializationsRepository as SpecializationsService } from "projects/social_platform/src/app/infrastructure/repository/specializations/specializations.repository";
-import { SkillsRepository as SkillsService } from "projects/social_platform/src/app/infrastructure/repository/skills/skills.repository";
+import { navProfileItems } from "@core/consts/navigation/nav-profile-items.const";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { ProfileFormService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-form.service";
 import {
@@ -33,7 +31,6 @@ import {
   ProjectStepService,
 } from "projects/social_platform/src/app/api/project/project-step.service";
 import { ProfileEditInfoService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-edit-info.service";
-import { SkillsInfoService } from "projects/social_platform/src/app/api/skills/facades/skills-info.service";
 import { OnboardingStageOneUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-one-ui-info.service";
 import { OnboardingStageOneInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/onboarding-stage-one-info.service";
 import { ProjectVacancyUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-vacancy-ui.service";
@@ -47,6 +44,10 @@ import { ProfileExperienceStepComponent } from "./components/profile-experience-
 import { ProfileAchievementsStepComponent } from "./components/profile-achievements-step/profile-achievements-step.component";
 import { ProfileSkillsStepComponent } from "./components/profile-skills-step/profile-skills-step.component";
 import { OnboardingUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-ui-info.service";
+import { SpecializationsInfoService } from "@api/specializations/facades/specializations-info.service";
+import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
+import { ProjectsEditUIInfoService } from "@api/project/facades/edit/ui/projects-edit-ui-info.service";
+import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
 
 dayjs.extend(cpf);
 
@@ -102,6 +103,9 @@ dayjs.extend(cpf);
     ProfileEditEducationInfoService,
     ProfileEditExperienceInfoService,
     ProfileEditSkillsInfoService,
+    ProjectVacancyUIService,
+    ProjectsEditUIInfoService,
+    ToggleFieldsInfoService,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -109,9 +113,9 @@ export class ProfileEditComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly profileFormService = inject(ProfileFormService);
   private readonly profileEditInfoService = inject(ProfileEditInfoService);
   private readonly projectStepService = inject(ProjectStepService);
-  private readonly specsService = inject(SpecializationsService);
+  private readonly specsService = inject(SpecializationsInfoService);
   private readonly skillsInfoService = inject(SkillsInfoService);
-  private readonly skillsService = inject(SkillsService);
+  private readonly skillsService = inject(SkillsInfoService);
   private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
   private readonly onboardingStageOneUIInfoService = inject(OnboardingStageOneUIInfoService);
   private readonly onboardingStageOneInfoService = inject(OnboardingStageOneInfoService);

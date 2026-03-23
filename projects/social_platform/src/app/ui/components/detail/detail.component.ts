@@ -11,11 +11,11 @@ import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ApproveSkillComponent } from "../approve-skill/approve-skill.component";
 import { ControlErrorPipe } from "@corelib";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { ProfileService } from "../../../api/auth/profile.service";
 import { ChatService } from "../../../api/chat/chat.service";
 import { ProjectFormService } from "../../../api/project/project-form.service";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProjectAdditionalService } from "../../../api/project/facades/edit/project-additional.service";
 import { TooltipInfoService } from "../../../api/tooltip/tooltip-info.service";
 import { DetailInfoService } from "./services/detail-info.service";
@@ -96,6 +96,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   protected readonly submissionProjectDateExpired =
     this.detailProjectInfoService.submissionProjectDateExpired;
   protected readonly isInProject = this.detailInfoService.isInProject;
+  protected readonly queryCourseId = this.detailInfoService.queryCourseId;
 
   protected readonly isSended = this.detailProfileInfoService.isSended;
   protected readonly isProfileFill = this.detailProfileInfoService.isProfileFill;

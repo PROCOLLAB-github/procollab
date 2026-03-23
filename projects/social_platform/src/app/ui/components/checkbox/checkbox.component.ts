@@ -35,6 +35,8 @@ export class CheckboxComponent implements OnInit {
   /** Состояние чекбокса */
   @Input({ required: true }) checked = false;
 
+  @Input() size?: string;
+
   /** Событие изменения состояния */
   @Output() checkedChange = new EventEmitter<boolean>();
 

@@ -22,7 +22,7 @@ import { InfoCardComponent } from "@ui/components/info-card/info-card.component"
 import { ButtonComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
 import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
-import { tagsFilter } from "projects/core/src/consts/filters/tags-filter.const";
+import { tagsFilter } from "@core/consts/filters/tags-filter.const";
 import { ProgramDetailListUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-list-ui-info.service";
 import { ProgramDetailListInfoService } from "projects/social_platform/src/app/api/program/facades/detail/program-detail-list-info.service";
 import { ExportFileInfoService } from "projects/social_platform/src/app/api/export-file/facades/export-file-info.service";
@@ -31,7 +31,7 @@ import { ProgramProjectsFilterInfoService } from "@ui/components/program-project
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 
 @Component({
   selector: "app-list",

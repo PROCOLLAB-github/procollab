@@ -2,7 +2,7 @@
 
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import {
   AsyncState,

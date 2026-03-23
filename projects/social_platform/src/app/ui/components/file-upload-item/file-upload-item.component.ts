@@ -12,7 +12,7 @@ import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { LoaderComponent } from "../loader/loader.component";
 import { IconComponent } from "@ui/components";
 import { UpperCasePipe } from "@angular/common";
-import { FormatedFileSizePipe } from "projects/core/src/lib/pipes/transformers/formatted-file-size.pipe";
+import { FormatedFileSizePipe } from "@core/lib/pipes/transformers/formatted-file-size.pipe";
 
 /**
  * Компонент для отображения элемента загружаемого файла.

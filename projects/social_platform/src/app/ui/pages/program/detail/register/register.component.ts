@@ -4,12 +4,12 @@ import { ChangeDetectionStrategy, Component, OnInit, inject, DestroyRef } from "
 import { ActivatedRoute, Router } from "@angular/router";
 import { map } from "rxjs";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ControlErrorPipe, ValidationService } from "projects/core";
+import { ControlErrorPipe, ValidationService } from "@corelib";
 import { BarComponent, ButtonComponent, InputComponent } from "@ui/components";
 import { KeyValuePipe } from "@angular/common";
 import { RegisterProgramUseCase } from "projects/social_platform/src/app/api/program/use-cases/register-program.use-case";
 import { ProgramDataSchema } from "projects/social_platform/src/app/domain/program/program.model";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**

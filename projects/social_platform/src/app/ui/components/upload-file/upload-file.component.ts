@@ -5,16 +5,17 @@ import {
   ChangeDetectorRef,
   Component,
   DestroyRef,
+  EventEmitter,
   forwardRef,
   inject,
   Input,
   OnInit,
+  Output,
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { FileService } from "projects/core/src/lib/services/file/file.service";
+import { FileService } from "@core/lib/services/file/file.service";
 import { nanoid } from "nanoid";
 import { IconComponent } from "@ui/components";
-import { SlicePipe } from "@angular/common";
 import { LoaderComponent } from "../loader/loader.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
@@ -49,7 +50,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
     },
   ],
   standalone: true,
-  imports: [IconComponent, SlicePipe, LoaderComponent],
+  imports: [IconComponent, LoaderComponent],
 })
 export class UploadFileComponent implements OnInit, ControlValueAccessor {
   private readonly fileService = inject(FileService);
@@ -61,6 +62,17 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
 
   /** Состояние ошибки */
   @Input() error = false;
+
+  /** Режим: после загрузки сбросить в пустое состояние и не показывать "файл успешно загружен" */
+  @Input() resetAfterUpload = false;
+
+  /** Событие с данными загруженного файла (url + метаданные оригинального файла) */
+  @Output() uploaded = new EventEmitter<{
+    url: string;
+    name: string;
+    size: number;
+    mimeType: string;
+  }>();
 
   ngOnInit(): void {}
 
@@ -93,11 +105,13 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
 
   /** Обработчик загрузки файла */
   onUpdate(event: Event): void {
-    const files = (event.currentTarget as HTMLInputElement).files;
+    const input = event.currentTarget as HTMLInputElement;
+    const files = input.files;
     if (!files?.length) {
       return;
     }
 
+    const originalFile = files[0];
     this.loading = true;
     this.cdr.markForCheck();
 

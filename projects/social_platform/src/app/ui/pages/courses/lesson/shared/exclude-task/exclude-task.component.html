@@ -1,0 +1,59 @@
+<!-- @format -->
+
+<div class="exclude" [class.exclude--hasContent]="cachedVideoUrl || !!data.imageUrl">
+  <div class="exclude__body" [class.exclude__body--hasContent]="cachedVideoUrl || !!data.imageUrl">
+    <p class="text-body-12 exclude__answer">задание {{ data.order }}</p>
+    <div
+      class="exclude__text text-body-12"
+      [class.exclude__text--hasContent]="cachedVideoUrl || !!data.imageUrl"
+    >
+      @if (cachedVideoUrl) {
+      <iframe
+        [src]="cachedVideoUrl"
+        frameborder="0"
+        allowfullscreen
+        allowtransparency="true"
+      ></iframe>
+      } @else if (data.imageUrl) {
+      <img appImagePreview alt="exclude-image" [src]="data.imageUrl" class="exclude__image" />
+      <p class="text-body-12-bold">{{ data.title | truncate: 50 }}</p>
+      } @if (!data.imageUrl) {
+      <p class="exclude__text text-body-12-bold">{{ data.answerTitle | truncate: 110 }}</p>
+      }
+
+      <p
+        #descEl
+        class="text-body-12 exclude__description"
+        [innerHTML]="
+          readFullDescription ? data.bodyText : (data.bodyText | truncateHtml: truncateLimit)
+        "
+      ></p>
+      @if (descriptionExpandable) {
+      <div class="read-more text-body-10" (click)="onToggleDescription(descEl)">
+        {{ readFullDescription ? "скрыть" : "подробнее" }}
+      </div>
+      }
+    </div>
+  </div>
+
+  <div
+    class="exclude__content"
+    [class.exclude__content--hasContent]="cachedVideoUrl || !!data.imageUrl"
+  >
+    <p class="exclude__answer text-body-12">ответ</p>
+    <ul class="exclude__list">
+      <p class="exclude__text text-body-12-bold">{{ data.answerTitle | truncate: 110 }}</p>
+      @for (op of data.options; track op.id) {
+      <li
+        class="exclude__item"
+        [class.exclude__item--success]="success && result().includes(op.id)"
+        [class.exclude__item--error]="error"
+        (click)="onSelect(op.id)"
+      >
+        <app-checkbox size="10" [checked]="result().includes(op.id)"></app-checkbox>
+        <label class="text-body-12">{{ op.text }}</label>
+      </li>
+      }
+    </ul>
+  </div>
+</div>

@@ -9,7 +9,7 @@ import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/au
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
 import { ControlErrorPipe } from "@corelib";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProfileFormService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-form.service";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SearchesService } from "projects/social_platform/src/app/api/searches/searches.service";

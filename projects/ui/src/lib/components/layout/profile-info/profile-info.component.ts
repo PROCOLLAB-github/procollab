@@ -9,7 +9,7 @@ import {
   Output,
 } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
-import { DayjsPipe } from "projects/core";
+import { DayjsPipe } from "@corelib";
 import { AvatarComponent, IconComponent } from "@uilib";
 import type { User } from "../../../models/user.model";
 
@@ -32,7 +32,7 @@ import type { User } from "../../../models/user.model";
   templateUrl: "./profile-info.component.html",
   styleUrl: "./profile-info.component.scss",
   standalone: true,
-  imports: [RouterLink, AvatarComponent, IconComponent, DayjsPipe],
+  imports: [RouterLink, AvatarComponent, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileInfoComponent implements OnInit {

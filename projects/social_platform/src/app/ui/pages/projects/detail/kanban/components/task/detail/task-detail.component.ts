@@ -32,9 +32,9 @@ import { expandElement } from "@utils/expand-element";
 import { IconComponent } from "@uilib";
 import { nanoid } from "nanoid";
 import { DropdownComponent } from "@ui/components/dropdown/dropdown.component";
-import { priorityInfoList } from "projects/core/src/consts/lists/priority-info-list.const";
+import { priorityInfoList } from "@core/consts/lists/priority-info-list.const";
 import { ClickOutsideModule } from "ng-click-outside";
-import { actionTypeList } from "projects/core/src/consts/lists/actiion-type-list.const";
+import { actionTypeList } from "@core/consts/lists/actiion-type-list.const";
 import { SkillsGroupComponent } from "@ui/shared/skills-group/skills-group.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { map, Subscription } from "rxjs";
@@ -44,9 +44,9 @@ import { KanbanBoardService } from "../../../../../../../../api/kanban/kanban-bo
 import { getPriorityType } from "@utils/helpers/getPriorityType";
 import { getActionType } from "@utils/helpers/getActionType";
 import { ActivatedRoute } from "@angular/router";
-import { FileService } from "projects/core/src/lib/services/file/file.service";
+import { FileService } from "@core/lib/services/file/file.service";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
 import {
@@ -59,7 +59,7 @@ import { PerformerDto } from "../../../../../../../../api/kanban/dto/performer.m
 import { KanbanBoardDetailInfoService } from "../../../../../../../../api/kanban/kanban-board-detail-info.service";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
-import { SkillsRepository } from "projects/social_platform/src/app/infrastructure/repository/skills/skills.repository";
+import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 
 @Component({
   selector: "app-task-detail",
@@ -99,7 +99,7 @@ export class TaskDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   /** Ссылка на viewport для автопрокрутки */
   @ViewChild(CdkVirtualScrollViewport) viewport?: CdkVirtualScrollViewport;
 
-  private readonly skillsRepository = inject(SkillsRepository);
+  private readonly skillsRepository = inject(SkillsInfoService);
   private readonly kanbanBoardService = inject(KanbanBoardService);
   private readonly kanbanBoardDetailInfoService = inject(KanbanBoardDetailInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);

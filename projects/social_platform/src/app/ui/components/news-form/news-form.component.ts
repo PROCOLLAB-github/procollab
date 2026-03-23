@@ -10,9 +10,9 @@ import {
   Output,
 } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ValidationService } from "projects/core";
+import { ValidationService } from "@corelib";
 import { nanoid } from "nanoid";
-import { FileService } from "projects/core/src/lib/services/file/file.service";
+import { FileService } from "@core/lib/services/file/file.service";
 import { forkJoin, noop, Observable, tap } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FileUploadItemComponent } from "@ui/components/file-upload-item/file-upload-item.component";

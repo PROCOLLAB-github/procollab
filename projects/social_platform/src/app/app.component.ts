@@ -17,9 +17,9 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { TokenService } from "@corelib";
 import { LoadingService } from "@ui/services/loading/loading.service";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { AuthRepository } from "./infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
 /**
  * Корневой компонент приложения
@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   constructor(
-    private authRepository: AuthRepository,
+    private authRepository: AuthRepositoryPort,
     private tokenService: TokenService,
     private router: Router,
     private loadingService: LoadingService

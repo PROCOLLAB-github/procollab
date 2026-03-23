@@ -2,10 +2,10 @@
 
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, FormControl, Validators } from "@angular/forms";
-import { rolesMembersList } from "projects/core/src/consts/lists/roles-members-list.const";
-import { workExperienceList } from "projects/core/src/consts/lists/work-experience-list.const";
-import { workFormatList } from "projects/core/src/consts/lists/work-format-list.const";
-import { workScheludeList } from "projects/core/src/consts/lists/work-schelude-list.const";
+import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
+import { workExperienceList } from "@core/consts/lists/work-experience-list.const";
+import { workFormatList } from "@core/consts/lists/work-format-list.const";
+import { workScheludeList } from "@core/consts/lists/work-schelude-list.const";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
 import {

@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component, inject, Input } from "@angular/core
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
 import { IconComponent } from "@uilib";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { SelectComponent, ButtonComponent, InputComponent } from "@ui/components";
 import { ProfileFormService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-form.service";
 import { ProfileEditEducationInfoService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-edit-education-info.service";

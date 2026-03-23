@@ -1,6 +1,6 @@
 /** @format */
 
-import { actionTypeList } from "projects/core/src/consts/lists/actiion-type-list.const";
+import { actionTypeList } from "@core/consts/lists/actiion-type-list.const";
 
 export const getActionType = (actionId: number) => {
   const findedAction = actionTypeList.find(action => action.id === actionId);

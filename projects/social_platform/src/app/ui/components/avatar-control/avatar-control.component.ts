@@ -12,7 +12,7 @@ import {
 } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { nanoid } from "nanoid";
-import { FileService } from "projects/core/src/lib/services/file/file.service";
+import { FileService } from "@core/lib/services/file/file.service";
 import { catchError, concatMap, map, of } from "rxjs";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { IconComponent, ButtonComponent } from "@ui/components";

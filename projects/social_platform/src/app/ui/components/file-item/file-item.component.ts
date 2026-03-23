@@ -1,17 +1,20 @@
 /** @format */
+
 import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  EventEmitter,
   inject,
   Input,
   OnInit,
+  Output,
 } from "@angular/core";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { IconComponent } from "@ui/components";
 import { UpperCasePipe } from "@angular/common";
-import { FileService } from "projects/core/src/lib/services/file/file.service";
-import { FormatedFileSizePipe } from "projects/core/src/lib/pipes/transformers/formatted-file-size.pipe";
+import { FileService } from "@core/lib/services/file/file.service";
+import { FormatedFileSizePipe } from "@core/lib/pipes/transformers/formatted-file-size.pipe";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
@@ -43,6 +46,12 @@ export class FileItemComponent implements OnInit {
 
   @Input() canDelete = false;
 
+  /** Режим отображения: 'default' — скачивание + удаление через сервис, 'preview' — только просмотр + удаление через Output */
+  @Input() mode: "default" | "preview" = "default";
+
+  /** Событие удаления файла (используется в режиме preview) */
+  @Output() deleted = new EventEmitter<void>();
+
   /** MIME-тип файла */
   @Input() type = "file";
 
@@ -71,10 +80,16 @@ export class FileItemComponent implements OnInit {
 
   /**
    * Удаление файла
-   * Удаляет файл с сервера и из списка прикрепленных файлов
+   * В режиме preview — эмитит событие наружу
+   * В режиме default — удаляет через FileService
    */
   onDeleteFile(): void {
     if (!this.link) return;
+
+    if (this.mode === "preview") {
+      this.deleted.emit();
+      return;
+    }
 
     this.fileService
       .deleteFile(this.link)

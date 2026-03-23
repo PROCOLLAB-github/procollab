@@ -8,20 +8,36 @@
     </div>
     <div class="invite__info">
       <div class="text-body-12 invite__text">
+        <!-- для приглашений в проект -->
         <a [routerLink]="['/office/profile', invite.sender.id]"
           >{{ invite.sender.firstName }} {{ invite.sender.lastName }}</a
         ><br />приглашает вас в проект <br />
         <a [routerLink]="['/office/projects', invite.project.id]"
           >"{{ invite.project.name | truncate: 20 }}"</a
         >
+
+        <!-- для программ -->
+        <!-- <p>В программе</p>
+        <br />
+        <a [routerLink]="['/office/program', invite.project.id]"
+          >"{{ invite.project.name | truncate: 20 }}"</a
+        > -->
+
+        <!-- для поста текст -->
+        <!-- <p>выложили новый пост</p> -->
+
+        <!-- для материалов текст -->
+        <!-- <p>опубликован новый материал</p> -->
       </div>
-      <div class="text-body-12 invite__time">
+
+      <!-- <div class="text-body-12 invite__time">
         {{ invite.datetimeCreated | dayjs: "fromX" }} назад в
         {{ invite.datetimeCreated | dayjs: "format":"HH:HH" }}
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="invite__actions">
+    <!-- для приглашений в проект -->
     <app-button
       customTypographyClass="text-body-12"
       size="medium"
@@ -32,6 +48,14 @@
     <app-button customTypographyClass="text-body-12" size="medium" (click)="accept.emit(invite.id)"
       >принять</app-button
     >
+
+    <!-- для программ -->
+    <!-- <app-button
+      customTypographyClass="text-body-12"
+      size="big"
+      [routerLink]="['/office/program', invite.project.id]"
+      >перейти в программу</app-button
+    > -->
   </div>
 </div>
 }

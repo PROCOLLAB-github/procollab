@@ -1,6 +1,6 @@
 /** @format */
 
-import { priorityInfoList } from "projects/core/src/consts/lists/priority-info-list.const";
+import { priorityInfoList } from "@core/consts/lists/priority-info-list.const";
 import { hexToRgba } from "./hexToRgba";
 
 export const getPriorityType = (

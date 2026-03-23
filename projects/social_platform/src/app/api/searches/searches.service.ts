@@ -4,7 +4,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import { Subject, take, takeUntil } from "rxjs";
 import { Specialization } from "../../domain/specializations/specialization";
 import { FormGroup } from "@angular/forms";
-import { SpecializationsRepository as SpecializationsService } from "projects/social_platform/src/app/infrastructure/repository/specializations/specializations.repository";
+import { SpecializationsRepositoryPort as SpecializationsService } from "@domain/specializations/ports/specializations.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class SearchesService {

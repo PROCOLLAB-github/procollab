@@ -2,8 +2,8 @@
 
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
-import { ControlErrorPipe, TokenService } from "projects/core";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
+import { ControlErrorPipe, TokenService } from "@corelib";
 import { RouterLink } from "@angular/router";
 import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
 import { CommonModule } from "@angular/common";

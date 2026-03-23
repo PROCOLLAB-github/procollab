@@ -3,13 +3,13 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, OnDestroy } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { IconComponent } from "@uilib";
 import { ButtonComponent, InputComponent, SelectComponent } from "@ui/components";
 import { ControlErrorPipe } from "@corelib";
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { optionsListElement } from "@utils/generate-options-list";
-import { resourceOptionsList } from "projects/core/src/consts/lists/resource-options-list.const";
+import { resourceOptionsList } from "@core/consts/lists/resource-options-list.const";
 import { ProjectsEditInfoService } from "projects/social_platform/src/app/api/project/facades/edit/projects-edit-info.service";
 import { ProjectPartnerService } from "projects/social_platform/src/app/api/project/facades/edit/project-partner.service";
 import { ProjectResourceService } from "projects/social_platform/src/app/api/project/facades/edit/project-resources.service";

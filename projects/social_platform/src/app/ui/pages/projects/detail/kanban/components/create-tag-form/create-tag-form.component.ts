@@ -11,7 +11,7 @@ import {
   Output,
   SimpleChanges,
 } from "@angular/core";
-import { tagColors } from "projects/core/src/consts/other/tag-colors.const";
+import { tagColors } from "@core/consts/other/tag-colors.const";
 import {
   FormBuilder,
   FormGroup,

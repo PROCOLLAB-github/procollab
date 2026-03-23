@@ -2,24 +2,24 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivateFn, Router, UrlTree } from "@angular/router";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
+import { User } from "@domain/auth/user.model";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { Collaborator } from "@domain/project/collaborator.model";
+import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
 import { catchError, map, Observable, of, switchMap } from "rxjs";
-import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 export const KanbanBoardGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot
 ): Observable<UrlTree | boolean> => {
   const router = inject(Router);
-  const projectRepository = inject(ProjectRepository);
-  const authRepository = inject(AuthRepository);
+  const projectRepository = inject(ProjectRepositoryPort);
+  const authRepository = inject(AuthRepositoryPort);
 
   const projectId = Number(route.parent?.params["projectId"]);
 
   if (!projectId) return of(router.createUrlTree([`/office/projects/${projectId}/`]));
 
-  return authRepository.profile.pipe(
+  return authRepository.fetchProfile().pipe(
     switchMap((user: User) =>
       projectRepository.getOne(projectId).pipe(
         map(project => {
@@ -31,6 +31,7 @@ export const KanbanBoardGuard: CanActivateFn = (
         }),
         catchError(() => of(router.createUrlTree(["/office/projects"])))
       )
-    )
+    ),
+    catchError(() => of(router.createUrlTree(["/auth/login"])))
   );
 };

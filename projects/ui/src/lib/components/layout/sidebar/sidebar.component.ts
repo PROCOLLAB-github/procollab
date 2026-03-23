@@ -11,13 +11,8 @@ import {
   type OnInit,
 } from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
-import {
-  IconComponent,
-  InviteManageCardComponent,
-  ProfileControlPanelComponent,
-  ProfileInfoComponent,
-} from "@uilib";
-import { AsyncPipe, CommonModule } from "@angular/common";
+import { IconComponent } from "@uilib";
+import { CommonModule } from "@angular/common";
 import { ClickOutsideModule } from "ng-click-outside";
 
 /**

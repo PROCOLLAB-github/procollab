@@ -6,14 +6,14 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { optionsListElement } from "@utils/generate-options-list";
 import { toObservable } from "@angular/core/rxjs-interop";
 import { map, Subject, takeUntil } from "rxjs";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { IndustryRepository } from "projects/social_platform/src/app/infrastructure/repository/industry/industry.repository";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 
 @Injectable()
 export class ProjectsFilterInfoService {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly industryRepository = inject(IndustryRepository);
+  private readonly industryRepository = inject(IndustryInfoService);
   private readonly logger = inject(LoggerService);
 
   private readonly destroy$ = new Subject<void>();

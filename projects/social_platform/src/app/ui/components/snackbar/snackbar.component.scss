@@ -33,4 +33,9 @@
     color: var(--white);
     background-color: var(--red);
   }
+
+  &--info {
+    color: var(--black);
+    background-color: var(--lime);
+  }
 }

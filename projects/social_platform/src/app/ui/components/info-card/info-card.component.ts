@@ -17,14 +17,14 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { Router, RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { YearsFromBirthdayPipe } from "@corelib";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { IndustryRepository } from "../../../infrastructure/repository/industry/industry.repository";
 import { AcceptInviteUseCase } from "../../../api/invite/use-cases/accept-invite.use-case";
 import { RejectInviteUseCase } from "../../../api/invite/use-cases/reject-invite.use-case";
 import { AddProjectSubscriptionUseCase } from "../../../api/project/use-case/add-project-subscription.use-case";
 import { DeleteProjectSubscriptionUseCase } from "../../../api/project/use-case/delete-project-subscription.use-case";
+import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 
 /**
  * Компонент карточки информации с разным наполнением, в зависимости от контекста
@@ -55,7 +55,7 @@ export class InfoCardComponent {
   private readonly rejectInviteUseCase = inject(RejectInviteUseCase);
   private readonly addProjectSubscriptionUseCase = inject(AddProjectSubscriptionUseCase);
   private readonly deleteProjectSubscriptionUseCase = inject(DeleteProjectSubscriptionUseCase);
-  public readonly industryRepository = inject(IndustryRepository);
+  public readonly industryRepository = inject(IndustryInfoService);
   private readonly router = inject(Router);
   private readonly logger = inject(LoggerService);
 

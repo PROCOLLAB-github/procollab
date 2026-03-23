@@ -5,13 +5,13 @@ import { combineLatest, Subject, switchMap, takeUntil } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { ProjectsDashboardUIInfoService } from "./ui/projects-dashboard-ui-info.service";
 import { ProjectsService } from "../../projects.service";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { GetProjectSubscriptionsUseCase } from "../../use-case/get-project-subscriptions.use-case";
 
 @Injectable()
 export class ProjectsDashboardInfoService {
   private readonly route = inject(ActivatedRoute);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly getProjectSubscriptionsUseCase = inject(GetProjectSubscriptionsUseCase);
   private readonly projectsDashboardUIInfoService = inject(ProjectsDashboardUIInfoService);
   private readonly projectsService = inject(ProjectsService);

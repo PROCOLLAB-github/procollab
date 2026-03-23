@@ -16,7 +16,7 @@ import {
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { CommonModule } from "@angular/common";
-import { ControlErrorPipe, ParseBreaksPipe, ParseLinksPipe } from "projects/core";
+import { ControlErrorPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { expandElement } from "@utils/expand-element";
 import {
   debounceTime,
@@ -34,14 +34,14 @@ import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { HttpResponse } from "@angular/common/http";
 import { ProjectRate } from "../../../domain/project/project-rate";
 import { ProgramDetailMainUIInfoService } from "../../../api/program/facades/detail/ui/program-detail-main-ui-info.service";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
-import { IndustryRepository } from "../../../infrastructure/repository/industry/industry.repository";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { RateProjectUseCase } from "../../../api/program/use-cases/rate-project.use-case";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
+import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 
 /**
  * Компонент карточки оценки проекта
@@ -97,9 +97,9 @@ export class RatingCardComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly logger = inject(LoggerService);
 
   constructor(
-    public industryRepository: IndustryRepository,
+    public industryRepository: IndustryInfoService,
     private readonly rateProjectUseCase: RateProjectUseCase,
-    private readonly authRepository: AuthRepository,
+    private readonly authRepository: AuthInfoService,
     private readonly programDetailMainUIInfoService: ProgramDetailMainUIInfoService,
     private readonly breakpointObserver: BreakpointObserver,
     private readonly cdRef: ChangeDetectorRef

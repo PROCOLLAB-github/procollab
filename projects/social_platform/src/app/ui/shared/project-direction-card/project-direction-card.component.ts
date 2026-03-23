@@ -21,10 +21,10 @@ import { FileModel } from "projects/social_platform/src/app/domain/file/file.mod
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { DayjsPipe } from "@corelib";
 import { ButtonComponent } from "@ui/components";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { Goal } from "../../../domain/project/goals.model";
 import { ProfileService } from "../../../api/auth/profile.service";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { UpdateGoalUseCase } from "../../../api/project/use-case/update-goal.use-case";
 @Component({
   selector: "app-project-direction-card",

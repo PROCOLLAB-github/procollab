@@ -11,15 +11,15 @@ import {
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
-import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "projects/core";
+import { DayjsPipe, ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { Router, RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/components/tag/tag.component";
 import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
 import { expandElement } from "@utils/expand-element";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { AdvertCardComponent } from "@ui/shared/advert-card/advert-card.component";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
-import { IndustryRepository } from "../../../infrastructure/repository/industry/industry.repository";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
+import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 
 /**
  *
@@ -75,7 +75,7 @@ export class OpenVacancyComponent implements AfterViewInit {
   constructor(
     public readonly router: Router,
     private readonly cdRef: ChangeDetectorRef,
-    public readonly industryRepository: IndustryRepository
+    public readonly industryRepository: IndustryInfoService
   ) {}
 
   ngAfterViewInit(): void {

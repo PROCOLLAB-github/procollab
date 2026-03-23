@@ -1,8 +1,8 @@
 /** @format */
 
 import { Pipe, PipeTransform } from "@angular/core";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
-import { map, Observable } from "rxjs";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { map, Observable, shareReplay } from "rxjs";
 
 /**
  * Пайп для преобразования ID роли пользователя в название роли
@@ -15,7 +15,9 @@ import { map, Observable } from "rxjs";
   standalone: true,
 })
 export class UserRolePipe implements PipeTransform {
-  constructor(private readonly authService: AuthService) {}
+  private readonly roles$ = this.authRepository.fetchUserRoles().pipe(shareReplay(1));
+
+  constructor(private readonly authRepository: AuthRepositoryPort) {}
 
   /**
    * Преобразует числовой ID роли в название роли
@@ -24,6 +26,6 @@ export class UserRolePipe implements PipeTransform {
    * @returns Observable<string | undefined> - Observable с названием роли или undefined, если роль не найдена
    */
   transform(value: number): Observable<string | undefined> {
-    return this.authService.roles.pipe(map(roles => roles.find(role => role.id === value)?.name));
+    return this.roles$.pipe(map(roles => roles.find(role => role.id === value)?.name));
   }
 }

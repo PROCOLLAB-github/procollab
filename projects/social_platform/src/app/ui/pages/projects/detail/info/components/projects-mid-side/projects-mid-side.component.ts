@@ -22,7 +22,7 @@ import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
 import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 @Component({
   selector: "app-projects-mid-side",
@@ -51,7 +51,7 @@ export class ProjectsMidSideComponent {
   @ViewChild(NewsFormComponent) newsFormComponent?: NewsFormComponent;
   @ViewChild(NewsCardComponent) newsCardComponent?: NewsCardComponent;
 
-  protected readonly authRepository = inject(AuthRepository);
+  protected readonly authRepository = inject(AuthInfoService);
   private readonly projectsDetailService = inject(ProjectsDetailService);
   private readonly newsInfoService = inject(NewsInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);

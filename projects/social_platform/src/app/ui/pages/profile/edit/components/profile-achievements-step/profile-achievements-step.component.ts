@@ -6,7 +6,7 @@ import { InputComponent, SelectComponent, ButtonComponent } from "@ui/components
 import { TextareaComponent } from "@ui/components/textarea/textarea.component";
 import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProfileFormService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-form.service";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";

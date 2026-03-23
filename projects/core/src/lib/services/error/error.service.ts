@@ -3,7 +3,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { ErrorCode } from "../../models/error/error-code";
-import { LoggerService } from "@corelib";
+import { LoggerService } from "../logger/logger.service";
 
 /**
  * Сервис для обработки и навигации к страницам ошибок

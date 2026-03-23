@@ -2,7 +2,7 @@
 
 import { HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { WebsocketService } from "projects/core/src/lib/services/websockets/websocket.service";
+import { WebsocketService } from "@core/lib/services/websockets/websocket.service";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import {
   ChatFile,
@@ -23,7 +23,7 @@ import {
   TypingInChatEventDto,
 } from "projects/social_platform/src/app/domain/chat/chat.model";
 import { plainToInstance } from "class-transformer";
-import { ApiService, TokenService } from "projects/core";
+import { ApiService, TokenService } from "@corelib";
 import { BehaviorSubject, map, Observable } from "rxjs";
 
 /**
@@ -76,7 +76,7 @@ export class ChatService {
    * @param status - статус онлайн (true - онлайн, false - оффлайн)
    */
   setOnlineStatus(userId: number, status: boolean) {
-    this.userOnlineStatusCache.next({ ...this.userOnlineStatusCache, [userId]: status });
+    this.userOnlineStatusCache.next({ ...this.userOnlineStatusCache.value, [userId]: status });
   }
 
   /**

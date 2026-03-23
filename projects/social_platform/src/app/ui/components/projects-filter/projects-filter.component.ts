@@ -3,7 +3,7 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { SelectComponent } from "@ui/components";
 import { ReactiveFormsModule } from "@angular/forms";
-import { tagsFilter } from "projects/core/src/consts/filters/tags-filter.const";
+import { tagsFilter } from "@core/consts/filters/tags-filter.const";
 import { ProjectsFilterInfoService } from "./service/projects-filter-info.service";
 
 /**

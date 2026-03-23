@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { TokenService, ValidationService } from "@corelib";
 import { Subject, takeUntil, tap } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { LoginUseCase } from "../use-cases/login.use-case";
 import { toAsyncState } from "projects/social_platform/src/app/domain/shared/to-async-state";
 import {
@@ -52,7 +52,7 @@ export class AuthLoginService {
         tap(result => {
           if (result.ok) {
             this.tokenService.memTokens(result.value.tokens);
-            const url = redirectType === "program" ? "/office/program/list" : "/office";
+            const url = redirectType === "program" ? "/office/program" : "/office";
             this.router
               .navigateByUrl(url)
               .then(() => this.logger.debug("Route changed from LoginComponent"));

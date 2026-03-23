@@ -1,10 +1,11 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ApiService, TokenService } from "@corelib";
 import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { environment } from "@environment";
+import { ApiService } from "../api/api.service";
+import { TokenService } from "../tokens/token.service";
 
 /**
  * Сервис для работы с файлами
@@ -33,17 +34,44 @@ export class FileService {
     formData.append("file", file);
 
     return new Observable<{ url: string }>(observer => {
-      fetch(`${environment.apiUrl}${this.FILES_URL}/`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${this.tokenService.getTokens()?.access}`,
-        },
-        body: formData,
-      })
-        .then(res => res.json())
+      const doFetch = (token: string) =>
+        fetch(`${environment.apiUrl}${this.FILES_URL}/`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        });
+
+      const token = this.tokenService.getTokens()?.access;
+      if (!token) {
+        observer.error(new Error("No access token"));
+        return;
+      }
+
+      doFetch(token)
         .then(res => {
-          observer.next(res);
-          observer.complete();
+          if (res.status === 401) {
+            this.tokenService.refreshTokens().subscribe({
+              next: newTokens => {
+                this.tokenService.memTokens(newTokens);
+                doFetch(newTokens.access)
+                  .then(r => r.json())
+                  .then(data => {
+                    observer.next(data);
+                    observer.complete();
+                  })
+                  .catch(err => observer.error(err));
+              },
+              error: err => observer.error(err),
+            });
+            return;
+          }
+          return res.json();
+        })
+        .then(res => {
+          if (res) {
+            observer.next(res);
+            observer.complete();
+          }
         })
         .catch(err => observer.error(err));
     });

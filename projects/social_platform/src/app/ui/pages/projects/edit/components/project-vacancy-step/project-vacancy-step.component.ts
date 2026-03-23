@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/cor
 import { ReactiveFormsModule } from "@angular/forms";
 import { InputComponent, ButtonComponent, SelectComponent } from "@ui/components";
 import { ControlErrorPipe } from "@corelib";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
 import { SkillsBasketComponent } from "@ui/shared/skills-basket/skills-basket.component";
 import { VacancyCardComponent } from "@ui/components/vacancy-card/vacancy-card.component";

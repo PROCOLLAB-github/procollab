@@ -20,8 +20,8 @@ import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { ProgramDetailListUIInfoService } from "./ui/program-detail-list-ui-info.service";
 import { ProjectRate } from "projects/social_platform/src/app/domain/project/project-rate";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { CreateProgramFiltersUseCase } from "../../use-cases/create-program-filters.use-case";
 import { GetAllProjectsUseCase } from "../../use-cases/get-all-projects.use-case";
 import { GetAllMembersUseCase } from "../../use-cases/get-all-members.use-case";
@@ -49,7 +49,7 @@ export class ProgramDetailListInfoService {
   private readonly filterProjectRatingsUseCase = inject(FilterProjectRatingsUseCase);
   private readonly getProjectRatingsUseCase = inject(GetProjectRatingsUseCase);
 
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
 
   private readonly programDetailListUIInfoService = inject(ProgramDetailListUIInfoService);
   private readonly logger = inject(LoggerService);

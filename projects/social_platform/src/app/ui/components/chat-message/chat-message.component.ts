@@ -17,14 +17,14 @@ import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-m
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { DomPortal } from "@angular/cdk/portal";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
-import { DayjsPipe } from "projects/core";
+import { DayjsPipe } from "@corelib";
 import { IconComponent } from "@ui/components";
 import { FileItemComponent } from "../file-item/file-item.component";
 import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "../avatar/avatar.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /**
  * Компонент сообщения в чате с контекстным меню и файловыми вложениями.
@@ -70,7 +70,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly snackbarService: SnackbarService,
     private readonly overlay: Overlay,
-    public readonly authRepository: AuthRepository
+    public readonly authRepository: AuthInfoService
   ) {}
 
   /** Объект сообщения чата */

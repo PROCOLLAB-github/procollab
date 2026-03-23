@@ -12,8 +12,8 @@ import { filter, Subject, takeUntil } from "rxjs";
 import { DetailProfileInfoService } from "./profile/detail-profile-info.service";
 import { DetailProjectInfoService } from "./project/detail-project-info.service";
 import { DetailProgramInfoService } from "./program/detail-program-info.service";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 import { GetMyProjectsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-my-projects.use-case";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 @Injectable()
 export class DetailInfoService {
@@ -22,7 +22,7 @@ export class DetailInfoService {
   private readonly getMyProjectsUseCase = inject(GetMyProjectsUseCase);
   private readonly programDetailMainUIInfoService = inject(ProgramDetailMainUIInfoService);
   private readonly projectFormService = inject(ProjectFormService);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly profileDetailUIInfoService = inject(ProfileDetailUIInfoService);
   private readonly location = inject(Location);
@@ -40,6 +40,7 @@ export class DetailInfoService {
   readonly memberProjects = this.detailProfileInfoService.memberProjects;
   readonly userType = signal<number | undefined>(undefined);
   readonly profile = this.detailProfileInfoService.profile;
+  readonly queryCourseId = signal<number | null>(null);
 
   // Сигналы для работы с модальными окнами с текстом
   readonly errorMessageModal = signal("");
@@ -80,6 +81,11 @@ export class DetailInfoService {
       this.listType.set(data["listType"]);
       this.initializeBackPath();
       this.initializeInfo();
+    });
+
+    this.route.queryParams.pipe(takeUntil(this.destroy$)).subscribe(params => {
+      const courseId = params["courseId"];
+      this.queryCourseId.set(courseId ? Number(courseId) : null);
     });
 
     this.updatePageStates();

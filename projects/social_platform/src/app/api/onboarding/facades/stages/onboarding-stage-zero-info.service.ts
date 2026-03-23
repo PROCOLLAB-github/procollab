@@ -8,7 +8,7 @@ import { Router } from "@angular/router";
 import { OnboardingStageZeroUIInfoService } from "./ui/onboarding-stage-zero-ui-info.service";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import {
   failure,
   initial,
@@ -21,7 +21,7 @@ export class OnboardingStageZeroInfoService {
   private readonly onboardingUIInfoService = inject(OnboardingUIInfoService);
   private readonly onboardingStageZeroUIInfoService = inject(OnboardingStageZeroUIInfoService);
   private readonly validationService = inject(ValidationService);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly router = inject(Router);
 
   private readonly destroy$ = new Subject<void>();

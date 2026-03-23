@@ -13,11 +13,11 @@ import {
 } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { IconComponent } from "@uilib";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RemoveProjectCollaboratorUseCase } from "../../../api/project/use-case/remove-project-collaborator.use-case";
 

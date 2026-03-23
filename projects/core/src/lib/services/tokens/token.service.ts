@@ -6,7 +6,8 @@ import { RefreshResponse } from "projects/social_platform/src/app/domain/auth/ht
 import { plainToInstance } from "class-transformer";
 import { Tokens } from "projects/social_platform/src/app/domain/auth/tokens.model";
 import Cookies, { CookieAttributes } from "js-cookie";
-import { ApiService, PRODUCTION } from "@corelib";
+import { PRODUCTION } from "../../providers/production.provide";
+import { ApiService } from "../api/api.service";
 
 /**
  * Сервис для управления JWT токенами аутентификации

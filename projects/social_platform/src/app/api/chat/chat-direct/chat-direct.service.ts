@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { ApiService } from "projects/core";
+import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";

@@ -1,8 +1,8 @@
 /** @format */
 
 import { Injectable, signal } from "@angular/core";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 import { ChatWindowComponent } from "@ui/components/chat-window/chat-window.component";
-import { ApiPagination } from "projects/skills/src/models/api-pagination.model";
 import { ChatItem } from "projects/social_platform/src/app/domain/chat/chat-item.model";
 import {
   ChatFile,

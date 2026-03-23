@@ -25,7 +25,7 @@ import { ValidationService } from "@corelib";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { EditStep, ProjectStepService } from "../../project-step.service";
 import { toObservable } from "@angular/core/rxjs-interop";
-import { SkillsRepository as SkillsService } from "projects/social_platform/src/app/infrastructure/repository/skills/skills.repository";
+import { SkillsRepositoryPort as SkillsService } from "@domain/skills/ports/skills.repository.port";
 import { ProjectFormService } from "./project-form.service";
 import { ProjectGoalService } from "./project-goals.service";
 import { ProjectPartnerService } from "./project-partner.service";
@@ -38,8 +38,8 @@ import { ProjectVacancyUIService } from "./ui/project-vacancy-ui.service";
 import { ProjectTeamUIService } from "./ui/project-team-ui.service";
 import { ProjectContactsService } from "./project-contacts.service";
 import { ProjectVacancyService } from "./project-vacancy.service";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { IndustryRepository } from "projects/social_platform/src/app/infrastructure/repository/industry/industry.repository";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
 import { AssignProjectProgramUseCase } from "../../../program/use-cases/assign-project-program";
 import { DeleteProjectUseCase } from "../../use-case/delete-project.use-case";
 import { UpdateFormUseCase } from "../../use-case/update-form.use-case";
@@ -67,7 +67,7 @@ export class ProjectsEditInfoService {
   private readonly projectVacancyUIService = inject(ProjectVacancyUIService);
   private readonly projectsEditUIInfoService = inject(ProjectsEditUIInfoService);
 
-  private readonly industryRepository = inject(IndustryRepository);
+  private readonly industryRepository = inject(IndustryRepositoryPort);
   private readonly skillsService = inject(SkillsService);
   private readonly navService = inject(NavService);
   private readonly validationService = inject(ValidationService);
@@ -147,12 +147,11 @@ export class ProjectsEditInfoService {
   );
 
   readonly openGroupIds = signal<Set<number>>(new Set());
-  readonly openSkillGroup = signal<string | null>(null);
 
   /**
    * Проверяет, есть ли открытые группы навыков
    */
-  readonly hasOpenSkillsGroups = this.openSkillGroup() !== null;
+  readonly hasOpenSkillsGroups = computed(() => this.openGroupIds().size > 0);
 
   initializationEditInfo(): void {
     this.navService.setNavTitle("Создание проекта");

@@ -1,7 +1,7 @@
 /** @format */
 
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
-import { DayjsPipe } from "projects/core";
+import { DayjsPipe } from "@corelib";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ChatListItem } from "../../../domain/chat/chat-item.model";
 

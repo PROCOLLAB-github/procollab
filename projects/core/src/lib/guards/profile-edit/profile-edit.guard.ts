@@ -1,28 +1,22 @@
 /** @format */
 
-import { inject, signal } from "@angular/core";
+import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivateFn, Router, UrlTree } from "@angular/router";
-import { AuthService } from "projects/social_platform/src/app/api/auth";
-import { Observable, of } from "rxjs";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { catchError, map, Observable, of } from "rxjs";
 
 export const ProfileEditRequiredGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot
 ): Observable<boolean | UrlTree> => {
   const router = inject(Router);
-  const authService = inject(AuthService);
-
-  const loggedUserId = signal<number | undefined>(undefined);
-
-  authService.profile.subscribe({
-    next: profile => {
-      loggedUserId.set(profile.id);
-    },
-  });
+  const authRepository = inject(AuthRepositoryPort);
 
   const profileId = Number(route.paramMap.get("id"));
-  if (profileId !== loggedUserId()) {
-    return of(router.createUrlTree([`/office/profile/${profileId}/`]));
-  }
 
-  return of(router.createUrlTree([`/office/profel/${profileId}/`]));
+  return authRepository.fetchProfile().pipe(
+    map(profile =>
+      profile.id === profileId ? true : router.createUrlTree([`/office/profile/${profileId}/`])
+    ),
+    catchError(() => of(router.createUrlTree(["/auth/login"])))
+  );
 };

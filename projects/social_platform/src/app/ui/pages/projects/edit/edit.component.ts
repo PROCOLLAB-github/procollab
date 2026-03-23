@@ -10,7 +10,7 @@ import {
 } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { CommonModule } from "@angular/common";
@@ -23,7 +23,7 @@ import { ProjectAchievementStepComponent } from "./components/project-achievemen
 import { ProjectVacancyStepComponent } from "./components/project-vacancy-step/project-vacancy-step.component";
 import { ProjectTeamStepComponent } from "./components/project-team-step/project-team-step.component";
 import { ProjectAdditionalStepComponent } from "./components/project-additional-step/project-additional-step.component";
-import { navProjectItems } from "projects/core/src/consts/navigation/nav-project-items.const";
+import { navProjectItems } from "@core/consts/navigation/nav-project-items.const";
 import { ProjectsEditInfoService } from "projects/social_platform/src/app/api/project/facades/edit/projects-edit-info.service";
 import { ProjectsEditUIInfoService } from "projects/social_platform/src/app/api/project/facades/edit/ui/projects-edit-ui-info.service";
 import { ProjectVacancyUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-vacancy-ui.service";

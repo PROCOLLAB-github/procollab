@@ -7,9 +7,9 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { Router, RouterLink } from "@angular/router";
 import { DayjsPipe } from "@corelib";
 import { TagComponent } from "@ui/components/tag/tag.component";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { FeedProject } from "../../../domain/feed/feed-item.model";
-import { IndustryRepository } from "../../../infrastructure/repository/industry/industry.repository";
+import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 
 /**
  * КОМПОНЕНТ НОВОГО ПРОЕКТА
@@ -63,5 +63,5 @@ export class NewProjectComponent {
    * Инициализирует компонент с доступом к сервису маршрутизации
    * для возможной навигации к детальной странице проекта
    */
-  constructor(public readonly industryRepository: IndustryRepository) {}
+  constructor(public readonly industryRepository: IndustryInfoService) {}
 }

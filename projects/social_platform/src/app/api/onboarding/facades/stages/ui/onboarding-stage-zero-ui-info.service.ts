@@ -8,11 +8,8 @@ import { yearRangeValidators } from "@utils/helpers/yearRangeValidators";
 import {
   educationUserLevel,
   educationUserType,
-} from "projects/core/src/consts/lists/education-info-list.const";
-import {
-  languageLevelsList,
-  languageNamesList,
-} from "projects/core/src/consts/lists/language-info-list.const";
+} from "@core/consts/lists/education-info-list.const";
+import { languageLevelsList, languageNamesList } from "@core/consts/lists/language-info-list.const";
 import { User } from "projects/social_platform/src/app/domain/auth/user.model";
 
 @Injectable()

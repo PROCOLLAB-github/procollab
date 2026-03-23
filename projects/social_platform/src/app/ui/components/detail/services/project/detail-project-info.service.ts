@@ -3,7 +3,7 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { concatMap, map, Subject, takeUntil } from "rxjs";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { LeaveProjectUseCase } from "projects/social_platform/src/app/api/project/use-case/leave-project.use-case";
 
 @Injectable()

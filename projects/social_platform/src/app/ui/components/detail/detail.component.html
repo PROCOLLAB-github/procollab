@@ -65,7 +65,7 @@
         </div>
 
         <ng-template #programTpl>
-          @if (userType() !== undefined) { @if (!isUserMember && !isUserManager) { @if
+          @if (userType() !== undefined) { @if (!isUserMember() && !isUserManager()) { @if
           (info().name.includes("Кейс-чемпионат MIR")) {
           <a
             (click)="checkPrograRegistrationEnded($event, info())"
@@ -90,7 +90,7 @@
               зарегистрироваться
             </app-button>
           </a>
-          } } @if (isUserMember() && !isUserManager && !isUserExpert) {
+          } } @if (isUserMember() && !isUserManager() && !isUserExpert()) {
           <app-button
             size="medium"
             [style.opacity]="submissionProjectDateExpired || isProjectAssigned() ? '0.5' : '1'"
@@ -99,7 +99,7 @@
             (click)="isProjectAssigned() ? null : addNewProject(info().id)"
             customTypographyClass="text-body-12 bar__add-project"
           >
-            <span>{{ isProjectAssigned() ? "вы подали проект" : "подать проект" }}</span>
+            <span>{{ isProjectAssigned() ? "вы подали проект" : "создать заявку" }}</span>
             <i appIcon icon="plus" appSquare="10"></i>
           </app-button>
           } @if ((isUserManager() || isUserExpert()) && isUserMember()) {
@@ -188,6 +188,15 @@
               участники
             </app-button>
           </a>
+          } @else { @if (info().courseId || queryCourseId()) {
+          <a
+            class="info__contacts"
+            [href]="'https://skills.procollab.ru/trackCar/' + (info().courseId || queryCourseId())"
+          >
+            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+              перейти в курс
+            </app-button>
+          </a>
           } @else {
           <a class="info__contacts">
             <app-button
@@ -200,7 +209,7 @@
               информация с ссылок
             </app-button>
           </a>
-          } }
+          } } }
 
           <app-modal
             [open]="isAssignProjectToProgramModalOpen()"
@@ -263,7 +272,7 @@
             customTypographyClass="text-body-12"
             >вернуться</app-button
           >
-          } @else if (isInProject() && !isKanbanBoardPage) {
+          } @else if (isInProject() && !isKanbanBoardPage()) {
           <app-button
             [routerLink]="'/office/projects/' + info().id + '/work-section'"
             [appearance]="isProjectWorkSectionPage() ? 'inline' : 'outline'"
@@ -279,7 +288,7 @@
               <i appIcon icon="arrow-down" appSquare="6"></i>
             </app-button>
           </a>
-          } @if (!isInProject) {
+          } @if (!isInProject()) {
           <app-button
             [disabled]="true"
             style="opacity: 0.5"

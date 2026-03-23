@@ -25,8 +25,8 @@ import { ApiPagination } from "../../../domain/other/api-pagination.model";
 import { MembersUIInfoService } from "./ui/members-ui-info.service";
 import { NavigationService } from "../../paths/navigation.service";
 import { ProjectsDetailUIInfoService } from "../../project/facades/detail/ui/projects-detail-ui.service";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { GetMembersUseCase } from "../use-case/get-members.use-case";
 import { isSuccess, loading, success } from "../../../domain/shared/async-state";
 
@@ -37,7 +37,7 @@ export class MembersInfoService {
   private readonly navService = inject(NavService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly membersUIInfoService = inject(MembersUIInfoService);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
   private readonly navigationService = inject(NavigationService);
   private readonly logger = inject(LoggerService);
   private readonly getMembersUseCase = inject(GetMembersUseCase);

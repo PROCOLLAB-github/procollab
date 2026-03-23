@@ -15,7 +15,7 @@ import { SelectComponent, ButtonComponent } from "@ui/components";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
 import { ProfileFormService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-form.service";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ProfileEditSkillsInfoService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-edit-skills-info.service";
 import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { SkillsInfoService } from "projects/social_platform/src/app/api/skills/facades/skills-info.service";

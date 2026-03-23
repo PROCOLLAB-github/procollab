@@ -14,9 +14,9 @@ import {
 import { RouterLink } from "@angular/router";
 import { ButtonComponent, CheckboxComponent, IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
-import { workFormatFilter } from "projects/core/src/consts/filters/work-format-filter.const";
-import { workScheduleFilter } from "projects/core/src/consts/filters/work-schedule-filter.const";
-import { workExperienceFilter } from "projects/core/src/consts/filters/work-experience-filter.const";
+import { workFormatFilter } from "@core/consts/filters/work-format-filter.const";
+import { workScheduleFilter } from "@core/consts/filters/work-schedule-filter.const";
+import { workExperienceFilter } from "@core/consts/filters/work-experience-filter.const";
 import { VacancyFilterInfoService } from "./service/vacancy-filter-info.service";
 
 /**

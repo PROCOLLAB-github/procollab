@@ -14,7 +14,7 @@ import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { IconComponent } from "@uilib";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /**
  * Компонент карточки отклика на вакансию
@@ -46,7 +46,7 @@ import { AuthRepository } from "../../../infrastructure/repository/auth/auth.rep
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResponseCardComponent implements OnInit {
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthInfoService);
   private readonly destroyRef = inject(DestroyRef);
 
   @Input({ required: true }) response!: VacancyResponse;

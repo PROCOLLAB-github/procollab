@@ -11,13 +11,13 @@ import {
 } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
 import { IconComponent, ButtonComponent, SelectComponent, InputComponent } from "@ui/components";
 import { ModalComponent } from "@ui/components/modal/modal.component";
-import { rolesMembersList } from "projects/core/src/consts/lists/roles-members-list.const";
+import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { TruncatePipe } from "projects/core/src/lib/pipes/formatters/truncate.pipe";
+import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 
 /**
  * Компонент карточки приглашения в команду или проект

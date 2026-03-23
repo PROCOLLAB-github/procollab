@@ -6,17 +6,17 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ChatService } from "../../chat/chat.service";
 import { Invite } from "../../../domain/invite/invite.model";
 import { OfficeUIInfoService } from "./ui/office-ui-info.service";
-import { LoggerService } from "projects/core/src/lib/services/logger/logger.service";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
-import { IndustryRepository } from "../../../infrastructure/repository/industry/industry.repository";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { RejectInviteUseCase } from "../../invite/use-cases/reject-invite.use-case";
 import { AcceptInviteUseCase } from "../../invite/use-cases/accept-invite.use-case";
 
 @Injectable()
 export class OfficeInfoService {
-  private readonly industryRepository = inject(IndustryRepository);
+  private readonly industryRepository = inject(IndustryRepositoryPort);
   private readonly route = inject(ActivatedRoute);
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthRepositoryPort);
 
   private readonly rejectInviteUseCase = inject(RejectInviteUseCase);
   private readonly acceptInviteUseCase = inject(AcceptInviteUseCase);

@@ -3,8 +3,8 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { initial } from "projects/social_platform/src/app/domain/shared/async-state";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ControlErrorPipe, TokenService } from "projects/core";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
+import { ControlErrorPipe, TokenService } from "@corelib";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { RouterLink } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";

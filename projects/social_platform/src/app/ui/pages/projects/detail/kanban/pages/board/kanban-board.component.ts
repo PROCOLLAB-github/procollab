@@ -19,7 +19,7 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from "@angular/cdk/drag-drop";
-import { kanbanColumnInfo } from "projects/core/src/consts/other/kanban-column-info.const";
+import { kanbanColumnInfo } from "@core/consts/other/kanban-column-info.const";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { Subscription } from "rxjs";

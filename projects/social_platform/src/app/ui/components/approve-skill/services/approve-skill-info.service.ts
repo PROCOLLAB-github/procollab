@@ -8,11 +8,11 @@ import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
 import { map, of, Subject, switchMap, takeUntil } from "rxjs";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ApproveSkillUIInfoService } from "./approve-skill-ui-info.service";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 @Injectable()
 export class ApproveskillInfoService {
-  private readonly authRepository = inject(AuthRepository);
+  private readonly authRepository = inject(AuthInfoService);
   private readonly projectsDetailUIInfoService = inject(ProjectsDetailUIInfoService);
   private readonly route = inject(ActivatedRoute);
   private readonly profileApproveSkillService = inject(ProfileApproveSkillService);

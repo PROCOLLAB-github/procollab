@@ -2,7 +2,7 @@
 
 import { Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
-import { AuthRequiredGuard } from "projects/core/src/lib/guards/auth/auth-required.guard";
+import { AuthRequiredGuard } from "@core/lib/guards/auth/auth-required.guard";
 
 /**
  * Основные маршруты приложения

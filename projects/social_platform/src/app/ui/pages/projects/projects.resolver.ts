@@ -6,10 +6,10 @@ import { ResolveFn } from "@angular/router";
 import { HttpParams } from "@angular/common/http";
 import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
 import { Project } from "../../../domain/project/project.model";
-import { AuthRepository } from "../../../infrastructure/repository/auth/auth.repository";
 import { GetAllProjectsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-all-projects.use-case";
 import { GetMyProjectsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-my-projects.use-case";
 import { GetProjectSubscriptionsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project-subscriptions.use-case";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /**
  * Resolver для загрузки данных о количестве проектов
@@ -39,7 +39,7 @@ export interface DashboardProjectsData {
 }
 
 export const ProjectsResolver: ResolveFn<DashboardProjectsData> = () => {
-  const authRepository = inject(AuthRepository);
+  const authRepository = inject(AuthInfoService);
   const getAllProjectsUseCase = inject(GetAllProjectsUseCase);
   const getMyProjectsUseCase = inject(GetMyProjectsUseCase);
   const getProjectSubscriptionsUseCase = inject(GetProjectSubscriptionsUseCase);

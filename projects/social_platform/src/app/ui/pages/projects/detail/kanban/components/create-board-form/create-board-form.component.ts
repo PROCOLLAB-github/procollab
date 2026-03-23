@@ -6,9 +6,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { Subscription } from "rxjs";
 import { IconComponent } from "@ui/components";
 import { ControlErrorPipe } from "@corelib";
-import { ErrorMessage } from "projects/core/src/lib/models/error/error-message";
-import { tagColors } from "projects/core/src/consts/other/tag-colors.const";
-import { KanbanIcons } from "projects/core/src/consts/other/kanban-icons.const";
+import { ErrorMessage } from "@core/lib/models/error/error-message";
+import { tagColors } from "@core/consts/other/tag-colors.const";
+import { KanbanIcons } from "@core/consts/other/kanban-icons.const";
 
 @Component({
   selector: "app-create-board-form",
