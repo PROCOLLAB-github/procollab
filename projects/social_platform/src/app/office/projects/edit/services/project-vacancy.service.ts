@@ -4,7 +4,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { ValidationService } from "@corelib";
-import { Skill } from "@office/models/skill";
+import { Skill } from "@office/models/skill.model";
 import { Vacancy } from "@office/models/vacancy.model";
 import { VacancyService } from "@office/services/vacancy.service";
 import { stripNullish } from "@utils/stripNull";

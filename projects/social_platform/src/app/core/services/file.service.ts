@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService, TokenService } from "@corelib";
-import { firstValueFrom, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
 import { environment } from "@environment";
 
@@ -32,37 +32,45 @@ export class FileService {
     const formData = new FormData();
     formData.append("file", file);
 
-    const doFetch = (token: string) =>
-      fetch(`${environment.apiUrl}${this.FILES_URL}/`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
-
     return new Observable<{ url: string }>(observer => {
-      const execute = async () => {
-        const token = this.tokenService.getTokens()?.access;
-        if (!token) throw new Error("No access token");
+      const doFetch = (token: string) =>
+        fetch(`${environment.apiUrl}${this.FILES_URL}/`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        });
 
-        let res = await doFetch(token);
+      const token = this.tokenService.getTokens()?.access;
+      if (!token) {
+        observer.error(new Error("No access token"));
+        return;
+      }
 
-        if (res.status === 401) {
-          const refreshRes = await firstValueFrom(this.tokenService.refreshTokens());
-          this.tokenService.memTokens(refreshRes);
-          res = await doFetch(refreshRes.access);
-        }
-
-        if (!res.ok) {
-          throw new Error(`Upload failed: ${res.status}`);
-        }
-
-        return res.json();
-      };
-
-      execute()
-        .then(data => {
-          observer.next(data);
-          observer.complete();
+      doFetch(token)
+        .then(res => {
+          if (res.status === 401) {
+            this.tokenService.refreshTokens().subscribe({
+              next: newTokens => {
+                this.tokenService.memTokens(newTokens);
+                doFetch(newTokens.access)
+                  .then(r => r.json())
+                  .then(data => {
+                    observer.next(data);
+                    observer.complete();
+                  })
+                  .catch(err => observer.error(err));
+              },
+              error: err => observer.error(err),
+            });
+            return;
+          }
+          return res.json();
+        })
+        .then(res => {
+          if (res) {
+            observer.next(res);
+            observer.complete();
+          }
         })
         .catch(err => observer.error(err));
     });

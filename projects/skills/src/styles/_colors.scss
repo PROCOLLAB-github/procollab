@@ -12,25 +12,24 @@
   --accent-light: #9a80e6;
 
   // GOLD
-  --gold: #f6ff8b;
-  --gold-dark: #f7cf4d;
+  --gold: #e5b25d;
+  --gold-dark: #c69849;
 
   // GRAY
-  --white: #fafafa;
   --light-white: #fff;
+  --white: #fafafa;
   --black: #333;
-  --dark-grey: #e7e7e7;
+  --dark-grey: #a59fb9;
   --gray: #d3d3d3;
   --light-gray: #f9f9f9;
   --grey-button: #e5e5e5e5;
-  --gray-for-shadow: rgb(159 159 159 / 15%);
   --medium-grey-for-outline: #eee;
-  --grey-for-text: #a59fb9;
+  --grey-for-text: #827e80;
 
   // FUNCTIONAL
-  --green: #92e3a9;
-  --light-green: #e3f8e9;
-  --red: rgb(242 66 72 / 50%);
-  --light-red: #ffd2d2;
+  --green: #88c9a1;
+  --green-dark: #297373;
+  --lime: #d6ff54;
+  --red: #d48a9e;
   --red-dark: #{color.adjust(#d48a9e, $blackness: 10%)};
 }

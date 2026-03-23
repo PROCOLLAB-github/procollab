@@ -32,7 +32,7 @@ import { AsyncPipe, CommonModule, NgTemplateOutlet } from "@angular/common";
 import { ProfileService } from "@auth/services/profile.service";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { AvatarComponent } from "../../../../ui/components/avatar/avatar.component";
-import { Skill } from "@office/models/skill";
+import { Skill } from "@office/models/skill.model";
 import { HttpErrorResponse } from "@angular/common/http";
 import { NewsFormComponent } from "@office/features/news-form/news-form.component";
 import { NewsCardComponent } from "@office/features/news-card/news-card.component";

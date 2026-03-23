@@ -1,10 +1,10 @@
 /** @format */
 
 import { Injectable } from "@angular/core";
-import { SkillsGroup } from "../models/skills-group";
+import { SkillsGroup } from "../models/skills-group.model";
 import { Observable } from "rxjs";
 import { ApiService } from "@corelib";
-import { Skill } from "../models/skill";
+import { Skill } from "../models/skill.model";
 import { ApiPagination } from "@office/models/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
 

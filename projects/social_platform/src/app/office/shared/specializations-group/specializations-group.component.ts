@@ -10,7 +10,7 @@ import {
   signal,
 } from "@angular/core";
 import { IconComponent } from "@ui/components";
-import { Specialization } from "@office/models/specialization";
+import { Specialization } from "@office/models/specialization.model";
 
 /**
  * Компонент группы специализаций с возможностью сворачивания/разворачивания

@@ -3,11 +3,11 @@
 import { Component, inject, type OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { Router, RouterLink, RouterOutlet } from "@angular/router";
-import { IconComponent, SidebarComponent } from "@uilib";
+import { IconComponent, ProfileControlPanelComponent, SidebarComponent } from "@uilib";
 import { SidebarProfileComponent } from "./shared/sidebar-profile/sidebar-profile.component";
-import { ProfileService } from "./profile/services/profile.service";
 import type { UserData } from "../models/profile.model";
 import { AuthService } from "@auth/services";
+import { SnackbarComponent } from "@ui/components/snackbar/snackbar.component";
 
 /**
  * Корневой компонент приложения, который служит основным контейнером макета
@@ -32,13 +32,14 @@ import { AuthService } from "@auth/services";
     SidebarComponent,
     SidebarProfileComponent,
     IconComponent,
+    ProfileControlPanelComponent,
+    SnackbarComponent,
   ],
   templateUrl: "./app.component.html",
   styleUrl: "./app.component.scss",
 })
 export class AppComponent implements OnInit {
   // Внедренные сервисы для управления профилем и аутентификацией
-  profileService = inject(ProfileService);
   authService = inject(AuthService);
   router = inject(Router);
 
@@ -54,12 +55,9 @@ export class AppComponent implements OnInit {
    * Каждый элемент представляет основной раздел приложения
    */
   navItems = [
-    // { name: "Навыки", icon: "lib", link: "skills" }, // Временно отключено
-    { name: "Детский Форсайт", icon: "trackcar", link: "trackCar" },
-    // { name: "Траектории", icon: "receipt", link: "subscription" },
-    // { name: "Рейтинг", icon: "growth", link: "rating" },
-    // { name: "Траектория бизнеса", icon: "trackbuss", link: "trackBuss" }, // Временно отключено
-    // { name: "Вебинары", icon: "webinars", link: "webinars" }, // Временно отключено
+    { name: "Мой профиль", icon: "person", link: "profile" },
+    { name: "Рейтинг", icon: "growth", link: "rating" },
+    // { name: "Траектории", icon: "receipt", link: "trackCar" },
   ];
 
   // Реактивное состояние с использованием Angular signals
@@ -71,23 +69,11 @@ export class AppComponent implements OnInit {
    * Получает данные пользователя и синхронизирует профиль при запуске
    * Перенаправляет на страницу входа при ошибке аутентификации
    */
-  ngOnInit(): void {
-    // Получение текущих данных пользователя
-    this.profileService.getUserData().subscribe({
-      next: data => this.userData.set(data as UserData),
-      error: () => {
-        // Перенаправление на основное приложение для входа при ошибке получения данных пользователя
-        location.href = "https://app.procollab.ru/auth/login";
-      },
-    });
+  ngOnInit(): void {}
 
-    // Синхронизация данных профиля с бэкендом
-    this.profileService.syncProfile().subscribe({
+  onLogout() {
+    this.authService.logout().subscribe({
       next: () => {
-        // Синхронизация профиля успешна - никаких действий не требуется
-      },
-      error: () => {
-        // Перенаправление на основное приложение для входа при ошибке синхронизации профиля
         location.href = "https://app.procollab.ru/auth/login";
       },
     });

@@ -1,0 +1,13 @@
+<!-- @format -->
+
+<div class="courses">
+  @if (coursesList().length) {
+  <div class="courses__list">
+    @for (course of coursesList(); track course.id) {
+    <a [routerLink]="['/office/courses', course.id]">
+      <app-course [course]="course"></app-course>
+    </a>
+    }
+  </div>
+  }
+</div>

@@ -1,12 +1,6 @@
 <!-- @format -->
 
 <div class="app">
-  <ui-sidebar class="app__sidebar" [navItems]="navItems" logoSrc="/assets/images/shared/logo.svg">
-    @if(userData()){
-    <app-sidebar-profile></app-sidebar-profile>
-    }
-  </ui-sidebar>
-
   <div class="app__wrapper">
     <div class="app__top">
       <div class="nav-bar__toggle">
@@ -63,7 +57,34 @@
 
     <div class="app__body">
       <div class="app__inner">
-        <router-outlet></router-outlet>
+        <div class="app__inner--wrapper">
+          <ui-sidebar
+            class="app__sidebar"
+            [navItems]="navItems"
+            logoSrc="/assets/images/shared/logo.svg"
+            style="align-self: flex-start"
+          >
+            <div class="app__sidebar--text">
+              <p class="text-body-6">Платформа создана компанией ООО «Молодежный форсайт»</p>
+              <p class="text-body-6">Политика обработки персональных данных</p>
+              <p class="text-body-6">2022</p>
+            </div>
+          </ui-sidebar>
+
+          <div class="app__inner--content">
+            @if (userData() !== undefined) {
+            <app-profile-control-panel
+              [invites]="[]"
+              [hasNotifications]="false"
+              [hasUnreads]="false"
+              [user]="userData()"
+              (logout)="onLogout()"
+            ></app-profile-control-panel>
+            }
+            <router-outlet></router-outlet>
+            <app-snackbar></app-snackbar>
+          </div>
+        </div>
       </div>
     </div>
   </div>

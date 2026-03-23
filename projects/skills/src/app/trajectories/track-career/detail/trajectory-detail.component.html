@@ -1,14 +1,46 @@
 <!-- @format -->
 
 <div class="detail">
-  <app-bar
-    class="bar"
-    [backHave]="true"
-    backRoute="/profile"
-    [links]="[
-      { link: '/trackCar/' + trackId, linkText: 'Моя траектория', isRouterLinkActiveOptions: true }
-    ]"
-  ></app-bar>
-</div>
+  <div class="detail__body">
+    @if(trajectory()) {
+    <div class="info detail__section detail__info">
+      <div class="info__cover"></div>
 
-<router-outlet></router-outlet>
+      <div class="info__avatar">
+        <app-avatar
+          [url]="trajectory()?.avatar!"
+          [size]="106"
+          (click)="redirectDetailInfo(trajectory()!.id)"
+        ></app-avatar>
+        @if (!isTaskDetail()) {
+        <h1 class="info__title text-body-12">{{ trajectory()?.name }}</h1>
+        }
+      </div>
+    </div>
+
+    <div class="info__body">
+      <div class="info__actions">
+        <app-button
+          (click)="redirectDetailInfo(isTaskDetail() ? trajectory()?.id : undefined)"
+          [disabled]="false"
+          size="big"
+          customTypographyClass="text-body-12"
+          appearance="outline"
+          >{{ isTaskDetail() ? "назад к модулю?" : "назад" }}</app-button
+        >
+
+        <app-button
+          [disabled]="true"
+          [class.info__actions--disabled]="isDisabled()"
+          size="big"
+          customTypographyClass="text-body-12"
+          appearance="outline"
+          >вернуться в программу</app-button
+        >
+      </div>
+    </div>
+
+    <router-outlet></router-outlet>
+    }
+  </div>
+</div>

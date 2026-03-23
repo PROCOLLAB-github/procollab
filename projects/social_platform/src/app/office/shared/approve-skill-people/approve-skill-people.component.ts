@@ -3,7 +3,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
 import { PluralizePipe } from "@corelib";
-import { Skill } from "@office/models/skill";
+import { Skill } from "@office/models/skill.model";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 
 @Component({

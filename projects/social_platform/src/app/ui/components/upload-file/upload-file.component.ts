@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, forwardRef, Input, OnInit } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { FileService } from "@core/services/file.service";
 import { nanoid } from "nanoid";
@@ -38,7 +38,7 @@ import { LoaderComponent } from "../loader/loader.component";
     },
   ],
   standalone: true,
-  imports: [IconComponent, SlicePipe, LoaderComponent],
+  imports: [IconComponent, LoaderComponent],
 })
 export class UploadFileComponent implements OnInit, ControlValueAccessor {
   constructor(private fileService: FileService) {}
@@ -48,6 +48,17 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
 
   /** Состояние ошибки */
   @Input() error = false;
+
+  /** Режим: после загрузки сбросить в пустое состояние и не показывать "файл успешно загружен" */
+  @Input() resetAfterUpload = false;
+
+  /** Событие с данными загруженного файла (url + метаданные оригинального файла) */
+  @Output() uploaded = new EventEmitter<{
+    url: string;
+    name: string;
+    size: number;
+    mimeType: string;
+  }>();
 
   ngOnInit(): void {}
 
@@ -79,18 +90,30 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
 
   /** Обработчик загрузки файла */
   onUpdate(event: Event): void {
-    const files = (event.currentTarget as HTMLInputElement).files;
+    const input = event.currentTarget as HTMLInputElement;
+    const files = input.files;
     if (!files?.length) {
       return;
     }
 
+    const originalFile = files[0];
     this.loading = true;
 
-    this.fileService.uploadFile(files[0]).subscribe(res => {
+    this.fileService.uploadFile(originalFile).subscribe(res => {
       this.loading = false;
 
-      this.value = res.url;
-      this.onChange(res.url);
+      if (this.resetAfterUpload) {
+        this.uploaded.emit({
+          url: res.url,
+          name: originalFile.name,
+          size: originalFile.size,
+          mimeType: originalFile.type,
+        });
+        input.value = "";
+      } else {
+        this.value = res.url;
+        this.onChange(res.url);
+      }
     });
   }
 

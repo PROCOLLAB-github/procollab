@@ -1,55 +1,117 @@
 @use "styles/responsive";
 @use "styles/typography";
 
-@mixin expandable-list {
-  &__remaining {
+.trajectory {
+  padding-top: 12px;
+  padding-bottom: 100px;
+
+  @include responsive.apply-desktop {
+    padding-bottom: 0;
+  }
+
+  &__main {
     display: grid;
-    grid-template-rows: 0fr;
-    overflow: hidden;
-    transition: all 0.5s ease-in-out;
-
-    &--show {
-      grid-template-rows: 1fr;
-      margin-top: 12px;
-    }
-
-    ul {
-      min-height: 0;
-    }
-
-    li {
-      &:first-child {
-        margin-top: 12px;
-      }
-
-      &:not(:last-child) {
-        margin-bottom: 12px;
-      }
-    }
-  }
-}
-
-.read-more {
-  margin-top: 12px;
-  color: var(--accent);
-  cursor: pointer;
-  transition: color 0.2s;
-
-  &:hover {
-    color: var(--accent-dark);
+    grid-template-columns: 1fr;
   }
 
-  @include typography.body-14;
+  &__right {
+    display: flex;
+    flex-direction: column;
+    max-height: 226px;
+  }
+
+  &__left {
+    max-width: 157px;
+  }
+
+  &__section {
+    padding: 24px;
+    margin-bottom: 14px;
+    background-color: var(--light-white);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
+  }
+
+  &__info {
+    @include responsive.apply-desktop {
+      grid-column: span 3;
+    }
+  }
+
+  &__details {
+    display: grid;
+    grid-template-columns: 2fr 5fr 3fr;
+    grid-gap: 20px;
+  }
+
+  &__progress {
+    position: relative;
+    height: 48px;
+    padding: 10px;
+    text-align: center;
+    background-color: var(--light-white);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
+
+    &--cover {
+      position: absolute;
+      top: 0%;
+      left: 0%;
+      height: 48px;
+      background-color: var(--accent);
+      border-radius: var(--rounded-lg);
+      opacity: 0.15;
+
+      &--complete {
+        background-color: var(--green-dark);
+      }
+    }
+
+    &--percent {
+      color: var(--green-dark);
+    }
+
+    &--complete {
+      color: var(--black);
+    }
+  }
+
+  &__skills {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 18px;
+  }
 }
 
 .about {
+  padding: 24px;
+  background-color: var(--light-white);
+  border-radius: var(--rounded-lg);
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    border-bottom: 0.5px solid var(--accent);
+
+    &--icon {
+      color: var(--accent);
+    }
+  }
+
+  &__title {
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
 
   /* stylelint-disable value-no-vendor-prefix */
   &__text {
     p {
       display: -webkit-box;
       overflow: hidden;
-      color: var(--dark-grey);
+      color: var(--black);
       text-overflow: ellipsis;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 5;
@@ -72,273 +134,40 @@
       }
     }
   }
-
   /* stylelint-enable value-no-vendor-prefix */
 
   &__read-full {
-    margin-top: 2px;
+    margin-top: 8px;
     color: var(--accent);
     cursor: pointer;
   }
 }
 
-.trajectory__infoItem {
-  @include responsive.apply-desktop {
-    margin-left: 50px;
+.read-more {
+  margin-top: 8px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    color: var(--accent-dark);
   }
+}
 
-  .trajectory {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
+.cancel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: calc(100vh - 40px);
+  padding: 0 200px;
 
-    @include responsive.apply-desktop {
-      flex-direction: row;
-    }
-
-    &__cover {
-      display: flex;
-      flex-basis: 200%;
-      flex-direction: column;
-      gap: 30px;
-      align-items: center;
-      width: 100%;
-
-      img {
-        width: 150px;
-        height: 130px;
-      }
-
-      @include responsive.apply-desktop {
-        align-items: flex-start;
-
-        img {
-          width: 275px;
-          height: 275px;
-        }
-      }
-    }
-
-    &__image {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    &__title {
-      @include typography.heading-4;
-
-      width: 100%;
-
-      @include responsive.apply-desktop {
-        @include typography.heading-2;
-      }
-    }
-
-    &__info {
-      display: flex;
-      flex-basis: 270%;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    &__info--additional {
-      display: none;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 25px;
-      border: 1px solid var(--grey-button);
-      border-radius: 15px;
-
-      @include responsive.apply-desktop {
-        flex-direction: row;
-      }
-    }
-
-    &__timeline {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 25px;
-      background-color: var(--white);
-      border: 1px solid var(--grey-button);
-      border-radius: 15px;
-
-      ::ng-deep app-month-block {
-        display: block;
-        width: 100%;
-
-        .month {
-          display: flex;
-          justify-content: center;
-        }
-
-        .item {
-          max-width: 65px;
-          height: 20px;
-
-          &__name {
-            top: -40%;
-            left: 40%;
-            font-size: 10px;
-            font-weight: 600;
-
-            @include responsive.apply-desktop {
-              top: -50%;
-              left: 44%;
-
-              @include typography.body-14;
-            }
-          }
-
-          @include responsive.apply-desktop {
-            max-width: 120px;
-          }
-        }
-      }
-
-      @include responsive.apply-desktop {
-        flex-direction: row;
-      }
-    }
-
-    &__mentor {
-      display: none;
-      flex-direction: column;
-      gap: 20px;
-      align-items: flex-start;
-      justify-content: space-between;
-      padding: 10px 25px;
-      border: 1px solid var(--grey-button);
-      border-radius: 15px;
-
-      @include responsive.apply-desktop {
-        flex-direction: row;
-        gap: 12px;
-        align-items: center;
-      }
-    }
-
-    &__description {
-      height: auto;
-      padding: 18px 25px;
-      overflow-y: auto;
-      border: 1px solid var(--grey-button);
-      border-radius: 15px;
-
-      @include responsive.apply-desktop {
-        height: 235px;
-        overflow-y: auto;
-      }
-    }
-  }
-
-  .timeline {
-    &__images {
-      display: flex;
-      flex-direction: row;
-      gap: 20px;
-      align-items: center;
-    }
-
-    &__date {
-      color: var(--dark-grey);
-
-      @include responsive.apply-desktop {
-        align-self: center !important;
-      }
-    }
-
-    &__start {
-      align-self: baseline;
-      margin-top: 10px;
-      color: var(--dark-grey);
-
-      @include responsive.apply-desktop {
-        margin: 0;
-      }
-    }
-
-    &__end {
-      align-self: end;
-      margin-bottom: 10px;
-      color: var(--dark-grey);
-
-      @include responsive.apply-desktop {
-        margin: 0;
-      }
-    }
-  }
-
-  .info__additional {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    padding: 5px 24px;
+  &__text {
+    color: var(--dark-grey);
     text-align: center;
-    border-radius: 15px;
-
-    p {
-      width: 100%;
-    }
   }
 
-  .mentor {
-    &__years {
-      color: var(--dark-grey);
-    }
-
-    &__info {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-  }
-
-  .skills {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-top: 10px;
-
-    &__future-container,
-    &__personal-container,
-    &__past-container {
-      display: none;
-    }
-
-    &__now-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 20px;
-
-      h4 {
-        display: none;
-      }
-    }
-
-    &__now,
-    &__past,
-    &__personal,
-    &__future {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-
-      @include responsive.apply-desktop {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    &__complete {
-      width: 100%;
-      height: 100%;
-    }
+  &__img {
+    margin: 30px 0;
   }
 }

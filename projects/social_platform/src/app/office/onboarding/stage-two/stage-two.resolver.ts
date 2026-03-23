@@ -3,7 +3,7 @@
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
 import { SkillsService } from "@office/services/skills.service";
-import { SkillsGroup } from "@office/models/skills-group";
+import { SkillsGroup } from "@office/models/skills-group.model";
 
 /**
  * РЕЗОЛВЕР ВТОРОГО ЭТАПА ОНБОРДИНГА

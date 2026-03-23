@@ -13,7 +13,7 @@ import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ErrorMessage } from "@error/models/error-message";
 import { Invite } from "@models/invite.model";
 import { Project } from "@models/project.model";
-import { Skill } from "@office/models/skill";
+import { Skill } from "@office/models/skill.model";
 import { ProgramService } from "@office/program/services/program.service";
 import { SkillsService } from "@office/services/skills.service";
 import { SkillsGroupComponent } from "@office/shared/skills-group/skills-group.component";

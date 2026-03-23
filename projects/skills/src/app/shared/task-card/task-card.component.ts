@@ -4,7 +4,10 @@ import { Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ButtonComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
-import type { Task, TasksResponse } from "../../../models/skill.model";
+import type {
+  Task,
+  TasksResponse,
+} from "../../../../../social_platform/src/app/office/models/skill.model";
 
 /**
  * Компонент карточки задачи

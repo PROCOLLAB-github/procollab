@@ -58,6 +58,7 @@ export class Program {
   isUserManager!: boolean;
   isUserMember!: boolean;
   publishProjectsAfterFinish!: boolean;
+  courseId!: number | null;
 
   static default(): Program {
     return {
@@ -86,6 +87,7 @@ export class Program {
       isUserMember: false,
       isUserManager: false,
       publishProjectsAfterFinish: false,
+      courseId: null,
     };
   }
 }

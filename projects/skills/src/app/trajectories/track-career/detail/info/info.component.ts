@@ -4,7 +4,6 @@ import {
   type AfterViewInit,
   ChangeDetectorRef,
   Component,
-  computed,
   type ElementRef,
   inject,
   type OnInit,
@@ -13,19 +12,17 @@ import {
 } from "@angular/core";
 import { ActivatedRoute, Router, RouterModule } from "@angular/router";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { ButtonComponent } from "@ui/components";
-import { AvatarComponent, IconComponent } from "@uilib";
+import { IconComponent } from "@uilib";
 import { expandElement } from "@utils/expand-element";
 import { map, type Observable, type Subscription } from "rxjs";
-import { SkillCardComponent } from "../../../../skills/shared/skill-card/skill-card.component";
 import { CommonModule } from "@angular/common";
-import { MonthBlockComponent } from "projects/skills/src/app/profile/shared/month-block/month-block.component";
 import type { Trajectory, UserTrajectory } from "projects/skills/src/models/trajectory.model";
 import { TrajectoriesService } from "../../../trajectories.service";
-import type { Month, UserData } from "projects/skills/src/models/profile.model";
-import { ProfileService } from "projects/skills/src/app/profile/services/profile.service";
-import { SkillService } from "projects/skills/src/app/skills/services/skill.service";
 import { BreakpointObserver } from "@angular/cdk/layout";
+import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
+// import { SkillCardComponent } from "projects/skills/src/app/shared/skill-card/skill-card.component";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { ButtonComponent } from "@ui/components";
 
 /**
  * Компонент детальной информации о траектории
@@ -42,13 +39,14 @@ import { BreakpointObserver } from "@angular/cdk/layout";
   standalone: true,
   imports: [
     IconComponent,
-    ButtonComponent,
     RouterModule,
     ParseBreaksPipe,
     ParseLinksPipe,
-    SkillCardComponent,
-    AvatarComponent,
     CommonModule,
+    SoonCardComponent,
+    // SkillCardComponent,
+    ModalComponent,
+    ButtonComponent,
   ],
   templateUrl: "./info.component.html",
   styleUrl: "./info.component.scss",
@@ -60,29 +58,14 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
   cdRef = inject(ChangeDetectorRef);
 
   trajectoryService = inject(TrajectoriesService);
-  profileService = inject(ProfileService);
-  skillService = inject(SkillService);
   breakpointObserver = inject(BreakpointObserver);
 
   subscriptions$: Subscription[] = [];
 
   trajectory!: Trajectory;
   userTrajectory = signal<UserTrajectory | null>(null);
-  profileId!: number;
 
-  // Вычисляемые свойства для состояния навыков
-  completeAllMainSkills = computed(
-    () => this.userTrajectory()?.availableSkills.every(skill => skill.isDone) ?? false
-  );
-
-  availableSkills = computed(
-    () => this.userTrajectory()?.availableSkills.filter(s => !s.isDone) ?? []
-  );
-
-  completedSkills = computed(() => [
-    ...(this.userTrajectory()?.completedSkills ?? []),
-    ...(this.userTrajectory()?.availableSkills.filter(s => s.isDone) ?? []),
-  ]);
+  isCompleteModule = signal<boolean>(false);
 
   @ViewChild("descEl") descEl?: ElementRef;
 
@@ -95,44 +78,17 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
    * Загружает данные траектории, пользовательскую информацию и настраивает навыки
    */
   ngOnInit(): void {
-    this.desktopMode$.subscribe(r => console.log(r));
+    this.desktopMode$.subscribe(_ => {});
 
-    this.route.data.pipe(map(r => r["data"])).subscribe(r => {
+    this.route.parent?.data.pipe(map(r => r["data"])).subscribe(r => {
       this.trajectory = r[0];
       this.userTrajectory.set({ ...r[1], individualSkills: r[2] });
-
-      // Настройка доступности навыков
-      this.userTrajectory()?.availableSkills.forEach(i => (i.freeAccess = true));
-      this.userTrajectory()?.completedSkills.forEach(i => {
-        i.freeAccess = true;
-        i.isDone = true;
-      });
-      this.userTrajectory()?.unavailableSkills.forEach(i => (i.freeAccess = true));
-      this.userTrajectory()?.individualSkills.forEach(i => (i.freeAccess = true));
-    });
-
-    this.profileService.getUserData().subscribe((r: UserData) => {
-      this.profileId = r.id;
-    });
-
-    // Создание макета месяцев для временной шкалы
-    this.mockMonts = Array.from({ length: this.userTrajectory()!.durationMonths }, (_, index) => {
-      const monthNumber = index + 1;
-
-      return {
-        month: `${monthNumber} месяц`,
-        successfullyDone: monthNumber <= this.userTrajectory()!.activeMonth,
-      };
+      // this.isCompleteModule.set(this.userTrajectory()!.completedSkills.some(skill => skill.isDone));
     });
   }
 
-  mockMonts: Month[] = [];
-
-  placeholderUrl =
-    "https://uch-ibadan.org.ng/wp-content/uploads/2021/10/Profile_avatar_placeholder_large.png";
-
-  readFullDescription = false;
   descriptionExpandable?: boolean;
+  readFullDescription!: boolean;
 
   /**
    * Проверка возможности расширения описания после инициализации представления
@@ -168,7 +124,6 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
    * @param skillId - ID выбранного навыка
    */
   onSkillClick(skillId: number) {
-    this.skillService.setSkillId(skillId);
     this.router.navigate(["skills", skillId]);
   }
 }
