@@ -1,6 +1,13 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 
 /**
  * Компонент переключателя (switch) для булевых значений.
@@ -24,6 +31,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
   templateUrl: "./switch.component.html",
   styleUrl: "./switch.component.scss",
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SwitchComponent implements OnInit {
   /** Состояние переключателя */

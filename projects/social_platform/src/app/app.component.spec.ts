@@ -3,15 +3,15 @@
 import { TestBed } from "@angular/core/testing";
 import { RouterTestingModule } from "@angular/router/testing";
 import { AppComponent } from "./app.component";
-import { AuthService } from "@auth/services";
+import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
 
 describe("AppComponent", () => {
   beforeEach(async () => {
-    const authSpy = jasmine.createSpyObj("AuthService", ["getTokens"]);
+    const authSpy = jasmine.createSpyObj("AuthRepository", ["getTokens"]);
 
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, AppComponent],
-      providers: [{ provide: AuthService, useValue: authSpy }],
+      providers: [{ provide: AuthRepository, useValue: authSpy }],
     }).compileComponents();
   });
 

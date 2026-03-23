@@ -10,7 +10,7 @@ import {
 } from "@angular/common/http";
 import { BehaviorSubject, catchError, filter, Observable, switchMap, take, throwError } from "rxjs";
 import { Router } from "@angular/router";
-import { TokenService } from "../services";
+import { LoggerService, TokenService } from "../services";
 
 /**
  * HTTP интерцептор для автоматического управления JWT токенами
@@ -30,7 +30,11 @@ import { TokenService } from "../services";
  */
 @Injectable()
 export class BearerTokenInterceptor implements HttpInterceptor {
-  constructor(private readonly tokenService: TokenService, private readonly router: Router) {}
+  constructor(
+    private readonly tokenService: TokenService,
+    private readonly router: Router,
+    private readonly loggerService: LoggerService
+  ) {}
 
   /** Флаг предотвращения множественных запросов на обновление токена */
   private isRefreshing = false;
@@ -92,7 +96,7 @@ export class BearerTokenInterceptor implements HttpInterceptor {
         if (error.status === 401 && request.url.includes("/api/token/refresh")) {
           this.router
             .navigateByUrl("/auth/login")
-            .then(() => console.debug("Redirected to login: refresh token expired"));
+            .then(() => this.loggerService.debug("Redirected to login: refresh token expired"));
         }
         // Если 401 на другом endpoint - пытаемся обновить токен
         else if (error.status === 401 && !request.url.includes("/api/token/refresh")) {

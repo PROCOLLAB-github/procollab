@@ -58,7 +58,7 @@
     <i appIcon icon="dots" appWidth="4" appHeight="10" appViewBox="0 0 4 10"></i>
   </div>
 </div>
-@if (authService.profile | async; as profile) {
+@if (authRepository.profile | async; as profile) {
 <ul
   #contextMenu
   class="message__contextmenu contextmenu"

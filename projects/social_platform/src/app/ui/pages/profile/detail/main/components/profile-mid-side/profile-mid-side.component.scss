@@ -1,0 +1,127 @@
+@use "styles/responsive";
+
+.profile {
+  &__content {
+    grid-row-start: 2;
+    min-width: 0;
+    word-break: break-word;
+
+    @include responsive.apply-desktop {
+      grid-row-start: unset;
+    }
+  }
+
+  &__news {
+    grid-row-start: 4;
+
+    @include responsive.apply-desktop {
+      grid-row-start: unset;
+    }
+  }
+
+  &__directions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 3fr;
+    grid-gap: 20px;
+    align-items: center;
+    margin-top: 14px;
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+
+    &--text {
+      color: var(--grey-for-text);
+    }
+
+    i {
+      color: var(--grey-for-text);
+    }
+  }
+}
+
+.about {
+  padding: 24px;
+  background-color: var(--light-white);
+  border-radius: var(--rounded-lg);
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    border-bottom: 0.5px solid var(--accent);
+
+    &--icon {
+      color: var(--accent);
+    }
+  }
+
+  &__title {
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+  /* stylelint-disable value-no-vendor-prefix */
+  &__text {
+    p {
+      display: -webkit-box;
+      overflow: hidden;
+      color: var(--black);
+      text-overflow: ellipsis;
+      word-break: break-word;
+      transition: all 0.7s ease-in-out;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+
+      &.expanded {
+        -webkit-line-clamp: unset;
+      }
+    }
+
+    ::ng-deep a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      transition: text-decoration-color 0.2s;
+
+      &:hover {
+        text-decoration-color: var(--accent);
+      }
+    }
+  }
+
+  /* stylelint-enable value-no-vendor-prefix */
+
+  &__read-full {
+    margin-top: 2px;
+    color: var(--accent);
+    cursor: pointer;
+  }
+}
+
+.news {
+  &__form {
+    display: block;
+    margin-top: 20px;
+  }
+
+  &__item {
+    display: block;
+    margin-top: 20px;
+  }
+}
+
+.read-more {
+  margin-top: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--accent-dark);
+  }
+}

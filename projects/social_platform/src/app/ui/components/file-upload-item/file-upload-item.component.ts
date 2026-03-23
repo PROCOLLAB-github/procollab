@@ -1,11 +1,18 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { LoaderComponent } from "../loader/loader.component";
 import { IconComponent } from "@ui/components";
 import { UpperCasePipe } from "@angular/common";
-import { FormatedFileSizePipe } from "@core/pipes/formatted-file-size.pipe";
+import { FormatedFileSizePipe } from "@core/lib/pipes/transformers/formatted-file-size.pipe";
 
 /**
  * Компонент для отображения элемента загружаемого файла.
@@ -29,6 +36,7 @@ import { FormatedFileSizePipe } from "@core/pipes/formatted-file-size.pipe";
   styleUrl: "./file-upload-item.component.scss",
   standalone: true,
   imports: [IconComponent, LoaderComponent, UpperCasePipe, FileTypePipe, FormatedFileSizePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileUploadItemComponent implements OnInit {
   constructor() {}

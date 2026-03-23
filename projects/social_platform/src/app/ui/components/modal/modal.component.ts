@@ -2,6 +2,7 @@
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -43,6 +44,7 @@ import { CommonModule } from "@angular/common";
   styleUrl: "./modal.component.scss",
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(

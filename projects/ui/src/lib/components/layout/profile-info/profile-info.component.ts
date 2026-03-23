@@ -1,11 +1,17 @@
 /** @format */
 
-import { Component, EventEmitter, Input, type OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  type OnInit,
+  Output,
+} from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
-import { DayjsPipe } from "projects/core";
+import { DayjsPipe } from "@corelib";
 import { AvatarComponent, IconComponent } from "@uilib";
 import type { User } from "../../../models/user.model";
-import { UserData } from "projects/skills/src/models/profile.model";
 
 /**
  * Компонент отображения информации о профиле пользователя
@@ -27,6 +33,7 @@ import { UserData } from "projects/skills/src/models/profile.model";
   styleUrl: "./profile-info.component.scss",
   standalone: true,
   imports: [RouterLink, AvatarComponent, IconComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileInfoComponent implements OnInit {
   constructor(readonly router: Router) {}
@@ -34,7 +41,7 @@ export class ProfileInfoComponent implements OnInit {
   ngOnInit(): void {}
 
   /** Данные пользователя для отображения */
-  @Input({ required: true }) user!: User | UserData;
+  @Input({ required: true }) user!: User;
 
   /** Событие выхода из системы */
   @Output() logout = new EventEmitter<void>();

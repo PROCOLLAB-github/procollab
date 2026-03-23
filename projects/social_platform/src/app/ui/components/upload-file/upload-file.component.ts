@@ -1,12 +1,23 @@
 /** @format */
 
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  EventEmitter,
+  forwardRef,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { FileService } from "@core/services/file.service";
+import { FileService } from "@core/lib/services/file/file.service";
 import { nanoid } from "nanoid";
 import { IconComponent } from "@ui/components";
-import { SlicePipe } from "@angular/common";
 import { LoaderComponent } from "../loader/loader.component";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент для загрузки файлов с предварительным просмотром.
@@ -30,6 +41,7 @@ import { LoaderComponent } from "../loader/loader.component";
   selector: "app-upload-file",
   templateUrl: "./upload-file.component.html",
   styleUrl: "./upload-file.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -41,7 +53,9 @@ import { LoaderComponent } from "../loader/loader.component";
   imports: [IconComponent, LoaderComponent],
 })
 export class UploadFileComponent implements OnInit, ControlValueAccessor {
-  constructor(private fileService: FileService) {}
+  private readonly fileService = inject(FileService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   /** Ограничения по типу файлов */
   @Input() accept = "";
@@ -71,6 +85,7 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
   // Методы ControlValueAccessor
   writeValue(url: string) {
     this.value = url;
+    this.cdr.markForCheck();
   }
 
   onTouch: () => void = () => {};
@@ -98,40 +113,40 @@ export class UploadFileComponent implements OnInit, ControlValueAccessor {
 
     const originalFile = files[0];
     this.loading = true;
+    this.cdr.markForCheck();
 
-    this.fileService.uploadFile(originalFile).subscribe(res => {
-      this.loading = false;
+    this.fileService
+      .uploadFile(files[0])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(res => {
+        this.loading = false;
 
-      if (this.resetAfterUpload) {
-        this.uploaded.emit({
-          url: res.url,
-          name: originalFile.name,
-          size: originalFile.size,
-          mimeType: originalFile.type,
-        });
-        input.value = "";
-      } else {
         this.value = res.url;
         this.onChange(res.url);
-      }
-    });
+        this.cdr.markForCheck();
+      });
   }
 
   /** Обработчик удаления файла */
   onRemove(): void {
-    this.fileService.deleteFile(this.value).subscribe({
-      next: () => {
-        this.value = "";
+    this.fileService
+      .deleteFile(this.value)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.value = "";
 
-        this.onTouch();
-        this.onChange("");
-      },
-      error: () => {
-        this.value = "";
+          this.onTouch();
+          this.onChange("");
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.value = "";
 
-        this.onTouch();
-        this.onChange("");
-      },
-    });
+          this.onTouch();
+          this.onChange("");
+          this.cdr.markForCheck();
+        },
+      });
   }
 }

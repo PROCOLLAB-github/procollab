@@ -1,8 +1,7 @@
 /** @format */
 
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, OnInit, DestroyRef } from "@angular/core";
 import { ResolveEnd, ResolveStart, Router, RouterOutlet } from "@angular/router";
-import { AuthService } from "@auth/services";
 import {
   debounceTime,
   filter,
@@ -12,13 +11,15 @@ import {
   merge,
   noop,
   type Observable,
-  type Subscription,
   throttleTime,
 } from "rxjs";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { TokenService } from "@corelib";
-import { LoadingService } from "@office/services/loading.service";
+import { LoadingService } from "@ui/services/loading/loading.service";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
 /**
  * Корневой компонент приложения
@@ -32,20 +33,23 @@ import { LoadingService } from "@office/services/loading.service";
   styleUrls: ["./app.component.scss"],
   standalone: true,
   imports: [NgIf, MatProgressBarModule, RouterOutlet, AsyncPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
+  private readonly logger = inject(LoggerService);
+  private readonly destroyRef = inject(DestroyRef);
+
   constructor(
-    private authService: AuthService,
+    private authRepository: AuthRepositoryPort,
     private tokenService: TokenService,
     private router: Router,
     private loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
-    this.rolesSub$ = forkJoin([
-      this.authService.getUserRoles(),
-      this.authService.getChangeableRoles(),
-    ]).subscribe(noop);
+    forkJoin([this.authRepository.fetchUserRoles(), this.authRepository.fetchChangeableRoles()])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(noop);
 
     const showLoaderEvents = this.router.events.pipe(
       filter(evt => evt instanceof ResolveStart),
@@ -58,13 +62,15 @@ export class AppComponent implements OnInit, OnDestroy {
       map(() => false)
     );
 
-    this.routerLoadingSub$ = merge(hideLoaderEvents, showLoaderEvents).subscribe(isLoading => {
-      if (isLoading) {
-        this.loadingService.show();
-      } else {
-        this.loadingService.hide();
-      }
-    });
+    merge(hideLoaderEvents, showLoaderEvents)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(isLoading => {
+        if (isLoading) {
+          this.loadingService.show();
+        } else {
+          this.loadingService.hide();
+        }
+      });
 
     this.isLoading$ = this.loadingService.isLoading$;
 
@@ -72,36 +78,24 @@ export class AppComponent implements OnInit, OnDestroy {
       if (this.tokenService.getTokens() === null) {
         this.router
           .navigateByUrl("/auth/login")
-          .then(() => console.debug("Route changed from AppComponent"));
+          .then(() => this.logger.debug("Route changed from AppComponent"));
       } else {
-        console.debug("Route start changing from AppComponent");
+        this.logger.debug("Route start changing from AppComponent");
         this.router
           .navigateByUrl("/office")
-          .then(() => console.debug("Route changed From AppComponent"));
+          .then(() => this.logger.debug("Route changed From AppComponent"));
       }
     }
 
-    this.loadEvent = fromEvent(window, "load");
-    this.resizeEvent = fromEvent(window, "resize").pipe(throttleTime(500));
+    const loadEvent = fromEvent(window, "load");
+    const resizeEvent = fromEvent(window, "resize").pipe(throttleTime(500));
 
-    this.appHeight$ = merge(this.loadEvent, this.resizeEvent).subscribe(() => {
-      document.documentElement.style.setProperty("--app-height", `${window.innerHeight}px`);
-    });
+    merge(loadEvent, resizeEvent)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        document.documentElement.style.setProperty("--app-height", `${window.innerHeight}px`);
+      });
   }
-
-  ngOnDestroy(): void {
-    this.rolesSub$?.unsubscribe();
-    this.routerLoadingSub$?.unsubscribe();
-    this.appHeight$?.unsubscribe();
-  }
-
-  rolesSub$?: Subscription;
-  routerLoadingSub$?: Subscription;
-
-  private loadEvent?: Observable<Event>;
-  private resizeEvent?: Observable<Event>;
-
-  private appHeight$?: Subscription;
 
   isLoading$?: Observable<boolean>;
 }

@@ -1,7 +1,7 @@
 /** @format */
 
-import { User } from "@auth/models/user.model";
-import { profileFields } from "projects/core/src/consts/other/profile-fields.const";
+import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import { profileFields } from "@core/consts/other/profile-fields.const";
 
 /**
  * @fileoverview Функция для расчета прогресса заполнения профиля пользователя

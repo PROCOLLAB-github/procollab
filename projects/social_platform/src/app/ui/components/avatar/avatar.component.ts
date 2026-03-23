@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, type OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, type OnInit } from "@angular/core";
 
 /**
  * Компонент для отображения аватара пользователя.
@@ -26,6 +26,7 @@ import { Component, Input, type OnInit } from "@angular/core";
   templateUrl: "./avatar.component.html",
   styleUrl: "./avatar.component.scss",
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AvatarComponent implements OnInit {
   /** URL изображения аватара */

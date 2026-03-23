@@ -2,6 +2,8 @@
 
 import { CommonModule } from "@angular/common";
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   forwardRef,
@@ -13,6 +15,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
 import { ClickOutsideModule } from "ng-click-outside";
+import { DropdownComponent } from "../dropdown/dropdown.component";
 
 /**
  * Компонент выпадающего списка для выбора значения из предустановленных опций.
@@ -37,6 +40,7 @@ import { ClickOutsideModule } from "ng-click-outside";
   selector: "app-select",
   templateUrl: "./select.component.html",
   styleUrl: "./select.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -45,7 +49,7 @@ import { ClickOutsideModule } from "ng-click-outside";
     },
   ],
   standalone: true,
-  imports: [ClickOutsideModule, IconComponent, CommonModule],
+  imports: [ClickOutsideModule, IconComponent, CommonModule, DropdownComponent],
 })
 export class SelectComponent implements ControlValueAccessor {
   /** Текст подсказки */
@@ -79,7 +83,7 @@ export class SelectComponent implements ControlValueAccessor {
   /** Индекс подсвеченного элемента при навигации */
   highlightedIndex = -1;
 
-  constructor(private readonly renderer: Renderer2) {}
+  constructor(private readonly renderer: Renderer2, private readonly cdr: ChangeDetectorRef) {}
 
   /** Ссылка на элемент выпадающего списка */
   @ViewChild("dropdown") dropdown!: ElementRef<HTMLUListElement>;
@@ -106,7 +110,7 @@ export class SelectComponent implements ControlValueAccessor {
     }
     if (event.code === "Enter") {
       if (i >= 0) {
-        this.onUpdate(event, this.options[this.highlightedIndex].id);
+        this.onUpdate(this.options[this.highlightedIndex].id);
       }
     }
     if (event.code === "Escape") {
@@ -137,23 +141,71 @@ export class SelectComponent implements ControlValueAccessor {
   }
 
   // Методы ControlValueAccessor
-  writeValue(value: number | string) {
-    if (typeof value === "string") {
-      // Найти ID по значению или label
-      this.selectedId = this.getIdByValue(value) || this.getId(value);
-    } else {
-      this.selectedId = value;
+  writeValue(value: number | string | null) {
+    if (value === null || value === undefined || value === "") {
+      this.selectedId = undefined;
+      this.cdr.markForCheck();
+      return;
     }
+
+    const optionByValue = this.options.find(option => option.value === value);
+    if (optionByValue) {
+      this.selectedId = optionByValue.id;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    const yearValue = this.extractYear(value);
+    if (yearValue !== null) {
+      const yearOption = this.options.find(option => this.extractYear(option.value) === yearValue);
+      if (yearOption) {
+        this.selectedId = yearOption.id;
+        this.cdr.markForCheck();
+        return;
+      }
+    }
+
+    if (typeof value === "number") {
+      this.selectedId = this.options.some(option => option.id === value) ? value : undefined;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    this.selectedId = this.getIdByValue(value) || this.getId(value);
+    this.cdr.markForCheck();
   }
 
   getIdByValue(value: string | number): number | undefined {
     return this.options.find(el => el.value === value)?.id;
   }
 
+  private extractYear(value: unknown): number | null {
+    if (typeof value === "number" && Number.isInteger(value) && value >= 1900 && value <= 3000) {
+      return value;
+    }
+
+    if (typeof value !== "string") {
+      return null;
+    }
+
+    const match = value.match(/\d{4}/);
+    if (!match) {
+      return null;
+    }
+
+    const year = Number(match[0]);
+    if (!Number.isInteger(year) || year < 1900 || year > 3000) {
+      return null;
+    }
+
+    return year;
+  }
+
   disabled = false;
 
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
+    this.cdr.markForCheck();
   }
 
   onChange: (value: string | number | null | boolean) => void = () => {};
@@ -169,11 +221,8 @@ export class SelectComponent implements ControlValueAccessor {
   }
 
   /** Обработчик выбора опции */
-  onUpdate(event: Event, id: number): void {
-    event.stopPropagation();
-    if (this.disabled) {
-      return;
-    }
+  onUpdate(id: number): void {
+    if (this.disabled) return;
 
     this.selectedId = id;
     this.onChange(this.getValue(id) ?? this.options[0].value);

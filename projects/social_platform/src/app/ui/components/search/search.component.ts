@@ -1,6 +1,7 @@
 /** @format */
 
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -38,6 +39,7 @@ import { ClickOutsideModule } from "ng-click-outside";
   selector: "app-search",
   templateUrl: "./search.component.html",
   styleUrl: "./search.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

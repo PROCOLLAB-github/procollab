@@ -1,6 +1,7 @@
 /** @format */
 
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -41,6 +42,7 @@ import { Subscription } from "rxjs";
     },
   ],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NumSliderComponent implements OnInit, OnDestroy {
   constructor() {}

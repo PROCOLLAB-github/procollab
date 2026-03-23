@@ -1,10 +1,20 @@
 /** @format */
 
-import { Component, forwardRef, Input, OnInit } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  forwardRef,
+  inject,
+  Input,
+  OnInit,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { nanoid } from "nanoid";
-import { FileService } from "@core/services/file.service";
+import { FileService } from "@core/lib/services/file/file.service";
 import { catchError, concatMap, map, of } from "rxjs";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { IconComponent, ButtonComponent } from "@ui/components";
 import { LoaderComponent } from "../loader/loader.component";
 import { CommonModule } from "@angular/common";
@@ -12,6 +22,7 @@ import { ImageCroppedEvent, ImageCropperComponent } from "ngx-image-cropper";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { ModalComponent } from "../modal/modal.component";
 import { TooltipComponent } from "../tooltip/tooltip.component";
+import { LoggerService } from "@corelib";
 
 /**
  * Компонент для управления аватаром пользователя.
@@ -37,6 +48,7 @@ import { TooltipComponent } from "../tooltip/tooltip.component";
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
     LoaderComponent,
@@ -49,7 +61,14 @@ import { TooltipComponent } from "../tooltip/tooltip.component";
   ],
 })
 export class AvatarControlComponent implements OnInit, ControlValueAccessor {
-  constructor(private fileService: FileService, private sanitizer: DomSanitizer) {}
+  private readonly destroyRef = inject(DestroyRef);
+
+  constructor(
+    private fileService: FileService,
+    private sanitizer: DomSanitizer,
+    private readonly loggerService: LoggerService,
+    private readonly cdr: ChangeDetectorRef
+  ) {}
 
   /** Размер аватара в пикселях */
   @Input() size = 140;
@@ -101,6 +120,7 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
   /** Записывает значение URL изображения */
   writeValue(address: string) {
     this.value = address;
+    this.cdr.markForCheck();
   }
 
   onTouch: () => void = () => {};
@@ -156,8 +176,9 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
    * Обработчик ошибки загрузки
    */
   loadImageFailed() {
-    console.error("Не удалось загрузить изображение");
+    this.loggerService.error("Не удалось загрузить изображение");
     this.showCropperModalErrorMessage = "Не удалось загрузить изображение. Попробуйте ещё раз!";
+    this.cdr.markForCheck();
   }
 
   /**
@@ -170,6 +191,7 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
 
     this.loading = true;
     this.showCropperModal = false;
+    this.cdr.markForCheck();
 
     // Создаем файл из blob
     const file = new File([this.croppedBlob], "cropped-avatar.jpg", {
@@ -180,13 +202,17 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
     const source = this.value
       ? this.fileService.deleteFile(this.value).pipe(
           catchError(err => {
-            console.error(err);
+            this.loggerService.error(err);
             return of({});
           }),
           concatMap(() => this.fileService.uploadFile(file)),
-          map(r => r["url"])
+          map(r => r["url"]),
+          takeUntilDestroyed(this.destroyRef)
         )
-      : this.fileService.uploadFile(file).pipe(map(r => r.url));
+      : this.fileService.uploadFile(file).pipe(
+          map(r => r.url),
+          takeUntilDestroyed(this.destroyRef)
+        );
 
     source.subscribe(this.updateValue.bind(this));
   }
@@ -199,6 +225,7 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
     this.imageChangedEvent = null;
     this.croppedImage = "";
     this.croppedBlob = null;
+    this.cdr.markForCheck();
 
     // Сбрасываем значение input
     const input = document.getElementById(this.controlId) as HTMLInputElement;
@@ -228,5 +255,6 @@ export class AvatarControlComponent implements OnInit, ControlValueAccessor {
     this.value = url;
 
     this.onTouch();
+    this.cdr.markForCheck();
   }
 }

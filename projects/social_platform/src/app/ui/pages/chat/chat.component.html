@@ -1,0 +1,35 @@
+<!-- @format -->
+
+<div class="page">
+  <div class="page__bar">
+    <app-back namespace="чаты" path="/office/feed"></app-back>
+
+    <app-bar
+      class="bar"
+      [backHave]="false"
+      [links]="[
+        {
+          link: '/office/chats/directs',
+          linkText: 'Личные чаты',
+          isRouterLinkActiveOptions: false,
+        },
+        {
+          link: '/office/chats/groups',
+          linkText: 'Чаты проектов',
+          isRouterLinkActiveOptions: false,
+        },
+      ]"
+    ></app-bar>
+  </div>
+
+  <div class="page__list">
+    @for (c of chats | async; track c.id; let last = $last) {
+    <app-chat-card
+      [chat]="c"
+      [isLast]="last"
+      [isUnread]="c.isUnread ?? false"
+      (click)="onGotoChat(c.id)"
+    ></app-chat-card>
+    }
+  </div>
+</div>

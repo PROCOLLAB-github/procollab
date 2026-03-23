@@ -11,6 +11,7 @@ import {
 import { map, type Observable } from "rxjs";
 import * as snakecaseKeys from "snakecase-keys";
 import camelcaseKeys from "camelcase-keys";
+import { LoggerService } from "../services/logger/logger.service";
 
 /**
  * HTTP интерцептор для автоматического преобразования стиля именования ключей объектов
@@ -31,7 +32,7 @@ import camelcaseKeys from "camelcase-keys";
  */
 @Injectable()
 export class CamelcaseInterceptor implements HttpInterceptor {
-  constructor() {}
+  constructor(private readonly loggerService: LoggerService) {}
 
   /**
    * Основной метод интерцептора
@@ -46,7 +47,7 @@ export class CamelcaseInterceptor implements HttpInterceptor {
     let req: HttpRequest<Record<string, any>>;
 
     // Обрабатываем тело запроса если оно существует
-    if (request.body) {
+    if (request.body && !(request.body instanceof FormData)) {
       // Клонируем запрос с преобразованным телом (camelCase → snake_case)
       req = request.clone({
         body: snakecaseKeys(request.body, {
@@ -77,7 +78,10 @@ export class CamelcaseInterceptor implements HttpInterceptor {
               }),
             });
           } catch (error) {
-            console.warn("CamelcaseInterceptor: Failed to transform response body", error);
+            this.loggerService.warn(
+              "CamelcaseInterceptor: Failed to transform response body",
+              error
+            );
             return event;
           }
         }

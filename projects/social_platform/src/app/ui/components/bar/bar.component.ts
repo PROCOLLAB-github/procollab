@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { BackComponent } from "@uilib";
@@ -30,6 +30,7 @@ import { BackComponent } from "@uilib";
   imports: [CommonModule, RouterLink, RouterLinkActive, BackComponent],
   templateUrl: "./bar.component.html",
   styleUrl: "./bar.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BarComponent {
   constructor() {}

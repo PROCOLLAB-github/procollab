@@ -1,6 +1,13 @@
 /** @format */
 
-import { Component, EventEmitter, Input, type OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  type OnInit,
+  Output,
+} from "@angular/core";
 import { IconComponent } from "@ui/components/icon/icon.component";
 
 /**
@@ -22,6 +29,7 @@ import { IconComponent } from "@ui/components/icon/icon.component";
   styleUrl: "./checkbox.component.scss",
   standalone: true,
   imports: [IconComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckboxComponent implements OnInit {
   /** Состояние чекбокса */

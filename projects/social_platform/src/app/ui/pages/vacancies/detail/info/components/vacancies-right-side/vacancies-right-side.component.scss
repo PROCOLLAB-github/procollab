@@ -1,0 +1,145 @@
+@use "styles/responsive";
+
+.vacancy {
+  &__content {
+    padding: 24px;
+    margin-bottom: 20px;
+    background-color: var(--light-white);
+    border: 0.5px solid var(--medium-grey-for-outline);
+    border-radius: var(--rounded-lg);
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+
+    &--title {
+      margin: 12px 0;
+    }
+
+    &--project {
+      position: relative;
+      padding: 48px 24px 24px;
+      background-color: var(--light-white);
+      border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: var(--rounded-lg);
+
+      &-image {
+        position: absolute;
+        top: -70px;
+        left: 50%;
+        display: block;
+        transform: translate(-50%, 50%);
+      }
+    }
+  }
+}
+
+.cancel {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__image {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 30px 0;
+    }
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+
+    @include responsive.apply-desktop {
+      top: 8px;
+      right: 8px;
+    }
+  }
+
+  &__title {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+}
+
+.lists {
+  &__section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    border-bottom: 0.5px solid var(--accent);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__icon {
+    color: var(--accent);
+  }
+
+  &__title {
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+
+  &__item {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+
+    &--status {
+      padding: 8px;
+      border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: var(--rounded-xl);
+    }
+
+    &--title {
+      color: var(--black);
+    }
+
+    i {
+      padding: 6px;
+      background-color: var(--light-white);
+      border: 0.5px solid var(--medium-grey-for-outline);
+      border-radius: var(--rounded-xl);
+    }
+
+    p {
+      color: var(--accent);
+    }
+
+    span {
+      cursor: pointer;
+    }
+  }
+}

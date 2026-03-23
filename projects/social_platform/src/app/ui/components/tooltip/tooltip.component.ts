@@ -1,7 +1,7 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { IconComponent } from "@ui/components";
 
 /**
@@ -25,6 +25,7 @@ import { IconComponent } from "@ui/components";
   styleUrl: "./tooltip.component.scss",
   standalone: true,
   imports: [CommonModule, IconComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TooltipComponent {
   /** Текст подсказки */

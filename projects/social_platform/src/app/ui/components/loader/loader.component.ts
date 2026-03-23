@@ -1,6 +1,6 @@
 /** @format */
 
-import { Component, Input, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core";
 
 /**
  * Компонент индикатора загрузки с настраиваемым внешним видом.
@@ -21,6 +21,7 @@ import { Component, Input, OnInit } from "@angular/core";
   templateUrl: "./loader.component.html",
   styleUrl: "./loader.component.scss",
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoaderComponent implements OnInit {
   constructor() {}

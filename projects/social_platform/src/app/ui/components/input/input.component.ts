@@ -1,7 +1,15 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, forwardRef, Input, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  Output,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@ui/components";
 import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
@@ -33,8 +41,11 @@ import { MatFormFieldModule } from "@angular/material/form-field";
     MatNativeDateModule,
     MatFormFieldModule,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent implements ControlValueAccessor {
+  constructor(private readonly cdr: ChangeDetectorRef) {}
+
   @Input() placeholder = "";
   @Input() type: "text" | "password" | "email" | "tel" | "date" | "radio" = "text";
   @Input() size: "small" | "big" = "small";
@@ -144,6 +155,7 @@ export class InputComponent implements ControlValueAccessor {
   writeValue(value: string | null): void {
     setTimeout(() => {
       this.value = value ?? "";
+      this.cdr.markForCheck();
     });
   }
 
@@ -163,6 +175,7 @@ export class InputComponent implements ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
+    this.cdr.markForCheck();
   }
 
   onEnter(event: Event) {

@@ -2,6 +2,7 @@
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   EventEmitter,
@@ -10,18 +11,20 @@ import {
   OnInit,
   Output,
   ViewChild,
+  inject,
 } from "@angular/core";
-import { ChatMessage } from "@models/chat-message.model";
-import { SnackbarService } from "@ui/services/snackbar.service";
+import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
+import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { DomPortal } from "@angular/cdk/portal";
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
-import { AuthService } from "@auth/services";
-import { DayjsPipe } from "projects/core";
+import { DayjsPipe } from "@corelib";
 import { IconComponent } from "@ui/components";
 import { FileItemComponent } from "../file-item/file-item.component";
 import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "../avatar/avatar.component";
 import { ClickOutsideModule } from "ng-click-outside";
+import { LoggerService } from "@core/lib/services/logger/logger.service";
+import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /**
  * Компонент сообщения в чате с контекстным меню и файловыми вложениями.
@@ -59,12 +62,15 @@ import { ClickOutsideModule } from "ng-click-outside";
     AsyncPipe,
     DayjsPipe,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly logger = inject(LoggerService);
+
   constructor(
     private readonly snackbarService: SnackbarService,
     private readonly overlay: Overlay,
-    public readonly authService: AuthService
+    public readonly authRepository: AuthInfoService
   ) {}
 
   /** Объект сообщения чата */
@@ -147,7 +153,7 @@ export class ChatMessageComponent implements OnInit, AfterViewInit, OnDestroy {
 
     navigator.clipboard.writeText(this.chatMessage.text).then(() => {
       this.snackbarService.success("Сообщение скопированно");
-      console.debug("Text copied in ChatMessageComponent");
+      this.logger.debug("Text copied in ChatMessageComponent");
     });
   }
 

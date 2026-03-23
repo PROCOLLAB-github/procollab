@@ -1,6 +1,6 @@
 /** @format */
 
-import { ChangeDetectorRef, Component, forwardRef } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, forwardRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { NgxMaskModule } from "ngx-mask";
@@ -22,6 +22,7 @@ import { NgxMaskModule } from "ngx-mask";
   selector: "app-range-input",
   standalone: true,
   imports: [CommonModule, NgxMaskModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

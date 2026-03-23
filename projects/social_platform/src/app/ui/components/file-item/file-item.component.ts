@@ -1,10 +1,21 @@
 /** @format */
-import { Component, EventEmitter, inject, Input, OnInit, Output } from "@angular/core";
+
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { FileTypePipe } from "@ui/pipes/file-type.pipe";
 import { IconComponent } from "@ui/components";
 import { UpperCasePipe } from "@angular/common";
-import { FormatedFileSizePipe } from "@core/pipes/formatted-file-size.pipe";
-import { FileService } from "@core/services/file.service";
+import { FileService } from "@core/lib/services/file/file.service";
+import { FormatedFileSizePipe } from "@core/lib/pipes/transformers/formatted-file-size.pipe";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 /**
  * Компонент для отображения информации о файле.
@@ -27,9 +38,11 @@ import { FileService } from "@core/services/file.service";
   styleUrl: "./file-item.component.scss",
   standalone: true,
   imports: [IconComponent, FileTypePipe, UpperCasePipe, FormatedFileSizePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileItemComponent implements OnInit {
   private readonly fileService = inject(FileService);
+  private readonly destroyRef = inject(DestroyRef);
 
   @Input() canDelete = false;
 
@@ -78,9 +91,12 @@ export class FileItemComponent implements OnInit {
       return;
     }
 
-    this.fileService.deleteFile(this.link).subscribe(() => {
-      this.link = "";
-      this.name = "";
-    });
+    this.fileService
+      .deleteFile(this.link)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.link = "";
+        this.name = "";
+      });
   }
 }

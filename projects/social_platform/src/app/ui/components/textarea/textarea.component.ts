@@ -1,6 +1,16 @@
 /** @format */
 
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  forwardRef,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { IconComponent } from "@uilib";
 import { AutosizeModule } from "ngx-autosize";
@@ -29,6 +39,7 @@ import { NgStyle } from "@angular/common";
   selector: "app-textarea",
   templateUrl: "./textarea.component.html",
   styleUrl: "./textarea.component.scss",
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -40,6 +51,8 @@ import { NgStyle } from "@angular/common";
   imports: [AutosizeModule, IconComponent, TooltipComponent, NgStyle],
 })
 export class TextareaComponent implements OnInit, ControlValueAccessor {
+  private readonly cdr = inject(ChangeDetectorRef);
+
   /** Текст подсказки */
   @Input() placeholder = "";
 
@@ -124,6 +137,7 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
   // Методы ControlValueAccessor
   writeValue(value: string): void {
     this.value = value ?? "";
+    this.cdr.markForCheck();
   }
 
   onChange: (value: string) => void = () => {};
@@ -143,6 +157,7 @@ export class TextareaComponent implements OnInit, ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
+    this.cdr.markForCheck();
   }
 
   /** Предотвращение перехода на новую строку по Enter */
