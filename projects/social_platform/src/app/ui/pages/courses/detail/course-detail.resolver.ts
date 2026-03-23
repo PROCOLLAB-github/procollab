@@ -3,8 +3,8 @@
 import { inject } from "@angular/core";
 import type { ActivatedRouteSnapshot } from "@angular/router";
 import { Router } from "@angular/router";
-import { CoursesService } from "../courses.service";
 import { forkJoin, tap } from "rxjs";
+import { CoursesHttpAdapter } from "@infrastructure/adapters/courses/courses-http.adapter";
 
 /**
  * Резолвер для получения детальной информации о курсе
@@ -13,18 +13,18 @@ import { forkJoin, tap } from "rxjs";
  * @returns Observable с данными о курсе
  */
 export const CoursesDetailResolver = (route: ActivatedRouteSnapshot) => {
-  const coursesService = inject(CoursesService);
+  const coursesAdapter = inject(CoursesHttpAdapter);
   const router = inject(Router);
   const courseId = route.parent?.params["courseId"];
 
   return forkJoin([
-    coursesService.getCourseDetail(courseId).pipe(
+    coursesAdapter.getCourseDetail(courseId).pipe(
       tap(course => {
         if (!course.isAvailable) {
           router.navigate(["/office/courses/all"]);
         }
       })
     ),
-    coursesService.getCourseStructure(courseId),
+    coursesAdapter.getCourseStructure(courseId),
   ]);
 };

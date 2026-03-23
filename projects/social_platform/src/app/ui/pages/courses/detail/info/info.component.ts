@@ -21,7 +21,7 @@ import { ModalComponent } from "@ui/components/modal/modal.component";
 import { ButtonComponent } from "@ui/components";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { SoonCardComponent } from "@ui/shared/soon-card/soon-card.component";
-import { CourseModuleCardComponent } from "../../shared/course-module-card/course-module-card.component";
+import { CourseModuleCardComponent } from "../../../../components/course-module-card/course-module-card.component";
 import {
   CourseDetail,
   CourseStructure,

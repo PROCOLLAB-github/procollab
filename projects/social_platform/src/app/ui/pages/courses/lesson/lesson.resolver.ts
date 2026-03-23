@@ -3,7 +3,7 @@
 import type { ResolveFn } from "@angular/router";
 import { inject } from "@angular/core";
 import { CourseLesson } from "@domain/project/courses.model";
-import { CoursesService } from "../courses.service";
+import { CoursesHttpAdapter } from "@infrastructure/adapters/courses/courses-http.adapter";
 
 /**
  * Резолвер для получения данных задачи
@@ -14,9 +14,9 @@ import { CoursesService } from "../courses.service";
  * @returns Promise<CourseLesson> - промис с данными о шагах задачи
  */
 export const lessonDetailResolver: ResolveFn<CourseLesson> = (route, _state) => {
-  const coursesService = inject(CoursesService);
+  const coursesAdapter = inject(CoursesHttpAdapter);
   const lessonId = route.params["lessonId"];
 
   // Получаем ID задачи из параметров маршрута и загружаем шаги задачи
-  return coursesService.getCourseLesson(lessonId);
+  return coursesAdapter.getCourseLesson(lessonId);
 };

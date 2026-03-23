@@ -6,7 +6,6 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
 import { filter, map, tap } from "rxjs";
 import { CourseLesson, Task } from "@domain/project/courses.model";
-import { CoursesService } from "../courses.service";
 import { ButtonComponent } from "@ui/components";
 import { InfoTaskComponent } from "./shared/video-task/info-task.component";
 import { WriteTaskComponent } from "./shared/write-task/write-task.component";
@@ -15,6 +14,7 @@ import { RadioSelectTaskComponent } from "./shared/radio-select-task/radio-selec
 import { FileTaskComponent } from "./shared/file-task/file-task.component";
 import { LoaderComponent } from "@ui/components/loader/loader.component";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
+import { CoursesHttpAdapter } from "@infrastructure/adapters/courses/courses-http.adapter";
 
 @Component({
   selector: "app-lesson",
@@ -37,7 +37,7 @@ export class LessonComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly coursesService = inject(CoursesService);
+  private readonly coursesAdapter = inject(CoursesHttpAdapter);
   private readonly snackbarService = inject(SnackbarService);
 
   protected readonly lessonInfo = signal<CourseLesson | undefined>(undefined);
@@ -172,7 +172,7 @@ export class LessonComponent implements OnInit {
         : undefined;
     const fileIds = task.answerType === "files" ? body : isTextFile ? body?.fileUrls : undefined;
 
-    this.coursesService
+    this.coursesAdapter
       .postAnswerQuestion(task.id, answerText, optionIds, fileIds)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({

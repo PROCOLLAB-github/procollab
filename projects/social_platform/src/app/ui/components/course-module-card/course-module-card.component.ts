@@ -5,7 +5,7 @@ import { CommonModule } from "@angular/common";
 import { AvatarComponent } from "@uilib";
 import { PluralizePipe } from "@corelib";
 import { IconComponent } from "@ui/components";
-import { CircleProgressBarComponent } from "../circle-progress-bar/circle-progress-bar.component";
+import { CircleProgressBarComponent } from "../../shared/circle-progress-bar/circle-progress-bar.component";
 import { CourseDetail, CourseModule } from "@domain/project/courses.model";
 import { RouterLink } from "@angular/router";
 

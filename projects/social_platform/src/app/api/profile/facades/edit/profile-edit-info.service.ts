@@ -142,20 +142,52 @@ export class ProfileEditInfoService {
           : [],
     }));
 
-    const newProfile = {
-      ...this.profileForm.value,
-      achievements,
-      [this.userTypeMap[this.profileForm.value.userType]]: this.typeSpecific.value,
-      typeSpecific: undefined,
-      birthday: this.profileForm.value.birthday
-        ? dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format("YYYY-MM-DD")
-        : undefined,
-      skillsIds: this.profileForm.value.skills.map((s: Skill) => s.id),
-      phoneNumber:
+    // Построение объекта профиля с только необходимыми полями
+    const newProfile: any = {
+      id: this.profileId(),
+      first_name: this.profileForm.value.firstName,
+      last_name: this.profileForm.value.lastName,
+      email: this.profileForm.value.email,
+      user_type: this.profileForm.value.userType,
+      city: this.profileForm.value.city,
+      about_me: this.profileForm.value.aboutMe || "",
+      avatar: this.profileForm.value.avatar || null,
+      cover_image_address: this.profileForm.value.coverImageAddress || null,
+      phone_number:
         typeof this.profileForm.value.phoneNumber === "string"
           ? this.profileForm.value.phoneNumber.replace(/^([87])/, "+7")
           : this.profileForm.value.phoneNumber,
+      speciality: this.profileForm.value.speciality,
+      skills_ids: this.profileForm.value.skills?.map((s: Skill) => s.id) || [],
     };
+
+    // Добавляем birthday если он указан
+    if (this.profileForm.value.birthday) {
+      newProfile.birthday = dayjs(this.profileForm.value.birthday, "DD.MM.YYYY").format(
+        "YYYY-MM-DD"
+      );
+    }
+
+    // Добавляем специфичные для типа пользователя поля
+    if (this.userTypeMap[this.profileForm.value.userType]) {
+      newProfile[this.userTypeMap[this.profileForm.value.userType]] = this.typeSpecific.value;
+    }
+
+    // Добавляем связанные данные если они были отредактированы
+    if (this.achievements.length > 0) {
+      newProfile.achievements = achievements;
+    }
+    if (this.profileForm.value.education?.length > 0) {
+      newProfile.education = this.profileForm.value.education;
+    }
+    if (this.profileForm.value.workExperience?.length > 0) {
+      newProfile.work_experience = this.profileForm.value.workExperience;
+    }
+    if (this.profileForm.value.userLanguages?.length > 0) {
+      newProfile.user_languages = this.profileForm.value.userLanguages;
+    }
+
+    console.log("Saving profile:", newProfile);
 
     this.authRepository
       .updateProfile(newProfile)
@@ -164,30 +196,32 @@ export class ProfileEditInfoService {
         takeUntil(this.destroy$)
       )
       .subscribe({
-        next: () => {
+        next: profile => {
           this.profileFormSubmitting$.set(success(undefined));
-          this.navigationService.profileRedirect(this.profileId());
+          this.navigationService.profileRedirect(profile.id);
         },
         error: error => {
           this.profileFormSubmitting$.set(failure("profile_edit_error"));
           this.isModalErrorSkillsChoose.set(true);
-          if (error.error.phone_number) {
+          if (error.error?.phone_number) {
             this.isModalErrorSkillChooseText.set(error.error.phone_number[0]);
-          } else if (error.error.language) {
+          } else if (error.error?.language) {
             this.isModalErrorSkillChooseText.set(error.error.language);
-          } else if (error.error.achievements) {
+          } else if (error.error?.achievements) {
             this.isModalErrorSkillChooseText.set(error.error.achievements[0]);
-          } else if (error.error.work_experience?.[2]) {
+          } else if (error.error?.work_experience?.[2]) {
             const errorText = error.error.work_experience[2].entry_year
               ? error.error.work_experience[2].entry_year
               : error.error.work_experience[2].completion_year;
             this.isModalErrorSkillChooseText.set(errorText);
-          } else if (error.error.first_name?.[0]) {
+          } else if (error.error?.first_name?.[0]) {
             this.isModalErrorSkillChooseText.set(error.error.first_name?.[0]);
-          } else if (error.error.last_name?.[0]) {
+          } else if (error.error?.last_name?.[0]) {
             this.isModalErrorSkillChooseText.set(error.error.last_name?.[0]);
-          } else {
+          } else if (error.error?.[0]) {
             this.isModalErrorSkillChooseText.set(error.error[0]);
+          } else {
+            this.isModalErrorSkillChooseText.set("Ошибка при сохранении профиля");
           }
         },
       });

@@ -1,9 +1,9 @@
 /** @format */
 
 import type { Routes } from "@angular/router";
-import { TrajectoryInfoComponent } from "./info/info.component";
-import { CourseDetailComponent } from "./course-detail.component";
-import { CoursesDetailResolver } from "./course-detail.resolver";
+import { TrajectoryInfoComponent } from "../../pages/courses/detail/info/info.component";
+import { CourseDetailComponent } from "../../pages/courses/detail/course-detail.component";
+import { CoursesDetailResolver } from "../../pages/courses/detail/course-detail.resolver";
 
 export const COURSE_DETAIL_ROUTES: Routes = [
   {
@@ -20,7 +20,7 @@ export const COURSE_DETAIL_ROUTES: Routes = [
       },
       {
         path: "lesson",
-        loadChildren: () => import("../lesson/lesson.routes").then(m => m.LESSON_ROUTES),
+        loadChildren: () => import("./lesson.routes").then(m => m.LESSON_ROUTES),
       },
     ],
   },

@@ -57,8 +57,7 @@ export const OFFICE_ROUTES: Routes = [
       },
       {
         path: "courses",
-        loadChildren: () =>
-          import("../../pages/courses/courses.routes").then(c => c.COURSES_ROUTES),
+        loadChildren: () => import("../courses/courses.routes").then(c => c.COURSES_ROUTES),
       },
       {
         path: "members",

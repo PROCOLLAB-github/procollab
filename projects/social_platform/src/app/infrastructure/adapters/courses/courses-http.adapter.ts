@@ -1,7 +1,7 @@
 /** @format */
 
-import { Injectable } from "@angular/core";
-import { ApiService } from "@corelib";
+import { inject, Injectable } from "@angular/core";
+import { ApiService } from "@core/public-api";
 import {
   CourseCard,
   CourseDetail,
@@ -11,19 +11,10 @@ import {
 } from "@domain/project/courses.model";
 import { Observable } from "rxjs";
 
-/**
- * Сервис Курсов
- *
- * Управляет всеми операциями, связанными с курсами, включая:
- * - Отслеживание прогресса пользователя по курсу
- */
-@Injectable({
-  providedIn: "root",
-})
-export class CoursesService {
+@Injectable({ providedIn: "root" })
+export class CoursesHttpAdapter {
   private readonly COURSE_URL = "/courses";
-
-  constructor(private readonly apiService: ApiService) {}
+  private readonly apiService = inject(ApiService);
 
   /**
    * Получает доступные курсов

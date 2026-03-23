@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { CoursesService } from "./courses.service";
+import { CoursesHttpAdapter } from "@infrastructure/adapters/courses/courses-http.adapter";
 
 /**
  * Резолвер для загрузки списка всех доступных траекторий
@@ -14,7 +14,7 @@ import { CoursesService } from "./courses.service";
  * @returns Promise/Observable с данными траекторий
  */
 export const CoursesResolver = () => {
-  const coursesService = inject(CoursesService);
+  const coursesAdapter = inject(CoursesHttpAdapter);
 
-  return coursesService.getCourses();
+  return coursesAdapter.getCourses();
 };

@@ -4,7 +4,7 @@ import { Component, inject, type OnDestroy, type OnInit, signal } from "@angular
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute, RouterModule } from "@angular/router";
 import { map, Subscription } from "rxjs";
-import { CourseComponent } from "../shared/course/course.component";
+import { CourseComponent } from "../../../components/course/course.component";
 import { CourseCard } from "@domain/project/courses.model";
 
 /**
