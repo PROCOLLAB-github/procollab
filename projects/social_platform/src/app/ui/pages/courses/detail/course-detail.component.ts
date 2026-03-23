@@ -1,87 +1,45 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, DestroyRef, inject, signal, OnInit } from "@angular/core";
-import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
-import { filter, map, tap } from "rxjs";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
+import { RouterOutlet } from "@angular/router";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ButtonComponent } from "@ui/components";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import {
-  CourseDetail,
-  CourseStructure,
-} from "projects/social_platform/src/app/domain/project/courses.model";
+import { LoaderComponent } from "@ui/components/loader/loader.component";
+import { CourseDetailInfoService } from "@api/courses/facades/course-detail-info.service";
+import { CourseDetailUIInfoService } from "@api/courses/facades/ui/course-detail-ui-info.service";
 
-/**
- * Компонент детального просмотра траектории
- * Отображает навигационную панель и служит контейнером для дочерних компонентов
- * Управляет состоянием выбранной траектории и ID траектории из URL
- */
 @Component({
   selector: "app-course-detail",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, AvatarComponent, ButtonComponent],
+  imports: [CommonModule, RouterOutlet, AvatarComponent, ButtonComponent, LoaderComponent],
   templateUrl: "./course-detail.component.html",
   styleUrl: "./course-detail.component.scss",
+  providers: [CourseDetailInfoService, CourseDetailUIInfoService],
 })
-export class CourseDetailComponent implements OnInit {
-  private readonly route = inject(ActivatedRoute);
-  private readonly router = inject(Router);
-  private readonly destroyRef = inject(DestroyRef);
+export class CourseDetailComponent implements OnInit, OnDestroy {
+  private readonly courseDetailInfoService = inject(CourseDetailInfoService);
+  private readonly courseDetailUIInfoService = inject(CourseDetailUIInfoService);
 
-  protected readonly isTaskDetail = signal<boolean>(false);
-  protected readonly isDisabled = signal<boolean>(false);
+  protected readonly loading = this.courseDetailUIInfoService.loading;
+  protected readonly course = this.courseDetailUIInfoService.course;
+  protected readonly courseModules = this.courseDetailUIInfoService.courseModules;
+  protected readonly isDisabled = this.courseDetailUIInfoService.isDisabled;
+  protected readonly isTaskDetail = this.courseDetailUIInfoService.isTaskDetail;
 
-  protected readonly courseModules = signal<CourseStructure["modules"]>([]);
-  protected readonly course = signal<CourseDetail | undefined>(undefined);
-
-  /**
-   * Инициализация компонента
-   * Подписывается на параметры маршрута и данные траектории
-   */
   ngOnInit(): void {
-    this.route.data
-      .pipe(
-        map(data => data["data"]),
-        filter(course => !!course),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe({
-        next: ([course, _]: [CourseDetail, CourseStructure]) => {
-          this.course.set(course);
-
-          if (!course.partnerProgramId) {
-            this.isDisabled.set(true);
-          }
-        },
-      });
-
-    this.isTaskDetail.set(this.router.url.includes("lesson"));
-
-    this.router.events
-      .pipe(
-        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe(() => {
-        this.isTaskDetail.set(this.router.url.includes("lesson"));
-      });
+    this.courseDetailInfoService.init();
   }
 
-  /**
-   * Перенаправляет на страницу с информацией в завивисимости от listType
-   */
+  ngOnDestroy(): void {
+    this.courseDetailInfoService.destroy();
+  }
+
   redirectDetailInfo(courseId?: number): void {
-    if (courseId != null) {
-      this.router.navigateByUrl(`/office/courses/${courseId}`);
-    } else {
-      this.router.navigateByUrl("/office/courses/all");
-    }
+    this.courseDetailInfoService.redirectDetailInfo(courseId);
   }
 
   redirectToProgram(): void {
-    this.router.navigate([`/office/program/${this.course()?.partnerProgramId}`], {
-      queryParams: { courseId: this.course()?.id },
-    });
+    this.courseDetailInfoService.redirectToProgram();
   }
 }

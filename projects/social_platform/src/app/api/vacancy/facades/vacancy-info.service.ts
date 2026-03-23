@@ -17,7 +17,6 @@ import {
   tap,
   throttleTime,
 } from "rxjs";
-import { VacancyResponse } from "../../../domain/vacancy/vacancy-response.model";
 import { Vacancy } from "../../../domain/vacancy/vacancy.model";
 import { VacancyUIInfoService } from "./ui/vacancy-ui-info.service";
 import { GetVacanciesUseCase } from "../use-cases/get-vacancies.use-case";
@@ -135,6 +134,8 @@ export class VacancyInfoService {
   // -------------------
 
   initializeQueryParams(): void {
+    let isFirstEmit = true;
+
     this.route.queryParams
       .pipe(
         debounceTime(200),
@@ -157,7 +158,14 @@ export class VacancyInfoService {
             salary
           );
         }),
-        switchMap(() => {
+        switchMap(params => {
+          // Пропускаем первый emit без фильтров — данные уже загружены resolver'ом
+          if (isFirstEmit) {
+            isFirstEmit = false;
+            const hasFilters = Object.values(params).some(v => v != null);
+            if (!hasFilters) return EMPTY;
+          }
+
           const prev = this.vacancyUIInfoService.vacancyList();
           this.vacancyUIInfoService.vacancies$.set(loading(prev));
           return this.onFetch(0, 20);

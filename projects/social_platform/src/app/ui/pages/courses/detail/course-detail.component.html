@@ -2,7 +2,11 @@
 
 <div class="detail">
   <div class="detail__body">
-    @if(course()) {
+    @if (loading()) {
+    <div class="loading">
+      <app-loader size="125px" color="accent"></app-loader>
+    </div>
+    } @else if (course()) {
     <div class="info detail__section detail__info">
       <img class="info__cover" [src]="course()!.headerCoverUrl" alt="cover" />
 

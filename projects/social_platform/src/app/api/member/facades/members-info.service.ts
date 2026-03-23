@@ -64,9 +64,6 @@ export class MembersInfoService {
    * - Настройку подписок на изменения форм и URL параметровК
    */
   initializationMembers(): void {
-    // Очищаем URL параметры при инициализации
-    this.router.navigate([], { queryParams: {} });
-
     // Устанавливаем заголовок страницы
     this.navService.setNavTitle("Участники");
 
@@ -75,6 +72,7 @@ export class MembersInfoService {
     this.initializationControls();
 
     // Подписываемся на изменения URL параметров для обновления списка участников
+    // (skip(1) пропускает начальное значение — данные уже загружены resolver'ом)
     this.initializationQueryParams();
   }
 

@@ -3,14 +3,13 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
-import { environment } from "@environment";
 import { ApiService } from "../api/api.service";
-import { TokenService } from "../tokens/token.service";
 
 /**
  * Сервис для работы с файлами
  * Предоставляет методы для загрузки и удаления файлов через API
- * Использует авторизацию через Bearer токен
+ * Использует ApiService + HttpClient, поэтому авторизация, retry и camelCase
+ * обрабатываются интерсепторами автоматически
  */
 @Injectable({
   providedIn: "root",
@@ -18,7 +17,7 @@ import { TokenService } from "../tokens/token.service";
 export class FileService {
   private readonly FILES_URL = "/files";
 
-  constructor(private readonly tokenService: TokenService, private apiService: ApiService) {}
+  constructor(private readonly apiService: ApiService) {}
 
   /**
    * Загружает файл на сервер
@@ -26,55 +25,14 @@ export class FileService {
    * @param file - объект File для загрузки
    * @returns Observable<{ url: string }> - Observable с URL загруженного файла
    *
-   * Использует нативный fetch API вместо HttpClient для поддержки FormData
-   * Автоматически добавляет Authorization header с Bearer токеном
+   * Использует HttpClient через ApiService — интерсепторы (bearer token, retry, logging)
+   * работают автоматически. CamelcaseInterceptor пропускает FormData без преобразования.
    */
   uploadFile(file: File): Observable<{ url: string }> {
     const formData = new FormData();
     formData.append("file", file);
 
-    return new Observable<{ url: string }>(observer => {
-      const doFetch = (token: string) =>
-        fetch(`${environment.apiUrl}${this.FILES_URL}/`, {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-          body: formData,
-        });
-
-      const token = this.tokenService.getTokens()?.access;
-      if (!token) {
-        observer.error(new Error("No access token"));
-        return;
-      }
-
-      doFetch(token)
-        .then(res => {
-          if (res.status === 401) {
-            this.tokenService.refreshTokens().subscribe({
-              next: newTokens => {
-                this.tokenService.memTokens(newTokens);
-                doFetch(newTokens.access)
-                  .then(r => r.json())
-                  .then(data => {
-                    observer.next(data);
-                    observer.complete();
-                  })
-                  .catch(err => observer.error(err));
-              },
-              error: err => observer.error(err),
-            });
-            return;
-          }
-          return res.json();
-        })
-        .then(res => {
-          if (res) {
-            observer.next(res);
-            observer.complete();
-          }
-        })
-        .catch(err => observer.error(err));
-    });
+    return this.apiService.post<{ url: string }>(`${this.FILES_URL}/`, formData);
   }
 
   /**

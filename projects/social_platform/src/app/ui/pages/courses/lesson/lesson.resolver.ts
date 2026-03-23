@@ -2,21 +2,15 @@
 
 import type { ResolveFn } from "@angular/router";
 import { inject } from "@angular/core";
-import { CourseLesson } from "@domain/project/courses.model";
-import { CoursesHttpAdapter } from "@infrastructure/adapters/courses/courses-http.adapter";
+import { CourseLesson } from "@domain/courses/courses.model";
+import { GetCourseLessonUseCase } from "@api/courses/use-cases/get-course-lesson.use-case";
+import { map } from "rxjs";
 
-/**
- * Резолвер для получения данных задачи
- * Используется для предварительной загрузки данных о шагах задачи перед отображением компонента
- *
- * @param route - объект маршрута, содержащий параметры URL (включая taskId)
- * @param _state - состояние маршрутизатора (не используется)
- * @returns Promise<CourseLesson> - промис с данными о шагах задачи
- */
-export const lessonDetailResolver: ResolveFn<CourseLesson> = (route, _state) => {
-  const coursesAdapter = inject(CoursesHttpAdapter);
+export const lessonDetailResolver: ResolveFn<CourseLesson | null> = (route, _state) => {
+  const getCourseLessonUseCase = inject(GetCourseLessonUseCase);
   const lessonId = route.params["lessonId"];
 
-  // Получаем ID задачи из параметров маршрута и загружаем шаги задачи
-  return coursesAdapter.getCourseLesson(lessonId);
+  return getCourseLessonUseCase
+    .execute(lessonId)
+    .pipe(map(result => (result.ok ? result.value : null)));
 };

@@ -5,7 +5,7 @@ import { Component, Input, OnInit, signal } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { IconComponent, ButtonComponent } from "@ui/components";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { CourseCard } from "@domain/project/courses.model";
+import { CourseCard } from "@domain/courses/courses.model";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 
 /**

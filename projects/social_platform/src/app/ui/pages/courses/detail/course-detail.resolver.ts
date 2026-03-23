@@ -3,28 +3,28 @@
 import { inject } from "@angular/core";
 import type { ActivatedRouteSnapshot } from "@angular/router";
 import { Router } from "@angular/router";
-import { forkJoin, tap } from "rxjs";
-import { CoursesHttpAdapter } from "@infrastructure/adapters/courses/courses-http.adapter";
+import { EMPTY, map, switchMap } from "rxjs";
+import { GetCourseDetailUseCase } from "@api/courses/use-cases/get-course-detail.use-case";
+import { GetCourseStructureUseCase } from "@api/courses/use-cases/get-course-structure.use-case";
 
-/**
- * Резолвер для получения детальной информации о курсе
- * Также проверяет isAvailable — если false, редиректит на список курсов
- * @param route - снимок маршрута содержащий параметр courseId
- * @returns Observable с данными о курсе
- */
 export const CoursesDetailResolver = (route: ActivatedRouteSnapshot) => {
-  const coursesAdapter = inject(CoursesHttpAdapter);
+  const getCourseDetailUseCase = inject(GetCourseDetailUseCase);
+  const getCourseStructureUseCase = inject(GetCourseStructureUseCase);
   const router = inject(Router);
   const courseId = route.parent?.params["courseId"];
 
-  return forkJoin([
-    coursesAdapter.getCourseDetail(courseId).pipe(
-      tap(course => {
-        if (!course.isAvailable) {
-          router.navigate(["/office/courses/all"]);
-        }
-      })
-    ),
-    coursesAdapter.getCourseStructure(courseId),
-  ]);
+  return getCourseDetailUseCase.execute(courseId).pipe(
+    switchMap(detailResult => {
+      const detail = detailResult.ok ? detailResult.value : null;
+
+      if (!detail?.isAvailable) {
+        router.navigate(["/office/courses/all"]);
+        return EMPTY;
+      }
+
+      return getCourseStructureUseCase
+        .execute(courseId)
+        .pipe(map(structureResult => [detail, structureResult.ok ? structureResult.value : null]));
+    })
+  );
 };

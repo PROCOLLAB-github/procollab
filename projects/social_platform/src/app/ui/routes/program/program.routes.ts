@@ -3,15 +3,13 @@
 import { Routes } from "@angular/router";
 import { ProgramComponent } from "../../pages/program/program.component";
 import { ProgramMainComponent } from "../../pages/program/main/main.component";
-import { ProgramMainResolver } from "../../pages/program/main/main.resolver";
-
 /**
  * Конфигурация маршрутов для модуля "Программы"
  *
  * Описание маршрутов:
  * - "" - корневой маршрут программ с дочерними маршрутами
  *   - "" - редирект на "/all"
- *   - "all" - список всех программ с резолвером данных
+ *   - "all" - список всех программ (данные загружает facade)
  * - ":programId" - детальная страница программы (ленивая загрузка)
  * - ":programId/projects-rating" - страница оценки проектов программы (ленивая загрузка)
  *
@@ -30,9 +28,6 @@ export const PROGRAM_ROUTES: Routes = [
       {
         path: "all",
         component: ProgramMainComponent,
-        resolve: {
-          data: ProgramMainResolver,
-        },
       },
     ],
   },

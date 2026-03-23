@@ -17,7 +17,7 @@ import { UploadFileComponent } from "@ui/components/upload-file/upload-file.comp
 import { IconComponent } from "@ui/components";
 import { FileItemComponent } from "@ui/components/file-item/file-item.component";
 import { FileService } from "@core/lib/services/file/file.service";
-import { Task } from "@domain/project/courses.model";
+import { Task } from "@domain/courses/courses.model";
 import { FileModel } from "@domain/file/file.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";
 import { animateContentHeight } from "@utils/animate-content-height";

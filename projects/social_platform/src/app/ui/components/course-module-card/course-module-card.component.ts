@@ -6,7 +6,7 @@ import { AvatarComponent } from "@uilib";
 import { PluralizePipe } from "@corelib";
 import { IconComponent } from "@ui/components";
 import { CircleProgressBarComponent } from "../../shared/circle-progress-bar/circle-progress-bar.component";
-import { CourseDetail, CourseModule } from "@domain/project/courses.model";
+import { CourseDetail, CourseModule } from "@domain/courses/courses.model";
 import { RouterLink } from "@angular/router";
 
 /**

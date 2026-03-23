@@ -1,46 +1,33 @@
 /** @format */
 
-import { Component, inject, type OnDestroy, type OnInit, signal } from "@angular/core";
+import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ActivatedRoute, RouterModule } from "@angular/router";
-import { map, Subscription } from "rxjs";
+import { RouterModule } from "@angular/router";
 import { CourseComponent } from "../../../components/course/course.component";
-import { CourseCard } from "@domain/project/courses.model";
+import { LoaderComponent } from "@ui/components/loader/loader.component";
+import { CoursesListInfoService } from "@api/courses/facades/courses-list-info.service";
+import { CoursesListUIInfoService } from "@api/courses/facades/ui/courses-list-ui-info.service";
 
-/**
- * Компонент списка траекторий
- * Отображает список доступных траекторий с поддержкой пагинации
- * Поддерживает два режима: "all" (все траектории) и "my" (пользовательские)
- * Реализует бесконечную прокрутку для загрузки дополнительных элементов
- */
 @Component({
   selector: "app-list",
   standalone: true,
-  imports: [CommonModule, RouterModule, CourseComponent],
+  imports: [CommonModule, RouterModule, CourseComponent, LoaderComponent],
   templateUrl: "./list.component.html",
   styleUrl: "./list.component.scss",
+  providers: [CoursesListInfoService, CoursesListUIInfoService],
 })
 export class CoursesListComponent implements OnInit, OnDestroy {
-  private readonly route = inject(ActivatedRoute);
+  private readonly coursesListInfoService = inject(CoursesListInfoService);
+  private readonly coursesListUIInfoService = inject(CoursesListUIInfoService);
 
-  protected readonly coursesList = signal<CourseCard[]>([]);
+  protected readonly coursesList = this.coursesListUIInfoService.coursesList;
+  protected readonly loading = this.coursesListUIInfoService.loading;
 
-  private readonly subscriptions$: Subscription[] = [];
-
-  /**
-   * Инициализация компонента
-   * Определяет тип списка (all/my) и загружает начальные данные
-   */
   ngOnInit(): void {
-    this.route.data.pipe(map(r => r["data"])).subscribe(courses => {
-      this.coursesList.set(courses);
-    });
+    this.coursesListInfoService.init();
   }
 
-  /**
-   * Очистка ресурсов при уничтожении компонента
-   */
   ngOnDestroy(): void {
-    this.subscriptions$.forEach(s => s.unsubscribe());
+    this.coursesListInfoService.destroy();
   }
 }

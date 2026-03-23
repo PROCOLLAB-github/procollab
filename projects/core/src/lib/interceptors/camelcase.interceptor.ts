@@ -47,7 +47,7 @@ export class CamelcaseInterceptor implements HttpInterceptor {
     let req: HttpRequest<Record<string, any>>;
 
     // Обрабатываем тело запроса если оно существует
-    if (request.body) {
+    if (request.body && !(request.body instanceof FormData)) {
       // Клонируем запрос с преобразованным телом (camelCase → snake_case)
       req = request.clone({
         body: snakecaseKeys(request.body, {

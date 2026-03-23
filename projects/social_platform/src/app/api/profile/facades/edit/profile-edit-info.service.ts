@@ -187,8 +187,6 @@ export class ProfileEditInfoService {
       newProfile.user_languages = this.profileForm.value.userLanguages;
     }
 
-    console.log("Saving profile:", newProfile);
-
     this.authRepository
       .updateProfile(newProfile)
       .pipe(
