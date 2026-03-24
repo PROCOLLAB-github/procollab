@@ -58,7 +58,7 @@ export class ProjectRatingService {
       url += `?${params.toString()}`;
     }
 
-    return this.apiService.post(url, { filters: filters });
+    return this.apiService.post(url, { filters });
   }
 
   rate(projectId: number, scores: ProjectRatingCriterionOutput[]): Observable<void> {

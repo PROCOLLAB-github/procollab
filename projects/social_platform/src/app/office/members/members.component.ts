@@ -14,6 +14,7 @@ import {
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import {
   BehaviorSubject,
+  catchError,
   concatMap,
   debounceTime,
   distinctUntilChanged,
@@ -204,8 +205,8 @@ export class MembersComponent implements OnInit, OnDestroy, AfterViewInit {
     if (target) {
       const scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
-          concatMap(() => this.onScroll()),
-          throttleTime(500) // Ограничиваем частоту обработки прокрутки
+          concatMap(() => this.onScroll().pipe(catchError(() => of({})))),
+          throttleTime(500)
         )
         .subscribe(noop);
 

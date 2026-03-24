@@ -13,6 +13,7 @@ import {
 } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Params, Router, RouterLink } from "@angular/router";
 import {
+  catchError,
   concatMap,
   distinctUntilChanged,
   fromEvent,
@@ -192,7 +193,7 @@ export class ProjectsListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (target) {
       const scrollEvent$ = fromEvent(target, "scroll")
         .pipe(
-          concatMap(() => this.onScroll()),
+          concatMap(() => this.onScroll().pipe(catchError(() => of({})))),
           throttleTime(500)
         )
         .subscribe(noop);

@@ -6,6 +6,7 @@
 import { Component, inject, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
+  catchError,
   concatMap,
   debounceTime,
   fromEvent,
@@ -124,7 +125,7 @@ export class VacanciesListComponent {
     if (target) {
       const scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
-          concatMap(() => this.onScroll()),
+          concatMap(() => this.onScroll().pipe(catchError(() => of({})))),
           throttleTime(500)
         )
         .subscribe(noop);

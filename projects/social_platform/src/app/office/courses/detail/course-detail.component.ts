@@ -77,8 +77,6 @@ export class CourseDetailComponent implements OnInit {
   }
 
   redirectToProgram(): void {
-    this.router.navigate([`/office/program/${this.course()?.partnerProgramId}`], {
-      queryParams: { courseId: this.course()?.id },
-    });
+    this.router.navigateByUrl(`/office/program/${this.course()?.partnerProgramId}`);
   }
 }

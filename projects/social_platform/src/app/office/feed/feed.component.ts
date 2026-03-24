@@ -15,7 +15,18 @@ import { CommonModule } from "@angular/common";
 import { NewProjectComponent } from "@office/feed/shared/new-project/new-project.component";
 import { ActivatedRoute } from "@angular/router";
 import { FeedItem, FeedItemType } from "@office/feed/models/feed-item.model";
-import { concatMap, fromEvent, map, noop, of, skip, Subscription, tap, throttleTime } from "rxjs";
+import {
+  catchError,
+  concatMap,
+  fromEvent,
+  map,
+  noop,
+  of,
+  skip,
+  Subscription,
+  tap,
+  throttleTime,
+} from "rxjs";
 import { ApiPagination } from "@models/api-pagination.model";
 import { FeedService } from "@office/feed/services/feed.service";
 import { ProjectNewsService } from "@office/projects/detail/services/project-news.service";
@@ -99,7 +110,7 @@ export class FeedComponent implements OnInit, AfterViewInit, OnDestroy {
     if (target) {
       const scrollEvents$ = fromEvent(target, "scroll")
         .pipe(
-          concatMap(() => this.onScroll()),
+          concatMap(() => this.onScroll().pipe(catchError(() => of({})))),
           throttleTime(500)
         )
         .subscribe(noop);

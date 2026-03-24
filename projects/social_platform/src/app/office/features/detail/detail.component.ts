@@ -80,7 +80,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
   profile?: User;
   profileProjects = signal<User["projects"]>([]);
   listType: "project" | "program" | "profile" = "project";
-  queryCourseId = signal<number | null>(null);
 
   // Переменная для подсказок
   isTooltipVisible = false;
@@ -158,12 +157,6 @@ export class DeatilComponent implements OnInit, OnDestroy {
     const listTypeSub$ = this.route.data.subscribe(data => {
       this.listType = data["listType"];
     });
-
-    const queryParamsSub$ = this.route.queryParams.subscribe(params => {
-      const courseId = params["courseId"];
-      this.queryCourseId.set(courseId ? +courseId : null);
-    });
-    this.subscriptions.push(queryParamsSub$);
 
     this.initializeBackPath();
 
