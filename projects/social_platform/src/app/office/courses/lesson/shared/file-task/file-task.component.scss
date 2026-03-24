@@ -105,7 +105,7 @@
       display: block;
       align-self: center;
       width: 100%;
-      max-width: 295px;
+      max-width: 395px;
       height: 223px;
       aspect-ratio: 16 / 9;
       border: 0;
@@ -157,6 +157,8 @@
   .read-more {
     margin-top: 12px;
     color: var(--accent);
+    align-self: self-start;
+    align-items: start;
     cursor: pointer;
     transition: color 0.2s;
 
