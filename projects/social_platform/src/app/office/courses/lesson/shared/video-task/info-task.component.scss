@@ -75,10 +75,10 @@
   }
 
   .read-more {
+    align-items: start;
+    align-self: self-start;
     margin-top: 12px;
     color: var(--accent);
-    align-self: self-start;
-    align-items: start;
     cursor: pointer;
     transition: color 0.2s;
 
