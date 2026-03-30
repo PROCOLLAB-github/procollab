@@ -15,7 +15,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { CommonModule } from "@angular/common";
 import { SearchComponent } from "@ui/primitives/search/search.component";
-import { MembersFiltersComponent } from "@ui/widgets/members-filters/members-filters.component";
+import { MembersFiltersComponent } from "./members-filters/members-filters.component";
 import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
 import { BackComponent } from "@uilib";
 import { ButtonComponent } from "@ui/primitives";

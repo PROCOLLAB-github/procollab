@@ -29,7 +29,7 @@ import {
   tap,
 } from "rxjs";
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { ProjectRatingComponent } from "@ui/widgets/project-rating/project-rating.component";
+import { ProjectRatingComponent } from "./project-rating/project-rating.component";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { RouterLink } from "@angular/router";
 import { TagComponent } from "@ui/primitives/tag/tag.component";

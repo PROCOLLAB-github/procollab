@@ -11,7 +11,7 @@ import {
 } from "@angular/core";
 import { ButtonComponent } from "@ui/primitives";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { ApproveSkillPeopleComponent } from "@ui/widgets/approve-skill-people/approve-skill-people.component";
+import { ApproveSkillPeopleComponent } from "./approve-skill-people/approve-skill-people.component";
 import { Skill } from "@domain/skills/skill";
 import { ApproveskillInfoService } from "./services/approve-skill-info.service";
 import { ApproveSkillUIInfoService } from "./services/approve-skill-ui-info.service";

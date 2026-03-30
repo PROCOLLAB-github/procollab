@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from "@angular/core";
 import { ModalService } from "@ui/primitives/modal/modal.service";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { AsyncPipe } from "@angular/common";
-import { ModalComponent } from "../modal/modal.component";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
 /**
  * Компонент диалога подтверждения удаления.

@@ -36,7 +36,7 @@ import { FileItemComponent } from "@ui/primitives/file-item/file-item.component"
 import { FileUploadItemComponent } from "@ui/primitives/file-upload-item/file-upload-item.component";
 import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { CarouselComponent } from "@ui/primitives/carousel/carousel.component";
+import { CarouselComponent } from "./carousel/carousel.component";
 import { ImgCardComponent } from "@ui/primitives/img-card/img-card.component";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { FeedNews } from "@domain/project/project-news.model";

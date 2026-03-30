@@ -18,7 +18,7 @@ import { InputComponent, ButtonComponent } from "@ui/primitives";
 import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
 import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { TagComponent } from "@ui/primitives/tag/tag.component";
-import { BadgeComponent } from "@ui/primitives/badge/badge.component";
+import { BadgeComponent } from "./badge/badge.component";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import {

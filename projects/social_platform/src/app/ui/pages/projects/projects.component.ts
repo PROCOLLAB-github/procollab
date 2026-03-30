@@ -13,7 +13,7 @@ import { RouterOutlet } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { SearchComponent } from "@ui/primitives/search/search.component";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
-import { BarNewComponent } from "@ui/primitives/bar-new/bar.component";
+import { BarNewComponent } from "./bar-new/bar.component";
 import { BackComponent } from "@uilib";
 import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
 import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";

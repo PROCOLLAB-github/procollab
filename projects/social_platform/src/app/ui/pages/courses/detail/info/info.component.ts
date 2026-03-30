@@ -17,7 +17,7 @@ import { CommonModule } from "@angular/common";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ButtonComponent } from "@ui/primitives";
 import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
-import { CourseModuleCardComponent } from "@ui/widgets/course-module-card/course-module-card.component";
+import { CourseModuleCardComponent } from "./course-module-card/course-module-card.component";
 import { CourseDetailUIInfoService } from "@api/courses/facades/ui/course-detail-ui-info.service";
 
 @Component({

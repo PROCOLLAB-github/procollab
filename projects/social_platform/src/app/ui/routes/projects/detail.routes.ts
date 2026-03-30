@@ -13,8 +13,8 @@ import { KanbanBoardResolver } from "../../pages/projects/detail/kanban/kanban.r
 import { KanbanBoardGuard } from "../../../../../../core/src/lib/guards/kanban/kanban.guard";
 import { KanbanComponent } from "../../pages/projects/detail/kanban/kanban.component";
 import { ProjectDetailResolver } from "@ui/pages/projects/detail/detail.resolver";
-import { NewsDetailComponent } from "@ui/widgets/news-detail/news-detail.component";
-import { NewsDetailResolver } from "@ui/widgets/news-detail/news-detail.resolver";
+import { NewsDetailComponent } from "@ui/pages/projects/detail/news-detail/news-detail.component";
+import { NewsDetailResolver } from "@ui/pages/projects/detail/news-detail/news-detail.resolver";
 import { ProjectChatResolver } from "@ui/pages/projects/detail/chat/chat.resolver";
 
 /**

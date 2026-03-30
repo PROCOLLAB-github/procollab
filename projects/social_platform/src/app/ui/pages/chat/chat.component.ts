@@ -1,7 +1,7 @@
 /** @format */
 
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { ChatCardComponent } from "@ui/widgets/chat-card/chat-card.component";
+import { ChatCardComponent } from "./chat-card/chat-card.component";
 import { AsyncPipe } from "@angular/common";
 import { BarComponent } from "@ui/primitives";
 import { BackComponent } from "@uilib";

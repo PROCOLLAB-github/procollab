@@ -9,7 +9,7 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { ProjectVacancyCardComponent } from "@ui/widgets/project-vacancy-card/project-vacancy-card.component";
-import { ResponseCardComponent } from "@ui/widgets/response-card/response-card.component";
+import { ResponseCardComponent } from "./response-card/response-card.component";
 import { VacancyUIInfoService } from "@api/vacancy/facades/ui/vacancy-ui-info.service";
 import { VacancyInfoService } from "@api/vacancy/facades/vacancy-info.service";
 

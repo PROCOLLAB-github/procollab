@@ -12,12 +12,12 @@ import {
 } from "@angular/core";
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { takeUntilDestroyed, toSignal } from "@angular/core/rxjs-interop";
-import { ProgramSidebarCardComponent } from "@ui/widgets/program-sidebar-card/program-sidebar-card.component";
+import { ProgramSidebarCardComponent } from "./program-sidebar-card/program-sidebar-card.component";
 import { ButtonComponent } from "@ui/primitives";
-import { DeleteConfirmComponent } from "@ui/primitives/delete-confirm/delete-confirm.component";
+import { DeleteConfirmComponent } from "./delete-confirm/delete-confirm.component";
 import { ModalComponent } from "@ui/primitives/modal/modal.component";
-import { NavComponent } from "@ui/widgets/nav/nav.component";
-import { SnackbarComponent } from "@ui/primitives/snackbar/snackbar.component";
+import { NavComponent } from "./nav/nav.component";
+import { SnackbarComponent } from "./snackbar/snackbar.component";
 import { ProfileControlPanelComponent, SidebarComponent } from "@uilib";
 import { ChatService } from "@api/chat/chat.service";
 import { GetActualProgramsUseCase } from "@api/program/use-cases/get-actual-programs.use-case";

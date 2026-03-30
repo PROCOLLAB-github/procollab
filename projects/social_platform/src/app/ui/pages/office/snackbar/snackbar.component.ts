@@ -11,7 +11,7 @@ import {
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
 import { Snack } from "@ui/services/snackbar/snack.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { AnimationService } from "@ui/services/animation/animation.service";
+import { AnimationService } from "./animation/animation.service";
 import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
 

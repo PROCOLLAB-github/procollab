@@ -26,7 +26,7 @@ import { filter, fromEvent, noop, skip, tap, throttleTime } from "rxjs";
 import { ModalService } from "@ui/primitives/modal/modal.service";
 import { User } from "@domain/auth/user.model";
 import { PluralizePipe } from "@corelib";
-import { ChatMessageComponent } from "@ui/widgets/chat-message/chat-message.component";
+import { ChatMessageComponent } from "./chat-message/chat-message.component";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 

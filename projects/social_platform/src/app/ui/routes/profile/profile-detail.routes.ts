@@ -5,7 +5,7 @@ import { ProfileDetailResolver } from "../../pages/profile/detail/profile-detail
 import { ProfileMainComponent } from "../../pages/profile/detail/main/main.component";
 import { ProfileMainResolver } from "../../pages/profile/detail/main/main.resolver";
 import { DeatilComponent } from "@ui/widgets/detail/detail.component";
-import { ProfileNewsComponent } from "@ui/widgets/profile-news/profile-news.component";
+import { ProfileNewsComponent } from "@ui/pages/profile/detail/profile-news/profile-news.component";
 
 /**
  * Конфигурация маршрутов для детального просмотра профиля пользователя

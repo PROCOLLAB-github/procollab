@@ -16,7 +16,7 @@ import Fuse from "fuse.js";
 import { CheckboxComponent, SelectComponent } from "@ui/primitives";
 import { generateOptionsList } from "@utils/generate-options-list";
 import { ClickOutsideModule } from "ng-click-outside";
-import { ProgramCardComponent } from "@ui/widgets/program-card/program-card.component";
+import { ProgramCardComponent } from "./program-card/program-card.component";
 import { HttpParams } from "@angular/common/http";
 import { Program } from "@domain/program/program.model";
 import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-ui-info.service";

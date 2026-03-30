@@ -9,7 +9,7 @@ import { RouterModule } from "@angular/router";
 import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ApproveSkillComponent } from "../approve-skill/approve-skill.component";
+import { ApproveSkillComponent } from "./approve-skill/approve-skill.component";
 import { ControlErrorPipe } from "@corelib";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { ProfileService } from "@api/auth/profile.service";
