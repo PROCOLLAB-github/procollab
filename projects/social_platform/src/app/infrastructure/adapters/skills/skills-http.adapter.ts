@@ -4,9 +4,9 @@ import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { SkillsGroup } from "../../../domain/skills/skills-group";
-import { Skill } from "../../../domain/skills/skill";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { SkillsGroup } from "@domain/skills/skills-group";
+import { Skill } from "@domain/skills/skill";
 
 @Injectable({ providedIn: "root" })
 export class SkillsHttpAdapter {

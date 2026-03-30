@@ -2,13 +2,13 @@
 
 import { CommonModule, NgTemplateOutlet } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
-import { IconComponent } from "@ui/components";
+import { IconComponent } from "@ui/primitives";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { UserLinksPipe } from "@core/lib/pipes/user/user-links.pipe";
-import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { ModalComponent } from "@ui/components/modal/modal.component";
-import { ProfileDetailUIInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { ExpandService } from "@api/expand/expand.service";
+import { User } from "@domain/auth/user.model";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { RouterModule } from "@angular/router";
 
 @Component({

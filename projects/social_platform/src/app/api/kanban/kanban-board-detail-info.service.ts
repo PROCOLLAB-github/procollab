@@ -1,8 +1,8 @@
 /** @format */
 
 import { computed, inject, Injectable, signal } from "@angular/core";
-import { TaskDetail } from "../../domain/kanban/task.model";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import { TaskDetail } from "@domain/kanban/task.model";
+import { User } from "@domain/auth/user.model";
 import { filter, Observable, of, Subject } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ProjectsDetailUIInfoService } from "../project/facades/detail/ui/projects-detail-ui.service";

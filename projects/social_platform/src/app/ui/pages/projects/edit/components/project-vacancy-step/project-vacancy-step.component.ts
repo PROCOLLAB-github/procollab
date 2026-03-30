@@ -3,22 +3,22 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { InputComponent, ButtonComponent, SelectComponent } from "@ui/components";
+import { InputComponent, ButtonComponent, SelectComponent } from "@ui/primitives";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
-import { SkillsBasketComponent } from "@ui/shared/skills-basket/skills-basket.component";
-import { VacancyCardComponent } from "@ui/components/vacancy-card/vacancy-card.component";
+import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
+import { SkillsBasketComponent } from "@ui/widgets/skills-basket/skills-basket.component";
+import { VacancyCardComponent } from "@ui/widgets/vacancy-card/vacancy-card.component";
 import { IconComponent } from "@uilib";
-import { TextareaComponent } from "@ui/components/textarea/textarea.component";
-import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
-import { ProjectsEditInfoService } from "projects/social_platform/src/app/api/project/facades/edit/projects-edit-info.service";
-import { ModalComponent } from "@ui/components/modal/modal.component";
-import { SkillsGroupComponent } from "@ui/shared/skills-group/skills-group.component";
-import { ProjectVacancyUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-vacancy-ui.service";
-import { SkillsInfoService } from "projects/social_platform/src/app/api/skills/facades/skills-info.service";
-import { ToggleFieldsInfoService } from "projects/social_platform/src/app/api/toggle-fields/toggle-fields-info.service";
-import { ProjectVacancyService } from "projects/social_platform/src/app/api/project/facades/edit/project-vacancy.service";
+import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
+import { Skill } from "@domain/skills/skill";
+import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import { SkillsGroupComponent } from "@ui/widgets/skills-group/skills-group.component";
+import { ProjectVacancyUIService } from "@api/project/facades/edit/ui/project-vacancy-ui.service";
+import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
+import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
+import { ProjectVacancyService } from "@api/project/facades/edit/project-vacancy.service";
 
 @Component({
   selector: "app-project-vacancy-step",

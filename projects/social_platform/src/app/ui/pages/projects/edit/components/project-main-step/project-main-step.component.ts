@@ -12,24 +12,24 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angu
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { directionProjectList } from "@core/consts/lists/direction-project-list.const";
 import { trackProjectList } from "@core/consts/lists/track-project-list.const";
-import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
-import { InputComponent, SelectComponent, ButtonComponent } from "@ui/components";
-import { TextareaComponent } from "@ui/components/textarea/textarea.component";
-import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
+import { AvatarControlComponent } from "@ui/primitives/avatar-control/avatar-control.component";
+import { InputComponent, SelectComponent, ButtonComponent } from "@ui/primitives";
+import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
+import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { ControlErrorPipe } from "@corelib";
-import { ProjectFormService } from "../../../../../../api/project/facades/edit/project-form.service";
+import { ProjectFormService } from "@api/project/facades/edit/project-form.service";
 import { IconComponent } from "@uilib";
-import { ModalComponent } from "@ui/components/modal/modal.component";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { RouterLink } from "@angular/router";
 import { generateOptionsList } from "@utils/generate-options-list";
-import { ProjectsEditInfoService } from "projects/social_platform/src/app/api/project/facades/edit/projects-edit-info.service";
-import { ProjectsEditUIInfoService } from "projects/social_platform/src/app/api/project/facades/edit/ui/projects-edit-ui-info.service";
-import { ProjectGoalsUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-goals-ui.service";
-import { ProjectGoalService } from "projects/social_platform/src/app/api/project/facades/edit/project-goals.service";
-import { ProjectContactsService } from "projects/social_platform/src/app/api/project/facades/edit/project-contacts.service";
-import { ProjectTeamUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-team-ui.service";
+import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
+import { ProjectsEditUIInfoService } from "@api/project/facades/edit/ui/projects-edit-ui-info.service";
+import { ProjectGoalsUIService } from "@api/project/facades/edit/ui/project-goals-ui.service";
+import { ProjectGoalService } from "@api/project/facades/edit/project-goals.service";
+import { ProjectContactsService } from "@api/project/facades/edit/project-contacts.service";
+import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
 
 @Component({
   selector: "app-project-main-step",

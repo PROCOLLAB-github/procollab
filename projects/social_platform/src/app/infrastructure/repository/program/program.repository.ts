@@ -3,16 +3,16 @@
 import { HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
-import { User } from "../../../domain/auth/user.model";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { PartnerProgramFields } from "../../../domain/program/partner-program-fields.model";
-import { ProgramCreate } from "../../../domain/program/program-create.model";
-import { Program, ProgramDataSchema } from "../../../domain/program/program.model";
-import { ProjectAdditionalFields } from "../../../domain/project/project-additional-fields.model";
-import { Project } from "../../../domain/project/project.model";
+import { User } from "@domain/auth/user.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
+import { ProgramCreate } from "@domain/program/program-create.model";
+import { Program, ProgramDataSchema } from "@domain/program/program.model";
+import { ProjectAdditionalFields } from "@domain/project/project-additional-fields.model";
+import { Project } from "@domain/project/project.model";
 import { ProgramHttpAdapter } from "../../adapters/program/program-http.adapter";
-import { ProgramRepositoryPort } from "../../../domain/program/ports/program.repository.port";
-import { EntityCache } from "../../../domain/shared/entity-cache";
+import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
+import { EntityCache } from "@domain/shared/entity-cache";
 
 @Injectable({ providedIn: "root" })
 export class ProgramRepository implements ProgramRepositoryPort {

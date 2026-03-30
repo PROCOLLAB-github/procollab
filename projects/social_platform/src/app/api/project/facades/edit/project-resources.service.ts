@@ -3,7 +3,7 @@
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
-import { Resource, ResourceDto } from "../../../../domain/project/resource.model";
+import { Resource, ResourceDto } from "@domain/project/resource.model";
 import { LoggerService } from "@corelib";
 import { DeleteResourceUseCase } from "../../use-case/delete-resource.use-case";
 import { CreateResourceUseCase } from "../../use-case/create-resource.use-case";

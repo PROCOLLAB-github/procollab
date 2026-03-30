@@ -1,10 +1,10 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { DashboardItem, dashboardItemBuilder } from "@utils/helpers/dashboardItemBuilder";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
+import { DashboardItem, dashboardItemBuilder } from "@utils/dashboardItemBuilder";
+import { Project } from "@domain/project/project.model";
 import { ProgramDetailListUIInfoService } from "../../../../program/facades/detail/ui/program-detail-list-ui-info.service";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 
 @Injectable()
 export class ProjectsDashboardUIInfoService {

@@ -4,7 +4,7 @@ import { TestBed } from "@angular/core/testing";
 
 import { of } from "rxjs";
 import { OnboardingService } from "./onboarding.service";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 
 describe("OnboardingService", () => {
   let service: OnboardingService;

@@ -2,7 +2,7 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { Observable, Subject } from "rxjs";
-import { Skill } from "../../../domain/skills/skill";
+import { Skill } from "@domain/skills/skill";
 import { FormGroup } from "@angular/forms";
 import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
 import { SkillsGroup } from "@domain/skills/skills-group";

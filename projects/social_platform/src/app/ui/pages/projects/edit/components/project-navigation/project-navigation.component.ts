@@ -8,10 +8,10 @@ import {
   Input,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { EditStep, ProjectStepService } from "../../../../../../api/project/project-step.service";
+import { EditStep, ProjectStepService } from "@api/project/project-step.service";
 import { IconComponent } from "@uilib";
 import { CommonModule } from "@angular/common";
-import { Navigation } from "projects/social_platform/src/app/domain/other/navigation.model";
+import { Navigation } from "@domain/other/navigation.model";
 
 @Component({
   selector: "app-project-navigation",

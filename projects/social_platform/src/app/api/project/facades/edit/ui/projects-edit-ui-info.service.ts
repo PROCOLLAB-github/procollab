@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { ProjectAssign } from "projects/social_platform/src/app/domain/project/project-assign.model";
+import { ProjectAssign } from "@domain/project/project-assign.model";
 import { ProjectsDetailUIInfoService } from "../../detail/ui/projects-detail-ui.service";
 
 @Injectable()

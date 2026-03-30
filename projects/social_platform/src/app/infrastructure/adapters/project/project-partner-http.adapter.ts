@@ -3,7 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
-import { Partner, PartnerDto } from "../../../domain/project/partner.model";
+import { Partner, PartnerDto } from "@domain/project/partner.model";
 
 @Injectable({ providedIn: "root" })
 export class ProjectPartnerHttpAdapter {

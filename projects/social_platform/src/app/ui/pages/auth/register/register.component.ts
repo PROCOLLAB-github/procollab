@@ -1,19 +1,19 @@
 /** @format */
 
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
-import { initial } from "projects/social_platform/src/app/domain/shared/async-state";
+import { initial } from "@domain/shared/async-state";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe, TokenService } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { RouterLink } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
-import { ButtonComponent, CheckboxComponent, InputComponent } from "@ui/components";
-import { ModalComponent } from "@ui/components/modal/modal.component";
+import { ButtonComponent, CheckboxComponent, InputComponent } from "@ui/primitives";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { IconComponent } from "@uilib";
 import { CommonModule } from "@angular/common";
-import { AuthRegisterService } from "projects/social_platform/src/app/api/auth/facades/auth-register.service";
-import { AuthUIInfoService } from "projects/social_platform/src/app/api/auth/facades/ui/auth-ui-info.service";
+import { AuthRegisterService } from "@api/auth/facades/auth-register.service";
+import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 
 dayjs.extend(cpf);
 

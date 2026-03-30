@@ -5,8 +5,8 @@ import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } fro
 import { IconComponent } from "@uilib";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { UserLinksPipe } from "@core/lib/pipes/user/user-links.pipe";
-import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
+import { ExpandService } from "@api/expand/expand.service";
+import { Project } from "@domain/project/project.model";
 
 @Component({
   selector: "app-projects-right-side",

@@ -10,17 +10,17 @@ import {
   ViewChild,
   WritableSignal,
 } from "@angular/core";
-import { NewsFormComponent } from "@ui/components/news-form/news-form.component";
-import { ProjectDirectionCard } from "@ui/shared/project-direction-card/project-direction-card.component";
-import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
-import { NewsInfoService } from "projects/social_platform/src/app/api/news/news-info.service";
-import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
-import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import { ProjectsDetailService } from "projects/social_platform/src/app/api/project/facades/detail/projects-detail.service";
+import { NewsFormComponent } from "@ui/widgets/news-form/news-form.component";
+import { ProjectDirectionCard } from "@ui/widgets/project-direction-card/project-direction-card.component";
+import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
+import { NewsInfoService } from "@api/news/news-info.service";
+import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
+import { ExpandService } from "@api/expand/expand.service";
+import { Project } from "@domain/project/project.model";
+import { ProjectsDetailService } from "@api/project/facades/detail/projects-detail.service";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
-import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
+import { FeedNews } from "@domain/project/project-news.model";
+import { Collaborator } from "@domain/project/collaborator.model";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 

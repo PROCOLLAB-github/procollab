@@ -1,12 +1,12 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ProgramRepositoryPort } from "../../../domain/program/ports/program.repository.port";
+import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
 import { HttpParams } from "@angular/common/http";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { Project } from "../../../domain/project/project.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { Project } from "@domain/project/project.model";
 
 @Injectable({ providedIn: "root" })
 export class GetAllProjectsUseCase {

@@ -2,9 +2,9 @@
 
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
-import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
+import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
 import { map } from "rxjs";
-import { GetMyVacanciesUseCase } from "projects/social_platform/src/app/api/vacancy/use-cases/get-my-vacancies.use-case";
+import { GetMyVacanciesUseCase } from "@api/vacancy/use-cases/get-my-vacancies.use-case";
 
 /**
  * Резолвер для загрузки откликов пользователя на вакансии

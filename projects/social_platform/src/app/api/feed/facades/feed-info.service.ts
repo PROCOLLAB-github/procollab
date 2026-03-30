@@ -14,13 +14,13 @@ import {
   tap,
   throttleTime,
 } from "rxjs";
-import { FeedItem, FeedItemType } from "../../../domain/feed/feed-item.model";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
+import { FeedItem, FeedItemType } from "@domain/feed/feed-item.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 import { FeedUIInfoService } from "./ui/feed-ui-info.service";
 import { FetchFeedUseCase } from "../use-cases/fetch-feed.use-case";
 import { ReadFeedNewsUseCase } from "../use-cases/read-feed-news.use-case";
 import { ToggleFeedLikeUseCase } from "../use-cases/toggle-feed-like.use-case";
-import { isSuccess, loading, success } from "../../../domain/shared/async-state";
+import { isSuccess, loading, success } from "@domain/shared/async-state";
 
 const DEFAULT_FEED_TYPES: FeedItemType[] = ["vacancy", "project", "news"];
 const FILTER_SPLIT_SYMBOL = "|";

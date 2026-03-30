@@ -3,10 +3,10 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { IndustryHttpAdapter } from "../../adapters/industry/industry-http.adapter";
 import { map, Observable, tap } from "rxjs";
-import { Industry } from "../../../domain/industry/industry.model";
+import { Industry } from "@domain/industry/industry.model";
 import { plainToInstance } from "class-transformer";
-import { IndustryRepositoryPort } from "../../../domain/industry/ports/industry.repository.port";
-import { EntityCache } from "../../../domain/shared/entity-cache";
+import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";
+import { EntityCache } from "@domain/shared/entity-cache";
 
 @Injectable({ providedIn: "root" })
 export class IndustryRepository implements IndustryRepositoryPort {

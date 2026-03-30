@@ -2,9 +2,9 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { ProjectRatingRepositoryPort } from "../../../domain/project/ports/project-rating.repository.port";
-import { ProjectRatingCriterion } from "../../../domain/project/project-rating-criterion";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { ProjectRatingRepositoryPort } from "@domain/project/ports/project-rating.repository.port";
+import { ProjectRatingCriterion } from "@domain/project/project-rating-criterion";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class RateProjectUseCase {

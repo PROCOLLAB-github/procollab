@@ -13,9 +13,9 @@ import {
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
 import { TruncateHtmlPipe } from "@core/lib/pipes/truncate-html.pipe";
-import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
-import { IconComponent } from "@ui/components";
-import { FileItemComponent } from "@ui/components/file-item/file-item.component";
+import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
+import { IconComponent } from "@ui/primitives";
+import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
 import { FileService } from "@core/lib/services/file/file.service";
 import { Task } from "@domain/courses/courses.model";
 import { FileModel } from "@domain/file/file.model";

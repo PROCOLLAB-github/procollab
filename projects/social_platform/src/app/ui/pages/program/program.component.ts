@@ -3,10 +3,10 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
-import { SearchComponent } from "@ui/components/search/search.component";
+import { SearchComponent } from "@ui/primitives/search/search.component";
 import { BackComponent } from "@uilib";
-import { ProgramInfoService } from "../../../api/program/facades/program-info.service";
-import { ProgramMainUIInfoService } from "../../../api/program/facades/ui/program-main-ui-info.service";
+import { ProgramInfoService } from "@api/program/facades/program-info.service";
+import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-ui-info.service";
 
 /**
  * Основной компонент модуля "Программы"

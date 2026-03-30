@@ -3,7 +3,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, inject, Output } from "@angular/core";
 import { IconComponent } from "@uilib";
-import { KanbanBoardDetailInfoService } from "../../../../../../../api/kanban/kanban-board-detail-info.service";
+import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-info.service";
 
 @Component({
   selector: "app-kanban-board-actions",

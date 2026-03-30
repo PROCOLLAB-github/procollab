@@ -2,10 +2,10 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { User } from "@domain/auth/user.model";
 import { map } from "rxjs";
-import { GetAllMembersUseCase } from "projects/social_platform/src/app/api/program/use-cases/get-all-members.use-case";
+import { GetAllMembersUseCase } from "@api/program/use-cases/get-all-members.use-case";
 
 /**
  * Резолвер для предзагрузки участников программы

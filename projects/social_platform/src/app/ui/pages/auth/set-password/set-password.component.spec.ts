@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { SetPasswordComponent } from "./set-password.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { RouterTestingModule } from "@angular/router/testing";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 import { of } from "rxjs";
 import { NgxMaskModule } from "ngx-mask";
 

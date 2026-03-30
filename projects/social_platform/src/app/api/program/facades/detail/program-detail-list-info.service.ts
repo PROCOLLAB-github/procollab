@@ -17,9 +17,9 @@ import {
 } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpParams } from "@angular/common/http";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 import { ProgramDetailListUIInfoService } from "./ui/program-detail-list-ui-info.service";
-import { ProjectRate } from "projects/social_platform/src/app/domain/project/project-rate";
+import { ProjectRate } from "@domain/project/project-rate";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { CreateProgramFiltersUseCase } from "../../use-cases/create-program-filters.use-case";
@@ -29,13 +29,9 @@ import { GetProjectSubscriptionsUseCase } from "../../../project/use-case/get-pr
 import { FilterProjectRatingsUseCase } from "../../use-cases/filter-project-ratings.use-case";
 import { GetProjectRatingsUseCase } from "../../use-cases/get-project-ratings.use-case";
 import Fuse from "fuse.js";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import {
-  isSuccess,
-  loading,
-  success,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+import { Project } from "@domain/project/project.model";
+import { User } from "@domain/auth/user.model";
+import { isSuccess, loading, success } from "@domain/shared/async-state";
 
 @Injectable()
 export class ProgramDetailListInfoService {

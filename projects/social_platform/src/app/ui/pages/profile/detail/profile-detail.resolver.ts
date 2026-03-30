@@ -2,7 +2,7 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import { User } from "@domain/auth/user.model";
 import { forkJoin, map, tap } from "rxjs";
 import { calculateProfileProgress } from "@utils/calculateProgress";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";

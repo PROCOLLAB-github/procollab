@@ -2,9 +2,9 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { ProjectSubscriptionRepositoryPort } from "../../../domain/project/ports/project-subscription.repository.port";
-import { ProjectSubscriber } from "../../../domain/project/project-subscriber.model";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
+import { ProjectSubscriber } from "@domain/project/project-subscriber.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class GetProjectSubscribersUseCase {

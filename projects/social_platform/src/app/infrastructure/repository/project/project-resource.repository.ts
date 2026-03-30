@@ -3,9 +3,9 @@
 import { inject, Injectable } from "@angular/core";
 import { ProjectResourceHttpAdapter } from "../../adapters/project/project-resource-http.adapter";
 import { map, Observable } from "rxjs";
-import { Resource, ResourceDto } from "../../../domain/project/resource.model";
+import { Resource, ResourceDto } from "@domain/project/resource.model";
 import { plainToInstance } from "class-transformer";
-import { ProjectResourceRepositoryPort } from "../../../domain/project/ports/project-resource.repository.port";
+import { ProjectResourceRepositoryPort } from "@domain/project/ports/project-resource.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class ProjectResourceRepository implements ProjectResourceRepositoryPort {

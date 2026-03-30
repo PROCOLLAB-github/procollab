@@ -10,24 +10,24 @@ import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { isFailure, isLoading } from "projects/social_platform/src/app/domain/shared/async-state";
+import { isFailure, isLoading } from "@domain/shared/async-state";
 import { ReactiveFormsModule } from "@angular/forms";
 import {
   InputComponent,
   CheckboxComponent,
   SelectComponent,
   ButtonComponent,
-} from "@ui/components";
-import { TextareaComponent } from "@ui/components/textarea/textarea.component";
-import { SwitchComponent } from "@ui/components/switch/switch.component";
+} from "@ui/primitives";
+import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
+import { SwitchComponent } from "@ui/primitives/switch/switch.component";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ToSelectOptionsPipe } from "@core/lib/pipes/transformers/options-transform.pipe";
 import { RouterLink } from "@angular/router";
 import { IconComponent } from "@uilib";
-import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
-import { ProjectAdditionalService } from "projects/social_platform/src/app/api/project/facades/edit/project-additional.service";
-import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
+import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
+import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
+import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 
 @Component({
   selector: "app-project-additional-step",

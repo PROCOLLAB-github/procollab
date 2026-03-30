@@ -1,7 +1,7 @@
 /** @format */
 
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
+import { User } from "@domain/auth/user.model";
+import { ChatMessage } from "@domain/chat/chat-message.model";
 
 /**
  * Модели данных для элементов чата

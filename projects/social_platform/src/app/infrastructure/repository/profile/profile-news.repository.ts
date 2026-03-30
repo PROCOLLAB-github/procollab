@@ -3,10 +3,10 @@
 import { inject, Injectable } from "@angular/core";
 import { plainToInstance } from "class-transformer";
 import { forkJoin, map, Observable, of, tap } from "rxjs";
-import { StorageService } from "../../../api/storage/storage.service";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { ProfileNews } from "../../../domain/profile/profile-news.model";
-import { ProfileNewsRepositoryPort } from "../../../domain/profile/ports/profile-news.repository.port";
+import { StorageService } from "@api/storage/storage.service";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { ProfileNews } from "@domain/profile/profile-news.model";
+import { ProfileNewsRepositoryPort } from "@domain/profile/ports/profile-news.repository.port";
 import { ProfileNewsHttpAdapter } from "../../adapters/profile/profile-news-http.adapter";
 
 @Injectable({ providedIn: "root" })

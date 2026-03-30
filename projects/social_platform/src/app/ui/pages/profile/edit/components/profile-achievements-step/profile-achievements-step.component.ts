@@ -2,15 +2,15 @@
 
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, Input } from "@angular/core";
-import { InputComponent, SelectComponent, ButtonComponent } from "@ui/components";
-import { TextareaComponent } from "@ui/components/textarea/textarea.component";
-import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
-import { FileItemComponent } from "@ui/components/file-item/file-item.component";
+import { InputComponent, SelectComponent, ButtonComponent } from "@ui/primitives";
+import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
+import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
+import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { ProfileFormService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-form.service";
+import { ProfileFormService } from "@api/profile/facades/edit/profile-form.service";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
-import { ProfileEditAchievementsInfoService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-edit-achievements-info.service";
+import { ProfileEditAchievementsInfoService } from "@api/profile/facades/edit/profile-edit-achievements-info.service";
 import { IconComponent } from "@uilib";
 
 @Component({

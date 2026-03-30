@@ -1,9 +1,9 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ProgramNewsRepositoryPort } from "../../../domain/program/ports/program-news.repository.port";
+import { ProgramNewsRepositoryPort } from "@domain/program/ports/program-news.repository.port";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class DeleteNewsUseCase {

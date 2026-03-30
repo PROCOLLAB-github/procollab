@@ -4,9 +4,9 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/cor
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { ButtonComponent, InputComponent } from "@ui/components";
-import { AuthPasswordService } from "projects/social_platform/src/app/api/auth/facades/auth-password.service";
-import { AuthUIInfoService } from "projects/social_platform/src/app/api/auth/facades/ui/auth-ui-info.service";
+import { ButtonComponent, InputComponent } from "@ui/primitives";
+import { AuthPasswordService } from "@api/auth/facades/auth-password.service";
+import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
 
 /**
  * Компонент установки нового пароля

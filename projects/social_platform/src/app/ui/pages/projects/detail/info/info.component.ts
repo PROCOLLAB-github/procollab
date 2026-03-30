@@ -10,8 +10,8 @@ import {
   OnInit,
 } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
-import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
-import { ProjectsDetailService } from "projects/social_platform/src/app/api/project/facades/detail/projects-detail.service";
+import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
+import { ProjectsDetailService } from "@api/project/facades/detail/projects-detail.service";
 import { ProjectsLeftSideComponent } from "./components/projects-left-side/projects-left-side.component";
 import { ProjectsRightSideComponent } from "./components/projects-right-side/projects-right-side.component";
 import { ProjectsMidSideComponent } from "./components/projects-mid-side/projects-mid-side.component";

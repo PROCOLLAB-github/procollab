@@ -4,11 +4,11 @@ import { inject } from "@angular/core";
 import { forkJoin, map, switchMap } from "rxjs";
 import { ResolveFn } from "@angular/router";
 import { HttpParams } from "@angular/common/http";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
-import { Project } from "../../../domain/project/project.model";
-import { GetAllProjectsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-all-projects.use-case";
-import { GetMyProjectsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-my-projects.use-case";
-import { GetProjectSubscriptionsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project-subscriptions.use-case";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { Project } from "@domain/project/project.model";
+import { GetAllProjectsUseCase } from "@api/project/use-case/get-all-projects.use-case";
+import { GetMyProjectsUseCase } from "@api/project/use-case/get-my-projects.use-case";
+import { GetProjectSubscriptionsUseCase } from "@api/project/use-case/get-project-subscriptions.use-case";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /**

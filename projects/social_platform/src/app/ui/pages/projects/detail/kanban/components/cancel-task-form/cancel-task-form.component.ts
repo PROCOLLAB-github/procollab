@@ -4,11 +4,11 @@ import { CommonModule } from "@angular/common";
 import { Component, EventEmitter, inject, Output } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ControlErrorPipe, ValidationService } from "@corelib";
-import { ButtonComponent } from "@ui/components";
+import { ButtonComponent } from "@ui/primitives";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { TextareaComponent } from "@ui/components/textarea/textarea.component";
+import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { QuickAnswers } from "@core/consts/other/quick-answers.const";
-import { TagComponent } from "@ui/components/tag/tag.component";
+import { TagComponent } from "@ui/primitives/tag/tag.component";
 
 @Component({
   selector: "app-cancel-task-form",

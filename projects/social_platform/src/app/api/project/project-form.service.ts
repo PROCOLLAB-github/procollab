@@ -10,10 +10,10 @@ import {
   ValidatorFn,
 } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
-import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
-import { stripNullish } from "@utils/helpers/stripNull";
+import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
+import { stripNullish } from "@utils/stripNull";
 import { concatMap, filter } from "rxjs";
-import { Project } from "../../domain/project/project.model";
+import { Project } from "@domain/project/project.model";
 import { optionalUrlOrMentionValidator } from "@utils/optionalUrl.validator";
 import { UpdateFormUseCase } from "./use-case/update-form.use-case";
 /**

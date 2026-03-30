@@ -7,7 +7,7 @@
 // import { HttpClientTestingModule } from "@angular/common/http/testing";
 // import { ReactiveFormsModule } from "@angular/forms";
 // import { of } from "rxjs";
-// import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+// import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 // import { ProjectRepository } from "../services/project.service";
 // import { User } from "../../auth/models/user.model";
 // import { Project } from "../models/project.model";

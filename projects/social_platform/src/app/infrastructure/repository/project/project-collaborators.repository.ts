@@ -2,7 +2,7 @@
 
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { ProjectCollaboratorsRepositoryPort } from "../../../domain/project/ports/project-collaborators.repository.port";
+import { ProjectCollaboratorsRepositoryPort } from "@domain/project/ports/project-collaborators.repository.port";
 import { ProjectCollaboratorsHttpAdapter } from "../../adapters/project/project-collaborators-http.adapter";
 
 @Injectable({ providedIn: "root" })

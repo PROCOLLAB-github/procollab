@@ -11,8 +11,8 @@ import {
   ViewChild,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ProfileDetailInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/profile-detail-info.service";
-import { ProfileDetailUIInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { ProfileDetailInfoService } from "@api/profile/facades/detail/profile-detail-info.service";
+import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
 import { ProfileLeftSideComponent } from "./components/profile-left-side/profile-left-side.component";
 import { ProfileRightSideComponent } from "./components/profile-right-side/profile-right-side.component";
 import { ProfileMidSideComponent } from "./components/profile-mid-side/profile-mid-side.component";

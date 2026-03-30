@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { distinctUntilChanged, Subject } from "rxjs";
-import { Snack } from "@ui/models/snack.model";
+import { Snack } from "@ui/services/snackbar/snack.model";
 import { nanoid } from "nanoid";
 
 /**

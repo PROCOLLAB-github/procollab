@@ -7,7 +7,7 @@ import { RouterTestingModule } from "@angular/router/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { NgxMaskModule } from "ngx-mask";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 
 describe("ProjectEditComponent", () => {
   let component: ProjectEditComponent;

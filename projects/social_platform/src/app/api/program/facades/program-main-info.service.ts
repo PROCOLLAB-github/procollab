@@ -4,10 +4,10 @@ import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
 import { combineLatest, distinctUntilChanged, map, Subject, switchMap, takeUntil } from "rxjs";
-import { Program } from "../../../domain/program/program.model";
+import { Program } from "@domain/program/program.model";
 import { HttpParams } from "@angular/common/http";
 import { ProgramMainUIInfoService } from "./ui/program-main-ui-info.service";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 import Fuse from "fuse.js";
 import { ParticipatingProgramUseCase } from "../use-cases/participating-program.use-case";
 

@@ -2,9 +2,9 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { ChatRepositoryPort } from "../../../domain/chat/ports/chat.repository.port";
-import { ChatFile } from "../../../domain/chat/chat-message.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { ChatRepositoryPort } from "@domain/chat/ports/chat.repository.port";
+import { ChatFile } from "@domain/chat/chat-message.model";
 
 export type LoadProjectFilesError = { kind: "server_error" };
 

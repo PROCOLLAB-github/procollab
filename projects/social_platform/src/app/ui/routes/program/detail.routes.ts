@@ -3,7 +3,7 @@
 import { Routes } from "@angular/router";
 import { ProgramListComponent } from "../../pages/program/detail/list/list.component";
 import { ProgramDetailResolver } from "../../pages/program/detail/detail.resolver";
-import { DeatilComponent } from "@ui/components/detail/detail.component";
+import { DeatilComponent } from "@ui/widgets/detail/detail.component";
 import { ProgramDetailMainComponent } from "@ui/pages/program/detail/main/main.component";
 import { ProgramProjectsResolver } from "@ui/pages/program/detail/list/projects.resolver";
 import { ProgramMembersResolver } from "@ui/pages/program/detail/list/members.resolver";

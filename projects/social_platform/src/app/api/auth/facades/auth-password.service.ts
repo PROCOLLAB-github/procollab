@@ -8,8 +8,8 @@ import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { ResetPasswordUseCase } from "../use-cases/reset-password.use-case";
 import { SetPasswordUseCase } from "../use-cases/set-password.use-case";
-import { toAsyncState } from "../../../domain/shared/to-async-state";
-import { PasswordError } from "../../../domain/auth/results/password.result";
+import { toAsyncState } from "@domain/shared/to-async-state";
+import { PasswordError } from "@domain/auth/results/password.result";
 
 @Injectable()
 export class AuthPasswordService {

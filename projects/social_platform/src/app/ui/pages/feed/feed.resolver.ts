@@ -3,9 +3,9 @@
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
 import { map } from "rxjs";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
-import { FeedItem } from "../../../domain/feed/feed-item.model";
-import { FetchFeedUseCase } from "../../../api/feed/use-cases/fetch-feed.use-case";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { FeedItem } from "@domain/feed/feed-item.model";
+import { FetchFeedUseCase } from "@api/feed/use-cases/fetch-feed.use-case";
 
 /**
  * резолвер ленты новостей

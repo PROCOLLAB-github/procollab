@@ -13,14 +13,14 @@ import { ActivatedRoute, Params, Router, RouterLink } from "@angular/router";
 import { combineLatest, distinctUntilChanged, map, Subscription, switchMap } from "rxjs";
 import { NavService } from "@ui/services/nav/nav.service";
 import Fuse from "fuse.js";
-import { CheckboxComponent, SelectComponent } from "@ui/components";
+import { CheckboxComponent, SelectComponent } from "@ui/primitives";
 import { generateOptionsList } from "@utils/generate-options-list";
 import { ClickOutsideModule } from "ng-click-outside";
-import { ProgramCardComponent } from "../../../shared/program-card/program-card.component";
+import { ProgramCardComponent } from "@ui/widgets/program-card/program-card.component";
 import { HttpParams } from "@angular/common/http";
-import { Program } from "projects/social_platform/src/app/domain/program/program.model";
-import { ProgramMainUIInfoService } from "projects/social_platform/src/app/api/program/facades/ui/program-main-ui-info.service";
-import { ProgramMainInfoService } from "projects/social_platform/src/app/api/program/facades/program-main-info.service";
+import { Program } from "@domain/program/program.model";
+import { ProgramMainUIInfoService } from "@api/program/facades/ui/program-main-ui-info.service";
+import { ProgramMainInfoService } from "@api/program/facades/program-main-info.service";
 
 /**
  * Главный компонент списка программ

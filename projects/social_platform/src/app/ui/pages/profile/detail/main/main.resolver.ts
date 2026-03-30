@@ -3,8 +3,8 @@
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { inject } from "@angular/core";
 import { map } from "rxjs";
-import { ProfileNews } from "projects/social_platform/src/app/domain/profile/profile-news.model";
-import { GetProfileNewsDetailUseCase } from "projects/social_platform/src/app/api/profile/use-cases/get-profile-news-detail.use-case";
+import { ProfileNews } from "@domain/profile/profile-news.model";
+import { GetProfileNewsDetailUseCase } from "@api/profile/use-cases/get-profile-news-detail.use-case";
 
 /**
  * Резолвер для загрузки детальной информации о новости профиля

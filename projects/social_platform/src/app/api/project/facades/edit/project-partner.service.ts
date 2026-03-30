@@ -3,7 +3,7 @@
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { catchError, forkJoin, map, of, Subject, takeUntil, tap } from "rxjs";
-import { Partner, PartnerDto } from "../../../../domain/project/partner.model";
+import { Partner, PartnerDto } from "@domain/project/partner.model";
 import { LoggerService } from "@corelib";
 import { CreatePartnerUseCase } from "../../use-case/create-partner.use-case";
 import { DeletePartnerUseCase } from "../../use-case/delete-partner.use-case";

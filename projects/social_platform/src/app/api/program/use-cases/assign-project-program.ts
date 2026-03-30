@@ -1,10 +1,10 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ProjectProgramRepositoryPort } from "../../../domain/project/ports/project-program.repository.port";
+import { ProjectProgramRepositoryPort } from "@domain/project/ports/project-program.repository.port";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { ProjectAssign } from "../../../domain/project/project-assign.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { ProjectAssign } from "@domain/project/project-assign.model";
 
 @Injectable({ providedIn: "root" })
 export class AssignProjectProgramUseCase {

@@ -1,6 +1,6 @@
 /** @format */
 
-import { CreateVacancyDto } from "../../../api/project/dto/create-vacancy.model";
+import { CreateVacancyDto } from "@api/project/dto/create-vacancy.model";
 import { DomainEvent } from "../../shared/domain-event";
 
 export interface VacancyCreated extends DomainEvent {

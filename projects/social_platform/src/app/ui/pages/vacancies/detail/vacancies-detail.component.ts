@@ -3,12 +3,12 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, RouterOutlet } from "@angular/router";
-import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
-import { BarComponent } from "@ui/components";
+import { Vacancy } from "@domain/vacancy/vacancy.model";
+import { BarComponent } from "@ui/primitives";
 import { map, Subscription } from "rxjs";
 import { BackComponent } from "@uilib";
-import { VacancyDetailInfoService } from "projects/social_platform/src/app/api/vacancy/facades/vacancy-detail-info.service";
-import { VacancyDetailUIInfoService } from "projects/social_platform/src/app/api/vacancy/facades/ui/vacancy-detail-ui-info.service";
+import { VacancyDetailInfoService } from "@api/vacancy/facades/vacancy-detail-info.service";
+import { VacancyDetailUIInfoService } from "@api/vacancy/facades/ui/vacancy-detail-ui-info.service";
 
 /**
  * Компонент детального просмотра вакансии

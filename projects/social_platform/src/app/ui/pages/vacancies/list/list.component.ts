@@ -6,12 +6,12 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
-import { ButtonComponent, IconComponent } from "@ui/components";
-import { ModalComponent } from "@ui/components/modal/modal.component";
-import { ProjectVacancyCardComponent } from "@ui/shared/project-vacancy-card/project-vacancy-card.component";
-import { ResponseCardComponent } from "@ui/components/response-card/response-card.component";
-import { VacancyUIInfoService } from "projects/social_platform/src/app/api/vacancy/facades/ui/vacancy-ui-info.service";
-import { VacancyInfoService } from "projects/social_platform/src/app/api/vacancy/facades/vacancy-info.service";
+import { ButtonComponent, IconComponent } from "@ui/primitives";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import { ProjectVacancyCardComponent } from "@ui/widgets/project-vacancy-card/project-vacancy-card.component";
+import { ResponseCardComponent } from "@ui/widgets/response-card/response-card.component";
+import { VacancyUIInfoService } from "@api/vacancy/facades/ui/vacancy-ui-info.service";
+import { VacancyInfoService } from "@api/vacancy/facades/vacancy-info.service";
 
 @Component({
   selector: "app-vacancies-list",

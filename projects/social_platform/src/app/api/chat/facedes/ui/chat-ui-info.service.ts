@@ -1,8 +1,8 @@
 /** @format */
 
 import { Injectable, signal } from "@angular/core";
-import { ChatListItem } from "projects/social_platform/src/app/domain/chat/chat-item.model";
-import { OnChatMessageDto } from "projects/social_platform/src/app/domain/chat/chat.model";
+import { ChatListItem } from "@domain/chat/chat-item.model";
+import { OnChatMessageDto } from "@domain/chat/chat.model";
 
 @Injectable()
 export class ChatUIInfoService {

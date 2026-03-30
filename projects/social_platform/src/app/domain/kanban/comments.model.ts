@@ -1,8 +1,8 @@
 /** @format */
 
-import { FileModel } from "projects/social_platform/src/app/domain/file/file.model";
+import { FileModel } from "@domain/file/file.model";
 import { TaskDetail } from "./task.model";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import { User } from "@domain/auth/user.model";
 
 export interface Comment {
   id: number;

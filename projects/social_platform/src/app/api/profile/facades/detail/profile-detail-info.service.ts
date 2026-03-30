@@ -2,7 +2,7 @@
 
 import { ElementRef, inject, Injectable } from "@angular/core";
 import { concatMap, filter, map, Subject, takeUntil, tap } from "rxjs";
-import { ProfileNews } from "../../../../domain/profile/profile-news.model";
+import { ProfileNews } from "@domain/profile/profile-news.model";
 import { ActivatedRoute } from "@angular/router";
 import { ExpandService } from "../../../expand/expand.service";
 import { calculateProfileProgress } from "@utils/calculateProgress";

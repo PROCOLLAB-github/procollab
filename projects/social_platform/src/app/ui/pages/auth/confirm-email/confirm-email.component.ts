@@ -2,7 +2,7 @@
 
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
-import { AuthEmailService } from "projects/social_platform/src/app/api/auth/facades/auth-email.service";
+import { AuthEmailService } from "@api/auth/facades/auth-email.service";
 
 /**
  * Компонент подтверждения email адреса

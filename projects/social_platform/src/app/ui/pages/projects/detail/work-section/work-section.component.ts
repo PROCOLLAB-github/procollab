@@ -2,11 +2,11 @@
 
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { ButtonComponent } from "@ui/components";
+import { ButtonComponent } from "@ui/primitives";
 import { IconComponent } from "@uilib";
 import { RouterLink } from "@angular/router";
-import { ProjectsDetailWorkSectionInfoService } from "projects/social_platform/src/app/api/project/facades/detail/work-section/projects-detail-work-section-info.service";
-import { ProjectsDetailWorkSectionUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/work-section/ui/projects-detail-work-section-ui-info.service";
+import { ProjectsDetailWorkSectionInfoService } from "@api/project/facades/detail/work-section/projects-detail-work-section-info.service";
+import { ProjectsDetailWorkSectionUIInfoService } from "@api/project/facades/detail/work-section/ui/projects-detail-work-section-ui-info.service";
 
 @Component({
   selector: "app-work-section",

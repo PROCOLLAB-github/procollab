@@ -2,11 +2,11 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn, Router } from "@angular/router";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
 import { catchError, EMPTY, map } from "rxjs";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import { GetAllProjectsUseCase } from "projects/social_platform/src/app/api/program/use-cases/get-all-projects.use-case";
+import { Project } from "@domain/project/project.model";
+import { GetAllProjectsUseCase } from "@api/program/use-cases/get-all-projects.use-case";
 
 /**
  * Резолвер для предзагрузки проектов программы

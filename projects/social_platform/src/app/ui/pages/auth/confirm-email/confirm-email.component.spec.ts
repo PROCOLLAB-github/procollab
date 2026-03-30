@@ -3,7 +3,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ConfirmEmailComponent } from "./confirm-email.component";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 import { RouterTestingModule } from "@angular/router/testing";
 
 describe("ConfirmEmailComponent", () => {

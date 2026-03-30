@@ -4,7 +4,7 @@ import { inject, Injectable } from "@angular/core";
 import { map, Subject, takeUntil, tap } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ChatService } from "../../chat/chat.service";
-import { Invite } from "../../../domain/invite/invite.model";
+import { Invite } from "@domain/invite/invite.model";
 import { OfficeUIInfoService } from "./ui/office-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { IndustryRepositoryPort } from "@domain/industry/ports/industry.repository.port";

@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
-import { New } from "projects/social_platform/src/app/domain/news/article.model";
+import { New } from "@domain/news/article.model";
 import { ApiService } from "@corelib";
 import { plainToInstance } from "class-transformer";
 

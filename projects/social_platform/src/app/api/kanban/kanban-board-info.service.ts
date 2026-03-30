@@ -1,7 +1,7 @@
 /** @format */
 
 import { computed, Injectable, signal } from "@angular/core";
-import { Board } from "../../domain/kanban/board.model";
+import { Board } from "@domain/kanban/board.model";
 
 @Injectable({ providedIn: "root" })
 export class KanbanBoardInfoService {

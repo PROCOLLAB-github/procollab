@@ -1,7 +1,7 @@
 /** @format */
 
 import { computed, Injectable, signal } from "@angular/core";
-import { AsyncState, initial, isLoading } from "../../../../../domain/shared/async-state";
+import { AsyncState, initial, isLoading } from "@domain/shared/async-state";
 
 @Injectable()
 export class OnboardingUIInfoService {

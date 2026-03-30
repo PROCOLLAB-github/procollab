@@ -2,9 +2,9 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { Goal } from "../../../domain/project/goals.model";
-import { ProjectGoalsRepositoryPort } from "../../../domain/project/ports/project-goals.repository.port";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { Goal } from "@domain/project/goals.model";
+import { ProjectGoalsRepositoryPort } from "@domain/project/ports/project-goals.repository.port";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class GetProjectGoalsUseCase {

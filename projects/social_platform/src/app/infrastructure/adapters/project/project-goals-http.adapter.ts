@@ -3,7 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
-import { Goal } from "../../../domain/project/goals.model";
+import { Goal } from "@domain/project/goals.model";
 import { GoalFormData } from "./dto/project-goal.dto";
 
 @Injectable({ providedIn: "root" })

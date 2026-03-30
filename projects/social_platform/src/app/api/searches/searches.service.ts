@@ -2,7 +2,7 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { Subject, take, takeUntil } from "rxjs";
-import { Specialization } from "../../domain/specializations/specialization";
+import { Specialization } from "@domain/specializations/specialization";
 import { FormGroup } from "@angular/forms";
 import { SpecializationsRepositoryPort as SpecializationsService } from "@domain/specializations/ports/specializations.repository.port";
 

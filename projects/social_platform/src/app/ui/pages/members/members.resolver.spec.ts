@@ -2,7 +2,7 @@
 
 import { TestBed } from "@angular/core/testing";
 import { MembersResolver } from "./members.resolver";
-import { MemberService } from "projects/social_platform/src/app/api/member/member.service";
+import { MemberService } from "@api/member/member.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { of } from "rxjs";

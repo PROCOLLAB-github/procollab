@@ -2,7 +2,7 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { ApiService } from "@corelib";
-import { Industry } from "../../../domain/industry/industry.model";
+import { Industry } from "@domain/industry/industry.model";
 import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })

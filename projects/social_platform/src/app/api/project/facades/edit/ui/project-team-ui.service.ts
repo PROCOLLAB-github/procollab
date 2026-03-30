@@ -2,13 +2,9 @@
 
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
-import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
-import {
-  AsyncState,
-  failure,
-  initial,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+import { Invite } from "@domain/invite/invite.model";
+import { Collaborator } from "@domain/project/collaborator.model";
+import { AsyncState, failure, initial } from "@domain/shared/async-state";
 
 @Injectable({ providedIn: "root" })
 export class ProjectTeamUIService {

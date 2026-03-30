@@ -1,12 +1,12 @@
 /** @format */
 
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { ChatCardComponent } from "../../shared/chat-card/chat-card.component";
+import { ChatCardComponent } from "@ui/widgets/chat-card/chat-card.component";
 import { AsyncPipe } from "@angular/common";
-import { BarComponent } from "@ui/components";
+import { BarComponent } from "@ui/primitives";
 import { BackComponent } from "@uilib";
-import { ChatInfoService } from "../../../api/chat/facedes/chat-info.service";
-import { ChatUIInfoService } from "../../../api/chat/facedes/ui/chat-ui-info.service";
+import { ChatInfoService } from "@api/chat/facedes/chat-info.service";
+import { ChatUIInfoService } from "@api/chat/facedes/ui/chat-ui-info.service";
 
 /**
  * Компонент списка чатов - отображает все чаты пользователя

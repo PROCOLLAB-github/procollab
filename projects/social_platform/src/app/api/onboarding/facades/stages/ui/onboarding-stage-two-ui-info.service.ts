@@ -2,8 +2,8 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { NonNullableFormBuilder } from "@angular/forms";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
+import { User } from "@domain/auth/user.model";
+import { Skill } from "@domain/skills/skill";
 
 @Injectable()
 export class OnboardingStageTwoUIInfoService {

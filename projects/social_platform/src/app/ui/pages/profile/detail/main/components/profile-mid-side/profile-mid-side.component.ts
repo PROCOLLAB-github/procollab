@@ -13,16 +13,16 @@ import {
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterModule } from "@angular/router";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { IconComponent, ButtonComponent } from "@ui/components";
-import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
-import { NewsFormComponent } from "@ui/components/news-form/news-form.component";
-import { ProjectDirectionCard } from "@ui/shared/project-direction-card/project-direction-card.component";
-import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
-import { NewsInfoService } from "projects/social_platform/src/app/api/news/news-info.service";
-import { ProfileDetailInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/profile-detail-info.service";
-import { ProfileDetailUIInfoService } from "projects/social_platform/src/app/api/profile/facades/detail/ui/profile-detail-ui-info.service";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { ProfileNews } from "projects/social_platform/src/app/domain/profile/profile-news.model";
+import { IconComponent, ButtonComponent } from "@ui/primitives";
+import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
+import { NewsFormComponent } from "@ui/widgets/news-form/news-form.component";
+import { ProjectDirectionCard } from "@ui/widgets/project-direction-card/project-direction-card.component";
+import { ExpandService } from "@api/expand/expand.service";
+import { NewsInfoService } from "@api/news/news-info.service";
+import { ProfileDetailInfoService } from "@api/profile/facades/detail/profile-detail-info.service";
+import { ProfileDetailUIInfoService } from "@api/profile/facades/detail/ui/profile-detail-ui-info.service";
+import { User } from "@domain/auth/user.model";
+import { ProfileNews } from "@domain/profile/profile-news.model";
 
 @Component({
   selector: "app-profile-mid-side",

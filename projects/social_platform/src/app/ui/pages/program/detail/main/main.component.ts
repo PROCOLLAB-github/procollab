@@ -10,23 +10,23 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { isFailure } from "projects/social_platform/src/app/domain/shared/async-state";
+import { isFailure } from "@domain/shared/async-state";
 import { RouterModule } from "@angular/router";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { ButtonComponent, IconComponent } from "@ui/components";
-import { ModalComponent } from "@ui/components/modal/modal.component";
+import { ButtonComponent, IconComponent } from "@ui/primitives";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { MatProgressBarModule } from "@angular/material/progress-bar";
-import { SoonCardComponent } from "@ui/shared/soon-card/soon-card.component";
-import { NewsFormComponent } from "@ui/components/news-form/news-form.component";
-import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
+import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
+import { NewsFormComponent } from "@ui/widgets/news-form/news-form.component";
+import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 import { UserLinksPipe } from "@core/lib/pipes/user/user-links.pipe";
-import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
-import { ProgramDetailMainUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-main-ui-info.service";
-import { ProgramDetailMainService } from "projects/social_platform/src/app/api/program/facades/detail/program-detail-main-info.service";
-import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
-import { NewsInfoService } from "projects/social_platform/src/app/api/news/news-info.service";
-import { ProjectAdditionalService } from "projects/social_platform/src/app/api/project/facades/edit/project-additional.service";
+import { FeedNews } from "@domain/project/project-news.model";
+import { ProgramDetailMainUIInfoService } from "@api/program/facades/detail/ui/program-detail-main-ui-info.service";
+import { ProgramDetailMainService } from "@api/program/facades/detail/program-detail-main-info.service";
+import { ExpandService } from "@api/expand/expand.service";
+import { NewsInfoService } from "@api/news/news-info.service";
+import { ProjectAdditionalService } from "@api/project/facades/edit/project-additional.service";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
 @Component({

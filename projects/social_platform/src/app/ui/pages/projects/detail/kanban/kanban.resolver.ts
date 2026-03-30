@@ -1,7 +1,7 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { KanbanBoardService } from "../../../../../api/kanban/kanban-board.service";
+import { KanbanBoardService } from "@api/kanban/kanban-board.service";
 import { ActivatedRouteSnapshot, Router } from "@angular/router";
 import { catchError, map, of } from "rxjs";
 

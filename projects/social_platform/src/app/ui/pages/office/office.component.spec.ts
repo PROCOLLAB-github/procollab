@@ -2,12 +2,12 @@
 
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { IndustryRepository } from "projects/social_platform/src/app/infrastructure/repository/industry/industry.repository";
+import { IndustryRepository } from "@infrastructure/repository/industry/industry.repository";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { of } from "rxjs";
 import { OfficeComponent } from "./office.component";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 
 describe("OfficeComponent", () => {
   let component: OfficeComponent;

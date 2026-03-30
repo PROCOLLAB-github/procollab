@@ -1,6 +1,6 @@
 /** @format */
 
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import { User } from "@domain/auth/user.model";
 import { profileFields } from "@core/consts/other/profile-fields.const";
 
 /**

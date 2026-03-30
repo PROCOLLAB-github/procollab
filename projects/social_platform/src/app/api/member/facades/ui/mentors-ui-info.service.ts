@@ -1,8 +1,8 @@
 /** @format */
 
 import { Injectable, signal } from "@angular/core";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { User } from "@domain/auth/user.model";
 
 @Injectable()
 export class MentorsUIInfoService {

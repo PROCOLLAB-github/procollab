@@ -11,10 +11,10 @@ import {
   WritableSignal,
 } from "@angular/core";
 import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
-import { TagComponent } from "@ui/components/tag/tag.component";
-import { ExpandService } from "projects/social_platform/src/app/api/expand/expand.service";
-import { VacancyDetailInfoService } from "projects/social_platform/src/app/api/vacancy/facades/vacancy-detail-info.service";
-import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
+import { TagComponent } from "@ui/primitives/tag/tag.component";
+import { ExpandService } from "@api/expand/expand.service";
+import { VacancyDetailInfoService } from "@api/vacancy/facades/vacancy-detail-info.service";
+import { Vacancy } from "@domain/vacancy/vacancy.model";
 
 @Component({
   selector: "app-vacancies-left-side",

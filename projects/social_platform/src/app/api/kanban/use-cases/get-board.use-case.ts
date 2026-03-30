@@ -2,9 +2,9 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { KanbanRepositoryPort } from "../../../domain/kanban/ports/kanban.repository.port";
-import { Board } from "../../../domain/kanban/board.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { KanbanRepositoryPort } from "@domain/kanban/ports/kanban.repository.port";
+import { Board } from "@domain/kanban/board.model";
 
 export type GetBoardError = { kind: "not_found" } | { kind: "server_error" };
 

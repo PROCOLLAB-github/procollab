@@ -1,12 +1,12 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ProjectRepositoryPort } from "../../../domain/project/ports/project.repository.port";
+import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
 import { catchError, map, Observable, of, tap } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { Project } from "../../../domain/project/project.model";
-import { EventBus } from "../../../domain/shared/event-bus";
-import { projectCreated } from "../../../domain/project/events/project-created.event";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { Project } from "@domain/project/project.model";
+import { EventBus } from "@domain/shared/event-bus";
+import { projectCreated } from "@domain/project/events/project-created.event";
 
 @Injectable({ providedIn: "root" })
 export class CreateProjectUseCase {

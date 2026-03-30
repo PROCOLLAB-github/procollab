@@ -1,10 +1,10 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ProjectResourceRepositoryPort } from "../../../domain/project/ports/project-resource.repository.port";
+import { ProjectResourceRepositoryPort } from "@domain/project/ports/project-resource.repository.port";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { Resource, ResourceDto } from "../../../domain/project/resource.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { Resource, ResourceDto } from "@domain/project/resource.model";
 
 @Injectable({ providedIn: "root" })
 export class CreateResourceUseCase {

@@ -5,7 +5,7 @@ import { FormBuilder, Validators } from "@angular/forms";
 import { Subject } from "rxjs";
 import { ProfileFormService } from "./profile-form.service";
 import { ProfileEditInfoService } from "./profile-edit-info.service";
-import { transformYearStringToNumber } from "@utils/helpers/transformYear";
+import { transformYearStringToNumber } from "@utils/transformYear";
 
 @Injectable()
 export class ProfileEditAchievementsInfoService {

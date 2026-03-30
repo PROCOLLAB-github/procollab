@@ -3,7 +3,7 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { generateOptionsList } from "@utils/generate-options-list";
-import { Program } from "projects/social_platform/src/app/domain/program/program.model";
+import { Program } from "@domain/program/program.model";
 
 @Injectable()
 export class ProgramMainUIInfoService {

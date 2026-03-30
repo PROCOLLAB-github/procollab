@@ -1,11 +1,11 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ProjectRepositoryPort } from "../../../domain/project/ports/project.repository.port";
+import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
 import { catchError, map, Observable, of, tap } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { EventBus } from "../../../domain/shared/event-bus";
-import { projectDeleted } from "../../../domain/project/events/project-deleted.event";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { EventBus } from "@domain/shared/event-bus";
+import { projectDeleted } from "@domain/project/events/project-deleted.event";
 
 @Injectable({ providedIn: "root" })
 export class DeleteProjectUseCase {

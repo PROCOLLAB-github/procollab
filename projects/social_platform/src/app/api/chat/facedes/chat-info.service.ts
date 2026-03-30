@@ -4,7 +4,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NavService } from "@ui/services/nav/nav.service";
 import { ChatService } from "../chat.service";
-import { ChatListItem } from "../../../domain/chat/chat-item.model";
+import { ChatListItem } from "@domain/chat/chat-item.model";
 import { combineLatest, map, Observable, Subject, takeUntil } from "rxjs";
 import { toObservable } from "@angular/core/rxjs-interop";
 import { ChatUIInfoService } from "./ui/chat-ui-info.service";

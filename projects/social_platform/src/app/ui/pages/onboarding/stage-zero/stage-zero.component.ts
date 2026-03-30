@@ -4,17 +4,17 @@ import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ControlErrorPipe } from "@corelib";
-import { ButtonComponent, InputComponent, SelectComponent } from "@ui/components";
+import { ButtonComponent, InputComponent, SelectComponent } from "@ui/primitives";
 import { CommonModule } from "@angular/common";
 import { IconComponent } from "@uilib";
-import { ModalComponent } from "@ui/components/modal/modal.component";
-import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { generateOptionsList } from "@utils/generate-options-list";
-import { OnboardingStageZeroInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/onboarding-stage-zero-info.service";
-import { OnboardingStageZeroUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-zero-ui-info.service";
-import { OnboardingUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-ui-info.service";
-import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
-import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
+import { OnboardingStageZeroInfoService } from "@api/onboarding/facades/stages/onboarding-stage-zero-info.service";
+import { OnboardingStageZeroUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-stage-zero-ui-info.service";
+import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-ui-info.service";
+import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
+import { AvatarControlComponent } from "@ui/primitives/avatar-control/avatar-control.component";
 
 /**
  * КОМПОНЕНТ НУЛЕВОГО ЭТАПА ОНБОРДИНГА

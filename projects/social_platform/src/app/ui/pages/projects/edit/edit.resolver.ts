@@ -3,16 +3,16 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
 import { forkJoin, map } from "rxjs";
-import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import { Goal } from "projects/social_platform/src/app/domain/project/goals.model";
-import { Partner } from "projects/social_platform/src/app/domain/project/partner.model";
-import { Resource } from "projects/social_platform/src/app/domain/project/resource.model";
-import { GetProjectInvitesUseCase } from "projects/social_platform/src/app/api/invite/use-cases/get-project-invites.use-case";
-import { GetProjectUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project.use-case";
-import { GetProjectGoalsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project-goals.use-case";
-import { GetProjectPartnersUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project-partners.use-case";
-import { GetProjectResourcesUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project-resources.use-case";
+import { Invite } from "@domain/invite/invite.model";
+import { Project } from "@domain/project/project.model";
+import { Goal } from "@domain/project/goals.model";
+import { Partner } from "@domain/project/partner.model";
+import { Resource } from "@domain/project/resource.model";
+import { GetProjectInvitesUseCase } from "@api/invite/use-cases/get-project-invites.use-case";
+import { GetProjectUseCase } from "@api/project/use-case/get-project.use-case";
+import { GetProjectGoalsUseCase } from "@api/project/use-case/get-project-goals.use-case";
+import { GetProjectPartnersUseCase } from "@api/project/use-case/get-project-partners.use-case";
+import { GetProjectResourcesUseCase } from "@api/project/use-case/get-project-resources.use-case";
 
 /**
  * Resolver для загрузки данных редактирования проекта

@@ -2,11 +2,11 @@
 
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { Skill } from "../../../domain/skills/skill";
-import { SkillsGroup } from "../../../domain/skills/skills-group";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { Skill } from "@domain/skills/skill";
+import { SkillsGroup } from "@domain/skills/skills-group";
 import { SkillsHttpAdapter } from "../../adapters/skills/skills-http.adapter";
-import { SkillsRepositoryPort } from "../../../domain/skills/ports/skills.repository.port";
+import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class SkillsRepository implements SkillsRepositoryPort {

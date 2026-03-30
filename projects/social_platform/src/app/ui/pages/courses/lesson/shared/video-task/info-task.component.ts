@@ -9,7 +9,7 @@ import { animateContentHeight } from "@utils/animate-content-height";
 import { isHtmlTextTruncated } from "@utils/is-html-text-truncated";
 import { ImagePreviewDirective } from "../image-preview/image-preview.directive";
 import { Task } from "@domain/courses/courses.model";
-import { FileItemComponent } from "@ui/components/file-item/file-item.component";
+import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
 
 /**

@@ -3,11 +3,8 @@
 import { HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { WebsocketService } from "@core/lib/services/websockets/websocket.service";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
-import {
-  ChatFile,
-  ChatMessage,
-} from "projects/social_platform/src/app/domain/chat/chat-message.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { ChatFile, ChatMessage } from "@domain/chat/chat-message.model";
 import {
   ChatEventType,
   DeleteChatMessageDto,
@@ -21,7 +18,7 @@ import {
   SendChatMessageDto,
   TypingInChatDto,
   TypingInChatEventDto,
-} from "projects/social_platform/src/app/domain/chat/chat.model";
+} from "@domain/chat/chat.model";
 import { plainToInstance } from "class-transformer";
 import { ApiService, TokenService } from "@corelib";
 import { BehaviorSubject, map, Observable } from "rxjs";

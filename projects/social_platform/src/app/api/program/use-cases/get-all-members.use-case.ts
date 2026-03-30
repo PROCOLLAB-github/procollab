@@ -1,11 +1,11 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ProgramRepositoryPort } from "../../../domain/program/ports/program.repository.port";
+import { ProgramRepositoryPort } from "@domain/program/ports/program.repository.port";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { User } from "../../../domain/auth/user.model";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { User } from "@domain/auth/user.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 
 @Injectable({ providedIn: "root" })
 export class GetAllMembersUseCase {

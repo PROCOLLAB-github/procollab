@@ -2,18 +2,18 @@
 
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { ButtonComponent } from "@ui/components";
-import { ModalComponent } from "@ui/components/modal/modal.component";
+import { ButtonComponent } from "@ui/primitives";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { IconComponent } from "@uilib";
 import { ReactiveFormsModule } from "@angular/forms";
-import { VacancyDetailInfoService } from "projects/social_platform/src/app/api/vacancy/facades/vacancy-detail-info.service";
-import { VacancyDetailUIInfoService } from "projects/social_platform/src/app/api/vacancy/facades/ui/vacancy-detail-ui-info.service";
+import { VacancyDetailInfoService } from "@api/vacancy/facades/vacancy-detail-info.service";
+import { VacancyDetailUIInfoService } from "@api/vacancy/facades/ui/vacancy-detail-ui-info.service";
 import { VacanciesRightSideComponent } from "./components/vacancies-right-side/vacancies-right-side.component";
 import { VacanciesLeftSideComponent } from "./components/vacancies-left-side/vacancies-left-side.component";
-import { TextareaComponent } from "@ui/components/textarea/textarea.component";
+import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ControlErrorPipe } from "@corelib";
-import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
+import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
 
 /**
  * Компонент отображения детальной информации о вакансии

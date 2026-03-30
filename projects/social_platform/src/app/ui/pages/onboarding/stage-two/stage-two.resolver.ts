@@ -2,7 +2,7 @@
 
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
-import { SkillsGroup } from "projects/social_platform/src/app/domain/skills/skills-group";
+import { SkillsGroup } from "@domain/skills/skills-group";
 import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 
 /**

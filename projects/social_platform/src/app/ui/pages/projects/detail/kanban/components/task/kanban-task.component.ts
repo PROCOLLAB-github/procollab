@@ -3,15 +3,15 @@
 import { CommonModule } from "@angular/common";
 import { Component, computed, inject, Input } from "@angular/core";
 import { IconComponent } from "@uilib";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { TagComponent } from "@ui/components/tag/tag.component";
+import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
+import { TagComponent } from "@ui/primitives/tag/tag.component";
 import { RouterModule } from "@angular/router";
-import { getPriorityType } from "@utils/helpers/getPriorityType";
-import { TaskPreview } from "../../../../../../../domain/kanban/task.model";
-import { KanbanBoardDetailInfoService } from "../../../../../../../api/kanban/kanban-board-detail-info.service";
+import { getPriorityType } from "@utils/getPriorityType";
+import { TaskPreview } from "@domain/kanban/task.model";
+import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-info.service";
 import { PluralizePipe } from "@corelib";
 import { CancelTaskFormComponent } from "../cancel-task-form/cancel-task-form.component";
-import { ModalComponent } from "@ui/components/modal/modal.component";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
 @Component({
   selector: "app-kanban-task",

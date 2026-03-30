@@ -3,12 +3,12 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { SearchComponent } from "@ui/components/search/search.component";
+import { SearchComponent } from "@ui/primitives/search/search.component";
 import { Subscription } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
 import { KanbanTaskComponent } from "../../components/task/kanban-task.component";
-import { KanbanBoardDetailInfoService } from "projects/social_platform/src/app/api/kanban/kanban-board-detail-info.service";
-import { TaskPreview } from "projects/social_platform/src/app/domain/kanban/task.model";
+import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-info.service";
+import { TaskPreview } from "@domain/kanban/task.model";
 
 @Component({
   selector: "app-kanban-archive",

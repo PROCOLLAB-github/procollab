@@ -3,9 +3,9 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, Input, WritableSignal } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { IconComponent } from "@ui/components";
+import { IconComponent } from "@ui/primitives";
 import { TruncatePipe } from "@core/lib/pipes/formatters/truncate.pipe";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
+import { Project } from "@domain/project/project.model";
 import { IndustryInfoService } from "@api/industry/facades/industry-info.service";
 
 @Component({

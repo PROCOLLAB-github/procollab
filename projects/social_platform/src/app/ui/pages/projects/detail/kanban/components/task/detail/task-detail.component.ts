@@ -14,12 +14,12 @@ import {
   signal,
   ViewChild,
 } from "@angular/core";
-import { InputComponent, ButtonComponent } from "@ui/components";
-import { FileItemComponent } from "@ui/components/file-item/file-item.component";
-import { TextareaComponent } from "@ui/components/textarea/textarea.component";
-import { TagComponent } from "@ui/components/tag/tag.component";
-import { BadgeComponent } from "@ui/components/badge/badge.component";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { InputComponent, ButtonComponent } from "@ui/primitives";
+import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
+import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
+import { TagComponent } from "@ui/primitives/tag/tag.component";
+import { BadgeComponent } from "@ui/primitives/badge/badge.component";
+import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import {
   ControlErrorPipe,
@@ -31,34 +31,34 @@ import {
 import { expandElement } from "@utils/expand-element";
 import { IconComponent } from "@uilib";
 import { nanoid } from "nanoid";
-import { DropdownComponent } from "@ui/components/dropdown/dropdown.component";
+import { DropdownComponent } from "@ui/primitives/dropdown/dropdown.component";
 import { priorityInfoList } from "@core/consts/lists/priority-info-list.const";
 import { ClickOutsideModule } from "ng-click-outside";
 import { actionTypeList } from "@core/consts/lists/actiion-type-list.const";
-import { SkillsGroupComponent } from "@ui/shared/skills-group/skills-group.component";
-import { ModalComponent } from "@ui/components/modal/modal.component";
+import { SkillsGroupComponent } from "@ui/widgets/skills-group/skills-group.component";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { map, Subscription } from "rxjs";
-import { TaskDetail } from "../../../../../../../../domain/kanban/task.model";
+import { TaskDetail } from "@domain/kanban/task.model";
 import { daysUntil } from "@utils/days-untit";
-import { KanbanBoardService } from "../../../../../../../../api/kanban/kanban-board.service";
-import { getPriorityType } from "@utils/helpers/getPriorityType";
-import { getActionType } from "@utils/helpers/getActionType";
+import { KanbanBoardService } from "@api/kanban/kanban-board.service";
+import { getPriorityType } from "@utils/getPriorityType";
+import { getActionType } from "@utils/getActionType";
 import { ActivatedRoute } from "@angular/router";
 import { FileService } from "@core/lib/services/file/file.service";
-import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
+import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
-import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
+import { ChatMessage } from "@domain/chat/chat-message.model";
 import {
   CdkFixedSizeVirtualScroll,
   CdkVirtualForOf,
   CdkVirtualScrollViewport,
 } from "@angular/cdk/scrolling";
-import { TagDto } from "../../../../../../../../api/kanban/dto/tag.model.dto";
-import { PerformerDto } from "../../../../../../../../api/kanban/dto/performer.model.dto";
-import { KanbanBoardDetailInfoService } from "../../../../../../../../api/kanban/kanban-board-detail-info.service";
-import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
-import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
+import { TagDto } from "@api/kanban/dto/tag.model.dto";
+import { PerformerDto } from "@api/kanban/dto/performer.model.dto";
+import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-info.service";
+import { Skill } from "@domain/skills/skill";
+import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 
 @Component({

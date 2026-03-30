@@ -2,7 +2,7 @@
 
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, map } from "rxjs";
-import { Notification } from "projects/social_platform/src/app/domain/other/notification.model";
+import { Notification } from "@domain/other/notification.model";
 
 /**
  * Сервис для управления уведомлениями пользователя

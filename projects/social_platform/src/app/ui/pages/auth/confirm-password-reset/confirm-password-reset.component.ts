@@ -2,7 +2,7 @@
 
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { AsyncPipe } from "@angular/common";
-import { AuthPasswordService } from "projects/social_platform/src/app/api/auth/facades/auth-password.service";
+import { AuthPasswordService } from "@api/auth/facades/auth-password.service";
 
 /**
  * Компонент подтверждения сброса пароля

@@ -2,8 +2,8 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { ProjectCollaboratorsRepositoryPort } from "../../../domain/project/ports/project-collaborators.repository.port";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { ProjectCollaboratorsRepositoryPort } from "@domain/project/ports/project-collaborators.repository.port";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class TransferProjectOwnershipUseCase {

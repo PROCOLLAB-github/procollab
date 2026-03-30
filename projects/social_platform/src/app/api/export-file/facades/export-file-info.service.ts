@@ -2,11 +2,11 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { ExportFileService } from "../export-file.service";
-import { saveFile } from "@utils/helpers/export-file";
+import { saveFile } from "@utils/export-file";
 import { ProgramDetailMainUIInfoService } from "../../program/facades/detail/ui/program-detail-main-ui-info.service";
 import { Subject, takeUntil } from "rxjs";
 import { LoggerService } from "@corelib";
-import { AsyncState, failure, initial, loading, success } from "../../../domain/shared/async-state";
+import { AsyncState, failure, initial, loading, success } from "@domain/shared/async-state";
 
 @Injectable()
 export class ExportFileInfoService {

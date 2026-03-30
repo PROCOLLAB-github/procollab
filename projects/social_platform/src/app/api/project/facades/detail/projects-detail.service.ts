@@ -3,13 +3,13 @@
 import { inject, Injectable } from "@angular/core";
 import { filter, map, Observable, Subject, takeUntil, tap } from "rxjs";
 import { NavService } from "@ui/services/nav/nav.service";
-import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
+import { FeedNews } from "@domain/project/project-news.model";
 import { ActivatedRoute } from "@angular/router";
-import { Collaborator } from "projects/social_platform/src/app/domain/project/collaborator.model";
+import { Collaborator } from "@domain/project/collaborator.model";
 import { ExpandService } from "../../../expand/expand.service";
 import { ProjectsDetailUIInfoService } from "./ui/projects-detail-ui.service";
 import { NewsInfoService } from "../../../news/news-info.service";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import { User } from "@domain/auth/user.model";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { RemoveProjectCollaboratorUseCase } from "../../use-case/remove-project-collaborator.use-case";
 import { TransferProjectOwnershipUseCase } from "../../use-case/transfer-project-ownership.use-case";

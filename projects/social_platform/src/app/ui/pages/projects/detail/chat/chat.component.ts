@@ -11,14 +11,14 @@ import {
 } from "@angular/core";
 import { NavService } from "@ui/services/nav/nav.service";
 import { RouterLink } from "@angular/router";
-import { MessageInputComponent } from "@ui/components/message-input/message-input.component";
-import { ChatWindowComponent } from "@ui/components/chat-window/chat-window.component";
-import { FileItemComponent } from "@ui/components/file-item/file-item.component";
-import { IconComponent } from "@ui/components";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
-import { ChatDirectInfoService } from "projects/social_platform/src/app/api/chat/facedes/chat-direct-info.service";
-import { ChatDirectUIInfoService } from "projects/social_platform/src/app/api/chat/facedes/ui/chat-direct-ui-info.service";
+import { MessageInputComponent } from "@ui/widgets/message-input/message-input.component";
+import { ChatWindowComponent } from "@ui/widgets/chat-window/chat-window.component";
+import { FileItemComponent } from "@ui/primitives/file-item/file-item.component";
+import { IconComponent } from "@ui/primitives";
+import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
+import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
+import { ChatDirectInfoService } from "@api/chat/facedes/chat-direct-info.service";
+import { ChatDirectUIInfoService } from "@api/chat/facedes/ui/chat-direct-ui-info.service";
 
 /**
  * Компонент чата проекта

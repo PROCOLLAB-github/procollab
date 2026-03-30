@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { Project, ProjectCount } from "../project.model";
 import { ApiPagination } from "../../other/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
-import { ProjectDto } from "../../../infrastructure/adapters/project/dto/project.dto";
+import { ProjectDto } from "@infrastructure/adapters/project/dto/project.dto";
 
 /**
  * Порт репозитория проектов.

@@ -3,9 +3,9 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router, RouterOutlet } from "@angular/router";
 import { Subscription } from "rxjs";
-import { OnboardingService } from "../../../api/onboarding/onboarding.service";
-import { OnboardingInfoService } from "../../../api/onboarding/facades/onboarding-info.service";
-import { OnboardingUIInfoService } from "../../../api/onboarding/facades/stages/ui/onboarding-ui-info.service";
+import { OnboardingService } from "@api/onboarding/onboarding.service";
+import { OnboardingInfoService } from "@api/onboarding/facades/onboarding-info.service";
+import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-ui-info.service";
 
 /**
  * ОСНОВНОЙ КОМПОНЕНТ ОНБОРДИНГА

@@ -2,17 +2,17 @@
 
 import { CommonModule } from "@angular/common";
 import { Component, inject, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
-import { InputComponent, ButtonComponent, SelectComponent } from "@ui/components";
-import { TextareaComponent } from "@ui/components/textarea/textarea.component";
+import { InputComponent, ButtonComponent, SelectComponent } from "@ui/primitives";
+import { TextareaComponent } from "@ui/primitives/textarea/textarea.component";
 import { AutosizeModule } from "ngx-autosize";
-import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
-import { UploadFileComponent } from "@ui/components/upload-file/upload-file.component";
-import { AvatarControlComponent } from "@ui/components/avatar-control/avatar-control.component";
+import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
+import { UploadFileComponent } from "@ui/primitives/upload-file/upload-file.component";
+import { AvatarControlComponent } from "@ui/primitives/avatar-control/avatar-control.component";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { ProfileFormService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-form.service";
+import { ProfileFormService } from "@api/profile/facades/edit/profile-form.service";
 import { ReactiveFormsModule } from "@angular/forms";
-import { SearchesService } from "projects/social_platform/src/app/api/searches/searches.service";
+import { SearchesService } from "@api/searches/searches.service";
 import { IconComponent } from "@uilib";
 
 @Component({

@@ -4,9 +4,9 @@ import { CommonModule } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { BackComponent } from "@uilib";
-import { SearchComponent } from "@ui/components/search/search.component";
+import { SearchComponent } from "@ui/primitives/search/search.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { SoonCardComponent } from "@ui/shared/soon-card/soon-card.component";
+import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
 
 /**
  * Главный компонент модуля отслеживания карьерных траекторий

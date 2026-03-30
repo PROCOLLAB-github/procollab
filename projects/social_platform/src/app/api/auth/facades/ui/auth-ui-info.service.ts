@@ -4,18 +4,10 @@ import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ValidationService } from "@corelib";
 import dayjs from "dayjs";
-import {
-  LoginError,
-  LoginResult,
-} from "projects/social_platform/src/app/domain/auth/results/login.result";
-import { PasswordError } from "projects/social_platform/src/app/domain/auth/results/password.result";
-import { RegisterError } from "projects/social_platform/src/app/domain/auth/results/register.result";
-import {
-  AsyncState,
-  initial,
-  isFailure,
-  isLoading,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+import { LoginError, LoginResult } from "@domain/auth/results/login.result";
+import { PasswordError } from "@domain/auth/results/password.result";
+import { RegisterError } from "@domain/auth/results/register.result";
+import { AsyncState, initial, isFailure, isLoading } from "@domain/shared/async-state";
 
 @Injectable()
 export class AuthUIInfoService {

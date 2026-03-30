@@ -3,10 +3,10 @@
 import { HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { ProjectRatingRepositoryPort } from "../../../domain/project/ports/project-rating.repository.port";
-import { ProjectRate } from "../../../domain/project/project-rate";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { ProjectRatingRepositoryPort } from "@domain/project/ports/project-rating.repository.port";
+import { ProjectRate } from "@domain/project/project-rate";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class FilterProjectRatingsUseCase {

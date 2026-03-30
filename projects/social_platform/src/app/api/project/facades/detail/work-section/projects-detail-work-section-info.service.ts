@@ -3,7 +3,7 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { map, Subject, takeUntil } from "rxjs";
 import { ActivatedRoute } from "@angular/router";
-import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
+import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
 import { ProjectsDetailWorkSectionUIInfoService } from "./ui/projects-detail-work-section-ui-info.service";
 import { AcceptResponseUseCase } from "../../../../vacancy/use-cases/accept-response.use-case";
 import { RejectResponseUseCase } from "../../../../vacancy/use-cases/reject-response.use-case";

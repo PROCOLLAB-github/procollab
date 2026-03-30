@@ -4,7 +4,7 @@ import { inject, Injectable } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ChatService } from "../chat.service";
 import { ChatDirectService } from "../chat-direct/chat-direct.service";
-import { ChatMessage } from "../../../domain/chat/chat-message.model";
+import { ChatMessage } from "@domain/chat/chat-message.model";
 import { map, Observable, Subject, switchMap, takeUntil, tap } from "rxjs";
 import { ChatDirectUIInfoService } from "./ui/chat-direct-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";

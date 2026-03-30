@@ -2,7 +2,7 @@
 
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
-import { TaskDetail } from "../../domain/kanban/task.model";
+import { TaskDetail } from "@domain/kanban/task.model";
 import { Observable } from "rxjs";
 
 @Injectable({

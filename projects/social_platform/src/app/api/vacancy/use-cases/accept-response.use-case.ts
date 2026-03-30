@@ -1,11 +1,11 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { VacancyRepositoryPort } from "../../../domain/vacancy/ports/vacancy.repository.port";
+import { VacancyRepositoryPort } from "@domain/vacancy/ports/vacancy.repository.port";
 import { catchError, map, Observable, of, switchMap, tap } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { EventBus } from "../../../domain/shared/event-bus";
-import { acceptVacancyResponse } from "../../../domain/vacancy/events/accept-vacancy-response.event";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { EventBus } from "@domain/shared/event-bus";
+import { acceptVacancyResponse } from "@domain/vacancy/events/accept-vacancy-response.event";
 
 @Injectable({ providedIn: "root" })
 export class AcceptResponseUseCase {

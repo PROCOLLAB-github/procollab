@@ -14,12 +14,12 @@ import {
   takeUntil,
   tap,
 } from "rxjs";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
+import { Project } from "@domain/project/project.model";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Goal } from "projects/social_platform/src/app/domain/project/goals.model";
-import { Partner } from "projects/social_platform/src/app/domain/project/partner.model";
-import { Resource } from "projects/social_platform/src/app/domain/project/resource.model";
-import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
+import { Goal } from "@domain/project/goals.model";
+import { Partner } from "@domain/project/partner.model";
+import { Resource } from "@domain/project/resource.model";
+import { Invite } from "@domain/invite/invite.model";
 import { HttpErrorResponse } from "@angular/common/http";
 import { ValidationService } from "@corelib";
 import { SnackbarService } from "@ui/services/snackbar/snackbar.service";
@@ -50,7 +50,7 @@ import {
   isLoading,
   loading,
   success,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+} from "@domain/shared/async-state";
 
 @Injectable()
 export class ProjectsEditInfoService {

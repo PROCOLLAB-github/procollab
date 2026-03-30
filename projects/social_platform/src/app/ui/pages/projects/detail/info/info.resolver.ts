@@ -2,9 +2,9 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
+import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { map } from "rxjs";
-import { GetVacanciesUseCase } from "projects/social_platform/src/app/api/vacancy/use-cases/get-vacancies.use-case";
+import { GetVacanciesUseCase } from "@api/vacancy/use-cases/get-vacancies.use-case";
 
 /**
  * РЕЗОЛВЕР ДЛЯ ЗАГРУЗКИ ВАКАНСИЙ ПРОЕКТА

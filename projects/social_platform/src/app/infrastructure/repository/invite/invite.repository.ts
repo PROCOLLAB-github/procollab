@@ -3,12 +3,12 @@
 import { inject, Injectable } from "@angular/core";
 import { plainToInstance } from "class-transformer";
 import { BehaviorSubject, map, Observable } from "rxjs";
-import { Invite } from "../../../domain/invite/invite.model";
+import { Invite } from "@domain/invite/invite.model";
 import { InviteHttpAdapter } from "../../adapters/invite/invite-http.adapter";
-import { InviteRepositoryPort } from "../../../domain/invite/ports/invite.repository.port";
-import { EventBus } from "../../../domain/shared/event-bus";
-import { AcceptInvite } from "../../../domain/invite/events/accept-invite.event";
-import { RejectInvite } from "../../../domain/invite/events/reject-invite.event";
+import { InviteRepositoryPort } from "@domain/invite/ports/invite.repository.port";
+import { EventBus } from "@domain/shared/event-bus";
+import { AcceptInvite } from "@domain/invite/events/accept-invite.event";
+import { RejectInvite } from "@domain/invite/events/reject-invite.event";
 
 @Injectable({ providedIn: "root" })
 export class InviteRepository implements InviteRepositoryPort {

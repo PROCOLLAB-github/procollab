@@ -11,16 +11,16 @@ import {
 } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
-import { SearchComponent } from "@ui/components/search/search.component";
-import { ButtonComponent, IconComponent } from "@ui/components";
-import { BarNewComponent } from "@ui/components/bar-new/bar.component";
+import { SearchComponent } from "@ui/primitives/search/search.component";
+import { ButtonComponent, IconComponent } from "@ui/primitives";
+import { BarNewComponent } from "@ui/primitives/bar-new/bar.component";
 import { BackComponent } from "@uilib";
-import { SoonCardComponent } from "@ui/shared/soon-card/soon-card.component";
-import { ProjectsFilterComponent } from "../../components/projects-filter/projects-filter.component";
-import { InfoCardComponent } from "@ui/components/info-card/info-card.component";
-import { ProjectsUIInfoService } from "../../../api/project/facades/ui/projects-ui-info.service";
-import { ProjectsInfoService } from "../../../api/project/facades/projects-info.service";
-import { SwipeService } from "../../../api/swipe/swipe.service";
+import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
+import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
+import { ProjectsUIInfoService } from "@api/project/facades/ui/projects-ui-info.service";
+import { ProjectsInfoService } from "@api/project/facades/projects-info.service";
+import { SwipeService } from "@api/swipe/swipe.service";
+import { ProjectsFilterComponent } from "@ui/widgets/projects-filter/projects-filter.component";
 
 /**
  * Главный компонент модуля проектов

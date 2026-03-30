@@ -3,7 +3,7 @@
 import { Observable } from "rxjs";
 import { Vacancy } from "../vacancy.model";
 import { VacancyResponse } from "../vacancy-response.model";
-import { CreateVacancyDto } from "../../../api/project/dto/create-vacancy.model";
+import { CreateVacancyDto } from "@api/project/dto/create-vacancy.model";
 
 /**
  * Порт репозитория вакансий.

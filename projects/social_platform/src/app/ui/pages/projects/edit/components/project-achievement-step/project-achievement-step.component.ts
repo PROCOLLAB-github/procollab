@@ -10,13 +10,13 @@ import {
   OnInit,
 } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { InputComponent, ButtonComponent } from "@ui/components";
+import { InputComponent, ButtonComponent } from "@ui/primitives";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { ProjectFormService } from "../../../../../../api/project/facades/edit/project-form.service";
+import { ProjectFormService } from "@api/project/facades/edit/project-form.service";
 import { IconComponent } from "@uilib";
-import { ProjectAchievementsService } from "projects/social_platform/src/app/api/project/facades/edit/project-achievements.service";
-import { ToggleFieldsInfoService } from "projects/social_platform/src/app/api/toggle-fields/toggle-fields-info.service";
+import { ProjectAchievementsService } from "@api/project/facades/edit/project-achievements.service";
+import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
 
 @Component({
   selector: "app-project-achievement-step",

@@ -1,15 +1,9 @@
 /** @format */
 
 import { computed, Injectable, signal } from "@angular/core";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
-import { FeedItem } from "projects/social_platform/src/app/domain/feed/feed-item.model";
-import {
-  AsyncState,
-  initial,
-  isLoading,
-  isSuccess,
-  success,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { FeedItem } from "@domain/feed/feed-item.model";
+import { AsyncState, initial, isLoading, isSuccess, success } from "@domain/shared/async-state";
 
 @Injectable()
 export class FeedUIInfoService {

@@ -2,8 +2,8 @@
 
 import { Injectable, signal } from "@angular/core";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { Program } from "projects/social_platform/src/app/domain/program/program.model";
-import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
+import { Program } from "@domain/program/program.model";
+import { FeedNews } from "@domain/project/project-news.model";
 
 @Injectable({ providedIn: "root" })
 export class ProgramDetailMainUIInfoService {

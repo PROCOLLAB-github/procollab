@@ -1,12 +1,12 @@
 /** @format */
 
 import { inject } from "@angular/core";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
 import { ResolveFn } from "@angular/router";
 import { map } from "rxjs";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import { GetAllProjectsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-all-projects.use-case";
+import { Project } from "@domain/project/project.model";
+import { GetAllProjectsUseCase } from "@api/project/use-case/get-all-projects.use-case";
 
 /**
  * РЕЗОЛВЕР ДЛЯ ПОЛУЧЕНИЯ ВСЕХ ПРОЕКТОВ

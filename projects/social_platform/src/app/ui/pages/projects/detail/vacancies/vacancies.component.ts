@@ -2,9 +2,9 @@
 
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { ProjectVacancyCardComponent } from "../../../../shared/project-vacancy-card/project-vacancy-card.component";
-import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
-import { ProjectsDetailService } from "projects/social_platform/src/app/api/project/facades/detail/projects-detail.service";
+import { ProjectVacancyCardComponent } from "@ui/widgets/project-vacancy-card/project-vacancy-card.component";
+import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
+import { ProjectsDetailService } from "@api/project/facades/detail/projects-detail.service";
 
 /**
  * Компонент страницы вакансий в деательной информации о проекте

@@ -4,8 +4,8 @@ import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { FeedItem } from "../../../domain/feed/feed-item.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { FeedItem } from "@domain/feed/feed-item.model";
 
 @Injectable({ providedIn: "root" })
 export class FeedHttpAdapter {

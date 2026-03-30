@@ -11,13 +11,13 @@ import {
   ViewChild,
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { NewsCardComponent } from "@ui/components/news-card/news-card.component";
-import { OpenVacancyComponent } from "../../shared/open-vacancy/open-vacancy.component";
-import { IconComponent } from "@ui/components";
-import { NewProjectComponent } from "@ui/shared/new-project/new-project.component";
-import { FeedFilterComponent } from "@ui/components/feed-filter/feed-filter.component";
-import { FeedInfoService } from "../../../api/feed/facades/feed-info.service";
-import { FeedUIInfoService } from "../../../api/feed/facades/ui/feed-ui-info.service";
+import { NewsCardComponent } from "@ui/widgets/news-card/news-card.component";
+import { OpenVacancyComponent } from "@ui/widgets/open-vacancy/open-vacancy.component";
+import { IconComponent } from "@ui/primitives";
+import { NewProjectComponent } from "@ui/widgets/new-project/new-project.component";
+import { FeedFilterComponent } from "@ui/widgets/feed-filter/feed-filter.component";
+import { FeedInfoService } from "@api/feed/facades/feed-info.service";
+import { FeedUIInfoService } from "@api/feed/facades/ui/feed-ui-info.service";
 
 @Component({
   selector: "app-feed",

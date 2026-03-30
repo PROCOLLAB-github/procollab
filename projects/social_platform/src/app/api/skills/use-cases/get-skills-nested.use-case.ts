@@ -2,9 +2,9 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { SkillsRepositoryPort } from "../../../domain/skills/ports/skills.repository.port";
-import { SkillsGroup } from "../../../domain/skills/skills-group";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
+import { SkillsGroup } from "@domain/skills/skills-group";
 
 export type GetSkillsNestedError = { kind: "server_error" };
 

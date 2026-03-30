@@ -1,7 +1,7 @@
 /** @format */
 
 import * as dayjs from "dayjs";
-import { FileModel } from "projects/social_platform/src/app/domain/file/file.model";
+import { FileModel } from "@domain/file/file.model";
 
 /**
  * Модель данных для новости профиля пользователя

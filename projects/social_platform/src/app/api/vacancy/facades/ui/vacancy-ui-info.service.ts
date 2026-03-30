@@ -2,14 +2,9 @@
 
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import {
-  AsyncState,
-  initial,
-  isLoading,
-  isSuccess,
-} from "projects/social_platform/src/app/domain/shared/async-state";
-import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
-import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
+import { AsyncState, initial, isLoading, isSuccess } from "@domain/shared/async-state";
+import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
+import { Vacancy } from "@domain/vacancy/vacancy.model";
 
 @Injectable()
 export class VacancyUIInfoService {

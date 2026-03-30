@@ -4,7 +4,7 @@ import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
 import { CoursesRepositoryPort } from "@domain/courses/ports/courses.repository.port";
 import { CourseDetail } from "@domain/courses/courses.model";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class GetCourseDetailUseCase {

@@ -2,11 +2,11 @@
 
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { Specialization } from "../../../domain/specializations/specialization";
-import { SpecializationsGroup } from "../../../domain/specializations/specializations-group";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { Specialization } from "@domain/specializations/specialization";
+import { SpecializationsGroup } from "@domain/specializations/specializations-group";
 import { SpecializationsHttpAdapter } from "../../adapters/specializations/specializations-http.adapter";
-import { SpecializationsRepositoryPort } from "../../../domain/specializations/ports/specializations.repository.port";
+import { SpecializationsRepositoryPort } from "@domain/specializations/ports/specializations.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class SpecializationsRepository implements SpecializationsRepositoryPort {

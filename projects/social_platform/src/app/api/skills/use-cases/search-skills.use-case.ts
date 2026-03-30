@@ -2,10 +2,10 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { SkillsRepositoryPort } from "../../../domain/skills/ports/skills.repository.port";
-import { Skill } from "../../../domain/skills/skill";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { SkillsRepositoryPort } from "@domain/skills/ports/skills.repository.port";
+import { Skill } from "@domain/skills/skill";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 
 export type SearchSkillsError = { kind: "server_error" };
 

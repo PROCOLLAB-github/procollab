@@ -1,5 +1,5 @@
 /** @format */
-import type { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
+import type { ChatMessage } from "@domain/chat/chat-message.model";
 
 /**
  * Класс для уведомления об изменении статуса пользователя

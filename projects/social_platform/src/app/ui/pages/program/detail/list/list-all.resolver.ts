@@ -3,10 +3,10 @@
 import { HttpParams } from "@angular/common/http";
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn, Router } from "@angular/router";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
-import { ProjectRate } from "projects/social_platform/src/app/domain/project/project-rate";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { ProjectRate } from "@domain/project/project-rate";
 import { catchError, EMPTY, map } from "rxjs";
-import { GetProjectRatingsUseCase } from "projects/social_platform/src/app/api/program/use-cases/get-project-ratings.use-case";
+import { GetProjectRatingsUseCase } from "@api/program/use-cases/get-project-ratings.use-case";
 
 /**
  * Резолвер для предзагрузки проектов для оценки

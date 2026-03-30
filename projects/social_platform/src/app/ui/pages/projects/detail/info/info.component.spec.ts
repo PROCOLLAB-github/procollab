@@ -6,8 +6,8 @@ import { ProjectInfoComponent } from "./info.component";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { of } from "rxjs";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
-import { ProjectNewsRepository as ProjectNewsService } from "projects/social_platform/src/app/infrastructure/repository/project/project-news.repository";
+import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
+import { ProjectNewsRepository as ProjectNewsService } from "@infrastructure/repository/project/project-news.repository";
 import { ReactiveFormsModule } from "@angular/forms";
 
 describe("ProjectInfoComponent", () => {

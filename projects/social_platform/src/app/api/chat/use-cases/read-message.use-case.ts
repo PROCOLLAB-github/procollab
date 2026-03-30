@@ -1,8 +1,8 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ChatRealtimePort } from "../../../domain/chat/ports/chat-realtime.port";
-import { ReadChatMessageDto } from "../../../domain/chat/chat.model";
+import { ChatRealtimePort } from "@domain/chat/ports/chat-realtime.port";
+import { ReadChatMessageDto } from "@domain/chat/chat.model";
 
 @Injectable({ providedIn: "root" })
 export class ReadMessageUseCase {

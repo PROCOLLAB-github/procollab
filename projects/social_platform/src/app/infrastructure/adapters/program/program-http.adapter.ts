@@ -4,13 +4,13 @@ import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { User } from "../../../domain/auth/user.model";
-import { PartnerProgramFields } from "../../../domain/program/partner-program-fields.model";
-import { Program, ProgramDataSchema } from "../../../domain/program/program.model";
-import { ProgramCreate } from "../../../domain/program/program-create.model";
-import { Project } from "../../../domain/project/project.model";
-import { ProjectAdditionalFields } from "../../../domain/project/project-additional-fields.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { User } from "@domain/auth/user.model";
+import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
+import { Program, ProgramDataSchema } from "@domain/program/program.model";
+import { ProgramCreate } from "@domain/program/program-create.model";
+import { Project } from "@domain/project/project.model";
+import { ProjectAdditionalFields } from "@domain/project/project-additional-fields.model";
 
 @Injectable({ providedIn: "root" })
 export class ProgramHttpAdapter {

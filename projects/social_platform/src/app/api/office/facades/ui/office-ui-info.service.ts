@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable, signal } from "@angular/core";
-import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
+import { Invite } from "@domain/invite/invite.model";
 
 @Injectable()
 export class OfficeUIInfoService {

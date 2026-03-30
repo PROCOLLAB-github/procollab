@@ -1,11 +1,11 @@
 /** @format */
 
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { ButtonComponent } from "@ui/components";
-import { UserTypeCardComponent } from "@ui/shared/user-type-card/user-type-card.component";
-import { OnboardingStageThreeUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-three-ui-info.service";
-import { OnboardingStageThreeInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/onboarding-stage-three-info.service";
-import { OnboardingUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-ui-info.service";
+import { ButtonComponent } from "@ui/primitives";
+import { UserTypeCardComponent } from "@ui/widgets/user-type-card/user-type-card.component";
+import { OnboardingStageThreeUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-stage-three-ui-info.service";
+import { OnboardingStageThreeInfoService } from "@api/onboarding/facades/stages/onboarding-stage-three-info.service";
+import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-ui-info.service";
 
 /**
  * КОМПОНЕНТ ТРЕТЬЕГО ЭТАПА ОНБОРДИНГА

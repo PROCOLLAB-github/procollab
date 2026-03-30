@@ -1,10 +1,10 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { VacancyRepositoryPort } from "../../../domain/vacancy/ports/vacancy.repository.port";
-import { VacancyResponse } from "../../../domain/vacancy/vacancy-response.model";
+import { VacancyRepositoryPort } from "@domain/vacancy/ports/vacancy.repository.port";
+import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class GetProjectResponsesUseCase {

@@ -3,11 +3,11 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService, TokenService } from "@corelib";
 import { Observable } from "rxjs";
-import { LoginResponse, RegisterResponse } from "../../../domain/auth/http.model";
-import { User } from "../../../domain/auth/user.model";
+import { LoginResponse, RegisterResponse } from "@domain/auth/http.model";
+import { User } from "@domain/auth/user.model";
 import { ProjectDto } from "../project/dto/project.dto";
-import { LoginCommand } from "../../../domain/auth/commands/login.command";
-import { RegisterCommand } from "../../../domain/auth/commands/register.command";
+import { LoginCommand } from "@domain/auth/commands/login.command";
+import { RegisterCommand } from "@domain/auth/commands/register.command";
 import { ApiPagination } from "@domain/other/api-pagination.model";
 
 @Injectable({ providedIn: "root" })

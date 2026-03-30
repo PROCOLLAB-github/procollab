@@ -2,16 +2,16 @@
 
 import { inject, Injectable } from "@angular/core";
 import { AuthHttpAdapter } from "../../adapters/auth/auth-http.adapter";
-import { User, UserRole } from "../../../domain/auth/user.model";
+import { User, UserRole } from "@domain/auth/user.model";
 import { concatMap, map, Observable, ReplaySubject, take, tap } from "rxjs";
-import { LoginResponse, RegisterResponse } from "../../../domain/auth/http.model";
+import { LoginResponse, RegisterResponse } from "@domain/auth/http.model";
 import { plainToInstance } from "class-transformer";
 import { TokenService } from "@corelib";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { Project } from "../../../domain/project/project.model";
-import { AuthRepositoryPort } from "../../../domain/auth/ports/auth.repository.port";
-import { LoginCommand } from "../../../domain/auth/commands/login.command";
-import { RegisterCommand } from "../../../domain/auth/commands/register.command";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { Project } from "@domain/project/project.model";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
+import { LoginCommand } from "@domain/auth/commands/login.command";
+import { RegisterCommand } from "@domain/auth/commands/register.command";
 
 @Injectable({ providedIn: "root" })
 export class AuthRepository implements AuthRepositoryPort {

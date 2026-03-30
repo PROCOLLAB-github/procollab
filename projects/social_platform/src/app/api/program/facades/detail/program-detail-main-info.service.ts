@@ -3,14 +3,14 @@
 import { ElementRef, inject, Injectable, signal } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { concatMap, fromEvent, map, of, Subject, takeUntil, tap, throttleTime } from "rxjs";
-import { FeedNews } from "projects/social_platform/src/app/domain/project/project-news.model";
+import { FeedNews } from "@domain/project/project-news.model";
 import { LoadingService } from "@ui/services/loading/loading.service";
 import { ExpandService } from "../../../expand/expand.service";
 import { ProgramDetailMainUIInfoService } from "./ui/program-detail-main-ui-info.service";
 import { NewsInfoService } from "../../../news/news-info.service";
 import { FetchNewsUseCase } from "../../use-cases/fetch-news.use-case";
 import { ReadNewsUseCase } from "../../use-cases/read-news.use-case";
-import { ok } from "projects/social_platform/src/app/domain/shared/result.type";
+import { ok } from "@domain/shared/result.type";
 import { AddNewsUseCase } from "../../use-cases/add-news.use-case";
 import { DeleteNewsUseCase } from "../../use-cases/delete-news.use-case";
 import { ToggleLikeUseCase } from "../../use-cases/toggle-like.use-case";

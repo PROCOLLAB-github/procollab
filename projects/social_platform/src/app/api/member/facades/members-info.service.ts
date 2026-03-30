@@ -19,16 +19,16 @@ import {
   tap,
   throttleTime,
 } from "rxjs";
-import { User } from "../../../domain/auth/user.model";
+import { User } from "@domain/auth/user.model";
 import { AbstractControl } from "@angular/forms";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 import { MembersUIInfoService } from "./ui/members-ui-info.service";
 import { NavigationService } from "../../paths/navigation.service";
 import { ProjectsDetailUIInfoService } from "../../project/facades/detail/ui/projects-detail-ui.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { GetMembersUseCase } from "../use-case/get-members.use-case";
-import { isSuccess, loading, success } from "../../../domain/shared/async-state";
+import { isSuccess, loading, success } from "@domain/shared/async-state";
 
 @Injectable()
 export class MembersInfoService {

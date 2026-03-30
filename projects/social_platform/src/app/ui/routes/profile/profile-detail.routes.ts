@@ -4,8 +4,8 @@ import { Routes } from "@angular/router";
 import { ProfileDetailResolver } from "../../pages/profile/detail/profile-detail.resolver";
 import { ProfileMainComponent } from "../../pages/profile/detail/main/main.component";
 import { ProfileMainResolver } from "../../pages/profile/detail/main/main.resolver";
-import { ProfileNewsComponent } from "../../shared/profile-news/profile-news.component";
-import { DeatilComponent } from "@ui/components/detail/detail.component";
+import { DeatilComponent } from "@ui/widgets/detail/detail.component";
+import { ProfileNewsComponent } from "@ui/widgets/profile-news/profile-news.component";
 
 /**
  * Конфигурация маршрутов для детального просмотра профиля пользователя

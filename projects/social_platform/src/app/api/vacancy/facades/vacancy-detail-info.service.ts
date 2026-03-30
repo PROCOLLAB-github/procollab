@@ -7,7 +7,7 @@ import { ValidationService } from "@corelib";
 import { VacancyDetailUIInfoService } from "./ui/vacancy-detail-ui-info.service";
 import { ExpandService } from "../../expand/expand.service";
 import { SendVacancyResponseUseCase } from "../use-cases/send-vacancy-response.use-case";
-import { loading } from "projects/social_platform/src/app/domain/shared/async-state";
+import { loading } from "@domain/shared/async-state";
 
 @Injectable()
 export class VacancyDetailInfoService {

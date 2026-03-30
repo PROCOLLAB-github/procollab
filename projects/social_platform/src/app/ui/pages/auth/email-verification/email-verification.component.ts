@@ -1,8 +1,8 @@
 /** @format */
 
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { IconComponent } from "@ui/components";
-import { AuthEmailService } from "projects/social_platform/src/app/api/auth/facades/auth-email.service";
+import { IconComponent } from "@ui/primitives";
+import { AuthEmailService } from "@api/auth/facades/auth-email.service";
 import { CommonModule } from "@angular/common";
 
 /**

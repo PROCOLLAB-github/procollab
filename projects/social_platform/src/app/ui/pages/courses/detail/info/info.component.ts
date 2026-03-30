@@ -14,10 +14,10 @@ import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { IconComponent } from "@uilib";
 import { expandElement } from "@utils/expand-element";
 import { CommonModule } from "@angular/common";
-import { ModalComponent } from "@ui/components/modal/modal.component";
-import { ButtonComponent } from "@ui/components";
-import { SoonCardComponent } from "@ui/shared/soon-card/soon-card.component";
-import { CourseModuleCardComponent } from "../../../../components/course-module-card/course-module-card.component";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import { ButtonComponent } from "@ui/primitives";
+import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
+import { CourseModuleCardComponent } from "@ui/widgets/course-module-card/course-module-card.component";
 import { CourseDetailUIInfoService } from "@api/courses/facades/ui/course-detail-ui-info.service";
 
 @Component({

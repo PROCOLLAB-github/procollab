@@ -2,9 +2,9 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { ProfileNewsRepositoryPort } from "../../../domain/profile/ports/profile-news.repository.port";
-import { ProjectNewsRepositoryPort } from "../../../domain/project/ports/project-news.repository.port";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { ProfileNewsRepositoryPort } from "@domain/profile/ports/profile-news.repository.port";
+import { ProjectNewsRepositoryPort } from "@domain/project/ports/project-news.repository.port";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class ToggleFeedLikeUseCase {

@@ -6,9 +6,9 @@ import { Subject, takeUntil, tap } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { ValidationService } from "@corelib";
 import { RegisterUseCase } from "../use-cases/register.use-case";
-import { toAsyncState } from "../../../domain/shared/to-async-state";
-import { RegisterError } from "../../../domain/auth/results/register.result";
-import { isFailure } from "../../../domain/shared/async-state";
+import { toAsyncState } from "@domain/shared/to-async-state";
+import { RegisterError } from "@domain/auth/results/register.result";
+import { isFailure } from "@domain/shared/async-state";
 
 @Injectable()
 export class AuthRegisterService {

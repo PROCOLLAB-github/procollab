@@ -11,15 +11,15 @@ import {
   ViewChild,
 } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { IconComponent } from "@ui/components";
-import { InfoCardComponent } from "@ui/components/info-card/info-card.component";
-import { ProjectsListInfoService } from "projects/social_platform/src/app/api/project/facades/list/projects-list-info.service";
-import { SwipeService } from "projects/social_platform/src/app/api/swipe/swipe.service";
-import { ProjectsInfoService } from "projects/social_platform/src/app/api/project/facades/projects-info.service";
-import { OfficeInfoService } from "projects/social_platform/src/app/api/office/facades/office-info.service";
-import { ProgramDetailListUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-list-ui-info.service";
-import { ProgramDetailListInfoService } from "projects/social_platform/src/app/api/program/facades/detail/program-detail-list-info.service";
-import { OfficeUIInfoService } from "projects/social_platform/src/app/api/office/facades/ui/office-ui-info.service";
+import { IconComponent } from "@ui/primitives";
+import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
+import { ProjectsListInfoService } from "@api/project/facades/list/projects-list-info.service";
+import { SwipeService } from "@api/swipe/swipe.service";
+import { ProjectsInfoService } from "@api/project/facades/projects-info.service";
+import { OfficeInfoService } from "@api/office/facades/office-info.service";
+import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
+import { ProgramDetailListInfoService } from "@api/program/facades/detail/program-detail-list-info.service";
+import { OfficeUIInfoService } from "@api/office/facades/ui/office-ui-info.service";
 
 /**
  * КОМПОНЕНТ СПИСКА ПРОЕКТОВ

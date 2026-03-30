@@ -3,16 +3,16 @@
 import { inject, Injectable } from "@angular/core";
 import { plainToInstance } from "class-transformer";
 import { map, Observable } from "rxjs";
-import { CreateVacancyDto } from "../../../api/project/dto/create-vacancy.model";
-import { VacancyResponse } from "../../../domain/vacancy/vacancy-response.model";
-import { Vacancy } from "../../../domain/vacancy/vacancy.model";
+import { CreateVacancyDto } from "@api/project/dto/create-vacancy.model";
+import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
+import { Vacancy } from "@domain/vacancy/vacancy.model";
 import { VacancyHttpAdapter } from "../../adapters/vacancy/vacancy-http.adapter";
-import { VacancyRepositoryPort } from "../../../domain/vacancy/ports/vacancy.repository.port";
-import { EntityCache } from "../../../domain/shared/entity-cache";
-import { EventBus } from "../../../domain/shared/event-bus";
-import { VacancyCreated } from "../../../domain/vacancy/events/vacancy-created.event";
-import { VacancyUpdated } from "../../../domain/vacancy/events/vacancy-updated.event";
-import { VacancyDelete } from "../../../domain/vacancy/events/vacancy-deleted.event";
+import { VacancyRepositoryPort } from "@domain/vacancy/ports/vacancy.repository.port";
+import { EntityCache } from "@domain/shared/entity-cache";
+import { EventBus } from "@domain/shared/event-bus";
+import { VacancyCreated } from "@domain/vacancy/events/vacancy-created.event";
+import { VacancyUpdated } from "@domain/vacancy/events/vacancy-updated.event";
+import { VacancyDelete } from "@domain/vacancy/events/vacancy-deleted.event";
 
 @Injectable({ providedIn: "root" })
 export class VacancyRepository implements VacancyRepositoryPort {

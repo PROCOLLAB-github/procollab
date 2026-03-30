@@ -2,9 +2,9 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { ProgramDataSchema } from "projects/social_platform/src/app/domain/program/program.model";
+import { ProgramDataSchema } from "@domain/program/program.model";
 import { map } from "rxjs";
-import { GetProgramDataSchemaUseCase } from "projects/social_platform/src/app/api/program/use-cases/get-program-data-schema.use-case";
+import { GetProgramDataSchemaUseCase } from "@api/program/use-cases/get-program-data-schema.use-case";
 
 /**
  * Резолвер для получения схемы данных регистрации в программе

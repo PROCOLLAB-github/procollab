@@ -2,7 +2,7 @@
 
 import { inject } from "@angular/core";
 import { map } from "rxjs";
-import { GetVacanciesUseCase } from "../../../api/vacancy/use-cases/get-vacancies.use-case";
+import { GetVacanciesUseCase } from "@api/vacancy/use-cases/get-vacancies.use-case";
 
 /**
  * Резолвер для предзагрузки списка вакансий

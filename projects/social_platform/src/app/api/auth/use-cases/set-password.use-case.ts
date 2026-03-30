@@ -2,8 +2,8 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { AuthRepositoryPort } from "../../../domain/auth/ports/auth.repository.port";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class SetPasswordUseCase {

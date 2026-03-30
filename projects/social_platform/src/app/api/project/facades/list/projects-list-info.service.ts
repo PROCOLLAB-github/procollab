@@ -17,10 +17,10 @@ import {
 import { NavService } from "@ui/services/nav/nav.service";
 import { ProjectsInfoService } from "../projects-info.service";
 import { ProgramDetailListInfoService } from "../../../program/facades/detail/program-detail-list-info.service";
-import { inviteToProjectMapper } from "@utils/helpers/inviteToProjectMapper";
+import { inviteToProjectMapper } from "@utils/inviteToProjectMapper";
 import { HttpParams } from "@angular/common/http";
-import { ApiPagination } from "../../../../domain/other/api-pagination.model";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { Project } from "@domain/project/project.model";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { GetAllProjectsUseCase } from "../../use-case/get-all-projects.use-case";
 import { GetMyProjectsUseCase } from "../../use-case/get-my-projects.use-case";
@@ -32,7 +32,7 @@ import {
   isSuccess,
   loading,
   success,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+} from "@domain/shared/async-state";
 
 @Injectable()
 export class ProjectsListInfoService {

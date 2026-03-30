@@ -5,7 +5,7 @@ import { Component, inject, OnInit, signal } from "@angular/core";
 import { RouterOutlet, ActivatedRoute } from "@angular/router";
 import { KanbanBoardSidebarComponent } from "./components/sidebar/kanban-board-sidebar.component";
 import { TaskDetailComponent } from "./components/task/detail/task-detail.component";
-import { KanbanBoardDetailInfoService } from "../../../../../api/kanban/kanban-board-detail-info.service";
+import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-info.service";
 import { Subscription } from "rxjs";
 import { ClickOutsideModule } from "ng-click-outside";
 

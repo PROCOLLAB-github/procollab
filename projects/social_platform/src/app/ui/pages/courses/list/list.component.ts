@@ -3,8 +3,8 @@
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
-import { CourseComponent } from "../../../components/course/course.component";
-import { LoaderComponent } from "@ui/components/loader/loader.component";
+import { CourseComponent } from "@ui/widgets/course/course.component";
+import { LoaderComponent } from "@ui/primitives/loader/loader.component";
 import { CoursesListInfoService } from "@api/courses/facades/courses-list-info.service";
 import { CoursesListUIInfoService } from "@api/courses/facades/ui/courses-list-ui-info.service";
 

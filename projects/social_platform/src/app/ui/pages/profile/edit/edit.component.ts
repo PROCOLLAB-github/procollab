@@ -10,40 +10,37 @@ import {
   OnInit,
   signal,
 } from "@angular/core";
-import { isLoading } from "projects/social_platform/src/app/domain/shared/async-state";
+import { isLoading } from "@domain/shared/async-state";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { ButtonComponent, IconComponent } from "@ui/components";
+import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { RouterModule } from "@angular/router";
 import * as dayjs from "dayjs";
 import * as cpf from "dayjs/plugin/customParseFormat";
-import { EditorSubmitButtonDirective } from "@ui/directives/editor-submit-button.directive";
+import { EditorSubmitButtonDirective } from "./editor-submit-button.directive";
 import { AsyncPipe, CommonModule } from "@angular/common";
-import { Specialization } from "projects/social_platform/src/app/domain/specializations/specialization";
-import { SkillsGroupComponent } from "@ui/shared/skills-group/skills-group.component";
-import { SpecializationsGroupComponent } from "@ui/shared/specializations-group/specializations-group.component";
-import { ModalComponent } from "@ui/components/modal/modal.component";
+import { Specialization } from "@domain/specializations/specialization";
+import { SkillsGroupComponent } from "@ui/widgets/skills-group/skills-group.component";
+import { SpecializationsGroupComponent } from "@ui/widgets/specializations-group/specializations-group.component";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
 import { navProfileItems } from "@core/consts/navigation/nav-profile-items.const";
-import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
-import { ProfileFormService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-form.service";
-import {
-  EditStep,
-  ProjectStepService,
-} from "projects/social_platform/src/app/api/project/project-step.service";
-import { ProfileEditInfoService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-edit-info.service";
-import { OnboardingStageOneUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-one-ui-info.service";
-import { OnboardingStageOneInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/onboarding-stage-one-info.service";
-import { ProjectVacancyUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-vacancy-ui.service";
-import { ProfileEditEducationInfoService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-edit-education-info.service";
-import { ProfileEditExperienceInfoService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-edit-experience-info.service";
-import { ProfileEditSkillsInfoService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-edit-skills-info.service";
+import { Skill } from "@domain/skills/skill";
+import { ProfileFormService } from "@api/profile/facades/edit/profile-form.service";
+import { EditStep, ProjectStepService } from "@api/project/project-step.service";
+import { ProfileEditInfoService } from "@api/profile/facades/edit/profile-edit-info.service";
+import { OnboardingStageOneUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-stage-one-ui-info.service";
+import { OnboardingStageOneInfoService } from "@api/onboarding/facades/stages/onboarding-stage-one-info.service";
+import { ProjectVacancyUIService } from "@api/project/facades/edit/ui/project-vacancy-ui.service";
+import { ProfileEditEducationInfoService } from "@api/profile/facades/edit/profile-edit-education-info.service";
+import { ProfileEditExperienceInfoService } from "@api/profile/facades/edit/profile-edit-experience-info.service";
+import { ProfileEditSkillsInfoService } from "@api/profile/facades/edit/profile-edit-skills-info.service";
 import { ProjectNavigationComponent } from "@ui/pages/projects/edit/components/project-navigation/project-navigation.component";
 import { ProfileMainStepComponent } from "./components/profile-main-step/profile-main-step.component";
 import { ProfileEducationStepComponent } from "./components/profile-education-step/profile-education-step.component";
 import { ProfileExperienceStepComponent } from "./components/profile-experience-step/profile-experience-step.component";
 import { ProfileAchievementsStepComponent } from "./components/profile-achievements-step/profile-achievements-step.component";
 import { ProfileSkillsStepComponent } from "./components/profile-skills-step/profile-skills-step.component";
-import { OnboardingUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-ui-info.service";
+import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-ui-info.service";
 import { SpecializationsInfoService } from "@api/specializations/facades/specializations-info.service";
 import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 import { ProjectsEditUIInfoService } from "@api/project/facades/edit/ui/projects-edit-ui-info.service";

@@ -2,23 +2,23 @@
 
 import { inject, Injectable } from "@angular/core";
 import { BehaviorSubject, map, Observable, tap } from "rxjs";
-import { Project, ProjectCount } from "../../../domain/project/project.model";
+import { Project, ProjectCount } from "@domain/project/project.model";
 import { ProjectHttpAdapter } from "../../adapters/project/project-http.adapter";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
 import { HttpParams } from "@angular/common/http";
 import { plainToInstance } from "class-transformer";
 import { ProjectDto } from "../../adapters/project/dto/project.dto";
-import { ProjectRepositoryPort } from "../../../domain/project/ports/project.repository.port";
-import { EventBus } from "../../../domain/shared/event-bus";
-import { ProjectCreated } from "../../../domain/project/events/project-created.event";
-import { ProjectDeleted } from "../../../domain/project/events/project-deleted.event";
-import { ProjectSubscribed } from "../../../domain/project/events/project-subscribed.event";
-import { ProjectUnSubscribed } from "../../../domain/project/events/project-unsubsribed.event";
-import { RemoveProjectCollaborator } from "../../../domain/project/events/remove-project-collaborator.event";
-import { SendVacancyResponse } from "../../../domain/vacancy/events/send-vacancy-response.event";
-import { AcceptVacancyResponse } from "../../../domain/vacancy/events/accept-vacancy-response.event";
-import { RejectVacancyResponse } from "../../../domain/vacancy/events/reject-vacancy-response.event";
-import { EntityCache } from "../../../domain/shared/entity-cache";
+import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
+import { EventBus } from "@domain/shared/event-bus";
+import { ProjectCreated } from "@domain/project/events/project-created.event";
+import { ProjectDeleted } from "@domain/project/events/project-deleted.event";
+import { ProjectSubscribed } from "@domain/project/events/project-subscribed.event";
+import { ProjectUnSubscribed } from "@domain/project/events/project-unsubsribed.event";
+import { RemoveProjectCollaborator } from "@domain/project/events/remove-project-collaborator.event";
+import { SendVacancyResponse } from "@domain/vacancy/events/send-vacancy-response.event";
+import { AcceptVacancyResponse } from "@domain/vacancy/events/accept-vacancy-response.event";
+import { RejectVacancyResponse } from "@domain/vacancy/events/reject-vacancy-response.event";
+import { EntityCache } from "@domain/shared/entity-cache";
 
 @Injectable({ providedIn: "root" })
 export class ProjectRepository implements ProjectRepositoryPort {

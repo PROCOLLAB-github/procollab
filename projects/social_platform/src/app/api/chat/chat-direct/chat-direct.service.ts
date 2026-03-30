@@ -4,9 +4,9 @@ import { Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
 import { HttpParams } from "@angular/common/http";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
-import { ChatMessage } from "projects/social_platform/src/app/domain/chat/chat-message.model";
-import { ChatItem, ChatListItem } from "../../../domain/chat/chat-item.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { ChatMessage } from "@domain/chat/chat-message.model";
+import { ChatItem, ChatListItem } from "@domain/chat/chat-item.model";
 
 /**
  * Сервис для работы с прямыми чатами (личными сообщениями)

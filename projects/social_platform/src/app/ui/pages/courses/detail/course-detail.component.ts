@@ -3,9 +3,9 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
-import { ButtonComponent } from "@ui/components";
-import { LoaderComponent } from "@ui/components/loader/loader.component";
+import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
+import { ButtonComponent } from "@ui/primitives";
+import { LoaderComponent } from "@ui/primitives/loader/loader.component";
 import { CourseDetailInfoService } from "@api/courses/facades/course-detail-info.service";
 import { CourseDetailUIInfoService } from "@api/courses/facades/ui/course-detail-ui-info.service";
 

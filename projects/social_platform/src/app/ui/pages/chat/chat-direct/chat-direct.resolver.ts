@@ -2,8 +2,8 @@
 
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, ResolveFn } from "@angular/router";
-import { ChatDirectService } from "projects/social_platform/src/app/api/chat/chat-direct/chat-direct.service";
-import { ChatItem } from "projects/social_platform/src/app/domain/chat/chat-item.model";
+import { ChatDirectService } from "@api/chat/chat-direct/chat-direct.service";
+import { ChatItem } from "@domain/chat/chat-item.model";
 
 /**
  * Резолвер для загрузки данных конкретного прямого чата

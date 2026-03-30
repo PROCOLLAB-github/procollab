@@ -5,16 +5,12 @@ import { Router } from "@angular/router";
 import { concatMap, Subject, take, takeUntil } from "rxjs";
 import { ValidationService } from "@corelib";
 import { OnboardingService } from "../../onboarding.service";
-import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
+import { Skill } from "@domain/skills/skill";
 import { SkillsInfoService } from "../../../skills/facades/skills-info.service";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { OnboardingStageTwoUIInfoService } from "./ui/onboarding-stage-two-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
-import {
-  failure,
-  initial,
-  loading,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+import { failure, initial, loading } from "@domain/shared/async-state";
 
 @Injectable()
 export class OnboardingStageTwoInfoService {

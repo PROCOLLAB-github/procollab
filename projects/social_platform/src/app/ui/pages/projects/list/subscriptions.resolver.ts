@@ -3,8 +3,8 @@
 import { ResolveFn } from "@angular/router";
 import { inject } from "@angular/core";
 import { map, switchMap } from "rxjs";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import { GetProjectSubscriptionsUseCase } from "projects/social_platform/src/app/api/project/use-case/get-project-subscriptions.use-case";
+import { Project } from "@domain/project/project.model";
+import { GetProjectSubscriptionsUseCase } from "@api/project/use-case/get-project-subscriptions.use-case";
 import { AuthInfoService } from "@api/auth/facades/auth-info.service";
 
 /**

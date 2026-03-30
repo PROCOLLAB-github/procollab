@@ -3,11 +3,11 @@
 import { inject, Injectable } from "@angular/core";
 import { ProjectProgramHttpAdapter } from "../../adapters/project/project-program-http.adapter";
 import { map, Observable } from "rxjs";
-import { ProjectAssign } from "../../../domain/project/project-assign.model";
+import { ProjectAssign } from "@domain/project/project-assign.model";
 import { plainToInstance } from "class-transformer";
-import { Project } from "../../../domain/project/project.model";
-import { ProjectNewAdditionalProgramFields } from "../../../domain/program/partner-program-fields.model";
-import { ProjectProgramRepositoryPort } from "../../../domain/project/ports/project-program.repository.port";
+import { Project } from "@domain/project/project.model";
+import { ProjectNewAdditionalProgramFields } from "@domain/program/partner-program-fields.model";
+import { ProjectProgramRepositoryPort } from "@domain/project/ports/project-program.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class ProjectProgramRepository implements ProjectProgramRepositoryPort {

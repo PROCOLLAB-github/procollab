@@ -1,6 +1,6 @@
 /** @format */
 
-import { EditStep } from "../../api/project/project-step.service";
+import { EditStep } from "@api/project/project-step.service";
 
 export interface Navigation {
   step: EditStep;

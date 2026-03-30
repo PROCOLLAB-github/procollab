@@ -2,11 +2,11 @@
 
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { RouterLink } from "@angular/router";
-import { ChatWindowComponent } from "@ui/components/chat-window/chat-window.component";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { ChatWindowComponent } from "@ui/widgets/chat-window/chat-window.component";
+import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { BackComponent } from "@uilib";
-import { ChatDirectInfoService } from "projects/social_platform/src/app/api/chat/facedes/chat-direct-info.service";
-import { ChatDirectUIInfoService } from "projects/social_platform/src/app/api/chat/facedes/ui/chat-direct-ui-info.service";
+import { ChatDirectInfoService } from "@api/chat/facedes/chat-direct-info.service";
+import { ChatDirectUIInfoService } from "@api/chat/facedes/ui/chat-direct-ui-info.service";
 
 /**
  * Компонент для отображения конкретного прямого чата

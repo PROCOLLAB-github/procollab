@@ -1,8 +1,8 @@
 /** @format */
 
 import { computed, Injectable, signal } from "@angular/core";
-import { DirectionItem, directionItemBuilder } from "@utils/helpers/directionItemBuilder";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
+import { DirectionItem, directionItemBuilder } from "@utils/directionItemBuilder";
+import { Project } from "@domain/project/project.model";
 
 @Injectable({ providedIn: "root" })
 export class ProjectsDetailUIInfoService {

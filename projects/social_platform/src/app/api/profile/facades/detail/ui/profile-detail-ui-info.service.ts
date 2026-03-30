@@ -1,8 +1,8 @@
 /** @format */
 
 import { inject, Injectable, signal } from "@angular/core";
-import { DirectionItem, directionItemBuilder } from "@utils/helpers/directionItemBuilder";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import { DirectionItem, directionItemBuilder } from "@utils/directionItemBuilder";
+import { User } from "@domain/auth/user.model";
 import { ProjectsDetailUIInfoService } from "../../../../project/facades/detail/ui/projects-detail-ui.service";
 
 @Injectable()

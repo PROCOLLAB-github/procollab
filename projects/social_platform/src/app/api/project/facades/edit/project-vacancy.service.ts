@@ -10,11 +10,7 @@ import { ProjectFormService } from "./project-form.service";
 import { UpdateVacancyUseCase } from "../../../vacancy/use-cases/update-vacancy.use-case";
 import { PostVacancyUseCase } from "../../../vacancy/use-cases/post-vacancy.use-case";
 import { DeleteVacancyUseCase } from "../../../vacancy/use-cases/delete-vacancy.use-case";
-import {
-  failure,
-  initial,
-  loading,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+import { failure, initial, loading } from "@domain/shared/async-state";
 
 /**
  * Сервис для управления вакансиями проекта.

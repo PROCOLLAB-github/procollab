@@ -2,9 +2,9 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { KanbanRepositoryPort } from "../../../domain/kanban/ports/kanban.repository.port";
-import { TaskDetail } from "../../../domain/kanban/task.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { KanbanRepositoryPort } from "@domain/kanban/ports/kanban.repository.port";
+import { TaskDetail } from "@domain/kanban/task.model";
 
 export type GetTaskError = { kind: "not_found" } | { kind: "server_error" };
 

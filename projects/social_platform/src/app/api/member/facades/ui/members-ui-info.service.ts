@@ -3,14 +3,8 @@
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import {
-  AsyncState,
-  initial,
-  isLoading,
-  isSuccess,
-  success,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+import { User } from "@domain/auth/user.model";
+import { AsyncState, initial, isLoading, isSuccess, success } from "@domain/shared/async-state";
 
 @Injectable()
 export class MembersUIInfoService {

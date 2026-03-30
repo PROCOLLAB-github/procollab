@@ -2,8 +2,8 @@
 
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
-import { GetMyInvitesUseCase } from "projects/social_platform/src/app/api/invite/use-cases/get-my-invites.use-case";
-import { Invite } from "projects/social_platform/src/app/domain/invite/invite.model";
+import { GetMyInvitesUseCase } from "@api/invite/use-cases/get-my-invites.use-case";
+import { Invite } from "@domain/invite/invite.model";
 import { map } from "rxjs";
 
 /**

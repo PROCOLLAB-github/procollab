@@ -2,17 +2,12 @@
 
 import { computed, inject, Injectable, signal } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
-import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
-import { ProjectRate } from "projects/social_platform/src/app/domain/project/project-rate";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import {
-  AsyncState,
-  initial,
-  isLoading,
-  isSuccess,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+import { User } from "@domain/auth/user.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
+import { ProjectRate } from "@domain/project/project-rate";
+import { Project } from "@domain/project/project.model";
+import { AsyncState, initial, isLoading, isSuccess } from "@domain/shared/async-state";
 
 @Injectable()
 export class ProgramDetailListUIInfoService {

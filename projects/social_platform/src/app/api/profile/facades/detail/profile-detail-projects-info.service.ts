@@ -2,7 +2,7 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { Subject, takeUntil } from "rxjs";
-import { Project } from "../../../../domain/project/project.model";
+import { Project } from "@domain/project/project.model";
 import { ActivatedRoute } from "@angular/router";
 import { ProjectsDetailUIInfoService } from "../../../project/facades/detail/ui/projects-detail-ui.service";
 import { ProfileDetailUIInfoService } from "./ui/profile-detail-ui-info.service";

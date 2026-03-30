@@ -7,14 +7,14 @@ import { ProjectResponsesResolver } from "../../pages/projects/detail/work-secti
 import { ProjectChatComponent } from "../../pages/projects/detail/chat/chat.component";
 import { ProjectTeamComponent } from "../../pages/projects/detail/team/team.component";
 import { ProjectVacanciesComponent } from "../../pages/projects/detail/vacancies/vacancies.component";
-import { DeatilComponent } from "@ui/components/detail/detail.component";
+import { DeatilComponent } from "@ui/widgets/detail/detail.component";
 import { ProjectWorkSectionComponent } from "../../pages/projects/detail/work-section/work-section.component";
 import { KanbanBoardResolver } from "../../pages/projects/detail/kanban/kanban.resolver";
 import { KanbanBoardGuard } from "../../../../../../core/src/lib/guards/kanban/kanban.guard";
 import { KanbanComponent } from "../../pages/projects/detail/kanban/kanban.component";
 import { ProjectDetailResolver } from "@ui/pages/projects/detail/detail.resolver";
-import { NewsDetailComponent } from "@ui/components/news-detail/news-detail.component";
-import { NewsDetailResolver } from "@ui/components/news-detail/news-detail.resolver";
+import { NewsDetailComponent } from "@ui/widgets/news-detail/news-detail.component";
+import { NewsDetailResolver } from "@ui/widgets/news-detail/news-detail.resolver";
 import { ProjectChatResolver } from "@ui/pages/projects/detail/chat/chat.resolver";
 
 /**

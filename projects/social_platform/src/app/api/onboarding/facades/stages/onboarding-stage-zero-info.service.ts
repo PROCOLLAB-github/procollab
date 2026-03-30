@@ -6,14 +6,10 @@ import { OnboardingService } from "../../onboarding.service";
 import { ValidationService } from "@corelib";
 import { Router } from "@angular/router";
 import { OnboardingStageZeroUIInfoService } from "./ui/onboarding-stage-zero-ui-info.service";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import { User } from "@domain/auth/user.model";
 import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
-import {
-  failure,
-  initial,
-  loading,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+import { failure, initial, loading } from "@domain/shared/async-state";
 
 @Injectable()
 export class OnboardingStageZeroInfoService {

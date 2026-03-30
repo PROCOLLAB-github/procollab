@@ -2,7 +2,7 @@
 
 import { inject, Injectable, signal } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import { transformYearStringToNumber } from "@utils/helpers/transformYear";
+import { transformYearStringToNumber } from "@utils/transformYear";
 import { Subject } from "rxjs";
 import { ProfileFormService } from "./profile-form.service";
 import { ProfileEditInfoService } from "./profile-edit-info.service";

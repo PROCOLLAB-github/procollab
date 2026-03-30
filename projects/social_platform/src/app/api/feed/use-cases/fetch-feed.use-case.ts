@@ -2,10 +2,10 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { FeedRepositoryPort } from "../../../domain/feed/ports/feed.repository.port";
-import { FeedItem } from "../../../domain/feed/feed-item.model";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { FeedRepositoryPort } from "@domain/feed/ports/feed.repository.port";
+import { FeedItem } from "@domain/feed/feed-item.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class FetchFeedUseCase {

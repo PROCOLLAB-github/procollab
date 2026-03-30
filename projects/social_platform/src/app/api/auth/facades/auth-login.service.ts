@@ -7,11 +7,8 @@ import { Subject, takeUntil, tap } from "rxjs";
 import { AuthUIInfoService } from "./ui/auth-ui-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { LoginUseCase } from "../use-cases/login.use-case";
-import { toAsyncState } from "projects/social_platform/src/app/domain/shared/to-async-state";
-import {
-  LoginResult,
-  LoginError,
-} from "projects/social_platform/src/app/domain/auth/results/login.result";
+import { toAsyncState } from "@domain/shared/to-async-state";
+import { LoginResult, LoginError } from "@domain/auth/results/login.result";
 
 @Injectable()
 export class AuthLoginService {

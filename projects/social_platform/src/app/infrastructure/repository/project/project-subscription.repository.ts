@@ -3,10 +3,10 @@
 import { HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { ProjectSubscriptionRepositoryPort } from "../../../domain/project/ports/project-subscription.repository.port";
-import { ProjectSubscriber } from "../../../domain/project/project-subscriber.model";
-import { Project } from "../../../domain/project/project.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
+import { ProjectSubscriber } from "@domain/project/project-subscriber.model";
+import { Project } from "@domain/project/project.model";
 import { SubscriptionHttpAdapter } from "../../adapters/subscription/subscription-http.adapter";
 
 @Injectable({ providedIn: "root" })

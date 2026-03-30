@@ -2,9 +2,9 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { KanbanRepositoryPort } from "../../../domain/kanban/ports/kanban.repository.port";
-import { Column } from "../../../domain/kanban/column.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { KanbanRepositoryPort } from "@domain/kanban/ports/kanban.repository.port";
+import { Column } from "@domain/kanban/column.model";
 
 export type GetColumnTasksError = { kind: "server_error" };
 

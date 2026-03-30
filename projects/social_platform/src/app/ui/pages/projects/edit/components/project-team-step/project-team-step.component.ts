@@ -3,20 +3,20 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { InputComponent, ButtonComponent } from "@ui/components";
+import { InputComponent, ButtonComponent } from "@ui/primitives";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { InviteCardComponent } from "@ui/components/invite-card/invite-card.component";
+import { InviteCardComponent } from "@ui/widgets/invite-card/invite-card.component";
 import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
 import { IconComponent } from "@uilib";
-import { CollaboratorCardComponent } from "@ui/shared/collaborator-card/collaborator-card.component";
-import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
-import { ToggleFieldsInfoService } from "projects/social_platform/src/app/api/toggle-fields/toggle-fields-info.service";
-import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
-import { ProjectTeamService } from "projects/social_platform/src/app/api/project/facades/edit/project-team.service";
-import { ProjectTeamUIService } from "projects/social_platform/src/app/api/project/facades/edit/ui/project-team-ui.service";
-import { ProjectsEditInfoService } from "projects/social_platform/src/app/api/project/facades/edit/projects-edit-info.service";
-import { ModalComponent } from "@ui/components/modal/modal.component";
+import { CollaboratorCardComponent } from "@ui/widgets/collaborator-card/collaborator-card.component";
+import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
+import { ToggleFieldsInfoService } from "@api/toggle-fields/toggle-fields-info.service";
+import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
+import { ProjectTeamService } from "@api/project/facades/edit/project-team.service";
+import { ProjectTeamUIService } from "@api/project/facades/edit/ui/project-team-ui.service";
+import { ProjectsEditInfoService } from "@api/project/facades/edit/projects-edit-info.service";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
 
 @Component({
   selector: "app-project-team-step",

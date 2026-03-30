@@ -3,21 +3,15 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { concatMap, Subject, takeUntil } from "rxjs";
 import { ProfileFormService } from "./profile-form.service";
-import { Achievement } from "projects/social_platform/src/app/domain/auth/user.model";
+import { Achievement } from "@domain/auth/user.model";
 import dayjs from "dayjs";
-import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
+import { Skill } from "@domain/skills/skill";
 import { NavigationService } from "../../../paths/navigation.service";
 import { EditStep, ProjectStepService } from "../../../project/project-step.service";
 import { NavService } from "@ui/services/nav/nav.service";
 import { ActivatedRoute } from "@angular/router";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
-import {
-  AsyncState,
-  failure,
-  initial,
-  loading,
-  success,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+import { AsyncState, failure, initial, loading, success } from "@domain/shared/async-state";
 
 @Injectable()
 export class ProfileEditInfoService {

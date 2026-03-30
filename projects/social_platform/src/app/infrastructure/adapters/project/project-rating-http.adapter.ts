@@ -4,9 +4,9 @@ import { HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { ProjectRate } from "../../../domain/project/project-rate";
-import { ProjectRatingCriterionOutput } from "../../../domain/project/project-rating-criterion-output";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { ProjectRate } from "@domain/project/project-rate";
+import { ProjectRatingCriterionOutput } from "@domain/project/project-rating-criterion-output";
 
 @Injectable({ providedIn: "root" })
 export class ProjectRatingHttpAdapter {

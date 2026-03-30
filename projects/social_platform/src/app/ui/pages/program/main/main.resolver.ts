@@ -2,10 +2,10 @@
 
 import { inject } from "@angular/core";
 import { ResolveFn } from "@angular/router";
-import { ApiPagination } from "projects/social_platform/src/app/domain/other/api-pagination.model";
-import { Program } from "projects/social_platform/src/app/domain/program/program.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { Program } from "@domain/program/program.model";
 import { map } from "rxjs";
-import { GetProgramsUseCase } from "projects/social_platform/src/app/api/program/use-cases/get-programs.use-case";
+import { GetProgramsUseCase } from "@api/program/use-cases/get-programs.use-case";
 
 /**
  * Резолвер для предзагрузки списка программ

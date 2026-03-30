@@ -4,13 +4,13 @@ import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterOutlet } from "@angular/router";
 import { Task } from "@domain/courses/courses.model";
-import { ButtonComponent } from "@ui/components";
+import { ButtonComponent } from "@ui/primitives";
 import { InfoTaskComponent } from "./shared/video-task/info-task.component";
 import { WriteTaskComponent } from "./shared/write-task/write-task.component";
 import { ExcludeTaskComponent } from "./shared/exclude-task/exclude-task.component";
 import { RadioSelectTaskComponent } from "./shared/radio-select-task/radio-select-task.component";
 import { FileTaskComponent } from "./shared/file-task/file-task.component";
-import { LoaderComponent } from "@ui/components/loader/loader.component";
+import { LoaderComponent } from "@ui/primitives/loader/loader.component";
 import { LessonInfoService } from "@api/courses/facades/lesson-info.service";
 import { LessonUIInfoService } from "@api/courses/facades/ui/lesson-ui-info.service";
 

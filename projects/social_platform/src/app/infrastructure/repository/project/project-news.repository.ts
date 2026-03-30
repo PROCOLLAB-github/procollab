@@ -3,11 +3,11 @@
 import { inject, Injectable } from "@angular/core";
 import { plainToInstance } from "class-transformer";
 import { forkJoin, map, Observable, of, tap } from "rxjs";
-import { StorageService } from "../../../api/storage/storage.service";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { FeedNews } from "../../../domain/project/project-news.model";
+import { StorageService } from "@api/storage/storage.service";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { FeedNews } from "@domain/project/project-news.model";
 import { ProjectNewsHttpAdapter } from "../../adapters/project/project-news-http.adapter";
-import { ProjectNewsRepositoryPort } from "../../../domain/project/ports/project-news.repository.port";
+import { ProjectNewsRepositoryPort } from "@domain/project/ports/project-news.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class ProjectNewsRepository implements ProjectNewsRepositoryPort {

@@ -3,9 +3,9 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
-import { ProjectAssign } from "../../../domain/project/project-assign.model";
+import { ProjectAssign } from "@domain/project/project-assign.model";
 import { ProjectDto } from "./dto/project.dto";
-import { ProjectNewAdditionalProgramFields } from "../../../domain/program/partner-program-fields.model";
+import { ProjectNewAdditionalProgramFields } from "@domain/program/partner-program-fields.model";
 
 @Injectable({ providedIn: "root" })
 export class ProjectProgramHttpAdapter {

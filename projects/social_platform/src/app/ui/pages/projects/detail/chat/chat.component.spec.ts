@@ -4,9 +4,9 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { ProjectChatComponent } from "./chat.component";
 import { ReactiveFormsModule } from "@angular/forms";
-import { MessageInputComponent } from "@ui/components/message-input/message-input.component";
+import { MessageInputComponent } from "@ui/widgets/message-input/message-input.component";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 import { RouterTestingModule } from "@angular/router/testing";
 import { of } from "rxjs";
 

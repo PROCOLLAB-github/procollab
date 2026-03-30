@@ -2,9 +2,9 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { ProjectResourceRepositoryPort } from "../../../domain/project/ports/project-resource.repository.port";
-import { Resource } from "../../../domain/project/resource.model";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { ProjectResourceRepositoryPort } from "@domain/project/ports/project-resource.repository.port";
+import { Resource } from "@domain/project/resource.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class GetProjectResourcesUseCase {

@@ -6,17 +6,11 @@ import {
   PartnerProgramFields,
   PartnerProgramFieldsValues,
   ProjectNewAdditionalProgramFields,
-} from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
+} from "@domain/program/partner-program-fields.model";
 import { Observable } from "rxjs";
 import { SendProjectAdditionalFieldsUseCase } from "../../use-case/send-project-additional-fields.use-case";
 import { SubmitCompetitiveProjectUseCase } from "../../use-case/submit-competitive-project.use-case";
-import {
-  AsyncState,
-  failure,
-  initial,
-  loading,
-  success,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+import { AsyncState, failure, initial, loading, success } from "@domain/shared/async-state";
 
 /**
  * Сервис для управления дополнительными полями проекта в партнерской программе.

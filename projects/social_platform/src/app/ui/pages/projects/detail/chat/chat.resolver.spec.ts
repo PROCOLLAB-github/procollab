@@ -3,7 +3,7 @@
 import { TestBed } from "@angular/core/testing";
 
 import { ProjectChatResolver } from "./chat.resolver";
-import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
+import { ProjectRepository } from "@infrastructure/repository/project/project.repository";
 import { ActivatedRouteSnapshot, convertToParamMap, RouterStateSnapshot } from "@angular/router";
 import { of } from "rxjs";
 

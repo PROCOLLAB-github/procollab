@@ -2,9 +2,9 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { Partner, PartnerDto } from "../../../domain/project/partner.model";
-import { ProjectPartnerRepositoryPort } from "../../../domain/project/ports/project-partner.repository.port";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { Partner, PartnerDto } from "@domain/project/partner.model";
+import { ProjectPartnerRepositoryPort } from "@domain/project/ports/project-partner.repository.port";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class CreatePartnerUseCase {

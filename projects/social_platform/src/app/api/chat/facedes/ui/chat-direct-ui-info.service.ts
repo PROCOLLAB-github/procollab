@@ -2,18 +2,15 @@
 
 import { Injectable, signal } from "@angular/core";
 import { ApiPagination } from "@domain/other/api-pagination.model";
-import { ChatWindowComponent } from "@ui/components/chat-window/chat-window.component";
-import { ChatItem } from "projects/social_platform/src/app/domain/chat/chat-item.model";
-import {
-  ChatFile,
-  ChatMessage,
-} from "projects/social_platform/src/app/domain/chat/chat-message.model";
+import { ChatWindowComponent } from "@ui/widgets/chat-window/chat-window.component";
+import { ChatItem } from "@domain/chat/chat-item.model";
+import { ChatFile, ChatMessage } from "@domain/chat/chat-message.model";
 import {
   OnChatMessageDto,
   OnDeleteChatMessageDto,
   OnEditChatMessageDto,
   OnReadChatMessageDto,
-} from "projects/social_platform/src/app/domain/chat/chat.model";
+} from "@domain/chat/chat.model";
 
 @Injectable()
 export class ChatDirectUIInfoService {

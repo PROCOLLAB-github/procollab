@@ -3,14 +3,14 @@
 import { inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, Validators } from "@angular/forms";
 import { generateOptionsList } from "@utils/generate-options-list";
-import { transformYearStringToNumber } from "@utils/helpers/transformYear";
-import { yearRangeValidators } from "@utils/helpers/yearRangeValidators";
+import { transformYearStringToNumber } from "@utils/transformYear";
+import { yearRangeValidators } from "@utils/yearRangeValidators";
 import {
   educationUserLevel,
   educationUserType,
 } from "@core/consts/lists/education-info-list.const";
 import { languageLevelsList, languageNamesList } from "@core/consts/lists/language-info-list.const";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
+import { User } from "@domain/auth/user.model";
 
 @Injectable()
 export class OnboardingStageZeroUIInfoService {

@@ -1,11 +1,11 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { AuthRepositoryPort } from "../../../domain/auth/ports/auth.repository.port";
+import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { RegisterCommand } from "../../../domain/auth/commands/register.command";
-import { RegisterError, RegisterFieldErrors } from "../../../domain/auth/results/register.result";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { RegisterCommand } from "@domain/auth/commands/register.command";
+import { RegisterError, RegisterFieldErrors } from "@domain/auth/results/register.result";
 
 @Injectable({ providedIn: "root" })
 export class RegisterUseCase {

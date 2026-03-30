@@ -8,7 +8,7 @@ import { OnboardingUIInfoService } from "./ui/onboarding-ui-info.service";
 import { OnboardingStageThreeUIInfoService } from "./ui/onboarding-stage-three-ui-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 import { AuthRepositoryPort } from "@domain/auth/ports/auth.repository.port";
-import { loading } from "projects/social_platform/src/app/domain/shared/async-state";
+import { loading } from "@domain/shared/async-state";
 
 @Injectable()
 export class OnboardingStageThreeInfoService {

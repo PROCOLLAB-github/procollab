@@ -3,7 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
-import { Invite } from "../../../domain/invite/invite.model";
+import { Invite } from "@domain/invite/invite.model";
 import { HttpParams } from "@angular/common/http";
 
 /**

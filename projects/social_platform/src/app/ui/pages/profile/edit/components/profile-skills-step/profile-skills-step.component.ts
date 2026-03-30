@@ -9,16 +9,16 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
 } from "@angular/core";
-import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
-import { SkillsBasketComponent } from "@ui/shared/skills-basket/skills-basket.component";
-import { SelectComponent, ButtonComponent } from "@ui/components";
+import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
+import { SkillsBasketComponent } from "@ui/widgets/skills-basket/skills-basket.component";
+import { SelectComponent, ButtonComponent } from "@ui/primitives";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
-import { ProfileFormService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-form.service";
+import { ProfileFormService } from "@api/profile/facades/edit/profile-form.service";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { ProfileEditSkillsInfoService } from "projects/social_platform/src/app/api/profile/facades/edit/profile-edit-skills-info.service";
-import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
-import { SkillsInfoService } from "projects/social_platform/src/app/api/skills/facades/skills-info.service";
+import { ProfileEditSkillsInfoService } from "@api/profile/facades/edit/profile-edit-skills-info.service";
+import { Skill } from "@domain/skills/skill";
+import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 import { IconComponent } from "@uilib";
 
 @Component({

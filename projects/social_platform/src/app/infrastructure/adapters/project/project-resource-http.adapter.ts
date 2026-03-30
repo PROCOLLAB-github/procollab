@@ -3,7 +3,7 @@
 import { inject, Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
-import { Resource, ResourceDto } from "../../../domain/project/resource.model";
+import { Resource, ResourceDto } from "@domain/project/resource.model";
 
 @Injectable({ providedIn: "root" })
 export class ProjectResourceHttpAdapter {

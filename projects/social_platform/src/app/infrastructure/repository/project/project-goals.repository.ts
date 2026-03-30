@@ -4,9 +4,9 @@ import { inject, Injectable } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { ProjectGoalsHttpAdapter } from "../../adapters/project/project-goals-http.adapter";
 import { plainToInstance } from "class-transformer";
-import { Goal } from "../../../domain/project/goals.model";
+import { Goal } from "@domain/project/goals.model";
 import { GoalFormData } from "../../adapters/project/dto/project-goal.dto";
-import { ProjectGoalsRepositoryPort } from "../../../domain/project/ports/project-goals.repository.port";
+import { ProjectGoalsRepositoryPort } from "@domain/project/ports/project-goals.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class ProjectGoalsRepository implements ProjectGoalsRepositoryPort {

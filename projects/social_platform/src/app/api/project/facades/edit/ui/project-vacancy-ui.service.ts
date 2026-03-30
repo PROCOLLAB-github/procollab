@@ -6,16 +6,12 @@ import { rolesMembersList } from "@core/consts/lists/roles-members-list.const";
 import { workExperienceList } from "@core/consts/lists/work-experience-list.const";
 import { workFormatList } from "@core/consts/lists/work-format-list.const";
 import { workScheludeList } from "@core/consts/lists/work-schelude-list.const";
-import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
-import { Vacancy } from "projects/social_platform/src/app/domain/vacancy/vacancy.model";
-import {
-  AsyncState,
-  initial,
-  isLoading,
-} from "projects/social_platform/src/app/domain/shared/async-state";
+import { Skill } from "@domain/skills/skill";
+import { Vacancy } from "@domain/vacancy/vacancy.model";
+import { AsyncState, initial, isLoading } from "@domain/shared/async-state";
 import { ProjectFormService } from "../project-form.service";
 import { ValidationService } from "@corelib";
-import { stripNullish } from "@utils/helpers/stripNull";
+import { stripNullish } from "@utils/stripNull";
 import { ProjectsEditUIInfoService } from "./projects-edit-ui-info.service";
 import { ToggleFieldsInfoService } from "../../../../toggle-fields/toggle-fields-info.service";
 

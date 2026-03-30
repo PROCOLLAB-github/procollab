@@ -3,7 +3,7 @@
 import { Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
 import { Observable } from "rxjs";
-import { ChatListItem } from "../../../domain/chat/chat-item.model";
+import { ChatListItem } from "@domain/chat/chat-item.model";
 
 /**
  * Сервис для работы с чатами проектов (групповыми чатами)

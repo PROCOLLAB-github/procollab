@@ -4,7 +4,7 @@ import { TestBed } from "@angular/core/testing";
 
 import { ProjectsAllResolver } from "./all.resolver";
 import { of } from "rxjs";
-import { ProjectRepository } from "projects/social_platform/src/app/infrastructure/repository/project/project.repository";
+import { ProjectRepository } from "@infrastructure/repository/project/project.repository";
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 
 describe("ProjectsAllResolver", () => {

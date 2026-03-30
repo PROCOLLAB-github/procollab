@@ -1,9 +1,9 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ProjectResourceRepositoryPort } from "../../../domain/project/ports/project-resource.repository.port";
+import { ProjectResourceRepositoryPort } from "@domain/project/ports/project-resource.repository.port";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class DeleteResourceUseCase {

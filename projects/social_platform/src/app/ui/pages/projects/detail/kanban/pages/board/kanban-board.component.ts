@@ -10,8 +10,8 @@ import {
   OnInit,
   signal,
 } from "@angular/core";
-import { InputComponent } from "@ui/components";
-import { DropdownComponent } from "@ui/components/dropdown/dropdown.component";
+import { InputComponent } from "@ui/primitives";
+import { DropdownComponent } from "@ui/primitives/dropdown/dropdown.component";
 import {
   CdkDrag,
   CdkDragDrop,
@@ -26,9 +26,9 @@ import { Subscription } from "rxjs";
 import { IconComponent } from "@uilib";
 import { ControlErrorPipe } from "@corelib";
 import { KanbanTaskComponent } from "../../components/task/kanban-task.component";
-import { KanbanBoardDetailInfoService } from "projects/social_platform/src/app/api/kanban/kanban-board-detail-info.service";
-import { Column } from "projects/social_platform/src/app/domain/kanban/column.model";
-import { TaskPreview } from "projects/social_platform/src/app/domain/kanban/task.model";
+import { KanbanBoardDetailInfoService } from "@api/kanban/kanban-board-detail-info.service";
+import { Column } from "@domain/kanban/column.model";
+import { TaskPreview } from "@domain/kanban/task.model";
 
 @Component({
   selector: "app-kanban-board",

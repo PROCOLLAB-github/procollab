@@ -2,10 +2,10 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of, tap } from "rxjs";
-import { ProjectSubscriptionRepositoryPort } from "../../../domain/project/ports/project-subscription.repository.port";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { projectUnSubscribed } from "../../../domain/project/events/project-unsubsribed.event";
-import { EventBus } from "../../../domain/shared/event-bus";
+import { ProjectSubscriptionRepositoryPort } from "@domain/project/ports/project-subscription.repository.port";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { projectUnSubscribed } from "@domain/project/events/project-unsubsribed.event";
+import { EventBus } from "@domain/shared/event-bus";
 
 @Injectable({ providedIn: "root" })
 export class DeleteProjectSubscriptionUseCase {

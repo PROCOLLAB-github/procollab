@@ -2,10 +2,10 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { User } from "../../../domain/auth/user.model";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { MemberRepositoryPort } from "../../../domain/member/ports/member.repository.port";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { User } from "@domain/auth/user.model";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { MemberRepositoryPort } from "@domain/member/ports/member.repository.port";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class GetMembersUseCase {

@@ -3,17 +3,17 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
-import { ButtonComponent } from "@ui/components";
+import { ButtonComponent } from "@ui/primitives";
 import { CommonModule } from "@angular/common";
-import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
-import { SpecializationsGroupComponent } from "@ui/shared/specializations-group/specializations-group.component";
-import { Specialization } from "projects/social_platform/src/app/domain/specializations/specialization";
+import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
+import { SpecializationsGroupComponent } from "@ui/widgets/specializations-group/specializations-group.component";
+import { Specialization } from "@domain/specializations/specialization";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
-import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
-import { OnboardingStageOneUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-one-ui-info.service";
-import { OnboardingStageOneInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/onboarding-stage-one-info.service";
-import { OnboardingUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-ui-info.service";
-import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
+import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
+import { OnboardingStageOneUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-stage-one-ui-info.service";
+import { OnboardingStageOneInfoService } from "@api/onboarding/facades/stages/onboarding-stage-one-info.service";
+import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-ui-info.service";
+import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 
 /**
  * КОМПОНЕНТ ПЕРВОГО ЭТАПА ОНБОРДИНГА

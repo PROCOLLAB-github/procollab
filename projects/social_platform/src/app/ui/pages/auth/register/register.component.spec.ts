@@ -4,8 +4,8 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { RegisterComponent } from "./register.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
-import { InputComponent } from "@ui/components";
+import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
+import { InputComponent } from "@ui/primitives";
 import { NgxMaskModule } from "ngx-mask";
 import { RouterTestingModule } from "@angular/router/testing";
 

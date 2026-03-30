@@ -2,10 +2,10 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { ProjectProgramRepositoryPort } from "../../../domain/project/ports/project-program.repository.port";
-import { ProjectNewAdditionalProgramFields } from "../../../domain/program/partner-program-fields.model";
-import { Project } from "../../../domain/project/project.model";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { ProjectProgramRepositoryPort } from "@domain/project/ports/project-program.repository.port";
+import { ProjectNewAdditionalProgramFields } from "@domain/program/partner-program-fields.model";
+import { Project } from "@domain/project/project.model";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class SendProjectAdditionalFieldsUseCase {

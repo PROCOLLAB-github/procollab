@@ -12,7 +12,7 @@ import {
 } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser";
-import { CheckboxComponent } from "@ui/components";
+import { CheckboxComponent } from "@ui/primitives";
 import { TruncateHtmlPipe } from "@core/lib/pipes/truncate-html.pipe";
 import { Task } from "@domain/courses/courses.model";
 import { resolveVideoUrlForIframe } from "@utils/video-url-embed";

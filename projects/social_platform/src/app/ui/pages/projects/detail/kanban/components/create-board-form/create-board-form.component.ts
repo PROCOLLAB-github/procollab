@@ -4,7 +4,7 @@ import { CommonModule } from "@angular/common";
 import { Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Subscription } from "rxjs";
-import { IconComponent } from "@ui/components";
+import { IconComponent } from "@ui/primitives";
 import { ControlErrorPipe } from "@corelib";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { tagColors } from "@core/consts/other/tag-colors.const";

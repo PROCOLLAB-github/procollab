@@ -2,10 +2,10 @@
 
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
-import { DashboardItemComponent } from "../../../shared/dashboardItem/dashboardItem.component";
-import { ProjectsDashboardInfoService } from "projects/social_platform/src/app/api/project/facades/dashboard/projects-dashboard-info.service";
-import { ProjectsDashboardUIInfoService } from "projects/social_platform/src/app/api/project/facades/dashboard/ui/projects-dashboard-ui-info.service";
-import { ProgramDetailListUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-list-ui-info.service";
+import { DashboardItemComponent } from "@ui/widgets/dashboardItem/dashboardItem.component";
+import { ProjectsDashboardInfoService } from "@api/project/facades/dashboard/projects-dashboard-info.service";
+import { ProjectsDashboardUIInfoService } from "@api/project/facades/dashboard/ui/projects-dashboard-ui-info.service";
+import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
 
 @Component({
   selector: "app-dashboard",

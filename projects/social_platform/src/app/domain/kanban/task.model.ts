@@ -1,7 +1,7 @@
 /** @format */
 
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { FileModel } from "projects/social_platform/src/app/domain/file/file.model";
+import { User } from "@domain/auth/user.model";
+import { FileModel } from "@domain/file/file.model";
 import { Column } from "./column.model";
 import { Goal } from "../project/goals.model";
 import { Tag } from "./tag.model";

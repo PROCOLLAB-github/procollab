@@ -2,15 +2,15 @@
 
 import { CommonModule } from "@angular/common";
 import { Component, inject, Input, signal } from "@angular/core";
-import { AvatarComponent } from "@ui/components/avatar/avatar.component";
+import { AvatarComponent } from "@ui/primitives/avatar/avatar.component";
 import { KanbanBoardActionsComponent } from "../actions/kanban-board-actions.component";
-import { DropdownComponent } from "@ui/components/dropdown/dropdown.component";
+import { DropdownComponent } from "@ui/primitives/dropdown/dropdown.component";
 import { ClickOutsideModule } from "ng-click-outside";
 import { Router } from "@angular/router";
-import { KanbanBoardInfoService } from "../../../../../../../api/kanban/kanban-board-info.service";
+import { KanbanBoardInfoService } from "@api/kanban/kanban-board-info.service";
 import { CreateBoardFormComponent } from "../create-board-form/create-board-form.component";
-import { Project } from "projects/social_platform/src/app/domain/project/project.model";
-import { ProjectsDetailUIInfoService } from "projects/social_platform/src/app/api/project/facades/detail/ui/projects-detail-ui.service";
+import { Project } from "@domain/project/project.model";
+import { ProjectsDetailUIInfoService } from "@api/project/facades/detail/ui/projects-detail-ui.service";
 
 @Component({
   selector: "app-kanban-board-sidebar",

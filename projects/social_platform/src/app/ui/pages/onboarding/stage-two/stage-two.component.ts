@@ -3,18 +3,18 @@
 import { ChangeDetectionStrategy, Component, inject, OnDestroy, OnInit } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ControlErrorPipe } from "@corelib";
-import { ButtonComponent, IconComponent } from "@ui/components";
+import { ButtonComponent, IconComponent } from "@ui/primitives";
 import { CommonModule } from "@angular/common";
-import { AutoCompleteInputComponent } from "@ui/components/autocomplete-input/autocomplete-input.component";
-import { SkillsGroupComponent } from "@ui/shared/skills-group/skills-group.component";
-import { SkillsBasketComponent } from "@ui/shared/skills-basket/skills-basket.component";
-import { ModalComponent } from "@ui/components/modal/modal.component";
-import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
-import { Skill } from "projects/social_platform/src/app/domain/skills/skill";
-import { OnboardingUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-ui-info.service";
-import { OnboardingStageTwoUIInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/ui/onboarding-stage-two-ui-info.service";
-import { OnboardingStageTwoInfoService } from "projects/social_platform/src/app/api/onboarding/facades/stages/onboarding-stage-two-info.service";
-import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
+import { AutoCompleteInputComponent } from "@ui/primitives/autocomplete-input/autocomplete-input.component";
+import { SkillsGroupComponent } from "@ui/widgets/skills-group/skills-group.component";
+import { SkillsBasketComponent } from "@ui/widgets/skills-basket/skills-basket.component";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
+import { Skill } from "@domain/skills/skill";
+import { OnboardingUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-ui-info.service";
+import { OnboardingStageTwoUIInfoService } from "@api/onboarding/facades/stages/ui/onboarding-stage-two-ui-info.service";
+import { OnboardingStageTwoInfoService } from "@api/onboarding/facades/stages/onboarding-stage-two-info.service";
+import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { SkillsInfoService } from "@api/skills/facades/skills-info.service";
 
 /**

@@ -14,14 +14,14 @@ import { RouterLink } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
 import { containerSm } from "@utils/responsive";
 import { CommonModule } from "@angular/common";
-import { SearchComponent } from "@ui/components/search/search.component";
-import { MembersFiltersComponent } from "../../components/members-filters/members-filters.component";
-import { InfoCardComponent } from "@ui/components/info-card/info-card.component";
+import { SearchComponent } from "@ui/primitives/search/search.component";
+import { MembersFiltersComponent } from "@ui/widgets/members-filters/members-filters.component";
+import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
 import { BackComponent } from "@uilib";
-import { ButtonComponent } from "@ui/components";
-import { SoonCardComponent } from "@ui/shared/soon-card/soon-card.component";
-import { MembersInfoService } from "../../../api/member/facades/members-info.service";
-import { MembersUIInfoService } from "../../../api/member/facades/ui/members-ui-info.service";
+import { ButtonComponent } from "@ui/primitives";
+import { SoonCardComponent } from "@ui/primitives/soon-card/soon-card.component";
+import { MembersInfoService } from "@api/member/facades/members-info.service";
+import { MembersUIInfoService } from "@api/member/facades/ui/members-ui-info.service";
 
 /**
  * Компонент для отображения списка участников с возможностью поиска и фильтрации

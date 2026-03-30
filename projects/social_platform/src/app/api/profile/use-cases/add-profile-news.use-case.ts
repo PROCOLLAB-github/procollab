@@ -2,9 +2,9 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { ProfileNews } from "../../../domain/profile/profile-news.model";
-import { ProfileNewsRepositoryPort } from "../../../domain/profile/ports/profile-news.repository.port";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
+import { ProfileNews } from "@domain/profile/profile-news.model";
+import { ProfileNewsRepositoryPort } from "@domain/profile/ports/profile-news.repository.port";
+import { fail, ok, Result } from "@domain/shared/result.type";
 
 @Injectable({ providedIn: "root" })
 export class AddProfileNewsUseCase {

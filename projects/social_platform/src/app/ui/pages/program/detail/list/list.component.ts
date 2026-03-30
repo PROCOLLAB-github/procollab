@@ -12,25 +12,25 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { isLoading } from "projects/social_platform/src/app/domain/shared/async-state";
+import { isLoading } from "@domain/shared/async-state";
 import { RouterModule } from "@angular/router";
 import { ReactiveFormsModule } from "@angular/forms";
-import { SearchComponent } from "@ui/components/search/search.component";
-import { ProgramProjectsFilterComponent } from "@ui/components/program-projects-filter/program-projects-filter.component";
-import { RatingCardComponent } from "@ui/shared/rating-card/rating-card.component";
-import { InfoCardComponent } from "@ui/components/info-card/info-card.component";
-import { ButtonComponent } from "@ui/components";
+import { SearchComponent } from "@ui/primitives/search/search.component";
+import { ProgramProjectsFilterComponent } from "@ui/widgets/program-projects-filter/program-projects-filter.component";
+import { RatingCardComponent } from "@ui/widgets/rating-card/rating-card.component";
+import { InfoCardComponent } from "@ui/widgets/info-card/info-card.component";
+import { ButtonComponent } from "@ui/primitives";
 import { IconComponent } from "@uilib";
-import { PartnerProgramFields } from "projects/social_platform/src/app/domain/program/partner-program-fields.model";
+import { PartnerProgramFields } from "@domain/program/partner-program-fields.model";
 import { tagsFilter } from "@core/consts/filters/tags-filter.const";
-import { ProgramDetailListUIInfoService } from "projects/social_platform/src/app/api/program/facades/detail/ui/program-detail-list-ui-info.service";
-import { ProgramDetailListInfoService } from "projects/social_platform/src/app/api/program/facades/detail/program-detail-list-info.service";
-import { ExportFileInfoService } from "projects/social_platform/src/app/api/export-file/facades/export-file-info.service";
-import { SwipeService } from "projects/social_platform/src/app/api/swipe/swipe.service";
-import { ProgramProjectsFilterInfoService } from "@ui/components/program-projects-filter/service/program-projects-filter-info.service";
-import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
-import { ModalComponent } from "@ui/components/modal/modal.component";
-import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
+import { ProgramDetailListUIInfoService } from "@api/program/facades/detail/ui/program-detail-list-ui-info.service";
+import { ProgramDetailListInfoService } from "@api/program/facades/detail/program-detail-list-info.service";
+import { ExportFileInfoService } from "@api/export-file/facades/export-file-info.service";
+import { SwipeService } from "@api/swipe/swipe.service";
+import { ProgramProjectsFilterInfoService } from "@ui/widgets/program-projects-filter/service/program-projects-filter-info.service";
+import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
+import { ModalComponent } from "@ui/primitives/modal/modal.component";
+import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 import { LoggerService } from "@core/lib/services/logger/logger.service";
 
 @Component({

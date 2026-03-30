@@ -2,9 +2,9 @@
 
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { FeedItem } from "../../../domain/feed/feed-item.model";
-import { FeedRepositoryPort } from "../../../domain/feed/ports/feed.repository.port";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { FeedItem } from "@domain/feed/feed-item.model";
+import { FeedRepositoryPort } from "@domain/feed/ports/feed.repository.port";
 import { FeedHttpAdapter } from "../../adapters/feed/feed-http.adapter";
 
 @Injectable({ providedIn: "root" })

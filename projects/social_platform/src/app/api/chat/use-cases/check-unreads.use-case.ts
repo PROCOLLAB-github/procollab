@@ -2,8 +2,8 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { ChatRepositoryPort } from "../../../domain/chat/ports/chat.repository.port";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { ChatRepositoryPort } from "@domain/chat/ports/chat.repository.port";
 
 export type CheckUnreadsError = { kind: "server_error" };
 

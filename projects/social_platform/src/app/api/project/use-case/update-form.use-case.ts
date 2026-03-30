@@ -1,11 +1,11 @@
 /** @format */
 
 import { inject, Injectable } from "@angular/core";
-import { ProjectRepositoryPort } from "../../../domain/project/ports/project.repository.port";
+import { ProjectRepositoryPort } from "@domain/project/ports/project.repository.port";
 import { catchError, map, Observable, of } from "rxjs";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { Project } from "../../../domain/project/project.model";
-import { UpdateFormCommand } from "../../../domain/project/commands/update-form.command";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { Project } from "@domain/project/project.model";
+import { UpdateFormCommand } from "@domain/project/commands/update-form.command";
 
 @Injectable({ providedIn: "root" })
 export class UpdateFormUseCase {

@@ -5,13 +5,13 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { ErrorMessage } from "@core/lib/models/error/error-message";
 import { ControlErrorPipe, TokenService } from "@corelib";
 import { RouterLink } from "@angular/router";
-import { ButtonComponent, IconComponent, InputComponent } from "@ui/components";
+import { ButtonComponent, IconComponent, InputComponent } from "@ui/primitives";
 import { CommonModule } from "@angular/common";
-import { TooltipComponent } from "@ui/components/tooltip/tooltip.component";
+import { TooltipComponent } from "@ui/primitives/tooltip/tooltip.component";
 import { ClickOutsideModule } from "ng-click-outside";
-import { AuthUIInfoService } from "projects/social_platform/src/app/api/auth/facades/ui/auth-ui-info.service";
-import { AuthLoginService } from "projects/social_platform/src/app/api/auth/facades/auth-login.service";
-import { TooltipInfoService } from "projects/social_platform/src/app/api/tooltip/tooltip-info.service";
+import { AuthUIInfoService } from "@api/auth/facades/ui/auth-ui-info.service";
+import { AuthLoginService } from "@api/auth/facades/auth-login.service";
+import { TooltipInfoService } from "@api/tooltip/tooltip-info.service";
 
 /**
  * Компонент входа в систему

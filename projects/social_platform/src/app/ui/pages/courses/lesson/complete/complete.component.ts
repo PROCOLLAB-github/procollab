@@ -2,7 +2,7 @@
 
 import { Component, inject, OnInit, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ButtonComponent } from "@ui/components";
+import { ButtonComponent } from "@ui/primitives";
 import { ActivatedRoute, Router } from "@angular/router";
 
 /**

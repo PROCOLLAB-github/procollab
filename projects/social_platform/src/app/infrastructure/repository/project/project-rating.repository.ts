@@ -3,12 +3,12 @@
 import { HttpParams } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { ApiPagination } from "../../../domain/other/api-pagination.model";
-import { ProjectRate } from "../../../domain/project/project-rate";
-import { ProjectRatingCriterion } from "../../../domain/project/project-rating-criterion";
-import { ProjectRatingCriterionOutput } from "../../../domain/project/project-rating-criterion-output";
+import { ApiPagination } from "@domain/other/api-pagination.model";
+import { ProjectRate } from "@domain/project/project-rate";
+import { ProjectRatingCriterion } from "@domain/project/project-rating-criterion";
+import { ProjectRatingCriterionOutput } from "@domain/project/project-rating-criterion-output";
 import { ProjectRatingHttpAdapter } from "../../adapters/project/project-rating-http.adapter";
-import { ProjectRatingRepositoryPort } from "../../../domain/project/ports/project-rating.repository.port";
+import { ProjectRatingRepositoryPort } from "@domain/project/ports/project-rating.repository.port";
 
 @Injectable({ providedIn: "root" })
 export class ProjectRatingRepository implements ProjectRatingRepositoryPort {

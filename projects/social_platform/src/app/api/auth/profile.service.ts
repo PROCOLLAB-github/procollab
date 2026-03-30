@@ -2,10 +2,10 @@
 
 import { Injectable } from "@angular/core";
 import { ApiService } from "@corelib";
-import { Achievement } from "../../domain/auth/user.model";
+import { Achievement } from "@domain/auth/user.model";
 import { map, Observable } from "rxjs";
 import { plainToInstance } from "class-transformer";
-import { Approve } from "../../domain/skills/skill";
+import { Approve } from "@domain/skills/skill";
 
 /**
  * Сервис управления профилем пользователя

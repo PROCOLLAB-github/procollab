@@ -5,7 +5,7 @@ import { of } from "rxjs";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { ProfileMainComponent } from "./main.component";
-import { AuthRepository } from "projects/social_platform/src/app/infrastructure/repository/auth/auth.repository";
+import { AuthRepository } from "@infrastructure/repository/auth/auth.repository";
 
 describe("MainComponent", () => {
   let component: ProfileMainComponent;

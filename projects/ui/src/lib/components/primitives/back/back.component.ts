@@ -3,7 +3,7 @@
 import { ChangeDetectionStrategy, Component, inject, Input, type OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Location } from "@angular/common";
-import { IconComponent } from "@ui/components";
+import { IconComponent } from "@ui/primitives";
 import { LoggerService } from "@corelib";
 
 /**

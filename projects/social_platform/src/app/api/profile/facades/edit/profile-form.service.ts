@@ -4,10 +4,10 @@ import { inject, Injectable, signal } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { catchError, concatMap, first, map, Observable, skip, Subject, takeUntil } from "rxjs";
 import dayjs from "dayjs";
-import { yearRangeValidators } from "@utils/helpers/yearRangeValidators";
-import { User } from "projects/social_platform/src/app/domain/auth/user.model";
-import { Specialization } from "projects/social_platform/src/app/domain/specializations/specialization";
-import { SelectComponent } from "@ui/components";
+import { yearRangeValidators } from "@utils/yearRangeValidators";
+import { User } from "@domain/auth/user.model";
+import { Specialization } from "@domain/specializations/specialization";
+import { SelectComponent } from "@ui/primitives";
 import { generateOptionsList } from "@utils/generate-options-list";
 import {
   educationUserLevel,

@@ -3,7 +3,7 @@
 import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot } from "@angular/router";
 import { map } from "rxjs";
-import { GetVacancyDetailUseCase } from "projects/social_platform/src/app/api/vacancy/use-cases/get-vacancy-detail.use-case";
+import { GetVacancyDetailUseCase } from "@api/vacancy/use-cases/get-vacancy-detail.use-case";
 
 /**
  * Резолвер для загрузки детальной информации о конкретной вакансии

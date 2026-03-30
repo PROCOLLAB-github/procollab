@@ -1,7 +1,7 @@
 /** @format */
 
 import { Injectable, signal } from "@angular/core";
-import { VacancyResponse } from "projects/social_platform/src/app/domain/vacancy/vacancy-response.model";
+import { VacancyResponse } from "@domain/vacancy/vacancy-response.model";
 
 @Injectable()
 export class ProjectsDetailWorkSectionUIInfoService {

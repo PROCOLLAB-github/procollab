@@ -2,10 +2,10 @@
 
 import { inject, Injectable } from "@angular/core";
 import { catchError, map, Observable, of, tap } from "rxjs";
-import { ProjectCollaboratorsRepositoryPort } from "../../../domain/project/ports/project-collaborators.repository.port";
-import { fail, ok, Result } from "../../../domain/shared/result.type";
-import { removeProjectCollaborator } from "../../../domain/project/events/remove-project-collaborator.event";
-import { EventBus } from "../../../domain/shared/event-bus";
+import { ProjectCollaboratorsRepositoryPort } from "@domain/project/ports/project-collaborators.repository.port";
+import { fail, ok, Result } from "@domain/shared/result.type";
+import { removeProjectCollaborator } from "@domain/project/events/remove-project-collaborator.event";
+import { EventBus } from "@domain/shared/event-bus";
 
 @Injectable({ providedIn: "root" })
 export class RemoveProjectCollaboratorUseCase {
