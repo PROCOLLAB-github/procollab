@@ -1,0 +1,43 @@
+/** @format */
+
+.cookie-consent {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9999;
+  max-width: 320px;
+  padding: 24px;
+  background-color: var(--light-white);
+  border: 0.5px solid var(--gray);
+  border-radius: var(--rounded-lg);
+
+  &__text {
+    margin: 0 0 12px;
+    color: var(--dark-gray);
+  }
+
+  &__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__label {
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    color: var(--dark-gray);
+    cursor: pointer;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+
+    app-button {
+      flex: 1;
+    }
+  }
+}

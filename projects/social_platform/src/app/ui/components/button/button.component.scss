@@ -13,6 +13,11 @@
   border-radius: var(--rounded-xxl);
   transition: all 0.2s;
 
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
   &.button--inline {
     font-weight: 400;
     color: var(--white);
