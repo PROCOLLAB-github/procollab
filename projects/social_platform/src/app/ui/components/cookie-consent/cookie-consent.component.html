@@ -1,0 +1,35 @@
+<!-- @format -->
+
+@if (visible) {
+  <div class="cookie-consent text-body-12">
+    <p class="cookie-consent__text">
+      мы используем файлы cookie для аналитики и улучшения сайта
+    </p>
+
+    <div class="cookie-consent__controls">
+      <div class="cookie-consent__label" (click)="onAcceptedChange(!accepted)">
+        <app-checkbox [checked]="accepted" />
+        <span>я согласен</span>
+      </div>
+
+      <div class="cookie-consent__buttons">
+        <app-button
+          size="big"
+          customTypographyClass="text-body-12"
+          [disabled]="!accepted"
+          (click)="confirm()"
+        >
+          принять
+        </app-button>
+        <app-button
+          size="big"
+          appearance="outline"
+          customTypographyClass="text-body-12"
+          (click)="decline()"
+        >
+          отклонить
+        </app-button>
+      </div>
+    </div>
+  </div>
+}

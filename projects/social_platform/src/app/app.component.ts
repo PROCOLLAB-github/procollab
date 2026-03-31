@@ -19,6 +19,7 @@ import { MatProgressBarModule } from "@angular/material/progress-bar";
 import { AsyncPipe, NgIf } from "@angular/common";
 import { TokenService } from "@corelib";
 import { LoadingService } from "@office/services/loading.service";
+import { CookieConsentComponent } from "@ui/components/cookie-consent/cookie-consent.component";
 
 /**
  * Корневой компонент приложения
@@ -31,7 +32,7 @@ import { LoadingService } from "@office/services/loading.service";
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
   standalone: true,
-  imports: [NgIf, MatProgressBarModule, RouterOutlet, AsyncPipe],
+  imports: [NgIf, MatProgressBarModule, RouterOutlet, AsyncPipe, CookieConsentComponent],
 })
 export class AppComponent implements OnInit, OnDestroy {
   constructor(
