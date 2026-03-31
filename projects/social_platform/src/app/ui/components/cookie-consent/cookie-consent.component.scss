@@ -2,8 +2,8 @@
 
 .cookie-consent {
   position: fixed;
-  bottom: 20px;
   right: 20px;
+  bottom: 20px;
   z-index: 9999;
   max-width: 320px;
   padding: 24px;
@@ -24,17 +24,17 @@
 
   &__label {
     display: inline-flex;
-    align-items: center;
     gap: 10px;
-    cursor: pointer;
+    align-items: center;
     color: var(--dark-gray);
+    cursor: pointer;
   }
 
   &__buttons {
     display: flex;
+    gap: 10px;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
 
     app-button {
       flex: 1;
