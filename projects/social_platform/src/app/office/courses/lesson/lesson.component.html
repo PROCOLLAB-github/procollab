@@ -11,9 +11,11 @@
       @for (task of tasks(); track task.id) {
       <div
         class="progress__task"
+        (click)="onSelectTask(task)"
         [ngClass]="{
           'progress__task--done': isDone(task),
-          'progress__task--current': isCurrent(task.id)
+          'progress__task--current': isCurrent(task.id),
+          'progress__task--clickable': isDone(task)
         }"
       >
         <p class="text-body-12">{{ task.order }}</p>
@@ -82,8 +84,8 @@
 
         <app-button
           [loader]="loader()"
-          [disabled]="isSubmitDisabled()"
-          [style.opacity]="isSubmitDisabled() ? 0.5 : 1"
+          [disabled]="isSubmitDisabled() || isViewingCompleted()"
+          [style.opacity]="isSubmitDisabled() || isViewingCompleted() ? 0.5 : 1"
           size="big"
           customTypographyClass="text-body-12"
           class="action__button"
