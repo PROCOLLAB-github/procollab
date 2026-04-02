@@ -1,14 +1,13 @@
 /** @format */
 
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from "@angular/core";
-import { NavService } from "@services/nav.service";
 import { NavigationStart, Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { noop, Subscription } from "rxjs";
 import { NotificationService } from "@services/notification.service";
 import { Invite } from "@models/invite.model";
 import { AuthService } from "@auth/services";
 import { InviteService } from "@services/invite.service";
-import { AsyncPipe } from "@angular/common";
+import { AsyncPipe, CommonModule } from "@angular/common";
 import { IconComponent } from "@ui/components";
 import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
 
@@ -47,6 +46,7 @@ import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
   styleUrl: "./nav.component.scss",
   standalone: true,
   imports: [
+    CommonModule,
     IconComponent,
     RouterLink,
     RouterLinkActive,
@@ -57,12 +57,10 @@ import { InviteManageCardComponent, ProfileInfoComponent } from "@uilib";
 })
 export class NavComponent implements OnInit, OnDestroy {
   constructor(
-    public readonly navService: NavService,
     private readonly router: Router,
     public readonly notificationService: NotificationService,
     private readonly inviteService: InviteService,
-    public readonly authService: AuthService,
-    private readonly cdref: ChangeDetectorRef
+    public readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -73,14 +71,6 @@ export class NavComponent implements OnInit, OnDestroy {
       }
     });
     routerEvents$ && this.subscriptions$.push(routerEvents$);
-
-    // Подписка на изменения заголовка страницы
-    const title$ = this.navService.navTitle.subscribe(title => {
-      this.title = title;
-      this.cdref.detectChanges();
-    });
-
-    title$ && this.subscriptions$.push(title$);
   }
 
   ngOnDestroy(): void {
@@ -92,7 +82,6 @@ export class NavComponent implements OnInit, OnDestroy {
   subscriptions$: Subscription[] = [];
   mobileMenuOpen = false;
   notificationsOpen = false;
-  title = "";
 
   /**
    * Проверка наличия непринятых приглашений

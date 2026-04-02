@@ -1,9 +1,13 @@
-.courses {
-  margin-top: 20px;
+@use "styles/responsive";
 
+.courses {
   &__list {
     display: grid;
-    grid-template-columns: 4fr 4fr;
+    grid-template-columns: 1fr;
     grid-gap: 20px;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: 4fr 4fr;
+    }
   }
 }

@@ -69,7 +69,6 @@ import { ProgramService } from "../services/program.service";
   ],
 })
 export class ProgramMainComponent implements OnInit, OnDestroy {
-  private readonly navService = inject(NavService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly programService = inject(ProgramService);
@@ -90,8 +89,6 @@ export class ProgramMainComponent implements OnInit, OnDestroy {
   ]);
 
   ngOnInit(): void {
-    this.navService.setNavTitle("Программы");
-
     const combined$ = combineLatest([
       this.route.queryParams.pipe(
         map(q => ({ filter: this.buildFilterQuery(q), search: q["search"] || "" })),

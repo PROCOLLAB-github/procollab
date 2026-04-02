@@ -1,9 +1,28 @@
 @use "styles/responsive";
 
 .page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding-bottom: 100px;
+  margin: 30px 20px 0;
+
+  @include responsive.apply-desktop {
+    display: block;
+    align-items: flex-start;
+  }
 
   &__bar {
-    margin-bottom: 12px;
+    width: 100%;
+    margin-bottom: 24px;
+
+    app-back {
+      display: none;
+
+      @include responsive.apply-desktop {
+        display: block;
+      }
+    }
   }
 }
