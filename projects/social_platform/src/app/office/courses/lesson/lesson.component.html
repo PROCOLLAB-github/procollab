@@ -45,6 +45,7 @@
       <app-write-task
         [data]="task"
         [type]="task.answerType === 'text_and_files' ? 'text-file' : 'text'"
+        [disabled]="isViewingCompleted()"
         (update)="onAnswerChange($event)"
       ></app-write-task>
       }
@@ -55,6 +56,7 @@
         [data]="task"
         [success]="success()"
         [error]="hasError()"
+        [disabled]="isViewingCompleted()"
         (update)="onAnswerChange($event)"
       ></app-exclude-task>
       }
@@ -65,6 +67,7 @@
         [data]="task"
         [success]="success()"
         [error]="hasError()"
+        [disabled]="isViewingCompleted()"
         (update)="onAnswerChange([$event.answerId])"
       ></app-radio-select-task>
       }
@@ -75,6 +78,7 @@
         [data]="task"
         [success]="success()"
         [error]="hasError()"
+        [disabled]="isViewingCompleted()"
         (update)="onAnswerChange($event)"
       ></app-file-task>
       }

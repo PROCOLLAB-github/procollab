@@ -48,6 +48,7 @@
         class="exclude__item"
         [class.exclude__item--success]="success && result().includes(op.id)"
         [class.exclude__item--error]="error"
+        [class.exclude__item--disabled]="disabled"
         (click)="onSelect(op.id)"
       >
         <app-checkbox size="10" [checked]="result().includes(op.id)"></app-checkbox>
