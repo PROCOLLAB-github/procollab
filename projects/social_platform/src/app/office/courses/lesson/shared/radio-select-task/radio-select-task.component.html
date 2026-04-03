@@ -55,9 +55,10 @@
         class="radio__item"
         [class.radio__item--success]="success && result().answerId === op.id"
         [class.radio__item--error]="error && result().answerId === op.id"
+        [class.radio__item--disabled]="disabled"
         (click)="onSelect(op.id)"
       >
-        <input type="radio" [id]="op.id" name="radio-group" />
+        <input type="radio" [id]="op.id" name="radio-group" [disabled]="disabled" />
         <label class="text-body-12" [for]="op.id">
           {{ op.text }}
         </label>

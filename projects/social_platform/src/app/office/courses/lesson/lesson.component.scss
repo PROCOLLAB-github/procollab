@@ -73,6 +73,10 @@
       border: 0 !important;
     }
 
+    &--clickable {
+      cursor: pointer;
+    }
+
     &--current {
       border: 0.5px solid var(--accent);
     }

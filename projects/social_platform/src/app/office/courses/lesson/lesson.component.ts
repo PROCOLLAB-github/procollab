@@ -157,6 +157,24 @@ export class LessonComponent implements OnInit {
     return task.isCompleted || this.completedTaskIds().has(task.id);
   }
 
+  protected readonly isViewingCompleted = computed(() => {
+    const task = this.currentTask();
+    return task ? this.isDone(task) : false;
+  });
+
+  onSelectTask(task: Task) {
+    if (!this.isDone(task)) return;
+
+    this.currentTaskId.set(task.id);
+    this.answerBody.set(null);
+    this.success.set(false);
+    this.hasError.set(false);
+
+    if (this.isComplete()) {
+      this.router.navigate(["./"], { relativeTo: this.route });
+    }
+  }
+
   onSubmitAnswer() {
     const task = this.currentTask();
     if (!task) return;

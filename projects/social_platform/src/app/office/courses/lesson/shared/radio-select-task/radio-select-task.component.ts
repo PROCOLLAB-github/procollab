@@ -34,6 +34,7 @@ export class RadioSelectTaskComponent implements OnInit {
   @Input({ required: true }) data!: Task;
   @Input() success = false;
   @Input() hint = "";
+  @Input() disabled = false;
 
   @Input()
   set error(value: boolean) {
@@ -80,6 +81,7 @@ export class RadioSelectTaskComponent implements OnInit {
   }
 
   onSelect(id: number) {
+    if (this.disabled) return;
     this.result.set({ answerId: id });
     this.update.emit({ answerId: id });
   }

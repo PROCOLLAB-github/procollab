@@ -58,6 +58,7 @@
         attr.maxlength="{{ maxLength }}"
         (input)="onKeyUp($event)"
         placeholder="ваш ответ"
+        [disabled]="disabled"
       ></textarea>
       <div class="write-task__counter">
         <p class="text-body-10">
@@ -66,7 +67,7 @@
       </div>
     </div>
 
-    @if (type === 'text-file') {
+    @if (type === 'text-file' && !disabled) {
     <div class="write-task__files">
       <app-upload-file [resetAfterUpload]="true" (uploaded)="onFileUploaded($event)">
         <div emptyPlaceholder class="write-task__upload">
