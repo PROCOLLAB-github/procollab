@@ -31,21 +31,21 @@
   }
 
   &__top {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 100;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 30px 5px 30px 17px;
     background: linear-gradient(var(--accent), #4d3780);
-    position: sticky;
-    top: 0;
-    left: 0;
-    z-index: 100;
 
     @include responsive.apply-desktop {
+      position: static;
       flex-shrink: 0;
       padding: 0;
       background: none;
-      position: static;
     }
   }
 
