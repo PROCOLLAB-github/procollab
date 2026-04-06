@@ -1,6 +1,8 @@
 @use "styles/responsive";
 
 .page {
+  margin-top: 30px;
+
   &__bar {
     display: grid;
     grid-template-columns: 8fr 2fr;

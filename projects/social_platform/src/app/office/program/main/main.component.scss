@@ -1,20 +1,36 @@
+@use "styles/responsive";
+
 .programs {
   display: grid;
-  grid-template-columns: 8fr 2fr;
+  grid-template-columns: 1fr;
   grid-gap: 24px;
+  align-items: center;
   justify-content: space-between;
+
+  @include responsive.apply-desktop {
+    grid-template-columns: 8fr 2fr;
+    align-items: flex-start;
+  }
 
   &__list {
     display: grid;
-    grid-template-columns: 4fr 4fr;
+    grid-template-columns: 1fr;
     grid-gap: 24px;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: 4fr 4fr;
+    }
   }
 
   &__filter {
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 20px;
     margin-top: 14px;
+
+    @include responsive.apply-desktop {
+      display: flex;
+    }
 
     &--block {
       display: flex;

@@ -2,13 +2,14 @@
 
 <div class="nav-bar">
   <div class="nav-bar__inner">
-    <h1 class="text-heading-1 nav-bar__title">{{ title }}</h1>
     <div class="nav-bar__toggle">
       <i
         appIcon
+        [ngStyle]="{ color: mobileMenuOpen ? 'var(--dark-grey)' : 'var(--light-white)' }"
         [icon]="mobileMenuOpen ? 'menu-cross' : 'menu-burger'"
-        appSquare="40"
+        appSquare="24"
         (click)="mobileMenuOpen = !mobileMenuOpen"
+        class="nav-bar__icon"
       >
       </i>
       @if (((notificationService.hasNotifications | async) || hasInvites) && !mobileMenuOpen) {
@@ -19,9 +20,6 @@
   @if (mobileMenuOpen) {
   <div class="nav-bar__mobile-menu">
     <div class="nav-bar__top">
-      <a class="nav-bar__mobile-logo" href="https://procollab.ru/" target="_blank">
-        <img src="/assets/images/shared/logo.svg" alt="procollab" width="125px" />
-      </a>
       <div
         class="nav-bar__notifications-toggle"
         [class.nav-bar__notifications-toggle--active]="notificationsOpen"
@@ -34,9 +32,17 @@
           appWidth="23"
           appHeight="21"
           appViewBox="0 0 23 21"
+          class="nav-bar__icon"
         ></i>
 
-        <i appIcon icon="bell" appWidth="20" appHeight="22" appViewBox="0 0 20 22"></i>
+        <i
+          appIcon
+          icon="bell"
+          appWidth="20"
+          appHeight="22"
+          appViewBox="0 0 20 22"
+          class="nav-bar__icon"
+        ></i>
         @if ((notificationService.hasNotifications | async) || hasInvites) {
         <div class="attention"></div>
         }
@@ -47,50 +53,75 @@
       <ul class="nav__list">
         <a class="nav__link" routerLink="feed" routerLinkActive="nav__link--active">
           <li class="text-body-14 nav__item">
-            <i appIcon icon="feed" appSquare="24" appViewBox="0 0 24 20"></i>
-            Новости
+            <i appIcon icon="feed" appSquare="24" appViewBox="0 0 24 20" class="nav-bar__icon"></i>
+            новости
           </li>
         </a>
         <a class="nav__link" routerLink="projects" routerLinkActive="nav__link--active">
           <li class="text-body-14 nav__item">
-            <i appIcon icon="projects-filled" appSquare="24" appViewBox="0 0 24 20"></i>
-            Проекты
-          </li>
-        </a>
-        <a class="nav__link" routerLink="program/list" routerLinkActive="nav__link--active">
-          <li class="text-body-14 nav__item">
-            <i appIcon icon="program" appSquare="24" appViewBox="0 0 24 16"></i>
-            Программы
+            <i
+              appIcon
+              icon="projects"
+              appSquare="24"
+              appViewBox="0 0 24 20"
+              class="nav-bar__icon"
+            ></i>
+            проекты
           </li>
         </a>
         <a class="nav__link" routerLink="members" routerLinkActive="nav__link--active">
           <li class="text-body-14 nav__item">
-            <i appIcon icon="people-bold" appSquare="24" appViewBox="0 0 24 18"></i>
-            Участники
+            <i
+              appIcon
+              icon="people-bold"
+              appSquare="24"
+              appViewBox="0 0 24 18"
+              class="nav-bar__icon"
+            ></i>
+            участники
           </li>
         </a>
-        <a class="nav__link" routerLink="mentors" routerLinkActive="nav__link--active">
+        <a class="nav__link" routerLink="program" routerLinkActive="nav__link--active">
           <li class="text-body-14 nav__item">
-            <i appIcon icon="two-people" appSquare="24" appViewBox="0 0 28 20"></i>
-            Эксперты
+            <i
+              appIcon
+              icon="program"
+              appSquare="24"
+              appViewBox="0 0 24 16"
+              class="nav-bar__icon"
+            ></i>
+            программы
+          </li>
+        </a>
+        <a class="nav__link" routerLink="courses" routerLinkActive="nav__link--active">
+          <li class="text-body-14 nav__item">
+            <i
+              appIcon
+              icon="trajectories"
+              appSquare="24"
+              appViewBox="0 0 28 20"
+              class="nav-bar__icon"
+            ></i>
+            курсы
           </li>
         </a>
         <a class="nav__link" routerLink="vacancies" routerLinkActive="nav__link--active">
           <li class="text-body-14 nav__item">
-            <i appIcon icon="search-sidebar" appSquare="24" appViewBox="0 0 28 20"></i>
-            Вакансии
+            <i
+              appIcon
+              icon="search-sidebar"
+              appSquare="24"
+              appViewBox="0 0 28 20"
+              class="nav-bar__icon"
+            ></i>
+            вакансии
           </li>
         </a>
-        <div class="text-body-14 pro-item" (click)="openSkills()" afterNavItems>
-          <div class="pro-item__name">
-            <i appIcon icon="trajectories" appSquare="24"></i> <span> Траектории </span>
-          </div>
-        </div>
       </ul>
     </nav>
     } @else {
     <div>
-      <h3 class="text-bold-body-16 notifications__title">Уведомления</h3>
+      <h3 class="text-bold-body-16 notifications__title">уведомления</h3>
       <ul class="notifications__invites">
         @for (invite of invites; track invite.id) {
         <li class="notifications__invite">
@@ -103,8 +134,6 @@
         }
       </ul>
     </div>
-    } @if (authService.profile | async; as user) {
-    <app-profile-info class="nav-bar__profile" [user]="user"></app-profile-info>
     }
   </div>
   }

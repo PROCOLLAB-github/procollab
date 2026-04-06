@@ -3,9 +3,6 @@
 <div class="office">
   @if (authService.profile | async; as user) {
   <div class="office__wrapper">
-    <div class="office__top">
-      <app-nav [invites]="invites()"></app-nav>
-    </div>
     <img
       alt="background-image"
       src="/assets/images/office/shared/backgorund-image-rocket-main.svg"
@@ -37,17 +34,22 @@
           </ui-sidebar>
 
           <div class="office__inner--content">
-            @if (user !== undefined && invites !== undefined) {
-            <app-profile-control-panel
-              [invites]="invites()"
-              [hasNotifications]="false"
-              [hasUnreads]="!!(chatService.unread$ | async)"
-              [user]="user"
-              (acceptInvite)="onAcceptInvite($event)"
-              (rejectInvite)="onRejectInvite($event)"
-              (logout)="onLogout()"
-            ></app-profile-control-panel>
-            }
+            <div class="office__top">
+              <app-nav [invites]="invites()"></app-nav>
+
+              @if (user !== undefined && invites !== undefined) {
+              <app-profile-control-panel
+                [invites]="invites()"
+                [hasNotifications]="false"
+                [hasUnreads]="!!(chatService.unread$ | async)"
+                [user]="user"
+                (acceptInvite)="onAcceptInvite($event)"
+                (rejectInvite)="onRejectInvite($event)"
+                (logout)="onLogout()"
+              ></app-profile-control-panel>
+              }
+            </div>
+
             <router-outlet></router-outlet>
           </div>
         </div>

@@ -9,12 +9,18 @@
   background-color: var(--white);
 
   &__background-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    max-width: 130px;
-    padding-right: 20px;
+    display: none;
+
+    @include responsive.apply-desktop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      gap: 30px;
+      width: 100%;
+      max-width: 130px;
+      padding-right: 20px;
+    }
   }
 
   &__wrapper {
@@ -25,7 +31,22 @@
   }
 
   &__top {
-    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 5px 30px 17px;
+    background: linear-gradient(var(--accent), #4d3780);
+
+    @include responsive.apply-desktop {
+      position: static;
+      flex-shrink: 0;
+      padding: 0;
+      background: none;
+    }
   }
 
   &__body {
@@ -52,7 +73,7 @@
     }
 
     @media (max-width: 768px) {
-      padding: 0 15px;
+      padding: 0;
     }
   }
 
@@ -74,6 +95,10 @@
       display: grid;
       grid-template-columns: 2fr 10fr;
       width: 100%;
+
+      @include responsive.apply-desktop {
+        margin-top: 18px;
+      }
 
       @media (max-width: 992px) {
         grid-template-columns: 1fr;
