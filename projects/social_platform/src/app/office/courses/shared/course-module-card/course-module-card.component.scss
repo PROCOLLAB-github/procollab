@@ -55,7 +55,7 @@
     cursor: pointer;
     background-color: var(--medium-grey-for-outline);
     border-radius: var(--rounded-xl);
-    
+
     @include responsive.apply-desktop {
       left: 14%;
     }

@@ -10,8 +10,8 @@ $detail-bar-mb: 12px;
   height: 100%;
   max-height: 100%;
   padding-top: 20px;
-  margin: 0px 20px;
-  
+  margin: 0 20px;
+
   @include responsive.apply-desktop {
     margin: 0;
   }
@@ -28,15 +28,15 @@ $detail-bar-mb: 12px;
 
   position: relative;
   padding: 0;
+  margin-bottom: 20px;
   border: none;
   border-radius: $body-slide;
-  margin-bottom: 20px;
 
   &__cover {
     position: relative;
     height: 136px;
     border-radius: 15px;
-    
+
     @include responsive.apply-desktop {
       border-radius: 15px 15px 0 0;
     }

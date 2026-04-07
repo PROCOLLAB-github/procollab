@@ -3,10 +3,10 @@
 @use "styles/responsive";
 
 .about {
-  padding: 0px;
+  padding: 0;
   background-color: transparent;
-  border-radius: 0px;
-  
+  border-radius: 0;
+
   @include responsive.apply-desktop {
     padding: 24px;
     background-color: var(--light-white);

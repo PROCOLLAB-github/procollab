@@ -67,7 +67,7 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-gap: 20px;
-    
+
     @include responsive.apply-desktop {
       grid-template-columns: 2fr 5fr 3fr;
     }
@@ -143,7 +143,6 @@
     color: var(--accent-dark);
   }
 }
-
 
 .news {
   &__form {
