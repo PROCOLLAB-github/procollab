@@ -1,20 +1,9 @@
 /** @format */
 
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  DestroyRef,
-  ElementRef,
-  inject,
-  OnInit,
-  signal,
-  ViewChild,
-} from "@angular/core";
+import { Component, DestroyRef, HostListener, inject, OnInit, signal } from "@angular/core";
 import { ActivatedRoute, RouterModule } from "@angular/router";
-import { ParseBreaksPipe, ParseLinksPipe } from "@corelib";
 import { IconComponent } from "@uilib";
-import { expandElement } from "@utils/expand-element";
+import { CourseAboutComponent } from "@office/courses/shared/course-about/course-about.component";
 import { map } from "rxjs";
 import { CommonModule } from "@angular/common";
 import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component";
@@ -40,24 +29,26 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
   imports: [
     IconComponent,
     RouterModule,
-    ParseBreaksPipe,
-    ParseLinksPipe,
     CommonModule,
     SoonCardComponent,
     ModalComponent,
     ButtonComponent,
     CourseModuleCardComponent,
+    CourseAboutComponent,
   ],
   templateUrl: "./info.component.html",
   styleUrl: "./info.component.scss",
 })
-export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
-  @ViewChild("descEl") descEl?: ElementRef;
+export class CourseInfoComponent implements OnInit {
+  appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
+  }
 
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
-
-  private readonly cdRef = inject(ChangeDetectorRef);
 
   protected readonly courseStructure = signal<CourseStructure | undefined>(undefined);
   protected readonly courseDetail = signal<CourseDetail | undefined>(undefined);
@@ -99,29 +90,5 @@ export class TrajectoryInfoComponent implements OnInit, AfterViewInit {
           );
         }
       });
-  }
-
-  protected descriptionExpandable?: boolean;
-  protected readFullDescription!: boolean;
-
-  /**
-   * Проверка возможности расширения описания после инициализации представления
-   */
-  ngAfterViewInit(): void {
-    const descElement = this.descEl?.nativeElement;
-    this.descriptionExpandable = descElement?.clientHeight < descElement?.scrollHeight;
-
-    this.cdRef.detectChanges();
-  }
-
-  /**
-   * Переключение развернутого/свернутого состояния описания
-   * @param elem - HTML элемент описания
-   * @param expandedClass - CSS класс для развернутого состояния
-   * @param isExpanded - текущее состояние (развернуто/свернуто)
-   */
-  onExpandDescription(elem: HTMLElement, expandedClass: string, isExpanded: boolean): void {
-    expandElement(elem, expandedClass, isExpanded);
-    this.readFullDescription = !isExpanded;
   }
 }

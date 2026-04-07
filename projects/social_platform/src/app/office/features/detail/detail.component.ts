@@ -1,7 +1,15 @@
 /** @format */
 
 import { CommonModule, Location } from "@angular/common";
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { ButtonComponent, InputComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
 import { ModalComponent } from "@ui/components/modal/modal.component";
@@ -35,6 +43,7 @@ import { ControlErrorPipe, ValidationService } from "@corelib";
 import { ErrorMessage } from "@error/models/error-message";
 import { InviteService } from "@office/services/invite.service";
 import { ApiPagination } from "@office/models/api-pagination.model";
+import { ProgramLinksComponent } from "../program-links/program-links.component";
 
 @Component({
   selector: "app-detail",
@@ -53,6 +62,7 @@ import { ApiPagination } from "@office/models/api-pagination.model";
     InputComponent,
     TruncatePipe,
     ControlErrorPipe,
+    ProgramLinksComponent,
   ],
   standalone: true,
 })
@@ -80,6 +90,13 @@ export class DeatilComponent implements OnInit, OnDestroy {
   profile?: User;
   profileProjects = signal<User["projects"]>([]);
   listType: "project" | "program" | "profile" = "project";
+
+  appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
+  }
 
   // Переменная для подсказок
   isTooltipVisible = false;
@@ -128,6 +145,19 @@ export class DeatilComponent implements OnInit, OnDestroy {
   openSupport = false; // Флаг модального окна поддержки
   leaderLeaveModal = false; // Флаг модального окна предупреждения лидера
   isDelayModalOpen = false;
+  isContactsModalOpen = false;
+  isMaterialsModalOpen = false;
+
+  get contactLinks(): { label: string; url: string }[] {
+    return (this.info()?.links ?? []).map((link: string) => ({ label: link, url: link }));
+  }
+
+  get materialLinks(): { label: string; url: string }[] {
+    return (this.info()?.materials ?? []).map((m: { title: string; url: string }) => ({
+      label: m.title,
+      url: m.url,
+    }));
+  }
 
   // Переменные для работы с подтверждением навыков
   showApproveSkillModal = false;

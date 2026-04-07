@@ -1,13 +1,16 @@
 /** @format */
 
 import { CommonModule } from "@angular/common";
-import { Component, DestroyRef, inject, signal, OnInit } from "@angular/core";
+import { Component, DestroyRef, HostListener, inject, signal, OnInit } from "@angular/core";
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
 import { filter, map, tap } from "rxjs";
 import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ButtonComponent } from "@ui/components";
+import { IconComponent } from "@uilib";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { CourseDetail, CourseStructure } from "@office/models/courses.model";
+import { ModalComponent } from "@ui/components/modal/modal.component";
+import { CourseAboutComponent } from "@office/courses/shared/course-about/course-about.component";
 
 /**
  * Компонент детального просмотра траектории
@@ -17,7 +20,15 @@ import { CourseDetail, CourseStructure } from "@office/models/courses.model";
 @Component({
   selector: "app-course-detail",
   standalone: true,
-  imports: [CommonModule, RouterOutlet, AvatarComponent, ButtonComponent],
+  imports: [
+    CommonModule,
+    RouterOutlet,
+    AvatarComponent,
+    ButtonComponent,
+    IconComponent,
+    ModalComponent,
+    CourseAboutComponent,
+  ],
   templateUrl: "./course-detail.component.html",
   styleUrl: "./course-detail.component.scss",
 })
@@ -26,8 +37,16 @@ export class CourseDetailComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
+  appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
+  }
+
   protected readonly isTaskDetail = signal<boolean>(false);
   protected readonly isDisabled = signal<boolean>(false);
+  isAboutModalOpen = false;
 
   protected readonly courseModules = signal<CourseStructure["modules"]>([]);
   protected readonly course = signal<CourseDetail | undefined>(undefined);

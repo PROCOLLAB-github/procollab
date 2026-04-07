@@ -1,9 +1,9 @@
 /** @format */
 
 import type { Routes } from "@angular/router";
-import { TrajectoryInfoComponent } from "./info/info.component";
 import { CourseDetailComponent } from "./course-detail.component";
 import { CoursesDetailResolver } from "./course-detail.resolver";
+import { CourseInfoComponent } from "./info/info.component";
 
 export const COURSE_DETAIL_ROUTES: Routes = [
   {
@@ -16,7 +16,7 @@ export const COURSE_DETAIL_ROUTES: Routes = [
     children: [
       {
         path: "",
-        component: TrajectoryInfoComponent,
+        component: CourseInfoComponent,
       },
       {
         path: "lesson",

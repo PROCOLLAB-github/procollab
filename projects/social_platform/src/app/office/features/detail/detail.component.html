@@ -19,7 +19,13 @@
           class="info__avatar"
           (click)="redirectDetailInfo()"
           [class.info__avatar--program]="listType === 'program'"
-          [style.width]="listType === 'project' || listType === 'profile' ? '110px' : '123px'"
+          [style.width]="
+            appWidth < 920
+              ? '90px'
+              : listType === 'project' || listType === 'profile'
+              ? '110px'
+              : '123px'
+          "
         >
           @if (chatService.userOnlineStatusCache | async; as cache) {
           <app-avatar
@@ -30,7 +36,9 @@
             [onlineBadgeSize]="15"
             [onlineBadgeBorder]="0"
             [onlineBadgeOffset]="8"
-            [size]="listType === 'project' || listType === 'profile' ? 110 : 123"
+            [size]="
+              appWidth < 920 ? 90 : listType === 'project' || listType === 'profile' ? 110 : 123
+            "
             [isOnline]="cache[info().id] !== undefined ? cache[info().id] : info().isOnline"
           ></app-avatar>
           @if (listType === 'project' || listType === 'profile') {
@@ -61,65 +69,62 @@
         </div>
 
         <ng-template #programTpl>
-          @if (userType() !== undefined) { @if (!isUserMember && !isUserManager) { @if
-          (info().name.includes("Кейс-чемпионат MIR")) {
-          <a
-            (click)="checkPrograRegistrationEnded($event)"
-            href="https://case-champ.ru/corporate#rec1176757836"
-          >
-            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
-              зарегистрироваться
-            </app-button>
-          </a>
-          } @else if (info().registrationLink) {
-          <a (click)="checkPrograRegistrationEnded($event)" [href]="info().registrationLink">
-            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
-              зарегистрироваться
-            </app-button>
-          </a>
-          } @else {
-          <a (click)="checkPrograRegistrationEnded($event)">
-            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
-              зарегистрироваться
-            </app-button>
-          </a>
-          } } @if (isUserMember && !isUserManager && !isUserExpert) {
-          <app-button
-            size="medium"
-            [style.opacity]="submissionProjectDateExpired || isProjectAssigned ? '0.5' : '1'"
-            [disabled]="!!submissionProjectDateExpired || isProjectAssigned"
-            [appearance]="isProjectAssigned ? 'outline' : 'inline'"
-            (click)="isProjectAssigned ? null : addNewProject()"
-            customTypographyClass="text-body-12 bar__add-project"
-          >
-            <span>{{ isProjectAssigned ? "вы подали проект" : "создать заявку" }}</span>
-            <i appIcon icon="plus" appSquare="10"></i>
-          </app-button>
-          } @if ((isUserManager || isUserExpert) && isUserMember) {
-          <a [routerLink]="'/office/program/' + info().id + '/projects-rating'">
-            <app-button
-              [appearance]="isProjectsRatingPage ? 'inline' : 'outline'"
-              size="medium"
-              customTypographyClass="text-body-12"
+          @if (userType() !== undefined) {
+          <div class="info__primary-action">
+            @if (!isUserMember && !isUserManager) { @if (info().name.includes("Кейс-чемпионат MIR"))
+            {
+            <a
+              (click)="checkPrograRegistrationEnded($event)"
+              href="https://case-champ.ru/corporate#rec1176757836"
             >
-              оценка проектов
+              <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+                зарегистрироваться
+              </app-button>
+            </a>
+            } @else if (info().registrationLink) {
+            <a (click)="checkPrograRegistrationEnded($event)" [href]="info().registrationLink">
+              <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+                зарегистрироваться
+              </app-button>
+            </a>
+            } @else {
+            <a (click)="checkPrograRegistrationEnded($event)">
+              <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
+                зарегистрироваться
+              </app-button>
+            </a>
+            } } @if (isUserMember && !isUserManager && !isUserExpert) {
+            <app-button
+              [size]="appWidth > 920 ? 'medium' : 'big'"
+              [disabled]="!!submissionProjectDateExpired || isProjectAssigned"
+              [appearance]="isProjectAssigned ? 'outline' : 'inline'"
+              (click)="isProjectAssigned ? null : addNewProject()"
+              customTypographyClass="text-body-12 bar__add-project"
+            >
+              <span>{{ isProjectAssigned ? "вы подали проект" : "создать заявку" }}</span>
+              <i appIcon icon="plus" appSquare="10"></i>
             </app-button>
-          </a>
-          }
+            } @if ((isUserManager || isUserExpert) && isUserMember) {
+            <a [routerLink]="'/office/program/' + info().id + '/projects-rating'">
+              <app-button
+                [appearance]="isProjectsRatingPage ? 'inline' : 'outline'"
+                [size]="appWidth > 920 ? 'medium' : 'big'"
+                customTypographyClass="text-body-12"
+              >
+                оценка проектов
+              </app-button>
+            </a>
+            }
+          </div>
 
-          <a
-            class="info__presentation"
-            [href]="info().presentationAddress"
-            download=""
-            target="_blank"
-          >
+          <a [href]="info().presentationAddress" download="" target="_blank">
             <app-button
               [disabled]="isUserManager"
-              [style.opacity]="isUserManager ? '0.3' : '1'"
               appearance="outline"
-              size="medium"
+              [size]="appWidth > 920 ? 'medium' : 'small'"
               customTypographyClass="text-body-12"
             >
+              @if (appWidth > 920) {
               <span>{{
                 info().name.includes("Технолидеры Будущего")
                   ? "Каталог лучших стартапов 2022/23"
@@ -127,7 +132,7 @@
                   ? "аналитика"
                   : "положение"
               }}</span>
-              @if (isUserManager) {
+              } @if (isUserManager && appWidth > 920) {
               <app-tooltip
                 [text]="'Скоро здесь будет аналитика по включенности участников и проектов'"
                 [isVisible]="isTooltipVisible"
@@ -138,61 +143,88 @@
                 (hide)="hideTooltip()"
               ></app-tooltip>
               } @else {
-              <i appIcon class="info__presentation-icon" icon="arrow-down" appSquare="6"></i>
+              <i
+                appIcon
+                class="info__presentation-icon"
+                [icon]="appWidth > 920 ? 'arrow-down' : isUserManager ? 'graph' : 'file'"
+                [appSquare]="appWidth > 920 ? '8' : '12'"
+              ></i>
               }
             </app-button>
           </a>
 
+          @if (appWidth > 920) {
           <div class="info__divider"></div>
-
-          @if (isUserManager || isUserExpert) {
+          } @if (isUserManager || isUserExpert) {
           <a [routerLink]="'/office/program/' + info().id + '/projects'">
             <app-button
               [appearance]="isProjectsPage ? 'inline' : 'outline'"
               size="medium"
               [disabled]="isUserExpert && !isUserManager"
-              [style.opacity]="isUserExpert && !isUserManager ? '0.5' : '1'"
               customTypographyClass="text-body-12"
             >
               проекты-участники
             </app-button>
           </a>
-          } @else {
+          } @else { @if (appWidth > 920) {
           <a class="info__more">
             <app-button
               appearance="outline"
               [disabled]="true"
-              style="opacity: 0.5"
               size="medium"
               customTypographyClass="text-body-12"
             >
               узнать подробнее
             </app-button>
           </a>
+          } @else {
+          <app-button
+            appearance="outline"
+            size="small"
+            [disabled]="!info().links?.length"
+            class="info__contacts"
+            customTypographyClass="text-body-12"
+            (click)="isContactsModalOpen = true"
+          >
+            <i appIcon icon="phone" appSquare="12"></i>
+          </app-button>
+          } } @if (appWidth < 920) {
+          <app-button
+            appearance="outline"
+            size="big"
+            [disabled]="!info().materials?.length"
+            class="info__materials"
+            customTypographyClass="text-body-12"
+            (click)="isMaterialsModalOpen = true"
+          >
+            материалы
+          </app-button>
           } @if (isUserManager || isUserExpert) {
           <a [routerLink]="'/office/program/' + info().id + '/members'">
             <app-button
               [appearance]="isMembersPage ? 'inline' : 'outline'"
               size="medium"
               [disabled]="isUserExpert && !isUserManager"
-              [style.opacity]="isUserExpert && !isUserManager ? '0.5' : '1'"
               customTypographyClass="text-body-12"
             >
               участники
             </app-button>
           </a>
           } @else { @if (info().courses?.length) {
-          <a class="info__contacts" [routerLink]="'/office/courses/' + info().courses[0].id">
-            <app-button appearance="outline" size="medium" customTypographyClass="text-body-12">
-              перейти в курс
+          <a [routerLink]="'/office/courses/' + info().courses[0].id">
+            <app-button
+              appearance="outline"
+              [size]="appWidth > 920 ? 'medium' : 'big'"
+              customTypographyClass="text-body-12"
+            >
+              {{ appWidth > 920 ? "перейти в курс" : "курс" }}
             </app-button>
           </a>
           } @else {
-          <a class="info__contacts">
+          <a>
             <app-button
               appearance="outline"
               [disabled]="true"
-              style="opacity: 0.5"
               size="medium"
               customTypographyClass="text-body-12"
             >
@@ -251,6 +283,30 @@
               <i appIcon icon="sad-smile" appSquare="50" style="margin-top: 36px"></i>
             </div>
           </app-modal>
+
+          <app-modal
+            [open]="isContactsModalOpen"
+            (openChange)="isContactsModalOpen = !isContactsModalOpen"
+            bodyClass="modal__body--no-flex"
+          >
+            <app-program-links
+              title="контакты"
+              icon="phone"
+              [links]="contactLinks"
+            ></app-program-links>
+          </app-modal>
+
+          <app-modal
+            [open]="isMaterialsModalOpen"
+            (openChange)="isMaterialsModalOpen = !isMaterialsModalOpen"
+            bodyClass="modal__body--no-flex"
+          >
+            <app-program-links
+              title="материалы"
+              icon="book"
+              [links]="materialLinks"
+            ></app-program-links>
+          </app-modal>
         </ng-template>
 
         <ng-template #projectTpl>
@@ -273,7 +329,6 @@
           } @if (!isInProject) {
           <app-button
             [disabled]="true"
-            style="opacity: 0.5"
             appearance="outline"
             size="medium"
             customTypographyClass="text-body-12"
@@ -416,7 +471,6 @@
         <ng-template #profileTpl>
           @if (profile) { @if (+profile.id === +info().id) {
           <app-button
-            style="opacity: 0.5"
             size="medium"
             appearance="outline"
             [disabled]="true"
@@ -433,7 +487,6 @@
           >
           } @if (+profile.id === +info().id) {
           <app-button
-            style="opacity: 0.5"
             size="medium"
             appearance="outline"
             [disabled]="true"

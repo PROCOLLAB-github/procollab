@@ -10,6 +10,11 @@ $detail-bar-mb: 12px;
   height: 100%;
   max-height: 100%;
   padding-top: 20px;
+  margin: 0px 20px;
+  
+  @include responsive.apply-desktop {
+    margin: 0;
+  }
 
   &__body {
     flex-grow: 1;
@@ -25,12 +30,16 @@ $detail-bar-mb: 12px;
   padding: 0;
   border: none;
   border-radius: $body-slide;
+  margin-bottom: 20px;
 
   &__cover {
     position: relative;
-    width: 100%;
     height: 136px;
-    border-radius: 15px 15px 0 0;
+    border-radius: 15px;
+    
+    @include responsive.apply-desktop {
+      border-radius: 15px 15px 0 0;
+    }
 
     img {
       position: absolute;
@@ -60,6 +69,7 @@ $detail-bar-mb: 12px;
     align-items: center;
     cursor: pointer;
     border-radius: 50%;
+    transform: translate(-50%, 30%);
 
     &--program {
       bottom: 15px;
@@ -102,13 +112,29 @@ $detail-bar-mb: 12px;
   &__actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 180px;
+    gap: 12px;
     align-items: center;
-    padding: 24px 0 30px;
+    padding: 24px 10px 0;
+
+    @include responsive.apply-desktop {
+      gap: 180px;
+      padding: 24px 0 30px;
+    }
+
+    &--end {
+      justify-self: end;
+    }
+
+    &--full {
+      grid-column: 1 / -1;
+
+      @include responsive.apply-desktop {
+        grid-column: auto;
+      }
+    }
 
     &--disabled {
       cursor: not-allowed;
-      opacity: 0.5;
     }
   }
 }

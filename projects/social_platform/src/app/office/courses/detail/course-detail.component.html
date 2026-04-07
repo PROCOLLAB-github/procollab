@@ -4,44 +4,75 @@
   <div class="detail__body">
     @if(course()) {
     <div class="info detail__section detail__info">
-      <img class="info__cover" [src]="course()!.headerCoverUrl" alt="cover" />
-
-      <div class="info__avatar">
-        <app-avatar
-          [url]="course()!.avatarUrl"
-          [size]="106"
-          (click)="redirectDetailInfo(course()!.id)"
-        ></app-avatar>
-        @if (!isTaskDetail()) {
-        <h1 class="info__title text-body-12">{{ course()!.title }}</h1>
-        }
+      <div class="info__cover">
+        <img class="info__cover" [src]="course()!.headerCoverUrl" alt="cover" />
+        <div class="info__avatar">
+          <app-avatar
+            [url]="course()!.avatarUrl"
+            [size]="106"
+            (click)="redirectDetailInfo(course()!.id)"
+          ></app-avatar>
+          @if (!isTaskDetail()) { @if (appWidth > 920) {
+          <h1 class="info__title text-body-12">{{ course()!.title }}</h1>
+          } }
+        </div>
       </div>
-    </div>
 
-    <div class="info__body">
-      <div class="info__actions">
-        <app-button
-          (click)="redirectDetailInfo(isTaskDetail() ? course()!.id : undefined)"
-          [disabled]="false"
-          size="big"
-          customTypographyClass="text-body-12"
-          appearance="outline"
-          >{{ isTaskDetail() ? "назад к модулю" : "назад" }}</app-button
-        >
+      <div class="info__body">
+        <div class="info__actions">
+          @if (appWidth < 920) {
+          <app-button
+            [disabled]="true"
+            size="small"
+            customTypographyClass="text-body-12"
+            appearance="outline"
+          >
+            аналитика
+          </app-button>
 
-        <app-button
-          [disabled]="isDisabled()"
-          [class.info__actions--disabled]="isDisabled()"
-          size="big"
-          customTypographyClass="text-body-12"
-          appearance="outline"
-          (click)="redirectToProgram()"
-          >вернуться в программу</app-button
-        >
+          <app-button
+            [disabled]="!course()!.description"
+            size="small"
+            class="info__actions--end"
+            customTypographyClass="text-body-12"
+            appearance="outline"
+            (click)="course()!.description ? (isAboutModalOpen = true) : null"
+          >
+            о курсе
+          </app-button>
+          }
+
+          <app-button
+            class="info__actions--full"
+            (click)="redirectDetailInfo(isTaskDetail() ? course()!.id : undefined)"
+            [size]="appWidth > 920 ? 'big' : 'big'"
+            customTypographyClass="text-body-12"
+            appearance="outline"
+            >{{ isTaskDetail() ? "назад к модулю" : "назад" }}</app-button
+          >
+
+          <app-button
+            class="info__actions--full"
+            [disabled]="isDisabled()"
+            [size]="appWidth > 920 ? 'big' : 'big'"
+            customTypographyClass="text-body-12"
+            appearance="outline"
+            (click)="redirectToProgram()"
+            >вернуться в программу</app-button
+          >
+        </div>
       </div>
     </div>
 
     <router-outlet></router-outlet>
+
+    <app-modal
+      [open]="isAboutModalOpen"
+      (openChange)="isAboutModalOpen = !isAboutModalOpen"
+      bodyClass="modal__body--no-flex"
+    >
+      <app-course-about [description]="course()!.description"></app-course-about>
+    </app-modal>
     }
   </div>
 </div>

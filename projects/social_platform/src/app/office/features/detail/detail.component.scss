@@ -12,6 +12,11 @@ $detail-bar-mb: 12px;
   height: 100%;
   max-height: 100%;
   padding-top: 20px;
+  margin: 0px 20px;
+  
+  @include responsive.apply-desktop {
+    margin: 0;
+  }
 
   &__body {
     flex-grow: 1;
@@ -31,11 +36,20 @@ $detail-bar-mb: 12px;
 
   &__cover {
     position: relative;
-    height: 136px;
-    border-radius: 15px 15px 0 0;
+    height: 63px;
+    border-radius: 15px;
+    
+    @include responsive.apply-desktop {
+      height: 136px;
+      border-radius: 15px 15px 0 0;
+    }
 
     &--program {
-      height: 155px;
+      height: 63px;
+      
+      @include responsive.apply-desktop {
+        height: 155px;
+      }
     }
 
     img {
@@ -64,12 +78,13 @@ $detail-bar-mb: 12px;
     position: absolute;
     bottom: -10px;
     left: 50%;
-    z-index: 100;
+    z-index: 10;
     display: block;
     cursor: pointer;
     background-color: var(--white);
     border-radius: 50%;
-
+    transform: translate(-50%, 60%);
+    
     &--program {
       bottom: 15px;
     }
@@ -110,10 +125,48 @@ $detail-bar-mb: 12px;
 
   &__actions {
     display: grid;
-    grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
-    gap: 20px;
+    grid-template-columns: 2fr 2fr;
+    gap: 12px;
     align-items: center;
-    padding: 24px 0 30px;
+    padding: 24px 10px 0px;
+
+    @include responsive.apply-desktop {
+      grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
+      padding: 24px 0 30px;
+      gap: 20px;
+    }
+
+    app-modal {
+      display: none;
+    }
+  }
+
+  &__contacts {
+    justify-self: end;
+
+    @include responsive.apply-desktop {
+      justify-self: auto;
+    }
+  }
+
+  &__primary-action {
+    order: 999;
+    grid-column: 1 / -1;
+
+    a, app-button {
+      display: block;
+      width: 100%;
+    }
+
+    @include responsive.apply-desktop {
+      order: 0;
+      grid-column: auto;
+
+      a, app-button {
+        display: inline-block;
+        width: auto;
+      }
+    }
   }
 
   &__presentation {

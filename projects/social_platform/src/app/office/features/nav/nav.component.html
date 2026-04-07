@@ -12,9 +12,6 @@
         class="nav-bar__icon"
       >
       </i>
-      @if (((notificationService.hasNotifications | async) || hasInvites) && !mobileMenuOpen) {
-      <div class="attention"></div>
-      }
     </div>
   </div>
   @if (mobileMenuOpen) {
