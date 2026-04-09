@@ -210,28 +210,21 @@
               участники
             </app-button>
           </a>
-          } @else { @if (info().courses?.length) {
-          <a [routerLink]="'/office/courses/' + info().courses[0].id">
-            <app-button
-              appearance="outline"
-              [size]="appWidth > 920 ? 'medium' : 'big'"
-              customTypographyClass="text-body-12"
-            >
-              {{ appWidth > 920 ? "перейти в курс" : "курс" }}
-            </app-button>
-          </a>
           } @else {
-          <a>
-            <app-button
-              appearance="outline"
-              [disabled]="true"
-              size="medium"
-              customTypographyClass="text-body-12"
-            >
-              информация с ссылок
-            </app-button>
-          </a>
-          } } }
+          <app-button
+            (click)="
+              info().courses?.length
+                ? router.navigate(['/office/courses/' + info().courses[0].id])
+                : null
+            "
+            appearance="outline"
+            [disabled]="!info().courses?.length"
+            [size]="appWidth > 920 ? 'medium' : 'big'"
+            customTypographyClass="text-body-12"
+          >
+            {{ appWidth > 920 ? "перейти в курс" : "курс" }}
+          </app-button>
+          } }
 
           <app-modal
             [open]="isAssignProjectToProgramModalOpen()"

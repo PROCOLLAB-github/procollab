@@ -8,9 +8,10 @@ import { AvatarComponent } from "@ui/components/avatar/avatar.component";
 import { ButtonComponent } from "@ui/components";
 import { IconComponent } from "@uilib";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { CourseDetail, CourseStructure } from "@office/models/courses.model";
+import { CourseDetail, CourseLesson, CourseStructure } from "@office/models/courses.model";
 import { ModalComponent } from "@ui/components/modal/modal.component";
 import { CourseAboutComponent } from "@office/courses/shared/course-about/course-about.component";
+import { CoursesService } from "@office/courses/courses.service";
 
 /**
  * Компонент детального просмотра траектории
@@ -36,6 +37,7 @@ export class CourseDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly coursesService = inject(CoursesService);
 
   appWidth = window.innerWidth;
 
@@ -50,6 +52,44 @@ export class CourseDetailComponent implements OnInit {
 
   protected readonly courseModules = signal<CourseStructure["modules"]>([]);
   protected readonly course = signal<CourseDetail | undefined>(undefined);
+  protected readonly courseStructure = signal<CourseStructure | undefined>(undefined);
+  protected readonly currentLesson = this.coursesService.currentLesson;
+
+  get lessonOrder(): number | null {
+    const lesson = this.currentLesson();
+    const structure = this.courseStructure();
+    if (!lesson || !structure) return null;
+
+    for (const mod of structure.modules) {
+      const found = mod.lessons.find(l => l.id === lesson.id);
+      if (found) return found.order;
+    }
+    return null;
+  }
+
+  get isMobile(): boolean {
+    return this.appWidth < 920;
+  }
+
+  get showCover(): boolean {
+    return !this.isTaskDetail() || !this.isMobile;
+  }
+
+  get showAboutButton(): boolean {
+    return this.isMobile && !this.isTaskDetail();
+  }
+
+  get showBackOnly(): boolean {
+    return this.isTaskDetail() && this.isMobile;
+  }
+
+  get showAnalyticsButton(): boolean {
+    return this.isMobile && !this.isTaskDetail();
+  }
+
+  get showProgramButton(): boolean {
+    return !this.showBackOnly;
+  }
 
   /**
    * Инициализация компонента
@@ -63,8 +103,10 @@ export class CourseDetailComponent implements OnInit {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
-        next: ([course, _]: [CourseDetail, CourseStructure]) => {
+        next: ([course, structure]: [CourseDetail, CourseStructure]) => {
           this.course.set(course);
+          this.courseStructure.set(structure);
+          this.coursesService.courseStructure.set(structure);
 
           if (!course.partnerProgramId) {
             this.isDisabled.set(true);

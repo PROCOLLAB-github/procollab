@@ -75,7 +75,7 @@ export class DeatilComponent implements OnInit, OnDestroy {
   private readonly projectDataService = inject(ProjectDataService);
   private readonly projectAdditionalService = inject(ProjectAdditionalService);
   private readonly snackbarService = inject(SnackbarService);
-  private readonly router = inject(Router);
+  protected readonly router = inject(Router);
   private readonly location = inject(Location);
   private readonly profileDataService = inject(ProfileDataService);
   public readonly chatService = inject(ChatService);

@@ -2,8 +2,11 @@
 @use "styles/responsive";
 
 .radio {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  
   @include responsive.apply-desktop {
-    display: flex;
     flex-direction: row;
     gap: 20px;
 
@@ -140,10 +143,14 @@
         align-self: center;
         width: 100%;
         max-width: 395px;
-        height: 223px;
+        height: 185px;
         aspect-ratio: 16 / 9;
         border: 0;
         border-radius: var(--rounded-lg);
+
+        @include responsive.apply-desktop {
+          height: 223px;
+        }
       }
     }
   }

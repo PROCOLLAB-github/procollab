@@ -10,12 +10,21 @@
 
 .task {
   display: grid;
-  grid-template-columns: 68px 1fr;
+  grid-template-columns: 1fr;
   gap: 20px;
+
+  @include responsive.apply-desktop {
+    grid-template-columns: 68px 1fr;
+  }
 
   &__wrapper {
     display: flex;
     flex-direction: column;
+    order: -1;
+    
+    @include responsive.apply-desktop {
+      order: 0;
+    }
   }
 
   &__tasks {
@@ -26,21 +35,32 @@
   &__skill-name {
     color: var(--black);
   }
-
-  &__name {
-    color: var(--dark-grey);
+  
+  &__lesson {
+    color: var(--grey-for-text);
   }
 
   &__progress {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 0;
+
+    @include responsive.apply-desktop {
+      flex-direction: column;
+      overflow-x: visible;
+    }
   }
 
   &__main {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  &__content {
+    width: 100%;
   }
 
   &__complete {
@@ -62,7 +82,9 @@
 .progress {
   &__task {
     height: 23px;
+    min-width: 42px;
     padding: 4px 0;
+    flex-shrink: 0;
     text-align: center;
     background-color: var(--light-white);
     border-radius: var(--rounded-xl);
@@ -79,6 +101,18 @@
 
     &--current {
       border: 0.5px solid var(--accent);
+    }
+  }
+}
+
+.action {
+  &__button {
+    position: fixed;
+    bottom: 1%;
+    left: 7%;
+    
+    @include responsive.apply-desktop {
+      position: static;
     }
   }
 }

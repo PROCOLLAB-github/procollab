@@ -2,11 +2,15 @@
 @use "styles/typography";
 
 .complete {
-  min-height: 358px;
+  min-height: 543px;
   padding: 24px;
   background-color: var(--light-white);
   border: 0.5px solid var(--medium-grey-for-outline);
   border-radius: var(--rounded-lg);
+  
+  @include responsive.apply-desktop {
+    min-height: 358px;
+  }
 
   &__block {
     display: flex;

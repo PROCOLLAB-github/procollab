@@ -1,6 +1,14 @@
 /** @format */
 
-import { Component, computed, DestroyRef, inject, OnInit, signal } from "@angular/core";
+import {
+  Component,
+  computed,
+  DestroyRef,
+  HostListener,
+  inject,
+  OnInit,
+  signal,
+} from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from "@angular/router";
@@ -40,9 +48,17 @@ export class LessonComponent implements OnInit {
   private readonly coursesService = inject(CoursesService);
   private readonly snackbarService = inject(SnackbarService);
 
+  appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
+  }
+
   protected readonly lessonInfo = signal<CourseLesson | undefined>(undefined);
   protected readonly isComplete = signal<boolean>(false);
   protected readonly currentTaskId = signal<number | null>(null);
+  protected readonly activeTaskId = signal<number | null>(null);
 
   protected readonly loader = signal(false);
   protected readonly loading = signal(false);
@@ -53,6 +69,18 @@ export class LessonComponent implements OnInit {
   protected readonly completedTaskIds = signal<Set<number>>(new Set());
 
   protected readonly tasks = computed(() => this.lessonInfo()?.tasks ?? []);
+
+  protected readonly lessonOrder = computed(() => {
+    const lesson = this.lessonInfo();
+    const structure = this.coursesService.courseStructure();
+    if (!lesson || !structure) return null;
+
+    for (const mod of structure.modules) {
+      const found = mod.lessons.find(l => l.id === lesson.id);
+      if (found) return found.order;
+    }
+    return null;
+  });
 
   protected readonly currentTask = computed(() => {
     const id = this.currentTaskId();
@@ -96,6 +124,8 @@ export class LessonComponent implements OnInit {
       .subscribe({
         next: lessonInfo => {
           this.lessonInfo.set(lessonInfo);
+          console.log(lessonInfo);
+          this.coursesService.currentLesson.set(lessonInfo);
 
           // Если курс уже завершен, редирект на results
           if (lessonInfo.progressStatus === "completed") {
@@ -117,6 +147,7 @@ export class LessonComponent implements OnInit {
           if (onResultsPage && !allCompleted) {
             // Находимся на results, но не все задания выполнены — редирект обратно
             this.currentTaskId.set(nextTaskId);
+            this.activeTaskId.set(nextTaskId);
             setTimeout(() => {
               this.loading.set(false);
               this.router.navigate(["./"], { relativeTo: this.route });
@@ -129,6 +160,7 @@ export class LessonComponent implements OnInit {
             }, 500);
           } else {
             this.currentTaskId.set(nextTaskId);
+            this.activeTaskId.set(nextTaskId);
             setTimeout(() => this.loading.set(false), 500);
           }
         },
@@ -162,8 +194,12 @@ export class LessonComponent implements OnInit {
     return task ? this.isDone(task) : false;
   });
 
+  isClickable(task: Task): boolean {
+    return this.isDone(task) || task.id === this.activeTaskId();
+  }
+
   onSelectTask(task: Task) {
-    if (!this.isDone(task)) return;
+    if (!this.isClickable(task)) return;
 
     this.currentTaskId.set(task.id);
     this.answerBody.set(null);
@@ -217,6 +253,7 @@ export class LessonComponent implements OnInit {
 
             if (nextId) {
               this.currentTaskId.set(nextId);
+              this.activeTaskId.set(nextId);
               this.success.set(false);
               this.answerBody.set(null);
             } else {

@@ -2,40 +2,57 @@
 
 <div class="detail">
   <div class="detail__body">
-    @if(course()) {
+    @if (course()) {
     <div class="info detail__section detail__info">
+      @if (showCover) {
       <div class="info__cover">
         <img class="info__cover" [src]="course()!.headerCoverUrl" alt="cover" />
+
         <div class="info__avatar">
           <app-avatar
             [url]="course()!.avatarUrl"
             [size]="106"
             (click)="redirectDetailInfo(course()!.id)"
           ></app-avatar>
-          @if (!isTaskDetail()) { @if (appWidth > 920) {
-          <h1 class="info__title text-body-12">{{ course()!.title }}</h1>
-          } }
+
+          @if (!isTaskDetail() && !isMobile) {
+          <h1 class="info__title text-body-12">
+            {{ course()!.title }}
+          </h1>
+          }
         </div>
       </div>
+      }
 
       <div class="info__body">
-        <div class="info__actions">
-          @if (appWidth < 920) {
-          <app-button
-            [disabled]="true"
-            size="small"
-            customTypographyClass="text-body-12"
-            appearance="outline"
-          >
-            аналитика
+        <div class="info__actions" [class.info__actions--task]="showBackOnly">
+          @if (showBackOnly) {
+          <app-button size="small" appearance="outline" (click)="redirectDetailInfo(course()!.id)">
+            назад
           </app-button>
 
+          <div class="task__meta">
+            @if (currentLesson()) {
+            <p class="text-body-14">модуль {{ currentLesson()!.moduleOrder }}</p>
+            <p class="task__lesson text-body-12">урок {{ lessonOrder }}</p>
+            }
+          </div>
+
           <app-button
-            [disabled]="!course()!.description"
             size="small"
-            class="info__actions--end"
-            customTypographyClass="text-body-12"
             appearance="outline"
+            (click)="course()!.description ? (isAboutModalOpen = true) : null"
+          >
+            о курсе
+          </app-button>
+          } @else { @if (showAnalyticsButton) {
+          <app-button [disabled]="true" size="small" appearance="outline">аналитика</app-button>
+          } @if (showAboutButton) {
+          <app-button
+            size="small"
+            appearance="outline"
+            class="info__actions--end"
+            [disabled]="!course()!.description"
             (click)="course()!.description ? (isAboutModalOpen = true) : null"
           >
             о курсе
@@ -44,22 +61,24 @@
 
           <app-button
             class="info__actions--full"
-            (click)="redirectDetailInfo(isTaskDetail() ? course()!.id : undefined)"
-            [size]="appWidth > 920 ? 'big' : 'big'"
-            customTypographyClass="text-body-12"
+            size="big"
             appearance="outline"
-            >{{ isTaskDetail() ? "назад к модулю" : "назад" }}</app-button
+            (click)="redirectDetailInfo(isTaskDetail() ? course()!.id : undefined)"
           >
+            назад
+          </app-button>
 
+          @if (showProgramButton) {
           <app-button
             class="info__actions--full"
             [disabled]="isDisabled()"
-            [size]="appWidth > 920 ? 'big' : 'big'"
-            customTypographyClass="text-body-12"
+            size="big"
             appearance="outline"
             (click)="redirectToProgram()"
-            >вернуться в программу</app-button
           >
+            вернуться в программу
+          </app-button>
+          } }
         </div>
       </div>
     </div>

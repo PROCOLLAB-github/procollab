@@ -7,13 +7,15 @@ $detail-bar-mb: 12px;
 .detail {
   display: flex;
   flex-direction: column;
-  height: 100%;
   max-height: 100%;
   padding-top: 20px;
+  padding-bottom: 20px;
   margin: 0 20px;
 
   @include responsive.apply-desktop {
     margin: 0;
+    height: 100%;
+    padding-bottom: 0px;
   }
 
   &__body {
@@ -36,6 +38,7 @@ $detail-bar-mb: 12px;
     position: relative;
     height: 136px;
     border-radius: 15px;
+    margin-bottom: 24px;
 
     @include responsive.apply-desktop {
       border-radius: 15px 15px 0 0;
@@ -62,7 +65,7 @@ $detail-bar-mb: 12px;
     position: absolute;
     bottom: -10px;
     left: 50%;
-    z-index: 100;
+    z-index: 10;
     display: block;
     display: flex;
     flex-direction: column;
@@ -114,11 +117,17 @@ $detail-bar-mb: 12px;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
     align-items: center;
-    padding: 24px 10px 0;
 
     @include responsive.apply-desktop {
       gap: 180px;
-      padding: 24px 0 30px;
+      padding: 0px 0px 30px;
+    }
+    
+    &--task {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      align-items: center;
     }
 
     &--end {
@@ -136,5 +145,17 @@ $detail-bar-mb: 12px;
     &--disabled {
       cursor: not-allowed;
     }
+  }
+}
+
+.task {
+  &__lesson {
+    color: var(--dark-grey);
+  }
+  
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
