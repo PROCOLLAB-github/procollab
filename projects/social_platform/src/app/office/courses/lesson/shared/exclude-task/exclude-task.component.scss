@@ -136,14 +136,27 @@
   }
 
   &__content {
-    max-width: 350px;
+    max-width: 100%;
+
+    @include responsive.apply-desktop {
+      max-width: 350px;
+    }
+
 
     &--hasContent {
-      min-width: 333px;
+      max-width: 100%;
+
+      @include responsive.apply-desktop {
+        min-width: 333px;
+      }
     }
 
     &:not(&--hasContent) {
-      max-width: 333px;
+      max-width: 100%;
+
+      @include responsive.apply-desktop {
+        max-width: 333px;
+      }
     }
   }
 

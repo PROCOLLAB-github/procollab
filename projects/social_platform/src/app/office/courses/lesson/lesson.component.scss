@@ -74,7 +74,11 @@
     margin-top: 20px;
 
     :last-child {
-      width: 333px;
+      width: 90%;
+
+      @include responsive.apply-desktop {
+        width: 333px;
+      }
     }
   }
 }
@@ -108,8 +112,8 @@
 .action {
   &__button {
     position: fixed;
-    bottom: 1%;
-    left: 7%;
+    bottom: 2%;
+    left: 5%;
 
     @include responsive.apply-desktop {
       position: static;

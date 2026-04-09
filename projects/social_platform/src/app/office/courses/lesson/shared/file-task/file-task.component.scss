@@ -35,8 +35,12 @@
 
   &__content {
     min-width: 333px;
-    max-width: 350px;
+    max-width: 100%;
     padding: 12px;
+
+    @include responsive.apply-desktop {
+      max-width: 350px;
+    }
 
     ::ng-deep {
       app-upload-file {
