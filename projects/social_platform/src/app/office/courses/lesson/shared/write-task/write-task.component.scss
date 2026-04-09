@@ -8,7 +8,7 @@
   @include responsive.apply-desktop {
     flex-direction: row;
     gap: 20px;
-    
+
     &--hasVideo {
       flex-direction: row;
     }
@@ -20,7 +20,7 @@
     background: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
-    
+
     @include responsive.apply-desktop {
       min-height: 358px;
     }
@@ -34,7 +34,7 @@
     min-width: 333px;
     max-width: 350px;
     padding: 12px;
-    
+
     @include responsive.apply-desktop {
       padding: 12px 24px;
     }
@@ -64,7 +64,7 @@
       aspect-ratio: 16 / 9;
       border: 0;
       border-radius: var(--rounded-lg);
-      
+
       @include responsive.apply-desktop {
         height: 223px;
       }
@@ -98,14 +98,14 @@
   &__textarea {
     display: block;
     width: 100%;
+    min-height: 125px;
     padding: 12px 18px;
     resize: none;
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
     outline: none;
     scrollbar-width: none;
-    min-height: 125px;
-    
+
     @include responsive.apply-desktop {
       min-height: 341px;
     }

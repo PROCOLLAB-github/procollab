@@ -21,7 +21,7 @@
     display: flex;
     flex-direction: column;
     order: -1;
-    
+
     @include responsive.apply-desktop {
       order: 0;
     }
@@ -35,7 +35,7 @@
   &__skill-name {
     color: var(--black);
   }
-  
+
   &__lesson {
     color: var(--grey-for-text);
   }
@@ -44,8 +44,8 @@
     display: flex;
     flex-direction: row;
     gap: 12px;
-    overflow-x: auto;
     padding-bottom: 0;
+    overflow-x: auto;
 
     @include responsive.apply-desktop {
       flex-direction: column;
@@ -81,10 +81,10 @@
 
 .progress {
   &__task {
-    height: 23px;
-    min-width: 42px;
-    padding: 4px 0;
     flex-shrink: 0;
+    min-width: 42px;
+    height: 23px;
+    padding: 4px 0;
     text-align: center;
     background-color: var(--light-white);
     border-radius: var(--rounded-xl);
@@ -110,7 +110,7 @@
     position: fixed;
     bottom: 1%;
     left: 7%;
-    
+
     @include responsive.apply-desktop {
       position: static;
     }

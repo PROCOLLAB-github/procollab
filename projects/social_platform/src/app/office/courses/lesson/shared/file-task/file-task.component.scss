@@ -9,7 +9,7 @@
   @include responsive.apply-desktop {
     flex-direction: row;
     gap: 20px;
-    
+
     &--hasVideo {
       flex-direction: row;
     }
@@ -17,12 +17,12 @@
 
   &__header,
   &__content {
-    min-height: 0px;
+    min-height: 0;
     padding: 12px;
     background: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
-    
+
     @include responsive.apply-desktop {
       min-height: 358px;
       padding: 24px;
@@ -43,14 +43,14 @@
         .control {
           max-height: 61px;
           border-radius: var(--rounded-lg);
-          
+
           @include responsive.apply-desktop {
             max-height: 83px;
           }
         }
       }
     }
-    
+
     @include responsive.apply-desktop {
       padding: 12px 24px;
     }

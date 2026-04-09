@@ -13,9 +13,9 @@ $detail-bar-mb: 12px;
   margin: 0 20px;
 
   @include responsive.apply-desktop {
-    margin: 0;
     height: 100%;
-    padding-bottom: 0px;
+    padding-bottom: 0;
+    margin: 0;
   }
 
   &__body {
@@ -37,8 +37,8 @@ $detail-bar-mb: 12px;
   &__cover {
     position: relative;
     height: 136px;
-    border-radius: 15px;
     margin-bottom: 24px;
+    border-radius: 15px;
 
     @include responsive.apply-desktop {
       border-radius: 15px 15px 0 0;
@@ -120,14 +120,14 @@ $detail-bar-mb: 12px;
 
     @include responsive.apply-desktop {
       gap: 180px;
-      padding: 0px 0px 30px;
+      padding: 0 0 30px;
     }
-    
+
     &--task {
       display: flex;
       flex-direction: row-reverse;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
     }
 
     &--end {
@@ -152,7 +152,7 @@ $detail-bar-mb: 12px;
   &__lesson {
     color: var(--dark-grey);
   }
-  
+
   &__meta {
     display: flex;
     flex-direction: column;

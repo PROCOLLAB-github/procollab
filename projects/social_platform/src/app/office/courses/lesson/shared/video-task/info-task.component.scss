@@ -12,10 +12,10 @@
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
-    
+
     @include responsive.apply-desktop {
-      padding: 24px;
       gap: 24px;
+      padding: 24px;
     }
 
     iframe {
@@ -35,7 +35,7 @@
 
     &--hasImage {
       flex-direction: column;
-      
+
       @include responsive.apply-desktop {
         flex-direction: row-reverse;
       }
@@ -54,7 +54,7 @@
     &--hasVideo {
       flex-direction: column;
       flex-grow: 1;
-      
+
       @include responsive.apply-desktop {
         flex-direction: row;
       }
@@ -63,7 +63,7 @@
     &--hasImage {
       flex-direction: column-reverse;
       flex-grow: 1;
-      
+
       @include responsive.apply-desktop {
         flex-direction: row-reverse;
       }
