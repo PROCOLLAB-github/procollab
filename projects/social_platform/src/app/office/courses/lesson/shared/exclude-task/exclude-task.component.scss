@@ -98,10 +98,14 @@
   .read-more {
     align-items: start;
     align-self: self-start;
-    margin-top: 12px;
+    margin-top: 0px;
     color: var(--accent);
     cursor: pointer;
     transition: color 0.2s;
+    
+    @include responsive.apply-desktop {
+      margin-top: 12px;
+    }
 
     &:hover {
       color: var(--accent-dark);

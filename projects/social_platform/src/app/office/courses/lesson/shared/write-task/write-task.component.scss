@@ -45,9 +45,13 @@
   &__text {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0px;
     margin-top: 23px;
     white-space: pre-line;
+    
+    @include responsive.apply-desktop {
+      gap: 10px;
+    }
 
     &--hasVideo {
       display: flex;
