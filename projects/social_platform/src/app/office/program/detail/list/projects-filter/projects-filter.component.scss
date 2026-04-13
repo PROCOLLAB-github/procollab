@@ -33,9 +33,9 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 8px;
-    
+
     @include responsive.apply-desktop {
-      margin-bottom: 0px;
+      margin-bottom: 0;
     }
   }
 

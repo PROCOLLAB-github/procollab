@@ -7,7 +7,7 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
-  
+
   @include responsive.apply-desktop {
     grid-template-columns: 5fr 3fr;
   }
@@ -30,7 +30,7 @@
     gap: 10px;
     align-items: center;
     width: 100%;
-    
+
     @include responsive.apply-desktop {
       gap: 20px;
     }
@@ -90,7 +90,7 @@
     gap: 5px;
     align-items: center;
     margin-top: 6px;
-    
+
     @include responsive.apply-desktop {
       margin: 0;
     }
