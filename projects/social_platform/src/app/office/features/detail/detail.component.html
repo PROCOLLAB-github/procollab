@@ -69,7 +69,42 @@
         </div>
 
         <ng-template #programTpl>
-          @if (userType() !== undefined) {
+          @if (userType() !== undefined) { @if ((isProjectsPage || isProjectsRatingPage) && appWidth
+          < 920) {
+          <a [routerLink]="'/office/program/' + info().id">
+            <app-button
+              appearance="outline"
+              size="small"
+              class="info__contacts"
+              customTypographyClass="text-body-12"
+            >
+              <span>назад</span>
+            </app-button>
+          </a>
+
+          <app-button
+            appearance="outline"
+            size="small"
+            [disabled]="!info().links?.length"
+            class="info__contacts"
+            customTypographyClass="text-body-12"
+            (click)="isContactsModalOpen = true"
+          >
+            <i appIcon icon="phone" appSquare="12"></i>
+          </app-button>
+
+          <app-modal
+            [open]="isContactsModalOpen"
+            (openChange)="isContactsModalOpen = !isContactsModalOpen"
+            bodyClass="modal__body--no-flex"
+          >
+            <app-program-links
+              title="контакты"
+              icon="phone"
+              [links]="contactLinks"
+            ></app-program-links>
+          </app-modal>
+          } @else {
           <div class="info__primary-action">
             @if (!isUserMember && !isUserManager) { @if (info().name.includes("Кейс-чемпионат MIR"))
             {
@@ -107,7 +142,7 @@
             } @if ((isUserManager || isUserExpert) && isUserMember) {
             <a [routerLink]="'/office/program/' + info().id + '/projects-rating'">
               <app-button
-                [appearance]="isProjectsRatingPage ? 'inline' : 'outline'"
+                [appearance]="isProjectsRatingPage || appWidth < 920 ? 'inline' : 'outline'"
                 [size]="appWidth > 920 ? 'medium' : 'big'"
                 customTypographyClass="text-body-12"
               >
@@ -146,7 +181,7 @@
               <i
                 appIcon
                 class="info__presentation-icon"
-                [icon]="appWidth > 920 ? 'arrow-down' : isUserManager ? 'graph' : 'file'"
+                [icon]="appWidth > 920 ? 'arrow-down' : 'file'"
                 [appSquare]="appWidth > 920 ? '8' : '12'"
               ></i>
               }
@@ -155,29 +190,7 @@
 
           @if (appWidth > 920) {
           <div class="info__divider"></div>
-          } @if (isUserManager || isUserExpert) {
-          <a [routerLink]="'/office/program/' + info().id + '/projects'">
-            <app-button
-              [appearance]="isProjectsPage ? 'inline' : 'outline'"
-              size="medium"
-              [disabled]="isUserExpert && !isUserManager"
-              customTypographyClass="text-body-12"
-            >
-              проекты-участники
-            </app-button>
-          </a>
-          } @else { @if (appWidth > 920) {
-          <a class="info__more">
-            <app-button
-              appearance="outline"
-              [disabled]="true"
-              size="medium"
-              customTypographyClass="text-body-12"
-            >
-              узнать подробнее
-            </app-button>
-          </a>
-          } @else {
+          } @if (appWidth < 920) {
           <app-button
             appearance="outline"
             size="small"
@@ -188,19 +201,30 @@
           >
             <i appIcon icon="phone" appSquare="12"></i>
           </app-button>
-          } } @if (appWidth < 920) {
-          <app-button
-            appearance="outline"
-            size="big"
-            [disabled]="!info().materials?.length"
-            class="info__materials"
-            customTypographyClass="text-body-12"
-            (click)="isMaterialsModalOpen = true"
-          >
-            материалы
-          </app-button>
-          } @if (isUserManager || isUserExpert) {
-          <a [routerLink]="'/office/program/' + info().id + '/members'">
+          } @if (isUserManager || (isUserExpert && appWidth > 920)) {
+          <a [routerLink]="'/office/program/' + info().id + '/projects'">
+            <app-button
+              [appearance]="isProjectsPage ? 'inline' : 'outline'"
+              size="medium"
+              [disabled]="isUserExpert && !isUserManager"
+              customTypographyClass="text-body-12"
+            >
+              проекты-участники
+            </app-button>
+          </a>
+          } @if (!isUserManager && !isUserExpert && appWidth > 920) {
+          <a class="info__more">
+            <app-button
+              appearance="outline"
+              [disabled]="true"
+              size="medium"
+              customTypographyClass="text-body-12"
+            >
+              узнать подробнее
+            </app-button>
+          </a>
+          } @if (isUserManager || (isUserExpert && appWidth > 920)) {
+          <a [routerLink]="'/office/program/' + info().id + '/members'" class="info__members">
             <app-button
               [appearance]="isMembersPage ? 'inline' : 'outline'"
               size="medium"
@@ -210,7 +234,19 @@
               участники
             </app-button>
           </a>
-          } @else {
+          } @if (appWidth < 920) {
+          <app-button
+            appearance="outline"
+            size="big"
+            [disabled]="!info().materials?.length"
+            class="info__materials"
+            [class.info__materials--full]="isUserManager || isUserExpert"
+            customTypographyClass="text-body-12"
+            (click)="isMaterialsModalOpen = true"
+          >
+            материалы
+          </app-button>
+          } @if (!isUserManager && !isUserExpert) {
           <app-button
             (click)="
               info().courses?.length
@@ -224,7 +260,7 @@
           >
             {{ appWidth > 920 ? "перейти в курс" : "курс" }}
           </app-button>
-          } }
+          }
 
           <app-modal
             [open]="isAssignProjectToProgramModalOpen()"
@@ -300,6 +336,7 @@
               [links]="materialLinks"
             ></app-program-links>
           </app-modal>
+          } }
         </ng-template>
 
         <ng-template #projectTpl>

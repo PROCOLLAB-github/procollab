@@ -141,11 +141,22 @@ $detail-bar-mb: 12px;
     }
   }
 
-  &__contacts {
+  &__contacts,
+  &__members {
     justify-self: end;
 
     @include responsive.apply-desktop {
       justify-self: auto;
+    }
+  }
+
+  &__materials {
+    &--full {
+      grid-column: 1 / -1;
+
+      @include responsive.apply-desktop {
+        grid-column: auto;
+      }
     }
   }
 
