@@ -5,6 +5,7 @@
     @if (info()) {
     <div class="info detail__section detail__info">
       <div class="info__cover" [class.info__cover--program]="listType === 'program'">
+        @if (appWidth > 920) {
         <img
           class="info__cover"
           [class.info__cover--program]="listType === 'program'"
@@ -15,13 +16,16 @@
           "
           alt="cover"
         />
+        }
+
+        <div class="info__cover--mobile"></div>
         <div
           class="info__avatar"
           (click)="redirectDetailInfo()"
           [class.info__avatar--program]="listType === 'program'"
           [style.width]="
             appWidth < 920
-              ? '90px'
+              ? '105px'
               : listType === 'project' || listType === 'profile'
               ? '110px'
               : '123px'
@@ -37,7 +41,7 @@
             [onlineBadgeBorder]="0"
             [onlineBadgeOffset]="8"
             [size]="
-              appWidth < 920 ? 90 : listType === 'project' || listType === 'profile' ? 110 : 123
+              appWidth < 920 ? 105 : listType === 'project' || listType === 'profile' ? 110 : 123
             "
             [isOnline]="cache[info().id] !== undefined ? cache[info().id] : info().isOnline"
           ></app-avatar>

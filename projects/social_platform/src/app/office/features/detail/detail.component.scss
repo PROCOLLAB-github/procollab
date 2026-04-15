@@ -67,6 +67,18 @@ $detail-bar-mb: 12px;
         object-position: top;
       }
     }
+    
+    &--mobile {
+      display: block;
+      max-width: 100%;
+      height: 136px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--lime) 100%);
+      border-radius: 15px;
+
+      @include responsive.apply-desktop {
+        display: none;
+      }
+    }
   }
 
   &__body {
@@ -86,7 +98,11 @@ $detail-bar-mb: 12px;
     transform: translate(-50%, 60%);
 
     &--program {
-      bottom: 15px;
+      bottom: -60px;
+      
+      @include responsive.apply-desktop {
+        bottom: 5px;
+      }
     }
 
     @include responsive.apply-desktop {
@@ -128,7 +144,7 @@ $detail-bar-mb: 12px;
     grid-template-columns: 2fr 2fr;
     gap: 12px;
     align-items: center;
-    padding: 24px 10px 0;
+    padding: 94px 0px 0;
 
     @include responsive.apply-desktop {
       grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
