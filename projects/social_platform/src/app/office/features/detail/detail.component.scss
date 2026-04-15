@@ -67,7 +67,7 @@ $detail-bar-mb: 12px;
         object-position: top;
       }
     }
-    
+
     &--mobile {
       display: block;
       max-width: 100%;
@@ -99,7 +99,7 @@ $detail-bar-mb: 12px;
 
     &--program {
       bottom: -60px;
-      
+
       @include responsive.apply-desktop {
         bottom: 5px;
       }
@@ -144,7 +144,7 @@ $detail-bar-mb: 12px;
     grid-template-columns: 2fr 2fr;
     gap: 12px;
     align-items: center;
-    padding: 94px 0px 0;
+    padding: 94px 0 0;
 
     @include responsive.apply-desktop {
       grid-template-columns: 2fr 2fr 2fr 2fr 2fr;
