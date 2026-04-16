@@ -6,26 +6,39 @@
   &__body {
     display: flex;
     flex-direction: row;
-    gap: 24px;
+    gap: 12px;
     min-height: 358px;
-    padding: 24px;
+    padding: 12px;
     background-color: var(--light-white);
     border: 0.5px solid var(--medium-grey-for-outline);
     border-radius: var(--rounded-lg);
+
+    @include responsive.apply-desktop {
+      gap: 24px;
+      padding: 24px;
+    }
 
     iframe {
       display: block;
       align-self: center;
       width: 100%;
       max-width: 395px;
-      height: 223px;
+      height: 185px;
       aspect-ratio: 16 / 9;
       border: 0;
       border-radius: var(--rounded-lg);
+
+      @include responsive.apply-desktop {
+        height: 223px;
+      }
     }
 
     &--hasImage {
-      flex-direction: row-reverse;
+      flex-direction: column;
+
+      @include responsive.apply-desktop {
+        flex-direction: row-reverse;
+      }
     }
 
     &--hasVideo {
@@ -39,13 +52,21 @@
     width: 100%;
 
     &--hasVideo {
-      flex-direction: row;
+      flex-direction: column;
       flex-grow: 1;
+
+      @include responsive.apply-desktop {
+        flex-direction: row;
+      }
     }
 
     &--hasImage {
-      flex-direction: row-reverse;
+      flex-direction: column-reverse;
       flex-grow: 1;
+
+      @include responsive.apply-desktop {
+        flex-direction: row-reverse;
+      }
     }
   }
 
@@ -77,10 +98,14 @@
   .read-more {
     align-items: start;
     align-self: self-start;
-    margin-top: 12px;
+    margin-top: -14px;
     color: var(--accent);
     cursor: pointer;
     transition: color 0.2s;
+
+    @include responsive.apply-desktop {
+      margin-top: 12px;
+    }
 
     &:hover {
       color: var(--accent-dark);

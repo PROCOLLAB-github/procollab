@@ -1,6 +1,6 @@
 /** @format */
 
-import { Injectable } from "@angular/core";
+import { Injectable, signal } from "@angular/core";
 import { ApiService } from "@corelib";
 import {
   CourseCard,
@@ -22,6 +22,9 @@ import { Observable } from "rxjs";
 })
 export class CoursesService {
   private readonly COURSE_URL = "/courses";
+
+  readonly currentLesson = signal<CourseLesson | null>(null);
+  readonly courseStructure = signal<CourseStructure | null>(null);
 
   constructor(private readonly apiService: ApiService) {}
 

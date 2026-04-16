@@ -3,8 +3,13 @@
 
 .exclude {
   display: flex;
-  flex-direction: row;
-  gap: 20px;
+  flex-direction: column;
+  gap: 12px;
+
+  @include responsive.apply-desktop {
+    flex-direction: row;
+    gap: 20px;
+  }
 
   // &--hasContent {
   //   display: flex;
@@ -30,10 +35,14 @@
         align-self: center;
         width: 100%;
         max-width: 395px;
-        height: 223px;
+        height: 185px;
         aspect-ratio: 16 / 9;
         border: 0;
         border-radius: var(--rounded-lg);
+
+        @include responsive.apply-desktop {
+          height: 223px;
+        }
       }
     }
   }
@@ -89,10 +98,14 @@
   .read-more {
     align-items: start;
     align-self: self-start;
-    margin-top: 12px;
+    margin-top: 0;
     color: var(--accent);
     cursor: pointer;
     transition: color 0.2s;
+
+    @include responsive.apply-desktop {
+      margin-top: 12px;
+    }
 
     &:hover {
       color: var(--accent-dark);
@@ -127,14 +140,26 @@
   }
 
   &__content {
-    max-width: 350px;
+    max-width: 100%;
+
+    @include responsive.apply-desktop {
+      max-width: 350px;
+    }
 
     &--hasContent {
-      min-width: 333px;
+      max-width: 100%;
+
+      @include responsive.apply-desktop {
+        min-width: 333px;
+      }
     }
 
     &:not(&--hasContent) {
-      max-width: 333px;
+      max-width: 100%;
+
+      @include responsive.apply-desktop {
+        max-width: 333px;
+      }
     }
   }
 

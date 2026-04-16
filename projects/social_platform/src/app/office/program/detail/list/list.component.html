@@ -3,7 +3,9 @@
 <div
   class="page"
   #listRoot
-  [style.grid-template-columns]="listType === 'members' ? '10fr' : '8fr 2fr'"
+  [style.grid-template-columns]="
+    appWidth < 920 ? '1fr' : listType === 'members' ? '10fr' : '8fr 2fr'
+  "
 >
   <div class="page__outlet">
     <div class="page__search">
@@ -12,10 +14,75 @@
       </form>
     </div>
 
-    <div class="filter-toggle page__filter-toggle" (click)="isFilterOpen = !isFilterOpen">
-      <span>Фильтры</span>
-      <i appIcon icon="filter" appSquare="34"></i>
+    @if (appWidth < 920 && listType !== 'members') {
+    <div class="page__mobile-controls">
+      <div class="page__mobile-filter-row">
+        <div class="page__mobile-filter-row">
+          <app-button
+            appearance="outline"
+            size="big"
+            customTypographyClass="text-body-12"
+            (click)="isFilterModalOpen.set(true)"
+          >
+            <i appIcon icon="additional" appSquare="14"></i>
+          </app-button>
+          <a class="page__clear text-body-12" (click)="onClearFilters()">сбросить</a>
+        </div>
+
+        @if (listType === "rating") {
+        <div class="page__mobile-export">
+          <app-button
+            [loader]="loadingExportRates()"
+            customTypographyClass="text-body-12"
+            size="big"
+            (click)="downloadRates()"
+          >
+            <span class="text-body-12">выгрузка оценок</span>
+            <i appIcon icon="download" appSquare="18"></i>
+          </app-button>
+        </div>
+
+        }
+      </div>
+
+      @if (listType === 'projects') {
+      <div class="page__mobile-export">
+        <app-button
+          [loader]="loadingExportProjects()"
+          customTypographyClass="text-body-12"
+          size="medium"
+          (click)="downloadProjects()"
+        >
+          <span class="text-body-12">выгрузка проектов</span>
+          <i appIcon icon="download" appSquare="18"></i>
+        </app-button>
+
+        <app-button
+          [loader]="loadingExportSubmittedProjects()"
+          customTypographyClass="text-body-12"
+          size="medium"
+          (click)="downloadSubmittedProjects()"
+        >
+          <span class="text-body-12">сданные решения</span>
+          <i appIcon icon="download" appSquare="18"></i>
+        </app-button>
+      </div>
+      } @else { @if (appWidth > 920) {
+      <div class="page__mobile-export">
+        <app-button
+          [loader]="loadingExportRates()"
+          customTypographyClass="text-body-12"
+          size="medium"
+          (click)="downloadRates()"
+        >
+          <span class="text-body-12">выгрузка оценок</span>
+          <i appIcon icon="download" appSquare="18"></i>
+        </app-button>
+      </div>
+
+      } }
     </div>
+    }
 
     <ul class="page__list" [class.page__list--rating]="listType === 'rating'">
       @for (listItem of searchedList; track listItem.id) {
@@ -37,7 +104,7 @@
     </ul>
   </div>
 
-  @if (listType !== 'members') {
+  @if (appWidth >= 920 && listType !== 'members') {
   <div class="page__create">
     <div class="page__left">
       @if (listType === 'projects' || listType === 'rating') {
@@ -78,7 +145,7 @@
               <i appIcon icon="download" appSquare="18"></i>
             </app-button>
           </div>
-          } @else {
+          } @else { @if (appWidth > 920) {
           <div class="page__export">
             <app-button
               [loader]="loadingExportRates()"
@@ -102,13 +169,14 @@
               <i appIcon icon="download" appSquare="18"></i>
             </app-button>
           </div>
-          }
+
+          } }
         </div>
       </div>
       }
     </div>
   </div>
-  } @if (listType !== 'members' && listType !== 'projects') {
+  } @if (listType !== 'members' && listType !== 'projects' && appWidth >= 920) {
   <div class="page__tooltip">
     <div class="tooltip">
       <app-tooltip color="grey" iconSize="40" (show)="isHintExpertsVisible.set(true)"></app-tooltip>
@@ -163,4 +231,25 @@
     </div>
   </app-modal>
   }
+
+  <app-modal
+    [open]="isFilterModalOpen()"
+    (openChange)="isFilterModalOpen.set($event)"
+    bodyClass="modal__body--no-flex"
+  >
+    <app-projects-filter
+      [listType]="listType"
+      (closeFilter)="isFilterModalOpen.set(false)"
+      (clear)="onClearFilters()"
+    ></app-projects-filter>
+
+    <app-button
+      appearance="outline"
+      size="big"
+      customTypographyClass="text-body-12"
+      (click)="isFilterModalOpen.set(false)"
+    >
+      применить фильтр
+    </app-button>
+  </app-modal>
 </div>

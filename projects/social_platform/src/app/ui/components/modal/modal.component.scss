@@ -41,5 +41,9 @@
     &--gradient {
       background: var(--gradient);
     }
+
+    &--no-flex {
+      display: block;
+    }
   }
 }

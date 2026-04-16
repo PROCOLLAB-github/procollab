@@ -1,6 +1,14 @@
 /** @format */
 
-import { Component, EventEmitter, Input, OnInit, Output, signal } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnInit,
+  Output,
+  signal,
+} from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { debounceTime, distinctUntilChanged, filter, map, Subscription } from "rxjs";
 import { SwitchComponent } from "@ui/components/switch/switch.component";
@@ -73,6 +81,13 @@ export class ProjectsFilterComponent implements OnInit {
 
   // Константы для фильтрации по типу проекта
   private programId = 0;
+
+  appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
+  }
 
   ngOnInit(): void {
     this.programId = this.route.parent?.snapshot.params["programId"];

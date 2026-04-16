@@ -7,9 +7,16 @@ $detail-bar-mb: 12px;
 .detail {
   display: flex;
   flex-direction: column;
-  height: 100%;
   max-height: 100%;
   padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 0 20px;
+
+  @include responsive.apply-desktop {
+    height: 100%;
+    padding-bottom: 0;
+    margin: 0;
+  }
 
   &__body {
     flex-grow: 1;
@@ -23,14 +30,19 @@ $detail-bar-mb: 12px;
 
   position: relative;
   padding: 0;
+  margin-bottom: 20px;
   border: none;
   border-radius: $body-slide;
 
   &__cover {
     position: relative;
-    width: 100%;
     height: 136px;
-    border-radius: 15px 15px 0 0;
+    margin-bottom: 24px;
+    border-radius: 15px;
+
+    @include responsive.apply-desktop {
+      border-radius: 15px 15px 0 0;
+    }
 
     img {
       position: absolute;
@@ -53,13 +65,14 @@ $detail-bar-mb: 12px;
     position: absolute;
     bottom: -10px;
     left: 50%;
-    z-index: 100;
+    z-index: 10;
     display: block;
     display: flex;
     flex-direction: column;
     align-items: center;
     cursor: pointer;
     border-radius: 50%;
+    transform: translate(-50%, 30%);
 
     &--program {
       bottom: 15px;
@@ -102,13 +115,47 @@ $detail-bar-mb: 12px;
   &__actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 180px;
+    gap: 12px;
     align-items: center;
-    padding: 24px 0 30px;
+
+    @include responsive.apply-desktop {
+      gap: 180px;
+      padding: 0 0 30px;
+    }
+
+    &--task {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &--end {
+      justify-self: end;
+    }
+
+    &--full {
+      grid-column: 1 / -1;
+
+      @include responsive.apply-desktop {
+        grid-column: auto;
+      }
+    }
 
     &--disabled {
       cursor: not-allowed;
-      opacity: 0.5;
     }
+  }
+}
+
+.task {
+  &__lesson {
+    color: var(--dark-grey);
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }

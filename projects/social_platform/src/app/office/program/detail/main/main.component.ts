@@ -3,6 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   OnDestroy,
   OnInit,
   signal,
@@ -26,7 +27,7 @@ import { ProgramNewsService } from "@office/program/services/program-news.servic
 import { FeedNews } from "@office/projects/models/project-news.model";
 import { expandElement } from "@utils/expand-element";
 import { ParseBreaksPipe, ParseLinksPipe } from "projects/core";
-import { UserLinksPipe } from "@core/pipes/user-links.pipe";
+import { ProgramLinksComponent } from "@office/features/program-links/program-links.component";
 import { ProgramNewsCardComponent } from "../shared/news-card/news-card.component";
 import { ButtonComponent, IconComponent } from "@ui/components";
 import { ApiPagination } from "@models/api-pagination.model";
@@ -40,7 +41,6 @@ import { SoonCardComponent } from "@office/shared/soon-card/soon-card.component"
 import { NewsFormComponent } from "@office/features/news-form/news-form.component";
 import { AsyncPipe } from "@angular/common";
 import { AvatarComponent } from "@uilib";
-import { TruncatePipe } from "projects/core/src/lib/pipes/truncate.pipe";
 import { NewsCardComponent } from "@office/features/news-card/news-card.component";
 import { AuthService } from "@auth/services";
 
@@ -53,7 +53,6 @@ import { AuthService } from "@auth/services";
     IconComponent,
     ButtonComponent,
     ProgramNewsCardComponent,
-    UserLinksPipe,
     AsyncPipe,
     ParseBreaksPipe,
     ParseLinksPipe,
@@ -61,9 +60,7 @@ import { AuthService } from "@auth/services";
     MatProgressBarModule,
     SoonCardComponent,
     NewsFormComponent,
-    ModalComponent,
-    MatProgressBarModule,
-    TruncatePipe,
+    ProgramLinksComponent,
     RouterModule,
   ],
 })
@@ -84,6 +81,13 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
 
   get errorAssignProjectToProgramModalMessage() {
     return this.projectAdditionalService.getErrorAssignProjectToProgramModalMessage();
+  }
+
+  appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
   }
 
   news = signal<FeedNews[]>([]);
@@ -367,4 +371,12 @@ export class ProgramDetailMainComponent implements OnInit, OnDestroy {
   registerDateExpired!: boolean;
   descriptionExpandable!: boolean;
   readFullDescription = false;
+
+  get contactLinks(): { label: string; url: string }[] {
+    return (this.program?.links ?? []).map(link => ({ label: link, url: link }));
+  }
+
+  get materialLinks(): { label: string; url: string }[] {
+    return (this.program?.materials ?? []).map(m => ({ label: m.title, url: m.url }));
+  }
 }

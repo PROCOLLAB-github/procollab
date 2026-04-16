@@ -3,11 +3,15 @@
 
 .page {
   display: grid;
-  grid-template-columns: 8fr 2fr;
+  grid-template-columns: 1fr;
   gap: 10px;
   max-width: 1280px;
   padding-bottom: 100px;
   margin: 0 auto;
+
+  @include responsive.apply-desktop {
+    grid-template-columns: 8fr 2fr;
+  }
 
   &__outlet {
     display: flex;
@@ -15,7 +19,12 @@
     flex-grow: 1;
     gap: 20px;
     width: 100%;
-    margin-top: 10px;
+    padding: 0 10px;
+    margin-top: 12px;
+
+    @include responsive.apply-desktop {
+      padding: 0;
+    }
   }
 
   &__filter {
@@ -31,22 +40,68 @@
     }
   }
 
+  &__mobile-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    @include responsive.apply-desktop {
+      display: none;
+    }
+  }
+
+  &__mobile-filter-row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__clear {
+    color: var(--accent);
+    cursor: pointer;
+  }
+
+  &__mobile-export {
+    display: flex;
+    gap: 20px;
+
+    ::ng-deep app-button {
+      flex: 1;
+
+      button {
+        width: 100%;
+      }
+
+      span {
+        margin-right: 5px !important;
+      }
+    }
+  }
+
   &__list {
     display: grid;
-    grid-template-columns: 1fr;
-    row-gap: 50px;
-    column-gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 30px;
+    column-gap: 12px;
     align-items: flex-start;
-    margin-top: 50px;
+    margin-top: 30px;
 
     @include responsive.apply-desktop {
       grid-template-columns: repeat(4, 2fr);
+      row-gap: 50px;
+      column-gap: 20px;
+      margin-top: 50px;
     }
 
     &--rating {
       grid-template-columns: 1fr;
       row-gap: 20px;
       margin-top: 0;
+
+      @include responsive.apply-desktop {
+        grid-template-columns: 1fr;
+      }
     }
   }
 

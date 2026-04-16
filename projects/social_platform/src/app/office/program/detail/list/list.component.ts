@@ -6,6 +6,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  HostListener,
   inject,
   OnDestroy,
   OnInit,
@@ -117,6 +118,14 @@ export class ProgramListComponent implements OnInit, OnDestroy, AfterViewInit {
 
   readonly ratingOptionsList = tagsFilter;
   isFilterOpen = false;
+  readonly isFilterModalOpen = signal<boolean>(false);
+
+  appWidth = window.innerWidth;
+
+  @HostListener("window:resize")
+  onResize() {
+    this.appWidth = window.innerWidth;
+  }
 
   readonly isHintExpertsVisible = signal<boolean>(false);
   readonly isHintExpertsModal = signal<boolean>(false);

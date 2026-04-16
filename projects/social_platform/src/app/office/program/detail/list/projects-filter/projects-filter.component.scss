@@ -32,6 +32,11 @@
   &__body {
     display: flex;
     flex-direction: column;
+    margin-bottom: 8px;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 0;
+    }
   }
 
   &__tags {
@@ -45,10 +50,14 @@
   }
 
   &__titles {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
+    display: none;
+
+    @include responsive.apply-desktop {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
   }
 
   &__clear {
@@ -60,7 +69,11 @@
   }
 
   &__block {
-    margin-bottom: 14px;
+    margin: 0;
+
+    @include responsive.apply-desktop {
+      margin-bottom: 14px;
+    }
   }
 
   &__name {
